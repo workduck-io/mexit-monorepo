@@ -1,4 +1,4 @@
-# browser-extension-frontend
+# Browser Extension
 
 ## How to setup?
 
@@ -8,10 +8,10 @@
     yarn install
   ```
 
-- Start the development server (Keep running for hot reload)
+- Start the development server (Keep running to build on change)
 
   ```
-    yarn start
+    yarn dev
   ```
 
 - Open up `chrome://extensions` and load the `build` folder
