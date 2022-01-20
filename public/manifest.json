@@ -1,7 +1,7 @@
 {
-  "name": "Chrome Extension",
-  "description": "Extension built with chrome",
-  "version": "1.0",
+  "name": "Mexit",
+  "description": "Extension built with React + TS for Chrome",
+  "version": "0.0.1",
   "manifest_version": 3,
   "background": {
     "service_worker": "./static/js/background.js"
@@ -14,7 +14,8 @@
     {
       "matches": [
         "http://*/*",
-        "https://*/*"
+        "https://*/*",
+        "<all_urls>"
       ],
       "js": [
         "./static/js/content.js"
@@ -25,5 +26,10 @@
     "16": "logo192.png",
     "48": "logo192.png",
     "128": "logo192.png"
-  }
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting"
+  ]
 }
