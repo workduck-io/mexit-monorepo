@@ -3,6 +3,15 @@
   "description": "Extension built with React + TS for Chrome",
   "version": "0.0.1",
   "manifest_version": 3,
+  "commands": {
+    "open-kbar": {
+      "suggested_key": {
+        "default": "Ctrl+K",
+        "mac": "Command+K"
+      },
+      "description": "Open kbar"
+    }
+  },
   "background": {
     "service_worker": "./static/js/background.js"
   },
