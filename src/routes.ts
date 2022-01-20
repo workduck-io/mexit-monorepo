@@ -15,6 +15,7 @@ export const BASE_API_URL = 'https://http.workduck.io/mex'
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
+export const LINK_SHORTENER_URL_BASE = 'http://localhost:4000'
 
 export const apiURLs = {
   //node
@@ -45,5 +46,9 @@ export const apiURLs = {
   // Workspace
   createWorkspace: `${BASE_API_URL}/workspace`,
   getNodesByWorkspace: (workspaceId: string) => `${BASE_API_URL}/node/workspace/${workspaceId}/namespace/NAMESPACE1`,
-  getWorkspace: (workspace_id: string) => `${BASE_API_URL}/workspace/${workspace_id}`
+  getWorkspace: (workspace_id: string) => `${BASE_API_URL}/workspace/${workspace_id}`,
+
+  // Link Shortener URLs
+  createShort: `${LINK_SHORTENER_URL_BASE}/shorten`,
+  updateShort: `${LINK_SHORTENER_URL_BASE}/update`
 }

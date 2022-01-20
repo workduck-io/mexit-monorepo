@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { useAuth } from '@workduck-io/dwindle'
 
-import Auth, { Login } from './Components/Auth'
+import { Login, Logout } from './Components/Auth'
+import Shortener from './Components/Shortener'
 import config from './config'
 import { useAuthStore } from './Hooks/useAuth'
 
@@ -42,7 +43,6 @@ export const Init = () => {
   const { initCognito } = useAuth()
 
   useEffect(() => {
-    console.log('Setting Up Authentication')
     const userAuthenticatedEmail = initCognito({
       UserPoolId: config.cognito.USER_POOL_ID,
       ClientId: config.cognito.APP_CLIENT_ID
@@ -55,13 +55,21 @@ export const Init = () => {
 }
 
 function App() {
+  const authenticated = useAuthStore((store) => store.authenticated)
+
   return (
     <Container>
       <Init />
       <Header>
         <Logo src="/logo.svg" alt="logo" />
-        <p>Hello, World!</p>
-        <Auth />
+        {!authenticated ? (
+          <Login />
+        ) : (
+          <>
+            <Shortener />
+            <Logout />
+          </>
+        )}
       </Header>
     </Container>
   )
