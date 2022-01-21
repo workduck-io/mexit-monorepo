@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { useContentStore } from '../Hooks/useContentStore'
 import Search from './Search'
 import { useDeserializeSelectionToNodes } from '../Utils/deserialize'
+import HighlightSource from 'web-highlighter/dist/model/source'
 
 const Overlay = styled.div`
   height: 100%;
@@ -55,11 +56,21 @@ const Footer = styled.div`
   margin-right: auto;
 `
 
-function Sputlit({ url, html, nodeId }: { url: string; html: string; nodeId: string }) {
+function Sputlit({
+  url,
+  html,
+  nodeId,
+  range
+}: {
+  url: string
+  html: string
+  nodeId: string
+  range: Partial<HighlightSource>
+}) {
   const setContent = useContentStore((store) => store.setContent)
   const content = useDeserializeSelectionToNodes(nodeId, { text: html }) || [{ text: '' }]
 
-  setContent(url, content)
+  setContent(url, content, range)
 
   return (
     <div>

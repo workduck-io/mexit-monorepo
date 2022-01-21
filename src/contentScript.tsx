@@ -2,11 +2,11 @@
 import { nanoid } from 'nanoid'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import styled from 'styled-components'
-import { ThemeProvider } from 'styled-components'
-import { GlobalStyle } from './Styles/GlobalStyle'
-import { theme } from './Styles/theme'
+import Highlighter from 'web-highlighter'
+import HighlightSource from 'web-highlighter/dist/model/source'
 import Sputlit from './Components/Sputlit'
+import { useContentStore } from './Hooks/useContentStore'
+import { getDomMeta } from './Utils/highlight'
 
 // TODO(@sahil-shubham): remove console logs;
 // const delta = 6;
@@ -87,8 +87,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
 })
 
-// Listen for message from background script to see if sputlit is requested
+const highlighter = new Highlighter()
 
+// Listen for message from background script to see if sputlit is requested
 chrome.runtime.onMessage.addListener((request) => {
   if (request.type === 'sputlit') {
     if (document.getElementById('extension-root') === null) {
@@ -96,12 +97,22 @@ chrome.runtime.onMessage.addListener((request) => {
       overlay.id = 'extension-root'
       document.body.appendChild(overlay)
 
+      const range = window.getSelection().getRangeAt(0)
+      highlighter.fromRange(range)
+
       const { url, html } = getSelectionHtml()
       const nodeId = nanoid()
 
+      const saveableRange: Partial<HighlightSource> = {
+        startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
+        endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
+        text: range.toString(),
+        id: nodeId
+      }
+
       ReactDOM.render(
         <React.StrictMode>
-          <Sputlit url={url} html={html} nodeId={nodeId} />
+          <Sputlit url={url} html={html} nodeId={nodeId} range={saveableRange} />
         </React.StrictMode>,
         overlay
       )
@@ -111,5 +122,8 @@ chrome.runtime.onMessage.addListener((request) => {
     }
   }
 })
+
+const { startMeta, endMeta, text, id } = useContentStore.getState().contents[window.location.href].range
+highlighter.fromStore(startMeta, endMeta, text, id)
 
 export {}
