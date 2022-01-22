@@ -4,77 +4,47 @@ import { client } from '@workduck-io/dwindle'
 
 import { useAuthStore } from '../Hooks/useAuth'
 import { useShortenerStore } from '../Hooks/useShortener'
-import { getCurrentTab } from '../Utils/tabInfo'
+import { useTagStore } from '../Hooks/useTags'
+import { getCurrentTab, checkMetaParseableURL } from '../Utils/tabInfo'
 import { apiURLs } from '../routes'
+import { Tag } from '../Types/Tags'
 
 interface ShortenFormDetails {
   short: string
   namespace?: string
 }
 
-const Shortener = () => {
-  const [currTabURL, setCurrTabURL] = useState('')
-  const [currTabID, setCurrTabID] = useState(-1)
-  const [injected, setInjected] = useState(false)
-  const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
+interface ShortenerProps {
+  currTabURL: string
+  pageMetaTags?: any[]
+  userTags: Tag[]
+}
+
+const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTags }: ShortenerProps) => {
   const [shortenerResponse, setShortenerResponse] = useState<any>()
-  const userDetails = useAuthStore((store) => store.userDetails)
+  // const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
 
-  const { handleSubmit, register } = useForm<ShortenFormDetails>({
-    defaultValues: {
-      short: '',
-      namespace: 'WORKSPACE_1'
-    }
-  })
-
-  useEffect(() => {
-    async function fetchTab() {
-      const currentTab = await getCurrentTab()
-      setCurrTabURL(currentTab.url)
-      setCurrTabID(currentTab.id)
-    }
-    fetchTab()
-  }, [])
-
-  /* Inject Content Script into current tab */
-  useEffect(() => {
-    async function injectScript() {
-      if (currTabID !== -1 && !injected) {
-        await chrome.scripting.executeScript({
-          target: {
-            tabId: currTabID
-          },
-          files: ['./static/js/content.js']
-        })
-      }
-    }
-    injectScript()
-    setInjected(true)
-  }, [currTabID, injected])
+  const { handleSubmit, register } = useForm<ShortenFormDetails>()
+  const addTagsToGlobalStore = useTagStore((store) => store.addTags)
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
     const { short, namespace } = data
 
-    chrome.tabs.sendMessage(
-      currTabID,
-      {
-        method: 'GetPageMetaTags'
-      },
-      (response) => {
-        setPageMetaTags(response.metaTags)
-      }
-    )
+    addTagsToGlobalStore(userTags)
+
     const reqBody = {
       long: currTabURL,
       short: short,
-      namespace: 'WORKSPACE_1', // Hardcoding right now
+      namespace: workspaceDetails.name,
       metadata: {
-        metaTags: pageMetaTags
+        metaTags: pageMetaTags,
+        userTags: userTags
       }
     }
+
     const URL = apiURLs.createShort
 
     client
@@ -105,7 +75,7 @@ const Shortener = () => {
       <p>Your current URL is: {currTabURL}</p>
       <form onSubmit={handleSubmit(onShortenLinkSubmit)}>
         <input placeholder="short alias you would like to give" {...register('short')} />
-        <input placeholder="Workspace Name" readOnly={true} {...register('namespace')} />
+        <input placeholder="Workspace Name" readOnly={true} value={workspaceDetails.name} {...register('namespace')} />
         <input type="submit" />
       </form>
       <p>{JSON.stringify(shortenerResponse)}</p>
