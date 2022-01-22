@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { useAuth } from '@workduck-io/dwindle'
 
+import Init from './Components/Init'
 import { Login, Logout } from './Components/Auth'
-import Shortener from './Components/Shortener'
-import config from './config'
 import { useAuthStore } from './Hooks/useAuth'
+import BaseView from './Components/BaseView'
 
 const Container = styled.div`
   text-align: center;
@@ -39,21 +38,6 @@ const Header = styled.header`
   color: white;
 `
 
-export const Init = () => {
-  const { initCognito } = useAuth()
-
-  useEffect(() => {
-    const userAuthenticatedEmail = initCognito({
-      UserPoolId: config.cognito.USER_POOL_ID,
-      ClientId: config.cognito.APP_CLIENT_ID
-    })
-
-    console.log('User Authenticated Email: ', userAuthenticatedEmail)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return null
-}
-
 function App() {
   const authenticated = useAuthStore((store) => store.authenticated)
 
@@ -66,7 +50,7 @@ function App() {
           <Login />
         ) : (
           <>
-            <Shortener />
+            <BaseView />
             <Logout />
           </>
         )}

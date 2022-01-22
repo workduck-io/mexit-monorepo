@@ -4,3 +4,10 @@ export const getCurrentTab = async () => {
 
   return currTab
 }
+
+export const checkMetaParseableURL = (url: string) => {
+  /* We can't insert our content script in edge:// or chrome:// like pages */
+
+  if (url.startsWith('edge://') || url.startsWith('chrome://')) return false
+  return true
+}
