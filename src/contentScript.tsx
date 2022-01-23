@@ -31,6 +31,16 @@ import { getDomMeta } from './Utils/highlight'
 //   }
 // });
 
+function closeSputlit() {
+  document.getElementById('extension-root')?.remove()
+}
+
+document.onkeyup = (e) => {
+  if (e.key == 'Escape' && document.getElementById('extension-root')) {
+    chrome.runtime.sendMessage({ request: 'close-sputlit' })
+  }
+}
+
 async function getSelectionHtml() {
   let html, url
 
@@ -115,9 +125,10 @@ chrome.runtime.onMessage.addListener(async (request) => {
 
       ReactDOM.render(<Sputlit url={url} html={html} />, overlay)
     } else {
-      //TODO: Add separate listeners to close sputlit on keys like escape
-      document.getElementById('extension-root')?.remove()
+      closeSputlit()
     }
+  } else if (request.type === 'close-sputlit') {
+    closeSputlit()
   }
 })
 
@@ -125,4 +136,4 @@ chrome.runtime.onMessage.addListener(async (request) => {
 // const { startMeta, endMeta, text, id } = useContentStore.getState().contents[window.location.href].range
 // highlighter.fromStore(startMeta, endMeta, text, id)
 
-export {}
+export { closeSputlit }

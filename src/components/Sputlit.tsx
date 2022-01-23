@@ -7,6 +7,7 @@ import { useDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../Utils
 import HighlightSource from 'web-highlighter/dist/model/source'
 import { getPlateSelectors, usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
+import { closeSputlit } from '../contentScript'
 
 const Overlay = styled.div`
   height: 100%;
@@ -92,7 +93,12 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
           </Footer>
         </Main>
       </Wrapper>
-      <Overlay />
+      <Overlay
+        id="sputlit-overlay"
+        onClick={() => {
+          closeSputlit()
+        }}
+      />
     </div>
   )
 }
