@@ -1,5 +1,5 @@
-import { usePlateEditorRef, deserializeHtml } from '@udecode/plate-core'
 import { NodeEditorContent } from '../Types/Editor'
+import { htmlStringToDOMNode, usePlateEditorRef, deserializeHtml, htmlBodyToFragment } from '@udecode/plate-core'
 
 export const useDeserializeSelectionToNodes = (
   nodeId: string,
@@ -11,6 +11,13 @@ export const useDeserializeSelectionToNodes = (
         element: selection?.text || ''
       })
     : undefined
+
+  return nodes
+}
+
+export const getMexHTMLDeserializer = (HTMLContent: string, editor: any) => {
+  const element = htmlStringToDOMNode(HTMLContent ?? '')
+  const nodes = editor ? htmlBodyToFragment(editor, element) : undefined
 
   return nodes
 }

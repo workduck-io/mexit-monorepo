@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Editor from './Editor'
 import styled from 'styled-components'
 import { useContentStore } from '../Hooks/useContentStore'
 import Search from './Search'
-import { useDeserializeSelectionToNodes } from '../Utils/deserialize'
+import { useDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../Utils/deserialize'
 import HighlightSource from 'web-highlighter/dist/model/source'
+import { getPlateSelectors, usePlateEditorRef } from '@udecode/plate'
+import { nanoid } from 'nanoid'
 
 const Overlay = styled.div`
   height: 100%;
@@ -56,30 +58,31 @@ const Footer = styled.div`
   margin-right: auto;
 `
 
-function Sputlit({
-  url,
-  html,
-  nodeId,
-  range
-}: {
-  url: string
-  html: string
-  nodeId: string
-  range: Partial<HighlightSource>
-}) {
+function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Partial<HighlightSource> }) {
   const setContent = useContentStore((store) => store.setContent)
-  const content = useDeserializeSelectionToNodes(nodeId, { text: html }) || [{ text: '' }]
+  const nodeId = useMemo(() => nanoid(), [])
+  const editor = usePlateEditorRef()
+  const [value, setValue] = useState([{ text: '' }])
 
-  setContent(url, content, range)
+  useEffect(() => {
+    const content = getMexHTMLDeserializer(html, editor)
+    if (content !== undefined && content.length > 0 && content[0].text !== '') {
+      setContent(url, content, range)
+      setValue(content)
+    }
+  }, [editor])
+
+  const updateContent = (newContent) => {
+    // setContent(url, newContent, range)
+    return
+  }
 
   return (
     <div>
       <Wrapper>
         <Main>
-          {/* TODO: don't render editor if nothing selected, opposite with search results */}
           <Search />
-          <Editor nodeId={nodeId} content={content} />
-
+          <Editor nodeId={nodeId} content={value} onChange={updateContent} />
           <Footer>
             {/* <div id="omni-results">2 results</div>
             <div id="omni-arrows">
