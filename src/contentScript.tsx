@@ -1,6 +1,6 @@
 // Any kind of DOM manipulation is done here.
 import { nanoid } from 'nanoid'
-import React from 'react'
+import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import Highlighter from 'web-highlighter'
 import HighlightSource from 'web-highlighter/dist/model/source'
@@ -31,9 +31,8 @@ import { getDomMeta } from './Utils/highlight'
 //   }
 // });
 
-function getSelectionHtml() {
-  let html = ''
-  let url = ''
+async function getSelectionHtml() {
+  let html, url
 
   if (typeof window.getSelection != 'undefined') {
     const selection: Selection | null = window.getSelection()
@@ -43,7 +42,7 @@ function getSelectionHtml() {
 
       const container = document.createElement('div')
       for (let i = 0, len = selection.rangeCount; i < len; ++i) {
-        container.appendChild(selection.getRangeAt(i).cloneContents())
+        await container.appendChild(selection.getRangeAt(i).cloneContents())
       }
       html = container.innerHTML
     }
@@ -90,32 +89,31 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 const highlighter = new Highlighter()
 
 // Listen for message from background script to see if sputlit is requested
-chrome.runtime.onMessage.addListener((request) => {
+chrome.runtime.onMessage.addListener(async (request) => {
   if (request.type === 'sputlit') {
     if (document.getElementById('extension-root') === null) {
       const overlay = document.createElement('div')
       overlay.id = 'extension-root'
       document.body.appendChild(overlay)
 
-      const range = window.getSelection().getRangeAt(0)
-      highlighter.fromRange(range)
-
-      const { url, html } = getSelectionHtml()
-      const nodeId = nanoid()
-
-      const saveableRange: Partial<HighlightSource> = {
-        startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
-        endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
-        text: range.toString(),
-        id: nodeId
+      const selections = window.getSelection()
+      let range: any
+      if (selections.rangeCount !== 0) {
+        range = selections.getRangeAt(0)
       }
 
-      ReactDOM.render(
-        <React.StrictMode>
-          <Sputlit url={url} html={html} nodeId={nodeId} range={saveableRange} />
-        </React.StrictMode>,
-        overlay
-      )
+      if (range) highlighter.fromRange(range)
+      const { url, html } = await getSelectionHtml()
+
+      // const saveableRange: Partial<HighlightSource> = {
+      //   startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
+      //   endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
+      //   text: range.toString()
+      // }
+
+      selections.removeAllRanges()
+
+      ReactDOM.render(<Sputlit url={url} html={html} />, overlay)
     } else {
       //TODO: Add separate listeners to close sputlit on keys like escape
       document.getElementById('extension-root')?.remove()
@@ -123,7 +121,8 @@ chrome.runtime.onMessage.addListener((request) => {
   }
 })
 
-const { startMeta, endMeta, text, id } = useContentStore.getState().contents[window.location.href].range
-highlighter.fromStore(startMeta, endMeta, text, id)
+// console.log('CStore: ', useContentStore.getState().contents[window.location.href].range)
+// const { startMeta, endMeta, text, id } = useContentStore.getState().contents[window.location.href].range
+// highlighter.fromStore(startMeta, endMeta, text, id)
 
 export {}
