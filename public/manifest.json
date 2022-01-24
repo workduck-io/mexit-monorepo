@@ -37,6 +37,7 @@
     "128": "logo192.png"
   },
   "permissions": [
+    "storage",
     "tabs",
     "activeTab",
     "scripting"

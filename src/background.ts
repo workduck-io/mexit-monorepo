@@ -8,13 +8,4 @@ chrome.commands.onCommand.addListener((command) => {
   })
 })
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  switch (message.request) {
-    case 'close-sputlit':
-      getCurrentTab().then((response) => {
-        chrome.tabs.sendMessage(response.id, { type: 'close-sputlit' })
-      })
-  }
-})
-
 export {}

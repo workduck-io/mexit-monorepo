@@ -6,6 +6,7 @@ import { persist } from 'zustand/middleware'
 
 import { apiURLs } from '../routes'
 import { RegisterFormData } from '../Types/Auth'
+import { asyncLocalStorage, storageAdapter } from '../Utils/asyncStorage'
 
 interface UserDetails {
   email: string
@@ -47,7 +48,7 @@ export const useAuthStore = create<AuthStoreState>(
         return undefined
       }
     }),
-    { name: 'auth-mex-extension' }
+    { name: 'auth-mex-extension', ...storageAdapter }
   )
 )
 

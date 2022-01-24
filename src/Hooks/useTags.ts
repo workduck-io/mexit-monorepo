@@ -1,3 +1,4 @@
+import { storageAdapter } from '../Utils/asyncStorage'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -29,6 +30,6 @@ export const useTagStore = create<TagStore>(
         set({ tags: tags })
       }
     }),
-    { name: 'mexit-tags' }
+    { name: 'mexit-tags', ...storageAdapter }
   )
 )

@@ -2,6 +2,7 @@ import { Content, Contents, NodeEditorContent } from '../Types/Editor'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import HighlightSource from 'web-highlighter/dist/model/source'
+import { storageAdapter } from '../Utils/asyncStorage'
 
 export interface ContentStoreState extends State {
   contents: Contents
@@ -23,9 +24,9 @@ export const useContentStore = create<ContentStoreState>(
             [url]: {
               content: content,
               range: saveableRange
-            }
-          },
-          ...oldContent
+            },
+            ...oldContent
+          }
         })
       },
       getContent: (url) => {
@@ -36,6 +37,9 @@ export const useContentStore = create<ContentStoreState>(
         delete oldContent[url]
       }
     }),
-    { name: 'mexit-content' }
+    {
+      name: 'mexit-content',
+      ...storageAdapter
+    }
   )
 )

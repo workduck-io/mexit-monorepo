@@ -8,6 +8,9 @@ import HighlightSource from 'web-highlighter/dist/model/source'
 import { getPlateSelectors, usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import { closeSputlit } from '../contentScript'
+import { useAuthStore } from '../Hooks/useAuth'
+import { Login, Logout } from './Auth'
+import BaseView from './BaseView'
 
 const Overlay = styled.div`
   height: 100%;
@@ -64,6 +67,7 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
   const nodeId = useMemo(() => nanoid(), [])
   const editor = usePlateEditorRef()
   const [value, setValue] = useState([{ text: '' }])
+  const authenticated = useAuthStore((store) => store.authenticated)
 
   useEffect(() => {
     const content = getMexHTMLDeserializer(html, editor)
@@ -85,11 +89,13 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
           <Search />
           <Editor nodeId={nodeId} content={value} onChange={updateContent} />
           <Footer>
-            {/* <div id="omni-results">2 results</div>
-            <div id="omni-arrows">
-              Use arrow keys <span className="omni-shortcut">↑</span>
-              <span className="omni-shortcut">↓</span> to navigate
-            </div> */}
+            {!authenticated ? (
+              <></>
+            ) : (
+              <>
+                <BaseView />
+              </>
+            )}
           </Footer>
         </Main>
       </Wrapper>
