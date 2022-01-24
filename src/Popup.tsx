@@ -38,7 +38,7 @@ const Header = styled.header`
   color: white;
 `
 
-function App() {
+const Popup = () => {
   const authenticated = useAuthStore((store) => store.authenticated)
 
   return (
@@ -50,7 +50,6 @@ function App() {
           <Login />
         ) : (
           <>
-            <BaseView />
             <Logout />
           </>
         )}
@@ -59,4 +58,4 @@ function App() {
   )
 }
 
-export default App
+export default Popup

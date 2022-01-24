@@ -37,7 +37,7 @@ function closeSputlit() {
 
 document.onkeyup = (e) => {
   if (e.key == 'Escape' && document.getElementById('extension-root')) {
-    chrome.runtime.sendMessage({ request: 'close-sputlit' })
+    closeSputlit()
   }
 }
 
@@ -127,8 +127,6 @@ chrome.runtime.onMessage.addListener(async (request) => {
     } else {
       closeSputlit()
     }
-  } else if (request.type === 'close-sputlit') {
-    closeSputlit()
   }
 })
 
