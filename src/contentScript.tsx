@@ -31,16 +31,6 @@ import { getDomMeta } from './Utils/highlight'
 //   }
 // });
 
-function closeSputlit() {
-  document.getElementById('extension-root')?.remove()
-}
-
-document.onkeyup = (e) => {
-  if (e.key == 'Escape' && document.getElementById('extension-root')) {
-    closeSputlit()
-  }
-}
-
 async function getSelectionHtml() {
   let html, url
 
@@ -97,33 +87,42 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 })
 
 const highlighter = new Highlighter()
+const overlay = document.createElement('div')
+overlay.id = 'extension-root'
+document.body.appendChild(overlay)
+
+function closeSputlit() {
+  window.getSelection().removeAllRanges()
+  ReactDOM.unmountComponentAtNode(overlay)
+}
+
+document.onkeyup = (e) => {
+  if (e.key == 'Escape' && document.getElementById('extension-root')) {
+    closeSputlit()
+  }
+}
 
 // Listen for message from background script to see if sputlit is requested
 chrome.runtime.onMessage.addListener(async (request) => {
   if (request.type === 'sputlit') {
-    if (document.getElementById('extension-root') === null) {
-      const overlay = document.createElement('div')
-      overlay.id = 'extension-root'
-      document.body.appendChild(overlay)
+    if (document.getElementById('sputlit-container') === null) {
+      if (window.getSelection().rangeCount >= 1) {
+        const selection = window.getSelection()
+        const range = selection.getRangeAt(0)
 
-      const selections = window.getSelection()
-      let range: any
-      if (selections.rangeCount !== 0) {
-        range = selections.getRangeAt(0)
+        highlighter.fromRange(range)
+        const { url, html } = await getSelectionHtml()
+
+        const saveableRange: Partial<HighlightSource> = {
+          startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
+          endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
+          text: range.toString()
+        }
+
+        ReactDOM.render(<Sputlit url={url} html={html} range={saveableRange} />, overlay)
+      } else {
+        ReactDOM.render(<Sputlit />, overlay)
       }
-
-      if (range) highlighter.fromRange(range)
-      const { url, html } = await getSelectionHtml()
-
-      // const saveableRange: Partial<HighlightSource> = {
-      //   startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
-      //   endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
-      //   text: range.toString()
-      // }
-
-      selections.removeAllRanges()
-
-      ReactDOM.render(<Sputlit url={url} html={html} />, overlay)
     } else {
       closeSputlit()
     }
