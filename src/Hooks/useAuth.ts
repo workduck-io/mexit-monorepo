@@ -1,12 +1,20 @@
-import { useState } from 'react'
-import { useAuth, client } from '@workduck-io/dwindle'
-import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
+import React, { useState, useEffect } from 'react'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { apiURLs } from '../routes'
 import { RegisterFormData } from '../Types/Auth'
 import { asyncLocalStorage, storageAdapter } from '../Utils/asyncStorage'
+import client from '../Utils/fetchClient'
+import useAuth from './useDwindle'
+
+interface UserCred {
+  email: string
+  userId: string
+  token: string
+  expiry: number
+  url: string
+}
 
 interface UserDetails {
   email: string
@@ -48,7 +56,7 @@ export const useAuthStore = create<AuthStoreState>(
         return undefined
       }
     }),
-    { name: 'auth-mex-extension', ...storageAdapter }
+    { name: 'mexit-auth' }
   )
 )
 

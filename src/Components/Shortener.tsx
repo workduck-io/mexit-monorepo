@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { client } from '@workduck-io/dwindle'
 
 import { useAuthStore } from '../Hooks/useAuth'
 import { useShortenerStore } from '../Hooks/useShortener'
@@ -46,27 +45,32 @@ const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTag
     }
 
     const URL = apiURLs.createShort
-
-    client
-      .post(URL, reqBody)
-      .then((response: any) => {
-        setShortenerResponse(response.data)
-        addLinkCapture({
-          ...reqBody,
-          shortenedURL: response.data.message
-        })
-      })
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.data.message === 'URL already exists') {
+    chrome.runtime.sendMessage(
+      {
+        type: 'DISPATCH_DWINDLE_REQUEST',
+        data: {
+          requestMethod: 'POST',
+          URL: apiURLs.createShort,
+          body: reqBody
+        }
+      },
+      (response) => {
+        const { message, error } = response
+        if (error) {
+          if (error.data.message === 'URL already exists') {
             setShortenerResponse({ message: 'Alias Already Exists, choose another' })
           } else {
             setShortenerResponse({ message: 'An Error Occured. Please try again' })
           }
         } else {
-          setShortenerResponse({ message: 'An Error Occured. Please try again' })
+          setShortenerResponse(message)
+          addLinkCapture({
+            ...reqBody,
+            shortenedURL: response.data.message
+          })
         }
-      })
+      }
+    )
   }
 
   return (

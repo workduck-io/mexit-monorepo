@@ -1,21 +1,27 @@
-export const asyncLocalStorage: Storage = {
-  length: localStorage.length,
-  key: (index: number) => {
-    return localStorage.key(index)
-  },
-  setItem: async (key: string, value: string) => {
-    chrome.storage.local.set({ [key]: value }, () => {
-      console.log('set', key, value)
-      return
+export const asyncLocalStorage = {
+  setItem: (key: string, value: string) => {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        chrome.storage.local.set({ [key]: value }, function () {
+          console.log('set', key, value)
+          resolve()
+        })
+      } catch (error) {
+        reject(error)
+      }
     })
   },
   getItem: (key: string) => {
-    let res
-    chrome.storage.local.get([key], (result) => {
-      console.log('get', key)
-      res = result
+    return new Promise<string>((resolve, reject) => {
+      try {
+        chrome.storage.local.get([key], function (result) {
+          console.log('get', key, result[key])
+          resolve(result[key])
+        })
+      } catch (error) {
+        reject(error)
+      }
     })
-    return res
   },
   removeItem: (key: string) => {
     chrome.storage.local.remove(key, () => {

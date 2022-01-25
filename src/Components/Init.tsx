@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useAuth } from '@workduck-io/dwindle'
+import useAuth from '../Hooks/useDwindle'
 
 import config from '../config'
 

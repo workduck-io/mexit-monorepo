@@ -88,15 +88,7 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
         <Main>
           <Search />
           <Editor nodeId={nodeId} content={value} onChange={updateContent} />
-          <Footer>
-            {!authenticated ? (
-              <></>
-            ) : (
-              <>
-                <BaseView />
-              </>
-            )}
-          </Footer>
+          <Footer>{authenticated && <BaseView />}</Footer>
         </Main>
       </Wrapper>
       <Overlay
