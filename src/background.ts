@@ -1,6 +1,13 @@
-// Anything here runs in the background
+import { handleDwindleRequest } from './Utils/requestHandler'
 
-import { getCurrentTab } from './Utils/tabInfo'
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'DISPATCH_DWINDLE_REQUEST') {
+    handleDwindleRequest(request.data).then((resp) => {
+      sendResponse(resp)
+    })
+  }
+  return true
+})
 
 chrome.commands.onCommand.addListener((command) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
