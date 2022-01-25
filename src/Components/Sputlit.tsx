@@ -83,7 +83,7 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
   }
 
   return (
-    <div>
+    <div id="sputlit-container">
       <Wrapper>
         <Main>
           <Search />
