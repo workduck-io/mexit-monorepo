@@ -30,6 +30,6 @@ export const useTagStore = create<TagStore>(
         set({ tags: tags })
       }
     }),
-    { name: 'mexit-tags', ...storageAdapter }
+    { name: 'mexit-tags' }
   )
 )

@@ -4,8 +4,6 @@ import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { storageAdapter } from '../Utils/asyncStorage'
-
 export interface UserCred {
   email: string
   userId: string
@@ -50,7 +48,7 @@ const useInternalAuthStore = create<InternalAuthStoreState>(
           email: undefined
         })
     }),
-    { name: 'aws-auth-mex-extension', ...storageAdapter }
+    { name: 'aws-auth-mex-extension' }
   )
 )
 

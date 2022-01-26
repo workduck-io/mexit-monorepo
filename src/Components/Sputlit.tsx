@@ -62,12 +62,11 @@ const Footer = styled.div`
   margin-right: auto;
 `
 
-function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Partial<HighlightSource> }) {
+const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Partial<HighlightSource> }) => {
   const setContent = useContentStore((store) => store.setContent)
   const nodeId = useMemo(() => nanoid(), [])
   const editor = usePlateEditorRef()
   const [value, setValue] = useState([{ text: '' }])
-  const authenticated = useAuthStore((store) => store.authenticated)
 
   useEffect(() => {
     const content = getMexHTMLDeserializer(html, editor)
@@ -88,7 +87,8 @@ function Sputlit({ url, html, range }: { url?: string; html?: string; range?: Pa
         <Main>
           <Search />
           <Editor nodeId={nodeId} content={value} onChange={updateContent} />
-          <Footer>{authenticated && <BaseView />}</Footer>
+          <BaseView />
+          <Footer></Footer>
         </Main>
       </Wrapper>
       <Overlay
