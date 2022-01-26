@@ -1,3 +1,4 @@
+import { clearLocalStorage, reloadTab } from './Utils/helpers'
 import { handleActionRequest, handleStoreRequest, handleAuthRequest } from './Utils/requestHandler'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -16,8 +17,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 })
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  switch (message.request) {
+    case 'reload':
+      reloadTab()
+      break
+    case 'remove-local-storage':
+      clearLocalStorage()
+      break
+  }
+})
+
 chrome.commands.onCommand.addListener((command) => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
   })
 })

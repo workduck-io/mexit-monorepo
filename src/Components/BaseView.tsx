@@ -4,6 +4,8 @@ import { getCurrentTab, checkMetaParseableURL } from '../Utils/tabInfo'
 import Shortener from './Shortener'
 import Tags from './Tags'
 import { Tag } from '../Types/Tags'
+import { MexitAction, ActionType } from '../Types/Actions'
+import { useActionsStore } from '../Hooks/useActions'
 
 const BaseView = () => {
   const [currTabURL, setCurrTabURL] = useState('')
@@ -11,6 +13,10 @@ const BaseView = () => {
   const [injected, setInjected] = useState(false)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
+
+  const [actionData, setActionData] = useState<any>({})
+
+  const actions = useActionsStore((store) => store.actions)
 
   /* Fetch Current Tab Information using chrome APIs */
   useEffect(() => {
@@ -67,10 +73,13 @@ const BaseView = () => {
     setUserTags([...t])
   }
 
+  const action = actions[0]
+
   return (
     <>
       <Shortener currTabURL={currTabURL} pageMetaTags={pageMetaTags} userTags={userTags} />
-      <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
+      {/* TODO: content script doesn't have access to chrome.tabs, send and get message from background script */}
+      {/* <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} /> */}
     </>
   )
 }

@@ -1,11 +1,21 @@
-import React from 'react'
-import { Action } from '../Types/Sputlit'
+import React, { useEffect, useRef, useState } from 'react'
+import { ActionType, MexitAction } from '../Types/Actions'
 import styled from 'styled-components'
+import fuzzysort from 'fuzzysort'
+import { defaultActions, initActions } from '../Utils/actions'
+import Results from './Results'
+import { useSlateStatic } from 'slate-react'
+import { actionExec } from '../Utils/actionExec'
+
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 
 const Input = styled.input`
   background: transparent;
+  flex-grow: 1;
   font-size: 1.25rem;
-  width: 92%;
 
   border: none;
   outline: none;
@@ -16,79 +26,52 @@ const Input = styled.input`
   caret-color: #6968d2;
 `
 
-const List = styled.div`
-  width: 100%;
-  overflow: overlay;
-
-  max-height: 400px;
-`
-
-const ListItem = styled.div`
+const QuerySearch = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 
-  height: 60px;
-  width: 100%;
-  padding: 0 0 0 1rem;
-  color: #111;
-  border-left: 2px solid transparent;
-
-  h3 {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0;
-  }
-
-  p {
-    font-size: 0.85rem;
-    margin: 0.25rem 0 0.5rem 0;
-  }
-
-  &:hover {
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-left: 2px solid rgb(28, 28, 29);
-  }
-`
-
-const Subtitle = styled.div`
-  padding: 0.5rem 1rem;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  opacity: 0.5;
+  font-size: 1.25rem;
+  color: #6968d2;
 `
 
 function Search() {
-  const actions: Action[] = [
-    {
-      title: 'Reload',
-      description: 'Reload this tab',
-      showDesc: false,
-      action: 'reload'
-    },
-    {
-      title: 'About Us',
-      description: 'Know more about Workduck.io',
-      showDesc: true,
-      action: 'workduck'
+  const [query, setQuery] = useState('')
+  const [actions, setActions] = useState<MexitAction[]>([])
+  const [selectedAction, setSelectedAction] = useState<MexitAction>()
+
+  useEffect(() => {
+    if (query !== '') {
+      setActions(fuzzysort.go(query, initActions, { key: 'title' }).map((item) => item.obj))
+    } else {
+      setActions(defaultActions)
     }
-  ]
+  }, [query])
 
   return (
     <>
-      {/* TODO: No search functionality at the moment */}
-      <Input placeholder="Type a command or search" />
-
-      <Subtitle>Navigation</Subtitle>
-      <List>
-        {actions.map((item, id) => (
-          <ListItem key={id}>
-            <h3> {item.title}</h3>
-            {item.showDesc && <p>{item.description}</p>}
-          </ListItem>
-        ))}
-      </List>
+      {/* TODO: it would be good to have the ability to go back after selected a search type action */}
+      <InputContainer>
+        {selectedAction?.type === ActionType.search && <QuerySearch>{selectedAction.title} | </QuerySearch>}
+        <Input
+          autoFocus
+          autoComplete="off"
+          spellCheck="false"
+          value={query}
+          placeholder="Type a command or search"
+          onChange={(event) => {
+            setQuery(event.target.value)
+          }}
+        />
+      </InputContainer>
+      {/* TODO: add a provider and move this from here */}
+      <Results
+        query={query}
+        setQuery={setQuery}
+        actions={actions}
+        selectedAction={selectedAction}
+        setSelectedAction={setSelectedAction}
+      />
     </>
   )
 }
