@@ -2,7 +2,7 @@ import { Content, Contents, NodeEditorContent } from '../Types/Editor'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import HighlightSource from 'web-highlighter/dist/model/source'
-import { storageAdapter } from '../Utils/asyncStorage'
+import { localStorageAdapter } from '../Utils/localStorageAdapter'
 
 export interface ContentStoreState extends State {
   contents: Contents
@@ -39,7 +39,7 @@ export const useContentStore = create<ContentStoreState>(
     }),
     {
       name: 'mexit-content',
-      ...storageAdapter
+      ...localStorageAdapter
     }
   )
 )

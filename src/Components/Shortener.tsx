@@ -10,7 +10,6 @@ import { Tag } from '../Types/Tags'
 
 interface ShortenFormDetails {
   short: string
-  namespace?: string
 }
 
 interface ShortenerProps {
@@ -21,53 +20,40 @@ interface ShortenerProps {
 
 const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTags }: ShortenerProps) => {
   const [shortenerResponse, setShortenerResponse] = useState<any>()
-  // const userDetails = useAuthStore((store) => store.userDetails)
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-
-  const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
-
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
-  const addTagsToGlobalStore = useTagStore((store) => store.addTags)
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
-    const { short, namespace } = data
-
-    addTagsToGlobalStore(userTags)
+    const { short } = data
 
     const reqBody = {
       long: currTabURL,
       short: short,
-      namespace: workspaceDetails.name,
       metadata: {
         metaTags: pageMetaTags,
         userTags: userTags
       }
     }
 
-    const URL = apiURLs.createShort
     chrome.runtime.sendMessage(
       {
         type: 'DISPATCH_DWINDLE_REQUEST',
+        subType: 'CREATE_SHORT_URL',
         data: {
-          requestMethod: 'POST',
-          URL: apiURLs.createShort,
           body: reqBody
         }
       },
       (response) => {
         const { message, error } = response
         if (error) {
-          if (error.data.message === 'URL already exists') {
+          if (error === 'Not Authenticated') {
+            setShortenerResponse({ message: 'Not Authenticated. Please login via Popup' })
+          } else if (error.data.message === 'URL already exists') {
             setShortenerResponse({ message: 'Alias Already Exists, choose another' })
           } else {
             setShortenerResponse({ message: 'An Error Occured. Please try again' })
           }
         } else {
           setShortenerResponse(message)
-          addLinkCapture({
-            ...reqBody,
-            shortenedURL: response.data.message
-          })
         }
       }
     )
@@ -79,7 +65,6 @@ const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTag
       <p>Your current URL is: {currTabURL}</p>
       <form onSubmit={handleSubmit(onShortenLinkSubmit)}>
         <input placeholder="short alias you would like to give" {...register('short')} />
-        <input placeholder="Workspace Name" readOnly={true} value={workspaceDetails.name} {...register('namespace')} />
         <input type="submit" />
       </form>
       <p>{JSON.stringify(shortenerResponse)}</p>

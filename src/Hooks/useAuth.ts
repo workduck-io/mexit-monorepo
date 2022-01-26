@@ -8,6 +8,8 @@ import { asyncLocalStorage, storageAdapter } from '../Utils/asyncStorage'
 import client from '../Utils/fetchClient'
 import useAuth from './useDwindle'
 
+import { localStorageAdapter } from '../Utils/localStorageAdapter'
+
 interface UserCred {
   email: string
   userId: string
