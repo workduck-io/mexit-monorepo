@@ -3,6 +3,7 @@ module.exports = {
     configure: (webpackConfig, { env, paths }) => {
       return {
         ...webpackConfig,
+        devtool: 'inline-source-map',
         entry: {
           main: [
             env === 'development' && require.resolve('react-dev-utils/webpackHotDevClient'),
