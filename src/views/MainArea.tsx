@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 function MainArea() {
-  return <h1>Hello, World!</h1>;
+  return <h1>Hello, World! Does this update?</h1>
 }
 
-export default MainArea;
+export default MainArea
