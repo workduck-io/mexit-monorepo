@@ -4,9 +4,18 @@ import React, { useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import Highlighter from 'web-highlighter'
 import HighlightSource from 'web-highlighter/dist/model/source'
+import * as Sentry from '@sentry/react'
+import { CaptureConsole } from '@sentry/integrations'
+import mixpanel from 'mixpanel-browser'
+
 import Sputlit from './Components/Sputlit'
-import { useContentStore } from './Hooks/useContentStore'
 import { getDomMeta } from './Utils/highlight'
+
+if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
+Sentry.init({
+  dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
+  integrations: [new CaptureConsole({ levels: ['error'] })]
+})
 
 // TODO(@sahil-shubham): remove console logs;
 // const delta = 6;
