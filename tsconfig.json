@@ -10,11 +10,12 @@
       "dom"
     ],
     "noImplicitAny": false,
-    "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "sourceMap": true,
+    "inlineSourceMap": true,
     "paths": {
       "*": [
         "node_modules/*"

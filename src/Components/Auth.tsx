@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useAuthentication, useAuthStore } from '../Hooks/useAuth'
+import mixpanel from 'mixpanel-browser'
 
+import { useAuthentication, useAuthStore } from '../Hooks/useAuth'
 import { LoginFormData } from '../Types/Auth'
 
 export const Login = () => {
@@ -22,10 +23,15 @@ export const Login = () => {
           setLoginResult('Invalid Username or Password')
         }
         temp = s.data
+        mixpanel.track('Login Successful', {
+          source: 'Browser Extension'
+        })
+        mixpanel.identify(s.data.email)
       })
       .catch((e) => {
         console.error('Error occured: ', e)
         temp = 'Error Occurred'
+        mixpanel.track('Login Successful')
       })
     setLoginResult(JSON.stringify(temp))
   }
@@ -49,6 +55,8 @@ export const Logout = () => {
 
   const onLogout = () => {
     logout()
+    mixpanel.track('Logged Out')
+    mixpanel.reset()
   }
 
   return (

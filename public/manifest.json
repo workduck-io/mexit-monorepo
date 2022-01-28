@@ -42,5 +42,6 @@
     "storage",
     "tabs",
     "activeTab"
-  ]
+  ],
+  "content_security_policy": "script-src 'self' https://browser.sentry-cdn.com https://cdn.mxpnl.com https://cdn4.mxpnl.com; object-src 'self'"
 }
