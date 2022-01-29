@@ -15,6 +15,7 @@ interface UserCred {
 }
 
 interface UserDetails {
+  userId: string
   email: string
 }
 
@@ -86,7 +87,7 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords(data.userId))
         .then((d: any) => {
-          const userDetails = { email }
+          const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
           setAuthenticated(userDetails, workspaceDetails)

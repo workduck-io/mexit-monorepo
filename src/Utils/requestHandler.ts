@@ -58,6 +58,31 @@ export const handleActionRequest = ({ subType, data }) => {
           return { message: null, error: err }
         })
     }
+    case 'CREATE_LINK_QC': {
+      const authenticated = useAuthStore.getState().authenticated
+      if (!authenticated) return { message: null, error: 'Not Authenticated' }
+
+      const userDetails = useAuthStore.getState().userDetails
+
+      const body = data.body
+      const workspaceDetails = useAuthStore.getState().workspaceDetails
+
+      const reqBody = {
+        ...body,
+        workspace: workspaceDetails.id,
+        createdBy: userDetails.userId
+      }
+
+      const URL = apiURLs.addLinkCapture
+      return client
+        .post(URL, reqBody)
+        .then((response: any) => {
+          return { message: response, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
   }
 }
 

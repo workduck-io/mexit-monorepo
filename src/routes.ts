@@ -15,7 +15,9 @@ export const BASE_API_URL = 'https://http.workduck.io/mex'
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
-export const LINK_SHORTENER_URL_BASE = 'http://localhost:4000'
+export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
+
+export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io'
 
 export const apiURLs = {
   //node
@@ -50,5 +52,9 @@ export const apiURLs = {
 
   // Link Shortener URLs
   createShort: `${LINK_SHORTENER_URL_BASE}/shorten`,
-  updateShort: `${LINK_SHORTENER_URL_BASE}/update`
+  updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
+
+  // Mexit Backend URLs
+  addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/link`,
+  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/content`
 }
