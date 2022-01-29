@@ -1,9 +1,11 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import styled, { ThemeProvider } from "styled-components";
-import GlobalStyle from "./shared/GlobalStyle";
-import theme from "./shared/theme";
-import MainArea from "./views/MainArea";
+import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import styled, { ThemeProvider } from 'styled-components'
+
+import GlobalStyle from './Shared/GlobalStyle'
+import theme from './Shared/theme'
+import Switch from './Switch'
+import Analytics from './Utils/analytics'
 
 //----------Styled Components------------
 
@@ -12,9 +14,11 @@ const AppContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-`;
+`
 
 //======================================
+
+Analytics.init(import.meta.env.VITE_APP_MIXPANEL_TOKEN)
 
 function App() {
   return (
@@ -22,14 +26,11 @@ function App() {
       <ThemeProvider theme={theme}>
         <AppContainer>
           <GlobalStyle />
-
-          <Routes>
-            <Route  path="/" element={<MainArea />} />
-          </Routes>
+          <Switch />
         </AppContainer>
       </ThemeProvider>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

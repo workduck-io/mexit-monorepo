@@ -1,0 +1,26 @@
+import mixpanel from 'mixpanel-browser'
+
+import { IS_DEV } from '../config'
+
+const mixpanelMethods = {
+  init: (token: string) => {
+    if (!IS_DEV) mixpanel.init(token)
+  },
+  track: (name, props) => {
+    if (!IS_DEV) mixpanel.track(name, props)
+  },
+  alias: (id: string, original: string) => {
+    if (!IS_DEV) mixpanel.alias(id, original)
+  },
+  people: {
+    set: (props: any) => {
+      if (!IS_DEV) mixpanel.people.set(props)
+    }
+  },
+  identify: (id: string) => {
+    if (!IS_DEV) mixpanel.identify(id)
+  }
+}
+
+const Analytics = mixpanelMethods
+export default Analytics
