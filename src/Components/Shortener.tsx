@@ -14,6 +14,8 @@ interface ShortenerProps {
 
 const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTags }: ShortenerProps) => {
   const [shortenerResponse, setShortenerResponse] = useState<any>()
+  const [sendToBackend, setSendToBackend] = useState(false)
+  const [linkQCBackendResponse, setLinkQCBackendResponse] = useState<any>({})
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
@@ -48,9 +50,34 @@ const Shortener: React.FC<ShortenerProps> = ({ currTabURL, pageMetaTags, userTag
           }
         } else {
           setShortenerResponse(message)
+          setSendToBackend(true)
         }
       }
     )
+
+    if (sendToBackend) {
+      chrome.runtime.sendMessage(
+        {
+          type: 'DISPATH_DWINDLE_REQUEST',
+          subType: 'CREATE_LINK_QC',
+          data: {
+            body: {
+              ...reqBody,
+              shortenedURL: shortenerResponse.data.message
+            }
+          }
+        },
+        (response) => {
+          const { message, error } = response
+          if (error) {
+            setLinkQCBackendResponse({ message: 'An Error Occured. Please try again later' })
+            console.error('Err is: ', error)
+          } else {
+            setLinkQCBackendResponse(message)
+          }
+        }
+      )
+    }
   }
 
   return (
