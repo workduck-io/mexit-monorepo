@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-
 import { apiURLs } from '../routes'
 import { RegisterFormData } from '../Types/Auth'
-import { asyncLocalStorage, storageAdapter } from '../Utils/asyncStorage'
 import client from '../Utils/fetchClient'
 import useAuth from './useDwindle'
-
-import { localStorageAdapter } from '../Utils/localStorageAdapter'
 
 interface UserCred {
   email: string

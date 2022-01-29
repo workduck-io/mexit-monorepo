@@ -1,6 +1,5 @@
 // Any kind of DOM manipulation is done here.
-import { nanoid } from 'nanoid'
-import React, { useMemo } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import Highlighter from 'web-highlighter'
 import HighlightSource from 'web-highlighter/dist/model/source'
@@ -10,6 +9,7 @@ import mixpanel from 'mixpanel-browser'
 
 import Sputlit from './Components/Sputlit'
 import { getDomMeta } from './Utils/highlight'
+import { useContentStore } from './Hooks/useContentStore'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -115,7 +115,7 @@ document.onkeyup = (e) => {
 chrome.runtime.onMessage.addListener(async (request) => {
   if (request.type === 'sputlit') {
     if (document.getElementById('sputlit-container') === null) {
-      if (window.getSelection().rangeCount >= 1) {
+      if (window.getSelection().toString() !== '') {
         const selection = window.getSelection()
         const range = selection.getRangeAt(0)
 
@@ -138,8 +138,21 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 })
 
-// console.log('CStore: ', useContentStore.getState().contents[window.location.href].range)
-// const { startMeta, endMeta, text, id } = useContentStore.getState().contents[window.location.href].range
-// highlighter.fromStore(startMeta, endMeta, text, id)
+// const highlightOldRange = (store: any) => {
+//   if (Object.keys(store.contents).length !== 0) {
+//     console.log('Highlight Content: ', store.contents)
+//     const highlights: any[] = store.contents[window.location.href]
+//     highlights.forEach((h) => {
+//       const { startMeta, endMeta, text, id } = h.range
+//       console.log(
+//         `Start Meta: ${JSON.stringify(startMeta)} | End Meta: ${JSON.stringify(endMeta)} | Text: ${text} | ID: ${id}`
+//       )
+//       highlighter.fromStore(startMeta, endMeta, text, id)
+//     })
+//     unsub()
+//   }
+// }
+
+// const unsub = useContentStore.subscribe((store: any) => store.contents, highlightOldRange)
 
 export { closeSputlit }

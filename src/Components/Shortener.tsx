@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
-import { useAuthStore } from '../Hooks/useAuth'
-import { useShortenerStore } from '../Hooks/useShortener'
-import { useTagStore } from '../Hooks/useTags'
-import { getCurrentTab, checkMetaParseableURL } from '../Utils/tabInfo'
-import { apiURLs } from '../routes'
 import { Tag } from '../Types/Tags'
 
 interface ShortenFormDetails {

@@ -1,7 +1,5 @@
-import { asyncLocalStorage, storageAdapter } from '../Utils/asyncStorage'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { localStorageAdapter } from '../Utils/localStorageAdapter'
 
 interface LinkCapture {
   short: string
@@ -25,6 +23,6 @@ export const useShortenerStore = create<LinkCaptureStore>(
         set({ linkCaptures: [...captures, l] })
       }
     }),
-    { name: 'mexit-link-captures', ...localStorageAdapter }
+    { name: 'mexit-link-captures' }
   )
 )

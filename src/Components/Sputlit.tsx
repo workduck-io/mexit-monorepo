@@ -1,16 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import Editor from './Editor'
-import styled from 'styled-components'
-import { useContentStore } from '../Hooks/useContentStore'
-import Search from './Search'
-import { useDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../Utils/deserialize'
-import HighlightSource from 'web-highlighter/dist/model/source'
-import { getPlateSelectors, usePlateEditorRef } from '@udecode/plate'
+import { usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
+import React, { useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
+import HighlightSource from 'web-highlighter/dist/model/source'
 import { closeSputlit } from '../contentScript'
-import { useAuthStore } from '../Hooks/useAuth'
-import { Login, Logout } from './Auth'
-import BaseView from './BaseView'
+import { useContentStore } from '../Hooks/useContentStore'
+import { getMexHTMLDeserializer } from '../Utils/deserialize'
+import Editor from './Editor'
+import Search from './Search'
 
 const Overlay = styled.div`
   height: 100%;
@@ -67,11 +64,11 @@ const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Pa
   const nodeId = useMemo(() => nanoid(), [])
   const editor = usePlateEditorRef()
   const [value, setValue] = useState([{ text: '' }])
+  const content = getMexHTMLDeserializer(html, editor)
 
   useEffect(() => {
-    const content = getMexHTMLDeserializer(html, editor)
-    if (content !== undefined && content.length > 0 && content[0].text !== '') {
-      setContent(url, content, range)
+    if (range && content && url) {
+      setContent(url, content, range, nodeId)
       setValue(content)
     }
   }, [editor])

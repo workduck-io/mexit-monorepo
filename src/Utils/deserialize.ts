@@ -1,5 +1,5 @@
+import { deserializeHtml, htmlBodyToFragment, htmlStringToDOMNode, usePlateEditorRef } from '@udecode/plate-core'
 import { NodeEditorContent } from '../Types/Editor'
-import { htmlStringToDOMNode, usePlateEditorRef, deserializeHtml, htmlBodyToFragment } from '@udecode/plate-core'
 
 export const useDeserializeSelectionToNodes = (
   nodeId: string,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { ActionType, MexitAction } from '../Types/Actions'
 import styled, { css } from 'styled-components'
+import { ActionType, MexitAction } from '../Types/Actions'
 import { actionExec } from '../Utils/actionExec'
 
 const List = styled.div`

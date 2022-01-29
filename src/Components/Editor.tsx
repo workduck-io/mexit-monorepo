@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { Plate, usePlateEditorRef, selectEditor } from '@udecode/plate'
+import { Plate, usePlateEditorRef } from '@udecode/plate'
+import React from 'react'
 import styled from 'styled-components'
-import { NodeEditorContent } from '../Types/Editor'
 import { useEditorChange } from '../Hooks/useEditorActions'
+import { NodeEditorContent } from '../Types/Editor'
 
 const EditorWrapper = styled.div`
   margin: 1rem;

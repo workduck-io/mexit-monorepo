@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
-
-import { useTagStore } from '../Hooks/useTags'
+import React, { useState } from 'react'
 import { Tag } from '../Types/Tags'
 
 interface TagsProps {

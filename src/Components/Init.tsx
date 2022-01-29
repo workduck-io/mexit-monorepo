@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
-import useAuth from '../Hooks/useDwindle'
-
+import { useEffect } from 'react'
 import config from '../config'
+import useAuth from '../Hooks/useDwindle'
 
 const Init = () => {
   const { initCognito } = useAuth()

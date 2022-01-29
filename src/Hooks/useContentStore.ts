@@ -1,35 +1,43 @@
-import { Content, Contents, NodeEditorContent } from '../Types/Editor'
+import HighlightSource from 'web-highlighter/dist/model/source'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-import HighlightSource from 'web-highlighter/dist/model/source'
-import { localStorageAdapter } from '../Utils/localStorageAdapter'
+import { Content, Contents, NodeEditorContent } from '../Types/Editor'
+import storageAdapter from '../Utils/chromeStorageAdapter'
 
 export interface ContentStoreState extends State {
   contents: Contents
-  getContent: (url: string) => Content
+  getContent: (url: string) => Content[]
   removeContent: (url: string) => void
-  setContent: (url: string, content: NodeEditorContent, saveableRange: Partial<HighlightSource>) => void
+  setContent: (url: string, content: NodeEditorContent, saveableRange: Partial<HighlightSource>, id: string) => void
 }
 
 export const useContentStore = create<ContentStoreState>(
   persist(
     (set, get) => ({
       contents: {},
-      setContent: (url, content, saveableRange) => {
+      setContent: (url, content, saveableRange, id) => {
+        console.log('Setting Content: ', content)
         const oldContent = get()?.contents
+        const urlContent = oldContent[url] || []
+        delete oldContent[url]
 
-        // TODO: this most probably doesn't work properly after highlighting multiple times
-        set({
-          contents: {
-            [url]: {
+        const contents = {
+          ...oldContent,
+          [url]: [
+            ...urlContent,
+            {
+              id: id,
               content: content,
               range: saveableRange
-            },
-            ...oldContent
-          }
+            }
+          ]
+        }
+        set({
+          contents: contents
         })
       },
       getContent: (url) => {
+        console.log('Getting Content for URL: ', url)
         return get().contents[url]
       },
       removeContent: (url) => {
@@ -39,7 +47,7 @@ export const useContentStore = create<ContentStoreState>(
     }),
     {
       name: 'mexit-content',
-      ...localStorageAdapter
+      ...storageAdapter
     }
   )
 )

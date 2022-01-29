@@ -1,9 +1,8 @@
+import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js'
 import axios from 'axios'
 import useAuthStore from '../Hooks/useAuthStore'
 import { wrapErr } from './helpers'
-
-import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 
 const client = axios.create({
   adapter: fetchAdapter
