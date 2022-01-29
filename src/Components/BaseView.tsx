@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react'
-
-import { getCurrentTab, checkMetaParseableURL } from '../Utils/tabInfo'
-import Shortener from './Shortener'
-import Tags from './Tags'
-import { Tag } from '../Types/Tags'
-import { MexitAction, ActionType } from '../Types/Actions'
+import React, { useEffect, useState } from 'react'
 import { useActionsStore } from '../Hooks/useActions'
+import { Tag } from '../Types/Tags'
+import { checkMetaParseableURL, getCurrentTab } from '../Utils/tabInfo'
+import Shortener from './Shortener'
 
 const BaseView = () => {
   const [currTabURL, setCurrTabURL] = useState('')
@@ -29,20 +26,20 @@ const BaseView = () => {
   }, [])
 
   /* Inject Content Script into current tab */
-  useEffect(() => {
-    async function injectScript() {
-      if (currTabID !== -1 && !injected) {
-        await chrome.scripting.executeScript({
-          target: {
-            tabId: currTabID
-          },
-          files: ['./static/js/content.js']
-        })
-      }
-    }
-    injectScript()
-    setInjected(true)
-  }, [currTabID, injected])
+  // useEffect(() => {
+  //   async function injectScript() {
+  //     if (currTabID !== -1 && !injected) {
+  //       await chrome.scripting.executeScript({
+  //         target: {
+  //           tabId: currTabID
+  //         },
+  //         files: ['./static/js/content.js']
+  //       })
+  //     }
+  //   }
+  //   injectScript()
+  //   setInjected(true)
+  // }, [currTabID, injected])
 
   /* Try to fetch page metadata using content script*/
   useEffect(() => {

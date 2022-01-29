@@ -1,7 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import { closeSputlit } from '../contentScript'
-import { MexitAction, ActionType } from '../Types/Actions'
+import { ActionType, MexitAction } from '../Types/Actions'
 
 export function actionExec(action: MexitAction, query?: string) {
   switch (action.type) {

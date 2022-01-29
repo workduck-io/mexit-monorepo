@@ -1,10 +1,9 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-
-import Init from './Components/Init'
 import { Login, Logout } from './Components/Auth'
+import Init from './Components/Init'
 import { useAuthStore } from './Hooks/useAuth'
-import BaseView from './Components/BaseView'
+
 
 const Container = styled.div`
   text-align: center;

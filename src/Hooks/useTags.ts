@@ -1,4 +1,3 @@
-import { storageAdapter } from '../Utils/asyncStorage'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 

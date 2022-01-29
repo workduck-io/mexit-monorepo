@@ -1,15 +1,15 @@
 import {
-  CognitoUserPool,
-  CognitoUserAttribute,
-  //CognitoUser,
-  ICognitoUserPoolData,
   AuthenticationDetails,
+  ClientMetadata,
   CognitoUser,
+  CognitoUserAttribute,
+  CognitoUserPool,
   CognitoUserSession,
-  ClientMetadata
+  //CognitoUser,
+  ICognitoUserPoolData
 } from 'amazon-cognito-identity-js'
+import { useEffect } from 'react'
 import useInternalAuthStore, { UserCred } from './useAuthStore'
-import React, { useEffect } from 'react'
 
 const AWSRegion = 'us-east-1'
 

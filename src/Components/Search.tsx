@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ActionType, MexitAction } from '../Types/Actions'
-import styled from 'styled-components'
 import fuzzysort from 'fuzzysort'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+import { ActionType, MexitAction } from '../Types/Actions'
 import { defaultActions, initActions } from '../Utils/actions'
 import Results from './Results'
-import { useSlateStatic } from 'slate-react'
-import { actionExec } from '../Utils/actionExec'
 
 const InputContainer = styled.div`
   display: flex;

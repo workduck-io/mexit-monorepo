@@ -1,8 +1,7 @@
-import { initActions } from '../Utils/actions'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { MexitAction, ActionType } from '../Types/Actions'
+import { MexitAction } from '../Types/Actions'
+import { initActions } from '../Utils/actions'
 
 interface ActionsStore extends State {
   actions: MexitAction[]

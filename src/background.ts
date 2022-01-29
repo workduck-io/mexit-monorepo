@@ -3,7 +3,7 @@ import { CaptureConsole } from '@sentry/integrations'
 import mixpanel from 'mixpanel-browser'
 
 import { clearLocalStorage, reloadTab } from './Utils/helpers'
-import { handleActionRequest, handleStoreRequest, handleAuthRequest } from './Utils/requestHandler'
+import { handleActionRequest, handleAuthRequest, handleStoreRequest } from './Utils/requestHandler'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'ACTION_HANDLER') {
