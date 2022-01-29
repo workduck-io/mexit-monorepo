@@ -7,15 +7,18 @@ export function actionExec(action: MexitAction, query?: string) {
       chrome.runtime.sendMessage({ request: action.data.action_name })
       break
     case ActionType.open:
-      window.open(action.data.base_url, '_target').focus()
+      window.open(action.data.base_url, '_blank').focus()
       closeSputlit()
+
       break
     case ActionType.render:
       // render the component present in the action
       break
-    case ActionType.search:
-      window.open(action.data.base_url + query, '_target').focus()
+    case ActionType.search: {
+      const url = encodeURI(action.data.base_url + query)
+      window.open(url, '_blank').focus()
       closeSputlit()
       break
+    }
   }
 }
