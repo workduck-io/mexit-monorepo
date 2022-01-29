@@ -36,6 +36,22 @@ const ListItem = styled.div<{ active: boolean }>`
     `}
 `
 
+const Action = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+const ActionIcon = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
+
+  img {
+    height: 40px;
+    aspect-ratio: 1/1;
+  }
+`
+
 const ActionDesc = styled.div`
   display: flex;
   flex-direction: column;
@@ -151,10 +167,15 @@ function Results({
         <List>
           {actions.map((item, id) => (
             <ListItem key={id} active={activeIndex === id} onClick={() => actionExec(item)}>
-              <ActionDesc>
-                <h3> {item.title}</h3>
-                {item.description && <p>{item.description}</p>}
-              </ActionDesc>
+              <Action>
+                <ActionIcon>
+                  {item.data.icon && <img src={chrome.runtime.getURL(`/Assets/${item.data.icon}`)} />}
+                </ActionIcon>
+                <ActionDesc>
+                  <h3> {item.title}</h3>
+                  {item.description && <p>{item.description}</p>}
+                </ActionDesc>
+              </Action>
               <Shortcut>
                 {item.shortcut && item.shortcut.map((shortcutKey, id) => <Key key={id}>{shortcutKey}</Key>)}
               </Shortcut>
