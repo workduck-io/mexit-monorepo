@@ -1,8 +1,16 @@
-import Shortener from '../Components/Shortener'
 import { ActionType, MexitAction } from '../Types/Actions'
 
 // TODO: change shortcut keys based on user's OS
 export const initActions: Array<MexitAction> = [
+  {
+    id: '5',
+    title: 'Shorten URL',
+    description: 'Share this URL as an alias',
+    type: ActionType.render,
+    data: {
+      componentName: 'AliasWrapper'
+    }
+  },
   {
     id: '1',
     type: ActionType.search,
@@ -33,33 +41,6 @@ export const initActions: Array<MexitAction> = [
       icon: 'refresh.svg'
     },
     shortcut: ['Cmd', 'R']
-  },
-  {
-    id: '4',
-    title: 'About Us',
-    description: 'Get to know more about Workduck.io',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://workduck.io'
-    }
-  },
-  {
-    id: '5',
-    title: 'Shorten URL',
-    description: 'Share this URL as an alias',
-    type: ActionType.render,
-    data: {
-      component: Shortener
-    }
-  },
-  {
-    id: '6',
-    title: 'Clear Local Storage',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-local-storage'
-    },
-    shortcut: ['Cmd', 'D']
   },
   {
     id: '7',
@@ -97,7 +78,8 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new GitHub Gist',
     type: ActionType.open,
     data: {
-      base_url: 'https://gist.new'
+      base_url: 'https://gist.new',
+      icon: 'gist.svg'
     }
   },
   {
@@ -170,6 +152,25 @@ export const initActions: Array<MexitAction> = [
       base_url: 'https://github.com/search?ref=opensearch&q=',
       icon: 'github.svg'
     }
+  },
+  {
+    id: '4',
+    title: 'About Us',
+    description: 'Get to know more about Workduck.io',
+    type: ActionType.open,
+    data: {
+      base_url: 'https://workduck.io',
+      icon: 'workduck.svg'
+    }
+  },
+  {
+    id: '6',
+    title: 'Clear Local Storage',
+    type: ActionType.action,
+    data: {
+      action_name: 'remove-local-storage'
+    },
+    shortcut: ['Cmd', 'D']
   }
 ]
 

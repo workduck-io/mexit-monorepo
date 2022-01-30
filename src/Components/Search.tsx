@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ActionType, MexitAction } from '../Types/Actions'
 import { defaultActions, initActions } from '../Utils/actions'
+import Renderer from './Renderer'
 import Results from './Results'
 
 const InputContainer = styled.div`
@@ -70,6 +71,9 @@ function Search() {
         selectedAction={selectedAction}
         setSelectedAction={setSelectedAction}
       />
+      {selectedAction?.type === ActionType.render && (
+        <Renderer componentName={selectedAction.data.componentName} componentProps={selectedAction.data.props} />
+      )}
     </>
   )
 }
