@@ -53,8 +53,7 @@ const Main = styled.div`
 const Footer = styled.div`
   height: 45px;
   line-height: 45px;
-  border-top: 1px solid #35373e;
-  width: 92%;
+  border-top: 0.5px solid #ccc;
   margin-left: auto;
   margin-right: auto;
 `

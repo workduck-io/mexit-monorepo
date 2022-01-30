@@ -47,7 +47,7 @@ const ActionIcon = styled.div`
   margin-right: 0.75rem;
 
   img {
-    height: 40px;
+    height: 24px;
     aspect-ratio: 1/1;
   }
 `
@@ -103,6 +103,7 @@ function Results({
 }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [first, setFirst] = useState(false)
+  const [showResults, setShowResults] = useState(true)
 
   // TODO: lesser re-renders on using ref for active item, see KBarResults.tsx
   useEffect(() => {
@@ -138,7 +139,11 @@ function Results({
         selectedAction?.type !== ActionType.search
       ) {
         event.preventDefault()
+        setSelectedAction(actions[activeIndex])
         actionExec(actions[activeIndex])
+        if (actions[activeIndex].type === ActionType.render) {
+          setShowResults(false)
+        }
       } else if (event.key === 'Enter') {
         event.preventDefault()
         console.log(selectedAction, actions[activeIndex])
@@ -146,6 +151,7 @@ function Results({
           setSelectedAction(actions[activeIndex])
           setFirst(true)
           setQuery('')
+          setShowResults(false)
         } else {
           actionExec(selectedAction, query)
         }
@@ -162,26 +168,28 @@ function Results({
   return (
     // Better to use something like react-virtual to make scrolling and rendering a big list of actions better
     <>
-      <Subtitle>Navigation</Subtitle>
-      {selectedAction?.type !== ActionType.search && (
-        <List>
-          {actions.map((item, id) => (
-            <ListItem key={id} active={activeIndex === id} onClick={() => actionExec(item)}>
-              <Action>
-                <ActionIcon>
-                  {item.data.icon && <img src={chrome.runtime.getURL(`/Assets/${item.data.icon}`)} />}
-                </ActionIcon>
-                <ActionDesc>
-                  <h3> {item.title}</h3>
-                  {item.description && <p>{item.description}</p>}
-                </ActionDesc>
-              </Action>
-              <Shortcut>
-                {item.shortcut && item.shortcut.map((shortcutKey, id) => <Key key={id}>{shortcutKey}</Key>)}
-              </Shortcut>
-            </ListItem>
-          ))}
-        </List>
+      {showResults && (
+        <>
+          <Subtitle>Navigation</Subtitle>
+          <List>
+            {actions.map((item, id) => (
+              <ListItem key={id} active={activeIndex === id} onClick={() => actionExec(item)}>
+                <Action>
+                  <ActionIcon>
+                    {item.data.icon && <img src={chrome.runtime.getURL(`/Assets/${item.data.icon}`)} />}
+                  </ActionIcon>
+                  <ActionDesc>
+                    <h3> {item.title}</h3>
+                    {item.description && <p>{item.description}</p>}
+                  </ActionDesc>
+                </Action>
+                <Shortcut>
+                  {item.shortcut && item.shortcut.map((shortcutKey, id) => <Key key={id}>{shortcutKey}</Key>)}
+                </Shortcut>
+              </ListItem>
+            ))}
+          </List>
+        </>
       )}
     </>
   )

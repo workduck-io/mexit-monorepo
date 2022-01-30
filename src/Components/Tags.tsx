@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid'
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import { Tag } from '../Types/Tags'
 
 interface TagsProps {
@@ -7,6 +8,32 @@ interface TagsProps {
   addNewTag: (s: Tag) => void
   removeTag: (s: Tag) => void
 }
+
+const InputRow = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  margin: 0.75rem 0;
+`
+const Label = styled.label`
+  font-family: 1rem;
+  font-weight: 500;
+  color: #374151;
+`
+const Input = styled.input`
+  width: 80%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  &:focus {
+    outline: #6968d2;
+  }
+`
+
+const TagsContainer = styled.div`
+  display: flex;
+`
 
 const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps) => {
   const [input, setInput] = useState('')
@@ -49,17 +76,21 @@ const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps
   }
 
   return (
-    <>
-      <div className="container">
+    <div className="container">
+      <InputRow>
+        <Label>Add Tags</Label>
+        <Input value={input} placeholder="Enter a Tag" onKeyDown={onKeyDown} onKeyUp={onKeyUp} onChange={onChange} />
+      </InputRow>
+
+      <TagsContainer>
         {userTags.map((tag) => (
           <div key={tag.id} className="tag">
             {tag.text}
             <button onClick={() => removeTag(tag)}>x</button>
           </div>
         ))}
-        <input value={input} placeholder="Enter a Tag" onKeyDown={onKeyDown} onKeyUp={onKeyUp} onChange={onChange} />
-      </div>
-    </>
+      </TagsContainer>
+    </div>
   )
 }
 
