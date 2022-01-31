@@ -4,6 +4,7 @@ export type NodeEditorContent = any[]
 
 export interface Content {
   id: string
+  highlighterId: string
   content: NodeEditorContent
   range: Partial<HighlightSource>
 }

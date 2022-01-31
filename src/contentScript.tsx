@@ -13,6 +13,7 @@ import { useContentStore } from './Hooks/useContentStore'
 import { ThemeProvider } from 'styled-components'
 import { theme } from './Styles/theme'
 import { GlobalStyle } from './Styles/GlobalStyle'
+import Tooltip from './Components/Tooltip'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -122,14 +123,9 @@ chrome.runtime.onMessage.addListener(async (request) => {
         const selection = window.getSelection()
         const range = selection.getRangeAt(0)
 
-        highlighter.fromRange(range)
         const { url, html } = await getSelectionHtml()
 
-        const saveableRange: Partial<HighlightSource> = {
-          startMeta: getDomMeta(range.startContainer as Text, range.startOffset, document),
-          endMeta: getDomMeta(range.endContainer as Text, range.endOffset, document),
-          text: range.toString()
-        }
+        const saveableRange = highlighter.fromRange(range)
 
         ReactDOM.render(
           <ThemeProvider theme={theme}>
@@ -153,21 +149,32 @@ chrome.runtime.onMessage.addListener(async (request) => {
   }
 })
 
-// const highlightOldRange = (store: any) => {
-//   if (Object.keys(store.contents).length !== 0) {
-//     console.log('Highlight Content: ', store.contents)
-//     const highlights: any[] = store.contents[window.location.href]
-//     highlights.forEach((h) => {
-//       const { startMeta, endMeta, text, id } = h.range
-//       console.log(
-//         `Start Meta: ${JSON.stringify(startMeta)} | End Meta: ${JSON.stringify(endMeta)} | Text: ${text} | ID: ${id}`
-//       )
-//       highlighter.fromStore(startMeta, endMeta, text, id)
-//     })
-//     unsub()
-//   }
-// }
+const anotherOne = document.createElement('div')
+anotherOne.id = 'tooltip-root'
+document.body.appendChild(anotherOne)
 
-// const unsub = useContentStore.subscribe((store: any) => store.contents, highlightOldRange)
+highlighter.on(Highlighter.event.CLICK, (e) => {
+  const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
+  const coordinates = element.getBoundingClientRect()
+
+  ReactDOM.render(<Tooltip id={e.id} coordinates={coordinates} />, anotherOne)
+})
+
+const highlightOldRange = (store: any) => {
+  if (Object.keys(store.contents).length !== 0) {
+    console.log('Highlight Content: ', store.contents)
+    const highlights: any[] = store.contents[window.location.href]
+    highlights.forEach((h) => {
+      const { startMeta, endMeta, text, id } = h.range
+      console.log(
+        `Start Meta: ${JSON.stringify(startMeta)} | End Meta: ${JSON.stringify(endMeta)} | Text: ${text} | ID: ${id}`
+      )
+      highlighter.fromStore(startMeta, endMeta, text, id)
+    })
+    unsub()
+  }
+}
+
+const unsub = useContentStore.subscribe((store: any) => store.contents, highlightOldRange)
 
 export { closeSputlit }
