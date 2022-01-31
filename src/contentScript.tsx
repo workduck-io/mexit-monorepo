@@ -10,6 +10,9 @@ import mixpanel from 'mixpanel-browser'
 import Sputlit from './Components/Sputlit'
 import { getDomMeta } from './Utils/highlight'
 import { useContentStore } from './Hooks/useContentStore'
+import { ThemeProvider } from 'styled-components'
+import { theme } from './Styles/theme'
+import { GlobalStyle } from './Styles/GlobalStyle'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -128,9 +131,21 @@ chrome.runtime.onMessage.addListener(async (request) => {
           text: range.toString()
         }
 
-        ReactDOM.render(<Sputlit url={url} html={html} range={saveableRange} />, overlay)
+        ReactDOM.render(
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Sputlit url={url} html={html} range={saveableRange} />
+          </ThemeProvider>,
+          overlay
+        )
       } else {
-        ReactDOM.render(<Sputlit />, overlay)
+        ReactDOM.render(
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Sputlit />
+          </ThemeProvider>,
+          overlay
+        )
       }
     } else {
       closeSputlit()
