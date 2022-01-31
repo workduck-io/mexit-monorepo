@@ -1,19 +1,39 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
-  body {
-    background-color: ${(props) => props.theme.colors.background};
-    color: ${(props) => props.theme.colors.text};
-    margin: 0;
-    width: 600px;
-    height: 400px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    src: url(${chrome.runtime.getURL('/Assets/Inter-Regular.ttf')});
   }
 
-  html {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    src: url(${chrome.runtime.getURL('/Assets/Inter-Medium.ttf')});
   }
-`;
+
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    src: url(${chrome.runtime.getURL('/Assets/Inter-SemiBold.ttf')});
+  }
+
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    src: url(${chrome.runtime.getURL('/Assets/Inter-Bold.ttf')});
+  }
+
+  #extension-root *{
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 1;
+    text-align: left;
+  }
+`
