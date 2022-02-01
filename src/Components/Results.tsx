@@ -146,7 +146,6 @@ function Results({
         }
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        console.log(selectedAction, actions[activeIndex])
         if (!first) {
           setSelectedAction(actions[activeIndex])
           setFirst(true)
@@ -165,6 +164,25 @@ function Results({
     setActiveIndex(0)
   }, [actions])
 
+  function handleClick(id: number) {
+    if (actions[id]?.type !== ActionType.search && selectedAction?.type !== ActionType.search) {
+      setSelectedAction(actions[id])
+      actionExec(actions[id])
+      if (actions[id].type === ActionType.render) {
+        setShowResults(false)
+      }
+    } else {
+      if (!first) {
+        setSelectedAction(actions[id])
+        setFirst(true)
+        setQuery('')
+        setShowResults(false)
+      } else {
+        actionExec(selectedAction, query)
+      }
+    }
+  }
+
   return (
     // Better to use something like react-virtual to make scrolling and rendering a big list of actions better
     <>
@@ -173,7 +191,7 @@ function Results({
           <Subtitle>Navigation</Subtitle>
           <List>
             {actions.map((item, id) => (
-              <ListItem key={id} active={activeIndex === id} onClick={() => actionExec(item)}>
+              <ListItem key={id} active={activeIndex === id} onClick={() => handleClick(id)}>
                 <Action>
                   <ActionIcon>
                     {item.data.icon && <img src={chrome.runtime.getURL(`/Assets/${item.data.icon}`)} />}
