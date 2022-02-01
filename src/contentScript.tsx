@@ -14,6 +14,7 @@ import { ThemeProvider } from 'styled-components'
 import { theme } from './Styles/theme'
 import { GlobalStyle } from './Styles/GlobalStyle'
 import Tooltip from './Components/Tooltip'
+import { sanitizeHtml } from './Utils/sanitizeHTML'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -44,8 +45,8 @@ Sentry.init({
 //   }
 // });
 
-async function getSelectionHtml() {
-  let html, url
+function getSelectionHtml() {
+  let html, url, range
 
   if (typeof window.getSelection != 'undefined') {
     const selection: Selection | null = window.getSelection()
@@ -55,13 +56,17 @@ async function getSelectionHtml() {
 
       const container = document.createElement('div')
       for (let i = 0, len = selection.rangeCount; i < len; ++i) {
-        await container.appendChild(selection.getRangeAt(i).cloneContents())
+        const t = selection.getRangeAt(i).cloneContents()
+        console.log('Yaay I reached here: ', t)
+        container.appendChild(t)
+        range = selection.getRangeAt(i)
       }
+      console.log('Container: ', container)
       html = container.innerHTML
     }
   }
 
-  return { url, html }
+  return { url, html, range }
 }
 
 const parsePageMetaTags = () => {
@@ -116,21 +121,21 @@ document.onkeyup = (e) => {
 }
 
 // Listen for message from background script to see if sputlit is requested
-chrome.runtime.onMessage.addListener(async (request) => {
+chrome.runtime.onMessage.addListener((request) => {
   if (request.type === 'sputlit') {
     if (document.getElementById('sputlit-container') === null) {
       if (window.getSelection().toString() !== '') {
-        const selection = window.getSelection()
-        const range = selection.getRangeAt(0)
-
-        const { url, html } = await getSelectionHtml()
+        const { url, html, range } = getSelectionHtml()
 
         const saveableRange = highlighter.fromRange(range)
+        highlighter.fromRange(range)
+
+        const sanitizedHTML = sanitizeHtml(html)
 
         ReactDOM.render(
           <ThemeProvider theme={theme}>
             <GlobalStyle />
-            <Sputlit url={url} html={html} range={saveableRange} />
+            <Sputlit url={url} html={sanitizedHTML} range={saveableRange} />
           </ThemeProvider>,
           overlay
         )
