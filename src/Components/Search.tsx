@@ -2,7 +2,7 @@ import fuzzysort from 'fuzzysort'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ActionType, MexitAction } from '../Types/Actions'
-import { defaultActions, initActions } from '../Utils/actions'
+import { defaultActions, initActions, searchBrowserAction } from '../Utils/actions'
 import Renderer from './Renderer'
 import Results from './Results'
 
@@ -41,7 +41,9 @@ function Search() {
 
   useEffect(() => {
     if (query !== '') {
-      setActions(fuzzysort.go(query, initActions, { key: 'title' }).map((item) => item.obj))
+      const res = fuzzysort.go(query, initActions, { key: 'title' }).map((item) => item.obj)
+      if (res.length === 0) setActions([searchBrowserAction(query)])
+      else setActions(res)
     } else {
       setActions(defaultActions)
     }

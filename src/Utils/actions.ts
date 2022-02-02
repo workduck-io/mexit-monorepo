@@ -175,3 +175,16 @@ export const initActions: Array<MexitAction> = [
 ]
 
 export const defaultActions: MexitAction[] = initActions
+
+export const searchBrowserAction = (query: string) => {
+  return {
+    id: '0',
+    title: 'Search in Browser Search Bar',
+    description: "Perform a search in your browser's URL Bar!",
+    type: ActionType.open,
+    data: {
+      base_url: `https://google.com/search?q=${query}`,
+      icon: 'search.svg'
+    }
+  }
+}

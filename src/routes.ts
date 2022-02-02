@@ -19,6 +19,8 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io'
 
+export const MEXIT_FRONTEND_URL_BASE = 'http://localhost:3000'
+
 export const apiURLs = {
   //node
   saveNode: `${BASE_API_URL}/node`,
@@ -56,5 +58,7 @@ export const apiURLs = {
 
   // Mexit Backend URLs
   addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/link`,
-  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/content`
+  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/content`,
+
+  mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`
 }

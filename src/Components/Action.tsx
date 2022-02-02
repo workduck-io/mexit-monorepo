@@ -71,7 +71,7 @@ function Action({ action, active }: { action: MexitAction; active?: boolean }) {
   return (
     <Wrapper active={active}>
       <Container>
-        <Icon>{action.data.icon && <img src={chrome.runtime.getURL(`/Assets/${action.data.icon}`)} />}</Icon>
+        <Icon>{action.data.icon && <img src={chrome.runtime.getURL(`/assets/${action.data.icon}`)} />}</Icon>
         <Desc>
           <h3> {action.title}</h3>
           {action.description && <p>{action.description}</p>}

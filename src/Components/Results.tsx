@@ -21,10 +21,7 @@ const ListItem = styled.div<{ start: number }>`
   left: 0;
   transform: translateY(${(props) => props.start}px);
   width: 100%;
-
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `
 
 const Subtitle = styled.div`

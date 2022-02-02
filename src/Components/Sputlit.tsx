@@ -61,7 +61,7 @@ const Footer = styled.div`
 const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Partial<HighlightSource> }) => {
   const setContent = useContentStore((store) => store.setContent)
   const nodeId = useMemo(() => nanoid(), [])
-  const editor = usePlateEditorRef()
+  const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
   const content = getMexHTMLDeserializer(html, editor)
 
@@ -76,14 +76,12 @@ const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Pa
     // setContent(url, newContent, range)
     return
   }
-
   return (
     <div id="sputlit-container">
       <Wrapper>
         <Main>
-          <Search />
-
-          <Editor nodeId={nodeId} content={value} onChange={updateContent} />
+          {/* TODO: This is fucked up, Fix */}
+          {html === undefined ? <Search /> : <Editor nodeId={nodeId} content={value} onChange={updateContent} />}
           {/* <Footer id="sputlit-footer">Omni puts number of results and stuff here, lets see what we do</Footer> */}
         </Main>
       </Wrapper>

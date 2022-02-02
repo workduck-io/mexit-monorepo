@@ -1,9 +1,26 @@
+import { apiURLs } from './routes'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import mixpanel from 'mixpanel-browser'
 
 import { clearLocalStorage, reloadTab } from './Utils/helpers'
 import { handleActionRequest, handleAuthRequest, handleStoreRequest } from './Utils/requestHandler'
+
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    const url = apiURLs.mexitHome
+    chrome.tabs.create(
+      {
+        url: url,
+        pinned: true
+      },
+      (tab) => {
+        tab.highlighted = true
+        tab.active = true
+      }
+    )
+  }
+})
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'ACTION_HANDLER') {
