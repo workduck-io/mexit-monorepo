@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import usePointerMovedSinceMount from '../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
 import { ActionType, MexitAction } from '../Types/Actions'
 import { actionExec } from '../Utils/actionExec'
@@ -22,8 +23,6 @@ const ListItem = styled.div<{ active: boolean }>`
 
   &:hover {
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-left: 2px solid rgb(28, 28, 29);
   }
 
   ${(props) =>
@@ -104,6 +103,7 @@ function Results({
   const [activeIndex, setActiveIndex] = useState(0)
   const [first, setFirst] = useState(false)
   const [showResults, setShowResults] = useState(true)
+  const pointerMoved = usePointerMovedSinceMount()
 
   // TODO: lesser re-renders on using ref for active item, see KBarResults.tsx
   useEffect(() => {
@@ -191,7 +191,12 @@ function Results({
           <Subtitle>Navigation</Subtitle>
           <List>
             {actions.map((item, id) => (
-              <ListItem key={id} active={activeIndex === id} onClick={() => handleClick(id)}>
+              <ListItem
+                key={id}
+                active={activeIndex === id}
+                onPointerMove={() => pointerMoved && setActiveIndex(id)}
+                onClick={() => handleClick(id)}
+              >
                 <Action>
                   <ActionIcon>
                     {item.data.icon && <img src={chrome.runtime.getURL(`/Assets/${item.data.icon}`)} />}
