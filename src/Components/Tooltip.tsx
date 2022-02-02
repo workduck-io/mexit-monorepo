@@ -47,7 +47,7 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
       showTooltip={showTooltip}
     >
       <div onClick={handleDelete}>
-        <img src={chrome.runtime.getURL('/Assets/trash.svg')} />
+        <img src={chrome.runtime.getURL('/assets/trash.svg')} />
       </div>
     </Container>
   )

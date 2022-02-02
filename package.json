@@ -3,7 +3,6 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.3",
     "@sentry/integrations": "^6.17.2",
     "@sentry/react": "^6.17.2",
     "@udecode/plate": "^9.2.1",
@@ -32,6 +31,7 @@
     "zustand": "^3.6.9"
   },
   "devDependencies": {
+    "@craco/craco": "^6.4.3",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -56,7 +56,7 @@
     "watch": "^1.0.2"
   },
   "scripts": {
-    "dev": "watch 'yarn build' src",
+    "dev": "watch 'yarn build' src public",
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
     "test": "react-scripts test",
