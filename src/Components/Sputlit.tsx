@@ -84,7 +84,7 @@ const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Pa
           <Search />
 
           <Editor nodeId={nodeId} content={value} onChange={updateContent} />
-          <Footer id="sputlit-footer">{/* Omni puts number of results and stuff here, lets see what we do */}</Footer>
+          {/* <Footer id="sputlit-footer">Omni puts number of results and stuff here, lets see what we do</Footer> */}
         </Main>
       </Wrapper>
       <Overlay
