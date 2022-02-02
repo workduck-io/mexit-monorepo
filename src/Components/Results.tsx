@@ -5,15 +5,13 @@ import { ActionType, MexitAction } from '../Types/Actions'
 import { actionExec } from '../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import Action from './Action'
-import { ReactEditor } from 'slate-react'
 
-const List = styled.div<{ height: number }>`
+const List = styled.div`
   width: 100%;
   overflow: auto;
   position: relative;
   scroll-behavior: smooth;
 
-  height: ${(props) => props.height}px;
   max-height: 400px;
 `
 
@@ -65,10 +63,8 @@ function Results({
   const { scrollToIndex } = rowVirtualizer
   React.useEffect(() => {
     scrollToIndex(activeIndex, {
-      // ensure that if the first item in the list is a group
-      // name and we are focused on the second item, to not
-      // scroll past that group, hiding it.
-      align: activeIndex <= 1 ? 'end' : 'auto'
+      // To ensure that we don't move past the first item
+      align: activeIndex < 1 ? 'start' : 'auto'
     })
   }, [activeIndex, scrollToIndex])
 
@@ -155,21 +151,23 @@ function Results({
       {showResults && (
         <>
           <Subtitle>Navigation</Subtitle>
-          <List ref={parentRef} height={rowVirtualizer.totalSize}>
-            {rowVirtualizer.virtualItems.map((virtualRow) => {
-              const item = actions[virtualRow.index]
-              const handlers = {
-                onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
-                onClick: () => handleClick(virtualRow.index)
-              }
-              const active = virtualRow.index === activeIndex
+          <List ref={parentRef}>
+            <div style={{ height: rowVirtualizer.totalSize }}>
+              {rowVirtualizer.virtualItems.map((virtualRow) => {
+                const item = actions[virtualRow.index]
+                const handlers = {
+                  onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
+                  onClick: () => handleClick(virtualRow.index)
+                }
+                const active = virtualRow.index === activeIndex
 
-              return (
-                <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
-                  <Action action={item} active={active} />
-                </ListItem>
-              )
-            })}
+                return (
+                  <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
+                    <Action action={item} active={active} />
+                  </ListItem>
+                )
+              })}
+            </div>
           </List>
         </>
       )}
