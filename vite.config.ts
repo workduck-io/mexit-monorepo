@@ -6,8 +6,5 @@ export default defineConfig({
   build: {
     sourcemap: true
   },
-  define: {
-    global: {}
-  },
   plugins: [react()]
 })
