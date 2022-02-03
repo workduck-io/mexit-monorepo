@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
+import { nanoid } from 'nanoid'
 
 import { apiURLs } from '../Utils/routes'
 import { RegisterFormData } from '../Types/Auth'
@@ -106,5 +107,67 @@ export const useAuthentication = () => {
     })
   }
 
-  return { login, logout }
+  const registerDetails = (data: RegisterFormData): Promise<string> => {
+    const customAttributes = [{ name: 'user_type', value: 'mexit_webapp' }]
+    const { email, password, roles, name } = data
+    const userRole = roles.map((r) => r.value).join(', ') ?? ''
+
+    const status = signUp(email, password, customAttributes)
+      .then(() => {
+        setRegistered(true)
+        setSensitiveData(data)
+        return data.email
+      })
+      .catch((e) => {
+        if (e.name === 'UsernameExistsException') {
+          setRegistered(true)
+          setSensitiveData(data)
+          return e.name
+        }
+      })
+    return status
+  }
+
+  const verifySignup = async (code: string, metadata: any): Promise<string> => {
+    const formMetaData = {
+      ...metadata,
+      name: sensitiveData.name,
+      email: sensitiveData.email,
+      roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1)
+    }
+    const vSign = await verifySignUp(code, formMetaData).catch(console.error)
+
+    const loginData = await login(sensitiveData.email, sensitiveData.password).catch(console.error)
+
+    if (!loginData) {
+      return
+    }
+
+    const uCred = loginData.data
+    const newWorkspaceName = `WD_${nanoid()}`
+
+    await client
+      .post(apiURLs.registerUser, {
+        user: {
+          id: uCred.userId,
+          name: uCred.email,
+          email: uCred.email
+        },
+        workspaceName: newWorkspaceName
+      })
+      .then((d: any) => {
+        const userDetails = { email: uCred.email, userId: uCred.userId }
+        const workspaceDetails = { id: d.data.id, name: d.data.name }
+
+        setAuthenticated(userDetails, workspaceDetails)
+      })
+      .catch(console.error)
+
+    if (vSign) {
+      setRegistered(false)
+    }
+    return vSign
+  }
+
+  return { login, logout, registerDetails, verifySignup }
 }
