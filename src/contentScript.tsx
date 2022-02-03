@@ -57,7 +57,6 @@ function getSelectionHtml() {
       const container = document.createElement('div')
       for (let i = 0, len = selection.rangeCount; i < len; ++i) {
         const t = selection.getRangeAt(i).cloneContents()
-        console.log('Yaay I reached here: ', t)
         container.appendChild(t)
         range = selection.getRangeAt(i)
       }
