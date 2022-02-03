@@ -46,7 +46,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 })
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender) => {
   switch (message.request) {
     case 'reload':
       reloadTab()
@@ -54,6 +54,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     case 'remove-local-storage':
       clearLocalStorage()
       break
+  }
+
+  if (message.request.id === '0') {
+    const query = message.request.data.query
+    chrome.search.query(
+      {
+        disposition: 'NEW_TAB',
+        text: query
+      },
+      () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+    )
   }
 })
 

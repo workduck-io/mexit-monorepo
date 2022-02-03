@@ -181,9 +181,9 @@ export const searchBrowserAction = (query: string) => {
     id: '0',
     title: 'Search in Browser Search Bar',
     description: "Perform a search in your browser's URL Bar!",
-    type: ActionType.open,
+    type: ActionType.browser_search,
     data: {
-      base_url: `https://google.com/search?q=${query}`,
+      query: query,
       icon: 'search.svg'
     }
   }

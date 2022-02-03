@@ -20,5 +20,9 @@ export function actionExec(action: MexitAction, query?: string) {
       closeSputlit()
       break
     }
+    case ActionType.browser_search: {
+      chrome.runtime.sendMessage({ request: action })
+      break
+    }
   }
 }

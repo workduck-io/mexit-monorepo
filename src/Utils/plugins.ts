@@ -12,11 +12,7 @@ import {
   createPlugins,
   createStrikethroughPlugin,
   createUnderlinePlugin,
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TH,
-  PlatePlugin,
-  withPlaceholders
+  PlatePlugin
 } from '@udecode/plate'
 
 const generatePlugins = () => {
