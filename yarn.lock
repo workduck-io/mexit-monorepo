@@ -438,7 +438,18 @@
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
-"@sentry/types@6.17.4":
+"@sentry/tracing@^6.17.4":
+  version "6.17.4"
+  resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-6.17.4.tgz#17c2ab50d9e4cdf727b9b25e7f91ae3a9ea19437"
+  integrity sha512-UV6wWH/fqndts0k0cptsNtzD0h8KXqHInJSCGqlWDlygFRO16jwMKv0wfXgqsgc3cBGDlsl8C4l6COSwz9ROdg==
+  dependencies:
+    "@sentry/hub" "6.17.4"
+    "@sentry/minimal" "6.17.4"
+    "@sentry/types" "6.17.4"
+    "@sentry/utils" "6.17.4"
+    tslib "^1.9.3"
+
+"@sentry/types@6.17.4", "@sentry/types@^6.14.1":
   version "6.17.4"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.17.4.tgz#36b78d7c4a6de19b2bbc631bb34893bcad30c0ba"
   integrity sha512-RUyiXCKf61k2GIMP7FQX0naoSew4zLxe+UrtbjwVcWU4AFPZfH7tLNtTpVE85zAKbxsaiq3OD2FPtTZarHcwxQ==
@@ -2254,6 +2265,13 @@ react-router-dom@^6.2.1:
   dependencies:
     history "^5.2.0"
     react-router "6.2.1"
+
+react-router-v6-instrumentation@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-router-v6-instrumentation/-/react-router-v6-instrumentation-2.0.1.tgz#72df8b1a0b857b373d49a187f8acb0cf984a46f3"
+  integrity sha512-VqUJHA7U89QP/SNJsxjAZ55sO5tROQlwOpnERAyxog+xSBG2AdlALksj2fV3ufeKZ0JR6rZbcF7PSh/lmZD1BA==
+  dependencies:
+    "@sentry/types" "^6.14.1"
 
 react-router@6.2.1:
   version "6.2.1"

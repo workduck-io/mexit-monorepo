@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import Editor from '../Components/Editor/Editor'
+import React from 'react'
+import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react'
 
+import Editor from '../Components/Editor/Editor'
 import styled from 'styled-components'
 import Sidebar from '../Components/Sidebar'
 
@@ -11,10 +12,12 @@ const Container = styled.div`
 
 function MainArea() {
   return (
-    <Container>
-      <Sidebar />
-      <Editor />
-    </Container>
+    <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
+      <Container>
+        <Sidebar />
+        <Editor />
+      </Container>
+    </SentryErrorBoundary>
   )
 }
 
