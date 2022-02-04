@@ -3,8 +3,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 import * as Sentry from '@sentry/react'
 
-import GlobalStyle from './Shared/GlobalStyle'
-import theme from './Shared/theme'
+import GlobalStyle from './Style/GlobalStyle'
+import theme from './Style/theme'
 import Switch from './Switch'
 import Analytics from './Utils/analytics'
 
@@ -14,7 +14,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
+  height: 100%;
 `
 
 //======================================

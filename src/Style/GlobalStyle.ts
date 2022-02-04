@@ -1,20 +1,25 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: ${(props) => props.theme.colors.background};
-    color: ${(props) => props.theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.background.modal};
+    color: ${({ theme }) => theme.colors.text.default};
+
+    height: 100vh;
     margin: 0;
-    width: 600px;
-    height: 400px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  #root {
+    height: 100vh;
+  }
+
   html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   }
-`;
+`
 
-export default GlobalStyle;
+export default GlobalStyle
