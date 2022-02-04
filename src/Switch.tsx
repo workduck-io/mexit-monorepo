@@ -2,10 +2,13 @@ import React, { useEffect } from 'react'
 import { Navigate, Route, RouteProps, Routes } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 
-import { Login, Register } from './Components/Auth'
 import MainArea from './Views/MainArea'
 import { useAuthStore } from './Hooks/useAuth'
 import config from './config'
+import { Login } from './Views/Login'
+import { Register } from './Views/Register'
+import Navbar from './Components/Navbar'
+import Footer from './Components/Footer'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -36,6 +39,7 @@ const Switch = () => {
         path="/"
         element={
           <ProtectedRoute>
+            <Navbar />
             <MainArea />
           </ProtectedRoute>
         }
@@ -45,6 +49,7 @@ const Switch = () => {
         element={
           <AuthRoute>
             <Login />
+            <Footer />
           </AuthRoute>
         }
       />
@@ -53,6 +58,7 @@ const Switch = () => {
         element={
           <AuthRoute>
             <Register />
+            <Footer />
           </AuthRoute>
         }
       />

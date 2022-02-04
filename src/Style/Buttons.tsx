@@ -12,6 +12,7 @@ export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
 
 export const Button = styled.button<ButtonProps>`
   ${centeredCss};
+  border: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.colors.text.subheading};
   cursor: pointer;
@@ -74,6 +75,7 @@ export interface AsyncButtonProps {
 
 export const AsyncButton = styled.button<AsyncButtonProps>`
   ${centeredCss};
+  border: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.colors.text.subheading};
   cursor: pointer;
