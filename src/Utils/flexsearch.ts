@@ -1,10 +1,10 @@
 import { Document } from 'flexsearch'
-import { NodeSearchData, ActivityNode } from '../Types/data'
+import { BlockIndexData, Node } from '../Types/data'
 
-export const createFlexsearchIndex = (initList: NodeSearchData[]) => {
+export const createFlexsearchIndex = (initList: BlockIndexData[]) => {
   const options = {
     document: {
-      id: 'ID',
+      id: 'blockUID',
       index: ['text']
     },
     tokenize: 'full'
@@ -28,35 +28,29 @@ export const flexIndexKeys = [
   'tag'
 ]
 
-export const convertContentToRawText = (content: any[], join?: string): string => {
+export const parseBlock = (content: any[], join?: string): string => {
   const text: string[] = []
   content.forEach((n) => {
     if (n.text && n.text !== '') text.push(n.text)
     if (n.children && n.children.length > 0) {
-      const childText = convertContentToRawText(n.children)
+      const childText = parseBlock(n.children)
       text.push(childText)
     }
   })
   return text.join(join ?? '')
 }
 
-export const convertEntryToRawText = (nodeUID: string, entry: any[]): NodeSearchData => {
-  return { nodeUID: nodeUID, title: '', text: convertContentToRawText(entry) }
-}
+export const parseNode = (node: Node): BlockIndexData[] => {
+  const nodeUID = node.id
+  const result: BlockIndexData[] = []
 
-export const convertDataToRawText = (activityNode: ActivityNode): NodeSearchData[] => {
-  const result: NodeSearchData[] = []
-  const titleNodeMap = new Map<string, string>()
-  data.ilinks.forEach((entry) => {
-    titleNodeMap.set(entry.uid, entry.text)
-  })
-
-  Object.entries(data.contents).forEach(([k, v]) => {
-    if (v.type === 'editor' && k !== '__null__') {
-      const temp: NodeSearchData = convertEntryToRawText(k, v.content)
-      temp.title = titleNodeMap.get(k)
+  node.content.forEach((block) => {
+    const blockText = parseBlock(block.children)
+    if (blockText.length !== 0) {
+      const temp: BlockIndexData = { blockUID: block.id, text: blockText, nodeUID: nodeUID }
       result.push(temp)
     }
   })
+
   return result
 }

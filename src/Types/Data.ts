@@ -1,13 +1,32 @@
-export interface NodeSearchData {
+export interface BlockIndexData {
+  blockUID: string
   nodeUID: string
-  title?: string
   text: string
 }
 
-export type Activity = any
+export interface Metadata {
+  createdBy: string
+  createdAt: number
+  lastEditedBy: string
+  updatedAt: number
+}
+export interface Block {
+  id: string // Block ID of form `BLOCK_`
+  nodeUID: string // UID of node to which this block belongs
+  children: any[]
+  metadata?: Metadata // Block level metadata
+  type?: string
+}
 
-export interface ActivityNode {
+export interface Node {
   id: string
-  data: Activity[]
-  metadata?: any
+  content: Block[]
+  metadata?: Metadata // Node level metadata
+}
+
+export interface FlexSearchResult {
+  blockUID: string
+  nodeUID: string
+  text: string
+  matchField: string[]
 }

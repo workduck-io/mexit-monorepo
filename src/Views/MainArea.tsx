@@ -3,7 +3,10 @@ import { client } from '@workduck-io/dwindle'
 
 import { useAuthStore, useAuthentication } from '../Hooks/useAuth'
 import { apiURLs } from '../Utils/routes'
-import { activities as InitActivities } from '../Utils/activity'
+import { activityNode as InitActivities } from '../Utils/activity'
+import { parseNode } from '../Utils/flexsearch'
+import useSearchStore from '../Hooks/useSearchStore'
+import { Node, FlexSearchResult } from '../Types/Data'
 
 export const Logout = () => {
   const { logout } = useAuthentication()
@@ -20,10 +23,23 @@ export const Logout = () => {
 }
 
 export const UserActivities = () => {
-  const [activities, setActivities] = useState<any>(InitActivities)
-  const [blockCount, setBlockCount] = useState<number>(InitActivities.blocks.length)
+  const [activities, setActivities] = useState<Node>(InitActivities)
+  const [blockCount, setBlockCount] = useState<number>(InitActivities.content.length)
   const userDetails = useAuthStore((store) => store.userDetails)
   const url = apiURLs.fetchActivities(userDetails.userId)
+  const initializeSearchIndex = useSearchStore((store) => store.initializeSearchIndex)
+  const searchIndex = useSearchStore((store) => store.searchIndex)
+  const [results, setResults] = useState<FlexSearchResult[]>([])
+
+  useEffect(() => {
+    const initList = parseNode(activities)
+    console.log('Initlist: ', JSON.stringify(initList))
+    const index = initializeSearchIndex(initList)
+
+    const results = searchIndex('block')
+    console.log('Results: ', JSON.stringify(results))
+    setResults(results)
+  }, [activities])
 
   // useEffect(() => {
   //   async function fetchActivities() {
@@ -38,14 +54,14 @@ export const UserActivities = () => {
   //   }
   //   fetchActivities()
   // }, [])
-
   return (
     <>
       <h1>Quick Captures</h1>
       {blockCount !== -1 && <h3>Number of Captures: {blockCount}</h3>}
-      {activities.blocks.map((item, id) => (
-        <p key={id}>Item is: {JSON.stringify(item)}</p>
-      ))}
+      <p key={activities.id}>{JSON.stringify(activities)}</p>
+
+      <h1>Search Results for Block</h1>
+      {JSON.stringify(results)}
     </>
   )
 }
