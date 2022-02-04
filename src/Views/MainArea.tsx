@@ -7,6 +7,7 @@ import { activityNode as InitActivities } from '../Utils/activity'
 import { parseNode } from '../Utils/flexsearch'
 import useSearchStore from '../Hooks/useSearchStore'
 import { Node, FlexSearchResult } from '../Types/Data'
+import Editor from '../Components/Editor/Editor'
 
 export const Logout = () => {
   const { logout } = useAuthentication()
@@ -68,12 +69,21 @@ export const UserActivities = () => {
 
 function MainArea() {
   const userDetails = useAuthStore((store) => store.userDetails)
+
+  const onVChange = (newVal) => {
+    // console.log('Newval: ', JSON.stringify(newVal))
+    // setValue(newVal)
+    return
+  }
+
   return (
     <>
       <h1>Hello, World! Does this update?</h1>
       <p>{JSON.stringify(userDetails)}</p>
 
       <UserActivities />
+      <h1>Editor Below</h1>
+      <Editor />
       <Logout />
     </>
   )
