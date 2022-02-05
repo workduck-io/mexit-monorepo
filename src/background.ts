@@ -3,7 +3,6 @@ import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import mixpanel from 'mixpanel-browser'
 
-import { clearLocalStorage, reloadTab } from './Utils/helpers'
 import { handleActionRequest, handleAuthRequest, handleStoreRequest } from './Utils/requestHandler'
 
 chrome.runtime.onInstalled.addListener((details) => {
@@ -47,24 +46,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 chrome.runtime.onMessage.addListener((message, sender) => {
-  switch (message.request) {
+  switch (message.request.action_name) {
     case 'reload':
-      reloadTab()
+      chrome.tabs.reload()
       break
     case 'remove-local-storage':
-      clearLocalStorage()
+      chrome.browsingData.removeLocalStorage({ since: 0 })
       break
-  }
-
-  if (message.request.id === '0') {
-    const query = message.request.data.query
-    chrome.search.query(
-      {
-        disposition: 'NEW_TAB',
-        text: query
-      },
-      () => {} // eslint-disable-line @typescript-eslint/no-empty-function
-    )
+    case 'browser-search':
+      chrome.search.query(
+        {
+          disposition: 'NEW_TAB',
+          text: message.request.query
+        },
+        () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+      )
+      break
+    case 'chrome-url':
+      chrome.tabs.create({ url: message.request.base_url })
+      break
+    case 'remove-cookies':
+      chrome.browsingData.removeCookies({ since: 0 })
+      break
+    case 'remove-history':
+      chrome.browsingData.removeHistory({ since: 0 })
+      break
+    case 'remove-cache':
+      chrome.browsingData.removeCache({ since: 0 })
+      break
   }
 })
 
