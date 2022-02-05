@@ -103,6 +103,68 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
+    id: '18',
+    title: 'New Linear issue',
+    description: 'Create a new Linear issue',
+    type: ActionType.open,
+    data: {
+      base_url: 'https://linear.new',
+      icon: 'linear.png'
+    }
+  },
+  {
+    id: '19',
+    title: 'New Notion page',
+    description: 'Create a new Notion page',
+    type: ActionType.open,
+    data: {
+      base_url: 'https://notion.new',
+      icon: 'notion.svg'
+    }
+  },
+  {
+    id: '20',
+    title: 'New Google form',
+    description: 'Create a new Google form',
+    type: ActionType.open,
+    data: {
+      base_url: 'https://forms.new',
+      icon: 'google-form.svg'
+    }
+  },
+  {
+    id: '21',
+    title: 'New Tweet',
+    description: 'Make a new Tweet',
+    type: ActionType.open,
+    data: {
+      base_url: 'https://twitter.com/intent/tweet',
+      icon: 'twitter.svg'
+    }
+  },
+  {
+    id: '22',
+    title: 'Downloads',
+    description: 'Browse through your downloads',
+    type: ActionType.action,
+    data: {
+      action_name: 'chrome-url',
+      base_url: 'chrome://downloads',
+      icon: 'downloads.svg'
+    }
+  },
+  {
+    id: '23',
+    title: 'Extensions',
+    description: 'Manage your chrome extensions',
+    type: ActionType.action,
+    data: {
+      action_name: 'chrome-url',
+      base_url: 'chrome://extensions',
+      icon: 'extension.svg'
+    }
+  },
+  {
     id: '13',
     title: 'Search Gmail',
     description: 'Search within your default Gmail Account',
@@ -154,6 +216,46 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
+    id: '24',
+    title: 'Clear browsing history',
+    description: 'Clear all of your browsing history',
+    type: ActionType.action,
+    data: {
+      action_name: 'remove-history',
+      icon: 'delete-history.png'
+    }
+  },
+  {
+    id: '25',
+    title: 'Clear Cache',
+    description: 'Clear all the cache',
+    type: ActionType.action,
+    data: {
+      action_name: 'remove-cache',
+      icon: 'cache.png'
+    }
+  },
+  {
+    id: '26',
+    title: 'Clear Cookies',
+    description: 'Clear all cookies',
+    type: ActionType.action,
+    data: {
+      action_name: 'remove-cookies',
+      icon: 'cookies.png'
+    }
+  },
+  {
+    id: '6',
+    title: 'Clear Local Storage',
+    type: ActionType.action,
+    data: {
+      action_name: 'remove-local-storage',
+      icon: 'storage.png'
+    },
+    shortcut: ['Cmd', 'D']
+  },
+  {
     id: '4',
     title: 'About Us',
     description: 'Get to know more about Workduck.io',
@@ -162,15 +264,6 @@ export const initActions: Array<MexitAction> = [
       base_url: 'https://workduck.io',
       icon: 'workduck.svg'
     }
-  },
-  {
-    id: '6',
-    title: 'Clear Local Storage',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-local-storage'
-    },
-    shortcut: ['Cmd', 'D']
   }
 ]
 
@@ -181,8 +274,9 @@ export const searchBrowserAction = (query: string) => {
     id: '0',
     title: 'Search in Browser Search Bar',
     description: "Perform a search in your browser's URL Bar!",
-    type: ActionType.browser_search,
+    type: ActionType.action,
     data: {
+      action_name: 'browser-search',
       query: query,
       icon: 'search.svg'
     }

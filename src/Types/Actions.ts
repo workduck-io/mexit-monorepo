@@ -2,8 +2,7 @@ export enum ActionType {
   'search',
   'open',
   'render',
-  'action',
-  'browser_search'
+  'action'
 }
 
 export interface MexitAction {

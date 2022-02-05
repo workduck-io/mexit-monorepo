@@ -42,7 +42,8 @@
     "storage",
     "tabs",
     "activeTab",
-    "search"
+    "search",
+    "browsingData"
   ],
   "web_accessible_resources": [
     "assets/*"
