@@ -46,6 +46,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 chrome.runtime.onMessage.addListener((message, sender) => {
+  if (!message.request.action_name) return
+
   switch (message.request.action_name) {
     case 'reload':
       chrome.tabs.reload()

@@ -4,7 +4,6 @@ import { Login, Logout } from './Components/Auth'
 import Init from './Components/Init'
 import { useAuthStore } from './Hooks/useAuth'
 
-
 const Container = styled.div`
   text-align: center;
 `
@@ -44,7 +43,6 @@ const Popup = () => {
     <Container>
       <Init />
       <Header>
-        <Logo src="/logo.svg" alt="logo" />
         {!authenticated ? (
           <Login />
         ) : (
