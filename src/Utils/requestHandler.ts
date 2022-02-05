@@ -29,6 +29,7 @@ export const handleDwindleRequest = ({ requestMethod, URL, body }) => {
 export const handleActionRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_SHORT_URL': {
+      console.log('Did it hit the handler')
       const authenticated = useAuthStore.getState().authenticated
       if (!authenticated) return { message: null, error: 'Not Authenticated' }
 
@@ -43,6 +44,8 @@ export const handleActionRequest = ({ subType, data }) => {
         ...body,
         namespace: workspaceDetails.name
       }
+
+      console.log('Reqbody: ', reqBody)
 
       const URL = apiURLs.createShort
       return client

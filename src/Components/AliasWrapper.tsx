@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { useActionsStore } from '../Hooks/useActions'
 import { Tag } from '../Hooks/useTags'
-import { checkMetaParseableURL, getCurrentTab } from '../Utils/tabInfo'
+import { checkMetaParseableURL, getCurrentTab, parsePageMetaTags } from '../Utils/tabInfo'
 import Shortener from './Shortener'
 import Tags from './Tags'
 
@@ -32,8 +32,8 @@ interface ShortenFormDetails {
 }
 
 function AliasWrapper() {
-  const [currTabURL, setCurrTabURL] = useState('')
-  const [currTabID, setCurrTabID] = useState(-1)
+  const [currTabURL, setCurrTabURL] = useState(window.location.href)
+  const [currTabID, setCurrTabID] = useState(1)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortenerResponse, setShortenerResponse] = useState<any>()
@@ -42,6 +42,7 @@ function AliasWrapper() {
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
+    console.log('did I even get here?')
     const { short } = data
 
     const reqBody = {
@@ -55,7 +56,7 @@ function AliasWrapper() {
 
     chrome.runtime.sendMessage(
       {
-        type: 'DISPATCH_DWINDLE_REQUEST',
+        type: 'ACTION_HANDLER',
         subType: 'CREATE_SHORT_URL',
         data: {
           body: reqBody
@@ -79,30 +80,21 @@ function AliasWrapper() {
   }
 
   /* Fetch Current Tab Information using chrome APIs */
-  useEffect(() => {
-    async function fetchTab() {
-      const currentTab = await getCurrentTab()
-      setCurrTabURL(currentTab.url)
-      setCurrTabID(currentTab.id)
-    }
-    fetchTab()
-  }, [])
+  // useEffect(() => {
+  //   async function fetchTab() {
+  //     const currentTab = await getCurrentTab()
+  //     console.log('Current Tab: ', currentTab)
+  //     setCurrTabURL(currentTab.url)
+  //     setCurrTabID(currentTab.id)
+  //   }
+  //   fetchTab()
+  // }, [])
 
   /* Try to fetch page metadata using content script*/
   useEffect(() => {
     if (currTabID > 0 && checkMetaParseableURL(currTabURL)) {
-      chrome.tabs.sendMessage(
-        currTabID,
-        {
-          method: 'GetPageMetaTags'
-        },
-        (response) => {
-          if (!chrome.runtime.lastError) {
-            const mt = response.metaTags
-            setPageMetaTags(mt)
-          }
-        }
-      )
+      const mt = parsePageMetaTags()
+      setPageMetaTags(mt)
     }
   }, [currTabID, currTabURL])
 
