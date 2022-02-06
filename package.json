@@ -1,6 +1,6 @@
 {
   "name": "mexit-chrome-extension",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
     "@sentry/integrations": "^6.17.2",
