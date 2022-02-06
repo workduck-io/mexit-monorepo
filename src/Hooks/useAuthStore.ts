@@ -1,6 +1,7 @@
 /* Dwindle Internal Store for Auth */
 
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
+import storageAdapter from '../Utils/chromeStorageAdapter'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -48,7 +49,7 @@ const useInternalAuthStore = create<InternalAuthStoreState>(
           email: undefined
         })
     }),
-    { name: 'aws-auth-mex-extension' }
+    { name: 'aws-auth-mex-extension', ...storageAdapter }
   )
 )
 

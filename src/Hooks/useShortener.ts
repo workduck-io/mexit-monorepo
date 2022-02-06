@@ -1,3 +1,4 @@
+import storageAdapter from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -23,6 +24,6 @@ export const useShortenerStore = create<LinkCaptureStore>(
         set({ linkCaptures: [...captures, l] })
       }
     }),
-    { name: 'mexit-link-captures' }
+    { name: 'mexit-link-captures', ...storageAdapter }
   )
 )

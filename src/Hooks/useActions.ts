@@ -1,3 +1,4 @@
+import storageAdapter from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { MexitAction } from '../Types/Actions'
@@ -18,6 +19,6 @@ export const useActionsStore = create<ActionsStore>(
         })
       }
     }),
-    { name: 'mexit-actions' }
+    { name: 'mexit-actions', ...storageAdapter }
   )
 )

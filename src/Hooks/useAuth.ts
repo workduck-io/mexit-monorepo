@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import storageAdapter from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { apiURLs } from '../routes'
@@ -55,7 +56,7 @@ export const useAuthStore = create<AuthStoreState>(
         return undefined
       }
     }),
-    { name: 'mexit-auth' }
+    { name: 'mexit-auth', ...storageAdapter }
   )
 )
 
