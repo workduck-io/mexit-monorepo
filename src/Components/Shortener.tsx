@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Tag } from '../Types/Tags'
 import styled from 'styled-components'
 import { UseFormRegister } from 'react-hook-form'
+import { ShortenFormDetails } from './AliasWrapper'
 
 const Container = styled.div`
   display: flex;
@@ -29,16 +30,21 @@ const Input = styled.input`
     outline: #6968d2;
   }
 `
-interface ShortenFormDetails {
-  short: string
-}
 
-const Shortener = ({ currTabURL, register }: { currTabURL: string; register: UseFormRegister<ShortenFormDetails> }) => {
+const Shortener = ({
+  currTabURL,
+  setCurrTabURL,
+  register
+}: {
+  currTabURL: string
+  setCurrTabURL: (s: string) => void
+  register: UseFormRegister<ShortenFormDetails>
+}) => {
   return (
     <Container>
       <InputRow>
         <Label>Destination URL</Label>
-        <Input placeholder="URL to shorten" defaultValue={currTabURL} />
+        <Input placeholder="URL to shorten" defaultValue={currTabURL} onChange={(e) => setCurrTabURL(e.target.value)} />
       </InputRow>
 
       <InputRow>

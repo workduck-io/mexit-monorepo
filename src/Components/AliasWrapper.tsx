@@ -27,13 +27,12 @@ const SubmitButton = styled.input`
   cursor: pointer;
 `
 
-interface ShortenFormDetails {
+export interface ShortenFormDetails {
   short: string
 }
 
 function AliasWrapper() {
   const [currTabURL, setCurrTabURL] = useState(window.location.href)
-  const [currTabID, setCurrTabID] = useState(1)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortenerResponse, setShortenerResponse] = useState<any>()
@@ -42,7 +41,6 @@ function AliasWrapper() {
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
-    console.log('did I even get here?')
     const { short } = data
 
     const reqBody = {
@@ -79,24 +77,13 @@ function AliasWrapper() {
     )
   }
 
-  /* Fetch Current Tab Information using chrome APIs */
-  // useEffect(() => {
-  //   async function fetchTab() {
-  //     const currentTab = await getCurrentTab()
-  //     console.log('Current Tab: ', currentTab)
-  //     setCurrTabURL(currentTab.url)
-  //     setCurrTabID(currentTab.id)
-  //   }
-  //   fetchTab()
-  // }, [])
-
   /* Try to fetch page metadata using content script*/
   useEffect(() => {
-    if (currTabID > 0 && checkMetaParseableURL(currTabURL)) {
+    if (checkMetaParseableURL(currTabURL)) {
       const mt = parsePageMetaTags()
       setPageMetaTags(mt)
     }
-  }, [currTabID, currTabURL])
+  }, [currTabURL])
 
   const addNewUserTag = (tag: Tag) => {
     setUserTags([...userTags, tag])
@@ -112,7 +99,7 @@ function AliasWrapper() {
   // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
     <Form onSubmit={handleSubmit(onShortenLinkSubmit)}>
-      <Shortener currTabURL={currTabURL} register={register} />
+      <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
       <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
       <SubmitButton type="submit" value="Save" />
       <p>{JSON.stringify(shortenerResponse)}</p>
