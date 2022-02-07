@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid'
+
 import { useAuthStore } from '../Hooks/useAuth'
 import { useShortenerStore } from '../Hooks/useShortener'
 import { useTagStore } from '../Hooks/useTags'
@@ -23,17 +25,16 @@ export const handleCaptureRequest = ({ subType, data }) => {
         namespace: workspaceDetails.name
       }
 
-      console.log('Reqbody: ', reqBody)
-
       const URL = apiURLs.createShort
       return client
         .post(URL, reqBody)
         .then((response: any) => {
-          addLinkCapture({
+          const t = {
             ...reqBody,
             shortenedURL: response.data.message
-          })
-          return { message: response, error: null }
+          }
+          addLinkCapture(t)
+          return { message: t, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -52,6 +53,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
 
       const reqBody = {
         ...body,
+        id: `LINK_QC_${nanoid()}`,
         workspace: workspaceDetails.id,
         createdBy: userDetails.userId
       }
@@ -66,6 +68,22 @@ export const handleCaptureRequest = ({ subType, data }) => {
           return { message: null, error: err }
         })
     }
+    case 'CREATE_CONTENT_QC': {
+      const URL = apiURLs.addContentCapture
+      const reqBody = data.body
+
+      console.log('ReqBody: ', JSON.stringify(reqBody))
+
+      return client
+        .post(URL, reqBody)
+        .then((response: any) => {
+          return { message: response, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+
     case 'GET_CURRENT_WINDOW_TABS': {
       chrome.tabs
         .query({ currentWindow: true })
@@ -142,4 +160,7 @@ export const handleActionRequest = (request: any) => {
       chrome.browsingData.removeCache({ since: 0 })
       break
   }
+}
+export const handleEditorSaveRequest = (data: any) => {
+  return console.log('nothing')
 }
