@@ -53,7 +53,7 @@ function Search() {
     <>
       {/* TODO: it would be good to have the ability to go back after selected a search type action */}
       <InputContainer>
-        {selectedAction?.type === ActionType.search && <QuerySearch>{selectedAction.title} | </QuerySearch>}
+        {selectedAction?.type === ActionType.SEARCH && <QuerySearch>{selectedAction.title} | </QuerySearch>}
         <Input
           autoFocus
           autoComplete="off"
@@ -73,7 +73,7 @@ function Search() {
         selectedAction={selectedAction}
         setSelectedAction={setSelectedAction}
       />
-      {selectedAction?.type === ActionType.render && (
+      {selectedAction?.type === ActionType.RENDER && (
         <Renderer componentName={selectedAction.data.componentName} componentProps={selectedAction.data.props} />
       )}
     </>

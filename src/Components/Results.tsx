@@ -95,13 +95,13 @@ function Results({
         // TODO: improve the code below for the love of anything
       } else if (
         event.key === 'Enter' &&
-        actions[activeIndex]?.type !== ActionType.search &&
-        selectedAction?.type !== ActionType.search
+        actions[activeIndex]?.type !== ActionType.SEARCH &&
+        selectedAction?.type !== ActionType.SEARCH
       ) {
         event.preventDefault()
         setSelectedAction(actions[activeIndex])
         actionExec(actions[activeIndex])
-        if (actions[activeIndex].type === ActionType.render) {
+        if (actions[activeIndex].type === ActionType.RENDER) {
           setShowResults(false)
         }
       } else if (event.key === 'Enter') {
@@ -125,10 +125,10 @@ function Results({
   }, [actions])
 
   function handleClick(id: number) {
-    if (actions[id]?.type !== ActionType.search && selectedAction?.type !== ActionType.search) {
+    if (actions[id]?.type !== ActionType.SEARCH && selectedAction?.type !== ActionType.SEARCH) {
       setSelectedAction(actions[id])
       actionExec(actions[id])
-      if (actions[id].type === ActionType.render) {
+      if (actions[id].type === ActionType.RENDER) {
         setShowResults(false)
       }
     } else {

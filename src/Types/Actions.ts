@@ -1,8 +1,8 @@
 export enum ActionType {
-  'search',
-  'open',
-  'render',
-  'action'
+  'SEARCH',
+  'OPEN',
+  'RENDER',
+  'BROWSER_EVENT'
 }
 
 export interface MexitAction {

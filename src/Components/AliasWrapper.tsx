@@ -6,6 +6,7 @@ import { Tag } from '../Hooks/useTags'
 import { checkMetaParseableURL, getCurrentTab, parsePageMetaTags } from '../Utils/tabInfo'
 import Shortener from './Shortener'
 import Tags from './Tags'
+import toast, { Toaster } from 'react-hot-toast'
 
 const Form = styled.form`
   display: flex;
@@ -51,27 +52,28 @@ function AliasWrapper() {
         userTags: userTags
       }
     }
-
+    console.log('Sending Runtime Message')
     chrome.runtime.sendMessage(
       {
-        type: 'ACTION_HANDLER',
+        type: 'CAPTURE_HANDLER',
         subType: 'CREATE_SHORT_URL',
         data: {
           body: reqBody
         }
       },
       (response) => {
+        console.log('Received Response: ', response)
         const { message, error } = response
         if (error) {
           if (error === 'Not Authenticated') {
-            setShortenerResponse({ message: 'Not Authenticated. Please login via Popup' })
+            toast.error('Not Authenticated. Please login via Popup')
           } else if (error.data.message === 'URL already exists') {
-            setShortenerResponse({ message: 'Alias Already Exists, choose another' })
+            toast.error('Alias Already Exists, choose another')
           } else {
-            setShortenerResponse({ message: 'An Error Occured. Please try again' })
+            toast.error('An Error Occured. Please try again')
           }
         } else {
-          setShortenerResponse(message)
+          toast.success('Successful!')
         }
       }
     )
@@ -98,12 +100,14 @@ function AliasWrapper() {
 
   // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
-    <Form onSubmit={handleSubmit(onShortenLinkSubmit)}>
-      <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
-      <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
-      <SubmitButton type="submit" value="Save" />
-      <p>{JSON.stringify(shortenerResponse)}</p>
-    </Form>
+    <>
+      <Form onSubmit={handleSubmit(onShortenLinkSubmit)}>
+        <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
+        <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
+        <SubmitButton type="submit" value="Save" />
+      </Form>
+      <Toaster position="bottom-center" />
+    </>
   )
 }
 

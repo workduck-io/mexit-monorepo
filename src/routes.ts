@@ -19,7 +19,7 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io'
 
-export const MEXIT_FRONTEND_URL_BASE = 'http://localhost:3000'
+export const MEXIT_FRONTEND_URL_BASE = 'https://mexit-webapp.netlify.app'
 
 export const apiURLs = {
   //node
