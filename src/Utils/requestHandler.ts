@@ -4,33 +4,11 @@ import { useTagStore } from '../Hooks/useTags'
 import { apiURLs } from '../routes'
 import client from './fetchClient'
 
-export const handleDwindleRequest = ({ requestMethod, URL, body }) => {
-  if (requestMethod === 'POST') {
-    return client
-      .post(URL, body)
-      .then((response) => {
-        return { message: response, error: null }
-      })
-      .catch((err) => {
-        return { message: null, error: err.response }
-      })
-  } else if (requestMethod === 'GET') {
-    return client
-      .get(URL)
-      .then((response) => {
-        return { message: response, error: null }
-      })
-      .catch((err) => {
-        return { message: null, error: err.response }
-      })
-  }
-}
-
-export const handleActionRequest = ({ subType, data }) => {
+export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_SHORT_URL': {
-      console.log('Did it hit the handler')
-      const authenticated = useAuthStore.getState().authenticated
+      // const authenticated = useAuthStore.getState().authenticated
+      const authenticated = true
       if (!authenticated) return { message: null, error: 'Not Authenticated' }
 
       const body = data.body
@@ -62,7 +40,9 @@ export const handleActionRequest = ({ subType, data }) => {
         })
     }
     case 'CREATE_LINK_QC': {
-      const authenticated = useAuthStore.getState().authenticated
+      // const authenticated = useAuthStore.getState().authenticated
+      const authenticated = true
+
       if (!authenticated) return { message: null, error: 'Not Authenticated' }
 
       const userDetails = useAuthStore.getState().userDetails
@@ -81,6 +61,16 @@ export const handleActionRequest = ({ subType, data }) => {
         .post(URL, reqBody)
         .then((response: any) => {
           return { message: response, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+    case 'GET_CURRENT_WINDOW_TABS': {
+      chrome.tabs
+        .query({ currentWindow: true })
+        .then((tabs) => {
+          return { message: tabs, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -119,4 +109,37 @@ export const handleAuthRequest = (data: any) => {
   }
 
   return { authenticated, userDetails, workspaceDetails }
+}
+
+export const handleActionRequest = (request: any) => {
+  const event_name = request.data.event_name
+  switch (event_name) {
+    case 'reload':
+      chrome.tabs.reload()
+      break
+    case 'remove-local-storage':
+      chrome.browsingData.removeLocalStorage({ since: 0 })
+      break
+    case 'browser-search':
+      chrome.search.query(
+        {
+          disposition: 'NEW_TAB',
+          text: request.data.query
+        },
+        () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+      )
+      break
+    case 'chrome-url':
+      chrome.tabs.create({ url: request.data.base_url })
+      break
+    case 'remove-cookies':
+      chrome.browsingData.removeCookies({ since: 0 })
+      break
+    case 'remove-history':
+      chrome.browsingData.removeHistory({ since: 0 })
+      break
+    case 'remove-cache':
+      chrome.browsingData.removeCache({ since: 0 })
+      break
+  }
 }

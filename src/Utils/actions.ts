@@ -3,192 +3,154 @@ import { ActionType, MexitAction } from '../Types/Actions'
 // TODO: change shortcut keys based on user's OS
 export const initActions: Array<MexitAction> = [
   {
-    id: '5',
+    id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     description: 'Share this URL as an alias',
-    type: ActionType.render,
-    data: {
-      componentName: 'AliasWrapper'
-    }
+    type: ActionType.RENDER,
+    data: { componentName: 'AliasWrapper' }
   },
   {
-    id: '1',
-    type: ActionType.search,
+    id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
+    type: ActionType.SEARCH,
     title: 'Search Twitter',
     description: 'Search on Twitter',
-    data: {
-      base_url: 'https://twitter.com/search?q=',
-      icon: 'twitter.svg'
-    }
+    data: { base_url: 'https://twitter.com/search?q=', icon: 'twitter.svg' }
   },
   {
-    id: '2',
-    type: ActionType.open,
+    id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
+    type: ActionType.OPEN,
     title: 'Open Gmail',
     description: 'Open your default Gmail Account',
-    data: {
-      base_url: 'https://gmail.com',
-      icon: 'gmail.svg'
-    }
+    data: { base_url: 'https://gmail.com', icon: 'gmail.svg' }
   },
   {
-    id: '3',
+    id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
     title: 'Reload',
     description: 'Reload current tab',
-    type: ActionType.action,
-    data: {
-      action_name: 'reload',
-      icon: 'refresh.svg'
-    },
+    type: ActionType.BROWSER_EVENT,
+    data: { event_name: 'reload', icon: 'refresh.svg' },
     shortcut: ['Cmd', 'R']
   },
   {
-    id: '7',
+    id: 'ACTION_nlTaC5-ZcMXgaJrNg_NfL',
     title: 'New Google Doc',
     description: 'Create new empty Google Doc with default Google Account',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://docs.new',
-      icon: 'google-docs.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://docs.new', icon: 'google-docs.svg' }
   },
   {
-    id: '8',
+    id: 'ACTION_H77GDKfBFVriXpplM-b1x',
     title: 'New Google Sheet',
     description: 'Create new empty Google Sheet with default Google Account',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://sheets.new',
-      icon: 'google-sheets.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://sheets.new', icon: 'google-sheets.svg' }
   },
   {
-    id: '9',
+    id: 'ACTION_gpymSN3oEOd4gfCdfwK4E',
     title: 'New Google Slides',
     description: 'Create new empty Google Slides with default Google Account',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://slides.new',
-      icon: 'google-slides.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://slides.new', icon: 'google-slides.svg' }
   },
   {
-    id: '10',
+    id: 'ACTION_XGHlAYLbMrcROQbgIJMBl',
     title: 'New GitHub Gist',
     description: 'Create new GitHub Gist',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://gist.new',
-      icon: 'gist.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://gist.new', icon: 'gist.svg' }
   },
   {
-    id: '11',
+    id: 'ACTION_WMORyqSCI5gdYq-0ZEXTx',
     title: 'New GitHub Repo',
     description: 'Create new GitHub Repository',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://repo.new',
-      icon: 'github.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://repo.new', icon: 'github.svg' }
   },
   {
-    id: '12',
+    id: 'ACTION_30FPylVvxZDAfeoyTdxOY',
     title: 'New Figma File',
     description: 'Create new empty Figma File',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://figma.new',
-      icon: 'figma.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://figma.new', icon: 'figma.svg' }
   },
   {
-    id: '18',
+    id: 'ACTION_w5lK-B2y5p8-vxuq-254_',
     title: 'New Linear issue',
     description: 'Create a new Linear issue',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://linear.new',
-      icon: 'linear.png'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://linear.new', icon: 'linear.png' }
   },
   {
-    id: '19',
+    id: 'ACTION_dh7Hq50UFvK3LQP5_E-70',
     title: 'New Notion page',
     description: 'Create a new Notion page',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://notion.new',
-      icon: 'notion.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://notion.new', icon: 'notion.svg' }
   },
   {
-    id: '20',
+    id: 'ACTION_2vWe76dH6sXpxOH081X7J',
     title: 'New Google form',
     description: 'Create a new Google form',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://forms.new',
-      icon: 'google-form.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://forms.new', icon: 'google-form.svg' }
   },
   {
-    id: '21',
+    id: 'ACTION_o1LA-TFz5-szRUaMPSsqh',
     title: 'New Tweet',
     description: 'Make a new Tweet',
-    type: ActionType.open,
+    type: ActionType.OPEN,
     data: {
       base_url: 'https://twitter.com/intent/tweet',
       icon: 'twitter.svg'
     }
   },
   {
-    id: '22',
+    id: 'ACTION_RIVhQLkDOJiApxuM6l7gE',
     title: 'Downloads',
     description: 'Browse through your downloads',
-    type: ActionType.action,
+    type: ActionType.BROWSER_EVENT,
     data: {
-      action_name: 'chrome-url',
+      event_name: 'chrome-url',
       base_url: 'chrome://downloads',
       icon: 'downloads.svg'
     }
   },
   {
-    id: '23',
+    id: 'ACTION_u1Fc119Vi69v1Ag-HKU0Y',
     title: 'Extensions',
     description: 'Manage your chrome extensions',
-    type: ActionType.action,
+    type: ActionType.BROWSER_EVENT,
     data: {
-      action_name: 'chrome-url',
+      event_name: 'chrome-url',
       base_url: 'chrome://extensions',
       icon: 'extension.svg'
     }
   },
   {
-    id: '13',
+    id: 'ACTION_vUiFbCMGsoJxOHhh6m3IT',
     title: 'Search Gmail',
     description: 'Search within your default Gmail Account',
-    type: ActionType.search,
+    type: ActionType.SEARCH,
     data: {
       base_url: 'https://mail.google.com/mail/#search/',
       icon: 'gmail.svg'
     }
   },
   {
-    id: '14',
+    id: 'ACTION_DhQ9ozhUTXPTmfkHncMiH',
     title: 'Search Wikipedia',
     description: 'Search on Wikipedia',
-    type: ActionType.search,
+    type: ActionType.SEARCH,
     data: {
       base_url: 'http://en.wikipedia.org/?search=',
       icon: 'wikipedia.svg'
     }
   },
   {
-    id: '15',
+    id: 'ACTION_QKur_eR3JVLNCX-gwkeGW',
     title: 'Search YouTube',
     description: 'Search on YouTube',
-    type: ActionType.search,
+    type: ActionType.SEARCH,
     data: {
       base_url:
         'http://www.youtube.com/results?search_type=search_videos&search_sort=relevance&search=Search&search_query=',
@@ -196,74 +158,59 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
-    id: '16',
+    id: 'ACTION_JWOtwPiaMnyL_RVgT3Jn7',
     title: 'Search Google Drive',
     description: 'Search Google Drive on default Google Account',
-    type: ActionType.search,
+    type: ActionType.SEARCH,
     data: {
       base_url: 'https://drive.google.com/drive/search?q=',
       icon: 'google-drive.svg'
     }
   },
   {
-    id: '17',
+    id: 'ACTION_A6VLKiPZeHGw0EFq-dtV7',
     title: 'Search GitHub',
     description: 'Search on GitHub',
-    type: ActionType.search,
+    type: ActionType.SEARCH,
     data: {
       base_url: 'https://github.com/search?ref=opensearch&q=',
       icon: 'github.svg'
     }
   },
   {
-    id: '24',
+    id: 'ACTION_n3PlVrmCBz6T7bbqYyR_B',
     title: 'Clear browsing history',
     description: 'Clear all of your browsing history',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-history',
-      icon: 'delete-history.png'
-    }
+    type: ActionType.BROWSER_EVENT,
+    data: { event_name: 'remove-history', icon: 'delete-history.png' }
   },
   {
-    id: '25',
+    id: 'ACTION_rlmi2Cf0a4tFx7sk8EIKz',
     title: 'Clear Cache',
     description: 'Clear all the cache',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-cache',
-      icon: 'cache.png'
-    }
+    type: ActionType.BROWSER_EVENT,
+    data: { event_name: 'remove-cache', icon: 'cache.png' }
   },
   {
-    id: '26',
+    id: 'ACTION_zMA6-QR6T9dWUiBd8ojHR',
     title: 'Clear Cookies',
     description: 'Clear all cookies',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-cookies',
-      icon: 'cookies.png'
-    }
+    type: ActionType.BROWSER_EVENT,
+    data: { event_name: 'remove-cookies', icon: 'cookies.png' }
   },
   {
-    id: '6',
+    id: 'ACTION_fAQjILBYjQ8hOFuW-VZAS',
     title: 'Clear Local Storage',
-    type: ActionType.action,
-    data: {
-      action_name: 'remove-local-storage',
-      icon: 'storage.png'
-    },
+    type: ActionType.BROWSER_EVENT,
+    data: { event_name: 'remove-local-storage', icon: 'storage.png' },
     shortcut: ['Cmd', 'D']
   },
   {
-    id: '4',
+    id: 'ACTION_CMDT1C7TlZEFyuk54ME6c',
     title: 'About Us',
     description: 'Get to know more about Workduck.io',
-    type: ActionType.open,
-    data: {
-      base_url: 'https://workduck.io',
-      icon: 'workduck.svg'
-    }
+    type: ActionType.OPEN,
+    data: { base_url: 'https://workduck.io', icon: 'workduck.svg' }
   }
 ]
 
@@ -274,9 +221,9 @@ export const searchBrowserAction = (query: string) => {
     id: '0',
     title: 'Search in Browser Search Bar',
     description: "Perform a search in your browser's URL Bar!",
-    type: ActionType.action,
+    type: ActionType.BROWSER_EVENT,
     data: {
-      action_name: 'browser-search',
+      event_name: 'browser-search',
       query: query,
       icon: 'search.svg'
     }
