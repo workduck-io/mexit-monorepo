@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
+import toast, { Toaster } from 'react-hot-toast'
+
+import { Button } from '../Styles/Button'
 import { useActionsStore } from '../Hooks/useActions'
 import { Tag } from '../Hooks/useTags'
-import { checkMetaParseableURL, getCurrentTab, parsePageMetaTags } from '../Utils/tabInfo'
+import { checkMetaParseableURL, parsePageMetaTags } from '../Utils/tabInfo'
 import Shortener from './Shortener'
 import Tags from './Tags'
-import toast, { Toaster } from 'react-hot-toast'
+import { closeSputlit } from '../contentScript'
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
 
   margin: 1rem;
-`
-
-const SubmitButton = styled.input`
-  width: fit-content;
-  background: #111827;
-  color: #fff;
-  border-radius: 0.25rem;
-  border: none;
-  padding: 0.5rem 1rem;
-  line-height: 1.25rem;
-  font-size: 0.9rem;
-
-  cursor: pointer;
 `
 
 export interface ShortenFormDetails {
@@ -62,7 +52,6 @@ function AliasWrapper() {
         }
       },
       (response) => {
-        console.log('Received Response: ', response)
         const { message, error } = response
         if (error) {
           if (error === 'Not Authenticated') {
@@ -73,7 +62,32 @@ function AliasWrapper() {
             toast.error('An Error Occured. Please try again')
           }
         } else {
-          toast.success('Successful!')
+          chrome.runtime.sendMessage(
+            {
+              type: 'CAPTURE_HANDLER',
+              subType: 'CREATE_LINK_QC',
+              data: {
+                body: message
+              }
+            },
+            (response) => {
+              const { message, error } = response
+              if (error) {
+                if (error === 'Not Authenticated') {
+                  toast.error('Not Authenticated. Please login via Popup')
+                } else if (error.data.message === 'URL already exists') {
+                  toast.error('Alias Already Exists, choose another')
+                } else {
+                  toast.error('An Error Occured. Please try again')
+                }
+              } else {
+                toast.success('Successful!', { duration: 2000 })
+                setTimeout(() => {
+                  closeSputlit()
+                }, 2000)
+              }
+            }
+          )
         }
       }
     )
@@ -104,7 +118,7 @@ function AliasWrapper() {
       <Form onSubmit={handleSubmit(onShortenLinkSubmit)}>
         <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
         <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
-        <SubmitButton type="submit" value="Save" />
+        <Button type="submit" value="Save" />
       </Form>
       <Toaster position="bottom-center" />
     </>

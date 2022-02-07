@@ -17,7 +17,7 @@ export const BASE_USER_URL = 'https://http.workduck.io/user'
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
-export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io'
+export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io/api/v1'
 
 export const MEXIT_FRONTEND_URL_BASE = 'https://mexit-webapp.netlify.app'
 
@@ -57,8 +57,8 @@ export const apiURLs = {
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
 
   // Mexit Backend URLs
-  addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/link`,
-  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/api/v1/node/content`,
+  addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/node/link`,
+  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/content`,
 
   mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`
 }
