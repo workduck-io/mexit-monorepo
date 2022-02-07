@@ -1,5 +1,5 @@
 import { Document } from 'flexsearch'
-import { BlockIndexData, Node } from '../Types/data'
+import { BlockIndexData, Node } from '../Types/Data'
 
 export const createFlexsearchIndex = (initList: BlockIndexData[]) => {
   const options = {
