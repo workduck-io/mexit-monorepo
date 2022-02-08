@@ -1,6 +1,6 @@
 {
   "name": "Mexit",
-  "description": "Mexit - Gettin' Rich Fast?",
+  "description": "Mexit - Augment your thoughts, Automate your tasks",
   "manifest_version": 3,
   "version": "0.1.2",
   "icons": {
@@ -9,12 +9,12 @@
     "128": "icon128x128.png"
   },
   "commands": {
-    "open-kbar": {
+    "open-mexit": {
       "suggested_key": {
         "default": "Ctrl+K",
         "mac": "Command+K"
       },
-      "description": "Open kbar"
+      "description": "Open Mexit"
     }
   },
   "background": {
@@ -28,8 +28,7 @@
     {
       "matches": [
         "http://*/*",
-        "https://*/*",
-        "<all_urls>"
+        "https://*/*"
       ],
       "js": [
         "content.js"
@@ -40,8 +39,7 @@
     "storage",
     "tabs",
     "activeTab",
-    "search",
-    "browsingData"
+    "search"
   ],
   "web_accessible_resources": [
     {
@@ -49,7 +47,8 @@
         "assets/*"
       ],
       "matches": [
-        "<all_urls>"
+        "http://*/*",
+        "https://*/*"
       ]
     }
   ]

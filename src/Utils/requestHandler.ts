@@ -116,9 +116,6 @@ export const handleActionRequest = (request: any) => {
     case 'reload':
       chrome.tabs.reload()
       break
-    case 'remove-local-storage':
-      chrome.browsingData.removeLocalStorage({ since: 0 })
-      break
     case 'browser-search':
       chrome.search.query(
         {
@@ -130,15 +127,6 @@ export const handleActionRequest = (request: any) => {
       break
     case 'chrome-url':
       chrome.tabs.create({ url: request.data.base_url })
-      break
-    case 'remove-cookies':
-      chrome.browsingData.removeCookies({ since: 0 })
-      break
-    case 'remove-history':
-      chrome.browsingData.removeHistory({ since: 0 })
-      break
-    case 'remove-cache':
-      chrome.browsingData.removeCache({ since: 0 })
       break
   }
 }
