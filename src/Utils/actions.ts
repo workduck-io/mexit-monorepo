@@ -178,34 +178,6 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
-    id: 'ACTION_n3PlVrmCBz6T7bbqYyR_B',
-    title: 'Clear browsing history',
-    description: 'Clear all of your browsing history',
-    type: ActionType.BROWSER_EVENT,
-    data: { event_name: 'remove-history', icon: 'delete-history.png' }
-  },
-  {
-    id: 'ACTION_rlmi2Cf0a4tFx7sk8EIKz',
-    title: 'Clear Cache',
-    description: 'Clear all the cache',
-    type: ActionType.BROWSER_EVENT,
-    data: { event_name: 'remove-cache', icon: 'cache.png' }
-  },
-  {
-    id: 'ACTION_zMA6-QR6T9dWUiBd8ojHR',
-    title: 'Clear Cookies',
-    description: 'Clear all cookies',
-    type: ActionType.BROWSER_EVENT,
-    data: { event_name: 'remove-cookies', icon: 'cookies.png' }
-  },
-  {
-    id: 'ACTION_fAQjILBYjQ8hOFuW-VZAS',
-    title: 'Clear Local Storage',
-    type: ActionType.BROWSER_EVENT,
-    data: { event_name: 'remove-local-storage', icon: 'storage.png' },
-    shortcut: ['Cmd', 'D']
-  },
-  {
     id: 'ACTION_CMDT1C7TlZEFyuk54ME6c',
     title: 'About Us',
     description: 'Get to know more about Workduck.io',
