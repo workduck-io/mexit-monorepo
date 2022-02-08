@@ -43,6 +43,7 @@
     "@types/styled-components": "^5.1.19",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
+    "chokidar-cli": "^3.0.0",
     "eslint": "^7.6.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.20.0",
@@ -52,11 +53,10 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "watch": "^1.0.2"
+    "eslint-plugin-unused-imports": "^2.0.0"
   },
   "scripts": {
-    "dev": "watch 'yarn build' src public",
+    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**..ts\" \"public/**\"  -c 'yarn build' ",
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
     "test": "react-scripts test",

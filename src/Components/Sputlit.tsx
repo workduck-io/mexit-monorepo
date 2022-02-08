@@ -82,7 +82,7 @@ const Sputlit = ({
       setContent(url, content, range, nodeId)
       setValue(content)
     }
-  }, [editor])
+  }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
     // setContent(url, newContent, range)
