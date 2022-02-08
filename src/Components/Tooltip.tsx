@@ -6,6 +6,7 @@ import Highlighter from 'web-highlighter'
 import { GlobalStyle } from '../Styles/GlobalStyle'
 import Sputlit from './Sputlit'
 import { theme } from '../Styles/theme'
+import { toast, Toaster } from 'react-hot-toast'
 
 const Container = styled.div<{ top: number; left: number; showTooltip: boolean }>`
   position: absolute;
@@ -70,6 +71,25 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
     setShowTooltip(true)
   }, [id])
 
+  const handleCopyClipboard = async () => {
+    const parts = []
+    content.forEach((p) => {
+      p.children.forEach((e: any) => {
+        parts.push(e.text)
+      })
+      parts.push(' ')
+    })
+    const text = parts.join('')
+    await navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast.success('Copied to Clipboard!')
+      })
+      .catch((err) => {
+        toast.error('An error occurred. Please try again later')
+      })
+  }
+
   // TODO: remove this component somehow.
   return (
     <Container
@@ -78,12 +98,17 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
       showTooltip={showTooltip}
     >
       <Div onClick={handleEdit}>
-        <img src={chrome.runtime.getURL('/assets/edit.svg')} />
+        <img alt="Pencil Icon" src={chrome.runtime.getURL('/assets/edit.svg')} />
       </Div>
 
       <Div onClick={handleDelete}>
-        <img src={chrome.runtime.getURL('/assets/trash.svg')} />
+        <img alt="Delete Icon" src={chrome.runtime.getURL('/assets/trash.svg')} />
       </Div>
+
+      <Div onClick={handleCopyClipboard}>
+        <img alt="Clipboard Icon" src={chrome.runtime.getURL('/assets/clipboard.svg')} />
+      </Div>
+      <Toaster position="bottom-center" />
     </Container>
   )
 }

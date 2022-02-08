@@ -67,8 +67,6 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
         if (error) {
           if (error === 'Not Authenticated') {
             toast.error('Not Authenticated. Please login via Popup')
-          } else if (error.data.message === 'URL already exists') {
-            toast.error('Alias Already Exists, choose another')
           } else {
             toast.error('An Error Occured. Please try again')
           }
