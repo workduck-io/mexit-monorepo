@@ -6,6 +6,7 @@ import mixpanel from 'mixpanel-browser'
 import {
   handleCaptureRequest,
   handleActionRequest,
+  handleAsyncActionRequest,
   handleAuthRequest,
   handleStoreRequest
 } from './Utils/requestHandler'
@@ -65,6 +66,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     case 'ACTION_HANDLER': {
       handleActionRequest(request)
+      return true
+    }
+
+    case 'ASYNC_ACTION_HANDLER': {
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;(async () => {
+        const res = await handleAsyncActionRequest(request)
+        console.log('Got async action response: ', res)
+        sendResponse(res)
+      })()
       return true
     }
 

@@ -34,7 +34,7 @@ const QuerySearch = styled.div`
   color: #6968d2;
 `
 
-function Search() {
+const Search = () => {
   const [query, setQuery] = useState('')
   const [actions, setActions] = useState<MexitAction[]>([])
   const [selectedAction, setSelectedAction] = useState<MexitAction>()
@@ -52,19 +52,21 @@ function Search() {
   return (
     <>
       {/* TODO: it would be good to have the ability to go back after selected a search type action */}
-      <InputContainer>
-        {selectedAction?.type === ActionType.SEARCH && <QuerySearch>{selectedAction.title} | </QuerySearch>}
-        <Input
-          autoFocus
-          autoComplete="off"
-          spellCheck="false"
-          value={query}
-          placeholder="Type a command or search"
-          onChange={(event) => {
-            setQuery(event.target.value)
-          }}
-        />
-      </InputContainer>
+      {selectedAction?.type !== ActionType.RENDER && (
+        <InputContainer>
+          {selectedAction?.type === ActionType.SEARCH && <QuerySearch>{selectedAction.title} | </QuerySearch>}
+          <Input
+            autoFocus
+            autoComplete="off"
+            spellCheck="false"
+            value={query}
+            placeholder="Type a command or search"
+            onChange={(event) => {
+              setQuery(event.target.value)
+            }}
+          />
+        </InputContainer>
+      )}
       {/* TODO: add a provider and move this from here */}
       <Results
         query={query}

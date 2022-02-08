@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { NodeEditorContent } from '../Types/Editor'
 import styled from 'styled-components'
 import HighlightSource from 'web-highlighter/dist/model/source'
+
 import { closeSputlit } from '../contentScript'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../Utils/deserialize'

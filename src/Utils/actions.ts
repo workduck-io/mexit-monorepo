@@ -211,6 +211,24 @@ export const initActions: Array<MexitAction> = [
     description: 'Get to know more about Workduck.io',
     type: ActionType.OPEN,
     data: { base_url: 'https://workduck.io', icon: 'workduck.svg' }
+  },
+  {
+    id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
+    title: 'Capture Multiple Tabs',
+    description: 'Save a group of tabs to retrieve later',
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'CreateTabCapture'
+    }
+  },
+  {
+    id: 'ACTION_t4Gbp9x7f6jmkKB3LbYQ5',
+    title: 'Show Captured Tab Groups',
+    description: 'List and Open Tab Saved Tab Groups',
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'ShowTabCaptures'
+    }
   }
 ]
 
