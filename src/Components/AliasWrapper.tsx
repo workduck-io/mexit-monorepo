@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
-import toast, { Toaster } from 'react-hot-toast'
+import { toast, Toaster } from 'react-hot-toast'
 
 import { Button } from '../Styles/Button'
 import { useActionsStore } from '../Hooks/useActions'
