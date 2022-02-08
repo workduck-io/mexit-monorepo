@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useContentStore } from '../Hooks/useContentStore'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import Highlighter from 'web-highlighter'
+import { GlobalStyle } from '../Styles/GlobalStyle'
+import Sputlit from './Sputlit'
+import { theme } from '../Styles/theme'
 
 const Container = styled.div<{ top: number; left: number; showTooltip: boolean }>`
   position: absolute;
   display: ${(props) => (props.showTooltip ? 'flex' : 'none')};
   margin: -3rem 0 0 0;
-  cursor: pointer;
 
   background: #fff;
   box-shadow: 0 2px 2px 0 rgb(39 43 49 / 10%);
@@ -24,8 +26,26 @@ const Container = styled.div<{ top: number; left: number; showTooltip: boolean }
   }
 `
 
+const Div = styled.div`
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 0.3rem;
+
+  img {
+    height: 18px;
+    aspect-ratio: 1/1;
+  }
+
+  &:hover {
+    background-color: #eaeaea;
+  }
+`
+
 function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
   const [showTooltip, setShowTooltip] = useState(true)
+  const content = useContentStore((store) => store.getContent(window.location.href)).find(
+    (item) => item.highlighterId === id
+  ).content
   const removeContent = useContentStore((store) => store.removeContent)
   const highligter = new Highlighter()
 
@@ -33,6 +53,17 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
     highligter.remove(id)
     setShowTooltip(false)
     removeContent(window.location.href, id)
+  }
+
+  const handleEdit = () => {
+    ReactDOM.render(
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Sputlit editContent={content} />
+      </ThemeProvider>,
+      document.getElementById('extension-root')
+    )
+    setShowTooltip(false)
   }
 
   useEffect(() => {
@@ -46,9 +77,13 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
       left={window.scrollX + coordinates.left}
       showTooltip={showTooltip}
     >
-      <div onClick={handleDelete}>
+      <Div onClick={handleEdit}>
+        <img src={chrome.runtime.getURL('/assets/edit.svg')} />
+      </Div>
+
+      <Div onClick={handleDelete}>
         <img src={chrome.runtime.getURL('/assets/trash.svg')} />
-      </div>
+      </Div>
     </Container>
   )
 }

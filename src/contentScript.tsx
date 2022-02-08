@@ -22,29 +22,6 @@ Sentry.init({
   integrations: [new CaptureConsole({ levels: ['error'] })]
 })
 
-// TODO(@sahil-shubham): remove console logs;
-// const delta = 6;
-// let startX: number;
-// let startY: number;
-
-// document.addEventListener("mousedown", function (event) {
-//   startX = event.pageX;
-//   startY = event.pageY;
-// });
-
-// document.addEventListener("mouseup", function (event) {
-//   const diffX = Math.abs(event.pageX - startX);
-//   const diffY = Math.abs(event.pageY - startY);
-
-//   // Checking if the mouse moved between mouseup and mousedown
-//   // or if a selection is present without dragging (e.g clicking on a paragraph multiple times)
-//   if (diffX > delta && diffY > delta) {
-//     getSelectionHtml();
-//   } else if (window.getSelection()?.type != "Caret") {
-//     getSelectionHtml();
-//   }
-// });
-
 function getSelectionHtml() {
   let html, url, range
 
@@ -127,7 +104,6 @@ chrome.runtime.onMessage.addListener((request) => {
         const { url, html, range } = getSelectionHtml()
 
         const saveableRange = highlighter.fromRange(range)
-        highlighter.fromRange(range)
 
         const sanitizedHTML = sanitizeHtml(html)
 

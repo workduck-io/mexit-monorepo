@@ -9,10 +9,6 @@ import client from './fetchClient'
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_SHORT_URL': {
-      // const authenticated = useAuthStore.getState().authenticated
-      const authenticated = true
-      if (!authenticated) return { message: null, error: 'Not Authenticated' }
-
       const body = data.body
       const workspaceDetails = useAuthStore.getState().workspaceDetails
 
@@ -41,11 +37,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
     case 'CREATE_LINK_QC': {
-      // const authenticated = useAuthStore.getState().authenticated
-      const authenticated = true
-
-      if (!authenticated) return { message: null, error: 'Not Authenticated' }
-
       const userDetails = useAuthStore.getState().userDetails
 
       const body = data.body
@@ -160,7 +151,4 @@ export const handleActionRequest = (request: any) => {
       chrome.browsingData.removeCache({ since: 0 })
       break
   }
-}
-export const handleEditorSaveRequest = (data: any) => {
-  return console.log('nothing')
 }

@@ -28,7 +28,7 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
-  const mexit_content = useContentStore((state) => state.getContent)
+  const mexit_content = useContentStore((state) => state.getContent(window.location.href))
   const initialValue = [
     {
       children: content
@@ -106,11 +106,11 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
       <EditorWrapper>
         <Plate id={nodeId} value={initialValue} plugins={plugins} />
 
+        <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
         <Container>
           <Button onClick={handleSave} type="submit" value="Save" />
         </Container>
       </EditorWrapper>
-      <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
       <Toaster position="bottom-center" />
     </>
   )
