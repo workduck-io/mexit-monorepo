@@ -1,6 +1,7 @@
 import { usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useState } from 'react'
+import { NodeEditorContent } from '../Types/Editor'
 import styled from 'styled-components'
 import HighlightSource from 'web-highlighter/dist/model/source'
 import { closeSputlit } from '../contentScript'
@@ -58,7 +59,17 @@ const Footer = styled.div`
   margin-right: auto;
 `
 
-const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Partial<HighlightSource> }) => {
+const Sputlit = ({
+  url,
+  html,
+  range,
+  editContent
+}: {
+  url?: string
+  html?: string
+  range?: Partial<HighlightSource>
+  editContent?: NodeEditorContent
+}) => {
   const setContent = useContentStore((store) => store.setContent)
   const nodeId = useMemo(() => nanoid(), [])
   const editor = usePlateEditorRef(nodeId)
@@ -76,12 +87,18 @@ const Sputlit = ({ url, html, range }: { url?: string; html?: string; range?: Pa
     // setContent(url, newContent, range)
     return
   }
+
+  console.log(`html: ${!!html} \n editContent: ${!!editContent} ${editContent}`)
   return (
     <div id="sputlit-container">
       <Wrapper>
         <Main>
           {/* TODO: This is fucked up, Fix */}
-          {html === undefined ? <Search /> : <Editor nodeId={nodeId} content={value} onChange={updateContent} />}
+          {html === undefined && editContent === undefined ? (
+            <Search />
+          ) : (
+            <Editor nodeId={nodeId} content={editContent ? editContent : value} onChange={updateContent} />
+          )}
           {/* <Footer id="sputlit-footer">Omni puts number of results and stuff here, lets see what we do</Footer> */}
         </Main>
       </Wrapper>
