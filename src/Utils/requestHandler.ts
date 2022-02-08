@@ -5,6 +5,7 @@ import { useShortenerStore } from '../Hooks/useShortener'
 import { useTagStore } from '../Hooks/useTags'
 import { apiURLs } from '../routes'
 import client from './fetchClient'
+import { Tab } from '../Types/Tabs'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
@@ -69,17 +70,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
         .post(URL, reqBody)
         .then((response: any) => {
           return { message: response, error: null }
-        })
-        .catch((err) => {
-          return { message: null, error: err }
-        })
-    }
-
-    case 'GET_CURRENT_WINDOW_TABS': {
-      chrome.tabs
-        .query({ currentWindow: true })
-        .then((tabs) => {
-          return { message: tabs, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -150,5 +140,51 @@ export const handleActionRequest = (request: any) => {
     case 'remove-cache':
       chrome.browsingData.removeCache({ since: 0 })
       break
+  }
+}
+export const handleEditorSaveRequest = (data: any) => {
+  return console.log('nothing')
+}
+
+export const handleAsyncActionRequest = ({ subType, data }) => {
+  switch (subType) {
+    case 'GET_CURRENT_WINDOW_TABS': {
+      return chrome.tabs
+        .query({ currentWindow: true })
+        .then((tabs) => {
+          const res = []
+          tabs.forEach((tab) => {
+            const t: Tab = {
+              id: tab.id,
+              title: tab.title,
+              windowId: tab.windowId,
+              url: tab.url,
+              status: tab.status,
+              incognito: tab.incognito,
+              pinned: tab.pinned
+            }
+            res.push(t)
+          })
+          return { message: res, error: null }
+        })
+        .catch((err) => {
+          console.error('Error in getting current tabs: ', err)
+          return { message: null, error: err }
+        })
+    }
+
+    case 'OPEN_WINDOW_WITH_TABS': {
+      return chrome.windows
+        .create({
+          focused: true,
+          url: data.urls
+        })
+        .then((response) => {
+          return { message: response, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
   }
 }
