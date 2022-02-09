@@ -10,6 +10,7 @@ import { checkMetaParseableURL, parsePageMetaTags } from '../Utils/tabInfo'
 import Shortener from './Shortener'
 import Tags from './Tags'
 import { closeSputlit } from '../contentScript'
+import { CaptureType } from '../Types/Editor'
 
 const Form = styled.form`
   display: flex;
@@ -62,12 +63,17 @@ function AliasWrapper() {
             toast.error('An Error Occured. Please try again')
           }
         } else {
+          const shortenerReqBody = {
+            ...message,
+            path: '',
+            type: CaptureType.LINK
+          }
           chrome.runtime.sendMessage(
             {
               type: 'CAPTURE_HANDLER',
               subType: 'CREATE_LINK_QC',
               data: {
-                body: message
+                body: shortenerReqBody
               }
             },
             (response) => {

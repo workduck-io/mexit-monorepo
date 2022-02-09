@@ -12,3 +12,9 @@ export interface Content {
 export interface Contents {
   [key: string]: Content[]
 }
+
+export enum CaptureType {
+  LINK = 'LINK',
+  DRAFT = 'DRAFT',
+  HIERARCHY = 'HIERARCHY'
+}
