@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import storageAdapter from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
+
 import { apiURLs } from '../routes'
 import { RegisterFormData } from '../Types/Auth'
 import client from '../Utils/fetchClient'
 import useAuth from './useDwindle'
+import storageAdapter from '../Utils/chromeStorageAdapter'
 
 interface UserCred {
   email: string
@@ -18,6 +19,7 @@ interface UserCred {
 interface UserDetails {
   userId: string
   email: string
+  activeNodeUID?: string
 }
 
 interface WorkspaceDetails {
@@ -88,7 +90,8 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords(data.userId))
         .then((d: any) => {
-          const userDetails = { email, userId: data.userId }
+          // TODO: CHANGE THIS AHHHHHH DO NOT HARDCODE ACTIVITY NODE UID
+          const userDetails: UserDetails = { email, userId: data.userId, activeNodeUID: 'NODE_123456' }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
           setAuthenticated(userDetails, workspaceDetails)

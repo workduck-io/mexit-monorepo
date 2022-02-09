@@ -13,6 +13,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "fuzzysort": "^1.1.4",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "mixpanel-browser": "^2.43.0",
     "nanoid": "^3.2.0",
     "react": "^17.0.2",
@@ -60,7 +61,7 @@
     "dev": "chokidar \"src/**/**.tsx\" \"src/**/**..ts\" \"public/**\"  -c 'yarn build' --initial",
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
-    "release": "NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build"
+    "release": "NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ."

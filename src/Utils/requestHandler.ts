@@ -64,8 +64,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const URL = apiURLs.addContentCapture
       const reqBody = data.body
 
-      console.log('ReqBody: ', JSON.stringify(reqBody))
-
       return client
         .post(URL, reqBody)
         .then((response: any) => {

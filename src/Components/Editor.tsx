@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 import { nanoid } from 'nanoid'
+import { debounce } from 'lodash'
 
 import { useContentStore } from '../Hooks/useContentStore'
 import { useEditorChange } from '../Hooks/useEditorActions'
-import { NodeEditorContent } from '../Types/Editor'
+import { NodeEditorContent, CaptureType } from '../Types/Editor'
 import generatePlugins from '../Utils/plugins'
 import { Button } from '../Styles/Button'
 import { closeSputlit } from '../contentScript'
@@ -29,6 +30,8 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
   const mexit_content = useContentStore((state) => state.getContent(window.location.href))
+  const [path, setPath] = useState<string>()
+
   const initialValue = [
     {
       children: content
@@ -45,6 +48,8 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
     const reqBody = {
       id: `CONTENT_QC_${nanoid()}`,
       long: 'Uhhhh',
+      path: path,
+      type: path !== undefined ? CaptureType.HIERARCHY : CaptureType.DRAFT,
       createdBy: userDetails.userId,
       workspace: workspaceDetails.name,
       content: mexit_content,
@@ -99,12 +104,18 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
     setUserTags([...t])
   }
 
+  const handlePathChange = (e: any) => {
+    e.preventDefault()
+    setPath(e.target.value)
+  }
+
   return (
     <>
       <EditorWrapper>
         <Plate id={nodeId} value={initialValue} plugins={plugins} />
 
         <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
+        <input onChange={debounce((e) => handlePathChange(e), 1000)} placeholder="Hierarchy for Node" />
         <Container>
           <Button onClick={handleSave} type="submit" value="Save" />
         </Container>
