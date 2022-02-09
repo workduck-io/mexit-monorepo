@@ -1,9 +1,11 @@
+const devtool = process.env.NO_INLINE_SOURCE_MAP ? 'source-map' : 'inline-source-map'
+
 module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => {
       return {
         ...webpackConfig,
-        devtool: 'inline-source-map',
+        devtool: devtool,
         entry: {
           main: [
             env === 'development' && require.resolve('react-dev-utils/webpackHotDevClient'),

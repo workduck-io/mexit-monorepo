@@ -57,9 +57,10 @@
     "eslint-plugin-unused-imports": "^2.0.0"
   },
   "scripts": {
-    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**..ts\" \"public/**\"  -c 'yarn build' ",
+    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**..ts\" \"public/**\"  -c 'yarn build' --initial",
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "release": "NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build"
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ."
