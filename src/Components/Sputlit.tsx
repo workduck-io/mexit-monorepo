@@ -72,7 +72,7 @@ const Sputlit = ({
   editContent?: NodeEditorContent
 }) => {
   const setContent = useContentStore((store) => store.setContent)
-  const nodeId = useMemo(() => nanoid(), [])
+  const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
   const content = getMexHTMLDeserializer(html, editor)

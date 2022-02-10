@@ -19,7 +19,7 @@ interface UserCred {
 interface UserDetails {
   userId: string
   email: string
-  activeNodeUID?: string
+  activityNodeUID?: string
 }
 
 interface WorkspaceDetails {
@@ -91,7 +91,7 @@ export const useAuthentication = () => {
         .get(apiURLs.getUserRecords(data.userId))
         .then((d: any) => {
           // TODO: CHANGE THIS AHHHHHH DO NOT HARDCODE ACTIVITY NODE UID
-          const userDetails: UserDetails = { email, userId: data.userId, activeNodeUID: 'NODE_123456' }
+          const userDetails: UserDetails = { email, userId: data.userId, activityNodeUID: 'NODE_123456' }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
           setAuthenticated(userDetails, workspaceDetails)

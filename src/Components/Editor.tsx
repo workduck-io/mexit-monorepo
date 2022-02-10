@@ -15,6 +15,7 @@ import { useAuthStore } from '../Hooks/useAuth'
 import { checkMetaParseableURL, parsePageMetaTags } from '../Utils/tabInfo'
 import Tags from './Tags'
 import { Tag } from '../Types/Tags'
+import config from '../config'
 
 const EditorWrapper = styled.div`
   margin: 1rem;
@@ -30,7 +31,7 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
   const mexit_content = useContentStore((state) => state.getContent(window.location.href))
-  const [path, setPath] = useState<string>()
+  const [nodePath, setNodePath] = useState<string>(config.mex.ACTIVITY_NODE_NAME)
 
   const initialValue = [
     {
@@ -46,10 +47,9 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
 
   const handleSave = () => {
     const reqBody = {
-      id: `CONTENT_QC_${nanoid()}`,
-      long: 'Uhhhh',
-      path: path,
-      type: path !== undefined ? CaptureType.HIERARCHY : CaptureType.DRAFT,
+      id: userDetails.activityNodeUID,
+      nodePath: nodePath,
+      type: nodePath !== config.mex.ACTIVITY_NODE_NAME ? CaptureType.HIERARCHY : CaptureType.DRAFT,
       createdBy: userDetails.userId,
       workspace: workspaceDetails.name,
       content: mexit_content,
@@ -106,7 +106,7 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
 
   const handlePathChange = (e: any) => {
     e.preventDefault()
-    setPath(e.target.value)
+    setNodePath(e.target.value)
   }
 
   return (
