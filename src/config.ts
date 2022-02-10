@@ -7,6 +7,9 @@ export default {
   },
   mixpanel: {
     TOKEN: process.env.MIXPANEL_TOKEN
+  },
+  mex: {
+    ACTIVITY_NODE_NAME: 'Activities'
   }
 }
 
