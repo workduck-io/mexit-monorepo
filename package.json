@@ -15,7 +15,6 @@
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
     "@types/react-router-dom": "^5.3.3",
-    "@udecode/plate": "^9.4.0",
     "@workduck-io/dwindle": "^0.0.9",
     "color-scheme": "^1.0.1",
     "deepmerge": "^4.2.2",
@@ -30,10 +29,6 @@
     "react-router-dom": "^6.2.1",
     "react-router-v6-instrumentation": "^2.0.1",
     "react-select": "^5.2.2",
-    "slate": "^0.72.8",
-    "slate-history": "^0.66.0",
-    "slate-hyperscript": "^0.67.0",
-    "slate-react": "^0.72.8",
     "styled-components": "^5.3.3",
     "zustand": "^3.6.9"
   },

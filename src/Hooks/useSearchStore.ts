@@ -12,7 +12,6 @@ interface SearchStoreState {
   blocks: Map<string, BlockMapData>
   nodeBlockRevIndex: Map<string, Set<string>>
   index: Document | null
-  //   indexDump: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initializeSearchIndex: (initList: BlockIndexData[]) => Document
   addBlock: (block: BlockIndexData) => void
@@ -31,7 +30,6 @@ const useSearchStore = create<SearchStoreState>((set, get) => ({
   blocks: new Map<string, BlockMapData>(),
   nodeBlockRevIndex: new Map<string, Set<string>>(),
   index: null,
-  //   indexDump: {},
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initializeSearchIndex: (initList: BlockIndexData[]) => {
     const index = createFlexsearchIndex(initList)
