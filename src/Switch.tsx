@@ -60,6 +60,15 @@ const Switch = () => {
   return (
     <Routes>
       <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Navbar />
+            <h1>Hello World</h1>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/:nodeId"
         element={
           <ProtectedRoute>
