@@ -201,6 +201,51 @@ export const initActions: Array<MexitAction> = [
     data: {
       componentName: 'ShowTabCaptures'
     }
+  },
+  {
+    id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
+    title: 'Colour Picker',
+    description: "Pretend you're a designer and steal some colours",
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'ColourPicker'
+    }
+  },
+  {
+    id: 'ACTION_9x7LbYQ5t4Gbpf6jmkKB3',
+    title: 'Unix Epoch Converter',
+    description: 'Convert Epoch Timestamp to Datetime and vice versa',
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'UnixEpochConverter'
+    }
+  },
+  {
+    id: '007',
+    title: 'Corporate Buzzwords',
+    description: 'Gimme some Corporate BS Buzzwords',
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'CorporateBS'
+    }
+  },
+  // {
+  //   id: '008',
+  //   title: 'Translate Between Languages',
+  //   description: 'Google Translate, but worse',
+  //   type: ActionType.RENDER,
+  //   data: {
+  //     componentName: 'LibreTranslate'
+  //   }
+  // }
+  {
+    id: '009',
+    title: 'Convert Between Currencies',
+    description: 'Mr. International',
+    type: ActionType.RENDER,
+    data: {
+      componentName: 'CurrencyConverter'
+    }
   }
 ]
 
