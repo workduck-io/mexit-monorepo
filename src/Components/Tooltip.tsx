@@ -6,7 +6,8 @@ import Highlighter from 'web-highlighter'
 import { GlobalStyle } from '../Styles/GlobalStyle'
 import Sputlit from './Sputlit'
 import { theme } from '../Styles/theme'
-import { toast, Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
+import { copyToClipboard } from '../Utils/helpers'
 
 const Container = styled.div<{ top: number; left: number; showTooltip: boolean }>`
   position: absolute;
@@ -80,14 +81,7 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
       parts.push(' ')
     })
     const text = parts.join('')
-    await navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        toast.success('Copied to Clipboard!')
-      })
-      .catch((err) => {
-        toast.error('An error occurred. Please try again later')
-      })
+    await copyToClipboard(text)
   }
 
   // TODO: remove this component somehow.

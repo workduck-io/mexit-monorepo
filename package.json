@@ -17,6 +17,7 @@
     "mixpanel-browser": "^2.43.0",
     "nanoid": "^3.2.0",
     "react": "^17.0.2",
+    "react-colorful": "^5.5.1",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.22.5",
     "react-hot-toast": "^2.2.0",
@@ -58,7 +59,7 @@
     "eslint-plugin-unused-imports": "^2.0.0"
   },
   "scripts": {
-    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**..ts\" \"public/**\"  -c 'yarn build' --initial",
+    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**.ts\" \"public/**\"  -c 'yarn build' --initial",
     "start": "react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false craco build",
     "release": "NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build",

@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true
     }
 
-    case 'ACTION_HANDLER': {
+    case 'BROWSER_EVENT': {
       handleActionRequest(request)
       return true
     }

@@ -4,7 +4,7 @@ import { ActionType, MexitAction } from '../Types/Actions'
 export function actionExec(action: MexitAction, query?: string) {
   switch (action.type) {
     case ActionType.BROWSER_EVENT:
-      chrome.runtime.sendMessage({ request: action })
+      chrome.runtime.sendMessage({ ...action })
       break
     case ActionType.OPEN:
       window.open(action.data.base_url, '_blank').focus()
