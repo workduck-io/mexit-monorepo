@@ -22,7 +22,7 @@ export const MEXIT_BACKEND_URL_BASE = 'http://localhost:3000'
 export const apiURLs = {
   //node
   saveNode: `${BASE_API_URL}/node`,
-  getNode: (uid: string) => `${BASE_API_URL}/node/${uid}`,
+  // getNode: (uid: string) => `${BASE_API_URL}/node/${uid}`,
 
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -55,5 +55,8 @@ export const apiURLs = {
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
 
   // Mexit Backend URLs
-  fetchActivities: (userId: string) => `${MEXIT_BACKEND_URL_BASE}/activities/${userId}`
+  fetchActivities: (userId: string) => `${MEXIT_BACKEND_URL_BASE}/activities/${userId}`,
+  getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/api/v1/node/${uid}`,
+  // getNode: (uid: string) => `http://localhost:8000/node.json`,
+  createNode: `${MEXIT_BACKEND_URL_BASE}/api/v1/node`
 }

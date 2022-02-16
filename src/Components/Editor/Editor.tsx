@@ -1,26 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey } from '@workduck-io/mex-editor'
+import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { activityNode } from '../../Utils/activity'
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
-import useDataStore from '../../store/useDataStore'
-import { useParams } from 'react-router-dom'
+import useDataStore from '../../Store/useDataStore'
+import useLoad from '../../Hooks/useLoad'
 
 const EditorWrapper = styled.div`
   max-width: 800px;
   margin: 1rem;
 `
 
-const initialValue = [
-  {
-    children: activityNode.content
-  }
-]
+interface EditorProps {
+  content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  nodePath?: string
+  nodeUID: string
+  readOnly?: boolean
+  onChange?: any
+  autoFocus?: boolean
+}
 
-const Editor = () => {
-  const { nodeId } = useParams()
+const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
+  const { getNode } = useLoad()
 
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
@@ -55,7 +60,7 @@ const Editor = () => {
     }
   }
 
-  const editorOptions = {
+  const editorOptions: MexEditorOptions = {
     editableProps: {
       readOnly: false,
       placeholder: "Let's try something here...",
@@ -67,6 +72,11 @@ const Editor = () => {
     }
   }
 
+  const debounced = useDebouncedCallback((value) => {
+    const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
+    f(value)
+  }, 1000)
+
   return (
     <EditorWrapper>
       <MexEditor
@@ -76,12 +86,13 @@ const Editor = () => {
           [ELEMENT_TAG]: TagWrapper
         }}
         meta={{
-          path: 'documentation.first'
+          path: nodePath
         }}
         debug
+        onChange={debounced}
         options={editorOptions}
-        editorId={nodeId}
-        value={[{ children: [{ type: 'p', text: '' }] }]}
+        editorId={nodeUID}
+        value={content}
       />
     </EditorWrapper>
   )
