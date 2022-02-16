@@ -6,13 +6,14 @@ import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 
 import MainArea from './Views/MainArea'
-import { useAuthStore } from './Hooks/useAuth'
+import { useAuthStore } from './Store/useAuth'
 import config from './config'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import { useInitialize } from './Hooks/useInitialize'
+import ContentEditor from './Components/Editor/ContentEditor'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -69,14 +70,16 @@ const Switch = () => {
         }
       />
       <Route
-        path="/:nodeId"
+        path="/editor"
         element={
           <ProtectedRoute>
             <Navbar />
             <MainArea />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path=":nodeId" element={<ContentEditor />} />
+      </Route>
       <Route
         path="/login"
         element={

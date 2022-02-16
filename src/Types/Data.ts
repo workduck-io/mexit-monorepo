@@ -4,7 +4,7 @@ export interface BlockIndexData {
   text: string
 }
 
-export interface Metadata {
+export interface NodeMetadata {
   createdBy: string
   createdAt: number
   lastEditedBy: string
@@ -14,14 +14,14 @@ export interface Block {
   id: string // Block ID of form `BLOCK_`
   nodeUID: string // UID of node to which this block belongs
   children: any[]
-  metadata?: Metadata // Block level metadata
+  metadata?: NodeMetadata // Block level metadata
   type?: string
 }
 
 export interface Node {
   id: string
   content: Block[]
-  metadata?: Metadata // Node level metadata
+  metadata?: NodeMetadata // Node level metadata
 }
 
 export type NodeEditorContent = any[]
@@ -30,7 +30,7 @@ export interface NodeContent {
   type: string
   content: NodeEditorContent
   version?: number
-  metadata?: Metadata
+  metadata?: NodeMetadata
 }
 
 export interface InitData extends InitDataStoreType {
@@ -82,4 +82,9 @@ export interface FlexSearchResult {
   nodeUID: string
   text: string
   matchField: string[]
+}
+
+export interface NodeLink {
+  from: string
+  to: string
 }
