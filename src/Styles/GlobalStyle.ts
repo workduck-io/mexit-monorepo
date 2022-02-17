@@ -30,12 +30,14 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   #extension-root *{
-    /* TODO: uncommented the following line to prevent FOUT */
-    /* See: https://github.com/styled-components/styled-components/issues/2227 */
-    /* font-family: "Inter", sans-serif; */
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     line-height: 1.5;
     opacity: 1;
     text-align: left;
+  }
+
+  body {
+    margin: 0;
   }
 `

@@ -9,6 +9,10 @@ interface TagsProps {
   removeTag: (s: Tag) => void
 }
 
+const Container = styled.div`
+  margin: 1rem 0;
+`
+
 const InputRow = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,6 +37,23 @@ const Input = styled.input`
 
 const TagsContainer = styled.div`
   display: flex;
+`
+
+const Tagg = styled.div`
+  padding: 0.5rem;
+  margin: 0 0.5rem 0 0;
+  background: #e8e8e8;
+  border-radius: 5px;
+
+  button {
+    cursor: pointer;
+    margin: 0 0 0 0.5rem;
+    color: #bcbec4;
+
+    &:hover {
+      color: #3e3e41;
+    }
+  }
 `
 
 const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps) => {
@@ -76,21 +97,22 @@ const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps
   }
 
   return (
-    <div className="container">
+    <Container>
       <InputRow>
         <Label>Add Tags</Label>
         <Input value={input} placeholder="Enter a Tag" onKeyDown={onKeyDown} onKeyUp={onKeyUp} onChange={onChange} />
       </InputRow>
 
+      {/* TODO: recommend and show recent used tags */}
       <TagsContainer>
         {userTags.map((tag) => (
-          <div key={tag.id} className="tag">
+          <Tagg key={tag.id} className="tag">
             {tag.text}
             <button onClick={() => removeTag(tag)}>x</button>
-          </div>
+          </Tagg>
         ))}
       </TagsContainer>
-    </div>
+    </Container>
   )
 }
 
