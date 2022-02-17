@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Tag } from '../Types/Tags'
 import styled from 'styled-components'
 import { UseFormRegister } from 'react-hook-form'
-import { ShortenFormDetails } from './AliasWrapper'
+import { ShortenFormDetails } from './Actions/AliasWrapper'
 import { InputRow, Label, Input } from '../Styles/Form'
 
 const Container = styled.div`

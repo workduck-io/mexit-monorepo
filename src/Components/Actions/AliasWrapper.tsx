@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button } from '../Styles/Button'
-import { useActionsStore } from '../Hooks/useActions'
-import { Tag } from '../Hooks/useTags'
-import { checkMetaParseableURL, parsePageMetaTags } from '../Utils/tabInfo'
-import Shortener from './Shortener'
-import Tags from './Tags'
-import { closeSputlit } from '../contentScript'
-import { CaptureType } from '../Types/Editor'
+import { Button } from '../../Styles/Button'
+import { useActionsStore } from '../../Hooks/useActions'
+import { Tag } from '../../Hooks/useTags'
+import { checkMetaParseableURL, parsePageMetaTags } from '../../Utils/tabInfo'
+import Shortener from '../Shortener'
+import Tags from '../Tags'
+import { closeSputlit } from '../../contentScript'
+import { CaptureType } from '../../Types/Editor'
 
 const Form = styled.form`
   display: flex;

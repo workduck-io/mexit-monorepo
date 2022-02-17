@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 
-import AliasWrapper from '../Components/AliasWrapper'
+import AliasWrapper from './Actions/AliasWrapper'
 import { CreateTabCapture, ShowTabCaptures } from './TabCaptures'
 import ColourPicker from './Actions/ColourPicker'
 import UnixEpochConverter from './Actions/UnixEpoch'
