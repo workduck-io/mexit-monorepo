@@ -58,13 +58,7 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
   }
 
   const handleEdit = () => {
-    ReactDOM.render(
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <Sputlit editContent={content} />
-      </ThemeProvider>,
-      document.getElementById('extension-root')
-    )
+    ReactDOM.render(<Sputlit editContent={content} />, document.getElementById('sputlit-root'))
     setShowTooltip(false)
   }
 

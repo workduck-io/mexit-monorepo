@@ -3,37 +3,33 @@ import styled, { keyframes } from 'styled-components'
 import { Login, Logout } from './Components/Auth'
 import Init from './Components/Init'
 import { useAuthStore } from './Hooks/useAuth'
+import { MEXIT_FRONTEND_URL_BASE } from './routes'
 
 const Container = styled.div`
-  text-align: center;
+  background-color: #fff;
+  width: 480px;
+  margin: 1rem;
 `
 
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
-
-const Logo = styled.img`
-  height: 40vmin;
-  pointer-events: none;
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${spin} infinite 20s linear;
-  }
-`
-
-const Header = styled.header`
-  background-color: #282c34;
-  min-height: 100vh;
+const Header = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 100%;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #ccc;
+  padding: 0.5rem 0;
+  margin: 0 0 0.5rem 0;
+
+  img {
+    width: 20px;
+    height: 20px;
+
+    border-radius: 5px;
+    padding: 0.3rem;
+    &:hover {
+      background-color: #eaeaea;
+    }
+  }
 `
 
 const Popup = () => {
@@ -43,14 +39,14 @@ const Popup = () => {
     <Container>
       <Init />
       <Header>
-        {!authenticated ? (
-          <Login />
-        ) : (
-          <>
-            <Logout />
-          </>
-        )}
+        <a href="https://workduck.io" target="_blank" rel="noopener noreferrer">
+          <img src={chrome.runtime.getURL('/icon128x128.png')} />
+        </a>
+        <a href={MEXIT_FRONTEND_URL_BASE} target="_blank" rel="noopener noreferrer">
+          <img src={chrome.runtime.getURL('/assets/dashboard.svg')} />
+        </a>
       </Header>
+      {!authenticated ? <Login /> : <Logout />}
     </Container>
   )
 }

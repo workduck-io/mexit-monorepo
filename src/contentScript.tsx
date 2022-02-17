@@ -85,14 +85,24 @@ const overlay = document.createElement('div')
 overlay.id = 'extension-root'
 document.body.appendChild(overlay)
 
+// Add any providers here as they don't get unmounted with sputlit
+ReactDOM.render(
+  <ThemeProvider theme={theme}>
+    <GlobalStyle />
+    <div id="sputlit-root"></div>
+  </ThemeProvider>,
+  overlay
+)
+
 function closeSputlit() {
   window.getSelection().removeAllRanges()
-  ReactDOM.unmountComponentAtNode(overlay)
+  ReactDOM.unmountComponentAtNode(document.getElementById('sputlit-root'))
 }
 
 document.onkeyup = (e) => {
   if (e.key == 'Escape' && document.getElementById('extension-root')) {
     closeSputlit()
+    ReactDOM.unmountComponentAtNode(anotherOne)
   }
 }
 
@@ -108,20 +118,11 @@ chrome.runtime.onMessage.addListener((request) => {
         const sanitizedHTML = sanitizeHtml(html)
 
         ReactDOM.render(
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Sputlit url={url} html={sanitizedHTML} range={saveableRange} />
-          </ThemeProvider>,
-          overlay
+          <Sputlit url={url} html={sanitizedHTML} range={saveableRange} />,
+          document.getElementById('sputlit-root')
         )
       } else {
-        ReactDOM.render(
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Sputlit />
-          </ThemeProvider>,
-          overlay
-        )
+        ReactDOM.render(<Sputlit />, document.getElementById('sputlit-root'))
       }
     } else {
       closeSputlit()

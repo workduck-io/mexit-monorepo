@@ -4,6 +4,13 @@ import mixpanel from 'mixpanel-browser'
 
 import { useAuthentication, useAuthStore } from '../Hooks/useAuth'
 import { LoginFormData } from '../Types/Auth'
+import { Input, InputRow, Label } from '../Styles/Form'
+import { Button } from '../Styles/Button'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  width: 100%;
+`
 
 export const Login = () => {
   const [loginResult, setLoginResult] = useState('')
@@ -37,16 +44,22 @@ export const Login = () => {
   }
 
   return (
-    <>
+    <Container>
       <h3>Login</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('email')} />
-        <input type="password" {...register('password')} />
+        <InputRow>
+          <Label>Email</Label>
+          <Input {...register('email')} />
+        </InputRow>
+        <InputRow>
+          <Label>Password</Label>
+          <Input type="password" {...register('password')} />
+        </InputRow>
 
-        <button type="submit">Submit</button>
+        <Button type="submit" />
       </form>
       <p>{loginResult}</p>
-    </>
+    </Container>
   )
 }
 
@@ -60,30 +73,8 @@ export const Logout = () => {
   }
 
   return (
-    <>
-      <button onClick={onLogout}>Logout</button>
-    </>
+    <div>
+      <Button type="submit" value="Logout" onClick={onLogout} />
+    </div>
   )
 }
-
-const Auth = () => {
-  const authenticated = useAuthStore((store) => store.authenticated)
-  console.log('Is Authenticated: ', authenticated)
-
-  return (
-    <>
-      {authenticated ? (
-        <>
-          <h3>LMAO BRUH YOU ALREADY LOGGED IN</h3>
-          <Logout />
-        </>
-      ) : (
-        <>
-          <Login />
-        </>
-      )}
-    </>
-  )
-}
-
-export default Auth
