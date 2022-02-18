@@ -7,7 +7,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Shorten URL',
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
-    data: { componentName: 'AliasWrapper' }
+    data: { src: 'http://localhost:3000/shortner' }
   },
   {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
@@ -208,7 +208,7 @@ export const initActions: Array<MexitAction> = [
     description: "Pretend you're a designer and steal some colours",
     type: ActionType.RENDER,
     data: {
-      componentName: 'ColourPicker'
+      src: 'http://localhost:3000/color-picker'
     }
   },
   {
@@ -226,7 +226,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Gimme some Corporate BS Buzzwords',
     type: ActionType.RENDER,
     data: {
-      componentName: 'CorporateBS'
+      src: 'http://localhost:3000/corpbs'
     }
   },
   // {

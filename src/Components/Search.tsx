@@ -75,9 +75,7 @@ const Search = () => {
         selectedAction={selectedAction}
         setSelectedAction={setSelectedAction}
       />
-      {selectedAction?.type === ActionType.RENDER && (
-        <Renderer componentName={selectedAction.data.componentName} componentProps={selectedAction.data.props} />
-      )}
+      {selectedAction?.type === ActionType.RENDER && <Renderer componentSrc={selectedAction.data.src} />}
     </>
   )
 }
