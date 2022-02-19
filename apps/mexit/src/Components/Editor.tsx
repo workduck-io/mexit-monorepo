@@ -13,7 +13,6 @@ import { Button } from '../Styles/Button'
 import { closeSputlit } from '../contentScript'
 import { useAuthStore } from '../Hooks/useAuth'
 import { checkMetaParseableURL, parsePageMetaTags } from '../Utils/tabInfo'
-import Tags from './Tags'
 import { Tag } from '../Types/Tags'
 import config from '../config'
 
@@ -29,6 +28,7 @@ const Container = styled.div`
 const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEditorContent; onChange }) => {
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
+  // TODO: use Dinesh's editor package and take tags from editor
   const [userTags, setUserTags] = useState<Tag[]>([])
   const mexit_content = useContentStore((state) => state.getContent(window.location.href))
   const [nodePath, setNodePath] = useState<string>(config.mex.ACTIVITY_NODE_NAME)
@@ -93,17 +93,6 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
     }
   }, [currTabURL])
 
-  const addNewUserTag = (tag: Tag) => {
-    setUserTags([...userTags, tag])
-  }
-
-  const removeUserTag = (tag: Tag) => {
-    const t = userTags
-    const idx = t.map((e) => e.id).indexOf(tag.id)
-    t.splice(idx, 1)
-    setUserTags([...t])
-  }
-
   const handlePathChange = (e: any) => {
     e.preventDefault()
     setNodePath(e.target.value)
@@ -114,7 +103,6 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
       <EditorWrapper>
         <Plate id={nodeId} value={initialValue} plugins={plugins} />
 
-        <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
         <input onChange={debounce((e) => handlePathChange(e), 1000)} placeholder="Hierarchy for Node" />
         <Container>
           <Button onClick={handleSave} type="submit" value="Save" />
