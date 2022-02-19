@@ -1,7 +1,7 @@
 {
   "name": "mexit-chrome-extension",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@sentry/integrations": "^6.17.2",
