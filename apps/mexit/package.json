@@ -61,8 +61,8 @@
   "scripts": {
     "dev": "chokidar \"src/**/**.tsx\" \"src/**/**.ts\" \"public/**\"  -c 'yarn build' --initial",
     "start": "craco start",
-    "build": "BUILD_PATH=../../dist/apps/mexit craco build",
-    "release": "NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build",
+    "build": "BUILD_PATH=../../dist/apps/mexit INLINE_RNTIME_CHUNK=false craco build",
+    "release": "BUILD_PATH=../../dist/apps/mexit NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx .",
