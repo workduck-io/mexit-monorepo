@@ -1,6 +1,0 @@
-{
-  "root": "apps/mexit-chrome-extension",
-  "sourceRoot": "apps/mexit-chrome-extension/src",
-  "projectType": "application",
-  "tags": []
-}
