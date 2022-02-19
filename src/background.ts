@@ -97,4 +97,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 })
 
+chrome.omnibox.onInputEntered.addListener((text) => {
+  const url = encodeURI(apiURLs.searchMexit + text)
+  chrome.tabs.update({ url: url })
+})
+
 export {}
