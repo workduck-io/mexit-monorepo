@@ -172,16 +172,6 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
-    case 'GET_CORP_BS': {
-      return fetch('https://corporatebs-generator.sameerkumar.website')
-        .then((resp) => resp.json())
-        .then((data) => {
-          return { message: data.phrase, error: null }
-        })
-        .catch((error) => {
-          return { message: null, error: error }
-        })
-    }
     case 'GET_LIBRE_TRANSLATE': {
       return fetch('https://libretranslate.com/translate', {
         method: 'POST',
