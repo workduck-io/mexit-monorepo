@@ -8,6 +8,9 @@
     "test": "nx test"
   },
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "dependencies": {
     "@types/lodash": "^4.14.178",
     "core-js": "^3.6.5",
