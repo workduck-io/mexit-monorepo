@@ -12,7 +12,7 @@ export function App() {
   return (
     <StyledApp>
       <Routes>
-        <Route path="/" element={<h1>Hi</h1>} />
+        <Route path="/" element={<h1>Hi Mom</h1>} />
         <Route path="/color-picker" element={<ColourPicker />} />
         <Route path="/corpbs" element={<CorporateBS />} />
       </Routes>
