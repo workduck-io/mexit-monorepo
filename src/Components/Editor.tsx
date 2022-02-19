@@ -47,7 +47,7 @@ const Editor = ({ nodeId, content, onChange }: { nodeId: string; content: NodeEd
 
   const handleSave = () => {
     const reqBody = {
-      id: userDetails.activityNodeUID,
+      id: userDetails.activityNodeUID ? userDetails.activityNodeUID : 'NODE_ACTIVITY',
       nodePath: nodePath,
       type: nodePath !== config.mex.ACTIVITY_NODE_NAME ? CaptureType.HIERARCHY : CaptureType.DRAFT,
       createdBy: userDetails.userId,

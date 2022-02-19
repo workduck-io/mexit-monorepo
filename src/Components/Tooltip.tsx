@@ -67,8 +67,9 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
   }, [id])
 
   const handleCopyClipboard = async () => {
+    console.log('Content: ', content)
     const parts = []
-    content.forEach((p) => {
+    content?.forEach((p) => {
       p.children.forEach((e: any) => {
         parts.push(e.text)
       })
