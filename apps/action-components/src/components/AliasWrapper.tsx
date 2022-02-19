@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button } from '../../Styles/Button'
-import { useActionsStore } from '../../Hooks/useActions'
-import { Tag } from '../../Hooks/useTags'
-import { checkMetaParseableURL, parsePageMetaTags } from '../../Utils/tabInfo'
-import Shortener from '../Shortener'
-import Tags from '../Tags'
-import { closeSputlit } from '../../contentScript'
-import { CaptureType } from '../../Types/Editor'
+import { Button } from '../../../mexit/src/Styles/Button'
+import { useActionsStore } from '../../../mexit/src/Hooks/useActions'
+import { Tag } from '../../../mexit/src/Hooks/useTags'
+import { checkMetaParseableURL, parsePageMetaTags } from '../../../mexit/src/Utils/tabInfo'
+import Shortener from './Shortener'
+import Tags from './Tags'
+import { closeSputlit } from '../../../mexit/src/contentScript'
+import { CaptureType } from '../../../mexit/src/Types/Editor'
 
 const Form = styled.form`
   display: flex;
@@ -43,7 +43,7 @@ function AliasWrapper() {
         userTags: userTags
       }
     }
-    console.log('Sending Runtime Message')
+
     chrome.runtime.sendMessage(
       {
         type: 'CAPTURE_HANDLER',

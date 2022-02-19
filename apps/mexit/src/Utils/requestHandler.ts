@@ -9,57 +9,6 @@ import { Tab } from '../Types/Tabs'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
-    case 'CREATE_SHORT_URL': {
-      const body = data.body
-      const workspaceDetails = useAuthStore.getState().workspaceDetails
-
-      const addLinkCapture = useShortenerStore.getState().addLinkCapture
-      const addTagsToGlobalStore = useTagStore.getState().addTags
-      addTagsToGlobalStore(body.metadata.userTags)
-
-      const reqBody = {
-        ...body,
-        namespace: workspaceDetails.name
-      }
-
-      const URL = apiURLs.createShort
-      return client
-        .post(URL, reqBody)
-        .then((response: any) => {
-          const t = {
-            ...reqBody,
-            shortenedURL: response.data.message
-          }
-          addLinkCapture(t)
-          return { message: t, error: null }
-        })
-        .catch((err) => {
-          return { message: null, error: err }
-        })
-    }
-    case 'CREATE_LINK_QC': {
-      const userDetails = useAuthStore.getState().userDetails
-
-      const body = data.body
-      const workspaceDetails = useAuthStore.getState().workspaceDetails
-
-      const reqBody = {
-        ...body,
-        id: `LINK_QC_${nanoid()}`,
-        workspace: workspaceDetails.id,
-        createdBy: userDetails.userId
-      }
-
-      const URL = apiURLs.addLinkCapture
-      return client
-        .post(URL, reqBody)
-        .then((response: any) => {
-          return { message: response, error: null }
-        })
-        .catch((err) => {
-          return { message: null, error: err }
-        })
-    }
     case 'CREATE_CONTENT_QC': {
       const URL = apiURLs.addContentCapture
       const reqBody = data.body
