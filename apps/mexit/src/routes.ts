@@ -60,5 +60,6 @@ export const apiURLs = {
   addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/node/link`,
   addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/content`,
 
-  mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`
+  mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`,
+  searchMexit: `${MEXIT_FRONTEND_URL_BASE}/search?q=`
 }

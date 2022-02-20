@@ -87,7 +87,15 @@ function AliasWrapper() {
                   toast.error('An Error Occured. Please try again')
                 }
               } else {
-                toast.success('Successful!', { duration: 2000 })
+                const text = message.data.shortenedURL
+                navigator.clipboard
+                  .writeText(text)
+                  .then(() => {
+                    toast.success('Successful! Aliased URL Copied to Clipboard', { duration: 2000 })
+                  })
+                  .catch((err) => {
+                    toast.error('An error occurred. Please try again later')
+                  })
                 setTimeout(() => {
                   closeSputlit()
                 }, 2000)

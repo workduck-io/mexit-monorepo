@@ -24,6 +24,9 @@
   "action": {
     "default_popup": "index.html"
   },
+  "omnibox": {
+    "keyword": "mexit"
+  },
   "content_scripts": [
     {
       "matches": [
