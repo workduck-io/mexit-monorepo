@@ -2,7 +2,7 @@
   "name": "Mexit",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
   "manifest_version": 3,
-  "version": "0.1.2",
+  "version": "0.2.0",
   "icons": {
     "16": "icon16x16.png",
     "48": "icon48x48.png",
@@ -11,8 +11,8 @@
   "commands": {
     "open-mexit": {
       "suggested_key": {
-        "default": "Ctrl+K",
-        "mac": "Command+K"
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
       },
       "description": "Open Mexit"
     }
@@ -23,6 +23,9 @@
   },
   "action": {
     "default_popup": "index.html"
+  },
+  "omnibox": {
+    "keyword": "mexit"
   },
   "content_scripts": [
     {
