@@ -3,9 +3,9 @@ import { HexColorPicker, RgbStringColorPicker } from 'react-colorful'
 import { useForm } from 'react-hook-form'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { copyToClipboard } from '../../../mexit/src/Utils/helpers'
+import { copyToClipboard } from '../../../extension/src/Utils/helpers'
 import { Toaster } from 'react-hot-toast'
-import { Input } from '../../../mexit/src/Styles/Form'
+import { Input } from '../../../extension/src/Styles/Form'
 
 const Container = styled.div`
   display: flex;

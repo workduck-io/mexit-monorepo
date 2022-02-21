@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Tag } from '../../../mexit/src/Types/Tags'
+import { Tag } from '../../../extension/src/Types/Tags'
 import styled from 'styled-components'
 import { UseFormRegister } from 'react-hook-form'
 import { ShortenFormDetails } from './AliasWrapper'
-import { InputRow, Label, Input } from '../../../mexit/src/Styles/Form'
+import { InputRow, Label, Input } from '../../../extension/src/Styles/Form'
 
 const Container = styled.div`
   display: flex;
