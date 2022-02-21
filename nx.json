@@ -21,9 +21,9 @@
           "build",
           "lint",
           "test",
-          "e2e"
-        ],
-        "accessToken": "Y2I1N2UwMzUtMzM0Mi00Mjg3LTlhYWYtMTRkYzlmNjVmNjI5fHJlYWQtd3JpdGU="
+          "release",
+          "dev"
+        ]
       }
     }
   },

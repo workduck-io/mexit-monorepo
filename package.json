@@ -8,9 +8,13 @@
     "test": "nx test"
   },
   "private": true,
-  "workspaces": [
-    "apps/*"
-  ],
+  "workspaces": {
+    "packages": ["apps/*"],
+    "nohoist": [
+      "react/**",
+      "react"
+    ]
+  },
   "dependencies": {
     "@types/lodash": "^4.14.178",
     "core-js": "^3.6.5",
