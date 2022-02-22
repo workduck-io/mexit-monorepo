@@ -21,9 +21,6 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "action": {
-    "default_popup": "index.html"
-  },
   "omnibox": {
     "keyword": "mexit"
   },
