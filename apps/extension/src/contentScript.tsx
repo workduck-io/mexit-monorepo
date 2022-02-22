@@ -15,6 +15,7 @@ import { theme } from './Styles/theme'
 import { GlobalStyle } from './Styles/GlobalStyle'
 import Tooltip from './Components/Tooltip'
 import { sanitizeHtml } from './Utils/sanitizeHTML'
+import Chotu from './Components/Chotu'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -89,6 +90,7 @@ document.body.appendChild(overlay)
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <GlobalStyle />
+    <Chotu />
     <div id="sputlit-root"></div>
   </ThemeProvider>,
   overlay
