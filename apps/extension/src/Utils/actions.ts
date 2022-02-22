@@ -1,3 +1,4 @@
+import { MEXIT_ACTIONS_URL_BASE } from '../routes'
 import { ActionType, MexitAction } from '../Types/Actions'
 
 // TODO: change shortcut keys based on user's OS
@@ -208,7 +209,7 @@ export const initActions: Array<MexitAction> = [
     description: "Pretend you're a designer and steal some colours",
     type: ActionType.RENDER,
     data: {
-      src: 'http://localhost:4200/color-picker'
+      src: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
     }
   },
   {
@@ -217,7 +218,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Convert Epoch Timestamp to Datetime and vice versa',
     type: ActionType.RENDER,
     data: {
-      componentName: 'UnixEpochConverter'
+      src: `${MEXIT_ACTIONS_URL_BASE}/epoch`
     }
   },
   {
@@ -226,25 +227,16 @@ export const initActions: Array<MexitAction> = [
     description: 'Gimme some Corporate BS Buzzwords',
     type: ActionType.RENDER,
     data: {
-      src: 'http://localhost:4200/corpbs'
+      src: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
     }
   },
-  // {
-  //   id: '008',
-  //   title: 'Translate Between Languages',
-  //   description: 'Google Translate, but worse',
-  //   type: ActionType.RENDER,
-  //   data: {
-  //     componentName: 'LibreTranslate'
-  //   }
-  // }
   {
     id: '009',
     title: 'Convert Between Currencies',
     description: 'Mr. International',
     type: ActionType.RENDER,
     data: {
-      componentName: 'CurrencyConverter'
+      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
     }
   }
 ]

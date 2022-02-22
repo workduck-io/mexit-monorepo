@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Input } from '../../Styles/Form'
+import { Input } from '../../../extension/src/Styles/Form'
 import styled from 'styled-components'
-import { copyToClipboard } from '../../Utils/helpers'
+import { copyToClipboard } from '../../../extension/src/Utils/helpers'
 import { Toaster } from 'react-hot-toast'
 
 const Container = styled.div`
