@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
-import { ActionType, MexitAction } from '../Types/Actions'
+import { ActionType, MexitAction } from '@mexit/shared'
 import { actionExec } from '../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import Action from './Action'

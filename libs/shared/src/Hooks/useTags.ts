@@ -1,4 +1,4 @@
-import storageAdapter from '../Utils/chromeStorageAdapter'
+import { storageAdapter } from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 

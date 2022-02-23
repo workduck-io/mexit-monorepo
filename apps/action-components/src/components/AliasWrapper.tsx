@@ -4,13 +4,13 @@ import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
 import { Button } from '../../../extension/src/Styles/Button'
-import { useActionsStore } from '../../../extension/src/Hooks/useActions'
-import { Tag } from '../../../extension/src/Hooks/useTags'
-import { checkMetaParseableURL, parsePageMetaTags } from '../../../extension/src/Utils/tabInfo'
+import { useActionsStore } from '@mexit/shared'
+import { Tag } from '@mexit/shared'
+import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import Shortener from './Shortener'
 import Tags from './Tags'
-import { closeSputlit } from '../../../extension/src/contentScript'
-import { CaptureType } from '../../../extension/src/Types/Editor'
+import { closeSputlit } from '@mexit/shared'
+import { CaptureType } from '@mexit/shared'
 
 const Form = styled.form`
   display: flex;

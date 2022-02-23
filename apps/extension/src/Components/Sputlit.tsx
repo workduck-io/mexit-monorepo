@@ -1,11 +1,11 @@
 import { usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useState } from 'react'
-import { NodeEditorContent } from '../Types/Editor'
+import { NodeEditorContent } from '@mexit/shared'
 import styled from 'styled-components'
 import HighlightSource from 'web-highlighter/dist/model/source'
 
-import { closeSputlit } from '../contentScript'
+import { closeSputlit } from '@mexit/shared'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../Utils/deserialize'
 import Editor from './Editor'

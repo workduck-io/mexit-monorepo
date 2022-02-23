@@ -1,7 +1,7 @@
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import storageAdapter from '../Utils/chromeStorageAdapter'
+import { storageAdapter } from '@mexit/shared'
 import { TabGroup } from '../Types/Tabs'
 
 interface TabCaptureStore extends State {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { MexitAction } from '../Types/Actions'
+import { MexitAction } from '@mexit/shared'
 import styled, { css } from 'styled-components'
 
 const Wrapper = styled.div<{ active?: boolean }>`

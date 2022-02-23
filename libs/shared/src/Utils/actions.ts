@@ -1,4 +1,4 @@
-import { MEXIT_ACTIONS_URL_BASE } from '../routes'
+import { MEXIT_ACTIONS_URL_BASE } from './routes'
 import { ActionType, MexitAction } from '../Types/Actions'
 
 // TODO: change shortcut keys based on user's OS

@@ -1,3 +1,5 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import toast from 'react-hot-toast'
 
 export function wrapErr<T>(f: (result: T) => void) {
@@ -18,4 +20,9 @@ export async function copyToClipboard(text: any) {
     .catch((err) => {
       toast.error('An error occurred. Please try again later')
     })
+}
+
+export function closeSputlit() {
+  window.getSelection().removeAllRanges()
+  ReactDOM.unmountComponentAtNode(document.getElementById('sputlit-root'))
 }

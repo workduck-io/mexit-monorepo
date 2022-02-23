@@ -1,8 +1,8 @@
 import fuzzysort from 'fuzzysort'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { ActionType, MexitAction } from '../Types/Actions'
-import { defaultActions, initActions, searchBrowserAction } from '../Utils/actions'
+import { ActionType, MexitAction } from '@mexit/shared'
+import { defaultActions, initActions, searchBrowserAction } from '@mexit/shared'
 import Renderer from './Renderer'
 import Results from './Results'
 

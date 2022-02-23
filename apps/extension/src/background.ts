@@ -1,4 +1,4 @@
-import { apiURLs } from './routes'
+import { apiURLs } from '@mexit/shared'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import mixpanel from 'mixpanel-browser'
@@ -10,7 +10,6 @@ import {
   handleAuthRequest,
   handleStoreRequest
 } from './Utils/requestHandler'
-import { ActionType } from './Types/Actions'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 

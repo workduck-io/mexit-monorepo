@@ -1,9 +1,5 @@
-import { nanoid } from 'nanoid'
-
 import { useAuthStore } from '../Hooks/useAuth'
-import { useShortenerStore } from '../Hooks/useShortener'
-import { useTagStore } from '../Hooks/useTags'
-import { apiURLs } from '../routes'
+import { apiURLs } from '@mexit/shared'
 import client from './fetchClient'
 import { Tab } from '../Types/Tabs'
 

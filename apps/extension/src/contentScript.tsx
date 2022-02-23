@@ -16,6 +16,7 @@ import { GlobalStyle } from './Styles/GlobalStyle'
 import Tooltip from './Components/Tooltip'
 import { sanitizeHtml } from './Utils/sanitizeHTML'
 import Chotu from './Components/Chotu'
+import { closeSputlit } from '@mexit/shared'
 
 if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
@@ -96,11 +97,6 @@ ReactDOM.render(
   overlay
 )
 
-function closeSputlit() {
-  window.getSelection().removeAllRanges()
-  ReactDOM.unmountComponentAtNode(document.getElementById('sputlit-root'))
-}
-
 document.onkeyup = (e) => {
   if (e.key == 'Escape' && document.getElementById('extension-root')) {
     closeSputlit()
@@ -159,5 +155,3 @@ const highlightOldRange = (store: any) => {
 }
 
 const unsub = useContentStore.subscribe((store: any) => store.contents, highlightOldRange)
-
-export { closeSputlit }

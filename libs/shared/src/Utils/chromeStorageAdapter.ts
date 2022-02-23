@@ -18,8 +18,6 @@ export const asyncLocalStorage = {
   }
 }
 
-const storageAdapter = {
+export const storageAdapter = {
   getStorage: () => asyncLocalStorage
 }
-
-export default storageAdapter

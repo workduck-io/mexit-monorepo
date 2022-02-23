@@ -1,4 +1,4 @@
-import storageAdapter from '../Utils/chromeStorageAdapter'
+import { storageAdapter } from '@mexit/shared'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 

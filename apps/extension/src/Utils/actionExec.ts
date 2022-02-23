@@ -1,5 +1,5 @@
-import { closeSputlit } from '../contentScript'
-import { ActionType, MexitAction } from '../Types/Actions'
+import { closeSputlit } from '@mexit/shared'
+import { ActionType, MexitAction } from '@mexit/shared'
 
 export function actionExec(action: MexitAction, query?: string) {
   switch (action.type) {
