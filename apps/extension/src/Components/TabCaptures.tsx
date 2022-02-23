@@ -5,7 +5,7 @@ import { toast, Toaster } from 'react-hot-toast'
 
 import { Tab, TabGroup } from '../Types/Tabs'
 import { useTabCaptureStore } from '../Hooks/useTabCaptures'
-import { closeSputlit } from '../contentScript'
+import { closeSputlit } from '@mexit/shared'
 
 interface TabCaptureFormDetails {
   name: string

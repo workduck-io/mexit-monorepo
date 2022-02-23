@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button } from '../../../extension/src/Styles/Button'
+import { Button } from '@mexit/shared'
 import { useActionsStore } from '@mexit/shared'
 import { Tag } from '@mexit/shared'
 import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'

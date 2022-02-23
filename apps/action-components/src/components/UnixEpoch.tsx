@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Input } from '../../../extension/src/Styles/Form'
+import { Input } from '@mexit/shared'
 import styled from 'styled-components'
 import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'

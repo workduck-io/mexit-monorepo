@@ -5,7 +5,7 @@ import _ from 'lodash'
 import styled from 'styled-components'
 import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
-import { Input } from '../../../extension/src/Styles/Form'
+import { Input } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

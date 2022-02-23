@@ -1,6 +1,9 @@
 export * from './Hooks/useActions'
 export * from './Hooks/useTags'
 
+export * from './Styles/Button'
+export * from './Styles/Form'
+
 export * from './Types/Editor'
 export * from './Types/Actions'
 
