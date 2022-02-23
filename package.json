@@ -11,10 +11,6 @@
   "workspaces": {
     "packages": [
       "apps/*"
-    ],
-    "nohoist": [
-      "react/**",
-      "react"
     ]
   },
   "dependencies": {
