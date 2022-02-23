@@ -3,7 +3,7 @@ import { HexColorPicker, RgbStringColorPicker } from 'react-colorful'
 import { useForm } from 'react-hook-form'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { copyToClipboard } from '../../../extension/src/Utils/helpers'
+import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
 import { Input } from '../../../extension/src/Styles/Form'
 
@@ -92,11 +92,7 @@ const ColourPicker = () => {
         ))}
       </div>
       <Wrapper>
-        <CurrentColor
-        // onClick={() => copyToClipboard(hexColor)}
-        >
-          {hexColor}
-        </CurrentColor>
+        <CurrentColor onClick={() => copyToClipboard(hexColor)}>{hexColor}</CurrentColor>
         <Form>
           <Input
             name="red"

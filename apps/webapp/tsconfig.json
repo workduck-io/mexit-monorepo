@@ -14,13 +14,9 @@
     "outDir": "dist",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "paths": {
-      "*": [
-        "./node_modules/*"
-      ]
-    },
   },
   "include": [
     "./src/**/*"
-  ]
+  ],
+  "extends": "../../tsconfig.base.json"
 }

@@ -7,7 +7,7 @@ import { GlobalStyle } from '../Styles/GlobalStyle'
 import Sputlit from './Sputlit'
 import { theme } from '../Styles/theme'
 import { Toaster } from 'react-hot-toast'
-import { copyToClipboard } from '../Utils/helpers'
+import { copyToClipboard } from '@mexit/shared'
 
 const Container = styled.div<{ top: number; left: number; showTooltip: boolean }>`
   position: absolute;
