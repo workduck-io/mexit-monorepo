@@ -6,7 +6,7 @@ export default {
     IDENTITY_POOL_ID: 'us-east-1:315a075f-0427-46bc-9d82-e08133591944'
   },
   mixpanel: {
-    TOKEN: process.env.MIXPANEL_TOKEN
+    TOKEN: 'something'
   },
   mex: {
     ACTIVITY_NODE_NAME: 'Activities'

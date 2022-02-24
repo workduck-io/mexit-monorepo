@@ -86,15 +86,15 @@ function Tooltip({ id, coordinates }: { id: string; coordinates: DOMRect }) {
       showTooltip={showTooltip}
     >
       <Div onClick={handleEdit}>
-        <img alt="Pencil Icon" src={chrome.runtime.getURL('/assets/edit.svg')} />
+        <img alt="Pencil Icon" src={chrome.runtime.getURL('/Assets/edit.svg')} />
       </Div>
 
       <Div onClick={handleDelete}>
-        <img alt="Delete Icon" src={chrome.runtime.getURL('/assets/trash.svg')} />
+        <img alt="Delete Icon" src={chrome.runtime.getURL('/Assets/trash.svg')} />
       </Div>
 
       <Div onClick={handleCopyClipboard}>
-        <img alt="Clipboard Icon" src={chrome.runtime.getURL('/assets/clipboard.svg')} />
+        <img alt="Clipboard Icon" src={chrome.runtime.getURL('/Assets/clipboard.svg')} />
       </Div>
       <Toaster position="bottom-center" />
     </Container>

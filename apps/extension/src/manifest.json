@@ -4,9 +4,9 @@
   "manifest_version": 3,
   "version": "0.2.0",
   "icons": {
-    "16": "icon16x16.png",
-    "48": "icon48x48.png",
-    "128": "icon128x128.png"
+    "16": "Assets/icon16x16.png",
+    "48": "Assets/icon48x48.png",
+    "128": "Assets/icon128x128.png"
   },
   "commands": {
     "open-mexit": {
@@ -44,7 +44,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "assets/*"
+        "Assets/*"
       ],
       "matches": [
         "http://*/*",

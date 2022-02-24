@@ -17,5 +17,5 @@
   },
   "include": [
     "src"
-, "../../libs/shared/src/Styles/Form.ts"  ]
+  ]
 }

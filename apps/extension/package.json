@@ -58,16 +58,6 @@
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-unused-imports": "^2.0.0"
   },
-  "scripts": {
-    "dev": "chokidar \"src/**/**.tsx\" \"src/**/**.ts\" \"public/**\"  -c 'yarn build' --initial",
-    "start": "craco start",
-    "build": "BUILD_PATH=../../dist/apps/extension INLINE_RNTIME_CHUNK=false craco build",
-    "release": "BUILD_PATH=../../dist/apps/extension NO_INLINE_SOURCE_MAP=true INLINE_RUNTIME_CHUNK=false craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext .ts,.tsx .",
-    "serve": "npm start"
-  },
   "eslintConfig": {
     "extends": [
       "react-app",

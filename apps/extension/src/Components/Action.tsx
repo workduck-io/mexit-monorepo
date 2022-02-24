@@ -77,7 +77,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
     <Wrapper active={active}>
       <Container>
         <Icon>
-          {action.data.icon && <img alt="Icon for Action" src={chrome.runtime.getURL(`/assets/${action.data.icon}`)} />}
+          {action.data.icon && <img alt="Icon for Action" src={chrome.runtime.getURL(`/Assets/${action.data.icon}`)} />}
         </Icon>
         <Desc>
           <h3> {action.title}</h3>

@@ -18,7 +18,7 @@ import { sanitizeHtml } from './Utils/sanitizeHTML'
 import Chotu from './Components/Chotu'
 import { closeSputlit } from '@mexit/shared'
 
-if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
+// if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 Sentry.init({
   dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
   integrations: [new CaptureConsole({ levels: ['error'] })]

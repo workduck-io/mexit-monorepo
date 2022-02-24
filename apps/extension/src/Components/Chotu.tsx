@@ -76,13 +76,13 @@ export default function Chotu() {
     <StyledChotu>
       <iframe src={'http://localhost:3000/chotu'} />
       <Icon>
-        <img src={chrome.runtime.getURL('/assets/black_logo.svg')} />
+        <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
       </Icon>
 
       <Container>
         <p>shortened</p>
         <CopyButton>
-          <img src={chrome.runtime.getURL('/assets/copy.svg')} />
+          <img src={chrome.runtime.getURL('/Assets/copy.svg')} />
         </CopyButton>
       </Container>
     </StyledChotu>
