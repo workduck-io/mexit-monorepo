@@ -54,7 +54,6 @@ const MainArea = () => {
     <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
       <Container>
         <Sidebar tree={Tree} starred={Tree} />
-        <Button> fml </Button>
         <Outlet />
       </Container>
     </SentryErrorBoundary>

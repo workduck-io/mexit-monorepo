@@ -1,3 +1,4 @@
+import { Button } from '@mexit/shared'
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
@@ -15,8 +16,8 @@ const AppContainer = styled.div`
   justify-content: space-between;
   height: 100%;
 `
-
-Analytics.init(import.meta.env.VITE_APP_MIXPANEL_TOKEN)
+// TODO: mulkul halp
+Analytics.init('something')
 
 function App() {
   return (
