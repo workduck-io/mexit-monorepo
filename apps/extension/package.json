@@ -1,0 +1,79 @@
+{
+  "name": "mexit",
+  "description": "Mexit - Augment your thoughts, Automate your tasks",
+  "version": "0.1.2",
+  "private": true,
+  "dependencies": {
+    "@sentry/integrations": "^6.17.2",
+    "@sentry/react": "^6.17.2",
+    "@udecode/plate": "9.2.1",
+    "@vespaiach/axios-fetch-adapter": "^0.1.1",
+    "@workduck-io/dwindle": "^0.0.9",
+    "chrome-extension-async": "^3.4.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "fuzzysort": "^1.1.4",
+    "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
+    "mixpanel-browser": "^2.43.0",
+    "nanoid": "^3.2.0",
+    "react": "^17.0.2",
+    "react-colorful": "^5.5.1",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.22.5",
+    "react-hot-toast": "^2.2.0",
+    "react-scripts": "5.0.0",
+    "react-virtual": "^2.10.4",
+    "sanitize-html": "^2.6.1",
+    "slate": "0.72.3",
+    "slate-history": "0.66.0",
+    "slate-hyperscript": "0.67.0",
+    "slate-react": "0.72.4",
+    "styled-components": "^5.3.3",
+    "typescript": "^4.5.4",
+    "web-highlighter": "^0.7.4",
+    "zustand": "^3.6.9"
+  },
+  "devDependencies": {
+    "@craco/craco": "^6.4.3",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/chrome": "^0.0.176",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.19",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/styled-components": "^5.1.19",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "chokidar-cli": "^3.0.0",
+    "eslint": "^7.6.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

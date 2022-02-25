@@ -42,11 +42,12 @@
         }
       }
     },
-    "serve": {
+    "dev": {
       "executor": "@nrwl/web:dev-server",
       "options": {
         "buildTarget": "action-components:build",
-        "hmr": true
+        "hmr": true,
+        "port": 3000
       },
       "configurations": {
         "production": {

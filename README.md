@@ -1,4 +1,6 @@
-# TempWorkspace
+# Mexit
+
+To use Nx Cloud, set the `NX_CLOUD_AUTH_TOKEN` environment variable
 
 This project was generated using [Nx](https://nx.dev).
 
