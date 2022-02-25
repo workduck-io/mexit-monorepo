@@ -1,7 +1,6 @@
 import { apiURLs } from '@mexit/shared'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
-import mixpanel from 'mixpanel-browser'
 
 import {
   handleCaptureRequest,
@@ -10,8 +9,6 @@ import {
   handleAuthRequest,
   handleStoreRequest
 } from './Utils/requestHandler'
-
-// if (process.env.REACT_APP_MIXPANEL_TOKEN) mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN, { debug: true })
 
 Sentry.init({
   dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
@@ -45,15 +42,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   switch (actionType) {
     case 'CAPTURE_HANDLER': {
-      // if (process.env.REACT_APP_MIXPANEL_TOKEN) {
-      //   console.log('Tried to Send Event?')
-      //   mixpanel.track('Action Handler Event', {
-      //     type: 'CAPTURE_HANDLER',
-      //     subType: request?.type?.subType
-      //   })
-      //   console.log('Tracked Event in Mixpanel')
-      // }
-
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       ;(async () => {
         const res = await handleCaptureRequest(request)

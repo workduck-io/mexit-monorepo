@@ -16,8 +16,11 @@ const AppContainer = styled.div`
   justify-content: space-between;
   height: 100%;
 `
-// TODO: mulkul halp
-Analytics.init('something')
+
+if (process.env.NX_MIXPANEL_TOKEN_WEBAPP) {
+  console.log('Token is: ', process.env.NX_MIXPANEL_TOKEN_WEBAPP)
+  Analytics.init(process.env.NX_MIXPANEL_TOKEN_WEBAPP)
+}
 
 function App() {
   return (
