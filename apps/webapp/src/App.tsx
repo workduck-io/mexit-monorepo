@@ -1,3 +1,4 @@
+import { Button } from '@mexit/shared'
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
@@ -16,7 +17,10 @@ const AppContainer = styled.div`
   height: 100%;
 `
 
-Analytics.init(import.meta.env.VITE_APP_MIXPANEL_TOKEN)
+if (process.env.NX_MIXPANEL_TOKEN_WEBAPP) {
+  console.log('Token is: ', process.env.NX_MIXPANEL_TOKEN_WEBAPP)
+  Analytics.init(process.env.NX_MIXPANEL_TOKEN_WEBAPP)
+}
 
 function App() {
   return (

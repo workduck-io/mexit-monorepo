@@ -1,0 +1,55 @@
+{
+  "name": "Mexit",
+  "description": "Mexit - Augment your thoughts, Automate your tasks",
+  "manifest_version": 3,
+  "version": "0.2.0",
+  "icons": {
+    "16": "Assets/icon16x16.png",
+    "48": "Assets/icon48x48.png",
+    "128": "Assets/icon128x128.png"
+  },
+  "commands": {
+    "open-mexit": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
+      },
+      "description": "Open Mexit"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "omnibox": {
+    "keyword": "mexit"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "search"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "Assets/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ]
+}

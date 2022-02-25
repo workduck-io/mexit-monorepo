@@ -6,6 +6,7 @@ import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import useDataStore, { useTreeFromLinks } from '../Store/useDataStore'
+import { Button } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

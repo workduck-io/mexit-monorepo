@@ -14,6 +14,7 @@ import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import { useInitialize } from './Hooks/useInitialize'
 import ContentEditor from './Components/Editor/ContentEditor'
+import Chotu from './Components/Chotu'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -66,6 +67,14 @@ const Switch = () => {
           <ProtectedRoute>
             <Navbar />
             <h1>Hello World</h1>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/chotu"
+        element={
+          <ProtectedRoute>
+            <Chotu />
           </ProtectedRoute>
         }
       />

@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": [
+      "es2021",
+      "dom"
+    ],
+    "noImplicitAny": false,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -53,7 +53,7 @@ class Tree extends React.Component<RCTreeProps> {
     this.onSelect = this.onSelect.bind(this)
   }
 
-  componentDidUpdate(prevProps: RCTreeProps) {
+  override componentDidUpdate(prevProps: RCTreeProps) {
     const { tree } = this.props
 
     if (!equal(prevProps, this.props)) {
@@ -173,7 +173,7 @@ class Tree extends React.Component<RCTreeProps> {
     }
   }
 
-  render() {
+  override render() {
     const { expandedKeys, autoExpandParent }: any = this.state
     const { tree, currentNode, displayMenu } = this.props
 

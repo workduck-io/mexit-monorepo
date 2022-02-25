@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button } from '../../../mexit/src/Styles/Button'
-import { useActionsStore } from '../../../mexit/src/Hooks/useActions'
-import { Tag } from '../../../mexit/src/Hooks/useTags'
-import { checkMetaParseableURL, parsePageMetaTags } from '../../../mexit/src/Utils/tabInfo'
+import { Button } from '@mexit/shared'
+import { useActionsStore } from '@mexit/shared'
+import { Tag } from '@mexit/shared'
+import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import Shortener from './Shortener'
 import Tags from './Tags'
-import { closeSputlit } from '../../../mexit/src/contentScript'
-import { CaptureType } from '../../../mexit/src/Types/Editor'
+import { closeSputlit } from '@mexit/shared'
+import { CaptureType } from '@mexit/shared'
 
 const Form = styled.form`
   display: flex;

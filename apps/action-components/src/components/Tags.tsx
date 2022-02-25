@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Tag } from '../../../mexit/src/Types/Tags'
+import { Tag } from '@mexit/shared'
 
 interface TagsProps {
   userTags: Tag[]
