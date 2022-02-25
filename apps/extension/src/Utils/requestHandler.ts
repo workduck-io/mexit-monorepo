@@ -117,32 +117,5 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
-    case 'GET_LIBRE_TRANSLATE': {
-      return fetch('https://libretranslate.com/translate', {
-        method: 'POST',
-        body: data.body
-      })
-        .then((resp) => resp.json())
-        .then((val) => {
-          return { message: val.translatedText, error: null }
-        })
-        .catch((error) => {
-          return { error: error, message: null }
-        })
-    }
-    case 'GET_CURRENCY_CONVERSION': {
-      const params = data.params
-      const url = new URL('https://api.frankfurter.app/latest')
-      url.search = new URLSearchParams(params).toString()
-      return fetch(url.toString())
-        .then((resp) => resp.json())
-        .then((val) => {
-          const conv = val.rates[params.to]
-          return { message: conv, error: null }
-        })
-        .catch((error) => {
-          return { message: null, error: error }
-        })
-    }
   }
 }

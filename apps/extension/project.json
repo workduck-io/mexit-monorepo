@@ -38,17 +38,9 @@
       }
     },
     "dev": {
-      "executor": "@nrwl/web:dev-server",
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "buildTarget": "extension:build",
-        "hmr": true,
-        "port": 3000
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "extension:build:production",
-          "hmr": false
-        }
+        "command": "chokidar \"apps/extension/src/**/**.tsx\" \"apps/extension/src/**/**.ts\" -c 'nx build extension' --initial"
       }
     },
     "lint": {

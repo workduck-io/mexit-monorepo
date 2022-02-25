@@ -20,22 +20,18 @@ const CurrencyConverter = () => {
   })
 
   const submitHandler = (data: ConverterForm) => {
-    chrome.runtime.sendMessage(
-      {
-        type: 'ASYNC_ACTION_HANDLER',
-        subType: 'GET_CURRENCY_CONVERSION',
-        data: {
-          params: data
-        }
-      },
-      (response) => {
-        const { message, error } = response
-        if (!error) {
-          setConvertedVal(message)
-          setOutCurrency(data.to)
-        }
-      }
-    )
+    const url = new URL('https://api.frankfurter.app/latest')
+    url.search = new URLSearchParams(data as any).toString()
+
+    return fetch(url.toString())
+      .then((resp) => resp.json())
+      .then((val) => {
+        const conv = val.rates[data.to]
+        return { message: conv, error: null }
+      })
+      .catch((error) => {
+        return { message: null, error: error }
+      })
   }
 
   return (
