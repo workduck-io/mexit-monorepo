@@ -2,7 +2,6 @@ import { Plate, usePlateEditorRef, createPlugins, createPlateUI } from '@udecode
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
-import { nanoid } from 'nanoid'
 import { debounce } from 'lodash'
 
 import { useContentStore } from '../Hooks/useContentStore'
