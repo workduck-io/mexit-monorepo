@@ -1,22 +1,30 @@
 import React from 'react'
 import { useAuthStore } from '../Hooks/useAuth'
 import styled from 'styled-components'
+import { useShortenerStore } from '../Hooks/useShortener'
+import { css } from 'styled-components'
 
 const Container = styled.div`
   display: flex;
   align-items: center;
 
   width: 0;
-  margin: 0 0.25rem;
+  height: 0;
+
+  p {
+    margin: 0 0.5rem !important;
+  }
 `
 
-const StyledChotu = styled.div`
-  display: flex;
+const StyledChotu = styled.div<{ show: boolean }>`
+  display: ${(props) => (props.show ? css`flex` : css`none`)};
   align-items: center;
   position: absolute;
   right: 0;
   bottom: 0;
   padding: 0.25rem;
+
+  cursor: pointer;
 
   color: #fff;
   border-radius: 25px;
@@ -65,15 +73,20 @@ const Icon = styled.div`
 `
 
 export default function Chotu() {
+  const { linkCaptures, setLinkCaptures } = useShortenerStore((store) => store)
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
+
   window.addEventListener('message', (event) => {
     if (event.origin === 'http://localhost:3000') {
       console.log(event.data)
       setAutheticated(event.data.userDetails, event.data.workspaceDetails)
+      setLinkCaptures(event.data.linkCapture)
     }
   })
+
   return (
-    <StyledChotu>
+    // TODO: Test this whenever shornter starts working
+    <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
       <iframe src={'http://localhost:3000/chotu'} />
       <Icon>
         <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
