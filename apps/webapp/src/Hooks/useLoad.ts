@@ -1,9 +1,9 @@
-import useDataStore from '../Store/useDataStore'
-import useEditorStore, { NodeProperties } from '../Store/useEditorStore'
+import useDataStore from '../Stores/useDataStore'
+import useEditorStore, { NodeProperties } from '../Stores/useEditorStore'
 import { NodeEditorContent } from '../Types/Types'
 import { useApi } from './useApi'
-import { getContent } from '../Store/useEditorStore'
-import useContentStore from '../Store/useContentStore'
+import { getContent } from '../Stores/useEditorStore'
+import useContentStore from '../Stores/useContentStore'
 
 export interface LoadNodeOptions {
   savePrev?: boolean

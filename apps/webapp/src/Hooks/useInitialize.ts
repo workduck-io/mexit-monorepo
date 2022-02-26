@@ -1,5 +1,5 @@
-import useContentStore from '../Store/useContentStore'
-import useDataStore from '../Store/useDataStore'
+import useContentStore from '../Stores/useContentStore'
+import useDataStore from '../Stores/useDataStore'
 import { InitData } from '../Types/Data'
 
 export enum AppType {

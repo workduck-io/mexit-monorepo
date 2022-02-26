@@ -1,4 +1,4 @@
-import useDataStore from '../Store/useDataStore'
+import useDataStore from '../Stores/useDataStore'
 import { TagsCache } from '../Types/Types'
 
 const ELEMENT_TAG = 'tag'

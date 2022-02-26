@@ -8,7 +8,7 @@ import RCTree from 'rc-tree'
 import { Key } from 'rc-tree/lib/interface'
 import React from 'react'
 
-import { withNodeOps } from '../../Store/useEditorStore'
+import { withNodeOps } from '../../Stores/useEditorStore'
 import { StyledTree } from '../../Style/Sidebar'
 import TreeExpandIcon from './Icon'
 import { getNodeIdLast, SEPARATOR } from '../../Utils/treeUtils'
