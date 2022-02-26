@@ -8,7 +8,7 @@ import HighlightSource from 'web-highlighter/dist/model/source'
 import { closeSputlit } from '@mexit/shared'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../Utils/deserialize'
-import Editor from './Editor'
+import { NewEditor } from './Editor/Editor'
 import Search from './Search'
 
 const Overlay = styled.div`
@@ -85,7 +85,7 @@ const Sputlit = ({
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
-    // setContent(url, newContent, range)
+    console.log('New Content is: ', newContent)
     return
   }
 
@@ -98,7 +98,8 @@ const Sputlit = ({
           {html === undefined && editContent === undefined ? (
             <Search />
           ) : (
-            <Editor nodeId={nodeId} content={editContent ? editContent : value} onChange={updateContent} />
+            // <Editor nodeId={nodeId} content={editContent ? editContent : value} onChange={updateContent} />
+            <NewEditor nodeUID={nodeId} content={editContent ? editContent : value} onChange={updateContent} />
           )}
           {/* <Footer id="sputlit-footer">Omni puts number of results and stuff here, lets see what we do</Footer> */}
         </Main>

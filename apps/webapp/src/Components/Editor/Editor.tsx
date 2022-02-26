@@ -81,10 +81,6 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     <EditorWrapper>
       <MexEditor
         comboboxConfig={comboboxConfig}
-        components={{
-          [ELEMENT_ILINK]: ILinkWrapper,
-          [ELEMENT_TAG]: TagWrapper
-        }}
         meta={{
           path: nodePath
         }}
