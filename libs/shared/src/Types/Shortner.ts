@@ -10,5 +10,6 @@ export interface LinkCapture {
 
 export interface LinkCaptureStore extends State {
   linkCaptures: LinkCapture[]
+  setLinkCaptures: (l: LinkCapture[]) => void
   addLinkCapture: (l: LinkCapture) => void
 }
