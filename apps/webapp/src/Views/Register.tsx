@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { useAuth } from '@workduck-io/dwindle'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
-import { LoginFormData, RegisterFormData, VerifyFormData, UserRoleValues } from '../Types/Auth'
+import { LoginFormData, RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/shared'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '../Style/Form'
 import { CenteredColumn } from '../Style/Layouts'

@@ -13,7 +13,7 @@ import { Title } from '../Style/Elements'
 import { ButtonFields } from '../Style/Form'
 import { AuthForm } from '../Style/Form'
 import { CenteredColumn } from '../Style/Layouts'
-import { LoginFormData } from '../Types/Auth'
+import { LoginFormData } from '@mexit/shared'
 import { EMAIL_REG } from '../Utils/constants'
 
 export const Login = () => {

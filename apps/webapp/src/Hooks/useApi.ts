@@ -4,7 +4,7 @@ import { defaultContent } from '../Stores/useEditorStore'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { apiURLs } from '../Utils/routes'
+import { apiURLs } from '@mexit/shared'
 import { NodeMetadata } from '../Types/Data'
 
 export const removeNulls = (obj: any): any => {
