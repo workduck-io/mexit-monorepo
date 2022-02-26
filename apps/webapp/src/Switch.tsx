@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { Navigate, Route, RouteProps, Routes } from 'react-router-dom'
+import { Navigate, Route, RouteProps, Routes, useNavigate } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 
 import MainArea from './Views/MainArea'
-import { useAuthStore } from './Store/useAuth'
+import { useAuthStore } from './Stores/useAuth'
 import config from './config'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
@@ -15,6 +15,7 @@ import Footer from './Components/Footer'
 import { useInitialize } from './Hooks/useInitialize'
 import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
+import Themes from './Components/Themes'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -30,6 +31,8 @@ const Switch = () => {
   const { initCognito } = useAuth()
   const routingInstrumentation = useRoutingInstrumentation()
   const { init } = useInitialize()
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     // * TBD: Initialize app with data
@@ -105,6 +108,15 @@ const Switch = () => {
             <Register />
             <Footer />
           </AuthRoute>
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Themes />
+          </ProtectedRoute>
         }
       />
     </Routes>

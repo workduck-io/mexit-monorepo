@@ -25,7 +25,6 @@ export const MEXIT_ACTIONS_URL_BASE = 'http://localhost:3000'
 export const apiURLs = {
   //node
   saveNode: `${BASE_API_URL}/node`,
-  getNode: (uid: string) => `${BASE_API_URL}/node/${uid}`,
 
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -62,5 +61,11 @@ export const apiURLs = {
   addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/content`,
 
   mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`,
-  searchMexit: `${MEXIT_FRONTEND_URL_BASE}/search?q=`
+  searchMexit: `${MEXIT_FRONTEND_URL_BASE}/search?q=`,
+
+  // Mexit Backend URLs
+  fetchActivities: (userId: string) => `${MEXIT_BACKEND_URL_BASE}/activities/${userId}`,
+  getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/api/v1/node/${uid}`,
+  // getNode: (uid: string) => `http://localhost:8000/node.json`,
+  createNode: `${MEXIT_BACKEND_URL_BASE}/api/v1/node`
 }

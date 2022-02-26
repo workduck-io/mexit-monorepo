@@ -1,4 +1,4 @@
-import { generateTheme } from './generator';
+import generateTheme from '../Utils/themeGenerator'
 
 export const gruvboxTheme = generateTheme({
   // Colors
@@ -16,14 +16,14 @@ export const gruvboxTheme = generateTheme({
     4: '#a89984',
     3: '#bdae93',
     2: '#d5c4a1',
-    1: '#fbf1c7', // Lightest
+    1: '#fbf1c7' // Lightest
   },
   palette: {
     white: '#ffffff',
     black: '#000000',
     green: '#00e676',
     yellow: '#eeff41',
-    red: '#fb4934',
+    red: '#fb4934'
   },
   text: {
     heading: '#f9f5d7',
@@ -32,6 +32,6 @@ export const gruvboxTheme = generateTheme({
     fade: '#d5c4a1',
     disabled: '#a89984',
     accent: '#fe8019',
-    oppositePrimary: '#282828',
-  },
-});
+    oppositePrimary: '#282828'
+  }
+})

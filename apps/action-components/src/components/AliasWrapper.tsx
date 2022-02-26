@@ -3,14 +3,15 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button } from '@mexit/shared'
-import { useActionsStore } from '@mexit/shared'
+import { apiURLs, Button, useTagStore } from '@mexit/shared'
 import { Tag } from '@mexit/shared'
 import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import Shortener from './Shortener'
 import Tags from './Tags'
 import { closeSputlit } from '@mexit/shared'
 import { CaptureType } from '@mexit/shared'
+import { client } from '@workduck-io/dwindle'
+import { useShortenerStore } from '../stores/useShortener'
 
 const Form = styled.form`
   display: flex;
@@ -29,11 +30,14 @@ function AliasWrapper() {
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortenerResponse, setShortenerResponse] = useState<any>()
 
-  const actions = useActionsStore((store) => store.actions)
+  const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
+  const addTagsToGlobalStore = useTagStore((store) => store.addTags)
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
 
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
     const { short } = data
+
+    // const workspaceDetails = useAuthStore.getState().workspaceDetails
 
     const reqBody = {
       long: currTabURL,
@@ -42,69 +46,88 @@ function AliasWrapper() {
         metaTags: pageMetaTags,
         userTags: userTags
       }
+      // namespace: workspaceDetails.name
     }
 
-    chrome.runtime.sendMessage(
-      {
-        type: 'CAPTURE_HANDLER',
-        subType: 'CREATE_SHORT_URL',
-        data: {
-          body: reqBody
-        }
-      },
-      (response) => {
-        const { message, error } = response
-        if (error) {
-          if (error === 'Not Authenticated') {
-            toast.error('Not Authenticated. Please login via Popup')
-          } else if (error.data.message === 'URL already exists') {
-            toast.error('Alias Already Exists, choose another')
-          } else {
-            toast.error('An Error Occured. Please try again')
-          }
-        } else {
-          const shortenerReqBody = {
-            ...message,
-            path: '',
-            type: CaptureType.LINK
-          }
-          chrome.runtime.sendMessage(
-            {
-              type: 'CAPTURE_HANDLER',
-              subType: 'CREATE_LINK_QC',
-              data: {
-                body: shortenerReqBody
-              }
-            },
-            (response) => {
-              const { message, error } = response
-              if (error) {
-                if (error === 'Not Authenticated') {
-                  toast.error('Not Authenticated. Please login via Popup')
-                } else if (error.data.message === 'URL already exists') {
-                  toast.error('Alias Already Exists, choose another')
-                } else {
-                  toast.error('An Error Occured. Please try again')
-                }
-              } else {
-                const text = message.data.shortenedURL
-                navigator.clipboard
-                  .writeText(text)
-                  .then(() => {
-                    toast.success('Successful! Aliased URL Copied to Clipboard', { duration: 2000 })
-                  })
-                  .catch((err) => {
-                    toast.error('An error occurred. Please try again later')
-                  })
-                setTimeout(() => {
-                  closeSputlit()
-                }, 2000)
-              }
-            }
-          )
-        }
-      }
-    )
+    addTagsToGlobalStore(reqBody.metadata.userTags)
+
+    // TODO: make just
+    const URL = apiURLs.createShort
+    // client
+    //   .post(URL, reqBody)
+    //   .then((response: any) => {
+    //     const t = {
+    //       ...reqBody,
+    //       shortenedURL: response.data.message
+    //     }
+    //     addLinkCapture(t)
+    //     setShortenerResponse(t)
+    //   })
+    //   .catch((err) => {
+    //     return { message: null, error: err }
+    //   })
+
+    // chrome.runtime.sendMessage(
+    //   {
+    //     type: 'CAPTURE_HANDLER',
+    //     subType: 'CREATE_SHORT_URL',
+    //     data: {
+    //       body: reqBody
+    //     }
+    //   },
+    //   (response) => {
+    //     const { message, error } = response
+    //     if (error) {
+    //       if (error === 'Not Authenticated') {
+    //         toast.error('Not Authenticated. Please login via Popup')
+    //       } else if (error.data.message === 'URL already exists') {
+    //         toast.error('Alias Already Exists, choose another')
+    //       } else {
+    //         toast.error('An Error Occured. Please try again')
+    //       }
+    //     } else {
+    //       const shortenerReqBody = {
+    //         ...message,
+    //         path: '',
+    //         type: CaptureType.LINK
+    //       }
+    //       chrome.runtime.sendMessage(
+    //         {
+    //           type: 'CAPTURE_HANDLER',
+    //           subType: 'CREATE_LINK_QC',
+    //           data: {
+    //             body: shortenerReqBody
+    //           }
+    //         },
+    //         (response) => {
+    //           const { message, error } = response
+    //           if (error) {
+    //             if (error === 'Not Authenticated') {
+    //               toast.error('Not Authenticated. Please login via Popup')
+    //             } else if (error.data.message === 'URL already exists') {
+    //               toast.error('Alias Already Exists, choose another')
+    //             } else {
+    //               toast.error('An Error Occured. Please try again')
+    //             }
+    //           } else {
+    //             const text = message.data.shortenedURL
+    //             navigator.clipboard
+    //               .writeText(text)
+    //               .then(() => {
+    //                 toast.success('Successful! Aliased URL Copied to Clipboard', { duration: 2000 })
+    //               })
+    //               .catch((err) => {
+    //                 toast.error('An error occurred. Please try again later')
+    //               })
+    //             setTimeout(() => {
+    //               closeSputlit()
+    //             }, 2000)
+    //           }
+    //         }
+    //       )
+    //     }
+    // }
+    // )
   }
 
   /* Try to fetch page metadata using content script*/
