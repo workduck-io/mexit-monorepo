@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import mixpanel from 'mixpanel-browser'
 
-import { useAuthentication, useAuthStore } from '../Store/useAuth'
+import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { Button } from '../Style/Buttons'
 
 export const Logout = () => {

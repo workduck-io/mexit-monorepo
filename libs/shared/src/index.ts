@@ -12,3 +12,7 @@ export * from './Utils/tabInfo'
 export * from './Utils/chromeStorageAdapter'
 export * from './Utils/actions'
 export * from './Utils/routes'
+
+export * from './Themes'
+
+export * from './styled.d'

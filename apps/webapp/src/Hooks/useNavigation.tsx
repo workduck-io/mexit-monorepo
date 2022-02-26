@@ -1,8 +1,8 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useHistoryStore } from '../Store/useHistoryStore'
-import { useRecentsStore } from '../Store/useRecentsStore'
+import { useHistoryStore } from '../Stores/useHistoryStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 import useLoad, { LoadNodeOptions } from './useLoad'
 
 export const useNavigation = () => {

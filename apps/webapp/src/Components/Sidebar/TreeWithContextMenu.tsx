@@ -8,7 +8,7 @@ import { Item, ItemParams, Separator, useContextMenu } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
 
 import { StyledMenu } from '../../Style/Menu'
-import { useRenameStore } from '../../Store/useRenameStore'
+import { useRenameStore } from '../../Stores/useRenameStore'
 import TreeNode from '../../Types/Tree'
 import Tree from './Tree'
 

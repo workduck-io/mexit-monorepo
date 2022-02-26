@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuthStore } from '../Store/useAuth'
+import { useAuthStore } from '../Stores/useAuth'
 export default function Chotu() {
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)

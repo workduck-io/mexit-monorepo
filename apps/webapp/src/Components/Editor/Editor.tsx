@@ -7,7 +7,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { activityNode } from '../../Utils/activity'
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
-import useDataStore from '../../Store/useDataStore'
+import useDataStore from '../../Stores/useDataStore'
 import useLoad from '../../Hooks/useLoad'
 
 const EditorWrapper = styled.div`

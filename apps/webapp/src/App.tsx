@@ -1,12 +1,12 @@
-import { Button } from '@mexit/shared'
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components'
 
 import GlobalStyle from './Style/GlobalStyle'
-import theme from './Style/theme'
 import Switch from './Switch'
 import Analytics from './Utils/analytics'
+import useThemeStore from './Stores/useThemeStore'
+import { defaultThemes } from '@mexit/shared'
 
 //----------Styled Components------------
 
@@ -23,9 +23,11 @@ if (process.env.NX_MIXPANEL_TOKEN_WEBAPP) {
 }
 
 function App() {
+  const theme = useThemeStore((state) => state.theme)
+
   return (
     <Router>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
         <AppContainer>
           <GlobalStyle />
           <Switch />
