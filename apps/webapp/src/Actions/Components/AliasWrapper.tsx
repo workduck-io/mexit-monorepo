@@ -9,6 +9,8 @@ import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import { Shortener } from './Shortener'
 import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
+import { useAuthStore } from '../../Stores/useAuth'
+import { client } from '@workduck-io/dwindle'
 
 const Form = styled.form`
   display: flex;
@@ -31,13 +33,14 @@ export const AliasWrapper = () => {
   const addTagsToGlobalStore = useTagStore((store) => store.addTags)
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
 
-  const onShortenLinkSubmit = (data: ShortenFormDetails) => {
+  const onShortenLinkSubmit = async (data: ShortenFormDetails) => {
     const { short } = data
 
-    const authStore = JSON.parse(localStorage.getItem('mexit-authstore')).state
-    const workspaceDetails = authStore.workspaceDetails
+    const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+    const userDetails = useAuthStore((store) => store.userDetails)
 
     const reqBody = {
+      id: `NODE_${userDetails.userId}`,
       long: currTabURL,
       short: short,
       metadata: {
@@ -50,81 +53,9 @@ export const AliasWrapper = () => {
     addTagsToGlobalStore(reqBody.metadata.userTags)
 
     const URL = apiURLs.createShort
-    // client
-    //   .post(URL, reqBody)
-    //   .then((response: any) => {
-    //     const t = {
-    //       ...reqBody,
-    //       shortenedURL: response.data.message
-    //     }
-    //     addLinkCapture(t)
-    //     setShortenerResponse(t)
-    //   })
-    //   .catch((err) => {
-    //     return { message: null, error: err }
-    //   })
+    const resp = await client.post(URL, reqBody)
 
-    // chrome.runtime.sendMessage(
-    //   {
-    //     type: 'CAPTURE_HANDLER',
-    //     subType: 'CREATE_SHORT_URL',
-    //     data: {
-    //       body: reqBody
-    //     }
-    //   },
-    //   (response) => {
-    //     const { message, error } = response
-    //     if (error) {
-    //       if (error === 'Not Authenticated') {
-    //         toast.error('Not Authenticated. Please login via Popup')
-    //       } else if (error.data.message === 'URL already exists') {
-    //         toast.error('Alias Already Exists, choose another')
-    //       } else {
-    //         toast.error('An Error Occured. Please try again')
-    //       }
-    //     } else {
-    //       const shortenerReqBody = {
-    //         ...message,
-    //         path: '',
-    //         type: CaptureType.LINK
-    //       }
-    //       chrome.runtime.sendMessage(
-    //         {
-    //           type: 'CAPTURE_HANDLER',
-    //           subType: 'CREATE_LINK_QC',
-    //           data: {
-    //             body: shortenerReqBody
-    //           }
-    //         },
-    //         (response) => {
-    //           const { message, error } = response
-    //           if (error) {
-    //             if (error === 'Not Authenticated') {
-    //               toast.error('Not Authenticated. Please login via Popup')
-    //             } else if (error.data.message === 'URL already exists') {
-    //               toast.error('Alias Already Exists, choose another')
-    //             } else {
-    //               toast.error('An Error Occured. Please try again')
-    //             }
-    //           } else {
-    //             const text = message.data.shortenedURL
-    //             navigator.clipboard
-    //               .writeText(text)
-    //               .then(() => {
-    //                 toast.success('Successful! Aliased URL Copied to Clipboard', { duration: 2000 })
-    //               })
-    //               .catch((err) => {
-    //                 toast.error('An error occurred. Please try again later')
-    //               })
-    //             setTimeout(() => {
-    //               closeSputlit()
-    //             }, 2000)
-    //           }
-    //         }
-    //       )
-    //     }
-    // }
-    // )
+    window.parent.postMessage(resp, '*')
   }
 
   /* Try to fetch page metadata using content script*/

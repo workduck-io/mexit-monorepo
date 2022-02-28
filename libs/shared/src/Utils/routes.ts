@@ -53,10 +53,10 @@ export const apiURLs = {
   getWorkspace: (workspace_id: string) => `${BASE_API_URL}/workspace/${workspace_id}`,
 
   // Link Shortener URLs
-  createShort: `${LINK_SHORTENER_URL_BASE}/shorten`,
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
 
   // Mexit Backend URLs
+  createShort: `${MEXIT_BACKEND_URL_BASE}/node/capture/link`,
   addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/node/link`,
   addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/content`,
 
