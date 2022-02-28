@@ -1,6 +1,11 @@
 {
   "name": "mexit-webapp",
   "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@iconify-icons/bx": "^1.1.5",
     "@iconify-icons/codicon": "^1.2.1",
