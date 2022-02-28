@@ -7,7 +7,7 @@ const path = require('path')
 export default defineConfig({
   build: {
     sourcemap: true,
-    outDir: '../../dist/webapp'
+    outDir: '../../dist/apps/webapp'
   },
   define: {
     'process.env': {}
