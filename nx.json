@@ -39,8 +39,7 @@
     "@nrwl/react": {
       "application": {
         "style": "css",
-        "linter": "eslint",
-        "babel": true
+        "linter": "eslint"
       },
       "component": {
         "style": "css"

@@ -10,7 +10,7 @@
       ],
       "defaultConfiguration": "production",
       "options": {
-        "compiler": "babel",
+        "compiler": "swc",
         "outputPath": "dist/apps/webapp",
         "index": "apps/webapp/src/index.html",
         "baseHref": "/",
