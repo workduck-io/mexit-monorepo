@@ -73,14 +73,31 @@ const Icon = styled.div`
 `
 
 export default function Chotu() {
-  const { linkCaptures, setLinkCaptures } = useShortenerStore((store) => store)
+  const linkCaptures = useShortenerStore((store) => store.linkCaptures)
+  const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
+  const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
+
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
 
   window.addEventListener('message', (event) => {
     if (event.origin === 'http://localhost:3000') {
       console.log(event.data)
-      setAutheticated(event.data.userDetails, event.data.workspaceDetails)
-      setLinkCaptures(event.data.linkCapture)
+      switch (event.data.type) {
+        case 'store-init':
+          setAutheticated(event.data.userDetails, event.data.workspaceDetails)
+          setLinkCaptures(event.data.linkCapture)
+          break
+        case 'shortener':
+          if (event.data.status === 200) {
+            console.log('Received: ', event.data.message)
+            addLinkCapture(event.data.message)
+          } else {
+            console.error('Received: ', event.data)
+          }
+          break
+        default:
+          break
+      }
     }
   })
 

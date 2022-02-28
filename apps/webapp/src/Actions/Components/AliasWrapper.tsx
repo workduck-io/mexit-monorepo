@@ -32,12 +32,11 @@ export const AliasWrapper = () => {
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
   const addTagsToGlobalStore = useTagStore((store) => store.addTags)
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
+  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+  const userDetails = useAuthStore((store) => store.userDetails)
 
   const onShortenLinkSubmit = async (data: ShortenFormDetails) => {
     const { short } = data
-
-    const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-    const userDetails = useAuthStore((store) => store.userDetails)
 
     const reqBody = {
       id: `NODE_${userDetails.userId}`,
@@ -53,9 +52,21 @@ export const AliasWrapper = () => {
     addTagsToGlobalStore(reqBody.metadata.userTags)
 
     const URL = apiURLs.createShort
-    const resp = await client.post(URL, reqBody)
+    let response: any
+    try {
+      response = await client.post(URL, reqBody)
+    } catch (error) {
+      response = error
+    }
 
-    window.parent.postMessage(resp, '*')
+    window.parent.postMessage(
+      {
+        type: 'shortener',
+        status: response.status,
+        message: response.message || { ...reqBody, shortenedURL: response.data.shortenedURL }
+      },
+      '*'
+    )
   }
 
   /* Try to fetch page metadata using content script*/

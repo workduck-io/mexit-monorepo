@@ -8,7 +8,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Shorten URL',
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
-    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortner` }
+    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
   },
   {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',

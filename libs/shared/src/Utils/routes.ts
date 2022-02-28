@@ -17,10 +17,10 @@ export const BASE_USER_URL = 'https://http.workduck.io/user'
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
-export const MEXIT_BACKEND_URL_BASE = 'https://mex-webapp-dev.workduck.io/api/v1'
+export const MEXIT_BACKEND_URL_BASE = 'http://localhost:5000/api/v1'
 
-export const MEXIT_FRONTEND_URL_BASE = 'https://mexit-webapp.netlify.app'
-export const MEXIT_ACTIONS_URL_BASE = 'http://localhost:3000'
+export const MEXIT_FRONTEND_URL_BASE = 'http://localhost:3000'
+export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
 export const apiURLs = {
   //node
