@@ -51,7 +51,7 @@ interface Colour {
   b: number
 }
 
-const ColourPicker = () => {
+export const ColourPicker = () => {
   const [hexColor, setHexColor] = useState('#aabbcc')
 
   const [rgbColor, setRgbColor] = useState<Colour>({
@@ -145,5 +145,3 @@ const ColourPicker = () => {
     </Container>
   )
 }
-
-export default ColourPicker

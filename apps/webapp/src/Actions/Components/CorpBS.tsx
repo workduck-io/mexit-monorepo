@@ -24,7 +24,7 @@ const Blockquote = styled.blockquote`
   }
 `
 
-const CorporateBS = () => {
+export const CorporateBS = () => {
   const [corpBS, setCorpBS] = useState<string>()
 
   useEffect(() => {
@@ -52,5 +52,3 @@ const CorporateBS = () => {
     </Container>
   )
 }
-
-export default CorporateBS

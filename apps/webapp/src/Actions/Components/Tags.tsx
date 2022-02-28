@@ -56,7 +56,7 @@ const Tagg = styled.div`
   }
 `
 
-const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps) => {
+export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps) => {
   const [input, setInput] = useState('')
   const [isKeyReleased, setIsKeyReleased] = useState(false)
 
@@ -115,5 +115,3 @@ const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: TagsProps
     </Container>
   )
 }
-
-export default Tags

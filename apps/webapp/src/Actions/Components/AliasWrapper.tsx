@@ -6,12 +6,9 @@ import { toast, Toaster } from 'react-hot-toast'
 import { apiURLs, Button, useTagStore } from '@mexit/shared'
 import { Tag } from '@mexit/shared'
 import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
-import Shortener from './Shortener'
-import Tags from './Tags'
-import { closeSputlit } from '@mexit/shared'
-import { CaptureType } from '@mexit/shared'
-import { client } from '@workduck-io/dwindle'
-import { useShortenerStore } from '../stores/useShortener'
+import { Shortener } from './Shortener'
+import { Tags } from './Tags'
+import { useShortenerStore } from '../../Stores/useShortener'
 
 const Form = styled.form`
   display: flex;
@@ -24,7 +21,7 @@ export interface ShortenFormDetails {
   short: string
 }
 
-function AliasWrapper() {
+export const AliasWrapper = () => {
   const [currTabURL, setCurrTabURL] = useState(window.location.href)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -37,7 +34,8 @@ function AliasWrapper() {
   const onShortenLinkSubmit = (data: ShortenFormDetails) => {
     const { short } = data
 
-    // const workspaceDetails = useAuthStore.getState().workspaceDetails
+    const authStore = JSON.parse(localStorage.getItem('mexit-authstore')).state
+    const workspaceDetails = authStore.workspaceDetails
 
     const reqBody = {
       long: currTabURL,
@@ -45,13 +43,12 @@ function AliasWrapper() {
       metadata: {
         metaTags: pageMetaTags,
         userTags: userTags
-      }
-      // namespace: workspaceDetails.name
+      },
+      namespace: workspaceDetails.name
     }
 
     addTagsToGlobalStore(reqBody.metadata.userTags)
 
-    // TODO: make just
     const URL = apiURLs.createShort
     // client
     //   .post(URL, reqBody)
@@ -161,5 +158,3 @@ function AliasWrapper() {
     </>
   )
 }
-
-export default AliasWrapper

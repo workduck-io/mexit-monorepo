@@ -27,7 +27,7 @@ const Output = styled.div`
   border-radius: 5px; ;
 `
 
-const UnixEpochConverter = () => {
+export const UnixEpochConverter = () => {
   const [epochT, setEpochT] = useState(Math.round(new Date().getTime() / 1000))
   const [datetime, setDateTime] = useState(new Date().toLocaleString())
 
@@ -85,5 +85,3 @@ const UnixEpochConverter = () => {
     </Container>
   )
 }
-
-export default UnixEpochConverter

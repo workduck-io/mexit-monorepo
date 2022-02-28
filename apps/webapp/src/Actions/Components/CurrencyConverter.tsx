@@ -7,7 +7,7 @@ interface ConverterForm {
   amount?: number
 }
 
-const CurrencyConverter = () => {
+export const CurrencyConverter = () => {
   const [convertedVal, setConvertedVal] = useState<number>()
   const [outCurrency, setOutCurrency] = useState<string>()
 
@@ -60,5 +60,3 @@ const CurrencyConverter = () => {
     </>
   )
 }
-
-export default CurrencyConverter

@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Shortener = ({
+export const Shortener = ({
   currTabURL,
   setCurrTabURL,
   register
@@ -32,5 +32,3 @@ const Shortener = ({
     </Container>
   )
 }
-
-export default Shortener
