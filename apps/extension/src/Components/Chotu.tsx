@@ -3,6 +3,9 @@ import { useAuthStore } from '../Hooks/useAuth'
 import styled from 'styled-components'
 import { useShortenerStore } from '../Hooks/useShortener'
 import { css } from 'styled-components'
+import { useCallback } from 'react'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { useEffect } from 'react'
 
 const Container = styled.div`
   display: flex;
@@ -79,9 +82,8 @@ export default function Chotu() {
 
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
 
-  window.addEventListener('message', (event) => {
-    if (event.origin === 'http://localhost:3000') {
-      console.log(event.data)
+  const handleEvent = useCallback((event) => {
+    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
       switch (event.data.type) {
         case 'store-init':
           setAutheticated(event.data.userDetails, event.data.workspaceDetails)
@@ -99,12 +101,20 @@ export default function Chotu() {
           break
       }
     }
-  })
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('message', handleEvent)
+
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
+  }, [])
 
   return (
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
-      <iframe src={'http://localhost:3000/chotu'} />
+      <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} />
       <Icon>
         <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
       </Icon>
