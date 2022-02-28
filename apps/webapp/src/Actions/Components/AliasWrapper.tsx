@@ -24,6 +24,10 @@ export interface ShortenFormDetails {
 }
 
 export const AliasWrapper = () => {
+  const x = window.location != window.parent.location ? document.referrer : document.location.href
+
+  console.log('X: ', x)
+
   const [currTabURL, setCurrTabURL] = useState(window.location.href)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
