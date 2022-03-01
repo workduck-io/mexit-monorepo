@@ -8,7 +8,7 @@ import HighlightSource from 'web-highlighter/dist/model/source'
 import { closeSputlit } from '@mexit/shared'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../Utils/deserialize'
-import Editor from './Editor'
+import { Editor } from './Editor'
 import Search from './Search'
 
 const Overlay = styled.div`
@@ -52,14 +52,6 @@ const Main = styled.div`
   display: block;
 `
 
-const Footer = styled.div`
-  height: 45px;
-  line-height: 45px;
-  border-top: 0.5px solid #ccc;
-  margin-left: auto;
-  margin-right: auto;
-`
-
 const Sputlit = ({
   url,
   html,
@@ -72,12 +64,14 @@ const Sputlit = ({
   editContent?: NodeEditorContent
 }) => {
   const setContent = useContentStore((store) => store.setContent)
+  const [currentContent, setCurrentContent] = useState()
   const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
   const content = getMexHTMLDeserializer(html, editor)
 
   useEffect(() => {
+    console.log(`content: ${JSON.stringify(content)}`)
     if (range && content && url) {
       setContent(url, content, range, nodeId)
       setValue(content)
@@ -85,11 +79,42 @@ const Sputlit = ({
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
-    // setContent(url, newContent, range)
+    setCurrentContent(newContent)
     return
   }
 
-  console.log(`html: ${!!html} \n editContent: ${!!editContent} ${editContent}`)
+  const handleSave = (payload: any) => {
+    setContent(url, currentContent, range, nodeId)
+
+    chrome.runtime.sendMessage(
+      {
+        type: 'CAPTURE_HANDLER',
+        subType: 'CREATE_CONTENT_QC',
+        data: {
+          body: {
+            ...payload,
+            content: currentContent
+          }
+        }
+      },
+      (response) => {
+        const { message, error } = response
+        if (error) {
+          if (error === 'Not Authenticated') {
+            console.error('Not Authenticated. Please login via Popup')
+          } else {
+            console.error('An Error Occured. Please try again')
+          }
+        } else {
+          console.log('Successful')
+          setTimeout(() => {
+            closeSputlit()
+          }, 2000)
+        }
+      }
+    )
+  }
+
   return (
     <div id="sputlit-container">
       <Wrapper>
@@ -98,9 +123,13 @@ const Sputlit = ({
           {html === undefined && editContent === undefined ? (
             <Search />
           ) : (
-            <Editor nodeId={nodeId} content={editContent ? editContent : value} onChange={updateContent} />
+            <Editor
+              nodeUID={nodeId}
+              content={editContent ? editContent : value}
+              onChange={updateContent}
+              handleSave={handleSave}
+            />
           )}
-          {/* <Footer id="sputlit-footer">Omni puts number of results and stuff here, lets see what we do</Footer> */}
         </Main>
       </Wrapper>
       <Overlay
