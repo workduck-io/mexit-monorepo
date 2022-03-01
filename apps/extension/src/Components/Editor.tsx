@@ -5,12 +5,9 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { toast, Toaster } from 'react-hot-toast'
-import { debounce } from 'lodash'
 
-import { useContentStore } from '../Hooks/useContentStore'
 import { useEditorChange } from '../Hooks/useEditorActions'
-import { NodeEditorContent, CaptureType } from '@mexit/shared'
+import { CaptureType } from '@mexit/shared'
 import generatePlugins from '../Utils/plugins'
 import { Button } from '@mexit/shared'
 import { closeSputlit } from '@mexit/shared'
@@ -43,7 +40,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
 
-  const plugins = createPlugins(generatePlugins(), { components: createPlateUI() })
+  const plugins = createPlugins(generatePlugins())
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -100,7 +97,6 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
     f(value)
   }, 1000)
-
   return (
     <EditorWrapper>
       <MexEditor
@@ -108,12 +104,16 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         meta={{
           path: nodePath
         }}
-        // TODO: adding plugins below breaks things
-        // plugins={plugins}
+        plugins={plugins}
+        components={{}}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
-        value={content}
+        value={[
+          {
+            children: content
+          }
+        ]}
       />
 
       <button
