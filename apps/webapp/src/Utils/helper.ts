@@ -1,5 +1,7 @@
 import { NODE_ID_PREFIX, ID_SEPARATOR, SEPARATOR } from '@workduck-io/mex-editor'
 import { nanoid } from 'nanoid'
+import React, { Ref } from 'react'
+import { ReactComponentElement } from 'react'
 
 export const BASE_DRAFT_PATH = 'Draft'
 
@@ -17,3 +19,7 @@ export const getNodeIcon = (path: string) => {
 }
 
 export const generateNodeId = () => `${NODE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
+
+export const resize = (ref: React.RefObject<HTMLElement>) => {
+  window.parent.postMessage({ type: 'height-init', height: ref.current.clientHeight }, '*')
+}

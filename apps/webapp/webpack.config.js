@@ -6,7 +6,11 @@ module.exports = (config, context) => {
   // then override your config.
   return {
     ...config,
-    devtool: 'inline-source-map',
+    optimization: {
+      splitChunks: {
+        chunks: 'all'
+      }
+    },
     node: { global: true } // Fix: "Uncaught ReferenceError: global is not defined", and "Can't resolve 'fs'".
   }
 }

@@ -17,6 +17,8 @@ import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
 
+import * as Actions from './Actions'
+
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
   return authenticated ? children : <Navigate to="/login" />
@@ -119,6 +121,14 @@ const Switch = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/actions">
+        <Route path="shortener" element={<Actions.AliasWrapper />} />
+        <Route path="color-picker" element={<Actions.ColourPicker />} />
+        <Route path="corpbs" element={<Actions.CorporateBS />} />
+        <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
+        <Route path="epoch" element={<Actions.UnixEpochConverter />} />
+      </Route>
     </Routes>
   )
 }
