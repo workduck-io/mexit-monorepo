@@ -1,3 +1,4 @@
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import React, { Suspense } from 'react'
 import styled from 'styled-components'
 
@@ -8,7 +9,15 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = ({ componentSrc }: { componentSrc: string }) => {
-  return <Iframe src={componentSrc} />
+  document
+    .getElementById('action-component')
+    // @ts-ignore
+    .contentWidnow.postMessage(
+      { type: 'tab-info', title: document.title, url: window.location.href },
+      MEXIT_FRONTEND_URL_BASE
+    )
+
+  return <Iframe id="action-component" src={componentSrc} />
 }
 
 export default Renderer

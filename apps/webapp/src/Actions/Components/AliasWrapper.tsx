@@ -71,13 +71,21 @@ export const AliasWrapper = () => {
     )
   }
 
-  /* Try to fetch page metadata using content script*/
+  useEffect(() => {
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'tab-info') {
+        console.log(event.data)
+        setCurrTabURL(event.data.url)
+      }
+    })
+  }, [])
+
   useEffect(() => {
     if (checkMetaParseableURL(currTabURL)) {
       const mt = parsePageMetaTags()
       setPageMetaTags(mt)
     }
-  }, [currTabURL])
+  }, [])
 
   const addNewUserTag = (tag: Tag) => {
     setUserTags([...userTags, tag])
