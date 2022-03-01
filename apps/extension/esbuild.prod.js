@@ -5,13 +5,13 @@ esbuild
     entryPoints: ['./src/background.ts', './src/contentScript.tsx'],
     bundle: true,
     minify: true,
-    sourcemap: process.env.NODE_ENV !== 'production',
+    sourcemap: false,
     target: ['chrome89', 'firefox91'],
     outdir: './public/build',
     define: {
       global: '{}',
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
+      'process.env.NODE_ENV': `"production"`
     },
-    assetNames: './src/Assets'
+    loader: { '.eot': 'file', '.woff': 'file', '.woff2': 'file', '.ttf': 'file', '.svg': 'file', '.html': 'file' }
   })
   .catch(() => process.exit(1))

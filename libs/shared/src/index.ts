@@ -19,5 +19,3 @@ export * from './Utils/actions'
 export * from './Utils/routes'
 
 export * from './Themes'
-
-export * from './styled.d'

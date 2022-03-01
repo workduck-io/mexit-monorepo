@@ -4,7 +4,8 @@
   "version": "0.1.2",
   "private": true,
   "scripts": {
-    "dev": "node esbuild.js"
+    "dev": "node esbuild.dev.js",
+    "build": "node esbuild.prod.js"
   },
   "dependencies": {
     "@sentry/integrations": "^6.17.2",

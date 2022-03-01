@@ -5,28 +5,28 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Inter";
     font-style: normal;
     font-weight: 400;
-    src: url(${chrome.runtime.getURL('/Assets/Inter-Regular.ttf')});
+    src: url(${chrome.runtime.getURL('/assets/Inter-Regular.ttf')});
   }
 
   @font-face {
     font-family: "Inter";
     font-style: normal;
     font-weight: 500;
-    src: url(${chrome.runtime.getURL('/Assets/Inter-Medium.ttf')});
+    src: url(${chrome.runtime.getURL('/assets/Inter-Medium.ttf')});
   }
 
   @font-face {
     font-family: "Inter";
     font-style: normal;
     font-weight: 600;
-    src: url(${chrome.runtime.getURL('/Assets/Inter-SemiBold.ttf')});
+    src: url(${chrome.runtime.getURL('/assets/Inter-SemiBold.ttf')});
   }
 
   @font-face {
     font-family: "Inter";
     font-style: normal;
     font-weight: 700;
-    src: url(${chrome.runtime.getURL('/Assets/Inter-Bold.ttf')});
+    src: url(${chrome.runtime.getURL('/assets/Inter-Bold.ttf')});
   }
 
   #extension-root *{

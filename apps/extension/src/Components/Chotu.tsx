@@ -130,13 +130,13 @@ export default function Chotu() {
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
       <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
       <Icon>
-        <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
+        <img src={chrome.runtime.getURL('/assets/black_logo.svg')} />
       </Icon>
 
       <Container>
         <p>shortened</p>
         <CopyButton>
-          <img src={chrome.runtime.getURL('/Assets/copy.svg')} />
+          <img src={chrome.runtime.getURL('/assets/copy.svg')} />
         </CopyButton>
       </Container>
     </StyledChotu>
