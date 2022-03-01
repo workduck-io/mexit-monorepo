@@ -13,18 +13,6 @@ export default function Chotu() {
     linkCaptures: linkCaptures
   }
 
-  const handleEvent = (event: MessageEvent) => {
-    console.log('Event recv chotu: ', event)
-  }
-
-  useEffect(() => {
-    window.addEventListener('message', handleEvent)
-
-    return () => {
-      window.removeEventListener('message', handleEvent)
-    }
-  })
-
   window.parent.postMessage(message, '*')
 
   return (

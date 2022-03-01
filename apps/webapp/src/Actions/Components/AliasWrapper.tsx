@@ -25,9 +25,7 @@ export interface ShortenFormDetails {
 }
 
 export const AliasWrapper = () => {
-  const x = window.location != window.parent.location ? document.referrer : document.location.href
-
-  const [currTabURL, setCurrTabURL] = useState(x)
+  const [currTabURL, setCurrTabURL] = useState(document.referrer)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortenerResponse, setShortenerResponse] = useState<any>()
@@ -72,22 +70,24 @@ export const AliasWrapper = () => {
       '*'
     )
   }
+  useEffect(() => {}, [])
+
+  const handleEvent = (event: MessageEvent) => {
+    switch (event.data.type) {
+      case 'tab-info-response':
+        setCurrTabURL(event.data.data.url)
+    }
+  }
 
   useEffect(() => {
+    window.addEventListener('message', handleEvent)
+
     window.parent.postMessage(
       {
         type: 'tab-info-request'
       },
       '*'
     )
-  }, [])
-
-  const handleEvent = (event: MessageEvent) => {
-    console.log('Event recv: ', event)
-  }
-
-  useEffect(() => {
-    window.addEventListener('message', handleEvent)
 
     return () => {
       window.removeEventListener('message', handleEvent)

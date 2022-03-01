@@ -99,19 +99,6 @@ export default function Chotu() {
           }
           break
         }
-        case 'tab-info-request': {
-          const iframe = document.getElementById('chotu-iframe') as any
-          iframe.contentWindow.postMessage(
-            {
-              type: 'tab-info-response',
-              data: {
-                url: window.location.href
-              }
-            },
-            MEXIT_FRONTEND_URL_BASE
-          )
-          break
-        }
         default:
           break
       }

@@ -21,6 +21,18 @@ const Renderer = ({ componentSrc }: { componentSrc: string }) => {
         case 'height-init':
           iframeRef.current.height = event.data.height + 'px'
           break
+        case 'tab-info-request': {
+          iframeRef.current.contentWindow.postMessage(
+            {
+              type: 'tab-info-response',
+              data: {
+                url: window.location.href
+              }
+            },
+            MEXIT_FRONTEND_URL_BASE
+          )
+          break
+        }
         default:
           break
       }
