@@ -97,6 +97,19 @@ export default function Chotu() {
             console.error('Received: ', event.data)
           }
           break
+        case 'tab-info-request': {
+          const iframe = document.getElementById('chotu-iframe') as any
+          iframe.contentWindow.postMessage(
+            {
+              type: 'tab-info-response',
+              data: {
+                url: window.location.href
+              }
+            },
+            MEXIT_FRONTEND_URL_BASE
+          )
+          break
+        }
         default:
           break
       }
@@ -105,7 +118,6 @@ export default function Chotu() {
 
   useEffect(() => {
     window.addEventListener('message', handleEvent)
-
     return () => {
       window.removeEventListener('message', handleEvent)
     }
@@ -114,7 +126,7 @@ export default function Chotu() {
   return (
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
-      <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} />
+      <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
       <Icon>
         <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
       </Icon>

@@ -72,13 +72,25 @@ export const AliasWrapper = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('message', (event) => {
-      if (event.data.type === 'tab-info') {
-        console.log(event.data)
-        setCurrTabURL(event.data.url)
-      }
-    })
+    window.parent.postMessage(
+      {
+        type: 'tab-info-request'
+      },
+      '*'
+    )
   }, [])
+
+  const handleEvent = (event: MessageEvent) => {
+    console.log('Event recv: ', event)
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', handleEvent)
+
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
+  })
 
   useEffect(() => {
     if (checkMetaParseableURL(currTabURL)) {
