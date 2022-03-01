@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { resize } from '../../Utils/helper'
 
 interface ConverterForm {
   from: string
@@ -10,6 +11,7 @@ interface ConverterForm {
 export const CurrencyConverter = () => {
   const [convertedVal, setConvertedVal] = useState<number>()
   const [outCurrency, setOutCurrency] = useState<string>()
+  const elementRef = useRef(null)
 
   const { handleSubmit, register } = useForm<ConverterForm>({
     defaultValues: {
@@ -34,8 +36,14 @@ export const CurrencyConverter = () => {
       })
   }
 
+  useEffect(() => {
+    if (elementRef !== null) {
+      resize(elementRef)
+    }
+  }, [elementRef])
+
   return (
-    <>
+    <div ref={elementRef}>
       <h1>Convert Between Currencies</h1>
 
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -57,6 +65,6 @@ export const CurrencyConverter = () => {
           Frankfurter App
         </a>
       </h3>
-    </>
+    </div>
   )
 }

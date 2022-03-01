@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { HexColorPicker, RgbStringColorPicker } from 'react-colorful'
 import { useForm } from 'react-hook-form'
 import _ from 'lodash'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
 import { Input } from '@mexit/shared'
+import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ interface Colour {
 
 export const ColourPicker = () => {
   const [hexColor, setHexColor] = useState('#aabbcc')
+  const elementRef = useRef(null)
 
   const [rgbColor, setRgbColor] = useState<Colour>({
     r: 0,
@@ -83,8 +85,14 @@ export const ColourPicker = () => {
     })
   }, 100)
 
+  useEffect(() => {
+    if (elementRef !== null) {
+      resize(elementRef)
+    }
+  }, [elementRef])
+
   return (
-    <Container>
+    <Container ref={elementRef}>
       <div>
         <HexColorPicker color={hexColor} onChange={setHexColor} />
         {presetColors.map((presetColor) => (

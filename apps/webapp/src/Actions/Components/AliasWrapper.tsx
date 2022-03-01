@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
@@ -11,6 +11,7 @@ import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
+import { resize } from '../../Utils/helper'
 
 const Form = styled.form`
   display: flex;
@@ -30,6 +31,7 @@ export const AliasWrapper = () => {
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortenerResponse, setShortenerResponse] = useState<any>()
+  const elementRef = useRef(null)
 
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
   const addTagsToGlobalStore = useTagStore((store) => store.addTags)
@@ -90,7 +92,13 @@ export const AliasWrapper = () => {
     return () => {
       window.removeEventListener('message', handleEvent)
     }
-  })
+  }, [])
+
+  useEffect(() => {
+    if (elementRef !== null) {
+      resize(elementRef)
+    }
+  }, [elementRef])
 
   useEffect(() => {
     if (checkMetaParseableURL(currTabURL)) {
@@ -112,13 +120,10 @@ export const AliasWrapper = () => {
 
   // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
-    <>
-      <Form onSubmit={handleSubmit(onShortenLinkSubmit)}>
-        <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
-        <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
-        <Button type="submit" value="Save" />
-      </Form>
-      <Toaster position="bottom-center" />
-    </>
+    <Form ref={elementRef} onSubmit={handleSubmit(onShortenLinkSubmit)}>
+      <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
+      <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
+      <Button type="submit" value="Save" />
+    </Form>
   )
 }
