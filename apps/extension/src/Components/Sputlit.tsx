@@ -73,7 +73,6 @@ const Sputlit = ({
   useEffect(() => {
     console.log(`content: ${JSON.stringify(content)}`)
     if (range && content && url) {
-      setContent(url, content, range, nodeId)
       setValue(content)
     }
   }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
