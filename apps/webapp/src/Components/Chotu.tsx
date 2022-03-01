@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuthStore } from '../Stores/useAuth'
 
 export default function Chotu() {
@@ -12,6 +12,18 @@ export default function Chotu() {
     workspaceDetails: workspaceDetails,
     linkCaptures: linkCaptures
   }
+
+  const handleEvent = (event: MessageEvent) => {
+    console.log('Event recv chotu: ', event)
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', handleEvent)
+
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
+  })
 
   window.parent.postMessage(message, '*')
 

@@ -9,14 +9,6 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = ({ componentSrc }: { componentSrc: string }) => {
-  document
-    .getElementById('action-component')
-    // @ts-ignore
-    .contentWidnow.postMessage(
-      { type: 'tab-info', title: document.title, url: window.location.href },
-      MEXIT_FRONTEND_URL_BASE
-    )
-
   return <Iframe id="action-component" src={componentSrc} />
 }
 
