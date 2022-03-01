@@ -18,7 +18,7 @@ import { sanitizeHtml } from './Utils/sanitizeHTML'
 import Chotu from './Components/Chotu'
 import { closeSputlit } from '@mexit/shared'
 
-if (process.env.NX_MIXPANEL_TOKEN_EXTENSION) mixpanel.init(process.env.NX_MIXPANEL_TOKEN_EXTENSION, { debug: true })
+// if (process.env.NX_MIXPANEL_TOKEN_EXTENSION) mixpanel.init(process.env.NX_MIXPANEL_TOKEN_EXTENSION, { debug: true })
 
 Sentry.init({
   dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',

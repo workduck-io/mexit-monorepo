@@ -3,6 +3,9 @@
   "description": "Mexit - Augment your thoughts, Automate your tasks",
   "version": "0.1.2",
   "private": true,
+  "scripts": {
+    "dev": "node esbuild.js"
+  },
   "dependencies": {
     "@sentry/integrations": "^6.17.2",
     "@sentry/react": "^6.17.2",
