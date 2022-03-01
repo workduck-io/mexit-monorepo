@@ -7,6 +7,19 @@ module.exports = (config, context) => {
   // then override your config.
   return {
     ...config,
+    module: {
+      rules: [
+        // Use esbuild as a Babel alternative
+        {
+          test: /\.tsx?$/,
+          loader: 'esbuild-loader',
+          options: {
+            loader: 'tsx',
+            target: 'es2015'
+          }
+        }
+      ]
+    },
     devtool: 'inline-source-map',
     entry: {
       content: './src/contentScript.tsx',
