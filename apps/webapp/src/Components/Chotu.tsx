@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuthStore } from '../Stores/useAuth'
 
 export default function Chotu() {
@@ -6,7 +6,12 @@ export default function Chotu() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const linkCaptures = localStorage.getItem('mexit-link-captures')
 
-  const message = { userDetails: userDetails, workspaceDetails: workspaceDetails, linkCaptures: linkCaptures }
+  const message = {
+    type: 'store-init',
+    userDetails: userDetails,
+    workspaceDetails: workspaceDetails,
+    linkCaptures: linkCaptures
+  }
 
   window.parent.postMessage(message, '*')
 

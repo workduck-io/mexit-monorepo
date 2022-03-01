@@ -3,6 +3,9 @@ import { useAuthStore } from '../Hooks/useAuth'
 import styled from 'styled-components'
 import { useShortenerStore } from '../Hooks/useShortener'
 import { css } from 'styled-components'
+import { useCallback } from 'react'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { useEffect } from 'react'
 
 const Container = styled.div`
   display: flex;
@@ -73,21 +76,46 @@ const Icon = styled.div`
 `
 
 export default function Chotu() {
-  const { linkCaptures, setLinkCaptures } = useShortenerStore((store) => store)
+  const linkCaptures = useShortenerStore((store) => store.linkCaptures)
+  const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
+  const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
+
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
 
-  window.addEventListener('message', (event) => {
-    if (event.origin === 'http://localhost:3000') {
-      console.log(event.data)
-      setAutheticated(event.data.userDetails, event.data.workspaceDetails)
-      setLinkCaptures(event.data.linkCapture)
+  const handleEvent = (event) => {
+    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
+      switch (event.data.type) {
+        case 'store-init': {
+          setAutheticated(event.data.userDetails, event.data.workspaceDetails)
+          setLinkCaptures(event.data.linkCapture)
+          break
+        }
+        case 'shortener': {
+          if (event.data.status === 200) {
+            console.log('Received: ', event.data.message)
+            addLinkCapture(event.data.message)
+          } else {
+            console.error('Received: ', event.data)
+          }
+          break
+        }
+        default:
+          break
+      }
     }
-  })
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', handleEvent)
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
+  }, [])
 
   return (
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
-      <iframe src={'http://localhost:3000/chotu'} />
+      <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
       <Icon>
         <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
       </Icon>

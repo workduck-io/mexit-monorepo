@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
   margin: 2rem;
@@ -24,8 +25,9 @@ const Blockquote = styled.blockquote`
   }
 `
 
-const CorporateBS = () => {
+export const CorporateBS = () => {
   const [corpBS, setCorpBS] = useState<string>()
+  const elementRef = useRef(null)
 
   useEffect(() => {
     fetch('https://corporatebs-generator.sameerkumar.website')
@@ -38,8 +40,14 @@ const CorporateBS = () => {
       })
   }, [])
 
+  useEffect(() => {
+    if (elementRef !== null) {
+      resize(elementRef)
+    }
+  }, [elementRef])
+
   return (
-    <Container>
+    <Container ref={elementRef}>
       <h1>Your Random Dose of Corporate BS is</h1>
       <Blockquote>{corpBS}</Blockquote>
 
@@ -52,5 +60,3 @@ const CorporateBS = () => {
     </Container>
   )
 }
-
-export default CorporateBS

@@ -3,6 +3,7 @@ import { Input } from '@mexit/shared'
 import styled from 'styled-components'
 import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
+import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
   display: flex;
@@ -27,12 +28,13 @@ const Output = styled.div`
   border-radius: 5px; ;
 `
 
-const UnixEpochConverter = () => {
+export const UnixEpochConverter = () => {
   const [epochT, setEpochT] = useState(Math.round(new Date().getTime() / 1000))
   const [datetime, setDateTime] = useState(new Date().toLocaleString())
 
   const [epochInput, setEpochInput] = useState(epochT)
   const [dtInput, setDtInput] = useState(datetime)
+  const elementRef = useRef(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,8 +49,14 @@ const UnixEpochConverter = () => {
   const datetimeInput = useRef(null)
   const utsInput = useRef(null)
 
+  useEffect(() => {
+    if (elementRef !== null) {
+      resize(elementRef)
+    }
+  }, [elementRef])
+
   return (
-    <Container>
+    <Container ref={elementRef}>
       <h2>Unix Timestamp Conversion</h2>
       <p>Current Unix Timestamp is: {epochT}</p>
       <p>Current Date and Time is: {datetime}</p>
@@ -85,5 +93,3 @@ const UnixEpochConverter = () => {
     </Container>
   )
 }
-
-export default UnixEpochConverter
