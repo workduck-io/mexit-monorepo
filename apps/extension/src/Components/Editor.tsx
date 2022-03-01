@@ -1,3 +1,4 @@
+import { createPlugins, createPlateUI } from '@udecode/plate'
 import { MexEditor, ComboboxKey } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
@@ -42,6 +43,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
 
+  const plugins = createPlugins(generatePlugins(), { components: createPlateUI() })
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -106,6 +108,8 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         meta={{
           path: nodePath
         }}
+        // TODO: adding plugins below breaks things
+        // plugins={plugins}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
