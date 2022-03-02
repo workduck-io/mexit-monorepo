@@ -1,26 +1,66 @@
-const nrwlConfig = require('@nrwl/react/plugins/webpack.js') // require the main @nrwl/react/plugins/webpack configuration function.
-// const devtool = process.env.NO_INLINE_SOURCE_MAP ? 'source-map' : 'inline-source-map'
+// const nrwlConfig = require('@nrwl/react/plugins/webpack.js') // require the main @nrwl/react/plugins/webpack configuration function.
+const { ESBuildMinifyPlugin } = require('esbuild-loader')
+
+const devtool = process.env.NO_INLINE_SOURCE_MAP ? 'source-map' : 'inline-source-map'
 
 module.exports = (config, context) => {
-  nrwlConfig(config) // first call it so that it @nrwl/react plugin adds its configs,
+  config.module.rules.push({
+    test: /\.tsx?$/,
+    loader: 'esbuild-loader',
+    options: {
+      loader: 'tsx',
+      target: 'es2015'
+    }
+  })
+
+  config.module.rules.push({
+    test: /\.svg$/,
+    oneOf: [
+      {
+        issuer: /\.(js|ts|md)x?$/,
+        use: [
+          {
+            loader: require.resolve('@svgr/webpack'),
+            options: {
+              svgo: false,
+              titleProp: true,
+              ref: true
+            }
+          },
+          {
+            loader: require.resolve('url-loader'),
+            options: {
+              limit: 10000,
+              name: '[name].[hash:7].[ext]',
+              esModule: false
+            }
+          }
+        ]
+      },
+      // Fallback to plain URL loader.
+      {
+        use: [
+          {
+            loader: require.resolve('url-loader'),
+            options: {
+              limit: 10000,
+              name: '[name].[hash:7].[ext]'
+            }
+          }
+        ]
+      }
+    ]
+  })
+
+  config.optimization = {
+    minimize: false,
+    minimizer: [new ESBuildMinifyPlugin()]
+  }
 
   // then override your config.
   return {
     ...config,
-    module: {
-      rules: [
-        // Use esbuild as a Babel alternative
-        {
-          test: /\.tsx?$/,
-          loader: 'esbuild-loader',
-          options: {
-            loader: 'tsx',
-            target: 'es2015'
-          }
-        }
-      ]
-    },
-    devtool: 'inline-source-map',
+    devtool: devtool,
     entry: {
       content: './src/contentScript.tsx',
       background: './src/background.ts'
@@ -28,10 +68,6 @@ module.exports = (config, context) => {
     output: {
       ...config.output,
       filename: '[name].js'
-    },
-    optimization: {
-      ...config.optimization,
-      runtimeChunk: false
     },
     node: { global: true } // Fix: "Uncaught ReferenceError: global is not defined", and "Can't resolve 'fs'".
   }
