@@ -52,11 +52,6 @@ module.exports = (config, context) => {
     ]
   })
 
-  config.optimization = {
-    minimize: false,
-    minimizer: [new ESBuildMinifyPlugin()]
-  }
-
   // then override your config.
   return {
     ...config,
@@ -68,6 +63,11 @@ module.exports = (config, context) => {
     output: {
       ...config.output,
       filename: '[name].js'
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [new ESBuildMinifyPlugin()],
+      runtimeChunk: false
     },
     node: { global: true } // Fix: "Uncaught ReferenceError: global is not defined", and "Can't resolve 'fs'".
   }
