@@ -1,7 +1,7 @@
-import styled, { css, keyframes } from 'styled-components'
-import { range } from 'lodash'
-
 import React from 'react'
+import styled, { css, keyframes } from 'styled-components'
+
+import { range } from '@mexit/shared'
 
 const loadingFade = keyframes`
   0% { opacity: 0; }

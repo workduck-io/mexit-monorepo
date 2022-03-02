@@ -6,17 +6,14 @@ import path from 'path'
 export default defineConfig({
   build: {
     sourcemap: true,
-    outDir: '../../dist/apps/webapp',
-    rollupOptions: {
-      input: [
-        path.resolve(__dirname, 'src', 'index.tsx'),
-        path.resolve(__dirname, 'src', 'Actions/Components', 'AliasWrapper.tsx')
-      ],
-      output: {
-        format: 'es',
-        dir: './'
-      }
-    }
+    outDir: '../../dist/apps/webapp'
+    // rollupOptions: {
+    //   input: [path.resolve(__dirname, 'index.html'), path.resolve(__dirname, 'src', 'Actions', 'index.html')],
+    //   output: {
+    //     format: 'es',
+    //     dir: '../../dist/apps/webapp'
+    //   }
+    // }
   },
   define: {
     'process.env': {}

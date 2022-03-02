@@ -1,4 +1,4 @@
-import circleOutline from '@iconify-icons/codicon/circle-outline'
+import circleOutline from '@iconify-icons/ri/checkbox-blank-circle-line'
 import React from 'react'
 
 import MexIcons, { MexNodeIcons } from '../Icons/Icons'

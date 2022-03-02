@@ -2,18 +2,6 @@
   "root": "apps/webapp",
   "sourceRoot": "apps/webapp/src",
   "projectType": "application",
-  "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "apps/webapp/**/*.{ts,tsx,js,jsx}"
-        ]
-      }
-    }
-  },
+  "targets": {},
   "tags": []
 }
