@@ -43,6 +43,12 @@
         "command": "chokidar \"apps/extension/src/**/**.tsx\" \"apps/extension/src/**/**.ts\" -c 'nx build extension' --initial"
       }
     },
+    "release": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "NO_INLINE_SOURCE_MAP=true nx build extension"
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": [
