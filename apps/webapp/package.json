@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build --emptyOutDir",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
   },
   "dependencies": {
     "@iconify-icons/ri": "^1.1.1",

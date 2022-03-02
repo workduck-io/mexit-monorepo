@@ -36,6 +36,18 @@
           "vendorChunk": false
         }
       }
+    },
+    "dev": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "chokidar \"apps/extension/src/**/**.tsx\" \"apps/extension/src/**/**.ts\" -c 'nx build extension' --initial"
+      }
+    },
+    "release": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "NO_SOURCE_MAP=true yarn nx build extension"
+      }
     }
   },
   "tags": []
