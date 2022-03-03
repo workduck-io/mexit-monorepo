@@ -55,6 +55,7 @@ module.exports = (config, context) => {
   // then override your config.
   return {
     ...config,
+    stats: { preset: 'normal', colors: true },
     devtool: devtool,
     entry: {
       content: './src/contentScript.tsx',

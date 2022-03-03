@@ -46,7 +46,7 @@
     "release": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "NO_SOURCE_MAP=true yarn nx build extension"
+        "command": "NO_SOURCE_MAP=true nx build extension"
       }
     }
   },
