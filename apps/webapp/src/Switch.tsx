@@ -47,22 +47,20 @@ const Switch = () => {
       ClientId: config.cognito.APP_CLIENT_ID
     })
 
-    console.log('User Authenticated Email: ', userAuthenticatedEmail)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // useEffect(() => {
-  //   const browserTracing = new BrowserTracing({
-  //     routingInstrumentation
-  //   })
+  useEffect(() => {
+    const browserTracing = new BrowserTracing({
+      routingInstrumentation
+    })
 
-  //   SentryInit({
-  //     dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
-  //     tracesSampleRate: 1.0,
-  //     integrations: [browserTracing]
-  //   })
+    SentryInit({
+      dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
+      tracesSampleRate: 1.0,
+      integrations: [browserTracing]
+    })
 
-  //   console.log('Sentry Initialized!')
-  // }, [routingInstrumentation])
+  }, [routingInstrumentation])
 
   return (
     <Routes>

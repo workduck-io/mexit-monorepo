@@ -10,7 +10,7 @@
       ],
       "defaultConfiguration": "production",
       "options": {
-        "compiler": "babel",
+        "compiler": "swc",
         "outputPath": "dist/apps/extension",
         "index": "apps/extension/src/index.html",
         "baseHref": "/",
@@ -43,15 +43,10 @@
         "command": "chokidar \"apps/extension/src/**/**.tsx\" \"apps/extension/src/**/**.ts\" -c 'nx build extension' --initial"
       }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+    "release": {
+      "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "apps/extension/**/*.{ts,tsx,js,jsx}"
-        ]
+        "command": "NO_SOURCE_MAP=true nx build extension"
       }
     }
   },
