@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { HexColorPicker, RgbStringColorPicker } from 'react-colorful'
-import { useForm } from 'react-hook-form'
-import _ from 'lodash'
+import { HexColorPicker } from 'react-colorful'
 import styled from 'styled-components'
-import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
-import { Input } from '@mexit/shared'
+
+import { copyToClipboard, Input, throttle } from '@mexit/shared'
+
 import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
@@ -64,7 +63,7 @@ export const ColourPicker = () => {
 
   const presetColors = ['#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#417505', '#9013FE']
 
-  const convRGBToHex = _.throttle((rgb: Colour) => {
+  const convRGBToHex = throttle((rgb: Colour) => {
     const componentToHex = (c: number) => {
       const hex = c.toString(16)
       return hex.length == 1 ? '0' + hex : hex
@@ -74,7 +73,7 @@ export const ColourPicker = () => {
     setHexColor(hexVal)
   }, 100)
 
-  const convHexToRGB = _.throttle((hex: string) => {
+  const convHexToRGB = throttle((hex: string) => {
     if (hex.length < 7) return
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex) || ['0', '0', '0']

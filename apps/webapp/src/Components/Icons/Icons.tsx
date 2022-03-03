@@ -1,9 +1,9 @@
 // Icons for sidebar and UI
 import starLine from '@iconify-icons/ri/star-line'
-import bxChevronDownCircle from '@iconify-icons/bx/bx-chevron-down-circle'
 import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-line'
 import checkboxBlankCircleFill from '@iconify-icons/ri/checkbox-blank-circle-fill'
 import starFill from '@iconify-icons/ri/star-fill'
+import arrowDownCircleLine from '@iconify-icons/ri/arrow-down-circle-line'
 import draftLine from '@iconify-icons/ri/draft-line'
 import draftFill from '@iconify-icons/ri/draft-fill'
 import taskLine from '@iconify-icons/ri/task-line'
@@ -17,7 +17,7 @@ import externalLinkLine from '@iconify-icons/ri/external-link-line'
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const MexIcons: { [key: string]: [any, any] } = {
   // First element of array is of closed Icon and the second is for open
-  openClose: [checkboxBlankCircleFill, bxChevronDownCircle],
+  openClose: [checkboxBlankCircleFill, arrowDownCircleLine],
   circle: [checkboxBlankCircleFill, checkboxBlankCircleLine],
   pursuits: [starFill, starLine],
   starred: [starFill, starLine],

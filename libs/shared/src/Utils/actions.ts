@@ -194,15 +194,15 @@ export const initActions: Array<MexitAction> = [
       componentName: 'CreateTabCapture'
     }
   },
-  {
-    id: 'ACTION_t4Gbp9x7f6jmkKB3LbYQ5',
-    title: 'Show Captured Tab Groups',
-    description: 'List and Open Tab Saved Tab Groups',
-    type: ActionType.RENDER,
-    data: {
-      componentName: 'ShowTabCaptures'
-    }
-  },
+  // {
+  //   id: 'ACTION_t4Gbp9x7f6jmkKB3LbYQ5',
+  //   title: 'Show Captured Tab Groups',
+  //   description: 'List and Open Tab Saved Tab Groups',
+  //   type: ActionType.RENDER,
+  //   data: {
+  //     componentName: 'ShowTabCaptures'
+  //   }
+  // },
   {
     id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
     title: 'Colour Picker',
