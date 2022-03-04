@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+
+    commands:
+      - npm install -g yarn
+      - yarn
+
+  build:
+    commands:
+      - yarn nx release webapp
+
+artifacts:
+  files:
+    - "**/*"
+  base-directory: "dist/apps/webapp"
