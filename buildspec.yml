@@ -7,13 +7,13 @@ phases:
 
     commands:
       - npm install yarn
-      - yarn --prod
+      - yarn
 
   build:
     commands:
-      - yarn build
+      - yarn nx release webapp
 
 artifacts:
   files:
     - "**/*"
-  base-directory: "dist"
+  base-directory: "dist/apps/webapp"
