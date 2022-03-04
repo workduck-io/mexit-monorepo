@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DEBUG: "*"
       GITHUB_TOKEN: ${{ github.token }}
       YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
 
@@ -25,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --network-timeout 1000000
 
-      - name: Build Extension for Release
+      - name: Build Webapp for Release
         run: yarn nx release webapp
 
       - uses: aws-actions/configure-aws-credentials@v1
