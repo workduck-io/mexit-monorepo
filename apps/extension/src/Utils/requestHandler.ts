@@ -9,6 +9,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const URL = apiURLs.addContentCapture
       const reqBody = data.body
 
+      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
+
       return client
         .post(URL, reqBody)
         .then((response: any) => {

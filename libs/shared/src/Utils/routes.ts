@@ -58,7 +58,7 @@ export const apiURLs = {
   // Mexit Backend URLs
   createShort: `${MEXIT_BACKEND_URL_BASE}/node/capture/link`,
   addLinkCapture: `${MEXIT_BACKEND_URL_BASE}/node/link`,
-  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/content`,
+  addContentCapture: `${MEXIT_BACKEND_URL_BASE}/node/capture`,
 
   mexitHome: `${MEXIT_FRONTEND_URL_BASE}/`,
   searchMexit: `${MEXIT_FRONTEND_URL_BASE}/search?q=`,

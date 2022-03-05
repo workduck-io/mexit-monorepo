@@ -119,11 +119,10 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
       <button
         onClick={() => {
           const payload = {
-            id: userDetails.activityNodeUID ? userDetails.activityNodeUID : 'NODE_ACTIVITY',
+            id: `NODE_${userDetails.userId}`,
             nodePath: nodePath,
-            type: nodePath !== config.mex.ACTIVITY_NODE_NAME ? CaptureType.HIERARCHY : CaptureType.DRAFT,
-            createdBy: userDetails.userId,
-            workspace: workspaceDetails.name,
+            type: CaptureType.DRAFT,
+            createdBy: userDetails.email,
             metadata: {
               metaTags: pageMetaTags,
               userTags: userTags

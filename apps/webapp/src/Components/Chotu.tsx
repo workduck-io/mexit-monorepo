@@ -5,12 +5,16 @@ export default function Chotu() {
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const linkCaptures = localStorage.getItem('mexit-link-captures')
+  const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
+
+  console.log('AuthAWS: ', authAWS)
 
   const message = {
     type: 'store-init',
     userDetails: userDetails,
     workspaceDetails: workspaceDetails,
-    linkCaptures: linkCaptures
+    linkCaptures: linkCaptures,
+    authAWS: authAWS
   }
 
   window.parent.postMessage(message, '*')

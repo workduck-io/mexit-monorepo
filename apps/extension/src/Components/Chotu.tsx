@@ -6,6 +6,7 @@ import { css } from 'styled-components'
 import { useCallback } from 'react'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import { useEffect } from 'react'
+import useInternalAuthStore from '../Hooks/useAuthStore'
 
 const Container = styled.div`
   display: flex;
@@ -82,12 +83,16 @@ export default function Chotu() {
 
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
 
+  const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
+
   const handleEvent = (event) => {
     if (event.origin === MEXIT_FRONTEND_URL_BASE) {
       switch (event.data.type) {
         case 'store-init': {
           setAutheticated(event.data.userDetails, event.data.workspaceDetails)
           setLinkCaptures(event.data.linkCapture)
+          const internalAuthStoreState = event.data.authAWS
+          setInternalAuthStore(internalAuthStoreState)
           break
         }
         case 'shortener': {
