@@ -6,6 +6,7 @@ import { css } from 'styled-components'
 import { useCallback } from 'react'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import { useEffect } from 'react'
+import { useSputlitContext } from '../Hooks/useSputlitContext'
 
 const Container = styled.div`
   display: flex;
@@ -111,7 +112,6 @@ export default function Chotu() {
       window.removeEventListener('message', handleEvent)
     }
   }, [])
-
   return (
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
