@@ -1,20 +1,17 @@
 // Any kind of DOM manipulation is done here.
-import React, { ReactNode, ReactPortal } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
-import Highlighter from 'web-highlighter'
-import HighlightSource from 'web-highlighter/dist/model/source'
 
 import Sputlit from './Components/Sputlit'
-import { getDomMeta } from './Utils/highlight'
-import { useContentStore } from './Hooks/useContentStore'
 import { ThemeProvider } from 'styled-components'
 import { theme } from './Styles/theme'
 import { GlobalStyle } from './Styles/GlobalStyle'
 import Tooltip from './Components/Tooltip'
 import Chotu from './Components/Chotu'
-import { SputlitProvider, useSputlitContext, VisualState } from './Hooks/useSputlitContext'
+import { SputlitProvider } from './Hooks/useSputlitContext'
 import { SputlitPortal } from './Components/Sputlit/SputlitPortal'
 import { InternalEvents } from './Components/InternalEvents'
+import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
 
 const overlay = document.createElement('div')
 overlay.id = 'extension-root'
@@ -26,7 +23,13 @@ ReactDOM.render(
     <GlobalStyle />
     <SputlitProvider>
       <InternalEvents />
+
       <Chotu />
+
+      <TooltipPortal>
+        <Tooltip />
+      </TooltipPortal>
+
       <SputlitPortal>
         <Sputlit />
       </SputlitPortal>

@@ -71,6 +71,7 @@ function initAnalytics() {
 
 function handleHighlighter() {
   const contents = useContentStore().contents
+  const { tooltipState, setTooltipState } = useSputlitContext()
 
   const highlightOldRange = (store: any) => {
     if (Object.keys(contents).length !== 0) {
@@ -94,7 +95,6 @@ function handleHighlighter() {
     const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
     const coordinates = element.getBoundingClientRect()
 
-    // TODO: change tooltip visual state
-    // ReactDOM.createPortal(<Tooltip id={e.id} coordinates={coordinates} />, document.getElementById('tooltip-root'))
+    setTooltipState({ visualState: VisualState.showing, id: e.id, coordinates: coordinates })
   })
 }

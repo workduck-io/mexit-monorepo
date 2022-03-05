@@ -19,6 +19,12 @@ export enum VisualState {
   hidden = 'hidden'
 }
 
+export type TooltipState = {
+  visualState: VisualState
+  id?: string
+  coordinates?: DOMRect
+}
+
 export type ActiveItem = { item: MexitAction; active: boolean }
 
 type SputlitContextType = {
@@ -34,6 +40,8 @@ type SputlitContextType = {
   activeItem: ActiveItem
   visualState: VisualState
   setVisualState: (vs: VisualState) => void
+  tooltipState: TooltipState
+  setTooltipState: (vs: TooltipState) => void
 }
 
 const SputlitContext = createContext<SputlitContextType>(undefined!)
@@ -46,6 +54,9 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [activeItem, setActiveItem] = useState<ActiveItem>({ item: undefined, active: false })
   const [visualState, setVisualState] = useState<VisualState>(VisualState.hidden)
+  const [tooltipState, setTooltipState] = useState<TooltipState>({
+    visualState: VisualState.hidden
+  })
 
   const value = {
     search,
@@ -59,7 +70,9 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     setSearchResults,
     setActiveItem,
     visualState,
-    setVisualState
+    setVisualState,
+    tooltipState,
+    setTooltipState
   }
 
   return <SputlitContext.Provider value={value}>{children}</SputlitContext.Provider>
