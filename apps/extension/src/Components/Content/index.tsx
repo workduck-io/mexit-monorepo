@@ -1,32 +1,17 @@
 import { usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useState } from 'react'
-import { ActionType, NodeEditorContent } from '@mexit/shared'
-import styled from 'styled-components'
-import HighlightSource from 'web-highlighter/dist/model/source'
 
 import { useContentStore } from '../../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../../Utils/deserialize'
 import { Editor } from '../Editor'
-import Search from '../Search'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
 import Renderer from '../Renderer'
 import { StyledContent } from './styled'
 
-export default function Content({
-  url,
-  html,
-  range,
-  editContent
-}: {
-  url?: string
-  html?: string
-  range?: Partial<HighlightSource>
-  editContent?: NodeEditorContent
-}) {
-  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setVisualState } =
-    useSputlitContext()
+export default function Content() {
+  const { selection, setVisualState } = useSputlitContext()
 
   const setContent = useContentStore((store) => store.setContent)
   const [currentContent, setCurrentContent] = useState()
@@ -34,14 +19,15 @@ export default function Content({
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
 
-  const content = getMexHTMLDeserializer(html, editor)
-
   useEffect(() => {
-    console.log(`content: ${JSON.stringify(content)}`)
-    if (range && content && url) {
+    const content = getMexHTMLDeserializer(selection?.sanitizedHTML, editor)
+
+    if (selection?.range && content && selection?.url) {
       setValue(content)
     }
-  }, [editor]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    console.log('content:', content, 'selection:', selection)
+  }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
     setCurrentContent(newContent)
@@ -49,7 +35,7 @@ export default function Content({
   }
 
   const handleSave = (payload: any) => {
-    setContent(url, currentContent, range, nodeId)
+    setContent(selection.url, currentContent, selection.range, nodeId)
 
     chrome.runtime.sendMessage(
       {
@@ -82,12 +68,8 @@ export default function Content({
   return (
     <StyledContent>
       <Results />
-      <Editor
-        nodeUID={nodeId}
-        content={editContent ? editContent : value}
-        onChange={updateContent}
-        handleSave={handleSave}
-      />
+      {/* TODO: add support for tooltip edit content */}
+      {selection && <Editor nodeUID={nodeId} content={value} onChange={updateContent} handleSave={handleSave} />}
     </StyledContent>
   )
 }

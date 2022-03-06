@@ -10,8 +10,6 @@ import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
-type Timeout = ReturnType<typeof setTimeout>
-
 export function InternalEvents() {
   useToggleHandler()
   initAnalytics()
@@ -28,7 +26,7 @@ const highlighter = new Highlighter()
  * `useToggleHandler` handles the keyboard events for toggling kbar.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState } = useSputlitContext()
+  const { visualState, setVisualState, setSelection } = useSputlitContext()
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -37,8 +35,9 @@ function useToggleHandler() {
           if (visualState === VisualState.hidden) {
             if (window.getSelection().toString() !== '') {
               const { url, html, range } = getSelectionHTML()
-
               const sanitizedHTML = sanitizeHTML(html)
+
+              setSelection({ url, sanitizedHTML, range })
             }
 
             setVisualState(VisualState.showing)
