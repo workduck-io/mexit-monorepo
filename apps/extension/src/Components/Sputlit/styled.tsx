@@ -29,7 +29,7 @@ export const Wrapper = styled.div`
 export const Main = styled.div`
   position: absolute;
   width: 100%;
-  background: rgb(252, 252, 252);
+  background: ${({ theme }) => theme.colors.background.modal};
   box-shadow: 0px 6px 20px rgb(0 0 0 / 20%);
 
   border-radius: 5px;

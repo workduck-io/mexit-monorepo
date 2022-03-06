@@ -5,12 +5,14 @@ export default function Chotu() {
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const linkCaptures = localStorage.getItem('mexit-link-captures')
+  const theme = localStorage.getItem('mexit-theme-store')
 
   const message = {
     type: 'store-init',
     userDetails: userDetails,
     workspaceDetails: workspaceDetails,
-    linkCaptures: linkCaptures
+    linkCaptures: linkCaptures,
+    theme: theme
   }
 
   window.parent.postMessage(message, '*')

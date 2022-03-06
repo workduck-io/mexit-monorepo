@@ -4,11 +4,13 @@ import { useShortenerStore } from '../../Hooks/useShortener'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
+import useThemeStore from '../../Hooks/useThemeStore'
 
 export default function Chotu() {
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
+  const setTheme = useThemeStore((store) => store.setTheme)
 
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
 
@@ -18,6 +20,7 @@ export default function Chotu() {
         case 'store-init': {
           setAutheticated(event.data.userDetails, event.data.workspaceDetails)
           setLinkCaptures(event.data.linkCapture)
+          setTheme(event.data.theme)
           break
         }
         case 'shortener': {
