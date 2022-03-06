@@ -1,8 +1,7 @@
 import styled from 'styled-components'
+import { animated } from 'react-spring'
 
-export const StyledResults = styled.div`
-  flex: 1;
-`
+export const StyledResults = styled(animated.div)``
 
 export const List = styled.div`
   width: 100%;

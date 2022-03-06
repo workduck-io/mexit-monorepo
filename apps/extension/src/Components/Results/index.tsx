@@ -8,9 +8,10 @@ import Action from '../Action'
 import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
+import { useSpring } from 'react-spring'
 
 function Results() {
-  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex } =
+  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, preview } =
     useSputlitContext()
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
@@ -21,6 +22,8 @@ function Results() {
     size: searchResults.length,
     parentRef
   })
+
+  const springProps = useSpring({ width: preview ? '50%' : '0', flex: preview ? '1' : '0' })
 
   // destructuring here to prevent linter warning to pass
   // entire rowVirtualizer in the dependencies array.
@@ -113,7 +116,7 @@ function Results() {
   }
 
   return (
-    <StyledResults>
+    <StyledResults style={springProps}>
       <Subtitle>Navigation</Subtitle>
 
       <List ref={parentRef}>

@@ -42,6 +42,8 @@ type SputlitContextType = {
   setVisualState: (vs: VisualState) => void
   tooltipState: TooltipState
   setTooltipState: (vs: TooltipState) => void
+  preview: boolean
+  setPreview: (val: boolean) => void
 }
 
 const SputlitContext = createContext<SputlitContextType>(undefined!)
@@ -57,6 +59,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     visualState: VisualState.hidden
   })
+  const [preview, setPreview] = useState(true)
 
   const value = {
     search,
@@ -72,7 +75,9 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     visualState,
     setVisualState,
     tooltipState,
-    setTooltipState
+    setTooltipState,
+    preview,
+    setPreview
   }
 
   return <SputlitContext.Provider value={value}>{children}</SputlitContext.Provider>

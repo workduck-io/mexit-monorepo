@@ -15,6 +15,7 @@ import { checkMetaParseableURL, parsePageMetaTags, useTagStore } from '@mexit/sh
 import { Tag } from '../../Types/Tags'
 import config from '../../config'
 import { EditorWrapper } from './styled'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -27,6 +28,7 @@ interface EditorProps {
 }
 
 export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, handleSave }) => {
+  const setPreview = useSputlitContext().setPreview
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -92,7 +94,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     f(value)
   }, 1000)
   return (
-    <EditorWrapper>
+    <EditorWrapper onFocus={() => setPreview(false)} onBlur={() => setPreview(true)}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         meta={{
@@ -110,7 +112,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         ]}
       />
 
-      {/* <button
+      <button
         onClick={() => {
           const payload = {
             id: userDetails.activityNodeUID ? userDetails.activityNodeUID : 'NODE_ACTIVITY',
@@ -128,7 +130,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         }}
       >
         Save
-      </button> */}
+      </button>
     </EditorWrapper>
   )
 }
