@@ -25,8 +25,6 @@ export default function Content() {
     if (selection?.range && content && selection?.url) {
       setValue(content)
     }
-
-    console.log('content:', content, 'selection:', selection)
   }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
