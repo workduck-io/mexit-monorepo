@@ -39,7 +39,6 @@ function useToggleHandler() {
               const sanitizedHTML = sanitizeHTML(html)
 
               setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
-              console.log(url, sanitizedHTML, saveableRange)
             } else {
               // To reset selection if a selection is made once
               setSelection(undefined)
