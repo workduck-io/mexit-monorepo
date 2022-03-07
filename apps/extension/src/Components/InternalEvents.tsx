@@ -23,7 +23,7 @@ export function InternalEvents() {
 const highlighter = new Highlighter()
 
 /**
- * `useToggleHandler` handles the keyboard events for toggling kbar.
+ * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
   const { visualState, setVisualState, setSelection } = useSputlitContext()
@@ -35,9 +35,11 @@ function useToggleHandler() {
           if (visualState === VisualState.hidden) {
             if (window.getSelection().toString() !== '') {
               const { url, html, range } = getSelectionHTML()
+              const saveableRange = highlighter.fromRange(range)
               const sanitizedHTML = sanitizeHTML(html)
 
-              setSelection({ url, sanitizedHTML, range })
+              setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
+              console.log(url, sanitizedHTML, saveableRange)
             } else {
               // To reset selection if a selection is made once
               setSelection(undefined)
@@ -81,9 +83,6 @@ function handleHighlighter() {
 
       highlights.forEach((h) => {
         const { startMeta, endMeta, text, id } = h.range
-        console.log(
-          `Start Meta: ${JSON.stringify(startMeta)} | End Meta: ${JSON.stringify(endMeta)} | Text: ${text} | ID: ${id}`
-        )
         highlighter.fromStore(startMeta, endMeta, text, id)
       })
     }
