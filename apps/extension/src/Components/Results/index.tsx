@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
 import { ActionType, MexitAction } from '@mexit/shared'
@@ -23,11 +23,15 @@ function Results() {
     parentRef
   })
 
-  const springProps = useSpring({
-    width: preview ? '50%' : '0',
-    flex: preview ? '1' : '0',
-    margin: preview ? '0.75rem' : '0'
-  })
+  const springProps = useSpring(
+    useMemo(() => {
+      return {
+        width: preview ? '50%' : '0',
+        flex: preview ? '1' : '0',
+        margin: preview ? '0.75rem' : '0'
+      }
+    }, [preview])
+  )
 
   // destructuring here to prevent linter warning to pass
   // entire rowVirtualizer in the dependencies array.

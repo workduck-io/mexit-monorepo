@@ -38,6 +38,9 @@ function useToggleHandler() {
               const sanitizedHTML = sanitizeHTML(html)
 
               setSelection({ url, sanitizedHTML, range })
+            } else {
+              // To reset selection if a selection is made once
+              setSelection(undefined)
             }
 
             setVisualState(VisualState.showing)
