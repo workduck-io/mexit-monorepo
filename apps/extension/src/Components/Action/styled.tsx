@@ -6,15 +6,17 @@ export const StyledAction = styled.div<{ active?: boolean }>`
   justify-content: space-between;
 
   padding: 0.5rem 0.75rem;
-  color: #111;
+  color: ${({ theme }) => theme.colors.text.fade};
   border-left: 2px solid transparent;
+  border-radius: 10px;
 
   ${(props) =>
     props.active &&
     css`
        {
-        background-color: rgba(0, 0, 0, 0.05);
-        border-left: 2px solid rgb(28, 28, 29);
+        /* TODO: don't know why but background.highlight is white coloured */
+        background-color: ${({ theme }) => theme.colors.background.modal};
+        /* border-left: 2px solid rgb(28, 28, 29); */
       }
     `}
 `

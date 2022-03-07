@@ -20,6 +20,7 @@ export * from './Utils/chromeStorageAdapter'
 export * from './Utils/actions'
 export * from './Utils/routes'
 export * from './Utils/lodashUtils'
+export * from './Utils/Logo'
 
 export * from './Themes'
 

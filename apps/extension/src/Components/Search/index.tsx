@@ -1,10 +1,9 @@
 import fuzzysort from 'fuzzysort'
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { ActionType, MexitAction } from '@mexit/shared'
+import React, { useEffect } from 'react'
+import { ActionType, WDLogo } from '@mexit/shared'
 import { defaultActions, initActions, searchBrowserAction } from '@mexit/shared'
 import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
-import { Input, InputContainer, QuerySearch } from './styled'
+import { CenterIcon, QuerySearch, StyledInput, StyledSearch } from './styled'
 
 const Search = () => {
   const { search, setSearch, setSearchResults, activeItem } = useSputlitContext()
@@ -22,9 +21,9 @@ const Search = () => {
   // TODO: it would be good to have the ability to go back after selected a search type action
 
   return (
-    <InputContainer>
+    <StyledSearch>
       {activeItem.item?.type === ActionType.SEARCH && <QuerySearch>{activeItem.item.title} | </QuerySearch>}
-      <Input
+      <StyledInput
         autoFocus
         autoComplete="off"
         spellCheck="false"
@@ -35,7 +34,11 @@ const Search = () => {
           setSearch({ value: event.target.value, type: CategoryType.search })
         }}
       />
-    </InputContainer>
+
+      <CenterIcon>
+        <WDLogo />
+      </CenterIcon>
+    </StyledSearch>
   )
 }
 

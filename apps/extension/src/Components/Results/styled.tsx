@@ -1,7 +1,10 @@
 import styled from 'styled-components'
 import { animated } from 'react-spring'
 
-export const StyledResults = styled(animated.div)``
+export const StyledResults = styled(animated.div)`
+  overflow: hidden;
+  color: ${({ theme }) => theme.colors.text.fade};
+`
 
 export const List = styled.div`
   width: 100%;
@@ -22,7 +25,7 @@ export const ListItem = styled.div<{ start: number }>`
 `
 
 export const Subtitle = styled.div`
-  padding: 0.5rem 1rem;
+  margin: 0.5rem 1rem;
   text-transform: uppercase;
   font-size: 0.75rem;
   opacity: 0.5;

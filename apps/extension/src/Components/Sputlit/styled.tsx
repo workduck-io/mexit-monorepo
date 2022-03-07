@@ -29,10 +29,10 @@ export const Wrapper = styled.div`
 export const Main = styled.div`
   position: absolute;
   width: 100%;
-  background: ${({ theme }) => theme.colors.background.modal};
+  background: ${({ theme }) => theme.colors.background.app};
   box-shadow: 0px 6px 20px rgb(0 0 0 / 20%);
 
-  border-radius: 5px;
+  border-radius: 10px;
   top: 0px;
   left: 0px;
   z-index: 9999999998;

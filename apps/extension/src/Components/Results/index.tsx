@@ -23,7 +23,11 @@ function Results() {
     parentRef
   })
 
-  const springProps = useSpring({ width: preview ? '50%' : '0', flex: preview ? '1' : '0' })
+  const springProps = useSpring({
+    width: preview ? '50%' : '0',
+    flex: preview ? '1' : '0',
+    margin: preview ? '0.75rem' : '0'
+  })
 
   // destructuring here to prevent linter warning to pass
   // entire rowVirtualizer in the dependencies array.
@@ -117,6 +121,7 @@ function Results() {
 
   return (
     <StyledResults style={springProps}>
+      {/* TODO: don't hardcode this subtitle as we want cmd+arrow key interaction later */}
       <Subtitle>Navigation</Subtitle>
 
       <List ref={parentRef}>
