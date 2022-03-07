@@ -22,9 +22,9 @@ export const StyledChotu = styled.div<{ show: boolean }>`
 
   cursor: pointer;
 
-  color: #fff;
+  color: ${({ theme }) => theme.colors.text.fade};
   border-radius: 25px;
-  border: 2px solid rgba(255, 255, 255, 1);
+  border: 2px solid ${({ theme }) => theme.colors.background.app};
   transition-property: all;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 300ms;

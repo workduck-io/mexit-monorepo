@@ -14,16 +14,17 @@ export default function Content() {
   const { selection, setVisualState } = useSputlitContext()
 
   const setContent = useContentStore((store) => store.setContent)
-  const [currentContent, setCurrentContent] = useState()
+  const [currentContent, setCurrentContent] = useState([{ text: '' }])
   const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
 
   useEffect(() => {
-    const content = getMexHTMLDeserializer(selection?.sanitizedHTML, editor)
+    const content = getMexHTMLDeserializer(selection?.html, editor)
 
     if (selection?.range && content && selection?.url) {
       setValue(content)
+      setCurrentContent(content)
     }
   }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -5,7 +5,7 @@ export const StyledTooltip = styled.div<{ top: number; left: number; showTooltip
   display: ${(props) => (props.showTooltip ? 'flex' : 'none')};
   margin: -3rem 0 0 0;
 
-  background: #fff;
+  background: ${({ theme }) => theme.colors.background.app};
   box-shadow: 0 2px 2px 0 rgb(39 43 49 / 10%);
   padding: 0.25rem;
   border: solid 1px #ccc;
@@ -30,6 +30,6 @@ export const Icon = styled.div`
   }
 
   &:hover {
-    background-color: #eaeaea;
+    background-color: ${({ theme }) => theme.colors.background.modal};
   }
 `

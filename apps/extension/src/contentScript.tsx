@@ -10,6 +10,7 @@ document.body.appendChild(overlay)
 
 ReactDOM.render(<Index />, overlay)
 
+// TODO: add this in InternalComponents.tsx
 // document.onkeyup = (e) => {
 //   if (e.key == 'Escape' && document.getElementById('extension-root')) {
 //     // closeSputlit()
