@@ -14,10 +14,11 @@ export default function Content() {
   const { selection, setVisualState } = useSputlitContext()
 
   const setContent = useContentStore((store) => store.setContent)
-  const [currentContent, setCurrentContent] = useState([{ text: '' }])
   const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
+  const [currentContent, setCurrentContent] = useState(value)
+  const [first, setFirst] = useState(true)
 
   useEffect(() => {
     const content = getMexHTMLDeserializer(selection?.html, editor)
@@ -29,7 +30,12 @@ export default function Content() {
   }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
-    setCurrentContent(newContent)
+    // Because the useEditorChange hook runs the onChange once
+    if (!first) {
+      setCurrentContent(newContent)
+    } else {
+      setFirst(true)
+    }
     return
   }
 
@@ -68,7 +74,14 @@ export default function Content() {
     <StyledContent>
       <Results />
       {/* TODO: add support for tooltip edit content */}
-      {selection && <Editor nodeUID={nodeId} content={value} onChange={updateContent} handleSave={handleSave} />}
+      {selection && (
+        <Editor
+          nodeUID={nodeId}
+          content={selection?.editContent ? selection?.editContent : value}
+          onChange={updateContent}
+          handleSave={handleSave}
+        />
+      )}
     </StyledContent>
   )
 }
