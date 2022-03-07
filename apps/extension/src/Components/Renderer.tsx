@@ -49,7 +49,7 @@ const Renderer = () => {
     }
   }, [])
 
-  return <Iframe ref={iframeRef} id="action-component" src={activeItem.item.data.src} />
+  return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} />
 }
 
 export default Renderer

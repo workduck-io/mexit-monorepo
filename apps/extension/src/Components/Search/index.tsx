@@ -22,7 +22,7 @@ const Search = () => {
 
   return (
     <StyledSearch>
-      {activeItem.item?.type === ActionType.SEARCH && <QuerySearch>{activeItem.item.title} | </QuerySearch>}
+      {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>}
       <StyledInput
         autoFocus
         autoComplete="off"

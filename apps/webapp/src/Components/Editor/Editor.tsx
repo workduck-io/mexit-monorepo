@@ -13,6 +13,7 @@ import useLoad from '../../Hooks/useLoad'
 const EditorWrapper = styled.div`
   max-width: 800px;
   margin: 1rem;
+  padding: 1rem;
 `
 
 interface EditorProps {

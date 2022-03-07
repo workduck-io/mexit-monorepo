@@ -25,8 +25,6 @@ export type TooltipState = {
   coordinates?: DOMRect
 }
 
-export type ActiveItem = { item: MexitAction; active: boolean }
-
 type SputlitContextType = {
   search: Search
   setSearch: (val: Search) => void
@@ -37,7 +35,7 @@ type SputlitContextType = {
   activeIndex: number
   setActiveIndex: any
   setActiveItem: any
-  activeItem: ActiveItem
+  activeItem: MexitAction
   visualState: VisualState
   setVisualState: (vs: VisualState) => void
   tooltipState: TooltipState
@@ -54,7 +52,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   const [selection, setSelection] = useState<any>()
   const [searchResults, setSearchResults] = useState<Array<MexitAction>>([])
   const [activeIndex, setActiveIndex] = useState<number>(0)
-  const [activeItem, setActiveItem] = useState<ActiveItem>({ item: undefined, active: false })
+  const [activeItem, setActiveItem] = useState<MexitAction>()
   const [visualState, setVisualState] = useState<VisualState>(VisualState.hidden)
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     visualState: VisualState.hidden

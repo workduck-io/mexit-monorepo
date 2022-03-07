@@ -11,8 +11,17 @@ import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
 
 function Results() {
-  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, preview } =
-    useSputlitContext()
+  const {
+    search,
+    setSearch,
+    searchResults,
+    activeItem,
+    setActiveItem,
+    activeIndex,
+    setActiveIndex,
+    preview,
+    setSearchResults
+  } = useSputlitContext()
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
   const [showResults, setShowResults] = useState(true)
@@ -74,24 +83,21 @@ function Results() {
       } else if (
         event.key === 'Enter' &&
         searchResults[activeIndex]?.type !== ActionType.SEARCH &&
-        activeItem?.item.type !== ActionType.SEARCH
+        activeItem?.type !== ActionType.SEARCH
       ) {
         event.preventDefault()
         setActiveItem(searchResults[activeIndex])
         actionExec(searchResults[activeIndex])
-        if (searchResults[activeIndex].type === ActionType.RENDER) {
-          setShowResults(false)
-        }
+        setSearchResults([])
+        // TODO: stop search bar on action type search
       } else if (event.key === 'Enter') {
         event.preventDefault()
+        setSearchResults([])
         if (!first) {
-          setActiveIndex(searchResults[activeIndex])
+          setActiveItem(searchResults[activeIndex])
           setFirst(true)
-          // TODO: here as well
-          setSearch({ value: '', type: CategoryType.search })
-          setShowResults(false)
         } else {
-          actionExec(activeItem.item, search.value)
+          actionExec(activeItem, search.value)
         }
       }
     }
@@ -104,21 +110,17 @@ function Results() {
   }, [searchResults])
 
   function handleClick(id: number) {
-    if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.item.type !== ActionType.SEARCH) {
+    if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
       setActiveItem(searchResults[id])
       actionExec(searchResults[id])
-      if (searchResults[id].type === ActionType.RENDER) {
-        setShowResults(false)
-      }
+      setSearchResults([])
     } else {
+      setSearchResults([])
       if (!first) {
-        setActiveIndex(searchResults[id])
+        setActiveItem(searchResults[id])
         setFirst(true)
-        // TODO: here as well
-        setSearch({ value: '', type: CategoryType.search })
-        setShowResults(false)
       } else {
-        actionExec(activeItem.item, search.value)
+        actionExec(activeItem, search.value)
       }
     }
   }
@@ -147,7 +149,7 @@ function Results() {
         </div>
       </List>
 
-      {activeItem.item && activeItem.item.type === ActionType.RENDER && <Renderer />}
+      {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
     </StyledResults>
   )
 }

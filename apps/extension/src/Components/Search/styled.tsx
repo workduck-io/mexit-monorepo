@@ -13,7 +13,7 @@ export const Draggable = css`
 export const QuerySearch = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 0 0.5rem;
 
   font-size: 1.25rem;
   color: #6968d2;
@@ -23,7 +23,7 @@ export const StyledInput = styled.input<{ disabled?: boolean }>`
   ${StyledBackground}
   font-size: 1rem;
   border-radius: 10px;
-  padding: 10px;
+  padding: 0.75rem;
 
   flex: 1;
   border: none;
