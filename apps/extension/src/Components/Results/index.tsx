@@ -109,6 +109,11 @@ function Results() {
     setActiveIndex(0)
   }, [searchResults])
 
+  // To reset active Item when done
+  useEffect(() => {
+    return setActiveItem()
+  }, [])
+
   function handleClick(id: number) {
     if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
       setActiveItem(searchResults[id])
