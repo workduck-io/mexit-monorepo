@@ -3,17 +3,17 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 14
 
     commands:
-      - npm install yarn
-      - yarn --prod
+      - npm install -g yarn
+      - yarn
 
   build:
     commands:
-      - yarn build
+      - yarn nx release webapp
 
 artifacts:
   files:
     - "**/*"
-  base-directory: "dist"
+  base-directory: "dist/apps/webapp"
