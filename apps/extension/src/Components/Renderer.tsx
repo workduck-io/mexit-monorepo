@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 import { useRef } from 'react'
 import { useEffect } from 'react'
 import styled from 'styled-components'
+import { useSputlitContext } from '../Hooks/useSputlitContext'
 
 const Iframe = styled.iframe`
   border: none;
@@ -12,7 +13,8 @@ const Iframe = styled.iframe`
   width: 100%;
 `
 
-const Renderer = ({ componentSrc }: { componentSrc: string }) => {
+const Renderer = () => {
+  const activeItem = useSputlitContext().activeItem
   const iframeRef = useRef(null)
 
   const handleEvent = (event) => {
@@ -47,7 +49,7 @@ const Renderer = ({ componentSrc }: { componentSrc: string }) => {
     }
   }, [])
 
-  return <Iframe ref={iframeRef} id="action-component" src={componentSrc} />
+  return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} />
 }
 
 export default Renderer

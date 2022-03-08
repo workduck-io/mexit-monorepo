@@ -6,21 +6,16 @@ import { useDebouncedCallback } from 'use-debounce'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { useEditorChange } from '../Hooks/useEditorActions'
+import { useEditorChange } from '../../Hooks/useEditorActions'
 import { CaptureType } from '@mexit/shared'
-import generatePlugins from '../Utils/plugins'
+import generatePlugins from '../../Utils/plugins'
 import { Button } from '@mexit/shared'
-import { closeSputlit } from '@mexit/shared'
-import { useAuthStore } from '../Hooks/useAuth'
+import { useAuthStore } from '../../Hooks/useAuth'
 import { checkMetaParseableURL, parsePageMetaTags, useTagStore } from '@mexit/shared'
-import { Tag } from '../Types/Tags'
-import config from '../config'
-
-const EditorWrapper = styled.div`
-  max-height: 100%;
-  overflow: scroll;
-  margin: 1rem;
-`
+import { Tag } from '../../Types/Tags'
+import config from '../../config'
+import { EditorWrapper } from './styled'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -33,6 +28,7 @@ interface EditorProps {
 }
 
 export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, handleSave }) => {
+  const setPreview = useSputlitContext().setPreview
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -98,7 +94,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     f(value)
   }, 1000)
   return (
-    <EditorWrapper>
+    <EditorWrapper onFocus={() => setPreview(false)} onBlur={() => setPreview(true)}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         meta={{

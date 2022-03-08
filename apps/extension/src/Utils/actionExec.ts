@@ -1,4 +1,3 @@
-import { closeSputlit } from '@mexit/shared'
 import { ActionType, MexitAction } from '@mexit/shared'
 
 export function actionExec(action: MexitAction, query?: string) {
@@ -8,7 +7,7 @@ export function actionExec(action: MexitAction, query?: string) {
       break
     case ActionType.OPEN:
       window.open(action.data.base_url, '_blank').focus()
-      closeSputlit()
+      // closeSputlit()
 
       break
     case ActionType.RENDER:
@@ -17,7 +16,7 @@ export function actionExec(action: MexitAction, query?: string) {
     case ActionType.SEARCH: {
       const url = encodeURI(action.data.base_url + query)
       window.open(url, '_blank').focus()
-      closeSputlit()
+      // closeSputlit()
       break
     }
   }
