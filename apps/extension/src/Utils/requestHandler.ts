@@ -9,8 +9,14 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const URL = apiURLs.addContentCapture
       const reqBody = data.body
 
+      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
+
       return client
-        .post(URL, reqBody)
+        .post(URL, reqBody, {
+          headers: {
+            'workspace-id': data.workspaceID
+          }
+        })
         .then((response: any) => {
           return { message: response, error: null }
         })

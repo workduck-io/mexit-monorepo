@@ -26,11 +26,13 @@ export interface InternalAuthStoreState {
   setEmail: (email: string) => void
 
   clearStore: () => void
+
+  setAllStore: (data: any) => void
 }
 
 const useInternalAuthStore = create<InternalAuthStoreState>(
   persist(
-    (set) => ({
+    (set, get) => ({
       userPool: undefined,
       user: undefined,
       userCred: undefined,
@@ -47,9 +49,14 @@ const useInternalAuthStore = create<InternalAuthStoreState>(
           user: undefined,
           userCred: undefined,
           email: undefined
-        })
+        }),
+
+      setAllStore: ({ userCred, userPool }) => {
+        get().setUserCred(userCred)
+        get().setUserPool(userPool)
+      }
     }),
-    { name: 'aws-auth-mex-extension', ...storageAdapter }
+    { name: 'aws-auth-mexit', ...storageAdapter }
   )
 )
 

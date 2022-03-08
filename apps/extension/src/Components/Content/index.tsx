@@ -9,6 +9,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
 import Renderer from '../Renderer'
 import { StyledContent } from './styled'
+import { useAuthStore } from '../../Hooks/useAuth'
 
 export default function Content() {
   const { selection, setVisualState } = useSputlitContext()
@@ -19,6 +20,8 @@ export default function Content() {
   const [value, setValue] = useState([{ text: '' }])
   const [currentContent, setCurrentContent] = useState(value)
   const [first, setFirst] = useState(true)
+
+  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useEffect(() => {
     const content = getMexHTMLDeserializer(selection?.html, editor)
@@ -49,7 +52,8 @@ export default function Content() {
         data: {
           body: {
             ...payload,
-            content: currentContent
+            content: currentContent,
+            workspaceID: workspaceDetails.id
           }
         }
       },
