@@ -79,7 +79,6 @@ function handleHighlighter() {
   const highlightOldRange = (store: any) => {
     if (Object.keys(contents).length !== 0) {
       const highlights: any[] = contents[window.location.href]
-
       highlights.forEach((h) => {
         const { startMeta, endMeta, text, id } = h.range
         highlighter.fromStore(startMeta, endMeta, text, id)
@@ -89,7 +88,7 @@ function handleHighlighter() {
 
   useEffect(() => {
     highlightOldRange(contents)
-  })
+  }, [])
 
   highlighter.on(Highlighter.event.CLICK, (e) => {
     const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
