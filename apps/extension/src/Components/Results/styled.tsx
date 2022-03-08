@@ -1,9 +1,20 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { animated } from 'react-spring'
 
 export const StyledResults = styled(animated.div)`
   overflow: hidden;
   color: ${({ theme }) => theme.colors.text.fade};
+`
+
+export const Scroll = css`
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `
 
 export const List = styled.div`
@@ -13,6 +24,7 @@ export const List = styled.div`
   scroll-behavior: smooth;
 
   max-height: 400px;
+  ${Scroll}
 `
 
 export const ListItem = styled.div<{ start: number }>`

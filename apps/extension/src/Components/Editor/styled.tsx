@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Scroll } from '../Results/styled'
 
 export const EditorWrapper = styled.div`
   flex: 1;
@@ -10,4 +11,5 @@ export const EditorWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background.modal};
   color: ${({ theme }) => theme.colors.text.fade};
   border-radius: 10px;
+  ${Scroll}
 `
