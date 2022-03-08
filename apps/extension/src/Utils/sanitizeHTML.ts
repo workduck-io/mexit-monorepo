@@ -440,6 +440,6 @@ const options = {
   }
 }
 
-export const sanitizeHtml = (html: any) => {
+export const sanitizeHTML = (html: any) => {
   return sanitize(html, options)
 }

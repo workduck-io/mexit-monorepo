@@ -21,8 +21,3 @@ export async function copyToClipboard(text: any) {
       toast.error('An error occurred. Please try again later')
     })
 }
-
-export function closeSputlit() {
-  window.getSelection().removeAllRanges()
-  ReactDOM.unmountComponentAtNode(document.getElementById('sputlit-root'))
-}

@@ -5,7 +5,6 @@ import { toast, Toaster } from 'react-hot-toast'
 
 import { Tab, TabGroup } from '../Types/Tabs'
 import { useTabCaptureStore } from '../Hooks/useTabCaptures'
-import { closeSputlit } from '@mexit/shared'
 
 interface TabCaptureFormDetails {
   name: string
@@ -55,7 +54,7 @@ const CreateTabCapture = () => {
     } else {
       toast.success('Tab Group Created Successfully!', { duration: 2000 })
       setTimeout(() => {
-        closeSputlit()
+        // closeSputlit()
       }, 2000)
     }
   }
