@@ -26,7 +26,7 @@ const highlighter = new Highlighter()
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState, setSelection } = useSputlitContext()
+  const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -56,10 +56,23 @@ function useToggleHandler() {
       }
     }
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setVisualState(VisualState.hidden)
+        setTooltipState({ visualState: VisualState.hidden })
+      }
+    }
+
     // Listen for message from background script to see if sputlit is requested
     chrome.runtime.onMessage.addListener(messageHandler)
 
-    return () => chrome.runtime.onMessage.removeListener(messageHandler)
+    // Listen for keydown events
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      chrome.runtime.onMessage.removeListener(messageHandler)
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [visualState])
 }
 
