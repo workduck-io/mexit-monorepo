@@ -41,7 +41,6 @@ export const AliasWrapper = () => {
     const { short } = data
 
     const reqBody = {
-      id: `NODE_${userDetails.userId}`,
       long: currTabURL,
       short: short,
       metadata: {
@@ -56,7 +55,11 @@ export const AliasWrapper = () => {
     const URL = apiURLs.createShort
     let response: any
     try {
-      response = await client.post(URL, reqBody)
+      response = await client.post(URL, reqBody, {
+        headers: {
+          'workspace-id': workspaceDetails.id
+        }
+      })
     } catch (error) {
       response = error
     }
