@@ -5,7 +5,7 @@ import { sanitizeHTML } from '../Utils/sanitizeHTML'
 import mixpanel from 'mixpanel-browser'
 import * as Sentry from '@sentry/react'
 import { CaptureConsole } from '@sentry/integrations'
-import { initActions, parsePageMetaTags } from '@mexit/shared'
+import { Contents, initActions, parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
@@ -86,13 +86,14 @@ function initAnalytics() {
 }
 
 function handleHighlighter() {
-  const contents = useContentStore().contents
-  const { tooltipState, setTooltipState } = useSputlitContext()
+  const getContent = useContentStore((store) => store.getContent)
+  const { setTooltipState } = useSputlitContext()
 
-  const highlightOldRange = (store: any) => {
-    if (Object.keys(contents).length !== 0) {
-      const highlights: any[] = contents[window.location.href]
-      highlights.forEach((h) => {
+  const highlightOldRange = () => {
+    const content = getContent(window.location.href)
+    console.log(content)
+    if (Object.keys(content).length !== 0) {
+      content.forEach((h) => {
         const { startMeta, endMeta, text, id } = h.range
         highlighter.fromStore(startMeta, endMeta, text, id)
       })
@@ -100,8 +101,8 @@ function handleHighlighter() {
   }
 
   useEffect(() => {
-    highlightOldRange(contents)
-  }, [])
+    highlightOldRange()
+  }, [window.location.href])
 
   highlighter.on(Highlighter.event.CLICK, (e) => {
     const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
