@@ -91,8 +91,7 @@ function handleHighlighter() {
 
   const highlightOldRange = () => {
     const content = getContent(window.location.href)
-    console.log(content)
-    if (Object.keys(content).length !== 0) {
+    if (content && Object.keys(content).length !== 0) {
       content.forEach((h) => {
         const { startMeta, endMeta, text, id } = h.range
         highlighter.fromStore(startMeta, endMeta, text, id)
