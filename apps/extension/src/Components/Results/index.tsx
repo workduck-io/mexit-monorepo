@@ -20,6 +20,7 @@ function Results() {
     activeIndex,
     setActiveIndex,
     preview,
+    setPreview,
     setSearchResults
   } = useSputlitContext()
   const parentRef = useRef(null)
@@ -111,7 +112,11 @@ function Results() {
 
   // To reset active Item when done
   useEffect(() => {
-    return setActiveItem()
+    const ret = () => {
+      setActiveItem()
+      setPreview(true)
+    }
+    return ret
   }, [])
 
   function handleClick(id: number) {
