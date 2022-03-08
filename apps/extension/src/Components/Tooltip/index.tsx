@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useContentStore } from '../../Hooks/useContentStore'
 import Highlighter from 'web-highlighter'
-import { copyToClipboard } from '@mexit/shared'
+import { copyToClipboard, NodeEditorContent } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 
@@ -27,16 +27,15 @@ function Tooltip() {
     setTooltipState({ visualState: VisualState.hidden })
   }
 
-  const handleCopyClipboard = async () => {
+  const handleCopyClipboard = async (content: NodeEditorContent) => {
     const parts = []
     content?.forEach((p) => {
-      p.children.forEach((e: any) => {
-        parts.push(e.text)
-      })
-      parts.push(' ')
+      parts.push(p.text)
     })
     const text = parts.join('')
+
     await copyToClipboard(text)
+    setTooltipState({ visualState: VisualState.hidden })
   }
 
   // TODO: add multiple color choice in tooltip
@@ -82,7 +81,7 @@ function Tooltip() {
         </svg>
       </Icon>
 
-      <Icon onClick={handleCopyClipboard}>
+      <Icon onClick={() => handleCopyClipboard(content)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
