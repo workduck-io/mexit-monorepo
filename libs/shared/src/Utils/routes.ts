@@ -64,8 +64,7 @@ export const apiURLs = {
   searchMexit: `${MEXIT_FRONTEND_URL_BASE}/search?q=`,
 
   // Mexit Backend URLs
-  fetchActivities: (userId: string) => `${MEXIT_BACKEND_URL_BASE}/activities/${userId}`,
-  getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/api/v1/node/${uid}`,
-  // getNode: (uid: string) => `http://localhost:8000/node.json`,
+  fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
+  getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
   createNode: `${MEXIT_BACKEND_URL_BASE}/api/v1/node`
 }

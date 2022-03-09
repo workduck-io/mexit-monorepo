@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate, Route, RouteProps, Routes, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
@@ -12,12 +12,12 @@ import { Login } from './Views/Login'
 import { Register } from './Views/Register'
 import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
-import { useInitialize } from './Hooks/useInitialize'
 import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
 
 import * as Actions from './Actions'
+import ActivityViewEditor from './Components/Editor/ActivityViewEditor'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -32,9 +32,6 @@ const AuthRoute = ({ children }) => {
 const Switch = () => {
   const { initCognito } = useAuth()
   const routingInstrumentation = useRoutingInstrumentation()
-  const { init } = useInitialize()
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     // * TBD: Initialize app with data
@@ -46,7 +43,6 @@ const Switch = () => {
       UserPoolId: config.cognito.USER_POOL_ID,
       ClientId: config.cognito.APP_CLIENT_ID
     })
-
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -59,7 +55,6 @@ const Switch = () => {
       tracesSampleRate: 1.0,
       integrations: [browserTracing]
     })
-
   }, [routingInstrumentation])
 
   return (
@@ -69,7 +64,7 @@ const Switch = () => {
         element={
           <ProtectedRoute>
             <Navbar />
-            <h1>Hello World</h1>
+            <ActivityViewEditor />
           </ProtectedRoute>
         }
       />

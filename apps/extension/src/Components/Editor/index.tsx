@@ -100,7 +100,6 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         meta={{
           path: nodePath
         }}
-        plugins={plugins}
         components={{}}
         onChange={debounced}
         options={editorOptions}

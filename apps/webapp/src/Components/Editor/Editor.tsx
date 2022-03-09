@@ -21,12 +21,14 @@ interface EditorProps {
   nodePath?: string
   nodeUID: string
   readOnly?: boolean
-  onChange?: any
+  onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
 }
 
 const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
   const { getNode } = useLoad()
+
+  console.log('Received Content: ', content)
 
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
@@ -63,7 +65,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
 
   const editorOptions: MexEditorOptions = {
     editableProps: {
-      readOnly: false,
+      readOnly: readOnly,
       placeholder: "Let's try something here...",
       autoFocus: true
     },
@@ -89,7 +91,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         meta={{
           path: nodePath
         }}
-        debug
+        // debug
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
