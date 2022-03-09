@@ -23,8 +23,7 @@ export default function Chotu() {
           setAutheticated(event.data.userDetails, event.data.workspaceDetails)
           setLinkCaptures(event.data.linkCapture)
           setTheme(event.data.theme)
-          const internalAuthStoreState = event.data.authAWS
-          setInternalAuthStore(internalAuthStoreState)
+          setInternalAuthStore(event.data.authAWS)
           break
         }
         case 'shortener': {

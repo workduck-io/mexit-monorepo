@@ -52,8 +52,7 @@ const useInternalAuthStore = create<InternalAuthStoreState>(
         }),
 
       setAllStore: ({ userCred, userPool }) => {
-        get().setUserCred(userCred)
-        get().setUserPool(userPool)
+        set({ userCred, userPool })
       }
     }),
     { name: 'aws-auth-mexit', ...storageAdapter }
