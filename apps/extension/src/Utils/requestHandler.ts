@@ -7,10 +7,19 @@ export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_CONTENT_QC': {
       const URL = apiURLs.addContentCapture
-      const reqBody = data.body
+      const reqBody = {
+        ...data.body,
+        content: [{ type: 'p', children: data.body.content }]
+      }
+
+      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
 
       return client
-        .post(URL, reqBody)
+        .post(URL, reqBody, {
+          headers: {
+            'workspace-id': data.workspaceID
+          }
+        })
         .then((response: any) => {
           return { message: response, error: null }
         })
