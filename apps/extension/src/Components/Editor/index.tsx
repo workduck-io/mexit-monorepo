@@ -45,6 +45,20 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
       const mt = parsePageMetaTags()
       setPageMetaTags(mt)
     }
+
+    return () => {
+      const payload = {
+        nodePath: nodePath,
+        type: CaptureType.DRAFT,
+        createdBy: userDetails.email,
+        metadata: {
+          metaTags: pageMetaTags,
+          userTags: userTags
+        }
+      }
+
+      handleSave(payload)
+    }
   }, [currTabURL])
 
   useEditorChange(nodeUID, content)
@@ -111,24 +125,6 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
           }
         ]}
       />
-
-      <button
-        onClick={() => {
-          const payload = {
-            nodePath: nodePath,
-            type: CaptureType.DRAFT,
-            createdBy: userDetails.email,
-            metadata: {
-              metaTags: pageMetaTags,
-              userTags: userTags
-            }
-          }
-
-          handleSave(payload)
-        }}
-      >
-        Save
-      </button>
     </EditorWrapper>
   )
 }
