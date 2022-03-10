@@ -9,6 +9,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { apiURLs } from '@mexit/shared'
 
 const SPlate = styled.div`
+  flex: 1;
   max-width: 800px;
   margin: 1rem;
   padding: 1rem;
@@ -35,32 +36,21 @@ const ActivityViewEditor = () => {
         }
       })
       //   console.log('Received Content: ', nodeContent.data)
-
       setNodeContent(nodeContent.data.content)
       setIsLoading(false)
     }
     getActivityNodeContent()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  //   const handleActivityNodeChange = (data: any) => {
-  //     console.log('New Data: ', data)
-  //     setNodeContent(data)
-  //   }
-
   return (
-    <Editor
-      readOnly={true}
-      nodeUID={!isLoading ? nodeId : 'NODE_LOADING'}
-      nodePath={'Activity'}
-      content={nodeContent ?? defaultContent.content}
-    />
-    // <Plate
-    //   id={!isLoading ? nodeId : 'NODE_LOADING'}
-    //   value={nodeContent?.content ?? defaultContent.content}
-    //   editableProps={{
-    //     readOnly: true
-    //   }}
-    // />
+    <SPlate>
+      <Editor
+        readOnly={true}
+        nodeUID={!isLoading ? nodeId : 'NODE_LOADING'}
+        nodePath={'Activity'}
+        content={nodeContent ?? defaultContent.content}
+      />
+    </SPlate>
   )
 }
 
