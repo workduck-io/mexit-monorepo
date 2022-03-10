@@ -4,6 +4,7 @@ import Highlighter from 'web-highlighter'
 import { copyToClipboard, NodeEditorContent } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import toast from 'react-hot-toast'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
@@ -16,9 +17,12 @@ function Tooltip() {
   const highligter = new Highlighter()
 
   const handleDelete = () => {
+    // TODO: send request to backed to remove the same
     highligter.remove(tooltipState.id)
-    setTooltipState({ visualState: VisualState.hidden })
     removeContent(window.location.href, tooltipState.id)
+    toast.success('Highlight removed')
+
+    setTooltipState({ visualState: VisualState.hidden })
   }
 
   const handleEdit = () => {

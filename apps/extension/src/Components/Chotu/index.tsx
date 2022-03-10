@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
+import { Toaster } from 'react-hot-toast'
 
 export default function Chotu() {
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
@@ -61,6 +62,8 @@ export default function Chotu() {
           <img src={chrome.runtime.getURL('/Assets/copy.svg')} />
         </CopyButton>
       </Container>
+
+      <Toaster position="bottom-center" containerStyle={{ visibility: 'visible' }} />
     </StyledChotu>
   )
 }
