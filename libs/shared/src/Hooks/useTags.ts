@@ -1,11 +1,8 @@
-import { storageAdapter } from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export interface Tag {
-  id: string
-  text: string
-}
+import { Tag } from '../Types/Editor'
+import { storageAdapter } from '../Utils/chromeStorageAdapter'
 
 interface TagStore extends State {
   tags: Tag[]

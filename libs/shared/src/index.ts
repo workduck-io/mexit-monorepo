@@ -5,9 +5,10 @@ export * from './Stores/authStoreConstructor'
 export * from './Stores/shortnerStoreConstructor'
 export * from './Stores/themeStoreConstructor'
 
-export * from './Styles/Button'
-export * from './Styles/Form'
-export * from './Styles/normalize'
+export * from './Style/Button'
+export * from './Style/Form'
+export * from './Style/Helpers'
+export * from './Style/Normalize'
 
 export * from './Types/Editor'
 export * from './Types/Actions'
