@@ -101,12 +101,14 @@ function handleHighlighter() {
 
   useEffect(() => {
     highlightOldRange()
+
+    highlighter.on(Highlighter.event.CLICK, (e) => {
+      const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
+      const coordinates = element.getBoundingClientRect()
+
+      setTooltipState({ visualState: VisualState.showing, id: e.id, coordinates: coordinates })
+    })
+
+    return () => highlighter.dispose()
   }, [window.location.href])
-
-  highlighter.on(Highlighter.event.CLICK, (e) => {
-    const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
-    const coordinates = element.getBoundingClientRect()
-
-    setTooltipState({ visualState: VisualState.showing, id: e.id, coordinates: coordinates })
-  })
 }
