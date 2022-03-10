@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { activityNode } from '../../Utils/activity'
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
-import useLoad from '../../Hooks/useLoad'
 
 const EditorWrapper = styled.div`
+  flex: 1;
   max-width: 800px;
   margin: 1rem;
   padding: 1rem;
@@ -21,13 +20,11 @@ interface EditorProps {
   nodePath?: string
   nodeUID: string
   readOnly?: boolean
-  onChange?: any
+  onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
 }
 
 const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
-  const { getNode } = useLoad()
-
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
@@ -63,7 +60,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
 
   const editorOptions: MexEditorOptions = {
     editableProps: {
-      readOnly: false,
+      readOnly: readOnly,
       placeholder: "Let's try something here...",
       autoFocus: true
     },
@@ -89,7 +86,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         meta={{
           path: nodePath
         }}
-        debug
+        // debug
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}

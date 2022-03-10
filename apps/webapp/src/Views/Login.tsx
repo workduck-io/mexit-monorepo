@@ -28,6 +28,7 @@ export const Login = () => {
 
   const onSubmit = async (data: LoginFormData): Promise<void> => {
     let temp: any
+
     await login(data.email, data.password, true)
       .then((s) => {
         if (s.v === 'Incorrect username or password.') {

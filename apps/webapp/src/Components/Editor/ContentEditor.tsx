@@ -29,14 +29,12 @@ const ContentEditor = () => {
   }
 
   return (
-    <>
-      <Editor
-        nodeUID={nodeId}
-        nodePath={node.path}
-        content={nodeContent?.content ?? defaultContent.content}
-        onChange={handleSave}
-      />
-    </>
+    <Editor
+      nodeUID={nodeId}
+      nodePath={node.path}
+      content={nodeContent?.content ?? defaultContent.content}
+      onChange={handleSave}
+    />
   )
 }
 

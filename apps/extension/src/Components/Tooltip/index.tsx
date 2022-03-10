@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useContentStore } from '../../Hooks/useContentStore'
 import Highlighter from 'web-highlighter'
 import { copyToClipboard, NodeEditorContent } from '@mexit/shared'
