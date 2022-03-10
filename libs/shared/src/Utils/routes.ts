@@ -1,3 +1,9 @@
+const IS_DEV = (() => {
+  if (import.meta.env && import.meta.env.MODE) return import.meta.env.MODE === 'development' ? true : false
+  else if (process.env['NX_BUILD_MODE'] === 'development') return true
+  return false
+})()
+
 export const BASE_INTEGRATION_URL = 'https://http.workduck.io/integration'
 
 export const integrationURLs = {
@@ -15,11 +21,13 @@ export const BASE_API_URL = 'https://http.workduck.io/mex'
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
-export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
+export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
 
-export const MEXIT_BACKEND_URL_BASE = 'http://localhost:5000/api/v1'
+export const MEXIT_BACKEND_URL_BASE = IS_DEV
+  ? 'http://localhost:5000/api/v1'
+  : 'https://mex-webapp-dev.workduck.io/api/v1'
 
-export const MEXIT_FRONTEND_URL_BASE = 'http://localhost:3000'
+export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3000' : 'https://mexit.workduck.io'
 export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
 export const apiURLs = {
