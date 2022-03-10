@@ -1,8 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
-import normalize from './normalize'
+import { normalize } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
-  ${normalize}
 
   @font-face {
     font-family: "Inter";
@@ -33,13 +32,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   #extension-root *{
+    ${normalize}; // NormalizeCSS normalization
     font-family: "Inter", sans-serif;
     font-size: 14px;
     line-height: 1.5;
     text-align: left;
-  }
-
-  body {
-    margin: 0;
   }
 `
