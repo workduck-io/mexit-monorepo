@@ -1,0 +1,53 @@
+{
+  "name": "mexit-link-sharing",
+  "version": "0.3.1",
+  "license": "MIT",
+  "scripts": {
+    "dev": "NX_BUILD_MODE=development vite",
+    "build": "tsc --noEmit && vite build --emptyOutDir",
+    "preview": "vite preview",
+    "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
+  },
+  "dependencies": {
+    "@workduck-io/mex-editor": "^0.1.0",
+    "core-js": "^3.21.1",
+    "fast-deep-equal": "^3.1.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.1",
+    "slate": "^0.72.8",
+    "slate-history": "^0.66.0",
+    "slate-hyperscript": "^0.67.0",
+    "slate-react": "^0.72.9",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.19",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/styled-components": "^5.1.20",
+    "@types/mixpanel-browser": "^2.36.0",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2",
+    "@vitejs/plugin-react": "^1.0.7"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">1.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
