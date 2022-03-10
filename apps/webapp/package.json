@@ -3,7 +3,7 @@
   "version": "0.3.1",
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
+    "dev": "NX_BUILD_MODE=development vite",
     "build": "tsc --noEmit && vite build --emptyOutDir",
     "preview": "vite preview",
     "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"

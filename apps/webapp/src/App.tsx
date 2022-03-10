@@ -18,7 +18,6 @@ const AppContainer = styled.div`
 `
 
 if (process.env.NX_MIXPANEL_TOKEN_WEBAPP) {
-  console.log('Token is: ', process.env.NX_MIXPANEL_TOKEN_WEBAPP)
   Analytics.init(process.env.NX_MIXPANEL_TOKEN_WEBAPP)
 }
 

@@ -9,7 +9,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const URL = apiURLs.addContentCapture
       const reqBody = {
         ...data.body,
-        content: [{ type: 'p', children: data.body.content }]
+        content: [{ children: data.body.content }]
       }
 
       console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
