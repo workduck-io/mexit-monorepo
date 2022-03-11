@@ -8,6 +8,7 @@ export interface DataStoreState {
   baseNodeId: string
   bookmarks: string[]
   archive: ILink[]
+  publicNodes: Record<string, boolean>
 
   initializeDataStore: (initData: InitDataStoreType) => void
 
@@ -40,4 +41,8 @@ export interface DataStoreState {
   unArchive: (archive: ILink) => void
   removeFromArchive: (archive: ILink[]) => void
   setArchive: (archive: ILink[]) => void
+
+  setNodePublic: (nodeId: string) => void
+  setNodePrivate: (nodeId: string) => void
+  checkNodePublic: (nodeId: string) => boolean
 }

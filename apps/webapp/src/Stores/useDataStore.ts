@@ -28,6 +28,8 @@ const useDataStore = create<DataStoreState>(
 
       archive: [],
 
+      publicNodes: {},
+
       initializeDataStore: (initData) => {
         set({
           ...initData
@@ -198,6 +200,23 @@ const useDataStore = create<DataStoreState>(
       setArchive: (archive) => {
         const userArchive = archive
         set({ archive: userArchive })
+      },
+
+      setNodePublic: (nodeId) => {
+        if (get().publicNodes[nodeId]) return
+        set({ publicNodes: { ...get().publicNodes, [nodeId]: true } })
+      },
+
+      setNodePrivate: (nodeId) => {
+        if (get().publicNodes[nodeId]) {
+          const newNodes = get().publicNodes
+          delete newNodes[nodeId]
+          set({ publicNodes: newNodes })
+        }
+      },
+
+      checkNodePublic: (nodeId) => {
+        return !!get().publicNodes[nodeId]
       }
     }),
     { name: 'mexit-data-store' }

@@ -97,5 +97,35 @@ export const useApi = () => {
       .catch(console.error)
   }
 
-  return { saveDataAPI, getDataAPI, saveNewNodeAPI }
+  const makeNodePublic = async (nodeId: string) => {
+    return await client
+      .patch<any>(
+        apiURLs.makeNodePublic(nodeId),
+        {},
+        {
+          headers: {
+            'workspace-id': getWorkspaceId()
+          }
+        }
+      )
+      .then((resp) => resp.data)
+      .catch((error) => console.error(error))
+  }
+
+  const makeNodePrivate = async (nodeId: string) => {
+    return await client
+      .patch<any>(
+        apiURLs.makeNodePrivate(nodeId),
+        {},
+        {
+          headers: {
+            'workspace-id': getWorkspaceId()
+          }
+        }
+      )
+      .then((resp) => resp.data)
+      .catch((error) => console.error(error))
+  }
+
+  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate }
 }

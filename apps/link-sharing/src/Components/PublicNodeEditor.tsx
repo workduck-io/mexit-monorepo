@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import styled from 'styled-components'
-import { Plate, usePlateEditorRef } from '@udecode/plate'
 
 import Editor from './Editor'
 import { DEFAULT_CONTENT, WORKSPACE_NAME } from '../Data/defaults'
@@ -20,7 +19,6 @@ const PublicNodeEditor = ({ nodeId }) => {
   const [nodePath, setNodePath] = useState<string>(nodeId)
   const [isLoading, setIsLoading] = useState(false)
 
-  const editor = usePlateEditorRef()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -35,19 +33,13 @@ const PublicNodeEditor = ({ nodeId }) => {
         })
         setNodeContent(res.data.content)
         setNodePath(res.data.path ?? nodeId)
+        setIsLoading(false)
       } catch (error) {
         navigate('/404')
       }
     }
     getPublicNodeContent()
-    setIsLoading(false)
   }, [setNodeContent, setIsLoading]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (editor) editor.children = nodeContent
-
-    console.log('Node Content updated: ', nodeContent)
-  }, [editor, nodeContent])
 
   return (
     <SPlate>
