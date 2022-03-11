@@ -85,7 +85,6 @@ const CreateTabCapture = () => {
         <input placeholder="Name this group of tabs" {...register('name')} />
         <input type="submit" />
       </form>
-      <Toaster position="bottom-center" />
     </>
   )
 }

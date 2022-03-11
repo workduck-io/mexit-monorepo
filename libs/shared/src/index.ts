@@ -7,6 +7,7 @@ export * from './Stores/themeStoreConstructor'
 
 export * from './Styles/Button'
 export * from './Styles/Form'
+export * from './Styles/normalize'
 
 export * from './Types/Editor'
 export * from './Types/Actions'

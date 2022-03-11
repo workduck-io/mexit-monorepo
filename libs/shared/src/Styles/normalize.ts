@@ -25,7 +25,6 @@ const normalize = css`
 
   body {
     margin: 0;
-    padding: 0;
   }
 
   /**
@@ -355,4 +354,4 @@ const normalize = css`
   }
 `
 
-export default normalize
+export { normalize }
