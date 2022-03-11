@@ -10,6 +10,7 @@ import Results from '../Results'
 import Renderer from '../Renderer'
 import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
+import toast from 'react-hot-toast'
 
 export default function Content() {
   const { selection, setVisualState } = useSputlitContext()
@@ -44,6 +45,7 @@ export default function Content() {
 
   const handleSave = (payload: any) => {
     setContent(selection.url, currentContent, selection.range, nodeId)
+    toast.success('Saved')
 
     chrome.runtime.sendMessage(
       {
@@ -61,12 +63,12 @@ export default function Content() {
         const { message, error } = response
         if (error) {
           if (error === 'Not Authenticated') {
-            console.error('Not Authenticated. Please login via Popup')
+            toast.error('Not Authenticated. Please login on Mexit webapp.')
           } else {
-            console.error('An Error Occured. Please try again')
+            toast.error('An Error Occured. Please try again.')
           }
         } else {
-          console.log('Successful')
+          toast.success('Saved')
           setTimeout(() => {
             setVisualState(VisualState.hidden)
           }, 2000)

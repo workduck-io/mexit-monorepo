@@ -1,4 +1,10 @@
 import styled from 'styled-components'
+import { normalize } from '@mexit/shared'
+
+export const SputlitContainer = styled.div`
+  ${normalize}
+  font-family: 'Inter', sans-serif;
+`
 
 export const Overlay = styled.div`
   height: 100%;

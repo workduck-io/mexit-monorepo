@@ -1,6 +1,6 @@
+import { normalize } from '@mexit/shared'
 import { createGlobalStyle, css } from 'styled-components'
 
-import normalize from './Normalize'
 import { ThinScrollbar } from './Helpers'
 import { EditorBalloonStyles, TippyBalloonStyles } from './Toolbar'
 
