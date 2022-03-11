@@ -3,6 +3,8 @@ import { Scroll } from '../Results/styled'
 
 export const EditorWrapper = styled.div`
   flex: 1;
+  /* display: grid so that mex-editor takes up all the space */
+  display: grid;
   max-height: 100%;
   overflow: scroll;
   margin: 1rem;
