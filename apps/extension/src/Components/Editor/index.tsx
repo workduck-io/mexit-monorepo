@@ -1,5 +1,5 @@
 import { createPlugins, createPlateUI } from '@udecode/plate'
-import { MexEditor, ComboboxKey } from '@workduck-io/mex-editor'
+import { MexEditor, ComboboxKey, ELEMENT_TAG } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useEditorChange } from '../../Hooks/useEditorActions'
-import { CaptureType } from '@mexit/shared'
+import { CaptureType, TagWrapper } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
 import { Button } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
@@ -116,7 +116,9 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         meta={{
           path: nodePath
         }}
-        components={{}}
+        components={{
+          [ELEMENT_TAG]: TagWrapper
+        }}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}

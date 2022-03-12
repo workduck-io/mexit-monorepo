@@ -4,8 +4,7 @@ import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey } from '@workduck-io
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
-import ILinkWrapper from './ILinkWrapper'
-import TagWrapper from './TagWrapper'
+import { ILinkWrapper, TagWrapper } from '@mexit/shared'
 import useDataStore from '../../Stores/useDataStore'
 
 const EditorWrapper = styled.div`

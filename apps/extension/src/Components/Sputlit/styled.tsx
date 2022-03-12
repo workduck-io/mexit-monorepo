@@ -12,7 +12,7 @@ export const Overlay = styled.div`
   position: fixed;
   top: 0px;
   left: 0px;
-  z-index: 9999;
+  z-index: 8;
   opacity: 0.6;
   transition: all 0.1s cubic-bezier(0.05, 0.03, 0.35, 1);
 `
@@ -27,7 +27,7 @@ export const Wrapper = styled.div`
   right: 0px;
   bottom: 0px;
   left: 0px;
-  z-index: 9999999999;
+  z-index: 10;
   height: 540px;
   transition: all 0.2s cubic-bezier(0.05, 0.03, 0.35, 1);
 `
@@ -41,7 +41,7 @@ export const Main = styled.div`
   border-radius: 10px;
   top: 0px;
   left: 0px;
-  z-index: 9999999998;
+  z-index: 9;
   height: fit-content;
   transition: all 0.2s cubic-bezier(0.05, 0.03, 0.35, 1);
   display: block;
