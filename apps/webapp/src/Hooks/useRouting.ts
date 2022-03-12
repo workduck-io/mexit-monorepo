@@ -8,11 +8,11 @@ export const ROUTE_PATHS = {
   //   tag: '/tag', // * /tag/:tag
   node: '/editor', // * /node/:nodeid
   search: '/search',
-  settings: '/settings'
+  settings: '/settings',
   //   tasks: '/tasks',
   //   integrations: '/integrations',
-  //   snippets: '/snippets',
-  //   snippet: '/snippets/node' // * /snippets/node/:snippetid
+  snippets: '/snippets',
+  snippet: '/snippets/node' // * /snippets/node/:snippetid
 }
 
 export enum NavigationType {
