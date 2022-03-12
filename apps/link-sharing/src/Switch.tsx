@@ -7,7 +7,7 @@ import PublicNode from './Views/PublicNode'
 const Switch = () => {
   return (
     <Routes>
-      <Route path="/" element={<MainArea />}>
+      <Route path="/share" element={<MainArea />}>
         <Route path=":nodeId" element={<PublicNode />} />
       </Route>
       <Route path="/404" element={<h1>Page Not Found</h1>} />

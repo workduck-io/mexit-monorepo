@@ -30,7 +30,7 @@ const ContentEditor = () => {
   }
 
   return (
-    <>
+    <div>
       <ShareOptions nodeId={nodeId} />
       <Editor
         nodeUID={nodeId}
@@ -38,7 +38,7 @@ const ContentEditor = () => {
         content={nodeContent?.content ?? defaultContent.content}
         onChange={handleSave}
       />
-    </>
+    </div>
   )
 }
 
