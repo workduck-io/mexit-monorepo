@@ -9,4 +9,4 @@ const TagWrapper = (props: TagElementProps) => {
   return <TagElement {...props} onClick={handleTagClick} />
 }
 
-export default TagWrapper
+export { TagWrapper }

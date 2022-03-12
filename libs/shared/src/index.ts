@@ -1,3 +1,5 @@
+export * from './Components/ILinkWrapper'
+export * from './Components/TagWrapper'
 export * from './Components/ToggleButton'
 
 export * from './Hooks/useActions'

@@ -19,4 +19,4 @@ const ILinkWrapper = (props: ILinkElementProps) => {
   return <QuickLinkElement {...props} onClick={handleILinkClick} isArchived nodeId={nodeId} acrhivedIcon="something" />
 }
 
-export default ILinkWrapper
+export { ILinkWrapper }
