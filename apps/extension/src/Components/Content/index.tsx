@@ -1,6 +1,6 @@
 import { usePlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useContentStore } from '../../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../../Utils/deserialize'
@@ -19,8 +19,11 @@ export default function Content() {
   const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
-  const [currentContent, setCurrentContent] = useState(value)
   const [first, setFirst] = useState(true)
+
+  // Ref so that the function contains the newest value without re-renders
+  const currentContent = value
+  const contentRef = useRef(currentContent)
 
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -29,14 +32,14 @@ export default function Content() {
 
     if (selection?.range && content && selection?.url) {
       setValue(content)
-      setCurrentContent(content)
+      contentRef.current = content
     }
   }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateContent = (newContent) => {
     // Because the useEditorChange hook runs the onChange once
     if (!first) {
-      setCurrentContent(newContent)
+      contentRef.current = newContent
     } else {
       setFirst(true)
     }
@@ -44,7 +47,7 @@ export default function Content() {
   }
 
   const handleSave = (payload: any) => {
-    setContent(selection.url, currentContent, selection.range, nodeId)
+    setContent(selection.url, contentRef.current, selection.range, nodeId)
     toast.success('Saved')
 
     chrome.runtime.sendMessage(
@@ -54,7 +57,7 @@ export default function Content() {
         data: {
           body: {
             ...payload,
-            content: currentContent,
+            content: contentRef.current,
             workspaceID: workspaceDetails.id
           }
         }
@@ -76,6 +79,7 @@ export default function Content() {
       }
     )
   }
+
   return (
     <StyledContent>
       <Results />
