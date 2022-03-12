@@ -1,7 +1,6 @@
 export * from './Components/ToggleButton'
 
 export * from './Hooks/useActions'
-export * from './Hooks/useTags'
 
 export * from './Stores/authStoreConstructor'
 export * from './Stores/shortnerStoreConstructor'

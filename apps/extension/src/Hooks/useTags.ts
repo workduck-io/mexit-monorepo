@@ -1,8 +1,8 @@
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Tag } from '../Types/Editor'
-import { storageAdapter } from '../Utils/chromeStorageAdapter'
+import { Tag } from '../Types/Tags'
+import { storageAdapter } from '@mexit/shared'
 
 interface TagStore extends State {
   tags: Tag[]

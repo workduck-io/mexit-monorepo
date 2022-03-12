@@ -24,7 +24,6 @@
     "**/*.js",
     "**/*.jsx",
     "**/*.ts",
-    "**/*.tsx",
-    "../../apps/webapp/src/Stores/useThemeStore.ts"
+    "**/*.tsx"
   ]
 }
