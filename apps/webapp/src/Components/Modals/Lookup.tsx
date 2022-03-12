@@ -42,7 +42,7 @@ const InputWrapper = styled.div`
 `
 
 const Lookup = () => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const { saveNewNodeAPI } = useApi()
   const { addNode } = useNodes()
 
@@ -77,7 +77,6 @@ const Lookup = () => {
     const nodeid = quickLink.nodeid
 
     push(nodeid)
-
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
 
     closeModal()
@@ -95,6 +94,7 @@ const Lookup = () => {
 
   const handleCreateItem = (inputValue: QuickLink) => {
     addNode({ ilink: inputValue.value, showAlert: true }, (node) => {
+      mog('CreatedNode: ', { node })
       saveNewNodeAPI(node.nodeid)
       push(node.nodeid, { withLoading: false })
     })

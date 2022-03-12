@@ -14,6 +14,7 @@ export const useNodes = () => {
     // mog('Adding Node for:', { props })
     try {
       const node = addILink({ ...props, showAlert })
+      console.log('New ILink: ', node)
       if (node) onSuccess(node)
     } catch (e) {
       mog('Error while creating node', { e })
