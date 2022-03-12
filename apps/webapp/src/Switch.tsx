@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, Outlet } from 'react-router-dom'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
@@ -18,6 +18,12 @@ import config from './config'
 
 import * as Actions from './Actions'
 import ActivityView from './Views/ActivityView'
+import Snippets from './Views/Snippets'
+import SnippetEditor from './Components/Editor/SnippetEditor'
+
+import UserPage from './Components/User/UserPage'
+
+import { ROUTE_PATHS } from './Hooks/useRouting'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -27,6 +33,10 @@ const ProtectedRoute = ({ children }) => {
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
   return !authenticated ? children : <Navigate to="/" />
+}
+
+const Home = () => {
+  return <Outlet />
 }
 
 const Switch = () => {
@@ -100,11 +110,20 @@ const Switch = () => {
           </AuthRoute>
         }
       />
-
+      <Route
+        path="/snippets"
+        element={
+          <ProtectedRoute>
+            <Navbar />
+            <Snippets />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/settings"
         element={
           <ProtectedRoute>
+            <Navbar />
             <Themes />
           </ProtectedRoute>
         }
@@ -122,3 +141,55 @@ const Switch = () => {
 }
 
 export default Switch
+
+export const NewSwitch = () => {
+  return (
+    <Routes>
+      <Route
+        path={ROUTE_PATHS.login}
+        element={
+          <AuthRoute>
+            <Login />
+            <Footer />
+          </AuthRoute>
+        }
+      />
+      <Route
+        path={ROUTE_PATHS.register}
+        element={
+          <AuthRoute>
+            <Register />
+            <Footer />
+          </AuthRoute>
+        }
+      />
+
+      <Route
+        path={ROUTE_PATHS.home}
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          index
+          element={
+            <>
+              <Navbar />
+              <ActivityView />
+            </>
+          }
+        />
+        <Route path={ROUTE_PATHS.snippets} element={<Snippets />} />
+        {/* <Route path={ROUTE_PATHS.search} element={<Search />} /> */}
+
+        <Route path={`${ROUTE_PATHS.snippet}/:snippetid`} element={<SnippetEditor />} />
+        <Route path={ROUTE_PATHS.settings} element={<ProtectedRoute component={Settings} />}>
+          <Route path="themes" element={<ProtectedRoute component={Themes} />} />
+          <Route path="user" element={<UserPage />} />
+        </Route>
+      </Route>
+    </Routes>
+  )
+}

@@ -36,6 +36,7 @@ export type SnippetsProps = {
 }
 
 const Snippets = () => {
+  console.log('Idhar aaya re? ')
   const snippets = useSnippetStore((store) => store.snippets)
   const { addSnippet, deleteSnippet, getSnippetContent, getSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)

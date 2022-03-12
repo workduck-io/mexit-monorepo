@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import UserDropdown from './UserDropdown'
 
@@ -12,11 +13,18 @@ const Container = styled.div`
   border-bottom: 1px solid #333;
 `
 
-function Navbar() {
+const Navbar = () => {
   return (
     <Container>
-      <h3>Home</h3>
-
+      <Link to="/">
+        <h3>Home</h3>
+      </Link>
+      <Link to="/snippets">
+        <h3>Snippets</h3>
+      </Link>
+      <Link to="/settings">
+        <h3>Settings</h3>
+      </Link>
       <UserDropdown />
     </Container>
   )

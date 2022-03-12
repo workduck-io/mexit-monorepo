@@ -91,10 +91,6 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   }
 `
 
-interface RelDateWithPreviewProps {
-  n: number
-}
-
 const Relative = styled.div`
   &:hover {
   }
