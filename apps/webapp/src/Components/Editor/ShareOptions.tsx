@@ -20,15 +20,28 @@ const ShareOptions = ({ nodeId }) => {
   const onChange = async () => {
     // Go from public -> private
     if (isPublic) {
-      const resp = await makeNodePrivate(nodeId)
-      console.log('Resp: ', JSON.stringify(resp.nodeUID))
       setNodePrivate(nodeId)
+
+      // Toggle immedtiately but re-toggle if request failed
+      try {
+        const resp = await makeNodePrivate(nodeId)
+        console.log('Resp: ', JSON.stringify(resp.nodeUID))
+      } catch (error) {
+        setNodePublic(nodeId)
+        console.log('Error in making private')
+      }
     } else {
       // Private to Public
-      const resp = await makeNodePublic(nodeId)
-      console.log('Resp: ', JSON.stringify(resp.nodeUID))
       setNodePublic(nodeId)
+      try {
+        const resp = await makeNodePublic(nodeId)
+        console.log('Resp: ', JSON.stringify(resp.nodeUID))
+      } catch (error) {
+        setNodePrivate(nodeId)
+        console.log('error in making public')
+      }
     }
+
     console.log('Inverting public from: ', isPublic)
   }
 
@@ -36,6 +49,7 @@ const ShareOptions = ({ nodeId }) => {
     <div>
       <p>Share to Web</p>
       <ToggleButton id="toggle-public" value={isPublic} onChange={onChange} checked={isPublic} />
+      {/* TODO: copy this to clipboard */}
       {isPublic && <p>URL: {apiURLs.getPublicNodePath(nodeId)}</p>}
     </div>
   )
