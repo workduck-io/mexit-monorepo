@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { apiURLs, Button, useTagStore } from '@mexit/shared'
+import { apiURLs, Button } from '@mexit/shared'
 import { Tag } from '@mexit/shared'
 import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import { Shortener } from './Shortener'
@@ -32,7 +32,7 @@ export const AliasWrapper = () => {
   const elementRef = useRef(null)
 
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
-  const addTagsToGlobalStore = useTagStore((store) => store.addTags)
+  // const addTagsToGlobalStore = useTagStore((store) => store.addTags)
   const { handleSubmit, register } = useForm<ShortenFormDetails>()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const userDetails = useAuthStore((store) => store.userDetails)
@@ -50,7 +50,10 @@ export const AliasWrapper = () => {
       namespace: workspaceDetails.name
     }
 
-    addTagsToGlobalStore(reqBody.metadata.userTags)
+    // TODO: think about this because we cannot directly use the extension store,
+    // need to send message
+
+    // addTagsToGlobalStore(reqBody.metadata.userTags)
 
     const URL = apiURLs.createShort
     let response: any
@@ -110,22 +113,22 @@ export const AliasWrapper = () => {
     }
   }, [])
 
-  const addNewUserTag = (tag: Tag) => {
-    setUserTags([...userTags, tag])
-  }
+  // const addNewUserTag = (tag: Tag) => {
+  //   setUserTags([...userTags, tag])
+  // }
 
-  const removeUserTag = (tag: Tag) => {
-    const t = userTags
-    const idx = t.map((e) => e.id).indexOf(tag.id)
-    t.splice(idx, 1)
-    setUserTags([...t])
-  }
+  // const removeUserTag = (tag: Tag) => {
+  //   const t = userTags
+  //   const idx = t.map((e) => e.id).indexOf(tag.id)
+  //   t.splice(idx, 1)
+  //   setUserTags([...t])
+  // }
 
   // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
     <Form ref={elementRef} onSubmit={handleSubmit(onShortenLinkSubmit)}>
       <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
-      <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} />
+      {/* <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} /> */}
       <Button type="submit" value="Save" />
     </Form>
   )

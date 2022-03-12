@@ -11,11 +11,12 @@ import { CaptureType } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
 import { Button } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
-import { checkMetaParseableURL, parsePageMetaTags, useTagStore } from '@mexit/shared'
+import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
 import { Tag } from '../../Types/Tags'
 import config from '../../config'
 import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useTagStore } from '../../Hooks/useTags'
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -107,6 +108,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
     f(value)
   }, 1000)
+
   return (
     <EditorWrapper onFocus={() => setPreview(false)} onBlur={() => setPreview(true)}>
       <MexEditor
