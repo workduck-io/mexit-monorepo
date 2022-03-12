@@ -24,6 +24,7 @@ export * from './Utils/actions'
 export * from './Utils/routes'
 export * from './Utils/lodashUtils'
 export * from './Utils/Logo'
+export * from './Utils/mog'
 
 export * from './Themes'
 

@@ -7,6 +7,7 @@ import Switch from './Switch'
 import Analytics from './Utils/analytics'
 import useThemeStore from './Stores/useThemeStore'
 import { defaultThemes } from '@mexit/shared'
+import Modals from './Views/Modals'
 
 //----------Styled Components------------
 
@@ -29,6 +30,7 @@ function App() {
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
         <AppContainer>
           <GlobalStyle />
+          <Modals />
           <Switch />
         </AppContainer>
       </ThemeProvider>
