@@ -4,10 +4,10 @@ import styled, { ThemeProvider } from 'styled-components'
 
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
-import Analytics from './Utils/analytics'
 import useThemeStore from './Stores/useThemeStore'
 import { defaultThemes } from '@mexit/shared'
 import Modals from './Views/Modals'
+import Init from './Components/Init'
 
 //----------Styled Components------------
 
@@ -18,10 +18,6 @@ const AppContainer = styled.div`
   height: 100%;
 `
 
-if (process.env.NX_MIXPANEL_TOKEN_WEBAPP) {
-  Analytics.init(process.env.NX_MIXPANEL_TOKEN_WEBAPP)
-}
-
 function App() {
   const theme = useThemeStore((state) => state.theme)
 
@@ -29,6 +25,7 @@ function App() {
     <Router>
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
         <AppContainer>
+          <Init />
           <GlobalStyle />
           <Modals />
           <Switch />

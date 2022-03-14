@@ -6,21 +6,6 @@ import { indexNames } from '../Data/constants'
 import { GenericSearchData, GenericSearchResult, SearchIndex } from '../Types/Search'
 import { ILink } from '../Types/Data'
 
-export const createFlexsearchIndex = (initList: BlockIndexData[]) => {
-  const options = {
-    document: {
-      id: 'blockUID',
-      index: ['text']
-    },
-    tokenize: 'full'
-  }
-
-  const index = Document(options)
-  initList.forEach((i) => index.add(i))
-
-  return index
-}
-
 export const flexIndexKeys = [
   'title.cfg',
   'title.ctx',
@@ -73,9 +58,9 @@ export const createSearchIndex = (ilinks, initData: Record<indexNames, any[]>): 
   const initList: Record<indexNames, any> = convertDataToIndexable(ilinks, initData)
   // Pass options corrwectly depending on what fields are indexed ([title, text] for now)
   return {
-    node: createGenricSearchIndex(initList.node),
-    snippet: createGenricSearchIndex(initList.snippet),
-    archive: createGenricSearchIndex(initList.archive)
+    node: initList.node ? createGenricSearchIndex(initList.node) : null,
+    snippet: initList.snippet ? createGenricSearchIndex(initList.snippet) : null,
+    archive: initList.archive ? createGenricSearchIndex(initList.archive) : null
   }
 }
 
