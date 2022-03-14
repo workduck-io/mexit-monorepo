@@ -2,17 +2,30 @@ import React from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
-import informationLine from '@iconify-icons/ri/information-line'
-import refreshLine from '@iconify-icons/ri/refresh-line'
 import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
-import keyboardBoxLine from '@iconify-icons/fluent/keyboard-24-regular'
-import installLine from '@iconify-icons/ri/install-line'
 import user3Line from '@iconify-icons/ri/user-3-line'
 import { Icon } from '@iconify/react'
 
-import { useAuthentication } from '../../Stores/useAuth'
-import { Button } from '../../Style/Buttons'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { useAuthentication } from '../Stores/useAuth'
+import { Button } from '../Style/Buttons'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+
+const IntegrationContainer = styled.section`
+  margin-left: 4rem;
+`
+
+const Margin = styled.div`
+  margin: 1rem 1rem 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+`
+
+const Title = styled.h1`
+  padding: 2.5rem 1rem;
+  font-size: 36px;
+  line-height: 44px;
+  user-select: none;
+`
 
 export const SettingsContainer = styled.section`
   display: flex;
@@ -67,18 +80,9 @@ const Settings = () => {
   const { logout } = useAuthentication()
   const { goTo } = useRouting()
 
-  const { addEventProperties } = useAnalytics()
-
   const onLogout = (e: any) => {
     e.preventDefault()
     logout()
-    addEventProperties({ [CustomEvents.LOGGED_IN]: false })
-    /**
-     * Sessions ends after 30mins of inactivity
-     *
-     * identifyUser(undefined)
-     * */
-
     goTo(ROUTE_PATHS.login, NavigationType.push)
   }
 
@@ -94,22 +98,6 @@ const Settings = () => {
           <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="user">
             <Icon icon={user3Line} />
             Profile
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="shortcuts">
-            <Icon icon={keyboardBoxLine} />
-            Shortcuts
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
-            <Icon icon={informationLine} />
-            About
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="import">
-            <Icon icon={refreshLine} />
-            Import Notes
-          </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="autoupdate">
-            <Icon icon={installLine} />
-            Automatic Updates
           </SettingTitle>
           <Margin />
           <Button onClick={onLogout}>Logout</Button>

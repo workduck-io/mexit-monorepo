@@ -24,6 +24,7 @@ import SnippetEditor from './Components/Editor/SnippetEditor'
 import UserPage from './Components/User/UserPage'
 
 import { ROUTE_PATHS } from './Hooks/useRouting'
+import Settings from './Views/Settings'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -185,8 +186,8 @@ export const NewSwitch = () => {
         {/* <Route path={ROUTE_PATHS.search} element={<Search />} /> */}
 
         <Route path={`${ROUTE_PATHS.snippet}/:snippetid`} element={<SnippetEditor />} />
-        <Route path={ROUTE_PATHS.settings} element={<ProtectedRoute component={Settings} />}>
-          <Route path="themes" element={<ProtectedRoute component={Themes} />} />
+        <Route path={ROUTE_PATHS.settings} element={<Settings />}>
+          <Route path="themes" element={<Themes />} />
           <Route path="user" element={<UserPage />} />
         </Route>
       </Route>
