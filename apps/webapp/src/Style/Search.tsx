@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components'
 
 import { MetadataWrapper } from '../Components/Metadata/Metadata'
 import { View } from '../Views/ViewSelector'
-
 import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
@@ -12,26 +11,33 @@ import { size } from './Responsive'
 import { Title } from './Typography'
 import { ProfileIcon } from './UserPage'
 
-const SearchTransition = css`
-  transition: all 0.2s ease-in-out;
-`
-
-const Ellipsis = css`
+export const Ellipsis = css`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 `
 
-export const InputWrapper = styled.div`
-  width: 100%;
+const SearchTransition = css`
+  transition: all 0.2s ease-in-out;
+`
+
+const SearchHeight = css`
+  height: calc(100vh - 22rem);
+`
+
+const iconStyle = (primary?: boolean) => css`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
   svg {
     height: 1.5rem;
     width: 1.5rem;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => (primary ? theme.colors.primary : theme.colors.gray[9])};
   }
+`
+export const InputWrapper = styled.div`
+  width: 100%;
+  ${iconStyle(true)};
 `
 
 export const SearchInput = styled(Input)`
@@ -53,9 +59,98 @@ export const SearchHeader = styled.div`
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
 
+export const SearchFilterWrapper = styled(SearchHeader)`
+  justify-content: flex-start;
+  gap: ${({ theme }) => theme.spacing.large};
+`
+
+export const SearchFilterCategoryLabel = styled.div`
+  color: ${({ theme }) => theme.colors.text.fade};
+  margin: 0 ${({ theme }) => theme.spacing.small} 0 ${({ theme }) => theme.spacing.medium};
+`
+
+export const SearchFilterLabel = styled.div`
+  ${iconStyle(true)}
+  color: ${({ theme }) => theme.colors.text.fade};
+`
+
+export const SearchFilterList = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
+export const SearchFilterCancel = styled.div`
+  cursor: pointer;
+  display: flex;
+  padding: ${({ theme }) => ` ${theme.spacing.small}`};
+  transition: all 0.25s ease-in-out;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  margin-left: ${({ theme }) => theme.spacing.large};
+
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+
+  background-color: ${({ theme }) => theme.colors.gray[8]};
+  transition: all 0.25s ease-in-out;
+
+  svg {
+    opacity: 0.66;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.palette.black};
+    background-color: ${({ theme }) => theme.colors.palette.red};
+    svg {
+      opacity: 1;
+    }
+  }
+`
+export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
+  cursor: pointer;
+  display: flex;
+  padding: ${({ theme }) => ` ${theme.spacing.small}`};
+  transition: all 0.25s ease-in-out;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+
+  background-color: ${({ theme }) => theme.colors.gray[8]};
+  transition: all 0.25s ease-in-out;
+
+  svg {
+    opacity: 0.66;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray[7]};
+    svg {
+      opacity: 1;
+    }
+  }
+  ${({ selected }) =>
+    selected &&
+    css`
+      background-color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      &:hover {
+        background-color: ${({ theme }) => transparentize(0.4, theme.colors.primary)};
+        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        svg {
+          opacity: 1;
+        }
+      }
+    `}
+`
+
 export const SearchViewContainer = styled.div`
   position: relative;
   margin: ${({ theme: { spacing } }) => `${spacing.large}`};
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.medium};
+  flex-direction: column;
 `
 export const SearchContainer = styled.div`
   margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
@@ -178,10 +273,13 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         display: flex;
         flex-direction: row;
         align-items: flex-start;
+        flex-shrink: 0;
         width: 100%;
         border: 1px solid transparent;
+        transition: 0.3s ease;
         ${selected &&
         css`
+          transition: 0s ease;
           background-color: ${theme.colors.gray[8]};
           border: 1px solid ${theme.colors.primary};
           ${ResultTitle} {
@@ -198,6 +296,8 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
 `
 
 export const Results = styled.div<{ view: View }>`
+  ${SearchHeight}
+  overflow-y: auto;
   ${({ theme, view }) => {
     if (view === View.Card) {
       return css`
@@ -226,7 +326,6 @@ export const Results = styled.div<{ view: View }>`
 `
 
 export const ResultsWrapper = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.large};
   position: relative;
 `
 
@@ -235,11 +334,14 @@ export const SearchPreviewWrapper = styled.div<{ active?: boolean }>`
 `
 
 export const SplitSearchPreviewWrapper = styled.div`
-  height: calc(100vh - 16rem);
+  height: calc(100vh - 22rem);
   overflow-y: auto;
   border-radius: ${({ theme }) => theme.borderRadius.large};
   background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
-  padding: ${({ theme }) => theme.spacing.medium};
+  padding: 0 ${({ theme }) => theme.spacing.medium};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.large};
 
   ${EditorStyles} {
     border-radius: ${({ theme }) => theme.borderRadius.small};

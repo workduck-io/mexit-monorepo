@@ -4,9 +4,9 @@ import { ILinkElementProps, QuickLinkElement, mog } from '@workduck-io/mex-edito
 const ILinkWrapper = (props: ILinkElementProps) => {
   // * TBD: Uncomment after adding stores
   // const { push } = useNavigation()
-  // const { getUidFromNodeId } = useLinks()
+  // const { getNodeidFromPath } = useLinks()
 
-  // const nodeid = getUidFromNodeId(props.element.value)
+  // const nodeid = getNodeidFromPath(props.element.value)
   // const { archived } = useArchive()
 
   const nodeId = 'random'

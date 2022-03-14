@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 
-// import { mog } from '@mexit/shared'
+import { mog } from '@mexit/shared'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
@@ -30,17 +30,17 @@ import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } fr
 import { Title } from '../Style/Typography'
 import { parseBlock } from '../Utils/flexsearch'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import useSearchStore from '../Hooks/useSearchStore'
 
 export type SnippetsProps = {
   title?: string
 }
 
 const Snippets = () => {
-  console.log('Idhar aaya re? ')
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippetContent, getSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  //   const searchIndex = useSearchStore((store) => store.searchIndex)
+  const searchIndex = useSearchStore((store) => store.searchIndex)
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
   const initialSnippets: any[] = snippets.map((snippet) => ({
@@ -49,14 +49,14 @@ const Snippets = () => {
     text: parseBlock(snippet.content)
   }))
 
-  //   const onSearch = (newSearchTerm: string) => {
-  //     const res = searchIndex('snippet', newSearchTerm)
-  //     mog('search', { res })
-  //     if (newSearchTerm === '' && res.length === 0) {
-  //       return initialSnippets
-  //     }
-  //     return res
-  //   }
+  const onSearch = (newSearchTerm: string) => {
+    const res = searchIndex('snippet', newSearchTerm)
+    mog('search', { res })
+    if (newSearchTerm === '' && res.length === 0) {
+      return initialSnippets
+    }
+    return res
+  }
 
   const onCreateNew = () => {
     // Create a better way.
@@ -186,11 +186,7 @@ const Snippets = () => {
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
-        // onSearch={onSearch}
-        onSearch={(data) => {
-          console.log('OnSearch: ', data)
-          return []
-        }}
+        onSearch={onSearch}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
         RenderStartCard={RenderStartCard}

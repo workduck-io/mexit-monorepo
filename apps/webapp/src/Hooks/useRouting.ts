@@ -5,7 +5,7 @@ export const ROUTE_PATHS = {
   login: '/login',
   register: '/register',
   //   archive: '/archive',
-  //   tag: '/tag', // * /tag/:tag
+  tag: '/tag', // * /tag/:tag
   editor: '/editor',
   node: '/editor', // * /node/:nodeid
   search: '/search',
