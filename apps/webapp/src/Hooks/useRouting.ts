@@ -6,13 +6,16 @@ export const ROUTE_PATHS = {
   register: '/register',
   //   archive: '/archive',
   //   tag: '/tag', // * /tag/:tag
+  editor: '/editor',
   node: '/editor', // * /node/:nodeid
   search: '/search',
   settings: '/settings',
   //   tasks: '/tasks',
   //   integrations: '/integrations',
   snippets: '/snippets',
-  snippet: '/snippets/node' // * /snippets/node/:snippetid
+  snippet: '/snippets/node', // * /snippets/node/:snippetid
+  chotu: '/chotu',
+  actions: '/actions'
 }
 
 export enum NavigationType {

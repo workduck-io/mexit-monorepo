@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate, Route, Routes, Outlet } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
@@ -9,7 +9,6 @@ import MainArea from './Views/MainArea'
 import { useAuthStore } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
-import Navbar from './Components/Navbar'
 import Footer from './Components/Footer'
 import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
@@ -36,11 +35,7 @@ const AuthRoute = ({ children }) => {
   return !authenticated ? children : <Navigate to="/" />
 }
 
-const Home = () => {
-  return <Outlet />
-}
-
-const Switch = () => {
+export const Switch = () => {
   const routingInstrumentation = useRoutingInstrumentation()
   const { initCognito } = useAuth()
 
@@ -66,87 +61,6 @@ const Switch = () => {
   return (
     <Routes>
       <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Navbar />
-            <ActivityView />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/chotu"
-        element={
-          <ProtectedRoute>
-            <Chotu />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/editor"
-        element={
-          <ProtectedRoute>
-            <Navbar />
-            <MainArea />
-          </ProtectedRoute>
-        }
-      >
-        <Route path=":nodeId" element={<ContentEditor />} />
-      </Route>
-      <Route
-        path="/login"
-        element={
-          <AuthRoute>
-            <Login />
-            <Footer />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <AuthRoute>
-            <Register />
-            <Footer />
-          </AuthRoute>
-        }
-      />
-      <Route
-        path="/snippets"
-        element={
-          <ProtectedRoute>
-            <Navbar />
-            <Snippets />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <Navbar />
-            <Themes />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route path="/actions">
-        <Route path="shortener" element={<Actions.AliasWrapper />} />
-        <Route path="color-picker" element={<Actions.ColourPicker />} />
-        <Route path="corpbs" element={<Actions.CorporateBS />} />
-        <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
-        <Route path="epoch" element={<Actions.UnixEpochConverter />} />
-      </Route>
-    </Routes>
-  )
-}
-
-export default Switch
-
-export const NewSwitch = () => {
-  return (
-    <Routes>
-      <Route
         path={ROUTE_PATHS.login}
         element={
           <AuthRoute>
@@ -169,19 +83,14 @@ export const NewSwitch = () => {
         path={ROUTE_PATHS.home}
         element={
           <ProtectedRoute>
-            <Home />
+            <MainArea />
           </ProtectedRoute>
         }
       >
-        <Route
-          index
-          element={
-            <>
-              <Navbar />
-              <ActivityView />
-            </>
-          }
-        />
+        <Route index element={<ActivityView />} />
+
+        <Route path={`${ROUTE_PATHS.node}/:nodeId`} element={<ContentEditor />} />
+
         <Route path={ROUTE_PATHS.snippets} element={<Snippets />} />
         {/* <Route path={ROUTE_PATHS.search} element={<Search />} /> */}
 
@@ -190,7 +99,26 @@ export const NewSwitch = () => {
           <Route path="themes" element={<Themes />} />
           <Route path="user" element={<UserPage />} />
         </Route>
+
+        <Route
+          path={ROUTE_PATHS.chotu}
+          element={
+            <ProtectedRoute>
+              <Chotu />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path={ROUTE_PATHS.actions}>
+          <Route path="shortener" element={<Actions.AliasWrapper />} />
+          <Route path="color-picker" element={<Actions.ColourPicker />} />
+          <Route path="corpbs" element={<Actions.CorporateBS />} />
+          <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
+          <Route path="epoch" element={<Actions.UnixEpochConverter />} />
+        </Route>
       </Route>
     </Routes>
   )
 }
+
+export default Switch

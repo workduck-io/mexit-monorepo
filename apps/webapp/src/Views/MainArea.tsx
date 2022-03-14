@@ -5,6 +5,7 @@ import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import { useTreeFromLinks } from '../Stores/useDataStore'
+import Navbar from '../Components/Navbar'
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +17,7 @@ const MainArea = () => {
 
   return (
     <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
+      <Navbar />
       <Container>
         <Sidebar tree={Tree} starred={Tree} />
         <Outlet />
