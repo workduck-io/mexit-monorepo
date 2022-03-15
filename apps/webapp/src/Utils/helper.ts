@@ -1,13 +1,20 @@
 import { NODE_ID_PREFIX, ID_SEPARATOR, SEPARATOR } from '@workduck-io/mex-editor'
 import { nanoid } from 'nanoid'
-import React, { Ref } from 'react'
-import { ReactComponentElement } from 'react'
+import React from 'react'
+import { NodeProperties } from '../Stores/useEditorStore'
 
 export const BASE_DRAFT_PATH = 'Draft'
 
 export const isElder = (id: string, xparent: string) => {
   return id.startsWith(xparent + SEPARATOR)
 }
+
+export const getInitialNode = (): NodeProperties => ({
+  title: '@',
+  id: '@',
+  path: '@',
+  nodeid: '__null__'
+})
 
 export const getAllParentIds = (id: string) =>
   id.split(SEPARATOR).reduce((p, c) => [...p, p.length > 0 ? `${p[p.length - 1]}${SEPARATOR}${c}` : c], [])

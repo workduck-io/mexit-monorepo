@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
 
+import { Title } from './Typography'
+
 export const Wrapper = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.large};
 `
@@ -42,3 +44,17 @@ export const SpaceBetweenHorizontalFlex = styled.div`
 `
 
 export default Centered
+
+export const MainHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.medium};
+  color: ${({ theme }) => theme.colors.primary};
+  margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
+
+  ${Title} {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+`

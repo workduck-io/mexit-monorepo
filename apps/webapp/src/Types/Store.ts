@@ -1,4 +1,4 @@
-import { Tag, ILink, LinkCache, TagsCache, CachedILink, InitDataStoreType } from './Data'
+import { Tag, ILink, LinkCache, TagsCache, CachedILink, InitDataStoreType, AddILinkProps } from './Data'
 
 export interface DataStoreState {
   tags: Tag[]
@@ -13,7 +13,7 @@ export interface DataStoreState {
   initializeDataStore: (initData: InitDataStoreType) => void
 
   // adds the node
-  addILink: (ilink: string, nodeid?: string, parentId?: string, archived?: boolean) => string
+  addILink: (props: AddILinkProps) => ILink | undefined
 
   // adds tag for combobox
   addTag: (tag: string) => void

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAuthStore } from '../Stores/useAuth'
 import { useShortenerStore } from '../Stores/useShortener'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 
 export default function Chotu() {
@@ -9,6 +10,7 @@ export default function Chotu() {
   const linkCaptures = useShortenerStore((state) => state.linkCaptures)
   const theme = useThemeStore((state) => state.theme)
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
+  const snippets = useSnippetStore((store) => store.snippets)
 
   const message = {
     type: 'store-init',
@@ -16,7 +18,9 @@ export default function Chotu() {
     workspaceDetails: workspaceDetails,
     linkCaptures: linkCaptures,
     theme: theme,
-    authAWS: authAWS
+    authAWS: authAWS,
+    snippets: snippets
+
   }
 
   window.parent.postMessage(message, '*')

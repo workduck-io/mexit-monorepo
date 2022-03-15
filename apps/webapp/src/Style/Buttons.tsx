@@ -1,8 +1,12 @@
 import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { Icon } from '@iconify/react'
+import { TippyProps } from '@tippyjs/react'
+
 import { centeredCss } from './Layouts'
 import { LoadingWrapper } from './Loading'
+import { ToolbarTooltip } from '../Components/Tooltips'
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   primary?: boolean
@@ -72,6 +76,33 @@ export interface AsyncButtonProps {
   onClick?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   type?: 'button' | 'submit' | 'reset'
 }
+
+export type IconButtonProps = {
+  icon: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  title: string
+  size?: string | number
+  onClick?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  singleton?: TippyProps['singleton']
+  highlight?: boolean
+  shortcut?: string
+}
+
+export const HeadlessButton = styled.button`
+  border: none;
+  background: transparent;
+`
+
+const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton }: IconButtonProps) => {
+  return (
+    <ToolbarTooltip content={<span>{title}</span>} singleton={singleton}>
+      <Button onClick={onClick} highlight={highlight}>
+        <Icon icon={icon} height={size} />
+      </Button>
+    </ToolbarTooltip>
+  )
+}
+
+export default IconButton
 
 export const AsyncButton = styled.button<AsyncButtonProps>`
   ${centeredCss};

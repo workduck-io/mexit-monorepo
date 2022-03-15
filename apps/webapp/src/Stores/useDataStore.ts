@@ -6,6 +6,7 @@ import { DataStoreState } from '../Types/Store'
 import { generateNodeId, getAllParentIds, getNodeIcon } from '../Utils/helper'
 import { CachedILink, Tag } from '../Types/Data'
 import { generateTree, getFlatTree } from '../Utils/treeUtils'
+import { getUniquePath } from '../Utils/path'
 
 export const generateTag = (item: string): Tag => ({
   value: item
@@ -16,7 +17,34 @@ const useDataStore = create<DataStoreState>(
     (set, get) => ({
       tags: [],
 
-      ilinks: [],
+      ilinks: [
+        {
+          path: 'doc',
+          nodeid: 'NODE_pgNXymywCdMqGCpmED3U9'
+        },
+        {
+          path: 'dev',
+          nodeid: 'NODE_6imUwDyYhgm7mUKx9WWXg'
+        },
+        {
+          path: 'design',
+          nodeid: 'NODE_Qxmbcc6U4bdfMrGG7nVm8'
+        },
+        {
+          path: '@',
+          nodeid: 'NODE_zdgDPT3rw69pL8GtyytM9'
+        },
+        {
+          path: 'Draft',
+          nodeid: 'NODE_AyWJeFYDW6GNH4CAEXcLG',
+          icon: 'ri:draft-line'
+        },
+        {
+          path: 'Tasks',
+          nodeid: 'NODE_kdaPNyJDDHDPkULmctdCn',
+          icon: 'ri:task-line'
+        }
+      ],
 
       linkCache: {},
 
@@ -43,7 +71,7 @@ const useDataStore = create<DataStoreState>(
         })
       },
 
-      addILink: (ilink, nodeid, parentId, archived) => {
+      addILink: ({ ilink, nodeid, parentId, archived, showAlert }) => {
         const { key, isChild } = withoutDelimiter(ilink)
 
         if (key) {
@@ -53,26 +81,34 @@ const useDataStore = create<DataStoreState>(
         const ilinks = get().ilinks
 
         const linksStrings = ilinks.map((l) => l.path)
-        const parents = getAllParentIds(ilink) // includes link of child
+        const reservedOrUnique = getUniquePath(ilink, linksStrings, showAlert)
 
+        if (!reservedOrUnique) {
+          throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
+        }
+
+        const uniquePath = reservedOrUnique.unique
+
+        const parents = getAllParentIds(uniquePath) // includes link of child
         const newLinks = parents.filter((l) => !linksStrings.includes(l)) // only create links for non existing
 
         const newILinks = newLinks.map((l) => ({
-          nodeid: nodeid && l === ilink ? nodeid : generateNodeId(),
+          nodeid: nodeid && l === uniquePath ? nodeid : generateNodeId(),
           path: l,
           icon: getNodeIcon(l)
         }))
 
-        const newLink = newILinks.find((l) => l.path === ilink)
+        const newLink = newILinks.find((l) => l.path === uniquePath)
 
-        const userILinks = archived ? ilinks.map((val) => (val.path === ilink ? { ...val, nodeid } : val)) : ilinks
+        const userILinks = archived ? ilinks.map((val) => (val.path === uniquePath ? { ...val, nodeid } : val)) : ilinks
 
+        mog('Adding ILink', { ilink, uniquePath, nodeid, parentId, archived, newLink, newLinks, userILinks, parents })
         set({
           ilinks: [...userILinks, ...newILinks]
         })
 
-        if (newLink) return newLink.nodeid
-        return ''
+        if (newLink) return newLink
+        return
       },
 
       setIlinks: (ilinks) => {
