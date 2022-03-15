@@ -44,6 +44,7 @@
     "slate-react": "^0.72.9",
     "styled-components": "^5.3.3",
     "tinykeys": "^1.4.0",
+    "universal-cookie": "^4.0.4",
     "use-debounce": "^7.0.1",
     "zustand": "3.7.1"
   },

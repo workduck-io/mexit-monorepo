@@ -38,7 +38,8 @@ const Init = () => {
       integrations: [browserTracing]
     })
 
-    if (process.env.NX_MIXPANEL_TOKEN_WEBAPP && !IS_DEV) Analytics.init(process.env.NX_MIXPANEL_TOKEN_WEBAPP)
+    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
+      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
   }, [routingInstrumentation])
 
   useEffect(() => {

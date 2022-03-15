@@ -20,6 +20,7 @@ import UserPage from './Components/User/UserPage'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
 import Search from './Views/Search'
+import PublicNodeView from './Views/PublicNodeView'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -43,6 +44,9 @@ export const Switch = () => {
           </AuthRoute>
         }
       />
+
+      <Route path={`${ROUTE_PATHS.home}/share/:nodeId`} element={<PublicNodeView />} />
+
       <Route
         path={ROUTE_PATHS.register}
         element={
@@ -54,6 +58,23 @@ export const Switch = () => {
       />
 
       <Route
+        path={ROUTE_PATHS.chotu}
+        element={
+          <ProtectedRoute>
+            <Chotu />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path={ROUTE_PATHS.actions}>
+        <Route path="shortener" element={<Actions.AliasWrapper />} />
+        <Route path="color-picker" element={<Actions.ColourPicker />} />
+        <Route path="corpbs" element={<Actions.CorporateBS />} />
+        <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
+        <Route path="epoch" element={<Actions.UnixEpochConverter />} />
+      </Route>
+
+      <Route
         path={ROUTE_PATHS.home}
         element={
           <ProtectedRoute>
@@ -63,7 +84,7 @@ export const Switch = () => {
       >
         <Route index element={<ActivityView />} />
 
-        <Route path={`${ROUTE_PATHS.node}/:nodeId`} element={<ContentEditor />} />
+        <Route path={`${ROUTE_PATHS.home}/:nodeId`} element={<ContentEditor />} />
 
         <Route path={ROUTE_PATHS.snippets} element={<Snippets />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
@@ -72,23 +93,6 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.settings} element={<Settings />}>
           <Route path="themes" element={<Themes />} />
           <Route path="user" element={<UserPage />} />
-        </Route>
-
-        <Route
-          path={ROUTE_PATHS.chotu}
-          element={
-            <ProtectedRoute>
-              <Chotu />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route path={ROUTE_PATHS.actions}>
-          <Route path="shortener" element={<Actions.AliasWrapper />} />
-          <Route path="color-picker" element={<Actions.ColourPicker />} />
-          <Route path="corpbs" element={<Actions.CorporateBS />} />
-          <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
-          <Route path="epoch" element={<Actions.UnixEpochConverter />} />
         </Route>
       </Route>
     </Routes>

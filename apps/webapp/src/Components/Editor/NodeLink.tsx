@@ -19,14 +19,14 @@ const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
   const { getPathFromNodeid } = useLinks()
   const { loadNode } = useLoad()
   const { goTo } = useRouting()
-  
+
   return (
     <TippyPreviewEditor key={keyStr} nodeid={nodeid} placement="left">
       <NodeLinkStyled
         key={`NodeLink_${keyStr}`}
         onClick={() => {
           loadNode(nodeid, { savePrev: false })
-          goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+          goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
         }}
       >
         {getPathFromNodeid(nodeid)}
