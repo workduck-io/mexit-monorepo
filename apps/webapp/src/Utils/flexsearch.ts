@@ -1,5 +1,6 @@
-import { Snippet } from './../Stores/useSnippetStore'
 import { Document } from 'flexsearch'
+
+import { Snippet } from '@mexit/shared'
 
 import { indexNames } from '../Data/constants'
 import { GenericSearchData, SearchIndex } from '../Types/Search'

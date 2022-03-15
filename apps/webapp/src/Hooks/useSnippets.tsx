@@ -1,6 +1,9 @@
+import { Snippet } from '@mexit/shared'
+
 import { SEPARATOR } from '../Utils/treeUtils'
 // import { parseBlock } from '../Utils/flexsearch'
-import { useSnippetStore, Snippet } from '../Stores/useSnippetStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+
 // import useSearchStore from './useSearchStore'
 import { SlashCommandConfig } from '@workduck-io/mex-editor'
 
