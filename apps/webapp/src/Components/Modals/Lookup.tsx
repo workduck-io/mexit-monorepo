@@ -77,7 +77,7 @@ const Lookup = () => {
     const nodeid = quickLink.nodeid
 
     push(nodeid)
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
 
     closeModal()
   }

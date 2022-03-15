@@ -1,7 +1,0 @@
-{
-  "root": "apps/link-sharing",
-  "sourceRoot": "apps/link-sharing/src",
-  "projectType": "application",
-  "targets": {},
-  "tags": []
-}

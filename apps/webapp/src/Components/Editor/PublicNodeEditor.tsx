@@ -4,7 +4,8 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import Editor from './Editor'
-import { DEFAULT_CONTENT, WORKSPACE_NAME } from '../Data/defaults'
+import { WORKSPACE_NAME } from '../../Data/defaults'
+
 import { apiURLs } from '@mexit/shared'
 
 const SPlate = styled.div`
@@ -17,12 +18,10 @@ const SPlate = styled.div`
 const PublicNodeEditor = ({ nodeId }) => {
   const [nodeContent, setNodeContent] = useState<any[]>()
   const [nodePath, setNodePath] = useState<string>(nodeId)
-  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    setIsLoading(true)
     async function getPublicNodeContent() {
       const URL = apiURLs.getPublicNode(nodeId)
       try {
@@ -33,21 +32,18 @@ const PublicNodeEditor = ({ nodeId }) => {
         })
         setNodeContent(res.data.content)
         setNodePath(res.data.path ?? nodeId)
-        setIsLoading(false)
       } catch (error) {
         navigate('/404')
       }
     }
     getPublicNodeContent()
-  }, [setNodeContent, setIsLoading]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [setNodeContent]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <SPlate>
-      <Editor
-        nodeUID={!isLoading ? nodeId : 'NODE_LOADING'}
-        nodePath={nodeId}
-        content={nodeContent ?? DEFAULT_CONTENT.content}
-      />
+      {nodeContent && nodeContent.length > 0 && (
+        <Editor readOnly={true} nodeUID={nodeId} nodePath={nodeId} content={nodeContent} />
+      )}
     </SPlate>
   )
 }
