@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
-import mixpanel from 'mixpanel-browser'
 import toast from 'react-hot-toast'
 import { useAuth } from '@workduck-io/dwindle'
+import Cookies from 'universal-cookie'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
-import { LoginFormData, RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/shared'
+import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/shared'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '../Style/Form'
 import { CenteredColumn } from '../Style/Layouts'
-import { BackCard, FooterCard } from '../Style/Card'
+import { BackCard } from '../Style/Card'
 import Input, { InputFormError, PasswordRequirements } from '../Components/Input'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 import { LoadingButton } from '../Components/Buttons/Buttons'
 import { Button } from '../Style/Buttons'
+import Analytics from '../Utils/analytics'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -52,6 +53,16 @@ export const Register = () => {
       if (s === 'UsernameExistsException') {
         toast('You have already registered, please verify code.')
       }
+      const cookies = new Cookies()
+      const shareLinkCookie = cookies.get('mexit-sharing')
+
+      let props: any = {}
+      if (shareLinkCookie) {
+        props = {
+          'mexit-sharing': shareLinkCookie
+        }
+      }
+      Analytics.track('USER_REGISTERED', props)
     })
   }
 

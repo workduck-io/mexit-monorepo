@@ -20,14 +20,14 @@ export const useNavigation = () => {
     pushHs(nodeid)
     addRecent(nodeid)
     loadNode(nodeid, options)
-    navigate(`/editor/${nodeid}`)
+    navigate(`/${nodeid}`)
   }
 
   const replace = (nodeid: string) => {
     replaceHs(nodeid)
     addRecent(nodeid)
     loadNode(nodeid)
-    navigate(`/editor/${nodeid}`)
+    navigate(`/${nodeid}`)
   }
 
   const move = (dist: number) => {
