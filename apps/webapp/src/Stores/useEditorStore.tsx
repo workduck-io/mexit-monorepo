@@ -22,7 +22,7 @@ export function getContent(nodeid: string): NodeContent {
 export const getInitialNode = (): NodeProperties => ({
   title: '@',
   id: '@',
-  key: '@',
+  path: '@',
   nodeid: '__null__'
 })
 
@@ -36,7 +36,7 @@ export interface NodeProperties {
   title: string
   id: string
   nodeid: string
-  key: string
+  path: string
 }
 
 export type EditorContextType = {

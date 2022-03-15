@@ -14,7 +14,7 @@ import { BackCard, FooterCard } from '../Style/Card'
 import Input, { InputFormError, PasswordRequirements } from '../Components/Input'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
-import { LoadingButton } from '../Components/Buttons'
+import { LoadingButton } from '../Components/Buttons/Buttons'
 import { Button } from '../Style/Buttons'
 
 export const Register = () => {

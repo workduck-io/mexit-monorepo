@@ -7,6 +7,7 @@ import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
 import { Notification } from '../Notification'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 export default function Chotu() {
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
@@ -16,6 +17,7 @@ export default function Chotu() {
 
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
 
   const handleEvent = (event) => {
     if (event.origin === MEXIT_FRONTEND_URL_BASE) {
@@ -25,6 +27,8 @@ export default function Chotu() {
           setLinkCaptures(event.data.linkCapture)
           setTheme(event.data.theme)
           setInternalAuthStore(event.data.authAWS)
+          initSnippets(event.data.snippets)
+
           break
         }
         case 'shortener': {

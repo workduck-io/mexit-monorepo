@@ -7,7 +7,7 @@ import { NodeEditorContent } from '../Types/Types'
 const useDataSaver = () => {
   const setContent = useContentStore((state) => state.setContent)
   const getContent = useContentStore((state) => state.getContent)
-  const { updateLinksFromContent, getNodeIdFromUid } = useLinks()
+  const { updateLinksFromContent, getPathFromNodeid } = useLinks()
   const { updateTagsFromContent } = useTags()
   const { saveDataAPI } = useApi()
 

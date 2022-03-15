@@ -51,7 +51,6 @@ const ActivityView = () => {
   return (
     <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
       <Container>
-        <Sidebar tree={Tree} starred={Tree} />
         <ActivityViewEditor />
       </Container>
     </SentryErrorBoundary>
