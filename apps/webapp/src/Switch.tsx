@@ -19,6 +19,7 @@ import UserPage from './Components/User/UserPage'
 
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
+import Search from './Views/Search'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -65,7 +66,7 @@ export const Switch = () => {
         <Route path={`${ROUTE_PATHS.node}/:nodeId`} element={<ContentEditor />} />
 
         <Route path={ROUTE_PATHS.snippets} element={<Snippets />} />
-        {/* <Route path={ROUTE_PATHS.search} element={<Search />} /> */}
+        <Route path={ROUTE_PATHS.search} element={<Search />} />
 
         <Route path={`${ROUTE_PATHS.snippet}/:snippetid`} element={<SnippetEditor />} />
         <Route path={ROUTE_PATHS.settings} element={<Settings />}>

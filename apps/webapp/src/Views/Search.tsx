@@ -7,7 +7,6 @@ import { mog } from '@mexit/shared'
 import { defaultContent } from '../Stores/useEditorStore'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useFilters } from '../Hooks/useFilters'
-import { useLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { useNodes } from '../Hooks/useNodes'
 import useContentStore from '../Stores/useContentStore'
@@ -57,7 +56,6 @@ const Search = () => {
   const { goTo } = useRouting()
   const {
     applyCurrentFilters,
-    resetFilters,
     addCurrentFilter,
     setFilters,
     generateNodeSearchFilters,
@@ -66,8 +64,6 @@ const Search = () => {
     currentFilters,
     resetCurrentFilters
   } = useFilters<GenericSearchResult>()
-
-  const { getPathFromNodeid } = useLinks()
 
   const onSearch = (newSearchTerm: string) => {
     const res = searchIndex('node', newSearchTerm)

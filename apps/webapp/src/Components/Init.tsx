@@ -10,6 +10,7 @@ import { IS_DEV } from '@mexit/shared'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useSearchStore from '../Hooks/useSearchStore'
 import useDataStore from '../Stores/useDataStore'
+import useContentStore from '../Stores/useContentStore'
 
 const Init = () => {
   const { initCognito } = useAuth()
@@ -17,6 +18,7 @@ const Init = () => {
   const snippets = useSnippetStore((store) => store.snippets)
   const initializeSearchIndex = useSearchStore((store) => store.initializeSearchIndex)
   const ilinks = useDataStore((store) => store.ilinks)
+  const contents = useContentStore((store) => store.contents)
 
   useEffect(() => {
     initCognito({
@@ -40,8 +42,14 @@ const Init = () => {
   }, [routingInstrumentation])
 
   useEffect(() => {
+    const nodes = Object.entries(contents).map(([nodeId, val]) => {
+      return {
+        id: nodeId,
+        ...val
+      }
+    })
     const initData = {
-      node: [],
+      node: nodes,
       snippet: snippets,
       archive: []
     }

@@ -1,9 +1,8 @@
 import { Snippet } from './../Stores/useSnippetStore'
 import { Document } from 'flexsearch'
-import { BlockIndexData, Node } from '../Types/Data'
 
 import { indexNames } from '../Data/constants'
-import { GenericSearchData, GenericSearchResult, SearchIndex } from '../Types/Search'
+import { GenericSearchData, SearchIndex } from '../Types/Search'
 import { ILink } from '../Types/Data'
 
 export const flexIndexKeys = [
@@ -30,7 +29,7 @@ export const parseBlock = (content: any[], join?: string): string => {
   return text.join(join ?? '')
 }
 
-export const parseNode = (node: Node, title: string): GenericSearchData[] => {
+export const parseNode = (node: any, title: string): GenericSearchData[] => {
   const nodeUID = node.id
   const result: GenericSearchData[] = []
 
@@ -75,6 +74,7 @@ export const createGenricSearchIndex = (
   }
 ): Document<GenericSearchData> => {
   const index = new Document<GenericSearchData>(options)
+
   initList.forEach((i) => index.add(i))
   return index
 }
@@ -101,12 +101,12 @@ export const convertDataToIndexable = (
 
   nodeData.forEach((node) => {
     const blocks = parseNode(node, titleNodeMap.get(node.id))
-    res.node.concat(blocks)
+    res.node = [...res.node, ...blocks]
   })
 
   archiveData.forEach((archivedNode) => {
     const blocks = parseNode(archivedNode, titleNodeMap.get(archivedNode.id))
-    res.archive.concat(blocks)
+    res.archive = [...res.archive, ...blocks]
   })
 
   snippetData.forEach((snippet) => {
