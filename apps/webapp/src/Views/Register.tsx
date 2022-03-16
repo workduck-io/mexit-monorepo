@@ -14,7 +14,7 @@ import { BackCard } from '../Style/Card'
 import Input, { InputFormError, PasswordRequirements } from '../Components/Input'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
-import { GoogleLoginButton, LoadingButton } from '../Components/Buttons'
+import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { Button } from '../Style/Buttons'
 import Analytics from '../Utils/analytics'
 
