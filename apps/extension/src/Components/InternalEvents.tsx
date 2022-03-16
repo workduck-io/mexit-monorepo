@@ -26,7 +26,7 @@ const highlighter = new Highlighter()
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
+  const { visualState, setVisualState, setSelection, setTooltipState, setDibbaState } = useSputlitContext()
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -57,9 +57,37 @@ function useToggleHandler() {
     }
 
     function handleKeyDown(event: KeyboardEvent) {
+      // console.log('keydown event', event.key)
       if (event.key === 'Escape') {
         setVisualState(VisualState.hidden)
         setTooltipState({ visualState: VisualState.hidden })
+        setDibbaState({ visualState: VisualState.hidden })
+      }
+    }
+
+    let _buffer = []
+    function handleInput(event: InputEvent) {
+      console.log('input event', event.data)
+
+      const usefulCharacters = '['
+
+      if (usefulCharacters.indexOf(event.data) === -1) {
+        console.log('return')
+        _buffer = []
+        return
+      } else {
+        _buffer.push(event.data)
+        console.log('push', _buffer.length, _buffer)
+      }
+
+      if (_buffer.length === 2) {
+        console.log('render dibba')
+        setDibbaState({
+          visualState: VisualState.showing,
+          coordinates: window.getSelection().getRangeAt(0).getClientRects()[0],
+          extra: { range: window.getSelection().getRangeAt(0) }
+        })
+        _buffer = []
       }
     }
 
@@ -69,9 +97,12 @@ function useToggleHandler() {
     // Listen for keydown events
     window.addEventListener('keydown', handleKeyDown)
 
+    window.addEventListener('input', handleInput)
+
     return () => {
       chrome.runtime.onMessage.removeListener(messageHandler)
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('input', handleInput)
     }
   }, [visualState])
 }

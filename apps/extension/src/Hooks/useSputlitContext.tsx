@@ -23,6 +23,7 @@ export type TooltipState = {
   visualState: VisualState
   id?: string
   coordinates?: DOMRect
+  extra?: any
 }
 
 type SputlitContextType = {
@@ -40,6 +41,8 @@ type SputlitContextType = {
   setVisualState: (vs: VisualState) => void
   tooltipState: TooltipState
   setTooltipState: (vs: TooltipState) => void
+  dibbaState: TooltipState
+  setDibbaState: (vs: TooltipState) => void
   preview: boolean
   setPreview: (val: boolean) => void
 }
@@ -57,6 +60,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     visualState: VisualState.hidden
   })
+  const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [preview, setPreview] = useState(true)
 
   const value = {
@@ -74,6 +78,8 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     setVisualState,
     tooltipState,
     setTooltipState,
+    dibbaState,
+    setDibbaState,
     preview,
     setPreview
   }

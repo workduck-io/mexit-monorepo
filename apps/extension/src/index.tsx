@@ -11,6 +11,8 @@ import { InternalEvents } from './Components/InternalEvents'
 import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
 import useThemeStore from './Hooks/useThemeStore'
 import { defaultThemes } from '@mexit/shared'
+import Dibba from './Components/Dibba'
+import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 
 export default function Index() {
   const theme = useThemeStore((state) => state.theme)
@@ -22,6 +24,10 @@ export default function Index() {
         <InternalEvents />
 
         <Chotu />
+
+        <DibbaPortal>
+          <Dibba />
+        </DibbaPortal>
 
         <TooltipPortal>
           <Tooltip />
