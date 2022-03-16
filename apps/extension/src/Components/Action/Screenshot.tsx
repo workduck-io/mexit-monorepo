@@ -29,10 +29,10 @@ const Screenshot = () => {
               {
                 children: [
                   {
-                    text: message
+                    text: ''
                   }
                 ],
-                type: 'a',
+                type: 'img',
                 url: message
               },
               {
