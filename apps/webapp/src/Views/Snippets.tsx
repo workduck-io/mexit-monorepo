@@ -28,7 +28,7 @@ import {
 } from '../Style/Search'
 import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '../Style/Snippets'
 import { Title } from '../Style/Typography'
-import { parseBlock } from '../Utils/flexsearch'
+import { parseBlock } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import useSearchStore from '../Hooks/useSearchStore'
 
