@@ -56,7 +56,7 @@ const Lookup = () => {
     setOpen(false)
   }
 
-  const LOOKUP_SHORTCUT = '$mod+Shift+G'
+  const LOOKUP_SHORTCUT = '$mod+L'
 
   useEffect(() => {
     console.log('Setting up a keyboard shortcut: ', LOOKUP_SHORTCUT)
