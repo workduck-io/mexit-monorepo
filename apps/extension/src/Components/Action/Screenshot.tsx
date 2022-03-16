@@ -27,8 +27,31 @@ const Screenshot = () => {
           setSelection({
             editContent: [
               {
-                text: message,
-                type: 'p'
+                children: [
+                  {
+                    text: message
+                  }
+                ],
+                type: 'a',
+                url: message
+              },
+              {
+                text: '\n'
+              },
+              {
+                text: '['
+              },
+              {
+                type: 'a',
+                url: message,
+                children: [
+                  {
+                    text: 'Ref'
+                  }
+                ]
+              },
+              {
+                text: ' ]'
               }
             ]
           })
