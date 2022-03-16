@@ -15,6 +15,17 @@ export default function Dibba() {
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const snippets = useSnippets().getSnippets()
 
+  const data = [
+    ...linkCaptures.map((item) => ({
+      id: item.shortenedURL,
+      title: item.short,
+      // TODO: find a way to use favicons but single array of results
+      icon: 'ri:link',
+      content: item.shortenedURL
+    })),
+    ...snippets
+  ]
+
   console.log('snippets', snippets, 'link Captures', linkCaptures)
 
   const insertSnippet = (item: Snippet) => {
@@ -23,14 +34,23 @@ export default function Dibba() {
     setDibbaState({ visualState: VisualState.hidden })
   }
 
-  const insertLink = (item: LinkCapture) => {
+  const insertLink = (item: any) => {
     const link = document.createElement('a')
-    link.appendChild(document.createTextNode(item.long))
-    link.href = item.long
+    link.appendChild(document.createTextNode(item.content))
+    link.href = item.content
 
     dibbaState.extra.range.deleteContents()
     dibbaState.extra.range.insertNode(link)
     setDibbaState({ visualState: VisualState.hidden })
+  }
+
+  const handleClick = (item: any) => {
+    if (item.icon === 'ri:quill-pen-line') {
+      insertSnippet(item as Snippet)
+    } else {
+      // TODO: transform again to type linkCapture
+      insertLink(item)
+    }
   }
 
   return (
@@ -39,61 +59,20 @@ export default function Dibba() {
       left={window.scrollX + dibbaState.coordinates.left}
       isOpen={dibbaState.visualState === VisualState.hidden ? false : true}
     >
-      {linkCaptures.map((item, index) => {
-        // const Item = onRenderItem ? onRenderItem({ item }) : item.text
-        // const text = item.text
-
+      {data.map((item, index) => {
         return (
           <ComboboxItem
-            // key={`${item.key}-${String(index)}`}
+            key={index}
             highlighted={false}
-            // {...comboProps(item, index)}
             onMouseDown={() => {
-              console.log('link', item)
-              insertLink(item)
+              console.log('something', item)
+              handleClick(item)
             }}
           >
-            <Img src={`https://www.google.com/s2/favicons?domain=${item.long}&sz=${18}`} />
-            <ItemCenterWrapper>
-              <ItemTitle>{item.short}</ItemTitle>
-              {/* {item.desc && <ItemDesc>{item.desc}</ItemDesc>} */}
-            </ItemCenterWrapper>
-            {/* {item.rightIcons && (
-              <ItemRightIcons>
-                {item.rightIcons.map((i: string) => (
-                  <Icon key={item.key + i} icon={i} />
-                ))}
-              </ItemRightIcons>
-            )} */}
-          </ComboboxItem>
-        )
-      })}
-      {snippets.map((item, index) => {
-        // const Item = onRenderItem ? onRenderItem({ item }) : item.text
-        // const text = item.text
-
-        return (
-          <ComboboxItem
-            // key={`${item.key}-${String(index)}`}
-            highlighted={false}
-            // {...comboProps(item, index)}
-            onMouseDown={() => {
-              console.log('parsed snippet', parseSnippet(item))
-              insertSnippet(item)
-            }}
-          >
-            <Icon height={18} key={item.id} icon={quillPenLine} />
+            <Icon height={18} key={item.id} icon={item.icon} />
             <ItemCenterWrapper>
               <ItemTitle>{item.title}</ItemTitle>
-              {/* {item.desc && <ItemDesc>{item.desc}</ItemDesc>} */}
             </ItemCenterWrapper>
-            {/* {item.rightIcons && (
-              <ItemRightIcons>
-                {item.rightIcons.map((i: string) => (
-                  <Icon key={item.key + i} icon={i} />
-                ))}
-              </ItemRightIcons>
-            )} */}
           </ComboboxItem>
         )
       })}
