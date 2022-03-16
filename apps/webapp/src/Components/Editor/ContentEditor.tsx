@@ -7,7 +7,7 @@ import useEditorStore, { defaultContent } from '../../Stores/useEditorStore'
 import useLoad from '../../Hooks/useLoad'
 import useDataSaver from '../../Hooks/useSave'
 import { NodeEditorContent } from '../../Types/Data'
-import ShareOptions from './ShareOptions'
+import EditorInfoBar from '../EditorInfobar'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
@@ -31,7 +31,7 @@ const ContentEditor = () => {
 
   return (
     <div>
-      <ShareOptions nodeId={nodeId} />
+      <EditorInfoBar />
       <Editor
         nodeUID={nodeId}
         nodePath={node.path}
