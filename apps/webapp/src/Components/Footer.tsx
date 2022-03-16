@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 const Container = styled.div`
   text-align: center;
@@ -16,10 +17,10 @@ const Anchor = styled.a`
 function Footer() {
   return (
     <Container>
-      {window.location.pathname === '/login' ? (
-        <Anchor href="/register">Don't have an account? Sign up</Anchor>
+      {window.location.pathname === ROUTE_PATHS.login ? (
+        <Anchor href={ROUTE_PATHS.register}>Don't have an account? Sign up</Anchor>
       ) : (
-        <Anchor href="/login">Already have an account? Log in </Anchor>
+        <Anchor href={ROUTE_PATHS.login}>Already have an account? Log in </Anchor>
       )}
     </Container>
   )

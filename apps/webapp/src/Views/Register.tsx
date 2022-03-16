@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useAuth } from '@workduck-io/dwindle'
@@ -27,8 +26,6 @@ export const Register = () => {
   const registered = useAuthStore((store) => store.registered)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const { resendCode } = useAuth()
-
-  const navigate = useNavigate()
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -78,10 +75,6 @@ export const Register = () => {
   const onCancelVerification = (e) => {
     e.preventDefault()
     setRegistered(false)
-  }
-
-  const handleNavigate = () => {
-    navigate('/login')
   }
 
   return (

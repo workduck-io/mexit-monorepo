@@ -45,7 +45,7 @@ const ProtectedRoute = ({ children }) => {
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  return !authenticated ? children : <Navigate to="/" />
+  return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
 }
 
 const AuthRoutes = () => {
