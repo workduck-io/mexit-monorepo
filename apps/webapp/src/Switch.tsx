@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import MainArea from './Views/MainArea'
 import { useAuthStore, useAuthentication } from './Stores/useAuth'
@@ -21,6 +21,7 @@ import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
+import Navbar from './Components/Navbar'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -47,11 +48,11 @@ const AuthRoute = ({ children }) => {
   return !authenticated ? children : <Navigate to="/" />
 }
 
-export const Switch = () => {
+const AuthRoutes = () => {
   return (
     <Routes>
       <Route
-        path={ROUTE_PATHS.login}
+        path="login"
         element={
           <AuthRoute>
             <Login />
@@ -60,10 +61,8 @@ export const Switch = () => {
         }
       />
 
-      <Route path={`${ROUTE_PATHS.home}/share/:nodeId`} element={<PublicNodeView />} />
-
       <Route
-        path={ROUTE_PATHS.register}
+        path="register"
         element={
           <AuthRoute>
             <Register />
@@ -71,17 +70,21 @@ export const Switch = () => {
           </AuthRoute>
         }
       />
+    </Routes>
+  )
+}
 
+const ActionsRoutes = () => {
+  return (
+    <Routes>
       <Route
-        path={ROUTE_PATHS.chotu}
+        path=""
         element={
           <ProtectedRoute>
-            <Chotu />
+            <Outlet />
           </ProtectedRoute>
         }
       />
-
-      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
 
       <Route path={ROUTE_PATHS.actions}>
         <Route path="shortener" element={<Actions.AliasWrapper />} />
@@ -90,9 +93,56 @@ export const Switch = () => {
         <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
         <Route path="epoch" element={<Actions.UnixEpochConverter />} />
       </Route>
+    </Routes>
+  )
+}
 
+const PublicNodeRoutes = () => {
+  return <Route path=":nodeId" element={<PublicNodeView />} />
+}
+
+const SettingsRoutes = () => {
+  return (
+    <Routes>
       <Route
-        path={ROUTE_PATHS.home}
+        path=""
+        element={
+          <ProtectedRoute>
+            <Navbar />
+            <Settings />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="themes" element={<Themes />} />
+        <Route path="user" element={<UserPage />} />
+      </Route>
+    </Routes>
+  )
+}
+
+const SnippetRoutes = () => {
+  return (
+    <Routes>
+      <Route
+        path=""
+        element={
+          <ProtectedRoute>
+            <MainArea />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Snippets />} />
+        <Route path="node/:snippetid" element={<SnippetEditor />} />
+      </Route>
+    </Routes>
+  )
+}
+
+const EditorRoutes = () => {
+  return (
+    <Routes>
+      <Route
+        path=""
         element={
           <ProtectedRoute>
             <MainArea />
@@ -100,18 +150,24 @@ export const Switch = () => {
         }
       >
         <Route index element={<ActivityView />} />
-
         <Route path={`${ROUTE_PATHS.home}/:nodeId`} element={<ContentEditor />} />
-
-        <Route path={ROUTE_PATHS.snippets} element={<Snippets />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
-
-        <Route path={`${ROUTE_PATHS.snippet}/:snippetid`} element={<SnippetEditor />} />
-        <Route path={ROUTE_PATHS.settings} element={<Settings />}>
-          <Route path="themes" element={<Themes />} />
-          <Route path="user" element={<UserPage />} />
-        </Route>
       </Route>
+    </Routes>
+  )
+}
+
+export const Switch = () => {
+  return (
+    <Routes>
+      <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
+      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
+      <Route path={`${ROUTE_PATHS.home}/*`} element={<EditorRoutes />} />
+      <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
+      <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
+      <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
+      <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
+      <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
     </Routes>
   )
 }
