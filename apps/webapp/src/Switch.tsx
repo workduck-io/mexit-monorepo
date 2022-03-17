@@ -20,6 +20,7 @@ import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
+import OAuthDesktop from './Components/OAuthDesktop'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -79,6 +80,8 @@ export const Switch = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
 
       <Route path={ROUTE_PATHS.actions}>
         <Route path="shortener" element={<Actions.AliasWrapper />} />
