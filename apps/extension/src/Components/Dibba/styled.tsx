@@ -4,7 +4,7 @@ export const ComboboxRoot = styled.ul<{ isOpen: boolean; top: number; left: numb
   ${({ isOpen, theme, top, left }) =>
     isOpen &&
     css`
-      top: ${top}px;
+      top: calc(${top}px + 1rem);
       left: ${left}px;
       position: absolute;
       padding: 0;
