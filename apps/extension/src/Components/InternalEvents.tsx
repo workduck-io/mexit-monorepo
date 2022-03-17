@@ -14,6 +14,7 @@ export function InternalEvents() {
   useToggleHandler()
   initAnalytics()
   handleHighlighter()
+  dibbaToggle()
   // useDocumentLock()
   // useShortcuts()
   // useFocusHandler()
@@ -61,33 +62,6 @@ function useToggleHandler() {
       if (event.key === 'Escape') {
         setVisualState(VisualState.hidden)
         setTooltipState({ visualState: VisualState.hidden })
-        setDibbaState({ visualState: VisualState.hidden })
-      }
-    }
-
-    let _buffer = []
-    function handleInput(event: InputEvent) {
-      console.log('input event', event.data)
-
-      const usefulCharacters = '['
-
-      if (usefulCharacters.indexOf(event.data) === -1) {
-        console.log('return')
-        _buffer = []
-        return
-      } else {
-        _buffer.push(event.data)
-        console.log('push', _buffer.length, _buffer)
-      }
-
-      if (_buffer.length === 2) {
-        console.log('render dibba')
-        setDibbaState({
-          visualState: VisualState.showing,
-          coordinates: window.getSelection().getRangeAt(0).getClientRects()[0],
-          extra: { range: window.getSelection().getRangeAt(0) }
-        })
-        _buffer = []
       }
     }
 
@@ -97,14 +71,45 @@ function useToggleHandler() {
     // Listen for keydown events
     window.addEventListener('keydown', handleKeyDown)
 
-    window.addEventListener('input', handleInput)
-
     return () => {
       chrome.runtime.onMessage.removeListener(messageHandler)
       window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('input', handleInput)
     }
   }, [visualState])
+}
+
+function dibbaToggle() {
+  const { dibbaState, setDibbaState } = useSputlitContext()
+
+  useEffect(() => {
+    let _buffer = ''
+    function handleInput(event: KeyboardEvent) {
+      const clearBuffer = [' ', 'Enter']
+
+      if (clearBuffer.includes(event.key)) {
+        _buffer = ''
+        return
+      } else {
+        _buffer += event.key
+      }
+
+      if (_buffer === '[[') {
+        setDibbaState({
+          visualState: VisualState.showing,
+          coordinates: window.getSelection().getRangeAt(0).getClientRects()[0],
+          extra: { range: window.getSelection().getRangeAt(0) }
+        })
+        _buffer = ''
+      }
+    }
+
+    // TODO: keydown shouldn't be used but input event cannot differentiate between backspace and enter
+    window.addEventListener('keydown', handleInput)
+
+    return () => {
+      window.removeEventListener('keydown', handleInput)
+    }
+  }, [dibbaState])
 }
 
 function initAnalytics() {
