@@ -2,8 +2,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 export const ROUTE_PATHS = {
   home: '/',
-  login: '/login',
-  register: '/register',
+  auth: '/auth',
+  login: '/auth/login',
+  register: '/auth/register',
   //   archive: '/archive',
   tag: '/tag', // * /tag/:tag
   editor: '/editor',
@@ -16,7 +17,8 @@ export const ROUTE_PATHS = {
   snippet: '/snippets/node', // * /snippets/node/:snippetid
   chotu: '/chotu',
   actions: '/actions',
-  oauthdesktop: '/oauth/desktop'
+  oauthdesktop: '/oauth/desktop',
+  share: '/share'
 }
 
 export enum NavigationType {

@@ -7,12 +7,17 @@ export const Wrapper = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.large};
 `
 
-export const MexIcon = styled(Icon)`
+export const MexIcon = styled(Icon)<{ margin?: string; noHover?: boolean }>`
   padding: 1px;
-  :hover {
-    background-color: ${(props) => props.theme.colors.background.card};
-    border-radius: 5px;
-  }
+  margin: ${({ margin }) => margin};
+  ${({ noHover }) =>
+    !noHover &&
+    css`
+      :hover {
+        background-color: ${(props) => props.theme.colors.background.card};
+        border-radius: 5px;
+      }
+    `}
 `
 
 export const centeredCss = css`

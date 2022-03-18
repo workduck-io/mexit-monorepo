@@ -238,11 +238,10 @@ const useDataStore = create<DataStoreState>(
         set({ archive: userArchive })
       },
 
-      setNodePublic: (nodeId) => {
+      setNodePublic: (nodeId, publicURL) => {
         if (get().publicNodes[nodeId]) return
-        set({ publicNodes: { ...get().publicNodes, [nodeId]: true } })
+        set({ publicNodes: { ...get().publicNodes, [nodeId]: publicURL } })
       },
-
       setNodePrivate: (nodeId) => {
         if (get().publicNodes[nodeId]) {
           const newNodes = get().publicNodes
@@ -250,9 +249,8 @@ const useDataStore = create<DataStoreState>(
           set({ publicNodes: newNodes })
         }
       },
-
       checkNodePublic: (nodeId) => {
-        return !!get().publicNodes[nodeId]
+        return get().publicNodes?.[nodeId]
       }
     }),
     { name: 'mexit-data-store' }
