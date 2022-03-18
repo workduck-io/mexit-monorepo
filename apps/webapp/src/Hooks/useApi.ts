@@ -1,11 +1,14 @@
 import { client } from '@workduck-io/dwindle'
 
-import { defaultContent } from '../Stores/useEditorStore'
+import { mog } from '@mexit/shared'
+
+// import { defaultContent } from '../Stores/useEditorStore'
 import { useAuthStore } from '../Stores/useAuth'
-import useContentStore from '../Stores/useContentStore'
-import { deserializeContent, serializeContent } from '../Utils/serializer'
+// import useContentStore from '../Stores/useContentStore'
+// import { deserializeContent, serializeContent } from '../Utils/serializer'
 import { apiURLs } from '@mexit/shared'
 import { NodeMetadata } from '../Types/Data'
+import useDataStore from '../Stores/useDataStore'
 
 export const removeNulls = (obj: any): any => {
   if (obj === null) {
@@ -32,8 +35,17 @@ export const extractMetadata = (data: any): NodeMetadata => {
 export const useApi = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const setMetadata = useContentStore((store) => store.setMetadata)
-  const setContent = useContentStore((store) => store.setContent)
+  // const setMetadata = useContentStore((store) => store.setMetadata)
+  // const setContent = useContentStore((store) => store.setContent)
+
+  const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
+    ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
+      setNodePublic,
+      setNodePrivate,
+      checkNodePublic
+    })
+  )
+
   /*
    * Saves data in the backend
    * Also updates the incoming data in the store
@@ -90,7 +102,11 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string) => {
     return await client
-      .get(apiURLs.getNode(nodeid), {})
+      .get(apiURLs.getNode(nodeid), {
+        headers: {
+          'workspace-id': getWorkspaceId()
+        }
+      })
       .then((d: any) => {
         return { content: d.data.data, metadata: d.data.metadata }
       })
@@ -98,34 +114,55 @@ export const useApi = () => {
   }
 
   const makeNodePublic = async (nodeId: string) => {
+    const URL = apiURLs.makeNodePublic(nodeId)
     return await client
-      .patch<any>(
-        apiURLs.makeNodePublic(nodeId),
-        {},
-        {
-          headers: {
-            'workspace-id': getWorkspaceId()
-          }
+      .patch(URL, null, {
+        withCredentials: false,
+        headers: {
+          'workspace-id': getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
         }
-      )
+      })
       .then((resp) => resp.data)
-      .catch((error) => console.error(error))
+      .then((data: any) => {
+        const nodeUID = data.nodeUID
+        if (nodeUID === nodeId) {
+          const publicURL = apiURLs.getNodePublicURL(nodeUID)
+          setNodePublic(nodeUID, publicURL)
+          return publicURL
+        } else throw new Error('Error making node public')
+      })
+      .catch((error) => {
+        mog('MakeNodePublicError', { error })
+      })
   }
 
   const makeNodePrivate = async (nodeId: string) => {
+    const URL = apiURLs.makeNodePrivate(nodeId)
+
     return await client
-      .patch<any>(
-        apiURLs.makeNodePrivate(nodeId),
-        {},
-        {
-          headers: {
-            'workspace-id': getWorkspaceId()
-          }
+      .patch(URL, null, {
+        withCredentials: false,
+        headers: {
+          'workspace-id': getWorkspaceId()
         }
-      )
+      })
       .then((resp) => resp.data)
-      .catch((error) => console.error(error))
+      .then((data: any) => {
+        const nodeUID = data.nodeUID
+        if (nodeUID === nodeId) {
+          setNodePrivate(nodeUID)
+          return nodeUID
+        } else throw new Error('Error making node private')
+      })
+      .catch((error) => {
+        mog('MakeNodePrivateError', { error })
+      })
   }
 
-  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate }
+  const isPublic = (nodeid: string) => {
+    return checkNodePublic(nodeid)
+  }
+
+  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate, isPublic }
 }

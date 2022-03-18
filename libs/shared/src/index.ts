@@ -11,6 +11,7 @@ export * from './Style/Button'
 export * from './Style/Form'
 export * from './Style/Helpers'
 export * from './Style/Normalize'
+export * from './Style/Card'
 
 export * from './Types/Editor'
 export * from './Types/Actions'

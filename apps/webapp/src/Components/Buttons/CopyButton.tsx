@@ -1,23 +1,22 @@
+import React, { useState } from 'react'
 import checkboxLine from '@iconify-icons/ri/checkbox-line'
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
-import React, { useState } from 'react'
+
 import IconButton from '../../Style/Buttons'
 
 interface CopyButtonProps {
   text: string
   size?: string
+  beforeCopyTooltip?: string
+  afterCopyTooltip?: string
 }
 
-export const CopyButton = ({ text, size }: CopyButtonProps) => {
+export const CopyButton = ({ text, size, beforeCopyTooltip, afterCopyTooltip }: CopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false)
 
   // This is the function we wrote earlier
   const copyTextToClipboard = async (text: string) => {
-    if ('clipboard' in navigator) {
-      return await navigator.clipboard.writeText(text)
-    } else {
-      return document.execCommand('copy', true, text)
-    }
+    return await navigator.clipboard.writeText(text)
   }
 
   // onClick handler function for the copy button
@@ -36,12 +35,9 @@ export const CopyButton = ({ text, size }: CopyButtonProps) => {
       })
   }
 
+  const copyText = isCopied ? afterCopyTooltip ?? 'Copied to Clipboard' : beforeCopyTooltip ?? 'Copy'
+
   return (
-    <IconButton
-      onClick={handleCopyClick}
-      icon={isCopied ? checkboxLine : fileCopyLine}
-      size={size}
-      title={isCopied ? 'Copied to Clipboard' : 'Copy'}
-    ></IconButton>
+    <IconButton onClick={handleCopyClick} icon={isCopied ? checkboxLine : fileCopyLine} size={size} title={copyText} />
   )
 }

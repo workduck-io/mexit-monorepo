@@ -2,7 +2,7 @@ import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
-import { MetadataWrapper } from '../Components/Metadata/Metadata'
+import { MetadataWrapper } from '../Components/EditorInfobar/Metadata'
 import { View } from '../Views/ViewSelector'
 import { EditorStyles } from './Editor'
 import { Input } from './Form'
