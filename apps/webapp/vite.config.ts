@@ -6,6 +6,9 @@ const sourceMap = process.env.NO_SOURCE_MAP ? false : true
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 3333
+  },
   build: {
     sourcemap: sourceMap,
     outDir: '../../dist/apps/webapp'

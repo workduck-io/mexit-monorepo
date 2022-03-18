@@ -15,7 +15,8 @@ export const ROUTE_PATHS = {
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid
   chotu: '/chotu',
-  actions: '/actions'
+  actions: '/actions',
+  oauthdesktop: '/oauth/desktop'
 }
 
 export enum NavigationType {
