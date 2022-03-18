@@ -23,7 +23,10 @@ export type TooltipState = {
   visualState: VisualState
   id?: string
   coordinates?: DOMRect
-  extra?: any
+  extra?: {
+    range: Range
+    textAfterTrigger: string
+  }
 }
 
 type SputlitContextType = {

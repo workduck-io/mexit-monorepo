@@ -4,7 +4,6 @@ import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { ComboboxItem, ComboboxRoot, Img, ItemCenterWrapper, ItemDesc, ItemTitle } from './styled'
 
-import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import fuzzysort from 'fuzzysort'
@@ -62,8 +61,6 @@ export default function Dibba() {
     } else {
       setResults(data)
     }
-
-    console.log('current query', query)
   }, [query])
 
   useEffect(() => {
@@ -82,19 +79,11 @@ export default function Dibba() {
         setActiveIndex(activeIndex > 0 ? activeIndex - 1 : activeIndex)
       } else if (event.key === 'Escape') {
         event.preventDefault()
-
         setDibbaState({ visualState: VisualState.hidden })
       } else if (['Tab', 'Enter', ' ', ']'].includes(event.key)) {
         event.preventDefault()
 
         handleClick(results[activeIndex])
-      } else {
-        // TODO: fix or add something to know when the cursor has moved past the trigger
-        if (event.key === 'Backspace') {
-          setQuery(query.slice(0, -1))
-        } else {
-          setQuery(query + event.key)
-        }
       }
     }
 
@@ -103,7 +92,9 @@ export default function Dibba() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [activeIndex, results])
 
-  useEffect(() => console.log('active index', activeIndex), [activeIndex])
+  useEffect(() => {
+    setQuery(dibbaState.extra.textAfterTrigger)
+  }, [dibbaState])
 
   return (
     <ComboboxRoot

@@ -8,6 +8,7 @@ import { CaptureConsole } from '@sentry/integrations'
 import { parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
+import { getDibbaText } from '../Utils/getDibbaText'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
 export function InternalEvents() {
@@ -27,7 +28,7 @@ const highlighter = new Highlighter()
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState, setSelection, setTooltipState, setDibbaState } = useSputlitContext()
+  const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -82,32 +83,39 @@ function dibbaToggle() {
   const { dibbaState, setDibbaState } = useSputlitContext()
 
   useEffect(() => {
-    let _buffer = ''
-    function handleInput(event: KeyboardEvent) {
-      const clearBuffer = [' ', 'Enter']
+    function handleInput() {
+      // @ts-ignore
+      console.log('is contenteditable?', document.activeElement.isContentEditable)
 
-      if (clearBuffer.includes(event.key)) {
-        _buffer = ''
-        return
-      } else {
-        _buffer += event.key
-      }
+      // @ts-ignore
+      if (document.activeElement.isContentEditable) {
+        const contentEditable = document.activeElement
 
-      if (_buffer === '[[') {
-        setDibbaState({
-          visualState: VisualState.showing,
-          coordinates: window.getSelection().getRangeAt(0).getClientRects()[0],
-          extra: { range: window.getSelection().getRangeAt(0) }
+        contentEditable.addEventListener('input', (event) => {
+          // @ts-ignore
+          const text = event.target.innerText
+          const range = window.getSelection().getRangeAt(0)
+          const textAfterTrigger = getDibbaText(range, text)
+          console.log('dibba text', textAfterTrigger)
+
+          if (textAfterTrigger) {
+            setDibbaState({
+              visualState: VisualState.showing,
+              coordinates: range.getClientRects()[0],
+              extra: textAfterTrigger
+            })
+            console.log('render', range.getClientRects()[0])
+          } else {
+            setDibbaState({ visualState: VisualState.hidden })
+          }
         })
-        _buffer = ''
       }
     }
 
-    // TODO: keydown shouldn't be used but input event cannot differentiate between backspace and enter
-    window.addEventListener('keydown', handleInput)
+    window.addEventListener('click', handleInput)
 
     return () => {
-      window.removeEventListener('keydown', handleInput)
+      window.removeEventListener('click', handleInput)
     }
   }, [dibbaState])
 }
