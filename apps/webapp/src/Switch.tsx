@@ -1,15 +1,14 @@
 import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import MainArea from './Views/MainArea'
-import { useAuthStore } from './Stores/useAuth'
+import { useAuthStore, useAuthentication } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
 import Footer from './Components/Footer'
 import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
-
 import * as Actions from './Actions'
 import ActivityView from './Views/ActivityView'
 import Snippets from './Views/Snippets'
@@ -21,9 +20,25 @@ import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
+import OAuthDesktop from './Components/OAuthDesktop'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+  const { loginViaGoogle } = useAuthentication()
+  const { hash } = useLocation()
+  let accessToken: string
+  let idToken: string
+
+  if (hash) {
+    accessToken = new URLSearchParams(hash).get('#access_token')
+    idToken = new URLSearchParams(hash).get('id_token')
+    localStorage.setItem('mex-google-access-token', accessToken.toString())
+    localStorage.setItem('mex-google-id-token', idToken.toString())
+    ;(async () => await loginViaGoogle(idToken, accessToken, true))()
+    window.close()
+    return <Navigate to="/blank?google_auth=success" />
+  }
+
   return authenticated ? children : <Navigate to="/login" />
 }
 
@@ -65,6 +80,8 @@ export const Switch = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
 
       <Route path={ROUTE_PATHS.actions}>
         <Route path="shortener" element={<Actions.AliasWrapper />} />

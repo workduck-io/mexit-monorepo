@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { LoadingButton } from '../Components/Buttons/Buttons'
+import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { InputFormError } from '../Components/Input'
 import { useAuthentication } from '../Stores/useAuth'
 import { Button } from '../Style/Buttons'
@@ -91,6 +91,9 @@ export const Login = () => {
             </LoadingButton>
           </ButtonFields>
         </AuthForm>
+        <ButtonFields>
+          <GoogleLoginButton text={'Login via Google'} />
+        </ButtonFields>
       </BackCard>
     </CenteredColumn>
   )
