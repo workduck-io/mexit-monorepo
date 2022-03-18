@@ -40,7 +40,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/blank?google_auth=success" />
   }
 
-  return authenticated ? children : <Navigate to="/login" />
+  return authenticated ? children : <Navigate to={ROUTE_PATHS.login} />
 }
 
 const AuthRoute = ({ children }) => {
