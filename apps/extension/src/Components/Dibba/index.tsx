@@ -31,8 +31,8 @@ export default function Dibba() {
   ]
 
   const insertSnippet = (item: Snippet) => {
-    dibbaState.extra.range.deleteContents()
     dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
+    dibbaState.extra.range.collapse(false)
   }
 
   const insertLink = (item: any) => {
@@ -40,17 +40,32 @@ export default function Dibba() {
     link.appendChild(document.createTextNode(item.content))
     link.href = item.content
 
-    dibbaState.extra.range.deleteContents()
     dibbaState.extra.range.insertNode(link)
+    dibbaState.extra.range.collapse(false)
   }
 
   const handleClick = (item: any) => {
+    // TODO: this fails in keep
+    try {
+      // Extendering the range by 2 + text after trigger length i.e. search query
+      let triggerRange = dibbaState.extra.range.cloneRange()
+      console.log(triggerRange.startOffset)
+      triggerRange.setStart(
+        triggerRange.startContainer,
+        triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
+      )
+      triggerRange.deleteContents()
+    } catch (error) {
+      console.log(error)
+    }
+
     if (item.icon === 'ri:quill-pen-line') {
       insertSnippet(item as Snippet)
     } else {
       // TODO: transform again to type linkCapture
       insertLink(item)
     }
+
     setDibbaState({ visualState: VisualState.hidden })
   }
 
@@ -69,6 +84,7 @@ export default function Dibba() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      console.log(event.key)
       if (event.key === 'ArrowDown') {
         event.preventDefault()
 
@@ -82,14 +98,17 @@ export default function Dibba() {
         setDibbaState({ visualState: VisualState.hidden })
       } else if (['Tab', 'Enter', ' ', ']'].includes(event.key)) {
         event.preventDefault()
+        console.log('enter daba le raha')
 
         handleClick(results[activeIndex])
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
+    document.activeElement.addEventListener('keydown', handleKeyDown)
 
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      document.activeElement.removeEventListener('keydown', handleKeyDown)
+    }
   }, [activeIndex, results])
 
   useEffect(() => {

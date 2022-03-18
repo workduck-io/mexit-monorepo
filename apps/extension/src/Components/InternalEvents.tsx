@@ -96,7 +96,6 @@ function dibbaToggle() {
           const text = event.target.innerText
           const range = window.getSelection().getRangeAt(0)
           const textAfterTrigger = getDibbaText(range, text)
-          console.log('dibba text', textAfterTrigger)
 
           if (textAfterTrigger) {
             setDibbaState({
@@ -104,7 +103,6 @@ function dibbaToggle() {
               coordinates: range.getClientRects()[0],
               extra: textAfterTrigger
             })
-            console.log('render', range.getClientRects()[0])
           } else {
             setDibbaState({ visualState: VisualState.hidden })
           }
