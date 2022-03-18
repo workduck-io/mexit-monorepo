@@ -138,11 +138,19 @@ const SnippetRoutes = () => {
   )
 }
 
-const EditorRoutes = () => {
+export const Switch = () => {
   return (
     <Routes>
+      <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
+      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
+      <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
+      <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
+      <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
+      <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
+      <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
+
       <Route
-        path=""
+        path={ROUTE_PATHS.home}
         element={
           <ProtectedRoute>
             <MainArea />
@@ -153,21 +161,6 @@ const EditorRoutes = () => {
         <Route path={`${ROUTE_PATHS.home}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
       </Route>
-    </Routes>
-  )
-}
-
-export const Switch = () => {
-  return (
-    <Routes>
-      <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
-      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
-      <Route path={`${ROUTE_PATHS.home}/*`} element={<EditorRoutes />} />
-      <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
-      <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
-      <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
-      <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
-      <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
     </Routes>
   )
 }
