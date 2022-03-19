@@ -7,12 +7,21 @@ import { BackCard } from '../../Style/Card'
 import { CenteredColumn } from '../../Style/Layouts'
 import { Title } from '../../Style/Typography'
 import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '../../Style/UserPage'
+import { Button } from '../../Style/Buttons'
+import { useApi } from '../../Hooks/useApi'
 
 const UserPage = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const userDetails = useAuthStore((store) => store.userDetails)
 
+  const { getGoogleAuthUrl } = useApi()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const handleGoogleAuthUrl = async () => {
+    const googleAuthUrl = await getGoogleAuthUrl()
+    window.open(googleAuthUrl, '_blank', 'width=1000,height=1000')
+    // TODO: fetch the google refresh token from the auth service and set in the local auth store
+  }
 
   return (
     <CenteredColumn>
@@ -34,6 +43,7 @@ const UserPage = () => {
                 {getWorkspaceId()}
               </InfoData>
             </Info>
+            <Button onClick={handleGoogleAuthUrl}>Authorize Google Calendar</Button>
           </div>
         </ProfileContainer>
       </BackCard>

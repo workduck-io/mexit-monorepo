@@ -20,7 +20,7 @@ import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
-import OAuthDesktop from './Components/OAuthDesktop'
+import OAuthDesktop from './Components/OAuth2/OAuthDesktop'
 import Navbar from './Components/Navbar'
 
 const ProtectedRoute = ({ children }) => {

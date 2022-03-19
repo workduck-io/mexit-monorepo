@@ -18,7 +18,8 @@ export const ROUTE_PATHS = {
   chotu: '/chotu',
   actions: '/actions',
   oauthdesktop: '/oauth/desktop',
-  share: '/share'
+  share: '/share',
+  oauth2Google: '/oauth2/google'
 }
 
 export enum NavigationType {

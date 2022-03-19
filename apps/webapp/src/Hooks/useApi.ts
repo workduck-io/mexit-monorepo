@@ -164,5 +164,12 @@ export const useApi = () => {
     return checkNodePublic(nodeid)
   }
 
-  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate, isPublic }
+  const getGoogleAuthUrl = async () => {
+    return await client
+      .get<any>(apiURLs.getGoogleAuthUrl(), {})
+      .then((resp) => resp.data)
+      .catch((error) => console.error(error))
+  }
+
+  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate, getGoogleAuthUrl }
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuthentication } from '../Stores/useAuth'
-import { BackCard } from '../Style/Card'
-import { CenteredColumn } from '../Style/Layouts'
-import { Title } from '../Style/Typography'
+import { useAuthentication } from '../../Stores/useAuth'
+import { BackCard } from '../../Style/Card'
+import { CenteredColumn } from '../../Style/Layouts'
+import { Title } from '../../Style/Typography'
 
 export default function OAuthDesktop() {
   const hash = window.location.hash

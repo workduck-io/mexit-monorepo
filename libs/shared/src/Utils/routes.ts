@@ -24,7 +24,7 @@ export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5000/api/v1'
+  ? 'http://localhost:5002/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
 
 export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
@@ -78,5 +78,6 @@ export const apiURLs = {
   makeNodePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
   makeNodePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,
-  getNodePublicURL: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`
+  getNodePublicURL: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
+  getGoogleAuthUrl: () => `${MEXIT_BACKEND_URL_BASE}/oauth2/getGoogleAuthUrl`
 }
