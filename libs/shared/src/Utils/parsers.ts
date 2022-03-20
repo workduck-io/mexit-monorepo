@@ -10,7 +10,7 @@ export const parseBlock = (content: any[], join?: string): string => {
       text.push(childText)
     }
   })
-  return text.join(join ?? '')
+  return text.join(join ?? ' ')
 }
 
 export const parseNode = (node: any, title: string): GenericSearchData[] => {
@@ -32,7 +32,7 @@ export const parseSnippet = (snippet: Snippet): GenericSearchData => {
   const snip: GenericSearchData = {
     id: snippet.id,
     title: snippet.title,
-    text: parseBlock(snippet.content)
+    text: parseBlock(snippet.content, ' ')
   }
   return snip
 }
