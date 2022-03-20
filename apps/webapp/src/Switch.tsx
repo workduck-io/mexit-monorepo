@@ -86,7 +86,7 @@ const ActionsRoutes = () => {
         }
       />
 
-      <Route path={ROUTE_PATHS.actions}>
+      <Route path="">
         <Route path="shortener" element={<Actions.AliasWrapper />} />
         <Route path="color-picker" element={<Actions.ColourPicker />} />
         <Route path="corpbs" element={<Actions.CorporateBS />} />
