@@ -5,7 +5,7 @@ import { mog } from '@mexit/shared'
 
 import { getAllParentIds, isElder } from '../Utils/treeUtils'
 import useDataStore from '../Stores/useDataStore'
-import { GenericSearchResult } from '../Types/Search'
+import { GenericSearchResult } from '@mexit/shared'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
 // import create from 'zustand'

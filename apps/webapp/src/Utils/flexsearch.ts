@@ -1,9 +1,9 @@
 import { Document } from 'flexsearch'
 
-import { Snippet } from '@mexit/shared'
+import { parseNode, parseSnippet, Snippet } from '@mexit/shared'
 
 import { indexNames } from '../Data/constants'
-import { GenericSearchData, SearchIndex } from '../Types/Search'
+import { GenericSearchData, SearchIndex } from '@mexit/shared'
 import { ILink } from '../Types/Data'
 
 export const flexIndexKeys = [
@@ -17,42 +17,6 @@ export const flexIndexKeys = [
   'store',
   'tag'
 ]
-
-export const parseBlock = (content: any[], join?: string): string => {
-  const text: string[] = []
-  content.forEach((n) => {
-    if (n.text && n.text !== '') text.push(n.text)
-    if (n.children && n.children.length > 0) {
-      const childText = parseBlock(n.children)
-      text.push(childText)
-    }
-  })
-  return text.join(join ?? '')
-}
-
-export const parseNode = (node: any, title: string): GenericSearchData[] => {
-  const nodeUID = node.id
-  const result: GenericSearchData[] = []
-
-  node.content.forEach((block) => {
-    const blockText = parseBlock(block.children)
-    if (blockText.length !== 0) {
-      const temp: GenericSearchData = { id: block.id, text: blockText, nodeUID: nodeUID, title: title }
-      result.push(temp)
-    }
-  })
-
-  return result
-}
-
-export const parseSnippet = (snippet: Snippet): GenericSearchData => {
-  const snip: GenericSearchData = {
-    id: snippet.id,
-    title: snippet.title,
-    text: parseBlock(snippet.content)
-  }
-  return snip
-}
 
 export const createSearchIndex = (ilinks, initData: Record<indexNames, any[]>): SearchIndex => {
   const initList: Record<indexNames, any> = convertDataToIndexable(ilinks, initData)

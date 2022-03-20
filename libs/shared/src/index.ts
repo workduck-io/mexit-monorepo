@@ -19,6 +19,7 @@ export * from './Types/Auth'
 export * from './Types/Shortner'
 export * from './Types/Theme'
 export * from './Types/Snippet'
+export * from './Types/Search'
 
 export * from './Utils/helpers'
 export * from './Utils/tabInfo'
@@ -28,6 +29,7 @@ export * from './Utils/routes'
 export * from './Utils/lodashUtils'
 export * from './Utils/Logo'
 export * from './Utils/mog'
+export * from './Utils/parsers'
 
 export * from './Themes'
 
