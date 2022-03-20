@@ -17,7 +17,8 @@ export const ComboboxRoot = styled.ul<{
       margin: 0;
       z-index: 9999999;
       background: ${theme.colors.background.modal};
-      width: 300px;
+      width: 225px;
+      overflow: hidden;
       border-radius: 8px;
       box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
 
