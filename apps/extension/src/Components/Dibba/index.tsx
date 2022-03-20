@@ -33,6 +33,9 @@ export default function Dibba() {
   const insertSnippet = (item: Snippet) => {
     dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
     dibbaState.extra.range.collapse(false)
+
+    // Combining the inserted text node into one
+    document.activeElement.normalize()
   }
 
   const insertLink = (item: any) => {
@@ -42,6 +45,9 @@ export default function Dibba() {
 
     dibbaState.extra.range.insertNode(link)
     dibbaState.extra.range.collapse(false)
+
+    // Combining the inserted text node into one
+    document.activeElement.normalize()
   }
 
   const handleClick = (item: any) => {
@@ -98,7 +104,6 @@ export default function Dibba() {
         setDibbaState({ visualState: VisualState.hidden })
       } else if (['Tab', 'Enter', ' ', ']'].includes(event.key)) {
         event.preventDefault()
-        console.log('enter daba le raha')
 
         handleClick(results[activeIndex])
       }

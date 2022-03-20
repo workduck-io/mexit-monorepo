@@ -83,37 +83,29 @@ function dibbaToggle() {
   const { dibbaState, setDibbaState } = useSputlitContext()
 
   useEffect(() => {
-    function handleInput() {
-      // @ts-ignore
-      console.log('is contenteditable?', document.activeElement.isContentEditable)
-
+    function handleRender() {
       // @ts-ignore
       if (document.activeElement.isContentEditable) {
-        const contentEditable = document.activeElement
+        const text = window.getSelection().anchorNode.textContent
+        const range = window.getSelection().getRangeAt(0)
+        const textAfterTrigger = getDibbaText(range, text)
 
-        contentEditable.addEventListener('input', (event) => {
-          // @ts-ignore
-          const text = event.target.innerText
-          const range = window.getSelection().getRangeAt(0)
-          const textAfterTrigger = getDibbaText(range, text)
-
-          if (textAfterTrigger) {
-            setDibbaState({
-              visualState: VisualState.showing,
-              coordinates: range.getClientRects()[0],
-              extra: textAfterTrigger
-            })
-          } else {
-            setDibbaState({ visualState: VisualState.hidden })
-          }
-        })
+        if (textAfterTrigger) {
+          setDibbaState({
+            visualState: VisualState.showing,
+            coordinates: range.getClientRects()[0],
+            extra: textAfterTrigger
+          })
+        } else {
+          setDibbaState({ visualState: VisualState.hidden })
+        }
       }
     }
 
-    window.addEventListener('click', handleInput)
+    document.addEventListener('selectionchange', handleRender)
 
     return () => {
-      window.removeEventListener('click', handleInput)
+      document.removeEventListener('selectionchange', handleRender)
     }
   }, [dibbaState])
 }
