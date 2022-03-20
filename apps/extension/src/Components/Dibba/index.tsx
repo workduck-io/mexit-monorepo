@@ -7,6 +7,23 @@ import { ComboboxItem, ComboboxRoot, Img, ItemCenterWrapper, ItemDesc, ItemTitle
 import { Icon } from '@iconify/react'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import fuzzysort from 'fuzzysort'
+import { getDibbaText } from '../../Utils/getDibbaText'
+
+// This functions provides the 'to be' range and text content
+// Needed because keydown event happens before there is a selection or content change
+function getUpcomingData(selection: Selection) {
+  const ogRange = selection.getRangeAt(0)
+
+  // Shifitng both start and end offset to simulate backwards caret movement
+  const range = ogRange.cloneRange()
+  range.setStart(ogRange.startContainer, ogRange.startOffset - 1)
+  range.setEnd(ogRange.endContainer, ogRange.endOffset - 1)
+
+  // delete last character of current content
+  const text = selection.anchorNode.textContent.slice(0, -1)
+
+  return { range, text }
+}
 
 // TODO: whether or not to enable dibba should be a user's preference
 // we don't users to move away because they have doubts of us forcing a 'keylogger' on them
@@ -60,7 +77,6 @@ export default function Dibba() {
     try {
       // Extendering the range by 2 + text after trigger length i.e. search query
       let triggerRange = dibbaState.extra.range.cloneRange()
-      console.log(triggerRange.startOffset)
       triggerRange.setStart(
         triggerRange.startContainer,
         triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
@@ -95,7 +111,6 @@ export default function Dibba() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      console.log(event.key)
       if (event.key === 'ArrowDown') {
         event.preventDefault()
 
@@ -111,6 +126,24 @@ export default function Dibba() {
         event.preventDefault()
 
         handleClick(results[activeIndex])
+      }
+      // TODO: should only listen for this on chromium browsers
+      // because of the active bug of selectionchange not triggering on backspace
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=725890
+      else if (event.key === 'Backspace') {
+        const selection = window.getSelection()
+        const { range, text } = getUpcomingData(selection)
+        const textAfterTrigger = getDibbaText(range, text)
+
+        if (textAfterTrigger) {
+          setDibbaState({
+            visualState: VisualState.showing,
+            coordinates: range.getClientRects()[0],
+            extra: textAfterTrigger
+          })
+        } else {
+          setDibbaState({ visualState: VisualState.hidden })
+        }
       }
     }
 
