@@ -8,7 +8,7 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { SlashCommandConfig } from '@workduck-io/mex-editor'
 
 import useSearchStore from './useSearchStore'
-import { parseSnippet } from '../Utils/flexsearch'
+import { parseSnippet } from '@mexit/shared'
 
 export const useSnippets = () => {
   const addSnippetStore = useSnippetStore((state) => state.addSnippet)

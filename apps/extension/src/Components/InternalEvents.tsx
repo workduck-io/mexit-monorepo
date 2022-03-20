@@ -8,12 +8,14 @@ import { CaptureConsole } from '@sentry/integrations'
 import { parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
+import { getDibbaText } from '../Utils/getDibbaText'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
 export function InternalEvents() {
   useToggleHandler()
   initAnalytics()
   handleHighlighter()
+  dibbaToggle()
   // useDocumentLock()
   // useShortcuts()
   // useFocusHandler()
@@ -74,6 +76,37 @@ function useToggleHandler() {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [visualState])
+}
+
+function dibbaToggle() {
+  const { dibbaState, setDibbaState } = useSputlitContext()
+
+  useEffect(() => {
+    function handleRender() {
+      // @ts-ignore
+      if (document.activeElement.isContentEditable) {
+        const text = window.getSelection().anchorNode.textContent
+        const range = window.getSelection().getRangeAt(0)
+        const textAfterTrigger = getDibbaText(range, text)
+
+        if (textAfterTrigger) {
+          setDibbaState({
+            visualState: VisualState.showing,
+            coordinates: range.getClientRects()[0],
+            extra: textAfterTrigger
+          })
+        } else {
+          setDibbaState({ visualState: VisualState.hidden })
+        }
+      }
+    }
+
+    document.addEventListener('selectionchange', handleRender)
+
+    return () => {
+      document.removeEventListener('selectionchange', handleRender)
+    }
+  }, [dibbaState])
 }
 
 function initAnalytics() {

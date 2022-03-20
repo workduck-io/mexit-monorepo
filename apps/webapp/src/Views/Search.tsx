@@ -2,7 +2,7 @@ import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import React from 'react'
 
-import { mog } from '@mexit/shared'
+import { mog, parseBlock } from '@mexit/shared'
 
 import { defaultContent } from '../Stores/useEditorStore'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
@@ -14,7 +14,7 @@ import useDataStore from '../Stores/useDataStore'
 import useEditorStore, { getInitialNode } from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import useSearchStore from '../Hooks/useSearchStore'
-import { GenericSearchResult } from '../Types/Search'
+import { GenericSearchResult } from '../../../../libs/shared/src/Types/Search'
 import { MainHeader } from '../Style/Layouts'
 import {
   Result,
@@ -30,7 +30,6 @@ import {
 } from '../Style/Search'
 import { Title } from '../Style/Typography'
 import { SplitType } from './SplitView'
-import { parseBlock } from '../Utils/flexsearch'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import Backlinks from '../Components/Editor/Backlinks'
 import Metadata from '../Components/EditorInfobar/Metadata'
