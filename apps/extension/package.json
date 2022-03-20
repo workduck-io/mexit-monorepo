@@ -7,7 +7,7 @@
     "@sentry/integrations": "^6.17.2",
     "@sentry/react": "^6.17.2",
     "@vespaiach/axios-fetch-adapter": "^0.1.1",
-    "@workduck-io/dwindle": "^0.0.9",
+    "@workduck-io/dwindle": "^0.0.11",
     "@workduck-io/mex-editor": "^0.1.0",
     "chrome-extension-async": "^3.4.1",
     "core-js": "^3.21.1",

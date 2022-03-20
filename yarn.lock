@@ -3630,16 +3630,17 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@workduck-io/dwindle@^0.0.9":
-  version "0.0.9"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.9/a8896c92d94c2b0a0b0c107b3491ed6b1d430d17b5b11c3385b02b9800d78e39#aa3c562e92ab1358151df36373d01d2d28375ca4"
-  integrity sha512-sClvis6Nvl7241mh5CHEvO+aZ9O7Z5RHKXLXRM3jGNKEPcydCFVZ6R/AQELNgVUJI+c3KFsJ3Lx0GmwzSovj7w==
+"@workduck-io/dwindle@^0.0.11":
+  version "0.0.11"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.11/1dbbd6ee88d11e75e058499d7209e411edef924547e6bd147122cad0bd3082c6#62a55339c982f558b4d7c8aac0330a154854b4dd"
+  integrity sha512-LrTi5gjQ/ftb7dBVkdkrPaQW2h0PwVRx0ry9zh0SMiL/3tSp4swn7bpJ1H7UqQ3vx3pQW5/0KTL/G2NIDgATpw==
   dependencies:
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
     axios "^0.23.0"
     cross-fetch "^3.1.4"
     jsonwebtoken "^8.5.1"
+    jwt-decode "^3.1.2"
 
 "@workduck-io/mex-editor@^0.1.0":
   version "0.1.0"
@@ -8106,6 +8107,11 @@ jws@^3.2.2:
   dependencies:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
+
+jwt-decode@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
+  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
 
 kind-of@^6.0.2:
   version "6.0.3"
