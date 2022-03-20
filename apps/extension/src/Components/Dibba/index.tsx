@@ -1,5 +1,5 @@
 import { LinkCapture, parseSnippet, Snippet } from '@mexit/shared'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { ComboboxItem, ComboboxRoot, Img, ItemCenterWrapper, ItemDesc, ItemTitle } from './styled'
@@ -15,6 +15,11 @@ export default function Dibba() {
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [results, setResults] = useState([])
+  const dibbaRef = useRef(null)
+
+  const top = window.scrollY + dibbaState.coordinates.top
+  const left = window.scrollX + dibbaState.coordinates.left
+  const [offsetTop, setOffsetTop] = useState(window.innerHeight < top + dibbaRef.current?.clientHeight)
 
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const snippets = useSnippets().getSnippets()
@@ -120,13 +125,20 @@ export default function Dibba() {
 
   useEffect(() => {
     setQuery(dibbaState.extra.textAfterTrigger)
-  }, [dibbaState])
+  }, [dibbaState.extra])
+
+  useEffect(() => {
+    setOffsetTop(window.innerHeight < top + dibbaRef.current.clientHeight)
+  })
 
   return (
     <ComboboxRoot
-      top={window.scrollY + dibbaState.coordinates.top}
-      left={window.scrollX + dibbaState.coordinates.left}
-      isOpen={dibbaState.visualState === VisualState.hidden ? false : true}
+      ref={dibbaRef}
+      top={top}
+      left={left}
+      offsetTop={offsetTop}
+      offsetRight={window.innerWidth < left + 300}
+      isOpen={dibbaState.visualState === VisualState.showing}
     >
       {results.map((item, index) => {
         return (

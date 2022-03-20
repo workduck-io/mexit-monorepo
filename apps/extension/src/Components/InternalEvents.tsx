@@ -59,7 +59,6 @@ function useToggleHandler() {
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      // console.log('keydown event', event.key)
       if (event.key === 'Escape') {
         setVisualState(VisualState.hidden)
         setTooltipState({ visualState: VisualState.hidden })

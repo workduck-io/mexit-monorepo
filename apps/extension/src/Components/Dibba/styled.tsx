@@ -1,7 +1,13 @@
 import styled, { css } from 'styled-components'
 
-export const ComboboxRoot = styled.ul<{ isOpen: boolean; top: number; left: number }>`
-  ${({ isOpen, theme, top, left }) =>
+export const ComboboxRoot = styled.ul<{
+  isOpen: boolean
+  top: number
+  left: number
+  offsetTop: boolean
+  offsetRight: boolean
+}>`
+  ${({ isOpen, theme, top, left, offsetTop, offsetRight }) =>
     isOpen &&
     css`
       top: calc(${top}px + 1rem);
@@ -14,6 +20,8 @@ export const ComboboxRoot = styled.ul<{ isOpen: boolean; top: number; left: numb
       width: 300px;
       border-radius: 8px;
       box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
+
+      transform: ${offsetTop ? css`translateY(calc(-100% - 1rem))` : ''} ${offsetRight ? css`translateX(-100%)` : ''};
     `}
 `
 
