@@ -40,7 +40,7 @@ export default function Dibba() {
 
   const insertLink = (item: any) => {
     const link = document.createElement('a')
-    link.appendChild(document.createTextNode(item.content))
+    link.appendChild(document.createTextNode(item.title))
     link.href = item.content
 
     dibbaState.extra.range.insertNode(link)
@@ -109,10 +109,12 @@ export default function Dibba() {
       }
     }
 
-    document.activeElement.addEventListener('keydown', handleKeyDown)
+    const contentEditable = document.activeElement
+
+    contentEditable.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.activeElement.removeEventListener('keydown', handleKeyDown)
+      contentEditable.removeEventListener('keydown', handleKeyDown)
     }
   }, [activeIndex, results])
 
