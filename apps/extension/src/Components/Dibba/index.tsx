@@ -1,12 +1,12 @@
 import { LinkCapture, parseSnippet, Snippet } from '@mexit/shared'
 import React, { useEffect, useRef, useState } from 'react'
+import { Icon } from '@iconify/react'
+import fuzzysort from 'fuzzysort'
+
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { ComboboxItem, ComboboxRoot, Img, ItemCenterWrapper, ItemDesc, ItemTitle } from './styled'
-
-import { Icon } from '@iconify/react'
 import { useShortenerStore } from '../../Hooks/useShortener'
-import fuzzysort from 'fuzzysort'
 import { getDibbaText } from '../../Utils/getDibbaText'
 
 // This functions provides the 'to be' range and text content
@@ -88,7 +88,7 @@ export default function Dibba() {
 
     if (item.icon === 'ri:quill-pen-line') {
       insertSnippet(item as Snippet)
-    } else {
+    } else if (item.icon === 'ri:link') {
       // TODO: transform again to type linkCapture
       insertLink(item)
     }
@@ -98,7 +98,17 @@ export default function Dibba() {
 
   useEffect(() => {
     if (query !== '') {
-      const res = fuzzysort.go(query, data, { key: 'title' }).map((item) => item.obj)
+      const res = fuzzysort.go(query, data, { key: 'title', allowTypo: true }).map((item) => item.obj)
+
+      if (res.length === 0) {
+        res.push({
+          id: 'no-results',
+          title: 'No Results Found',
+          icon: 'ri:alert-line',
+          content: ''
+        })
+      }
+
       setResults(res)
     } else {
       setResults(data)
@@ -170,7 +180,7 @@ export default function Dibba() {
       top={top}
       left={left}
       offsetTop={offsetTop}
-      offsetRight={window.innerWidth < left + 300}
+      offsetRight={window.innerWidth < left + 225}
       isOpen={dibbaState.visualState === VisualState.showing}
     >
       {results.map((item, index) => {
