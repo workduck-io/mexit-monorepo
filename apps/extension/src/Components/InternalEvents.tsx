@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
@@ -9,6 +10,7 @@ import { parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getDibbaText } from '../Utils/getDibbaText'
+import LinkedInBadge from './LinkedInBadge'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
 export function InternalEvents() {
@@ -16,6 +18,7 @@ export function InternalEvents() {
   initAnalytics()
   handleHighlighter()
   dibbaToggle()
+  badgeRenderer()
   // useDocumentLock()
   // useShortcuts()
   // useFocusHandler()
@@ -144,4 +147,25 @@ function handleHighlighter() {
 
     return () => highlighter.dispose()
   }, [window.location.href])
+}
+
+function badgeRenderer() {
+  // useEffect(() => {
+  //   if (window.location.host === 'www.linkedin.com') {
+  //     // Here send the link to an endpoint to check if a user exists
+
+  //   }
+  // }, [])
+
+  useEffect(() => {
+    const header = document.getElementsByClassName('pv-top-card__badge-wrap')[0]
+    if (header && !document.getElementById('badge-root')) {
+      const badgeRoot = document.createElement('div')
+      badgeRoot.id = 'badge-root'
+
+      header.prepend(badgeRoot)
+
+      ReactDOM.render(<LinkedInBadge />, document.getElementById('badge-root'))
+    }
+  }, [])
 }
