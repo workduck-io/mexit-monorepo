@@ -150,14 +150,7 @@ function handleHighlighter() {
 }
 
 function badgeRenderer() {
-  // useEffect(() => {
-  //   if (window.location.host === 'www.linkedin.com') {
-  //     // Here send the link to an endpoint to check if a user exists
-
-  //   }
-  // }, [])
-
-  useEffect(() => {
+  function renderBadge() {
     const header = document.getElementsByClassName('pv-top-card__badge-wrap')[0]
     if (header && !document.getElementById('badge-root')) {
       const badgeRoot = document.createElement('div')
@@ -166,6 +159,30 @@ function badgeRenderer() {
       header.prepend(badgeRoot)
 
       ReactDOM.render(<LinkedInBadge />, document.getElementById('badge-root'))
+    }
+  }
+
+  useEffect(() => {
+    // Only custom choosen urls have /in/
+    // check comment on this answer https://stackoverflow.com/a/8450549/13011527
+    if (window.location.host === 'www.linked.com') {
+      chrome.runtime.sendMessage(
+        {
+          type: 'ASYNC_ACTION_HANDLER',
+          subType: 'MEX_USER',
+          data: {
+            username: ''
+          }
+        },
+        (response) => {
+          const { message, error } = response
+
+          // TODO: check message here
+          if (message === '') {
+            renderBadge()
+          }
+        }
+      )
     }
   }, [])
 }

@@ -126,5 +126,17 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
+
+    // TODO: complete this
+    case 'MEX_USER': {
+      return client
+        .get(``)
+        .then((response: any) => {
+          return { message: response, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
   }
 }
