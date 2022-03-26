@@ -126,5 +126,18 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
+
+    // TODO: complete this
+    case 'MEX_USER': {
+      const URL = apiURLs.getUserByLinkedin
+
+      return client.post(URL, data.body)
+        .then((response: any) => {
+          return { message: response, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
   }
 }

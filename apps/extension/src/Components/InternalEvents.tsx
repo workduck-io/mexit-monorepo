@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
@@ -9,6 +10,7 @@ import { parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getDibbaText } from '../Utils/getDibbaText'
+import LinkedInBadge from './LinkedInBadge'
 // import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
 export function InternalEvents() {
@@ -16,6 +18,7 @@ export function InternalEvents() {
   initAnalytics()
   handleHighlighter()
   dibbaToggle()
+  badgeRenderer()
   // useDocumentLock()
   // useShortcuts()
   // useFocusHandler()
@@ -144,4 +147,51 @@ function handleHighlighter() {
 
     return () => highlighter.dispose()
   }, [window.location.href])
+}
+
+function badgeRenderer() {
+  function renderBadge() {
+    const header = document.getElementsByClassName('pv-top-card__badge-wrap')[0]
+    if (header && !document.getElementById('badge-root')) {
+      const badgeRoot = document.createElement('div')
+      badgeRoot.id = 'badge-root'
+
+      header.prepend(badgeRoot)
+
+      ReactDOM.render(<LinkedInBadge />, document.getElementById('badge-root'))
+    }
+  }
+
+  useEffect(() => {
+    // Only custom choosen urls have /in/
+    // check comment on this answer https://stackoverflow.com/a/8450549/13011527
+    const url = window.location.href
+    const LINKEDIN_REGEX = /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/
+
+    if (url.match(LINKEDIN_REGEX)) {
+      chrome.runtime.sendMessage(
+        {
+          type: 'ASYNC_ACTION_HANDLER',
+          subType: 'MEX_USER',
+          data: {
+            body: {
+              linkedinURL: url
+            }
+          }
+        },
+        (response) => {
+          const { message, error } = response
+
+          if (message && message.data.mex_user) {
+            console.log('Showing Linkedin Badge', message)
+            renderBadge()
+          }
+
+          // TODO: check message here
+          // if (message === '') {
+          // }
+        }
+      )
+    }
+  }, [])
 }
