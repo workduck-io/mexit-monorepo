@@ -165,22 +165,31 @@ function badgeRenderer() {
   useEffect(() => {
     // Only custom choosen urls have /in/
     // check comment on this answer https://stackoverflow.com/a/8450549/13011527
-    if (window.location.host === 'www.linked.com') {
+    const url = window.location.href
+    const LINKEDIN_REGEX = /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/
+
+    if (url.match(LINKEDIN_REGEX)) {
       chrome.runtime.sendMessage(
         {
           type: 'ASYNC_ACTION_HANDLER',
           subType: 'MEX_USER',
           data: {
-            username: ''
+            body: {
+              linkedinURL: url
+            }
           }
         },
         (response) => {
           const { message, error } = response
 
-          // TODO: check message here
-          if (message === '') {
+          if (message && message.data.mex_user) {
+            console.log('Showing Linkedin Badge', message)
             renderBadge()
           }
+
+          // TODO: check message here
+          // if (message === '') {
+          // }
         }
       )
     }

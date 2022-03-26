@@ -129,8 +129,9 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
 
     // TODO: complete this
     case 'MEX_USER': {
-      return client
-        .get(``)
+      const URL = apiURLs.getUserByLinkedin
+
+      return client.post(URL, data.body)
         .then((response: any) => {
           return { message: response, error: null }
         })
