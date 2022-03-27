@@ -21,7 +21,6 @@ export const QuerySearch = styled.div`
 
 export const StyledInput = styled.input<{ disabled?: boolean }>`
   ${StyledBackground}
-  font-size: 1rem;
   border-radius: 10px;
   padding: 0.75rem;
 
@@ -41,11 +40,12 @@ export const StyledInput = styled.input<{ disabled?: boolean }>`
   }
 `
 
-export const StyledSearch = styled.section`
+export const StyledSearch = styled.div`
   ${Draggable}
   ${StyledBackground}
   padding: 5px;
   display: flex;
+  font-size: 1rem;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
@@ -64,7 +64,12 @@ export const CenterIcon = styled(Center)<{ cursor?: boolean }>`
     css`
       cursor: pointer;
     `}
-  height: 100%;
+
   color: #888;
   padding-left: 8px;
+
+  svg {
+    height: 33px;
+    aspect-ratio: 1/1;
+  }
 `

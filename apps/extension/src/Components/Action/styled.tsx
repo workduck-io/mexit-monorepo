@@ -37,21 +37,21 @@ export const Icon = styled.div`
   }
 `
 
-export const Desc = styled.div`
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
 
-  h3 {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0;
-  }
+export const Title = styled.div`
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0;
+`
 
-  p {
-    font-size: 0.85rem;
-    margin: 0.25rem 0 0.5rem 0;
-  }
+export const Description = styled.div`
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.5rem 0;
 `
 
 export const Shortcut = styled.div`
@@ -60,7 +60,8 @@ export const Shortcut = styled.div`
   margin: 0.5rem;
 `
 
-export const Key = styled.span`
+export const Key = styled.div`
+  display: inline-block;
   background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   margin: 0.25rem;
