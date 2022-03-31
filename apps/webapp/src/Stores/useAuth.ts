@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 import { apiURLs, AuthStoreState, UserCred } from '@mexit/shared'
 import { RegisterFormData } from '@mexit/shared'
 import { authStoreConstructor } from '@mexit/shared'
+import { mog } from '@workduck-io/mex-editor'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -52,17 +53,19 @@ export const useAuthentication = () => {
     return { data, v }
   }
 
-  const loginViaGoogle = async (idToken: string, accessToken: string, getWorkspace = false) => {
+  const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
-      const result: any = await googleSignIn(idToken, accessToken)
+      const { userCred: result }: any = await googleSignIn(code, clientId, redirectURI)
 
       if (getWorkspace && result !== undefined) {
         await client
           .get(apiURLs.getUserRecords(result.userId))
           .then((d: any) => {
+            console.log(d)
             const userDetails = { email: result.email, userId: result.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
+            console.log('userDetails', { userDetails })
             setAuthenticated(userDetails, workspaceDetails)
           })
           .catch(async (e) => {
@@ -72,7 +75,7 @@ export const useAuthentication = () => {
               email: result.email,
               userId: result.userId,
               expiry: result.exp,
-              token: accessToken,
+              token: result.token,
               url: result.iss
             }
             const newWorkspaceName = `WD_${nanoid()}`
@@ -95,6 +98,7 @@ export const useAuthentication = () => {
               .catch(console.error)
           })
       }
+      return result
     } catch (error) {
       console.log(error)
     }

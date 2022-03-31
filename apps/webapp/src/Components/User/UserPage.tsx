@@ -14,6 +14,8 @@ const UserPage = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+  console.log({ userDetails })
+
   return (
     <CenteredColumn>
       <BackCard>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import MainArea from './Views/MainArea'
@@ -22,29 +22,119 @@ import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
 import Navbar from './Components/Navbar'
+import config from './config'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import jwtDecode from 'jwt-decode'
+import toast from 'react-hot-toast'
+import Loading from './Style/Loading'
+import { useTheme } from 'styled-components'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  const { loginViaGoogle } = useAuthentication()
-  const { hash } = useLocation()
-  let accessToken: string
-  let idToken: string
 
-  if (hash) {
-    accessToken = new URLSearchParams(hash).get('#access_token')
-    idToken = new URLSearchParams(hash).get('id_token')
-    localStorage.setItem('mex-google-access-token', accessToken.toString())
-    localStorage.setItem('mex-google-id-token', idToken.toString())
-    ;(async () => await loginViaGoogle(idToken, accessToken, true))()
-    window.close()
-    return <Navigate to="/blank?google_auth=success" />
-  }
+  // if (code) {
+  //   console.log({ code })
+
+  //   let tripletTokens: any
+  //   ;(async () => {
+  //     tripletTokens = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
+
+  //     if (tripletTokens) {
+  //       console.log('hit')
+
+  //       const decodedIdToken: any = jwtDecode(tripletTokens.id_token)
+
+  //       localStorage.setItem(
+  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.idToken`,
+  //         tripletTokens.id_token.toString()
+  //       )
+  //       localStorage.setItem(
+  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.accessToken`,
+  //         tripletTokens.access_token.toString()
+  //       )
+  //       localStorage.setItem(
+  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.refreshToken`,
+  //         tripletTokens.refresh_token.toString()
+  //       )
+  //     }
+  //     // window.close()
+  //     return <Navigate to="/blank?google_auth=success" />
+  //   })()
+
+  // return <Navigate to="/blank?google_auth=success" />
+  // }
+
+  console.log('AUTHENTICATED: ', authenticated)
 
   return authenticated ? children : <Navigate to={ROUTE_PATHS.login} />
 }
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const theme = useTheme()
+  const { loginViaGoogle } = useAuthentication()
+
+  console.log('auth', { authenticated, isLoading })
+  const code = new URLSearchParams(window.location.search).get('code')
+
+  useEffect(() => {
+    const setAsyncLocal = async () => {
+      setIsLoading(true)
+      console.log('caaling')
+      const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
+      return res
+    }
+
+    console.log('code', { code })
+
+    if (code) {
+      setAsyncLocal()
+        .then(({ tokens }) => {
+          if (tokens) {
+            console.log({ tokens })
+            const decodedIdToken: any = jwtDecode(tokens.id_token)
+            console.log('b')
+
+            const localConfig = {
+              idToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.idToken`,
+              accessToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.accessToken`,
+              refreshToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.refreshToken`,
+              clockDrift: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.clockDrift`
+            }
+
+            localStorage.setItem(localConfig.idToken, tokens.id_token.toString())
+            localStorage.setItem(localConfig.accessToken, tokens.access_token.toString())
+            localStorage.setItem(localConfig.refreshToken, tokens.refresh_token.toString())
+            localStorage.setItem(localConfig.clockDrift, '0')
+          }
+          setIsLoading(false)
+        })
+        .catch((err) => {
+          setIsLoading(false)
+          toast('Something went wrong!')
+        })
+    }
+  }, [code])
+
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%'
+        }}
+      >
+        <Loading transparent dots={4} color={theme.colors.primary} />
+        <h3>Signing in</h3>
+      </div>
+    )
+
   return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
 }
 
