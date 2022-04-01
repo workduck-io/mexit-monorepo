@@ -55,28 +55,28 @@ export const useAuthentication = () => {
 
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
-      const { userCred: result }: any = await googleSignIn(code, clientId, redirectURI)
+      const result: any = await googleSignIn(code, clientId, redirectURI)
 
-      if (getWorkspace && result !== undefined) {
+      if (getWorkspace && result.userCred !== undefined) {
         await client
-          .get(apiURLs.getUserRecords(result.userId))
+          .get(apiURLs.getUserRecords(result.userCred.userId))
           .then((d: any) => {
             console.log(d)
-            const userDetails = { email: result.email, userId: result.userId }
+            const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
             console.log('userDetails', { userDetails })
             setAuthenticated(userDetails, workspaceDetails)
           })
           .catch(async (e) => {
-            setSensitiveData({ email: result.email, name: result.username, password: '', roles: [] })
+            setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
 
             const uCred: UserCred = {
-              email: result.email,
-              userId: result.userId,
-              expiry: result.exp,
-              token: result.token,
-              url: result.iss
+              email: result.userCred.email,
+              userId: result.userCred.userId,
+              expiry: result.userCred.exp,
+              token: result.userCred.token,
+              url: result.userCred.iss
             }
             const newWorkspaceName = `WD_${nanoid()}`
 
