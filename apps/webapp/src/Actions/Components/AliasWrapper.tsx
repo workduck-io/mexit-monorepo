@@ -60,7 +60,7 @@ export const AliasWrapper = () => {
     try {
       response = await client.post(URL, reqBody, {
         headers: {
-          'workspace-id': workspaceDetails.id
+          'mex-workspace-id': workspaceDetails.id
         }
       })
     } catch (error) {

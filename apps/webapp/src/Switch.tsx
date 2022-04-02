@@ -32,40 +32,6 @@ import { useTheme } from 'styled-components'
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
 
-  // if (code) {
-  //   console.log({ code })
-
-  //   let tripletTokens: any
-  //   ;(async () => {
-  //     tripletTokens = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
-
-  //     if (tripletTokens) {
-  //       console.log('hit')
-
-  //       const decodedIdToken: any = jwtDecode(tripletTokens.id_token)
-
-  //       localStorage.setItem(
-  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.idToken`,
-  //         tripletTokens.id_token.toString()
-  //       )
-  //       localStorage.setItem(
-  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.accessToken`,
-  //         tripletTokens.access_token.toString()
-  //       )
-  //       localStorage.setItem(
-  //         `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.refreshToken`,
-  //         tripletTokens.refresh_token.toString()
-  //       )
-  //     }
-  //     // window.close()
-  //     return <Navigate to="/blank?google_auth=success" />
-  //   })()
-
-  // return <Navigate to="/blank?google_auth=success" />
-  // }
-
-  console.log('AUTHENTICATED: ', authenticated)
-
   return authenticated ? children : <Navigate to={ROUTE_PATHS.login} />
 }
 
@@ -77,44 +43,23 @@ const AuthRoute = ({ children }) => {
   const theme = useTheme()
   const { loginViaGoogle } = useAuthentication()
 
-  console.log('auth', { authenticated, isLoading })
   const code = new URLSearchParams(window.location.search).get('code')
 
   useEffect(() => {
     const setAsyncLocal = async () => {
       setIsLoading(true)
-      console.log('caaling')
       const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
       return res
     }
 
-    console.log('code', { code })
-
     if (code) {
       setAsyncLocal()
-        .then(({ tokens }) => {
-          if (tokens) {
-            console.log({ tokens })
-            const decodedIdToken: any = jwtDecode(tokens.id_token)
-            console.log('b')
-
-            const localConfig = {
-              idToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.idToken`,
-              accessToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.accessToken`,
-              refreshToken: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.refreshToken`,
-              clockDrift: `CognitoIdentityServiceProvider.${config.cognito.APP_CLIENT_ID}.${decodedIdToken.email}.clockDrift`
-            }
-
-            localStorage.setItem(localConfig.idToken, tokens.id_token.toString())
-            localStorage.setItem(localConfig.accessToken, tokens.access_token.toString())
-            localStorage.setItem(localConfig.refreshToken, tokens.refresh_token.toString())
-            localStorage.setItem(localConfig.clockDrift, '0')
-          }
-          setIsLoading(false)
-        })
         .catch((err) => {
           setIsLoading(false)
           toast('Something went wrong!')
+        })
+        .finally(() => {
+          setIsLoading(false)
         })
     }
   }, [code])
