@@ -17,7 +17,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
       return client
         .post(URL, reqBody, {
           headers: {
-            'workspace-id': data.workspaceID
+            'mex-workspace-id': data.workspaceID
           }
         })
         .then((response: any) => {
@@ -131,7 +131,8 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
     case 'MEX_USER': {
       const URL = apiURLs.getUserByLinkedin
 
-      return client.post(URL, data.body)
+      return client
+        .post(URL, data.body)
         .then((response: any) => {
           return { message: response, error: null }
         })

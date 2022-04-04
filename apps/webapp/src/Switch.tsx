@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import MainArea from './Views/MainArea'
@@ -22,29 +22,64 @@ import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
 import Navbar from './Components/Navbar'
+import config from './config'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import jwtDecode from 'jwt-decode'
+import toast from 'react-hot-toast'
+import Loading from './Style/Loading'
+import { useTheme } from 'styled-components'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  const { loginViaGoogle } = useAuthentication()
-  const { hash } = useLocation()
-  let accessToken: string
-  let idToken: string
-
-  if (hash) {
-    accessToken = new URLSearchParams(hash).get('#access_token')
-    idToken = new URLSearchParams(hash).get('id_token')
-    localStorage.setItem('mex-google-access-token', accessToken.toString())
-    localStorage.setItem('mex-google-id-token', idToken.toString())
-    ;(async () => await loginViaGoogle(idToken, accessToken, true))()
-    window.close()
-    return <Navigate to="/blank?google_auth=success" />
-  }
 
   return authenticated ? children : <Navigate to={ROUTE_PATHS.login} />
 }
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const theme = useTheme()
+  const { loginViaGoogle } = useAuthentication()
+
+  const code = new URLSearchParams(window.location.search).get('code')
+
+  useEffect(() => {
+    const setAsyncLocal = async () => {
+      setIsLoading(true)
+      const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
+      return res
+    }
+
+    if (code) {
+      setAsyncLocal()
+        .catch((err) => {
+          setIsLoading(false)
+          toast('Something went wrong!')
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+  }, [code])
+
+  if (isLoading)
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%'
+        }}
+      >
+        <Loading transparent dots={4} color={theme.colors.primary} />
+        <h3>Signing in</h3>
+      </div>
+    )
+
   return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
 }
 

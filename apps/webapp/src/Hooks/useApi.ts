@@ -104,7 +104,7 @@ export const useApi = () => {
     return await client
       .get(apiURLs.getNode(nodeid), {
         headers: {
-          'workspace-id': getWorkspaceId()
+          'mex-workspace-id': getWorkspaceId()
         }
       })
       .then((d: any) => {
@@ -119,7 +119,7 @@ export const useApi = () => {
       .patch(URL, null, {
         withCredentials: false,
         headers: {
-          'workspace-id': getWorkspaceId(),
+          'mex-workspace-id': getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
         }
       })
@@ -144,7 +144,7 @@ export const useApi = () => {
       .patch(URL, null, {
         withCredentials: false,
         headers: {
-          'workspace-id': getWorkspaceId()
+          'mex-workspace-id': getWorkspaceId()
         }
       })
       .then((resp) => resp.data)

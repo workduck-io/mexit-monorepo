@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components'
 import { AsyncButton, AsyncButtonProps, GoogleAuthButton } from '../../Style/Buttons'
 import Loading from '../../Style/Loading'
 import { Icon } from '@iconify/react'
-import { useAuthentication } from '../../Stores/useAuth'
+import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
 import { IS_DEV, MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import config from '../../config'
 export interface LoadingButtonProps {
@@ -36,11 +36,10 @@ export const LoadingButton = ({ children, dots, loading, alsoDisabled, buttonPro
 }
 export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   const { loginViaGoogle } = useAuthentication()
-
-  const baseAuthURL = 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize?identity_provider=Google'
+  const baseAuthURL = 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize'
   const searchParams = new URLSearchParams({
     identity_provider: 'Google',
-    response_type: 'token',
+    response_type: 'code',
     redirect_uri: MEXIT_FRONTEND_URL_BASE,
     client_id: config.cognito.APP_CLIENT_ID,
     scope: config.cognito.SCOPES
@@ -50,7 +49,7 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   URLObject.search = searchParams.toString()
 
   const authURL = URLObject.toString()
-
+  console.log({ authURL })
   // const authURL = IS_DEV
   //   ? 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize?response_type=token&client_id=6pvqt64p0l2kqkk2qafgdh13qe&scope=email openid profile'
   //   : // TODO: Add the production deployed url of the mexit webapp
@@ -58,19 +57,8 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   //     ''
 
   const openUrl = (url) => {
-    const newWindow = window.open(url, '_blank', 'width=500, height=500')
-    if (newWindow) newWindow.opener = null
-    window.addEventListener('storage', async (event) => {
-      let accessToken
-      let idToken
-      if (event.key === 'mex-google-id-token') {
-        accessToken = localStorage.getItem('mex-google-access-token')
-        idToken = event.newValue
-        if (accessToken && idToken) {
-          await loginViaGoogle(idToken, accessToken, true)
-        }
-      }
-    })
+    window.open(url, '_self')
+    // if (newWindow) newWindow.opener = null
   }
   return (
     <GoogleAuthButton
