@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid'
 import { apiURLs, AuthStoreState, UserCred } from '@mexit/shared'
 import { RegisterFormData } from '@mexit/shared'
 import { authStoreConstructor } from '@mexit/shared'
+import { mog } from '@workduck-io/mex-editor'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -52,28 +53,30 @@ export const useAuthentication = () => {
     return { data, v }
   }
 
-  const loginViaGoogle = async (idToken: string, accessToken: string, getWorkspace = false) => {
+  const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
-      const result: any = await googleSignIn(idToken, accessToken)
+      const result: any = await googleSignIn(code, clientId, redirectURI)
 
-      if (getWorkspace && result !== undefined) {
+      if (getWorkspace && result.userCred !== undefined) {
         await client
-          .get(apiURLs.getUserRecords(result.userId))
+          .get(apiURLs.getUserRecords(result.userCred.userId))
           .then((d: any) => {
-            const userDetails = { email: result.email, userId: result.userId }
+            console.log(d)
+            const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
+            console.log('userDetails', { userDetails })
             setAuthenticated(userDetails, workspaceDetails)
           })
           .catch(async (e) => {
-            setSensitiveData({ email: result.email, name: result.username, password: '', roles: [] })
+            setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
 
             const uCred: UserCred = {
-              email: result.email,
-              userId: result.userId,
-              expiry: result.exp,
-              token: accessToken,
-              url: result.iss
+              email: result.userCred.email,
+              userId: result.userCred.userId,
+              expiry: result.userCred.exp,
+              token: result.userCred.token,
+              url: result.userCred.iss
             }
             const newWorkspaceName = `WD_${nanoid()}`
 
@@ -95,6 +98,7 @@ export const useAuthentication = () => {
               .catch(console.error)
           })
       }
+      return result
     } catch (error) {
       console.log(error)
     }

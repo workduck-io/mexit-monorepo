@@ -27,7 +27,7 @@ const PublicNodeEditor = ({ nodeId }) => {
       try {
         const res = await axios.get<any>(URL, {
           headers: {
-            'workspace-id': WORKSPACE_NAME
+            'mex-workspace-id': WORKSPACE_NAME
           }
         })
         setNodeContent(res.data.content)

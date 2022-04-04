@@ -32,7 +32,7 @@ const ActivityViewEditor = () => {
           blockSize: 10
         },
         headers: {
-          'workspace-id': workspaceDetails.id
+          'mex-workspace-id': workspaceDetails.id
         }
       })
       //   console.log('Received Content: ', nodeContent.data)
