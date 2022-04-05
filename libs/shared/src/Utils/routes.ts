@@ -27,9 +27,8 @@ export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
 
-export const MEXIT_FRONTEND_URL_BASE = IS_DEV
-  ? 'http://localhost:3333/auth/login'
-  : 'https://mexit.workduck.io/auth/login'
+export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
+export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/auth/login`
 export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
 export const WORKDUCK_API_BASE = 'https://api.workduck.io'
