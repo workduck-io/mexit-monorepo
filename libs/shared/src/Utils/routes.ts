@@ -27,10 +27,12 @@ export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
 
-export const MEXIT_FRONTEND_URL_BASE = IS_DEV
-  ? 'http://localhost:3333/auth/login'
-  : 'https://mexit.workduck.io/auth/login'
+export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
+export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/auth/login`
 export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
+
+export const WORKDUCK_API_BASE = 'https://api.workduck.io'
+export const CDN_BASE = 'https://cdn.workduck.io'
 
 export const apiURLs = {
   //node
@@ -82,5 +84,10 @@ export const apiURLs = {
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,
   getNodePublicURL: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
-  getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`
+  getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`,
+  getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
+
+  // Screenshot capture URLs
+  createImageLink: `${WORKDUCK_API_BASE}/testing/upload/s3`,
+  getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`
 }

@@ -6,12 +6,11 @@ import { sanitizeHTML } from '../Utils/sanitizeHTML'
 import mixpanel from 'mixpanel-browser'
 import * as Sentry from '@sentry/react'
 import { CaptureConsole } from '@sentry/integrations'
-import { parsePageMetaTags } from '@mexit/shared'
+import { getScrollbarWidth, parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
-// import { getScrollbarWidth, shouldRejectKeystrokes, isModKey } from './utils'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -19,8 +18,7 @@ export function InternalEvents() {
   handleHighlighter()
   dibbaToggle()
   badgeRenderer()
-  // useDocumentLock()
-  // useShortcuts()
+  useDocumentLock()
   // useFocusHandler()
   return null
 }
@@ -195,3 +193,32 @@ function badgeRenderer() {
     }
   }, [])
 }
+
+/**
+ * `useDocumentLock` is a simple implementation for preventing the
+ * underlying page content from scrolling when kbar is open.
+ */
+function useDocumentLock() {
+  const { visualState } = useSputlitContext()
+
+  useEffect(() => {
+    if (visualState === VisualState.showing) {
+      // adding style to html instead of body because it worked in all sites
+      document.documentElement.style.overflow = 'hidden'
+
+      let scrollbarWidth = getScrollbarWidth()
+      // take into account the margins explicitly added by the consumer
+      const mr = getComputedStyle(document.documentElement)['margin-right']
+      if (mr) {
+        // remove non-numeric values; px, rem, em, etc.
+        scrollbarWidth += Number(mr.replace(/\D/g, ''))
+      }
+      document.documentElement.style.marginRight = scrollbarWidth + 'px'
+    } else if (visualState === VisualState.hidden) {
+      document.documentElement.style.removeProperty('overflow')
+
+      document.documentElement.style.removeProperty('margin-right')
+    }
+  }, [visualState])
+}
+

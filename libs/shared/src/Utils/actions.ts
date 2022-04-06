@@ -4,6 +4,15 @@ import { ActionType, MexitAction } from '../Types/Actions'
 // TODO: change shortcut keys based on user's OS
 export const initActions: Array<MexitAction> = [
   {
+    id: 'ACTION_1',
+    title: 'Capture Screenshot',
+    description: 'Capture visible window and send to Mexit',
+    type: ActionType.SCREENSHOT,
+    data: {
+      icon: 'twitter.svg'
+    }
+  },
+  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     description: 'Share this URL as an alias',

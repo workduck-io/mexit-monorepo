@@ -18,6 +18,8 @@ import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useTagStore } from '../../Hooks/useTags'
 
+import components from './Components'
+
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
   nodePath?: string
@@ -99,7 +101,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
       autoFocus: true
     },
     focusOptions: {
-      edge: 'start',
+      edge: 'end',
       focus: true
     }
   }
@@ -116,7 +118,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         meta={{
           path: nodePath
         }}
-        components={{}}
+        components={components}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}

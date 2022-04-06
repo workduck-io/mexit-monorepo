@@ -140,5 +140,34 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
+    case 'CAPTURE_VISIBLE_TAB': {
+      return chrome.tabs
+        .captureVisibleTab()
+        .then((img) => {
+          const parsedImage = img.split(',')[1]
+          return client
+            .post(
+              apiURLs.createImageLink,
+              {
+                encodedString: parsedImage
+              },
+              {
+                headers: {
+                  'workspace-id': data.workspaceId
+                }
+              }
+            )
+            .then((resp) => resp.data)
+            .then((path) => {
+              return { message: apiURLs.getImagePublicLink(path), error: null }
+            })
+            .catch((error) => {
+              return { message: null, error: error }
+            })
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
   }
 }
