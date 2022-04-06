@@ -1,4 +1,4 @@
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import config from '../config'
@@ -17,7 +17,7 @@ export default function OAuthDesktop() {
 
   const handleNavigatedLogin = async (e) => {
     e.preventDefault()
-    await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
+    await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
     navigate('/')
   }
   return (

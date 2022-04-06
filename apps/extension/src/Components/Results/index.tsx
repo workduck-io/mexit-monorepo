@@ -9,6 +9,7 @@ import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
+import Screenshot from '../Action/Screenshot'
 
 function Results() {
   const {
@@ -160,6 +161,7 @@ function Results() {
       </List>
 
       {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
+      {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}
     </StyledResults>
   )
 }

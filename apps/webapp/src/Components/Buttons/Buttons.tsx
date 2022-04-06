@@ -4,7 +4,7 @@ import { AsyncButton, AsyncButtonProps, GoogleAuthButton } from '../../Style/But
 import Loading from '../../Style/Loading'
 import { Icon } from '@iconify/react'
 import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
-import { IS_DEV, MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
 import config from '../../config'
 export interface LoadingButtonProps {
   children?: React.ReactNode
@@ -40,7 +40,7 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   const searchParams = new URLSearchParams({
     identity_provider: 'Google',
     response_type: 'code',
-    redirect_uri: MEXIT_FRONTEND_URL_BASE,
+    redirect_uri: MEXIT_FRONTEND_AUTH_BASE,
     client_id: config.cognito.APP_CLIENT_ID,
     scope: config.cognito.SCOPES
   })

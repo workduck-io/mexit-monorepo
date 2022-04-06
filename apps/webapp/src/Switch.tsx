@@ -23,7 +23,7 @@ import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
 import Navbar from './Components/Navbar'
 import config from './config'
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
 import jwtDecode from 'jwt-decode'
 import toast from 'react-hot-toast'
 import Loading from './Style/Loading'
@@ -48,7 +48,7 @@ const AuthRoute = ({ children }) => {
   useEffect(() => {
     const setAsyncLocal = async () => {
       setIsLoading(true)
-      const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_URL_BASE)
+      const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
       return res
     }
 
