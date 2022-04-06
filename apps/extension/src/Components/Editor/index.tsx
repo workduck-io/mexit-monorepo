@@ -101,7 +101,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
       autoFocus: true
     },
     focusOptions: {
-      edge: 'start',
+      edge: 'end',
       focus: true
     }
   }
