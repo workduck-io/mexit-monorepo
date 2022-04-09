@@ -1,7 +1,8 @@
 export const IS_DEV = (() => {
-  if (import.meta.env && import.meta.env.MODE) return import.meta.env.MODE === 'development' ? true : false
-  else if (process.env['NX_BUILD_MODE'] === 'development') return true
-  return false
+  // if (import.meta.env && import.meta.env.MODE) return import.meta.env.MODE === 'development' ? true : false
+  // else if (process.env['NX_BUILD_MODE'] === 'development') return true
+  // return false
+  return true
 })()
 
 export const BASE_INTEGRATION_URL = 'https://http.workduck.io/integration'

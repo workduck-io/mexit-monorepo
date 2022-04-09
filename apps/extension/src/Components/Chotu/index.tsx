@@ -47,6 +47,17 @@ export default function Chotu() {
   }
 
   useEffect(() => {
+    setTimeout(() => {
+      const iframe = document.getElementById('chotu-iframe')
+
+      const message = {
+        type: 'current-page-document',
+        document: window.document
+      }
+      // @ts-ignore
+      iframe.contentWindow.postMessage(message, '*')
+    }, 5000)
+
     window.addEventListener('message', handleEvent)
     return () => {
       window.removeEventListener('message', handleEvent)
