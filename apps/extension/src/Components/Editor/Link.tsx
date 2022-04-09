@@ -27,7 +27,7 @@ const Link = styled.a`
     position: absolute;
     z-index: 1000;
     display: none;
-    bottom: -2.5rem;
+    bottom: -2.5em;
     padding: 2px ${({ theme }) => theme.spacing.small};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
     background: ${({ theme }) => theme.colors.gray[8]};
