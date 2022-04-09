@@ -15,7 +15,7 @@ styleSlot.id = 'style-sheet-target'
 shadowRoot.attachShadow({ mode: 'closed' }).appendChild(styleSlot)
 
 const root = document.createElement('div')
-root.id = 'extension-root'
+root.id = 'chotu-container'
 
 styleSlot.appendChild(root)
 
