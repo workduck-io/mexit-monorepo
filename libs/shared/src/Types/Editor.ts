@@ -93,6 +93,7 @@ export interface ILink {
 
 /**  Tags */
 export interface Tag {
+  id: string
   value: string
 }
 
