@@ -43,13 +43,13 @@ export const Content = styled.div`
   justify-content: center;
 `
 
-export const Title = styled.div`
+export const Title = styled.h3`
   font-size: 1.1em;
   font-weight: 400;
   margin: 0;
 `
 
-export const Description = styled.div`
+export const Description = styled.p`
   font-size: 0.85em;
   margin: 0.25em 0 0.5em 0;
 `
@@ -60,8 +60,7 @@ export const Shortcut = styled.div`
   margin: 0.5em;
 `
 
-export const Key = styled.div`
-  display: inline-block;
+export const Key = styled.span`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   margin: 0.25em;
