@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const BadgeContainer = styled.div`
   display: flex;
-  padding: 0 0.5rem;
+  padding: 0 0.5em;
 `
 
 export default function LinkedInBadge() {

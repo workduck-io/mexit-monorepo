@@ -15,7 +15,7 @@ export const editorPreviewComponents = createPlateUI({
   [ELEMENT_PARAGRAPH]: withProps(StyledElement, {
     styles: {
       root: {
-        margin: '0.1rem 0 0'
+        margin: '0.1em 0 0'
       }
     }
   }),

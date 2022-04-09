@@ -37,8 +37,8 @@ export const ListItem = styled.div<{ start: number }>`
 `
 
 export const Subtitle = styled.div`
-  margin: 0.5rem 1rem;
+  margin: 0.5em 1em;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: 0.75em;
   opacity: 0.5;
 `

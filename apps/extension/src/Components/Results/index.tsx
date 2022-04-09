@@ -39,7 +39,7 @@ function Results() {
       return {
         width: preview ? '50%' : '0',
         flex: preview ? '1' : '0',
-        margin: preview ? '0.75rem' : '0'
+        margin: preview ? '0.75em' : '0'
       }
     }, [preview])
   )

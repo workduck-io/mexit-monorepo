@@ -9,6 +9,7 @@ const Notif = styled.div`
   color: ${({ theme }) => theme.colors.text.default};
   box-shadow: 0px 5px 15px ${({ theme }) => theme.colors.gray[9]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+  font: inherit;
 `
 
 export const Notification = () => {
