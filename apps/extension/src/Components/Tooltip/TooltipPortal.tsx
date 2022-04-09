@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { styleSlot } from '../../contentScript'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 
 interface Props {
@@ -13,5 +14,5 @@ export function TooltipPortal(props: Props) {
     return null
   }
 
-  return ReactDOM.createPortal(props.children, document.body)
+  return ReactDOM.createPortal(props.children, styleSlot)
 }
