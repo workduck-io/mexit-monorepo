@@ -31,11 +31,12 @@ export const GlobalStyle = createGlobalStyle`
     src: url(${chrome.runtime.getURL('/Assets/Inter-Bold.ttf')});
   }
 
-  #extension-root *{
+  #chotu-container, #sputlit-container, #dibba-container {
     ${normalize}; // NormalizeCSS normalization
+    letter-spacing: normal;
     font-family: "Inter", sans-serif;
-    font-size: 14px;
     line-height: 1.5;
-    text-align: left;
+    font-size: 14px;
   }
+
 `

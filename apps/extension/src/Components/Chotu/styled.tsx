@@ -8,7 +8,7 @@ export const Container = styled.div`
   height: 0;
 
   p {
-    margin: 0 0.5rem !important;
+    margin: 0 0.5em !important;
   }
 `
 
@@ -19,7 +19,7 @@ export const StyledChotu = styled.div<{ show: boolean }>`
   position: absolute;
   right: 0;
   bottom: 0;
-  padding: 0.25rem;
+  padding: 0.25em;
 
   cursor: pointer;
 
@@ -61,7 +61,7 @@ export const Icon = styled.div`
   background-color: #fff;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  padding: 0.25rem;
+  padding: 0.25em;
 
   img {
     width: 16px;

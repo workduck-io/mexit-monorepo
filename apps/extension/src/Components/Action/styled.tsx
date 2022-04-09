@@ -5,7 +5,7 @@ export const StyledAction = styled.div<{ active?: boolean }>`
   flex-direction: row;
   justify-content: space-between;
 
-  padding: 0.5rem 0.75rem;
+  padding: 0.5em 0.75em;
   color: ${({ theme }) => theme.colors.text.fade};
   border-left: 2px solid transparent;
   border-radius: 10px;
@@ -29,7 +29,7 @@ export const Container = styled.div`
 export const Icon = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 0.75rem;
+  margin-right: 0.75em;
 
   img {
     height: 24px;
@@ -37,32 +37,32 @@ export const Icon = styled.div`
   }
 `
 
-export const Desc = styled.div`
+export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`
 
-  h3 {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 0;
-  }
+export const Title = styled.h3`
+  font-size: 1.1em;
+  font-weight: 400;
+  margin: 0;
+`
 
-  p {
-    font-size: 0.85rem;
-    margin: 0.25rem 0 0.5rem 0;
-  }
+export const Description = styled.p`
+  font-size: 0.85em;
+  margin: 0.25em 0 0.5em 0;
 `
 
 export const Shortcut = styled.div`
   display: flex;
   align-items: center;
-  margin: 0.5rem;
+  margin: 0.5em;
 `
 
 export const Key = styled.span`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  margin: 0.25rem;
-  padding: 0.25rem;
+  margin: 0.25em;
+  padding: 0.25em;
 `

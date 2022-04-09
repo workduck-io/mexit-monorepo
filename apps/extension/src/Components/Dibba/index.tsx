@@ -176,6 +176,7 @@ export default function Dibba() {
 
   return (
     <ComboboxRoot
+      id="dibba-container"
       ref={dibbaRef}
       top={top}
       left={left}

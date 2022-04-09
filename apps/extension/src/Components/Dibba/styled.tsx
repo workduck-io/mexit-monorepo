@@ -10,7 +10,7 @@ export const ComboboxRoot = styled.ul<{
   ${({ isOpen, theme, top, left, offsetTop, offsetRight }) =>
     isOpen &&
     css`
-      top: calc(${top}px + 1rem);
+      top: calc(${top}px + 1em);
       left: ${left}px;
       position: absolute;
       padding: 0;
@@ -22,7 +22,7 @@ export const ComboboxRoot = styled.ul<{
       border-radius: 8px;
       box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
 
-      transform: ${offsetTop ? css`translateY(calc(-100% - 1rem))` : ''} ${offsetRight ? css`translateX(-100%)` : ''};
+      transform: ${offsetTop ? css`translateY(calc(-100% - 1em))` : ''} ${offsetRight ? css`translateX(-100%)` : ''};
     `}
 `
 
@@ -40,7 +40,7 @@ export const ItemRightIcons = styled.div`
 export const ItemDesc = styled.div`
   margin-top: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
-  font-size: 0.8rem;
+  font-size: 0.8em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
