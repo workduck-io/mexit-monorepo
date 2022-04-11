@@ -26,16 +26,13 @@ export default function Chotu() {
   window.parent.postMessage(message, '*')
 
   const handleEvent = (event) => {
-    if (event.origin === '*') {
-      switch (event.data.type) {
-        case 'current-page-document': {
-          console.log('hit handle event chotu')
-
-          break
-        }
-        default:
-          break
+    switch (event.data.type) {
+      case 'current-page-document': {
+        console.log('hit handle event chotu', event.origin)
+        break
       }
+      default:
+        break
     }
   }
   useEffect(() => {
