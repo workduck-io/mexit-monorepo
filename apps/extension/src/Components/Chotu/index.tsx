@@ -46,17 +46,6 @@ export default function Chotu() {
     }
   }
 
-  setTimeout(() => {
-    const iframe = document.getElementById('chotu-iframe') as HTMLIFrameElement
-
-    const message = {
-      type: 'current-page-document',
-      document: 'hi'
-    }
-
-    iframe.contentWindow.postMessage(message, MEXIT_FRONTEND_URL_BASE)
-  }, 5000)
-
   useEffect(() => {
     window.addEventListener('message', handleEvent)
     return () => {

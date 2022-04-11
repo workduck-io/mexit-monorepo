@@ -164,13 +164,6 @@ export const AliasWrapper = () => {
     // Tags result in height change
   }, [elementRef, userTags])
 
-  // useEffect(() => {
-  //   if (checkMetaParseableURL(currTabURL)) {
-  //     const mt = parsePageMetaTags()
-  //     setPageMetaTags(mt)
-  //   }
-  // }, [])
-
   // const addNewUserTag = (tag: Tag) => {
   //   setUserTags([...userTags, tag])
   // }
