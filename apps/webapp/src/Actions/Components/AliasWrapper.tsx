@@ -12,6 +12,7 @@ import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
 import { resize } from '../../Utils/helper'
+import { nanoid } from 'nanoid'
 
 const Form = styled.form`
   display: flex;
@@ -23,6 +24,50 @@ const Form = styled.form`
 export interface ShortenFormDetails {
   short: string
 }
+
+interface SitesMetadata {
+  baseUrl: string
+  metaTags: string[]
+}
+
+const sitesMetadataDict: SitesMetadata[] = [
+  {
+    baseUrl: 'https://linear.app/',
+    metaTags: ['title']
+  },
+  {
+    baseUrl: 'https://meet.google.com/',
+    metaTags: ['title', 'description']
+  },
+  {
+    baseUrl: 'https://github.com/',
+    metaTags: ['title', 'description']
+  },
+  {
+    baseUrl: 'https://mail.google.com/',
+    metaTags: ['title', 'application-name']
+  },
+  {
+    baseUrl: 'https://app.slack.com/',
+    metaTags: ['title']
+  },
+  {
+    baseUrl: 'https://airtable.com/',
+    metaTags: ['title']
+  },
+  {
+    baseUrl: 'https://www.figma.com/',
+    metaTags: ['title']
+  },
+  {
+    baseUrl: 'https://www.notion.so/',
+    metaTags: ['title']
+  },
+  {
+    baseUrl: 'atlassian.net',
+    metaTags: ['title']
+  }
+]
 
 export const AliasWrapper = () => {
   const [currTabURL, setCurrTabURL] = useState(document.referrer)
@@ -76,12 +121,24 @@ export const AliasWrapper = () => {
       '*'
     )
   }
-  useEffect(() => {}, [])
 
   const handleEvent = (event: MessageEvent) => {
     switch (event.data.type) {
-      case 'tab-info-response':
+      case 'tab-info-response': {
         setCurrTabURL(event.data.data.url)
+        const matchedURL = sitesMetadataDict.filter((e) => event.data.data.url.toString().includes(e.baseUrl))
+        const resultUserTags: Tag[] = []
+        if (matchedURL.length > 0) {
+          for (const metaTag of matchedURL[0].metaTags) {
+            for (const tag of event.data.data.tags) {
+              if (tag.name === metaTag) {
+                resultUserTags.push({ id: nanoid(), value: tag.value })
+              }
+            }
+          }
+        }
+        setUserTags(resultUserTags)
+      }
     }
   }
 
@@ -107,12 +164,12 @@ export const AliasWrapper = () => {
     // Tags result in height change
   }, [elementRef, userTags])
 
-  useEffect(() => {
-    if (checkMetaParseableURL(currTabURL)) {
-      const mt = parsePageMetaTags()
-      setPageMetaTags(mt)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (checkMetaParseableURL(currTabURL)) {
+  //     const mt = parsePageMetaTags()
+  //     setPageMetaTags(mt)
+  //   }
+  // }, [])
 
   // const addNewUserTag = (tag: Tag) => {
   //   setUserTags([...userTags, tag])
@@ -128,7 +185,13 @@ export const AliasWrapper = () => {
   // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
     <Form ref={elementRef} onSubmit={handleSubmit(onShortenLinkSubmit)}>
-      <Shortener currTabURL={currTabURL} register={register} setCurrTabURL={setCurrTabURL} />
+      <Shortener
+        currTabURL={currTabURL}
+        register={register}
+        setCurrTabURL={setCurrTabURL}
+        userTags={userTags}
+        setUserTags={setUserTags}
+      />
       {/* <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} /> */}
       <Button type="submit" value="Save" />
     </Form>
