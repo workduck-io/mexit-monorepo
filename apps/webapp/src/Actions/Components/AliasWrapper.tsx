@@ -132,7 +132,7 @@ export const AliasWrapper = () => {
           for (const metaTag of matchedURL[0].metaTags) {
             for (const tag of event.data.data.tags) {
               if (tag.name === metaTag) {
-                resultUserTags.push({ id: nanoid(), value: tag.value })
+                resultUserTags.push({ id: nanoid(), text: tag.value })
               }
             }
           }
