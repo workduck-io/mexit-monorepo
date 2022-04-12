@@ -17,7 +17,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 
-  margin: 1rem;
+  padding: 1rem;
 `
 
 export interface ShortenFormDetails {
@@ -104,7 +104,8 @@ export const AliasWrapper = () => {
     if (elementRef !== null) {
       resize(elementRef)
     }
-  }, [elementRef])
+    // Tags result in height change
+  }, [elementRef, userTags])
 
   useEffect(() => {
     if (checkMetaParseableURL(currTabURL)) {
