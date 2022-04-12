@@ -9,7 +9,7 @@ import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
   display: flex;
-  margin: 2rem;
+  padding: 2rem;
 `
 
 const PresetButton = styled.button<{ bg: string }>`
