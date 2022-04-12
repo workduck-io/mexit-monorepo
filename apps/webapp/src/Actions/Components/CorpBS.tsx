@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import { resize } from '../../Utils/helper'
 
 const Container = styled.div`
-  margin: 2rem;
   display: flex;
   flex-direction: column;
+
+  padding: 2rem;
 
   h1 {
     font-size: 1.5rem !important;

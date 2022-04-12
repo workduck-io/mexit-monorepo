@@ -17,7 +17,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 
-  margin: 1rem;
+  padding: 1rem;
 `
 
 export interface ShortenFormDetails {

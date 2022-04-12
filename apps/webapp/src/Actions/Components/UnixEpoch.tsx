@@ -8,7 +8,8 @@ import { resize } from '../../Utils/helper'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 2rem;
+
+  padding: 2rem;
 
   h2 {
     font-size: 1.25rem !important;
