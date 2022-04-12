@@ -44,8 +44,8 @@ const sitesMetadataDict: SitesMetadata[] = [
   {
     appName: 'github',
     baseUrl: 'https://github.com/',
-    metaTags: ['title', 'description'],
-    keywords: ['pulls', 'pull', 'issues', 'issue']
+    metaTags: ['title'],
+    keywords: ['pulls', 'pull', 'issues', 'issue', 'projects']
   },
   {
     baseUrl: 'https://mail.google.com/',
@@ -138,10 +138,12 @@ export const AliasWrapper = () => {
         let resultShortAlias: string = undefined
 
         if (matchedURL.length > 0) {
+          const matchedMetaTags = []
           for (const metaTag of matchedURL[0].metaTags) {
             for (const tag of event.data.data.tags) {
               if (tag.name === metaTag) {
                 resultShortAlias = CreateAlias(matchedURL[0].appName, tag)
+                matchedMetaTags.push(tag)
                 break
               }
             }
@@ -151,7 +153,9 @@ export const AliasWrapper = () => {
           // URL Parsing
           for (const keyword of matchedURL[0].keywords) {
             if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0)
-              resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString(), keyword))
+              resultUserTags.push(
+                ...CreateTags(matchedURL[0].appName, event.data.data.url.toString(), keyword, matchedMetaTags[0])
+              )
           }
           if (resultUserTags.length === 0)
             resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString()))
