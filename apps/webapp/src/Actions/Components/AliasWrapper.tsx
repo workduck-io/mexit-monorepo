@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { apiURLs, Button } from '@mexit/shared'
+import { apiURLs, Button, CreateAlias } from '@mexit/shared'
 import { Tag } from '@mexit/shared'
-import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
+import { checkMetaParseableURL, parsePageMetaTags, CreateTags } from '@mexit/shared'
 import { Shortener } from './Shortener'
 import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
@@ -26,8 +26,10 @@ export interface ShortenFormDetails {
 }
 
 interface SitesMetadata {
+  appName?: string
   baseUrl: string
   metaTags: string[]
+  keywords?: string[]
 }
 
 const sitesMetadataDict: SitesMetadata[] = [
@@ -40,8 +42,10 @@ const sitesMetadataDict: SitesMetadata[] = [
     metaTags: ['title', 'description']
   },
   {
+    appName: 'github',
     baseUrl: 'https://github.com/',
-    metaTags: ['title', 'description']
+    metaTags: ['title', 'description'],
+    keywords: ['pulls', 'pull', 'issues', 'issue']
   },
   {
     baseUrl: 'https://mail.google.com/',
@@ -73,6 +77,7 @@ export const AliasWrapper = () => {
   const [currTabURL, setCurrTabURL] = useState(document.referrer)
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
+  const [shortAlias, setShortAlias] = useState<string>()
   const [shortenerResponse, setShortenerResponse] = useState<any>()
   const elementRef = useRef(null)
 
@@ -126,18 +131,32 @@ export const AliasWrapper = () => {
     switch (event.data.type) {
       case 'tab-info-response': {
         setCurrTabURL(event.data.data.url)
+
+        // Metatag Parsing
         const matchedURL = sitesMetadataDict.filter((e) => event.data.data.url.toString().includes(e.baseUrl))
         const resultUserTags: Tag[] = []
+        let resultShortAlias: string
         if (matchedURL.length > 0) {
           for (const metaTag of matchedURL[0].metaTags) {
             for (const tag of event.data.data.tags) {
               if (tag.name === metaTag) {
-                resultUserTags.push({ id: nanoid(), text: tag.value })
+                resultShortAlias = CreateAlias(matchedURL[0].appName, tag)
+                break
               }
             }
+            if (resultShortAlias) break
           }
+          // URL Parsing
+          for (const keyword of matchedURL[0].keywords) {
+            if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0)
+              resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString(), keyword))
+          }
+          if (resultUserTags.length === 0)
+            resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString()))
+
+          setShortAlias(resultShortAlias.split(' ').join(',').split(':')[0])
+          setUserTags(resultUserTags)
         }
-        setUserTags(resultUserTags)
       }
     }
   }
@@ -184,6 +203,8 @@ export const AliasWrapper = () => {
         setCurrTabURL={setCurrTabURL}
         userTags={userTags}
         setUserTags={setUserTags}
+        shortAlias={shortAlias}
+        setShortAlias={setShortAlias}
       />
       {/* <Tags addNewTag={addNewUserTag} removeTag={removeUserTag} userTags={userTags} /> */}
       <Button type="submit" value="Save" />

@@ -30,6 +30,7 @@ export * from './Utils/lodashUtils'
 export * from './Utils/Logo'
 export * from './Utils/mog'
 export * from './Utils/parsers'
+export * from './Utils/heuristichelper'
 
 export * from './Themes'
 

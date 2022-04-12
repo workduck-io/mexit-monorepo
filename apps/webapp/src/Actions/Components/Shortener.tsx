@@ -12,12 +12,16 @@ const Container = styled.div`
 export const Shortener = ({
   currTabURL,
   setCurrTabURL,
+  shortAlias,
+  setShortAlias,
   register,
   userTags,
   setUserTags
 }: {
   currTabURL: string
   setCurrTabURL: (s: string) => void
+  shortAlias: string
+  setShortAlias: (s: string) => void
   register: UseFormRegister<ShortenFormDetails>
   userTags: Tag[]
   setUserTags: (s: Tag[]) => void
@@ -42,7 +46,8 @@ export const Shortener = ({
 
       <InputRow>
         <Label>Shortcut</Label>
-        <Input placeholder="Shorcut" {...register('short')} />
+        {console.log(shortAlias)}
+        <Input placeholder="Shorcut" {...register('short')} value={shortAlias} />
       </InputRow>
     </Container>
   )
