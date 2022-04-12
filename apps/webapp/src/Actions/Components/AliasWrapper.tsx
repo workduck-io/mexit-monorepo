@@ -135,7 +135,8 @@ export const AliasWrapper = () => {
         // Metatag Parsing
         const matchedURL = sitesMetadataDict.filter((e) => event.data.data.url.toString().includes(e.baseUrl))
         const resultUserTags: Tag[] = []
-        let resultShortAlias: string
+        let resultShortAlias: string = undefined
+
         if (matchedURL.length > 0) {
           for (const metaTag of matchedURL[0].metaTags) {
             for (const tag of event.data.data.tags) {
@@ -146,6 +147,7 @@ export const AliasWrapper = () => {
             }
             if (resultShortAlias) break
           }
+
           // URL Parsing
           for (const keyword of matchedURL[0].keywords) {
             if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0)
@@ -156,6 +158,9 @@ export const AliasWrapper = () => {
 
           setShortAlias(resultShortAlias.split(' ').join(',').split(':')[0])
           setUserTags(resultUserTags)
+        } else {
+          if (!resultShortAlias) resultShortAlias = event.data.data.tags.filter((el) => el.name === 'title')[0].value
+          setShortAlias(resultShortAlias)
         }
       }
     }
