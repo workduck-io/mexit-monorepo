@@ -1,6 +1,16 @@
 import { ActionType, apiURLs } from '@mexit/core'
 
 import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
+import * as Sentry from '@sentry/browser'
+import { CaptureConsole } from '@sentry/integrations'
+import fuzzysort from 'fuzzysort'
+import { deserialize } from 'v8'
+import { useShortenerStore } from './Hooks/useShortener'
+
+Sentry.init({
+  dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
+  integrations: [new CaptureConsole({ levels: ['error'] })]
+})
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
@@ -145,9 +155,20 @@ chrome.notifications.onClosed.addListener((notificationId, byUser) => {
   chrome.notifications.clear(notificationId)
 })
 
+chrome.omnibox.onInputChanged.addListener((text, suggest) => {
+  const linkCaptures = useShortenerStore.getState().linkCaptures
+  const suggestions = fuzzysort.go(text, linkCaptures, { key: 'short', allowTypo: true }).map((item) => {
+    return {
+      content: item.obj.long,
+      description: item.obj.short
+    }
+  })
+
+  suggest(suggestions)
+})
+
 chrome.omnibox.onInputEntered.addListener((text) => {
-  const url = encodeURI(apiURLs.searchMexit + text)
-  chrome.tabs.update({ url: url })
+  chrome.tabs.update({ url: text })
 })
 
 export {}
