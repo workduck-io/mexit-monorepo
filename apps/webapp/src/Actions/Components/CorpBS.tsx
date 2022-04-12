@@ -45,7 +45,8 @@ export const CorporateBS = () => {
     if (elementRef !== null) {
       resize(elementRef)
     }
-  }, [elementRef])
+    // quote results in height change
+  }, [elementRef, corpBS])
 
   return (
     <Container ref={elementRef}>

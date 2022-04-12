@@ -104,7 +104,8 @@ export const AliasWrapper = () => {
     if (elementRef !== null) {
       resize(elementRef)
     }
-  }, [elementRef])
+    // Tags result in height change
+  }, [elementRef, userTags])
 
   useEffect(() => {
     if (checkMetaParseableURL(currTabURL)) {
