@@ -1,4 +1,4 @@
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { MEXIT_FRONTEND_URL_BASE, parsePageMetaTags } from '@mexit/shared'
 import React, { Suspense } from 'react'
 import { useCallback } from 'react'
 import { useRef } from 'react'
@@ -24,11 +24,13 @@ const Renderer = () => {
           iframeRef.current.height = event.data.height + 'px'
           break
         case 'tab-info-request': {
+          const tags = parsePageMetaTags(window.document)
           iframeRef.current.contentWindow.postMessage(
             {
               type: 'tab-info-response',
               data: {
-                url: window.location.href
+                url: window.location.href,
+                tags
               }
             },
             MEXIT_FRONTEND_URL_BASE
