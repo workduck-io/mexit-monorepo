@@ -1,4 +1,5 @@
-import React from 'react'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import React, { useEffect } from 'react'
 import { useAuthStore } from '../Stores/useAuth'
 import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
@@ -20,7 +21,6 @@ export default function Chotu() {
     theme: theme,
     authAWS: authAWS,
     snippets: snippets
-
   }
 
   window.parent.postMessage(message, '*')
