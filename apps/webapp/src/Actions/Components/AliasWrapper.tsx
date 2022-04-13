@@ -82,18 +82,19 @@ export const AliasWrapper = () => {
   const handleEvent = (event: MessageEvent) => {
     switch (event.data.type) {
       case 'tab-info-response': {
+        const { url, tags } = event.data.data
         setCurrTabURL(event.data.data.url)
 
         // Metatag Parsing
-        const matchedURL = sitesMetadataDict.filter((e) => event.data.data.url.toString().includes(e.baseUrl))
+        const matchedURL = sitesMetadataDict.filter((e) => url.toString().includes(e.baseUrl))
         const resultUserTags: Tag[] = []
         let resultShortAlias: string = undefined
-        console.log({ matchedURL })
+        // console.log({ matchedURL })
 
         if (matchedURL.length > 0) {
           const matchedMetaTags = []
           for (const metaTag of matchedURL[0].metaTags) {
-            for (const tag of event.data.data.tags) {
+            for (const tag of tags) {
               if (tag.name === metaTag) {
                 resultShortAlias = CreateAlias(matchedURL[0].appName, tag)
                 matchedMetaTags.push(tag)
@@ -105,32 +106,23 @@ export const AliasWrapper = () => {
 
           // Add user tags for the keyword from the URL
           for (const keyword of matchedURL[0].keywords) {
-            if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0) {
-              resultUserTags.push(
-                ...CreateTags(matchedURL[0].appName, event.data.data.url.toString(), keyword, matchedMetaTags[0])
-              )
+            if (url.toString().includes(keyword) && resultUserTags.length === 0) {
+              resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString(), keyword, matchedMetaTags[0]))
             }
           }
 
           // Add title as user tags if needed
           if (matchedURL[0].titleAsTag) {
             resultUserTags.push(
-              ...CreateTags(
-                matchedURL[0].appName,
-                event.data.data.url.toString(),
-                'NA',
-                matchedMetaTags[0],
-                matchedURL[0].titleAsTag
-              )
+              ...CreateTags(matchedURL[0].appName, url.toString(), 'NA', matchedMetaTags[0], matchedURL[0].titleAsTag)
             )
           }
-          if (resultUserTags.length === 0)
-            resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString()))
+          if (resultUserTags.length === 0) resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString()))
 
-          setShortAlias(resultShortAlias)
+          setShort(resultShortAlias)
           setUserTags(resultUserTags)
         } else {
-          const title = event.data.data.tags.filter((el) => el.name === 'title')[0].value
+          const title = tags.filter((el) => el.name === 'title')[0].value
           if (!resultShortAlias) resultShortAlias = title
           setUserTags([
             { id: nanoid(), text: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }
@@ -163,18 +155,6 @@ export const AliasWrapper = () => {
     // Tags result in height change
   }, [elementRef, userTags])
 
-  // const addNewUserTag = (tag: Tag) => {
-  //   setUserTags([...userTags, tag])
-  // }
-
-  // const removeUserTag = (tag: Tag) => {
-  //   const t = userTags
-  //   const idx = t.map((e) => e.id).indexOf(tag.id)
-  //   t.splice(idx, 1)
-  //   setUserTags([...t])
-  // }
-
-  // TODO: a provider for this too, or even better if we can let go of passing props. Why not let the components contain the logic
   return (
     <Form ref={elementRef} onSubmit={handleSubmit(onShortenLinkSubmit)}>
       <Shortener
