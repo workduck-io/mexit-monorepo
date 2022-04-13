@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Tag } from '@mexit/shared'
+import { Input, InputRow, Label, Tag } from '@mexit/shared'
 
 interface TagsProps {
   userTags: Tag[]
@@ -9,39 +9,14 @@ interface TagsProps {
   removeTag: (s: Tag) => void
 }
 
-const Container = styled.div`
-  margin: 1rem 0;
-`
-
-const InputRow = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  margin: 0.75rem 0;
-`
-const Label = styled.label`
-  font-family: 1rem;
-  font-weight: 500;
-  color: #374151;
-`
-const Input = styled.input`
-  width: 80%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-
-  &:focus {
-    outline: #6968d2;
-  }
-`
-
 const TagsContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `
 
 const Tagg = styled.div`
   padding: 0.5rem;
-  margin: 0 0.5rem 0 0;
+  margin: 0.5rem 0.5rem 0.5rem 0;
   background: #e8e8e8;
   border-radius: 5px;
 
@@ -97,7 +72,7 @@ export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: Ta
   }
 
   return (
-    <Container>
+    <div>
       <InputRow>
         <Label>Add Tags</Label>
         <Input value={input} placeholder="Enter a Tag" onKeyDown={onKeyDown} onKeyUp={onKeyUp} onChange={onChange} />
@@ -112,6 +87,6 @@ export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: Ta
           </Tagg>
         ))}
       </TagsContainer>
-    </Container>
+    </div>
   )
 }
