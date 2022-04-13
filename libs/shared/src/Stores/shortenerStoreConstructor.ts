@@ -1,6 +1,6 @@
 import { LinkCapture } from '..'
 
-export const shortnerStoreConstructor = (set, get) => ({
+export const shortenerStoreConstructor = (set, get) => ({
   linkCaptures: new Array<LinkCapture>(),
   setLinkCaptures: (l: LinkCapture[]) => {
     set(l)
