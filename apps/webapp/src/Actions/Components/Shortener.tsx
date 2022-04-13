@@ -46,7 +46,6 @@ export const Shortener = ({
 
       <InputRow>
         <Label>Shortcut</Label>
-        {console.log(shortAlias)}
         <Input placeholder="Shorcut" {...register('short')} value={shortAlias} />
       </InputRow>
     </Container>

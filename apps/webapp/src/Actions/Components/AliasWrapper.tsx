@@ -30,16 +30,22 @@ interface SitesMetadata {
   baseUrl: string
   metaTags: string[]
   keywords?: string[]
+  titleAsTag?: boolean
 }
 
 const sitesMetadataDict: SitesMetadata[] = [
   {
+    appName: 'linear',
     baseUrl: 'https://linear.app/',
-    metaTags: ['title']
+    metaTags: ['title'],
+    keywords: ['issue', 'views', 'team', 'view']
   },
   {
+    appName: 'gmeet',
     baseUrl: 'https://meet.google.com/',
-    metaTags: ['title', 'description']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   },
   {
     appName: 'github',
@@ -48,28 +54,39 @@ const sitesMetadataDict: SitesMetadata[] = [
     keywords: ['pulls', 'pull', 'issues', 'issue', 'projects']
   },
   {
+    appName: 'gmail',
     baseUrl: 'https://mail.google.com/',
-    metaTags: ['title', 'application-name']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   },
   {
+    appName: 'slack',
     baseUrl: 'https://app.slack.com/',
-    metaTags: ['title']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   },
   {
+    appName: 'airtable',
     baseUrl: 'https://airtable.com/',
-    metaTags: ['title']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   },
   {
+    appName: 'figma',
     baseUrl: 'https://www.figma.com/',
-    metaTags: ['title']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   },
   {
-    baseUrl: 'https://www.notion.so/',
-    metaTags: ['title']
-  },
-  {
+    appName: 'atlassian',
     baseUrl: 'atlassian.net',
-    metaTags: ['title']
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   }
 ]
 
@@ -136,6 +153,7 @@ export const AliasWrapper = () => {
         const matchedURL = sitesMetadataDict.filter((e) => event.data.data.url.toString().includes(e.baseUrl))
         const resultUserTags: Tag[] = []
         let resultShortAlias: string = undefined
+        console.log({ matchedURL })
 
         if (matchedURL.length > 0) {
           const matchedMetaTags = []
@@ -150,17 +168,31 @@ export const AliasWrapper = () => {
             if (resultShortAlias) break
           }
 
-          // URL Parsing
+          // Add user tags for the keyword from the URL
           for (const keyword of matchedURL[0].keywords) {
-            if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0)
+            if (event.data.data.url.toString().includes(keyword) && resultUserTags.length === 0) {
               resultUserTags.push(
                 ...CreateTags(matchedURL[0].appName, event.data.data.url.toString(), keyword, matchedMetaTags[0])
               )
+            }
+          }
+
+          // Add title as user tags if needed
+          if (matchedURL[0].titleAsTag) {
+            resultUserTags.push(
+              ...CreateTags(
+                matchedURL[0].appName,
+                event.data.data.url.toString(),
+                'NA',
+                matchedMetaTags[0],
+                matchedURL[0].titleAsTag
+              )
+            )
           }
           if (resultUserTags.length === 0)
             resultUserTags.push(...CreateTags(matchedURL[0].appName, event.data.data.url.toString()))
 
-          setShortAlias(resultShortAlias.split(' ').join(',').split(':')[0])
+          setShortAlias(resultShortAlias)
           setUserTags(resultUserTags)
         } else {
           if (!resultShortAlias) resultShortAlias = event.data.data.tags.filter((el) => el.name === 'title')[0].value
