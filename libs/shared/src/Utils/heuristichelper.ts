@@ -40,7 +40,7 @@ export const CreateTags = (
     case 'gmeet':
       resultTags.push({ id: nanoid(), text: 'Google Meet' })
 
-      if (titleAsTag) resultTags.push({ id: nanoid(), text: matchedMetaTags.value })
+      if (titleAsTag) resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('–')[1] })
       return resultTags
     case 'gmail':
       resultTags.push({ id: nanoid(), text: 'Gmail' })
@@ -48,7 +48,10 @@ export const CreateTags = (
       return resultTags
     case 'slack':
       resultTags.push({ id: nanoid(), text: 'Slack' })
-      if (titleAsTag) resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('|')[1] })
+      if (titleAsTag) {
+        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('|')[1] })
+        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('|')[2] })
+      }
       return resultTags
     case 'airtable':
       resultTags.push({ id: nanoid(), text: 'Airtable' })
@@ -64,11 +67,22 @@ export const CreateTags = (
       }
       return resultTags
     case 'atlassian':
-      resultTags.push({ id: nanoid(), text: 'Atlassian' })
       if (titleAsTag) {
         resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
         resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[1] })
         resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[2] })
+      }
+      return resultTags
+    case 'docs':
+      resultTags.push({ id: nanoid(), text: 'Google Docs' })
+      if (titleAsTag) {
+        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
+      }
+      return resultTags
+    case 'sheets':
+      resultTags.push({ id: nanoid(), text: 'Google Sheets' })
+      if (titleAsTag) {
+        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
       }
       return resultTags
 

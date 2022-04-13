@@ -87,11 +87,25 @@ const sitesMetadataDict: SitesMetadata[] = [
     metaTags: ['title'],
     keywords: [],
     titleAsTag: true
+  },
+  {
+    appName: 'docs',
+    baseUrl: 'https://docs.google.com/document',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'sheets',
+    baseUrl: 'https://docs.google.com/spreadsheets',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
   }
 ]
 
 export const AliasWrapper = () => {
-  const [currTabURL, setCurrTabURL] = useState(document.referrer)
+  const [currTabURL, setCurrTabURL] = useState<string>()
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [shortAlias, setShortAlias] = useState<string>()
@@ -195,7 +209,11 @@ export const AliasWrapper = () => {
           setShortAlias(resultShortAlias)
           setUserTags(resultUserTags)
         } else {
-          if (!resultShortAlias) resultShortAlias = event.data.data.tags.filter((el) => el.name === 'title')[0].value
+          const title = event.data.data.tags.filter((el) => el.name === 'title')[0].value
+          if (!resultShortAlias) resultShortAlias = title
+          setUserTags([
+            { id: nanoid(), text: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }
+          ])
           setShortAlias(resultShortAlias)
         }
       }
