@@ -1,5 +1,85 @@
 import { Tag } from '../Types/Editor'
 import { nanoid } from 'nanoid'
+
+interface SitesMetadata {
+  appName?: string
+  baseUrl: string
+  metaTags: string[]
+  keywords?: string[]
+  titleAsTag?: boolean
+}
+
+export const sitesMetadataDict: SitesMetadata[] = [
+  {
+    appName: 'linear',
+    baseUrl: 'https://linear.app/',
+    metaTags: ['title'],
+    keywords: ['issue', 'views', 'team', 'view']
+  },
+  {
+    appName: 'gmeet',
+    baseUrl: 'https://meet.google.com/',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'github',
+    baseUrl: 'https://github.com/',
+    metaTags: ['title'],
+    keywords: ['pulls', 'pull', 'issues', 'issue', 'projects']
+  },
+  {
+    appName: 'gmail',
+    baseUrl: 'https://mail.google.com/',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'slack',
+    baseUrl: 'https://app.slack.com/',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'airtable',
+    baseUrl: 'https://airtable.com/',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'figma',
+    baseUrl: 'https://www.figma.com/',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'atlassian',
+    baseUrl: 'atlassian.net',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'docs',
+    baseUrl: 'https://docs.google.com/document',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  },
+  {
+    appName: 'sheets',
+    baseUrl: 'https://docs.google.com/spreadsheets',
+    metaTags: ['title'],
+    keywords: [],
+    titleAsTag: true
+  }
+]
+
 export const CreateTags = (
   appName: string,
   appUrl: string,
