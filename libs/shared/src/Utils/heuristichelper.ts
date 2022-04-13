@@ -82,7 +82,7 @@ export const CreateAlias = (appName: string, tag?: { name: string; value: any })
     case 'github':
       if (tag.name === 'title') {
         const temp = tag.value.split('·')[0]
-        return temp.split(' ')[0]
+        return temp.split(' ')[0].split(':')[0]
       }
       return
     case 'linear':
