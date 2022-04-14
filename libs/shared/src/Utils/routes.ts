@@ -84,6 +84,7 @@ export const apiURLs = {
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,
   getNodePublicURL: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
+  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`,
   getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`,
   getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 

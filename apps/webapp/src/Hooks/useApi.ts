@@ -113,6 +113,19 @@ export const useApi = () => {
       .catch(console.error)
   }
 
+  const getILinks = async () => {
+    return await client
+      .get(apiURLs.getILink(), {
+        headers: {
+          'mex-workspace-id': getWorkspaceId()
+        }
+      })
+      .then((res: any) => {
+        return res.data
+      })
+      .catch(console.error)
+  }
+
   const makeNodePublic = async (nodeId: string) => {
     const URL = apiURLs.makeNodePublic(nodeId)
     return await client
@@ -164,5 +177,5 @@ export const useApi = () => {
     return checkNodePublic(nodeid)
   }
 
-  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate, isPublic }
+  return { saveDataAPI, getDataAPI, saveNewNodeAPI, makeNodePublic, makeNodePrivate, isPublic, getILinks }
 }
