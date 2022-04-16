@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, createPlateUI } from '@udecode/plate'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -9,6 +9,7 @@ import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
 import { MediaEmbedElement } from './MediaEmbed'
+import TableWrapper from './TableWrapper'
 
 const EditorWrapper = styled.div`
   flex: 1;
@@ -127,7 +128,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         components={{
           [ELEMENT_ILINK]: ILinkWrapper,
           [ELEMENT_TAG]: TagWrapper,
-          [ELEMENT_MEDIA_EMBED]: MediaEmbedElement
+          [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
+          [ELEMENT_TABLE]: TableWrapper
         }}
         meta={{
           path: nodePath
