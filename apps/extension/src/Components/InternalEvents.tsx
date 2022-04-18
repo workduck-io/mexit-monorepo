@@ -51,11 +51,6 @@ function useToggleHandler() {
           } else {
             setVisualState(VisualState.hidden)
           }
-        // The following shouldn't be here
-        case 'GetPageMetaTags':
-          const res = parsePageMetaTags()
-          sendResponse({ metaTags: res })
-          return true
       }
     }
 
@@ -221,4 +216,3 @@ function useDocumentLock() {
     }
   }, [visualState])
 }
-
