@@ -1,4 +1,4 @@
-import { createPlugins, createPlateUI } from '@udecode/plate'
+import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { MexEditor, ComboboxKey } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
@@ -30,6 +30,27 @@ interface EditorProps {
   handleSave: (payload: any) => void
 }
 
+const commands = [
+  {
+    command: 'table',
+    text: 'Insert Table',
+    icon: 'ri:table-line',
+    type: 'Quick Actions'
+  },
+  // {
+  //   command: 'canvas',
+  //   text: 'Insert Drawing canvas',
+  //   icon: 'ri:markup-line',
+  //   type: 'Quick Actions'
+  // },
+  {
+    command: 'webem',
+    text: 'Insert Web embed',
+    icon: 'ri:global-line',
+    type: 'Quick Actions'
+  }
+]
+
 export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, handleSave }) => {
   const setPreview = useSputlitContext().setPreview
   const currTabURL = window.location.href
@@ -44,10 +65,10 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useEffect(() => {
-    if (checkMetaParseableURL(currTabURL)) {
-      const mt = parsePageMetaTags()
-      setPageMetaTags(mt)
-    }
+    // if (checkMetaParseableURL(currTabURL)) {
+    //   const mt = parsePageMetaTags()
+    //   setPageMetaTags(mt)
+    // }
 
     return () => {
       const payload = {
@@ -74,9 +95,24 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         },
         ilink: {
           newItemHandler: (ilink: string, parentId?: string) => console.log(`ilink: ${ilink} | ParentID: ${parentId}`)
+        },
+        slash_command: {
+          newItemHandler: () => undefined
         }
       },
-      slashCommands: {}
+      slashCommands: {
+        webem: {
+          slateElementType: ELEMENT_MEDIA_EMBED,
+          command: 'webem',
+          options: {
+            url: 'http://example.com/'
+          }
+        },
+        table: {
+          slateElementType: ELEMENT_TABLE,
+          command: 'table'
+        }
+      }
     },
     onChangeConfig: {
       tag: {
@@ -90,6 +126,12 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         trigger: '[[',
         data: [],
         icon: 'add-something-here'
+      },
+      slash_command: {
+        cbKey: ComboboxKey.SLASH_COMMAND,
+        trigger: '/',
+        data: commands.map((l) => ({ ...l, value: l.command })),
+        icon: 'ri:flask-line'
       }
     }
   }
