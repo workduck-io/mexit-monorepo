@@ -14,7 +14,6 @@ const Container = styled.div`
 
 const MainArea = () => {
   const Tree = useTreeFromLinks()
-
   return (
     <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
       <Navbar />

@@ -13,7 +13,6 @@ const Container = styled.div`
 
 const ActivityView = () => {
   const setILinks = useDataStore((store) => store.setIlinks)
-
   useEffect(() => {
     const ilinks = [
       {
