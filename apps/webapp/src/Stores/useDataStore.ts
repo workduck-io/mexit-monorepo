@@ -3,10 +3,11 @@ import { persist } from 'zustand/middleware'
 import { withoutDelimiter, mog, SEPARATOR, Settify, typeInvert, removeLink } from '@workduck-io/mex-editor'
 
 import { DataStoreState } from '../Types/Store'
-import { generateNodeId, getAllParentIds, getNodeIcon } from '../Utils/helper'
+import { getAllParentIds, getNodeIcon } from '../Utils/helper'
 import { CachedILink, Tag } from '../Types/Data'
 import { generateTree, getFlatTree } from '../Utils/treeUtils'
 import { getUniquePath } from '../Utils/path'
+import { generateNodeId } from '../Utils/idGenerator'
 
 export const generateTag = (item: string): Tag => ({
   value: item

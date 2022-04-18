@@ -3664,10 +3664,10 @@
     jwt-decode "^3.1.2"
     qs "^6.10.3"
 
-"@workduck-io/mex-editor@0.3.0-alpha.1":
-  version "0.3.0-alpha.1"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.3.0-alpha.1/8505088a1c3bf0068f977e4976cbe0522729d00662cffd51b41749e95754ec5e#e5a412b00ff308e0d23f8075b747e866acaab5f7"
-  integrity sha512-Xm5UFEzBYPONulLpLU0WdjmvEbCm5UOoYrm8KuC+vx0ZHQxY8EMJJ22T6FZD8+XNxA/S5u6yb4uJx7GtcU+2CA==
+"@workduck-io/mex-editor@0.3.0-alpha.3":
+  version "0.3.0-alpha.3"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.3.0-alpha.3/cb96875dd668455abedb94017160c6f016de08d9e7749a921315ab5714f2ad05#88bf7fb31e8bf7096bb1a8dad18e2c1f047a555f"
+  integrity sha512-ZLv9HctJ11D7X4VXDEWtBFIoyKbzbNb8+WEDz9oFGSo4dj/oYQUbUPYf67I1DGOvy4ST/Xrs/vD1VkS+7BCFwg==
   dependencies:
     "@udecode/plate" "10.2.2"
     color-scheme "^1.0.1"
