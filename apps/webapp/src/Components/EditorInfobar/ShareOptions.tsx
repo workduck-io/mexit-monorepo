@@ -3,13 +3,12 @@ import styled, { css, useTheme } from 'styled-components'
 import { transparentize } from 'polished'
 import globalLine from '@iconify-icons/ri/global-line'
 
-import { ToggleButton, mog, CardTitle } from '@mexit/shared'
+import { ToggleButton, mog, CardTitle, Loading } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/useApi'
 import useEditorStore from '../../Stores/useEditorStore'
 import { MexIcon } from '../../Style/Layouts'
 import { CopyButton } from '../Buttons/CopyButton'
-import Loading from '../../Style/Loading'
 
 const Flex = css`
   display: flex;

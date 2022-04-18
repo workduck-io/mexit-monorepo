@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 
-import { range } from '@mexit/shared'
+import { range } from '../Utils/lodashUtils'
 
 const loadingFade = keyframes`
   0% { opacity: 0; }
@@ -74,4 +74,4 @@ const Loading = ({ dots, transparent, color }: LoadingProps) => {
   )
 }
 
-export default Loading
+export { Loading }

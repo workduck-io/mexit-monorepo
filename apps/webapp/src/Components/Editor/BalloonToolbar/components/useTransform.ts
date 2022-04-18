@@ -53,10 +53,6 @@ export const useTransform = () => {
 
   const replaceSelectionWithLink = (editor: TEditor, ilink: string, inline: boolean) => {
     try {
-      const selectionPath = Editor.path(editor, editor.selection)
-
-      // mog('replaceSelectionWithLink  selPath', { selectionPath })
-
       if (inline) Transforms.delete(editor)
       else
         Transforms.removeNodes(editor, {
@@ -111,7 +107,6 @@ export const useTransform = () => {
     if (!isConvertable(editor)) return
 
     Editor.withoutNormalizing(editor, () => {
-      const selectionPath = Editor.path(editor, editor.selection)
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',
@@ -159,7 +154,6 @@ export const useTransform = () => {
     if (!isConvertable(editor)) return
 
     Editor.withoutNormalizing(editor, () => {
-      const selectionPath = Editor.path(editor, editor.selection)
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',

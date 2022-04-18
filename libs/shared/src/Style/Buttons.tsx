@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
 import { TippyProps } from '@tippyjs/react'
 
-import { centeredCss } from '../../../../apps/webapp/src/Style/Layouts'
-import { LoadingWrapper } from '../../../../apps/webapp/src/Style/Loading'
-import { ToolbarTooltip } from '../../../../apps/webapp/src/Components/Tooltips'
+import { centeredCss } from './Layouts'
+import { LoadingWrapper } from './Loading'
+import { ToolbarTooltip } from '../Components/Tooltips'
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   primary?: boolean

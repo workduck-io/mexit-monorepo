@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import mixpanel from 'mixpanel-browser'
 
 import { Button } from '@mexit/shared'
