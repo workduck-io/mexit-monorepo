@@ -1,14 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { createPlateUI, ELEMENT_LINK, ELEMENT_MEDIA_EMBED, ELEMENT_PARAGRAPH, withProps } from '@udecode/plate'
+import {
+  createPlateUI,
+  ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
+  withProps
+} from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 import LinkElement from './Link'
-// import { MediaEmbedElement } from './media-embed-ui/src'
 import { TagElement } from '@workduck-io/mex-editor'
+import { MediaEmbedElement } from './MediaEmbed'
+import TableWrapper from './TableWrapper'
 
 export const ELEMENT_TAG = 'tag'
 
-export const editorPreviewComponents = createPlateUI({
+export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
     as: 'a'
   }),
@@ -19,9 +27,10 @@ export const editorPreviewComponents = createPlateUI({
       }
     }
   }),
-  [ELEMENT_TAG]: TagElement as any
-  //   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any
-})
+  [ELEMENT_TAG]: TagElement as any,
+  [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
+  [ELEMENT_TABLE]: TableWrapper
+}
 
 const components = createPlateUI({
   ...editorPreviewComponents

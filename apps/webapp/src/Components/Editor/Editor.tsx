@@ -1,12 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey } from '@workduck-io/mex-editor'
+import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, createPlateUI } from '@udecode/plate'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
+import { MediaEmbedElement } from './MediaEmbed'
+import TableWrapper from './TableWrapper'
 
 const EditorWrapper = styled.div`
   flex: 1;
@@ -24,23 +27,60 @@ interface EditorProps {
   autoFocus?: boolean
 }
 
+const commands = [
+  {
+    command: 'table',
+    text: 'Insert Table',
+    icon: 'ri:table-line',
+    type: 'Quick Actions'
+  },
+  // {
+  //   command: 'canvas',
+  //   text: 'Insert Drawing canvas',
+  //   icon: 'ri:markup-line',
+  //   type: 'Quick Actions'
+  // },
+  {
+    command: 'webem',
+    text: 'Insert Web embed',
+    icon: 'ri:global-line',
+    type: 'Quick Actions'
+  }
+]
+
 const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
   const addILink = useDataStore((store) => store.addILink)
 
-  const comboboxConfig = {
+  const comboboxConfig: ComboboxConfig = {
     onKeyDownConfig: {
       keys: {
         ilink: {
+          // @ts-ignore
           newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
         },
         tag: {
           newItemHandler: (tag: string) => addTag(tag)
+        },
+        slash_command: {
+          newItemHandler: () => undefined
         }
       },
-      slashCommands: {}
+      slashCommands: {
+        webem: {
+          slateElementType: ELEMENT_MEDIA_EMBED,
+          command: 'webem',
+          options: {
+            url: 'http://example.com/'
+          }
+        },
+        table: {
+          slateElementType: ELEMENT_TABLE,
+          command: 'table'
+        }
+      }
     },
     onChangeConfig: {
       ilink: {
@@ -53,7 +93,13 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         cbKey: ComboboxKey.TAG,
         trigger: '#',
         data: tags.map((t) => ({ ...t, text: t.value })),
-        icon: 'add-something-here'
+        icon: 'ri:hashtag'
+      },
+      slash_command: {
+        cbKey: ComboboxKey.SLASH_COMMAND,
+        trigger: '/',
+        data: commands.map((l) => ({ ...l, value: l.command })),
+        icon: 'ri:flask-line'
       }
     }
   }
@@ -81,7 +127,9 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         comboboxConfig={comboboxConfig}
         components={{
           [ELEMENT_ILINK]: ILinkWrapper,
-          [ELEMENT_TAG]: TagWrapper
+          [ELEMENT_TAG]: TagWrapper,
+          [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
+          [ELEMENT_TABLE]: TableWrapper
         }}
         meta={{
           path: nodePath

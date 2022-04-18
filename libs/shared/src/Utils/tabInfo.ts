@@ -13,7 +13,7 @@ export const checkMetaParseableURL = (url: string) => {
   return true
 }
 
-export const parsePageMetaTags = (document?) => {
+export const parsePageMetaTags = (document = window.document) => {
   const metaElements = document.getElementsByTagName('meta')
   const title = document.getElementsByTagName('title')[0]
 
