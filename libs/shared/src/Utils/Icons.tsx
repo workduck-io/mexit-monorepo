@@ -15,7 +15,7 @@ import externalLinkLine from '@iconify-icons/ri/external-link-line'
 // `any` is used in type signature as `IconifyIcon` type doesn't work
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-const MexIcons: { [key: string]: [any, any] } = {
+export const MexIcons: { [key: string]: [any, any] } = {
   // First element of array is of closed Icon and the second is for open
   openClose: [checkboxBlankCircleFill, arrowDownCircleLine],
   circle: [checkboxBlankCircleFill, checkboxBlankCircleLine],
@@ -34,5 +34,3 @@ export const MexNodeIcons: { [key: string]: [any, any] } = {
 export const EditorIcons: { [name: string]: any } = {
   externalLink: externalLinkLine
 }
-
-export default MexIcons

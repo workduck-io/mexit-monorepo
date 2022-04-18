@@ -20,16 +20,16 @@ export enum CustomEvents {
   SYNC_BLOCK_SYNC = 'Sync - Data'
 }
 
-export enum ActionType {
-  KEY_PRESS = 'KeyPress',
-  CLICK = 'Click',
-  USE = 'Use',
-  CREATE = 'Create',
-  CHANGE = 'Change',
-  DELETE = 'Delete',
-  SAVE = 'Save',
-  SYNC = 'Sync'
-}
+// export enum ActionType {
+//   KEY_PRESS = 'KeyPress',
+//   CLICK = 'Click',
+//   USE = 'Use',
+//   CREATE = 'Create',
+//   CHANGE = 'Change',
+//   DELETE = 'Delete',
+//   SAVE = 'Save',
+//   SYNC = 'Sync'
+// }
 
 export enum Properties {
   WORKSPACE_ID = 'mex-workspace-id',

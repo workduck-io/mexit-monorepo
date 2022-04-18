@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import checkboxLine from '@iconify-icons/ri/checkbox-line'
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 
-import IconButton from '../../Style/Buttons'
+import { IconButton } from '@mexit/shared'
 
 interface CopyButtonProps {
   text: string

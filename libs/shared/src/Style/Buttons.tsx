@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
 import { TippyProps } from '@tippyjs/react'
 
-import { centeredCss } from './Layouts'
-import { LoadingWrapper } from './Loading'
-import { ToolbarTooltip } from '../Components/Tooltips'
+import { centeredCss } from '../../../../apps/webapp/src/Style/Layouts'
+import { LoadingWrapper } from '../../../../apps/webapp/src/Style/Loading'
+import { ToolbarTooltip } from '../../../../apps/webapp/src/Components/Tooltips'
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   primary?: boolean
@@ -92,7 +92,7 @@ export const HeadlessButton = styled.button`
   background: transparent;
 `
 
-const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton }: IconButtonProps) => {
+export const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton }: IconButtonProps) => {
   return (
     <ToolbarTooltip content={<span>{title}</span>} singleton={singleton}>
       <Button onClick={onClick} highlight={highlight}>
@@ -101,8 +101,6 @@ const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton
     </ToolbarTooltip>
   )
 }
-
-export default IconButton
 
 export const AsyncButton = styled.button<AsyncButtonProps>`
   ${centeredCss};

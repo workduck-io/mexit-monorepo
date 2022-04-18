@@ -9,11 +9,11 @@ import { mog } from '@mexit/shared'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
-import { generateSnippetId } from '../Utils/idGenerator'
+import { generateSnippetId } from '@mexit/shared'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import IconButton, { Button } from '../Style/Buttons'
+import { Button, IconButton } from '@mexit/shared'
 
 import { MainHeader } from '../Style/Layouts'
 import {

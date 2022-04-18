@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { AsyncButton, AsyncButtonProps, GoogleAuthButton } from '../../Style/Buttons'
+import { AsyncButton, AsyncButtonProps, GoogleAuthButton } from '@mexit/shared'
 import Loading from '../../Style/Loading'
 import { Icon } from '@iconify/react'
 import { useAuthentication, useAuthStore } from '../../Stores/useAuth'

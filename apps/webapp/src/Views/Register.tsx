@@ -14,7 +14,7 @@ import Input, { InputFormError, PasswordRequirements } from '../Components/Input
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
-import { Button } from '../Style/Buttons'
+import { Button } from '@mexit/shared'
 import Analytics from '../Utils/analytics'
 
 export const Register = () => {

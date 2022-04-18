@@ -5,9 +5,9 @@ import { withoutDelimiter, mog, SEPARATOR, Settify, typeInvert, removeLink } fro
 import { DataStoreState } from '../Types/Store'
 import { getAllParentIds, getNodeIcon } from '../Utils/helper'
 import { CachedILink, Tag } from '../Types/Data'
-import { generateTree, getFlatTree } from '../Utils/treeUtils'
+import { generateTree, getFlatTree } from '@mexit/shared'
 import { getUniquePath } from '../Utils/path'
-import { generateNodeId } from '../Utils/idGenerator'
+import { generateNodeId } from '@mexit/shared'
 
 export const generateTag = (item: string): Tag => ({
   value: item

@@ -3,7 +3,7 @@ import create from 'zustand'
 
 import { mog } from '@mexit/shared'
 
-import { getAllParentIds, isElder } from '../Utils/treeUtils'
+import { getAllParentIds, isElder } from '@mexit/shared'
 import useDataStore from '../Stores/useDataStore'
 import { GenericSearchResult } from '@mexit/shared'
 import { useLinks } from './useLinks'

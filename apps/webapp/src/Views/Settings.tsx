@@ -7,7 +7,7 @@ import user3Line from '@iconify-icons/ri/user-3-line'
 import { Icon } from '@iconify/react'
 
 import { useAuthentication } from '../Stores/useAuth'
-import { Button } from '../Style/Buttons'
+import { Button } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 
 const IntegrationContainer = styled.section`

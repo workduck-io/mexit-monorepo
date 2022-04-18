@@ -4,17 +4,12 @@ import { TEditor, getNodes, getSelectionText, insertNodes } from '@udecode/plate
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
 import { ELEMENT_ILINK, ILinkNode, SEPARATOR } from '@workduck-io/mex-editor'
-import useContentStore from '../../../../Stores/useContentStore'
-import useDataStore from '../../../../Stores/useDataStore'
-import useEditorStore, { defaultContent } from '../../../../Stores/useEditorStore'
-import { NODE_PATH_CHAR_LENGTH, NODE_PATH_SPACER, getSlug } from '@mexit/shared'
-import { convertContentToRawText } from '@mexit/shared'
+import { convertContentToRawText, generateSnippetId, mog } from '@mexit/shared'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
-import { generateSnippetId } from '@mexit/shared'
-import { mog } from '@mexit/shared'
+import { useContentStore } from '../../../../Hooks/useContentStore'
 
 export const useTransform = () => {
-  const addILink = useDataStore((s) => s.addILink)
+  // const addILink = useDataStore((s) => s.addILink)
   const addSnippet = useSnippetStore((s) => s.addSnippet)
   const setContent = useContentStore((s) => s.setContent)
 
@@ -110,43 +105,43 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, () => {
-      const selectionPath = Editor.path(editor, editor.selection)
-      const nodes = Array.from(
-        getNodes(editor, {
-          mode: 'highest',
-          block: true,
-          at: editor.selection
-        })
-      )
-      const lowest = Array.from(
-        getNodes(editor, {
-          mode: 'lowest',
-          block: true,
-          at: editor.selection
-        })
-      )
+    // Editor.withoutNormalizing(editor, () => {
+    //   const selectionPath = Editor.path(editor, editor.selection)
+    //   const nodes = Array.from(
+    //     getNodes(editor, {
+    //       mode: 'highest',
+    //       block: true,
+    //       at: editor.selection
+    //     })
+    //   )
+    //   const lowest = Array.from(
+    //     getNodes(editor, {
+    //       mode: 'lowest',
+    //       block: true,
+    //       at: editor.selection
+    //     })
+    //   )
 
-      const selText = getSelectionText(editor)
+    //   const selText = getSelectionText(editor)
 
-      const value = nodes.map(([node, _path]) => {
-        return node
-      })
-      const isInline = lowest.length === 1
-      const putContent = selText.length > NODE_PATH_CHAR_LENGTH
+    //   const value = nodes.map(([node, _path]) => {
+    //     return node
+    //   })
+    //   const isInline = lowest.length === 1
+    //   const putContent = selText.length > NODE_PATH_CHAR_LENGTH
 
-      const text = convertContentToRawText(value, NODE_PATH_SPACER)
-      const parentPath = useEditorStore.getState().node.title
-      const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
+    //   const text = convertContentToRawText(value, NODE_PATH_SPACER)
+    //   const parentPath = useEditorStore.getState().node.title
+    //   const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
 
-      const node = addILink({ ilink: path })
+    //   const node = addILink({ ilink: path })
 
-      replaceSelectionWithLink(editor, node.nodeid, isInline)
-      // mog('We are here', { lowest, selText, esl: editor.selection, selectionPath, nodes, value, text, path, nodeid })
-      setContent(node.nodeid, putContent ? value : defaultContent.content)
-      // saveData()
-      // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
-    })
+    //   replaceSelectionWithLink(editor, node.nodeid, isInline)
+    //   // mog('We are here', { lowest, selText, esl: editor.selection, selectionPath, nodes, value, text, path, nodeid })
+    //   setContent(node.nodeid, putContent ? value : defaultContent.content)
+    //   // saveData()
+    //   // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
+    // })
   }
 
   /**

@@ -14,7 +14,7 @@ import useDataStore from '../Stores/useDataStore'
 import useEditorStore, { getInitialNode } from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import useSearchStore from '../Hooks/useSearchStore'
-import { GenericSearchResult } from '../../../../libs/shared/src/Types/Search'
+import { GenericSearchResult } from '@mexit/shared'
 import { MainHeader } from '../Style/Layouts'
 import {
   Result,

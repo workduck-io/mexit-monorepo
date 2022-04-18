@@ -1,5 +1,5 @@
-import MexIcons from '../Components/Icons/Icons'
-import TreeNode from '../Types/Tree'
+import { MexIcons } from './Icons'
+import { TreeNode } from '../Types/Tree'
 
 export const sampleFlatTree = [
   '@',
@@ -132,5 +132,3 @@ export const getFlatTree = (nestedTree: TreeNode[]) => {
 
   return newTree
 }
-
-// export default generateTree(sampleFlatTree)

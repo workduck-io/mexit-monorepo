@@ -1,6 +1,6 @@
-import MexIcons from '../Components/Icons/Icons'
+import { MexIcons } from '../Utils/Icons'
 
-export default interface TreeNode {
+export interface TreeNode {
   title: string
   id: string
   nodeid: string

@@ -1,6 +1,6 @@
 import { Snippet } from '@mexit/shared'
 
-import { SEPARATOR } from '../Utils/treeUtils'
+import { SEPARATOR } from '@mexit/shared'
 // import { parseBlock } from '../Utils/flexsearch'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
