@@ -1,5 +1,5 @@
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import config from '../config'
 import { useAuthentication } from '../Stores/useAuth'
@@ -8,12 +8,18 @@ import { CenteredColumn } from '../Style/Layouts'
 import { Title } from '../Style/Typography'
 
 export default function OAuthDesktop() {
-  const URLparams = new URL(window.location.href).searchParams
-  const code = URLparams.get('code')
-  const mexProtocolURL = `mex://localhost:3333/?code=${code}`
+  const [code, setCode] = useState<string>()
   const navigate = useNavigate()
   const { loginViaGoogle } = useAuthentication()
-  window.open(mexProtocolURL, '_self')
+
+  useEffect(() => {
+    const URLparams = new URL(window.location.href).searchParams
+    const codeP = URLparams.get('code')
+    setCode(codeP)
+    const mexProtocolURL = `mex://localhost:3333/?code=${codeP}`
+    console.log('Mex Protocol URL: ', mexProtocolURL)
+    window.open(mexProtocolURL, '_self')
+  }, [])
 
   const handleNavigatedLogin = async (e) => {
     e.preventDefault()
