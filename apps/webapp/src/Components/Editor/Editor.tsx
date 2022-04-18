@@ -10,6 +10,7 @@ import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
 import { MediaEmbedElement } from './MediaEmbed'
 import TableWrapper from './TableWrapper'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled.div`
   flex: 1;
@@ -113,7 +114,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     focusOptions: {
       edge: 'start',
       focus: true
-    }
+    },
+    withBalloonToolbar: true
   }
 
   const debounced = useDebouncedCallback((value) => {
@@ -134,6 +136,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         meta={{
           path: nodePath
         }}
+        BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         // debug
         onChange={debounced}
         options={editorOptions}
