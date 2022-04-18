@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor,
 export const useAuthentication = () => {
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
-  const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
+  const { signIn, signOut, signUp, verifySignUp, googleSignIn, refreshToken } = useAuth()
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
@@ -61,11 +61,9 @@ export const useAuthentication = () => {
         await client
           .get(apiURLs.getUserRecords(result.userCred.userId))
           .then((d: any) => {
-            console.log(d)
             const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
-            console.log('userDetails', { userDetails })
             setAuthenticated(userDetails, workspaceDetails)
           })
           .catch(async (e) => {
@@ -81,19 +79,30 @@ export const useAuthentication = () => {
             const newWorkspaceName = `WD_${nanoid()}`
 
             await client
-              .post(apiURLs.registerUser, {
-                user: {
-                  id: uCred.userId,
-                  name: uCred.email,
-                  email: uCred.email
+              .post(
+                apiURLs.registerUser,
+                {
+                  type: 'RegisterUserRequest',
+                  user: {
+                    id: uCred.userId,
+                    name: uCred.email,
+                    email: uCred.email
+                  },
+                  workspaceName: newWorkspaceName
                 },
-                workspaceName: newWorkspaceName
-              })
-              .then((d: any) => {
+                {
+                  headers: {
+                    'mex-workspace-id': ''
+                  }
+                }
+              )
+              .then(async (d: any) => {
+                await refreshToken()
                 const userDetails = { email: uCred.email, userId: uCred.userId }
                 const workspaceDetails = { id: d.data.id, name: d.data.name }
 
                 setAuthenticated(userDetails, workspaceDetails)
+                console.log('Setting user as authenticated')
               })
               .catch(console.error)
           })
