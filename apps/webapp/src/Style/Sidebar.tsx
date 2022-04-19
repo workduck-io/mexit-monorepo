@@ -32,6 +32,7 @@ export const SidebarContent = styled.div`
   overflow-y: auto;
   padding: ${({ theme }) => theme.spacing.medium};
 `
+
 export const SectionHeading = styled.div`
   user-select: none;
   margin: ${({ theme }) => theme.spacing.medium} 0 ${({ theme }) => theme.spacing.small};
