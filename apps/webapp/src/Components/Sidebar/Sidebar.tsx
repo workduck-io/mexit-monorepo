@@ -10,6 +10,7 @@ import { TreeWithContextMenu } from './TreeWithContextMenu'
 import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading, ILinkRefresh, FlexRow } from '../../Style/Sidebar'
 import { useApi } from '../../Hooks/useApi'
 import useDataStore from '../../Stores/useDataStore'
+import { isEqual } from 'lodash'
 
 export type SideBarProps = { tree: TreeNode[]; starred: TreeNode[] }
 
@@ -17,6 +18,7 @@ const SideBar = ({ tree, starred }: SideBarProps) => {
   const { transitions } = useFocusTransition()
   const [tHide, setThide] = useState(false)
   const setILinks = useDataStore((store) => store.setIlinks)
+  const iLinks = useDataStore((store) => store.ilinks)
 
   const { getILinks } = useApi()
 
@@ -26,8 +28,18 @@ const SideBar = ({ tree, starred }: SideBarProps) => {
 
   const RefreshILinks = () => {
     getILinks()
-      .then((iLinks) => {
-        setILinks(iLinks)
+      .then((response) => {
+        if (!isEqual(iLinks, response)) {
+          getILinks(true)
+            .then((secondResponse) => {
+              setILinks(secondResponse)
+            })
+            .catch((err) => {
+              console.error(err.message)
+            })
+        } else {
+          setILinks(response)
+        }
       })
       .catch((err) => {
         console.error(err.message)
