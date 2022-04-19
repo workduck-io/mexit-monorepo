@@ -2,7 +2,6 @@ import gitBranchLine from '@iconify-icons/ri/git-branch-line'
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
 import arrowRightSLine from '@iconify-icons/ri/arrow-right-s-line'
-import refreshIcon from '@iconify-icons/ri/refresh-line'
 
 import { useFocusTransition } from '../../Hooks/useFocusTransition'
 import TreeNode from '../../Types/Tree'
@@ -10,7 +9,6 @@ import { TreeWithContextMenu } from './TreeWithContextMenu'
 import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading } from '../../Style/Sidebar'
 import { useApi } from '../../Hooks/useApi'
 import useDataStore from '../../Stores/useDataStore'
-import { isEqual } from 'lodash'
 
 export type SideBarProps = { tree: TreeNode[]; starred: TreeNode[] }
 
