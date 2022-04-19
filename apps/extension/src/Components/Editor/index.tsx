@@ -19,6 +19,7 @@ import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -145,7 +146,8 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     focusOptions: {
       edge: 'end',
       focus: true
-    }
+    },
+    withBalloonToolbar: true
   }
 
   const debounced = useDebouncedCallback((value) => {
@@ -161,6 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
           path: nodePath
         }}
         components={components}
+        BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
