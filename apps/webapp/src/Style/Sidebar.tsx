@@ -33,16 +33,6 @@ export const SidebarContent = styled.div`
   padding: ${({ theme }) => theme.spacing.medium};
 `
 
-export const ILinkRefresh = styled.div`
-  margin-top: 18px;
-  margin-left: 10px;
-  cursor: pointer;
-`
-
-export const FlexRow = styled.div`
-  display: flex;
-  flex-direction: row;
-`
 export const SectionHeading = styled.div`
   user-select: none;
   margin: ${({ theme }) => theme.spacing.medium} 0 ${({ theme }) => theme.spacing.small};

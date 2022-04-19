@@ -7,7 +7,7 @@ import refreshIcon from '@iconify-icons/ri/refresh-line'
 import { useFocusTransition } from '../../Hooks/useFocusTransition'
 import TreeNode from '../../Types/Tree'
 import { TreeWithContextMenu } from './TreeWithContextMenu'
-import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading, ILinkRefresh, FlexRow } from '../../Style/Sidebar'
+import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading } from '../../Style/Sidebar'
 import { useApi } from '../../Hooks/useApi'
 import useDataStore from '../../Stores/useDataStore'
 import { isEqual } from 'lodash'
@@ -18,28 +18,21 @@ const SideBar = ({ tree, starred }: SideBarProps) => {
   const { transitions } = useFocusTransition()
   const [tHide, setThide] = useState(false)
   const setILinks = useDataStore((store) => store.setIlinks)
-  const iLinks = useDataStore((store) => store.ilinks)
-
+  const ONE_HOUR_IN_MS = 3600000
   const { getILinks } = useApi()
 
   useEffect(() => {
     RefreshILinks()
+    const interval = setInterval(() => {
+      RefreshILinks()
+    }, ONE_HOUR_IN_MS)
+    return () => clearInterval(interval)
   }, [])
 
   const RefreshILinks = () => {
     getILinks()
       .then((response) => {
-        if (!isEqual(iLinks, response)) {
-          getILinks(true)
-            .then((secondResponse) => {
-              setILinks(secondResponse)
-            })
-            .catch((err) => {
-              console.error(err.message)
-            })
-        } else {
-          setILinks(response)
-        }
+        setILinks(response)
       })
       .catch((err) => {
         console.error(err.message)
@@ -50,19 +43,15 @@ const SideBar = ({ tree, starred }: SideBarProps) => {
     <SidebarDiv>
       <SidebarContent>
         <SidebarSection className="tree">
-          <FlexRow>
-            <SectionHeading
-              onClick={() => {
-                setThide((b) => !b)
-              }}
-            >
-              <Icon height={20} icon={tHide ? arrowRightSLine : gitBranchLine} />
-              <h2>Tree</h2>
-            </SectionHeading>
-            <ILinkRefresh onClick={RefreshILinks}>
-              <Icon height={20} icon={refreshIcon} />
-            </ILinkRefresh>
-          </FlexRow>
+          <SectionHeading
+            onClick={() => {
+              setThide((b) => !b)
+            }}
+          >
+            <Icon height={20} icon={tHide ? arrowRightSLine : gitBranchLine} />
+            <h2>Tree</h2>
+          </SectionHeading>
+
           {!tHide && <TreeWithContextMenu tree={tree} />}
         </SidebarSection>
       </SidebarContent>

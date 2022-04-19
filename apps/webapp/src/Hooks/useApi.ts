@@ -113,12 +113,9 @@ export const useApi = () => {
       .catch(console.error)
   }
 
-  const getILinks = async (hardRefresh = false) => {
+  const getILinks = async () => {
     return await client
       .get(apiURLs.getILink(), {
-        params: {
-          hardRefresh
-        },
         headers: {
           'mex-workspace-id': getWorkspaceId()
         }
@@ -187,7 +184,6 @@ export const useApi = () => {
     makeNodePublic,
     makeNodePrivate,
     isPublic,
-    getILinks,
-    refreshILinks
+    getILinks
   }
 }
