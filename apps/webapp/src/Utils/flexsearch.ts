@@ -1,6 +1,6 @@
 import { Document } from 'flexsearch'
 
-import { parseNode, parseSnippet, Snippet } from '@mexit/shared'
+import { parseNode, parseSnippet } from '@mexit/shared'
 
 import { indexNames } from '../Data/constants'
 import { GenericSearchData, SearchIndex } from '@mexit/shared'

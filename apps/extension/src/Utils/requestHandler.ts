@@ -1,5 +1,5 @@
 import { useAuthStore } from '../Hooks/useAuth'
-import { apiURLs } from '@mexit/shared'
+import { apiURLs } from './routes'
 import client from './fetchClient'
 import { Tab } from '../Types/Tabs'
 

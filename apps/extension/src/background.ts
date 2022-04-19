@@ -1,19 +1,6 @@
-import { apiURLs } from '@mexit/shared'
-import * as Sentry from '@sentry/browser'
-import { CaptureConsole } from '@sentry/integrations'
+import { apiURLs } from './Utils/routes'
 
-import {
-  handleCaptureRequest,
-  handleActionRequest,
-  handleAsyncActionRequest,
-  handleAuthRequest,
-  handleStoreRequest
-} from './Utils/requestHandler'
-
-Sentry.init({
-  dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
-  integrations: [new CaptureConsole({ levels: ['error'] })]
-})
+import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
@@ -60,21 +47,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       // eslint-disable-next-line @typescript-eslint/no-extra-semi
       ;(async () => {
         const res = await handleAsyncActionRequest(request)
-        console.log('Got async action response: ', res)
         sendResponse(res)
       })()
-      return true
-    }
-
-    case 'AUTH_HANDLER': {
-      const res = handleAuthRequest(request)
-      sendResponse(res)
-      return true
-    }
-
-    case 'STORE_HANDLER': {
-      const res = handleStoreRequest(request)
-      sendResponse(res)
       return true
     }
 

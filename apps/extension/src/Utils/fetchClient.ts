@@ -1,8 +1,17 @@
+import axios from 'axios'
 import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js'
-import axios from 'axios'
+
 import useAuthStore from '../Hooks/useAuthStore'
-import { wrapErr } from '@mexit/shared'
+
+export function wrapErr<T>(f: (result: T) => void) {
+  return (err: any, result: T) => {
+    if (err) {
+      console.error({ error: JSON.stringify(err) })
+      return
+    } else f(result)
+  }
+}
 
 const client = axios.create({
   adapter: fetchAdapter
