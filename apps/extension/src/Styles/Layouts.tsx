@@ -1,10 +1,15 @@
 import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
-
 import { Title } from './Typography'
 
 export const Wrapper = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.large};
+  margin-right: 3rem;
+`
+
+export const PageContainer = styled.div`
+  margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
+  position: relative;
 `
 
 export const MexIcon = styled(Icon)<{ margin?: string; noHover?: boolean }>`
@@ -61,5 +66,6 @@ export const MainHeader = styled.div`
   ${Title} {
     font-size: 2rem;
     font-weight: bold;
+    flex-grow: 1;
   }
 `

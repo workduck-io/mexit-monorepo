@@ -7,7 +7,7 @@ import { ToggleButton, mog, CardTitle, Loading } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/useApi'
 import useEditorStore from '../../Stores/useEditorStore'
-import { MexIcon } from '../../Style/Layouts'
+import { MexIcon } from '@mexit/shared'
 import { CopyButton } from '../Buttons/CopyButton'
 
 const Flex = css`

@@ -1,6 +1,37 @@
 import styled, { css } from 'styled-components'
 import { transparentize } from 'polished'
 
+export const getTippyStyles = (name: string, textColor: string, background: string, border?: string) => css`
+  .tippy-box[data-theme~='${name}'] {
+    background: ${background};
+    color: ${textColor};
+
+    &[data-placement^='top'] > .tippy-arrow::before {
+      border-top-color: ${border || background};
+    }
+
+    &[data-placement^='bottom'] > .tippy-arrow::before {
+      border-bottom-color: ${border || background};
+    }
+
+    &[data-placement^='left'] > .tippy-arrow::before {
+      border-left-color: ${border || background};
+    }
+
+    &[data-placement^='right'] > .tippy-arrow::before {
+      border-right-color: ${border || background};
+    }
+
+    & > .tippy-backdrop {
+      background: ${background};
+    }
+
+    & > .tippy-svg-arrow {
+      fill: ${background};
+    }
+  }
+`
+
 export const TippyBalloonStyles = css`
   .tippy-box[data-theme~='transparent'] {
     background: transparent;
@@ -34,61 +65,38 @@ export const TippyBalloonStyles = css`
     }
   }
 
-  .tippy-box[data-theme~='mex'] {
-    background-color: ${({ theme }) => theme.colors.gray[8]};
-    color: ${({ theme }) => theme.colors.text.fade};
+  ${({ theme }) => getTippyStyles('mex', theme.colors.text.fade, theme.colors.gray[8])}
+  ${({ theme }) => getTippyStyles('mex-bright', theme.colors.text.oppositePrimary, theme.colors.primary)}
+
+  .tippy-box[data-theme~='help-text'] {
+    background: ${({ theme }) => transparentize(0.4, theme.colors.gray[8])};
+    color: ${({ theme }) => theme.colors.text.default};
+    box-shadow: 0 0 8px 2px ${({ theme }) => theme.colors.gray[10]};
+    backdrop-filter: blur(10px);
+    border-radius: ${({ theme }) => theme.borderRadius.small};
 
     &[data-placement^='top'] > .tippy-arrow::before {
-      border-top-color: ${({ theme }) => theme.colors.gray[8]};
+      border-top-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
 
     &[data-placement^='bottom'] > .tippy-arrow::before {
-      border-bottom-color: ${({ theme }) => theme.colors.gray[8]};
+      border-bottom-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
 
     &[data-placement^='left'] > .tippy-arrow::before {
-      border-left-color: ${({ theme }) => theme.colors.gray[8]};
+      border-left-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
 
     &[data-placement^='right'] > .tippy-arrow::before {
-      border-right-color: ${({ theme }) => theme.colors.gray[8]};
+      border-right-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
 
     & > .tippy-backdrop {
-      background-color: ${({ theme }) => theme.colors.gray[8]};
+      background: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
 
     & > .tippy-svg-arrow {
-      fill: ${({ theme }) => theme.colors.gray[8]};
-    }
-  }
-
-  .tippy-box[data-theme~='mex-bright'] {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
-
-    &[data-placement^='top'] > .tippy-arrow::before {
-      border-top-color: ${({ theme }) => theme.colors.primary};
-    }
-
-    &[data-placement^='bottom'] > .tippy-arrow::before {
-      border-bottom-color: ${({ theme }) => theme.colors.primary};
-    }
-
-    &[data-placement^='left'] > .tippy-arrow::before {
-      border-left-color: ${({ theme }) => theme.colors.primary};
-    }
-
-    &[data-placement^='right'] > .tippy-arrow::before {
-      border-right-color: ${({ theme }) => theme.colors.primary};
-    }
-
-    & > .tippy-backdrop {
-      background-color: ${({ theme }) => theme.colors.primary};
-    }
-
-    & > .tippy-svg-arrow {
-      fill: ${({ theme }) => theme.colors.primary};
+      fill: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
     }
   }
 

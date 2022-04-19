@@ -1,3 +1,4 @@
+import { Title } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
@@ -8,7 +9,6 @@ import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
 import { size } from './Responsive'
-import { Title } from './Typography'
 import { ProfileIcon } from './UserPage'
 
 export const Ellipsis = css`

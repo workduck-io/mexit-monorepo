@@ -10,7 +10,7 @@ import { BackCard } from '../Style/Card'
 import { Title } from '../Style/Elements'
 import { ButtonFields } from '../Style/Form'
 import { AuthForm } from '../Style/Form'
-import { CenteredColumn } from '../Style/Layouts'
+import { CenteredColumn } from '@mexit/shared'
 import { LoginFormData } from '@mexit/shared'
 import { EMAIL_REG } from '../Utils/constants'
 

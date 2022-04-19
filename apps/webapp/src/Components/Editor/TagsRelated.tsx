@@ -7,7 +7,7 @@ import { useTags } from '../../Hooks/useTags'
 import useDataStore from '../../Stores/useDataStore'
 import { HoverSubtleGlow } from '../../Style/Helpers'
 import { InfoWidgetScroll, InfoWidgetWrapper } from '../../Style/Infobar'
-import { Note } from '../../Style/Typography'
+import { Note } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { DataInfoHeader } from '../../Style/Backlinks'
 import NodeLink from './NodeLink'
@@ -30,8 +30,7 @@ const TagsFlex = styled.div`
 `
 
 const InfoSubHeading = styled.h2`
-  margin: ${({ theme }) => theme.spacing.large} 0 ${({ theme }) => theme.spacing.medium}
-    ${({ theme }) => theme.spacing.medium};
+  margin: ${({ theme }) => theme.spacing.large};
   font-size: 1.2rem;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text.fade};

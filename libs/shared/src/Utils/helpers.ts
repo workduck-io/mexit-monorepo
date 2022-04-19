@@ -1,5 +1,3 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
 import toast from 'react-hot-toast'
 
 export function wrapErr<T>(f: (result: T) => void) {

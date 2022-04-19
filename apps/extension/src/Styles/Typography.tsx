@@ -7,7 +7,17 @@ export const Title = styled.h1<{ colored?: boolean }>`
       color: ${theme.colors.primary};
     `}
 `
+
+export const TitleText = styled.div`
+  flex-grow: 1;
+`
+
 export const Subtitle = styled.h2``
+
+export const Description = styled.div`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.text.fade};
+`
 
 export const Para = styled.p`
   margin-top: 1rem;
