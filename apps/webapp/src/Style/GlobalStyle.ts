@@ -2,7 +2,7 @@ import { normalize } from '@mexit/shared'
 import { createGlobalStyle, css } from 'styled-components'
 
 import { ThinScrollbar } from './Helpers'
-import { EditorBalloonStyles, TippyBalloonStyles } from './Toolbar'
+import { EditorBalloonStyles, TippyBalloonStyles } from '@mexit/shared'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization
@@ -24,7 +24,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
     display: flex;
     font-family: Inter, sans-serif;
     color: ${({ theme }) => theme.colors.text.heading};

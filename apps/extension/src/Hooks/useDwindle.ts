@@ -1,3 +1,4 @@
+import { wrapErr } from '@mexit/core'
 import {
   AuthenticationDetails,
   ClientMetadata,
@@ -12,15 +13,6 @@ import { useEffect } from 'react'
 import useInternalAuthStore, { UserCred } from './useAuthStore'
 
 const AWSRegion = 'us-east-1'
-
-export function wrapErr<T>(f: (result: T) => void) {
-  return (err: any, result: T) => {
-    if (err) {
-      console.error({ error: JSON.stringify(err) })
-      return
-    } else f(result)
-  }
-}
 
 const useAuth = () => {
   const uPool = useInternalAuthStore((store) => store.userPool)

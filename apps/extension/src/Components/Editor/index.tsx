@@ -7,18 +7,15 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useEditorChange } from '../../Hooks/useEditorActions'
-import { CaptureType } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
-import { Button } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
-import { checkMetaParseableURL, parsePageMetaTags } from '@mexit/shared'
-import { Tag } from '../../Types/Tags'
-import config from '../../config'
 import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
+import { Tag, CaptureType } from '@mexit/core'
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -145,7 +142,8 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     focusOptions: {
       edge: 'end',
       focus: true
-    }
+    },
+    withBalloonToolbar: true
   }
 
   const debounced = useDebouncedCallback((value) => {
@@ -161,6 +159,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
           path: nodePath
         }}
         components={components}
+        BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}

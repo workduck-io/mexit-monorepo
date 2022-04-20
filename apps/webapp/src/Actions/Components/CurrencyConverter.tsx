@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { resize } from '../../Utils/helper'
+import { resize } from '@mexit/shared'
 
 interface ConverterForm {
   from: string

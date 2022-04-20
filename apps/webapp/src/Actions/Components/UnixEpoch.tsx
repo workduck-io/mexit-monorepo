@@ -3,7 +3,7 @@ import { Input } from '@mexit/shared'
 import styled from 'styled-components'
 import { copyToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
-import { resize } from '../../Utils/helper'
+import { resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

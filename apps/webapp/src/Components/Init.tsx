@@ -6,7 +6,6 @@ import { BrowserTracing } from '@sentry/tracing'
 import Analytics from '../Utils/analytics'
 
 import config from '../config'
-import { IS_DEV } from '@mexit/shared'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useSearchStore from '../Hooks/useSearchStore'
 import useDataStore from '../Stores/useDataStore'

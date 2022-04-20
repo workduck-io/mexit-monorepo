@@ -23,11 +23,10 @@ import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
 import Navbar from './Components/Navbar'
 import config from './config'
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
-import jwtDecode from 'jwt-decode'
+import { Loading } from '@mexit/shared'
 import toast from 'react-hot-toast'
-import Loading from './Style/Loading'
 import { useTheme } from 'styled-components'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)

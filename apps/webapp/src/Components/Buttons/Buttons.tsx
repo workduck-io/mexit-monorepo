@@ -1,11 +1,11 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
-import { AsyncButton, AsyncButtonProps, GoogleAuthButton } from '../../Style/Buttons'
-import Loading from '../../Style/Loading'
+import { AsyncButton, AsyncButtonProps, GoogleAuthButton, Loading } from '@mexit/shared'
 import { Icon } from '@iconify/react'
 import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
-import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
+import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import config from '../../config'
+
 export interface LoadingButtonProps {
   children?: React.ReactNode
   loading?: boolean

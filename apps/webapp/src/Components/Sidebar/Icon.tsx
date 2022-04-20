@@ -1,9 +1,9 @@
 import circleOutline from '@iconify-icons/ri/checkbox-blank-circle-line'
 import React from 'react'
 
-import MexIcons, { MexNodeIcons } from '../Icons/Icons'
+import { MexIcons, MexNodeIcons } from '@mexit/shared'
 import { SIcon } from '../../Style/Sidebar'
-import TreeNode from '../../Types/Tree'
+import { TreeNode } from '@mexit/shared'
 
 interface RCIconProps {
   data: TreeNode

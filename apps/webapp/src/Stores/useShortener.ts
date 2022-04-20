@@ -1,4 +1,4 @@
-import { LinkCaptureStore, shortenerStoreConstructor } from '@mexit/shared'
+import { LinkCaptureStore, shortenerStoreConstructor } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

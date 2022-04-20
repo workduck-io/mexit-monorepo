@@ -1,8 +1,7 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Content, Contents, NodeEditorContent } from '@mexit/shared'
-import { storageAdapter } from '@mexit/shared'
+import { Content, Contents, NodeEditorContent, storageAdapter } from '@mexit/core'
 
 export interface ContentStoreState extends State {
   contents: Contents

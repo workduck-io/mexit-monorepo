@@ -31,7 +31,7 @@ export const centeredCss = css`
   justify-content: center;
 `
 
-const Centered = styled.div`
+export const Centered = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,8 +52,6 @@ export const SpaceBetweenHorizontalFlex = styled.div`
   align-items: center;
   justify-content: space-between;
 `
-
-export default Centered
 
 export const MainHeader = styled.div`
   display: flex;

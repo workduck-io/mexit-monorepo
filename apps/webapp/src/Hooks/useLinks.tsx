@@ -1,6 +1,6 @@
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { CachedILink, ILink } from '../Types/Data'
+import { CachedILink, ILink } from '@mexit/core'
 
 const ELEMENT_INLINE_BLOCK = 'inline_block'
 

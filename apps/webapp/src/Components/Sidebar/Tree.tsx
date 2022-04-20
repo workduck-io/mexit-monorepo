@@ -11,8 +11,9 @@ import React from 'react'
 import { withNodeOps } from '../../Stores/useEditorStore'
 import { StyledTree } from '../../Style/Sidebar'
 import TreeExpandIcon from './Icon'
-import { getNodeIdLast, SEPARATOR } from '../../Utils/treeUtils'
+import { getNodeIdLast } from '@mexit/shared'
 import { withNavigation } from '../../Hooks/useNavigation'
+import { SEPARATOR } from '@mexit/core'
 
 const motion = {
   motionName: 'node-motion',

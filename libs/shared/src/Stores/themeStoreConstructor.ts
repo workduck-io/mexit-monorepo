@@ -1,5 +1,5 @@
 import { defaultThemes, lightTheme } from '../Themes'
-import { Theme } from '../Types/Theme'
+import { Theme } from '@mexit/core'
 
 export const themeStoreConstructor = (set) => ({
   theme: { id: 'Light', themeData: lightTheme },

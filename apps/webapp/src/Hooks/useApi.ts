@@ -1,14 +1,12 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog } from '@mexit/shared'
-
 // import { defaultContent } from '../Stores/useEditorStore'
 import { useAuthStore } from '../Stores/useAuth'
 // import useContentStore from '../Stores/useContentStore'
 // import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { apiURLs } from '@mexit/shared'
-import { NodeMetadata } from '../Types/Data'
+import { NodeMetadata } from '@mexit/core'
 import useDataStore from '../Stores/useDataStore'
+import { apiURLs, mog } from '@mexit/core'
 
 export const removeNulls = (obj: any): any => {
   if (obj === null) {

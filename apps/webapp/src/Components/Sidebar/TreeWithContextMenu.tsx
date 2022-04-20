@@ -9,7 +9,7 @@ import 'react-contexify/dist/ReactContexify.css'
 
 import { StyledMenu } from '../../Style/Menu'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import TreeNode from '../../Types/Tree'
+import { TreeNode } from '@mexit/shared'
 import Tree from './Tree'
 
 interface TreeProps {

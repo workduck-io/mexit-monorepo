@@ -1,5 +1,4 @@
-import { MEXIT_ACTIONS_URL_BASE } from './routes'
-import { ActionType, MexitAction } from '../Types/Actions'
+import { MEXIT_ACTIONS_URL_BASE, ActionType, MexitAction } from '@mexit/core'
 
 // TODO: change shortcut keys based on user's OS
 export const initActions: Array<MexitAction> = [

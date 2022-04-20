@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom'
 
 import Editor from './Editor'
 import useDataStore from '../../Stores/useDataStore'
-import useEditorStore, { defaultContent } from '../../Stores/useEditorStore'
+import useEditorStore from '../../Stores/useEditorStore'
 import useLoad from '../../Hooks/useLoad'
 import useDataSaver from '../../Hooks/useSave'
-import { NodeEditorContent } from '../../Types/Data'
+import { defaultContent } from '@mexit/core'
 import EditorInfoBar from '../EditorInfobar'
+import { NodeEditorContent } from '@mexit/core'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()

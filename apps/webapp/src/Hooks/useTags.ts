@@ -1,5 +1,5 @@
 import useDataStore from '../Stores/useDataStore'
-import { TagsCache } from '../Types/Types'
+import { TagsCache } from '@mexit/core'
 
 const ELEMENT_TAG = 'tag'
 

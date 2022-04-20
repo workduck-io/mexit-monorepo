@@ -10,12 +10,8 @@ import toast from 'react-hot-toast'
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import { withoutDelimiter } from '@workduck-io/mex-editor'
 
-import { mog } from '@mexit/shared'
-
-import { ILink } from '../../Types/Data'
 import { Input } from '../../Style/Form'
-import { isClash, isReserved } from '../../Utils/path'
-import { parseBlock } from '@mexit/shared'
+import { isClash, isReserved } from '@mexit/core'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import useContentStore from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
@@ -31,6 +27,7 @@ import {
   SuggestionError,
   SuggestionText
 } from './NodeSelect.styles'
+import { ILink, mog, parseBlock } from '@mexit/core'
 
 export type QuickLink = {
   // Text to be shown in the combobox list

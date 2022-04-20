@@ -11,8 +11,7 @@ import {
 import { StyledElement } from '@udecode/plate-styled-components'
 import LinkElement from './Link'
 import { TagElement } from '@workduck-io/mex-editor'
-import { MediaEmbedElement } from './MediaEmbed'
-import TableWrapper from './TableWrapper'
+import { MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 export const ELEMENT_TAG = 'tag'
 

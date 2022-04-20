@@ -4,9 +4,9 @@ import { Plate } from '@udecode/plate'
 import styled from 'styled-components'
 
 import Editor from './Editor'
-import { defaultContent } from '../../Stores/useEditorStore'
 import { useAuthStore } from '../../Stores/useAuth'
-import { apiURLs } from '@mexit/shared'
+import { apiURLs } from '@mexit/core'
+import { defaultContent } from '@mexit/core'
 
 const SPlate = styled.div`
   flex: 1;

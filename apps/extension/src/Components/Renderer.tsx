@@ -1,4 +1,5 @@
-import { MEXIT_FRONTEND_URL_BASE, parsePageMetaTags } from '@mexit/shared'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { parsePageMetaTags } from '@mexit/shared'
 import React, { Suspense } from 'react'
 import { useCallback } from 'react'
 import { useRef } from 'react'

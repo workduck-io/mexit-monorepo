@@ -1,4 +1,4 @@
-import { NodeLink } from '../Types/Data'
+import { NodeLink } from '@mexit/core'
 import create from 'zustand'
 
 interface RenameStoreState {

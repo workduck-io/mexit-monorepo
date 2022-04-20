@@ -2,7 +2,7 @@ import React from 'react'
 import { useTransition } from 'react-spring'
 import { ThemeProvider } from 'styled-components'
 import useThemeStore from '../Stores/useThemeStore'
-import { Wrapper } from '../Style/Layouts'
+import { Wrapper } from '@mexit/shared'
 import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
 
 const Themes = () => {

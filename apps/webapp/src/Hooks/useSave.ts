@@ -2,7 +2,7 @@ import { useApi } from './useApi'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
 import useContentStore from '../Stores/useContentStore'
-import { NodeEditorContent } from '../Types/Types'
+import { NodeEditorContent } from '@mexit/core'
 
 const useDataSaver = () => {
   const setContent = useContentStore((state) => state.setContent)

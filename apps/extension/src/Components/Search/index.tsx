@@ -1,9 +1,9 @@
 import fuzzysort from 'fuzzysort'
 import React, { useEffect } from 'react'
-import { ActionType, WDLogo } from '@mexit/shared'
-import { defaultActions, initActions, searchBrowserAction } from '@mexit/shared'
+import { WDLogo } from '@mexit/shared'
 import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
 import { CenterIcon, QuerySearch, StyledInput, StyledSearch } from './styled'
+import { initActions, searchBrowserAction, defaultActions, ActionType } from '@mexit/core'
 
 const Search = () => {
   const { search, setSearch, setSearchResults, activeItem } = useSputlitContext()
