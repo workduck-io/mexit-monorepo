@@ -1,10 +1,10 @@
 import create from 'zustand'
-import { NodeEditorContent } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
 
-import { defaultContent } from './useEditorStore'
+import { defaultContent } from '@mexit/core'
 
 import { TodoType, TodoStatus, PriorityType, TodosType } from '../Types/Todo'
-import { useReminderStore } from '../hooks/useReminders'
+import { useReminderStore } from './useReminderStore'
 
 const createTodo = (nodeid: string, todoId: string, content: NodeEditorContent = defaultContent.content) => ({
   id: todoId,
