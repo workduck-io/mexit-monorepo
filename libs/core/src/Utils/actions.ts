@@ -1,4 +1,4 @@
-import { MEXIT_ACTIONS_URL_BASE } from '@mexit/core'
+import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 import { ActionType, MexitAction } from '../Types/Actions'
 
 // TODO: change shortcut keys based on user's OS
@@ -9,7 +9,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Capture visible window and send to Mexit',
     type: ActionType.SCREENSHOT,
     data: {
-      icon: 'twitter.svg'
+      icon: 'screenshot.svg'
     }
   },
   {
@@ -17,7 +17,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Shorten URL',
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
-    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
+    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener`, icon: 'shortener.svg' }
   },
   {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
@@ -245,7 +245,8 @@ export const initActions: Array<MexitAction> = [
     description: 'Mr. International',
     type: ActionType.RENDER,
     data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
+      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`,
+      icon: 'currencyconv.svg'
     }
   }
 ]

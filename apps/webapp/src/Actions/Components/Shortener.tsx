@@ -33,8 +33,6 @@ export const Shortener = () => {
   const userDetails = useAuthStore((store) => store.userDetails)
 
   const onShortenLinkSubmit = async () => {
-    event.preventDefault()
-
     const reqBody = {
       long: currTabURL,
       short: short,
