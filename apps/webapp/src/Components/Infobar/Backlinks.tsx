@@ -1,10 +1,10 @@
 import React from 'react'
 import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 
-import { BacklinksHelp } from '../../Data/defaultText'
+import { Note } from '@mexit/shared'
 
+import { BacklinksHelp } from '../../Data/defaultText'
 import { useLinks } from '../../Hooks/useLinks'
-import { Note } from '../../Style/Typography'
 import NodeLink from '../Editor/NodeLink'
 import Collapse from '../../Layout/Collapse'
 

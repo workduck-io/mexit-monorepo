@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import create from 'zustand'
 
-import { getAllParentIds, isElder } from '../Utils/treeUtils'
+import { mog, GenericSearchResult } from '@mexit/core'
+import { getAllParentIds, isElder } from '@mexit/shared'
 import useDataStore from '../Stores/useDataStore'
-import { mog } from '../Utils/mog'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
-// import create from 'zustand'
 
-import { GenericSearchResult } from '@mexit/shared'
 /*
 - Date
 - Node level

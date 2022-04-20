@@ -1,7 +1,5 @@
 import { trim } from 'lodash'
-import { SEPARATOR } from './treeUtils'
-
-import { DRAFT_NODE, DRAFT_PREFIX } from './idGenerator'
+import { DRAFT_NODE, DRAFT_PREFIX, SEPARATOR } from '@mexit/core'
 
 export const capitalize = (str: string) => {
   if (!str) return ''

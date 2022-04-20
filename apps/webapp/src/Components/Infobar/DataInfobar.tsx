@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 import useEditorStore from '../../Stores/useEditorStore'
-import Backlinks from '../Backlinks'
-// import Outline from '../Outline/Outline'
-// import TagsRelated from '../Tags/TagsRelated'
+import Outline from './Outline'
+import Backlinks from './Backlinks'
+import TagsRelated from '../Editor/TagsRelated'
 
 export const DataInfobarWrapper = styled.div`
   display: flex;
@@ -23,9 +23,9 @@ const DataInfoBar = () => {
 
   return (
     <DataInfobarWrapper>
-      {/* <Outline /> */}
+      <Outline />
       <Backlinks nodeid={node.nodeid} />
-      {/* <TagsRelated nodeid={node.nodeid} fromAnalysis /> */}
+      <TagsRelated nodeid={node.nodeid} fromAnalysis />
     </DataInfobarWrapper>
   )
 }

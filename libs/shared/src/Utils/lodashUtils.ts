@@ -39,4 +39,9 @@ const range = (start: number, end?: number, increment?: number) => {
   return result
 }
 
-export { throttle, remove, range }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const uniq = (data: Array<any>): Array<any> => {
+  return [...new Set(data)]
+}
+
+export { throttle, remove, range, uniq }
