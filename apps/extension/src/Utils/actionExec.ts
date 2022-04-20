@@ -1,4 +1,4 @@
-import { ActionType, MexitAction } from '@mexit/shared'
+import { ActionType, MexitAction } from '@mexit/core'
 
 export function actionExec(action: MexitAction, query?: string) {
   switch (action.type) {

@@ -1,4 +1,4 @@
-import { HeadlessButton } from '../../../../Styles/Buttons'
+import { HeadlessButton } from '@mexit/shared'
 import styled, { css } from 'styled-components'
 
 export const LinkButtonStyled = styled.span<{ focused: boolean }>`

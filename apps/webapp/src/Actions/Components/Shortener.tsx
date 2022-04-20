@@ -3,15 +3,14 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { apiURLs, Button, CreateAlias, Input, InputRow, Label, sitesMetadataDict } from '@mexit/shared'
-import { Tag } from '@mexit/shared'
-import { checkMetaParseableURL, parsePageMetaTags, CreateTags } from '@mexit/shared'
+import { Button, Input, InputRow, Label } from '@mexit/shared'
 import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
-import { resize } from '../../Utils/helper'
+import { resize } from '@mexit/shared'
 import { nanoid } from 'nanoid'
+import { apiURLs, CreateAlias, CreateTags, sitesMetadataDict, Tag } from '@mexit/core'
 
 const Form = styled.form`
   display: flex;

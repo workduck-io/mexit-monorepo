@@ -1,10 +1,7 @@
+import { SearchIndex, GenericSearchData, ILink, parseNode, parseSnippet } from '@mexit/core'
 import { Document } from 'flexsearch'
 
-import { parseNode, parseSnippet } from '@mexit/shared'
-
 import { indexNames } from '../Data/constants'
-import { GenericSearchData, SearchIndex } from '@mexit/shared'
-import { ILink } from '../Types/Data'
 
 export const flexIndexKeys = [
   'title.cfg',

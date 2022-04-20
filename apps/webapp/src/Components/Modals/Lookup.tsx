@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
 
-import { mog } from '@mexit/shared'
+import { mog } from '@mexit/core'
 
 import { Input } from '../../Style/Form'
 import { useApi } from '../../Hooks/useApi'

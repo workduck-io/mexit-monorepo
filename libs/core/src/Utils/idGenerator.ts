@@ -1,9 +1,9 @@
 import { customAlphabet } from 'nanoid'
-import { SEPARATOR } from './treeUtils'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
 
+export const SEPARATOR = '.'
 export const ID_SEPARATOR = '_'
 export const NODE_ID_PREFIX = 'NODE'
 export const WORKSPACE_ID_PREFIX = 'WORKSPACE'

@@ -1,5 +1,6 @@
-import { MexIcons } from './Icons'
 import { TreeNode } from '../Types/Tree'
+import { BASE_DRAFT_PATH, SEPARATOR } from '@mexit/core'
+import { NodeProperties } from '@mexit/core'
 
 export const sampleFlatTree = [
   '@',
@@ -16,7 +17,18 @@ export const sampleFlatTree = [
   'com.workduck'
 ]
 
-export const SEPARATOR = '.'
+export const getInitialNode = (): NodeProperties => ({
+  title: '@',
+  id: '@',
+  path: '@',
+  nodeid: '__null__'
+})
+
+export const getNodeIcon = (path: string) => {
+  if (isElder(path, BASE_DRAFT_PATH)) {
+    return 'ri:draft-line'
+  }
+}
 
 export const getParentId = (id: string) => {
   const lastIndex = id.lastIndexOf(SEPARATOR)

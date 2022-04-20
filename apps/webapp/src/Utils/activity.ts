@@ -1,4 +1,4 @@
-import { Node } from '../Types/Data'
+import { Node } from '@mexit/core'
 
 export const activityNode: Node = {
   id: '12345',

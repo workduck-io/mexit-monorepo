@@ -10,26 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2021",
-      "dom"
-    ],
+    "lib": ["es2021", "dom"],
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@mexit/shared": [
-        "libs/shared/src/index.ts"
-      ],
-      "crypto": [
-        "node_modules/crypto-browserify"
-      ],
-      "stream": [
-        "node_modules/stream-browserify"
-      ]
+      "@mexit/core": ["libs/core/src/index.ts"],
+      "@mexit/shared": ["libs/shared/src/index.ts"],
+      "crypto": ["node_modules/crypto-browserify"],
+      "stream": ["node_modules/stream-browserify"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

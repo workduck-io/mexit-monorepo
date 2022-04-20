@@ -1,4 +1,4 @@
-import { LinkCapture } from '..'
+import { LinkCapture } from '../Types/Shortener'
 
 export const shortenerStoreConstructor = (set, get) => ({
   linkCaptures: new Array<LinkCapture>(),

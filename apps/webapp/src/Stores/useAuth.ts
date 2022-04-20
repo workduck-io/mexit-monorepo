@@ -4,10 +4,9 @@ import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
 
-import { apiURLs, AuthStoreState, UserCred } from '@mexit/shared'
-import { RegisterFormData } from '@mexit/shared'
-import { authStoreConstructor } from '@mexit/shared'
-import { mog } from '@workduck-io/mex-editor'
+import { apiURLs, AuthStoreState, UserCred } from '@mexit/core'
+import { RegisterFormData } from '@mexit/core'
+import { authStoreConstructor } from '@mexit/core'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 

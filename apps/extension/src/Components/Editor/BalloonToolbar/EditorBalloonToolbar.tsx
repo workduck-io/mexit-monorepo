@@ -15,7 +15,7 @@ import listUnordered from '@iconify/icons-ri/list-unordered'
 import strikeThrough from '@iconify/icons-ri/strikethrough'
 
 import { Icon } from '@iconify/react'
-import { ButtonSeparator } from '../../../Styles/Toolbar'
+import { ButtonSeparator } from '@mexit/shared'
 import {
   AlignToolbarButton,
   BlockToolbarButton,

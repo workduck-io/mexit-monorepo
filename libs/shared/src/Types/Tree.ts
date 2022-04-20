@@ -1,4 +1,4 @@
-import { MexIcons } from '../Utils/Icons'
+import { MexIcons } from '../Components/Icons'
 
 export interface TreeNode {
   title: string

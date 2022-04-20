@@ -1,4 +1,5 @@
-import { CenteredColumn, MEXIT_FRONTEND_AUTH_BASE, Title } from '@mexit/shared'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { CenteredColumn, Title } from '@mexit/shared'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import config from '../config'

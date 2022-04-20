@@ -1,7 +1,7 @@
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { storageAdapter } from '@mexit/shared'
+import { storageAdapter } from '@mexit/core'
 import { TabGroup } from '../Types/Tabs'
 
 interface TabCaptureStore extends State {

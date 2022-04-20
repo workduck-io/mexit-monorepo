@@ -1,8 +1,6 @@
 import { toast } from 'react-hot-toast'
-
-import { mog } from '@mexit/shared'
-
-import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from '../Data/defaults'
+import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
+import { mog } from '@mexit/core'
 
 const RESERVED_PATHS: string[] = [BASE_DRAFT_PATH, BASE_TASKS_PATH, 'mex', 'sync', 'root']
 
@@ -10,6 +8,7 @@ export const getPathNum = (path: string) => {
   const numMatch = path.match(/\d+$/)
   // mog('getPathNum', { path, numMatch })
   if (numMatch) {
+    // @ts-ignore
     const prevPathNum = path.match(/\d+$/)[0]
     return `${path.slice(0, path.length - prevPathNum.length)}${Number(prevPathNum) + 1}`
   } else {

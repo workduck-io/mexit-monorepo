@@ -1,4 +1,3 @@
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
 import React, { useEffect } from 'react'
 import { useAuthStore } from '../Stores/useAuth'
 import { useShortenerStore } from '../Stores/useShortener'

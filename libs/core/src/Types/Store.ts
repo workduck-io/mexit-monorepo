@@ -1,4 +1,4 @@
-import { Tag, ILink, LinkCache, TagsCache, CachedILink, InitDataStoreType, AddILinkProps } from './Data'
+import { Tag, ILink, LinkCache, TagsCache, CachedILink, InitDataStoreType, AddILinkProps } from './Editor'
 
 export interface DataStoreState {
   tags: Tag[]

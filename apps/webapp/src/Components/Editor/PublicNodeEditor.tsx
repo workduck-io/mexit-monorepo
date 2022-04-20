@@ -4,9 +4,8 @@ import axios from 'axios'
 import styled from 'styled-components'
 
 import Editor from './Editor'
-import { WORKSPACE_NAME } from '../../Data/defaults'
 
-import { apiURLs } from '@mexit/shared'
+import { apiURLs, WORKSPACE_NAME } from '@mexit/core'
 
 const SPlate = styled.div`
   flex: 1;

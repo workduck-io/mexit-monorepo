@@ -2,19 +2,17 @@ import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import React from 'react'
 
-import { MainHeader, mog, parseBlock, Title } from '@mexit/shared'
+import { MainHeader, Title, getInitialNode } from '@mexit/shared'
 
-import { defaultContent } from '../Stores/useEditorStore'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
 import { useNodes } from '../Hooks/useNodes'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import useEditorStore, { getInitialNode } from '../Stores/useEditorStore'
+import useEditorStore from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import useSearchStore from '../Hooks/useSearchStore'
-import { GenericSearchResult } from '@mexit/shared'
 import {
   Result,
   ResultDesc,
@@ -35,6 +33,7 @@ import TagsRelated from '../Components/Editor/TagsRelated'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
+import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/core'
 
 const Search = () => {
   const { loadNode } = useLoad()

@@ -1,7 +1,6 @@
+import { NodeContent, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { NodeContent, NodeMetadata, NodeEditorContent } from '../Types/Data'
 
 export interface Contents {
   [key: string]: NodeContent

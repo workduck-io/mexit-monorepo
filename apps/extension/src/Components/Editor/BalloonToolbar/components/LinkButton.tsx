@@ -13,12 +13,12 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ReactEditor } from 'slate-react'
 import { useBalloonToolbarStore } from '..'
-import { HeadlessButton } from '../../../../Styles/Buttons'
+import { HeadlessButton } from '@mexit/shared'
 // import { Input } from '../../../../style/Form'
 import { clearAllSelection } from '@mexit/shared'
 import { upsertLinkAtSelection } from '../upsertLinkAtSelection'
 import { LinkButtonStyled } from './LinkButton.styles'
-import { mog } from '@workduck-io/mex-editor'
+import { mog } from '@mexit/core'
 
 type LinkButtonProps = LinkToolbarButtonProps
 

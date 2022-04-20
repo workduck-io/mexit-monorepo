@@ -1,4 +1,4 @@
-import { apiURLs } from './Utils/routes'
+import { apiURLs } from '@mexit/core'
 
 import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
 

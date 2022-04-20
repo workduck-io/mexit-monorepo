@@ -1,6 +1,6 @@
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { InitData } from '../Types/Data'
+import { InitData } from '@mexit/core'
 
 export enum AppType {
   SPOTLIGHT = 'SPOTLIGHT',

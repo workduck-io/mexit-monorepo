@@ -1,5 +1,6 @@
 import React from 'react'
-import { ILinkElementProps, QuickLinkElement, mog } from '@workduck-io/mex-editor'
+import { ILinkElementProps, QuickLinkElement } from '@workduck-io/mex-editor'
+import { mog } from '@mexit/core'
 
 const ILinkWrapper = (props: ILinkElementProps) => {
   // * TBD: Uncomment after adding stores

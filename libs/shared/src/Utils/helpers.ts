@@ -1,13 +1,6 @@
+import React from 'react'
 import toast from 'react-hot-toast'
-
-export function wrapErr<T>(f: (result: T) => void) {
-  return (err: any, result: T) => {
-    if (err) {
-      console.error({ error: JSON.stringify(err) })
-      return
-    } else f(result)
-  }
-}
+import { NodeContent } from '@mexit/core'
 
 export async function copyToClipboard(text: any) {
   await navigator.clipboard
@@ -31,4 +24,8 @@ export function getScrollbarWidth() {
   const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
   outer.parentNode!.removeChild(outer)
   return scrollbarWidth
+}
+
+export const resize = (ref: React.RefObject<HTMLElement>) => {
+  window.parent.postMessage({ type: 'height-init', height: ref.current.clientHeight }, '*')
 }

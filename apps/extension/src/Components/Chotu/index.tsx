@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/shared'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'

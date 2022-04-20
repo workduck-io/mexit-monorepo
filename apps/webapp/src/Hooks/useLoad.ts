@@ -1,6 +1,6 @@
 import useDataStore from '../Stores/useDataStore'
-import useEditorStore, { NodeProperties } from '../Stores/useEditorStore'
-import { NodeEditorContent } from '../Types/Types'
+import useEditorStore from '../Stores/useEditorStore'
+import { NodeEditorContent, NodeProperties } from '@mexit/core'
 import { useApi } from './useApi'
 import { getContent } from '../Stores/useEditorStore'
 import useContentStore from '../Stores/useContentStore'
@@ -43,6 +43,7 @@ const useLoad = () => {
     const node = {
       title: text,
       id: text,
+      path: text,
       nodeid: UID,
       key: text
     }

@@ -1,14 +1,11 @@
-import { Snippet } from '@mexit/shared'
-
-import { SEPARATOR } from '@mexit/shared'
 // import { parseBlock } from '../Utils/flexsearch'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
 // import useSearchStore from './useSearchStore'
-import { SlashCommandConfig } from '@workduck-io/mex-editor'
+import { SEPARATOR, SlashCommandConfig } from '@workduck-io/mex-editor'
 
 import useSearchStore from './useSearchStore'
-import { parseSnippet } from '@mexit/shared'
+import { Snippet, parseSnippet } from '@mexit/core'
 
 export const useSnippets = () => {
   const addSnippetStore = useSnippetStore((state) => state.addSnippet)
