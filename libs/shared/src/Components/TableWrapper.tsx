@@ -17,8 +17,8 @@ import {
 } from '@udecode/plate'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { useTheme } from 'styled-components'
-import { MexIcon } from '@mexit/shared'
-import { ButtonSeparator } from '@mexit/shared'
+import { MexIcon } from '../Style/Layouts'
+import { ButtonSeparator } from '../Style/Toolbar'
 
 const JustifyCenter = styled.div<{ width: string; height: string }>`
   display: flex;
@@ -66,6 +66,7 @@ const TableToolbarButtons = () => {
         <ButtonSeparator />
       </JustifyCenter>
       <TableToolbarButton
+        // @ts-ignore
         icon={<MexIcon color={theme.colors.primary} icon={DeleteTableIcon} />}
         transform={deleteTable}
         tooltip={{ content: 'Delete Table', ...tooltip }}
@@ -80,12 +81,10 @@ export const TableModal = ({ element, popoverProps, children }: TableElementProp
   </Popover>
 )
 
-const TableWrapper = (props: any) => {
+export const TableWrapper = (props: any) => {
   return (
     <ErrorBoundary fallback={<></>}>
       <TableElement {...props} onRenderContainer={TableModal} id="hello" />
     </ErrorBoundary>
   )
 }
-
-export default TableWrapper

@@ -1,6 +1,8 @@
 export * from './Components/Icons'
 export * from './Components/ToggleButton'
 export * from './Components/Tooltips'
+export * from './Components/MediaEmbed'
+export * from './Components/TableWrapper'
 
 export * from './Hooks/useActions'
 
