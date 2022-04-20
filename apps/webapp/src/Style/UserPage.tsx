@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from './Buttons'
+import { Button } from '@mexit/shared'
 
 export const ProfileContainer = styled.div`
   display: flex;

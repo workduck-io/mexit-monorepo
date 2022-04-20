@@ -1,4 +1,4 @@
-import { LinkCapture, parseSnippet, Snippet } from '@mexit/shared'
+import { LinkCapture, parseSnippet, Snippet } from '@mexit/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import fuzzysort from 'fuzzysort'

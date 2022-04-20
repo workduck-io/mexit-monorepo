@@ -4,9 +4,8 @@ import { CopyButton } from '../Buttons/CopyButton'
 import { ProfileImage } from './ProfileImage'
 import { useAuthStore } from '../../Stores/useAuth'
 import { BackCard } from '../../Style/Card'
-import { CenteredColumn } from '../../Style/Layouts'
-import { Title } from '../../Style/Typography'
 import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '../../Style/UserPage'
+import { CenteredColumn, Title } from '@mexit/shared'
 
 const UserPage = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)

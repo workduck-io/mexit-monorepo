@@ -1,10 +1,10 @@
 import React from 'react'
 import create from 'zustand'
 
-import { NodeContent } from '../Types/Data'
+import { defaultContent } from '@mexit/core'
 import useContentStore from './useContentStore'
-
-const ELEMENT_PARAGRAPH = 'p'
+import { NodeContent, NodeProperties } from '@mexit/core'
+import { getInitialNode } from '@mexit/shared'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content
@@ -17,26 +17,6 @@ export function getContent(nodeid: string): NodeContent {
     return contents[nodeid]
   }
   return defaultContent
-}
-
-export const getInitialNode = (): NodeProperties => ({
-  title: '@',
-  id: '@',
-  path: '@',
-  nodeid: '__null__'
-})
-
-export const defaultContent: NodeContent = {
-  type: 'init',
-  content: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
-  version: -1
-}
-
-export interface NodeProperties {
-  title: string
-  id: string
-  nodeid: string
-  path: string
 }
 
 export type EditorContextType = {

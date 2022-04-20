@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import arrowRightSLine from '@iconify-icons/ri/arrow-right-s-line'
 
 import { useFocusTransition } from '../../Hooks/useFocusTransition'
-import TreeNode from '../../Types/Tree'
+import { TreeNode } from '@mexit/shared'
 import { TreeWithContextMenu } from './TreeWithContextMenu'
 import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading } from '../../Style/Sidebar'
 import { useApi } from '../../Hooks/useApi'

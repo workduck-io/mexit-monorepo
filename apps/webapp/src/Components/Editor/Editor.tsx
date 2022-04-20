@@ -8,8 +8,8 @@ import { useDebouncedCallback } from 'use-debounce'
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
-import { MediaEmbedElement } from './MediaEmbed'
-import TableWrapper from './TableWrapper'
+import { MediaEmbedElement, TableWrapper } from '@mexit/shared'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled.div`
   flex: 1;
@@ -92,7 +92,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       tag: {
         cbKey: ComboboxKey.TAG,
         trigger: '#',
-        data: tags.map((t) => ({ ...t, text: t.value })),
+        data: tags,
         icon: 'ri:hashtag'
       },
       slash_command: {
@@ -113,7 +113,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     focusOptions: {
       edge: 'start',
       focus: true
-    }
+    },
+    withBalloonToolbar: true
   }
 
   const debounced = useDebouncedCallback((value) => {
@@ -134,6 +135,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         meta={{
           path: nodePath
         }}
+        BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         // debug
         onChange={debounced}
         options={editorOptions}

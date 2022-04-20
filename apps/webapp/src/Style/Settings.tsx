@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
-import { Button } from './Buttons'
+import { Button } from '@mexit/shared'
 import { GridCss } from './Grid'
 
 export const ThemePreviews = styled.div`
@@ -46,12 +46,13 @@ export const ThemePreview = styled.div<{ back?: string }>`
   border-radius: ${({ theme }) => theme.borderRadius.small};
   box-shadow: 0px 10px 20px ${({ theme }) => transparentize(0.6, theme.colors.palette.black)};
   background-color: ${({ theme }) => theme.colors.background.app};
+
   ${({ back }) =>
     back !== undefined &&
     css`
       background-image: url(${back});
       background-size: cover;
-    `}}
+    `}
 `
 
 export const ButtonWrapper = styled.div`

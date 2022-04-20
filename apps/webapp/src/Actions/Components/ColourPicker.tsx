@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast'
 
 import { copyToClipboard, Input, throttle } from '@mexit/shared'
 
-import { resize } from '../../Utils/helper'
+import { resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

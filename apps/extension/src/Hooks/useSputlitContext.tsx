@@ -1,4 +1,4 @@
-import { MexitAction } from '@mexit/shared'
+import { MexitAction } from '@mexit/core'
 import React, { createContext, useContext, useState } from 'react'
 
 export enum CategoryType {

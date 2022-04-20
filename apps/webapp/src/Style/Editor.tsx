@@ -2,7 +2,7 @@ import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { FOCUS_MODE_OPACITY } from '../Data/constants'
-import { AsyncButton, Button } from './Buttons'
+import { AsyncButton, Button } from '@mexit/shared'
 
 export interface FocusModeProp {
   // Focus mode is on?

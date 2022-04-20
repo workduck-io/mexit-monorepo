@@ -1,11 +1,10 @@
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/shared'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { CenteredColumn, Title } from '@mexit/shared'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import config from '../config'
 import { useAuthentication } from '../Stores/useAuth'
 import { BackCard } from '../Style/Card'
-import { CenteredColumn } from '../Style/Layouts'
-import { Title } from '../Style/Typography'
 
 export default function OAuthDesktop() {
   const [code, setCode] = useState<string>()

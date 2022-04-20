@@ -4,7 +4,7 @@ import { debounce } from 'lodash'
 import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import tinykeys from 'tinykeys'
 
-import { mog } from '@mexit/shared'
+import { mog } from '@mexit/core'
 
 import { SearchFilter, useFilters, useFilterStore } from '../Hooks/useFilters'
 import {

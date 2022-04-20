@@ -1,7 +1,7 @@
 /* Dwindle Internal Store for Auth */
 
+import { storageAdapter } from '@mexit/core'
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
-import { storageAdapter } from '@mexit/shared'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

@@ -5,17 +5,14 @@ import { Icon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 
-import { mog } from '@mexit/shared'
-
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
-import { generateSnippetId } from '../Utils/idGenerator'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import IconButton, { Button } from '../Style/Buttons'
+import { Button, IconButton } from '@mexit/shared'
 
-import { MainHeader } from '../Style/Layouts'
+import { MainHeader } from '@mexit/shared'
 import {
   Result,
   ResultDesc,
@@ -27,10 +24,10 @@ import {
   SplitSearchPreviewWrapper
 } from '../Style/Search'
 import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '../Style/Snippets'
-import { Title } from '../Style/Typography'
-import { parseBlock } from '@mexit/shared'
+import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import useSearchStore from '../Hooks/useSearchStore'
+import { generateSnippetId, mog, parseBlock } from '@mexit/core'
 
 export type SnippetsProps = {
   title?: string

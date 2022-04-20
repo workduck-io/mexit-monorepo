@@ -1,9 +1,8 @@
 import create from 'zustand'
 
-import { GenericSearchData, GenericSearchResult, mog, SearchIndex } from '@mexit/shared'
+import { GenericSearchData, GenericSearchResult, ILink, mog, SearchIndex } from '@mexit/core'
 
 import { createSearchIndex } from '../Utils/flexsearch'
-import { ILink } from '../Types/Data'
 import { diskIndex, indexNames } from './../Data/constants'
 
 // interface BlockMapData {

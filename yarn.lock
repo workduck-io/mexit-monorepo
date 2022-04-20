@@ -1251,6 +1251,13 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
+"@iconify/icons-bx@^1.1.0":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-bx/-/icons-bx-1.2.3.tgz#9c683339eb887a87bd6ecd32053f9ee26ed2fb02"
+  integrity sha512-L78ckaCU/f0GXJLIgbvpI3wFKgV5Lnnn+Q3IjwU2QzfpXEpdJJZgXGC2aEIpO6DIl0DK2XFiNZ6vMW8fxSG4UA==
+  dependencies:
+    "@iconify/types" "^1.0.12"
+
 "@iconify/icons-fluent@^1.1.33":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@iconify/icons-fluent/-/icons-fluent-1.2.6.tgz#965bd67eae0283f9683c5105f62c466cc29f5b8d"
@@ -3657,10 +3664,10 @@
     jwt-decode "^3.1.2"
     qs "^6.10.3"
 
-"@workduck-io/mex-editor@0.2.0":
-  version "0.2.0"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.2.0/ae7d1f76c4a8e21697d749f677851477b5ab3293a8b702cdc5eafbad83d2b2d9#f322ea6372124407d0e4fbc72cfb32c6d4ea80fc"
-  integrity sha512-inAe/JhIQB8zQvSBOcKW5h5rXwMib/XkkY+krUvAVUID4RbU8T1qIQsB9HqY/afsjf3CENOThfEnSXfsnC1ZrQ==
+"@workduck-io/mex-editor@0.3.0":
+  version "0.3.0"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.3.0/53b0c8d174a7b66b39104a8ec16807ec4660621b88267296d2aec3bb49c8cf8a#cae806363b078516a44905552650d78b6e6cd700"
+  integrity sha512-nE1Nj35Z4A25lt0qEemr/eFUFxZOURCpBP8Oi8JDm79JsYqR3evul7+TXDmLFbIbNTufJCbV0SzaKDPne1jOHQ==
   dependencies:
     "@udecode/plate" "10.2.2"
     color-scheme "^1.0.1"

@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 
-import { NodeMetadata } from '../Types/Data'
+import { NodeMetadata } from '@mexit/core'
 
 const removeNulls = (obj: any): any => {
   if (obj === null) {

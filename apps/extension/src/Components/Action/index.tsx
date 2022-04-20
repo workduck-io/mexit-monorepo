@@ -1,5 +1,5 @@
+import { MexitAction } from '@mexit/core'
 import React from 'react'
-import { MexitAction } from '@mexit/shared'
 import styled, { css } from 'styled-components'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { StyledAction, Container, Content, Icon, Shortcut, Key, Title, Description } from './styled'

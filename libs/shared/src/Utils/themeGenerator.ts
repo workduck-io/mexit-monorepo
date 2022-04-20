@@ -2,27 +2,7 @@ import ColorScheme from 'color-scheme'
 import merge from 'deepmerge'
 import { getLuminance, lighten, mix, tint } from 'polished'
 import { DefaultTheme } from 'styled-components'
-
-type Pixels = number
-
-export interface LayoutStyle {
-  spacing: {
-    large: string
-    medium: string
-    small: string
-    tiny: string
-  }
-  borderRadius: {
-    large: string
-    small: string
-    tiny: string
-  }
-  width: {
-    nav: Pixels
-    sidebar: Pixels
-  }
-  indent: { sidebar: Pixels }
-}
+import { LayoutStyle } from '../styled'
 
 const LayoutTheme: LayoutStyle = {
   spacing: {

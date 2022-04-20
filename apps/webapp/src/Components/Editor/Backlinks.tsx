@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { InfoWidgetScroll, InfoWidgetWrapper } from '../../Style/Infobar'
-import { Note } from '../../Style/Typography'
+import { Note } from '@mexit/shared'
 import NodeLink from '../Editor/NodeLink'
 import { DataInfoHeader } from '../../Style/Backlinks'
 
