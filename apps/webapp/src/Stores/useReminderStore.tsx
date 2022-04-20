@@ -1,8 +1,7 @@
-import create from 'zustand'
+import create from "zustand"
 
-import { mog } from '@mexit/core'
+import { mog, Reminder, ReminderState } from "@mexit/core"
 
-import { Reminder, ReminderState } from '@mexit/core'
 
 interface ArmedReminder {
   reminderId: string

@@ -52,20 +52,6 @@ export const useAnalysisTodoAutoUpdate = () => {
   }, [analysis, node])
 }
 
-// export const useAnalysisIPC = () => {
-//   const setAnalysis = useAnalysisStore((s) => s.setAnalysis)
-//   const node = useEditorStore((s) => s.node)
-
-//   const setIpc = () => {
-//     ipcRenderer.on(IpcAction.RECEIVE_ANALYSIS, (_event, analysis: any) => {
-//       // mog('analysisRECEIVEd', { analysis })
-//       if (analysis) setAnalysis(analysis)
-//     })
-//   }
-
-//   return setIpc
-// }
-
 export const useAnalysis = () => {
   const node = useEditorStore((s) => s.node)
   const { getBufferVal } = useEditorBuffer()
