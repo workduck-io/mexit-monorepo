@@ -1,6 +1,6 @@
 import { Snippet } from '../Types/Snippet'
 
-export const snippetStoreConstructor = (set) => ({
+export const snippetStoreConstructor = (set, get) => ({
   snippets: [],
 
   initSnippets: (snippets: Snippet[]) =>
@@ -17,6 +17,31 @@ export const snippetStoreConstructor = (set) => ({
       const snippets = state.snippets.filter((s) => s.id !== id)
       return { snippets: [...snippets, snippet] }
     }),
+  updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => {
+    const snippets = get().snippets.map((s) => {
+      if (s.id === id) {
+        if (isTemplate !== undefined) {
+          return { ...s, content, isTemplate }
+        }
+        return { ...s, content }
+      }
+      return s
+    })
+    set({ snippets })
+  },
+
+  updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => {
+    const snippets = get().snippets.map((s) => {
+      if (s.id === id) {
+        if (isTemplate !== undefined) {
+          return { ...s, content, isTemplate, title }
+        }
+        return { ...s, content, title }
+      }
+      return s
+    })
+    set({ snippets })
+  },
 
   deleteSnippet: (id: string) =>
     // Updates the snippet at the ID with a new snippet,

@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import create from 'zustand'
 
-import { getAllParentIds, isElder } from '@mexit/shared'
+import { getAllParentIds, isElder } from '../Utils/treeUtils'
 import useDataStore from '../Stores/useDataStore'
+import { mog } from '../Utils/mog'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
-import { GenericSearchResult, mog } from '@mexit/core'
+// import create from 'zustand'
 
-
+import { GenericSearchResult } from '@mexit/shared'
 /*
 - Date
 - Node level
@@ -45,7 +46,7 @@ export const useFilterStoreBase = create<FilterStore<any>>((set) => ({
 export const useFilterStore = <Item, Slice>(selector: (state: FilterStore<Item>) => Slice) =>
   useFilterStoreBase(selector)
 
-export const useFilters = <Item,>() => {
+export const useFilters = <Item>() => {
   const filters = useFilterStore((state) => state.filters) as SearchFilter<Item>[]
   const setFilters = useFilterStore((state) => state.setFilters) as (filters: SearchFilter<Item>[]) => void
   const currentFilters = useFilterStore((state) => state.currentFilters) as SearchFilter<Item>[]
@@ -190,7 +191,7 @@ export const useFilters = <Item,>() => {
   }
 }
 
-export const applyFilters = <Item,>(items: Item[], filters: SearchFilter<Item>[]): Item[] => {
+export const applyFilters = <Item>(items: Item[], filters: SearchFilter<Item>[]): Item[] => {
   const filtered = filters.reduce((acc, filter) => {
     return acc.filter(filter.filter)
   }, items)

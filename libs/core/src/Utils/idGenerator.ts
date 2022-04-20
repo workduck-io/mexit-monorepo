@@ -1,4 +1,5 @@
 import { customAlphabet } from 'nanoid'
+import { SEPARATOR } from './treeUtils'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
