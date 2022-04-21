@@ -15,8 +15,14 @@ export interface RegisterFormData {
   roles: Option[]
   email: string
   password: string
+  confirmPassword?: string
 }
 
+export interface ForgotPasswordFormData {
+  email: string
+  newpassword: string
+  confirmNewPassword: string
+}
 export interface VerifyFormData {
   code: string
 }
@@ -48,6 +54,7 @@ export interface WorkspaceDetails {
 }
 
 export interface AuthStoreState extends State {
+  isForgottenPassword: boolean
   authenticated: boolean
   registered: boolean
   userDetails: undefined | UserDetails
@@ -55,5 +62,6 @@ export interface AuthStoreState extends State {
   setAuthenticated: (userDetails: UserDetails, workspaceDetails: WorkspaceDetails) => void
   setUnAuthenticated: () => void
   setRegistered: (val: boolean) => void
+  setIsForgottenPassword: (val: boolean) => void
   getWorkspaceId: () => string | undefined
 }
