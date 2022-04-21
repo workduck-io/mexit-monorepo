@@ -27,13 +27,13 @@ export const TagFlex = styled.div`
   ${HoverSubtleGlow}
 `
 
-const TagsFlex = styled.div`
+export const TagsFlex = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.small};
 `
 
-const InfoSubHeading = styled.h2`
+export const InfoSubHeading = styled.h2`
   margin: ${({ theme }) => theme.spacing.large};
   font-size: 1.2rem;
   font-weight: normal;
