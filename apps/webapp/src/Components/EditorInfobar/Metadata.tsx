@@ -5,9 +5,7 @@ import styled, { css } from 'styled-components'
 
 import useLayout from '../../Hooks/useLayout'
 import useContentStore from '../../Stores/useContentStore'
-import useEditorStore from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { FOCUS_MODE_OPACITY } from '@mexit/core'
 import { focusStyles, FocusModeProp } from '../../Style/Editor'
 import { Label } from '../../Style/Form'
 import { CardShadow, HoverFade } from '../../Style/Helpers'
@@ -114,6 +112,7 @@ interface MetadataProps {
   node: NodeProperties
   fadeOnHover?: boolean
 }
+
 const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
   const focusMode = useLayoutStore((s) => s.focusMode)
@@ -121,6 +120,13 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
   const content = getContent(node.nodeid)
   const { getFocusProps } = useLayout()
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(undefined)
+
+  const isEmpty =
+    metadata &&
+    metadata.createdAt === undefined &&
+    metadata.createdBy === undefined &&
+    metadata.updatedAt === undefined &&
+    metadata.lastEditedBy === undefined
 
   useEffect(() => {
     // mog({ content })
@@ -131,7 +137,7 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
 
   // mog({ node, metadata })
 
-  if (content === undefined || content.metadata === undefined || metadata === undefined) return null
+  if (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty) return null
   return (
     <MetadataWrapper {...getFocusProps(focusMode)} fadeOnHover={fadeOnHover}>
       <DataGroup>
@@ -182,3 +188,5 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
 }
 
 export default Metadata
+
+

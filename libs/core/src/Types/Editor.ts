@@ -226,45 +226,38 @@ export interface NodeProperties {
   path: string
 }
 
-export interface FileData {
-  // Version. Should be same as Mex. Lower versions will be updated.
-  version: string
-
-  // variable to detect whether the data in the file was updated via mex/spotlight or externally
-  remoteUpdate: boolean
-  baseNodeId: string
-  ilinks: ILink[]
-  tags: Tag[]
-  contents: {
-    [key: string]: NodeContent
-  }
-  archive: ILink[]
-  linkCache: LinkCache
-  tagsCache: TagsCache
-  bookmarks: string[]
-
-  // Tasks
-  todos: TodosType
-
-  // Reminders
-  reminders: Reminder[]
-
-  // Sync
-  syncBlocks: SyncBlockData[]
-  templates: SyncBlockTemplate[]
-  intents: SyncStoreIntents
-  services: Service[]
-
-  // Misc
-  userSettings: {
-    theme: string
-    spotlight: { [key: string]: any } // eslint-disable-line @typescript-eslint/no-explicit-any
-  }
-  snippets: Snippet[]
+export enum QuickLinkType {
+  backlink = 'Backlinks',
+  snippet = 'Snippets',
+  flow = 'Flows',
+  tags = 'Tags'
 }
 
-export interface NodeSearchData {
-  nodeUID: string
-  title?: string
-  text: string
+export enum ComboboxKey {
+  TAG = 'tag',
+  INTERNAL = 'internal',
+  INLINE_BLOCK = 'inline_block',
+  SLASH_COMMAND = 'slash_command',
+  BLOCK = 'block'
+}
+export enum CategoryType {
+  backlink = 'Backlinks',
+  action = 'Quick Actions',
+  search = 'Search Results',
+  meeting = 'Meetings'
+}
+
+
+export interface SlashCommand {
+  command: string
+  text?: string
+  icon?: string
+  type?: QuickLinkType | CategoryType
+  /** Extended command -> Text after the command is part of it and used as arguments */
+  extended?: boolean
+}
+
+export enum QuickLinkStatus {
+  new,
+  exists
 }

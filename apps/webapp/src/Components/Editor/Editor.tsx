@@ -8,7 +8,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import ILinkWrapper from './ILinkWrapper'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
-import { MediaEmbedElement, TableWrapper } from '@mexit/shared'
+import { MediaEmbedElement, TableWrapper, useEditorChange } from '@mexit/shared'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled.div`
@@ -103,6 +103,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       }
     }
   }
+
+  useEditorChange(nodeUID, content)
 
   const editorOptions: MexEditorOptions = {
     editableProps: {

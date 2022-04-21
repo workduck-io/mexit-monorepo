@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
-import MainArea from './Views/MainArea'
+import EditorView from './Views/EditorView'
 import { useAuthStore, useAuthentication } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
@@ -172,7 +172,7 @@ const SnippetRoutes = () => {
         path=""
         element={
           <ProtectedRoute>
-            <MainArea />
+            <EditorView />
           </ProtectedRoute>
         }
       >
@@ -198,12 +198,12 @@ export const Switch = () => {
         path={ROUTE_PATHS.home}
         element={
           <ProtectedRoute>
-            <MainArea />
+            <EditorView />
           </ProtectedRoute>
         }
       >
         <Route index element={<ActivityView />} />
-        <Route path={`${ROUTE_PATHS.home}/:nodeId`} element={<ContentEditor />} />
+        <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
       </Route>
     </Routes>

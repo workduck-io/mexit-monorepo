@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ELEMENT_TODO_LI } from '@udecode/plate'
+import { ELEMENT_TODO_LI, ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { uniq } from 'lodash'
 import { ELEMENT_TAG } from '@workduck-io/mex-editor'
 import { NodeEditorContent, generateTempId, NodeMetadata } from '@mexit/core'
@@ -78,4 +78,16 @@ export const extractMetadata = (data: any): NodeMetadata => {
         createdAt: data.createdAt
     }
     return removeNulls(metadata)
+}
+
+export const updateEmptyBlockTypes = (content: NodeEditorContent, type: string = ELEMENT_PARAGRAPH) => {
+    content.forEach((element) => {
+        if (!element.type) {
+            element['type'] = type
+        }
+
+        if (element.children && element.children.length > 0) {
+            updateEmptyBlockTypes(element.children, type)
+        }
+    })
 }

@@ -1,4 +1,4 @@
-import { NodeEditorContent, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import { useApi } from './useApi'
 import { useLinks } from './useLinks'
@@ -11,8 +11,8 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 // import useThemeStore from '../Stores/useThemeStore'
 import useDataStore from '../Stores/useDataStore'
 
-import { writeToIndexedDB } from '../Data/persistentStorage'
 import { PersistentData } from '../Types/Data'
+import { useIndexedDBData } from './usePersistentData'
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)
@@ -23,6 +23,8 @@ export const useDataSaverFromContent = () => {
 
   const { updateTagsFromContent } = useTags()
   const { saveDataAPI } = useApi()
+
+  const { persistData } = useIndexedDBData()
 
   // const { updateDocument } = useSearch()
 
@@ -59,31 +61,10 @@ export const useDataSaverFromContent = () => {
       reminders: useReminderStore.getState().reminders,
     }
     mog('We persisted the data for you', { persistentData })
-    writeToIndexedDB(persistentData)
+    persistData(persistentData)
   }
 
 
   return { saveEditorValueAndUpdateStores, saveDataToPersistentStorage }
 }
 
-
-const useDataSaver = () => {
-  const setContent = useContentStore((state) => state.setContent)
-  const getContent = useContentStore((state) => state.getContent)
-  const { updateLinksFromContent, getPathFromNodeid } = useLinks()
-  const { updateTagsFromContent } = useTags()
-  const { saveDataAPI } = useApi()
-
-  const saveNodeWithValue = (nodeid: string, editorValue: NodeEditorContent) => {
-    if (editorValue) {
-      setContent(nodeid, editorValue)
-      saveDataAPI(nodeid, editorValue)
-      updateLinksFromContent(nodeid, editorValue)
-      updateTagsFromContent(nodeid, editorValue)
-    }
-  }
-
-  return { saveNodeWithValue }
-}
-
-export default useDataSaver

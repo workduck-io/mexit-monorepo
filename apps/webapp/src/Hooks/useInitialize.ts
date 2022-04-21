@@ -1,6 +1,14 @@
+import { PersistentData } from './../Types/Data';
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { InitData } from '@mexit/core'
+import { getTheme } from '@mexit/shared'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import useThemeStore from '../Stores/useThemeStore'
+import useTodoStore from '../Stores/useTodoStore'
+import useLoad from './useLoad'
+import { useSlashCommands } from './useSlashCommands';
 
 export enum AppType {
   SPOTLIGHT = 'SPOTLIGHT',
@@ -9,16 +17,38 @@ export enum AppType {
 
 export const useInitialize = () => {
   const initializeDataStore = useDataStore((state) => state.initializeDataStore)
+  const initTodos = useTodoStore((store) => store.initTodos)
   const initContents = useContentStore((state) => state.initContents)
-  // const setTheme = useThemeStore((state) => state.setTheme)
+  const setReminders = useReminderStore((state) => state.setReminders)
+  const setTheme = useThemeStore((state) => state.setTheme)
+  const initSnippets = useSnippetStore((state) => state.initSnippets)
+  const { generateSlashCommands } = useSlashCommands()
+  const { loadNodeProps } = useLoad()
 
-  const update = (data: InitData) => {
-    const { tags, ilinks, linkCache, tagsCache, bookmarks, contents, archive, baseNodeId } = data
+  const update = (data: PersistentData) => {
+    const {
+      baseNodeId,
+      tags,
+      todos,
+      reminders,
+      ilinks,
+      linkCache,
+      tagsCache,
+      bookmarks,
+      contents,
+      archive,
+      snippets,
+
+    } = data
+    // const snippetCommands = extractSnippetCommands(snippets)
+    // const syncCommands = extractSyncBlockCommands(templates)
+    const slashCommands = generateSlashCommands(snippets)
 
     const initData = {
       tags,
       tagsCache,
       ilinks,
+      slashCommands,
       linkCache,
       archive: archive ?? [],
       baseNodeId,
@@ -27,16 +57,13 @@ export const useInitialize = () => {
 
     initializeDataStore(initData)
     initContents(contents)
-    // setTheme(getTheme(data.userSettings.theme))
+    initSnippets(snippets)
+    initTodos(todos)
+    setReminders(reminders)
   }
 
-  const init = (data: InitData, initNodeId?: string, initFor?: AppType) => {
+  const init = (data: PersistentData, initNodeId?: string, initFor?: AppType) => {
     update(data)
-    // const keyToLoad = initNodeId || '@'
-
-    // if (initFor === AppType.SPOTLIGHT) {
-    //   loadNodeProps(createNodeWithUid(keyToLoad))
-    // }
   }
 
   return { init, update }

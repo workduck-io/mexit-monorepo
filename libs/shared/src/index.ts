@@ -5,6 +5,7 @@ export * from './Components/MediaEmbed'
 export * from './Components/TableWrapper'
 
 export * from './Hooks/useActions'
+export * from './Hooks/useEditorActions'
 
 export * from './Stores/themeStoreConstructor'
 export * from './Stores/dataStoreConstructor'

@@ -9,7 +9,7 @@ export function wrapErr<T>(f: (result: T) => void) {
   }
 }
 
-const ELEMENT_PARAGRAPH = 'p'
+export const ELEMENT_PARAGRAPH = 'p'
 
 export const defaultContent: NodeContent = {
   type: 'init',
