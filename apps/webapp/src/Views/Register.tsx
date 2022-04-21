@@ -10,7 +10,7 @@ import { StyledRolesSelectComponents } from '../Style/Select'
 import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '../Style/Form'
 import { CenteredColumn } from '@mexit/shared'
 import { BackCard } from '../Style/Card'
-import Input, { InputFormError, PasswordRequirements } from '../Components/Input'
+import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
@@ -19,6 +19,8 @@ import Analytics from '../Utils/analytics'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
+  const [password, setPassword] = useState<string>()
+  const [arePasswordEqual, setArePasswordEqual] = useState<boolean>(true)
   const registerForm = useForm<RegisterFormData>()
   const verifyForm = useForm<VerifyFormData>()
 
@@ -134,7 +136,8 @@ export const Register = () => {
                   type: 'password',
                   ...registerForm.register('password', {
                     required: true,
-                    pattern: PASSWORD
+                    pattern: PASSWORD,
+                    onChange: (e) => setPassword(e.target.value)
                   })
                 }}
                 errors={regErrors}
@@ -142,10 +145,33 @@ export const Register = () => {
 
               {regErrors.password?.type === 'pattern' ? <PasswordRequirements /> : undefined}
 
+              <InputFormError
+                name="confirmpassword"
+                label="Confirm Password"
+                inputProps={{
+                  type: 'password',
+                  ...registerForm.register('confirmPassword', {
+                    required: true,
+                    pattern: PASSWORD,
+                    deps: ['password'],
+                    onChange: (e) => {
+                      if (e.target.value.toString() !== password) {
+                        setArePasswordEqual(false)
+                      } else {
+                        setArePasswordEqual(true)
+                      }
+                    }
+                  })
+                }}
+                errors={regErrors}
+              ></InputFormError>
+
+              {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
+
               <ButtonFields>
                 <LoadingButton
                   loading={regSubmitting}
-                  alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined}
+                  alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
                   buttonProps={{ type: 'submit', primary: true, large: true }}
                 >
                   Send Verification Code

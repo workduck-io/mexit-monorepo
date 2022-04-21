@@ -18,7 +18,11 @@ function Footer() {
   return (
     <Container>
       {window.location.pathname === ROUTE_PATHS.login ? (
-        <Anchor href={ROUTE_PATHS.register}>Don't have an account? Sign up</Anchor>
+        <>
+          <Anchor href={ROUTE_PATHS.register}>Don't have an account? Sign up</Anchor>
+          <Anchor> | </Anchor>
+          <Anchor href={ROUTE_PATHS.forgotpassword}>Forgot Password? </Anchor>
+        </>
       ) : (
         <Anchor href={ROUTE_PATHS.login}>Already have an account? Log in </Anchor>
       )}

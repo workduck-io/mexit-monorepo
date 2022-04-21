@@ -27,6 +27,7 @@ import { Loading } from '@mexit/shared'
 import toast from 'react-hot-toast'
 import { useTheme } from 'styled-components'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { ForgotPassword } from './Views/ForgotPassword'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -90,6 +91,16 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <Login />
+            <Footer />
+          </AuthRoute>
+        }
+      />
+
+      <Route
+        path="forgotpassword"
+        element={
+          <AuthRoute>
+            <ForgotPassword />
             <Footer />
           </AuthRoute>
         }

@@ -21,6 +21,12 @@ export const PasswordRequirements = () => (
   </>
 )
 
+export const PasswordNotMatch = () => (
+  <>
+    <p>Passwords does not match</p>
+  </>
+)
+
 export interface LabeledInputProps {
   name: string
   label: string
