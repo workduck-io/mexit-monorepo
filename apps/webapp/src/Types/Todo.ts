@@ -1,4 +1,4 @@
-import { NodeEditorContent } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
 
 import { Shortcut } from '../Components/Help'
 

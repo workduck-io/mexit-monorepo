@@ -1,11 +1,12 @@
 import create from 'zustand'
 
-import { NodeEditorContent } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
 
 import { getContent } from '../Stores/useEditorStore'
 import { areEqual } from '../Utils/hash'
 import { useSnippets } from './useSnippets'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useDataSaverFromContent } from './useSave'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>
@@ -28,9 +29,6 @@ export const useBufferStore = create<BufferStore>((set, get) => ({
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)
   const clearBuffer = useBufferStore((s) => s.clear)
-  // const { saveData } = useSaveData()
-
-  // const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
 
   const addOrUpdateValBuffer = (nodeid: string, val: NodeEditorContent) => {
     add2Buffer(nodeid, val)
@@ -39,23 +37,23 @@ export const useEditorBuffer = () => {
   const getBuffer = () => useBufferStore.getState().buffer
   const getBufferVal = (nodeid: string) => useBufferStore.getState().buffer[nodeid] ?? undefined
 
+  const { saveEditorValueAndUpdateStores, saveDataToPersistentStorage } = useDataSaverFromContent()
+
   const saveAndClearBuffer = (explicitSave?: boolean) => {
     const buffer = useBufferStore.getState().buffer
-    // mog('Save And Clear Buffer', { buffer })
     if (Object.keys(buffer).length > 0) {
       const saved = Object.entries(buffer)
         .map(([nodeid, val]) => {
           const content = getContent(nodeid)
           const res = areEqual(content.content, val)
-          // const mT = measureTime(() => areEqual(content.content, val))
           if (!res) {
-            // saveEditorValueAndUpdateStores(nodeid, val, true)
+            saveEditorValueAndUpdateStores(nodeid, val, true)
           }
           return !res
         })
         .reduce((acc, cur) => acc || cur, false)
       if (saved || explicitSave) {
-        // saveData()
+        saveDataToPersistentStorage()
       }
       clearBuffer()
     }

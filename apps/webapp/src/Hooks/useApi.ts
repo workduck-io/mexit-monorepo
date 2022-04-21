@@ -1,187 +1,135 @@
 import { client } from '@workduck-io/dwindle'
 
-// import { defaultContent } from '../Stores/useEditorStore'
+import { defaultContent, apiURLs, mog } from '@mexit/core'
+
 import { useAuthStore } from '../Stores/useAuth'
-// import useContentStore from '../Stores/useContentStore'
-// import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { NodeMetadata } from '@mexit/core'
-import useDataStore from '../Stores/useDataStore'
-import { apiURLs, mog } from '@mexit/core'
-
-export const removeNulls = (obj: any): any => {
-  if (obj === null) {
-    return undefined
-  }
-  if (typeof obj === 'object') {
-    for (const key in obj) {
-      obj[key] = removeNulls(obj[key])
-    }
-  }
-  return obj
-}
-
-export const extractMetadata = (data: any): NodeMetadata => {
-  const metadata: any = {
-    lastEditedBy: data.lastEditedBy,
-    updatedAt: data.updatedAt,
-    createdBy: data.createdBy,
-    createdAt: data.createdAt
-  }
-  return removeNulls(metadata)
-}
+import { removeNulls, extractMetadata } from '../Utils/content'
+import { useLinks } from '../Hooks/useLinks'
+import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '../Data/constants'
+import { isRequestedWithin } from '../Stores/useApiStore'
+import useContentStore from '../Stores/useContentStore'
+import { deserializeContent, serializeContent } from '../Utils/serializer'
 
 export const useApi = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  // const setMetadata = useContentStore((store) => store.setMetadata)
-  // const setContent = useContentStore((store) => store.setContent)
-
-  const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
-    ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
-      setNodePublic,
-      setNodePrivate,
-      checkNodePublic
-    })
-  )
+  const setMetadata = useContentStore((store) => store.setMetadata)
+  const setContent = useContentStore((store) => store.setContent)
+  const { getPathFromNodeid } = useLinks()
 
   /*
-   * Saves data in the backend
+   * Saves new node data in the backend
    * Also updates the incoming data in the store
    */
   const saveNewNodeAPI = async (nodeid: string) => {
-    // const reqData = {
-    //   id: nodeid,
-    //   type: 'NodeRequest',
-    //   lastEditedBy: useAuthStore.getState().userDetails.email,
-    //   namespaceIdentifier: 'NAMESPACE1',
-    //   workspaceIdentifier: getWorkspaceId(),
-    //   data: serializeContent(defaultContent.content)
-    // }
-    // setContent(nodeid, defaultContent.content)
-    // const data = await client
-    //   .post(apiURLs.saveNode, reqData, {})
-    //   .then((d) => {
-    //     setMetadata(nodeid, extractMetadata(d.data))
-    //     return d.data
-    //   })
-    //   .catch((e) => {
-    //     console.error(e)
-    //   })
-    // return data
+    const reqData = {
+      id: nodeid,
+      title: getPathFromNodeid(nodeid),
+      type: 'NodeRequest',
+      lastEditedBy: useAuthStore.getState().userDetails.email,
+      namespaceIdentifier: 'NAMESPACE1',
+      data: serializeContent(defaultContent.content)
+    }
+
+    setContent(nodeid, defaultContent.content)
+
+    const data = await client
+      .post(apiURLs.saveNode, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((d) => {
+        mog('saveNewNodeAPI response', d)
+        setMetadata(nodeid, extractMetadata(d.data))
+        return d.data
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+    return data
   }
+
   /*
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[], nodePath?: string) => {
-    console.log(`Saving NodeID: ${nodeid} | Content: ${JSON.stringify(content)}`)
-    // const reqData = {
-    //   id: nodeid,
-    //   nodePath: nodePath,
-    //   createdBy: user,
-    //   workspaceIdentifier: getWorkspaceId(),
-    //   content: mexit_content,
-    //   lastEditedBy: useAuthStore.getState().userDetails.email,
-    //   namespaceIdentifier: 'NAMESPACE1',
-    //   content: content
-    // }
-    // const data = await client
-    //   .post(apiURLs.saveNode, reqData, {})
-    //   .then((d: any) => {
-    //     // setMetadata(nodeid, extractMetadata(d.data))
-    //     setContent(nodeid, deserializeContent(d.data.data), extractMetadata(d.data))
-    //     return d.data
-    //   })
-    //   .catch((e) => {
-    //     console.error(e)
-    //   })
-    // return data
-  }
+  const saveDataAPI = async (nodeid: string, content: any[]) => {
+    const reqData = {
+      id: nodeid,
+      type: 'NodeRequest',
+      title: getPathFromNodeid(nodeid),
+      lastEditedBy: useAuthStore.getState().userDetails.email,
+      namespaceIdentifier: DEFAULT_NAMESPACE,
+      data: serializeContent(content ?? defaultContent.content)
+    }
 
-  const getDataAPI = async (nodeid: string) => {
-    return await client
-      .get(apiURLs.getNode(nodeid), {
+    const data = await client
+      .post(apiURLs.saveNode, reqData, {
         headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((d: any) => {
-        return { content: d.data.data, metadata: d.data.metadata }
-      })
-      .catch(console.error)
-  }
-
-  const getILinks = async () => {
-    return await client
-      .get(apiURLs.getILink(), {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
-  }
-
-  const makeNodePublic = async (nodeId: string) => {
-    const URL = apiURLs.makeNodePublic(nodeId)
-    return await client
-      .patch(URL, null, {
-        withCredentials: false,
-        headers: {
-          'mex-workspace-id': getWorkspaceId(),
+          [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((resp) => resp.data)
-      .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          const publicURL = apiURLs.getNodePublicURL(nodeUID)
-          setNodePublic(nodeUID, publicURL)
-          return publicURL
-        } else throw new Error('Error making node public')
+      .then((d: any) => {
+        mog('savedData', { d })
+        // setMetadata(nodeid, extractMetadata(d.data))
+        setContent(nodeid, deserializeContent(d.data.data), extractMetadata(d.data))
+        return d.data
       })
-      .catch((error) => {
-        mog('MakeNodePublicError', { error })
+      .catch((e) => {
+        console.error(e)
       })
+    return data
   }
 
-  const makeNodePrivate = async (nodeId: string) => {
-    const URL = apiURLs.makeNodePrivate(nodeId)
+  const getDataAPI = async (nodeid: string) => {
+    const url = apiURLs.getNode(nodeid)
+    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
+      console.warn('\nAPI has been requested before, cancelling\n')
+      return
+    }
 
-    return await client
-      .patch(URL, null, {
-        withCredentials: false,
+    // console.warn('\n\n\n\nAPI has not been requested before, requesting\n\n\n\n')
+    const res = await client
+      .get(apiURLs.getNode(nodeid), {
         headers: {
-          'mex-workspace-id': getWorkspaceId()
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((resp) => resp.data)
-      .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          setNodePrivate(nodeUID)
-          return nodeUID
-        } else throw new Error('Error making node private')
+      .then((d: any) => {
+        const metadata = {
+          createdBy: d.data.createdBy,
+          createdAt: d.data.createdAt,
+          lastEditedBy: d.data.lastEditedBy,
+          updatedAt: d.data.updatedAt
+        }
+
+        // console.log(metadata, d.data)
+        return { data: d.data.data, metadata: removeNulls(metadata), version: d.data.version ?? undefined }
       })
-      .catch((error) => {
-        mog('MakeNodePrivateError', { error })
-      })
+      .catch(console.error)
+
+    if (res) {
+      return { content: deserializeContent(res.data), metadata: res.metadata ?? undefined, version: res.version }
+    }
   }
 
-  const isPublic = (nodeid: string) => {
-    return checkNodePublic(nodeid)
+  const getNodesByWorkspace = async (workspaceId: string) => {
+    const data = await client
+      .get(apiURLs.getNodesByWorkspace(workspaceId), {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((d) => {
+        return d.data
+      })
+
+    return data
   }
 
-  return {
-    saveDataAPI,
-    getDataAPI,
-    saveNewNodeAPI,
-    makeNodePublic,
-    makeNodePrivate,
-    isPublic,
-    getILinks
-  }
+  return { saveDataAPI, getDataAPI, saveNewNodeAPI, getNodesByWorkspace }
 }
