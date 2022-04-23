@@ -11,7 +11,7 @@ import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import { withoutDelimiter } from '@workduck-io/mex-editor'
 
 import { Input } from '../../Style/Form'
-import { isClash, isReserved } from '@mexit/core'
+import { isClash, isReserved, QuickLinkStatus, QuickLinkType } from '@mexit/core'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import useContentStore from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
@@ -48,15 +48,6 @@ export type QuickLink = {
   icon?: string
 }
 
-export enum QuickLinkType {
-  ilink,
-  flow
-}
-
-enum QuickLinkStatus {
-  new,
-  exists
-}
 
 export const makeQuickLink = (
   title: string,
@@ -64,13 +55,13 @@ export const makeQuickLink = (
 ): QuickLink => ({
   text: title,
   value: title,
-  type: options.type ?? QuickLinkType.ilink,
+  type: options.type ?? QuickLinkType.backlink,
   status: QuickLinkStatus.exists,
   nodeid: options.nodeid,
   icon: options.icon
 })
 
-export const createNewQuickLink = (path: string, type: QuickLinkType = QuickLinkType.ilink): QuickLink => ({
+export const createNewQuickLink = (path: string, type: QuickLinkType = QuickLinkType.backlink): QuickLink => ({
   text: `Create New: ${path}`,
   value: path,
   type,

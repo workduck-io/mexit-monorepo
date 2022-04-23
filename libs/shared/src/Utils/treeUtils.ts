@@ -1,5 +1,5 @@
 import { TreeNode } from '../Types/Tree'
-import { BASE_DRAFT_PATH, SEPARATOR } from '@mexit/core'
+import { BASE_DRAFT_PATH, SEPARATOR, BASE_TASKS_PATH } from '@mexit/core'
 import { NodeProperties } from '@mexit/core'
 
 export const sampleFlatTree = [
@@ -27,6 +27,9 @@ export const getInitialNode = (): NodeProperties => ({
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH)) {
     return 'ri:draft-line'
+  }
+  if (isElder(path, BASE_TASKS_PATH)) {
+    return 'ri:task-line'
   }
 }
 

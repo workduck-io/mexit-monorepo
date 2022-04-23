@@ -16,7 +16,7 @@ const EditorViewWrapper = styled.div`
 `
 
 
-const MainArea = () => {
+const EditorView = () => {
   const Tree = useTreeFromLinks()
 
   return (
@@ -30,4 +30,4 @@ const MainArea = () => {
   )
 }
 
-export default MainArea
+export default EditorView

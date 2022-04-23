@@ -1,7 +1,8 @@
-import { ELEMENT_TODO_LI } from '@udecode/plate'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ELEMENT_TODO_LI, ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { uniq } from 'lodash'
 import { ELEMENT_TAG } from '@workduck-io/mex-editor'
-import { NodeEditorContent, generateTempId } from '@mexit/core'
+import { NodeEditorContent, generateTempId, NodeMetadata } from '@mexit/core'
 
 export const getTagsFromContent = (content: any[]): string[] => {
     let tags: string[] = []
@@ -53,5 +54,40 @@ export const removeId = (content: any[]) => {
         if (item.children) item.children = removeId(item.children)
         if (item.id) delete item.id
         return item
+    })
+}
+
+export const removeNulls = (obj: any): any => {
+    if (obj === null) {
+        return undefined
+    }
+    if (typeof obj === 'object') {
+        for (const key in obj) {
+            obj[key] = removeNulls(obj[key])
+        }
+    }
+    return obj
+}
+
+
+export const extractMetadata = (data: any): NodeMetadata => {
+    const metadata: any = {
+        lastEditedBy: data.lastEditedBy,
+        updatedAt: data.updatedAt,
+        createdBy: data.createdBy,
+        createdAt: data.createdAt
+    }
+    return removeNulls(metadata)
+}
+
+export const updateEmptyBlockTypes = (content: NodeEditorContent, type: string = ELEMENT_PARAGRAPH) => {
+    content.forEach((element) => {
+        if (!element.type) {
+            element['type'] = type
+        }
+
+        if (element.children && element.children.length > 0) {
+            updateEmptyBlockTypes(element.children, type)
+        }
     })
 }

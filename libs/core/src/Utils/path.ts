@@ -1,6 +1,7 @@
 import { toast } from 'react-hot-toast'
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
-import { mog } from '@mexit/core'
+import { mog } from './mog'
+import { SEPARATOR } from './idGenerator'
 
 const RESERVED_PATHS: string[] = [BASE_DRAFT_PATH, BASE_TASKS_PATH, 'mex', 'sync', 'root']
 
@@ -8,7 +9,6 @@ export const getPathNum = (path: string) => {
   const numMatch = path.match(/\d+$/)
   // mog('getPathNum', { path, numMatch })
   if (numMatch) {
-    // @ts-ignore
     const prevPathNum = path.match(/\d+$/)[0]
     return `${path.slice(0, path.length - prevPathNum.length)}${Number(prevPathNum) + 1}`
   } else {
@@ -44,3 +44,12 @@ export const getUniquePath = (path: string, paths: string[], showNotification = 
 
   return { unique: path }
 }
+
+/*
+ * Checks if a path is same or a child of given testPath
+ */
+export const isMatch = (path: string, testPath: string) => {
+  if (testPath === path) return true
+  if (path.startsWith(testPath + SEPARATOR)) return true
+}
+

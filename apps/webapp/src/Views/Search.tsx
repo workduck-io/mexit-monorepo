@@ -83,7 +83,7 @@ const Search = () => {
   const onEscapeExit = () => {
     const nodeid = nodeUID ?? lastOpened[0] ?? baseNodeId
     loadNode(nodeid)
-    goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
+    goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
   // Forwarding ref to focus on the selected result

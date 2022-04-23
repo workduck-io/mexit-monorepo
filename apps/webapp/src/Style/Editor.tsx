@@ -4,12 +4,14 @@ import styled, { css } from 'styled-components'
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 import { AsyncButton, Button } from '@mexit/shared'
 
+
 export interface FocusModeProp {
   // Focus mode is on?
   focusMode?: boolean
   // Is element Hovered over focus mode?
   focusHover?: boolean
 }
+
 
 export const focusStyles = ({ focusMode, focusHover }: FocusModeProp) => {
   if (focusMode)
@@ -21,6 +23,7 @@ export const focusStyles = ({ focusMode, focusHover }: FocusModeProp) => {
           opacity: ${FOCUS_MODE_OPACITY};
         `
 }
+
 
 export const NoteTitle = styled.h1``
 
@@ -46,16 +49,61 @@ export const NodeInfo = styled.div<FocusModeProp>`
 export const InfoTools = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
   ${Button}, ${AsyncButton} {
     margin: 0;
   }
 `
 
-export const EditorStyles = styled.div`
+export const EditorPreviewStyles = styled.div`
+  overflow-x: hidden;
+`
+interface StyledEditorProps {
+  showGraph?: boolean
+}
+
+export const EditorWrapper = styled.div`
+  height: 100%;
+  overflow-y: auto;
+`
+export const StyledEditor = styled.div<StyledEditorProps>`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.large};
+  padding: 0 ${({ theme }) => theme.spacing.medium};
+  margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
+  width: 100%;
+  max-width: 1000px;
+  min-width: 400px;
+  height: calc(100vh - 3rem);
+  flex: 1;
+  overflow-y: auto;
+  /* ${({ showGraph }) =>
+    showGraph
+      ? css`
+          max-width: 600px;
+        `
+      : css`
+          max-width: 800px;
+        `} */
+
+  && > div {
+    width: 100%;
+  }
+`
+export const EditorStyles = styled.div<{ readOnly?: boolean }>`
+  ${({ readOnly }) =>
+    readOnly &&
+    css`
+      pointer-events: none;
+    `};
+
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;
+  width: 100%;
 
   .slate-Draggable {
     > div {
@@ -73,6 +121,7 @@ export const EditorStyles = styled.div`
   mark {
     background-color: ${(props) => transparentize(0.75, props.theme.colors.primary)};
     color: ${(props) => props.theme.colors.text.default};
+    transition: all 0.3s ease-in-out;
   }
 
   p,
@@ -311,7 +360,6 @@ export const EditorStyles = styled.div`
   select {
     font-family: inherit;
     font-size: inherit;
-    padding: 10px;
     border: none;
     outline: none;
   }
@@ -443,37 +491,5 @@ export const EditorStyles = styled.div`
 
   .LinkIcon > * {
     color: ${({ theme }) => theme.colors.primary};
-  }
-`
-
-interface StyledEditorProps {
-  showGraph?: boolean
-}
-
-export const StyledEditor = styled.div<StyledEditorProps>`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: ${({ theme }) => theme.spacing.large};
-  padding: ${({ theme }) => theme.spacing.large} ${({ theme }) => theme.spacing.medium};
-  margin: auto;
-  margin-bottom: 0;
-  width: 100%;
-  max-width: 1000px;
-  min-width: 400px;
-  height: 100%;
-  flex: 1;
-  overflow-y: auto;
-  /* ${({ showGraph }) =>
-    showGraph
-      ? css`
-          max-width: 600px;
-        `
-      : css`
-          max-width: 800px;
-        `} */
-
-  && > div {
-    width: 100%;
   }
 `

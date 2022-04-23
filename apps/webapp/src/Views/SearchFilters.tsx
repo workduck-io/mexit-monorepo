@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import filterOffLine from '@iconify-icons/ri/filter-off-line'
 import filter2Line from '@iconify-icons/ri/filter-2-line'
-import { FilterKey, SearchFilter, useFilters } from '../Hooks/useFilters'
+import { FilterKey, SearchFilter } from '../Hooks/useFilters'
 import {
   SearchFilterCancel,
   SearchFilterCategoryLabel,
