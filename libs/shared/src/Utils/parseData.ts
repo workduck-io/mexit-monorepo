@@ -1,4 +1,4 @@
-import { diskIndex, FileData, GenericSearchData, indexNames, NodeEditorContent } from '@mexit/core'
+import { diskIndex, PersistentData, GenericSearchData, indexNames, NodeEditorContent } from '@mexit/core'
 import { ELEMENT_ILINK } from '@workduck-io/mex-editor'
 import { getSlug } from './strings'
 
@@ -71,7 +71,7 @@ export const getTitleFromContent = (content: NodeEditorContent) => {
   return title
 }
 
-export const convertDataToIndexable = (data: FileData) => {
+export const convertDataToIndexable = (data: PersistentData) => {
   const nodeBlockMap: { [key: string]: string[] } = {}
   const result: Record<indexNames, GenericSearchData[]> = Object.entries(indexNames).reduce((p, c) => {
     const idxResult = []

@@ -1,10 +1,9 @@
-import { SearchIndex, SearchWorker, FileData, idxKey, parseNode, GenericSearchResult, mog } from '@mexit/core'
+import { SearchIndex, SearchWorker, PersistentData, idxKey, parseNode, GenericSearchResult, mog } from '@mexit/core'
 import { expose } from 'threads/worker'
 import {
   createSearchIndex,
   createIndexCompositeKey,
   getNodeAndBlockIdFromCompositeKey,
-  exportIndex,
   indexedFields,
   TITLE_RANK_BUMP,
   SEARCH_RESULTS_LIMIT
@@ -14,7 +13,7 @@ let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
 
 const searchWorker: SearchWorker = {
-  init: (fileData: FileData, indexData: Record<idxKey, any>) => {
+  init: (fileData: PersistentData, indexData: Record<idxKey, any>) => {
     const { idx, nbMap } = createSearchIndex(fileData, indexData)
 
     globalSearchIndex = idx

@@ -1,18 +1,20 @@
 import { spawn, Worker } from 'threads'
 
-// @ts-expect-error it don't want .ts
 // eslint-disable-next-line
-import workerURL from 'threads-plugin/dist/loader?name=worker!./analysis.ts'
-// @ts-expect-error it don't want .ts
-//eslint-disable-next-line
-import searchWorkerURL from 'threads-plugin/dist/loader?name=searchWorker!./search.ts'
-import { NodeEditorContent, FileData, idxKey } from '@mexit/core'
+// import workerURL from 'threads-plugin/dist/loader?name=worker!./analysis.ts'
+// // @ts-expect-error it don't want .ts
+// //eslint-disable-next-line
+// import searchWorkerURL from 'threads-plugin/dist/loader?name=searchWorker!./search.ts'
+import { NodeEditorContent, PersistentData, idxKey } from '@mexit/core'
 import { mog } from '@workduck-io/mex-editor'
 
 export const WORKER_LOCATION = '/apps/webapp/src/Utils/Workers'
 export let worker = null
 
 export let search_worker = null
+
+const workerURL = new URL('./search.ts', import.meta.url).toString()
+const searchWorkerURL = workerURL
 
 export const startAnalysisWorkerService = async () => {
   console.log('startWorkerService')
@@ -48,7 +50,7 @@ export const startSearchWorker = async () => {
   console.log('startSearchWorkerService')
   if (!search_worker) search_worker = await spawn(new Worker(searchWorkerURL))
 }
-export const initSearchIndex = async (fileData: FileData, indexData: Record<idxKey, any>) => {
+export const initSearchIndex = async (fileData: PersistentData, indexData: Record<idxKey, any>) => {
   try {
     if (!search_worker) {
       console.log('Creating new search worker')

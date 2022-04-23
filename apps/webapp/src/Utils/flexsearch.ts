@@ -1,4 +1,4 @@
-import { GenericSearchData, FileData, mog, diskIndex, indexNames } from '@mexit/core'
+import { GenericSearchData, PersistentData, mog, diskIndex, indexNames } from '@mexit/core'
 import { convertDataToIndexable } from '@mexit/shared'
 import { Document } from 'flexsearch'
 
@@ -24,7 +24,7 @@ export const getNodeAndBlockIdFromCompositeKey = (compositeKey: string) => {
 export const indexedFields = ['title', 'text']
 export const storedFields = ['text', 'data']
 
-export const createSearchIndex = (fileData: FileData, data: CreateSearchIndexData) => {
+export const createSearchIndex = (fileData: PersistentData, data: CreateSearchIndexData) => {
   // TODO: Find a way to delay the conversion until needed i.e. if index is not present
   const { result: initList, nodeBlockMap: nbMap } = convertDataToIndexable(fileData)
 

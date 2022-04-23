@@ -1,6 +1,28 @@
 import { Document } from 'flexsearch'
-import { FileData } from './Editor'
+import { ILink, Tag, NodeContent, LinkCache, TagsCache } from './Editor'
+import { Reminder } from './Reminders'
+import { Snippet } from './Snippet'
+import { TodosType } from './Todo'
 
+
+export interface PersistentData {
+  baseNodeId: string
+  ilinks: ILink[]
+  tags: Tag[]
+  contents: {
+    [key: string]: NodeContent
+  }
+
+  linkCache: LinkCache
+  tagsCache: TagsCache
+
+  archive: ILink[]
+  bookmarks: string[]
+
+  todos: TodosType
+  reminders: Reminder[]
+  snippets: Snippet[]
+}
 export interface GenericSearchData {
   id: string
   blockId?: string
@@ -30,7 +52,7 @@ export interface GenericSearchResult {
 export type idxKey = keyof SearchIndex
 
 export interface SearchWorker {
-  init: (fileData: FileData, indexData: Record<idxKey, any>) => void
+  init: (fileData: PersistentData, indexData: Record<idxKey, any>) => void
   addDoc: (key: idxKey, nodeId: string, contents: any[], title: string, tags?: Array<string>) => void
   updateDoc: (key: idxKey, nodeId: string, contents: any[], title: string, tags?: Array<string>) => void
   removeDoc: (key: idxKey, id: string) => void
