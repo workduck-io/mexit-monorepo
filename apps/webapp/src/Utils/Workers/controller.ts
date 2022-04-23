@@ -13,8 +13,8 @@ export let worker = null
 
 export let search_worker = null
 
-const workerURL = new URL('./search.ts', import.meta.url).toString()
-const searchWorkerURL = workerURL
+const workerURL = new URL('./analysis.ts', import.meta.url).toString()
+const searchWorkerURL = new URL('./search.ts', import.meta.url).toString()
 
 export const startAnalysisWorkerService = async () => {
   console.log('startWorkerService')

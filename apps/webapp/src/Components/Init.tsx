@@ -13,6 +13,7 @@ import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
+import { startAnalysisWorkerService } from '../Utils/Workers/controller'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -21,6 +22,9 @@ const Init: React.FC = () => {
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
 
+  useEffect(() => {
+    startAnalysisWorkerService()
+  }, [])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
