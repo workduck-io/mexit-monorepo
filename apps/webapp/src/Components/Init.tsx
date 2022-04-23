@@ -7,7 +7,7 @@ import Analytics from '../Utils/analytics'
 
 import config from '../config'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import useSearchStore from '../Hooks/useSearchStore'
+import { useSearch } from '../Hooks/useSearch'
 import useDataStore from '../Stores/useDataStore'
 import useContentStore from '../Stores/useContentStore'
 
@@ -15,7 +15,7 @@ const Init = () => {
   const { initCognito } = useAuth()
   const routingInstrumentation = useRoutingInstrumentation()
   const snippets = useSnippetStore((store) => store.snippets)
-  const initializeSearchIndex = useSearchStore((store) => store.initializeSearchIndex)
+  // const initializeSearchIndex = useSearchStore((store) => store.initializeSearchIndex)
   const ilinks = useDataStore((store) => store.ilinks)
   const contents = useContentStore((store) => store.contents)
 
@@ -53,7 +53,7 @@ const Init = () => {
       snippet: snippets,
       archive: []
     }
-    initializeSearchIndex(ilinks, initData)
+    // initializeSearchIndex(ilinks, initData)
   }, [])
 
   return null

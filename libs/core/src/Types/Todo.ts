@@ -1,7 +1,3 @@
-import { NodeEditorContent } from '@mexit/shared'
-
-import { Shortcut } from '../Components/Help'
-
 export enum PriorityType {
   low = 'low',
   high = 'high',

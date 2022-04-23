@@ -4,7 +4,7 @@ import create from 'zustand'
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import useEditorStore, { getContent } from './useEditorStore'
 import { areEqual } from '../Utils/hash'
-import { TodoType } from '../Types/Todo'
+import { TodoType } from '@mexit/core'
 import useTodoStore from './useTodoStore'
 import { checkIfUntitledDraftNode } from '../Utils/strings'
 
@@ -90,13 +90,13 @@ export const useAnalysis = () => {
     if (bufferContent) {
       // mog('Buffer for calc', { bufferContent })
       if (!areEqual(bufferContent, content.content)) {
-        console.log("Handle case when not equal")
+        console.log('Handle case when not equal')
         // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: bufferContent, nodeid: node.nodeid, options })
       }
     } else {
       // mog('Content for calc', { content })
       if (content && content.content) {
-        console.log("Handle case when equal")
+        console.log('Handle case when equal')
       }
       // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: content.content, nodeid: node.nodeid, options })
     }

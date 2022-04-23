@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "dev": "NX_BUILD_MODE=development vite",
+    "dev": "tsc --noEmit && NX_BUILD_MODE=development vite",
     "build": "tsc --noEmit && vite build --emptyOutDir",
     "preview": "vite preview",
     "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
@@ -50,6 +50,8 @@
     "slate-hyperscript": "^0.67.0",
     "slate-react": "^0.72.9",
     "styled-components": "^5.3.3",
+    "threads": "^1.7.0",
+    "rollup-plugin-threads": "^1.2.0",
     "tinykeys": "^1.4.0",
     "universal-cookie": "^4.0.4",
     "use-debounce": "^7.0.1",

@@ -12,7 +12,7 @@ import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import useEditorStore from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
-import useSearchStore from '../Hooks/useSearchStore'
+import { useSearch } from '../Hooks/useSearch'
 import {
   Result,
   ResultDesc,
@@ -37,7 +37,7 @@ import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/cor
 
 const Search = () => {
   const { loadNode } = useLoad()
-  const searchIndex = useSearchStore((store) => store.searchIndex)
+  const { queryIndex } = useSearch()
   const contents = useContentStore((store) => store.contents)
   const ilinks = useDataStore((store) => store.ilinks)
   const initialResults = ilinks
@@ -62,7 +62,7 @@ const Search = () => {
   } = useFilters<GenericSearchResult>()
 
   const onSearch = (newSearchTerm: string) => {
-    const res = searchIndex('node', newSearchTerm)
+    const res = queryIndex('node', newSearchTerm)
     const nodeids = useDataStore.getState().ilinks.map((l) => l.nodeid)
     const filRes = res.filter((r) => nodeids.includes(r.id))
     // mog('search', { res, filRes })

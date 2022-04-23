@@ -1,7 +1,49 @@
-import { SearchIndex, GenericSearchData, ILink, parseNode, parseSnippet } from '@mexit/core'
+import { GenericSearchData, FileData, mog, diskIndex, indexNames } from '@mexit/core'
+import { convertDataToIndexable } from '@mexit/shared'
 import { Document } from 'flexsearch'
 
-import { indexNames } from '../Data/constants'
+export interface CreateSearchIndexData {
+  node: GenericSearchData[] | null
+  snippet: GenericSearchData[] | null
+  archive: GenericSearchData[] | null
+  template: GenericSearchData[] | null
+}
+
+export const SEARCH_RESULTS_LIMIT = 10
+export const TITLE_RANK_BUMP = 3
+
+export const createIndexCompositeKey = (nodeId: string, blockId: string) => {
+  return `${nodeId}#${blockId}`
+}
+
+export const getNodeAndBlockIdFromCompositeKey = (compositeKey: string) => {
+  const c = compositeKey.split('#')
+  return { nodeId: c[0], blockId: c[1] }
+}
+
+export const indexedFields = ['title', 'text']
+export const storedFields = ['text', 'data']
+
+export const createSearchIndex = (fileData: FileData, data: CreateSearchIndexData) => {
+  // TODO: Find a way to delay the conversion until needed i.e. if index is not present
+  const { result: initList, nodeBlockMap: nbMap } = convertDataToIndexable(fileData)
+
+  const idx = Object.entries(indexNames).reduce((p, c) => {
+    const idxName = c[0]
+    const options = {
+      document: {
+        id: 'blockId',
+        tag: 'tag',
+        index: indexedFields,
+        store: storedFields
+      },
+      tokenize: 'full'
+    }
+    return { ...p, [idxName]: createGenricSearchIndex(initList[idxName], data[idxName] ?? null, options) }
+  }, diskIndex)
+
+  return { idx, nbMap }
+}
 
 export const flexIndexKeys = [
   'title.cfg',
@@ -15,65 +57,66 @@ export const flexIndexKeys = [
   'tag'
 ]
 
-export const createSearchIndex = (ilinks, initData: Record<indexNames, any[]>): SearchIndex => {
-  const initList: Record<indexNames, any> = convertDataToIndexable(ilinks, initData)
-  // Pass options corrwectly depending on what fields are indexed ([title, text] for now)
-  return {
-    node: initList.node ? createGenricSearchIndex(initList.node) : null,
-    snippet: initList.snippet ? createGenricSearchIndex(initList.snippet) : null,
-    archive: initList.archive ? createGenricSearchIndex(initList.archive) : null
-  }
-}
-
 export const createGenricSearchIndex = (
   initList: GenericSearchData[],
+  indexData: any,
+  // Default options for node search
   options: any = {
     document: {
       id: 'id',
-      index: ['title', 'text']
+      index: ['title', 'text'],
+      store: ['text', 'data']
     },
     tokenize: 'full'
   }
 ): Document<GenericSearchData> => {
   const index = new Document<GenericSearchData>(options)
 
-  initList.forEach((i) => index.add(i))
+  if (indexData && Object.keys(indexData).length > 0) {
+    // When using a prebuilt index read from disk present in the indexData parameter
+    mog('Using Prebuilt Index!', {})
+    Object.entries(indexData).forEach(([key, data]) => {
+      const parsedData = JSON.parse((data as string) ?? '') ?? null
+      index.import(key, parsedData)
+    })
+  } else {
+    initList.forEach((block) => {
+      block.blockId = createIndexCompositeKey(block.id, block.blockId ?? block.id)
+
+      index.add({ ...block, tag: [block.id, ...(block.tag ?? [])] })
+    })
+  }
+
+  mog('CreateSearchIndex', { options, initList })
   return index
 }
 
-export const convertDataToIndexable = (
-  ilinks: ILink[],
-  data: Record<indexNames, any[]>
-): Record<indexNames, GenericSearchData[]> => {
-  const titleNodeMap = new Map<string, string>()
-
-  ilinks.forEach((ilink) => {
-    titleNodeMap.set(ilink.nodeid, ilink.path)
+export const exportAsync = (index) => {
+  const idxResult = {}
+  return new Promise<any>((resolve, reject) => {
+    try {
+      return index.export(async (key, data) => {
+        try {
+          idxResult[key] = data
+          if (key === 'store') {
+            // Hacky Fix: store is the last key that is exported so we resolve when store finishes exporting
+            resolve(idxResult)
+          }
+        } catch (err) {
+          reject(err)
+        }
+      })
+    } catch (err) {
+      reject(err)
+    }
   })
+}
 
-  const nodeData = data.node
-  const archiveData = data.archive
-  const snippetData = data.snippet
+export const exportIndex = async (indexEntries) => {
+  const result = diskIndex
 
-  const res = {
-    node: [],
-    archive: [],
-    snippet: []
+  for (const [idxName, idxVal] of indexEntries) {
+    result[idxName] = await exportAsync(idxVal)
   }
-
-  nodeData.forEach((node) => {
-    const blocks = parseNode(node, titleNodeMap.get(node.id))
-    res.node = [...res.node, ...blocks]
-  })
-
-  archiveData.forEach((archivedNode) => {
-    const blocks = parseNode(archivedNode, titleNodeMap.get(archivedNode.id))
-    res.archive = [...res.archive, ...blocks]
-  })
-
-  snippetData.forEach((snippet) => {
-    res.snippet.push(parseSnippet(snippet))
-  })
-
-  return res
+  return result
 }

@@ -225,3 +225,46 @@ export interface NodeProperties {
   nodeid: string
   path: string
 }
+
+export interface FileData {
+  // Version. Should be same as Mex. Lower versions will be updated.
+  version: string
+
+  // variable to detect whether the data in the file was updated via mex/spotlight or externally
+  remoteUpdate: boolean
+  baseNodeId: string
+  ilinks: ILink[]
+  tags: Tag[]
+  contents: {
+    [key: string]: NodeContent
+  }
+  archive: ILink[]
+  linkCache: LinkCache
+  tagsCache: TagsCache
+  bookmarks: string[]
+
+  // Tasks
+  todos: TodosType
+
+  // Reminders
+  reminders: Reminder[]
+
+  // Sync
+  syncBlocks: SyncBlockData[]
+  templates: SyncBlockTemplate[]
+  intents: SyncStoreIntents
+  services: Service[]
+
+  // Misc
+  userSettings: {
+    theme: string
+    spotlight: { [key: string]: any } // eslint-disable-line @typescript-eslint/no-explicit-any
+  }
+  snippets: Snippet[]
+}
+
+export interface NodeSearchData {
+  nodeUID: string
+  title?: string
+  text: string
+}
