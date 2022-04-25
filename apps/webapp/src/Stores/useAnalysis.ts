@@ -8,7 +8,7 @@ import { TodoType } from '@mexit/core'
 import useTodoStore from './useTodoStore'
 import { checkIfUntitledDraftNode } from '../Utils/strings'
 
-import { analyseContent } from '../Workers/controller'
+// import { analyseContent } from '../Workers/controller'
 
 export interface OutlineItem {
   id: string
@@ -79,17 +79,17 @@ export const useAnalysis = () => {
       // mog('Buffer for calc', { bufferContent })
       if (!areEqual(bufferContent, content.content)) {
         console.log('Handle case when not equal')
-        analyseContent({ content: bufferContent, nodeid: node.nodeid, options }, (results) => {
-          console.log("Results: ", results)
-        })
+        // analyseContent({ content: bufferContent, nodeid: node.nodeid, options }, (results) => {
+        //   console.log("Results: ", results)
+        // })
         // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: bufferContent, nodeid: node.nodeid, options })
       }
     } else {
       // mog('Content for calc', { content })
       if (content && content.content) {
-        analyseContent({ content: content.content, nodeid: node.nodeid, options }, (results) => {
-          console.log("Results: ", results)
-        })
+        // analyseContent({ content: content.content, nodeid: node.nodeid, options }, (results) => {
+        //   console.log("Results: ", results)
+        // })
       }
       // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: content.content, nodeid: node.nodeid, options })
     }

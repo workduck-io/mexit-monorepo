@@ -13,7 +13,7 @@ import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
-import { startAnalysisWorkerService } from '../Workers/controller'
+import { hashPasswordWithWorker } from '../Workers/controller'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -23,7 +23,11 @@ const Init: React.FC = () => {
   const { loadNode } = useLoad()
 
   useEffect(() => {
-    startAnalysisWorkerService()
+    const x = async () => {
+      const results = await hashPasswordWithWorker("Lassan")
+      console.log("Results aaya inside of the init component yaay: ", results)
+    }
+    x()
   }, [])
 
   useEffect(() => {
