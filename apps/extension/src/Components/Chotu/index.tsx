@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
-import { Notification } from '../Notification'
+import { Notification } from '@mexit/shared'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
@@ -20,7 +20,7 @@ export default function Chotu() {
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const {setVisualState} = useSputlitContext()
+  const { setVisualState } = useSputlitContext()
   const handleEvent = (event) => {
     if (event.origin === MEXIT_FRONTEND_URL_BASE) {
       switch (event.data.type) {
@@ -38,10 +38,10 @@ export default function Chotu() {
             console.log('Received: ', event.data.message)
             addLinkCapture(event.data.message)
             setVisualState(VisualState.hidden)
-            toast.success('Copied Shortened URL to Clipboard!') 
+            toast.success('Copied Shortened URL to Clipboard!')
           } else {
             console.error('Received: ', event.data)
-            toast.error("Failed :( Try again later!")
+            toast.error('Failed :( Try again later!')
           }
           break
         }
