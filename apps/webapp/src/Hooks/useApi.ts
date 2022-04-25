@@ -8,6 +8,7 @@ import { useLinks } from '../Hooks/useLinks'
 import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '../Data/constants'
 import { isRequestedWithin } from '../Stores/useApiStore'
 import useContentStore from '../Stores/useContentStore'
+import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
 import useDataStore from '../Stores/useDataStore'
 
