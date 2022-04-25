@@ -147,8 +147,6 @@ export const ColourPicker = () => {
           />
         </Form>
       </Wrapper>
-
-      <Toaster position="bottom-center" />
     </Container>
   )
 }
