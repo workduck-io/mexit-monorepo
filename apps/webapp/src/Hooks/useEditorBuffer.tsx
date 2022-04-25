@@ -7,6 +7,7 @@ import { areEqual } from '../Utils/hash'
 import { useSnippets } from './useSnippets'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useDataSaverFromContent } from './useSave'
+import { persist } from 'zustand/middleware'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>
@@ -15,16 +16,21 @@ interface BufferStore {
   clear: () => void
 }
 
-export const useBufferStore = create<BufferStore>((set, get) => ({
-  buffer: {},
-  add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
-  remove: (nodeid) => {
-    const newBuffer = get().buffer
-    if (newBuffer[nodeid]) delete newBuffer[nodeid]
-    set({ buffer: newBuffer })
-  },
-  clear: () => set({ buffer: {} })
-}))
+export const useBufferStore = create<BufferStore>(
+  persist(
+    (set, get) => ({
+      buffer: {},
+      add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
+      remove: (nodeid) => {
+        const newBuffer = get().buffer
+        if (newBuffer[nodeid]) delete newBuffer[nodeid]
+        set({ buffer: newBuffer })
+      },
+      clear: () => set({ buffer: {} })
+    }),
+    { name: 'editor-buffer' }
+  )
+)
 
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)
