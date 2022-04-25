@@ -37,7 +37,7 @@ export let worker = null
 export const startTestWorker = async () => {
   console.log('Starting Test Worker')
   if (!worker) {
-    worker = await spawn(new Worker(testWorkerURL))
+    worker = await spawn(new Worker(testWorkerURL, { type: 'classic' }))
   }
 }
 

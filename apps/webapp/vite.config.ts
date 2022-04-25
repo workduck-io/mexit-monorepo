@@ -23,5 +23,6 @@ export default defineConfig({
     },
     dedupe: ['styled-components', 'react', 'react-dom', '@workduck-io/mex-editor', '@udecode/plate']
   },
-  plugins: [react()]
+  plugins: [react()],
+  worker: { format: 'es' }
 })
