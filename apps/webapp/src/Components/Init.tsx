@@ -13,7 +13,7 @@ import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
-import { startAnalysisWorkerService } from '../Utils/Workers/controller'
+import { startAnalysisWorkerService } from '../Workers/controller'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()

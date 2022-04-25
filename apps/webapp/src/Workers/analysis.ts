@@ -2,8 +2,8 @@ import { NodeEditorContent } from '@mexit/core'
 import { convertContentToRawText, getTitleFromContent } from '@mexit/shared'
 import { expose } from 'threads/worker'
 import { ELEMENTS_IN_OUTLINE, LIST_ELEMENTS, HIGHLIGHTED_ELEMENTS } from '@mexit/core'
-import { OutlineItem, NodeAnalysis } from '../../Stores/useAnalysis'
-import { getTagsFromContent, getTodosFromContent } from '../content'
+import { OutlineItem, NodeAnalysis } from '../Stores/useAnalysis'
+import { getTagsFromContent, getTodosFromContent } from '../Utils/content'
 import { AnalyseContentProps } from './controller'
 
 const getSingle = (content: NodeEditorContent) => {

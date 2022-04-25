@@ -8,7 +8,7 @@ import { TodoType } from '@mexit/core'
 import useTodoStore from './useTodoStore'
 import { checkIfUntitledDraftNode } from '../Utils/strings'
 
-import { analyseContent } from '../Utils/Workers/controller'
+import { analyseContent } from '../Workers/controller'
 
 export interface OutlineItem {
   id: string

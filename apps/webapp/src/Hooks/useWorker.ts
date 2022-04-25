@@ -10,7 +10,7 @@ import {
   searchIndexWithRanking,
   updateDoc,
   dumpIndexDisk
-} from '../Utils/Workers/controller'
+} from '../Workers/controller'
 
 interface Options {
   [IpcAction.ADD_DOCUMENT]: {
@@ -26,34 +26,34 @@ export const useWorker = () => {
   const handle = (type: string, ...args: any[]) => {
     switch (type) {
       case IpcAction.ADD_DOCUMENT:
-        ;async ([key, nodeId, contents, title, tags] = args) => {
+        ; async ([key, nodeId, contents, title, tags] = args) => {
           await addDoc(key, nodeId, contents, title, tags)
         }
         break
       case IpcAction.UPDATE_DOCUMENT:
-        ;async ([key, nodeId, contents, title, tags] = args) => {
+        ; async ([key, nodeId, contents, title, tags] = args) => {
           await updateDoc(key, nodeId, contents, title, tags)
         }
         break
       case IpcAction.REMOVE_DOCUMENT:
-        ;async ([key, id] = args) => {
+        ; async ([key, id] = args) => {
           await removeDoc(key, id)
         }
         break
       case IpcAction.QUERY_INDEX:
-        ;async ([key, query, tags] = args) => {
+        ; async ([key, query, tags] = args) => {
           const results = await searchIndex(key, query, tags)
           return results
         }
         break
       case IpcAction.QUERY_INDEX_BY_NODEID:
-        ;async ([key, nodeId, query] = args) => {
+        ; async ([key, nodeId, query] = args) => {
           const results = await searchIndexByNodeId(key, nodeId, query)
           return results
         }
         break
       case IpcAction.QUERY_INDEX_WITH_RANKING:
-        ;async ([key, query] = args) => {
+        ; async ([key, query] = args) => {
           const results = await searchIndexWithRanking(key, query)
           return results
         }
