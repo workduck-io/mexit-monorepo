@@ -1,38 +1,9 @@
-import { CachedILink, ILink } from '@mexit/core'
+import { CachedILink, getLinksFromContent, hasLink, ILink, NodeLink } from '@mexit/core'
 
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 
 import { useNodes } from './useNodes'
-import { uniq } from '@mexit/shared'
-
-const ELEMENT_INLINE_BLOCK = 'inline_block'
-
-const getLinksFromContent = (content: any[]): string[] => {
-  let links: string[] = []
-
-  content.forEach((n) => {
-    if (n.type === 'ilink' || n.type === ELEMENT_INLINE_BLOCK) {
-      links.push(n.value)
-    }
-    if (n.children && n.children.length > 0) {
-      links = links.concat(getLinksFromContent(n.children))
-    }
-  })
-
-  return uniq(links)
-}
-export interface NodeLink {
-  from: string
-  to: string
-}
-
-export const hasLink = (link: CachedILink, links: CachedILink[]): boolean => {
-  const filtered = links.filter((l) => {
-    return link.nodeid === l.nodeid && link.type === l.type
-  })
-  return filtered.length > 0
-}
 
 export const useLinks = () => {
   const contents = useContentStore((state) => state.contents)
@@ -170,7 +141,6 @@ export const useLinks = () => {
     createLink
   }
 }
-
 
 export const getNodeidFromPathAndLinks = (links: ILink[], path: string) => {
   const link = links.find((l) => l.path === path)

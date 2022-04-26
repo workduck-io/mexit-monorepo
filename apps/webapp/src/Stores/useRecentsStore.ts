@@ -1,7 +1,6 @@
+import { remove } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { remove } from '@mexit/shared'
 
 const MAX_RECENT_SIZE = 10
 

@@ -27,7 +27,6 @@ export * from './Types/Tree'
 
 export * from './Utils/helpers'
 export * from './Utils/tabInfo'
-export * from './Utils/lodashUtils'
 export * from './Utils/Logo'
 export * from './Utils/blurSelection'
 export * from './Utils/events'

@@ -1,5 +1,3 @@
-export const IS_DEV = false // import.meta.env.DEV
-
 export default {
   cognito: {
     REGION: 'us-east-1',

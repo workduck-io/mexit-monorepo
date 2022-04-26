@@ -1,11 +1,17 @@
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-import { withoutDelimiter, mog, SEPARATOR, Settify, typeInvert, removeLink } from '@workduck-io/mex-editor'
-
-import { generateTree, getAllParentIds, getFlatTree } from '../Utils/treeUtils'
-import { getNodeIcon } from '../Utils/treeUtils'
+import {
+  Settify,
+  getUniquePath,
+  generateNodeUID,
+  mog,
+  CachedILink,
+  SEPARATOR,
+  withoutContinuousDelimiter,
+  removeLink,
+  Tag,
+  typeInvert
+} from '@mexit/core'
+import { getAllParentIds, getNodeIcon, generateTree } from '../Utils/treeUtils'
 import { nanoid } from 'nanoid'
-import { Tag, getUniquePath, generateNodeId, CachedILink } from '@mexit/core'
 
 export const generateTag = (item: string): Tag => ({
   id: nanoid(),
@@ -30,6 +36,7 @@ export const dataStoreConstructor = (set, get) => ({
   publicNodes: {},
 
   initializeDataStore: (initData) => {
+    // mog('Initializing Data store', { initData })
     set({
       ...initData
     })
@@ -42,8 +49,15 @@ export const dataStoreConstructor = (set, get) => ({
     })
   },
 
+  /*
+   * Add a new ILink to the store
+   * ## Rules
+      - When new node / rename and clash
+        - with existing add numeric suffix
+        - not allowed with reserved keywords
+   */
   addILink: ({ ilink, nodeid, parentId, archived, showAlert }) => {
-    const { key, isChild } = withoutDelimiter(ilink)
+    const { key, isChild } = withoutContinuousDelimiter(ilink)
 
     if (key) {
       ilink = isChild && parentId ? `${parentId}${key}` : key
@@ -64,7 +78,7 @@ export const dataStoreConstructor = (set, get) => ({
     const newLinks = parents.filter((l) => !linksStrings.includes(l)) // only create links for non existing
 
     const newILinks = newLinks.map((l) => ({
-      nodeid: nodeid && l === uniquePath ? nodeid : generateNodeId(),
+      nodeid: nodeid && l === uniquePath ? nodeid : generateNodeUID(),
       path: l,
       icon: getNodeIcon(l)
     }))
@@ -73,7 +87,7 @@ export const dataStoreConstructor = (set, get) => ({
 
     const userILinks = archived ? ilinks.map((val) => (val.path === uniquePath ? { ...val, nodeid } : val)) : ilinks
 
-    mog('Adding ILink', { ilink, uniquePath, nodeid, parentId, archived, newLink, newLinks, userILinks, parents })
+    // mog('Adding ILink', { ilink, uniquePath, nodeid, parentId, archived, newLink, newLinks, userILinks, parents })
     set({
       ilinks: [...userILinks, ...newILinks]
     })
@@ -83,6 +97,7 @@ export const dataStoreConstructor = (set, get) => ({
   },
 
   setIlinks: (ilinks) => {
+    // mog('Setting ILinks', { ilinks })
     set({
       ilinks
     })
@@ -178,7 +193,9 @@ export const dataStoreConstructor = (set, get) => ({
     set({ bookmarks: Array.from(ubookmarks) })
   },
 
-  updateInternalLinks: (links, nodeid) => {
+  updateInternalLinks: (linkCache) => set({ linkCache }),
+
+  updateInternalLinksForNode: (links, nodeid) => {
     set({
       linkCache: {
         ...get().linkCache,

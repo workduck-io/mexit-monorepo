@@ -11,6 +11,7 @@ import { StyledMenu } from '../../Style/Menu'
 import { useRenameStore } from '../../Stores/useRenameStore'
 import { TreeNode } from '@mexit/shared'
 import Tree from './Tree'
+import { useDeleteStore } from '../Refactor/DeleteModal'
 
 interface TreeProps {
   tree: TreeNode[]
@@ -24,6 +25,8 @@ const MENU_ID = 'Tree-Menu'
 
 export const TreeWithContextMenu = ({ tree }: TreeProps) => {
   const openRenameModal = useRenameStore((store) => store.openModal)
+  const openDeleteModal = useDeleteStore((store) => store.openModal)
+
   const { show } = useContextMenu({
     id: MENU_ID
   })
@@ -36,10 +39,10 @@ export const TreeWithContextMenu = ({ tree }: TreeProps) => {
     // console.log({ event, props, data, triggerEvent })
     switch (event.currentTarget.id) {
       case 'rename':
-        // openRenameModal(p.id)
+        openRenameModal(p.id)
         break
       case 'archive':
-        // openDeleteModal(p.id)
+        openDeleteModal(p.id)
         break
       case 'sync':
         break

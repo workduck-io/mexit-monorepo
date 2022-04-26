@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 
-import { range } from '../Utils/lodashUtils'
+import { range } from '@mexit/core'
 
 const loadingFade = keyframes`
   0% { opacity: 0; }

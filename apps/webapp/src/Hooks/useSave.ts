@@ -13,6 +13,7 @@ import useDataStore from '../Stores/useDataStore'
 
 import { PersistentData } from '../Types/Data'
 import { useIndexedDBData } from './usePersistentData'
+import { getContent } from '../Stores/useEditorStore'
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)
@@ -43,6 +44,12 @@ export const useDataSaverFromContent = () => {
     }
   }
 
+  const saveNodeAPIandFs = (nodeId: string) => {
+    const content = getContent(nodeId)
+    mog('saving to api for nodeId: ', { nodeId, content })
+    saveDataAPI(nodeId, content.content)
+    // saveData()
+  }
 
   const saveDataToPersistentStorage = () => {
     const { baseNodeId, ilinks, linkCache, tags, tagsCache, archive, bookmarks } = useDataStore.getState()
@@ -58,13 +65,11 @@ export const useDataSaverFromContent = () => {
       archive,
       bookmarks,
       todos: useTodoStore.getState().todos,
-      reminders: useReminderStore.getState().reminders,
+      reminders: useReminderStore.getState().reminders
     }
     mog('We persisted the data for you', { persistentData })
     persistData(persistentData)
   }
 
-
-  return { saveEditorValueAndUpdateStores, saveDataToPersistentStorage }
+  return { saveEditorValueAndUpdateStores, saveNodeAPIandFs, saveDataToPersistentStorage }
 }
-

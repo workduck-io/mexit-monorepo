@@ -247,7 +247,6 @@ export enum CategoryType {
   meeting = 'Meetings'
 }
 
-
 export interface SlashCommand {
   command: string
   text?: string
@@ -255,6 +254,11 @@ export interface SlashCommand {
   type?: QuickLinkType | CategoryType
   /** Extended command -> Text after the command is part of it and used as arguments */
   extended?: boolean
+}
+
+export interface SlashCommands {
+  default: SlashCommand[]
+  internal: SlashCommand[]
 }
 
 export enum QuickLinkStatus {

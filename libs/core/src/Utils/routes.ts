@@ -4,6 +4,13 @@ export const IS_DEV = (() => {
   return false
 })()
 
+export const USE_API = () => {
+  /** Useful for tracking stopped API calls */
+  // if (IS_DEV) console.info('API is set to false')
+  // return true
+  return !IS_DEV
+}
+
 export const BASE_INTEGRATION_URL = 'https://http.workduck.io/integration'
 
 export const integrationURLs = {
@@ -89,5 +96,5 @@ export const apiURLs = {
   getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
 
   // Get Ilinks from Middleware
-  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`,
+  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`
 }
