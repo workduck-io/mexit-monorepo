@@ -23,6 +23,7 @@ export * from './Style/Loading'
 export * from './Themes'
 
 export * from './Types/Tree'
+export * from './Types/Theme'
 
 export * from './Utils/helpers'
 export * from './Utils/tabInfo'
@@ -32,5 +33,3 @@ export * from './Utils/shortcuts'
 export * from './Utils/tabInfo'
 export * from './Utils/themeGenerator'
 export * from './Utils/treeUtils'
-
-export * from './styled.d'
