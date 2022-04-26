@@ -1,6 +1,7 @@
-import { LinkCaptureStore, shortenerStoreConstructor, storageAdapter } from '@mexit/core'
+import { LinkCaptureStore, shortenerStoreConstructor } from '@mexit/core'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { storageAdapter } from '../Utils/chromeStorageAdapter'
 
 export const useShortenerStore = create<LinkCaptureStore>(
   persist(shortenerStoreConstructor, { name: 'mexit-link-captures', ...storageAdapter })

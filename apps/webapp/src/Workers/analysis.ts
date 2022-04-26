@@ -3,7 +3,7 @@ import { expose } from 'threads/worker'
 
 import { getTagsFromContent, getTodosFromContent } from '../Utils/content'
 import { AnalyseContentProps } from './controller'
-import { convertContentToRawText, getTitleFromContent } from '../Utils/parseData'
+import { convertContentToRawText, getTitleFromContent } from '@mexit/core'
 export interface OutlineItem {
   id: string
   title: string

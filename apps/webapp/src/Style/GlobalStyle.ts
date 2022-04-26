@@ -4,9 +4,7 @@ import { createGlobalStyle, css } from 'styled-components'
 import { ThinScrollbar } from './Helpers'
 import { EditorBalloonStyles, TippyBalloonStyles } from '@mexit/shared'
 
-import { ThemeType } from '../styled.d'
-
-const GlobalStyle = createGlobalStyle<{ theme: ThemeType }>`
+const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization
 
   input:focus-visible {

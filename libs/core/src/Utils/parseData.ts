@@ -1,4 +1,6 @@
-import { diskIndex, PersistentData, GenericSearchData, indexNames, NodeEditorContent } from '@mexit/core'
+import { indexNames, diskIndex } from '../Data/search'
+import { NodeEditorContent } from '../Types/Editor'
+import { GenericSearchData, PersistentData } from '../Types/Search'
 import { getSlug } from './strings'
 
 const ELEMENT_ILINK = 'ilink'

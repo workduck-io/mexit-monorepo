@@ -1,5 +1,5 @@
 import { GenericSearchData, PersistentData, mog, diskIndex, indexNames } from '@mexit/core'
-import { convertDataToIndexable } from '@mexit/shared'
+import { convertDataToIndexable } from '@mexit/core'
 import { Document } from 'flexsearch'
 
 export interface CreateSearchIndexData {

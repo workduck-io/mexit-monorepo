@@ -1,5 +1,5 @@
 import { MiscKeys } from '@mexit/core'
-import { getEventNameFromElement } from '@mexit/shared'
+import { getEventNameFromElement } from '@mexit/core'
 import { mog } from '@workduck-io/mex-editor'
 import { useEffect, useCallback, useMemo } from 'react'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
