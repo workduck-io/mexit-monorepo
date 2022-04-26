@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import { useTreeFromLinks } from '../Stores/useDataStore'
 import InfoBar from '../Components/Infobar'
+import Navbar from '../Components/Navbar'
 
 const EditorViewWrapper = styled.div`
   display: flex;
@@ -15,12 +16,12 @@ const EditorViewWrapper = styled.div`
   height: 100%;
 `
 
-
 const EditorView = () => {
   const Tree = useTreeFromLinks()
 
   return (
     <EditorViewWrapper>
+      <Navbar />
       <Sidebar tree={Tree} starred={Tree} />
       <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
         <Outlet />
