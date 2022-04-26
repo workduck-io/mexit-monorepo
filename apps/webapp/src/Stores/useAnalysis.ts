@@ -87,10 +87,12 @@ export const useAnalysis = () => {
       }
     } else {
       if (content && content.content) {
+        console.log('Content is not same')
         const getAnalysis = async () => {
           const results = await analyseContent({ content: content.content, nodeid: node.nodeid, options })
           setAnalysis(results)
         }
+        getAnalysis()
       }
     }
   }, [node.nodeid, buffer])

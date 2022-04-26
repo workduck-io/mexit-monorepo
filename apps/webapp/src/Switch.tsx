@@ -10,7 +10,6 @@ import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
 import * as Actions from './Actions'
-import ActivityView from './Views/ActivityView'
 import Snippets from './Views/Snippets'
 import SnippetEditor from './Components/Editor/SnippetEditor'
 
@@ -202,7 +201,7 @@ export const Switch = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<ActivityView />} />
+        <Route index element={<></>} />
         <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
       </Route>

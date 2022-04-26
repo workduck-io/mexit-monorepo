@@ -14,6 +14,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { hashPasswordWithWorker } from '../Workers/controller'
+import { useAnalysis } from '../Stores/useAnalysis'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -22,13 +23,7 @@ const Init: React.FC = () => {
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
 
-  useEffect(() => {
-    const x = async () => {
-      const results = await hashPasswordWithWorker("Lassan")
-      console.log("Results aaya inside of the init component yaay: ", results)
-    }
-    x()
-  }, [])
+  useAnalysis()
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi

@@ -21,7 +21,6 @@ export * from './Types/Theme'
 export * from './Types/Todo'
 
 export * from './Utils/actions'
-export * from './Utils/chromeStorageAdapter'
 export * from './Utils/defaults'
 export * from './Utils/helpers'
 export * from './Utils/heuristichelper'

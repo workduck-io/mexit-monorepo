@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ThreadsPlugin = require('threads-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/index.tsx',
@@ -11,7 +12,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../..', 'dist', 'apps', 'webapp'),
-    filename: 'index.js'
+    filename: 'index.js',
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -21,7 +23,8 @@ module.exports = {
     },
     fallback: {
       crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify')
+      stream: require.resolve('stream-browserify'),
+      process: 'process/browser'
     }
   },
   module: {
@@ -50,6 +53,9 @@ module.exports = {
     new ThreadsPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src', 'index.html')
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser'
     })
   ],
   stats: { preset: 'normal', colors: true, errorDetails: true }
