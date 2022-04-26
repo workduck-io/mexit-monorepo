@@ -1,9 +1,8 @@
-import { Document } from 'flexsearch'
+import { Document } from '@workduck-io/flexsearch'
 import { ILink, Tag, NodeContent, LinkCache, TagsCache } from './Editor'
 import { Reminder } from './Reminders'
 import { Snippet } from './Snippet'
 import { TodosType } from './Todo'
-
 
 export interface PersistentData {
   baseNodeId: string
