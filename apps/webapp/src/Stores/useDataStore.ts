@@ -1,4 +1,4 @@
-import { DataStoreState } from '@mexit/core'
+import { DataStoreState, mog } from '@mexit/core'
 import { dataStoreConstructor, generateTree, getFlatTree, sanatizeLinks } from '@mexit/shared'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -11,6 +11,7 @@ export const useTreeFromLinks = () => {
   const sanatizedLinks = sanatizeLinks(links)
   const tree = generateTree(sanatizedLinks)
 
+  console.log({ ilinks, links, sanatizedLinks, tree })
   return tree
 }
 

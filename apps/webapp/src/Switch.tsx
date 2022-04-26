@@ -27,6 +27,8 @@ import toast from 'react-hot-toast'
 import { useTheme } from 'styled-components'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { ForgotPassword } from './Views/ForgotPassword'
+import { useEditorBuffer } from './Hooks/useEditorBuffer'
+import useBlockStore from './Stores/useBlockStore'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -43,6 +45,20 @@ const AuthRoute = ({ children }) => {
   const { loginViaGoogle } = useAuthentication()
 
   const code = new URLSearchParams(window.location.search).get('code')
+
+  const location = useLocation()
+  const { saveAndClearBuffer } = useEditorBuffer()
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+
+  useEffect(() => {
+    if (authenticated) {
+      if (isBlockMode) {
+        setIsBlockMode(false)
+      }
+      saveAndClearBuffer()
+    }
+  }, [location])
 
   useEffect(() => {
     const setAsyncLocal = async () => {
