@@ -1,11 +1,5 @@
-import { EXCLUDED_KEYS_MODIFIERS, KEY_MODIFIERS, getKeyFromKeycode } from '@mexit/core'
+import { EXCLUDED_KEYS_MODIFIERS, KEY_MODIFIERS, getKeyFromKeycode, Key, KeyBinding } from '@mexit/core'
 import create from 'zustand'
-import { Key } from './useShortcutListener'
-
-export type KeyBinding = {
-  key: string
-  alias: string
-}
 
 export type ShortcutStoreType = {
   modifiers: Set<string>

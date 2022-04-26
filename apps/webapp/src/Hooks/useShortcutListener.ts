@@ -1,31 +1,17 @@
-import { MiscKeys } from '@mexit/core'
+import { MiscKeys, ShortcutListner, Key } from '@mexit/core'
 import { getEventNameFromElement } from '@mexit/core'
 import { mog } from '@workduck-io/mex-editor'
 import { useEffect, useCallback, useMemo } from 'react'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
 import useAnalytics from './useAnalytics'
 import { ActionType } from './useAnalytics/events'
-import { KeyBinding, useShortcutStore } from './useShortcutStore'
-
-export type ShortcutListner = {
-  shortcut: KeyBinding
-}
-
-export type KeyBindingPress = [string[], string]
+import { useShortcutStore } from './useShortcutStore'
 
 export const usePlatformInfo = () =>
   useMemo(
     () => (typeof navigator === 'object' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'Meta' : 'Control'),
     []
   )
-
-export type Key = {
-  name: string
-  code: string
-  alias?: string
-  isModifier: boolean
-  modifiers: Array<Key>
-}
 
 export const getKey = (name: string, alias?: string): Key => {
   return {
