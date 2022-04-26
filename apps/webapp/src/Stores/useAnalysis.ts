@@ -8,7 +8,7 @@ import { TodoType } from '@mexit/core'
 import useTodoStore from './useTodoStore'
 import { checkIfUntitledDraftNode } from '../Utils/strings'
 
-// import { analyseContent } from '../Workers/controller'
+import { analyseContent } from '../Workers/controller'
 
 export interface OutlineItem {
   id: string
@@ -58,8 +58,8 @@ export const useAnalysis = () => {
   const node = useEditorStore((s) => s.node)
   const { getBufferVal } = useEditorBuffer()
   const buffer = useBufferStore((s) => s.buffer)
+  const setAnalysis = useAnalysisStore((s) => s.setAnalysis)
 
-  // mog('Setting up IPC for Buffer', { node })
   useEffect(() => {
     const bufferContent = getBufferVal(node.nodeid)
     const content = getContent(node.nodeid)
@@ -79,19 +79,19 @@ export const useAnalysis = () => {
       // mog('Buffer for calc', { bufferContent })
       if (!areEqual(bufferContent, content.content)) {
         console.log('Handle case when not equal')
-        // analyseContent({ content: bufferContent, nodeid: node.nodeid, options }, (results) => {
-        //   console.log("Results: ", results)
-        // })
-        // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: bufferContent, nodeid: node.nodeid, options })
+        const getAnalysis = async () => {
+          const results = await analyseContent({ content: bufferContent, nodeid: node.nodeid, options })
+          setAnalysis(results)
+        }
+        getAnalysis()
       }
     } else {
-      // mog('Content for calc', { content })
       if (content && content.content) {
-        // analyseContent({ content: content.content, nodeid: node.nodeid, options }, (results) => {
-        //   console.log("Results: ", results)
-        // })
+        const getAnalysis = async () => {
+          const results = await analyseContent({ content: content.content, nodeid: node.nodeid, options })
+          setAnalysis(results)
+        }
       }
-      // ipcRenderer.send(IpcAction.ANALYSE_CONTENT, { content: content.content, nodeid: node.nodeid, options })
     }
   }, [node.nodeid, buffer])
 
