@@ -72,3 +72,8 @@ export interface ThemeType extends LayoutStyle {
     reactSelect: any
   }
 }
+
+declare module 'styled-components' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends ThemeType {}
+}

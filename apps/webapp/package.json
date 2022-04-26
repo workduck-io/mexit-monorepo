@@ -3,8 +3,8 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "dev": "tsc --noEmit && NX_BUILD_MODE=development vite",
-    "build": "tsc --noEmit && vite build --emptyOutDir",
+    "dev": "webpack-dev-server",
+    "build": "webpack",
     "preview": "vite preview",
     "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
   },
@@ -70,7 +70,13 @@
     "@types/styled-components": "^5.1.20",
     "@vitejs/plugin-react": "^1.0.7",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "webpack": "^5.72.0",
+    "webpack-dev-server": "^4.8.1",
+    "webpack-cli": "^4.9.2",
+    "threads-plugin": "^1.4.0",
+    "html-webpack-plugin": "^5.5.0",
+    "ignore-loader": "^0.1.2"
   },
   "eslintConfig": {
     "extends": [

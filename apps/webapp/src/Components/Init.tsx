@@ -73,8 +73,8 @@ const Init: React.FC = () => {
       integrations: [browserTracing]
     })
 
-    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
-      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
+    // if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
+    //   Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
   }, [routingInstrumentation])
 
   return null

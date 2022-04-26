@@ -33,16 +33,19 @@ export const useSearch = () => {
 
   const queryIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
     // const results = await handle(IpcAction.QUERY_INDEX, key, query, tags)
+    return []
     // return results
   }
 
   const queryIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
     // const results = await handle(IpcAction.QUERY_INDEX_BY_NODEID, key, nodeId, query)
+    return []
     // return results
   }
 
   const queryIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
     // const results = await handle(IpcAction.QUERY_INDEX_WITH_RANKING, key, query)
+    return []
     // return results
   }
 
