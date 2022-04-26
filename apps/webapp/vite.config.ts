@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import threads from 'rollup-plugin-threads'
 
 const sourceMap = process.env.NO_SOURCE_MAP ? false : true
 
@@ -25,13 +24,5 @@ export default defineConfig({
     dedupe: ['styled-components', 'react', 'react-dom', '@workduck-io/mex-editor', '@udecode/plate']
   },
   plugins: [react()],
-  worker: {
-    plugins: [
-      // threads({
-      //   exclude: ['./src/Utils/Workers/*'],
-      //   include: ['./src/Utils/Workers/*'],
-      //   verbose: true
-      // })
-    ]
-  }
+  worker: { format: 'es' }
 })

@@ -1,4 +1,4 @@
-import { PriorityType, TodoType } from './Todo'
+import { PriorityType, TodoType } from '@mexit/core'
 
 export const REMINDER_PREFIX = 'REMINDER_'
 

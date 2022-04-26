@@ -13,7 +13,8 @@ import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
-import { startAnalysisWorkerService } from '../Utils/Workers/controller'
+import { hashPasswordWithWorker } from '../Workers/controller'
+import { useAnalysis } from '../Stores/useAnalysis'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -22,9 +23,7 @@ const Init: React.FC = () => {
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
 
-  useEffect(() => {
-    startAnalysisWorkerService()
-  }, [])
+  useAnalysis()
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
@@ -69,8 +68,8 @@ const Init: React.FC = () => {
       integrations: [browserTracing]
     })
 
-    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
-      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
+    // if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
+    //   Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
   }, [routingInstrumentation])
 
   return null

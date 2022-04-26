@@ -61,8 +61,8 @@ const Search = () => {
     resetCurrentFilters
   } = useFilters<GenericSearchResult>()
 
-  const onSearch = (newSearchTerm: string) => {
-    const res = queryIndex('node', newSearchTerm)
+  const onSearch = async (newSearchTerm: string) => {
+    const res = await queryIndex('node', newSearchTerm)
     const nodeids = useDataStore.getState().ilinks.map((l) => l.nodeid)
     const filRes = res.filter((r) => nodeids.includes(r.id))
     // mog('search', { res, filRes })

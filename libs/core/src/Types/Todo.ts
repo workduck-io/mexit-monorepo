@@ -1,3 +1,6 @@
+import { Shortcut } from './Help'
+import { NodeEditorContent } from './Editor'
+
 export enum PriorityType {
   low = 'low',
   high = 'high',

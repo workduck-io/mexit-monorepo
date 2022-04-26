@@ -1,10 +1,23 @@
-import { NodeEditorContent } from '@mexit/core'
-import { convertContentToRawText, getTitleFromContent } from '@mexit/shared'
+import { NodeEditorContent, TodoType, ELEMENTS_IN_OUTLINE, LIST_ELEMENTS, HIGHLIGHTED_ELEMENTS } from '@mexit/core'
 import { expose } from 'threads/worker'
-import { ELEMENTS_IN_OUTLINE, LIST_ELEMENTS, HIGHLIGHTED_ELEMENTS } from '@mexit/core'
-import { OutlineItem, NodeAnalysis } from '../../Stores/useAnalysis'
-import { getTagsFromContent, getTodosFromContent } from '../content'
+
+import { getTagsFromContent, getTodosFromContent } from '../Utils/content'
 import { AnalyseContentProps } from './controller'
+import { convertContentToRawText, getTitleFromContent } from '../Utils/parseData'
+export interface OutlineItem {
+  id: string
+  title: string
+  type: string
+  level?: number
+}
+
+export interface NodeAnalysis {
+  nodeid: string
+  tags: string[]
+  outline: OutlineItem[]
+  editorTodos: TodoType[]
+  title?: string
+}
 
 const getSingle = (content: NodeEditorContent) => {
   if (content[0] && content[0].children.length === 1) {

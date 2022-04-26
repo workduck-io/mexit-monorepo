@@ -7,7 +7,7 @@ import {
   indexedFields,
   TITLE_RANK_BUMP,
   SEARCH_RESULTS_LIMIT
-} from '../flexsearch'
+} from '../Utils/flexsearch'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null

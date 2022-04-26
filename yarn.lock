@@ -10242,15 +10242,6 @@ rollup-plugin-postcss@^4.0.1:
     safe-identifier "^0.4.2"
     style-inject "^0.3.0"
 
-rollup-plugin-threads@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-threads/-/rollup-plugin-threads-1.2.0.tgz#f6d78bcf9a1b90d32e4a7e7c5a1fb9bff821c737"
-  integrity sha512-mh5L6dRir3UcyPjy6lm/MJH0QKp7JwjFnDdqh9iBbfWSa3WVNINnhE21lTlQGO6gPF3i0QNu1wQA1Ru2+paQ6A==
-  dependencies:
-    "@rollup/pluginutils" "^4.1.2"
-    chalk "^4.1.2"
-    rollup "^2.66.1"
-
 rollup-plugin-typescript2@^0.31.1:
   version "0.31.2"
   resolved "https://registry.yarnpkg.com/rollup-plugin-typescript2/-/rollup-plugin-typescript2-0.31.2.tgz#463aa713a7e2bf85b92860094b9f7fb274c5a4d8"
@@ -10274,13 +10265,6 @@ rollup@^2.56.2, rollup@^2.59.0:
   version "2.69.1"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.69.1.tgz#d37f8bf9c9d60018df58c5c9ec36705a7b90dc6e"
   integrity sha512-xaQKTomUVZBopk38EIshM/kOoPFkKWisgBV7Emy80coP9MOSLUDrba1jKZhqH0iS5DoGcRbbcuyl/BzblV8w5w==
-  optionalDependencies:
-    fsevents "~2.3.2"
-
-rollup@^2.66.1:
-  version "2.70.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.70.2.tgz#808d206a8851628a065097b7ba2053bd83ba0c0d"
-  integrity sha512-EitogNZnfku65I1DD5Mxe8JYRUCy0hkK5X84IlDtUs+O6JRMpRciXTzyCUuX11b5L5pvjH+OmFXiQ3XjabcXgg==
   optionalDependencies:
     fsevents "~2.3.2"
 

@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash'
 
-import { NodeEditorContent } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
 
 export const areEqual = (val1: NodeEditorContent, val2: NodeEditorContent): boolean => {
   if (val1.length !== val2.length) {

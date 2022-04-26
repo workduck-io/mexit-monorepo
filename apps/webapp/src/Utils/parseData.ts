@@ -52,13 +52,6 @@ export const convertEntryToRawText = (nodeUID: string, entry: any[], title = '')
 
 export const getHeadingBlock = (content: NodeEditorContent) => {
   // const isHeadingBlock = content[0].type === ELEMENT_QA_BLOCK
-  if (false) {
-    return {
-      isHeadingBlock: true,
-      title: getSlug(content[0].answer ?? '')
-    }
-  }
-
   return undefined
 }
 
