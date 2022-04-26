@@ -1,6 +1,8 @@
-import { spawn, Worker } from 'threads'
+import { spawn } from 'threads'
 import { NodeEditorContent, PersistentData, idxKey, mog } from '@mexit/core'
 
+import analysisWorkerConstructor from './analysis?worker'
+import searchWorkerConstructor from './search?worker'
 export interface AnalysisOptions {
   title?: boolean
 }
@@ -11,51 +13,12 @@ export interface AnalyseContentProps {
   options?: AnalysisOptions
 }
 
-// const testWorkerURL = new URL('./test.ts', import.meta.url).toString()
-// @ts-expect-error it don't want .ts
-// eslint-disable-next-line
-import testWorkerURL from 'threads-plugin/dist/loader?name=test!./test.ts'
-
-// @ts-expect-error it don't want .ts
-// eslint-disable-next-line
-import analysisWorkerURL from 'threads-plugin/dist/loader?name=analysis!./analysis.ts'
-
-// @ts-expect-error it don't want .ts
-// eslint-disable-next-line
-import searchWorkerURL from 'threads-plugin/dist/loader?name=search!./search.ts'
-
-// import workerURL from 'threads-plugin/dist/loader?name=test!./test.ts'
-
-export let testWorker = null
 export let analysisWorker = null
 export let searchWorker = null
 
-export const startTestWorker = async () => {
-  console.log('Starting Test Worker')
-  if (!testWorker) {
-    testWorker = await spawn(new Worker(testWorkerURL))
-  }
-}
-
-export const hashPasswordWithWorker = async (data: any) => {
-  try {
-    if (!testWorker) {
-      await startTestWorker()
-      console.log('Starting new test worker')
-    } else {
-      console.log('Reusing test worker')
-    }
-
-    const results = testWorker.hashPassword(data)
-    return results
-  } catch (error) {
-    console.log('Error occured in testWorker: ', error)
-  }
-}
-
 export const startAnalysisWorkerService = async () => {
   console.log('startWorkerService')
-  if (!analysisWorker) analysisWorker = await spawn(new Worker(analysisWorkerURL))
+  if (!analysisWorker) analysisWorker = await spawn(new analysisWorkerConstructor())
 }
 
 export const analyseContent = async (props: AnalyseContentProps) => {
@@ -75,7 +38,7 @@ export const analyseContent = async (props: AnalyseContentProps) => {
 }
 export const startSearchWorker = async () => {
   console.log('startSearchWorkerService')
-  if (!searchWorker) searchWorker = await spawn(new Worker(searchWorkerURL))
+  if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
 }
 export const initSearchIndex = async (fileData: PersistentData, indexData: Record<idxKey, any>) => {
   try {

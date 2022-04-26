@@ -1,3 +1,11 @@
+/* 
+
+Webpack, you old friend
+Thank you for the trouble,
+Will see you soon sometime,
+for now let this saga end
+*/
+
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ThreadsPlugin = require('threads-plugin')
