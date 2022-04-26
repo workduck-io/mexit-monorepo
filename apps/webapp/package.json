@@ -76,7 +76,8 @@
     "webpack-cli": "^4.9.2",
     "threads-plugin": "^1.4.0",
     "html-webpack-plugin": "^5.5.0",
-    "ignore-loader": "^0.1.2"
+    "ignore-loader": "^0.1.2",
+    "@babel/preset-typescript": "^7.16.7"
   },
   "eslintConfig": {
     "extends": [

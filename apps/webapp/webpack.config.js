@@ -6,6 +6,9 @@ module.exports = {
   entry: './src/index.tsx',
   target: 'web',
   mode: 'development',
+  devServer: {
+    port: 3333
+  },
   output: {
     path: path.resolve(__dirname, '../..', 'dist', 'apps', 'webapp'),
     filename: 'index.js'

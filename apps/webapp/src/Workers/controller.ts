@@ -30,14 +30,18 @@ import { spawn, Worker } from 'threads'
 //   options?: AnalysisOptions
 // }
 
-const testWorkerURL = new URL('./test.ts', import.meta.url).toString()
+// const testWorkerURL = new URL('./test.ts', import.meta.url).toString()
+// @ts-expect-error it don't want .ts
+// eslint-disable-next-line
+import testWorkerURL from 'threads-plugin/dist/loader?name=test!./test.ts'
+// import workerURL from 'threads-plugin/dist/loader?name=test!./test.ts'
 
 export let worker = null
 
 export const startTestWorker = async () => {
   console.log('Starting Test Worker')
   if (!worker) {
-    worker = await spawn(new Worker(testWorkerURL, { type: 'classic' }))
+    worker = await spawn(new Worker(testWorkerURL))
   }
 }
 
@@ -51,7 +55,6 @@ export const hashPasswordWithWorker = async (data: any) => {
     }
 
     const results = worker.hashPassword(data)
-    console.log('Worker gave result: ', results)
     return results
   } catch (error) {
     console.log('Error occured in testWorker: ', error)
