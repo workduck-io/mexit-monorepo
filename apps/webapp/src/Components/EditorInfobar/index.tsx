@@ -10,7 +10,6 @@ const EditorInfoBar = () => {
   return (
     <>
       <ShareOptions />
-      <Metadata node={node} />
     </>
   )
 }
