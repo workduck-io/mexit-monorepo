@@ -26,7 +26,7 @@ import {
 import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '../Style/Snippets'
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import useSearchStore from '../Hooks/useSearchStore'
+import { useSearch } from '../Hooks/useSearch'
 import { generateSnippetId, mog, parseBlock } from '@mexit/core'
 
 export type SnippetsProps = {
@@ -37,7 +37,7 @@ const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
   const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  const searchIndex = useSearchStore((store) => store.searchIndex)
+  const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
   const initialSnippets: any[] = snippets.map((snippet) => ({
@@ -46,9 +46,10 @@ const Snippets = () => {
     text: parseBlock(snippet.content)
   }))
 
-  const onSearch = (newSearchTerm: string) => {
-    const res = searchIndex('snippet', newSearchTerm)
+  const onSearch = async (newSearchTerm: string) => {
+    const res = await queryIndex('snippet', newSearchTerm)
     mog('search', { res })
+    // @ts-ignore
     if (newSearchTerm === '' && res.length === 0) {
       return initialSnippets
     }
@@ -183,6 +184,7 @@ const Snippets = () => {
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
+        // @ts-ignore
         onSearch={onSearch}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}

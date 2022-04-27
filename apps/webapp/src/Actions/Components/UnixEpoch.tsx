@@ -90,7 +90,6 @@ export const UnixEpochConverter = () => {
           </Output>
         </div>
       </Columns>
-      <Toaster position="bottom-center" />
     </Container>
   )
 }

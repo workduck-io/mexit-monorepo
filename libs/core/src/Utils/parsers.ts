@@ -13,14 +13,13 @@ export const parseBlock = (content: any[], join?: string): string => {
   return text.join(join ?? ' ')
 }
 
-export const parseNode = (node: any, title: string): GenericSearchData[] => {
-  const nodeUID = node.id
+export const parseNode = (nodeId: string, contents: any[], title = ''): GenericSearchData[] => {
   const result: GenericSearchData[] = []
 
-  node.content.forEach((block) => {
+  contents.forEach((block) => {
     const blockText = parseBlock(block.children)
     if (blockText.length !== 0) {
-      const temp: GenericSearchData = { id: block.id, text: blockText, nodeUID: nodeUID, title: title }
+      const temp: GenericSearchData = { blockId: block.id, text: blockText, id: nodeId, title: title }
       result.push(temp)
     }
   })

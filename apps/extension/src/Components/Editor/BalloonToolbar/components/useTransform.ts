@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { ELEMENT_ILINK, ILinkNode } from '@workduck-io/mex-editor'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 import { useContentStore } from '../../../../Hooks/useContentStore'
-import { convertContentToRawText } from '@mexit/shared'
+import { convertContentToRawText } from '@mexit/core'
 import { generateSnippetId, mog } from '@mexit/core'
 
 export const useTransform = () => {

@@ -1,9 +1,9 @@
 /* Dwindle Internal Store for Auth */
 
-import { storageAdapter } from '@mexit/core'
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+import { storageAdapter } from '../Utils/chromeStorageAdapter'
 
 export interface UserCred {
   email: string

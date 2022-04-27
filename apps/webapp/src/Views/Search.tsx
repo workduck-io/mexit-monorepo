@@ -12,7 +12,7 @@ import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import useEditorStore from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
-import useSearchStore from '../Hooks/useSearchStore'
+import { useSearch } from '../Hooks/useSearch'
 import {
   Result,
   ResultDesc,
@@ -37,7 +37,7 @@ import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/cor
 
 const Search = () => {
   const { loadNode } = useLoad()
-  const searchIndex = useSearchStore((store) => store.searchIndex)
+  const { queryIndex } = useSearch()
   const contents = useContentStore((store) => store.contents)
   const ilinks = useDataStore((store) => store.ilinks)
   const initialResults = ilinks
@@ -61,8 +61,8 @@ const Search = () => {
     resetCurrentFilters
   } = useFilters<GenericSearchResult>()
 
-  const onSearch = (newSearchTerm: string) => {
-    const res = searchIndex('node', newSearchTerm)
+  const onSearch = async (newSearchTerm: string) => {
+    const res = await queryIndex('node', newSearchTerm)
     const nodeids = useDataStore.getState().ilinks.map((l) => l.nodeid)
     const filRes = res.filter((r) => nodeids.includes(r.id))
     // mog('search', { res, filRes })
@@ -83,7 +83,7 @@ const Search = () => {
   const onEscapeExit = () => {
     const nodeid = nodeUID ?? lastOpened[0] ?? baseNodeId
     loadNode(nodeid)
-    goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
+    goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
   // Forwarding ref to focus on the selected result

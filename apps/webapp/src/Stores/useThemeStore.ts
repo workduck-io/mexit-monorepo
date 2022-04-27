@@ -1,4 +1,5 @@
-import { themeStoreConstructor, ThemeStoreState } from '@mexit/shared'
+import { themeStoreConstructor } from '@mexit/shared'
+import { ThemeStoreState } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

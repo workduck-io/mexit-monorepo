@@ -1,45 +1,104 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
+import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+import shallow from 'zustand/shallow'
+import tinykeys from 'tinykeys'
 
-import Editor from './Editor'
-import useDataStore from '../../Stores/useDataStore'
-import useEditorStore from '../../Stores/useEditorStore'
-import useLoad from '../../Hooks/useLoad'
-import useDataSaver from '../../Hooks/useSave'
 import { defaultContent } from '@mexit/core'
+
+import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
+import Editor from './Editor'
+import useEditorStore from '../../Stores/useEditorStore'
+import useBlockStore from '../../Stores/useBlockStore'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import useLoad from '../../Hooks/useLoad'
+
 import EditorInfoBar from '../EditorInfobar'
-import { NodeEditorContent } from '@mexit/core'
+import useLayout from '../../Hooks/useLayout'
+import { getEditorId } from '../../Utils/editor'
+import { StyledEditor, EditorWrapper } from '../../Style/Editor'
+
+import Toolbar from './Toolbar'
+import Metadata from '../EditorInfobar/Metadata'
+import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
-  //   const { getNode } = useLoad()
 
-  const node = useDataStore((store) => store.ilinks).find((e) => e.nodeid === nodeId)
-  const nodeContent = useEditorStore((store) => store.content)
+  const fetchingContent = useEditorStore((state) => state.fetchingContent)
+  const setIsEditing = useEditorStore((store) => store.setIsEditing)
+  const { toggleFocusMode } = useLayout()
+  const { saveApiAndUpdate } = useLoad()
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
 
-  const { loadNode } = useLoad()
-  const { saveNodeWithValue } = useDataSaver()
+  const { addOrUpdateValBuffer, getBufferVal } = useEditorBuffer()
+  const { node, fsContent } = useEditorStore(
+    (state) => ({ nodeid: state.node.nodeid, node: state.node, fsContent: state.content }),
+    shallow
+  )
+
+  const shortcuts = useHelpStore((store) => store.shortcuts)
 
   useEffect(() => {
-    loadNode(nodeId)
-  }, [nodeId])
+    const unsubscribe = tinykeys(window, {
+      [shortcuts.toggleFocusMode.keystrokes]: (event) => {
+        event.preventDefault()
+        toggleFocusMode()
+      },
+      [shortcuts.refreshNode.keystrokes]: (event) => {
+        event.preventDefault()
 
-  const handleSave = (value: NodeEditorContent) => {
-    console.log('Saving in content editor: ', value)
-    saveNodeWithValue(nodeId, value)
-    return
+        const node = useEditorStore.getState().node
+        const val = getBufferVal(node.nodeid)
+        saveApiAndUpdate(node, val)
+      }
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [shortcuts, toggleFocusMode])
+
+  const editorId = useMemo(() => getEditorId(node.nodeid, false), [node, fetchingContent])
+  const editorRef = usePlateEditorRef()
+
+  const onFocusClick = () => {
+    if (editorRef) {
+      selectEditor(editorRef, { focus: true })
+    }
+  }
+
+  const readOnly = !!fetchingContent
+
+  const onChangeSave = async (val: any[]) => {
+    if (val && node && node.nodeid !== '__null__') {
+      setIsEditing(false)
+      addOrUpdateValBuffer(node.nodeid, val)
+    }
   }
 
   return (
-    <div>
-      <EditorInfoBar />
-      <Editor
-        nodeUID={nodeId}
-        nodePath={node.path}
-        content={nodeContent?.content ?? defaultContent.content}
-        onChange={handleSave}
-      />
-    </div>
+    <>
+      <StyledEditor showGraph={false} className="mex_editor">
+        <Toolbar />
+
+        {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
+
+        <EditorWrapper onClick={onFocusClick}>
+          <Editor
+            nodeUID={nodeId}
+            nodePath={node.path}
+            content={fsContent?.content ?? defaultContent.content}
+            onChange={onChangeSave}
+          />
+        </EditorWrapper>
+      </StyledEditor>
+
+      <div>
+        <EditorInfoBar />
+
+      </div>
+    </>
+
   )
 }
 

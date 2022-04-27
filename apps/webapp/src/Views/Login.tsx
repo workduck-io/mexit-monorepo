@@ -11,8 +11,9 @@ import { Title } from '../Style/Elements'
 import { ButtonFields } from '../Style/Form'
 import { AuthForm } from '../Style/Form'
 import { CenteredColumn } from '@mexit/shared'
-import { LoginFormData } from '@mexit/shared'
 import { EMAIL_REG } from '../Utils/constants'
+
+import { LoginFormData } from '@mexit/core'
 
 export const Login = () => {
   const [loginResult, setLoginResult] = useState('')

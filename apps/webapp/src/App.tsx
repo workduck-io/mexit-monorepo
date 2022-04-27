@@ -8,6 +8,7 @@ import useThemeStore from './Stores/useThemeStore'
 import { defaultThemes } from '@mexit/shared'
 import Modals from './Views/Modals'
 import Init from './Components/Init'
+import { Notification } from '@mexit/shared'
 
 //----------Styled Components------------
 
@@ -29,6 +30,7 @@ function App() {
           <GlobalStyle />
           <Modals />
           <Switch />
+          <Notification />
         </AppContainer>
       </ThemeProvider>
     </Router>

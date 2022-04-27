@@ -7,17 +7,21 @@ import { TippyProps } from '@tippyjs/react'
 import { centeredCss } from './Layouts'
 import { LoadingWrapper } from './Loading'
 import { ToolbarTooltip } from '../Components/Tooltips'
+import { TooltipTitleWithShortcut } from './Tooltip'
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   primary?: boolean
   large?: boolean
   highlight?: boolean
+  transparent?: boolean
 }
 
 export const Button = styled.button<ButtonProps>`
   ${centeredCss};
-  border: none;
+  gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+  border: none;
+  outline: none;
   color: ${({ theme }) => theme.colors.text.subheading};
   cursor: pointer;
   transition: 0.3s ease;
@@ -26,6 +30,16 @@ export const Button = styled.button<ButtonProps>`
     color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0px 6px 12px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
   }
+
+  ${({ primary, transparent, theme }) =>
+    !primary &&
+    transparent &&
+    css`
+      background-color: transparent;
+      &:hover {
+        background-color: ${theme.colors.form.button.bg};
+      }
+    `}
 
   ${({ theme: { spacing }, large }) =>
     large
@@ -39,6 +53,18 @@ export const Button = styled.button<ButtonProps>`
           margin: 0 ${spacing.tiny};
         `}
 
+  ${({ theme, primary }) =>
+    primary
+      ? css`
+          background-color: ${theme.colors.primary};
+          color: ${theme.colors.text.oppositePrimary};
+          &:hover {
+            background-color: ${theme.colors.fade.primary};
+            color: ${theme.colors.text.oppositePrimary};
+          }
+        `
+      : ''}
+
   ${({ theme, highlight }) =>
     highlight
       ? css`
@@ -51,31 +77,7 @@ export const Button = styled.button<ButtonProps>`
           }
         `
       : ''}
-
-  ${({ theme, primary }) =>
-    primary
-      ? css`
-          background-color: ${theme.colors.primary};
-          color: ${theme.colors.text.oppositePrimary};
-          &:hover {
-            background-color: ${theme.colors.fade.primary};
-            color: ${theme.colors.text.oppositePrimary};
-          }
-        `
-      : ''}
 `
-
-export interface AsyncButtonProps {
-  children?: React.ReactNode
-  primary?: boolean
-  large?: boolean
-  highlight?: boolean
-  disabled?: boolean
-  style?: any
-  id?: string
-  onClick?: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  type?: 'button' | 'submit' | 'reset'
-}
 
 export type IconButtonProps = {
   icon: any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -94,22 +96,51 @@ export const HeadlessButton = styled.button`
 
 export const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton }: IconButtonProps) => {
   return (
-    <ToolbarTooltip content={<span>{title}</span>} singleton={singleton}>
-      <Button onClick={onClick} highlight={highlight}>
+    <ToolbarTooltip
+      content={
+        shortcut !== undefined ? <TooltipTitleWithShortcut shortcut={shortcut} title={title} /> : <span>{title}</span>
+      }
+      singleton={singleton}
+    >
+      <Button transparent onClick={onClick} highlight={highlight}>
         <Icon icon={icon} height={size} />
       </Button>
     </ToolbarTooltip>
   )
 }
 
+export default IconButton
+
+export interface AsyncButtonProps {
+  children?: React.ReactNode
+  primary?: boolean
+  large?: boolean
+  highlight?: boolean
+  disabled?: boolean
+  style?: any
+  id?: string
+  onClick?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  type?: 'button' | 'submit' | 'reset'
+  transparent?: boolean
+}
+
 export const AsyncButton = styled.button<AsyncButtonProps>`
   ${centeredCss};
-  border: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.colors.text.subheading};
   cursor: pointer;
   transition: 0.3s ease;
   background-color: ${({ theme }) => theme.colors.form.button.bg};
+
+  ${({ primary, transparent, theme }) =>
+    !primary &&
+    transparent &&
+    css`
+      background-color: transparent;
+      &:hover {
+        background-color: ${theme.colors.form.button.bg};
+      }
+    `}
 
   ${({ theme, large }) =>
     large

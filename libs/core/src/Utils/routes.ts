@@ -4,6 +4,13 @@ export const IS_DEV = (() => {
   return false
 })()
 
+export const USE_API = () => {
+  /** Useful for tracking stopped API calls */
+  // if (IS_DEV) console.info('API is set to false')
+  // return true
+  return !IS_DEV
+}
+
 export const BASE_INTEGRATION_URL = 'https://http.workduck.io/integration'
 
 export const integrationURLs = {
@@ -35,9 +42,6 @@ export const WORKDUCK_API_BASE = 'https://api.workduck.io'
 export const CDN_BASE = 'https://cdn.workduck.io'
 
 export const apiURLs = {
-  //node
-  saveNode: `${BASE_API_URL}/node`,
-
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
   getPreference: (userId: string, preferenceType: string) => `/userPreference/${userId}/${preferenceType}`,
@@ -78,7 +82,7 @@ export const apiURLs = {
   // Mexit Backend URLs
   fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
   getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
-  createNode: `${MEXIT_BACKEND_URL_BASE}/api/v1/node`,
+  createNode: `${MEXIT_BACKEND_URL_BASE}/node`,
   makeNodePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
   makeNodePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,
@@ -89,5 +93,8 @@ export const apiURLs = {
 
   // Screenshot capture URLs
   createImageLink: `${WORKDUCK_API_BASE}/testing/upload/s3`,
-  getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`
+  getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
+
+  // Get Ilinks from Middleware
+  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`
 }

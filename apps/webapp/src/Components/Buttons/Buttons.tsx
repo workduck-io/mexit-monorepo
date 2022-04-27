@@ -20,6 +20,7 @@ export interface GoogleLoginButtonProps {
   text: string
 }
 
+
 export const LoadingButton = ({ children, dots, loading, alsoDisabled, buttonProps, style }: LoadingButtonProps) => {
   const theme = useTheme()
   return (

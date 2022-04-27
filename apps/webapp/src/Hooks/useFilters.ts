@@ -1,12 +1,11 @@
-import { useState } from 'react'
 import create from 'zustand'
 
-import { getAllParentIds, isElder } from '@mexit/shared'
+import { GenericSearchResult, mog } from '@mexit/core'
+import { isElder, getAllParentIds } from '@mexit/shared'
+
 import useDataStore from '../Stores/useDataStore'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
-import { GenericSearchResult, mog } from '@mexit/core'
-// import create from 'zustand'
 
 /*
 - Date
@@ -16,17 +15,19 @@ import { GenericSearchResult, mog } from '@mexit/core'
 - Sorting [:?]
 */
 
-export type FilterKey = 'node' | 'tag' | 'date'
+export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has'
 export interface SearchFilter<Item> {
   key: FilterKey
   id: string
   label: string
   filter: (item: Item) => boolean | number
   icon?: string
+  // No. of items that match this filter
+  count?: number
   // sort: 'asc' | 'desc'
 }
 
-interface FilterStore<Item> {
+export interface FilterStore<Item> {
   filters: SearchFilter<Item>[]
   currentFilters: SearchFilter<Item>[]
   setFilters: (filters: SearchFilter<Item>[]) => void
@@ -43,7 +44,7 @@ export const useFilterStoreBase = create<FilterStore<any>>((set) => ({
 export const useFilterStore = <Item, Slice>(selector: (state: FilterStore<Item>) => Slice) =>
   useFilterStoreBase(selector)
 
-export const useFilters = <Item,>() => {
+export const useFilters = <Item>() => {
   const filters = useFilterStore((state) => state.filters) as SearchFilter<Item>[]
   const setFilters = useFilterStore((state) => state.setFilters) as (filters: SearchFilter<Item>[]) => void
   const currentFilters = useFilterStore((state) => state.currentFilters) as SearchFilter<Item>[]
@@ -109,6 +110,7 @@ export const useFilters = <Item,>() => {
               icon: 'ri:hashtag',
               id: `tag_filter_${tag}`,
               label: tag,
+              count: rank,
               filter: (item: GenericSearchResult) => {
                 return tags && tags.nodes.includes(item.id)
               }
@@ -123,7 +125,7 @@ export const useFilters = <Item,>() => {
     return tagsFilter
   }
 
-  const generateNodeFilters = (items: GenericSearchResult[]) => {
+  const generateNodeFilters = <T extends { id: string }>(items: T[]) => {
     // Known
     const currentFilters_ = currentFilters as unknown as SearchFilter<GenericSearchResult>[]
     const filteredItems = currentFilters_.length > 0 ? applyFilters(items, currentFilters_) : items
@@ -146,10 +148,11 @@ export const useFilters = <Item,>() => {
       if (rank > 1) {
         // mog('path', { path, rank })
         acc.push({
-          key: 'node',
+          key: 'note',
           id: `node_${path}`,
           icon: 'ri:file-list-2-line',
           label: path,
+          count: rank,
           filter: (item: GenericSearchResult) => {
             const itemPath = getPathFromNodeid(item.id)
             mog('itemPath being filtered', { item, itemPath, path })
@@ -186,7 +189,7 @@ export const useFilters = <Item,>() => {
   }
 }
 
-export const applyFilters = <Item,>(items: Item[], filters: SearchFilter<Item>[]): Item[] => {
+export const applyFilters = <Item>(items: Item[], filters: SearchFilter<Item>[]): Item[] => {
   const filtered = filters.reduce((acc, filter) => {
     return acc.filter(filter.filter)
   }, items)

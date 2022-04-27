@@ -6,10 +6,11 @@ import UserDropdown from './UserDropdown'
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 
   padding: 1rem 0.5rem;
-
+  height: 100%;
   border-bottom: 1px solid #333;
 `
 
@@ -28,7 +29,6 @@ const Navbar = () => {
       <Link to="/settings">
         <h3>Settings</h3>
       </Link>
-      <UserDropdown />
     </Container>
   )
 }
