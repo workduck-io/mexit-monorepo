@@ -26,7 +26,7 @@ const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
         key={`NodeLink_${keyStr}`}
         onClick={() => {
           loadNode(nodeid, { savePrev: false })
-          goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
+          goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
         }}
       >
         {getPathFromNodeid(nodeid)}

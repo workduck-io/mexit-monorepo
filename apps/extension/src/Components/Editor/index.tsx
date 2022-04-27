@@ -6,7 +6,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { useEditorChange } from '../../Hooks/useEditorActions'
+import { useEditorChange } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { EditorWrapper } from './styled'

@@ -1,6 +1,6 @@
 import { trim } from 'lodash'
-import { DRAFT_NODE, DRAFT_PREFIX, SEPARATOR } from '@mexit/core'
 import { CustomEvents } from './events'
+import { SEPARATOR, DRAFT_PREFIX, DRAFT_NODE } from './idGenerator'
 
 export const capitalize = (str: string) => {
   if (!str) return ''

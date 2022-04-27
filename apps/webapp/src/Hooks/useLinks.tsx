@@ -1,41 +1,16 @@
+import { CachedILink, getLinksFromContent, hasLink, ILink, NodeLink } from '@mexit/core'
+
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { CachedILink, ILink } from '@mexit/core'
 
-const ELEMENT_INLINE_BLOCK = 'inline_block'
-
-export interface NodeLink {
-  from: string
-  to: string
-}
-
-export const hasLink = (link: CachedILink, links: CachedILink[]): boolean => {
-  const filtered = links.filter((l) => {
-    return link.nodeid === l.nodeid && link.type === l.type
-  })
-  return filtered.length > 0
-}
-
-const getLinksFromContent = (content: any[]): string[] => {
-  let links: string[] = []
-
-  content.forEach((n) => {
-    if (n.type === 'ilink' || n.type === ELEMENT_INLINE_BLOCK) {
-      links.push(n.value)
-    }
-    if (n.children && n.children.length > 0) {
-      links = links.concat(getLinksFromContent(n.children))
-    }
-  })
-
-  return [...new Set(links)]
-}
+import { useNodes } from './useNodes'
 
 export const useLinks = () => {
   const contents = useContentStore((state) => state.contents)
   const addInternalLink = useDataStore((state) => state.addInternalLink)
   const removeInternalLink = useDataStore((state) => state.removeInternalLink)
   const linkCache = useDataStore((state) => state.linkCache)
+  const { isInArchive } = useNodes()
 
   const getAllLinks = () => {
     // We assume that all links exist
@@ -99,7 +74,7 @@ export const useLinks = () => {
   const getBacklinks = (nodeid: string) => {
     const links = linkCache[nodeid]
     if (links) {
-      return links.filter((l) => l.type === 'from')
+      return links.filter((l) => l.type === 'from' && !isInArchive(l.nodeid) && getPathFromNodeid(l.nodeid))
     }
     return []
   }
@@ -126,9 +101,15 @@ export const useLinks = () => {
         return !hasLink(l, currentLinks)
       })
 
-      toLinkstoDelete.map((l) => removeInternalLink(l, nodeid))
-      toLinkstoAdd.map((l) => addInternalLink(l, nodeid))
+      toLinkstoDelete.forEach((l) => removeInternalLink(l, nodeid))
+      toLinkstoAdd.forEach((l) => addInternalLink(l, nodeid))
     }
+  }
+
+  const getILinkFromNodeid = (nodeid: string) => {
+    const links = useDataStore.getState().ilinks
+    const link = links.find((l) => l.nodeid === nodeid)
+    if (link) return link
   }
 
   const getNodeidFromPath = (path: string) => {
@@ -155,6 +136,7 @@ export const useLinks = () => {
     getBacklinks,
     updateLinksFromContent,
     getNodeidFromPath,
+    getILinkFromNodeid,
     getPathFromNodeid,
     createLink
   }
@@ -163,4 +145,15 @@ export const useLinks = () => {
 export const getNodeidFromPathAndLinks = (links: ILink[], path: string) => {
   const link = links.find((l) => l.path === path)
   if (link) return link.nodeid
+}
+
+export const getPathFromNodeIdHookless = (nodeid: string) => {
+  const links = useDataStore.getState().ilinks
+  const archive = useDataStore.getState().archive
+
+  const link = links.find((l) => l.nodeid === nodeid)
+  const archivedLink = archive.find((l) => l.nodeid === nodeid)
+
+  if (link) return link.path
+  if (archivedLink) return archivedLink.path
 }

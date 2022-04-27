@@ -1,7 +1,8 @@
 import React from 'react'
-import { getSplitDisplayShortcut } from '../../utils/lib/shortcuts'
 import { shade } from 'polished'
 import styled from 'styled-components'
+
+import { getSplitDisplayShortcut } from '@mexit/shared'
 
 const ShortcutWrapper = styled.div`
   display: flex;

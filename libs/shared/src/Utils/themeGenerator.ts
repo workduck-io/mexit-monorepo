@@ -2,7 +2,7 @@ import ColorScheme from 'color-scheme'
 import merge from 'deepmerge'
 import { getLuminance, lighten, mix, tint } from 'polished'
 import { DefaultTheme } from 'styled-components'
-import { LayoutStyle } from '../styled'
+import { LayoutStyle, ThemePalette } from '../Types/Theme'
 
 const LayoutTheme: LayoutStyle = {
   spacing: {
@@ -23,63 +23,6 @@ const LayoutTheme: LayoutStyle = {
   indent: {
     sidebar: 8
   }
-}
-
-export interface ShadePalette {
-  10: string // Darkest
-  9: string
-  8: string
-  7: string
-  6: string
-  5: string
-  4: string
-  3: string
-  2: string
-  1: string // Lightest
-}
-
-export interface ColorPalette {
-  white: string
-  black: string
-  green: string
-  yellow: string
-  red: string
-}
-
-export interface TextPalette {
-  heading: string
-  default: string
-  subheading: string
-  fade: string
-  disabled: string
-  accent: string
-  oppositePrimary: string
-}
-
-export interface ButtonPalette {
-  default: string
-  hover: string
-  focus: string
-  active: string
-  disabled: string
-}
-
-export interface BackgroundImages {
-  app: string
-}
-
-export interface ThemePalette {
-  // Colors
-  primary: string
-  secondary: string
-
-  // Palettes
-  gray: ShadePalette
-  palette: ColorPalette
-
-  backgroundImages?: BackgroundImages
-
-  text?: TextPalette
 }
 
 const generateTheme = (p: ThemePalette): DefaultTheme => {

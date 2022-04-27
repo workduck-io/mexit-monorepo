@@ -1,10 +1,11 @@
 import React from 'react'
 import create from 'zustand'
 
-import { defaultContent } from '@mexit/core'
-import useContentStore from './useContentStore'
-import { NodeContent, NodeProperties } from '@mexit/core'
+import { NodeContent, NodeProperties, defaultContent } from '@mexit/core'
 import { getInitialNode } from '@mexit/shared'
+
+import useContentStore from './useContentStore'
+import { ComboTriggerType } from '../Types/Combobox'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content
@@ -29,11 +30,23 @@ export type EditorContextType = {
   content: NodeContent
   readOnly: boolean
 
+  // * Checks if there's an active trigger in the editor
+  trigger?: ComboTriggerType | undefined
+  setTrigger: (trigger: ComboTriggerType | undefined) => void
+
   setUid: (nodeid: string) => void
+  setNode: (node: NodeProperties) => void
 
   fetchingContent: boolean
 
+  loadingNodeid: string | null
+  setLoadingNodeid: (nodeid: string) => void
+  clearLoadingNodeid: () => void
+
   // State transformations
+  //* On change
+  isEditing: boolean
+  setIsEditing: (isEditing: boolean) => void
 
   // Load a node and its contents in the editor
   loadNode: (node: NodeProperties) => void
@@ -45,11 +58,12 @@ export type EditorContextType = {
   setReadOnly: (isReadOnly: boolean) => void
 }
 
-const useEditorStore = create<EditorContextType>((set, get) => ({
+export const useEditorStore = create<EditorContextType>((set, get) => ({
   node: getInitialNode(),
   content: defaultContent,
   readOnly: false,
   fetchingContent: false,
+  setTrigger: (trigger) => set({ trigger }),
 
   setReadOnly: (isReadOnly: boolean) => {
     set({ readOnly: isReadOnly })
@@ -61,9 +75,27 @@ const useEditorStore = create<EditorContextType>((set, get) => ({
     set({ node })
   },
 
+  isEditing: false,
+  setIsEditing: (isEditing: boolean) => {
+    if (get().isEditing === isEditing) return
+    set({ isEditing })
+  },
+
+  setNode: (node: NodeProperties) => set({ node }),
+
   setFetchingContent: (value) =>
     set({
       fetchingContent: value
+    }),
+
+  loadingNodeid: null,
+  setLoadingNodeid: (nodeid) =>
+    set({
+      loadingNodeid: nodeid
+    }),
+  clearLoadingNodeid: () =>
+    set({
+      loadingNodeid: null
     }),
 
   loadNode: (node: NodeProperties) => {
@@ -78,6 +110,67 @@ const useEditorStore = create<EditorContextType>((set, get) => ({
     set({ node, content })
   }
 }))
+
+
+// export type EditorContextType = {
+//   // State
+
+//   // Data of the current node
+//   node: NodeProperties
+//   // Contents of the current node
+//   // These are loaded internally from ID
+//   content: NodeContent
+//   readOnly: boolean
+
+//   setUid: (nodeid: string) => void
+
+//   fetchingContent: boolean
+
+//   // State transformations
+
+//   // Load a node and its contents in the editor
+//   loadNode: (node: NodeProperties) => void
+
+//   setFetchingContent: (value: boolean) => void
+
+//   loadNodeAndReplaceContent: (node: NodeProperties, content: NodeContent) => void
+
+//   setReadOnly: (isReadOnly: boolean) => void
+// }
+
+// const useEditorStore = create<EditorContextType>((set, get) => ({
+//   node: getInitialNode(),
+//   content: defaultContent,
+//   readOnly: false,
+//   fetchingContent: false,
+
+//   setReadOnly: (isReadOnly: boolean) => {
+//     set({ readOnly: isReadOnly })
+//   },
+
+//   setUid: (nodeid) => {
+//     const node = get().node
+//     node.nodeid = nodeid
+//     set({ node })
+//   },
+
+//   setFetchingContent: (value) =>
+//     set({
+//       fetchingContent: value
+//     }),
+
+//   loadNode: (node: NodeProperties) => {
+//     const content = getContent(node.nodeid)
+//     set({
+//       node,
+//       content
+//     })
+//   },
+
+//   loadNodeAndReplaceContent: (node, content) => {
+//     set({ node, content })
+//   }
+// }))
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

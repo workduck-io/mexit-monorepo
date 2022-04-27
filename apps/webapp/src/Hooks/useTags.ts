@@ -1,63 +1,93 @@
-import useDataStore from '../Stores/useDataStore'
+
 import { TagsCache } from '@mexit/core'
 
-const ELEMENT_TAG = 'tag'
-
-const getTagsFromContent = (content: any[]): string[] => {
-  let tags: string[] = []
-
-  content.forEach((n) => {
-    if (n.type === 'tag' || n.type === ELEMENT_TAG) {
-      tags.push(n.value)
-    }
-    if (n.children && n.children.length > 0) {
-      tags = tags.concat(getTagsFromContent(n.children))
-    }
-  })
-
-  return [...new Set(tags)]
-}
+import { useAnalysisStore } from '../Stores/useAnalysis'
+import useDataStore from '../Stores/useDataStore'
+import { getTagsFromContent } from '../Utils/content'
+import { useLinks } from './useLinks'
+import { useNodes } from './useNodes'
 
 /**
-    Tags req
-    - getTags(nodeid: string) => string[]
-    - getNodesForTag(tag: string) => string[]
-   **/
+  Tags req
+  - getTags(nodeid: string) => string[]
+  - getNodesForTag(tag: string) => string[]
+ **/
+
+export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr));
 
 export interface RelatedNodes {
   [tag: string]: string[]
 }
 
 export const useTags = () => {
+  // const contents = useContentStore((state) => state.contents)
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
+  const { getPathFromNodeid } = useLinks()
+  const { isInArchive } = useNodes()
+
+  // const getAllLinks = () => {
+  //   // We assume that all links exist
+  //   const allLinks: NodeLink[] = []
+  //   Object.keys(contents).forEach((key) => {
+  //     const { content } = contents[key]
+  //     const tags = getTagsFromContent(content)
+  //     if (links.length > 0) {
+  //       links.forEach((to) => {
+  //         allLinks.push({
+  //           from: key,
+  //           to
+  //         })
+  //       })
+  //     }
+  //   })
+
+  //   return allLinks
+  // }
+  //
 
   const _getTags = (nodeid: string, tagsCache: TagsCache): string[] =>
     Object.keys(tagsCache).filter((t) => tagsCache[t].nodes.includes(nodeid))
 
-  const getTags = (nodeid: string): string[] => {
+  const getTags = (nodeid: string, fromAnalysis = false): string[] => {
     const tagsCache = useDataStore.getState().tagsCache
-    return _getTags(nodeid, tagsCache)
+    if (!fromAnalysis) {
+      return _getTags(nodeid, tagsCache)
+    }
+    const analTags = useAnalysisStore.getState().analysis.tags
+
+    // mog('getTags', { analTags })
+
+    return analTags
   }
 
-  const getNodesForTag = (tag: string): string[] => {
+  const hasTags = (nodeid: string): boolean => {
     const tagsCache = useDataStore.getState().tagsCache
-    if (tagsCache[tag]) return tagsCache[tag].nodes
-    return []
+    return _getTags(nodeid, tagsCache).length > 0
+  }
+
+  const getNodesAndCleanCacheForTag = (tag: string): { nodes: string[]; cleanCache: TagsCache } => {
+    const tagsCache = useDataStore.getState().tagsCache
+    const cleanCache = Object.entries(tagsCache).reduce((p, [k, v]) => {
+      return { ...p, [k]: { nodes: v.nodes.filter((n) => !isInArchive(n)) } }
+    }, {})
+    if (cleanCache[tag]) return { nodes: cleanCache[tag].nodes, cleanCache }
+    return { nodes: [], cleanCache }
   }
 
   /**
    * Produce a list of related nodes that share the same tags with the given node
    * The list is sorted by the number of common tags between the nodes
    * */
-  const getRelatedNodes = (nodeid: string) => {
+  const getRelatedNodes = (nodeid: string, fromAnalysis = false) => {
     const tagsCache = useDataStore.getState().tagsCache
-    const tags = getTags(nodeid)
+    const tags = getTags(nodeid, fromAnalysis)
 
     /** Related nodes per tag **/
     const relatedNodes: RelatedNodes = tags.reduce((p, t) => {
+      if (!tagsCache[t]) return p
       return {
         ...p,
-        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid)
+        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid && !isInArchive(id) && getPathFromNodeid(id))
       }
     }, {})
 
@@ -90,9 +120,9 @@ export const useTags = () => {
     if (content) {
       const tags: string[] = getTagsFromContent(content)
       /*
-           Here we need to remove nodeid from tags that are not present
-           and add it to those that have been added
-        * */
+         Here we need to remove nodeid from tags that are not present
+         and add it to those that have been added
+      * */
       const currentTags = _getTags(nodeid, tagsCache)
       const removedFromTags = currentTags.filter((t) => {
         return !tags.includes(t)
@@ -106,7 +136,7 @@ export const useTags = () => {
         const tag = tagsCache[t]
         // If it is included in tags found in content, add it
         if (tags.includes(t)) {
-          const set = [...new Set([...tag.nodes, nodeid])]
+          const set = Settify([...tag.nodes, nodeid])
           return {
             ...p,
             [t]: { nodes: set }
@@ -144,5 +174,5 @@ export const useTags = () => {
     }
   }
 
-  return { getRelatedNodes, getNodesForTag, updateTagsFromContent, getTags }
+  return { getRelatedNodes, getNodesAndCleanCacheForTag, updateTagsFromContent, getTags, hasTags }
 }

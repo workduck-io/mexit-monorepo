@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react'
+import { mog } from '@mexit/core'
+
 import { useAuth } from '@workduck-io/dwindle'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
@@ -6,26 +8,55 @@ import { BrowserTracing } from '@sentry/tracing'
 import Analytics from '../Utils/analytics'
 
 import config from '../config'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import useSearchStore from '../Hooks/useSearchStore'
-import useDataStore from '../Stores/useDataStore'
-import useContentStore from '../Stores/useContentStore'
+import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
+import useLoad from '../Hooks/useLoad'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useInitialize } from '../Hooks/useInitialize'
+import { useIndexedDBData } from '../Hooks/usePersistentData'
+import { hashPasswordWithWorker } from '../Workers/controller'
+import { useAnalysis } from '../Stores/useAnalysis'
 
-const Init = () => {
+const Init: React.FC = () => {
+  const { init } = useInitialize()
+  const { getPersistedData } = useIndexedDBData()
   const { initCognito } = useAuth()
-  const routingInstrumentation = useRoutingInstrumentation()
-  const snippets = useSnippetStore((store) => store.snippets)
-  const initializeSearchIndex = useSearchStore((store) => store.initializeSearchIndex)
-  const ilinks = useDataStore((store) => store.ilinks)
-  const contents = useContentStore((store) => store.contents)
+  const { goTo } = useRouting()
+  const { loadNode } = useLoad()
+
+  useAnalysis()
 
   useEffect(() => {
-    initCognito({
-      UserPoolId: config.cognito.USER_POOL_ID,
-      ClientId: config.cognito.APP_CLIENT_ID
-    })
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    ; (async () => {
+
+      initCognito({
+        UserPoolId: config.cognito.USER_POOL_ID,
+        ClientId: config.cognito.APP_CLIENT_ID
+      })
+
+      getPersistedData()
+        .then((d) => {
+          mog('Initializaing With Data', { d })
+          init(d)
+          return d
+        })
+        .then((d) => {
+          const baseNodeId = getNodeidFromPathAndLinks(d.ilinks, d.baseNodeId)
+          loadNode(baseNodeId, {
+            fetch: false,
+            savePrev: false,
+            withLoading: false
+          })
+          return { nodeid: baseNodeId }
+        })
+        .then(({ nodeid }) => {
+          goTo(ROUTE_PATHS.node, NavigationType.replace, nodeid)
+        })
+        .catch((e) => console.error(e))
+    })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const routingInstrumentation = useRoutingInstrumentation()
   useEffect(() => {
     const browserTracing = new BrowserTracing({
       routingInstrumentation
@@ -37,24 +68,9 @@ const Init = () => {
       integrations: [browserTracing]
     })
 
-    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
-      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
+    // if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
+    //   Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
   }, [routingInstrumentation])
-
-  useEffect(() => {
-    const nodes = Object.entries(contents).map(([nodeId, val]) => {
-      return {
-        id: nodeId,
-        ...val
-      }
-    })
-    const initData = {
-      node: nodes,
-      snippet: snippets,
-      archive: []
-    }
-    initializeSearchIndex(ilinks, initData)
-  }, [])
 
   return null
 }

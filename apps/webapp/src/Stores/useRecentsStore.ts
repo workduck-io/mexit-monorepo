@@ -1,4 +1,4 @@
-import { remove } from 'lodash'
+import { remove } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

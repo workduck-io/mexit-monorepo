@@ -3,9 +3,10 @@ import { HexColorPicker } from 'react-colorful'
 import styled from 'styled-components'
 import { Toaster } from 'react-hot-toast'
 
-import { copyToClipboard, Input, throttle } from '@mexit/shared'
+import { copyToClipboard, Input } from '@mexit/shared'
 
 import { resize } from '@mexit/shared'
+import { throttle } from '@mexit/core'
 
 const Container = styled.div`
   display: flex;
@@ -147,8 +148,6 @@ export const ColourPicker = () => {
           />
         </Form>
       </Wrapper>
-
-      <Toaster position="bottom-center" />
     </Container>
   )
 }

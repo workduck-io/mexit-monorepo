@@ -225,3 +225,43 @@ export interface NodeProperties {
   nodeid: string
   path: string
 }
+
+export enum QuickLinkType {
+  backlink = 'Backlinks',
+  snippet = 'Snippets',
+  flow = 'Flows',
+  tags = 'Tags'
+}
+
+export enum ComboboxKey {
+  TAG = 'tag',
+  INTERNAL = 'internal',
+  INLINE_BLOCK = 'inline_block',
+  SLASH_COMMAND = 'slash_command',
+  BLOCK = 'block'
+}
+export enum CategoryType {
+  backlink = 'Backlinks',
+  action = 'Quick Actions',
+  search = 'Search Results',
+  meeting = 'Meetings'
+}
+
+export interface SlashCommand {
+  command: string
+  text?: string
+  icon?: string
+  type?: QuickLinkType | CategoryType
+  /** Extended command -> Text after the command is part of it and used as arguments */
+  extended?: boolean
+}
+
+export interface SlashCommands {
+  default: SlashCommand[]
+  internal: SlashCommand[]
+}
+
+export enum QuickLinkStatus {
+  new,
+  exists
+}

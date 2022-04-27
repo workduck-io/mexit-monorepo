@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
-import MainArea from './Views/MainArea'
+import EditorView from './Views/EditorView'
 import { useAuthStore, useAuthentication } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
@@ -10,7 +10,6 @@ import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
 import * as Actions from './Actions'
-import ActivityView from './Views/ActivityView'
 import Snippets from './Views/Snippets'
 import SnippetEditor from './Components/Editor/SnippetEditor'
 
@@ -28,6 +27,8 @@ import toast from 'react-hot-toast'
 import { useTheme } from 'styled-components'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { ForgotPassword } from './Views/ForgotPassword'
+import { useEditorBuffer } from './Hooks/useEditorBuffer'
+import useBlockStore from './Stores/useBlockStore'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -44,6 +45,20 @@ const AuthRoute = ({ children }) => {
   const { loginViaGoogle } = useAuthentication()
 
   const code = new URLSearchParams(window.location.search).get('code')
+
+  const location = useLocation()
+  const { saveAndClearBuffer } = useEditorBuffer()
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+
+  useEffect(() => {
+    if (authenticated) {
+      if (isBlockMode) {
+        setIsBlockMode(false)
+      }
+      saveAndClearBuffer()
+    }
+  }, [location])
 
   useEffect(() => {
     const setAsyncLocal = async () => {
@@ -172,7 +187,7 @@ const SnippetRoutes = () => {
         path=""
         element={
           <ProtectedRoute>
-            <MainArea />
+            <EditorView />
           </ProtectedRoute>
         }
       >
@@ -198,12 +213,12 @@ export const Switch = () => {
         path={ROUTE_PATHS.home}
         element={
           <ProtectedRoute>
-            <MainArea />
+            <EditorView />
           </ProtectedRoute>
         }
       >
-        <Route index element={<ActivityView />} />
-        <Route path={`${ROUTE_PATHS.home}/:nodeId`} element={<ContentEditor />} />
+        <Route index element={<></>} />
+        <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
       </Route>
     </Routes>

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any */
+
 const throttle = (callback: Function, timeFrame: number) => {
   let lastTime = 0
   return function (args) {
@@ -39,4 +41,21 @@ const range = (start: number, end?: number, increment?: number) => {
   return result
 }
 
-export { throttle, remove, range }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const uniq = (data: Array<any>): Array<any> => {
+  return [...new Set(data)]
+}
+
+export type ByFunction = (data: any) => any
+
+const uniqBy = (data: Array<any>, by: string | ByFunction): Array<any> => {
+  const setElems = new Set<any>()
+  if (typeof by === 'string') {
+    data.forEach((i) => setElems.add(i[by]))
+  } else {
+    data.forEach((i) => setElems.add(by(i)))
+  }
+  return [...setElems]
+}
+
+export { throttle, remove, range, uniq, uniqBy }

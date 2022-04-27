@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
 import arrowRightSLine from '@iconify-icons/ri/arrow-right-s-line'
 
-import { useFocusTransition } from '../../Hooks/useFocusTransition'
 import { TreeNode } from '@mexit/shared'
 import { TreeWithContextMenu } from './TreeWithContextMenu'
 import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading } from '../../Style/Sidebar'
@@ -13,17 +12,15 @@ import useDataStore from '../../Stores/useDataStore'
 export type SideBarProps = { tree: TreeNode[]; starred: TreeNode[] }
 
 const SideBar = ({ tree, starred }: SideBarProps) => {
-  const { transitions } = useFocusTransition()
   const [tHide, setThide] = useState(false)
   const setILinks = useDataStore((store) => store.setIlinks)
-  const ONE_HOUR_IN_MS = 3600000
   const { getILinks } = useApi()
 
   useEffect(() => {
     RefreshILinks()
     const interval = setInterval(() => {
       RefreshILinks()
-    }, ONE_HOUR_IN_MS)
+    }, 3600000)
     return () => clearInterval(interval)
   }, [])
 

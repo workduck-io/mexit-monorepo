@@ -1,21 +1,15 @@
-// import { parseBlock } from '../Utils/flexsearch'
+import { Snippet } from '@mexit/core'
+import { SlashCommandConfig, mog, SEPARATOR } from '@workduck-io/mex-editor'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-
-// import useSearchStore from './useSearchStore'
-import { SEPARATOR, SlashCommandConfig } from '@workduck-io/mex-editor'
-
-import useSearchStore from './useSearchStore'
-import { Snippet, parseSnippet } from '@mexit/core'
+import { useSearch } from './useSearch'
 
 export const useSnippets = () => {
-  const addSnippetStore = useSnippetStore((state) => state.addSnippet)
-  const updateSnippetStore = useSnippetStore((state) => state.updateSnippet)
-  const deleteSnippetStore = useSnippetStore((state) => state.deleteSnippet)
-  const { addDoc, updateDoc, removeDoc } = useSearchStore(({ addDoc, updateDoc, removeDoc }) => ({
-    addDoc,
-    updateDoc,
-    removeDoc
-  }))
+  const addSnippetZus = useSnippetStore((state) => state.addSnippet)
+  const updateSnippetZus = useSnippetStore((state) => state.updateSnippet)
+  const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
+
+  const { updateDocument, addDocument, removeDocument } = useSearch()
+
   const getSnippets = () => {
     return useSnippetStore.getState().snippets
   }
@@ -51,20 +45,42 @@ export const useSnippets = () => {
     return undefined
   }
 
-  const updateSnippet = (snippet: Snippet) => {
-    updateSnippetStore(snippet.id, snippet)
-    updateDoc('snippet', parseSnippet(snippet))
-  }
-  const deleteSnippet = (id: string) => {
-    deleteSnippetStore(id)
-    removeDoc('snippet', id)
-  }
-  const addSnippet = (snippet: Snippet) => {
-    addSnippetStore(snippet)
-    addDoc('snippet', parseSnippet(snippet))
+  const updateSnippet = async (snippet: Snippet) => {
+    updateSnippetZus(snippet.id, snippet)
+    const tags = snippet.isTemplate ? ['template'] : ['snippet']
+    const idxName = snippet.isTemplate ? 'template' : 'snippet'
+    mog('Update snippet', { snippet, tags })
+    if (snippet.isTemplate) {
+      await removeDocument('snippet', snippet.id)
+    } else {
+      await removeDocument('template', snippet.id)
+    }
+    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
   }
 
-  return { getSnippets, getSnippet, getSnippetContent, getSnippetsConfigs, addSnippet, updateSnippet, deleteSnippet }
+  const deleteSnippet = async (id: string) => {
+    deleteSnippetZus(id)
+    await removeDocument('snippet', id)
+  }
+
+  const addSnippet = async (snippet: Snippet) => {
+    addSnippetZus(snippet)
+    const tags = snippet.isTemplate ? ['template'] : ['snippet']
+    const idxName = snippet.isTemplate ? 'template' : 'snippet'
+    mog('Add snippet', { snippet, tags })
+
+    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+  }
+
+  return {
+    getSnippets,
+    getSnippet,
+    getSnippetContent,
+    getSnippetsConfigs,
+    addSnippet,
+    updateSnippet,
+    deleteSnippet
+  }
 }
 
 export const extractSnippetCommands = (snippets: Snippet[]): string[] => {

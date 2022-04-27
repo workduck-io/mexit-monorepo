@@ -5,24 +5,30 @@ import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import { useTreeFromLinks } from '../Stores/useDataStore'
+import InfoBar from '../Components/Infobar'
 import Navbar from '../Components/Navbar'
 
-const Container = styled.div`
+const EditorViewWrapper = styled.div`
   display: flex;
-  flex: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
 `
 
-const MainArea = () => {
+const EditorView = () => {
   const Tree = useTreeFromLinks()
+
   return (
-    <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
+    <EditorViewWrapper>
       <Navbar />
-      <Container>
-        <Sidebar tree={Tree} starred={Tree} />
+      <Sidebar tree={Tree} starred={Tree} />
+      <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
         <Outlet />
-      </Container>
-    </SentryErrorBoundary>
+      </SentryErrorBoundary>
+      <InfoBar />
+    </EditorViewWrapper>
   )
 }
 
-export default MainArea
+export default EditorView

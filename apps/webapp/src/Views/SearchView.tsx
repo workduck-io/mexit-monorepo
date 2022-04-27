@@ -97,7 +97,7 @@ interface SearchViewProps<Item> {
    * @param index Index of the item
    * @param view View to render
    */
-  onSearch: (searchTerm: string) => Item[]
+  onSearch: (searchTerm: string) => Promise<Item[]>
 
   /**
    * Handle select item
@@ -219,14 +219,14 @@ const SearchView = <Item,>({
     clearSearch()
   }, [id])
 
-  const executeSearch = (newSearchTerm: string) => {
+  const executeSearch = async (newSearchTerm: string) => {
     if (newSearchTerm === '' && initialItems.length > 0) {
       // const res = onSearch(newSearchTerm)
       const filtered = filterResults ? filterResults(initialItems) : initialItems
       mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered })
       setResult(filtered, newSearchTerm)
     } else {
-      const res = onSearch(newSearchTerm)
+      const res = await onSearch(newSearchTerm)
       const filtered = filterResults ? filterResults(res) : res
       mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
       setResult(filtered, newSearchTerm)

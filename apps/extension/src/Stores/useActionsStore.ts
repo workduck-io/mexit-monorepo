@@ -1,6 +1,7 @@
-import { MexitAction, initActions, storageAdapter } from '@mexit/core'
+import { MexitAction, initActions } from '@mexit/core'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { storageAdapter } from '../Utils/chromeStorageAdapter'
 
 interface ActionsStore extends State {
   actions: MexitAction[]
