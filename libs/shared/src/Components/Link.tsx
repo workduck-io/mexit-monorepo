@@ -5,7 +5,7 @@ import { StyledElementProps } from '@udecode/plate-styled-components'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { EditorIcons } from '../Icons'
+import { EditorIcons } from '@mexit/shared'
 
 const Link = styled.a`
   position: relative;
@@ -66,7 +66,7 @@ const getSanatizedLink = (raw: string) => {
  * LinkElement with no default styles.
  * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
  */
-const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<LinkNodeData>) => {
+export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<LinkNodeData>) => {
   const isExternal = element.url.startsWith('#')
 
   const openLink = (e: React.MouseEvent, meta: boolean) => {
@@ -107,7 +107,7 @@ const LinkElement = ({ attributes, children, element, nodeProps }: StyledElement
             }}
             contentEditable={false}
           >
-            <Icon icon={EditorIcons.externalLink} />
+            <Icon icon={EditorIcons['externalLink']} />
           </button>
         )}
 
@@ -116,5 +116,3 @@ const LinkElement = ({ attributes, children, element, nodeProps }: StyledElement
     </Tippy>
   )
 }
-
-export default LinkElement
