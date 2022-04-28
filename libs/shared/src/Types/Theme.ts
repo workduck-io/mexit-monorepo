@@ -1,3 +1,5 @@
+import { ThemeConfig } from 'react-select/src/theme'
+
 export interface ShadePalette {
   10: string // Darkest
   9: string
@@ -122,6 +124,8 @@ export interface ThemeType extends LayoutStyle {
   backgroundImages?: BackgroundImages
   additional: {
     profilePalette: string[]
-    reactSelect: any
+    reactSelect: ThemeConfig
+    hasBlocks?: boolean
   }
+  custom?: string
 }

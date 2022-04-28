@@ -1,22 +1,31 @@
 import { DataStoreState, mog } from '@mexit/core'
-import { dataStoreConstructor, generateTree, getFlatTree, sanatizeLinks } from '@mexit/shared'
+import { dataStoreConstructor, sanatizeLinks } from '@mexit/shared'
+import { useMemo } from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+import getFlatTree, { generateTree } from '../Utils/tree'
+import useEditorStore from './useEditorStore'
+import { useTreeStore } from './useTreeStore'
 
 const useDataStore = create<DataStoreState>(persist(dataStoreConstructor, { name: 'mexit-data-store' }))
 
 export const useTreeFromLinks = () => {
+  const node = useEditorStore((state) => state.node)
   const ilinks = useDataStore((store) => store.ilinks)
+  const expanded = useTreeStore((store) => store.expanded)
   const links = ilinks.map((i) => ({ id: i.path, nodeid: i.nodeid, icon: i.icon }))
   const sanatizedLinks = sanatizeLinks(links)
-  const tree = generateTree(sanatizedLinks)
+  mog('Sanatized links', { sanatizedLinks })
+  // const sortedTree = sortTree(sanatizeLinks, contents)
+  const tree = useMemo(() => generateTree(sanatizedLinks, expanded), [ilinks, node])
 
-  console.log({ ilinks, links, sanatizedLinks, tree })
+  // mog('Tree', { ilinks, contents, links, sanatizedLinks, sortedTree, tree })
+
   return tree
 }
 
 export const useFlatTreeFromILinks = () => {
-  return getFlatTree(useTreeFromLinks())
+  return useTreeFromLinks()
 }
 
 export default useDataStore

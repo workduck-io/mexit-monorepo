@@ -1,58 +1,38 @@
-import gitBranchLine from '@iconify-icons/ri/git-branch-line'
-import { Icon } from '@iconify/react'
-import React, { useEffect, useState } from 'react'
-import arrowRightSLine from '@iconify-icons/ri/arrow-right-s-line'
-
+import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
+import { BookmarksHelp } from '../../Data/defaultText'
+import useLayout from '../../Hooks/useLayout'
+import Collapse from '../../Layout/Collapse'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { SidebarDiv, SidebarContent, SidebarDivider } from '../../Style/Sidebar'
+import Bookmarks from './Bookmarks'
 import { TreeNode } from '@mexit/shared'
-import { TreeWithContextMenu } from './TreeWithContextMenu'
-import { SidebarDiv, SidebarContent, SidebarSection, SectionHeading } from '../../Style/Sidebar'
-import { useApi } from '../../Hooks/useApi'
-import useDataStore from '../../Stores/useDataStore'
 
 export type SideBarProps = { tree: TreeNode[]; starred: TreeNode[] }
 
-const SideBar = ({ tree, starred }: SideBarProps) => {
-  const [tHide, setThide] = useState(false)
-  const setILinks = useDataStore((store) => store.setIlinks)
-  const { getILinks } = useApi()
-
-  useEffect(() => {
-    RefreshILinks()
-    const interval = setInterval(() => {
-      RefreshILinks()
-    }, 3600000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const RefreshILinks = () => {
-    getILinks()
-      .then((response) => {
-        setILinks(response)
-      })
-      .catch((err) => {
-        console.error(err.message)
-      })
-  }
+const SideBar = ({ tree }: SideBarProps) => {
+  // const { transitions } = useFocusTransition()
+  const focusMode = useLayoutStore((s) => s.focusMode)
+  const { getFocusProps } = useLayout()
 
   return (
-    <SidebarDiv>
+    <SidebarDiv {...getFocusProps(focusMode)}>
       <SidebarContent>
-        <SidebarSection className="tree">
-          <SectionHeading
-            onClick={() => {
-              setThide((b) => !b)
-            }}
-          >
-            <Icon height={20} icon={tHide ? arrowRightSLine : gitBranchLine} />
-            <h2>Tree</h2>
-          </SectionHeading>
+        <Collapse
+          title="Bookmarks"
+          oid="Bookmarks"
+          icon={bookmark3Line}
+          maximumHeight="30vh"
+          infoProps={{
+            text: BookmarksHelp
+          }}
+        >
+          <Bookmarks />
+        </Collapse>
 
-          {!tHide && <TreeWithContextMenu tree={tree} />}
-        </SidebarSection>
+        <SidebarDivider />
       </SidebarContent>
     </SidebarDiv>
   )
-  // return <h1>Hello World</h1>
 }
 
 export default SideBar

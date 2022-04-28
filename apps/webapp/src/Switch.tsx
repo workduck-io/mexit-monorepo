@@ -20,7 +20,6 @@ import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
-import Navbar from './Components/Navbar'
 import config from './config'
 import { Loading } from '@mexit/shared'
 import toast from 'react-hot-toast'
@@ -168,7 +167,6 @@ const SettingsRoutes = () => {
         path=""
         element={
           <ProtectedRoute>
-            <Navbar />
             <Settings />
           </ProtectedRoute>
         }

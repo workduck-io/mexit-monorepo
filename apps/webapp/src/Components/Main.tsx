@@ -2,10 +2,13 @@ import { linkTooltip } from '@mexit/shared'
 import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import useNavlinks from '../Data/links'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { GridWrapper } from '../Style/Grid'
 import { navTooltip } from '../Style/Nav'
+import Nav from './Sidebar/Nav'
+import { useSidebarTransition } from './Sidebar/Transition'
 
 const AppWrapper = styled.div`
   min-height: 100%;
@@ -47,20 +50,17 @@ const Main = ({ children }: MainProps) => {
   const styles = {
     WebkitAppRegion: 'drag'
   }
-  // const { getLinks } = useNavlinks()
+  const { getLinks } = useNavlinks()
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
 
-  // const { gridSpringProps } = useSidebarTransition()
+  const { gridSpringProps } = useSidebarTransition()
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       <Draggable style={styles as any} /> {/* eslint-disable-line @typescript-eslint/no-explicit-any */}
-      <GridWrapper
-        // style={gridSpringProps}
-        grid={authenticated ? 'true' : ''}
-      >
-        {/* {authenticated && <Nav links={getLinks()} />} */}
+      <GridWrapper style={gridSpringProps} grid={authenticated ? 'true' : ''}>
+        {authenticated && <Nav links={getLinks()} />}
         <Content id="wd-mex-content-view" grid={authenticated}>
           {children}
         </Content>

@@ -1,207 +1,259 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console, react/no-access-state-in-setstate */
-/* eslint-disable react/no-danger, no-param-reassign */
-/* eslint-enable react/no-danger, no-param-reassign */
-/* eslint-enable no-console, react/no-access-state-in-setstate */
-import equal from 'fast-deep-equal'
-import RCTree from 'rc-tree'
-import { Key } from 'rc-tree/lib/interface'
-import React from 'react'
+import {
+  default as AtlaskitTree,
+  ItemId,
+  mutateTree,
+  RenderItemParams,
+  TreeData,
+  TreeDestinationPosition,
+  TreeItem,
+  TreeSourcePosition
+} from '@atlaskit/tree'
+import Tippy from '@tippyjs/react'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import React, { useEffect, useRef } from 'react'
+import { useContextMenu } from 'react-contexify'
+import { useLocation } from 'react-router-dom'
+import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
+import { IpcAction } from '@mexit/core'
+import { SEPARATOR, mog } from '@workduck-io/mex-editor'
+import { AppType } from '../../Hooks/useInitialize'
+import { useNavigation } from '../../Hooks/useNavigation'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import useEditorStore from '../../Stores/useEditorStore'
+import { useRefactorStore } from '../../Stores/useRefactorStore'
+import {
+  StyledTreeItemSwitcher,
+  TooltipContentWrapper,
+  TooltipCount,
+  StyledTreeItem,
+  ItemContent,
+  ItemTitle,
+  ItemCount
+} from '../../Style/Sidebar'
+import { useTreeStore } from '../../Stores/useTreeStore'
+import { getNameFromPath } from '@mexit/shared'
 
-import { withNodeOps } from '../../Stores/useEditorStore'
-import { StyledTree } from '../../Style/Sidebar'
-import TreeExpandIcon from './Icon'
-import { getNodeIdLast } from '@mexit/shared'
-import { withNavigation } from '../../Hooks/useNavigation'
-import { SEPARATOR } from '@mexit/core'
-
-const motion = {
-  motionName: 'node-motion',
-  motionAppear: false,
-  onAppearStart: (node: any) => {
-    // eslint-disable-next-line no-console
-    // console.log('Start Motion:', node)
-    return { height: 0 }
-  },
-  onAppearActive: (node: any) => ({ height: node.scrollHeight }),
-  onLeaveStart: (node: any) => ({ height: node.offsetHeight }),
-  onLeaveActive: () => ({ height: 0 })
+interface GetIconProps {
+  item: TreeItem
+  onExpand: (itemId: ItemId) => void
+  onCollapse: (itemId: ItemId) => void
 }
 
-interface RCTreeProps {
-  tree: any
-  currentNode: any
-  displayMenu: any
-  push?: any
-  getMockRefactor: any
-  execRefactor: any
-  prefillRefactorModal: any
-}
-
-/* Renders a draggable tree with custom collapse-able icon */
-class Tree extends React.Component<RCTreeProps> {
-  constructor(props: RCTreeProps) {
-    super(props)
-    this.state = {
-      gData: props.tree,
-      autoExpandParent: true
-    }
-
-    // These three functions were from the react-component/tree example
-    this.onDragEnter = this.onDragEnter.bind(this)
-    this.onDrop = this.onDrop.bind(this)
-    this.onExpand = this.onExpand.bind(this)
-    this.onSelect = this.onSelect.bind(this)
-  }
-
-  override componentDidUpdate(prevProps: RCTreeProps) {
-    const { tree } = this.props
-
-    if (!equal(prevProps, this.props)) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ gData: tree, expandedKeys: [this.props.currentNode.id] })
-    }
-  }
-
-  onDragEnter({ expandedKeys }: any) {
-    // eslint-disable-next-line no-console
-    // console.log('enter', expandedKeys)
-    this.setState({
-      expandedKeys
-    })
-  }
-
-  onDrop(info: any) {
-    // eslint-disable-next-line no-console
-    // console.log('drop', info)
-    const dropKey = info.node.props.eventKey
-    const dragKey = info.dragNode.props.eventKey
-    const dropPos = info.node.props.pos.split('-')
-    const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1])
-
-    const loop = (data: any, key: any, callback: any) => {
-      data.forEach((item: any, index: any, arr: any) => {
-        if (item.key === key) {
-          callback(item, index, arr)
-          return
-        }
-        if (item.children) {
-          loop(item.children, key, callback)
-        }
-      })
-    }
-    const { gData: gDataTemp }: any = this.state
-    const data = [...gDataTemp]
-
-    // Find dragObject
-    let dragObj: any
-    loop(data, dragKey, (item: any, index: any, arr: any) => {
-      arr.splice(index, 1)
-      dragObj = item
-    })
-
-    if (!info.dropToGap) {
-      // Drop on the content
-      loop(data, dropKey, (item: any) => {
-        item.children = item.children || []
-        // where to insert
-        item.children.push(dragObj)
-      })
-    } else if (
-      (info.node.props.children || []).length > 0 && // Has children
-      info.node.props.expanded && // Is expanded
-      dropPosition === 1 // On the bottom gap
-    ) {
-      loop(data, dropKey, (item: any) => {
-        item.children = item.children || []
-        // where to insert
-        item.children.unshift(dragObj)
-      })
-    } else {
-      // Drop on the gap
-      let ar: any
-      let i: any
-      loop(data, dropKey, (_item: any, index: any, arr: any) => {
-        ar = arr
-        i = index
-      })
-      if (dropPosition === -1) {
-        ar.splice(i, 0, dragObj)
-      } else {
-        ar.splice(i + 1, 0, dragObj)
-      }
-    }
-
-    // console.log('We be dropping stuff here', { dropPos, dragObj, dragKey, dropKey });
-
-    const singleId = getNodeIdLast(dragKey)
-
-    const from = dragKey
-    const to = dropKey + SEPARATOR + singleId
-
-    const { prefillRefactorModal: prefillModal } = this.props
-
-    // console.log(getMockRefactor(from, to));
-    prefillModal(from, to)
-
-    // this.setState({
-    //   gData: data,
-    // });
-  }
-
-  onExpand(expandedKeys: any) {
-    // eslint-disable-next-line no-console
-    // console.log('onExpand', expandedKeys)
-    if (expandedKeys) {
-      const { currentNode } = this.props
-      const newExp = expandedKeys.filter((k) => k)
-      const expKeys = Array.from(new Set([...newExp, currentNode.id]))
-      // console.log({ currentNode, expandedKeys, expKeys, newExp })
-
-      this.setState({
-        expandedKeys: expKeys,
-        autoExpandParent: true
-      })
-    }
-  }
-
-  onSelect(_selectedKeys: Key[], info: any) {
-    const { selectedNodes } = info
-    const { push } = this.props
-
-    if (selectedNodes.length > 0) {
-      push(selectedNodes[0].nodeid)
-    }
-  }
-
-  override render() {
-    const { expandedKeys, autoExpandParent }: any = this.state
-    const { tree, currentNode, displayMenu } = this.props
-
-    // let newExpKeys = expandedKeys !== undefined ? [...expandedKeys, currentNode.key] : [currentNode.key]
-
-    return (
-      <StyledTree className="draggable-demo">
-        <RCTree
-          expandedKeys={expandedKeys}
-          onExpand={this.onExpand}
-          autoExpandParent={autoExpandParent}
-          draggable
-          // onDragStart={this.onDragStart}
-          // defaultExpandParent={}
-          onDragEnter={this.onDragEnter}
-          selectedKeys={[currentNode.id]}
-          onDrop={this.onDrop}
-          treeData={tree}
-          motion={motion}
-          switcherIcon={TreeExpandIcon}
-          showIcon={false}
-          onSelect={this.onSelect}
-          onRightClick={displayMenu}
-        />
-      </StyledTree>
+const GetIcon = ({ item, onCollapse, onExpand }: GetIconProps) => {
+  if (item.children && item.children.length > 0) {
+    return item.isExpanded ? (
+      <StyledTreeItemSwitcher onClick={() => onCollapse(item.id)}>
+        <Icon icon={'ri:arrow-down-s-line'} />
+      </StyledTreeItemSwitcher>
+    ) : (
+      <StyledTreeItemSwitcher onClick={() => onExpand(item.id)}>
+        <Icon icon={'ri:arrow-right-s-line'} />
+      </StyledTreeItemSwitcher>
     )
   }
+  return <StyledTreeItemSwitcher></StyledTreeItemSwitcher>
 }
 
-export default withNavigation(withNodeOps(Tree))
+const TooltipContent = ({ item }: { item: TreeItem }) => {
+  return (
+    <TooltipContentWrapper>
+      {item.data.title}
+      {item.data.tasks !== undefined && item.data.tasks > 0 && (
+        <TooltipCount>
+          <Icon icon="ri:task-line" />
+          {item.data.tasks}
+        </TooltipCount>
+      )}
+      {item.data.reminders !== undefined && item.data.reminders > 0 && (
+        <TooltipCount>
+          <Icon icon="ri:timer-flash-line" />
+          {item.data.reminders}
+        </TooltipCount>
+      )}
+    </TooltipContentWrapper>
+  )
+}
+
+interface TreeProps {
+  initTree: TreeData
+}
+
+interface TreeLocalState {
+  tree: TreeData
+}
+
+const Tree = ({ initTree }: TreeProps) => {
+  const [treeState, setTreeState] = React.useState<TreeLocalState>({ tree: initTree })
+  // const [draggedItem, setDraggedItem] = React.useState<TreeItem | null>(null)
+  const location = useLocation()
+
+  const node = useEditorStore((state) => state.node)
+  const expandNode = useTreeStore((state) => state.expandNode)
+  const collapseNode = useTreeStore((state) => state.collapseNode)
+  const prefillModal = useRefactorStore((state) => state.prefillModal)
+  const { push } = useNavigation()
+  const { goTo } = useRouting()
+  const { tree } = treeState
+  // mog('renderTree', { initTree })
+  //
+  const draggedRef = useRef<TreeItem | null>(null)
+
+  const changeTree = (newTree: TreeData) => {
+    setTreeState((state) => ({ ...state, tree: newTree }))
+  }
+  //
+  useEffect(() => {
+    setTreeState({ tree: initTree })
+  }, [initTree])
+
+  const onOpenItem = (itemId: string, nodeid: string) => {
+    push(nodeid)
+    // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, nodeid)
+
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    changeTree(mutateTree(tree, itemId, { isExpanded: true }))
+  }
+
+  const { show } = useContextMenu({
+    id: MENU_ID
+  })
+
+  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: TreeItem) => {
+    // mog('onClick', { item })
+    if (e.button === 0) {
+      expandNode(item.data.path)
+      onOpenItem(item.id as string, item.data.nodeid)
+    }
+  }
+  const defaultSnap = {
+    isDragging: false,
+    isDropAnimating: false,
+    dropAnimation: null,
+    mode: null,
+    draggingOver: null,
+    combineTargetFor: null,
+    combineWith: null
+  }
+
+  const renderItem = ({ item, onExpand, onCollapse, provided, snapshot }: RenderItemParams) => {
+    const isTrue = JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
+    const isInEditor = location.pathname.startsWith(ROUTE_PATHS.node)
+
+    // mog('renderItem', { item, snapshot, provided, location, isInEditor })
+
+    return (
+      <Tippy theme="mex" placement="right" content={<TooltipContent item={item} />}>
+        <StyledTreeItem
+          ref={provided.innerRef}
+          selected={isInEditor && node && item.data && node.nodeid === item.data.nodeid}
+          isDragging={snapshot.isDragging}
+          isBeingDroppedAt={isTrue}
+          onContextMenu={(e) => show(e, { props: { id: item.data.nodeid, path: item.data.path } })}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
+
+          <ItemContent onMouseDown={(e) => onClick(e, item)}>
+            <ItemTitle>
+              <Icon icon={item.data.mex_icon ?? fileList2Line} />
+              <span>{item.data ? item.data.title : 'No Title'}</span>
+            </ItemTitle>
+          </ItemContent>
+
+          {item.hasChildren && item.children && item.children.length > 0 && (
+            <ItemCount>{item.children.length}</ItemCount>
+          )}
+          {/* <AkNavigationItem
+          text={item.data ? item.data.title : ''}
+          icon={DragDropWithNestingTree.getIcon(item, onExpand, onCollapse)}
+          dnd={{ dragHandleProps: provided.dragHandleProps }}
+        /> */}
+        </StyledTreeItem>
+      </Tippy>
+    )
+  }
+
+  const onExpand = (itemId: ItemId) => {
+    // const { tree }: State = this.state
+    const item = tree.items[itemId]
+    if (item && item.data && item.data.path) {
+      expandNode(item.data.path)
+    }
+    changeTree(mutateTree(tree, itemId, { isExpanded: true }))
+  }
+
+  const onCollapse = (itemId: ItemId) => {
+    // const { tree }: State = this.state
+    const item = tree.items[itemId]
+    if (item && item.data && item.data.path) {
+      collapseNode(item.data.path)
+    }
+    changeTree(mutateTree(tree, itemId, { isExpanded: false }))
+  }
+
+  const onDragStart = (itemId: ItemId) => {
+    // const { tree }: State = this.state
+    const item = tree.items[itemId]
+    if (item && item.data && item.data.path) {
+      draggedRef.current = item
+    }
+  }
+
+  const onDragEnd = (source: TreeSourcePosition, destination?: TreeDestinationPosition) => {
+    // const { tree } = this.state
+
+    if (!destination || !draggedRef.current) {
+      draggedRef.current = null
+      return
+    }
+
+    if (source === destination) {
+      draggedRef.current = null
+      return
+    }
+
+    if (source.parentId === destination.parentId) {
+      return
+    }
+
+    const from = draggedRef.current.data.path
+    const toItem = tree.items[destination.parentId]
+    let to: string | null = null
+    if (toItem) {
+      if (toItem.id === '1') {
+        // Has been dropped on root
+        to = getNameFromPath(from)
+      } else {
+        // Has been dropped inside some item
+        to = `${toItem.data.path}${SEPARATOR}${getNameFromPath(from)}`
+      }
+    }
+    mog('onDragEnd', { source, destination, to, from, toItem, tree })
+
+    draggedRef.current = null
+
+    prefillModal(from, to)
+    // changeTree(newTree)
+  }
+
+  return (
+    <>
+      <AtlaskitTree
+        offsetPerLevel={16}
+        tree={tree}
+        renderItem={renderItem}
+        onExpand={onExpand}
+        onCollapse={onCollapse}
+        onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
+        isDragEnabled
+        isNestingEnabled
+      />
+      <TreeContextMenu />
+    </>
+  )
+}
+
+export default Tree

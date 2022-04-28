@@ -5,10 +5,11 @@ export interface Content {
   highlighterId: string
   content: NodeEditorContent
   range: Partial<HighlightSource>
+  metaData?: NodeMetadata
 }
 
 export interface Contents {
-  [key: string]: Content[]
+  [key: string]: NodeContent
 }
 
 export enum CaptureType {
@@ -102,11 +103,6 @@ export interface FlexSearchResult {
   matchField: string[]
 }
 
-export interface NodeLink {
-  from: string
-  to: string
-}
-
 export interface Content {
   id: string
   highlighterId: string
@@ -126,19 +122,6 @@ export interface NodeMetadata {
   lastEditedBy: string
   updatedAt: number
 }
-export interface Block {
-  id: string // Block ID of form `BLOCK_`
-  nodeUID: string // UID of node to which this block belongs
-  children: any[]
-  metadata?: NodeMetadata // Block level metadata
-  type?: string
-}
-
-export interface Node {
-  id: string
-  content: Block[]
-  metadata?: NodeMetadata // Node level metadata
-}
 
 export type NodeEditorContent = any[]
 
@@ -147,42 +130,6 @@ export interface NodeContent {
   content: NodeEditorContent
   version?: number
   metadata?: NodeMetadata
-}
-
-export interface InitData extends InitDataStoreType {
-  contents: Record<string, NodeContent>
-}
-
-export interface InitDataStoreType {
-  tags: Tag[]
-  ilinks: ILink[]
-  linkCache: LinkCache
-  tagsCache: TagsCache
-  bookmarks: string[]
-  archive: ILink[]
-  baseNodeId: string
-}
-
-export interface CachedILink {
-  // ILink from/to path
-  type: 'from' | 'to'
-  nodeid: string
-}
-
-export interface CacheTag {
-  nodes: string[]
-}
-
-export interface ILink {
-  /** Unique Identifier */
-  nodeid: string
-
-  /** The title of the node.
-   * Uses separator for heirarchy */
-  path: string
-
-  /** Iconify Icon string */
-  icon?: string
 }
 
 export interface FlexSearchResult {
