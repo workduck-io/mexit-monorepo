@@ -81,6 +81,7 @@ const ContentEditor = () => {
       <StyledEditor showGraph={false} className="mex_editor">
         <Toolbar />
 
+        <EditorInfoBar />
         {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
 
         <EditorWrapper onClick={onFocusClick}>
@@ -92,13 +93,7 @@ const ContentEditor = () => {
           />
         </EditorWrapper>
       </StyledEditor>
-
-      <div>
-        <EditorInfoBar />
-
-      </div>
     </>
-
   )
 }
 
