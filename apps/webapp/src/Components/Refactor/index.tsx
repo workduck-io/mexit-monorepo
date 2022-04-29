@@ -14,7 +14,7 @@ import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
-import { doesLinkRemain } from "./doesLinkRemain"
+import { doesLinkRemain } from './doesLinkRemain'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
