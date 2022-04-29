@@ -27,7 +27,7 @@ interface EditorProps {
   autoFocus?: boolean
 }
 
-const commands = [
+export const commands = [
   {
     command: 'table',
     text: 'Insert Table',

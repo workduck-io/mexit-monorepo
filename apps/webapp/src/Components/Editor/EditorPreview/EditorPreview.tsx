@@ -11,11 +11,13 @@ import {
 } from './EditorPreview.styles'
 import { NodeEditorContent, generateTempId, mog } from '@mexit/core'
 import { Button } from '@mexit/shared'
-import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 import { useTags } from '../../../Hooks/useTags'
 import useContentStore from '../../../Stores/useContentStore'
+import { useLinks } from '../../../Hooks/useLinks'
+import { TagsRelatedTiny } from '../TagsRelated'
+import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -102,7 +104,8 @@ const EditorPreview = ({
                 {ilink?.path && (
                   <EditorPreviewNoteName onClick={onClickNavigate}>
                     <Icon icon={ilink?.icon ?? fileList2Line} />
-                    {getNameFromPath(ilink.path)}
+                    {/* TODO: uncomment this when rebasing with sidebar PR */}
+                    {/* {getNameFromPath(ilink.path)} */}
                   </EditorPreviewNoteName>
                 )}
                 <TagsRelatedTiny nodeid={nodeid} />
