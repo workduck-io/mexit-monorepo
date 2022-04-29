@@ -23,6 +23,20 @@ export default defineConfig({
     },
     dedupe: ['styled-components', 'react', 'react-dom', '@workduck-io/mex-editor', '@udecode/plate']
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          [
+            'babel-plugin-styled-components',
+            {
+              displayName: true,
+              fileName: false
+            }
+          ]
+        ]
+      }
+    })
+  ],
   worker: { format: 'es' }
 })

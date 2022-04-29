@@ -12,6 +12,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 
 const IntegrationContainer = styled.section`
   margin-left: 4rem;
+  flex: 1;
 `
 
 const Margin = styled.div`

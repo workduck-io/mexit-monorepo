@@ -1,7 +1,20 @@
-import { CachedILink, getLinksFromContent, hasLink, ILink, NodeLink } from '@mexit/core'
+import {
+  CachedILink,
+  convertContentToRawText,
+  defaultContent,
+  getLinksFromContent,
+  hasLink,
+  ILink,
+  mog,
+  NodeLink,
+  TodoStatus
+} from '@mexit/core'
 
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import useTodoStore from '../Stores/useTodoStore'
 
 import { useNodes } from './useNodes'
 
@@ -29,6 +42,49 @@ export const useLinks = () => {
     })
 
     return allLinks
+  }
+
+  const getLinkCount = (): {
+    notes: number
+    archive: number
+    reminders: number
+    snippets: number
+    tasks: number
+  } => {
+    const links = useDataStore.getState().ilinks
+    const archive = useDataStore.getState().archive
+    const remindersAll = useReminderStore.getState().reminders
+    const snippets = useSnippetStore.getState().snippets
+    const ntasks = useTodoStore.getState().todos
+
+    const reminders = remindersAll.filter((r) => r.state.done === false)
+
+    const tasksC = Object.entries(ntasks).reduce((acc, [_k, v]) => {
+      const c = v.reduce((acc, t) => {
+        // TODO: Find a faster way to check for empty content
+        const text = convertContentToRawText(t.content).trim()
+        // mog('empty todo check', { text, nodeid, todo })
+        if (text === '') {
+          return acc
+        }
+        if (t.content === defaultContent.content) return acc
+        if (t.metadata.status !== TodoStatus.completed) {
+          acc += 1
+        }
+        return acc
+      }, 0)
+      return acc + c
+    }, 0)
+
+    mog('reminderCounds', { remindersAll, reminders })
+
+    return {
+      notes: links.length,
+      archive: archive.length,
+      reminders: reminders.length,
+      snippets: snippets.length,
+      tasks: tasksC
+    }
   }
 
   const getLinks = (nodeid: string): NodeLink[] => {
@@ -139,6 +195,7 @@ export const useLinks = () => {
 
   return {
     getAllLinks,
+    getLinkCount,
     getLinks,
     getBacklinks,
     updateLinksFromContent,

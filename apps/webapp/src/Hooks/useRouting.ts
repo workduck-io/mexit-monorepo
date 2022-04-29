@@ -6,13 +6,14 @@ export const ROUTE_PATHS = {
   auth: '/auth',
   login: '/auth/login',
   register: '/auth/register',
-  //   archive: '/archive',
+  archive: '/archive',
+  tasks: '/tasks',
+  reminders: '/reminders',
   tag: '/tag', // * /tag/:tag
   editor: '/editor',
   node: '/editor', // * /node/:nodeid
   search: '/search',
   settings: '/settings',
-  //   tasks: '/tasks',
   //   integrations: '/integrations',
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid

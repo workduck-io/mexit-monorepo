@@ -1,4 +1,5 @@
 export * from './Components/Icons'
+export * from './Components/Link'
 export * from './Components/Notification'
 export * from './Components/ToggleButton'
 export * from './Components/Tooltips'

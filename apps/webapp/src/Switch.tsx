@@ -20,7 +20,6 @@ import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
-import Navbar from './Components/Navbar'
 import config from './config'
 import { Loading } from '@mexit/shared'
 import toast from 'react-hot-toast'
@@ -29,6 +28,8 @@ import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { ForgotPassword } from './Views/ForgotPassword'
 import { useEditorBuffer } from './Hooks/useEditorBuffer'
 import useBlockStore from './Stores/useBlockStore'
+import Tasks from './Views/Tasks'
+import Archive from './Views/Archive'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -168,7 +169,6 @@ const SettingsRoutes = () => {
         path=""
         element={
           <ProtectedRoute>
-            <Navbar />
             <Settings />
           </ProtectedRoute>
         }
@@ -220,6 +220,8 @@ export const Switch = () => {
         <Route index element={<></>} />
         <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
+        <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
+        <Route path={ROUTE_PATHS.archive} element={<Archive />} />
       </Route>
     </Routes>
   )

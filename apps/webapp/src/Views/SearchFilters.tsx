@@ -14,7 +14,7 @@ import { startCase } from 'lodash'
 import { Icon } from '@iconify/react'
 
 interface SearchFiltersProps<Item> {
-  result: Item[]
+  result?: any
   filters: SearchFilter<Item>[]
   currentFilters: SearchFilter<Item>[]
   addCurrentFilter: (filter: SearchFilter<Item>) => void
