@@ -1300,6 +1300,13 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
+"@iconify/icons-clarity@^1.1.2":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-clarity/-/icons-clarity-1.2.4.tgz#07bfa551168e6ae096940e6b4213e1154782e82f"
+  integrity sha512-gkVGJbXznAluPNl0ST7jenriyIVZ0jg+hJ/cTeAXXfojq5ruhg7Uuq2z9cLD645LZFuIE8qH15D3G1l2ZgHqUw==
+  dependencies:
+    "@iconify/types" "^1.0.12"
+
 "@iconify/icons-codicon@^1.1.15":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@iconify/icons-codicon/-/icons-codicon-1.2.6.tgz#6079cc2d66c7328f2f124207bc686a08cbdc5ace"

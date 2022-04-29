@@ -29,6 +29,7 @@ import { ForgotPassword } from './Views/ForgotPassword'
 import { useEditorBuffer } from './Hooks/useEditorBuffer'
 import useBlockStore from './Stores/useBlockStore'
 import Tasks from './Views/Tasks'
+import Archive from './Views/Archive'
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -220,6 +221,7 @@ export const Switch = () => {
         <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         <Route path={ROUTE_PATHS.search} element={<Search />} />
         <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
+        <Route path={ROUTE_PATHS.archive} element={<Archive />} />
       </Route>
     </Routes>
   )
