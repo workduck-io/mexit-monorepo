@@ -10,6 +10,8 @@ import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
 import { MediaEmbedElement, TableWrapper, useEditorChange } from '@mexit/shared'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
+import { ELEMENT_TODO_LI } from '@mexit/core'
+import Todo from '../Todo'
 
 const EditorWrapper = styled.div`
   flex: 1;
@@ -82,6 +84,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         }
       }
     },
+    // TODO: fix the value of ilink, it should be nodeId rather than the path
     onChangeConfig: {
       ilink: {
         cbKey: ComboboxKey.ILINK,
@@ -132,7 +135,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           [ELEMENT_ILINK]: ILinkElement,
           [ELEMENT_TAG]: TagWrapper,
           [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
-          [ELEMENT_TABLE]: TableWrapper
+          [ELEMENT_TABLE]: TableWrapper,
+          [ELEMENT_TODO_LI]: Todo
         }}
         meta={{
           path: nodePath

@@ -22,7 +22,7 @@ interface TodoProps {
   showDelete?: boolean
 }
 
-const Todo = ({ parentNodeId, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
+export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
 
@@ -100,5 +100,3 @@ const Todo = ({ parentNodeId, todoid, children, readOnly, oid, controls, showDel
     </TodoContainer>
   )
 }
-
-export default Todo

@@ -18,6 +18,7 @@ import useContentStore from '../../../Stores/useContentStore'
 import { useLinks } from '../../../Hooks/useLinks'
 import { TagsRelatedTiny } from '../TagsRelated'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
+import { getNameFromPath } from '@mexit/shared'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -104,8 +105,7 @@ const EditorPreview = ({
                 {ilink?.path && (
                   <EditorPreviewNoteName onClick={onClickNavigate}>
                     <Icon icon={ilink?.icon ?? fileList2Line} />
-                    {/* TODO: uncomment this when rebasing with sidebar PR */}
-                    {/* {getNameFromPath(ilink.path)} */}
+                    {getNameFromPath(ilink.path)}
                   </EditorPreviewNoteName>
                 )}
                 <TagsRelatedTiny nodeid={nodeid} />

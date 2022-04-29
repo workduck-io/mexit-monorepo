@@ -22,7 +22,8 @@ import { Title } from '../Style/Elements'
 import SearchFilters from './SearchFilters'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
 import { ShortcutToken, ShortcutTokens, StyledTasksKanban, TaskCard, TaskColumnHeader, TaskHeader } from '../Style/Todo'
-import Todo from '../Components/Todo/Todo'
+import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
+import { TodoBase } from '../Components/Todo/Todo'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
@@ -39,6 +40,8 @@ const Tasks = () => {
   const { push } = useNavigation()
 
   const todos = useMemo(() => Object.entries(nodesTodo), [nodesTodo])
+
+  console.log('todos', nodesTodo)
 
   const {
     getTodoBoard,
@@ -294,7 +297,8 @@ const Tasks = () => {
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     const pC = getPureContent(todo)
-    // mog('RenderTodo', { id, todo, dragging })
+    mog('RenderTodo', { id, todo, dragging })
+
     return (
       <TaskCard
         ref={selectedCard && id === selectedCard.id ? selectedRef : null}
@@ -305,19 +309,19 @@ const Tasks = () => {
           onDoubleClick(event, todo.nodeid)
         }}
       >
-        <Todo
+        <TodoBase
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
           readOnly
           parentNodeId={todo.nodeid}
         >
-          {/* <EditorPreviewRenderer
+          <EditorPreviewRenderer
             noStyle
             content={pC}
             editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-          /> */}
-        </Todo>
+          />
+        </TodoBase>
       </TaskCard>
     )
   }

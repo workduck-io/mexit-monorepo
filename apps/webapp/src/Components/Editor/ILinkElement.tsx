@@ -118,6 +118,8 @@ export const ILinkElement = ({ attributes, children, element }: ILinkElementProp
   const content = block ? [block] : undefined
   const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
 
+  console.log({ isArchived, path, element })
+
   return (
     <SILinkRoot
       {...attributes}
@@ -146,7 +148,7 @@ export const ILinkElement = ({ attributes, children, element }: ILinkElementProp
             <span className="ILink_decoration ILink_decoration_left">[[</span>
             <span className="ILink_decoration ILink_decoration_value">
               {' '}
-              {!content ? path : `${path} : ${element.blockValue}`}{' '}
+              {!content ? path : `${path} : ${element.blockValue}`} {element.value}
             </span>
             <span className="ILink_decoration ILink_decoration_right">]]</span>
           </SILink>
