@@ -8,7 +8,7 @@ export interface FocusMode {
 export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'
 
 interface LayoutState {
-  sidebar: { visible: boolean; width: number }
+  sidebar: { expanded: boolean }
   infobar: { visible: boolean; mode: InfobarMode }
   focusMode: FocusMode
   toggleSidebar: () => void
@@ -16,7 +16,6 @@ interface LayoutState {
   setFocusMode: (focusMode: FocusMode) => void
   hoverFocusMode: () => void
   blurFocusMode: () => void
-  setSidebarWidth: (width: number) => void
   toggleInfobar: () => void
   setInfobarMode: (mode: InfobarMode) => void
   showInfobar: () => void
@@ -33,11 +32,10 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
 
   // Sidebar
   sidebar: {
-    width: 300,
-    visible: true
+    expanded: true
   },
-  toggleSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, visible: !state.sidebar.visible } })),
-  setSidebarWidth: (width) => set((state) => ({ sidebar: { ...state.sidebar, width } })),
+  toggleSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, expanded: !state.sidebar.expanded } })),
+
   // Infobar
   infobar: {
     visible: true,

@@ -1,48 +1,36 @@
-import archiveLine from '@iconify-icons/ri/archive-line'
-import editLine from '@iconify-icons/ri/edit-line'
-import refreshFill from '@iconify-icons/ri/refresh-fill'
-import shareLine from '@iconify-icons/ri/share-line'
+import archiveLine from '@iconify/icons-ri/archive-line'
+import editLine from '@iconify/icons-ri/edit-line'
+import refreshFill from '@iconify/icons-ri/refresh-fill'
+import shareLine from '@iconify/icons-ri/share-line'
 import { Icon } from '@iconify/react'
+import { isReserved } from '@mexit/core'
 import React from 'react'
-import { Item, ItemParams, Separator, useContextMenu } from 'react-contexify'
+import { Item, ItemParams, Separator } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
-
-import { StyledMenu } from '../../Style/Menu'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import { TreeNode } from '@mexit/shared'
-import Tree from './Tree'
+import { StyledMenu } from "../../Style/Menu"
 import { useDeleteStore } from '../Refactor/DeleteModal'
-
-interface TreeProps {
-  tree: TreeNode[]
-}
 
 interface ItemProps {
   id: string
+  path: string
+  onDisplayMenu: (nodeid: string) => void
 }
 
-const MENU_ID = 'Tree-Menu'
+export const MENU_ID = 'Tree-Menu'
 
-export const TreeWithContextMenu = ({ tree }: TreeProps) => {
+export const TreeContextMenu = () => {
   const openRenameModal = useRenameStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
 
-  const { show } = useContextMenu({
-    id: MENU_ID
-  })
-
-  function displayMenu({ event, node }: any) {
-    show(event, { props: { id: node.id } })
-  }
-
   function handleItemClick({ event, props: p, data, triggerEvent }: ItemParams<ItemProps, any>) {
-    // console.log({ event, props, data, triggerEvent })
+    // mog('handleItemClick', { event, p, data, triggerEvent })
     switch (event.currentTarget.id) {
       case 'rename':
-        openRenameModal(p.id)
+        openRenameModal(p.path)
         break
       case 'archive':
-        openDeleteModal(p.id)
+        openDeleteModal(p.path)
         break
       case 'sync':
         break
@@ -53,14 +41,12 @@ export const TreeWithContextMenu = ({ tree }: TreeProps) => {
 
   return (
     <>
-      <Tree tree={tree} displayMenu={displayMenu} />
-
       <StyledMenu id={MENU_ID}>
-        <Item id="rename" onClick={handleItemClick}>
+        <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
           <Icon icon={editLine} />
           Rename
         </Item>
-        <Item id="archive" onClick={handleItemClick}>
+        <Item disabled={(args) => isReserved(args.props.path)} id="archive" onClick={handleItemClick}>
           <Icon icon={archiveLine} />
           Archive
         </Item>

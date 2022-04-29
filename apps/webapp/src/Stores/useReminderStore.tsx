@@ -1,7 +1,6 @@
-import create from "zustand"
+import create from 'zustand'
 
-import { mog, Reminder, ReminderState } from "@mexit/core"
-
+import { mog, Reminder, ReminderState } from '@mexit/core'
 
 interface ArmedReminder {
   reminderId: string
@@ -16,6 +15,7 @@ interface ReminderStoreState {
   updateReminder(newReminder: Reminder): void
   updateReminderState: (id: string, rstate: ReminderState) => void
   clearReminders(): void
+  getNodeReminderGroup(): Record<string, Reminder[]>
 
   // To store the currently aremd ie:"timeout set" reminders
   armedReminders: Array<ArmedReminder>
@@ -53,6 +53,20 @@ export const useReminderStore = create<ReminderStoreState>((set, get) => ({
     const oldRem = get().reminders.find((reminder) => reminder.id === id)
     const newRem = { ...oldRem, state: { ...oldRem.state, done: false, snooze: true }, time }
     get().updateReminder(newRem)
+  },
+
+  getNodeReminderGroup: () => {
+    const reminders = get().reminders.filter((reminder) => reminder.state.done === false)
+    const groups: Record<string, Reminder[]> = {}
+
+    reminders.forEach((reminder) => {
+      if (!groups[reminder.nodeid]) {
+        groups[reminder.nodeid] = [reminder]
+      } else {
+        groups[reminder.nodeid] = [...groups[reminder.nodeid], reminder]
+      }
+    })
+    return groups
   },
 
   armedReminders: [],

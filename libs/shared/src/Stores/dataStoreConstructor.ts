@@ -10,8 +10,8 @@ import {
   Tag,
   typeInvert
 } from '@mexit/core'
-import { getAllParentIds, getNodeIcon, generateTree } from '../Utils/treeUtils'
 import { nanoid } from 'nanoid'
+import { getAllParentIds, getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
   id: nanoid(),

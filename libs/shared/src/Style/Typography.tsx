@@ -29,3 +29,9 @@ export const Note = styled.p`
   margin: ${({ theme }) => theme.spacing.small} 0;
   color: ${({ theme }) => theme.colors.text.fade};
 `
+export const Heading = styled.div`
+  font-size: 1.1rem;
+  margin: 5px 0 5px;
+  font-weight: lighter;
+  color: ${({ theme }) => theme.colors.text.fade};
+`

@@ -6,9 +6,10 @@ import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 import useThemeStore from './Stores/useThemeStore'
 import { defaultThemes } from '@mexit/shared'
-import Modals from './Views/Modals'
+import Modals from './Components/Modals'
 import Init from './Components/Init'
 import { Notification } from '@mexit/shared'
+import Main from './Components/Main'
 
 //----------Styled Components------------
 
@@ -25,13 +26,14 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
-        <AppContainer>
-          <Init />
+        <Init />
+
+        <Main>
           <GlobalStyle />
           <Modals />
           <Switch />
           <Notification />
-        </AppContainer>
+        </Main>
       </ThemeProvider>
     </Router>
   )
