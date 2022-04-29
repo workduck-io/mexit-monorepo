@@ -5,7 +5,7 @@ import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, createPlateUI } from '@udecode/plat
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
-import ILinkWrapper from './ILinkWrapper'
+import { ILinkElement } from './ILinkElement'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
 import { MediaEmbedElement, TableWrapper, useEditorChange } from '@mexit/shared'
@@ -27,7 +27,7 @@ interface EditorProps {
   autoFocus?: boolean
 }
 
-const commands = [
+export const commands = [
   {
     command: 'table',
     text: 'Insert Table',
@@ -129,7 +129,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       <MexEditor
         comboboxConfig={comboboxConfig}
         components={{
-          [ELEMENT_ILINK]: ILinkWrapper,
+          [ELEMENT_ILINK]: ILinkElement,
           [ELEMENT_TAG]: TagWrapper,
           [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
           [ELEMENT_TABLE]: TableWrapper

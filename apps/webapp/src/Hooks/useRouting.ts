@@ -1,4 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export const ROUTE_PATHS = {
   home: '/',
@@ -30,15 +31,16 @@ export enum NavigationType {
 export const useRouting = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const params = useParams()
 
-  const goTo = (basePath: string, type: NavigationType, id?: string) => {
+  const goTo = (basePath: string, type: NavigationType, id?: string, query?: Record<string, any>) => {
     const path = id ? `${basePath}/${id}` : basePath
-    const state = { from: location.pathname }
+    const state = { from: location.pathname, ...query }
 
     if (type === NavigationType.push) navigate(path, { state })
 
     if (type === NavigationType.replace) navigate(path, { replace: true, state })
   }
 
-  return { goTo }
+  return { goTo, location, params }
 }
