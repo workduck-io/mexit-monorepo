@@ -68,6 +68,13 @@ export const useLinks = () => {
       nodeid: nodeid
     })
 
+    // set({
+    //   linkCache: {
+    //     ...get().linkCache,
+    //     [nodeid]: nodeLinks,
+    //     [ilink.nodeid]: secondNodeLinks
+    //   }
+    // })
     return true
   }
 
@@ -85,7 +92,7 @@ export const useLinks = () => {
     if (content) {
       const links: CachedILink[] = getLinksFromContent(content).map((l) => ({
         type: 'to',
-        nodeid: getNodeidFromPath(l)
+        nodeid: l
       }))
 
       let currentLinks = linkCache[nodeid]
