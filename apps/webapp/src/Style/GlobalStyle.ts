@@ -4,8 +4,13 @@ import { createGlobalStyle, css } from 'styled-components'
 import { ThinScrollbar } from './Helpers'
 import { EditorBalloonStyles, TippyBalloonStyles } from '@mexit/shared'
 
+import { ModalStyles } from './Refactor'
+
 const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization
+
+  /* Styles for modals */
+  ${ModalStyles}
 
   input:focus-visible {
     outline: ${({ theme }) => theme.colors.primary} solid 1px;
