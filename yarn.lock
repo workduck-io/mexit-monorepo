@@ -9,6 +9,13 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
+"@asseinfo/react-kanban@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@asseinfo/react-kanban/-/react-kanban-2.2.0.tgz#56b703e9e6d1722a4b2edee321c928fd23749a4d"
+  integrity sha512-/gCigrNXRHeP9VCo8RipTOrA0vAPRIOThJhR4ibVxe6BLkaWFUEuJ1RMT4fODpRRsE3XsdrfVGKkfpRBKgvxXg==
+  dependencies:
+    react-beautiful-dnd "^13.0.0"
+
 "@atlaskit/tree@^8.6.0":
   version "8.6.1"
   resolved "https://registry.yarnpkg.com/@atlaskit/tree/-/tree-8.6.1.tgz#92c76f7797ee5241aecb76d1ae79c24b727e3d37"
@@ -1293,6 +1300,13 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
+"@iconify/icons-codicon@^1.1.15":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-codicon/-/icons-codicon-1.2.6.tgz#6079cc2d66c7328f2f124207bc686a08cbdc5ace"
+  integrity sha512-p7rqxRgeL8OHr6tbax7ujoVtd7ZijkIMAGY5SaBsGo3GmsZ/XiRfabPlh1E3YyAkQa27ApbntujmFejkkDNLpg==
+  dependencies:
+    "@iconify/types" "^1.1.0"
+
 "@iconify/icons-fluent@^1.1.33":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@iconify/icons-fluent/-/icons-fluent-1.2.6.tgz#965bd67eae0283f9683c5105f62c466cc29f5b8d"
@@ -1330,6 +1344,11 @@
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.0.12.tgz#839f1f784b7030b94482d51996570f4dbd7d6796"
   integrity sha512-6er6wSGF3hgc1JEZqiGpg21CTCjHBYOUwqLmb2Idzkjiw6ogalGP0ZMLVutCzah+0WB4yP+Zd2oVPN8jvJ+Ftg==
+
+"@iconify/types@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@iconify/types/-/types-1.1.0.tgz#dc15fc988b1b3fd558dd140a24ede7e0aac11280"
+  integrity sha512-Jh0llaK2LRXQoYsorIH8maClebsnzTcve+7U3rQUSnC11X4jtPnFuyatqFLvMxZ8MLG8dB4zfHsbPfuvxluONw==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
@@ -8589,7 +8608,7 @@ memfs@^3.1.2, memfs@^3.4.1:
   dependencies:
     fs-monkey "1.0.3"
 
-memoize-one@^5.0.0, memoize-one@^5.0.4:
+memoize-one@^5.0.0, memoize-one@^5.0.4, memoize-one@^5.1.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.2.1.tgz#8337aa3c4335581839ec01c3d594090cebe8f00e"
   integrity sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==
@@ -9762,7 +9781,7 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-raf-schd@^4.0.0:
+raf-schd@^4.0.0, raf-schd@^4.0.2:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-4.0.3.tgz#5d6c34ef46f8b2a0e880a8fcdb743efc5bfdbc1a"
   integrity sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ==
@@ -9879,6 +9898,19 @@ react-beautiful-dnd-next@11.0.5:
     tiny-invariant "^1.0.4"
     use-memo-one "^1.1.0"
 
+react-beautiful-dnd@^13.0.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-13.1.0.tgz#ec97c81093593526454b0de69852ae433783844d"
+  integrity sha512-aGvblPZTJowOWUNiwd6tNfEpgkX5OxmpqxHKNW/4VmvZTNTbeiq7bA3bn5T+QSF2uibXB0D1DmJsb1aC/+3cUA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+    css-box-model "^1.2.0"
+    memoize-one "^5.1.1"
+    raf-schd "^4.0.2"
+    react-redux "^7.2.0"
+    redux "^4.0.4"
+    use-memo-one "^1.1.1"
+
 react-colorful@^5.5.1:
   version "5.5.1"
   resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.5.1.tgz#29d9c4e496f2ca784dd2bb5053a3a4340cfaf784"
@@ -9989,7 +10021,7 @@ react-popper@2.2.5, react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-redux@^7.0.3:
+react-redux@^7.0.3, react-redux@^7.2.0:
   version "7.2.8"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.8.tgz#a894068315e65de5b1b68899f9c6ee0923dd28de"
   integrity sha512-6+uDjhs3PSIclqoCk0kd6iX74gzrGc3W5zcAjbrFgEdIjRSQObdIwfx80unTkVUYvbQ95Y8Av3OvFHq1w5EOUw==
@@ -10153,7 +10185,7 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-redux@^4.0.0, redux@^4.0.1:
+redux@^4.0.0, redux@^4.0.1, redux@^4.0.4:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.0.tgz#46f10d6e29b6666df758780437651eeb2b969f13"
   integrity sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==
@@ -11659,7 +11691,7 @@ use-latest@^1.0.0:
   dependencies:
     use-isomorphic-layout-effect "^1.0.0"
 
-use-memo-one@^1.1.0:
+use-memo-one@^1.1.0, use-memo-one@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.2.tgz#0c8203a329f76e040047a35a1197defe342fab20"
   integrity sha512-u2qFKtxLsia/r8qG0ZKkbytbztzRb317XCkT7yP8wxL0tZ/CzK2G+WWie5vWvpyeP7+YoPIwbJoIHJ4Ba4k0oQ==

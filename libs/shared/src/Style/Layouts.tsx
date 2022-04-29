@@ -25,6 +25,12 @@ export const MexIcon = styled(Icon)<{ margin?: string; noHover?: boolean }>`
     `}
 `
 
+export const Center = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export const centeredCss = css`
   display: flex;
   align-items: center;
