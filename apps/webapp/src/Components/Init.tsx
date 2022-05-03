@@ -41,7 +41,7 @@ const Init: React.FC = () => {
           return d
         })
         .then((d) => {
-          const index = initSearchIndex(d, null)
+          initSearchIndex(d)
           return d
         })
         .then((d) => {

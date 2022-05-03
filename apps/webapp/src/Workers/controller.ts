@@ -41,12 +41,12 @@ export const startSearchWorker = async () => {
   if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
 }
 
-export const initSearchIndex = async (fileData: PersistentData, indexData: Record<idxKey, any>) => {
+export const initSearchIndex = async (fileData: PersistentData) => {
   try {
     if (!searchWorker) {
       console.log('Creating new search worker')
       await startSearchWorker()
-      await searchWorker.init(fileData, indexData)
+      await searchWorker.init(fileData)
     } else {
       console.log('Found existing search worker, reusing')
     }

@@ -27,7 +27,7 @@ import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } fr
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
-import { generateSnippetId, mog, parseBlock } from '@mexit/core'
+import { generateSnippetId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
 
 export type SnippetsProps = {
   title?: string
@@ -46,13 +46,14 @@ const Snippets = () => {
     text: parseBlock(snippet.content)
   }))
 
-  const onSearch = async (newSearchTerm: string) => {
-    const res = await queryIndex('snippet', newSearchTerm)
-    mog('search', { res })
-    // @ts-ignore
+  const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
+    const res = await queryIndex(['template', 'snippet'], newSearchTerm)
+
     if (newSearchTerm === '' && res.length === 0) {
       return initialSnippets
     }
+
+    mog("Got search results: ", { res })
     return res
   }
 
@@ -184,7 +185,6 @@ const Snippets = () => {
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
-        // @ts-ignore
         onSearch={onSearch}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}

@@ -24,7 +24,7 @@ export const integrationURLs = {
   getAllTemplates: (workspaceId: string) => `${BASE_INTEGRATION_URL}/workspace/${workspaceId}/templates/all`
 }
 
-export const BASE_API_URL = 'https://qp5qf0k5sg.execute-api.us-east-1.amazonaws.com'
+export const BASE_API_URL = 'https://http-test.workduck.io/mex'
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
