@@ -14,6 +14,13 @@ export const styleSlot = document.createElement('div')
 styleSlot.id = 'style-sheet-target'
 shadowRoot.attachShadow({ mode: 'closed' }).appendChild(styleSlot)
 
+// Adding a stopPropagation here so as to not notify any event listeners on the window
+// Checkout: https://github.com/facebook/react/issues/11387#issuecomment-355258340
+// And this too: https://github.com/facebook/react/issues/24136
+shadowRoot.addEventListener('keydown', (event) => {
+  event.stopPropagation()
+})
+
 const root = document.createElement('div')
 root.id = 'chotu-container'
 
