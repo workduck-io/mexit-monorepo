@@ -5,7 +5,6 @@ import { useAuth } from '@workduck-io/dwindle'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
-import Analytics from '../Utils/analytics'
 
 import config from '../config'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
@@ -13,8 +12,8 @@ import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
-import { hashPasswordWithWorker } from '../Workers/controller'
 import { useAnalysis } from '../Stores/useAnalysis'
+import { initSearchIndex } from '../Workers/controller'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -38,6 +37,10 @@ const Init: React.FC = () => {
         .then((d) => {
           mog('Initializaing With Data', { d })
           init(d)
+          return d
+        })
+        .then((d) => {
+          const index = initSearchIndex(d, null)
           return d
         })
         .then((d) => {

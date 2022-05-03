@@ -25,7 +25,6 @@ export const indexedFields = ['title', 'text']
 export const storedFields = ['text', 'data']
 
 export const createSearchIndex = (fileData: PersistentData, data: CreateSearchIndexData) => {
-  // TODO: Find a way to delay the conversion until needed i.e. if index is not present
   const { result: initList, nodeBlockMap: nbMap } = convertDataToIndexable(fileData)
 
   const idx = Object.entries(indexNames).reduce((p, c) => {
