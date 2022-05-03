@@ -40,6 +40,7 @@ export const startSearchWorker = async () => {
   console.log('startSearchWorkerService')
   if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
 }
+
 export const initSearchIndex = async (fileData: PersistentData, indexData: Record<idxKey, any>) => {
   try {
     if (!searchWorker) {
@@ -81,7 +82,7 @@ export const removeDoc = async (key: idxKey, id: string) => {
   }
 }
 
-export const searchIndex = async (key: idxKey, query: string, tags?: Array<string>) => {
+export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
@@ -101,7 +102,7 @@ export const dumpIndexDisk = async (location: string) => {
   }
 }
 
-export const searchIndexByNodeId = async (key: idxKey, nodeId: string, query: string) => {
+export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
