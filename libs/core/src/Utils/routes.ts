@@ -83,6 +83,7 @@ export const apiURLs = {
   fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
   getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
   createNode: `${MEXIT_BACKEND_URL_BASE}/node`,
+  bulkCreateNodes: `${MEXIT_BACKEND_URL_BASE}/node/bulkCreate`,
   makeNodePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
   makeNodePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,
