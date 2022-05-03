@@ -40,26 +40,24 @@ export const TreeContextMenu = () => {
   }
 
   return (
-    <>
-      <StyledMenu id={MENU_ID}>
-        <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
-          <Icon icon={editLine} />
-          Rename
-        </Item>
-        <Item disabled={(args) => isReserved(args.props.path)} id="archive" onClick={handleItemClick}>
-          <Icon icon={archiveLine} />
-          Archive
-        </Item>
-        <Separator />
-        <Item id="sync" onClick={handleItemClick}>
-          <Icon icon={refreshFill} />
-          Sync
-        </Item>
-        <Item id="share" onClick={handleItemClick}>
-          <Icon icon={shareLine} />
-          Share
-        </Item>
-      </StyledMenu>
-    </>
+    <StyledMenu id={MENU_ID}>
+      <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
+        <Icon icon={editLine} />
+        Rename
+      </Item>
+      <Item disabled={(args) => isReserved(args.props.path)} id="archive" onClick={handleItemClick}>
+        <Icon icon={archiveLine} />
+        Archive
+      </Item>
+      <Separator />
+      <Item id="sync" onClick={handleItemClick}>
+        <Icon icon={refreshFill} />
+        Sync
+      </Item>
+      <Item id="share" onClick={handleItemClick}>
+        <Icon icon={shareLine} />
+        Share
+      </Item>
+    </StyledMenu>
   )
 }

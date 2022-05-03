@@ -42,6 +42,7 @@ import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
 import { getUntitledDraftKey } from '../../Utils/getNewBlockData'
+import { useInternalLinks } from '../../Data/useInternalLinks'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -122,11 +123,23 @@ const Nav = ({ links }: NavProps) => {
     return () => {
       unsubscribe()
     }
-  }, [shortcuts])
+  }, [shortcuts]) // eslint-disable-line
 
   const { springProps } = useSidebarTransition()
 
   const archiveCount = getLinkCount().archive
+
+  const { refreshILinks } = useInternalLinks()
+
+  // useEffect(() => {
+  //   refreshILinks()
+  //   const interval = setInterval(() => {
+  //     refreshILinks()
+  //   }, 3600000)
+  //   return () => clearInterval(interval)
+  // }, []) // eslint-disable-line
+
+
 
   return (
     <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>

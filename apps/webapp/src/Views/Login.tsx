@@ -1,8 +1,11 @@
-import mixpanel from 'mixpanel-browser'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
+
+import { LoginFormData } from '@mexit/core'
+import { CenteredColumn } from '@mexit/shared'
+
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { InputFormError } from '../Components/Input'
 import { useAuthentication } from '../Stores/useAuth'
@@ -10,10 +13,8 @@ import { BackCard, FooterCard } from '../Style/Card'
 import { Title } from '../Style/Elements'
 import { ButtonFields } from '../Style/Form'
 import { AuthForm } from '../Style/Form'
-import { CenteredColumn } from '@mexit/shared'
 import { EMAIL_REG } from '../Utils/constants'
-
-import { LoginFormData } from '@mexit/core'
+import Analytics from '../Utils/analytics'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 export const Login = () => {
@@ -24,7 +25,6 @@ export const Login = () => {
     register,
     formState: { errors, isSubmitting }
   } = useForm<LoginFormData>()
-  const navigate = useNavigate()
 
   const onSubmit = async (data: LoginFormData): Promise<void> => {
     let temp: any
@@ -36,17 +36,17 @@ export const Login = () => {
           setLoginResult('Invalid Username or Password')
         }
         temp = s.data
-        mixpanel.track('Login Successful', {
+        Analytics.track('Login Successful', {
           source: 'Browser Extension'
         })
-        mixpanel.identify(s.data.email)
+        Analytics.identify(s.data.email)
         console.log('Login Success!')
       })
       .catch((e) => {
         toast('An error Occured. Please Try Again Later')
         console.error('Error occured: ', e)
         temp = 'Error Occurred'
-        mixpanel.track('Login Unsuccessful')
+        Analytics.track('Login Unsuccessful')
       })
     setLoginResult(JSON.stringify(temp))
   }
