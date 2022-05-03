@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { mog } from '@mexit/core'
+import { IS_DEV, mog } from '@mexit/core'
 
 import { useAuth } from '@workduck-io/dwindle'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
@@ -14,6 +14,7 @@ import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useAnalysis } from '../Stores/useAnalysis'
 import { initSearchIndex } from '../Workers/controller'
+import Analytics from '../Utils/analytics'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
@@ -61,18 +62,20 @@ const Init: React.FC = () => {
 
   const routingInstrumentation = useRoutingInstrumentation()
   useEffect(() => {
-    const browserTracing = new BrowserTracing({
-      routingInstrumentation
-    })
+    if (!IS_DEV) {
+      const browserTracing = new BrowserTracing({
+        routingInstrumentation
+      })
 
-    SentryInit({
-      dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
-      tracesSampleRate: 1.0,
-      integrations: [browserTracing]
-    })
+      SentryInit({
+        dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
+        tracesSampleRate: 1.0,
+        integrations: [browserTracing]
+      })
+    }
 
-    // if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
-    //   Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
+    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
+      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
   }, [routingInstrumentation])
 
   return null
