@@ -11,12 +11,9 @@ import { useSidebarTransition } from './Transition'
 import Bookmarks from './Bookmarks'
 import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
 import Tree from './Tree'
-import { nanoid } from 'nanoid'
-import { IpcAction } from '@mexit/core'
 import { NavTooltip } from '@mexit/shared'
 import { BookmarksHelp, TreeHelp } from '../../Data/defaultText'
 import { useApi } from '../../Hooks/useApi'
-import { AppType } from '../../Hooks/useInitialize'
 import useLayout from '../../Hooks/useLayout'
 import { useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
@@ -132,7 +129,7 @@ const Nav = ({ links }: NavProps) => {
   const archiveCount = getLinkCount().archive
 
   return (
-    <NavWrapper style={springProps} expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
+    <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
       <NavTooltip singleton={source} />
 
       <NavLogoWrapper>
