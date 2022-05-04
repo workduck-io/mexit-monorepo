@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    height: 100vh;
+    height: 100%;
     width: 100vw;
     display: flex;
     font-family: Inter, sans-serif;

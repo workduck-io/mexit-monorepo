@@ -9,13 +9,15 @@ import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '../Style/Form'
 import { CenteredColumn } from '@mexit/shared'
-import { BackCard } from '../Style/Card'
+import { BackCard, FooterCard } from '../Style/Card'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { Button } from '@mexit/shared'
 import Analytics from '../Utils/analytics'
+import { Link } from 'react-router-dom'
+import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -218,6 +220,9 @@ export const Register = () => {
         )}
         <br />
       </BackCard>
+      <FooterCard>
+        <Link to={ROUTE_PATHS.login}>Login</Link>
+      </FooterCard>
     </CenteredColumn>
   )
 }

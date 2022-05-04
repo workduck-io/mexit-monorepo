@@ -155,6 +155,7 @@ export const SearchViewContainer = styled.div`
 export const SearchContainer = styled.div`
   margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
   position: relative;
+  flex: 1;
 `
 
 export const NoSearchResults = styled.div`

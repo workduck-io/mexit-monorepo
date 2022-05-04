@@ -5,7 +5,6 @@ import EditorView from './Views/EditorView'
 import { useAuthStore, useAuthentication } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
-import Footer from './Components/Footer'
 import ContentEditor from './Components/Editor/ContentEditor'
 import Chotu from './Components/Chotu'
 import Themes from './Components/Themes'
@@ -23,13 +22,23 @@ import OAuthDesktop from './Components/OAuthDesktop'
 import config from './config'
 import { Loading } from '@mexit/shared'
 import toast from 'react-hot-toast'
-import { useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { ForgotPassword } from './Views/ForgotPassword'
 import { useEditorBuffer } from './Hooks/useEditorBuffer'
 import useBlockStore from './Stores/useBlockStore'
 import Tasks from './Views/Tasks'
 import Archive from './Views/Archive'
+import { animated } from 'react-spring'
+import { useSidebarTransition } from './Components/Sidebar/Transition'
+
+export const SwitchWrapper = styled(animated.div)<{ isAuth?: boolean }>`
+  position: fixed;
+  width: ${({ theme, isAuth }) =>
+    !isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`};
+  overflow-x: hidden;
+  overflow-y: auto;
+`
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
@@ -107,7 +116,6 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <Login />
-            <Footer />
           </AuthRoute>
         }
       />
@@ -117,7 +125,6 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <ForgotPassword />
-            <Footer />
           </AuthRoute>
         }
       />
@@ -127,7 +134,6 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <Register />
-            <Footer />
           </AuthRoute>
         }
       />
@@ -199,31 +205,50 @@ const SnippetRoutes = () => {
 }
 
 export const Switch = () => {
-  return (
-    <Routes>
-      <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
-      <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
-      <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
-      <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
-      <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
-      <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
-      <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
+  const location = useLocation()
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
-      <Route
-        path={ROUTE_PATHS.home}
-        element={
-          <ProtectedRoute>
-            <EditorView />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<></>} />
-        <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
-        <Route path={ROUTE_PATHS.search} element={<Search />} />
-        <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
-        <Route path={ROUTE_PATHS.archive} element={<Archive />} />
-      </Route>
-    </Routes>
+  const { saveAndClearBuffer } = useEditorBuffer()
+  const authenticated = useAuthStore((s) => s.authenticated)
+
+  useEffect(() => {
+    // ? Do we need to save data locally on every route change?
+    if (authenticated) {
+      if (isBlockMode) setIsBlockMode(false)
+      saveAndClearBuffer()
+    }
+  }, [location])
+
+  const { switchWrapperSpringProps } = useSidebarTransition()
+
+  return (
+    <SwitchWrapper style={switchWrapperSpringProps} isAuth={authenticated}>
+      <Routes>
+        <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
+        <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
+        <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
+        <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
+        <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
+        <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
+        <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
+
+        <Route
+          path={ROUTE_PATHS.home}
+          element={
+            <ProtectedRoute>
+              <EditorView />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<></>} />
+          <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
+          <Route path={ROUTE_PATHS.search} element={<Search />} />
+          <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
+          <Route path={ROUTE_PATHS.archive} element={<Archive />} />
+        </Route>
+      </Routes>
+    </SwitchWrapper>
   )
 }
 

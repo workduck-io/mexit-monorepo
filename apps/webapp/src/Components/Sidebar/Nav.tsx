@@ -63,6 +63,27 @@ const Nav = ({ links }: NavProps) => {
 
   const [source, target] = useSingleton()
 
+  const setILinks = useDataStore((store) => store.setIlinks)
+  const { getILinks } = useApi()
+
+  useEffect(() => {
+    RefreshILinks()
+    const interval = setInterval(() => {
+      RefreshILinks()
+    }, 3600000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const RefreshILinks = () => {
+    getILinks()
+      .then((response) => {
+        setILinks(response)
+      })
+      .catch((err) => {
+        console.error(err.message)
+      })
+  }
+
   const createNewNode = () => {
     const newNodeId = getUntitledDraftKey()
     const node = addILink({ ilink: newNodeId, showAlert: false })
