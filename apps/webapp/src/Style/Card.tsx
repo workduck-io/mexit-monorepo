@@ -33,5 +33,6 @@ export const FooterCard = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.large};
   border: 1px solid ${({ theme }) => theme.colors.gray[8]};
   outline: none;
+  margin: 1rem 0;
   padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.medium}`};
 `
