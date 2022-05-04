@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { useAuth } from '@workduck-io/dwindle'
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { Button, CenteredColumn } from '@mexit/shared'
-import { BackCard } from '../Style/Card'
+import { BackCard, FooterCard } from '../Style/Card'
 import { Title } from '../Style/Elements'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 import { LoadingButton } from '../Components/Buttons/Buttons'
@@ -12,6 +12,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
 import { AuthForm, ButtonFields } from '../Style/Form'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
+import { Link } from 'react-router-dom'
 
 export const ForgotPassword = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -156,6 +157,9 @@ export const ForgotPassword = () => {
         )}
         <br />
       </BackCard>
+      <FooterCard>
+        <Link to={ROUTE_PATHS.login}>Login</Link>
+      </FooterCard>
     </CenteredColumn>
   )
 }

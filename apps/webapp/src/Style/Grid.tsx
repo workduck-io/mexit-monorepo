@@ -20,14 +20,10 @@ export const GridWrapper = styled(animated.div)<{ grid?: string }>`
   width: 100vw;
   overflow: auto;
   display: grid;
+
   ${({ grid }) =>
     grid &&
     css`
-      grid-template-columns: ${({ theme }) => theme.width.nav}px 2fr auto;
-    `}/* grid-gap: ${({ theme }) => theme.spacing.tiny}; */
-
-  /* Columns conditions
-    - Small - no graph
-    - large - graph, no graph
-  */
+      grid-template-columns: 300px 2fr auto;
+    `}
 `

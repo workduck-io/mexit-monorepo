@@ -2,11 +2,11 @@ import mixpanel from 'mixpanel-browser'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { InputFormError } from '../Components/Input'
 import { useAuthentication } from '../Stores/useAuth'
-import { BackCard } from '../Style/Card'
+import { BackCard, FooterCard } from '../Style/Card'
 import { Title } from '../Style/Elements'
 import { ButtonFields } from '../Style/Form'
 import { AuthForm } from '../Style/Form'
@@ -14,6 +14,7 @@ import { CenteredColumn } from '@mexit/shared'
 import { EMAIL_REG } from '../Utils/constants'
 
 import { LoginFormData } from '@mexit/core'
+import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 export const Login = () => {
   const [loginResult, setLoginResult] = useState('')
@@ -94,6 +95,12 @@ export const Login = () => {
           <GoogleLoginButton text={'Login via Google'} />
         </ButtonFields>
       </BackCard>
+      <FooterCard>
+        <Link to={ROUTE_PATHS.forgotpassword}>Forgot Password?</Link>
+      </FooterCard>
+      <FooterCard>
+        <Link to={ROUTE_PATHS.register}>Register</Link>
+      </FooterCard>
     </CenteredColumn>
   )
 }
