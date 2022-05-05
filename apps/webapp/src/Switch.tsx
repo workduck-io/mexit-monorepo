@@ -31,6 +31,7 @@ import Tasks from './Views/Tasks'
 import Archive from './Views/Archive'
 import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
+import DraftView from './Views/DraftView'
 
 export const SwitchWrapper = styled(animated.div) <{ $isAuth?: boolean }>`
   position: fixed;
@@ -228,7 +229,7 @@ export const Switch = () => {
             </ProtectedRoute>
           }
         >
-          <Route index element={<></>} />
+          <Route index element={<DraftView />} />
           <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
