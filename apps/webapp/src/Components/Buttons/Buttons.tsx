@@ -50,12 +50,6 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   URLObject.search = searchParams.toString()
 
   const authURL = URLObject.toString()
-  console.log({ authURL })
-  // const authURL = IS_DEV
-  //   ? 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize?response_type=token&client_id=6pvqt64p0l2kqkk2qafgdh13qe&scope=email openid profile'
-  //   : // TODO: Add the production deployed url of the mexit webapp
-  //     // and register it in the cognito as well
-  //     ''
 
   const openUrl = (url) => {
     window.open(url, '_self')

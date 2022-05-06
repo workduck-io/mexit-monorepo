@@ -1,16 +1,16 @@
 import React from 'react'
-import mixpanel from 'mixpanel-browser'
-
 import { Button } from '@mexit/shared'
+
 import { useAuthentication } from '../Stores/useAuth'
+import Analytics from '../Utils/analytics'
 
 export const Logout = () => {
   const { logout } = useAuthentication()
 
   const onLogout = () => {
     logout()
-    mixpanel.track('Logged Out')
-    mixpanel.reset()
+    Analytics.track('Logged Out')
+    Analytics.reset()
   }
 
   return <Button onClick={onLogout}>Logout</Button>

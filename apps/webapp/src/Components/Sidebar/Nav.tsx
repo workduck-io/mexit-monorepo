@@ -11,12 +11,9 @@ import { useSidebarTransition } from './Transition'
 import Bookmarks from './Bookmarks'
 import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
 import Tree from './Tree'
-import { nanoid } from 'nanoid'
-import { IpcAction } from '@mexit/core'
 import { NavTooltip } from '@mexit/shared'
 import { BookmarksHelp, TreeHelp } from '../../Data/defaultText'
 import { useApi } from '../../Hooks/useApi'
-import { AppType } from '../../Hooks/useInitialize'
 import useLayout from '../../Hooks/useLayout'
 import { useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
@@ -45,6 +42,7 @@ import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
 import { getUntitledDraftKey } from '../../Utils/getNewBlockData'
+import { useInternalLinks } from '../../Data/useInternalLinks'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -125,14 +123,26 @@ const Nav = ({ links }: NavProps) => {
     return () => {
       unsubscribe()
     }
-  }, [shortcuts])
+  }, [shortcuts]) // eslint-disable-line
 
   const { springProps } = useSidebarTransition()
 
   const archiveCount = getLinkCount().archive
 
+  const { refreshILinks } = useInternalLinks()
+
+  // useEffect(() => {
+  //   refreshILinks()
+  //   const interval = setInterval(() => {
+  //     refreshILinks()
+  //   }, 3600000)
+  //   return () => clearInterval(interval)
+  // }, []) // eslint-disable-line
+
+
+
   return (
-    <NavWrapper style={springProps} expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
+    <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
       <NavTooltip singleton={source} />
 
       <NavLogoWrapper>

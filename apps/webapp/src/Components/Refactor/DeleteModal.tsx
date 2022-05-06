@@ -7,7 +7,6 @@ import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
 import tinykeys from 'tinykeys'
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLoad from '../../Hooks/useLoad'
@@ -32,35 +31,32 @@ interface DeleteStoreState {
 }
 
 export const useDeleteStore = create<DeleteStoreState>(
-  persist(
-    (set) => ({
-      open: false,
-      mockRefactored: [],
-      del: undefined,
-      focus: true,
-      openModal: (id) => {
-        if (id) {
-          set({ open: true, del: id })
-        } else {
-          set({
-            open: true
-          })
-        }
-      },
-      closeModal: () => {
+  (set) => ({
+    open: false,
+    mockRefactored: [],
+    del: undefined,
+    focus: true,
+    openModal: (id) => {
+      if (id) {
+        set({ open: true, del: id })
+      } else {
         set({
-          del: undefined,
-          mockRefactored: [],
-          open: false
+          open: true
         })
-      },
-      setFocus: (focus) => set({ focus }),
-      setDel: (del) => set({ del }),
-      setMockRefactored: (mockRefactored) => set({ mockRefactored }),
-      setDelAndRefactored: (del, mockRefactored) => set({ del, mockRefactored })
-    }),
-    { name: 'mexit-archive' }
-  )
+      }
+    },
+    closeModal: () => {
+      set({
+        del: undefined,
+        mockRefactored: [],
+        open: false
+      })
+    },
+    setFocus: (focus) => set({ focus }),
+    setDel: (del) => set({ del }),
+    setMockRefactored: (mockRefactored) => set({ mockRefactored }),
+    setDelAndRefactored: (del, mockRefactored) => set({ del, mockRefactored })
+  })
 )
 
 const Delete = () => {
