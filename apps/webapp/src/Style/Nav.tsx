@@ -157,10 +157,10 @@ export const NavButton = styled.div<{ primary?: boolean }>`
 `
 
 export interface NavWrapperProps extends FocusModeProp {
-  expanded: boolean
+  $expanded: boolean
 }
 
-export const NavWrapper = styled(animated.div)<NavWrapperProps>`
+export const NavWrapper = styled(animated.div) <NavWrapperProps>`
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 10;
@@ -187,8 +187,8 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
 
   ${(props) => focusStyles(props)}
 
-  ${({ expanded }) =>
-    !expanded &&
+  ${({ $expanded }) =>
+    !$expanded &&
     css`
       ${NavTitle} {
         opacity: 0;

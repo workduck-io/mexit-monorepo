@@ -33,8 +33,8 @@ const useLayout = () => {
       onMouseLeave: () => {
         if (focusMode.on) setFocusHover({ on: true, hover: false })
       },
-      focusMode: focusMode.on,
-      focusHover: focusMode.hover
+      $focusMode: focusMode.on,
+      $focusHover: focusMode.hover
     }
   }
   return { toggleFocusMode, setFocusHover, getFocusProps }

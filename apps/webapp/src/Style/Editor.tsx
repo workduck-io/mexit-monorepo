@@ -7,15 +7,15 @@ import { AsyncButton, Button } from '@mexit/shared'
 
 export interface FocusModeProp {
   // Focus mode is on?
-  focusMode?: boolean
+  $focusMode?: boolean
   // Is element Hovered over focus mode?
-  focusHover?: boolean
+  $focusHover?: boolean
 }
 
 
-export const focusStyles = ({ focusMode, focusHover }: FocusModeProp) => {
-  if (focusMode)
-    return focusHover
+export const focusStyles = ({ $focusMode, $focusHover }: FocusModeProp) => {
+  if ($focusMode)
+    return $focusHover
       ? css`
           opacity: 1;
         `

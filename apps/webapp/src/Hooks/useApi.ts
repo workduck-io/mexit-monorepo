@@ -1,6 +1,6 @@
 import { client } from '@workduck-io/dwindle'
 
-import { defaultContent, apiURLs, mog } from '@mexit/core'
+import { defaultContent, apiURLs, mog, SEPARATOR } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { removeNulls, extractMetadata } from '../Utils/content'
@@ -31,9 +31,13 @@ export const useApi = () => {
    * Also updates the incoming data in the store
    */
   const saveNewNodeAPI = async (nodeid: string) => {
+    const path = getPathFromNodeid(nodeid)
     const reqData = {
+      nodePath: {
+        path: path
+      },
       id: nodeid,
-      title: getPathFromNodeid(nodeid),
+      title: path.slice(-1)[0],
       type: 'NodeRequest',
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
@@ -43,7 +47,7 @@ export const useApi = () => {
     setContent(nodeid, defaultContent.content)
 
     const data = await client
-      .post(apiURLs.createNode, reqData, {
+      .post(apiURLs.bulkCreateNodes, reqData, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'

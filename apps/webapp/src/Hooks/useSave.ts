@@ -14,6 +14,7 @@ import useDataStore from '../Stores/useDataStore'
 import { PersistentData } from '../Types/Data'
 import { useIndexedDBData } from './usePersistentData'
 import { getContent } from '../Stores/useEditorStore'
+import { useSearch } from './useSearch'
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)
@@ -27,7 +28,7 @@ export const useDataSaverFromContent = () => {
 
   const { persistData } = useIndexedDBData()
 
-  // const { updateDocument } = useSearch()
+  const { updateDocument } = useSearch()
 
   // By default saves to API use false to not save
   const saveEditorValueAndUpdateStores = async (nodeId: string, editorValue: any[], saveApi?: boolean) => {
@@ -40,7 +41,7 @@ export const useDataSaverFromContent = () => {
       updateTagsFromContent(nodeId, editorValue)
       updateNodeTodos(nodeId, getTodosFromContent(editorValue))
 
-      // await updateDocument('node', nodeId, editorValue)
+      await updateDocument('node', nodeId, editorValue)
     }
   }
 
@@ -48,7 +49,6 @@ export const useDataSaverFromContent = () => {
     const content = getContent(nodeId)
     mog('saving to api for nodeId: ', { nodeId, content })
     saveDataAPI(nodeId, content.content)
-    // saveData()
   }
 
   const saveDataToPersistentStorage = () => {

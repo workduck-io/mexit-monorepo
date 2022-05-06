@@ -221,19 +221,14 @@ const SearchView = <Item,>({
 
   const executeSearch = async (newSearchTerm: string) => {
     if (newSearchTerm === '' && initialItems.length > 0) {
-      // const res = onSearch(newSearchTerm)
       const filtered = filterResults ? filterResults(initialItems) : initialItems
-      mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered })
       setResult(filtered, newSearchTerm)
     } else {
       const res = await onSearch(newSearchTerm)
       const filtered = filterResults ? filterResults(res) : res
-      mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
       setResult(filtered, newSearchTerm)
     }
   }
-
-  // console.log({ result })
 
   const updateResults = useMemo(
     () => () => {
@@ -361,7 +356,6 @@ const SearchView = <Item,>({
     <Results key={`ResultForSearch_${id}`} view={view}>
       {view === View.Card && RenderStartCard && <RenderStartCard />}
       {result.map((c, i) => {
-        // mog('item from result', { c, i })
         return (
           <RenderItem
             view={view}

@@ -6,7 +6,7 @@ const mixpanelMethods = {
   init: (token: string) => {
     if (!IS_DEV) mixpanel.init(token)
   },
-  track: (name, props) => {
+  track: (name, props?) => {
     if (!IS_DEV) mixpanel.track(name, props)
   },
   alias: (id: string, original: string) => {
@@ -19,6 +19,9 @@ const mixpanelMethods = {
   },
   identify: (id: string) => {
     if (!IS_DEV) mixpanel.identify(id)
+  },
+  reset: () => {
+    if (!IS_DEV) mixpanel.reset()
   }
 }
 

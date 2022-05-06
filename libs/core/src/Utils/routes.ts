@@ -24,7 +24,7 @@ export const integrationURLs = {
   getAllTemplates: (workspaceId: string) => `${BASE_INTEGRATION_URL}/workspace/${workspaceId}/templates/all`
 }
 
-export const BASE_API_URL = 'https://qp5qf0k5sg.execute-api.us-east-1.amazonaws.com'
+export const BASE_API_URL = 'https://http-test.workduck.io/mex'
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
@@ -83,6 +83,7 @@ export const apiURLs = {
   fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
   getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
   createNode: `${MEXIT_BACKEND_URL_BASE}/node`,
+  bulkCreateNodes: `${MEXIT_BACKEND_URL_BASE}/node/bulkCreate`,
   makeNodePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
   makeNodePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/public/${uid}`,

@@ -20,12 +20,14 @@ export const useApiStore = create<ApiStore>(
     (set, get) => ({
       requests: {},
       setRequest(url, data) {
-        set({
-          requests: {
-            ...get().requests,
-            [url]: data
-          }
-        })
+        if (!url.includes('linkhierarchy')) {
+          set({
+            requests: {
+              ...get().requests,
+              [url]: data
+            }
+          })
+        }
       },
       clearRequests() {
         set({

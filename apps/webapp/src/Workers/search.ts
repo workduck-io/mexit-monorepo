@@ -13,8 +13,8 @@ let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
 
 const searchWorker: SearchWorker = {
-  init: (fileData: PersistentData, indexData: Record<idxKey, any>) => {
-    const { idx, nbMap } = createSearchIndex(fileData, indexData)
+  init: (fileData: PersistentData) => {
+    const { idx, nbMap } = createSearchIndex(fileData)
 
     globalSearchIndex = idx
     nodeBlockMapping = nbMap
@@ -85,7 +85,6 @@ const searchWorker: SearchWorker = {
         })
       }
 
-      mog('response is', { response }, { pretty: true, collapsed: false })
       const results = new Array<any>()
       response.forEach((entry) => {
         const matchField = entry.field
@@ -138,7 +137,6 @@ const searchWorker: SearchWorker = {
         })
       }
 
-      // mog('response is', response, { pretty: true, collapsed: false })
       const results = new Array<any>()
       response.forEach((entry) => {
         const matchField = entry.field

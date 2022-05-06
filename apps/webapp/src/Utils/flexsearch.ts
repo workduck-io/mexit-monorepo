@@ -24,8 +24,7 @@ export const getNodeAndBlockIdFromCompositeKey = (compositeKey: string) => {
 export const indexedFields = ['title', 'text']
 export const storedFields = ['text', 'data']
 
-export const createSearchIndex = (fileData: PersistentData, data: CreateSearchIndexData) => {
-  // TODO: Find a way to delay the conversion until needed i.e. if index is not present
+export const createSearchIndex = (fileData: PersistentData) => {
   const { result: initList, nodeBlockMap: nbMap } = convertDataToIndexable(fileData)
 
   const idx = Object.entries(indexNames).reduce((p, c) => {
@@ -39,7 +38,7 @@ export const createSearchIndex = (fileData: PersistentData, data: CreateSearchIn
       },
       tokenize: 'full'
     }
-    return { ...p, [idxName]: createGenricSearchIndex(initList[idxName], data[idxName] ?? null, options) }
+    return { ...p, [idxName]: createGenricSearchIndex(initList[idxName], options) }
   }, diskIndex)
 
   return { idx, nbMap }
@@ -59,8 +58,6 @@ export const flexIndexKeys = [
 
 export const createGenricSearchIndex = (
   initList: GenericSearchData[],
-  indexData: any,
-  // Default options for node search
   options: any = {
     document: {
       id: 'id',
@@ -72,22 +69,12 @@ export const createGenricSearchIndex = (
 ): Document<GenericSearchData> => {
   const index = new Document<GenericSearchData>(options)
 
-  if (indexData && Object.keys(indexData).length > 0) {
-    // When using a prebuilt index read from disk present in the indexData parameter
-    mog('Using Prebuilt Index!', {})
-    Object.entries(indexData).forEach(([key, data]) => {
-      const parsedData = JSON.parse((data as string) ?? '') ?? null
-      index.import(key, parsedData)
-    })
-  } else {
-    initList.forEach((block) => {
-      block.blockId = createIndexCompositeKey(block.id, block.blockId ?? block.id)
+  initList.forEach((block) => {
+    block.blockId = createIndexCompositeKey(block.id, block.blockId ?? block.id)
+    mog('Adding to Index: ', { block })
+    index.add({ ...block, tag: [block.id, ...(block.tag ?? [])] })
+  })
 
-      index.add({ ...block, tag: [block.id, ...(block.tag ?? [])] })
-    })
-  }
-
-  mog('CreateSearchIndex', { options, initList })
   return index
 }
 
