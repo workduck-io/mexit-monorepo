@@ -7,8 +7,8 @@ import Analytics from '../Utils/analytics'
 export const Logout = () => {
   const { logout } = useAuthentication()
 
-  const onLogout = () => {
-    logout()
+  const onLogout = async () => {
+    await logout()
     Analytics.track('Logged Out')
     Analytics.reset()
   }
