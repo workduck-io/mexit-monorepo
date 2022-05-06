@@ -81,9 +81,9 @@ const Settings = () => {
   const { logout } = useAuthentication()
   const { goTo } = useRouting()
 
-  const onLogout = (e: any) => {
+  const onLogout = async (e: any) => {
     e.preventDefault()
-    logout()
+    await logout()
     goTo(ROUTE_PATHS.login, NavigationType.push)
   }
 

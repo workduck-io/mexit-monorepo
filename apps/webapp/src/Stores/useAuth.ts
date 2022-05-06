@@ -3,6 +3,7 @@ import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
+import { clear as IDBClear } from 'idb-keyval'
 
 import { apiURLs, AuthStoreState, UserCred } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
@@ -112,10 +113,11 @@ export const useAuthentication = () => {
     }
   }
 
-  const logout = () => {
-    signOut().then(() => {
-      setUnAuthenticated()
-    })
+  const logout = async () => {
+    await signOut()
+    setUnAuthenticated()
+    localStorage.clear()
+    await IDBClear()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {
