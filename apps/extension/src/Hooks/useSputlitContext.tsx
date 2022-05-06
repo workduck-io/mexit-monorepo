@@ -32,6 +32,8 @@ export type TooltipState = {
 type SputlitContextType = {
   search: Search
   setSearch: (val: Search) => void
+  isLoading: Boolean
+  setIsLoading: (val: boolean) => void
   selection: any
   setSelection: (val: any) => void
   searchResults: Array<MexitAction>
@@ -65,10 +67,13 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [preview, setPreview] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const value = {
     search,
     setSearch,
+    isLoading,
+    setIsLoading,
     selection,
     setSelection,
     activeIndex,

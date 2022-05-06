@@ -15,7 +15,7 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = () => {
-  const activeItem = useSputlitContext().activeItem
+  const { activeItem, setIsLoading } = useSputlitContext()
   const iframeRef = useRef(null)
 
   const handleEvent = (event) => {
@@ -23,6 +23,7 @@ const Renderer = () => {
       switch (event.data.type) {
         case 'height-init':
           iframeRef.current.height = event.data.height + 'px'
+          setIsLoading(false)
           break
         case 'tab-info-request': {
           const tags = parsePageMetaTags(window.document)
@@ -45,6 +46,7 @@ const Renderer = () => {
   }
 
   useEffect(() => {
+    setIsLoading(true)
     window.addEventListener('message', handleEvent)
 
     return () => {

@@ -1,12 +1,14 @@
 import fuzzysort from 'fuzzysort'
-import React, { useEffect } from 'react'
-import { WDLogo } from '@mexit/shared'
+import React, { useEffect, useState } from 'react'
+import { Loading, WDLogo } from '@mexit/shared'
 import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
 import { CenterIcon, QuerySearch, StyledInput, StyledSearch } from './styled'
 import { initActions, searchBrowserAction, defaultActions, ActionType } from '@mexit/core'
+import { useTheme } from 'styled-components'
 
 const Search = () => {
-  const { search, setSearch, setSearchResults, activeItem } = useSputlitContext()
+  const { search, setSearch, setSearchResults, activeItem, isLoading } = useSputlitContext()
+  const theme = useTheme()
 
   useEffect(() => {
     if (search.value !== '') {
@@ -35,9 +37,7 @@ const Search = () => {
         }}
       />
 
-      <CenterIcon>
-        <WDLogo />
-      </CenterIcon>
+      <CenterIcon>{isLoading ? <Loading color={theme.colors.primary} dots={3} transparent /> : <WDLogo />}</CenterIcon>
     </StyledSearch>
   )
 }
