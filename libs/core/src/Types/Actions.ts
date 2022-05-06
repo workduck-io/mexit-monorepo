@@ -1,3 +1,5 @@
+import { CategoryType } from './Editor'
+
 export const ActionType: any = {
   SEARCH: 'SEARCH',
   OPEN: 'OPEN',
@@ -11,6 +13,7 @@ export interface MexitAction {
   title: string
   description?: string
   type: string
+  category: CategoryType
   shortcut?: string[]
   data?: any
   metadata?: any

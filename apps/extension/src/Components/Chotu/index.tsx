@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { CategoryType, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
@@ -64,16 +64,19 @@ export default function Chotu() {
   }, [])
 
   useEffect(() => {
-    console.log('sending message', search.value)
-    iframeRef.current.contentWindow.postMessage(
-      {
-        type: 'search',
-        data: {
-          query: search.value
-        }
-      },
-      MEXIT_FRONTEND_URL_BASE
-    )
+    if (search.type === CategoryType.search || search.type === CategoryType.backlink) {
+      console.log('sending message', search.value)
+      // iframeRef.current.contentWindow.postMessage(
+      //   {
+      //     type: 'search',
+      //     data: {
+      //       query: search.value,
+      //       searchType: search.type
+      //     }
+      //   },
+      //   MEXIT_FRONTEND_URL_BASE
+      // )
+    }
   }, [search, iframeRef])
 
   return (

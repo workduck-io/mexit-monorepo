@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { CategoryType } from '@mexit/core'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
@@ -44,9 +45,18 @@ export default function Chotu() {
   const handleEvent = async (event) => {
     switch (event.data.type) {
       case 'search': {
-        console.log('search value', event.data.data.query)
-        const res = await queryIndex('node', event.data.data.query)
-        window.parent.postMessage({ type: 'search', res }, '*')
+        let results: any[] = []
+
+        switch (event.data.data.searchType) {
+          case CategoryType.backlink:
+            results = await queryIndex('node', event.data.data.query)
+            break
+          case CategoryType.search:
+            results = await queryIndex(['snippet', 'node'], event.data.data.query)
+            break
+        }
+
+        window.parent.postMessage({ type: 'search', results }, '*')
       }
     }
   }

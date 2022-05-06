@@ -190,8 +190,7 @@ export enum ComboboxKey {
 export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
-  search = 'Search Results',
-  meeting = 'Meetings'
+  search = 'Search Results'
 }
 
 export interface SlashCommand {

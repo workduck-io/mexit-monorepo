@@ -1,11 +1,5 @@
-import { MexitAction } from '@mexit/core'
+import { CategoryType, MexitAction } from '@mexit/core'
 import React, { createContext, useContext, useState } from 'react'
-
-export enum CategoryType {
-  quicklink = 'Quick Links',
-  action = 'Quick Actions',
-  search = 'Search Results'
-}
 
 export type Search = {
   value: string
