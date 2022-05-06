@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -26,6 +27,7 @@ export default function Chotu() {
       setFirst(false)
     }
   }, [ilinks, archive, contents, snippets])
+  const { queryIndex } = useSearch()
 
   const message = {
     type: 'store-init',
@@ -38,6 +40,23 @@ export default function Chotu() {
   }
 
   window.parent.postMessage(message, '*')
+
+  const handleEvent = async (event) => {
+    switch (event.data.type) {
+      case 'search': {
+        console.log('search value', event.data.data.query)
+        const res = await queryIndex('node', event.data.data.query)
+        window.parent.postMessage({ type: 'search', res }, '*')
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', handleEvent)
+    return () => {
+      window.removeEventListener('message', handleEvent)
+    }
+  }, [])
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
@@ -12,6 +12,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
 
 export default function Chotu() {
+  const iframeRef = useRef(null)
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
@@ -20,7 +21,8 @@ export default function Chotu() {
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { setVisualState } = useSputlitContext()
+  const { setVisualState, search } = useSputlitContext()
+
   const handleEvent = (event) => {
     if (event.origin === MEXIT_FRONTEND_URL_BASE) {
       switch (event.data.type) {
@@ -45,6 +47,9 @@ export default function Chotu() {
           }
           break
         }
+        case 'search': {
+          console.log('search vapas aa gaya bidu', event.data)
+        }
         default:
           break
       }
@@ -57,10 +62,24 @@ export default function Chotu() {
       window.removeEventListener('message', handleEvent)
     }
   }, [])
+
+  useEffect(() => {
+    console.log('sending message', search.value)
+    iframeRef.current.contentWindow.postMessage(
+      {
+        type: 'search',
+        data: {
+          query: search.value
+        }
+      },
+      MEXIT_FRONTEND_URL_BASE
+    )
+  }, [search, iframeRef])
+
   return (
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
-      <iframe src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
+      <iframe ref={iframeRef} src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
       <Icon>
         <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
       </Icon>
