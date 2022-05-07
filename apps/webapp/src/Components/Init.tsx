@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react'
-import { IS_DEV, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 
-import { useAuth } from '@workduck-io/dwindle'
-import useRoutingInstrumentation from 'react-router-v6-instrumentation'
-import { init as SentryInit } from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
-
-import config from '../config'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -14,12 +8,10 @@ import { useInitialize } from '../Hooks/useInitialize'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useAnalysis } from '../Stores/useAnalysis'
 import { initSearchIndex } from '../Workers/controller'
-import Analytics from '../Utils/analytics'
 
 const Init: React.FC = () => {
   const { init } = useInitialize()
   const { getPersistedData } = useIndexedDBData()
-  const { initCognito } = useAuth()
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
 
@@ -28,12 +20,6 @@ const Init: React.FC = () => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-extra-semi
     ; (async () => {
-
-      initCognito({
-        UserPoolId: config.cognito.USER_POOL_ID,
-        ClientId: config.cognito.APP_CLIENT_ID
-      })
-
       getPersistedData()
         .then((d) => {
           mog('Initializaing With Data', { d })
@@ -59,24 +45,6 @@ const Init: React.FC = () => {
         .catch((e) => console.error(e))
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const routingInstrumentation = useRoutingInstrumentation()
-  useEffect(() => {
-    if (!IS_DEV) {
-      const browserTracing = new BrowserTracing({
-        routingInstrumentation
-      })
-
-      SentryInit({
-        dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
-        tracesSampleRate: 1.0,
-        integrations: [browserTracing]
-      })
-    }
-
-    if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
-      Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
-  }, [routingInstrumentation])
 
   return null
 }
