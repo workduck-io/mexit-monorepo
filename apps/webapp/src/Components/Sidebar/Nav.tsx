@@ -184,7 +184,7 @@ const Nav = ({ links }: NavProps) => {
         )}
       </MainLinkContainer>
 
-      <Collapse
+      {/* <Collapse
         title="Bookmarks"
         oid="bookmarks"
         icon={bookmark3Line}
@@ -195,7 +195,7 @@ const Nav = ({ links }: NavProps) => {
       >
         <Bookmarks />
       </Collapse>
-
+ */}
       <Collapse
         title="All Notes"
         oid={`tree`}

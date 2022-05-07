@@ -33,10 +33,10 @@ import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
 import Init from './Components/Init'
 
-export const SwitchWrapper = styled(animated.div) <{ isAuth?: boolean }>`
+export const SwitchWrapper = styled(animated.div) <{ $isAuth?: boolean }>`
   position: fixed;
-  width: ${({ theme, isAuth }) =>
-    !isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`};
+  width: ${({ theme, $isAuth }) =>
+    !$isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`};
   overflow-x: hidden;
   overflow-y: auto;
 `
@@ -224,7 +224,7 @@ export const Switch = () => {
   const { switchWrapperSpringProps } = useSidebarTransition()
 
   return (
-    <SwitchWrapper style={switchWrapperSpringProps} isAuth={authenticated}>
+    <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
