@@ -1,6 +1,10 @@
 import create from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 import { snippetStoreConstructor, SnippetStoreState } from '@mexit/core'
 
-export const useSnippetStore = create<SnippetStoreState>(devtools(snippetStoreConstructor))
+import IDBStorage from '../Utils/idbStorageAdapter'
+
+export const useSnippetStore = create<SnippetStoreState>(
+  persist(snippetStoreConstructor, { name: 'mexit-snippet-store', getStorage: () => IDBStorage })
+)

@@ -60,7 +60,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     onKeyDownConfig: {
       keys: {
         ilink: {
-          // @ts-ignore
+          // @ts-expect-error Mex Space requires it in this format
           newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
         },
         tag: {

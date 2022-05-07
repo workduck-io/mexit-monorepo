@@ -4,7 +4,6 @@ import { Outlet } from 'react-router-dom'
 
 import styled from 'styled-components'
 import InfoBar from '../Components/Infobar'
-import Init from '../Components/Init'
 
 const EditorViewWrapper = styled.div`
   display: flex;
@@ -15,15 +14,13 @@ const EditorViewWrapper = styled.div`
 `
 
 const EditorView = () => {
-  return (<>
-    <Init />
+  return (
     <EditorViewWrapper>
       <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
         <Outlet />
       </SentryErrorBoundary>
       <InfoBar />
     </EditorViewWrapper>
-  </>
   )
 }
 

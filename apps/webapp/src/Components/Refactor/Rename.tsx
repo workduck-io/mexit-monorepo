@@ -1,17 +1,17 @@
+import React, { useEffect } from 'react'
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
-import { isReserved } from '@mexit/core'
-import { Button } from '@mexit/shared'
-import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
+
+import { isReserved } from '@mexit/core'
+import { Button } from '@mexit/shared'
+
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import { useDataSaverFromContent } from '../../Hooks/useSave'
 import useEditorStore from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { useQStore } from '../../Stores/useQStore'
 import { useRenameStore } from '../../Stores/useRenameStore'
 import { ModalHeader, MockRefactorMap, MRMHead, MRMRow, ArrowIcon, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
@@ -21,7 +21,6 @@ const Rename = () => {
   const { execRefactor, getMockRefactor } = useRefactor()
   const { push } = useNavigation()
   const shortcuts = useHelpStore((store) => store.shortcuts)
-  const { saveDataToPersistentStorage } = useDataSaverFromContent()
 
   const open = useRenameStore((store) => store.open)
   const focus = useRenameStore((store) => store.focus)
@@ -36,7 +35,6 @@ const Rename = () => {
   const setFrom = useRenameStore((store) => store.setFrom)
 
   const { getNodeidFromPath } = useLinks()
-  const q = useQStore((s) => s.q)
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
@@ -83,14 +81,14 @@ const Rename = () => {
       // mog('To, from in rename', { to, from })
       setMockRefactored(getMockRefactor(from, to))
     }
-  }, [to, from, q])
+  }, [to, from])
 
   const handleRefactor = () => {
     if (to && from) {
       // mog('To, from in rename exec', { to, from })
       const res = execRefactor(from, to)
 
-      saveDataToPersistentStorage()
+      // saveDataToPersistentStorage()
 
       const path = useEditorStore.getState().node.id
       const nodeid = useEditorStore.getState().node.nodeid

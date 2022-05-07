@@ -1,47 +1,46 @@
-import { mog } from '@mexit/core';
-import { get, set } from 'idb-keyval';
+import { mog } from '@mexit/core'
+import { get, set } from 'idb-keyval'
 
-import { DefaultPersistentData } from '../Data/baseData';
-import { PersistentData } from './../Types/Data';
+import { DefaultPersistentData } from '../Data/baseData'
+import { PersistentData } from './../Types/Data'
 
 export const keys = [
-    'baseNodeId',
-    'ilinks',
-    'tags',
-    'contents',
-    'linkCache',
-    'tagsCache',
-    'archive',
-    'bookmarks',
-    'todos',
-    'reminders',
-    'snippets'
+  'baseNodeId',
+  'ilinks',
+  'tags',
+  'contents',
+  'linkCache',
+  'tagsCache',
+  'archive',
+  'bookmarks',
+  'todos',
+  'reminders',
+  'snippets'
 ]
 
-
 export const useIndexedDBData = () => {
-    const getPersistedData = async () => {
-        const res = DefaultPersistentData
+  const getPersistedData = async (): Promise<any> => {
+    const res = {}
 
-        keys.forEach(async (key) => {
-            let val = await get(key);
+    for (const key of keys) {
+      let val = await get(key)
 
-            if (!val) {
-                val = DefaultPersistentData[key]
-            }
-            res[key] = val
-        })
-
-        return res
+      if (!val) {
+        mog('Value Not Found in IDB', { key })
+        val = DefaultPersistentData[key]
+      } else {
+        mog('Value Found in IDB', { key })
+      }
+      res[key] = val
     }
+    return res
+  }
 
-    const persistData = (data: PersistentData) => {
-        Object.entries(data).forEach(async ([key, value]) => {
-            set(key, value)
-        })
-    }
+  const persistData = (data: PersistentData) => {
+    Object.entries(data).forEach(async ([key, value]) => {
+      await set(key, value)
+    })
+  }
 
-    return { getPersistedData, persistData }
+  return { getPersistedData, persistData }
 }
-
-

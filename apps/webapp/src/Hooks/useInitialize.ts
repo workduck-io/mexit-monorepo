@@ -18,16 +18,12 @@ export const useInitialize = () => {
   const initTodos = useTodoStore((store) => store.initTodos)
   const initContents = useContentStore((state) => state.initContents)
   const setReminders = useReminderStore((state) => state.setReminders)
-  const setTheme = useThemeStore((state) => state.setTheme)
   const initSnippets = useSnippetStore((state) => state.initSnippets)
   const { generateSlashCommands } = useSlashCommands()
-  const { loadNodeProps } = useLoad()
 
   const update = (data: PersistentData) => {
     const { baseNodeId, tags, todos, reminders, ilinks, linkCache, tagsCache, bookmarks, contents, archive, snippets } =
       data
-    // const snippetCommands = extractSnippetCommands(snippets)
-    // const syncCommands = extractSyncBlockCommands(templates)
     const slashCommands = generateSlashCommands(snippets)
 
     const initData = {

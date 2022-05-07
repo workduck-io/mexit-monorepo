@@ -31,7 +31,6 @@ import Tasks from './Views/Tasks'
 import Archive from './Views/Archive'
 import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
-import Init from './Components/Init'
 
 export const SwitchWrapper = styled(animated.div) <{ $isAuth?: boolean }>`
   position: fixed;
@@ -206,20 +205,7 @@ const SnippetRoutes = () => {
 }
 
 export const Switch = () => {
-  const location = useLocation()
-  const isBlockMode = useBlockStore((store) => store.isBlockMode)
-  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
-
-  const { saveAndClearBuffer } = useEditorBuffer()
   const authenticated = useAuthStore((s) => s.authenticated)
-
-  useEffect(() => {
-    // ? Do we need to save data locally on every route change?
-    if (authenticated) {
-      if (isBlockMode) setIsBlockMode(false)
-      saveAndClearBuffer()
-    }
-  }, [location])
 
   const { switchWrapperSpringProps } = useSidebarTransition()
 
