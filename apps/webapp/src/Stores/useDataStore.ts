@@ -7,7 +7,7 @@ import getFlatTree, { generateTree } from '../Utils/tree'
 import useEditorStore from './useEditorStore'
 import { useTreeStore } from './useTreeStore'
 
-const useDataStore = create<DataStoreState>(persist(dataStoreConstructor, { name: 'mexit-data-store' }))
+const useDataStore = create<DataStoreState>(dataStoreConstructor)
 
 export const useTreeFromLinks = () => {
   const node = useEditorStore((state) => state.node)

@@ -17,19 +17,16 @@ interface BufferStore {
 }
 
 export const useBufferStore = create<BufferStore>(
-  persist(
-    (set, get) => ({
-      buffer: {},
-      add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
-      remove: (nodeid) => {
-        const newBuffer = get().buffer
-        if (newBuffer[nodeid]) delete newBuffer[nodeid]
-        set({ buffer: newBuffer })
-      },
-      clear: () => set({ buffer: {} })
-    }),
-    { name: 'editor-buffer' }
-  )
+  (set, get) => ({
+    buffer: {},
+    add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
+    remove: (nodeid) => {
+      const newBuffer = get().buffer
+      if (newBuffer[nodeid]) delete newBuffer[nodeid]
+      set({ buffer: newBuffer })
+    },
+    clear: () => set({ buffer: {} })
+  })
 )
 
 export const useEditorBuffer = () => {
