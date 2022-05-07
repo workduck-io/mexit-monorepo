@@ -1,7 +1,15 @@
-import React, { useRef } from 'react'
+import React, { createRef, useRef, useState } from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
-import { CategoryType, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import {
+  CategoryType,
+  LinkCapture,
+  MEXIT_FRONTEND_URL_BASE,
+  Snippet,
+  Theme,
+  UserDetails,
+  WorkspaceDetails
+} from '@mexit/core'
 import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
@@ -10,9 +18,10 @@ import { Notification } from '@mexit/shared'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
+import { AsyncMethodReturns, connectToChild } from 'penpal'
 
 export default function Chotu() {
-  const iframeRef = useRef(null)
+  const iframeRef = createRef<HTMLIFrameElement>()
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
@@ -23,61 +32,47 @@ export default function Chotu() {
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setVisualState, search } = useSputlitContext()
 
-  const handleEvent = (event) => {
-    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
-      switch (event.data.type) {
-        case 'store-init': {
-          setAutheticated(event.data.userDetails, event.data.workspaceDetails)
-          setLinkCaptures(event.data.linkCapture)
-          setTheme(event.data.theme)
-          setInternalAuthStore(event.data.authAWS)
-          initSnippets(event.data.snippets)
-
-          break
-        }
-        case 'shortener': {
-          if (event.data.status === 200) {
-            console.log('Received: ', event.data.message)
-            addLinkCapture(event.data.message)
-            setVisualState(VisualState.hidden)
-            toast.success('Copied Shortened URL to Clipboard!')
-          } else {
-            console.error('Received: ', event.data)
-            toast.error('Failed :( Try again later!')
-          }
-          break
-        }
-        case 'search': {
-          console.log('search vapas aa gaya bidu', event.data)
-        }
-        default:
-          break
-      }
-    }
-  }
+  const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
   useEffect(() => {
-    window.addEventListener('message', handleEvent)
+    const connection = connectToChild({
+      iframe: iframeRef.current,
+      methods: {
+        init(
+          userDetails: UserDetails,
+          workspaceDetails: WorkspaceDetails,
+          linkCaptures: LinkCapture[],
+          theme: Theme,
+          authAWS: any,
+          snippets: Snippet[]
+        ) {
+          // Can be separated into multiple methods
+          setAutheticated(userDetails, workspaceDetails)
+          setLinkCaptures(linkCaptures)
+          setTheme(theme)
+          setInternalAuthStore(authAWS)
+          initSnippets(snippets)
+        },
+        success(message: string) {
+          toast.success(message)
+        }
+      },
+      debug: true
+    })
+
+    connection.promise
+      .then((child) => {
+        setChild(child)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
     return () => {
-      window.removeEventListener('message', handleEvent)
+      // connection.destroy()
+      // setChild(null)
     }
   }, [])
-
-  useEffect(() => {
-    if (search.type === CategoryType.search || search.type === CategoryType.backlink) {
-      console.log('sending message', search.value)
-      // iframeRef.current.contentWindow.postMessage(
-      //   {
-      //     type: 'search',
-      //     data: {
-      //       query: search.value,
-      //       searchType: search.type
-      //     }
-      //   },
-      //   MEXIT_FRONTEND_URL_BASE
-      // )
-    }
-  }, [search, iframeRef])
 
   return (
     // TODO: Test this whenever shornter starts working

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { CategoryType } from '@mexit/core'
+import { CategoryType, idxKey } from '@mexit/core'
+import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
@@ -10,6 +11,7 @@ import useThemeStore from '../Stores/useThemeStore'
 import { initSearchIndex } from '../Workers/controller'
 
 export default function Chotu() {
+  const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const linkCaptures = useShortenerStore((state) => state.linkCaptures)
@@ -30,43 +32,29 @@ export default function Chotu() {
   }, [ilinks, archive, contents, snippets])
   const { queryIndex } = useSearch()
 
-  const message = {
-    type: 'store-init',
-    userDetails: userDetails,
-    workspaceDetails: workspaceDetails,
-    linkCaptures: linkCaptures,
-    theme: theme,
-    authAWS: authAWS,
-    snippets: snippets
-  }
-
-  window.parent.postMessage(message, '*')
-
-  const handleEvent = async (event) => {
-    switch (event.data.type) {
-      case 'search': {
-        let results: any[] = []
-
-        switch (event.data.data.searchType) {
-          case CategoryType.backlink:
-            results = await queryIndex('node', event.data.data.query)
-            break
-          case CategoryType.search:
-            results = await queryIndex(['snippet', 'node'], event.data.data.query)
-            break
-        }
-
-        window.parent.postMessage({ type: 'search', results }, '*')
+  const connection = connectToParent<{ init: () => any; search: () => Promise<any> }>({
+    methods: {
+      search(key: idxKey | idxKey[], query: string) {
+        return queryIndex(key, query)
       }
-    }
-  }
+    },
+    debug: true
+  })
 
   useEffect(() => {
-    window.addEventListener('message', handleEvent)
+    connection.promise
+      .then((parent: any) => {
+        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets)
+        parent.success('Hi')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
     return () => {
-      window.removeEventListener('message', handleEvent)
+      connection.destroy()
     }
-  }, [])
+  }, [theme])
 
   return (
     <div>
