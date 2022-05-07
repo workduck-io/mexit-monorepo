@@ -1,5 +1,6 @@
 import React from 'react'
 import create from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 import { NodeContent, NodeProperties, defaultContent } from '@mexit/core'
 import { getInitialNode } from '@mexit/shared'
@@ -58,7 +59,7 @@ export type EditorContextType = {
   setReadOnly: (isReadOnly: boolean) => void
 }
 
-export const useEditorStore = create<EditorContextType>((set, get) => ({
+export const useEditorStore = create<EditorContextType>(devtools((set, get) => ({
   node: getInitialNode(),
   content: defaultContent,
   readOnly: false,
@@ -109,7 +110,7 @@ export const useEditorStore = create<EditorContextType>((set, get) => ({
   loadNodeAndReplaceContent: (node, content) => {
     set({ node, content })
   }
-}))
+})))
 
 
 // export type EditorContextType = {

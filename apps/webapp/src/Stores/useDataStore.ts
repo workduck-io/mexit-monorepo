@@ -2,12 +2,12 @@ import { DataStoreState, mog } from '@mexit/core'
 import { dataStoreConstructor, sanatizeLinks } from '@mexit/shared'
 import { useMemo } from 'react'
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 import getFlatTree, { generateTree } from '../Utils/tree'
 import useEditorStore from './useEditorStore'
 import { useTreeStore } from './useTreeStore'
 
-const useDataStore = create<DataStoreState>(dataStoreConstructor)
+const useDataStore = create<DataStoreState>(devtools(dataStoreConstructor))
 
 export const useTreeFromLinks = () => {
   const node = useEditorStore((state) => state.node)

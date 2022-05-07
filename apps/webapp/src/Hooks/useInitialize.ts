@@ -1,14 +1,12 @@
-import { PersistentData } from './../Types/Data';
+import { PersistentData } from './../Types/Data'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { InitData } from '@mexit/core'
-import { getTheme } from '@mexit/shared'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 import useTodoStore from '../Stores/useTodoStore'
 import useLoad from './useLoad'
-import { useSlashCommands } from './useSlashCommands';
+import { useSlashCommands } from './useSlashCommands'
 
 export enum AppType {
   SPOTLIGHT = 'SPOTLIGHT',
@@ -26,20 +24,8 @@ export const useInitialize = () => {
   const { loadNodeProps } = useLoad()
 
   const update = (data: PersistentData) => {
-    const {
-      baseNodeId,
-      tags,
-      todos,
-      reminders,
-      ilinks,
-      linkCache,
-      tagsCache,
-      bookmarks,
-      contents,
-      archive,
-      snippets,
-
-    } = data
+    const { baseNodeId, tags, todos, reminders, ilinks, linkCache, tagsCache, bookmarks, contents, archive, snippets } =
+      data
     // const snippetCommands = extractSnippetCommands(snippets)
     // const syncCommands = extractSyncBlockCommands(templates)
     const slashCommands = generateSlashCommands(snippets)

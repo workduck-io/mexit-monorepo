@@ -1,6 +1,6 @@
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 
 import { snippetStoreConstructor, SnippetStoreState } from '@mexit/core'
 
-export const useSnippetStore = create<SnippetStoreState>(snippetStoreConstructor)
+export const useSnippetStore = create<SnippetStoreState>(devtools(snippetStoreConstructor))
