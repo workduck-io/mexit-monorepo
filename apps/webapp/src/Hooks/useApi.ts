@@ -87,8 +87,7 @@ export const useApi = () => {
       })
       .then((d: any) => {
         mog('savedData', { d })
-        // setMetadata(nodeid, extractMetadata(d.data))
-        setContent(nodeid, deserializeContent(d.data.data), extractMetadata(d.data))
+        setMetadata(nodeid, extractMetadata(d.data))
         return d.data
       })
       .catch((e) => {
