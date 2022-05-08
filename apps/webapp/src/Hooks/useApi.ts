@@ -11,13 +11,15 @@ import useContentStore from '../Stores/useContentStore'
 import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
 import useDataStore from '../Stores/useDataStore'
+import { useInternalLinks } from './../Data/useInternalLinks'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
-  const { getPathFromNodeid } = useLinks()
-
+  const userDetails = useAuthStore((store) => store.userDetails)
+  const { getPathFromNodeid, getNodeidFromPath } = useLinks()
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
       setNodePublic,
@@ -31,14 +33,14 @@ export const useApi = () => {
    * Also updates the incoming data in the store
    */
   const saveNewNodeAPI = async (nodeid: string) => {
-    const path = getPathFromNodeid(nodeid)
+    const path = getPathFromNodeid(nodeid).split(SEPARATOR)
     const reqData = {
       nodePath: {
-        path: path
+        path: path.join('#')
       },
       id: nodeid,
       title: path.slice(-1)[0],
-      type: 'NodeRequest',
+      type: 'NodeBulkRequest',
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
       data: serializeContent(defaultContent.content)
@@ -53,14 +55,24 @@ export const useApi = () => {
           Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((d) => {
-        mog('saveNewNodeAPI response', d)
-        setMetadata(nodeid, extractMetadata(d.data))
+      .then((d: any) => {
+        const { addedILinks, removedILinks } = d.data
+        // TODO: Return the empty node info from backend
+        const time = Date.now()
+        const metadata = {
+          lastEditedBy: userDetails?.email,
+          createdBy: userDetails?.email,
+          createdAt: time,
+          updatedAt: time
+        }
+        setMetadata(nodeid, extractMetadata(metadata))
+        updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
         return d.data
       })
       .catch((e) => {
         console.error(e)
       })
+
     return data
   }
 
@@ -69,13 +81,18 @@ export const useApi = () => {
    * Also updates the incoming data in the store
    */
   const saveDataAPI = async (nodeid: string, content: any[]) => {
+    const path = getPathFromNodeid(nodeid).split(SEPARATOR)
     const reqData = {
       id: nodeid,
       type: 'NodeRequest',
-      title: getPathFromNodeid(nodeid),
+      title: path.slice(-1)[0],
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content)
+    }
+
+    if (path.length > 1) {
+      reqData['referenceID'] = getNodeidFromPath(path.slice(0, -1).join(SEPARATOR))
     }
 
     const data = await client
@@ -85,7 +102,7 @@ export const useApi = () => {
           Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((d: any) => {
+      .then((d) => {
         mog('savedData', { d })
         setMetadata(nodeid, extractMetadata(d.data))
         return d.data
@@ -144,19 +161,6 @@ export const useApi = () => {
     return data
   }
 
-  const getILinks = async () => {
-    return await client
-      .get(apiURLs.getILink(), {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
-  }
-
   const makeNodePublic = async (nodeId: string) => {
     const URL = apiURLs.makeNodePublic(nodeId)
     return await client
@@ -213,7 +217,6 @@ export const useApi = () => {
     getDataAPI,
     saveNewNodeAPI,
     getNodesByWorkspace,
-    getILinks,
     makeNodePublic,
     makeNodePrivate,
     isPublic
