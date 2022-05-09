@@ -61,18 +61,17 @@ export default function Chotu() {
     })
 
     connection.promise
-      .then((child) => {
-        setChild(child)
+      .then(async (child: any) => {
+        const nodeItems = await child.search('node', search.value)
       })
       .catch((error) => {
         console.log(error)
       })
 
     return () => {
-      // connection.destroy()
-      // setChild(null)
+      connection.destroy()
     }
-  }, [])
+  }, [search])
 
   return (
     // TODO: Test this whenever shornter starts working

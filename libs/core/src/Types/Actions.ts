@@ -1,20 +1,22 @@
 import { CategoryType } from './Editor'
+import { Shortcut } from './Help'
 
-export const ActionType: any = {
-  SEARCH: 'SEARCH',
-  OPEN: 'OPEN',
-  RENDER: 'RENDER',
-  BROWSER_EVENT: 'BROWSER_EVENT',
-  SCRENSHOT: 'SCREENSHOT'
+export enum ActionType {
+  SEARCH,
+  OPEN,
+  RENDER,
+  BROWSER_EVENT,
+  SCREENSHOT
 }
 
 export interface MexitAction {
   id: string
   title: string
   description?: string
-  type: string
+  type: ActionType
   category: CategoryType
-  shortcut?: string[]
+  icon?: string
+  shortcut?: Record<string, Shortcut>
   data?: any
   metadata?: any
 }

@@ -10,8 +10,13 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Capture visible window and send to Mexit',
     type: ActionType.SCREENSHOT,
-    data: {
-      icon: 'screenshot.svg'
+    icon: 'bx:screenshot',
+    shortcut: {
+      capture: {
+        category: 'action',
+        title: 'to capture',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -20,7 +25,8 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
-    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener`, icon: 'shortener.svg' }
+    icon: 'ri:link',
+    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
   },
   {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
@@ -28,7 +34,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     title: 'Search Twitter',
     description: 'Search on Twitter',
-    data: { base_url: 'https://twitter.com/search?q=', icon: 'twitter.svg' }
+    icon: 'logos:twitter',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
+    data: { base_url: 'https://twitter.com/search?q=' }
   },
   {
     id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
@@ -36,7 +50,15 @@ export const initActions: Array<MexitAction> = [
     title: 'Open Gmail',
     category: CategoryType.action,
     description: 'Open your default Gmail Account',
-    data: { base_url: 'https://gmail.com', icon: 'gmail.svg' }
+    icon: 'logos:google-gmail',
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    },
+    data: { base_url: 'https://gmail.com' }
   },
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
@@ -44,8 +66,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Reload current tab',
     type: ActionType.BROWSER_EVENT,
-    data: { event_name: 'reload', icon: 'refresh.svg' },
-    shortcut: ['Cmd', 'R']
+    icon: 'eva:refresh-outline',
+    data: { event_name: 'reload' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_nlTaC5-ZcMXgaJrNg_NfL',
@@ -53,7 +82,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new empty Google Doc with default Google Account',
     type: ActionType.OPEN,
-    data: { base_url: 'https://docs.new', icon: 'google-docs.svg' }
+    icon: 'logos:google-drive',
+    data: { base_url: 'https://docs.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_H77GDKfBFVriXpplM-b1x',
@@ -61,7 +98,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new empty Google Sheet with default Google Account',
     type: ActionType.OPEN,
-    data: { base_url: 'https://sheets.new', icon: 'google-sheets.svg' }
+    icon: 'simple-icons:googlesheets',
+    data: { base_url: 'https://sheets.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_gpymSN3oEOd4gfCdfwK4E',
@@ -69,7 +114,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new empty Google Slides with default Google Account',
     type: ActionType.OPEN,
-    data: { base_url: 'https://slides.new', icon: 'google-slides.svg' }
+    // icon: 'google-slides.svg',
+    data: { base_url: 'https://slides.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_XGHlAYLbMrcROQbgIJMBl',
@@ -77,7 +130,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new GitHub Gist',
     type: ActionType.OPEN,
-    data: { base_url: 'https://gist.new', icon: 'gist.svg' }
+    icon: 'codicon:github',
+    data: { base_url: 'https://gist.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_WMORyqSCI5gdYq-0ZEXTx',
@@ -85,7 +146,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new GitHub Repository',
     type: ActionType.OPEN,
-    data: { base_url: 'https://repo.new', icon: 'github.svg' }
+    icon: 'codeicon:github',
+    data: { base_url: 'https://repo.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_30FPylVvxZDAfeoyTdxOY',
@@ -93,7 +162,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create new empty Figma File',
     type: ActionType.OPEN,
-    data: { base_url: 'https://figma.new', icon: 'figma.svg' }
+    icon: 'logos:figma',
+    data: { base_url: 'https://figma.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_w5lK-B2y5p8-vxuq-254_',
@@ -101,7 +178,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create a new Linear issue',
     type: ActionType.OPEN,
-    data: { base_url: 'https://linear.new', icon: 'linear.png' }
+    icon: 'gg:linear',
+    data: { base_url: 'https://linear.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_dh7Hq50UFvK3LQP5_E-70',
@@ -109,7 +194,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create a new Notion page',
     type: ActionType.OPEN,
-    data: { base_url: 'https://notion.new', icon: 'notion.svg' }
+    icon: 'simple-icons:notion',
+    data: { base_url: 'https://notion.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_2vWe76dH6sXpxOH081X7J',
@@ -117,7 +210,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Create a new Google form',
     type: ActionType.OPEN,
-    data: { base_url: 'https://forms.new', icon: 'google-form.svg' }
+    // icon: 'google-form.svg',
+    data: { base_url: 'https://forms.new' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_o1LA-TFz5-szRUaMPSsqh',
@@ -125,9 +226,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Make a new Tweet',
     type: ActionType.OPEN,
+    icon: 'logos:twitter',
     data: {
-      base_url: 'https://twitter.com/intent/tweet',
-      icon: 'twitter.svg'
+      base_url: 'https://twitter.com/intent/tweet'
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -136,10 +244,17 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Browse through your downloads',
     type: ActionType.BROWSER_EVENT,
+    icon: 'bx:download',
     data: {
       event_name: 'chrome-url',
-      base_url: 'chrome://downloads',
-      icon: 'downloads.svg'
+      base_url: 'chrome://downloads'
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -148,10 +263,17 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Manage your chrome extensions',
     type: ActionType.BROWSER_EVENT,
+    icon: 'bx:extension',
     data: {
       event_name: 'chrome-url',
-      base_url: 'chrome://extensions',
-      icon: 'extension.svg'
+      base_url: 'chrome://extensions'
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -160,9 +282,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Search within your default Gmail Account',
     type: ActionType.SEARCH,
+    icon: 'logos:google-gmail',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
-      base_url: 'https://mail.google.com/mail/#search/',
-      icon: 'gmail.svg'
+      base_url: 'https://mail.google.com/mail/#search/'
     }
   },
   {
@@ -171,9 +300,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Search on Wikipedia',
     type: ActionType.SEARCH,
+    icon: 'logos:xwiki',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
-      base_url: 'http://en.wikipedia.org/?search=',
-      icon: 'wikipedia.svg'
+      base_url: 'http://en.wikipedia.org/?search='
     }
   },
   {
@@ -182,10 +318,17 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Search on YouTube',
     type: ActionType.SEARCH,
+    icon: 'logos:youtube-icon',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
       base_url:
-        'http://www.youtube.com/results?search_type=search_videos&search_sort=relevance&search=Search&search_query=',
-      icon: 'youtube.svg'
+        'http://www.youtube.com/results?search_type=search_videos&search_sort=relevance&search=Search&search_query='
     }
   },
   {
@@ -194,9 +337,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Search Google Drive on default Google Account',
     type: ActionType.SEARCH,
+    icon: 'logos:google-drive',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
-      base_url: 'https://drive.google.com/drive/search?q=',
-      icon: 'google-drive.svg'
+      base_url: 'https://drive.google.com/drive/search?q='
     }
   },
   {
@@ -205,9 +355,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Search on GitHub',
     type: ActionType.SEARCH,
+    icon: 'codeicon:github',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
-      base_url: 'https://github.com/search?ref=opensearch&q=',
-      icon: 'github.svg'
+      base_url: 'https://github.com/search?ref=opensearch&q='
     }
   },
   {
@@ -216,7 +373,15 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Get to know more about Workduck.io',
     type: ActionType.OPEN,
-    data: { base_url: 'https://workduck.io', icon: 'workduck.svg' }
+    icon: 'workduck.svg',
+    data: { base_url: 'https://workduck.io' },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
@@ -245,6 +410,13 @@ export const initActions: Array<MexitAction> = [
     type: ActionType.RENDER,
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -255,6 +427,13 @@ export const initActions: Array<MexitAction> = [
     type: ActionType.RENDER,
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/epoch`
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -265,6 +444,13 @@ export const initActions: Array<MexitAction> = [
     type: ActionType.RENDER,
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   },
   {
@@ -273,9 +459,16 @@ export const initActions: Array<MexitAction> = [
     category: CategoryType.action,
     description: 'Mr. International',
     type: ActionType.RENDER,
+    icon: 'currencyconv.svg',
     data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`,
-      icon: 'currencyconv.svg'
+      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
   }
 ]
@@ -289,10 +482,17 @@ export const searchBrowserAction = (query: string) => {
     category: CategoryType.action,
     description: "Perform a search in your browser's URL Bar!",
     type: ActionType.BROWSER_EVENT,
+    icon: 'ph:magnifying-glass',
     data: {
       event_name: 'browser-search',
-      query: query,
-      icon: 'search.svg'
+      query: query
+    },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
     }
-  }
+  } as MexitAction
 }

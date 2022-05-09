@@ -45,7 +45,7 @@ export default function Chotu() {
     connection.promise
       .then((parent: any) => {
         parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets)
-        parent.success('Hi')
+        // parent.success('Hi')
       })
       .catch((error) => {
         console.log(error)
