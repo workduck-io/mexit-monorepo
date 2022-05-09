@@ -55,7 +55,7 @@ export const apiURLs = {
 
   // User
   getUserRecords: (userId: string) => `${BASE_USER_URL}/user/${userId}/MEX`,
-  registerUser: `${BASE_API_URL}/user/register`,
+  registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
 
   // Archive
   archiveNodes: () => `${BASE_API_URL}/node/archive`,

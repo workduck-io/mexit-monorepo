@@ -1,6 +1,8 @@
 import create from 'zustand'
 
 import { mog, Reminder, ReminderState } from '@mexit/core'
+import { persist } from 'zustand/middleware'
+import IDBStorage from '../Utils/idbStorageAdapter'
 
 interface ArmedReminder {
   reminderId: string
@@ -28,7 +30,7 @@ interface ReminderStoreState {
   setModalOpen: (modalOpen: boolean) => void
 }
 
-export const useReminderStore = create<ReminderStoreState>((set, get) => ({
+export const useReminderStore = create<ReminderStoreState>(persist((set, get) => ({
   reminders: [],
   setReminders: (reminders: Reminder[]) => set({ reminders }),
   addReminder: (reminder: Reminder) => set((state) => ({ reminders: [...state.reminders, reminder] })),
@@ -77,4 +79,4 @@ export const useReminderStore = create<ReminderStoreState>((set, get) => ({
 
   modalOpen: false,
   setModalOpen: (modalOpen: boolean) => set({ modalOpen })
-}))
+}), { name: "mexit-reminder-store", getStorage: () => IDBStorage }))

@@ -76,7 +76,7 @@ export const useLinks = () => {
       return acc + c
     }, 0)
 
-    mog('reminderCounds', { remindersAll, reminders })
+    // mog('reminderCounds', { remindersAll, reminders })
 
     return {
       notes: links.length,

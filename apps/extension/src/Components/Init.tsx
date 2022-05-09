@@ -12,7 +12,7 @@ const Init = () => {
     })
 
     console.log('User Authenticated Email: ', userAuthenticatedEmail)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line
 
   return null
 }

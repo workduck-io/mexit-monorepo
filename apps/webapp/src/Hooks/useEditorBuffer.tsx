@@ -17,19 +17,16 @@ interface BufferStore {
 }
 
 export const useBufferStore = create<BufferStore>(
-  persist(
-    (set, get) => ({
-      buffer: {},
-      add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
-      remove: (nodeid) => {
-        const newBuffer = get().buffer
-        if (newBuffer[nodeid]) delete newBuffer[nodeid]
-        set({ buffer: newBuffer })
-      },
-      clear: () => set({ buffer: {} })
-    }),
-    { name: 'editor-buffer' }
-  )
+  (set, get) => ({
+    buffer: {},
+    add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
+    remove: (nodeid) => {
+      const newBuffer = get().buffer
+      if (newBuffer[nodeid]) delete newBuffer[nodeid]
+      set({ buffer: newBuffer })
+    },
+    clear: () => set({ buffer: {} })
+  })
 )
 
 export const useEditorBuffer = () => {
@@ -43,26 +40,21 @@ export const useEditorBuffer = () => {
   const getBuffer = () => useBufferStore.getState().buffer
   const getBufferVal = (nodeid: string) => useBufferStore.getState().buffer[nodeid] ?? undefined
 
-  const { saveEditorValueAndUpdateStores, saveDataToPersistentStorage } = useDataSaverFromContent()
+  const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
 
   const saveAndClearBuffer = (explicitSave?: boolean) => {
     const buffer = useBufferStore.getState().buffer
-    if (Object.keys(buffer).length > 0) {
-      const saved = Object.entries(buffer)
-        .map(([nodeid, val]) => {
-          const content = getContent(nodeid)
-          const res = areEqual(content.content, val)
-          if (!res) {
-            saveEditorValueAndUpdateStores(nodeid, val, true)
-          }
-          return !res
-        })
-        .reduce((acc, cur) => acc || cur, false)
-      if (saved || explicitSave) {
-        saveDataToPersistentStorage()
-      }
-      clearBuffer()
-    }
+    Object.entries(buffer)
+      .map(([nodeid, val]) => {
+        const content = getContent(nodeid)
+        const res = areEqual(content.content, val)
+        if (!res) {
+          saveEditorValueAndUpdateStores(nodeid, val, true)
+        }
+        return !res
+      })
+      .reduce((acc, cur) => acc || cur, false)
+    clearBuffer()
   }
 
   return { addOrUpdateValBuffer, saveAndClearBuffer, getBuffer, getBufferVal, clearBuffer }

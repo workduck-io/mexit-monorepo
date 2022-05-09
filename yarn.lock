@@ -10757,6 +10757,11 @@ signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.3:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==
 
+simple-zustand-devtools@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/simple-zustand-devtools/-/simple-zustand-devtools-1.0.1.tgz#0586c00190f52c842f7b25e4390730ec435cf85f"
+  integrity sha512-/+g+XA7ojPRa+ZDPy1dHBwtf+nBn+ZWN5RUTRgz1lNl5ZTqETo2uhjCl7KzQWlKzLO7CfQrmxK+dTI/5iAF3/Q==
+
 slash@3.0.0, slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"

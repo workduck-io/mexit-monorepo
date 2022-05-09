@@ -32,9 +32,9 @@ export const useSaver = () => {
             saveEditorValueAndUpdateStores(cnode.nodeid, editorState)
         }
 
-        if (writeToFile !== false) {
-            saveDataToPersistentStorage()
-        }
+        // if (writeToFile !== false) {
+        //     saveDataToPersistentStorage()
+        // }
 
         if (notification !== false) toast('Saved!', { duration: 1000 })
     }
