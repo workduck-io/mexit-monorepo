@@ -43,8 +43,9 @@ export const SwitchWrapper = styled(animated.div) <{ $isAuth?: boolean }>`
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+  const location = useLocation()
 
-  return authenticated ? children : <Navigate to={ROUTE_PATHS.login} />
+  return authenticated ? children : <Navigate to={ROUTE_PATHS.login} state={{ from: location }} replace />
 }
 
 const AuthRoute = ({ children }) => {

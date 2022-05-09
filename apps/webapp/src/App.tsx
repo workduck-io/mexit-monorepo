@@ -24,7 +24,7 @@ function App() {
       UserPoolId: config.cognito.USER_POOL_ID,
       ClientId: config.cognito.APP_CLIENT_ID
     })
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <Router>
