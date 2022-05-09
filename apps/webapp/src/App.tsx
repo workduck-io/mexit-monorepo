@@ -14,7 +14,6 @@ import Main from './Components/Main'
 import config from './config'
 
 import './Stores'
-import Init from './Components/Init'
 
 function App() {
   const theme = useThemeStore((state) => state.theme)
@@ -30,7 +29,6 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
-        {/* <Init /> */}
         <Main>
           <GlobalStyle />
           <Modals />
