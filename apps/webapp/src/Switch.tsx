@@ -153,17 +153,8 @@ const SettingsRoutes = () => {
 const SnippetRoutes = () => {
   return (
     <Routes>
-      <Route
-        path=""
-        element={
-          <ProtectedRoute>
-            <EditorView />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Snippets />} />
-        <Route path="node/:snippetid" element={<SnippetEditor />} />
-      </Route>
+      <Route index element={<Snippets />} />
+      <Route path="node/:snippetid" element={<SnippetEditor />} />
     </Routes>
   )
 }
@@ -181,8 +172,6 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
-        <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
-        <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
 
         <Route
           path={ROUTE_PATHS.home}
@@ -194,6 +183,8 @@ export const Switch = () => {
         >
           <Route index element={<DraftView />} />
           <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
+          <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
+          <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={ROUTE_PATHS.archive} element={<Archive />} />

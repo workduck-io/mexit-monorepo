@@ -17,7 +17,6 @@ const EditorViewWrapper = styled.div`
 `
 
 const EditorView = () => {
-
   const { resetEditor } = useEditorActions()
   useAnalysis()
 
@@ -27,7 +26,7 @@ const EditorView = () => {
         <Outlet />
       </ErrorBoundary>
       <InfoBar />
-    </EditorViewWrapper >
+    </EditorViewWrapper>
   )
 }
 
