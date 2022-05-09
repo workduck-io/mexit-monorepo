@@ -151,8 +151,6 @@ const NodeRenameTitle = () => {
     reset()
   }, [nodeFrom])
 
-  console.log({ mockRefactored, to, nodeFrom, editable })
-
   return (
     <Wrapper>
       {isReserved(nodeFrom) ? (

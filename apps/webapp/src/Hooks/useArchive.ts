@@ -155,9 +155,9 @@ const useArchive = () => {
         .then(() => {
           cleanCachesAfterDelete(nodeids)
         })
-        .then(() => {
-          saveDataToPersistentStorage()
-        })
+        // .then(() => {
+        //   saveDataToPersistentStorage()
+        // })
         .then(() => {
           return true
         })

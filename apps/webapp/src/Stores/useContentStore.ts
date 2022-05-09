@@ -1,6 +1,7 @@
 import { NodeContent, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+import IDBStorage from '../Utils/idbStorageAdapter'
 
 export interface Contents {
   [key: string]: NodeContent
@@ -17,7 +18,6 @@ interface ContentStoreState {
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
   initContents: (contents: Contents) => void
 }
-
 const useContentStore = create<ContentStoreState>(
   persist(
     (set, get) => ({
@@ -67,7 +67,7 @@ const useContentStore = create<ContentStoreState>(
         })
       }
     }),
-    { name: 'mexit-content-store' }
+    { name: 'mexit-content-store', getStorage: () => IDBStorage }
   )
 )
 

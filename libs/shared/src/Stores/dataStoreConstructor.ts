@@ -96,6 +96,18 @@ export const dataStoreConstructor = (set, get) => ({
     return
   },
 
+  checkValidILink: (ilink: string) => {
+    const ilinks = get().ilinks
+
+    const linksStrings = ilinks.map((l) => l.path)
+    const reservedOrUnique = getUniquePath(ilink, linksStrings, true)
+
+    if (!reservedOrUnique) {
+      throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
+    }
+    return
+  },
+
   setIlinks: (ilinks) => {
     // mog('Setting ILinks', { ilinks })
     set({

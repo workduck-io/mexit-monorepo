@@ -77,23 +77,22 @@ const ContentEditor = () => {
   }
 
   return (
-    <>
-      <StyledEditor showGraph={false} className="mex_editor">
-        <Toolbar />
+    <StyledEditor showGraph={false} className="mex_editor">
+      <Toolbar />
 
-        <EditorInfoBar />
-        {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
+      <EditorInfoBar />
+      {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
 
-        <EditorWrapper onClick={onFocusClick}>
-          <Editor
-            nodeUID={nodeId}
-            nodePath={node.path}
-            content={fsContent?.content ?? defaultContent.content}
-            onChange={onChangeSave}
-          />
-        </EditorWrapper>
-      </StyledEditor>
-    </>
+      <EditorWrapper onClick={onFocusClick}>
+        <Editor
+          readOnly={readOnly}
+          nodeUID={nodeId}
+          nodePath={node.path}
+          content={fsContent?.content ?? defaultContent.content}
+          onChange={onChangeSave}
+        />
+      </EditorWrapper>
+    </StyledEditor>
   )
 }
 

@@ -60,7 +60,7 @@ const BallonMarkToolbarButtons = () => {
   } as any
 
   return (
-    <BalloonToolbar popperOptions={popperOptions} theme={theme} arrow={arrow}>
+    <BalloonToolbar $popperOptions={popperOptions} theme={theme} arrow={arrow}>
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}
         icon={<Icon height={20} icon={h1} />}

@@ -5,8 +5,6 @@ import App from './App'
 import "threads/register"
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 )

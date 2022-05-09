@@ -68,7 +68,7 @@ export const useDataSaverFromContent = () => {
       reminders: useReminderStore.getState().reminders
     }
     mog('We persisted the data for you', { persistentData })
-    persistData(persistentData)
+    // persistData(persistentData)
   }
 
   return { saveEditorValueAndUpdateStores, saveNodeAPIandFs, saveDataToPersistentStorage }
