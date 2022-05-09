@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import EditorView from './Views/EditorView'
-import { useAuthStore, useAuthentication } from './Stores/useAuth'
+import { useAuthStore } from './Stores/useAuth'
 import { Login } from './Views/Login'
 import { Register } from './Views/Register'
 import ContentEditor from './Components/Editor/ContentEditor'
@@ -19,21 +19,16 @@ import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
 import OAuthDesktop from './Components/OAuthDesktop'
-import config from './config'
-import { Loading } from '@mexit/shared'
-import toast from 'react-hot-toast'
-import styled, { useTheme } from 'styled-components'
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import styled from 'styled-components'
 import { ForgotPassword } from './Views/ForgotPassword'
-import { useEditorBuffer } from './Hooks/useEditorBuffer'
-import useBlockStore from './Stores/useBlockStore'
 import Tasks from './Views/Tasks'
 import Archive from './Views/Archive'
 import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
 import DraftView from './Views/DraftView'
+import GoogleOAuth from './Components/OAuth/Google'
 
-export const SwitchWrapper = styled(animated.div) <{ $isAuth?: boolean }>`
+export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   position: fixed;
   width: ${({ theme, $isAuth }) =>
     !$isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`};
@@ -50,63 +45,6 @@ const ProtectedRoute = ({ children }) => {
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const theme = useTheme()
-  const { loginViaGoogle } = useAuthentication()
-
-  const code = new URLSearchParams(window.location.search).get('code')
-
-  const location = useLocation()
-  const { saveAndClearBuffer } = useEditorBuffer()
-  const isBlockMode = useBlockStore((store) => store.isBlockMode)
-  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
-
-  useEffect(() => {
-    if (authenticated) {
-      if (isBlockMode) {
-        setIsBlockMode(false)
-      }
-      saveAndClearBuffer()
-    }
-  }, [location])
-
-  useEffect(() => {
-    const setAsyncLocal = async () => {
-      setIsLoading(true)
-      const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
-      return res
-    }
-
-    if (code) {
-      setAsyncLocal()
-        .catch((err) => {
-          setIsLoading(false)
-          toast('Something went wrong!')
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    }
-  }, [code])
-
-  if (isLoading)
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100%'
-        }}
-      >
-        <Loading transparent dots={4} color={theme.colors.primary} />
-        <h3>Signing in</h3>
-      </div>
-    )
-
   return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
 }
 
@@ -136,6 +74,30 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <Register />
+          </AuthRoute>
+        }
+      />
+    </Routes>
+  )
+}
+
+const OAuthRoutes = () => {
+  return (
+    <Routes>
+      <Route
+        path="google"
+        element={
+          <AuthRoute>
+            <GoogleOAuth />
+          </AuthRoute>
+        }
+      />
+
+      <Route
+        path="google/desktop"
+        element={
+          <AuthRoute>
+            <OAuthDesktop />
           </AuthRoute>
         }
       />
@@ -215,7 +177,7 @@ export const Switch = () => {
     <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
-        <Route path={ROUTE_PATHS.oauthdesktop} element={<OAuthDesktop />} />
+        <Route path={`${ROUTE_PATHS.oauth}/*`} element={<OAuthRoutes />} />
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />

@@ -1,7 +1,9 @@
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-import { CenteredColumn, Title } from '@mexit/shared'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { CenteredColumn, Title } from '@mexit/shared'
+
 import config from '../config'
 import { useAuthentication } from '../Stores/useAuth'
 import { BackCard } from '../Style/Card'
