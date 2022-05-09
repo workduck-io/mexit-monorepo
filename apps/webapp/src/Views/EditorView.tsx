@@ -1,9 +1,11 @@
 import React from 'react'
-import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet } from 'react-router-dom'
 
 import styled from 'styled-components'
 import InfoBar from '../Components/Infobar'
+import useEditorActions from '../Hooks/useEditorActions'
+import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 
 const EditorViewWrapper = styled.div`
   display: flex;
@@ -14,13 +16,16 @@ const EditorViewWrapper = styled.div`
 `
 
 const EditorView = () => {
+
+  const { resetEditor } = useEditorActions()
+
   return (
     <EditorViewWrapper>
-      <SentryErrorBoundary fallback={<p>An error has occurred</p>}>
+      <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
         <Outlet />
-      </SentryErrorBoundary>
+      </ErrorBoundary>
       <InfoBar />
-    </EditorViewWrapper>
+    </EditorViewWrapper >
   )
 }
 

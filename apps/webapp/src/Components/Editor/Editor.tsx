@@ -1,17 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, createPlateUI } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
+
+import { MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import { ILinkElement } from './ILinkElement'
 import TagWrapper from './TagWrapper'
 import useDataStore from '../../Stores/useDataStore'
-import { MediaEmbedElement, TableWrapper, useEditorChange } from '@mexit/shared'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { ELEMENT_TODO_LI } from '@mexit/core'
 import Todo from '../Todo'
+import { useEditorChange } from '../../Hooks/useEditorActions'
 
 const EditorWrapper = styled.div`
   flex: 1;
