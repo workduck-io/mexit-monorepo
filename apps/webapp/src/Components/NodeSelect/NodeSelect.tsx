@@ -237,7 +237,6 @@ function NodeSelect({
   function handleSelectedItemChange({ selectedItem }: { selectedItem?: QuickLink }) {
     if (selectedItem) {
       const { key, isChild } = withoutDelimiter(selectedItem.value)
-      mog('Handling the selected item change', { selectedItem, key, isChild })
 
       onReverseClashAction({
         path: key,

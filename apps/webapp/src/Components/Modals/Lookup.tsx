@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
 
-import { mog } from '@mexit/core'
+import { generateNodeId, mog } from '@mexit/core'
 
 import { Input } from '../../Style/Form'
 import { useApi } from '../../Hooks/useApi'
@@ -14,6 +14,7 @@ import { useNodes } from '../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
+import useDataStore from '../../Stores/useDataStore'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;
@@ -44,7 +45,7 @@ const InputWrapper = styled.div`
 const Lookup = () => {
   const [open, setOpen] = useState(false)
   const { saveNewNodeAPI } = useApi()
-  const { addNode } = useNodes()
+  const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const { goTo } = useRouting()
 
@@ -92,12 +93,12 @@ const Lookup = () => {
     openNode(quickLink)
   }
 
-  const handleCreateItem = (inputValue: QuickLink) => {
-    addNode({ ilink: inputValue.value, showAlert: true }, (node) => {
-      mog('CreatedNode: ', { node })
-      saveNewNodeAPI(node.nodeid)
-      push(node.nodeid, { withLoading: false })
-    })
+  const handleCreateItem = async (inputValue: QuickLink) => {
+    checkValidILink(inputValue.text)
+    const nodeID = generateNodeId()
+    const node = await saveNewNodeAPI(nodeID, inputValue.text)
+    push(nodeID)
+    mog("Created Hierarchy: ", { node, inputValue })
     closeModal()
   }
 

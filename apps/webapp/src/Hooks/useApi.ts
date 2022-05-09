@@ -32,14 +32,18 @@ export const useApi = () => {
    * Saves new node data in the backend
    * Also updates the incoming data in the store
    */
-  const saveNewNodeAPI = async (nodeid: string) => {
-    const path = getPathFromNodeid(nodeid).split(SEPARATOR)
+  const saveNewNodeAPI = async (nodeid: string, path?: string) => {
+    if (!path) path = getPathFromNodeid(nodeid)
+
+    const paths = path.split(SEPARATOR)
+    console.log('Sendin this path to the API: ', path)
+
     const reqData = {
       nodePath: {
-        path: path.join('#')
+        path: paths.join('#')
       },
       id: nodeid,
-      title: path.slice(-1)[0],
+      title: paths.slice(-1)[0],
       type: 'NodeBulkRequest',
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
@@ -57,7 +61,6 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const { addedILinks, removedILinks } = d.data
-        // TODO: Return the empty node info from backend
         const time = Date.now()
         const metadata = {
           lastEditedBy: userDetails?.email,
