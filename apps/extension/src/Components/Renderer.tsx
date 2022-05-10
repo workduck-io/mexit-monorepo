@@ -1,6 +1,7 @@
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
-import React, { Suspense } from 'react'
+import { AsyncMethodReturns, connectToChild } from 'penpal'
+import React, { createRef, Suspense, useState } from 'react'
 import { useCallback } from 'react'
 import { useRef } from 'react'
 import { useEffect } from 'react'
@@ -15,42 +16,44 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = () => {
-  const activeItem = useSputlitContext().activeItem
-  const iframeRef = useRef(null)
+  const { activeItem, setIsLoading } = useSputlitContext()
+  const iframeRef = createRef<HTMLIFrameElement>()
+  const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
-  const handleEvent = (event) => {
-    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
-      switch (event.data.type) {
-        case 'height-init':
-          iframeRef.current.height = event.data.height + 'px'
-          break
-        case 'tab-info-request': {
-          const tags = parsePageMetaTags(window.document)
-          iframeRef.current.contentWindow.postMessage(
-            {
-              type: 'tab-info-response',
-              data: {
-                url: window.location.href,
-                tags
-              }
-            },
-            MEXIT_FRONTEND_URL_BASE
-          )
-          break
-        }
-        default:
-          break
-      }
-    }
-  }
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   const connection = connectToChild({
+  //     iframe: iframeRef.current,
+  //     methods: {
+  //       resize(value: number) {
+  //         iframeRef.current.height = value + 'px'
+  //         setIsLoading(false)
+  //       },
+  //       tabInfo() {
+  //         const tags = parsePageMetaTags(window.document)
 
-  useEffect(() => {
-    window.addEventListener('message', handleEvent)
+  //         return {
+  //           url: window.location.href,
+  //           tags
+  //         }
+  //       }
+  //     },
+  //     debug: true
+  //   })
 
-    return () => {
-      window.removeEventListener('message', handleEvent)
-    }
-  }, [])
+  //   connection.promise
+  //     .then((child) => {
+  //       setChild(child)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //     })
+
+  //   return () => {
+  //     connection.destroy()
+  //     setChild(null)
+  //   }
+  // }, [])
 
   return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} />
 }

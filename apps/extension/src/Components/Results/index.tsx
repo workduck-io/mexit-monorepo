@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
-import { ActionType, MexitAction } from '@mexit/core'
+import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import Action from '../Action'
-import { CategoryType, useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
@@ -84,17 +84,24 @@ function Results() {
         // TODO: improve the code below for the love of anything
       } else if (
         event.key === 'Enter' &&
+        searchResults[activeIndex]?.category === CategoryType.action &&
         searchResults[activeIndex]?.type !== ActionType.SEARCH &&
         activeItem?.type !== ActionType.SEARCH
       ) {
         event.preventDefault()
-        setActiveItem(searchResults[activeIndex])
-        actionExec(searchResults[activeIndex])
+
         setSearchResults([])
         // TODO: stop search bar on action type search
       } else if (event.key === 'Enter') {
         event.preventDefault()
         setSearchResults([])
+
+        if (searchResults[activeIndex].category === CategoryType.action) {
+          setActiveItem(searchResults[activeIndex])
+          actionExec(searchResults[activeIndex])
+        } else if (searchResults[activeIndex].category === CategoryType.backlink) {
+          window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${searchResults[activeIndex].id}`)
+        }
         if (!first) {
           setActiveItem(searchResults[activeIndex])
           setFirst(true)
@@ -142,12 +149,12 @@ function Results() {
   return (
     <StyledResults style={springProps}>
       {/* TODO: don't hardcode this subtitle as we want cmd+arrow key interaction later */}
-      <Subtitle>Navigation</Subtitle>
 
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {
             const item = searchResults[virtualRow.index]
+            const lastItem = virtualRow.index > 0 ? searchResults[virtualRow.index - 1] : undefined
             const handlers = {
               onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
               onClick: () => handleClick(virtualRow.index)
@@ -156,6 +163,7 @@ function Results() {
 
             return (
               <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
+                {item.category !== lastItem?.category && <Subtitle key={item.category}>{item.category}</Subtitle>}
                 <Action action={item} active={active} />
               </ListItem>
             )

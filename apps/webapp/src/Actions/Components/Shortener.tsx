@@ -8,9 +8,9 @@ import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
-import { resize } from '@mexit/shared'
 import { nanoid } from 'nanoid'
 import { apiURLs, CreateAlias, CreateTags, sitesMetadataDict, Tag } from '@mexit/core'
+import { AsyncMethodReturns, connectToParent } from 'penpal'
 
 const Form = styled.form`
   display: flex;
@@ -31,6 +31,25 @@ export const Shortener = () => {
   // const addTagsToGlobalStore = useTagStore((store) => store.addTags)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const userDetails = useAuthStore((store) => store.userDetails)
+  const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
+
+  // FIXME
+  // const connection = connectToParent({
+  //   methods: {},
+  //   debug: true
+  // })
+
+  // connection.destroy()
+
+  // connection.promise
+  //   .then((parent: any) => {
+  //     const { url, tags } = parent.tabInfo()
+  //     analyseTags(url, tags)
+  //     parent.resize(elementRef.current.height)
+  //   })
+  //   .catch((error) => {
+  //     console.log(error)
+  //   })
 
   const onShortenLinkSubmit = async () => {
     const reqBody = {
@@ -49,102 +68,72 @@ export const Shortener = () => {
     // addTagsToGlobalStore(reqBody.metadata.userTags)
 
     const URL = apiURLs.createShort
-    let response: any
+
     try {
-      response = await client.post(URL, reqBody, {
+      const response = await client.post(URL, reqBody, {
         headers: {
           'mex-workspace-id': workspaceDetails.id
         }
       })
-    } catch (error) {
-      response = error
-    }
 
-    window.parent.postMessage(
-      {
-        type: 'shortener',
-        status: response.status,
-        message: response.message || { ...reqBody, shortenedURL: response.data.shortenedURL }
-      },
-      '*'
-    )
+      // parent.toast.success('Link Shortened')
+    } catch (error) {
+      // parent.toast.error('Failed :( Try again later')
+    }
   }
 
-  const handleEvent = (event: MessageEvent) => {
-    switch (event.data.type) {
-      case 'tab-info-response': {
-        const { url, tags } = event.data.data
-        setCurrTabURL(event.data.data.url)
+  const analyseTags = (url: string, tags) => {
+    setCurrTabURL(url)
 
-        // Metatag Parsing
-        const matchedURL = sitesMetadataDict.filter((e) => url.toString().includes(e.baseUrl))
-        const resultUserTags: Tag[] = []
-        let resultShortAlias: string = undefined
-        // console.log({ matchedURL })
+    // Metatag Parsing
+    const matchedURL = sitesMetadataDict.filter((e) => url.toString().includes(e.baseUrl))
+    const resultUserTags: Tag[] = []
+    let resultShortAlias: string = undefined
+    // console.log({ matchedURL })
 
-        if (matchedURL.length > 0) {
-          const matchedMetaTags = []
-          for (const metaTag of matchedURL[0].metaTags) {
-            for (const tag of tags) {
-              if (tag.name === metaTag) {
-                resultShortAlias = CreateAlias(matchedURL[0].appName, tag)
-                matchedMetaTags.push(tag)
-                break
-              }
-            }
-            if (resultShortAlias) break
+    if (matchedURL.length > 0) {
+      const matchedMetaTags = []
+      for (const metaTag of matchedURL[0].metaTags) {
+        for (const tag of tags) {
+          if (tag.name === metaTag) {
+            resultShortAlias = CreateAlias(matchedURL[0].appName, tag)
+            matchedMetaTags.push(tag)
+            break
           }
+        }
+        if (resultShortAlias) break
+      }
 
-          // Add user tags for the keyword from the URL
-          for (const keyword of matchedURL[0].keywords) {
-            if (url.toString().includes(keyword) && resultUserTags.length === 0) {
-              resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString(), keyword, matchedMetaTags[0]))
-            }
-          }
-
-          // Add title as user tags if needed
-          if (matchedURL[0].titleAsTag) {
-            resultUserTags.push(
-              ...CreateTags(matchedURL[0].appName, url.toString(), 'NA', matchedMetaTags[0], matchedURL[0].titleAsTag)
-            )
-          }
-          if (resultUserTags.length === 0) resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString()))
-
-          setShort(resultShortAlias)
-          setUserTags(resultUserTags)
-        } else {
-          const title = tags.filter((el) => el.name === 'title')[0].value.trim()
-          if (!resultShortAlias) resultShortAlias = title
-          setUserTags([
-            { id: nanoid(), text: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }
-          ])
-          setShort(resultShortAlias)
+      // Add user tags for the keyword from the URL
+      for (const keyword of matchedURL[0].keywords) {
+        if (url.toString().includes(keyword) && resultUserTags.length === 0) {
+          resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString(), keyword, matchedMetaTags[0]))
         }
       }
+
+      // Add title as user tags if needed
+      if (matchedURL[0].titleAsTag) {
+        resultUserTags.push(
+          ...CreateTags(matchedURL[0].appName, url.toString(), 'NA', matchedMetaTags[0], matchedURL[0].titleAsTag)
+        )
+      }
+      if (resultUserTags.length === 0) resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString()))
+
+      setShort(resultShortAlias)
+      setUserTags(resultUserTags)
+    } else {
+      const title = tags.filter((el) => el.name === 'title')[0].value.trim()
+      if (!resultShortAlias) resultShortAlias = title
+      setUserTags([{ id: nanoid(), text: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }])
+      setShort(resultShortAlias)
     }
   }
 
-  useEffect(() => {
-    window.addEventListener('message', handleEvent)
+  // useEffect(() => {
+  //   parent?.resize(elementRef.current.clientHeight)
 
-    window.parent.postMessage(
-      {
-        type: 'tab-info-request'
-      },
-      '*'
-    )
-
-    return () => {
-      window.removeEventListener('message', handleEvent)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (elementRef !== null) {
-      resize(elementRef)
-    }
-    // Tags result in height change
-  }, [elementRef, userTags])
+  //   // Tags result in height change
+  // }, [elementRef, userTags])
 
   const removeUserTag = (tag: Tag) => {
     const updatedUserTags = userTags.filter((userTag) => tag.id !== userTag.id)

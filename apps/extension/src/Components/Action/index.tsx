@@ -1,8 +1,19 @@
+import { Icon } from '@iconify/react'
 import { MexitAction } from '@mexit/core'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
-import { StyledAction, Container, Content, Icon, Shortcut, Key, Title, Description } from './styled'
+import { DisplayShortcut } from './Shortcuts'
+import {
+  StyledAction,
+  Container,
+  Content,
+  Title,
+  Description,
+  ShortcutContainer,
+  ShortcutText,
+  ItemIcon
+} from './styled'
 
 interface ActionProps {
   action: MexitAction
@@ -10,20 +21,37 @@ interface ActionProps {
 }
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
+  const theme = useTheme()
   return (
     <StyledAction active={active}>
       <Container>
-        <Icon>
-          {action.data.icon && <img alt="Icon for Action" src={chrome.runtime.getURL(`/Assets/${action.data.icon}`)} />}
-        </Icon>
+        <ItemIcon
+          as={Icon}
+          color={theme.colors.primary}
+          height={20}
+          width={20}
+          icon={action?.icon}
+        />
         <Content>
           <Title> {action.title}</Title>
           {action.description && <Description>{action.description}</Description>}
         </Content>
       </Container>
-      <Shortcut>
-        {action.shortcut && action.shortcut.map((shortcutKey, id) => <Key key={id}>{shortcutKey}</Key>)}
-      </Shortcut>
+      {active && action.shortcut && (
+        <ShortcutContainer>
+          {Object.entries(action.shortcut).map(([key, shortcut]) => {
+            // if (action.type === QuickLinkType.backlink && key === 'save') {
+            //   if (!selection) return <span key={key}></span>
+            // }
+
+            return (
+              <ShortcutText key={shortcut.title}>
+                <DisplayShortcut shortcut={shortcut.keystrokes} /> <div className="text">{shortcut.title}</div>
+              </ShortcutText>
+            )
+          })}
+        </ShortcutContainer>
+      )}
     </StyledAction>
   )
 }

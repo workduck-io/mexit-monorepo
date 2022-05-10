@@ -112,7 +112,6 @@ export const useEditorStore = create<EditorContextType>(devtools((set, get) => (
   }
 })))
 
-
 // export type EditorContextType = {
 //   // State
 
