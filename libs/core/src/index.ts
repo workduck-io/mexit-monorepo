@@ -1,3 +1,4 @@
+export * from './Data/actions'
 export * from './Data/constants'
 export * from './Data/IpcAction'
 export * from './Data/outline'
@@ -21,7 +22,6 @@ export * from './Types/Store'
 export * from './Types/Theme'
 export * from './Types/Todo'
 
-export * from './Utils/actions'
 export * from './Utils/defaults'
 export * from './Utils/events'
 export * from './Utils/helpers'

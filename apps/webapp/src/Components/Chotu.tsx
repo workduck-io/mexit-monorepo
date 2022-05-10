@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { CategoryType, idxKey } from '@mexit/core'
+import { AsyncMethodReturns, connectToParent } from 'penpal'
+import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 import { initSearchIndex } from '../Workers/controller'
 
 export default function Chotu() {
+  const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const linkCaptures = useShortenerStore((state) => state.linkCaptures)
@@ -26,18 +31,37 @@ export default function Chotu() {
       setFirst(false)
     }
   }, [ilinks, archive, contents, snippets])
+  const { queryIndex } = useSearch()
 
-  const message = {
-    type: 'store-init',
-    userDetails: userDetails,
-    workspaceDetails: workspaceDetails,
-    linkCaptures: linkCaptures,
-    theme: theme,
-    authAWS: authAWS,
-    snippets: snippets
-  }
+  const connection = connectToParent({
+    methods: {
+      log(value: string) {
+        console.log('message log', value)
+      },
+      search(key: idxKey | idxKey[], query: string) {
+        console.log('webapp chotu', key, query)
+        const res = queryIndex(key, query)
+        console.log('results pls', res)
+        return res
+      }
+    },
+    debug: true
+  })
 
-  window.parent.postMessage(message, '*')
+  useEffect(() => {
+    connection.promise
+      .then((parent: any) => {
+        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets, contents)
+        // parent.success('Hi')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    return () => {
+      connection.destroy()
+    }
+  }, [theme, snippets, contents])
 
   return (
     <div>

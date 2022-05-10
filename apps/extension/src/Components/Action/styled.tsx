@@ -26,15 +26,9 @@ export const Container = styled.div`
   flex-direction: row;
 `
 
-export const Icon = styled.div`
-  display: flex;
-  align-items: center;
+export const ItemIcon = styled.div`
   margin-right: 0.75em;
-
-  img {
-    height: 24px;
-    aspect-ratio: 1/1;
-  }
+  align-self: center;
 `
 
 export const Content = styled.div`
@@ -54,15 +48,21 @@ export const Description = styled.p`
   margin: 0.25em 0 0.5em 0;
 `
 
-export const Shortcut = styled.div`
+export const ShortcutContainer = styled.div`
+  margin: 0 0.5rem;
   display: flex;
-  align-items: center;
-  margin: 0.5em;
+  flex-direction: column;
+  justify-content: center;
 `
+export const ShortcutText = styled.div`
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: flex-end;
 
-export const Key = styled.span`
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  margin: 0.25em;
-  padding: 0.25em;
+  .text {
+    display: flex;
+    align-items: center;
+    margin-left: 4px;
+    color: ${({ theme }) => theme.colors.text.fade};
+  }
 `

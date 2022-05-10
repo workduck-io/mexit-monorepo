@@ -1,11 +1,5 @@
-import { MexitAction } from '@mexit/core'
+import { CategoryType, MexitAction, NodeContent } from '@mexit/core'
 import React, { createContext, useContext, useState } from 'react'
-
-export enum CategoryType {
-  quicklink = 'Quick Links',
-  action = 'Quick Actions',
-  search = 'Search Results'
-}
 
 export type Search = {
   value: string
@@ -32,6 +26,8 @@ export type TooltipState = {
 type SputlitContextType = {
   search: Search
   setSearch: (val: Search) => void
+  isLoading: Boolean
+  setIsLoading: (val: boolean) => void
   selection: any
   setSelection: (val: any) => void
   searchResults: Array<MexitAction>
@@ -65,10 +61,13 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [preview, setPreview] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const value = {
     search,
     setSearch,
+    isLoading,
+    setIsLoading,
     selection,
     setSelection,
     activeIndex,

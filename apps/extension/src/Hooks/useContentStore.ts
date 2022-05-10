@@ -10,6 +10,7 @@ export interface ContentStoreState extends State {
   getContent: (url: string) => Content[]
   removeContent: (url: string, highlighterId: string) => void
   setContent: (url: string, content: NodeEditorContent, saveableRange: Partial<HighlightSource>, id: string) => void
+  initContent: (contents: Contents) => void
 }
 
 export const useContentStore = create<ContentStoreState>(
@@ -34,6 +35,11 @@ export const useContentStore = create<ContentStoreState>(
             }
           ]
         }
+        set({
+          contents: contents
+        })
+      },
+      initContent: (contents: Contents) => {
         set({
           contents: contents
         })

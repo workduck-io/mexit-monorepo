@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { useTheme } from 'styled-components'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'

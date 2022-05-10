@@ -19,11 +19,11 @@ export const GridWrapper = styled(animated.div)<{ grid?: string }>`
   height: 100vh;
   width: 100vw;
   overflow: auto;
-  display: grid;
 
   ${({ grid }) =>
     grid &&
     css`
+      display: grid;
       grid-template-columns: 300px 2fr auto;
     `}
 `
