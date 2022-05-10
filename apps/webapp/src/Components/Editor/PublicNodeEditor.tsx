@@ -22,7 +22,7 @@ const PublicNodeEditor = ({ nodeId }) => {
     async function getPublicNodeContent() {
       try {
         const node = await getPublicNodeAPI(nodeId)
-        setNode(node)
+        setNode({ ...node, id: nodeId })
       } catch (error) {
         navigate('/404')
       }

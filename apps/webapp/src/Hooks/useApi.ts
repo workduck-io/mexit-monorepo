@@ -213,7 +213,6 @@ export const useApi = () => {
 
   const getPublicNodeAPI = async (nodeId: string) => {
     const res = {
-      id: 'NODE_Px7CnrVecKK3YrwE8rGUQ',
       title: 'design',
       content: [
         {
