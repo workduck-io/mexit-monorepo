@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 import styled from 'styled-components'
 import InfoBar from '../Components/Infobar'
@@ -37,12 +37,17 @@ const EditorView = () => {
     }
   }, [ilinks, archive, contents, snippets])
 
+  const location = useLocation()
+  const showInfoBar = () => {
+    if (location.pathname.startsWith('/editor')) return true
+  }
+
   return (
     <EditorViewWrapper>
       <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
         <Outlet />
       </ErrorBoundary>
-      <InfoBar />
+      {showInfoBar() && <InfoBar />}
     </EditorViewWrapper>
   )
 }

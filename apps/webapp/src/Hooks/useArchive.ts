@@ -1,10 +1,10 @@
-import { ILink, apiURLs, USE_API } from '@mexit/core'
 import { client, useAuth } from '@workduck-io/dwindle'
-import { mog } from '@workduck-io/mex-editor'
+
+import { ILink, apiURLs, mog } from '@mexit/core'
+
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
 import useDataStore from '../Stores/useDataStore'
-import { useDataSaverFromContent } from './useSave'
 import { useSaver } from './useSaver'
 
 const useArchive = () => {
@@ -19,8 +19,6 @@ const useArchive = () => {
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
 
-  const { saveDataToPersistentStorage } = useDataSaverFromContent()
-
   const { onSave } = useSaver()
   // const { saveData } = useSaveData()
   const { userCred } = useAuth()
@@ -30,13 +28,9 @@ const useArchive = () => {
   }
 
   const addArchiveData = async (nodes: ILink[]): Promise<boolean> => {
-    if (!USE_API()) {
-      addInArchive(nodes)
-      return true
-    }
     if (userCred) {
       return await client
-        .post(
+        .put(
           apiURLs.archiveNodes(),
           {
             ids: nodes.map((i) => i.nodeid)
@@ -65,11 +59,8 @@ const useArchive = () => {
   }
 
   const unArchiveData = async (nodes: ILink[]) => {
-    if (!USE_API()) {
-      return unArchive(nodes[0])
-    }
     await client
-      .post(
+      .put(
         apiURLs.unArchiveNodes(),
         {
           ids: nodes.map((i) => i.nodeid)
@@ -90,10 +81,6 @@ const useArchive = () => {
   }
 
   const getArchiveData = async () => {
-    if (!USE_API()) {
-      return archive
-    }
-
     await client
       .get(apiURLs.getArchivedNodes(getWorkspaceId()), {
         headers: {
@@ -129,11 +116,6 @@ const useArchive = () => {
   }
 
   const removeArchiveData = async (nodeids: ILink[]): Promise<boolean> => {
-    if (!USE_API()) {
-      removeArchive(nodeids)
-      return true
-    }
-
     if (userCred) {
       const res = await client
         .post(
@@ -155,9 +137,6 @@ const useArchive = () => {
         .then(() => {
           cleanCachesAfterDelete(nodeids)
         })
-        // .then(() => {
-        //   saveDataToPersistentStorage()
-        // })
         .then(() => {
           return true
         })

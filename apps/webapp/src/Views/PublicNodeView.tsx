@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
-import PublicNavbar from '../Components/PublicNavbar'
 import Cookies from 'universal-cookie'
 
 const PublicNodeView = () => {
