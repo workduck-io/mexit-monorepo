@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet } from 'react-router-dom'
 
@@ -22,15 +22,20 @@ const EditorViewWrapper = styled.div`
 
 const EditorView = () => {
   const { resetEditor } = useEditorActions()
+  const { ilinks, archive } = useDataStore()
+  const contents = useContentStore((state) => state.contents)
+  const snippets = useSnippetStore((state) => state.snippets)
+  const [first, setFirst] = useState(true)
+
   useAnalysis()
 
   useEffect(() => {
-    const { ilinks, archive } = useDataStore.getState()
-    const contents = useContentStore.getState().contents
-    const snippets = useSnippetStore.getState().snippets
-
-    initSearchIndex({ ilinks, archive, contents, snippets })
-  }, [])
+    if (!first) {
+      initSearchIndex({ ilinks, archive, contents, snippets })
+    } else {
+      setFirst(false)
+    }
+  }, [ilinks, archive, contents, snippets])
 
   return (
     <EditorViewWrapper>
