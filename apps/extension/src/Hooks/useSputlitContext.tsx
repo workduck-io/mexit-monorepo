@@ -1,4 +1,4 @@
-import { CategoryType, MexitAction } from '@mexit/core'
+import { CategoryType, MexitAction, NodeContent } from '@mexit/core'
 import React, { createContext, useContext, useState } from 'react'
 
 export type Search = {

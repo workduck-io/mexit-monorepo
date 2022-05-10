@@ -27,18 +27,18 @@ export function getContent(nodeid: string): NodeContent {
   return defaultContent
 }
 
-export const getListItemFromNode = (node: ILink, description?: string, blockid?: string) => {
-  const rawText = description ?? convertContentToRawText(getContent(node?.nodeid)?.content ?? [], ' ')
+export const getListItemFromNode = (node: any, description?: string, blockid?: string) => {
+  const rawText = description ?? convertContentToRawText(getContent(node?.id)?.content ?? [], ' ')
 
   const listItem: ListItemType = {
     icon: node?.icon ?? 'gg:file-document',
     title: node?.path,
-    id: node?.nodeid,
+    id: node?.id,
     description: rawText,
     type: QuickLinkType.backlink,
     category: CategoryType.backlink,
     extras: {
-      nodeid: node?.nodeid,
+      nodeid: node?.id,
       blockid,
       path: node?.path,
       new: false

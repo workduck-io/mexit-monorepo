@@ -76,7 +76,6 @@ export default function Chotu() {
 
     connection.promise
       .then((child: any) => {
-        child.log('aata hai isko', search, child)
         setChild(child)
       })
       .catch((error) => {
@@ -122,6 +121,7 @@ export default function Chotu() {
 
         const mainItems = [...localNodes, ...actionItems]
         searchList = [CREATE_NEW_ITEM, ...mainItems]
+        mog('nodelist', { nodeItems })
         mog('searchList chotu', { searchList })
         if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
         setSearchResults(searchList)
