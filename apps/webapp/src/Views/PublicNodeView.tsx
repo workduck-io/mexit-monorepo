@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicNavbar from '../Components/PublicNavbar'
@@ -7,7 +7,7 @@ import Cookies from 'universal-cookie'
 
 const PublicNodeView = () => {
   const nodeId = useParams().nodeId
-
+  console.log('Inside public node: ', nodeId)
   useEffect(() => {
     const cookies = new Cookies()
     const timestamp = Date.now()
@@ -16,7 +16,9 @@ const PublicNodeView = () => {
 
   return (
     <>
-      <PublicNavbar />
+      <h1>
+        <Link to={'/'}>Mexit</Link>
+      </h1>
       <PublicNodeEditor nodeId={nodeId} />
     </>
   )

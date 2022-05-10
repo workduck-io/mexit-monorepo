@@ -92,7 +92,7 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
     editorTodos: getTodosFromContent(content)
   }
 
-  return options.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
+  return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
 
 expose({ analyseContent })

@@ -128,10 +128,6 @@ const ActionsRoutes = () => {
   )
 }
 
-const PublicNodeRoutes = () => {
-  return <Route path=":nodeId" element={<PublicNodeView />} />
-}
-
 const SettingsRoutes = () => {
   return (
     <Routes>
@@ -171,8 +167,7 @@ export const Switch = () => {
         <Route path={`${ROUTE_PATHS.oauth}/*`} element={<OAuthRoutes />} />
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
-        <Route path={ROUTE_PATHS.share} element={<PublicNodeRoutes />} />
-
+        <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
         <Route
           path={ROUTE_PATHS.home}
           element={

@@ -1,49 +1,58 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import styled from 'styled-components'
+import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+
+import { defaultContent, mog } from '@mexit/core'
 
 import Editor from './Editor'
-
-import { apiURLs, WORKSPACE_NAME } from '@mexit/core'
-
-const SPlate = styled.div`
-  flex: 1;
-  max-width: 800px;
-  margin: 1rem;
-  padding: 1rem;
-`
+import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
+import { StyledEditor, EditorWrapper } from '../../Style/Editor'
+import PublicNodeMetadata from '../EditorInfobar/PublicNodeMetadata'
+import { useApi } from '../../Hooks/useApi'
+import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
 
 const PublicNodeEditor = ({ nodeId }) => {
-  const [nodeContent, setNodeContent] = useState<any[]>()
-  const [nodePath, setNodePath] = useState<string>(nodeId)
-
+  const getPublicNode = usePublicNodeStore((store) => store.getPublicNode)
+  const { getPublicNodeAPI } = useApi()
   const navigate = useNavigate()
+
+  const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
 
   useEffect(() => {
     async function getPublicNodeContent() {
-      const URL = apiURLs.getPublicNode(nodeId)
       try {
-        const res = await axios.get<any>(URL, {
-          headers: {
-            'mex-workspace-id': WORKSPACE_NAME
-          }
-        })
-        setNodeContent(res.data.content)
-        setNodePath(res.data.path ?? nodeId)
+        const node = await getPublicNodeAPI(nodeId)
+        setNode(node)
       } catch (error) {
         navigate('/404')
       }
     }
     getPublicNodeContent()
-  }, [setNodeContent]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const editorRef = usePlateEditorRef()
+
+  const onFocusClick = () => {
+    if (editorRef) {
+      selectEditor(editorRef, { focus: true })
+    }
+  }
 
   return (
-    <SPlate>
-      {nodeContent && nodeContent.length > 0 && (
-        <Editor readOnly={true} nodeUID={nodeId} nodePath={nodeId} content={nodeContent} />
-      )}
-    </SPlate>
+    <StyledEditor showGraph={false} className="mex_editor">
+      {node?.metadata && <PublicNodeMetadata metadata={node.metadata} />}
+
+      <EditorWrapper onClick={onFocusClick}>
+        <Editor
+          readOnly={true}
+          nodeUID={nodeId}
+          nodePath={node?.title ?? ''}
+          content={node?.content ?? defaultContent.content}
+          onChange={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
+        />
+      </EditorWrapper>
+      <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
+    </StyledEditor>
   )
 }
 

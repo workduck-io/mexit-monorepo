@@ -211,6 +211,359 @@ export const useApi = () => {
       })
   }
 
+  const getPublicNodeAPI = async (nodeId: string) => {
+    const res = {
+      id: 'NODE_Px7CnrVecKK3YrwE8rGUQ',
+      title: 'design',
+      content: [
+        {
+          type: 'h1',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141037137,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: 'This is an H1'
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_saFIZrueywZ_3z72qmQzJ',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_ivxCu-liB4qlrXyNzw5Cq',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_2kKTteV5fL7D7GGZ5LfJs',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_zB38JTRk_QXHHZtX2L6-D',
+              metadata: {},
+              text: ''
+            },
+            {
+              type: 'tag',
+              id: 'TEMP_0jvp04eT3qsfVxAFvGlAd',
+              metadata: {},
+              value: 'tag1',
+              children: [
+                {
+                  id: 'TEMP_XOg1fHLqtViS3w-hZ2vU2',
+                  metadata: {},
+                  text: ''
+                }
+              ]
+            },
+            {
+              id: 'TEMP_GG0ja-lF-YfVHMqGnVIlw',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_uRjtA71Xw8EQjHXEBO-z2',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_iHZzIodx296Ugap63YjQZ',
+              metadata: {},
+              text: ''
+            },
+            {
+              type: 'tag',
+              id: 'TEMP_dTelr-blnf4ioHw4VNshA',
+              metadata: {},
+              value: 'tag2',
+              children: [
+                {
+                  id: 'TEMP_OEhvzx4sGL_LyTmBuA3la',
+                  metadata: {},
+                  text: ''
+                }
+              ]
+            },
+            {
+              id: 'TEMP_yXpprBx43sBoAQVWKt6Sy',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_kYiD4uvuFgeh6oG6E23wT',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_rptisCZ0EVtuWFQYreNtN',
+              metadata: {},
+              text: ''
+            },
+            {
+              type: 'tag',
+              id: 'TEMP_6R1UnTU55492DdH0WWbAN',
+              metadata: {},
+              value: 'mex',
+              children: [
+                {
+                  id: 'TEMP_adiQ_-WaASAXZtmbYwqbU',
+                  metadata: {},
+                  text: ''
+                }
+              ]
+            },
+            {
+              id: 'TEMP_-4MEHZaxs5VE6h12MND-e',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_mNAdADKnNajOkMTmKMAhB',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_I1dImSSPY8ms_FKY7WVRt',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_R3OPlAnf9UhATx_6WrzaO',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141037137,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652140847174
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_pzVp64cb3DLJFCQo5pbyE',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_DSDmn3qahNRlx_DB-lqpD',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141037137,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652140847174
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_a-YginJyRzzd3QCxL9Nxz',
+              metadata: {},
+              text: 'Inside there is some normal content and shit'
+            }
+          ]
+        },
+        {
+          type: 'h2',
+          id: 'TEMP_Q592NR_jHFVL9GAX496xj',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141037137,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652140847174
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_kUKmQdTmwsou_Y9Gvivle',
+              metadata: {},
+              text: 'Ab aayega re h2'
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_afsVhG8hzokN0_1ZKkJWi',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652141036298,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652141036298
+          },
+          children: [
+            {
+              id: 'TEMP_GeBeotOBP_YkyWYplZisr',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        },
+        {
+          type: 'p',
+          id: 'TEMP_St2T1NG8Fe54ykxBMtGd4',
+          metadata: {
+            lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            updatedAt: 1652140852597,
+            createdBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+            createdAt: 1652095091872
+          },
+          children: [
+            {
+              type: 'p',
+              id: 'TEMP_TSKoq_KqBtRFaCrwMxiI9',
+              metadata: {},
+              text: ''
+            }
+          ]
+        }
+      ],
+      metadata: {
+        createdAt: 1651772540797,
+        createdBy: 'sahil+mex@workduck.io',
+        lastEditedBy: '3b9c8d1b-c7a0-448c-851e-354a479c2e2b',
+        updatedAt: 1651772540797
+      }
+    }
+
+    return res
+  }
+
   const isPublic = (nodeid: string) => {
     return checkNodePublic(nodeid)
   }
@@ -222,6 +575,7 @@ export const useApi = () => {
     getNodesByWorkspace,
     makeNodePublic,
     makeNodePrivate,
-    isPublic
+    isPublic,
+    getPublicNodeAPI
   }
 }

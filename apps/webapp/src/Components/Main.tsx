@@ -84,17 +84,20 @@ const Main = ({ children }: MainProps) => {
   const { gridSpringProps } = useSidebarTransition()
 
   const showNav = (): boolean => {
+    if (location.pathname === '/') return true
     const showNavPaths = ['/editor', '/search', '/snippets', '/archive', '/tasks', '/settings']
-    showNavPaths.forEach((path) => {
+
+    for (const path of showNavPaths) {
       if (location.pathname.startsWith(path)) return true
-    })
+    }
+
     return false
   }
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       <GridWrapper style={gridSpringProps} grid={authenticated ? 'true' : ''}>
-        {authenticated && showNav && <Nav links={getLinks()} />}
+        {authenticated && showNav() && <Nav links={getLinks()} />}
         <Content id="wd-mex-content-view" grid={authenticated}>
           {children}
         </Content>
