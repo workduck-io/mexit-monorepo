@@ -7,10 +7,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_CONTENT_QC': {
       const URL = apiURLs.addContentCapture
-      const reqBody = {
-        ...data.body,
-        content: [{ children: data.body.content }]
-      }
+      const reqBody = data.body
 
       console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
 
@@ -28,38 +25,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
   }
-}
-
-export const handleStoreRequest = ({ subType, data }) => {
-  switch (subType) {
-    case 'GET_ITEM': {
-      const res = localStorage.getItem(data.key)
-      return { value: res }
-    }
-    case 'SET_ITEM': {
-      localStorage.setItem(data.key, data.value)
-      return
-    }
-    case 'REMOVE_ITEM': {
-      localStorage.removeItem(data.key)
-      return
-    }
-    case 'CLEAR_STORE': {
-      localStorage.clear()
-      return
-    }
-  }
-}
-
-export const handleAuthRequest = (data: any) => {
-  const authenticated = useAuthStore.getState().authenticated
-  let userDetails: any, workspaceDetails: any
-  if (authenticated) {
-    userDetails = useAuthStore.getState().userDetails
-    workspaceDetails = useAuthStore.getState().workspaceDetails
-  }
-
-  return { authenticated, userDetails, workspaceDetails }
 }
 
 export const handleActionRequest = (request: any) => {
@@ -81,9 +46,6 @@ export const handleActionRequest = (request: any) => {
       chrome.tabs.create({ url: request.data.base_url })
       break
   }
-}
-export const handleEditorSaveRequest = (data: any) => {
-  return console.log('nothing')
 }
 
 export const handleAsyncActionRequest = ({ subType, data }) => {
