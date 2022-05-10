@@ -14,7 +14,7 @@ import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
 
 export const ELEMENT_TAG = 'tag'
 
-export const editorPreviewComponents = {
+export const components = {
   [ELEMENT_LINK]: withProps(LinkElement, {
     as: 'a'
   }),
@@ -25,13 +25,13 @@ export const editorPreviewComponents = {
       }
     }
   }),
-  [ELEMENT_TAG]: TagElement as any,
+  [ELEMENT_TAG]: TagElement,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
   [ELEMENT_TABLE]: TableWrapper
 }
 
-const components = createPlateUI({
-  ...editorPreviewComponents
-})
+// const components = createPlateUI({
+//   ...editorPreviewComponents
+// })
 
 export default components

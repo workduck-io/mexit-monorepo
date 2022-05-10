@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { normalize } from '@mexit/shared'
+import { EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -37,6 +37,23 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Inter", sans-serif;
     line-height: 1.5;
     font-size: 14px;
+
+
+    /* Tippy Balloon styles */
+    ${TippyBalloonStyles}
+
+    /* Editor Balloon styles */
+    ${EditorBalloonStyles}
+
+    body > ul[role="listbox"]{
+      display: block;
+      /* list-style-type: disc; */
+      margin-block-start: 0em;
+      margin-block-end: 0em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      padding-inline-start: 0px;
+    }
   }
 
 `

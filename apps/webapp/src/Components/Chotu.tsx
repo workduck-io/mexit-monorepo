@@ -5,6 +5,7 @@ import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
@@ -35,10 +36,10 @@ export default function Chotu() {
   const connection = connectToParent<{ init: () => any; search: () => Promise<any> }>({
     methods: {
       search(key: idxKey | idxKey[], query: string) {
-        return queryIndex(key, query)
+        console.log('webapp chotu', key, query)
+        // return queryIndex(key, query)
       }
-    },
-    debug: true
+    }
   })
 
   useEffect(() => {

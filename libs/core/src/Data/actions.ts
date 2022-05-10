@@ -1,6 +1,30 @@
 import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 import { ActionType, MexitAction } from '../Types/Actions'
-import { CategoryType } from '../Types/Editor'
+import { CategoryType, QuickLinkType } from '../Types/Editor'
+
+export const CREATE_NEW_ITEM = {
+  title: 'Create new ',
+  id: 'create-new-node',
+  icon: 'bi:plus-circle',
+  type: QuickLinkType.backlink,
+  category: CategoryType.backlink,
+  description: 'Quick note',
+  shortcut: {
+    edit: {
+      category: 'action',
+      keystrokes: 'Enter',
+      title: 'to create'
+    },
+    save: {
+      category: 'action',
+      keystrokes: '$mod+Enter',
+      title: 'to save'
+    }
+  },
+  extras: {
+    new: true
+  }
+}
 
 // TODO: change shortcut keys based on user's OS
 export const initActions: Array<MexitAction> = [
@@ -480,7 +504,7 @@ export const searchBrowserAction = (query: string) => {
     id: '0',
     title: 'Search in Browser Search Bar',
     category: CategoryType.action,
-    description: "Perform a search in your browser's URL Bar!",
+    description: `Search for "${query}"`,
     type: ActionType.BROWSER_EVENT,
     icon: 'ph:magnifying-glass',
     data: {
@@ -488,8 +512,8 @@ export const searchBrowserAction = (query: string) => {
       query: query
     },
     shortcut: {
-      open: {
-        title: 'to open',
+      search: {
+        title: 'to search',
         category: 'action',
         keystrokes: 'Enter'
       }

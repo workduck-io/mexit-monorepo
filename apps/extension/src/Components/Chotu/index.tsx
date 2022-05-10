@@ -3,8 +3,12 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import {
   CategoryType,
+  CREATE_NEW_ITEM,
+  initActions,
   LinkCapture,
   MEXIT_FRONTEND_URL_BASE,
+  mog,
+  searchBrowserAction,
   Snippet,
   Theme,
   UserDetails,
@@ -19,6 +23,9 @@ import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
 import { AsyncMethodReturns, connectToChild } from 'penpal'
+import fuzzysort from 'fuzzysort'
+import { getListItemFromSnippet } from '../../Utils/helper'
+import { useSnippets } from '../../Hooks/useSnippets'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -26,6 +33,7 @@ export default function Chotu() {
   const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
   const setTheme = useThemeStore((store) => store.setTheme)
+  const getSnippet = useSnippets().getSnippet
 
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
@@ -62,7 +70,35 @@ export default function Chotu() {
 
     connection.promise
       .then(async (child: any) => {
+        console.log('extension chotu', search)
+        let searchList
         const nodeItems = await child.search('node', search.value)
+        const snippetItems = await child.search('snippet', search.value)
+
+        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+
+        const localNodes = []
+
+        // nodeItems.forEach((item) => {
+        //   const localNode = isLocalNode(item.id)
+
+        //   if (localNode.isLocal) {
+        //     // mog('Local node', { localNode, item })
+        //     const listItem = getistItemFromNode(localNode.ilink, item.text, item.blockId)
+        //     localNodes.push(listItem)
+        //   }
+        // })
+
+        snippetItems.forEach((snippet: Snippet) => {
+          const snip = getSnippet(snippet.id)
+          const item = getListItemFromSnippet(snip)
+          localNodes.push(item)
+        })
+
+        const mainItems = [...localNodes, ...actionItems]
+        searchList = [CREATE_NEW_ITEM, ...mainItems]
+        mog('searchList chotu', { searchList })
+        if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
       })
       .catch((error) => {
         console.log(error)
