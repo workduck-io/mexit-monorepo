@@ -8,6 +8,9 @@ import { clear as IDBClear } from 'idb-keyval'
 import { apiURLs, AuthStoreState, UserCred } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
+import useDataStore from './useDataStore'
+import { useSnippetStore } from './useSnippetStore'
+import useContentStore from './useContentStore'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -16,6 +19,9 @@ export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn, refreshToken } = useAuth()
 
+  const setILinks = useDataStore((store) => store.setIlinks)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const initContents = useContentStore((store) => store.initContents)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
@@ -97,12 +103,22 @@ export const useAuthentication = () => {
                 }
               )
               .then(async (d: any) => {
-                await refreshToken()
                 const userDetails = { email: uCred.email, userId: uCred.userId }
-                const workspaceDetails = { id: d.data.id, name: d.data.name }
+                const { registrationInfo, ilinks, nodes, snippets } = d.data
+                const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 
+                setILinks(ilinks)
+                initSnippets(snippets)
+
+                const contents = {}
+                nodes.forEach((node) => {
+                  contents[node.id] = { ...node, type: 'Node' }
+                })
+                initContents(contents)
                 setAuthenticated(userDetails, workspaceDetails)
-                console.log('Setting user as authenticated')
+                try {
+                  await refreshToken()
+                } catch (error) {} // eslint-disable-line
               })
               .catch(console.error)
           })
@@ -168,11 +184,23 @@ export const useAuthentication = () => {
         },
         workspaceName: newWorkspaceName
       })
-      .then((d: any) => {
+      .then(async (d: any) => {
         const userDetails = { email: uCred.email, userId: uCred.userId }
-        const workspaceDetails = { id: d.data.id, name: d.data.name }
+        const { registrationInfo, ilinks, nodes, snippets } = d.data
+        const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 
+        setILinks(ilinks)
+        initSnippets(snippets)
+
+        const contents = {}
+        nodes.forEach((node) => {
+          contents[node.id] = { ...node, type: 'editor' }
+        })
+        initContents(contents)
         setAuthenticated(userDetails, workspaceDetails)
+        try {
+          await refreshToken()
+        } catch (error) {} // eslint-disable-line
       })
       .catch(console.error)
 
