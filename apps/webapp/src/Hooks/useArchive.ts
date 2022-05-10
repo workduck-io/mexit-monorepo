@@ -1,6 +1,7 @@
-import { ILink, apiURLs, USE_API } from '@mexit/core'
 import { client, useAuth } from '@workduck-io/dwindle'
-import { mog } from '@workduck-io/mex-editor'
+
+import { ILink, apiURLs, mog } from '@mexit/core'
+
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
 import useDataStore from '../Stores/useDataStore'
@@ -30,10 +31,6 @@ const useArchive = () => {
   }
 
   const addArchiveData = async (nodes: ILink[]): Promise<boolean> => {
-    if (!USE_API()) {
-      addInArchive(nodes)
-      return true
-    }
     if (userCred) {
       return await client
         .post(
@@ -65,9 +62,6 @@ const useArchive = () => {
   }
 
   const unArchiveData = async (nodes: ILink[]) => {
-    if (!USE_API()) {
-      return unArchive(nodes[0])
-    }
     await client
       .post(
         apiURLs.unArchiveNodes(),
@@ -90,10 +84,6 @@ const useArchive = () => {
   }
 
   const getArchiveData = async () => {
-    if (!USE_API()) {
-      return archive
-    }
-
     await client
       .get(apiURLs.getArchivedNodes(getWorkspaceId()), {
         headers: {
@@ -129,11 +119,6 @@ const useArchive = () => {
   }
 
   const removeArchiveData = async (nodeids: ILink[]): Promise<boolean> => {
-    if (!USE_API()) {
-      removeArchive(nodeids)
-      return true
-    }
-
     if (userCred) {
       const res = await client
         .post(
@@ -155,9 +140,6 @@ const useArchive = () => {
         .then(() => {
           cleanCachesAfterDelete(nodeids)
         })
-        // .then(() => {
-        //   saveDataToPersistentStorage()
-        // })
         .then(() => {
           return true
         })
