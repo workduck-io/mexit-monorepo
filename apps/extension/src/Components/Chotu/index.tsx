@@ -4,6 +4,7 @@ import { useShortenerStore } from '../../Hooks/useShortener'
 import {
   CategoryType,
   CREATE_NEW_ITEM,
+  defaultActions,
   initActions,
   LinkCapture,
   MEXIT_FRONTEND_URL_BASE,
@@ -20,12 +21,14 @@ import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
 import { Notification } from '@mexit/shared'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import { Search, useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
 import { AsyncMethodReturns, connectToChild } from 'penpal'
 import fuzzysort from 'fuzzysort'
-import { getListItemFromSnippet } from '../../Utils/helper'
+import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
+import { ContentStoreState, useContentStore } from '../../Hooks/useContentStore'
+import { Contents } from '../../Types/Editor'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -38,7 +41,8 @@ export default function Chotu() {
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { setVisualState, search } = useSputlitContext()
+  const { setSearchResults, search } = useSputlitContext()
+  const initContent = useContentStore((store) => store.initContent)
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
@@ -52,7 +56,8 @@ export default function Chotu() {
           linkCaptures: LinkCapture[],
           theme: Theme,
           authAWS: any,
-          snippets: Snippet[]
+          snippets: Snippet[],
+          contents: Contents
         ) {
           // Can be separated into multiple methods
           setAutheticated(userDetails, workspaceDetails)
@@ -60,6 +65,7 @@ export default function Chotu() {
           setTheme(theme)
           setInternalAuthStore(authAWS)
           initSnippets(snippets)
+          initContent(contents)
         },
         success(message: string) {
           toast.success(message)
@@ -69,17 +75,31 @@ export default function Chotu() {
     })
 
     connection.promise
-      .then(async (child: any) => {
-        console.log('extension chotu', search)
+      .then((child: any) => {
+        child.log('aata hai isko', search, child)
+        setChild(child)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    // return () => {
+    //   connection.destroy()
+    // }
+  }, [])
+
+  useEffect(() => {
+    const useSearch = async (search: Search) => {
+      if (search.value !== '') {
         let searchList
-        const nodeItems = await child.search('node', search.value)
         const snippetItems = await child.search('snippet', search.value)
+        const nodeItems = await child.search('node', search.value)
+        // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
 
         const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
 
         const localNodes = []
 
-        // nodeItems.forEach((item) => {
         //   const localNode = isLocalNode(item.id)
 
         //   if (localNode.isLocal) {
@@ -88,6 +108,11 @@ export default function Chotu() {
         //     localNodes.push(listItem)
         //   }
         // })
+
+        nodeItems.forEach((item) => {
+          const listItem = getListItemFromNode(item, item.text, item.blockId)
+          localNodes.push(listItem)
+        })
 
         snippetItems.forEach((snippet: Snippet) => {
           const snip = getSnippet(snippet.id)
@@ -99,15 +124,16 @@ export default function Chotu() {
         searchList = [CREATE_NEW_ITEM, ...mainItems]
         mog('searchList chotu', { searchList })
         if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    return () => {
-      connection.destroy()
+        setSearchResults(searchList)
+      } else {
+        setSearchResults(defaultActions)
+      }
     }
-  }, [search])
+
+    if (child) {
+      useSearch(search)
+    }
+  }, [child, search])
 
   return (
     // TODO: Test this whenever shornter starts working

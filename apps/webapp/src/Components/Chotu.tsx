@@ -33,29 +33,35 @@ export default function Chotu() {
   }, [ilinks, archive, contents, snippets])
   const { queryIndex } = useSearch()
 
-  const connection = connectToParent<{ init: () => any; search: () => Promise<any> }>({
+  const connection = connectToParent({
     methods: {
+      log(value: string) {
+        console.log('message log', value)
+      },
       search(key: idxKey | idxKey[], query: string) {
         console.log('webapp chotu', key, query)
-        // return queryIndex(key, query)
+        const res = queryIndex(key, query)
+        console.log('results pls', res)
+        return res
       }
-    }
+    },
+    debug: true
   })
 
   useEffect(() => {
     connection.promise
       .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets)
+        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets, contents)
         // parent.success('Hi')
       })
       .catch((error) => {
-        console.log(error)
+        console.error(error)
       })
 
     return () => {
       connection.destroy()
     }
-  }, [theme])
+  }, [theme, snippets, contents])
 
   return (
     <div>

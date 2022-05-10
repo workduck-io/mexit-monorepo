@@ -58,15 +58,15 @@ const Search = () => {
     handleSearchInput(query)
   }
 
-  useEffect(() => {
-    if (search.value !== '') {
-      const res = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
-      if (res.length === 0) setSearchResults([searchBrowserAction(search.value)])
-      else setSearchResults(res)
-    } else {
-      setSearchResults(defaultActions)
-    }
-  }, [search])
+  // useEffect(() => {
+  //   if (search.value !== '') {
+  //     const res = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+  //     if (res.length === 0) setSearchResults([searchBrowserAction(search.value)])
+  //     else setSearchResults(res)
+  //   } else {
+  //     setSearchResults(defaultActions)
+  //   }
+  // }, [search])
 
   // TODO: it would be good to have the ability to go back after selected a search type action
 
