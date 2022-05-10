@@ -224,4 +224,3 @@ const useLoad = () => {
 }
 
 export default useLoad
-

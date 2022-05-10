@@ -19,6 +19,7 @@ export const ROUTE_PATHS = {
   snippet: '/snippets/node', // * /snippets/node/:snippetid
   chotu: '/chotu',
   actions: '/actions',
+  oauth: '/oauth',
   oauthdesktop: '/oauth/desktop',
   share: '/share',
   forgotpassword: '/auth/forgotpassword'

@@ -64,6 +64,35 @@ interface TagsRelated {
   fromAnalysis?: boolean
 }
 
+export const PublicTagsView = ({ nodeid, tags }) => {
+  return (
+    <InfoWidgetWrapper>
+      <Collapse
+        icon={hashtagIcon}
+        infoProps={{
+          text: TagsHelp
+        }}
+        title="Tags"
+        defaultOpen
+        maximumHeight="40vh"
+      >
+        {tags.length > 0 ? (
+          <TagsFlex>
+            {tags.map((t) => (
+              <TagFlex key={`info_tags_${nodeid}_${t}`}>#{t}</TagFlex>
+            ))}
+          </TagsFlex>
+        ) : (
+          <>
+            <Note>No Tags found.</Note>
+            <Note>Create tags with # view them and related nodes here.</Note>
+          </>
+        )}
+      </Collapse>
+    </InfoWidgetWrapper>
+  )
+}
+
 const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   const { getRelatedNodes, getTags } = useTags()
   const tagsCache = useDataStore((state) => state.tagsCache)

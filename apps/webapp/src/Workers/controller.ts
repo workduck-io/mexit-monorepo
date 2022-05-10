@@ -41,7 +41,7 @@ export const startSearchWorker = async () => {
   if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
 }
 
-export const initSearchIndex = async (fileData: PersistentData) => {
+export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   try {
     if (!searchWorker) {
       console.log('Creating new search worker')

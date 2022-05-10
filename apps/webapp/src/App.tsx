@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { useAuth } from '@workduck-io/dwindle'
 
-
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 import useThemeStore from './Stores/useThemeStore'
@@ -24,7 +23,7 @@ function App() {
       UserPoolId: config.cognito.USER_POOL_ID,
       ClientId: config.cognito.APP_CLIENT_ID
     })
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <Router>
