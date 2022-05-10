@@ -24,6 +24,7 @@ const PublicNodeEditor = ({ nodeId }) => {
         const node = await getPublicNodeAPI(nodeId)
         setNode({ ...node, id: nodeId })
       } catch (error) {
+        console.log('Error occured in get public: ', error)
         navigate('/404')
       }
     }

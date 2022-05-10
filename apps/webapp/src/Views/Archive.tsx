@@ -68,17 +68,12 @@ const Archive = () => {
   const [delNode, setDelNode] = useState(undefined)
   const [showModal, setShowModal] = useState(false)
   const { loadNode } = useLoad()
-  const { onSave } = useSaver()
   const contents = useContentStore((store) => store.contents)
   const theme = useTheme()
   const { queryIndex } = useSearch()
 
   const { updateDocument, removeDocument } = useSearch()
 
-  // * TODO: Uncomment this !important
-  // useEffect(() => {
-  //   getArchiveData()
-  // }, [])
   const getArchiveResult = (nodeid: string): GenericSearchResult => {
     const node = archive.find((node) => node.nodeid === nodeid)
     const content = getContent(nodeid)
@@ -91,7 +86,6 @@ const Archive = () => {
   }
   const onSearch = async (newSearchTerm: string) => {
     const res = await queryIndex('archive', newSearchTerm)
-    mog('ArchiveSearch', { newSearchTerm, res })
     if (newSearchTerm === '' && res.length === 0) {
       return initialArchive
     }
@@ -151,7 +145,6 @@ const Archive = () => {
     { item, splitOptions, ...props }: RenderItemProps<GenericSearchResult>,
     ref: React.Ref<HTMLDivElement>
   ) => {
-    mog('BaseItem', item)
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
     const node = archive.find((node) => node.nodeid === item.id)
@@ -210,16 +203,13 @@ const Archive = () => {
   const RenderItem = React.forwardRef(BaseItem)
 
   const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
-    // mog('BaseItem', item)
     if (!item) return null
     const node = archive.find((node) => node.nodeid === item.id)
     if (!node) return null
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
     const icon = fileList2Line
-    // mog('RenderPreview', { item })
     if (item) {
-      // const edNode = { ...node, title: node.path, id: node.nodeid }
       return (
         <SplitSearchPreviewWrapper id={`splitArchiveSearchPreview_for_${item.id}`}>
           <Title>
