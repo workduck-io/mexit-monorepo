@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { useAuth } from '@workduck-io/dwindle'
 
-
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 import useThemeStore from './Stores/useThemeStore'

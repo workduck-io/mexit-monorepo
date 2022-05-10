@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet } from 'react-router-dom'
 
@@ -7,6 +7,10 @@ import InfoBar from '../Components/Infobar'
 import useEditorActions from '../Hooks/useEditorActions'
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 import { useAnalysis } from '../Stores/useAnalysis'
+import { initSearchIndex } from '../Workers/controller'
+import useDataStore from '../Stores/useDataStore'
+import useContentStore from '../Stores/useContentStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 const EditorViewWrapper = styled.div`
   display: flex;
@@ -19,6 +23,14 @@ const EditorViewWrapper = styled.div`
 const EditorView = () => {
   const { resetEditor } = useEditorActions()
   useAnalysis()
+
+  useEffect(() => {
+    const { ilinks, archive } = useDataStore.getState()
+    const contents = useContentStore.getState().contents
+    const snippets = useSnippetStore.getState().snippets
+
+    initSearchIndex({ ilinks, archive, contents, snippets })
+  }, [])
 
   return (
     <EditorViewWrapper>

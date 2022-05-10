@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react'
 import { useAuthStore } from '../Stores/useAuth'
+import useContentStore from '../Stores/useContentStore'
+import useDataStore from '../Stores/useDataStore'
 import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
+import { initSearchIndex } from '../Workers/controller'
 
 export default function Chotu() {
   const userDetails = useAuthStore((store) => store.userDetails)
@@ -11,6 +14,14 @@ export default function Chotu() {
   const theme = useThemeStore((state) => state.theme)
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
+
+  useEffect(() => {
+    const { ilinks, archive } = useDataStore.getState()
+    const contents = useContentStore.getState().contents
+    const snippets = useSnippetStore.getState().snippets
+
+    initSearchIndex({ ilinks, archive, contents, snippets })
+  }, [])
 
   const message = {
     type: 'store-init',
