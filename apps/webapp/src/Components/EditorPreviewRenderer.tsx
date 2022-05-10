@@ -7,6 +7,7 @@ import { EditorStyles } from '../Style/Editor'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import useDataStore from '../Stores/useDataStore'
 import { commands } from './Editor/Editor'
+import { useEditorChange } from '@mexit/shared'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -104,6 +105,8 @@ const EditorPreviewRenderer = ({
     },
     withBalloonToolbar: false
   }
+
+  useEditorChange(editorId, content)
 
   // We get memoized plugins
   const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
