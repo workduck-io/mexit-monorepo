@@ -1,12 +1,12 @@
 import { linkTooltip } from '@mexit/shared'
 import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import { init as SentryInit } from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import { IS_DEV } from '@mexit/core'
-
 
 import styled, { css } from 'styled-components'
 import useNavlinks from '../Data/links'
@@ -70,24 +70,34 @@ const Main = ({ children }: MainProps) => {
 
       if (import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP && typeof import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP === 'string')
         Analytics.init(import.meta.env.VITE_MIXPANEL_TOKEN_WEBAPP)
-
     }
   }, [routingInstrumentation])
-
 
   const styles = {
     WebkitAppRegion: 'drag'
   }
   const { getLinks } = useNavlinks()
+  const location = useLocation()
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
 
   const { gridSpringProps } = useSidebarTransition()
 
+  const showNav = (): boolean => {
+    if (location.pathname === '/') return true
+    const showNavPaths = ['/editor', '/search', '/snippets', '/archive', '/tasks', '/settings']
+
+    for (const path of showNavPaths) {
+      if (location.pathname.startsWith(path)) return true
+    }
+
+    return false
+  }
+
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       <GridWrapper style={gridSpringProps} grid={authenticated ? 'true' : ''}>
-        {authenticated && <Nav links={getLinks()} />}
+        {authenticated && showNav() && <Nav links={getLinks()} />}
         <Content id="wd-mex-content-view" grid={authenticated}>
           {children}
         </Content>

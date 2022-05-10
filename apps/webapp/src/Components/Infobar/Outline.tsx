@@ -7,7 +7,7 @@ import fileList3Line from '@iconify/icons-ri/file-list-3-line'
 import { Icon } from '@iconify/react'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate'
 
-import { useAnalysisStore } from '../../Stores/useAnalysis'
+import { OutlineItem, useAnalysisStore } from '../../Stores/useAnalysis'
 import { Note } from '@mexit/shared'
 import Collapse from '../../Layout/Collapse'
 import { OutlineHelp } from '../../Data/defaultText'
@@ -16,8 +16,14 @@ import { InfoWidgetWrapper } from '../../Style/Infobar'
 import { OutlineIconWrapper, OutlineItemRender, OutlineItemText, OutlineWrapper } from '../../Style/Outline'
 import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
 
-const Outline = () => {
-  const outline = useAnalysisStore((state) => state.analysis.outline)
+interface OutlineProps {
+  staticOutline?: OutlineItem[]
+}
+
+const Outline = ({ staticOutline }: OutlineProps) => {
+  const storeOutline = useAnalysisStore((state) => state.analysis.outline)
+
+  const outline = staticOutline ? staticOutline : storeOutline
 
   const { selectBlock } = useFocusBlock()
   const setHighlights = useBlockHighlightStore((state) => state.setHighlightedBlockIds)
