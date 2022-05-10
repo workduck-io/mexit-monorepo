@@ -5,7 +5,6 @@ import { ILink, apiURLs, mog } from '@mexit/core'
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
 import useDataStore from '../Stores/useDataStore'
-import { useDataSaverFromContent } from './useSave'
 import { useSaver } from './useSaver'
 
 const useArchive = () => {
@@ -20,8 +19,6 @@ const useArchive = () => {
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
 
-  const { saveDataToPersistentStorage } = useDataSaverFromContent()
-
   const { onSave } = useSaver()
   // const { saveData } = useSaveData()
   const { userCred } = useAuth()
@@ -33,7 +30,7 @@ const useArchive = () => {
   const addArchiveData = async (nodes: ILink[]): Promise<boolean> => {
     if (userCred) {
       return await client
-        .post(
+        .put(
           apiURLs.archiveNodes(),
           {
             ids: nodes.map((i) => i.nodeid)
@@ -63,7 +60,7 @@ const useArchive = () => {
 
   const unArchiveData = async (nodes: ILink[]) => {
     await client
-      .post(
+      .put(
         apiURLs.unArchiveNodes(),
         {
           ids: nodes.map((i) => i.nodeid)
