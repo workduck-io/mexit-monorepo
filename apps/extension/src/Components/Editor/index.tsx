@@ -16,6 +16,7 @@ import { useTagStore } from '../../Hooks/useTags'
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, CaptureType } from '@mexit/core'
+import { useEditorContext } from "../../Hooks/useEditorContext"
 
 interface EditorProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -49,7 +50,7 @@ const commands = [
 ]
 
 export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, handleSave }) => {
-  const setPreview = useSputlitContext().setPreview
+  const { preview, setPreview } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])

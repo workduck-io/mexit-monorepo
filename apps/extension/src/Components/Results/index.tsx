@@ -10,20 +10,13 @@ import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
 import Screenshot from '../Action/Screenshot'
+import { useEditorContext } from '../../Hooks/useEditorContext'
 
 function Results() {
-  const {
-    search,
-    setSearch,
-    searchResults,
-    activeItem,
-    setActiveItem,
-    activeIndex,
-    setActiveIndex,
-    preview,
-    setPreview,
-    setSearchResults
-  } = useSputlitContext()
+  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setSearchResults } =
+    useSputlitContext()
+  const { preview, setPreview } = useEditorContext()
+
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
   const [showResults, setShowResults] = useState(true)

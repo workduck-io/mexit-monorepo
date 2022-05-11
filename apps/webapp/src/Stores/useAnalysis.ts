@@ -5,9 +5,8 @@ import { devtools } from 'zustand/middleware'
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import useEditorStore, { getContent } from './useEditorStore'
 import { areEqual } from '../Utils/hash'
-import { TodoType } from '@mexit/core'
+import { TodoType, checkIfUntitledDraftNode } from '@mexit/core'
 import useTodoStore from './useTodoStore'
-import { checkIfUntitledDraftNode } from '../Utils/strings'
 
 import { analyseContent } from '../Workers/controller'
 

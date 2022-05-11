@@ -1,6 +1,6 @@
 import { insertId } from '../../Utils/content'
 
-import { toLocaleString } from '../../Utils/time'
+import { toLocaleString } from '@mexit/core'
 
 const meetingTemplate = (title: string, date: number, link: string) => [
   { type: 'h1', children: [{ text: title }] },

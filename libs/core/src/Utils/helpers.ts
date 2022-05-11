@@ -1,5 +1,5 @@
-import { NodeContent, NodeEditorContent } from '../Types/Editor'
-import { SEPARATOR } from './idGenerator'
+import { NodeContent, NodeEditorContent, NodeProperties } from '../Types/Editor'
+import { generateNodeUID, SEPARATOR } from './idGenerator'
 import { convertContentToRawText } from './parseData'
 
 export function wrapErr<T>(f: (result: T) => void) {
@@ -23,6 +23,13 @@ export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 
 // Returns an array of unique values via Set
 export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr))
+
+export const createNodeWithUid = (key: string): NodeProperties => ({
+  title: key,
+  id: key,
+  nodeid: generateNodeUID(),
+  path: key
+})
 
 /*
  * Checks for links that start with  the separator (.) and returns key and whether it is a child node i.e. starting with the separator

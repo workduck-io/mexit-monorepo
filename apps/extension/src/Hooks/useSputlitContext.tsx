@@ -42,8 +42,6 @@ type SputlitContextType = {
   setTooltipState: (vs: TooltipState) => void
   dibbaState: TooltipState
   setDibbaState: (vs: TooltipState) => void
-  preview: boolean
-  setPreview: (val: boolean) => void
 }
 
 const SputlitContext = createContext<SputlitContextType>(undefined!)
@@ -60,7 +58,6 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     visualState: VisualState.hidden
   })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
-  const [preview, setPreview] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const value = {
@@ -81,9 +78,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     tooltipState,
     setTooltipState,
     dibbaState,
-    setDibbaState,
-    preview,
-    setPreview
+    setDibbaState
   }
 
   return <SputlitContext.Provider value={value}>{children}</SputlitContext.Provider>
