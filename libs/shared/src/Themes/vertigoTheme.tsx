@@ -35,6 +35,7 @@ export const vertigoTheme = generateTheme({
     accent: '#CC7796',
     oppositePrimary: '#ffffff'
   },
+  hasBlocks: true,
   backgroundImages: {
     app: 'https://i.imgur.com/5og7Xot.png'
   }

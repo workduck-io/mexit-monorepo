@@ -47,6 +47,12 @@ export const defaultShortcuts = {
     keystrokes: '$mod+Backslash',
     category: 'Actions'
   },
+  toggleSidebar: {
+    title: 'Toggle Sidebar',
+    keystrokes: '$mod+Shift+Backslash',
+    category: 'Actions'
+  },
+
   refreshNode: {
     title: 'Refresh Note',
     keystrokes: '$mod+KeyR',

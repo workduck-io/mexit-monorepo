@@ -33,5 +33,6 @@ export const vvkTheme = generateTheme({
     disabled: '#7f8288',
     accent: '#C792EA',
     oppositePrimary: '#000'
-  }
+  },
+  hasBlocks: true
 })
