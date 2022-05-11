@@ -1,18 +1,23 @@
-import { useAuthStore } from '../Hooks/useAuth'
-import { apiURLs } from '@mexit/core'
+import { apiURLs, defaultContent, serializeContent } from '@mexit/core'
 import client from './fetchClient'
 import { Tab } from '../Types/Tabs'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_CONTENT_QC': {
-      const URL = apiURLs.addContentCapture
-      const reqBody = data.body
+      const URL = apiURLs.createNode
+      // const path = getPathFromNodeid(nodeid).split(SEPARATOR)
+      const reqData = {
+        id: data.id,
+        title: data.title,
+        lastEditedBy: data.createdBy,
+        data: serializeContent(data.content ?? defaultContent.content)
+      }
 
-      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqBody)}`)
+      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqData)}`)
 
       return client
-        .post(URL, reqBody, {
+        .post(URL, reqData, {
           headers: {
             'mex-workspace-id': data.workspaceID
           }
