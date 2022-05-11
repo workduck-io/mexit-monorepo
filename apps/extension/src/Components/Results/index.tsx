@@ -29,12 +29,19 @@ function Results() {
 
   const springProps = useSpring(
     useMemo(() => {
-      return {
-        width: preview ? '50%' : '100%',
-        flex: preview ? '1' : '0',
-        margin: preview ? '0.75em' : '0'
+      const style = { width: '55%', marginRight: '0.75em' }
+
+      if (!preview) {
+        style.width = '0%'
+        style.marginRight = '0'
       }
-    }, [preview])
+
+      if (searchResults[activeIndex] && searchResults[activeIndex]?.category === QuickLinkType.action) {
+        style.width = '100%'
+      }
+
+      return style
+    }, [preview, activeIndex, searchResults])
   )
 
   // destructuring here to prevent linter warning to pass
@@ -79,8 +86,11 @@ function Results() {
         event.preventDefault()
         const item = searchResults[activeIndex]
 
-        if (item.category === QuickLinkType.action) {
+        if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
           actionExec(item, search.value)
+        } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
+          setActiveItem(item)
+          setSearchResults([])
         }
       }
     }
@@ -97,18 +107,13 @@ function Results() {
     setActiveIndex(0)
   }, [searchResults])
 
-  // To reset active Item when done
-  useEffect(() => {
-    const ret = () => {
-      setActiveItem()
-      setPreview(true)
-    }
-    return ret
-  }, [])
-
   function handleClick(id: number) {
-    if (searchResults[id]?.category === QuickLinkType.action) {
-      actionExec(searchResults[id])
+    const item = searchResults[id]
+
+    if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
+      actionExec(item, search.value)
+    } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
+      setActiveItem(item)
       setSearchResults([])
     }
   }
@@ -138,8 +143,8 @@ function Results() {
         </div>
       </List>
 
-      {/* {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
-      {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />} */}
+      {activeItem?.type === ActionType.RENDER && <Renderer />}
+      {/* {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}  */}
     </StyledResults>
   )
 }

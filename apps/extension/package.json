@@ -28,6 +28,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-toast": "^2.2.0",
+    "react-spring": "^9.4.3",
     "react-virtual": "^2.10.4",
     "sanitize-html": "^2.6.1",
     "slate": "^0.72.8",

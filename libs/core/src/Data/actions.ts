@@ -13,11 +13,6 @@ export const CREATE_NEW_ITEM = {
       category: 'action',
       keystrokes: 'Enter',
       title: 'to create'
-    },
-    save: {
-      category: 'action',
-      keystrokes: '$mod+Enter',
-      title: 'to save'
     }
   },
   extras: {
@@ -49,6 +44,13 @@ export const initActions: Array<MexitAction> = [
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
     icon: 'ri:link',
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    },
     data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
   },
   {

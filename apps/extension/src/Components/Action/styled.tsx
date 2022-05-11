@@ -41,11 +41,13 @@ export const Title = styled.h3`
   font-size: 1.1em;
   font-weight: 400;
   margin: 0;
+  white-space: nowrap;
 `
 
 export const Description = styled.p`
   font-size: 0.85em;
   margin: 0.25em 0 0.5em 0;
+  white-space: nowrap;
 `
 
 export const ShortcutContainer = styled.div`
