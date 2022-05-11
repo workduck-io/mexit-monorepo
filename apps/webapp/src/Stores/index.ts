@@ -1,11 +1,12 @@
-import { IS_DEV } from '@mexit/core'
 import { mountStoreDevtool } from 'simple-zustand-devtools'
 import { share, isSupported } from 'shared-zustand'
 
+import { IS_DEV } from '@mexit/core'
+
 import { useAnalysisStore } from './useAnalysis'
-import { useAuthStore } from './useAuth'
 import useContentStore from './useContentStore'
 import useDataStore from './useDataStore'
+import { useAuthStore } from './useAuth'
 import useEditorStore from './useEditorStore'
 import { useRecentsStore } from './useRecentsStore'
 import { useSnippetStore } from './useSnippetStore'

@@ -39,7 +39,11 @@ function DraftView() {
     <Wrapper>
       <Title>Mex Activity!</Title>
       <SSnippets>
-        {!allLinks || allLinks.length === 0 ? <h3>No Activity Found</h3> : ''}
+        {!allLinks || allLinks.length === 0 ? (
+          <h3>No Activity Found. Open Nodes and Bookmark Them, Then Come Back!</h3>
+        ) : (
+          ''
+        )}
         {allLinks &&
           allLinks.map((s) => (
             <SSnippet key={`NODE_${s.nodeid}`}>
