@@ -29,6 +29,7 @@ import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { ContentStoreState, useContentStore } from '../../Hooks/useContentStore'
 import { Contents } from '../../Types/Editor'
+import useDataStore from '../../Stores/useDataStore'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -46,6 +47,8 @@ export default function Chotu() {
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
+  const setIlinks = useDataStore((store) => store.setIlinks)
+
   useEffect(() => {
     const connection = connectToChild({
       iframe: iframeRef.current,
@@ -57,7 +60,8 @@ export default function Chotu() {
           theme: Theme,
           authAWS: any,
           snippets: Snippet[],
-          contents: Contents
+          contents: Contents,
+          ilinks: any[]
         ) {
           // Can be separated into multiple methods
           setAutheticated(userDetails, workspaceDetails)
@@ -66,6 +70,7 @@ export default function Chotu() {
           setInternalAuthStore(authAWS)
           initSnippets(snippets)
           initContent(contents)
+          setIlinks(ilinks)
         },
         success(message: string) {
           toast.success(message)
@@ -90,7 +95,6 @@ export default function Chotu() {
   useEffect(() => {
     const useSearch = async (search: Search) => {
       if (search.value !== '') {
-        let searchList
         const snippetItems = await child.search('snippet', search.value)
         const nodeItems = await child.search('node', search.value)
         // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
@@ -120,7 +124,7 @@ export default function Chotu() {
         })
 
         const mainItems = [...localNodes, ...actionItems]
-        searchList = [CREATE_NEW_ITEM, ...mainItems]
+        const searchList = [CREATE_NEW_ITEM, ...mainItems]
         mog('nodelist', { nodeItems })
         mog('searchList chotu', { searchList })
         if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
