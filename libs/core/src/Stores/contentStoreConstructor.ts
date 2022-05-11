@@ -6,6 +6,7 @@ export interface ContentStoreState {
   setSaved: (saved: boolean) => void
   removeContent: (nodeid: string) => void
   getContent: (nodeid: string) => NodeContent
+  getContentFromLink: (url: string) => NodeContent
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
   getAllMetadata: () => Record<string, NodeMetadata>
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
@@ -48,6 +49,10 @@ export const contentStoreConstructor = (set, get) => ({
   },
   getContent: (nodeid) => {
     return get().contents[nodeid]
+  },
+  getContentFromLink: (url) => {
+    const contents: Contents = get().contents
+    return Object.values(contents).find((item) => item.metadata.url === url)
   },
   removeContent: (nodeid) => {
     const oldContent = get().contents

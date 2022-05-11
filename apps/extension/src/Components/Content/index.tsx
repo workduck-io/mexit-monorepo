@@ -39,7 +39,7 @@ export default function Content() {
     const content = getMexHTMLDeserializer(selection?.html, editor)
 
     if (selection?.range && content && selection?.url) {
-      setValue(content)
+      setNodeContent(content)
       contentRef.current = content
     }
   }, [editor, selection]) // eslint-disable-line
@@ -61,7 +61,8 @@ export default function Content() {
       createdBy: userDetails?.email,
       createdAt: time,
       updatedAt: time,
-      saveableRange: selection.range
+      saveableRange: selection.range,
+      url: window.location.href
     }
 
     setContent(nodeId, contentRef.current, metadata)
