@@ -181,7 +181,8 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   flow = 'Flows',
-  tags = 'Tags'
+  tags = 'Tags',
+  action = 'Actions'
 }
 
 export enum ComboboxKey {

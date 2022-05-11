@@ -1,20 +1,20 @@
-import { CategoryType } from './Editor'
+import { CategoryType, QuickLinkType } from './Editor'
 import { Shortcut } from './Help'
 
 export enum ActionType {
-  SEARCH,
-  OPEN,
-  RENDER,
-  BROWSER_EVENT,
-  SCREENSHOT
+  SEARCH = 'Search Action',
+  OPEN = 'Open Link',
+  RENDER = 'Render Action',
+  BROWSER_EVENT = 'Browser Action',
+  SCREENSHOT = 'Screenshot Action'
 }
 
 export interface MexitAction {
   id: string
   title: string
   description?: string
-  type: ActionType
-  category: CategoryType
+  type?: ActionType
+  category: QuickLinkType
   icon?: string
   shortcut?: Record<string, Shortcut>
   data?: any

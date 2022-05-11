@@ -113,17 +113,8 @@ export default function Chotu() {
 
           const localNodes = []
 
-          //   const localNode = isLocalNode(item.id)
-
-          //   if (localNode.isLocal) {
-          //     // mog('Local node', { localNode, item })
-          //     const listItem = getistItemFromNode(localNode.ilink, item.text, item.blockId)
-          //     localNodes.push(listItem)
-          //   }
-          // })
-
           nodeItems.forEach((item) => {
-            const node = ilinks[item.id]
+            const node = ilinks.find((i) => i.nodeid === item.id)
             const listItem = getListItemFromNode(node, item.text, item.blockId)
             localNodes.push(listItem)
           })
@@ -136,7 +127,7 @@ export default function Chotu() {
 
           const mainItems = [...localNodes, ...actionItems]
           searchList = [CREATE_NEW_ITEM, ...mainItems]
-          mog('nodelist', { nodeItems })
+          mog('nodelist', { nodeItems, snippetItems })
           mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
           break
@@ -148,7 +139,7 @@ export default function Chotu() {
     if (child) {
       useSearch(search)
     }
-  }, [child, search])
+  }, [child, search, ilinks])
 
   return (
     // TODO: Test this whenever shornter starts working

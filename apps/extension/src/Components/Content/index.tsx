@@ -11,9 +11,10 @@ import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
 import useDataStore from '../../Stores/useDataStore'
-import { generateNodeId } from '@mexit/core'
+import { generateNodeId, QuickLinkType } from '@mexit/core'
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSnippets } from '../../Hooks/useSnippets'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
@@ -25,6 +26,7 @@ export default function Content() {
   const [value, setValue] = useState([{ text: '' }])
   const [first, setFirst] = useState(true)
   const userDetails = useAuthStore((state) => state.userDetails)
+  const getSnippet = useSnippets().getSnippet
 
   const ilinks = useDataStore((store) => store.ilinks)
   // Ref so that the function contains the newest value without re-renders
@@ -107,11 +109,12 @@ export default function Content() {
   }
 
   useEffect(() => {
-    if (searchResults[activeIndex]?.category === CategoryType.backlink) {
+    if (searchResults[activeIndex]?.category === QuickLinkType.backlink) {
       const content = useContentStore.getState().getContent(searchResults[activeIndex].id)?.content
       setNodeContent(content)
-    } else if (searchResults[activeIndex]?.category === CategoryType.action) {
-      setPreview(false)
+    } else if (searchResults[activeIndex]?.category === QuickLinkType.snippet) {
+      const content = getSnippet(searchResults[activeIndex].id).content
+      setNodeContent(content)
     }
   }, [activeIndex, searchResults])
 

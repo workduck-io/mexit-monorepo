@@ -35,8 +35,7 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
     title: node?.path,
     id: node?.nodeid,
     description: rawText,
-    type: QuickLinkType.backlink,
-    category: CategoryType.backlink,
+    category: QuickLinkType.backlink,
     extras: {
       nodeid: node?.nodeid,
       blockid,
@@ -63,7 +62,7 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
 export const getListItemFromAction = (action: MexitAction) => {
   const actionItem: ListItemType = {
     icon: action?.icon ?? 'fluent:arrow-routing-24-filled',
-    category: CategoryType.action,
+    category: QuickLinkType.action,
     id: action.id,
     type: action.type,
     description: action.description,
@@ -90,8 +89,7 @@ export const getListItemFromSnippet = (snippet: Snippet) => {
     title: snippet.title,
     id: snippet.id,
     description: rawText,
-    type: QuickLinkType.snippet,
-    category: CategoryType.backlink,
+    category: QuickLinkType.snippet,
     extras: {
       nodeid: snippet.id,
       path: snippet.title

@@ -76,10 +76,9 @@ function Results() {
         })
         // TODO: improve the code below for the love of anything
       } else if (
-        event.key === 'Enter' &&
-        searchResults[activeIndex]?.category === CategoryType.action &&
-        searchResults[activeIndex]?.type !== ActionType.SEARCH &&
-        activeItem?.type !== ActionType.SEARCH
+        event.key === 'Enter'
+        // searchResults[activeIndex]?.type !== ActionType.SEARCH &&
+        // activeItem?.type !== ActionType.SEARCH
       ) {
         event.preventDefault()
 
@@ -89,12 +88,12 @@ function Results() {
         event.preventDefault()
         setSearchResults([])
 
-        if (searchResults[activeIndex].category === CategoryType.action) {
-          setActiveItem(searchResults[activeIndex])
-          actionExec(searchResults[activeIndex])
-        } else if (searchResults[activeIndex].category === CategoryType.backlink) {
-          window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${searchResults[activeIndex].id}`)
-        }
+        // if (searchResults[activeIndex].category === CategoryType.action) {
+        //   setActiveItem(searchResults[activeIndex])
+        //   actionExec(searchResults[activeIndex])
+        // } else if (searchResults[activeIndex].category === CategoryType.backlink) {
+        //   window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${searchResults[activeIndex].id}`)
+        // }
         if (!first) {
           setActiveItem(searchResults[activeIndex])
           setFirst(true)
@@ -126,19 +125,19 @@ function Results() {
   }, [])
 
   function handleClick(id: number) {
-    if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
-      setActiveItem(searchResults[id])
-      actionExec(searchResults[id])
-      setSearchResults([])
-    } else {
-      setSearchResults([])
-      if (!first) {
-        setActiveItem(searchResults[id])
-        setFirst(true)
-      } else {
-        actionExec(activeItem, search.value)
-      }
-    }
+    // if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
+    //   setActiveItem(searchResults[id])
+    //   actionExec(searchResults[id])
+    //   setSearchResults([])
+    // } else {
+    //   setSearchResults([])
+    //   if (!first) {
+    //     setActiveItem(searchResults[id])
+    //     setFirst(true)
+    //   } else {
+    //     actionExec(activeItem, search.value)
+    //   }
+    // }
   }
 
   return (
@@ -166,8 +165,8 @@ function Results() {
         </div>
       </List>
 
-      {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
-      {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}
+      {/* {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
+      {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />} */}
     </StyledResults>
   )
 }

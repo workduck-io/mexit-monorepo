@@ -74,7 +74,7 @@ const Search = () => {
 
   return (
     <StyledSearch>
-      {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>}
+      {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
       <CenterIcon id="wd-mex-search-left-icon" cursor={false}>
         <Icon color={theme.colors.primary} height={24} width={24} icon={LensIcon} />
       </CenterIcon>
