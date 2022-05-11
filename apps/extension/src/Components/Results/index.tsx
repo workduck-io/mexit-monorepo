@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
-import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE, QuickLinkType } from '@mexit/core'
 import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import Action from '../Action'
@@ -75,30 +75,12 @@ function Results() {
           return nextIndex
         })
         // TODO: improve the code below for the love of anything
-      } else if (
-        event.key === 'Enter'
-        // searchResults[activeIndex]?.type !== ActionType.SEARCH &&
-        // activeItem?.type !== ActionType.SEARCH
-      ) {
-        event.preventDefault()
-
-        setSearchResults([])
-        // TODO: stop search bar on action type search
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        setSearchResults([])
+        const item = searchResults[activeIndex]
 
-        // if (searchResults[activeIndex].category === CategoryType.action) {
-        //   setActiveItem(searchResults[activeIndex])
-        //   actionExec(searchResults[activeIndex])
-        // } else if (searchResults[activeIndex].category === CategoryType.backlink) {
-        //   window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${searchResults[activeIndex].id}`)
-        // }
-        if (!first) {
-          setActiveItem(searchResults[activeIndex])
-          setFirst(true)
-        } else {
-          actionExec(activeItem, search.value)
+        if (item.category === QuickLinkType.action) {
+          actionExec(item, search.value)
         }
       }
     }
@@ -125,19 +107,10 @@ function Results() {
   }, [])
 
   function handleClick(id: number) {
-    // if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
-    //   setActiveItem(searchResults[id])
-    //   actionExec(searchResults[id])
-    //   setSearchResults([])
-    // } else {
-    //   setSearchResults([])
-    //   if (!first) {
-    //     setActiveItem(searchResults[id])
-    //     setFirst(true)
-    //   } else {
-    //     actionExec(activeItem, search.value)
-    //   }
-    // }
+    if (searchResults[id]?.category === QuickLinkType.action) {
+      actionExec(searchResults[id])
+      setSearchResults([])
+    }
   }
 
   return (

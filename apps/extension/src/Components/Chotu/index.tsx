@@ -30,6 +30,7 @@ import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useContentStore } from '../../Hooks/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import { useQuickLinks } from '../../Hooks/useQuickLinks'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -45,6 +46,7 @@ export default function Chotu() {
   const { setSearchResults, search } = useSputlitContext()
   const initContents = useContentStore((store) => store.initContents)
   const { ilinks, setIlinks } = useDataStore()
+  const { getQuickLinks } = useQuickLinks()
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
@@ -98,9 +100,19 @@ export default function Chotu() {
       switch (search.type) {
         case CategoryType.action:
           const actionList = fuzzysort
-            .go(search.value, initActions, { all: true, key: 'title' })
+            .go(search.value.substring(1), initActions, { all: true, key: 'title' })
             .map((item) => item.obj)
           searchList = actionList
+          break
+        case CategoryType.backlink:
+          const quickLinks = getQuickLinks()
+
+          const results = fuzzysort
+            .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
+            .map((item) => item.obj)
+
+          console.log('backlink resuts', results)
+          searchList = results
           break
         case CategoryType.search:
           const snippetItems = await child.search('snippet', search.value)
@@ -139,7 +151,7 @@ export default function Chotu() {
     if (child) {
       useSearch(search)
     }
-  }, [child, search, ilinks])
+  }, [child, search.value, ilinks])
 
   return (
     // TODO: Test this whenever shornter starts working
