@@ -15,7 +15,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 function Results() {
   const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setSearchResults } =
     useSputlitContext()
-  const { preview, setPreview } = useEditorContext()
+  const { preview, setPreview, setNodeContent } = useEditorContext()
 
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
@@ -30,7 +30,7 @@ function Results() {
   const springProps = useSpring(
     useMemo(() => {
       return {
-        width: preview ? '50%' : '0',
+        width: preview ? '50%' : '100%',
         flex: preview ? '1' : '0',
         margin: preview ? '0.75em' : '0'
       }
@@ -107,7 +107,9 @@ function Results() {
     // Not adding event listener to window as the event never reaches there
     document.getElementById('mexit')!.addEventListener('keydown', handler)
 
-    return () => document.getElementById('mexit')!.removeEventListener('keydown', handler)
+    return () => {
+      document.getElementById('mexit')!.removeEventListener('keydown', handler)
+    }
   }, [searchResults, activeIndex, activeItem])
 
   useEffect(() => {

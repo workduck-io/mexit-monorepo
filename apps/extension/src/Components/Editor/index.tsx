@@ -16,10 +16,9 @@ import { useTagStore } from '../../Hooks/useTags'
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, CaptureType } from '@mexit/core'
-import { useEditorContext } from "../../Hooks/useEditorContext"
+import { useEditorContext } from '../../Hooks/useEditorContext'
 
 interface EditorProps {
-  content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
   nodePath?: string
   nodeUID: string
   readOnly?: boolean
@@ -49,8 +48,8 @@ const commands = [
   }
 ]
 
-export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, handleSave }) => {
-  const { preview, setPreview } = useEditorContext()
+export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onChange, handleSave }) => {
+  const { preview, setPreview, nodeContent } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -83,7 +82,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     }
   }, [currTabURL])
 
-  useEditorChange(nodeUID, content)
+  useEditorChange(nodeUID, nodeContent)
 
   const comboboxConfig = {
     onKeyDownConfig: {
@@ -138,7 +137,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
     editableProps: {
       readOnly: false,
       placeholder: "Let's try something here...",
-      autoFocus: true
+      autoFocus: false
     },
     focusOptions: {
       edge: 'end',
@@ -164,11 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, read
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
-        value={[
-          {
-            children: content
-          }
-        ]}
+        value={nodeContent}
       />
     </EditorWrapper>
   )

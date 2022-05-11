@@ -94,44 +94,54 @@ export default function Chotu() {
 
   useEffect(() => {
     const useSearch = async (search: Search) => {
-      if (search.value !== '') {
-        const snippetItems = await child.search('snippet', search.value)
-        const nodeItems = await child.search('node', search.value)
-        // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
+      let searchList
+      switch (search.type) {
+        case CategoryType.action:
+          const actionList = fuzzysort
+            .go(search.value, initActions, { all: true, key: 'title' })
+            .map((item) => item.obj)
+          searchList = actionList
+          break
+        case CategoryType.search:
+          const snippetItems = await child.search('snippet', search.value)
+          const nodeItems = await child.search('node', search.value)
+          // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
 
-        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+          const actionItems = fuzzysort
+            .go(search.value, initActions, { all: true, key: 'title' })
+            .map((item) => item.obj)
 
-        const localNodes = []
+          const localNodes = []
 
-        //   const localNode = isLocalNode(item.id)
+          //   const localNode = isLocalNode(item.id)
 
-        //   if (localNode.isLocal) {
-        //     // mog('Local node', { localNode, item })
-        //     const listItem = getistItemFromNode(localNode.ilink, item.text, item.blockId)
-        //     localNodes.push(listItem)
-        //   }
-        // })
+          //   if (localNode.isLocal) {
+          //     // mog('Local node', { localNode, item })
+          //     const listItem = getistItemFromNode(localNode.ilink, item.text, item.blockId)
+          //     localNodes.push(listItem)
+          //   }
+          // })
 
-        nodeItems.forEach((item) => {
-          const listItem = getListItemFromNode(item, item.text, item.blockId)
-          localNodes.push(listItem)
-        })
+          nodeItems.forEach((item) => {
+            const listItem = getListItemFromNode(item, item.text, item.blockId)
+            localNodes.push(listItem)
+          })
 
-        snippetItems.forEach((snippet: Snippet) => {
-          const snip = getSnippet(snippet.id)
-          const item = getListItemFromSnippet(snip)
-          localNodes.push(item)
-        })
+          snippetItems.forEach((snippet: Snippet) => {
+            const snip = getSnippet(snippet.id)
+            const item = getListItemFromSnippet(snip)
+            localNodes.push(item)
+          })
 
-        const mainItems = [...localNodes, ...actionItems]
-        const searchList = [CREATE_NEW_ITEM, ...mainItems]
-        mog('nodelist', { nodeItems })
-        mog('searchList chotu', { searchList })
-        if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
-        setSearchResults(searchList)
-      } else {
-        setSearchResults(defaultActions)
+          const mainItems = [...localNodes, ...actionItems]
+          searchList = [CREATE_NEW_ITEM, ...mainItems]
+          mog('nodelist', { nodeItems })
+          mog('searchList chotu', { searchList })
+          if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
+          break
       }
+
+      setSearchResults(searchList)
     }
 
     if (child) {

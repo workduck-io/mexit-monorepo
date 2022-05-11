@@ -12,9 +12,12 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
 import useDataStore from '../../Stores/useDataStore'
 import { generateNodeId } from '@mexit/core'
+import { CategoryType } from '@mexit/core'
+import { useEditorContext } from '../../Hooks/useEditorContext'
 
 export default function Content() {
-  const { selection, setVisualState } = useSputlitContext()
+  const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
+  const { setNodeContent, setPreview } = useEditorContext()
 
   const setContent = useContentStore((store) => store.setContent)
   const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
@@ -93,18 +96,21 @@ export default function Content() {
     )
   }
 
+  useEffect(() => {
+    if (searchResults[activeIndex]?.category === CategoryType.backlink) {
+      const content = useContentStore.getState().getContent(searchResults[activeIndex].id)
+      console.log('node content', content)
+      // setNodeContent(content)
+    } else if (searchResults[activeIndex]?.category === CategoryType.action) {
+      setPreview(false)
+    }
+  }, [activeIndex, searchResults])
+
   return (
     <StyledContent>
       <Results />
       {/* TODO: add support for tooltip edit content */}
-      {selection && (
-        <Editor
-          nodeUID={nodeId}
-          content={selection?.editContent ? selection?.editContent : value}
-          onChange={updateContent}
-          handleSave={handleSave}
-        />
-      )}
+      <Editor nodeUID={nodeId} onChange={updateContent} handleSave={handleSave} />
     </StyledContent>
   )
 }

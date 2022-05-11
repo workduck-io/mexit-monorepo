@@ -17,6 +17,7 @@ import {
 import { useTheme } from 'styled-components'
 
 const Search = () => {
+  const [input, setInput] = useState('')
   const { search, setSearch, setSearchResults, activeItem, isLoading } = useSputlitContext()
   const theme = useTheme()
 
@@ -55,6 +56,7 @@ const Search = () => {
 
     const query = key.startsWith('.') || key.startsWith('[[.') ? key.replace('.', '') : key
 
+    setInput(replaceContinousDots)
     handleSearchInput(query)
   }
 
@@ -80,7 +82,7 @@ const Search = () => {
         autoFocus
         autoComplete="off"
         spellCheck="false"
-        value={search.value}
+        value={input}
         placeholder="[[  for Backlinks or / for actions"
         onChange={onChange}
       />

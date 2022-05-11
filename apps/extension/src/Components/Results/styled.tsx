@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import { animated } from 'react-spring'
 
 export const StyledResults = styled(animated.div)`
-  overflow: hidden;
+  overflow: hidden auto;
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
