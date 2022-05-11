@@ -40,8 +40,12 @@ function Results() {
         style.width = '100%'
       }
 
+      if (activeItem?.type === ActionType.RENDER) {
+        style.width = '100%'
+      }
+
       return style
-    }, [preview, activeIndex, searchResults])
+    }, [preview, activeIndex, searchResults, activeItem])
   )
 
   // destructuring here to prevent linter warning to pass

@@ -16,7 +16,7 @@ import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import { Tag, CaptureType, QuickLinkType } from '@mexit/core'
+import { Tag, CaptureType, QuickLinkType, ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 
 interface EditorProps {
@@ -50,7 +50,7 @@ const commands = [
 ]
 
 export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onChange, handleSave }) => {
-  const { searchResults, activeIndex } = useSputlitContext()
+  const { searchResults, activeIndex, activeItem } = useSputlitContext()
   const { preview, setPreview, nodeContent } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
@@ -161,8 +161,13 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onC
         style.padding = '0'
       }
 
+      if (activeItem?.type === ActionType.RENDER) {
+        style.width = '0%'
+        style.padding = '0'
+      }
+
       return style
-    }, [preview, activeIndex, searchResults])
+    }, [preview, activeIndex, searchResults, activeItem])
   )
 
   const debounced = useDebouncedCallback((value) => {

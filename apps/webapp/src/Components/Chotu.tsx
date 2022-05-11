@@ -36,9 +36,6 @@ export default function Chotu() {
 
   const connection = connectToParent({
     methods: {
-      log(value: string) {
-        console.log('message log', value)
-      },
       search(key: idxKey | idxKey[], query: string) {
         const res = searchWorker ? queryIndex(key, query) : []
         return res

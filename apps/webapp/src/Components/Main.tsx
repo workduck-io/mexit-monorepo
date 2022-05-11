@@ -96,9 +96,9 @@ const Main = ({ children }: MainProps) => {
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
-      <GridWrapper style={gridSpringProps} grid={authenticated ? 'true' : ''}>
+      <GridWrapper style={gridSpringProps} grid={authenticated && showNav() ? 'true' : 'false'}>
         {authenticated && showNav() && <Nav links={getLinks()} />}
-        <Content id="wd-mex-content-view" grid={authenticated}>
+        <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
           {children}
         </Content>
       </GridWrapper>

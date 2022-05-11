@@ -75,6 +75,9 @@ export default function Chotu() {
         },
         success(message: string) {
           toast.success(message)
+        },
+        error(message: string) {
+          toast.error(message)
         }
       },
       debug: true
