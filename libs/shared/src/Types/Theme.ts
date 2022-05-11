@@ -41,6 +41,7 @@ export interface ButtonPalette {
 
 export interface BackgroundImages {
   app: string
+  preview?: string
 }
 
 export interface ThemePalette {
