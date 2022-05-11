@@ -266,7 +266,7 @@ export const generateTree = (treeFlat: FlatItem[], expanded: string[]): TreeData
       // Will have a parent
       const parentId = `1${TREE_SEPARATOR}${getIdFromBaseNestedTree(baseNestedTree, parentPath)}`
       const parentItem = nestedTree.items[parentId]
-      mog('hasParent Internal', { parentId, nestedItem, parentItem, parentPath, n, i })
+      // mog('hasParent Internal', { parentId, nestedItem, parentItem, parentPath, n, i })
       if (parentItem) {
         // add to tree and update parent
         const newId = `1${TREE_SEPARATOR}${getIdFromBaseNestedTree(baseNestedTree, n.id)}`
