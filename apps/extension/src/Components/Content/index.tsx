@@ -10,6 +10,8 @@ import Results from '../Results'
 import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
+import useDataStore from '../../Stores/useDataStore'
+import { generateNodeId } from '@mexit/core'
 
 export default function Content() {
   const { selection, setVisualState } = useSputlitContext()
@@ -20,6 +22,7 @@ export default function Content() {
   const [value, setValue] = useState([{ text: '' }])
   const [first, setFirst] = useState(true)
 
+  const ilinks = useDataStore((store) => store.ilinks)
   // Ref so that the function contains the newest value without re-renders
   const currentContent = value
   const contentRef = useRef(currentContent)
@@ -33,7 +36,7 @@ export default function Content() {
       setValue(content)
       contentRef.current = content
     }
-  }, [editor, selection]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [editor, selection]) // eslint-disable-line
 
   const updateContent = (newContent) => {
     // Because the useEditorChange hook runs the onChange once
@@ -48,17 +51,28 @@ export default function Content() {
   const handleSave = (payload: any) => {
     setContent(selection.url, contentRef.current, selection.range, nodeId)
     toast.success('Saved')
+    console.log('Payload: ', payload)
+    const title = new Date().toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    })
 
+    const referenceID = ilinks.filter((ilink) => ilink.path.toLowerCase() === 'drafts')[0]
     chrome.runtime.sendMessage(
       {
         type: 'CAPTURE_HANDLER',
         subType: 'CREATE_CONTENT_QC',
         data: {
-          body: {
-            ...payload,
-            content: contentRef.current,
-            workspaceID: workspaceDetails.id
-          }
+          id: generateNodeId(),
+          content: contentRef.current,
+          referenceID: referenceID,
+          title: title,
+          workspaceID: workspaceDetails.id,
+          createdBy: payload.createdBy
         }
       },
       (response) => {

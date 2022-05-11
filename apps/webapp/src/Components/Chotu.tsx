@@ -51,7 +51,7 @@ export default function Chotu() {
   useEffect(() => {
     connection.promise
       .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets, contents)
+        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets, contents, ilinks)
         // parent.success('Hi')
       })
       .catch((error) => {
@@ -61,7 +61,7 @@ export default function Chotu() {
     return () => {
       connection.destroy()
     }
-  }, [theme, snippets, contents])
+  }, [ilinks, theme, snippets, contents])
 
   return (
     <div>
