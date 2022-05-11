@@ -15,7 +15,7 @@ import LinkedInBadge from './LinkedInBadge'
 export function InternalEvents() {
   useToggleHandler()
   initAnalytics()
-  handleHighlighter()
+  // handleHighlighter()
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
@@ -114,33 +114,33 @@ function initAnalytics() {
   })
 }
 
-function handleHighlighter() {
-  const getContent = useContentStore((store) => store.getContent)
-  const { setTooltipState } = useSputlitContext()
+// function handleHighlighter() {
+//   const getContent = useContentStore((store) => store.getContent)
+//   const { setTooltipState } = useSputlitContext()
 
-  const highlightOldRange = () => {
-    const content = getContent(window.location.href)
-    if (content && Object.keys(content).length !== 0) {
-      content.forEach((h) => {
-        const { startMeta, endMeta, text, id } = h.range
-        highlighter.fromStore(startMeta, endMeta, text, id)
-      })
-    }
-  }
+//   const highlightOldRange = () => {
+//     const content = getContent(window.location.href)
+//     if (content && Object.keys(content).length !== 0) {
+//       content.forEach((h) => {
+//         const { startMeta, endMeta, text, id } = h.range
+//         highlighter.fromStore(startMeta, endMeta, text, id)
+//       })
+//     }
+//   }
 
-  useEffect(() => {
-    highlightOldRange()
+//   useEffect(() => {
+//     highlightOldRange()
 
-    highlighter.on(Highlighter.event.CLICK, (e) => {
-      const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
-      const coordinates = element.getBoundingClientRect()
+//     highlighter.on(Highlighter.event.CLICK, (e) => {
+//       const element = document.querySelector(`[data-highlight-id="${e.id}"]`)
+//       const coordinates = element.getBoundingClientRect()
 
-      setTooltipState({ visualState: VisualState.showing, id: e.id, coordinates: coordinates })
-    })
+//       setTooltipState({ visualState: VisualState.showing, id: e.id, coordinates: coordinates })
+//     })
 
-    return () => highlighter.dispose()
-  }, [window.location.href])
-}
+//     return () => highlighter.dispose()
+//   }, [window.location.href])
+// }
 
 function badgeRenderer() {
   function renderBadge() {

@@ -10,9 +10,9 @@ import { NodeEditorContent } from '@mexit/core'
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
 
-  const content = useContentStore((store) => store.getContent(window.location.href)).find(
-    (item) => item.highlighterId === tooltipState.id
-  ).content
+  // const content = useContentStore((store) => store.getContent(window.location.href)).find(
+  //   (item) => item.highlighterId === tooltipState.id
+  // ).content
 
   const removeContent = useContentStore((store) => store.removeContent)
   const highligter = new Highlighter()
@@ -20,7 +20,7 @@ function Tooltip() {
   const handleDelete = () => {
     // TODO: send request to backed to remove the same
     highligter.remove(tooltipState.id)
-    removeContent(window.location.href, tooltipState.id)
+    // removeContent(window.location.href, tooltipState.id)
     toast.success('Highlight removed')
 
     setTooltipState({ visualState: VisualState.hidden })
@@ -28,7 +28,7 @@ function Tooltip() {
 
   const handleEdit = () => {
     setVisualState(VisualState.showing)
-    setSelection({ editContent: content })
+    // setSelection({ editContent: content })
     setTooltipState({ visualState: VisualState.hidden })
   }
 
@@ -86,7 +86,7 @@ function Tooltip() {
         </svg>
       </Icon>
 
-      <Icon onClick={() => handleCopyClipboard(content)}>
+      <Icon onClick={() => handleCopyClipboard([])}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

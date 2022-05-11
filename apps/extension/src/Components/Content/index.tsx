@@ -12,7 +12,7 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
 import useDataStore from '../../Stores/useDataStore'
 import { generateNodeId } from '@mexit/core'
-import { CategoryType } from '@mexit/core'
+import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 
 export default function Content() {
@@ -24,11 +24,12 @@ export default function Content() {
   const editor = usePlateEditorRef(nodeId)
   const [value, setValue] = useState([{ text: '' }])
   const [first, setFirst] = useState(true)
+  const userDetails = useAuthStore((state) => state.userDetails)
 
   const ilinks = useDataStore((store) => store.ilinks)
   // Ref so that the function contains the newest value without re-renders
   const currentContent = value
-  const contentRef = useRef(currentContent)
+  const contentRef = useRef<NodeEditorContent>(currentContent)
 
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -52,7 +53,16 @@ export default function Content() {
   }
 
   const handleSave = (payload: any) => {
-    setContent(selection.url, contentRef.current, selection.range, nodeId)
+    const time = Date.now()
+    const metadata: NodeMetadata = {
+      lastEditedBy: userDetails?.email,
+      createdBy: userDetails?.email,
+      createdAt: time,
+      updatedAt: time,
+      saveableRange: selection.range
+    }
+
+    setContent(nodeId, contentRef.current, metadata)
     toast.success('Saved')
     console.log('Payload: ', payload)
     const title = new Date().toLocaleString('en-US', {
@@ -98,9 +108,8 @@ export default function Content() {
 
   useEffect(() => {
     if (searchResults[activeIndex]?.category === CategoryType.backlink) {
-      const content = useContentStore.getState().getContent(searchResults[activeIndex].id)
-      console.log('node content', content)
-      // setNodeContent(content)
+      const content = useContentStore.getState().getContent(searchResults[activeIndex].id)?.content
+      setNodeContent(content)
     } else if (searchResults[activeIndex]?.category === CategoryType.action) {
       setPreview(false)
     }

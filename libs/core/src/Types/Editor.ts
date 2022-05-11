@@ -29,7 +29,11 @@ export interface NodeMetadata {
   createdAt: number
   lastEditedBy: string
   updatedAt: number
+
+  highlighterId?: string
+  saveableRange?: Partial<HighlightSource>
 }
+
 export interface Block {
   id: string // Block ID of form `BLOCK_`
   nodeUID: string // UID of node to which this block belongs

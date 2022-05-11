@@ -3,6 +3,7 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import {
   CategoryType,
+  Contents,
   CREATE_NEW_ITEM,
   defaultActions,
   initActions,
@@ -27,8 +28,7 @@ import { AsyncMethodReturns, connectToChild } from 'penpal'
 import fuzzysort from 'fuzzysort'
 import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { ContentStoreState, useContentStore } from '../../Hooks/useContentStore'
-import { Contents } from '../../Types/Editor'
+import { useContentStore } from '../../Hooks/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 
 export default function Chotu() {
@@ -43,11 +43,10 @@ export default function Chotu() {
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setSearchResults, search } = useSputlitContext()
-  const initContent = useContentStore((store) => store.initContent)
+  const initContents = useContentStore((store) => store.initContents)
+  const { ilinks, setIlinks } = useDataStore()
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
-
-  const setIlinks = useDataStore((store) => store.setIlinks)
 
   useEffect(() => {
     const connection = connectToChild({
@@ -69,8 +68,8 @@ export default function Chotu() {
           setTheme(theme)
           setInternalAuthStore(authAWS)
           initSnippets(snippets)
-          initContent(contents)
           setIlinks(ilinks)
+          initContents(contents)
         },
         success(message: string) {
           toast.success(message)
@@ -87,9 +86,10 @@ export default function Chotu() {
         console.error(error)
       })
 
-    // return () => {
-    //   connection.destroy()
-    // }
+    return () => {
+      connection.destroy()
+      setChild(null)
+    }
   }, [])
 
   useEffect(() => {
@@ -123,7 +123,8 @@ export default function Chotu() {
           // })
 
           nodeItems.forEach((item) => {
-            const listItem = getListItemFromNode(item, item.text, item.blockId)
+            const node = ilinks[item.id]
+            const listItem = getListItemFromNode(node, item.text, item.blockId)
             localNodes.push(listItem)
           })
 

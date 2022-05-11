@@ -40,7 +40,6 @@ export default function Chotu() {
         console.log('message log', value)
       },
       search(key: idxKey | idxKey[], query: string) {
-        console.log('query', query)
         const res = searchWorker ? queryIndex(key, query) : []
         return res
       }
