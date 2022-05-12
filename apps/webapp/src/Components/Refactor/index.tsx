@@ -33,7 +33,7 @@ const Refactor = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
   useEffect(() => {
-    console.log('Setting up a keyboard shortcut: ', shortcuts.showRefactor.keystrokes)
+    // console.log('Setting up a keyboard shortcut: ', shortcuts.showRefactor.keystrokes)
     const unsubscribe = tinykeys(window, {
       [shortcuts.showRefactor.keystrokes]: (event) => {
         event.preventDefault()
@@ -70,7 +70,7 @@ const Refactor = () => {
   const { getNodeidFromPath } = useLinks()
 
   useEffect(() => {
-    mog('Refactor', { open, to, from })
+    // mog('Refactor', { open, to, from })
     if (to && from && !isReserved(from) && !isReserved(to)) {
       // mog('To, from in refactor', { to, from })
       setMockRefactored(getMockRefactor(from, to))

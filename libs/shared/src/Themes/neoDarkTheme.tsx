@@ -1,6 +1,6 @@
 import generateTheme from '../Utils/themeGenerator'
 
-export const neoLight = generateTheme({
+export const neoDark = generateTheme({
   // border-radius: 43px;
   // background: #c4cce0;
   // box-shadow:  13px 13px 26px #acb4c5,
@@ -11,16 +11,16 @@ export const neoLight = generateTheme({
 
   // Palettes
   gray: {
-    10: '#E1E7F7', // Lightest for Light theme
-    9: '#D9E0F1',
-    8: '#B2BCD6',
-    7: '#C4CCE0',
-    6: '#A0ADCC',
-    5: '#8997BA',
-    4: '#606E8F',
-    3: '#495571',
-    2: '#415075',
-    1: '#263458' // Darkest for light theme
+    1: '#C4CAF8', // Lightest for Light theme
+    2: '#A7AEEA',
+    3: '#868DC5',
+    4: '#6E75AC',
+    5: '#555C90',
+    6: '#4A4F7C',
+    7: '#3D426C',
+    8: '#2E335B',
+    9: '#212647',
+    10: '#13162E' // Darkest for light theme
   },
 
   palette: {
@@ -31,16 +31,13 @@ export const neoLight = generateTheme({
     red: '#fb4934'
   },
   text: {
-    heading: '#415075',
-    default: '#495571',
-    subheading: '#415075',
-    fade: '#415075',
+    heading: '#CDD6EC',
+    default: '#909EC4',
+    subheading: '#909EC4',
+    fade: '#7580A6',
     disabled: '#9CA2BA',
     accent: '#CC7796',
     oppositePrimary: '#ffffff'
   },
   hasBlocks: true
-  // backgroundImages: {
-  //   app: 'https://i.imgur.com/Z2iNoSC.jpg'
-  // }
 })

@@ -1,35 +1,35 @@
-import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
-import quillPenLine from '@iconify-icons/ri/quill-pen-line'
-import { Icon } from '@iconify/react'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
-import React from 'react'
-import genereateName from 'project-name-generator'
-import { Wrapper, IconButton } from '@mexit/shared'
-import { generateSnippetId } from '@workduck-io/mex-editor'
-import { Editor } from 'slate'
+import React, { useEffect, useState } from 'react'
+import shallow from 'zustand/shallow'
+
+import { Wrapper } from '@mexit/shared'
+import { defaultContent, ILink, uniq } from '@mexit/core'
+
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { SnippetCommandPrefix } from '../Hooks/useSnippets'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { Title } from '../Style/Elements'
-import {
-  SSnippets,
-  CreateSnippet,
-  SSnippet,
-  SnippetHeader,
-  SnippetCommand,
-  StyledSnippetPreview
-} from '../Style/Snippets'
+import { SSnippets, SSnippet, SnippetHeader, SnippetCommand, StyledSnippetPreview } from '../Style/Snippets'
 import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 import useContentStore from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { defaultContent } from '@mexit/core'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 function DraftView() {
-  const { getContent, contents } = useContentStore()
-  const { ilinks } = useDataStore()
-
+  const { contents } = useContentStore()
+  const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
+  const lastOpened = useRecentsStore((store) => store.lastOpened)
   const { goTo } = useRouting()
+
+  const [allLinks, setAllLinks] = useState<ILink[]>()
+
+  useEffect(() => {
+    if (ilinks && ilinks.length > 0) {
+      const t = []
+      const activityItems = uniq([...bookmarks, ...lastOpened])
+      activityItems.forEach((id) => {
+        t.push(ilinks.find((store) => store.nodeid === id))
+      })
+      setAllLinks(t)
+    }
+  }, [ilinks, bookmarks, lastOpened])
 
   const onOpen = (id: string) => {
     goTo(ROUTE_PATHS.editor, NavigationType.push, id)
@@ -37,26 +37,32 @@ function DraftView() {
 
   return (
     <Wrapper>
-      <Title>Notes</Title>
+      <Title>Mex Activity!</Title>
       <SSnippets>
-        {ilinks.map((s) => (
-          <SSnippet key={`NODE_${s.nodeid}`}>
-            <SnippetHeader>
-              <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
-            </SnippetHeader>
+        {!allLinks || allLinks.length === 0 ? (
+          <h3>No Activity Found. Open Nodes and Bookmark Them, Then Come Back!</h3>
+        ) : (
+          ''
+        )}
+        {allLinks &&
+          allLinks.map((s) => (
+            <SSnippet key={`NODE_${s.nodeid}`}>
+              <SnippetHeader>
+                <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
+              </SnippetHeader>
 
-            <StyledSnippetPreview
-              onClick={() => {
-                onOpen(s.nodeid)
-              }}
-            >
-              <EditorPreviewRenderer
-                content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                editorId={`Editor_Embed_${s.nodeid}`}
-              />
-            </StyledSnippetPreview>
-          </SSnippet>
-        ))}
+              <StyledSnippetPreview
+                onClick={() => {
+                  onOpen(s.nodeid)
+                }}
+              >
+                <EditorPreviewRenderer
+                  content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
+                  editorId={`Editor_Embed_${s.nodeid}`}
+                />
+              </StyledSnippetPreview>
+            </SSnippet>
+          ))}
       </SSnippets>
     </Wrapper>
   )

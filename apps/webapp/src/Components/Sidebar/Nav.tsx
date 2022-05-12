@@ -66,7 +66,7 @@ const Nav = ({ links }: NavProps) => {
     refreshILinks()
     const interval = setInterval(() => {
       refreshILinks()
-    }, 3600000)
+    }, 120000)
     return () => clearInterval(interval)
   }, [])
 

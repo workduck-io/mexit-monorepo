@@ -160,8 +160,8 @@ export interface NavWrapperProps extends FocusModeProp {
   $expanded: boolean
 }
 
-export const NavWrapper = styled(animated.div) <NavWrapperProps>`
-  overflow-y: auto;
+export const NavWrapper = styled(animated.div)<NavWrapperProps>`
+  overflow-y: hidden;
   overflow-x: hidden;
   z-index: 10;
   display: flex;
@@ -203,7 +203,8 @@ export const NavWrapper = styled(animated.div) <NavWrapperProps>`
       }
 
       ${NavLogoWrapper} {
-        padding: 22px;
+        padding: 0px 22px 16px;
+        padding-top: ${({ theme }) => (theme.additional.hasBlocks ? 8 : 28)}px;
       }
 
       ${CollapseWrapper} {

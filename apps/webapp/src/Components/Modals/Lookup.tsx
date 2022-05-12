@@ -60,7 +60,7 @@ const Lookup = () => {
   const LOOKUP_SHORTCUT = '$mod+L'
 
   useEffect(() => {
-    console.log('Setting up a keyboard shortcut: ', LOOKUP_SHORTCUT)
+    // console.log('Setting up a keyboard shortcut: ', LOOKUP_SHORTCUT)
     const unsubscribe = tinykeys(window, {
       [LOOKUP_SHORTCUT]: (event) => {
         event.preventDefault()
@@ -98,7 +98,7 @@ const Lookup = () => {
     const nodeID = generateNodeId()
     const node = await saveNewNodeAPI(nodeID, inputValue.text)
     push(nodeID)
-    mog("Created Hierarchy: ", { node, inputValue })
+    mog('Created Hierarchy: ', { node, inputValue })
     closeModal()
   }
 
