@@ -3,20 +3,20 @@ import generateTheme from '../Utils/themeGenerator'
 export const vvkTheme = generateTheme({
   // Colors
   primary: '#C792EA',
-  secondary: '#6D9AFF',
+  secondary: '#8d39c1',
 
   // Palettes
   gray: {
-    10: '#0f111a', // Darkest
-    9: '#1C1D21',
-    8: '#252A41',
-    7: '#3D435C',
-    6: '#575C75',
-    5: '#73778C',
-    4: '#9EA1B2',
-    3: '#B9BBC6',
-    2: '#D5D6DD',
-    1: '#EAEBED' // Lightest
+    1: '#C4CAF8', // Lightest for Light theme
+    2: '#A7AEEA',
+    3: '#868DC5',
+    4: '#6E75AC',
+    5: '#555C90',
+    6: '#4A4F7C',
+    7: '#3D426C',
+    8: '#2E335B',
+    9: '#212647',
+    10: '#13162E' // Darkest for light theme
   },
   palette: {
     white: '#ffffff',
@@ -34,5 +34,9 @@ export const vvkTheme = generateTheme({
     accent: '#C792EA',
     oppositePrimary: '#000'
   },
-  hasBlocks: true
+  hasBlocks: true,
+  backgroundImages: {
+    app: 'https://wallpapercave.com/wp/wp2757874.gif',
+    preview: 'https://wallpapercave.com/wp/wp2757874.gif'
+  }
 })

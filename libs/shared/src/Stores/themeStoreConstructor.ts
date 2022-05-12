@@ -1,8 +1,20 @@
-import { defaultThemes, lightTheme } from '../Themes'
-import { Theme } from '@mexit/core'
+import { defaultThemes, devTheme, lightTheme } from '../Themes'
+import { DefaultTheme } from 'styled-components'
+
+export interface Theme {
+  id: string
+  themeData: DefaultTheme
+}
+
+export interface ThemeStoreState {
+  theme: Theme
+  themes: Theme[]
+  setTheme: (theme: Theme) => void
+  setThemes: (theme: Theme[]) => void
+}
 
 export const themeStoreConstructor = (set) => ({
-  theme: { id: 'Light', themeData: lightTheme },
+  theme: { id: 'Dev', themeData: devTheme },
 
   themes: defaultThemes,
 
