@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE, QuickLinkType } from '@mexit/core'
 import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
+import { findIndex, groupBy } from 'lodash'
 import Action from '../Action'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
@@ -13,14 +14,18 @@ import Screenshot from '../Action/Screenshot'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 
 function Results() {
-  const { search, setSearch, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setSearchResults } =
+  const { search, setInput, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setSearchResults } =
     useSputlitContext()
-  const { preview, setPreview, setNodeContent } = useEditorContext()
+  const { previewMode, setPreviewMode } = useEditorContext()
 
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
   const [showResults, setShowResults] = useState(true)
   const pointerMoved = usePointerMovedSinceMount()
+
+  const groups = Object.keys(groupBy(searchResults, (n) => n.category))
+
+  const indexes = React.useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
 
   const rowVirtualizer = useVirtual({
     size: searchResults.length,
@@ -31,7 +36,7 @@ function Results() {
     useMemo(() => {
       const style = { width: '55%', marginRight: '0.75em' }
 
-      if (!preview) {
+      if (!previewMode) {
         style.width = '0%'
         style.marginRight = '0'
       }
@@ -45,7 +50,7 @@ function Results() {
       }
 
       return style
-    }, [preview, activeIndex, searchResults, activeItem])
+    }, [previewMode, activeIndex, searchResults, activeItem])
   )
 
   // destructuring here to prevent linter warning to pass
@@ -63,29 +68,58 @@ function Results() {
     const handler = (event) => {
       if (event.key === 'ArrowUp') {
         event.preventDefault()
-        setActiveIndex((index) => {
-          let nextIndex = index > 0 ? index - 1 : index
 
-          // avoid setting active index on a group
-          if (typeof searchResults[nextIndex] === 'string') {
-            if (nextIndex === 0) return index
-            nextIndex -= 1
+        // * check if CMD + ARROW_UP is pressed
+        if (event.metaKey) {
+          for (let i = indexes[indexes.length - 1]; i > -1; i--) {
+            const categoryIndex = indexes[i]
+            if (
+              categoryIndex < activeIndex &&
+              searchResults[categoryIndex].category !== searchResults[activeIndex].category
+            ) {
+              setActiveIndex(categoryIndex)
+              break
+            }
           }
-          return nextIndex
-        })
+        } else
+          setActiveIndex((index: number) => {
+            let nextIndex = index > 0 ? index - 1 : index
+
+            // avoid setting active index on a group
+            if (typeof searchResults[nextIndex] === 'string') {
+              if (nextIndex === 0) nextIndex = index
+              else nextIndex -= 1
+            }
+
+            return nextIndex
+          })
       } else if (event.key === 'ArrowDown') {
         event.preventDefault()
-        setActiveIndex((index) => {
-          let nextIndex = index < searchResults.length - 1 ? index + 1 : index
 
-          // avoid setting active index on a group
-          if (typeof searchResults[nextIndex] === 'string') {
-            if (nextIndex === searchResults.length - 1) return index
-            nextIndex += 1
+        // * check if CMD + ARROW_DOWN is pressed
+        if (event.metaKey) {
+          for (let i = 0; i < indexes.length; i++) {
+            const categoryIndex = indexes[i]
+            if (
+              categoryIndex > activeIndex &&
+              searchResults[categoryIndex].category !== searchResults[activeIndex].category
+            ) {
+              setActiveIndex(categoryIndex)
+              break
+            }
           }
-          return nextIndex
-        })
-        // TODO: improve the code below for the love of anything
+        } else
+          setActiveIndex((index) => {
+            let nextIndex = index < searchResults.length - 1 ? index + 1 : index
+
+            // * avoid setting active index on a group
+            if (typeof searchResults[nextIndex] === 'string') {
+              if (nextIndex === searchResults.length - 1) nextIndex = index
+              else nextIndex += 1
+            }
+
+            return nextIndex
+          })
       } else if (event.key === 'Enter') {
         event.preventDefault()
         const item = searchResults[activeIndex]
@@ -94,7 +128,13 @@ function Results() {
           actionExec(item, search.value)
         } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
           setActiveItem(item)
+          setInput('')
           setSearchResults([])
+        } else if (item.category === QuickLinkType.backlink) {
+          setActiveItem(item)
+          setInput('')
+          setPreviewMode(false)
+        } else if (item.category === QuickLinkType.snippet) {
         }
       }
     }

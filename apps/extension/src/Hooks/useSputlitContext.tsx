@@ -26,6 +26,8 @@ export type TooltipState = {
 type SputlitContextType = {
   search: Search
   setSearch: (val: Search) => void
+  input: string
+  setInput: (val: string) => void
   isLoading: Boolean
   setIsLoading: (val: boolean) => void
   selection: any
@@ -49,6 +51,7 @@ export const useSputlitContext = () => useContext(SputlitContext)
 
 export const SputlitProvider: React.FC = ({ children }: any) => {
   const [search, setSearch] = useState<Search>({ value: '', type: CategoryType.search })
+  const [input, setInput] = useState('')
   const [selection, setSelection] = useState<any>()
   const [searchResults, setSearchResults] = useState<Array<MexitAction>>([])
   const [activeIndex, setActiveIndex] = useState<number>(0)
@@ -63,6 +66,8 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   const value = {
     search,
     setSearch,
+    input,
+    setInput,
     isLoading,
     setIsLoading,
     selection,
