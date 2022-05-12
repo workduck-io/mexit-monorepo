@@ -25,7 +25,17 @@ export const yellowyTheme = generateTheme({
     yellow: '#eeff41',
     red: '#ff3b30'
   },
+  // text: {
+  //   heading: '#CBCDD2',
+  //   default: '#A6ACCD',
+  //   subheading: '#abafc7',
+  //   fade: '#9196B3',
+  //   disabled: '#7f8288',
+  //   accent: '#C792EA',
+  //   oppositePrimary: '#000',
+  // },
   backgroundImages: {
-    app: 'https://i.imgur.com/0SGx9h8.png'
+    app: 'https://i.imgur.com/0SGx9h8.png',
+    preview: 'https://i.imgur.com/Lwos7os.png'
   }
 })

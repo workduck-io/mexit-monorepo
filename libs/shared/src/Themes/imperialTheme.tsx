@@ -37,6 +37,7 @@ export const imperialTheme = generateTheme({
   },
   hasBlocks: true,
   backgroundImages: {
-    app: 'https://i.imgur.com/Z2iNoSC.jpg'
+    app: 'https://i.imgur.com/Z2iNoSC.jpg',
+    preview: 'https://i.imgur.com/2zgshMW.png'
   }
 })

@@ -20,7 +20,6 @@ export * from './Types/Shortcut'
 export * from './Types/Shortener'
 export * from './Types/Snippet'
 export * from './Types/Store'
-export * from './Types/Theme'
 export * from './Types/Todo'
 
 export * from './Utils/defaults'

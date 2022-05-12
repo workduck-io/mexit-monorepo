@@ -37,6 +37,7 @@ export const vertigoTheme = generateTheme({
   },
   hasBlocks: true,
   backgroundImages: {
-    app: 'https://i.imgur.com/5og7Xot.png'
+    app: 'https://i.imgur.com/5og7Xot.png',
+    preview: 'https://i.imgur.com/8tfThnE.png'
   }
 })

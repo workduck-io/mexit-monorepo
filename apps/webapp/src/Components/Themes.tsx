@@ -36,7 +36,7 @@ const Themes = () => {
           return (
             <ThemeProvider key={`mex_theme_key_${t.id}`} theme={t.themeData}>
               <Theme selected={t.id === theme.id} onClick={() => onThemeSelect(i)} style={styles}>
-                <ThemePreview back={t.themeData.backgroundImages ? t.themeData.backgroundImages.preview : undefined}>
+                <ThemePreview back={t.themeData.backgroundImages ? t.themeData.backgroundImages.app : undefined}>
                   <ThemeColorDots>
                     <div className="primary"></div>
                     <div className="secondary"></div>

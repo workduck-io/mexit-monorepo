@@ -12,7 +12,6 @@ import {
   mog,
   searchBrowserAction,
   Snippet,
-  Theme,
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
@@ -20,7 +19,7 @@ import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
-import { Notification } from '@mexit/shared'
+import { Notification, Theme } from '@mexit/shared'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { Search, useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'

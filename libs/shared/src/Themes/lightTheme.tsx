@@ -1,4 +1,5 @@
 import generateTheme from '../Utils/themeGenerator'
+
 export const lightTheme = generateTheme({
   // Colors
   primary: '#34be79',

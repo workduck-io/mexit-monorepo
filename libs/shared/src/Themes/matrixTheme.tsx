@@ -1,4 +1,5 @@
 import generateTheme from '../Utils/themeGenerator'
+
 export const matrixTheme = generateTheme({
   // Colors
   primary: '#31d181',
@@ -34,6 +35,7 @@ export const matrixTheme = generateTheme({
     oppositePrimary: '#000'
   },
   backgroundImages: {
-    app: 'https://i.imgur.com/vVzVdsW.jpg'
+    app: 'https://i.imgur.com/vVzVdsW.jpg',
+    preview: 'https://i.imgur.com/FJnrKFE.png'
   }
 })

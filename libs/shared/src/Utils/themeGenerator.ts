@@ -53,7 +53,16 @@ const generateTheme = (p: ThemePalette): DefaultTheme => {
         secondary: p.secondary,
 
         //
-        palette: p.palette,
+        palette: {
+          white: '#ffffff',
+          black: '#000000',
+          green: '#00e676',
+          yellow: '#eeff41',
+          red: '#ff3b30',
+          blue: '#00b0ff',
+
+          ...p.palette
+        },
         gray: p.gray,
 
         //
@@ -122,8 +131,12 @@ const generateTheme = (p: ThemePalette): DefaultTheme => {
             controlHeight: 38,
             menuGutter: 8
           }
-        }
-      }
+        },
+        hasBlocks: p.hasBlocks
+      },
+      // TODO: add support for style.custom.ts files
+      custom: p.custom,
+      ...p.additionalTheme
     },
     p
   )

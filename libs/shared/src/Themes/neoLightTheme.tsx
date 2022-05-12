@@ -39,8 +39,8 @@ export const neoLight = generateTheme({
     accent: '#CC7796',
     oppositePrimary: '#ffffff'
   },
-  hasBlocks: true
   // backgroundImages: {
   //   app: 'https://i.imgur.com/Z2iNoSC.jpg'
-  // }
+  // },
+  hasBlocks: true
 })
