@@ -1,21 +1,39 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
-import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE, QuickLinkType } from '@mexit/core'
+import {
+  ActionType,
+  CategoryType,
+  MexitAction,
+  MEXIT_FRONTEND_URL_BASE,
+  parseSnippet,
+  QuickLinkType
+} from '@mexit/core'
 import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import { findIndex, groupBy } from 'lodash'
 import Action from '../Action'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
 import Screenshot from '../Action/Screenshot'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSnippets } from '../../Hooks/useSnippets'
+import { copyToClipboard } from '@mexit/shared'
 
 function Results() {
-  const { search, setInput, searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, setSearchResults } =
-    useSputlitContext()
+  const {
+    search,
+    setInput,
+    searchResults,
+    activeItem,
+    setActiveItem,
+    activeIndex,
+    setActiveIndex,
+    setSearchResults,
+    setVisualState
+  } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
 
   const parentRef = useRef(null)
@@ -25,7 +43,8 @@ function Results() {
 
   const groups = Object.keys(groupBy(searchResults, (n) => n.category))
 
-  const indexes = React.useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
+  const indexes = useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
+  const { getSnippet } = useSnippets()
 
   const rowVirtualizer = useVirtual({
     size: searchResults.length,
@@ -135,6 +154,9 @@ function Results() {
           setInput('')
           setPreviewMode(false)
         } else if (item.category === QuickLinkType.snippet) {
+          const snippet = getSnippet(item.id)
+          copyToClipboard(parseSnippet(snippet).text)
+          setVisualState(VisualState.hidden)
         }
       }
     }
@@ -158,7 +180,16 @@ function Results() {
       actionExec(item, search.value)
     } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
       setActiveItem(item)
+      setInput('')
       setSearchResults([])
+    } else if (item.category === QuickLinkType.backlink) {
+      setActiveItem(item)
+      setInput('')
+      setPreviewMode(false)
+    } else if (item.category === QuickLinkType.snippet) {
+      const snippet = getSnippet(item.id)
+      copyToClipboard(parseSnippet(snippet).text)
+      setVisualState(VisualState.hidden)
     }
   }
 
