@@ -10,11 +10,11 @@ import {
   ReminderActions,
   ReminderGroup,
   ReminderState,
-  DisplayReminder
+  DisplayReminder,
+  isInSameMinute
 } from '@mexit/core'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@mexit/core'
 import { useLinks } from '../Hooks/useLinks'
-import { isInSameMinute } from '../Utils/time'
 import { SearchFilter } from '../Hooks/useFilters'
 // import { ReminderControls, SnoozeControl } from '../components/mex/Reminders/Reminder'
 // import { getReminderState } from '../services/reminders/reminders'

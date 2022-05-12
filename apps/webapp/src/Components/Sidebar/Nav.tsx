@@ -41,7 +41,7 @@ import {
 import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
-import { getUntitledDraftKey } from '../../Utils/getNewBlockData'
+import { getUntitledDraftKey } from '@mexit/core'
 import { useInternalLinks } from '../../Data/useInternalLinks'
 
 const Nav = ({ links }: NavProps) => {
@@ -117,7 +117,6 @@ const Nav = ({ links }: NavProps) => {
 
   const archiveCount = getLinkCount().archive
 
-
   // useEffect(() => {
   //   refreshILinks()
   //   const interval = setInterval(() => {
@@ -125,8 +124,6 @@ const Nav = ({ links }: NavProps) => {
   //   }, 3600000)
   //   return () => clearInterval(interval)
   // }, []) // eslint-disable-line
-
-
 
   return (
     <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>

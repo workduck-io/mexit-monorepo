@@ -27,18 +27,17 @@ export function getContent(nodeid: string): NodeContent {
   return defaultContent
 }
 
-export const getListItemFromNode = (node: any, description?: string, blockid?: string) => {
-  const rawText = description ?? convertContentToRawText(getContent(node?.id)?.content ?? [], ' ')
+export const getListItemFromNode = (node: ILink, description?: string, blockid?: string) => {
+  const rawText = description ?? convertContentToRawText(getContent(node?.nodeid)?.content ?? [], ' ')
 
   const listItem: ListItemType = {
     icon: node?.icon ?? 'gg:file-document',
     title: node?.path,
-    id: node?.id,
+    id: node?.nodeid,
     description: rawText,
-    type: QuickLinkType.backlink,
-    category: CategoryType.backlink,
+    category: QuickLinkType.backlink,
     extras: {
-      nodeid: node?.id,
+      nodeid: node?.nodeid,
       blockid,
       path: node?.path,
       new: false
@@ -63,7 +62,7 @@ export const getListItemFromNode = (node: any, description?: string, blockid?: s
 export const getListItemFromAction = (action: MexitAction) => {
   const actionItem: ListItemType = {
     icon: action?.icon ?? 'fluent:arrow-routing-24-filled',
-    category: CategoryType.action,
+    category: QuickLinkType.action,
     id: action.id,
     type: action.type,
     description: action.description,
@@ -90,8 +89,7 @@ export const getListItemFromSnippet = (snippet: Snippet) => {
     title: snippet.title,
     id: snippet.id,
     description: rawText,
-    type: QuickLinkType.snippet,
-    category: CategoryType.backlink,
+    category: QuickLinkType.snippet,
     extras: {
       nodeid: snippet.id,
       path: snippet.title

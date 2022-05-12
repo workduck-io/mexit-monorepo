@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import { animated } from 'react-spring'
 
 export const StyledResults = styled(animated.div)`
-  overflow: hidden;
+  overflow: hidden auto;
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
@@ -23,7 +23,7 @@ export const List = styled.div`
   position: relative;
   scroll-behavior: smooth;
 
-  max-height: 400px;
+  max-height: 425px;
   ${Scroll}
 `
 

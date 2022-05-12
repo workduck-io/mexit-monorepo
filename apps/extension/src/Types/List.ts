@@ -5,8 +5,8 @@ export interface ListItemType {
   icon: string
   title: string
   description?: string
-  type: ActionType | QuickLinkType
-  category: CategoryType
+  type?: ActionType
+  category: QuickLinkType
   shortcut?: Record<string, Shortcut>
   extras?: Partial<ItemExtraType>
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CategoryType, idxKey } from '@mexit/core'
+import { CategoryType, idxKey, initActions } from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
@@ -9,7 +9,7 @@ import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
-import { initSearchIndex } from '../Workers/controller'
+import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -31,21 +31,17 @@ export default function Chotu() {
       setFirst(false)
     }
   }, [ilinks, archive, contents, snippets])
+
   const { queryIndex } = useSearch()
 
   const connection = connectToParent({
     methods: {
-      log(value: string) {
-        console.log('message log', value)
-      },
       search(key: idxKey | idxKey[], query: string) {
-        console.log('webapp chotu', key, query)
-        const res = queryIndex(key, query)
-        console.log('results pls', res)
+        const res = searchWorker ? queryIndex(key, query) : []
         return res
       }
-    },
-    debug: true
+    }
+    // debug: true
   })
 
   useEffect(() => {

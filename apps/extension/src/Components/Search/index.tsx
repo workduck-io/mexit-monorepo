@@ -15,9 +15,13 @@ import {
   CategoryType
 } from '@mexit/core'
 import { useTheme } from 'styled-components'
+import { useSearchProps } from '../../Hooks/useSearchProps'
+import { useEditorContext } from '../../Hooks/useEditorContext'
 
 const Search = () => {
-  const { search, setSearch, setSearchResults, activeItem, isLoading } = useSputlitContext()
+  const { input, setInput, setSearch, isLoading } = useSputlitContext()
+  const { previewMode } = useEditorContext()
+  const { icon, placeholder } = useSearchProps()
   const theme = useTheme()
 
   const getQuery = (value: string): Search => {
@@ -55,33 +59,25 @@ const Search = () => {
 
     const query = key.startsWith('.') || key.startsWith('[[.') ? key.replace('.', '') : key
 
+    setInput(replaceContinousDots)
     handleSearchInput(query)
   }
-
-  // useEffect(() => {
-  //   if (search.value !== '') {
-  //     const res = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
-  //     if (res.length === 0) setSearchResults([searchBrowserAction(search.value)])
-  //     else setSearchResults(res)
-  //   } else {
-  //     setSearchResults(defaultActions)
-  //   }
-  // }, [search])
 
   // TODO: it would be good to have the ability to go back after selected a search type action
 
   return (
     <StyledSearch>
-      {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>}
+      {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
       <CenterIcon id="wd-mex-search-left-icon" cursor={false}>
-        <Icon color={theme.colors.primary} height={24} width={24} icon={LensIcon} />
+        <Icon color={theme.colors.primary} height={24} width={24} icon={icon} />
       </CenterIcon>
       <StyledInput
-        autoFocus
+        autoFocus={previewMode}
+        disabled={!previewMode}
         autoComplete="off"
         spellCheck="false"
-        value={search.value}
-        placeholder="[[  for Backlinks or / for actions"
+        value={input}
+        placeholder={placeholder}
         onChange={onChange}
       />
 

@@ -1,5 +1,6 @@
 import { IS_DEV } from '@mexit/core'
 import { mountStoreDevtool } from 'simple-zustand-devtools'
+import { share, isSupported } from 'shared-zustand'
 
 import { useAnalysisStore } from './useAnalysis'
 import { useAuthStore } from './useAuth'
@@ -26,6 +27,19 @@ if (IS_DEV) {
   mountStoreDevtool('useRefactorStore', useRefactorStore)
   mountStoreDevtool('useHistoryStore', useHistoryStore)
   mountStoreDevtool('useSnippetStore', useSnippetStore)
+}
+
+// This is required for event driven messaging, as the tabs or in our
+// case a tab and a iframe don't know about their state updates, we
+// create a channel for each other to inform of their changes
+// progressive enhancement check.
+if ('BroadcastChannel' in globalThis /* || isSupported() */) {
+  // share the property "count" of the state with other tabs
+  share('theme', useThemeStore)
+  share('ilinks', useDataStore)
+  // share('archive', useDataStore)
+  share('contents', useContentStore)
+  // share('snippets', useSnippetStore)
 }
 
 export default {}

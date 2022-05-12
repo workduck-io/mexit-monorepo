@@ -11,6 +11,7 @@ import Highlighter from 'web-highlighter'
 import { useContentStore } from '../Hooks/useContentStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
+import { getHtmlString } from './Source'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -39,7 +40,7 @@ function useToggleHandler() {
             if (window.getSelection().toString() !== '') {
               const { url, html, range } = getSelectionHTML()
               const saveableRange = highlighter.fromRange(range)
-              const sanitizedHTML = sanitizeHTML(html)
+              const sanitizedHTML = sanitizeHTML(html) + getHtmlString(window.location.href)
 
               setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
             } else {
@@ -115,17 +116,19 @@ function initAnalytics() {
 }
 
 function handleHighlighter() {
-  const getContent = useContentStore((store) => store.getContent)
+  const getContentFromLink = useContentStore((store) => store.getContentFromLink)
   const { setTooltipState } = useSputlitContext()
 
   const highlightOldRange = () => {
-    const content = getContent(window.location.href)
-    if (content && Object.keys(content).length !== 0) {
-      content.forEach((h) => {
-        const { startMeta, endMeta, text, id } = h.range
+    const pageContents = getContentFromLink(window.location.href)
+    console.log('content', pageContents)
+    // TODO: fix the following for multiple highlights on a page, maybe storing multiple highlights as a block in a node?
+    pageContents.forEach((item) => {
+      if (item?.metadata?.url === window.location.href) {
+        const { startMeta, endMeta, text, id } = item.metadata.saveableRange
         highlighter.fromStore(startMeta, endMeta, text, id)
-      })
-    }
+      }
+    })
   }
 
   useEffect(() => {

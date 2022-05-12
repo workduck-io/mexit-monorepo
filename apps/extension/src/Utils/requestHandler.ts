@@ -5,16 +5,16 @@ import { Tab } from '../Types/Tabs'
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'CREATE_CONTENT_QC': {
-      const URL = apiURLs.createNode
-      // const path = getPathFromNodeid(nodeid).split(SEPARATOR)
+      const URL = apiURLs.bulkCreateNodes
       const reqData = {
+        nodePath: {
+          path: `Drafts#${data.title}`
+        },
         id: data.id,
         title: data.title,
         lastEditedBy: data.createdBy,
         data: serializeContent(data.content ?? defaultContent.content)
       }
-
-      console.log(`URL: ${URL} | reqBody: ${JSON.stringify(reqData)}`)
 
       return client
         .post(URL, reqData, {

@@ -1,33 +1,50 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import styled, { css } from 'styled-components'
-import { ActionType, CategoryType, MexitAction, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import {
+  ActionType,
+  CategoryType,
+  MexitAction,
+  MEXIT_FRONTEND_URL_BASE,
+  parseSnippet,
+  QuickLinkType
+} from '@mexit/core'
 import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
+import { findIndex, groupBy } from 'lodash'
 import Action from '../Action'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
 import Screenshot from '../Action/Screenshot'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSnippets } from '../../Hooks/useSnippets'
+import { copyToClipboard } from '@mexit/shared'
 
 function Results() {
   const {
     search,
-    setSearch,
+    setInput,
     searchResults,
     activeItem,
     setActiveItem,
     activeIndex,
     setActiveIndex,
-    preview,
-    setPreview,
-    setSearchResults
+    setSearchResults,
+    setVisualState
   } = useSputlitContext()
+  const { previewMode, setPreviewMode } = useEditorContext()
+
   const parentRef = useRef(null)
   const [first, setFirst] = useState(false)
   const [showResults, setShowResults] = useState(true)
   const pointerMoved = usePointerMovedSinceMount()
+
+  const groups = Object.keys(groupBy(searchResults, (n) => n.category))
+
+  const indexes = useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
+  const { getSnippet } = useSnippets()
 
   const rowVirtualizer = useVirtual({
     size: searchResults.length,
@@ -36,12 +53,23 @@ function Results() {
 
   const springProps = useSpring(
     useMemo(() => {
-      return {
-        width: preview ? '50%' : '0',
-        flex: preview ? '1' : '0',
-        margin: preview ? '0.75em' : '0'
+      const style = { width: '55%', marginRight: '0.75em' }
+
+      if (!previewMode) {
+        style.width = '0%'
+        style.marginRight = '0'
       }
-    }, [preview])
+
+      if (searchResults[activeIndex] && searchResults[activeIndex]?.category === QuickLinkType.action) {
+        style.width = '100%'
+      }
+
+      if (activeItem?.type === ActionType.RENDER) {
+        style.width = '100%'
+      }
+
+      return style
+    }, [previewMode, activeIndex, searchResults, activeItem])
   )
 
   // destructuring here to prevent linter warning to pass
@@ -59,54 +87,76 @@ function Results() {
     const handler = (event) => {
       if (event.key === 'ArrowUp') {
         event.preventDefault()
-        setActiveIndex((index) => {
-          let nextIndex = index > 0 ? index - 1 : index
 
-          // avoid setting active index on a group
-          if (typeof searchResults[nextIndex] === 'string') {
-            if (nextIndex === 0) return index
-            nextIndex -= 1
+        // * check if CMD + ARROW_UP is pressed
+        if (event.metaKey) {
+          for (let i = indexes[indexes.length - 1]; i > -1; i--) {
+            const categoryIndex = indexes[i]
+            if (
+              categoryIndex < activeIndex &&
+              searchResults[categoryIndex].category !== searchResults[activeIndex].category
+            ) {
+              setActiveIndex(categoryIndex)
+              break
+            }
           }
-          return nextIndex
-        })
+        } else
+          setActiveIndex((index: number) => {
+            let nextIndex = index > 0 ? index - 1 : index
+
+            // avoid setting active index on a group
+            if (typeof searchResults[nextIndex] === 'string') {
+              if (nextIndex === 0) nextIndex = index
+              else nextIndex -= 1
+            }
+
+            return nextIndex
+          })
       } else if (event.key === 'ArrowDown') {
         event.preventDefault()
-        setActiveIndex((index) => {
-          let nextIndex = index < searchResults.length - 1 ? index + 1 : index
 
-          // avoid setting active index on a group
-          if (typeof searchResults[nextIndex] === 'string') {
-            if (nextIndex === searchResults.length - 1) return index
-            nextIndex += 1
+        // * check if CMD + ARROW_DOWN is pressed
+        if (event.metaKey) {
+          for (let i = 0; i < indexes.length; i++) {
+            const categoryIndex = indexes[i]
+            if (
+              categoryIndex > activeIndex &&
+              searchResults[categoryIndex].category !== searchResults[activeIndex].category
+            ) {
+              setActiveIndex(categoryIndex)
+              break
+            }
           }
-          return nextIndex
-        })
-        // TODO: improve the code below for the love of anything
-      } else if (
-        event.key === 'Enter' &&
-        searchResults[activeIndex]?.category === CategoryType.action &&
-        searchResults[activeIndex]?.type !== ActionType.SEARCH &&
-        activeItem?.type !== ActionType.SEARCH
-      ) {
-        event.preventDefault()
+        } else
+          setActiveIndex((index) => {
+            let nextIndex = index < searchResults.length - 1 ? index + 1 : index
 
-        setSearchResults([])
-        // TODO: stop search bar on action type search
+            // * avoid setting active index on a group
+            if (typeof searchResults[nextIndex] === 'string') {
+              if (nextIndex === searchResults.length - 1) nextIndex = index
+              else nextIndex += 1
+            }
+
+            return nextIndex
+          })
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        setSearchResults([])
+        const item = searchResults[activeIndex]
 
-        if (searchResults[activeIndex].category === CategoryType.action) {
-          setActiveItem(searchResults[activeIndex])
-          actionExec(searchResults[activeIndex])
-        } else if (searchResults[activeIndex].category === CategoryType.backlink) {
-          window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${searchResults[activeIndex].id}`)
-        }
-        if (!first) {
-          setActiveItem(searchResults[activeIndex])
-          setFirst(true)
-        } else {
-          actionExec(activeItem, search.value)
+        if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
+          actionExec(item, search.value)
+        } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
+          setActiveItem(item)
+          setInput('')
+          setSearchResults([])
+        } else if (item.category === QuickLinkType.backlink) {
+          setActiveItem(item)
+          setInput('')
+          setPreviewMode(false)
+        } else if (item.category === QuickLinkType.snippet) {
+          const snippet = getSnippet(item.id)
+          copyToClipboard(parseSnippet(snippet).text)
+          setVisualState(VisualState.hidden)
         }
       }
     }
@@ -114,35 +164,32 @@ function Results() {
     // Not adding event listener to window as the event never reaches there
     document.getElementById('mexit')!.addEventListener('keydown', handler)
 
-    return () => document.getElementById('mexit')!.removeEventListener('keydown', handler)
+    return () => {
+      document.getElementById('mexit')!.removeEventListener('keydown', handler)
+    }
   }, [searchResults, activeIndex, activeItem])
 
   useEffect(() => {
     setActiveIndex(0)
   }, [searchResults])
 
-  // To reset active Item when done
-  useEffect(() => {
-    const ret = () => {
-      setActiveItem()
-      setPreview(true)
-    }
-    return ret
-  }, [])
-
   function handleClick(id: number) {
-    if (searchResults[id]?.type !== ActionType.SEARCH && activeItem?.type !== ActionType.SEARCH) {
-      setActiveItem(searchResults[id])
-      actionExec(searchResults[id])
+    const item = searchResults[id]
+
+    if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
+      actionExec(item, search.value)
+    } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
+      setActiveItem(item)
+      setInput('')
       setSearchResults([])
-    } else {
-      setSearchResults([])
-      if (!first) {
-        setActiveItem(searchResults[id])
-        setFirst(true)
-      } else {
-        actionExec(activeItem, search.value)
-      }
+    } else if (item.category === QuickLinkType.backlink) {
+      setActiveItem(item)
+      setInput('')
+      setPreviewMode(false)
+    } else if (item.category === QuickLinkType.snippet) {
+      const snippet = getSnippet(item.id)
+      copyToClipboard(parseSnippet(snippet).text)
+      setVisualState(VisualState.hidden)
     }
   }
 
@@ -171,8 +218,8 @@ function Results() {
         </div>
       </List>
 
-      {activeItem && activeItem.type === ActionType.RENDER && <Renderer />}
-      {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}
+      {activeItem?.type === ActionType.RENDER && <Renderer />}
+      {/* {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}  */}
     </StyledResults>
   )
 }
