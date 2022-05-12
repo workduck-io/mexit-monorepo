@@ -79,8 +79,8 @@ export default function Chotu() {
         error(message: string) {
           toast.error(message)
         }
-      },
-      debug: true
+      }
+      // debug: true
     })
 
     connection.promise
@@ -114,7 +114,7 @@ export default function Chotu() {
             .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
             .map((item) => item.obj)
 
-          console.log('backlink resuts', results)
+          // console.log('backlink resuts', results)
           searchList = results
           break
         case CategoryType.search:
@@ -142,8 +142,8 @@ export default function Chotu() {
 
           const mainItems = [...localNodes, ...actionItems]
           searchList = [CREATE_NEW_ITEM, ...mainItems]
-          mog('nodelist', { nodeItems, snippetItems })
-          mog('searchList chotu', { searchList })
+          // mog('nodelist', { nodeItems, snippetItems })
+          // mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
           break
       }
