@@ -17,7 +17,7 @@ export let analysisWorker = null
 export let searchWorker = null
 
 export const startAnalysisWorkerService = async () => {
-  console.log('startWorkerService')
+  // console.log('startWorkerService')
   if (!analysisWorker) analysisWorker = await spawn(new analysisWorkerConstructor())
 }
 
@@ -25,9 +25,9 @@ export const analyseContent = async (props: AnalyseContentProps) => {
   try {
     if (!analysisWorker) {
       await startAnalysisWorkerService()
-      console.log('Creating new analysis worker')
+      // console.log('Creating new analysis worker')
     } else {
-      console.log('Reusing analysis worker')
+      // console.log('Reusing analysis worker')
     }
     const analysis = await analysisWorker.analyseContent(props)
     return analysis
@@ -37,18 +37,14 @@ export const analyseContent = async (props: AnalyseContentProps) => {
   }
 }
 export const startSearchWorker = async () => {
-  console.log('startSearchWorkerService')
   if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
 }
 
 export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   try {
     if (!searchWorker) {
-      console.log('Creating new search worker')
       await startSearchWorker()
       await searchWorker.init(fileData)
-    } else {
-      console.log('Found existing search worker, reusing')
     }
   } catch (error) {
     mog('InitSearchWorkerError', { error })

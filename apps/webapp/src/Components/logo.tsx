@@ -1,9 +1,15 @@
 import React, { useEffect } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import { Icon } from '@iconify/react'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { FocusModeProp, focusStyles } from '../Style/Editor'
+import Tippy from '@tippyjs/react'
+import { TooltipTitleWithShortcut } from './Shortcuts'
+import { useHelpStore } from '../Stores/useHelpStore'
+import useLayout from '../Hooks/useLayout'
+import tinykeys from 'tinykeys'
 
 const LogoWrapper = styled.div<{ $expanded: boolean }>`
   ${({ $expanded }) => ($expanded ? 'width: 100%;' : 'width: 40px;')}
@@ -28,23 +34,69 @@ export const Logo = () => {
     </LogoWrapper>
   )
 }
+interface SidebarToggleWrappperProps extends FocusModeProp {
+  expanded: boolean
+}
 
-export const SidebarToggleWrapper = styled.div`
+export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
+  position: absolute;
+  ${(props) => focusStyles(props)}
+  ${({ expanded, theme }) =>
+    expanded
+      ? css`
+          top: ${theme.additional.hasBlocks ? 76 : 35}px;
+          left: ${theme.additional.hasBlocks ? 296 : 280}px;
+        `
+      : css`
+          top: ${theme.additional.hasBlocks ? 84 : 64}px;
+          left: ${theme.additional.hasBlocks ? 86 : 68}px;
+        `}
+  transition: left 0.5s ease, top 0.5s ease;
+  z-index: 11;
   background-color: ${({ theme }) => theme.colors.gray[7]};
   padding: 8px;
   display: flex;
   align-items: center;
   border-radius: 4px;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
 `
-
 export const SidebarToggle = () => {
   const sidebar = useLayoutStore((state) => state.sidebar)
 
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
 
+  /** Set shortcuts */
+  const shortcuts = useHelpStore((store) => store.shortcuts)
+
+  const focusMode = useLayoutStore((state) => state.focusMode)
+  const { getFocusProps } = useLayout()
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      [shortcuts.toggleSidebar.keystrokes]: (event) => {
+        event.preventDefault()
+        toggleSidebar()
+      }
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [shortcuts]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <SidebarToggleWrapper onClick={toggleSidebar}>
-      <Icon icon={sidebar.expanded ? arrowLeftSLine : arrowRightSLine} />
-    </SidebarToggleWrapper>
+    <Tippy
+      theme="mex-bright"
+      placement="right"
+      content={
+        <TooltipTitleWithShortcut
+          title={sidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'}
+          shortcut={shortcuts.toggleSidebar.keystrokes}
+        />
+      }
+    >
+      <SidebarToggleWrapper onClick={toggleSidebar} expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
+        <Icon icon={sidebar.expanded ? arrowLeftSLine : arrowRightSLine} />
+      </SidebarToggleWrapper>
+    </Tippy>
   )
 }

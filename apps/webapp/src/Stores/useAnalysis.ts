@@ -80,7 +80,7 @@ export const useAnalysis = () => {
     if (bufferContent) {
       // mog('Buffer for calc', { bufferContent })
       if (!areEqual(bufferContent, content.content)) {
-        console.log('Handle case when not equal')
+        // console.log('Handle case when not equal')
         const getAnalysis = async () => {
           const results = await analyseContent({ content: bufferContent, nodeid: node.nodeid, options })
           setAnalysis(results)
@@ -89,7 +89,7 @@ export const useAnalysis = () => {
       }
     } else {
       if (content && content.content) {
-        console.log('Content is not same')
+        // console.log('Content is not same')
         const getAnalysis = async () => {
           const results = await analyseContent({ content: content.content, nodeid: node.nodeid, options })
           setAnalysis(results)

@@ -41,8 +41,8 @@ export interface ButtonPalette {
 
 export interface BackgroundImages {
   app: string
+  preview?: string
 }
-
 export interface ThemePalette {
   // Colors
   primary: string
@@ -50,11 +50,15 @@ export interface ThemePalette {
 
   // Palettes
   gray: ShadePalette
-  palette: ColorPalette
+  palette: Partial<ColorPalette>
 
   backgroundImages?: BackgroundImages
 
   text?: TextPalette
+
+  custom?: string
+  additionalTheme?: any
+  hasBlocks?: boolean
 }
 
 export type Pixels = number // Pixels in integer
