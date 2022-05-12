@@ -13,7 +13,7 @@ import useDataStore from '../../Stores/useDataStore'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { ELEMENT_TODO_LI } from '@mexit/core'
 import Todo from '../Todo'
-import { useEditorChange } from '../../Hooks/useEditorActions'
+import { useEditorChange } from '@mexit/shared'
 
 const EditorWrapper = styled.div`
   flex: 1;

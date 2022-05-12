@@ -16,44 +16,45 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = () => {
-  const { activeItem, setIsLoading } = useSputlitContext()
-  const iframeRef = createRef<HTMLIFrameElement>()
-  const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
+  const { activeItem, setActiveItem, setIsLoading } = useSputlitContext()
+  const iframeRef = useRef(null)
 
-  // useEffect(() => {
-  //   setIsLoading(true)
-  //   const connection = connectToChild({
-  //     iframe: iframeRef.current,
-  //     methods: {
-  //       resize(value: number) {
-  //         iframeRef.current.height = value + 'px'
-  //         setIsLoading(false)
-  //       },
-  //       tabInfo() {
-  //         const tags = parsePageMetaTags(window.document)
+  const handleEvent = (event) => {
+    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
+      switch (event.data.type) {
+        case 'height-init':
+          setIsLoading(false)
+          iframeRef.current.height = event.data.height + 'px'
+          break
+        case 'tab-info-request': {
+          const tags = parsePageMetaTags(window.document)
+          iframeRef.current.contentWindow.postMessage(
+            {
+              type: 'tab-info-response',
+              data: {
+                url: window.location.href,
+                tags
+              }
+            },
+            MEXIT_FRONTEND_URL_BASE
+          )
+          break
+        }
+        default:
+          break
+      }
+    }
+  }
 
-  //         return {
-  //           url: window.location.href,
-  //           tags
-  //         }
-  //       }
-  //     },
-  //     debug: true
-  //   })
+  useEffect(() => {
+    setIsLoading(true)
+    window.addEventListener('message', handleEvent)
 
-  //   connection.promise
-  //     .then((child) => {
-  //       setChild(child)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-
-  //   return () => {
-  //     connection.destroy()
-  //     setChild(null)
-  //   }
-  // }, [])
+    return () => {
+      window.removeEventListener('message', handleEvent)
+      setActiveItem()
+    }
+  }, [])
 
   return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} />
 }

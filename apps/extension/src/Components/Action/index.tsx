@@ -25,13 +25,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
   return (
     <StyledAction active={active}>
       <Container>
-        <ItemIcon
-          as={Icon}
-          color={theme.colors.primary}
-          height={20}
-          width={20}
-          icon={action?.icon}
-        />
+        <ItemIcon as={Icon} color={theme.colors.primary} height={20} width={20} icon={action?.icon} />
         <Content>
           <Title> {action.title}</Title>
           {action.description && <Description>{action.description}</Description>}

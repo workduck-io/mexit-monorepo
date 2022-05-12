@@ -29,7 +29,12 @@ export interface NodeMetadata {
   createdAt: number
   lastEditedBy: string
   updatedAt: number
+
+  highlighterId?: string
+  saveableRange?: Partial<HighlightSource>
+  url?: string
 }
+
 export interface Block {
   id: string // Block ID of form `BLOCK_`
   nodeUID: string // UID of node to which this block belongs
@@ -177,7 +182,8 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   flow = 'Flows',
-  tags = 'Tags'
+  tags = 'Tags',
+  action = 'Actions'
 }
 
 export enum ComboboxKey {

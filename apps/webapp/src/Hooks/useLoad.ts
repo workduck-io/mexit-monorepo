@@ -13,7 +13,7 @@ import { useAnalysisStore } from '../Stores/useAnalysis'
 import { getPathFromNodeIdHookless } from './useLinks'
 import { updateEmptyBlockTypes } from '../Utils/content'
 import { useRefactor } from './useRefactor'
-import { checkIfUntitledDraftNode } from '../Utils/strings'
+import { checkIfUntitledDraftNode } from '@mexit/core'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
 
 export interface LoadNodeOptions {
