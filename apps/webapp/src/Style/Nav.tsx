@@ -161,14 +161,12 @@ export interface NavWrapperProps extends FocusModeProp {
 }
 
 export const NavWrapper = styled(animated.div)<NavWrapperProps>`
-  overflow-y: hidden;
-  overflow-x: hidden;
   z-index: 10;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  min-height: 100%;
+  height: 100vh;
   transition: opacity 0.3s ease-in-out;
   padding: 2rem 0 0;
   background-color: ${({ theme }) => theme.colors.gray[8]};
@@ -181,8 +179,8 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
   }
 
   #Collapse_tree {
-    flex-shrink: 0;
-    flex-grow: 1;
+    height: 100%;
+    overflow-y: auto;
   }
 
   ${(props) => focusStyles(props)}

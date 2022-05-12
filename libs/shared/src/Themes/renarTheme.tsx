@@ -36,6 +36,7 @@ export const renarTheme = generateTheme({
     oppositePrimary: '#ffffff'
   },
   backgroundImages: {
-    app: 'https://i.imgur.com/MExxqeL.jpg'
+    app: 'https://i.imgur.com/MExxqeL.jpg',
+    preview: 'https://i.imgur.com/Hv7XOvQ.png'
   }
 })

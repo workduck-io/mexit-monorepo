@@ -25,4 +25,13 @@ export const spotlightTheme = generateTheme({
     yellow: '#eeff41',
     red: '#ff3b30'
   }
+  // text: {
+  //   heading: '#CBCDD2',
+  //   default: '#A6ACCD',
+  //   subheading: '#abafc7',
+  //   fade: '#9196B3',
+  //   disabled: '#7f8288',
+  //   accent: '#C792EA',
+  //   oppositePrimary: '#000',
+  // },
 })

@@ -1,4 +1,5 @@
 import { ThemeConfig } from 'react-select/src/theme'
+import { DefaultTheme } from 'styled-components'
 
 export interface ShadePalette {
   10: string // Darkest
@@ -19,6 +20,7 @@ export interface ColorPalette {
   green: string
   yellow: string
   red: string
+  blue: string
 }
 
 export interface TextPalette {
@@ -57,7 +59,7 @@ export interface ThemePalette {
   text?: TextPalette
 
   custom?: string
-  additionalTheme?: any
+  additionalTheme?: Partial<DefaultTheme>
   hasBlocks?: boolean
 }
 
