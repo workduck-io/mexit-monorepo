@@ -121,12 +121,7 @@ function handleHighlighter() {
   const highlightOldRange = () => {
     const content = getContentFromLink(window.location.href)
     console.log('content', content)
-    // if (content && Object.keys(content).length !== 0) {
-    //   content.forEach((h) => {
-    //     const { startMeta, endMeta, text, id } = h.range
-    //     highlighter.fromStore(startMeta, endMeta, text, id)
-    //   })
-    // }
+    // TODO: fix the following for multiple highlights on a page, maybe storing multiple highlights as a block in a node?
     if (content?.metadata?.url) {
       const { startMeta, endMeta, text, id } = content.metadata.saveableRange
       highlighter.fromStore(startMeta, endMeta, text, id)
