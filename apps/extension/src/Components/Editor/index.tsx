@@ -1,7 +1,6 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { MexEditor, ComboboxKey, QuickLinkElement } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
-import { useDebouncedCallback } from 'use-debounce'
 import { useSpring } from 'react-spring'
 
 import React, { useState, useEffect, useMemo } from 'react'
@@ -21,7 +20,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 
 interface EditorProps {
   nodePath?: string
-  nodeUID: string
+  nodeId?: string
   readOnly?: boolean
   onChange?: any
   autoFocus?: boolean
@@ -49,9 +48,9 @@ const commands = [
   }
 ]
 
-export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onChange, handleSave }) => {
+export const Editor: React.FC<EditorProps> = ({ nodeId, nodePath, readOnly, onChange, handleSave }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
-  const { preview, setPreview, nodeContent } = useEditorContext()
+  const { previewMode, setPreviewMode, nodeContent } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -84,7 +83,7 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onC
     }
   }, [currTabURL])
 
-  useEditorChange(nodeUID, nodeContent)
+  useEditorChange(nodeId, nodeContent)
 
   const comboboxConfig = {
     onKeyDownConfig: {
@@ -137,9 +136,12 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onC
 
   const editorOptions: MexEditorOptions = {
     editableProps: {
-      readOnly: false,
+      readOnly,
       placeholder: "Let's try something here...",
-      autoFocus: false
+      autoFocus: false,
+      style: {
+        padding: '1em'
+      }
     },
     focusOptions: {
       edge: 'end',
@@ -150,33 +152,31 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onC
 
   const springProps = useSpring(
     useMemo(() => {
-      const style = { width: '45%', padding: '1em' }
+      const style = { width: '45%' }
 
-      if (!preview) {
+      if (!previewMode) {
         style.width = '100%'
       }
 
       if (searchResults[activeIndex] && searchResults[activeIndex]?.category === QuickLinkType.action) {
         style.width = '0%'
-        style.padding = '0'
       }
 
       if (activeItem?.type === ActionType.RENDER) {
         style.width = '0%'
-        style.padding = '0'
       }
 
       return style
-    }, [preview, activeIndex, searchResults, activeItem])
+    }, [previewMode, activeIndex, searchResults, activeItem])
   )
 
-  const debounced = useDebouncedCallback((value) => {
-    const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
-    f(value)
-  }, 1000)
-
   return (
-    <EditorWrapper style={springProps} onFocus={() => setPreview(false)} onBlur={() => setPreview(true)}>
+    <EditorWrapper
+      style={springProps}
+      readOnly={readOnly}
+      onFocus={() => setPreviewMode(false)}
+      onBlur={() => setPreviewMode(true)}
+    >
       <MexEditor
         comboboxConfig={comboboxConfig}
         meta={{
@@ -184,9 +184,9 @@ export const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, readOnly, onC
         }}
         components={components}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
-        onChange={debounced}
+        onChange={onChange}
         options={editorOptions}
-        editorId={nodeUID}
+        editorId={nodeId}
         value={nodeContent}
       />
     </EditorWrapper>

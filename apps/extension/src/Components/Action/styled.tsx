@@ -65,6 +65,7 @@ export const ShortcutText = styled.div`
     display: flex;
     align-items: center;
     margin-left: 4px;
+    white-space: nowrap;
     color: ${({ theme }) => theme.colors.text.fade};
   }
 `

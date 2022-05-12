@@ -18,11 +18,10 @@ import { useSnippets } from '../../Hooks/useSnippets'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
-  const { setNodeContent, setPreview } = useEditorContext()
+  const { node, setNodeContent, previewMode } = useEditorContext()
 
   const setContent = useContentStore((store) => store.setContent)
-  const nodeId = useMemo(() => `BLOCK_${nanoid()}`, [])
-  const editor = usePlateEditorRef(nodeId)
+  const editor = usePlateEditorRef(node.nodeid)
   const [value, setValue] = useState([{ text: '' }])
   const [first, setFirst] = useState(true)
   const userDetails = useAuthStore((state) => state.userDetails)
@@ -44,16 +43,6 @@ export default function Content() {
     }
   }, [editor, selection]) // eslint-disable-line
 
-  const updateContent = (newContent) => {
-    // Because the useEditorChange hook runs the onChange once
-    if (!first) {
-      contentRef.current = newContent
-    } else {
-      setFirst(true)
-    }
-    return
-  }
-
   const handleSave = (payload: any) => {
     const time = Date.now()
     const metadata: NodeMetadata = {
@@ -65,7 +54,7 @@ export default function Content() {
       url: window.location.href
     }
 
-    setContent(nodeId, contentRef.current, metadata)
+    setContent(node.nodeid, contentRef.current, metadata)
     toast.success('Saved')
     console.log('Payload: ', payload)
     const title = new Date().toLocaleString('en-US', {
@@ -123,7 +112,7 @@ export default function Content() {
     <StyledContent>
       <Results />
       {/* TODO: add support for tooltip edit content */}
-      <Editor nodeUID={nodeId} onChange={updateContent} handleSave={handleSave} />
+      <Editor nodeId={node.nodeid} readOnly={previewMode} handleSave={handleSave} />
     </StyledContent>
   )
 }
