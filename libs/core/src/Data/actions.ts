@@ -59,7 +59,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     title: 'Search Twitter',
     description: 'Search on Twitter',
-    icon: 'logos:twitter',
+    icon: 'bi:twitter',
     shortcut: {
       search: {
         category: 'action',
@@ -75,7 +75,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Open Gmail',
     category: QuickLinkType.action,
     description: 'Open your default Gmail Account',
-    icon: 'logos:google-gmail',
+    icon: 'simple-icons:gmail',
     shortcut: {
       open: {
         title: 'to open',
@@ -107,7 +107,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create new empty Google Doc with default Google Account',
     type: ActionType.OPEN,
-    icon: 'logos:google-drive',
+    icon: 'material-symbols:docs',
     data: { base_url: 'https://docs.new' },
     shortcut: {
       open: {
@@ -139,7 +139,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create new empty Google Slides with default Google Account',
     type: ActionType.OPEN,
-    // icon: 'google-slides.svg',
+    icon: 'material-symbols:slides',
     data: { base_url: 'https://slides.new' },
     shortcut: {
       open: {
@@ -155,7 +155,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create new GitHub Gist',
     type: ActionType.OPEN,
-    icon: 'codicon:github',
+    icon: 'bi:github',
     data: { base_url: 'https://gist.new' },
     shortcut: {
       open: {
@@ -171,7 +171,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create new GitHub Repository',
     type: ActionType.OPEN,
-    icon: 'codeicon:github',
+    icon: 'bi:github',
     data: { base_url: 'https://repo.new' },
     shortcut: {
       open: {
@@ -187,7 +187,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create new empty Figma File',
     type: ActionType.OPEN,
-    icon: 'logos:figma',
+    icon: 'ph:figma-logo-fill',
     data: { base_url: 'https://figma.new' },
     shortcut: {
       open: {
@@ -235,7 +235,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Create a new Google form',
     type: ActionType.OPEN,
-    // icon: 'google-form.svg',
+    icon: 'ri:drive-fill',
     data: { base_url: 'https://forms.new' },
     shortcut: {
       open: {
@@ -251,7 +251,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Make a new Tweet',
     type: ActionType.OPEN,
-    icon: 'logos:twitter',
+    icon: 'bi:twitter',
     data: {
       base_url: 'https://twitter.com/intent/tweet'
     },
@@ -307,7 +307,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Search within your default Gmail Account',
     type: ActionType.SEARCH,
-    icon: 'logos:google-gmail',
+    icon: 'simple-icons:gmail',
     shortcut: {
       search: {
         category: 'action',
@@ -325,7 +325,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Search on Wikipedia',
     type: ActionType.SEARCH,
-    icon: 'logos:xwiki',
+    icon: 'simple-icons:wikipedia',
     shortcut: {
       search: {
         category: 'action',
@@ -343,7 +343,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Search on YouTube',
     type: ActionType.SEARCH,
-    icon: 'logos:youtube-icon',
+    icon: 'bi:youtube',
     shortcut: {
       search: {
         category: 'action',
@@ -362,7 +362,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Search Google Drive on default Google Account',
     type: ActionType.SEARCH,
-    icon: 'logos:google-drive',
+    icon: 'ri:drive-fill',
     shortcut: {
       search: {
         category: 'action',
@@ -380,7 +380,7 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Search on GitHub',
     type: ActionType.SEARCH,
-    icon: 'codeicon:github',
+    icon: 'bi:github',
     shortcut: {
       search: {
         category: 'action',
@@ -393,24 +393,9 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
-    id: 'ACTION_CMDT1C7TlZEFyuk54ME6c',
-    title: 'About Us',
-    category: QuickLinkType.action,
-    description: 'Get to know more about Workduck.io',
-    type: ActionType.OPEN,
-    icon: 'workduck.svg',
-    data: { base_url: 'https://workduck.io' },
-    shortcut: {
-      open: {
-        title: 'to open',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
     id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
     title: 'Capture Multiple Tabs',
+    icon: 'bi:collection-fill',
     category: QuickLinkType.action,
     description: 'Save a group of tabs to retrieve later',
     type: ActionType.RENDER,
@@ -431,6 +416,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
     title: 'Colour Picker',
     category: QuickLinkType.action,
+    icon: 'eva:color-picker-fill',
     description: "Pretend you're a designer and steal some colours",
     type: ActionType.RENDER,
     data: {
@@ -449,6 +435,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Unix Epoch Converter',
     category: QuickLinkType.action,
     description: 'Convert Epoch Timestamp to Datetime and vice versa',
+    icon: 'material-symbols:date-range',
     type: ActionType.RENDER,
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/epoch`
@@ -466,6 +453,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Corporate Buzzwords',
     category: QuickLinkType.action,
     description: 'Gimme some Corporate BS Buzzwords',
+    icon: 'material-symbols:corporate-fare-rounded',
     type: ActionType.RENDER,
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
@@ -484,10 +472,26 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Mr. International',
     type: ActionType.RENDER,
-    icon: 'currencyconv.svg',
+    icon: 'bi:currency-exchange',
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
     },
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
+    id: 'ACTION_CMDT1C7TlZEFyuk54ME6c',
+    title: 'About Us',
+    category: QuickLinkType.action,
+    description: 'Get to know more about Workduck.io',
+    type: ActionType.OPEN,
+    icon: 'workduck.svg',
+    data: { base_url: 'https://workduck.io' },
     shortcut: {
       open: {
         title: 'to open',
