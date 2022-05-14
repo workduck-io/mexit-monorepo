@@ -5,9 +5,10 @@ export * from './Data/outline'
 export * from './Data/search'
 
 export * from './Stores/authStoreConstructor'
+export * from './Stores/contentStoreConstructor'
+export * from './Stores/shortcutStoreConstructor'
 export * from './Stores/shortenerStoreConstructor'
 export * from './Stores/snippetStoreConstructor'
-export * from './Stores/contentStoreConstructor'
 
 export * from './Types/Actions'
 export * from './Types/Auth'
