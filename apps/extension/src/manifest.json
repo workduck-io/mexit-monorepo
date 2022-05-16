@@ -17,6 +17,9 @@
       "description": "Open Mexit"
     }
   },
+  "action": {
+    "default_title": "Click to open Sputlit"
+  },
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -26,15 +29,30 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["content.js"]
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
   ],
-  "permissions": ["storage", "tabs", "activeTab", "search"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "search"
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["Assets/*"],
-      "matches": ["http://*/*", "https://*/*"]
+      "resources": [
+        "Assets/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
     }
   ]
 }

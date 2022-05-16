@@ -24,6 +24,12 @@ chrome.commands.onCommand.addListener((command) => {
   })
 })
 
+chrome.action.onClicked.addListener((command) => {
+  chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
+  })
+})
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const actionType = request.type
 
