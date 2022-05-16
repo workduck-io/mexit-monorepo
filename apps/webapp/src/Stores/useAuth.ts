@@ -43,7 +43,7 @@ export const useAuthentication = () => {
 
     if (getWorkspace && data !== undefined) {
       await client
-        .get(apiURLs.getUserRecords(data.userId))
+        .get(apiURLs.getUserRecords)
         .then((d: any) => {
           const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
@@ -65,7 +65,7 @@ export const useAuthentication = () => {
 
       if (getWorkspace && result.userCred !== undefined) {
         await client
-          .get(apiURLs.getUserRecords(result.userCred.userId))
+          .get(apiURLs.getUserRecords)
           .then((d: any) => {
             const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
