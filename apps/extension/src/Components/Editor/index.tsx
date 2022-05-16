@@ -51,7 +51,7 @@ const commands = [
 
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
-  const { previewMode, nodeContent, node } = useEditorContext()
+  const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -163,7 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }
   }, 1000)
 
   return (
-    <EditorWrapper style={springProps}>
+    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         meta={{

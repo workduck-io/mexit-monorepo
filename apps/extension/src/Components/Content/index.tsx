@@ -15,11 +15,10 @@ import { CaptureType, extractMetadata, generateNodeId, QuickLinkType } from '@me
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { FadeContainer } from '@mexit/shared'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
-  const { node, nodeContent, setNodeContent, previewMode, setPreviewMode } = useEditorContext()
+  const { node, nodeContent, setNodeContent, previewMode } = useEditorContext()
 
   const setContent = useContentStore((store) => store.setContent)
   const setMetadata = useContentStore((store) => store.setMetadata)
@@ -117,9 +116,7 @@ export default function Content() {
   return (
     <StyledContent>
       <Results />
-      <FadeContainer fade={true} onClick={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
-        <Editor readOnly={previewMode} onChange={onChangeSave} handleSave={handleSave} />
-      </FadeContainer>
+      <Editor readOnly={previewMode} onChange={onChangeSave} handleSave={handleSave} />
     </StyledContent>
   )
 }
