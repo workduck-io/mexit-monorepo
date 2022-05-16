@@ -1,5 +1,6 @@
 import { uniq } from 'lodash'
-import { NodeEditorContent, generateTempId, NodeMetadata } from '@mexit/core'
+import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
+import { generateTempId } from './idGenerator'
 
 const ELEMENT_TODO_LI = 'action_item'
 const ELEMENT_PARAGRAPH = 'p'
@@ -75,7 +76,9 @@ export const extractMetadata = (data: any): NodeMetadata => {
     lastEditedBy: data.lastEditedBy,
     updatedAt: data.updatedAt,
     createdBy: data.createdBy,
-    createdAt: data.createdAt
+    createdAt: data.createdAt,
+    saveableRange: data?.saveableRange,
+    sourceUrl: data?.sourceUrl
   }
   return removeNulls(metadata)
 }

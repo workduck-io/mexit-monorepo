@@ -11,7 +11,7 @@ import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
 import useDataStore from '../../Stores/useDataStore'
-import { CaptureType, generateNodeId, QuickLinkType } from '@mexit/core'
+import { CaptureType, extractMetadata, generateNodeId, QuickLinkType } from '@mexit/core'
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
@@ -22,6 +22,7 @@ export default function Content() {
   const { node, nodeContent, setNodeContent, previewMode, setPreviewMode } = useEditorContext()
 
   const setContent = useContentStore((store) => store.setContent)
+  const setMetadata = useContentStore((store) => store.setMetadata)
   const editor = usePlateEditorRef(node.nodeid)
   const userDetails = useAuthStore((state) => state.userDetails)
   const getSnippet = useSnippets().getSnippet
@@ -50,18 +51,12 @@ export default function Content() {
   }
 
   const handleSave = () => {
-    const time = Date.now()
-
-    const metadata: NodeMetadata = {
-      lastEditedBy: userDetails?.email,
-      createdBy: userDetails?.email,
-      createdAt: time,
-      updatedAt: time,
+    const metadata = {
       saveableRange: selection.range,
-      url: window.location.href
+      sourceUrl: window.location.href
     }
 
-    setContent(node.nodeid, contentRef.current, metadata)
+    setContent(node.nodeid, contentRef.current)
 
     toast.success('Saved')
 
@@ -99,6 +94,7 @@ export default function Content() {
             toast.error('An Error Occured. Please try again.')
           }
         } else {
+          setMetadata(message.node.id, extractMetadata(message.node))
           toast.success('Saved to Cloud')
           setTimeout(() => {
             setVisualState(VisualState.hidden)

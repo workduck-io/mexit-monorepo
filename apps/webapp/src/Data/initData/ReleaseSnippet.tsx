@@ -1,6 +1,4 @@
-import { generateQuestionId } from '@mexit/core'
-
-import { insertId } from '../../Utils/content'
+import { generateQuestionId, insertId } from '@mexit/core'
 
 export const ReleaseSnippet = insertId([
   {

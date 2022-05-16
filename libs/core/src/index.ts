@@ -23,6 +23,7 @@ export * from './Types/Snippet'
 export * from './Types/Store'
 export * from './Types/Todo'
 
+export * from './Utils/content'
 export * from './Utils/defaults'
 export * from './Utils/events'
 export * from './Utils/getNewBlockData'

@@ -32,7 +32,7 @@ export interface NodeMetadata {
 
   highlighterId?: string
   saveableRange?: Partial<HighlightSource>
-  url?: string
+  sourceUrl?: string
 }
 
 export interface Block {

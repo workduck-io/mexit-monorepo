@@ -12,7 +12,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
         },
         id: data.id,
         title: data.title,
-        lastEditedBy: data.createdBy,
+        saveableRange: data.metadata?.saveableRange,
+        sourceUrl: data.metadata?.sourceUrl,
         data: serializeContent(data.content ?? defaultContent.content)
       }
 
@@ -23,7 +24,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
           }
         })
         .then((response: any) => {
-          return { message: response, error: null }
+          return { message: response.data, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
