@@ -2,6 +2,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { StyleSheetManager } from 'styled-components'
+import tinykeys from 'tinykeys'
 
 import Index from '.'
 
@@ -17,8 +18,11 @@ shadowRoot.attachShadow({ mode: 'closed' }).appendChild(styleSlot)
 // Adding a stopPropagation here so as to not notify any event listeners on the window
 // Checkout: https://github.com/facebook/react/issues/11387#issuecomment-355258340
 // And this too: https://github.com/facebook/react/issues/24136
+// event propagation is stopped for all keydown events except the ones required for opening/closing sputlit
 shadowRoot.addEventListener('keydown', (event) => {
-  event.stopPropagation()
+  if (event.key !== 'Escape') {
+    event.stopPropagation()
+  }
 })
 
 const root = document.createElement('div')
