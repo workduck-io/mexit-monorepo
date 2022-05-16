@@ -1335,6 +1335,13 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
+"@iconify/icons-material-symbols@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-material-symbols/-/icons-material-symbols-1.2.2.tgz#bca8ab48304dd665b45e01bfdc7b2192144f4be9"
+  integrity sha512-0lzENEZ6XDGN6wtuGW2z0XU0Q8d4nYRS4RiaRgtf0vL/OpuiuBD07d4wknzBCQo1Y/WXdmKiDHY8aiVCpXCtxA==
+  dependencies:
+    "@iconify/types" "^1.1.0"
+
 "@iconify/icons-ph@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify/icons-ph/-/icons-ph-1.2.1.tgz#292155d05e660d24a65c1510ccb61cd1ad15676a"
