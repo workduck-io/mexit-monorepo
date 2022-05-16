@@ -39,15 +39,15 @@ export const handleActionRequest = (request: any) => {
     case 'reload':
       chrome.tabs.reload()
       break
-    case 'browser-search':
-      chrome.search.query(
-        {
-          disposition: 'NEW_TAB',
-          text: request.data.query
-        },
-        () => {} // eslint-disable-line @typescript-eslint/no-empty-function
-      )
-      break
+    // case 'browser-search':
+    //   chrome.search.query(
+    //     {
+    //       disposition: 'NEW_TAB',
+    //       text: request.data.query
+    //     },
+    //     () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+    //   )
+    //   break
     case 'chrome-url':
       chrome.tabs.create({ url: request.data.base_url })
       break

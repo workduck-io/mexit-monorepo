@@ -511,17 +511,16 @@ export const initActions: Array<MexitAction> = [
 
 export const defaultActions: MexitAction[] = initActions
 
-export const searchBrowserAction = (query: string) => {
+export const searchBrowserAction = (query: string, activeItem?: MexitAction) => {
   return {
     id: '0',
-    title: 'Search in Browser Search Bar',
+    title: activeItem?.title || 'Search in Browser Search Bar',
     category: QuickLinkType.action,
     description: `Search for "${query}"`,
-    type: ActionType.BROWSER_EVENT,
-    icon: 'ph:magnifying-glass',
+    type: ActionType.SEARCH,
+    icon: activeItem?.icon || 'ph:magnifying-glass',
     data: {
-      event_name: 'browser-search',
-      query: query
+      base_url: activeItem?.data?.base_url || 'https://google.com/search?q='
     },
     shortcut: {
       search: {
