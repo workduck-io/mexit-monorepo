@@ -161,13 +161,15 @@ function Results() {
       }
     }
 
-    // Not adding event listener to window as the event never reaches there
-    document.getElementById('mexit')!.addEventListener('keydown', handler)
+    if (previewMode) {
+      // Not adding event listener to window as the event never reaches there
+      document.getElementById('mexit')!.addEventListener('keydown', handler)
+    }
 
     return () => {
       document.getElementById('mexit')!.removeEventListener('keydown', handler)
     }
-  }, [searchResults, activeIndex, activeItem])
+  }, [searchResults, previewMode, activeIndex, activeItem, input])
 
   useEffect(() => {
     setActiveIndex(0)
