@@ -25,7 +25,7 @@ export const integrationURLs = {
 }
 
 export const BASE_API_URL = 'https://http-test.workduck.io/mex'
-export const BASE_USER_URL = 'https://http.workduck.io/user'
+export const BASE_USER_URL = 'https://http.workduck.io'
 
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
@@ -54,7 +54,7 @@ export const apiURLs = {
   getBookmarks: (userId: string) => `${BOOKMARK_URL}/userBookmark/${userId}`,
 
   // User
-  getUserRecords: (userId: string) => `${BASE_USER_URL}/user/${userId}/MEX`,
+  getUserRecords: `${BASE_USER_URL}/user/`,
   registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
 
   // Archive
