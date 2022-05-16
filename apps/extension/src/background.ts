@@ -1,4 +1,4 @@
-import { apiURLs } from '@mexit/core'
+import { ActionType, apiURLs } from '@mexit/core'
 
 import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
 
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true
     }
 
-    case 'BROWSER_EVENT': {
+    case ActionType.BROWSER_EVENT: {
       handleActionRequest(request)
       return true
     }
