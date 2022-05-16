@@ -45,8 +45,8 @@ export const initActions: Array<MexitAction> = [
     type: ActionType.RENDER,
     icon: 'ri:link',
     shortcut: {
-      open: {
-        title: 'to open',
+      shorten: {
+        title: 'to shorten',
         category: 'action',
         keystrokes: 'Enter'
       }
@@ -94,8 +94,8 @@ export const initActions: Array<MexitAction> = [
     icon: 'eva:refresh-outline',
     data: { event_name: 'reload' },
     shortcut: {
-      open: {
-        title: 'to open',
+      reload: {
+        title: 'to reload',
         category: 'action',
         keystrokes: 'Enter'
       }
@@ -399,6 +399,13 @@ export const initActions: Array<MexitAction> = [
     category: QuickLinkType.action,
     description: 'Save a group of tabs to retrieve later',
     type: ActionType.RENDER,
+    shortcut: {
+      capture: {
+        category: 'action',
+        title: 'to capture',
+        keystrokes: 'Enter'
+      }
+    },
     data: {
       componentName: 'CreateTabCapture'
     }
@@ -423,8 +430,8 @@ export const initActions: Array<MexitAction> = [
       src: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
     },
     shortcut: {
-      open: {
-        title: 'to open',
+      pick: {
+        title: 'to pick',
         category: 'action',
         keystrokes: 'Enter'
       }
@@ -441,8 +448,8 @@ export const initActions: Array<MexitAction> = [
       src: `${MEXIT_ACTIONS_URL_BASE}/epoch`
     },
     shortcut: {
-      open: {
-        title: 'to open',
+      convert: {
+        title: 'to convert',
         category: 'action',
         keystrokes: 'Enter'
       }
@@ -459,8 +466,8 @@ export const initActions: Array<MexitAction> = [
       src: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
     },
     shortcut: {
-      open: {
-        title: 'to open',
+      get: {
+        title: 'to get',
         category: 'action',
         keystrokes: 'Enter'
       }
@@ -477,8 +484,8 @@ export const initActions: Array<MexitAction> = [
       src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
     },
     shortcut: {
-      open: {
-        title: 'to open',
+      convert: {
+        title: 'to convert',
         category: 'action',
         keystrokes: 'Enter'
       }
