@@ -30,6 +30,20 @@ chrome.action.onClicked.addListener((command) => {
   })
 })
 
+chrome.contextMenus.create({
+  id: 'open-sputlit',
+  title: 'Open Sputlit',
+  contexts: ['page', 'selection']
+})
+
+chrome.contextMenus.onClicked.addListener((onClickData) => {
+  console.log('onClickData', onClickData)
+
+  chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
+  })
+})
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const actionType = request.type
 
