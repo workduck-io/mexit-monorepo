@@ -2,6 +2,7 @@ import React, { createRef, useRef, useState } from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import {
+  ActionType,
   CategoryType,
   Contents,
   CREATE_NEW_ITEM,
@@ -42,7 +43,7 @@ export default function Chotu() {
   const setAutheticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { setSearchResults, search } = useSputlitContext()
+  const { setSearchResults, search, activeItem } = useSputlitContext()
   const initContents = useContentStore((store) => store.initContents)
   const { ilinks, setIlinks } = useDataStore()
   const { getQuickLinks } = useQuickLinks()
@@ -142,7 +143,7 @@ export default function Chotu() {
           const mainItems = [...localNodes, ...actionItems]
           searchList = [CREATE_NEW_ITEM, ...mainItems]
           // mog('nodelist', { nodeItems, snippetItems })
-          // mog('searchList chotu', { searchList })
+          mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
           break
       }
@@ -151,9 +152,13 @@ export default function Chotu() {
     }
 
     if (child) {
-      useSearch(search)
+      if (activeItem && activeItem?.type === ActionType.SEARCH) {
+        setSearchResults([searchBrowserAction(search.value, activeItem)])
+      } else if (!activeItem) {
+        useSearch(search)
+      }
     }
-  }, [child, search.value, ilinks])
+  }, [child, activeItem, search.value, ilinks])
 
   return (
     // TODO: Test this whenever shornter starts working
