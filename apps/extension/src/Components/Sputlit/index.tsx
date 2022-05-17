@@ -6,6 +6,7 @@ import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
 
 const Sputlit = () => {
   const setVisualState = useSputlitContext().setVisualState
+
   return (
     <SputlitContainer id="sputlit-container">
       <Wrapper>

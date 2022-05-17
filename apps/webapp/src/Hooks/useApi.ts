@@ -1,9 +1,8 @@
 import { client } from '@workduck-io/dwindle'
 
-import { defaultContent, apiURLs, mog, SEPARATOR } from '@mexit/core'
+import { defaultContent, apiURLs, mog, SEPARATOR, extractMetadata, removeNulls } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
-import { removeNulls, extractMetadata } from '../Utils/content'
 import { useLinks } from '../Hooks/useLinks'
 import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '../Data/constants'
 import { isRequestedWithin } from '../Stores/useApiStore'

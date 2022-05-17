@@ -1,7 +1,14 @@
-import { NodeEditorContent, TodoType, ELEMENTS_IN_OUTLINE, LIST_ELEMENTS, HIGHLIGHTED_ELEMENTS } from '@mexit/core'
+import {
+  NodeEditorContent,
+  TodoType,
+  ELEMENTS_IN_OUTLINE,
+  LIST_ELEMENTS,
+  HIGHLIGHTED_ELEMENTS,
+  getTagsFromContent,
+  getTodosFromContent
+} from '@mexit/core'
 import { expose } from 'threads/worker'
 
-import { getTagsFromContent, getTodosFromContent } from '../Utils/content'
 import { AnalyseContentProps } from './controller'
 import { convertContentToRawText, getTitleFromContent } from '@mexit/core'
 export interface OutlineItem {

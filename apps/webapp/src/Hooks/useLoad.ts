@@ -1,4 +1,13 @@
-import { NodeEditorContent, NodeProperties, ILink, DRAFT_PREFIX, mog, ELEMENT_PARAGRAPH, SEPARATOR } from '@mexit/core'
+import {
+  NodeEditorContent,
+  NodeProperties,
+  ILink,
+  DRAFT_PREFIX,
+  mog,
+  ELEMENT_PARAGRAPH,
+  SEPARATOR,
+  updateEmptyBlockTypes
+} from '@mexit/core'
 import { getParentId } from '@mexit/shared'
 import { toast } from 'react-hot-toast'
 
@@ -11,7 +20,6 @@ import useContentStore from '../Stores/useContentStore'
 import { useEditorBuffer } from './useEditorBuffer'
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { getPathFromNodeIdHookless } from './useLinks'
-import { updateEmptyBlockTypes } from '../Utils/content'
 import { useRefactor } from './useRefactor'
 import { checkIfUntitledDraftNode } from '@mexit/core'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'

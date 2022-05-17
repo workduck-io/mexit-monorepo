@@ -1,11 +1,10 @@
-import { mog } from '@mexit/core'
+import { getTodosFromContent, mog } from '@mexit/core'
 
 import { useApi } from './useApi'
 import { useLinks } from './useLinks'
 import { useTags } from './useTags'
 import useContentStore from '../Stores/useContentStore'
 import useTodoStore from '../Stores/useTodoStore'
-import { getTodosFromContent } from '../Utils/content'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 // import useThemeStore from '../Stores/useThemeStore'

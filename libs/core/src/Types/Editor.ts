@@ -32,7 +32,7 @@ export interface NodeMetadata {
 
   highlighterId?: string
   saveableRange?: Partial<HighlightSource>
-  url?: string
+  sourceUrl?: string
 }
 
 export interface Block {
@@ -147,20 +147,6 @@ export interface FlexSearchResult {
 export interface NodeLink {
   from: string
   to: string
-}
-
-/**  ~~ILinks~~ (Node)
- * Map of path -> heirarchal id, with nodeid -> Unique nanoid */
-export interface ILink {
-  /** Unique Identifier */
-  nodeid: string
-
-  /** The title of the node.
-   * Uses separator for heirarchy */
-  path: string
-
-  /** Iconify Icon string */
-  icon?: string
 }
 
 export interface AddILinkProps {

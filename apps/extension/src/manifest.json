@@ -2,7 +2,7 @@
   "name": "Mexit",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
   "manifest_version": 3,
-  "version": "0.5.1",
+  "version": "0.5.2",
   "icons": {
     "16": "Assets/icon16x16.png",
     "48": "Assets/icon48x48.png",
@@ -29,31 +29,15 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "content.js"
-      ]
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
     }
   ],
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "tabs",
-    "activeTab",
-    "search"
-  ],
+  "permissions": ["contextMenus", "storage", "tabs", "activeTab", "search"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "Assets/*"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ]
+      "resources": ["Assets/*"],
+      "matches": ["http://*/*", "https://*/*"]
     }
   ]
 }

@@ -1,9 +1,7 @@
-
-import { TagsCache } from '@mexit/core'
+import { getTagsFromContent, TagsCache } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import useDataStore from '../Stores/useDataStore'
-import { getTagsFromContent } from '../Utils/content'
 import { useLinks } from './useLinks'
 import { useNodes } from './useNodes'
 
@@ -13,7 +11,7 @@ import { useNodes } from './useNodes'
   - getNodesForTag(tag: string) => string[]
  **/
 
-export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr));
+export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr))
 
 export interface RelatedNodes {
   [tag: string]: string[]

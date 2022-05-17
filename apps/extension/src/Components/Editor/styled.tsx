@@ -3,6 +3,7 @@ import { Scroll } from '../Results/styled'
 import { animated } from 'react-spring'
 
 export const EditorWrapper = styled(animated.div)`
+  display: flex;
   flex: 1;
   max-height: 100%;
   overflow: scroll;
