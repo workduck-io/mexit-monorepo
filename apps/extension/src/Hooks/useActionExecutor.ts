@@ -21,7 +21,7 @@ export function useActionExecutor() {
 
   function execute(item: MexitAction) {
     switch (item.category) {
-      case QuickLinkType.backlink:
+      case QuickLinkType.backlink: {
         let newNode: ILink
         if (!item?.extras?.new) {
           newNode = ilinks.find((i) => i.nodeid === item.id)
@@ -35,12 +35,14 @@ export function useActionExecutor() {
         setPreviewMode(false)
         setInput('')
         break
-      case QuickLinkType.snippet:
+      }
+      case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
         copyToClipboard(parseSnippet(snippet).text)
         setVisualState(VisualState.hidden)
         break
-      case QuickLinkType.action:
+      }
+      case QuickLinkType.action: {
         switch (item.type) {
           case ActionType.BROWSER_EVENT:
             chrome.runtime.sendMessage({ ...item })
@@ -119,6 +121,7 @@ export function useActionExecutor() {
             )
           }
         }
+      }
     }
   }
 

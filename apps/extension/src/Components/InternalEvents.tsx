@@ -80,6 +80,7 @@ function dibbaToggle() {
 
   useEffect(() => {
     function handleRender() {
+      // eslint-disable-next-line
       // @ts-ignore
       if (document.activeElement.isContentEditable) {
         const text = window.getSelection().anchorNode.textContent
