@@ -9,8 +9,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const reqData = {
         id: data.id,
         title: data.title,
-        saveableRange: data.metadata?.saveableRange,
-        sourceUrl: data.metadata?.sourceUrl,
+        // saveableRange: data.metadata?.saveableRange,
+        // sourceUrl: data.metadata?.sourceUrl,
         data: serializeContent(data.content ?? defaultContent.content)
       }
 
