@@ -10,7 +10,6 @@ import Results from '../Results'
 import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
-import useDataStore from '../../Stores/useDataStore'
 import {
   CaptureType,
   createNodeWithUid,
@@ -18,11 +17,13 @@ import {
   extractMetadata,
   generateNodeId,
   getNewDraftKey,
-  QuickLinkType
+  QuickLinkType,
+  SEPARATOR
 } from '@mexit/core'
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
+import useDataStore from '../../Stores/useDataStore'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
@@ -37,6 +38,8 @@ export default function Content() {
   const deserializedContentRef = useRef<NodeEditorContent>()
 
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+
+  const ilinks = useDataStore((store) => store.ilinks)
 
   useEffect(() => {
     const content = getMexHTMLDeserializer(selection?.html, editor)
@@ -70,44 +73,48 @@ export default function Content() {
         sourceUrl: selection?.range && window.location.href
       }
 
-      console.log(node.nodeid, contentRef.current)
+      const splitPath = node.path.split(SEPARATOR)
+      const request = {
+        type: 'CAPTURE_HANDLER',
+        subType: 'BULK_CREATE_NODE',
+        data: {
+          id: node.nodeid,
+          content: contentRef.current,
+          title: splitPath.slice(-1)[0],
+          type: CaptureType.DRAFT,
+          workspaceID: workspaceDetails.id,
+          metadata: metadata
+        }
+      }
+
+      if (splitPath.length > 1) {
+        const parent = splitPath.slice(0, -1).join(SEPARATOR)
+        const parentID = ilinks.find((i) => i.path === parent)
+        request.data['referenceID'] = parentID.nodeid
+      }
+
+      console.log('Sending: ', node, request)
+
       setContent(node.nodeid, contentRef.current)
-
-      toast.success('Saved')
-
-      chrome.runtime.sendMessage(
-        {
-          type: 'CAPTURE_HANDLER',
-          subType: 'CREATE_CONTENT_QC',
-          data: {
-            id: node.nodeid,
-            content: contentRef.current,
-            title: node.title,
-            nodePath: { path: node.path },
-            type: CaptureType.DRAFT,
-            workspaceID: workspaceDetails.id,
-            metadata: metadata
-          }
-        },
-        (response) => {
-          const { message, error } = response
-          if (error) {
-            if (error === 'Not Authenticated') {
-              toast.error('Not Authenticated. Please login on Mexit webapp.')
-            } else {
-              toast.error('An Error Occured. Please try again.')
-            }
+      chrome.runtime.sendMessage(request, (response) => {
+        const { message, error } = response
+        console.log('Response aaya: ', response)
+        if (error) {
+          if (error === 'Not Authenticated') {
+            toast.error('Not Authenticated. Please login on Mexit webapp.')
           } else {
-            setMetadata(message.node.id, extractMetadata(message.node))
-            toast.success('Saved to Cloud')
-            if (saveAndExit) {
-              setTimeout(() => {
-                setVisualState(VisualState.hidden)
-              }, 2000)
-            }
+            toast.error('An Error Occured. Please try again.')
+          }
+        } else {
+          setMetadata(message.node.id, extractMetadata(message.node))
+          toast.success('Saved to Cloud')
+          if (saveAndExit) {
+            setTimeout(() => {
+              setVisualState(VisualState.hidden)
+            }, 2000)
           }
         }
-      )
+      })
     }
 
     const handleSaveKeydown = (event: KeyboardEvent) => {
@@ -126,7 +133,7 @@ export default function Content() {
       // handleSave()
       document.getElementById('mexit')!.removeEventListener('keydown', handleSaveKeydown)
     }
-  }, [node])
+  }, [node, ilinks])
 
   useEffect(() => {
     const item = searchResults[activeIndex]

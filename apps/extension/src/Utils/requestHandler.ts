@@ -4,15 +4,18 @@ import { Tab } from '../Types/Tabs'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
-    case 'CREATE_CONTENT_QC': {
-      const URL = apiURLs.bulkCreateNodes
+    case 'BULK_CREATE_NODE': {
+      const URL = apiURLs.createNode
       const reqData = {
-        nodePath: data.nodePath,
         id: data.id,
         title: data.title,
         saveableRange: data.metadata?.saveableRange,
         sourceUrl: data.metadata?.sourceUrl,
         data: serializeContent(data.content ?? defaultContent.content)
+      }
+
+      if (data.referenceID) {
+        reqData['referenceID'] = data.referenceID
       }
 
       return client
