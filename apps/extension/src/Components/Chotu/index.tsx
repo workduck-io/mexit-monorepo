@@ -142,6 +142,7 @@ export default function Chotu() {
 
           const mainItems = [...localNodes, ...actionItems]
           searchList = [CREATE_NEW_ITEM, ...mainItems]
+          // search debug
           // mog('nodelist', { nodeItems, snippetItems })
           mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
@@ -164,15 +165,11 @@ export default function Chotu() {
     // TODO: Test this whenever shornter starts working
     <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
       <iframe ref={iframeRef} src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
-      <Icon>
-        <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} />
-      </Icon>
+      <Icon>{/* <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} /> */}</Icon>
 
       <Container>
         <p>shortened</p>
-        <CopyButton>
-          <img src={chrome.runtime.getURL('/Assets/copy.svg')} />
-        </CopyButton>
+        <CopyButton>{/* <img src={chrome.runtime.getURL('/Assets/copy.svg')} /> */}</CopyButton>
       </Container>
 
       <Notification />

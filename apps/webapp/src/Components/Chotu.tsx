@@ -40,8 +40,8 @@ export default function Chotu() {
         const res = searchWorker ? queryIndex(key, query) : []
         return res
       }
-    }
-    // debug: true
+    },
+    debug: true
   })
 
   useEffect(() => {

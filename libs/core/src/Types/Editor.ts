@@ -149,20 +149,6 @@ export interface NodeLink {
   to: string
 }
 
-/**  ~~ILinks~~ (Node)
- * Map of path -> heirarchal id, with nodeid -> Unique nanoid */
-export interface ILink {
-  /** Unique Identifier */
-  nodeid: string
-
-  /** The title of the node.
-   * Uses separator for heirarchy */
-  path: string
-
-  /** Iconify Icon string */
-  icon?: string
-}
-
 export interface AddILinkProps {
   ilink: string
   nodeid?: string

@@ -11,17 +11,25 @@ import { StyledContent } from './styled'
 import { useAuthStore } from '../../Hooks/useAuth'
 import toast from 'react-hot-toast'
 import useDataStore from '../../Stores/useDataStore'
-import { CaptureType, extractMetadata, generateNodeId, QuickLinkType } from '@mexit/core'
+import {
+  CaptureType,
+  createNodeWithUid,
+  defaultContent,
+  extractMetadata,
+  generateNodeId,
+  getNewDraftKey,
+  QuickLinkType
+} from '@mexit/core'
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
+import tinykeys from 'tinykeys'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
-  const { node, nodeContent, setNodeContent, previewMode } = useEditorContext()
+  const { node, nodeContent, setNodeContent, previewMode, setNode } = useEditorContext()
 
-  const setContent = useContentStore((store) => store.setContent)
-  const setMetadata = useContentStore((store) => store.setMetadata)
+  const { setContent, setMetadata, getContent } = useContentStore()
   const editor = usePlateEditorRef(node.nodeid)
   const userDetails = useAuthStore((state) => state.userDetails)
   const getSnippet = useSnippets().getSnippet
@@ -51,10 +59,11 @@ export default function Content() {
 
   const handleSave = () => {
     const metadata = {
-      saveableRange: selection.range,
-      sourceUrl: window.location.href
+      saveableRange: selection?.range,
+      sourceUrl: selection?.range ?? window.location.href
     }
 
+    console.log(node.nodeid, contentRef.current)
     setContent(node.nodeid, contentRef.current)
 
     toast.success('Saved')
@@ -104,12 +113,36 @@ export default function Content() {
   }
 
   useEffect(() => {
-    if (searchResults[activeIndex]?.category === QuickLinkType.backlink) {
-      const content = useContentStore.getState().getContent(searchResults[activeIndex].id)?.content
+    // const unsubscribe = tinykeys(document.getElementById('mexit'), {
+    //   '$mod + S': (event) => {
+    //     console.log('mod s')
+    //     event.preventDefault()
+    //     handleSave()
+    //   },
+    //   '$mod + Enter': (event) => {
+    //     console.log('mod enter')
+    //     event.preventDefault()
+    //     handleSave()
+    //   }
+    // })
+
+    return () => {
+      // unsubscribe()
+      handleSave()
+    }
+  }, [previewMode])
+
+  useEffect(() => {
+    const item = searchResults[activeIndex]
+
+    if (item?.category === QuickLinkType.backlink && !item?.extras?.new) {
+      const content = getContent(item.id)?.content
       setNodeContent(content)
-    } else if (searchResults[activeIndex]?.category === QuickLinkType.snippet) {
-      const content = getSnippet(searchResults[activeIndex].id).content
+    } else if (item?.category === QuickLinkType.snippet) {
+      const content = getSnippet(item.id).content
       setNodeContent(content)
+    } else {
+      setNodeContent(defaultContent.content)
     }
   }, [activeIndex, searchResults])
 

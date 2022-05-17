@@ -63,12 +63,6 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
-  useEffect(() => {
-    return () => {
-      handleSave()
-    }
-  }, [currTabURL])
-
   useEditorChange(node.nodeid, nodeContent, onChange)
 
   const comboboxConfig = {

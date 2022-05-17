@@ -40,6 +40,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('ilinks', useDataStore)
   // share('archive', useDataStore)
   share('contents', useContentStore)
+  // share('authenticated', useAuthStore)
   // share('snippets', useSnippetStore)
 }
 

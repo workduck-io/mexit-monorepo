@@ -1,8 +1,9 @@
-import { ActionType, CategoryType, MexitAction, parseSnippet, QuickLinkType } from '@mexit/core'
+import { ActionType, CategoryType, ILink, MexitAction, parseSnippet, QuickLinkType } from '@mexit/core'
 import { copyToClipboard } from '@mexit/shared'
 import toast from 'react-hot-toast'
 import Action from '../Components/Action'
 import { StyledInput } from '../Components/Search/styled'
+import useDataStore from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useAuthStore } from './useAuth'
 import { useContentStore } from './useContentStore'
@@ -11,17 +12,28 @@ import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
-  const { setVisualState, search, activeItem, setActiveItem, setSearch, setSearchResults } = useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode } = useEditorContext()
+  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
+    useSputlitContext()
+  const { node, setNodeContent, setPreviewMode, setNode } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { getContent } = useContentStore()
   const { getSnippet } = useSnippets()
+  const { ilinks } = useDataStore()
 
   function execute(item: MexitAction) {
     switch (item.category) {
       case QuickLinkType.backlink:
+        let newNode: ILink
+        if (!item?.extras?.new) {
+          newNode = ilinks.find((i) => i.nodeid === item.id)
+        }
+        setNode({
+          id: (newNode || node).nodeid,
+          title: (newNode || node).path.slice(-1)[0],
+          path: (newNode || node).path,
+          nodeid: (newNode || node).nodeid
+        })
         setPreviewMode(false)
-        setSearch({ value: '', type: CategoryType.search })
+        setInput('')
         break
       case QuickLinkType.snippet:
         const snippet = getSnippet(item.id)
@@ -38,8 +50,12 @@ export function useActionExecutor() {
             setVisualState(VisualState.hidden)
             break
           case ActionType.SEARCH: {
-            if (activeItem !== item) {
+            console.log('activeItem', activeItem, item)
+            // Ignore the case for search type action when it is the generic search action
+            // As it is not a two step action
+            if (activeItem?.title !== item?.title && item?.id !== '0') {
               setActiveItem(item)
+              setInput('')
             } else {
               const url = encodeURI(item.data.base_url + search.value)
               window.open(url, '_blank').focus()
@@ -49,6 +65,7 @@ export function useActionExecutor() {
           }
           case ActionType.RENDER: {
             setActiveItem(item)
+            setInput('')
             setSearchResults([])
             break
           }
@@ -75,7 +92,7 @@ export function useActionExecutor() {
                           text: ''
                         }
                       ],
-                      type: 'img',
+                      type: 'image',
                       url: message
                     },
                     {
