@@ -50,6 +50,10 @@ export default function Content() {
     }
   }, [editor, selection]) // eslint-disable-line
 
+  // useEffect(() => {
+  //   console.log('NODE CHANGED: ', node)
+  // }, [node])
+
   const onChangeSave = (val: any[]) => {
     if (val) {
       setNodeContent(val)
@@ -57,62 +61,51 @@ export default function Content() {
     }
   }
 
-  const handleSave = () => {
-    const metadata = {
-      saveableRange: selection?.range,
-      sourceUrl: selection?.range ?? window.location.href
+  useEffect(() => {
+    const handleSave = () => {
+      const metadata = {
+        saveableRange: selection?.range,
+        sourceUrl: selection?.range && window.location.href
+      }
+
+      console.log(node.nodeid, contentRef.current)
+      setContent(node.nodeid, contentRef.current)
+
+      toast.success('Saved')
+
+      chrome.runtime.sendMessage(
+        {
+          type: 'CAPTURE_HANDLER',
+          subType: 'CREATE_CONTENT_QC',
+          data: {
+            id: node.nodeid,
+            content: contentRef.current,
+            title: node.title,
+            nodePath: { path: node.path },
+            type: CaptureType.DRAFT,
+            workspaceID: workspaceDetails.id,
+            metadata: metadata
+          }
+        },
+        (response) => {
+          const { message, error } = response
+          if (error) {
+            if (error === 'Not Authenticated') {
+              toast.error('Not Authenticated. Please login on Mexit webapp.')
+            } else {
+              toast.error('An Error Occured. Please try again.')
+            }
+          } else {
+            setMetadata(message.node.id, extractMetadata(message.node))
+            toast.success('Saved to Cloud')
+            setTimeout(() => {
+              setVisualState(VisualState.hidden)
+            }, 2000)
+          }
+        }
+      )
     }
 
-    console.log(node.nodeid, contentRef.current)
-    setContent(node.nodeid, contentRef.current)
-
-    toast.success('Saved')
-
-    const title = new Date().toLocaleString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    })
-
-    const referenceID = ilinks.filter((ilink) => ilink.path.toLowerCase() === 'drafts')[0]
-    chrome.runtime.sendMessage(
-      {
-        type: 'CAPTURE_HANDLER',
-        subType: 'CREATE_CONTENT_QC',
-        data: {
-          id: node.nodeid,
-          content: contentRef.current,
-          referenceID: referenceID,
-          title: title,
-          nodePath: node.path,
-          type: CaptureType.DRAFT,
-          workspaceID: workspaceDetails.id,
-          metadata: metadata
-        }
-      },
-      (response) => {
-        const { message, error } = response
-        if (error) {
-          if (error === 'Not Authenticated') {
-            toast.error('Not Authenticated. Please login on Mexit webapp.')
-          } else {
-            toast.error('An Error Occured. Please try again.')
-          }
-        } else {
-          setMetadata(message.node.id, extractMetadata(message.node))
-          toast.success('Saved to Cloud')
-          setTimeout(() => {
-            setVisualState(VisualState.hidden)
-          }, 2000)
-        }
-      }
-    )
-  }
-
-  useEffect(() => {
     const handleSaveKeydown = (event: KeyboardEvent) => {
       if (event.key === 's' && event.metaKey) {
         event.preventDefault()
@@ -129,7 +122,7 @@ export default function Content() {
       // handleSave()
       document.getElementById('mexit')!.removeEventListener('keydown', handleSaveKeydown)
     }
-  }, [])
+  }, [node])
 
   useEffect(() => {
     const item = searchResults[activeIndex]
@@ -148,7 +141,7 @@ export default function Content() {
   return (
     <StyledContent>
       <Results />
-      <Editor readOnly={previewMode} onChange={onChangeSave} handleSave={handleSave} />
+      <Editor readOnly={previewMode} onChange={onChangeSave} />
     </StyledContent>
   )
 }

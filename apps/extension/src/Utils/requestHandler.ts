@@ -7,9 +7,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
     case 'CREATE_CONTENT_QC': {
       const URL = apiURLs.bulkCreateNodes
       const reqData = {
-        nodePath: {
-          path: `Drafts#${data.title}`
-        },
+        nodePath: data.nodePath,
         id: data.id,
         title: data.title,
         saveableRange: data.metadata?.saveableRange,

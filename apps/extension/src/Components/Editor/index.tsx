@@ -25,7 +25,6 @@ interface EditorProps {
   readOnly?: boolean
   onChange?: any
   autoFocus?: boolean
-  handleSave: () => void
 }
 
 const commands = [
@@ -49,7 +48,7 @@ const commands = [
   }
 ]
 
-export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }) => {
+export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const currTabURL = window.location.href

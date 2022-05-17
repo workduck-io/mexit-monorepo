@@ -1,4 +1,4 @@
-import { ActionType, CategoryType, ILink, MexitAction, parseSnippet, QuickLinkType } from '@mexit/core'
+import { ActionType, CategoryType, ILink, MexitAction, parseSnippet, QuickLinkType, SEPARATOR } from '@mexit/core'
 import { copyToClipboard } from '@mexit/shared'
 import toast from 'react-hot-toast'
 import Action from '../Components/Action'
@@ -22,15 +22,12 @@ export function useActionExecutor() {
   function execute(item: MexitAction) {
     switch (item.category) {
       case QuickLinkType.backlink: {
-        let newNode: ILink
-        if (!item?.extras?.new) {
-          newNode = ilinks.find((i) => i.nodeid === item.id)
-        }
+        const newNode = ilinks.find((i) => i.nodeid === item.id)
         setNode({
-          id: (newNode || node).nodeid,
-          title: (newNode || node).path.slice(-1)[0],
-          path: (newNode || node).path,
-          nodeid: (newNode || node).nodeid
+          id: newNode.nodeid,
+          title: newNode.path.split(SEPARATOR)[0],
+          path: newNode.path,
+          nodeid: newNode.nodeid
         })
         setPreviewMode(false)
         setInput('')
