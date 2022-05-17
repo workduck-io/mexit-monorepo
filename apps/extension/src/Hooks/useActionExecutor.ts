@@ -22,12 +22,16 @@ export function useActionExecutor() {
   function execute(item: MexitAction) {
     switch (item.category) {
       case QuickLinkType.backlink: {
-        const newNode = ilinks.find((i) => i.nodeid === item.id)
+        let existingNode
+        if (!item?.extras?.new) {
+          existingNode = ilinks.find((i) => i.nodeid === item.id)
+        }
+
         setNode({
-          id: newNode.nodeid,
-          title: newNode.path.split(SEPARATOR)[0],
-          path: newNode.path,
-          nodeid: newNode.nodeid
+          id: (existingNode || node).nodeid,
+          title: (existingNode || node).path.split(SEPARATOR).slice(-1)[0],
+          path: (existingNode || node).path,
+          nodeid: (existingNode || node).nodeid
         })
         setPreviewMode(false)
         setInput('')

@@ -125,7 +125,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
     },
     focusOptions: {
       edge: 'end',
-      focus: true
+      focus: false
     },
     withBalloonToolbar: true
   }

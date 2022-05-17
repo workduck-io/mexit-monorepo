@@ -23,7 +23,6 @@ import {
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
-import tinykeys from 'tinykeys'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()
@@ -31,13 +30,10 @@ export default function Content() {
 
   const { setContent, setMetadata, getContent } = useContentStore()
   const editor = usePlateEditorRef(node.nodeid)
-  const userDetails = useAuthStore((state) => state.userDetails)
   const getSnippet = useSnippets().getSnippet
 
-  const ilinks = useDataStore((store) => store.ilinks)
   // Ref so that the function contains the newest value without re-renders
-  const currentContent = nodeContent
-  const contentRef = useRef<NodeEditorContent>(currentContent)
+  const contentRef = useRef<NodeEditorContent>(nodeContent)
 
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -62,7 +58,7 @@ export default function Content() {
   }
 
   useEffect(() => {
-    const handleSave = () => {
+    const handleSave = (saveAndExit = false) => {
       const metadata = {
         saveableRange: selection?.range,
         sourceUrl: selection?.range && window.location.href
@@ -98,9 +94,11 @@ export default function Content() {
           } else {
             setMetadata(message.node.id, extractMetadata(message.node))
             toast.success('Saved to Cloud')
-            setTimeout(() => {
-              setVisualState(VisualState.hidden)
-            }, 2000)
+            if (saveAndExit) {
+              setTimeout(() => {
+                setVisualState(VisualState.hidden)
+              }, 2000)
+            }
           }
         }
       )
@@ -133,7 +131,7 @@ export default function Content() {
     } else if (item?.category === QuickLinkType.snippet) {
       const content = getSnippet(item.id).content
       setNodeContent(content)
-    } else {
+    } else if (!selection) {
       setNodeContent(defaultContent.content)
     }
   }, [activeIndex, searchResults])
