@@ -113,24 +113,23 @@ export default function Content() {
   }
 
   useEffect(() => {
-    // const unsubscribe = tinykeys(document.getElementById('mexit'), {
-    //   '$mod + S': (event) => {
-    //     console.log('mod s')
-    //     event.preventDefault()
-    //     handleSave()
-    //   },
-    //   '$mod + Enter': (event) => {
-    //     console.log('mod enter')
-    //     event.preventDefault()
-    //     handleSave()
-    //   }
-    // })
+    const handleSaveKeydown = (event: KeyboardEvent) => {
+      if (event.key === 's' && event.metaKey) {
+        event.preventDefault()
+        handleSave()
+      } else if (event.key === 'Enter' && event.metaKey) {
+        event.preventDefault()
+        handleSave()
+      }
+    }
+
+    document.getElementById('mexit')!.addEventListener('keydown', handleSaveKeydown)
 
     return () => {
-      // unsubscribe()
-      handleSave()
+      // handleSave()
+      document.getElementById('mexit')!.removeEventListener('keydown', handleSaveKeydown)
     }
-  }, [previewMode])
+  }, [])
 
   useEffect(() => {
     const item = searchResults[activeIndex]
