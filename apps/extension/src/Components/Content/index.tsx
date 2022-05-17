@@ -1,4 +1,4 @@
-import { usePlateEditorRef } from '@udecode/plate'
+import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
@@ -40,15 +40,19 @@ export default function Content() {
   useEffect(() => {
     const content = getMexHTMLDeserializer(selection?.html, editor)
 
-    if (selection?.range && content && selection?.url) {
+    if (selection?.range && content && selection?.url && previewMode) {
       setNodeContent(content)
       contentRef.current = content
     }
-  }, [editor, selection]) // eslint-disable-line
+  }, [editor]) // eslint-disable-line
 
   // useEffect(() => {
   //   console.log('NODE CHANGED: ', node)
   // }, [node])
+
+  useEffect(() => {
+    setNode(createNodeWithUid(getNewDraftKey()))
+  }, [])
 
   const onChangeSave = (val: any[]) => {
     if (val) {
@@ -127,7 +131,12 @@ export default function Content() {
 
     if (item?.category === QuickLinkType.backlink && !item?.extras?.new) {
       const content = getContent(item.id)?.content
-      setNodeContent(content)
+      // TODO: fix this
+      if (selection?.range) {
+        setNodeContent([...content, { text: '\n' }, ...nodeContent])
+      } else {
+        setNodeContent(content)
+      }
     } else if (item?.category === QuickLinkType.snippet) {
       const content = getSnippet(item.id).content
       setNodeContent(content)
