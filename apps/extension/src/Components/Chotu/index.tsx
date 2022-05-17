@@ -144,7 +144,7 @@ export default function Chotu() {
           searchList = [CREATE_NEW_ITEM, ...mainItems]
           // search debug
           // mog('nodelist', { nodeItems, snippetItems })
-          mog('searchList chotu', { searchList })
+          // mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
           break
       }

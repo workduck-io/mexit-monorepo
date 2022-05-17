@@ -93,7 +93,7 @@ export default function Content() {
         request.data['referenceID'] = parentID.nodeid
       }
 
-      console.log('Sending: ', node, request)
+      // console.log('Sending: ', node, request)
 
       setContent(node.nodeid, contentRef.current)
       chrome.runtime.sendMessage(request, (response) => {
@@ -106,7 +106,7 @@ export default function Content() {
             toast.error('An Error Occured. Please try again.')
           }
         } else {
-          setMetadata(message.node.id, extractMetadata(message.node))
+          setMetadata(message.id, extractMetadata(message))
           toast.success('Saved to Cloud')
           if (saveAndExit) {
             setTimeout(() => {
