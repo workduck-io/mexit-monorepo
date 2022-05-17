@@ -34,6 +34,7 @@ export default function Content() {
 
   // Ref so that the function contains the newest value without re-renders
   const contentRef = useRef<NodeEditorContent>(nodeContent)
+  const deserializedContentRef = useRef<NodeEditorContent>()
 
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
@@ -43,6 +44,7 @@ export default function Content() {
     if (selection?.range && content && selection?.url && previewMode) {
       setNodeContent(content)
       contentRef.current = content
+      deserializedContentRef.current = content
     }
   }, [editor]) // eslint-disable-line
 
@@ -133,7 +135,7 @@ export default function Content() {
       const content = getContent(item.id)?.content
       // TODO: fix this
       if (selection?.range) {
-        setNodeContent([...content, { text: '\n' }, ...nodeContent])
+        setNodeContent([...content, { text: '\n' }, ...deserializedContentRef.current])
       } else {
         setNodeContent(content)
       }
