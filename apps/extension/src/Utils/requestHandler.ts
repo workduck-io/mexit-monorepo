@@ -4,16 +4,18 @@ import { Tab } from '../Types/Tabs'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
-    case 'CREATE_CONTENT_QC': {
-      const URL = apiURLs.bulkCreateNodes
+    case 'BULK_CREATE_NODE': {
+      const URL = apiURLs.createNode
       const reqData = {
-        nodePath: {
-          path: `Drafts#${data.title}`
-        },
         id: data.id,
         title: data.title,
-        lastEditedBy: data.createdBy,
+        // saveableRange: data.metadata?.saveableRange,
+        // sourceUrl: data.metadata?.sourceUrl,
         data: serializeContent(data.content ?? defaultContent.content)
+      }
+
+      if (data.referenceID) {
+        reqData['referenceID'] = data.referenceID
       }
 
       return client
@@ -23,7 +25,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
           }
         })
         .then((response: any) => {
-          return { message: response, error: null }
+          return { message: response.data, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -38,15 +40,15 @@ export const handleActionRequest = (request: any) => {
     case 'reload':
       chrome.tabs.reload()
       break
-    case 'browser-search':
-      chrome.search.query(
-        {
-          disposition: 'NEW_TAB',
-          text: request.data.query
-        },
-        () => {} // eslint-disable-line @typescript-eslint/no-empty-function
-      )
-      break
+    // case 'browser-search':
+    //   chrome.search.query(
+    //     {
+    //       disposition: 'NEW_TAB',
+    //       text: request.data.query
+    //     },
+    //     () => {} // eslint-disable-line @typescript-eslint/no-empty-function
+    //   )
+    //   break
     case 'chrome-url':
       chrome.tabs.create({ url: request.data.base_url })
       break

@@ -80,6 +80,7 @@ function dibbaToggle() {
 
   useEffect(() => {
     function handleRender() {
+      // eslint-disable-next-line
       // @ts-ignore
       if (document.activeElement.isContentEditable) {
         const text = window.getSelection().anchorNode.textContent
@@ -124,7 +125,7 @@ function handleHighlighter() {
     console.log('content', pageContents)
     // TODO: fix the following for multiple highlights on a page, maybe storing multiple highlights as a block in a node?
     pageContents.forEach((item) => {
-      if (item?.metadata?.url === window.location.href) {
+      if (item?.metadata?.sourceUrl === window.location.href && item?.metadata?.saveableRange) {
         const { startMeta, endMeta, text, id } = item.metadata.saveableRange
         highlighter.fromStore(startMeta, endMeta, text, id)
       }

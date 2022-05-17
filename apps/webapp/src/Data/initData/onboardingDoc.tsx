@@ -1,5 +1,4 @@
-import { NodeContent } from '@mexit/core'
-import { insertId } from '../../Utils/content'
+import { insertId, NodeContent } from '@mexit/core'
 
 export const OnboardingDoc = insertId([
   {

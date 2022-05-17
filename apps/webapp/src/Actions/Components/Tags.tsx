@@ -18,16 +18,17 @@ const TagsContainer = styled.div`
 const Tagg = styled.div`
   padding: 0.5rem;
   margin: 0.5rem 0.5rem 0.5rem 0;
-  background: #e8e8e8;
+  background: ${({ theme }) => theme.colors.gray[8]};
+  color: ${({ theme }) => theme.colors.primary};
   border-radius: 5px;
 
   button {
     cursor: pointer;
     margin: 0 0 0 0.5rem;
-    color: #bcbec4;
+    background: none;
 
     &:hover {
-      color: #3e3e41;
+      color: ${({ theme }) => theme.colors.form.button.hover};
     }
   }
 `

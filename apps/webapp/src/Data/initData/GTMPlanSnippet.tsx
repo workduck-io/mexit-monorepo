@@ -1,5 +1,4 @@
-import { insertId } from '../../Utils/content'
-import { generateQuestionId } from '@mexit/core'
+import { generateQuestionId, insertId } from '@mexit/core'
 
 export const GTMPlanSnippet = insertId([
   {

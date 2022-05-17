@@ -28,7 +28,7 @@ type SputlitContextType = {
   setSearch: (val: Search) => void
   input: string
   setInput: (val: string) => void
-  isLoading: Boolean
+  isLoading: boolean
   setIsLoading: (val: boolean) => void
   selection: any
   setSelection: (val: any) => void

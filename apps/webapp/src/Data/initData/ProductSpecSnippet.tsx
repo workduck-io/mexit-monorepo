@@ -1,4 +1,4 @@
-import { insertId } from '../../Utils/content'
+import { insertId } from '@mexit/core'
 
 export const ProductSpecSnippet = insertId([
   {

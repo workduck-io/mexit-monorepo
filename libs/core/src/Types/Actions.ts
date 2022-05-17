@@ -18,5 +18,6 @@ export interface MexitAction {
   icon?: string
   shortcut?: Record<string, Shortcut>
   data?: any
+  extras?: any
   metadata?: any
 }

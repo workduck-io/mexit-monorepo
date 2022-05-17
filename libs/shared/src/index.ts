@@ -20,6 +20,7 @@ export * from './Style/Layouts'
 export * from './Style/Typography'
 export * from './Style/Toolbar'
 export * from './Style/Loading'
+export * from './Style/fade'
 
 export * from './Themes'
 

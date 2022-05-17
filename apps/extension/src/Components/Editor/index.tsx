@@ -25,7 +25,6 @@ interface EditorProps {
   readOnly?: boolean
   onChange?: any
   autoFocus?: boolean
-  handleSave: () => void
 }
 
 const commands = [
@@ -49,9 +48,9 @@ const commands = [
   }
 ]
 
-export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }) => {
+export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
-  const { previewMode, setPreviewMode, nodeContent, node } = useEditorContext()
+  const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
@@ -62,12 +61,6 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }
   const plugins = createPlugins(generatePlugins())
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-
-  useEffect(() => {
-    return () => {
-      handleSave()
-    }
-  }, [currTabURL])
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
@@ -124,14 +117,15 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }
     editableProps: {
       readOnly,
       placeholder: "Let's try something here...",
-      autoFocus: false,
+      autoFocus: !readOnly,
       style: {
-        padding: '1em'
+        padding: '1em',
+        flex: '1'
       }
     },
     focusOptions: {
-      edge: 'end',
-      focus: false
+      edge: 'start',
+      focus: true
     },
     withBalloonToolbar: true
   }
@@ -162,7 +156,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange, handleSave }
   }, 1000)
 
   return (
-    <EditorWrapper style={springProps} onFocus={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
+    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         meta={{

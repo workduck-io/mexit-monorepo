@@ -7,9 +7,9 @@ import {
   MexitAction,
   MEXIT_FRONTEND_URL_BASE,
   parseSnippet,
-  QuickLinkType
+  QuickLinkType,
+  searchBrowserAction
 } from '@mexit/core'
-import { actionExec } from '../../Utils/actionExec'
 import { useVirtual } from 'react-virtual'
 import { findIndex, groupBy } from 'lodash'
 import Action from '../Action'
@@ -17,10 +17,10 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
-import Screenshot from '../Action/Screenshot'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { copyToClipboard } from '@mexit/shared'
+import { useActionExecutor } from '../../Hooks/useActionExecutor'
 
 function Results() {
   const {
@@ -32,13 +32,14 @@ function Results() {
     activeIndex,
     setActiveIndex,
     setSearchResults,
-    setVisualState
+    setVisualState,
+    setSearch,
+    input
   } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
+  const { execute } = useActionExecutor()
 
   const parentRef = useRef(null)
-  const [first, setFirst] = useState(false)
-  const [showResults, setShowResults] = useState(true)
   const pointerMoved = usePointerMovedSinceMount()
 
   const groups = Object.keys(groupBy(searchResults, (n) => n.category))
@@ -142,32 +143,22 @@ function Results() {
       } else if (event.key === 'Enter') {
         event.preventDefault()
         const item = searchResults[activeIndex]
-
-        if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
-          actionExec(item, search.value)
-        } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
-          setActiveItem(item)
-          setInput('')
-          setSearchResults([])
-        } else if (item.category === QuickLinkType.backlink) {
-          setActiveItem(item)
-          setInput('')
-          setPreviewMode(false)
-        } else if (item.category === QuickLinkType.snippet) {
-          const snippet = getSnippet(item.id)
-          copyToClipboard(parseSnippet(snippet).text)
-          setVisualState(VisualState.hidden)
-        }
+        execute(item)
+      } else if (event.key === 'Backspace' && activeItem && input === '') {
+        setActiveItem()
+        setSearch({ value: '', type: CategoryType.search })
       }
     }
 
-    // Not adding event listener to window as the event never reaches there
-    document.getElementById('mexit')!.addEventListener('keydown', handler)
+    if (previewMode) {
+      // Not adding event listener to window as the event never reaches there
+      document.getElementById('mexit')!.addEventListener('keydown', handler)
+    }
 
     return () => {
       document.getElementById('mexit')!.removeEventListener('keydown', handler)
     }
-  }, [searchResults, activeIndex, activeItem])
+  }, [searchResults, previewMode, activeIndex, activeItem, input])
 
   useEffect(() => {
     setActiveIndex(0)
@@ -175,22 +166,7 @@ function Results() {
 
   function handleClick(id: number) {
     const item = searchResults[id]
-
-    if (item.category === QuickLinkType.action && item.type !== ActionType.RENDER) {
-      actionExec(item, search.value)
-    } else if (item.category === QuickLinkType.action && item.type === ActionType.RENDER) {
-      setActiveItem(item)
-      setInput('')
-      setSearchResults([])
-    } else if (item.category === QuickLinkType.backlink) {
-      setActiveItem(item)
-      setInput('')
-      setPreviewMode(false)
-    } else if (item.category === QuickLinkType.snippet) {
-      const snippet = getSnippet(item.id)
-      copyToClipboard(parseSnippet(snippet).text)
-      setVisualState(VisualState.hidden)
-    }
+    execute(item)
   }
 
   return (
@@ -219,7 +195,6 @@ function Results() {
       </List>
 
       {activeItem?.type === ActionType.RENDER && <Renderer />}
-      {/* {activeItem && activeItem.type === ActionType.SCREENSHOT && <Screenshot />}  */}
     </StyledResults>
   )
 }
