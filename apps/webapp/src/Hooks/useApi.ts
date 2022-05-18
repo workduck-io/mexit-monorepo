@@ -250,6 +250,33 @@ export const useApi = () => {
     return checkNodePublic(nodeid)
   }
 
+  const saveSnippetAPI = async (snippetId: string, snippetTitle: string, content: any[]) => {
+    const reqData = {
+      id: snippetId,
+      type: 'SnippetRequest',
+      title: snippetTitle,
+      namespaceIdentifier: DEFAULT_NAMESPACE,
+      data: serializeContent(content ?? defaultContent.content)
+    }
+
+    const data = await client
+      .post(apiURLs.createSnippet, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((d) => {
+        mog('savedData', { d })
+        setMetadata(snippetId, extractMetadata(d.data))
+        return d.data
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+    return data
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -258,6 +285,7 @@ export const useApi = () => {
     makeNodePublic,
     makeNodePrivate,
     isPublic,
-    getPublicNodeAPI
+    getPublicNodeAPI,
+    saveSnippet: saveSnippetAPI
   }
 }
