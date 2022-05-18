@@ -43,6 +43,7 @@ import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
 import { getUntitledDraftKey } from '@mexit/core'
 import { useInternalLinks } from '../../Data/useInternalLinks'
+import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -58,6 +59,7 @@ const Nav = ({ links }: NavProps) => {
   const { getLinkCount } = useLinks()
   const { goTo } = useRouting()
   const { saveNodeName } = useLoad()
+  const { createNewNode } = useCreateNewNode()
 
   const [source, target] = useSingleton()
   const { refreshILinks } = useInternalLinks()
@@ -69,23 +71,6 @@ const Nav = ({ links }: NavProps) => {
     }, 120000)
     return () => clearInterval(interval)
   }, [])
-
-  const createNewNode = () => {
-    const newNodeId = getUntitledDraftKey()
-    const node = addILink({ ilink: newNodeId, showAlert: false })
-
-    if (node === undefined) {
-      toast.error('The node clashed')
-      return
-    }
-
-    saveNodeName(useEditorStore.getState().node.nodeid)
-    saveNewNodeAPI(node.nodeid)
-    push(node.nodeid, { withLoading: false })
-    // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
-
-    return node.nodeid
-  }
 
   const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault()

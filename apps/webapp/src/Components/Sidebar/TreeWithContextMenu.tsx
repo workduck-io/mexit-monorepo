@@ -1,5 +1,6 @@
 import archiveLine from '@iconify/icons-ri/archive-line'
 import editLine from '@iconify/icons-ri/edit-line'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshFill from '@iconify/icons-ri/refresh-fill'
 import shareLine from '@iconify/icons-ri/share-line'
 import { Icon } from '@iconify/react'
@@ -8,8 +9,9 @@ import React from 'react'
 import { Item, ItemParams, Separator } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import { StyledMenu } from "../../Style/Menu"
+import { StyledMenu } from '../../Style/Menu'
 import { useDeleteStore } from '../Refactor/DeleteModal'
+import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 
 interface ItemProps {
   id: string
@@ -22,6 +24,7 @@ export const MENU_ID = 'Tree-Menu'
 export const TreeContextMenu = () => {
   const openRenameModal = useRenameStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
+  const { createNewNode } = useCreateNewNode()
 
   function handleItemClick({ event, props: p, data, triggerEvent }: ItemParams<ItemProps, any>) {
     // mog('handleItemClick', { event, p, data, triggerEvent })
@@ -31,6 +34,9 @@ export const TreeContextMenu = () => {
         break
       case 'archive':
         openDeleteModal(p.path)
+        break
+      case 'createChild':
+        createNewNode(p.path)
         break
       case 'sync':
         break
@@ -44,6 +50,10 @@ export const TreeContextMenu = () => {
       <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
         <Icon icon={editLine} />
         Rename
+      </Item>
+      <Item id="createChild" onClick={handleItemClick}>
+        <Icon icon={addCircleLine} />
+        Create Child
       </Item>
       <Item disabled={(args) => isReserved(args.props.path)} id="archive" onClick={handleItemClick}>
         <Icon icon={archiveLine} />
