@@ -8,7 +8,9 @@ import {
   CREATE_NEW_ITEM,
   defaultActions,
   initActions,
+  isReservedOrClash,
   LinkCapture,
+  MexitAction,
   MEXIT_FRONTEND_URL_BASE,
   mog,
   searchBrowserAction,
@@ -99,7 +101,7 @@ export default function Chotu() {
 
   useEffect(() => {
     const useSearch = async (search: Search) => {
-      let searchList
+      let searchList = []
       switch (search.type) {
         case CategoryType.action:
           const actionList = fuzzysort
@@ -108,14 +110,20 @@ export default function Chotu() {
           searchList = actionList
           break
         case CategoryType.backlink:
-          const quickLinks = getQuickLinks()
+          if (search.value.substring(2)) {
+            const quickLinks = getQuickLinks()
 
-          const results = fuzzysort
-            .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
-            .map((item) => item.obj)
+            const results = fuzzysort
+              .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
+              .map((item) => item.obj)
 
-          // console.log('backlink resuts', results)
-          searchList = results
+            const isNew = !isReservedOrClash(
+              search.value.substring(2),
+              quickLinks.map((i) => i.title)
+            )
+
+            searchList = isNew ? [CREATE_NEW_ITEM, ...results] : results
+          }
           break
         case CategoryType.search:
           const snippetItems = await child.search('snippet', search.value)

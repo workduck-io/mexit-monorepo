@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { MexitAction } from '@mexit/core'
+import { CategoryType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 import React from 'react'
 import styled, { css, useTheme } from 'styled-components'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
@@ -12,7 +12,8 @@ import {
   Description,
   ShortcutContainer,
   ShortcutText,
-  ItemIcon
+  ItemIcon,
+  PrimaryText
 } from './styled'
 
 interface ActionProps {
@@ -22,12 +23,24 @@ interface ActionProps {
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
+  const { search } = useSputlitContext()
+
+  const newNodeName = cleanString(search.type === CategoryType.backlink ? search.value.slice(2) : search.value)
+
   return (
     <StyledAction active={active}>
       <Container>
         <ItemIcon as={Icon} color={theme.colors.primary} height={20} width={20} icon={action?.icon} />
         <Content>
-          <Title> {action.title}</Title>
+          <Title>
+            {action?.extras?.new ? (
+              <>
+                Create a <PrimaryText>{search.value ? newNodeName : 'Quick note'}</PrimaryText>
+              </>
+            ) : (
+              action?.title
+            )}
+          </Title>
           {action.description && <Description>{action.description}</Description>}
         </Content>
       </Container>
