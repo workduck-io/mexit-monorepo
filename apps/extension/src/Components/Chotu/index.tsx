@@ -102,6 +102,8 @@ export default function Chotu() {
   useEffect(() => {
     const useSearch = async (search: Search) => {
       let searchList = []
+      const quickLinks = getQuickLinks()
+
       switch (search.type) {
         case CategoryType.action:
           const actionList = fuzzysort
@@ -111,8 +113,6 @@ export default function Chotu() {
           break
         case CategoryType.backlink:
           if (search.value.substring(2)) {
-            const quickLinks = getQuickLinks()
-
             const results = fuzzysort
               .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
               .map((item) => item.obj)
@@ -128,7 +128,6 @@ export default function Chotu() {
         case CategoryType.search:
           const snippetItems = await child.search('snippet', search.value)
           const nodeItems = await child.search('node', search.value)
-          // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
 
           const actionItems = fuzzysort
             .go(search.value, initActions, { all: true, key: 'title' })
@@ -149,7 +148,13 @@ export default function Chotu() {
           })
 
           const mainItems = [...localNodes, ...actionItems]
-          searchList = [CREATE_NEW_ITEM, ...mainItems]
+
+          const isNew = !isReservedOrClash(
+            search.value,
+            quickLinks.map((i) => i.title)
+          )
+
+          searchList = isNew ? [CREATE_NEW_ITEM, ...mainItems] : mainItems
           // search debug
           // mog('nodelist', { nodeItems, snippetItems })
           // mog('searchList chotu', { searchList })
