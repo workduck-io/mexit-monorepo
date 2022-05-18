@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { MediaEmbedElement, TableWrapper } from '@mexit/shared'
+import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import { ILinkElement } from './ILinkElement'
 import TagWrapper from './TagWrapper'
@@ -138,7 +138,10 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           [ELEMENT_TAG]: TagWrapper,
           [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
           [ELEMENT_TABLE]: TableWrapper,
-          [ELEMENT_TODO_LI]: Todo
+          [ELEMENT_TODO_LI]: Todo,
+          [ELEMENT_LINK]: withProps(LinkElement, {
+            as: 'a'
+          })
         }}
         meta={{
           path: nodePath
