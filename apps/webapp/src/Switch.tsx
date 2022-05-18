@@ -121,7 +121,6 @@ const ActionsRoutes = () => {
         <Route path="shortener" element={<Actions.Shortener />} />
         <Route path="color-picker" element={<Actions.ColourPicker />} />
         <Route path="corpbs" element={<Actions.CorporateBS />} />
-        <Route path="currency-convertor" element={<Actions.CurrencyConverter />} />
         <Route path="epoch" element={<Actions.UnixEpochConverter />} />
       </Route>
     </Routes>

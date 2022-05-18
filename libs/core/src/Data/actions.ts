@@ -474,24 +474,6 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
-    id: '009',
-    title: 'Convert Between Currencies',
-    category: QuickLinkType.action,
-    description: 'Mr. International',
-    type: ActionType.RENDER,
-    icon: 'bi:currency-exchange',
-    data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/currency-convertor`
-    },
-    shortcut: {
-      convert: {
-        title: 'to convert',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
     id: 'ACTION_CMDT1C7TlZEFyuk54ME6c',
     title: 'About Us',
     category: QuickLinkType.action,

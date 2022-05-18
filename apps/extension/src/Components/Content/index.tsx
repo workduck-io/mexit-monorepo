@@ -120,10 +120,10 @@ export default function Content() {
     const handleSaveKeydown = (event: KeyboardEvent) => {
       if (event.key === 's' && event.metaKey) {
         event.preventDefault()
-        handleSave()
+        handleSave(true)
       } else if (event.key === 'Enter' && event.metaKey) {
         event.preventDefault()
-        handleSave()
+        handleSave(true)
       }
     }
 

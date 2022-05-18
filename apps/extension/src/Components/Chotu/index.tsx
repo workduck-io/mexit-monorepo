@@ -8,7 +8,9 @@ import {
   CREATE_NEW_ITEM,
   defaultActions,
   initActions,
+  isReservedOrClash,
   LinkCapture,
+  MexitAction,
   MEXIT_FRONTEND_URL_BASE,
   mog,
   searchBrowserAction,
@@ -99,7 +101,9 @@ export default function Chotu() {
 
   useEffect(() => {
     const useSearch = async (search: Search) => {
-      let searchList
+      let searchList = []
+      const quickLinks = getQuickLinks()
+
       switch (search.type) {
         case CategoryType.action:
           const actionList = fuzzysort
@@ -108,19 +112,22 @@ export default function Chotu() {
           searchList = actionList
           break
         case CategoryType.backlink:
-          const quickLinks = getQuickLinks()
+          if (search.value.substring(2)) {
+            const results = fuzzysort
+              .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
+              .map((item) => item.obj)
 
-          const results = fuzzysort
-            .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
-            .map((item) => item.obj)
+            const isNew = !isReservedOrClash(
+              search.value.substring(2),
+              quickLinks.map((i) => i.title)
+            )
 
-          // console.log('backlink resuts', results)
-          searchList = results
+            searchList = isNew ? [CREATE_NEW_ITEM, ...results] : results
+          }
           break
         case CategoryType.search:
           const snippetItems = await child.search('snippet', search.value)
           const nodeItems = await child.search('node', search.value)
-          // console.log('snippets chotu', snippetItems, 'node items', nodeItems)
 
           const actionItems = fuzzysort
             .go(search.value, initActions, { all: true, key: 'title' })
@@ -141,7 +148,13 @@ export default function Chotu() {
           })
 
           const mainItems = [...localNodes, ...actionItems]
-          searchList = [CREATE_NEW_ITEM, ...mainItems]
+
+          const isNew = !isReservedOrClash(
+            search.value,
+            quickLinks.map((i) => i.title)
+          )
+
+          searchList = isNew ? [CREATE_NEW_ITEM, ...mainItems] : mainItems
           // search debug
           // mog('nodelist', { nodeItems, snippetItems })
           // mog('searchList chotu', { searchList })

@@ -53,3 +53,6 @@ export const isMatch = (path: string, testPath: string) => {
   if (path.startsWith(testPath + SEPARATOR)) return true
 }
 
+export const isReservedOrClash = (path: string, paths: string[]) => {
+  return isReserved(path) || isClash(path, paths)
+}

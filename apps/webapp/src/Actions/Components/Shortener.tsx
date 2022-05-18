@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { toast, Toaster } from 'react-hot-toast'
 
-import { Button, Input, InputRow, Label, resize } from '@mexit/shared'
+import { Button, copyToClipboard, Input, InputRow, Label, resize } from '@mexit/shared'
 import { Tags } from './Tags'
 import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -69,6 +69,7 @@ export const Shortener = () => {
       },
       '*'
     )
+    copyToClipboard(response.data.shortenedURL)
   }
 
   const handleEvent = (event: MessageEvent) => {
