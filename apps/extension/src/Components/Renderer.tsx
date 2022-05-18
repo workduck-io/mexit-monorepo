@@ -56,7 +56,7 @@ const Renderer = () => {
     }
   }, [])
 
-  return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} />
+  return <Iframe ref={iframeRef} id="action-component" src={activeItem.data.src} allow="clipboard-write" />
 }
 
 export default Renderer
