@@ -23,14 +23,19 @@ export function useActionExecutor() {
     switch (item.category) {
       case QuickLinkType.backlink: {
         let existingNode
+        let nodePath = node.path
         if (!item?.extras?.new) {
           existingNode = ilinks.find((i) => i.nodeid === item.id)
+          nodePath = existingNode.path
+        } else {
+          nodePath = search.value.startsWith('[[') ? search.value.substring(2) : search.value || node.path
         }
 
+        console.log('nodePat', nodePath)
         setNode({
           id: (existingNode || node).nodeid,
-          title: (existingNode || node).path.split(SEPARATOR).slice(-1)[0],
-          path: (existingNode || node).path,
+          title: nodePath.split(SEPARATOR).slice(-1)[0],
+          path: nodePath,
           nodeid: (existingNode || node).nodeid
         })
         setPreviewMode(false)

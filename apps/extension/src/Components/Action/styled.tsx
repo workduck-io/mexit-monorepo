@@ -21,6 +21,10 @@ export const StyledAction = styled.div<{ active?: boolean }>`
     `}
 `
 
+export const PrimaryText = styled.span`
+  color: ${({ theme }) => theme.colors.primary};
+`
+
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
