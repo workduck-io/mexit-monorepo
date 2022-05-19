@@ -11,3 +11,7 @@ export const getNewDraftKey = (): string => {
 export const getUntitledDraftKey = (): string => {
   return `${DRAFT_PREFIX}${SEPARATOR}${DRAFT_NODE}`
 }
+
+export const getUntitledKey = (parent: string): string => {
+  return `${parent}${SEPARATOR}${DRAFT_NODE}`
+}

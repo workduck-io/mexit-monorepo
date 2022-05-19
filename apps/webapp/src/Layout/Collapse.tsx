@@ -2,6 +2,7 @@ import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import { Icon, IconifyIcon } from '@iconify/react'
 import React, { useMemo } from 'react'
 import { useSpring } from 'react-spring'
+import styled from 'styled-components'
 import Infobox, { InfoboxProps } from '../Components/Infobox'
 import { CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '../Style/Collapse'
 
@@ -13,9 +14,24 @@ interface CollapseProps {
   icon?: string | IconifyIcon
   children?: React.ReactNode
   infoProps?: InfoboxProps
+  stopPropagation?: boolean
 }
 
-const Collapse = ({ defaultOpen, maximumHeight, icon, infoProps, children, oid, title }: CollapseProps) => {
+export const CollapsableHeaderTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: bolder;
+`
+
+const Collapse = ({
+  defaultOpen,
+  maximumHeight,
+  icon,
+  infoProps,
+  children,
+  oid,
+  title,
+  stopPropagation
+}: CollapseProps) => {
   const [hide, setHide] = React.useState(!defaultOpen ?? true)
 
   const springProps = useMemo(() => {
@@ -33,16 +49,22 @@ const Collapse = ({ defaultOpen, maximumHeight, icon, infoProps, children, oid, 
   const animationProps = useSpring(springProps)
 
   return (
-    <CollapseWrapper id={`Collapse_${oid}`}>
-      <CollapseHeader
-        onClick={() => {
-          setHide((b) => !b)
-        }}
-      >
-        <CollapseToggle>
+    <CollapseWrapper id={`Collapse_${oid}`} onMouseUp={(e) => stopPropagation && e.stopPropagation()}>
+      <CollapseHeader collapsed={hide}>
+        <CollapseToggle
+          onClick={() => {
+            setHide((b) => !b)
+          }}
+        >
           <Icon icon={hide ? arrowRightSLine : icon} />
         </CollapseToggle>
-        <h2>{title}</h2>
+        <CollapsableHeaderTitle
+          onClick={() => {
+            setHide((b) => !b)
+          }}
+        >
+          {title}
+        </CollapsableHeaderTitle>
         {infoProps && <Infobox {...infoProps} />}
       </CollapseHeader>
 

@@ -53,7 +53,7 @@ const Snippets = () => {
       return initialSnippets
     }
 
-    mog("Got search results: ", { res })
+    mog('Got search results: ', { res })
     return res
   }
 
