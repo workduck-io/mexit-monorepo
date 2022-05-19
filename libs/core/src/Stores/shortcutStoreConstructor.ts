@@ -5,8 +5,8 @@ export type ShortcutStoreType = {
   modifiers: Set<string>
   excludedKeys: Set<string>
 
-  // editMode: boolean
-  // setEditMode: (editMode: boolean) => void
+  editMode: boolean
+  setEditMode: (editMode: boolean) => void
 
   resetIndex: number
 
@@ -35,11 +35,11 @@ export const shortcutStoreConstructor = (set, get) => ({
   },
   setKeyBinding: (keybinding) => set({ keybinding }),
 
-  // editMode: false,
-  // setEditMode: (editMode: boolean) => {
-  //   ipcRenderer.send(IpcAction.DISABLE_GLOBAL_SHORTCUT, { disable: editMode })
-  //   set({ editMode })
-  // },
+  editMode: false,
+  setEditMode: (editMode: boolean) => {
+    // ipcRenderer.send(IpcAction.DISABLE_GLOBAL_SHORTCUT, { disable: editMode })
+    set({ editMode })
+  },
 
   resetIndex: 0,
   setCurrentShortcut: (shortcut) => set({ currentShortcut: shortcut }),
@@ -94,8 +94,8 @@ export const shortcutStoreConstructor = (set, get) => ({
         alias: ''
       },
       resetIndex: 0,
-      keystrokes: [[], []]
-      // editMode: false
+      keystrokes: [[], []],
+      editMode: false
     })
   }
 })

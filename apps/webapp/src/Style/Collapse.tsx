@@ -13,18 +13,18 @@ export const CollapseToggle = styled.div`
     padding: ${({ theme }) => theme.spacing.tiny};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
     color: ${({ theme }) => theme.colors.primary};
-    height: 2rem;
-    width: 2rem;
+    height: 28px;
+    width: 28px;
   }
 `
 
-export const CollapseHeader = styled.div`
+export const CollapseHeader = styled.div<{ collapsed?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
 
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.tiny};
 
   :hover {
     ${CollapseToggle} {
@@ -35,11 +35,25 @@ export const CollapseHeader = styled.div`
   }
   h2 {
     flex-grow: 1;
-    font-size: 1.5rem;
+    font-size: 14px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.text.fade};
+    margin: 0;
   }
+
+  ${({ collapsed }) =>
+    collapsed &&
+    css`
+      ${CollapseToggle} {
+        svg {
+          color: ${({ theme }) => theme.colors.text.fade};
+        }
+      }
+    `}
 `
 
 export const CollapseContent = styled(animated.div)`
   overflow-y: auto;
   overflow-x: hidden;
+  flex-grow: 1;
 `

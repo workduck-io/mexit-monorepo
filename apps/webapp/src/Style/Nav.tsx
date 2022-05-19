@@ -2,7 +2,7 @@ import { transparentize } from 'polished'
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
-import { CollapseWrapper } from './Collapse'
+import { CollapseHeader, CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
 import { Ellipsis } from './Search'
 
@@ -32,7 +32,7 @@ const ButtonOrLinkStyles = css`
   align-items: center;
   gap: 8px;
   color: ${({ theme }) => theme.colors.text.default};
-  padding: 12px;
+  padding: 6px 12px;
   text-decoration: none !important;
   cursor: pointer;
   font-weight: bold;
@@ -68,6 +68,9 @@ export const Link = styled(NavLink)`
   }
 `
 
+export const NavSpacer = styled.div`
+  flex-grow: 1;
+`
 export const NavDivider = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.colors.gray[6]};
@@ -122,6 +125,8 @@ export const NavLogoWrapper = styled.div`
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
   padding: ${({ theme }) => theme.spacing.small};
+  padding-left: 5rem;
+  transition: padding 0.5s ease;
 `
 
 export const CreateNewButton = styled.div`
@@ -154,6 +159,15 @@ export const NavButton = styled.div<{ primary?: boolean }>`
         }
       }
     `}
+
+    &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.gray[6]};
+    border-radius: 6px;
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-clip: content-box;
+    min-width: 10px;
+    min-height: 32px;
+  }
 `
 
 export interface NavWrapperProps extends FocusModeProp {
@@ -161,43 +175,54 @@ export interface NavWrapperProps extends FocusModeProp {
 }
 
 export const NavWrapper = styled(animated.div)<NavWrapperProps>`
-  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100vh;
+  min-height: 100%;
   transition: opacity 0.3s ease-in-out;
-  padding: 2rem 0 0;
+  padding: 0 0;
   background-color: ${({ theme }) => theme.colors.gray[8]};
   gap: ${({ theme }) => theme.spacing.small};
+  user-select: none;
 
   ${CollapseWrapper} {
     width: 100%;
-    transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out, height 0.2s ease-in-out;
     padding: 0 0 0 ${({ theme }) => theme.spacing.small};
+    ${CollapseHeader} {
+      padding-right: 0.5rem;
+    }
   }
 
   #Collapse_tree {
-    height: 100%;
-    overflow-y: auto;
+    flex-shrink: 0;
+    /* flex-grow: 1; */
   }
 
   ${(props) => focusStyles(props)}
 
-  ${({ $expanded }) =>
+  ${({ $expanded, theme }) =>
     !$expanded &&
     css`
-      ${NavTitle} {
-        opacity: 0;
+      ${NavTitle}, ${Count} {
+        display: none;
       }
 
       ${Link}, ${NavButton}, ${CreateNewButton} {
         padding: 12px;
-        max-width: 48px;
+        width: 48px;
+        transition-delay: 0.8s;
+        transition: width 0.8s ease-in-out;
       }
 
       ${MainLinkContainer}, ${EndLinkContainer} {
+      }
+
+      ${EndLinkContainer} {
+        margin-top: auto;
       }
 
       ${NavLogoWrapper} {
@@ -208,6 +233,7 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
       ${CollapseWrapper} {
         pointer-events: none;
         cursor: default;
+        max-height: 64px;
         opacity: 0;
         div {
           pointer-events: none !important;
@@ -215,8 +241,8 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
       }
     `}
 
-    &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[6]};
+    &::-webkit-scrollbar-thumb, *::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
     border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;

@@ -10,6 +10,7 @@ import { TooltipTitleWithShortcut } from './Shortcuts'
 import { useHelpStore } from '../Stores/useHelpStore'
 import useLayout from '../Hooks/useLayout'
 import tinykeys from 'tinykeys'
+import { useKeyListener } from '../Hooks/useShortcutListener'
 
 const LogoWrapper = styled.div<{ $expanded: boolean }>`
   ${({ $expanded }) => ($expanded ? 'width: 100%;' : 'width: 40px;')}
@@ -60,6 +61,19 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
   border-radius: 4px;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
 `
+
+export const TrafficLightBG = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 66px;
+  height: 26px;
+  background-color: ${({ theme }) => theme.colors.gray[8]};
+  opacity: 0.9;
+  z-index: 10000;
+  border-radius: 0 0 10px;
+`
+
 export const SidebarToggle = () => {
   const sidebar = useLayoutStore((state) => state.sidebar)
 
@@ -67,6 +81,7 @@ export const SidebarToggle = () => {
 
   /** Set shortcuts */
   const shortcuts = useHelpStore((store) => store.shortcuts)
+  const { shortcutDisabled, shortcutHandler } = useKeyListener()
 
   const focusMode = useLayoutStore((state) => state.focusMode)
   const { getFocusProps } = useLayout()
@@ -75,13 +90,15 @@ export const SidebarToggle = () => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.toggleSidebar.keystrokes]: (event) => {
         event.preventDefault()
-        toggleSidebar()
+        shortcutHandler(shortcuts.showSnippets, () => {
+          toggleSidebar()
+        })
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [shortcuts]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shortcuts, shortcutDisabled]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Tippy
