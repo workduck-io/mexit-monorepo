@@ -277,6 +277,21 @@ export const useApi = () => {
     return data
   }
 
+  const getAllSnippetsByWorkspace = async () => {
+    const data = await client
+      .get(apiURLs.getAllSnippetsByWorkspace, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((d) => {
+        return d.data
+      })
+
+    return data
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -286,6 +301,7 @@ export const useApi = () => {
     makeNodePrivate,
     isPublic,
     getPublicNodeAPI,
-    saveSnippet: saveSnippetAPI
+    saveSnippetAPI,
+    getAllSnippetsByWorkspace
   }
 }

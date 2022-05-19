@@ -90,6 +90,7 @@ export const apiURLs = {
   getNodePublicURL: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
   createSnippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
+  getAllSnippetsByWorkspace: `${MEXIT_BACKEND_URL_BASE}/snippet/all`,
 
   getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`,
   getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,

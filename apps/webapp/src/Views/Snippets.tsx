@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -27,7 +27,8 @@ import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } fr
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
-import { generateSnippetId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
+import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
+import { useApi } from '../Hooks/useApi'
 
 export type SnippetsProps = {
   title?: string
@@ -35,16 +36,25 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
+  const api = useApi()
   const initialSnippets: any[] = snippets.map((snippet) => ({
     id: snippet.id,
     title: snippet.title,
-    text: parseBlock(snippet.content)
+    text: parseBlock(snippet.content || [{ text: '' }])
   }))
+  useEffect(() => {
+    let _snippets: Snippet[]
+    api.getAllSnippetsByWorkspace().then((res) => {
+      _snippets = res as Snippet[]
+      if (_snippets) initSnippets(_snippets)
+    })
+  }, [])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
