@@ -116,7 +116,7 @@ const Nav = ({ links }: NavProps) => {
       <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
         <NavTooltip singleton={source} />
 
-        <NavLogoWrapper>
+        <NavLogoWrapper onClick={() => goTo(ROUTE_PATHS.home, NavigationType.push)}>
           <Logo />
         </NavLogoWrapper>
 
