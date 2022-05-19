@@ -95,7 +95,7 @@ const OAuthRoutes = () => {
       />
 
       <Route
-        path="google/desktop"
+        path="desktop"
         element={
           <AuthRoute>
             <OAuthDesktop />
