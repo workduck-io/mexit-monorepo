@@ -27,13 +27,13 @@ const AppWrapper = styled.div`
 
 const Content = styled.div<{ grid?: boolean }>`
   display: flex;
-  flex-grow: 1;
+  flex: 1;
   overflow: auto;
-  ${({ grid }) =>
+  /* ${({ grid }) =>
     grid &&
     css`
       grid-column-start: 2;
-    `}
+    `} */
 `
 
 const Draggable = styled.div`
@@ -96,7 +96,10 @@ const Main = ({ children }: MainProps) => {
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
-      <GridWrapper style={gridSpringProps} grid={authenticated && showNav() ? 'true' : 'false'}>
+      <GridWrapper
+        // style={gridSpringProps}
+        grid={authenticated && showNav() ? 'true' : 'false'}
+      >
         {authenticated && showNav() && <Nav links={getLinks()} />}
         <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
           {children}
