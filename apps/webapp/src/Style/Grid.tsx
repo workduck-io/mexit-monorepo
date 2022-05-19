@@ -16,14 +16,15 @@ export const GridCss = (smCol = 2, lgCol = 3, spacing?: string) => css`
 `
 
 export const GridWrapper = styled(animated.div)<{ grid?: string }>`
+  display: flex;
   height: 100vh;
   width: 100vw;
   overflow: auto;
 
-  ${({ grid }) =>
+  /* ${({ grid }) =>
     grid &&
     css`
       display: grid;
       grid-template-columns: 300px 2fr auto;
-    `}
+    `} */
 `

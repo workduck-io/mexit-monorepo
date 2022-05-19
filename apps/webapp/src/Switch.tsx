@@ -29,9 +29,10 @@ import DraftView from './Views/DraftView'
 import GoogleOAuth from './Components/OAuth/Google'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
-  position: fixed;
-  width: ${({ theme, $isAuth }) =>
-    !$isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`};
+  /* position: fixed; */
+  /* width: ${({ theme, $isAuth }) =>
+    !$isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`}; */
+  width: 100% !important;
   overflow-x: hidden;
   overflow-y: auto;
 `

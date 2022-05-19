@@ -3,12 +3,18 @@ import { Card } from './Card'
 import { GridCss } from './Grid'
 
 export const SSnippets = styled.div`
-  ${GridCss(2, 3)}
+  /* ${GridCss(2, 3)} */
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 0;
 `
 
 export const SSnippet = styled(Card)`
   background-color: ${({ theme }) => theme.colors.gray[9]};
   overflow: auto;
+  margin: 1rem;
+  padding: 1rem;
+  aspect-ratio: 1/1;
 `
 
 export const SnippetHeader = styled.div`

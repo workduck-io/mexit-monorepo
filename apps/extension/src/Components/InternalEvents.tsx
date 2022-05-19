@@ -12,6 +12,7 @@ import { useContentStore } from '../Hooks/useContentStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
 import { getHtmlString } from './Source'
+import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -78,11 +79,14 @@ function useToggleHandler() {
 function dibbaToggle() {
   const { dibbaState, setDibbaState } = useSputlitContext()
 
+  // TODO: store this in preferences, whenever that is made
+  const disabledWebsites = [MEXIT_FRONTEND_URL_BASE]
+
   useEffect(() => {
     function handleRender() {
       // eslint-disable-next-line
       // @ts-ignore
-      if (document.activeElement.isContentEditable) {
+      if (document.activeElement.isContentEditable && !disabledWebsites.includes(window.location.origin)) {
         const text = window.getSelection().anchorNode.textContent
         const range = window.getSelection().getRangeAt(0)
         const textAfterTrigger = getDibbaText(range, text)

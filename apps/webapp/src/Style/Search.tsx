@@ -345,6 +345,7 @@ export const SplitSearchPreviewWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.large};
 
   ${EditorStyles} {
+    font-size: 1rem;
     border-radius: ${({ theme }) => theme.borderRadius.small};
     max-height: 40vh;
     overflow-y: auto;
