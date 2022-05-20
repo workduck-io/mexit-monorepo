@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 
 import { MetadataWrapper } from '../Components/EditorInfobar/Metadata'
 import { View } from '../Views/ViewSelector'
-import { EditorStyles } from './Editor'
+import { EditorStyles } from '@mexit/shared'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
 import { size } from './Responsive'
@@ -347,7 +347,7 @@ export const SplitSearchPreviewWrapper = styled.div`
   ${EditorStyles} {
     font-size: 1rem;
     border-radius: ${({ theme }) => theme.borderRadius.small};
-    max-height: 40vh;
+    /* max-height: 40vh; */
     overflow-y: auto;
 
     background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};

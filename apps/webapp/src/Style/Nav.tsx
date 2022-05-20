@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 import { CollapseHeader, CollapseWrapper } from './Collapse'
-import { FocusModeProp, focusStyles } from './Editor'
+import { FocusModeProp, focusStyles } from '@mexit/shared'
 import { Ellipsis } from './Search'
 
 export const NavTitle = styled.span`

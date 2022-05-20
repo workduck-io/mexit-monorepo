@@ -45,7 +45,7 @@ export default function Content() {
     const content = getMexHTMLDeserializer(selection?.html, editor)
 
     if (selection?.range && content && selection?.url && previewMode) {
-      setNodeContent(content)
+      setNodeContent([{ children: content }])
       contentRef.current = content
       deserializedContentRef.current = content
     }
@@ -142,7 +142,7 @@ export default function Content() {
       const content = getContent(item.id)?.content
       // TODO: fix this
       if (selection?.range) {
-        setNodeContent([...content, { text: '\n' }, ...deserializedContentRef.current])
+        setNodeContent([...content, { text: '\n' }, { children: deserializedContentRef.current }])
       } else {
         setNodeContent(content)
       }

@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import useLayout from '../../Hooks/useLayout'
 import useContentStore from '../../Stores/useContentStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { focusStyles, FocusModeProp } from '../../Style/Editor'
+import { focusStyles, FocusModeProp } from '@mexit/shared'
 import { Label } from '../../Style/Form'
 import { CardShadow, HoverFade } from '../../Style/Helpers'
 import { ProfileIcon } from '../../Style/UserPage'
@@ -188,5 +188,3 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
 }
 
 export default Metadata
-
-

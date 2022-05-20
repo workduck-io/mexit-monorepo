@@ -4,14 +4,12 @@ import styled, { css } from 'styled-components'
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 import { AsyncButton, Button } from '@mexit/shared'
 
-
 export interface FocusModeProp {
   // Focus mode is on?
   $focusMode?: boolean
   // Is element Hovered over focus mode?
   $focusHover?: boolean
 }
-
 
 export const focusStyles = ({ $focusMode, $focusHover }: FocusModeProp) => {
   if ($focusMode)
@@ -23,7 +21,6 @@ export const focusStyles = ({ $focusMode, $focusHover }: FocusModeProp) => {
           opacity: ${FOCUS_MODE_OPACITY};
         `
 }
-
 
 export const NoteTitle = styled.h1``
 
@@ -93,13 +90,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
     width: 100%;
   }
 `
-export const EditorStyles = styled.div<{ readOnly?: boolean }>`
-  ${({ readOnly }) =>
-    readOnly &&
-    css`
-      pointer-events: none;
-    `};
-
+export const EditorStyles = css`
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;

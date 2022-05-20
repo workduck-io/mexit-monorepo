@@ -3,7 +3,7 @@ import timeLine from '@iconify-icons/ri/time-line'
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-import { focusStyles, FocusModeProp } from '../../Style/Editor'
+import { focusStyles, FocusModeProp } from '@mexit/shared'
 import { Label } from '../../Style/Form'
 import { HoverFade } from '../../Style/Helpers'
 import { ProfileIcon } from '../../Style/UserPage'
