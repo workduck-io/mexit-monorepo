@@ -93,14 +93,24 @@ export function useActionExecutor() {
                   toast.error('Could not capture screenshot')
                 } else {
                   setVisualState(VisualState.showing)
+                  // Adding a paragraph in the start due to errors caused by editor
+                  // trying to focus in the start of the note
                   setNodeContent([
+                    {
+                      type: 'p',
+                      children: [
+                        {
+                          text: 'Screenshot'
+                        }
+                      ]
+                    },
                     {
                       children: [
                         {
                           text: ''
                         }
                       ],
-                      type: 'image',
+                      type: 'img',
                       url: message
                     },
                     {

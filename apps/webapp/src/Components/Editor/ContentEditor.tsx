@@ -16,7 +16,7 @@ import useLoad from '../../Hooks/useLoad'
 import EditorInfoBar from '../EditorInfobar'
 import useLayout from '../../Hooks/useLayout'
 import { getEditorId } from '../../Utils/editor'
-import { StyledEditor, EditorWrapper } from '../../Style/Editor'
+import { StyledEditor, EditorWrapper } from '@mexit/shared'
 
 import Toolbar from './Toolbar'
 import Metadata from '../EditorInfobar/Metadata'

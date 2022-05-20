@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { focusStyles, FocusModeProp } from './Editor'
+import { focusStyles, FocusModeProp } from '@mexit/shared'
 import { size } from './Responsive'
 
 interface InfoBarWrapperProps extends FocusModeProp {
@@ -39,21 +39,21 @@ export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
 
   @media (max-width: ${size.wide}) {
     ${({ mode }) => {
-    const mainWidth = getMainWidth(mode, false)
-    return css`
+      const mainWidth = getMainWidth(mode, false)
+      return css`
         min-width: calc(${mainWidth});
         max-width: calc(${mainWidth});
       `
-  }};
+    }};
   }
   @media (min-width: ${size.wide}) {
     ${({ mode }) => {
-    const mainWidth = getMainWidth(mode, true)
-    return css`
+      const mainWidth = getMainWidth(mode, true)
+      return css`
         min-width: calc(${mainWidth});
         max-width: calc(${mainWidth});
       `
-  }};
+    }};
   }
   transition: opacity 0.3s ease-in-out;
   ${focusStyles}

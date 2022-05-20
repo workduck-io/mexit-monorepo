@@ -4,7 +4,7 @@ import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import { useForm } from 'react-hook-form'
 
 import Editor from './Editor'
-import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '../../Style/Editor'
+import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 import { Input } from '../../Style/Form'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useSnippets } from '../../Hooks/useSnippets'

@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { FocusModeProp, focusStyles } from './Editor'
+import { FocusModeProp, focusStyles } from '@mexit/shared'
 import { PixelToCSS, ThinScrollbar } from './Helpers'
 import { Ellipsis } from './Search'
 
