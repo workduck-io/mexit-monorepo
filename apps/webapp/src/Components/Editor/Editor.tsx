@@ -14,12 +14,15 @@ import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { ELEMENT_TODO_LI } from '@mexit/core'
 import Todo from '../Todo'
 import { useEditorChange } from '@mexit/shared'
+import { EditorStyles } from '@mexit/shared'
 
 const EditorWrapper = styled.div`
   flex: 1;
   max-width: 800px;
   margin: 1rem;
   padding: 1rem;
+
+  ${EditorStyles}
 `
 
 interface EditorProps {

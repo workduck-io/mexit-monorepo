@@ -3,7 +3,7 @@ import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
-import { EditorStyles } from '../Style/Editor'
+import { EditorStyles } from '@mexit/shared'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import useDataStore from '../Stores/useDataStore'
 import { commands } from './Editor/Editor'
@@ -21,10 +21,12 @@ interface EditorPreviewRendererProps {
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
-const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
+const PreviewStyles = styled.div<{ noMouseEvents: boolean }>`
   ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
   user-select: none;
   font-size: 14px;
+
+  ${EditorStyles}
 `
 /* ${TodoContainer}, button, input, textarea, select, option {
     pointer-events: none;
@@ -127,20 +129,18 @@ const EditorPreviewRenderer = ({
   }, [blockId, editorId, content])
 
   return (
-    <>
-      <PreviewStyles
-        noMouseEvents={noMouseEvents}
-        onClick={(ev) => {
-          // ev.preventDefault()
-          // ev.stopPropagation()
-          if (onDoubleClick && ev.detail === 2) {
-            onDoubleClick(ev)
-          }
-        }}
-      >
-        <MexEditor comboboxConfig={comboboxConfig} options={editorOptions} editorId={editorId} value={content} />
-      </PreviewStyles>
-    </>
+    <PreviewStyles
+      noMouseEvents={noMouseEvents}
+      onClick={(ev) => {
+        // ev.preventDefault()
+        // ev.stopPropagation()
+        if (onDoubleClick && ev.detail === 2) {
+          onDoubleClick(ev)
+        }
+      }}
+    >
+      <MexEditor comboboxConfig={comboboxConfig} options={editorOptions} editorId={editorId} value={content} />
+    </PreviewStyles>
   )
 }
 export default EditorPreviewRenderer

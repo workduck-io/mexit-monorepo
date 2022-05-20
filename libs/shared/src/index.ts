@@ -13,6 +13,7 @@ export * from './Stores/dataStoreConstructor'
 
 export * from './Style/Buttons'
 export * from './Style/Form'
+export * from './Style/Editor'
 export * from './Style/Helpers'
 export * from './Style/Normalize'
 export * from './Style/Card'

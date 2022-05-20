@@ -6,7 +6,7 @@ import { defaultContent, mog } from '@mexit/core'
 
 import Editor from './Editor'
 import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
-import { StyledEditor, EditorWrapper } from '../../Style/Editor'
+import { StyledEditor, EditorWrapper } from '@mexit/shared'
 import PublicNodeMetadata from '../EditorInfobar/PublicNodeMetadata'
 import { useApi } from '../../Hooks/useApi'
 import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
