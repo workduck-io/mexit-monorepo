@@ -13,7 +13,11 @@ document.documentElement.appendChild(shadowRoot)
 
 export const styleSlot = document.createElement('div')
 styleSlot.id = 'style-sheet-target'
-shadowRoot.attachShadow({ mode: 'closed' }).appendChild(styleSlot)
+
+// keeping the shadow dom open so that extensions or websites can see the actual
+// target of the event, closed shadow dom results in shadow root being the
+// target of all events
+shadowRoot.attachShadow({ mode: 'open' }).appendChild(styleSlot)
 
 // Adding a stopPropagation here so as to not notify any event listeners on the window
 // Checkout: https://github.com/facebook/react/issues/11387#issuecomment-355258340
