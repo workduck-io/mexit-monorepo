@@ -1,10 +1,10 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import { MexEditor, ComboboxKey, QuickLinkElement } from '@workduck-io/mex-editor'
+import { MexEditor, ComboboxKey, QuickLinkElement, ComboboxConfig } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
 import { useEditorChange } from '@mexit/shared'
@@ -18,6 +18,7 @@ import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, CaptureType, QuickLinkType, ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { styleSlot } from '../../contentScript'
 
 interface EditorProps {
   nodePath?: string
@@ -64,7 +65,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
-  const comboboxConfig = {
+  const comboboxConfig: ComboboxConfig = {
     onKeyDownConfig: {
       keys: {
         tag: {
@@ -168,6 +169,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         options={editorOptions}
         editorId={node.nodeid}
         value={nodeContent}
+        portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
       />
     </EditorWrapper>
   )

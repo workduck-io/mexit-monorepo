@@ -10,7 +10,7 @@ const Sputlit = () => {
   return (
     <SputlitContainer id="sputlit-container">
       <Wrapper>
-        <Main>
+        <Main id="sputlit-main">
           <Search />
           <Content />
         </Main>
