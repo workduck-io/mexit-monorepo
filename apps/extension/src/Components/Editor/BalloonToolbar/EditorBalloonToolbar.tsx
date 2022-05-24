@@ -35,6 +35,7 @@ import {
   ToolbarButtonProps,
   usePlateEditorRef
 } from '@udecode/plate'
+import { styleSlot } from 'apps/extension/src/contentScript'
 import React from 'react'
 import { BalloonToolbar } from './BalloonToolbar'
 import { SelectionToNode } from './components/SelectionToNode'
@@ -60,7 +61,7 @@ const BallonMarkToolbarButtons = () => {
   } as any
 
   return (
-    <BalloonToolbar popperOptions={popperOptions} theme={theme} arrow={arrow}>
+    <BalloonToolbar popperOptions={popperOptions} theme={theme} arrow={arrow} portalElement={styleSlot}>
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}
         icon={<Icon height={20} icon={h1} />}
