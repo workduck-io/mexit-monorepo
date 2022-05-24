@@ -53,6 +53,7 @@ function useToggleHandler() {
           } else {
             setVisualState(VisualState.hidden)
           }
+          sendResponse(true)
       }
     }
 

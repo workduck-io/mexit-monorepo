@@ -20,13 +20,21 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 chrome.commands.onCommand.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
+      if (!response) {
+        chrome.tabs.reload(tabs[0].id)
+      }
+    })
   })
 })
 
 chrome.action.onClicked.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
+      if (!response) {
+        chrome.tabs.reload(tabs[0].id)
+      }
+    })
   })
 })
 
@@ -37,10 +45,12 @@ chrome.contextMenus.create({
 })
 
 chrome.contextMenus.onClicked.addListener((onClickData) => {
-  console.log('onClickData', onClickData)
-
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' })
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
+      if (!response) {
+        chrome.tabs.reload(tabs[0].id)
+      }
+    })
   })
 })
 
