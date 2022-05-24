@@ -3799,10 +3799,10 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/78facf234f5d5157ef2a7bf2d514f554afcfae084bd4bd996eb16c8309fd93d4#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-"@workduck-io/mex-editor@0.5.0-alpha.2":
-  version "0.5.0-alpha.2"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.5.0-alpha.2/9f6e4d5386e80d34a942f63eac65b5bfe021a25c4191b3f253c5da02d14de80f#33702aa08b62b14d224722cd8e008402339a9492"
-  integrity sha512-CcqcZIjTd+RZH+qP1gVw1q/RLyiZbB1BhwhrHBDbJ/7XfXFXOv6Rrf789CsffEeSfo1dAf44i3SI4JxaGVRwOg==
+"@workduck-io/mex-editor@0.5.0":
+  version "0.5.0"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.5.0/230baef329cbf656c5c26a7da458f7021dc6b00ce35f4e864bb07a69fbf11a42#75c17ea12f9977b54ba49986ee7e410ad8127c88"
+  integrity sha512-47WiE/GxY72PQ+8fsjNk2cLJ9e97jN86M3tkfbG+9EgvYTSknnNN8kT/1yYGMU8iCIcZG4xN/VebAGiftF8Z0Q==
   dependencies:
     "@udecode/plate" "10.2.2"
     color-scheme "^1.0.1"
