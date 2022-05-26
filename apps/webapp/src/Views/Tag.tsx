@@ -84,8 +84,6 @@ const Tag = () => {
   const [selected, setSelected] = useState(-1)
   const [tags, setTags] = useState(Object.keys(cleanCache))
 
-  mog('TagStuff', { tag, tags, selected })
-
   const transition = useTransition(nodes, {
     // sort: (a, b) => (a.score > b.score ? -1 : 0),
     keys: (item) => `${tag}_${item}`,
