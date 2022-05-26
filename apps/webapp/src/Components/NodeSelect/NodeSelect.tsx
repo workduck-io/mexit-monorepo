@@ -48,7 +48,6 @@ export type QuickLink = {
   icon?: string
 }
 
-
 export const makeQuickLink = (
   title: string,
   options: { nodeid: string; type?: QuickLinkType; icon?: string }
@@ -188,7 +187,7 @@ function NodeSelect({
     // mog('Slelected', { inputValue })
 
     if (inputValue !== '') {
-      const newItems = fuzzySearch(quickLinks, inputValue, { keys: ['text'] })
+      const newItems = fuzzySearch(quickLinks, inputValue, (item) => item.text)
       if (
         !isClash(
           inputValue,
