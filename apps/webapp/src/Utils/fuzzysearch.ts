@@ -1,6 +1,6 @@
-import Fuse from 'fuse.js'
+import { search } from 'fast-fuzzy'
 
-export const fuzzySearch = (list: any[], text: string, options: Fuse.IFuseOptions<any>) => {
-  const fuse = new Fuse(list, options)
-  return fuse.search(text).map((l) => l.item)
+export const fuzzySearch = (list: any[], text: string, keySelector = (item) => item) => {
+  const results = search(text, list, { keySelector: keySelector })
+  return results
 }

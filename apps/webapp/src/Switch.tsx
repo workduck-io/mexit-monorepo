@@ -27,6 +27,7 @@ import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
 import DraftView from './Views/DraftView'
 import GoogleOAuth from './Components/OAuth/Google'
+import Tag from './Views/Tag'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -183,6 +184,7 @@ export const Switch = () => {
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={ROUTE_PATHS.archive} element={<Archive />} />
+          <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
         </Route>
       </Routes>
     </SwitchWrapper>
