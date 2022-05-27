@@ -37,7 +37,7 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippet, updateSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet, updateSnippet, getSnippets } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
@@ -96,6 +96,16 @@ const Snippets = () => {
     goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
 
+  useEffect(() => {
+    const snippets = getSnippets()
+
+    snippets.forEach(async (item) => {
+      await api.getSnippetById(item.id).then((response) => {
+        updateSnippet(response as Snippet)
+      })
+    })
+  }, [])
+
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
     const snip = getSnippet(item.id)
@@ -104,22 +114,6 @@ const Snippets = () => {
     }
     const icon = quillPenLine
     const id = `${item.id}_ResultFor_SearchSnippet`
-
-    const debouncedFetch = useDebouncedCallback(
-      async () =>
-        await api.getSnippetById(snip.id).then((response) => {
-          updateSnippet(response as Snippet)
-        }),
-      1000
-    )
-
-    useEffect(() => {
-      // TODO: better check for if the snippet has been fetched or not
-      // One can remove all the content inside snippets to make it go into a infinite loop
-      if (snip.content.length === 1) {
-        debouncedFetch()
-      }
-    }, [snip.content])
 
     if (props.view === View.Card) {
       return (
