@@ -38,7 +38,6 @@ const SnippetEditor = () => {
   // const [value, setValue] = useState('')
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  const { updateSnippet } = useSnippets()
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
   const buffer = useSnippetBufferStore((store) => store.buffer)
@@ -74,7 +73,6 @@ const SnippetEditor = () => {
     if (val) {
       addOrUpdateValBuffer(snippet.id, val)
       api.saveSnippetAPI(snippet.id, snippet.title, val)
-      updateSnippet({ ...snippet, content: val })
     }
   }
 

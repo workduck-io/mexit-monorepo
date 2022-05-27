@@ -1,7 +1,7 @@
 export interface Snippet {
   id: string
   title: string
-  icon: string
+  icon?: string
   content: any[]
   isTemplate?: boolean
 }

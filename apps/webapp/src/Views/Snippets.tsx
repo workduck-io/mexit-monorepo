@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -29,6 +29,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
 import { useApi } from '../Hooks/useApi'
+import { useDebouncedCallback } from 'use-debounce'
 
 export type SnippetsProps = {
   title?: string
@@ -36,8 +37,7 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet, updateSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
@@ -48,13 +48,6 @@ const Snippets = () => {
     title: snippet.title,
     text: parseBlock(snippet.content || [{ text: '' }])
   }))
-  useEffect(() => {
-    let _snippets: Snippet[]
-    api.getAllSnippetsByWorkspace().then((res) => {
-      _snippets = res as Snippet[]
-      if (_snippets) initSnippets(_snippets)
-    })
-  }, [])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
@@ -112,6 +105,22 @@ const Snippets = () => {
     const icon = quillPenLine
     const id = `${item.id}_ResultFor_SearchSnippet`
 
+    const debouncedFetch = useDebouncedCallback(
+      async () =>
+        await api.getSnippetById(snip.id).then((response) => {
+          updateSnippet(response as Snippet)
+        }),
+      1000
+    )
+
+    useEffect(() => {
+      // TODO: better check for if the snippet has been fetched or not
+      // One can remove all the content inside snippets to make it go into a infinite loop
+      if (snip.content.length === 1) {
+        debouncedFetch()
+      }
+    }, [snip.content])
+
     if (props.view === View.Card) {
       return (
         <Result {...props} key={id} ref={ref}>
@@ -161,6 +170,7 @@ const Snippets = () => {
     if (item) {
       const snip = getSnippet(item.id)
       const icon = quillPenLine
+
       // const edNode = { ...node, title: node.path, id: node.nodeid }
       return (
         <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}`}>
