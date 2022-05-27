@@ -5,12 +5,13 @@ import { useAuth, client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
 import { clear as IDBClear } from 'idb-keyval'
 
-import { apiURLs, AuthStoreState, UserCred } from '@mexit/core'
+import { apiURLs, AuthStoreState, Snippet, UserCred } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
 import useDataStore from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
 import useContentStore from './useContentStore'
+import { useApi } from '../Hooks/useApi'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -24,6 +25,7 @@ export const useAuthentication = () => {
   const initContents = useContentStore((store) => store.initContents)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
+  const api = useApi()
 
   const login = async (
     email: string,
@@ -50,7 +52,18 @@ export const useAuthentication = () => {
 
           setAuthenticated(userDetails, workspaceDetails)
         })
-        .then()
+        .then(() =>
+          api.getAllSnippetsByWorkspace().then((res: any[]) => {
+            initSnippets(
+              res.map((item) => ({
+                icon: 'ri:quill-pen-line',
+                id: item.snippetID,
+                title: item.title,
+                content: [{ children: [{ text: '' }] }]
+              }))
+            )
+          })
+        )
         .catch((e) => {
           console.error({ e })
           return e.toString() as string

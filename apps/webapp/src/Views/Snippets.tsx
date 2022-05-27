@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -27,7 +27,9 @@ import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } fr
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
-import { generateSnippetId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
+import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
+import { useApi } from '../Hooks/useApi'
+import { useDebouncedCallback } from 'use-debounce'
 
 export type SnippetsProps = {
   title?: string
@@ -35,15 +37,16 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet, updateSnippet, getSnippets } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
+  const api = useApi()
   const initialSnippets: any[] = snippets.map((snippet) => ({
     id: snippet.id,
     title: snippet.title,
-    text: parseBlock(snippet.content)
+    text: parseBlock(snippet.content || [{ text: '' }])
   }))
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
@@ -92,6 +95,16 @@ const Snippets = () => {
     // loadNode(nodeid)
     goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
+
+  useEffect(() => {
+    const snippets = getSnippets()
+
+    snippets.forEach(async (item) => {
+      await api.getSnippetById(item.id).then((response) => {
+        updateSnippet(response as Snippet)
+      })
+    })
+  }, [])
 
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
@@ -151,6 +164,7 @@ const Snippets = () => {
     if (item) {
       const snip = getSnippet(item.id)
       const icon = quillPenLine
+
       // const edNode = { ...node, title: node.path, id: node.nodeid }
       return (
         <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}`}>

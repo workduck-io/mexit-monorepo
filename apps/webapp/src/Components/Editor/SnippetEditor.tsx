@@ -17,6 +17,7 @@ import tinykeys from 'tinykeys'
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
+import { useApi } from '../../Hooks/useApi'
 
 type Inputs = {
   title: string
@@ -26,14 +27,17 @@ const SnippetEditor = () => {
   const snippet = useSnippetStore((store) => store.editor.snippet)
   const { goTo } = useRouting()
 
-  const { control, handleSubmit } = useForm<Inputs>()
+  const api = useApi()
+  const {
+    register,
+    formState: { errors }
+  } = useForm<Inputs>()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [content, setContent] = useState<any[] | undefined>(undefined)
   // const [value, setValue] = useState('')
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  // const { updater } = useUpdater()
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
   const buffer = useSnippetBufferStore((store) => store.buffer)
@@ -68,6 +72,7 @@ const SnippetEditor = () => {
     mog('onChangeSave', { val })
     if (val) {
       addOrUpdateValBuffer(snippet.id, val)
+      api.saveSnippetAPI(snippet.id, snippet.title, val)
     }
   }
 
