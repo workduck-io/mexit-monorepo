@@ -1,4 +1,3 @@
-import { useComboboxStore } from '../store/combobox';
+import { useComboboxStore } from '../store/useComboboxStore'
 
-export const useComboboxIsOpen = () =>
-  useComboboxStore((state) => !!state.targetRange);
+export const useComboboxIsOpen = () => useComboboxStore((state) => !!state.targetRange)

@@ -34,50 +34,49 @@ import {
   TEditor,
   toggleList,
   unwrapList,
-  AutoformatRule,
-} from '@udecode/plate';
+  AutoformatRule
+} from '@udecode/plate'
 
-import { generateTempId } from '../utils/idGenerators';
+import { generateTempId } from '@mexit/core'
 
-const preFormat = (editor: TEditor<AnyObject>) =>
-  unwrapList(editor as PlateEditor);
+const preFormat = (editor: TEditor<AnyObject>) => unwrapList(editor as PlateEditor)
 
 export const optionsAutoFormatRule: Array<AutoformatRule> = [
   {
     mode: 'block',
     type: ELEMENT_H1,
     match: 'h1',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H2,
     match: 'h2',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H3,
     match: 'h3',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H4,
     match: 'h4',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H5,
     match: 'h5',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H6,
     match: 'h6',
-    preFormat,
+    preFormat
   },
   {
     mode: 'block',
@@ -86,20 +85,20 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     preFormat,
     format: (editor: TEditor<AnyObject>) => {
       if (editor.selection) {
-        const parentEntry = getParent(editor, editor.selection);
-        if (!parentEntry) return;
-        const [node] = parentEntry;
+        const parentEntry = getParent(editor, editor.selection)
+        if (!parentEntry) return
+        const [node] = parentEntry
         if (
           isElement(node) &&
           !isType(editor as PlateEditor, node, ELEMENT_CODE_BLOCK) &&
           !isType(editor as PlateEditor, node, ELEMENT_CODE_LINE)
         ) {
           toggleList(editor as PlateEditor, {
-            type: ELEMENT_UL,
-          });
+            type: ELEMENT_UL
+          })
         }
       }
-    },
+    }
   },
   {
     mode: 'block',
@@ -109,67 +108,67 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     preFormat,
     format: (editor: TEditor<AnyObject>) => {
       if (editor.selection) {
-        const parentEntry = getParent(editor, editor.selection);
-        if (!parentEntry) return;
-        const [node] = parentEntry;
+        const parentEntry = getParent(editor, editor.selection)
+        if (!parentEntry) return
+        const [node] = parentEntry
         if (
           isElement(node) &&
           !isType(editor as PlateEditor, node, ELEMENT_CODE_BLOCK) &&
           !isType(editor as PlateEditor, node, ELEMENT_CODE_LINE)
         ) {
           toggleList(editor as PlateEditor, {
-            type: ELEMENT_OL,
-          });
+            type: ELEMENT_OL
+          })
         }
       }
-    },
+    }
   },
   {
     mode: 'block',
     type: ELEMENT_TODO_LI,
-    match: ['[]'],
+    match: ['[]']
   },
   {
     mode: 'block',
     type: ELEMENT_BLOCKQUOTE,
     match: ['>'],
-    preFormat,
+    preFormat
   },
   {
     type: MARK_BOLD,
     match: ['**', '**'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     type: MARK_BOLD,
     match: ['__', '__'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     type: MARK_ITALIC,
     match: ['*', '*'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     type: MARK_ITALIC,
     match: ['_', '_'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     type: MARK_CODE,
     match: ['`', '`'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     type: MARK_STRIKETHROUGH,
     match: ['~~', '~~'],
     mode: 'mark',
-    insertTrigger: true,
+    insertTrigger: true
   },
   {
     mode: 'block',
@@ -180,11 +179,11 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     format: (editor: TEditor<AnyObject>) => {
       insertEmptyCodeBlock(editor as PlateEditor, {
         defaultType: getPluginType(editor as PlateEditor, ELEMENT_DEFAULT),
-        insertNodesOptions: { select: true },
-      });
-    },
-  },
-];
+        insertNodesOptions: { select: true }
+      })
+    }
+  }
+]
 
 export const optionsSoftBreakPlugin = {
   options: {
@@ -193,39 +192,39 @@ export const optionsSoftBreakPlugin = {
       {
         hotkey: 'enter',
         query: {
-          allow: [ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_TD],
-        },
-      },
-    ],
-  },
-};
+          allow: [ELEMENT_CODE_BLOCK, ELEMENT_BLOCKQUOTE, ELEMENT_TD]
+        }
+      }
+    ]
+  }
+}
 
 export const optionsExitBreakPlugin = {
   options: {
     rules: [
       {
-        hotkey: 'mod+enter',
+        hotkey: 'mod+enter'
       },
       {
         hotkey: 'mod+shift+enter',
-        before: true,
+        before: true
       },
       {
         hotkey: 'enter',
         query: {
           start: true,
           end: true,
-          allow: KEYS_HEADING,
-        },
-      },
-    ],
-  },
-};
+          allow: KEYS_HEADING
+        }
+      }
+    ]
+  }
+}
 
 const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE, ELEMENT_TODO_LI],
-  defaultType: ELEMENT_PARAGRAPH,
-};
+  defaultType: ELEMENT_PARAGRAPH
+}
 
 export const optionsResetBlockTypePlugin = {
   options: {
@@ -233,26 +232,26 @@ export const optionsResetBlockTypePlugin = {
       {
         ...resetBlockTypesCommonRule,
         hotkey: 'Enter',
-        predicate: isBlockAboveEmpty,
+        predicate: isBlockAboveEmpty
       },
       {
         ...resetBlockTypesCommonRule,
         hotkey: 'Backspace',
-        predicate: isSelectionAtBlockStart,
-      },
-    ],
-  },
-};
+        predicate: isSelectionAtBlockStart
+      }
+    ]
+  }
+}
 
 export const optionsSelectOnBackspacePlugin = {
-  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED] } },
-};
+  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED] } }
+}
 
 export const optionsCreateNodeIdPlugin = {
   options: {
     reuseId: true,
     filterText: false,
-    idCreator: () => generateTempId(),
+    idCreator: () => generateTempId()
     // exclude: [ELEMENT_SYNC_BLOCK],
-  },
-};
+  }
+}
