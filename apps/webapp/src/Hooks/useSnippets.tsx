@@ -1,5 +1,5 @@
-import { Snippet } from '@mexit/core'
-import { SlashCommandConfig, mog, SEPARATOR } from '@workduck-io/mex-editor'
+import { mog, SEPARATOR, Snippet } from '@mexit/core'
+import { SlashCommandConfig } from '@workduck-io/mex-editor'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useSearch } from './useSearch'
 

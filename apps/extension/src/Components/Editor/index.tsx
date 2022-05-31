@@ -1,6 +1,6 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { MexEditor, ComboboxKey, QuickLinkElement, ComboboxConfig } from '@workduck-io/mex-editor'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -163,6 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         meta={{
           path: node.path
         }}
+        debug
         components={components}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={debounced}

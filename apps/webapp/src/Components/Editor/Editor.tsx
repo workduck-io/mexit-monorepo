@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
@@ -150,7 +150,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           path: nodePath
         }}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
-        // debug
+        debug
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}

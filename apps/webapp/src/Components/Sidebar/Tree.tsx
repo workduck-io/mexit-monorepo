@@ -15,7 +15,6 @@ import React, { useEffect, useRef } from 'react'
 import { useContextMenu } from 'react-contexify'
 import { useLocation } from 'react-router-dom'
 import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
-import { SEPARATOR, mog } from '@workduck-io/mex-editor'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import useEditorStore from '../../Stores/useEditorStore'
@@ -31,6 +30,7 @@ import {
 } from '../../Style/Sidebar'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { getNameFromPath } from '@mexit/shared'
+import { mog, SEPARATOR } from '@mexit/core'
 
 interface GetIconProps {
   item: TreeItem
