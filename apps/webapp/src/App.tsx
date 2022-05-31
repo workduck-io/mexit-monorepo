@@ -11,6 +11,7 @@ import Modals from './Components/Modals'
 import { Notification } from '@mexit/shared'
 import Main from './Components/Main'
 import config from './config'
+import FloatingButton from './Components/FloatingButton'
 
 import './Stores'
 
@@ -32,6 +33,7 @@ function App() {
           <GlobalStyle />
           <Modals />
           <Switch />
+          <FloatingButton />
           <Notification />
         </Main>
       </ThemeProvider>
