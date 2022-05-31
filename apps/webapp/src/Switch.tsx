@@ -28,6 +28,7 @@ import { useSidebarTransition } from './Components/Sidebar/Transition'
 import DraftView from './Views/DraftView'
 import GoogleOAuth from './Components/OAuth/Google'
 import Tag from './Views/Tag'
+import Shortcuts from './Views/Settings/Shortcuts'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -142,6 +143,7 @@ const SettingsRoutes = () => {
       >
         <Route path="themes" element={<Themes />} />
         <Route path="user" element={<UserPage />} />
+        <Route path="shortcuts" element={<Shortcuts />} />
       </Route>
     </Routes>
   )

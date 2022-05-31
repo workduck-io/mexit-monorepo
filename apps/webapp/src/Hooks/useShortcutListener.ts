@@ -99,12 +99,10 @@ const useShortcutListener = (): ShortcutListner => {
 
 export const useKeyListener = () => {
   const shortcutDisabled = useShortcutStore((state) => state.editMode)
-  const { trackEvent } = useAnalytics()
 
   const shortcutHandler = (shortcut: Shortcut, callback: any) => {
     mog('shortcutHandler', { shortcut })
     if (!shortcutDisabled && !shortcut.disabled) {
-      trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.KEY_PRESS, 'Shortcut'), shortcut)
       callback()
     }
   }

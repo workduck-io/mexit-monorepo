@@ -3,12 +3,13 @@ import { NavLink, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
+import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
 import user3Line from '@iconify-icons/ri/user-3-line'
 import { Icon } from '@iconify/react'
 
-import { useAuthentication } from '../Stores/useAuth'
-import { Button } from '@mexit/shared'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useAuthentication } from '../../Stores/useAuth'
+import { Button, Title } from '@mexit/shared'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
 const IntegrationContainer = styled.section`
   margin-left: 4rem;
@@ -19,13 +20,6 @@ const Margin = styled.div`
   margin: 1rem 1rem 0.5rem 0;
   display: flex;
   justify-content: space-between;
-`
-
-const Title = styled.h1`
-  padding: 2.5rem 1rem;
-  font-size: 36px;
-  line-height: 44px;
-  user-select: none;
 `
 
 export const SettingsContainer = styled.section`
@@ -100,6 +94,11 @@ const Settings = () => {
             <Icon icon={user3Line} />
             Profile
           </SettingTitle>
+          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="shortcuts">
+            <Icon icon={keyboardBoxLine} />
+            Shortcuts
+          </SettingTitle>
+
           <Margin />
           <Button onClick={onLogout}>Logout</Button>
         </SettingsOptions>
