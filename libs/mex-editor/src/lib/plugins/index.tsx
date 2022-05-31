@@ -44,10 +44,10 @@ import {
   createPlateUI,
   ELEMENT_PARAGRAPH,
   PlatePluginComponent,
-  createTablePlugin,
-} from '@udecode/plate';
+  createTablePlugin
+} from '@udecode/plate'
 
-import { createQuickLinkPlugin } from './QuickLink/createQuickLinkPlugin';
+import { createQuickLinkPlugin } from './QuickLink/createQuickLinkPlugin'
 
 import {
   optionsAutoFormatRule,
@@ -55,10 +55,10 @@ import {
   optionsExitBreakPlugin,
   optionsResetBlockTypePlugin,
   optionsSelectOnBackspacePlugin,
-  optionsSoftBreakPlugin,
-} from './options';
-import { createTagPlugin } from './Tags/createTagPlugin';
-import { createTodoPlugin } from './createTodoPlugin';
+  optionsSoftBreakPlugin
+} from './options'
+import { createTagPlugin } from './Tags/createTagPlugin'
+import { createTodoPlugin } from './createTodoPlugin'
 
 export const generatePlugins = () => {
   const Plugins: PlatePlugin[] = [
@@ -90,22 +90,14 @@ export const generatePlugins = () => {
     createResetNodePlugin(optionsResetBlockTypePlugin),
     createHorizontalRulePlugin(),
     createSelectOnBackspacePlugin({
-      options: { query: { allow: [ELEMENT_HR] } },
+      options: { query: { allow: [ELEMENT_HR] } }
     }),
     createAlignPlugin({
       inject: {
         props: {
-          validTypes: [
-            ELEMENT_PARAGRAPH,
-            ELEMENT_H1,
-            ELEMENT_H2,
-            ELEMENT_H3,
-            ELEMENT_H4,
-            ELEMENT_H5,
-            ELEMENT_H6,
-          ],
-        },
-      },
+          validTypes: [ELEMENT_PARAGRAPH, ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4, ELEMENT_H5, ELEMENT_H6]
+        }
+      }
     }),
 
     // Autoformat markdown syntax to elements (**, #(n))
@@ -124,38 +116,38 @@ export const generatePlugins = () => {
             type: ELEMENT_HR,
             match: ['---', '—-', '___ '],
             format: (editor) => {
-              setNodes(editor, { type: ELEMENT_HR });
+              setNodes(editor, { type: ELEMENT_HR })
               insertNodes(editor, {
                 type: ELEMENT_DEFAULT,
-                children: [{ text: '' }],
-              });
-            },
-          },
-        ],
-      },
+                children: [{ text: '' }]
+              })
+            }
+          }
+        ]
+      }
     }),
     createDndPlugin(),
     createMediaEmbedPlugin(),
 
-    // createNodeIdPlugin(optionsCreateNodeIdPlugin),
+    createNodeIdPlugin(optionsCreateNodeIdPlugin),
 
     // // mex custom plugins
     createTagPlugin(),
     createQuickLinkPlugin(),
 
-    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
-  ];
+    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin)
+  ]
 
-  return Plugins;
-};
+  return Plugins
+}
 
 const useMemoizedPlugins = (
   plugins: Array<PlatePlugin>,
   components: Record<string, PlatePluginComponent<any | undefined>>
 ) => {
   return createPlugins(plugins, {
-    components: createPlateUI(components),
-  });
-};
+    components: createPlateUI(components)
+  })
+}
 
-export default useMemoizedPlugins;
+export default useMemoizedPlugins
