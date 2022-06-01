@@ -8,10 +8,9 @@ import { clear as IDBClear } from 'idb-keyval'
 import { apiURLs, AuthStoreState, Snippet, UserCred } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
-import useDataStore from './useDataStore'
-import { useSnippetStore } from './useSnippetStore'
-import useContentStore from './useContentStore'
+import { useSnippetStore } from '../../../../libs/mex-editor/src/lib/store/useSnippetStore'
 import { useApi } from '../Hooks/useApi'
+import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 

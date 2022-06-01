@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import useEditorStore from '../../Stores/useEditorStore'
 import Outline from './Outline'
 import Backlinks from './Backlinks'
 import TagsRelated from '../Editor/TagsRelated'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 export const DataInfobarWrapper = styled.div`
   display: flex;

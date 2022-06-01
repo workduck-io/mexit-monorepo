@@ -1,8 +1,7 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { NodeEditorContent, NodeMetadata } from '@mexit/core'
-import IDBStorage from '../Utils/idbStorageAdapter'
+import { IDBStorage, NodeEditorContent, NodeMetadata } from '@mexit/core'
 
 export interface PublicNode {
   id: string

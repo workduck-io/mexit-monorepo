@@ -1,4 +1,4 @@
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useSnippetStore } from '@workduck-io/mex-editor'
 
 export const useSnippets = () => {
   const getSnippets = () => {

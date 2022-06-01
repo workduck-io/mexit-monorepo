@@ -8,9 +8,7 @@ import useEditorActions from '../Hooks/useEditorActions'
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 import { useAnalysis } from '../Stores/useAnalysis'
 import { initSearchIndex } from '../Workers/controller'
-import useDataStore from '../Stores/useDataStore'
-import useContentStore from '../Stores/useContentStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useContentStore, useDataStore, useSnippetStore } from '@workduck-io/mex-editor'
 
 const EditorViewWrapper = styled.div`
   display: flex;

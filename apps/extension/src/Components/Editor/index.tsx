@@ -1,6 +1,14 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import { MexEditor, ComboboxKey, QuickLinkElement, ComboboxConfig } from '@workduck-io/mex-editor'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import {
+  MexEditor,
+  ComboboxKey,
+  QuickLinkElement,
+  ComboboxConfig,
+  ELEMENT_TAG,
+  ELEMENT_ILINK,
+  useDataStore
+} from '@workduck-io/mex-editor'
+import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -55,6 +63,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
+  const ilinks = useDataStore((store) => store.ilinks)
 
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
@@ -69,12 +78,15 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
     onKeyDownConfig: {
       keys: {
         tag: {
+          slateElementType: ELEMENT_TAG,
           newItemHandler: (tag: string) => addTags({ id: 'TAG_1234', text: tag })
         },
         ilink: {
+          slateElementType: ELEMENT_ILINK,
           newItemHandler: (ilink: string, parentId?: string) => console.log(`ilink: ${ilink} | ParentID: ${parentId}`)
         },
         slash_command: {
+          slateElementType: 'slash_command',
           newItemHandler: () => undefined
         }
       },
@@ -102,7 +114,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
       ilink: {
         cbKey: ComboboxKey.ILINK,
         trigger: '[[',
-        data: [],
+        data: ilinks.map((l) => ({ ...l, value: l.path, text: l.path })),
         icon: 'add-something-here'
       },
       slash_command: {
@@ -163,6 +175,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         meta={{
           path: node.path
         }}
+        // debug
         components={components}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={debounced}

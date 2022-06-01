@@ -3,13 +3,11 @@ import { CategoryType, idxKey, initActions } from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
-import useContentStore from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
 import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useShortenerStore } from '../Stores/useShortener'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
+import { useContentStore, useDataStore, useSnippetStore } from '@workduck-io/mex-editor'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)

@@ -3,9 +3,8 @@ import create from 'zustand'
 import { GenericSearchResult, mog } from '@mexit/core'
 import { isElder, getAllParentIds } from '@mexit/shared'
 
-import useDataStore from '../Stores/useDataStore'
-import { useLinks } from './useLinks'
 import { useTags } from './useTags'
+import { useLinks } from '@workduck-io/mex-editor'
 
 /*
 - Date

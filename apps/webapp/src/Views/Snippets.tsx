@@ -9,7 +9,6 @@ import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { Button, IconButton } from '@mexit/shared'
 
 import { MainHeader } from '@mexit/shared'
@@ -30,6 +29,7 @@ import { useSearch } from '../Hooks/useSearch'
 import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
 import { useApi } from '../Hooks/useApi'
 import { useDebouncedCallback } from 'use-debounce'
+import { useSnippetStore } from '@workduck-io/mex-editor'
 
 export type SnippetsProps = {
   title?: string

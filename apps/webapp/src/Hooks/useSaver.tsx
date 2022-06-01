@@ -2,8 +2,8 @@ import { getPlateId, platesStore } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
 import { NodeProperties } from '@mexit/core'
-import useEditorStore from '../Stores/useEditorStore'
 import { useDataSaverFromContent } from './useSave'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 export const useSaver = () => {
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()

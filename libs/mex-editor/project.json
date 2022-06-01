@@ -1,0 +1,7 @@
+{
+  "root": "libs/mex-editor",
+  "sourceRoot": "libs/mex-editor/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {}
+}

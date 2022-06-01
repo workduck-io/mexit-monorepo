@@ -14,13 +14,10 @@ import {
   isInSameMinute
 } from '@mexit/core'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '@mexit/core'
-import { useLinks } from '../Hooks/useLinks'
 import { SearchFilter } from '../Hooks/useFilters'
+import { useLinks, useReminderStore, useTodoStore } from '@workduck-io/mex-editor'
 // import { ReminderControls, SnoozeControl } from '../components/mex/Reminders/Reminder'
 // import { getReminderState } from '../services/reminders/reminders'
-
-import { useReminderStore } from '../Stores/useReminderStore'
-import useTodoStore from '../Stores/useTodoStore'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'

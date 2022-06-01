@@ -1,5 +1,5 @@
 import React from 'react'
-import { useContentStore } from '../../Hooks/useContentStore'
+import { useContentStore } from '@workduck-io/mex-editor'
 import Highlighter from 'web-highlighter'
 import { copyToClipboard } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'

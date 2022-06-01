@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { idxKey } from '@mexit/core'
-import { useLinks } from './useLinks'
+import { useLinks } from '@workduck-io/mex-editor'
 
 import {
   addDoc,

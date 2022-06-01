@@ -6,11 +6,11 @@ import { Loading, ToolbarTooltip, IconButton } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useEditorStore from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { InfoTools, NodeInfo } from '@mexit/shared'
 import BookmarkButton from '../Buttons/BookmarkButton'
 import NodeRenameTitle from './NodeRenameTitle'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)

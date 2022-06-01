@@ -3,7 +3,7 @@
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-import { storageAdapter } from '../Utils/chromeStorageAdapter'
+import { storageAdapter } from '@mexit/core'
 
 export interface UserCred {
   email: string

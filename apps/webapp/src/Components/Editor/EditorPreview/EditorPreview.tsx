@@ -14,11 +14,10 @@ import { Button } from '@mexit/shared'
 import useLoad from '../../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 import { useTags } from '../../../Hooks/useTags'
-import useContentStore from '../../../Stores/useContentStore'
-import { useLinks } from '../../../Hooks/useLinks'
 import { TagsRelatedTiny } from '../TagsRelated'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import { getNameFromPath } from '@mexit/shared'
+import { useContentStore, useLinks } from '@workduck-io/mex-editor'
 
 export interface EditorPreviewProps {
   nodeid: string

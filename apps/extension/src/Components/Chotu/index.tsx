@@ -23,16 +23,14 @@ import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
 import useInternalAuthStore from '../../Hooks/useAuthStore'
 import { Notification, Theme } from '@mexit/shared'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { Search, useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
 import { AsyncMethodReturns, connectToChild } from 'penpal'
 import fuzzysort from 'fuzzysort'
 import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useContentStore } from '../../Hooks/useContentStore'
-import useDataStore from '../../Stores/useDataStore'
 import { useQuickLinks } from '../../Hooks/useQuickLinks'
+import { useSnippetStore, useContentStore, useDataStore } from '@workduck-io/mex-editor'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
