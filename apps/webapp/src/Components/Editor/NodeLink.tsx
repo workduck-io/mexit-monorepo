@@ -1,6 +1,6 @@
+import { useLinks } from '@workduck-io/mex-editor'
 import React from 'react'
 
-import { useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { NodeLinkStyled } from '../../Style/Backlinks'

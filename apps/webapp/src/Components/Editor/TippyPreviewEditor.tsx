@@ -3,9 +3,9 @@ import Tippy from '@tippyjs/react/headless'
 import { transparentize } from 'polished'
 import styled from 'styled-components'
 
-import useContentStore from '../../Stores/useContentStore'
 import PreviewEditor from './PreviewEditor'
 import { CardShadow } from '../../Style/Helpers'
+import { useContentStore } from '@workduck-io/mex-editor'
 
 export const TippyPreviewEditorWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};

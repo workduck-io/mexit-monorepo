@@ -8,7 +8,6 @@ import { defaultContent } from '@mexit/core'
 
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import Editor from './Editor'
-import useEditorStore from '../../Stores/useEditorStore'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import useLoad from '../../Hooks/useLoad'
@@ -21,6 +20,7 @@ import { StyledEditor, EditorWrapper } from '@mexit/shared'
 import Toolbar from './Toolbar'
 import Metadata from '../EditorInfobar/Metadata'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()

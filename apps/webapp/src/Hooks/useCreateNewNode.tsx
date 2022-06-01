@@ -1,7 +1,6 @@
 import { getUntitledDraftKey, getUntitledKey } from '@mexit/core'
+import { useDataStore, useEditorStore } from '@workduck-io/mex-editor'
 import toast from 'react-hot-toast'
-import useDataStore from '../Stores/useDataStore'
-import useEditorStore from '../Stores/useEditorStore'
 import { useApi } from './useApi'
 import useLoad from './useLoad'
 import { useNavigation } from './useNavigation'

@@ -14,16 +14,14 @@ import { AppType } from '../Hooks/useInitialize'
 import useLoad from '../Hooks/useLoad'
 import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import useDataStore from '../Stores/useDataStore'
-import useEditorStore from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
-import useTodoStore from '../Stores/useTodoStore'
 import { Title } from '../Style/Elements'
 import SearchFilters from './SearchFilters'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
 import { ShortcutToken, ShortcutTokens, StyledTasksKanban, TaskCard, TaskColumnHeader, TaskHeader } from '../Style/Todo'
 import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
 import { TodoBase } from '../Components/Todo/Todo'
+import { useDataStore, useEditorStore, useTodoStore } from '@workduck-io/mex-editor'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)

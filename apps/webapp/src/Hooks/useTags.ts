@@ -1,9 +1,7 @@
 import { getTagsFromContent, TagsCache } from '@mexit/core'
+import { useDataStore, useLinks, useNodes } from '@workduck-io/mex-editor'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
-import useDataStore from '../Stores/useDataStore'
-import { useLinks } from './useLinks'
-import { useNodes } from './useNodes'
 
 /**
   Tags req

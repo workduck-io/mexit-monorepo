@@ -3,12 +3,11 @@ import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
-import useEditorStore, { getContent } from './useEditorStore'
 import { areEqual } from '../Utils/hash'
 import { TodoType, checkIfUntitledDraftNode } from '@mexit/core'
-import useTodoStore from './useTodoStore'
 
 import { analyseContent } from '../Workers/controller'
+import { getContent, useEditorStore, useTodoStore } from '@workduck-io/mex-editor'
 
 export interface OutlineItem {
   id: string

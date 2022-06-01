@@ -7,10 +7,7 @@ import { MainHeader, Title, getInitialNode } from '@mexit/shared'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
-import { useNodes } from '../Hooks/useNodes'
-import useContentStore from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
-import useEditorStore from '../Stores/useEditorStore'
+import { useNodes } from '../../../../libs/mex-editor/src/lib/hooks/useNodes'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSearch } from '../Hooks/useSearch'
 import {
@@ -34,6 +31,7 @@ import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
 import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/core'
+import { useContentStore, useDataStore, useEditorStore } from '@workduck-io/mex-editor'
 
 const Search = () => {
   const { loadNode } = useLoad()
@@ -65,7 +63,7 @@ const Search = () => {
     const res = await queryIndex('node', newSearchTerm)
     const nodeids = useDataStore.getState().ilinks.map((l) => l.nodeid)
     const filRes = res.filter((r) => nodeids.includes(r.id))
-    mog("Node Search Results", { filRes })
+    mog('Node Search Results', { filRes })
     // mog('search', { res, filRes })
     return filRes
   }

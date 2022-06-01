@@ -6,10 +6,10 @@ import globalLine from '@iconify-icons/ri/global-line'
 import { ToggleButton, CardTitle, Loading } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/useApi'
-import useEditorStore from '../../Stores/useEditorStore'
 import { MexIcon } from '@mexit/shared'
 import { CopyButton } from '../Buttons/CopyButton'
 import { mog } from '@mexit/core'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 const Flex = css`
   display: flex;

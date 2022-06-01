@@ -6,15 +6,14 @@ import tinykeys from 'tinykeys'
 
 import { mog, isReserved, NodeLink } from '@mexit/core'
 import { Button } from '@mexit/shared'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import useEditorStore from '../../Stores/useEditorStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { doesLinkRemain } from './doesLinkRemain'
+import { useEditorStore, useLinks } from '@workduck-io/mex-editor'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)

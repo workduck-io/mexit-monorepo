@@ -25,6 +25,7 @@ export * from './Style/fade'
 
 export * from './Themes'
 
+export * from './Types/Combobox'
 export * from './Types/Tree'
 export * from './Types/Theme'
 

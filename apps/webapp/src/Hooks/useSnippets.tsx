@@ -1,6 +1,5 @@
-import { Snippet } from '@mexit/core'
-import { SlashCommandConfig, mog, SEPARATOR } from '@workduck-io/mex-editor'
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import { mog, SEPARATOR, Snippet } from '@mexit/core'
+import { SlashCommandConfig, useSnippetStore } from '@workduck-io/mex-editor'
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {

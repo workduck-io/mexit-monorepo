@@ -6,10 +6,8 @@ import { Icon } from '@iconify/react'
 import { HoverSubtleGlow } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import useDataStore from '../../Stores/useDataStore'
-
+import { useDataStore, useLinks } from '@workduck-io/mex-editor'
 
 export const BaseLink = styled.div`
   cursor: pointer;
@@ -25,7 +23,6 @@ export const BaseLink = styled.div`
   }
   ${HoverSubtleGlow}
 `
-
 
 const BList = styled.div`
   max-height: 15rem;
@@ -53,30 +50,30 @@ const BLink = styled(BaseLink)`
 `
 
 const Bookmarks = () => {
-    const bookmarks = useDataStore((store) => store.bookmarks)
-    const { getAllBookmarks } = useBookmarks()
-    const { getPathFromNodeid } = useLinks()
-    const { push } = useNavigation()
-    // const [ bookmarks, setBookmarks ] = useState<string[]>([])
+  const bookmarks = useDataStore((store) => store.bookmarks)
+  const { getAllBookmarks } = useBookmarks()
+  const { getPathFromNodeid } = useLinks()
+  const { push } = useNavigation()
+  // const [ bookmarks, setBookmarks ] = useState<string[]>([])
 
-    useEffect(() => {
-        // ssetBookmarks(
-        getAllBookmarks()
-    }, [])
+  useEffect(() => {
+    // ssetBookmarks(
+    getAllBookmarks()
+  }, [])
 
-    return (
-        <BList>
-            {bookmarks.map((nodeid) => {
-                if (getPathFromNodeid(nodeid) === undefined) return null
-                return (
-                    <BLink key={`bookmark_link_${nodeid}`} onClick={() => push(nodeid)}>
-                        <Icon height={14} icon={bookmarkLine} />
-                        {getPathFromNodeid(nodeid)}
-                    </BLink>
-                )
-            })}
-        </BList>
-    )
+  return (
+    <BList>
+      {bookmarks.map((nodeid) => {
+        if (getPathFromNodeid(nodeid) === undefined) return null
+        return (
+          <BLink key={`bookmark_link_${nodeid}`} onClick={() => push(nodeid)}>
+            <Icon height={14} icon={bookmarkLine} />
+            {getPathFromNodeid(nodeid)}
+          </BLink>
+        )
+      })}
+    </BList>
+  )
 }
 
 export default Bookmarks

@@ -13,7 +13,14 @@
       "apps/*"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "@udecode/plate": "10.2.2",
+    "color-scheme": "^1.0.1",
+    "fast-equals": "^2.0.4",
+    "ramda": "^0.28.0",
+    "fuse.js": "^6.5.3",
+    "@uifabric/styling": "^7.20.0"
+  },
   "devDependencies": {
     "@nrwl/cli": "13.8.2",
     "@nrwl/eslint-plugin-nx": "13.8.2",

@@ -1,15 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MexEditor, ELEMENT_ILINK, ELEMENT_TAG, ComboboxKey, ComboboxConfig } from '@workduck-io/mex-editor'
+import {
+  MexEditor,
+  ELEMENT_ILINK,
+  ELEMENT_TAG,
+  ComboboxKey,
+  ComboboxConfig,
+  useDataStore
+} from '@workduck-io/mex-editor'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import { ILinkElement } from './ILinkElement'
 import TagWrapper from './TagWrapper'
-import useDataStore from '../../Stores/useDataStore'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { ELEMENT_TODO_LI } from '@mexit/core'
 import Todo from '../Todo'
@@ -65,13 +71,16 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     onKeyDownConfig: {
       keys: {
         ilink: {
+          slateElementType: ELEMENT_ILINK,
           // @ts-expect-error Mex Space requires it in this format
           newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
         },
         tag: {
+          slateElementType: ELEMENT_TAG,
           newItemHandler: (tag: string) => addTag(tag)
         },
         slash_command: {
+          slateElementType: 'slash_command',
           newItemHandler: () => undefined
         }
       },

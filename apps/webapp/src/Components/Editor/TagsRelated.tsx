@@ -7,7 +7,6 @@ import { Note } from '@mexit/shared'
 
 import { TagsHelp } from '../../Data/defaultText'
 import { useTags } from '../../Hooks/useTags'
-import useDataStore from '../../Stores/useDataStore'
 import { InfoWidgetWrapper } from '../../Style/Infobar'
 
 import Collapse from '../../Layout/Collapse'
@@ -16,6 +15,7 @@ import { HoverSubtleGlow } from '../../Style/Helpers'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { useDataStore } from '@workduck-io/mex-editor'
 
 export const TagFlex = styled.div`
   cursor: pointer;

@@ -1,12 +1,10 @@
 import { mog, ILink, isMatch } from '@mexit/core'
 import { getAllParentIds } from '@mexit/shared'
+import { useDataStore, useLinks, useEditorStore, getContent } from '@workduck-io/mex-editor'
 
-import useDataStore from '../Stores/useDataStore'
-import useEditorStore, { getContent } from '../Stores/useEditorStore'
 import { useHistoryStore } from '../Stores/useHistoryStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import useArchive from './useArchive'
-import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'
 
 export const useDelete = () => {

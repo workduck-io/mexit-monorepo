@@ -2,6 +2,7 @@ import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
 import { isReserved, mog, USE_API } from '@mexit/core'
 import { Button } from '@mexit/shared'
+import { useEditorStore } from '@workduck-io/mex-editor'
 import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
@@ -12,7 +13,6 @@ import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLoad from '../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import useEditorStore from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { ModalHeader, MockRefactorMap, MRMHead, MRMRow, DeleteIcon, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
@@ -30,34 +30,32 @@ interface DeleteStoreState {
   setDelAndRefactored: (del: string, mR: string[]) => void
 }
 
-export const useDeleteStore = create<DeleteStoreState>(
-  (set) => ({
-    open: false,
-    mockRefactored: [],
-    del: undefined,
-    focus: true,
-    openModal: (id) => {
-      if (id) {
-        set({ open: true, del: id })
-      } else {
-        set({
-          open: true
-        })
-      }
-    },
-    closeModal: () => {
+export const useDeleteStore = create<DeleteStoreState>((set) => ({
+  open: false,
+  mockRefactored: [],
+  del: undefined,
+  focus: true,
+  openModal: (id) => {
+    if (id) {
+      set({ open: true, del: id })
+    } else {
       set({
-        del: undefined,
-        mockRefactored: [],
-        open: false
+        open: true
       })
-    },
-    setFocus: (focus) => set({ focus }),
-    setDel: (del) => set({ del }),
-    setMockRefactored: (mockRefactored) => set({ mockRefactored }),
-    setDelAndRefactored: (del, mockRefactored) => set({ del, mockRefactored })
-  })
-)
+    }
+  },
+  closeModal: () => {
+    set({
+      del: undefined,
+      mockRefactored: [],
+      open: false
+    })
+  },
+  setFocus: (focus) => set({ focus }),
+  setDel: (del) => set({ del }),
+  setMockRefactored: (mockRefactored) => set({ mockRefactored }),
+  setDelAndRefactored: (del, mockRefactored) => set({ del, mockRefactored })
+}))
 
 const Delete = () => {
   const { getMockDelete, execDelete } = useDelete()
