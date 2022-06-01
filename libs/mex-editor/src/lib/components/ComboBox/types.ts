@@ -1,3 +1,4 @@
+import { QuickLinkType } from '@mexit/core'
 import { PlateEditor, RenderFunction } from '@udecode/plate'
 import { CustomElements } from '../../types/editor'
 
@@ -21,6 +22,13 @@ export interface SlashCommandConfig {
   getData?: (element: IComboboxItem) => Record<string, any>
 }
 
+export enum SlashType {
+  embed = 'media_embed',
+  table = 'table',
+  canvas = 'excalidraw',
+  remind = 'remind'
+}
+
 export interface IComboboxItem {
   /**
    * Arbitrary string associated with this option.
@@ -32,10 +40,9 @@ export interface IComboboxItem {
    */
   text: any
 
-  /**
-   * Text to render for this option
-   */
   itemType?: ComboboxItemType
+
+  type?: QuickLinkType | SlashType
 
   /**
    * Icon to be rendered
@@ -82,7 +89,7 @@ export interface ComboboxItemProps {
 }
 
 export interface ComboboxItemType {
-  slateElementType?: string
+  slateElementType: string
   newItemHandler: (item: string, parentId?: string) => void
   itemRenderer?: RenderFunction<ComboboxItemProps>
 }

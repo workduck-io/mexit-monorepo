@@ -1,14 +1,17 @@
+import { getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
 import { getBlockAbove, getPluginType, insertNodes, PlateEditor, TElement } from '@udecode/plate'
 import { Editor, Transforms } from 'slate'
 import { useComboboxStore } from '../store/useComboboxStore'
 import { useMexEditorStore } from '../store/useMexEditorStore'
-import { ComboboxItemType, IComboboxItem } from '../types'
+import { ComboboxItemType, ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, IComboboxItem } from '../types'
 import { withoutDelimiter } from '../utils'
+import { useLinks } from './useLinks'
 
 export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Array<any>) => {
+  const { getNodeidFromPath } = useLinks()
   const closeMenu = useComboboxStore((state) => state.closeMenu)
 
-  return (editor: PlateEditor, item: IComboboxItem) => {
+  return (editor: PlateEditor, item: IComboboxItem, elementType?: string) => {
     try {
       let comboType = elementComboType
       if (keys) {
@@ -17,45 +20,83 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
       }
 
       const targetRange = useComboboxStore.getState().targetRange
-      const parentPath = useMexEditorStore.getState().metaData.path
-      const type = getPluginType(editor, comboType.slateElementType!)
+      // mog('Target Range', { targetRange })
+
+      // mog('ELEMENT', { elementType, comboType })
+
+      const type =
+        elementType ??
+        getPluginType(editor, comboType.slateElementType === 'internal' ? 'ilink' : comboType.slateElementType)
 
       if (targetRange) {
-        // console.log('useElementOnChange 1', { comboType, type });
-
         const pathAbove = getBlockAbove(editor)?.[1]
         const isBlockEnd = editor.selection && pathAbove && Editor.isEnd(editor, editor.selection.anchor, pathAbove)
 
-        // console.log('useElementOnChange 2', { type, pathAbove, isBlockEnd });
         // insert a space to fix the bug
         if (isBlockEnd) {
           Transforms.insertText(editor, ' ')
         }
 
-        const { key, isChild } = withoutDelimiter(item.text)
+        let itemValue = item.text
 
-        let itemValue
-        if (key) itemValue = isChild ? `${parentPath}${key}` : key
-        else itemValue = parentPath
+        if ((type === ELEMENT_ILINK || type === ELEMENT_INLINE_BLOCK) && !itemValue.startsWith(`${NODE_ID_PREFIX}_`)) {
+          // mog('Replacing itemValue', { comboType, type, itemValue, item })
 
-        //* Select the ilink text and insert the ilink element
+          const nodeId = getNodeidFromPath(itemValue)
+          itemValue = nodeId
+        }
+
+        // select the ilink text and insert the ilink element
         Transforms.select(editor, targetRange)
+        // mog('Inserting Element', { comboType, type, itemValue, item })
 
-        insertNodes<TElement>(editor, {
-          type: type as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-          children: [{ text: '' }],
-          value: itemValue
-        })
+        const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
+        const activeBlock = useComboboxStore.getState().activeBlock
+        const textAfterBlockTrigger = useComboboxStore.getState().search.textAfterBlockTrigger
 
-        //* Move the selection after the ilink element
+        // mog('Inserting from here', { activeBlock, isBlockTriggered })
+        if (
+          (item.type === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) &&
+          isBlockTriggered &&
+          activeBlock
+        ) {
+          const blockValue = activeBlock?.text ? getSlug(activeBlock.text) : ''
+          const withBlockInfo = {
+            type,
+            children: [{ text: '' }],
+            value: activeBlock?.id,
+            blockValue,
+            blockId: activeBlock?.blockId
+          }
+
+          insertNodes(editor, withBlockInfo)
+        } else {
+          if (item.type === QuickLinkType.flow || item.type === QuickLinkType.snippet) {
+            itemValue = item.key
+          }
+
+          insertNodes<TElement>(editor, {
+            type,
+            children: [{ text: '' }],
+            value: itemValue
+          })
+        }
+
+        // TODO: would require moving useAnalytics inside mex-editor, can do later
+        // trackEvent(getEventNameFromElement('Editor', ActionType.CREATE, type), {
+        //   'mex-element-type': type,
+        //   'mex-element-text': itemValue
+        // })
+
+        // move the selection after the ilink element
         Transforms.move(editor)
 
-        //* Delete the inserted space
+        // delete the inserted space
         if (isBlockEnd) {
           Transforms.delete(editor)
         }
 
-        //* return true
+        // return true
         return closeMenu()
       }
     } catch (e) {

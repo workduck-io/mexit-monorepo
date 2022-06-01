@@ -71,13 +71,16 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     onKeyDownConfig: {
       keys: {
         ilink: {
+          slateElementType: ELEMENT_ILINK,
           // @ts-expect-error Mex Space requires it in this format
           newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
         },
         tag: {
+          slateElementType: ELEMENT_TAG,
           newItemHandler: (tag: string) => addTag(tag)
         },
         slash_command: {
+          slateElementType: 'slash_command',
           newItemHandler: () => undefined
         }
       },

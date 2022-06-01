@@ -61,18 +61,19 @@ export const ILinkElement = ({ attributes, children, element }: ILinkElementProp
 
   const onClickProps = useOnMouseClick(() => {
     // Show preview on click, if preview is shown, navigate to link
-    if (!preview) setPreview(true)
-    else {
+    if (!preview) {
+      setPreview(true)
+    } else {
       push(element.value)
       goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
     }
   })
 
-  useEffect(() => {
-    // If the preview is shown and the element losses focus --> Editor focus is moved
-    // Hide the preview
-    if (preview && !selected) setPreview(false)
-  }, [selected])
+  // useEffect(() => {
+  //   // If the preview is shown and the element losses focus --> Editor focus is moved
+  //   // Hide the preview
+  //   if (preview && !selected) setPreview(false)
+  // }, [selected])
 
   useHotkeys(
     'backspace',
@@ -145,7 +146,7 @@ export const ILinkElement = ({ attributes, children, element }: ILinkElementProp
             <span className="ILink_decoration ILink_decoration_left">[[</span>
             <span className="ILink_decoration ILink_decoration_value">
               {' '}
-              {!content ? path : `${path} : ${element.blockValue}`} {element.value}
+              {!content ? path : `${path} : ${element.blockValue}`}{' '}
             </span>
             <span className="ILink_decoration ILink_decoration_right">]]</span>
           </SILink>

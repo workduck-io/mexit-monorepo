@@ -1,5 +1,12 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import { MexEditor, ComboboxKey, QuickLinkElement, ComboboxConfig } from '@workduck-io/mex-editor'
+import {
+  MexEditor,
+  ComboboxKey,
+  QuickLinkElement,
+  ComboboxConfig,
+  ELEMENT_TAG,
+  ELEMENT_ILINK
+} from '@workduck-io/mex-editor'
 import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
@@ -69,12 +76,15 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
     onKeyDownConfig: {
       keys: {
         tag: {
+          slateElementType: ELEMENT_TAG,
           newItemHandler: (tag: string) => addTags({ id: 'TAG_1234', text: tag })
         },
         ilink: {
+          slateElementType: ELEMENT_ILINK,
           newItemHandler: (ilink: string, parentId?: string) => console.log(`ilink: ${ilink} | ParentID: ${parentId}`)
         },
         slash_command: {
+          slateElementType: 'slash_command',
           newItemHandler: () => undefined
         }
       },
