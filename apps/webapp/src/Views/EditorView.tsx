@@ -93,7 +93,7 @@ const EditorView = () => {
       [shortcuts.showSettings.keystrokes]: (event) => {
         event.preventDefault()
         shortcutHandler(shortcuts.showSettings, () => {
-          goTo(`${ROUTE_PATHS.settings}/themes`, NavigationType.push)
+          goTo(`${ROUTE_PATHS.settings}/about`, NavigationType.push)
         })
       }
     })

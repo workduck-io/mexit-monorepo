@@ -5,6 +5,7 @@ import { transparentize } from 'polished'
 import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
 import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
 import user3Line from '@iconify-icons/ri/user-3-line'
+import informationLine from '@iconify/icons-ri/information-line'
 import { Icon } from '@iconify/react'
 
 import { useAuthentication } from '../../Stores/useAuth'
@@ -86,6 +87,10 @@ const Settings = () => {
       <Title>Settings</Title>
       <SettingsContainer>
         <SettingsOptions>
+          <SettingTitle tabIndex={-1} to="about">
+            <Icon icon={informationLine} />
+            About
+          </SettingTitle>
           <SettingTitle tabIndex={-1} to="themes">
             <Icon icon={paintBrushFill} />
             Themes
