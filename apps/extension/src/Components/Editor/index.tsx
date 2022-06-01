@@ -5,7 +5,8 @@ import {
   QuickLinkElement,
   ComboboxConfig,
   ELEMENT_TAG,
-  ELEMENT_ILINK
+  ELEMENT_ILINK,
+  useDataStore
 } from '@workduck-io/mex-editor'
 import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useSpring } from 'react-spring'
@@ -62,6 +63,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const currTabURL = window.location.href
   const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
   const [userTags, setUserTags] = useState<Tag[]>([])
+  const ilinks = useDataStore((store) => store.ilinks)
 
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
@@ -112,7 +114,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
       ilink: {
         cbKey: ComboboxKey.ILINK,
         trigger: '[[',
-        data: [],
+        data: ilinks.map((l) => ({ ...l, value: l.path, text: l.path })),
         icon: 'add-something-here'
       },
       slash_command: {

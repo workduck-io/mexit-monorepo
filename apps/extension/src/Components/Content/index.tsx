@@ -2,7 +2,6 @@ import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { useContentStore } from '../../Hooks/useContentStore'
 import { getMexHTMLDeserializer } from '../../Utils/deserialize'
 import { Editor } from '../Editor'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
@@ -23,7 +22,7 @@ import {
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
-import useDataStore from '../../Stores/useDataStore'
+import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()

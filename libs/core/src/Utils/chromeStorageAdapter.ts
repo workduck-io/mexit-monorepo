@@ -1,4 +1,4 @@
-import 'chrome-extension-async'
+import { IDBStorage } from './idbStorageAdapter'
 
 export const asyncLocalStorage = {
   setItem: async (key: string, value: string) => {
@@ -18,6 +18,18 @@ export const asyncLocalStorage = {
   }
 }
 
+function checkStorage() {
+  if (!!chrome.storage) {
+    // @ts-ignore
+    require('chrome-extension-async')
+    return asyncLocalStorage
+  } else {
+    return IDBStorage
+  }
+}
+
 export const storageAdapter = {
-  getStorage: () => asyncLocalStorage
+  getStorage: () => {
+    return checkStorage()
+  }
 }

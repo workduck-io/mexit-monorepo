@@ -9,7 +9,8 @@ import {
   TodosType,
   TodoType,
   convertContentToRawText,
-  IDBStorage
+  IDBStorage,
+  storageAdapter
 } from '@mexit/core'
 
 import { useReminderStore } from './useReminderStore'
@@ -171,7 +172,7 @@ const useTodoStore = create<TodoStoreType>(
         get().updateTodoOfNode(nodeid, newTodo)
       }
     }),
-    { name: 'mexit-todo-store', getStorage: () => IDBStorage }
+    { name: 'mexit-todo-store', ...storageAdapter }
   )
 )
 
