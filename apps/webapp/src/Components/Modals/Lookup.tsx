@@ -8,13 +8,12 @@ import { generateNodeId, mog } from '@mexit/core'
 import { Input } from '../../Style/Form'
 import { useApi } from '../../Hooks/useApi'
 
-import useEditorStore from '../../Stores/useEditorStore'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useNodes } from '../../Hooks/useNodes'
+import { useNodes } from '../../../../../libs/mex-editor/src/lib/hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
-import useDataStore from '../../Stores/useDataStore'
+import { useDataStore, useEditorStore } from '@workduck-io/mex-editor'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;

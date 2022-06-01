@@ -4,8 +4,8 @@ import { ILink, apiURLs, mog } from '@mexit/core'
 
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
-import useDataStore from '../Stores/useDataStore'
 import { useSaver } from './useSaver'
+import { useDataStore } from '@workduck-io/mex-editor'
 
 const useArchive = () => {
   const setArchive = useDataStore((state) => state.setArchive)

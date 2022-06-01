@@ -1,105 +1,102 @@
-import { PlateEditor, RenderFunction } from '@udecode/plate';
-import { CustomElements } from '../../types/editor';
+import { PlateEditor, RenderFunction } from '@udecode/plate'
+import { CustomElements } from '../../types/editor'
 
 export interface ComboboxKeyDownConfig {
-  keys: Record<CustomElements, ComboboxItemType>;
-  slashCommands: Record<string, SlashCommandConfig>;
-  portalElement?: Element;
+  keys: Record<CustomElements, ComboboxItemType>
+  slashCommands: Record<string, SlashCommandConfig>
+  portalElement?: Element
 }
 
 export interface ComboboxItemOnChangeConfig {
-  cbKey: ComboboxKey;
-  trigger: string;
-  data: Array<any>;
-  icon?: string;
+  cbKey: ComboboxKey
+  trigger: string
+  data: Array<any>
+  icon?: string
 }
 
 export interface SlashCommandConfig {
-  command: string;
-  slateElementType: string;
-  options?: any;
-  getData?: (element: IComboboxItem) => Record<string, any>;
+  command: string
+  slateElementType: string
+  options?: any
+  getData?: (element: IComboboxItem) => Record<string, any>
 }
 
 export interface IComboboxItem {
   /**
    * Arbitrary string associated with this option.
    */
-  key: string;
+  key: string
 
   /**
    * Text to render for this option
    */
-  text: any;
+  text: any
 
   /**
    * Text to render for this option
    */
-  itemType?: ComboboxItemType;
+  itemType?: ComboboxItemType
 
   /**
    * Icon to be rendered
    */
-  icon?: string;
+  icon?: string
 
   /**
    * Icon to be rendered on the right
    */
-  rightIcons?: string[];
+  rightIcons?: string[]
 
   /**
    * description text if any
    */
-  desc?: string;
+  desc?: string
 
   /**
    * Whether the option is disabled
    * @defaultvalue false
    */
-  disabled?: boolean;
+  disabled?: boolean
 
   /**
    * Data available to onRenderItem.
    */
-  data?: unknown;
+  data?: unknown
 }
 
 export enum ComboboxElementType {
   Normal = 0,
   Divider = 1,
-  Header = 2,
+  Header = 2
 }
 
 export enum ComboboxKey {
   TAG = 'tag',
   ILINK = 'ilink',
   INLINE_BLOCK = 'inline_block',
-  SLASH_COMMAND = 'slash_command',
+  SLASH_COMMAND = 'slash_command'
 }
 
 export interface ComboboxItemProps {
-  item: IComboboxItem;
+  item: IComboboxItem
 }
 
 export interface ComboboxItemType {
-  slateElementType?: string;
-  newItemHandler: (item: string, parentId?: string) => void;
-  itemRenderer?: RenderFunction<ComboboxItemProps>;
+  slateElementType?: string
+  newItemHandler: (item: string, parentId?: string) => void
+  itemRenderer?: RenderFunction<ComboboxItemProps>
 }
 
-export type ComboboxOnChangeConfig = Record<
-  CustomElements,
-  ComboboxItemOnChangeConfig
->;
+export type ComboboxOnChangeConfig = Record<CustomElements, ComboboxItemOnChangeConfig>
 
 export interface ComboboxConfig {
-  onKeyDownConfig: ComboboxKeyDownConfig;
-  onChangeConfig: ComboboxOnChangeConfig;
+  onKeyDownConfig: ComboboxKeyDownConfig
+  onChangeConfig: ComboboxOnChangeConfig
 }
 
 export interface ComboboxProps {
-  isSlash?: boolean;
-  onSelectItem: (editor: PlateEditor, item: string) => void;
-  onRenderItem?: RenderFunction<ComboboxItemProps>;
-  portalElement?: Element;
+  isSlash?: boolean
+  onSelectItem: (editor: PlateEditor, item: string) => void
+  onRenderItem?: RenderFunction<ComboboxItemProps>
+  portalElement?: Element
 }

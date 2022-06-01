@@ -8,9 +8,8 @@ import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { Title } from '../Style/Elements'
 import { SSnippets, SSnippet, SnippetHeader, SnippetCommand, StyledSnippetPreview } from '../Style/Snippets'
 import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
-import useContentStore from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
 
 function DraftView() {
   const { contents } = useContentStore()

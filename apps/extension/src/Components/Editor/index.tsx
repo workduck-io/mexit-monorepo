@@ -163,7 +163,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         meta={{
           path: node.path
         }}
-        debug
+        // debug
         components={components}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={debounced}

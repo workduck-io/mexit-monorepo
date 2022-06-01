@@ -8,11 +8,11 @@ import {
   PriorityType,
   TodosType,
   TodoType,
-  convertContentToRawText
+  convertContentToRawText,
+  IDBStorage
 } from '@mexit/core'
 
 import { useReminderStore } from './useReminderStore'
-import IDBStorage from '../Utils/idbStorageAdapter'
 
 const createTodo = (nodeid: string, todoId: string, content: NodeEditorContent = defaultContent.content) => ({
   id: todoId,
@@ -175,4 +175,4 @@ const useTodoStore = create<TodoStoreType>(
   )
 )
 
-export default useTodoStore
+export { useTodoStore }

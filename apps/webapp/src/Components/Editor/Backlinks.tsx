@@ -2,11 +2,11 @@ import React from 'react'
 import arrowGoBackLine from '@iconify-icons/ri/arrow-go-back-line'
 import { Icon } from '@iconify/react'
 
-import { useLinks } from '../../Hooks/useLinks'
 import { InfoWidgetScroll, InfoWidgetWrapper } from '../../Style/Infobar'
 import { Note } from '@mexit/shared'
 import NodeLink from '../Editor/NodeLink'
 import { DataInfoHeader } from '../../Style/Backlinks'
+import { useLinks } from '@workduck-io/mex-editor'
 
 interface BackLinkProps {
   nodeid: string

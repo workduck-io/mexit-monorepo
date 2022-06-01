@@ -17,7 +17,6 @@ import { useLocation } from 'react-router-dom'
 import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import useEditorStore from '../../Stores/useEditorStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import {
   StyledTreeItemSwitcher,
@@ -31,6 +30,7 @@ import {
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { getNameFromPath } from '@mexit/shared'
 import { mog, SEPARATOR } from '@mexit/core'
+import { useEditorStore } from '@workduck-io/mex-editor'
 
 interface GetIconProps {
   item: TreeItem

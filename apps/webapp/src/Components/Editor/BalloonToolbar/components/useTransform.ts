@@ -3,14 +3,11 @@ import { TEditor, getNodes, getSelectionText, insertNodes } from '@udecode/plate
 
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import useContentStore from '../../../../Stores/useContentStore'
-import useDataStore from '../../../../Stores/useDataStore'
-import useEditorStore from '../../../../Stores/useEditorStore'
 import { NODE_PATH_CHAR_LENGTH, NODE_PATH_SPACER, getSlug, SEPARATOR } from '@mexit/core'
 import { convertContentToRawText } from '@mexit/core'
-import { useSnippetStore } from '../../../../Stores/useSnippetStore'
+import { useSnippetStore } from '../../../../../../../libs/mex-editor/src/lib/store/useSnippetStore'
 import { defaultContent, mog, generateSnippetId } from '@mexit/core'
-import { ELEMENT_ILINK, ILinkNode } from '@workduck-io/mex-editor'
+import { ELEMENT_ILINK, ILinkNode, useContentStore, useDataStore } from '@workduck-io/mex-editor'
 
 export const useTransform = () => {
   const addILink = useDataStore((s) => s.addILink)

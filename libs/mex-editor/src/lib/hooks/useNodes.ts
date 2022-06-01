@@ -1,7 +1,7 @@
 import { toast } from 'react-hot-toast'
 
-import useDataStore from '../Stores/useDataStore'
 import { AddILinkProps, ILink, mog } from '@mexit/core'
+import { useDataStore } from '../store/useDataStore'
 
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used

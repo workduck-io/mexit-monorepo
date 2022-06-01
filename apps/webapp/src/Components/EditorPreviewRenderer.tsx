@@ -1,13 +1,12 @@
-import { ComboboxConfig, ComboboxKey, MexEditor } from '@workduck-io/mex-editor'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { ComboboxConfig, ComboboxKey, MexEditor, useDataStore } from '@workduck-io/mex-editor'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { EditorStyles } from '@mexit/shared'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import useDataStore from '../Stores/useDataStore'
 import { commands } from './Editor/Editor'
 import { useEditorChange } from '@mexit/shared'
+import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any

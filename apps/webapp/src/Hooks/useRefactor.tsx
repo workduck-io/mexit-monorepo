@@ -4,20 +4,19 @@ import React from 'react'
 import { NodeLink, mog, getUniquePath, isMatch, generateNodeUID } from '@mexit/core'
 import { getAllParentIds, getNodeIcon } from '@mexit/shared'
 
-import useDataStore from '../Stores/useDataStore'
 import { useEditorBuffer } from './useEditorBuffer'
 
 import { useRefactorStore } from '../Stores/useRefactorStore'
+import { useDataStore } from '@workduck-io/mex-editor'
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
-    const index = refactored.map((r) => r.from).indexOf(id)
-    if (index === -1) return false
-    else return refactored[index]
+  const index = refactored.map((r) => r.from).indexOf(id)
+  if (index === -1) return false
+  else return refactored[index]
 }
 
-
 export const useRefactor = () => {
-    /*  Notes:
+  /*  Notes:
     We need to refactor all ilinks that match with the given regex and replace the initial regex with the refactorId
   
     Then we need to remap the contents to the new IDs.
@@ -28,110 +27,110 @@ export const useRefactor = () => {
     execRefactor will apply the refactor action.
     */
 
-    const setILinks = useDataStore((state) => state.setIlinks)
-    const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
-    const { saveAndClearBuffer } = useEditorBuffer()
+  const setILinks = useDataStore((state) => state.setIlinks)
+  const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
+  const { saveAndClearBuffer } = useEditorBuffer()
 
-    /*
-     * Returns a mock array of refactored paths
-     * Also refactors children
-     * from: the current path
-     * to: the new changed path
-     */
-    const getMockRefactor = (from: string, to: string, clearBuffer = true): NodeLink[] => {
-        if (clearBuffer) saveAndClearBuffer()
-        const ilinks = useDataStore.getState().ilinks
+  /*
+   * Returns a mock array of refactored paths
+   * Also refactors children
+   * from: the current path
+   * to: the new changed path
+   */
+  const getMockRefactor = (from: string, to: string, clearBuffer = true): NodeLink[] => {
+    if (clearBuffer) saveAndClearBuffer()
+    const ilinks = useDataStore.getState().ilinks
 
-        const refactorMap = ilinks.filter((i) => {
-            const match = isMatch(i.path, from)
-            return match
-        })
+    const refactorMap = ilinks.filter((i) => {
+      const match = isMatch(i.path, from)
+      return match
+    })
 
-        const allPaths = ilinks.map((link) => link.path)
+    const allPaths = ilinks.map((link) => link.path)
 
-        const refactored = refactorMap.map((f) => {
-            const uniquePath = getUniquePath(to, allPaths, true)
+    const refactored = refactorMap.map((f) => {
+      const uniquePath = getUniquePath(to, allPaths, true)
 
-            if (uniquePath)
-                return {
-                    from: f.path,
-                    to: uniquePath?.unique
-                }
-
-            return {
-                from: f.path,
-                to: f.path
-            }
-        })
-
-        mog('MOCK REFACTOR', { ilinks, from, to, refactorMap, refactored })
-        return refactored
-    }
-
-    const execRefactor = (from: string, to: string, clearBuffer = true) => {
-        const refactored = getMockRefactor(from, to, clearBuffer)
-
-        mog('execRefactor', { from, to, refactored })
-
-        // Generate the new links
-        const ilinks = useDataStore.getState().ilinks
-
-        const newIlinks = ilinks.map((i) => {
-            for (const ref of refactored) {
-                if (ref.from === i.path) {
-                    return {
-                        ...i,
-                        path: ref.to,
-                        icon: getNodeIcon(ref.to)
-                    }
-                }
-            }
-            return i
-        })
-
-        const isInNewlinks = (l: string) => {
-            const ft = newIlinks.filter((i) => i.path === l)
-            return ft.length > 0
+      if (uniquePath)
+        return {
+          from: f.path,
+          to: uniquePath?.unique
         }
 
-        const newParents = refactored
-            .map((r) => getAllParentIds(r.to))
-            .flat()
-            .filter((x) => !isInNewlinks(x))
+      return {
+        from: f.path,
+        to: f.path
+      }
+    })
 
-        const newParentIlinks = newParents.map((p) => ({
-            path: p,
-            nodeid: generateNodeUID(),
-            icon: getNodeIcon(p)
-        }))
+    mog('MOCK REFACTOR', { ilinks, from, to, refactorMap, refactored })
+    return refactored
+  }
 
-        setILinks([...newIlinks, ...newParentIlinks])
+  const execRefactor = (from: string, to: string, clearBuffer = true) => {
+    const refactored = getMockRefactor(from, to, clearBuffer)
 
-        const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
-        if (baseId !== false) {
-            setBaseNodeId(baseId.to)
+    mog('execRefactor', { from, to, refactored })
+
+    // Generate the new links
+    const ilinks = useDataStore.getState().ilinks
+
+    const newIlinks = ilinks.map((i) => {
+      for (const ref of refactored) {
+        if (ref.from === i.path) {
+          return {
+            ...i,
+            path: ref.to,
+            icon: getNodeIcon(ref.to)
+          }
         }
+      }
+      return i
+    })
 
-        return refactored
+    const isInNewlinks = (l: string) => {
+      const ft = newIlinks.filter((i) => i.path === l)
+      return ft.length > 0
     }
 
-    return { getMockRefactor, execRefactor }
+    const newParents = refactored
+      .map((r) => getAllParentIds(r.to))
+      .flat()
+      .filter((x) => !isInNewlinks(x))
+
+    const newParentIlinks = newParents.map((p) => ({
+      path: p,
+      nodeid: generateNodeUID(),
+      icon: getNodeIcon(p)
+    }))
+
+    setILinks([...newIlinks, ...newParentIlinks])
+
+    const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
+    if (baseId !== false) {
+      setBaseNodeId(baseId.to)
+    }
+
+    return refactored
+  }
+
+  return { getMockRefactor, execRefactor }
 }
 
 // Used to wrap a class component to provide hooks
 export const withRefactor = (Component: any) => {
-    return function C2(props: any) {
-        const { getMockRefactor, execRefactor } = useRefactor()
+  return function C2(props: any) {
+    const { getMockRefactor, execRefactor } = useRefactor()
 
-        const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
+    const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
 
-        return (
-            <Component
-                getMockRefactor={getMockRefactor}
-                execRefactor={execRefactor}
-                prefillRefactorModal={prefillRefactorModal}
-                {...props}
-            />
-        )
-    }
+    return (
+      <Component
+        getMockRefactor={getMockRefactor}
+        execRefactor={execRefactor}
+        prefillRefactorModal={prefillRefactorModal}
+        {...props}
+      />
+    )
+  }
 }

@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form'
 import Editor from './Editor'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 import { Input } from '../../Style/Form'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useSnippets } from '../../Hooks/useSnippets'
 import magicLine from '@iconify/icons-ri/magic-line'
 import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
@@ -17,6 +16,7 @@ import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBu
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
 import { useApi } from '../../Hooks/useApi'
+import { useSnippetStore } from '@workduck-io/mex-editor'
 
 type Inputs = {
   title: string

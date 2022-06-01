@@ -19,4 +19,4 @@ const IDBStorage = {
   }
 }
 
-export default IDBStorage
+export { IDBStorage }

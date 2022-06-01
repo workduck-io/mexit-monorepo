@@ -1,9 +1,7 @@
 import { TreeItem, TreeData } from '@atlaskit/tree'
 import { Contents, mog, NodeMetadata } from '@mexit/core'
 import { isElder, isParent, getParentId, getNameFromPath, TreeNode } from '@mexit/shared'
-import useContentStore from '../Stores/useContentStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import useTodoStore from '../Stores/useTodoStore'
+import { useContentStore, useReminderStore, useTodoStore } from '@workduck-io/mex-editor'
 import { filterIncompleteTodos } from './filter'
 
 export const sortTree = (tree: TreeNode[], contents: Contents): TreeNode[] => {

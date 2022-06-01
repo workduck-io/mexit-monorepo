@@ -4,11 +4,11 @@ import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 import { Note } from '@mexit/shared'
 
 import { BacklinksHelp } from '../../Data/defaultText'
-import { useLinks } from '../../Hooks/useLinks'
 import NodeLink from '../Editor/NodeLink'
 import Collapse from '../../Layout/Collapse'
 
 import { InfoWidgetWrapper } from '../../Style/Infobar'
+import { useLinks } from '@workduck-io/mex-editor'
 
 interface BackLinkProps {
   nodeid: string

@@ -9,14 +9,12 @@ import {
   NodeLink,
   TodoStatus
 } from '@mexit/core'
-
-import useContentStore from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import useTodoStore from '../Stores/useTodoStore'
-
+import { useContentStore } from '@workduck-io/mex-editor'
+import { useReminderStore } from '../store/useReminderStore'
+import { useSnippetStore } from '../store/useSnippetStore'
 import { useNodes } from './useNodes'
+import { useDataStore } from '../store/useDataStore'
+import { useTodoStore } from '../store/useTodoStore'
 
 export const useLinks = () => {
   const contents = useContentStore((state) => state.contents)
