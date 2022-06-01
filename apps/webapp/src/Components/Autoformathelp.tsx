@@ -28,13 +28,13 @@ const AutoFormatWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.spacing.small};
-    border-radius: ${(props) => props.theme.borderRadius.small};
-    padding: ${(props) => props.theme.spacing.small};
-    background-color: ${(props) => props.theme.colors.gray[8]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    padding: ${({ theme }) => theme.spacing.small};
+    background-color: ${({ theme }) => theme.colors.gray[8]};
     min-width: 220px;
     ${Title} {
       font-size: 1rem;
-      color: ${(props) => props.theme.colors.text.fade};
+      color: ${({ theme }) => theme.colors.text.fade};
       margin: 0;
     }
     p {

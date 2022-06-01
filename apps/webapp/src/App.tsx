@@ -30,9 +30,9 @@ function App() {
     <Router>
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
         <Main>
-          <GlobalStyle />
           <Modals />
           <Switch />
+          <GlobalStyle />
           <FloatingButton />
           <Notification />
         </Main>

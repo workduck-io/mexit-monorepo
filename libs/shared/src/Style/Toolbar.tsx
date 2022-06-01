@@ -66,7 +66,41 @@ export const TippyBalloonStyles = css`
   }
 
   ${({ theme }) => getTippyStyles('mex', theme.colors.text.fade, theme.colors.gray[8])}
+  ${({ theme }) => getTippyStyles('mex-error', theme.colors.text.fade, theme.colors.palette.red)}
   ${({ theme }) => getTippyStyles('mex-bright', theme.colors.text.oppositePrimary, theme.colors.primary)}
+
+  .tippy-box[data-theme~='markdown-help'] {
+    background: ${({ theme }) => transparentize(0.4, theme.colors.gray[8])};
+    color: ${({ theme }) => theme.colors.text.default};
+    box-shadow: 0 0 8px 2px ${({ theme }) => theme.colors.gray[10]};
+    backdrop-filter: blur(10px);
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    max-width: 600px !important;
+
+    &[data-placement^='top'] > .tippy-arrow::before {
+      border-top-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+
+    &[data-placement^='bottom'] > .tippy-arrow::before {
+      border-bottom-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+
+    &[data-placement^='left'] > .tippy-arrow::before {
+      border-left-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+
+    &[data-placement^='right'] > .tippy-arrow::before {
+      border-right-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+
+    & > .tippy-backdrop {
+      background: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+
+    & > .tippy-svg-arrow {
+      fill: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
+    }
+  }
 
   .tippy-box[data-theme~='help-text'] {
     background: ${({ theme }) => transparentize(0.4, theme.colors.gray[8])};
