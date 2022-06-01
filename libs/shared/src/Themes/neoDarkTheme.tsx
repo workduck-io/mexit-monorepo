@@ -39,5 +39,6 @@ export const neoDark = generateTheme({
     accent: '#CC7796',
     oppositePrimary: '#ffffff'
   },
-  hasBlocks: true
+  hasBlocks: true,
+  custom: 'NeoDarkStyles'
 })

@@ -81,6 +81,16 @@ export const SearchFilterList = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
 `
 
+export const SearchFilterListWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: ${({ theme }) => theme.spacing.small};
+  margin-right: ${({ theme }) => theme.spacing.medium};
+  max-width: 70vw;
+  overflow-x: auto;
+`
+
 export const SearchFilterCancel = styled.div`
   cursor: pointer;
   display: flex;

@@ -1,10 +1,10 @@
-import { normalize } from '@mexit/shared'
 import { createGlobalStyle, css } from 'styled-components'
 
-import { ThinScrollbar } from './Helpers'
-import { EditorBalloonStyles, TippyBalloonStyles } from '@mexit/shared'
+import { EditorBalloonStyles, TippyBalloonStyles, normalize } from '@mexit/shared'
 
+import { ThinScrollbar } from './Helpers'
 import { ModalStyles } from './Refactor'
+import { customStyles } from '../Themes/customStyles'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization
@@ -84,6 +84,8 @@ const GlobalStyle = createGlobalStyle`
   button {
     border: none;
   }
+
+  ${({ theme }) => theme.custom && customStyles[theme.custom]}
 `
 
 export default GlobalStyle
