@@ -53,3 +53,19 @@ export interface SingleComboboxConfig {
   newItemHandler: (newItem: string, parentId?: any) => any // eslint-disable-line @typescript-eslint/no-explicit-any
   renderElement: RenderFunction<ComboboxItemProps>
 }
+
+export interface ComboOnKeyDownConfig {
+  keys: ConfigDataKeys
+  slashCommands: ConfigDataSlashCommands
+  internal: {
+    ilink: SingleComboboxConfig
+    commands: ConfigDataSlashCommands
+  }
+}
+
+export type ComboOnChangeConfig = Record<string, ComboboxType>
+
+export interface ComboboxConfig {
+  onKeyDownConfig: ComboOnKeyDownConfig
+  onChangeConfig: ComboOnChangeConfig
+}

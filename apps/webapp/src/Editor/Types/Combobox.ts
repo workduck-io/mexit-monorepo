@@ -2,18 +2,19 @@ import { QuickLinkType } from '@mexit/core'
 import { PlateEditor } from '@udecode/plate'
 
 import { CustomElements } from '../constants'
+import { ComboboxItem } from './MultiCombobox'
 
 export interface ComboboxKeyDownConfig {
   keys: Record<CustomElements, ComboboxItemType>
   slashCommands: Record<string, SlashCommandConfig>
   portalElement?: Element
 }
-
 export interface ComboboxItemOnChangeConfig {
   cbKey: ComboboxKey
-  trigger: string
-  data: Array<any>
   icon?: string
+  trigger: string
+  data?: ComboboxItem[]
+  blockTrigger?: string
 }
 
 export interface SlashCommandConfig {
@@ -98,13 +99,6 @@ export interface ComboboxItemType {
   slateElementType: string
   newItemHandler: (item: string, parentId?: string) => void
   itemRenderer?: RenderFunction<ComboboxItemProps>
-}
-
-export type ComboboxOnChangeConfig = Record<CustomElements, ComboboxItemOnChangeConfig>
-
-export interface ComboboxConfig {
-  onKeyDownConfig: ComboboxKeyDownConfig
-  onChangeConfig: ComboboxOnChangeConfig
 }
 
 export interface ComboboxProps {

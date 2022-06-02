@@ -14,6 +14,7 @@ import { useElementOnChange as getElementOnChange } from '../Components/MultiCom
 import { ELEMENT_INLINE_BLOCK } from '../elements'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
+import { useMexEditorStore } from './useMexEditorStore'
 
 // import { mog } from '../../../../utils/lib/helper'
 // import { useEditorStore } from '../../../../store/useEditorStore'
@@ -55,7 +56,7 @@ export type OnNewItem = (name: string, parentId?) => string | undefined
 export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnNewItem, creatable?: boolean) => {
   const creatableOnSelect = (editor: any, selectVal: IComboboxItem | string, elementType?: string) => {
     const items = useComboboxStore.getState().items
-    const currentNodeKey = useEditorStore.getState().node.path
+    const currentNodeKey = useMexEditorStore.getState().internalMetadata.path
     const itemIndex = useComboboxStore.getState().itemIndex
 
     mog('getCreatableInSelect', { items, selectVal, creatable, itemIndex })
