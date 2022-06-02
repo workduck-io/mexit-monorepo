@@ -1,10 +1,13 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useCallback } from 'react'
 import { MentionNodeData } from '@udecode/plate'
 import { TEditor } from '@udecode/plate-core'
 import shallow from 'zustand/shallow'
-import { useComboboxOnChange } from './useComboOnChange'
-import { ComboboxKey, useComboboxStore } from '../store/useComboboxStore'
-import { IComboboxItem } from '../components/ComboBox/types'
+
+import { ComboboxKey, IComboboxItem } from '../Editor/Types/Combobox'
+import { useComboboxStore } from '../Stores/useComboboxStore'
+import { useComboboxOnChange } from '../Editor/Hooks/useComboOnChange'
 
 export const useTagOnChange = (editor: TEditor, data: MentionNodeData[]) => {
   const comboboxOnChange = useComboboxOnChange({

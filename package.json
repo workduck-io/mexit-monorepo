@@ -14,9 +14,10 @@
     ]
   },
   "dependencies": {
-    "@udecode/plate": "10.2.2",
+    "@udecode/plate": "10.2.4",
     "color-scheme": "^1.0.1",
     "fast-equals": "^2.0.4",
+    "chrono-node": "^2.3.8",
     "ramda": "^0.28.0",
     "fuse.js": "^6.5.3",
     "@uifabric/styling": "^7.20.0"

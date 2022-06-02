@@ -3195,10 +3195,10 @@
     use-deep-compare "1.1.0"
     zustand "3.7.0"
 
-"@udecode/plate-find-replace@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-10.2.2.tgz#a0aee79a81598b9c74d11b16966aa67c91837a83"
-  integrity sha512-pWRfP22EWf3jhfST/ty3kXpqTPll2d+/wB+HKNSVoyuXTZFnV7Ga1uK5ctpip90WpTMlrtCrYkhdb4L+EYTQDA==
+"@udecode/plate-find-replace@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-10.2.4.tgz#c8c709a857dd911f9bc0c816e1119de168ae7ba6"
+  integrity sha512-kmGP7d+uEIQ0dlToVb1imh4rz+sSW+PSCJrjuy38ZuAjJZBxwfcWelleeFxZqzvSaiUzMRvBss3WK/nb+7ijYQ==
   dependencies:
     "@udecode/plate-core" "10.2.2"
 
@@ -3216,10 +3216,10 @@
   dependencies:
     "@udecode/plate-core" "10.2.2"
 
-"@udecode/plate-headless@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-10.2.2.tgz#2b41467521ffdd5727dc8d180c1643ac075ec2e9"
-  integrity sha512-R5AsyZ4rkMfd9XfrE8IocSWF6JeKWx41rtwcD2usVwUA843oev2I1HCJ+Ub4gcuWMRvSScKyQvaAzPcVBSntfA==
+"@udecode/plate-headless@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-10.2.4.tgz#86c121d6700030d31a92f6ab6867ce9963275abf"
+  integrity sha512-+vlbUmpDzFl1pyXWbHVyf/9LtcN9SSmkwE4bwZvGOohedZDbH9l9esqKHKnm6js8JhaCLmsQpx2QFJbaD673kg==
   dependencies:
     "@udecode/plate-alignment" "10.2.2"
     "@udecode/plate-autoformat" "10.2.2"
@@ -3230,7 +3230,7 @@
     "@udecode/plate-code-block" "10.2.2"
     "@udecode/plate-combobox" "10.2.2"
     "@udecode/plate-core" "10.2.2"
-    "@udecode/plate-find-replace" "10.2.2"
+    "@udecode/plate-find-replace" "10.2.4"
     "@udecode/plate-font" "10.2.2"
     "@udecode/plate-heading" "10.2.2"
     "@udecode/plate-highlight" "10.2.2"
@@ -3501,13 +3501,13 @@
     react-dnd "^14.0.2"
     react-dnd-html5-backend "^14.0.0"
 
-"@udecode/plate-ui-find-replace@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-10.2.2.tgz#d6ba4253d198257f1a186f13a39e01994fea3deb"
-  integrity sha512-N5+/tR4TPV052NhKDSCuQ5QyaHHtR9KTvdb7jT9qmWo6iaonj5pdJs8purZeF8bmplGp2uO/jCX/QB+uG/uppQ==
+"@udecode/plate-ui-find-replace@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-10.2.4.tgz#b1f3c76ad9ccce5be1376ea3cf7d981faf21034a"
+  integrity sha512-vsOAtzyi6F0eA7ICWXDgCxfwBKiEe5mpzAQLCMaOXIt2D6spkP7pVj1eJjIASAvGe3vptfQLZdCz+OhIk+FGKw==
   dependencies:
     "@udecode/plate-core" "10.2.2"
-    "@udecode/plate-find-replace" "10.2.2"
+    "@udecode/plate-find-replace" "10.2.4"
     "@udecode/plate-styled-components" "10.2.2"
     "@udecode/plate-ui-toolbar" "10.2.2"
 
@@ -3637,12 +3637,12 @@
     react-popper "^2.2.4"
     react-use "^17.1.1"
 
-"@udecode/plate-ui@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.2.2.tgz#91a21aee881ad5729a19777e719b1d961fcd2b27"
-  integrity sha512-9W3r2tIa+FABvoZyWuak7zqypLw0cX/N0gAaL9jPeEQ8AwEzDmmYj119CdhPj8bG4eNJ1DF9wGML+P+xE2DznA==
+"@udecode/plate-ui@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.2.4.tgz#fcc5a9a6b4d6c1f70864dde84921fe47ec1975b9"
+  integrity sha512-DU5LnnDKOgEABZiGpKYLXOnAZOluvCp5tTJrarPRnSHO0NRy2/h2mTRcGyoFuOG1+u0fG7rfc1i41wVwHex/6g==
   dependencies:
-    "@udecode/plate-headless" "10.2.2"
+    "@udecode/plate-headless" "10.2.4"
     "@udecode/plate-styled-components" "10.2.2"
     "@udecode/plate-ui-alignment" "10.2.2"
     "@udecode/plate-ui-block-quote" "10.2.2"
@@ -3650,7 +3650,7 @@
     "@udecode/plate-ui-code-block" "10.2.2"
     "@udecode/plate-ui-combobox" "10.2.2"
     "@udecode/plate-ui-dnd" "10.2.2"
-    "@udecode/plate-ui-find-replace" "10.2.2"
+    "@udecode/plate-ui-find-replace" "10.2.4"
     "@udecode/plate-ui-font" "10.2.2"
     "@udecode/plate-ui-image" "10.2.2"
     "@udecode/plate-ui-line-height" "10.2.2"
@@ -3664,13 +3664,13 @@
     "@udecode/plate-ui-table" "10.2.2"
     "@udecode/plate-ui-toolbar" "10.2.2"
 
-"@udecode/plate@10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-10.2.2.tgz#33d2a08eb0db516f15f2383e024b34421b402962"
-  integrity sha512-3THm6y/Mz5LpZLLL6A7uoB72pDhk6IN6I6tWvKgt32ZYLxFhzl6u9lDqVYOrMfrNcofZZ92JvjiurBCpH0cxfA==
+"@udecode/plate@10.2.4":
+  version "10.2.4"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-10.2.4.tgz#1d04940b5694173099fa0c2f207eada5199ca24b"
+  integrity sha512-cp6NDRt18JXG+BDPL1D0075xDTBu6G7/KJ7juW4Hkp3/93ahW5CHmuz7gZs6EgDoYsR39l6McxoCoir2yP+FtA==
   dependencies:
-    "@udecode/plate-headless" "10.2.2"
-    "@udecode/plate-ui" "10.2.2"
+    "@udecode/plate-headless" "10.2.4"
+    "@udecode/plate-ui" "10.2.4"
 
 "@udecode/zustood@0.4.4":
   version "0.4.4"
@@ -4809,6 +4809,13 @@ chrome-trace-event@^1.0.2:
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
 
+chrono-node@^2.3.8:
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/chrono-node/-/chrono-node-2.3.8.tgz#c53ab3a9fd55ec1f78623582570de07da2e23c6f"
+  integrity sha512-cOCUKFHkGKJ//2VK0Vjwd8qh/tDJNraZHYb4DNB48mRUyfL7ag9lCDXgos30fPmV1pha4sP4qHLYItKNS0YpRw==
+  dependencies:
+    dayjs "^1.10.0"
+
 ci-info@^3.2.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.3.1.tgz#58331f6f472a25fe3a50a351ae3052936c2c7f32"
@@ -5411,6 +5418,11 @@ date-fns@^2.28.0:
   version "2.28.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.28.0.tgz#9570d656f5fc13143e50c975a3b6bbeb46cd08b2"
   integrity sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==
+
+dayjs@^1.10.0:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.2.tgz#fa0f5223ef0d6724b3d8327134890cfe3d72fbe5"
+  integrity sha512-F4LXf1OeU9hrSYRPTTj/6FbO4HTjPKXvEIC1P2kcnFurViINCVk3ZV0xAS3XVx9MkMsXbbqlK6hjseaYbgKEHw==
 
 dayjs@^1.10.8:
   version "1.11.2"
