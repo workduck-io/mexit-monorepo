@@ -27,7 +27,7 @@ const InputShortcut = () => {
   return (
     <CenterSpace>
       <Heading>Enter new shortcut for {currentShortcut.title} </Heading>
-      <InputBlock center autoFocus value={value} />
+      <InputBlock center autoFocus defaultValue={value} />
       <br />
       <Description>
         Press <strong>Esc</strong> to reset or hit <strong>Enter</strong> to save

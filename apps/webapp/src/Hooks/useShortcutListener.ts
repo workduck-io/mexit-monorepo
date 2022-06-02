@@ -24,13 +24,13 @@ export const getKey = (name: string, alias?: string): Key => {
 
 const useShortcutListener = (): ShortcutListner => {
   const shortcut = useShortcutStore((state) => state.keybinding)
-  // const setEditMode = useShortcutStore((state) => state.setEditMode)
+  const setEditMode = useShortcutStore((state) => state.setEditMode)
   const setWithModifier = useShortcutStore((state) => state.setWithModifier)
   const addInKeystrokes = useShortcutStore((state) => state.addInKeystrokes)
   const changeShortcut = useHelpStore((state) => state.changeShortcut)
   const currentShortcut = useShortcutStore((state) => state.currentShortcut)
 
-  const { trackEvent } = useAnalytics()
+  // const { trackEvent } = useAnalytics()
 
   const MOD = usePlatformInfo()
 
@@ -62,11 +62,11 @@ const useShortcutListener = (): ShortcutListner => {
             ...currentShortcut,
             keystrokes: shortcut.key.trim()
           })
-          trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.CHANGE, 'Shortcut'), {
-            from: currentShortcut.keystrokes,
-            to: shortcut.key.trim()
-          })
-          // setEditMode(false)
+          // trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.CHANGE, 'Shortcut'), {
+          //   from: currentShortcut.keystrokes,
+          //   to: shortcut.key.trim()
+          // })
+          setEditMode(false)
         }
         return
       }
@@ -79,6 +79,7 @@ const useShortcutListener = (): ShortcutListner => {
         modifiers: getKeyModifiers(event)
       }
 
+      mog('key', { key })
       addInKeystrokes(key)
     },
     [currentShortcut, shortcut]
