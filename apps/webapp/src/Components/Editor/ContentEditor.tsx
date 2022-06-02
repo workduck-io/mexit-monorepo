@@ -21,6 +21,7 @@ import Toolbar from './Toolbar'
 import Metadata from '../EditorInfobar/Metadata'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import { useEditorStore } from '@workduck-io/mex-editor'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
@@ -38,19 +39,23 @@ const ContentEditor = () => {
   )
 
   const shortcuts = useHelpStore((store) => store.shortcuts)
+  const { shortcutHandler } = useKeyListener()
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.toggleFocusMode.keystrokes]: (event) => {
         event.preventDefault()
-        toggleFocusMode()
+        shortcutHandler(shortcuts.toggleFocusMode, () => {
+          toggleFocusMode()
+        })
       },
       [shortcuts.refreshNode.keystrokes]: (event) => {
         event.preventDefault()
-
-        const node = useEditorStore.getState().node
-        const val = getBufferVal(node.nodeid)
-        saveApiAndUpdate(node, val)
+        shortcutHandler(shortcuts.refreshNode, () => {
+          const node = useEditorStore.getState().node
+          const val = getBufferVal(node.nodeid)
+          saveApiAndUpdate(node, val)
+        })
       }
     })
     return () => {

@@ -75,7 +75,7 @@ const Delete = () => {
   const mockRefactored = useDeleteStore((store) => store.mockRefactored)
 
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { shortcutHandler } = useKeyListener()
+  const { shortcutDisabled, shortcutHandler } = useKeyListener()
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
@@ -91,9 +91,7 @@ const Delete = () => {
     return () => {
       unsubscribe()
     }
-  }, [shortcuts, location.pathname])
-
-  // console.log({ to, from, open });
+  }, [shortcuts, shortcutDisabled, location.pathname])
 
   const handleDeleteChange = (quickLink: QuickLink) => {
     const newValue = quickLink.value

@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
 
-import { mog, isReserved, NodeLink } from '@mexit/core'
+import { isReserved } from '@mexit/core'
 import { Button } from '@mexit/shared'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
@@ -14,6 +14,7 @@ import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { doesLinkRemain } from './doesLinkRemain'
 import { useEditorStore, useLinks } from '@workduck-io/mex-editor'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
@@ -29,20 +30,23 @@ const Refactor = () => {
   const setFrom = useRefactorStore((store) => store.setFrom)
 
   const { push } = useNavigation()
+
   const shortcuts = useHelpStore((store) => store.shortcuts)
+  const { shortcutDisabled, shortcutHandler } = useKeyListener()
 
   useEffect(() => {
-    // console.log('Setting up a keyboard shortcut: ', shortcuts.showRefactor.keystrokes)
     const unsubscribe = tinykeys(window, {
       [shortcuts.showRefactor.keystrokes]: (event) => {
         event.preventDefault()
-        openModal()
+        shortcutHandler(shortcuts.showRefactor, () => {
+          openModal()
+        })
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [])
+  }, [shortcuts, shortcutDisabled])
 
   const handleFromChange = (quickLink: QuickLink) => {
     const newValue = quickLink.value

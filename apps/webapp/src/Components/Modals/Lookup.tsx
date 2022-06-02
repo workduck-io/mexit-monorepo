@@ -9,10 +9,11 @@ import { Input } from '../../Style/Form'
 import { useApi } from '../../Hooks/useApi'
 
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useNodes } from '../../../../../libs/mex-editor/src/lib/hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useDataStore, useEditorStore } from '@workduck-io/mex-editor'
 
 const StyledModal = styled(Modal)`
@@ -56,20 +57,22 @@ const Lookup = () => {
     setOpen(false)
   }
 
-  const LOOKUP_SHORTCUT = '$mod+L'
+  const shortcuts = useHelpStore((store) => store.shortcuts)
+  const { shortcutDisabled, shortcutHandler } = useKeyListener()
 
   useEffect(() => {
-    // console.log('Setting up a keyboard shortcut: ', LOOKUP_SHORTCUT)
     const unsubscribe = tinykeys(window, {
-      [LOOKUP_SHORTCUT]: (event) => {
+      [shortcuts.showLookup.keystrokes]: (event) => {
         event.preventDefault()
-        openModal()
+        shortcutHandler(shortcuts.showLookup, () => {
+          openModal()
+        })
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [])
+  }, [shortcuts, shortcutDisabled])
 
   const { push } = useNavigation()
 

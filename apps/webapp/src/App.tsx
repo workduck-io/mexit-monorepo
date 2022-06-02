@@ -11,6 +11,7 @@ import Modals from './Components/Modals'
 import { Notification } from '@mexit/shared'
 import Main from './Components/Main'
 import config from './config'
+import FloatingButton from './Components/FloatingButton'
 
 import './Stores'
 
@@ -29,9 +30,10 @@ function App() {
     <Router>
       <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
         <Main>
-          <GlobalStyle />
           <Modals />
           <Switch />
+          <GlobalStyle />
+          <FloatingButton />
           <Notification />
         </Main>
       </ThemeProvider>

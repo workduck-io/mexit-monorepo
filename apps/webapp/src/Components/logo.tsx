@@ -90,7 +90,7 @@ export const SidebarToggle = () => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.toggleSidebar.keystrokes]: (event) => {
         event.preventDefault()
-        shortcutHandler(shortcuts.showSnippets, () => {
+        shortcutHandler(shortcuts.toggleSidebar, () => {
           toggleSidebar()
         })
       }
