@@ -4,16 +4,17 @@ export enum CustomElements {
   SLASH_COMMAND = 'slash_command'
 }
 
+export enum CategoryType {
+  backlink = 'Backlinks',
+  action = 'Quick Actions',
+  search = 'Search Results',
+  task = 'Task'
+}
+
 export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   tags = 'Tags'
-}
-
-export enum CategoryType {
-  backlink = 'Backlinks',
-  search = 'Search Results',
-  task = 'Task'
 }
 
 export enum SlashType {

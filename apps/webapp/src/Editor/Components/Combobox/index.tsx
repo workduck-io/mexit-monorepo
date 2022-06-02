@@ -18,7 +18,8 @@ import { Icon } from '@iconify/react'
 // import { useComboboxIsOpen } from '../selectors/useComboboxIsOpen'
 // import { useComboboxStore } from '../useComboboxStore'
 import useMergedRef from '@react-hook/merged-ref'
-import { QuickLinkType } from '../../constants'
+import { MexIcon } from '@mexit/shared'
+import { CategoryType, QuickLinkType } from '../../constants'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
@@ -26,7 +27,21 @@ import { useContentStore } from '../../../Stores/useContentStore'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { setElementPositionByRange } from '../../Utils/setElementPositionByRange'
 import { ComboboxProps } from '../../Types/Combobox'
-import { ComboboxRoot } from '../../Styles/Combobox'
+import {
+  ActionTitle,
+  ComboboxItem,
+  ComboboxRoot,
+  ComboboxShortcuts,
+  ItemCenterWrapper,
+  ItemDesc,
+  ItemRightIcons,
+  ItemTitle,
+  ShortcutText
+} from '../../Styles/Combobox'
+import { Shortcut } from '../../../Stores/useHelpStore'
+import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
+import { DisplayShortcut } from '../../../Components/Shortcuts'
+import EditorPreviewRenderer from '../../../Components/EditorPreviewRenderer'
 // import EditorPreviewRenderer from '../../../EditorPreviewRenderer'
 // import { QuickLinkType } from '../../../../components/mex/NodeSelect/NodeSelect'
 // import { useContentStore } from '../../../../store/useContentStore'
@@ -43,6 +58,54 @@ import { ComboboxRoot } from '../../Styles/Combobox'
 // import PreviewMeta from './PreviewMeta'
 // import { mog } from '../../../../utils/lib/helper'
 // import { MexIcon } from '../../../../style/Layouts'
+
+export const spotlightShortcuts = {
+  save: {
+    title: 'Save changes',
+    keystrokes: '$mod+Enter',
+    category: 'Action'
+  },
+  open: {
+    title: 'Open item',
+    keystrokes: 'Enter',
+    category: 'Action'
+  },
+  escape: {
+    title: 'Save and Escape',
+    keystrokes: 'Escape',
+    category: 'Navigation'
+  },
+  Tab: {
+    title: 'Create new quick note',
+    keystrokes: 'Tab',
+    category: 'Action'
+  }
+}
+
+export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> = {
+  [QuickLinkType.backlink]: {
+    link: {
+      ...spotlightShortcuts.open,
+      title: 'to Link'
+    },
+    inlineBlock: {
+      ...spotlightShortcuts.Tab,
+      title: 'to Embed'
+    }
+  },
+  [QuickLinkType.snippet]: {
+    snippet: {
+      ...spotlightShortcuts.open,
+      title: 'to Insert'
+    }
+  },
+  [CategoryType.action]: {
+    action: {
+      ...spotlightShortcuts.open,
+      title: 'to Insert'
+    }
+  }
+}
 
 export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }: ComboboxProps) => {
   // TODO clear the error-esque warnings for 'type inference'
