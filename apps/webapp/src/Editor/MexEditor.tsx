@@ -58,7 +58,7 @@ export const MexEditor = (props: MexEditorProps) => {
     setInternalMetadata(props.meta)
   }, [editorRef, props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig)
+  const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig, props?.components)
 
   const onChange = (value: MexEditorValue) => {
     setContent(value)
@@ -76,8 +76,10 @@ export const MexEditor = (props: MexEditorProps) => {
         plugins={plugins}
         onChange={onChange}
       >
-        {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
-        <MultiComboboxContainer config={comboConfigData} />
+        <>
+          {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
+          <MultiComboboxContainer config={comboConfigData} />
+        </>
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
     </>

@@ -23,6 +23,7 @@ import { SlashComboboxItem } from '../../Editor/Components/SlashCommands/SlashCo
 import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
 import { QuickLinkElement } from '../../Editor/Components/QuickLink/QuickLinkElement'
 import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
+import components from '../../Editor/Components/EditorPreviewComponents'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -174,6 +175,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       edge: 'start',
       focus: true
     },
+    withDraggable: false,
     withBalloonToolbar: true
   }
 
@@ -191,16 +193,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     <EditorWrapper>
       <MexEditor
         comboboxConfig={comboboxConfig}
-        components={{
-          [ELEMENT_ILINK]: QuickLinkElement,
-          [ELEMENT_TAG]: TagWrapper,
-          [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
-          [ELEMENT_TABLE]: TableWrapper,
-          [ELEMENT_TODO_LI]: Todo,
-          [ELEMENT_LINK]: withProps(LinkElement, {
-            as: 'a'
-          })
-        }}
+        components={components}
         meta={{
           path: nodePath
         }}

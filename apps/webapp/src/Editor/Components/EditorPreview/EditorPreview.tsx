@@ -19,6 +19,8 @@ import { getNameFromPath } from '@mexit/shared'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useContentStore } from '../../../Stores/useContentStore'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
+import { generatePlugins } from '../../Plugins'
+import { editorPreviewComponents } from '../EditorPreviewComponents'
 
 export interface EditorPreviewProps {
   nodeid: string

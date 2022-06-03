@@ -33,6 +33,7 @@ import { DisplayShortcut } from '../../../Components/Shortcuts'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import BlockCombo from './BlockCombo'
+import PreviewMeta from './PreviewMeta'
 
 export const spotlightShortcuts = {
   save: {
@@ -273,7 +274,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
               nodeId={items[itemIndex]?.key}
               isNew={items[itemIndex]?.data}
             />
-            {/* {((preview && listItem?.type && !isBlockTriggered) ||
+            {((preview && listItem?.type && !isBlockTriggered) ||
               (isBlockTriggered && textAfterBlockTrigger && preview)) && (
               <ComboSeperator>
                 <section>
@@ -285,7 +286,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                 </section>
                 {preview && <PreviewMeta meta={metaData} />}
               </ComboSeperator>
-            )} */}
+            )}
           </>
         )}
       </ComboboxRoot>

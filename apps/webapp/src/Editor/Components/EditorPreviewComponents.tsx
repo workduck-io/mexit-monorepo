@@ -12,13 +12,13 @@ import {
 import { StyledElement } from '@udecode/plate-styled-components'
 
 import Todo from '../../Components/Todo'
-import TagElement from './Tags/TagElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG } from '../elements'
 import InlineBlock from './InlineBlock'
+import TagWrapper from '../../Components/Editor/TagWrapper'
 
-export const editorPreviewComponents = createPlateUI({
+export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
     as: 'a'
   }),
@@ -30,16 +30,15 @@ export const editorPreviewComponents = createPlateUI({
     }
   }),
   [ELEMENT_TODO_LI]: Todo as any,
-  [ELEMENT_TAG]: TagElement as any,
+  [ELEMENT_TAG]: TagWrapper as any,
   [ELEMENT_ILINK]: QuickLinkElement as any,
-  [ELEMENT_INLINE_BLOCK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,
   [ELEMENT_TABLE]: TableWrapper
-})
+}
 
-const components = createPlateUI({
+const components = {
   ...editorPreviewComponents,
   [ELEMENT_INLINE_BLOCK]: InlineBlock as any
-})
+}
 
 export default components

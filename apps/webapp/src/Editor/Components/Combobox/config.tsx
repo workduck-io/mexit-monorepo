@@ -22,7 +22,7 @@ export const useComboboxConfig = (
 
   const { show } = useContextMenu({ id: MENU_ID })
 
-  const prePlugins = useMemoizedPlugins(components)
+  const prePlugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
   const plugins = [
     ...prePlugins,
     {
