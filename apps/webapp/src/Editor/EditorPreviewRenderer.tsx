@@ -22,6 +22,7 @@ import { ComboboxKey } from './Types/Combobox'
 import { ComboConfigData, ComboboxConfig } from './Types/MultiCombobox'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { Plate, PlatePlugin } from '@udecode/plate'
+import useMemoizedPlugins from './Plugins'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -52,8 +53,7 @@ const EditorPreviewRenderer = ({
   blockId,
   noStyle,
   noMouseEvents,
-  onDoubleClick,
-  plugins
+  onDoubleClick
 }: EditorPreviewRendererProps) => {
   const editableProps = {
     placeholder: 'Murmuring the mex hype... ',
@@ -67,6 +67,7 @@ const EditorPreviewRenderer = ({
   }
 
   // We get memoized plugins
+  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
   const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
   const { focusBlock } = useFocusBlock()
 

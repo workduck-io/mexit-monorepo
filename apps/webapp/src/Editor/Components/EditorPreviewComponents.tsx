@@ -36,9 +36,9 @@ export const editorPreviewComponents = {
   [ELEMENT_TABLE]: TableWrapper
 }
 
-const components = {
+const components = createPlateUI({
   ...editorPreviewComponents,
   [ELEMENT_INLINE_BLOCK]: InlineBlock as any
-}
+})
 
 export default components

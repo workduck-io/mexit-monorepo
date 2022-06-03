@@ -1,6 +1,6 @@
 import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
 import { useContextMenu } from 'react-contexify'
-import useMemoizedPlugins from '../../Plugins/index'
+import useMemoizedPlugins, { generatePlugins } from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
 import { MENU_ID } from '../BlockContextMenu'
 

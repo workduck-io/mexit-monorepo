@@ -198,7 +198,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           path: nodePath
         }}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
-        debug
+        // debug
         onChange={debounced}
         options={editorOptions}
         editorId={nodeUID}
