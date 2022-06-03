@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { idxKey } from '@mexit/core'
-import { useLinks } from '@workduck-io/mex-editor'
 
 import {
   addDoc,
@@ -11,6 +10,7 @@ import {
   searchIndexWithRanking,
   searchIndexByNodeId
 } from '../Workers/controller'
+import { useLinks } from './useLinks'
 
 export const useSearch = () => {
   const { getPathFromNodeid } = useLinks()

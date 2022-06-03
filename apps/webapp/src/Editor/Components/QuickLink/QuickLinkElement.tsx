@@ -85,5 +85,3 @@ const QuickLinkElement = ({
 }
 
 export default QuickLinkElement
-
-const isPreview = (id: string) => id.startsWith('__preview__')

@@ -5,8 +5,8 @@ import { NodeEditorContent } from '@mexit/core'
 import { areEqual } from '../Utils/hash'
 import { useSnippets } from './useSnippets'
 import { useDataSaverFromContent } from './useSave'
-import { persist } from 'zustand/middleware'
-import { getContent, useSnippetStore } from '@workduck-io/mex-editor'
+import { getContent } from '../Stores/useEditorStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>

@@ -15,7 +15,7 @@ import { HoverSubtleGlow } from '../../Style/Helpers'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useDataStore } from '@workduck-io/mex-editor'
+import { useDataStore } from '../../Stores/useDataStore'
 
 export const TagFlex = styled.div`
   cursor: pointer;

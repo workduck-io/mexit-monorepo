@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 
 import { NodeProperties } from '@mexit/core'
 import { useDataSaverFromContent } from './useSave'
-import { useEditorStore } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../Stores/useEditorStore'
 
 export const useSaver = () => {
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()

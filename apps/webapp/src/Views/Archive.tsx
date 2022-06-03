@@ -4,11 +4,9 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog } from '@mexit/core'
 import { MainHeader, Button } from '@mexit/shared'
-import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import styled, { useTheme } from 'styled-components'
-import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
 import Infobox from '../Components/Infobox'
 import { defaultContent } from '../Data/baseData'
 import { ArchiveHelp } from '../Data/defaultText'
@@ -16,7 +14,6 @@ import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
 import { useSaver } from '../Hooks/useSaver' // FIXME move useSaver to hooks
 import { useSearch } from '../Hooks/useSearch'
-import { getContent } from '../../../../libs/mex-editor/src/lib/store/useEditorStore'
 import { Title } from '../Style/Elements'
 import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
 import {
@@ -32,6 +29,10 @@ import {
 } from '../Style/Search'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { getContent } from '../Stores/useEditorStore'
 
 export const ArchivedNode = styled.div`
   display: flex;

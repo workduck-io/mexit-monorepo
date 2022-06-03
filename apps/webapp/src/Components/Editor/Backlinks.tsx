@@ -6,7 +6,7 @@ import { InfoWidgetScroll, InfoWidgetWrapper } from '../../Style/Infobar'
 import { Note } from '@mexit/shared'
 import NodeLink from '../Editor/NodeLink'
 import { DataInfoHeader } from '../../Style/Backlinks'
-import { useLinks } from '@workduck-io/mex-editor'
+import { useLinks } from '../../Hooks/useLinks'
 
 interface BackLinkProps {
   nodeid: string

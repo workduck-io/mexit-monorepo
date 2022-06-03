@@ -8,7 +8,7 @@ import {
   NodeLink,
   TodoStatus
 } from '@mexit/core'
-import { useContentStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'

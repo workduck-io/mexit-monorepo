@@ -9,7 +9,11 @@ import { useRecentsStore } from './useRecentsStore'
 import useThemeStore from './useThemeStore'
 import { useRefactorStore } from './useRefactorStore'
 import { useHistoryStore } from './useHistoryStore'
-import { useContentStore, useDataStore, useEditorStore, useSnippetStore, useTodoStore } from '@workduck-io/mex-editor'
+import { useContentStore } from './useContentStore'
+import { useDataStore } from './useDataStore'
+import { useEditorStore } from './useEditorStore'
+import { useSnippetStore } from './useSnippetStore'
+import { useTodoStore } from './useTodoStore'
 
 if (IS_DEV) {
   console.log('Zustand Devtools Initialize')

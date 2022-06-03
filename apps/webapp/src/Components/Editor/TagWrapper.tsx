@@ -1,6 +1,7 @@
 import React from 'react'
-import { TagElementProps, TagElement } from '@workduck-io/mex-editor'
-import { mog } from "@mexit/core"
+import { mog } from '@mexit/core'
+import TagElement from '../../Editor/Components/Tags/TagElement'
+import { TagElementProps } from '../../Editor/Types/TagElement'
 
 const TagWrapper = (props: TagElementProps) => {
   const handleTagClick = (tag: string) => {

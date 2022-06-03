@@ -8,7 +8,7 @@ import NodeLink from '../Editor/NodeLink'
 import Collapse from '../../Layout/Collapse'
 
 import { InfoWidgetWrapper } from '../../Style/Infobar'
-import { useLinks } from '@workduck-io/mex-editor'
+import { useLinks } from '../../Hooks/useLinks'
 
 interface BackLinkProps {
   nodeid: string

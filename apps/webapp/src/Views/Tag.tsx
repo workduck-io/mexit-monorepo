@@ -4,7 +4,6 @@ import { useTransition } from 'react-spring'
 import styled, { css } from 'styled-components'
 import { useParams } from 'react-router-dom'
 
-import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
 import { defaultContent } from '../Data/baseData'
 import useLoad from '../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
@@ -14,7 +13,9 @@ import { HoverSubtleGlow } from '../Style/Helpers'
 import { Results, Result, ResultHeader, ResultTitle, SearchPreviewWrapper } from '../Style/Search'
 import { View } from './ViewSelector'
 import { fuzzySearch } from '../Utils/fuzzysearch'
-import { useContentStore, useLinks } from '@workduck-io/mex-editor'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useLinks } from '../Hooks/useLinks'
+import { useContentStore } from '../Stores/useContentStore'
 
 const TagsWrapper = styled.div`
   display: flex;

@@ -3,7 +3,6 @@ import { getTodosFromContent, NodeProperties, getEventNameFromElement, mog } fro
 import { IconButton } from '@mexit/shared'
 import { TippyProps } from '@tippyjs/react'
 import { getPlateId, platesStore } from '@udecode/plate'
-import { useContentStore, useEditorStore, useLinks, useSnippetStore, useTodoStore } from '@workduck-io/mex-editor'
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import tinykeys from 'tinykeys'
@@ -11,10 +10,15 @@ import useAnalytics from '../Hooks/useAnalytics'
 import { ActionType } from '../Hooks/useAnalytics/events'
 import { useApi } from '../Hooks/useApi'
 import { useSnippetBuffer } from '../Hooks/useEditorBuffer'
+import { useLinks } from '../Hooks/useLinks'
 import { useSearch } from '../Hooks/useSearch'
 import { useKeyListener } from '../Hooks/useShortcutListener'
 import { useTags } from '../Hooks/useTags'
+import { useContentStore } from '../Stores/useContentStore'
+import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useTodoStore } from '../Stores/useTodoStore'
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)

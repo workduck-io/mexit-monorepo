@@ -7,7 +7,10 @@ import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useShortenerStore } from '../Stores/useShortener'
 import useThemeStore from '../Stores/useThemeStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
-import { useContentStore, useDataStore, useSnippetStore } from '@workduck-io/mex-editor'
+
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)

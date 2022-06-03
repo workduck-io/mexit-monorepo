@@ -30,7 +30,7 @@ import {
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { getNameFromPath } from '@mexit/shared'
 import { mog, SEPARATOR } from '@mexit/core'
-import { useEditorStore } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 interface GetIconProps {
   item: TreeItem

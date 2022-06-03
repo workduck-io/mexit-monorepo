@@ -31,7 +31,9 @@ import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from './ViewSelector'
 import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/core'
-import { useContentStore, useDataStore, useEditorStore } from '@workduck-io/mex-editor'
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore } from '../Stores/useEditorStore'
+import { useContentStore } from '../Stores/useContentStore'
 
 const Search = () => {
   const { loadNode } = useLoad()

@@ -20,21 +20,14 @@ export const generateTag = (item: string): Tag => ({
 
 export const dataStoreConstructor = (set, get) => ({
   tags: [],
-
   ilinks: [],
-
   linkCache: {},
-
   tagsCache: {},
-
   baseNodeId: '@',
-
   bookmarks: [],
-
   archive: [],
-
   publicNodes: {},
-
+  slashCommands: { default: [], internal: [] },
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
     set({
@@ -114,6 +107,8 @@ export const dataStoreConstructor = (set, get) => ({
       ilinks
     })
   },
+
+  setSlashCommands: (slashCommands) => set({ slashCommands }),
 
   removeBookamarks: (bookmarks) => {
     const ubookmarks = new Set(get().bookmarks.filter((b) => !(bookmarks.indexOf(b) > -1)))

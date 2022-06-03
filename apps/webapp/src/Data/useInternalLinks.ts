@@ -1,7 +1,7 @@
 import { apiURLs, ILink, mog } from '@mexit/core'
 import { client } from '@workduck-io/dwindle'
-import { useDataStore } from '@workduck-io/mex-editor'
 import { useAuthStore } from '../Stores/useAuth'
+import { useDataStore } from '../Stores/useDataStore'
 
 export const useInternalLinks = () => {
   const setILinks = useDataStore((store) => store.setIlinks)

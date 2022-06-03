@@ -14,7 +14,8 @@ export enum CategoryType {
 export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
-  tags = 'Tags'
+  tags = 'Tags',
+  action = 'Actions'
 }
 
 export enum SlashType {

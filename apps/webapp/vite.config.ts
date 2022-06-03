@@ -19,8 +19,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@mexit/shared': path.resolve(__dirname, '../../libs/shared/src'),
-      '@mexit/core': path.resolve(__dirname, '../../libs/core/src'),
-      '@workduck-io/mex-editor': path.resolve(__dirname, '../../libs/mex-editor/src')
+      '@mexit/core': path.resolve(__dirname, '../../libs/core/src')
     },
     dedupe: ['styled-components', 'react', 'react-dom', '@udecode/plate']
   },

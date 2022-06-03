@@ -20,7 +20,7 @@ import { StyledEditor, EditorWrapper } from '@mexit/shared'
 import Toolbar from './Toolbar'
 import Metadata from '../EditorInfobar/Metadata'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
-import { useEditorStore } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 const ContentEditor = () => {

@@ -167,7 +167,6 @@ export interface NodeProperties {
 export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
-  flow = 'Flows',
   tags = 'Tags',
   action = 'Actions'
 }

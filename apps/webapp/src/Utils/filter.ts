@@ -1,6 +1,7 @@
 import { NodeEditorContent, TodoType, TodoStatus } from '@mexit/core'
-import { ELEMENT_INLINE_BLOCK, useEditorStore } from '@workduck-io/mex-editor'
 import { useMemo } from 'react'
+import { ELEMENT_INLINE_BLOCK } from '../Editor/elements'
+import { useEditorStore } from '../Stores/useEditorStore'
 
 export const ELEMENT_SYNC_BLOCK = 'sync_block'
 

@@ -4,9 +4,8 @@ import bookmarkLine from '@iconify/icons-ri/bookmark-line'
 import { Icon } from '@iconify/react'
 
 import { LoadingButton } from './Buttons'
-
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { useDataStore } from '@workduck-io/mex-editor'
+import { useDataStore } from '../../Stores/useDataStore'
 
 interface BookmarkButtonProps {
   nodeid: string

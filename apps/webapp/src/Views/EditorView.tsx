@@ -9,13 +9,9 @@ import useEditorActions from '../Hooks/useEditorActions'
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 import { useAnalysis } from '../Stores/useAnalysis'
 import { initSearchIndex } from '../Workers/controller'
-import { useContentStore, useDataStore, useSnippetStore, useEditorStore } from '@workduck-io/mex-editor'
-import { useKeyListener } from '../Hooks/useShortcutListener'
-import { useHelpStore } from '../Stores/useHelpStore'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import useLoad from '../Hooks/useLoad'
-import useBlockStore from '../Stores/useBlockStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 const EditorViewWrapper = styled.div`
   display: flex;

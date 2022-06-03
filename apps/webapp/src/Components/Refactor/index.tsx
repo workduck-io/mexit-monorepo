@@ -13,8 +13,8 @@ import { useHelpStore } from '../../Stores/useHelpStore'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { doesLinkRemain } from './doesLinkRemain'
-import { useEditorStore, useLinks } from '@workduck-io/mex-editor'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
+import { useLinks } from '../../Hooks/useLinks'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)

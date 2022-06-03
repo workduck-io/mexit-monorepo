@@ -28,8 +28,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
 import { useApi } from '../Hooks/useApi'
-import { useDebouncedCallback } from 'use-debounce'
-import { useSnippetStore } from '@workduck-io/mex-editor'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 export type SnippetsProps = {
   title?: string

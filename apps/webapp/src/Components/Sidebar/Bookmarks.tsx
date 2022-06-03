@@ -7,7 +7,8 @@ import { HoverSubtleGlow } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useDataStore, useLinks } from '@workduck-io/mex-editor'
+import { useLinks } from '../../Hooks/useLinks'
+import { useDataStore } from '../../Stores/useDataStore'
 
 export const BaseLink = styled.div`
   cursor: pointer;

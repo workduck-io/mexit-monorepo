@@ -3,7 +3,8 @@ import { client, useAuth } from '@workduck-io/dwindle'
 import { apiURLs } from '@mexit/core'
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
-import { useDataStore, useLinks } from '@workduck-io/mex-editor'
+import { useDataStore } from '../Stores/useDataStore'
+import { useLinks } from './useLinks'
 
 export const useBookmarks = () => {
   const setBookmarks = useDataStore((state) => state.setBookmarks)

@@ -7,15 +7,13 @@ import { useTags } from './useTags'
 import { PersistentData } from '../Types/Data'
 import { useIndexedDBData } from './usePersistentData'
 import { useSearch } from './useSearch'
-import {
-  getContent,
-  useContentStore,
-  useDataStore,
-  useLinks,
-  useReminderStore,
-  useSnippetStore,
-  useTodoStore
-} from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { getContent } from '../Stores/useEditorStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useTodoStore } from '../Stores/useTodoStore'
+import { useLinks } from './useLinks'
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)

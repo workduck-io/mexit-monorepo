@@ -11,7 +11,8 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import { useEditorStore, useLinks } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { useLinks } from '../../Hooks/useLinks'
 
 const doesLinkRemain = (id: string, refactored: NodeLink[]): boolean => {
   return refactored.map((r) => r.from).indexOf(id) === -1

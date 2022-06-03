@@ -3200,6 +3200,13 @@
     use-deep-compare "1.1.0"
     zustand "3.7.0"
 
+"@udecode/plate-find-replace@10.2.2":
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-10.2.2.tgz#a0aee79a81598b9c74d11b16966aa67c91837a83"
+  integrity sha512-pWRfP22EWf3jhfST/ty3kXpqTPll2d+/wB+HKNSVoyuXTZFnV7Ga1uK5ctpip90WpTMlrtCrYkhdb4L+EYTQDA==
+  dependencies:
+    "@udecode/plate-core" "10.2.2"
+
 "@udecode/plate-find-replace@10.2.4":
   version "10.2.4"
   resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-10.2.4.tgz#c8c709a857dd911f9bc0c816e1119de168ae7ba6"
@@ -3220,6 +3227,46 @@
   integrity sha512-eJ3S4/JkYkgwaXlLgEHxw+O7AOQcN4Movx34OI7GMmjQTOLq7EBOR+FA78YqQ/axsnTEbzY1BKcgN7rMxOTAHw==
   dependencies:
     "@udecode/plate-core" "10.2.2"
+
+"@udecode/plate-headless@10.2.2":
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-10.2.2.tgz#2b41467521ffdd5727dc8d180c1643ac075ec2e9"
+  integrity sha512-R5AsyZ4rkMfd9XfrE8IocSWF6JeKWx41rtwcD2usVwUA843oev2I1HCJ+Ub4gcuWMRvSScKyQvaAzPcVBSntfA==
+  dependencies:
+    "@udecode/plate-alignment" "10.2.2"
+    "@udecode/plate-autoformat" "10.2.2"
+    "@udecode/plate-basic-elements" "10.2.2"
+    "@udecode/plate-basic-marks" "10.2.2"
+    "@udecode/plate-block-quote" "10.2.2"
+    "@udecode/plate-break" "10.2.2"
+    "@udecode/plate-code-block" "10.2.2"
+    "@udecode/plate-combobox" "10.2.2"
+    "@udecode/plate-core" "10.2.2"
+    "@udecode/plate-find-replace" "10.2.2"
+    "@udecode/plate-font" "10.2.2"
+    "@udecode/plate-heading" "10.2.2"
+    "@udecode/plate-highlight" "10.2.2"
+    "@udecode/plate-horizontal-rule" "10.2.2"
+    "@udecode/plate-image" "10.2.2"
+    "@udecode/plate-indent" "10.2.2"
+    "@udecode/plate-indent-list" "10.2.2"
+    "@udecode/plate-juice" "10.2.2"
+    "@udecode/plate-kbd" "10.2.2"
+    "@udecode/plate-line-height" "10.2.2"
+    "@udecode/plate-link" "10.2.2"
+    "@udecode/plate-list" "10.2.2"
+    "@udecode/plate-media-embed" "10.2.2"
+    "@udecode/plate-mention" "10.2.2"
+    "@udecode/plate-node-id" "10.2.2"
+    "@udecode/plate-normalizers" "10.2.2"
+    "@udecode/plate-paragraph" "10.2.2"
+    "@udecode/plate-reset-node" "10.2.2"
+    "@udecode/plate-select" "10.2.2"
+    "@udecode/plate-serializer-csv" "10.2.2"
+    "@udecode/plate-serializer-docx" "10.2.2"
+    "@udecode/plate-serializer-md" "10.2.2"
+    "@udecode/plate-table" "10.2.2"
+    "@udecode/plate-trailing-block" "10.2.2"
 
 "@udecode/plate-headless@10.2.4":
   version "10.2.4"
@@ -3506,6 +3553,16 @@
     react-dnd "^14.0.2"
     react-dnd-html5-backend "^14.0.0"
 
+"@udecode/plate-ui-find-replace@10.2.2":
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-10.2.2.tgz#d6ba4253d198257f1a186f13a39e01994fea3deb"
+  integrity sha512-N5+/tR4TPV052NhKDSCuQ5QyaHHtR9KTvdb7jT9qmWo6iaonj5pdJs8purZeF8bmplGp2uO/jCX/QB+uG/uppQ==
+  dependencies:
+    "@udecode/plate-core" "10.2.2"
+    "@udecode/plate-find-replace" "10.2.2"
+    "@udecode/plate-styled-components" "10.2.2"
+    "@udecode/plate-ui-toolbar" "10.2.2"
+
 "@udecode/plate-ui-find-replace@10.2.4":
   version "10.2.4"
   resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-10.2.4.tgz#b1f3c76ad9ccce5be1376ea3cf7d981faf21034a"
@@ -3642,6 +3699,33 @@
     react-popper "^2.2.4"
     react-use "^17.1.1"
 
+"@udecode/plate-ui@10.2.2":
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.2.2.tgz#91a21aee881ad5729a19777e719b1d961fcd2b27"
+  integrity sha512-9W3r2tIa+FABvoZyWuak7zqypLw0cX/N0gAaL9jPeEQ8AwEzDmmYj119CdhPj8bG4eNJ1DF9wGML+P+xE2DznA==
+  dependencies:
+    "@udecode/plate-headless" "10.2.2"
+    "@udecode/plate-styled-components" "10.2.2"
+    "@udecode/plate-ui-alignment" "10.2.2"
+    "@udecode/plate-ui-block-quote" "10.2.2"
+    "@udecode/plate-ui-button" "10.2.2"
+    "@udecode/plate-ui-code-block" "10.2.2"
+    "@udecode/plate-ui-combobox" "10.2.2"
+    "@udecode/plate-ui-dnd" "10.2.2"
+    "@udecode/plate-ui-find-replace" "10.2.2"
+    "@udecode/plate-ui-font" "10.2.2"
+    "@udecode/plate-ui-image" "10.2.2"
+    "@udecode/plate-ui-line-height" "10.2.2"
+    "@udecode/plate-ui-link" "10.2.2"
+    "@udecode/plate-ui-list" "10.2.2"
+    "@udecode/plate-ui-media-embed" "10.2.2"
+    "@udecode/plate-ui-mention" "10.2.2"
+    "@udecode/plate-ui-placeholder" "10.2.2"
+    "@udecode/plate-ui-popover" "10.2.2"
+    "@udecode/plate-ui-popper" "10.2.2"
+    "@udecode/plate-ui-table" "10.2.2"
+    "@udecode/plate-ui-toolbar" "10.2.2"
+
 "@udecode/plate-ui@10.2.4":
   version "10.2.4"
   resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-10.2.4.tgz#fcc5a9a6b4d6c1f70864dde84921fe47ec1975b9"
@@ -3668,6 +3752,14 @@
     "@udecode/plate-ui-popper" "10.2.2"
     "@udecode/plate-ui-table" "10.2.2"
     "@udecode/plate-ui-toolbar" "10.2.2"
+
+"@udecode/plate@10.2.2":
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-10.2.2.tgz#33d2a08eb0db516f15f2383e024b34421b402962"
+  integrity sha512-3THm6y/Mz5LpZLLL6A7uoB72pDhk6IN6I6tWvKgt32ZYLxFhzl6u9lDqVYOrMfrNcofZZ92JvjiurBCpH0cxfA==
+  dependencies:
+    "@udecode/plate-headless" "10.2.2"
+    "@udecode/plate-ui" "10.2.2"
 
 "@udecode/plate@10.2.4":
   version "10.2.4"
@@ -3879,6 +3971,21 @@
   version "0.7.22"
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/78facf234f5d5157ef2a7bf2d514f554afcfae084bd4bd996eb16c8309fd93d4#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
+
+"@workduck-io/mex-editor@^0.5.0":
+  version "0.5.0"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-editor/0.5.0/ca3f12c1d1b3deb8389c902f135a99dd72157016e90c978eb9ac59dd552404e7#2b5847438da1b07acaab7ec2b9f8105b67bedb49"
+  integrity sha512-+YtxDBtmWgAf86YytAfXWeQNS+FFxXvmdD5J/vmfnx3P4ca+oEVRvvYWYXlyEIV6+vUtSBSlvRbXf3i3Wd6hQA==
+  dependencies:
+    "@udecode/plate" "10.2.2"
+    color-scheme "^1.0.1"
+    core-js "^3.21.0"
+    fast-equals "^2.0.4"
+    fuse.js "^6.5.3"
+    hotkeys-js "^3.8.7"
+    immer "^9.0.12"
+    polished "^4.1.4"
+    ramda "^0.28.0"
 
 "@xobotyi/scrollbar-width@^1.9.5":
   version "1.9.5"
@@ -5113,6 +5220,11 @@ core-js@^3.0.1, core-js@^3.21.1, core-js@^3.6.5:
   version "3.22.7"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.7.tgz#8d6c37f630f6139b8732d10f2c114c3f1d00024f"
   integrity sha512-Jt8SReuDKVNZnZEzyEQT5eK6T2RRCXkfTq7Lo09kpm+fHjgGewSbNjV+Wt4yZMhPDdzz2x1ulI5z/w4nxpBseg==
+
+core-js@^3.21.0:
+  version "3.22.8"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.22.8.tgz#23f860b1fe60797cc4f704d76c93fea8a2f60631"
+  integrity sha512-UoGQ/cfzGYIuiq6Z7vWL1HfkE9U9IZ4Ub+0XSiJTCzvbZzgPA69oDF2f+lgJ6dFFLEdjW5O6svvoKzXX23xFkA==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -7432,6 +7544,11 @@ immer@9.0.6:
   version "9.0.6"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.6.tgz#7a96bf2674d06c8143e327cbf73539388ddf1a73"
   integrity sha512-G95ivKpy+EvVAnAab4fVa4YGYn24J1SpEktnJX7JJ45Bd7xqME/SCplFzYFmTbrkwZbQ4xJK1xMTUYBkN6pWsQ==
+
+immer@^9.0.12:
+  version "9.0.14"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.14.tgz#e05b83b63999d26382bb71676c9d827831248a48"
+  integrity sha512-ubBeqQutOSLIFCUBN03jGeOS6a3DoYlSYwYJTa+gSKEZKU5redJIqkIdZ3JVv/4RZpfcXdAWH5zCNLWPRv2WDw==
 
 immer@^9.0.6:
   version "9.0.14"
