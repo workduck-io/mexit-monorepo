@@ -7,7 +7,6 @@ import { MainHeader, Title, getInitialNode } from '@mexit/shared'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
-import { useNodes } from '../../../../libs/mex-editor/src/lib/hooks/useNodes'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSearch } from '../Hooks/useSearch'
 import {
@@ -34,6 +33,7 @@ import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/cor
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useContentStore } from '../Stores/useContentStore'
+import { useNodes } from '../Hooks/useNodes'
 
 const Search = () => {
   const { loadNode } = useLoad()

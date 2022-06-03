@@ -173,14 +173,17 @@ export enum QuickLinkType {
 
 export enum ComboboxKey {
   TAG = 'tag',
+  INTERNAL = 'internal',
   INLINE_BLOCK = 'inline_block',
   SLASH_COMMAND = 'slash_command',
   BLOCK = 'block'
 }
+
 export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
-  search = 'Search Results'
+  search = 'Search Results',
+  task = 'Task'
 }
 
 export interface SlashCommand {
