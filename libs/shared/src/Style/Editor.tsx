@@ -2,7 +2,7 @@ import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
-import { AsyncButton, Button } from '@mexit/shared'
+import { Button, AsyncButton } from './Buttons'
 
 export interface FocusModeProp {
   // Focus mode is on?
@@ -90,7 +90,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
     width: 100%;
   }
 `
-export const EditorStyles = css`
+export const EditorStyles = styled.div`
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;
@@ -482,5 +482,56 @@ export const EditorStyles = css`
 
   .LinkIcon > * {
     color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
+interface MenuTriggerProps {
+  selected: boolean
+  readOnly: boolean
+}
+
+export const MenuTrigger = styled.div<MenuTriggerProps>`
+  display: flex;
+  align-items: center;
+  width: max-content;
+  padding: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.medium}`};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border: 1px dashed ${({ theme }) => theme.colors.form.input.border};
+  svg {
+    margin-right: ${({ theme }) => theme.spacing.small};
+  }
+
+  ${({ readOnly, theme }) =>
+    !readOnly &&
+    css`
+      cursor: pointer;
+      &:hover {
+        border-color: ${theme.colors.primary};
+      }
+    `}
+
+  ${({ theme, selected }) =>
+    selected &&
+    css`
+      border: 1px solid transparent;
+      background-color: ${theme.colors.gray[8]};
+      svg {
+        color: ${theme.colors.primary};
+      }
+    `}
+`
+
+export const Widget = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.text.subheading};
+  background-color: ${({ theme }) => theme.colors.gray[9]};
+  padding: ${({ theme: { spacing } }) => `${spacing.tiny} ${spacing.medium}`};
+  width: max-content;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  margin-right: ${({ theme }) => theme.spacing.medium};
+  svg {
+    margin-right: ${({ theme }) => theme.spacing.small};
   }
 `

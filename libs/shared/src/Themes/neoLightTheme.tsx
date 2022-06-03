@@ -42,5 +42,6 @@ export const neoLight = generateTheme({
   // backgroundImages: {
   //   app: 'https://i.imgur.com/Z2iNoSC.jpg'
   // },
-  hasBlocks: true
+  hasBlocks: true,
+  custom: 'NeoLightStyles'
 })

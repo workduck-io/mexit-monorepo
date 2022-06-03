@@ -1,4 +1,11 @@
-import { ComboboxConfig, ComboboxKey, MexEditor, useDataStore } from '@workduck-io/mex-editor'
+import {
+  ComboboxConfig,
+  ComboboxKey,
+  ELEMENT_ILINK,
+  ELEMENT_TAG,
+  MexEditor,
+  useDataStore
+} from '@workduck-io/mex-editor'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
@@ -20,12 +27,10 @@ interface EditorPreviewRendererProps {
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
-const PreviewStyles = styled.div<{ noMouseEvents: boolean }>`
+const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
   ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
   user-select: none;
   font-size: 14px;
-
-  ${EditorStyles}
 `
 /* ${TodoContainer}, button, input, textarea, select, option {
     pointer-events: none;
@@ -50,12 +55,15 @@ const EditorPreviewRenderer = ({
       keys: {
         ilink: {
           // @ts-ignore
+          slateElementType: ELEMENT_ILINK,
           newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
         },
         tag: {
+          slateElementType: ELEMENT_TAG,
           newItemHandler: (tag: string) => addTag(tag)
         },
         slash_command: {
+          slateElementType: 'slash_command',
           newItemHandler: () => undefined
         }
       },

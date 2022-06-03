@@ -15,7 +15,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 
-import { useEditorChange } from '@mexit/shared'
+import { EditorStyles, useEditorChange } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { EditorWrapper } from './styled'
@@ -170,20 +170,22 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
 
   return (
     <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
-      <MexEditor
-        comboboxConfig={comboboxConfig}
-        meta={{
-          path: node.path
-        }}
-        // debug
-        components={components}
-        BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
-        onChange={debounced}
-        options={editorOptions}
-        editorId={node.nodeid}
-        value={nodeContent}
-        portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
-      />
+      <EditorStyles>
+        <MexEditor
+          comboboxConfig={comboboxConfig}
+          meta={{
+            path: node.path
+          }}
+          // debug
+          components={components}
+          BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
+          onChange={debounced}
+          options={editorOptions}
+          editorId={node.nodeid}
+          value={nodeContent}
+          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+        />
+      </EditorStyles>
     </EditorWrapper>
   )
 }

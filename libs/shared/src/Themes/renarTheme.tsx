@@ -38,5 +38,6 @@ export const renarTheme = generateTheme({
   backgroundImages: {
     app: 'https://i.imgur.com/MExxqeL.jpg',
     preview: 'https://i.imgur.com/Hv7XOvQ.png'
-  }
+  },
+  custom: 'RenarStyles'
 })
