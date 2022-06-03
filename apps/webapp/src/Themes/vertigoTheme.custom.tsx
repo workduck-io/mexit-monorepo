@@ -4,7 +4,6 @@ import { css } from 'styled-components'
 import { EditorStyles, MenuTrigger, Widget } from '@mexit/shared'
 
 import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
-import { EditorPreviewWrapper } from '../Components/Editor/EditorPreview/EditorPreview.styles'
 import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
@@ -19,6 +18,7 @@ import { TodoContainer } from '../Style/Todo.style'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
+import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
 
 const textStyleColors = css`
   b,

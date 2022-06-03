@@ -15,6 +15,7 @@ import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow
 import { doesLinkRemain } from './doesLinkRemain'
 import { useLinks } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)

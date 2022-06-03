@@ -14,6 +14,8 @@ import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;
