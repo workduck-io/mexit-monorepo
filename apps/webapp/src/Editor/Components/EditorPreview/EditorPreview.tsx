@@ -19,7 +19,7 @@ import { getNameFromPath } from '@mexit/shared'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useContentStore } from '../../../Stores/useContentStore'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
-import { generatePlugins } from '../../Plugins'
+import useMemoizedPlugins from '../../Plugins'
 import { editorPreviewComponents } from '../EditorPreviewComponents'
 
 export interface EditorPreviewProps {
@@ -91,7 +91,7 @@ const EditorPreview = ({
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = generatePlugins(editorPreviewComponents, { exclude: { dnd: true } })
+  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
 
   if (cc) {
     return (

@@ -1,14 +1,14 @@
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
-import useBlockStore, { ContextMenuActionType } from '../../../store/useBlockStore'
-import { Button } from '../../../style/Buttons'
-import { ButtonWrapper } from '../../../style/Settings'
 import xBold from '@iconify/icons-ph/x-bold'
 import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
-import { MexIcon } from '../../../style/Layouts'
-import { PrimaryText } from '../../../style/Integration'
+import { MexIcon } from '@mexit/shared'
+import { Button } from '@udecode/plate'
+import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
+import useBlockStore, { ContextMenuActionType } from '../../../Stores/useBlockStore'
+import { ButtonWrapper } from 'apps/webapp/src/Style/Settings'
 
 const BlockMenu = styled.div`
   display: flex;

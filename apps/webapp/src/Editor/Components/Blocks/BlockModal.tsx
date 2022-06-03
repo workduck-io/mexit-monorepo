@@ -1,3 +1,4 @@
+import { NodeEditorContent, defaultContent, generateTempId, IpcAction, mog } from '@mexit/core'
 import {
   AnyObject,
   ELEMENT_PARAGRAPH,
@@ -7,27 +8,17 @@ import {
   insertNodes,
   usePlateEditorRef
 } from '@udecode/plate'
-import { NodeEntry, Transforms } from 'slate'
-import { QuickLink, WrappedNodeSelect } from '../../../components/mex/NodeSelect/NodeSelect'
-import useBlockStore, { ContextMenuActionType } from '../../../store/useBlockStore'
-
-import { Button } from '../../../style/Buttons'
-import { AppType } from '../../../hooks/useInitialize'
-import { IpcAction } from '../../../data/IpcAction'
 import Modal from 'react-modal'
-import { NodeEditorContent } from '../../../types/Types'
-import React from 'react'
-import { appNotifierWindow } from '../../../electron/utils/notifiers'
-import { defaultContent } from '../../../data/Defaults/baseData'
-import { generateTempId } from '../../../data/Defaults/idPrefixes'
-import { mog } from '../../../utils/lib/helper'
-import { updateIds } from '../../../utils/dataTransform'
-import { useContentStore } from '../../../store/useContentStore'
-import { useDataSaverFromContent } from '../Saver'
-import { useLinks } from '../../../hooks/useLinks'
-import { useNodes } from '../../../hooks/useNodes'
-import { ButtonWrapper } from '../../../style/Settings'
-import { useSaveData } from '../../../hooks/useSaveData'
+import { QuickLink, WrappedNodeSelect } from 'apps/webapp/src/Components/NodeSelect/NodeSelect'
+import { useLinks } from 'apps/webapp/src/Hooks/useLinks'
+import { useNodes } from 'apps/webapp/src/Hooks/useNodes'
+import { useDataSaverFromContent } from 'apps/webapp/src/Hooks/useSave'
+import useBlockStore, { ContextMenuActionType } from 'apps/webapp/src/Stores/useBlockStore'
+import { useContentStore } from 'apps/webapp/src/Stores/useContentStore'
+import { ButtonWrapper } from 'apps/webapp/src/Style/Settings'
+import { NodeEntry, Transforms } from 'slate'
+import { Button } from '@mexit/shared'
+import { updateIds } from '../../Utils/dataTransform'
 
 const BlockModal = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)
@@ -36,7 +27,8 @@ const BlockModal = () => {
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
   const { addNode } = useNodes()
-  const { saveData } = useSaveData()
+  // TODO: replace this our comparable object
+  // const { saveData } = useSaveData()
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
   const editor = usePlateEditorRef()
   const { getNodeidFromPath } = useLinks()
@@ -123,8 +115,8 @@ const BlockModal = () => {
 
     addNode({ ilink: quickLink.value, showAlert: true }, (node) => {
       saveEditorValueAndUpdateStores(node.nodeid, blocksContent)
-      appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
-      saveData()
+      // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
+      // saveData()
     })
   }
 
@@ -138,7 +130,7 @@ const BlockModal = () => {
     setIsBlockMode(false)
 
     saveEditorValueAndUpdateStores(nodeid, content)
-    saveData()
+    // saveData()
     mog('content length', { content: getPlateSelectors().value(), len: getPlateSelectors().value() })
   }
 
