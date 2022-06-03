@@ -8,7 +8,8 @@ import {
   withoutContinuousDelimiter,
   removeLink,
   Tag,
-  typeInvert
+  typeInvert,
+  defaultCommands
 } from '@mexit/core'
 import { nanoid } from 'nanoid'
 import { getAllParentIds, getNodeIcon } from '../Utils/treeUtils'
@@ -27,7 +28,7 @@ export const dataStoreConstructor = (set, get) => ({
   bookmarks: [],
   archive: [],
   publicNodes: {},
-  slashCommands: { default: [], internal: [] },
+  slashCommands: { default: defaultCommands, internal: [] },
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
     set({
