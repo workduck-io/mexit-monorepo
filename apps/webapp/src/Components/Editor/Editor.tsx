@@ -22,13 +22,11 @@ import Todo from '../Todo'
 import { useEditorChange } from '@mexit/shared'
 import { EditorStyles } from '@mexit/shared'
 
-const EditorWrapper = styled.div`
+const EditorWrapper = styled(EditorStyles)`
   flex: 1;
   max-width: 800px;
   margin: 1rem;
   padding: 1rem;
-
-  ${EditorStyles}
 `
 
 interface EditorProps {

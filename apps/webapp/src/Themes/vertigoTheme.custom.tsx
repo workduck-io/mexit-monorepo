@@ -30,7 +30,7 @@ const textStyleColors = css`
 
 const headingColors = css`
   h1 {
-    color: red;
+    color: #dfcc84;
   }
   h2 {
     color: #abc86f;

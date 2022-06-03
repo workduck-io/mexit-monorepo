@@ -90,7 +90,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
     width: 100%;
   }
 `
-export const EditorStyles = css`
+export const EditorStyles = styled.div`
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;

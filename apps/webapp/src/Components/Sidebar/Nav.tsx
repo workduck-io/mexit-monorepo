@@ -144,9 +144,11 @@ const Nav = ({ links }: NavProps) => {
                 content={l.shortcut ? <TooltipTitleWithShortcut title={l.title} shortcut={l.shortcut} /> : l.title}
               >
                 <Link tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to={l.path} key={`nav_${l.title}`}>
-                  {l.icon !== undefined ? l.icon : l.title}
-                  <NavTitle>{l.title}</NavTitle>
-                  {l.count > 0 && <Count>{l.count}</Count>}
+                  <>
+                    {l.icon !== undefined ? l.icon : l.title}
+                    <NavTitle>{l.title}</NavTitle>
+                    {l.count > 0 && <Count>{l.count}</Count>}
+                  </>
                 </Link>
               </NavTooltip>
             )
@@ -206,9 +208,11 @@ const Nav = ({ links }: NavProps) => {
               to={ROUTE_PATHS.archive}
               key="nav_search"
             >
-              {GetIcon(archiveFill)}
-              <NavTitle>Archive</NavTitle>
-              {archiveCount > 0 && <Count>{archiveCount}</Count>}
+              <>
+                {GetIcon(archiveFill)}
+                <NavTitle>Archive</NavTitle>
+                {archiveCount > 0 && <Count>{archiveCount}</Count>}
+              </>
             </Link>
           </NavTooltip>
           {/*
@@ -229,8 +233,10 @@ const Nav = ({ links }: NavProps) => {
               to={`${ROUTE_PATHS.settings}/themes`}
               key="nav_settings"
             >
-              {GetIcon(settings4Line)}
-              <NavTitle>Settings</NavTitle>
+              <>
+                {GetIcon(settings4Line)}
+                <NavTitle>Settings</NavTitle>
+              </>
             </Link>
           </NavTooltip>
         </EndLinkContainer>
