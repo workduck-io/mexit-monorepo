@@ -1,4 +1,5 @@
-import { useDataStore, useSnippetStore } from '@workduck-io/mex-editor'
+import useDataStore from "../Stores/useDataStore"
+import { useSnippetStore } from "../Stores/useSnippetStore"
 import { ListItemType } from '../Types/List'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 

@@ -8,11 +8,11 @@ import * as Sentry from '@sentry/react'
 import { CaptureConsole } from '@sentry/integrations'
 import { getScrollbarWidth, parsePageMetaTags } from '@mexit/shared'
 import Highlighter from 'web-highlighter'
-import { useContentStore } from '@workduck-io/mex-editor'
 import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
 import { getHtmlString } from './Source'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { useContentStore } from '../Stores/useContentStore'
 
 export function InternalEvents() {
   useToggleHandler()

@@ -22,7 +22,8 @@ import {
 import { CategoryType, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../../Stores/useContentStore'
+import useDataStore from '../../Stores/useDataStore'
 
 export default function Content() {
   const { selection, setVisualState, searchResults, activeIndex } = useSputlitContext()

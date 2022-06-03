@@ -5,10 +5,8 @@ import {
   QuickLinkElement,
   ComboboxConfig,
   ELEMENT_TAG,
-  ELEMENT_ILINK,
-  useDataStore
+  ELEMENT_ILINK
 } from '@workduck-io/mex-editor'
-import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -27,6 +25,8 @@ import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, CaptureType, QuickLinkType, ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { styleSlot } from '../../contentScript'
+import useDataStore from '../../Stores/useDataStore'
+import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 
 interface EditorProps {
   nodePath?: string
