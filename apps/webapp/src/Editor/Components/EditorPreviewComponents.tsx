@@ -13,11 +13,10 @@ import { StyledElement } from '@udecode/plate-styled-components'
 
 import Todo from '../../Components/Todo'
 import TagElement from './Tags/TagElement'
-
+import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG } from '../elements'
 import InlineBlock from './InlineBlock'
-import QuickLinkElement from './QuickLink/QuickLinkElement'
 
 export const editorPreviewComponents = createPlateUI({
   [ELEMENT_LINK]: withProps(LinkElement, {

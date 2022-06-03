@@ -46,7 +46,7 @@ export interface MexEditorProps {
   portalElement?: Element
 }
 
-export function MexEditor(props: MexEditorProps) {
+export const MexEditor = (props: MexEditorProps) => {
   const editorRef = usePlateEditorRef()
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
@@ -58,7 +58,6 @@ export function MexEditor(props: MexEditorProps) {
     setInternalMetadata(props.meta)
   }, [editorRef, props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log('Props for MexEditor: ', props)
   const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig)
 
   const onChange = (value: MexEditorValue) => {

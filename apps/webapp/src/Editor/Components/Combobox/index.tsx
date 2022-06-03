@@ -32,7 +32,6 @@ import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
-import PreviewMeta from './PreviewMeta'
 import BlockCombo from './BlockCombo'
 
 export const spotlightShortcuts = {
@@ -161,6 +160,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
 
       if (type === QuickLinkType.backlink) {
         const nodeContent = getContent(key)
+        console.log('nodeContent', nodeContent)
         content = nodeContent?.content
 
         setMetaData(nodeContent?.metadata)
@@ -273,7 +273,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
               nodeId={items[itemIndex]?.key}
               isNew={items[itemIndex]?.data}
             />
-            {((preview && listItem?.type && !isBlockTriggered) ||
+            {/* {((preview && listItem?.type && !isBlockTriggered) ||
               (isBlockTriggered && textAfterBlockTrigger && preview)) && (
               <ComboSeperator>
                 <section>
@@ -285,7 +285,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                 </section>
                 {preview && <PreviewMeta meta={metaData} />}
               </ComboSeperator>
-            )}
+            )} */}
           </>
         )}
       </ComboboxRoot>

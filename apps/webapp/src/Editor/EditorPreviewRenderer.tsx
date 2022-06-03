@@ -21,6 +21,7 @@ import { ELEMENT_INLINE_BLOCK, ELEMENT_TAG, ELEMENT_ILINK, ELEMENT_MEDIA_EMBED, 
 import { ComboboxKey } from './Types/Combobox'
 import { ComboConfigData, ComboboxConfig } from './Types/MultiCombobox'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { PlatePlugin } from '@udecode/plate'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -32,6 +33,7 @@ interface EditorPreviewRendererProps {
   blockId?: string
   noMouseEvents?: boolean
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  plugins?: PlatePlugin[]
 }
 
 const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
@@ -50,7 +52,8 @@ const EditorPreviewRenderer = ({
   blockId,
   noStyle,
   noMouseEvents,
-  onDoubleClick
+  onDoubleClick,
+  plugins
 }: EditorPreviewRendererProps) => {
   const editableProps = {
     placeholder: 'Murmuring the mex hype... ',
@@ -64,7 +67,6 @@ const EditorPreviewRenderer = ({
   }
 
   // We get memoized plugins
-  const plugins = generatePlugins(editorPreviewComponents, { exclude: { dnd: true } })
   const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
   const { focusBlock } = useFocusBlock()
 

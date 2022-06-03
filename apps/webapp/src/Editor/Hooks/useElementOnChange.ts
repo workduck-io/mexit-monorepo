@@ -68,9 +68,11 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
             blockId: activeBlock?.blockId
           }
 
+          console.log('Inserting Node: ', withBlockInfo)
+
           insertNodes(editor, withBlockInfo)
         } else {
-          if (item.type === QuickLinkType.flow || item.type === QuickLinkType.snippet) {
+          if (item.type === QuickLinkType.snippet) {
             itemValue = item.key
           }
 

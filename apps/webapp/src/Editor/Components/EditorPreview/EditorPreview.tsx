@@ -89,6 +89,8 @@ const EditorPreview = ({
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
+  const plugins = generatePlugins(editorPreviewComponents, { exclude: { dnd: true } })
+
   if (cc) {
     return (
       <LazyTippy
@@ -117,7 +119,7 @@ const EditorPreview = ({
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>
-              <EditorPreviewRenderer content={cc} editorId={editorId} />
+              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} />
             </EditorPreviewEditorWrapper>
           </EditorPreviewWrapper>
         )}

@@ -1,21 +1,20 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const SILinkRoot = styled.div`
   display: inline-block;
   line-height: 1.2;
-`;
+`
 
 interface SILinkProps {
-  focused: boolean;
-  archived?: boolean;
+  $selected: boolean
+  $archived?: boolean
 }
 
 export const SILink = styled.div<SILinkProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  /* color: ${({ theme, archived }) =>
-    archived ? theme.colors.fade : theme.colors.secondary}; */
+
   cursor: pointer;
   .ILink_decoration {
     color: ${({ theme }) => theme.colors.gray[6]};
@@ -29,8 +28,8 @@ export const SILink = styled.div<SILinkProps>`
     }
   }
 
-  ${({ theme, focused }) =>
-    focused
+  ${({ theme, $selected }) =>
+    $selected
       ? css`
           color: ${theme.colors.primary};
           background-color: ${theme.colors.gray[8]};
@@ -40,4 +39,4 @@ export const SILink = styled.div<SILinkProps>`
           }
         `
       : ''}
-`;
+`
