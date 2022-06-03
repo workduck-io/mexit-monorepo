@@ -24,5 +24,13 @@ export enum SlashType {
   remind = 'remind'
 }
 
+export enum KEYBOARD_KEYS {
+  Enter = 'Enter',
+  ArrowUp = 'ArrowUp',
+  ArrowDown = 'ArrowDown',
+  Escape = 'Escape',
+  Space = 'Space'
+}
+
 export const SnippetCommandPrefix = `snip`
 export const CreateNewPrefix = `Create `

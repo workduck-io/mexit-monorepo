@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { PortalBody, useEditorState } from '@udecode/plate'
-
-// import {
-//   ComboboxItem,
-//   ComboboxRoot,
-//   ItemCenterWrapper,
-//   ItemDesc,
-//   ItemRightIcons,
-//   ItemTitle
-// } from '../../tag/components/TagCombobox.styles'
-
-// import { ComboboxProps } from './Combobox.types'
 import { Icon } from '@iconify/react'
-// import { setElementPositionByRange } from '../../tag/utils/setElementPositionByRange'
-// import { useComboboxControls } from '../hooks/useComboboxControls'
-// import { useComboboxIsOpen } from '../selectors/useComboboxIsOpen'
-// import { useComboboxStore } from '../useComboboxStore'
 import useMergedRef from '@react-hook/merged-ref'
+
 import { MexIcon } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
+
 import { CategoryType, QuickLinkType } from '../../constants'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
@@ -32,6 +20,7 @@ import {
   ComboboxItem,
   ComboboxRoot,
   ComboboxShortcuts,
+  ComboSeperator,
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
@@ -41,23 +30,10 @@ import {
 import { Shortcut } from '../../../Stores/useHelpStore'
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'
-import EditorPreviewRenderer from '../../../Components/EditorPreviewRenderer'
-// import EditorPreviewRenderer from '../../../EditorPreviewRenderer'
-// import { QuickLinkType } from '../../../../components/mex/NodeSelect/NodeSelect'
-// import { useContentStore } from '../../../../store/useContentStore'
-// import { PrimaryText } from '../../../../style/Integration'
-// import { useSnippets } from '../../../../hooks/useSnippets'
-// import { ActionTitle } from '../../../../components/spotlight/Actions/styled'
-// import { NodeEditorContent } from '../../../../types/Types'
-// import BlockCombo from './BlockCombo'
-// import { ComboboxShortcuts, ComboSeperator } from './styled'
-// import { ElementTypeBasedShortcut } from '../../../../components/spotlight/Shortcuts/list'
-// import { ShortcutText } from '../../../../components/spotlight/Home/components/Item'
-// import { DisplayShortcut } from '../../../../components/mex/Shortcuts'
-// import { replaceFragment } from '../hooks/useComboboxOnKeyDown'
-// import PreviewMeta from './PreviewMeta'
-// import { mog } from '../../../../utils/lib/helper'
-// import { MexIcon } from '../../../../style/Layouts'
+import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
+import EditorPreviewRenderer from '../../EditorPreviewRenderer'
+import PreviewMeta from './PreviewMeta'
+import BlockCombo from './BlockCombo'
 
 export const spotlightShortcuts = {
   save: {
