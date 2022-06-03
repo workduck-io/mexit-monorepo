@@ -1,6 +1,8 @@
 import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
-import useMemoizedPlugins, { generatePlugins } from '../../Plugins/index'
+import { useContextMenu } from 'react-contexify'
+import useMemoizedPlugins from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
+import { MENU_ID } from '../BlockContextMenu'
 
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDown'
@@ -8,18 +10,29 @@ import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDow
 export const useComboboxConfig = (
   editorId: string,
   config: ComboboxConfig,
-  components: Record<string, PlatePluginComponent<any | undefined>> = {},
-  customPlugins?: Array<PlatePlugin>
+  components: Record<string, PlatePluginComponent<any | undefined>> = {}
 ) => {
-  const prePlugins = useMemoizedPlugins(customPlugins ?? generatePlugins(), components)
+  const pluginConfigs = {
+    combobox: {
+      onChange: useMultiComboboxOnChange(editorId, config.onChangeConfig),
 
+      onKeyDown: useMultiComboboxOnKeyDown(config.onKeyDownConfig)
+    }
+  }
+
+  const { show } = useContextMenu({ id: MENU_ID })
+
+  const prePlugins = useMemoizedPlugins(components)
   const plugins = [
     ...prePlugins,
     {
       key: 'MULTI_COMBOBOX',
       handlers: {
-        onChange: useMultiComboboxOnChange(editorId, config.onChangeConfig),
-        onKeyDown: useMultiComboboxOnKeyDown(config.onKeyDownConfig)
+        onContextMenu: () => (ev) => {
+          show(ev)
+        },
+        onChange: pluginConfigs.combobox.onChange,
+        onKeyDown: pluginConfigs.combobox.onKeyDown
       }
     }
   ]

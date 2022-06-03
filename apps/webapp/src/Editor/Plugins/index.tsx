@@ -12,7 +12,6 @@ import {
   createItalicPlugin,
   createLinkPlugin,
   createListPlugin,
-  createTodoListPlugin,
   createMediaEmbedPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
@@ -26,7 +25,6 @@ import {
   autoformatLegal,
   autoformatLegalHtml,
   autoformatMath,
-  autoformatPunctuation,
   autoformatSmartQuotes,
   ELEMENT_HR,
   createHorizontalRulePlugin,
@@ -44,54 +42,77 @@ import {
   createPlateUI,
   ELEMENT_PARAGRAPH,
   PlatePluginComponent,
-  createTablePlugin
+  createTablePlugin,
+  PEditor
 } from '@udecode/plate'
 
-import { createQuickLinkPlugin } from './createQuickLinkPlugin'
+import { TableWrapper } from '@mexit/shared'
 
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
   optionsExitBreakPlugin,
+  optionsImagePlugin,
   optionsResetBlockTypePlugin,
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
+
+import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
+import { createInlineBlockPlugin } from './createInlineBlockPlugin'
+import { ELEMENT_EXCALIDRAW } from '../elements'
+import { createILinkPlugin } from './createILinkPlugin'
+import { createHighlightTextPlugin } from './createHighlightTextPlugin'
+import { withStyledDraggables } from '../Actions/withDraggables'
+import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
+import { withBlockOptions } from '../Components/Blocks'
 
-export const generatePlugins = () => {
+export type PluginOptionType = {
+  exclude: {
+    dnd: boolean
+  }
+}
+
+/**
+ * Plugin generator
+ * @param config Configurations for the plugins, event handlers etc.
+ * @returns Array of PlatePlugin
+ */
+
+export const generatePlugins = (options: PluginOptionType) => {
   const Plugins: PlatePlugin[] = [
+    // editor
+
     // elements
-    createParagraphPlugin(),
-    createBlockquotePlugin(),
-    createCodeBlockPlugin(),
-    createHeadingPlugin(),
+    createParagraphPlugin(), // paragraph element
+    createBlockquotePlugin(), // blockquote element
+    createCodeBlockPlugin(), // code block element
+    createHeadingPlugin(), // heading elements
 
     // Marks
-    createBoldPlugin(),
-    createItalicPlugin(),
-    createUnderlinePlugin(),
-    createStrikethroughPlugin(),
-    createCodePlugin(),
-    createHighlightPlugin(),
-    createTodoListPlugin(),
+    createBoldPlugin(), // bold mark
+    createItalicPlugin(), // italic mark
+    createUnderlinePlugin(), // underline mark
+    createStrikethroughPlugin(), // strikethrough mark
+    createCodePlugin(), // code mark
+    createHighlightPlugin(), // highlight mark
+    // createTodoListPlugin(),
 
     // Special Elements
-    createImagePlugin(),
-    createLinkPlugin(),
-    createListPlugin(),
-    createTablePlugin(),
+    createImagePlugin(optionsImagePlugin), // Image
+    createLinkPlugin(), // Link
+    createListPlugin(), // List
     createTodoPlugin(),
+    createTablePlugin({ component: TableWrapper }), // Table
 
     // Editing Plugins
     createSoftBreakPlugin(optionsSoftBreakPlugin),
     createExitBreakPlugin(optionsExitBreakPlugin),
     createResetNodePlugin(optionsResetBlockTypePlugin),
     createHorizontalRulePlugin(),
-    createSelectOnBackspacePlugin({
-      options: { query: { allow: [ELEMENT_HR] } }
-    }),
+    createSelectOnBackspacePlugin({ options: { query: { allow: [ELEMENT_HR, ELEMENT_EXCALIDRAW] } } }),
     createAlignPlugin({
       inject: {
         props: {
@@ -99,17 +120,15 @@ export const generatePlugins = () => {
         }
       }
     }),
-
     // Autoformat markdown syntax to elements (**, #(n))
     createAutoformatPlugin({
       options: {
         rules: [
           ...autoformatSmartQuotes,
-          ...autoformatPunctuation,
           ...autoformatLegal,
           ...autoformatLegalHtml,
-          ...autoformatArrow,
           ...autoformatMath,
+          ...autoformatArrow,
           ...optionsAutoFormatRule,
           {
             mode: 'block',
@@ -126,28 +145,45 @@ export const generatePlugins = () => {
         ]
       }
     }),
-    createDndPlugin(),
-    createMediaEmbedPlugin(),
-
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
 
-    // // mex custom plugins
-    createTagPlugin(),
-    createQuickLinkPlugin(),
+    // serialization / deseriailization
 
-    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin)
+    // Convert pasted markdown to contents of the editor
+    // createDeserializeMDPlugin(),
+
+    // Media and link embed
+    createMediaEmbedPlugin(),
+
+    // Custom Plugins
+    createBlurSelectionPlugin() as PlatePlugin<PEditor>,
+
+    // Comboboxes
+    createTagPlugin(), // Tags
+    createILinkPlugin(), // Internal Links ILinks
+
+    // // For Inline Blocks
+    createInlineBlockPlugin(),
+
+    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
+    createHighlightTextPlugin()
   ]
 
-  return Plugins
+  const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins
+
+  return withPlugins
 }
 
-const useMemoizedPlugins = (
-  plugins: Array<PlatePlugin>,
-  components: Record<string, PlatePluginComponent<any | undefined>>
-) => {
-  return createPlugins(plugins, {
-    components: createPlateUI(components)
+const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+  const wrappedComponents = options?.exclude
+    ? components
+    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+
+  const plugins = createPlugins(generatePlugins(options), {
+    components: wrappedComponents
   })
+
+  return plugins
 }
 
 export default useMemoizedPlugins

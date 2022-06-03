@@ -1,6 +1,6 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-import { TagFlex } from '../TagsRelated'
+import { TagFlex } from '../../../Components/Editor/TagsRelated'
 import { Button } from '@mexit/shared'
 import { CardShadow } from '@mexit/shared'
 

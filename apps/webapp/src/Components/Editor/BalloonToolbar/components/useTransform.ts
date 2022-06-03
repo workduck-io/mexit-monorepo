@@ -1,37 +1,51 @@
-import { Editor, Transforms } from 'slate'
-import { TEditor, getNodes, getSelectionText, insertNodes } from '@udecode/plate'
-
+import { getNodes, getSelectionText, insertNodes, TEditor } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import { NODE_PATH_CHAR_LENGTH, NODE_PATH_SPACER, getSlug, SEPARATOR } from '@mexit/core'
-import { convertContentToRawText } from '@mexit/core'
-import { useSnippetStore } from '../../../../../../../libs/mex-editor/src/lib/store/useSnippetStore'
-import { defaultContent, mog, generateSnippetId } from '@mexit/core'
-import { ELEMENT_ILINK, ILinkNode, useContentStore, useDataStore } from '@workduck-io/mex-editor'
+import { Editor, Transforms } from 'slate'
+
+import {
+  NodeEditorContent,
+  mog,
+  generateSnippetId,
+  defaultContent,
+  getSlug,
+  NODE_PATH_CHAR_LENGTH,
+  NODE_PATH_SPACER,
+  SEPARATOR
+} from '@mexit/core'
+
+import { useContentStore } from '../../../../Stores/useContentStore'
+import { useDataStore } from '../../../../Stores/useDataStore'
+import { useSnippetStore } from '../../../../Stores/useSnippetStore'
+import { ILinkNode } from '../../../../Editor/Types/QuickLink'
+import { ELEMENT_ILINK } from '../../../../Editor/elements'
+import { useEditorStore } from '../../../../Stores/useEditorStore'
+import { convertContentToRawText } from '../../../../Utils/parseData'
+import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 
 export const useTransform = () => {
   const addILink = useDataStore((s) => s.addILink)
   const addSnippet = useSnippetStore((s) => s.addSnippet)
   const setContent = useContentStore((s) => s.setContent)
+  // Checks whether a node is a flowblock
 
-  const convertSelectionToQABlock = (editor: TEditor) => {
+  const replaceSelectionWithTask = (editor: TEditor, todoVal: NodeEditorContent) => {
     try {
-      const selectionPath = Editor.path(editor, editor.selection)
-      const val = selectionToValue(editor)
-      const valText = convertContentToRawText(val)
-
-      // mog('replaceSelectionWithLink  selPath', { selectionPath })
-
       Transforms.removeNodes(editor, { at: editor.selection, hanging: false })
-      // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
+      Transforms.delete(editor)
 
-      mog('replaceSelectionWithQA  ', { selectionPath, val, valText })
+      const convertedVal = convertValueToTasks(todoVal)
+      mog('replaceSelectionWithTask  ', { todoVal, convertedVal })
+
+      insertNodes<any>(editor, convertedVal, {
+        at: editor.selection
+      })
+      // addQABlock(editor, { question: valText, questionId: generateSnippetId() })
     } catch (e) {
       console.error(e)
       return e
     }
   }
-
   // Checks whether current editor selection can be converted
   const isConvertable = (editor: TEditor): boolean => {
     if (!editor) return false
@@ -50,11 +64,7 @@ export const useTransform = () => {
   const replaceSelectionWithLink = (editor: TEditor, ilink: string, inline: boolean) => {
     try {
       if (inline) Transforms.delete(editor)
-      else
-        Transforms.removeNodes(editor, {
-          at: editor.selection,
-          hanging: false
-        })
+      else Transforms.removeNodes(editor, { at: editor.selection, hanging: false })
       // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
 
       // mog('replaceSelectionWithLink  detFrag', { selectionPath })
@@ -70,8 +80,7 @@ export const useTransform = () => {
   }
 
   /**
-   * Converts selection to new snippet
-   * Shows notification of snippet creation
+   * Converts selection to Value
    * @param editor
    */
   const selectionToValue = (editor: TEditor) => {
@@ -141,6 +150,33 @@ export const useTransform = () => {
   }
 
   /**
+   * Converts selection to new Task
+   * @param editor
+   */
+  const selectionToTask = (editor: TEditor) => {
+    if (!editor.selection) return
+    if (!isConvertable(editor)) return
+
+    Editor.withoutNormalizing(editor, () => {
+      // const selectionPath = Editor.path(editor, editor.selection)
+      const nodes = Array.from(
+        getNodes(editor, {
+          mode: 'highest',
+          block: true,
+          at: editor.selection
+        })
+      )
+
+      const value = nodes.map(([node, _path]) => {
+        return node
+      })
+
+      replaceSelectionWithTask(editor, value)
+
+      // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
+    })
+  }
+  /**
    * Converts selection to new snippet
    * Shows notification of snippet creation
    * @param editor
@@ -150,6 +186,7 @@ export const useTransform = () => {
     if (!isConvertable(editor)) return
 
     Editor.withoutNormalizing(editor, () => {
+      const selectionPath = Editor.path(editor, editor.selection)
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',
@@ -182,9 +219,9 @@ export const useTransform = () => {
 
   return {
     selectionToNode,
-    convertSelectionToQABlock,
     isConvertable,
     selectionToSnippet,
+    selectionToTask,
     selectionToValue
   }
 }

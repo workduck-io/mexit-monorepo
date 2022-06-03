@@ -58,12 +58,7 @@ export function MexEditor(props: MexEditorProps) {
     setInternalMetadata(props.meta)
   }, [editorRef, props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { plugins, comboConfigData } = useComboboxConfig(
-    props.editorId,
-    props?.comboboxConfig,
-    props?.components,
-    props?.plugins
-  )
+  const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig)
 
   const onChange = (value: MexEditorValue) => {
     setContent(value)

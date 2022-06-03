@@ -1,11 +1,10 @@
+import React from 'react'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 import { LinkNodeData } from '@udecode/plate-link'
 import { StyledElementProps } from '@udecode/plate-styled-components'
-import React from 'react'
 import styled, { css } from 'styled-components'
-
-import { EditorIcons } from '@mexit/shared'
+import { EditorIcons } from './Icons'
 
 const Link = styled.a`
   position: relative;

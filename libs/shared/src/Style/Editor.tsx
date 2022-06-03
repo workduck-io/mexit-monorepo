@@ -90,7 +90,13 @@ export const StyledEditor = styled.div<StyledEditorProps>`
     width: 100%;
   }
 `
-export const EditorStyles = styled.div`
+export const EditorStyles = styled.div<{ readOnly?: boolean }>`
+  ${({ readOnly }) =>
+    readOnly &&
+    css`
+      pointer-events: none;
+    `};
+
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;

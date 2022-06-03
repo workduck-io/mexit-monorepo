@@ -139,8 +139,6 @@ const EditorPreviewRenderer = ({
     <PreviewStyles
       noMouseEvents={noMouseEvents}
       onClick={(ev) => {
-        // ev.preventDefault()
-        // ev.stopPropagation()
         if (onDoubleClick && ev.detail === 2) {
           onDoubleClick(ev)
         }
