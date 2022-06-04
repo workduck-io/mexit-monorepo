@@ -89,16 +89,6 @@ export const SearchFilterLabel = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
-export const SearchFilterListWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: ${({ theme }) => theme.spacing.small};
-  margin-right: ${({ theme }) => theme.spacing.medium};
-  max-width: 70vw;
-  overflow-x: auto;
-`
-
 export const SearchFilterListCurrent = styled.div`
   display: flex;
   align-items: center;
