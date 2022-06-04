@@ -12,9 +12,10 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useDataStore, useEditorStore } from '@workduck-io/mex-editor'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;

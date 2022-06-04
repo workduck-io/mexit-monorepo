@@ -1,7 +1,7 @@
 import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus } from '@mexit/core'
 import { MexIcon } from '@mexit/shared'
-import { useTodoStore } from '@workduck-io/mex-editor'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTodoStore } from '../../Stores/useTodoStore'
 import { TodoContainer, CheckBoxWrapper, StyledTodoStatus, TodoText, TodoOptions } from '../../Style/Todo.style'
 import PrioritySelect from './PrioritySelect'
 

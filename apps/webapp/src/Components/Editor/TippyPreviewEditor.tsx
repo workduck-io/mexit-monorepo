@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import PreviewEditor from './PreviewEditor'
 import { CardShadow } from '../../Style/Helpers'
-import { useContentStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../../Stores/useContentStore'
 
 export const TippyPreviewEditorWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};

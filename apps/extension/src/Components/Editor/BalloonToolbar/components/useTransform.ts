@@ -3,9 +3,11 @@ import { TEditor, getNodes, getSelectionText, insertNodes } from '@udecode/plate
 
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import { ELEMENT_ILINK, ILinkNode, useContentStore, useSnippetStore } from '@workduck-io/mex-editor'
+import { ELEMENT_ILINK, ILinkNode } from '@workduck-io/mex-editor'
 import { convertContentToRawText } from '@mexit/core'
 import { generateSnippetId, mog } from '@mexit/core'
+import { useContentStore } from '../../../../Stores/useContentStore'
+import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 
 export const useTransform = () => {
   // const addILink = useDataStore((s) => s.addILink)

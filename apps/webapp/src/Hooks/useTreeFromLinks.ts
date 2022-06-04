@@ -1,6 +1,7 @@
 import { sanatizeLinks } from '@mexit/shared'
-import { useEditorStore, useDataStore } from '@workduck-io/mex-editor'
 import { useMemo } from 'react'
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore } from '../Stores/useEditorStore'
 import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
 

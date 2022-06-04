@@ -8,7 +8,11 @@ import React, { useMemo } from 'react'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
-import { useEditorStore, useReminderStore, useDataStore, useTodoStore, useLinks } from '@workduck-io/mex-editor'
+import { useLinks } from '../Hooks/useLinks'
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore } from '../Stores/useEditorStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useTodoStore } from '../Stores/useTodoStore'
 
 /*
 Sidebar links are defined here

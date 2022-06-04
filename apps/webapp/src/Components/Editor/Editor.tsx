@@ -1,26 +1,29 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import {
-  MexEditor,
-  ELEMENT_ILINK,
-  ELEMENT_TAG,
-  ComboboxKey,
-  ComboboxConfig,
-  useDataStore
-} from '@workduck-io/mex-editor'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
-import { MexEditorOptions } from 'libs/mex-editor/src/lib/types/editor'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
-import { ILinkElement } from './ILinkElement'
 import TagWrapper from './TagWrapper'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { ELEMENT_TODO_LI } from '@mexit/core'
 import Todo from '../Todo'
 import { useEditorChange } from '@mexit/shared'
 import { EditorStyles } from '@mexit/shared'
+import { useDataStore } from '../../Stores/useDataStore'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG } from '../../Editor/elements'
+import { ComboboxKey } from '../../Editor/Types/Combobox'
+import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
+import { ComboboxConfig, ComboboxItem, ComboboxType, ComboConfigData } from '../../Editor/Types/MultiCombobox'
+import { useRouting } from '../../Hooks/useRouting'
+import { useSnippets } from '../../Hooks/useSnippets'
+import { CategoryType, QuickLinkType } from '../../Editor/constants'
+import { SlashComboboxItem } from '../../Editor/Components/SlashCommands/SlashComboboxItem'
+import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
+import { QuickLinkElement } from '../../Editor/Components/QuickLink/QuickLinkElement'
+import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
+import components from '../../Editor/Components/EditorPreviewComponents'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -38,84 +41,125 @@ interface EditorProps {
   autoFocus?: boolean
 }
 
-export const commands = [
-  {
-    command: 'table',
-    text: 'Insert Table',
-    icon: 'ri:table-line',
-    type: 'Quick Actions'
-  },
-  // {
-  //   command: 'canvas',
-  //   text: 'Insert Drawing canvas',
-  //   icon: 'ri:markup-line',
-  //   type: 'Quick Actions'
-  // },
-  {
-    command: 'webem',
-    text: 'Insert Web embed',
-    icon: 'ri:global-line',
-    type: 'Quick Actions'
-  }
-]
-
 const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
   const addILink = useDataStore((store) => store.addILink)
+  const slashCommands = useDataStore((store) => store.slashCommands)
 
-  const comboboxConfig: ComboboxConfig = {
-    onKeyDownConfig: {
-      keys: {
-        ilink: {
-          slateElementType: ELEMENT_ILINK,
-          // @ts-expect-error Mex Space requires it in this format
-          newItemHandler: (ilink: string, parentId?: string) => addILink(ilink, null, parentId)
+  const { getSnippetConfigs } = useSnippets()
+
+  const snippetConfigs = getSnippetConfigs()
+  const { params, location } = useRouting()
+
+  const ilinksForCurrentNode = useMemo(() => {
+    if (params.snippetid) return ilinks
+
+    return ilinks.filter((item) => item.nodeid !== nodeUID)
+  }, [nodeUID, ilinks])
+
+  const slashInternals = useMemo(() => {
+    const snippetName = (location?.state as any)?.title
+    if (params.snippetid && snippetName) {
+      return slashCommands.internal.filter((item) => snippetName !== item.text)
+    }
+
+    return slashCommands.internal
+  }, [slashCommands.internal])
+
+  const internals: ComboboxItem[] = [
+    ...ilinksForCurrentNode.map((l) => ({
+      ...l,
+      value: l.nodeid,
+      text: l.path,
+      icon: l.icon ?? 'ri:file-list-2-line',
+      type: QuickLinkType.backlink
+    })),
+    ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
+  ]
+
+  const comboOnKeyDownConfig: ComboConfigData = {
+    keys: {
+      inline_block: {
+        slateElementType: ELEMENT_INLINE_BLOCK,
+        newItemHandler: (newItem, parentId?) => {
+          const link = addILink({ ilink: newItem, parentId })
+          return link.nodeid
         },
-        tag: {
-          slateElementType: ELEMENT_TAG,
-          newItemHandler: (tag: string) => addTag(tag)
-        },
-        slash_command: {
-          slateElementType: 'slash_command',
-          newItemHandler: () => undefined
-        }
-      },
-      slashCommands: {
-        webem: {
-          slateElementType: ELEMENT_MEDIA_EMBED,
-          command: 'webem',
-          options: {
-            url: 'http://example.com/'
-          }
-        },
-        table: {
-          slateElementType: ELEMENT_TABLE,
-          command: 'table'
-        }
-      }
-    },
-    // TODO: fix the value of ilink, it should be nodeId rather than the path
-    onChangeConfig: {
-      ilink: {
-        cbKey: ComboboxKey.ILINK,
-        trigger: '[[',
-        data: ilinks.map((l) => ({ ...l, value: l.path, text: l.path })),
-        icon: 'add-something-here'
+        renderElement: QuickLinkComboboxItem
       },
       tag: {
-        cbKey: ComboboxKey.TAG,
-        trigger: '#',
-        data: tags,
-        icon: 'ri:hashtag'
+        slateElementType: ELEMENT_TAG,
+        newItemHandler: (newItem) => {
+          addTag(newItem)
+          return newItem
+        },
+        renderElement: TagComboboxItem
       },
       slash_command: {
-        cbKey: ComboboxKey.SLASH_COMMAND,
-        trigger: '/',
-        data: commands.map((l) => ({ ...l, value: l.command })),
-        icon: 'ri:flask-line'
+        slateElementType: 'slash_command',
+        newItemHandler: () => undefined,
+        renderElement: SlashComboboxItem
+      },
+      internal: {
+        slateElementType: 'internal',
+        newItemHandler: (newItem, parentId?) => {
+          const link = addILink({ ilink: newItem, parentId })
+          // mog('Link', { link, newItem, parentId })
+          return link.nodeid
+        },
+        renderElement: SlashComboboxItem
       }
+    },
+    internal: {
+      ilink: {
+        slateElementType: ELEMENT_ILINK,
+        newItemHandler: (newItem, parentId?) => {
+          const link = addILink({ ilink: newItem, parentId })
+          // mog('Link', { link, newItem, parentId })
+          return link.nodeid
+        },
+        renderElement: QuickLinkComboboxItem
+      },
+      commands: {
+        ...snippetConfigs
+      }
+    },
+    slashCommands: {
+      webem: {
+        slateElementType: ELEMENT_MEDIA_EMBED,
+        command: 'webem',
+        options: {
+          url: 'http://example.com/'
+        }
+      },
+      table: {
+        slateElementType: ELEMENT_TABLE,
+        command: 'table'
+      }
+    }
+  }
+
+  const comboOnChangeConfig: Record<string, ComboboxType> = {
+    internal: {
+      cbKey: ComboboxKey.INTERNAL,
+      trigger: '[[',
+      blockTrigger: ':',
+      data: internals,
+      icon: 'ri:file-list-2-line'
+    },
+    tag: {
+      cbKey: ComboboxKey.TAG,
+      trigger: '#',
+      data: tags.map((t) => ({ ...t, value: t.text })),
+      icon: 'ri:hashtag'
+    },
+    slash_command: {
+      cbKey: ComboboxKey.SLASH_COMMAND,
+      trigger: '/',
+      icon: 'ri:flask-line',
+      data: slashCommands.default.map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
     }
   }
 
@@ -131,6 +175,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       edge: 'start',
       focus: true
     },
+    withDraggable: false,
     withBalloonToolbar: true
   }
 
@@ -139,20 +184,16 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     f(value)
   }, 1000)
 
+  const comboboxConfig: ComboboxConfig = {
+    onChangeConfig: comboOnChangeConfig,
+    onKeyDownConfig: comboOnKeyDownConfig
+  }
+
   return (
     <EditorWrapper>
       <MexEditor
         comboboxConfig={comboboxConfig}
-        components={{
-          [ELEMENT_ILINK]: ILinkElement,
-          [ELEMENT_TAG]: TagWrapper,
-          [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
-          [ELEMENT_TABLE]: TableWrapper,
-          [ELEMENT_TODO_LI]: Todo,
-          [ELEMENT_LINK]: withProps(LinkElement, {
-            as: 'a'
-          })
-        }}
+        components={components}
         meta={{
           path: nodePath
         }}

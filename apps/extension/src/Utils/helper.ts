@@ -9,7 +9,7 @@ import {
   ActionType,
   MexitAction
 } from '@mexit/core'
-import { useContentStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
 import { ListItemType } from '../Types/List'
 
 export function getContent(nodeid: string): NodeContent {

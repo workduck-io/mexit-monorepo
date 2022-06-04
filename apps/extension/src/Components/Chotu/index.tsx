@@ -30,7 +30,9 @@ import fuzzysort from 'fuzzysort'
 import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useQuickLinks } from '../../Hooks/useQuickLinks'
-import { useSnippetStore, useContentStore, useDataStore } from '@workduck-io/mex-editor'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { useContentStore } from '../../Stores/useContentStore'
+import useDataStore from '../../Stores/useDataStore'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()

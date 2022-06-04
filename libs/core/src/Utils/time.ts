@@ -1,5 +1,6 @@
 import { formatDistanceToNow, formatRelative, format, add, sub, startOfToday } from 'date-fns'
 import { capitalize } from './strings'
+import * as chrono from 'chrono-node'
 
 export const toLocaleString = (date: Date) => {
   return date.toLocaleString('en-US', {
@@ -48,4 +49,40 @@ export const getNextReminderTime = () => {
   const nextFifteenMinute = add(today, { minutes: 15 })
   // const nextDay10AM = add(tomorrow, { hours: 10 })
   return nextFifteenMinute
+}
+
+const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const extra = ['Tomorrow']
+const timesToResetSimple = [...dayNamesShort, ...dayNames, ...extra]
+const timesToReset = [...timesToResetSimple, ...timesToResetSimple.map((x) => x.toLowerCase())]
+const surroundingCaps = [' On', ' At']
+const surrounding = [...surroundingCaps, ...surroundingCaps.map((x) => x.toLowerCase())]
+
+const customChrono = chrono.casual.clone()
+customChrono.refiners.push({
+  // Resets the time to 9am from the current time for the reset days
+  refine: (context, results) => {
+    results.forEach((result) => {
+      if (timesToReset.includes(result.text)) {
+        result.start.assign('hour', 9)
+        result.start.assign('minute', 0)
+        result.start.assign('second', 0)
+      }
+    })
+    return results
+  }
+})
+
+export const getTimeInText = (text: string): { time: Date; textWithoutTime: string } | undefined => {
+  const parsed = customChrono.parse(text)
+  if (parsed.length > 0) {
+    const parse = parsed[0]
+    const parsedTimeText = parse.text
+    const textRemoveSurrounding = surrounding.reduce((acc, cur) => acc.replace(cur, ''), text).trim()
+    const textWithoutTime = textRemoveSurrounding.replace(parsedTimeText, '').trim()
+
+    return { time: parse.date(), textWithoutTime }
+  }
+  return undefined
 }

@@ -14,7 +14,8 @@ import { useRenameStore } from '../../Stores/useRenameStore'
 import { ModalHeader, MockRefactorMap, MRMHead, MRMRow, ArrowIcon, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { doesLinkRemain } from './doesLinkRemain'
-import { useLinks, useEditorStore } from '@workduck-io/mex-editor'
+import { useLinks } from '../../Hooks/useLinks'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Rename = () => {
   const { execRefactor, getMockRefactor } = useRefactor()

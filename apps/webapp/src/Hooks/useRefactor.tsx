@@ -7,7 +7,7 @@ import { getAllParentIds, getNodeIcon } from '@mexit/shared'
 import { useEditorBuffer } from './useEditorBuffer'
 
 import { useRefactorStore } from '../Stores/useRefactorStore'
-import { useDataStore } from '@workduck-io/mex-editor'
+import { useDataStore } from '../Stores/useDataStore'
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
   const index = refactored.map((r) => r.from).indexOf(id)

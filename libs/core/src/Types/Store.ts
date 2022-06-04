@@ -1,4 +1,14 @@
-import { AddILinkProps, CachedILink, ILink, InitData, InitDataStoreType, LinkCache, Tag, TagsCache } from './Editor'
+import {
+  AddILinkProps,
+  CachedILink,
+  ILink,
+  InitData,
+  InitDataStoreType,
+  LinkCache,
+  SlashCommands,
+  Tag,
+  TagsCache
+} from './Editor'
 
 export interface DataStoreState {
   tags: Tag[]
@@ -9,6 +19,7 @@ export interface DataStoreState {
   bookmarks: string[]
   archive: ILink[]
   publicNodes: Record<string, string>
+  slashCommands: SlashCommands
 
   initializeDataStore: (initData: InitDataStoreType) => void
 
@@ -20,6 +31,8 @@ export interface DataStoreState {
 
   setIlinks: (ilinks: ILink[]) => void
   setBaseNodeId: (baseNodeId: string) => void
+
+  setSlashCommands: (slashCommands: SlashCommands) => void
 
   // Bookmarks
   addBookmarks: (bookmarks: string[]) => void

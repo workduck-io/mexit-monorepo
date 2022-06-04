@@ -1,7 +1,9 @@
 import { TreeItem, TreeData } from '@atlaskit/tree'
 import { Contents, mog, NodeMetadata } from '@mexit/core'
 import { isElder, isParent, getParentId, getNameFromPath, TreeNode } from '@mexit/shared'
-import { useContentStore, useReminderStore, useTodoStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useTodoStore } from '../Stores/useTodoStore'
 import { filterIncompleteTodos } from './filter'
 
 export const sortTree = (tree: TreeNode[], contents: Contents): TreeNode[] => {
@@ -78,26 +80,6 @@ interface FlatItem {
   tasks?: number
   reminders?: number
   icon?: string
-}
-
-const getItem = (treeFlat: FlatItem[], id: string): number | undefined => {
-  const item = treeFlat.findIndex((n) => n.id === id)
-  return item ? item : null
-}
-
-const getParentItemId = (path: string, treeData: TreeData): string | undefined => {
-  const parentPath = getParentId(path)
-
-  if (parentPath) {
-    const parentItem = Object.entries(treeData.items).find(([_k, n]) => {
-      return n.data.path === parentPath
-    })
-    // mog('parentPath', { parentPath, parentItem, treeData })
-    if (parentItem) {
-      return parentItem[0]
-    }
-  }
-  return undefined
 }
 
 export const TREE_SEPARATOR = '-'

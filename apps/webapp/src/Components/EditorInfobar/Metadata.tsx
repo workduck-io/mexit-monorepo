@@ -12,7 +12,7 @@ import { ProfileIcon } from '../../Style/UserPage'
 import { NodeMetadata, NodeProperties } from '@mexit/core'
 import { RelativeTime } from '../RelativeTime'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
-import { useContentStore } from '@workduck-io/mex-editor'
+import { useContentStore } from '../../Stores/useContentStore'
 
 const Data = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};

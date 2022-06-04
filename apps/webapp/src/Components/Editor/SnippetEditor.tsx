@@ -16,7 +16,7 @@ import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBu
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
 import { useApi } from '../../Hooks/useApi'
-import { useSnippetStore } from '@workduck-io/mex-editor'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 type Inputs = {
   title: string

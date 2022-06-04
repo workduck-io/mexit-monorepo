@@ -17,13 +17,10 @@ import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useRefactor } from './useRefactor'
 import { checkIfUntitledDraftNode } from '@mexit/core'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
-import {
-  getContent,
-  getPathFromNodeIdHookless,
-  useContentStore,
-  useDataStore,
-  useEditorStore
-} from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore, getContent } from '../Stores/useEditorStore'
+import { getPathFromNodeIdHookless } from './useLinks'
 
 export interface LoadNodeOptions {
   savePrev?: boolean

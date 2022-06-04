@@ -9,7 +9,7 @@ import { useApi } from '../../Hooks/useApi'
 import { MexIcon } from '@mexit/shared'
 import { CopyButton } from '../Buttons/CopyButton'
 import { mog } from '@mexit/core'
-import { useEditorStore } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Flex = css`
   display: flex;

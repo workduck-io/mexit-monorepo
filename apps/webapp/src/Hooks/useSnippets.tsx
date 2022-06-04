@@ -1,5 +1,6 @@
 import { mog, SEPARATOR, Snippet } from '@mexit/core'
-import { SlashCommandConfig, useSnippetStore } from '@workduck-io/mex-editor'
+import { SlashCommandConfig } from '../Editor/Types/Combobox'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {
@@ -13,7 +14,7 @@ export const useSnippets = () => {
     return useSnippetStore.getState().snippets
   }
 
-  const getSnippetsConfigs = (): { [key: string]: SlashCommandConfig } => {
+  const getSnippetConfigs = (): { [key: string]: SlashCommandConfig } => {
     const snippets = useSnippetStore.getState().snippets
     return snippets.reduce((prev, cur) => {
       const snipCommand = getSnippetCommand(cur.title)
@@ -75,7 +76,7 @@ export const useSnippets = () => {
     getSnippets,
     getSnippet,
     getSnippetContent,
-    getSnippetsConfigs,
+    getSnippetConfigs,
     addSnippet,
     updateSnippet,
     deleteSnippet

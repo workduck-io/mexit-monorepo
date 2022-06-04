@@ -10,7 +10,7 @@ import { useHelpStore } from '../../Stores/useHelpStore'
 import { InfoTools, NodeInfo } from '@mexit/shared'
 import BookmarkButton from '../Buttons/BookmarkButton'
 import NodeRenameTitle from './NodeRenameTitle'
-import { useEditorStore } from '@workduck-io/mex-editor'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)

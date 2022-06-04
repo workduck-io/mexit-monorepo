@@ -1,11 +1,11 @@
 import React from 'react'
-import { useContentStore } from '@workduck-io/mex-editor'
 import Highlighter from 'web-highlighter'
 import { copyToClipboard } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
 import { NodeEditorContent } from '@mexit/core'
+import { useContentStore } from '../../Stores/useContentStore'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()

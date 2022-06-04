@@ -1,7 +1,7 @@
-import { useLinks } from '@workduck-io/mex-editor'
 import React from 'react'
 
 import useLoad from '../../Hooks/useLoad'
+import { useLinks } from '../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { NodeLinkStyled } from '../../Style/Backlinks'
 import TippyPreviewEditor from '../Editor/TippyPreviewEditor'

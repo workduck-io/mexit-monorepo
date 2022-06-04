@@ -7,7 +7,8 @@ import { areEqual } from '../Utils/hash'
 import { TodoType, checkIfUntitledDraftNode } from '@mexit/core'
 
 import { analyseContent } from '../Workers/controller'
-import { getContent, useEditorStore, useTodoStore } from '@workduck-io/mex-editor'
+import { useEditorStore, getContent } from './useEditorStore'
+import { useTodoStore } from './useTodoStore'
 
 export interface OutlineItem {
   id: string

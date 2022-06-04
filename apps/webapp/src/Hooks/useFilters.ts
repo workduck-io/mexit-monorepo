@@ -4,7 +4,7 @@ import { GenericSearchResult, mog } from '@mexit/core'
 import { isElder, getAllParentIds } from '@mexit/shared'
 
 import { useTags } from './useTags'
-import { useLinks } from '@workduck-io/mex-editor'
+import { useLinks } from './useLinks'
 
 /*
 - Date

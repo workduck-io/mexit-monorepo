@@ -3,6 +3,7 @@ export * from './Data/constants'
 export * from './Data/IpcAction'
 export * from './Data/outline'
 export * from './Data/search'
+export * from './Data/defaultCommands'
 
 export * from './Stores/authStoreConstructor'
 export * from './Stores/contentStoreConstructor'

@@ -7,9 +7,10 @@ import { defaultContent, ILink, uniq } from '@mexit/core'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { Title } from '../Style/Elements'
 import { SSnippets, SSnippet, SnippetHeader, SnippetCommand, StyledSnippetPreview } from '../Style/Snippets'
-import EditorPreviewRenderer from '../Components/EditorPreviewRenderer'
 import { useRecentsStore } from '../Stores/useRecentsStore'
-import { useContentStore, useDataStore } from '@workduck-io/mex-editor'
+import { useDataStore } from '../Stores/useDataStore'
+import { useContentStore } from '../Stores/useContentStore'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 
 function DraftView() {
   const { contents } = useContentStore()

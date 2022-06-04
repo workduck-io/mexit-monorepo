@@ -43,7 +43,8 @@ import { getUntitledDraftKey } from '@mexit/core'
 import { useInternalLinks } from '../../Data/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useDataStore, useLinks } from '@workduck-io/mex-editor'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useLinks } from '../../Hooks/useLinks'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)

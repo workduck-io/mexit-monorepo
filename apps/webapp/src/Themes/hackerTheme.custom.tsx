@@ -3,7 +3,6 @@ import { css } from 'styled-components'
 
 import { EditorStyles, NodeInfo, Button, AsyncButton, Widget } from '@mexit/shared'
 
-import { EditorPreviewWrapper } from '../Components/Editor/EditorPreview/EditorPreview.styles'
 import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
@@ -14,6 +13,7 @@ import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
+import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
 
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}

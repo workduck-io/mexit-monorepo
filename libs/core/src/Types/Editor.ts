@@ -167,7 +167,6 @@ export interface NodeProperties {
 export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
-  flow = 'Flows',
   tags = 'Tags',
   action = 'Actions'
 }
@@ -179,10 +178,12 @@ export enum ComboboxKey {
   SLASH_COMMAND = 'slash_command',
   BLOCK = 'block'
 }
+
 export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
-  search = 'Search Results'
+  search = 'Search Results',
+  task = 'Task'
 }
 
 export interface SlashCommand {

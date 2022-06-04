@@ -8,7 +8,9 @@ import { isRequestedWithin } from '../Stores/useApiStore'
 import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
 import { useInternalLinks } from './../Data/useInternalLinks'
-import { useContentStore, useDataStore, useLinks } from '@workduck-io/mex-editor'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useLinks } from './useLinks'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
