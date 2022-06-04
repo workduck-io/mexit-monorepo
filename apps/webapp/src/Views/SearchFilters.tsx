@@ -5,13 +5,22 @@ import { FilterKey, SearchFilter } from '../Hooks/useFilters'
 import {
   SearchFilterCancel,
   SearchFilterCategoryLabel,
+  SearchFilterCount,
   SearchFilterLabel,
   SearchFilterList,
+  SearchFilterListCurrent,
+  SearchFilterListSuggested,
+  SearchFilterListWrap,
   SearchFilterStyled,
   SearchFilterWrapper
 } from '../Style/Search'
 import { startCase } from 'lodash'
 import { Icon } from '@iconify/react'
+import Infobox from '../Components/Infobox'
+import { nanoid } from 'nanoid'
+import { SearchFiltersHelp } from '../Data/defaultText'
+import SearchFilterInput from '../Components/SearchFilterInput'
+import { mog } from '@mexit/core'
 
 interface SearchFiltersProps<Item> {
   result?: any
@@ -23,6 +32,7 @@ interface SearchFiltersProps<Item> {
 }
 
 const getGroupedFilters = <Item,>(filters: SearchFilter<Item>[], currentFilters: SearchFilter<Item>[]) => {
+  const randomId = nanoid()
   // Remove current filters from filters
   const suggestedFilters = filters.filter(
     (filter) => !currentFilters.find((currentFilter) => currentFilter.id === filter.id)
@@ -57,13 +67,13 @@ const getGroupedFilters = <Item,>(filters: SearchFilter<Item>[], currentFilters:
     filtersByKey[key].current.push(filter)
   })
 
-  Object.entries(filtersByKey).forEach(([key, { current, suggested }]) => {
-    if (suggested.length > 5) {
-      filtersByKey[key].suggested = suggested.slice(0, 5)
-    }
-  })
+  // Object.entries(filtersByKey).forEach(([key, { current, suggested }]) => {
+  //   if (suggested.length > 5) {
+  //     filtersByKey[key].suggested = suggested.slice(0, 5)
+  //   }
+  // })
 
-  return { filtersByKey }
+  return { filtersByKey, randomId }
 }
 
 const SearchFilters = <Item,>({
@@ -74,8 +84,22 @@ const SearchFilters = <Item,>({
   removeCurrentFilter,
   resetCurrentFilters
 }: SearchFiltersProps<Item>) => {
-  const { filtersByKey } = useMemo(() => getGroupedFilters(filters, currentFilters), [filters, currentFilters, result])
-  // mog('SearchFilters', { filters, currentFilters, filtersByKey })
+  const { filtersByKey, randomId } = useMemo(
+    () => getGroupedFilters(filters, currentFilters),
+    [filters, currentFilters, result]
+  )
+
+  mog('SearchFilters', { filters, currentFilters, filtersByKey })
+
+  const toggleForFilter = (filter: SearchFilter<Item>) => {
+    if (currentFilters.find((currentFilter) => currentFilter.id === filter.id)) {
+      // mog('removeCurrentFilter', { filter })
+      removeCurrentFilter(filter)
+    } else {
+      // mog('addCurrentFilter', { filter })
+      addCurrentFilter(filter)
+    }
+  }
 
   return (
     <SearchFilterWrapper>
@@ -89,31 +113,51 @@ const SearchFilters = <Item,>({
           return (
             <SearchFilterList key={`filter_options${k}`}>
               <SearchFilterCategoryLabel>{startCase(k)}:</SearchFilterCategoryLabel>
-              {filter.current.map((f) => (
-                <SearchFilterStyled
-                  selected
-                  key={`current_f_${f.id}`}
-                  onClick={() => {
-                    removeCurrentFilter(f)
-                    // updateResults()
-                  }}
-                >
-                  {f.icon ? <Icon icon={f.icon} /> : null}
-                  {f.label}
-                </SearchFilterStyled>
-              ))}
-              {filter.suggested.map((f) => (
-                <SearchFilterStyled
-                  key={`suggested_f_${f.id}`}
-                  onClick={() => {
-                    addCurrentFilter(f)
-                    // updateResults()
-                  }}
-                >
-                  {f.icon ? <Icon icon={f.icon} /> : null}
-                  {f.label}
-                </SearchFilterStyled>
-              ))}
+
+              <SearchFilterListWrap>
+                {filter.current.length > 0 && (
+                  <SearchFilterListCurrent>
+                    {filter.current.map((f) => (
+                      <SearchFilterStyled
+                        selected
+                        key={`current_f_${f.id}`}
+                        onClick={() => {
+                          removeCurrentFilter(f)
+                          // updateResults()
+                        }}
+                      >
+                        {f.icon ? <Icon icon={f.icon} /> : null}
+                        {f.label}
+                        {f.count && <SearchFilterCount>{f.count}</SearchFilterCount>}
+                      </SearchFilterStyled>
+                    ))}
+                  </SearchFilterListCurrent>
+                )}
+                {filter.suggested.length > 0 && (
+                  <SearchFilterListSuggested>
+                    {filter.suggested.slice(0, 5).map((f) => (
+                      <SearchFilterStyled
+                        key={`suggested_f_${f.id}`}
+                        onClick={() => {
+                          addCurrentFilter(f)
+                          // updateResults()
+                        }}
+                      >
+                        {f.icon ? <Icon icon={f.icon} /> : null}
+                        {f.label}
+                        {f.count && <SearchFilterCount>{f.count}</SearchFilterCount>}
+                      </SearchFilterStyled>
+                    ))}
+                  </SearchFilterListSuggested>
+                )}
+              </SearchFilterListWrap>
+              <SearchFilterInput
+                key={`filter_input_${randomId}`}
+                items={[...filter.current, ...filter.suggested]}
+                onChange={(value) => {
+                  toggleForFilter(value)
+                }}
+              />
             </SearchFilterList>
           )
         })}
@@ -123,6 +167,7 @@ const SearchFilters = <Item,>({
           Reset
         </SearchFilterCancel>
       )}
+      <Infobox text={SearchFiltersHelp} />
     </SearchFilterWrapper>
   )
 }
