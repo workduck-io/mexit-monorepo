@@ -43,7 +43,9 @@
     "storage",
     "tabs",
     "activeTab",
-    "search"
+    "search",
+    "<all_urls>",
+    "webNavigation"
   ],
   "web_accessible_resources": [
     {

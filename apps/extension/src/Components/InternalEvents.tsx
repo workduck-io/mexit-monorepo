@@ -21,6 +21,7 @@ export function InternalEvents() {
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
+  useVimium()
   // useFocusHandler()
   return null
 }
@@ -32,7 +33,6 @@ const highlighter = new Highlighter()
  */
 function useToggleHandler() {
   const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
-
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
       switch (request.type) {
@@ -224,4 +224,48 @@ function useDocumentLock() {
       document.documentElement.style.removeProperty('margin-right')
     }
   }, [visualState])
+}
+
+function useVimium() {
+  const [toggleVimium , setToggleVimium] = React.useState<boolean>(true);
+  function doFunction(e: KeyboardEvent) {
+    if (e.key === "k") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset - 100);
+    }
+    if (e.key === "j") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset + 100);
+    }
+    if (e.key === "h") {
+      window.scrollTo(window.pageXOffset - 100, window.pageYOffset);
+    }
+    if (e.key === "l") {
+      window.scrollTo(window.pageXOffset + 100, window.pageYOffset);
+    }
+    if (e.key === "d") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset + window.innerHeight/2);
+    }
+    if (e.key === "d") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset - window.innerHeight/2);
+    }
+    if (e.key === "r") {
+      location.reload();
+    }
+    if (e.key === "i") {
+      setToggleVimium(false);
+    }
+    if (e.key === "b") {
+      let url = window.location.href;
+      url = "view-source:" + url;
+      console.log(url);
+      window.open(url , '_blank');
+    }
+  }
+  function checkKeyHandler(event: KeyboardEvent) {
+    // setPressKey(event.key);
+    if (event.key === "escape") {
+      setToggleVimium(true);
+    }
+    if(toggleVimium)doFunction(event);
+  }
+  window.addEventListener("keydown", checkKeyHandler)
 }
