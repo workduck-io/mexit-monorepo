@@ -5,7 +5,7 @@ import { useFocused, useSelected } from 'slate-react'
 import { TagElementProps } from './TagElement.types'
 import { STag, STagRoot } from './TagElement.styles'
 import { useHotkeys } from '../../hooks/useHotKeys'
-import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
+import { useOnMouseClick } from '../../hooks/useOnMouseClick'
 
 /**
  * TagElement with no default styles.
