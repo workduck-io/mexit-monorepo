@@ -60,14 +60,7 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const { addedILinks, removedILinks } = d.data
-        const time = Date.now()
-        const metadata = {
-          lastEditedBy: userDetails?.email,
-          createdBy: userDetails?.email,
-          createdAt: time,
-          updatedAt: time
-        }
-        setMetadata(nodeid, extractMetadata(metadata))
+        setMetadata(nodeid, extractMetadata(d.data))
         updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
         return d.data
       })
@@ -131,15 +124,7 @@ export const useApi = () => {
         }
       })
       .then((d: any) => {
-        const metadata = {
-          createdBy: d.data.createdBy,
-          createdAt: d.data.createdAt,
-          lastEditedBy: d.data.lastEditedBy,
-          updatedAt: d.data.updatedAt
-        }
-
-        // console.log(metadata, d.data)
-        return { data: d.data.data, metadata: removeNulls(metadata), version: d.data.version ?? undefined }
+        return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
       })
       .catch(console.error)
 

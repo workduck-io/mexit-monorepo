@@ -4,7 +4,6 @@ export interface Content {
   id: string
   highlighterId: string
   content: NodeEditorContent
-  range: Partial<HighlightSource>
   metaData?: NodeMetadata
 }
 
