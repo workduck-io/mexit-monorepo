@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ComboboxItemProps } from '../../../components/ComboBox/types'
+import { ComboboxItemProps } from '../../types'
 
 export type ITagComboboxItemData =
   | {

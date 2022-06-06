@@ -10,8 +10,7 @@ import {
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useEffect, useMemo, useRef } from 'react'
-import styled from 'styled-components'
+import React, { useState, useMemo } from 'react'
 
 import { EditorStyles, useEditorChange } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
@@ -22,9 +21,8 @@ import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import { Tag, CaptureType, QuickLinkType, ActionType } from '@mexit/core'
+import { Tag, QuickLinkType, ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
-import { styleSlot } from '../../contentScript'
 import useDataStore from '../../Stores/useDataStore'
 import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
 
@@ -43,12 +41,6 @@ const commands = [
     icon: 'ri:table-line',
     type: 'Quick Actions'
   },
-  // {
-  //   command: 'canvas',
-  //   text: 'Insert Drawing canvas',
-  //   icon: 'ri:markup-line',
-  //   type: 'Quick Actions'
-  // },
   {
     command: 'webem',
     text: 'Insert Web embed',
