@@ -9,7 +9,7 @@ export const ComboboxRoot = styled.ul<{ isOpen: boolean }>`
       position: absolute;
       padding: 0;
       margin: 0;
-      z-index: 11;
+      z-index: 9999999998;
       background: ${theme.colors.background.modal};
       width: 300px;
       border-radius: 8px;

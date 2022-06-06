@@ -162,7 +162,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
           options={editorOptions}
           editorId={node.nodeid}
           value={nodeContent}
-          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-container')}
         />
       </EditorStyles>
     </EditorWrapper>

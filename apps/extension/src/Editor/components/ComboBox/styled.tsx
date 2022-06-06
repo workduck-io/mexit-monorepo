@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const ComboboxRoot = styled.ul<{ isOpen: boolean }>`
   ${({ isOpen, theme }) =>
@@ -9,20 +9,19 @@ export const ComboboxRoot = styled.ul<{ isOpen: boolean }>`
       position: absolute;
       padding: 0;
       margin: 0;
-      z-index: 11;
+      z-index: 9999999998;
       background: ${theme.colors.background.modal};
       width: 300px;
       border-radius: 8px;
-      box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0,
-        rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
+      box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
     `}
-`;
+`
 
-export const ItemTitle = styled.div``;
+export const ItemTitle = styled.div``
 export const ItemRightIcons = styled.div`
   display: flex;
   flex-gap: ${({ theme }) => theme.spacing.tiny};
-`;
+`
 
 export const ItemDesc = styled.div`
   margin-top: ${({ theme }) => theme.spacing.tiny};
@@ -31,10 +30,10 @@ export const ItemDesc = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
+`
 export const ItemCenterWrapper = styled.div`
   width: 90%;
-`;
+`
 
 export const ComboboxItem = styled.div<{ highlighted: boolean }>`
   display: flex;
@@ -55,8 +54,7 @@ export const ComboboxItem = styled.div<{ highlighted: boolean }>`
   min-height: 36px;
   user-select: none;
   color: ${({ theme }) => theme.colors.text.subheading};
-  background: ${({ highlighted, theme }) =>
-    !highlighted ? 'transparent' : theme.colors.background.highlight};
+  background: ${({ highlighted, theme }) => (!highlighted ? 'transparent' : theme.colors.background.highlight)};
   cursor: pointer;
 
   :hover {
@@ -66,4 +64,4 @@ export const ComboboxItem = styled.div<{ highlighted: boolean }>`
   & > svg {
     color: ${({ theme }) => theme.colors.gray[4]};
   }
-`;
+`
