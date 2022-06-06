@@ -2,7 +2,7 @@ import { deleteFragment, PlatePlugin, WithOverride } from '@udecode/plate-core'
 import { Editor, Range } from 'slate'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { ELEMENT_ILINK } from '../elements'
+import { ELEMENT_ILINK } from '@mexit/core'
 import { ComboboxKey } from '../Types/Combobox'
 
 /**

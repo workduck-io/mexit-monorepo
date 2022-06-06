@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {
-  createPlateUI,
-  ELEMENT_LINK,
-  ELEMENT_MEDIA_EMBED,
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TABLE,
-  ELEMENT_TODO_LI,
-  withProps
-} from '@udecode/plate'
+import { createPlateUI, withProps } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 
 import Todo from '../../Components/Todo'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG } from '../elements'
 import InlineBlock from './InlineBlock'
 import TagWrapper from '../../Components/Editor/TagWrapper'
+import {
+  ELEMENT_ILINK,
+  ELEMENT_INLINE_BLOCK,
+  ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TABLE,
+  ELEMENT_TAG,
+  ELEMENT_TODO_LI
+} from '@mexit/core'
 
 export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {

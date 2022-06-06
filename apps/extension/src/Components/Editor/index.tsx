@@ -1,17 +1,8 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import {
-  MexEditor,
-  ComboboxKey,
-  QuickLinkElement,
-  ComboboxConfig,
-  ELEMENT_TAG,
-  ELEMENT_ILINK
-} from '@workduck-io/mex-editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useEffect, useMemo, useRef } from 'react'
-import styled from 'styled-components'
+import React, { useState, useMemo } from 'react'
 
 import { EditorStyles, useEditorChange } from '@mexit/shared'
 import generatePlugins from '../../Utils/plugins'
@@ -22,11 +13,12 @@ import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import { Tag, CaptureType, QuickLinkType, ActionType } from '@mexit/core'
+import { Tag, QuickLinkType, ActionType, ELEMENT_TAG, ELEMENT_ILINK } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
-import { styleSlot } from '../../contentScript'
 import useDataStore from '../../Stores/useDataStore'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
+import MexEditor from '../../Editor/MexEditor'
+import { MexEditorOptions } from '../../Editor/types/editor'
 
 interface EditorProps {
   nodePath?: string
@@ -43,12 +35,6 @@ const commands = [
     icon: 'ri:table-line',
     type: 'Quick Actions'
   },
-  // {
-  //   command: 'canvas',
-  //   text: 'Insert Drawing canvas',
-  //   icon: 'ri:markup-line',
-  //   type: 'Quick Actions'
-  // },
   {
     command: 'webem',
     text: 'Insert Web embed',
@@ -60,17 +46,10 @@ const commands = [
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
-  const currTabURL = window.location.href
-  const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
-  const [userTags, setUserTags] = useState<Tag[]>([])
   const ilinks = useDataStore((store) => store.ilinks)
 
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
-
-  const plugins = createPlugins(generatePlugins())
-  const userDetails = useAuthStore((store) => store.userDetails)
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
@@ -183,7 +162,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
           options={editorOptions}
           editorId={node.nodeid}
           value={nodeContent}
-          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-container')}
         />
       </EditorStyles>
     </EditorWrapper>

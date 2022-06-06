@@ -1,10 +1,13 @@
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { contentStoreConstructor, ContentStoreState, storageAdapter } from '@mexit/core'
+
+import { contentStoreConstructor, ContentStoreState } from '@mexit/core'
+
+import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 export const useContentStore = create<ContentStoreState>(
   persist(contentStoreConstructor, {
     name: 'mexit-content-store',
-    ...storageAdapter
+    getStorage: () => asyncLocalStorage
   })
 )

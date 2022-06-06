@@ -11,16 +11,16 @@ import {
   getSlug,
   NODE_PATH_CHAR_LENGTH,
   NODE_PATH_SPACER,
-  SEPARATOR
+  SEPARATOR,
+  ELEMENT_ILINK,
+  convertContentToRawText
 } from '@mexit/core'
 
 import { useContentStore } from '../../../../Stores/useContentStore'
 import { useDataStore } from '../../../../Stores/useDataStore'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 import { ILinkNode } from '../../../../Editor/Types/QuickLink'
-import { ELEMENT_ILINK } from '../../../../Editor/elements'
 import { useEditorStore } from '../../../../Stores/useEditorStore'
-import { convertContentToRawText } from '../../../../Utils/parseData'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 
 export const useTransform = () => {

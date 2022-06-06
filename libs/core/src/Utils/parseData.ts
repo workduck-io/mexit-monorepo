@@ -1,6 +1,17 @@
+import { ELEMENT_TODO_LI } from '../Data/outline'
 import { indexNames, diskIndex } from '../Data/search'
+import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData } from '../Types/Search'
+import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_EXCALIDRAW,
+  ELEMENT_IMAGE,
+  ELEMENT_INLINE_BLOCK,
+  ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_TABLE
+} from './editorElements'
 import { getSlug } from './strings'
 
 const ELEMENT_ILINK = 'ilink'
@@ -158,4 +169,89 @@ export const convertDataToIndexable = (data: PersistentData) => {
   }, diskIndex)
 
   return { result, nodeBlockMap }
+}
+
+type BeforeCopyOptions = {
+  filter: (block: BlockType) => boolean
+  converter?: (block: BlockType) => { changed: boolean; block: BlockType }
+}
+
+export const convertToCopySnippet = (
+  content: Array<BlockType>,
+  options: BeforeCopyOptions = { filter: defaultCopyFilter }
+) => {
+  return content.reduce((previousArr, block) => {
+    const children = convertToCopySnippet(block.children || [], options)
+
+    if (options.filter(block)) {
+      if (options.converter) {
+        const { changed, block: newBlock } = options.converter(block)
+        previousArr.push(Object.assign({}, newBlock, children.length && !changed && { children }))
+      } else {
+        previousArr.push(Object.assign({}, block, children.length && { children }))
+      }
+    }
+
+    return previousArr
+  }, [])
+}
+
+export const defaultCopyConverter = (block) => {
+  if (block.type === ELEMENT_TODO_LI) {
+    return {
+      changed: true,
+      block: {
+        type: 'ul',
+        children: [
+          {
+            type: 'li',
+            children: [{ type: 'lic', children: block.children }]
+          }
+        ]
+      }
+    }
+  }
+
+  if (block.type === ELEMENT_MEDIA_EMBED || block.type === ELEMENT_IMAGE) {
+    return {
+      changed: true,
+      block: {
+        type: ELEMENT_LINK,
+        url: block.url,
+        children: [{ text: '' }]
+      }
+    }
+  }
+
+  return { changed: false, block }
+}
+
+export const defaultCopyFilter = ({ type }) => {
+  const exclude: Array<string> = [
+    ELEMENT_EXCALIDRAW,
+    ELEMENT_ILINK,
+    ELEMENT_TABLE,
+    ELEMENT_INLINE_BLOCK,
+    ELEMENT_CODE_BLOCK
+  ]
+  return !exclude.includes(type)
+}
+
+export const getBlocks = (content: NodeEditorContent): Record<string, any> | undefined => {
+  if (content) {
+    const blocks: Record<string, any> = {}
+    let insertOp = false
+
+    content.map((block) => {
+      if (block.id) {
+        if (!insertOp) insertOp = true
+        const desc = convertContentToRawText(block.children)
+        blocks[block.id] = { block, desc }
+      }
+    })
+
+    if (insertOp) return blocks
+  }
+
+  return undefined
 }

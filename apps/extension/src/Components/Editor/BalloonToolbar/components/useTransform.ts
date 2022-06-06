@@ -3,16 +3,13 @@ import { TEditor, getNodes, getSelectionText, insertNodes } from '@udecode/plate
 
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import { ELEMENT_ILINK, ILinkNode } from '@workduck-io/mex-editor'
 import { convertContentToRawText } from '@mexit/core'
 import { generateSnippetId, mog } from '@mexit/core'
 import { useContentStore } from '../../../../Stores/useContentStore'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 
 export const useTransform = () => {
-  // const addILink = useDataStore((s) => s.addILink)
   const addSnippet = useSnippetStore((s) => s.addSnippet)
-  const setContent = useContentStore((s) => s.setContent)
 
   const convertSelectionToQABlock = (editor: TEditor) => {
     try {
@@ -45,32 +42,6 @@ export const useTransform = () => {
       // mog('isConvertable', { editor, p, node, ifb: isFlowBlock(node) })
       return p
     }, false)
-  }
-
-  const replaceSelectionWithLink = (editor: TEditor, ilink: string, inline: boolean) => {
-    try {
-      const selectionPath = Editor.path(editor, editor.selection)
-
-      // mog('replaceSelectionWithLink  selPath', { selectionPath })
-
-      if (inline) Transforms.delete(editor)
-      else
-        Transforms.removeNodes(editor, {
-          at: editor.selection,
-          hanging: false
-        })
-      // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
-
-      // mog('replaceSelectionWithLink  detFrag', { selectionPath })
-
-      insertNodes<ILinkNode>(editor, [{ type: ELEMENT_ILINK, value: ilink, children: [] }], {
-        at: editor.selection
-      })
-      // mog('replaceSelectionWithLink  insNode', { sel: editor.selection })
-    } catch (e) {
-      console.error(e)
-      return e
-    }
   }
 
   /**
@@ -155,7 +126,6 @@ export const useTransform = () => {
     if (!isConvertable(editor)) return
 
     Editor.withoutNormalizing(editor, () => {
-      const selectionPath = Editor.path(editor, editor.selection)
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',

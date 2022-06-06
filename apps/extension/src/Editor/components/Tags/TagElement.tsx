@@ -1,17 +1,17 @@
-import { useEditorRef } from '@udecode/plate'
 import * as React from 'react'
+import { useEditorRef } from '@udecode/plate'
 import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
-
-import { useHotkeys } from '../../Hooks/useHotKeys'
-import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
-import { STag, STagRoot } from '../../Styles/Tag'
+import { TagElementProps } from './TagElement.types'
+import { STag, STagRoot } from './TagElement.styles'
+import { useHotkeys } from '../../hooks/useHotKeys'
+import { useOnMouseClick } from '../../hooks/useOnMouseClick'
 
 /**
  * TagElement with no default styles.
  * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
  */
-export const TagElement = ({ attributes, children, element }) => {
+const TagElement = ({ attributes, children, element, onClick }: TagElementProps) => {
   const editor = useEditorRef()
   const selected = useSelected()
   const focused = useFocused()
@@ -33,7 +33,6 @@ export const TagElement = ({ attributes, children, element }) => {
     'delete',
     () => {
       if (selected && focused && editor.selection) {
-        // mog('delete', { selected, focused, sel: editor.selection })
         Transforms.move(editor, { reverse: true })
       }
     },
@@ -41,16 +40,15 @@ export const TagElement = ({ attributes, children, element }) => {
   )
 
   const openTag = (tag: string) => {
-    // Open External Link
-    // goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+    onClick(tag)
   }
 
   return (
     <STagRoot {...attributes} data-slate-value={element.value} contentEditable={false}>
-      <STag {...onClickProps} selected={selected}>
-        #{element.value}
-      </STag>
+      <STag {...onClickProps}>#{element.value}</STag>
       {children}
     </STagRoot>
   )
 }
+
+export default TagElement

@@ -8,8 +8,9 @@ import { Icon } from '@iconify/react'
 import { getNodes, usePlateEditorRef } from '@udecode/plate'
 
 import { useTransform } from '../../Components/Editor/BalloonToolbar/components/useTransform'
-import useBlockStore, { BlockType, ContextMenuActionType } from '../../Stores/useBlockStore'
+import useBlockStore from '../../Stores/useBlockStore'
 import { StyledMenu } from '../../Style/Menu'
+import { BlockType, ContextMenuActionType } from '@mexit/core'
 
 type BlockOptionsProps = {
   blockId: string

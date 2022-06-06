@@ -1,10 +1,10 @@
 import { getBlockAbove, getPluginType, insertNodes, PlateEditor, TElement } from '@udecode/plate'
 import { useCallback } from 'react'
 import { Editor, Transforms } from 'slate'
-
-import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
+import { IComboboxItem } from '../components/ComboBox/types'
+import { useComboboxStore } from '../store/combobox'
 import { useComboboxIsOpen } from './useComboboxIsOpen'
+import { ComboboxKey } from '../components/ComboBox/types'
 
 /**
  * Select the target range, add a ilink node and set the target range to null

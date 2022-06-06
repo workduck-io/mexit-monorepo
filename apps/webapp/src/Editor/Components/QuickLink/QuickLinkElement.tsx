@@ -16,10 +16,10 @@ import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
 import { useContentStore } from '../../../Stores/useContentStore'
-import { getBlocks } from '../../../Utils/parseData'
 import { SILinkRoot, SILink } from '../../Styles/QuickLinkElement'
 import { ILinkElementProps } from '../../Types/QuickLink'
 import EditorPreview from '../EditorPreview/EditorPreview'
+import { getBlock } from '../../../Utils/parseData'
 
 /**
  * ILinkElement with no default styles.
@@ -29,24 +29,6 @@ import EditorPreview from '../EditorPreview/EditorPreview'
 const StyledIcon = styled(Icon)`
   margin-right: 4px;
 `
-
-const getBlock = (nodeid: string, blockId: string) => {
-  const nodeContent = useContentStore.getState().getContent(nodeid)
-
-  if (nodeContent?.content) {
-    const blocksMap = getBlocks(nodeContent.content)
-    if (blocksMap) {
-      const blocks = Object.values(blocksMap).map((bd) => bd.block)
-      if (!blocks) return undefined
-
-      return blocks.find((b) => {
-        return b?.id === blockId
-      })
-    }
-  }
-
-  return undefined
-}
 
 export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()

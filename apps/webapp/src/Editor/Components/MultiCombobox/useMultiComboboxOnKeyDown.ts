@@ -6,7 +6,7 @@ import { getSlug, NODE_ID_PREFIX } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '../../elements'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey, IComboboxItem } from '../../Types/Combobox'
 import {
