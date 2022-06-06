@@ -1,6 +1,6 @@
-import { createPluginFactory, getSlateClass } from '@udecode/plate';
-import { ELEMENT_ILINK } from '../../types';
-import QuickLinkElement from './components/QuickLinkElement';
+import { ELEMENT_ILINK } from '@mexit/core'
+import { createPluginFactory, getSlateClass } from '@udecode/plate'
+import QuickLinkElement from './components/QuickLinkElement'
 
 /**
  * Enables support for Internal links.
@@ -11,10 +11,10 @@ export const createQuickLinkPlugin = createPluginFactory({
   component: QuickLinkElement,
   deserializeHtml: {
     getNode: (el) => ({
-      value: el.getAttribute('data-slate-value'),
+      value: el.getAttribute('data-slate-value')
     }),
-    rules: [{ validClassName: getSlateClass(ELEMENT_ILINK) }],
+    rules: [{ validClassName: getSlateClass(ELEMENT_ILINK) }]
   },
   isInline: true,
-  isVoid: true,
-});
+  isVoid: true
+})

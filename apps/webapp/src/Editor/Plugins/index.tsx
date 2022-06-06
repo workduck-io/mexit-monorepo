@@ -62,12 +62,12 @@ import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
-import { ELEMENT_EXCALIDRAW } from '../elements'
 import { createILinkPlugin } from './createILinkPlugin'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
 import { withBlockOptions } from '../Components/Blocks'
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 
 export type PluginOptionType = {
   exclude: {

@@ -7,6 +7,8 @@ import { useHotkeys } from '../../../hooks/useHotKeys'
 import { SILink, SILinkRoot } from './QuickLinkElement.styles'
 import { ILinkProps } from './QuickLink.types'
 import React from 'react'
+import { useLinks } from '../../../../Hooks/useLinks'
+import { getBlock } from '../../../../Utils/parseData'
 
 const StyledIcon = styled(Icon)`
   margin-right: 4px;
@@ -25,6 +27,11 @@ const QuickLinkElement = ({
   const editor = useEditorRef()
   const selected = useSelected()
   const focused = useFocused()
+  const { getPathFromNodeid } = useLinks()
+
+  const path = getPathFromNodeid(element.value)
+  const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
+  const content = block ? [block] : undefined
 
   useHotkeys(
     'backspace',
@@ -73,7 +80,10 @@ const QuickLinkElement = ({
         // >
         <SILink focused={selected}>
           <span className="ILink_decoration ILink_decoration_left">[[</span>
-          <span className="ILink_decoration ILink_decoration_value"> {element.value}</span>
+          <span className="ILink_decoration ILink_decoration_value">
+            {' '}
+            {!content ? path : `${path} : ${element.blockValue}`}{' '}
+          </span>
           <span className="ILink_decoration ILink_decoration_right">]]</span>
         </SILink>
         // </EditorPreview>

@@ -5,9 +5,10 @@ import xBold from '@iconify/icons-ph/x-bold'
 import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 
-import useBlockStore, { ContextMenuActionType } from '../../Stores/useBlockStore'
+import useBlockStore from '../../Stores/useBlockStore'
 import { Button, MexIcon } from '@mexit/shared'
 import { ButtonWrapper } from '../../Style/Settings'
+import { ContextMenuActionType } from "@mexit/core"
 
 export const PrimaryText = styled.span`
   color: ${({ theme }) => theme.colors.primary};

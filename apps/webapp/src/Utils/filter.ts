@@ -3,8 +3,6 @@ import { useMemo } from 'react'
 import { ELEMENT_INLINE_BLOCK } from '../Editor/elements'
 import { useEditorStore } from '../Stores/useEditorStore'
 
-export const ELEMENT_SYNC_BLOCK = 'sync_block'
-
 export type ContentBlockType = typeof ELEMENT_SYNC_BLOCK | typeof ELEMENT_INLINE_BLOCK
 
 export type FilterContentType = {

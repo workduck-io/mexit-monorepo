@@ -7,8 +7,9 @@ import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 import { MexIcon } from '@mexit/shared'
 import { Button } from '@udecode/plate'
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
-import useBlockStore, { ContextMenuActionType } from '../../../Stores/useBlockStore'
+import useBlockStore from '../../../Stores/useBlockStore'
 import { ButtonWrapper } from 'apps/webapp/src/Style/Settings'
+import { ContextMenuActionType } from '@mexit/core'
 
 const BlockMenu = styled.div`
   display: flex;

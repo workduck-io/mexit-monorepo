@@ -1,10 +1,9 @@
-import { getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
 import { getBlockAbove, getPluginType, insertNodes, PlateEditor, TElement } from '@udecode/plate'
 import { Editor, Transforms } from 'slate'
 import { useLinks } from '../../Hooks/useLinks'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '../elements'
 import { ComboboxItemType, IComboboxItem } from '../Types/Combobox'
 
 export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Array<any>) => {

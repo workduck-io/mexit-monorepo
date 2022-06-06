@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { createPlateUI, withProps } from '@udecode/plate'
+import { StyledElement } from '@udecode/plate-styled-components'
+import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
+import TagElement from '../../Editor/components/Tags/TagElement'
+import QuickLinkElement from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
 import {
-  createPlateUI,
+  ELEMENT_ILINK,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
-  withProps
-} from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
-import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
-import { ELEMENT_ILINK } from '../../Editor/types'
-import TagElement from '../../Editor/components/Tags/TagElement'
-import QuickLinkElement from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
-
-export const ELEMENT_TAG = 'tag'
+  ELEMENT_TAG
+} from '@mexit/core'
 
 export const components = {
   [ELEMENT_LINK]: withProps(LinkElement, {
