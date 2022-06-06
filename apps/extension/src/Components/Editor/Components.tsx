@@ -9,8 +9,10 @@ import {
   withProps
 } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
-import { TagElement } from '@workduck-io/mex-editor'
 import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
+import { TagElement } from './TagElement'
+import { ELEMENT_ILINK } from '../../Editor/types'
+import { QuickLinkElement } from '../../Editor/plugins/components'
 
 export const ELEMENT_TAG = 'tag'
 
@@ -26,6 +28,7 @@ export const components = {
     }
   }),
   [ELEMENT_TAG]: TagElement,
+  [ELEMENT_ILINK]: QuickLinkElement,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
   [ELEMENT_TABLE]: TableWrapper
 }

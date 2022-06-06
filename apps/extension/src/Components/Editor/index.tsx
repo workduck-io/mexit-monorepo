@@ -1,12 +1,4 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import {
-  MexEditor,
-  ComboboxKey,
-  QuickLinkElement,
-  ComboboxConfig,
-  ELEMENT_TAG,
-  ELEMENT_ILINK
-} from '@workduck-io/mex-editor'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -19,12 +11,14 @@ import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useTagStore } from '../../Hooks/useTags'
 
-import components from './Components'
+import components, { ELEMENT_TAG } from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, QuickLinkType, ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import useDataStore from '../../Stores/useDataStore'
-import { MexEditorOptions } from '@workduck-io/mex-editor/lib/types/editor'
+import { ComboboxConfig, ComboboxKey, ELEMENT_ILINK } from '../../Editor/types'
+import MexEditor from '../../Editor/MexEditor'
+import { MexEditorOptions } from '../../Editor/types/editor'
 
 interface EditorProps {
   nodePath?: string
@@ -52,17 +46,10 @@ const commands = [
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
-  const currTabURL = window.location.href
-  const [pageMetaTags, setPageMetaTags] = useState<any[]>([])
-  const [userTags, setUserTags] = useState<Tag[]>([])
   const ilinks = useDataStore((store) => store.ilinks)
 
   const addTags = useTagStore((store) => store.addTags)
   const tags = useTagStore((store) => store.tags)
-
-  const plugins = createPlugins(generatePlugins())
-  const userDetails = useAuthStore((store) => store.userDetails)
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
