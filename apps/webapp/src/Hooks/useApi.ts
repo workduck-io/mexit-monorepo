@@ -46,7 +46,7 @@ export const useApi = () => {
       type: 'NodeBulkRequest',
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
-      data: serializeContent(defaultContent.content)
+      data: serializeContent(defaultContent.content, nodeid)
     }
 
     setContent(nodeid, defaultContent.content)
@@ -90,7 +90,7 @@ export const useApi = () => {
       title: path.slice(-1)[0],
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,
-      data: serializeContent(content ?? defaultContent.content)
+      data: serializeContent(content ?? defaultContent.content, nodeid)
     }
 
     if (path.length > 1) {
@@ -256,7 +256,7 @@ export const useApi = () => {
       type: 'SnippetRequest',
       title: snippetTitle,
       namespaceIdentifier: DEFAULT_NAMESPACE,
-      data: serializeContent(content ?? defaultContent.content)
+      data: serializeContent(content ?? defaultContent.content, snippetId)
     }
 
     const data = await client
