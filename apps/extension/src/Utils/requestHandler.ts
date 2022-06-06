@@ -1,17 +1,22 @@
-import { apiURLs, defaultContent, serializeContent } from '@mexit/core'
+import { apiURLs, defaultContent } from '@mexit/core'
 import client from './fetchClient'
 import { Tab } from '../Types/Tabs'
+import { serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'BULK_CREATE_NODE': {
       const URL = apiURLs.createNode
+      const elementMetadata = data.metadata.saveableRange
+        ? {
+            saveableRange: data.metadata?.saveableRange,
+            sourceUrl: data.metadata?.sourceUrl
+          }
+        : undefined
       const reqData = {
         id: data.id,
         title: data.title,
-        // saveableRange: data.metadata?.saveableRange,
-        // sourceUrl: data.metadata?.sourceUrl,
-        data: serializeContent(data.content ?? defaultContent.content)
+        data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata)
       }
 
       if (data.referenceID) {
@@ -40,15 +45,6 @@ export const handleActionRequest = (request: any) => {
     case 'reload':
       chrome.tabs.reload()
       break
-    // case 'browser-search':
-    //   chrome.search.query(
-    //     {
-    //       disposition: 'NEW_TAB',
-    //       text: request.data.query
-    //     },
-    //     () => {} // eslint-disable-line @typescript-eslint/no-empty-function
-    //   )
-    //   break
     case 'chrome-url':
       chrome.tabs.create({ url: request.data.base_url })
       break

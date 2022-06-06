@@ -1,6 +1,5 @@
 import { generateTempId, NodeMetadata } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
+import { useAuthStore } from '../Hooks/useAuth'
 
 const removeNulls = (obj: any): any => {
   if (obj === null) {
@@ -51,8 +50,41 @@ const mappedKeys = {
   text: 'content'
 }
 
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+interface HighlightMetaBlock {
+  parentTagName: string
+  parentIndex: number
+  textOffset: number
+}
+
+interface ElementHighlightMetadata {
+  type: string
+  saveableRange: {
+    startMeta: HighlightMetaBlock
+    endMeta: HighlightMetaBlock
+    text: string
+    id: string
+  }
+  sourceUrl: string
+}
+
+export const generateElementMetadata = (
+  elementMetadata: PartialBy<ElementHighlightMetadata, 'type'>
+): ElementHighlightMetadata => {
+  delete elementMetadata.saveableRange['__isHighlightSource']
+  return {
+    ...elementMetadata,
+    type: 'highlight'
+  }
+}
+
 // From content to api
-export const serializeContent = (content: any[], nodeid: string) => {
+export const serializeContent = (
+  content: any[],
+  nodeid: string,
+  elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
+) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
       return serializeSpecial[el.type](el, nodeid)
@@ -64,6 +96,10 @@ export const serializeContent = (content: any[], nodeid: string) => {
       nl.id = el.id
     } else {
       nl.id = generateTempId()
+    }
+
+    if (elementMetadata) {
+      nl.elementMetadata = generateElementMetadata(elementMetadata)
     }
 
     if (el.type) {

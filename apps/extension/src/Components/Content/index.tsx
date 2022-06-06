@@ -106,7 +106,7 @@ export default function Content() {
             toast.error('An Error Occured. Please try again.')
           }
         } else {
-          setMetadata(message.id, extractMetadata(message))
+          setMetadata(message.id, extractMetadata(message.data[0]))
           toast.success('Saved to Cloud')
           if (saveAndExit) {
             setTimeout(() => {
