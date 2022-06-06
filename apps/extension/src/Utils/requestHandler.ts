@@ -7,13 +7,16 @@ export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'BULK_CREATE_NODE': {
       const URL = apiURLs.createNode
+      const elementMetadata = data.metadata.saveableRange
+        ? {
+            saveableRange: data.metadata?.saveableRange,
+            sourceUrl: data.metadata?.sourceUrl
+          }
+        : undefined
       const reqData = {
         id: data.id,
         title: data.title,
-        data: serializeContent(data.content ?? defaultContent.content, data.id, {
-          saveableRange: data.metadata?.saveableRange,
-          sourceUrl: data.metadata?.sourceUrl
-        })
+        data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata)
       }
 
       if (data.referenceID) {
