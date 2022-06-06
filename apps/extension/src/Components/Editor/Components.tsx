@@ -10,9 +10,9 @@ import {
 } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
-import { TagElement } from './TagElement'
 import { ELEMENT_ILINK } from '../../Editor/types'
-import { QuickLinkElement } from '../../Editor/plugins/components'
+import TagElement from '../../Editor/components/Tags/TagElement'
+import QuickLinkElement from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
 
 export const ELEMENT_TAG = 'tag'
 
