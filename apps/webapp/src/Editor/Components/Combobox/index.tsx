@@ -4,7 +4,7 @@ import { PortalBody, useEditorState } from '@udecode/plate'
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
 
-import { MexIcon } from '@mexit/shared'
+import { ComboboxItem, MexIcon } from '@mexit/shared'
 import { NodeEditorContent } from '@mexit/core'
 
 import { CategoryType, QuickLinkType } from '../../constants'
@@ -17,7 +17,6 @@ import { setElementPositionByRange } from '../../Utils/setElementPositionByRange
 import { ComboboxProps } from '../../Types/Combobox'
 import {
   ActionTitle,
-  ComboboxItem,
   ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
@@ -26,7 +25,7 @@ import {
   ItemRightIcons,
   ItemTitle,
   ShortcutText
-} from '../../Styles/Combobox'
+} from '@mexit/shared'
 import { Shortcut } from '../../../Stores/useHelpStore'
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'

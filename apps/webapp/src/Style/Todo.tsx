@@ -1,8 +1,7 @@
-import { MainHeader } from '@mexit/shared'
+import { MainHeader, TodoContainer } from '@mexit/shared'
 import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 import { Title } from './Elements'
-import { TodoContainer } from './Todo.style'
 
 /*
  * Todos

@@ -1,26 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ComboboxItem, ComboboxType, EditorStyles, FadeContainer } from '@mexit/shared'
+import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { useEditorChange } from '@mexit/shared'
-import MexEditor from './MexEditor'
-import { TodoContainer } from '../Style/Todo.style'
-import generatePlugins from './Plugins'
 import { editorPreviewComponents } from './Components/EditorPreviewComponents'
 
-import { useRouting } from '../Hooks/useRouting'
-import { useSnippets } from '../Hooks/useSnippets'
-import { useDataStore } from '../Stores/useDataStore'
-import { QuickLinkComboboxItem } from './Components/QuickLink/QuickLinkComboboxItem'
-import { SlashComboboxItem } from './Components/SlashCommands/SlashComboboxItem'
-import { TagComboboxItem } from './Components/Tags/TagComboboxItem'
-import { QuickLinkType, CategoryType } from './constants'
-import { ELEMENT_INLINE_BLOCK, ELEMENT_TAG, ELEMENT_ILINK, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from './elements'
-import { ComboboxKey } from './Types/Combobox'
-import { ComboConfigData, ComboboxConfig } from './Types/MultiCombobox'
-import { useEditorStore } from '../Stores/useEditorStore'
 import { Plate, PlatePlugin } from '@udecode/plate'
 import useMemoizedPlugins from './Plugins'
 

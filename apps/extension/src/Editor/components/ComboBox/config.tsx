@@ -58,7 +58,7 @@ export const useComboboxConfig = (
     ...(config.onChangeConfig as any)
   }
 
-  const prePlugins = useMemoizedPlugins(customPlugins ?? generatePlugins(), components)
+  const prePlugins = useMemoizedPlugins(components)
 
   const plugins = [
     ...prePlugins,

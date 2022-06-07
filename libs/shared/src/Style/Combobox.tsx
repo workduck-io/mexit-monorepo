@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-
-import { Button } from '@mexit/shared'
+import { Button } from './Buttons'
 
 export const ComboboxItem = styled.div`
   display: flex;
