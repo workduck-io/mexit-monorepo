@@ -77,69 +77,72 @@ export const useAuthentication = () => {
       const result: any = await googleSignIn(code, clientId, redirectURI)
 
       if (getWorkspace && result.userCred !== undefined) {
-        await client
-          .get(apiURLs.getUserRecords)
-          .then((d: any) => {
+        await client.get(apiURLs.getUserRecords).then(async (d: any) => {
+          if (!d.data.group) {
+            await registerUserForGoogle(result)
+          } else {
             const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
             setAuthenticated(userDetails, workspaceDetails)
-          })
-          .catch(async (e) => {
-            setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
-
-            const uCred: UserCred = {
-              email: result.userCred.email,
-              userId: result.userCred.userId,
-              expiry: result.userCred.exp,
-              token: result.userCred.token,
-              url: result.userCred.iss
-            }
-            const newWorkspaceName = `WD_${nanoid()}`
-
-            await client
-              .post(
-                apiURLs.registerUser,
-                {
-                  type: 'RegisterUserRequest',
-                  user: {
-                    id: uCred.userId,
-                    name: uCred.email,
-                    email: uCred.email
-                  },
-                  workspaceName: newWorkspaceName
-                },
-                {
-                  headers: {
-                    'mex-workspace-id': ''
-                  }
-                }
-              )
-              .then(async (d: any) => {
-                const userDetails = { email: uCred.email, userId: uCred.userId }
-                const { registrationInfo, ilinks, nodes, snippets } = d.data
-                const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
-
-                setILinks(ilinks)
-                initSnippets(snippets)
-
-                const contents = {}
-                nodes.forEach((node) => {
-                  contents[node.id] = { ...node, type: 'Node' }
-                })
-                initContents(contents)
-                setAuthenticated(userDetails, workspaceDetails)
-                try {
-                  await refreshToken()
-                } catch (error) {} // eslint-disable-line
-              })
-              .catch(console.error)
-          })
+          }
+        })
       }
       return result
     } catch (error) {
       console.log(error)
     }
+  }
+
+  async function registerUserForGoogle(result: any) {
+    setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
+
+    const uCred: UserCred = {
+      email: result.userCred.email,
+      userId: result.userCred.userId,
+      expiry: result.userCred.expiry,
+      token: result.userCred.token,
+      url: result.userCred.url
+    }
+    const newWorkspaceName = `WD_${nanoid()}`
+
+    await client
+      .post(
+        apiURLs.registerUser,
+        {
+          type: 'RegisterUserRequest',
+          user: {
+            id: uCred.userId,
+            name: uCred.email,
+            email: uCred.email
+          },
+          workspaceName: newWorkspaceName
+        },
+        {
+          headers: {
+            'mex-workspace-id': ''
+          }
+        }
+      )
+      .then(async (d: any) => {
+        const userDetails = { email: uCred.email, userId: uCred.userId }
+        const { registrationInfo, ilinks, nodes, snippets } = d.data
+        const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
+
+        setILinks(ilinks)
+        initSnippets(snippets)
+
+        const contents = {}
+        nodes.forEach((node) => {
+          contents[node.id] = { ...node, type: 'Node' }
+        })
+        initContents(contents)
+        setAuthenticated(userDetails, workspaceDetails)
+        try {
+          await refreshToken()
+        } catch (error) {} // eslint-disable-line
+      })
+      .catch(console.error)
   }
 
   const logout = async () => {
