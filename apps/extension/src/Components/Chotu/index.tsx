@@ -31,6 +31,7 @@ import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useQuickLinks } from '../../Hooks/useQuickLinks'
 import { useSnippetStore, useContentStore, useDataStore } from '@workduck-io/mex-editor'
+import ShortCutLinks from '../ShortCutLinks'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -184,6 +185,7 @@ export default function Chotu() {
       </Container>
 
       <Notification />
+      <ShortCutLinks/>
     </StyledChotu>
   )
 }

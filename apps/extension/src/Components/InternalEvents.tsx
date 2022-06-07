@@ -13,6 +13,10 @@ import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
 import { getHtmlString } from './Source'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { incrementChar } from '../Utils/incrementChar'
+import { Interface } from 'readline'
+import tinykeys from 'tinykeys'
+import { cond } from 'lodash'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -226,8 +230,40 @@ function useDocumentLock() {
   }, [visualState])
 }
 
-function useVimium() {
+function useVimium(){
   const [toggleVimium , setToggleVimium] = React.useState<boolean>(true);
+  
+    let keyString = {};
+    function checkVal(allHref : {charIndex : string , link: string}[]){
+      let stringPress = '';
+      for(const key in  keyString){
+        if(key !== 'Alt' ){
+          if(key !== 'Shift'){
+            if(key !== 'CapsLock'){
+              stringPress += key;
+            }
+          }
+        }
+      }
+      allHref.map(e=>{
+        if(e.charIndex == stringPress){
+          window.open(e.link, "_blank");
+          stringPress = '';
+          keyString = {};
+        }
+      })
+    }
+    function listenForHints(allHref : {charIndex : string , link: string}[]){
+      window.addEventListener("keydown",(e)=>{
+        keyString[e.key] = true;
+        console.log(keyString);
+        setTimeout(() => checkVal(allHref) , 100); 
+      })
+      window.addEventListener("keyup",(e)=>{
+        setTimeout(() =>delete keyString[e.key] , 100);
+        console.log(keyString);
+      })
+    }
   function doFunction(e: KeyboardEvent) {
     if (e.key === "k") {
       window.scrollTo(window.pageXOffset, window.pageYOffset - 100);
@@ -254,10 +290,48 @@ function useVimium() {
       setToggleVimium(false);
     }
     if (e.key === "b") {
-      let url = window.location.href;
-      url = "view-source:" + url;
-      console.log(url);
-      window.open(url , '_blank');
+      chrome.runtime.sendMessage(
+        {
+          type: 'ASYNC_ACTION_HANDLER',
+          subType: 'GET_CURRENT_TAB'
+        },
+        (response) => {
+          const newUrl = "view-source:"+ response.message[0].url;
+          chrome.runtime.sendMessage(
+            {
+              type: 'ASYNC_ACTION_HANDLER',
+              subType: 'OPEN_WITH_NEW_TABS',
+              data: {
+                urls: newUrl
+              }
+            },
+            (response) => {
+              const { message, error } = response
+              if (error) console.error('Some error occured. Please Try Again')
+            }
+          )
+        }
+      )
+    }
+    if(e.key === "f"){
+      const allATags = document.querySelectorAll('a');
+      let allHref : {charIndex : string , link: string}[] = [];
+      const screen = {
+        top: window.pageYOffset,
+        bottom: window.innerHeight+window.pageYOffset
+      }
+      let indexChar = '';
+      for(let i = 0 ; i < allATags.length; i++){
+        const pos= allATags[i].getBoundingClientRect().top;
+        if(pos >= screen.top && pos <= screen.bottom){
+          const charIndex = incrementChar(indexChar);
+          const link = allATags[i].href;
+          allHref[i] = ({ charIndex: charIndex , link: link });
+          console.log(allHref[i]);
+          indexChar = charIndex;
+        }
+      }
+      listenForHints(allHref);
     }
   }
   function checkKeyHandler(event: KeyboardEvent) {
