@@ -38,7 +38,7 @@ import {
 } from '@udecode/plate'
 
 import { generateTempId } from '@mexit/core'
-import { uploadImageToWDCDN } from '../../Utils/uploadToCDN'
+import { uploadImageToWDCDN } from '@mexit/shared'
 
 const preFormat = (editor: TEditor<AnyObject>) => unwrapList(editor as PlateEditor)
 

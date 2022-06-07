@@ -5,7 +5,6 @@ import { useDebouncedCallback } from 'use-debounce'
 import React, { useState, useMemo } from 'react'
 
 import { EditorStyles, useEditorChange } from '@mexit/shared'
-import generatePlugins from '../../Utils/plugins'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
