@@ -4,8 +4,8 @@ import { PortalBody, useEditorState } from '@udecode/plate'
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
 
-import { ComboboxItem, MexIcon } from '@mexit/shared'
-import { NodeEditorContent } from '@mexit/core'
+import { ComboboxItem, MexIcon, PreviewMeta } from '@mexit/shared'
+import { mog, NodeEditorContent } from '@mexit/core'
 
 import { CategoryType, QuickLinkType } from '../../constants'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -32,7 +32,6 @@ import { DisplayShortcut } from '../../../Components/Shortcuts'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import BlockCombo from './BlockCombo'
-import PreviewMeta from './PreviewMeta'
 
 export const spotlightShortcuts = {
   save: {

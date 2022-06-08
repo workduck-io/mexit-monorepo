@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { RelativeTime } from '../../../Components/RelativeTime'
+import { RelativeTime } from './RelativeTime'
 
 export const Data = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};
@@ -39,4 +39,4 @@ const PreviewMeta: React.FC<PreviewMetaProps> = ({ meta }) => {
   )
 }
 
-export default PreviewMeta
+export { PreviewMeta }

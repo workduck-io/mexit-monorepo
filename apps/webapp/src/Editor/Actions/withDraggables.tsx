@@ -29,7 +29,7 @@ import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-lin
 import { ProfileImage } from '../../Components/User/ProfileImage'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { RelativeTime } from '../../Components/RelativeTime'
+import { RelativeTime } from '@mexit/shared'
 
 // import { RelativeTime } from '../../components/mex/RelativeTime'
 // import { ProfileImage } from '../../components/mex/User/ProfileImage'
