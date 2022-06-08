@@ -47,6 +47,7 @@ export default function Dibba() {
   const pointerMoved = usePointerMovedSinceMount()
 
   const data = [
+    // TODO: fix link captures after discussion
     ...linkCaptures.map((item) => ({
       id: item.shortenedURL,
       title: item.short,
@@ -55,6 +56,7 @@ export default function Dibba() {
     })),
     ...snippets.map((item) => ({
       type: QuickLinkType.snippet,
+      icon: item?.icon || 'ri:quill-pen-line',
       ...item
     }))
   ]
@@ -93,7 +95,7 @@ export default function Dibba() {
       console.log(error)
     }
 
-    if (item.icon === 'ri:quill-pen-line') {
+    if (item.type === QuickLinkType.snippet) {
       insertSnippet(item as Snippet)
     } else if (item.icon === 'ri:link') {
       // TODO: transform again to type linkCapture
