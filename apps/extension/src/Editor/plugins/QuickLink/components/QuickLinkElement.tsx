@@ -73,6 +73,7 @@ const QuickLinkElement = ({
           <span className="ILink_decoration ILink_decoration_right">]]</span>
         </SILink>
       ) : (
+        // TODO: uncomment this when the id from address bar issue is fixed in webapp
         // <EditorPreview
         //   isPreview={isPreview(editor.id)}
         //   previewRef={editor}
