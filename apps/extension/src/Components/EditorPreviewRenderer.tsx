@@ -3,12 +3,11 @@ import styled from 'styled-components'
 
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
-import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { useEditorChange } from '@mexit/shared'
-import { editorPreviewComponents } from './Components/EditorPreviewComponents'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
-import useMemoizedPlugins from './Plugins'
+import components from './Editor/Components'
+import useMemoizedPlugins from '../Editor/plugins'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -53,16 +52,16 @@ const EditorPreviewRenderer = ({
   }
 
   // We get memoized plugins
-  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
-  const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
-  const { focusBlock } = useFocusBlock()
+  const plugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
+  // const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
+  // const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (blockId) {
         // mog('editorPreviewRenderer', { blockId, editorId })
-        focusBlock(blockId, editorId)
-        setHighlights([blockId], 'preview')
+        // focusBlock(blockId, editorId)
+        // setHighlights([blockId], 'preview')
       }
     }, 300)
 

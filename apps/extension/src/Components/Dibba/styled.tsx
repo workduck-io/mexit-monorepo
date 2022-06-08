@@ -10,25 +10,35 @@ export const ComboboxRoot = styled.ul<{
   ${({ isOpen, theme, top, left, offsetTop, offsetRight }) =>
     isOpen &&
     css`
+      display: flex;
       top: calc(${top}px + 1em);
       left: ${left}px;
       position: absolute;
       padding: 0;
       margin: 0;
       z-index: 9999999;
-      background: ${theme.colors.background.modal};
-      width: 225px;
+      /* background: ${theme.colors.background.modal}; */
+      /* width: 225px; */
       overflow: hidden;
       border-radius: 8px;
-      box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
+      /* box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0; */
 
       transform: ${offsetTop ? css`translateY(calc(-100% - 1em))` : ''} ${offsetRight ? css`translateX(-100%)` : ''};
-    `}
-`
 
-export const Img = styled.img`
-  width: 18px;
-  aspect-ratio: 1/1;
+      > div {
+        background: ${theme.colors.background.modal};
+        height: fit-content;
+        /* max-height: 400px; */
+        box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
+        border-radius: ${theme.borderRadius.small};
+
+        > section {
+          max-height: 30vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+      }
+    `}
 `
 
 export const ItemTitle = styled.div``
@@ -40,7 +50,7 @@ export const ItemRightIcons = styled.div`
 export const ItemDesc = styled.div`
   margin-top: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
-  font-size: 0.8em;
+  font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

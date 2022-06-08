@@ -1,4 +1,4 @@
-import { MenuTrigger, EditorStyles, Widget } from '@mexit/shared'
+import { MenuTrigger, EditorStyles, Widget, TodoContainer } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
@@ -14,7 +14,6 @@ import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
-import { TodoContainer } from '../Style/Todo.style'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'

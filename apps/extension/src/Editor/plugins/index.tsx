@@ -12,8 +12,8 @@ import {
   createItalicPlugin,
   createLinkPlugin,
   createListPlugin,
-  createTodoListPlugin,
   createMediaEmbedPlugin,
+  createNodeIdPlugin,
   createParagraphPlugin,
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
@@ -25,7 +25,6 @@ import {
   autoformatLegal,
   autoformatLegalHtml,
   autoformatMath,
-  autoformatPunctuation,
   autoformatSmartQuotes,
   ELEMENT_HR,
   createHorizontalRulePlugin,
@@ -43,10 +42,11 @@ import {
   createPlateUI,
   ELEMENT_PARAGRAPH,
   PlatePluginComponent,
-  createTablePlugin
+  createTablePlugin,
+  PEditor
 } from '@udecode/plate'
 
-import { createQuickLinkPlugin } from './QuickLink/createQuickLinkPlugin'
+import { TableWrapper } from '@mexit/shared'
 
 import {
   optionsAutoFormatRule,
@@ -59,39 +59,53 @@ import {
 
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { createQuickLinkPlugin } from './QuickLink'
 
-export const generatePlugins = () => {
+export type PluginOptionType = {
+  exclude: {
+    dnd: boolean
+  }
+}
+
+/**
+ * Plugin generator
+ * @param config Configurations for the plugins, event handlers etc.
+ * @returns Array of PlatePlugin
+ */
+
+export const generatePlugins = (options: PluginOptionType) => {
   const Plugins: PlatePlugin[] = [
+    // editor
+
     // elements
-    createParagraphPlugin(),
-    createBlockquotePlugin(),
-    createCodeBlockPlugin(),
-    createHeadingPlugin(),
+    createParagraphPlugin(), // paragraph element
+    createBlockquotePlugin(), // blockquote element
+    createCodeBlockPlugin(), // code block element
+    createHeadingPlugin(), // heading elements
 
     // Marks
-    createBoldPlugin(),
-    createItalicPlugin(),
-    createUnderlinePlugin(),
-    createStrikethroughPlugin(),
-    createCodePlugin(),
-    createHighlightPlugin(),
-    createTodoListPlugin(),
+    createBoldPlugin(), // bold mark
+    createItalicPlugin(), // italic mark
+    createUnderlinePlugin(), // underline mark
+    createStrikethroughPlugin(), // strikethrough mark
+    createCodePlugin(), // code mark
+    createHighlightPlugin(), // highlight mark
+    // createTodoListPlugin(),
 
     // Special Elements
-    createImagePlugin(),
-    createLinkPlugin(),
-    createListPlugin(),
-    createTablePlugin(),
+    // createImagePlugin(optionsImagePlugin), // Image
+    createLinkPlugin(), // Link
+    createListPlugin(), // List
     createTodoPlugin(),
+    createTablePlugin({ component: TableWrapper }), // Table
 
     // Editing Plugins
     createSoftBreakPlugin(optionsSoftBreakPlugin),
     createExitBreakPlugin(optionsExitBreakPlugin),
     createResetNodePlugin(optionsResetBlockTypePlugin),
     createHorizontalRulePlugin(),
-    createSelectOnBackspacePlugin({
-      options: { query: { allow: [ELEMENT_HR] } }
-    }),
+    createSelectOnBackspacePlugin({ options: { query: { allow: [ELEMENT_HR, ELEMENT_EXCALIDRAW] } } }),
     createAlignPlugin({
       inject: {
         props: {
@@ -99,17 +113,15 @@ export const generatePlugins = () => {
         }
       }
     }),
-
     // Autoformat markdown syntax to elements (**, #(n))
     createAutoformatPlugin({
       options: {
         rules: [
           ...autoformatSmartQuotes,
-          ...autoformatPunctuation,
           ...autoformatLegal,
           ...autoformatLegalHtml,
-          ...autoformatArrow,
           ...autoformatMath,
+          ...autoformatArrow,
           ...optionsAutoFormatRule,
           {
             mode: 'block',
@@ -126,28 +138,43 @@ export const generatePlugins = () => {
         ]
       }
     }),
-    createDndPlugin(),
+    createNodeIdPlugin(optionsCreateNodeIdPlugin),
+
+    // serialization / deseriailization
+
+    // Convert pasted markdown to contents of the editor
+    // createDeserializeMDPlugin(),
+
+    // Media and link embed
     createMediaEmbedPlugin(),
 
-    // createNodeIdPlugin(optionsCreateNodeIdPlugin),
+    // Custom Plugins
+    // createBlurSelectionPlugin() as PlatePlugin<PEditor>,
 
-    // // mex custom plugins
-    createTagPlugin(),
-    createQuickLinkPlugin(),
+    // Comboboxes
+    createTagPlugin(), // Tags
+    createQuickLinkPlugin(), // Internal Links ILinks
+
+    // // For Inline Blocks
+    // createInlineBlockPlugin(),
 
     createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin)
+    // createHighlightTextPlugin()
   ]
 
-  return Plugins
+  const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins
+
+  return withPlugins
 }
 
-const useMemoizedPlugins = (
-  plugins: Array<PlatePlugin>,
-  components: Record<string, PlatePluginComponent<any | undefined>>
-) => {
-  return createPlugins(plugins, {
-    components: createPlateUI(components)
+const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+  const wrappedComponents = components
+
+  const plugins = createPlugins(generatePlugins(options), {
+    components: wrappedComponents
   })
+
+  return plugins
 }
 
 export default useMemoizedPlugins

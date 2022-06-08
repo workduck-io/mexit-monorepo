@@ -1,13 +1,17 @@
-import { LinkCapture, parseSnippet, Snippet } from '@mexit/core'
+import { LinkCapture, parseSnippet, QuickLinkType, Snippet } from '@mexit/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import fuzzysort from 'fuzzysort'
 
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { ComboboxItem, ComboboxRoot, Img, ItemCenterWrapper, ItemDesc, ItemTitle } from './styled'
+import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import { getDibbaText } from '../../Utils/getDibbaText'
+import { ComboboxShortcuts, ComboSeperator, DisplayShortcut, ShortcutText } from '@mexit/shared'
+import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
+import EditorPreviewRenderer from '../EditorPreviewRenderer'
+import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 
 // This functions provides the 'to be' range and text content
 // Needed because keydown event happens before there is a selection or content change
@@ -40,16 +44,21 @@ export default function Dibba() {
 
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const snippets = useSnippets().getSnippets()
+  const pointerMoved = usePointerMovedSinceMount()
 
   const data = [
+    // TODO: fix link captures after discussion
     ...linkCaptures.map((item) => ({
       id: item.shortenedURL,
       title: item.short,
-      // TODO: find a way to use favicons but single array of results
       icon: 'ri:link',
       content: item.shortenedURL
     })),
-    ...snippets
+    ...snippets.map((item) => ({
+      type: QuickLinkType.snippet,
+      icon: item?.icon || 'ri:quill-pen-line',
+      ...item
+    }))
   ]
 
   const insertSnippet = (item: Snippet) => {
@@ -86,7 +95,7 @@ export default function Dibba() {
       console.log(error)
     }
 
-    if (item.icon === 'ri:quill-pen-line') {
+    if (item.type === QuickLinkType.snippet) {
       insertSnippet(item as Snippet)
     } else if (item.icon === 'ri:link') {
       // TODO: transform again to type linkCapture
@@ -174,6 +183,9 @@ export default function Dibba() {
     setOffsetTop(window.innerHeight < top + dibbaRef.current.clientHeight)
   })
 
+  const listItem = results[activeIndex]
+  const itemShortcut = listItem?.type ? ElementTypeBasedShortcut[listItem?.type] : undefined
+
   return (
     <ComboboxRoot
       id="dibba-container"
@@ -181,25 +193,55 @@ export default function Dibba() {
       top={top}
       left={left}
       offsetTop={offsetTop}
-      offsetRight={window.innerWidth < left + 225}
+      offsetRight={window.innerWidth < left + 500}
       isOpen={dibbaState.visualState === VisualState.showing}
     >
-      {results.map((item, index) => {
-        return (
-          <ComboboxItem
-            key={index}
-            highlighted={index === activeIndex}
-            onMouseDown={() => {
-              handleClick(item)
-            }}
-          >
-            <Icon height={18} key={item.id} icon={item.icon} />
-            <ItemCenterWrapper>
-              <ItemTitle>{item.title}</ItemTitle>
-            </ItemCenterWrapper>
-          </ComboboxItem>
-        )
-      })}
+      <div style={{ flex: 1 }}>
+        {results.map((item, index) => {
+          return (
+            <ComboboxItem
+              key={index}
+              highlighted={index === activeIndex}
+              onMouseDown={() => {
+                handleClick(item)
+              }}
+              onPointerMove={() => pointerMoved && setActiveIndex(index)}
+            >
+              <Icon height={18} key={item.id} icon={item.icon} />
+              <ItemCenterWrapper>
+                <ItemTitle>{item.title}</ItemTitle>
+                {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
+              </ItemCenterWrapper>
+              {item.rightIcons && (
+                <ItemRightIcons>
+                  {item.rightIcons.map((i: string) => (
+                    <Icon key={item.key + i} icon={i} />
+                  ))}
+                </ItemRightIcons>
+              )}
+            </ComboboxItem>
+          )
+        })}
+        {itemShortcut && (
+          <ComboboxShortcuts>
+            {Object.entries(itemShortcut).map(([key, shortcut]) => {
+              return (
+                <ShortcutText key={key}>
+                  <DisplayShortcut shortcut={shortcut.keystrokes} /> <div className="text">{shortcut.title}</div>
+                </ShortcutText>
+              )
+            })}
+          </ComboboxShortcuts>
+        )}
+      </div>
+
+      {listItem?.content && (
+        <ComboSeperator>
+          <section>
+            <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} />
+          </section>
+        </ComboSeperator>
+      )}
     </ComboboxRoot>
   )
 }

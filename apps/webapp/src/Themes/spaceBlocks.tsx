@@ -1,4 +1,4 @@
-import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles } from '@mexit/shared'
+import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles, TodoContainer } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
@@ -13,7 +13,6 @@ import { Result, SearchFilterListWrap } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { StyledBoard } from '../Style/Todo'
-import { TodoContainer } from '../Style/Todo.style'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions } from '../Views/Settings'
 

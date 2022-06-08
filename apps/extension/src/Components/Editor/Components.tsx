@@ -14,14 +14,14 @@ import {
   ELEMENT_TAG
 } from '@mexit/core'
 
-export const components = {
+export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
     as: 'a'
   }),
   [ELEMENT_PARAGRAPH]: withProps(StyledElement, {
     styles: {
       root: {
-        margin: '0.1em 0 0'
+        margin: '0.1rem 0 0'
       }
     }
   }),
@@ -31,8 +31,8 @@ export const components = {
   [ELEMENT_TABLE]: TableWrapper
 }
 
-// const components = createPlateUI({
-//   ...editorPreviewComponents
-// })
+const components = createPlateUI({
+  ...editorPreviewComponents
+})
 
 export default components

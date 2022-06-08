@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import { transparentize } from 'polished'
 import { TodoStatus } from '@mexit/core'
-import { WaterWave, CompleteWave } from '../Components/Welcome'
+import { CompleteWave, WaterWave } from './Welcome'
 
 export const TodoContainer = styled.div<{ checked?: boolean }>`
   display: flex;

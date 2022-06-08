@@ -4,8 +4,8 @@ import { PortalBody, useEditorState } from '@udecode/plate'
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
 
-import { MexIcon } from '@mexit/shared'
-import { NodeEditorContent } from '@mexit/core'
+import { ComboboxItem, MexIcon, PreviewMeta } from '@mexit/shared'
+import { mog, NodeEditorContent } from '@mexit/core'
 
 import { CategoryType, QuickLinkType } from '../../constants'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -17,7 +17,6 @@ import { setElementPositionByRange } from '../../Utils/setElementPositionByRange
 import { ComboboxProps } from '../../Types/Combobox'
 import {
   ActionTitle,
-  ComboboxItem,
   ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
@@ -26,14 +25,13 @@ import {
   ItemRightIcons,
   ItemTitle,
   ShortcutText
-} from '../../Styles/Combobox'
+} from '@mexit/shared'
 import { Shortcut } from '../../../Stores/useHelpStore'
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import BlockCombo from './BlockCombo'
-import PreviewMeta from './PreviewMeta'
 
 export const spotlightShortcuts = {
   save: {
@@ -161,7 +159,6 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
 
       if (type === QuickLinkType.backlink) {
         const nodeContent = getContent(key)
-        console.log('nodeContent', nodeContent)
         content = nodeContent?.content
 
         setMetaData(nodeContent?.metadata)

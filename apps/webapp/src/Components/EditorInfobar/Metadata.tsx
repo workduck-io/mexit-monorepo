@@ -10,7 +10,7 @@ import { Label } from '../../Style/Form'
 import { CardShadow, HoverFade } from '../../Style/Helpers'
 import { ProfileIcon } from '../../Style/UserPage'
 import { NodeMetadata, NodeProperties } from '@mexit/core'
-import { RelativeTime } from '../RelativeTime'
+import { RelativeTime } from '@mexit/shared'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 import { useContentStore } from '../../Stores/useContentStore'
 

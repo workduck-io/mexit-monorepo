@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
-import { EditorStyles, MenuTrigger, Widget } from '@mexit/shared'
+import { EditorStyles, MenuTrigger, TodoContainer, Widget } from '@mexit/shared'
 
 import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
 import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
@@ -14,7 +14,6 @@ import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
-import { TodoContainer } from '../Style/Todo.style'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'

@@ -1,121 +1,113 @@
-import { getNextWrappingIndex, PlateEditor } from '@udecode/plate';
-import { KeyboardHandler } from '@udecode/plate-core';
-import { ComboboxKey, IComboboxItem } from '../components/ComboBox/types';
-import { useSlashCommandOnChange } from '../components/SlashCommands/useSlashCommandOnChange';
-import { useComboboxStore } from '../store/combobox';
-import { useMexEditorStore } from '../store/editor';
-import { useElementOnChange } from './useElementOnChange';
+import { getNextWrappingIndex, PlateEditor } from '@udecode/plate'
+import { KeyboardHandler } from '@udecode/plate-core'
+import { ComboboxKey, IComboboxItem } from '../components/ComboBox/types'
+import { useSlashCommandOnChange } from '../components/SlashCommands/useSlashCommandOnChange'
+import { useComboboxStore } from '../store/combobox'
+import { useMexEditorStore } from '../store/editor'
+import { useElementOnChange } from './useElementOnChange'
+import { Transforms, Editor } from 'slate'
 
 const pure = (id: string) => {
   if (id.endsWith(']]')) {
-    return id.substr(0, id.length - 2);
+    return id.substr(0, id.length - 2)
   }
-  return id;
-};
+  return id
+}
 
-export type OnSelectItem = (editor: PlateEditor, item: IComboboxItem) => any; // eslint-disable-line @typescript-eslint/no-explicit-any
-export type OnNewItem = (name: string, parentId?) => void;
+export type OnSelectItem = (editor: PlateEditor, item: IComboboxItem) => any // eslint-disable-line @typescript-eslint/no-explicit-any
+export type OnNewItem = (name: string, parentId?) => void
 
-export const getCreateableOnSelect = (
-  onSelectItem: OnSelectItem,
-  onNewItem: OnNewItem,
-  creatable?: boolean
-) => {
+export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnNewItem, creatable?: boolean) => {
   const creatableOnSelect = (editor: any, textVal: string) => {
-    const items = useComboboxStore.getState().items;
-    const currentNodeKey = useMexEditorStore.getState().metaData.path;
-    const itemIndex = useComboboxStore.getState().itemIndex;
+    const items = useComboboxStore.getState().items
+    const currentNodeKey = useMexEditorStore.getState().metaData.path
+    const itemIndex = useComboboxStore.getState().itemIndex
 
-    const val = pure(textVal);
+    const val = pure(textVal)
     if (items[itemIndex]) {
-      const item = items[itemIndex];
+      const item = items[itemIndex]
 
       if (item.key === '__create_new' && val !== '') {
-        onSelectItem(editor, { key: String(items.length), text: val });
-        onNewItem(val, currentNodeKey);
-      } else onSelectItem(editor, item);
+        onSelectItem(editor, { key: String(items.length), text: val })
+        onNewItem(val, currentNodeKey)
+      } else onSelectItem(editor, item)
     } else if (val && creatable) {
-      onSelectItem(editor, { key: String(items.length), text: val });
-      onNewItem(val, currentNodeKey);
+      onSelectItem(editor, { key: String(items.length), text: val })
+      onNewItem(val, currentNodeKey)
     }
-  };
+  }
 
-  return creatableOnSelect;
-};
+  return creatableOnSelect
+}
+
+export const replaceFragment = (editor: any, range: any, text: string) => {
+  const sel = editor.selection
+
+  if (sel) {
+    Transforms.select(editor, range)
+    Editor.insertText(editor, text)
+  }
+}
 
 /**
  * If the combobox is open, handle keyboard
  */
 export const useComboboxOnKeyDown = (config: any): KeyboardHandler => {
-  const setItemIndex = useComboboxStore((state) => state.setItemIndex);
-  const closeMenu = useComboboxStore((state) => state.closeMenu);
+  const setItemIndex = useComboboxStore((state) => state.setItemIndex)
+  const closeMenu = useComboboxStore((state) => state.closeMenu)
 
   // We need to create the select handlers ourselves here
 
-  const { keys, slashCommands } = config;
-  const slashCommandOnChange = useSlashCommandOnChange(slashCommands);
-  const comboboxKey: string = useComboboxStore.getState().key;
+  const { keys, slashCommands } = config
+  const slashCommandOnChange = useSlashCommandOnChange(slashCommands)
+  const comboboxKey: string = useComboboxStore.getState().key
 
-  const elementOnChange = useElementOnChange(keys[comboboxKey], keys);
+  const elementOnChange = useElementOnChange(keys[comboboxKey], keys)
 
   return (editor) => (e) => {
-    const comboboxKey: string = useComboboxStore.getState().key;
-    const comboType = keys[comboboxKey];
+    const comboboxKey: string = useComboboxStore.getState().key
+    const comboType = keys[comboboxKey]
 
     const onSelectItemHandler =
-      comboType.slateElementType === ComboboxKey.SLASH_COMMAND
-        ? slashCommandOnChange
-        : elementOnChange;
+      comboType.slateElementType === ComboboxKey.SLASH_COMMAND ? slashCommandOnChange : elementOnChange
 
     const creatabaleOnSelect = getCreateableOnSelect(
       onSelectItemHandler,
       (newItem, parentId?) => {
-        comboType.newItemHandler(newItem, parentId);
+        comboType.newItemHandler(newItem, parentId)
       },
       comboboxKey !== ComboboxKey.SLASH_COMMAND
-    );
+    )
 
-    const itemIndex = useComboboxStore.getState().itemIndex;
-    const search = useComboboxStore.getState().search;
-    const items = useComboboxStore.getState().items;
-    const isOpen = !!useComboboxStore.getState().targetRange;
+    const itemIndex = useComboboxStore.getState().itemIndex
+    const search = useComboboxStore.getState().search
+    const items = useComboboxStore.getState().items
+    const isOpen = !!useComboboxStore.getState().targetRange
 
     if (isOpen) {
       if (e.key === 'ArrowDown') {
-        e.preventDefault();
+        e.preventDefault()
 
-        const newIndex = getNextWrappingIndex(
-          1,
-          itemIndex,
-          items.length,
-          () => undefined,
-          true
-        );
-        return setItemIndex(newIndex);
+        const newIndex = getNextWrappingIndex(1, itemIndex, items.length, () => undefined, true)
+        return setItemIndex(newIndex)
       }
       if (e.key === 'ArrowUp') {
-        e.preventDefault();
+        e.preventDefault()
 
-        const newIndex = getNextWrappingIndex(
-          -1,
-          itemIndex,
-          items.length,
-          () => undefined,
-          true
-        );
-        return setItemIndex(newIndex);
+        const newIndex = getNextWrappingIndex(-1, itemIndex, items.length, () => undefined, true)
+        return setItemIndex(newIndex)
       }
       if (e.key === 'Escape') {
-        e.preventDefault();
-        return closeMenu();
+        e.preventDefault()
+        return closeMenu()
       }
 
       if (['Tab', 'Enter', ' ', ']'].includes(e.key)) {
-        e.preventDefault();
-        creatabaleOnSelect(editor, search);
-        return false;
+        e.preventDefault()
+        creatabaleOnSelect(editor, search)
+        return false
       }
     }
-    return false;
-  };
-};
+    return false
+  }
+}

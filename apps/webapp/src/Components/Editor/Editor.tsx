@@ -20,7 +20,6 @@ import { useSnippets } from '../../Hooks/useSnippets'
 import { CategoryType, QuickLinkType } from '../../Editor/constants'
 import { SlashComboboxItem } from '../../Editor/Components/SlashCommands/SlashComboboxItem'
 import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
-import { QuickLinkElement } from '../../Editor/Components/QuickLink/QuickLinkElement'
 import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
 import components from '../../Editor/Components/EditorPreviewComponents'
 
