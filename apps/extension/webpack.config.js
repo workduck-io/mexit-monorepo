@@ -66,7 +66,7 @@ module.exports = (config, context) => {
       filename: '[name].js'
     },
     optimization: {
-      minimize: true,
+      minimize: !!process.env.NO_SOURCE_MAP,
       minimizer: [new ESBuildMinifyPlugin()],
       runtimeChunk: false
     },
