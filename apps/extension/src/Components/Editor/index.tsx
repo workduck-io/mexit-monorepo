@@ -8,7 +8,6 @@ import { EditorStyles, useEditorChange } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { EditorWrapper } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
-import { useTagStore } from '../../Hooks/useTags'
 
 import components from './Components'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
@@ -45,10 +44,8 @@ const commands = [
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
-  const ilinks = useDataStore((store) => store.ilinks)
 
-  const addTags = useTagStore((store) => store.addTags)
-  const tags = useTagStore((store) => store.tags)
+  const { tags, addTag, ilinks, addILink } = useDataStore()
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
@@ -57,11 +54,11 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
       keys: {
         tag: {
           slateElementType: ELEMENT_TAG,
-          newItemHandler: (tag: string) => addTags({ id: 'TAG_1234', text: tag })
+          newItemHandler: (newItem) => addTag(newItem)
         },
         ilink: {
           slateElementType: ELEMENT_ILINK,
-          newItemHandler: (ilink: string, parentId?: string) => console.log(`ilink: ${ilink} | ParentID: ${parentId}`)
+          newItemHandler: (newItem, parentId?) => addILink({ ilink: newItem, parentId })
         },
         slash_command: {
           slateElementType: 'slash_command',
@@ -87,13 +84,18 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         cbKey: ComboboxKey.TAG,
         trigger: '#',
         data: tags.map((t) => ({ ...t, text: t.text })),
-        icon: 'add-something-here'
+        icon: 'ri:hashtag'
       },
       ilink: {
         cbKey: ComboboxKey.ILINK,
         trigger: '[[',
-        data: ilinks.map((l) => ({ ...l, value: l.path, text: l.path })),
-        icon: 'add-something-here'
+        data: ilinks.map((l) => ({
+          ...l,
+          value: l.nodeid,
+          text: l.path,
+          type: QuickLinkType.backlink
+        })),
+        icon: 'ri:file-list-2-line'
       },
       slash_command: {
         cbKey: ComboboxKey.SLASH_COMMAND,

@@ -60,6 +60,7 @@ import {
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { createQuickLinkPlugin } from './QuickLink'
 
 export type PluginOptionType = {
   exclude: {
@@ -152,7 +153,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 
     // Comboboxes
     createTagPlugin(), // Tags
-    // createILinkPlugin(), // Internal Links ILinks
+    createQuickLinkPlugin(), // Internal Links ILinks
 
     // // For Inline Blocks
     // createInlineBlockPlugin(),

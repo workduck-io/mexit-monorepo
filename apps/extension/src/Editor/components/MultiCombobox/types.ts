@@ -1,14 +1,14 @@
-import { ComboboxKey } from '../../types';
+import { ComboboxKey } from '../../types'
 
 export interface ComboboxItem {
-  text: string;
-  value: string;
-  icon?: string;
+  text: string
+  value: string
+  icon?: string
 }
 
 export interface ComboboxType {
-  cbKey: ComboboxKey;
-  icon?: string;
-  trigger: string;
-  data: ComboboxItem[];
+  cbKey: ComboboxKey
+  icon?: string
+  trigger: string
+  data: ComboboxItem[]
 }

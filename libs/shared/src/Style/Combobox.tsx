@@ -61,7 +61,7 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       background: none !important;
       display: flex;
       margin: 0;
-      z-index: 11;
+      z-index: 9999999998;
       height: fit-content;
 
       > div {
