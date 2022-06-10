@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import Tippy from '@tippyjs/react'
 import CloseIcon from '@iconify/icons-ri/close-line'
@@ -12,6 +12,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import AutoformatHelp from './Autoformathelp'
+import { useLocation } from 'react-router-dom'
 
 export const Float = styled.div<FocusModeProp>`
   position: fixed;
@@ -82,6 +83,24 @@ export const ClickableIcon = styled(Icon)`
 `
 
 const FloatingButton = () => {
+  const location = useLocation()
+  const [showFloating, setShowFloating] = useState<boolean>()
+
+  const checkFloating = (): boolean => {
+    if (location.pathname === '/') return true
+    const showNavPaths = ['/editor', '/search', '/snippets', '/archive', '/tasks', '/settings', '/tag']
+
+    for (const path of showNavPaths) {
+      if (location.pathname.startsWith(path)) return true
+    }
+
+    return false
+  }
+
+  useEffect(() => {
+    setShowFloating(checkFloating())
+  }, [location])
+
   const [showMenu, setMenu] = useState<boolean>(false)
 
   const toggleModal = useHelpStore((store) => store.toggleModal)
@@ -94,6 +113,7 @@ const FloatingButton = () => {
   }
 
   if (!authenticated) return null
+  if (!showFloating) return null
 
   return (
     <Float $focusMode={focusMode.on}>
