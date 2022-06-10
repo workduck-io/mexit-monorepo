@@ -8,7 +8,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import { getDibbaText } from '../../Utils/getDibbaText'
-import { ComboboxShortcuts, ComboSeperator, DisplayShortcut, ShortcutText } from '@mexit/shared'
+import { ActionTitle, ComboboxShortcuts, ComboSeperator, DisplayShortcut, ShortcutText } from '@mexit/shared'
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
@@ -106,22 +106,20 @@ export default function Dibba() {
   }
 
   useEffect(() => {
-    if (query !== '') {
-      const res = fuzzysort.go(query, data, { key: 'title', allowTypo: true }).map((item) => item.obj)
+    const res = fuzzysort
+      .go(query, data, { key: 'title', allowTypo: true, limit: 7, all: true })
+      .map((item) => item.obj)
 
-      if (res.length === 0) {
-        res.push({
-          id: 'no-results',
-          title: 'No Results Found',
-          icon: 'ri:alert-line',
-          content: ''
-        })
-      }
-
-      setResults(res)
-    } else {
-      setResults(data)
+    if (res.length === 0) {
+      res.push({
+        id: 'no-results',
+        title: 'No Results Found',
+        icon: 'ri:alert-line',
+        content: ''
+      })
     }
+
+    setResults(res)
   }, [query])
 
   useEffect(() => {
@@ -193,33 +191,37 @@ export default function Dibba() {
       top={top}
       left={left}
       offsetTop={offsetTop}
-      offsetRight={window.innerWidth < left + 500}
+      offsetRight={window.innerWidth < left + 550}
       isOpen={dibbaState.visualState === VisualState.showing}
     >
       <div style={{ flex: 1 }}>
         {results.map((item, index) => {
+          const lastItem = index > 0 ? results[index - 1] : undefined
           return (
-            <ComboboxItem
-              key={index}
-              highlighted={index === activeIndex}
-              onMouseDown={() => {
-                handleClick(item)
-              }}
-              onPointerMove={() => pointerMoved && setActiveIndex(index)}
-            >
-              <Icon height={18} key={item.id} icon={item.icon} />
-              <ItemCenterWrapper>
-                <ItemTitle>{item.title}</ItemTitle>
-                {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
-              </ItemCenterWrapper>
-              {item.rightIcons && (
-                <ItemRightIcons>
-                  {item.rightIcons.map((i: string) => (
-                    <Icon key={item.key + i} icon={i} />
-                  ))}
-                </ItemRightIcons>
-              )}
-            </ComboboxItem>
+            <span key={`${item.key}-${String(index)}`}>
+              {item.type !== lastItem?.type && <ActionTitle>{item.type}</ActionTitle>}
+              <ComboboxItem
+                key={index}
+                highlighted={index === activeIndex}
+                onMouseDown={() => {
+                  handleClick(item)
+                }}
+                onPointerMove={() => pointerMoved && setActiveIndex(index)}
+              >
+                <Icon height={18} key={item.id} icon={item.icon} />
+                <ItemCenterWrapper>
+                  <ItemTitle>{item.title}</ItemTitle>
+                  {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
+                </ItemCenterWrapper>
+                {item.rightIcons && (
+                  <ItemRightIcons>
+                    {item.rightIcons.map((i: string) => (
+                      <Icon key={item.key + i} icon={i} />
+                    ))}
+                  </ItemRightIcons>
+                )}
+              </ComboboxItem>
+            </span>
           )
         })}
         {itemShortcut && (
