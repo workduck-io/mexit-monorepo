@@ -61,6 +61,7 @@ import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { createQuickLinkPlugin } from './QuickLink'
+import { optionsImagePlugin } from './options'
 
 export type PluginOptionType = {
   exclude: {
@@ -94,7 +95,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     // createTodoListPlugin(),
 
     // Special Elements
-    // createImagePlugin(optionsImagePlugin), // Image
+    createImagePlugin(optionsImagePlugin), // Image
     createLinkPlugin(), // Link
     createListPlugin(), // List
     createTodoPlugin(),
