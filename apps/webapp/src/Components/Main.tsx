@@ -1,10 +1,9 @@
 import { linkTooltip } from '@mexit/shared'
-import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
-import { init as SentryInit } from '@sentry/react'
+import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import { IS_DEV } from '@mexit/core'
 
@@ -35,23 +34,6 @@ const Content = styled.div<{ grid?: boolean }>`
       grid-column-start: 2;
     `} */
 `
-
-const Draggable = styled.div`
-  height: 24px;
-  width: 100vw;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 10000;
-
-  &:hover,
-  &:active {
-    background-color: ${({ theme }) => transparentize(0.85, theme.colors.primary)};
-  }
-`
-
 export type MainProps = { children: React.ReactNode }
 
 const Main = ({ children }: MainProps) => {
@@ -62,9 +44,10 @@ const Main = ({ children }: MainProps) => {
         routingInstrumentation
       })
 
-      SentryInit({
+      Sentry.init({
         dsn: 'https://53b95f54a627459c8d0e74b9bef36381@o1135527.ingest.sentry.io/6184488',
-        tracesSampleRate: 1.0,
+        tracesSampleRate: 0.2,
+        ignoreErrors: ['Warning', 'ResizeObserver', 'buildPlaceholders'],
         integrations: [browserTracing]
       })
 
@@ -73,15 +56,10 @@ const Main = ({ children }: MainProps) => {
     }
   }, [routingInstrumentation])
 
-  const styles = {
-    WebkitAppRegion: 'drag'
-  }
   const { getLinks } = useNavlinks()
   const location = useLocation()
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
-
-  const { gridSpringProps } = useSidebarTransition()
 
   const showNav = (): boolean => {
     if (location.pathname === '/') return true
