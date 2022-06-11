@@ -9,7 +9,7 @@ import { getNodes, usePlateEditorRef } from '@udecode/plate'
 
 import { useTransform } from '../../Components/Editor/BalloonToolbar/components/useTransform'
 import useBlockStore from '../../Stores/useBlockStore'
-import { StyledMenu } from '../../Style/Menu'
+import { StyledMenu } from '@mexit/shared'
 import { BlockType, ContextMenuActionType } from '@mexit/core'
 
 type BlockOptionsProps = {

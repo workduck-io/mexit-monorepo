@@ -3,7 +3,7 @@ import { useCombobox } from 'downshift'
 import React, { useState } from 'react'
 import { SearchFilter } from '../Hooks/useFilters'
 import { Input } from '../Style/Form'
-import { StyledMenu } from '../Style/Menu'
+import { StyledMenu } from '@mexit/shared'
 import { SearchFilterInputWrapper } from '../Style/Search'
 import { StyledCombobox, Suggestion } from './NodeSelect/NodeSelect.styles'
 

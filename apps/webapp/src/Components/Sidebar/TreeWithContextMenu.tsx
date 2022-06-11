@@ -9,7 +9,7 @@ import React from 'react'
 import { Item, ItemParams, Separator } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import { StyledMenu } from '../../Style/Menu'
+import { StyledMenu } from '@mexit/shared'
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 
