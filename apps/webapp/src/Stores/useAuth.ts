@@ -12,6 +12,7 @@ import { useApi } from '../Hooks/useApi'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
+import { useLayoutStore } from './useLayoutStore'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -25,6 +26,7 @@ export const useAuthentication = () => {
   const initContents = useContentStore((store) => store.initContents)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
+  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const api = useApi()
 
   const login = async (
@@ -42,6 +44,8 @@ export const useAuthentication = () => {
         console.error({ e })
         return e.toString() as string
       })
+
+    setShowLoader(true)
 
     if (getWorkspace && data !== undefined) {
       await client
@@ -69,13 +73,14 @@ export const useAuthentication = () => {
           return e.toString() as string
         })
     }
+    setShowLoader(false)
     return { data, v }
   }
 
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
       const result: any = await googleSignIn(code, clientId, redirectURI)
-
+      setShowLoader(true)
       if (getWorkspace && result.userCred !== undefined) {
         await client.get(apiURLs.getUserRecords).then(async (d: any) => {
           if (!d.data.group) {
@@ -88,13 +93,16 @@ export const useAuthentication = () => {
           }
         })
       }
+      setShowLoader(false)
       return result
     } catch (error) {
+      setShowLoader(false)
       console.log(error)
     }
   }
 
   async function registerUserForGoogle(result: any) {
+    setShowLoader(true)
     setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
 
     const uCred: UserCred = {
@@ -143,6 +151,8 @@ export const useAuthentication = () => {
         } catch (error) {} // eslint-disable-line
       })
       .catch(console.error)
+
+    setShowLoader(false)
   }
 
   const logout = async () => {
@@ -191,6 +201,8 @@ export const useAuthentication = () => {
     const uCred = loginData.data
     const newWorkspaceName = `WD_${nanoid()}`
 
+    setShowLoader(true)
+
     await client
       .post(apiURLs.registerUser, {
         user: {
@@ -223,6 +235,7 @@ export const useAuthentication = () => {
     if (vSign) {
       setRegistered(false)
     }
+    setShowLoader(false)
     return vSign
   }
 
