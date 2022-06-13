@@ -30,6 +30,8 @@ import GoogleOAuth from './Components/OAuth/Google'
 import Tag from './Views/Tag'
 import Shortcuts from './Views/Settings/Shortcuts'
 import About from './Views/Settings/About'
+import { useLayoutStore } from './Stores/useLayoutStore'
+import SplashScreen from './Components/SplashScreen'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -44,11 +46,18 @@ const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
   const location = useLocation()
 
+  const showLoader = useLayoutStore((store) => store.showLoader)
+  if (showLoader) return <SplashScreen />
+
   return authenticated ? children : <Navigate to={ROUTE_PATHS.login} state={{ from: location }} replace />
 }
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+
+  const showLoader = useLayoutStore((store) => store.showLoader)
+  if (showLoader) return <SplashScreen />
+
   return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
 }
 

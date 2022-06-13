@@ -20,6 +20,8 @@ interface LayoutState {
   setInfobarMode: (mode: InfobarMode) => void
   showInfobar: () => void
   hideInfobar: () => void
+  showLoader?: boolean
+  setShowLoader?: (showLoader: boolean) => void
 }
 
 export const useLayoutStore = create<LayoutState>(
@@ -45,6 +47,9 @@ export const useLayoutStore = create<LayoutState>(
     setInfobarMode: (mode) => set((state) => ({ infobar: { ...state.infobar, mode } })),
     toggleInfobar: () => set((state) => ({ infobar: { ...state.infobar, visible: !state.infobar.visible } })),
     showInfobar: () => set((state) => ({ infobar: { ...state.infobar, visible: true } })),
-    hideInfobar: () => set((state) => ({ infobar: { ...state.infobar, visible: false } }))
+    hideInfobar: () => set((state) => ({ infobar: { ...state.infobar, visible: false } })),
+
+    showLoader: false,
+    setShowLoader: (showLoader) => set({ showLoader })
   }))
 )

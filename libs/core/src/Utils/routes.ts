@@ -97,7 +97,7 @@ export const apiURLs = {
   getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
   // Screenshot capture URLs
-  createImageLink: `${WORKDUCK_API_BASE}/testing/upload/s3`,
+  createImageLink: `${BASE_USER_URL}/testing/upload/s3`,
   getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
 
   // Get Ilinks from Middleware
