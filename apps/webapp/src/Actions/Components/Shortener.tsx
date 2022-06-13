@@ -11,6 +11,7 @@ import { client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
 import { apiURLs, CreateAlias, CreateTags, sitesMetadataDict, Tag } from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
+import { LoadingButton } from '../../Components/Buttons/Buttons'
 
 const Form = styled.form`
   display: flex;
@@ -22,6 +23,7 @@ const Form = styled.form`
 export const Shortener = () => {
   const [currTabURL, setCurrTabURL] = useState<string>()
   const [pageMetaTags, setPageMetaTags] = useState<any[]>()
+  const [isLoading, setIsLoading] = useState(false)
   const [userTags, setUserTags] = useState<Tag[]>([])
   const [short, setShort] = useState<string>()
   const [shortenerResponse, setShortenerResponse] = useState<any>()
@@ -34,6 +36,7 @@ export const Shortener = () => {
 
   const onShortenLinkSubmit = async (e: any) => {
     e.preventDefault()
+    setIsLoading(true)
     const reqBody = {
       long: currTabURL,
       short: short,
@@ -60,6 +63,8 @@ export const Shortener = () => {
     } catch (error) {
       response = error
     }
+
+    setIsLoading(false)
 
     window.parent.postMessage(
       {
@@ -170,9 +175,9 @@ export const Shortener = () => {
         <Label>Shortcut</Label>
         <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(event.target.value)} />
       </InputRow>
-      <Button type="submit" onClick={onShortenLinkSubmit}>
+      <LoadingButton loading={isLoading} buttonProps={{ type: 'submit', onClick: onShortenLinkSubmit }}>
         Save
-      </Button>
+      </LoadingButton>
     </Form>
   )
 }
