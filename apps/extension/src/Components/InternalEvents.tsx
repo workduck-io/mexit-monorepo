@@ -230,73 +230,62 @@ function useDocumentLock() {
   }, [visualState])
 }
 
-function useVimium(){
-  const [toggleVimium , setToggleVimium] = React.useState<boolean>(true);
-  
-    let keyString = {};
-    function checkVal(allHref : {charIndex : string , link: string}[]){
-      let stringPress = '';
-      for(const key in  keyString){
-        if(key !== 'Alt' ){
-          if(key !== 'Shift'){
-            if(key !== 'CapsLock'){
-              stringPress += key;
-            }
-          }
-        }
-      }
-      allHref.map(e=>{
-        if(e.charIndex == stringPress){
-          window.open(e.link, "_blank");
-          stringPress = '';
-          keyString = {};
-        }
-      })
-    }
-    function listenForHints(allHref : {charIndex : string , link: string}[]){
-      window.addEventListener("keydown",(e)=>{
-        keyString[e.key] = true;
-        console.log(keyString);
-        setTimeout(() => checkVal(allHref) , 100); 
-      })
-      window.addEventListener("keyup",(e)=>{
-        setTimeout(() =>delete keyString[e.key] , 100);
-        console.log(keyString);
-      })
-    }
-  function doFunction(e: KeyboardEvent) {
-    if (e.key === "k") {
+function useVimium() {
+  const { visualState } = useSputlitContext()
+  const [toggleVimium, setToggleVimium] = React.useState<boolean>(true);
+  let keyString = {};
+  function doFunction(string: String) {
+    if (string === "k") {
       window.scrollTo(window.pageXOffset, window.pageYOffset - 100);
     }
-    if (e.key === "j") {
+    else if (string === "j") {
       window.scrollTo(window.pageXOffset, window.pageYOffset + 100);
     }
-    if (e.key === "h") {
+    else if (string === "h") {
       window.scrollTo(window.pageXOffset - 100, window.pageYOffset);
     }
-    if (e.key === "l") {
+    else if (string === "l") {
       window.scrollTo(window.pageXOffset + 100, window.pageYOffset);
     }
-    if (e.key === "d") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset + window.innerHeight/2);
+    else if (string === "d") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset + window.innerHeight / 2);
     }
-    if (e.key === "d") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset - window.innerHeight/2);
+    else if (string === "u") {
+      window.scrollTo(window.pageXOffset, window.pageYOffset - window.innerHeight / 2);
     }
-    if (e.key === "r") {
+    else if (string === "gg") {
+      window.scrollTo(window.pageXOffset, 0);
+    }
+    else if (string === "G") {
+      window.scrollTo(window.pageXOffset, document.body.scrollHeight);
+    }
+    else if (string === "r") {
       location.reload();
     }
-    if (e.key === "i") {
+    else if (string === "i") {
       setToggleVimium(false);
     }
-    if (e.key === "b") {
+    else if (string === "yy") {
+      console.log("Manav")
       chrome.runtime.sendMessage(
         {
           type: 'ASYNC_ACTION_HANDLER',
           subType: 'GET_CURRENT_TAB'
         },
         (response) => {
-          const newUrl = "view-source:"+ response.message[0].url;
+          const Url = response.message[0].url;
+          navigator.clipboard.writeText(Url);
+        }
+      )
+    }
+    else if (string === "gs") {
+      chrome.runtime.sendMessage(
+        {
+          type: 'ASYNC_ACTION_HANDLER',
+          subType: 'GET_CURRENT_TAB'
+        },
+        (response) => {
+          const newUrl = "view-source:" + response.message[0].url;
           chrome.runtime.sendMessage(
             {
               type: 'ASYNC_ACTION_HANDLER',
@@ -313,33 +302,63 @@ function useVimium(){
         }
       )
     }
-    if(e.key === "f"){
-      const allATags = document.querySelectorAll('a');
-      let allHref : {charIndex : string , link: string}[] = [];
-      const screen = {
-        top: window.pageYOffset,
-        bottom: window.innerHeight+window.pageYOffset
-      }
-      let indexChar = '';
-      for(let i = 0 ; i < allATags.length; i++){
-        const pos= allATags[i].getBoundingClientRect().top;
-        if(pos >= screen.top && pos <= screen.bottom){
-          const charIndex = incrementChar(indexChar);
-          const link = allATags[i].href;
-          allHref[i] = ({ charIndex: charIndex , link: link });
-          console.log(allHref[i]);
-          indexChar = charIndex;
-        }
-      }
-      listenForHints(allHref);
-    }
   }
-  function checkKeyHandler(event: KeyboardEvent) {
-    // setPressKey(event.key);
-    if (event.key === "escape") {
+  function checkTyping(event) {
+    if (event.target.nodeName === "INPUT") {
+      setToggleVimium(false);
+    } else {
       setToggleVimium(true);
     }
-    if(toggleVimium)doFunction(event);
   }
-  window.addEventListener("keydown", checkKeyHandler)
+  useEffect(() => {
+    window.addEventListener("click", checkTyping)
+  })
+  function checkVal() {
+    // console.log(keyString);
+    let stringPress = '';
+    for (const key in keyString) {
+      if (key !== 'Alt') {
+        if (key !== 'Shift') {
+          if (key !== 'CapsLock') {
+            if (key !== 'Ctrl') {
+              // stringPress += key;
+              for(let i = 0 ; i < keyString[key] ; i++){
+                stringPress += key;
+              }
+            }
+          }
+        }
+      }
+    }
+    doFunction(stringPress);
+  }
+  const keydown = (e) => {
+    if (e.key === "escape" || visualState === VisualState.showing) {
+      setToggleVimium(true);
+    }
+    if (toggleVimium) {
+      if(keyString[e.key]){
+        keyString[e.key]++;
+      }else{
+        keyString[e.key] = 1;
+      };
+      setTimeout(() => checkVal(), 1000);
+    }
+  }
+  const keyup = (e) => {
+    if (e.key === "escape" || visualState === VisualState.showing) {
+      setToggleVimium(true);
+    }
+    if (toggleVimium) {
+      setTimeout(() => delete keyString[e.key], 1000);
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => keydown(e))
+    window.addEventListener("keyup", (e) => keyup(e))
+    return () => {
+      window.removeEventListener("keydown", keydown);
+      window.removeEventListener("keyup", keyup);
+    }
+  })
 }
