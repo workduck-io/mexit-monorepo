@@ -1,37 +1,57 @@
 import { Icon } from '@iconify/react'
+import archivedIcon from '@iconify/icons-ri/archive-line'
 import { useEditorRef } from '@udecode/plate'
 import { Transforms } from 'slate'
-import { useFocused, useSelected } from 'slate-react'
+import { useFocused, useSelected, useReadOnly } from 'slate-react'
 import styled from 'styled-components'
 import { useHotkeys } from '../../../hooks/useHotKeys'
-import { SILink, SILinkRoot } from './QuickLinkElement.styles'
-import { ILinkProps } from './QuickLink.types'
-import React from 'react'
+import { SILink, SILinkRoot } from '@mexit/shared'
+import { ILinkElementProps, ILinkProps } from './QuickLink.types'
+import React, { useState } from 'react'
 import { useLinks } from '../../../../Hooks/useLinks'
 import { getBlock } from '../../../../Utils/parseData'
+import EditorPreview from '../../../../Components/Editor/EditorPreview'
+import { useNodes } from '../../../../Hooks/useNodes'
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
 
 const StyledIcon = styled(Icon)`
   margin-right: 4px;
 `
 
-const QuickLinkElement = ({
-  attributes,
-  children,
-  element,
-  isArchived,
-  nodeid,
-  onClick,
-  showPreview,
-  archivedIcon
-}: ILinkProps) => {
+export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()
   const selected = useSelected()
   const focused = useFocused()
+  const [preview, setPreview] = useState(false)
+  // const { push } = useNavigation()
   const { getPathFromNodeid } = useLinks()
+  const { getArchiveNode } = useNodes()
+  // mog('We reached here', { selected, focused })
 
+  // const nodeid = getNodeidFromPath(element.value)
+  const readOnly = useReadOnly()
   const path = getPathFromNodeid(element.value)
-  const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
-  const content = block ? [block] : undefined
+  // const { archived } = useArchive()
+  // const { goTo } = useRouting()
+
+  const onClickProps = useOnMouseClick(() => {
+    // Show preview on click, if preview is shown, navigate to link
+    if (!preview) {
+      setPreview(true)
+    } else {
+      mog('pushing', { id: element.value })
+      // push(element.value)
+      // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+      window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
+    }
+  })
+
+  // useEffect(() => {
+  //   // If the preview is shown and the element losses focus --> Editor focus is moved
+  //   // Hide the preview
+  //   if (preview && !selected) setPreview(false)
+  // }, [selected])
 
   useHotkeys(
     'backspace',
@@ -40,13 +60,27 @@ const QuickLinkElement = ({
         Transforms.move(editor)
       }
     },
-    [selected, focused]
+    [element]
   )
 
-  // const onClickProps = useOnMouseClick(() => {
-  //   onClick();
-  // });
-
+  useHotkeys(
+    'enter',
+    () => {
+      // mog('Enter the dragon', { selected, preview, focused, esl: editor.selection })
+      // Show preview on Enter, if preview is shown, navigate to link
+      if (selected && focused && editor.selection) {
+        if (!preview) setPreview(true)
+      }
+      // Once preview is shown the link looses focus
+      if (preview) {
+        mog('working', { element })
+        // push(element.value)
+        // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+        window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
+      }
+    },
+    [selected, preview]
+  )
   useHotkeys(
     'delete',
     () => {
@@ -56,44 +90,48 @@ const QuickLinkElement = ({
     },
     [selected, focused]
   )
+  // const isArchived = archived(element.value)
+  const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
+  const content = block ? [block] : undefined
+  // const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
+
+  console.log({ path, element })
 
   return (
     <SILinkRoot
       {...attributes}
       id={`ILINK_${element.value}`}
+      data-tour="mex-onboarding-ilink"
       data-slate-value={element.value}
       contentEditable={false}
-      onClick={onClick}
     >
-      {isArchived ? (
-        <SILink focused={selected} archived={true}>
+      {false ? (
+        <SILink $selected={selected} $archived={true}>
           <StyledIcon icon={archivedIcon} color="#df7777" />
           <span className="ILink_decoration ILink_decoration_left">[[</span>
-          <span className="ILink_decoration ILink_decoration_value"> {element.value}</span>
+          {/* <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span> */}
           <span className="ILink_decoration ILink_decoration_right">]]</span>
         </SILink>
       ) : (
-        // TODO: uncomment this when the id from address bar issue is fixed in webapp
-        // <EditorPreview
-        //   isPreview={isPreview(editor.id)}
-        //   previewRef={editor}
-        //   nodeid={nodeid}
-        // >
-        <SILink focused={selected}>
-          <span className="ILink_decoration ILink_decoration_left">[[</span>
-          <span className="ILink_decoration ILink_decoration_value">
-            {' '}
-            {!content ? path : `${path} : ${element.blockValue}`}{' '}
-          </span>
-          <span className="ILink_decoration ILink_decoration_right">]]</span>
-        </SILink>
-        // </EditorPreview>
+        <EditorPreview
+          placement="auto"
+          allowClosePreview={readOnly}
+          preview={preview}
+          nodeid={element.value}
+          content={content}
+          closePreview={() => setPreview(false)}
+        >
+          <SILink $selected={selected} {...onClickProps}>
+            <span className="ILink_decoration ILink_decoration_left">[[</span>
+            <span className="ILink_decoration ILink_decoration_value">
+              {' '}
+              {!content ? path : `${path} : ${element.blockValue}`}{' '}
+            </span>
+            <span className="ILink_decoration ILink_decoration_right">]]</span>
+          </SILink>
+        </EditorPreview>
       )}
       {children}
     </SILinkRoot>
   )
 }
-
-export default QuickLinkElement
-
-const isPreview = (id: string) => id.startsWith('__preview__')

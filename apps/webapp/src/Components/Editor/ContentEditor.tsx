@@ -4,7 +4,7 @@ import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import shallow from 'zustand/shallow'
 import tinykeys from 'tinykeys'
 
-import { defaultContent } from '@mexit/core'
+import { defaultContent, mog } from '@mexit/core'
 
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import Editor from './Editor'
@@ -22,6 +22,7 @@ import Metadata from '../EditorInfobar/Metadata'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
@@ -29,8 +30,9 @@ const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
   const setIsEditing = useEditorStore((store) => store.setIsEditing)
   const { toggleFocusMode } = useLayout()
-  const { saveApiAndUpdate } = useLoad()
+  const { saveApiAndUpdate, loadNode } = useLoad()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const { setShowLoader } = useLayoutStore()
 
   const { addOrUpdateValBuffer, getBufferVal } = useEditorBuffer()
   const { node, fsContent } = useEditorStore(
@@ -80,6 +82,18 @@ const ContentEditor = () => {
       addOrUpdateValBuffer(node.nodeid, val)
     }
   }
+
+  useEffect(() => {
+    if (node.nodeid !== nodeId) {
+      setShowLoader(true)
+      // Had to add a loader because useLoad didn't work due to store hydration taking so much time
+      // TODO: see how to navigate around this issue
+      setTimeout(() => {
+        loadNode(nodeId, { savePrev: false, fetch: false })
+        setShowLoader(false)
+      }, 3000)
+    }
+  }, [])
 
   return (
     <StyledEditor showGraph={false} className="mex_editor">

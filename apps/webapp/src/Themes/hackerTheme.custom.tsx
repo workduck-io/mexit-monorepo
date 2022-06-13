@@ -13,7 +13,7 @@ import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
-import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
+import { EditorPreviewWrapper } from '@mexit/shared'
 
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}

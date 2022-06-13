@@ -5,9 +5,8 @@ import styled, { css } from 'styled-components'
 
 import { focusStyles, FocusModeProp } from '@mexit/shared'
 import { Label } from '../../Style/Form'
-import { HoverFade } from '../../Style/Helpers'
 import { ProfileIcon } from '../../Style/UserPage'
-import { RelativeTime } from '@mexit/shared'
+import { RelativeTime, HoverFade } from '@mexit/shared'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 import { PublicNode } from '../../Stores/usePublicNodes'
 

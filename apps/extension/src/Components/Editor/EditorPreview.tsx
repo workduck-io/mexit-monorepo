@@ -9,18 +9,17 @@ import {
   EditorPreviewNoteName,
   EditorPreviewWrapper
 } from '@mexit/shared'
-import { NodeEditorContent, generateTempId, mog } from '@mexit/core'
+import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { Button } from '@mexit/shared'
-import useLoad from '../../../Hooks/useLoad'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
-import { useTags } from '../../../Hooks/useTags'
-import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
+// import useLoad from '../../../Hooks/useLoad'
+// import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
+// import { useTags } from '../../Hooks/useTags'
 import { getNameFromPath } from '@mexit/shared'
-import { useLinks } from '../../../Hooks/useLinks'
-import { useContentStore } from '../../../Stores/useContentStore'
-import EditorPreviewRenderer from '../../EditorPreviewRenderer'
-import useMemoizedPlugins from '../../Plugins'
-import { editorPreviewComponents } from '../EditorPreviewComponents'
+import { useLinks } from '../../Hooks/useLinks'
+import { useContentStore } from '../../Stores/useContentStore'
+import EditorPreviewRenderer from '../EditorPreviewRenderer'
+import useMemoizedPlugins from '../../Editor/plugins'
+import components from './Components'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -76,9 +75,9 @@ const EditorPreview = ({
   const getContent = useContentStore((store) => store.getContent)
   const nodeContent = getContent(nodeid)
   const cc = content ?? (nodeContent && nodeContent.content)
-  const { hasTags } = useTags()
-  const { loadNode } = useLoad()
-  const { goTo } = useRouting()
+  // const { hasTags } = useTags()
+  // const { loadNode } = useLoad()
+  // const { goTo } = useRouting()
 
   const ilink = getILinkFromNodeid(nodeid)
 
@@ -87,11 +86,12 @@ const EditorPreview = ({
   const onClickNavigate = (e) => {
     e.preventDefault()
     mog('OnClickNavigate', { e })
-    loadNode(nodeid)
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    // loadNode(nodeid)
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`)
+    // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
+  const plugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
 
   if (cc) {
     return (
@@ -101,18 +101,26 @@ const EditorPreview = ({
         interactiveDebounce={100}
         placement={placement ?? 'bottom'}
         visible={preview}
-        appendTo={() => document.body}
+        appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
         render={(attrs) => (
           <EditorPreviewWrapper className="__editor__preview" tabIndex={-1} {...attrs}>
-            {(allowClosePreview || hasTags(nodeid) || ilink?.path) && (
-              <EditorPreviewControls hasTags={hasTags(nodeid)}>
+            {(allowClosePreview ||
+              // TODO: look into adding useTags later
+              // hasTags(nodeid)
+              false ||
+              ilink?.path) && (
+              <EditorPreviewControls
+              // hasTags={
+              //   hasTags(nodeid)
+              // }
+              >
                 {ilink?.path && (
                   <EditorPreviewNoteName onClick={onClickNavigate}>
                     <Icon icon={ilink?.icon ?? fileList2Line} />
                     {getNameFromPath(ilink.path)}
                   </EditorPreviewNoteName>
                 )}
-                <TagsRelatedTiny nodeid={nodeid} />
+                {/* <TagsRelatedTiny nodeid={nodeid} /> */}
                 {allowClosePreview && (
                   <Button transparent onClick={() => closePreview && closePreview()}>
                     <Icon icon={closeCircleLine} />

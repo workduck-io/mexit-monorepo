@@ -4,7 +4,7 @@ import { createPlateUI, withProps } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 import { MediaEmbedElement, TableWrapper, LinkElement } from '@mexit/shared'
 import TagElement from '../../Editor/components/Tags/TagElement'
-import QuickLinkElement from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
+import { QuickLinkElement } from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
 import {
   ELEMENT_ILINK,
   ELEMENT_LINK,

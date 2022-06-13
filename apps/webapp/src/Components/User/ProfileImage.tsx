@@ -6,8 +6,7 @@ import { Icon } from '@iconify/react'
 import user3Line from '@iconify-icons/ri/user-3-line'
 import styled, { useTheme } from 'styled-components'
 
-import { CardShadow } from '../../Style/Helpers'
-import { Centered } from '@mexit/shared'
+import { Centered, CardShadow } from '@mexit/shared'
 
 interface ProfileImageProps {
   email: string
