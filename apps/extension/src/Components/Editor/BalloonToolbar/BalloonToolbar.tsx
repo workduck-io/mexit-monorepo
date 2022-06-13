@@ -15,7 +15,8 @@ export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => 
   const popperOptions: UsePopperPositionOptions = {
     popperElement: popperRef.current,
     placement: 'top' as any,
-    offset: [0, 8],
+    // TODO: not able to fix the position on the balloon toolbar, approximation for now
+    offset: [window.innerWidth / 3.5, window.innerHeight / 5.5],
     ..._popperOptions
   }
 
