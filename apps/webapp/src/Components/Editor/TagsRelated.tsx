@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import hashtagIcon from '@iconify/icons-ri/hashtag'
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
 
-import { Note } from '@mexit/shared'
+import { InfoSubHeading, Note, TagFlex, TagsFlex } from '@mexit/shared'
 
 import { TagsHelp } from '../../Data/defaultText'
 import { useTags } from '../../Hooks/useTags'
@@ -11,54 +9,11 @@ import { InfoWidgetWrapper } from '../../Style/Infobar'
 
 import Collapse from '../../Layout/Collapse'
 import NodeLink from './NodeLink'
-import { HoverSubtleGlow } from '../../Style/Helpers'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
 
-export const TagFlex = styled.div`
-  cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
-  color: ${({ theme }) => theme.colors.text.fade};
-
-  ${HoverSubtleGlow}
-`
-
-export const TagsFlex = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.small};
-`
-
-export const InfoSubHeading = styled.h2`
-  margin: ${({ theme }) => theme.spacing.large};
-  font-size: 1.2rem;
-  font-weight: normal;
-  color: ${({ theme }) => theme.colors.text.fade};
-`
-
-export const ResultCardFooter = styled.div<{ active?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1rem;
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[9]};
-  padding: ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.colors.text.fade};
-  ${TagFlex} {
-    background-color: ${({ theme }) => theme.colors.gray[8]};
-    ${HoverSubtleGlow}
-  }
-  ${({ theme, active }) =>
-    active &&
-    css`
-      color: ${theme.colors.primary};
-    `}
-`
 interface TagsRelated {
   nodeid: string
   fromAnalysis?: boolean

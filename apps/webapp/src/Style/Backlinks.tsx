@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import styled from 'styled-components'
 
-import { HoverSubtleGlow } from './Helpers'
+import { HoverSubtleGlow } from '@mexit/shared'
 
 export const SBackLinks = styled.div`
   width: 100%;

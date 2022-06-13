@@ -4,7 +4,7 @@ import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 import PreviewEditor from './PreviewEditor'
-import { CardShadow } from '../../Style/Helpers'
+import { CardShadow } from '@mexit/shared'
 import { useContentStore } from '../../Stores/useContentStore'
 
 export const TippyPreviewEditorWrapper = styled.div`

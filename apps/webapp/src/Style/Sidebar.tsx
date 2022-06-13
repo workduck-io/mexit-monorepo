@@ -2,8 +2,7 @@ import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { FocusModeProp, focusStyles } from '@mexit/shared'
-import { PixelToCSS, ThinScrollbar } from './Helpers'
+import { FocusModeProp, focusStyles, PixelToCSS, ThinScrollbar } from '@mexit/shared'
 import { Ellipsis } from './Search'
 
 export const Sicon = styled(Icon)`

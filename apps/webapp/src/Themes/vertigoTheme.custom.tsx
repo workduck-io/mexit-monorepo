@@ -17,7 +17,7 @@ import { CreateSnippet } from '../Style/Snippets'
 import { ArchivedNode } from '../Views/Archive'
 import { SettingsOptions, SettingTitle } from '../Views/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
-import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
+import { EditorPreviewWrapper } from '@mexit/shared'
 
 const textStyleColors = css`
   b,

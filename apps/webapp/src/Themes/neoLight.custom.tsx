@@ -4,7 +4,7 @@ import { css } from 'styled-components'
 
 import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
 import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
-import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
+import { EditorPreviewWrapper } from '@mexit/shared'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { Title } from '../Style/Elements'

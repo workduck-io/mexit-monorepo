@@ -1,10 +1,9 @@
-import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles, TodoContainer } from '@mexit/shared'
+import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles, TodoContainer, EditorPreviewWrapper } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
 import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
 import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
-import { EditorPreviewWrapper } from '../Editor/Components/EditorPreview/EditorPreview.styles'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { GridWrapper } from '../Style/Grid'

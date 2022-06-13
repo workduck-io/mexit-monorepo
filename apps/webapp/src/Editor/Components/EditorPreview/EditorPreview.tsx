@@ -8,7 +8,7 @@ import {
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper
-} from './EditorPreview.styles'
+} from '@mexit/shared'
 import { NodeEditorContent, generateTempId, mog } from '@mexit/core'
 import { Button } from '@mexit/shared'
 import useLoad from '../../../Hooks/useLoad'

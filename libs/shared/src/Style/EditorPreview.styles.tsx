@@ -1,8 +1,8 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-import { TagFlex } from '../../../Components/Editor/TagsRelated'
 import { Button } from '@mexit/shared'
 import { CardShadow } from '@mexit/shared'
+import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`
   background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])} !important;
