@@ -77,6 +77,7 @@ export const ComboboxItem = styled.div<{ highlighted: boolean }>`
   padding: 0 8px;
   min-height: 36px;
   user-select: none;
+  width: 225px;
   color: ${({ theme }) => theme.colors.text.subheading};
   background: ${({ highlighted, theme }) => (!highlighted ? 'transparent' : theme.colors.background.highlight)};
   cursor: pointer;

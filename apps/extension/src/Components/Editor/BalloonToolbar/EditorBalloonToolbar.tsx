@@ -57,11 +57,17 @@ const BallonMarkToolbarButtons = () => {
     theme: 'mex',
     hideOnClick: false,
     offset: [0, 17],
-    placement: top
+    placement: top,
+    appendTo: styleSlot
   } as any
 
   return (
-    <BalloonToolbar popperOptions={popperOptions} theme={theme} arrow={arrow} portalElement={styleSlot}>
+    <BalloonToolbar
+      popperOptions={popperOptions}
+      theme={theme}
+      arrow={arrow}
+      portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+    >
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}
         icon={<Icon height={20} icon={h1} />}
@@ -127,13 +133,18 @@ const BallonMarkToolbarButtons = () => {
       <MarkToolbarButton
         type={getPluginType(editor, MARK_STRIKETHROUGH)}
         icon={<Icon height={20} icon={strikeThrough} />}
+        tooltip={{ content: 'Strikethrough', ...tooltip }}
       />
       <MarkToolbarButton
         type={getPluginType(editor, MARK_ITALIC)}
         icon={<Icon height={20} icon={italicIcon} />}
         tooltip={{ content: 'Italic (⌘I)', ...tooltip }}
       />
-      <MarkToolbarButton type={getPluginType(editor, MARK_CODE)} icon={<Icon height={20} icon={codeLine} />} />
+      <MarkToolbarButton
+        type={getPluginType(editor, MARK_CODE)}
+        icon={<Icon height={20} icon={codeLine} />}
+        tooltip={{ content: 'CodeBlock', ...tooltip }}
+      />
 
       <ButtonSeparator />
 

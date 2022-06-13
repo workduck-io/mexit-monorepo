@@ -498,7 +498,7 @@ export const searchBrowserAction = (query: string, activeItem?: MexitAction) => 
     id: '0',
     title: activeItem?.title || 'Search in Browser Search Bar',
     category: QuickLinkType.action,
-    description: `Search for "${query}"`,
+    description: `Search for ${query}`,
     type: ActionType.SEARCH,
     icon: activeItem?.icon || 'ph:magnifying-glass',
     data: {

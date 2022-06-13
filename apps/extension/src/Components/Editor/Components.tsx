@@ -11,8 +11,10 @@ import {
   ELEMENT_MEDIA_EMBED,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
-  ELEMENT_TAG
+  ELEMENT_TAG,
+  ELEMENT_TODO_LI
 } from '@mexit/core'
+import Todo from './Todo'
 
 export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
@@ -28,7 +30,8 @@ export const editorPreviewComponents = {
   [ELEMENT_TAG]: TagElement,
   [ELEMENT_ILINK]: QuickLinkElement,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
-  [ELEMENT_TABLE]: TableWrapper
+  [ELEMENT_TABLE]: TableWrapper,
+  [ELEMENT_TODO_LI]: Todo
 }
 
 const components = createPlateUI({

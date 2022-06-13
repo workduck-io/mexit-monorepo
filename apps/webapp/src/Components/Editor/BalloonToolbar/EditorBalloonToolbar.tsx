@@ -126,13 +126,18 @@ const BallonMarkToolbarButtons = () => {
       <MarkToolbarButton
         type={getPluginType(editor, MARK_STRIKETHROUGH)}
         icon={<Icon height={20} icon={strikeThrough} />}
+        tooltip={{ content: 'Strikethrough', ...tooltip }}
       />
       <MarkToolbarButton
         type={getPluginType(editor, MARK_ITALIC)}
         icon={<Icon height={20} icon={italicIcon} />}
         tooltip={{ content: 'Italic (⌘I)', ...tooltip }}
       />
-      <MarkToolbarButton type={getPluginType(editor, MARK_CODE)} icon={<Icon height={20} icon={codeLine} />} />
+      <MarkToolbarButton
+        type={getPluginType(editor, MARK_CODE)}
+        icon={<Icon height={20} icon={codeLine} />}
+        tooltip={{ content: 'CodeBlock', ...tooltip }}
+      />
 
       <ButtonSeparator />
 
