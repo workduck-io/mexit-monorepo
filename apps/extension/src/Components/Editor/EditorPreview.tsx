@@ -9,7 +9,7 @@ import {
   EditorPreviewNoteName,
   EditorPreviewWrapper
 } from '@mexit/shared'
-import { NodeEditorContent, generateTempId, mog } from '@mexit/core'
+import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { Button } from '@mexit/shared'
 // import useLoad from '../../../Hooks/useLoad'
 // import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
@@ -87,6 +87,7 @@ const EditorPreview = ({
     e.preventDefault()
     mog('OnClickNavigate', { e })
     // loadNode(nodeid)
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`)
     // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 

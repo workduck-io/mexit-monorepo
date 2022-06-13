@@ -12,7 +12,7 @@ import { useLinks } from '../../../../Hooks/useLinks'
 import { getBlock } from '../../../../Utils/parseData'
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
 import { useNodes } from '../../../../Hooks/useNodes'
-import { mog } from '@mexit/core'
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
 
 const StyledIcon = styled(Icon)`
@@ -43,6 +43,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       mog('pushing', { id: element.value })
       // push(element.value)
       // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+      window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
     }
   })
 
@@ -75,6 +76,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
         mog('working', { element })
         // push(element.value)
         // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+        window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
       }
     },
     [selected, preview]
