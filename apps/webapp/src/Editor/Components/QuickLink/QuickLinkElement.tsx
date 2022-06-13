@@ -16,15 +16,10 @@ import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
 import { useContentStore } from '../../../Stores/useContentStore'
-import { SILinkRoot, SILink } from './styled'
+import { SILinkRoot, SILink } from '@mexit/shared'
 import { ILinkElementProps } from '../../Types/QuickLink'
 import EditorPreview from '../EditorPreview/EditorPreview'
 import { getBlock } from '../../../Utils/parseData'
-
-/**
- * ILinkElement with no default styles.
- * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
- */
 
 const StyledIcon = styled(Icon)`
   margin-right: 4px;
