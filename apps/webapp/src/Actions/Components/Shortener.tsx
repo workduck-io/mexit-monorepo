@@ -70,11 +70,11 @@ export const Shortener = () => {
       {
         type: 'shortener',
         status: response.status,
-        message: response.message || { ...reqBody, shortenedURL: response.data.shortenedURL }
+        message: response.message || { ...reqBody, shortenedURL: response.data.message }
       },
       '*'
     )
-    copyToClipboard(response.data.shortenedURL)
+    copyToClipboard(response.data.message)
   }
 
   const handleEvent = (event: MessageEvent) => {

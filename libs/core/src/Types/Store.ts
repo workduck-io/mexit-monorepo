@@ -23,6 +23,9 @@ export interface DataStoreState {
 
   initializeDataStore: (initData: InitDataStoreType) => void
 
+  // Just to reset everything to initial data
+  resetDataStore: () => void
+
   // adds the node
   addILink: (props: AddILinkProps) => ILink | undefined
 

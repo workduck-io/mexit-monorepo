@@ -14,6 +14,7 @@ export interface PublicNodeStoreType {
   nodes: Record<string, PublicNode>
   addPublicNode: (node: PublicNode) => void
   getPublicNode: (nodeID: string) => PublicNode
+  reset: () => void
 }
 
 export const usePublicNodeStore = create<PublicNodeStoreType>(
@@ -25,6 +26,11 @@ export const usePublicNodeStore = create<PublicNodeStoreType>(
       },
       getPublicNode: (nodeID: string) => {
         return get().nodes[nodeID]
+      },
+      reset: () => {
+        set({
+          nodes: {}
+        })
       }
     }),
     { name: 'mexit-public-node-store', getStorage: () => IDBStorage }
