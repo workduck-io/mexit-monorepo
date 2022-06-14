@@ -14,6 +14,7 @@ import { getHtmlString } from './Source'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { useContentStore } from '../Stores/useContentStore'
 import { useEditorContext } from '../Hooks/useEditorContext'
+import { useSaveChanges } from '../Hooks/useSaveChanges'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -34,6 +35,7 @@ const highlighter = new Highlighter()
 function useToggleHandler() {
   const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
+  const { saveIt } = useSaveChanges()
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -66,6 +68,7 @@ function useToggleHandler() {
           setTooltipState({ visualState: VisualState.hidden })
         } else {
           setPreviewMode(true)
+          saveIt(false, true)
         }
       }
     }

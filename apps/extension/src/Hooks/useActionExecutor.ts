@@ -29,7 +29,6 @@ export function useActionExecutor() {
           nodePath = search.value.startsWith('[[') ? search.value.substring(2) : search.value || node.path
         }
 
-        console.log('nodePat', nodePath)
         setNode({
           id: (existingNode || node).nodeid,
           title: nodePath.split(SEPARATOR).slice(-1)[0],
@@ -56,7 +55,6 @@ export function useActionExecutor() {
             setVisualState(VisualState.hidden)
             break
           case ActionType.SEARCH: {
-            console.log('activeItem', activeItem, item)
             // Ignore the case for search type action when it is the generic search action
             // As it is not a two step action
             if (activeItem?.title !== item?.title && item?.id !== '0') {
