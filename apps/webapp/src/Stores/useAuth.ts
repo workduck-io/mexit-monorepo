@@ -13,6 +13,11 @@ import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useLayoutStore } from './useLayoutStore'
+import { useApiStore } from './useApiStore'
+import { usePublicNodeStore } from './usePublicNodes'
+import { useRecentsStore } from './useRecentsStore'
+import { useReminderStore } from './useReminderStore'
+import { useTodoStore } from './useTodoStore'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -28,6 +33,13 @@ export const useAuthentication = () => {
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const api = useApi()
+
+  const clearRequests = useApiStore().clearRequests
+  const resetDataStore = useDataStore().resetDataStore
+  const resetPublicNodes = usePublicNodeStore().reset
+  const clearRecents = useRecentsStore().clear
+  const clearReminders = useReminderStore().clearReminders
+  const clearTodos = useTodoStore().clearTodos
 
   const login = async (
     email: string,
@@ -158,8 +170,18 @@ export const useAuthentication = () => {
   const logout = async () => {
     await signOut()
     setUnAuthenticated()
-    localStorage.clear()
-    await IDBClear()
+
+    // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
+    // This is because zustand maintains it's state post logout as we don't go through a reload
+    // Which results in zustand recreating everything post logout
+    clearRequests()
+    initContents({})
+    resetDataStore()
+    resetPublicNodes()
+    clearRecents()
+    clearReminders()
+    initSnippets([])
+    clearTodos()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {

@@ -35,6 +35,21 @@ export const dataStoreConstructor = (set, get) => ({
       ...initData
     })
   },
+  resetDataStore: () => {
+    set({
+      tags: [],
+      ilinks: [],
+      linkCache: {},
+      tagsCache: {},
+      bookmarks: [],
+      archive: [],
+      baseNodeId: '@',
+      slashCommands: {
+        default: defaultCommands,
+        internal: []
+      }
+    })
+  },
 
   addTag: (tag) => {
     const Tags = Settify([...get().tags.map((t) => t.value), tag])
