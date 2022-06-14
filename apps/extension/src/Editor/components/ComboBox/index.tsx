@@ -71,6 +71,12 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
       ...spotlightShortcuts.open,
       title: 'to Insert'
     }
+  },
+  ['Links']: {
+    link: {
+      ...spotlightShortcuts.open,
+      title: 'to Insert'
+    }
   }
 }
 

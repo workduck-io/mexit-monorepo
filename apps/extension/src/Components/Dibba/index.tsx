@@ -1,4 +1,14 @@
-import { LinkCapture, parseSnippet, QuickLinkType, Snippet } from '@mexit/core'
+import {
+  defaultContent,
+  LinkCapture,
+  mog,
+  parseBlock,
+  parseNode,
+  parseSnippet,
+  QuickLinkType,
+  SEPARATOR,
+  Snippet
+} from '@mexit/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import fuzzysort from 'fuzzysort'
@@ -12,6 +22,8 @@ import { ActionTitle, ComboboxShortcuts, ComboSeperator, DisplayShortcut, Shortc
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
+import useDataStore from '../../Stores/useDataStore'
+import { useContentStore } from '../../Stores/useContentStore'
 
 // This functions provides the 'to be' range and text content
 // Needed because keydown event happens before there is a selection or content change
@@ -42,18 +54,29 @@ export default function Dibba() {
   const left = window.scrollX + dibbaState.coordinates.left
   const [offsetTop, setOffsetTop] = useState(window.innerHeight < top + dibbaRef.current?.clientHeight)
 
-  const linkCaptures = useShortenerStore((store) => store.linkCaptures)
+  const linkCaptures = []
+  const ilinks = useDataStore((state) => state.ilinks).filter(
+    (item) => item.path.split(SEPARATOR)[0] === 'Links' && item.path.split(SEPARATOR).length > 1
+  )
+
+  const getContent = useContentStore((store) => store.getContent)
+  ilinks.forEach((item) => {
+    const _content = getContent(item.nodeid)
+
+    linkCaptures.push({
+      id: item.nodeid,
+      title: item.path.split(SEPARATOR).slice(-1)[0],
+      icon: 'ri:link',
+      content: _content?.content || defaultContent.content,
+      type: 'Links'
+    })
+  })
+
   const snippets = useSnippets().getSnippets()
   const pointerMoved = usePointerMovedSinceMount()
 
   const data = [
-    // TODO: fix link captures after discussion
-    ...linkCaptures.map((item) => ({
-      id: item.shortenedURL,
-      title: item.short,
-      icon: 'ri:link',
-      content: item.shortenedURL
-    })),
+    ...linkCaptures,
     ...snippets.map((item) => ({
       type: QuickLinkType.snippet,
       icon: item?.icon || 'ri:quill-pen-line',
@@ -70,11 +93,12 @@ export default function Dibba() {
   }
 
   const insertLink = (item: any) => {
-    const link = document.createElement('a')
-    link.appendChild(document.createTextNode(item.title))
-    link.href = item.content
+    // const link = document.createElement('a')
+    // link.appendChild(document.createTextNode(item.title))
+    // link.href = item.content
 
-    dibbaState.extra.range.insertNode(link)
+    // dibbaState.extra.range.insertNode(link)
+    dibbaState.extra.range.insertNode(document.createTextNode(parseBlock(item.content)))
     dibbaState.extra.range.collapse(false)
 
     // Combining the inserted text node into one
@@ -97,7 +121,7 @@ export default function Dibba() {
 
     if (item.type === QuickLinkType.snippet) {
       insertSnippet(item as Snippet)
-    } else if (item.icon === 'ri:link') {
+    } else if (item.type === 'Links') {
       // TODO: transform again to type linkCapture
       insertLink(item)
     }
@@ -114,8 +138,7 @@ export default function Dibba() {
       res.push({
         id: 'no-results',
         title: 'No Results Found',
-        icon: 'ri:alert-line',
-        content: ''
+        icon: 'ri:alert-line'
       })
     }
 
