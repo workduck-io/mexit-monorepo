@@ -17,11 +17,13 @@ import {
 import { useTheme } from 'styled-components'
 import { useSearchProps } from '../../Hooks/useSearchProps'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
 
 const Search = () => {
   const { input, setInput, setSearch, isLoading } = useSputlitContext()
-  const { previewMode } = useEditorContext()
+  const { previewMode, setPreviewMode } = useEditorContext()
   const { icon, placeholder } = useSearchProps()
+  const { saveIt } = useSaveChanges()
   const theme = useTheme()
 
   const getQuery = (value: string): Search => {
@@ -63,12 +65,17 @@ const Search = () => {
     handleSearchInput(query)
   }
 
-  // TODO: it would be good to have the ability to go back after selected a search type action
+  const onBackClick = () => {
+    if (!previewMode) {
+      setPreviewMode(true)
+      saveIt(false, true)
+    }
+  }
 
   return (
     <StyledSearch>
       {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
-      <CenterIcon id="wd-mex-search-left-icon" cursor={false}>
+      <CenterIcon id="wd-mex-search-left-icon" cursor={!previewMode} onClick={onBackClick}>
         <Icon color={theme.colors.primary} height={24} width={24} icon={icon} />
       </CenterIcon>
       <StyledInput

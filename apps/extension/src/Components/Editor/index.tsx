@@ -149,7 +149,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   }, 1000)
 
   return (
-    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)} onBlur={() => setPreviewMode(true)}>
+    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)}>
       <EditorStyles>
         <MexEditor
           comboboxConfig={comboboxConfig}

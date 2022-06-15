@@ -22,8 +22,6 @@ export default function Index() {
     <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
       <GlobalStyle />
       <SputlitProvider>
-        <InternalEvents />
-
         <Chotu />
 
         <DibbaPortal>
@@ -31,6 +29,8 @@ export default function Index() {
         </DibbaPortal>
 
         <EditorProvider>
+          <InternalEvents />
+
           <TooltipPortal>
             <Tooltip />
           </TooltipPortal>
