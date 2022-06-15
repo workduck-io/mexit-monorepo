@@ -7,7 +7,7 @@ import { Editor } from '../Editor'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
 import { StyledContent } from './styled'
-import { createNodeWithUid, defaultContent, getNewDraftKey, QuickLinkType } from '@mexit/core'
+import { CategoryType, createNodeWithUid, defaultContent, getNewDraftKey, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
@@ -33,10 +33,6 @@ export default function Content() {
       deserializedContentRef.current = content
     }
   }, [editor])
-
-  useEffect(() => {
-    setNode(createNodeWithUid(getNewDraftKey()))
-  }, [])
 
   const onChangeSave = (val: any[]) => {
     if (val) {
