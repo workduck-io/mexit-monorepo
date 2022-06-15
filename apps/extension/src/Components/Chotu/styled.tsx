@@ -29,7 +29,6 @@ export const StyledChotu = styled.div<{ show: boolean }>`
   transition-property: all;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   transition-duration: 300ms;
-  overflow: hidden;
 
   background-color: #111;
 
