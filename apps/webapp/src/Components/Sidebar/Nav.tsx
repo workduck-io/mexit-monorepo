@@ -73,11 +73,10 @@ const Nav = ({ links }: NavProps) => {
     return () => clearInterval(interval)
   }, [])
 
-  const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const onNewNote: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault()
-    const nodeid = createNewNode()
-
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    const nodeId = await createNewNode()
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
   }
 
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -87,8 +86,8 @@ const Nav = ({ links }: NavProps) => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.newNode.keystrokes]: (event) => {
         event.preventDefault()
-        shortcutHandler(shortcuts.newNode, () => {
-          const nodeid = createNewNode()
+        shortcutHandler(shortcuts.newNode, async () => {
+          const nodeid = await createNewNode()
 
           goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
         })
