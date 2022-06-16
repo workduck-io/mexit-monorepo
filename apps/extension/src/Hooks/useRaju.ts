@@ -20,6 +20,9 @@ import useInternalAuthStore from './useAuthStore'
 import useThemeStore from './useThemeStore'
 
 interface ParentMethods {
+  // Custom events is not a good option when we want to receive a response,
+  // I may have to go with postmessage or broadcast channel for this,
+  // TODO: implement the above and then we can move useSearch away from chotu
   // ['SEARCH']: (key: idxKey | idxKey[], query: string) => Promise<any>
   ['SET_CONTENT']: [props: { nodeid: string; content: NodeEditorContent; metadata: NodeMetadata }]
   ['ADD_ILINK']: [props: AddILinkProps]

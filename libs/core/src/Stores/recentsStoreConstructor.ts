@@ -1,6 +1,6 @@
 import { remove } from '../Utils/lodashUtils'
 
-const MAX_RECENT_SIZE = 10
+export const MAX_RECENT_SIZE = 10
 
 export type RecentsType = {
   lastOpened: string[]

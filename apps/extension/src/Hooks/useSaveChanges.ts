@@ -7,14 +7,16 @@ import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import useRaju from './useRaju'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { node } = useEditorContext()
-  const ilinks = useDataStore((state) => state.ilinks)
+  const { ilinks, addILink } = useDataStore()
   const { selection, setVisualState } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   const saveIt = (saveAndExit = false, notification = false) => {
     const state = platesStore.get.state()
@@ -53,6 +55,8 @@ export function useSaveChanges() {
     // console.log('Sending: ', node, request)
 
     setContent(node.nodeid, editorState)
+    addILink({ ilink: node.path, nodeid: node.nodeid })
+    addRecent(node.nodeid)
     if (notification) {
       toast.success('Saved')
     }

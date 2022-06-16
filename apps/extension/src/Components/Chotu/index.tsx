@@ -8,6 +8,7 @@ import {
   CREATE_NEW_ITEM,
   defaultActions,
   initActions,
+  insertItemInArray,
   isReservedOrClash,
   LinkCapture,
   MexitAction,
@@ -34,6 +35,11 @@ import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 import useRaju from '../../Hooks/useRaju'
+import { useRecentsStore } from '../../Stores/useRecentsStore'
+import { ListItemType } from '../../Types/List'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+
+const MAX_RECENT_ITEMS = 3
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
@@ -41,6 +47,8 @@ export default function Chotu() {
   const getSnippet = useSnippets().getSnippet
 
   const { setSearchResults, search, activeItem } = useSputlitContext()
+  const previewMode = useEditorContext().previewMode
+  const lastOpenedNodes = useRecentsStore((store) => store.lastOpened)
   const { ilinks } = useDataStore()
   const { getQuickLinks } = useQuickLinks()
   const methods = useRaju().methods
@@ -137,11 +145,37 @@ export default function Chotu() {
     if (child) {
       if (activeItem && activeItem?.type === ActionType.SEARCH) {
         setSearchResults([searchBrowserAction(search.value, activeItem)])
-      } else if (!activeItem) {
+      } else if (!activeItem && search.value) {
         useSearch(search)
+      } else if (!activeItem && !search.value) {
+        if (!previewMode) return
+
+        const recents = lastOpenedNodes
+        const items = recents.filter((recent: string) => ilinks.find((ilink) => ilink.nodeid === recent))
+
+        const recentList = items
+          .map((nodeid: string) => {
+            const item = ilinks.find((link) => link?.nodeid === nodeid)
+
+            const listItem: ListItemType = getListItemFromNode(item)
+            return listItem
+          })
+          .reverse()
+
+        const recentLimit = recentList.length < MAX_RECENT_ITEMS ? recentList.length : MAX_RECENT_ITEMS
+        const limitedList = recentList.slice(0, recentLimit)
+        const listWithNew = insertItemInArray(limitedList, CREATE_NEW_ITEM, 1)
+        const listWithAllNew = listWithNew
+        const defItems = [CREATE_NEW_ITEM]
+
+        const list = !recentLimit ? defItems : listWithAllNew
+
+        const data = [...list, ...initActions]
+
+        setSearchResults(data)
       }
     }
-  }, [child, activeItem, search.value, ilinks])
+  }, [child, activeItem, search.value, ilinks, previewMode])
 
   useEffect(() => {
     const handleEvent = (event: CustomEvent) => {
