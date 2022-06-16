@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-import { IDBStorage, mog, Reminder, ReminderState, storageAdapter } from '@mexit/core'
+import { IDBStorage, mog, Reminder, ReminderState } from '@mexit/core'
 import { persist } from 'zustand/middleware'
 
 interface ArmedReminder {
@@ -81,6 +81,6 @@ export const useReminderStore = create<ReminderStoreState>(
       modalOpen: false,
       setModalOpen: (modalOpen: boolean) => set({ modalOpen })
     }),
-    { name: 'mexit-reminder-store', ...storageAdapter }
+    { name: 'mexit-reminder-store', getStorage: () => IDBStorage }
   )
 )

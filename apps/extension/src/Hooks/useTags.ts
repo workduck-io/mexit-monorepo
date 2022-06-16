@@ -2,7 +2,7 @@ import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { Tag } from '@mexit/core'
-import { storageAdapter } from '@mexit/core'
+import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 interface TagStore extends State {
   tags: Tag[]
@@ -27,6 +27,6 @@ export const useTagStore = create<TagStore>(
         set({ tags: tags })
       }
     }),
-    { name: 'mexit-tags', ...storageAdapter }
+    { name: 'mexit-tags', getStorage: () => asyncLocalStorage }
   )
 )
