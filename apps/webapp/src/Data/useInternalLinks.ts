@@ -39,8 +39,9 @@ export const useInternalLinks = () => {
         1
       )
     })
-    addedPaths.forEach((path) => {
-      currILinks.push(path)
+    addedPaths.forEach((p) => {
+      const idx = currILinks.find((link) => link.nodeid === p.nodeid && link.path === p.path)
+      if (idx === undefined) currILinks.push(p)
     })
     mog('Setting ILinks', { currILinks })
     setILinks(currILinks)
