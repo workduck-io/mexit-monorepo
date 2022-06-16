@@ -6,6 +6,7 @@ import {
   hasLink,
   ILink,
   NodeLink,
+  SEPARATOR,
   TodoStatus
 } from '@mexit/core'
 import { useContentStore } from '../Stores/useContentStore'
@@ -183,6 +184,10 @@ export const useLinks = () => {
     if (link) return link.path
   }
 
+  const getTitleFromPath = (path: string) => {
+    return path.split(SEPARATOR).slice(-1)[0]
+  }
+
   return {
     getAllLinks,
     getLinkCount,
@@ -192,7 +197,8 @@ export const useLinks = () => {
     getNodeidFromPath,
     getILinkFromNodeid,
     getPathFromNodeid,
-    createLink
+    createLink,
+    getTitleFromPath
   }
 }
 

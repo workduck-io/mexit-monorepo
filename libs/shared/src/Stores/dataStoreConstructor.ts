@@ -9,7 +9,8 @@ import {
   removeLink,
   Tag,
   typeInvert,
-  defaultCommands
+  defaultCommands,
+  CheckValidILinkProps
 } from '@mexit/core'
 import { nanoid } from 'nanoid'
 import { getAllParentIds, getNodeIcon } from '../Utils/treeUtils'
@@ -72,6 +73,8 @@ export const dataStoreConstructor = (set, get) => ({
       ilink = isChild && parentId ? `${parentId}${key}` : key
     }
 
+    mog('AddILink', { ilink, nodeid, parentId, key, isChild })
+
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
@@ -105,16 +108,22 @@ export const dataStoreConstructor = (set, get) => ({
     return
   },
 
-  checkValidILink: (ilink: string) => {
+  checkValidILink: ({ ilink, parentId, showAlert }) => {
+    const { key, isChild } = withoutContinuousDelimiter(ilink)
+
+    if (key) {
+      ilink = isChild && parentId ? `${parentId}${key}` : key
+    }
+
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
-    const reservedOrUnique = getUniquePath(ilink, linksStrings, true)
+    const reservedOrUnique = getUniquePath(ilink, linksStrings, showAlert)
 
     if (!reservedOrUnique) {
       throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
     }
-    return
+    return ilink
   },
 
   setIlinks: (ilinks) => {

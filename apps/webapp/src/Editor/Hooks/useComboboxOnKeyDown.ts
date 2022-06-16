@@ -54,7 +54,7 @@ export type OnSelectItem = (editor: PlateEditor, item: IComboboxItem, elementTyp
 export type OnNewItem = (name: string, parentId?) => string | undefined
 
 export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnNewItem, creatable?: boolean) => {
-  const creatableOnSelect = (editor: any, selectVal: IComboboxItem | string, elementType?: string) => {
+  const creatableOnSelect = async (editor: any, selectVal: IComboboxItem | string, elementType?: string) => {
     const items = useComboboxStore.getState().items
     const currentNodeKey = useMexEditorStore.getState().internalMetadata.path
     const itemIndex = useComboboxStore.getState().itemIndex
@@ -66,7 +66,8 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
       mog('getCreatableInSelect', { item, selectVal, creatable })
       if (item.key === '__create_new' && selectVal) {
         const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)
-        const res = onNewItem(val, currentNodeKey)
+        const res = await onNewItem(val, currentNodeKey)
+        mog('CreatableInSelectRes: ', { res })
         // mog('getCreatableInSelect', { item, val, selectVal, creatable, res })
         mog('Select__CN clause', { val, selectVal, creatable, res })
         if (res) onSelectItem(editor, { key: String(items.length), text: res }, elementType)

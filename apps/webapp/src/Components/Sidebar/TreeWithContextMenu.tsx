@@ -26,7 +26,7 @@ export const TreeContextMenu = () => {
   const openDeleteModal = useDeleteStore((store) => store.openModal)
   const { createNewNode } = useCreateNewNode()
 
-  function handleItemClick({ event, props: p, data, triggerEvent }: ItemParams<ItemProps, any>) {
+  async function handleItemClick({ event, props: p, data, triggerEvent }: ItemParams<ItemProps, any>) {
     // mog('handleItemClick', { event, p, data, triggerEvent })
     switch (event.currentTarget.id) {
       case 'rename':
@@ -36,7 +36,7 @@ export const TreeContextMenu = () => {
         openDeleteModal(p.path)
         break
       case 'createChild':
-        createNewNode(p.path)
+        await createNewNode(p.path)
         break
       case 'sync':
         break

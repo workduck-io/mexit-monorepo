@@ -1,11 +1,12 @@
-import { linkTooltip } from '@mexit/shared'
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-
+import { transparentize } from 'polished'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
+
 import { IS_DEV } from '@mexit/core'
+import { linkTooltip } from '@mexit/shared'
 
 import styled, { css } from 'styled-components'
 import useNavlinks from '../Data/links'
@@ -35,6 +36,22 @@ const Content = styled.div<{ grid?: boolean }>`
     `} */
 `
 export type MainProps = { children: React.ReactNode }
+
+const Draggable = styled.div`
+  height: 24px;
+  width: 100vw;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 10000;
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => transparentize(0.85, theme.colors.primary)};
+  }
+`
 
 const Main = ({ children }: MainProps) => {
   const routingInstrumentation = useRoutingInstrumentation()
@@ -72,10 +89,16 @@ const Main = ({ children }: MainProps) => {
     return false
   }
 
+  const styles = {
+    WebkitAppRegion: 'drag'
+  }
+
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
+      <Draggable style={styles as any} /> {/* eslint-disable-line @typescript-eslint/no-explicit-any */}
       <GridWrapper
-        // style={gridSpringProps}
+        // eslint-disable-next-line
+        // @ts-ignore
         grid={authenticated && showNav() ? 'true' : 'false'}
       >
         {authenticated && showNav() && <Nav links={getLinks()} />}

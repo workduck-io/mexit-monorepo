@@ -25,8 +25,6 @@ export const useDataSaverFromContent = () => {
   const { updateTagsFromContent } = useTags()
   const { saveDataAPI } = useApi()
 
-  const { persistData } = useIndexedDBData()
-
   const { updateDocument } = useSearch()
 
   // By default saves to API use false to not save

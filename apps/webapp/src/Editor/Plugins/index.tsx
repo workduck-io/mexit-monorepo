@@ -175,7 +175,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 }
 
 const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
-  const wrappedComponents = options?.exclude
+  const wrappedComponents = options?.exclude.dnd
     ? components
     : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
 

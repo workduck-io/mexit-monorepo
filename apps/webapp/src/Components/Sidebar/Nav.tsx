@@ -4,23 +4,16 @@ import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 import React, { useEffect } from 'react'
-import toast from 'react-hot-toast'
 import tinykeys from 'tinykeys'
 import { TooltipTitleWithShortcut } from '../Shortcuts'
 import { useSidebarTransition } from './Transition'
-import Bookmarks from './Bookmarks'
-import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
 import Tree from './Tree'
 import { NavTooltip } from '@mexit/shared'
-import { BookmarksHelp, TreeHelp } from '../../Data/defaultText'
-import { useApi } from '../../Hooks/useApi'
+import { TreeHelp } from '../../Data/defaultText'
 import useLayout from '../../Hooks/useLayout'
-import useLoad from '../../Hooks/useLoad'
-import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import Collapse from '../../Layout/Collapse'
-import { useAuthStore } from '../../Stores/useAuth'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import {
@@ -36,30 +29,22 @@ import {
   Link,
   NavSpacer
 } from '../../Style/Nav'
-import { Logo, SidebarToggle, TrafficLightBG } from '../logo'
+import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
-import { getUntitledDraftKey } from '@mexit/core'
 import { useInternalLinks } from '../../Data/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useDataStore } from '../../Stores/useDataStore'
 import { useLinks } from '../../Hooks/useLinks'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
   const initTree = useTreeFromLinks()
-  const authenticated = useAuthStore((store) => store.authenticated)
   const sidebar = useLayoutStore((store) => store.sidebar)
-  const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const focusMode = useLayoutStore((store) => store.focusMode)
-  const addILink = useDataStore((store) => store.addILink)
-  const { push } = useNavigation()
-  const { saveNewNodeAPI } = useApi()
   const { getFocusProps } = useLayout()
   const { getLinkCount } = useLinks()
   const { goTo } = useRouting()
-  const { saveNodeName } = useLoad()
   const { createNewNode } = useCreateNewNode()
 
   const [source, target] = useSingleton()
@@ -73,11 +58,10 @@ const Nav = ({ links }: NavProps) => {
     return () => clearInterval(interval)
   }, [])
 
-  const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
+  const onNewNote: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault()
-    const nodeid = createNewNode()
-
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    const nodeId = await createNewNode()
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
   }
 
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -87,8 +71,8 @@ const Nav = ({ links }: NavProps) => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.newNode.keystrokes]: (event) => {
         event.preventDefault()
-        shortcutHandler(shortcuts.newNode, () => {
-          const nodeid = createNewNode()
+        shortcutHandler(shortcuts.newNode, async () => {
+          const nodeid = await createNewNode()
 
           goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
         })
