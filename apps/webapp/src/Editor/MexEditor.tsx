@@ -10,6 +10,8 @@ import {
   SelectEditorOptions
 } from '@udecode/plate'
 import { EditableProps } from 'slate-react/dist/components/editable'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { MexEditorValue } from './Types/Editor'
 import { useMexEditorStore } from './Hooks/useMexEditorStore'
@@ -46,7 +48,7 @@ export interface MexEditorProps {
   portalElement?: Element
 }
 
-export const MexEditor = (props: MexEditorProps) => {
+const MexEditor = (props: MexEditorProps) => {
   const editorRef = usePlateEditorRef()
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
@@ -86,4 +88,15 @@ export const MexEditor = (props: MexEditorProps) => {
   )
 }
 
-export default MexEditor
+const withDndProvider = (Component: any) => {
+  const DndDefaultEditor = (props: MexEditorProps) => (
+    <DndProvider backend={HTML5Backend}>
+      <Component {...props} />
+    </DndProvider>
+  )
+  return DndDefaultEditor
+}
+
+withDndProvider.displayName = 'DefaultEditor'
+
+export default withDndProvider(MexEditor)

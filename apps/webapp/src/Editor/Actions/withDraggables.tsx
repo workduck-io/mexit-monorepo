@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { default as TippyHeadless, TippyProps as TippyHeadlessProps } from '@tippyjs/react/headless'
 import {
@@ -25,18 +24,12 @@ import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshLine from '@iconify/icons-ri/refresh-line'
 import timeLine from '@iconify/icons-ri/time-line'
 import { Icon } from '@iconify/react'
-import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-line'
-import { ProfileImage } from '../../Components/User/ProfileImage'
-import useBlockStore from '../../Stores/useBlockStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
+
 import { RelativeTime } from '@mexit/shared'
 
-// import { RelativeTime } from '../../components/mex/RelativeTime'
-// import { ProfileImage } from '../../components/mex/User/ProfileImage'
-// import { IS_DEV } from '../../data/Defaults/dev_'
-// import useBlockStore from '../../store/useBlockStore'
-// import { useEditorStore } from '../../store/useEditorStore'
-// import { mog } from '../../utils/lib/helper'
+import useBlockStore from '../../Stores/useBlockStore'
+import { ProfileImage } from '../../Components/User/ProfileImage'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const StyledTip = styled.div`
   display: flex;
@@ -174,6 +167,11 @@ export const DraggerContent = ({ element }: any) => {
     <>
       <div>Drag to move</div>
       <div>Click to select</div>
+      <div>
+        <span>
+          <i>{element && element.id}</i> - {element && element.type}
+        </span>
+      </div>
     </>
   )
 }
@@ -209,6 +207,7 @@ export const withStyledDraggables = (components: any) => {
         ELEMENT_TABLE,
         ELEMENT_MEDIA_EMBED,
         ELEMENT_CODE_BLOCK
+        // ELEMENT_ACTION_BLOCK
       ],
       onRenderDragHandle: ({ className, styles, element }) => {
         const setIsBlockMode = useBlockStore.getState().setIsBlockMode
@@ -216,9 +215,15 @@ export const withStyledDraggables = (components: any) => {
         return (
           <Tippy {...grabberTooltipProps} content={<GrabberTooltipContent element={element} />}>
             <Tippy theme="mex" placement="top" content={<DraggerContent element={element} />}>
-              {/* eslint-disable-next-line */}
               <StyledDraggable onClick={() => setIsBlockMode(true)} className={className} css={styles}>
-                <Icon icon={checkboxBlankCircleLine} />
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M5.5 4.625C6.12132 4.625 6.625 4.12132 6.625 3.5C6.625 2.87868 6.12132 2.375 5.5 2.375C4.87868 2.375 4.375 2.87868 4.375 3.5C4.375 4.12132 4.87868 4.625 5.5 4.625ZM9.5 4.625C10.1213 4.625 10.625 4.12132 10.625 3.5C10.625 2.87868 10.1213 2.375 9.5 2.375C8.87868 2.375 8.375 2.87868 8.375 3.5C8.375 4.12132 8.87868 4.625 9.5 4.625ZM10.625 7.5C10.625 8.12132 10.1213 8.625 9.5 8.625C8.87868 8.625 8.375 8.12132 8.375 7.5C8.375 6.87868 8.87868 6.375 9.5 6.375C10.1213 6.375 10.625 6.87868 10.625 7.5ZM5.5 8.625C6.12132 8.625 6.625 8.12132 6.625 7.5C6.625 6.87868 6.12132 6.375 5.5 6.375C4.87868 6.375 4.375 6.87868 4.375 7.5C4.375 8.12132 4.87868 8.625 5.5 8.625ZM10.625 11.5C10.625 12.1213 10.1213 12.625 9.5 12.625C8.87868 12.625 8.375 12.1213 8.375 11.5C8.375 10.8787 8.87868 10.375 9.5 10.375C10.1213 10.375 10.625 10.8787 10.625 11.5ZM5.5 12.625C6.12132 12.625 6.625 12.1213 6.625 11.5C6.625 10.8787 6.12132 10.375 5.5 10.375C4.87868 10.375 4.375 10.8787 4.375 11.5C4.375 12.1213 4.87868 12.625 5.5 12.625Z"
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
               </StyledDraggable>
             </Tippy>
           </Tippy>

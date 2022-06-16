@@ -34,7 +34,7 @@ export const blockStoreConstructor = (set, get) => ({
   },
   getBlocks: () => {
     const blocks = get().blocks
-    return Object.values(blocks)
+    return Object.values<BlockType>(blocks)
   },
   deleteBlock: (blockId: string) => {
     const blocks = get().blocks

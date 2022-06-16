@@ -21,6 +21,7 @@ const SplashScreen = () => {
   return (
     <OverlayLoader>
       <Lottie autoplay loop animationData={loader} />
+      <p>Setting Up Your Workspace For You!</p>
     </OverlayLoader>
   )
 }

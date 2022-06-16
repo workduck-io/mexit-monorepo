@@ -1,4 +1,3 @@
-import { NodeEditorContent, defaultContent, generateTempId, IpcAction, mog } from '@mexit/core'
 import {
   AnyObject,
   ELEMENT_PARAGRAPH,
@@ -9,16 +8,19 @@ import {
   usePlateEditorRef
 } from '@udecode/plate'
 import Modal from 'react-modal'
-import { QuickLink, WrappedNodeSelect } from 'apps/webapp/src/Components/NodeSelect/NodeSelect'
-import { useLinks } from 'apps/webapp/src/Hooks/useLinks'
-import { useNodes } from 'apps/webapp/src/Hooks/useNodes'
-import { useDataSaverFromContent } from 'apps/webapp/src/Hooks/useSave'
-import useBlockStore, { ContextMenuActionType } from 'apps/webapp/src/Stores/useBlockStore'
-import { useContentStore } from 'apps/webapp/src/Stores/useContentStore'
-import { ButtonWrapper } from 'apps/webapp/src/Style/Settings'
 import { NodeEntry, Transforms } from 'slate'
+
+import { NodeEditorContent, defaultContent, generateTempId, mog, ContextMenuActionType } from '@mexit/core'
 import { Button } from '@mexit/shared'
+import useBlockStore from '../../../Stores/useBlockStore'
+import { useDataSaverFromContent } from '../../../Hooks/useSave'
+import { useLinks } from '../../../Hooks/useLinks'
 import { updateIds } from '../../Utils/dataTransform'
+import { useContentStore } from '../../../Stores/useContentStore'
+import { QuickLink, WrappedNodeSelect } from '../../../Components/NodeSelect/NodeSelect'
+import { ButtonWrapper } from '../../../Style/Settings'
+import { useNewNodes } from '../../../Hooks/useNewNodes'
+import { useRecentsStore } from '../../../Stores/useRecentsStore'
 
 const BlockModal = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)
@@ -26,9 +28,6 @@ const BlockModal = () => {
   const setIsModalOpen = useBlockStore((store) => store.setIsModalOpen)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
-  const { addNode } = useNodes()
-  // TODO: replace this our comparable object
-  // const { saveData } = useSaveData()
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
   const editor = usePlateEditorRef()
   const { getNodeidFromPath } = useLinks()
@@ -71,9 +70,9 @@ const BlockModal = () => {
 
   const deleteContentBlocks = (blocks: NodeEntry<TNode<AnyObject>>[]): void => {
     const selection = editor?.selection
-    const moveAction =
-      isModalOpen === ContextMenuActionType.move /* Move content blocks */ ||
-      isModalOpen === ContextMenuActionType.del /* Delete content blocks */
+
+    // Move Content Blocks or Delete Content Blocks
+    const moveAction = isModalOpen === (ContextMenuActionType.move || ContextMenuActionType.del)
 
     if (moveAction) {
       if (blocks.length) {
@@ -105,7 +104,9 @@ const BlockModal = () => {
     setIsBlockMode(false)
   }
 
-  const onNodeCreate = (quickLink: QuickLink): void => {
+  const { addNodeOrNodes } = useNewNodes()
+  const addRecent = useRecentsStore((store) => store.addRecent)
+  const onNodeCreate = async (quickLink: QuickLink): Promise<void> => {
     const editorBlocks = getEditorBlocks()
     const blocksContent = getContentFromBlocks(quickLink.value, editorBlocks, false)
 
@@ -113,11 +114,8 @@ const BlockModal = () => {
     setIsModalOpen(undefined)
     setIsBlockMode(false)
 
-    //   addNode({ ilink: quickLink.value, showAlert: true }, (node) => {
-    //     saveEditorValueAndUpdateStores(node.nodeid, blocksContent)
-    //     // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
-    //     // saveData()
-    //   })
+    const node = await addNodeOrNodes(quickLink.value, true, undefined, blocksContent)
+    addRecent(node.id)
   }
 
   const onNodeSelect = (quickLink: QuickLink) => {
@@ -130,8 +128,6 @@ const BlockModal = () => {
     setIsBlockMode(false)
 
     saveEditorValueAndUpdateStores(nodeid, content)
-    // saveData()
-    mog('content length', { content: getPlateSelectors().value(), len: getPlateSelectors().value() })
   }
 
   const length = Object.values(blocksFromStore).length

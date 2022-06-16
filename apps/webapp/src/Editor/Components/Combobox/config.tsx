@@ -1,6 +1,6 @@
 import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
 import { useContextMenu } from 'react-contexify'
-import useMemoizedPlugins, { generatePlugins } from '../../Plugins/index'
+import useMemoizedPlugins from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
 import { MENU_ID } from '../BlockContextMenu'
 
@@ -22,7 +22,7 @@ export const useComboboxConfig = (
 
   const { show } = useContextMenu({ id: MENU_ID })
 
-  const prePlugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
+  const prePlugins = useMemoizedPlugins(components, { exclude: { dnd: false } })
   const plugins = [
     ...prePlugins,
     {

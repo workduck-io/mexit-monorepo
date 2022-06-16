@@ -6,6 +6,7 @@ import Delete from './Refactor/DeleteModal'
 import Rename from './Refactor/Rename'
 import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
+import { BlockModal } from '../Editor/Styles/Block'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -17,6 +18,7 @@ const Modals = () => {
       <Rename />
       <Delete />
       <HelpModal />
+      <BlockModal />
     </>
   )
 }
