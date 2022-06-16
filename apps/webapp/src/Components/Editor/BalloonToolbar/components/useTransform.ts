@@ -8,28 +8,21 @@ import {
   NodeEditorContent,
   mog,
   generateSnippetId,
-  defaultContent,
   getSlug,
-  NODE_PATH_CHAR_LENGTH,
   NODE_PATH_SPACER,
   SEPARATOR,
   ELEMENT_ILINK,
   convertContentToRawText
 } from '@mexit/core'
 
-import { useContentStore } from '../../../../Stores/useContentStore'
-import { useDataStore } from '../../../../Stores/useDataStore'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 import { ILinkNode } from '../../../../Editor/Types/QuickLink'
 import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 
 export const useTransform = () => {
-  // const addILink = useDataStore((s) => s.addILink)
   const { addNodeOrNodes } = useNewNodes()
   const addSnippet = useSnippetStore((s) => s.addSnippet)
-  const setContent = useContentStore((s) => s.setContent)
-  // Checks whether a node is a flowblock
 
   const replaceSelectionWithTask = (editor: TEditor, todoVal: NodeEditorContent) => {
     try {

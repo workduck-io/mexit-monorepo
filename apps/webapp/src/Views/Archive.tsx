@@ -2,7 +2,7 @@ import unarchiveLine from '@iconify/icons-clarity/unarchive-line'
 import trashIcon from '@iconify/icons-codicon/trash'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog } from '@mexit/core'
+import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog, SEPARATOR } from '@mexit/core'
 import { MainHeader, Button } from '@mexit/shared'
 import React, { useState } from 'react'
 import Modal from 'react-modal'
@@ -12,7 +12,6 @@ import { defaultContent } from '../Data/baseData'
 import { ArchiveHelp } from '../Data/defaultText'
 import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
-import { useSaver } from '../Hooks/useSaver' // FIXME move useSaver to hooks
 import { useSearch } from '../Hooks/useSearch'
 import { Title } from '../Style/Elements'
 import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
@@ -33,6 +32,8 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { getContent } from '../Stores/useEditorStore'
+import { useNewNodes } from '../Hooks/useNewNodes'
+import { NavigationType, useRouting } from '../Hooks/useRouting'
 
 export const ArchivedNode = styled.div`
   display: flex;
@@ -61,7 +62,6 @@ const ActionContainer = styled.div`
 
 const Archive = () => {
   const archive = useDataStore((store) => store.archive)
-  const addILink = useDataStore((state) => state.addILink)
 
   const { unArchiveData, removeArchiveData } = useArchive()
   const [delNode, setDelNode] = useState(undefined)
@@ -92,6 +92,8 @@ const Archive = () => {
   }
 
   const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
+  const { addNodeOrNodes } = useNewNodes()
+  const { goTo } = useRouting()
   const onUnarchiveClick = async (node: ILink) => {
     // const present = ilinks.find((link) => link.key === node.key)
 
@@ -100,7 +102,7 @@ const Archive = () => {
     // }
 
     await unArchiveData([node])
-    addILink({ ilink: node.path, nodeid: node.nodeid, archived: true })
+    await addNodeOrNodes(node.path, false, undefined, undefined, false)
 
     const content = getContent(node.nodeid)
     await removeDocument('archive', node.nodeid)
@@ -110,11 +112,12 @@ const Archive = () => {
     const archiveNode: NodeProperties = {
       id: node.path,
       path: node.path,
-      title: node.path,
+      title: node.path.split(SEPARATOR).pop(),
       nodeid: node.nodeid
     }
 
     loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
+    goTo(node.path, NavigationType.replace)
   }
 
   const onDeleteClick = async () => {
@@ -153,6 +156,8 @@ const Archive = () => {
 
     if (props.view === View.Card) {
       return (
+        // eslint-disable-next-line
+        // @ts-ignore
         <Result {...props} key={id} ref={ref}>
           <ResultHeader>
             <ResultTitle>{node.path}</ResultTitle>
