@@ -17,8 +17,8 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const userDetails = useAuthStore((store) => store.userDetails)
-  const { getPathFromNodeid, getNodeidFromPath } = useLinks()
-  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
+  const { getPathFromNodeid, getNodeidFromPath, getTitleFromPath } = useLinks()
+  const { updateILinksFromAddedRemovedPaths, updateSingleILink } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
       setNodePublic,
@@ -31,6 +31,65 @@ export const useApi = () => {
    * Saves new node data in the backend
    * Also updates the incoming data in the store
    */
+
+  const saveSingleNewNode = async (nodeid: string, path: string, referenceID?: string) => {
+    const reqData = {
+      id: nodeid,
+      title: getTitleFromPath(path),
+      referenceID: referenceID,
+      data: serializeContent(defaultContent.content, nodeid)
+    }
+
+    setContent(nodeid, defaultContent.content)
+
+    const data = await client
+      .post(apiURLs.createNode, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((d: any) => {
+        setMetadata(nodeid, extractMetadata(d.data))
+        updateSingleILink(nodeid, path)
+        return d.data
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
+    return data
+  }
+
+  const bulkCreateNodes = async (nodeid: string, path: string) => {
+    const paths = path.split(SEPARATOR)
+    const reqData = {
+      nodePath: {
+        path: paths.join('#')
+      },
+      id: nodeid,
+      title: getTitleFromPath(path),
+      data: serializeContent(defaultContent.content, nodeid)
+    }
+
+    setContent(nodeid, defaultContent.content)
+
+    const data = await client
+      .post(apiURLs.bulkCreateNodes, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId()
+        }
+      })
+      .then((d: any) => {
+        const { addedILinks, removedILinks, node } = d.data
+        setMetadata(nodeid, extractMetadata(node))
+        updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
+        return node
+      })
+
+    return data
+  }
+
   const saveNewNodeAPI = async (nodeid: string, path?: string) => {
     if (!path) path = getPathFromNodeid(nodeid)
 
@@ -296,6 +355,8 @@ export const useApi = () => {
   return {
     saveDataAPI,
     getDataAPI,
+    bulkCreateNodes,
+    saveSingleNewNode,
     saveNewNodeAPI,
     getNodesByWorkspace,
     makeNodePublic,

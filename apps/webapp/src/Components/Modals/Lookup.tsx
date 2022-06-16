@@ -16,6 +16,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
+import { useNodes } from '../../Hooks/useNodes'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;
@@ -96,11 +97,12 @@ const Lookup = () => {
     openNode(quickLink)
   }
 
+  const { addNodeOrNodes } = useNodes()
+
   const handleCreateItem = async (inputValue: QuickLink) => {
-    checkValidILink(inputValue.text)
-    const nodeID = generateNodeId()
-    const node = await saveNewNodeAPI(nodeID, inputValue.text)
-    push(nodeID)
+    console.log('Input Value: ', inputValue)
+    const node = await addNodeOrNodes(inputValue.text, true)
+    push(node.id)
     mog('Created Hierarchy: ', { node, inputValue })
     closeModal()
   }

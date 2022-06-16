@@ -63,5 +63,5 @@ export interface DataStoreState {
   setNodePrivate: (nodeId: string) => void
   checkNodePublic: (nodeId: string) => string | undefined
 
-  checkValidILink: (ilink: string) => void
+  checkValidILink: (ilink: string, showAlert: boolean) => void
 }

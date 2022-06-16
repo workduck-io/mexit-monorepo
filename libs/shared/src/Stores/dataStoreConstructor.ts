@@ -105,11 +105,11 @@ export const dataStoreConstructor = (set, get) => ({
     return
   },
 
-  checkValidILink: (ilink: string) => {
+  checkValidILink: (ilink: string, showAlert: boolean) => {
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
-    const reservedOrUnique = getUniquePath(ilink, linksStrings, true)
+    const reservedOrUnique = getUniquePath(ilink, linksStrings, showAlert)
 
     if (!reservedOrUnique) {
       throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)

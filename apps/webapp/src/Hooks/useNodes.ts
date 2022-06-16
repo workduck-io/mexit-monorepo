@@ -1,12 +1,17 @@
 import { toast } from 'react-hot-toast'
 
-import { AddILinkProps, ILink, mog } from '@mexit/core'
+import { AddILinkProps, generateNodeUID, ILink, mog } from '@mexit/core'
 import { useDataStore } from '../Stores/useDataStore'
+import { useInternalLinks } from '../Data/useInternalLinks'
+import { useApi } from './useApi'
 
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used
 export const useNodes = () => {
   const addILink = useDataStore((s) => s.addILink)
+  const checkValidILink = useDataStore((s) => s.checkValidILink)
+  const { getParentILink } = useInternalLinks()
+  const { saveSingleNewNode, bulkCreateNodes } = useApi()
 
   const addNode = (props: AddILinkProps, onSuccess: (node: ILink) => void, showAlert = true) => {
     // mog('Adding Node for:', { props })
@@ -16,6 +21,25 @@ export const useNodes = () => {
       if (node) onSuccess(node)
     } catch (e) {
       mog('Error while creating node', { e })
+      if (showAlert) toast.error('Path clashed with a ReservedKeyword')
+    }
+  }
+
+  const addNodeOrNodes = async (ilink, showAlert) => {
+    try {
+      checkValidILink(ilink, true)
+      const nodeUID = generateNodeUID()
+
+      const parentILink = getParentILink(ilink)
+
+      const node =
+        parentILink && parentILink.nodeid
+          ? await saveSingleNewNode(nodeUID, ilink, parentILink.nodeid)
+          : await bulkCreateNodes(nodeUID, ilink)
+
+      return node
+    } catch (error) {
+      mog('Error while creating node', { error, ilink })
       if (showAlert) toast.error('Path clashed with a ReservedKeyword')
     }
   }
@@ -42,5 +66,5 @@ export const useNodes = () => {
     const node = nodes.find((l) => l.nodeid === nodeid)
     if (node) return node
   }
-  return { addNode, isInArchive, getIcon, getNode, getArchiveNode }
+  return { addNode, addNodeOrNodes, isInArchive, getIcon, getNode, getArchiveNode }
 }
