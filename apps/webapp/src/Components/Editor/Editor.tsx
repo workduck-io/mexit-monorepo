@@ -22,6 +22,7 @@ import { SlashComboboxItem } from '../../Editor/Components/SlashCommands/SlashCo
 import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
 import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
 import components from '../../Editor/Components/EditorPreviewComponents'
+import { useNewNodes } from '../../Hooks/useNewNodes'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -66,6 +67,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     return slashCommands.internal
   }, [slashCommands.internal])
 
+  const { addNodeOrNodes } = useNewNodes()
+
   const internals: ComboboxItem[] = [
     ...ilinksForCurrentNode.map((l) => ({
       ...l,
@@ -102,10 +105,9 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       },
       internal: {
         slateElementType: 'internal',
-        newItemHandler: (newItem, parentId?) => {
-          const link = addILink({ ilink: newItem, parentId })
-          // mog('Link', { link, newItem, parentId })
-          return link.nodeid
+        newItemHandler: async (newItem, parentId?) => {
+          const node = await addNodeOrNodes(newItem, true, parentId)
+          return node.id
         },
         renderElement: SlashComboboxItem
       }
@@ -114,9 +116,9 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       ilink: {
         slateElementType: ELEMENT_ILINK,
         newItemHandler: (newItem, parentId?) => {
-          const link = addILink({ ilink: newItem, parentId })
-          // mog('Link', { link, newItem, parentId })
-          return link.nodeid
+          return addNodeOrNodes(newItem, true, parentId).then((node) => {
+            return node.id
+          })
         },
         renderElement: QuickLinkComboboxItem
       },

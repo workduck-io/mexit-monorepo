@@ -44,7 +44,7 @@ export const useInternalLinks = () => {
       if (idx === undefined) currILinks.push(p)
     })
     mog('Setting ILinks', { currILinks })
-    setILinks(currILinks)
+    setILinks([...currILinks])
   }
 
   const updateSingleILink = (nodeId: string, path: string) => {

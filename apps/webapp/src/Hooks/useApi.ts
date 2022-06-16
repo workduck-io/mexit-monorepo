@@ -138,7 +138,6 @@ export const useApi = () => {
     const path = getPathFromNodeid(nodeid).split(SEPARATOR)
     const reqData = {
       id: nodeid,
-      type: 'NodeRequest',
       title: path.slice(-1)[0],
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,

@@ -16,7 +16,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useNodes } from '../../Hooks/useNodes'
+import { useNewNodes } from '../../Hooks/useNewNodes'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;
@@ -97,7 +97,7 @@ const Lookup = () => {
     openNode(quickLink)
   }
 
-  const { addNodeOrNodes } = useNodes()
+  const { addNodeOrNodes } = useNewNodes()
 
   const handleCreateItem = async (inputValue: QuickLink) => {
     console.log('Input Value: ', inputValue)

@@ -156,6 +156,12 @@ export interface AddILinkProps {
   showAlert?: boolean
 }
 
+export interface CheckValidILinkProps {
+  ilink: string
+  parentId?: string
+  showAlert?: boolean
+}
+
 export interface NodeProperties {
   title: string
   id: string
