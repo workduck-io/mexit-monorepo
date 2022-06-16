@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CategoryType, idxKey, initActions } from '@mexit/core'
+import { AddILinkProps, CategoryType, idxKey, initActions, NodeEditorContent, NodeMetadata } from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
@@ -16,13 +16,13 @@ export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
   const userDetails = useAuthStore((store) => store.userDetails)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const linkCaptures = useShortenerStore((state) => state.linkCaptures)
+  // const linkCaptures = useShortenerStore((state) => state.linkCaptures)
   const theme = useThemeStore((state) => state.theme)
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
 
-  const { ilinks, archive } = useDataStore()
-  const contents = useContentStore((state) => state.contents)
+  const { ilinks, archive, addILink } = useDataStore()
+  const { contents, setContent } = useContentStore()
   const [first, setFirst] = useState(true)
 
   useEffect(() => {
@@ -40,6 +40,14 @@ export default function Chotu() {
       search(key: idxKey | idxKey[], query: string) {
         const res = searchWorker ? queryIndex(key, query) : []
         return res
+      },
+      updateContentStore(props: { nodeid: string; content: NodeEditorContent; metadata: NodeMetadata }) {
+        setContent(props.nodeid, props.content, props.metadata)
+        return
+      },
+      updateIlinks(props: AddILinkProps) {
+        addILink(props)
+        return
       }
     }
     // debug: true
@@ -48,7 +56,7 @@ export default function Chotu() {
   useEffect(() => {
     connection.promise
       .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, linkCaptures, theme, authAWS, snippets, contents, ilinks)
+        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks)
         // parent.success('Hi')
       })
       .catch((error) => {

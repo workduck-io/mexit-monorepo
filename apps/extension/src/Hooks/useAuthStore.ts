@@ -3,7 +3,7 @@
 import { CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-import { storageAdapter } from '@mexit/core'
+import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 export interface UserCred {
   email: string
@@ -55,7 +55,7 @@ const useInternalAuthStore = create<InternalAuthStoreState>(
         set({ userCred, userPool })
       }
     }),
-    { name: 'aws-auth-mexit', ...storageAdapter }
+    { name: 'aws-auth-mexit', getStorage: () => asyncLocalStorage }
   )
 )
 

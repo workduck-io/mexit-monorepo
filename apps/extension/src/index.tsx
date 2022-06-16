@@ -22,14 +22,14 @@ export default function Index() {
     <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
       <GlobalStyle />
       <SputlitProvider>
-        <Chotu />
-
         <DibbaPortal>
           <Dibba />
         </DibbaPortal>
 
         <EditorProvider>
           <InternalEvents />
+
+          <Chotu />
 
           <TooltipPortal>
             <Tooltip />

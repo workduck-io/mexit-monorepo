@@ -6,13 +6,17 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
+import useRaju from './useRaju'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { node } = useEditorContext()
-  const ilinks = useDataStore((state) => state.ilinks)
+  const { ilinks, addILink } = useDataStore()
   const { selection, setVisualState } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
+  const { dispatch } = useRaju()
+  const addRecent = useRecentsStore((store) => store.addRecent)
 
   const saveIt = (saveAndExit = false, notification = false) => {
     const state = platesStore.get.state()
@@ -51,6 +55,8 @@ export function useSaveChanges() {
     // console.log('Sending: ', node, request)
 
     setContent(node.nodeid, editorState)
+    addILink({ ilink: node.path, nodeid: node.nodeid })
+    addRecent(node.nodeid)
     if (notification) {
       toast.success('Saved')
     }
@@ -62,6 +68,13 @@ export function useSaveChanges() {
         toast.error('An Error Occured. Please try again.')
       } else {
         setMetadata(message.id, extractMetadata(message.data[0]))
+
+        dispatch('SET_CONTENT', {
+          nodeid: node.nodeid,
+          content: editorState,
+          metadata: extractMetadata(message.data[0])
+        })
+        dispatch('ADD_ILINK', { ilink: node.path, nodeid: node.nodeid })
 
         if (notification) {
           toast.success('Saved to Cloud')

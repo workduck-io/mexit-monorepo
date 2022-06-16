@@ -2,7 +2,7 @@ import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { TabGroup } from '../Types/Tabs'
-import { storageAdapter } from '@mexit/core'
+import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 interface TabCaptureStore extends State {
   TabCaptures: TabGroup[]
@@ -33,6 +33,6 @@ export const useTabCaptureStore = create<TabCaptureStore>(
         set({ TabCaptures: TabCaptures })
       }
     }),
-    { name: 'mexit-tab-captures', ...storageAdapter }
+    { name: 'mexit-tab-captures', getStorage: () => asyncLocalStorage }
   )
 )
