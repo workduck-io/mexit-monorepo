@@ -113,11 +113,11 @@ const BlockModal = () => {
     setIsModalOpen(undefined)
     setIsBlockMode(false)
 
-    addNode({ ilink: quickLink.value, showAlert: true }, (node) => {
-      saveEditorValueAndUpdateStores(node.nodeid, blocksContent)
-      // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
-      // saveData()
-    })
+    //   addNode({ ilink: quickLink.value, showAlert: true }, (node) => {
+    //     saveEditorValueAndUpdateStores(node.nodeid, blocksContent)
+    //     // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, node.nodeid)
+    //     // saveData()
+    //   })
   }
 
   const onNodeSelect = (quickLink: QuickLink) => {

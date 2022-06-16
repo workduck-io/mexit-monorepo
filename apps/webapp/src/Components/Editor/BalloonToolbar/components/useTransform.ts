@@ -1,3 +1,4 @@
+import { useNewNodes } from './../../../../Hooks/useNewNodes'
 import { getNodes, getSelectionText, insertNodes, TEditor } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
@@ -24,7 +25,8 @@ import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 
 export const useTransform = () => {
-  const addILink = useDataStore((s) => s.addILink)
+  // const addILink = useDataStore((s) => s.addILink)
+  const { addNodeOrNodes } = useNewNodes()
   const addSnippet = useSnippetStore((s) => s.addSnippet)
   const setContent = useContentStore((s) => s.setContent)
   // Checks whether a node is a flowblock
@@ -111,7 +113,7 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, () => {
+    Editor.withoutNormalizing(editor, async () => {
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',
@@ -133,19 +135,14 @@ export const useTransform = () => {
         return node
       })
       const isInline = lowest.length === 1
-      const putContent = selText.length > NODE_PATH_CHAR_LENGTH
 
       const text = convertContentToRawText(value, NODE_PATH_SPACER)
       const parentPath = useEditorStore.getState().node.title
       const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
 
-      const node = addILink({ ilink: path })
-
-      replaceSelectionWithLink(editor, node.nodeid, isInline)
-      // mog('We are here', { lowest, selText, esl: editor.selection, selectionPath, nodes, value, text, path, nodeid })
-      setContent(node.nodeid, putContent ? value : defaultContent.content)
-      // saveData()
-      // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
+      const node = await addNodeOrNodes(path, true, undefined, value)
+      replaceSelectionWithLink(editor, node.id, isInline)
+      mog('SelectionToNode', { selText, value, isInline, path, parentPath, nodeid: node.id })
     })
   }
 

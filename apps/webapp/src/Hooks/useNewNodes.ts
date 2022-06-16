@@ -11,7 +11,7 @@ export const useNewNodes = () => {
   const { getParentILink } = useInternalLinks()
   const { saveSingleNewNode, bulkCreateNodes } = useApi()
 
-  const addNodeOrNodes = async (ilink, showAlert, parentId?) => {
+  const addNodeOrNodes = async (ilink, showAlert, parentId?, content?: any[]) => {
     try {
       ilink = checkValidILink({ ilink, parentId, showAlert })
       const nodeUID = generateNodeUID()
@@ -20,8 +20,8 @@ export const useNewNodes = () => {
 
       const node =
         parentILink && parentILink.nodeid
-          ? await saveSingleNewNode(nodeUID, ilink, parentILink.nodeid)
-          : await bulkCreateNodes(nodeUID, ilink)
+          ? await saveSingleNewNode(nodeUID, ilink, parentILink.nodeid, content)
+          : await bulkCreateNodes(nodeUID, ilink, content)
 
       return node
     } catch (error) {

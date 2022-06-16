@@ -32,15 +32,20 @@ export const useApi = () => {
    * Also updates the incoming data in the store
    */
 
-  const saveSingleNewNode = async (nodeid: string, path: string, referenceID?: string) => {
+  const saveSingleNewNode = async (
+    nodeid: string,
+    path: string,
+    referenceID?: string,
+    content?: any[] // eslint-disable-line
+  ) => {
     const reqData = {
       id: nodeid,
       title: getTitleFromPath(path),
       referenceID: referenceID,
-      data: serializeContent(defaultContent.content, nodeid)
+      data: serializeContent(content ?? defaultContent.content, nodeid)
     }
 
-    setContent(nodeid, defaultContent.content)
+    setContent(nodeid, content ?? defaultContent.content)
 
     const data = await client
       .post(apiURLs.createNode, reqData, {
@@ -61,7 +66,8 @@ export const useApi = () => {
     return data
   }
 
-  const bulkCreateNodes = async (nodeid: string, path: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const bulkCreateNodes = async (nodeid: string, path: string, content?: any[]) => {
     const paths = path.split(SEPARATOR)
     const reqData = {
       nodePath: {
@@ -69,10 +75,10 @@ export const useApi = () => {
       },
       id: nodeid,
       title: getTitleFromPath(path),
-      data: serializeContent(defaultContent.content, nodeid)
+      data: serializeContent(content ?? defaultContent.content, nodeid)
     }
 
-    setContent(nodeid, defaultContent.content)
+    setContent(nodeid, content ?? defaultContent.content)
 
     const data = await client
       .post(apiURLs.bulkCreateNodes, reqData, {
