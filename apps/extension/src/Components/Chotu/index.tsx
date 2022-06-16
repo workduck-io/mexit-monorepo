@@ -1,4 +1,4 @@
-import React, { createRef, useRef, useState } from 'react'
+import React, { Children, createRef, useRef, useState } from 'react'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useShortenerStore } from '../../Hooks/useShortener'
 import {
@@ -33,56 +33,25 @@ import { useQuickLinks } from '../../Hooks/useQuickLinks'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import useRaju from '../../Hooks/useRaju'
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
-  const setLinkCaptures = useShortenerStore((store) => store.setLinkCaptures)
-  const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
-  const setTheme = useThemeStore((store) => store.setTheme)
   const getSnippet = useSnippets().getSnippet
 
-  const setAutheticated = useAuthStore((store) => store.setAuthenticated)
-  const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setSearchResults, search, activeItem } = useSputlitContext()
-  const initContents = useContentStore((store) => store.initContents)
-  const { ilinks, setIlinks } = useDataStore()
+  const { ilinks } = useDataStore()
   const { getQuickLinks } = useQuickLinks()
+  const methods = useRaju().methods
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
 
   useEffect(() => {
     const connection = connectToChild({
+      // debug: true,
       iframe: iframeRef.current,
-      methods: {
-        init(
-          userDetails: UserDetails,
-          workspaceDetails: WorkspaceDetails,
-          linkCaptures: LinkCapture[],
-          theme: Theme,
-          authAWS: any,
-          snippets: Snippet[],
-          contents: Contents,
-          ilinks: any[]
-        ) {
-          // Can be separated into multiple methods
-          setAutheticated(userDetails, workspaceDetails)
-          setLinkCaptures(linkCaptures)
-          setTheme(theme)
-          setInternalAuthStore(authAWS)
-          initSnippets(snippets)
-          setIlinks(ilinks)
-          initContents(contents)
-        },
-        success(message: string) {
-          toast.success(message)
-        },
-        error(message: string) {
-          toast.error(message)
-        }
-      }
-      // debug: true
+      methods
     })
 
     connection.promise
@@ -173,6 +142,24 @@ export default function Chotu() {
       }
     }
   }, [child, activeItem, search.value, ilinks])
+
+  useEffect(() => {
+    const handleEvent = (event: CustomEvent) => {
+      switch (event.detail.type) {
+        case 'SET_CONTENT':
+          delete event.detail['type']
+          child.updateContentStore(event.detail[0])
+          break
+        case 'ADD_ILINK':
+          delete event.detail['type']
+          child.updateIlinks(event.detail[0])
+          break
+      }
+    }
+    window.addEventListener('raju', handleEvent)
+
+    return () => window.removeEventListener('raju', handleEvent)
+  })
 
   return (
     // TODO: Test this whenever shornter starts working
