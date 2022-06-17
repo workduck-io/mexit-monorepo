@@ -71,7 +71,7 @@ jobs:
       with:
           node-version: "16.x"
     - name: Install yarn
-      uses: npm install -g yarn
+      run: npm install -g yarn
     - name: Install dependencies
       run: yarn add chrome-webstore-upload
     - uses: actions/checkout@v2 
