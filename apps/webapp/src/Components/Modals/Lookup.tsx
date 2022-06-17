@@ -5,13 +5,13 @@ import tinykeys from 'tinykeys'
 
 import { generateNodeId, mog } from '@mexit/core'
 
-import { Input } from '../../Style/Form'
+import { Input } from '@mexit/shared'
 import { useApi } from '../../Hooks/useApi'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
-import { StyledCombobox, StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
+import { StyledCombobox, StyledInputWrapper } from '@mexit/shared'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'

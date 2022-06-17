@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react'
 
 import { CenteredColumn, Title } from '@mexit/shared'
 
-import { BackCard } from '../../Style/Card'
+import { BackCard } from '@mexit/shared'
 
 import { version } from '../../../package.json'
 

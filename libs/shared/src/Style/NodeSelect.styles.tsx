@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { Input } from '../../Style/Form'
 import { transparentize } from 'polished'
+import { Input } from './ToggleButton'
 
 export const StyledInputWrapper = styled.div`
   width: 100%;

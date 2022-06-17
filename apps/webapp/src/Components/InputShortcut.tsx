@@ -3,7 +3,7 @@ import { CenterSpace, Description, Heading } from '@mexit/shared'
 
 import useShortcutListener from '../Hooks/useShortcutListener'
 import { useShortcutStore } from '../Hooks/useShortcutStore'
-import { InputBlock } from '../Style/Form'
+import { InputBlock } from '@mexit/shared'
 
 const InputShortcut = () => {
   const keybinding = useShortcutStore((state) => state.keybinding)

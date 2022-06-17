@@ -1,14 +1,16 @@
-import { EditorStyles, TagFlex, CardShadow } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
-import { DataGroup, MetadataWrapper } from '../Components/EditorInfobar/Metadata'
-import { StyledInputWrapper } from '../Components/NodeSelect/NodeSelect.styles'
-import { View } from '../Views/ViewSelector'
+import { DataGroup, MetadataWrapper } from './Metadata'
+import { StyledInputWrapper } from './NodeSelect.styles'
+import { View } from '../Style/ViewSelector'
 import { Title } from './Elements'
 import { Input } from './Form'
 import { size } from './Responsive'
 import { ProfileIcon } from './UserPage'
+import { EditorStyles } from './Editor'
+import { CardShadow } from './Helpers'
+import { TagFlex } from './TagsRelated.styles'
 
 interface ResultProps {
   selected?: boolean

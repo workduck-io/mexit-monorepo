@@ -28,7 +28,7 @@ import {
   EndLinkContainer,
   Link,
   NavSpacer
-} from '../../Style/Nav'
+} from '@mexit/shared'
 import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'

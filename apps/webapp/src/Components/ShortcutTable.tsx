@@ -5,7 +5,7 @@ import { matchSorter } from 'match-sorter'
 import Modal from 'react-modal'
 import useShortcutTableData from '../Hooks/useShortcutTableData'
 import { useShortcutStore } from '../Hooks/useShortcutStore'
-import { Input } from '../Style/Form'
+import { Input } from '@mexit/shared'
 import { DisplayShortcut } from './Shortcuts'
 import {
   StyledRow,

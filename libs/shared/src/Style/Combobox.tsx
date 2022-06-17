@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { Button } from './Buttons'
+import { BodyFont } from './Search'
 
 export const ComboboxItem = styled.div`
   display: flex;
@@ -103,10 +104,6 @@ export const ItemDesc = styled.div`
 
 export const ItemCenterWrapper = styled.div`
   width: 90%;
-`
-
-export const BodyFont = css`
-  font-size: 12px;
 `
 
 export const ActionTitle = styled.div`

@@ -1,9 +1,8 @@
-import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles, TodoContainer, EditorPreviewWrapper } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
-import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
-import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
+import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { GridWrapper } from '../Style/Grid'
@@ -12,8 +11,11 @@ import { Result, SearchFilterListWrap } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { StyledBoard } from '../Style/Todo'
-import { ArchivedNode } from '../Views/Archive'
-import { SettingsOptions } from '../Views/Settings'
+import { ArchivedNode } from '../Style/Archive'
+import { SettingsOptions } from '../Style/Settings'
+import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
+import { TodoContainer } from '../Style/Todo.style'
 
 interface SpaceProps {
   containerStyle?: FlattenInterpolation<ThemeProps<DefaultTheme>>

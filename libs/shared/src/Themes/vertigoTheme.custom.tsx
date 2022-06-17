@@ -1,29 +1,63 @@
-import { MenuTrigger, EditorStyles, Widget, TodoContainer } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
-import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
-import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
-import { EditorPreviewWrapper } from '@mexit/shared'
+import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { Title } from '../Style/Elements'
-import { SILink } from '../Style/ILinkElement.styles'
-import { StyledMenu } from '@mexit/shared'
+import { SILink } from '../Style/QuickLinkElement.styles'
 import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
-import { ArchivedNode } from '../Views/Archive'
-import { SettingsOptions, SettingTitle } from '../Views/Settings'
+import { ArchivedNode } from '../Style/Archive'
+import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
+import { MenuTrigger, EditorStyles, Widget } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
+import { StyledMenu } from '../Style/NodeSelect.styles'
+import { TodoContainer } from '../Style/Todo.style'
 
-const palette = { body: '#C4CCE0', background: '#D2D9EC', shadow: '#576BA4', primDark: '#4263B6' }
+const textStyleColors = css`
+  b,
+  i,
+  strong {
+    color: #a372e3;
+  }
+`
 
+const headingColors = css`
+  h1 {
+    color: #dfcc84;
+  }
+  h2 {
+    color: #abc86f;
+  }
+  h3 {
+    color: #83c182;
+  }
+  h4 {
+    color: #82c1aa;
+  }
+  h5 {
+    color: #82bec1;
+  }
+  h6 {
+    color: #699ecf;
+  }
+`
+
+const listColors = css`
+  li::marker {
+    color: ${({ theme }) => transparentize(0.5, theme.colors.secondary)};
+  }
+`
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}
 `
-const heightMain = `calc(100vh - 3rem)`
+
+const heightMain = `calc(100vh - 4rem)`
 
 const edStyles = css`
   ${MenuTrigger} {
@@ -35,6 +69,9 @@ const edStyles = css`
     blockquote {
       background-color: ${({ theme }) => theme.colors.gray[9]};
     }
+    ${headingColors}
+    ${textStyleColors}
+    ${listColors}
   }
   ${SILink} {
     .ILink_decoration {
@@ -157,29 +194,53 @@ const modalStyles = css`
   }
 `
 
+const setFonts = (fontFamily: string) => css`
+  body {
+    font-family: ${fontFamily};
+  }
+  ${EditorStyles} {
+    font-family: ${fontFamily};
+  }
+`
+
+const globalStyles = css`
+  ${setFonts('"Inter", sans-serif')}
+
+  ::selection {
+    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background: ${({ theme }) => transparentize(0.5, theme.colors.primary)};
+  }
+
+  body {
+    background-color: ${({ theme }) => theme.colors.gray[10]};
+  }
+`
+
+const palette = { body: '#211E33', border: '#332A47' }
+
 const containerStyle = css`
-  background-color: ${palette.background};
-  box-shadow: 0px 15px 40px ${transparentize(0.9, palette.shadow)};
+  background-color: ${transparentize(0.15, palette.body)};
+  box-shadow: 0px 15px 40px ${({ theme }) => transparentize(0.9, theme.colors.palette.black)};
+  border: 1px solid ${palette.border};
 `
 
 const containerStyleReset = css`
   background-color: transparent;
   box-shadow: none;
+  border: none;
 `
 
 const spaceBlocks = SpaceBlocksCss({ containerStyle, containerStyleReset, heightMain })
 
-export const NeoLightStyles = css`
-  body {
-    background-color: ${palette.body};
-  }
-  ${searchStyles}
-  ${todoStyles}
+export const VertigoStyles = css`
   ${spaceBlocks}
+  ${globalStyles}
   ${modalStyles}
   ${navStyles}
   ${sidebarStyles}
   ${settingsStyles}
-    ${gridCardStyles}
-    ${edStyles}
+  ${searchStyles}
+  ${gridCardStyles}
+  ${edStyles}
+  ${todoStyles}
 `

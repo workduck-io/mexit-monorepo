@@ -13,7 +13,7 @@ import { ArchiveHelp } from '../Data/defaultText'
 import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
 import { useSearch } from '../Hooks/useSearch'
-import { Title } from '../Style/Elements'
+import { Title } from '@mexit/shared'
 import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
 import {
   Result,
@@ -25,26 +25,15 @@ import {
   ResultDesc,
   SplitSearchPreviewWrapper,
   SearchContainer
-} from '../Style/Search'
+} from '@mexit/shared'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
-import { View } from './ViewSelector'
+import { View } from '@mexit/shared'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { getContent } from '../Stores/useEditorStore'
 import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
-
-export const ArchivedNode = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  width: 16rem;
-  height: 8rem;
-  margin: 1rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
-`
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;

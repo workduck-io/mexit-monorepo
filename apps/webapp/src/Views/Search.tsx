@@ -19,8 +19,9 @@ import {
   ResultTitle,
   SearchContainer,
   SearchPreviewWrapper,
-  SplitSearchPreviewWrapper
-} from '../Style/Search'
+  SplitSearchPreviewWrapper,
+  View
+} from '@mexit/shared'
 import { SplitType } from './SplitView'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import Backlinks from '../Components/Editor/Backlinks'
@@ -28,7 +29,6 @@ import Metadata from '../Components/EditorInfobar/Metadata'
 import TagsRelated from '../Components/Editor/TagsRelated'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
-import { View } from './ViewSelector'
 import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/core'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'

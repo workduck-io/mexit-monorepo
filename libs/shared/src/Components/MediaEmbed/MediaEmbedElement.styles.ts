@@ -52,7 +52,7 @@ export const IFrame = styled.iframe`
 
 // Input
 
-export const InputWrapper = styled.div`
+export const MediaInputWrapper = styled.div`
   display: flex;
   align-items: center;
 

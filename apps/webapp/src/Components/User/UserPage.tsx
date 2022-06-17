@@ -3,8 +3,8 @@ import React from 'react'
 import { CopyButton } from '../Buttons/CopyButton'
 import { ProfileImage } from './ProfileImage'
 import { useAuthStore } from '../../Stores/useAuth'
-import { BackCard } from '../../Style/Card'
-import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '../../Style/UserPage'
+import { BackCard } from '@mexit/shared'
+import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '@mexit/shared'
 import { CenteredColumn, Title } from '@mexit/shared'
 
 const UserPage = () => {

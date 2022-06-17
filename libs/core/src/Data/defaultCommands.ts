@@ -1,4 +1,4 @@
-import { CategoryType } from '@mexit/core'
+import { CategoryType } from '../Types/Editor'
 
 export const defaultCommands = [
   { command: 'table', text: 'Insert Table', icon: 'ri:table-line', type: CategoryType.action },

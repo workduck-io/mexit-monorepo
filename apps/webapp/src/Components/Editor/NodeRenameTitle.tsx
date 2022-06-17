@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { isReserved, mog, NodeLink } from '@mexit/core'
 import { Button, Input } from '@mexit/shared'
 
-import { StyledInputWrapper } from '../NodeSelect/NodeSelect.styles'
+import { StyledInputWrapper } from '@mexit/shared'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'

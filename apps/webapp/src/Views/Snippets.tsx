@@ -6,7 +6,6 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
-import { View } from './ViewSelector'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
 import { Button, IconButton } from '@mexit/shared'
@@ -20,9 +19,10 @@ import {
   ResultTitle,
   SearchContainer,
   SearchPreviewWrapper,
-  SplitSearchPreviewWrapper
-} from '../Style/Search'
-import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '../Style/Snippets'
+  SplitSearchPreviewWrapper,
+  View
+} from '@mexit/shared'
+import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '@mexit/shared'
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'

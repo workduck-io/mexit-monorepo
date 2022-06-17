@@ -3,8 +3,8 @@ import { PortalBody } from '@udecode/plate-styled-components'
 import { UsePopperPositionOptions } from '@udecode/plate-ui-popper'
 import React, { useRef } from 'react'
 // import { ToolbarBase } from '../Toolbar/Toolbar'
-import { BalloonToolbarBase, getBalloonToolbarStyles } from './BalloonToolbar.styles'
-import { BalloonToolbarProps } from './BalloonToolbar.types'
+import { BalloonToolbarBase, getBalloonToolbarStyles } from '@mexit/shared'
+import { BalloonToolbarProps } from '@mexit/shared'
 import { useBalloonToolbarPopper } from './useBalloonToolbarPopper'
 
 export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => {

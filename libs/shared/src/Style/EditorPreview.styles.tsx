@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-import { Button } from '@mexit/shared'
-import { CardShadow } from '@mexit/shared'
+import { Button } from './Buttons'
+import { CardShadow } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`

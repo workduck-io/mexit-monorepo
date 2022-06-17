@@ -4,7 +4,7 @@ import { transparentize } from 'polished'
 import styled, { css, CSSProp } from 'styled-components'
 // import tw from 'twin.macro'
 // import { getToolbarStyles } from '../Toolbar/Toolbar.styles';
-import { BalloonToolbarStyleProps } from './BalloonToolbar.types'
+import { BalloonToolbarStyleProps } from '../Types/BalloonToolbar.types'
 
 export const getBalloonToolbarStyles = (props: BalloonToolbarStyleProps) => {
   let color = 'rgb(157, 170, 182)'
@@ -19,7 +19,7 @@ export const getBalloonToolbarStyles = (props: BalloonToolbarStyleProps) => {
     borderColor = 'rgb(196, 196, 196)'
   }
 
-  const { placement = 'top' } = props.$popperOptions ?? {}
+  const { placement = 'top' } = props.popperOptions ?? {}
 
   const arrowStyle: CSSProp = [
     props.arrow &&

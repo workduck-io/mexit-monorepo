@@ -2,7 +2,7 @@ import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 import { Button } from '@mexit/shared'
-import { GridCss } from './Grid'
+import { GridCss } from '@mexit/shared'
 
 export const ThemePreviews = styled.div`
   ${GridCss(3, 5)}

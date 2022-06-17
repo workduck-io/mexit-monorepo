@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Input, InputRow, Label } from '@mexit/shared'
+import { Input, Label } from '@mexit/shared'
 import { Tag } from '@mexit/core'
 
 interface TagsProps {
@@ -9,6 +9,12 @@ interface TagsProps {
   addNewTag: (s: Tag) => void
   removeTag: (s: Tag) => void
 }
+
+const InputRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0.75rem 0;
+`
 
 const TagsContainer = styled.div`
   display: flex;
