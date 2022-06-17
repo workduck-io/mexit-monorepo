@@ -73,7 +73,7 @@ jobs:
     - name: Install yarn
       uses: npm install -g yarn
     - name: Install dependencies
-      uses: yarn add chrome-webstore-upload
+      run: yarn add chrome-webstore-upload
     - uses: actions/checkout@v2 
     - name: Download .zip artifact from previous step
       uses: actions/download-artifact@v3
