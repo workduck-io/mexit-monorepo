@@ -19,7 +19,6 @@ axios
   })
   .then(async ({ data }) => {
     const body = data.body
-    console.log('Body: ', body)
     try {
       const result = await client.files.upload({
         channels: channelId,
