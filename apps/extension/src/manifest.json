@@ -29,31 +29,15 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "content.js"
-      ]
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
     }
   ],
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "tabs",
-    "activeTab",
-    "search"
-  ],
+  "permissions": ["contextMenus", "storage", "tabs", "activeTab", "search"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "Assets/*"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ]
+      "resources": ["Assets/*"],
+      "matches": ["http://*/*", "https://*/*"]
     }
   ]
 }
