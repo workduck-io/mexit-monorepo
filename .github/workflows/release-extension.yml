@@ -69,12 +69,12 @@ jobs:
     - name: Setup Node 
       uses: actions/setup-node@master
       with:
-          node-version: "16.x"
+        node-version: "16.x"
     - name: Install yarn
       run: npm install -g yarn
-    - name: Install dependencies
-      run: yarn add chrome-webstore-upload
     - uses: actions/checkout@v2 
+    - name: Install Dependencies
+      run: yarn
     - name: Download .zip artifact from previous step
       uses: actions/download-artifact@v3
     - name: List Directory
