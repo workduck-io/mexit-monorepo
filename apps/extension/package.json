@@ -44,6 +44,7 @@
     "zustand": "3.7.1"
   },
   "devDependencies": {
+    "@slack/web-api": "^6.7.2",
     "@types/chrome": "^0.0.176",
     "@types/node": "^16.11.19",
     "@types/react": "^17.0.38",
