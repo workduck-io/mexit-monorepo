@@ -10,7 +10,7 @@ const store = chromeWebstoreUpload({
 
 const fileName = fs.readdirSync('./dist/apps/extension').filter((file) => file.endsWith('.zip'))[0]
 
-const extZipFile = fs.createReadStream(fileName)
+const extZipFile = fs.createReadStream(`./dist/apps/extension/${fileName}`)
 
 console.log('Uploading Extension with Filename: ', fileName)
 store
