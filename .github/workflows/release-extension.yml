@@ -83,5 +83,6 @@ jobs:
           node-version: "16.x"
     - name: Install dependencies
       run: npm install chrome-webstore-upload
-    - name: node apps/extension/build/upload-extension.mjs
+    - name: Upload Zip to Chrome Store
+      run: node apps/extension/build/upload-extension.mjs
  
