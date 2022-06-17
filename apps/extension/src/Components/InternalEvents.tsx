@@ -13,10 +13,9 @@ import { getDibbaText } from '../Utils/getDibbaText'
 import LinkedInBadge from './LinkedInBadge'
 import { getHtmlString } from './Source'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
-import { incrementChar } from '../Utils/incrementChar'
-import { Interface } from 'readline'
-import tinykeys from 'tinykeys'
-import { cond } from 'lodash'
+// import { getSingleKeyFunction, useVimium } from '../Utils/Vimium'
+import useVimium from './vimium'
+
 
 export function InternalEvents() {
   useToggleHandler()
@@ -25,6 +24,7 @@ export function InternalEvents() {
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
+  // checkVimium()
   useVimium()
   // useFocusHandler()
   return null
@@ -228,137 +228,4 @@ function useDocumentLock() {
       document.documentElement.style.removeProperty('margin-right')
     }
   }, [visualState])
-}
-
-function useVimium() {
-  const { visualState } = useSputlitContext()
-  const [toggleVimium, setToggleVimium] = React.useState<boolean>(true);
-  let keyString = {};
-  function doFunction(string: String) {
-    if (string === "k") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset - 100);
-    }
-    else if (string === "j") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset + 100);
-    }
-    else if (string === "h") {
-      window.scrollTo(window.pageXOffset - 100, window.pageYOffset);
-    }
-    else if (string === "l") {
-      window.scrollTo(window.pageXOffset + 100, window.pageYOffset);
-    }
-    else if (string === "d") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset + window.innerHeight / 2);
-    }
-    else if (string === "u") {
-      window.scrollTo(window.pageXOffset, window.pageYOffset - window.innerHeight / 2);
-    }
-    else if (string === "gg") {
-      window.scrollTo(window.pageXOffset, 0);
-    }
-    else if (string === "G") {
-      window.scrollTo(window.pageXOffset, document.body.scrollHeight);
-    }
-    else if (string === "r") {
-      location.reload();
-    }
-    else if (string === "i") {
-      setToggleVimium(false);
-    }
-    else if (string === "yy") {
-      console.log("Manav")
-      chrome.runtime.sendMessage(
-        {
-          type: 'ASYNC_ACTION_HANDLER',
-          subType: 'GET_CURRENT_TAB'
-        },
-        (response) => {
-          const Url = response.message[0].url;
-          navigator.clipboard.writeText(Url);
-        }
-      )
-    }
-    else if (string === "gs") {
-      chrome.runtime.sendMessage(
-        {
-          type: 'ASYNC_ACTION_HANDLER',
-          subType: 'GET_CURRENT_TAB'
-        },
-        (response) => {
-          const newUrl = "view-source:" + response.message[0].url;
-          chrome.runtime.sendMessage(
-            {
-              type: 'ASYNC_ACTION_HANDLER',
-              subType: 'OPEN_WITH_NEW_TABS',
-              data: {
-                urls: newUrl
-              }
-            },
-            (response) => {
-              const { message, error } = response
-              if (error) console.error('Some error occured. Please Try Again')
-            }
-          )
-        }
-      )
-    }
-  }
-  function checkTyping(event) {
-    if (event.target.nodeName === "INPUT") {
-      setToggleVimium(false);
-    } else {
-      setToggleVimium(true);
-    }
-  }
-  useEffect(() => {
-    window.addEventListener("click", checkTyping)
-  })
-  function checkVal() {
-    // console.log(keyString);
-    let stringPress = '';
-    for (const key in keyString) {
-      if (key !== 'Alt') {
-        if (key !== 'Shift') {
-          if (key !== 'CapsLock') {
-            if (key !== 'Ctrl') {
-              // stringPress += key;
-              for(let i = 0 ; i < keyString[key] ; i++){
-                stringPress += key;
-              }
-            }
-          }
-        }
-      }
-    }
-    doFunction(stringPress);
-  }
-  const keydown = (e) => {
-    if (e.key === "escape" || visualState === VisualState.showing) {
-      setToggleVimium(true);
-    }
-    if (toggleVimium) {
-      if(keyString[e.key]){
-        keyString[e.key]++;
-      }else{
-        keyString[e.key] = 1;
-      };
-      setTimeout(() => checkVal(), 1000);
-    }
-  }
-  const keyup = (e) => {
-    if (e.key === "escape" || visualState === VisualState.showing) {
-      setToggleVimium(true);
-    }
-    if (toggleVimium) {
-      setTimeout(() => delete keyString[e.key], 1000);
-    }
-  }
-  useEffect(() => {
-    window.addEventListener("keydown", (e) => keydown(e))
-    window.addEventListener("keyup", (e) => keyup(e))
-    return () => {
-      window.removeEventListener("keydown", keydown);
-      window.removeEventListener("keyup", keyup);
-    }
-  })
 }

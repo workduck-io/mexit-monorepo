@@ -185,7 +185,6 @@ export default function Chotu() {
       </Container>
 
       <Notification />
-      <ShortCutLinks/>
     </StyledChotu>
   )
 }
