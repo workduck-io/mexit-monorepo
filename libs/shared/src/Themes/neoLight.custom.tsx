@@ -1,55 +1,29 @@
-import { EditorStyles, Widget, MenuTrigger, TodoContainer } from '@mexit/shared'
+import { MenuTrigger, EditorStyles, Widget, TodoContainer } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
-import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
-import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
+
+import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { EditorPreviewWrapper } from '@mexit/shared'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { Title } from '../Style/Elements'
-import { SILink } from '../Style/ILinkElement.styles'
+import { SILink } from '../Style/QuickLinkElement.styles'
 import { StyledMenu } from '@mexit/shared'
 import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
-import { ArchivedNode } from '../Views/Archive'
-import { SettingsOptions, SettingTitle } from '../Views/Settings'
+import { ArchivedNode } from '../Style/Archive'
+import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
 
-const palette = { body: '#1B1F3D' }
+const palette = { body: '#C4CCE0', background: '#D2D9EC', shadow: '#576BA4', primDark: '#4263B6' }
 
-const headingColors = css`
-  h1 {
-    color: #dfcc84;
-  }
-  h2 {
-    color: #abc86f;
-  }
-  h3 {
-    color: #83c182;
-  }
-  h4 {
-    color: #82c1aa;
-  }
-  h5 {
-    color: #82bec1;
-  }
-  h6 {
-    color: #699ecf;
-  }
-`
-
-const listColors = css`
-  li::marker {
-    color: ${({ theme }) => transparentize(0.5, theme.colors.secondary)};
-  }
-`
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}
 `
-
-const heightMain = `calc(100vh - 4rem)`
+const heightMain = `calc(100vh - 3rem)`
 
 const edStyles = css`
   ${MenuTrigger} {
@@ -61,8 +35,6 @@ const edStyles = css`
     blockquote {
       background-color: ${({ theme }) => theme.colors.gray[9]};
     }
-    ${headingColors}
-    ${listColors}
   }
   ${SILink} {
     .ILink_decoration {
@@ -184,43 +156,30 @@ const modalStyles = css`
     background-color: ${({ theme }) => theme.colors.gray[9]};
   }
 `
-const globalStyles = css`
-  body {
-    background-color: ${({ theme }) => theme.colors.gray[10]};
-  }
-`
-
-export const NeoDarkStylesPlain = css`
-  ${modalStyles}
-  ${navStyles}
-  ${sidebarStyles}
-  ${settingsStyles}
-  ${searchStyles}
-  ${gridCardStyles}
-  ${edStyles}
-  ${todoStyles}
-`
 
 const containerStyle = css`
-  background-color: ${palette.body};
-  box-shadow: 0px 15px 40px ${({ theme }) => transparentize(0.9, theme.colors.palette.black)};
+  background-color: ${palette.background};
+  box-shadow: 0px 15px 40px ${transparentize(0.9, palette.shadow)};
 `
 
 const containerStyleReset = css`
   background-color: transparent;
   box-shadow: none;
 `
+
 const spaceBlocks = SpaceBlocksCss({ containerStyle, containerStyleReset, heightMain })
 
-export const NeoDarkStyles = css`
+export const NeoLightStyles = css`
+  body {
+    background-color: ${palette.body};
+  }
+  ${searchStyles}
+  ${todoStyles}
   ${spaceBlocks}
-  ${globalStyles}
   ${modalStyles}
   ${navStyles}
   ${sidebarStyles}
   ${settingsStyles}
-  ${searchStyles}
-  ${gridCardStyles}
-  ${edStyles}
-  ${todoStyles}
+    ${gridCardStyles}
+    ${edStyles}
 `

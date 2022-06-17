@@ -13,7 +13,7 @@ import {
   SearchFilterListWrap,
   SearchFilterStyled,
   SearchFilterWrapper
-} from '../Style/Search'
+} from '@mexit/shared'
 import { startCase } from 'lodash'
 import { Icon } from '@iconify/react'
 import Infobox from '../Components/Infobox'

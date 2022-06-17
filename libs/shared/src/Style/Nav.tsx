@@ -4,7 +4,7 @@ import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 import { CollapseHeader, CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from '@mexit/shared'
-import { Ellipsis } from './Search'
+import { Ellipsis } from '@mexit/shared'
 
 export const NavTitle = styled.span`
   flex-grow: 1;

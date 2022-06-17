@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
+import { customStyles, EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -54,6 +54,8 @@ export const GlobalStyle = createGlobalStyle`
       margin-inline-end: 0px;
       padding-inline-start: 0px;
     }
+
+    ${({ theme }) => theme.custom && customStyles[theme.custom]}
   }
 
 `

@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { focusStyles, FocusModeProp } from '@mexit/shared'
-import { size } from './Responsive'
+import { size } from '@mexit/shared'
 
 interface InfoBarWrapperProps extends FocusModeProp {
   mode: string

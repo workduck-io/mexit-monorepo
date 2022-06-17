@@ -3,7 +3,7 @@ import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { FocusModeProp, focusStyles, PixelToCSS, ThinScrollbar } from '@mexit/shared'
-import { Ellipsis } from './Search'
+import { Ellipsis } from '@mexit/shared'
 
 export const Sicon = styled(Icon)`
   height: 26px;
@@ -94,7 +94,7 @@ export const StyledTreeItemSwitcher = styled.button`
   }
 `
 
-export const ItemTitle = styled.div`
+export const SidebarItemTitle = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
   max-width: 220px;

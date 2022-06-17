@@ -3,7 +3,7 @@ import { PriorityDataType, Priority } from '@mexit/core'
 import React from 'react'
 import { Item } from 'react-contexify'
 import styled from 'styled-components'
-import { StyledMenu } from '@mexit/shared'
+import { StyledContexifyMenu } from '@mexit/shared'
 
 type PriorityMenuType = {
   id: string
@@ -22,7 +22,7 @@ const Text = styled.span`
 
 const PriorityMenu: React.FC<PriorityMenuType> = ({ onClick, id }) => {
   return (
-    <StyledMenu contentEditable={false} id={id}>
+    <StyledContexifyMenu contentEditable={false} id={id}>
       {Object.values(Priority).map((priority) => {
         return (
           <Item key={priority.title} id={priority.title} onClick={() => onClick(priority)}>
@@ -35,7 +35,7 @@ const PriorityMenu: React.FC<PriorityMenuType> = ({ onClick, id }) => {
           </Item>
         )
       })}
-    </StyledMenu>
+    </StyledContexifyMenu>
   )
 }
 

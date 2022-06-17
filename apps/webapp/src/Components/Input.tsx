@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react/headless' // different import path!
 import React from 'react'
-import { InputBlock, Label, InputWrapper } from '../Style/Form'
+import { InputBlock, Label, InputWrapper } from '@mexit/shared'
 import { ErrorTooltip } from '../Style/Tippy'
 
 export const errorMessages = {

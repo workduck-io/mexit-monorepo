@@ -6,7 +6,7 @@ import { CenteredColumn, Title } from '@mexit/shared'
 
 import config from '../config'
 import { useAuthentication } from '../Stores/useAuth'
-import { BackCard } from '../Style/Card'
+import { BackCard } from '@mexit/shared'
 
 export default function OAuthDesktop() {
   const [code, setCode] = useState<string>()

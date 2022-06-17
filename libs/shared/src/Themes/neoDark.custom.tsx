@@ -1,31 +1,23 @@
+import { EditorStyles, Widget, MenuTrigger, TodoContainer } from '@mexit/shared'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
-
-import { EditorStyles, MenuTrigger, TodoContainer, Widget } from '@mexit/shared'
-
-import { BalloonToolbarBase } from '../Components/Editor/BalloonToolbar'
-import { DataInfobarWrapper } from '../Components/Infobar/DataInfobar'
+import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
+import { EditorPreviewWrapper } from '@mexit/shared'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { Title } from '../Style/Elements'
-import { SILink } from '../Style/ILinkElement.styles'
+import { SILink } from '../Style/QuickLinkElement.styles'
 import { StyledMenu } from '@mexit/shared'
 import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
-import { ArchivedNode } from '../Views/Archive'
-import { SettingsOptions, SettingTitle } from '../Views/Settings'
+import { ArchivedNode } from '../Style/Archive'
+import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
-import { EditorPreviewWrapper } from '@mexit/shared'
 
-const textStyleColors = css`
-  b,
-  i,
-  strong {
-    color: #a372e3;
-  }
-`
+const palette = { body: '#1B1F3D' }
 
 const headingColors = css`
   h1 {
@@ -70,7 +62,6 @@ const edStyles = css`
       background-color: ${({ theme }) => theme.colors.gray[9]};
     }
     ${headingColors}
-    ${textStyleColors}
     ${listColors}
   }
   ${SILink} {
@@ -193,46 +184,35 @@ const modalStyles = css`
     background-color: ${({ theme }) => theme.colors.gray[9]};
   }
 `
-
-const setFonts = (fontFamily: string) => css`
-  body {
-    font-family: ${fontFamily};
-  }
-  ${EditorStyles} {
-    font-family: ${fontFamily};
-  }
-`
-
 const globalStyles = css`
-  ${setFonts('"Inter", sans-serif')}
-
-  ::selection {
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
-    background: ${({ theme }) => transparentize(0.5, theme.colors.primary)};
-  }
-
   body {
     background-color: ${({ theme }) => theme.colors.gray[10]};
   }
 `
 
-const palette = { body: '#211E33', border: '#332A47' }
+export const NeoDarkStylesPlain = css`
+  ${modalStyles}
+  ${navStyles}
+  ${sidebarStyles}
+  ${settingsStyles}
+  ${searchStyles}
+  ${gridCardStyles}
+  ${edStyles}
+  ${todoStyles}
+`
 
 const containerStyle = css`
-  background-color: ${transparentize(0.15, palette.body)};
+  background-color: ${palette.body};
   box-shadow: 0px 15px 40px ${({ theme }) => transparentize(0.9, theme.colors.palette.black)};
-  border: 1px solid ${palette.border};
 `
 
 const containerStyleReset = css`
   background-color: transparent;
   box-shadow: none;
-  border: none;
 `
-
 const spaceBlocks = SpaceBlocksCss({ containerStyle, containerStyleReset, heightMain })
 
-export const VertigoStyles = css`
+export const NeoDarkStyles = css`
   ${spaceBlocks}
   ${globalStyles}
   ${modalStyles}

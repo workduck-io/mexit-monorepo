@@ -9,7 +9,7 @@ import { useCombobox } from 'downshift'
 import toast from 'react-hot-toast'
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 
-import { Input } from '../../Style/Form'
+import { Input } from '@mexit/shared'
 import { isClash, isReserved, QuickLinkStatus, QuickLinkType, ILink, parseBlock } from '@mexit/core'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
@@ -22,7 +22,7 @@ import {
   SuggestionDesc,
   SuggestionError,
   SuggestionText
-} from './NodeSelect.styles'
+} from '@mexit/shared'
 import { withoutDelimiter } from '../../Editor/Utils/helper'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'

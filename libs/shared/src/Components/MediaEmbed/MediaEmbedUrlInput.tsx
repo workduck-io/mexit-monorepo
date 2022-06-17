@@ -6,7 +6,7 @@ import magicLine from '@iconify/icons-ri/magic-line'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 import * as React from 'react'
-import { InputPrompt, InputWrapper, MediaInput } from './MediaEmbedElement.styles'
+import { InputPrompt, MediaInputWrapper, MediaInput } from './MediaEmbedElement.styles'
 
 export const MediaEmbedUrlInput = ({
   url,
@@ -26,7 +26,7 @@ export const MediaEmbedUrlInput = ({
   const [value, setValue] = React.useState(url)
 
   return (
-    <InputWrapper>
+    <MediaInputWrapper>
       <InputPrompt
         onClick={() => {
           setExpand((i: boolean) => !i)
@@ -58,6 +58,6 @@ export const MediaEmbedUrlInput = ({
           {max ? <Icon icon={fullscreenExitLine} height={18} /> : <Icon icon={fullscreenLine} height={18} />}
         </InputPrompt>
       </Tippy>
-    </InputWrapper>
+    </MediaInputWrapper>
   )
 }

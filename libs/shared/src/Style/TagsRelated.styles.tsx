@@ -24,23 +24,3 @@ export const InfoSubHeading = styled.h2`
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text.fade};
 `
-
-export const ResultCardFooter = styled.div<{ active?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 1rem;
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[9]};
-  padding: ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.colors.text.fade};
-  ${TagFlex} {
-    background-color: ${({ theme }) => theme.colors.gray[8]};
-    ${HoverSubtleGlow}
-  }
-  ${({ theme, active }) =>
-    active &&
-    css`
-      color: ${theme.colors.primary};
-    `}
-`

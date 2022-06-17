@@ -2,10 +2,9 @@ import { mog } from '@mexit/core'
 import { useCombobox } from 'downshift'
 import React, { useState } from 'react'
 import { SearchFilter } from '../Hooks/useFilters'
-import { Input } from '../Style/Form'
-import { StyledMenu } from '@mexit/shared'
-import { SearchFilterInputWrapper } from '../Style/Search'
-import { StyledCombobox, Suggestion } from './NodeSelect/NodeSelect.styles'
+import { StyledMenu, Input } from '@mexit/shared'
+import { SearchFilterInputWrapper } from '@mexit/shared'
+import { StyledCombobox, Suggestion } from '@mexit/shared'
 
 interface SearchFilterInputProps<Item> {
   items: SearchFilter<Item>[]

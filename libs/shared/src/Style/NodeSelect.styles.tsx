@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Input } from '../../Style/Form'
+import { Input } from '@mexit/shared'
 import { transparentize } from 'polished'
 
 export const StyledInputWrapper = styled.div`

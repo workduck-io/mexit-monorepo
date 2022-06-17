@@ -24,9 +24,9 @@ import {
   TooltipCount,
   StyledTreeItem,
   ItemContent,
-  ItemTitle,
+  SidebarItemTitle,
   ItemCount
-} from '../../Style/Sidebar'
+} from '@mexit/shared'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { getNameFromPath } from '@mexit/shared'
 import { mog, SEPARATOR } from '@mexit/core'
@@ -154,10 +154,10 @@ const Tree = ({ initTree }: TreeProps) => {
           <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
 
           <ItemContent onMouseDown={(e) => onClick(e, item)}>
-            <ItemTitle>
+            <SidebarItemTitle>
               <Icon icon={item.data.mex_icon ?? fileList2Line} />
               <span>{item.data ? item.data.title : 'No Title'}</span>
-            </ItemTitle>
+            </SidebarItemTitle>
           </ItemContent>
 
           {item.hasChildren && item.children && item.children.length > 0 && (

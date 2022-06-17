@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import { useSpring } from 'react-spring'
 import styled from 'styled-components'
 import Infobox, { InfoboxProps } from '../Components/Infobox'
-import { CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '../Style/Collapse'
+import { CollapsableHeaderTitle, CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '@mexit/shared'
 
 interface CollapseProps {
   oid?: string
@@ -16,11 +16,6 @@ interface CollapseProps {
   infoProps?: InfoboxProps
   stopPropagation?: boolean
 }
-
-export const CollapsableHeaderTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: bolder;
-`
 
 const Collapse = ({
   defaultOpen,

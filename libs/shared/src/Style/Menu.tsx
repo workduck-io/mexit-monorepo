@@ -2,7 +2,7 @@ import { transparentize } from 'polished'
 import { Menu } from 'react-contexify'
 import styled from 'styled-components'
 
-export const StyledMenu = styled(Menu)`
+export const StyledContexifyMenu = styled(Menu)`
   &.react-contexify {
     background-color: ${({ theme }) => theme.colors.background.card};
     box-shadow: 0px 5px 20px ${({ theme }) => transparentize(0.5, theme.colors.palette.black)};

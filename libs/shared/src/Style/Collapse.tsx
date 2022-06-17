@@ -1,6 +1,11 @@
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
+export const CollapsableHeaderTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: bolder;
+`
+
 export const CollapseWrapper = styled.div`
   display: flex;
   flex-direction: column;

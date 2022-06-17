@@ -15,10 +15,11 @@ import {
   SearchFilterWrapper,
   SearchHeader,
   SearchInput,
-  SearchViewContainer
-} from '../Style/Search'
+  SearchViewContainer,
+  View
+} from '@mexit/shared'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
-import ViewSelector, { View } from './ViewSelector'
+import ViewSelector from './ViewSelector'
 
 interface SearchViewState<Item> {
   selected: number
