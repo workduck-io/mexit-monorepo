@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - release
+      - automated-releases-extension
 
 jobs:
   build_extension:
@@ -53,3 +54,34 @@ jobs:
           tag_name: ${{ fromJson(steps.get_package_version.outputs.packageJson).version }}
           files: |
             dist/apps/extension/*.zip
+
+      - name: Upload Zip Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip
+          path: dist/apps/extension/mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip
+
+  upload_extension:
+    runs-on: ubuntu-latest
+    needs: build_extension
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
+      CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+    steps:
+    - name: Download .zip artifact from previous step
+      uses: actions/download-artifact@v3
+    - name: List Directory
+      run: ls -lA
+    - uses: actions/checkout@v2
+    - name: Setup Node 
+      uses: actions/setup-node@master
+      with:
+          node-version: "16.x"
+    - name: Install dependencies
+      run: npm install chrome-webstore-upload
+    - name: node apps/extension/build/upload-extension.mjs
+ 
