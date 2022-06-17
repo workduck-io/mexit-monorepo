@@ -9,7 +9,7 @@ import React from 'react'
 import { Item, ItemParams, Separator } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
 import { useRenameStore } from '../../Stores/useRenameStore'
-import { StyledMenu } from '@mexit/shared'
+import { StyledContexifyMenu } from '@mexit/shared'
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 
@@ -46,7 +46,7 @@ export const TreeContextMenu = () => {
   }
 
   return (
-    <StyledMenu id={MENU_ID}>
+    <StyledContexifyMenu id={MENU_ID}>
       <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
         <Icon icon={editLine} />
         Rename
@@ -68,6 +68,6 @@ export const TreeContextMenu = () => {
         <Icon icon={shareLine} />
         Share
       </Item>
-    </StyledMenu>
+    </StyledContexifyMenu>
   )
 }

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card } from '@mexit/shared'
+import { Card } from './Card'
 import { GridCss } from './Grid'
 
 export const SSnippets = styled.div`

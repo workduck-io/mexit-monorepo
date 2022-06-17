@@ -1,15 +1,12 @@
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
-import { EditorStyles, MenuTrigger, TodoContainer, Widget } from '@mexit/shared'
-
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
 import { Title } from '../Style/Elements'
 import { SILink } from '../Style/QuickLinkElement.styles'
-import { StyledMenu } from '@mexit/shared'
 import { NavWrapper, NavButton } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
 import { SidebarDiv } from '../Style/Sidebar'
@@ -17,7 +14,10 @@ import { CreateSnippet } from '../Style/Snippets'
 import { ArchivedNode } from '../Style/Archive'
 import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SpaceBlocksCss } from './spaceBlocks'
-import { EditorPreviewWrapper } from '@mexit/shared'
+import { MenuTrigger, EditorStyles, Widget } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
+import { StyledMenu } from '../Style/NodeSelect.styles'
+import { TodoContainer } from '../Style/Todo.style'
 
 const textStyleColors = css`
   b,

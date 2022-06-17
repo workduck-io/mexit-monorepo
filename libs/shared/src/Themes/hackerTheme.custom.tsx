@@ -1,8 +1,6 @@
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
-import { EditorStyles, NodeInfo, Button, AsyncButton, Widget } from '@mexit/shared'
-
 import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
@@ -13,7 +11,9 @@ import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { ArchivedNode } from '../Style/Archive'
 import { SettingsOptions, SettingTitle } from '../Style/Settings'
-import { EditorPreviewWrapper } from '@mexit/shared'
+import { AsyncButton, Button } from '../Style/Buttons'
+import { EditorStyles, NodeInfo, Widget } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}

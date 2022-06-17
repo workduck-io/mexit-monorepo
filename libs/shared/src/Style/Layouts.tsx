@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
-import { Title } from '@mexit/shared'
+import { Title } from './Elements'
 
 export const Wrapper = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.large};
