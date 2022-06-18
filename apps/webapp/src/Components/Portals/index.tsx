@@ -10,6 +10,11 @@ import { useLinks } from '../../Hooks/useLinks'
 import usePortalStore from '../../Stores/usePortalStore'
 import { usePortals } from '../../Hooks/usePortals'
 import { QuickLink } from '../NodeSelect/NodeSelect'
+import { LoadingButton } from '../Buttons/Buttons'
+import ServiceInfo from './ServiceInfo'
+import ServiceHeader from './ServiceHeader'
+import { GlobalSectionHeader, GlobalSectionContainer } from '../../Style/GlobalSection'
+import CreateInput from '../createInput'
 
 const Portals = () => {
   const theme = useTheme()
@@ -32,6 +37,8 @@ const Portals = () => {
 
   const actionGroup = apps[params.actionGroupId]
 
+  mog('Inside Specific Portal', { location, query, serviceId, apps, connectedPortals, params, actionGroup })
+
   const { connectedPortalInfo, parentNoteName } = useMemo(() => {
     const connectedPortalInfo = getIsPortalConnected(actionGroup.actionGroupId)
 
@@ -50,7 +57,8 @@ const Portals = () => {
 
   const onClick = () => {
     const url = actionGroup?.authConfig?.authURL
-    if (url) shell.openExternal(url)
+
+    if (url) window.open(url, '_blank')
   }
 
   const onSaveDetails = async () => {

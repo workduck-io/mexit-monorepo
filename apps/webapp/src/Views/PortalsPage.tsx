@@ -18,10 +18,6 @@ const PortalsPage = () => {
     getConnectedPortals()
   }, []) // eslint-disable-line
 
-  const onClick = (route: string, actionGroupId: string) => {
-    goTo(route, NavigationType.push, actionGroupId)
-  }
-
   const portals = useMemo(
     () => sortPortals(apps, (item: any) => !!getIsPortalConnected(item.actionGroupId)),
     [apps, connectedPortals] // eslint-disable-line
@@ -34,7 +30,9 @@ const PortalsPage = () => {
           <Section
             items={portals}
             title="Portals"
-            onClick={(item: ActionGroupType) => onClick(`${ROUTE_PATHS.integrations}/portal`, item.actionGroupId)}
+            onClick={(item: ActionGroupType) =>
+              goTo(`${ROUTE_PATHS.integrations}/portal`, NavigationType.push, item.actionGroupId)
+            }
           />
         </IntegrationContainer>
       </FullHeight>

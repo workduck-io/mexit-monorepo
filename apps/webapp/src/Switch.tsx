@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import EditorView from './Views/EditorView'
@@ -172,10 +172,14 @@ const SnippetRoutes = () => {
 }
 
 const IntegrationRoutes = () => {
+  const location = useLocation()
+  useEffect(() => {
+    console.log('Location: ', location)
+  }, [location])
   return (
     <Routes>
       <Route
-        path=""
+        index
         element={
           <ProtectedRoute>
             <PortalsPage />
@@ -218,7 +222,7 @@ export const Switch = () => {
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={ROUTE_PATHS.archive} element={<Archive />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
-          <Route path={ROUTE_PATHS.integrations} element={<IntegrationRoutes />} />
+          <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
       </Routes>
     </SwitchWrapper>

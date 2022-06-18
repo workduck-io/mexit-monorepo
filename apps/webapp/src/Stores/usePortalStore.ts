@@ -48,8 +48,7 @@ const usePortalStore = create<PortalStoreType>(
         }
       }),
       {
-        name: 'mex-portal-store',
-        getStorage: () => IDBStorage
+        name: 'mex-portal-store'
       }
     )
   )
