@@ -13,7 +13,7 @@ export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { node } = useEditorContext()
   const { ilinks, addILink } = useDataStore()
-  const { selection, setVisualState } = useSputlitContext()
+  const { selection, setVisualState, setSelection } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
@@ -55,7 +55,10 @@ export function useSaveChanges() {
     // console.log('Sending: ', node, request)
 
     setContent(node.nodeid, editorState)
-    addILink({ ilink: node.path, nodeid: node.nodeid })
+    setSelection(undefined)
+    if (!ilinks.map((l) => l.path).includes(node.path)) {
+      addILink({ ilink: node.path, nodeid: node.nodeid })
+    }
     addRecent(node.nodeid)
     if (notification) {
       toast.success('Saved')
@@ -74,7 +77,9 @@ export function useSaveChanges() {
           content: editorState,
           metadata: extractMetadata(message.data[0])
         })
-        dispatch('ADD_ILINK', { ilink: node.path, nodeid: node.nodeid })
+        if (!ilinks.map((l) => l.path).includes(node.path)) {
+          dispatch('ADD_ILINK', { ilink: node.path, nodeid: node.nodeid })
+        }
 
         if (notification) {
           toast.success('Saved to Cloud')
