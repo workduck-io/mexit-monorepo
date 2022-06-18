@@ -80,7 +80,7 @@ const Main = ({ children }: MainProps) => {
 
   const showNav = (): boolean => {
     if (location.pathname === '/') return true
-    const showNavPaths = ['/editor', '/search', '/snippets', '/archive', '/tasks', '/settings', '/tag']
+    const showNavPaths = ['/editor', '/search', '/snippets', '/archive', '/tasks', '/settings', '/tag', '/integrations']
 
     for (const path of showNavPaths) {
       if (location.pathname.startsWith(path)) return true
