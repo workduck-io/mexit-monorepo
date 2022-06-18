@@ -22,7 +22,8 @@ export const ROUTE_PATHS = {
   oauth: '/oauth',
   oauthdesktop: '/oauth/desktop',
   share: '/share',
-  forgotpassword: '/auth/forgotpassword'
+  forgotpassword: '/auth/forgotpassword',
+  integrations: '/integrations'
 }
 
 export enum NavigationType {

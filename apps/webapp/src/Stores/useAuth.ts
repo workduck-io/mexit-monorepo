@@ -18,6 +18,7 @@ import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
+import { usePortals } from '../Hooks/usePortals'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -40,6 +41,7 @@ export const useAuthentication = () => {
   const clearRecents = useRecentsStore().clear
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
+  const { initPortals } = usePortals()
 
   const login = async (
     email: string,
@@ -84,6 +86,7 @@ export const useAuthentication = () => {
           console.error({ e })
           return e.toString() as string
         })
+      await initPortals()
     }
     setShowLoader(false)
     return { data, v }
@@ -104,6 +107,8 @@ export const useAuthentication = () => {
             setAuthenticated(userDetails, workspaceDetails)
           }
         })
+
+        await initPortals()
       }
       setShowLoader(false)
       return result
@@ -163,6 +168,8 @@ export const useAuthentication = () => {
         } catch (error) {} // eslint-disable-line
       })
       .catch(console.error)
+
+    await initPortals()
 
     setShowLoader(false)
   }
@@ -253,6 +260,8 @@ export const useAuthentication = () => {
         } catch (error) {} // eslint-disable-line
       })
       .catch(console.error)
+
+    await initPortals()
 
     if (vSign) {
       setRegistered(false)

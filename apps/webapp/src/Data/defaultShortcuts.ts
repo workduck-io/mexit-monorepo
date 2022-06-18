@@ -30,7 +30,12 @@ export const defaultShortcuts = {
     keystrokes: '$mod+Shift+KeyH',
     category: 'Navigate'
   },
-
+  showIntegrations: {
+    title: 'Flows',
+    keystrokes: '$mod+Shift+KeyI',
+    category: 'Navigate',
+    disabled: true
+  },
   // Actions
   newNode: {
     title: 'New Note',
