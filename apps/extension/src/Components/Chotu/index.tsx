@@ -46,7 +46,7 @@ export default function Chotu() {
   const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const getSnippet = useSnippets().getSnippet
 
-  const { setSearchResults, search, activeItem } = useSputlitContext()
+  const { setSearchResults, search, activeItem, selection } = useSputlitContext()
   const previewMode = useEditorContext().previewMode
   const lastOpenedNodes = useRecentsStore((store) => store.lastOpened)
   const { ilinks } = useDataStore()
@@ -165,17 +165,16 @@ export default function Chotu() {
         const recentLimit = recentList.length < MAX_RECENT_ITEMS ? recentList.length : MAX_RECENT_ITEMS
         const limitedList = recentList.slice(0, recentLimit)
         const listWithNew = insertItemInArray(limitedList, CREATE_NEW_ITEM, 1)
-        const listWithAllNew = listWithNew
         const defItems = [CREATE_NEW_ITEM]
 
-        const list = !recentLimit ? defItems : listWithAllNew
+        const list = !recentLimit ? defItems : listWithNew
 
         const data = [...list, ...initActions]
 
         setSearchResults(data)
       }
     }
-  }, [child, activeItem, search.value, ilinks, previewMode])
+  }, [child, activeItem, search.value, ilinks, previewMode, lastOpenedNodes])
 
   useEffect(() => {
     const handleEvent = (event: CustomEvent) => {
