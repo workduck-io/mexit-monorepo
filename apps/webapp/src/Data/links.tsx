@@ -1,10 +1,11 @@
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import React, { useMemo } from 'react'
+import { Icon } from '@iconify/react'
 import checkboxLine from '@iconify/icons-ri/checkbox-line'
+import appsLine from '@iconify/icons-ri/apps-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import fileDocument from '@iconify/icons-gg/file-document'
 import searchLine from '@iconify/icons-ri/search-line'
-import { Icon } from '@iconify/react'
-import React, { useMemo } from 'react'
+
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
@@ -69,6 +70,12 @@ const useNavlinks = () => {
         shortcut: shortcuts.showTasks.keystrokes,
         count: count.tasks
         // isComingSoon: true
+      },
+      {
+        title: 'Integrations',
+        path: ROUTE_PATHS.integrations,
+        shortcut: shortcuts.showIntegrations.keystrokes,
+        icon: GetIcon(appsLine)
       }
       // {
       // title: 'Reminders',

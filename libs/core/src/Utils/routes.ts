@@ -41,6 +41,8 @@ export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 export const WORKDUCK_API_BASE = 'https://api.workduck.io'
 export const CDN_BASE = 'https://cdn.workduck.io'
 
+export const MEX_LOCH_BASE_URL = 'https://http-test.workduck.io/loch'
+
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -101,5 +103,11 @@ export const apiURLs = {
   getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
 
   // Get Ilinks from Middleware
-  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`
+  getILink: () => `${MEXIT_BACKEND_URL_BASE}/node/linkhierarchy`,
+
+  // Loch
+  getLochServices: () => `${MEX_LOCH_BASE_URL}/connect/all`,
+  getConnectedLochServices: () => `${MEX_LOCH_BASE_URL}/connect`,
+  connectToLochService: () => `${MEX_LOCH_BASE_URL}/connect`,
+  updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`
 }

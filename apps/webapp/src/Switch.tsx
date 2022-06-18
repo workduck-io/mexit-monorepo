@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 
 import EditorView from './Views/EditorView'
@@ -32,6 +32,8 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import About from './Views/Settings/About'
 import { useLayoutStore } from './Stores/useLayoutStore'
 import SplashScreen from './Components/SplashScreen'
+import Portals from './Components/Portals'
+import PortalsPage from './Views/PortalsPage'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -169,12 +171,34 @@ const SnippetRoutes = () => {
   )
 }
 
+const IntegrationRoutes = () => {
+  const location = useLocation()
+  useEffect(() => {
+    console.log('Location: ', location)
+  }, [location])
+  return (
+    <Routes>
+      <Route
+        index
+        element={
+          <ProtectedRoute>
+            <PortalsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="portal/:actionGroupId" element={<Portals />} />
+    </Routes>
+  )
+}
+
 export const Switch = () => {
   const authenticated = useAuthStore((s) => s.authenticated)
 
   const { switchWrapperSpringProps } = useSidebarTransition()
 
   return (
+    // eslint-disable-next-line
+    // @ts-ignore
     <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
@@ -198,6 +222,7 @@ export const Switch = () => {
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={ROUTE_PATHS.archive} element={<Archive />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
+          <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
       </Routes>
     </SwitchWrapper>
