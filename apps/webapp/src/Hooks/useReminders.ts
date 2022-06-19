@@ -44,6 +44,22 @@ export interface ReminderBoard extends KanbanBoard {
   columns: ReminderBoardColumn[]
 }
 
+/*
+ * Only sets up reminder for the next 24 hours
+ */
+const BASE_REMINDER_HEIGHT = 80
+const BASE_TITLE_HEIGHT = 20
+export const BASE_WIDTH = 500
+const BASE_PADDING = 12
+
+export const REMINDERS_DIMENSIONS = {
+  height: 100,
+  width: BASE_WIDTH + BASE_PADDING * 2,
+  baseWidth: BASE_WIDTH,
+  padding: BASE_PADDING,
+  offset: 20
+}
+
 export type ReminderStatus = 'active' | 'snooze' | 'seen' | 'missed'
 
 export const getReminderState = (reminder: Reminder): ReminderStatus => {

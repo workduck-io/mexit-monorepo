@@ -87,5 +87,10 @@ export const defaultShortcuts = {
     title: 'Rename',
     keystrokes: '$mod+Shift+KeyN',
     category: 'Actions'
+  },
+  showReminder: {
+    title: 'Reminders',
+    keystrokes: '$mod+Shift+KeyM',
+    category: 'Actions'
   }
 }
