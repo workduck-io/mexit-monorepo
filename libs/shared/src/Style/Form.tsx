@@ -1,8 +1,15 @@
+import { transparentize } from 'polished'
 import React from 'react'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
 import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
+
+export declare enum TextFieldHeight {
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE'
+}
 
 interface InputProps {
   isSelected?: boolean
@@ -16,6 +23,7 @@ export const Input = styled.input<InputProps>`
   border: 1px solid ${({ theme }) => theme.colors.form.input.border};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
+  border: none;
 
   &:focus-visible {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -52,7 +60,7 @@ export const InputBlock = styled(Input)`
 export const NotFoundText = styled.div`
   width: 100%;
   flex-direction: column;
-  height: 65vh;
+  height: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +84,7 @@ export const TextArea = styled.textarea`
     border-color: ${({ theme }) => theme.colors.primary};
   }
 
-  &::hover,
+  &:hover,
   &:active {
     border-color: ${({ theme }) => theme.colors.primary};
   }
@@ -86,9 +94,55 @@ export const AuthForm = styled.form`
   width: 100%;
 `
 
-export const TextAreaBlock = styled(TextArea)`
+export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?: any }>`
   width: 100%;
   display: block;
+
+  ${({ error }) =>
+    error &&
+    css`
+      :focus,
+      :hover,
+      :active {
+        border-color: none;
+      }
+      border: 1px solid ${({ theme }) => theme.colors.palette.red};
+    `}
+
+  ${({ height }) =>
+    height &&
+    css`
+      resize: none;
+      box-sizing: border-box;
+      ::placeholder {
+        color: ${(props) => props.theme.colors.gray[4]};
+        opacity: 0.8;
+        font-size: 0.96rem;
+      }
+    `}
+
+  ${({ height }) => {
+    switch (height) {
+      case TextFieldHeight.SMALL:
+        return css`
+          max-height: 2.25rem;
+        `
+      case TextFieldHeight.MEDIUM:
+        return css`
+          min-height: 4rem;
+          max-height: 9rem;
+        `
+      case TextFieldHeight.LARGE:
+        return css`
+          height: 9rem;
+          max-height: 9rem;
+        `
+      default:
+        return css`
+          height: 2.25rem;
+        `
+    }
+  }}
   margin: ${({ theme }) => theme.spacing.small} 0;
 `
 
@@ -120,7 +174,7 @@ export const ReactSelectStyles = (theme: DefaultTheme) => ({
     ...provided,
     // width: state.selectProps.width,
     color: state.selectProps.menuColor,
-    backgroundColor: theme.colors.gray[8],
+    backgroundColor: theme.colors.background.modal,
     padding: `${theme.spacing.small} ${theme.spacing.small}`
     // padding: 20,
   }),
@@ -132,20 +186,33 @@ export const ReactSelectStyles = (theme: DefaultTheme) => ({
     margin: `${theme.spacing.small} 0`
   }),
 
-  option: (provided, state) => ({
-    ...provided,
-    borderRadius: theme.borderRadius.tiny,
-    backgroundColor: state.isSelected || state.isFocused ? theme.colors.primary : 'transparent',
-    color: state.isSelected || state.isFocused ? theme.colors.text.oppositePrimary : 'inherit',
-    padding: '6px 10px',
-    margin: `${theme.spacing.tiny} 0px`
-  })
+  option: (provided, state) => {
+    let background = state.isSelected ? theme.colors.primary : 'transparent'
+    background = state.isFocused ? transparentize(0.33, theme.colors.primary) : background
+    return {
+      ...provided,
+      borderRadius: theme.borderRadius.tiny,
+      backgroundColor: background,
+      color: state.isSelected || state.isFocused ? theme.colors.text.oppositePrimary : 'inherit',
+      padding: '6px 10px',
+      margin: `${theme.spacing.tiny} 0px`
+    }
+  }
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StyledSelect = (props: any) => {
   const theme = useTheme()
-  return <Select {...props} theme={theme.additional.reactSelect} styles={ReactSelectStyles(theme)}></Select>
+  return (
+    <Select
+      captureMenuScroll
+      blurInputOnSelect
+      menuShouldBlockScroll
+      theme={theme.additional.reactSelect}
+      styles={ReactSelectStyles(theme)}
+      {...props}
+    ></Select>
+  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -154,6 +221,13 @@ export const StyledCreatatbleSelect = (props: any) => {
   return <Creatable {...props} theme={theme.additional.reactSelect} styles={ReactSelectStyles(theme)}></Creatable>
 }
 
+export const SelectWrapper = styled.div`
+  width: 100%;
+`
+
+/*
+ * Date and Time Picker Wrapper for combined styles
+ */
 export const DatePickerStyles = styled.div`
   background: ${({ theme }) => theme.colors.form.input.bg};
   border-radius: ${({ theme }) => theme.borderRadius.small};

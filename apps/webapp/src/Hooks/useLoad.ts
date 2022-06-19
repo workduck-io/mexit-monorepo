@@ -11,7 +11,7 @@ import {
 import { getParentId } from '@mexit/shared'
 import { toast } from 'react-hot-toast'
 
-import { useApi } from './useApi'
+import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useRefactor } from './useRefactor'

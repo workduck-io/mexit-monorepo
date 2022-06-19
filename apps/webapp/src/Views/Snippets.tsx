@@ -10,22 +10,6 @@ import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
 import { Button, IconButton } from '@mexit/shared'
 
-import { MainHeader } from '@mexit/shared'
-import {
-  Result,
-  ResultDesc,
-  ResultMain,
-  ResultRow,
-  ResultTitle,
-  SearchContainer,
-  SearchPreviewWrapper,
-  SplitSearchPreviewWrapper,
-  View
-} from '@mexit/shared'
-import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } from '@mexit/shared'
-import { Title } from '@mexit/shared'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useSearch } from '../Hooks/useSearch'
 import {
   defaultContent,
   generateSnippetId,
@@ -35,7 +19,27 @@ import {
   parseBlock,
   Snippet
 } from '@mexit/core'
-import { useApi } from '../Hooks/useApi'
+import {
+  CreateSnippet,
+  SnippetCommand,
+  SnippetCommandPrefix,
+  SnippetHeader,
+  MainHeader,
+  Result,
+  ResultDesc,
+  ResultMain,
+  ResultRow,
+  ResultTitle,
+  SearchContainer,
+  SearchPreviewWrapper,
+  SplitSearchPreviewWrapper,
+  Title,
+  View
+} from '@mexit/shared'
+
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useSearch } from '../Hooks/useSearch'
+import { useApi } from '../Hooks/API/useNodeAPI'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 

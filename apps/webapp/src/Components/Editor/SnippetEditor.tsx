@@ -13,6 +13,7 @@ import tinykeys from 'tinykeys'
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 type Inputs = {

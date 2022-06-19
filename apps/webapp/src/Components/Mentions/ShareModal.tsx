@@ -4,18 +4,30 @@ import Modal from 'react-modal'
 import create from 'zustand'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
-import { Label, StyledCreatatbleSelect, ButtonFields, IconButton, Button } from '@mexit/shared'
+import { mog } from '@mexit/core'
+import { Label, StyledCreatatbleSelect, ButtonFields, IconButton, Button, Title } from '@mexit/shared'
+
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
-import { AccessLevel, DefaultPermissionValue, permissionOptions } from '../../Types/Mentions'
-import { EMAIL_REG } from '../../Utils/constants'
+import {
+  AccessLevel,
+  DefaultPermission,
+  DefaultPermissionValue,
+  Mentionable,
+  permissionOptions
+} from '../../Types/Mentions'
+import { EMAIL_REG, MultiEmailValidate } from '../../Utils/constants'
 import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
-
 import {
+  InviteFormWrapper,
+  InviteWrapper,
+  SelectWrapper,
   ShareAlias,
+  ShareAliasInput,
+  SharedPermissionsTable,
   SharedPermissionsWrapper,
   ShareEmail,
   SharePermission,
@@ -23,8 +35,17 @@ import {
   ShareRow,
   ShareRowHeading
 } from './styles'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 
 type ShareModalMode = 'invite' | 'permission'
+
+// To denote what has changed
+// Alias changes should not require a network call
+type UserChange = 'permission' | 'alias'
+
+interface ChangedUser extends Mentionable {
+  change: UserChange[]
+}
 
 interface ShareModalState {
   open: boolean
@@ -33,10 +54,12 @@ interface ShareModalState {
   data: {
     alias?: string
     fromEditor?: boolean
+    changedUsers?: ChangedUser[]
   }
   openModal: (mode: ShareModalMode) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
+  setChangedUsers: (users: ChangedUser[]) => void
   prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) => void
 }
 
@@ -44,7 +67,9 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
   open: false,
   focus: true,
   mode: 'permission',
-  data: {},
+  data: {
+    changedUsers: []
+  },
   openModal: (mode: ShareModalMode) =>
     set({
       mode,
@@ -57,6 +82,7 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
     })
   },
   setFocus: (focus: boolean) => set({ focus }),
+  setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users } }),
   prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) =>
     set({
       mode,
@@ -87,7 +113,7 @@ const InviteModalContent = () => {
   } = useForm<InviteModalData>()
 
   const onSubmit = (data: InviteModalData) => {
-    console.log('data', data)
+    mog('data', data)
 
     if (node && node.nodeid) {
       addInvitedUser({
@@ -95,17 +121,17 @@ const InviteModalContent = () => {
         alias: data.alias,
         email: data.email,
         access: {
-          [node.nodeid]: (data.access as AccessLevel) ?? 'READ'
+          [node.nodeid]: (data.access as AccessLevel) ?? DefaultPermission
         }
       })
     }
   }
 
   return (
-    <div>
-      <h1>Invite</h1>
-      <p>Invite your friends to join your team.</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <InviteWrapper>
+      <Title>Invite</Title>
+      <p>Invite your friends to your Note.</p>
+      <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InputFormError
           name="alias"
           label="Alias"
@@ -130,20 +156,22 @@ const InviteModalContent = () => {
           errors={errors}
         ></InputFormError>
 
-        <Label htmlFor="access">Permission of the user</Label>
-        <Controller
-          control={control}
-          render={({ field }) => (
-            <StyledCreatatbleSelect
-              {...field}
-              defaultValue={DefaultPermissionValue}
-              options={permissionOptions}
-              closeMenuOnSelect={true}
-              closeMenuOnBlur={true}
-            />
-          )}
-          name="access"
-        />
+        <SelectWrapper>
+          <Label htmlFor="access">Permission</Label>
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <StyledCreatatbleSelect
+                {...field}
+                defaultValue={DefaultPermissionValue}
+                options={permissionOptions}
+                closeMenuOnSelect={true}
+                closeMenuOnBlur={true}
+              />
+            )}
+            name="access"
+          />
+        </SelectWrapper>
 
         <ButtonFields>
           <LoadingButton
@@ -151,11 +179,94 @@ const InviteModalContent = () => {
             alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
             buttonProps={{ type: 'submit', primary: true, large: true }}
           >
-            Invite User
+            Invite
           </LoadingButton>
         </ButtonFields>
-      </form>
-    </div>
+      </InviteFormWrapper>
+    </InviteWrapper>
+  )
+}
+
+const MultiEmailInviteModalContent = () => {
+  const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
+  const { getUserDetails } = useUserService()
+  const node = useEditorStore((state) => state.node)
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { errors, isSubmitting }
+  } = useForm<InviteModalData>()
+
+  const onSubmit = (data: InviteModalData) => {
+    mog('data', data)
+
+    if (node && node.nodeid) {
+      const allMails = data.email.split(',')
+      allMails.forEach((email) => {
+        getUserDetails(email)
+      })
+      // addInvitedUser({
+      //   type: 'invite',
+      //   alias: data.alias,
+      //   email: data.email,
+      //   access: {
+      //     [node.nodeid]: (data.access as AccessLevel) ?? DefaultPermission
+      //   }
+      // })
+    }
+  }
+
+  mog('MultiEmailInvite', { errors })
+
+  return (
+    <InviteWrapper>
+      <Title>Invite</Title>
+      <p>Invite your friends to your Note.</p>
+      <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
+        <InputFormError
+          name="email"
+          label="Email"
+          inputProps={{
+            autoFocus: true,
+            type: 'email',
+            multiple: true,
+            ...register('email', {
+              required: true,
+              validate: MultiEmailValidate
+            })
+          }}
+          errors={errors}
+        ></InputFormError>
+
+        <SelectWrapper>
+          <Label htmlFor="access">Permission</Label>
+          <Controller
+            control={control}
+            render={({ field }) => (
+              <StyledCreatatbleSelect
+                {...field}
+                defaultValue={DefaultPermissionValue}
+                options={permissionOptions}
+                closeMenuOnSelect={true}
+                closeMenuOnBlur={true}
+              />
+            )}
+            name="access"
+          />
+        </SelectWrapper>
+
+        <ButtonFields>
+          <LoadingButton
+            loading={isSubmitting}
+            alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
+            buttonProps={{ type: 'submit', primary: true, large: true }}
+          >
+            Invite
+          </LoadingButton>
+        </ButtonFields>
+      </InviteFormWrapper>
+    </InviteWrapper>
   )
 }
 
@@ -167,6 +278,8 @@ interface PermissionModalContentProps {
 const PermissionModalContent = ({ handleSubmit, handleCopyLink }: PermissionModalContentProps) => {
   const { getSharedUsersForNode } = useMentions()
   const node = useEditorStore((state) => state.node)
+  const changedUsers = useShareModalStore((state) => state.data.changedUsers)
+  const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
 
   const sharedUsers = useMemo(() => {
     if (node && node.nodeid) {
@@ -176,23 +289,109 @@ const PermissionModalContent = ({ handleSubmit, handleCopyLink }: PermissionModa
   }, [node, getSharedUsersForNode])
 
   const onNewInvite = (alias: string, email: string, access: AccessLevel) => {
-    console.log('new invite', { alias, email, access })
+    mog('new invite', { alias, email, access })
   }
 
-  const onPermissionChange = (user: string, access: AccessLevel) => {
-    console.log('onPermissionChange', { user, access })
+  // This is called for every keystroke
+  const onAliasChange = (userid: string, alias: string) => {
+    // mog('onPermissionChange', { userid, alias })
+
+    // Change the user and add to changedUsers
+    const changedUser = changedUsers.find((u) => u.userid === userid)
+    const dataUser = sharedUsers.find((u) => u.userid === userid)
+
+    if (changedUser) {
+      changedUser.alias = alias
+      changedUser.change.push('alias')
+      setChangedUsers([...changedUsers.filter((u) => u.userid !== userid), changedUser])
+    } else if (dataUser) {
+      dataUser.alias = alias
+      const changeUser = { ...dataUser, change: ['alias' as const] }
+      setChangedUsers([...changedUsers, changeUser])
+    }
+  }
+  const onPermissionChange = (userid: string, access: AccessLevel) => {
+    // Change the user and add to changedUsers
+    const changedUser = changedUsers.find((u) => u.userid === userid)
+    const dataUser = sharedUsers.find((u) => u.userid === userid)
+    mog('onPermissionChange', { userid, access, changedUsers, changedUser, dataUser })
+
+    // TODO: Filter for the case when user permission is reverted to the og one
+    if (changedUser) {
+      const prevAccess = changedUser?.access[node.nodeid]
+      const ogAccess = dataUser?.access[node.nodeid]
+      if (ogAccess && access === ogAccess) {
+        mog('removing user from changedUsers', { changedUser, access, ogAccess })
+        if (changedUser.change.includes('permission')) {
+          changedUser.change = changedUser.change.filter((c) => c !== 'permission')
+          if (changedUser.change.length !== 0) {
+            setChangedUsers([...changedUsers.filter((u) => u.userid !== userid), changedUser])
+          } else {
+            setChangedUsers([...changedUsers.filter((u) => u.userid !== userid)])
+          }
+        }
+      } else if (prevAccess !== access) {
+        changedUser.access[node.nodeid] = access
+        changedUser.change.push('permission')
+        setChangedUsers([...changedUsers.filter((u) => u.userid !== userid), changedUser])
+      } else {
+        if (changedUser.change.includes('permission')) {
+          changedUser.change = changedUser.change.filter((c) => c !== 'permission')
+          if (changedUser.change.length !== 0) {
+            setChangedUsers([...changedUsers.filter((u) => u.userid !== userid), changedUser])
+          } else {
+            setChangedUsers([...changedUsers.filter((u) => u.userid !== userid)])
+          }
+        }
+      }
+    } else if (dataUser) {
+      const prevAccess = dataUser?.access[node.nodeid]
+      if (prevAccess !== access) {
+        dataUser.access[node.nodeid] = access
+        const changeUser = { ...dataUser, change: ['permission' as const] }
+        setChangedUsers([...changedUsers, changeUser])
+      }
+    }
   }
 
   const onUserRemove = (userid: string) => {
-    console.log('onUserRemove', { userid })
+    mog('onUserRemove', { userid })
+  }
+
+  const onSave = () => {
+    // Only when change is done to permission
+    const newPermissions = changedUsers
+      .filter((u) => u.change.includes('permission'))
+      .reduce((acc, user) => {
+        acc.push({
+          userid: user.userid,
+          access: user.access[node.nodeid]
+        })
+
+        return acc
+      }, [])
+
+    const newAliases = changedUsers
+      .filter((u) => u.change.includes('alias'))
+      .reduce((acc, user) => {
+        acc.push({
+          userid: user.userid,
+          alias: user.alias
+        })
+        return acc
+      }, [])
+
+    mog('onSave', { changedUsers, newPermissions, newAliases })
   }
 
   return (
-    <>
+    <SharedPermissionsWrapper>
       <ModalHeader>Share Note</ModalHeader>
 
-      <SharedPermissionsWrapper>
-        <caption>Users with permission to this note</caption>
+      <MultiEmailInviteModalContent />
+
+      <SharedPermissionsTable>
+        <caption>Users with access to this note</caption>
         <ShareRowHeading>
           <tr>
             <td>Alias</td>
@@ -204,9 +403,16 @@ const PermissionModalContent = ({ handleSubmit, handleCopyLink }: PermissionModa
 
         {sharedUsers.map((user) => {
           const access = user.access[node.nodeid]
+          const hasChanged = changedUsers.find((u) => u.userid === user.userid)
           return (
-            <ShareRow key={`${user.userid}`}>
-              <ShareAlias>{user.alias}</ShareAlias>
+            <ShareRow hasChanged={!!hasChanged} key={`${user.userid}`}>
+              <ShareAlias hasChanged={!!hasChanged}>
+                <ShareAliasInput
+                  type="text"
+                  defaultValue={user.alias}
+                  onChange={(e) => onAliasChange(user.userid, e.target.value)}
+                />
+              </ShareAlias>
               <ShareEmail>{user.email}</ShareEmail>
 
               <SharePermission>
@@ -224,23 +430,23 @@ const PermissionModalContent = ({ handleSubmit, handleCopyLink }: PermissionModa
             </ShareRow>
           )
         })}
-      </SharedPermissionsWrapper>
+      </SharedPermissionsTable>
 
       <ModalControls>
         <Button large onClick={handleCopyLink}>
           Copy Link
         </Button>
-        <Button primary autoFocus={!window.focus} large onClick={handleSubmit}>
+        <Button primary autoFocus={!window.focus} large onClick={onSave} disabled={changedUsers.length === 0}>
           Save
         </Button>
       </ModalControls>
-    </>
+    </SharedPermissionsWrapper>
   )
 }
 
 const ShareModal = () => {
   const open = useShareModalStore((store) => store.open)
-  const focus = useShareModalStore((store) => store.focus)
+  // const focus = useShareModalStore((store) => store.focus)
   const closeModal = useShareModalStore((store) => store.closeModal)
   const mode = useShareModalStore((store) => store.mode)
   // const openModal = useShareModalStore((store) => store.openModal)

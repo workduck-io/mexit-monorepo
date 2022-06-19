@@ -1,17 +1,25 @@
 import { client } from '@workduck-io/dwindle'
 
-import { defaultContent, apiURLs, mog, SEPARATOR, extractMetadata, removeNulls } from '@mexit/core'
+import {
+  defaultContent,
+  apiURLs,
+  mog,
+  SEPARATOR,
+  extractMetadata,
+  removeNulls,
+  WORKSPACE_HEADER,
+  DEFAULT_NAMESPACE,
+  GET_REQUEST_MINIMUM_GAP
+} from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
-import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '@mexit/core'
-import { isRequestedWithin } from '../Stores/useApiStore'
-import '../Utils/apiClient'
-import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { useInternalLinks } from './useInternalLinks'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useLinks } from './useLinks'
-import { useTags } from './useTags'
+import { useAuthStore } from '../../Stores/useAuth'
+import { isRequestedWithin } from '../../Stores/useApiStore'
+import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { useInternalLinks } from '../useInternalLinks'
+import { useContentStore } from '../../Stores/useContentStore'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useLinks } from '../useLinks'
+import { useTags } from '../useTags'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)

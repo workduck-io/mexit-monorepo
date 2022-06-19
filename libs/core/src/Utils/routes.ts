@@ -43,6 +43,10 @@ export const CDN_BASE = 'https://cdn.workduck.io'
 
 export const MEX_LOCH_BASE_URL = 'https://http-test.workduck.io/loch'
 
+export const USER_SERVICE_HELPER_URL = 'https://3jeonl1fee.execute-api.us-east-1.amazonaws.com'
+export const USER_SERVICE_EMAIL_URL = (email: string) =>
+  `https://http-test.workduck.io/user/email/${encodeURIComponent(email)}`
+
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -112,5 +116,8 @@ export const apiURLs = {
   getLochServices: () => `${MEX_LOCH_BASE_URL}/connect/all`,
   getConnectedLochServices: () => `${MEX_LOCH_BASE_URL}/connect`,
   connectToLochService: () => `${MEX_LOCH_BASE_URL}/connect`,
-  updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`
+  updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`,
+
+  // Sharing and Mentions
+  sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared/node`
 }

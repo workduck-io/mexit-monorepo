@@ -1,6 +1,6 @@
 import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-import { Title } from './Elements'
+import { Title } from './Typography'
 import { MainHeader } from './Layouts'
 import { TodoContainer } from './Todo.style'
 

@@ -5,7 +5,7 @@ import globalLine from '@iconify-icons/ri/global-line'
 
 import { ToggleButton, CardTitle, Loading } from '@mexit/shared'
 
-import { useApi } from '../../Hooks/useApi'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 import { MexIcon } from '@mexit/shared'
 import { CopyButton } from '../Buttons/CopyButton'
 import { mog } from '@mexit/core'

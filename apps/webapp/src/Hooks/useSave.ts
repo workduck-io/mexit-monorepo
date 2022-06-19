@@ -1,6 +1,6 @@
 import { getTodosFromContent, mog } from '@mexit/core'
 
-import { useApi } from './useApi'
+import { useApi } from './API/useNodeAPI'
 import { useTags } from './useTags'
 // import useThemeStore from '../Stores/useThemeStore'
 
