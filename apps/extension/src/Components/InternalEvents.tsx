@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
@@ -28,6 +28,7 @@ export function InternalEvents() {
 }
 
 const highlighter = new Highlighter()
+type Timeout = ReturnType<typeof setTimeout>
 
 /**
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
@@ -36,6 +37,26 @@ function useToggleHandler() {
   const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
+
+  const timeoutRef = useRef<Timeout>()
+  const runAnimateTimer = useCallback((vs: VisualState.animatingIn | VisualState.animatingOut) => {
+    let ms = 0
+    if (vs === VisualState.animatingIn) {
+      ms = 200
+    }
+    if (vs === VisualState.animatingOut) {
+      ms = 100
+    }
+
+    clearTimeout(timeoutRef.current as Timeout)
+    timeoutRef.current = setTimeout(() => {
+      if (vs === VisualState.animatingIn) {
+        setVisualState(VisualState.showing)
+      } else if (vs === VisualState.animatingOut) {
+        setVisualState(VisualState.hidden)
+      }
+    }, ms)
+  }, [])
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
@@ -53,9 +74,9 @@ function useToggleHandler() {
               setSelection(undefined)
             }
 
-            setVisualState(VisualState.showing)
+            setVisualState(VisualState.animatingIn)
           } else {
-            setVisualState(VisualState.hidden)
+            setVisualState(VisualState.animatingOut)
           }
           sendResponse(true)
       }
@@ -64,13 +85,20 @@ function useToggleHandler() {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         if (previewMode) {
-          setVisualState(VisualState.hidden)
+          setVisualState(VisualState.animatingOut)
           setTooltipState({ visualState: VisualState.hidden })
         } else {
           setPreviewMode(true)
           saveIt(false, true)
         }
       }
+    }
+
+    switch (visualState) {
+      case VisualState.animatingIn:
+      case VisualState.animatingOut:
+        runAnimateTimer(visualState)
+        break
     }
 
     // Listen for message from background script to see if sputlit is requested
