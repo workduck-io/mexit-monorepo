@@ -1,8 +1,8 @@
 import React from 'react'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import focusLine from '@iconify/icons-ri/focus-line'
 import { useSingleton } from '@tippyjs/react'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import shareLine from '@iconify/icons-ri/share-line'
+import focusLine from '@iconify/icons-ri/focus-line'
 
 import { Loading, ToolbarTooltip, IconButton } from '@mexit/shared'
 
@@ -14,6 +14,7 @@ import BookmarkButton from '../Buttons/BookmarkButton'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
 import useToggleElements from '../../Hooks/useToggleElements'
+import { useShareModalStore } from '../Mentions/ShareModal'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -25,6 +26,8 @@ const Toolbar = () => {
   const showShareOptions = useLayoutStore((store) => store.showShareOptions)
   const infobar = useLayoutStore((store) => store.infobar)
   const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
+  const openShareModal = useShareModalStore((store) => store.openModal)
+  const shareModalState = useShareModalStore((store) => store.open)
 
   const { toggleReminder } = useToggleElements()
 
@@ -35,18 +38,19 @@ const Toolbar = () => {
       <InfoTools>
         <ToolbarTooltip singleton={source} />
         <IconButton
-          singleton={target}
           size={24}
+          singleton={target}
           icon={shareLine}
           title="Share"
-          highlight={showShareOptions}
-          onClick={toggleShareOptions}
+          highlight={shareModalState}
+          onClick={() => openShareModal('permission')}
         />
-        {/* <ToolbarTooltip singleton={target} content="Bookmark">
+        <ToolbarTooltip singleton={target} content="Bookmark">
           <span tabIndex={0}>
             <BookmarkButton nodeid={nodeid} />
           </span>
-        </ToolbarTooltip> */}
+        </ToolbarTooltip>
+
         <IconButton
           size={24}
           singleton={target}

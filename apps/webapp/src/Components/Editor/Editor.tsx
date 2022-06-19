@@ -1,23 +1,22 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
-
-import TagWrapper from './TagWrapper'
-import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
-  ELEMENT_PARAGRAPH,
+  ELEMENT_MENTION,
   ELEMENT_TAG,
-  ELEMENT_TODO_LI,
-  NodeEditorContent
+  mog,
+  NodeEditorContent,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI
 } from '@mexit/core'
+import { useEditorChange, EditorStyles } from '@mexit/shared'
+
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import Todo from '../Todo'
-import { useEditorChange } from '@mexit/shared'
-import { EditorStyles } from '@mexit/shared'
 import { useDataStore } from '../../Stores/useDataStore'
 import { ComboboxKey } from '../../Editor/Types/Combobox'
 import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
@@ -31,6 +30,8 @@ import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLi
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { useNewNodes } from '../../Hooks/useNewNodes'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useShareModalStore } from '../Mentions/ShareModal'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -55,13 +56,13 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const ilinks = useDataStore((store) => store.ilinks)
   const addILink = useDataStore((store) => store.addILink)
   const slashCommands = useDataStore((store) => store.slashCommands)
-
   const { openReminderModal } = useOpenReminderModal()
-
   const { getSnippetConfigs } = useSnippets()
-
   const snippetConfigs = getSnippetConfigs()
   const { params, location } = useRouting()
+  const mentionable = useMentionStore((state) => state.mentionable)
+  const invitedUsers = useMentionStore((state) => state.invitedUsers)
+  const prefillShareModal = useShareModalStore((state) => state.prefillModal)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -80,7 +81,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
 
   const { addNodeOrNodesFast } = useNewNodes()
 
-  const internals: ComboboxItem[] = [
+  const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
       ...l,
       value: l.nodeid,
@@ -89,6 +90,21 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       type: QuickLinkType.backlink
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
+  ]
+
+  const mentions = [
+    ...mentionable.map((m) => ({
+      value: m.userid,
+      text: m.alias,
+      icon: 'ri:user-line',
+      type: QuickLinkType.mentions
+    })),
+    ...invitedUsers.map((m) => ({
+      value: m.alias,
+      text: m.alias,
+      icon: 'ri:user-line',
+      type: QuickLinkType.mentions
+    }))
   ]
 
   const comboOnKeyDownConfig: ComboConfigData = {
@@ -121,6 +137,16 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           return id
         },
         renderElement: SlashComboboxItem
+      },
+      mention: {
+        slateElementType: ELEMENT_MENTION,
+        newItemHandler: (newAlias) => {
+          // addTag(newItem)
+          mog('ELEMENT_MENTIONS', { newAlias })
+          prefillShareModal('invite', newAlias, true)
+          return newAlias
+        },
+        renderElement: TagComboboxItem
       }
     },
     internal: {
@@ -177,6 +203,12 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       trigger: '/',
       icon: 'ri:flask-line',
       data: slashCommands.default.map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
+    },
+    mention: {
+      cbKey: ComboboxKey.MENTION,
+      trigger: '@',
+      data: mentions,
+      icon: 'ri:at-line'
     }
   }
 

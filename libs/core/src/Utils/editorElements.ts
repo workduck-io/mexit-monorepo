@@ -19,3 +19,5 @@ export const ELEMENT_LINK = 'a'
 
 export const ELEMENT_PARAGRAPH = 'p'
 export const ELEMENT_SYNC_BLOCK = 'sync_block'
+
+export const ELEMENT_MENTION = 'mention'

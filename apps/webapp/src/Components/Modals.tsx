@@ -7,6 +7,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
 import BlockModal from '../Editor/Components/Blocks/BlockModal'
+import ShareModal from './Mentions/ShareModal'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -20,6 +21,7 @@ const Modals = () => {
       <HelpModal />
       <BlockModal />
       <CreateReminderModal />
+      <ShareModal />
     </>
   )
 }
