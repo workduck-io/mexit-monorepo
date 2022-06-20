@@ -56,7 +56,7 @@ const EditorView = () => {
       console.log({ sharedNodes })
       setSharedNodes(sharedNodes)
     })
-  }, [userCred])
+  }, [])
 
   useEffect(() => {
     if (!first) {

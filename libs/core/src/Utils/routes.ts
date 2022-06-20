@@ -119,6 +119,6 @@ export const apiURLs = {
   updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`,
 
   // Sharing and Mentions
-  sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared/node`,
-  allSharedNodes: `${MEXIT_BACKEND_URL_BASE}/shared/node/all`
+  sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared`,
+  allSharedNodes: `${MEXIT_BACKEND_URL_BASE}/shared/all`
 }
