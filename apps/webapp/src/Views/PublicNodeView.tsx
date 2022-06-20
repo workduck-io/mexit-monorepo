@@ -39,7 +39,7 @@ const PublicNodeView = () => {
       }
     }
     getPublicNodeContent()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <EditorViewWrapper>

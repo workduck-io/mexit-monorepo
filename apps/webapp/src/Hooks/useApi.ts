@@ -280,7 +280,6 @@ export const useApi = () => {
           version: d.data.version ?? undefined
         }
       })
-      .catch(console.error)
 
     if (res) {
       return {
