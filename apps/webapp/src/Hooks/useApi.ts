@@ -224,10 +224,9 @@ export const useApi = () => {
       })
       .then((resp) => resp.data)
       .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          const publicURL = apiURLs.getNodePublicURL(nodeUID)
-          setNodePublic(nodeUID, publicURL)
+        if (data === nodeId) {
+          const publicURL = apiURLs.getNodePublicURL(data)
+          setNodePublic(data, publicURL)
           return publicURL
         } else throw new Error('Error making node public')
       })
