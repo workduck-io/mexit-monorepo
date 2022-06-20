@@ -1,23 +1,25 @@
 import Board from '@asseinfo/react-kanban'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
-import { mog, Reminder } from '@mexit/core'
+import {
+  getReminderState,
+  mog,
+  past,
+  Reminder,
+  ReminderBoard,
+  ReminderBoardCard,
+  ReminderBoardColumn,
+  SearchFilter,
+  upcoming
+} from '@mexit/core'
 import { PageContainer, MainHeader, Button } from '@mexit/shared'
 import React, { useEffect, useMemo } from 'react'
 import create from 'zustand'
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import ReminderUI, { reminderStateIcons } from '../../Components/Reminders/Reminder'
-import { FilterStore, SearchFilter } from '../../Hooks/useFilters'
+import { FilterStore } from '../../Hooks/useFilters'
 import { useLinks } from '../../Hooks/useLinks'
-import {
-  getReminderState,
-  past,
-  ReminderBoard,
-  ReminderBoardCard,
-  ReminderBoardColumn,
-  upcoming,
-  useReminders
-} from '../../Hooks/useReminders'
+import { useReminders } from '../../Hooks/useReminders'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import { Title } from '../../Style/Integrations'
 import SearchFilters from '../SearchFilters'

@@ -1,30 +1,11 @@
 import create from 'zustand'
 
-import { GenericSearchResult, mog } from '@mexit/core'
+import { GenericSearchResult, mog, SearchFilter } from '@mexit/core'
 import { isElder, getAllParentIds } from '@mexit/shared'
 
 import { useTags } from './useTags'
 import { useLinks } from './useLinks'
-
-/*
-- Date
-- Node level
-- Tag based
-- Show only relevant options - Filter options that are empty
-- Sorting [:?]
-*/
-
-export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has'
-export interface SearchFilter<Item> {
-  key: FilterKey
-  id: string
-  label: string
-  filter: (item: Item) => boolean | number
-  icon?: string
-  // No. of items that match this filter
-  count?: number
-  // sort: 'asc' | 'desc'
-}
+import { useDataStore } from '../Stores/useDataStore'
 
 export interface FilterStore<Item> {
   filters: SearchFilter<Item>[]
