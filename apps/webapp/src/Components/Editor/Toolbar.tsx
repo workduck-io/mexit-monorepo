@@ -14,7 +14,7 @@ import BookmarkButton from '../Buttons/BookmarkButton'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
 import useToggleElements from '../../Hooks/useToggleElements'
-import { useShareModalStore } from '../Mentions/ShareModal'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
