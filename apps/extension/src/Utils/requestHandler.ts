@@ -77,11 +77,46 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: err }
         })
     }
-
+    case 'GET_CURRENT_TAB': {
+      return chrome.tabs
+        .query({ currentWindow: true , active: true})
+        .then((tabs) => {
+          const res = []
+          tabs.forEach((tab) => {
+            const t: Tab = {
+              id: tab.id,
+              title: tab.title,
+              windowId: tab.windowId,
+              url: tab.url,
+              status: tab.status,
+              incognito: tab.incognito,
+              pinned: tab.pinned
+            }
+            res.push(t)
+          })
+          return { message: res, error: null }
+        })
+        .catch((err) => {
+          console.error('Error in getting current tabs: ', err)
+          return { message: null, error: err }
+        })
+    }
     case 'OPEN_WINDOW_WITH_TABS': {
       return chrome.windows
         .create({
           focused: true,
+          url: data.urls
+        })
+        .then((response) => {
+          return { message: response, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+    case 'OPEN_WITH_NEW_TABS': {
+      return chrome.tabs
+        .create({
           url: data.urls
         })
         .then((response) => {
