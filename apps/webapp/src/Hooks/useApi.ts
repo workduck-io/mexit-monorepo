@@ -247,10 +247,9 @@ export const useApi = () => {
       })
       .then((resp) => resp.data)
       .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          setNodePrivate(nodeUID)
-          return nodeUID
+        if (data === nodeId) {
+          setNodePrivate(data)
+          return data
         } else throw new Error('Error making node private')
       })
       .catch((error) => {
