@@ -1,4 +1,5 @@
-import DomUtils from "./Dom_utils1";
+import DomUtils, { forTrusted } from "./Dom_utils1";
+import Scroller from "./scroller";
 
 function getValue(s: string) {
   return s.split('').reduce((r: number, a: string) => r * 26 + parseInt(a, 36) - 9, 0) - 1;
@@ -294,21 +295,21 @@ function getVisibleClickable(element) {
           ((getVisibleClickable(element.control)).length === 0);
       }
       break;
-    // case "body":
-    //   if (!isClickable) { isClickable = (element === document.body) && !windowIsFocused() &&
-    //         (window.innerWidth > 3) && (window.innerHeight > 3) &&
-    //         ((document.body != null ? document.body.tagName.toLowerCase() : undefined) !== "frameset") ?
-    //       (reason = "Frame.") : undefined; }
-    //   if (!isClickable) { isClickable = (element === document.body) && windowIsFocused() && Scroller.isScrollableElement(element) ?
-    //       (reason = "Scroll.") : undefined; }
-    //   break;
+    case "body":
+      if (!isClickable) { isClickable = (element === document.body) && !windowIsFocused() &&
+            (window.innerWidth > 3) && (window.innerHeight > 3) &&
+            ((document.body != null ? document.body.tagName.toLowerCase() : undefined) !== "frameset") ?
+          (reason = "Frame.") : undefined; }
+      if (!isClickable) { isClickable = (element === document.body) && windowIsFocused() && Scroller.isScrollableElement(element) ?
+          (reason = "Scroll.") : undefined; }
+      break;
     case "img":
       if (!isClickable) { isClickable = ["zoom-in", "zoom-out"].includes(element.style.cursor); }
       break;
-    // case "div": case "ol": case "ul":
-    //   if (!isClickable) { isClickable = (element.clientHeight < element.scrollHeight) && Scroller.isScrollableElement(element) ?
-    //       (reason = "Scroll.") : undefined; }
-    //   break;
+    case "div": case "ol": case "ul":
+      if (!isClickable) { isClickable = (element.clientHeight < element.scrollHeight) && Scroller.isScrollableElement(element) ?
+          (reason = "Scroll.") : undefined; }
+      break;
     case "details":
       isClickable = true;
       reason = "Open.";
@@ -335,7 +336,7 @@ function getVisibleClickable(element) {
   }
 
   const result: {
-    element: HTMLAllCollection
+    element: HTMLBaseElement
     possibleFalsePositive: boolean
     reason: null
     rect: {
@@ -368,3 +369,18 @@ function getVisibleClickable(element) {
   return result;
 }
 
+const windowIsFocused = (function() {
+  let windowHasFocus = null;
+  DomUtils.documentReady(() => windowHasFocus = document.hasFocus());
+  window.addEventListener("focus", (forTrusted(function(event) {
+    if (event.target === window)
+      windowHasFocus = true;
+    return true;
+  })), true);
+  window.addEventListener("blur", (forTrusted(function(event) {
+    if (event.target === window)
+      windowHasFocus = false;
+    return true;
+  })), true);
+  return () => windowHasFocus;
+})();

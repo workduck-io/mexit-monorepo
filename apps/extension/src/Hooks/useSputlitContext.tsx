@@ -14,11 +14,9 @@ export enum VisualState {
 }
 
 export type VimiumState = {
-  visualState: VisualState
-  singleKeyPress?: string
-  multiKeyPress?: string
-  linksData?: {
-    element: HTMLAllCollection
+  visualState: boolean
+  linksData: {
+    element: HTMLBaseElement
     lable: string
     possibleFalsePositive: boolean
     reason: null
@@ -84,7 +82,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [isLoading, setIsLoading] = useState(false)
-  const [vimium, setVimium] = useState<VimiumState>({ visualState: VisualState.showing })
+  const [vimium, setVimium] = useState<VimiumState>({ visualState: true , linksData : [] })
 
   const value = {
     search,

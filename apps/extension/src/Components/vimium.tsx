@@ -1,23 +1,39 @@
-import React, { useEffect } from "react"
-import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
+import React, { useCallback, useEffect } from "react"
+import { useSputlitContext, VisualState, VimiumState } from '../Hooks/useSputlitContext'
 import { getKeys, getAllVisibleTags, incrementChar } from "../Utils/incrementChar";
-import { getSingleKeyFunction, getMultiKeyFunctions , checkHintsPress } from "../Utils/Vimium";
+import { getSingleKeyFunction, getMultiKeyFunctions, checkHintsPress } from "../Utils/Vimium";
 
 function useVimium() {
     const { vimium, setVimium, visualState } = useSputlitContext();
     const multiKeyPress = {};
+    const emptyData: {
+        element: HTMLBaseElement
+        lable: string
+        possibleFalsePositive: boolean
+        reason: null
+        rect: {
+            bottom: number
+            top: number
+            left: number
+            right: number
+            width: number
+        }
+        secondClassCitizen: boolean
+    }[] = []
     let sentFlag = 0;
-    if (visualState !== VisualState.hidden) {
-        setVimium({ ...vimium, visualState: VisualState.hidden });
-        return;
-    } else {
-        const onKeyDownSinglekey = (e) => {
+    const onKeyDownSinglekey = useCallback((e)=>{
+        if(e.key === "Escape"){
+            setVimium({visualState: true , linksData:emptyData});
+        }
+        else if (!vimium.visualState || vimium.linksData.length !== 0) {
+        }
+        else {
             const result = getSingleKeyFunction(e.key);
-            if (result === 0) {
-                setVimium({ ...vimium, visualState: VisualState.hidden });
+            if (result === 3) {
+                setVimium({ visualState: false, linksData: emptyData })
             } else if (result === 2) {
                 const eles: {
-                    element: HTMLAllCollection
+                    element: HTMLBaseElement
                     lable: string
                     possibleFalsePositive: boolean
                     reason: null
@@ -30,46 +46,100 @@ function useVimium() {
                     }
                     secondClassCitizen: boolean
                 }[] = getAllVisibleTags(false);
-                console.log(eles);
                 let lable = 'AA'
-                eles.forEach((ele)=>{
+                eles.forEach((ele) => {
                     ele.lable = lable;
-                    lable = incrementChar(lable); 
+                    lable = incrementChar(lable);
                 })
-                setVimium({ ...vimium, linksData: eles });
+                setVimium({ visualState: true, linksData: eles });
             }
         }
-        const onKeyDownMultipleKey = (e) => {
-            if (multiKeyPress[e.key]) {
-                multiKeyPress[e.key]++;
-            } else {
-                multiKeyPress[e.key] = 1;
-            };
-            let getMultiKey = "";
-            if (sentFlag === 0) setTimeout(() => {
-                sentFlag++;
-                console.log(multiKeyPress);
-                getMultiKey = getKeys(multiKeyPress)
-                if(vimium.linksData.length === 0) getMultiKeyFunctions(getMultiKey);
-                else checkHintsPress(getMultiKey, vimium.linksData);
-                setTimeout(() => {
-                    sentFlag = 0;
-                    for (var ele in multiKeyPress) delete multiKeyPress[ele];
-                }, 1000);
-            }, 1000);
-            // if(sentFlag === 1)setTimeout(() => sentFlag = 0, 1000);
-        }
-        const onKeyUpMultipleKey = (e) => {
+    },[vimium])
+    const onKeyDownMultipleKey = useCallback((e: KeyboardEvent) => {
+        if (vimium.visualState === false) return;
+        if (multiKeyPress[e.key]) {
+            multiKeyPress[e.key]++;
+        } else {
+            multiKeyPress[e.key] = 1;
+        };
+        let getMultiKey = "";
+        if (sentFlag === 0) setTimeout(() => {
+            sentFlag++;
+            getMultiKey = getKeys(multiKeyPress)
+            if (vimium.linksData.length === 0) getMultiKeyFunctions(getMultiKey);
+            else {
+                const result = checkHintsPress(getMultiKey, vimium.linksData);
+                const eles: {
+                    element: HTMLBaseElement
+                    lable: string
+                    possibleFalsePositive: boolean
+                    reason: null
+                    rect: {
+                        bottom: number
+                        top: number
+                        left: number
+                        right: number
+                        width: number
+                    }
+                    secondClassCitizen: boolean
+                }[] = []
+                if (result === 1) {
+                    setVimium({ visualState: true, linksData: eles });
+                }
+            }
             setTimeout(() => {
-                delete multiKeyPress[e.key]
-            }, 1000)
+                sentFlag = 0;
+                for (var ele in multiKeyPress) delete multiKeyPress[ele];
+            }, 1000);
+        }, 1000);
+    },[vimium])
+    const onKeyUpMultipleKey = useCallback((e: KeyboardEvent) => {
+        setTimeout(() => {
+            delete multiKeyPress[e.key]
+        }, 1000)
+    },[vimium])
+    const resetVimium = useCallback((e) => {
+        if(visualState === VisualState.showing){
+            setVimium({ visualState: false, linksData: emptyData })
         }
-        useEffect(() => {
-            window.addEventListener('keydown', (e) => onKeyDownSinglekey(e))
-            window.addEventListener('keydown', (e) => onKeyDownMultipleKey(e))
-            window.addEventListener('keyup', (e) => onKeyUpMultipleKey(e))
-        }, [vimium])
-    }
+        else if (vimium.linksData.length !== 0 || vimium.visualState === false) {
+            setVimium({ visualState: true, linksData: emptyData });
+        }
+        if (e.target.nodeName === 'INPUT') {
+            setVimium({ visualState: false, linksData: emptyData })
+        }
+    },[vimium, visualState])
+    useEffect(() => {
+        window.addEventListener('keydown',onKeyDownSinglekey)
+        return (()=>window.removeEventListener("keydown",onKeyDownSinglekey))
+    },[onKeyDownSinglekey])
+
+
+    useEffect(() => {
+        window.addEventListener('click',resetVimium)
+        return (()=>window.removeEventListener("click",resetVimium))
+    },[resetVimium])
+
+
+    useEffect(() => {
+        window.addEventListener('keydown',onKeyDownMultipleKey)
+        return (()=>window.removeEventListener("keydown",onKeyDownMultipleKey))
+    },[onKeyDownMultipleKey])
+
+    
+    useEffect(() => {
+        window.addEventListener('keyup',onKeyUpMultipleKey)
+        return (()=>window.removeEventListener("keyup",onKeyUpMultipleKey))
+    },[onKeyUpMultipleKey])
+
+    useEffect(()=>{
+        if(visualState === VisualState.showing){
+            setVimium({visualState: false, linksData: emptyData});
+        }
+        if(visualState === VisualState.hidden){
+            setVimium({visualState: true, linksData: emptyData});
+        }
+    },[visualState])
 }
 
 export default useVimium;
