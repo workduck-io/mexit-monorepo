@@ -22,6 +22,7 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
   // console.log('styles', JSON.stringify({ styles }, null, 2));
 
   useEffect(() => {
+    console.log('MediaEmbedElementURL: ', { url, element })
     const getData = async () => {
       const d = await getEmbedData(url)
       if (d) {
@@ -31,7 +32,7 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
       }
     }
 
-    getData()
+    if (url.startsWith('http://') || url.startsWith('https://')) getData()
   }, [url])
 
   return (
