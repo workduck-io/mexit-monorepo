@@ -2,7 +2,7 @@ import { getBlockAbove, getPluginType, insertNodes, PEditor, PlateEditor, TEleme
 import { Editor, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
 
-import { getSlug, NODE_ID_PREFIX } from '@mexit/core'
+import { getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -38,7 +38,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
       const targetRange = useComboboxStore.getState().targetRange
       // mog('Target Range', { targetRange })
 
-      // mog('ELEMENT', { elementType, comboType })
+      mog('ELEMENT', { elementType, comboType })
 
       const type =
         elementType ??
@@ -83,7 +83,6 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             blockValue,
             blockId: activeBlock?.blockId
           }
-
           insertNodes(editor, withBlockInfo)
         } else if (item.type === QuickLinkType.mentions) {
           const withMentionUserId = {
@@ -91,6 +90,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             children: [{ text: '' }],
             value: item.key
           }
+          if (comboType.onItemInsert) comboType.onItemInsert(item.text)
           insertNodes(editor, withMentionUserId)
         } else {
           if (item.type === QuickLinkType.snippet) {

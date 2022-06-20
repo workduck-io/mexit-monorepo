@@ -1,9 +1,15 @@
-import { AccessLevel, Mentionable, InvitedUser } from '../Types/Mentions'
-import { useMentionStore } from './../Stores/useMentionsStore'
+import { mog } from '@mexit/core'
+
+import { AccessLevel, Mentionable, InvitedUser, DefaultPermission } from '../Types/Mentions'
+import { addAccessToUser, useMentionStore } from './../Stores/useMentionsStore'
+import { usePermission } from './API/usePermission'
 
 export const useMentions = () => {
+  const { grantUsersPermission } = usePermission()
   const addInvitedUser = useMentionStore((s) => s.addInvitedUser)
   const addAccess = useMentionStore((s) => s.addAccess)
+  const setInvited = useMentionStore((s) => s.setInvited)
+  const setMentionable = useMentionStore((s) => s.setMentionable)
 
   // Add access level that is returned from the backend after permissions have been given
   const inviteUser = (email: string, alias: string, nodeid: string, accessLevel: AccessLevel) => {
@@ -15,6 +21,62 @@ export const useMentions = () => {
       addAccess(user.email, nodeid, accessLevel)
     } else {
       addInvitedUser({ type: 'invite', email, alias, access: { [nodeid]: accessLevel } })
+    }
+  }
+
+  const grantUserAccessOnMention = async (alias: string, nodeid: string, access: AccessLevel = DefaultPermission) => {
+    mog('GrantUserAccessOnMention', { alias, nodeid, access })
+
+    const invitedUsers = useMentionStore.getState().invitedUsers
+    const mentionable = useMentionStore.getState().mentionable
+    const invitedExists = invitedUsers.find((user) => user.alias === alias)
+    const mentionExists = mentionable.find((user) => user.alias === alias)
+    if (invitedExists && !mentionExists) {
+      const newInvited: InvitedUser = addAccessToUser(invitedExists, nodeid, access)
+      // As user not on mex no need to call backend and give permission
+      setInvited([...invitedUsers.filter((user) => user.alias !== alias), newInvited])
+      return newInvited
+    } else if (!invitedExists && mentionExists) {
+      // We know it is guaranteed to be mentionable
+      // Call backend and give permission
+      const res = await grantUsersPermission(nodeid, [mentionExists.userid], access)
+        .then(() => {
+          const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, access) as Mentionable
+          setMentionable([...mentionable.filter((user) => user.email !== alias), newMentioned])
+          return newMentioned
+        })
+        .catch((e) => {
+          console.log('Granting permission to user failed', { e })
+          return undefined
+        })
+      return res
+    } else {
+      // By design, the user should be in either invited or mentionable. The flow for new created user is different.
+      console.log('SHOULD NOT RUN', {})
+      return 'notFound'
+      //
+    }
+  }
+
+  const addMentionable = (alias: string, email: string, userid: string, nodeid: string, access: AccessLevel) => {
+    const mentionable = useMentionStore.getState().mentionable
+
+    const mentionExists = mentionable.find((user) => user.userid === userid)
+
+    if (mentionExists) {
+      mentionExists.access[nodeid] = access
+      setMentionable([...mentionable.filter((u) => u.userid !== userid), mentionExists])
+    } else {
+      const newMention: Mentionable = {
+        type: 'mentionable',
+        alias,
+        email,
+        access: {
+          [nodeid]: access
+        },
+        userid
+      }
+      setMentionable([...mentionable, newMention])
     }
   }
 
@@ -40,6 +102,12 @@ export const useMentions = () => {
     return users
   }
 
+  const getInvitedUsersForNode = (nodeid: string): InvitedUser[] => {
+    const invitedUsers = useMentionStore.getState().invitedUsers
+    const users = invitedUsers.filter((mention) => mention.access[nodeid] !== undefined)
+    return users
+  }
+
   const getUserFromUserid = (userid: string): Mentionable | InvitedUser | undefined => {
     const mentionable = useMentionStore.getState().mentionable
     const user = mentionable.find((mention) => mention.userid === userid)
@@ -56,7 +124,16 @@ export const useMentions = () => {
     return undefined
   }
 
-  return { getUsernameFromUserid, getUserFromUserid, inviteUser, getUserAccessLevelForNode, getSharedUsersForNode }
+  return {
+    getUsernameFromUserid,
+    getUserFromUserid,
+    inviteUser,
+    addMentionable,
+    getUserAccessLevelForNode,
+    getSharedUsersForNode,
+    getInvitedUsersForNode,
+    grantUserAccessOnMention
+  }
 }
 
 export const getAccessValue = (access: AccessLevel): { value: AccessLevel; label: string } => {

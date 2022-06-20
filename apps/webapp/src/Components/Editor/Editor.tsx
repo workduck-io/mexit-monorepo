@@ -31,7 +31,8 @@ import components from '../../Editor/Components/EditorPreviewComponents'
 import { useNewNodes } from '../../Hooks/useNewNodes'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useShareModalStore } from '../Mentions/ShareModal'
+import { useMentions } from '../../Hooks/useMentions'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -63,6 +64,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const mentionable = useMentionStore((state) => state.mentionable)
   const invitedUsers = useMentionStore((state) => state.invitedUsers)
   const prefillShareModal = useShareModalStore((state) => state.prefillModal)
+  const { grantUserAccessOnMention } = useMentions()
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -140,6 +142,10 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       },
       mention: {
         slateElementType: ELEMENT_MENTION,
+        onItemInsert: (alias) => {
+          mog('Inserted new item', { alias })
+          grantUserAccessOnMention(alias, nodeid)
+        },
         newItemHandler: (newAlias) => {
           // addTag(newItem)
           mog('ELEMENT_MENTIONS', { newAlias })

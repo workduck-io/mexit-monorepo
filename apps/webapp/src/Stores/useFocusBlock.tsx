@@ -75,7 +75,6 @@ export const useFocusBlock = () => {
         const headingNode = findNode(editor, {
           at: [],
           match: (n) => {
-            // console.log('n', n)
             return n.id === blockid
           },
           mode: 'all'

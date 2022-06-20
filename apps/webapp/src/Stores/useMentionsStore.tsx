@@ -11,6 +11,7 @@ interface MentionStore {
   addInvitedUser: (invitedUser: InvitedUser) => void
   addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => void
   initMentionData: (mentionable: Mentionable[], invitedUser: InvitedUser[]) => void
+  setInvited: (invitedUsers: InvitedUser[]) => void
   setMentionable: (mentionable: Mentionable[]) => void
 }
 
@@ -35,6 +36,7 @@ export const useMentionStore = create<MentionStore>(
           set({
             invitedUsers: [...get().invitedUsers.filter((user) => user.email !== email), newInvited]
           })
+          return 'invite'
         } else if (!invitedExists && mentionExists) {
           // We know it is guaranteed to be mentionable
           const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, accessLevel) as Mentionable
@@ -42,10 +44,14 @@ export const useMentionStore = create<MentionStore>(
             mentionable: [...get().mentionable.filter((user) => user.email !== email), newMentioned]
           })
         } else {
-          return
+          return 'absent'
         }
       },
       initMentionData: (mentionable, invitedUsers) => set({ mentionable, invitedUsers }),
+      setInvited: (invitedUsers) =>
+        set({
+          invitedUsers
+        }),
       setMentionable: (mentionable) =>
         set({
           mentionable

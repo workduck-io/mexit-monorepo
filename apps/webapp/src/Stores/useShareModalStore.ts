@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { Mentionable } from '../Types/Mentions'
+import { InvitedUser, Mentionable } from '../Types/Mentions'
 
 type ShareModalMode = 'invite' | 'permission'
 
@@ -8,6 +8,10 @@ type ShareModalMode = 'invite' | 'permission'
 type UserChange = 'permission' | 'alias' | 'revoke'
 
 interface ChangedUser extends Mentionable {
+  change: UserChange[]
+}
+
+interface ChangedInvitedUser extends InvitedUser {
   change: UserChange[]
 }
 
@@ -25,11 +29,13 @@ interface ShareModalState {
     alias?: string
     fromEditor?: boolean
     changedUsers?: ChangedUser[]
+    changedInvitedUsers?: ChangedInvitedUser[]
   }
   openModal: (mode: ShareModalMode) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
+  setChangedInvitedUsers: (users: ChangedInvitedUser[]) => void
   prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) => void
 }
 
@@ -38,7 +44,8 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
   focus: true,
   mode: 'permission',
   data: {
-    changedUsers: []
+    changedUsers: [],
+    changedInvitedUsers: []
   },
   openModal: (mode: ShareModalMode) =>
     set({
@@ -48,11 +55,17 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
   closeModal: () => {
     set({
       open: false,
-      focus: false
+      focus: false,
+      data: {
+        changedUsers: [],
+        changedInvitedUsers: []
+      }
     })
   },
   setFocus: (focus: boolean) => set({ focus }),
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
+  setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
+    set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
   prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) =>
     set({
       mode,

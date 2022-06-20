@@ -48,5 +48,11 @@ export const usePermission = () => {
         return resp
       })
   }
-  return { grantUsersPermission, changeUserPermission, revokeUserAccess }
+  const getAllSharedNodes = async () => {
+    return await client.get(apiURLs.allSharedNodes).then((resp) => {
+      mog('changeUsers resp', { resp })
+      return resp
+    })
+  }
+  return { grantUsersPermission, changeUserPermission, revokeUserAccess, getAllSharedNodes }
 }
