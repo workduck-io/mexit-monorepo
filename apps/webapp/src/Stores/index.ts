@@ -14,6 +14,7 @@ import { useDataStore } from './useDataStore'
 import { useEditorStore } from './useEditorStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
+import usePortalStore from './usePortalStore'
 
 if (IS_DEV) {
   console.log('Zustand Devtools Initialize')
@@ -28,6 +29,7 @@ if (IS_DEV) {
   mountStoreDevtool('useRefactorStore', useRefactorStore)
   mountStoreDevtool('useHistoryStore', useHistoryStore)
   mountStoreDevtool('useSnippetStore', useSnippetStore)
+  mountStoreDevtool('usePortalStore', usePortalStore)
 }
 
 // This is required for event driven messaging, as the tabs or in our

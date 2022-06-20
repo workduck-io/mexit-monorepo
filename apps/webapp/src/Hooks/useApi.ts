@@ -224,10 +224,9 @@ export const useApi = () => {
       })
       .then((resp) => resp.data)
       .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          const publicURL = apiURLs.getNodePublicURL(nodeUID)
-          setNodePublic(nodeUID, publicURL)
+        if (data === nodeId) {
+          const publicURL = apiURLs.getNodePublicURL(data)
+          setNodePublic(data, publicURL)
           return publicURL
         } else throw new Error('Error making node public')
       })
@@ -248,10 +247,9 @@ export const useApi = () => {
       })
       .then((resp) => resp.data)
       .then((data: any) => {
-        const nodeUID = data.nodeUID
-        if (nodeUID === nodeId) {
-          setNodePrivate(nodeUID)
-          return nodeUID
+        if (data === nodeId) {
+          setNodePrivate(data)
+          return data
         } else throw new Error('Error making node private')
       })
       .catch((error) => {
@@ -282,7 +280,6 @@ export const useApi = () => {
           version: d.data.version ?? undefined
         }
       })
-      .catch(console.error)
 
     if (res) {
       return {

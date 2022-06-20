@@ -224,6 +224,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
+        <Route path="404" element={<h1>Not found, go away</h1>} />
       </Routes>
     </SwitchWrapper>
   )

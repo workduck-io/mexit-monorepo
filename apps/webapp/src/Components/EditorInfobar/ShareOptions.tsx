@@ -41,8 +41,8 @@ const ShareOptions = () => {
   const publicUrl = isPublic(node.nodeid)
 
   const flipPublicAccess = async () => {
-    // Go from public -> private
     setIsLoading(true)
+    // Go from public -> private
     if (publicUrl) {
       try {
         const resp = await makeNodePrivate(node.nodeid)

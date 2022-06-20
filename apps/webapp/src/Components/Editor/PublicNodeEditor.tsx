@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { defaultContent, mog } from '@mexit/core'
 
 import Editor from './Editor'
 import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
-import { StyledEditor, EditorWrapper } from '@mexit/shared'
+import { StyledEditor, EditorWrapper, Title } from '@mexit/shared'
 import PublicNodeMetadata from '../EditorInfobar/PublicNodeMetadata'
 import { useApi } from '../../Hooks/useApi'
 import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
 
-const PublicNodeEditor = ({ nodeId }) => {
-  const getPublicNode = usePublicNodeStore((store) => store.getPublicNode)
-  const { getPublicNodeAPI } = useApi()
-  const navigate = useNavigate()
-
-  const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
-
-  useEffect(() => {
-    async function getPublicNodeContent() {
-      try {
-        const node = await getPublicNodeAPI(nodeId)
-        setNode({ ...node, id: nodeId })
-      } catch (error) {
-        console.log('Error occured in get public: ', error)
-        navigate('/404')
-      }
-    }
-    getPublicNodeContent()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+const PublicNodeEditor = ({ nodeId, node }) => {
   const editorRef = usePlateEditorRef()
 
   const onFocusClick = () => {
@@ -41,6 +22,9 @@ const PublicNodeEditor = ({ nodeId }) => {
 
   return (
     <StyledEditor showGraph={false} className="mex_editor">
+      <Title>
+        <Link to={'/'}>Mexit</Link>
+      </Title>
       {node?.metadata && <PublicNodeMetadata metadata={node.metadata} />}
 
       <EditorWrapper onClick={onFocusClick}>
@@ -52,7 +36,6 @@ const PublicNodeEditor = ({ nodeId }) => {
           onChange={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
         />
       </EditorWrapper>
-      <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
     </StyledEditor>
   )
 }

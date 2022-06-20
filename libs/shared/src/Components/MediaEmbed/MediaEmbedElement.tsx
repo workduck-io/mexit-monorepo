@@ -31,7 +31,7 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
       }
     }
 
-    getData()
+    if (url.startsWith('http://') || url.startsWith('https://')) getData()
   }, [url])
 
   return (

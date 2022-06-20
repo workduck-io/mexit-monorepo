@@ -78,11 +78,11 @@ const Portals = () => {
 
       if (isUpdate) {
         await updateParentNote(params.actionGroupId, connectedPortalInfo.serviceId, parentNote.nodeid)
+        toast(`Updated Successfully! All new notes will be added under "${parentNote.text}"`)
       } else {
         await connectToPortal(params.actionGroupId, serviceId, parentNote?.nodeid)
+        toast(`Updated Successfully! All new notes will be added under "${parentNoteName}"`)
       }
-
-      toast(`Updated Successfully! All new notes will be added under "${parentNoteName}"`)
     } catch (err) {
       mog('Error connecting to portal', { err })
     } finally {
