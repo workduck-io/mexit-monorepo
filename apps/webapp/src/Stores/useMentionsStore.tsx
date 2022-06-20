@@ -1,6 +1,8 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
-import { mentionables } from '../Data/defaultMentions'
+import { IDBStorage } from '@mexit/core'
+
 import { InvitedUser, Mentionable, AccessLevel } from '../Types/Mentions'
 
 interface MentionStore {
@@ -8,43 +10,50 @@ interface MentionStore {
   mentionable: Mentionable[]
   addInvitedUser: (invitedUser: InvitedUser) => void
   addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => void
+  initMentionData: (mentionable: Mentionable[], invitedUser: InvitedUser[]) => void
   setMentionable: (mentionable: Mentionable[]) => void
 }
 
-export const useMentionStore = create<MentionStore>((set, get) => ({
-  invitedUsers: [],
-  mentionable: mentionables,
-  addInvitedUser: (invitedUser: InvitedUser) => {
-    const exists = get().invitedUsers.find((user) => user.email === invitedUser.email)
-    if (!exists) {
-      set({
-        invitedUsers: [...get().invitedUsers, invitedUser]
-      })
-    }
-  },
-  addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => {
-    const invitedExists = get().invitedUsers.find((user) => user.email === email)
-    const mentionExists = get().mentionable.find((user) => user.email === email)
-    if (invitedExists && !mentionExists) {
-      const newInvited: InvitedUser = addAccessToUser(invitedExists, nodeid, accessLevel)
-      set({
-        invitedUsers: [...get().invitedUsers.filter((user) => user.email !== email), newInvited]
-      })
-    } else if (!invitedExists && mentionExists) {
-      // We know it is guaranteed to be mentionable
-      const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, accessLevel) as Mentionable
-      set({
-        mentionable: [...get().mentionable.filter((user) => user.email !== email), newMentioned]
-      })
-    } else {
-      return
-    }
-  },
-  setMentionable: (mentionable) =>
-    set({
-      mentionable
-    })
-}))
+export const useMentionStore = create<MentionStore>(
+  persist(
+    (set, get) => ({
+      invitedUsers: [],
+      mentionable: [],
+      addInvitedUser: (invitedUser: InvitedUser) => {
+        const exists = get().invitedUsers.find((user) => user.email === invitedUser.email)
+        if (!exists) {
+          set({
+            invitedUsers: [...get().invitedUsers, invitedUser]
+          })
+        }
+      },
+      addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => {
+        const invitedExists = get().invitedUsers.find((user) => user.email === email)
+        const mentionExists = get().mentionable.find((user) => user.email === email)
+        if (invitedExists && !mentionExists) {
+          const newInvited: InvitedUser = addAccessToUser(invitedExists, nodeid, accessLevel)
+          set({
+            invitedUsers: [...get().invitedUsers.filter((user) => user.email !== email), newInvited]
+          })
+        } else if (!invitedExists && mentionExists) {
+          // We know it is guaranteed to be mentionable
+          const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, accessLevel) as Mentionable
+          set({
+            mentionable: [...get().mentionable.filter((user) => user.email !== email), newMentioned]
+          })
+        } else {
+          return
+        }
+      },
+      initMentionData: (mentionable, invitedUsers) => set({ mentionable, invitedUsers }),
+      setMentionable: (mentionable) =>
+        set({
+          mentionable
+        })
+    }),
+    { name: 'mexit-mentions-store', getStorage: () => IDBStorage }
+  )
+)
 
 export const addAccessToUser = (user: any, nodeid: string, accessLevel: AccessLevel) => {
   const access = user.access || {}

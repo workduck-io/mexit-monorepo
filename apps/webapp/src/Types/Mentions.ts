@@ -30,3 +30,8 @@ export interface Mentionable extends IUser {
   type: 'mentionable'
   userid: string
 }
+
+export interface MentionData {
+  mentionable: Mentionable[]
+  invitedUsers: InvitedUser[]
+}

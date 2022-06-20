@@ -36,7 +36,14 @@ export const SharedPermissionsTable = styled.table`
   }
 `
 
-export const ShareRow = styled.tr<{ hasChanged?: boolean }>``
+export const ShareRow = styled.tr<{ hasChanged?: boolean; isRevoked?: boolean }>`
+  ${({ isRevoked }) =>
+    isRevoked &&
+    css`
+      opacity: 0.5;
+      text-decoration: line-through;
+    `}
+`
 
 export const ShareRowHeading = styled.thead`
   tr {
