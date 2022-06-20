@@ -20,7 +20,7 @@ import { useKeyListener } from '../Hooks/useShortcutListener'
 import useBlockStore from '../Stores/useBlockStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 
-const EditorViewWrapper = styled.div`
+export const EditorViewWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

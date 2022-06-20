@@ -22,7 +22,6 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
   // console.log('styles', JSON.stringify({ styles }, null, 2));
 
   useEffect(() => {
-    console.log('MediaEmbedElementURL: ', { url, element })
     const getData = async () => {
       const d = await getEmbedData(url)
       if (d) {
