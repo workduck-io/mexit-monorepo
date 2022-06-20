@@ -2,9 +2,11 @@ import { client } from '@workduck-io/dwindle'
 
 import { mog, apiURLs } from '@mexit/core'
 
+import { useAuthStore } from '../../Stores/useAuth'
 import { AccessLevel } from '../../Types/Mentions'
 
 export const usePermission = () => {
+  const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     mog('changeThat permission')
     const payload = {
@@ -13,10 +15,16 @@ export const usePermission = () => {
       userIDs: userids,
       accessType: access
     }
-    return await client.post(apiURLs.sharedNode, payload).then((resp) => {
-      mog('grantPermission resp', { resp })
-      return resp
-    })
+    return await client
+      .post(apiURLs.sharedNode, payload, {
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
+      })
+      .then((resp) => {
+        mog('grantPermission resp', { resp })
+        return resp
+      })
   }
 
   const changeUserPermission = async (nodeid: string, userIDToAccessTypeMap: { [userid: string]: AccessLevel }) => {
@@ -26,14 +34,19 @@ export const usePermission = () => {
       nodeID: nodeid,
       userIDToAccessTypeMap
     }
-    return await client.put(apiURLs.sharedNode, payload).then((resp) => {
-      mog('changeUsers resp', { resp })
-      return resp
-    })
+    return await client
+      .put(apiURLs.sharedNode, payload, {
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
+      })
+      .then((resp) => {
+        mog('changeUsers resp', { resp })
+        return resp
+      })
   }
 
   const revokeUserAccess = async (nodeid: string, userids: string[]) => {
-    mog('changeThat permission')
     const payload = {
       type: 'SharedNodeRequest',
       nodeID: nodeid,
@@ -41,18 +54,28 @@ export const usePermission = () => {
     }
     return await client
       .delete(apiURLs.sharedNode, {
-        data: payload
+        data: payload,
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
       })
       .then((resp) => {
-        mog('changeUsers resp', { resp })
+        mog('revoke That permission resp', { resp })
         return resp
       })
   }
+
   const getAllSharedNodes = async () => {
-    return await client.get(apiURLs.allSharedNodes).then((resp) => {
-      mog('changeUsers resp', { resp })
-      return resp
-    })
+    return await client
+      .get(apiURLs.allSharedNodes, {
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
+      })
+      .then((resp) => {
+        mog('getAllSharedNodes resp', { resp })
+        return resp.data
+      })
   }
   return { grantUsersPermission, changeUserPermission, revokeUserAccess, getAllSharedNodes }
 }

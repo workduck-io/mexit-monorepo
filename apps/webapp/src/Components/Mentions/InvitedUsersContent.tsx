@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import repeatLine from '@iconify/icons-ri/repeat-line'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
-import { mog } from '@mexit/core'
+import { mog, AccessLevel, InvitedUser, DefaultPermissionValue, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect, IconButton, Button } from '@mexit/shared'
 
 import { useShareModalStore } from '../../Stores/useShareModalStore'
@@ -10,7 +10,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
-import { AccessLevel, InvitedUser, DefaultPermissionValue, permissionOptions } from '../../Types/Mentions'
 import {
   SharedPermissionsWrapper,
   SharedPermissionsTable,

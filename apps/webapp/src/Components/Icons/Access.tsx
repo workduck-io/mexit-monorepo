@@ -4,7 +4,7 @@ import adminLine from '@iconify/icons-ri/admin-line'
 import eyeLine from '@iconify/icons-ri/eye-line'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 
-import { AccessLevel } from '../../Types/Mentions'
+import { AccessLevel } from '@mexit/core'
 
 interface AccessIconProps {
   access: AccessLevel
@@ -17,5 +17,6 @@ const accessIcons = {
 }
 
 export const AccessIcon = ({ access }: AccessIconProps) => {
-  return accessIcons[access]
+  if (accessIcons[access]) return accessIcons[access]
+  return null
 }

@@ -8,7 +8,8 @@ import {
   LinkCache,
   SlashCommands,
   Tag,
-  TagsCache
+  TagsCache,
+  SharedNode
 } from './Editor'
 
 export interface DataStoreState {
@@ -20,6 +21,7 @@ export interface DataStoreState {
   bookmarks: string[]
   archive: ILink[]
   publicNodes: Record<string, string>
+  sharedNodes: SharedNode[]
   slashCommands: SlashCommands
 
   initializeDataStore: (initData: InitDataStoreType) => void
@@ -65,5 +67,9 @@ export interface DataStoreState {
   setNodePrivate: (nodeId: string) => void
   checkNodePublic: (nodeId: string) => string | undefined
 
-  checkValidILink: (props: CheckValidILinkProps) => string
+  checkValidILink: (props: CheckValidILinkProps) => void
+
+  // Shared Nodes
+  setSharedNodes: (sharedNodes: SharedNode[]) => void
+  getSharedNodes: () => SharedNode[]
 }

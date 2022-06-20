@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { InvitedUser, Mentionable } from '../Types/Mentions'
+import { InvitedUser, Mentionable } from '@mexit/core'
 
 type ShareModalMode = 'invite' | 'permission'
 

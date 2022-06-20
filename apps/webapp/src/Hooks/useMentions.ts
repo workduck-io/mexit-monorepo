@@ -1,7 +1,7 @@
 import { mog } from '@mexit/core'
 
-import { AccessLevel, Mentionable, InvitedUser, DefaultPermission } from '../Types/Mentions'
-import { addAccessToUser, useMentionStore } from './../Stores/useMentionsStore'
+import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
+import { AccessLevel, DefaultPermission, InvitedUser, Mentionable } from '../Types/Mentions'
 import { usePermission } from './API/usePermission'
 
 export const useMentions = () => {
@@ -24,13 +24,19 @@ export const useMentions = () => {
     }
   }
 
+  // Used when inserting existing mention/invited to the editor
   const grantUserAccessOnMention = async (alias: string, nodeid: string, access: AccessLevel = DefaultPermission) => {
-    mog('GrantUserAccessOnMention', { alias, nodeid, access })
-
     const invitedUsers = useMentionStore.getState().invitedUsers
     const mentionable = useMentionStore.getState().mentionable
     const invitedExists = invitedUsers.find((user) => user.alias === alias)
     const mentionExists = mentionable.find((user) => user.alias === alias)
+
+    const mentionPerm = mentionExists && mentionExists.access[nodeid]
+    const invitedPerm = invitedExists && invitedExists.access[nodeid]
+    mog('GrantUserAccessOnMention', { alias, nodeid, access, mentionPerm, invitedPerm })
+    // If the user has permission to node, no need to add it
+    if (mentionPerm) return
+    if (invitedPerm) return
     if (invitedExists && !mentionExists) {
       const newInvited: InvitedUser = addAccessToUser(invitedExists, nodeid, access)
       // As user not on mex no need to call backend and give permission
@@ -42,7 +48,7 @@ export const useMentions = () => {
       const res = await grantUsersPermission(nodeid, [mentionExists.userid], access)
         .then(() => {
           const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, access) as Mentionable
-          setMentionable([...mentionable.filter((user) => user.email !== alias), newMentioned])
+          setMentionable([...mentionable.filter((user) => user.alias !== alias), newMentioned])
           return newMentioned
         })
         .catch((e) => {
@@ -124,6 +130,44 @@ export const useMentions = () => {
     return undefined
   }
 
+  const applyChangesMentionable = (
+    newPermissions: { [userid: string]: AccessLevel },
+    newAliases: { [userid: string]: string },
+    revoked: string[],
+    nodeid: string
+  ) => {
+    mog('applyChanges', { newPermissions, newAliases, revoked })
+
+    const oldMentionable = useMentionStore.getState().mentionable
+
+    const afterRevoked = oldMentionable.map((u) => {
+      if (revoked.includes(u.userid)) {
+        delete u.access[nodeid]
+        return u
+      }
+      return u
+    })
+    const afterAliasChange = afterRevoked.map((u) => {
+      if (Object.keys(newAliases).includes(u.userid)) return { ...u, alias: newAliases[u.userid] }
+      return u
+    })
+    const afterAccessChange = afterAliasChange.map((u) => {
+      if (Object.keys(newPermissions).includes(u.userid))
+        return {
+          ...u,
+          access: {
+            ...u.access,
+            [nodeid]: newPermissions[u.userid]
+          }
+        }
+      return u
+    })
+
+    mog('AfterApplying the changes', { oldMentionable, afterRevoked, afterAliasChange, afterAccessChange })
+
+    setMentionable(afterAccessChange)
+  }
+
   return {
     getUsernameFromUserid,
     getUserFromUserid,
@@ -132,7 +176,8 @@ export const useMentions = () => {
     getUserAccessLevelForNode,
     getSharedUsersForNode,
     getInvitedUsersForNode,
-    grantUserAccessOnMention
+    grantUserAccessOnMention,
+    applyChangesMentionable
   }
 }
 

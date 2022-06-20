@@ -1,9 +1,7 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { IDBStorage } from '@mexit/core'
-
-import { InvitedUser, Mentionable, AccessLevel } from '../Types/Mentions'
+import { IDBStorage, InvitedUser, Mentionable, AccessLevel } from '@mexit/core'
 
 interface MentionStore {
   invitedUsers: InvitedUser[]

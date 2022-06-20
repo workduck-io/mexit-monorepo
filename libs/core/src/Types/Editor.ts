@@ -1,4 +1,5 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
+import { AccessLevel } from './Mentions'
 
 export interface Content {
   id: string
@@ -92,6 +93,10 @@ export interface ILink {
 
   /** Iconify Icon string */
   icon?: string
+}
+
+export interface SharedNode extends ILink {
+  access: AccessLevel
 }
 
 /**  Tags */

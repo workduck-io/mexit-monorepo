@@ -4,6 +4,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import tinykeys from 'tinykeys'
 import styled from 'styled-components'
 
+import { SharedNode } from '@mexit/core'
+
 import InfoBar from '../Components/Infobar'
 import useEditorActions from '../Hooks/useEditorActions'
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
@@ -20,6 +22,7 @@ import { useKeyListener } from '../Hooks/useShortcutListener'
 import useBlockStore from '../Stores/useBlockStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
+import { usePermission } from '../Hooks/API/usePermission'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -31,12 +34,29 @@ export const EditorViewWrapper = styled.div`
 
 const EditorView = () => {
   const { resetEditor } = useEditorActions()
-  const { ilinks, archive } = useDataStore()
+  const ilinks = useDataStore((s) => s.ilinks)
+  const archive = useDataStore((s) => s.archive)
+  const setSharedNodes = useDataStore((s) => s.setSharedNodes)
   const contents = useContentStore((state) => state.contents)
   const snippets = useSnippetStore((state) => state.snippets)
   const [first, setFirst] = useState(true)
+  const { getAllSharedNodes } = usePermission()
 
   useAnalysis()
+
+  useEffect(() => {
+    getAllSharedNodes().then((sharedNodesRaw: any) => {
+      const sharedNodes = sharedNodesRaw.map(
+        (n): SharedNode => ({
+          path: n.nodeTitle,
+          nodeid: n.nodeID,
+          access: n.accessType
+        })
+      )
+      console.log({ sharedNodes })
+      setSharedNodes(sharedNodes)
+    })
+  }, [userCred])
 
   useEffect(() => {
     if (!first) {

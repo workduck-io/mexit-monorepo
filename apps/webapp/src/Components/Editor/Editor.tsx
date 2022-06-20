@@ -69,8 +69,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
 
-    return ilinks.filter((item) => item.nodeid !== nodeUID)
-  }, [nodeUID, ilinks])
+    return ilinks.filter((item) => item.nodeid !== nodeid)
+  }, [nodeid, ilinks])
 
   const slashInternals = useMemo(() => {
     const snippetName = (location?.state as any)?.title
@@ -93,21 +93,23 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
   ]
-
-  const mentions = [
-    ...mentionable.map((m) => ({
-      value: m.userid,
-      text: m.alias,
-      icon: 'ri:user-line',
-      type: QuickLinkType.mentions
-    })),
-    ...invitedUsers.map((m) => ({
-      value: m.alias,
-      text: m.alias,
-      icon: 'ri:user-line',
-      type: QuickLinkType.mentions
-    }))
-  ]
+  const mentions = useMemo(
+    () => [
+      ...mentionable.map((m) => ({
+        value: m.userid,
+        text: m.alias,
+        icon: 'ri:user-line',
+        type: QuickLinkType.mentions
+      })),
+      ...invitedUsers.map((m) => ({
+        value: m.alias,
+        text: m.alias,
+        icon: 'ri:user-line',
+        type: QuickLinkType.mentions
+      }))
+    ],
+    [mentionable, invitedUsers]
+  )
 
   const comboOnKeyDownConfig: ComboConfigData = {
     keys: {
