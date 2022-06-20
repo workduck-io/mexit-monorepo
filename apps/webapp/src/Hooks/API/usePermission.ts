@@ -1,9 +1,8 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs } from '@mexit/core'
+import { mog, apiURLs, AccessLevel } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
-import { AccessLevel } from '../../Types/Mentions'
 
 export const usePermission = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)

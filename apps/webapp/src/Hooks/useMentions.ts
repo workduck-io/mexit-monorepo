@@ -1,7 +1,6 @@
-import { mog } from '@mexit/core'
+import { mog, AccessLevel, DefaultPermission, InvitedUser, Mentionable } from '@mexit/core'
 
 import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
-import { AccessLevel, DefaultPermission, InvitedUser, Mentionable } from '../Types/Mentions'
 import { usePermission } from './API/usePermission'
 
 export const useMentions = () => {

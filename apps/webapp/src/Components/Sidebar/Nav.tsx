@@ -1,6 +1,7 @@
 import archiveFill from '@iconify/icons-ri/archive-fill'
 import gitBranchLine from '@iconify/icons-ri/git-branch-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
+import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 import React, { useEffect } from 'react'
@@ -9,7 +10,7 @@ import { TooltipTitleWithShortcut } from '../Shortcuts'
 import { useSidebarTransition } from './Transition'
 import Tree from './Tree'
 import { NavTooltip } from '@mexit/shared'
-import { TreeHelp } from '../../Data/defaultText'
+import { BookmarksHelp, TreeHelp } from '../../Data/defaultText'
 import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
@@ -36,6 +37,8 @@ import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useLinks } from '../../Hooks/useLinks'
+// import Bookmarks from './Bookmarks'
+import SharedNotes from './SharedNodes'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -97,6 +100,8 @@ const Nav = ({ links }: NavProps) => {
 
   return (
     <>
+      {/* eslint-disable-next-line */}
+      {/* @ts-ignore */}
       <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
         <NavTooltip singleton={source} />
 
@@ -141,17 +146,28 @@ const Nav = ({ links }: NavProps) => {
         </MainLinkContainer>
 
         {/* <Collapse
-        title="Bookmarks"
-        oid="bookmarks"
-        icon={bookmark3Line}
-        maximumHeight="30vh"
-        infoProps={{
-          text: BookmarksHelp
-        }}
-      >
-        <Bookmarks />
-      </Collapse>
- */}
+          title="Bookmarks"
+          oid="bookmarks"
+          icon={bookmark3Line}
+          maximumHeight="30vh"
+          infoProps={{
+            text: BookmarksHelp
+          }}
+        >
+          <Bookmarks />
+        </Collapse> */}
+
+        <Collapse
+          title="SharedNotes"
+          oid="sharednotes"
+          icon={bookmark3Line}
+          maximumHeight="30vh"
+          infoProps={{
+            text: BookmarksHelp
+          }}
+        >
+          <SharedNotes />
+        </Collapse>
         <Collapse
           title="All Notes"
           oid={`tree`}

@@ -4,7 +4,7 @@ import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
 import { MentionElementProps, useEditorRef } from '@udecode/plate'
 
-import { mog } from '@mexit/core'
+import { mog, Mentionable, InvitedUser, AccessLevel } from '@mexit/core'
 
 import AccessTag from '../../../Components/Mentions/AccessTag'
 import { ProfileImage } from '../../../Components/User/ProfileImage'
@@ -12,7 +12,6 @@ import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useMentions } from '../../../Hooks/useMentions'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
 import { useEditorStore } from '../../../Stores/useEditorStore'
-import { Mentionable, InvitedUser, AccessLevel } from '../../../Types/Mentions'
 import { MentionTooltip, TooltipMail, SMentionRoot, SMention, Username } from '../../Styles/Mentions'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'

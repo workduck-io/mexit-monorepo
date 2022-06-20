@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 
-import { mog } from '@mexit/core'
+import { mog, AccessLevel, DefaultPermissionValue, permissionOptions, DefaultPermission } from '@mexit/core'
 import { Label, StyledCreatatbleSelect, ButtonFields, IconButton, Title, Button } from '@mexit/shared'
 
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
@@ -9,7 +9,6 @@ import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
-import { AccessLevel, DefaultPermissionValue, permissionOptions } from '../../Types/Mentions'
 import { MultiEmailValidate } from '../../Utils/constants'
 import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
@@ -31,9 +30,14 @@ import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { InvitedUsersContent } from './InvitedUsersContent'
+import { useMentionStore } from '../../Stores/useMentionsStore'
 
-const MultiEmailInviteModalContent = () => {
+export const MultiEmailInviteModalContent = () => {
+  const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
+  const addMentionable = useMentionStore((state) => state.addMentionable)
+  const closeModal = useShareModalStore((state) => state.closeModal)
   const { getUserDetails } = useUserService()
+  const { grantUsersPermission } = usePermission()
   const node = useEditorStore((state) => state.node)
   const {
     handleSubmit,
@@ -46,7 +50,8 @@ const MultiEmailInviteModalContent = () => {
     mog('data', data)
 
     if (node && node.nodeid) {
-      const allMails = data.email.split(',')
+      const allMails = data.email.split(',').map((e) => e.trim())
+      const access = (data?.access as AccessLevel) ?? DefaultPermission
 
       const userDetailPromises = allMails.map((email) => {
         return getUserDetails(email)
@@ -54,9 +59,53 @@ const MultiEmailInviteModalContent = () => {
 
       const userDetails = await Promise.allSettled(userDetailPromises)
 
-      mog('userDetails', { userDetails })
+      // mog('userDetails', { userDetails })
+
+      // Typescript has some weird thing going on with promises. Try to improve the type (if you can that is)
+      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId !== undefined) as any[]
+      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId === undefined) as any[]
+
+      const givePermToExisting = existing.reduce((p, c) => {
+        return [...p, c.value.userId]
+      }, [])
+
+      // const userDetails = allMails.map(async () => {})
+      // Only share with users with details, add the rest to invited users
+      // TODO: Uncomment this to give permission
+      const permGiven = await grantUsersPermission(node.nodeid, givePermToExisting, access)
+
+      mog('userDetails', { userDetails, permGiven, existing, absent, givePermToExisting })
+
+      // ifck
+
+      existing.forEach((u) => {
+        addMentionable({
+          type: 'mentionable',
+          alias: u?.value?.email.substring(0, u?.value?.email?.indexOf('@')),
+          email: u?.value?.email,
+          userid: u?.value?.userId,
+          access: {
+            [node?.nodeid]: access
+          }
+        })
+      })
+
+      absent.forEach((u) => {
+        addInvitedUser({
+          type: 'invite',
+          alias: u?.value?.email.substring(0, u?.value?.email?.indexOf('@')),
+          email: u?.value?.email,
+          access: {
+            [node?.nodeid]: access
+          }
+        })
+      })
+
+      closeModal()
     }
   }
+
+  // mog('MultiEmailInvite', { errors })
 
   return (
     <InviteWrapper>
@@ -65,10 +114,12 @@ const MultiEmailInviteModalContent = () => {
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InputFormError
           name="email"
-          label="Email"
+          label="Emails"
           inputProps={{
             autoFocus: true,
+            placeholder: 'alice@email.com, bob@email.com',
             type: 'email',
+            // Accepts multiple emails
             multiple: true,
             ...register('email', {
               required: true,
@@ -116,7 +167,7 @@ interface PermissionModalContentProps {
 
 export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
   const closeModal = useShareModalStore((s) => s.closeModal)
-  const { getSharedUsersForNode, getInvitedUsersForNode } = useMentions()
+  const { getSharedUsersForNode, getInvitedUsersForNode, applyChangesMentionable } = useMentions()
   const node = useEditorStore((state) => state.node)
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
@@ -240,12 +291,8 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
     const newAliases = withoutRevokeChanges
       .filter((u) => u.change.includes('alias'))
       .reduce((acc, user) => {
-        acc.push({
-          userid: user.userid,
-          alias: user.alias
-        })
-        return acc
-      }, [])
+        return { ...acc, [user.userid]: user.alias }
+      }, {})
 
     const revokedUsers = changedUsers
       .filter((u) => u.change.includes('revoke'))
@@ -254,13 +301,21 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
         return acc
       }, [])
 
+    mog('Updating after the table changes ', { newAliases, revokedUsers, newPermissions })
+
     const applyPermissions = async () => {
-      const userChangePerm = await changeUserPermission(node.nodeid, newPermissions)
-      const userRevoke = await revokeUserAccess(node.nodeid, revokedUsers)
-      mog('set new permissions', { userChangePerm, userRevoke })
+      if (Object.keys(newPermissions).length > 0) await changeUserPermission(node.nodeid, newPermissions)
+
+      if (revokedUsers.length > 0) await revokeUserAccess(node.nodeid, revokedUsers)
+      // mog('set new permissions', { userRevoke })
+      applyChangesMentionable(newPermissions, newAliases, revokedUsers, node.nodeid)
     }
 
     await applyPermissions()
+
+    // Update Aliases
+    // Update Permissions
+    // Delete Revoked
 
     closeModal()
 
@@ -272,6 +327,7 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
       <ModalHeader>Share Note</ModalHeader>
 
       <MultiEmailInviteModalContent />
+
       {sharedUsers.length > 0 && (
         <>
           <SharedPermissionsTable>

@@ -1,8 +1,10 @@
 import React from 'react'
+
+import { AccessLevel } from '@mexit/core'
+
 import { AccessNames } from '../../Data/defaultMentions'
-import { AccessLevel } from '../../Types/Mentions'
 import { AccessIcon } from '../Icons/Access'
-// import { SAccessTag } from '@editor/Components/mentions/components/MentionElement.styles'
+import { SAccessTag } from '../../Editor/Styles/Mentions'
 
 interface AccessTagProps {
   access: AccessLevel
