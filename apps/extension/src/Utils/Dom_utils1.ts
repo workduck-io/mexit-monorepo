@@ -1,6 +1,27 @@
 import Rect from "./Rect";
 
 var DomUtils = {
+    documentReady: (function() {
+        let isReady = document.readyState !== "loading";
+        let callbacks = [];
+        if (!isReady) {
+          let onDOMContentLoaded;
+          window.addEventListener("DOMContentLoaded", (onDOMContentLoaded = forTrusted(function() {
+            window.removeEventListener("DOMContentLoaded", onDOMContentLoaded, true);
+            isReady = true;
+            for (let callback of callbacks) { callback(); }
+            callbacks = null;
+          })), true);
+        }
+    
+        return function(callback) {
+          if (isReady) {
+            return callback();
+          } else {
+            callbacks.push(callback);
+          }
+        };
+      })(),
     getClientRectsForAreas(imgClientRect: { width: any; height: any; left: any; top: any; }, areas: HTMLCollectionOf<HTMLAreaElement>) {
         const rects = [];
         for (let i = 0; i < areas.length; i++) {
@@ -135,13 +156,6 @@ var DomUtils = {
         }
     },
 }
-
-// var Utils = {
-//     isFirefox: (function() {
-//         // We want this browser check to also cover Firefox variants, like LibreWolf. See #3773.
-//         const isFirefox = typeof InstallTrigger !== 'undefined';
-//         return () => isFirefox;
-//       })(),
-// }
+export const forTrusted = handler => handler;
 
 export default DomUtils;
