@@ -15,6 +15,7 @@ import { useEditorStore } from './useEditorStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import usePortalStore from './usePortalStore'
+import { useReminderStore } from './useReminderStore'
 
 if (IS_DEV) {
   console.log('Zustand Devtools Initialize')
@@ -44,6 +45,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('contents', useContentStore)
   // share('authenticated', useAuthStore)
   // share('snippets', useSnippetStore)
+  // share('reminders', useReminderStore)
 }
 
 export default {}

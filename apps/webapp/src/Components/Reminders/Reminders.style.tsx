@@ -1,7 +1,7 @@
 import { mix, transparentize } from 'polished'
 import styled, { createGlobalStyle, css } from 'styled-components'
-import { ReminderStatus, REMINDERS_DIMENSIONS } from '../../Hooks/useReminders'
 import { Title, Button } from '@mexit/shared'
+import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
 
 export const RemindersWrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.medium} 0;

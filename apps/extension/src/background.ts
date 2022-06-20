@@ -82,6 +82,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true
     }
 
+    case 'SHOW_REMINDER': {
+      console.log('reminderGroups', request.attachment)
+      const firstReminder = request.attachment[0]?.reminders[0]
+      chrome.notifications.create(firstReminder.id, {
+        message: firstReminder.description,
+        title: firstReminder.title,
+        type: 'basic',
+        iconUrl: './Assets/icon48x48.png',
+        priority: 2,
+        requireInteraction: true
+      })
+      return true
+    }
+
     default: {
       return true
     }

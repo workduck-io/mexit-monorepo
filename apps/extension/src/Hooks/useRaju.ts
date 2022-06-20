@@ -3,8 +3,10 @@ import {
   Contents,
   idxKey,
   ILink,
+  mog,
   NodeEditorContent,
   NodeMetadata,
+  Reminder,
   Snippet,
   UserDetails,
   WorkspaceDetails
@@ -14,6 +16,7 @@ import { AsyncMethodReturns, Methods } from 'penpal'
 import toast from 'react-hot-toast'
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
@@ -38,6 +41,7 @@ export default function useRaju() {
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const setReminders = useReminderStore((store) => store.setReminders)
 
   const methods: Methods = {
     init(
@@ -47,7 +51,8 @@ export default function useRaju() {
       authAWS: any,
       snippets: Snippet[],
       contents: Contents,
-      ilinks: any[]
+      ilinks: any[],
+      reminders: Reminder[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -55,6 +60,8 @@ export default function useRaju() {
       initSnippets(snippets)
       setIlinks(ilinks)
       initContents(contents)
+      setReminders(reminders)
+      mog('reminders raju', { reminders })
     },
     success(message: string) {
       toast.success(message)

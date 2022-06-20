@@ -11,6 +11,7 @@ import { initSearchIndex, searchWorker } from '../Workers/controller'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useReminderStore } from '../Stores/useReminderStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -20,6 +21,7 @@ export default function Chotu() {
   const theme = useThemeStore((state) => state.theme)
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
+  const reminders = useReminderStore((store) => store.reminders)
 
   const { ilinks, archive, addILink } = useDataStore()
   const { contents, setContent } = useContentStore()
@@ -56,7 +58,7 @@ export default function Chotu() {
   useEffect(() => {
     connection.promise
       .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks)
+        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders)
         // parent.success('Hi')
       })
       .catch((error) => {
