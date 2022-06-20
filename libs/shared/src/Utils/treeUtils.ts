@@ -77,6 +77,15 @@ export const isTopNode = (id: string) => {
   return getParentId(id) === null
 }
 
+export const getParentFromPath = (id: string) => {
+  const split = id.split(SEPARATOR)
+  if (split.length > 1) {
+    split.pop()
+    return split.join(SEPARATOR)
+  }
+  return undefined
+}
+
 export const getNameFromPath = (id: string) => {
   const split = id.split(SEPARATOR)
   if (split.length > 1) return split[split.length - 1]
