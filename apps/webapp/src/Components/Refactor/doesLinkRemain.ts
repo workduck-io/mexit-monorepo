@@ -1,4 +1,4 @@
-import { NodeLink } from '../../../types/relations'
+import { NodeLink } from '@mexit/core'
 
 export const doesLinkRemain = (id: string, refactored: NodeLink[]): boolean => {
   return refactored.map((r) => r.from).indexOf(id) === -1

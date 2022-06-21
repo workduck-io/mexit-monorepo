@@ -32,7 +32,7 @@ import {
 import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
-import { useInternalLinks } from '../../Data/useInternalLinks'
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useLinks } from '../../Hooks/useLinks'

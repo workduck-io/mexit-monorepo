@@ -9,8 +9,8 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { InfoTools, NodeInfo } from '@mexit/shared'
 import BookmarkButton from '../Buttons/BookmarkButton'
-import NodeRenameTitle from './NodeRenameTitle'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import NodeRenameOnlyTitle from './Rename/NodeRename'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -22,7 +22,7 @@ const Toolbar = () => {
 
   return (
     <NodeInfo {...getFocusProps(focusMode)}>
-      <NodeRenameTitle />
+      <NodeRenameOnlyTitle />
       {fetchingContent && <Loading dots={3} />}
       <InfoTools>
         <ToolbarTooltip singleton={source} />
