@@ -23,7 +23,7 @@ export const useNewNodes = () => {
 
   const addNodeOrNodes = async (ilink, showAlert, parentId?, content?: any[], save?: boolean) => {
     try {
-      ilink = checkValidILink({ ilink, parentId, showAlert })
+      ilink = checkValidILink({ ilink, parentId, showAlert: false })
       const nodeUID = generateNodeUID()
 
       const parentILink = getParentILink(ilink)

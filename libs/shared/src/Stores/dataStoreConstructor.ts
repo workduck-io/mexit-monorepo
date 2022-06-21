@@ -123,7 +123,8 @@ export const dataStoreConstructor = (set, get) => ({
     if (!reservedOrUnique) {
       throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
     }
-    return ilink
+
+    return reservedOrUnique.unique
   },
 
   setIlinks: (ilinks) => {
