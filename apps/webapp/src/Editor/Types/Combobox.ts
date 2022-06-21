@@ -85,6 +85,9 @@ export interface IComboboxItem {
    * Data available to onRenderItem.
    */
   data?: unknown
+
+  // Inserted to element if present
+  additional?: Record<string, any>
 }
 
 export enum ComboboxElementType {
@@ -117,4 +120,13 @@ export interface ComboboxProps {
   onSelectItem: (editor: PlateEditor, item: string) => void
   onRenderItem?: RenderFunction<ComboboxItemProps>
   portalElement?: Element
+}
+
+export interface InsertableElement {
+  type: string
+  children: any[]
+  value: string
+  blockValue?: string
+  blockId?: string
+  // Also additional properties are added
 }

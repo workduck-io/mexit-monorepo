@@ -122,5 +122,11 @@ export const apiURLs = {
   sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared`,
   allSharedNodes: `${MEXIT_BACKEND_URL_BASE}/shared/all`,
   getSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}`,
-  updateSharedNode: `${MEXIT_BACKEND_URL_BASE}/shared/update`
+  updateSharedNode: `${MEXIT_BACKEND_URL_BASE}/shared/update`,
+  getUsersOfSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}/users`,
+
+  user: {
+    getFromEmail: (email: string) => `${BASE_USER_URL}/email/${encodeURIComponent(email)}`,
+    getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`
+  }
 }

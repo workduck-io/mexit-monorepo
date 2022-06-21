@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Icon } from '@iconify/react'
 
-import { SharedNode, mog } from '@mexit/core'
-import { getNodeIcon, DefaultNodeIcon } from '@mexit/shared'
+import { SharedNode } from '@mexit/core'
+import { SharedNodeIcon } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
@@ -38,7 +37,7 @@ const SharedNotes = () => {
                 onClick={() => onOpenNode(sharedNode.nodeid)}
               >
                 <SItemContent>
-                  <Icon icon={getNodeIcon(sharedNode.path) ?? DefaultNodeIcon} />
+                  <SharedNodeIcon />
                   {sharedNode.path}
                 </SItemContent>
               </SItem>

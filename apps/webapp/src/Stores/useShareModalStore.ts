@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { InvitedUser, Mentionable, mog } from '@mexit/core'
+import { AccessLevel, InvitedUser, Mentionable, mog } from '@mexit/core'
 
 type ShareModalMode = 'invite' | 'permission'
 
@@ -18,7 +18,10 @@ interface ChangedInvitedUser extends InvitedUser {
 export interface InviteModalData {
   alias: string
   email: string
-  access: string
+  access: {
+    value: AccessLevel
+    label: string
+  }
 }
 
 interface ShareModalState {

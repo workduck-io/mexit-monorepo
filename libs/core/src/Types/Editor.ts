@@ -214,3 +214,10 @@ export enum QuickLinkStatus {
   new,
   exists
 }
+
+export enum NodeType {
+  DEFAULT,
+  SHARED,
+  ARCHIVED,
+  MISSING
+}

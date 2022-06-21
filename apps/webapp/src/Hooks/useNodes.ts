@@ -1,4 +1,4 @@
-import { AccessLevel, ILink, SharedNode } from '@mexit/core'
+import { AccessLevel, ILink, SharedNode, NodeType } from '@mexit/core'
 import { useDataStore } from '../Stores/useDataStore'
 
 // Used to ensure no path clashes while adding ILink.
@@ -43,5 +43,13 @@ export const useNodes = () => {
     if (res) return res.access
     return undefined
   }
-  return { isInArchive, getIcon, getNode, getArchiveNode, getSharedNode, isSharedNode, accessWhenShared }
+
+  const getNodeType = (nodeid: string) => {
+    if (getNode(nodeid)) return NodeType.DEFAULT
+    if (isInArchive(nodeid)) return NodeType.ARCHIVED
+    if (isSharedNode(nodeid)) return NodeType.SHARED
+    return NodeType.MISSING
+  }
+
+  return { isInArchive, getIcon, getNode, getArchiveNode, getSharedNode, isSharedNode, accessWhenShared, getNodeType }
 }

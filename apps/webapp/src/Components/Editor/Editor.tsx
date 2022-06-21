@@ -105,7 +105,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         value: m.alias,
         text: m.alias,
         icon: 'ri:user-line',
-        type: QuickLinkType.mentions
+        type: QuickLinkType.mentions,
+        additional: { email: m.email }
       }))
     ],
     [mentionable, invitedUsers]

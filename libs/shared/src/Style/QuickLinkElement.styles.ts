@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
 export const SILinkRoot = styled.div`
@@ -10,12 +11,19 @@ interface SILinkProps {
   $archived?: boolean
 }
 
+export const StyledIcon = styled(Icon)`
+  margin-right: 4px;
+`
+
 export const SILink = styled.div<SILinkProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
+  ${StyledIcon} {
+    color: ${({ theme }) => theme.colors.text.fade};
+  }
   .ILink_decoration {
     color: ${({ theme }) => theme.colors.gray[6]};
     &_left {

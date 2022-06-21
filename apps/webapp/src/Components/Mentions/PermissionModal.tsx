@@ -24,7 +24,8 @@ import {
   SharePermission,
   ShareRowAction,
   ShareRow,
-  ShareRowHeading
+  ShareRowHeading,
+  ShareRowActionsWrapper
 } from './styles'
 import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'
@@ -35,7 +36,7 @@ import { useMentionStore } from '../../Stores/useMentionsStore'
 export const MultiEmailInviteModalContent = () => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
   const addMentionable = useMentionStore((state) => state.addMentionable)
-  const closeModal = useShareModalStore((state) => state.closeModal)
+  // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getUserDetails } = useUserService()
   const { grantUsersPermission } = usePermission()
   const node = useEditorStore((state) => state.node)
@@ -51,7 +52,7 @@ export const MultiEmailInviteModalContent = () => {
 
     if (node && node.nodeid) {
       const allMails = data.email.split(',').map((e) => e.trim())
-      const access = (data?.access as AccessLevel) ?? DefaultPermission
+      const access = (data?.access?.value as AccessLevel) ?? DefaultPermission
 
       const userDetailPromises = allMails.map((email) => {
         return getUserDetails(email)
@@ -59,9 +60,10 @@ export const MultiEmailInviteModalContent = () => {
 
       const userDetails = await Promise.allSettled(userDetailPromises)
 
-      // mog('userDetails', { userDetails })
+      mog('userDetails', { userDetails })
 
-      // Typescript has some weird thing going on with promises. Try to improve the type (if you can that is)
+      // Typescript has some weird thing going on with promises.
+      // Try to improve the type (if you can that is)
       const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId !== undefined) as any[]
       const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId === undefined) as any[]
 
@@ -69,14 +71,11 @@ export const MultiEmailInviteModalContent = () => {
         return [...p, c.value.userId]
       }, [])
 
-      // const userDetails = allMails.map(async () => {})
-      // Only share with users with details, add the rest to invited users
-      // TODO: Uncomment this to give permission
-      const permGiven = await grantUsersPermission(node.nodeid, givePermToExisting, access)
-
-      mog('userDetails', { userDetails, permGiven, existing, absent, givePermToExisting })
-
-      // ifck
+      // Only share with users registered,
+      if (givePermToExisting.length > 0) {
+        const permGiven = await grantUsersPermission(node.nodeid, givePermToExisting, access)
+        mog('userDetails', { userDetails, permGiven, existing, absent, givePermToExisting })
+      }
 
       existing.forEach((u) => {
         addMentionable({
@@ -90,6 +89,7 @@ export const MultiEmailInviteModalContent = () => {
         })
       })
 
+      // Add the rest to invited users
       absent.forEach((u) => {
         addInvitedUser({
           type: 'invite',
@@ -101,7 +101,9 @@ export const MultiEmailInviteModalContent = () => {
         })
       })
 
-      closeModal()
+      saveMentionData()
+
+      // closeModal()
     }
   }
 
@@ -366,7 +368,9 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
                     />
                   </SharePermission>
                   <ShareRowAction>
-                    <IconButton onClick={() => onRevokeAccess(user.userid)} icon={deleteBin6Line} title="Remove" />
+                    <ShareRowActionsWrapper>
+                      <IconButton onClick={() => onRevokeAccess(user.userid)} icon={deleteBin6Line} title="Remove" />
+                    </ShareRowActionsWrapper>
                   </ShareRowAction>
                 </ShareRow>
               )

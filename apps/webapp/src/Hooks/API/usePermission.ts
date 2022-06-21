@@ -1,6 +1,6 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel } from '@mexit/core'
+import { mog, apiURLs, AccessLevel, SharedNode } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 
@@ -75,6 +75,31 @@ export const usePermission = () => {
         mog('getAllSharedNodes resp', { resp })
         return resp.data
       })
+      .then((sharedNodesRaw: any) => {
+        const sharedNodes = sharedNodesRaw.map(
+          (n): SharedNode => ({
+            path: n.nodeTitle,
+            nodeid: n.nodeID,
+            access: n.accessType
+          })
+        )
+        mog('SharedNodes', { sharedNodes })
+        return sharedNodes
+      })
   }
-  return { grantUsersPermission, changeUserPermission, revokeUserAccess, getAllSharedNodes }
+
+  const getUsersOfSharedNode = async (nodeid: string) => {
+    return await client
+      .get(apiURLs.getUsersOfSharedNode(nodeid), {
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
+      })
+      .then((resp) => {
+        mog('getAllSharedUsers For Node resp', { resp })
+        return resp.data
+      })
+  }
+
+  return { grantUsersPermission, changeUserPermission, revokeUserAccess, getAllSharedNodes, getUsersOfSharedNode }
 }

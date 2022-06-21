@@ -129,7 +129,8 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
           icon: item.icon ?? ct.icon ?? undefined,
           text: item.text,
           extended: item.extended,
-          type
+          type,
+          additional: item.additional
         })
 
       return acc

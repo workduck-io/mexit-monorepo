@@ -13,7 +13,7 @@ import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
 import { InviteWrapper, InviteFormWrapper, SelectWrapper } from './styles'
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { replaceUserMention } from '../../Editor/Actions/replaceUserMention'
+import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
 import { usePermission } from '../../Hooks/API/usePermission'
 
 export const InviteModalContent = () => {
@@ -34,19 +34,20 @@ export const InviteModalContent = () => {
   const onSubmit = async (data: InviteModalData) => {
     if (node && node.nodeid) {
       const editor = getPlateEditorRef()
-      const access = (data.access as AccessLevel) ?? DefaultPermission
+      const access = (data?.access?.value as AccessLevel) ?? DefaultPermission
 
       const details = await getUserDetails(data.email)
       mog('data', { data, details })
 
       if (details.userId !== undefined) {
-        // TODO: Give permission here
+        // Give permission here
         const resp = await grantUsersPermission(node.nodeid, [details.userId], access)
         mog('UserPermission given', { details, resp })
         addMentionable(data.alias, data.email, details.userId, node.nodeid, access)
         replaceUserMention(editor, data.alias, details.userId)
       } else {
         inviteUser(data.email, data.alias, node.nodeid, access)
+        replaceUserMentionEmail(editor, data.alias, details.email)
       }
     }
 

@@ -8,7 +8,7 @@ import { useLinks } from '../../../Hooks/useLinks'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
-import { ComboboxKey, IComboboxItem } from '../../Types/Combobox'
+import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
 import {
   ComboConfigData,
   ComboSearchType,
@@ -69,40 +69,48 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
         const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
         const activeBlock = useComboboxStore.getState().activeBlock
 
-        // mog('Inserting from here', { activeBlock, isBlockTriggered })
+        mog('Inserting from here', { item, isBlockTriggered })
+        let InsertedElement: InsertableElement = {
+          type,
+          children: [{ text: '' }],
+          value: itemValue
+        }
+
         if (
           (item.type === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) &&
           isBlockTriggered &&
           activeBlock
         ) {
           const blockValue = activeBlock?.text ? getSlug(activeBlock.text) : ''
-          const withBlockInfo = {
+          InsertedElement = {
+            ...InsertedElement,
             type,
             children: [{ text: '' }],
             value: activeBlock?.id,
             blockValue,
             blockId: activeBlock?.blockId
           }
-          insertNodes(editor, withBlockInfo)
         } else if (item.type === QuickLinkType.mentions) {
-          const withMentionUserId = {
-            type,
-            children: [{ text: '' }],
+          InsertedElement = {
+            ...InsertedElement,
             value: item.key
           }
           if (comboType.onItemInsert) comboType.onItemInsert(item.text)
-          insertNodes(editor, withMentionUserId)
         } else {
           if (item.type === QuickLinkType.snippet) {
             itemValue = item.key
           }
 
-          insertNodes<TElement>(editor, {
-            type,
-            children: [{ text: '' }],
+          InsertedElement = {
+            ...InsertedElement,
             value: itemValue
-          })
+          }
         }
+        if (item.additional) {
+          InsertedElement = { ...InsertedElement, ...item.additional }
+        }
+
+        insertNodes<TElement>(editor, InsertedElement)
 
         // move the selection after the ilink element
         Transforms.move(editor)

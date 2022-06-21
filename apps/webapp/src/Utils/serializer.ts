@@ -32,6 +32,7 @@ const directPropertyKeys = [
   'underline',
   'highlight',
   'code',
+  'email',
   'url',
   'value',
   'blockValue',

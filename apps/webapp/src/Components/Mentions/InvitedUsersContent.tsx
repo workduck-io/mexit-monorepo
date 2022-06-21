@@ -19,8 +19,11 @@ import {
   ShareAliasInput,
   ShareEmail,
   SharePermission,
-  ShareRowAction
+  ShareRowAction,
+  ShareRowActionsWrapper
 } from './styles'
+import { usePermission } from '../../Hooks/API/usePermission'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
@@ -29,6 +32,9 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
   const changedIUsers = useShareModalStore((state) => state.data.changedInvitedUsers)
   const setChangedIUsers = useShareModalStore((state) => state.setChangedInvitedUsers)
   // const { changeUserPermission, revokeUserAccess } = usePermission()
+
+  const { grantUsersPermission } = usePermission()
+  const { getUserDetails } = useUserService()
 
   const sharedIUsers = useMemo(() => {
     if (node && node.nodeid) {
@@ -125,6 +131,14 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
 
   const onReinviteUser = async (user: InvitedUser) => {
     mog('Reinviting that damn user', { user })
+    const uDetails = await getUserDetails(user.email)
+    const changedUser = changedIUsers.find((u) => u.email === user.email)
+    const dataUser = sharedIUsers.find((u) => u.email === user.email)
+    const access = changedUser ? changedUser.access[node.nodeid] : dataUser.access[node.nodeid] ?? undefined
+    if (uDetails && access) {
+      const res = await grantUsersPermission(node.nodeid, [uDetails.userId], access)
+      mog('res')
+    }
   }
 
   const onSave = async () => {
@@ -186,7 +200,6 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
             <td>Email</td>
             <td>Permission</td>
             <td></td>
-            <td></td>
           </tr>
         </ShareRowHeading>
 
@@ -215,15 +228,15 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
                 />
               </SharePermission>
               <ShareRowAction>
-                <IconButton
-                  transparent={false}
-                  onClick={() => onReinviteUser(user)}
-                  icon={repeatLine}
-                  title="Reinvite User"
-                />
-              </ShareRowAction>
-              <ShareRowAction>
-                <IconButton onClick={() => onRevokeAccess(user.email)} icon={deleteBin6Line} title="Remove" />
+                <ShareRowActionsWrapper>
+                  <IconButton
+                    transparent={false}
+                    onClick={() => onReinviteUser(user)}
+                    icon={repeatLine}
+                    title="Reinvite User"
+                  />
+                  <IconButton onClick={() => onRevokeAccess(user.email)} icon={deleteBin6Line} title="Remove" />
+                </ShareRowActionsWrapper>
               </ShareRowAction>
             </ShareRow>
           )

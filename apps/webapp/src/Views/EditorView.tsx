@@ -45,15 +45,8 @@ const EditorView = () => {
   useAnalysis()
 
   useEffect(() => {
-    getAllSharedNodes().then((sharedNodesRaw: any) => {
-      const sharedNodes = sharedNodesRaw.map(
-        (n): SharedNode => ({
-          path: n.nodeTitle,
-          nodeid: n.nodeID,
-          access: n.accessType
-        })
-      )
-      console.log({ sharedNodes })
+    getAllSharedNodes().then((sharedNodes) => {
+      console.log('GetAllSharedNodes: ', sharedNodes)
       setSharedNodes(sharedNodes)
     })
   }, [])

@@ -21,7 +21,8 @@ export const createMentionPlugin = (): PlatePlugin => ({
 
       return {
         type: ELEMENT_MENTION,
-        value: el.getAttribute('data-slate-value')
+        value: el.getAttribute('data-slate-value'),
+        email: el.getAttribute('data-slate-email')
       }
     }
   },
