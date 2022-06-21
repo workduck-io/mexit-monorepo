@@ -107,7 +107,7 @@ const ContentEditor = () => {
           readOnly={readOnly}
           nodeUID={nodeId}
           nodePath={node.path}
-          content={fsContent?.content ?? defaultContent.content}
+          content={fsContent?.content?.length ? fsContent?.content : defaultContent.content}
           onChange={onChangeSave}
         />
       </EditorWrapper>
