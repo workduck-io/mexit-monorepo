@@ -9,7 +9,6 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { InfoTools, NodeInfo } from '@mexit/shared'
 import BookmarkButton from '../Buttons/BookmarkButton'
-import NodeRenameTitle from './NodeRenameTitle'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
 

@@ -5,6 +5,7 @@ import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import tinykeys from 'tinykeys'
 import { useLinks } from '../../../Hooks/useLinks'
+import { useApi } from '../../../Hooks/useApi'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
@@ -16,6 +17,7 @@ import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 import { DisplayShortcut } from '../../Shortcuts'
 import { Wrapper, TitleStatic, ButtonWrapper } from './NodeRename.style'
+import { useInternalLinks } from '../../../Hooks/useInternalLinks'
 
 const NodeRenameOnlyTitle = () => {
   const { getNodeidFromPath } = useLinks()
@@ -36,13 +38,14 @@ const NodeRenameOnlyTitle = () => {
   const modalReset = useRenameStore((store) => store.closeModal)
   const setTo = useRenameStore((store) => store.setTo)
   const nodeFrom = useEditorStore((store) => store.node.path ?? '')
+  const setNode = useEditorStore((store) => store.setNode)
   const setFrom = useRenameStore((store) => store.setFrom)
   const [editable, setEditable] = useState(false)
   const [newTitle, setNewTitle] = useState(getNameFromPath(nodeFrom))
+  const updateSingleILink = useInternalLinks().updateSingleILink
   const inpRef = useRef<HTMLInputElement>()
-  //
-  //
-  //
+  const saveDataAPI = useApi().saveDataAPI
+  const { node, content } = useEditorStore()
 
   const reset = () => {
     if (editable) modalReset()
@@ -111,43 +114,23 @@ const NodeRenameOnlyTitle = () => {
     onRename()
   }
 
-  const onRename = () => {
-    // console.log('renaming', {})
-    if (newTitle === getNameFromPath(nodeFrom) || isClashed) {
+  const onRename = async () => {
+    if (newTitle === getNameFromPath(nodeFrom) || isClashed || newTitle.indexOf(SEPARATOR) !== -1) {
       reset()
       return
     }
+
     const parent = getParentFromPath(nodeFrom)
-    if (mockRefactored.length > 1) {
-      if (parent) setTo(`${parent}${SEPARATOR}${newTitle}`)
-      else setTo(newTitle)
-      setFrom(nodeFrom)
+    const updatedPath = parent ? `${parent}${SEPARATOR}${newTitle}` : newTitle
 
-      openModal()
-      setEditable(false)
-      return
-    }
-    if (newTitle && nodeFrom) {
-      let newPath = newTitle
-      if (parent) newPath = `${parent}${SEPARATOR}${newTitle}`
-      setFrom(nodeFrom)
+    await saveDataAPI(node.nodeid, content.content, updatedPath)
+    updateSingleILink(node.nodeid, updatedPath)
+    setNode({ ...node, title: newTitle, path: updatedPath })
 
-      const res = execRefactor(nodeFrom, newPath)
-      const path = useEditorStore.getState().node.id
-      const nodeid = useEditorStore.getState().node.nodeid
-
-      setEditable(false)
-      if (doesLinkRemain(path, res)) {
-        push(nodeid)
-      } else if (res.length > 0) {
-        const nodeid = getNodeidFromPath(res[0].to)
-        push(nodeid)
-      }
-      reset()
-      const editorRef = getPlateEditorRef()
-      if (editorRef) {
-        selectEditor(editorRef, { edge: 'start', focus: true })
-      }
+    setEditable(false)
+    const editorRef = getPlateEditorRef()
+    if (editorRef) {
+      selectEditor(editorRef, { edge: 'start', focus: true })
     }
   }
 
@@ -155,12 +138,6 @@ const NodeRenameOnlyTitle = () => {
     e.preventDefault()
     reset()
   }
-
-  // useEffect(() => {
-  //   if (nodeFrom && isReserved(nodeFrom)) {
-  //     mog('ISRESERVED', { nodeFrom })
-  //   }
-  // }, [nodeFrom])
 
   useEffect(() => {
     if (newTitle && editable) {
@@ -178,7 +155,7 @@ const NodeRenameOnlyTitle = () => {
     <Wrapper>
       {isReserved(nodeFrom) ? (
         <Tippy theme="mex" placement="bottom-start" content="Reserved Node">
-          <TitleStatic>{nodeTitle?.length > 0 ? getNameFromPath(nodeTitle) : getNameFromPath(nodeFrom)}</TitleStatic>
+          <TitleStatic>{getNameFromPath(nodeFrom)}</TitleStatic>
         </Tippy>
       ) : editable ? (
         <Input
@@ -208,16 +185,16 @@ const NodeRenameOnlyTitle = () => {
           <Button
             primary
             key="ButtonRename"
-            disabled={getNameFromPath(nodeFrom) === newTitle || isClashed}
+            disabled={getNameFromPath(nodeFrom) === newTitle || isClashed || newTitle.indexOf(SEPARATOR) !== -1}
             onClick={onRenameClick}
           >
             <DisplayShortcut shortcut="Enter" />
             Rename
           </Button>
-          <Button onClick={onCancel}>
+          {/* <Button onClick={onCancel}>
             <DisplayShortcut shortcut="Shift+Enter" />
             Open Refactor
-          </Button>
+          </Button> */}
         </ButtonWrapper>
       )}
     </Wrapper>

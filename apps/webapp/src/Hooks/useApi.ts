@@ -140,8 +140,8 @@ export const useApi = () => {
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[]) => {
-    const path = getPathFromNodeid(nodeid).split(SEPARATOR)
+  const saveDataAPI = async (nodeid: string, content: any[], nodePath?: string) => {
+    const path = nodePath.split(SEPARATOR) || getPathFromNodeid(nodeid).split(SEPARATOR)
     const reqData = {
       id: nodeid,
       title: path.slice(-1)[0],
