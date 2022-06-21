@@ -168,7 +168,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const editorOptions: MexEditorOptions = {
     editableProps: {
       readOnly: readOnly,
-      placeholder: "Let's try something here...",
+      // placeholder: "Let's try something here...",
       autoFocus: true
     },
     focusOptions: {
