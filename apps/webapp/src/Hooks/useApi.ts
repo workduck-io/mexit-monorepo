@@ -7,7 +7,7 @@ import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '..
 import { isRequestedWithin } from '../Stores/useApiStore'
 import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { useInternalLinks } from './../Data/useInternalLinks'
+import { useInternalLinks } from './useInternalLinks'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLinks } from './useLinks'

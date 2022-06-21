@@ -16,7 +16,7 @@ import { doesLinkRemain } from './doesLinkRemain'
 import { useLinks } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useInternalLinks } from '../../Data/useInternalLinks'
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
