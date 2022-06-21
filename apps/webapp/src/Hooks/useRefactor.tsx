@@ -116,10 +116,11 @@ export const useRefactor = () => {
     //   setBaseNodeId(baseId.to)
     // }
 
-    const data = await api.refactorHeirarchy({ path: from }, { path: to }, nodeId).then((response) => {
-      console.log(response)
-      return response
-    })
+    const data = await api
+      .refactorHeirarchy({ path: from.split('.').join('#') }, { path: to.split('.').join('#') }, nodeId)
+      .then((response) => {
+        return response
+      })
 
     return data
   }
