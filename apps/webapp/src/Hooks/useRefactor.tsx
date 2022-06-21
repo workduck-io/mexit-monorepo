@@ -8,6 +8,8 @@ import { useEditorBuffer } from './useEditorBuffer'
 
 import { useRefactorStore } from '../Stores/useRefactorStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useApi } from './useApi'
+import { useLinks } from './useLinks'
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
   const index = refactored.map((r) => r.from).indexOf(id)
@@ -30,6 +32,8 @@ export const useRefactor = () => {
   const setILinks = useDataStore((state) => state.setIlinks)
   const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
   const { saveAndClearBuffer } = useEditorBuffer()
+  const { getNodeidFromPath } = useLinks()
+  const api = useApi()
 
   /*
    * Returns a mock array of refactored paths
@@ -67,51 +71,57 @@ export const useRefactor = () => {
     return refactored
   }
 
-  const execRefactor = (from: string, to: string, clearBuffer = true) => {
-    const refactored = getMockRefactor(from, to, clearBuffer)
+  const execRefactor = async (from: string, to: string, clearBuffer = true) => {
+    // const refactored = getMockRefactor(from, to, clearBuffer)
 
-    mog('execRefactor', { from, to, refactored })
+    const nodeId = getNodeidFromPath(from)
+    // mog('execRefactor', { from, to, refactored })
 
-    // Generate the new links
-    const ilinks = useDataStore.getState().ilinks
+    // // Generate the new links
+    // const ilinks = useDataStore.getState().ilinks
 
-    const newIlinks = ilinks.map((i) => {
-      for (const ref of refactored) {
-        if (ref.from === i.path) {
-          return {
-            ...i,
-            path: ref.to,
-            icon: getNodeIcon(ref.to)
-          }
-        }
-      }
-      return i
+    // const newIlinks = ilinks.map((i) => {
+    //   for (const ref of refactored) {
+    //     if (ref.from === i.path) {
+    //       return {
+    //         ...i,
+    //         path: ref.to,
+    //         icon: getNodeIcon(ref.to)
+    //       }
+    //     }
+    //   }
+    //   return i
+    // })
+
+    // const isInNewlinks = (l: string) => {
+    //   const ft = newIlinks.filter((i) => i.path === l)
+    //   return ft.length > 0
+    // }
+
+    // const newParents = refactored
+    //   .map((r) => getAllParentIds(r.to))
+    //   .flat()
+    //   .filter((x) => !isInNewlinks(x))
+
+    // const newParentIlinks = newParents.map((p) => ({
+    //   path: p,
+    //   nodeid: generateNodeUID(),
+    //   icon: getNodeIcon(p)
+    // }))
+
+    // setILinks([...newIlinks, ...newParentIlinks])
+
+    // const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
+    // if (baseId !== false) {
+    //   setBaseNodeId(baseId.to)
+    // }
+
+    const data = await api.refactorHeirarchy({ path: from }, { path: to }, nodeId).then((response) => {
+      console.log(response)
+      return response
     })
 
-    const isInNewlinks = (l: string) => {
-      const ft = newIlinks.filter((i) => i.path === l)
-      return ft.length > 0
-    }
-
-    const newParents = refactored
-      .map((r) => getAllParentIds(r.to))
-      .flat()
-      .filter((x) => !isInNewlinks(x))
-
-    const newParentIlinks = newParents.map((p) => ({
-      path: p,
-      nodeid: generateNodeUID(),
-      icon: getNodeIcon(p)
-    }))
-
-    setILinks([...newIlinks, ...newParentIlinks])
-
-    const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
-    if (baseId !== false) {
-      setBaseNodeId(baseId.to)
-    }
-
-    return refactored
+    return data
   }
 
   return { getMockRefactor, execRefactor }

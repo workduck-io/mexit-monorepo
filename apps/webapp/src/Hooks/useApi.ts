@@ -354,6 +354,34 @@ export const useApi = () => {
     return data
   }
 
+  const refactorHeirarchy = async (
+    existingNodePath: { path: string; namespaceId?: string },
+    newNodePath: { path: string; namespaceId?: string },
+    nodeId: string
+  ) => {
+    const reqData = {
+      existingNodePath,
+      newNodePath,
+      nodeID: nodeId
+    }
+    const data = await client
+      .post(apiURLs.refactorHeirarchy, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((response) => {
+        mog('refactor', response.data)
+        return response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    return data
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -367,6 +395,7 @@ export const useApi = () => {
     getPublicNodeAPI,
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
-    getSnippetById
+    getSnippetById,
+    refactorHeirarchy
   }
 }

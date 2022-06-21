@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
 
-import { isReserved } from '@mexit/core'
+import { isReserved, NodeLink } from '@mexit/core'
 import { Button } from '@mexit/shared'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
@@ -16,6 +16,7 @@ import { doesLinkRemain } from './doesLinkRemain'
 import { useLinks } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
+import { useInternalLinks } from '../../Data/useInternalLinks'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
@@ -29,6 +30,7 @@ const Refactor = () => {
   const setMockRefactored = useRefactorStore((store) => store.setMockRefactored)
   const setTo = useRefactorStore((store) => store.setTo)
   const setFrom = useRefactorStore((store) => store.setFrom)
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
 
   const { push } = useNavigation()
 
@@ -83,18 +85,20 @@ const Refactor = () => {
 
   // console.log({ mockRefactored });
 
-  const handleRefactor = () => {
-    const res = execRefactor(from, to)
+  const handleRefactor = async () => {
+    const { addedILinks, removedILinks } = (await execRefactor(from, to)) as any
 
-    const path = useEditorStore.getState().node.path
-    const nodeid = useEditorStore.getState().node.nodeid
+    updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
 
-    if (doesLinkRemain(path, res)) {
-      push(nodeid, { savePrev: false })
-    } else if (res.length > 0) {
-      const nodeid = getNodeidFromPath(res[0].to)
-      push(nodeid, { savePrev: false })
-    }
+    // const path = useEditorStore.getState().node.path
+    // const nodeid = useEditorStore.getState().node.nodeid
+
+    // if (doesLinkRemain(path, res)) {
+    //   push(nodeid, { savePrev: false })
+    // } else if (res.length > 0) {
+    //   const nodeid = getNodeidFromPath(res[0].to)
+    //   push(nodeid, { savePrev: false })
+    // }
 
     closeModal()
   }
@@ -128,7 +132,8 @@ const Refactor = () => {
         handleCreateItem={handleToCreate}
       />
 
-      {mockRefactored.length > 0 && (
+      {/* TODO: Mock refactored is returning the wrong results */}
+      {/* {mockRefactored.length > 0 && (
         <MockRefactorMap>
           <MRMHead>
             <h1>Notes being refactored... </h1>
@@ -144,7 +149,7 @@ const Refactor = () => {
             </MRMRow>
           ))}
         </MockRefactorMap>
-      )}
+      )} */}
       <ModalControls>
         <Button primary autoFocus={!focus} large onClick={handleRefactor}>
           Apply Refactor

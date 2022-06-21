@@ -65,6 +65,9 @@ export const apiURLs = {
   getArchivedNodes: (workspaceId: string) => `${MEXIT_BACKEND_URL_BASE}/node/archive/${workspaceId}`,
   unArchiveNodes: () => `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
 
+  // Refactor
+  refactorHeirarchy: `${MEXIT_BACKEND_URL_BASE}/node/refactor`,
+
   // Workspace
   createWorkspace: `${BASE_API_URL}/workspace`,
   getNodesByWorkspace: (workspaceId: string) => `${BASE_API_URL}/node/workspace/${workspaceId}/namespace/NAMESPACE1`,
