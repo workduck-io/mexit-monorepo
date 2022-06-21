@@ -53,7 +53,7 @@ export const useInternalLinks = () => {
       path: path,
       icon: getNodeIcon(path)
     }
-    const currILinks = useDataStore.getState().ilinks
+    const currILinks = useDataStore.getState().ilinks.filter((item) => item.nodeid !== nodeId)
     setILinks([...currILinks, newILink])
   }
 

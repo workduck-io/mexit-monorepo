@@ -31,6 +31,10 @@ export const Button = styled.button<ButtonProps>`
     box-shadow: 0px 6px 12px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
   }
 
+  &:disabled {
+    opacity: 0.33;
+  }
+
   ${({ primary, transparent, theme }) =>
     !primary &&
     transparent &&

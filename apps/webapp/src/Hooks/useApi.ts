@@ -7,7 +7,7 @@ import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '..
 import { isRequestedWithin } from '../Stores/useApiStore'
 import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { useInternalLinks } from './../Data/useInternalLinks'
+import { useInternalLinks } from './useInternalLinks'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLinks } from './useLinks'
@@ -140,8 +140,8 @@ export const useApi = () => {
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[]) => {
-    const path = getPathFromNodeid(nodeid).split(SEPARATOR)
+  const saveDataAPI = async (nodeid: string, content: any[], nodePath?: string) => {
+    const path = nodePath.split(SEPARATOR) || getPathFromNodeid(nodeid).split(SEPARATOR)
     const reqData = {
       id: nodeid,
       title: path.slice(-1)[0],
@@ -354,6 +354,34 @@ export const useApi = () => {
     return data
   }
 
+  const refactorHeirarchy = async (
+    existingNodePath: { path: string; namespaceId?: string },
+    newNodePath: { path: string; namespaceId?: string },
+    nodeId: string
+  ) => {
+    const reqData = {
+      existingNodePath,
+      newNodePath,
+      nodeID: nodeId
+    }
+    const data = await client
+      .post(apiURLs.refactorHeirarchy, reqData, {
+        headers: {
+          [WORKSPACE_HEADER]: getWorkspaceId(),
+          Accept: 'application/json, text/plain, */*'
+        }
+      })
+      .then((response) => {
+        mog('refactor', response.data)
+        return response.data
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    return data
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -367,6 +395,7 @@ export const useApi = () => {
     getPublicNodeAPI,
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
-    getSnippetById
+    getSnippetById,
+    refactorHeirarchy
   }
 }

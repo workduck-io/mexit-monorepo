@@ -3,7 +3,6 @@ import React from 'react'
 import Lookup from './Modals/Lookup'
 import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
-import Rename from './Refactor/Rename'
 import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
 import { BlockModal } from '../Editor/Styles/Block'
@@ -15,7 +14,6 @@ const Modals = () => {
     <>
       <Lookup />
       <Refactor />
-      <Rename />
       <Delete />
       <HelpModal />
       <BlockModal />

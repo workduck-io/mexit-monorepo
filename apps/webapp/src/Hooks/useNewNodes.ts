@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 
 import { generateNodeUID, getTodosFromContent, mog } from '@mexit/core'
 
-import { useInternalLinks } from '../Data/useInternalLinks'
+import { useInternalLinks } from './useInternalLinks'
 import { useApi } from './useApi'
 import { useDataStore } from '../Stores/useDataStore'
 import { useTodoStore } from '../Stores/useTodoStore'
