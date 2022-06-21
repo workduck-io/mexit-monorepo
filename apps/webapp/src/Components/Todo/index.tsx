@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { Transforms } from 'slate'
 import { useReadOnly } from 'slate-react'
 import { TodoBase } from './Todo'
+import { useNodes } from '../../Hooks/useNodes'
 
 const cleanEditorId = (editorId: string) => {
   /*
@@ -31,11 +32,12 @@ const Todo = (props: any) => {
   const rootProps = getRootProps(props)
 
   const readOnly = useReadOnly()
+  const { accessWhenShared } = useNodes()
+
   const editorId = usePlateId()
   // const nodeid = useEditorStore((store) => store.node.nodeid)
   const nodeid = cleanEditorId(editorId)
-
-  // mog('Todo', { nodeid, editorId, readOnly })
+  const isSharedRead = accessWhenShared(nodeid) === 'READ'
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
@@ -57,7 +59,7 @@ const Todo = (props: any) => {
     <TodoBase
       {...rootProps}
       {...attributes}
-      readOnly={readOnly}
+      readOnly={readOnly || isSharedRead}
       oid={'EditorTodo'}
       todoid={element.id}
       parentNodeId={nodeid}

@@ -1,24 +1,16 @@
+import React, { useEffect } from 'react'
+import tinykeys from 'tinykeys'
+import { useSingleton } from '@tippyjs/react'
+import { Icon } from '@iconify/react'
 import archiveFill from '@iconify/icons-ri/archive-fill'
 import gitBranchLine from '@iconify/icons-ri/git-branch-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
-import { Icon } from '@iconify/react'
-import { useSingleton } from '@tippyjs/react'
-import React, { useEffect } from 'react'
-import tinykeys from 'tinykeys'
-import { TooltipTitleWithShortcut } from '../Shortcuts'
-import { useSidebarTransition } from './Transition'
-import Tree from './Tree'
-import { NavTooltip } from '@mexit/shared'
-import { BookmarksHelp, TreeHelp } from '../../Data/defaultText'
-import useLayout from '../../Hooks/useLayout'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
-import Collapse from '../../Layout/Collapse'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import shareLine from '@iconify/icons-ri/share-line'
+
 import {
   NavWrapper,
+  NavTooltip,
   NavLogoWrapper,
   MainLinkContainer,
   CreateNewButton,
@@ -30,6 +22,17 @@ import {
   Link,
   NavSpacer
 } from '@mexit/shared'
+
+import { TooltipTitleWithShortcut } from '../Shortcuts'
+import { useSidebarTransition } from './Transition'
+import Tree from './Tree'
+import { BookmarksHelp, TreeHelp, SharedHelp } from '../../Data/defaultText'
+import useLayout from '../../Hooks/useLayout'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
+import Collapse from '../../Layout/Collapse'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { Logo, SidebarToggle } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
@@ -37,8 +40,8 @@ import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useLinks } from '../../Hooks/useLinks'
-// import Bookmarks from './Bookmarks'
-import SharedNotes from './SharedNodes'
+import Bookmarks from './Bookmarks'
+import SharedNotes from './SharedNotes'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -90,14 +93,6 @@ const Nav = ({ links }: NavProps) => {
 
   const archiveCount = getLinkCount().archive
 
-  // useEffect(() => {
-  //   refreshILinks()
-  //   const interval = setInterval(() => {
-  //     refreshILinks()
-  //   }, 3600000)
-  //   return () => clearInterval(interval)
-  // }, []) // eslint-disable-line
-
   return (
     <>
       {/* eslint-disable-next-line */}
@@ -144,8 +139,7 @@ const Nav = ({ links }: NavProps) => {
             )
           )}
         </MainLinkContainer>
-
-        {/* <Collapse
+        <Collapse
           title="Bookmarks"
           oid="bookmarks"
           icon={bookmark3Line}
@@ -155,15 +149,14 @@ const Nav = ({ links }: NavProps) => {
           }}
         >
           <Bookmarks />
-        </Collapse> */}
-
+        </Collapse>
         <Collapse
-          title="SharedNotes"
+          title="Shared Notes"
           oid="sharednotes"
-          icon={bookmark3Line}
+          icon={shareLine}
           maximumHeight="30vh"
           infoProps={{
-            text: BookmarksHelp
+            text: SharedHelp
           }}
         >
           <SharedNotes />
@@ -185,19 +178,6 @@ const Nav = ({ links }: NavProps) => {
         <NavDivider />
 
         <EndLinkContainer>
-          {/* {authenticated ? (
-          <NavTooltip singleton={target} content="User">
-            <Link  tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="/user" key="nav_user">
-              {GetIcon(user3Line)}
-            </Link>
-          </NavTooltip>
-        ) : (
-          <NavTooltip singleton={target} content="Login">
-            <Link tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to={ROUTE_PATHS.login} key="nav_user" className="active">
-              {GetIcon(lockPasswordLine)}
-            </Link>
-          </NavTooltip>
-        )} */}
           <NavTooltip
             key={shortcuts.showArchive.title}
             singleton={target}
@@ -216,13 +196,6 @@ const Nav = ({ links }: NavProps) => {
               </>
             </Link>
           </NavTooltip>
-          {/*
-        <NavButton onClick={toggleSidebar}>
-          <Icon icon={sidebar.expanded ? menuFoldLine : menuUnfoldLine} />
-          <NavTitle>{sidebar.expanded ? 'Collapse' : 'Expand'}</NavTitle>
-        </NavButton>
-         */}
-
           <NavTooltip
             key={shortcuts.showSettings.title}
             singleton={target}

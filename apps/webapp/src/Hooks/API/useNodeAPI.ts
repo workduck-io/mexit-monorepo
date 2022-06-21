@@ -20,15 +20,15 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useLinks } from '../useLinks'
 import { useTags } from '../useTags'
+import { useNodes } from '../useNodes'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
-  const userDetails = useAuthStore((store) => store.userDetails)
   const { getTags } = useTags()
-  const { getPathFromNodeid, getNodeidFromPath, getTitleFromPath } = useLinks()
-  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
+  const { getPathFromNodeid, getTitleFromPath, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
       setNodePublic,
@@ -36,6 +36,8 @@ export const useApi = () => {
       checkNodePublic
     })
   )
+
+  const { getSharedNode } = useNodes()
 
   /*
    * Saves new node data in the backend
@@ -152,23 +154,29 @@ export const useApi = () => {
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[], nodePath?: string) => {
-    const path = nodePath?.split(SEPARATOR) || getPathFromNodeid(nodeid).split(SEPARATOR)
+  const saveDataAPI = async (nodeid: string, content: any[], isShared = false) => {
+    const { title, path } = getNodePathAndTitle(nodeid)
     const reqData = {
       id: nodeid,
-      title: path.slice(-1)[0],
+      title: title,
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content, nodeid),
       tags: getTags(nodeid)
     }
 
-    if (path.length > 1) {
-      reqData['referenceID'] = getNodeidFromPath(path.slice(0, -1).join(SEPARATOR))
+    const parentNodeId = getNodeParentIdFromPath(path)
+    if (parentNodeId) reqData['referenceID'] = parentNodeId
+
+    if (isShared) {
+      const node = getSharedNode(nodeid)
+      if (node.access[nodeid] === 'READ') return
     }
 
+    const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
+
     const data = await client
-      .post(apiURLs.createNode, reqData, {
+      .post(url, reqData, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
@@ -185,16 +193,15 @@ export const useApi = () => {
     return data
   }
 
-  const getDataAPI = async (nodeid: string) => {
-    const url = apiURLs.getNode(nodeid)
+  const getDataAPI = async (nodeid: string, isShared = false) => {
+    const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
     if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
     }
 
-    // console.warn('\n\n\n\nAPI has not been requested before, requesting\n\n\n\n')
     const res = await client
-      .get(apiURLs.getNode(nodeid), {
+      .get(url, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'

@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { InvitedUser, Mentionable } from '@mexit/core'
+import { InvitedUser, Mentionable, mog } from '@mexit/core'
 
 type ShareModalMode = 'invite' | 'permission'
 
@@ -66,7 +66,8 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) =>
+  prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) => {
+    mog('PrefillModal', { mode, alias, fromEditor })
     set({
       mode,
       open: true,
@@ -76,4 +77,5 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
       },
       focus: false
     })
+  }
 }))

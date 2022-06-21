@@ -188,6 +188,37 @@ export const useLinks = () => {
     return path.split(SEPARATOR).slice(-1)[0]
   }
 
+  const getPathFromShared = (nodeid: string) => {
+    const links = useDataStore.getState().sharedNodes
+
+    const link = links.find((l) => l.nodeid === nodeid)
+    if (link) return link.path
+  }
+
+  const getNodePathForSave = (nodeid: string) => {
+    const pathFromNodeid = getPathFromNodeid(nodeid)
+    if (pathFromNodeid) return pathFromNodeid
+
+    const pathFromShared = getPathFromShared(nodeid)
+    if (pathFromShared) return pathFromShared
+  }
+
+  const getNodePathAndTitle = (nodeid: string) => {
+    const path = getNodePathForSave(nodeid)
+    const title = path.split(SEPARATOR).pop()
+
+    return { title, path }
+  }
+
+  const getNodeParentIdFromPath = (path: string) => {
+    const paths = path.split(SEPARATOR)
+
+    if (paths.length === 1) return undefined
+
+    const parentPath = paths.slice(0, -1).join(SEPARATOR)
+    return getNodeidFromPath(parentPath)
+  }
+
   return {
     getAllLinks,
     getLinkCount,
@@ -198,7 +229,11 @@ export const useLinks = () => {
     getILinkFromNodeid,
     getPathFromNodeid,
     createLink,
-    getTitleFromPath
+    getTitleFromPath,
+    getPathFromShared,
+    getNodePathForSave,
+    getNodePathAndTitle,
+    getNodeParentIdFromPath
   }
 }
 

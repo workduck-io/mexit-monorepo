@@ -2,10 +2,7 @@ import { getTodosFromContent, mog } from '@mexit/core'
 
 import { useApi } from './API/useNodeAPI'
 import { useTags } from './useTags'
-// import useThemeStore from '../Stores/useThemeStore'
-
 import { PersistentData } from '../Types/Data'
-import { useIndexedDBData } from './usePersistentData'
 import { useSearch } from './useSearch'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
@@ -14,6 +11,14 @@ import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
+
+interface SaveEditorValueOptions {
+  // If not set, defaults to true
+  saveApi?: boolean
+
+  // Defaults to false
+  isShared?: boolean
+}
 
 export const useDataSaverFromContent = () => {
   const setContent = useContentStore((state) => state.setContent)
@@ -28,17 +33,25 @@ export const useDataSaverFromContent = () => {
   const { updateDocument } = useSearch()
 
   // By default saves to API use false to not save
-  const saveEditorValueAndUpdateStores = async (nodeId: string, editorValue: any[], saveApi?: boolean) => {
+  const saveEditorValueAndUpdateStores = async (
+    nodeId: string,
+    editorValue: any[],
+    options?: SaveEditorValueOptions
+  ) => {
     if (editorValue) {
       setContent(nodeId, editorValue)
-      mog('saveEditorValueAndUpdateStores', { nodeId, editorValue, saveApi })
+      mog('saveEditorValueAndUpdateStores', { nodeId, editorValue, options })
 
-      if (saveApi !== false) saveDataAPI(nodeId, editorValue)
-      updateLinksFromContent(nodeId, editorValue)
-      updateTagsFromContent(nodeId, editorValue)
-      updateNodeTodos(nodeId, getTodosFromContent(editorValue))
+      if (options.saveApi !== false) saveDataAPI(nodeId, editorValue)
+      if (options?.saveApi !== false) saveDataAPI(nodeId, editorValue, options?.isShared ?? false)
 
-      await updateDocument('node', nodeId, editorValue)
+      // Update operations for only notes owned by the user
+      if (options?.isShared !== true) {
+        updateLinksFromContent(nodeId, editorValue)
+        updateTagsFromContent(nodeId, editorValue)
+        updateNodeTodos(nodeId, getTodosFromContent(editorValue))
+        await updateDocument('node', nodeId, editorValue)
+      }
     }
   }
 

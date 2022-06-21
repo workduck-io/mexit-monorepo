@@ -23,6 +23,7 @@ import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { useNodes } from '../../Hooks/useNodes'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
@@ -34,8 +35,13 @@ const ContentEditor = () => {
   const { saveApiAndUpdate, loadNode } = useLoad()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const { setShowLoader } = useLayoutStore()
+<<<<<<< HEAD
 
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useEditorBuffer()
+=======
+  const { accessWhenShared } = useNodes()
+  const { addOrUpdateValBuffer, getBufferVal } = useEditorBuffer()
+>>>>>>> 23dc928 (Fetching and Update paths for shared nodes; Check access level in save)
   const { node, fsContent } = useEditorStore(
     (state) => ({ nodeid: state.node.nodeid, node: state.node, fsContent: state.content }),
     shallow
@@ -85,7 +91,7 @@ const ContentEditor = () => {
     }
   }
 
-  const readOnly = !!fetchingContent
+  const readOnly = accessWhenShared(node.nodeid) === 'READ' || !!fetchingContent
 
   const onChangeSave = async (val: any[]) => {
     if (val && node && node.nodeid !== '__null__') {

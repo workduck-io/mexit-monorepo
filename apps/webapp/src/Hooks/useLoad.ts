@@ -28,6 +28,8 @@ export interface LoadNodeOptions {
   fetch?: boolean
   node?: NodeProperties
   withLoading?: boolean
+  // Is the note shared with the person?
+  isShared?: boolean
   // Highlights the block after loading
   highlightBlockId?: string
 }
@@ -35,6 +37,7 @@ export interface LoadNodeOptions {
 export interface IsLocalType {
   isLocal: boolean
   ilink?: ILink
+  isShared?: boolean
 }
 
 export type LoadNodeFn = (nodeid: string, options?: LoadNodeOptions) => void
@@ -77,12 +80,14 @@ const useLoad = () => {
   const getNode = (nodeid: string): NodeProperties => {
     const ilinks = useDataStore.getState().ilinks
     const archive = useDataStore.getState().archive
+    const sharedNodes = useDataStore.getState().sharedNodes
 
     const archiveLink = archive.find((i) => i.nodeid === nodeid)
     const respectiveLink = ilinks.find((i) => i.nodeid === nodeid)
 
-    const UID = respectiveLink?.nodeid ?? archiveLink?.nodeid ?? nodeid
-    const text = respectiveLink?.path ?? archiveLink?.path
+    const sharedLink = sharedNodes.find((i) => i.nodeid === nodeid)
+    const UID = respectiveLink?.nodeid ?? archiveLink?.nodeid ?? sharedLink?.nodeid ?? nodeid
+    const text = respectiveLink?.path ?? archiveLink?.path ?? sharedLink?.path
 
     const node = {
       title: text,
@@ -97,16 +102,19 @@ const useLoad = () => {
   const isLocalNode = (nodeid: string): IsLocalType => {
     const ilinks = useDataStore.getState().ilinks
     const archive = useDataStore.getState().archive
+    const sharedNodes = useDataStore.getState().sharedNodes
 
     const node = getNode(nodeid)
 
     const inIlinks = ilinks.find((i) => i.nodeid === nodeid)
     const inArchive = archive.find((i) => i.nodeid === nodeid)
+    const inShared = sharedNodes.find((i) => i.nodeid === nodeid)
 
     const isDraftNode = node && node.path?.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`)
 
     const res = {
       isLocal: !!inIlinks || !!inArchive || !!isDraftNode,
+      isShared: !!inShared,
       ilink: inIlinks ?? inArchive
     }
 
@@ -133,10 +141,10 @@ const useLoad = () => {
    * Fetches the node and saves it to local state
    * Should be used when current editor content is irrelevant to the node
    */
-  const fetchAndSaveNode = async (node: NodeProperties, withLoading = true) => {
+  const fetchAndSaveNode = async (node: NodeProperties, options = { withLoading: true, isShared: false }) => {
     // console.log('Fetch and save', { node })
     // const node = getNode(nodeid)
-    if (withLoading) setFetchingContent(true)
+    if (options.withLoading) setFetchingContent(true)
     getDataAPI(node.nodeid)
       .then((nodeData) => {
         if (nodeData) {
@@ -165,13 +173,13 @@ const useLoad = () => {
             updateFromContent(node.nodeid, content)
           }
         }
-        if (withLoading) setFetchingContent(false)
+        if (options.withLoading) setFetchingContent(false)
       })
       .catch((e) => {
         console.error(e)
       })
       .finally(() => {
-        if (withLoading) setFetchingContent(false)
+        if (options.withLoading) setFetchingContent(false)
       })
   }
 
@@ -179,12 +187,18 @@ const useLoad = () => {
    * Loads a node in the editor.
    * This does not navigate to editor.
    */
-  const loadNode: LoadNodeFn = (nodeid, options = { savePrev: true, fetch: true, withLoading: true }) => {
+  const loadNode: LoadNodeFn = (
+    nodeid,
+    options = { savePrev: true, fetch: true, withLoading: true, isShared: false }
+  ) => {
     const hasBeenLoaded = false
     const currentNodeId = useEditorStore.getState().node.nodeid
 
-    if (!options.node && !isLocalNode(nodeid).isLocal) {
-      toast.error('Selected node does not exist.')
+    // mog('LOAD NODE', { nodeid, options })
+    const localCheck = isLocalNode(nodeid)
+
+    if (!options.node && !localCheck.isLocal && !localCheck.isShared) {
+      toast.error('Selected note does not exist.')
       nodeid = currentNodeId
     }
 
@@ -198,12 +212,13 @@ const useLoad = () => {
     const node = options.node ?? getNode(nodeid)
 
     if (options.fetch && !hasBeenLoaded) {
-      fetchAndSaveNode(node, options.withLoading)
+      if (localCheck.isShared) {
+        fetchAndSaveNode(node, { withLoading: true, isShared: true })
+      } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
     }
     if (options.highlightBlockId) {
       setHighlights([options.highlightBlockId], 'editor')
     }
-
     loadNodeEditor(node)
   }
 

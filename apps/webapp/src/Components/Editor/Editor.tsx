@@ -69,8 +69,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
 
-    return ilinks.filter((item) => item.nodeid !== nodeid)
-  }, [nodeid, ilinks])
+    return ilinks.filter((item) => item.nodeid !== nodeUID)
+  }, [nodeUID, ilinks])
 
   const slashInternals = useMemo(() => {
     const snippetName = (location?.state as any)?.title
@@ -146,7 +146,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         slateElementType: ELEMENT_MENTION,
         onItemInsert: (alias) => {
           mog('Inserted new item', { alias })
-          grantUserAccessOnMention(alias, nodeid)
+          grantUserAccessOnMention(alias, nodeUID)
         },
         newItemHandler: (newAlias) => {
           // addTag(newItem)

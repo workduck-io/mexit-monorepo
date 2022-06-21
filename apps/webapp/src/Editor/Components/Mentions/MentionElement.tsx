@@ -75,8 +75,6 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
     [selected, focused]
   )
 
-  mog('MentionElement', { user, access, node })
-
   return (
     <SMentionRoot {...attributes} data-slate-value={element.value} contentEditable={false}>
       <Tippy

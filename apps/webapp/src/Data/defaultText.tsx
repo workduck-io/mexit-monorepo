@@ -42,6 +42,13 @@ export const BookmarksHelp = (
     <p>Use the bookmark button to bookmark a note.</p>
   </div>
 )
+export const SharedHelp = (
+  <div>
+    <h1>Shared Notes</h1>
+    <p>Notes that have been shared with you.</p>
+    <p>You can edit the note if you have manage or edit access.</p>
+  </div>
+)
 
 export const SearchFiltersHelp = (
   <div>
