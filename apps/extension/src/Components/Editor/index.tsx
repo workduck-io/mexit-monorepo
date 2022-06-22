@@ -83,7 +83,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
       tag: {
         cbKey: ComboboxKey.TAG,
         trigger: '#',
-        data: tags.map((t) => ({ ...t, text: t.text })),
+        data: tags.map((t) => ({ ...t, text: t.value })),
         icon: 'ri:hashtag'
       },
       ilink: {
