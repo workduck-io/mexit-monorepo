@@ -66,8 +66,7 @@ export interface ErroredInputProps extends LabeledInputProps {
   errors?: any
 }
 
-export const InputFormError = ({ errors, ...props }: ErroredInputProps) => {
-  const { name, label } = props
+export const InputFormError = ({ errors, name, label }: ErroredInputProps) => {
   const error = errors[name] ? errorMessages[errors[name].type](label) : undefined
   return <Input {...props} error={error} />
 }
