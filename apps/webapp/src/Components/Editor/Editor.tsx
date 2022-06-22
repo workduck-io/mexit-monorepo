@@ -153,7 +153,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     tag: {
       cbKey: ComboboxKey.TAG,
       trigger: '#',
-      data: tags.map((t) => ({ ...t, value: t.text })),
+      data: tags.map((t) => ({ ...t, text: t.value })),
       icon: 'ri:hashtag'
     },
     slash_command: {
@@ -183,7 +183,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const onDelayPerform = useDebouncedCallback((value) => {
     const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
     f(value)
-  }, 500)
+  }, 400)
 
   const saveAfterDelay = useDebouncedCallback(
     typeof onAutoSave === 'function' ? onAutoSave : () => undefined,

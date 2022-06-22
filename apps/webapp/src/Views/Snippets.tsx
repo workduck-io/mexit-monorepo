@@ -161,6 +161,15 @@ const Snippets = () => {
               <ResultTitle>{snip.title}</ResultTitle>
               <ResultDesc>{parseBlock(snip.content, ' ')}</ResultDesc>
             </ResultMain>
+            <IconButton
+              size={20}
+              icon={deleteBin6Line}
+              title="delete"
+              onClick={(ev) => {
+                ev.stopPropagation()
+                onDeleteSnippet(snip.id)
+              }}
+            />
           </ResultRow>
         </Result>
       )

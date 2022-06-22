@@ -10,16 +10,13 @@ const ViewSelector = ({ onChangeView, currentView }: { onChangeView: (view: View
   // mog('ViewSelector', { currentView, entries: Object.entries(View) })
   return (
     <ViewSelectorWrapper>
-      <div>View: </div>
-
       {Object.entries(View).map(([view, val]) => (
         <ViewSelectorButton
           selected={currentView === val}
           key={`ViewSelectButton_${view}`}
           onClick={() => onChangeView(View[view])}
         >
-          <Icon icon={val === View.List ? listCheck2 : layoutGridFill} />
-          {view}
+          <Icon width={24} height={24} icon={val === View.List ? listCheck2 : layoutGridFill} />
         </ViewSelectorButton>
       ))}
     </ViewSelectorWrapper>

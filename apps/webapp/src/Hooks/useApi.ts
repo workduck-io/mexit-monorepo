@@ -11,12 +11,14 @@ import { useInternalLinks } from './useInternalLinks'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLinks } from './useLinks'
+import { useTags } from './useTags'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const userDetails = useAuthStore((store) => store.userDetails)
+  const { getTags } = useTags()
   const { getPathFromNodeid, getNodeidFromPath, getTitleFromPath } = useLinks()
   const { updateILinksFromAddedRemovedPaths, updateSingleILink } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
@@ -147,7 +149,8 @@ export const useApi = () => {
       title: path.slice(-1)[0],
       lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,
-      data: serializeContent(content ?? defaultContent.content, nodeid)
+      data: serializeContent(content ?? defaultContent.content, nodeid),
+      tags: getTags(nodeid)
     }
 
     if (path.length > 1) {
