@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { Icon } from '@iconify/react'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import checkboxLine from '@iconify/icons-ri/checkbox-line'
 import appsLine from '@iconify/icons-ri/apps-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
@@ -76,16 +77,15 @@ const useNavlinks = () => {
         path: ROUTE_PATHS.integrations,
         shortcut: shortcuts.showIntegrations.keystrokes,
         icon: GetIcon(appsLine)
+      },
+      {
+        title: 'Reminders',
+        path: ROUTE_PATHS.reminders,
+        icon: GetIcon(timerFlashLine),
+        count: count.reminders
+        // shortcut: shortcuts.showReminder.keystrokes
+        // isComingSoon: true
       }
-      // {
-      // title: 'Reminders',
-      // path: ROUTE_PATHS.reminders,
-      // icon: GetIcon(timerFlashLine),
-      // count: count.reminders
-      // shortcut: shortcuts.showReminder.keystrokes
-      // isComingSoon: true
-      // }
-
       /*{
         title: 'Flows',
         path: ROUTE_PATHS.integrations,

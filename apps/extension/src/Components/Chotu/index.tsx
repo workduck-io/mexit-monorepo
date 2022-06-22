@@ -187,6 +187,10 @@ export default function Chotu() {
           delete event.detail['type']
           child.updateIlinks(event.detail[0])
           break
+        case 'ACT_ON_REMINDER':
+          delete event.detail['type']
+          child.reminderAction(event.detail[0])
+          break
       }
     }
     window.addEventListener('raju', handleEvent)

@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
 import { IDBStorage } from '@mexit/core'
 
@@ -17,40 +17,38 @@ type PortalStoreType = {
 }
 
 const usePortalStore = create<PortalStoreType>(
-  devtools(
-    persist(
-      (set, get) => ({
-        apps: {},
-        setApps: (apps) => set({ apps }),
+  persist(
+    (set, get) => ({
+      apps: {},
+      setApps: (apps) => set({ apps }),
 
-        connectedPortals: [],
-        setConnectedPortals: (connectedPortals) => set({ connectedPortals }),
-        connectPortal: (portal) => {
-          const connectedPortals = get().connectedPortals
-          const newConnectedPortals = [...connectedPortals, portal]
-          set({ connectedPortals: newConnectedPortals })
-        },
-        getIsPortalConnected: (actionGroupId: string) => {
-          const connectedPortals = get().connectedPortals
+      connectedPortals: [],
+      setConnectedPortals: (connectedPortals) => set({ connectedPortals }),
+      connectPortal: (portal) => {
+        const connectedPortals = get().connectedPortals
+        const newConnectedPortals = [...connectedPortals, portal]
+        set({ connectedPortals: newConnectedPortals })
+      },
+      getIsPortalConnected: (actionGroupId: string) => {
+        const connectedPortals = get().connectedPortals
 
-          return connectedPortals.find((portal) => portal.serviceType === actionGroupId)
-        },
-        updateConnectedPortals: (actionGroupId, serviceId, parentNodeId) => {
-          const connectedPortals = get().connectedPortals
-          const newConnectedPortals = connectedPortals.map((portal) => {
-            if (portal.serviceType === actionGroupId) {
-              return { ...portal, serviceId, parentNodeId }
-            }
-            return portal
-          })
+        return connectedPortals.find((portal) => portal.serviceType === actionGroupId)
+      },
+      updateConnectedPortals: (actionGroupId, serviceId, parentNodeId) => {
+        const connectedPortals = get().connectedPortals
+        const newConnectedPortals = connectedPortals.map((portal) => {
+          if (portal.serviceType === actionGroupId) {
+            return { ...portal, serviceId, parentNodeId }
+          }
+          return portal
+        })
 
-          set({ connectedPortals: newConnectedPortals })
-        }
-      }),
-      {
-        name: 'mex-portal-store'
+        set({ connectedPortals: newConnectedPortals })
       }
-    )
+    }),
+    {
+      name: 'mex-portal-store'
+    }
   )
 )
 

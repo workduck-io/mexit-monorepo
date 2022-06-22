@@ -14,6 +14,7 @@ import { defaultThemes } from '@mexit/shared'
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { EditorProvider } from './Hooks/useEditorContext'
+import ReminderArmer from './Components/ReminderArmer'
 
 export default function Index() {
   const theme = useThemeStore((state) => state.theme)
@@ -21,6 +22,7 @@ export default function Index() {
   return (
     <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
       <GlobalStyle />
+      <ReminderArmer />
       <SputlitProvider>
         <DibbaPortal>
           <Dibba />

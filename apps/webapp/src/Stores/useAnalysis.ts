@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import create from 'zustand'
-import { devtools } from 'zustand/middleware'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { areEqual } from '../Utils/hash'
@@ -30,19 +29,17 @@ interface AnalysisStore {
   setAnalysis: (analysis: NodeAnalysis) => void
 }
 
-export const useAnalysisStore = create<AnalysisStore>(
-  devtools((set, get) => ({
-    analysis: {
-      nodeid: undefined,
-      tags: [],
-      outline: [],
-      editorTodos: []
-    },
-    setAnalysis: (analysis: NodeAnalysis) => {
-      set({ analysis })
-    }
-  }))
-)
+export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
+  analysis: {
+    nodeid: undefined,
+    tags: [],
+    outline: [],
+    editorTodos: []
+  },
+  setAnalysis: (analysis: NodeAnalysis) => {
+    set({ analysis })
+  }
+}))
 
 export const useAnalysisTodoAutoUpdate = () => {
   // const { setTodo } = useEditorStore(state => state)

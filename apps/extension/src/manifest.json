@@ -43,7 +43,8 @@
     "storage",
     "tabs",
     "activeTab",
-    "search"
+    "search",
+    "notifications"
   ],
   "web_accessible_resources": [
     {
