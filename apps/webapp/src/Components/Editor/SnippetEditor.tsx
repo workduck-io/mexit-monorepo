@@ -101,6 +101,7 @@ const SnippetEditor = () => {
     })
 
     return () => {
+      saveSnippet()
       unsubscribe()
     }
   }, [])
@@ -112,11 +113,12 @@ const SnippetEditor = () => {
     // const snippet = useSnippetStore.getState().sn
   }
 
-  const returnToSnippets = () => {
+  const saveSnippet = () => {
     saveAndClearBuffer()
     // updater()
-    goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
+
+  const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
 
   const defaultValue = snippet && snippet.title !== DRAFT_NODE ? snippet.title : ''
 
@@ -158,6 +160,7 @@ const SnippetEditor = () => {
               /> */}
               <SnippetSaverButton
                 getSnippetExtras={getSnippetExtras}
+                noButton
                 callbackAfterSave={callbackAfterSave}
                 title="Save Snippet"
               />

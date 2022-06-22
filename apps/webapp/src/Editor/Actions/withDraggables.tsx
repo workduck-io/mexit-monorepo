@@ -30,6 +30,7 @@ import { RelativeTime } from '@mexit/shared'
 import useBlockStore from '../../Stores/useBlockStore'
 import { ProfileImage } from '../../Components/User/ProfileImage'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { IS_DEV } from '@mexit/core'
 
 const StyledTip = styled.div`
   display: flex;
@@ -167,11 +168,13 @@ export const DraggerContent = ({ element }: any) => {
     <>
       <div>Drag to move</div>
       <div>Click to select</div>
-      <div>
-        <span>
-          <i>{element && element.id}</i> - {element && element.type}
-        </span>
-      </div>
+      {IS_DEV && (
+        <div>
+          <span>
+            <i>{element && element.id}</i> - {element && element.type}
+          </span>
+        </div>
+      )}
     </>
   )
 }

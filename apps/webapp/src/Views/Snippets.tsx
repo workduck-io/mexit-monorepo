@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -26,9 +26,18 @@ import { CreateSnippet, SnippetCommand, SnippetCommandPrefix, SnippetHeader } fr
 import { Title } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
-import { generateSnippetId, GenericSearchResult, mog, parseBlock, Snippet } from '@mexit/core'
+import {
+  defaultContent,
+  generateSnippetId,
+  generateTempId,
+  GenericSearchResult,
+  mog,
+  parseBlock,
+  Snippet
+} from '@mexit/core'
 import { useApi } from '../Hooks/useApi'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 
 export type SnippetsProps = {
   title?: string
@@ -42,16 +51,21 @@ const Snippets = () => {
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
   const api = useApi()
+
   const initialSnippets: any[] = snippets.map((snippet) => ({
     id: snippet.id,
     title: snippet.title,
     text: parseBlock(snippet.content || [{ text: '' }])
   }))
 
+  mog('Initial snippets', { snippets })
+
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
 
-    if (newSearchTerm === '' && res.length === 0) {
+    mog('new search is here', { newSearchTerm, res })
+    if (!newSearchTerm && res?.length === 0) {
+      mog('Inside', {})
       return initialSnippets
     }
 
@@ -97,12 +111,20 @@ const Snippets = () => {
 
   useEffect(() => {
     const snippets = getSnippets()
+    const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
 
-    snippets.forEach(async (item) => {
-      await api.getSnippetById(item.id).then((response) => {
-        updateSnippet(response as Snippet)
-      })
-    })
+    try {
+      Promise.allSettled(
+        unfetchedSnippets.map(
+          async (item) =>
+            await api.getSnippetById(item.id).then((response) => {
+              updateSnippet(response as Snippet)
+            })
+        )
+      )
+    } catch (err) {
+      mog('Failed to fetch snippets', { err })
+    }
   }, [])
 
   // Forwarding ref to focus on the selected result
@@ -171,7 +193,10 @@ const Snippets = () => {
             {snip.title}
             <Icon icon={icon} />
           </Title>
-          <PreviewEditor content={snip.content} editorId={`SnippetSearchPreview_editor_${item.id}`} />
+          <EditorPreviewRenderer
+            content={snip?.content?.length ? snip.content : defaultContent?.content}
+            editorId={`SnippetSearchPreview_editor_${item?.id}`}
+          />
         </SplitSearchPreviewWrapper>
       )
     } else
@@ -181,6 +206,8 @@ const Snippets = () => {
         </SplitSearchPreviewWrapper>
       )
   }
+
+  const randId = useMemo(() => generateTempId(), [initialSnippets])
 
   return (
     <SearchContainer>
@@ -192,8 +219,8 @@ const Snippets = () => {
         </Button>
       </MainHeader>
       <SearchView
-        id="searchSnippet"
-        key="searchSnippet"
+        id={`searchSnippet_${randId}`}
+        key={`searchSnippet_${randId}`}
         initialItems={initialSnippets}
         getItemKey={(i) => i.id}
         onSelect={onSelect}
@@ -201,7 +228,7 @@ const Snippets = () => {
         onSearch={onSearch}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
-        RenderStartCard={RenderStartCard}
+        // RenderStartCard={RenderStartCard}
       />
     </SearchContainer>
   )

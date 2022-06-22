@@ -203,7 +203,12 @@ interface SnippetSaverButtonProps extends SaverButtonProps {
   getSnippetExtras: () => SnippetExtras
 }
 
-export const SnippetSaverButton = ({ callbackAfterSave, title, getSnippetExtras }: SnippetSaverButtonProps) => {
+export const SnippetSaverButton = ({
+  callbackAfterSave,
+  title,
+  getSnippetExtras,
+  noButton
+}: SnippetSaverButtonProps) => {
   const { onSave: onSaveFs } = useSnippetSaver()
   const shortcuts = useHelpStore((state) => state.shortcuts)
   const { trackEvent } = useAnalytics()
@@ -228,6 +233,8 @@ export const SnippetSaverButton = ({ callbackAfterSave, title, getSnippetExtras 
       unsubscribe()
     }
   })
+
+  if (noButton) return <></>
 
   return (
     <IconButton

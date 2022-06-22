@@ -339,8 +339,10 @@ export const useApi = () => {
   }
 
   const getSnippetById = async (id: string) => {
+    const url = apiURLs.getSnippetById(id)
+
     const data = await client
-      .get(apiURLs.getSnippetById(id), {
+      .get(url, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'

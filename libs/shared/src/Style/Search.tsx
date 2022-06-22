@@ -323,6 +323,8 @@ export const ResultMetaData = styled.div`
 
 export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
   background-color: ${({ theme }) => theme.colors.gray[9]};
+  user-select: none;
+
   :hover {
     cursor: pointer;
   }
