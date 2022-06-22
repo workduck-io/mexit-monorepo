@@ -91,78 +91,77 @@ export const CreateTags = (
   const resultTags: Tag[] = []
   switch (appName) {
     case 'github':
-      resultTags.push({ id: nanoid(), text: appName })
-      if (splitURL[3]) resultTags.push({ id: nanoid(), text: `${splitURL[3]}` })
-      if (splitURL[4]) resultTags.push({ id: nanoid(), text: `${splitURL[4]}` })
-      if (keyword === 'pulls') resultTags.push({ id: nanoid(), text: 'PR' })
-      else if (keyword === 'issues')
-        resultTags.push({ id: nanoid(), text: `ISSUE${splitURL[6] ? '-' + splitURL[6] : 'S'}` })
-      else if (keyword === 'pull' && splitURL[6]) resultTags.push({ id: nanoid(), text: `PR-${splitURL[6]}` })
-      else if (keyword === 'projects') resultTags.push({ id: nanoid(), text: matchedMetaTags.value })
+      resultTags.push({ value: appName })
+      if (splitURL[3]) resultTags.push({ value: `${splitURL[3]}` })
+      if (splitURL[4]) resultTags.push({ value: `${splitURL[4]}` })
+      if (keyword === 'pulls') resultTags.push({ value: 'PR' })
+      else if (keyword === 'issues') resultTags.push({ value: `ISSUE${splitURL[6] ? '-' + splitURL[6] : 'S'}` })
+      else if (keyword === 'pull' && splitURL[6]) resultTags.push({ value: `PR-${splitURL[6]}` })
+      else if (keyword === 'projects') resultTags.push({ value: matchedMetaTags.value })
       return resultTags
     case 'linear':
-      resultTags.push({ id: nanoid(), text: appName })
+      resultTags.push({ value: appName })
 
-      if (splitURL[3]) resultTags.push({ id: nanoid(), text: `${splitURL[3]}` })
+      if (splitURL[3]) resultTags.push({ value: `${splitURL[3]}` })
       if (keyword === 'issue') {
-        resultTags.push({ id: nanoid(), text: 'issue' })
-        resultTags.push({ id: nanoid(), text: `${splitURL[5]}` })
+        resultTags.push({ value: 'issue' })
+        resultTags.push({ value: `${splitURL[5]}` })
       }
-      if (keyword === 'views') resultTags.push({ id: nanoid(), text: `${splitURL[4]}` })
-      if (keyword === 'view') resultTags.push({ id: nanoid(), text: 'view' })
+      if (keyword === 'views') resultTags.push({ value: `${splitURL[4]}` })
+      if (keyword === 'view') resultTags.push({ value: 'view' })
       if (keyword === 'team') {
-        resultTags.push({ id: nanoid(), text: 'team' })
-        resultTags.push({ id: nanoid(), text: `${splitURL[6]}` })
-        if (splitURL[7]) resultTags.push({ id: nanoid(), text: `${splitURL[7]}` })
+        resultTags.push({ value: 'team' })
+        resultTags.push({ value: `${splitURL[6]}` })
+        if (splitURL[7]) resultTags.push({ value: `${splitURL[7]}` })
       }
 
       return resultTags
     case 'gmeet':
-      resultTags.push({ id: nanoid(), text: 'Google Meet' })
+      resultTags.push({ value: 'Google Meet' })
 
-      if (titleAsTag) resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('–')[1] })
+      if (titleAsTag) resultTags.push({ value: matchedMetaTags.value.toString().split('–')[1] })
       return resultTags
     case 'gmail':
-      resultTags.push({ id: nanoid(), text: 'Gmail' })
-      if (titleAsTag) resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split(' ')[0] })
+      resultTags.push({ value: 'Gmail' })
+      if (titleAsTag) resultTags.push({ value: matchedMetaTags.value.toString().split(' ')[0] })
       return resultTags
     case 'slack':
-      resultTags.push({ id: nanoid(), text: 'Slack' })
+      resultTags.push({ value: 'Slack' })
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('|')[1] })
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('|')[2] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('|')[1] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('|')[2] })
       }
       return resultTags
     case 'airtable':
-      resultTags.push({ id: nanoid(), text: 'Airtable' })
+      resultTags.push({ value: 'Airtable' })
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split(' ')[0].split(':')[0] })
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split(' ')[1] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split(' ')[0].split(':')[0] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split(' ')[1] })
       }
       return resultTags
     case 'figma':
-      resultTags.push({ id: nanoid(), text: 'Figma' })
+      resultTags.push({ value: 'Figma' })
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('–')[0] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('–')[0] })
       }
       return resultTags
     case 'atlassian':
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[1] })
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[2] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('-')[0] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('-')[1] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('-')[2] })
       }
       return resultTags
     case 'docs':
-      resultTags.push({ id: nanoid(), text: 'Google Docs' })
+      resultTags.push({ value: 'Google Docs' })
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('-')[0] })
       }
       return resultTags
     case 'sheets':
-      resultTags.push({ id: nanoid(), text: 'Google Sheets' })
+      resultTags.push({ value: 'Google Sheets' })
       if (titleAsTag) {
-        resultTags.push({ id: nanoid(), text: matchedMetaTags.value.toString().split('-')[0] })
+        resultTags.push({ value: matchedMetaTags.value.toString().split('-')[0] })
       }
       return resultTags
 
