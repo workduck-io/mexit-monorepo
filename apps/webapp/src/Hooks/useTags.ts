@@ -1,4 +1,5 @@
 import { getTagsFromContent, TagsCache } from '@mexit/core'
+import { generateTag } from '@mexit/shared'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useDataStore } from '../Stores/useDataStore'
@@ -19,6 +20,7 @@ export interface RelatedNodes {
 
 export const useTags = () => {
   // const contents = useContentStore((state) => state.contents)
+  const setTags = useDataStore((store) => store.setTags)
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const { getPathFromNodeid } = useLinks()
   const { isInArchive } = useNodes()
@@ -114,6 +116,7 @@ export const useTags = () => {
 
   const updateTagsFromContent = (nodeid: string, content: any[]) => {
     const tagsCache = useDataStore.getState().tagsCache
+    const oldTags = useDataStore.getState().tags
 
     if (content) {
       const tags: string[] = getTagsFromContent(content)
@@ -167,8 +170,14 @@ export const useTags = () => {
         }
       }, {})
 
-      // console.log('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags })
-      updateTagsCache({ ...updatedTags, ...newCacheTags })
+      const newTagsCache = { ...updatedTags, ...newCacheTags }
+      const newTagsForStore = Object.keys(newTagsCache)
+      const oldTagsFromStore = oldTags.map((t) => t.value)
+      const alltags = Settify([...oldTagsFromStore, ...newTagsForStore]).map(generateTag)
+
+      console.log('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags, alltags })
+      setTags(alltags)
+      updateTagsCache(newTagsCache)
     }
   }
 

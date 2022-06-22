@@ -19,6 +19,7 @@ export const ViewSelectorWrapper = styled.div`
 export const ViewSelectorButton = styled.div<{ selected: boolean }>`
   display: flex;
   align-items: center;
+  cursor: pointer;
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny};

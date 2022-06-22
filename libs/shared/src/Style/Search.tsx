@@ -202,6 +202,7 @@ export const SearchViewContainer = styled.div`
 export const SearchContainer = styled.div`
   margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
   position: relative;
+  width: 100%;
   min-height: 60vh;
 `
 
@@ -322,6 +323,8 @@ export const ResultMetaData = styled.div`
 
 export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
   background-color: ${({ theme }) => theme.colors.gray[9]};
+  user-select: none;
+
   :hover {
     cursor: pointer;
   }

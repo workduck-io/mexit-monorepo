@@ -5,11 +5,14 @@ const useLayout = () => {
   const setFocusMode = useLayoutStore((store) => store.setFocusMode)
   const showInfobar = useLayoutStore((store) => store.showInfobar)
   const hideInfobar = useLayoutStore((store) => store.hideInfobar)
+  const showShareOptions = useLayoutStore((store) => store.showShareOptions)
+  const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
 
   const toggleFocusMode = () => {
     if (useLayoutStore.getState().focusMode) {
       toggleFocusModeBool()
       showInfobar()
+      if (showShareOptions) toggleShareOptions()
     } else {
       toggleFocusModeBool()
       hideInfobar()

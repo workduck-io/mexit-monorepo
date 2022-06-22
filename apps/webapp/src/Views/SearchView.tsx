@@ -356,7 +356,7 @@ const SearchView = <Item,>({
   const ResultsView = (
     <Results key={`ResultForSearch_${id}`} view={view}>
       {view === View.Card && RenderStartCard && <RenderStartCard />}
-      {result.map((c, i) => {
+      {result?.map((c, i) => {
         return (
           <RenderItem
             view={view}
@@ -413,7 +413,7 @@ const SearchView = <Item,>({
       {RenderFilters && filters.length > 0 ? <RenderFilters result={result} /> : null}
 
       <ResultsWrapper>
-        {result.length > 0 ? (
+        {result?.length > 0 ? (
           view === View.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
             <SplitView
               id={`SplitViewForSearch_${id}`}

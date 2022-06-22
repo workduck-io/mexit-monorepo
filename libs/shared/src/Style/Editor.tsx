@@ -68,7 +68,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: ${({ theme }) => theme.spacing.large};
+  gap: ${({ theme }) => theme.spacing.medium};
   padding: 0 ${({ theme }) => theme.spacing.medium};
   margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
   width: 100%;

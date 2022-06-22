@@ -9,15 +9,12 @@ import {
   removeLink,
   Tag,
   typeInvert,
-  defaultCommands,
-  CheckValidILinkProps
+  defaultCommands
 } from '@mexit/core'
-import { nanoid } from 'nanoid'
 import { getAllParentIds, getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
-  id: nanoid(),
-  text: item
+  value: item
 })
 
 export const dataStoreConstructor = (set, get) => ({
@@ -53,10 +50,18 @@ export const dataStoreConstructor = (set, get) => ({
   },
 
   addTag: (tag) => {
-    const Tags = Settify([...get().tags.map((t) => t.value), tag])
+    const currentTags = get().tags
+    mog('currentTags', { currentTags, tag })
+
+    const Tags = Settify([...currentTags.map((t) => t.value), tag])
+
     set({
       tags: Tags.map(generateTag)
     })
+  },
+
+  setTags: (tags) => {
+    set({ tags })
   },
 
   /*
@@ -123,7 +128,8 @@ export const dataStoreConstructor = (set, get) => ({
     if (!reservedOrUnique) {
       throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
     }
-    return ilink
+
+    return reservedOrUnique.unique
   },
 
   setIlinks: (ilinks) => {

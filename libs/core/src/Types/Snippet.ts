@@ -1,8 +1,10 @@
+import { NodeEditorContent } from './Editor'
+
 export interface Snippet {
   id: string
   title: string
   icon?: string
-  content: any[]
+  content?: NodeEditorContent
   isTemplate?: boolean
 }
 

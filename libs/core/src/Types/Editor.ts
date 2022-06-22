@@ -96,8 +96,7 @@ export interface ILink {
 
 /**  Tags */
 export interface Tag {
-  id: string
-  text: string
+  value: string
 }
 
 export interface FlexSearchResult {
