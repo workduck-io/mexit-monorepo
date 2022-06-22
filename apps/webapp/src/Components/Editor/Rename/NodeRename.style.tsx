@@ -30,7 +30,6 @@ export const ButtonWrapper = styled.div`
   top: 100%;
   display: flex;
   padding: ${({ theme }) => theme.spacing.medium} 0;
-  z-index: 200;
 
   ${Button} {
     margin-right: ${({ theme }) => theme.spacing.small};

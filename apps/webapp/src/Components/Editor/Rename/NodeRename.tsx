@@ -134,11 +134,6 @@ const NodeRenameOnlyTitle = () => {
     }
   }
 
-  const onCancel: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault()
-    reset()
-  }
-
   useEffect(() => {
     if (newTitle && editable) {
       // mog('RenameInput', { id: useEditorStore.getState().node.id, to })
@@ -186,15 +181,12 @@ const NodeRenameOnlyTitle = () => {
             primary
             key="ButtonRename"
             disabled={getNameFromPath(nodeFrom) === newTitle || isClashed || newTitle.indexOf(SEPARATOR) !== -1}
-            onClick={onRenameClick}
+            // OnMouseDown instead of onClick to prevent onBlur from triggering first
+            onMouseDown={onRenameClick}
           >
             <DisplayShortcut shortcut="Enter" />
             Rename
           </Button>
-          {/* <Button onClick={onCancel}>
-            <DisplayShortcut shortcut="Shift+Enter" />
-            Open Refactor
-          </Button> */}
         </ButtonWrapper>
       )}
     </Wrapper>
