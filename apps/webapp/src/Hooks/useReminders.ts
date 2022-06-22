@@ -145,11 +145,11 @@ export const useReminders = () => {
     const upcomingReminders = reminders.filter(upcoming).filter(toArm)
     const tobeArmedReminders = uniqBy(upcomingReminders, 'id')
 
-    mog('tobeArmedReminders', {
-      tobeArmedReminders,
-      reminders,
-      upcomingReminders
-    })
+    // mog('tobeArmedReminders', {
+    //   tobeArmedReminders,
+    //   reminders,
+    //   upcomingReminders
+    // })
 
     // Group by time of interval 1 minutes
     const groupedReminders: Record<number, Reminder[]> = tobeArmedReminders.reduce(

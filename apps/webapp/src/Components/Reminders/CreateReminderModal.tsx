@@ -19,8 +19,7 @@ import {
   generateReminderId,
   Reminder
 } from '@mexit/core'
-import { DatePickerStyles, getNameFromPath, Label, TextAreaBlock } from '@mexit/shared'
-import { Button } from '@udecode/plate'
+import { DatePickerStyles, getNameFromPath, Label, TextAreaBlock, Button } from '@mexit/shared'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import useAnalytics from '../../Hooks/useAnalytics'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
@@ -316,10 +315,7 @@ const CreateReminderModal = () => {
         </DatePickerStyles>
 
         <ModalControls>
-          <Button
-            // large
-            onClick={handleCancel}
-          >
+          <Button large onClick={handleCancel}>
             Cancel
           </Button>
           <LoadingButton

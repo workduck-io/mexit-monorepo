@@ -3,6 +3,7 @@ import { uniqBy } from 'lodash'
 
 import {
   getReminderState,
+  MEXIT_FRONTEND_URL_BASE,
   mog,
   past,
   ReminderControls,
@@ -153,11 +154,11 @@ export const useReminders = () => {
     const upcomingReminders = reminders.filter(upcoming).filter(toArm)
     const tobeArmedReminders = uniqBy(upcomingReminders, 'id')
 
-    mog('tobeArmedReminders', {
-      tobeArmedReminders,
-      reminders,
-      upcomingReminders
-    })
+    // mog('tobeArmedReminders', {
+    //   tobeArmedReminders,
+    //   reminders,
+    //   upcomingReminders
+    // })
 
     // Group by time of interval 1 minutes
     const groupedReminders: Record<number, Reminder[]> = tobeArmedReminders.reduce(
@@ -277,6 +278,8 @@ export const useReminders = () => {
         })
         mog('ReminderArmer: IpcAction.ACTION_REMINDER USE OPEN_REMINDER ACTION', { action, reminder })
         // appNotifierWindow(IpcAction.OPEN_REMINDER_IN_MEX, AppType.SPOTLIGHT, { reminder: reminder })
+        // TODO: even clicking on any button runs this, commenting it out for now. On mac, one has to click on options first to see all the notification buttons
+        // window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${reminder.nodeid}`, '_blank')
         break
       case 'delete':
         deleteReminder(reminder.id)

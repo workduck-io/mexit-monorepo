@@ -5,25 +5,8 @@ import { useReminderStore } from '../Stores/useReminderStore'
 
 const ReminderArmer = () => {
   const reminders = useReminderStore((state) => state.reminders)
-  const {
-    getToArmReminders,
-    armReminders,
-    clearAllArmedReminders,
-    armMissedReminders,
-    actOnReminder,
-    getMissedReminders
-  } = useReminders()
-
-  // Set reminder action listner
-  useEffect(() => {
-    // ipcRenderer.on(IpcAction.ACTION_REMINDER, (_event, arg: ReminderActionIpcData) => {
-    //   // goTo(ROUTE_PATHS.node, NavigationType.push, appleNotesUID)
-    //   // mog('ReminderArmer: IpcAction.ACTION_REMINDER', { arg })
-    //   const { action, reminder } = arg
-    //   actOnReminder(action, reminder)
-    // })
-    console.log('something nothing', {})
-  }, [])
+  const { getToArmReminders, armReminders, clearAllArmedReminders, armMissedReminders, getMissedReminders } =
+    useReminders()
 
   useEffect(() => {
     const toArmRems = getToArmReminders()
