@@ -33,6 +33,7 @@ import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useMentions } from '../../Hooks/useMentions'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useAuthStore } from '../../Stores/useAuth'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -66,6 +67,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const prefillShareModal = useShareModalStore((state) => state.prefillModal)
   const { grantUserAccessOnMention } = useMentions()
   const sharedNodes = useDataStore((store) => store.sharedNodes)
+  const userDetails = useAuthStore((state) => state.userDetails)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -101,23 +103,35 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
   ]
+
   const mentions = useMemo(
-    () => [
-      ...mentionable.map((m) => ({
-        value: m.userid,
-        text: m.alias,
-        icon: 'ri:user-line',
-        type: QuickLinkType.mentions
-      })),
-      ...invitedUsers.map((m) => ({
-        value: m.alias,
-        text: m.alias,
-        icon: 'ri:user-line',
-        type: QuickLinkType.mentions,
-        additional: { email: m.email }
-      }))
-    ],
-    [mentionable, invitedUsers]
+    () =>
+      userDetails
+        ? [
+            {
+              value: userDetails.userID,
+              text: `${userDetails.alias} (you)`,
+              icon: 'ri:user-line',
+              type: QuickLinkType.mentions
+            },
+            ...mentionable
+              .filter((m) => m.userID !== userDetails.userID)
+              .map((m) => ({
+                value: m.userID,
+                text: m.alias,
+                icon: 'ri:user-line',
+                type: QuickLinkType.mentions
+              })),
+            ...invitedUsers.map((m) => ({
+              value: m.alias,
+              text: m.alias,
+              icon: 'ri:user-line',
+              type: QuickLinkType.mentions,
+              additional: { email: m.email }
+            }))
+          ]
+        : [],
+    [mentionable, invitedUsers, userDetails]
   )
 
   const comboOnKeyDownConfig: ComboConfigData = {

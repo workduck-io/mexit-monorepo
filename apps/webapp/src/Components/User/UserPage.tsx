@@ -21,19 +21,19 @@ const UserPage = () => {
           <div>
             <Title>User</Title>
             <Info>
-              <InfoLabel>Name:</InfoLabel>
+              <InfoLabel>Name</InfoLabel>
               <InfoData>{currentUserDetails?.name}</InfoData>
             </Info>
             <Info>
-              <InfoLabel>Email:</InfoLabel>
+              <InfoLabel>Email</InfoLabel>
               <InfoData>{currentUserDetails?.email}</InfoData>
             </Info>
             <Info>
-              <InfoLabel>Alias:</InfoLabel>
+              <InfoLabel>Alias</InfoLabel>
               <InfoData>{currentUserDetails?.alias ?? 'Warning: Unset'}</InfoData>
             </Info>
             <Info>
-              <InfoLabel>Workspace:</InfoLabel>
+              <InfoLabel>Workspace</InfoLabel>
               <InfoData small>
                 <CopyButton text={getWorkspaceId()}></CopyButton>
                 {getWorkspaceId()}

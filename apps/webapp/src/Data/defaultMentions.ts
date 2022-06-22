@@ -2,7 +2,7 @@ import { InvitedUser, Mentionable } from '@mexit/core'
 
 const randomUser = (s: string) => ({
   type: 'mentionable' as const,
-  userid: `USER_${s}`,
+  userID: `USER_${s}`,
   alias: s,
   email: `${s}@gmail.com`,
   access: {

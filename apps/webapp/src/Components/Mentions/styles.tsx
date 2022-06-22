@@ -29,6 +29,14 @@ export const SharedPermissionsWrapper = styled.div`
   }
 `
 
+export const ShareOwnerTag = styled.div`
+  padding: ${({ theme }) => `0.75rem ${theme.spacing.small}`};
+  color: ${({ theme }) => theme.colors.text.default};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  background: ${({ theme }) => theme.colors.gray[8]};
+  border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
+`
+
 export const SharedPermissionsTable = styled.table`
   margin-top: ${({ theme }) => theme.spacing.large};
   min-width: 600px;
@@ -108,7 +116,7 @@ export const ShareEmail = styled.td`
 export const SharePermission = styled.td<{ disabled?: boolean }>`
   width: 120px;
 
-  ${(disabled) =>
+  ${({ disabled }) =>
     disabled &&
     css`
       pointer-events: none;

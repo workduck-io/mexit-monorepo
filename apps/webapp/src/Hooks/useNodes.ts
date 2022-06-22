@@ -40,7 +40,7 @@ export const useNodes = () => {
   const accessWhenShared = (nodeid: string): AccessLevel => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const res = sharedNodes.find((n) => n.nodeid === nodeid)
-    if (res) return res.access
+    if (res) return res.currentUserAccess
     return undefined
   }
 

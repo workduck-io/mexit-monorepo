@@ -21,7 +21,7 @@ const SharedNotes = () => {
   }, [sharedNodesS])
 
   const onOpenNode = (nodeid: string) => {
-    push(nodeid, { isShared: true, fetch: true })
+    push(nodeid, { fetch: true })
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 

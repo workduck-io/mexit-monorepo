@@ -23,6 +23,7 @@ import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
 import { usePermission } from '../Hooks/API/usePermission'
 import { useFetchShareData } from '../Hooks/useFetchShareData'
 import { usePortals } from '../Hooks/usePortals'
+import { useAuthStore } from '../Stores/useAuth'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const EditorView = () => {
   const [first, setFirst] = useState(true)
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
+  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useAnalysis()
 
@@ -52,7 +54,7 @@ const EditorView = () => {
       await Promise.allSettled([fetchSharedDataPromise, initPortalsPromise])
     }
     fetchSharedAndPortals()
-  }, [])
+  }, [workspaceDetails]) // eslint-disable-line
 
   useEffect(() => {
     if (!first) {

@@ -29,7 +29,7 @@ const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
           goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
         }}
       >
-        {getPathFromNodeid(nodeid)}
+        {getPathFromNodeid(nodeid, true)}
       </NodeLinkStyled>
     </TippyPreviewEditor>
   )

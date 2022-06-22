@@ -95,8 +95,11 @@ export interface ILink {
   icon?: string
 }
 
+type UserID = string
 export interface SharedNode extends ILink {
-  access: AccessLevel
+  currentUserAccess: AccessLevel
+  sharedBy: UserID
+  owner: UserID
 }
 
 /**  Tags */
@@ -176,9 +179,13 @@ export interface NodeProperties {
 export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
-  flow = 'Flows',
   tags = 'Tags',
   mentions = 'Mentions'
+}
+
+export enum QuickLinkStatus {
+  new,
+  exists
 }
 
 export enum ComboboxKey {
@@ -208,11 +215,6 @@ export interface SlashCommand {
 export interface SlashCommands {
   default: SlashCommand[]
   internal: SlashCommand[]
-}
-
-export enum QuickLinkStatus {
-  new,
-  exists
 }
 
 export enum NodeType {

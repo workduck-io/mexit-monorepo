@@ -15,6 +15,7 @@ interface UsersRaw {
 interface MUsersRaw {
   nodeid: string
   email: string
+  alias: string
   userid: string
   access: AccessLevel
 }
@@ -24,7 +25,6 @@ export const useFetchShareData = () => {
   const { getUserDetailsUserId } = useUserService()
   const { addMentionable } = useMentions()
   const setSharedNodes = useDataStore((s) => s.setSharedNodes)
-  const userDetails = useAuthStore((s) => s.userDetails)
 
   const fetchShareData = async () => {
     // First fetch the shared nodes
@@ -54,17 +54,30 @@ export const useFetchShareData = () => {
 
     // Then finally fetch the user detail: email
     const mentionableU = (
-      await Promise.allSettled(
-        UserAccessDetails.map(async (u) => {
+      await Promise.allSettled([
+        ...UserAccessDetails.map(async (u) => {
           const uDetails = await getUserDetailsUserId(u.userid)
-          return { ...u, email: uDetails.email }
+          return { ...u, email: uDetails.email, alias: uDetails.alias }
+        }),
+
+        ...sharedNodes.map(async (node) => {
+          const uDetails = await getUserDetailsUserId(node.owner)
+          return {
+            access: 'OWNER',
+            userid: uDetails.userID,
+            nodeid: node.nodeid,
+            email: uDetails.email,
+            alias: uDetails.alias
+          }
         })
-      )
+      ])
     )
       .filter((p) => p.status === 'fulfilled')
       .map((p: any) => p.value as MUsersRaw)
-      .filter((u) => u.userid !== userDetails?.userID)
 
+    mentionableU.forEach((u) =>
+      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.nodeid, u.access)
+    )
     mentionableU.forEach((u) => addMentionable(getEmailStart(u.email), u.email, u.userid, u.nodeid, u.access))
 
     mog('SharedNode', { sharedNodes, usersWithAccess, mentionableU, UserAccessDetails })

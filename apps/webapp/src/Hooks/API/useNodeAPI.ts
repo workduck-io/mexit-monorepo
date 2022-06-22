@@ -170,7 +170,7 @@ export const useApi = () => {
 
     if (isShared) {
       const node = getSharedNode(nodeid)
-      if (node.access[nodeid] === 'READ') return
+      if (node.currentUserAccess[nodeid] === 'READ') return
     }
 
     const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
@@ -210,7 +210,9 @@ export const useApi = () => {
       .then((d: any) => {
         return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
       })
-      .catch(console.error)
+      .catch((e) => {
+        console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
+      })
 
     if (res) {
       return { content: deserializeContent(res.data), metadata: res.metadata ?? undefined, version: res.version }

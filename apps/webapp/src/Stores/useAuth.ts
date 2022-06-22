@@ -20,6 +20,7 @@ import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
 import useArchive from '../Hooks/useArchive'
+import { useUserCacheStore } from './useUserCacheStore'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -44,6 +45,7 @@ export const useAuthentication = () => {
   const clearTodos = useTodoStore().clearTodos
   const { initPortals } = usePortals()
   const getArchiveData = useArchive().getArchiveData
+  const addUser = useUserCacheStore((s) => s.addUser)
 
   const login = async (
     email: string,
@@ -67,9 +69,16 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords)
         .then((d: any) => {
-          const userDetails = { email, alias: d.data.alias, userID: d.data.id, name: d.data.name }
+          const userDetails = { email, alias: d.data.alias ?? d.data.name, userID: d.data.id, name: d.data.name }
           // const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+
+          addUser({
+            userID: userDetails.userID,
+            email: userDetails.email,
+            name: userDetails.name,
+            alias: userDetails.alias
+          })
 
           setAuthenticated(userDetails, workspaceDetails)
         })
@@ -264,6 +273,13 @@ export const useAuthentication = () => {
         }
         const { registrationInfo, ilinks, nodes, snippets } = d.data
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
+
+        addUser({
+          userID: userDetails.userID,
+          email: userDetails.email,
+          name: userDetails.name,
+          alias: userDetails.alias
+        })
 
         setILinks(ilinks)
         initSnippets(snippets)

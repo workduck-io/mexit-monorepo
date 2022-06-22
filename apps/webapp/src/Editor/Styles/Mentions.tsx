@@ -1,13 +1,21 @@
-import { transparentize } from 'polished'
+import { transparentize, mix } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { CardShadow } from '@mexit/shared'
 
-export const SMentionRoot = styled.div`
+export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`
   display: inline-block;
   line-height: 1.2;
   background-color: ${({ theme }) => theme.colors.gray[8]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  ${({ type, theme }) =>
+    type &&
+    type === 'self' &&
+    css`
+      border-radius: ${({ theme }) => theme.borderRadius.tiny};
+      border: 1px solid ${transparentize(0.5, theme.colors.secondary)};
+      box-shadow: 0 0 4px ${transparentize(0.75, theme.colors.secondary)};
+    `}
 `
 
 export const Username = styled.div`
@@ -51,12 +59,25 @@ export const TooltipMail = styled.div`
   font-size: 0.9rem;
 `
 
-export const SMention = styled.div<{ selected: boolean }>`
+export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'invite' | 'self' }>`
   color: ${({ theme }) => theme.colors.secondary};
   ${({ selected, theme }) =>
     selected &&
     css`
       background-color: ${transparentize(0.75, theme.colors.secondary)};
       border-radius: ${theme.borderRadius.tiny};
+    `}
+  ${({ type, selected, theme }) =>
+    type &&
+    type === 'self' &&
+    !selected &&
+    css`
+      background: -webkit-linear-gradient(
+        60deg,
+        ${theme.colors.secondary},
+        ${mix(0.25, theme.colors.secondary, theme.colors.primary)}
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     `}
 `

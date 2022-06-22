@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { IDBStorage, InvitedUser, Mentionable, AccessLevel } from '@mexit/core'
+import { IDBStorage, InvitedUser, Mentionable, AccessLevel, mog } from '@mexit/core'
 
 interface MentionStore {
   invitedUsers: InvitedUser[]
@@ -21,6 +21,7 @@ export const useMentionStore = create<MentionStore>(
       mentionable: [],
       addMentionable: (mentionable: Mentionable) => {
         const exists = get().mentionable.find((user) => user.email === mentionable.email)
+        mog('addMentionable', { mentionable, exists })
         if (!exists) {
           set({
             mentionable: [...get().mentionable, mentionable]
@@ -84,7 +85,7 @@ export const addAccessToUser = (user: any, nodeid: string, accessLevel: AccessLe
 export const getUserFromUseridHookless = (userid: string) => {
   const mentionable = useMentionStore.getState().mentionable
 
-  const user = mentionable.find((user) => user.userid === userid)
+  const user = mentionable.find((user) => user.userID === userid)
 
   if (user) return user
 }

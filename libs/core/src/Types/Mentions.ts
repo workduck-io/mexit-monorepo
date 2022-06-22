@@ -1,3 +1,8 @@
+import { UserDetails } from './Auth'
+
+export interface SelfMention extends UserDetails {
+  type: 'self'
+}
 export interface IUser {
   email: string
   alias: string
@@ -8,7 +13,7 @@ export interface InvitedUser extends IUser {
   type: 'invite'
 }
 
-export type AccessLevel = 'MANAGE' | 'WRITE' | 'READ'
+export type AccessLevel = 'MANAGE' | 'WRITE' | 'READ' | 'OWNER'
 
 export const permissionOptions: {
   value: AccessLevel
@@ -28,7 +33,7 @@ export interface AccessMap {
 
 export interface Mentionable extends IUser {
   type: 'mentionable'
-  userid: string
+  userID: string
 }
 
 export interface MentionData {

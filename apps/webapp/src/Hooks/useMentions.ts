@@ -1,8 +1,9 @@
-import { mog, AccessLevel, DefaultPermission, InvitedUser, Mentionable } from '@mexit/core'
+import { mog, AccessLevel, DefaultPermission, InvitedUser, Mentionable, SelfMention } from '@mexit/core'
 import { useAuthStore } from '../Stores/useAuth'
 
 import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
 import { usePermission } from './API/usePermission'
+import { useNodes } from './useNodes'
 
 export const useMentions = () => {
   const { grantUsersPermission } = usePermission()
@@ -11,6 +12,7 @@ export const useMentions = () => {
   const addAccess = useMentionStore((s) => s.addAccess)
   const setInvited = useMentionStore((s) => s.setInvited)
   const setMentionable = useMentionStore((s) => s.setMentionable)
+  const { isSharedNode } = useNodes()
 
   // Add access level that is returned from the backend after permissions have been given
   const inviteUser = (email: string, alias: string, nodeid: string, accessLevel: AccessLevel) => {
@@ -29,6 +31,8 @@ export const useMentions = () => {
   const grantUserAccessOnMention = async (alias: string, nodeid: string, access: AccessLevel = DefaultPermission) => {
     const invitedUsers = useMentionStore.getState().invitedUsers
     const mentionable = useMentionStore.getState().mentionable
+    const currentUserDetails = useAuthStore.getState().userDetails
+
     const invitedExists = invitedUsers.find((user) => user.alias === alias)
     const mentionExists = mentionable.find((user) => user.alias === alias)
 
@@ -44,9 +48,10 @@ export const useMentions = () => {
       setInvited([...invitedUsers.filter((user) => user.alias !== alias), newInvited])
       return newInvited
     } else if (!invitedExists && mentionExists) {
+      if (currentUserDetails.userID === mentionExists.userID) return
       // We know it is guaranteed to be mentionable
       // Call backend and give permission
-      const res = await grantUsersPermission(nodeid, [mentionExists.userid], access)
+      const res = await grantUsersPermission(nodeid, [mentionExists.userID], access)
         .then(() => {
           const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, access) as Mentionable
           setMentionable([...mentionable.filter((user) => user.alias !== alias), newMentioned])
@@ -65,19 +70,20 @@ export const useMentions = () => {
     }
   }
 
-  const addMentionable = (alias: string, email: string, userid: string, nodeid: string, access: AccessLevel) => {
-    if (userid === localUserDetails.userID) {
-      mog('Not adding mentionable user as it is the current user', { userid })
-      return
-    }
+  const addMentionable = (alias: string, email: string, userID: string, nodeid: string, access: AccessLevel) => {
+    // if (userID === localUserDetails.userID) {
+    //   mog('Not adding mentionable user as it is the current user', { userID })
+    //   return
+    // }
 
     const mentionable = useMentionStore.getState().mentionable
 
-    const mentionExists = mentionable.find((user) => user.userid === userid)
+    const mentionExists = mentionable.find((user) => user.userID === userID)
 
+    mog('adding mentionable user ', { userID, mentionExists, mentionable })
     if (mentionExists) {
       mentionExists.access[nodeid] = access
-      setMentionable([...mentionable.filter((u) => u.userid !== userid), mentionExists])
+      setMentionable([...mentionable.filter((u) => u.userID !== userID), mentionExists])
     } else {
       const newMention: Mentionable = {
         type: 'mentionable',
@@ -86,23 +92,23 @@ export const useMentions = () => {
         access: {
           [nodeid]: access
         },
-        userid
+        userID
       }
       setMentionable([...mentionable, newMention])
     }
   }
 
-  const getUsernameFromUserid = (userid: string): string | undefined => {
+  const getUsernameFromUserid = (userID: string): string | undefined => {
     const mentionable = useMentionStore.getState().mentionable
-    const user = mentionable.find((mention) => mention.userid === userid)
+    const user = mentionable.find((mention) => mention.userID === userID)
     if (user) {
       return user.alias
     } else return undefined
   }
 
-  const getUserAccessLevelForNode = (userid: string, nodeid: string): AccessLevel | undefined => {
+  const getUserAccessLevelForNode = (userID: string, nodeid: string): AccessLevel | undefined => {
     const mentionable = useMentionStore.getState().mentionable
-    const user = mentionable.find((mention) => mention.userid === userid)
+    const user = mentionable.find((mention) => mention.userID === userID)
     if (user) {
       return user.access[nodeid]
     } else return undefined
@@ -110,7 +116,26 @@ export const useMentions = () => {
 
   const getSharedUsersForNode = (nodeid: string): Mentionable[] => {
     const mentionable = useMentionStore.getState().mentionable
-    const users = mentionable.filter((mention) => mention.access[nodeid] !== undefined)
+    const isShared = isSharedNode(nodeid)
+    const users = mentionable
+      .filter((mention) => mention.access[nodeid] !== undefined)
+      // Get the owner to the top
+      .sort((a, b) => (a.access[nodeid] === 'OWNER' ? -1 : b.access[nodeid] === 'OWNER' ? 1 : 0))
+
+    const currentUser = useAuthStore.getState().userDetails
+    // const sharedNodes = useDataStore.getState().sharedNodes
+
+    if (!isShared) {
+      const curUser: Mentionable = {
+        type: 'mentionable',
+        access: { [nodeid]: 'OWNER' },
+        email: currentUser.email,
+        alias: currentUser.alias,
+        userID: currentUser.userID
+      }
+      return [curUser, ...users]
+    }
+
     return users
   }
 
@@ -120,9 +145,16 @@ export const useMentions = () => {
     return users
   }
 
-  const getUserFromUserid = (userid: string): Mentionable | InvitedUser | undefined => {
+  const getUserFromUserid = (userid: string): Mentionable | InvitedUser | SelfMention | undefined => {
+    const currentUser = useAuthStore.getState().userDetails
+    if (currentUser.userID === userid) {
+      return {
+        type: 'self',
+        ...currentUser
+      }
+    }
     const mentionable = useMentionStore.getState().mentionable
-    const user = mentionable.find((mention) => mention.userid === userid)
+    const user = mentionable.find((mention) => mention.userID === userid)
     if (user) {
       return user
     } else {
@@ -137,8 +169,8 @@ export const useMentions = () => {
   }
 
   const applyChangesMentionable = (
-    newPermissions: { [userid: string]: AccessLevel },
-    newAliases: { [userid: string]: string },
+    newPermissions: { [userID: string]: AccessLevel },
+    newAliases: { [userID: string]: string },
     revoked: string[],
     nodeid: string
   ) => {
@@ -147,23 +179,23 @@ export const useMentions = () => {
     const oldMentionable = useMentionStore.getState().mentionable
 
     const afterRevoked = oldMentionable.map((u) => {
-      if (revoked.includes(u.userid)) {
+      if (revoked.includes(u.userID)) {
         delete u.access[nodeid]
         return u
       }
       return u
     })
     const afterAliasChange = afterRevoked.map((u) => {
-      if (Object.keys(newAliases).includes(u.userid)) return { ...u, alias: newAliases[u.userid] }
+      if (Object.keys(newAliases).includes(u.userID)) return { ...u, alias: newAliases[u.userID] }
       return u
     })
     const afterAccessChange = afterAliasChange.map((u) => {
-      if (Object.keys(newPermissions).includes(u.userid))
+      if (Object.keys(newPermissions).includes(u.userID))
         return {
           ...u,
           access: {
             ...u.access,
-            [nodeid]: newPermissions[u.userid]
+            [nodeid]: newPermissions[u.userID]
           }
         }
       return u

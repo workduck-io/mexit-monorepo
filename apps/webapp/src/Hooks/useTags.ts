@@ -87,7 +87,7 @@ export const useTags = () => {
       if (!tagsCache[t]) return p
       return {
         ...p,
-        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid && !isInArchive(id) && getPathFromNodeid(id))
+        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid && !isInArchive(id) && getPathFromNodeid(id, true))
       }
     }, {})
 

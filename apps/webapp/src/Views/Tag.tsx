@@ -179,7 +179,7 @@ const Tag = () => {
         <Results view={View.Card}>
           {transition((styles, nodeid, _t, _i) => {
             const con = contents[nodeid]
-            const path = getPathFromNodeid(nodeid)
+            const path = getPathFromNodeid(nodeid, true)
             const content = con ? con.content : defaultContent.content
             return (
               <Result
