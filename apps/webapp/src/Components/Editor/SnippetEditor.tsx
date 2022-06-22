@@ -13,7 +13,6 @@ import tinykeys from 'tinykeys'
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
-import { useApi } from '../../Hooks/useApi'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 type Inputs = {
@@ -24,7 +23,6 @@ const SnippetEditor = () => {
   const snippet = useSnippetStore((store) => store.editor.snippet)
   const { goTo } = useRouting()
 
-  const api = useApi()
   const {
     register,
     formState: { errors }
@@ -69,7 +67,6 @@ const SnippetEditor = () => {
     mog('onChangeSave', { val })
     if (val) {
       addOrUpdateValBuffer(snippet.id, val)
-      api.saveSnippetAPI(snippet.id, snippet.title, val)
     }
   }
 
@@ -104,6 +101,7 @@ const SnippetEditor = () => {
     })
 
     return () => {
+      saveSnippet()
       unsubscribe()
     }
   }, [])
@@ -115,11 +113,12 @@ const SnippetEditor = () => {
     // const snippet = useSnippetStore.getState().sn
   }
 
-  const returnToSnippets = () => {
+  const saveSnippet = () => {
     saveAndClearBuffer()
     // updater()
-    goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
+
+  const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
 
   const defaultValue = snippet && snippet.title !== DRAFT_NODE ? snippet.title : ''
 
@@ -161,6 +160,7 @@ const SnippetEditor = () => {
               /> */}
               <SnippetSaverButton
                 getSnippetExtras={getSnippetExtras}
+                noButton
                 callbackAfterSave={callbackAfterSave}
                 title="Save Snippet"
               />

@@ -3,7 +3,7 @@ import { Snippet } from '../Types/Snippet'
 
 export const parseBlock = (content: any[], join?: string): string => {
   const text: string[] = []
-  content.forEach((n) => {
+  content?.forEach((n) => {
     if (n.text && n.text !== '') text.push(n.text)
     if (n.children && n.children.length > 0) {
       const childText = parseBlock(n.children)

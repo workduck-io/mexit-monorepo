@@ -47,13 +47,12 @@ export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: Ta
     const { key } = e
     const trimmedInput = input.trim()
     const tagTexts = new Array<string>()
-    userTags.forEach((tag) => tagTexts.push(tag.text))
+    userTags.forEach((tag) => tagTexts.push(tag.value))
 
     if (key === 'Enter' && trimmedInput.length && !tagTexts.includes(trimmedInput)) {
       e.preventDefault()
       const t: Tag = {
-        id: `TAG_${nanoid()}`,
-        text: trimmedInput
+        value: trimmedInput
       }
       addNewTag(t)
       setInput('')
@@ -64,7 +63,7 @@ export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: Ta
       const poppedTag = tagsCopy.pop()
       e.preventDefault()
       removeTag(poppedTag)
-      setInput(poppedTag.text)
+      setInput(poppedTag.value)
     }
 
     setIsKeyReleased(false)
@@ -89,8 +88,8 @@ export const Tags: React.FC<TagsProps> = ({ userTags, addNewTag, removeTag }: Ta
       {/* TODO: recommend and show recent used tags */}
       <TagsContainer>
         {userTags.map((tag) => (
-          <Tagg key={tag.id} className="tag">
-            {tag.text}
+          <Tagg key={tag.value} className="tag">
+            {tag.value}
             <button onClick={() => removeTag(tag)}>x</button>
           </Tagg>
         ))}

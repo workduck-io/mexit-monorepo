@@ -34,7 +34,7 @@ const ContentEditor = () => {
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const { setShowLoader } = useLayoutStore()
 
-  const { addOrUpdateValBuffer, getBufferVal } = useEditorBuffer()
+  const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useEditorBuffer()
   const { node, fsContent } = useEditorStore(
     (state) => ({ nodeid: state.node.nodeid, node: state.node, fsContent: state.content }),
     shallow
@@ -95,6 +95,10 @@ const ContentEditor = () => {
     }
   }, [])
 
+  useEffect(() => {
+    return () => saveAndClearBuffer()
+  }, [])
+
   return (
     <StyledEditor showGraph={false} className="mex_editor">
       <Toolbar />
@@ -107,7 +111,10 @@ const ContentEditor = () => {
           readOnly={readOnly}
           nodeUID={nodeId}
           nodePath={node.path}
-          content={fsContent?.content ?? defaultContent.content}
+          onAutoSave={(val) => {
+            saveAndClearBuffer()
+          }}
+          content={fsContent?.content?.length ? fsContent?.content : defaultContent.content}
           onChange={onChangeSave}
         />
       </EditorWrapper>

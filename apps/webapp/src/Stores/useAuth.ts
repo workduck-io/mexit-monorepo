@@ -76,8 +76,7 @@ export const useAuthentication = () => {
               res.map((item) => ({
                 icon: 'ri:quill-pen-line',
                 id: item.snippetID,
-                title: item.title,
-                content: [{ children: [{ text: '' }] }]
+                title: item.title
               }))
             )
           })

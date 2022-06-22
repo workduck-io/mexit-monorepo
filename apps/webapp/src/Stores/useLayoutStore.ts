@@ -19,6 +19,8 @@ interface LayoutState {
   setInfobarMode: (mode: InfobarMode) => void
   showInfobar: () => void
   hideInfobar: () => void
+  showShareOptions?: boolean
+  toggleShareOptions: () => void
   showLoader?: boolean
   setShowLoader?: (showLoader: boolean) => void
 }
@@ -36,6 +38,9 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
     expanded: true
   },
   toggleSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, expanded: !state.sidebar.expanded } })),
+
+  // Note Share
+  toggleShareOptions: () => set({ showShareOptions: !get().showShareOptions }),
 
   // Infobar
   infobar: {

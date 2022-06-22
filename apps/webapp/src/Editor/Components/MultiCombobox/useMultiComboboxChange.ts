@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
-import { getTimeInText, isReservedOrClash, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
+import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useRouting } from '../../../Hooks/useRouting'
@@ -71,6 +71,7 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     const data = ct.data
 
     if (!data) return false
+
     const textAfterTrigger = search.textAfterTrigger
 
     if (params.snippetid && textAfterTrigger?.startsWith('.')) return
@@ -78,7 +79,9 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     const { isChild, key: pathKey } = withoutContinuousDelimiter(textAfterTrigger)
     const searchTerm = isChild ? `${getPathFromNodeid(editorId)}${pathKey}` : pathKey
 
-    const searchItems = fuzzySearch(data, searchTerm, (item) => item.text)
+    mog('data', { data })
+
+    const searchItems = fuzzySearch(data, searchTerm || '', (item) => item?.text || '')
 
     const { isExtended, extendedCommands } = getCommandExtended(search.textAfterTrigger, keys)
 

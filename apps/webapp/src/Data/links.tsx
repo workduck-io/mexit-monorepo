@@ -10,7 +10,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
-import { useLinks } from '../Hooks/useLinks'
+import { getNodeidFromPathAndLinks, useLinks } from '../Hooks/useLinks'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -27,11 +27,18 @@ export const GetIcon = (icon: any): React.ReactNode => <Icon icon={icon} />
 const useNavlinks = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const nodeid = useEditorStore((store) => store.node.nodeid)
+  const baseNodeId = useDataStore((store) => store.baseNodeId)
+
   const reminders = useReminderStore((store) => store.reminders)
   const ilinks = useDataStore((store) => store.ilinks)
   const archive = useDataStore((store) => store.archive)
   const tasks = useTodoStore((store) => store.todos)
   const { getLinkCount } = useLinks()
+
+  const noteId = useMemo(() => {
+    const currentNotId = nodeid === '__null__' ? getNodeidFromPathAndLinks(ilinks, baseNodeId) : nodeid
+    return currentNotId
+  }, [nodeid, ilinks])
 
   const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks])
 
@@ -51,7 +58,7 @@ const useNavlinks = () => {
       // },
       {
         title: 'Notes',
-        path: `${ROUTE_PATHS.node}/${nodeid}`,
+        path: `${ROUTE_PATHS.node}/${noteId}`,
         shortcut: shortcuts.showEditor.keystrokes,
         icon: GetIcon(fileDocument),
         count: count.notes

@@ -7,7 +7,7 @@ import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import TagWrapper from './TagWrapper'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG, ELEMENT_TODO_LI } from '@mexit/core'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG, ELEMENT_TODO_LI, NodeEditorContent } from '@mexit/core'
 import Todo from '../Todo'
 import { useEditorChange } from '@mexit/shared'
 import { EditorStyles } from '@mexit/shared'
@@ -38,9 +38,10 @@ interface EditorProps {
   readOnly?: boolean
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
+  onAutoSave?: (content: NodeEditorContent) => void
 }
 
-const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus }) => {
+const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus, onAutoSave }) => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
@@ -152,7 +153,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     tag: {
       cbKey: ComboboxKey.TAG,
       trigger: '#',
-      data: tags.map((t) => ({ ...t, value: t.text })),
+      data: tags.map((t) => ({ ...t, text: t.value })),
       icon: 'ri:hashtag'
     },
     slash_command: {
@@ -179,10 +180,24 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     withBalloonToolbar: true
   }
 
-  const debounced = useDebouncedCallback((value) => {
+  const onDelayPerform = useDebouncedCallback((value) => {
     const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
     f(value)
-  }, 1000)
+  }, 400)
+
+  const saveAfterDelay = useDebouncedCallback(
+    typeof onAutoSave === 'function' ? onAutoSave : () => undefined,
+    30 * 1000 // After 30 seconds
+  )
+
+  const onChangeContent = (val: NodeEditorContent) => {
+    onDelayPerform(val)
+
+    if (onAutoSave) {
+      saveAfterDelay.cancel()
+      saveAfterDelay(val)
+    }
+  }
 
   const comboboxConfig: ComboboxConfig = {
     onChangeConfig: comboOnChangeConfig,
@@ -199,7 +214,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         }}
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         // debug
-        onChange={debounced}
+        onChange={onChangeContent}
         options={editorOptions}
         editorId={nodeUID}
         value={content}

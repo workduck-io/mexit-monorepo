@@ -19,6 +19,7 @@ import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useKeyListener } from '../Hooks/useShortcutListener'
 import useBlockStore from '../Stores/useBlockStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -69,8 +70,10 @@ const EditorView = () => {
         event.preventDefault()
         shortcutHandler(shortcuts.showEditor, () => {
           if (node.nodeid === '__null__') {
-            loadNode(ilinks.find((ilink) => ilink.path === '@').nodeid)
+            const baseNodeId = getNodeidFromPathAndLinks(ilinks, node.path)
+            loadNode(baseNodeId)
           }
+
           loadNode(node.nodeid)
           goTo(ROUTE_PATHS.node, NavigationType.push, node.nodeid)
         })

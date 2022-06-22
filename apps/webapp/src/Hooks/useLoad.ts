@@ -21,6 +21,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore, getContent } from '../Stores/useEditorStore'
 import { getPathFromNodeIdHookless } from './useLinks'
+import { useUpdater } from './useUpdater'
 
 export interface LoadNodeOptions {
   savePrev?: boolean
@@ -49,6 +50,7 @@ const useLoad = () => {
   const setLoadingNodeid = useEditorStore((store) => store.setLoadingNodeid)
   const { saveAndClearBuffer } = useEditorBuffer()
   const { execRefactor } = useRefactor()
+  const { updateFromContent } = useUpdater()
 
   const saveNodeName = (nodeId: string, title?: string) => {
     const draftNodeTitle = title ?? useAnalysisStore.getState().analysis.title
@@ -158,7 +160,9 @@ const useLoad = () => {
             } else {
               mog('CurrentNode is not same for loadNode', { node, loadingNodeid })
             }
+
             setContent(node.nodeid, content, metadata)
+            updateFromContent(node.nodeid, content)
           }
         }
         if (withLoading) setFetchingContent(false)

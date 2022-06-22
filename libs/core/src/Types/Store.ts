@@ -32,6 +32,7 @@ export interface DataStoreState {
 
   // adds tag for combobox
   addTag: (tag: string) => void
+  setTags?: (tags: Array<Tag>) => void
 
   setIlinks: (ilinks: ILink[]) => void
   setBaseNodeId: (baseNodeId: string) => void
