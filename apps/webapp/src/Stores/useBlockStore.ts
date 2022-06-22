@@ -1,7 +1,6 @@
 import { BlockMode, blockStoreConstructor } from '@mexit/core'
 import create from 'zustand'
-import { devtools } from 'zustand/middleware'
 
-const useBlockStore = create<BlockMode>(devtools(blockStoreConstructor))
+const useBlockStore = create<BlockMode>(blockStoreConstructor)
 
 export default useBlockStore

@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { AddILinkProps, CategoryType, idxKey, initActions, NodeEditorContent, NodeMetadata } from '@mexit/core'
+import {
+  AddILinkProps,
+  CategoryType,
+  idxKey,
+  initActions,
+  mog,
+  NodeEditorContent,
+  NodeMetadata,
+  Reminder,
+  ReminderActions
+} from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
@@ -11,6 +21,8 @@ import { initSearchIndex, searchWorker } from '../Workers/controller'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useReminders } from '../Hooks/useReminders'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -20,9 +32,11 @@ export default function Chotu() {
   const theme = useThemeStore((state) => state.theme)
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
+  const reminders = useReminderStore((store) => store.reminders)
 
   const { ilinks, archive, addILink } = useDataStore()
   const { contents, setContent } = useContentStore()
+  const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
 
   useEffect(() => {
@@ -48,6 +62,10 @@ export default function Chotu() {
       updateIlinks(props: AddILinkProps) {
         addILink(props)
         return
+      },
+      reminderAction(props: { action: ReminderActions; reminder: Reminder }) {
+        actOnReminder(props.action, props.reminder)
+        return
       }
     }
     // debug: true
@@ -56,8 +74,7 @@ export default function Chotu() {
   useEffect(() => {
     connection.promise
       .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks)
-        // parent.success('Hi')
+        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders)
       })
       .catch((error) => {
         console.error(error)
@@ -66,7 +83,7 @@ export default function Chotu() {
     return () => {
       connection.destroy()
     }
-  }, [ilinks, theme, snippets, contents])
+  }, [userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders])
 
   return (
     <div>
