@@ -5,7 +5,7 @@ import { useAuth, client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
 import { clear as IDBClear } from 'idb-keyval'
 
-import { apiURLs, AuthStoreState, Snippet, UserCred } from '@mexit/core'
+import { apiURLs, AuthStoreState, mog, Snippet, UserCred } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
 import { useApi } from '../Hooks/API/useNodeAPI'
@@ -67,7 +67,8 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords)
         .then((d: any) => {
-          const userDetails = { email, userId: data.userId }
+          const userDetails = { email, alias: d.data.alias, userID: d.data.id, name: d.data.name }
+          // const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
           setAuthenticated(userDetails, workspaceDetails)
@@ -103,21 +104,20 @@ export const useAuthentication = () => {
       console.log(`Result of Login: ${JSON.stringify(result)}`)
 
       if (getWorkspace && result.userCred !== undefined) {
-        await client
-          .get(apiURLs.getUserRecords)
-          .then(async (d: any) => {
-            const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
-            const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-
-            setAuthenticated(userDetails, workspaceDetails)
-          })
-          .catch(async (error) => {
-            setShowLoader(true)
-            if (error.response && error.response.status === 404) {
-              await registerUserForGoogle(result)
+        await client.get(apiURLs.getUserRecords).then(async (d: any) => {
+          if (!d.data.group) {
+            await registerUserForGoogle(result)
+          } else {
+            const userDetails = {
+              email: result.userCred.email,
+              name: result.userCred.name,
+              userID: result.userCred.userId,
+              alias: result.userCred.alias
             }
-          })
-
+            const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+            setAuthenticated(userDetails, workspaceDetails)
+          }
+        })
         await initPortals()
       }
       setShowLoader(false)
@@ -129,8 +129,9 @@ export const useAuthentication = () => {
   }
 
   async function registerUserForGoogle(result: any) {
+    mog('Registering user for google', { result })
     setShowLoader(true)
-    setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
+    setSensitiveData({ email: result.email, name: result.email, password: '', roles: [], alias: result.alias })
 
     const uCred: UserCred = {
       email: result.userCred.email,
@@ -148,8 +149,9 @@ export const useAuthentication = () => {
           type: 'RegisterUserRequest',
           user: {
             id: uCred.userId,
-            name: uCred.email,
-            email: uCred.email
+            name: sensitiveData.name,
+            email: uCred.email,
+            alias: sensitiveData.alias
           },
           workspaceName: newWorkspaceName
         },
@@ -160,7 +162,7 @@ export const useAuthentication = () => {
         }
       )
       .then(async (d: any) => {
-        const userDetails = { email: uCred.email, userId: uCred.userId }
+        const userDetails = { email: uCred.email, userID: uCred.userId, name: result.name, alias: result.alias }
         const { registrationInfo, ilinks, nodes, snippets } = d.data
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 
@@ -227,7 +229,8 @@ export const useAuthentication = () => {
       ...metadata,
       name: sensitiveData.name,
       email: sensitiveData.email,
-      roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1)
+      roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1),
+      alias: sensitiveData.alias
     }
     const vSign = await verifySignUp(code, formMetaData).catch(console.error)
 
@@ -246,13 +249,19 @@ export const useAuthentication = () => {
       .post(apiURLs.registerUser, {
         user: {
           id: uCred.userId,
-          name: uCred.email,
-          email: uCred.email
+          name: sensitiveData.name,
+          email: uCred.email,
+          alias: sensitiveData.alias
         },
         workspaceName: newWorkspaceName
       })
       .then(async (d: any) => {
-        const userDetails = { email: uCred.email, userId: uCred.userId }
+        const userDetails = {
+          email: uCred.email,
+          userID: uCred.userId,
+          name: sensitiveData.name,
+          alias: sensitiveData.alias
+        }
         const { registrationInfo, ilinks, nodes, snippets } = d.data
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 

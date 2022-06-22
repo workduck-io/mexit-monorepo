@@ -16,7 +16,6 @@ import { useEditorStore } from '../../../Stores/useEditorStore'
 import { MentionTooltip, TooltipMail, SMentionRoot, SMention, Username } from '../../Styles/Mentions'
 import { useMentionStore } from '../../../Stores/useMentionsStore'
 import { usePermission } from '../../../Hooks/API/usePermission'
-import { useUserService } from '../../../Hooks/API/useUserAPI'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'
 
@@ -67,7 +66,6 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
   const focused = useFocused()
   const node = useEditorStore((state) => state.node)
   const { getUserFromUserid, getUserAccessLevelForNode } = useMentions()
-  const { getUserDetailsUserId } = useUserService()
 
   const onClickProps = useOnMouseClick(() => {
     mog('Mention has been clicked yo', { val: element.value })
@@ -88,7 +86,7 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
   }, [element.value])
   const access = getUserAccessLevelForNode(element.value, node.nodeid)
 
-  // mog('MentionElement', { user })
+  // mog('MentionElement', { user, access, node, elementEmail: element?.email })
 
   useHotkeys(
     'backspace',
@@ -115,8 +113,6 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
     <SMentionRoot {...attributes} data-slate-value={element.value} contentEditable={false}>
       <Tippy
         delay={100}
-        interactiveDebounce={100}
-        interactive
         placement="bottom"
         appendTo={() => document.body}
         render={(attrs) => <MentionTooltipComponent user={user} nodeid={node.nodeid} access={access} />}

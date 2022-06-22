@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Transforms } from 'slate'
-import styled from 'styled-components'
 import { useReadOnly, useFocused, useSelected } from 'slate-react'
-import archivedIcon from '@iconify/icons-ri/archive-line'
-import shareForwardLine from '@iconify/icons-ri/share-forward-line'
+import shareLine from '@iconify/icons-ri/share-line'
 import eyeOffLine from '@iconify/icons-ri/eye-off-line'
-import { Icon } from '@iconify/react'
 import { useEditorRef } from '@udecode/plate'
 
 import { ILink, mog, NodeType, SharedNode } from '@mexit/core'
+import { SILinkRoot, SILink, StyledIcon, SharedNodeIcon } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useNavigation } from '../../../Hooks/useNavigation'
@@ -17,8 +15,7 @@ import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
-import { useContentStore } from '../../../Stores/useContentStore'
-import { SILinkRoot, SILink, StyledIcon, SharedNodeIcon } from '@mexit/shared'
+
 import { ILinkElementProps } from '../../Types/QuickLink'
 import EditorPreview from '../EditorPreview/EditorPreview'
 import { getBlock } from '../../../Utils/parseData'
@@ -26,7 +23,7 @@ import { getBlock } from '../../../Utils/parseData'
 const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNode: SharedNode }) => {
   return (
     <SILink $selected={selected}>
-      <StyledIcon icon={shareForwardLine} color="#df7777" />
+      <StyledIcon icon={shareLine} />
       <span className="ILink_decoration ILink_decoration_left">[[</span>
       <span className="ILink_decoration ILink_decoration_value"> {sharedNode?.path}</span>
       <span className="ILink_decoration ILink_decoration_right">]]</span>
@@ -36,7 +33,7 @@ const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNod
 
 const ArchivedNode = ({ selected, archivedNode }: { selected: boolean; archivedNode: ILink }) => {
   return (
-    <SILink $selected={selected} $archived={true}>
+    <SILink $selected={selected} color="#df7777" $archived={true}>
       <SharedNodeIcon />
       <span className="ILink_decoration ILink_decoration_left">[[</span>
       <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span>
@@ -127,7 +124,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const nodeType = getNodeType(element.value)
   const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
   const content = block ? [block] : undefined
-  const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
   const archivedNode = nodeType === NodeType.ARCHIVED ? getArchiveNode(element.value) : undefined
   const sharedNode = nodeType === NodeType.SHARED ? getSharedNode(element.value) : undefined
 

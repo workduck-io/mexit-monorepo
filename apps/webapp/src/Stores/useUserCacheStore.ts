@@ -2,15 +2,17 @@ import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface CacheUser {
-  userId: string
+  userID: string
   email: string
+  alias: string
+  name: string
 }
 
 interface UserCacheState {
   cache: CacheUser[]
 
   addUser: (user: CacheUser) => void
-  getUser: (find: { email: string } | { userId: string }) => CacheUser | undefined
+  getUser: (find: { email: string } | { userID: string }) => CacheUser | undefined
   clearCache: () => void
 }
 
@@ -21,17 +23,16 @@ export const useUserCacheStore = create<UserCacheState>(
 
       addUser: (user: CacheUser) => {
         const cache = get().cache
-        const isUserAbsent = cache.find((u) => u.userId === user.userId) === undefined
+        const isUserAbsent = cache.find((u) => u.userID === user.userID) === undefined
         if (isUserAbsent) set({ cache: [...get().cache, user] })
       },
-
-      getUser: (find: { email?: string; userId?: string }): CacheUser | undefined => {
+      getUser: (find: { email?: string; userID?: string }): CacheUser | undefined => {
         const cache = get().cache
         if (find.email !== undefined) {
           return cache.find((u) => u.email === find.email)
         }
-        if (find.userId !== undefined) {
-          return cache.find((u) => u.userId === find.userId)
+        if (find.userID !== undefined) {
+          return cache.find((u) => u.userID === find.userID)
         }
         return undefined
       },

@@ -65,6 +65,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const invitedUsers = useMentionStore((state) => state.invitedUsers)
   const prefillShareModal = useShareModalStore((state) => state.prefillModal)
   const { grantUserAccessOnMention } = useMentions()
+  const sharedNodes = useDataStore((store) => store.sharedNodes)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -89,6 +90,13 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       value: l.nodeid,
       text: l.path,
       icon: l.icon ?? 'ri:file-list-2-line',
+      type: QuickLinkType.backlink
+    })),
+    ...sharedNodes.map((l) => ({
+      ...l,
+      value: l.nodeid,
+      text: l.path,
+      icon: l.icon ?? 'ri:share-line',
       type: QuickLinkType.backlink
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))

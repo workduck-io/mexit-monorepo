@@ -1,8 +1,10 @@
+import React, { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { getPlateEditorRef, usePlateEditorRef } from '@udecode/plate'
+import toast from 'react-hot-toast'
+import { getPlateEditorRef } from '@udecode/plate'
 
 import { mog, AccessLevel, DefaultPermission, DefaultPermissionValue, permissionOptions } from '@mexit/core'
-import { Label, StyledCreatatbleSelect, ButtonFields } from '@mexit/shared'
+import { Label, StyledCreatatbleSelect, ButtonFields, SelectWrapper } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -11,18 +13,22 @@ import { Title } from '../../Style/Integrations'
 import { EMAIL_REG } from '../../Utils/constants'
 import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
-import { InviteWrapper, InviteFormWrapper, SelectWrapper } from './styles'
+import { InviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
 import { usePermission } from '../../Hooks/API/usePermission'
+import { useAuthStore } from '../../Stores/useAuth'
+import { useNodes } from '../../Hooks/useNodes'
 
 export const InviteModalContent = () => {
   const data = useShareModalStore((state) => state.data)
   const closeModal = useShareModalStore((state) => state.closeModal)
-  const node = useEditorStore((state) => state.node)
   const { getUserDetails } = useUserService()
+  const currentUserDetails = useAuthStore((s) => s.userDetails)
+  const node = useEditorStore((state) => state.node)
   const { inviteUser, addMentionable } = useMentions()
   const { grantUsersPermission } = usePermission()
+  const { accessWhenShared } = useNodes()
 
   const {
     handleSubmit,
@@ -30,6 +36,12 @@ export const InviteModalContent = () => {
     control,
     formState: { errors, isSubmitting }
   } = useForm<InviteModalData>()
+
+  const readOnly = useMemo(() => {
+    const access = accessWhenShared(node.nodeid)
+    if (access) return access !== 'MANAGE'
+    return false
+  }, [node])
 
   const onSubmit = async (data: InviteModalData) => {
     if (node && node.nodeid) {
@@ -39,15 +51,22 @@ export const InviteModalContent = () => {
       const details = await getUserDetails(data.email)
       mog('data', { data, details })
 
-      if (details.userId !== undefined) {
+      if (details.userID !== undefined) {
         // Give permission here
-        const resp = await grantUsersPermission(node.nodeid, [details.userId], access)
+        if (details.userID === currentUserDetails.userID) {
+          toast("Can't Invite Yourself")
+          closeModal()
+          return
+        }
+        const resp = await grantUsersPermission(node.nodeid, [details.userID], access)
         mog('UserPermission given', { details, resp })
-        addMentionable(data.alias, data.email, details.userId, node.nodeid, access)
-        replaceUserMention(editor, data.alias, details.userId)
+        addMentionable(details.alias, data.email, details.userID, node.nodeid, access)
+        replaceUserMention(editor, data.alias, details.userID)
+        toast(`Shared with: ${data.email}`)
       } else {
         inviteUser(data.email, data.alias, node.nodeid, access)
         replaceUserMentionEmail(editor, data.alias, details.email)
+        toast(`${data.email} is not on Mex, added to Invited Users`)
       }
     }
 
@@ -59,56 +78,58 @@ export const InviteModalContent = () => {
       <Title>Invite</Title>
       <p>Invite your friends to your Note.</p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <InputFormError
-          name="alias"
-          label="Alias"
-          inputProps={{
-            defaultValue: data.alias ?? '',
-            ...register('alias', {
-              required: true
-            })
-          }}
-          errors={errors}
-        ></InputFormError>
-        <InputFormError
-          name="email"
-          label="Email"
-          inputProps={{
-            autoFocus: true,
-            ...register('email', {
-              required: true,
-              pattern: EMAIL_REG
-            })
-          }}
-          errors={errors}
-        ></InputFormError>
+        <InviteFormFieldset disabled={readOnly}>
+          <InputFormError
+            name="alias"
+            label="Alias"
+            inputProps={{
+              defaultValue: data.alias ?? '',
+              ...register('alias', {
+                required: true
+              })
+            }}
+            errors={errors}
+          ></InputFormError>
+          <InputFormError
+            name="email"
+            label="Email"
+            inputProps={{
+              autoFocus: true,
+              ...register('email', {
+                required: true,
+                pattern: EMAIL_REG
+              })
+            }}
+            errors={errors}
+          ></InputFormError>
 
-        <SelectWrapper>
-          <Label htmlFor="access">Permission</Label>
-          <Controller
-            control={control}
-            render={({ field }) => (
-              <StyledCreatatbleSelect
-                {...field}
-                defaultValue={DefaultPermissionValue}
-                options={permissionOptions}
-                closeMenuOnSelect={true}
-                closeMenuOnBlur={true}
-              />
-            )}
-            name="access"
-          />
-        </SelectWrapper>
+          <SelectWrapper>
+            <Label htmlFor="access">Permission</Label>
+            <Controller
+              control={control}
+              render={({ field }) => (
+                <StyledCreatatbleSelect
+                  {...field}
+                  defaultValue={DefaultPermissionValue}
+                  options={permissionOptions}
+                  closeMenuOnSelect={true}
+                  closeMenuOnBlur={true}
+                />
+              )}
+              name="access"
+            />
+          </SelectWrapper>
 
-        <ButtonFields>
-          <LoadingButton
-            loading={isSubmitting}
-            alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
-          >
-            Invite
-          </LoadingButton>
-        </ButtonFields>
+          <ButtonFields>
+            <LoadingButton
+              loading={isSubmitting}
+              alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
+              buttonProps={{ type: 'submit', primary: true, large: true }}
+            >
+              Invite
+            </LoadingButton>
+          </ButtonFields>
+        </InviteFormFieldset>
       </InviteFormWrapper>
     </InviteWrapper>
   )

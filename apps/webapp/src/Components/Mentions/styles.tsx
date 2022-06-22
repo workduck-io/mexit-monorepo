@@ -1,24 +1,27 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { Button, Title } from '@mexit/shared'
-
-export const SelectWrapper = styled.div`
-  width: 100%;
-`
+import { Title, Button, SelectWrapper } from '@mexit/shared'
 
 export const InviteWrapper = styled.div``
 export const InviteFormWrapper = styled.form``
-
+export const InviteFormFieldset = styled.fieldset`
+  border: none;
+  padding: 0;
+`
 export const SharedPermissionsWrapper = styled.div`
   ${InviteWrapper} {
     ${Title} {
       display: none;
     }
-    form {
+
+    form > fieldset {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
+      justify-content: space-between;
       gap: ${({ theme }) => theme.spacing.small};
+      flex-wrap: wrap;
+
       ${SelectWrapper} {
         width: 60%;
       }
@@ -32,6 +35,7 @@ export const SharedPermissionsTable = styled.table`
   width: 100%;
   border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+
   caption {
     text-align: left;
     padding: 0 0 ${({ theme }) => theme.spacing.medium} 0;
@@ -72,6 +76,14 @@ export const ShareAlias = styled.td<{ hasChanged?: boolean }>`
   padding: ${({ theme }) => theme.spacing.small};
 `
 
+export const ShareProfileImage = styled.td`
+  padding: ${({ theme }) => theme.spacing.small};
+  svg,
+  img {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+`
+
 export const ShareAliasInput = styled.input`
   background: ${({ theme }) => transparentize(0.75, theme.colors.gray[8])};
   border: none;
@@ -80,8 +92,8 @@ export const ShareAliasInput = styled.input`
   width: 100%;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   &:hover {
-    background: ${({ theme }) => transparentize(0.25, theme.colors.gray[9])};
   }
+
   &:focus {
     background: ${({ theme }) => transparentize(0.1, theme.colors.gray[9])};
   }
@@ -93,8 +105,14 @@ export const ShareEmail = styled.td`
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
-export const SharePermission = styled.td`
+export const SharePermission = styled.td<{ disabled?: boolean }>`
   width: 120px;
+
+  ${(disabled) =>
+    disabled &&
+    css`
+      pointer-events: none;
+    `}
 `
 
 export const ShareRowActionsWrapper = styled.div`
@@ -105,7 +123,6 @@ export const ShareRowActionsWrapper = styled.div`
     height: 100%;
   }
 `
-
 export const ShareRowAction = styled.td`
-  width: 48px;
+  width: 100px;
 `

@@ -111,6 +111,19 @@ export const Register = () => {
                 }}
                 errors={regErrors}
               ></InputFormError>
+              <InputFormError
+                name="alias"
+                label="Alias"
+                inputProps={{
+                  placeholder: 'Ex: CoolGuy',
+                  ...registerForm.register('alias', {
+                    required: true,
+                    pattern: ALIAS_REG
+                  })
+                }}
+                additionalInfo="Only Alphanumeric as content, and -_ as separators allowed"
+                errors={regErrors}
+              ></InputFormError>
 
               <Label htmlFor="roles">What roles are you part of?</Label>
               <Controller

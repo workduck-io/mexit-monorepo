@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
+import { transparentize } from 'polished'
 
 export const SILinkRoot = styled.div`
   display: inline-block;
@@ -22,7 +23,7 @@ export const SILink = styled.div<SILinkProps>`
 
   cursor: pointer;
   ${StyledIcon} {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => transparentize(0.3, theme.colors.primary)};
   }
   .ILink_decoration {
     color: ${({ theme }) => theme.colors.gray[6]};

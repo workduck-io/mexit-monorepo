@@ -2,22 +2,20 @@ import React, { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 
 import { mog, AccessLevel, DefaultPermissionValue, permissionOptions, DefaultPermission } from '@mexit/core'
-import { Label, StyledCreatatbleSelect, ButtonFields, IconButton, Title, Button } from '@mexit/shared'
+import { Label, StyledCreatatbleSelect, ButtonFields, IconButton, Title, Button, SelectWrapper } from '@mexit/shared'
 
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
-import { MultiEmailValidate } from '../../Utils/constants'
+import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
 import {
   InviteFormWrapper,
   InviteWrapper,
-  SelectWrapper,
   ShareAlias,
-  ShareAliasInput,
   SharedPermissionsTable,
   SharedPermissionsWrapper,
   ShareEmail,
@@ -25,20 +23,26 @@ import {
   ShareRowAction,
   ShareRow,
   ShareRowHeading,
-  ShareRowActionsWrapper
+  ShareRowActionsWrapper,
+  InviteFormFieldset,
+  ShareProfileImage
 } from './styles'
 import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { InvitedUsersContent } from './InvitedUsersContent'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useAuthStore } from '../../Stores/useAuth'
+import { ProfileImage } from '../User/ProfileImage'
+import { useNodes } from '../../Hooks/useNodes'
 
-export const MultiEmailInviteModalContent = () => {
+export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
   const addMentionable = useMentionStore((state) => state.addMentionable)
   // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getUserDetails } = useUserService()
   const { grantUsersPermission } = usePermission()
+  const localuserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
   const {
     handleSubmit,
@@ -54,9 +58,11 @@ export const MultiEmailInviteModalContent = () => {
       const allMails = data.email.split(',').map((e) => e.trim())
       const access = (data?.access?.value as AccessLevel) ?? DefaultPermission
 
-      const userDetailPromises = allMails.map((email) => {
-        return getUserDetails(email)
-      })
+      const userDetailPromises = allMails
+        .filter((e) => e !== localuserDetails.email)
+        .map((email) => {
+          return getUserDetails(email)
+        })
 
       const userDetails = await Promise.allSettled(userDetailPromises)
 
@@ -64,12 +70,14 @@ export const MultiEmailInviteModalContent = () => {
 
       // Typescript has some weird thing going on with promises.
       // Try to improve the type (if you can that is)
-      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId !== undefined) as any[]
-      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId === undefined) as any[]
+      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userID !== undefined) as any[]
+      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userID === undefined) as any[]
 
-      const givePermToExisting = existing.reduce((p, c) => {
-        return [...p, c.value.userId]
-      }, [])
+      const givePermToExisting = existing
+        .reduce((p, c) => {
+          return [...p, c.value.userID]
+        }, [])
+        .filter((u) => u !== localuserDetails.userID)
 
       // Only share with users registered,
       if (givePermToExisting.length > 0) {
@@ -80,9 +88,9 @@ export const MultiEmailInviteModalContent = () => {
       existing.forEach((u) => {
         addMentionable({
           type: 'mentionable',
-          alias: u?.value?.email.substring(0, u?.value?.email?.indexOf('@')),
+          alias: u?.value?.alias ?? '',
           email: u?.value?.email,
-          userid: u?.value?.userId,
+          userid: u?.value?.userID,
           access: {
             [node?.nodeid]: access
           }
@@ -93,17 +101,13 @@ export const MultiEmailInviteModalContent = () => {
       absent.forEach((u) => {
         addInvitedUser({
           type: 'invite',
-          alias: u?.value?.email.substring(0, u?.value?.email?.indexOf('@')),
+          alias: getEmailStart(u?.value?.email),
           email: u?.value?.email,
           access: {
             [node?.nodeid]: access
           }
         })
       })
-
-      saveMentionData()
-
-      // closeModal()
     }
   }
 
@@ -114,73 +118,80 @@ export const MultiEmailInviteModalContent = () => {
       <Title>Invite</Title>
       <p>Invite your friends to your Note.</p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <InputFormError
-          name="email"
-          label="Emails"
-          inputProps={{
-            autoFocus: true,
-            placeholder: 'alice@email.com, bob@email.com',
-            type: 'email',
-            // Accepts multiple emails
-            multiple: true,
-            ...register('email', {
-              required: true,
-              validate: MultiEmailValidate
-            })
-          }}
-          errors={errors}
-        ></InputFormError>
+        <InviteFormFieldset disabled={disabled}>
+          <InputFormError
+            name="email"
+            label="Emails"
+            inputProps={{
+              autoFocus: true,
+              placeholder: 'alice@email.com, bob@email.com',
+              type: 'email',
+              // Accepts multiple emails
+              multiple: true,
+              ...register('email', {
+                required: true,
+                validate: MultiEmailValidate
+              })
+            }}
+            errors={errors}
+          ></InputFormError>
 
-        <SelectWrapper>
-          <Label htmlFor="access">Permission</Label>
-          <Controller
-            control={control}
-            render={({ field }) => (
-              <StyledCreatatbleSelect
-                {...field}
-                defaultValue={DefaultPermissionValue}
-                options={permissionOptions}
-                closeMenuOnSelect={true}
-                closeMenuOnBlur={true}
-              />
-            )}
-            name="access"
-          />
-        </SelectWrapper>
+          <SelectWrapper>
+            <Label htmlFor="access">Permission</Label>
+            <Controller
+              control={control}
+              render={({ field }) => (
+                <StyledCreatatbleSelect
+                  {...field}
+                  defaultValue={DefaultPermissionValue}
+                  options={permissionOptions}
+                  closeMenuOnSelect={true}
+                  closeMenuOnBlur={true}
+                />
+              )}
+              name="access"
+            />
+          </SelectWrapper>
 
-        <ButtonFields>
-          <LoadingButton
-            loading={isSubmitting}
-            alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
-          >
-            Invite
-          </LoadingButton>
-        </ButtonFields>
+          <ButtonFields>
+            <LoadingButton
+              loading={isSubmitting}
+              alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
+              buttonProps={{ type: 'submit', primary: true, large: true }}
+            >
+              Invite
+            </LoadingButton>
+          </ButtonFields>
+        </InviteFormFieldset>
       </InviteFormWrapper>
     </InviteWrapper>
   )
 }
 
-interface PermissionModalContentProps {
-  handleSubmit: () => void
-  handleCopyLink: () => void
-}
-
 export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
   const closeModal = useShareModalStore((s) => s.closeModal)
   const { getSharedUsersForNode, getInvitedUsersForNode, applyChangesMentionable } = useMentions()
+  const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
+  const currentUserDetails = useAuthStore((s) => s.userDetails)
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = usePermission()
+  const { accessWhenShared } = useNodes()
+
+  const readOnly = useMemo(() => {
+    // to test: return true
+    const access = accessWhenShared(node.nodeid)
+    if (access) return access !== 'MANAGE'
+    return false
+  }, [node])
 
   const sharedUsers = useMemo(() => {
     if (node && node.nodeid) {
       return getSharedUsersForNode(node.nodeid)
     }
     return []
-  }, [node, getSharedUsersForNode])
+  }, [node, getSharedUsersForNode, mentionable])
 
   const invitedUsers = useMemo(() => {
     if (node && node.nodeid) {
@@ -324,11 +335,16 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
     mog('onSave', { changedUsers, newPermissions, newAliases, revokedUsers })
   }
 
+  // mog('ShareInvitedPermissions go brrr', {
+  //   sharedUsers,
+  //   changedUsers
+  // })
+
   return (
     <SharedPermissionsWrapper>
       <ModalHeader>Share Note</ModalHeader>
 
-      <MultiEmailInviteModalContent />
+      {!readOnly && <MultiEmailInviteModalContent />}
 
       {sharedUsers.length > 0 && (
         <>
@@ -336,6 +352,7 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
             <caption>Users with access to this note</caption>
             <ShareRowHeading>
               <tr>
+                <td></td>
                 <td>Alias</td>
                 <td>Email</td>
                 <td>Permission</td>
@@ -347,18 +364,24 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
               const access = user.access[node.nodeid]
               const hasChanged = changedUsers.find((u) => u.userid === user.userid)
               const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
+              const isCurrent = user.userid === currentUserDetails.userID
               return (
                 <ShareRow hasChanged={!!hasChanged} key={`${user.userid}`} isRevoked={isRevoked}>
+                  <ShareProfileImage>
+                    <ProfileImage email={user.email} size={24} />
+                  </ShareProfileImage>
                   <ShareAlias hasChanged={!!hasChanged}>
-                    <ShareAliasInput
+                    {/*<ShareAliasInput
                       type="text"
-                      defaultValue={user.alias}
+                      disabled={true}
+                      defaultValue={`${user.alias}${isCurrent ? ' (you)' : ''}`}
                       onChange={(e) => onAliasChange(user.userid, e.target.value)}
-                    />
+                    /> */}
+                    {`${user.alias}${isCurrent ? ' (you)' : ''}`}
                   </ShareAlias>
                   <ShareEmail>{user.email}</ShareEmail>
 
-                  <SharePermission>
+                  <SharePermission disabled={readOnly}>
                     <StyledCreatatbleSelect
                       onChange={(access) => onPermissionChange(user.userid, access.value)}
                       defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
@@ -369,7 +392,12 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
                   </SharePermission>
                   <ShareRowAction>
                     <ShareRowActionsWrapper>
-                      <IconButton onClick={() => onRevokeAccess(user.userid)} icon={deleteBin6Line} title="Remove" />
+                      <IconButton
+                        disabled={readOnly}
+                        onClick={() => onRevokeAccess(user.userid)}
+                        icon={deleteBin6Line}
+                        title="Remove"
+                      />
                     </ShareRowActionsWrapper>
                   </ShareRowAction>
                 </ShareRow>
@@ -378,7 +406,7 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
           </SharedPermissionsTable>
 
           <ModalControls>
-            <Button large onClick={onCopyLink}>
+            <Button disabled={readOnly} large onClick={onCopyLink}>
               Copy Link
             </Button>
             <Button
@@ -386,7 +414,7 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
               autoFocus={!window.focus}
               large
               onClick={onSave}
-              disabled={changedUsers && changedUsers.length === 0}
+              disabled={readOnly || (changedUsers && changedUsers.length === 0)}
             >
               Save
             </Button>
@@ -394,7 +422,7 @@ export const PermissionModalContent = (/*{}: PermissionModalContentProps*/) => {
         </>
       )}
 
-      {invitedUsers.length > 0 && <InvitedUsersContent />}
+      {!readOnly && invitedUsers.length > 0 && <InvitedUsersContent />}
     </SharedPermissionsWrapper>
   )
 }

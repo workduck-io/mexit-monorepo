@@ -45,10 +45,11 @@ export const useDataSaverFromContent = () => {
       if (options.saveApi !== false) saveDataAPI(nodeId, editorValue)
       if (options?.saveApi !== false) saveDataAPI(nodeId, editorValue, options?.isShared ?? false)
 
+      updateLinksFromContent(nodeId, editorValue)
+      updateTagsFromContent(nodeId, editorValue)
+
       // Update operations for only notes owned by the user
       if (options?.isShared !== true) {
-        updateLinksFromContent(nodeId, editorValue)
-        updateTagsFromContent(nodeId, editorValue)
         updateNodeTodos(nodeId, getTodosFromContent(editorValue))
         await updateDocument('node', nodeId, editorValue)
       }

@@ -169,12 +169,15 @@ export const useLinks = () => {
   const getNodeidFromPath = (path: string) => {
     const links = useDataStore.getState().ilinks
     const archive = useDataStore.getState().archive
+    const sharedNodes = useDataStore.getState().sharedNodes
 
     const link = links.find((l) => l.path === path)
     const archivedLink = archive.find((l) => l.path === path)
+    const sharedNode = sharedNodes.find((l) => l.path === path)
 
     if (link) return link.nodeid
     if (archivedLink) return archivedLink.nodeid
+    if (sharedNode) return sharedNode.nodeid
   }
 
   const getPathFromNodeid = (nodeid: string) => {

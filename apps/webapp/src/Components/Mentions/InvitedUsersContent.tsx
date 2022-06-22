@@ -2,13 +2,15 @@ import React, { useMemo } from 'react'
 import repeatLine from '@iconify/icons-ri/repeat-line'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
-import { mog, AccessLevel, InvitedUser, DefaultPermissionValue, permissionOptions } from '@mexit/core'
+import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect, IconButton, Button } from '@mexit/shared'
 
-import { useShareModalStore } from '../../Stores/useShareModalStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
-
+import { usePermission } from '../../Hooks/API/usePermission'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import {
   SharedPermissionsWrapper,
@@ -22,26 +24,24 @@ import {
   ShareRowAction,
   ShareRowActionsWrapper
 } from './styles'
-import { usePermission } from '../../Hooks/API/usePermission'
-import { useUserService } from '../../Hooks/API/useUserAPI'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
   const { getInvitedUsersForNode } = useMentions()
   const node = useEditorStore((state) => state.node)
+  const { grantUsersPermission } = usePermission()
+  const { getUserDetails } = useUserService()
+  const invitedUsers = useMentionStore((s) => s.invitedUsers)
   const changedIUsers = useShareModalStore((state) => state.data.changedInvitedUsers)
   const setChangedIUsers = useShareModalStore((state) => state.setChangedInvitedUsers)
   // const { changeUserPermission, revokeUserAccess } = usePermission()
-
-  const { grantUsersPermission } = usePermission()
-  const { getUserDetails } = useUserService()
 
   const sharedIUsers = useMemo(() => {
     if (node && node.nodeid) {
       return getInvitedUsersForNode(node.nodeid)
     }
     return []
-  }, [node, getInvitedUsersForNode])
+  }, [node, getInvitedUsersForNode, invitedUsers])
 
   // This is called for every keystroke
   const onAliasChange = (email: string, alias: string) => {
@@ -136,7 +136,7 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
     const dataUser = sharedIUsers.find((u) => u.email === user.email)
     const access = changedUser ? changedUser.access[node.nodeid] : dataUser.access[node.nodeid] ?? undefined
     if (uDetails && access) {
-      const res = await grantUsersPermission(node.nodeid, [uDetails.userId], access)
+      const res = await grantUsersPermission(node.nodeid, [uDetails.userID], access)
       mog('res')
     }
   }

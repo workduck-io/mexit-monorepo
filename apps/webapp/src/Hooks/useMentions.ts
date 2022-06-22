@@ -1,10 +1,12 @@
 import { mog, AccessLevel, DefaultPermission, InvitedUser, Mentionable } from '@mexit/core'
+import { useAuthStore } from '../Stores/useAuth'
 
 import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
 import { usePermission } from './API/usePermission'
 
 export const useMentions = () => {
   const { grantUsersPermission } = usePermission()
+  const localUserDetails = useAuthStore((s) => s.userDetails)
   const addInvitedUser = useMentionStore((s) => s.addInvitedUser)
   const addAccess = useMentionStore((s) => s.addAccess)
   const setInvited = useMentionStore((s) => s.setInvited)
@@ -57,13 +59,18 @@ export const useMentions = () => {
       return res
     } else {
       // By design, the user should be in either invited or mentionable. The flow for new created user is different.
-      console.log('SHOULD NOT RUN', {})
+      console.error('SHOULD NOT RUN: grantUserAccessOnMention', { alias, nodeid, access })
       return 'notFound'
       //
     }
   }
 
   const addMentionable = (alias: string, email: string, userid: string, nodeid: string, access: AccessLevel) => {
+    if (userid === localUserDetails.userID) {
+      mog('Not adding mentionable user as it is the current user', { userid })
+      return
+    }
+
     const mentionable = useMentionStore.getState().mentionable
 
     const mentionExists = mentionable.find((user) => user.userid === userid)

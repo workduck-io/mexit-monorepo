@@ -9,22 +9,28 @@ import { CenteredColumn, Title } from '@mexit/shared'
 
 const UserPage = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const userDetails = useAuthStore((store) => store.userDetails)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentUserDetails = useAuthStore((store) => store.userDetails)
 
   return (
     <CenteredColumn>
       <BackCard>
         <ProfileContainer>
           <ProfileIcon>
-            <ProfileImage email={userDetails?.email} size={128} />
+            <ProfileImage email={currentUserDetails?.email} size={128} />
           </ProfileIcon>
           <div>
             <Title>User</Title>
             <Info>
+              <InfoLabel>Name:</InfoLabel>
+              <InfoData>{currentUserDetails?.name}</InfoData>
+            </Info>
+            <Info>
               <InfoLabel>Email:</InfoLabel>
-              <InfoData>{userDetails?.email}</InfoData>
+              <InfoData>{currentUserDetails?.email}</InfoData>
+            </Info>
+            <Info>
+              <InfoLabel>Alias:</InfoLabel>
+              <InfoData>{currentUserDetails?.alias ?? 'Warning: Unset'}</InfoData>
             </Info>
             <Info>
               <InfoLabel>Workspace:</InfoLabel>
