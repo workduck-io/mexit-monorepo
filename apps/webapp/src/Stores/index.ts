@@ -1,37 +1,12 @@
-import { mountStoreDevtool } from 'simple-zustand-devtools'
-import { share, isSupported } from 'shared-zustand'
+import { share } from 'shared-zustand'
 
-import { IS_DEV } from '@mexit/core'
-
-import { useAnalysisStore } from './useAnalysis'
 import { useAuthStore } from './useAuth'
-import { useRecentsStore } from './useRecentsStore'
 import useThemeStore from './useThemeStore'
-import { useRefactorStore } from './useRefactorStore'
-import { useHistoryStore } from './useHistoryStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
-import { useEditorStore } from './useEditorStore'
 import { useSnippetStore } from './useSnippetStore'
-import { useTodoStore } from './useTodoStore'
-import usePortalStore from './usePortalStore'
 import { useReminderStore } from './useReminderStore'
-
-if (IS_DEV) {
-  console.log('Zustand Devtools Initialize')
-  mountStoreDevtool('useAuthStore', useAuthStore)
-  mountStoreDevtool('useAnalysisStore', useAnalysisStore)
-  mountStoreDevtool('useContentStore', useContentStore)
-  mountStoreDevtool('useDataStore', useDataStore)
-  mountStoreDevtool('useEditorStore', useEditorStore)
-  mountStoreDevtool('useRecentsStore', useRecentsStore)
-  mountStoreDevtool('useThemeStore', useThemeStore)
-  mountStoreDevtool('useTodoStore', useTodoStore)
-  mountStoreDevtool('useRefactorStore', useRefactorStore)
-  mountStoreDevtool('useHistoryStore', useHistoryStore)
-  mountStoreDevtool('useSnippetStore', useSnippetStore)
-  mountStoreDevtool('usePortalStore', usePortalStore)
-}
+import { nanoid } from 'nanoid'
 
 // This is required for event driven messaging, as the tabs or in our
 // case a tab and a iframe don't know about their state updates, we
@@ -39,13 +14,13 @@ if (IS_DEV) {
 // progressive enhancement check.
 if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   // share the property "count" of the state with other tabs
-  share('theme', useThemeStore)
-  share('ilinks', useDataStore)
-  // share('archive', useDataStore)
-  share('contents', useContentStore)
-  // share('authenticated', useAuthStore)
-  // share('snippets', useSnippetStore)
-  // share('reminders', useReminderStore)
+  share('theme', useThemeStore, { initialize: true, ref: 'share-theme' })
+  share('ilinks', useDataStore, { initialize: true, ref: 'share-ilinks' })
+  share('archive', useDataStore, { initialize: true, ref: 'share-archive' })
+  share('contents', useContentStore, { initialize: true, ref: 'share-content' })
+  share('authenticated', useAuthStore, { initialize: true, ref: 'share-auth' })
+  share('snippets', useSnippetStore, { initialize: true, ref: 'share-snippets' })
+  share('reminders', useReminderStore, { initialize: true, ref: 'share-reminders' })
 }
 
 export default {}

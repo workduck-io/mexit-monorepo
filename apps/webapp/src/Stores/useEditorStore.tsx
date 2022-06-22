@@ -1,6 +1,5 @@
 import React from 'react'
 import create from 'zustand'
-import { devtools } from 'zustand/middleware'
 
 import { NodeContent, NodeProperties, defaultContent } from '@mexit/core'
 import { getInitialNode } from '@mexit/shared'
@@ -58,60 +57,58 @@ export type EditorContextType = {
   setReadOnly: (isReadOnly: boolean) => void
 }
 
-export const useEditorStore = create<EditorContextType>(
-  devtools((set, get) => ({
-    node: getInitialNode(),
-    content: defaultContent,
-    readOnly: false,
-    fetchingContent: false,
-    setTrigger: (trigger) => set({ trigger }),
+export const useEditorStore = create<EditorContextType>((set, get) => ({
+  node: getInitialNode(),
+  content: defaultContent,
+  readOnly: false,
+  fetchingContent: false,
+  setTrigger: (trigger) => set({ trigger }),
 
-    setReadOnly: (isReadOnly: boolean) => {
-      set({ readOnly: isReadOnly })
-    },
+  setReadOnly: (isReadOnly: boolean) => {
+    set({ readOnly: isReadOnly })
+  },
 
-    setUid: (nodeid) => {
-      const node = get().node
-      node.nodeid = nodeid
-      set({ node })
-    },
+  setUid: (nodeid) => {
+    const node = get().node
+    node.nodeid = nodeid
+    set({ node })
+  },
 
-    isEditing: false,
-    setIsEditing: (isEditing: boolean) => {
-      if (get().isEditing === isEditing) return
-      set({ isEditing })
-    },
+  isEditing: false,
+  setIsEditing: (isEditing: boolean) => {
+    if (get().isEditing === isEditing) return
+    set({ isEditing })
+  },
 
-    setNode: (node: NodeProperties) => set({ node }),
+  setNode: (node: NodeProperties) => set({ node }),
 
-    setFetchingContent: (value) =>
-      set({
-        fetchingContent: value
-      }),
+  setFetchingContent: (value) =>
+    set({
+      fetchingContent: value
+    }),
 
-    loadingNodeid: null,
-    setLoadingNodeid: (nodeid) =>
-      set({
-        loadingNodeid: nodeid
-      }),
-    clearLoadingNodeid: () =>
-      set({
-        loadingNodeid: null
-      }),
+  loadingNodeid: null,
+  setLoadingNodeid: (nodeid) =>
+    set({
+      loadingNodeid: nodeid
+    }),
+  clearLoadingNodeid: () =>
+    set({
+      loadingNodeid: null
+    }),
 
-    loadNode: (node: NodeProperties) => {
-      const content = getContent(node.nodeid)
-      set({
-        node,
-        content
-      })
-    },
+  loadNode: (node: NodeProperties) => {
+    const content = getContent(node.nodeid)
+    set({
+      node,
+      content
+    })
+  },
 
-    loadNodeAndReplaceContent: (node, content) => {
-      set({ node, content })
-    }
-  }))
-)
+  loadNodeAndReplaceContent: (node, content) => {
+    set({ node, content })
+  }
+}))
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
