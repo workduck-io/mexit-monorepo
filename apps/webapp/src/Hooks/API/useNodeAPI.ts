@@ -28,7 +28,7 @@ export const useApi = () => {
   const setContent = useContentStore((store) => store.setContent)
   const { getTags } = useTags()
   const { getPathFromNodeid, getTitleFromPath, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
-  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
       setNodePublic,

@@ -27,12 +27,12 @@ export const useFetchShareData = () => {
   const setSharedNodes = useDataStore((s) => s.setSharedNodes)
 
   const fetchShareData = async () => {
-    // First fetch the shared nodes
-    const sharedNodes = await getAllSharedNodes()
-    // mog('SharedNode', { sharedNodes })
+    const sharedNodesPreset = await getAllSharedNodes()
+    if (sharedNodesPreset.status === 'error') return
+
+    const sharedNodes = sharedNodesPreset.data
 
     setSharedNodes(sharedNodes)
-
     // Then fetch the users with access to the shared node
     const sharedNodeDetails = sharedNodes.map((node) => {
       return getUsersOfSharedNode(node.nodeid)

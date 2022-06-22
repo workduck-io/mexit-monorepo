@@ -2,7 +2,8 @@ export enum indexNames {
   'node' = 'node',
   'snippet' = 'snippet',
   'archive' = 'archive',
-  'template' = 'template'
+  'template' = 'template',
+  'shared' = 'shared'
 }
 
 export const indexKeys: Record<indexNames, string[]> = {
@@ -39,6 +40,17 @@ export const indexKeys: Record<indexNames, string[]> = {
     'reg',
     'store',
     'tag'
+  ],
+  [indexNames.shared]: [
+    'title.cfg',
+    'title.ctx',
+    'title.map',
+    'text.cfg',
+    'text.ctx',
+    'text.map',
+    'reg',
+    'store',
+    'tag'
   ]
 }
 
@@ -46,5 +58,6 @@ export const diskIndex: Record<indexNames, any> = {
   node: {},
   snippet: {},
   archive: {},
-  template: {}
+  template: {},
+  shared: {}
 }

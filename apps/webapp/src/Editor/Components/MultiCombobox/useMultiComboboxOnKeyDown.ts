@@ -27,7 +27,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
   const { getNodeidFromPath } = useLinks()
   const closeMenu = useComboboxStore((state) => state.closeMenu)
 
-  return (editor: PlateEditor, item: IComboboxItem, elementType?: string) => {
+  return (editor: PlateEditor, item: IComboboxItem, elementType?: string, tab?: boolean) => {
     try {
       let comboType = elementComboType
       if (keys) {
@@ -40,9 +40,15 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
       mog('ELEMENT', { elementType, comboType })
 
-      const type =
+      let type =
         elementType ??
         getPluginType(editor, comboType.slateElementType === 'internal' ? 'ilink' : comboType.slateElementType)
+
+      if (tab) {
+        // console.log('TAB', { comboType, type })
+        type = type === ELEMENT_ILINK ? ELEMENT_INLINE_BLOCK : type
+        // if (type)
+      }
 
       if (targetRange) {
         const pathAbove = getBlockAbove(editor)?.[1]
@@ -95,7 +101,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             ...InsertedElement,
             value: item.key
           }
-          if (comboType.onItemInsert) comboType.onItemInsert(item.text)
+          if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
         } else {
           if (item.type === QuickLinkType.snippet) {
             itemValue = item.key

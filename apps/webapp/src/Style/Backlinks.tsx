@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { HoverSubtleGlow } from '@mexit/shared'
+import { HoverSubtleGlow, SubtleGlow } from '@mexit/shared'
 
 export const SBackLinks = styled.div`
   width: 100%;
@@ -10,19 +10,33 @@ export const SBackLinks = styled.div`
   margin: 3rem 0;
 `
 
-export const NodeLinkStyled = styled.div`
+export const NodeLinkStyled = styled.div<{ selected?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
   cursor: pointer;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   margin-bottom: ${({ theme }) => theme.spacing.small};
   background: ${({ theme }) => transparentize(0.75, theme.colors.gray[8])};
-
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
-
-  &:nth-child(2n + 1) {
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+  svg {
+    fill: ${({ theme }) => theme.colors.text.fade};
+    width: 16px;
+    height: 16px;
   }
-
-  ${HoverSubtleGlow}
+  ${({ selected, theme }) =>
+    selected
+      ? css`
+          background: ${theme.colors.primary};
+          color: ${theme.colors.text.oppositePrimary};
+          ${SubtleGlow}
+        `
+      : css`
+          &:nth-child(2n + 1) {
+            background: ${transparentize(0.5, theme.colors.gray[8])};
+          }
+          ${HoverSubtleGlow}
+        `}
 `
 
 export const DataInfoHeader = styled.div`

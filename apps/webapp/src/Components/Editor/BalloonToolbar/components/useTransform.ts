@@ -1,4 +1,3 @@
-import { useNewNodes } from './../../../../Hooks/useNewNodes'
 import { getNodes, getSelectionText, insertNodes, TEditor } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
@@ -19,6 +18,7 @@ import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 import { ILinkNode } from '../../../../Editor/Types/QuickLink'
 import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
+import { useNewNodes } from './../../../../Hooks/useNewNodes'
 
 export const useTransform = () => {
   const { addNodeOrNodesFast } = useNewNodes()
@@ -201,7 +201,7 @@ export const useTransform = () => {
 
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value })
 
-      toast(`Snippet created '/snip.${snippetTitle}'`, { duration: 5000 })
+      toast(`Snippet created '${snippetTitle}'`, { duration: 5000 })
       // setContent(nodeid, value)
       // saveData()
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })

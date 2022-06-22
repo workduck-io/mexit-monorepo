@@ -4,6 +4,16 @@ import { mog, apiURLs, AccessLevel, SharedNode } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 
+interface SharedNodesPreset {
+  status: 'success'
+  data: SharedNode[]
+}
+
+interface SharedNodesErrorPreset {
+  status: 'error'
+  data: SharedNode[]
+}
+
 export const usePermission = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
@@ -64,7 +74,7 @@ export const usePermission = () => {
       })
   }
 
-  const getAllSharedNodes = async (): Promise<SharedNode[]> => {
+  const getAllSharedNodes = async (): Promise<SharedNodesPreset | SharedNodesErrorPreset> => {
     try {
       return await client
         .get(apiURLs.allSharedNodes, {
@@ -87,11 +97,11 @@ export const usePermission = () => {
             })
           )
           mog('SharedNodes', { sharedNodes })
-          return sharedNodes
+          return { status: 'success', data: sharedNodes }
         })
     } catch (e) {
       mog('Error Fetching Shared Nodes', { e })
-      return []
+      return { data: [], status: 'error' }
     }
   }
 
