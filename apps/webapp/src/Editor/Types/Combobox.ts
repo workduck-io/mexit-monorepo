@@ -22,6 +22,10 @@ export interface SlashCommandConfig {
   slateElementType: string
   options?: any
   getData?: (element: IComboboxItem) => Record<string, any>
+  /**
+   * On extended command, run the callback with the command and the editor
+   */
+  onExtendedCommand?: (query: string, editor: any) => void
 }
 
 export enum SlashType {
@@ -70,6 +74,12 @@ export interface IComboboxItem {
    * @defaultvalue false
    */
   disabled?: boolean
+
+  /**
+   * Extedned
+   * @defaultvalue false
+   */
+  extended?: boolean
 
   /**
    * Data available to onRenderItem.

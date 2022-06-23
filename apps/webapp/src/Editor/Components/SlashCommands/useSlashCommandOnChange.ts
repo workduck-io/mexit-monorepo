@@ -16,6 +16,15 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
         if (item.key === 'table') {
           Transforms.select(editor, targetRange)
           insertTable(editor, { header: true })
+        } else if (item.extended) {
+          Transforms.select(editor, targetRange)
+          Transforms.delete(editor)
+          const search = useComboboxStore.getState().search
+          // mog('extended', {
+          //   item,
+          //   commandKey
+          // })
+          commandConfig.onExtendedCommand(search.textAfterTrigger, editor)
         } else {
           // console.log('useElementOnChange 2', { type, pathAbove, isBlockEnd });
           const type = getPluginType(editor, commandConfig.slateElementType)
