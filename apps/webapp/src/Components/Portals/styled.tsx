@@ -14,7 +14,7 @@ export const CardStyles = css`
 `
 
 export const Description = styled.p`
-  margin: 6px 0 4px;
+  margin: 0 1rem;
   ${BodyFont};
   font-weight: 400;
   white-space: nowrap;
