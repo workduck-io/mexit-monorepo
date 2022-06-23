@@ -18,6 +18,30 @@ export function incrementChar(string: string) {
   return setValue(getValue(string) + 1);
 }
 
+export const findUpTag = (el, tag) => {
+  let r = el
+  let val = 0;
+  while (r.parentNode) {
+      if (typeof r === 'object' && r !== null && 'getAttribute' in r && r.getAttribute("role") === tag){
+          val = 1;
+      }
+      r = r.parentNode;
+  }
+  if(val)return 1;
+  r = el;
+  const getAllChildren = (ele) => {
+      ele.childNodes.forEach(element => {
+          if(typeof element === 'object' && element !== null && 'getAttribute' in element && element.getAttribute('role') === tag){
+              val = 1;
+              return 1;
+          }
+          getAllChildren(element);
+      });
+    };
+  const data = getAllChildren(r);
+  return val;
+}          
+
 export function getKeys(keyString: object) {
   let stringPress = ''
   for (const key in keyString) {

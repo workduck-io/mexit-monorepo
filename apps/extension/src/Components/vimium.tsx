@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react"
 import { useSputlitContext, VisualState, VimiumState } from '../Hooks/useSputlitContext'
-import { getKeys, getAllVisibleTags, incrementChar } from "../Utils/incrementChar";
+import { getKeys, getAllVisibleTags, incrementChar, findUpTag } from "../Utils/incrementChar";
 import { getSingleKeyFunction, getMultiKeyFunctions, checkHintsPress } from "../Utils/vimium";
 
 function useVimium() {
@@ -28,7 +28,7 @@ function useVimium() {
         else if (!vimium.visualState || vimium.linksData.length !== 0) {
         }
         else {
-            const result = getSingleKeyFunction(e.key);
+            const result = getSingleKeyFunction(e);
             if (result === 3) {
                 setVimium({ visualState: false, linksData: emptyData })
             } else if (result === 2) {
@@ -105,9 +105,15 @@ function useVimium() {
         else if (vimium.linksData.length !== 0 || vimium.visualState === false) {
             setVimium({ visualState: true, linksData: emptyData });
         }
-        if (e.target.nodeName === 'INPUT') {
+        if (e.target.nodeName === 'INPUT' || e.target.nodeName === "TEXTAREA") {
+            setVimium({ visualState: false, linksData: emptyData });
+        }
+        const body = findUpTag(e.target, "textbox");
+        console.log("body :" , body);
+        if(body === 1){
             setVimium({ visualState: false, linksData: emptyData })
         }
+          
     },[vimium, visualState])
     useEffect(() => {
         window.addEventListener('keydown',onKeyDownSinglekey)

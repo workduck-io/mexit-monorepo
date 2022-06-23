@@ -16,7 +16,6 @@ import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { EditorProvider } from './Hooks/useEditorContext'
 import ShortCutLinks from './Components/ShortCutLinks'
 import ReminderArmer from './Components/ReminderArmer'
-import ShortCutLinks from './Components/ShortCutLinks'
 
 export default function Index() {
   const theme = useThemeStore((state) => state.theme)

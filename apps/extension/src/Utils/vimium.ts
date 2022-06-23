@@ -1,39 +1,42 @@
 import { elementToHtml } from "@udecode/plate";
 import { toUpper } from "lodash";
 
-function getSingleKeyFunction(key: string) {
-    if (key === "k") {
+function getSingleKeyFunction(e: KeyboardEvent) {
+    if(e.ctrlKey){
+        return -1;
+    }
+    else if (e.key === "k") {
         window.scrollTo(window.pageXOffset, window.pageYOffset - 100);
         return 1;
     }
-    else if (key === "j") {
+    else if (e.key === "j") {
         window.scrollTo(window.pageXOffset, window.pageYOffset + 100);
         return 1;
     }
-    else if (key === "h") {
+    else if (e.key === "h") {
         window.scrollTo(window.pageXOffset - 100, window.pageYOffset);
         return 1;
     }
-    else if (key === "l") {
+    else if (e.key === "l") {
         window.scrollTo(window.pageXOffset + 100, window.pageYOffset);
         return 1;
     }
-    else if (key === "d") {
+    else if (e.key === "d") {
         window.scrollTo(window.pageXOffset, window.pageYOffset + window.innerHeight / 2);
         return 1;
     }
-    else if (key === "u") {
+    else if (e.key === "u") {
         window.scrollTo(window.pageXOffset, window.pageYOffset - window.innerHeight / 2);
         return 1;
     }
-    else if (key === "r") {
+    else if (e.key === "r") {
         location.reload();
         return 1;
     }
-    else if (key === "f") {
+    else if (e.key === "f") {
         return 2;
     }
-    else if (key === "i") {
+    else if (e.key === "i") {
         return 3;
     } else {
         return -1;
@@ -106,6 +109,7 @@ function checkHintsPress(string: string, data: {
         if (string === d.lable || toUpper(string) === d.lable) {
             d.element.style.border = "thick solid #53BDEB";
             setTimeout(()=>{
+                console.log(d);
                 window.open(d.element.href, "_blank");
                 d.element.style.border = "";
             }, 400)

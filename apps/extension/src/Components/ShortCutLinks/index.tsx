@@ -5,7 +5,7 @@ const ShortCutLinks = () => {
   const { vimium } = useSputlitContext();
   return (
     <>
-      <div style={{ width: '100vw', height: '100vh', top: `${window.pageYOffset}` + 'px', left: 0 }}>
+      {/* <div style={{ width: '100vw', height: '100vh', top: `${window.pageYOffset}` + 'px', left: 0 }}> */}
         {vimium.linksData ?
           vimium.linksData.map((ele) => {
             return (
@@ -32,7 +32,7 @@ const ShortCutLinks = () => {
             )
           })
           : <></>}
-      </div>
+      {/* </div> */}
     </>
   )
 }
