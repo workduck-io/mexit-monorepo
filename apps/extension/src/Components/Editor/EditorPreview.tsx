@@ -121,11 +121,9 @@ const EditorPreview = ({
                   </EditorPreviewNoteName>
                 )}
                 {/* <TagsRelatedTiny nodeid={nodeid} /> */}
-                {allowClosePreview && (
-                  <Button transparent onClick={() => closePreview && closePreview()}>
-                    <Icon icon={closeCircleLine} />
-                  </Button>
-                )}
+                <Button transparent onClick={() => closePreview && closePreview()}>
+                  <Icon icon={closeCircleLine} />
+                </Button>
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>

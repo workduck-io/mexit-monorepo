@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
@@ -9,6 +9,7 @@ import { editorPreviewComponents } from './Components/EditorPreviewComponents'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
 import useMemoizedPlugins from './Plugins'
+import PreviewEditor from '../Components/Editor/PreviewEditor'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -21,12 +22,19 @@ interface EditorPreviewRendererProps {
   noMouseEvents?: boolean
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   plugins?: PlatePlugin[]
+  draftView?: boolean
 }
 
-const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
-  ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
-  /* user-select: none; */
-  font-size: 0.9rem;
+const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean }>`
+  ${({ draftView }) =>
+    draftView &&
+    css`
+      * {
+        font-size: 0.9rem !important;
+      }
+    `}
+
+  overflow: hidden;
 
   ${TodoContainer}, button, input, textarea, select, option {
     pointer-events: none;
@@ -39,7 +47,8 @@ const EditorPreviewRenderer = ({
   blockId,
   noStyle,
   noMouseEvents,
-  onDoubleClick
+  onDoubleClick,
+  draftView
 }: EditorPreviewRendererProps) => {
   const editableProps = {
     placeholder: 'Murmuring the mex hype... ',
@@ -75,7 +84,8 @@ const EditorPreviewRenderer = ({
 
   return (
     <PreviewStyles
-      noMouseEvents={noMouseEvents}
+      readOnly={noMouseEvents}
+      draftView={draftView}
       onClick={(ev) => {
         if (onDoubleClick && ev.detail === 2) {
           onDoubleClick(ev)
@@ -83,7 +93,7 @@ const EditorPreviewRenderer = ({
       }}
     >
       <FadeContainer fade={blockId !== undefined}>
-        <Plate id={editorId} editableProps={editableProps} value={content} plugins={plugins} />
+        <PreviewEditor editorId={editorId} content={content} />
       </FadeContainer>
     </PreviewStyles>
   )

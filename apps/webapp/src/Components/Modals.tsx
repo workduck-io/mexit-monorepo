@@ -5,8 +5,8 @@ import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
 import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
-import { BlockModal } from '../Editor/Styles/Block'
 import CreateReminderModal from './Reminders/CreateReminderModal'
+import BlockModal from '../Editor/Components/Blocks/BlockModal'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)

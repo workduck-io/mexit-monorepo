@@ -5,7 +5,6 @@ import { Icon } from '@iconify/react'
 import React, { useMemo } from 'react'
 import { useReminders } from '../../Hooks/useReminders'
 import { useReminderStore } from '../../Stores/useReminderStore'
-// import useToggleElements from '../../Hooks/useToggleElements'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
@@ -16,10 +15,11 @@ import { useCreateReminderModal } from './CreateReminderModal'
 import ReminderUI from './Reminder'
 import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper } from './Reminders.style'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import useToggleElements from '../../Hooks/useToggleElements'
 
 const RemindersInfobar = () => {
   const infobar = useLayoutStore((s) => s.infobar)
-  // const { toggleReminder } = useToggleElements()
+  const { toggleReminder } = useToggleElements()
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const remindersAll = useReminderStore((store) => store.reminders)
   const armedReminders = useReminderStore((store) => store.armedReminders)
@@ -42,10 +42,10 @@ const RemindersInfobar = () => {
         <IconButton
           size={24}
           icon={timerFlashLine}
-          shortcut={shortcuts.showReminder.keystrokes}
+          shortcut={shortcuts?.showReminder?.keystrokes}
           title="Reminders"
           highlight={infobar.mode === 'reminders'}
-          // onClick={toggleReminder}
+          onClick={toggleReminder}
         />
         <IconButton
           size={24}

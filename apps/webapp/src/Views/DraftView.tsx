@@ -59,6 +59,7 @@ function DraftView() {
                 <EditorPreviewRenderer
                   content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
                   editorId={`Editor_Embed_${s.nodeid}`}
+                  draftView
                 />
               </StyledSnippetPreview>
             </SSnippet>

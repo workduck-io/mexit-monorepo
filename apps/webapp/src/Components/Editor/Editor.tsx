@@ -7,7 +7,14 @@ import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import TagWrapper from './TagWrapper'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TAG, ELEMENT_TODO_LI, NodeEditorContent } from '@mexit/core'
+import {
+  ELEMENT_ILINK,
+  ELEMENT_INLINE_BLOCK,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TAG,
+  ELEMENT_TODO_LI,
+  NodeEditorContent
+} from '@mexit/core'
 import Todo from '../Todo'
 import { useEditorChange } from '@mexit/shared'
 import { EditorStyles } from '@mexit/shared'
@@ -23,6 +30,7 @@ import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
 import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { useNewNodes } from '../../Hooks/useNewNodes'
+import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -47,6 +55,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const ilinks = useDataStore((store) => store.ilinks)
   const addILink = useDataStore((store) => store.addILink)
   const slashCommands = useDataStore((store) => store.slashCommands)
+
+  const { openReminderModal } = useOpenReminderModal()
 
   const { getSnippetConfigs } = useSnippets()
 
@@ -138,6 +148,13 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       table: {
         slateElementType: ELEMENT_TABLE,
         command: 'table'
+      },
+      remind: {
+        slateElementType: ELEMENT_PARAGRAPH,
+        command: 'remind',
+        onExtendedCommand: (newValue, editor) => {
+          openReminderModal(newValue)
+        }
       }
     }
   }
@@ -168,7 +185,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
 
   const editorOptions: MexEditorOptions = {
     editableProps: {
-      readOnly: readOnly,
+      readOnly,
       // placeholder: "Let's try something here...",
       autoFocus: true
     },

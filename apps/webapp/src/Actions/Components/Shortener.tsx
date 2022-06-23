@@ -128,9 +128,7 @@ export const Shortener = () => {
         } else {
           const title = tags.filter((el) => el.name === 'title')[0].value.trim()
           if (!resultShortAlias) resultShortAlias = title
-          setUserTags([
-            { id: nanoid(), text: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }
-          ])
+          setUserTags([{ value: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }])
           setShort(resultShortAlias)
         }
       }
@@ -138,7 +136,7 @@ export const Shortener = () => {
   }
 
   const removeUserTag = (tag: Tag) => {
-    const updatedUserTags = userTags.filter((userTag) => tag.id !== userTag.id)
+    const updatedUserTags = userTags.filter((userTag) => tag.value !== userTag.value)
     setUserTags(updatedUserTags)
   }
   useEffect(() => {

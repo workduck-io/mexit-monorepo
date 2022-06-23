@@ -13,7 +13,7 @@ const Data = styled.div`
 `
 
 const PublicNodeMetadata = ({ metadata }) => {
-  console.log(metadata)
+  // console.log(metadata)
   const isEmpty =
     metadata &&
     metadata.createdAt === undefined &&

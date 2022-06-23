@@ -72,7 +72,7 @@ const BlockModal = () => {
     const selection = editor?.selection
 
     // Move Content Blocks or Delete Content Blocks
-    const moveAction = isModalOpen === (ContextMenuActionType.move || ContextMenuActionType.del)
+    const moveAction = isModalOpen === ContextMenuActionType.move || isModalOpen === ContextMenuActionType.del
 
     if (moveAction) {
       if (blocks.length) {

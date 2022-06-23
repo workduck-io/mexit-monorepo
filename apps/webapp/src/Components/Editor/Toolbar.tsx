@@ -1,4 +1,5 @@
 import React from 'react'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import focusLine from '@iconify/icons-ri/focus-line'
 import { useSingleton } from '@tippyjs/react'
 import shareLine from '@iconify/icons-ri/share-line'
@@ -12,6 +13,7 @@ import { InfoTools, NodeInfo } from '@mexit/shared'
 import BookmarkButton from '../Buttons/BookmarkButton'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
+import useToggleElements from '../../Hooks/useToggleElements'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -21,7 +23,10 @@ const Toolbar = () => {
   const [source, target] = useSingleton()
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const showShareOptions = useLayoutStore((store) => store.showShareOptions)
+  const infobar = useLayoutStore((store) => store.infobar)
   const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
+
+  const { toggleReminder } = useToggleElements()
 
   return (
     <NodeInfo {...getFocusProps(focusMode)}>
@@ -42,6 +47,15 @@ const Toolbar = () => {
             <BookmarkButton nodeid={nodeid} />
           </span>
         </ToolbarTooltip> */}
+        <IconButton
+          size={24}
+          singleton={target}
+          icon={timerFlashLine}
+          shortcut={shortcuts?.showReminder?.keystrokes}
+          title="Reminders"
+          highlight={infobar.mode === 'reminders'}
+          onClick={toggleReminder}
+        />
         <IconButton
           singleton={target}
           size={24}
