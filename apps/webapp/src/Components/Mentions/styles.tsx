@@ -4,30 +4,25 @@ import styled, { css } from 'styled-components'
 import { Title, Button, SelectWrapper } from '@mexit/shared'
 
 export const InviteWrapper = styled.div``
+export const MultipleInviteWrapper = styled.div`
+  form > fieldset {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: ${({ theme }) => theme.spacing.small};
+    flex-wrap: wrap;
+    ${SelectWrapper} {
+      width: 60%;
+    }
+  }
+`
+
 export const InviteFormWrapper = styled.form``
 export const InviteFormFieldset = styled.fieldset`
   border: none;
   padding: 0;
 `
-export const SharedPermissionsWrapper = styled.div`
-  ${InviteWrapper} {
-    ${Title} {
-      display: none;
-    }
-
-    form > fieldset {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: ${({ theme }) => theme.spacing.small};
-      flex-wrap: wrap;
-
-      ${SelectWrapper} {
-        width: 60%;
-      }
-    }
-  }
-`
+export const SharedPermissionsWrapper = styled.div``
 
 export const ShareOwnerTag = styled.div`
   padding: ${({ theme }) => `0.75rem ${theme.spacing.small}`};
@@ -84,12 +79,16 @@ export const ShareAlias = styled.td<{ hasChanged?: boolean }>`
   padding: ${({ theme }) => theme.spacing.small};
 `
 
-export const ShareProfileImage = styled.td`
+export const ShareAliasWithImage = styled.td`
   padding: ${({ theme }) => theme.spacing.small};
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
   svg,
   img {
     border-radius: ${({ theme }) => theme.borderRadius.small};
   }
+  font-weight: 500;
 `
 
 export const ShareAliasInput = styled.input`
@@ -131,6 +130,4 @@ export const ShareRowActionsWrapper = styled.div`
     height: 100%;
   }
 `
-export const ShareRowAction = styled.td`
-  width: 100px;
-`
+export const ShareRowAction = styled.td``

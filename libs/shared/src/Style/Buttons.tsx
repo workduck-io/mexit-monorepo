@@ -37,6 +37,12 @@ export const Button = styled.button<ButtonProps>`
     cursor: default;
   }
 
+  svg,
+  img {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
   ${({ primary, transparent, theme }) =>
     !primary &&
     transparent &&

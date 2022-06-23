@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { getPlateEditorRef } from '@udecode/plate'
@@ -21,9 +21,10 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useNodes } from '../../Hooks/useNodes'
 
 export const InviteModalContent = () => {
-  const data = useShareModalStore((state) => state.data)
+  const sModalData = useShareModalStore((state) => state.data)
+  // const data = useShareModalStore((state) => state.data)
   const closeModal = useShareModalStore((state) => state.closeModal)
-  const { getUserDetails } = useUserService()
+  const { getUserDetails, getUserDetailsUserId } = useUserService()
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
   const { inviteUser, addMentionable } = useMentions()
@@ -34,6 +35,7 @@ export const InviteModalContent = () => {
     handleSubmit,
     register,
     control,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm<InviteModalData>()
 
@@ -44,13 +46,28 @@ export const InviteModalContent = () => {
     return false
   }, [node])
 
+  const [existUserDetails, setExistUserDetails] = useState<any | null>(null)
+
+  useEffect(() => {
+    async function getUserDetailsById() {
+      const user = await getUserDetailsUserId(sModalData.userid)
+      setExistUserDetails(user)
+
+      if (user?.email && user?.alias) {
+        setValue('email', user.email)
+        setValue('alias', user.alias)
+      }
+    }
+    if (sModalData.userid) getUserDetailsById()
+  }, [sModalData.userid]) // eslint-disable-line
+
   const onSubmit = async (data: InviteModalData) => {
     if (node && node.nodeid) {
       const editor = getPlateEditorRef()
       const access = (data?.access?.value as AccessLevel) ?? DefaultPermission
 
       const details = await getUserDetails(data.email)
-      mog('data', { data, details })
+      mog('data', { data, details, node })
 
       if (details.userID !== undefined) {
         // Give permission here
@@ -59,20 +76,34 @@ export const InviteModalContent = () => {
           closeModal()
           return
         }
-        const resp = await grantUsersPermission(node.nodeid, [details.userID], access)
-        mog('UserPermission given', { details, resp })
-        addMentionable(details.alias, data.email, details.userID, node.nodeid, access)
-        replaceUserMention(editor, data.alias, details.userID)
-        toast(`Shared with: ${data.email}`)
+        if (data?.access?.value !== 'NONE') {
+          const resp = await grantUsersPermission(node.nodeid, [details.userID], access)
+          mog('UserPermission given', { details, resp })
+          addMentionable(details.alias, data.email, details.userID, details.name, node.nodeid, access)
+        } else {
+          addMentionable(details.alias, data.email, details.userID, undefined, undefined)
+        }
+        if (!sModalData.userid) {
+          replaceUserMention(editor, data.alias, details.userID)
+        }
+        if (data?.access?.value !== 'NONE') {
+          toast(`Shared with: ${data.email}`)
+        } else toast(`Added mention for: ${data.email}`)
       } else {
         inviteUser(data.email, data.alias, node.nodeid, access)
-        replaceUserMentionEmail(editor, data.alias, details.email)
+        if (!sModalData.userid) {
+          replaceUserMentionEmail(editor, data.alias, details.email)
+        }
         toast(`${data.email} is not on Mex, added to Invited Users`)
       }
     }
 
     closeModal()
   }
+
+  mog('InviteModalContent', {
+    existUserDetails
+  })
 
   return (
     <InviteWrapper>
@@ -84,7 +115,8 @@ export const InviteModalContent = () => {
             name="alias"
             label="Alias"
             inputProps={{
-              defaultValue: data.alias ?? '',
+              defaultValue: sModalData.alias ?? existUserDetails?.alias ?? '',
+              readOnly: existUserDetails?.alias !== undefined,
               ...register('alias', {
                 required: true
               })
@@ -96,6 +128,8 @@ export const InviteModalContent = () => {
             label="Email"
             inputProps={{
               autoFocus: true,
+              defaultValue: existUserDetails?.email ?? '',
+              readOnly: existUserDetails?.email !== undefined,
               ...register('email', {
                 required: true,
                 pattern: EMAIL_REG
@@ -112,7 +146,7 @@ export const InviteModalContent = () => {
                 <StyledCreatatbleSelect
                   {...field}
                   defaultValue={DefaultPermissionValue}
-                  options={permissionOptions}
+                  options={[...permissionOptions, { value: 'NONE', label: 'None' }]}
                   closeMenuOnSelect={true}
                   closeMenuOnBlur={true}
                 />

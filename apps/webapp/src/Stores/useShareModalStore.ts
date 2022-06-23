@@ -1,5 +1,6 @@
 import create from 'zustand'
-import { AccessLevel, InvitedUser, Mentionable, mog } from '@mexit/core'
+
+import { AccessLevel, InvitedUser, Mentionable } from '@mexit/core'
 
 type ShareModalMode = 'invite' | 'permission'
 
@@ -19,30 +20,34 @@ export interface InviteModalData {
   alias: string
   email: string
   access: {
-    value: AccessLevel
+    value: AccessLevel | 'NONE'
     label: string
   }
+}
+interface ShareModalData {
+  alias?: string
+
+  fromEditor?: boolean
+  // When sharing to a preexisting user from a mention
+  userid?: string
+  changedUsers?: ChangedUser[]
+  changedInvitedUsers?: ChangedInvitedUser[]
 }
 
 interface ShareModalState {
   open: boolean
   focus: boolean
   mode: ShareModalMode
-  data: {
-    alias?: string
-    fromEditor?: boolean
-    changedUsers?: ChangedUser[]
-    changedInvitedUsers?: ChangedInvitedUser[]
-  }
+  data: ShareModalData
   openModal: (mode: ShareModalMode) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) => void
-  prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) => void
+  prefillModal: (mode: ShareModalMode, data: ShareModalData) => void
 }
 
-export const useShareModalStore = create<ShareModalState>((set) => ({
+export const useShareModalStore = create<ShareModalState>((set, get) => ({
   open: false,
   focus: true,
   mode: 'permission',
@@ -69,16 +74,14 @@ export const useShareModalStore = create<ShareModalState>((set) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, alias?: string, fromEditor?: boolean) => {
-    mog('PrefillModal', { mode, alias, fromEditor })
+  prefillModal: (mode: ShareModalMode, data) =>
     set({
       mode,
       open: true,
       data: {
-        alias,
-        fromEditor
+        ...get().data,
+        ...data
       },
       focus: false
     })
-  }
 }))

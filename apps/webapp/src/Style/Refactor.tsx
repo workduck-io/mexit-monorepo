@@ -1,18 +1,32 @@
 import styled, { css } from 'styled-components'
 import { rgba, transparentize } from 'polished'
 
-const ModalContent = css`
+const ModalContent = (multi = false) => css`
   width: max-content;
   height: max-content;
   margin: auto;
-  background: ${({ theme }) => theme.colors.background.card};
-  box-shadow: 0px 20px 100px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
   overflow: visible;
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  border: 1px solid ${({ theme }) => theme.colors.gray[8]};
   outline: none;
-  padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
   min-width: 400px;
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  ${({ theme }) =>
+    !multi
+      ? css`
+          padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
+          background: ${theme.colors.background.card};
+          box-shadow: 0px 20px 100px ${transparentize(0.75, theme.colors.primary)};
+          border: 1px solid ${theme.colors.gray[8]};
+        `
+      : css`
+          padding: ${({ theme }) => theme.spacing.large};
+          background: ${transparentize(0.5, theme.colors.background.card)};
+          border: 1px solid ${({ theme }) => theme.colors.gray[8]};
+          display: flex;
+          flex-direction: column;
+          gap: ${({ theme }) => theme.spacing.large};
+          max-height: 90vh;
+          overflow-y: auto;
+        `}
 `
 
 const ModalOverlay = css`
@@ -26,17 +40,33 @@ const ModalOverlay = css`
 
 export const ModalStyles = css`
   .ModalContent {
-    ${ModalContent}
+    ${ModalContent()}
   }
   .ModalOverlay {
     ${ModalOverlay}
   }
+  .ModalContentSplit {
+    ${ModalContent(true)}
+  }
+`
+
+export const ModalSectionScroll = styled.div`
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
+`
+
+export const ModalSection = styled.div`
+  padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
+  background: ${({ theme }) => theme.colors.background.card};
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  border: 1px solid ${({ theme }) => theme.colors.gray[8]};
 `
 
 export const ModalHeader = styled.h1`
-  font-size: 1.5;
+  font-size: 1.5rem;
   color: ${({ theme }) => theme.colors.text.heading};
-  margin: ${({ theme: { spacing } }) => `${spacing.large} 0`};
+  margin: ${({ theme: { spacing } }) => `${spacing.medium} 0`};
 `
 
 export const MockRefactorMap = styled.div`

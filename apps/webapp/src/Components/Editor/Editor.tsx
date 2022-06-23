@@ -174,7 +174,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         newItemHandler: (newAlias) => {
           // addTag(newItem)
           mog('ELEMENT_MENTIONS', { newAlias })
-          prefillShareModal('invite', newAlias, true)
+          prefillShareModal('invite', { alias: newAlias, fromEditor: true })
           return newAlias
         },
         renderElement: TagComboboxItem

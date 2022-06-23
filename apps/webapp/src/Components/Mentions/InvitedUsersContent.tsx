@@ -130,14 +130,14 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
   }
 
   const onReinviteUser = async (user: InvitedUser) => {
-    mog('Reinviting that damn user', { user })
     const uDetails = await getUserDetails(user.email)
+    mog('Reinviting that damn user', { user, uDetails })
     const changedUser = changedIUsers.find((u) => u.email === user.email)
     const dataUser = sharedIUsers.find((u) => u.email === user.email)
     const access = changedUser ? changedUser.access[node.nodeid] : dataUser.access[node.nodeid] ?? undefined
     if (uDetails && access) {
       const res = await grantUsersPermission(node.nodeid, [uDetails.userID], access)
-      mog('res')
+      mog('ReinviteUser', { res })
     }
   }
 

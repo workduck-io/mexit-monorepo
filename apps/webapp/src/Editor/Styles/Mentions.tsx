@@ -18,26 +18,31 @@ export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self
     `}
 `
 
-export const Username = styled.div`
-  padding: ${({ theme }) => theme.spacing.tiny};
-`
+export const Username = styled.div``
 
 export const SAccessTag = styled.div`
   display: flex;
   align-items: center;
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
+  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   gap: ${({ theme }) => theme.spacing.tiny};
   font-size: 0.9rem;
 `
 
-export const MentionTooltip = styled.div`
+export const MentionTooltipContent = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
+`
+
+export const MentionTooltip = styled.div<{ spotlight?: boolean }>`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   max-height: 400px;
   max-width: 700px;
@@ -45,13 +50,20 @@ export const MentionTooltip = styled.div`
   ${CardShadow}
   background: ${({ theme }) => theme.colors.gray[8]} !important;
   color: ${({ theme }) => theme.colors.text.default};
-  img,
-  svg {
-    border-radius: ${({ theme }) => theme.borderRadius.large};
+  & > img,
+  & > svg {
+    width: 100%;
+    height: 100%;
   }
   &::after {
     border-right-color: ${({ theme }) => theme.colors.primary} !important;
   }
+
+  ${({ spotlight }) =>
+    spotlight &&
+    css`
+      flex-direction: row;
+    `}
 `
 
 export const TooltipMail = styled.div`
@@ -59,7 +71,22 @@ export const TooltipMail = styled.div`
   font-size: 0.9rem;
 `
 
+export const TooltipAlias = styled.div`
+  color: ${({ theme }) => theme.colors.primary};
+`
+
 export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'invite' | 'self' }>`
+  display: inline-flex;
+  align-items: baseline;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+
+  svg,
+  img {
+    align-self: center;
+    border-radius: ${({ theme }) => theme.borderRadius.large};
+  }
+
   color: ${({ theme }) => theme.colors.secondary};
   ${({ selected, theme }) =>
     selected &&
