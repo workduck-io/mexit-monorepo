@@ -15,18 +15,24 @@ export const SSnippet = styled(Card)`
   margin: 1rem;
   padding: 1rem;
   aspect-ratio: 1/1;
+
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
 `
 
 export const SnippetHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.small};
 `
 
 export const StyledSnippetPreview = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[8]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+  min-height: 80%;
 `
 
 export const SnippetCommandPrefix = styled.div`
@@ -35,7 +41,7 @@ export const SnippetCommandPrefix = styled.div`
 export const SnippetCommand = styled.div`
   display: flex;
   font-size: 1.5rem;
-  margin: ${({ theme }) => theme.spacing.medium} 0;
+  margin: ${({ theme }) => theme.spacing.small} 0;
   color: ${({ theme }) => theme.colors.text.heading};
 `
 

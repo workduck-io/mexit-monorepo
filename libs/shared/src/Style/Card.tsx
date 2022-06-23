@@ -10,7 +10,7 @@ export const CardTitle = styled.div`
 export const Card = styled.div`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.medium};
-  height: 400px;
+  height: 350px;
   border-radius: ${({ theme }) => theme.borderRadius.large};
 `
 

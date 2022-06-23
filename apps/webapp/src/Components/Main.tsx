@@ -105,7 +105,7 @@ const Main = ({ children }: MainProps) => {
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
-      <Draggable style={styles as any} /> {/* eslint-disable-line @typescript-eslint/no-explicit-any */}
+      {/* <Draggable style={styles as any} /> eslint-disable-line @typescript-eslint/no-explicit-any */}
       <GridWrapper
         // eslint-disable-next-line
         // @ts-ignore
