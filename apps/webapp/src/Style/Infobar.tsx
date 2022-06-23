@@ -101,8 +101,7 @@ export const InfobarTools = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: ${({ theme: { spacing } }) => `${spacing.large} ${spacing.medium}`};
-  margin-top: 2rem;
+  margin: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.large}`};
 
   background-color: ${({ theme }) => theme.colors.gray[9]};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.small}`};

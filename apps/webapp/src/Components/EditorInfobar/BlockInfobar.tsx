@@ -8,12 +8,11 @@ import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 import useBlockStore from '../../Stores/useBlockStore'
 import { Button, MexIcon } from '@mexit/shared'
 import { ButtonWrapper } from '../../Style/Settings'
-import { ContextMenuActionType } from "@mexit/core"
+import { ContextMenuActionType } from '@mexit/core'
 
 export const PrimaryText = styled.span`
   color: ${({ theme }) => theme.colors.primary};
 `
-
 
 const BlockMenu = styled.div`
   display: flex;
@@ -21,6 +20,7 @@ const BlockMenu = styled.div`
   justify-content: space-between;
 
   margin: 2px 0;
+  z-index: 999999;
 
   p {
     margin: 0;
@@ -29,39 +29,39 @@ const BlockMenu = styled.div`
 `
 
 const BlockInfoBar = () => {
-    const setIsModalOpen = useBlockStore((store) => store.setIsModalOpen)
-    const isBlockMode = useBlockStore((store) => store.isBlockMode)
-    const blocks = useBlockStore((store) => store.blocks)
-    const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+  const setIsModalOpen = useBlockStore((store) => store.setIsModalOpen)
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const blocks = useBlockStore((store) => store.blocks)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
-    const theme = useTheme()
-    const length = Object.values(blocks).length
-    const blockHeading = length === 0 ? 'Select Blocks' : `Block${length > 1 ? 's' : ''} selected:`
+  const theme = useTheme()
+  const length = Object.values(blocks).length
+  const blockHeading = length === 0 ? 'Select Blocks' : `Block${length > 1 ? 's' : ''} selected:`
 
-    return (
-        <BlockMenu>
-            <Button onClick={() => setIsBlockMode(!isBlockMode)}>
-                <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={xBold} /> Cancel
-            </Button>
-            <p>
-                {blockHeading}
-                {length > 0 && <PrimaryText>&#32;{length}</PrimaryText>}
-            </p>
-            <ButtonWrapper>
-                <Button onClick={() => setIsModalOpen(ContextMenuActionType.move)}>
-                    <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={moveToIcon} />
-                    Move
-                </Button>
-                <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
-                    <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={sendToIcon} /> Send
-                </Button>
-                <Button onClick={() => setIsModalOpen(ContextMenuActionType.del)}>
-                    <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={deleteBin6Line} />
-                    Delete
-                </Button>
-            </ButtonWrapper>
-        </BlockMenu>
-    )
+  return (
+    <BlockMenu>
+      <Button onClick={() => setIsBlockMode(!isBlockMode)}>
+        <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={xBold} /> Cancel
+      </Button>
+      <p>
+        {blockHeading}
+        {length > 0 && <PrimaryText>&#32;{length}</PrimaryText>}
+      </p>
+      <ButtonWrapper>
+        <Button onClick={() => setIsModalOpen(ContextMenuActionType.move)}>
+          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={moveToIcon} />
+          Move
+        </Button>
+        <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
+          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={sendToIcon} /> Send
+        </Button>
+        <Button onClick={() => setIsModalOpen(ContextMenuActionType.del)}>
+          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={deleteBin6Line} />
+          Delete
+        </Button>
+      </ButtonWrapper>
+    </BlockMenu>
+  )
 }
 
 export default BlockInfoBar
