@@ -52,6 +52,7 @@ export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, contro
   }
 
   const changeStatus = () => {
+    if (readOnly) return
     if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, getNextStatus(todo.metadata.status))
     else updateStatus(parentNodeId, todoid, getNextStatus(todo.metadata.status))
     setAnimate(true)
@@ -63,12 +64,12 @@ export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, contro
       id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       checked={todo?.metadata.status === TodoStatus.completed}
       onMouseEnter={() => {
-        setShowOptions(true)
+        if (!readOnly) setShowOptions(true)
       }}
-      onMouseLeave={() => setShowOptions(false)}
+      onMouseLeave={() => !readOnly && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
-        <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
+        <StyledTodoStatus animate={animate} status={todo.metadata.status} disabled={readOnly} onClick={changeStatus} />
       </CheckBoxWrapper>
 
       <TodoText contentEditable={!readOnly} suppressContentEditableWarning>

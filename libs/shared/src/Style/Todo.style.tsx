@@ -42,7 +42,7 @@ export const TodoActionButton = styled.button`
   }
 `
 
-export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStatus }>`
+export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStatus; disabled?: boolean }>`
   position: relative;
   display: flex;
   justify-content: center;
@@ -50,7 +50,7 @@ export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStat
   flex-direction: column;
   height: 1rem;
   width: 1rem;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'default' : 'cursor')};
   margin-right: 0.5rem;
   border: 1px solid ${({ theme }) => theme.colors.text.fade};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};

@@ -1,6 +1,7 @@
 import { BlockElement, BlockSelectorInput } from '../../Styles/Block'
 import React from 'react'
-import useBlockStore, { BlockType } from '../../../Stores/useBlockStore'
+import useBlockStore from '../../../Stores/useBlockStore'
+import { BlockType } from '@mexit/core'
 
 type BlockProps = {
   blockId: string
