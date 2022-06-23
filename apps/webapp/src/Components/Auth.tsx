@@ -9,7 +9,7 @@ export const Logout = () => {
 
   const onLogout = async () => {
     await logout()
-    Analytics.track('Logged Out')
+    Analytics?.track('Logged Out')
     Analytics.reset()
   }
 

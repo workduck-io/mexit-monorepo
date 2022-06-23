@@ -63,7 +63,7 @@ export const Register = () => {
           'mexit-sharing': shareLinkCookie
         }
       }
-      Analytics.track('USER_REGISTERED', props)
+      Analytics?.track('USER_REGISTERED', props)
     })
   }
 
