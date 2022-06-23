@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import shallow from 'zustand/shallow'
@@ -26,6 +26,7 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
+  const editorWrapperRef = useRef<HTMLDivElement>(null)
 
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
   const setIsEditing = useEditorStore((store) => store.setIsEditing)
@@ -68,9 +69,19 @@ const ContentEditor = () => {
   const editorId = useMemo(() => getEditorId(node.nodeid, false), [node, fetchingContent])
   const editorRef = usePlateEditorRef()
 
-  const onFocusClick = () => {
+  const onFocusClick = (ev) => {
+    ev.preventDefault()
+    ev.stopPropagation()
+
     if (editorRef) {
-      selectEditor(editorRef, { focus: true })
+      if (editorWrapperRef.current) {
+        const el = editorWrapperRef.current
+        const hasScrolled = el.scrollTop > 0
+        // mog('ElScroll', { hasScrolled })
+        if (!hasScrolled) {
+          selectEditor(editorRef, { focus: true })
+        }
+      }
     }
   }
 
@@ -106,7 +117,7 @@ const ContentEditor = () => {
       <EditorInfoBar />
       {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
 
-      <EditorWrapper onClick={onFocusClick}>
+      <EditorWrapper ref={editorWrapperRef} onMouseUpCapture={onFocusClick}>
         <Editor
           readOnly={readOnly}
           nodeUID={nodeId}
