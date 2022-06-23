@@ -84,7 +84,7 @@ export const LinkElement = ({ attributes, children, element, nodeProps }: Styled
   }
 
   return (
-    <Tippy content={element.url} theme="mex-bright">
+    <Tippy content={element.url} maxWidth="none" theme="mex-bright">
       <Link
         {...attributes}
         href={element.url}
