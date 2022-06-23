@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import tinykeys from 'tinykeys'
 import { useSingleton } from '@tippyjs/react'
 import { Icon } from '@iconify/react'
@@ -20,12 +20,14 @@ import {
   NavDivider,
   EndLinkContainer,
   Link,
-  NavSpacer
+  NavSpacer,
+  MexIcon,
+  SharedNodeIcon
 } from '@mexit/shared'
 
 import { TooltipTitleWithShortcut } from '../Shortcuts'
 import { useSidebarTransition } from './Transition'
-import Tree from './Tree'
+import Tree, { TreeContainer } from './Tree'
 import { BookmarksHelp, TreeHelp, SharedHelp } from '../../Data/defaultText'
 import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
@@ -33,7 +35,7 @@ import { useKeyListener } from '../../Hooks/useShortcutListener'
 import Collapse from '../../Layout/Collapse'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { Logo, SidebarToggle } from '../logo'
+import { Logo, SidebarToggle, TrafficLightBG } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
@@ -42,6 +44,9 @@ import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useLinks } from '../../Hooks/useLinks'
 import Bookmarks from './Bookmarks'
 import SharedNotes from './SharedNotes'
+import { useTheme } from 'styled-components'
+import { useBookmarks } from '../../Hooks/useBookmarks'
+import Tabs from '../../Views/Tabs'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -52,9 +57,13 @@ const Nav = ({ links }: NavProps) => {
   const { getLinkCount } = useLinks()
   const { goTo } = useRouting()
   const { createNewNode } = useCreateNewNode()
+  const theme = useTheme()
 
   const [source, target] = useSingleton()
   const { refreshILinks } = useInternalLinks()
+
+  const [openedTab, setOpenedTab] = useState<number>(0)
+  const { getAllBookmarks } = useBookmarks()
 
   useEffect(() => {
     refreshILinks()
@@ -89,9 +98,37 @@ const Nav = ({ links }: NavProps) => {
     }
   }, [shortcuts]) // eslint-disable-line
 
+  useEffect(() => {
+    getAllBookmarks()
+  }, [])
+
   const { springProps } = useSidebarTransition()
 
   const archiveCount = getLinkCount().archive
+
+  const tabs = useMemo(
+    () => [
+      {
+        label: <MexIcon noHover icon="ri:draft-line" width={20} height={20} />,
+        key: 'wd-mex-all-notes-tree',
+        component: <TreeContainer />,
+        tooltip: 'All Notes'
+      },
+      {
+        label: <SharedNodeIcon fill={theme.colors.text.heading} height={18} width={18} />,
+        key: 'wd-mex-shared-notes',
+        component: <SharedNotes />,
+        tooltip: 'Shared Notes'
+      },
+      {
+        label: <MexIcon noHover icon="ri:bookmark-line" width={20} height={20} />,
+        key: 'wd-mex-bookmarks',
+        component: <Bookmarks />,
+        tooltip: 'Bookmarks'
+      }
+    ],
+    []
+  )
 
   return (
     <>
@@ -99,11 +136,9 @@ const Nav = ({ links }: NavProps) => {
       {/* @ts-ignore */}
       <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
         <NavTooltip singleton={source} />
-
         <NavLogoWrapper onClick={() => goTo(ROUTE_PATHS.home, NavigationType.push)}>
           <Logo />
         </NavLogoWrapper>
-
         <MainLinkContainer>
           <NavTooltip
             key={shortcuts.newNode.title}
@@ -139,6 +174,9 @@ const Nav = ({ links }: NavProps) => {
             )
           )}
         </MainLinkContainer>
+        {/* Notes, Shared, Bookmarks */}
+        <Tabs visible={sidebar.expanded} openedTab={openedTab} onChange={setOpenedTab} tabs={tabs} />
+        {/* 
         <Collapse
           title="Bookmarks"
           oid="bookmarks"
@@ -176,8 +214,21 @@ const Nav = ({ links }: NavProps) => {
 
         <NavSpacer />
         <NavDivider />
-
-        <EndLinkContainer>
+ */}
+        <EndLinkContainer onMouseUp={(e) => e.stopPropagation()}>
+          {/* {authenticated ? (
+          <NavTooltip singleton={target} content="User">
+            <Link  tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="/user" key="nav_user">
+              {GetIcon(user3Line)}
+            </Link>
+          </NavTooltip>
+        ) : (
+          <NavTooltip singleton={target} content="Login">
+            <Link tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to={ROUTE_PATHS.login} key="nav_user" className="active">
+              {GetIcon(lockPasswordLine)}
+            </Link>
+          </NavTooltip>
+        )} */}
           <NavTooltip
             key={shortcuts.showArchive.title}
             singleton={target}
@@ -189,13 +240,12 @@ const Nav = ({ links }: NavProps) => {
               to={ROUTE_PATHS.archive}
               key="nav_search"
             >
-              <>
-                {GetIcon(archiveFill)}
-                <NavTitle>Archive</NavTitle>
-                {archiveCount > 0 && <Count>{archiveCount}</Count>}
-              </>
+              {GetIcon(archiveFill)}
+              <NavTitle>Archive</NavTitle>
+              {archiveCount > 0 && <Count>{archiveCount}</Count>}
             </Link>
           </NavTooltip>
+
           <NavTooltip
             key={shortcuts.showSettings.title}
             singleton={target}
@@ -204,18 +254,16 @@ const Nav = ({ links }: NavProps) => {
             <Link
               tabIndex={-1}
               className={(s) => (s.isActive ? 'active' : '')}
-              to={`${ROUTE_PATHS.settings}/themes`}
+              to={`${ROUTE_PATHS.settings}`}
               key="nav_settings"
             >
-              <>
-                {GetIcon(settings4Line)}
-                <NavTitle>Settings</NavTitle>
-              </>
+              {GetIcon(settings4Line)}
+              <NavTitle>Settings</NavTitle>
             </Link>
           </NavTooltip>
         </EndLinkContainer>
       </NavWrapper>
-      {/* <TrafficLightBG /> */}
+      <TrafficLightBG />
       <SidebarToggle />
     </>
   )

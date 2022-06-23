@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import bookmarkLine from '@iconify/icons-ri/bookmark-line'
 import { Icon } from '@iconify/react'
 
-import { HoverSubtleGlow } from '@mexit/shared'
+import { HoverSubtleGlow, MexIcon } from '@mexit/shared'
 
-import { useBookmarks } from '../../Hooks/useBookmarks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useLinks } from '../../Hooks/useLinks'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -26,10 +25,11 @@ export const BaseLink = styled.div`
 `
 
 const BList = styled.div`
-  max-height: 15rem;
+  /* max-height: 15rem;
   list-style: none;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: auto; */
+  height: 100%;
   padding: ${({ theme }) => theme.spacing.small};
 `
 
@@ -49,18 +49,25 @@ const BLink = styled(BaseLink)`
     }
   }
 `
+export const Centered = styled.div`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+`
 
 const Bookmarks = () => {
   const bookmarks = useDataStore((store) => store.bookmarks)
-  const { getAllBookmarks } = useBookmarks()
   const { getPathFromNodeid } = useLinks()
   const { push } = useNavigation()
   // const [ bookmarks, setBookmarks ] = useState<string[]>([])
 
-  useEffect(() => {
-    // ssetBookmarks(
-    getAllBookmarks()
-  }, [])
+  // useEffect(() => {
+  //   // ssetBookmarks(
+  //   getAllBookmarks()
+  // }, [])
 
   return (
     <BList>
@@ -73,6 +80,12 @@ const Bookmarks = () => {
           </BLink>
         )
       })}
+      {bookmarks.length === 0 && (
+        <Centered>
+          <MexIcon height={24} width={24} icon="ri:bookmark-line" margin="0 0 1rem 0" />
+          <span>No Notes bookmarked yet!</span>
+        </Centered>
+      )}
     </BList>
   )
 }

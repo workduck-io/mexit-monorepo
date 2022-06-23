@@ -48,8 +48,8 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
     mog('onAliasCHange', { email, alias })
 
     // Change the user and add to changedUsers
-    const changedUser = changedIUsers.find((u) => u.email === email)
-    const dataUser = sharedIUsers.find((u) => u.email === email)
+    const changedUser = changedIUsers?.find((u) => u.email === email)
+    const dataUser = sharedIUsers?.find((u) => u.email === email)
 
     if (changedUser) {
       changedUser.alias = alias

@@ -183,6 +183,8 @@ const Tag = () => {
             const content = con ? con.content : defaultContent.content
             return (
               <Result
+                // eslint-disable-next-line
+                // @ts-ignore
                 onClick={() => {
                   loadNode(nodeid)
                   goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)

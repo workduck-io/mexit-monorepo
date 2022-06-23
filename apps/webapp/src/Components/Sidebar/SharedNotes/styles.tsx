@@ -2,18 +2,19 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const BList = styled.div`
-  max-height: 15rem;
-  list-style: none;
+  /* max-height: 15rem;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: auto; */
+  list-style: none;
+  height: 100%;
 `
 
 // Sidebar Item
 // Does not have children
 // For children with expand collapse, see StyledTreeItem
 export const SItem = styled.div<{ selected: boolean }>`
-  border-radius: 6px 0px 0px 6px;
-  padding-left: 16px;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  padding-left: ${({ theme }) => theme.spacing.large};
   &:hover {
     transition: 0s ease;
     background: ${({ theme }) => theme.colors.gray[7]};

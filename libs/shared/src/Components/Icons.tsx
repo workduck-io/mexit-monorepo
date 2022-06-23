@@ -36,9 +36,28 @@ export const EditorIcons: { [name: string]: any } = {
   externalLink: externalLinkLine
 }
 
-export const SharedNodeIcon = () => {
+type SharedNodeIconProps = {
+  fill?: string
+  height?: number
+  width?: number
+  margin?: string
+}
+
+export const SharedNodeIcon: React.FC<SharedNodeIconProps> = ({
+  fill = 'none',
+  margin = '0',
+  height = 24,
+  width = 24
+}) => {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={`${width}`}
+      style={{ margin }}
+      height={`${height}`}
+      viewBox="0 0 24 24"
+      fill={fill}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path d="M4 22C3.73478 22 3.48043 21.8946 3.29289 21.7071C3.10536 21.5196 3 21.2652 3 21V3C3 2.73478 3.10536 2.48043 3.29289 2.29289C3.48043 2.10536 3.73478 2 4 2H20C20.2652 2 20.5196 2.10536 20.7071 2.29289C20.8946 2.48043 21 2.73478 21 3V9L19 7.5V4H5V20H11.5L15 22H4Z" />
       <path d="M8 7V9H14L15.5 7H8Z" />
       <path d="M7.9947 10.9931L8 13H9.5L11.5 11L7.9947 10.9931Z" />

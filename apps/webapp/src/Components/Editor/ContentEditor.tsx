@@ -35,13 +35,9 @@ const ContentEditor = () => {
   const { saveApiAndUpdate, loadNode } = useLoad()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const { setShowLoader } = useLayoutStore()
-<<<<<<< HEAD
 
-  const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useEditorBuffer()
-=======
   const { accessWhenShared } = useNodes()
-  const { addOrUpdateValBuffer, getBufferVal } = useEditorBuffer()
->>>>>>> 23dc928 (Fetching and Update paths for shared nodes; Check access level in save)
+  const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const { node, fsContent } = useEditorStore(
     (state) => ({ nodeid: state.node.nodeid, node: state.node, fsContent: state.content }),
     shallow

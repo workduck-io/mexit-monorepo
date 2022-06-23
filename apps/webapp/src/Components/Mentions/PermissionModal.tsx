@@ -369,7 +369,7 @@ export const PermissionModalContent = () => {
 
               <tbody>
                 {sharedUsers.map((user) => {
-                  const hasChanged = changedUsers.find((u) => u.userID === user.userID)
+                  const hasChanged = changedUsers?.find((u) => u.userID === user.userID)
                   const access = hasChanged ? hasChanged.access[node.nodeid] : user.access[node.nodeid]
                   const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
                   const isCurrent = user.userID === currentUserDetails.userID
@@ -425,7 +425,7 @@ export const PermissionModalContent = () => {
               autoFocus={!window.focus}
               large
               onClick={onSave}
-              disabled={readOnly || (changedUsers && changedUsers.length === 0)}
+              disabled={readOnly || (changedUsers && changedUsers?.length === 0)}
             >
               Save
             </Button>

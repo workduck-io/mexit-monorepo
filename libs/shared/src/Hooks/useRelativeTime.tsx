@@ -1,6 +1,7 @@
+import { useEffect, useState, useRef } from 'react'
+
 import dayjs, { ConfigType, OpUnitType } from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { useEffect, useState } from 'react'
 
 dayjs.extend(relativeTime)
 
@@ -31,4 +32,20 @@ export function useRelativeTime(d: Date | number, refresh_ms?: number) {
   }, [d])
 
   return humanTime
+}
+
+export const useTimout = (callback: () => void, delay: number | null) => {
+  const savedCallback = useRef(callback)
+
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    if (delay !== null) {
+      const refId = setTimeout(() => savedCallback.current(), delay)
+
+      return () => clearTimeout(refId)
+    }
+  }, [delay])
 }

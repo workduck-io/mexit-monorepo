@@ -146,7 +146,7 @@ export const StyledTreeItem = styled.div<{ selected?: boolean; isDragging?: bool
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  border-radius: 6px 0px 0px 6px;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   padding-right: 12px;
 
   transition: 0.3s ease;
