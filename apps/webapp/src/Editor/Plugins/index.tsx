@@ -72,7 +72,8 @@ import { createMentionPlugin } from './createMentionsPlugin'
 
 export type PluginOptionType = {
   exclude: {
-    dnd: boolean
+    dnd?: boolean
+    mentions?: boolean
   }
 }
 

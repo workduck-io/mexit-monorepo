@@ -34,6 +34,7 @@ import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useMentions } from '../../Hooks/useMentions'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useAuthStore } from '../../Stores/useAuth'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -49,10 +50,20 @@ interface EditorProps {
   readOnly?: boolean
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
+  options?: any
   onAutoSave?: (content: NodeEditorContent) => void
 }
 
-const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus, onAutoSave }) => {
+const Editor: React.FC<EditorProps> = ({
+  nodeUID,
+  nodePath,
+  content,
+  readOnly,
+  onChange,
+  autoFocus,
+  onAutoSave,
+  options
+}) => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
@@ -68,6 +79,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
   const { grantUserAccessOnMention } = useMentions()
   const sharedNodes = useDataStore((store) => store.sharedNodes)
   const userDetails = useAuthStore((state) => state.userDetails)
+  const nodeid = useEditorStore((state) => state.node.nodeid)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -165,20 +177,20 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
         },
         renderElement: SlashComboboxItem
       },
-      mention: {
-        slateElementType: ELEMENT_MENTION,
-        onItemInsert: (alias) => {
-          mog('Inserted new item', { alias })
-          grantUserAccessOnMention(alias, nodeUID)
-        },
-        newItemHandler: (newAlias) => {
-          // addTag(newItem)
-          mog('ELEMENT_MENTIONS', { newAlias })
-          prefillShareModal('invite', { alias: newAlias, fromEditor: true })
-          return newAlias
-        },
-        renderElement: TagComboboxItem
-      }
+      mention: !options?.exclude?.mentions
+        ? {
+            slateElementType: ELEMENT_MENTION,
+            onItemInsert: (alias) => {
+              mog('Inserted new item', { alias })
+              grantUserAccessOnMention(alias, nodeid)
+            },
+            newItemHandler: (newAlias) => {
+              prefillShareModal('invite', { alias: newAlias, fromEditor: true })
+              return newAlias
+            },
+            renderElement: TagComboboxItem
+          }
+        : undefined
     },
     internal: {
       ilink: {
@@ -215,7 +227,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     }
   }
 
-  const comboOnChangeConfig: Record<string, ComboboxType> = {
+  let comboOnChangeConfig: Record<string, ComboboxType> = {
     internal: {
       cbKey: ComboboxKey.INTERNAL,
       trigger: '[[',
@@ -234,14 +246,20 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       trigger: '/',
       icon: 'ri:flask-line',
       data: slashCommands.default.map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
-    },
-    mention: {
-      cbKey: ComboboxKey.MENTION,
-      trigger: '@',
-      data: mentions,
-      icon: 'ri:at-line'
     }
   }
+
+  comboOnChangeConfig = options?.exclude?.mentions
+    ? comboOnChangeConfig
+    : {
+        ...comboOnChangeConfig,
+        mention: {
+          cbKey: ComboboxKey.MENTION,
+          trigger: '@',
+          data: mentions,
+          icon: 'ri:at-line'
+        }
+      }
 
   useEditorChange(nodeUID, content)
 
