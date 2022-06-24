@@ -12233,6 +12233,14 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
+vite-plugin-svgr@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/vite-plugin-svgr/-/vite-plugin-svgr-2.2.0.tgz#1943e070b24d91c30dc247d0475fe04393f74b31"
+  integrity sha512-CRJgz92vf3SQbt3jwF6/BhyQIhbY0pwbXAPqUh1/EMG6a4eHsHCECcDNrKZMhlRBj3LyXQSfHXJLtM2ISP5rfg==
+  dependencies:
+    "@rollup/pluginutils" "^4.2.1"
+    "@svgr/core" "^6.2.1"
+
 vite@^2.7.2:
   version "2.9.9"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.9.tgz#8b558987db5e60fedec2f4b003b73164cb081c5e"

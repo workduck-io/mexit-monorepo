@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
+
 import path from 'path'
 
 const sourceMap = process.env.NO_SOURCE_MAP ? false : true
@@ -36,7 +38,8 @@ export default defineConfig({
           ]
         ]
       }
-    })
+    }),
+    svgr()
   ],
   worker: { format: 'es' }
 })

@@ -6,8 +6,9 @@ import { BackCard, Button, CenteredColumn, Description, Title } from '@mexit/sha
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 import { useAuthentication } from '../../Stores/useAuth'
 import config from '../../config'
+import { ServiceIcon } from '../../Icons/Icons'
 
-const allowedServices = ['Google', 'Telegram', 'Slack']
+const allowedServices = ['Google', 'Telegram', 'Slack', 'Asana', 'Figma', 'GitHub', 'Jira', 'Linear']
 
 const GenericOAuthRedirect = () => {
   const [hasDesktopApp, setHasDesktopApp] = useState<boolean>(true)
@@ -29,6 +30,12 @@ const GenericOAuthRedirect = () => {
       case 'Google':
       case 'Slack':
         return true
+
+      case 'Asana':
+      case 'Figma':
+      case 'GitHub':
+      case 'Jira':
+      case 'Linear':
       default:
         return false
     }
@@ -44,10 +51,19 @@ const GenericOAuthRedirect = () => {
         navigate('/')
         break
       }
+
       case 'Telegram':
       case 'Slack': {
         const serviceId = searchParams.get('serviceId')
         navigate(`/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`)
+        break
+      }
+      case 'Asana':
+      case 'Figma':
+      case 'GitHub':
+      case 'Jira':
+      case 'Linear': {
+        navigate('/404')
         break
       }
     }
@@ -74,10 +90,21 @@ const GenericOAuthRedirect = () => {
         checkProtocolAndOpen(url, event)
         break
       }
+
       case 'Slack':
       case 'Telegram': {
         const serviceId = searchParams.get('serviceId')
         const url = `mex://navigate/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`
+        checkProtocolAndOpen(url, event)
+        break
+      }
+
+      case 'Asana':
+      case 'Figma':
+      case 'GitHub':
+      case 'Jira':
+      case 'Linear': {
+        const url = `mex://navigate/integrations/?actionGroupId=${serviceName}`
         checkProtocolAndOpen(url, event)
         break
       }
@@ -87,6 +114,7 @@ const GenericOAuthRedirect = () => {
   return (
     <CenteredColumn>
       <BackCard>
+        <ServiceIcon serviceName={serviceName.toUpperCase()} height="64" width="64" />
         <Title>OAuth Complete for {serviceName}!</Title>
         {showWebappOpener() && <Button onClick={handleWebappOpen}>Continue to Web App</Button>}
         <Button onClick={(e) => handleDesktopAppOpen(e)}>Continue to Desktop App</Button>
