@@ -40,7 +40,7 @@ const Tasks = () => {
 
   const todos = useMemo(() => Object.entries(nodesTodo), [nodesTodo])
 
-  console.log('todos', nodesTodo)
+  // console.log('todos', nodesTodo)
 
   const {
     getTodoBoard,
@@ -284,7 +284,7 @@ const Tasks = () => {
   const onDoubleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, nodeid: string) => {
     event.preventDefault()
     //double click
-    mog('double click', { event })
+    // mog('double click', { event })
     if (event.detail === 2) {
       push(nodeid)
       // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, nodeid)
@@ -292,7 +292,7 @@ const Tasks = () => {
     }
   }
 
-  mog('Tasks', { nodesTodo, board, selectedCard })
+  // mog('Tasks', { nodesTodo, board, selectedCard })
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     const pC = getPureContent(todo)
@@ -302,6 +302,8 @@ const Tasks = () => {
       <TaskCard
         ref={selectedCard && id === selectedCard.id ? selectedRef : null}
         selected={selectedCard && selectedCard.id === id}
+        // TODO: for some reason the dragging is not as smooth as mex
+        // Dragging is consistent when holding the checkbox or priority icon
         dragging={dragging}
         onMouseDown={(event) => {
           event.preventDefault()
@@ -312,7 +314,7 @@ const Tasks = () => {
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly
+          readOnly={false}
           parentNodeId={todo.nodeid}
         >
           <EditorPreviewRenderer
@@ -357,10 +359,10 @@ const Tasks = () => {
             <DisplayShortcut shortcut="Esc" />
           </ShortcutToken>
         </ShortcutTokens>
-        <Button onClick={onClearClick}>
+        {/* <Button onClick={onClearClick}>
           <Icon icon={trashIcon} height={24} />
           Clear Todos
-        </Button>
+        </Button> */}
         <Infobox text={TasksHelp} />
       </TaskHeader>
       <StyledTasksKanban>

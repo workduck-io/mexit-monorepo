@@ -103,6 +103,7 @@ export const TaskCard = styled.div<{ dragging: boolean; selected: boolean }>`
     css`
       background: ${theme.colors.gray[7]};
       box-shadow: 0px 4px 10px ${({ theme }) => transparentize(0.75, theme.colors.palette.black)};
+      cursor: grab;
     `};
   :hover {
     background: ${({ theme }) => theme.colors.gray[7]};
