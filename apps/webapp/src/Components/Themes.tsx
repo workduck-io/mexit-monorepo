@@ -13,7 +13,10 @@ const Themes = () => {
   const transition = useTransition(themes, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
-    keys: (item) => item.id,
+    keys: (item) => {
+      console.log('Item: ', item)
+      return item.id
+    },
     trail: 100,
     duration: 300,
     config: {

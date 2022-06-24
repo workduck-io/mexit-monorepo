@@ -1,6 +1,5 @@
-import { NodeEditorContent, TodoType, TodoStatus } from '@mexit/core'
+import { NodeEditorContent, TodoType, TodoStatus, ELEMENT_SYNC_BLOCK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { useMemo } from 'react'
-import { ELEMENT_INLINE_BLOCK } from '../Editor/elements'
 import { useEditorStore } from '../Stores/useEditorStore'
 
 export type ContentBlockType = typeof ELEMENT_SYNC_BLOCK | typeof ELEMENT_INLINE_BLOCK

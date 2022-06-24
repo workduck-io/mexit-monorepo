@@ -53,7 +53,10 @@ export const useHelpStore = create<HelpState>(
     }),
     {
       name: 'mexit-help-store',
-      getStorage: () => IDBStorage
+      getStorage: () => IDBStorage,
+      merge: (persistedState, currentState) => {
+        return { ...persistedState, shortcuts: { ...currentState.shortcuts, ...persistedState.shortcuts } }
+      }
     }
   )
 )
