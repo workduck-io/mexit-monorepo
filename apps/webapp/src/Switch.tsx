@@ -58,10 +58,11 @@ const ProtectedRoute = ({ children }) => {
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
 
+  const { from } = (useLocation()?.state as { from: Location }) || { from: { pathname: ROUTE_PATHS.home } }
   const showLoader = useLayoutStore((store) => store.showLoader)
   if (showLoader) return <SplashScreen />
 
-  return !authenticated ? children : <Navigate to={ROUTE_PATHS.home} />
+  return !authenticated ? children : <Navigate to={from} />
 }
 
 const AuthRoutes = () => {
