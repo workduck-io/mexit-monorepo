@@ -50,7 +50,6 @@ const iconStyle = (primary?: boolean) => css`
 `
 export const InputWrapper = styled.div`
   width: 100%;
-  ${iconStyle(true)};
 `
 
 export const SearchInput = styled(Input)`
