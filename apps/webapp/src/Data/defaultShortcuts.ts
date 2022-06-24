@@ -1,5 +1,4 @@
 export const defaultShortcuts = {
-  // Navigation
   showSettings: {
     title: 'Settings',
     keystrokes: '$mod+,',

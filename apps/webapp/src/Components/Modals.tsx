@@ -10,7 +10,6 @@ import BlockModal from '../Editor/Components/Blocks/BlockModal'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
-  console.log('Is Auth? ', isAuthenticated)
   if (!isAuthenticated) return null
 
   return (
