@@ -36,6 +36,7 @@ import Portals from './Components/Portals'
 import PortalsPage from './Views/PortalsPage'
 import RemindersAll from './Views/Reminders/RemindersAll'
 import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
+import RouteNotFound from './Components/404'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -235,7 +236,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
-        <Route path="404" element={<h1>404 - Not Found</h1>} />
+        <Route path="*" element={<RouteNotFound />} />
       </Routes>
     </SwitchWrapper>
   )
