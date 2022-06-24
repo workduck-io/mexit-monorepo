@@ -1,8 +1,7 @@
 import { client, useAuth } from '@workduck-io/dwindle'
 
-import { ILink, apiURLs, mog } from '@mexit/core'
+import { ILink, apiURLs, mog, WORKSPACE_HEADER } from '@mexit/core'
 
-import { WORKSPACE_HEADER } from '../Data/constants'
 import { useAuthStore } from '../Stores/useAuth'
 import { useSaver } from './useSaver'
 import { useDataStore } from '../Stores/useDataStore'
