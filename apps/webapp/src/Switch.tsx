@@ -35,6 +35,7 @@ import SplashScreen from './Components/SplashScreen'
 import Portals from './Components/Portals'
 import PortalsPage from './Views/PortalsPage'
 import RemindersAll from './Views/Reminders/RemindersAll'
+import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -204,7 +205,7 @@ export const Switch = () => {
     <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
-        <Route path={`${ROUTE_PATHS.oauth}/*`} element={<OAuthRoutes />} />
+        <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<GenericOAuthRedirect />} />
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
@@ -234,7 +235,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
-        <Route path="404" element={<h1>Not found, go away</h1>} />
+        <Route path="404" element={<h1>404 - Not Found</h1>} />
       </Routes>
     </SwitchWrapper>
   )
