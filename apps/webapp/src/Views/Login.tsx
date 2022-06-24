@@ -35,17 +35,17 @@ export const Login = () => {
           setLoginResult('Invalid Username or Password')
         }
         temp = s.data
-        Analytics.track('Login Successful', {
+        Analytics?.track('Login Successful', {
           source: 'Browser Extension'
         })
-        Analytics.identify(s.data.email)
+        Analytics?.identify(s.data.email)
         console.log('Login Success!')
       })
       .catch((e) => {
         toast('An error Occured. Please Try Again Later')
         console.error('Error occured: ', e)
         temp = 'Error Occurred'
-        Analytics.track('Login Unsuccessful')
+        Analytics?.track('Login Unsuccessful')
       })
     setLoginResult(JSON.stringify(temp))
   }
