@@ -10,10 +10,15 @@ const Themes = () => {
   const theme = useThemeStore((state) => state.theme)
   const setTheme = useThemeStore((state) => state.setTheme)
 
+  console.log('Current Theme: ', theme)
+  console.log('Themes: ', themes)
   const transition = useTransition(themes, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
-    keys: (item) => item.id,
+    keys: (item) => {
+      console.log('Item: ', item)
+      return item.id
+    },
     trail: 100,
     duration: 300,
     config: {
