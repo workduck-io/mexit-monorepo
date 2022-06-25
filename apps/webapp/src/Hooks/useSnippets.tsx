@@ -1,5 +1,7 @@
-import { mog, SEPARATOR, Snippet } from '@mexit/core'
+import { getSnippetCommand, mog, Snippet } from '@mexit/core'
+import { useSlashCommands } from '@mexit/shared'
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
+import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useSearch } from './useSearch'
 
@@ -7,7 +9,10 @@ export const useSnippets = () => {
   const addSnippetZus = useSnippetStore((state) => state.addSnippet)
   const updateSnippetZus = useSnippetStore((state) => state.updateSnippet)
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
+  const { generateSlashCommands } = useSlashCommands()
   const { updateDocument, addDocument, removeDocument } = useSearch()
 
   const getSnippets = () => {
@@ -63,6 +68,13 @@ export const useSnippets = () => {
     await removeDocument('snippet', id)
   }
 
+  // * Updates snippets in store and adds them in combobox
+  const updateSnippets = (snippets: Snippet[]) => {
+    initSnippets(snippets)
+    const slashCommands = generateSlashCommands(snippets)
+    setSlashCommands(slashCommands)
+  }
+
   const addSnippet = async (snippet: Snippet) => {
     addSnippetZus(snippet)
     const tags = snippet.isTemplate ? ['template'] : ['snippet']
@@ -79,13 +91,7 @@ export const useSnippets = () => {
     getSnippetConfigs,
     addSnippet,
     updateSnippet,
-    deleteSnippet
+    deleteSnippet,
+    updateSnippets
   }
 }
-
-export const extractSnippetCommands = (snippets: Snippet[]): string[] => {
-  return snippets.map((c) => getSnippetCommand(c.title))
-}
-
-export const SnippetCommandPrefix = `snip`
-export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`

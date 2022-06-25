@@ -30,7 +30,7 @@ export const BASE_USER_URL = 'https://http.workduck.io'
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
 
-export const MEXIT_BACKEND_URL_BASE = IS_DEV
+export const MEXIT_BACKEND_URL_BASE = !IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
 

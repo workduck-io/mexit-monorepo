@@ -20,6 +20,7 @@ import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
 import useArchive from '../Hooks/useArchive'
+import { useSnippets } from '../Hooks/useSnippets'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -29,12 +30,12 @@ export const useAuthentication = () => {
   const { signIn, signOut, signUp, verifySignUp, googleSignIn, refreshToken } = useAuth()
 
   const setILinks = useDataStore((store) => store.setIlinks)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
   const initContents = useContentStore((store) => store.initContents)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const api = useApi()
+  const { updateSnippets } = useSnippets()
 
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
@@ -74,7 +75,7 @@ export const useAuthentication = () => {
         })
         .then(() =>
           api.getAllSnippetsByWorkspace().then((res: any[]) => {
-            initSnippets(
+            updateSnippets(
               res.map((item) => ({
                 icon: 'ri:quill-pen-line',
                 id: item.snippetID,
@@ -165,7 +166,7 @@ export const useAuthentication = () => {
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 
         setILinks(ilinks)
-        initSnippets(snippets)
+        updateSnippets(snippets)
 
         const contents = {}
         nodes.forEach((node) => {
@@ -197,7 +198,7 @@ export const useAuthentication = () => {
     resetPublicNodes()
     clearRecents()
     clearReminders()
-    initSnippets([])
+    updateSnippets([])
     clearTodos()
   }
 
@@ -257,7 +258,7 @@ export const useAuthentication = () => {
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
 
         setILinks(ilinks)
-        initSnippets(snippets)
+        updateSnippets(snippets)
 
         const contents = {}
         nodes.forEach((node) => {

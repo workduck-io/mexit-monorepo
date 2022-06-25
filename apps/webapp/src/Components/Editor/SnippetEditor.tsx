@@ -115,7 +115,6 @@ const SnippetEditor = () => {
 
   const saveSnippet = () => {
     saveAndClearBuffer()
-    // updater()
   }
 
   const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)

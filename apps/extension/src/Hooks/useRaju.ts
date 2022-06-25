@@ -25,6 +25,7 @@ import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import useThemeStore from './useThemeStore'
+import { useSnippets } from './useSnippets'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -46,9 +47,9 @@ export default function useRaju() {
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
+  const { updateSnippets } = useSnippets()
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -98,7 +99,7 @@ export default function useRaju() {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
       setInternalAuthStore(authAWS)
-      initSnippets(snippets)
+      updateSnippets(snippets)
       setIlinks(ilinks)
       initContents(contents)
       setReminders(reminders)

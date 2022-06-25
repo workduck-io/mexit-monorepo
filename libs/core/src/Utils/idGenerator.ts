@@ -32,5 +32,8 @@ export const generateTodoId = () => `${TODO_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateQuestionId = () => `${QUESTION_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateReminderId = () => `${REMINDER_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
 
+export const SnippetCommandPrefix = `snip`
+export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`
+
 export const cleanString = (str: string) =>
   str.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`) ? str.replace(`${DRAFT_PREFIX}${SEPARATOR}`, '') : str
