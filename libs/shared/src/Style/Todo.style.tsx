@@ -21,7 +21,6 @@ export const TodoContainer = styled.div<{ checked?: boolean }>`
 export const TodoActionWrapper = styled.span`
   padding: 2px;
   border-radius: 1rem;
-  cursor: pointer;
   font-size: 0.75rem;
   font-weight: 400;
   background-color: ${({ theme }) => transparentize(0.8, theme.colors.secondary)};
@@ -110,6 +109,7 @@ export const CheckBoxWrapper = styled.span`
   user-select: none;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   input {
     width: 1rem;

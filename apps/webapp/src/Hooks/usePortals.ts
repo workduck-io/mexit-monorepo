@@ -1,10 +1,9 @@
 import { orderBy } from 'lodash'
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, mog } from '@mexit/core'
+import { apiURLs, mog, WORKSPACE_HEADER } from '@mexit/core'
 
 import { useAuthStore } from './../Stores/useAuth'
-import { WORKSPACE_HEADER } from '../Data/constants'
 import usePortalStore from '../Stores/usePortalStore'
 import { ActionGroupType, PortalType } from '../Types/Actions'
 

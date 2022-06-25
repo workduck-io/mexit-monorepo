@@ -3,7 +3,7 @@ import { client } from '@workduck-io/dwindle'
 import { defaultContent, apiURLs, mog, SEPARATOR, extractMetadata, removeNulls } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
-import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '../Data/constants'
+import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '@mexit/core'
 import { isRequestedWithin } from '../Stores/useApiStore'
 import '../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
@@ -76,8 +76,9 @@ export const useApi = () => {
         path: paths.join('#')
       },
       id: nodeid,
-      title: getTitleFromPath(path),
-      data: serializeContent(content ?? defaultContent.content, nodeid)
+      data: serializeContent(content ?? defaultContent.content, nodeid),
+      namespaceIdentifier: DEFAULT_NAMESPACE,
+      tags: getTags(nodeid)
     }
 
     setContent(nodeid, content ?? defaultContent.content)

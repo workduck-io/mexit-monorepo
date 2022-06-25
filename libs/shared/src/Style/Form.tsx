@@ -99,7 +99,8 @@ interface LabelProps {
 export const Label = styled.label<LabelProps>`
   color: ${({ theme }) => theme.colors.text.fade};
   margin: ${({ theme: { spacing } }) => `${spacing.medium} 0 3px`};
-  display: block;
+  display: flex;
+  align-items: center;
   /*${({ theme, error }) =>
     error &&
     css`

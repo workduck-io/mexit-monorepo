@@ -93,7 +93,11 @@ const EditorPreviewRenderer = ({
       }}
     >
       <FadeContainer fade={blockId !== undefined}>
-        <PreviewEditor editorId={editorId} content={content} />
+        {draftView ? (
+          <PreviewEditor editorId={editorId} content={content} />
+        ) : (
+          <Plate id={editorId} value={content} plugins={plugins} editableProps={editableProps} />
+        )}
       </FadeContainer>
     </PreviewStyles>
   )
