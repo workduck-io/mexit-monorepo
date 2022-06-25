@@ -10,6 +10,8 @@ export const StyledAction = styled.div<{ active?: boolean }>`
   border-left: 2px solid transparent;
   border-radius: 10px;
 
+  min-height: 53.61px;
+
   ${(props) =>
     props.active &&
     css`
