@@ -193,7 +193,8 @@ export const useApi = () => {
         }
       })
       .then((d: any) => {
-        return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
+        mog('DATA is here', { d })
+        return { data: d.data.data, metadata: extractMetadata(d.data.data), version: d.data.version ?? undefined }
       })
       .catch(console.error)
 
@@ -265,18 +266,11 @@ export const useApi = () => {
         }
       })
       .then((d: any) => {
-        const metadata = {
-          createdBy: d.data.createdBy,
-          createdAt: d.data.createdAt,
-          lastEditedBy: d.data.lastEditedBy,
-          updatedAt: d.data.updatedAt
-        }
-
         // console.log(metadata, d.data)
         return {
           title: d.data.title,
           data: d.data.data,
-          metadata: removeNulls(metadata),
+          metadata: extractMetadata(d.data),
           version: d.data.version ?? undefined
         }
       })
@@ -292,8 +286,10 @@ export const useApi = () => {
     }
   }
 
-  const isPublic = (nodeid: string) => {
-    return checkNodePublic(nodeid)
+  const getPublicURL = (nodeid: string) => {
+    const meta = useContentStore.getState().getAllMetadata()
+    mog('META', { m: meta?.[nodeid] })
+    if (meta?.[nodeid]?.publicAccess) return apiURLs.getNodePublicURL(nodeid)
   }
 
   const saveSnippetAPI = async (snippetId: string, snippetTitle: string, content: any[]) => {
@@ -393,7 +389,7 @@ export const useApi = () => {
     getNodesByWorkspace,
     makeNodePublic,
     makeNodePrivate,
-    isPublic,
+    getPublicURL,
     getPublicNodeAPI,
     saveSnippetAPI,
     getAllSnippetsByWorkspace,

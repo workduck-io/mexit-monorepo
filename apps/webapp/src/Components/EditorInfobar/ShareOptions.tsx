@@ -37,8 +37,8 @@ const ShareOptions = () => {
   const theme = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
-  const { makeNodePrivate, makeNodePublic, isPublic } = useApi()
-  const publicUrl = isPublic(node.nodeid)
+  const { makeNodePrivate, makeNodePublic, getPublicURL } = useApi()
+  const publicUrl = getPublicURL(node.nodeid)
 
   const flipPublicAccess = async () => {
     setIsLoading(true)

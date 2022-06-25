@@ -29,6 +29,7 @@ export interface NodeMetadata {
   lastEditedBy: string
   updatedAt: number
 
+  publicAccess?: boolean
   highlighterId?: string
   saveableRange?: Partial<HighlightSource>
   sourceUrl?: string
