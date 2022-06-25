@@ -1,7 +1,7 @@
 import create from 'zustand'
 
 import { GenericSearchResult, mog, SearchFilter } from '@mexit/core'
-import { isElder, getAllParentIds } from '@mexit/shared'
+import { isElder, getAllParentPaths } from '@mexit/shared'
 
 import { useTags } from './useTags'
 import { useLinks } from './useLinks'
@@ -111,7 +111,7 @@ export const useFilters = <Item>() => {
     const filteredItems = currentFilters_.length > 0 ? applyFilters(items, currentFilters_) : items
     const rankedPaths = filteredItems.reduce((acc, item) => {
       const path = getPathFromNodeid(item.id)
-      const allPaths = getAllParentIds(path)
+      const allPaths = getAllParentPaths(path)
       // const allPaths =
       allPaths.forEach((path) => {
         if (acc[path]) {

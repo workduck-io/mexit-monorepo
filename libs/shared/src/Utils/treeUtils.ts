@@ -44,7 +44,7 @@ export const getParentId = (id: string, separator = SEPARATOR) => {
     link = [a b c]
     a, a.b, a.b.c
   */
-export const getAllParentIds = (
+export const getAllParentPaths = (
   id: string, // const allParents: string[] = []
   separator = SEPARATOR
 ) =>

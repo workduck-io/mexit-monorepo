@@ -1,15 +1,22 @@
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, ILink, mog, SEPARATOR } from '@mexit/core'
-import { getNodeIcon } from '@mexit/shared'
+import { apiURLs, generateNodeUID, ILink, mog, SEPARATOR } from '@mexit/core'
+import { getAllParentPaths, getNodeIcon } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
+import { getNodeidFromPathAndLinks } from './useLinks'
+
+const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {
+  if (!text) return textToAppend
+  return `${text}${separator}${textToAppend}`
+}
 
 export const useInternalLinks = () => {
   const setILinks = useDataStore((store) => store.setIlinks)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const ilinks = useDataStore((store) => store.ilinks)
+  const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const getILinks = async () => {
     return await client
@@ -57,11 +64,58 @@ export const useInternalLinks = () => {
     setILinks([...currILinks, newILink])
   }
 
+  const updateMultipleILinks = (ilinks: ILink[]) => {
+    const currILinks = useDataStore.getState().ilinks
+    setILinks([...currILinks, ...ilinks])
+  }
+
   const getParentILink = (path: string) => {
     const parentPath = path.split(SEPARATOR).slice(0, -1).join(SEPARATOR)
 
     return ilinks.find((ilink) => ilink.path === parentPath)
   }
 
-  return { getILinks, refreshILinks, updateILinksFromAddedRemovedPaths, getParentILink, updateSingleILink }
+  const getEntirePathILinks = (ilink: string, nodeID: string) => {
+    const pathStrings = useDataStore.getState().ilinks.map((ilink) => ilink.path)
+    const parents = getAllParentPaths(ilink) // includes link of child
+
+    const newPaths = parents.filter((l) => !pathStrings.includes(l)) // only create links for non existing
+
+    const newILinks: ILink[] = newPaths.map((l) => {
+      const addedILink = { nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(), path: l, icon: getNodeIcon(l) }
+      addedILink.path = checkValidILink(addedILink.path)
+
+      return addedILink
+    })
+
+    return newILinks
+  }
+
+  const createNoteHierarchyString = (notePath: string) => {
+    const ilinks = useDataStore.getState().ilinks
+    let prefix = ''
+
+    const noteLink = notePath.split(SEPARATOR).reduce((prevPath, currentNotePath) => {
+      prefix = appendToText(prefix, currentNotePath)
+
+      const currentNoteId = getNodeidFromPathAndLinks(ilinks, prefix)
+      const linkWithTitle = appendToText(prevPath, currentNotePath, '#')
+      const link = appendToText(linkWithTitle, currentNoteId, '#')
+
+      return link
+    }, '')
+
+    return noteLink
+  }
+
+  return {
+    getILinks,
+    refreshILinks,
+    updateILinksFromAddedRemovedPaths,
+    getParentILink,
+    updateSingleILink,
+    updateMultipleILinks,
+    getEntirePathILinks,
+    createNoteHierarchyString
+  }
 }

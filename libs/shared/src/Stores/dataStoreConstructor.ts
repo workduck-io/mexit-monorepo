@@ -11,7 +11,7 @@ import {
   typeInvert,
   defaultCommands
 } from '@mexit/core'
-import { getAllParentIds, getNodeIcon } from '../Utils/treeUtils'
+import { getAllParentPaths, getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
   value: item
@@ -91,7 +91,7 @@ export const dataStoreConstructor = (set, get) => ({
 
     const uniquePath = reservedOrUnique.unique
 
-    const parents = getAllParentIds(uniquePath) // includes link of child
+    const parents = getAllParentPaths(uniquePath) // includes link of child
     const newLinks = parents.filter((l) => !linksStrings.includes(l)) // only create links for non existing
 
     const newILinks = newLinks.map((l) => ({

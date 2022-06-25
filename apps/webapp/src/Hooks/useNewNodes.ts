@@ -9,7 +9,7 @@ import { useUpdater } from './useUpdater'
 
 export const useNewNodes = () => {
   const checkValidILink = useDataStore((s) => s.checkValidILink)
-  const { getParentILink } = useInternalLinks()
+  const { getParentILink, updateSingleILink, updateMultipleILinks, getEntirePathILinks } = useInternalLinks()
   const { saveSingleNewNode, bulkCreateNodes } = useApi()
   const { updateFromContent } = useUpdater()
 
@@ -19,6 +19,13 @@ export const useNewNodes = () => {
       const nodeUID = generateNodeUID()
 
       const parentILink = getParentILink(ilink)
+
+      if (parentILink && parentILink.nodeid) {
+        updateSingleILink(nodeUID, ilink)
+      } else {
+        const linksToBeCreated = getEntirePathILinks(ilink, nodeUID)
+        updateMultipleILinks(linksToBeCreated)
+      }
 
       if (save === false) return
 

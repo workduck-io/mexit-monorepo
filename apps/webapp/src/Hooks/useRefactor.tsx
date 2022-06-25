@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { NodeLink, mog, getUniquePath, isMatch, generateNodeUID } from '@mexit/core'
-import { getAllParentIds, getNodeIcon } from '@mexit/shared'
+import { getAllParentPaths, getNodeIcon } from '@mexit/shared'
 
 import { useEditorBuffer } from './useEditorBuffer'
 
