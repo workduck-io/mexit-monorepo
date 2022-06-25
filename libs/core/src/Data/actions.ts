@@ -26,7 +26,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_1',
     title: 'Capture Screenshot',
     category: QuickLinkType.action,
-    description: 'Capture visible window and send to Mexit',
+    description: 'Capture tab screenshot',
     type: ActionType.SCREENSHOT,
     icon: 'bx:screenshot',
     shortcut: {
@@ -74,7 +74,7 @@ export const initActions: Array<MexitAction> = [
     type: ActionType.OPEN,
     title: 'Open Gmail',
     category: QuickLinkType.action,
-    description: 'Open your default Gmail Account',
+    description: 'Open your Gmail account',
     icon: 'simple-icons:gmail',
     shortcut: {
       open: {
@@ -105,7 +105,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_nlTaC5-ZcMXgaJrNg_NfL',
     title: 'New Google Doc',
     category: QuickLinkType.action,
-    description: 'Create new empty Google Doc with default Google Account',
+    description: 'Create new Google Doc',
     type: ActionType.OPEN,
     icon: 'material-symbols:docs',
     data: { base_url: 'https://docs.new' },
@@ -121,7 +121,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_H77GDKfBFVriXpplM-b1x',
     title: 'New Google Sheet',
     category: QuickLinkType.action,
-    description: 'Create new empty Google Sheet with default Google Account',
+    description: 'Create new Google Sheet',
     type: ActionType.OPEN,
     icon: 'simple-icons:googlesheets',
     data: { base_url: 'https://sheets.new' },
@@ -137,7 +137,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_gpymSN3oEOd4gfCdfwK4E',
     title: 'New Google Slides',
     category: QuickLinkType.action,
-    description: 'Create new empty Google Slides with default Google Account',
+    description: 'Create new Google Slides',
     type: ActionType.OPEN,
     icon: 'material-symbols:slides',
     data: { base_url: 'https://slides.new' },
@@ -305,7 +305,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_vUiFbCMGsoJxOHhh6m3IT',
     title: 'Search Gmail',
     category: QuickLinkType.action,
-    description: 'Search within your default Gmail Account',
+    description: 'Search on Gmail',
     type: ActionType.SEARCH,
     icon: 'simple-icons:gmail',
     shortcut: {
@@ -360,7 +360,7 @@ export const initActions: Array<MexitAction> = [
     id: 'ACTION_JWOtwPiaMnyL_RVgT3Jn7',
     title: 'Search Google Drive',
     category: QuickLinkType.action,
-    description: 'Search Google Drive on default Google Account',
+    description: 'Search on Google Drive',
     type: ActionType.SEARCH,
     icon: 'ri:drive-fill',
     shortcut: {
@@ -397,7 +397,7 @@ export const initActions: Array<MexitAction> = [
     title: 'Capture Multiple Tabs',
     icon: 'bi:collection-fill',
     category: QuickLinkType.action,
-    description: 'Save a group of tabs to retrieve later',
+    description: 'Save a group of tabs',
     type: ActionType.RENDER,
     shortcut: {
       capture: {

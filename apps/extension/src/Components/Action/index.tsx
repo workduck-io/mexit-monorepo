@@ -38,7 +38,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
                 Create a <PrimaryText>{search.value ? newNodeName : 'Quick note'}</PrimaryText>
               </>
             ) : (
-              action?.title
+              <>{action?.category === QuickLinkType.backlink ? cleanString(action?.title) : action?.title}</>
             )}
           </Title>
           {action.description && <Description>{action.description}</Description>}

@@ -53,7 +53,11 @@ export const Title = styled.h3`
 export const Description = styled.p`
   font-size: 0.85em;
   margin: 0.25em 0 0.5em 0;
+  opacity: 0.7;
+
   white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 `
 
 export const ShortcutContainer = styled.div`
