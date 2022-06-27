@@ -76,6 +76,7 @@ export const useApi = () => {
         path: noteHierarchyString
       },
       id: nodeid,
+      title: getTitleFromPath(path),
       data: serializeContent(content ?? defaultContent.content, nodeid),
       namespaceIdentifier: DEFAULT_NAMESPACE,
       tags: getTags(nodeid)

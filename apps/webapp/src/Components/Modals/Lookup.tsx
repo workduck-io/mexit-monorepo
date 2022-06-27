@@ -46,8 +46,6 @@ const InputWrapper = styled.div`
 
 const Lookup = () => {
   const [open, setOpen] = useState(false)
-  const { saveNewNodeAPI } = useApi()
-  const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const { goTo } = useRouting()
 

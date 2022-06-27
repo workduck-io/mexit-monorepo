@@ -1,6 +1,6 @@
 import { toast } from 'react-hot-toast'
 
-import { generateNodeUID, mog } from '@mexit/core'
+import { generateNodeUID, mog, SEPARATOR } from '@mexit/core'
 
 import { useInternalLinks } from './useInternalLinks'
 import { useApi } from './useApi'
@@ -29,10 +29,10 @@ export const useNewNodes = () => {
     try {
       ilink = checkValidILink({ ilink, parentId, showAlert: false })
       const nodeUID = generateNodeUID()
-
+      const isRoot = ilink.split(SEPARATOR).length === 1
       const parentILink = getParentILink(ilink)
 
-      if (parentILink && parentILink.nodeid) {
+      if ((parentILink && parentILink?.nodeid) || isRoot) {
         updateSingleILink(nodeUID, ilink)
       } else {
         const linksToBeCreated = getEntirePathILinks(ilink, nodeUID)
@@ -40,9 +40,8 @@ export const useNewNodes = () => {
       }
 
       if (save === false) return
-
-      parentILink && parentILink.nodeid
-        ? saveSingleNewNode(nodeUID, ilink, parentILink.nodeid, content)
+      ;(parentILink && parentILink?.nodeid) || isRoot
+        ? saveSingleNewNode(nodeUID, ilink, parentILink?.nodeid, content)
         : bulkCreateNodes(nodeUID, ilink, content)
 
       if (content) updateFromContent(nodeUID, content)
@@ -66,8 +65,9 @@ export const useNewNodes = () => {
       const nodeUID = generateNodeUID()
 
       const parentILink = getParentILink(ilink)
+      const isRoot = ilink.split(SEPARATOR).length === 1
 
-      if (parentILink && parentILink.nodeid) {
+      if ((parentILink && parentILink?.nodeid) || isRoot) {
         updateSingleILink(nodeUID, ilink)
       } else {
         const linksToBeCreated = getEntirePathILinks(ilink, nodeUID)
@@ -77,8 +77,8 @@ export const useNewNodes = () => {
       if (save === false) return
 
       const node =
-        parentILink && parentILink.nodeid
-          ? await saveSingleNewNode(nodeUID, ilink, parentILink.nodeid, content)
+        (parentILink && parentILink?.nodeid) || isRoot
+          ? await saveSingleNewNode(nodeUID, ilink, parentILink?.nodeid, content)
           : await bulkCreateNodes(nodeUID, ilink, content)
 
       updateFromContent(nodeUID, content)
