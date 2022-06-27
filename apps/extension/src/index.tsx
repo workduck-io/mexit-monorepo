@@ -15,6 +15,7 @@ import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { EditorProvider } from './Hooks/useEditorContext'
 import ReminderArmer from './Components/ReminderArmer'
+import ShortCutLinks from './Components/ShortCutLinks'
 
 export default function Index() {
   const theme = useThemeStore((state) => state.theme)
@@ -32,6 +33,7 @@ export default function Index() {
           <InternalEvents />
 
           <Chotu />
+          <ShortCutLinks/>
 
           <TooltipPortal>
             <Tooltip />

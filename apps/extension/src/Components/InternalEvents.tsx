@@ -15,6 +15,7 @@ import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { useContentStore } from '../Stores/useContentStore'
 import { useEditorContext } from '../Hooks/useEditorContext'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
+import useVimium from './vimium'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -23,6 +24,7 @@ export function InternalEvents() {
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
+  useVimium()
   // useFocusHandler()
   return null
 }

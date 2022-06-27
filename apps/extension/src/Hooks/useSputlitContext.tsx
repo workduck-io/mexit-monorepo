@@ -13,6 +13,24 @@ export enum VisualState {
   hidden = 'hidden'
 }
 
+export type VimiumState = {
+  visualState: boolean
+  linksData: {
+    element: HTMLBaseElement
+    lable: string
+    possibleFalsePositive: boolean
+    reason: null
+    rect: {
+      bottom: number
+      top: number
+      left: number
+      right: number
+      width: number
+    }
+    secondClassCitizen: boolean
+  }[]
+}
+
 export type TooltipState = {
   visualState: VisualState
   id?: string
@@ -44,6 +62,8 @@ type SputlitContextType = {
   setTooltipState: (vs: TooltipState) => void
   dibbaState: TooltipState
   setDibbaState: (vs: TooltipState) => void
+  vimium: VimiumState
+  setVimium: (vs: VimiumState) => void
 }
 
 const SputlitContext = createContext<SputlitContextType>(undefined!)
@@ -62,6 +82,7 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
   })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [isLoading, setIsLoading] = useState(false)
+  const [vimium, setVimium] = useState<VimiumState>({ visualState: true, linksData: [] })
 
   const value = {
     search,
@@ -83,7 +104,9 @@ export const SputlitProvider: React.FC = ({ children }: any) => {
     tooltipState,
     setTooltipState,
     dibbaState,
-    setDibbaState
+    setDibbaState,
+    vimium,
+    setVimium
   }
 
   return <SputlitContext.Provider value={value}>{children}</SputlitContext.Provider>
