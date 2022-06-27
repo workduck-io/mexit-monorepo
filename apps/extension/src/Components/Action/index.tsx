@@ -23,7 +23,7 @@ interface ActionProps {
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
-  const { search } = useSputlitContext()
+  const { search, selection } = useSputlitContext()
 
   const newNodeName = cleanString(search.type === CategoryType.backlink ? search.value.slice(2) : search.value)
 
@@ -47,9 +47,9 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
       {active && action.shortcut && (
         <ShortcutContainer>
           {Object.entries(action.shortcut).map(([key, shortcut]) => {
-            // if (action.type === QuickLinkType.backlink && key === 'save') {
-            //   if (!selection) return <span key={key}></span>
-            // }
+            if (action.category === QuickLinkType.backlink && key === 'save') {
+              if (!selection) return <span key={key}></span>
+            }
 
             return (
               <ShortcutText key={shortcut.title}>

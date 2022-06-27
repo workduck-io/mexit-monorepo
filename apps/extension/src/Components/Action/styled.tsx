@@ -41,6 +41,8 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  max-width: 200px;
 `
 
 export const Title = styled.h3`

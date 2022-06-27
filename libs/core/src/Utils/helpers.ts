@@ -23,7 +23,7 @@ export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr))
 
 export const createNodeWithUid = (key: string): NodeProperties => ({
-  title: key,
+  title: key.split(SEPARATOR).slice(-1)[0],
   id: key,
   nodeid: generateNodeUID(),
   path: key

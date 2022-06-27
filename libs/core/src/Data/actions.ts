@@ -13,6 +13,11 @@ export const CREATE_NEW_ITEM = {
       category: 'action',
       keystrokes: 'Enter',
       title: 'to create'
+    },
+    save: {
+      category: 'action',
+      keystrokes: '$mod+Enter',
+      title: 'to save'
     }
   },
   extras: {

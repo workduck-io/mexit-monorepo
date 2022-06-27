@@ -25,8 +25,8 @@ export function useSaveChanges() {
     const state = platesStore.get.state()
 
     // Editor Id is different from nodeId
-    const editorId = getPlateId()
-    const editorState = state[editorId].get.value()
+    // const editorId = getPlateId()
+    const editorState = state[node.nodeid].get.value()
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1

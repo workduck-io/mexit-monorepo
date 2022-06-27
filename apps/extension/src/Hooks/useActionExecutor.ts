@@ -19,6 +19,7 @@ import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
+import { useSaveChanges } from './useSaveChanges'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
@@ -27,8 +28,9 @@ export function useActionExecutor() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks } = useDataStore()
+  const { saveIt } = useSaveChanges()
 
-  function execute(item: MexitAction) {
+  function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
       case QuickLinkType.backlink: {
         let node: ILink
@@ -48,7 +50,12 @@ export function useActionExecutor() {
           nodeid: node.nodeid
         })
 
-        setPreviewMode(false)
+        if (metaKeyPressed) {
+          saveIt(false, true)
+        } else {
+          setPreviewMode(false)
+        }
+
         setInput('')
         break
       }
