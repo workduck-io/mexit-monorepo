@@ -23,7 +23,7 @@
     "@sentry/react": "^6.17.4",
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
-    "@workduck-io/dwindle": "^0.0.15",
+    "@workduck-io/dwindle": "^0.0.16",
     "boring-avatars": "^1.6.3",
     "compress.js": "^1.2.2",
     "core-js": "^3.21.1",

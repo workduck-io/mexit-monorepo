@@ -3933,10 +3933,10 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@workduck-io/dwindle@^0.0.15":
-  version "0.0.15"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.15/badf8ae12770a6a78749b44ca007591d51751616f8c67d93d6b3f2847c0dd39b#50e58111608a8fb42a1dc0921bdedde225e67337"
-  integrity sha512-O2AVkCtulCA3dTJs9ZBA3kkJi4f7uM6yLisIwRR2+1hz8iPMxnSQg09yAin/L0PJIYJjo9tv3okFzrplnezbgA==
+"@workduck-io/dwindle@^0.0.16":
+  version "0.0.16"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.16/1b462f2ef47adfad2ce3d038a86cc9437b878f1dd92da58ac635f7eb274a0ed1#27253979b3e36dfcbf6d259621344c8e4290fdeb"
+  integrity sha512-iq/DbAOVSM61VvAWMo5x2TSeFDMFDSR+7hPPfU0XuIM+s02klsuhu6XyIGnWvYG3mpsVquklyfdOFfvTmXbGew==
   dependencies:
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
@@ -3944,6 +3944,7 @@
     cross-fetch "^3.1.4"
     jsonwebtoken "^8.5.1"
     jwt-decode "^3.1.2"
+    nanoid "^4.0.0"
     qs "^6.10.3"
 
 "@workduck-io/flexsearch@^0.7.22":
@@ -9206,6 +9207,11 @@ nanoid@^3.2.0, nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
+
+nanoid@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.0.tgz#6e144dee117609232c3f415c34b0e550e64999a5"
+  integrity sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==
 
 native-request@^1.0.5:
   version "1.1.0"
