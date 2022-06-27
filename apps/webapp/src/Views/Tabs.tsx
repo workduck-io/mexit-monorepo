@@ -37,7 +37,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
   return (
     // eslint-disable-next-line
     // @ts-ignore
-    <TabsContainer style={animationProps} visible={visible}>
+    <TabsContainer style={animationProps} visible={visible.toString()}>
       <TabHeaderContainer>
         {tabs.map((tab, tabIndex) => (
           <Tippy delay={200} key={tabIndex} theme="mex" content={<TooltipTitleWithShortcut title={tab.tooltip} />}>

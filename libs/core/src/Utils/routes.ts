@@ -25,7 +25,7 @@ export const integrationURLs = {
 }
 
 export const BASE_API_URL = 'https://http-test.workduck.io/mex'
-export const BASE_USER_URL = 'https://http.workduck.io'
+export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
@@ -60,7 +60,7 @@ export const apiURLs = {
   getBookmarks: (userId: string) => `${BOOKMARK_URL}/userBookmark/${userId}`,
 
   // User
-  getUserRecords: `${BASE_USER_URL}/user/`,
+  getUserRecords: `${BASE_USER_URL}/`,
   registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
 
   // Archive
@@ -106,7 +106,7 @@ export const apiURLs = {
   getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
   // Screenshot capture URLs
-  createImageLink: `${BASE_USER_URL}/testing/upload/s3`,
+  createImageLink: `https://http.workduck.io/testing/upload/s3`,
   getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
 
   // Get Ilinks from Middleware
