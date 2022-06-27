@@ -14,7 +14,6 @@ const Themes = () => {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     keys: (item) => {
-      console.log('Item: ', item)
       return item.id
     },
     trail: 100,
