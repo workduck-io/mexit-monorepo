@@ -26,13 +26,14 @@ import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import useThemeStore from './useThemeStore'
 
-interface ParentMethods {
+export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
   // I may have to go with postmessage or broadcast channel for this,
   // TODO: implement the above and then we can move useSearch away from chotu
   // ['SEARCH']: (key: idxKey | idxKey[], query: string) => Promise<any>
-  ['SET_CONTENT']: [props: { nodeid: string; content: NodeEditorContent; metadata: NodeMetadata }]
-  ['ADD_ILINK']: [props: AddILinkProps]
+  ['SET_CONTENT']: [props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }]
+  ['ADD_SINGLE_ILINK']: [props: { nodeid: string; path: string }]
+  ['ADD_MULTIPLE_ILINKS']: [props: { linksToBeCreated: ILink[] }]
   ['ACT_ON_REMINDER']: [props: { action: ReminderActions; reminder: Reminder }]
 }
 
@@ -101,12 +102,6 @@ export default function useRaju() {
       setIlinks(ilinks)
       initContents(contents)
       setReminders(reminders)
-    },
-    success(message: string) {
-      toast.success(message)
-    },
-    error(message: string) {
-      toast.error(message)
     }
   }
 

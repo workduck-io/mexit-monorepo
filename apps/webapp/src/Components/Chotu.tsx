@@ -3,6 +3,7 @@ import {
   AddILinkProps,
   CategoryType,
   idxKey,
+  ILink,
   initActions,
   mog,
   NodeEditorContent,
@@ -23,21 +24,23 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useReminders } from '../Hooks/useReminders'
+import { useInternalLinks } from '../Hooks/useInternalLinks'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
-  const userDetails = useAuthStore((store) => store.userDetails)
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+  const { userDetails, workspaceDetails } = useAuthStore()
   // const linkCaptures = useShortenerStore((state) => state.linkCaptures)
   const theme = useThemeStore((state) => state.theme)
+  // TODO: this is stupid, it would never know if auth changes
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
 
-  const { ilinks, archive, addILink } = useDataStore()
+  const { ilinks, archive } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
+  const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
 
   useEffect(() => {
     if (!first) {
@@ -55,12 +58,16 @@ export default function Chotu() {
         const res = searchWorker ? queryIndex(key, query) : []
         return res
       },
-      updateContentStore(props: { nodeid: string; content: NodeEditorContent; metadata: NodeMetadata }) {
-        setContent(props.nodeid, props.content, props.metadata)
+      updateContentStore(props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }) {
+        setContent(props.nodeid, props.content, props?.metadata)
         return
       },
-      updateIlinks(props: AddILinkProps) {
-        addILink(props)
+      updateSingleILink(props: { nodeid: string; path: string }) {
+        updateSingleILink(props.nodeid, props.path)
+        return
+      },
+      updateMultipleILinks(props: { linksToBeCreated: ILink[] }) {
+        updateMultipleILinks(props.linksToBeCreated)
         return
       },
       reminderAction(props: { action: ReminderActions; reminder: Reminder }) {
