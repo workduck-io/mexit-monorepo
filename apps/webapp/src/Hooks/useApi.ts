@@ -69,9 +69,11 @@ export const useApi = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bulkCreateNodes = async (nodeid: string, path: string, content?: any[]) => {
+    const noteHierarchyString = createNoteHierarchyString(path)
+    mog('BulkCreateNoteHierarchyString', { noteHierarchyString })
     const reqData = {
       nodePath: {
-        path: createNoteHierarchyString(path)
+        path: noteHierarchyString
       },
       id: nodeid,
       data: serializeContent(content ?? defaultContent.content, nodeid),

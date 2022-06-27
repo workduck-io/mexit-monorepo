@@ -4,16 +4,16 @@ import { useNewNodes } from './useNewNodes'
 
 export const useCreateNewNode = () => {
   const { push } = useNavigation()
-  const { addNodeOrNodes } = useNewNodes()
+  const { addNodeOrNodesFast } = useNewNodes()
 
-  const createNewNode = async (parent?: string) => {
+  const createNewNode = (parent?: string) => {
     const newNodeId = parent !== undefined ? getUntitledKey(parent) : getUntitledDraftKey()
 
-    const node = await addNodeOrNodes(newNodeId, true, parent)
-    mog('CreateNewNodeRightClick', { newNodeId, parent, node })
-    push(node.id, { withLoading: false })
+    const { id } = addNodeOrNodesFast(newNodeId, true, parent)
+    mog('CreateNewNodeRightClick', { newNodeId, parent, nodeid: id })
+    push(id, { withLoading: false })
 
-    return node.id
+    return id
   }
 
   return { createNewNode }

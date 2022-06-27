@@ -21,7 +21,7 @@ import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 
 export const useTransform = () => {
-  const { addNodeOrNodes } = useNewNodes()
+  const { addNodeOrNodesFast } = useNewNodes()
   const addSnippet = useSnippetStore((s) => s.addSnippet)
 
   const replaceSelectionWithTask = (editor: TEditor, todoVal: NodeEditorContent) => {
@@ -106,7 +106,7 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, async () => {
+    Editor.withoutNormalizing(editor, () => {
       const nodes = Array.from(
         getNodes(editor, {
           mode: 'highest',
@@ -133,9 +133,10 @@ export const useTransform = () => {
       const parentPath = useEditorStore.getState().node.title
       const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
 
-      const node = await addNodeOrNodes(path, true, undefined, value)
-      replaceSelectionWithLink(editor, node.id, isInline)
-      mog('SelectionToNode', { selText, value, isInline, path, parentPath, nodeid: node.id })
+      const { id } = addNodeOrNodesFast(path, true, undefined, value)
+
+      replaceSelectionWithLink(editor, id, isInline)
+      mog('SelectionToNode', { selText, value, isInline, path, parentPath, nodeid: id })
     })
   }
 

@@ -72,24 +72,10 @@ export const dataStoreConstructor = (set, get) => ({
         - not allowed with reserved keywords
    */
   addILink: ({ ilink, nodeid, parentId, archived, showAlert }) => {
-    const { key, isChild } = withoutContinuousDelimiter(ilink)
-
-    if (key) {
-      ilink = isChild && parentId ? `${parentId}${key}` : key
-    }
-
-    mog('AddILink', { ilink, nodeid, parentId, key, isChild })
-
+    const uniquePath = get().checkValidILink({ ilink, parentId, showAlert })
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
-    const reservedOrUnique = getUniquePath(ilink, linksStrings, showAlert)
-
-    if (!reservedOrUnique) {
-      throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
-    }
-
-    const uniquePath = reservedOrUnique.unique
 
     const parents = getAllParentPaths(uniquePath) // includes link of child
     const newLinks = parents.filter((l) => !linksStrings.includes(l)) // only create links for non existing

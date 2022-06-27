@@ -78,7 +78,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     return slashCommands.internal
   }, [slashCommands.internal])
 
-  const { addNodeOrNodes } = useNewNodes()
+  const { addNodeOrNodesFast } = useNewNodes()
 
   const internals: ComboboxItem[] = [
     ...ilinksForCurrentNode.map((l) => ({
@@ -116,9 +116,9 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       },
       internal: {
         slateElementType: 'internal',
-        newItemHandler: async (newItem, parentId?) => {
-          const node = await addNodeOrNodes(newItem, true, parentId)
-          return node.id
+        newItemHandler: (newItem, parentId?) => {
+          const { id } = addNodeOrNodesFast(newItem, true, parentId)
+          return id
         },
         renderElement: SlashComboboxItem
       }
@@ -127,9 +127,8 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       ilink: {
         slateElementType: ELEMENT_ILINK,
         newItemHandler: (newItem, parentId?) => {
-          return addNodeOrNodes(newItem, true, parentId).then((node) => {
-            return node.id
-          })
+          const { id } = addNodeOrNodesFast(newItem, true, parentId)
+          return id
         },
         renderElement: QuickLinkComboboxItem
       },
