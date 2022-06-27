@@ -5,6 +5,15 @@ import produce from 'immer'
 import { persist } from 'zustand/middleware'
 import { IDBStorage } from '@mexit/core'
 
+export const mergeShortcuts = (oldShortcuts, newShortcuts) => {
+  const currentShortcuts = newShortcuts
+
+  Object.entries(oldShortcuts).forEach(([key, value]) => {
+    if (currentShortcuts[key]) currentShortcuts[key] = oldShortcuts[key]
+  })
+  return currentShortcuts
+}
+
 export interface Shortcut {
   title: string
   keystrokes: string
@@ -54,8 +63,10 @@ export const useHelpStore = create<HelpState>(
     {
       name: 'mexit-help-store',
       getStorage: () => IDBStorage,
-      merge: (persistedState, currentState) => {
-        return { ...persistedState, shortcuts: { ...currentState.shortcuts, ...persistedState.shortcuts } }
+      version: 0,
+      migrate: (persistedState: any, version: number) => {
+        persistedState.shortcuts = mergeShortcuts(persistedState.shortcuts, defaultShortcuts)
+        return persistedState
       }
     }
   )
