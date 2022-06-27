@@ -20,7 +20,7 @@ export const useApi = () => {
   const userDetails = useAuthStore((store) => store.userDetails)
   const { getTags } = useTags()
   const { getPathFromNodeid, getNodeidFromPath, getTitleFromPath } = useLinks()
-  const { updateILinksFromAddedRemovedPaths, updateSingleILink } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
       setNodePublic,
@@ -58,7 +58,6 @@ export const useApi = () => {
       })
       .then((d: any) => {
         setMetadata(nodeid, extractMetadata(d.data))
-        updateSingleILink(nodeid, path)
         return d.data
       })
       .catch((e) => {
@@ -70,10 +69,11 @@ export const useApi = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bulkCreateNodes = async (nodeid: string, path: string, content?: any[]) => {
-    const paths = path.split(SEPARATOR)
+    const noteHierarchyString = createNoteHierarchyString(path)
+    mog('BulkCreateNoteHierarchyString', { noteHierarchyString })
     const reqData = {
       nodePath: {
-        path: paths.join('#')
+        path: noteHierarchyString
       },
       id: nodeid,
       data: serializeContent(content ?? defaultContent.content, nodeid),

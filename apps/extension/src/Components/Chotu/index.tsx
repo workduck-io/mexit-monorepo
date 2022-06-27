@@ -183,9 +183,13 @@ export default function Chotu() {
           delete event.detail['type']
           child.updateContentStore(event.detail[0])
           break
-        case 'ADD_ILINK':
+        case 'ADD_SINGLE_ILINK':
           delete event.detail['type']
-          child.updateIlinks(event.detail[0])
+          child.updateSingleILink(event.detail[0])
+          break
+        case 'ADD_MULTIPLE_ILINKS':
+          delete event.detail['type']
+          child.updateMultipleILinks(event.detail[0])
           break
         case 'ACT_ON_REMINDER':
           delete event.detail['type']

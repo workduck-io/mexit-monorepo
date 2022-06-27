@@ -8,11 +8,14 @@ import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import useRaju from './useRaju'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+import { useInternalLinks } from './useInternalLinks'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { node } = useEditorContext()
-  const { ilinks, addILink } = useDataStore()
+  const { ilinks, addILink, checkValidILink } = useDataStore()
+  const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
+    useInternalLinks()
   const { selection, setVisualState, setSelection } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
@@ -27,39 +30,53 @@ export function useSaveChanges() {
 
     // mog('editorState', { editorState })
 
-    const metadata = {
-      saveableRange: selection?.range,
-      sourceUrl: selection?.range && window.location.href
-    }
+    const parentILink = getParentILink(node.path)
 
-    const splitPath = node.path.split(SEPARATOR)
-    const request = {
-      type: 'CAPTURE_HANDLER',
-      subType: 'BULK_CREATE_NODE',
-      data: {
-        id: node.nodeid,
-        content: editorState,
-        title: splitPath.slice(-1)[0],
-        type: CaptureType.DRAFT,
-        workspaceID: workspaceDetails.id,
-        metadata: metadata
+    const metadata = { saveableRange: selection?.range, sourceUrl: selection?.range && window.location.href }
+
+    let request
+    if (parentILink && parentILink.nodeid) {
+      updateSingleILink(node.nodeid, node.path)
+      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path })
+      request = {
+        type: 'CAPTURE_HANDLER',
+        subType: 'SAVE_NODE',
+        data: {
+          id: node.nodeid,
+          title: node.title,
+          content: editorState,
+          referenceID: parentILink.nodeid,
+          workspaceID: workspaceDetails.id,
+          metadata: metadata
+        }
+      }
+    } else {
+      const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid)
+      updateMultipleILinks(linksToBeCreated)
+      dispatch('ADD_MULTIPLE_ILINKS', { linksToBeCreated: linksToBeCreated })
+      request = {
+        type: 'CAPTURE_HANDLER',
+        subType: 'BULK_CREATE_NODES',
+        data: {
+          path: createNoteHierarchyString(node.path),
+          id: node.nodeid,
+          title: node.title,
+          content: editorState,
+          workspaceID: workspaceDetails.id,
+          metadata: metadata
+        }
       }
     }
 
-    if (splitPath.length > 1) {
-      const parent = splitPath.slice(0, -1).join(SEPARATOR)
-      const parentID = ilinks.find((i) => i.path === parent)
-      request.data['referenceID'] = parentID.nodeid
-    }
-
-    // console.log('Sending: ', node, request)
-
     setContent(node.nodeid, editorState)
+    dispatch('SET_CONTENT', {
+      nodeid: node.nodeid,
+      content: editorState
+    })
+
     setSelection(undefined)
-    if (!ilinks.map((l) => l.path).includes(node.path)) {
-      addILink({ ilink: node.path, nodeid: node.nodeid })
-    }
     addRecent(node.nodeid)
+
     if (notification) {
       toast.success('Saved')
     }
@@ -70,16 +87,7 @@ export function useSaveChanges() {
       if (error && notification) {
         toast.error('An Error Occured. Please try again.')
       } else {
-        setMetadata(message.id, extractMetadata(message.data[0]))
-
-        dispatch('SET_CONTENT', {
-          nodeid: node.nodeid,
-          content: editorState,
-          metadata: extractMetadata(message.data[0])
-        })
-        if (!ilinks.map((l) => l.path).includes(node.path)) {
-          dispatch('ADD_ILINK', { ilink: node.path, nodeid: node.nodeid })
-        }
+        setMetadata(message.id, extractMetadata(request.subType === 'SAVE_NODE' ? message : message.node))
 
         if (notification) {
           toast.success('Saved to Cloud')

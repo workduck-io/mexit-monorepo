@@ -5,8 +5,7 @@ import { serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
-    case 'BULK_CREATE_NODE': {
-      const URL = apiURLs.createNode
+    case 'SAVE_NODE': {
       const elementMetadata = data.metadata.saveableRange
         ? {
             saveableRange: data.metadata?.saveableRange,
@@ -16,15 +15,12 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const reqData = {
         id: data.id,
         title: data.title,
-        data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata)
-      }
-
-      if (data.referenceID) {
-        reqData['referenceID'] = data.referenceID
+        data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata),
+        referenceID: data.referenceID
       }
 
       return client
-        .post(URL, reqData, {
+        .post(apiURLs.createNode, reqData, {
           headers: {
             'mex-workspace-id': data.workspaceID
           }
@@ -34,6 +30,37 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
         .catch((err) => {
           return { message: null, error: err }
+        })
+    }
+    case 'BULK_CREATE_NODES': {
+      const elementMetadata = data.metadata.saveableRange
+        ? {
+            saveableRange: data.metadata?.saveableRange,
+            sourceUrl: data.metadata?.sourceUrl
+          }
+        : undefined
+      const reqData = {
+        id: data.id,
+        nodePath: {
+          path: data.path
+        },
+        title: data.title,
+        data: serializeContent(data?.content ?? defaultContent, data.id, elementMetadata),
+        // TODO: replace this with DEFAULT_NAMESPACE constant (added in another PR)
+        namespaceIdentifier: 'NAMESPACE1',
+        tags: []
+      }
+      return client
+        .post(apiURLs.bulkCreateNodes, reqData, {
+          headers: {
+            'mex-workspace-id': data.workspaceID
+          }
+        })
+        .then((response) => {
+          return { message: response.data, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
         })
     }
   }

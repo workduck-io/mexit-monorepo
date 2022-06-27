@@ -1,5 +1,5 @@
 import { mog, ILink, isMatch } from '@mexit/core'
-import { getAllParentIds } from '@mexit/shared'
+import { getAllParentPaths } from '@mexit/shared'
 
 import { useHistoryStore } from '../Stores/useHistoryStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
@@ -69,7 +69,7 @@ export const useDelete = () => {
 
     setILinks(newIlinks)
 
-    const allParents = getAllParentIds(currentNode.path)
+    const allParents = getAllParentPaths(currentNode.path)
     const isCurrent = newIlinks.map((i) => i.path).indexOf(currentNode.path) !== -1
     let toLoad: string
 

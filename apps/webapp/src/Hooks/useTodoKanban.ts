@@ -7,7 +7,7 @@ import {
   TodoStatusRanks,
   SNIPPET_PREFIX
 } from '@mexit/core'
-import { isElder, getAllParentIds } from '@mexit/shared'
+import { isElder, getAllParentPaths } from '@mexit/shared'
 import { ELEMENT_TODO_LI } from '@udecode/plate'
 import create from 'zustand'
 import { defaultContent } from '../Data/baseData'
@@ -77,7 +77,7 @@ export const useTodoKanban = () => {
     const rankedPaths = todoNodes.reduce((acc, item) => {
       const path = getPathFromNodeid(item)
       if (!path) return acc
-      const allPaths = getAllParentIds(path)
+      const allPaths = getAllParentPaths(path)
       // const allPaths =
       allPaths.forEach((path) => {
         if (acc[path]) {

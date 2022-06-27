@@ -3,8 +3,8 @@ import { client } from '@workduck-io/dwindle'
 import { apiURLs, generateNodeUID, ILink, mog, SEPARATOR } from '@mexit/core'
 import { getAllParentPaths, getNodeIcon } from '@mexit/shared'
 
-import { useAuthStore } from '../Stores/useAuth'
-import { useDataStore } from '../Stores/useDataStore'
+import { useAuthStore } from './useAuth'
+import useDataStore from '../Stores/useDataStore'
 import { getNodeidFromPathAndLinks } from './useLinks'
 
 const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {

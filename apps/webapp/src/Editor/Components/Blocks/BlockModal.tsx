@@ -104,7 +104,7 @@ const BlockModal = () => {
     setIsBlockMode(false)
   }
 
-  const { addNodeOrNodes } = useNewNodes()
+  const { addNodeOrNodesFast } = useNewNodes()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const onNodeCreate = async (quickLink: QuickLink): Promise<void> => {
     const editorBlocks = getEditorBlocks()
@@ -114,8 +114,8 @@ const BlockModal = () => {
     setIsModalOpen(undefined)
     setIsBlockMode(false)
 
-    const node = await addNodeOrNodes(quickLink.value, true, undefined, blocksContent)
-    addRecent(node.id)
+    const { id } = addNodeOrNodesFast(quickLink.value, true, undefined, blocksContent)
+    addRecent(id)
   }
 
   const onNodeSelect = (quickLink: QuickLink) => {
