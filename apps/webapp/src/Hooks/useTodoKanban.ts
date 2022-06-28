@@ -5,7 +5,8 @@ import {
   convertContentToRawText,
   TodoRanks,
   TodoStatusRanks,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
+  SearchFilter
 } from '@mexit/core'
 import { isElder, getAllParentPaths } from '@mexit/shared'
 import { ELEMENT_TODO_LI } from '@udecode/plate'
@@ -13,7 +14,7 @@ import create from 'zustand'
 import { defaultContent } from '../Data/baseData'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { KanbanCard, KanbanColumn, KanbanBoard } from '../Types/Kanban'
-import { SearchFilter, FilterStore } from './useFilters'
+import { FilterStore } from './useFilters'
 import { useLinks } from './useLinks'
 import { useNodes } from './useNodes'
 
