@@ -8,7 +8,7 @@ import { BalloonToolbarProps } from '@mexit/shared'
 import { useBalloonToolbarPopper } from './useBalloonToolbarPopper'
 
 export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => {
-  const { children, theme = 'dark', arrow = false, portalElement, popperOptions: _popperOptions = {} } = props
+  const { children, theme = 'dark', arrow = false, portalElement, $popperOptions: _popperOptions = {} } = props
 
   const popperRef = useRef<HTMLDivElement>(null)
 
@@ -22,7 +22,7 @@ export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => 
   const { styles: popperStyles, attributes } = useBalloonToolbarPopper(popperOptions)
 
   const styles = getBalloonToolbarStyles({
-    popperOptions,
+    $popperOptions: popperOptions,
     theme,
     arrow,
     ...props
