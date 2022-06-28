@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { idxKey } from '@mexit/core'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, idxKey, SearchRepExtra } from '@mexit/core'
+import { ELEMENT_MENTION } from '@udecode/plate'
+import { useAuthStore } from '../Stores/useAuth'
+import { useDataStore } from '../Stores/useDataStore'
 
 import {
   addDoc,
@@ -12,8 +15,43 @@ import {
 } from '../Workers/controller'
 import { useLinks } from './useLinks'
 
+export const useSearchExtra = () => {
+  const ilinks = useDataStore((s) => s.ilinks)
+  // TODO: uncomment all of this once mentions is merged
+  // const mentionable = useMentionStore((s) => s.mentionable)
+  // const invited = useMentionStore((s) => s.invitedUsers)
+  const currentUserDetails = useAuthStore((s) => s.userDetails)
+
+  const getSearchExtra = (): SearchRepExtra => {
+    const ilink_rep = ilinks.reduce((p, ilink) => ({ ...p, [ilink.nodeid]: ilink.path }), {})
+
+    // const mention_rep = mentionable.reduce((p, mention) => ({ ...p, [mention.userID]: mention.alias }), {})
+    // const invited_rep = invited.reduce((p, invited) => ({ ...p, [invited.alias]: invited.alias }), {})
+    // const self_rep = { ...invited_rep, ...mention_rep, [currentUserDetails?.userID]: currentUserDetails?.alias }
+
+    return {
+      [ELEMENT_ILINK]: {
+        // ILinks nodeids are in value
+        keyToIndex: 'value',
+        replacements: ilink_rep
+      },
+      [ELEMENT_INLINE_BLOCK]: {
+        keyToIndex: 'value',
+        replacements: ilink_rep
+      }
+      // [ELEMENT_MENTION]: {
+      //   keyToIndex: 'value',
+      //   replacements: self_rep
+      // }
+    }
+  }
+
+  return { getSearchExtra }
+}
+
 export const useSearch = () => {
   const { getPathFromNodeid } = useLinks()
+  const { getSearchExtra } = useSearchExtra()
 
   const addDocument = async (
     key: idxKey,
@@ -22,7 +60,9 @@ export const useSearch = () => {
     title: string | undefined = undefined,
     tags?: Array<string>
   ) => {
-    await addDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags)
+    const extra = getSearchExtra()
+
+    await addDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
   }
 
   const updateDocument = async (
@@ -32,7 +72,9 @@ export const useSearch = () => {
     title: string | undefined = undefined,
     tags?: Array<string>
   ) => {
-    await updateDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags)
+    const extra = getSearchExtra()
+
+    await updateDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
   }
 
   const removeDocument = async (key: idxKey, id: string) => {

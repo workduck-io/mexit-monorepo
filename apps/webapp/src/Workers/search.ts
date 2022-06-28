@@ -1,4 +1,13 @@
-import { SearchIndex, SearchWorker, PersistentData, idxKey, parseNode, GenericSearchResult, mog } from '@mexit/core'
+import {
+  SearchIndex,
+  SearchWorker,
+  PersistentData,
+  idxKey,
+  parseNode,
+  GenericSearchResult,
+  mog,
+  SearchRepExtra
+} from '@mexit/core'
 import { expose } from 'threads/worker'
 import {
   createSearchIndex,
@@ -20,24 +29,37 @@ const searchWorker: SearchWorker = {
     nodeBlockMapping = nbMap
   },
 
-  addDoc: (key: idxKey, nodeId: string, contents: any[], title = '', tags: Array<string> = []) => {
+  addDoc: (
+    key: idxKey,
+    nodeId: string,
+    contents: any[],
+    title = '',
+    tags: Array<string> = [],
+    extra?: SearchRepExtra
+  ) => {
     if (globalSearchIndex[key]) {
-      const parsedBlocks = parseNode(nodeId, contents, title)
+      const parsedBlocks = parseNode(nodeId, contents, title, extra)
 
       const blockIds = parsedBlocks.map((block) => block.id)
       nodeBlockMapping[nodeId] = blockIds
 
       parsedBlocks.forEach((block) => {
         block.blockId = createIndexCompositeKey(nodeId, block.blockId)
-        mog('NEW ADD SNIPPET', { tags })
         globalSearchIndex[key].add({ ...block, tag: [...tags, nodeId] })
       })
     }
   },
 
-  updateDoc: (key: idxKey, nodeId: string, contents: any[], title = '', tags: Array<string> = []) => {
+  updateDoc: (
+    key: idxKey,
+    nodeId: string,
+    contents: any[],
+    title = '',
+    tags: Array<string> = [],
+    extra?: SearchRepExtra
+  ) => {
     if (globalSearchIndex[key]) {
-      const parsedBlocks = parseNode(nodeId, contents, title)
+      const parsedBlocks = parseNode(nodeId, contents, title, extra)
 
       const existingNodeBlocks = nodeBlockMapping[nodeId] ?? []
       const newBlockIds = parsedBlocks.map((block) => block.blockId)
@@ -53,7 +75,7 @@ const searchWorker: SearchWorker = {
 
       parsedBlocks.forEach((block) => {
         block.blockId = createIndexCompositeKey(nodeId, block.blockId)
-        mog('PARSING SNIPPET', { tags })
+        mog(`${block.title} updating block`, { block })
         globalSearchIndex[key].update({ ...block, tag: [...tags, nodeId] })
       })
     }
