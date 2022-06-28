@@ -34,7 +34,7 @@ export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => 
         ref={popperRef}
         className={styles.root.className}
         style={popperStyles.popper}
-        popperOptions={popperOptions}
+        $popperOptions={popperOptions}
         {...attributes.popper}
       >
         {children}
