@@ -94,18 +94,23 @@ export const useAuthentication = () => {
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
       const result: any = await googleSignIn(code, clientId, redirectURI)
-      setShowLoader(true)
+      console.log(`Result of Login: ${JSON.stringify(result)}`)
+
       if (getWorkspace && result.userCred !== undefined) {
-        await client.get(apiURLs.getUserRecords).then(async (d: any) => {
-          if (!d.data.group) {
-            await registerUserForGoogle(result)
-          } else {
+        await client
+          .get(apiURLs.getUserRecords)
+          .then(async (d: any) => {
             const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
             setAuthenticated(userDetails, workspaceDetails)
-          }
-        })
+          })
+          .catch(async (error) => {
+            setShowLoader(true)
+            if (error.response && error.response.status === 404) {
+              await registerUserForGoogle(result)
+            }
+          })
 
         await initPortals()
       }

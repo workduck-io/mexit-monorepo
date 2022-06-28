@@ -8,13 +8,13 @@ import { useAuthentication } from '../../Stores/useAuth'
 import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'
 
-const allowedServices = ['Google', 'Telegram', 'Slack', 'Asana', 'Figma', 'GitHub', 'Jira', 'Linear']
+const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear']
 
 const GenericOAuthRedirect = () => {
   const [hasDesktopApp, setHasDesktopApp] = useState<boolean>(true)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { serviceName } = useParams()
+  const serviceName = useParams().serviceName.toLowerCase()
   const { loginViaGoogle } = useAuthentication()
 
   useEffect(() => {
@@ -26,16 +26,16 @@ const GenericOAuthRedirect = () => {
 
   const showWebappOpener = () => {
     switch (serviceName) {
-      case 'Telegram':
-      case 'Google':
-      case 'Slack':
+      case 'telegram':
+      case 'google':
+      case 'slack':
         return true
 
-      case 'Asana':
-      case 'Figma':
-      case 'GitHub':
-      case 'Jira':
-      case 'Linear':
+      case 'asana':
+      case 'figma':
+      case 'github':
+      case 'jira':
+      case 'linear':
       default:
         return false
     }
@@ -45,24 +45,25 @@ const GenericOAuthRedirect = () => {
     e.preventDefault()
 
     switch (serviceName) {
-      case 'Google': {
+      case 'google': {
         const code = searchParams.get('code')
-        await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
+        const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
+        console.log('Result of Google Login: ', res)
         navigate('/')
         break
       }
 
-      case 'Telegram':
-      case 'Slack': {
+      case 'telegram':
+      case 'slack': {
         const serviceId = searchParams.get('serviceId')
         navigate(`/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`)
         break
       }
-      case 'Asana':
-      case 'Figma':
-      case 'GitHub':
-      case 'Jira':
-      case 'Linear': {
+      case 'asana':
+      case 'figma':
+      case 'github':
+      case 'hira':
+      case 'linear': {
         navigate('/404')
         break
       }
@@ -84,26 +85,26 @@ const GenericOAuthRedirect = () => {
 
   const handleDesktopAppOpen = (event: any) => {
     switch (serviceName) {
-      case 'Google': {
+      case 'google': {
         const code = searchParams.get('code')
         const url = `mex://navigate/?code=${code}`
         checkProtocolAndOpen(url, event)
         break
       }
 
-      case 'Slack':
-      case 'Telegram': {
+      case 'slack':
+      case 'telegram': {
         const serviceId = searchParams.get('serviceId')
         const url = `mex://navigate/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`
         checkProtocolAndOpen(url, event)
         break
       }
 
-      case 'Asana':
-      case 'Figma':
-      case 'GitHub':
-      case 'Jira':
-      case 'Linear': {
+      case 'asana':
+      case 'figma':
+      case 'github':
+      case 'jira':
+      case 'linear': {
         const url = `mex://navigate/integrations/?actionGroupId=${serviceName}`
         checkProtocolAndOpen(url, event)
         break
