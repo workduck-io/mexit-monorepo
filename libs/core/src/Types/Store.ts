@@ -67,7 +67,7 @@ export interface DataStoreState {
   setNodePrivate: (nodeId: string) => void
   checkNodePublic: (nodeId: string) => string | undefined
 
-  checkValidILink: (props: CheckValidILinkProps) => void
+  checkValidILink: (props: CheckValidILinkProps) => string
 
   // Shared Nodes
   setSharedNodes: (sharedNodes: SharedNode[]) => void
