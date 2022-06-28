@@ -227,14 +227,12 @@ export const useApi = () => {
           Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((resp) => resp.data)
-      .then((data: any) => {
-        if (data === nodeId) {
-          const publicURL = apiURLs.getNodePublicURL(data)
-          setNodePublic(data, publicURL)
-          return publicURL
-        } else throw new Error('Error making node public')
+      .then((resp) => {
+        const publicURL = apiURLs.getNodePublicURL(nodeId)
+        setNodePublic(nodeId, publicURL)
+        return nodeId
       })
+
       .catch((error) => {
         mog('MakeNodePublicError', { error })
       })
@@ -250,12 +248,9 @@ export const useApi = () => {
           'mex-workspace-id': getWorkspaceId()
         }
       })
-      .then((resp) => resp.data)
-      .then((data: any) => {
-        if (data === nodeId) {
-          setNodePrivate(data)
-          return data
-        } else throw new Error('Error making node private')
+      .then((resp) => {
+        setNodePrivate(nodeId)
+        return nodeId
       })
       .catch((error) => {
         mog('MakeNodePrivateError', { error })
