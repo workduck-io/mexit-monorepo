@@ -119,7 +119,7 @@ const EditorPreview = ({
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>
-              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} />
+              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} draftView />
             </EditorPreviewEditorWrapper>
           </EditorPreviewWrapper>
         )}
