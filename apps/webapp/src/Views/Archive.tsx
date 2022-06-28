@@ -4,7 +4,7 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog, SEPARATOR } from '@mexit/core'
 import { MainHeader, Button } from '@mexit/shared'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import styled, { useTheme } from 'styled-components'
 import Infobox from '../Components/Infobox'
@@ -34,6 +34,7 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { getContent } from '../Stores/useEditorStore'
 import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
+import { useApi } from '../Hooks/useApi'
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;
@@ -56,8 +57,9 @@ const Archive = () => {
   const [delNode, setDelNode] = useState(undefined)
   const [showModal, setShowModal] = useState(false)
   const { loadNode } = useLoad()
-  const contents = useContentStore((store) => store.contents)
+  const { contents, setContent } = useContentStore()
   const theme = useTheme()
+  const getDataAPI = useApi().getDataAPI
   const { queryIndex } = useSearch()
 
   const { updateDocument, removeDocument } = useSearch()
@@ -130,6 +132,21 @@ const Archive = () => {
     setShowModal(false)
     setDelNode(undefined)
   }
+
+  useEffect(() => {
+    try {
+      Promise.allSettled(
+        archive.map(
+          async (item) =>
+            await getDataAPI(item.nodeid).then((response) =>
+              setContent(item.nodeid, response.content, response.metadata)
+            )
+        )
+      )
+    } catch (err) {
+      mog('Failed to fetch archives', { err })
+    }
+  }, [])
 
   // Forwarding ref to focus on the selected result
   const BaseItem = (
@@ -262,7 +279,7 @@ const Archive = () => {
           setShowModal(false)
           setDelNode(undefined)
         }}
-        RenderItem={React.forwardRef(BaseItem)}
+        RenderItem={RenderItem}
         RenderPreview={RenderPreview}
       />
       <Modal

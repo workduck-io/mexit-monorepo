@@ -62,7 +62,7 @@ export const apiURLs = {
   // Archive
   archiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
   deleteArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive/delete`,
-  getArchivedNodes: (workspaceId: string) => `${MEXIT_BACKEND_URL_BASE}/node/archive/${workspaceId}`,
+  getArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
   unArchiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
 
   // Refactor

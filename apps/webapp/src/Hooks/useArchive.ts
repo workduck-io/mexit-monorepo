@@ -81,7 +81,7 @@ const useArchive = () => {
 
   const getArchiveData = async () => {
     await client
-      .get(apiURLs.getArchivedNodes(getWorkspaceId()), {
+      .get(apiURLs.getArchivedNodes, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
