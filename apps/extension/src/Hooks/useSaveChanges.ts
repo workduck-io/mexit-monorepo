@@ -83,7 +83,7 @@ export function useSaveChanges() {
         toast.error('An Error Occured. Please try again.')
       } else {
         const metadata = extractMetadata(request.subType === 'SAVE_NODE' ? message : message.node)
-        setMetadata(message.id, metadata)
+        // setMetadata(message.id, metadata)
         dispatch('SET_CONTENT', {
           nodeid: node.nodeid,
           content: editorState,
@@ -95,7 +95,7 @@ export function useSaveChanges() {
         }
 
         if (saveAndExit) {
-          setVisualState(VisualState.hidden)
+          setVisualState(VisualState.animatingOut)
         }
       }
     })

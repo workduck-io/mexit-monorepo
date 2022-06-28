@@ -25,6 +25,6 @@ export const SeePreview = styled.div`
   border: none;
   color: ${({ theme }) => theme.colors.text.fade};
   box-shadow: 0px 2px 4px ${({ theme }) => theme.colors.background.modal};
-  background-color: ${({ theme }) => theme.colors.background.highlight};
+  background-color: ${({ theme }) => theme.colors.background.app};
   bottom: 1.8rem;
 `

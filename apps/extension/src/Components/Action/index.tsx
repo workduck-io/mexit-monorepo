@@ -47,7 +47,12 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
       {active && action.shortcut && (
         <ShortcutContainer>
           {Object.entries(action.shortcut).map(([key, shortcut]) => {
-            if (action.category === QuickLinkType.backlink && key === 'save') {
+            if (
+              // TODO: removing save with metakey for now, causing issues with saveIt not having the current node post action execution
+              // action.category === QuickLinkType.backlink
+              true &&
+              key === 'save'
+            ) {
               if (!selection) return <span key={key}></span>
             }
 

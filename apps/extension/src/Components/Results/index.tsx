@@ -143,7 +143,7 @@ function Results() {
       } else if (event.key === 'Enter') {
         event.preventDefault()
         const item = searchResults[activeIndex]
-        execute(item, event.metaKey)
+        execute(item)
       } else if (event.key === 'Backspace' && activeItem && input === '') {
         setActiveItem()
         setSearch({ value: '', type: CategoryType.search })

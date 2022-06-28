@@ -19,6 +19,7 @@ import {
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
+import { ParentMethods } from '../../Hooks/useRaju'
 import { useEffect } from 'react'
 import { Container, CopyButton, Icon, StyledChotu } from './styled'
 import useThemeStore from '../../Hooks/useThemeStore'
@@ -51,6 +52,7 @@ export default function Chotu() {
   const lastOpenedNodes = useRecentsStore((store) => store.lastOpened)
   const { ilinks } = useDataStore()
   const { getQuickLinks } = useQuickLinks()
+  const contents = useContentStore((state) => state.contents)
   const methods = useRaju().methods
 
   const [child, setChild] = useState<AsyncMethodReturns<any>>(null)
@@ -174,10 +176,10 @@ export default function Chotu() {
         setSearchResults(data)
       }
     }
-  }, [child, activeItem, search.value, ilinks, previewMode, lastOpenedNodes])
+  }, [child, activeItem, search.value, ilinks, lastOpenedNodes, contents])
 
   useEffect(() => {
-    const handleEvent = (event: CustomEvent) => {
+    const handleEvent = (event: CustomEvent<{ type: keyof ParentMethods }>) => {
       switch (event.detail.type) {
         case 'SET_CONTENT':
           delete event.detail['type']
@@ -197,6 +199,7 @@ export default function Chotu() {
           break
       }
     }
+
     window.addEventListener('raju', handleEvent)
 
     return () => window.removeEventListener('raju', handleEvent)
