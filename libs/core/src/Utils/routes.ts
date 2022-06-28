@@ -60,10 +60,10 @@ export const apiURLs = {
   registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
 
   // Archive
-  archiveNodes: () => `${MEXIT_BACKEND_URL_BASE}/node/archive`,
-  deleteArchiveNodes: () => `${MEXIT_BACKEND_URL_BASE}/node/archive`,
+  archiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
+  deleteArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive/delete`,
   getArchivedNodes: (workspaceId: string) => `${MEXIT_BACKEND_URL_BASE}/node/archive/${workspaceId}`,
-  unArchiveNodes: () => `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
+  unArchiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
 
   // Refactor
   refactorHeirarchy: `${MEXIT_BACKEND_URL_BASE}/node/refactor`,

@@ -111,7 +111,7 @@ const Archive = () => {
 
   const onDeleteClick = async () => {
     const nodesToDelete = archive.filter((i) => {
-      const match = i.path.startsWith(delNode.path)
+      const match = i.path.startsWith(delNode.title)
       return match
     })
 
