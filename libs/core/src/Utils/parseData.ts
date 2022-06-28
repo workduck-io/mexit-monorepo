@@ -2,7 +2,7 @@ import { ELEMENT_TODO_LI } from '../Data/outline'
 import { indexNames, diskIndex } from '../Data/search'
 import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
-import { GenericSearchData, PersistentData } from '../Types/Search'
+import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_EXCALIDRAW,
@@ -23,33 +23,47 @@ type ExcludeFromTextType = {
 
 type ExcludeFieldTypes = 'value' | 'url' | 'text'
 
+type ContentConverterOptions = {
+  exclude?: ExcludeFromTextType
+  extra?: SearchRepExtra
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const convertContentToRawText = (
   content: any[],
   join?: string,
-  exclude: ExcludeFromTextType = {
-    types: new Set([
-      // ELEMENT_EXCALIDRAW,
-      ELEMENT_ILINK
-      // ELEMENT_INLINE_BLOCK
-    ])
+  options: ContentConverterOptions = {
+    exclude: {
+      types: new Set([ELEMENT_EXCALIDRAW])
+    }
   }
 ): string => {
   const text: string[] = []
+  const extraKeys = options?.extra ? Object.keys(options.extra) : []
 
   content?.forEach((n) => {
-    if (exclude?.types?.has(n.type)) return
+    if (options?.exclude?.types?.has(n.type)) return
 
-    if (n.text && !exclude?.fields?.has('text') && n.text !== '') text.push(n.text)
+    if (extraKeys.includes(n.type)) {
+      if (options?.extra[n.type]) {
+        const blockKey = options?.extra[n.type].keyToIndex
+        const blockText = options?.extra[n.type].replacements[n[blockKey]]
+        // console.log('Found Extra', { n, blockKey, blockText })
+        if (blockText) text.push(blockText)
+        return
+      }
+    }
+
+    if (n.text && !options?.exclude?.fields?.has('text') && n.text !== '') text.push(n.text)
 
     // * Extract custom components (ILink, Tags, etc) `value` field
-    if (n.value && !exclude?.fields?.has('value') && n.value !== '') text.push(n.value)
+    if (n.value && !options?.exclude?.fields?.has('value') && n.value !== '') text.push(n.value)
 
     // * Extract custom components (Webem, Links) `url` field
-    if (n.url && !exclude?.fields?.has('url') && n.url !== '') text.push(n.url)
+    if (n.url && !options?.exclude?.fields?.has('url') && n.url !== '') text.push(n.url)
 
     if (n.children && n.children.length > 0) {
-      const childText = convertContentToRawText(n.children, join ?? '', exclude)
+      const childText = convertContentToRawText(n.children, join ?? '', options)
       text.push(childText)
     }
   })
@@ -59,8 +73,13 @@ export const convertContentToRawText = (
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const convertEntryToRawText = (nodeUID: string, entry: any[], title = ''): GenericSearchData => {
-  return { id: nodeUID, title, text: convertContentToRawText(entry, ' ') }
+export const convertEntryToRawText = (
+  nodeUID: string,
+  entry: any[],
+  title = '',
+  extra?: SearchRepExtra
+): GenericSearchData => {
+  return { id: nodeUID, title, text: convertContentToRawText(entry, ' ', { extra }) }
 }
 
 export const getHeadingBlock = (content: NodeEditorContent) => {
@@ -73,7 +92,9 @@ export const getTitleFromContent = (content: NodeEditorContent) => {
   const heading = getHeadingBlock(content)
   if (heading) return heading.title
 
-  const text = convertContentToRawText(content, ' ', { fields: new Set<ExcludeFieldTypes>(['value', 'url']) })
+  const text = convertContentToRawText(content, ' ', {
+    exclude: { fields: new Set<ExcludeFieldTypes>(['value', 'url']) }
+  })
   const title = getSlug(text)
 
   return title

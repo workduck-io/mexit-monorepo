@@ -1,5 +1,5 @@
 import { spawn } from 'threads'
-import { NodeEditorContent, PersistentData, idxKey, mog } from '@mexit/core'
+import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '@mexit/core'
 
 import analysisWorkerConstructor from './analysis?worker'
 import searchWorkerConstructor from './search?worker'
@@ -51,19 +51,33 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   }
 }
 
-export const addDoc = async (key: idxKey, nodeId: string, contents: any[], title: string, tags?: Array<string>) => {
+export const addDoc = async (
+  key: idxKey,
+  nodeId: string,
+  contents: any[],
+  title: string,
+  tags?: Array<string>,
+  extra?: SearchRepExtra
+) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.addDoc(key, nodeId, contents, title, tags)
+    await searchWorker.addDoc(key, nodeId, contents, title, tags, extra)
   } catch (error) {
     mog('AddDocIndexError', { error })
   }
 }
 
-export const updateDoc = async (key: idxKey, nodeId: string, contents: any[], title: string, tags?: Array<string>) => {
+export const updateDoc = async (
+  key: idxKey,
+  nodeId: string,
+  contents: any[],
+  title: string,
+  tags?: Array<string>,
+  extra?: SearchRepExtra
+) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.updateDoc(key, nodeId, contents, title, tags)
+    await searchWorker.updateDoc(key, nodeId, contents, title, tags, extra)
   } catch (error) {
     mog('UpdateDocIndexError', { error })
   }

@@ -5,7 +5,8 @@ import {
   convertContentToRawText,
   TodoRanks,
   TodoStatusRanks,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
+  SearchFilter
 } from '@mexit/core'
 import { isElder, getAllParentPaths } from '@mexit/shared'
 import { ELEMENT_TODO_LI } from '@udecode/plate'
@@ -13,9 +14,10 @@ import create from 'zustand'
 import { defaultContent } from '../Data/baseData'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { KanbanCard, KanbanColumn, KanbanBoard } from '../Types/Kanban'
-import { SearchFilter, FilterStore } from './useFilters'
+import { FilterStore } from './useFilters'
 import { useLinks } from './useLinks'
 import { useNodes } from './useNodes'
+import { useSearchExtra } from './useSearch'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType
@@ -56,6 +58,7 @@ export const useTodoKanban = () => {
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
   const { getPathFromNodeid } = useLinks()
   const { isInArchive } = useNodes()
+  const { getSearchExtra } = useSearchExtra()
 
   const changeStatus = (todo: TodoType, newStatus: TodoStatus) => {
     updateTodo(todo.nodeid, { ...todo, metadata: { ...todo.metadata, status: newStatus } })
@@ -115,6 +118,7 @@ export const useTodoKanban = () => {
 
   const getTodoBoard = () => {
     const nodetodos = useTodoStore.getState().todos
+    const extra = getSearchExtra()
     const todoBoard: TodoKanbanBoard = {
       columns: [
         {
@@ -141,8 +145,8 @@ export const useTodoKanban = () => {
       todos
         .filter((todo) => currentFilters.every((filter) => filter.filter(todo)))
         .filter((todo) => {
-          // TODO: Find a faster way to check for empty content
-          const text = convertContentToRawText(todo.content).trim()
+          // TODO: Find a faster way to check for empty content // May not need to convert content to raw text
+          const text = convertContentToRawText(todo.content, ' ', { extra }).trim()
           // mog('empty todo check', { text, nodeid, todo })
           if (text === '') {
             return false
