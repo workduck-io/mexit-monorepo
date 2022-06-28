@@ -14,13 +14,13 @@ import { nanoid } from 'nanoid'
 // progressive enhancement check.
 if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   // share the property "count" of the state with other tabs
-  share('theme', useThemeStore, { initialize: true, ref: 'share-theme' })
-  share('ilinks', useDataStore, { initialize: true, ref: 'share-ilinks' })
-  share('archive', useDataStore, { initialize: true, ref: 'share-archive' })
-  share('contents', useContentStore, { initialize: true, ref: 'share-content' })
-  share('authenticated', useAuthStore, { initialize: true, ref: 'share-auth' })
-  share('snippets', useSnippetStore, { initialize: true, ref: 'share-snippets' })
-  share('reminders', useReminderStore, { initialize: true, ref: 'share-reminders' })
+  share('theme', useThemeStore, { ref: 'share-theme' })
+  share('ilinks', useDataStore, { ref: 'share-ilinks' })
+  share('archive', useDataStore, { ref: 'share-archive' })
+  share('contents', useContentStore, { ref: 'share-content' })
+  share('authenticated', useAuthStore, { ref: 'share-auth' })
+  share('snippets', useSnippetStore, { ref: 'share-snippets' })
+  share('reminders', useReminderStore, { ref: 'share-reminders' })
 }
 
 export default {}

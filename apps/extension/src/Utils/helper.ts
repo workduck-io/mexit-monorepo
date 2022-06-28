@@ -99,12 +99,12 @@ export const getListItemFromSnippet = (snippet: Snippet) => {
         category: 'action',
         keystrokes: 'Enter',
         title: 'to copy'
-      },
-      paste: {
-        category: 'action',
-        keystrokes: '$mod+Enter',
-        title: 'to paste'
       }
+      // paste: {
+      //   category: 'action',
+      //   keystrokes: '$mod+Enter',
+      //   title: 'to paste'
+      // }
     }
   }
 

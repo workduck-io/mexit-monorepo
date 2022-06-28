@@ -19,6 +19,7 @@ import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
+import { useSaveChanges } from './useSaveChanges'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
@@ -27,8 +28,9 @@ export function useActionExecutor() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks } = useDataStore()
+  const { saveIt } = useSaveChanges()
 
-  function execute(item: MexitAction) {
+  function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
       case QuickLinkType.backlink: {
         let node: ILink
@@ -48,7 +50,12 @@ export function useActionExecutor() {
           nodeid: node.nodeid
         })
 
-        setPreviewMode(false)
+        if (metaKeyPressed) {
+          saveIt(false, true)
+        } else {
+          setPreviewMode(false)
+        }
+
         setInput('')
         break
       }
@@ -87,63 +94,66 @@ export function useActionExecutor() {
             break
           }
           case ActionType.SCREENSHOT: {
-            setVisualState(VisualState.hidden)
-            chrome.runtime.sendMessage(
-              {
-                type: 'ASYNC_ACTION_HANDLER',
-                subType: 'CAPTURE_VISIBLE_TAB',
-                data: {
-                  workspaceId: workspaceDetails.id
+            setVisualState(VisualState.animatingOut)
+            toast.loading('Taking a screenshot', { duration: 800 })
+            setTimeout(() => {
+              chrome.runtime.sendMessage(
+                {
+                  type: 'ASYNC_ACTION_HANDLER',
+                  subType: 'CAPTURE_VISIBLE_TAB',
+                  data: {
+                    workspaceId: workspaceDetails.id
+                  }
+                },
+                (response) => {
+                  const { message, error } = response
+                  if (error) {
+                    toast.error('Could not capture screenshot')
+                  } else {
+                    setVisualState(VisualState.animatingIn)
+                    // Adding a paragraph in the start due to errors caused by editor
+                    // trying to focus in the start of the note
+                    setNodeContent([
+                      {
+                        type: 'p',
+                        children: [
+                          {
+                            text: 'Screenshot'
+                          }
+                        ]
+                      },
+                      {
+                        children: [
+                          {
+                            text: ''
+                          }
+                        ],
+                        type: 'img',
+                        url: message
+                      },
+                      {
+                        text: '\n'
+                      },
+                      {
+                        text: '['
+                      },
+                      {
+                        type: 'a',
+                        url: message,
+                        children: [
+                          {
+                            text: 'Ref'
+                          }
+                        ]
+                      },
+                      {
+                        text: ' ]'
+                      }
+                    ])
+                  }
                 }
-              },
-              (response) => {
-                const { message, error } = response
-                if (error) {
-                  toast.error('Could not capture screenshot')
-                } else {
-                  setVisualState(VisualState.showing)
-                  // Adding a paragraph in the start due to errors caused by editor
-                  // trying to focus in the start of the note
-                  setNodeContent([
-                    {
-                      type: 'p',
-                      children: [
-                        {
-                          text: 'Screenshot'
-                        }
-                      ]
-                    },
-                    {
-                      children: [
-                        {
-                          text: ''
-                        }
-                      ],
-                      type: 'img',
-                      url: message
-                    },
-                    {
-                      text: '\n'
-                    },
-                    {
-                      text: '['
-                    },
-                    {
-                      type: 'a',
-                      url: message,
-                      children: [
-                        {
-                          text: 'Ref'
-                        }
-                      ]
-                    },
-                    {
-                      text: ' ]'
-                    }
-                  ])
-                }
-              }
-            )
+              )
+            }, 1000)
           }
         }
       }

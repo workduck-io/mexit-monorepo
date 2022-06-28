@@ -6,6 +6,7 @@ export const SputlitContainer = styled.div`
   font-family: 'Inter', sans-serif;
 
   position: fixed;
+  z-index: 9999999999;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -39,6 +40,5 @@ export const Main = styled.div`
 
   top: 0px;
   left: 0px;
-  z-index: 9999999998;
   display: block;
 `

@@ -10,6 +10,8 @@ export const StyledAction = styled.div<{ active?: boolean }>`
   border-left: 2px solid transparent;
   border-radius: 10px;
 
+  min-height: 53.61px;
+
   ${(props) =>
     props.active &&
     css`
@@ -39,6 +41,8 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  max-width: 200px;
 `
 
 export const Title = styled.h3`
@@ -51,7 +55,11 @@ export const Title = styled.h3`
 export const Description = styled.p`
   font-size: 0.85em;
   margin: 0.25em 0 0.5em 0;
+  opacity: 0.7;
+
   white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 `
 
 export const ShortcutContainer = styled.div`

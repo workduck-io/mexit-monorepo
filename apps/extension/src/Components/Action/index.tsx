@@ -23,7 +23,7 @@ interface ActionProps {
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
-  const { search } = useSputlitContext()
+  const { search, selection } = useSputlitContext()
 
   const newNodeName = cleanString(search.type === CategoryType.backlink ? search.value.slice(2) : search.value)
 
@@ -38,7 +38,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
                 Create a <PrimaryText>{search.value ? newNodeName : 'Quick note'}</PrimaryText>
               </>
             ) : (
-              action?.title
+              <>{action?.category === QuickLinkType.backlink ? cleanString(action?.title) : action?.title}</>
             )}
           </Title>
           {action.description && <Description>{action.description}</Description>}
@@ -47,9 +47,14 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
       {active && action.shortcut && (
         <ShortcutContainer>
           {Object.entries(action.shortcut).map(([key, shortcut]) => {
-            // if (action.type === QuickLinkType.backlink && key === 'save') {
-            //   if (!selection) return <span key={key}></span>
-            // }
+            if (
+              // TODO: removing save with metakey for now, causing issues with saveIt not having the current node post action execution
+              // action.category === QuickLinkType.backlink
+              true &&
+              key === 'save'
+            ) {
+              if (!selection) return <span key={key}></span>
+            }
 
             return (
               <ShortcutText key={shortcut.title}>

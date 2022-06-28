@@ -25,17 +25,16 @@ export function useSaveChanges() {
     const state = platesStore.get.state()
 
     // Editor Id is different from nodeId
-    const editorId = getPlateId()
-    const editorState = state[editorId].get.value()
-
-    // mog('editorState', { editorState })
+    // const editorId = getPlateId()
+    const editorState = state[node.nodeid].get.value()
 
     const parentILink = getParentILink(node.path)
+    const isRoot = node.path.split(SEPARATOR).length === 1
 
     const metadata = { saveableRange: selection?.range, sourceUrl: selection?.range && window.location.href }
 
     let request
-    if (parentILink && parentILink.nodeid) {
+    if (parentILink || isRoot) {
       updateSingleILink(node.nodeid, node.path)
       dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path })
       request = {
@@ -45,7 +44,7 @@ export function useSaveChanges() {
           id: node.nodeid,
           title: node.title,
           content: editorState,
-          referenceID: parentILink.nodeid,
+          referenceID: parentILink?.nodeid,
           workspaceID: workspaceDetails.id,
           metadata: metadata
         }
@@ -69,10 +68,6 @@ export function useSaveChanges() {
     }
 
     setContent(node.nodeid, editorState)
-    dispatch('SET_CONTENT', {
-      nodeid: node.nodeid,
-      content: editorState
-    })
 
     setSelection(undefined)
     addRecent(node.nodeid)
@@ -87,14 +82,20 @@ export function useSaveChanges() {
       if (error && notification) {
         toast.error('An Error Occured. Please try again.')
       } else {
-        setMetadata(message.id, extractMetadata(request.subType === 'SAVE_NODE' ? message : message.node))
+        const metadata = extractMetadata(request.subType === 'SAVE_NODE' ? message : message.node)
+        // setMetadata(message.id, metadata)
+        dispatch('SET_CONTENT', {
+          nodeid: node.nodeid,
+          content: editorState,
+          metadata: metadata
+        })
 
         if (notification) {
           toast.success('Saved to Cloud')
         }
 
         if (saveAndExit) {
-          setVisualState(VisualState.hidden)
+          setVisualState(VisualState.animatingOut)
         }
       }
     })

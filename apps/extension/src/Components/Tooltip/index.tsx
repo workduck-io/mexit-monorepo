@@ -27,8 +27,8 @@ function Tooltip() {
   }
 
   const handleEdit = () => {
-    setVisualState(VisualState.showing)
-    // setSelection({ editContent: content })
+    //TODO:  Find node and set in editor store, would be implementing both of these post block level metadata implementation
+    setVisualState(VisualState.animatingIn)
     setTooltipState({ visualState: VisualState.hidden })
   }
 

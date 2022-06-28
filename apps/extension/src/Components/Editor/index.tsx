@@ -1,12 +1,14 @@
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { useSpring } from 'react-spring'
+import downIcon from '@iconify/icons-ph/arrow-down-bold'
+import { Icon } from '@iconify/react'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 
 import { EditorStyles, useEditorChange } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
-import { EditorWrapper } from './styled'
+import { EditorWrapper, SeePreview } from './styled'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 
 import components from './Components'
@@ -42,9 +44,9 @@ const commands = [
 ]
 
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
-  const { searchResults, activeIndex, activeItem } = useSputlitContext()
+  const { searchResults, activeIndex, activeItem, selection } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
-
+  const ref = useRef<HTMLDivElement>()
   const { tags, addTag, ilinks, addILink } = useDataStore()
 
   useEditorChange(node.nodeid, nodeContent, onChange)
@@ -148,8 +150,17 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
     f(value)
   }, 1000)
 
+  const handleScrollToBottom = () => {
+    ref.current.scrollTop = ref.current.scrollHeight
+  }
+
   return (
-    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)}>
+    <EditorWrapper style={springProps} onClick={() => setPreviewMode(false)} ref={ref}>
+      {selection && (
+        <SeePreview onMouseDown={handleScrollToBottom}>
+          <Icon icon={downIcon} />
+        </SeePreview>
+      )}
       <EditorStyles>
         <MexEditor
           comboboxConfig={comboboxConfig}
