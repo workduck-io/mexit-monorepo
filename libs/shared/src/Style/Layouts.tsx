@@ -13,11 +13,11 @@ export const PageContainer = styled.div`
   position: relative;
 `
 
-export const MexIcon = styled(Icon)<{ margin?: string; noHover?: boolean }>`
+export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean }>`
   padding: 1px;
   margin: ${({ margin }) => margin};
-  ${({ noHover }) =>
-    !noHover &&
+  ${({ $noHover }) =>
+    !$noHover &&
     css`
       :hover {
         background-color: ${(props) => props.theme.colors.background.card};

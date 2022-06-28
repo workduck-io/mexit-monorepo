@@ -22,7 +22,7 @@ const ActionGroup: React.FC<ActionGroupProps> = ({ group, onClick }) => {
         <>
           <RightCut />
           <ActiveStatus>
-            <MexIcon noHover height={24} icon={Check} />
+            <MexIcon $noHover height={24} icon={Check} />
           </ActiveStatus>
         </>
       )}

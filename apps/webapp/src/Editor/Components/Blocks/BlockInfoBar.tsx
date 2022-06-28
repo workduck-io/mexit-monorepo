@@ -1,15 +1,17 @@
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import React from 'react'
+import { Button } from '@udecode/plate'
 import styled, { useTheme } from 'styled-components'
 import xBold from '@iconify/icons-ph/x-bold'
 import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+
+import { ContextMenuActionType } from '@mexit/core'
 import { MexIcon } from '@mexit/shared'
-import { Button } from '@udecode/plate'
+
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import useBlockStore from '../../../Stores/useBlockStore'
-import { ButtonWrapper } from 'apps/webapp/src/Style/Settings'
-import { ContextMenuActionType } from '@mexit/core'
+import { ButtonWrapper } from '../../../Style/Settings'
 
 const BlockMenu = styled.div`
   display: flex;
@@ -37,7 +39,7 @@ const BlockInfoBar = () => {
   return (
     <BlockMenu>
       <Button onClick={() => setIsBlockMode(!isBlockMode)}>
-        <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={xBold} /> Cancel
+        <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={xBold} /> Cancel
       </Button>
       <p>
         {blockHeading}
@@ -45,14 +47,14 @@ const BlockInfoBar = () => {
       </p>
       <ButtonWrapper>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.move)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={moveToIcon} />
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={moveToIcon} />
           Move
         </Button>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={sendToIcon} /> Send
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={sendToIcon} /> Send
         </Button>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.del)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={deleteBin6Line} />
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={deleteBin6Line} />
           Delete
         </Button>
       </ButtonWrapper>

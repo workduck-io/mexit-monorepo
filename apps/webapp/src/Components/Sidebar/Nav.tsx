@@ -109,7 +109,7 @@ const Nav = ({ links }: NavProps) => {
   const tabs = useMemo(
     () => [
       {
-        label: <MexIcon noHover icon="ri:draft-line" width={20} height={20} />,
+        label: <MexIcon $noHover icon="ri:draft-line" width={20} height={20} />,
         key: 'wd-mex-all-notes-tree',
         component: <TreeContainer />,
         tooltip: 'All Notes'
@@ -121,7 +121,7 @@ const Nav = ({ links }: NavProps) => {
         tooltip: 'Shared Notes'
       },
       {
-        label: <MexIcon noHover icon="ri:bookmark-line" width={20} height={20} />,
+        label: <MexIcon $noHover icon="ri:bookmark-line" width={20} height={20} />,
         key: 'wd-mex-bookmarks',
         component: <Bookmarks />,
         tooltip: 'Bookmarks'
