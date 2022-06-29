@@ -110,7 +110,7 @@ const ContentEditor = () => {
 
   useEffect(() => {
     return () => saveAndClearBuffer()
-  }, [nodeId])
+  }, [])
 
   return (
     <StyledEditor showGraph={false} className="mex_editor">
