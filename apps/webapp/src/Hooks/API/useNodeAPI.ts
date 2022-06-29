@@ -9,7 +9,10 @@ import {
   removeNulls,
   WORKSPACE_HEADER,
   DEFAULT_NAMESPACE,
-  GET_REQUEST_MINIMUM_GAP
+  GET_REQUEST_MINIMUM_GAP,
+  runBatch,
+  iLinksToUpdate,
+  hierarchyParser
 } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
@@ -22,6 +25,9 @@ import { useLinks } from '../useLinks'
 import { useTags } from '../useTags'
 import { useNodes } from '../useNodes'
 import '../../Utils/apiClient'
+
+import '../Utils/apiClient'
+import { useUpdater } from '../useUpdater'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -37,6 +43,8 @@ export const useApi = () => {
       checkNodePublic
     })
   )
+  const { updateFromContent } = useUpdater()
+  const setIlinks = useDataStore((store) => store.setIlinks)
 
   const { getSharedNode } = useNodes()
 
@@ -208,6 +216,9 @@ export const useApi = () => {
         }
       })
       .then((d: any) => {
+        const content = deserializeContent(d.data.data)
+        updateFromContent(nodeid, content)
+
         return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
       })
       .catch((e) => {
@@ -228,7 +239,20 @@ export const useApi = () => {
         }
       })
       .then((d) => {
-        return d.data
+        if (d.data) {
+          const nodes = hierarchyParser(d.data as any)
+          if (nodes && nodes.length > 0) {
+            const localILinks = useDataStore.getState().ilinks
+            const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+
+            runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid)))
+
+            setIlinks(nodes)
+            // ipcRenderer.send(IpcAction.UPDATE_ILINKS, { ilinks: nodes })
+          }
+
+          return d.data
+        }
       })
 
     return data
