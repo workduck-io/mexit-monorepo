@@ -30,7 +30,7 @@ const useArchive = () => {
     if (userCred) {
       return await client
         .put(
-          apiURLs.archiveNodes(),
+          apiURLs.archiveNodes,
           {
             ids: nodes.map((i) => i.nodeid)
           },
@@ -60,7 +60,7 @@ const useArchive = () => {
   const unArchiveData = async (nodes: ILink[]) => {
     await client
       .put(
-        apiURLs.unArchiveNodes(),
+        apiURLs.unArchiveNodes,
         {
           ids: nodes.map((i) => i.nodeid)
         },
@@ -81,7 +81,7 @@ const useArchive = () => {
 
   const getArchiveData = async () => {
     await client
-      .get(apiURLs.getArchivedNodes(getWorkspaceId()), {
+      .get(apiURLs.getArchivedNodes, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
@@ -118,7 +118,7 @@ const useArchive = () => {
     if (userCred) {
       const res = await client
         .post(
-          apiURLs.deleteArchiveNodes(),
+          apiURLs.deleteArchivedNodes,
           {
             ids: nodeids.map((i) => i.nodeid)
           },

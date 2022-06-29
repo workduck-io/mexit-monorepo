@@ -19,6 +19,7 @@ import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
+import useArchive from '../Hooks/useArchive'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -42,6 +43,7 @@ export const useAuthentication = () => {
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
   const { initPortals } = usePortals()
+  const getArchiveData = useArchive().getArchiveData
 
   const login = async (
     email: string,
@@ -81,6 +83,10 @@ export const useAuthentication = () => {
             )
           })
         )
+        // TODO: uncomment when changes implemented
+        // .then(() => {
+        //   getArchiveData()
+        // })
         .catch((e) => {
           console.error({ e })
           return e.toString() as string

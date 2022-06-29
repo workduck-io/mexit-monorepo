@@ -9,9 +9,10 @@ import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
-import { apiURLs, CreateAlias, CreateTags, sitesMetadataDict, Tag } from '@mexit/core'
+import { apiURLs, CreateAlias, CreateTags, generateNodeId, sitesMetadataDict, Tag } from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { LoadingButton } from '../../Components/Buttons/Buttons'
+import { useDataStore } from '../../Stores/useDataStore'
 
 const Form = styled.form`
   display: flex;
@@ -43,6 +44,9 @@ export const Shortener = () => {
   const onShortenLinkSubmit = async (e: any) => {
     e.preventDefault()
     setIsLoading(true)
+
+    // Finding if the `Links` ILink exists
+    const linksILink = useDataStore.getState().ilinks.find((item) => item.path === 'Links')
     const reqBody = {
       long: currTabURL,
       short: short,
@@ -50,7 +54,8 @@ export const Shortener = () => {
         metaTags: pageMetaTags,
         userTags: userTags
       },
-      namespace: workspaceDetails.name
+      namespace: workspaceDetails.name,
+      linksNodeID: linksILink?.nodeid || generateNodeId()
     }
 
     // TODO: think about this because we cannot directly use the extension store,

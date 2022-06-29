@@ -117,7 +117,11 @@ const ContentEditor = () => {
       <EditorInfoBar />
       {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
 
-      <EditorWrapper ref={editorWrapperRef} onMouseUpCapture={onFocusClick}>
+      <EditorWrapper
+        ref={editorWrapperRef}
+        // TODO: uncomment this, currently causing focus moving issue
+        // onMouseUpCapture={onFocusClick}
+      >
         <Editor
           readOnly={readOnly}
           nodeUID={nodeId}

@@ -134,7 +134,6 @@ const generateTheme = (p: ThemePalette): DefaultTheme => {
         },
         hasBlocks: p.hasBlocks
       },
-      // TODO: add support for style.custom.ts files
       custom: p.custom,
       ...p.additionalTheme
     },

@@ -98,8 +98,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const content = block ? [block] : undefined
   const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
 
-  console.log({ isArchived, path, element })
-
   return (
     <SILinkRoot
       {...attributes}
