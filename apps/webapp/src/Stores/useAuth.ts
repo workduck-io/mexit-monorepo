@@ -83,9 +83,10 @@ export const useAuthentication = () => {
             )
           })
         )
-        .then(() => {
-          getArchiveData()
-        })
+        // TODO: uncomment when changes implemented
+        // .then(() => {
+        //   getArchiveData()
+        // })
         .catch((e) => {
           console.error({ e })
           return e.toString() as string
