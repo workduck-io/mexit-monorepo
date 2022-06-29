@@ -70,7 +70,12 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords)
         .then((d: any) => {
-          const userDetails = { email, alias: d.data.alias ?? d.data.name, userID: d.data.id, name: d.data.name }
+          const userDetails = {
+            email,
+            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+            userID: d.data.id,
+            name: d.data.name
+          }
           // const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
@@ -119,7 +124,7 @@ export const useAuthentication = () => {
           const userDetails = {
             email: result.userCred.email,
             userID: result.userCred.userId,
-            alias: d.data.alias ?? d.data.name,
+            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
             name: d.data.name
           }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
@@ -133,7 +138,7 @@ export const useAuthentication = () => {
               email: result.userCred.email,
               name: d.data.name,
               userID: result.userCred.userId,
-              alias: d.data.alias ?? d.data.name
+              alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name
             }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
@@ -155,7 +160,13 @@ export const useAuthentication = () => {
 
   async function registerUserForGoogle(result: any, data: any) {
     mog('Registering user for google', { result })
-    setSensitiveData({ email: result.email, name: data.name, password: '', roles: [], alias: data.alias ?? data.name })
+    setSensitiveData({
+      email: result.email,
+      name: data.name,
+      password: '',
+      roles: [],
+      alias: data.alias ?? data.properties?.alias ?? data.name
+    })
     const uCred: UserCred = {
       username: result.userCred.username,
       email: result.userCred.email,
@@ -197,7 +208,7 @@ export const useAuthentication = () => {
         const userDetails = {
           userID: uCred.userId,
           name: data.name,
-          alias: data.alias ?? data.name,
+          alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
           email: uCred.email
         }
         const workspaceDetails = { id: d.data.id, name: 'WORKSPACE_NAME' }

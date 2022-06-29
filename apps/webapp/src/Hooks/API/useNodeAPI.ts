@@ -123,7 +123,6 @@ export const useApi = () => {
       id: nodeid,
       title: paths.slice(-1)[0],
       type: 'NodeBulkRequest',
-      lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
       data: serializeContent(defaultContent.content, nodeid)
     }
@@ -159,7 +158,6 @@ export const useApi = () => {
     const reqData = {
       id: nodeid,
       title: title,
-      lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content, nodeid),
       tags: getTags(nodeid)

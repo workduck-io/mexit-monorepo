@@ -127,6 +127,7 @@ const Editor: React.FC<EditorProps> = ({
               type: QuickLinkType.mentions
             },
             ...mentionable
+              .filter((m) => m.alias !== undefined)
               .filter((m) => m.userID !== userDetails.userID)
               .map((m) => ({
                 value: m.userID,
