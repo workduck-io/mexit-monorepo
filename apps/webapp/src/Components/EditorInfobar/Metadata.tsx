@@ -8,7 +8,7 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { Label } from '@mexit/shared'
 import { ProfileIcon } from '@mexit/shared'
-import { NodeMetadata, NodeProperties } from '@mexit/core'
+import { mog, NodeMetadata, NodeProperties } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -44,6 +44,8 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
     setMetadata(contentMetadata)
   }, [node, content])
 
+  mog('METADATA OF THIS NODE', { node, metadata })
+
   // mog({ node, metadata })
 
   if (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty) return null
@@ -54,7 +56,7 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
           <DataWrapper interactive={metadata.createdAt !== undefined}>
             {metadata.createdBy !== undefined ? (
               <ProfileIcon>
-                <ProfileImageWithToolTip props={{ email: metadata.createdBy, size: 32 }} placement="bottom" />
+                <ProfileImageWithToolTip props={{ userId: metadata.createdBy, size: 32 }} placement="bottom" />
               </ProfileIcon>
             ) : (
               <Icon icon={timeLine}></Icon>
@@ -76,7 +78,7 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
           <DataWrapper interactive={metadata.updatedAt !== undefined}>
             {metadata.lastEditedBy !== undefined ? (
               <ProfileIcon data-title={metadata.lastEditedBy}>
-                <ProfileImageWithToolTip props={{ email: metadata.lastEditedBy, size: 32 }} placement="bottom" />
+                <ProfileImageWithToolTip props={{ userId: metadata.lastEditedBy, size: 32 }} placement="bottom" />
               </ProfileIcon>
             ) : (
               <Icon icon={timeLine}></Icon>

@@ -7,9 +7,10 @@ import user3Line from '@iconify-icons/ri/user-3-line'
 import styled, { useTheme } from 'styled-components'
 
 import { Centered, CardShadow } from '@mexit/shared'
+import { useAuthStore } from '../../Stores/useAuth'
 
 interface ProfileImageProps {
-  email: string
+  userId: string
   size: number
 }
 
@@ -76,7 +77,11 @@ interface ProfileImageWithToolTipProps {
 }
 
 export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {
-  const { email } = props // eslint-disable-line react/prop-types
+  const { userId } = props // eslint-disable-line react/prop-types
+
+  // *TODO: Remove this after adding mentions, use userId to get user information
+  const user = useAuthStore((store) => store.userDetails)
+
   return (
     <Tippy
       delay={100}
@@ -85,7 +90,7 @@ export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithTo
       appendTo={() => document.body}
       render={(attrs) => (
         <ProfileTooptip tabIndex={-1} {...attrs}>
-          {email}
+          {user?.email || ''}
         </ProfileTooptip>
       )}
     >

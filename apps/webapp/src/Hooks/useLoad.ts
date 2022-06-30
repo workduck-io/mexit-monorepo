@@ -143,6 +143,8 @@ const useLoad = () => {
           // console.log(res)
           const { content, metadata, version } = nodeData
 
+          console.log('CONTENT OF NOTE', { metadata })
+
           if (content) {
             updateEmptyBlockTypes(content, ELEMENT_PARAGRAPH)
             const nodeContent = {

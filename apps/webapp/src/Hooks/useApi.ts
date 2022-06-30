@@ -193,8 +193,8 @@ export const useApi = () => {
         }
       })
       .then((d: any) => {
-        mog('DATA is here', { d })
-        return { data: d.data.data, metadata: extractMetadata(d.data.data), version: d.data.version ?? undefined }
+        mog('DATA is here', { d, meta: extractMetadata(d.data) })
+        return { data: d.data.data, metadata: extractMetadata(d.data), version: d.data.version ?? undefined }
       })
       .catch(console.error)
 
