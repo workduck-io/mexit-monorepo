@@ -14,7 +14,6 @@ import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useLayoutStore } from './useLayoutStore'
 import { useApiStore } from './useApiStore'
-import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
@@ -39,7 +38,6 @@ export const useAuthentication = () => {
 
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
-  const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
@@ -195,7 +193,6 @@ export const useAuthentication = () => {
     clearRequests()
     initContents({})
     resetDataStore()
-    resetPublicNodes()
     clearRecents()
     clearReminders()
     updateSnippets([])

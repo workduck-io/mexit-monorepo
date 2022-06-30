@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import Cookies from 'universal-cookie'
@@ -7,9 +7,9 @@ import { Title } from '@mexit/shared'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/useApi'
-import { usePublicNodeStore, PublicNode } from '../Stores/usePublicNodes'
 import styled from 'styled-components'
 import { EditorViewWrapper } from './EditorView'
+import { PublicNode } from '@mexit/core'
 
 const Heading = styled(Title)`
   margin: 1rem 2rem;
@@ -17,10 +17,10 @@ const Heading = styled(Title)`
 
 const PublicNodeView = () => {
   const nodeId = useParams().nodeId
-  const getPublicNode = usePublicNodeStore((store) => store.getPublicNode)
+
   const { getPublicNodeAPI } = useApi()
   const navigate = useNavigate()
-  const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
+  const [node, setNode] = useState<PublicNode>()
 
   useEffect(() => {
     const cookies = new Cookies()
@@ -38,6 +38,7 @@ const PublicNodeView = () => {
         navigate('/404')
       }
     }
+
     getPublicNodeContent()
   }, [])
 

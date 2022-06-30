@@ -23,11 +23,18 @@ export interface BlockIndexData {
   text: string
 }
 
+export interface PublicNode {
+  id: string
+  title: string
+  content: NodeEditorContent
+  metadata: NodeMetadata
+}
+
 export interface NodeMetadata {
-  createdBy: string
-  createdAt: number
-  lastEditedBy: string
-  updatedAt: number
+  createdBy?: string
+  createdAt?: number
+  lastEditedBy?: string
+  updatedAt?: number
 
   publicAccess?: boolean
   highlighterId?: string
@@ -118,13 +125,6 @@ export interface BlockIndexData {
   blockUID: string
   nodeUID: string
   text: string
-}
-
-export interface NodeMetadata {
-  createdBy: string
-  createdAt: number
-  lastEditedBy: string
-  updatedAt: number
 }
 
 export type NodeEditorContent = any[]

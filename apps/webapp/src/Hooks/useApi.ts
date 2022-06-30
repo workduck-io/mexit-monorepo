@@ -227,8 +227,7 @@ export const useApi = () => {
         }
       })
       .then((resp) => {
-        const publicURL = apiURLs.getNodePublicURL(nodeId)
-        setNodePublic(nodeId, publicURL)
+        setMetadata(nodeId, { publicAccess: true })
         return nodeId
       })
 
@@ -248,7 +247,7 @@ export const useApi = () => {
         }
       })
       .then((resp) => {
-        setNodePrivate(nodeId)
+        setMetadata(nodeId, { publicAccess: false })
         return nodeId
       })
       .catch((error) => {
