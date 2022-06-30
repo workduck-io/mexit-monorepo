@@ -9,6 +9,7 @@ import { useEditorContext } from './useEditorContext'
 import useRaju from './useRaju'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useInternalLinks } from './useInternalLinks'
+import { deserializeContent } from '../Utils/serializer'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
@@ -82,11 +83,15 @@ export function useSaveChanges() {
       if (error && notification) {
         toast.error('An Error Occured. Please try again.')
       } else {
-        const metadata = extractMetadata(request.subType === 'SAVE_NODE' ? message : message.node)
+        const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
+        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
         // setMetadata(message.id, metadata)
+        // console.log('message', message)
+        // setContent(node.nodeid, deserializeContent(message.data))
         dispatch('SET_CONTENT', {
-          nodeid: node.nodeid,
-          content: editorState,
+          nodeid: !bulkCreateRequest ? message.id : message.node.id,
+          content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data),
+          // TODO: fix extract metadata function to get metadata from
           metadata: metadata
         })
 

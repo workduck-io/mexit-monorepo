@@ -1,4 +1,4 @@
-import { convertContentToRawText, generateTempId, mog, NodeMetadata, parseBlock } from '@mexit/core'
+import { convertContentToRawText, generateTempId, mog, NodeMetadata, parseBlock, Properties } from '@mexit/core'
 import { useAuthStore } from '../Hooks/useAuth'
 
 const removeNulls = (obj: any): any => {
@@ -98,8 +98,10 @@ export const serializeContent = (
       nl.id = generateTempId()
     }
 
-    if (elementMetadata) {
+    console.log('check', elementMetadata, el?.highlight)
+    if (elementMetadata && el?.highlight) {
       nl.elementMetadata = generateElementMetadata(elementMetadata)
+      delete el['highlight']
     }
 
     if (el.type) {
@@ -128,8 +130,10 @@ export const serializeContent = (
     }
 
     if (el.children) {
-      nl.children = serializeContent(el.children, nodeid)
+      nl.children = serializeContent(el.children, nodeid, elementMetadata)
     }
+
+    mog('block', { nl, el })
 
     return nl
   })

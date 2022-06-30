@@ -13,6 +13,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
 
 export default function Content() {
   const { selection, searchResults, activeIndex } = useSputlitContext()
@@ -24,6 +25,8 @@ export default function Content() {
   const getSnippet = useSnippets().getSnippet
 
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
+  const { highlighted, clearHighlightedBlockIds } = useBlockHighlightStore()
+  const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
     const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
@@ -41,6 +44,18 @@ export default function Content() {
       // setNodeContent(val)
     }
   }
+
+  useEffect(() => {
+    const highlights = highlighted.editor
+    if (!previewMode && highlights.length > 0) {
+      focusBlock(highlights[highlights.length - 1], node.nodeid)
+      const clearHighlightTimeout = setTimeout(() => {
+        clearHighlightedBlockIds('editor')
+      }, 2000)
+
+      return () => clearTimeout(clearHighlightTimeout)
+    }
+  }, [highlighted, node.nodeid, previewMode])
 
   useEffect(() => {
     const handleSaveKeydown = (event: KeyboardEvent) => {
