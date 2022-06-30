@@ -2,7 +2,7 @@ import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { getMexHTMLDeserializer } from '../../Utils/deserialize'
+import { getDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../../Utils/deserialize'
 import { Editor } from '../Editor'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
@@ -26,7 +26,9 @@ export default function Content() {
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
 
   useEffect(() => {
-    const content = getMexHTMLDeserializer(selection?.html, editor)
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
+
+    // mog('deserialized content', { content })
 
     if (selection?.range && content && selection?.url && previewMode) {
       // setNodeContent([...activeNodeContent, { text: '\n' }, { children: deserializedContent }])
