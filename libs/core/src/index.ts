@@ -31,6 +31,7 @@ export * from './Types/Todo'
 
 export * from './Utils/batchPromise'
 export * from './Utils/content'
+export * from './Utils/dataTransform'
 export * from './Utils/defaults'
 export * from './Utils/editorElements'
 export * from './Utils/events'
