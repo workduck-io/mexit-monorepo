@@ -14,7 +14,7 @@ interface BlockHighlightStore {
   /*
    * The current ids for specific editors to highlight
    */
-  hightlighted: Highlighted
+  highlighted: Highlighted
   addHighlightedBlockId: (id: string, key: keyof Highlighted) => void
   setHighlightedBlockIds: (ids: string[], key: keyof Highlighted) => void
   clearHighlightedBlockIds: (key: keyof Highlighted) => void
@@ -23,46 +23,46 @@ interface BlockHighlightStore {
 }
 
 export const useBlockHighlightStore = create<BlockHighlightStore>((set, get) => ({
-  hightlighted: {
+  highlighted: {
     preview: [],
     editor: []
   },
   addHighlightedBlockId: (id, key) => {
-    const { hightlighted } = get()
-    const newHighlighted = { ...hightlighted }
+    const { highlighted } = get()
+    const newHighlighted = { ...highlighted }
     newHighlighted[key].push(id)
     // mog('addHighlighted', { newHighlighted, id, key })
-    set({ hightlighted: newHighlighted })
+    set({ highlighted: newHighlighted })
   },
   setHighlightedBlockIds: (ids, key) => {
-    const { hightlighted } = get()
-    const newHighlighted = { ...hightlighted }
+    const { highlighted } = get()
+    const newHighlighted = { ...highlighted }
     newHighlighted[key] = ids
     // mog('setHighlighted', { newHighlighted, ids, key })
-    set({ hightlighted: newHighlighted })
+    set({ highlighted: newHighlighted })
   },
   clearHighlightedBlockIds: () => {
-    const oldHighlighted = get().hightlighted
+    const oldHighlighted = get().highlighted
     const newHighlighted = {
       preview: [],
       editor: []
     }
     mog('clearHighlighted', { oldHighlighted })
-    set({ hightlighted: newHighlighted })
+    set({ highlighted: newHighlighted })
   },
   clearAllHighlightedBlockIds: () => {
-    const oldHighlighted = get().hightlighted
+    const oldHighlighted = get().highlighted
     const newHighlighted = {
       preview: [],
       editor: []
     }
     mog('clearAllHighlighted', { oldHighlighted })
-    set({ hightlighted: newHighlighted })
+    set({ highlighted: newHighlighted })
   },
   isBlockHighlighted: (id) => {
-    const { hightlighted } = get()
+    const { highlighted } = get()
     // mog('isBlockHighlighted', { hightlighted, id })
-    return hightlighted.editor.includes(id) || hightlighted.preview.includes(id)
+    return highlighted.editor.includes(id) || highlighted.preview.includes(id)
   }
 }))
 
