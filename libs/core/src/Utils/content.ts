@@ -77,8 +77,7 @@ export const extractMetadata = (data: any): NodeMetadata => {
     updatedAt: data.updatedAt,
     createdBy: data.createdBy,
     createdAt: data.createdAt,
-    saveableRange: data?.elementMetadata?.saveableRange,
-    sourceUrl: data?.elementMetadata?.sourceUrl
+    elementMetadata: data?.elementMetadata
   }
   return removeNulls(metadata)
 }
