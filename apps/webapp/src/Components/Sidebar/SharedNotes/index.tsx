@@ -25,25 +25,19 @@ export const ItemContent = styled.div`
 
 const SharedNotes = () => {
   const sharedNodes = useDataStore((store) => store.sharedNodes)
-
+  console.log('Shared Nodes: ', sharedNodes)
   const { push } = useNavigation()
-  const { getAllSharedNodes } = usePermission()
 
   // const [sharedNodes, setSharedNodes] = useState<SharedNode[]>([])
   const { goTo } = useRouting()
   const theme = useTheme()
   const node = useEditorStore((s) => s.node)
 
-  usePolling()
-
-  useTimout(() => {
-    getAllSharedNodes().then(() => mog('Fetched shared Notes after 15 secs'))
-  }, 15 * 1000)
-
   const onOpenNode = (nodeid: string) => {
     push(nodeid, { fetch: true })
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
+
   return (
     <BList>
       {sharedNodes.length > 0 ? (
@@ -70,7 +64,7 @@ const SharedNotes = () => {
       ) : (
         <Centered>
           <SharedNodeIcon height={22} width={22} fill={theme.colors.text.default} margin="0 0 1rem 0" />
-          <span>No one has shared Notes with you (fucking loser) yet!</span>
+          <span>No one has shared Notes with you yet!</span>
         </Centered>
       )}
     </BList>

@@ -47,6 +47,8 @@ import SharedNotes from './SharedNotes'
 import { useTheme } from 'styled-components'
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import Tabs from '../../Views/Tabs'
+import { useDataStore } from '../../Stores/useDataStore'
+import { usePolling } from '../../Hooks/API/usePolling'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -60,18 +62,18 @@ const Nav = ({ links }: NavProps) => {
   const theme = useTheme()
 
   const [source, target] = useSingleton()
-  const { refreshILinks } = useInternalLinks()
 
   const [openedTab, setOpenedTab] = useState<number>(0)
   const { getAllBookmarks } = useBookmarks()
 
-  useEffect(() => {
-    refreshILinks()
-    const interval = setInterval(() => {
-      refreshILinks()
-    }, 120000)
-    return () => clearInterval(interval)
-  }, [])
+  usePolling()
+  // useEffect(() => {
+  //   refreshILinks()
+  //   const interval = setInterval(() => {
+  //     refreshILinks()
+  //   }, 120000)
+  //   return () => clearInterval(interval)
+  // }, [])
 
   const onNewNote: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault()
