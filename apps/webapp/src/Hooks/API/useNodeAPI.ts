@@ -228,9 +228,9 @@ export const useApi = () => {
     }
   }
 
-  const getNodesByWorkspace = async (workspaceId: string) => {
+  const getNodesByWorkspace = async () => {
     const data = await client
-      .get(apiURLs.getNodesByWorkspace(workspaceId), {
+      .get(apiURLs.getHierarchy, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'

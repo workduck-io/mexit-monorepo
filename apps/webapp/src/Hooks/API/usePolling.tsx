@@ -13,6 +13,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useBookmarks } from '../useBookmarks'
 import { useFetchShareData } from '../useFetchShareData'
 import { useInternalLinks } from '../useInternalLinks'
+import { useApi } from './useNodeAPI'
 
 export const PollingInterval = {
   [PollActions.shared]: 5 * 60 * 1000, // 5 minutes
@@ -25,6 +26,7 @@ export const usePolling = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
 
   const { refreshILinks } = useInternalLinks()
+  const { getNodesByWorkspace } = useApi()
   const { getAllBookmarks } = useBookmarks()
   const { fetchShareData } = useFetchShareData()
 
@@ -44,6 +46,8 @@ export const usePolling = () => {
 
   useIntervalWithTimeout(
     () => {
+      // TODO: commenting this out because it sends so many requests, it blocks the UI and slows down everything
+      // getNodesByWorkspace().then(() => mog('Successfully fetched hierarchy'))
       refreshILinks().then(() => mog('Successfully fetched hierarchy'))
     },
     isAuthenticated && polling.has(PollActions.hierarchy) ? PollingInterval[PollActions.hierarchy] : null

@@ -75,7 +75,7 @@ export const apiURLs = {
   // Workspace
   createWorkspace: `${BASE_API_URL}/workspace`,
   getNodesByWorkspace: (workspaceId: string) => `${BASE_API_URL}/node/workspace/${workspaceId}/namespace/NAMESPACE1`,
-  getWorkspace: (workspace_id: string) => `${BASE_API_URL}/workspace/${workspace_id}`,
+  getHierarchy: `${BASE_API_URL}/workspace/hierarchy`,
 
   // Link Shortener URLs
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
