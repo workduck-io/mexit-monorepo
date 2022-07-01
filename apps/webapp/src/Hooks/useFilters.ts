@@ -61,7 +61,6 @@ export const useFilters = <Item>() => {
 
   const generateTagFilters = (items: GenericSearchResult[]) => {
     const tagsCache = useDataStore.getState().tagsCache
-    // OK
     const currentFilters_ = currentFilters as unknown as SearchFilter<GenericSearchResult>[]
     const filteredItems = currentFilters_.length > 0 ? applyFilters(items, currentFilters_) : items
 

@@ -34,7 +34,7 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { getContent } from '../Stores/useEditorStore'
 import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
-import { useApi } from '../Hooks/useApi'
+import { useApi } from '../Hooks/API/useNodeAPI'
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;

@@ -93,6 +93,8 @@ export type IconButtonProps = {
   singleton?: TippyProps['singleton']
   highlight?: boolean
   shortcut?: string
+  disabled?: boolean
+  transparent?: boolean
 }
 
 export const HeadlessButton = styled.button`
@@ -100,7 +102,18 @@ export const HeadlessButton = styled.button`
   background: transparent;
 `
 
-export const IconButton = ({ icon, title, size, onClick, shortcut, highlight, singleton }: IconButtonProps) => {
+export const IconButton = ({
+  icon,
+  disabled,
+  title,
+  size,
+  onClick,
+  transparent,
+  shortcut,
+  highlight,
+  singleton
+}: IconButtonProps) => {
+  transparent = transparent ?? true
   return (
     <ToolbarTooltip
       content={
@@ -108,14 +121,17 @@ export const IconButton = ({ icon, title, size, onClick, shortcut, highlight, si
       }
       singleton={singleton}
     >
-      <Button transparent onClick={onClick} highlight={highlight}>
+      <Button
+        transparent={transparent ? transparent : true}
+        disabled={disabled}
+        onClick={onClick}
+        highlight={highlight}
+      >
         <Icon icon={icon} height={size} />
       </Button>
     </ToolbarTooltip>
   )
 }
-
-export default IconButton
 
 export interface AsyncButtonProps {
   children?: React.ReactNode

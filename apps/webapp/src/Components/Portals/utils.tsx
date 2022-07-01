@@ -34,7 +34,7 @@ export const ProjectIconMex: React.FC<{
       <MexIcon
         ref={ref as any}
         icon={icon}
-        noHover
+        $noHover
         margin={margin}
         height={size ?? 20}
         width={size ?? 20}

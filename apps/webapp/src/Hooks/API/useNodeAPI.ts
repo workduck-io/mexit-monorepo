@@ -1,25 +1,34 @@
 import { client } from '@workduck-io/dwindle'
 
-import { defaultContent, apiURLs, mog, SEPARATOR, extractMetadata, removeNulls } from '@mexit/core'
+import {
+  defaultContent,
+  apiURLs,
+  mog,
+  SEPARATOR,
+  extractMetadata,
+  removeNulls,
+  WORKSPACE_HEADER,
+  DEFAULT_NAMESPACE,
+  GET_REQUEST_MINIMUM_GAP
+} from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
-import { WORKSPACE_HEADER, DEFAULT_NAMESPACE, GET_REQUEST_MINIMUM_GAP } from '@mexit/core'
-import { isRequestedWithin } from '../Stores/useApiStore'
-import '../Utils/apiClient'
-import { deserializeContent, serializeContent } from '../Utils/serializer'
-import { useInternalLinks } from './useInternalLinks'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useLinks } from './useLinks'
-import { useTags } from './useTags'
+import { useAuthStore } from '../../Stores/useAuth'
+import { isRequestedWithin } from '../../Stores/useApiStore'
+import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { useInternalLinks } from '../useInternalLinks'
+import { useContentStore } from '../../Stores/useContentStore'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useLinks } from '../useLinks'
+import { useTags } from '../useTags'
+import { useNodes } from '../useNodes'
+import '../../Utils/apiClient'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
-  const userDetails = useAuthStore((store) => store.userDetails)
   const { getTags } = useTags()
-  const { getPathFromNodeid, getNodeidFromPath, getTitleFromPath } = useLinks()
+  const { getPathFromNodeid, getTitleFromPath, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
   const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({
@@ -28,6 +37,8 @@ export const useApi = () => {
       checkNodePublic
     })
   )
+
+  const { getSharedNode } = useNodes()
 
   /*
    * Saves new node data in the backend
@@ -113,7 +124,6 @@ export const useApi = () => {
       id: nodeid,
       title: paths.slice(-1)[0],
       type: 'NodeBulkRequest',
-      lastEditedBy: useAuthStore.getState().userDetails.email,
       namespaceIdentifier: 'NAMESPACE1',
       data: serializeContent(defaultContent.content, nodeid)
     }
@@ -144,23 +154,28 @@ export const useApi = () => {
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[], nodePath?: string) => {
-    const path = nodePath?.split(SEPARATOR) || getPathFromNodeid(nodeid).split(SEPARATOR)
+  const saveDataAPI = async (nodeid: string, content: any[], isShared = false) => {
+    const { title, path } = getNodePathAndTitle(nodeid)
     const reqData = {
       id: nodeid,
-      title: path.slice(-1)[0],
-      lastEditedBy: useAuthStore.getState().userDetails.email,
+      title: title,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content, nodeid),
       tags: getTags(nodeid)
     }
 
-    if (path.length > 1) {
-      reqData['referenceID'] = getNodeidFromPath(path.slice(0, -1).join(SEPARATOR))
+    const parentNodeId = getNodeParentIdFromPath(path)
+    if (parentNodeId) reqData['referenceID'] = parentNodeId
+
+    if (isShared) {
+      const node = getSharedNode(nodeid)
+      if (node.currentUserAccess[nodeid] === 'READ') return
     }
 
+    const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
+
     const data = await client
-      .post(apiURLs.createNode, reqData, {
+      .post(url, reqData, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
@@ -177,16 +192,16 @@ export const useApi = () => {
     return data
   }
 
-  const getDataAPI = async (nodeid: string) => {
-    const url = apiURLs.getNode(nodeid)
-    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
+  const getDataAPI = async (nodeid: string, isShared = false) => {
+    const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
+    mog('GetNodeOptions', { isShared, url })
+    if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
     }
 
-    // console.warn('\n\n\n\nAPI has not been requested before, requesting\n\n\n\n')
     const res = await client
-      .get(apiURLs.getNode(nodeid), {
+      .get(url, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
@@ -195,7 +210,9 @@ export const useApi = () => {
       .then((d: any) => {
         return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
       })
-      .catch(console.error)
+      .catch((e) => {
+        console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
+      })
 
     if (res) {
       return { content: deserializeContent(res.data), metadata: res.metadata ?? undefined, version: res.version }

@@ -1,12 +1,25 @@
-import Board from '@asseinfo/react-kanban'
-import trashIcon from '@iconify/icons-codicon/trash'
-import { Icon } from '@iconify/react'
 import React, { useEffect, useMemo, useRef } from 'react'
+import tinykeys from 'tinykeys'
+import Board from '@asseinfo/react-kanban'
+import { Icon } from '@iconify/react'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
 import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
-import tinykeys from 'tinykeys'
+import trashIcon from '@iconify/icons-codicon/trash'
+
 import { getNextStatus, getPrevStatus, PriorityType, TodoType, mog } from '@mexit/core'
-import { PageContainer, Button, Heading } from '@mexit/shared'
+import {
+  ShortcutToken,
+  ShortcutTokens,
+  StyledTasksKanban,
+  TaskCard,
+  TaskColumnHeader,
+  TaskHeader,
+  Heading,
+  Button,
+  PageContainer,
+  Title
+} from '@mexit/shared'
+
 import Infobox from '../Components/Infobox'
 import { DisplayShortcut, ShortcutMid } from '../Components/Shortcuts'
 import { TasksHelp } from '../Data/defaultText'
@@ -14,10 +27,8 @@ import useLoad from '../Hooks/useLoad'
 import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useRecentsStore } from '../Stores/useRecentsStore'
-import { Title } from '../../../../libs/shared/src/Style/Elements'
 import SearchFilters from './SearchFilters'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
-import { ShortcutToken, ShortcutTokens, StyledTasksKanban, TaskCard, TaskColumnHeader, TaskHeader } from '@mexit/shared'
 import { TodoBase } from '../Components/Todo/Todo'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useDataStore } from '../Stores/useDataStore'

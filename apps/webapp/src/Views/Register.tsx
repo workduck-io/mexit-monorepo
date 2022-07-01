@@ -12,7 +12,7 @@ import { CenteredColumn } from '@mexit/shared'
 import { BackCard, FooterCard } from '@mexit/shared'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { Title } from '@mexit/shared'
-import { EMAIL_REG, PASSWORD } from '../Utils/constants'
+import { EMAIL_REG, PASSWORD, ALIAS_REG } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
 import { Button } from '@mexit/shared'
 import Analytics from '../Utils/analytics'
@@ -109,6 +109,19 @@ export const Register = () => {
                     pattern: EMAIL_REG
                   })
                 }}
+                errors={regErrors}
+              ></InputFormError>
+              <InputFormError
+                name="alias"
+                label="Alias"
+                inputProps={{
+                  placeholder: 'Ex: CoolGuy',
+                  ...registerForm.register('alias', {
+                    required: true,
+                    pattern: ALIAS_REG
+                  })
+                }}
+                additionalInfo="Only Alphanumeric as content, and -_ as separators allowed"
                 errors={regErrors}
               ></InputFormError>
 

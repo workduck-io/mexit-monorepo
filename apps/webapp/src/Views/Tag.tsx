@@ -179,10 +179,12 @@ const Tag = () => {
         <Results view={View.Card}>
           {transition((styles, nodeid, _t, _i) => {
             const con = contents[nodeid]
-            const path = getPathFromNodeid(nodeid)
+            const path = getPathFromNodeid(nodeid, true)
             const content = con ? con.content : defaultContent.content
             return (
               <Result
+                // eslint-disable-next-line
+                // @ts-ignore
                 onClick={() => {
                   loadNode(nodeid)
                   goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)

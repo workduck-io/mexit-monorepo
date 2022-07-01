@@ -13,6 +13,7 @@ import tinykeys from 'tinykeys'
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { SnippetSaverButton } from '../Saver'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 type Inputs = {
@@ -53,15 +54,6 @@ const SnippetEditor = () => {
     const val = getBufferVal(snippet?.id)
     return { title: val?.title || snippet?.title || '', isTemplate: val?.isTemplate || snippet?.isTemplate || false }
   }
-
-  const isSnippetTemplate = useMemo(() => {
-    const val = getBufferVal(snippet?.id)
-    console.log('Getting whether snippet is a template or not', { val, snippet })
-    if (val && val.isTemplate !== undefined) {
-      return val.isTemplate
-    }
-    return snippet?.isTemplate || false
-  }, [snippet, buffer])
 
   const onChangeSave = (val: any[]) => {
     mog('onChangeSave', { val })

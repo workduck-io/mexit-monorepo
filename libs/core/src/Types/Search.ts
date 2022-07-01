@@ -1,5 +1,5 @@
 import { Document } from '@workduck-io/flexsearch'
-import { ILink, Tag, NodeContent, LinkCache, TagsCache } from './Editor'
+import { ILink, Tag, NodeContent, LinkCache, TagsCache, SharedNode } from './Editor'
 import { Reminder } from './Reminders'
 import { Snippet } from './Snippet'
 import { TodosType } from './Todo'
@@ -21,6 +21,7 @@ export interface PersistentData {
   todos: TodosType
   reminders: Reminder[]
   snippets: Snippet[]
+  sharedNodes: SharedNode[]
 }
 export interface GenericSearchData {
   id: string
@@ -36,6 +37,7 @@ export interface SearchIndex {
   snippet: Document<GenericSearchData> | null
   archive: Document<GenericSearchData> | null
   template: Document<GenericSearchData> | null
+  shared: Document<GenericSearchData> | null
 }
 
 export interface GenericSearchResult {

@@ -26,6 +26,7 @@ export const dataStoreConstructor = (set, get) => ({
   bookmarks: [],
   archive: [],
   publicNodes: {},
+  sharedNodes: [],
   slashCommands: { default: defaultCommands, internal: [] },
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
@@ -263,7 +264,13 @@ export const dataStoreConstructor = (set, get) => ({
   },
   checkNodePublic: (nodeId) => {
     return get().publicNodes?.[nodeId]
-  }
+  },
+
+  setSharedNodes: (sharedNodes) => {
+    set({ sharedNodes })
+  },
+
+  getSharedNodes: () => get().sharedNodes
 })
 
 export const getLevel = (path: string) => path.split(SEPARATOR).length

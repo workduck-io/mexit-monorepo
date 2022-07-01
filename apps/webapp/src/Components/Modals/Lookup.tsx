@@ -6,7 +6,7 @@ import tinykeys from 'tinykeys'
 import { generateNodeId, mog } from '@mexit/core'
 
 import { Input } from '@mexit/shared'
-import { useApi } from '../../Hooks/useApi'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -98,7 +98,6 @@ const Lookup = () => {
   const { addNodeOrNodesFast } = useNewNodes()
 
   const handleCreateItem = async (inputValue: QuickLink) => {
-    console.log('Input Value: ', inputValue)
     const { id } = addNodeOrNodesFast(inputValue.text, true)
     closeModal()
     mog('Created Hierarchy: ', { nodeid: id, inputValue })

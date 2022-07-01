@@ -30,18 +30,14 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   margin: ${({ theme }) => theme.spacing.small} 0;
   padding: 1px;
-
   transition: transform 0.2s ease-in;
-
   ${({ selected }) =>
     selected
       ? css`
           border: 1px solid ${({ theme }) => theme.colors.primary};
           background: none;
-
           padding: 0px;
           /* transform: translateY(-5px); */
         `
@@ -50,11 +46,17 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
             transform: translateY(-5px);
           }
         `}
-
   box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray[8]};
   /* background: ${({ theme }) => theme.colors.background.card}; */
   border-radius: ${({ theme: { borderRadius } }) => `${borderRadius.small}`};
+  svg {
+    width: 16px;
+    height: 16px;
+    margin-left: ${({ theme }) => theme.spacing.small};
+    fill: ${({ theme }) => theme.colors.gray[4]};
+  }
 `
+
 export const InlineBlockHeading = styled.div`
   color: ${({ theme }) => theme.colors.text.disabled};
   font-size: large;

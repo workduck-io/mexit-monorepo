@@ -7,7 +7,7 @@ import { ToolbarProps } from '@udecode/plate'
 export type BalloonToolbarStyleProps = BalloonToolbarProps
 
 export interface BalloonToolbarStyling {
-  popperOptions?: Partial<UsePopperPositionOptions>
+  $popperOptions?: Partial<UsePopperPositionOptions>
 
   /**
    * Show an arrow pointing to up or down depending on the direction.

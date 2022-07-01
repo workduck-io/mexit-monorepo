@@ -1,10 +1,8 @@
-import { mog } from '@mexit/core'
-import { useCombobox } from 'downshift'
 import React, { useState } from 'react'
-import { SearchFilter } from '../Hooks/useFilters'
-import { StyledMenu, Input } from '@mexit/shared'
-import { SearchFilterInputWrapper } from '@mexit/shared'
-import { StyledCombobox, Suggestion } from '@mexit/shared'
+import { useCombobox } from 'downshift'
+
+import { mog, SearchFilter } from '@mexit/core'
+import { StyledMenu, Input, SearchFilterInputWrapper, StyledCombobox, Suggestion } from '@mexit/shared'
 
 interface SearchFilterInputProps<Item> {
   items: SearchFilter<Item>[]

@@ -1,10 +1,11 @@
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
-import { Icon } from '@iconify/react'
 import React from 'react'
+import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify-icons/ri/file-list-2-line'
+import shareLine from '@iconify/icons-ri/share-line'
 
-import { MainHeader, Title, getInitialNode } from '@mexit/shared'
+import { GenericSearchResult, defaultContent, mog, NodeType, convertContentToRawText } from '@mexit/core'
+import { MainHeader, getInitialNode, TitleText, ResultCardFooter, Title } from '@mexit/shared'
 
-import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
 import { useRecentsStore } from '../Stores/useRecentsStore'
@@ -26,18 +27,21 @@ import { SplitType } from './SplitView'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import Backlinks from '../Components/Editor/Backlinks'
 import Metadata from '../Components/EditorInfobar/Metadata'
-import TagsRelated from '../Components/Editor/TagsRelated'
+import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
-import { GenericSearchResult, defaultContent, parseBlock, mog } from '@mexit/core'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useContentStore } from '../Stores/useContentStore'
 import { useNodes } from '../Hooks/useNodes'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useTags } from '../Hooks/useTags'
+import { SearchHelp } from '../Data/defaultText'
+import Infobox from '../Components/Infobox'
 
 const Search = () => {
   const { loadNode } = useLoad()
-  const { queryIndex } = useSearch()
+  const { queryIndexWithRanking } = useSearch()
   const contents = useContentStore((store) => store.contents)
   const ilinks = useDataStore((store) => store.ilinks)
   const initialResults = ilinks
@@ -48,8 +52,9 @@ const Search = () => {
       })
     )
     .slice(0, 12)
-  const { getNode } = useNodes()
+  const { getNode, getNodeType } = useNodes()
   const { goTo } = useRouting()
+  const { hasTags } = useTags()
   const {
     applyCurrentFilters,
     addCurrentFilter,
@@ -62,11 +67,12 @@ const Search = () => {
   } = useFilters<GenericSearchResult>()
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await queryIndex('node', newSearchTerm)
-    const nodeids = useDataStore.getState().ilinks.map((l) => l.nodeid)
-    const filRes = res.filter((r) => nodeids.includes(r.id))
-    mog('Node Search Results', { filRes })
-    // mog('search', { res, filRes })
+    const res = await queryIndexWithRanking(['shared', 'node'], newSearchTerm)
+    const filRes = res.filter((r) => {
+      const nodeType = getNodeType(r.id)
+      return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
+    })
+    mog('search', { res, filRes })
     return filRes
   }
 
@@ -87,30 +93,48 @@ const Search = () => {
     goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
-  // Forwarding ref to focus on the selected result
+  const onDoubleClick = (e: React.MouseEvent<HTMLElement>, item: GenericSearchResult) => {
+    e.preventDefault()
+    const nodeid = item.id
+    if (e.detail === 2) {
+      loadNode(nodeid, { highlightBlockId: item.blockId })
+      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    }
+  }
+
   const BaseItem = (
     { item, splitOptions, ...props }: RenderItemProps<GenericSearchResult>,
     ref: React.Ref<HTMLDivElement>
   ) => {
-    const node = getNode(item.id)
-    // mog('Baseitem', { item, node })
+    const node = getNode(item.id, true)
+    const nodeType = getNodeType(node.nodeid)
     if (!item || !node) {
+      // eslint-disable-next-line
+      // @ts-ignore
       return <Result {...props} ref={ref}></Result>
     }
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
-    const icon = node?.icon ?? fileList2Line
+    const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
     const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
+    const isTagged = hasTags(edNode.nodeid)
     const id = `${item.id}_ResultFor_Search`
+    // mog('Baseitem', { item, node, icon, nodeType })
     if (props.view === View.Card) {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultHeader active={item.matchField?.includes('title')}>
+            <Icon icon={icon} />
             <ResultTitle>{node.path}</ResultTitle>
           </ResultHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')}>
-            <PreviewEditor content={content} editorId={`editor_${item.id}`} />
+            <EditorPreviewRenderer content={content} editorId={`editor_${item.id}`} />
           </SearchPreviewWrapper>
+          {isTagged && (
+            <ResultCardFooter>
+              <TagsRelatedTiny nodeid={edNode.nodeid} />
+            </ResultCardFooter>
+          )}
         </Result>
       )
     } else if (props.view === View.List) {
@@ -120,7 +144,7 @@ const Search = () => {
             <Icon icon={icon} />
             <ResultMain>
               <ResultTitle>{node.path}</ResultTitle>
-              <ResultDesc>{parseBlock(content, ' ')}</ResultDesc>
+              <ResultDesc>{item.text ?? convertContentToRawText(content, ' ')}</ResultDesc>
             </ResultMain>
             {(!splitOptions || splitOptions.type === SplitType.NONE) && (
               <ResultMetaData>
@@ -138,7 +162,7 @@ const Search = () => {
     const nFilters = generateNodeSearchFilters(results)
     setFilters(nFilters)
     const filtered = applyCurrentFilters(results)
-    mog('filtered', { filtered, nFilters, currentFilters, results })
+    // mog('filtered', { filtered, nFilters, currentFilters, results })
     return filtered
   }
 
@@ -160,18 +184,24 @@ const Search = () => {
     if (item) {
       const con = contents[item.id]
       const content = con ? con.content : defaultContent.content
-      const node = getNode(item.id)
-      const icon = node?.icon ?? fileList2Line
+      const node = getNode(item.id, true)
+      const nodeType = getNodeType(node.nodeid)
+      const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
       const edNode = { ...node, title: node.path, id: node.nodeid }
-      mog('RenderPreview', { item, content, node })
+      // mog('RenderPreview', { item, content, node })
       return (
         <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
-          <Title>
-            {node.path}
+          <Title onMouseUp={(e) => onDoubleClick(e, item)}>
             <Icon icon={icon} />
+            <TitleText>{node.path}</TitleText>
+            <Metadata fadeOnHover={false} node={edNode} />
           </Title>
-          <Metadata fadeOnHover={false} node={edNode} />
-          <PreviewEditor content={content} editorId={`SearchPreview_editor_${item.id}`} />
+          <EditorPreviewRenderer
+            content={content}
+            blockId={item.blockId}
+            onDoubleClick={(e) => onDoubleClick(e, item)}
+            editorId={`SearchPreview_editor_${item.id}`}
+          />
           <Backlinks nodeid={node.nodeid} />
           <TagsRelated nodeid={node.nodeid} />
         </SplitSearchPreviewWrapper>
@@ -180,7 +210,7 @@ const Search = () => {
       return (
         <SplitSearchPreviewWrapper>
           <Title></Title>
-          <PreviewEditor content={defaultContent.content} editorId={`SearchPreview_editor_EMPTY`} />
+          <EditorPreviewRenderer content={defaultContent.content} editorId={`SearchPreview_editor_EMPTY`} />
         </SplitSearchPreviewWrapper>
       )
   }
@@ -189,6 +219,7 @@ const Search = () => {
     <SearchContainer>
       <MainHeader>
         <Title>Search</Title>
+        <Infobox text={SearchHelp} />
       </MainHeader>
       <SearchView
         id="searchStandard"

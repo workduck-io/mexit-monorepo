@@ -15,6 +15,32 @@ import { fuzzySearch } from '../../../Utils/fuzzysearch'
 
 export const CreateNewPrefix = `Create `
 
+export const getNewItem = (ct: ComboboxType, searchTerm: string) => {
+  let type = QuickLinkType.backlink
+  let createNewPrefix = CreateNewPrefix
+
+  switch (ct.cbKey) {
+    case 'tag': {
+      type = QuickLinkType.tags
+      break
+    }
+    case 'mention': {
+      type = QuickLinkType.mentions
+      createNewPrefix = 'Invite '
+      break
+    }
+  }
+
+  return {
+    key: '__create_new',
+    icon: 'ri:add-circle-line',
+    type,
+    data: true,
+    prefix: createNewPrefix,
+    text: searchTerm
+  }
+}
+
 export const getCommandExtended = (search: string, keys: Record<string, ComboboxType>) => {
   const extendedKeys = keys['slash_command'].data.filter((ct) => ct.extended)
   const extendedCommands = extendedKeys
@@ -103,7 +129,8 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
           icon: item.icon ?? ct.icon ?? undefined,
           text: item.text,
           extended: item.extended,
-          type
+          type,
+          additional: item.additional
         })
 
       return acc
@@ -120,14 +147,7 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
       !isInternalCommand(searchTerm) &&
       !isReservedOrClash(searchTerm, dataKeys)
     ) {
-      items.unshift({
-        key: '__create_new',
-        icon: 'ri:add-circle-line',
-        type: ct.cbKey === 'tag' ? QuickLinkType.tags : QuickLinkType.backlink,
-        data: true,
-        prefix: CreateNewPrefix,
-        text: searchTerm
-      })
+      items.unshift(getNewItem(ct, searchTerm))
     }
 
     // mog('items', { items })

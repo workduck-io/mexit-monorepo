@@ -31,6 +31,7 @@ import { useTreeStore } from '../../Stores/useTreeStore'
 import { getNameFromPath } from '@mexit/shared'
 import { mog, SEPARATOR } from '@mexit/core'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 
 interface GetIconProps {
   item: TreeItem
@@ -252,6 +253,12 @@ const Tree = ({ initTree }: TreeProps) => {
       <TreeContextMenu />
     </>
   )
+}
+
+export const TreeContainer = () => {
+  const initTree = useTreeFromLinks()
+
+  return <Tree initTree={initTree} />
 }
 
 export default Tree

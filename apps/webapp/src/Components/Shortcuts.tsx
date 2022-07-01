@@ -54,13 +54,14 @@ const TooltipShortcut = styled.span`
 `
 export interface TooltipTitleWithShortcutProps {
   title: string
-  shortcut: string
+  shortcut?: string
 }
 
 export const TooltipTitleWithShortcut = ({ title, shortcut }: TooltipTitleWithShortcutProps) => {
   return (
     <TooltipShortcut>
-      {title} <DisplayShortcut shortcut={shortcut} />
+      {title}
+      {shortcut && <DisplayShortcut shortcut={shortcut} />}
     </TooltipShortcut>
   )
 }

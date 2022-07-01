@@ -7,7 +7,8 @@ import { useSnippets } from './useSnippets'
 import { useDataSaverFromContent } from './useSave'
 import { getContent } from '../Stores/useEditorStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useApi } from './useApi'
+import { useApi } from './API/useNodeAPI'
+import { useNodes } from './useNodes'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>
@@ -30,6 +31,7 @@ export const useBufferStore = create<BufferStore>((set, get) => ({
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)
   const clearBuffer = useBufferStore((s) => s.clear)
+  const { isSharedNode } = useNodes()
 
   const addOrUpdateValBuffer = (nodeid: string, val: NodeEditorContent) => {
     add2Buffer(nodeid, val)
@@ -46,8 +48,10 @@ export const useEditorBuffer = () => {
       .map(([nodeid, val]) => {
         const content = getContent(nodeid)
         const res = areEqual(content.content, val)
+        const isShared = isSharedNode(nodeid)
+
         if (!res) {
-          saveEditorValueAndUpdateStores(nodeid, val, true)
+          saveEditorValueAndUpdateStores(nodeid, val, { saveApi: true, isShared })
         }
         return !res
       })

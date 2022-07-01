@@ -8,7 +8,7 @@ import Editor from './Editor'
 import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
 import { StyledEditor, EditorWrapper, Title } from '@mexit/shared'
 import PublicNodeMetadata from '../EditorInfobar/PublicNodeMetadata'
-import { useApi } from '../../Hooks/useApi'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
 
 const PublicNodeEditor = ({ nodeId, node }) => {

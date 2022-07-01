@@ -2,7 +2,8 @@ import React, { useMemo } from 'react'
 import { useSelected } from 'slate-react'
 import styled from 'styled-components'
 
-import { RootElement } from '@mexit/shared'
+import { mog, NodeType } from '@mexit/core'
+import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
 import { useContentStore } from '../../../Stores/useContentStore'
 import useArchive from '../../../Hooks/useArchive'
@@ -20,6 +21,7 @@ import {
   StyledInlineBlockPreview
 } from '../../Styles/InlineBlock'
 import { getBlock } from '../../../Utils/parseData'
+import { useNodes } from '../../../Hooks/useNodes'
 
 const StyledArchiveText = styled.text`
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -30,10 +32,12 @@ const StyledArchiveText = styled.text`
 const InlineBlock = (props: any) => {
   const { push } = useNavigation()
   const { getPathFromNodeid } = useLinks()
+  const { getNodeType } = useNodes()
   const getContent = useContentStore((store) => store.getContent)
-  const path = useMemo(() => getPathFromNodeid(props.element.value), [props.element.value])
+  const path = useMemo(() => getPathFromNodeid(props.element.value, true), [props.element.value])
   const nodeid = props.element.value
   const blockId = props.element.blockId
+  const nodeType = getNodeType(nodeid)
 
   const content = useMemo(() => {
     if (blockId) {
@@ -55,19 +59,30 @@ const InlineBlock = (props: any) => {
   }
 
   const selected = useSelected()
+  mog('InlineBlock', { nodeid, selected, content, nodeType, path })
 
   return (
     <RootElement {...props.attributes}>
       <div contentEditable={false}>
         <StyledInlineBlock selected={selected} data-tour="mex-onboarding-inline-block">
           <FlexBetween>
-            <InlineFlex>
-              <InlineBlockHeading>{blockId ? 'Within:' : 'From:'}</InlineBlockHeading>
-              <InlineBlockText>{path}</InlineBlockText>
-            </InlineFlex>
-            {archived(nodeid) ? <StyledArchiveText>Archived</StyledArchiveText> : <Chip onClick={openNode}>Open</Chip>}
+            {nodeType !== NodeType.MISSING && (
+              <InlineFlex>
+                <InlineBlockHeading>{blockId ? 'Within:' : 'From:'}</InlineBlockHeading>
+                {nodeType === NodeType.SHARED && <SharedNodeIcon />}
+                <InlineBlockText>{path}</InlineBlockText>
+              </InlineFlex>
+            )}
+            {
+              {
+                [NodeType.ARCHIVED]: <StyledArchiveText>Archived</StyledArchiveText>,
+                [NodeType.MISSING]: <StyledArchiveText>Private/Missing</StyledArchiveText>,
+                [NodeType.SHARED]: <Chip onClick={openNode}>Open</Chip>,
+                [NodeType.DEFAULT]: <Chip onClick={openNode}>Open</Chip>
+              }[nodeType]
+            }
           </FlexBetween>
-          {!archived(nodeid) && (
+          {(nodeType === NodeType.SHARED || nodeType === NodeType.DEFAULT) && (
             <StyledInlineBlockPreview>
               <EditorPreviewRenderer content={content} editorId={`__preview__${blockId ?? nodeid}`} />
             </StyledInlineBlockPreview>
