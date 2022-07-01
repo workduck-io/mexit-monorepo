@@ -1,13 +1,15 @@
-import { createNodesHOC, isCollapsed, useEditorState } from '@udecode/plate-core'
-import { ReactEditor, useFocused, useSelected } from 'slate-react'
-
-import Block from './Block'
-import { BlockOptionProps } from '../../Types/Block'
-import { Editor } from 'slate'
 import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 import { transparentize } from 'polished'
-import useBlockStore, { BlockType } from '../../../Stores/useBlockStore'
+import { Editor } from 'slate'
+import { ReactEditor, useFocused, useSelected } from 'slate-react'
+import { createNodesHOC, isCollapsed, useEditorState } from '@udecode/plate-core'
+
+import { BlockType } from '@mexit/core'
+
+import Block from './Block'
+import { BlockOptionProps } from '../../Types/Block'
+import useBlockStore from '../../../Stores/useBlockStore'
 
 const BlockOptions = (props: BlockOptionProps) => {
   const { children, element } = props

@@ -1,7 +1,11 @@
 import React, { useMemo } from 'react'
+import { nanoid } from 'nanoid'
+import { startCase } from 'lodash'
+import { Icon } from '@iconify/react'
 import filterOffLine from '@iconify-icons/ri/filter-off-line'
 import filter2Line from '@iconify-icons/ri/filter-2-line'
-import { FilterKey, SearchFilter } from '../Hooks/useFilters'
+
+import { mog, FilterKey, SearchFilter } from '@mexit/core'
 import {
   SearchFilterCancel,
   SearchFilterCategoryLabel,
@@ -14,13 +18,10 @@ import {
   SearchFilterStyled,
   SearchFilterWrapper
 } from '@mexit/shared'
-import { startCase } from 'lodash'
-import { Icon } from '@iconify/react'
+
 import Infobox from '../Components/Infobox'
-import { nanoid } from 'nanoid'
 import { SearchFiltersHelp } from '../Data/defaultText'
 import SearchFilterInput from '../Components/SearchFilterInput'
-import { mog } from '@mexit/core'
 
 interface SearchFiltersProps<Item> {
   result?: any

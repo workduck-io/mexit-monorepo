@@ -1,9 +1,10 @@
-import { AccessLevel } from '../../types/mentions'
 import React from 'react'
 import { Icon } from '@iconify/react'
 import adminLine from '@iconify/icons-ri/admin-line'
 import eyeLine from '@iconify/icons-ri/eye-line'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
+
+import { AccessLevel } from '@mexit/core'
 
 interface AccessIconProps {
   access: AccessLevel

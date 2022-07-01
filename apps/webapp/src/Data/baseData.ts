@@ -67,7 +67,7 @@ export const DefaultPersistentData: PersistentData = {
   baseNodeId: '@',
 
   ilinks: [...linksWithSpecialContent, ...links],
-  tags: [{ id: '1', text: 'mex' }],
+  tags: [{ value: 'mex' }],
 
   contents,
 
