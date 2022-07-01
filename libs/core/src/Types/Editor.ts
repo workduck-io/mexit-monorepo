@@ -186,6 +186,7 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   tags = 'Tags',
+  action = 'Actions',
   mentions = 'Mentions'
 }
 

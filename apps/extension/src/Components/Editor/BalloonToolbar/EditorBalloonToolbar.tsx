@@ -63,7 +63,7 @@ const BallonMarkToolbarButtons = () => {
 
   return (
     <BalloonToolbar
-      popperOptions={popperOptions}
+      $popperOptions={popperOptions}
       theme={theme}
       arrow={arrow}
       portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
