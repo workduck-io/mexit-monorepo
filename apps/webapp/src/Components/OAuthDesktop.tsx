@@ -18,7 +18,6 @@ export default function OAuthDesktop() {
     const codeP = URLparams.get('code')
     setCode(codeP)
     const mexProtocolURL = `mex://localhost:3333/?code=${codeP}`
-    console.log('Mex Protocol URL: ', mexProtocolURL)
     window.open(mexProtocolURL, '_self')
   }, [])
 

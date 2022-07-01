@@ -2,6 +2,8 @@ import { sub } from 'date-fns'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { mog } from '@mexit/core'
+
 interface RequestData {
   time: number
   url: string
@@ -45,6 +47,9 @@ export const isRequestedWithin = (minutes: number, url: string) => {
 
   const requests = useApiStore.getState().requests
   const request = requests[url]
+
+  mog('isRequestedWithinStore', { request, requests, backMinutes })
+
   if (!request) return false
   return request.time > backMinutes.getTime()
 }

@@ -55,15 +55,6 @@ const SnippetEditor = () => {
     return { title: val?.title || snippet?.title || '', isTemplate: val?.isTemplate || snippet?.isTemplate || false }
   }
 
-  const isSnippetTemplate = useMemo(() => {
-    const val = getBufferVal(snippet?.id)
-    console.log('Getting whether snippet is a template or not', { val, snippet })
-    if (val && val.isTemplate !== undefined) {
-      return val.isTemplate
-    }
-    return snippet?.isTemplate || false
-  }, [snippet, buffer])
-
   const onChangeSave = (val: any[]) => {
     mog('onChangeSave', { val })
     if (val) {

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import styled from 'styled-components'
 
+import { mog } from '@mexit/core'
 import { Title } from '@mexit/shared'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
@@ -31,7 +32,7 @@ const PublicNodeView = () => {
         const node = await getPublicNodeAPI(nodeId)
         setNode({ ...node, id: nodeId })
       } catch (error) {
-        console.log('Error occured in get public: ', error)
+        mog('ErrorOccuredWhenFetchingPublicNode', { error })
         navigate('/404')
       }
     }

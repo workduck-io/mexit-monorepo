@@ -19,7 +19,6 @@ const GenericOAuthRedirect = () => {
 
   useEffect(() => {
     if (!allowedServices.find((i) => i === serviceName)) {
-      console.log('Allowed Service: ', serviceName)
       navigate('/404')
     }
   }, [serviceName, navigate])

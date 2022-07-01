@@ -21,6 +21,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useLinks } from '../useLinks'
 import { useTags } from '../useTags'
 import { useNodes } from '../useNodes'
+import '../../Utils/apiClient'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -193,6 +194,7 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false) => {
     const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
+    mog('GetNodeOptions', { isShared, url })
     if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return

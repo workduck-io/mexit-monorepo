@@ -1,8 +1,8 @@
-import React from 'react'
-import { useTheme } from 'styled-components'
+import React, { useEffect } from 'react'
+import styled, { useTheme } from 'styled-components'
 
 import { mog, SharedNode } from '@mexit/core'
-import { Centered, SharedNodeIcon, useTimout } from '@mexit/shared'
+import { Centered, ItemTitle, SharedNodeIcon, useTimout } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
@@ -12,8 +12,20 @@ import { BList, SItem, SItemContent } from './styles'
 import { usePermission } from '../../../Hooks/API/usePermission'
 import { usePolling } from '../../../Hooks/API/usePolling'
 
+export const ItemContent = styled.div`
+  cursor: pointer;
+  padding: 8px 0px;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.tiny};
+`
+
 const SharedNotes = () => {
   const sharedNodes = useDataStore((store) => store.sharedNodes)
+
   const { push } = useNavigation()
   const { getAllSharedNodes } = usePermission()
 
@@ -32,7 +44,6 @@ const SharedNotes = () => {
     push(nodeid, { fetch: true })
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
-
   return (
     <BList>
       {sharedNodes.length > 0 ? (
@@ -44,10 +55,12 @@ const SharedNotes = () => {
                 key={`shared_notes_link_${sharedNode.nodeid}`}
                 onClick={() => onOpenNode(sharedNode.nodeid)}
               >
-                <SItemContent>
-                  <SharedNodeIcon />
-                  {sharedNode.path}
-                </SItemContent>
+                <ItemContent>
+                  <ItemTitle>
+                    <SharedNodeIcon />
+                    <span>{sharedNode.path}</span>
+                  </ItemTitle>
+                </ItemContent>
               </SItem>
             )
           })}
@@ -56,8 +69,8 @@ const SharedNotes = () => {
         </>
       ) : (
         <Centered>
-          <SharedNodeIcon height={22} width={22} fill={theme.colors.text.heading} margin="0 0 1rem 0" />
-          <span>No one has shared Notes with you yet!</span>
+          <SharedNodeIcon height={22} width={22} fill={theme.colors.text.default} margin="0 0 1rem 0" />
+          <span>No one has shared Notes with you (fucking loser) yet!</span>
         </Centered>
       )}
     </BList>

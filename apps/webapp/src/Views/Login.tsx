@@ -39,7 +39,6 @@ export const Login = () => {
           source: 'Browser Extension'
         })
         Analytics?.identify(s.data.email)
-        console.log('Login Success!')
       })
       .catch((e) => {
         toast('An error Occured. Please Try Again Later')

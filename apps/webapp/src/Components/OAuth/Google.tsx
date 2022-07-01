@@ -25,7 +25,6 @@ const GoogleOAuth = () => {
     if (code) {
       setAsyncLocal()
         .catch((err) => {
-          console.log('Error aaya: ', err)
           toast('Something went wrong!')
         })
         .finally(() => {

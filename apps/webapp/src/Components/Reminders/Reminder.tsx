@@ -196,17 +196,6 @@ const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: P
       </ReminderTime>
       <Title>{reminder.title}</Title>
       {reminder.description && <Description>{reminder.description}</Description>}
-      {/* {reminder.todo && (
-        <NotificationTodo
-          oid="ReminderTodo"
-          isNotification={isNotification}
-          reminder={reminder}
-          todo={reminder.todo as TodoType}
-          dismissNotification={() => {
-            console.log('dismiss notification')
-          }}
-        />
-      )} */}
       <ReminderControlsUI
         isNotification={isNotification}
         snoozeControls={snoozeControls}

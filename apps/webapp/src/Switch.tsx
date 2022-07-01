@@ -176,10 +176,6 @@ const SnippetRoutes = () => {
 }
 
 const IntegrationRoutes = () => {
-  const location = useLocation()
-  useEffect(() => {
-    console.log('Location: ', location)
-  }, [location])
   return (
     <Routes>
       <Route

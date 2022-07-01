@@ -98,7 +98,6 @@ const Lookup = () => {
   const { addNodeOrNodesFast } = useNewNodes()
 
   const handleCreateItem = async (inputValue: QuickLink) => {
-    console.log('Input Value: ', inputValue)
     const { id } = addNodeOrNodesFast(inputValue.text, true)
     closeModal()
     mog('Created Hierarchy: ', { nodeid: id, inputValue })
