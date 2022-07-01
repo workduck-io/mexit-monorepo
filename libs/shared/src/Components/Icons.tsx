@@ -1,5 +1,6 @@
 // Icons for sidebar and UI
 import React from 'react'
+import { useTheme } from 'styled-components'
 import starLine from '@iconify-icons/ri/star-line'
 import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-line'
 import checkboxBlankCircleFill from '@iconify-icons/ri/checkbox-blank-circle-fill'
@@ -43,19 +44,18 @@ type SharedNodeIconProps = {
   margin?: string
 }
 
-export const SharedNodeIcon: React.FC<SharedNodeIconProps> = ({
-  fill = 'none',
-  margin = '0',
-  height = 24,
-  width = 24
-}) => {
+export const SharedNodeIcon: React.FC<SharedNodeIconProps> = ({ fill, margin = '0', height = 24, width = 24 }) => {
+  const theme = useTheme()
+
+  const fillColor = fill || theme.colors.text.default
+
   return (
     <svg
       width={`${width}`}
       style={{ margin }}
       height={`${height}`}
       viewBox="0 0 24 24"
-      fill={fill}
+      fill={fillColor}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M4 22C3.73478 22 3.48043 21.8946 3.29289 21.7071C3.10536 21.5196 3 21.2652 3 21V3C3 2.73478 3.10536 2.48043 3.29289 2.29289C3.48043 2.10536 3.73478 2 4 2H20C20.2652 2 20.5196 2.10536 20.7071 2.29289C20.8946 2.48043 21 2.73478 21 3V9L19 7.5V4H5V20H11.5L15 22H4Z" />
