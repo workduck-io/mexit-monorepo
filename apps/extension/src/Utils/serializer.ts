@@ -33,12 +33,13 @@ export const serializeContent = (
 
     if (elementMetadata && el?.highlight) {
       nl.elementMetadata = generateElementMetadata(elementMetadata)
-      delete el['highlight']
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]
       })
     }
+
+    delete el['highlight']
 
     if (el.type) {
       if (el.type !== 'paragraph') {
@@ -66,7 +67,7 @@ export const serializeContent = (
     }
 
     if (el.children) {
-      nl.children = serializeContent(el.children, nodeid, elementMetadata)
+      nl.children = serializeContent(el.children, nodeid)
     }
 
     return nl

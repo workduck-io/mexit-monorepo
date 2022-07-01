@@ -94,6 +94,9 @@ export function useSaveChanges() {
           // TODO: fix extract metadata function to get metadata from
           metadata: metadata
         })
+        // mog('deserialized content from backend', {
+        //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        // })
 
         if (notification) {
           toast.success('Saved to Cloud')
