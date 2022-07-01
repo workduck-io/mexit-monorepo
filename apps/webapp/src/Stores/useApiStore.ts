@@ -24,37 +24,32 @@ interface ApiStore {
   clearRequests(): void
 }
 
-export const useApiStore = create<ApiStore>(
-  persist(
-    (set, get) => ({
-      polling: new Set([PollActions.hierarchy]),
-      addActionToPoll: (action: PollActions) => {
-        const polling = get().polling
-        const newActionsToPoll = polling.add(action)
-        set({ polling: newActionsToPoll })
-      },
-      replaceAndAddActionToPoll: (action: PollActions) => {
-        set({ polling: new Set([action]) })
-      },
+export const useApiStore = create<ApiStore>((set, get) => ({
+  polling: new Set([PollActions.hierarchy]),
+  addActionToPoll: (action: PollActions) => {
+    const polling = get().polling
+    const newActionsToPoll = polling.add(action)
+    set({ polling: newActionsToPoll })
+  },
+  replaceAndAddActionToPoll: (action: PollActions) => {
+    set({ polling: new Set([action]) })
+  },
 
-      requests: {},
-      setRequest(url, data) {
-        set({
-          requests: {
-            ...get().requests,
-            [url]: data
-          }
-        })
-      },
-      clearRequests() {
-        set({
-          requests: {}
-        })
+  requests: {},
+  setRequest(url, data) {
+    set({
+      requests: {
+        ...get().requests,
+        [url]: data
       }
-    }),
-    { name: 'mexit-api-store' }
-  )
-)
+    })
+  },
+  clearRequests() {
+    set({
+      requests: {}
+    })
+  }
+}))
 
 export const isRequestedWithin = (minutes: number, url: string) => {
   const now = Date.now()

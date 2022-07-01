@@ -102,6 +102,12 @@ export interface SharedNode extends ILink {
   owner: UserID
 }
 
+export type NewILinkProps = {
+  openedNotePath?: string
+  content?: NodeEditorContent
+  showAlert?: boolean
+}
+
 /**  Tags */
 export interface Tag {
   value: string
@@ -180,6 +186,7 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   tags = 'Tags',
+  action = 'Actions',
   mentions = 'Mentions'
 }
 

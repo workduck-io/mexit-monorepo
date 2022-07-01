@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import shallow from 'zustand/shallow'
 
 import { Wrapper } from '@mexit/shared'
-import { defaultContent, ILink, uniq } from '@mexit/core'
+import { defaultContent, ILink, mog, uniq } from '@mexit/core'
 
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { Title } from '@mexit/shared'
@@ -25,7 +25,8 @@ function DraftView() {
       const t = []
       const activityItems = uniq([...bookmarks, ...lastOpened])
       activityItems.forEach((id) => {
-        t.push(ilinks.find((store) => store.nodeid === id))
+        const ilink = ilinks.find((store) => store.nodeid === id)
+        if (ilink) t.push(ilink)
       })
       setAllLinks(t)
     }

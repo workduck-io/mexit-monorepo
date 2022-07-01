@@ -25,7 +25,6 @@ export const ItemContent = styled.div`
 
 const SharedNotes = () => {
   const sharedNodes = useDataStore((store) => store.sharedNodes)
-  console.log('Shared Nodes: ', sharedNodes)
   const { push } = useNavigation()
 
   // const [sharedNodes, setSharedNodes] = useState<SharedNode[]>([])
