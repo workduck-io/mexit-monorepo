@@ -1,59 +1,23 @@
-import { generateTempId, NodeMetadata } from '@mexit/core'
-
+import {
+  directKeys,
+  DirectProperties,
+  directPropertyKeys,
+  ElementHighlightMetadata,
+  extractMetadata,
+  generateElementMetadata,
+  generateTempId,
+  mappedKeys,
+  mog,
+  PartialBy
+} from '@mexit/core'
 import { useAuthStore } from '../Stores/useAuth'
 
-const removeNulls = (obj: any): any => {
-  if (obj === null) {
-    return undefined
-  }
-  if (typeof obj === 'object') {
-    for (const key in obj) {
-      obj[key] = removeNulls(obj[key])
-    }
-  }
-  return obj
-}
-
-const extractMetadata = (data: any): NodeMetadata => {
-  const metadata: NodeMetadata = {
-    lastEditedBy: data.lastEditedBy,
-    updatedAt: data.updatedAt,
-    createdBy: data.createdBy,
-    createdAt: data.createdAt
-  }
-  return removeNulls(metadata)
-}
-
-// Direct properties are collated in the properties for api
-// and then unfurled when converting back to editor content
-const directPropertyKeys = [
-  'bold',
-  'italic',
-  'underline',
-  'highlight',
-  'code',
-  'email',
-  'url',
-  'value',
-  'blockValue',
-  'checked',
-  'blockId',
-  'body'
-]
-const PropKeysArray = [...directPropertyKeys] as const
-type PropKeys = typeof PropKeysArray[number]
-type DirectProperties = Record<PropKeys, boolean | string>
-
-// Keys that will be replicated as is
-const directKeys = []
-
-// Keys that will be mapped to different key
-const mappedKeys = {
-  text: 'content'
-}
-
 // From content to api
-export const serializeContent = (content: any[], nodeid: string) => {
+export const serializeContent = (
+  content: any[],
+  nodeid: string,
+  elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
+) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
       return serializeSpecial[el.type](el, nodeid)
@@ -65,6 +29,15 @@ export const serializeContent = (content: any[], nodeid: string) => {
       nl.id = el.id
     } else {
       nl.id = generateTempId()
+    }
+
+    if (elementMetadata && el?.highlight) {
+      nl.elementMetadata = generateElementMetadata(elementMetadata)
+      delete el['highlight']
+    } else if (el?.metadata) {
+      Object.keys(el.metadata).forEach((k) => {
+        nl[k] = el.metadata[k]
+      })
     }
 
     if (el.type) {
@@ -93,7 +66,7 @@ export const serializeContent = (content: any[], nodeid: string) => {
     }
 
     if (el.children) {
-      nl.children = serializeContent(el.children, nodeid)
+      nl.children = serializeContent(el.children, nodeid, elementMetadata)
     }
 
     return nl
