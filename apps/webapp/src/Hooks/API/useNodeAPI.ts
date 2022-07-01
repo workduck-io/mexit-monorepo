@@ -24,10 +24,8 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useLinks } from '../useLinks'
 import { useTags } from '../useTags'
 import { useNodes } from '../useNodes'
-import '../../Utils/apiClient'
-
-import '../Utils/apiClient'
 import { useUpdater } from '../useUpdater'
+import '../../Utils/apiClient'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
