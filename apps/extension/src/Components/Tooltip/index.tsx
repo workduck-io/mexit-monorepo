@@ -4,24 +4,67 @@ import { copyToClipboard } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
-import { NodeEditorContent } from '@mexit/core'
+import { extractMetadata, NodeEditorContent, SEPARATOR } from '@mexit/core'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useLinks } from '../../Hooks/useLinks'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import { useAuthStore } from '../../Hooks/useAuth'
+import useRaju from '../../Hooks/useRaju'
+import { deserializeContent } from '../../Utils/serializer'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
+  const { setNode, setPreviewMode, setNodeContent } = useEditorContext()
+  const { highlighted } = useHighlightStore()
 
-  // const content = useContentStore((store) => store.getContent(window.location.href)).find(
-  //   (item) => item.highlighterId === tooltipState.id
-  // ).content
-
-  const removeContent = useContentStore((store) => store.removeContent)
-  const highligter = new Highlighter()
+  const { getILinkFromNodeid } = useLinks()
+  const { getContent, removeContent } = useContentStore()
+  const { getParentILink } = useInternalLinks()
+  const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
+  const { dispatch } = useRaju()
 
   const handleDelete = () => {
-    // TODO: send request to backed to remove the same
-    highligter.remove(tooltipState.id)
-    // removeContent(window.location.href, tooltipState.id)
-    toast.success('Highlight removed')
+    const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
+    const content = getContent(nodeId)
+    const node = getILinkFromNodeid(nodeId)
+
+    const parentILink = getParentILink(node.path)
+
+    const request = {
+      type: 'CAPTURE_HANDLER',
+      subType: 'SAVE_NODE',
+      data: {
+        id: node.nodeid,
+        title: node.path.split(SEPARATOR).slice(-1)[0],
+        content: content.content.filter((item) => item.id !== tooltipState.id),
+        referenceID: parentILink?.nodeid,
+        workspaceID: workspaceDetails.id,
+        metadata: {}
+      }
+    }
+
+    chrome.runtime.sendMessage(request, (response) => {
+      const { message, error } = response
+
+      if (error) {
+        toast.error('An Error Occured. Please try again.')
+      } else {
+        const nodeid = message.id
+        const content = deserializeContent(message.data)
+        const metadata = extractMetadata(message)
+
+        dispatch('SET_CONTENT', {
+          nodeid,
+          content,
+          metadata
+        })
+
+        toast.success('Highlight removed')
+      }
+    })
 
     setTooltipState({ visualState: VisualState.hidden })
   }
