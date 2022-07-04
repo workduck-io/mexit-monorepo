@@ -10,6 +10,7 @@ import useRaju from './useRaju'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useInternalLinks } from './useInternalLinks'
 import { deserializeContent } from '../Utils/serializer'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
@@ -21,6 +22,7 @@ export function useSaveChanges() {
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
+  const { addHighlightedBlock } = useHighlightStore()
 
   const saveIt = (saveAndExit = false, notification = false) => {
     const state = platesStore.get.state()
@@ -84,16 +86,21 @@ export function useSaveChanges() {
         toast.error('An Error Occured. Please try again.')
       } else {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
+        const nodeid = !bulkCreateRequest ? message.id : message.node.id
+        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
         // setMetadata(message.id, metadata)
         // console.log('message', message)
         // setContent(node.nodeid, deserializeContent(message.data))
+
         dispatch('SET_CONTENT', {
-          nodeid: !bulkCreateRequest ? message.id : message.node.id,
-          content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data),
-          // TODO: fix extract metadata function to get metadata from
-          metadata: metadata
+          nodeid,
+          content,
+          metadata
         })
+
+        addHighlightedBlock(nodeid, content)
+
         // mog('deserialized content from backend', {
         //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         // })
