@@ -26,7 +26,7 @@ export const usePolling = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
 
   const { refreshILinks } = useInternalLinks()
-  const { getNodesByWorkspace } = useApi()
+  // const { getNodesByWorkspace } = useApi()
   const { getAllBookmarks } = useBookmarks()
   const { fetchShareData } = useFetchShareData()
 

@@ -228,33 +228,33 @@ export const useApi = () => {
     }
   }
 
-  const getNodesByWorkspace = async () => {
-    const data = await client
-      .get(apiURLs.getHierarchy, {
-        headers: {
-          [WORKSPACE_HEADER]: getWorkspaceId(),
-          Accept: 'application/json, text/plain, */*'
-        }
-      })
-      .then((d) => {
-        if (d.data) {
-          const nodes = hierarchyParser(d.data as any)
-          if (nodes && nodes.length > 0) {
-            const localILinks = useDataStore.getState().ilinks
-            const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+  // const getNodesByWorkspace = async () => {
+  //   const data = await client
+  //     .get(apiURLs.getHierarchy, {
+  //       headers: {
+  //         [WORKSPACE_HEADER]: getWorkspaceId(),
+  //         Accept: 'application/json, text/plain, */*'
+  //       }
+  //     })
+  //     .then((d) => {
+  //       if (d.data) {
+  //         const nodes = hierarchyParser(d.data as any)
+  //         if (nodes && nodes.length > 0) {
+  //           const localILinks = useDataStore.getState().ilinks
+  //           const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
 
-            runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid)))
+  //           runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid)))
 
-            setIlinks(nodes)
-            // ipcRenderer.send(IpcAction.UPDATE_ILINKS, { ilinks: nodes })
-          }
+  //           setIlinks(nodes)
+  //           // ipcRenderer.send(IpcAction.UPDATE_ILINKS, { ilinks: nodes })
+  //         }
 
-          return d.data
-        }
-      })
+  //         return d.data
+  //       }
+  //     })
 
-    return data
-  }
+  //   return data
+  // }
 
   const makeNodePublic = async (nodeId: string) => {
     const URL = apiURLs.makeNodePublic(nodeId)
@@ -429,7 +429,6 @@ export const useApi = () => {
     bulkCreateNodes,
     saveSingleNewNode,
     saveNewNodeAPI,
-    getNodesByWorkspace,
     makeNodePublic,
     makeNodePrivate,
     isPublic,

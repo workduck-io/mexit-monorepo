@@ -32,7 +32,7 @@ export const useInternalLinks = () => {
   }
 
   const refreshILinks = async () => {
-    const updatedILinks: any[] = await getILinks()
+    const updatedILinks: any[] = (await getILinks()).ilinks
     if (updatedILinks && updatedILinks.length > 0) {
       setILinks(updatedILinks)
     }
