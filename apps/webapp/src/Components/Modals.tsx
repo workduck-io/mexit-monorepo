@@ -8,6 +8,7 @@ import HelpModal from '../Views/HelpModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
 import BlockModal from '../Editor/Components/Blocks/BlockModal'
 import ShareModal from './Mentions/ShareModal'
+import GameModal from '../Views/GameModal'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -19,6 +20,7 @@ const Modals = () => {
       <Refactor />
       <Delete />
       <HelpModal />
+      <GameModal />
       <BlockModal />
       <CreateReminderModal />
       <ShareModal />
