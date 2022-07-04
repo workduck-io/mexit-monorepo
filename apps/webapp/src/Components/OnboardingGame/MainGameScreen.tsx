@@ -13,6 +13,7 @@ import KeyboardSprite from './KeyboardSprite'
 import MouseSprite from './MouseSprite'
 import GameInstructions from './GameInstructions'
 import Modal from 'react-modal'
+import GameProgressBar from './GameProgressBar'
 function MainGameScreen() {
   const [start, setStart] = useState<boolean>(false)
   const [gameOver, setGameOver] = useState<boolean>(false)
@@ -124,6 +125,7 @@ function MainGameScreen() {
             <h3>Key Time: {keyTime}</h3>
             <h3>Click Time: {clickTime}</h3>
           </GameOverContainer>
+          <GameProgressBar percentage={(clickTime * 100) / (clickTime + keyTime)} />
         </Modal>
       ) : (
         ''
