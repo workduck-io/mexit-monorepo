@@ -99,7 +99,7 @@ export function useSaveChanges() {
           metadata
         })
 
-        addHighlightedBlock(nodeid, content)
+        addHighlightedBlock(nodeid, content, window.location.href)
 
         // mog('deserialized content from backend', {
         //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)

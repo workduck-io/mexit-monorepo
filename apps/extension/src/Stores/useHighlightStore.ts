@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { ElementHighlightMetadata, mog, NodeContent, NodeEditorContent } from '@mexit/core'
+import { Contents, ElementHighlightMetadata, ILink, mog, NodeContent, NodeEditorContent } from '@mexit/core'
 import { persist } from 'zustand/middleware'
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
@@ -16,8 +16,8 @@ interface HighlightStore {
    * The current ids for specific editors to highlight
    */
   highlighted: Highlighted
-  addHighlightedBlock: (nodeId: string, content: NodeEditorContent) => void
-  // setHighlightedBlockIds: () => void
+  initHighlights: (ilinks: ILink[], contents: Contents) => void
+  addHighlightedBlock: (nodeId: string, content: NodeEditorContent, url: string) => void
   clearHighlightedBlock: (url: string, blockId: string) => void
   clearAllHighlightedBlocks: () => void
 }
@@ -26,7 +26,27 @@ export const useHighlightStore = create<HighlightStore>(
   persist(
     (set, get) => ({
       highlighted: {},
-      addHighlightedBlock: (nodeId, content) => {
+      initHighlights: (ilinks, contents) => {
+        const highlighted = {}
+
+        ilinks.forEach((ilink) => {
+          contents[ilink.nodeid]?.content.forEach(function (block) {
+            if (block?.metadata?.elementMetadata && this) {
+              highlighted[block.metadata.elementMetadata.sourceUrl] = {
+                ...highlighted[block.metadata.elementMetadata.sourceUrl],
+                [block.id]: {
+                  elementMetadata: block.metadata.elementMetadata,
+                  nodeId: this.nodeid
+                }
+              }
+            }
+          }, ilink)
+        })
+
+        // mog('initing highlights', { highlighted })
+        set({ highlighted: highlighted })
+      },
+      addHighlightedBlock: (nodeId, content, url) => {
         const { highlighted } = get()
         const newHighlighted = { ...highlighted }
 
