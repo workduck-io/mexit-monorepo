@@ -70,8 +70,20 @@ function Tooltip() {
   }
 
   const handleEdit = () => {
-    //TODO:  Find node and set in editor store, would be implementing both of these post block level metadata implementation
     setVisualState(VisualState.animatingIn)
+
+    const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
+    const content = getContent(nodeId)
+    const node = getILinkFromNodeid(nodeId)
+
+    // TODO: the timeout is because the nodeContent setting in the content/index.ts according to the active item works as well
+    // will optimize later
+    setTimeout(() => {
+      setNode({ ...node, title: node.path.split(SEPARATOR).slice(-1)[0], id: node.nodeid })
+      setNodeContent(content.content)
+      setPreviewMode(false)
+    }, 500)
+
     setTooltipState({ visualState: VisualState.hidden })
   }
 
