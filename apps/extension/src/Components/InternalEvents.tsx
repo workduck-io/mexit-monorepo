@@ -61,7 +61,7 @@ function useToggleHandler() {
 
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
-      const highlighter = new Highlighter()
+      const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
 
       switch (request.type) {
         case 'sputlit':
@@ -166,7 +166,7 @@ function handleHighlighter() {
   const { highlighted } = useHighlightStore()
 
   useEffect(() => {
-    const highlighter = new Highlighter()
+    const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
     const highlightOldRange = () => {
       const highlighted = useHighlightStore.getState().highlighted
       const pageContents = highlighted[window.location.href]
