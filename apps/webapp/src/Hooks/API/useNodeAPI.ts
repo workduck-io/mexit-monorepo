@@ -256,8 +256,8 @@ export const useApi = () => {
   //   return data
   // }
 
-  const makeNodePublic = async (nodeId: string) => {
-    const URL = apiURLs.makeNodePublic(nodeId)
+  const makeNotePublic = async (nodeId: string) => {
+    const URL = apiURLs.makeNotePublic(nodeId)
     return await client
       .patch(URL, null, {
         withCredentials: false,
@@ -273,12 +273,12 @@ export const useApi = () => {
       })
 
       .catch((error) => {
-        mog('MakeNodePublicError', { error })
+        mog('makeNotePublicError', { error })
       })
   }
 
-  const makeNodePrivate = async (nodeId: string) => {
-    const URL = apiURLs.makeNodePrivate(nodeId)
+  const makeNotePrivate = async (nodeId: string) => {
+    const URL = apiURLs.makeNotePrivate(nodeId)
 
     return await client
       .patch(URL, null, {
@@ -292,7 +292,7 @@ export const useApi = () => {
         return nodeId
       })
       .catch((error) => {
-        mog('MakeNodePrivateError', { error })
+        mog('makeNotePrivateError', { error })
       })
   }
 
@@ -429,8 +429,8 @@ export const useApi = () => {
     bulkCreateNodes,
     saveSingleNewNode,
     saveNewNodeAPI,
-    makeNodePublic,
-    makeNodePrivate,
+    makeNotePublic,
+    makeNotePrivate,
     isPublic,
     getPublicNodeAPI,
     saveSnippetAPI,
