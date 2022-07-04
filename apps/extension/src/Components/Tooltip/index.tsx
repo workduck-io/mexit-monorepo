@@ -87,13 +87,7 @@ function Tooltip() {
     setTooltipState({ visualState: VisualState.hidden })
   }
 
-  const handleCopyClipboard = async (content: NodeEditorContent) => {
-    const parts = []
-    content?.forEach((p) => {
-      parts.push(p.text)
-    })
-    const text = parts.join('')
-
+  const handleCopyClipboard = async (text: string) => {
     await copyToClipboard(text)
     setTooltipState({ visualState: VisualState.hidden })
   }
@@ -141,7 +135,11 @@ function Tooltip() {
         </svg>
       </Icon>
 
-      <Icon onClick={() => handleCopyClipboard([])}>
+      <Icon
+        onClick={() =>
+          handleCopyClipboard(highlighted[window.location.href][tooltipState.id].elementMetadata.saveableRange.text)
+        }
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
