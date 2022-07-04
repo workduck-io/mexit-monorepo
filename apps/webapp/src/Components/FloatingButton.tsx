@@ -11,6 +11,7 @@ import { FocusModeProp, Button, MexIcon } from '@mexit/shared'
 import { useAuthStore } from '../Stores/useAuth'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useGameStore } from '../Stores/useGameStore'
 import AutoformatHelp from './Autoformathelp'
 import { useLocation } from 'react-router-dom'
 
@@ -106,10 +107,16 @@ const FloatingButton = () => {
   const toggleModal = useHelpStore((store) => store.toggleModal)
   const focusMode = useLayoutStore((store) => store.focusMode)
   const authenticated = useAuthStore((store) => store.authenticated)
+  const toggleOpen = useGameStore((store) => store.openModal)
 
   const onShortcutClick = () => {
     setMenu(false)
     toggleModal()
+  }
+
+  const openGame = () => {
+    setMenu(false)
+    toggleOpen()
   }
 
   if (!authenticated) return null
@@ -136,6 +143,9 @@ const FloatingButton = () => {
             </Tippy>
             <MenuItem key="wd-mex-shortcuts-button" onClick={onShortcutClick}>
               <MexIcon fontSize={20} margin="0 1rem 0 0" icon="fluent:keyboard-24-filled" /> Keyboard Shortcuts
+            </MenuItem>
+            <MenuItem key="wd-mex-shortcuts-button" onClick={openGame}>
+              <MexIcon fontSize={20} margin="0 1rem 0 0" icon="fluent:games-24-filled" /> Onboarding Game
             </MenuItem>
           </div>
         </FloatingMenu>
