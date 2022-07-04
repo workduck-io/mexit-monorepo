@@ -19,6 +19,7 @@ const Modals = () => {
       <Refactor />
       <Delete />
       <HelpModal />
+      <GameModal />
       <BlockModal />
       <CreateReminderModal />
       <ShareModal />

@@ -8,11 +8,9 @@ export const TableWrapperScrollable = styled.div`
 
 export const StyledTable = styled.table`
   margin: ${({ theme }) => theme.spacing.medium};
-
   border-collapse: collapse;
   min-width: 600px;
   border: 1px solid ${({ theme }) => theme.colors.gray[8]};
-
   border-radius: ${({ theme }) => theme.borderRadius.small};
   overflow: hidden;
 `
