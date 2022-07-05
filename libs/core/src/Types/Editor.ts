@@ -1,5 +1,6 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
 import { AccessLevel } from './Mentions'
+import { ElementHighlightMetadata } from '../Utils/serializer'
 
 export interface Content {
   id: string
@@ -30,9 +31,7 @@ export interface NodeMetadata {
   lastEditedBy: string
   updatedAt: number
 
-  highlighterId?: string
-  saveableRange?: Partial<HighlightSource>
-  sourceUrl?: string
+  elementMetadata: ElementHighlightMetadata
 }
 
 export interface Block {

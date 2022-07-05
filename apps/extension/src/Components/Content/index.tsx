@@ -2,7 +2,7 @@ import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { getMexHTMLDeserializer } from '../../Utils/deserialize'
+import { getDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../../Utils/deserialize'
 import { Editor } from '../Editor'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
@@ -13,6 +13,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
 
 export default function Content() {
   const { selection, searchResults, activeIndex } = useSputlitContext()
@@ -24,9 +25,13 @@ export default function Content() {
   const getSnippet = useSnippets().getSnippet
 
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
+  const { highlighted, clearHighlightedBlockIds } = useBlockHighlightStore()
+  const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
-    const content = getMexHTMLDeserializer(selection?.html, editor)
+    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
+
+    // mog('deserialized content', { content })
 
     if (selection?.range && content && selection?.url && previewMode) {
       // setNodeContent([...activeNodeContent, { text: '\n' }, { children: deserializedContent }])
@@ -39,6 +44,18 @@ export default function Content() {
       // setNodeContent(val)
     }
   }
+
+  useEffect(() => {
+    const highlights = highlighted.editor
+    if (!previewMode && highlights.length > 0) {
+      focusBlock(highlights[highlights.length - 1], node.nodeid)
+      const clearHighlightTimeout = setTimeout(() => {
+        clearHighlightedBlockIds('editor')
+      }, 2000)
+
+      return () => clearTimeout(clearHighlightTimeout)
+    }
+  }, [highlighted, node.nodeid, previewMode])
 
   useEffect(() => {
     const handleSaveKeydown = (event: KeyboardEvent) => {
@@ -60,7 +77,7 @@ export default function Content() {
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
-        setNodeContent([...content, { text: '\n' }, { children: deserializedContent }])
+        setNodeContent([...content, { children: deserializedContent, highlight: true }])
       } else {
         setNodeContent(content)
       }

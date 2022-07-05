@@ -1,83 +1,16 @@
-import { generateTempId, NodeMetadata } from '@mexit/core'
+import {
+  directKeys,
+  DirectProperties,
+  directPropertyKeys,
+  ElementHighlightMetadata,
+  extractMetadata,
+  generateElementMetadata,
+  generateTempId,
+  mappedKeys,
+  mog,
+  PartialBy
+} from '@mexit/core'
 import { useAuthStore } from '../Hooks/useAuth'
-
-const removeNulls = (obj: any): any => {
-  if (obj === null) {
-    return undefined
-  }
-  if (typeof obj === 'object') {
-    for (const key in obj) {
-      obj[key] = removeNulls(obj[key])
-    }
-  }
-  return obj
-}
-
-const extractMetadata = (data: any): NodeMetadata => {
-  const metadata: NodeMetadata = {
-    lastEditedBy: data.lastEditedBy,
-    updatedAt: data.updatedAt,
-    createdBy: data.createdBy,
-    createdAt: data.createdAt
-  }
-  return removeNulls(metadata)
-}
-
-// Direct properties are collated in the properties for api
-// and then unfurled when converting back to editor content
-const directPropertyKeys = [
-  'bold',
-  'italic',
-  'underline',
-  'highlight',
-  'code',
-  'url',
-  'value',
-  'blockValue',
-  'checked',
-  'blockId',
-  'body'
-]
-const PropKeysArray = [...directPropertyKeys] as const
-type PropKeys = typeof PropKeysArray[number]
-type DirectProperties = Record<PropKeys, boolean | string>
-
-// Keys that will be replicated as is
-const directKeys = []
-
-// Keys that will be mapped to different key
-const mappedKeys = {
-  text: 'content'
-}
-
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
-
-interface HighlightMetaBlock {
-  parentTagName: string
-  parentIndex: number
-  textOffset: number
-}
-
-interface ElementHighlightMetadata {
-  type: string
-  saveableRange: {
-    startMeta: HighlightMetaBlock
-    endMeta: HighlightMetaBlock
-    text: string
-    id: string
-  }
-  sourceUrl: string
-}
-
-export const generateElementMetadata = (
-  elementMetadata: PartialBy<ElementHighlightMetadata, 'type'>
-): ElementHighlightMetadata => {
-  delete elementMetadata.saveableRange['__isHighlightSource']
-  return {
-    ...elementMetadata,
-    type: 'highlight'
-  }
-}
 
 // From content to api
 export const serializeContent = (
@@ -98,9 +31,15 @@ export const serializeContent = (
       nl.id = generateTempId()
     }
 
-    if (elementMetadata) {
+    if (elementMetadata && el?.highlight) {
       nl.elementMetadata = generateElementMetadata(elementMetadata)
+    } else if (el?.metadata) {
+      Object.keys(el.metadata).forEach((k) => {
+        nl[k] = el.metadata[k]
+      })
     }
+
+    delete el['highlight']
 
     if (el.type) {
       if (el.type !== 'paragraph') {

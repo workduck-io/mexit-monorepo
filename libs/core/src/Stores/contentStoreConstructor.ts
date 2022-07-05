@@ -52,7 +52,7 @@ export const contentStoreConstructor = (set, get) => ({
   },
   getContentFromLink: (url) => {
     const contents: Contents = get().contents
-    return Object.values(contents).filter((item) => item?.metadata?.sourceUrl === url)
+    return Object.values(contents).filter((item) => item?.metadata?.elementMetadata?.sourceUrl === url)
   },
   removeContent: (nodeid) => {
     const oldContent = get().contents

@@ -15,7 +15,7 @@ export function MexEditor(props: MexEditorProps) {
       selectEditor(editorRef, props.options.focusOptions)
     }
     setMetaData(props.meta)
-  }, [editorRef, props.editorId]) // eslint-disable-line
+  }, [editorRef, props.editorId, props?.options?.editableProps?.autoFocus])
 
   const { plugins, comboOnKeydownConfig } = useComboboxConfig(
     props.editorId,

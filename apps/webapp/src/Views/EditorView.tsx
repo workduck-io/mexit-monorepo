@@ -35,8 +35,7 @@ export const EditorViewWrapper = styled.div`
 
 const EditorView = () => {
   const { resetEditor } = useEditorActions()
-  const ilinks = useDataStore((s) => s.ilinks)
-  const archive = useDataStore((s) => s.archive)
+  const { ilinks, archive, sharedNodes } = useDataStore()
   const contents = useContentStore((state) => state.contents)
   const snippets = useSnippetStore((state) => state.snippets)
   const [first, setFirst] = useState(true)
@@ -58,7 +57,7 @@ const EditorView = () => {
 
   useEffect(() => {
     if (!first) {
-      initSearchIndex({ ilinks, archive, contents, snippets })
+      initSearchIndex({ ilinks, archive, contents, snippets, sharedNodes })
     } else {
       setFirst(false)
     }

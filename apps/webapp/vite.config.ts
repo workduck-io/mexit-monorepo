@@ -28,6 +28,7 @@ export default defineConfig({
   plugins: [
     react({
       babel: {
+        compact: true,
         plugins: [
           [
             'babel-plugin-styled-components',

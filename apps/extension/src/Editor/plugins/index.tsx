@@ -62,6 +62,7 @@ import { createTodoPlugin } from './createTodoPlugin'
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { createQuickLinkPlugin } from './QuickLink'
 import { optionsImagePlugin } from './options'
+import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 
 export type PluginOptionType = {
   exclude: {
@@ -159,8 +160,8 @@ export const generatePlugins = (options: PluginOptionType) => {
     // // For Inline Blocks
     // createInlineBlockPlugin(),
 
-    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin)
-    // createHighlightTextPlugin()
+    createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
+    createHighlightTextPlugin()
   ]
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins

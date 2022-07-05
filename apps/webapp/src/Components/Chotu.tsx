@@ -36,7 +36,7 @@ export default function Chotu() {
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
 
-  const { ilinks, archive } = useDataStore()
+  const { ilinks, archive, sharedNodes } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
@@ -44,7 +44,7 @@ export default function Chotu() {
 
   useEffect(() => {
     if (!first) {
-      initSearchIndex({ ilinks, archive, contents, snippets })
+      initSearchIndex({ ilinks, archive, contents, snippets, sharedNodes })
     } else {
       setFirst(false)
     }

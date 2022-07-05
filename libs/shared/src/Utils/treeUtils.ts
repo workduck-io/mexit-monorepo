@@ -1,4 +1,4 @@
-import { BASE_DRAFT_PATH, BASE_TASKS_PATH, NodeProperties } from '@mexit/core'
+import { BASE_DRAFT_PATH, BASE_TASKS_PATH, NodeProperties, SEPARATOR } from '@mexit/core'
 
 export const sampleFlatTree = [
   '@',
@@ -31,8 +31,6 @@ export const getNodeIcon = (path: string) => {
 }
 
 export const DefaultNodeIcon = 'ri:file-list-2-line'
-
-export const SEPARATOR = '.'
 
 export const getParentId = (id: string, separator = SEPARATOR) => {
   const lastIndex = id.lastIndexOf(separator)

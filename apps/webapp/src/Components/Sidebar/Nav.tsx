@@ -265,7 +265,6 @@ const Nav = ({ links }: NavProps) => {
           </NavTooltip>
         </EndLinkContainer>
       </NavWrapper>
-      <TrafficLightBG />
       <SidebarToggle />
     </>
   )
