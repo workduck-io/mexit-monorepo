@@ -8,7 +8,7 @@ import { ToggleButton, CardTitle, Loading } from '@mexit/shared'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { MexIcon } from '@mexit/shared'
 import { CopyButton } from '../Buttons/CopyButton'
-import { mog } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Flex = css`
@@ -20,7 +20,7 @@ const Flex = css`
 
 const Container = styled.div`
   ${Flex}
-  padding: 1rem;
+  padding: ${({ theme }) => theme.spacing.medium} 0;
 `
 
 const ItemDesc = styled.div`
@@ -37,7 +37,7 @@ const ShareOptions = () => {
   const theme = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
-  const { makeNodePrivate, makeNodePublic, isPublic } = useApi()
+  const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
   const publicUrl = isPublic(node.nodeid)
 
   const flipPublicAccess = async () => {
@@ -45,7 +45,7 @@ const ShareOptions = () => {
     // Go from public -> private
     if (publicUrl) {
       try {
-        const resp = await makeNodePrivate(node.nodeid)
+        const resp = await makeNotePrivate(node.nodeid)
         mog('MakingNodePrivateResp', { resp })
       } catch (error) {
         mog('Error in making link private', error)
@@ -55,7 +55,7 @@ const ShareOptions = () => {
     } else {
       // Private to Public
       try {
-        const resp = await makeNodePublic(node.nodeid)
+        const resp = await makeNotePublic(node.nodeid)
         mog('MakingNodePulicResp', { resp })
       } catch (error) {
         mog('Error in making link public', error)

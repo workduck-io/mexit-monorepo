@@ -39,11 +39,11 @@ import {
 import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { InvitedUsersContent } from './InvitedUsersContent'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { ProfileImage } from '../User/ProfileImage'
 import { useNodes } from '../../Hooks/useNodes'
+import ShareOptions from '../EditorInfobar/ShareOptions'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
@@ -350,7 +350,11 @@ export const PermissionModalContent = () => {
 
   return (
     <>
-      <ModalSection>{!readOnly && <MultiEmailInviteModalContent />}</ModalSection>
+      {!readOnly && (
+        <ModalSection>
+          <MultiEmailInviteModalContent />
+        </ModalSection>
+      )}
 
       {sharedUsers.length > 0 && (
         <ModalSection>
@@ -417,9 +421,9 @@ export const PermissionModalContent = () => {
           </ModalSectionScroll>
 
           <ModalControls>
-            <Button disabled={readOnly} large onClick={onCopyLink}>
+            {/* <Button disabled={readOnly} large onClick={onCopyLink}>
               Copy Link
-            </Button>
+            </Button> */}
             <Button
               primary
               autoFocus={!window.focus}
@@ -433,7 +437,11 @@ export const PermissionModalContent = () => {
         </ModalSection>
       )}
 
-      {!readOnly && invitedUsers.length > 0 && <InvitedUsersContent />}
+      {!readOnly && (
+        <ModalSection>
+          <ShareOptions />
+        </ModalSection>
+      )}
     </>
   )
 }
