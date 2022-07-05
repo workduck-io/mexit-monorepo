@@ -17,6 +17,7 @@ import { useEditorContext } from '../Hooks/useEditorContext'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { forEach } from 'lodash'
+import getLinks from '../Utils/getProfileData'
 
 export function InternalEvents() {
   useToggleHandler()
@@ -25,6 +26,7 @@ export function InternalEvents() {
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
+  getLinks()
   // useFocusHandler()
   return null
 }
