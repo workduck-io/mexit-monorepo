@@ -77,7 +77,7 @@ export default function Content() {
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
-        setNodeContent([...content, { text: '\n' }, { children: deserializedContent, highlight: true }])
+        setNodeContent([...content, { children: deserializedContent, highlight: true }])
       } else {
         setNodeContent(content)
       }
