@@ -67,13 +67,6 @@ const Nav = ({ links }: NavProps) => {
   const { getAllBookmarks } = useBookmarks()
 
   usePolling()
-  // useEffect(() => {
-  //   refreshILinks()
-  //   const interval = setInterval(() => {
-  //     refreshILinks()
-  //   }, 120000)
-  //   return () => clearInterval(interval)
-  // }, [])
 
   const onNewNote: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault()

@@ -22,6 +22,7 @@ import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
 import useArchive from '../Hooks/useArchive'
 import { useUserCacheStore } from './useUserCacheStore'
+import { useInternalLinks } from '../Hooks/useInternalLinks'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -45,8 +46,9 @@ export const useAuthentication = () => {
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
   const { initPortals } = usePortals()
-  const getArchiveData = useArchive().getArchiveData
   const addUser = useUserCacheStore((s) => s.addUser)
+
+  const { refreshILinks } = useInternalLinks()
 
   const login = async (
     email: string,
@@ -108,6 +110,7 @@ export const useAuthentication = () => {
           return e.toString() as string
         })
       await initPortals()
+      await refreshILinks()
     }
     setShowLoader(false)
     return { data, v }
@@ -147,6 +150,7 @@ export const useAuthentication = () => {
             setAuthenticated(userDetails, workspaceDetails)
           }
         })
+        await refreshILinks()
         await initPortals()
       }
 
