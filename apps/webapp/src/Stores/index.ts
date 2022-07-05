@@ -17,8 +17,13 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('theme', useThemeStore, { ref: 'share-theme' })
   share('ilinks', useDataStore, { ref: 'share-ilinks' })
   share('archive', useDataStore, { ref: 'share-archive' })
+  share('sharedNodes', useDataStore, { ref: 'share-mentions' })
   share('contents', useContentStore, { ref: 'share-content' })
   share('authenticated', useAuthStore, { ref: 'share-auth' })
+  share('isForgottenPassword', useAuthStore, { ref: 'share-forgottenPassword' })
+  share('registered', useAuthStore, { ref: 'share-registered' })
+  share('userDetails', useAuthStore, { ref: 'share-userDetails' })
+  share('workspaceDetails', useAuthStore, { ref: 'share-workspaceDetails' })
   share('snippets', useSnippetStore, { ref: 'share-snippets' })
   share('reminders', useReminderStore, { ref: 'share-reminders' })
 }
