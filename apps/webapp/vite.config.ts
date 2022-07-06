@@ -25,6 +25,7 @@ export default defineConfig({
     },
     dedupe: ['styled-components', 'react', 'react-dom', '@udecode/plate']
   },
+  publicDir: './src/Assets/',
   plugins: [
     react({
       babel: {
