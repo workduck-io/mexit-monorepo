@@ -37,7 +37,6 @@ export const useAuthentication = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
-  const api = useApi()
 
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
@@ -50,13 +49,9 @@ export const useAuthentication = () => {
 
   const { refreshILinks } = useInternalLinks()
 
-  const login = async (
-    email: string,
-    password: string,
-    getWorkspace = false
-  ): Promise<{ data: UserCred; v: string }> => {
+  const login = async (email: string, password: string): Promise<{ data: UserCred; loginStatus: string }> => {
     let data: any // eslint-disable-line @typescript-eslint/no-explicit-any
-    const v = await signIn(email, password)
+    const loginStatus = await signIn(email, password)
       .then((d) => {
         data = d
         return 'success'
@@ -66,54 +61,13 @@ export const useAuthentication = () => {
         return e.toString() as string
       })
 
-    setShowLoader(true)
+    mog('LoginResult', { loginStatus, data })
 
-    if (getWorkspace && data !== undefined) {
-      await client
-        .get(apiURLs.getUserRecords)
-        .then((d: any) => {
-          const userDetails = {
-            email,
-            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-            userID: d.data.id,
-            name: d.data.name
-          }
-          // const userDetails = { email, userId: data.userId }
-          const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-
-          addUser({
-            userID: userDetails.userID,
-            email: userDetails.email,
-            name: userDetails.name,
-            alias: userDetails.alias
-          })
-
-          setAuthenticated(userDetails, workspaceDetails)
-        })
-        .then(() =>
-          api.getAllSnippetsByWorkspace().then((res: any[]) => {
-            initSnippets(
-              res.map((item) => ({
-                icon: 'ri:quill-pen-line',
-                id: item.snippetID,
-                title: item.title
-              }))
-            )
-          })
-        )
-        // TODO: uncomment when changes implemented
-        // .then(() => {
-        //   getArchiveData()
-        // })
-        .catch((e) => {
-          console.error({ e })
-          return e.toString() as string
-        })
-      await initPortals()
-      await refreshILinks()
+    if (!data) {
+      throw new Error('Error Occurred In Login')
     }
-    setShowLoader(false)
-    return { data, v }
+
+    return { data, loginStatus }
   }
 
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
@@ -339,4 +293,55 @@ export const useAuthentication = () => {
   }
 
   return { login, logout, registerDetails, verifySignup, loginViaGoogle }
+}
+
+export const useInitializeAfterAuth = () => {
+  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
+  const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
+  const addUser = useUserCacheStore((s) => s.addUser)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+
+  const { initPortals } = usePortals()
+  const { refreshILinks } = useInternalLinks()
+  const api = useApi()
+
+  const initializeAfterAuth = async ({ data, loginStatus }: { data: UserCred; loginStatus: string }) => {
+    try {
+      setShowLoader(true)
+      const { email } = data
+
+      const { userDetails, workspaceDetails } = await client.get(apiURLs.getUserRecords).then((d: any) => {
+        const userDetails = {
+          email,
+          alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+          userID: d.data.id,
+          name: d.data.name
+        }
+        // const userDetails = { email, userId: data.userId }
+        const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+        return { workspaceDetails, userDetails }
+      })
+
+      addUser({
+        userID: userDetails.userID,
+        email: userDetails.email,
+        name: userDetails.name,
+        alias: userDetails.alias
+      })
+
+      setAuthenticated(userDetails, workspaceDetails)
+
+      const initialSnippets = await api.getAllSnippetsByWorkspace()
+      initSnippets(initialSnippets)
+
+      await initPortals()
+      await refreshILinks()
+    } catch (error) {
+      mog('InitializeAfterAuthError', { error })
+    } finally {
+      setShowLoader(false)
+    }
+  }
+
+  return { initializeAfterAuth }
 }

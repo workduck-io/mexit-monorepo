@@ -28,9 +28,9 @@ export const Login = () => {
   const onSubmit = async (data: LoginFormData): Promise<void> => {
     let temp: any
 
-    await login(data.email, data.password, true)
+    await login(data.email, data.password)
       .then((s) => {
-        if (s.v === 'Incorrect username or password.') {
+        if (s.loginStatus === 'Incorrect username or password.') {
           toast('Invalid Username or Password')
           setLoginResult('Invalid Username or Password')
         }

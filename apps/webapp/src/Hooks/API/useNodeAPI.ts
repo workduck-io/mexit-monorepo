@@ -27,6 +27,18 @@ import { useNodes } from '../useNodes'
 import { useUpdater } from '../useUpdater'
 import '../../Utils/apiClient'
 
+interface SnippetResponse {
+  snippetID: string
+  title: string
+  version: number
+}
+
+interface SnippetMetadata {
+  id: string
+  title: string
+  icon: string
+}
+
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
@@ -360,7 +372,7 @@ export const useApi = () => {
     return data
   }
 
-  const getAllSnippetsByWorkspace = async () => {
+  const getAllSnippetsByWorkspace = async (): Promise<SnippetMetadata[]> => {
     const data = await client
       .get(apiURLs.getAllSnippetsByWorkspace, {
         headers: {
@@ -369,7 +381,14 @@ export const useApi = () => {
         }
       })
       .then((d) => {
-        return d.data
+        const snippetResp = d.data as SnippetResponse[]
+        return snippetResp.map((item) => {
+          return {
+            id: item.snippetID,
+            title: item.title,
+            icon: 'ri:quill-pen-line'
+          }
+        })
       })
 
     return data
