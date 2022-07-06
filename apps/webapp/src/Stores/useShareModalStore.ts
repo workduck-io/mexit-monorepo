@@ -2,6 +2,7 @@ import create from 'zustand'
 
 import { AccessLevel, InvitedUser, Mentionable } from '@mexit/core'
 
+// The invite mode is only when the editor is open and used to open on new combobox invite
 type ShareModalMode = 'invite' | 'permission'
 
 // To denote what has changed
@@ -25,6 +26,8 @@ export interface InviteModalData {
   }
 }
 interface ShareModalData {
+  //  Used only for share permissions mode
+  nodeid?: string
   alias?: string
 
   fromEditor?: boolean
@@ -39,7 +42,7 @@ interface ShareModalState {
   focus: boolean
   mode: ShareModalMode
   data: ShareModalData
-  openModal: (mode: ShareModalMode) => void
+  openModal: (mode: ShareModalMode, nodeid?: string) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
