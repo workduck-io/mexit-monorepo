@@ -7,6 +7,7 @@ import user3Line from '@iconify-icons/ri/user-3-line'
 import styled, { useTheme } from 'styled-components'
 
 import { Centered, CardShadow } from '@mexit/shared'
+import { useCacheStore } from '../../Stores/useRequestCache'
 
 interface ProfileImageProps {
   email: string
@@ -41,6 +42,7 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
 
   const theme = useTheme()
   const colors = theme.additional.profilePalette
+  const addGravatarAbsent = useCacheStore((store) => store.addGravatarAbsent)
 
   const params = {
     s: size.toString(),
@@ -54,6 +56,12 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
   const src = `${base}${hash}?${query.toString()}`
 
   useEffect(() => {
+    const gravatarAbsent = useCacheStore.getState().gravatarAbsent
+    // mog('grabbing gravatar for', { email, src, formattedEmail, gravatarAbsent })
+    if (gravatarAbsent.includes(email)) {
+      setGravState(-1)
+      return
+    }
     // Check if the gravatar exists
     const img = new Image()
     img.src = src
@@ -61,6 +69,8 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
       setGravState(1) // It does
     }
     img.onerror = () => {
+      // mog('gravatar not found', { email, src, formattedEmail })
+      addGravatarAbsent(email)
       setGravState(-1) // It doesn't
     }
   }, [email])
