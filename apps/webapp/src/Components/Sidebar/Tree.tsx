@@ -8,7 +8,7 @@ import {
   TreeItem,
   TreeSourcePosition
 } from '@atlaskit/tree'
-import Tippy from '@tippyjs/react'
+import Tippy, { useSingleton } from '@tippyjs/react'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import React, { useEffect, useRef } from 'react'
@@ -32,6 +32,8 @@ import { getNameFromPath } from '@mexit/shared'
 import { mog, SEPARATOR } from '@mexit/core'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
+import * as ContextMenu from '@radix-ui/react-context-menu'
+import { useAnalysisStore } from '../../Stores/useAnalysis'
 
 interface GetIconProps {
   item: TreeItem
@@ -58,16 +60,16 @@ const TooltipContent = ({ item }: { item: TreeItem }) => {
   return (
     <TooltipContentWrapper>
       {item.data.title}
-      {item.data.tasks !== undefined && item.data.tasks > 0 && (
+      {item?.data?.tasks !== undefined && item?.data?.tasks > 0 && (
         <TooltipCount>
           <Icon icon="ri:task-line" />
-          {item.data.tasks}
+          {item?.data?.tasks}
         </TooltipCount>
       )}
-      {item.data.reminders !== undefined && item.data.reminders > 0 && (
+      {item?.data?.reminders !== undefined && item?.data?.reminders > 0 && (
         <TooltipCount>
           <Icon icon="ri:timer-flash-line" />
-          {item.data.reminders}
+          {item?.data?.reminders}
         </TooltipCount>
       )}
     </TooltipContentWrapper>
@@ -97,6 +99,8 @@ const Tree = ({ initTree }: TreeProps) => {
   // mog('renderTree', { initTree })
   //
   const draggedRef = useRef<TreeItem | null>(null)
+
+  const [source, target] = useSingleton()
 
   const changeTree = (newTree: TreeData) => {
     setTreeState((state) => ({ ...state, tree: newTree }))
@@ -135,6 +139,23 @@ const Tree = ({ initTree }: TreeProps) => {
     combineWith: null
   }
 
+  const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
+    const anal = useAnalysisStore((state) => state.analysis)
+    const title =
+      anal.nodeid && anal.nodeid === item.data.nodeid && anal.title !== undefined && anal.title !== ''
+        ? anal.title
+        : item.data
+        ? item.data.title
+        : 'NoTitle'
+
+    return (
+      <SidebarItemTitle>
+        <Icon icon={item.data.mex_icon ?? fileList2Line} />
+        <span>{title}</span>
+      </SidebarItemTitle>
+    )
+  }
+
   const renderItem = ({ item, onExpand, onCollapse, provided, snapshot }: RenderItemParams) => {
     const isTrue = JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
     const isInEditor = location.pathname.startsWith(ROUTE_PATHS.node)
@@ -142,34 +163,35 @@ const Tree = ({ initTree }: TreeProps) => {
     // mog('renderItem', { item, snapshot, provided, location, isInEditor })
 
     return (
-      <Tippy theme="mex" placement="right" content={<TooltipContent item={item} />}>
-        <StyledTreeItem
-          ref={provided.innerRef}
-          selected={isInEditor && node && item.data && node.nodeid === item.data.nodeid}
-          isDragging={snapshot.isDragging}
-          isBeingDroppedAt={isTrue}
-          onContextMenu={(e) => show(e, { props: { id: item.data.nodeid, path: item.data.path } })}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
+      <Tippy theme="mex" placement="right" singleton={target} content={<TooltipContent item={item} />}>
+        <span>
+          <ContextMenu.Root>
+            <ContextMenu.Trigger asChild>
+              <StyledTreeItem
+                ref={provided.innerRef}
+                selected={isInEditor && node && item.data && node.nodeid === item.data.nodeid}
+                isDragging={snapshot.isDragging}
+                isBeingDroppedAt={isTrue}
+                onContextMenu={(e) => {
+                  console.log('ContextySe', e, item)
+                }}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
 
-          <ItemContent onMouseDown={(e) => onClick(e, item)}>
-            <SidebarItemTitle>
-              <Icon icon={item.data.mex_icon ?? fileList2Line} />
-              <span>{item.data ? item.data.title : 'No Title'}</span>
-            </SidebarItemTitle>
-          </ItemContent>
+                <ItemContent onMouseDown={(e) => onClick(e, item)}>
+                  <ItemTitleWithAnalysis item={item} />
+                </ItemContent>
 
-          {item.hasChildren && item.children && item.children.length > 0 && (
-            <ItemCount>{item.children.length}</ItemCount>
-          )}
-          {/* <AkNavigationItem
-          text={item.data ? item.data.title : ''}
-          icon={DragDropWithNestingTree.getIcon(item, onExpand, onCollapse)}
-          dnd={{ dragHandleProps: provided.dragHandleProps }}
-        /> */}
-        </StyledTreeItem>
+                {item.hasChildren && item.children && item.children.length > 0 && (
+                  <ItemCount>{item.children.length}</ItemCount>
+                )}
+              </StyledTreeItem>
+            </ContextMenu.Trigger>
+            <TreeContextMenu item={item} />
+          </ContextMenu.Root>
+        </span>
       </Tippy>
     )
   }
@@ -239,6 +261,7 @@ const Tree = ({ initTree }: TreeProps) => {
 
   return (
     <>
+      <Tippy theme="mex" placement="right" singleton={source} />
       <AtlaskitTree
         offsetPerLevel={16}
         tree={tree}
@@ -250,7 +273,6 @@ const Tree = ({ initTree }: TreeProps) => {
         isDragEnabled
         isNestingEnabled
       />
-      <TreeContextMenu />
     </>
   )
 }

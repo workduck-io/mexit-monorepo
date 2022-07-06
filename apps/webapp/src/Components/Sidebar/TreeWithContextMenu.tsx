@@ -12,62 +12,86 @@ import { useRenameStore } from '../../Stores/useRenameStore'
 import { StyledContexifyMenu } from '@mexit/shared'
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
+import { TreeItem } from '@atlaskit/tree'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 
-interface ItemProps {
-  id: string
-  path: string
-  onDisplayMenu: (nodeid: string) => void
+interface TreeContextMenuProps {
+  item: TreeItem
 }
 
 export const MENU_ID = 'Tree-Menu'
 
-export const TreeContextMenu = () => {
+export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const openRenameModal = useRenameStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
   const { createNewNode } = useCreateNewNode()
+  const openShareModal = useShareModalStore((store) => store.openModal)
 
-  async function handleItemClick({ event, props: p, data, triggerEvent }: ItemParams<ItemProps, any>) {
-    // mog('handleItemClick', { event, p, data, triggerEvent })
-    switch (event.currentTarget.id) {
-      case 'rename':
-        openRenameModal(p.path)
-        break
-      case 'archive':
-        openDeleteModal(p.path)
-        break
-      case 'createChild':
-        await createNewNode(p.path)
-        break
-      case 'sync':
-        break
-      case 'share':
-        break
-    }
+  const handleRename = (item: TreeItem) => {
+    // mog('handleRename', { item })
+    openRenameModal(item.data.path)
+  }
+
+  const handleArchive = (item: TreeItem) => {
+    // mog('handleArchive', { item })
+    openDeleteModal(item.data.path)
+  }
+
+  const handleCreateChild = (item: TreeItem) => {
+    // mog('handleCreateChild', { item })
+    createNewNode({ parent: item.data.path })
+  }
+
+  const handleShare = (item: TreeItem) => {
+    // mog('handleShare', { item })
+    openShareModal('permission', item.data.nodeid)
   }
 
   return (
-    <StyledContexifyMenu id={MENU_ID}>
-      <Item id="rename" disabled={(args) => isReserved(args.props.path)} onClick={handleItemClick}>
-        <Icon icon={editLine} />
-        Rename
-      </Item>
-      <Item id="createChild" onClick={handleItemClick}>
-        <Icon icon={addCircleLine} />
-        Create Child
-      </Item>
-      <Item disabled={(args) => isReserved(args.props.path)} id="archive" onClick={handleItemClick}>
-        <Icon icon={archiveLine} />
-        Archive
-      </Item>
-      <Separator />
-      <Item id="sync" onClick={handleItemClick}>
-        <Icon icon={refreshFill} />
-        Sync
-      </Item>
-      <Item id="share" onClick={handleItemClick}>
-        <Icon icon={shareLine} />
-        Share
-      </Item>
-    </StyledContexifyMenu>
+    <>
+      <ContextMenuContent>
+        {/* TODO: no rename from context menu for now */}
+        {/* <ContextMenuItem
+          onSelect={(args) => {
+            // console.log('onSelectRename', args, item)
+            handleRename(item)
+          }}
+        >
+          <Icon icon={editLine} />
+          Rename
+        </ContextMenuItem> */}
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleCreateChild(item)
+          }}
+        >
+          <Icon icon={addCircleLine} />
+          Create Child
+        </ContextMenuItem>
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleArchive(item)
+          }}
+        >
+          <Icon icon={archiveLine} />
+          Archive
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        {/* <ContextMenuItem>
+          <Icon icon={refreshFill} />
+          Sync
+        </ContextMenuItem>
+         */}
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleShare(item)
+          }}
+        >
+          <Icon icon={shareLine} />
+          Share
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </>
   )
 }

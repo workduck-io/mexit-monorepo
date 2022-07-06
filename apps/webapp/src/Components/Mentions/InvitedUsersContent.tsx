@@ -34,14 +34,16 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
   const invitedUsers = useMentionStore((s) => s.invitedUsers)
   const changedIUsers = useShareModalStore((state) => state.data.changedInvitedUsers)
   const setChangedIUsers = useShareModalStore((state) => state.setChangedInvitedUsers)
-  // const { changeUserPermission, revokeUserAccess } = usePermission()
+
+  const modalData = useShareModalStore((state) => state.data)
+  const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
 
   const sharedIUsers = useMemo(() => {
-    if (node && node.nodeid) {
+    if (nodeid) {
       return getInvitedUsersForNode(node.nodeid)
     }
     return []
-  }, [node, getInvitedUsersForNode, invitedUsers])
+  }, [nodeid, invitedUsers])
 
   // This is called for every keystroke
   const onAliasChange = (email: string, alias: string) => {
