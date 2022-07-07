@@ -1,4 +1,13 @@
-import { apiURLs, defaultContent, parseBlock, parseSnippet, QuickLinkType, SEPARATOR, Snippet } from '@mexit/core'
+import {
+  apiURLs,
+  defaultContent,
+  NodeEditorContent,
+  parseBlock,
+  parseSnippet,
+  QuickLinkType,
+  SEPARATOR,
+  Snippet
+} from '@mexit/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import fuzzysort from 'fuzzysort'
@@ -21,6 +30,7 @@ interface PublicNode {
   icon: string
   url: string
   title?: string
+  content: NodeEditorContent
 }
 
 // This functions provides the 'to be' range and text content
@@ -55,23 +65,28 @@ export default function Dibba() {
   const ilinks = useDataStore((state) => state.ilinks)
   const linkCaptures = []
   const publicNodes: PublicNode[] = []
+  const getContent = useContentStore((store) => store.getContent)
 
   const linkCaptureILinks = ilinks.filter(
     (item) => item.path.split(SEPARATOR).length > 1 && item.path.split(SEPARATOR)[0] === 'Links'
   )
+
   const publicNodeIDs = useDataStore((store) => store.publicNodes)
+
   publicNodeIDs.forEach((nodeID) => {
+    const _content = getContent(nodeID)
+
     const publicNode: PublicNode = {
       type: 'Public Nodes',
       id: nodeID,
       icon: 'ri:external-link-line',
       url: apiURLs.getPublicNodePath(nodeID),
-      title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop()
+      title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop(),
+      content: _content?.content || defaultContent.content
     }
     publicNodes.push(publicNode)
   })
 
-  const getContent = useContentStore((store) => store.getContent)
   linkCaptureILinks.forEach((item) => {
     const _content = getContent(item.nodeid)
 
@@ -89,12 +104,12 @@ export default function Dibba() {
 
   const data = [
     ...linkCaptures,
+    ...publicNodes,
     ...snippets.map((item) => ({
       type: QuickLinkType.snippet,
       icon: item?.icon || 'ri:quill-pen-line',
       ...item
-    })),
-    ...publicNodes
+    }))
   ]
 
   const insertPublicNode = (item: PublicNode) => {
