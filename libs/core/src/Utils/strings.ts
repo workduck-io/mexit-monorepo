@@ -60,3 +60,19 @@ export const getSlug = (text: string, charLength = NODE_PATH_CHAR_LENGTH, wordLe
     NODE_PATH_SPACER
     // Slice till the allowed limit
   ).slice(0, charLength)
+
+export const getValidTitle = (text: string) =>
+  // trims leading and trailing spacers
+  trim(
+    text
+      // Replace all non-alphanumeric characters with spacer
+      .replace(/[^A-Za-z0-9,:-]+/g, NODE_PATH_SPACER)
+      // Split on spacer
+      .split(NODE_PATH_SPACER)
+      // Remove empty texts and repeated uses of spacer
+      .filter((t) => t !== '')
+      // Join
+      .join('-'),
+    NODE_PATH_SPACER
+    // Slice till the allowed limit
+  ).slice(0, NODE_PATH_CHAR_LENGTH)

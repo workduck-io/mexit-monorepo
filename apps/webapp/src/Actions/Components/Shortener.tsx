@@ -9,7 +9,16 @@ import { useShortenerStore } from '../../Stores/useShortener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { client } from '@workduck-io/dwindle'
 import { nanoid } from 'nanoid'
-import { apiURLs, CreateAlias, CreateTags, generateNodeId, sitesMetadataDict, Tag } from '@mexit/core'
+import {
+  apiURLs,
+  CreateAlias,
+  CreateTags,
+  generateNodeId,
+  getSlug,
+  getValidTitle,
+  sitesMetadataDict,
+  Tag
+} from '@mexit/core'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 import { LoadingButton } from '../../Components/Buttons/Buttons'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -38,23 +47,24 @@ export const Shortener = () => {
 
   const addLinkCapture = useShortenerStore((store) => store.addLinkCapture)
   // const addTagsToGlobalStore = useTagStore((store) => store.addTags)
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const userDetails = useAuthStore((store) => store.userDetails)
 
   const onShortenLinkSubmit = async (e: any) => {
     e.preventDefault()
     setIsLoading(true)
 
+    const workspaceDetails = useAuthStore.getState().workspaceDetails
+
     // Finding if the `Links` ILink exists
     const linksILink = useDataStore.getState().ilinks.find((item) => item.path === 'Links')
     const reqBody = {
       long: currTabURL,
-      short: short,
+      short: getValidTitle(short),
       metadata: {
         metaTags: pageMetaTags,
         userTags: userTags
       },
-      namespace: workspaceDetails.name,
+      // Sending workspace id instead of name because everyon's workspace name was WORKSPACE_NAME
+      namespace: workspaceDetails.id,
       linksNodeID: linksILink?.nodeid || generateNodeId()
     }
 
@@ -128,13 +138,13 @@ export const Shortener = () => {
           }
           if (resultUserTags.length === 0) resultUserTags.push(...CreateTags(matchedURL[0].appName, url.toString()))
 
-          setShort(resultShortAlias)
+          setShort(getValidTitle(resultShortAlias))
           setUserTags(resultUserTags)
         } else {
           const title = tags.filter((el) => el.name === 'title')[0].value.trim()
           if (!resultShortAlias) resultShortAlias = title
           setUserTags([{ value: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }])
-          setShort(resultShortAlias)
+          setShort(getValidTitle(resultShortAlias))
         }
       }
     }
@@ -182,7 +192,7 @@ export const Shortener = () => {
 
       <InputRow>
         <Label>Shortcut</Label>
-        <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(event.target.value)} />
+        <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
       </InputRow>
       <LoadingButton loading={isLoading} buttonProps={{ type: 'submit', onClick: onShortenLinkSubmit }}>
         Save
