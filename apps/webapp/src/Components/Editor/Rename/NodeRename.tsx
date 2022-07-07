@@ -1,5 +1,5 @@
-import { SEPARATOR, isClash, isReserved } from '@mexit/core'
-import { getNameFromPath, Input, Button, getParentFromPath } from '@mexit/shared'
+import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
+import { Input, Button } from '@mexit/shared'
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import React, { useEffect, useMemo, useRef, useState } from 'react'

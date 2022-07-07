@@ -9,12 +9,11 @@ import {
   EditorPreviewNoteName,
   EditorPreviewWrapper
 } from '@mexit/shared'
-import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE, getNameFromPath } from '@mexit/core'
 import { Button } from '@mexit/shared'
 // import useLoad from '../../../Hooks/useLoad'
 // import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 // import { useTags } from '../../Hooks/useTags'
-import { getNameFromPath } from '@mexit/shared'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'

@@ -1,16 +1,10 @@
-import {
-  Settify,
-  getUniquePath,
-  generateNodeUID,
-  mog,
-  CachedILink,
-  SEPARATOR,
-  withoutContinuousDelimiter,
-  removeLink,
-  Tag,
-  typeInvert,
-  defaultCommands
-} from '@mexit/core'
+import { defaultCommands } from '../Data/defaultCommands'
+import { Tag, CachedILink } from '../Types/Editor'
+import { Settify, withoutContinuousDelimiter, typeInvert } from '../Utils/helpers'
+import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
+import { removeLink } from '../Utils/links'
+import { mog } from '../Utils/mog'
+import { getUniquePath } from '../Utils/path'
 import { getAllParentPaths, getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({

@@ -17,9 +17,10 @@ import {
   mog,
   getRelativeDate,
   generateReminderId,
-  Reminder
+  Reminder,
+  getNameFromPath
 } from '@mexit/core'
-import { DatePickerStyles, getNameFromPath, Label, TextAreaBlock, Button } from '@mexit/shared'
+import { DatePickerStyles, Label, TextAreaBlock, Button } from '@mexit/shared'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import useAnalytics from '../../Hooks/useAnalytics'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'

@@ -1,8 +1,7 @@
 import { PlateEditor } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
 
-import { isElder } from '@mexit/shared'
-import { mog } from '@mexit/core'
+import { mog, isElder } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
