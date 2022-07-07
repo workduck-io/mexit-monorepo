@@ -1,15 +1,13 @@
 const data = {
   LinkedIN: {
-    name: 'text-heading-xlarge inline t-24 v-align-middle break-words',
-    headline: 'text-body-medium break-words',
-    location: 'text-body-small inline t-black--light break-words',
-    currentCompany:
-      'inline-show-more-text inline-show-more-text--is-collapsed inline-show-more-text--is-collapsed-with-line-clamp inline',
-    education:
-      'inline-show-more-text inline-show-more-text--is-collapsed inline-show-more-text--is-collapsed-with-line-clamp inline ha-selection'
+    name: '//h1[@class="text-heading-xlarge inline t-24 v-align-middle break-words"]',
+    headline: '//div[@class="text-body-medium break-words"]',
+    location: '//span[@class="text-body-small inline t-black--light break-words"]',
+    currentCompany: '//*[@id="ember31"]/div[2]/div[2]/ul/li[1]/a/h2/div',
+    education: '//*[@id="ember31"]/div[2]/div[2]/ul/li[2]/a/h2/div'
   },
   Instagram: {
-    name: '_aacl _aacs _aact _aacx _aada'
+    name: '//h2[@class="_aacl _aacs _aact _aacx _aada"]'
   }
 }
 const ValidUrl = {
@@ -30,16 +28,17 @@ const checkURL = (url) => {
   }
   return null
 }
-const getUserData = () => {
+const getUserData = async () => {
   const url = window.location.href
-  console.log(url)
-  let webPage = checkURL(url)
-  console.log("webPage :",webPage);
+  // console.log(url)
+  let webPage = await checkURL(url)
+  console.log('webPage :', webPage)
   if (webPage !== null) {
     for (let key in data) {
       if (key === webPage) {
         for (var d in data[key]) {
-          console.log(d + ':' + document.getElementsByClassName(data[key][d])[0].textContent)
+          const ele = document.evaluate(data[key][d], document, null, XPathResult.ANY_TYPE, null).iterateNext()
+          console.log(d + " : " + ele.textContent)
         }
       }
     }
