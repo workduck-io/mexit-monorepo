@@ -331,11 +331,12 @@ export const useInitializeAfterAuth = () => {
 
       setAuthenticated(userDetails, workspaceDetails)
 
-      const initialSnippets = await api.getAllSnippetsByWorkspace()
-      initSnippets(initialSnippets)
+      const initialSnippetsP = await api.getAllSnippetsByWorkspace()
+      const initPortalsP = initPortals()
+      const refreshILinksP = refreshILinks()
 
-      await initPortals()
-      await refreshILinks()
+      const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
+      if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {
