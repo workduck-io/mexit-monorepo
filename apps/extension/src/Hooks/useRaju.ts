@@ -3,7 +3,6 @@ import {
   Contents,
   idxKey,
   ILink,
-  mog,
   NodeEditorContent,
   NodeMetadata,
   Reminder,
@@ -47,6 +46,7 @@ export default function useRaju() {
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
+  const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
@@ -96,7 +96,8 @@ export default function useRaju() {
       snippets: Snippet[],
       contents: Contents,
       ilinks: any[],
-      reminders: Reminder[]
+      reminders: Reminder[],
+      publicNodes: any[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -106,11 +107,12 @@ export default function useRaju() {
       initContents(contents)
       setReminders(reminders)
       initHighlights(ilinks, contents)
+      setPublicNodes(publicNodes)
     }
   }
 
   const dispatch = <K extends keyof ParentMethods>(type: K, ...params: ParentMethods[K]) => {
-    let event = new CustomEvent('raju', { detail: { type, ...params } })
+    const event = new CustomEvent('raju', { detail: { type, ...params } })
 
     window.dispatchEvent(event)
   }

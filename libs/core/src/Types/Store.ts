@@ -20,7 +20,7 @@ export interface DataStoreState {
   baseNodeId: string
   bookmarks: string[]
   archive: ILink[]
-  publicNodes: Record<string, string>
+  publicNodes: any[]
   sharedNodes: SharedNode[]
   slashCommands: SlashCommands
 
@@ -63,13 +63,15 @@ export interface DataStoreState {
   removeFromArchive: (archive: ILink[]) => void
   setArchive: (archive: ILink[]) => void
 
-  setNodePublic: (nodeId: string, publicURL: string) => void
+  setNodePublic: (nodeId: string) => void
   setNodePrivate: (nodeId: string) => void
-  checkNodePublic: (nodeId: string) => string | undefined
+  checkNodePublic: (nodeId: string) => boolean
 
   checkValidILink: (props: CheckValidILinkProps) => string
 
   // Shared Nodes
   setSharedNodes: (sharedNodes: SharedNode[]) => void
   getSharedNodes: () => SharedNode[]
+
+  setPublicNodes: (publicNodes: any[]) => void
 }

@@ -42,7 +42,6 @@ export const useApi = () => {
     })
   )
   const { updateFromContent } = useUpdater()
-  const setIlinks = useDataStore((store) => store.setIlinks)
 
   const { getSharedNode } = useNodes()
 
@@ -267,8 +266,7 @@ export const useApi = () => {
         }
       })
       .then((resp) => {
-        const publicURL = apiURLs.getNodePublicURL(nodeId)
-        setNodePublic(nodeId, publicURL)
+        setNodePublic(nodeId)
         return nodeId
       })
 

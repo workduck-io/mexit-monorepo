@@ -38,7 +38,7 @@ const ShareOptions = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
-  const publicUrl = isPublic(node.nodeid)
+  const publicUrl = isPublic(node.nodeid) ? apiURLs.getPublicNodePath(node.nodeid) : undefined
 
   const flipPublicAccess = async () => {
     setIsLoading(true)

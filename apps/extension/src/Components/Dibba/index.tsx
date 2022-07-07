@@ -1,14 +1,4 @@
-import {
-  defaultContent,
-  LinkCapture,
-  mog,
-  parseBlock,
-  parseNode,
-  parseSnippet,
-  QuickLinkType,
-  SEPARATOR,
-  Snippet
-} from '@mexit/core'
+import { apiURLs, defaultContent, parseBlock, parseSnippet, QuickLinkType, SEPARATOR, Snippet } from '@mexit/core'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import fuzzysort from 'fuzzysort'
@@ -16,7 +6,6 @@ import fuzzysort from 'fuzzysort'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
-import { useShortenerStore } from '../../Hooks/useShortener'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { ActionTitle, ComboboxShortcuts, ComboSeperator, DisplayShortcut, ShortcutText } from '@mexit/shared'
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
@@ -24,6 +13,15 @@ import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import useDataStore from '../../Stores/useDataStore'
 import { useContentStore } from '../../Stores/useContentStore'
+import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
+
+interface PublicNode {
+  type: 'Public Nodes'
+  id: string
+  icon: string
+  url: string
+  title?: string
+}
 
 // This functions provides the 'to be' range and text content
 // Needed because keydown event happens before there is a selection or content change
@@ -54,13 +52,27 @@ export default function Dibba() {
   const left = window.scrollX + dibbaState.coordinates.left
   const [offsetTop, setOffsetTop] = useState(window.innerHeight < top + dibbaRef.current?.clientHeight)
 
+  const ilinks = useDataStore((state) => state.ilinks)
   const linkCaptures = []
-  const ilinks = useDataStore((state) => state.ilinks).filter(
-    (item) => item.path.split(SEPARATOR)[0] === 'Links' && item.path.split(SEPARATOR).length > 1
+  const publicNodes: PublicNode[] = []
+
+  const linkCaptureILinks = ilinks.filter(
+    (item) => item.path.split(SEPARATOR).length > 1 && item.path.split(SEPARATOR)[0] === 'Links'
   )
+  const publicNodeIDs = useDataStore((store) => store.publicNodes)
+  publicNodeIDs.forEach((nodeID) => {
+    const publicNode: PublicNode = {
+      type: 'Public Nodes',
+      id: nodeID,
+      icon: 'ri:external-link-line',
+      url: apiURLs.getPublicNodePath(nodeID),
+      title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop()
+    }
+    publicNodes.push(publicNode)
+  })
 
   const getContent = useContentStore((store) => store.getContent)
-  ilinks.forEach((item) => {
+  linkCaptureILinks.forEach((item) => {
     const _content = getContent(item.nodeid)
 
     linkCaptures.push({
@@ -81,8 +93,17 @@ export default function Dibba() {
       type: QuickLinkType.snippet,
       icon: item?.icon || 'ri:quill-pen-line',
       ...item
-    }))
+    })),
+    ...publicNodes
   ]
+
+  const insertPublicNode = (item: PublicNode) => {
+    const linkEle = document.createElement('a')
+    linkEle.appendChild(document.createTextNode(item.title))
+    linkEle.href = item.url
+
+    dibbaState.extra.range.insertNode(linkEle)
+  }
 
   const insertSnippet = (item: Snippet) => {
     dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
@@ -109,7 +130,7 @@ export default function Dibba() {
     // TODO: this fails in keep
     try {
       // Extendering the range by 2 + text after trigger length i.e. search query
-      let triggerRange = dibbaState.extra.range.cloneRange()
+      const triggerRange = dibbaState.extra.range.cloneRange()
       triggerRange.setStart(
         triggerRange.startContainer,
         triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
@@ -119,11 +140,18 @@ export default function Dibba() {
       console.log(error)
     }
 
-    if (item.type === QuickLinkType.snippet) {
-      insertSnippet(item as Snippet)
-    } else if (item.type === 'Links') {
-      // TODO: transform again to type linkCapture
-      insertLink(item)
+    switch (item.type) {
+      case QuickLinkType.snippet: {
+        insertSnippet(item as Snippet)
+        break
+      }
+      case 'Links': {
+        insertLink(item)
+        break
+      }
+      case 'Public Nodes': {
+        insertPublicNode(item as PublicNode)
+      }
     }
 
     setDibbaState({ visualState: VisualState.hidden })

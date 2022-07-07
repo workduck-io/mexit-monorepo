@@ -25,7 +25,7 @@ export const dataStoreConstructor = (set, get) => ({
   baseNodeId: '@',
   bookmarks: [],
   archive: [],
-  publicNodes: {},
+  publicNodes: [],
   sharedNodes: [],
   slashCommands: { default: defaultCommands, internal: [] },
   initializeDataStore: (initData) => {
@@ -251,26 +251,28 @@ export const dataStoreConstructor = (set, get) => ({
     set({ archive: userArchive })
   },
 
-  setNodePublic: (nodeId, publicURL) => {
-    if (get().publicNodes[nodeId]) return
-    set({ publicNodes: { ...get().publicNodes, [nodeId]: publicURL } })
+  setNodePublic: (nodeId) => {
+    if (get().publicNodes.find((i) => i === nodeId)) return
+    set({ publicNodes: [...get().publicNodes, nodeId] })
   },
   setNodePrivate: (nodeId) => {
-    if (get().publicNodes[nodeId]) {
-      const newNodes = get().publicNodes
-      delete newNodes[nodeId]
-      set({ publicNodes: newNodes })
-    }
+    const filtered = get().publicNodes.filter((i) => i !== nodeId)
+    set({ publicNodes: filtered })
   },
   checkNodePublic: (nodeId) => {
-    return get().publicNodes?.[nodeId]
+    return get().publicNodes.find((i) => i === nodeId) ? true : false
   },
 
   setSharedNodes: (sharedNodes) => {
     set({ sharedNodes })
   },
 
-  getSharedNodes: () => get().sharedNodes
+  getSharedNodes: () => get().sharedNodes,
+  setPublicNodes: (publicNodes) => {
+    set({
+      publicNodes: publicNodes
+    })
+  }
 })
 
 export const getLevel = (path: string) => path.split(SEPARATOR).length

@@ -84,13 +84,15 @@ export default function Chotu() {
       const quickLinks = getQuickLinks()
 
       switch (search.type) {
-        case CategoryType.action:
+        case CategoryType.action: {
           const actionList = fuzzysort
             .go(search.value.substring(1), initActions, { all: true, key: 'title' })
             .map((item) => item.obj)
           searchList = actionList
           break
-        case CategoryType.backlink:
+        }
+
+        case CategoryType.backlink: {
           if (search.value.substring(2)) {
             const results = fuzzysort
               .go(search.value.substring(2), quickLinks, { all: true, key: 'title' })
@@ -104,7 +106,9 @@ export default function Chotu() {
             searchList = isNew ? [CREATE_NEW_ITEM, ...results] : results
           }
           break
-        case CategoryType.search:
+        }
+
+        case CategoryType.search: {
           const snippetItems = await child.search('snippet', search.value)
           const nodeItems = await child.search('node', search.value)
 
@@ -139,6 +143,7 @@ export default function Chotu() {
           // mog('searchList chotu', { searchList })
           if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
           break
+        }
       }
 
       setSearchResults(searchList)
