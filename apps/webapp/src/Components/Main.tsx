@@ -107,9 +107,9 @@ const Main = ({ children }: MainProps) => {
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       {/* <Draggable style={styles as any} /> eslint-disable-line @typescript-eslint/no-explicit-any */}
       <GridWrapper
-        // eslint-disable-next-line
-        // @ts-ignore
-        grid={authenticated && showNav() ? 'true' : 'false'}
+      // eslint-disable-next-line
+      // @ts-ignore
+      // grid={authenticated && showNav() ? 'true' : 'false'}
       >
         {authenticated && showNav() && <Nav links={getLinks()} />}
         <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
