@@ -22,6 +22,7 @@ import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
 import { useUserCacheStore } from './useUserCacheStore'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
+import { getEmailStart } from '../Utils/constants'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -65,47 +66,10 @@ export const useAuthentication = () => {
 
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
     try {
-      const result: any = await googleSignIn(code, clientId, redirectURI)
-      console.log(`Result of Login: ${JSON.stringify(result)}`)
-
-      setShowLoader(true)
-      if (getWorkspace && result !== undefined) {
-        await client.get(apiURLs.getUserRecords).then(async (d: any) => {
-          const userDetails = {
-            email: result.userCred.email,
-            userID: result.userCred.userId,
-            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-            name: d.data.name
-          }
-          const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-          setAuthenticated(userDetails, workspaceDetails)
-
-          if (!d.data.group) {
-            await registerUserForGoogle(result, d.data)
-          } else {
-            mog('UserDetails', { userDetails: result })
-            const userDetails = {
-              email: result.userCred.email,
-              name: d.data.name,
-              userID: result.userCred.userId,
-              alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name
-            }
-            const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-
-            mog('Login Google BIG success', { d, userDetails, workspaceDetails })
-
-            setAuthenticated(userDetails, workspaceDetails)
-          }
-        })
-        await refreshILinks()
-        await initPortals()
-      }
-
-      setShowLoader(false)
-      return result
+      const { userCred } = (await googleSignIn(code, clientId, redirectURI)) as any
+      return userCred
     } catch (error) {
-      setShowLoader(false)
-      console.log(error)
+      mog('ErrorInGoogleLogin', { error })
     }
   }
 
@@ -299,23 +263,79 @@ export const useInitializeAfterAuth = () => {
   const { refreshILinks } = useInternalLinks()
   const api = useApi()
 
-  const initializeAfterAuth = async (loginData: UserCred, loginStatus: string, forceRefreshToken = false) => {
+  const registerNewGoogleUser = async (loginResult: UserCred) => {
+    const { email, userId } = loginResult
+    const name = getEmailStart(email)
+    const newWorkspaceName = `WD_${nanoid()}`
+    const result = await client
+      .post(
+        apiURLs.registerUser,
+        {
+          type: 'RegisterUserRequest',
+          user: {
+            id: userId,
+            email: email,
+            name: name,
+            alias: name
+          },
+          workspaceName: newWorkspaceName
+        },
+        {
+          headers: {
+            'mex-workspace-id': ''
+          }
+        }
+      )
+      .then((d: any) => {
+        return d.data
+      })
+
+    const userDetails = {
+      email: email,
+      alias: name,
+      userID: userId,
+      name: name
+    }
+    const workspaceDetails = { id: result.group, name: 'WORKSPACE_NAME' }
+
+    return { userDetails, workspaceDetails }
+  }
+
+  const initializeAfterAuth = async (
+    loginData: UserCred,
+    loginStatus: string,
+    forceRefreshToken = false,
+    isGoogle = false
+  ) => {
     try {
       setShowLoader(true)
       const { email } = loginData
 
-      const { userDetails, workspaceDetails } = await client.get(apiURLs.getUserRecords).then((d: any) => {
-        const userDetails = {
-          email,
-          alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-          userID: d.data.id,
-          name: d.data.name
-        }
-        // const userDetails = { email, userId: data.userId }
-        const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-        return { workspaceDetails, userDetails }
-      })
+      const { userDetails, workspaceDetails } = await client
+        .get(apiURLs.getUserRecords, {
+          validateStatus: (status: number) => {
+            return (status >= 200 && status < 300) || status === 404
+          }
+        })
+        .then(async (d: { status: number; data: any }) => {
+          if (d.status === 404 && isGoogle) {
+            mog('InsideGoogleRegisterCall', { d, isGoogle })
+            return await registerNewGoogleUser(loginData)
+          } else if (d.data.group) {
+            const userDetails = {
+              email,
+              alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+              userID: d.data.id,
+              name: d.data.name
+            }
+            const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+            return { workspaceDetails, userDetails }
+          } else {
+            throw new Error('Could Not Fetch User Records')
+          }
+        })
 
+      mog('UserRecordsFetch', { userDetails, workspaceDetails })
       addUser({
         userID: userDetails.userID,
         email: userDetails.email,
@@ -325,6 +345,8 @@ export const useInitializeAfterAuth = () => {
 
       setAuthenticated(userDetails, workspaceDetails)
 
+      if (forceRefreshToken) await refreshToken()
+
       const initialSnippetsP = await api.getAllSnippetsByWorkspace()
       const initPortalsP = initPortals()
       const refreshILinksP = refreshILinks()
@@ -332,8 +354,6 @@ export const useInitializeAfterAuth = () => {
       const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
 
       if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
-
-      if (forceRefreshToken) await refreshToken()
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {
