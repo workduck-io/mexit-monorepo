@@ -258,7 +258,7 @@ export const defaultCopyConverter = (block) => {
 export const defaultCopyFilter = ({ type }) => {
   const exclude: Array<string> = [
     ELEMENT_EXCALIDRAW,
-    ELEMENT_ILINK,
+    // ELEMENT_ILINK,
     ELEMENT_TABLE,
     ELEMENT_INLINE_BLOCK,
     ELEMENT_CODE_BLOCK

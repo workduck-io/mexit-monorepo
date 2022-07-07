@@ -1,6 +1,12 @@
 import {
   apiURLs,
+  convertContentToRawText,
+  convertToCopySnippet,
   defaultContent,
+  defaultCopyConverter,
+  defaultCopyFilter,
+  ELEMENT_TAG,
+  mog,
   NodeEditorContent,
   parseBlock,
   parseSnippet,
@@ -23,6 +29,10 @@ import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import useDataStore from '../../Stores/useDataStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
+import toast from 'react-hot-toast'
+import { serializeHtml, createPlateEditor, createPlateUI } from '@udecode/plate'
+import getPlugins from '../../Editor/plugins/index'
+import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 
 interface PublicNode {
   type: 'Public Nodes'
@@ -118,14 +128,48 @@ export default function Dibba() {
     linkEle.href = item.url
 
     dibbaState.extra.range.insertNode(linkEle)
+
+    toast.success('Inserted Public Link!')
   }
 
-  const insertSnippet = (item: Snippet) => {
-    dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
-    dibbaState.extra.range.collapse(false)
+  const insertSnippet = async (item: Snippet) => {
+    const text = convertContentToRawText(item.content, '\n')
 
-    // Combining the inserted text node into one
-    document.activeElement.normalize()
+    let html = text
+
+    try {
+      const filterdContent = convertToCopySnippet(item.content)
+      const convertedContent = convertToCopySnippet(filterdContent, {
+        filter: defaultCopyFilter,
+        converter: defaultCopyConverter
+      })
+
+      const tempEditor = createPlateEditor({
+        plugins: getPlugins(
+          createPlateUI({
+            [ELEMENT_TAG]: CopyTag as any
+          }),
+          {
+            exclude: { dnd: true }
+          }
+        )
+      })
+
+      html = serializeHtml(tempEditor, {
+        nodes: convertedContent
+      })
+    } catch (err) {
+      mog('Something went wrong', { err })
+    }
+
+    //Copying both the html and text in clipboard
+    const textBlob = new Blob([text], { type: 'text/plain' })
+    const htmlBlob = new Blob([html], { type: 'text/html' })
+    const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
+
+    await navigator.clipboard.write(data)
+
+    toast.success('Snippet copied to clipboard!')
   }
 
   const insertLink = (item: any) => {
@@ -139,9 +183,11 @@ export default function Dibba() {
 
     // Combining the inserted text node into one
     document.activeElement.normalize()
+
+    toast.success('Inserted Shortened URL!')
   }
 
-  const handleClick = (item: any) => {
+  const handleClick = async (item: any) => {
     // TODO: this fails in keep
     try {
       // Extendering the range by 2 + text after trigger length i.e. search query
@@ -157,7 +203,7 @@ export default function Dibba() {
 
     switch (item.type) {
       case QuickLinkType.snippet: {
-        insertSnippet(item as Snippet)
+        await insertSnippet(item as Snippet)
         break
       }
       case 'Links': {
