@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import create, { State } from 'zustand'
+import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
@@ -20,7 +20,6 @@ import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
-import useArchive from '../Hooks/useArchive'
 import { useUserCacheStore } from './useUserCacheStore'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 
@@ -49,11 +48,11 @@ export const useAuthentication = () => {
 
   const { refreshILinks } = useInternalLinks()
 
-  const login = async (email: string, password: string): Promise<{ data: UserCred; loginStatus: string }> => {
-    let data: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  const login = async (email: string, password: string): Promise<{ loginData: UserCred; loginStatus: string }> => {
+    let loginData: UserCred
     const loginStatus = await signIn(email, password)
       .then((d) => {
-        data = d
+        loginData = d
         return 'success'
       })
       .catch((e) => {
@@ -61,13 +60,7 @@ export const useAuthentication = () => {
         return e.toString() as string
       })
 
-    mog('LoginResult', { loginStatus, data })
-
-    if (!data) {
-      throw new Error('Error Occurred In Login')
-    }
-
-    return { data, loginStatus }
+    return { loginData, loginStatus }
   }
 
   const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
@@ -236,7 +229,7 @@ export const useAuthentication = () => {
       return
     }
 
-    const uCred = loginData.data
+    const uCred = loginData.loginData
     const newWorkspaceName = `WD_${nanoid()}`
 
     setShowLoader(true)
@@ -301,14 +294,15 @@ export const useInitializeAfterAuth = () => {
   const addUser = useUserCacheStore((s) => s.addUser)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
 
+  const { refreshToken } = useAuth()
   const { initPortals } = usePortals()
   const { refreshILinks } = useInternalLinks()
   const api = useApi()
 
-  const initializeAfterAuth = async ({ data, loginStatus }: { data: UserCred; loginStatus: string }) => {
+  const initializeAfterAuth = async (loginData: UserCred, loginStatus: string, forceRefreshToken = false) => {
     try {
       setShowLoader(true)
-      const { email } = data
+      const { email } = loginData
 
       const { userDetails, workspaceDetails } = await client.get(apiURLs.getUserRecords).then((d: any) => {
         const userDetails = {
@@ -336,7 +330,10 @@ export const useInitializeAfterAuth = () => {
       const refreshILinksP = refreshILinks()
 
       const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
+
       if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
+
+      if (forceRefreshToken) await refreshToken()
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {

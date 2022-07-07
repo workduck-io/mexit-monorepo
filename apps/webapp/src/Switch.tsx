@@ -18,7 +18,6 @@ import { ROUTE_PATHS } from './Hooks/useRouting'
 import Settings from './Views/Settings'
 import Search from './Views/Search'
 import PublicNodeView from './Views/PublicNodeView'
-import OAuthDesktop from './Components/OAuthDesktop'
 import styled from 'styled-components'
 import { ForgotPassword } from './Views/ForgotPassword'
 import Tasks from './Views/Tasks'
@@ -26,7 +25,6 @@ import Archive from './Views/Archive'
 import { animated } from 'react-spring'
 import { useSidebarTransition } from './Components/Sidebar/Transition'
 import DraftView from './Views/DraftView'
-import GoogleOAuth from './Components/OAuth/Google'
 import Tag from './Views/Tag'
 import Shortcuts from './Views/Settings/Shortcuts'
 import About from './Views/Settings/About'
@@ -93,30 +91,6 @@ const AuthRoutes = () => {
         element={
           <AuthRoute>
             <Register />
-          </AuthRoute>
-        }
-      />
-    </Routes>
-  )
-}
-
-const OAuthRoutes = () => {
-  return (
-    <Routes>
-      <Route
-        path="google"
-        element={
-          <AuthRoute>
-            <GoogleOAuth />
-          </AuthRoute>
-        }
-      />
-
-      <Route
-        path="desktop"
-        element={
-          <AuthRoute>
-            <OAuthDesktop />
           </AuthRoute>
         }
       />
