@@ -12,25 +12,20 @@ import { useApi } from '../../Hooks/API/useNodeAPI'
 import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
 import styled from 'styled-components'
 
-const PublicStyledEditor = styled.div`
+const PublicStyledEditor = styled(StyledEditor)`
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex: 1;
 
-  max-width: 1000px;
+  max-width: 950px;
   min-width: 400px;
 
   padding: 0 2rem;
-  margin: 1rem 2rem;
+  margin: 1rem;
 
   && > div {
     width: 100%;
-    margin: 1rem;
-  }
-
-  ${Title} {
-    margin: 0 2rem;
   }
 `
 
