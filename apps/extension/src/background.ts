@@ -1,11 +1,11 @@
-import { ActionType, apiURLs } from '@mexit/core'
+import { ActionType, apiURLs, LINK_SHORTENER_URL_BASE, mog, SEPARATOR } from '@mexit/core'
 
 import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import fuzzysort from 'fuzzysort'
-import { deserialize } from 'v8'
-import { useShortenerStore } from './Hooks/useShortener'
+import useDataStore from './Stores/useDataStore'
+import { useAuthStore } from './Hooks/useAuth'
 
 Sentry.init({
   dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
@@ -156,16 +156,40 @@ chrome.notifications.onClosed.addListener((notificationId, byUser) => {
 })
 
 chrome.omnibox.onInputChanged.addListener((text, suggest) => {
-  const linkCaptures = useShortenerStore.getState().linkCaptures
-  const suggestions = fuzzysort.go(text, linkCaptures, { key: 'short', allowTypo: true }).map((item) => {
+  const workspaceDetails = useAuthStore.getState().workspaceDetails
+  const linkCaptures = useDataStore
+    .getState()
+    .ilinks.filter((item) => item.path.startsWith('Links') && item.path.split(SEPARATOR).length > 1)
+
+  const suggestions = fuzzysort.go(text, linkCaptures, { key: 'path', allowTypo: true, all: true }).map((item) => {
+    const title = item.obj.path.split(SEPARATOR).slice(-1)[0]
+
     return {
-      content: item.obj.long,
-      description: item.obj.short
+      content: `${LINK_SHORTENER_URL_BASE}/${workspaceDetails.id}/${title}`,
+      description: title
     }
   })
 
+  console.log('ombinobox ', { linkCaptures, suggestions })
   suggest(suggestions)
 })
+
+chrome.webRequest.onBeforeRequest.addListener(
+  (details) => {
+    const workspaceDetails = useAuthStore.getState().workspaceDetails
+
+    console.log('details ', { details })
+    if (details.url.startsWith('[[')) {
+      const alias = details.url.substring(2)
+
+      return {
+        redirectUrl: `${LINK_SHORTENER_URL_BASE}/${workspaceDetails.id}/${alias}`
+      }
+    }
+  },
+  { urls: ['<all_urls>'], types: ['main_frame'] }
+  // ['blocking']
+)
 
 chrome.omnibox.onInputEntered.addListener((text) => {
   chrome.tabs.update({ url: text })
