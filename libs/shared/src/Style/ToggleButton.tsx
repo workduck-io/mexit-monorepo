@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { transparentize } from 'polished'
 
 export const Input = styled.input`
   height: 0;
@@ -28,15 +29,22 @@ export const Label = styled.label<{ size: string; disabled: boolean }>`
 
 export const Slider = styled.span`
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.colors.background.modal};
+
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.background.app};
+  border-radius: 3.4em;
+
   -webkit-transition: 0.4s;
   transition: 0.4s;
-  border-radius: 3.4em;
+
+  &:hover {
+    box-shadow: 0px 0px 11px 6px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
+  }
+
   &::before {
     position: absolute;
     content: '';
@@ -49,17 +57,21 @@ export const Slider = styled.span`
     transition: 0.4s;
     border-radius: 50%;
   }
+
   ${Input}:checked + & {
     background-color: ${({ theme }) => theme.colors.primary};
   }
+
   ${Input}:checked + &::before {
     -webkit-transform: translateX(2.6em);
     -ms-transform: translateX(2.6em);
     transform: translateX(2.6em);
   }
+
   ${Input}:focus + & {
     box-shadow: 0 0 0.1em ${({ theme }) => theme.colors.background.highlight};
   }
+
   ${Input}:disabled + & {
     pointer-events: none;
     background: ${({ theme }) => theme.colors.text.disabled};
