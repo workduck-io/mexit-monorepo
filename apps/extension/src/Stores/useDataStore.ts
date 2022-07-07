@@ -7,7 +7,7 @@ import { dataStoreConstructor } from '@mexit/shared'
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 const useDataStore = create<DataStoreState>(
-  persist(dataStoreConstructor, { name: 'mexit-data-store', getStorage: () => asyncLocalStorage })
+  persist(dataStoreConstructor, { name: 'mexit-data-store', version: 1, getStorage: () => asyncLocalStorage })
 )
 
 export default useDataStore
