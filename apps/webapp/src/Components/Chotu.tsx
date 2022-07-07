@@ -35,6 +35,7 @@ export default function Chotu() {
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
+  const publicNodes = useDataStore((store) => store.publicNodes)
 
   const { ilinks, archive, sharedNodes } = useDataStore()
   const { contents, setContent } = useContentStore()
@@ -79,18 +80,20 @@ export default function Chotu() {
   })
 
   useEffect(() => {
-    connection.promise
-      .then((parent: any) => {
-        parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
+    if (connection) {
+      connection.promise
+        .then((parent: any) => {
+          parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
 
-    return () => {
-      connection.destroy()
+      return () => {
+        connection.destroy()
+      }
     }
-  }, [userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders])
+  }, [userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes, connection])
 
   return (
     <div>

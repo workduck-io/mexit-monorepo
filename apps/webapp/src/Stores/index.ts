@@ -26,6 +26,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('workspaceDetails', useAuthStore, { ref: 'share-workspaceDetails' })
   share('snippets', useSnippetStore, { ref: 'share-snippets' })
   share('reminders', useReminderStore, { ref: 'share-reminders' })
+  share('publicNodes', useDataStore, { ref: 'share-publicNodes' })
 }
 
 export default {}
