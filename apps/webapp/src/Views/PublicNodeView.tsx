@@ -12,6 +12,15 @@ import { defaultContent } from '../Data/baseData'
 import { usePublicNodeStore, PublicNode } from '../Stores/usePublicNodes'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { EditorViewWrapper } from './EditorView'
+import { useLayoutStore } from '../Stores/useLayoutStore'
+import SplashScreen from '../Components/SplashScreen'
+
+const PublicEditorWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`
 
 const PublicNodeView = () => {
   const nodeId = useParams().nodeId
@@ -19,6 +28,7 @@ const PublicNodeView = () => {
   const { getPublicNodeAPI } = useApi()
   const navigate = useNavigate()
   const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
+  const [showLoader, setShowLoader] = useState(true)
 
   useEffect(() => {
     const cookies = new Cookies()
@@ -31,6 +41,7 @@ const PublicNodeView = () => {
       try {
         const node = await getPublicNodeAPI(nodeId)
         setNode({ ...node, id: nodeId })
+        setShowLoader(false)
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNode', { error })
         navigate('/404')
@@ -40,11 +51,17 @@ const PublicNodeView = () => {
   }, [])
 
   return (
-    <EditorViewWrapper>
-      <PublicNodeEditor nodeId={nodeId} node={node} />
+    <PublicEditorWrapper>
+      {showLoader ? (
+        <SplashScreen />
+      ) : (
+        <>
+          <PublicNodeEditor nodeId={nodeId} node={node} />
 
-      <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
-    </EditorViewWrapper>
+          <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
+        </>
+      )}
+    </PublicEditorWrapper>
   )
 }
 
