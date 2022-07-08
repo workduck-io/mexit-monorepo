@@ -25,7 +25,7 @@
     "type": "module"
   },
   "omnibox": {
-    "keyword": "mexit"
+    "keyword": "[["
   },
   "content_scripts": [
     {

@@ -28,8 +28,7 @@ import {
   ItemCount
 } from '@mexit/shared'
 import { useTreeStore } from '../../Stores/useTreeStore'
-import { getNameFromPath } from '@mexit/shared'
-import { mog, SEPARATOR } from '@mexit/core'
+import { mog, SEPARATOR, getNameFromPath } from '@mexit/core'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import * as ContextMenu from '@radix-ui/react-context-menu'

@@ -12,7 +12,6 @@ export * from './Hooks/useEditorActions'
 export * from './Hooks/useRelativeTime'
 
 export * from './Stores/themeStoreConstructor'
-export * from './Stores/dataStoreConstructor'
 
 export * from './Style/Archive'
 export * from './Style/BalloonToolbar.styles'
@@ -67,5 +66,4 @@ export * from './Utils/blurSelection'
 export * from './Utils/shortcuts'
 export * from './Utils/tabInfo'
 export * from './Utils/themeGenerator'
-export * from './Utils/treeUtils'
 export * from './Utils/uploadToCDN'

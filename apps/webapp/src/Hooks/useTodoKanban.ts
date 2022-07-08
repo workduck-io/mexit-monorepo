@@ -6,9 +6,10 @@ import {
   TodoRanks,
   TodoStatusRanks,
   SNIPPET_PREFIX,
-  SearchFilter
+  SearchFilter,
+  isElder,
+  getAllParentPaths
 } from '@mexit/core'
-import { isElder, getAllParentPaths } from '@mexit/shared'
 import { ELEMENT_TODO_LI } from '@udecode/plate'
 import create from 'zustand'
 import { defaultContent } from '../Data/baseData'

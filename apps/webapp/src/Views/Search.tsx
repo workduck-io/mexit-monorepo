@@ -3,8 +3,15 @@ import { Icon } from '@iconify/react'
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import shareLine from '@iconify/icons-ri/share-line'
 
-import { GenericSearchResult, defaultContent, mog, NodeType, convertContentToRawText } from '@mexit/core'
-import { MainHeader, getInitialNode, TitleText, ResultCardFooter, Title } from '@mexit/shared'
+import {
+  GenericSearchResult,
+  defaultContent,
+  mog,
+  NodeType,
+  convertContentToRawText,
+  getInitialNode
+} from '@mexit/core'
+import { MainHeader, TitleText, ResultCardFooter, Title } from '@mexit/shared'
 
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'

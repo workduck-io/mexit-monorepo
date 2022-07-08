@@ -1,4 +1,4 @@
-import { sanatizeLinks } from '@mexit/shared'
+import { sanatizeLinks } from '@mexit/core'
 import { useMemo } from 'react'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'

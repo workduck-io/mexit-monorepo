@@ -1,4 +1,6 @@
-import { BASE_DRAFT_PATH, BASE_TASKS_PATH, NodeProperties, SEPARATOR } from '@mexit/core'
+import { NodeProperties } from '../Types/Editor'
+import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
+import { SEPARATOR } from './idGenerator'
 
 export const sampleFlatTree = [
   '@',

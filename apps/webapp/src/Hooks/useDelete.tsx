@@ -1,5 +1,4 @@
-import { mog, ILink, isMatch } from '@mexit/core'
-import { getAllParentPaths } from '@mexit/shared'
+import { mog, ILink, isMatch, getAllParentPaths } from '@mexit/core'
 
 import { useHistoryStore } from '../Stores/useHistoryStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'

@@ -6,9 +6,9 @@ import {
   mog,
   ELEMENT_PARAGRAPH,
   SEPARATOR,
-  updateEmptyBlockTypes
+  updateEmptyBlockTypes,
+  getParentId
 } from '@mexit/core'
-import { getParentId } from '@mexit/shared'
 import { toast } from 'react-hot-toast'
 
 import { useApi } from './API/useNodeAPI'

@@ -1,6 +1,6 @@
 import { TreeItem, TreeData } from '@atlaskit/tree'
-import { Contents, mog, NodeMetadata } from '@mexit/core'
-import { isElder, isParent, getParentId, getNameFromPath, TreeNode } from '@mexit/shared'
+import { Contents, mog, NodeMetadata, isElder, isParent, getParentId, getNameFromPath } from '@mexit/core'
+import { TreeNode } from '@mexit/shared'
 import { useContentStore } from '../Stores/useContentStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'

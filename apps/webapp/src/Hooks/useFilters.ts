@@ -1,7 +1,6 @@
 import create from 'zustand'
 
-import { GenericSearchResult, mog, SearchFilter } from '@mexit/core'
-import { isElder, getAllParentPaths } from '@mexit/shared'
+import { GenericSearchResult, mog, SearchFilter, isElder, getAllParentPaths } from '@mexit/core'
 
 import { useTags } from './useTags'
 import { useLinks } from './useLinks'
