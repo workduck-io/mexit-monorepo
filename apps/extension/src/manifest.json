@@ -42,7 +42,6 @@
     }
   ],
   "permissions": [
-    "webRequest",
     "contextMenus",
     "storage",
     "tabs",

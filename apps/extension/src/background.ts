@@ -170,26 +170,8 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     }
   })
 
-  console.log('ombinobox ', { linkCaptures, suggestions })
   suggest(suggestions)
 })
-
-chrome.webRequest.onBeforeRequest.addListener(
-  (details) => {
-    const workspaceDetails = useAuthStore.getState().workspaceDetails
-
-    console.log('details ', { details })
-    if (details.url.startsWith('[[')) {
-      const alias = details.url.substring(2)
-
-      return {
-        redirectUrl: `${LINK_SHORTENER_URL_BASE}/${workspaceDetails.id}/${alias}`
-      }
-    }
-  },
-  { urls: ['<all_urls>'], types: ['main_frame'] }
-  // ['blocking']
-)
 
 chrome.omnibox.onInputEntered.addListener((text) => {
   chrome.tabs.update({ url: text })
