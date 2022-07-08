@@ -41,7 +41,7 @@ const PublicNodeEditor = ({ nodeId, node }) => {
   return (
     <PublicStyledEditor className="mex_editor">
       <Title>
-        <Link to={'/'}>Mexit</Link>
+        <Link to={'/'}>{node?.title}</Link>
       </Title>
 
       {node?.metadata && <PublicNodeMetadata metadata={node.metadata} />}
