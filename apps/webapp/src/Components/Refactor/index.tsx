@@ -88,7 +88,7 @@ const Refactor = () => {
   const handleRefactor = async () => {
     const { addedILinks, removedILinks } = (await execRefactor(from, to)) as any
 
-    updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
+    updateILinksFromAddedRemovedPaths(addedILinks?.ilinks, removedILinks?.ilinks)
 
     // const path = useEditorStore.getState().node.path
     // const nodeid = useEditorStore.getState().node.nodeid
