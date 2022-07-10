@@ -14,7 +14,7 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { node } = useEditorContext()
+  const { node, setPreviewMode } = useEditorContext()
   const { ilinks, addILink, checkValidILink } = useDataStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
@@ -111,6 +111,8 @@ export function useSaveChanges() {
 
         if (saveAndExit) {
           setVisualState(VisualState.animatingOut)
+          // So that sputlit opens with preview true when it opens the next time
+          setPreviewMode(true)
         }
       }
     })
