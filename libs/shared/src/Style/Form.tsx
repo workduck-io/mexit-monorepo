@@ -4,7 +4,7 @@ import Creatable from 'react-select/creatable'
 import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
 
-export declare enum TextFieldHeight {
+export enum TextFieldHeight {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE'
@@ -118,9 +118,9 @@ export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?
         opacity: 0.8;
         font-size: 0.96rem;
       }
-    `}
+    `} 
 
-  ${({ height }) => {
+   ${({ height }) => {
     switch (height) {
       case TextFieldHeight.SMALL:
         return css`
