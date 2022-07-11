@@ -15,6 +15,8 @@ type EditorContextType = {
   setNode: (node: NodeProperties) => void
   nodeContent: NodeEditorContent
   setNodeContent: (content: NodeEditorContent) => void
+  persistedContent: NodeEditorContent
+  setPersistedContent: (content: NodeEditorContent) => void
   previewMode: boolean
   setPreviewMode: (val: boolean) => void
 }
@@ -26,12 +28,15 @@ export const EditorProvider: React.FC = ({ children }: any) => {
   const [node, setNode] = useState(createNodeWithUid(getNewDraftKey()))
   const [nodeContent, setNodeContent] = useState(defaultContent.content)
   const [previewMode, setPreviewMode] = useState(true)
+  const [persistedContent, setPersistedContent] = useState(defaultContent.content)
 
   const value = {
     node,
     setNode,
     nodeContent,
     setNodeContent,
+    persistedContent,
+    setPersistedContent,
     previewMode,
     setPreviewMode
   }

@@ -18,7 +18,7 @@ export function useSaveChanges() {
   const { ilinks, addILink, checkValidILink } = useDataStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
-  const { selection, setVisualState, setSelection } = useSputlitContext()
+  const { selection, setVisualState, setSelection, setActiveItem } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
@@ -74,6 +74,7 @@ export function useSaveChanges() {
 
     setSelection(undefined)
     addRecent(node.nodeid)
+    setActiveItem()
 
     if (notification) {
       toast.success('Saved')

@@ -7,7 +7,16 @@ import { Editor } from '../Editor'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import Results from '../Results'
 import { StyledContent } from './styled'
-import { CategoryType, createNodeWithUid, defaultContent, getNewDraftKey, ILink, mog, QuickLinkType } from '@mexit/core'
+import {
+  ActionType,
+  CategoryType,
+  createNodeWithUid,
+  defaultContent,
+  getNewDraftKey,
+  ILink,
+  mog,
+  QuickLinkType
+} from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
@@ -16,8 +25,8 @@ import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
 
 export default function Content() {
-  const { selection, searchResults, activeIndex } = useSputlitContext()
-  const { node, setNodeContent, previewMode, setNode, nodeContent } = useEditorContext()
+  const { selection, searchResults, activeIndex, activeItem } = useSputlitContext()
+  const { node, setNodeContent, previewMode, setNode, persistedContent } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
   const { getContent } = useContentStore()
@@ -78,6 +87,8 @@ export default function Content() {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
+      } else if (activeItem?.type === ActionType.SCREENSHOT && persistedContent) {
+        setNodeContent([...content, { children: persistedContent }])
       } else {
         setNodeContent(content)
       }
@@ -85,7 +96,7 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-  }, [activeIndex, searchResults, deserializedContent, selection])
+  }, [activeIndex, searchResults, deserializedContent, selection, activeItem, persistedContent])
 
   return (
     <StyledContent>

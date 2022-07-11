@@ -33,7 +33,7 @@ import getPlugins from '../Editor/plugins/index'
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
     useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode } = useEditorContext()
+  const { setNodeContent, setPreviewMode, setNode, setPersistedContent } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks } = useDataStore()
@@ -158,7 +158,8 @@ export function useActionExecutor() {
                     setVisualState(VisualState.animatingIn)
                     // Adding a paragraph in the start due to errors caused by editor
                     // trying to focus in the start of the note
-                    setNodeContent([
+                    setActiveItem(item)
+                    setPersistedContent([
                       {
                         type: 'p',
                         children: [
