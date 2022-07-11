@@ -2,7 +2,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { NodeContent } from '@mexit/core'
 
-export async function copyToClipboard(text: any) {
+export async function copyTextToClipboard(text: any) {
   await navigator.clipboard
     .writeText(String(text))
     .then(() => {

@@ -19,7 +19,6 @@ import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { copyToClipboard } from '@mexit/shared'
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 
 function Results() {

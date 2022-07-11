@@ -1,16 +1,21 @@
 import {
   ActionType,
   CategoryType,
+  convertContentToRawText,
+  convertToCopySnippet,
   createNodeWithUid,
+  defaultCopyConverter,
+  defaultCopyFilter,
+  ELEMENT_TAG,
   getNewDraftKey,
   getUntitledDraftKey,
   ILink,
   MexitAction,
+  mog,
   parseSnippet,
   QuickLinkType,
   SEPARATOR
 } from '@mexit/core'
-import { copyToClipboard } from '@mexit/shared'
 import toast from 'react-hot-toast'
 import Action from '../Components/Action'
 import { StyledInput } from '../Components/Search/styled'
@@ -20,6 +25,10 @@ import { useEditorContext } from './useEditorContext'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 import { useSaveChanges } from './useSaveChanges'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { CopyTag } from '../Editor/components/Tags/CopyTag'
+
+import getPlugins from '../Editor/plugins/index'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
@@ -61,7 +70,43 @@ export function useActionExecutor() {
       }
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
-        copyToClipboard(parseSnippet(snippet).text)
+        const text = convertContentToRawText(snippet.content, '\n')
+
+        let html = text
+
+        try {
+          const filterdContent = convertToCopySnippet(snippet.content)
+          const convertedContent = convertToCopySnippet(filterdContent, {
+            filter: defaultCopyFilter,
+            converter: defaultCopyConverter
+          })
+
+          const tempEditor = createPlateEditor({
+            plugins: getPlugins(
+              createPlateUI({
+                [ELEMENT_TAG]: CopyTag as any
+              }),
+              {
+                exclude: { dnd: true }
+              }
+            )
+          })
+
+          html = serializeHtml(tempEditor, {
+            nodes: convertedContent
+          })
+        } catch (err) {
+          mog('Something went wrong', { err })
+        }
+
+        //Copying both the html and text in clipboard
+        const textBlob = new Blob([text], { type: 'text/plain' })
+        const htmlBlob = new Blob([html], { type: 'text/html' })
+        const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
+
+        navigator.clipboard.write(data)
+
+        toast.success('Snippet copied to clipboard!')
         setVisualState(VisualState.hidden)
         break
       }
