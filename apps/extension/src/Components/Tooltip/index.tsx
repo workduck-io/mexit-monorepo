@@ -1,6 +1,6 @@
 import React from 'react'
 import Highlighter from 'web-highlighter'
-import { copyToClipboard } from '@mexit/shared'
+import { copyTextToClipboard } from '@mexit/shared'
 import { Icon, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
@@ -88,7 +88,7 @@ function Tooltip() {
   }
 
   const handleCopyClipboard = async (text: string) => {
-    await copyToClipboard(text)
+    await copyTextToClipboard(text)
     setTooltipState({ visualState: VisualState.hidden })
   }
 

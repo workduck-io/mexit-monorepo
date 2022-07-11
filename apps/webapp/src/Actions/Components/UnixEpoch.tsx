@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Input } from '@mexit/shared'
 import styled from 'styled-components'
-import { copyToClipboard } from '@mexit/shared'
+import { copyTextToClipboard } from '@mexit/shared'
 import { Toaster } from 'react-hot-toast'
 import { resize } from '@mexit/shared'
 
@@ -70,7 +70,7 @@ export const UnixEpochConverter = () => {
             value={epochInput}
             onChange={() => setEpochInput(datetimeInput.current.value)}
           />
-          <Output onClick={() => copyToClipboard(Math.round(new Date(epochInput).getTime() / 1000))}>
+          <Output onClick={() => copyTextToClipboard(Math.round(new Date(epochInput).getTime() / 1000))}>
             {Math.round(new Date(epochInput).getTime() / 1000)}
           </Output>
         </div>
@@ -85,7 +85,7 @@ export const UnixEpochConverter = () => {
             value={dtInput}
             onChange={() => setDtInput(utsInput.current.value)}
           />
-          <Output onClick={() => copyToClipboard(new Date(parseInt(dtInput) * 1000).toLocaleString())}>
+          <Output onClick={() => copyTextToClipboard(new Date(parseInt(dtInput) * 1000).toLocaleString())}>
             {new Date(parseInt(dtInput) * 1000).toLocaleString()}
           </Output>
         </div>

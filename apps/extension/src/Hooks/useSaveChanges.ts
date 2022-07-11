@@ -14,11 +14,11 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { node } = useEditorContext()
+  const { node, setPreviewMode } = useEditorContext()
   const { ilinks, addILink, checkValidILink } = useDataStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
-  const { selection, setVisualState, setSelection } = useSputlitContext()
+  const { selection, setVisualState, setSelection, setActiveItem } = useSputlitContext()
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
@@ -74,6 +74,7 @@ export function useSaveChanges() {
 
     setSelection(undefined)
     addRecent(node.nodeid)
+    setActiveItem()
 
     if (notification) {
       toast.success('Saved')
@@ -111,6 +112,8 @@ export function useSaveChanges() {
 
         if (saveAndExit) {
           setVisualState(VisualState.animatingOut)
+          // So that sputlit opens with preview true when it opens the next time
+          setPreviewMode(true)
         }
       }
     })

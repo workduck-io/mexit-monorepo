@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Transforms } from 'slate'
 import { useReadOnly, useFocused, useSelected } from 'slate-react'
 import shareLine from '@iconify/icons-ri/share-line'
+import archivedIcon from '@iconify/icons-ri/archive-line'
 import eyeOffLine from '@iconify/icons-ri/eye-off-line'
 import { useEditorRef } from '@udecode/plate'
 
@@ -34,7 +35,7 @@ const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNod
 const ArchivedNode = ({ selected, archivedNode }: { selected: boolean; archivedNode: ILink }) => {
   return (
     <SILink $selected={selected} color="#df7777" $archived={true}>
-      <SharedNodeIcon />
+      <StyledIcon icon={archivedIcon} color="#df7777" />
       <span className="ILink_decoration ILink_decoration_left">[[</span>
       <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span>
       <span className="ILink_decoration ILink_decoration_right">]]</span>

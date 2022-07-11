@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import styled from 'styled-components'
 
-import { copyToClipboard } from '@mexit/shared'
+import { copyTextToClipboard } from '@mexit/shared'
 
 import { resize } from '@mexit/shared'
 
@@ -60,7 +60,7 @@ export const ColourPicker = () => {
         ))}
       </div>
       <Wrapper>
-        <CurrentColor onClick={() => copyToClipboard(hexColor)}>{hexColor}</CurrentColor>
+        <CurrentColor onClick={() => copyTextToClipboard(hexColor)}>{hexColor}</CurrentColor>
       </Wrapper>
     </Container>
   )
