@@ -46,8 +46,12 @@ const GenericOAuthRedirect = () => {
     switch (serviceName) {
       case 'google': {
         const code = searchParams.get('code')
-        const userCred = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
-        await initializeAfterAuth(userCred, 'success', true, true)
+        const { loginStatus, loginData } = await loginViaGoogle(
+          code,
+          config.cognito.APP_CLIENT_ID,
+          MEXIT_FRONTEND_AUTH_BASE
+        )
+        await initializeAfterAuth(loginData, loginStatus, false, true)
         navigate('/')
         break
       }

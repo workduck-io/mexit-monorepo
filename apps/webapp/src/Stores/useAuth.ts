@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 import { nanoid } from 'nanoid'
-import { clear as IDBClear } from 'idb-keyval'
 
 import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
@@ -26,117 +25,57 @@ import { getEmailStart } from '../Utils/constants'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
-export const useAuthentication = () => {
-  const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
-  const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
-  const { signIn, signOut, signUp, verifySignUp, googleSignIn, refreshToken } = useAuth()
+type LoginResult = { loginData: UserCred; loginStatus: string }
 
-  const setILinks = useDataStore((store) => store.setIlinks)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const initContents = useContentStore((store) => store.initContents)
+export const useAuthentication = () => {
+  const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
+  const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
+
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
-  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
 
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const initContents = useContentStore((store) => store.initContents)
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
-  const { initPortals } = usePortals()
-  const addUser = useUserCacheStore((s) => s.addUser)
 
-  const { refreshILinks } = useInternalLinks()
-
-  const login = async (email: string, password: string): Promise<{ loginData: UserCred; loginStatus: string }> => {
-    let loginData: UserCred
-    const loginStatus = await signIn(email, password)
+  const login = async (email: string, password: string): Promise<LoginResult> => {
+    const loginResult = await signIn(email, password)
       .then((d) => {
-        loginData = d
-        return 'success'
+        return { loginStatus: 'success', loginData: d }
       })
       .catch((e) => {
         console.error({ e })
-        return e.toString() as string
+        return { loginStatus: e.toString(), loginData: {} as UserCred }
       })
 
-    return { loginData, loginStatus }
+    return loginResult
   }
 
-  const loginViaGoogle = async (code: string, clientId: string, redirectURI: string, getWorkspace = true) => {
+  const loginViaGoogle = async (
+    code: string,
+    clientId: string,
+    redirectURI: string,
+    getWorkspace = true
+  ): Promise<LoginResult> => {
     try {
-      const { userCred } = (await googleSignIn(code, clientId, redirectURI)) as any
-      return userCred
+      const loginResult = await googleSignIn(code, clientId, redirectURI)
+        .then(({ userCred }: { userCred: UserCred }) => {
+          return { loginStatus: 'success', loginData: userCred }
+        })
+        .catch((e: Error) => {
+          console.error('GoogleLoginError', { error: e })
+          return { loginStatus: e.toString(), loginData: {} as UserCred }
+        })
+
+      return loginResult
     } catch (error) {
       mog('ErrorInGoogleLogin', { error })
     }
-  }
-
-  async function registerUserForGoogle(result: any, data: any) {
-    mog('Registering user for google', { result })
-    setSensitiveData({
-      email: result.email,
-      name: data.name,
-      password: '',
-      roles: [],
-      alias: data.alias ?? data.properties?.alias ?? data.name
-    })
-    const uCred: UserCred = {
-      username: result.userCred.username,
-      email: result.userCred.email,
-      userId: result.userCred.userId,
-      expiry: result.userCred.expiry,
-      token: result.userCred.token,
-      url: result.userCred.url
-    }
-
-    const newWorkspaceName = `WD_${nanoid()}`
-
-    mog('Login Google Need to create user', { uCred })
-    await client
-      .post(
-        apiURLs.registerUser,
-        {
-          type: 'RegisterUserRequest',
-          user: {
-            id: uCred.userId,
-            name: data.name,
-            alias: data.alias ?? data.name,
-            email: uCred.email
-          },
-          workspaceName: newWorkspaceName
-        },
-        {
-          headers: {
-            'mex-workspace-id': ''
-          }
-        }
-      )
-      .then(async (d: any) => {
-        try {
-          await refreshToken()
-        } catch (error) {
-          // setShowLoader(false)
-          mog('Error: ', { error: JSON.stringify(error) })
-        }
-        const userDetails = {
-          userID: uCred.userId,
-          name: data.name,
-          alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-          email: uCred.email
-        }
-        const workspaceDetails = { id: d.data.id, name: 'WORKSPACE_NAME' }
-        mog('Register Google BIG success', { d, data, userDetails, workspaceDetails })
-
-        mog('Login Google BIG success created user', { userDetails, workspaceDetails })
-        setAuthenticated(userDetails, workspaceDetails)
-        // setShowLoader(false)
-      })
-      .catch(console.error)
-      .finally(() => {
-        setShowLoader(false)
-      })
   }
 
   const logout = async () => {
@@ -158,8 +97,7 @@ export const useAuthentication = () => {
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {
     const customAttributes = [{ name: 'user_type', value: 'mexit_webapp' }]
-    const { email, password, roles, name } = data
-    const userRole = roles.map((r) => r.value).join(', ') ?? ''
+    const { email, password } = data
 
     const status = signUp(email, password, customAttributes)
       .then(() => {
@@ -177,93 +115,23 @@ export const useAuthentication = () => {
     return status
   }
 
-  const verifySignup = async (code: string, metadata: any): Promise<string> => {
-    const formMetaData = {
+  const verifySignup = async (code: string, metadata: any): Promise<any> => {
+    const formMetadata = {
       ...metadata,
       name: sensitiveData.name,
       email: sensitiveData.email,
       roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1),
       alias: sensitiveData.alias
     }
-    const vSign = await verifySignUp(code, formMetaData).catch(console.error)
+    const vSign = await verifySignUp(code, formMetadata).catch(console.error)
+    const { loginStatus, loginData } = await login(sensitiveData.email, sensitiveData.password)
 
-    const loginData = await login(sensitiveData.email, sensitiveData.password).catch(console.error)
+    if (loginStatus !== 'success') throw new Error('Could Not Verify Signup')
 
-    if (!loginData) {
-      return
-    }
-
-    const uCred = loginData.loginData
-    const newWorkspaceName = `WD_${nanoid()}`
-
-    setShowLoader(true)
-
-    await client
-      .post(apiURLs.registerUser, {
-        user: {
-          id: uCred.userId,
-          name: sensitiveData.name,
-          email: uCred.email,
-          alias: sensitiveData.alias
-        },
-        workspaceName: newWorkspaceName
-      })
-      .then(async (d: any) => {
-        const userDetails = {
-          email: uCred.email,
-          userID: uCred.userId,
-          name: sensitiveData.name,
-          alias: sensitiveData.alias
-        }
-        const { registrationInfo, ilinks, nodes, snippets } = d.data
-        const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
-
-        addUser({
-          userID: userDetails.userID,
-          email: userDetails.email,
-          name: userDetails.name,
-          alias: userDetails.alias
-        })
-
-        setILinks(ilinks)
-        initSnippets(snippets)
-
-        const contents = {}
-        nodes.forEach((node) => {
-          contents[node.id] = { ...node, type: 'editor' }
-        })
-        initContents(contents)
-        setAuthenticated(userDetails, workspaceDetails)
-        try {
-          await refreshToken()
-        } catch (error) {} // eslint-disable-line
-      })
-      .catch(console.error)
-
-    await initPortals()
-
-    if (vSign) {
-      setRegistered(false)
-    }
-    setShowLoader(false)
-    return vSign
+    return { vSign, loginData }
   }
 
-  return { login, logout, registerDetails, verifySignup, loginViaGoogle }
-}
-
-export const useInitializeAfterAuth = () => {
-  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
-  const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
-  const addUser = useUserCacheStore((s) => s.addUser)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-
-  const { refreshToken } = useAuth()
-  const { initPortals } = usePortals()
-  const { refreshILinks } = useInternalLinks()
-  const api = useApi()
-
-  const registerNewGoogleUser = async (loginResult: UserCred) => {
+  const registerNewUser = async (loginResult: UserCred) => {
     const { email, userId } = loginResult
     const name = getEmailStart(email)
     const newWorkspaceName = `WD_${nanoid()}`
@@ -296,16 +164,31 @@ export const useInitializeAfterAuth = () => {
       userID: userId,
       name: name
     }
-    const workspaceDetails = { id: result.group, name: 'WORKSPACE_NAME' }
+    const workspaceDetails = { id: result.id, name: 'WORKSPACE_NAME' }
 
     return { userDetails, workspaceDetails }
   }
+
+  return { login, logout, registerDetails, verifySignup, loginViaGoogle, registerNewUser }
+}
+
+export const useInitializeAfterAuth = () => {
+  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
+  const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
+  const addUser = useUserCacheStore((s) => s.addUser)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+
+  const { refreshToken } = useAuth()
+  const { initPortals } = usePortals()
+  const { refreshILinks } = useInternalLinks()
+  const api = useApi()
+  const { registerNewUser } = useAuthentication()
 
   const initializeAfterAuth = async (
     loginData: UserCred,
     loginStatus: string,
     forceRefreshToken = false,
-    isGoogle = false
+    registerUser = false
   ) => {
     try {
       setShowLoader(true)
@@ -318,12 +201,12 @@ export const useInitializeAfterAuth = () => {
           }
         })
         .then(async (d: { status: number; data: any }) => {
-          if (d.status === 404 && isGoogle) {
-            mog('InsideGoogleRegisterCall', { d, isGoogle })
-            return await registerNewGoogleUser(loginData)
+          if (d.status === 404 && registerUser) {
+            forceRefreshToken = true
+            return await registerNewUser(loginData)
           } else if (d.data.group) {
             const userDetails = {
-              email,
+              email: email,
               alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
               userID: d.data.id,
               name: d.data.name
@@ -335,7 +218,6 @@ export const useInitializeAfterAuth = () => {
           }
         })
 
-      mog('UserRecordsFetch', { userDetails, workspaceDetails })
       addUser({
         userID: userDetails.userID,
         email: userDetails.email,
@@ -343,9 +225,9 @@ export const useInitializeAfterAuth = () => {
         alias: userDetails.alias
       })
 
-      setAuthenticated(userDetails, workspaceDetails)
-
       if (forceRefreshToken) await refreshToken()
+
+      setAuthenticated(userDetails, workspaceDetails)
 
       const initialSnippetsP = await api.getAllSnippetsByWorkspace()
       const initPortalsP = initPortals()

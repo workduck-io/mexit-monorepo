@@ -1,22 +1,27 @@
 import React, { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
-import Cookies from 'universal-cookie'
 
-import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
+import {
+  AuthForm,
+  BackCard,
+  Button,
+  ButtonFields,
+  CenteredColumn,
+  FooterCard,
+  Label,
+  StyledCreatatbleSelect,
+  Title
+} from '@mexit/shared'
+
+import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
-import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '@mexit/shared'
-import { CenteredColumn } from '@mexit/shared'
-import { BackCard, FooterCard } from '@mexit/shared'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
-import { Title } from '@mexit/shared'
 import { EMAIL_REG, PASSWORD, ALIAS_REG } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
-import { Button } from '@mexit/shared'
-import Analytics from '../Utils/analytics'
-import { Link } from 'react-router-dom'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 export const Register = () => {
@@ -30,6 +35,7 @@ export const Register = () => {
   const registered = useAuthStore((store) => store.registered)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const { resendCode } = useAuth()
+  const { initializeAfterAuth } = useInitializeAfterAuth()
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -54,22 +60,14 @@ export const Register = () => {
       if (s === 'UsernameExistsException') {
         toast('You have already registered, please verify code.')
       }
-      const cookies = new Cookies()
-      const shareLinkCookie = cookies.get('mexit-sharing')
-
-      let props: any = {}
-      if (shareLinkCookie) {
-        props = {
-          'mexit-sharing': shareLinkCookie
-        }
-      }
     })
   }
 
   const onVerifySubmit = async (data: VerifyFormData) => {
     const metadata = { tag: 'MEXIT_WEBAPP' }
     try {
-      await verifySignup(data.code, metadata)
+      const loginData = await verifySignup(data.code, metadata)
+      await initializeAfterAuth(loginData, 'success', true, true)
     } catch (err) {
       toast('Error occured!')
     }
