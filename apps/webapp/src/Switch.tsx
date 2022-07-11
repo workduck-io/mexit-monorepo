@@ -65,6 +65,13 @@ const AuthRoute = ({ children }) => {
   return !authenticated ? children : <Navigate to={from} />
 }
 
+const OAuthRoute = ({ children }) => {
+  const showLoader = useLayoutStore((store) => store.showLoader)
+  if (showLoader) return <SplashScreen />
+
+  return <GenericOAuthRedirect />
+}
+
 const AuthRoutes = () => {
   return (
     <Routes>
@@ -176,7 +183,7 @@ export const Switch = () => {
     <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
-        <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<GenericOAuthRedirect />} />
+        <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
