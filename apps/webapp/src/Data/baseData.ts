@@ -64,7 +64,7 @@ const contents: Contents = links.reduce(
 )
 
 export const DefaultPersistentData: PersistentData = {
-  baseNodeId: '@',
+  baseNodeId: 'doc',
 
   ilinks: [...linksWithSpecialContent, ...links],
   tags: [{ value: 'mex' }],
