@@ -67,7 +67,7 @@ export const Register = () => {
     const metadata = { tag: 'MEXIT_WEBAPP' }
     try {
       const loginData = await verifySignup(data.code, metadata)
-      await initializeAfterAuth(loginData, 'success', true, true)
+      await initializeAfterAuth(loginData, true, false, true)
     } catch (err) {
       toast('Error occured!')
     }

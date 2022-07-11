@@ -186,37 +186,38 @@ export const useInitializeAfterAuth = () => {
 
   const initializeAfterAuth = async (
     loginData: UserCred,
-    loginStatus: string,
     forceRefreshToken = false,
+    isGoogle = false,
     registerUser = false
   ) => {
     try {
       setShowLoader(true)
       const { email } = loginData
-
-      const { userDetails, workspaceDetails } = await client
-        .get(apiURLs.getUserRecords, {
-          validateStatus: (status: number) => {
-            return (status >= 200 && status < 300) || status === 404
-          }
-        })
-        .then(async (d: { status: number; data: any }) => {
-          if (d.status === 404 && registerUser) {
-            forceRefreshToken = true
-            return await registerNewUser(loginData)
-          } else if (d.data.group) {
-            const userDetails = {
-              email: email,
-              alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-              userID: d.data.id,
-              name: d.data.name
-            }
-            const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-            return { workspaceDetails, userDetails }
-          } else {
-            throw new Error('Could Not Fetch User Records')
-          }
-        })
+      const { userDetails, workspaceDetails } = registerUser
+        ? await registerNewUser(loginData)
+        : await client
+            .get(apiURLs.getUserRecords, {
+              validateStatus: (status: number) => {
+                return (status >= 200 && status < 300) || status === 404
+              }
+            })
+            .then(async (d: { status: number; data: any }) => {
+              if (d.status === 404 && isGoogle) {
+                forceRefreshToken = true
+                return await registerNewUser(loginData)
+              } else if (d.data.group) {
+                const userDetails = {
+                  email: email,
+                  alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+                  userID: d.data.id,
+                  name: d.data.name
+                }
+                const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+                return { workspaceDetails, userDetails }
+              } else {
+                throw new Error('Could Not Fetch User Records')
+              }
+            })
 
       addUser({
         userID: userDetails.userID,

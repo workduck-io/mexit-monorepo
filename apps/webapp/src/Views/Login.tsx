@@ -31,7 +31,7 @@ export const Login = () => {
         toast('Invalid Username or Password')
       }
 
-      if (loginStatus === 'success') await initializeAfterAuth(loginData, loginStatus)
+      if (loginStatus === 'success') await initializeAfterAuth(loginData, false, false, false)
     } catch (error) {
       toast('An Error Occured. Please Try Again Later')
       mog('LoginError', { error })

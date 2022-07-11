@@ -51,7 +51,7 @@ const GenericOAuthRedirect = () => {
           config.cognito.APP_CLIENT_ID,
           MEXIT_FRONTEND_AUTH_BASE
         )
-        await initializeAfterAuth(loginData, loginStatus, false, true)
+        await initializeAfterAuth(loginData, true, true, false)
         navigate('/')
         break
       }
