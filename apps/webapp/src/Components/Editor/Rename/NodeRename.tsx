@@ -123,7 +123,7 @@ const NodeRenameOnlyTitle = () => {
     const parent = getParentFromPath(nodeFrom)
     const updatedPath = parent ? `${parent}${SEPARATOR}${newTitle}` : newTitle
 
-    await saveDataAPI(node.nodeid, content.content, false)
+    await saveDataAPI(node.nodeid, content.content, false, updatedPath)
     updateSingleILink(node.nodeid, updatedPath)
     setNode({ ...node, title: newTitle, path: updatedPath })
 

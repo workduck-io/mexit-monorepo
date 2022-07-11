@@ -159,11 +159,11 @@ export const useApi = () => {
    * Saves data in the backend
    * Also updates the incoming data in the store
    */
-  const saveDataAPI = async (nodeid: string, content: any[], isShared = false) => {
+  const saveDataAPI = async (nodeid: string, content: any[], isShared = false, updatedPath?: string) => {
     const { title, path } = getNodePathAndTitle(nodeid)
     const reqData = {
       id: nodeid,
-      title: title,
+      title: updatedPath?.split(SEPARATOR).slice(-1)[0] ?? title,
       namespaceIdentifier: DEFAULT_NAMESPACE,
       data: serializeContent(content ?? defaultContent.content, nodeid),
       tags: getTags(nodeid)
