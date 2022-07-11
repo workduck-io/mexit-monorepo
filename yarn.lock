@@ -4186,10 +4186,10 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@workduck-io/dwindle@^0.0.16":
-  version "0.0.16"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.16/1b462f2ef47adfad2ce3d038a86cc9437b878f1dd92da58ac635f7eb274a0ed1#27253979b3e36dfcbf6d259621344c8e4290fdeb"
-  integrity sha512-iq/DbAOVSM61VvAWMo5x2TSeFDMFDSR+7hPPfU0XuIM+s02klsuhu6XyIGnWvYG3mpsVquklyfdOFfvTmXbGew==
+"@workduck-io/dwindle@^0.0.17":
+  version "0.0.17"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.17/f1ff4e26672914b4e59faaeb7497fd8dbaa25ee7b3ccc8c3be2640602562b83b#d804a53fc13224c5f07fbe6ded2d9a670ef84fb7"
+  integrity sha512-8oZYRRATfC23W+DaAvxVL7XUK+ggEePiyEwOy8tlgh7upm1L1PqEsfsg/NJRX5pCrYZhyY7N8STcOdXjaDOuGA==
   dependencies:
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
