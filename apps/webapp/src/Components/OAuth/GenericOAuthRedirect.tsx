@@ -4,7 +4,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { BackCard, Button, CenteredColumn, Description, Title } from '@mexit/shared'
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
-import { useAuthentication } from '../../Stores/useAuth'
+import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
 import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'
 
@@ -16,7 +16,7 @@ const GenericOAuthRedirect = () => {
   const [searchParams] = useSearchParams()
   const serviceName = useParams().serviceName.toLowerCase()
   const { loginViaGoogle } = useAuthentication()
-
+  const { initializeAfterAuth } = useInitializeAfterAuth()
   useEffect(() => {
     if (!allowedServices.find((i) => i === serviceName)) {
       navigate('/404')
@@ -46,8 +46,12 @@ const GenericOAuthRedirect = () => {
     switch (serviceName) {
       case 'google': {
         const code = searchParams.get('code')
-        const res = await loginViaGoogle(code, config.cognito.APP_CLIENT_ID, MEXIT_FRONTEND_AUTH_BASE)
-        console.log('Result of Google Login: ', res)
+        const { loginStatus, loginData } = await loginViaGoogle(
+          code,
+          config.cognito.APP_CLIENT_ID,
+          MEXIT_FRONTEND_AUTH_BASE
+        )
+        await initializeAfterAuth(loginData, true, true, false)
         navigate('/')
         break
       }
