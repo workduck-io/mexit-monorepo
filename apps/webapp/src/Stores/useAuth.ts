@@ -123,12 +123,12 @@ export const useAuthentication = () => {
       roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1),
       alias: sensitiveData.alias
     }
-    const vSign = await verifySignUp(code, formMetadata).catch(console.error)
+    await verifySignUp(code, formMetadata).catch(console.error)
     const { loginStatus, loginData } = await login(sensitiveData.email, sensitiveData.password)
 
     if (loginStatus !== 'success') throw new Error('Could Not Verify Signup')
 
-    return { vSign, loginData }
+    return loginData
   }
 
   const registerNewUser = async (loginResult: UserCred) => {
