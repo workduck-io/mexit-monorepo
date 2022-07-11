@@ -65,7 +65,7 @@ const AuthRoute = ({ children }) => {
   return !authenticated ? children : <Navigate to={from} />
 }
 
-const OAuthRoute = ({ children }) => {
+const OAuthRoute = () => {
   const showLoader = useLayoutStore((store) => store.showLoader)
   if (showLoader) return <SplashScreen />
 
