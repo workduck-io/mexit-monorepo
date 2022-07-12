@@ -443,6 +443,22 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
+    id: 'ACTION_9x34kgj23j4234ojin',
+    title: 'Magical Feature',
+    category: QuickLinkType.action,
+    icon: 'eva:color-picker-fill',
+    description: "Save any profile data you want in the webapp",
+    type: ActionType.USEMAGICAL,
+    data: {},
+    shortcut: {
+      pick: {
+        title: 'to pick',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
     id: 'ACTION_9x7LbYQ5t4Gbpf6jmkKB3',
     title: 'Unix Epoch Converter',
     category: QuickLinkType.action,

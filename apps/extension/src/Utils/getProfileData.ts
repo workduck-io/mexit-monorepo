@@ -28,29 +28,25 @@ const checkURL = (url) => {
   }
   return null
 }
+const sendData = []
 const getUserData = async () => {
   const url = window.location.href
   // console.log(url)
   let webPage = await checkURL(url)
-  console.log('webPage :', webPage)
+  // console.log('webPage :', webPage)
   if (webPage !== null) {
     for (let key in data) {
       if (key === webPage) {
         for (var d in data[key]) {
           const ele = document.evaluate(data[key][d], document, null, XPathResult.ANY_TYPE, null).iterateNext()
-          console.log(d + " : " + ele.textContent)
+          sendData[d] = ele.textContent.trim()
         }
       }
     }
   }
+  return sendData
 }
 const getLinks = () => {
-  document.addEventListener('visibilitychange', () => {
-    getUserData()
-  })
-  window.onload = () => {
-    console.log('Window is loaded successfully')
-    getUserData()
-  }
+  return getUserData()
 }
 export default getLinks

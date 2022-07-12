@@ -26,7 +26,6 @@ export function InternalEvents() {
   dibbaToggle()
   badgeRenderer()
   useDocumentLock()
-  getLinks()
   // useFocusHandler()
   return null
 }

@@ -30,16 +30,20 @@ import { CopyTag } from '../Editor/components/Tags/CopyTag'
 
 import getPlugins from '../Editor/plugins/index'
 import { useNodes } from './useNodes'
+import getLinks from '../Utils/getProfileData'
+import { useInternalLinks } from './useInternalLinks'
 
 export function useActionExecutor() {
-  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
+  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
     useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode, setPersistedContent } = useEditorContext()
+  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, nodeContent, persistedContent } =
+    useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
+  const { getParentILink } = useInternalLinks()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
@@ -140,6 +144,37 @@ export function useActionExecutor() {
             setActiveItem(item)
             setInput('')
             setSearchResults([])
+            break
+          }
+          case ActionType.USEMAGICAL: {
+            setVisualState(VisualState.animatingOut);
+            setActiveItem(item);
+            getLinks()
+              .then((data) => {
+                setPersistedContent([
+                  {
+                    type: 'p',
+                    children: [
+                      {
+                        text: "profile data"
+                      }
+                    ]
+                  },
+                  {
+                    children: [
+                      {
+                        text: data
+                      }
+                    ],
+                    type: 'text'
+                  },
+                ])
+              })
+              .catch((err) => {
+                console.log('err :', err)
+              })
+              setVisualState(VisualState.animatingIn);
+              setActiveIndex(0);
             break
           }
           case ActionType.SCREENSHOT: {
