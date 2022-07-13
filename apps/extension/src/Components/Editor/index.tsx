@@ -72,7 +72,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
           slateElementType: ELEMENT_MEDIA_EMBED,
           command: 'webem',
           options: {
-            url: 'http://example.com/'
+            url: 'https://example.com/'
           }
         },
         table: {
