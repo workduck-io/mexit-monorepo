@@ -37,7 +37,7 @@ const PublicNodeView = () => {
 
     if (existingCookie) setFirstVisit(false)
     cookies.set('mexit-sharing', timestamp, { path: '/' })
-  })
+  }, [])
 
   useEffect(() => {
     async function getPublicNodeContent() {

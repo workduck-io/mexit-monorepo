@@ -98,7 +98,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
     let clearFirstVisit: NodeJS.Timeout
     if (firstVisit) {
       clearFirstVisit = setTimeout(() => {
-        alert('HELLLLLOOOOOO')
+        if (!showMenu) setMenu(true)
       }, 1000)
     }
 
