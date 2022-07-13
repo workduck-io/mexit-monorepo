@@ -3,6 +3,8 @@ import Search from '../Search'
 import Content from '../Content'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useEditorContext } from '../../Hooks/useEditorContext'
 
 const appearanceAnimationKeyframes = [
   {
@@ -15,6 +17,8 @@ const appearanceAnimationKeyframes = [
 
 const Sputlit = () => {
   const { visualState, setVisualState } = useSputlitContext()
+  const { previewMode } = useEditorContext()
+  const { saveIt } = useSaveChanges()
 
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
@@ -103,6 +107,7 @@ const Sputlit = () => {
       <Overlay
         id="sputlit-overlay"
         onClick={() => {
+          if (!previewMode) saveIt(true, true)
           setVisualState(VisualState.animatingOut)
         }}
       />
