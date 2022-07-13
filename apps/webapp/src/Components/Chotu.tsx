@@ -83,7 +83,18 @@ export default function Chotu() {
     if (connection) {
       connection.promise
         .then((parent: any) => {
-          parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes)
+          parent.init(
+            userDetails,
+            workspaceDetails,
+            theme,
+            authAWS,
+            snippets,
+            contents,
+            ilinks,
+            reminders,
+            publicNodes,
+            sharedNodes
+          )
         })
         .catch((error) => {
           console.error(error)
@@ -93,7 +104,19 @@ export default function Chotu() {
         connection.destroy()
       }
     }
-  }, [userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes, connection])
+  }, [
+    userDetails,
+    workspaceDetails,
+    theme,
+    authAWS,
+    snippets,
+    contents,
+    ilinks,
+    reminders,
+    publicNodes,
+    sharedNodes,
+    connection
+  ])
 
   return (
     <div>

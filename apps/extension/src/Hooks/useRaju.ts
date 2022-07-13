@@ -7,6 +7,7 @@ import {
   NodeMetadata,
   Reminder,
   ReminderActions,
+  SharedNode,
   Snippet,
   UserDetails,
   WorkspaceDetails
@@ -47,6 +48,7 @@ export default function useRaju() {
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
+  const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
@@ -97,7 +99,8 @@ export default function useRaju() {
       contents: Contents,
       ilinks: any[],
       reminders: Reminder[],
-      publicNodes: any[]
+      publicNodes: any[],
+      sharedNodes: SharedNode[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -106,8 +109,10 @@ export default function useRaju() {
       setIlinks(ilinks)
       initContents(contents)
       setReminders(reminders)
-      initHighlights(ilinks, contents)
       setPublicNodes(publicNodes)
+      setSharedNodes(sharedNodes)
+
+      initHighlights([...ilinks, ...sharedNodes], contents)
     }
   }
 
