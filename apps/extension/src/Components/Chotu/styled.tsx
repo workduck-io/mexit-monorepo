@@ -12,9 +12,9 @@ export const Container = styled.div`
   }
 `
 
-export const StyledChotu = styled.div<{ show: boolean }>`
+export const StyledChotu = styled.div`
   display: flex;
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
+  visibility: hidden;
   align-items: center;
   position: absolute;
   right: 0;
