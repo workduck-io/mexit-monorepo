@@ -25,19 +25,19 @@ import { useEditorContext } from './useEditorContext'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 import { useSaveChanges } from './useSaveChanges'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 
 import getPlugins from '../Editor/plugins/index'
 import { useNodes } from './useNodes'
 import getLinks from '../Utils/getProfileData'
 import { useInternalLinks } from './useInternalLinks'
+import { getMexHTMLDeserializer } from '../Utils/deserialize'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
     useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, nodeContent, persistedContent } =
-    useEditorContext()
+  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, node } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
@@ -146,35 +146,37 @@ export function useActionExecutor() {
             setSearchResults([])
             break
           }
-          case ActionType.USEMAGICAL: {
-            setVisualState(VisualState.animatingOut);
-            setActiveItem(item);
+          case ActionType.MAGICAL: {
+            // const editor = usePlateEditorRef(node.nodeid)
+            setActiveItem(item)
             getLinks()
               .then((data) => {
-                setPersistedContent([
-                  {
-                    type: 'p',
-                    children: [
-                      {
-                        text: "profile data"
-                      }
-                    ]
-                  },
-                  {
-                    children: [
-                      {
-                        text: data
-                      }
-                    ],
-                    type: 'text'
-                  },
-                ])
+                console.log('data :', data)
+                const newData = data[0];
+                setTimeout(() => {
+                  setPersistedContent([
+                    {
+                      type: 'p',
+                      children: [
+                        {
+                          text: 'profile data'
+                        }
+                      ]
+                    },
+                    {
+                      text: 'Hello'
+                    },
+                    {
+                      type: 'array',
+                      children: data
+                    }
+                  ])
+                }, 10)
               })
               .catch((err) => {
                 console.log('err :', err)
               })
-              setVisualState(VisualState.animatingIn);
-              setActiveIndex(0);
+            setActiveIndex(0)
             break
           }
           case ActionType.SCREENSHOT: {

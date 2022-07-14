@@ -43,6 +43,22 @@ export const initActions: Array<MexitAction> = [
     }
   },
   {
+    id: 'ACTION_9x34kgj23j4234ojin',
+    title: 'Magical Feature',
+    category: QuickLinkType.action,
+    icon: 'eva:color-picker-fill',
+    description: "Save any profile data you want in the webapp",
+    type: ActionType.MAGICAL,
+    data: {},
+    shortcut: {
+      pick: {
+        title: 'to pick',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     category: QuickLinkType.action,
@@ -434,22 +450,6 @@ export const initActions: Array<MexitAction> = [
     data: {
       src: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
     },
-    shortcut: {
-      pick: {
-        title: 'to pick',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
-    id: 'ACTION_9x34kgj23j4234ojin',
-    title: 'Magical Feature',
-    category: QuickLinkType.action,
-    icon: 'eva:color-picker-fill',
-    description: "Save any profile data you want in the webapp",
-    type: ActionType.USEMAGICAL,
-    data: {},
     shortcut: {
       pick: {
         title: 'to pick',

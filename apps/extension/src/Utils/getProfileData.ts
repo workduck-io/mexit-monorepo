@@ -34,19 +34,25 @@ const getUserData = async () => {
   // console.log(url)
   let webPage = await checkURL(url)
   // console.log('webPage :', webPage)
+  while(sendData.length)sendData.pop();
   if (webPage !== null) {
-    for (let key in data) {
-      if (key === webPage) {
-        for (var d in data[key]) {
-          const ele = document.evaluate(data[key][d], document, null, XPathResult.ANY_TYPE, null).iterateNext()
-          sendData[d] = ele.textContent.trim()
-        }
-      }
+    for (var d in data[webPage]) {
+      const ele = document.evaluate(data[webPage][d], document, null, XPathResult.ANY_TYPE, null).iterateNext()
+      console.log(typeof ele , ele , '\n');
+      if(ele !== null)
+      sendData.push({
+        children: [
+          {
+            'text': ele.textContent.trim()
+          }
+        ],
+        'type': 'text'
+      })
     }
   }
   return sendData
 }
-const getLinks = () => {
-  return getUserData()
+const getLinks = async () => {
+  return await getUserData()
 }
 export default getLinks

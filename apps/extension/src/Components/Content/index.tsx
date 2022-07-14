@@ -88,10 +88,9 @@ export default function Content() {
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
       } else if (
-        (activeItem?.type === ActionType.USEMAGICAL || activeItem?.type === ActionType.SCREENSHOT) &&
+        (activeItem?.type === ActionType.MAGICAL || activeItem?.type === ActionType.SCREENSHOT) &&
         persistedContent
       ) {
-        console.log(persistedContent);
         setNodeContent([...content, { children: persistedContent }])
       } else {
         setNodeContent(content)
