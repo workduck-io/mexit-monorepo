@@ -1,94 +1,121 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import CloseIcon from '@iconify/icons-ri/close-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
+import externalLinkLine from '@iconify/icons-ri/external-link-line'
+import { transparentize } from 'polished'
 import { Icon } from '@iconify/react'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 import { FocusModeProp, Button, MexIcon } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
-
-export const Float = styled.div<FocusModeProp>`
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  z-index: 1000;
-  ${({ $focusMode }) =>
-    $focusMode &&
-    css`
-      opacity: ${FOCUS_MODE_OPACITY};
-      &:hover {
-        opacity: 1;
-      }
-    `}
-`
-
-export const FlexBetween = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-`
-
-export const FloatButton = styled(Button)`
-  border-radius: 50%;
-  height: 3.2rem;
-  cursor: pointer;
-  width: 3.2rem;
-  padding: 0.8rem;
-  :hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-`
-
-export const FloatingMenu = styled.div`
-  height: fit-content;
-  max-height: 400px;
-  width: 250px;
-
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
-`
-
-export const MenuItem = styled.button`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  text-align: left;
-  color: ${({ theme }) => theme.colors.text.default};
-  margin-bottom: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
-  :hover {
-    cursor: pointer;
-    border-radius: 0.5rem;
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => theme.colors.background.highlight};
-  }
-`
-
-export const ClickableIcon = styled(Icon)`
-  cursor: pointer;
-  border-radius: 50%;
-  :hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`
+import { Float, FlexBetween, ClickableIcon, MenuItem } from './FloatingButton'
+import { animated, useSpring } from 'react-spring'
 
 interface PublicNodeFloatingButtonProps {
   firstVisit: boolean
 }
 
+const FloatButton = styled(Button)`
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.8rem;
+  position: absolute;
+  right: 3.5rem;
+  bottom: 1rem;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
+const FloatingMenuHeader = styled(animated.div)<{ visible: boolean }>`
+  display: ${({ visible }) => (visible ? 'flex' : 'none')};
+  flex-direction: row;
+  justify-content: space-between;
+  white-space: nowrap;
+  background-color: ${({ theme }) => theme.colors.gray[9]};
+
+  color: ${({ theme }) => transparentize(0.22, theme.colors.text.oppositePrimary)};
+  position: absolute;
+
+  padding: 1rem 4rem;
+  text-align: left;
+  border-radius: 5px;
+`
+
+const FloatingMenu = styled(animated.div)`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+  background-color: ${({ theme }) => theme.colors.background.modal};
+
+  min-width: 250px;
+
+  overflow: hidden;
+
+  position: relative;
+  top: -1rem;
+  right: 7.5rem;
+
+  border-radius: 5px;
+  white-space: nowrap;
+`
+
+const HorizontalRule = styled.div`
+  margin: 1rem -1rem;
+
+  background-color: #d9d9d9;
+  opacity: 0.1;
+  content: ' ';
+  height: 1px;
+`
+
+const FloatingButton = styled(FloatButton)<{ visible: boolean }>`
+  height: 3.2rem;
+  cursor: pointer;
+  width: 3.2rem;
+
+  ${FloatingMenuHeader} {
+    display: ${({ visible }) => !visible && 'none'};
+  }
+
+  :hover {
+    ${FloatingMenuHeader} {
+      display: ${({ visible }) => !visible && 'block'};
+    }
+  }
+`
+
+const ConnectButton = styled(Button)`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+  }
+`
+
+const Link = styled.a`
+  color: #fff;
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.primary};
+    opacity: 1;
+  }
+`
+
 const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps) => {
-  const [showMenu, setMenu] = useState<boolean>(false)
+  const [showMenu, setShowMenu] = useState<boolean>(false)
 
   const focusMode = useLayoutStore((store) => store.focusMode)
-
-  const openWDWebsite = () => {
-    window.open('https://workduck.io', '_blank')
-  }
 
   const openCalendlyLink = () => {
     window.open('https://google.com', '_blank')
@@ -98,7 +125,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
     let clearFirstVisit: NodeJS.Timeout
     if (firstVisit) {
       clearFirstVisit = setTimeout(() => {
-        if (!showMenu) setMenu(true)
+        if (!showMenu) setShowMenu(true)
       }, 1000)
     }
 
@@ -107,37 +134,59 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
     }
   }, [firstVisit])
 
+  const menuProps = useSpring(
+    useMemo(() => {
+      const style = { height: '0', padding: '0' }
+
+      if (showMenu) {
+        style.height = '100%'
+        style.padding = '1rem'
+      }
+
+      return style
+    }, [showMenu])
+  )
+
+  const headerProps = useSpring(
+    useMemo(() => {
+      const style = {
+        top: '-3.5rem',
+        right: '3.85rem'
+      }
+
+      if (showMenu) {
+        style.top = '-8rem'
+      }
+
+      return style
+    }, [showMenu])
+  )
+
   return (
     <Float $focusMode={focusMode.on}>
-      {!showMenu ? (
-        <FloatButton
-          id="wd-mex-floating-button"
-          key="wd-mex-floating-button"
-          // onMouseOver={() => setMenu(true)}
-          // onMouseLeave={() => setMenu(false)}
-          // onClick={() => openWDWebsite()}a
-          onClick={() => setMenu(true)}
-        >
-          <Icon icon={QuestionMarkIcon} />
-        </FloatButton>
-      ) : (
-        <FloatingMenu>
-          <FlexBetween>
-            <h3>Like What You See? Check out Workduck!</h3>
-            <ClickableIcon onClick={() => setMenu(false)} width="24" icon={CloseIcon} />
-          </FlexBetween>
+      <FloatingButton
+        id="wd-mex-floating-button"
+        key="wd-mex-floating-button"
+        onClick={() => setShowMenu(!showMenu)}
+        visible={showMenu}
+      >
+        <Icon icon={QuestionMarkIcon} />
 
-          <div>
-            <MenuItem key="wd-mex-website-button" onClick={openWDWebsite}>
-              <MexIcon fontSize={20} margin="0 1rem 0 0" icon="ri:external-link-fill" />
-              Workduck Website
-            </MenuItem>
-            <MenuItem key="wd-mex-calendly-button" onClick={openCalendlyLink}>
-              <MexIcon fontSize={20} margin="0 1rem 0 0" icon="ri:calendar-2-line" /> Schedule a Call!
-            </MenuItem>
-          </div>
-        </FloatingMenu>
-      )}
+        <FloatingMenuHeader visible={showMenu} style={headerProps}>
+          Connect with us
+        </FloatingMenuHeader>
+      </FloatingButton>
+
+      {/* @ts-ignore */}
+      <FloatingMenu style={menuProps}>
+        <ConnectButton onClick={openCalendlyLink}>Calendly Link</ConnectButton>
+
+        <HorizontalRule> </HorizontalRule>
+        <Link href="https://workduck.io" target="__blank">
+          <Icon icon={externalLinkLine} />
+          Visit workduck.io{' '}
+        </Link>
+      </FloatingMenu>
     </Float>
   )
 }
