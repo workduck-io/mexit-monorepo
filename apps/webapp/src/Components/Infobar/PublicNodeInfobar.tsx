@@ -37,7 +37,7 @@ const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
 
   return analysis ? (
     <DataInfobarWrapper>
-      <Outline staticOutline={analysis.outline} />
+      <Outline staticOutline={analysis.outline} editorId={nodeId} />
       <PublicTagsView nodeid={nodeId} tags={analysis.tags} />
     </DataInfobarWrapper>
   ) : null

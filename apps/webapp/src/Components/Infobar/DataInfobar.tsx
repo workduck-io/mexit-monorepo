@@ -12,7 +12,7 @@ const DataInfoBar = () => {
 
   return (
     <DataInfobarWrapper>
-      <Outline />
+      <Outline editorId={node.nodeid} />
       <Backlinks nodeid={node.nodeid} />
       <TagsRelated nodeid={node.nodeid} fromAnalysis />
     </DataInfobarWrapper>
