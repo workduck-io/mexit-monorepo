@@ -5,12 +5,14 @@ import {
   LIST_ELEMENTS,
   HIGHLIGHTED_ELEMENTS,
   getTagsFromContent,
-  getTodosFromContent
+  getTodosFromContent,
+  SearchRepExtra,
+  convertContentToRawText,
+  mog
 } from '@mexit/core'
 import { expose } from 'threads/worker'
 
-import { AnalyseContentProps } from './controller'
-import { convertContentToRawText, getTitleFromContent } from '@mexit/core'
+import { getTitleFromContent } from '@mexit/core'
 export interface OutlineItem {
   id: string
   title: string
@@ -26,13 +28,25 @@ export interface NodeAnalysis {
   title?: string
 }
 
+export type AnalysisModifier = SearchRepExtra
+export interface AnalysisOptions {
+  title?: boolean
+  modifier?: AnalysisModifier
+}
+
+export interface AnalyseContentProps {
+  content: NodeEditorContent
+  nodeid: string
+  options?: AnalysisOptions
+}
+
 const getSingle = (content: NodeEditorContent) => {
   if (content[0] && content[0].children.length === 1) {
     return content[0].children
   } else return getSingle(content[0].children)
 }
 
-const getOutline = (content: NodeEditorContent): OutlineItem[] => {
+const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): OutlineItem[] => {
   // console.log('getOutline', content)
   if (!content) return []
   const outline: OutlineItem[] = []
@@ -40,9 +54,19 @@ const getOutline = (content: NodeEditorContent): OutlineItem[] => {
   let lastLevel = 1
   content.forEach((item) => {
     if (item && item.type) {
+      let title = ''
+      const extraKeys = options?.modifier ? Object.keys(options?.modifier) : []
+
+      if (extraKeys.includes(item.type)) {
+        if (options?.modifier?.[item.type]) {
+          const blockKey = options?.modifier[item.type].keyToIndex
+          title = options?.modifier[item.type].replacements[item[blockKey]]
+        }
+      }
+
       // Headings
       if (ELEMENTS_IN_OUTLINE.includes(item.type.toLowerCase())) {
-        const title = convertContentToRawText(item.children, ' ')
+        title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
         if (title.trim() !== '')
           outline.push({
             type: item.type,
@@ -55,7 +79,7 @@ const getOutline = (content: NodeEditorContent): OutlineItem[] => {
       } // Lists
       else if (LIST_ELEMENTS.includes(item.type.toLowerCase())) {
         if (item.children && item.children[0]) {
-          const title = convertContentToRawText(getSingle(item.children), ' ')
+          title = convertContentToRawText(getSingle(item.children), ' ', { extra: options?.modifier })
           if (title.trim() !== '')
             outline.push({
               type: item.type,
@@ -67,7 +91,7 @@ const getOutline = (content: NodeEditorContent): OutlineItem[] => {
         curHighlighted = ''
       } else if (HIGHLIGHTED_ELEMENTS.includes(item.type.toLowerCase())) {
         if (curHighlighted !== item.type) {
-          const title = convertContentToRawText(item.children, ' ')
+          title = convertContentToRawText(item.children, ' ', { extra: options?.modifier })
           if (title.trim() !== '')
             outline.push({
               type: item.type,
@@ -94,12 +118,12 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
 
   const analysisResult = {
     nodeid,
-    outline: getOutline(content),
+    outline: getOutline(content, options),
     tags: getTagsFromContent(content),
     editorTodos: getTodosFromContent(content)
   }
 
-  return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
+  return options.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
 
 expose({ analyseContent })

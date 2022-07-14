@@ -3,8 +3,10 @@ import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '
 
 import analysisWorkerConstructor from './analysis?worker'
 import searchWorkerConstructor from './search?worker'
+export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
   title?: boolean
+  modifier?: AnalysisModifier
 }
 
 export interface AnalyseContentProps {
