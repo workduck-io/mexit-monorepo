@@ -8,7 +8,7 @@ import { PublicTagsView } from '../Editor/TagsRelated'
 import Outline from './Outline'
 
 export const DataInfobarWrapper = styled.div`
-  display: flex;
+  display: none;
   height: calc(100% - 10rem);
   margin-top: 10rem;
   flex-direction: column;
@@ -17,6 +17,10 @@ export const DataInfobarWrapper = styled.div`
   padding: ${({ theme }) => `${theme.spacing.medium}`};
   max-width: 300px;
   overflow-y: auto;
+
+  @media (min-width: 800px) {
+    display: flex;
+  }
 `
 
 interface PublicDataInfobarProps {
@@ -37,7 +41,7 @@ const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
 
   return analysis ? (
     <DataInfobarWrapper>
-      <Outline staticOutline={analysis.outline} />
+      <Outline staticOutline={analysis.outline} editorId={nodeId} />
       <PublicTagsView nodeid={nodeId} tags={analysis.tags} />
     </DataInfobarWrapper>
   ) : null

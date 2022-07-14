@@ -1,6 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components'
 
-import { EditorBalloonStyles, TippyBalloonStyles, normalize, ThinScrollbar } from '@mexit/shared'
+import { EditorBalloonStyles, TippyBalloonStyles, normalize, ThinScrollbar, GridWrapper } from '@mexit/shared'
 
 import { ModalStyles } from './Refactor'
 import { customStyles } from '@mexit/shared'
@@ -85,6 +85,20 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ${({ theme }) => theme.custom && customStyles[theme.custom]}
+
+  /* The margin added to grid wrapper by spaceBlocks was resulting in unnecessary margin causing offcenter content and scroll */
+  ${({ theme }) => {
+    if (
+      theme?.custom &&
+      (window.location.pathname.startsWith('/share') || window.location.pathname.startsWith('/actions'))
+    ) {
+      return css`
+        ${GridWrapper} {
+          margin: 0;
+        }
+      `
+    }
+  }}
 `
 
 export default GlobalStyle

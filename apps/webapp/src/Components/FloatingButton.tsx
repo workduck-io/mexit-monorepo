@@ -47,7 +47,7 @@ export const FloatButton = styled(Button)`
   }
 `
 
-export const FloatingMenu = styled.div`
+const FloatingMenu = styled.div`
   height: fit-content;
   max-height: 400px;
   width: 250px;

@@ -1,4 +1,4 @@
-import { defaultThemes, devTheme, lightTheme } from '../Themes'
+import { defaultThemes, neoDark } from '../Themes'
 import { DefaultTheme } from 'styled-components'
 
 export interface Theme {
@@ -14,7 +14,7 @@ export interface ThemeStoreState {
 }
 
 export const themeStoreConstructor = (set) => ({
-  theme: { id: 'Dev', themeData: devTheme },
+  theme: { id: 'Neo Dark', themeData: neoDark },
 
   themes: defaultThemes,
 

@@ -18,9 +18,10 @@ import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBloc
 
 interface OutlineProps {
   staticOutline?: OutlineItem[]
+  editorId?: string
 }
 
-const Outline = ({ staticOutline }: OutlineProps) => {
+const Outline = ({ staticOutline, editorId }: OutlineProps) => {
   const storeOutline = useAnalysisStore((state) => state.analysis.outline)
 
   const outline = staticOutline ? staticOutline : storeOutline
@@ -49,8 +50,8 @@ const Outline = ({ staticOutline }: OutlineProps) => {
                   key={`OutlineItemFor_${outlineItem.id}`}
                   onClick={(e) => {
                     e.preventDefault()
-                    selectBlock(outlineItem.id)
                     setHighlights([outlineItem.id], 'editor')
+                    selectBlock(outlineItem.id, editorId)
                   }}
                   level={outlineItem.level}
                   heading={isHeading}
