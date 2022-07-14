@@ -22,7 +22,7 @@ const FloatButton = styled(Button)`
   cursor: pointer;
   padding: 0.8rem;
   position: absolute;
-  right: 3.5rem;
+  right: 2rem;
   bottom: 1rem;
 
   &:hover {
@@ -37,7 +37,7 @@ const FloatingMenuHeader = styled(animated.div)<{ visible: boolean }>`
   white-space: nowrap;
   background-color: ${({ theme }) => theme.colors.gray[9]};
 
-  color: ${({ theme }) => transparentize(0.22, theme.colors.text.oppositePrimary)};
+  color: ${({ theme }) => transparentize(0.22, theme.colors.text.heading)};
   position: absolute;
 
   padding: 1rem 4rem;
@@ -58,7 +58,7 @@ const FloatingMenu = styled(animated.div)`
 
   position: relative;
   top: -1rem;
-  right: 7.5rem;
+  right: 6rem;
 
   border-radius: 5px;
   white-space: nowrap;
@@ -78,23 +78,25 @@ const FloatingButton = styled(FloatButton)<{ visible: boolean }>`
   cursor: pointer;
   width: 3.2rem;
 
-  ${FloatingMenuHeader} {
-    display: ${({ visible }) => !visible && 'none'};
-  }
-
-  :hover {
+  @media (min-width: 800px) {
     ${FloatingMenuHeader} {
-      display: ${({ visible }) => !visible && 'block'};
+      display: ${({ visible }) => !visible && 'none'};
+    }
+
+    :hover {
+      ${FloatingMenuHeader} {
+        display: ${({ visible }) => !visible && 'block'};
+      }
     }
   }
 `
 
 const ConnectButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.primary};
-  color: #fff;
+  color: ${({ theme }) => theme.colors.text.oppositePrimary};
 
   &:hover {
-    color: #fff;
+    color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
 `
 
@@ -118,7 +120,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
   const focusMode = useLayoutStore((store) => store.focusMode)
 
   const openCalendlyLink = () => {
-    window.open('https://google.com', '_blank')
+    window.open('https://calendly.com/mihir-workduck/catch-up?month=2022-07', '_blank')
   }
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
       const style = { height: '0', padding: '0' }
 
       if (showMenu) {
-        style.height = '100%'
+        style.height = '125px'
         style.padding = '1rem'
       }
 
@@ -151,7 +153,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
     useMemo(() => {
       const style = {
         top: '-3.5rem',
-        right: '3.85rem'
+        right: '3.8rem'
       }
 
       if (showMenu) {
