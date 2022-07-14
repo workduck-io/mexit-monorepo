@@ -11,8 +11,14 @@ import { LoadingButton } from '../Components/Buttons/Buttons'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
 import { AuthForm, ButtonFields } from '@mexit/shared'
-import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
+import { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { Link } from 'react-router-dom'
+import { Container, Message, SectionForm, SectionInteractive, Space, ErrorMessages } from '../Style/AuthFlow'
+import { Form, FormGroup, Input, SubmitButton } from '../Style/Form'
+import { Icon } from '@iconify/react'
+import Errors from '../Components/Buttons/Errors'
+import LoaderButton from '../Components/Buttons/LoaderButton'
+import { useSpring } from 'react-spring'
 
 export const ForgotPassword = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -21,6 +27,10 @@ export const ForgotPassword = () => {
   const forgotPasswordForm = useForm<ForgotPasswordFormData>()
   const verifyForm = useForm<VerifyFormData>()
   const { goTo } = useRouting()
+
+  const [enteredEmail, setEnteredEmail] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(false)
+  const [showConfirm, setShowConfirm] = useState<boolean>(false)
 
   const { registerDetails, verifySignup } = useAuthentication()
   const registered = useAuthStore((store) => store.registered)
@@ -61,8 +71,41 @@ export const ForgotPassword = () => {
     setIsForgottenPassword(false)
   }
 
+  const animateForm = useSpring({
+    from: {
+      transform: 'translateX(100%)',
+      opacity: 0
+    },
+    to: {
+      transform: 'translateX(0%)',
+      opacity: 1
+    },
+    config: {
+      duration: 500
+    }
+  })
+
+  const animateFormGroup = useSpring({
+    from: {
+      transform: 'translateX(100%)',
+      opacity: 0
+    },
+    to: {
+      transform: 'translateX(0%)',
+      opacity: 1
+    },
+    config: {
+      duration: 500
+    }
+  })
+
+  const handleBlur = () => {
+    console.log('blur')
+  }
+
   return (
-    <CenteredColumn>
+    <>
+      {/*<CenteredColumn>
       <BackCard>
         <Title>Forgot Password</Title>
         {!isForgottenPassword ? (
@@ -160,6 +203,142 @@ export const ForgotPassword = () => {
       <FooterCard>
         <Link to={ROUTE_PATHS.login}>Login</Link>
       </FooterCard>
-    </CenteredColumn>
+            </CenteredColumn>*/}
+
+      <Container>
+        <SectionInteractive></SectionInteractive>
+        <SectionForm>
+          {!isForgottenPassword ? (
+            <>
+              <Space></Space>
+              <Space></Space>
+              {!enteredEmail ? (
+                <Message>
+                  <h1>Reset Password</h1>
+                  <p>
+                    Enter the email associated with your account and we'll send an email with instructions to reset your
+                    password
+                  </p>
+                </Message>
+              ) : (
+                <Message>
+                  <h2>Reset Account Password</h2>
+                  <p>Enter a new password</p>
+                </Message>
+              )}
+              <Form onSubmit={forgotPasswordForm.handleSubmit(onForgotPasswordSubmit)} style={animateForm}>
+                {!enteredEmail ? (
+                  <>
+                    <FormGroup style={animateFormGroup}>
+                      {regErrors.email && <Errors message="Please enter a valid email!" handleBlur={handleBlur} />}
+                      <Icon icon="ic:round-email" width={24} />
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        name="email"
+                        {...forgotPasswordForm.register('email', {
+                          required: true,
+                          pattern: EMAIL_REG
+                        })}
+                      />
+                    </FormGroup>
+                    <SubmitButton
+                      onClick={() => {
+                        setEnteredEmail(true)
+                      }}
+                    >
+                      Send Instructions
+                    </SubmitButton>
+                  </>
+                ) : (
+                  <>
+                    <FormGroup style={animateFormGroup}>
+                      {regErrors.newpassword && (
+                        <Errors message="Please enter a valid password!" handleBlur={handleBlur} />
+                      )}
+                      <Icon icon="bxs:lock" width={24} />
+                      <Input
+                        type={show ? 'text' : 'password'}
+                        placeholder="Password"
+                        name="newpassword"
+                        {...forgotPasswordForm.register('newpassword', {
+                          required: true,
+                          pattern: PASSWORD
+                        })}
+                      />
+                      <Icon
+                        icon={show ? 'bxs:hide' : 'bxs:show'}
+                        width={24}
+                        onClick={() => {
+                          setShow(!show)
+                        }}
+                      />
+                    </FormGroup>
+                    <FormGroup style={animateFormGroup}>
+                      {!arePasswordEqual ? (
+                        <Errors message="Passwords are not equal!" handleBlur={handleBlur} />
+                      ) : undefined}
+                      <Icon icon="bxs:lock" width={24} />
+                      <Input
+                        type={showConfirm ? 'text' : 'password'}
+                        placeholder="Confirm Password"
+                        name="confirmnewpassword"
+                        {...forgotPasswordForm.register('confirmNewPassword', {
+                          required: true,
+                          pattern: PASSWORD
+                        })}
+                        onChange={(e) => {
+                          if (e.target.value.toString() !== newPassword) {
+                            setArePasswordEqual(false)
+                          } else {
+                            setArePasswordEqual(true)
+                          }
+                        }}
+                      />
+                      <Icon
+                        icon={showConfirm ? 'bxs:hide' : 'bxs:show'}
+                        width={24}
+                        onClick={() => {
+                          setShowConfirm(!show)
+                        }}
+                      />
+                    </FormGroup>
+                    {regSubmitting ? <LoaderButton /> : <SubmitButton>Reset Password</SubmitButton>}
+                  </>
+                )}
+              </Form>
+            </>
+          ) : (
+            <>
+              <Space></Space>
+              <Space></Space>
+              <Message>
+                <h1>Enter the verification Code</h1>
+              </Message>
+              <Form onSubmit={verifyForm.handleSubmit(onVerifySubmit)} style={animateForm}>
+                <FormGroup>
+                  {verErrors.code && <Errors message="Please enter a code!" handleBlur={handleBlur} />}
+                  <Icon icon="bxs:lock" width={24} />
+                  <Input
+                    placeholder="Enter the 6-Character code"
+                    name="code"
+                    {...verifyForm.register('code', {
+                      required: true
+                    })}
+                  />
+                </FormGroup>
+                {verErrors.code?.type === 'required' ? (
+                  <ErrorMessages>
+                    <Icon icon="ant-design:warning-outlined" width={16} />
+                    <span>Code is required!</span>
+                  </ErrorMessages>
+                ) : undefined}
+                {verSubmitting ? <LoaderButton /> : <SubmitButton>Verify</SubmitButton>}
+              </Form>
+            </>
+          )}
+        </SectionForm>
+      </Container>
+    </>
   )
 }
