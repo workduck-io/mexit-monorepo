@@ -1,5 +1,6 @@
 import {
   AddILinkProps,
+  CacheUser,
   Contents,
   idxKey,
   ILink,
@@ -26,6 +27,7 @@ import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import useThemeStore from './useThemeStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -53,6 +55,7 @@ export default function useRaju() {
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
   const { initHighlights } = useHighlightStore()
+  const { setCache } = useUserCacheStore()
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -100,7 +103,8 @@ export default function useRaju() {
       ilinks: any[],
       reminders: Reminder[],
       publicNodes: any[],
-      sharedNodes: SharedNode[]
+      sharedNodes: SharedNode[],
+      cache: CacheUser[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -111,6 +115,7 @@ export default function useRaju() {
       setReminders(reminders)
       setPublicNodes(publicNodes)
       setSharedNodes(sharedNodes)
+      setCache(cache)
 
       initHighlights([...ilinks, ...sharedNodes], contents)
     }

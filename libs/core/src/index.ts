@@ -15,6 +15,7 @@ export * from './Stores/requestCacheConstructor'
 export * from './Stores/shortcutStoreConstructor'
 export * from './Stores/shortenerStoreConstructor'
 export * from './Stores/snippetStoreConstructor'
+export * from './Stores/userCacheStoreConstructor'
 
 export * from './Types/Actions'
 export * from './Types/Auth'

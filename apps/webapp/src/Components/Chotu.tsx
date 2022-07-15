@@ -25,6 +25,7 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useReminders } from '../Hooks/useReminders'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -42,6 +43,7 @@ export default function Chotu() {
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
+  const { cache } = useUserCacheStore()
 
   useEffect(() => {
     if (!first) {
@@ -93,7 +95,8 @@ export default function Chotu() {
             ilinks,
             reminders,
             publicNodes,
-            sharedNodes
+            sharedNodes,
+            cache
           )
         })
         .catch((error) => {
@@ -115,6 +118,7 @@ export default function Chotu() {
     reminders,
     publicNodes,
     sharedNodes,
+    cache,
     connection
   ])
 
