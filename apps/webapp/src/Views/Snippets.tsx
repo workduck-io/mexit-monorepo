@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -10,15 +10,7 @@ import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useSnippets } from '../Hooks/useSnippets'
 import { Button, IconButton } from '@mexit/shared'
 
-import {
-  defaultContent,
-  generateSnippetId,
-  generateTempId,
-  GenericSearchResult,
-  mog,
-  parseBlock,
-  Snippet
-} from '@mexit/core'
+import { defaultContent, generateSnippetId, generateTempId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
 import {
   CreateSnippet,
   SnippetCommand,
@@ -39,7 +31,6 @@ import {
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
-import { useApi } from '../Hooks/API/useNodeAPI'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 
@@ -49,12 +40,11 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippet, updateSnippet, getSnippets } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
-  const api = useApi()
 
   const initialSnippets: any[] = snippets.map((snippet) => ({
     id: snippet.id,
@@ -112,24 +102,6 @@ const Snippets = () => {
     // loadNode(nodeid)
     goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
-
-  useEffect(() => {
-    const snippets = getSnippets()
-    const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
-
-    try {
-      Promise.allSettled(
-        unfetchedSnippets.map(
-          async (item) =>
-            await api.getSnippetById(item.id).then((response) => {
-              updateSnippet(response as Snippet)
-            })
-        )
-      )
-    } catch (err) {
-      mog('Failed to fetch snippets', { err })
-    }
-  }, [])
 
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {

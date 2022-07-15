@@ -22,6 +22,7 @@ import { usePortals } from '../Hooks/usePortals'
 import { useUserCacheStore } from './useUserCacheStore'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { getEmailStart } from '../Utils/constants'
+import { useSnippets } from '../Hooks/useSnippets'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -183,6 +184,7 @@ export const useInitializeAfterAuth = () => {
   const { refreshILinks } = useInternalLinks()
   const api = useApi()
   const { registerNewUser } = useAuthentication()
+  const { getInitialSnippets } = useSnippets()
 
   const initializeAfterAuth = async (
     loginData: UserCred,
@@ -231,12 +233,14 @@ export const useInitializeAfterAuth = () => {
       setAuthenticated(userDetails, workspaceDetails)
 
       const initialSnippetsP = await api.getAllSnippetsByWorkspace()
+
       const initPortalsP = initPortals()
       const refreshILinksP = refreshILinks()
 
       const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
 
       if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
+      getInitialSnippets()
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {

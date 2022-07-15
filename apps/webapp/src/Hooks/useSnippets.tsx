@@ -1,6 +1,7 @@
 import { mog, SEPARATOR, Snippet } from '@mexit/core'
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useApi } from './API/useNodeAPI'
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {
@@ -9,6 +10,7 @@ export const useSnippets = () => {
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
 
   const { updateDocument, addDocument, removeDocument } = useSearch()
+  const api = useApi()
 
   const getSnippets = () => {
     return useSnippetStore.getState().snippets
@@ -72,6 +74,24 @@ export const useSnippets = () => {
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
   }
 
+  const getInitialSnippets = () => {
+    const snippets = getSnippets()
+    const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
+
+    try {
+      Promise.allSettled(
+        unfetchedSnippets.map(
+          async (item) =>
+            await api.getSnippetById(item.id).then((response) => {
+              updateSnippet(response as Snippet)
+            })
+        )
+      )
+    } catch (err) {
+      mog('Failed to fetch snippets', { err })
+    }
+  }
+
   return {
     getSnippets,
     getSnippet,
@@ -79,7 +99,8 @@ export const useSnippets = () => {
     getSnippetConfigs,
     addSnippet,
     updateSnippet,
-    deleteSnippet
+    deleteSnippet,
+    getInitialSnippets
   }
 }
 
