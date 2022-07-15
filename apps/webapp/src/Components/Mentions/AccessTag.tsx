@@ -4,7 +4,7 @@ import { AccessLevel } from '@mexit/core'
 
 import { AccessNames } from '../../Data/defaultMentions'
 import { AccessIcon } from '../Icons/Access'
-import { SAccessTag } from '../../Editor/Styles/Mentions'
+import { SAccessTag } from '@mexit/shared'
 
 interface AccessTagProps {
   access: AccessLevel

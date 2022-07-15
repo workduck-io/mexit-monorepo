@@ -22,7 +22,7 @@ import {
   Username,
   MentionTooltipContent,
   TooltipAlias
-} from '../../Styles/Mentions'
+} from '@mexit/shared'
 import { useShareModalStore } from '../../../Stores/useShareModalStore'
 import { Icon } from '@iconify/react'
 import { useMentionStore } from '../../../Stores/useMentionsStore'
