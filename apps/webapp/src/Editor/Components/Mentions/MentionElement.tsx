@@ -8,7 +8,6 @@ import { MentionElementProps, useEditorRef } from '@udecode/plate'
 import { mog, Mentionable, InvitedUser, AccessLevel, SelfMention } from '@mexit/core'
 import { Button } from '@mexit/shared'
 
-import AccessTag from '../../../Components/Mentions/AccessTag'
 import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useMentions } from '../../../Hooks/useMentions'
@@ -21,7 +20,8 @@ import {
   SMention,
   Username,
   MentionTooltipContent,
-  TooltipAlias
+  TooltipAlias,
+  AccessTag
 } from '@mexit/shared'
 import { useShareModalStore } from '../../../Stores/useShareModalStore'
 import { Icon } from '@iconify/react'

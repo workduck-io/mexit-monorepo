@@ -4,6 +4,8 @@ import {
   Contents,
   idxKey,
   ILink,
+  InvitedUser,
+  Mentionable,
   NodeEditorContent,
   NodeMetadata,
   Reminder,
@@ -28,6 +30,7 @@ import { useReminders } from './useReminders'
 import useThemeStore from './useThemeStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -56,6 +59,7 @@ export default function useRaju() {
   const { actOnReminder } = useReminders()
   const { initHighlights } = useHighlightStore()
   const { setCache } = useUserCacheStore()
+  const initMentionData = useMentionStore((store) => store.initMentionData)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -104,7 +108,9 @@ export default function useRaju() {
       reminders: Reminder[],
       publicNodes: any[],
       sharedNodes: SharedNode[],
-      cache: CacheUser[]
+      cache: CacheUser[],
+      mentionable: Mentionable[],
+      inivitedUsers: InvitedUser[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -116,6 +122,7 @@ export default function useRaju() {
       setPublicNodes(publicNodes)
       setSharedNodes(sharedNodes)
       setCache(cache)
+      initMentionData(mentionable, inivitedUsers)
 
       initHighlights([...ilinks, ...sharedNodes], contents)
     }

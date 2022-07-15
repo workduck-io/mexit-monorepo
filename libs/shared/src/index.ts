@@ -1,3 +1,5 @@
+export * from './Components/Access'
+export * from './Components/AccessTag'
 export * from './Components/Icons'
 export * from './Components/Link'
 export * from './Components/Notification'

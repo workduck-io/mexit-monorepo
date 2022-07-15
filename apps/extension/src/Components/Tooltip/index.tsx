@@ -1,10 +1,29 @@
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Highlighter from 'web-highlighter'
-import { copyTextToClipboard } from '@mexit/shared'
-import { Icon, StyledTooltip } from './styled'
+import {
+  AccessTag,
+  Button,
+  copyTextToClipboard,
+  MentionTooltip,
+  MentionTooltipContent,
+  SMention,
+  SMentionRoot,
+  TooltipAlias,
+  TooltipMail
+} from '@mexit/shared'
+import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import toast from 'react-hot-toast'
-import { extractMetadata, NodeEditorContent, SEPARATOR } from '@mexit/core'
+import {
+  AccessLevel,
+  CacheUser,
+  extractMetadata,
+  InvitedUser,
+  Mentionable,
+  NodeEditorContent,
+  SelfMention,
+  SEPARATOR
+} from '@mexit/core'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useLinks } from '../../Hooks/useLinks'
 import { useEditorContext } from '../../Hooks/useEditorContext'
@@ -14,6 +33,14 @@ import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useAuthStore } from '../../Hooks/useAuth'
 import useRaju from '../../Hooks/useRaju'
 import { deserializeContent } from '../../Utils/serializer'
+import { useNodes } from '../../Hooks/useNodes'
+import { useUserCacheStore } from '../../Stores/useUserCacheStore'
+import { ProfileImage } from '../ProfileImage'
+import Tippy from '@tippyjs/react/headless' // different import path!
+import { useMentions } from '../../Hooks/useMentions'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { styleSlot } from '../../contentScript'
+import { MentionTooltipComponent } from '../MentionTooltip'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
@@ -25,12 +52,30 @@ function Tooltip() {
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
+  const { isSharedNode, getSharedNode } = useNodes()
+  const { getUser, cache } = useUserCacheStore()
+  const mentionable = useMentionStore((state) => state.mentionable)
+  const [showTippy, setShowTippy] = useState(false)
+
+  const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
+
+  const { getUserFromUserid, getUserAccessLevelForNode } = useMentions()
+  // const { getUserDetailsUserId } = useUserService()
+
+  const user = useMemo(() => {
+    if (isSharedNode(nodeId)) {
+      const sharedNode = getSharedNode(nodeId)
+      const u = getUserFromUserid(sharedNode?.owner)
+
+      return u
+    }
+  }, [mentionable, cache])
+
+  const access = getUserAccessLevelForNode(user?.email, nodeId)
 
   const handleDelete = () => {
-    const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
     const content = getContent(nodeId)
     const node = getILinkFromNodeid(nodeId)
-
     const parentILink = getParentILink(node.path)
 
     const request = {
@@ -70,11 +115,9 @@ function Tooltip() {
   }
 
   const handleEdit = () => {
-    setVisualState(VisualState.animatingIn)
-
-    const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
     const content = getContent(nodeId)
     const node = getILinkFromNodeid(nodeId)
+    setVisualState(VisualState.animatingIn)
 
     // TODO: the timeout is because the nodeContent setting in the content/index.ts according to the active item works as well
     // will optimize later
@@ -96,6 +139,7 @@ function Tooltip() {
 
   return (
     <StyledTooltip
+      id="mexit-tooltip"
       top={window.scrollY + tooltipState.coordinates.top}
       left={window.scrollX + tooltipState.coordinates.left}
       showTooltip={tooltipState.visualState === VisualState.hidden ? false : true}
@@ -155,6 +199,27 @@ function Tooltip() {
           <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
         </svg>
       </Icon>
+
+      {user?.email && (
+        <Icon onClick={() => setShowTippy(!showTippy)}>
+          <Tippy
+            // delay={[100, 1000000]} // for testing
+            trigger="mouseenter"
+            delay={100}
+            visible={showTippy}
+            interactiveDebounce={100}
+            interactive
+            placement="auto-start"
+            appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('mexit-tooltip')}
+            getReferenceClientRect={() => tooltipState.coordinates}
+            render={(attrs) => <MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
+          >
+            <ProfileImageContainer>
+              {user?.email && <ProfileImage email={user?.email} size={24} />}
+            </ProfileImageContainer>
+          </Tippy>
+        </Icon>
+      )}
     </StyledTooltip>
   )
 }

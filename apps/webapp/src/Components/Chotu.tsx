@@ -26,6 +26,7 @@ import { useReminderStore } from '../Stores/useReminderStore'
 import { useReminders } from '../Hooks/useReminders'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -44,6 +45,7 @@ export default function Chotu() {
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const { cache } = useUserCacheStore()
+  const { mentionable, invitedUsers } = useMentionStore()
 
   useEffect(() => {
     if (!first) {
@@ -96,7 +98,9 @@ export default function Chotu() {
             reminders,
             publicNodes,
             sharedNodes,
-            cache
+            cache,
+            mentionable,
+            invitedUsers
           )
         })
         .catch((error) => {

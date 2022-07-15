@@ -1,9 +1,10 @@
 export * from './Data/actions'
 export * from './Data/constants'
+export * from './Data/defaultCommands'
+export * from './Data/defaultMentions'
 export * from './Data/IpcAction'
 export * from './Data/outline'
 export * from './Data/search'
-export * from './Data/defaultCommands'
 
 export * from './Stores/authStoreConstructor'
 export * from './Stores/blockStoreConstructor'
