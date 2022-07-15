@@ -55,7 +55,6 @@ function Tooltip() {
   const { isSharedNode, getSharedNode } = useNodes()
   const { getUser, cache } = useUserCacheStore()
   const mentionable = useMentionStore((state) => state.mentionable)
-  const [showTippy, setShowTippy] = useState(false)
 
   const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
 
@@ -201,17 +200,11 @@ function Tooltip() {
       </Icon>
 
       {user?.email && (
-        <Icon onClick={() => setShowTippy(!showTippy)}>
+        <Icon>
           <Tippy
-            // delay={[100, 1000000]} // for testing
-            trigger="mouseenter"
-            delay={100}
-            visible={showTippy}
-            interactiveDebounce={100}
             interactive
-            placement="auto-start"
+            placement="bottom"
             appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('mexit-tooltip')}
-            getReferenceClientRect={() => tooltipState.coordinates}
             render={(attrs) => <MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
           >
             <ProfileImageContainer>
