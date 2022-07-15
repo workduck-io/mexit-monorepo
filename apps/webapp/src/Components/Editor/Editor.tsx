@@ -211,7 +211,7 @@ const Editor: React.FC<EditorProps> = ({
         slateElementType: ELEMENT_MEDIA_EMBED,
         command: 'webem',
         options: {
-          url: 'http://example.com/'
+          url: 'https://example.com/'
         }
       },
       table: {
