@@ -20,6 +20,7 @@ import {
   extractMetadata,
   InvitedUser,
   Mentionable,
+  MEXIT_FRONTEND_URL_BASE,
   NodeEditorContent,
   SelfMention,
   SEPARATOR
@@ -68,7 +69,7 @@ function Tooltip() {
 
       return u
     }
-  }, [mentionable, cache])
+  }, [mentionable, cache, nodeId])
 
   const access = getUserAccessLevelForNode(user?.email, nodeId)
 
@@ -200,7 +201,9 @@ function Tooltip() {
       </Icon>
 
       {user?.email && (
-        <Icon>
+        <Icon
+          onClick={() => window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeId}`, '_blank', 'noopener, noreferrer')}
+        >
           <Tippy
             interactive
             placement="bottom"
