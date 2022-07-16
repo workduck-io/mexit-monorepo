@@ -1,12 +1,16 @@
 import {
   AddILinkProps,
+  CacheUser,
   Contents,
   idxKey,
   ILink,
+  InvitedUser,
+  Mentionable,
   NodeEditorContent,
   NodeMetadata,
   Reminder,
   ReminderActions,
+  SharedNode,
   Snippet,
   UserDetails,
   WorkspaceDetails
@@ -25,6 +29,8 @@ import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import useThemeStore from './useThemeStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -47,10 +53,13 @@ export default function useRaju() {
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
+  const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
   const { initHighlights } = useHighlightStore()
+  const { setCache } = useUserCacheStore()
+  const initMentionData = useMentionStore((store) => store.initMentionData)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -97,7 +106,11 @@ export default function useRaju() {
       contents: Contents,
       ilinks: any[],
       reminders: Reminder[],
-      publicNodes: any[]
+      publicNodes: any[],
+      sharedNodes: SharedNode[],
+      cache: CacheUser[],
+      mentionable: Mentionable[],
+      inivitedUsers: InvitedUser[]
     ) {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
@@ -106,8 +119,12 @@ export default function useRaju() {
       setIlinks(ilinks)
       initContents(contents)
       setReminders(reminders)
-      initHighlights(ilinks, contents)
       setPublicNodes(publicNodes)
+      setSharedNodes(sharedNodes)
+      setCache(cache)
+      initMentionData(mentionable, inivitedUsers)
+
+      initHighlights([...ilinks, ...sharedNodes], contents)
     }
   }
 

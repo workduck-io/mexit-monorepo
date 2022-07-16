@@ -20,6 +20,9 @@ export const StyledTooltip = styled.div<{ top: number; left: number; showTooltip
 `
 
 export const Icon = styled.div`
+  display: flex;
+  align-items: center;
+
   cursor: pointer;
   border-radius: 5px;
   padding: 0.3em;
@@ -31,4 +34,10 @@ export const Icon = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.colors.background.modal};
   }
+`
+
+export const ProfileImageContainer = styled.div`
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
 `

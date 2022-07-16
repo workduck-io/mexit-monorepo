@@ -25,6 +25,8 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useReminders } from '../Hooks/useReminders'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -42,6 +44,8 @@ export default function Chotu() {
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
+  const { cache } = useUserCacheStore()
+  const { mentionable, invitedUsers } = useMentionStore()
 
   useEffect(() => {
     if (!first) {
@@ -83,7 +87,21 @@ export default function Chotu() {
     if (connection) {
       connection.promise
         .then((parent: any) => {
-          parent.init(userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes)
+          parent.init(
+            userDetails,
+            workspaceDetails,
+            theme,
+            authAWS,
+            snippets,
+            contents,
+            ilinks,
+            reminders,
+            publicNodes,
+            sharedNodes,
+            cache,
+            mentionable,
+            invitedUsers
+          )
         })
         .catch((error) => {
           console.error(error)
@@ -93,7 +111,20 @@ export default function Chotu() {
         connection.destroy()
       }
     }
-  }, [userDetails, workspaceDetails, theme, authAWS, snippets, contents, ilinks, reminders, publicNodes, connection])
+  }, [
+    userDetails,
+    workspaceDetails,
+    theme,
+    authAWS,
+    snippets,
+    contents,
+    ilinks,
+    reminders,
+    publicNodes,
+    sharedNodes,
+    cache,
+    connection
+  ])
 
   return (
     <div>

@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { Contents, ElementHighlightMetadata, ILink, mog, NodeContent, NodeEditorContent } from '@mexit/core'
+import { Contents, ElementHighlightMetadata, ILink, mog, NodeContent, NodeEditorContent, SharedNode } from '@mexit/core'
 import { persist } from 'zustand/middleware'
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
@@ -8,6 +8,7 @@ interface Highlighted {
     [blockId: string]: {
       elementMetadata: ElementHighlightMetadata
       nodeId: string
+      shared?: boolean
     }
   }
 }
@@ -16,7 +17,7 @@ interface HighlightStore {
    * The current ids for specific editors to highlight
    */
   highlighted: Highlighted
-  initHighlights: (ilinks: ILink[], contents: Contents) => void
+  initHighlights: (ilinks: (ILink | SharedNode)[], contents: Contents) => void
   addHighlightedBlock: (nodeId: string, content: NodeEditorContent, url: string) => void
   clearHighlightedBlock: (url: string, blockId: string) => void
   clearAllHighlightedBlocks: () => void
@@ -36,7 +37,8 @@ export const useHighlightStore = create<HighlightStore>(
                 ...highlighted[block.metadata.elementMetadata.sourceUrl],
                 [block.id]: {
                   elementMetadata: block.metadata.elementMetadata,
-                  nodeId: this.nodeid
+                  nodeId: this.nodeid,
+                  shared: !!this?.owner
                 }
               }
             }

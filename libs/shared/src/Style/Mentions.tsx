@@ -1,7 +1,6 @@
 import { transparentize, mix } from 'polished'
 import styled, { css } from 'styled-components'
-
-import { CardShadow } from '@mexit/shared'
+import { CardShadow } from './Helpers'
 
 export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`
   display: inline-block;

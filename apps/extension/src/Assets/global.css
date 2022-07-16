@@ -16,8 +16,15 @@
   -webkit-animation: 1.5s highlight 1.5s 1 normal forwards;
           animation: 1.5s highlight 1.5s 1 normal forwards;
   background-color: none;
-  background: linear-gradient(90deg, #C3B1E1	, 50%, rgba(255, 255, 255, 0) 50%);
+  background: linear-gradient(90deg, #C3B1E1, 50%, rgba(255, 255, 255, 0) 50%);
   background-size: 200% 100%;
   background-position: 100% 0;
-  filter: contrast(1.25)
+  filter: contrast(1.25);
+}
+
+.mexit-highlight.shared {
+  background: linear-gradient(90deg, #ED8C79, 50%, rgba(255, 255, 255, 0) 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  filter: contrast(1.25);
 }

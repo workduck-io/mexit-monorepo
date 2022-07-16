@@ -174,6 +174,10 @@ function handleHighlighter() {
       forEach(pageContents, (value, key) => {
         const { startMeta, endMeta, text, id } = value.elementMetadata.saveableRange
         highlighter.fromStore(startMeta, endMeta, text, key)
+
+        if (value?.shared) {
+          highlighter.addClass('shared', key)
+        }
       })
     }
 

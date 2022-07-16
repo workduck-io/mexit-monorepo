@@ -39,6 +39,7 @@ import useRaju from '../../Hooks/useRaju'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { ListItemType } from '../../Types/List'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useMentionStore } from '../../Stores/useMentionsStore'
 
 const MAX_RECENT_ITEMS = 3
 
