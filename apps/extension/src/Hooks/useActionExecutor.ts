@@ -156,17 +156,6 @@ export function useActionExecutor() {
                 setTimeout(() => {
                   setPersistedContent([
                     {
-                      type: 'p',
-                      children: [
-                        {
-                          text: 'profile data'
-                        }
-                      ]
-                    },
-                    {
-                      text: 'Hello'
-                    },
-                    {
                       type: 'array',
                       children: data
                     }
