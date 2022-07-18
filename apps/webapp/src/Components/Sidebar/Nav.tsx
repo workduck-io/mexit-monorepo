@@ -1,23 +1,16 @@
+import React, { useEffect, useMemo, useState } from 'react'
+import tinykeys from 'tinykeys'
+import { useSingleton } from '@tippyjs/react'
+import { Icon } from '@iconify/react'
 import archiveFill from '@iconify/icons-ri/archive-fill'
 import gitBranchLine from '@iconify/icons-ri/git-branch-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
-import { Icon } from '@iconify/react'
-import { useSingleton } from '@tippyjs/react'
-import React, { useEffect } from 'react'
-import tinykeys from 'tinykeys'
-import { TooltipTitleWithShortcut } from '../Shortcuts'
-import { useSidebarTransition } from './Transition'
-import Tree from './Tree'
-import { NavTooltip } from '@mexit/shared'
-import { TreeHelp } from '../../Data/defaultText'
-import useLayout from '../../Hooks/useLayout'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
-import Collapse from '../../Layout/Collapse'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import bookmark3Line from '@iconify/icons-ri/bookmark-3-line'
+import shareLine from '@iconify/icons-ri/share-line'
+
 import {
   NavWrapper,
+  NavTooltip,
   NavLogoWrapper,
   MainLinkContainer,
   CreateNewButton,
@@ -27,15 +20,35 @@ import {
   NavDivider,
   EndLinkContainer,
   Link,
-  NavSpacer
+  NavSpacer,
+  MexIcon,
+  SharedNodeIcon
 } from '@mexit/shared'
-import { Logo, SidebarToggle } from '../logo'
+
+import { TooltipTitleWithShortcut } from '../Shortcuts'
+import { useSidebarTransition } from './Transition'
+import Tree, { TreeContainer } from './Tree'
+import { BookmarksHelp, TreeHelp, SharedHelp } from '../../Data/defaultText'
+import useLayout from '../../Hooks/useLayout'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
+import Collapse from '../../Layout/Collapse'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { Logo, SidebarToggle, TrafficLightBG } from '../logo'
 import { GetIcon } from '../../Data/links'
 import { NavProps } from '../../Types/Nav'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
 import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useLinks } from '../../Hooks/useLinks'
+import Bookmarks from './Bookmarks'
+import SharedNotes from './SharedNotes'
+import { useTheme } from 'styled-components'
+import { useBookmarks } from '../../Hooks/useBookmarks'
+import Tabs from '../../Views/Tabs'
+import { useDataStore } from '../../Stores/useDataStore'
+import { usePolling } from '../../Hooks/API/usePolling'
 
 const Nav = ({ links }: NavProps) => {
   // const match = useMatch(`/${ROUTE_PATHS.node}/:nodeid`)
@@ -46,17 +59,21 @@ const Nav = ({ links }: NavProps) => {
   const { getLinkCount } = useLinks()
   const { goTo } = useRouting()
   const { createNewNode } = useCreateNewNode()
+  const theme = useTheme()
 
   const [source, target] = useSingleton()
-  const { refreshILinks } = useInternalLinks()
 
-  useEffect(() => {
-    refreshILinks()
-    const interval = setInterval(() => {
-      refreshILinks()
-    }, 120000)
-    return () => clearInterval(interval)
-  }, [])
+  const [openedTab, setOpenedTab] = useState<number>(0)
+  const { getAllBookmarks } = useBookmarks()
+
+  usePolling()
+  // useEffect(() => {
+  //   refreshILinks()
+  //   const interval = setInterval(() => {
+  //     refreshILinks()
+  //   }, 120000)
+  //   return () => clearInterval(interval)
+  // }, [])
 
   const onNewNote: React.MouseEventHandler<HTMLDivElement> = async (e) => {
     e.preventDefault()
@@ -83,27 +100,47 @@ const Nav = ({ links }: NavProps) => {
     }
   }, [shortcuts]) // eslint-disable-line
 
+  useEffect(() => {
+    getAllBookmarks()
+  }, [])
+
   const { springProps } = useSidebarTransition()
 
   const archiveCount = getLinkCount().archive
 
-  // useEffect(() => {
-  //   refreshILinks()
-  //   const interval = setInterval(() => {
-  //     refreshILinks()
-  //   }, 3600000)
-  //   return () => clearInterval(interval)
-  // }, []) // eslint-disable-line
+  const tabs = useMemo(
+    () => [
+      {
+        label: <MexIcon $noHover icon="ri:draft-line" width={20} height={20} />,
+        key: 'wd-mex-all-notes-tree',
+        component: <TreeContainer />,
+        tooltip: 'All Notes'
+      },
+      {
+        label: <SharedNodeIcon fill={theme.colors.text.heading} height={18} width={18} />,
+        key: 'wd-mex-shared-notes',
+        component: <SharedNotes />,
+        tooltip: 'Shared Notes'
+      },
+      {
+        label: <MexIcon $noHover icon="ri:bookmark-line" width={20} height={20} />,
+        key: 'wd-mex-bookmarks',
+        component: <Bookmarks />,
+        tooltip: 'Bookmarks'
+      }
+    ],
+    []
+  )
 
   return (
     <>
+      {/* eslint-disable-next-line */}
+      {/* @ts-ignore */}
       <NavWrapper style={springProps} $expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
         <NavTooltip singleton={source} />
-
         <NavLogoWrapper onClick={() => goTo(ROUTE_PATHS.home, NavigationType.push)}>
           <Logo />
         </NavLogoWrapper>
-
         <MainLinkContainer>
           <NavTooltip
             key={shortcuts.newNode.title}
@@ -139,19 +176,31 @@ const Nav = ({ links }: NavProps) => {
             )
           )}
         </MainLinkContainer>
-
-        {/* <Collapse
-        title="Bookmarks"
-        oid="bookmarks"
-        icon={bookmark3Line}
-        maximumHeight="30vh"
-        infoProps={{
-          text: BookmarksHelp
-        }}
-      >
-        <Bookmarks />
-      </Collapse>
- */}
+        {/* Notes, Shared, Bookmarks */}
+        <Tabs visible={sidebar.expanded} openedTab={openedTab} onChange={setOpenedTab} tabs={tabs} />
+        {/* 
+        <Collapse
+          title="Bookmarks"
+          oid="bookmarks"
+          icon={bookmark3Line}
+          maximumHeight="30vh"
+          infoProps={{
+            text: BookmarksHelp
+          }}
+        >
+          <Bookmarks />
+        </Collapse>
+        <Collapse
+          title="Shared Notes"
+          oid="sharednotes"
+          icon={shareLine}
+          maximumHeight="30vh"
+          infoProps={{
+            text: SharedHelp
+          }}
+        >
+          <SharedNotes />
+        </Collapse>
         <Collapse
           title="All Notes"
           oid={`tree`}
@@ -167,8 +216,8 @@ const Nav = ({ links }: NavProps) => {
 
         <NavSpacer />
         <NavDivider />
-
-        <EndLinkContainer>
+ */}
+        <EndLinkContainer onMouseUp={(e) => e.stopPropagation()}>
           {/* {authenticated ? (
           <NavTooltip singleton={target} content="User">
             <Link  tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="/user" key="nav_user">
@@ -193,19 +242,11 @@ const Nav = ({ links }: NavProps) => {
               to={ROUTE_PATHS.archive}
               key="nav_search"
             >
-              <>
-                {GetIcon(archiveFill)}
-                <NavTitle>Archive</NavTitle>
-                {archiveCount > 0 && <Count>{archiveCount}</Count>}
-              </>
+              {GetIcon(archiveFill)}
+              <NavTitle>Archive</NavTitle>
+              {archiveCount > 0 && <Count>{archiveCount}</Count>}
             </Link>
           </NavTooltip>
-          {/*
-        <NavButton onClick={toggleSidebar}>
-          <Icon icon={sidebar.expanded ? menuFoldLine : menuUnfoldLine} />
-          <NavTitle>{sidebar.expanded ? 'Collapse' : 'Expand'}</NavTitle>
-        </NavButton>
-         */}
 
           <NavTooltip
             key={shortcuts.showSettings.title}
@@ -215,18 +256,16 @@ const Nav = ({ links }: NavProps) => {
             <Link
               tabIndex={-1}
               className={(s) => (s.isActive ? 'active' : '')}
-              to={`${ROUTE_PATHS.settings}/themes`}
+              to={`${ROUTE_PATHS.settings}`}
               key="nav_settings"
             >
-              <>
-                {GetIcon(settings4Line)}
-                <NavTitle>Settings</NavTitle>
-              </>
+              {GetIcon(settings4Line)}
+              <NavTitle>Settings</NavTitle>
             </Link>
           </NavTooltip>
         </EndLinkContainer>
       </NavWrapper>
-      {/* <TrafficLightBG /> */}
+      <TrafficLightBG />
       <SidebarToggle />
     </>
   )

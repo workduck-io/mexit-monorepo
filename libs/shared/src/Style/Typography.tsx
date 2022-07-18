@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components'
 
-// export const Title = styled.h1<{ colored?: boolean }>`
-//   ${({ theme, colored }) =>
-//     colored &&
-//     css`
-//       color: ${theme.colors.primary};
-//     `}
-// `
+export const Title = styled.h1<{ colored?: boolean }>`
+  ${({ theme, colored }) =>
+    colored &&
+    css`
+      color: ${theme.colors.primary};
+    `}
+`
 
 export const TitleText = styled.div`
   flex-grow: 1;

@@ -1,23 +1,22 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE, ELEMENT_LINK, withProps } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
-
-import TagWrapper from './TagWrapper'
-import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
-  ELEMENT_PARAGRAPH,
+  ELEMENT_MENTION,
   ELEMENT_TAG,
-  ELEMENT_TODO_LI,
-  NodeEditorContent
+  mog,
+  NodeEditorContent,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI
 } from '@mexit/core'
+import { useEditorChange, EditorStyles } from '@mexit/shared'
+
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import Todo from '../Todo'
-import { useEditorChange } from '@mexit/shared'
-import { EditorStyles } from '@mexit/shared'
 import { useDataStore } from '../../Stores/useDataStore'
 import { ComboboxKey } from '../../Editor/Types/Combobox'
 import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
@@ -31,6 +30,11 @@ import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLi
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { useNewNodes } from '../../Hooks/useNewNodes'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useMentions } from '../../Hooks/useMentions'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useAuthStore } from '../../Stores/useAuth'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -46,22 +50,36 @@ interface EditorProps {
   readOnly?: boolean
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
+  options?: any
   onAutoSave?: (content: NodeEditorContent) => void
 }
 
-const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, onChange, autoFocus, onAutoSave }) => {
+const Editor: React.FC<EditorProps> = ({
+  nodeUID,
+  nodePath,
+  content,
+  readOnly,
+  onChange,
+  autoFocus,
+  onAutoSave,
+  options
+}) => {
   const tags = useDataStore((store) => store.tags)
   const addTag = useDataStore((store) => store.addTag)
   const ilinks = useDataStore((store) => store.ilinks)
   const addILink = useDataStore((store) => store.addILink)
   const slashCommands = useDataStore((store) => store.slashCommands)
-
   const { openReminderModal } = useOpenReminderModal()
-
   const { getSnippetConfigs } = useSnippets()
-
   const snippetConfigs = getSnippetConfigs()
   const { params, location } = useRouting()
+  const mentionable = useMentionStore((state) => state.mentionable)
+  const invitedUsers = useMentionStore((state) => state.invitedUsers)
+  const prefillShareModal = useShareModalStore((state) => state.prefillModal)
+  const { grantUserAccessOnMention } = useMentions()
+  const sharedNodes = useDataStore((store) => store.sharedNodes)
+  const userDetails = useAuthStore((state) => state.userDetails)
+  const nodeid = useEditorStore((state) => state.node.nodeid)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -80,7 +98,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
 
   const { addNodeOrNodesFast } = useNewNodes()
 
-  const internals: ComboboxItem[] = [
+  const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
       ...l,
       value: l.nodeid,
@@ -88,8 +106,46 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       icon: l.icon ?? 'ri:file-list-2-line',
       type: QuickLinkType.backlink
     })),
+    ...sharedNodes.map((l) => ({
+      ...l,
+      value: l.nodeid,
+      text: l.path,
+      icon: l.icon ?? 'ri:share-line',
+      type: QuickLinkType.backlink
+    })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
   ]
+
+  const mentions = useMemo(
+    () =>
+      userDetails
+        ? [
+            {
+              value: userDetails.userID,
+              text: `${userDetails.alias} (you)`,
+              icon: 'ri:user-line',
+              type: QuickLinkType.mentions
+            },
+            ...mentionable
+              .filter((m) => m.alias !== undefined)
+              .filter((m) => m.userID !== userDetails.userID)
+              .map((m) => ({
+                value: m.userID,
+                text: m.alias,
+                icon: 'ri:user-line',
+                type: QuickLinkType.mentions
+              })),
+            ...invitedUsers.map((m) => ({
+              value: m.alias,
+              text: m.alias,
+              icon: 'ri:user-line',
+              type: QuickLinkType.mentions,
+              additional: { email: m.email }
+            }))
+          ]
+        : [],
+    [mentionable, invitedUsers, userDetails]
+  )
 
   const comboOnKeyDownConfig: ComboConfigData = {
     keys: {
@@ -121,7 +177,21 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
           return id
         },
         renderElement: SlashComboboxItem
-      }
+      },
+      mention: !options?.exclude?.mentions
+        ? {
+            slateElementType: ELEMENT_MENTION,
+            onItemInsert: (alias) => {
+              mog('Inserted new item', { alias })
+              grantUserAccessOnMention(alias, nodeid)
+            },
+            newItemHandler: (newAlias) => {
+              prefillShareModal('invite', { alias: newAlias, fromEditor: true })
+              return newAlias
+            },
+            renderElement: TagComboboxItem
+          }
+        : undefined
     },
     internal: {
       ilink: {
@@ -158,7 +228,7 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
     }
   }
 
-  const comboOnChangeConfig: Record<string, ComboboxType> = {
+  let comboOnChangeConfig: Record<string, ComboboxType> = {
     internal: {
       cbKey: ComboboxKey.INTERNAL,
       trigger: '[[',
@@ -179,6 +249,18 @@ const Editor: React.FC<EditorProps> = ({ nodeUID, nodePath, content, readOnly, o
       data: slashCommands.default.map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
     }
   }
+
+  comboOnChangeConfig = options?.exclude?.mentions
+    ? comboOnChangeConfig
+    : {
+        ...comboOnChangeConfig,
+        mention: {
+          cbKey: ComboboxKey.MENTION,
+          trigger: '@',
+          data: mentions,
+          icon: 'ri:at-line'
+        }
+      }
 
   useEditorChange(nodeUID, content)
 

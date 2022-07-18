@@ -25,7 +25,7 @@ export const integrationURLs = {
 }
 
 export const BASE_API_URL = 'https://http-test.workduck.io/mex'
-export const BASE_USER_URL = 'https://http.workduck.io'
+export const BASE_USER_URL = 'https://http.workduck.io/user'
 
 export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = IS_DEV ? 'http://localhost:3002' : 'https://url.workduck.io/link'
@@ -43,6 +43,10 @@ export const CDN_BASE = 'https://cdn.workduck.io'
 
 export const MEX_LOCH_BASE_URL = 'https://http-test.workduck.io/loch'
 
+export const USER_SERVICE_HELPER_URL = 'https://3jeonl1fee.execute-api.us-east-1.amazonaws.com'
+export const USER_SERVICE_EMAIL_URL = (email: string) =>
+  `https://http.workduck.io/user/email/${encodeURIComponent(email)}`
+
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -56,7 +60,7 @@ export const apiURLs = {
   getBookmarks: (userId: string) => `${BOOKMARK_URL}/userBookmark/${userId}`,
 
   // User
-  getUserRecords: `${BASE_USER_URL}/user/`,
+  getUserRecords: `${BASE_USER_URL}/`,
   registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
 
   // Archive
@@ -71,7 +75,7 @@ export const apiURLs = {
   // Workspace
   createWorkspace: `${BASE_API_URL}/workspace`,
   getNodesByWorkspace: (workspaceId: string) => `${BASE_API_URL}/node/workspace/${workspaceId}/namespace/NAMESPACE1`,
-  getWorkspace: (workspace_id: string) => `${BASE_API_URL}/workspace/${workspace_id}`,
+  getHierarchy: `${BASE_API_URL}/workspace/hierarchy`,
 
   // Link Shortener URLs
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
@@ -102,7 +106,7 @@ export const apiURLs = {
   getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
 
   // Screenshot capture URLs
-  createImageLink: `${BASE_USER_URL}/testing/upload/s3`,
+  createImageLink: `https://http.workduck.io/testing/upload/s3`,
   getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`,
 
   // Get Ilinks from Middleware
@@ -112,5 +116,17 @@ export const apiURLs = {
   getLochServices: () => `${MEX_LOCH_BASE_URL}/connect/all`,
   getConnectedLochServices: () => `${MEX_LOCH_BASE_URL}/connect`,
   connectToLochService: () => `${MEX_LOCH_BASE_URL}/connect`,
-  updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`
+  updateParentNoteOfService: () => `${MEX_LOCH_BASE_URL}/connect`,
+
+  // Sharing and Mentions
+  sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared`,
+  allSharedNodes: `${MEXIT_BACKEND_URL_BASE}/shared/all`,
+  getSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}`,
+  updateSharedNode: `${MEXIT_BACKEND_URL_BASE}/shared/update`,
+  getUsersOfSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}/users`,
+
+  user: {
+    getFromEmail: (email: string) => `${BASE_USER_URL}/email/${encodeURIComponent(email)}`,
+    getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`
+  }
 }

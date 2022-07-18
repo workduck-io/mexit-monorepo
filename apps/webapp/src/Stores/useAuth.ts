@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { useAuth, client } from '@workduck-io/dwindle'
+import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 import { nanoid } from 'nanoid'
 import { clear as IDBClear } from 'idb-keyval'
 
-import { apiURLs, AuthStoreState, Snippet, UserCred } from '@mexit/core'
+import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
-import { useApi } from '../Hooks/useApi'
+import { useApi } from '../Hooks/API/useNodeAPI'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
@@ -20,6 +21,7 @@ import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
 import { usePortals } from '../Hooks/usePortals'
 import useArchive from '../Hooks/useArchive'
+import { useUserCacheStore } from './useUserCacheStore'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -44,6 +46,7 @@ export const useAuthentication = () => {
   const clearTodos = useTodoStore().clearTodos
   const { initPortals } = usePortals()
   const getArchiveData = useArchive().getArchiveData
+  const addUser = useUserCacheStore((s) => s.addUser)
 
   const login = async (
     email: string,
@@ -67,8 +70,21 @@ export const useAuthentication = () => {
       await client
         .get(apiURLs.getUserRecords)
         .then((d: any) => {
-          const userDetails = { email, userId: data.userId }
+          const userDetails = {
+            email,
+            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+            userID: d.data.id,
+            name: d.data.name
+          }
+          // const userDetails = { email, userId: data.userId }
           const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+
+          addUser({
+            userID: userDetails.userID,
+            email: userDetails.email,
+            name: userDetails.name,
+            alias: userDetails.alias
+          })
 
           setAuthenticated(userDetails, workspaceDetails)
         })
@@ -102,24 +118,38 @@ export const useAuthentication = () => {
       const result: any = await googleSignIn(code, clientId, redirectURI)
       console.log(`Result of Login: ${JSON.stringify(result)}`)
 
-      if (getWorkspace && result.userCred !== undefined) {
-        await client
-          .get(apiURLs.getUserRecords)
-          .then(async (d: any) => {
-            const userDetails = { email: result.userCred.email, userId: result.userCred.userId }
+      setShowLoader(true)
+      if (getWorkspace && result !== undefined) {
+        await client.get(apiURLs.getUserRecords).then(async (d: any) => {
+          const userDetails = {
+            email: result.userCred.email,
+            userID: result.userCred.userId,
+            alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+            name: d.data.name
+          }
+          const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
+          setAuthenticated(userDetails, workspaceDetails)
+
+          if (!d.data.group) {
+            await registerUserForGoogle(result, d.data)
+          } else {
+            mog('UserDetails', { userDetails: result })
+            const userDetails = {
+              email: result.userCred.email,
+              name: d.data.name,
+              userID: result.userCred.userId,
+              alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name
+            }
             const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
 
-            setAuthenticated(userDetails, workspaceDetails)
-          })
-          .catch(async (error) => {
-            setShowLoader(true)
-            if (error.response && error.response.status === 404) {
-              await registerUserForGoogle(result)
-            }
-          })
+            mog('Login Google BIG success', { d, userDetails, workspaceDetails })
 
+            setAuthenticated(userDetails, workspaceDetails)
+          }
+        })
         await initPortals()
       }
+
       setShowLoader(false)
       return result
     } catch (error) {
@@ -128,19 +158,27 @@ export const useAuthentication = () => {
     }
   }
 
-  async function registerUserForGoogle(result: any) {
-    setShowLoader(true)
-    setSensitiveData({ email: result.userCred.email, name: result.userCred.username, password: '', roles: [] })
-
+  async function registerUserForGoogle(result: any, data: any) {
+    mog('Registering user for google', { result })
+    setSensitiveData({
+      email: result.email,
+      name: data.name,
+      password: '',
+      roles: [],
+      alias: data.alias ?? data.properties?.alias ?? data.name
+    })
     const uCred: UserCred = {
+      username: result.userCred.username,
       email: result.userCred.email,
       userId: result.userCred.userId,
       expiry: result.userCred.expiry,
       token: result.userCred.token,
       url: result.userCred.url
     }
+
     const newWorkspaceName = `WD_${nanoid()}`
 
+    mog('Login Google Need to create user', { uCred })
     await client
       .post(
         apiURLs.registerUser,
@@ -148,7 +186,8 @@ export const useAuthentication = () => {
           type: 'RegisterUserRequest',
           user: {
             id: uCred.userId,
-            name: uCred.email,
+            name: data.name,
+            alias: data.alias ?? data.name,
             email: uCred.email
           },
           workspaceName: newWorkspaceName
@@ -160,28 +199,29 @@ export const useAuthentication = () => {
         }
       )
       .then(async (d: any) => {
-        const userDetails = { email: uCred.email, userId: uCred.userId }
-        const { registrationInfo, ilinks, nodes, snippets } = d.data
-        const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
-
-        setILinks(ilinks)
-        initSnippets(snippets)
-
-        const contents = {}
-        nodes.forEach((node) => {
-          contents[node.id] = { ...node, type: 'Node' }
-        })
-        initContents(contents)
-        setAuthenticated(userDetails, workspaceDetails)
         try {
           await refreshToken()
-        } catch (error) {} // eslint-disable-line
+        } catch (error) {
+          // setShowLoader(false)
+          mog('Error: ', { error: JSON.stringify(error) })
+        }
+        const userDetails = {
+          userID: uCred.userId,
+          name: data.name,
+          alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
+          email: uCred.email
+        }
+        const workspaceDetails = { id: d.data.id, name: 'WORKSPACE_NAME' }
+        mog('Register Google BIG success', { d, data, userDetails, workspaceDetails })
+
+        mog('Login Google BIG success created user', { userDetails, workspaceDetails })
+        setAuthenticated(userDetails, workspaceDetails)
+        // setShowLoader(false)
       })
       .catch(console.error)
-
-    await initPortals()
-
-    setShowLoader(false)
+      .finally(() => {
+        setShowLoader(false)
+      })
   }
 
   const logout = async () => {
@@ -227,7 +267,8 @@ export const useAuthentication = () => {
       ...metadata,
       name: sensitiveData.name,
       email: sensitiveData.email,
-      roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1)
+      roles: sensitiveData.roles.reduce((prev, cur) => `${prev},${cur.value}`, '').slice(1),
+      alias: sensitiveData.alias
     }
     const vSign = await verifySignUp(code, formMetaData).catch(console.error)
 
@@ -246,15 +287,28 @@ export const useAuthentication = () => {
       .post(apiURLs.registerUser, {
         user: {
           id: uCred.userId,
-          name: uCred.email,
-          email: uCred.email
+          name: sensitiveData.name,
+          email: uCred.email,
+          alias: sensitiveData.alias
         },
         workspaceName: newWorkspaceName
       })
       .then(async (d: any) => {
-        const userDetails = { email: uCred.email, userId: uCred.userId }
+        const userDetails = {
+          email: uCred.email,
+          userID: uCred.userId,
+          name: sensitiveData.name,
+          alias: sensitiveData.alias
+        }
         const { registrationInfo, ilinks, nodes, snippets } = d.data
         const workspaceDetails = { id: registrationInfo.id, name: registrationInfo.name }
+
+        addUser({
+          userID: userDetails.userID,
+          email: userDetails.email,
+          name: userDetails.name,
+          alias: userDetails.alias
+        })
 
         setILinks(ilinks)
         initSnippets(snippets)

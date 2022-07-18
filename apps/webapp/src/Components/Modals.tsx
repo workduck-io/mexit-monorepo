@@ -7,6 +7,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
 import BlockModal from '../Editor/Components/Blocks/BlockModal'
+import ShareModal from './Mentions/ShareModal'
 import GameModal from '../Views/GameModal'
 
 const Modals = () => {
@@ -22,6 +23,7 @@ const Modals = () => {
       <GameModal />
       <BlockModal />
       <CreateReminderModal />
+      <ShareModal />
     </>
   )
 }

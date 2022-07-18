@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Transforms } from 'slate'
-import styled from 'styled-components'
 import { useReadOnly, useFocused, useSelected } from 'slate-react'
-import archivedIcon from '@iconify/icons-ri/archive-line'
-import { Icon } from '@iconify/react'
+import shareLine from '@iconify/icons-ri/share-line'
+import eyeOffLine from '@iconify/icons-ri/eye-off-line'
 import { useEditorRef } from '@udecode/plate'
 
-import { mog } from '@mexit/core'
+import { ILink, mog, NodeType, SharedNode } from '@mexit/core'
+import { SILinkRoot, SILink, StyledIcon, SharedNodeIcon } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useNavigation } from '../../../Hooks/useNavigation'
@@ -15,15 +15,43 @@ import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
-import { useContentStore } from '../../../Stores/useContentStore'
-import { SILinkRoot, SILink } from '@mexit/shared'
+
 import { ILinkElementProps } from '../../Types/QuickLink'
 import EditorPreview from '../EditorPreview/EditorPreview'
 import { getBlock } from '../../../Utils/parseData'
 
-const StyledIcon = styled(Icon)`
-  margin-right: 4px;
-`
+const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNode: SharedNode }) => {
+  return (
+    <SILink $selected={selected}>
+      <StyledIcon icon={shareLine} />
+      <span className="ILink_decoration ILink_decoration_left">[[</span>
+      <span className="ILink_decoration ILink_decoration_value"> {sharedNode?.path}</span>
+      <span className="ILink_decoration ILink_decoration_right">]]</span>
+    </SILink>
+  )
+}
+
+const ArchivedNode = ({ selected, archivedNode }: { selected: boolean; archivedNode: ILink }) => {
+  return (
+    <SILink $selected={selected} color="#df7777" $archived={true}>
+      <SharedNodeIcon />
+      <span className="ILink_decoration ILink_decoration_left">[[</span>
+      <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span>
+      <span className="ILink_decoration ILink_decoration_right">]]</span>
+    </SILink>
+  )
+}
+
+const MissingNode = ({ selected }: { selected: boolean }) => {
+  return (
+    <SILink $selected={selected}>
+      <StyledIcon icon={eyeOffLine} />
+      <span className="ILink_decoration ILink_decoration_left">[[</span>
+      <span className="ILink_decoration ILink_decoration_value">Private/Missing</span>
+      <span className="ILink_decoration ILink_decoration_right">]]</span>
+    </SILink>
+  )
+}
 
 export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()
@@ -32,7 +60,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const [preview, setPreview] = useState(false)
   const { push } = useNavigation()
   const { getPathFromNodeid } = useLinks()
-  const { getArchiveNode } = useNodes()
+  const { getArchiveNode, getSharedNode, getNodeType } = useNodes()
   // mog('We reached here', { selected, focused })
 
   // const nodeid = getNodeidFromPath(element.value)
@@ -93,10 +121,11 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     },
     [selected, focused]
   )
-  const isArchived = archived(element.value)
+  const nodeType = getNodeType(element.value)
   const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
   const content = block ? [block] : undefined
-  const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
+  const archivedNode = nodeType === NodeType.ARCHIVED ? getArchiveNode(element.value) : undefined
+  const sharedNode = nodeType === NodeType.SHARED ? getSharedNode(element.value) : undefined
 
   return (
     <SILinkRoot
@@ -106,32 +135,33 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       data-slate-value={element.value}
       contentEditable={false}
     >
-      {isArchived ? (
-        <SILink $selected={selected} $archived={true}>
-          <StyledIcon icon={archivedIcon} color="#df7777" />
-          <span className="ILink_decoration ILink_decoration_left">[[</span>
-          <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span>
-          <span className="ILink_decoration ILink_decoration_right">]]</span>
-        </SILink>
-      ) : (
-        <EditorPreview
-          placement="auto"
-          allowClosePreview={readOnly}
-          preview={preview}
-          nodeid={element.value}
-          content={content}
-          closePreview={() => setPreview(false)}
-        >
-          <SILink $selected={selected} {...onClickProps}>
-            <span className="ILink_decoration ILink_decoration_left">[[</span>
-            <span className="ILink_decoration ILink_decoration_value">
-              {' '}
-              {!content ? path : `${path} : ${element.blockValue}`}{' '}
-            </span>
-            <span className="ILink_decoration ILink_decoration_right">]]</span>
-          </SILink>
-        </EditorPreview>
-      )}
+      {
+        // The key to the temporary object defines what to render
+        {
+          [NodeType.SHARED]: <SharedNodeLink selected={selected} sharedNode={sharedNode} />,
+          [NodeType.ARCHIVED]: <ArchivedNode selected={selected} archivedNode={archivedNode} />,
+          [NodeType.DEFAULT]: (
+            <EditorPreview
+              placement="auto"
+              allowClosePreview={readOnly}
+              preview={preview}
+              nodeid={element.value}
+              content={content}
+              closePreview={() => setPreview(false)}
+            >
+              <SILink $selected={selected} {...onClickProps}>
+                <span className="ILink_decoration ILink_decoration_left">[[</span>
+                <span className="ILink_decoration ILink_decoration_value">
+                  {' '}
+                  {!content ? path : `${path} : ${element.blockValue}`}{' '}
+                </span>
+                <span className="ILink_decoration ILink_decoration_right">]]</span>
+              </SILink>
+            </EditorPreview>
+          ),
+          [NodeType.MISSING]: <MissingNode selected={selected} />
+        }[nodeType]
+      }
       {children}
     </SILinkRoot>
   )

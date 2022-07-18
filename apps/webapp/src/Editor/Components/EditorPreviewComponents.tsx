@@ -13,11 +13,13 @@ import {
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
   ELEMENT_TODO_LI
 } from '@mexit/core'
+import { MentionElement } from './Mentions/MentionElement'
 
 export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
@@ -34,7 +36,8 @@ export const editorPreviewComponents = {
   [ELEMENT_TAG]: TagWrapper as any,
   [ELEMENT_ILINK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,
-  [ELEMENT_TABLE]: TableWrapper
+  [ELEMENT_TABLE]: TableWrapper,
+  [ELEMENT_MENTION]: MentionElement as any
 }
 
 const components = createPlateUI({

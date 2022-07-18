@@ -1,5 +1,4 @@
-import { ILink, Tag, NodeContent, LinkCache, TagsCache, TodosType, Snippet } from '@mexit/core'
-import { Reminder } from './Reminders'
+import { ILink, Tag, NodeContent, LinkCache, TagsCache, TodosType, Snippet, Reminder } from '@mexit/core'
 
 export interface PersistentData {
   baseNodeId: string

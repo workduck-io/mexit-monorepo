@@ -68,10 +68,12 @@ import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
 import { withBlockOptions } from '../Components/Blocks'
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { createMentionPlugin } from './createMentionsPlugin'
 
 export type PluginOptionType = {
   exclude: {
-    dnd: boolean
+    dnd?: boolean
+    mentions?: boolean
   }
 }
 
@@ -166,7 +168,9 @@ export const generatePlugins = (options: PluginOptionType) => {
     createInlineBlockPlugin(),
 
     createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
-    createHighlightTextPlugin()
+    createHighlightTextPlugin(),
+
+    createMentionPlugin() // Mentions
   ]
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins

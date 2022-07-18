@@ -30,6 +30,8 @@ export const getNodeIcon = (path: string) => {
   }
 }
 
+export const DefaultNodeIcon = 'ri:file-list-2-line'
+
 export const SEPARATOR = '.'
 
 export const getParentId = (id: string, separator = SEPARATOR) => {

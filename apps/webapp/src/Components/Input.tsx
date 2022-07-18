@@ -2,6 +2,7 @@ import Tippy from '@tippyjs/react/headless' // different import path!
 import React from 'react'
 import { InputBlock, Label, InputWrapper } from '@mexit/shared'
 import { ErrorTooltip } from '../Style/Tippy'
+import Infobox from './Infobox'
 
 export const errorMessages = {
   required: (field: string) => `${field} is required`,
@@ -21,21 +22,18 @@ export const PasswordRequirements = () => (
   </>
 )
 
-export const PasswordNotMatch = () => (
-  <>
-    <p>Passwords does not match</p>
-  </>
-)
+export const PasswordNotMatch = () => <p>Passwords does not match</p>
 
 export interface LabeledInputProps {
   name: string
   label: string
   inputProps?: any
   labelProps?: any
+  additionalInfo?: string
   error?: string
 }
 
-const Input = ({ name, label, inputProps, labelProps, error }: LabeledInputProps) => {
+const Input = ({ name, label, inputProps, labelProps, error, additionalInfo }: LabeledInputProps) => {
   // console.log({ name, label, inputProps, labelProps, error })
 
   return (
@@ -52,7 +50,7 @@ const Input = ({ name, label, inputProps, labelProps, error }: LabeledInputProps
         visible={error !== undefined}
       >
         <Label error={error !== undefined} htmlFor={name} {...labelProps}>
-          {label}
+          {label} {additionalInfo && <Infobox text={additionalInfo} />}
         </Label>
       </Tippy>
       <InputBlock error={error !== undefined} key={`login-form-${name} `} {...inputProps} />
@@ -68,8 +66,8 @@ export interface ErroredInputProps extends LabeledInputProps {
   errors?: any
 }
 
-export const InputFormError = ({ errors, ...props }: ErroredInputProps) => {
-  const { name, label } = props
+export const InputFormError = (props: ErroredInputProps) => {
+  const { errors, name, label } = props
   const error = errors[name] ? errorMessages[errors[name].type](label) : undefined
   return <Input {...props} error={error} />
 }

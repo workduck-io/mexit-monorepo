@@ -1,7 +1,6 @@
 import { client, useAuth } from '@workduck-io/dwindle'
 
-import { apiURLs } from '@mexit/core'
-import { WORKSPACE_HEADER } from '../Data/constants'
+import { apiURLs, WORKSPACE_HEADER } from '@mexit/core'
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLinks } from './useLinks'

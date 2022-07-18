@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react'
+import { useCombobox } from 'downshift'
+import toast from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import addCircleLine from '@iconify-icons/ri/add-circle-line'
 import checkboxCircleLine from '@iconify-icons/ri/checkbox-circle-line'
 import errorWarningLine from '@iconify-icons/ri/error-warning-line'
 import { useDebouncedCallback } from 'use-debounce'
 import lock2Line from '@iconify-icons/ri/lock-2-line'
-import { useCombobox } from 'downshift'
-import toast from 'react-hot-toast'
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 
+import {
+  isClash,
+  isReserved,
+  ILink,
+  QuickLinkType,
+  QuickLinkStatus,
+  SEPARATOR,
+  withoutContinuousDelimiter,
+  convertContentToRawText
+} from '@mexit/core'
 import { Input } from '@mexit/shared'
-import { isClash, isReserved, QuickLinkStatus, QuickLinkType, ILink, parseBlock } from '@mexit/core'
+
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import {
@@ -23,10 +33,10 @@ import {
   SuggestionError,
   SuggestionText
 } from '@mexit/shared'
-import { withoutDelimiter } from '../../Editor/Utils/helper'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 export type QuickLink = {
   // Text to be shown in the combobox list
@@ -60,7 +70,7 @@ export const makeQuickLink = (
 })
 
 export const createNewQuickLink = (path: string, type: QuickLinkType = QuickLinkType.backlink): QuickLink => ({
-  text: `Create New: ${path}`,
+  text: `Create new: ${path}`,
   value: path,
   type,
   status: QuickLinkStatus.new
@@ -76,7 +86,11 @@ interface NodeSelectProps {
   showAll?: boolean
   prefillRecent?: boolean
   menuOpen?: boolean
+  /** If true, the combobox will be autofocused */
   autoFocus?: boolean
+  /** If true, when autofocused, all text will be selected */
+  autoFocusSelectAll?: boolean
+
   defaultValue?: string | undefined
   placeholder?: string
 
@@ -114,6 +128,7 @@ interface ReserveClashActionProps {
 
 function NodeSelect({
   autoFocus,
+  autoFocusSelectAll,
   menuOpen,
   defaultValue,
   placeholder,
@@ -148,14 +163,26 @@ function NodeSelect({
 
   const getQuickLinks = () => {
     const ilinks = useDataStore.getState().ilinks
+    const snippets = useSnippetStore.getState().snippets
+    const sharedNodes = useDataStore.getState().sharedNodes
+
+    // if (!disallowReserved) {
+    //   return ilinks.map((l) => makeQuickLink(l.path, { nodeid: l.nodeid, icon: l.icon }))
+    // }
 
     const fLinks = disallowReserved ? ilinks.filter((l) => !isReserved(l.path)) : ilinks
 
     const mLinks = fLinks.map((l) => makeQuickLink(l.path, { nodeid: l.nodeid, icon: l.icon }))
 
+    const sLinks = sharedNodes.map((l) => makeQuickLink(l.path, { nodeid: l.nodeid, icon: 'ri:share-line' }))
+
     if (!showAll) return mLinks
 
-    return [...mLinks]
+    const mSnippets = snippets.map((s) =>
+      makeQuickLink(s.title, { nodeid: s.id, type: QuickLinkType.snippet, icon: s.icon })
+    )
+
+    return [...mLinks, ...sLinks, ...mSnippets]
   }
 
   const reset = () =>
@@ -234,7 +261,10 @@ function NodeSelect({
 
   function handleSelectedItemChange({ selectedItem }: { selectedItem?: QuickLink }) {
     if (selectedItem) {
-      const { key, isChild } = withoutDelimiter(selectedItem.value)
+      const { key, isChild } = withoutContinuousDelimiter(selectedItem.value)
+
+      if (key === '') return
+      if (isChild) return
 
       onReverseClashAction({
         path: key,
@@ -260,6 +290,19 @@ function NodeSelect({
         }
       })
     }
+  }
+
+  const onFocusWithSelect = (e: React.FocusEvent<HTMLInputElement>) => {
+    // mog('Focusing with select all1', { e, autoFocus })
+    const timoutId = setTimeout(() => {
+      if (autoFocus && autoFocusSelectAll) {
+        // mog('Focusing with select all', { e, autoFocus })
+        e.target.focus()
+        e.target.select()
+        e.target.setSelectionRange(0, e.target.value.length)
+      }
+    }, 300)
+    onFocus && onFocus(e)
   }
 
   const onKeyUp = (event) => {
@@ -381,7 +424,7 @@ function NodeSelect({
             onInpChange(e)
           }}
           onKeyUp={onKeyUp}
-          onFocus={onFocus}
+          onFocus={onFocusWithSelect}
           onBlur={onBlur}
         />
         {highlightWhenSelected &&
@@ -397,20 +440,21 @@ function NodeSelect({
             <Icon width={24} icon={lock2Line} />
             {nodeSelectState.reserved && (
               <SuggestionContentWrapper>
-                <SuggestionText>Warning: Reserved Node</SuggestionText>
-                <SuggestionDesc>Reserved Nodes cannot be used!</SuggestionDesc>
-                <SuggestionDesc>However, Children inside reserved nodes can be used.</SuggestionDesc>
+                <SuggestionText>Warning: Reserved Note</SuggestionText>
+                <SuggestionDesc>Reserved Notes cannot be used!</SuggestionDesc>
+                <SuggestionDesc>However, Children inside reserved notes can be used.</SuggestionDesc>
               </SuggestionContentWrapper>
             )}
           </SuggestionError>
         ) : (
+          // eslint-disable-next-line
           <>
             {isOpen &&
               inputItems.map((item, index) => {
                 let desc: undefined | string = undefined
                 if (item.status !== QuickLinkStatus.new) {
                   const content = contents[item.nodeid]
-                  if (content) desc = parseBlock(content.content, ' ')
+                  if (content) desc = convertContentToRawText(content.content, ' ')
                   if (desc === '') desc = undefined
                 }
                 const icon = item.icon ? item.icon : fileList2Line
@@ -447,7 +491,8 @@ NodeSelect.defaultProps = {
 }
 
 export function isNew(input: string, items: Array<QuickLink>): boolean {
-  return items.filter((item) => item.text === input).length === 0
+  const ti = input.trim()
+  return items.filter((item) => item.text === ti).length === 0 && ti !== '' && !ti.startsWith(SEPARATOR)
 }
 
 export const isNewILink = (input: string, items: Array<ILink>): boolean => {

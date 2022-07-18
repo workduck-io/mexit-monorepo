@@ -9,35 +9,47 @@ interface RequestData {
   // headers: string;
 }
 
+export enum PollActions {
+  'hierarchy' = 'hierarchy',
+  'shared' = 'shared',
+  'bookmarks' = 'bookmarks'
+}
+
 interface ApiStore {
+  polling: Set<PollActions>
+  addActionToPoll: (action: PollActions) => void
+  replaceAndAddActionToPoll: (action: PollActions) => void
   requests: { [URL: string]: RequestData }
   setRequest(url: string, data: RequestData): void
   clearRequests(): void
 }
 
-export const useApiStore = create<ApiStore>(
-  persist(
-    (set, get) => ({
-      requests: {},
-      setRequest(url, data) {
-        if (!url.includes('linkhierarchy')) {
-          set({
-            requests: {
-              ...get().requests,
-              [url]: data
-            }
-          })
-        }
-      },
-      clearRequests() {
-        set({
-          requests: {}
-        })
+export const useApiStore = create<ApiStore>((set, get) => ({
+  polling: new Set([PollActions.hierarchy]),
+  addActionToPoll: (action: PollActions) => {
+    const polling = get().polling
+    const newActionsToPoll = polling.add(action)
+    set({ polling: newActionsToPoll })
+  },
+  replaceAndAddActionToPoll: (action: PollActions) => {
+    set({ polling: new Set([action]) })
+  },
+
+  requests: {},
+  setRequest(url, data) {
+    set({
+      requests: {
+        ...get().requests,
+        [url]: data
       }
-    }),
-    { name: 'api-store' }
-  )
-)
+    })
+  },
+  clearRequests() {
+    set({
+      requests: {}
+    })
+  }
+}))
 
 export const isRequestedWithin = (minutes: number, url: string) => {
   const now = Date.now()

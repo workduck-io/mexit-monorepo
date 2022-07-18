@@ -41,7 +41,7 @@ const BlockInfoBar = () => {
   return (
     <BlockMenu>
       <Button onClick={() => setIsBlockMode(!isBlockMode)}>
-        <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={xBold} /> Cancel
+        <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={xBold} /> Cancel
       </Button>
       <p>
         {blockHeading}
@@ -49,14 +49,14 @@ const BlockInfoBar = () => {
       </p>
       <ButtonWrapper>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.move)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={moveToIcon} />
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={moveToIcon} />
           Move
         </Button>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={sendToIcon} /> Send
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={sendToIcon} /> Send
         </Button>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.del)}>
-          <MexIcon fontSize={20} noHover color={theme.colors.primary} icon={deleteBin6Line} />
+          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={deleteBin6Line} />
           Delete
         </Button>
       </ButtonWrapper>

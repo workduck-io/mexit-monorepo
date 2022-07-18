@@ -10,6 +10,7 @@ import {
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
   ELEMENT_TABLE
 } from './editorElements'
 import { getSlug } from './strings'
@@ -131,13 +132,20 @@ export const convertDataToIndexable = (data: PersistentData) => {
         break
       }
 
+      case indexNames.shared: {
+        data.sharedNodes.forEach((entry) => {
+          titleNodeMap.set(entry.nodeid, entry.path)
+        })
+        break
+      }
+
       default: {
         throw new Error('No corresponding index name found')
       }
     }
 
     // Process the filedata to get the indexable data
-    if (idxName === indexNames.archive || idxName === indexNames.node) {
+    if (idxName === indexNames.archive || idxName === indexNames.node || idxName === indexNames.shared) {
       Object.entries(data.contents).forEach(([k, v]) => {
         if (k !== '__null__' && titleNodeMap.has(k)) {
           if (!nodeBlockMap[k]) nodeBlockMap[k] = []

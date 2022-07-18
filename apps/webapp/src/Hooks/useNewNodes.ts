@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast'
 import { generateNodeUID, mog, SEPARATOR } from '@mexit/core'
 
 import { useInternalLinks } from './useInternalLinks'
-import { useApi } from './useApi'
+import { useApi } from './API/useNodeAPI'
 import { useDataStore } from '../Stores/useDataStore'
 import { useUpdater } from './useUpdater'
 

@@ -8,7 +8,7 @@ import { useEditorBuffer } from './useEditorBuffer'
 
 import { useRefactorStore } from '../Stores/useRefactorStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useApi } from './useApi'
+import { useApi } from './API/useNodeAPI'
 import { useLinks } from './useLinks'
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {

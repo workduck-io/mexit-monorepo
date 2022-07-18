@@ -5,7 +5,7 @@ import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import tinykeys from 'tinykeys'
 import { useLinks } from '../../../Hooks/useLinks'
-import { useApi } from '../../../Hooks/useApi'
+import { useApi } from '../../../Hooks/API/useNodeAPI'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
@@ -123,7 +123,7 @@ const NodeRenameOnlyTitle = () => {
     const parent = getParentFromPath(nodeFrom)
     const updatedPath = parent ? `${parent}${SEPARATOR}${newTitle}` : newTitle
 
-    await saveDataAPI(node.nodeid, content.content, updatedPath)
+    await saveDataAPI(node.nodeid, content.content, false)
     updateSingleILink(node.nodeid, updatedPath)
     setNode({ ...node, title: newTitle, path: updatedPath })
 

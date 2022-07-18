@@ -8,7 +8,8 @@ import {
   LinkCache,
   SlashCommands,
   Tag,
-  TagsCache
+  TagsCache,
+  SharedNode
 } from './Editor'
 
 export interface DataStoreState {
@@ -20,6 +21,7 @@ export interface DataStoreState {
   bookmarks: string[]
   archive: ILink[]
   publicNodes: Record<string, string>
+  sharedNodes: SharedNode[]
   slashCommands: SlashCommands
 
   initializeDataStore: (initData: InitDataStoreType) => void
@@ -32,7 +34,7 @@ export interface DataStoreState {
 
   // adds tag for combobox
   addTag: (tag: string) => void
-  setTags?: (tags: Array<Tag>) => void
+  setTags: (tags: Tag[]) => void
 
   setIlinks: (ilinks: ILink[]) => void
   setBaseNodeId: (baseNodeId: string) => void
@@ -66,4 +68,8 @@ export interface DataStoreState {
   checkNodePublic: (nodeId: string) => string | undefined
 
   checkValidILink: (props: CheckValidILinkProps) => string
+
+  // Shared Nodes
+  setSharedNodes: (sharedNodes: SharedNode[]) => void
+  getSharedNodes: () => SharedNode[]
 }

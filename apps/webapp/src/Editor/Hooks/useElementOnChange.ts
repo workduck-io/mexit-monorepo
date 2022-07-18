@@ -67,8 +67,6 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
             blockId: activeBlock?.blockId
           }
 
-          console.log('Inserting Node: ', withBlockInfo)
-
           insertNodes(editor, withBlockInfo)
         } else {
           if (item.type === QuickLinkType.snippet) {

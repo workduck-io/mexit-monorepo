@@ -16,6 +16,7 @@ export interface RegisterFormData {
   email: string
   password: string
   confirmPassword?: string
+  alias: string
 }
 
 export interface ForgotPasswordFormData {
@@ -44,8 +45,9 @@ export interface UserCred {
 
 export interface UserDetails {
   email: string
-  userId: string
-  activityNodeUID?: string
+  userID: string
+  name: string
+  alias: string
 }
 
 export interface WorkspaceDetails {
@@ -64,4 +66,10 @@ export interface AuthStoreState extends State {
   setRegistered: (val: boolean) => void
   setIsForgottenPassword: (val: boolean) => void
   getWorkspaceId: () => string | undefined
+}
+
+export interface MexUser {
+  name: string
+  email: string
+  userID: string
 }

@@ -20,6 +20,10 @@ import { useKeyListener } from '../Hooks/useShortcutListener'
 import useBlockStore from '../Stores/useBlockStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
+import { usePermission } from '../Hooks/API/usePermission'
+import { useFetchShareData } from '../Hooks/useFetchShareData'
+import { usePortals } from '../Hooks/usePortals'
+import { useAuthStore } from '../Stores/useAuth'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -31,12 +35,26 @@ export const EditorViewWrapper = styled.div`
 
 const EditorView = () => {
   const { resetEditor } = useEditorActions()
-  const { ilinks, archive } = useDataStore()
+  const ilinks = useDataStore((s) => s.ilinks)
+  const archive = useDataStore((s) => s.archive)
   const contents = useContentStore((state) => state.contents)
   const snippets = useSnippetStore((state) => state.snippets)
   const [first, setFirst] = useState(true)
+  const { fetchShareData } = useFetchShareData()
+  const { initPortals } = usePortals()
+  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useAnalysis()
+
+  useEffect(() => {
+    async function fetchSharedAndPortals() {
+      const fetchSharedDataPromise = fetchShareData()
+      const initPortalsPromise = initPortals()
+
+      await Promise.allSettled([fetchSharedDataPromise, initPortalsPromise])
+    }
+    fetchSharedAndPortals()
+  }, [workspaceDetails]) // eslint-disable-line
 
   useEffect(() => {
     if (!first) {

@@ -2870,14 +2870,7 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.4.tgz#cd667bcfdd025213aafb7ca5915a932590acdcdc"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
-"@types/react-dom@*":
-  version "18.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.0.5.tgz#330b2d472c22f796e5531446939eacef8378444a"
-  integrity sha512-OWPWTUrY/NIrjsAPkAk1wW9LZeIjSvkXRhclsFO8CZcZGCOg2G0YZy4ft+rOyYxy8B7ui5iZzi9OkDebZ7/QSA==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-dom@^17.0.10", "@types/react-dom@^17.0.11":
+"@types/react-dom@*", "@types/react-dom@^17.0.10", "@types/react-dom@^17.0.11", "@types/react-dom@^17.0.9":
   version "17.0.17"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.17.tgz#2e3743277a793a96a99f1bf87614598289da68a1"
   integrity sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==
@@ -2935,19 +2928,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "18.0.10"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.10.tgz#5692944d4a45e204fb7a981eb1388afe919cf4d0"
-  integrity sha512-dIugadZuIPrRzvIEevIu7A1smqOAjkSMv8qOfwPt9Ve6i6JT/FQcCHyk2qIAxwsQNKZt5/oGR0T4z9h2dXRAkg==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^17", "@types/react@^17.0.33", "@types/react@^17.0.38":
-  version "17.0.45"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.45.tgz#9b3d5b661fd26365fefef0e766a1c6c30ccf7b3f"
-  integrity sha512-YfhQ22Lah2e3CHPsb93tRwIGNiSwkuz1/blk4e6QrWS0jQzCSNbGLtOEYhPg02W0yGTTmpajp7dCTbBAMN3qsg==
+"@types/react@*", "@types/react@^17", "@types/react@^17.0.18", "@types/react@^17.0.33", "@types/react@^17.0.38":
+  version "17.0.47"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.47.tgz#4ee71aaf4c5a9e290e03aa4d0d313c5d666b3b78"
+  integrity sha512-mk0BL8zBinf2ozNr3qPnlu1oyVTYq+4V7WA76RgxUAtf0Em/Wbid38KN6n4abEkvO4xMTBWmnP1FtQzgkEiJoA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3949,10 +3933,10 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
-"@workduck-io/dwindle@^0.0.15":
-  version "0.0.15"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.15/badf8ae12770a6a78749b44ca007591d51751616f8c67d93d6b3f2847c0dd39b#50e58111608a8fb42a1dc0921bdedde225e67337"
-  integrity sha512-O2AVkCtulCA3dTJs9ZBA3kkJi4f7uM6yLisIwRR2+1hz8iPMxnSQg09yAin/L0PJIYJjo9tv3okFzrplnezbgA==
+"@workduck-io/dwindle@^0.0.16":
+  version "0.0.16"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.16/1b462f2ef47adfad2ce3d038a86cc9437b878f1dd92da58ac635f7eb274a0ed1#27253979b3e36dfcbf6d259621344c8e4290fdeb"
+  integrity sha512-iq/DbAOVSM61VvAWMo5x2TSeFDMFDSR+7hPPfU0XuIM+s02klsuhu6XyIGnWvYG3mpsVquklyfdOFfvTmXbGew==
   dependencies:
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
@@ -3960,6 +3944,7 @@
     cross-fetch "^3.1.4"
     jsonwebtoken "^8.5.1"
     jwt-decode "^3.1.2"
+    nanoid "^4.0.0"
     qs "^6.10.3"
 
 "@workduck-io/flexsearch@^0.7.22":
@@ -9222,6 +9207,11 @@ nanoid@^3.2.0, nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
+
+nanoid@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.0.tgz#6e144dee117609232c3f415c34b0e550e64999a5"
+  integrity sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==
 
 native-request@^1.0.5:
   version "1.1.0"

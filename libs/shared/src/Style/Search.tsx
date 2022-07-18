@@ -4,13 +4,13 @@ import styled, { css } from 'styled-components'
 import { DataGroup, MetadataWrapper } from './Metadata'
 import { StyledInputWrapper } from './NodeSelect.styles'
 import { View } from '../Style/ViewSelector'
-import { Title } from './Elements'
 import { Input } from './Form'
 import { size } from './Responsive'
 import { ProfileIcon } from './UserPage'
 import { EditorStyles } from './Editor'
 import { CardShadow } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
+import { Title } from './Typography'
 
 interface ResultProps {
   selected?: boolean

@@ -25,26 +25,6 @@ export const useTags = () => {
   const { getPathFromNodeid } = useLinks()
   const { isInArchive } = useNodes()
 
-  // const getAllLinks = () => {
-  //   // We assume that all links exist
-  //   const allLinks: NodeLink[] = []
-  //   Object.keys(contents).forEach((key) => {
-  //     const { content } = contents[key]
-  //     const tags = getTagsFromContent(content)
-  //     if (links.length > 0) {
-  //       links.forEach((to) => {
-  //         allLinks.push({
-  //           from: key,
-  //           to
-  //         })
-  //       })
-  //     }
-  //   })
-
-  //   return allLinks
-  // }
-  //
-
   const _getTags = (nodeid: string, tagsCache: TagsCache): string[] =>
     Object.keys(tagsCache).filter((t) => tagsCache[t].nodes.includes(nodeid))
 
@@ -87,7 +67,7 @@ export const useTags = () => {
       if (!tagsCache[t]) return p
       return {
         ...p,
-        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid && !isInArchive(id) && getPathFromNodeid(id))
+        [t]: tagsCache[t].nodes.filter((id) => id !== nodeid && !isInArchive(id) && getPathFromNodeid(id, true))
       }
     }, {})
 

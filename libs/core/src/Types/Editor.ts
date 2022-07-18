@@ -1,4 +1,5 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
+import { AccessLevel } from './Mentions'
 
 export interface Content {
   id: string
@@ -94,6 +95,19 @@ export interface ILink {
   icon?: string
 }
 
+type UserID = string
+export interface SharedNode extends ILink {
+  currentUserAccess: AccessLevel
+  sharedBy: UserID
+  owner: UserID
+}
+
+export type NewILinkProps = {
+  openedNotePath?: string
+  content?: NodeEditorContent
+  showAlert?: boolean
+}
+
 /**  Tags */
 export interface Tag {
   value: string
@@ -172,7 +186,13 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   tags = 'Tags',
-  action = 'Actions'
+  action = 'Actions',
+  mentions = 'Mentions'
+}
+
+export enum QuickLinkStatus {
+  new,
+  exists
 }
 
 export enum ComboboxKey {
@@ -204,7 +224,9 @@ export interface SlashCommands {
   internal: SlashCommand[]
 }
 
-export enum QuickLinkStatus {
-  new,
-  exists
+export enum NodeType {
+  DEFAULT,
+  SHARED,
+  ARCHIVED,
+  MISSING
 }

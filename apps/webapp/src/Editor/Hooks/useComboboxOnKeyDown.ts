@@ -5,7 +5,6 @@ import { isElder } from '@mexit/shared'
 import { mog } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
 import { Editor, Transforms } from 'slate'
@@ -15,22 +14,6 @@ import { ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
 import { useMexEditorStore } from './useMexEditorStore'
-
-// import { mog } from '../../../../utils/lib/helper'
-// import { useEditorStore } from '../../../../store/useEditorStore'
-// import { ComboConfigData } from '../../multi-combobox/multiComboboxContainer'
-// import { useElementOnChange as getElementOnChange } from '../../multi-combobox/useMultiComboboxOnKeyDown'
-// import { useSlashCommandOnChange } from '../../SlashCommands/useSlashCommandOnChange'
-// import { IComboboxItem } from '../components/Combobox.types'
-// import { ComboboxKey, useComboboxStore } from '../useComboboxStore'
-// import { getNextWrappingIndex } from '../utils/getNextWrappingIndex'
-// import { isElder } from '../../../../components/mex/Sidebar/treeUtils'
-// import { FlowCommandPrefix } from '../../SlashCommands/useSyncConfig'
-// import { SnippetCommandPrefix } from '../../../../hooks/useSnippets'
-// import { CreateNewPrefix } from '../../multi-combobox/useMultiComboboxChange'
-// import { Editor, Transforms } from 'slate'
-// import { ComboSearchType } from '../../multi-combobox/types'
-// import { ELEMENT_INLINE_BLOCK } from '../../InlineBlock/types'
 
 const pure = (id: string) => {
   let newId = id
@@ -50,11 +33,16 @@ export const isInternalCommand = (search?: string) => {
   return false
 }
 
-export type OnSelectItem = (editor: PlateEditor, item: IComboboxItem, elementType?: string) => any // eslint-disable-line @typescript-eslint/no-explicit-any
+export type OnSelectItem = (editor: PlateEditor, item: IComboboxItem, elementType?: string, tab?: boolean) => any // eslint-disable-line @typescript-eslint/no-explicit-any
 export type OnNewItem = (name: string, parentId?) => string | undefined
 
 export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnNewItem, creatable?: boolean) => {
-  const creatableOnSelect = async (editor: any, selectVal: IComboboxItem | string, elementType?: string) => {
+  const creatableOnSelect = async (
+    editor: any,
+    selectVal: IComboboxItem | string,
+    elementType?: string,
+    tab?: boolean
+  ) => {
     const items = useComboboxStore.getState().items
     const currentNodeKey = useMexEditorStore.getState().internalMetadata.path
     const itemIndex = useComboboxStore.getState().itemIndex
@@ -67,17 +55,17 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
       if (item.key === '__create_new' && selectVal) {
         const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)
         const res = await onNewItem(val, currentNodeKey)
+        if (res) {
+          onSelectItem(editor, { key: String(items.length), text: res }, elementType, tab)
+        }
         mog('CreatableInSelectRes: ', { res })
-        // mog('getCreatableInSelect', { item, val, selectVal, creatable, res })
-        mog('Select__CN clause', { val, selectVal, creatable, res })
-        if (res) onSelectItem(editor, { key: String(items.length), text: res }, elementType)
-      } else onSelectItem(editor, item, elementType)
+      } else onSelectItem(editor, item, elementType, tab)
     } else if (selectVal && creatable) {
       const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)
       const res = onNewItem(val, currentNodeKey)
       mog('SelectElse clause', { val, selectVal, creatable, res })
       // onSelectItem(editor, { key: String(items.length), text: res ?? val })
-      if (res) onSelectItem(editor, { key: String(items.length), text: val }, elementType)
+      if (res) onSelectItem(editor, { key: String(items.length), text: val }, elementType, tab)
     }
   }
 
@@ -180,7 +168,7 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
       if (e.key === 'Tab') {
         // * On Tab insert the selected item as Inline Block
         e.preventDefault()
-        creatabaleOnSelect(editor, search, ELEMENT_INLINE_BLOCK)
+        creatabaleOnSelect(editor, search, undefined, true)
         return false
       }
       // }
