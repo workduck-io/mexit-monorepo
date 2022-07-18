@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { useDebouncedCallback } from 'use-debounce'
@@ -211,20 +211,22 @@ const Editor: React.FC<EditorProps> = ({
         slateElementType: ELEMENT_MEDIA_EMBED,
         command: 'webem',
         options: {
-          url: 'http://example.com/'
+          url: 'https://example.com/'
         }
       },
       table: {
         slateElementType: ELEMENT_TABLE,
         command: 'table'
       },
-      remind: {
-        slateElementType: ELEMENT_PARAGRAPH,
-        command: 'remind',
-        onExtendedCommand: (newValue, editor) => {
-          openReminderModal(newValue)
+      ...(!nodeUID.startsWith('SNIPPET_') && {
+        remind: {
+          slateElementType: ELEMENT_PARAGRAPH,
+          command: 'remind',
+          onExtendedCommand: (newValue, editor) => {
+            openReminderModal(newValue)
+          }
         }
-      }
+      })
     }
   }
 
@@ -246,7 +248,14 @@ const Editor: React.FC<EditorProps> = ({
       cbKey: ComboboxKey.SLASH_COMMAND,
       trigger: '/',
       icon: 'ri:flask-line',
-      data: slashCommands.default.map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
+      data: slashCommands.default
+        .map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
+        .filter((item) => {
+          if (nodeUID.startsWith('SNIPPET_') && item.command === 'remind') {
+            return false
+          }
+          return true
+        })
     }
   }
 

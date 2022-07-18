@@ -1,12 +1,15 @@
 import { toast } from 'react-hot-toast'
 
 import { AccessLevel, AddILinkProps, ILink, mog, NodeType, SharedNode } from '@mexit/core'
+
 import useDataStore from '../Stores/useDataStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used
 export const useNodes = () => {
   const addILink = useDataStore((s) => s.addILink)
+  const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
 
   const addNode = (props: AddILinkProps, onSuccess: (node: ILink) => void, showAlert = true) => {
     // mog('Adding Node for:', { props })
@@ -66,6 +69,39 @@ export const useNodes = () => {
     if (isSharedNode(nodeid)) return NodeType.SHARED
     return NodeType.MISSING
   }
+
+  const updateBaseNode = (): ILink => {
+    const nodeILinks = useDataStore.getState().ilinks
+    const baseNodePath = useDataStore.getState().baseNodeId
+    const localBaseNode = nodeILinks.find((l) => l.path === baseNodePath)
+
+    if (!localBaseNode) {
+      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.at(0)
+      if (lastOpenedNodeId) {
+        const node = getNode(lastOpenedNodeId)
+
+        if (node) {
+          mog(`Setting Recent Node ${node.path}: ${node.nodeid}`)
+
+          setBaseNodeId(node?.path)
+          return node
+        }
+      }
+
+      if (!lastOpenedNodeId) {
+        const topNode = nodeILinks.at(0)
+
+        if (topNode) {
+          mog(`Setting Base Node to first Node of hierarchy ${topNode.path}: ${topNode.nodeid}`)
+          setBaseNodeId(topNode?.path)
+          return topNode
+        }
+      }
+    }
+
+    return localBaseNode
+  }
+
   return {
     addNode,
     isInArchive,
@@ -75,6 +111,7 @@ export const useNodes = () => {
     getSharedNode,
     isSharedNode,
     accessWhenShared,
-    getNodeType
+    getNodeType,
+    updateBaseNode
   }
 }

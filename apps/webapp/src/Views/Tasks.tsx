@@ -347,24 +347,23 @@ const Tasks = () => {
             Select:
             <Icon icon={dragMove2Fill} />
           </ShortcutToken>
-          {selectedCard && (
-            <>
-              <ShortcutToken>
-                Navigate:
-                <DisplayShortcut shortcut="$mod+Enter" />
-              </ShortcutToken>
-              <ShortcutToken>
-                Move:
-                <DisplayShortcut shortcut="Shift" />
-                <ShortcutMid>+</ShortcutMid>
-                <Icon icon={arrowLeftRightLine} />
-              </ShortcutToken>
-              <ShortcutToken>
-                Change Priority:
-                <DisplayShortcut shortcut="$mod+0-3" />
-              </ShortcutToken>
-            </>
-          )}
+
+          <>
+            <ShortcutToken>
+              Navigate:
+              <DisplayShortcut shortcut="$mod+Enter" />
+            </ShortcutToken>
+            <ShortcutToken>
+              Move:
+              <DisplayShortcut shortcut="Shift" />
+              <ShortcutMid>+</ShortcutMid>
+              <Icon icon={arrowLeftRightLine} />
+            </ShortcutToken>
+            <ShortcutToken>
+              Change Priority:
+              <DisplayShortcut shortcut="$mod+0-3" />
+            </ShortcutToken>
+          </>
           <ShortcutToken>
             {selectedCard || currentFilters.length > 0 ? 'Clear Filters:' : 'Navigate to Editor:'}
             <DisplayShortcut shortcut="Esc" />

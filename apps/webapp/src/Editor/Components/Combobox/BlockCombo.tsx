@@ -48,40 +48,33 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
     const trimmedSearch = textAfterBlockTrigger?.trim()
     const trimmedNodeText = textAfterTrigger?.trim()
 
-    if (trimmedSearch) {
-      if (nodeId && trimmedNodeText) {
-        queryIndexByNodeId(['node'], nodeId, trimmedSearch).then((res) => {
-          const topFiveBlocks = res
-            ?.filter((block) => block.blockId !== 'undefined')
-            ?.map((block) => {
-              const { matchField, ...restBlock } = block
-              return restBlock
-            })
-            ?.slice(0, 5)
+    if (nodeId && trimmedNodeText) {
+      queryIndexByNodeId('node', nodeId, trimmedSearch).then((res) => {
+        const topFiveBlocks = res
+          ?.filter((block) => block.blockId !== 'undefined')
+          ?.map((block) => {
+            const { matchField, ...restBlock } = block
+            return restBlock
+          })
+          ?.slice(0, 5)
 
-          // mog('BLOCKS OF NODEID', { topFiveBlocks })
-
-          setBlocks(topFiveBlocks)
-          setIndex(0)
-          // setBlocks(res)
-        })
-      } else {
-        queryIndex(['node'], trimmedSearch).then((res) => {
-          const topFiveBlocks = res
-            ?.filter((block) => block.blockId !== 'undefined')
-            ?.map((block) => {
-              const { matchField, ...restBlock } = block
-              return restBlock
-            })
-            ?.slice(0, 5)
-          // mog('BLOCKS', { topFiveBlocks })
-
-          setBlocks(topFiveBlocks)
-          setIndex(0)
-        })
-      }
+        setBlocks(topFiveBlocks)
+        setIndex(0)
+        // setBlocks(res)
+      })
     } else {
-      setBlocks(undefined)
+      queryIndex(['node'], trimmedSearch).then((res) => {
+        const topFiveBlocks = res
+          ?.filter((block) => block.blockId !== 'undefined')
+          ?.map((block) => {
+            const { matchField, ...restBlock } = block
+            return restBlock
+          })
+          ?.slice(0, 5)
+
+        setBlocks(topFiveBlocks)
+        setIndex(0)
+      })
     }
   }, [textAfterBlockTrigger])
 

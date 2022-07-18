@@ -5,9 +5,10 @@ import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { areEqual } from '../Utils/hash'
 import { TodoType, checkIfUntitledDraftNode } from '@mexit/core'
 
-import { analyseContent } from '../Workers/controller'
+import { analyseContent, AnalysisOptions } from '../Workers/controller'
 import { useEditorStore, getContent } from './useEditorStore'
 import { useTodoStore } from './useTodoStore'
+import { useSearchExtra } from '../Hooks/useSearch'
 
 export interface OutlineItem {
   id: string
@@ -58,12 +59,14 @@ export const useAnalysis = () => {
   const { getBufferVal } = useEditorBuffer()
   const buffer = useBufferStore((s) => s.buffer)
   const setAnalysis = useAnalysisStore((s) => s.setAnalysis)
+  const { getSearchExtra } = useSearchExtra()
 
   useEffect(() => {
     const bufferContent = getBufferVal(node.nodeid)
     const content = getContent(node.nodeid)
     const metadata = content.metadata
-    const options = {}
+    const modifier = getSearchExtra()
+    const options: AnalysisOptions = { modifier }
 
     const isUntitledDraftNode = checkIfUntitledDraftNode(node.path)
     const isNewDraftNode = metadata?.createdAt === metadata?.updatedAt

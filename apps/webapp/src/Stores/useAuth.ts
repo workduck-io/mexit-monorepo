@@ -22,6 +22,7 @@ import { usePortals } from '../Hooks/usePortals'
 import { useUserCacheStore } from './useUserCacheStore'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { getEmailStart } from '../Utils/constants'
+import { useSnippets } from '../Hooks/useSnippets'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -34,7 +35,7 @@ export const useAuthentication = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippets } = useSnippets()
   const initContents = useContentStore((store) => store.initContents)
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
@@ -91,7 +92,7 @@ export const useAuthentication = () => {
     resetPublicNodes()
     clearRecents()
     clearReminders()
-    initSnippets([])
+    updateSnippets([])
     clearTodos()
   }
 
@@ -176,13 +177,14 @@ export const useInitializeAfterAuth = () => {
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const addUser = useUserCacheStore((s) => s.addUser)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippets } = useSnippets()
 
   const { refreshToken } = useAuth()
   const { initPortals } = usePortals()
   const { refreshILinks } = useInternalLinks()
   const api = useApi()
   const { registerNewUser } = useAuthentication()
+  const { getInitialSnippets } = useSnippets()
 
   const initializeAfterAuth = async (
     loginData: UserCred,
@@ -231,12 +233,14 @@ export const useInitializeAfterAuth = () => {
       setAuthenticated(userDetails, workspaceDetails)
 
       const initialSnippetsP = await api.getAllSnippetsByWorkspace()
+
       const initPortalsP = initPortals()
       const refreshILinksP = refreshILinks()
 
       const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
 
-      if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
+      if (initialSnippetsResult.status === 'fulfilled') updateSnippets(initialSnippetsResult.value)
+      getInitialSnippets()
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {

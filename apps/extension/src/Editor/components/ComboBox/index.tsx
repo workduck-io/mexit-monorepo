@@ -164,7 +164,6 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
 
       if (type === QuickLinkType.backlink) {
         const nodeContent = getContent(key)
-        console.log('nodeContent', nodeContent)
         content = nodeContent?.content
 
         setMetaData(nodeContent?.metadata)

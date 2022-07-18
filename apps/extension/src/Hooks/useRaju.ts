@@ -31,6 +31,7 @@ import useThemeStore from './useThemeStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
+import { useSnippets } from './useSnippets'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -54,7 +55,7 @@ export default function useRaju() {
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippets } = useSnippets()
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
   const { initHighlights } = useHighlightStore()
@@ -115,7 +116,7 @@ export default function useRaju() {
       setAuthenticated(userDetails, workspaceDetails)
       setTheme(theme)
       setInternalAuthStore(authAWS)
-      initSnippets(snippets)
+      updateSnippets(snippets)
       setIlinks(ilinks)
       initContents(contents)
       setReminders(reminders)

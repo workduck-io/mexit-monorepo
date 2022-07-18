@@ -15,6 +15,7 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 /*
 Sidebar links are defined here
@@ -28,6 +29,7 @@ const useNavlinks = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const nodeid = useEditorStore((store) => store.node.nodeid)
   const baseNodeId = useDataStore((store) => store.baseNodeId)
+  const snippets = useSnippetStore((store) => store.snippets)
 
   const reminders = useReminderStore((store) => store.reminders)
   const ilinks = useDataStore((store) => store.ilinks)
@@ -40,7 +42,7 @@ const useNavlinks = () => {
     return currentNotId
   }, [nodeid, ilinks])
 
-  const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks])
+  const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks, snippets])
 
   const getLinks = () => {
     const links: NavLinkData[] = [

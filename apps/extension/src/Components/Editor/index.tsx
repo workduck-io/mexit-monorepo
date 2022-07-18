@@ -4,7 +4,7 @@ import downIcon from '@iconify/icons-ph/arrow-down-bold'
 import { Icon } from '@iconify/react'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
 
 import { EditorStyles, useEditorChange } from '@mexit/shared'
 import { useAuthStore } from '../../Hooks/useAuth'
@@ -47,9 +47,33 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { searchResults, activeIndex, activeItem, selection } = useSputlitContext()
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const ref = useRef<HTMLDivElement>()
-  const { tags, addTag, ilinks, addILink } = useDataStore()
+  const { tags, addTag, ilinks, addILink, sharedNodes, slashCommands } = useDataStore()
 
   useEditorChange(node.nodeid, nodeContent, onChange)
+
+  // TODO: make both the editors same because snippets are not visible in the extension
+  // Plus this would enable us to have block level embed in the extension
+  // We would also have to do some optimizations in the way messaging happens
+  const internals: any[] = useMemo(
+    () => [
+      ...ilinks.map((l) => ({
+        ...l,
+        value: l.nodeid,
+        text: l.path,
+        icon: l.icon ?? 'ri:file-list-2-line',
+        type: QuickLinkType.backlink
+      })),
+      ...sharedNodes.map((l) => ({
+        ...l,
+        value: l.nodeid,
+        text: l.path,
+        icon: l.icon ?? 'ri:share-line',
+        type: QuickLinkType.backlink
+      })),
+      ...slashCommands.internal.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
+    ],
+    [ilinks, sharedNodes, slashCommands.internal]
+  )
 
   const comboboxConfig: ComboboxConfig = {
     onKeyDownConfig: {
@@ -72,7 +96,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
           slateElementType: ELEMENT_MEDIA_EMBED,
           command: 'webem',
           options: {
-            url: 'http://example.com/'
+            url: 'https://example.com/'
           }
         },
         table: {
@@ -91,12 +115,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
       ilink: {
         cbKey: ComboboxKey.ILINK,
         trigger: '[[',
-        data: ilinks.map((l) => ({
-          ...l,
-          value: l.nodeid,
-          text: l.path,
-          type: QuickLinkType.backlink
-        })),
+        data: internals,
         icon: 'ri:file-list-2-line'
       },
       slash_command: {

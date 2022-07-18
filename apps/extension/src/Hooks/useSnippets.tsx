@@ -1,7 +1,14 @@
-import { SEPARATOR } from '@mexit/core'
+import { getSnippetCommand, SEPARATOR, Snippet } from '@mexit/core'
+import { useSlashCommands } from '@mexit/shared'
+import useDataStore from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
 export const useSnippets = () => {
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
+
+  const { generateSlashCommands } = useSlashCommands()
+
   const getSnippets = () => {
     return useSnippetStore.getState().snippets
   }
@@ -23,8 +30,13 @@ export const useSnippets = () => {
     return undefined
   }
 
-  return { getSnippets, getSnippet, getSnippetContent }
-}
+  // * Updates snippets in store and adds them in combobox
+  const updateSnippets = (snippets: Snippet[]) => {
+    initSnippets(snippets)
+    const slashCommands = generateSlashCommands(snippets)
+    // console.log('snippets', snippets, slashCommands)
+    setSlashCommands(slashCommands)
+  }
 
-export const SnippetCommandPrefix = `snip`
-export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`
+  return { getSnippets, getSnippet, getSnippetContent, updateSnippets }
+}

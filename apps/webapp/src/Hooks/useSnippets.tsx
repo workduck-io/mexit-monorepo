@@ -1,14 +1,21 @@
-import { mog, SEPARATOR, Snippet } from '@mexit/core'
+import { getSnippetCommand, mog, SEPARATOR, Snippet } from '@mexit/core'
+import { useSlashCommands } from '@mexit/shared'
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
+import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useApi } from './API/useNodeAPI'
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {
   const addSnippetZus = useSnippetStore((state) => state.addSnippet)
   const updateSnippetZus = useSnippetStore((state) => state.updateSnippet)
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
+  const { generateSlashCommands } = useSlashCommands()
   const { updateDocument, addDocument, removeDocument } = useSearch()
+  const api = useApi()
 
   const getSnippets = () => {
     return useSnippetStore.getState().snippets
@@ -72,6 +79,31 @@ export const useSnippets = () => {
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
   }
 
+  const getInitialSnippets = () => {
+    const snippets = getSnippets()
+    const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
+
+    try {
+      Promise.allSettled(
+        unfetchedSnippets.map(
+          async (item) =>
+            await api.getSnippetById(item.id).then((response) => {
+              updateSnippet(response as Snippet)
+            })
+        )
+      )
+    } catch (err) {
+      mog('Failed to fetch snippets', { err })
+    }
+  }
+
+  // * Updates snippets in store and adds them in combobox
+  const updateSnippets = (snippets: Snippet[]) => {
+    initSnippets(snippets)
+    const slashCommands = generateSlashCommands(snippets)
+    setSlashCommands(slashCommands)
+  }
+
   return {
     getSnippets,
     getSnippet,
@@ -79,13 +111,8 @@ export const useSnippets = () => {
     getSnippetConfigs,
     addSnippet,
     updateSnippet,
-    deleteSnippet
+    deleteSnippet,
+    getInitialSnippets,
+    updateSnippets
   }
 }
-
-export const extractSnippetCommands = (snippets: Snippet[]): string[] => {
-  return snippets.map((c) => getSnippetCommand(c.title))
-}
-
-export const SnippetCommandPrefix = `snip`
-export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`

@@ -2,9 +2,12 @@ import { getPluginType, insertNodes, insertTable, PlateEditor, TElement } from '
 import { Transforms } from 'slate'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { isElder } from '@mexit/core'
+import { useSnippets } from '../../../Hooks/useSnippets'
 
 export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConfig }) => {
   const closeMenu = useComboboxStore((state) => state.closeMenu)
+  const { getSnippetContent } = useSnippets()
 
   return (editor: PlateEditor, item: IComboboxItem) => {
     const targetRange = useComboboxStore.getState().targetRange
@@ -13,7 +16,14 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
     const commandConfig = keys[commandKey]
     if (targetRange) {
       try {
-        if (item.key === 'table') {
+        if (isElder(commandKey, 'snip')) {
+          const content = getSnippetContent(commandConfig.command)
+
+          if (content) {
+            Transforms.select(editor, targetRange)
+            insertNodes<TElement>(editor, content)
+          }
+        } else if (item.key === 'table') {
           Transforms.select(editor, targetRange)
           insertTable(editor, { header: true })
         } else if (item.extended) {
