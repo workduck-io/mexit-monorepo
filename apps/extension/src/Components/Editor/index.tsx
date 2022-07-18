@@ -51,6 +51,9 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
+  // TODO: make both the editors same because snippets are not visible in the extension
+  // Plus this would enable us to have block level embed in the extension
+  // We would also have to do some optimizations in the way messaging happens
   const internals: any[] = useMemo(
     () => [
       ...ilinks.map((l) => ({
