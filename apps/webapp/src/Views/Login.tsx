@@ -35,10 +35,10 @@ import LoaderButton from '../Components/Buttons/LoaderButton'
 import { useInitializeAfterAuth } from '../Stores/useAuth'
 import { mog } from '@mexit/core'
 
-import male_1 from '../Assets/images/Male.png'
-import male_2 from '../Assets/images/Male_1.png'
-import female_1 from '../Assets/images/Female.png'
-import female_2 from '../Assets/images/Female_1.png'
+import male_1 from '../images/Male.png'
+import male_2 from '../images/Male_1.png'
+import female_1 from '../images/Female.png'
+import female_2 from '../images/Female_1.png'
 
 export const Login = () => {
   const [loginResult, setLoginResult] = useState('')
