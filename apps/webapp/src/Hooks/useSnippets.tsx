@@ -1,5 +1,7 @@
-import { mog, SEPARATOR, Snippet } from '@mexit/core'
+import { getSnippetCommand, mog, SEPARATOR, Snippet } from '@mexit/core'
+import { useSlashCommands } from '@mexit/shared'
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
+import { useDataStore } from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useApi } from './API/useNodeAPI'
 import { useSearch } from './useSearch'
@@ -8,7 +10,10 @@ export const useSnippets = () => {
   const addSnippetZus = useSnippetStore((state) => state.addSnippet)
   const updateSnippetZus = useSnippetStore((state) => state.updateSnippet)
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
+  const { generateSlashCommands } = useSlashCommands()
   const { updateDocument, addDocument, removeDocument } = useSearch()
   const api = useApi()
 
@@ -92,6 +97,13 @@ export const useSnippets = () => {
     }
   }
 
+  // * Updates snippets in store and adds them in combobox
+  const updateSnippets = (snippets: Snippet[]) => {
+    initSnippets(snippets)
+    const slashCommands = generateSlashCommands(snippets)
+    setSlashCommands(slashCommands)
+  }
+
   return {
     getSnippets,
     getSnippet,
@@ -100,13 +112,7 @@ export const useSnippets = () => {
     addSnippet,
     updateSnippet,
     deleteSnippet,
-    getInitialSnippets
+    getInitialSnippets,
+    updateSnippets
   }
 }
-
-export const extractSnippetCommands = (snippets: Snippet[]): string[] => {
-  return snippets.map((c) => getSnippetCommand(c.title))
-}
-
-export const SnippetCommandPrefix = `snip`
-export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`

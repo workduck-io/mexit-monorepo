@@ -1,6 +1,4 @@
-import { Snippet, QuickLinkType, SlashCommand, uniq, defaultCommands } from '@mexit/core'
-
-import { extractSnippetCommands } from './useSnippets'
+import { SlashCommand, Snippet, getSnippetCommand, uniq, QuickLinkType, defaultCommands } from '@mexit/core'
 
 export const addIconToSlashCommand = (items: SlashCommand[], icon: string) =>
   items.map((i: SlashCommand): SlashCommand => ({ ...i, icon }))
@@ -17,6 +15,10 @@ export const generatorCombo = <T, K>(
     if (addIndexAsValue) return { ...k, value: String(i) }
     return k
   })
+}
+
+export const extractSnippetCommands = (snippets: Snippet[]): string[] => {
+  return snippets.map((c) => getSnippetCommand(c.title))
 }
 
 export const useSlashCommands = () => {

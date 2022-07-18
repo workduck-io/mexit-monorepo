@@ -19,7 +19,9 @@ export const MEETING_PREFIX = 'Meeting'
 export const QUESTION_ID_PREFIX = 'WD_MEX_QUESTION'
 export const DRAFT_NODE = 'Untitled'
 export const REMINDER_ID_PREFIX = 'REMINDER'
+export const SnippetCommandPrefix = `snip`
 
+export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`
 export const generateNodeUID = () => `${NODE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateNodeId = () => `${NODE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateWorkspaceId = () => `${WORKSPACE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`

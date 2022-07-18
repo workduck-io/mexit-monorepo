@@ -35,7 +35,7 @@ export const useAuthentication = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippets } = useSnippets()
   const initContents = useContentStore((store) => store.initContents)
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
@@ -92,7 +92,7 @@ export const useAuthentication = () => {
     resetPublicNodes()
     clearRecents()
     clearReminders()
-    initSnippets([])
+    updateSnippets([])
     clearTodos()
   }
 
@@ -177,7 +177,7 @@ export const useInitializeAfterAuth = () => {
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const addUser = useUserCacheStore((s) => s.addUser)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippets } = useSnippets()
 
   const { refreshToken } = useAuth()
   const { initPortals } = usePortals()
@@ -239,7 +239,7 @@ export const useInitializeAfterAuth = () => {
 
       const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
 
-      if (initialSnippetsResult.status === 'fulfilled') initSnippets(initialSnippetsResult.value)
+      if (initialSnippetsResult.status === 'fulfilled') updateSnippets(initialSnippetsResult.value)
       getInitialSnippets()
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
