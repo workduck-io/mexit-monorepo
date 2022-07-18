@@ -5,50 +5,46 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 import Cookies from 'universal-cookie'
 import { useSpring } from 'react-spring'
+import { useTheme } from 'styled-components'
 
 import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
-import {
-  AuthForm,
-  BackCard,
-  Button,
-  ButtonFields,
-  CenteredColumn,
-  FooterCard,
-  Label,
-  StyledCreatatbleSelect,
-  Title
-} from '@mexit/shared'
-
-import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
-import { StyledRolesSelectComponents } from '../Style/Select'
-import { AuthForm, ButtonFields, Label, StyledCreatatbleSelect } from '@mexit/shared'
-import { CenteredColumn } from '@mexit/shared'
-import { BackCard, FooterCard } from '@mexit/shared'
-// import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
-import { Title } from '@mexit/shared'
+import { useAuthStore } from '../Stores/useAuth'
+import { useAuthentication } from '../Stores/useAuth'
+import { useInitializeAfterAuth } from '../Stores/useAuth'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
-import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
+import { GoogleLoginButton } from '../Components/Buttons/Buttons'
+import Analytics from '../Utils/analytics'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
+import PasswordChecker from '../Components/PasswordChecker'
 import {
-  OptionHeader,
   Container,
   Header,
   Message,
   SectionForm,
   SectionInteractive,
-  SignInOptions,
+  InteractiveContentWrapper,
   Space,
-  TabLink,
   Tabs,
+  TabLink,
+  SignInOptions,
+  OptionHeader,
   Line,
-  OptionButton,
-  ErrorMessages
+  AuthIcon,
+  InteractiveHeader,
+  SubContent,
+  ImageContainer,
+  ImageWrapper,
+  Image
 } from '../Style/AuthFlow'
 import { Form, FormGroup, Input, SubmitButton } from '../Style/Form'
-import { Icon } from '@iconify/react'
 import LoaderButton from '../Components/Buttons/LoaderButton'
 import Error from '../Components/Buttons/Errors'
 import Creatable from 'react-select/creatable'
+
+import male_1 from '../Assets/images/Male.png'
+import male_2 from '../Assets/images/Male_1.png'
+import female_1 from '../Assets/images/Female.png'
+import female_2 from '../Assets/images/Female_1.png'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -62,10 +58,19 @@ export const Register = () => {
   const { resendCode } = useAuth()
   const { initializeAfterAuth } = useInitializeAfterAuth()
 
+  const theme = useTheme()
+
   const [show, setShow] = useState<boolean>(false)
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [verify, setVerify] = useState<boolean>(false)
+
+  const [statusEmail, setStatusEmail] = useState<string>('rest')
+  const [statusPass, setStatusPass] = useState<string>('rest')
+  const [statusConfirm, setStatusConfirm] = useState<string>('rest')
+  const [statusSelect, setStatusSelect] = useState<string>('rest')
+  const [statusCode, setStatusCode] = useState<string>('rest')
+  const [showStrength, setShowStrength] = useState<boolean>(false)
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -82,10 +87,6 @@ export const Register = () => {
       })
       .catch(() => toast.error('Code could not be sent'))
     setReqCode(false)
-  }
-
-  const handleBlur = () => {
-    console.log('blur')
   }
 
   const onRegisterSubmit = async (data: RegisterFormData) => {
@@ -108,15 +109,13 @@ export const Register = () => {
 
   const animateForm = useSpring({
     from: {
-      transform: 'translateX(100%)',
       opacity: 0
     },
     to: {
-      transform: 'translateX(0%)',
       opacity: 1
     },
     config: {
-      duration: 500
+      duration: 250
     }
   })
 
@@ -137,19 +136,50 @@ export const Register = () => {
   const customStyles = {
     container: (provided) => ({
       ...provided,
-      width: '90%'
+      width: '100%',
+      border: 'none'
+    }),
+    control: (provided) => ({
+      display: 'flex',
+      gap: '10px',
+      maxHeight: '25px',
+      fontSize: '14px',
+      outline: 'none',
+      width: '100%',
+      color: '#B1B1B1',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      border: 'none',
+      marginLeft: '-0.65rem'
     }),
     menu: (provided) => ({
       ...provided,
-      width: '80%'
+      marginLeft: '-1.75rem',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      width: '110%'
     }),
     option: (provided) => ({
       ...provided,
-      width: '100%'
+      color: `${theme.colors.primary}`
+    }),
+    indicatorSeparator: (provided) => ({
+      display: 'none'
+    }),
+    indicatorsContainer: (provided) => ({
+      ...provided,
+      alignSelf: 'center',
+      marginRight: '-1.25rem',
+      color: '#5E6271'
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      marginTop: '-0.05rem',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      color: '#B1B1B1'
+    }),
+    placeholder: (provided) => ({
+      color: '#5E6271',
+      marginLeft: '0.25rem'
     })
-    // control: () => ({
-    //   width: '80%'
-    // })
   }
 
   const nextForm = !verify ? (
@@ -159,10 +189,22 @@ export const Register = () => {
       <Message>
         <h1>Secure Your Account</h1>
       </Message>
-      <Form style={animateForm}>
-        <FormGroup>
-          {regErrors.email && <Error message="Please enter a valid email!" handleBlur={handleBlur} />}
-          <Icon icon="ic:round-email" width={24} />
+      <Form>
+        <FormGroup
+          status={statusEmail}
+          tabIndex={-1}
+          onFocus={() => {
+            setStatusEmail('focus')
+            if (registerForm.formState.errors.email) {
+              setStatusEmail('error')
+            }
+          }}
+          onBlur={() => {
+            setStatusEmail('rest')
+            registerForm.clearErrors()
+          }}
+        >
+          <AuthIcon icon="ic:baseline-alternate-email" width={18} />
           <Input
             type="email"
             placeholder="Email"
@@ -176,6 +218,7 @@ export const Register = () => {
             }}
           />
         </FormGroup>
+        {regErrors.email && <Error message="Please enter a valid email!" />}
         <p>We'll send you a code to verify this mobile number. Message and data rates may apply.</p>
         <SubmitButton
           onClick={() => {
@@ -193,8 +236,21 @@ export const Register = () => {
         <h1>Enter the verification Code</h1>
       </Message>
       <Form onSubmit={verifyForm.handleSubmit(onVerifySubmit)} style={animateForm}>
-        <FormGroup>
-          <Icon icon="bxs:lock" width={24} />
+        <FormGroup
+          status={statusCode}
+          tabIndex={-1}
+          onFocus={() => {
+            setStatusCode('focus')
+            if (verifyForm.formState.errors.code) {
+              setStatusCode('error')
+            }
+          }}
+          onBlur={() => {
+            setStatusCode('rest')
+            verifyForm.clearErrors()
+          }}
+        >
+          <AuthIcon icon="bx:lock" width={18} />
           <Input
             placeholder="Enter the 6-Character code"
             name="code"
@@ -203,305 +259,213 @@ export const Register = () => {
             })}
           />
         </FormGroup>
-        {verErrors.code?.type === 'required' ? (
-          <ErrorMessages>
-            <Icon icon="ant-design:warning-outlined" width={16} />
-            <span>Code is required!</span>
-          </ErrorMessages>
-        ) : undefined}
+        {verErrors.code?.type === 'required' ? <Error message="Please enter the verification code!" /> : undefined}
         {verSubmitting ? <LoaderButton /> : <SubmitButton>Verify</SubmitButton>}
       </Form>
+      <Message>
+        <Space></Space>
+        <p>Didn't get a confirmation email?</p>
+        <p>
+          Check your spam folder or <span onClick={onResendRequest}>Send again</span>
+        </p>
+      </Message>
     </>
   )
 
   return (
-    <>
-      {/*<CenteredColumn>
-      <BackCard>
-        <Title>Register</Title>
+    <Container>
+      <SectionInteractive>
+        <InteractiveContentWrapper>
+          <InteractiveHeader>
+            <h1>Augment Thoughts.</h1>
+            <h1> Automate Task.</h1>
+          </InteractiveHeader>
+        </InteractiveContentWrapper>
+        <SubContent>
+          <ImageContainer>
+            <ImageWrapper>
+              <Image src={male_1} alt="male-1" />
+            </ImageWrapper>
+            <ImageWrapper>
+              <Image src={male_2} alt="male-2" />
+            </ImageWrapper>
+            <ImageWrapper>
+              <Image src={female_1} alt="female-1" />
+            </ImageWrapper>
+            <ImageWrapper>
+              <Image src={female_2} alt="female-2" />
+            </ImageWrapper>
+          </ImageContainer>
+          <p>3k+ founders and Product Managers joined us, now it’s your turn</p>
+        </SubContent>
+      </SectionInteractive>
+      <SectionForm>
         {!registered ? (
           <>
-            <AuthForm onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
-              <InputFormError
-                name="name"
-                label="Name"
-                inputProps={{
-                  autoFocus: true,
-                  ...registerForm.register('name', {
-                    required: true
-                  })
-                }}
-                errors={regErrors}
-              ></InputFormError>
+            <Header state={'register'}>
+              <Message>
+                <h1>Create Account</h1>
+                <p>Welcome back! Please enter your details.</p>
+              </Message>
+            </Header>
+            <Tabs style={animateTabContainer}>
+              <TabLink to={ROUTE_PATHS.login} status={false}>
+                Login
+              </TabLink>
+              <TabLink to={ROUTE_PATHS.register} status={true}>
+                Register
+              </TabLink>
+            </Tabs>
 
-              <InputFormError
-                name="email"
-                label="Email"
-                inputProps={{
-                  ...registerForm.register('email', {
+            <Form onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
+              <FormGroup
+                status={statusEmail}
+                tabIndex={0}
+                onFocus={() => {
+                  setStatusEmail('focus')
+                  if (regErrors.email) {
+                    setStatusEmail('error')
+                  }
+                }}
+                onBlur={() => {
+                  setStatusEmail('rest')
+                  registerForm.clearErrors()
+                }}
+              >
+                <AuthIcon icon="ic:baseline-alternate-email" width={16} />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  {...registerForm.register('email', {
                     required: true,
                     pattern: EMAIL_REG
-                  })
+                  })}
+                />
+              </FormGroup>
+              {regErrors.email && <Error message="Please enter a valid email!" />}
+              <FormGroup
+                status={statusSelect}
+                tabIndex={1}
+                onFocus={() => {
+                  setStatusSelect('focus')
                 }}
-                errors={regErrors}
-              ></InputFormError>
-              <InputFormError
-                name="alias"
-                label="Alias"
-                inputProps={{
-                  placeholder: 'Ex: CoolGuy',
-                  ...registerForm.register('alias', {
-                    required: true,
-                    pattern: ALIAS_REG
-                  })
+                onBlur={() => {
+                  setStatusSelect('rest')
                 }}
-                additionalInfo="Only Alphanumeric as content, and -_ as separators allowed"
-                errors={regErrors}
-              ></InputFormError>
-
-              <Label htmlFor="roles">What roles are you part of?</Label>
-              <Controller
-                control={registerForm.control}
-                render={({ field }) => (
-                  <StyledCreatatbleSelect
-                    {...field}
-                    isMulti
-                    isCreatable
-                    options={UserRoleValues}
-                    closeMenuOnSelect={true}
-                    closeMenuOnBlur={false}
-                    components={StyledRolesSelectComponents}
-                    placeholder="Ex. Developer, Designer"
-                  />
-                )}
-                rules={{ required: true }}
-                name="roles"
-              />
-
-              <InputFormError
-                name="password"
-                label="Password"
-                inputProps={{
-                  type: 'password',
-                  ...registerForm.register('password', {
-                    required: true,
-                    pattern: PASSWORD,
-                    onChange: (e) => setPassword(e.target.value)
-                  })
+              >
+                <AuthIcon icon="system-uicons:user-male" width={18} />
+                <Controller
+                  control={registerForm.control}
+                  render={({ field }) => (
+                    <Creatable
+                      isCreatable
+                      isMulti
+                      options={UserRoleValues}
+                      closeMenuOnSelect={true}
+                      closeMenuOnBlur={false}
+                      styles={customStyles}
+                    />
+                  )}
+                  rules={{ required: true }}
+                  name="roles"
+                />
+              </FormGroup>
+              <FormGroup
+                style={animateForm}
+                status={statusPass}
+                tabIndex={2}
+                onFocus={() => {
+                  setStatusPass('focus')
+                  setShowStrength(true)
+                  if (registerForm.formState.errors.password) {
+                    setStatusPass('error')
+                  }
                 }}
-                errors={regErrors}
-              ></InputFormError>
-
-              {regErrors.password?.type === 'pattern' ? <PasswordRequirements /> : undefined}
-
-              <InputFormError
-                name="confirmpassword"
-                label="Confirm Password"
-                inputProps={{
-                  type: 'password',
-                  ...registerForm.register('confirmPassword', {
+                onBlur={() => {
+                  setStatusPass('rest')
+                  setShowStrength(false)
+                  registerForm.clearErrors()
+                }}
+              >
+                <AuthIcon icon="bx:lock" width={18} />
+                <Input
+                  type={show ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  {...registerForm.register('password', {
                     required: true,
-                    pattern: PASSWORD,
-                    deps: ['password'],
-                    onChange: (e) => {
-                      if (e.target.value.toString() !== password) {
-                        setArePasswordEqual(false)
-                      } else {
-                        setArePasswordEqual(true)
-                      }
+                    pattern: PASSWORD
+                  })}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                  }}
+                />
+                <AuthIcon
+                  icon={show ? 'bxs:hide' : 'bxs:show'}
+                  width={18}
+                  onClick={() => {
+                    setShow(!show)
+                  }}
+                />
+              </FormGroup>
+              <PasswordChecker password={password} show={showStrength} />
+              {registerForm.formState.errors.password && <Error message="Please enter a valid password!" />}
+              <FormGroup
+                style={animateForm}
+                status={statusConfirm}
+                tabIndex={3}
+                onFocus={() => {
+                  setStatusConfirm('foucs')
+                }}
+                onBlur={() => {
+                  setStatusConfirm('rest')
+                  setArePasswordEqual(true)
+                  registerForm.clearErrors()
+                }}
+              >
+                <AuthIcon icon="bx:lock" width={18} />
+                <Input
+                  type={showConfirm ? 'text' : 'password'}
+                  placeholder="Confirm Password"
+                  name="confirmpassword"
+                  {...registerForm.register('confirmPassword', {
+                    required: true,
+                    pattern: PASSWORD
+                  })}
+                  onChange={(e) => {
+                    if (e.target.value.toString() !== password) {
+                      setArePasswordEqual(false)
+                      setStatusConfirm('error')
+                    } else {
+                      setArePasswordEqual(true)
                     }
-                  })
-                }}
-                errors={regErrors}
-              ></InputFormError>
-
-              {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
-
-              <ButtonFields>
-                <LoadingButton
-                  loading={regSubmitting}
-                  alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
-                  buttonProps={{ type: 'submit', primary: true, large: true }}
-                >
-                  Send Verification Code
-                </LoadingButton>
-              </ButtonFields>
-            </AuthForm>
-            <GoogleLoginButton text={'Register via Google'} />
+                  }}
+                />
+                <AuthIcon
+                  icon={showConfirm ? 'bxs:hide' : 'bxs:show'}
+                  width={18}
+                  onClick={() => {
+                    setShowConfirm(!show)
+                  }}
+                />
+              </FormGroup>
+              {!arePasswordEqual ? <Error message="Passwords did not match!" /> : undefined}
+              {regSubmitting ? <LoaderButton /> : <SubmitButton>Next</SubmitButton>}
+            </Form>
+            <SignInOptions>
+              <OptionHeader>
+                <Line></Line>
+                <p>or sign in with</p>
+                <Line></Line>
+              </OptionHeader>
+              <GoogleLoginButton text={'Google'} />
+            </SignInOptions>
           </>
         ) : (
-          <AuthForm onSubmit={verifyForm.handleSubmit(onVerifySubmit)}>
-            <Input
-              name="code"
-              label="Code"
-              inputProps={{
-                ...verifyForm.register('code', {
-                  required: true
-                })
-              }}
-              error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
-            ></Input>
-
-            <LoadingButton
-              loading={reqCode}
-              buttonProps={{
-                id: 'resendCodeButton',
-                onClick: onResendRequest
-              }}
-            >
-              Resend Code
-            </LoadingButton>
-            <ButtonFields>
-              <Button large onClick={onCancelVerification}>
-                Cancel
-              </Button>
-              <LoadingButton
-                loading={verSubmitting}
-                alsoDisabled={verErrors.code !== undefined}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
-              >
-                Verify Code
-              </LoadingButton>
-            </ButtonFields>
-          </AuthForm>
+          nextForm
         )}
-        <br />
-      </BackCard>
-      <FooterCard>
-        <Link to={ROUTE_PATHS.login}>Login</Link>
-      </FooterCard>
-            </CenteredColumn>*/}
-      <Container>
-        <SectionInteractive></SectionInteractive>
-        <SectionForm>
-          {!registered ? (
-            <>
-              <Header state={'register'}>
-                <Space></Space>
-                <Message>
-                  <h1>Create Account</h1>
-                  <p>Welcome back! Please enter your details.</p>
-                </Message>
-              </Header>
-              <Tabs style={animateTabContainer}>
-                <TabLink to={ROUTE_PATHS.login} status={false}>
-                  Login
-                </TabLink>
-                <TabLink to={ROUTE_PATHS.register} status={true}>
-                  Register
-                </TabLink>
-              </Tabs>
-              <Space></Space>
-              <Form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} style={animateForm}>
-                <FormGroup>
-                  {regErrors.email && <Error message="Please enter a valid email!" handleBlur={handleBlur} />}
-                  <Icon icon="ic:round-email" width={24} />
-                  <Input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    {...registerForm.register('email', {
-                      required: true,
-                      pattern: EMAIL_REG
-                    })}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Icon icon="carbon:user-role" width={24} />
-                  <Controller
-                    control={registerForm.control}
-                    render={({ field }) => (
-                      // <StyledCreatatbleSelect
-                      //   {...field}
-                      //   isMulti
-                      //   isCreatable
-                      //   options={UserRoleValues}
-                      //   closeMenuOnSelect={true}
-                      //   closeMenuOnBlur={false}
-                      //   components={StyledRolesSelectComponents}
-                      //   placeholder="Ex. Developer, Designer"
-                      // />
-                      <Creatable
-                        isCreatable
-                        isMulti
-                        options={UserRoleValues}
-                        closeMenuOnSelect={true}
-                        closeMenuOnBlur={false}
-                        styles={customStyles}
-                      />
-                    )}
-                    rules={{ required: true }}
-                    name="roles"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  {regErrors.password && <Error message="Please enter a valid password!" handleBlur={handleBlur} />}
-                  <Icon icon="bxs:lock" width={24} />
-                  <Input
-                    type={show ? 'text' : 'password'}
-                    name="password"
-                    placeholder="Password"
-                    {...registerForm.register('password', {
-                      required: true,
-                      pattern: PASSWORD
-                    })}
-                    onChange={(e) => {
-                      setPassword(e.target.value)
-                    }}
-                  />
-                  <Icon
-                    icon={show ? 'bxs:hide' : 'bxs:show'}
-                    width={24}
-                    onClick={() => {
-                      setShow(!show)
-                    }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  {!arePasswordEqual ? <Error message="Passwords did not match!" handleBlur={handleBlur} /> : undefined}
-                  <Icon icon="bxs:lock" width={24} />
-                  <Input
-                    type={showConfirm ? 'text' : 'password'}
-                    placeholder="Confirm Password"
-                    name="confirmpassword"
-                    {...registerForm.register('confirmPassword', {
-                      required: true,
-                      pattern: PASSWORD
-                    })}
-                    onChange={(e) => {
-                      if (e.target.value.toString() !== password) {
-                        setArePasswordEqual(false)
-                      } else {
-                        setArePasswordEqual(true)
-                      }
-                    }}
-                  />
-                  <Icon
-                    icon={showConfirm ? 'bxs:hide' : 'bxs:show'}
-                    width={24}
-                    onClick={() => {
-                      setShowConfirm(!show)
-                    }}
-                  />
-                </FormGroup>
-                {regSubmitting ? <LoaderButton /> : <SubmitButton>Next</SubmitButton>}
-              </Form>
-              <SignInOptions>
-                <OptionHeader>
-                  <Line></Line>
-                  <p>or sign in with</p>
-                  <Line></Line>
-                </OptionHeader>
-                <OptionButton>
-                  <GoogleLoginButton text={'Google'} />
-                </OptionButton>
-              </SignInOptions>
-            </>
-          ) : (
-            nextForm
-          )}
-        </SectionForm>
-      </Container>
-    </>
+      </SectionForm>
+    </Container>
   )
 }

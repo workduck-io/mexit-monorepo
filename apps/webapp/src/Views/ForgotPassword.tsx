@@ -32,11 +32,17 @@ export const ForgotPassword = () => {
   const [show, setShow] = useState<boolean>(false)
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
 
+  const [statusEmail, setStatusEmail] = useState<string>('rest')
+  const [statusPass, setStatusPass] = useState<string>('rest')
+  const [statusConfirm, setStatusConfirm] = useState<string>('rest')
+  const [statusCode, setStatusCode] = useState<string>('rest')
+
   const { registerDetails, verifySignup } = useAuthentication()
   const registered = useAuthStore((store) => store.registered)
   const isForgottenPassword = useAuthStore((store) => store.isForgottenPassword)
   const setIsForgottenPassword = useAuthStore((store) => store.setIsForgottenPassword)
   const { forgotPassword, verifyForgotPassword } = useAuth()
+  const { resendCode } = useAuth()
 
   const regErrors = forgotPasswordForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -69,6 +75,17 @@ export const ForgotPassword = () => {
   const onCancelVerification = (e) => {
     e.preventDefault()
     setIsForgottenPassword(false)
+  }
+
+  const onResendRequest = async (e) => {
+    e.preventDefault()
+    setReqCode(true)
+    await resendCode()
+      .then((r) => {
+        toast('Verification code sent!')
+      })
+      .catch(() => toast.error('Code could not be sent'))
+    setReqCode(false)
   }
 
   const animateForm = useSpring({
@@ -229,9 +246,22 @@ export const ForgotPassword = () => {
               <Form onSubmit={forgotPasswordForm.handleSubmit(onForgotPasswordSubmit)} style={animateForm}>
                 {!enteredEmail ? (
                   <>
-                    <FormGroup style={animateFormGroup}>
-                      {regErrors.email && <Errors message="Please enter a valid email!" handleBlur={handleBlur} />}
-                      <Icon icon="ic:round-email" width={24} />
+                    <FormGroup
+                      style={animateFormGroup}
+                      status={statusEmail}
+                      tabIndex={-1}
+                      onFocus={() => {
+                        setStatusEmail('focus')
+                        if (forgotPasswordForm.formState.errors.email) {
+                          setStatusEmail('rest')
+                        }
+                      }}
+                      onBlur={() => {
+                        setStatusEmail('rest')
+                        forgotPasswordForm.clearErrors()
+                      }}
+                    >
+                      <Icon icon="ic:round-email" width={18} />
                       <Input
                         type="email"
                         placeholder="Email"
@@ -242,6 +272,7 @@ export const ForgotPassword = () => {
                         })}
                       />
                     </FormGroup>
+                    {regErrors.email && <Errors message="Please enter a valid email!" />}
                     <SubmitButton
                       onClick={() => {
                         setEnteredEmail(true)
@@ -252,11 +283,22 @@ export const ForgotPassword = () => {
                   </>
                 ) : (
                   <>
-                    <FormGroup style={animateFormGroup}>
-                      {regErrors.newpassword && (
-                        <Errors message="Please enter a valid password!" handleBlur={handleBlur} />
-                      )}
-                      <Icon icon="bxs:lock" width={24} />
+                    <FormGroup
+                      style={animateFormGroup}
+                      status={statusPass}
+                      tabIndex={-1}
+                      onFocus={() => {
+                        setStatusPass('focus')
+                        if (forgotPasswordForm.formState.errors.newpassword) {
+                          setStatusPass('error')
+                        }
+                      }}
+                      onBlur={() => {
+                        setStatusPass('rest')
+                        forgotPasswordForm.clearErrors()
+                      }}
+                    >
+                      <Icon icon="bxs:lock" width={18} />
                       <Input
                         type={show ? 'text' : 'password'}
                         placeholder="Password"
@@ -268,21 +310,34 @@ export const ForgotPassword = () => {
                       />
                       <Icon
                         icon={show ? 'bxs:hide' : 'bxs:show'}
-                        width={24}
+                        width={18}
                         onClick={() => {
                           setShow(!show)
                         }}
                       />
                     </FormGroup>
-                    <FormGroup style={animateFormGroup}>
-                      {!arePasswordEqual ? (
-                        <Errors message="Passwords are not equal!" handleBlur={handleBlur} />
-                      ) : undefined}
-                      <Icon icon="bxs:lock" width={24} />
+                    {regErrors.newpassword && <Errors message="Please enter a valid password!" />}
+                    <FormGroup
+                      style={animateFormGroup}
+                      tabIndex={-1}
+                      status={statusConfirm}
+                      onFocus={() => {
+                        setStatusConfirm('focus')
+                        if (forgotPasswordForm.formState.errors.confirmNewPassword) {
+                          setStatusConfirm('error')
+                        }
+                      }}
+                      onBlur={() => {
+                        setStatusConfirm('rest')
+                        setArePasswordEqual(true)
+                        forgotPasswordForm.clearErrors()
+                      }}
+                    >
+                      <Icon icon="bxs:lock" width={18} />
                       <Input
                         type={showConfirm ? 'text' : 'password'}
                         placeholder="Confirm Password"
-                        name="confirmnewpassword"
+                        name="confirmNewPassword"
                         {...forgotPasswordForm.register('confirmNewPassword', {
                           required: true,
                           pattern: PASSWORD
@@ -290,6 +345,7 @@ export const ForgotPassword = () => {
                         onChange={(e) => {
                           if (e.target.value.toString() !== newPassword) {
                             setArePasswordEqual(false)
+                            setStatusConfirm('error')
                           } else {
                             setArePasswordEqual(true)
                           }
@@ -297,12 +353,13 @@ export const ForgotPassword = () => {
                       />
                       <Icon
                         icon={showConfirm ? 'bxs:hide' : 'bxs:show'}
-                        width={24}
+                        width={18}
                         onClick={() => {
                           setShowConfirm(!show)
                         }}
                       />
                     </FormGroup>
+                    {!arePasswordEqual ? <Errors message="Passwords are not equal!" /> : undefined}
                     {regSubmitting ? <LoaderButton /> : <SubmitButton>Reset Password</SubmitButton>}
                   </>
                 )}
@@ -314,10 +371,23 @@ export const ForgotPassword = () => {
               <Space></Space>
               <Message>
                 <h1>Enter the verification Code</h1>
+                <p>Enter the verification code we sent to your email</p>
               </Message>
               <Form onSubmit={verifyForm.handleSubmit(onVerifySubmit)} style={animateForm}>
-                <FormGroup>
-                  {verErrors.code && <Errors message="Please enter a code!" handleBlur={handleBlur} />}
+                <FormGroup
+                  status={statusCode}
+                  tabIndex={-1}
+                  onFocus={() => {
+                    setStatusCode('focus')
+                    if (verifyForm.formState.errors.code) {
+                      setStatusCode('error')
+                    }
+                  }}
+                  onBlur={() => {
+                    setStatusCode('rest')
+                    verifyForm.clearErrors()
+                  }}
+                >
                   <Icon icon="bxs:lock" width={24} />
                   <Input
                     placeholder="Enter the 6-Character code"
@@ -327,14 +397,16 @@ export const ForgotPassword = () => {
                     })}
                   />
                 </FormGroup>
-                {verErrors.code?.type === 'required' ? (
-                  <ErrorMessages>
-                    <Icon icon="ant-design:warning-outlined" width={16} />
-                    <span>Code is required!</span>
-                  </ErrorMessages>
-                ) : undefined}
+                {verErrors.code && <Errors message="Please enter a code" />}
                 {verSubmitting ? <LoaderButton /> : <SubmitButton>Verify</SubmitButton>}
               </Form>
+              <Message>
+                <Space></Space>
+                <p>Didn't get a confirmation email?</p>
+                <p>
+                  Check your spam folder or <span onClick={onResendRequest}>Send again</span>
+                </p>
+              </Message>
             </>
           )}
         </SectionForm>

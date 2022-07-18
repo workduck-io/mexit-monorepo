@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { animated } from 'react-spring'
+import { Icon } from '@iconify/react'
 
 export const Container = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.gray[9]};
   position: absolute;
   overflow: hidden;
 `
@@ -19,18 +20,89 @@ export const SectionForm = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  margin-top: -3rem;
+  /* background-color: #36393e; */
+  background-color: ${({ theme }) => theme.colors.gray[9]};
 `
 export const SectionInteractive = styled.div`
   width: 50%;
   height: 100vh;
-  background-image: linear-gradient(180deg, #4949ff, #1a9be5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-image: linear-gradient(180deg, #2d9edf, #1a9be5); */
+  background-color: ${({ theme }) => theme.colors.primary};
 `
+
+export const InteractiveContentWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2rem;
+  margin-top: 35%;
+`
+
+export const InteractiveHeader = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  & h1 {
+    color: white;
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-top: -2rem;
+  }
+`
+
+export const InteractiveContent = styled.div`
+  width: 100%;
+  margin-top: -2rem;
+  & p {
+    width: 75%;
+    color: white;
+    font-size: 1rem;
+  }
+`
+
+export const SubContent = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  margin-top: -1rem;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  & p {
+    width: 80%;
+    color: white;
+  }
+`
+
+export const ImageContainer = styled.div`
+  display: flex;
+  width: 12%;
+`
+
+export const ImageWrapper = styled.div`
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-right: -0.5rem;
+`
+
+export const Image = styled.img`
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+`
+
 export const Header = styled.div<{ state: string }>`
   width: 100%;
-  height: ${({ state }) => {
-    return state === 'login' ? 40 + '%' : 20 + '%'
-  }};
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,22 +110,28 @@ export const Header = styled.div<{ state: string }>`
 export const Message = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 50%;
   line-height: 1rem;
   & h1 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: black;
+    color: white;
   }
   & h2 {
     font-size: 1.5rem;
-    color: black;
+    color: white;
   }
   & p {
     font-weight: 400;
     font-size: 0.85rem;
-    margin-left: 0.1rem;
+    margin-top: -0.5rem;
+  }
+  & span {
+    color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+    & :hover {
+      border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
+    }
   }
 `
 
@@ -61,7 +139,8 @@ export const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10%;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
@@ -71,23 +150,22 @@ export const LogoContainer = styled.div`
 
 export const Tabs = styled(animated.div)`
   width: 50%;
-  min-height: 3.5rem;
+  height: 3.5rem;
+  margin-top: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-image: linear-gradient(90.1deg, rgba(109, 109, 255, 0.1) 21.86%, rgba(27, 156, 230, 0.1) 88.04%);
-  border-radius: 2rem;
+  background-color: rgba(45, 158, 223, 0.07);
+  border-radius: 2.5rem;
   padding: 0.1rem 0.5rem;
 `
 
 export const TabLink = styled(Link)<{ status: boolean }>`
   width: 45%;
-  background-image: ${({ status }) => {
-    return status ? 'linear-gradient(90deg, #6C6CFF 19.18%, #1A9BE5 93.15%)' : ''
+  background-color: ${({ status, theme }) => {
+    return status ? `${theme.colors.primary}` : ''
   }};
-  color: ${({ status }) => {
-    return status ? '#ffffff' : '#4949FF'
-  }};
+  color: white;
   font-size: 0.85rem;
   border-radius: 2rem;
   height: 75%;
@@ -95,9 +173,12 @@ export const TabLink = styled(Link)<{ status: boolean }>`
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  & :hover {
-    text-decoration: none !important;
-    text-decoration-style: none;
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
   }
 `
 
@@ -128,7 +209,7 @@ export const OptionHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   & p {
-    color: #6c6c71;
+    color: dcdcdc;
   }
 `
 export const Line = styled.div`
@@ -151,14 +232,14 @@ export const OptionButtonWrapper = styled.div`
 export const OptionButton = styled.button`
   display: flex;
   width: 100%;
-  height: 2.875rem;
+  height: 2.25rem;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  background-color: white;
+  gap: 0.25rem;
+  background-color: #f7f7f7;
   outline: none;
-  color: black;
-  border: 2px solid #4949ff;
+  font-weight: 700;
+  color: #094067;
   cursor: pointer;
   border-radius: 8px;
 `
@@ -168,16 +249,13 @@ export const Space = styled.div`
 `
 export const ErrorMessages = styled.p`
   display: flex;
-  position: absolute;
-  background-color: white;
-  border: 2px solid red;
-  box-shadow: 1px 2px 10px gray;
-  border-radius: 0.75rem;
-  top: 1rem;
-  width: 15rem;
-  height: 2rem;
   align-items: center;
-  justify-content: center;
+  gap: 0.15rem;
   font-size: 0.75rem;
-  color: #d00000;
+  color: #ff3932;
+  margin-top: -0.25rem;
+`
+
+export const AuthIcon = styled(Icon)`
+  color: #9e9e9e;
 `

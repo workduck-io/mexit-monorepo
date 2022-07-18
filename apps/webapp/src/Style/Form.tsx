@@ -1,19 +1,53 @@
 import styled from 'styled-components'
 import { animated } from 'react-spring'
+
+const checkBorder = (status: string) => {
+  let color = '#b1b1b1'
+  switch (status) {
+    case 'error':
+      color = '#FF3932'
+      break
+    case 'focus':
+      color = '#2d9edf'
+      break
+    case 'success':
+      color = '#60B527'
+      break
+    default:
+      color = '#b1b1b1'
+      break
+  }
+  return color
+}
+
 export const Form = styled(animated.form)`
   display: flex;
+  margin-top: 1.25rem;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 0.75rem;
   width: 50%;
 `
-export const FormGroup = styled(animated.div)`
+export const FormGroup = styled(animated.div)<{ status: string }>`
   width: 100%;
+  height: 2.25rem;
   display: flex;
   align-items: center;
-  border: 1px solid #b1b1b1;
+  background-color: ${({ theme }) => theme.colors.gray[8]};
+  border: ${({ status }) => {
+    return 1 + `px solid ${checkBorder(status)}`
+  }};
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
   gap: 0.5rem;
+  & :focus {
+    border: 1px solid #2d9edf;
+  }
+  & input:-webkit-autofill {
+    -webkit-text-fill-color: #9e9e9e !important;
+    -webkit-background-clip: text;
+    /* width: 100%;
+    margin-left: -2rem !important; */
+  }
 `
 
 export const SubForm = styled.div`
@@ -25,22 +59,40 @@ export const SubForm = styled.div`
 `
 export const RememberMe = styled.div`
   display: flex;
+  width: 65%;
   align-items: center;
-  gap: 0.25rem;
-  color: black;
-  & label {
+  gap: 0.15rem;
+  color: #9e9e9e;
+  & span {
     font-size: 0.75rem;
+    width: 90%;
+  }
+  & input {
+    width: 10%;
+    accent-color: #36393e;
+    background-color: #36393e;
+    border: 1px solid white;
+    & :before {
+      accent-color: #36393e;
+    }
+    & :focus {
+      outline: none;
+    }
   }
 `
 export const ForgotPassword = styled.p`
   font-size: 0.75rem;
-  color: #1a9be5;
+  color: ${({ theme }) => theme.colors.primary};
   text-decoration: none;
 `
 
 export const Input = styled.input`
+  width: 90%;
+  font-size: 14px;
   outline: none;
   border: none;
+  color: #9e9e9e;
+  background-color: transparent;
   &:focus {
     outline: none;
     border: none;
@@ -58,13 +110,13 @@ export const Select = styled.select`
 
 export const SubmitButton = styled(animated.button)`
   width: 100%;
-  height: 3rem;
+  height: 2.25rem;
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-image: linear-gradient(90deg, #4848fe 12.57%, #1a9be5 94.35%);
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   border-radius: 0.5rem;
 `
@@ -72,7 +124,9 @@ export const LoadButton = styled(animated.button)`
   outline: none;
   height: 3rem;
   width: 100%;
-  border: 2px solid gray;
-  background-color: white;
+  border-radius: ${({ theme }) => theme.borderRadius};
+  color: ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.gray[10]};
   cursor: not-allowed;
 `
