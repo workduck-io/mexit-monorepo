@@ -152,9 +152,9 @@ export default function Chotu() {
     if (child) {
       if (activeItem && activeItem?.type === ActionType.SEARCH) {
         setSearchResults([searchBrowserAction(search.value, activeItem)])
-      } else if (!activeItem && search.value) {
+      } else if (search.value) {
         useSearch(search)
-      } else if (!activeItem && !search.value) {
+      } else if (!search.value) {
         if (!previewMode) return
 
         const recents = lastOpenedNodes
