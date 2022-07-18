@@ -11,6 +11,7 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useInternalLinks } from './useInternalLinks'
 import { deserializeContent } from '../Utils/serializer'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useNodes } from './useNodes'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
@@ -23,6 +24,7 @@ export function useSaveChanges() {
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
+  const { isSharedNode } = useNodes()
 
   const saveIt = (saveAndExit = false, notification = false) => {
     const state = platesStore.get.state()
@@ -38,7 +40,10 @@ export function useSaveChanges() {
 
     let request
     if (parentILink || isRoot) {
-      updateSingleILink(node.nodeid, node.path)
+      if (!isSharedNode(node.nodeid)) {
+        updateSingleILink(node.nodeid, node.path)
+      }
+
       dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path })
       request = {
         type: 'CAPTURE_HANDLER',

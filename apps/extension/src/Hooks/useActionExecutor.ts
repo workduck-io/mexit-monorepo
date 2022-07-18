@@ -29,6 +29,7 @@ import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 
 import getPlugins from '../Editor/plugins/index'
+import { useNodes } from './useNodes'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
@@ -36,7 +37,8 @@ export function useActionExecutor() {
   const { setNodeContent, setPreviewMode, setNode, setPersistedContent } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
-  const { ilinks } = useDataStore()
+  const { ilinks, sharedNodes } = useDataStore()
+  const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
@@ -49,7 +51,9 @@ export function useActionExecutor() {
         if (item?.extras?.new) {
           node = createNodeWithUid(nodeValue)
         } else {
-          node = ilinks.find((i) => i.nodeid === item.id)
+          node = isSharedNode(item.id)
+            ? sharedNodes.find((i) => i.nodeid === item.id)
+            : ilinks.find((i) => i.nodeid === item.id)
         }
 
         setNode({
