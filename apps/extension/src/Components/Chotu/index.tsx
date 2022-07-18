@@ -45,7 +45,6 @@ const MAX_RECENT_ITEMS = 3
 
 export default function Chotu() {
   const iframeRef = createRef<HTMLIFrameElement>()
-  const linkCaptures = useShortenerStore((store) => store.linkCaptures)
   const getSnippet = useSnippets().getSnippet
 
   const { setSearchResults, search, activeItem, selection } = useSputlitContext()
@@ -153,9 +152,9 @@ export default function Chotu() {
     if (child) {
       if (activeItem && activeItem?.type === ActionType.SEARCH) {
         setSearchResults([searchBrowserAction(search.value, activeItem)])
-      } else if (!activeItem && search.value) {
+      } else if (search.value) {
         useSearch(search)
-      } else if (!activeItem && !search.value) {
+      } else if (!search.value) {
         if (!previewMode) return
 
         const recents = lastOpenedNodes
@@ -213,14 +212,8 @@ export default function Chotu() {
 
   return (
     // TODO: Test this whenever shornter starts working
-    <StyledChotu show={linkCaptures.some((item) => item.long === window.location.href)}>
+    <StyledChotu>
       <iframe ref={iframeRef} src={`${MEXIT_FRONTEND_URL_BASE}/chotu`} id="chotu-iframe" />
-      <Icon>{/* <img src={chrome.runtime.getURL('/Assets/black_logo.svg')} /> */}</Icon>
-
-      <Container>
-        <p>shortened</p>
-        <CopyButton>{/* <img src={chrome.runtime.getURL('/Assets/copy.svg')} /> */}</CopyButton>
-      </Container>
 
       <Notification />
     </StyledChotu>
