@@ -124,8 +124,8 @@ function MainGameScreen() {
             <h1>Game Over!</h1>
             <h3>Key Time: {keyTime}</h3>
             <h3>Click Time: {clickTime}</h3>
+            <GameProgressBar percentage={(clickTime * 100) / (clickTime + keyTime)} />
           </GameOverContainer>
-          <GameProgressBar percentage={(clickTime * 100) / (clickTime + keyTime)} />
         </Modal>
       ) : (
         ''
