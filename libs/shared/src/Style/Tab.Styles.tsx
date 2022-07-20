@@ -6,7 +6,6 @@ export const TabPanel = styled(animated.div)`
   width: 100%;
   height: 100%;
 
-  max-height: 50vh;
   overflow: hidden auto;
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `

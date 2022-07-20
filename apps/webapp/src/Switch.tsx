@@ -181,12 +181,11 @@ export const Switch = () => {
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
-  const authenticated = useAuthStore((s) => s.authenticated)
   const { saveAndClearBuffer: saveEditorBuffer } = useEditorBuffer()
   const { saveAndClearBuffer: saveSnippetBuffer } = useSnippetBuffer()
+  const authenticated = useAuthStore((s) => s.authenticated)
   const { saveNodeName } = useSaveNodeName()
-  const showSidebar = useLayoutStore((s) => s.showSidebar)
-  const hideSidebar = useLayoutStore((s) => s.hideSidebar)
+  const { showSidebar, showAllSidebars, hideAllSidebars, showRHSidebar, hideRHSidebar } = useLayoutStore()
 
   useEffect(() => {
     const editorNode = useEditorStore.getState().node
@@ -203,14 +202,16 @@ export const Switch = () => {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         mog('Showing Sidebar', { location })
         showSidebar()
+        hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.node)) {
         mog('Showing Sidebar', { location })
-        showSidebar()
+        showAllSidebars()
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         showSidebar()
+        hideRHSidebar()
       } else {
-        mog('Hiding Sidebar', { location })
-        hideSidebar()
+        mog('Hiding all Sidebar', { location })
+        hideAllSidebars()
       }
     }
   }, [location])

@@ -1,10 +1,12 @@
 import styled, { css } from 'styled-components'
 
+import { FOCUS_MODE_OPACITY } from '@mexit/core'
 import { focusStyles, FocusModeProp } from '@mexit/shared'
 import { size } from '@mexit/shared'
 
 interface InfoBarWrapperProps extends FocusModeProp {
   mode: string
+  hasPinnedSuggestions?: boolean
 }
 
 const infoWidths = {
@@ -19,44 +21,64 @@ const infoWidths = {
   default: '300px'
 }
 
-const getMainWidth = (mode: string, wide: boolean) => {
-  switch (mode) {
-    case 'graph':
-    case 'reminders':
-    case 'flow':
-      return wide ? infoWidths.large.wide : infoWidths.large.normal
-    case 'suggestions':
-      return wide ? infoWidths.small.wide : infoWidths.small.normal
-    case 'default':
-    default:
-      return infoWidths.default
-  }
-}
-
 export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
   overflow-x: hidden;
-  height: 100vh;
 
   @media (max-width: ${size.wide}) {
-    ${({ mode }) => {
+    min-width: ${infoWidths.small.normal};
+    max-width: ${infoWidths.small.normal};
+    ${
+      /*({ mode }) => {
       const mainWidth = getMainWidth(mode, false)
       return css`
         min-width: calc(${mainWidth});
         max-width: calc(${mainWidth});
       `
-    }};
+    }*/ false
+    };
   }
   @media (min-width: ${size.wide}) {
-    ${({ mode }) => {
+    min-width: ${infoWidths.small.wide};
+    max-width: ${infoWidths.small.wide};
+    ${
+      /*({ mode }) => {
       const mainWidth = getMainWidth(mode, true)
       return css`
         min-width: calc(${mainWidth});
         max-width: calc(${mainWidth});
       `
-    }};
+    }*/ false
+    };
   }
   transition: opacity 0.3s ease-in-out;
-  ${focusStyles}
+  ${({ $focusMode, $focusHover, mode, hasPinnedSuggestions }) => {
+    if ($focusMode) {
+      if (mode === 'suggestions' && hasPinnedSuggestions) {
+        return $focusHover
+          ? css`
+              opacity: 1;
+              ${InfobarTools} {
+                transition: opacity 0.3s ease-in-out;
+                opacity: 1;
+              }
+            `
+          : css`
+              opacity: 1;
+              ${InfobarTools} {
+                transition: opacity 0.3s ease-in-out;
+                opacity: ${FOCUS_MODE_OPACITY};
+              }
+            `
+      }
+      return $focusHover
+        ? css`
+            opacity: 1;
+          `
+        : css`
+            opacity: ${FOCUS_MODE_OPACITY};
+          `
+    }
+  }}
 `
 
 export const TemplateInfoBar = styled(InfoBarWrapper)`
@@ -79,7 +101,7 @@ export const InfobarFull = styled.div`
   max-height: 100vh;
   width: 100%;
   position: relative;
-  min-width: ${infoWidths.large.normal};
+  min-width: ${infoWidths.default};
   * {
     outline: none;
     outline-style: none;
@@ -90,7 +112,7 @@ export const InfobarMedium = styled.div`
   max-height: 100vh;
   width: 100%;
   position: relative;
-  min-width: ${infoWidths.small.normal};
+  height: calc(100vh - 9.5rem);
   * {
     outline: none;
     outline-style: none;
@@ -101,9 +123,9 @@ export const InfobarTools = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.large}`};
+  margin: ${({ theme: { spacing } }) => `${spacing.large} ${spacing.medium}`};
+  margin-top: 0.5rem;
 
-  background-color: ${({ theme }) => theme.colors.gray[9]};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.small}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 

@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, useLocation } from 'react-router-dom'
-import tinykeys from 'tinykeys'
 import styled from 'styled-components'
+import tinykeys from 'tinykeys'
 
-import InfoBar from '../Components/Infobar'
-import useEditorActions from '../Hooks/useEditorActions'
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
-import { useAnalysis } from '../Stores/useAnalysis'
-import { initSearchIndex } from '../Workers/controller'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useHelpStore } from '../Stores/useHelpStore'
-import { useEditorStore } from '../Stores/useEditorStore'
+import InfoBar from '../Components/Infobar'
+import { usePermission } from '../Hooks/API/usePermission'
+import useEditorActions from '../Hooks/useEditorActions'
+import { useFetchShareData } from '../Hooks/useFetchShareData'
+import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
+import { usePortals } from '../Hooks/usePortals'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useKeyListener } from '../Hooks/useShortcutListener'
-import useBlockStore from '../Stores/useBlockStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
-import { usePermission } from '../Hooks/API/usePermission'
-import { useFetchShareData } from '../Hooks/useFetchShareData'
-import { usePortals } from '../Hooks/usePortals'
+import { useAnalysis } from '../Stores/useAnalysis'
 import { useAuthStore } from '../Stores/useAuth'
+import useBlockStore from '../Stores/useBlockStore'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore } from '../Stores/useEditorStore'
+import { useHelpStore } from '../Stores/useHelpStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import { initSearchIndex } from '../Workers/controller'
 
 export const EditorViewWrapper = styled.div`
   display: flex;
@@ -164,7 +164,6 @@ const EditorView = () => {
       <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
         <Outlet />
       </ErrorBoundary>
-      {showInfoBar() && <InfoBar />}
     </EditorViewWrapper>
   )
 }

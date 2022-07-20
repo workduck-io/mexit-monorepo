@@ -15,6 +15,7 @@ import useNavlinks from '../Data/links'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import Analytics from '../Utils/analytics'
+import RHSidebar from './Infobar/RHSidebar'
 import Nav from './Sidebar/Nav'
 import { useSidebarTransition } from './Sidebar/Transition'
 
@@ -117,6 +118,8 @@ const Main = ({ children }: MainProps) => {
         <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
           {children}
         </Content>
+
+        {authenticated && <RHSidebar />}
       </GridWrapper>
     </AppWrapper>
   )

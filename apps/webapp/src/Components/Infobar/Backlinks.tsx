@@ -1,14 +1,13 @@
-import React from 'react'
 import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
+import React from 'react'
 
 import { Note } from '@mexit/shared'
+import { InfoWidgetWrapper } from '@mexit/shared'
 
 import { BacklinksHelp } from '../../Data/defaultText'
-import NodeLink from '../Editor/NodeLink'
-import Collapse from '../../Layout/Collapse'
-
-import { InfoWidgetWrapper } from '../../Style/Infobar'
 import { useLinks } from '../../Hooks/useLinks'
+import Collapse from '../../Layout/Collapse'
+import NodeLink from '../Editor/NodeLink'
 
 interface BackLinkProps {
   nodeid: string

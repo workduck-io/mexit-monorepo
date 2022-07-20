@@ -1,20 +1,20 @@
-import React from 'react'
-import { useSingleton } from '@tippyjs/react'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import shareLine from '@iconify/icons-ri/share-line'
 import focusLine from '@iconify/icons-ri/focus-line'
+import shareLine from '@iconify/icons-ri/share-line'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import { useSingleton } from '@tippyjs/react'
+import React from 'react'
 
 import { Loading, ToolbarTooltip, IconButton } from '@mexit/shared'
+import { InfoTools, NodeInfo } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { InfoTools, NodeInfo } from '@mexit/shared'
-import BookmarkButton from '../Buttons/BookmarkButton'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import NodeRenameOnlyTitle from './Rename/NodeRename'
 import useToggleElements from '../../Hooks/useToggleElements'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import BookmarkButton from '../Buttons/BookmarkButton'
+import NodeRenameOnlyTitle from './Rename/NodeRename'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -23,9 +23,7 @@ const Toolbar = () => {
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const [source, target] = useSingleton()
   const shortcuts = useHelpStore((store) => store.shortcuts)
-  const showShareOptions = useLayoutStore((store) => store.showShareOptions)
   const infobar = useLayoutStore((store) => store.infobar)
-  const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const shareModalState = useShareModalStore((store) => store.open)
 
@@ -51,15 +49,6 @@ const Toolbar = () => {
           </span>
         </ToolbarTooltip>
 
-        <IconButton
-          size={24}
-          singleton={target}
-          icon={timerFlashLine}
-          shortcut={shortcuts?.showReminder?.keystrokes}
-          title="Reminders"
-          highlight={infobar.mode === 'reminders'}
-          onClick={toggleReminder}
-        />
         <IconButton
           singleton={target}
           size={24}
