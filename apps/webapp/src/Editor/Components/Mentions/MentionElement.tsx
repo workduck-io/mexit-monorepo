@@ -1,18 +1,14 @@
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+import { MentionElementProps, useEditorRef } from '@udecode/plate'
 import React, { useMemo, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import Tippy from '@tippyjs/react/headless' // different import path!
+// different import path!
 import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
-import { MentionElementProps, useEditorRef } from '@udecode/plate'
 
 import { mog, Mentionable, InvitedUser, AccessLevel, SelfMention } from '@mexit/core'
 import { Button } from '@mexit/shared'
-
-import { ProfileImage } from '../../../Components/User/ProfileImage'
-import { useHotkeys } from '../../../Hooks/useHotkeys'
-import { useMentions } from '../../../Hooks/useMentions'
-import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
-import { useEditorStore } from '../../../Stores/useEditorStore'
 import {
   MentionTooltip,
   TooltipMail,
@@ -23,21 +19,26 @@ import {
   TooltipAlias,
   AccessTag
 } from '@mexit/shared'
-import { useShareModalStore } from '../../../Stores/useShareModalStore'
-import { Icon } from '@iconify/react'
-import { useMentionStore } from '../../../Stores/useMentionsStore'
-import { useUserCacheStore } from '../../../Stores/useUserCacheStore'
+
+import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useUserService } from '../../../Hooks/API/useUserAPI'
+import { useHotkeys } from '../../../Hooks/useHotkeys'
+import { useMentions } from '../../../Hooks/useMentions'
+import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
+import { useEditorStore } from '../../../Stores/useEditorStore'
+import { useMentionStore } from '../../../Stores/useMentionsStore'
+import { useShareModalStore } from '../../../Stores/useShareModalStore'
+import { useUserCacheStore } from '../../../Stores/useUserCacheStore'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'
 
 interface MentionTooltipProps {
   user?: Mentionable | InvitedUser | SelfMention
-  nodeid: string
   access?: AccessLevel
+  hideAccess?: boolean
 }
 
-const MentionTooltipComponent = ({ user, access, nodeid }: MentionTooltipProps) => {
+export const MentionTooltipComponent = ({ user, access, hideAccess }: MentionTooltipProps) => {
   const prefillShareModal = useShareModalStore((state) => state.prefillModal)
 
   const onShareModal = async () => {
@@ -66,7 +67,7 @@ const MentionTooltipComponent = ({ user, access, nodeid }: MentionTooltipProps) 
         {user && user.alias && <TooltipAlias>@{user.alias}</TooltipAlias>}
         <TooltipMail>{user && user.email}</TooltipMail>
         {access && <AccessTag access={access} />}
-        {user && user?.type !== 'invite' && user?.type !== 'self' && !access && (
+        {user && user?.type !== 'invite' && user?.type !== 'self' && !access && !hideAccess && (
           <Button onClick={onShareModal}>
             <Icon icon="ri:share-line" />
             Share Note
@@ -153,7 +154,7 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
         interactive
         placement="bottom"
         appendTo={() => document.body}
-        render={(attrs) => <MentionTooltipComponent user={user} nodeid={node.nodeid} access={access} />}
+        render={(attrs) => <MentionTooltipComponent user={user} access={access} />}
       >
         <SMention {...onClickProps} type={user?.type} selected={selected}>
           {user?.email && <ProfileImage email={user?.email} size={16} />}

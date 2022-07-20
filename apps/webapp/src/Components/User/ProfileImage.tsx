@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import md5 from 'md5'
-import Avatar from 'boring-avatars'
-import Tippy from '@tippyjs/react/headless' // different import path!
-import { Icon } from '@iconify/react'
 import user3Line from '@iconify-icons/ri/user-3-line'
+// different import path!
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+import Avatar from 'boring-avatars'
+import md5 from 'md5'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
+import { mog } from '@mexit/core'
 import { Centered, CardShadow } from '@mexit/shared'
+
+import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
+import { useUserService } from '../../Hooks/API/useUserAPI'
+import { useMentions } from '../../Hooks/useMentions'
 import { useCacheStore } from '../../Stores/useRequestCache'
 
 interface ProfileImageProps {
@@ -83,27 +89,43 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
   return <Icon className="defaultProfileIcon" icon={user3Line} height={size} />
 }
 
+interface ProfileImageTooltipProps {
+  userid: string
+  size: number
+  // Component to replace the default image
+  DefaultFallback?: React.ComponentType
+}
+
 interface ProfileImageWithToolTipProps {
-  props: ProfileImageProps
+  props: ProfileImageTooltipProps
   placement?: string
 }
 
 export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {
-  const { email } = props // eslint-disable-line react/prop-types
+  const { userid, size, DefaultFallback } = props // eslint-disable-line react/prop-types
+  const { getUserFromUserid } = useMentions()
+  const { getUserDetailsUserId } = useUserService()
+
+  const user = useMemo(() => {
+    const u = getUserFromUserid(userid)
+    if (u) return u
+    else {
+      getUserDetailsUserId(userid)
+        .then((d) => mog('GOT USERID', { d }))
+        .catch((err) => mog('GOT ERROR', { err }))
+    }
+  }, [userid])
+
   return (
     <Tippy
       delay={100}
       interactiveDebounce={100}
       placement={(placement as any) ?? 'auto'}
       appendTo={() => document.body}
-      render={(attrs) => (
-        <ProfileTooptip tabIndex={-1} {...attrs}>
-          {email}
-        </ProfileTooptip>
-      )}
+      render={(attrs) => <MentionTooltipComponent user={user} hideAccess />}
     >
       <Centered>
-        <ProfileImage {...props} />
+        <ProfileImage size={size} email={user?.email} DefaultFallback={DefaultFallback} />
       </Centered>
     </Tippy>
   )
