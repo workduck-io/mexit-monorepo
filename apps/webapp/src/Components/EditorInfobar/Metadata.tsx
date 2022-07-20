@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import { NodeMetadata, NodeProperties } from '@mexit/core'
+import { mog, NodeMetadata, NodeProperties } from '@mexit/core'
 import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { Label } from '@mexit/shared'
 import { ProfileIcon } from '@mexit/shared'
@@ -26,13 +26,14 @@ export const Data = styled.div`
 interface MetadataProps {
   node: NodeProperties
   fadeOnHover?: boolean
+  publicMetadata?: NodeMetadata
 }
 
-const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
+const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
   const getContent = useContentStore((state) => state.getContent)
   const content = getContent(node.nodeid)
-  const [metadata, setMetadata] = useState<NodeMetadata | undefined>(undefined)
+  const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
 
   const isEmpty =
     metadata &&
@@ -43,20 +44,21 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
 
   useEffect(() => {
     // mog({ content })
+
     if (content === undefined || content.metadata === undefined) return
     const { metadata: contentMetadata } = content
     setMetadata(contentMetadata)
   }, [node, content])
 
-  // mog({ node, metadata })
+  if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
+    return null
 
-  if (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty) return null
   return (
     <MetadataWrapper $fadeOnHover={fadeOnHover}>
       <DataGroup>
         {metadata.createdBy !== undefined && (
           <DataWrapper interactive={metadata.createdAt !== undefined}>
-            {metadata.createdBy !== undefined ? (
+            {metadata.createdBy !== undefined && !publicMetadata ? (
               <ProfileIcon>
                 <ProfileImageWithToolTip props={{ userid: metadata.createdBy, size: 16 }} placement="bottom" />
               </ProfileIcon>
@@ -78,7 +80,7 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
       <DataGroup>
         {metadata.lastEditedBy !== undefined && (
           <DataWrapper interactive={metadata.updatedAt !== undefined}>
-            {metadata.lastEditedBy !== undefined ? (
+            {metadata.lastEditedBy !== undefined && !publicMetadata ? (
               <ProfileIcon data-title={metadata.lastEditedBy}>
                 <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
               </ProfileIcon>

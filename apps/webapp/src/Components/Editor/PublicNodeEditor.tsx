@@ -1,16 +1,16 @@
+import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { usePlateEditorRef, selectEditor } from '@udecode/plate'
-
-import { defaultContent, mog } from '@mexit/core'
-
-import Editor from './Editor'
-import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
-import { StyledEditor, EditorWrapper, Title, FadeContainer } from '@mexit/shared'
-import PublicNodeMetadata from '../EditorInfobar/PublicNodeMetadata'
-import { useApi } from '../../Hooks/API/useNodeAPI'
-import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
 import styled from 'styled-components'
+
+import { defaultContent, extractMetadata, mog, NodeMetadata } from '@mexit/core'
+import { StyledEditor, EditorWrapper, Title, FadeContainer } from '@mexit/shared'
+
+import { useApi } from '../../Hooks/API/useNodeAPI'
+import { usePublicNodeStore, PublicNode } from '../../Stores/usePublicNodes'
+import Metadata from '../EditorInfobar/Metadata'
+import PublicDataInfobar from '../Infobar/PublicNodeInfobar'
+import Editor from './Editor'
 
 const PublicStyledEditor = styled(StyledEditor)`
   display: flex;
@@ -44,7 +44,7 @@ const PublicNodeEditor = ({ nodeId, node }) => {
         <Link to={'/'}>{node?.title}</Link>
       </Title>
 
-      {node?.metadata && <PublicNodeMetadata metadata={node.metadata} />}
+      {node && <Metadata node={node} publicMetadata={node?.metadata} />}
 
       <EditorWrapper onClick={onFocusClick}>
         <Editor
