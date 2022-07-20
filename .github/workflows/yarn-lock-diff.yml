@@ -14,4 +14,3 @@ jobs:
         uses: Simek/yarn-lock-changes@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          updateComment: false

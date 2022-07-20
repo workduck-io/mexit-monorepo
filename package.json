@@ -19,7 +19,7 @@
     "fast-equals": "^2.0.4",
     "chrono-node": "^2.3.8",
     "ramda": "^0.28.0",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "^6.5.3",
     "@uifabric/styling": "^7.20.0"
   },
   "devDependencies": {
