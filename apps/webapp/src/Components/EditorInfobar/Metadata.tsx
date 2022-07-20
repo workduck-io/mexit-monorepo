@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react'
 import timeLine from '@iconify-icons/ri/time-line'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import refreshLine from '@iconify/icons-ri/refresh-line'
 import { Icon } from '@iconify/react'
+import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
-import useLayout from '../../Hooks/useLayout'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { NodeMetadata, NodeProperties } from '@mexit/core'
 import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { Label } from '@mexit/shared'
 import { ProfileIcon } from '@mexit/shared'
-import { NodeMetadata, NodeProperties } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
-import { ProfileImageWithToolTip } from '../User/ProfileImage'
-import { useContentStore } from '../../Stores/useContentStore'
 
-const Data = styled.div`
+import useLayout from '../../Hooks/useLayout'
+import { useContentStore } from '../../Stores/useContentStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { ProfileImageWithToolTip } from '../User/ProfileImage'
+
+export const Data = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  align-items: center;
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
@@ -24,10 +30,8 @@ interface MetadataProps {
 
 const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
-  const focusMode = useLayoutStore((s) => s.focusMode)
   const getContent = useContentStore((state) => state.getContent)
   const content = getContent(node.nodeid)
-  const { getFocusProps } = useLayout()
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(undefined)
 
   const isEmpty =
@@ -48,22 +52,22 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
 
   if (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty) return null
   return (
-    <MetadataWrapper {...getFocusProps(focusMode)} fadeOnHover={fadeOnHover}>
+    <MetadataWrapper $fadeOnHover={fadeOnHover}>
       <DataGroup>
         {metadata.createdBy !== undefined && (
           <DataWrapper interactive={metadata.createdAt !== undefined}>
             {metadata.createdBy !== undefined ? (
               <ProfileIcon>
-                <ProfileImageWithToolTip props={{ email: metadata.createdBy, size: 32 }} placement="bottom" />
+                <ProfileImageWithToolTip props={{ userid: metadata.createdBy, size: 16 }} placement="bottom" />
               </ProfileIcon>
             ) : (
               <Icon icon={timeLine}></Icon>
             )}
             <div>
-              {metadata.createdAt !== undefined ? <Label>Created</Label> : null}
               {metadata.createdAt !== undefined && (
                 <Data>
-                  <RelativeTime dateNum={metadata.createdAt} />
+                  <Icon icon={addCircleLine} width={16} />
+                  <RelativeTime prefix="created" dateNum={metadata.createdAt} />
                 </Data>
               )}
             </div>
@@ -76,16 +80,16 @@ const Metadata = ({ node, fadeOnHover = true }: MetadataProps) => {
           <DataWrapper interactive={metadata.updatedAt !== undefined}>
             {metadata.lastEditedBy !== undefined ? (
               <ProfileIcon data-title={metadata.lastEditedBy}>
-                <ProfileImageWithToolTip props={{ email: metadata.lastEditedBy, size: 32 }} placement="bottom" />
+                <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
               </ProfileIcon>
             ) : (
               <Icon icon={timeLine}></Icon>
             )}
             <div>
-              {metadata.updatedAt !== undefined ? <Label>Updated</Label> : null}
               {metadata.updatedAt !== undefined && (
                 <Data>
-                  <RelativeTime dateNum={metadata.updatedAt} />
+                  <Icon icon={refreshLine} width={16} />
+                  <RelativeTime prefix={'Updated'} dateNum={metadata.updatedAt} />
                 </Data>
               )}
             </div>
