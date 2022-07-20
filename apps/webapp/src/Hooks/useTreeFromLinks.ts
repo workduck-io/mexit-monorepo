@@ -1,19 +1,23 @@
-import { sanatizeLinks } from '@mexit/core'
 import { useMemo } from 'react'
+
+import { sanatizeLinks, ILink } from '@mexit/core'
+
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
 
 export const useTreeFromLinks = () => {
-  const node = useEditorStore((state) => state.node)
-  const ilinks = useDataStore((store) => store.ilinks)
-  const expanded = useTreeStore((store) => store.expanded)
-  const links = ilinks.map((i) => ({ id: i.path, nodeid: i.nodeid, icon: i.icon }))
-  const sanatizedLinks = sanatizeLinks(links)
-  const tree = useMemo(() => generateTree(sanatizedLinks, expanded), [ilinks, node])
+  const getTreeFromLinks = (links: ILink[]) => {
+    const expanded = useTreeStore.getState().expanded
 
-  return tree
+    const sanatizedLinks = sanatizeLinks(links)
+    const tree = generateTree(sanatizedLinks, expanded)
+
+    return tree
+  }
+
+  return { getTreeFromLinks }
 }
 
 export const useFlatTreeFromILinks = () => {

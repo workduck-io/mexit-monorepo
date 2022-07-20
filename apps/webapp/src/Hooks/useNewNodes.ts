@@ -2,9 +2,9 @@ import { toast } from 'react-hot-toast'
 
 import { generateNodeUID, mog, SEPARATOR } from '@mexit/core'
 
-import { useInternalLinks } from './useInternalLinks'
-import { useApi } from './API/useNodeAPI'
 import { useDataStore } from '../Stores/useDataStore'
+import { useApi } from './API/useNodeAPI'
+import { useInternalLinks } from './useInternalLinks'
 import { useUpdater } from './useUpdater'
 
 export const useNewNodes = () => {
@@ -27,7 +27,7 @@ export const useNewNodes = () => {
     save?: boolean
   ) => {
     try {
-      ilink = checkValidILink({ ilink, parentId, showAlert: false })
+      ilink = checkValidILink({ nodePath: ilink, openedNodePath: parentId, showAlert: false })
       const nodeUID = generateNodeUID()
       const isRoot = ilink.split(SEPARATOR).length === 1
       const parentILink = getParentILink(ilink)
@@ -61,7 +61,7 @@ export const useNewNodes = () => {
     save?: boolean
   ) => {
     try {
-      ilink = checkValidILink({ ilink, parentId, showAlert: false })
+      ilink = checkValidILink({ nodePath: ilink, openedNodePath: parentId, showAlert: false })
       const nodeUID = generateNodeUID()
 
       const parentILink = getParentILink(ilink)

@@ -1,21 +1,32 @@
+import Tippy from '@tippyjs/react'
 import React, { useState } from 'react'
 import { useSpring } from 'react-spring'
-import Tippy from '@tippyjs/react'
+
+import { TabsContainer, TabHeaderContainer, StyledTab, TabPanel, TabBody, TabsWrapper } from '@mexit/shared'
 
 import { TooltipTitleWithShortcut } from '../Components/Shortcuts'
-import { TabsContainer, TabHeaderContainer, StyledTab, TabPanel, TabBody } from './Tab.Styles'
+import { InfobarMode } from '../Stores/useLayoutStore'
 
-type TabType = {
+export enum SidebarTab {
+  'hierarchy' = 'hierarchy',
+  'shared' = 'shared',
+  'bookmarks' = 'bookmarks'
+}
+
+export type SingleTabType = SidebarTab | InfobarMode
+
+export type TabType = {
   label: JSX.Element | string
   component: JSX.Element
-  key: string | number
+  type: SingleTabType
   tooltip?: string
+  shortcut?: string
 }
 
 type TabsProps = {
   tabs: Array<TabType>
-  openedTab: number
-  onChange: (index: number) => void
+  openedTab: SingleTabType
+  onChange: (tabType: SingleTabType) => void
   visible?: boolean
 }
 
@@ -34,21 +45,28 @@ const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
 
   if (openedTab !== previousTab) setPreviousTab(openedTab)
 
+  const index = tabs.findIndex((tab) => tab.type === openedTab)
+
   return (
-    // eslint-disable-next-line
-    // @ts-ignore
-    <TabsContainer style={animationProps} visible={visible.toString()}>
+    <TabsContainer style={animationProps} visible={visible}>
       <TabHeaderContainer>
-        {tabs.map((tab, tabIndex) => (
-          <Tippy delay={200} key={tabIndex} theme="mex" content={<TooltipTitleWithShortcut title={tab.tooltip} />}>
-            <StyledTab key={tabIndex} onClick={() => onChange(tabIndex)} selected={tabIndex === openedTab}>
-              {tab.label}
-            </StyledTab>
-          </Tippy>
-        ))}
+        <TabsWrapper index={index} total={tabs.length}>
+          {tabs.map((tab) => (
+            <Tippy
+              delay={200}
+              key={tab.type}
+              theme="mex-bright"
+              content={<TooltipTitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
+            >
+              <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
+                {tab.label}
+              </StyledTab>
+            </Tippy>
+          ))}
+        </TabsWrapper>
       </TabHeaderContainer>
       <TabPanel style={bodyAnimation}>
-        <TabBody onClick={() => onChange(openedTab)}>{tabs[openedTab]?.component}</TabBody>
+        <TabBody onClick={() => onChange(openedTab)}>{tabs[index]?.component}</TabBody>
       </TabPanel>
     </TabsContainer>
   )

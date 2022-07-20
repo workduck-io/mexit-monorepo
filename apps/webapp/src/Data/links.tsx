@@ -1,21 +1,22 @@
-import React, { useMemo } from 'react'
-import { Icon } from '@iconify/react'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import checkboxLine from '@iconify/icons-ri/checkbox-line'
-import appsLine from '@iconify/icons-ri/apps-line'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import fileDocument from '@iconify/icons-gg/file-document'
+import appsLine from '@iconify/icons-ri/apps-line'
+import checkboxLine from '@iconify/icons-ri/checkbox-line'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import searchLine from '@iconify/icons-ri/search-line'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import { Icon } from '@iconify/react'
+import React, { useMemo } from 'react'
+import { useMatch } from 'react-router-dom'
 
-import { ROUTE_PATHS } from '../Hooks/useRouting'
-import { useHelpStore } from '../Stores/useHelpStore'
-import { NavLinkData } from '../Types/Nav'
 import { getNodeidFromPathAndLinks, useLinks } from '../Hooks/useLinks'
+import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useHelpStore } from '../Stores/useHelpStore'
 import { useReminderStore } from '../Stores/useReminderStore'
-import { useTodoStore } from '../Stores/useTodoStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useTodoStore } from '../Stores/useTodoStore'
+import { NavLinkData } from '../Types/Nav'
 
 /*
 Sidebar links are defined here
@@ -27,81 +28,52 @@ export const GetIcon = (icon: any): React.ReactNode => <Icon icon={icon} />
 
 const useNavlinks = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
-  const nodeid = useEditorStore((store) => store.node.nodeid)
-  const baseNodeId = useDataStore((store) => store.baseNodeId)
-  const snippets = useSnippetStore((store) => store.snippets)
 
-  const reminders = useReminderStore((store) => store.reminders)
-  const ilinks = useDataStore((store) => store.ilinks)
-  const archive = useDataStore((store) => store.archive)
-  const tasks = useTodoStore((store) => store.todos)
-  const { getLinkCount } = useLinks()
+  const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
+  const nodeid = match?.params?.nodeid || useEditorStore.getState().node.nodeid
 
-  const noteId = useMemo(() => {
-    const currentNotId = nodeid === '__null__' ? getNodeidFromPathAndLinks(ilinks, baseNodeId) : nodeid
-    return currentNotId
-  }, [nodeid, ilinks])
-
-  const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks, snippets])
+  // const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks])
 
   const getLinks = () => {
     const links: NavLinkData[] = [
       {
-        title: 'Search',
-        path: ROUTE_PATHS.search,
-        shortcut: shortcuts.showSearch.keystrokes,
-        icon: GetIcon(searchLine)
-      },
-      // {
-      //   title: 'Dashboard',
-      //   path: ROUTE_PATHS.dashborad,
-      //   icon: GetIcon(dashboardLine),
-      //   isComingSoon: true
-      // },
-      {
         title: 'Notes',
-        path: `${ROUTE_PATHS.node}/${noteId}`,
+        path: `${ROUTE_PATHS.node}/${nodeid}`,
         shortcut: shortcuts.showEditor.keystrokes,
-        icon: GetIcon(fileDocument),
-        count: count.notes
+        icon: GetIcon(fileDocument)
+        // count: count.notes
       },
 
       {
         title: 'Snippets',
         path: ROUTE_PATHS.snippets,
         shortcut: shortcuts.showSnippets.keystrokes,
-        icon: GetIcon(quillPenLine),
-        count: count.snippets
+        icon: GetIcon(quillPenLine)
+        // count: count.snippets
       },
       {
         title: 'Tasks',
         path: ROUTE_PATHS.tasks,
         icon: GetIcon(checkboxLine),
-        shortcut: shortcuts.showTasks.keystrokes,
-        count: count.tasks
+        shortcut: shortcuts.showTasks.keystrokes
+        // count: count.tasks
         // isComingSoon: true
-      },
-      {
-        title: 'Integrations',
-        path: ROUTE_PATHS.integrations,
-        shortcut: shortcuts.showIntegrations.keystrokes,
-        icon: GetIcon(appsLine)
       },
       {
         title: 'Reminders',
         path: ROUTE_PATHS.reminders,
         icon: GetIcon(timerFlashLine),
-        count: count.reminders
-        // shortcut: shortcuts.showReminder.keystrokes
+        // count: count.reminders
+        shortcut: shortcuts.showReminder.keystrokes
         // isComingSoon: true
-      }
-      /*{
-        title: 'Flows',
+      },
+
+      {
+        title: 'Integrations',
         path: ROUTE_PATHS.integrations,
-        // shortcut: shortcuts.showIntegrations.keystrokes,
-        icon: GetIcon(appsLine),
-        isComingSoon: true
-      }*/
+        shortcut: shortcuts.showIntegrations.keystrokes,
+        icon: GetIcon(appsLine)
+      }
     ]
     return links
   }

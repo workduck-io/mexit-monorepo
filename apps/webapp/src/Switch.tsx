@@ -1,40 +1,44 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
-
-import EditorView from './Views/EditorView'
-import { useAuthStore } from './Stores/useAuth'
-import { Login } from './Views/Login'
-import { Register } from './Views/Register'
-import ContentEditor from './Components/Editor/ContentEditor'
-import Chotu from './Components/Chotu'
-import Themes from './Components/Themes'
-import * as Actions from './Actions'
-import Snippets from './Views/Snippets'
-import SnippetEditor from './Components/Editor/SnippetEditor'
-
-import UserPage from './Components/User/UserPage'
-
-import { ROUTE_PATHS } from './Hooks/useRouting'
-import Settings from './Views/Settings'
-import Search from './Views/Search'
-import PublicNodeView from './Views/PublicNodeView'
-import styled from 'styled-components'
-import { ForgotPassword } from './Views/ForgotPassword'
-import Tasks from './Views/Tasks'
-import Archive from './Views/Archive'
 import { animated } from 'react-spring'
-import { useSidebarTransition } from './Components/Sidebar/Transition'
-import DraftView from './Views/DraftView'
-import Tag from './Views/Tag'
-import Shortcuts from './Views/Settings/Shortcuts'
-import About from './Views/Settings/About'
-import { useLayoutStore } from './Stores/useLayoutStore'
-import SplashScreen from './Components/SplashScreen'
-import Portals from './Components/Portals'
-import PortalsPage from './Views/PortalsPage'
-import RemindersAll from './Views/Reminders/RemindersAll'
-import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
+import styled from 'styled-components'
+
+import { mog } from '@mexit/core'
+
+import * as Actions from './Actions'
 import RouteNotFound from './Components/404'
+import Chotu from './Components/Chotu'
+import ContentEditor from './Components/Editor/ContentEditor'
+import SnippetEditor from './Components/Editor/SnippetEditor'
+import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
+import Portals from './Components/Portals'
+import { useSidebarTransition } from './Components/Sidebar/Transition'
+import SplashScreen from './Components/SplashScreen'
+import Themes from './Components/Themes'
+import UserPage from './Components/User/UserPage'
+import { useEditorBuffer, useSnippetBuffer } from './Hooks/useEditorBuffer'
+import { ROUTE_PATHS } from './Hooks/useRouting'
+import { useSaveNodeName } from './Hooks/useSaveNodeName'
+import { useAuthStore } from './Stores/useAuth'
+import useBlockStore from './Stores/useBlockStore'
+import { useEditorStore } from './Stores/useEditorStore'
+import { useLayoutStore } from './Stores/useLayoutStore'
+import Archive from './Views/Archive'
+import DraftView from './Views/DraftView'
+import EditorView from './Views/EditorView'
+import { ForgotPassword } from './Views/ForgotPassword'
+import { Login } from './Views/Login'
+import PortalsPage from './Views/PortalsPage'
+import PublicNodeView from './Views/PublicNodeView'
+import { Register } from './Views/Register'
+import RemindersAll from './Views/Reminders/RemindersAll'
+import Search from './Views/Search'
+import Settings from './Views/Settings'
+import About from './Views/Settings/About'
+import Shortcuts from './Views/Settings/Shortcuts'
+import Snippets from './Views/Snippets'
+import Tag from './Views/Tag'
+import Tasks from './Views/Tasks'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   /* position: fixed; */
@@ -173,7 +177,43 @@ const IntegrationRoutes = () => {
 }
 
 export const Switch = () => {
+  const location = useLocation()
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+
   const authenticated = useAuthStore((s) => s.authenticated)
+  const { saveAndClearBuffer: saveEditorBuffer } = useEditorBuffer()
+  const { saveAndClearBuffer: saveSnippetBuffer } = useSnippetBuffer()
+  const { saveNodeName } = useSaveNodeName()
+  const showSidebar = useLayoutStore((s) => s.showSidebar)
+  const hideSidebar = useLayoutStore((s) => s.hideSidebar)
+
+  useEffect(() => {
+    const editorNode = useEditorStore.getState().node
+    // ? Do we need to save data locally on every route change?
+    mog('Changing location', { location })
+    if (authenticated) {
+      if (isBlockMode) setIsBlockMode(false)
+      if (editorNode) saveNodeName(editorNode.nodeid)
+      saveEditorBuffer()
+      saveSnippetBuffer()
+    }
+
+    if (location.pathname) {
+      if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
+        mog('Showing Sidebar', { location })
+        showSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.node)) {
+        mog('Showing Sidebar', { location })
+        showSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
+        showSidebar()
+      } else {
+        mog('Hiding Sidebar', { location })
+        hideSidebar()
+      }
+    }
+  }, [location])
 
   const { switchWrapperSpringProps } = useSidebarTransition()
 

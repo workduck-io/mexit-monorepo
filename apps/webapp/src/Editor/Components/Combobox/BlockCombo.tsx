@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { getPlateEditorRef } from '@udecode/plate'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { mog } from '@mexit/core'
-import { MexIcon, IconButton } from '@mexit/shared'
-
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
-import { useSearch } from '../../../Hooks/useSearch'
-import { KEYBOARD_KEYS } from '../../constants'
+import { MexIcon, IconButton, ComboboxItemTitle } from '@mexit/shared'
 import { ActionTitle, ComboboxShortcuts, ComboSeperator, StyledComboHeader, ShortcutText } from '@mexit/shared'
-import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
-import { ComboboxItem, ItemTitle, ItemDesc, ItemCenterWrapper } from '../../Styles/TagCombobox.styles'
+
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'
+import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
+import { useSearch } from '../../../Hooks/useSearch'
+import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
+import { ComboboxItem, ItemTitle, ItemDesc, ItemCenterWrapper } from '../../Styles/TagCombobox.styles'
+import { KEYBOARD_KEYS } from '../../constants'
 import { BlockIcons } from '../Blocks/BlockIcons'
 
 type BlockComboProps = {
@@ -145,16 +145,16 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
           onClick={clearBlockSearch}
           title={'Back to Quick links'}
         />
-        <ItemTitle>{textAfterTrigger ? `In ${textAfterTrigger}` : `Search`}</ItemTitle>
+        <ComboboxItemTitle>{textAfterTrigger ? `In ${textAfterTrigger}` : `Search`}</ComboboxItemTitle>
       </StyledComboHeader>
       {blocks?.length === 0 && (
         <ComboboxItem key={`search-text`} className="highlight">
           <MexIcon fontSize={16} icon="ri:add-circle-line" color={theme.colors.primary} />
           <ItemCenterWrapper>
-            <ItemTitle>
+            <ComboboxItemTitle>
               No results:&nbsp;
               <PrimaryText>{textAfterBlockTrigger}</PrimaryText>
-            </ItemTitle>
+            </ComboboxItemTitle>
           </ItemCenterWrapper>
         </ComboboxItem>
       )}

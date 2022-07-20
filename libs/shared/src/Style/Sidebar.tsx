@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import React from 'react'
 import styled, { css } from 'styled-components'
+
 import { FocusModeProp, focusStyles } from './Editor'
 import { PixelToCSS, ThinScrollbar } from './Helpers'
 import { Ellipsis } from './Search'
@@ -22,7 +23,6 @@ export const SIcon = (props: any) => {
 export const SidebarDiv = styled.div<FocusModeProp>`
   height: 100%;
   padding-top: ${({ theme }) => theme.spacing.large};
-  max-width: ${({ theme }) => PixelToCSS(theme.width.sidebar)};
   width: 100%;
   transition: opacity 0.3s ease-in-out;
   ${focusStyles}
@@ -71,8 +71,7 @@ export const SidebarSection = styled.div`
     color: ${({ theme }) => theme.colors.secondary};
   } */
 `
-
-export const StyledTreeItemSwitcher = styled.button`
+export const StyledTreeSwitcher = styled.button`
   background: none;
   border: none;
   padding: 0;
@@ -84,10 +83,13 @@ export const StyledTreeItemSwitcher = styled.button`
   justify-content: center;
   width: 18px;
   height: 24px;
-  color: ${({ theme }) => transparentize(0.3, theme.colors.text.fade)};
+  flex-shrink: 0;
   margin-left: ${({ theme }) => theme.spacing.tiny};
+`
+export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
+  color: ${({ theme }) => transparentize(0.3, theme.colors.text.fade)};
   border-radius: 3px;
-  transition: 0.3s ease;
+  transition: 0.1s ease;
   &:hover {
     transition: 0s ease;
     color: ${({ theme }) => theme.colors.primary};
@@ -95,20 +97,21 @@ export const StyledTreeItemSwitcher = styled.button`
   }
 `
 
-export const SidebarItemTitle = styled.div`
+export const ItemTitle = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
   max-width: 220px;
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
+  span {
+    ${Ellipsis}
+  }
+
   svg {
     flex-shrink: 0;
     width: 16px;
     height: 16px;
-  }
-  span {
-    ${Ellipsis}
   }
 `
 
@@ -142,14 +145,27 @@ export const ItemContent = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
 `
 
-export const StyledTreeItem = styled.div<{ selected?: boolean; isDragging?: boolean; isBeingDroppedAt?: boolean }>`
+export const StyledTreeItem = styled.div<{
+  selected?: boolean
+  isDragging?: boolean
+  isBeingDroppedAt?: boolean
+  hasMenuOpen?: boolean
+}>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding-right: 12px;
+  padding-right: 16px;
 
-  transition: 0.3s ease;
+  transition: 0.1s ease;
+
+  ${({ hasMenuOpen, theme }) =>
+    hasMenuOpen &&
+    css`
+      background: ${transparentize(0.5, theme.colors.gray[7])};
+      color: ${theme.colors.text.fade};
+    `}
+
   &:hover {
     transition: 0s ease;
     background: ${({ theme }) => theme.colors.gray[7]};
@@ -183,4 +199,29 @@ export const StyledTreeItem = styled.div<{ selected?: boolean; isDragging?: bool
       background: ${theme.colors.gray[7]};
       box-shadow: inset 0 0 0 1px ${isDragging ? theme.colors.secondary : theme.colors.secondary};
     `}
+`
+
+export const NavigationClusterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
+`
+
+export const NavigationButton = styled.div<{ disabled: boolean }>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing.tiny};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.25;
+      pointer-events: none;
+    `}
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.gray[7]};
+  }
 `

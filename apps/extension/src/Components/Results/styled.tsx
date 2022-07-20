@@ -1,20 +1,11 @@
-import styled, { css } from 'styled-components'
 import { animated } from 'react-spring'
+import styled, { css } from 'styled-components'
+
+import { Scroll } from '@mexit/shared'
 
 export const StyledResults = styled(animated.div)`
   overflow: hidden auto;
   color: ${({ theme }) => theme.colors.text.fade};
-`
-
-export const Scroll = css`
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 `
 
 export const List = styled.div`

@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { transparentize } from 'polished'
-import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
+import { transparentize } from 'polished'
+import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import useRoutingInstrumentation from 'react-router-v6-instrumentation'
+import styled, { css } from 'styled-components'
 
 import { IS_DEV } from '@mexit/core'
 import { linkTooltip } from '@mexit/shared'
+import { GridWrapper } from '@mexit/shared'
+import { navTooltip } from '@mexit/shared'
 
-import styled, { css } from 'styled-components'
 import useNavlinks from '../Data/links'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import { GridWrapper } from '@mexit/shared'
-import { navTooltip } from '@mexit/shared'
 import Analytics from '../Utils/analytics'
 import Nav from './Sidebar/Nav'
 import { useSidebarTransition } from './Sidebar/Transition'
@@ -73,7 +73,6 @@ const Main = ({ children }: MainProps) => {
     }
   }, [routingInstrumentation])
 
-  const { getLinks } = useNavlinks()
   const location = useLocation()
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
@@ -103,15 +102,18 @@ const Main = ({ children }: MainProps) => {
     WebkitAppRegion: 'drag'
   }
 
+  const { gridSpringProps } = useSidebarTransition()
+
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       {/* <Draggable style={styles as any} /> eslint-disable-line @typescript-eslint/no-explicit-any */}
       <GridWrapper
-      // eslint-disable-next-line
-      // @ts-ignore
-      // grid={authenticated && showNav() ? 'true' : 'false'}
+        style={gridSpringProps}
+        // eslint-disable-next-line
+        // @ts-ignore
+        // grid={authenticated && showNav() ? 'true' : 'false'}
       >
-        {authenticated && showNav() && <Nav links={getLinks()} />}
+        {authenticated && showNav() && <Nav />}
         <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
           {children}
         </Content>

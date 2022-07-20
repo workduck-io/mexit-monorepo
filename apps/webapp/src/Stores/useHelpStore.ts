@@ -1,9 +1,10 @@
+import produce from 'immer'
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
+import { IDBStorage } from '@mexit/core'
 
 import { defaultShortcuts } from '../Data/defaultShortcuts'
-import produce from 'immer'
-import { persist } from 'zustand/middleware'
-import { IDBStorage } from '@mexit/core'
 
 export const mergeShortcuts = (oldShortcuts, newShortcuts) => {
   const currentShortcuts = newShortcuts
@@ -63,7 +64,7 @@ export const useHelpStore = create<HelpState>(
     {
       name: 'mexit-help-store',
       getStorage: () => IDBStorage,
-      version: 0,
+      version: 1,
       migrate: (persistedState: any, version: number) => {
         persistedState.shortcuts = mergeShortcuts(persistedState.shortcuts, defaultShortcuts)
         return persistedState

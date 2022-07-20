@@ -83,7 +83,7 @@ export const useInternalLinks = () => {
 
     const newILinks: ILink[] = newPaths.map((l) => {
       const addedILink = { nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(), path: l, icon: getNodeIcon(l) }
-      addedILink.path = checkValidILink({ ilink: addedILink.path, showAlert: true, parentId: undefined })
+      addedILink.path = checkValidILink({ nodePath: addedILink.path, showAlert: true, openedNodePath: undefined })
 
       return addedILink
     })

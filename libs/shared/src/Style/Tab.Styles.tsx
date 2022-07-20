@@ -64,6 +64,31 @@ export const TabsContainer = styled(animated.section)<{ visible?: boolean }>`
   width: 100%;
 `
 
+export const TabsWrapper = styled.div<{ index: number; total: number }>`
+  display: flex;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  gap: 0 ${({ theme }) => theme.spacing.small};
+
+  ${({ index, total }) =>
+    css`
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: calc(100% / ${total});
+        height: 4px;
+        border-radius: ${({ theme }) => theme.borderRadius.small};
+        top: 46px;
+        left: 0;
+        background: ${({ theme }) => theme.colors.primary};
+        transform: translateX(${index * 100}%);
+        transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+      }
+    `}
+`
+
 export const TabHeaderContainer = styled.div`
   display: flex;
   gap: 0 ${({ theme }) => theme.spacing.small};

@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react'
-import styled, { css, useTheme } from 'styled-components'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import { Icon } from '@iconify/react'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { FocusModeProp, focusStyles } from '@mexit/shared'
 import Tippy from '@tippyjs/react'
-import { TooltipTitleWithShortcut } from './Shortcuts'
-import { useHelpStore } from '../Stores/useHelpStore'
-import useLayout from '../Hooks/useLayout'
+import React, { useEffect } from 'react'
+import styled, { css, useTheme } from 'styled-components'
 import tinykeys from 'tinykeys'
+
+import { FocusModeProp, focusStyles } from '@mexit/shared'
+
+import useLayout from '../Hooks/useLayout'
 import { useKeyListener } from '../Hooks/useShortcutListener'
+import { useHelpStore } from '../Stores/useHelpStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
+import { TooltipTitleWithShortcut } from './Shortcuts'
 
 const LogoWrapper = styled.div<{ $expanded: boolean }>`
   ${({ $expanded }) => ($expanded ? 'width: 100%;' : 'width: 40px;')}
@@ -37,6 +39,7 @@ export const Logo = () => {
 }
 interface SidebarToggleWrappperProps extends FocusModeProp {
   expanded: boolean
+  show: boolean
 }
 
 export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
@@ -45,21 +48,38 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
   ${({ expanded, theme }) =>
     expanded
       ? css`
-          top: ${theme.additional.hasBlocks ? 76 : 35}px;
-          left: ${theme.additional.hasBlocks ? 296 : 280}px;
+          top: ${theme.additional.hasBlocks ? 84 : 64}px;
+          left: ${theme.additional.hasBlocks ? 335 : 324}px;
         `
       : css`
           top: ${theme.additional.hasBlocks ? 84 : 64}px;
-          left: ${theme.additional.hasBlocks ? 86 : 68}px;
+          left: ${theme.additional.hasBlocks ? 86 : 70}px;
         `}
-  transition: left 0.5s ease, top 0.5s ease;
+
+  transition: left 0.5s ease, top 0.5s ease, background 0.5s ease, box-shadow 0.5s ease;
   z-index: 11;
-  background-color: ${({ theme }) => theme.colors.gray[7]};
   padding: 8px;
   display: flex;
   align-items: center;
-  border-radius: 4px;
-  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 100%;
+  background: ${({ theme }) => theme.colors.secondary};
+
+  ${({ show }) =>
+    !show &&
+    css`
+      display: none;
+    `}
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
+    background: ${({ theme }) => theme.colors.secondary};
+  }
+
+  &:active {
+    transition: background 0.1s ease;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 export const TrafficLightBG = styled.div`
@@ -111,7 +131,12 @@ export const SidebarToggle = () => {
         />
       }
     >
-      <SidebarToggleWrapper onClick={toggleSidebar} expanded={sidebar.expanded} {...getFocusProps(focusMode)}>
+      <SidebarToggleWrapper
+        onClick={toggleSidebar}
+        expanded={sidebar.expanded}
+        show={sidebar.show}
+        {...getFocusProps(focusMode)}
+      >
         <Icon icon={sidebar.expanded ? arrowLeftSLine : arrowRightSLine} />
       </SidebarToggleWrapper>
     </Tippy>
