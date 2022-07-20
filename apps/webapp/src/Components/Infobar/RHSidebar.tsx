@@ -16,9 +16,7 @@ const RHSidebarContent = () => {
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
   const isArchive = useMatch(ROUTE_PATHS.archive)
-  const isPublicView = useMatch(`${ROUTE_PATHS.share}/:nodeid`)
 
-  console.log('publick', isPublicView)
   if (!sidebar.show) return <></>
 
   if (isEditor) return <InfoBar />

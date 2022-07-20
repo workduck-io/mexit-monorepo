@@ -29,7 +29,7 @@ const InfoBarItems = () => {
       {
         label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
         type: 'default',
-        component: isPublicView ? <PublicDataInfobar nodeId={isPublicView.params.nodeid} /> : <DataInfoBar />,
+        component: <DataInfoBar />,
         tooltip: 'Context'
       },
       {
