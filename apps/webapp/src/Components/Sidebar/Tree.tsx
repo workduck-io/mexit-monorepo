@@ -124,6 +124,7 @@ const Tree = ({ initTree }: TreeProps) => {
   const expandNode = useTreeStore((state) => state.expandNode)
   const collapseNode = useTreeStore((state) => state.collapseNode)
   const prefillModal = useRefactorStore((state) => state.prefillModal)
+  const { push } = useNavigation()
   const { goTo } = useRouting()
 
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
@@ -137,6 +138,7 @@ const Tree = ({ initTree }: TreeProps) => {
   const [source, target] = useSingleton()
 
   const onOpenItem = (itemId: string, nodeid: string) => {
+    push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
     changeTree(mutateTree(tree, itemId, { isExpanded: true }))
     // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, nodeid)
