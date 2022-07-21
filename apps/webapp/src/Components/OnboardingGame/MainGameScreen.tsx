@@ -6,7 +6,8 @@ import {
   Container,
   PlayArea,
   Scoreboard,
-  GameOverContainer
+  GameOverContainer,
+  ScoreText
 } from '../../Style/OnboardingGame'
 import Timer from './Timer'
 import KeyboardSprite from './KeyboardSprite'
@@ -14,6 +15,7 @@ import MouseSprite from './MouseSprite'
 import GameInstructions from './GameInstructions'
 import Modal from 'react-modal'
 import GameProgressBar from './GameProgressBar'
+import { useGameStore } from '../../Stores/useGameStore'
 function MainGameScreen() {
   const [start, setStart] = useState<boolean>(false)
   const [gameOver, setGameOver] = useState<boolean>(false)
@@ -22,6 +24,12 @@ function MainGameScreen() {
   const [currentTime, setCurrentTime] = useState<number>(0)
   const [keyTime, setKeyTime] = useState<number>(0)
   const [clickTime, setClickTime] = useState<number>(0)
+
+  const [count, setCount] = useState<number>(1)
+
+  const score = useGameStore((store) => store.score)
+  const setScore = useGameStore((store) => store.setScore)
+  const cleanScore = useGameStore((store) => store.cleanScore)
 
   const [x, setX] = useState<number>(0)
   const [y, setY] = useState<number>(0)
@@ -64,11 +72,23 @@ function MainGameScreen() {
     }
   }
 
+  const calculateScore = () => {
+    const pow = -Math.abs(Math.ceil(currentTime / 100))
+    console.log(pow)
+    const factor = Math.exp(pow)
+    console.log(factor)
+    const sc = count * factor
+    console.log(sc)
+    setScore(Math.ceil(sc))
+  }
+
   const clickHandler = () => {
     setClickTime((time) => time + currentTime)
     setCurrentTime(0)
+    setCount((prevCount) => prevCount + 1)
     generateRandomCoord()
     generateRandomSprite()
+    calculateScore()
   }
 
   const modalHandler = () => {
@@ -79,21 +99,24 @@ function MainGameScreen() {
     if (e.key === randomKey) {
       setKeyTime((time) => time + currentTime)
       setCurrentTime(0)
+      setCount((prevCount) => prevCount + 1)
       generateRandomCoord()
       generateRandomSprite()
-
       generateRandomLetter()
+      calculateScore()
     }
   }
 
   const StartActionHandler = () => {
     setStart(true)
     setTimer(true)
+    cleanScore()
   }
   const StopActionHandler = () => {
     setStart(false)
     setTimer(false)
     setGameOver(true)
+    setCount(1)
   }
 
   const generateRandomLetter = () => {
@@ -104,7 +127,6 @@ function MainGameScreen() {
   useEffect(() => {
     generateRandomCoord()
     generateRandomSprite()
-
     generateRandomLetter()
     getNewSize()
   }, [])
@@ -122,15 +144,23 @@ function MainGameScreen() {
         <Modal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={modalHandler} isOpen={gameOver}>
           <GameOverContainer>
             <h1>Game Over!</h1>
-            <h3>Key Time: {keyTime}</h3>
-            <h3>Click Time: {clickTime}</h3>
+            <h2>FINAL SCORE: {score}</h2>
             <GameProgressBar percentage={(clickTime * 100) / (clickTime + keyTime)} />
           </GameOverContainer>
         </Modal>
       ) : (
         ''
       )}
-      <Scoreboard>{start ? <Timer active={timer} time={currentTime} setTime={setCurrentTime} /> : ''}</Scoreboard>
+      <Scoreboard>
+        {start ? (
+          <>
+            <Timer active={timer} time={currentTime} setTime={setCurrentTime} />
+            <ScoreText>SCORE: {score}</ScoreText>
+          </>
+        ) : (
+          ''
+        )}
+      </Scoreboard>
       <ActionBoard>
         {start ? (
           <ActionButton action={'stop'} onClick={StopActionHandler}>

@@ -37,7 +37,7 @@ const Timer = (props: TimerProps) => {
 
   return (
     <TimeContainer style={animateTime}>
-      <TimeText>{ms}</TimeText>
+      <TimeText>{ms} s</TimeText>
     </TimeContainer>
   )
 }

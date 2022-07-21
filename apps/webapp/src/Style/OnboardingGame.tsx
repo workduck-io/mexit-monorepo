@@ -21,6 +21,11 @@ export const Scoreboard = styled.div`
   justify-content: center;
   width: 100%;
 `
+
+export const ScoreText = styled.p`
+  font-size: 1.25rem;
+`
+
 export const ActionBoard = styled.div`
   width: 100%;
   padding: 1rem;
@@ -48,11 +53,12 @@ export const PlayArea = styled.div`
 `
 
 export const TimeText = styled.h3`
-  font-size: 1.5rem;
+  font-size: 0.75rem;
 `
 
 export const TimeContainer = styled(animated.div)`
   width: 50%;
+  height: 2rem;
   display: flex;
   justify-content: center;
 `
