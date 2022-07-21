@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
 import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import config from '../../config'
-
+import { OptionButton } from '../../Style/AuthFlow'
 export interface LoadingButtonProps {
   children?: React.ReactNode
   loading?: boolean
@@ -19,7 +19,6 @@ export interface LoadingButtonProps {
 export interface GoogleLoginButtonProps {
   text: string
 }
-
 
 export const LoadingButton = ({ children, dots, loading, alsoDisabled, buttonProps, style }: LoadingButtonProps) => {
   const theme = useTheme()
@@ -56,16 +55,15 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
     // if (newWindow) newWindow.opener = null
   }
   return (
-    <GoogleAuthButton
-      large={true}
+    <OptionButton
       onClick={() => {
         openUrl(authURL)
       }}
     >
-      <div style={{ marginRight: 8, width: 25, height: 25, marginTop: 1 }}>
+      <div style={{ marginRight: 1, width: 25, height: 25, marginTop: 1 }}>
         <Icon fontSize={23} icon="flat-color-icons:google" />
       </div>
       <div>{text}</div>
-    </GoogleAuthButton>
+    </OptionButton>
   )
 }

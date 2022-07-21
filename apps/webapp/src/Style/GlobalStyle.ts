@@ -90,7 +90,9 @@ const GlobalStyle = createGlobalStyle`
   ${({ theme }) => {
     if (
       theme?.custom &&
-      (window.location.pathname.startsWith('/share') || window.location.pathname.startsWith('/actions'))
+      (window.location.pathname.startsWith('/share') ||
+        window.location.pathname.startsWith('/actions') ||
+        window.location.pathname.startsWith('/auth'))
     ) {
       return css`
         ${GridWrapper} {

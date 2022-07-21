@@ -171,47 +171,38 @@ export const ButtonFields = styled.div`
 export const ReactSelectStyles = (theme: DefaultTheme) => ({
   menu: (provided, state) => ({
     ...provided,
-    // width: state.selectProps.width,
-    color: state.selectProps.menuColor,
-    backgroundColor: theme.colors.background.modal,
-    padding: `${theme.spacing.small} ${theme.spacing.small}`
+    width: '100%',
+    color: 'black',
+    backgroundColor: 'white'
+    // padding: `${theme.spacing.small} ${theme.spacing.small}`
     // padding: 20,
   }),
 
   control: (provided) => ({
     ...provided,
-    backgroundColor: theme.colors.form.input.bg,
-    borderColor: theme.colors.form.input.border,
+    width: '100%',
+    // backgroundColor: theme.colors.form.input.bg,
+    backgroundColor: 'white',
+    // borderColor: theme.colors.form.input.border,
     margin: `${theme.spacing.small} 0`
   }),
 
-  option: (provided, state) => {
-    let background = state.isSelected ? theme.colors.primary : 'transparent'
-    background = state.isFocused ? transparentize(0.33, theme.colors.primary) : background
-    return {
-      ...provided,
-      borderRadius: theme.borderRadius.tiny,
-      backgroundColor: background,
-      color: state.isSelected || state.isFocused ? theme.colors.text.oppositePrimary : 'inherit',
-      padding: '6px 10px',
-      margin: `${theme.spacing.tiny} 0px`
-    }
-  }
+  option: (provided, state) => ({
+    ...provided,
+    width: '100%',
+    borderRadius: theme.borderRadius.tiny,
+    backgroundColor: state.isSelected || state.isFocused ? theme.colors.primary : 'transparent',
+    color: state.isSelected || state.isFocused ? theme.colors.text.oppositePrimary : 'inherit'
+    // padding: '6px 10px',
+    // margin: `${theme.spacing.tiny} 0px`
+  })
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StyledSelect = (props: any) => {
   const theme = useTheme()
-  return (
-    <Select
-      captureMenuScroll
-      blurInputOnSelect
-      menuShouldBlockScroll
-      theme={theme.additional.reactSelect}
-      styles={ReactSelectStyles(theme)}
-      {...props}
-    ></Select>
-  )
+  // return <Select {...props} theme={theme.additional.reactSelect} styles={ReactSelectStyles(theme)}></Select>
+  return <Select {...props}></Select>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

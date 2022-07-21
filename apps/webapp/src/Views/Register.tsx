@@ -3,39 +3,71 @@ import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
+import Cookies from 'universal-cookie'
+import { useSpring } from 'react-spring'
+import { useTheme } from 'styled-components'
 
 import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
-import {
-  AuthForm,
-  BackCard,
-  Button,
-  ButtonFields,
-  CenteredColumn,
-  FooterCard,
-  Label,
-  StyledCreatatbleSelect,
-  Title
-} from '@mexit/shared'
-
-import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
-import { StyledRolesSelectComponents } from '../Style/Select'
-import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
+import { useAuthStore } from '../Stores/useAuth'
+import { useAuthentication } from '../Stores/useAuth'
+import { useInitializeAfterAuth } from '../Stores/useAuth'
 import { EMAIL_REG, PASSWORD, ALIAS_REG } from '../Utils/constants'
 import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
+import Analytics from '../Utils/analytics'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
+import PasswordChecker from '../Components/PasswordChecker'
+import { StyledCreatatbleSelect } from '@mexit/shared'
+import {
+  Container,
+  Header,
+  Message,
+  SectionForm,
+  SectionInteractive,
+  InteractiveContentWrapper,
+  Space,
+  Tabs,
+  TabLink,
+  SignInOptions,
+  OptionHeader,
+  Line,
+  AuthIcon,
+  InteractiveHeader,
+  SubContent
+} from '../Style/AuthFlow'
+import { Form, FormGroup, Input, SubmitButton } from '../Style/Form'
+import LoaderButton from '../Components/Buttons/LoaderButton'
+import ImagesContainer from '../Components/ImagesContainer'
+import Error from '../Components/Buttons/Errors'
+import Creatable from 'react-select/creatable'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
   const [password, setPassword] = useState<string>()
+  const [confirmPassword, setConfirmPassword] = useState<string>(false)
   const [arePasswordEqual, setArePasswordEqual] = useState<boolean>(true)
   const registerForm = useForm<RegisterFormData>()
   const verifyForm = useForm<VerifyFormData>()
-
   const { registerDetails, verifySignup } = useAuthentication()
   const registered = useAuthStore((store) => store.registered)
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const { resendCode } = useAuth()
   const { initializeAfterAuth } = useInitializeAfterAuth()
+
+  const theme = useTheme()
+
+  const [show, setShow] = useState<boolean>(false)
+  const [showConfirm, setShowConfirm] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('')
+  const [verify, setVerify] = useState<boolean>(false)
+
+  const [statusEmail, setStatusEmail] = useState<string>('rest')
+  const [statusName, setStatusName] = useState<string>('rest')
+  const [statusAlias, setStatusAlias] = useState<string>('rest')
+  const [statusPass, setStatusPass] = useState<string>('rest')
+  const [statusConfirm, setStatusConfirm] = useState<string>('rest')
+  const [statusSelect, setStatusSelect] = useState<string>('rest')
+  const [statusCode, setStatusCode] = useState<string>('rest')
+  const [showStrength, setShowStrength] = useState<boolean>(false)
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -51,7 +83,6 @@ export const Register = () => {
         toast('Verification code sent!')
       })
       .catch(() => toast.error('Code could not be sent'))
-
     setReqCode(false)
   }
 
@@ -73,166 +104,551 @@ export const Register = () => {
     }
   }
 
+  const animateForm = useSpring({
+    from: {
+      opacity: 0
+    },
+    to: {
+      opacity: 1
+    },
+    config: {
+      duration: 250
+    }
+  })
+
+  const animateTabContainer = useSpring({
+    from: {
+      marginBottom: -2 + 'rem'
+    },
+    to: {
+      marginBottom: 0 + 'rem'
+    }
+  })
+
   const onCancelVerification = (e) => {
     e.preventDefault()
     setRegistered(false)
   }
 
+  const customStyles = {
+    container: (provided) => ({
+      ...provided,
+      width: '100%',
+      border: 'none'
+    }),
+    control: (provided) => ({
+      display: 'flex',
+      gap: '10px',
+      maxHeight: '25px',
+      fontSize: '14px',
+      outline: 'none',
+      width: '100%',
+      color: '#B1B1B1',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      border: 'none',
+      marginLeft: '-0.65rem'
+    }),
+    menu: (provided) => ({
+      ...provided,
+      marginLeft: '-1.75rem',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      width: '110%'
+    }),
+    option: (provided) => ({
+      ...provided,
+      color: `${theme.colors.primary}`
+    }),
+    indicatorSeparator: (provided) => ({
+      display: 'none'
+    }),
+    indicatorsContainer: (provided) => ({
+      ...provided,
+      alignSelf: 'center',
+      marginRight: '-1.25rem',
+      color: '#5E6271'
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      marginTop: '-1px',
+      color: `${theme.colors.primary}`,
+      backgroundColor: `${theme.colors.gray[8]}`,
+      border: `1px solid ${theme.colors.primary}`
+    }),
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: `${theme.colors.primary}`
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      marginTop: '-0.05rem',
+      backgroundColor: `${theme.colors.gray[8]}`,
+      color: '#B1B1B1'
+    }),
+    placeholder: (provided) => ({
+      color: '#5E6271',
+      marginLeft: '0.25rem'
+    })
+  }
+
+  const nextForm = !verify ? (
+    <>
+      <Space></Space>
+      <Space></Space>
+      <Message>
+        <h1>Secure Your Account</h1>
+      </Message>
+      <Form>
+        <FormGroup
+          status={statusEmail}
+          tabIndex={-1}
+          onFocus={() => {
+            setStatusEmail('focus')
+            if (registerForm.formState.errors.email) {
+              setStatusEmail('error')
+            }
+          }}
+          onBlur={() => {
+            setStatusEmail('rest')
+            if (registerForm.formState.errors.email) {
+              setStatusEmail('error')
+            }
+          }}
+        >
+          <AuthIcon icon="ic:baseline-alternate-email" width={18} />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            {...registerForm.register('email', {
+              required: true,
+              pattern: EMAIL_REG
+            })}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (registerForm.formState.errors.email) {
+                if (e.target.value !== undefined || e.target.value !== '') {
+                  setStatusEmail('focus')
+                  registerForm.clearErrors()
+                }
+                if (!EMAIL_REG.test(e.target.value)) {
+                  setStatusEmail('error')
+                  registerForm.setError('email', { type: 'focus' })
+                }
+              }
+              if (e.target.value === undefined || e.target.value === '') {
+                registerForm.setError('email', { type: 'focus' })
+                setStatusEmail('error')
+              }
+              if (!EMAIL_REG.test(e.target.value)) {
+                setStatusEmail('error')
+                registerForm.setError('email', { type: 'focus' })
+              }
+            }}
+          />
+        </FormGroup>
+        {regErrors.email && <Error message="Please enter a valid email!" />}
+        <p>We'll send you a code to verify this email.</p>
+        <SubmitButton
+          onClick={() => {
+            setVerify(true)
+          }}
+        >
+          Send Code
+        </SubmitButton>
+      </Form>
+    </>
+  ) : (
+    <>
+      <Space></Space>
+      <Message>
+        <h1>Enter the verification Code</h1>
+      </Message>
+      <Form onSubmit={verifyForm.handleSubmit(onVerifySubmit)} style={animateForm}>
+        <FormGroup
+          status={statusCode}
+          tabIndex={-1}
+          onFocus={() => {
+            setStatusCode('focus')
+            if (verifyForm.formState.errors.code) {
+              setStatusCode('error')
+            }
+          }}
+          onBlur={() => {
+            setStatusCode('rest')
+            if (verErrors.code) {
+              setStatusCode('error')
+            }
+          }}
+        >
+          <AuthIcon icon="bx:lock" width={18} />
+          <Input
+            placeholder="Enter the 6-Character code"
+            name="code"
+            {...verifyForm.register('code', {
+              required: true
+            })}
+            onChange={(e) => {
+              if (verErrors.code) {
+                if (e.target.value !== undefined || e.target.value !== '') {
+                  setStatusCode('focus')
+                  verifyForm.clearErrors()
+                }
+              }
+              if (e.target.value === undefined || e.target.value === '') {
+                verifyForm.setError('code', { type: 'focus' })
+                setStatusCode('error')
+              }
+            }}
+          />
+        </FormGroup>
+        {verErrors.code?.type === 'required' ? <Error message="Please enter the verification code!" /> : undefined}
+        {/* {verSubmitting ? <LoaderButton /> : <SubmitButton>Verify</SubmitButton>}
+         */}
+        <LoadingButton
+          loading={verSubmitting}
+          alsoDisabled={verErrors.code !== undefined}
+          buttonProps={{ type: 'submit', primary: true, large: true }}
+        >
+          Verify Code
+        </LoadingButton>
+      </Form>
+      <Message>
+        <Space></Space>
+        <p>Didn't get a confirmation email?</p>
+        <p>
+          Check your spam folder or <span onClick={onResendRequest}>Send again</span>
+        </p>
+      </Message>
+    </>
+  )
+
   return (
-    <CenteredColumn>
-      <BackCard>
-        <Title>Register</Title>
+    <Container>
+      <SectionInteractive>
+        <InteractiveContentWrapper>
+          <InteractiveHeader>
+            <h1>Augment Thoughts.</h1>
+            <h1> Automate Task.</h1>
+          </InteractiveHeader>
+        </InteractiveContentWrapper>
+        <SubContent>
+          <ImagesContainer />
+          <p>3k+ founders and Product Managers joined us, now it’s your turn</p>
+        </SubContent>
+      </SectionInteractive>
+      <SectionForm>
         {!registered ? (
           <>
-            <AuthForm onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
-              <InputFormError
-                name="name"
-                label="Name"
-                inputProps={{
-                  autoFocus: true,
-                  ...registerForm.register('name', {
-                    required: true
-                  })
+            <Header state={'register'}>
+              <Message>
+                <h1>Create Account</h1>
+                <p>Welcome back! Please enter your details.</p>
+              </Message>
+            </Header>
+            <Tabs style={animateTabContainer}>
+              <TabLink to={ROUTE_PATHS.login} status={false}>
+                Login
+              </TabLink>
+              <TabLink to={ROUTE_PATHS.register} status={true}>
+                Register
+              </TabLink>
+            </Tabs>
+
+            <Form onSubmit={registerForm.handleSubmit(onRegisterSubmit)}>
+              <FormGroup
+                status={statusName}
+                tabIndex={-1}
+                onFocus={() => {
+                  setStatusName('focus')
+                  if (regErrors.name) {
+                    setStatusName('error')
+                  }
                 }}
-                errors={regErrors}
-              ></InputFormError>
-
-              <InputFormError
-                name="email"
-                label="Email"
-                inputProps={{
-                  ...registerForm.register('email', {
-                    required: true,
-                    pattern: EMAIL_REG
-                  })
+                onBlur={() => {
+                  setStatusName('rest')
+                  if (registerForm.formState.errors.name) {
+                    setStatusEmail('error')
+                  }
                 }}
-                errors={regErrors}
-              ></InputFormError>
-              <InputFormError
-                name="alias"
-                label="Alias"
-                inputProps={{
-                  placeholder: 'Ex: CoolGuy',
-                  ...registerForm.register('alias', {
+              >
+                <AuthIcon icon="system-uicons:user-male" width={16} />
+                <Input
+                  name="name"
+                  type="text"
+                  placeholder="Name"
+                  {...registerForm.register('name', {
                     required: true,
-                    pattern: ALIAS_REG
-                  })
-                }}
-                additionalInfo="Only Alphanumeric as content, and -_ as separators allowed"
-                errors={regErrors}
-              ></InputFormError>
-
-              <Label htmlFor="roles">What roles are you part of?</Label>
-              <Controller
-                control={registerForm.control}
-                render={({ field }) => (
-                  <StyledCreatatbleSelect
-                    {...field}
-                    isMulti
-                    isCreatable
-                    options={UserRoleValues}
-                    closeMenuOnSelect={true}
-                    closeMenuOnBlur={false}
-                    components={StyledRolesSelectComponents}
-                    placeholder="Ex. Developer, Designer"
-                  />
-                )}
-                rules={{ required: true }}
-                name="roles"
-              />
-
-              <InputFormError
-                name="password"
-                label="Password"
-                inputProps={{
-                  type: 'password',
-                  ...registerForm.register('password', {
-                    required: true,
-                    pattern: PASSWORD,
-                    onChange: (e) => setPassword(e.target.value)
-                  })
-                }}
-                errors={regErrors}
-              ></InputFormError>
-
-              {regErrors.password?.type === 'pattern' ? <PasswordRequirements /> : undefined}
-
-              <InputFormError
-                name="confirmpassword"
-                label="Confirm Password"
-                inputProps={{
-                  type: 'password',
-                  ...registerForm.register('confirmPassword', {
-                    required: true,
-                    pattern: PASSWORD,
-                    deps: ['password'],
-                    onChange: (e) => {
-                      if (e.target.value.toString() !== password) {
-                        setArePasswordEqual(false)
-                      } else {
-                        setArePasswordEqual(true)
+                    minLength: 2
+                  })}
+                  onChange={(e) => {
+                    if (registerForm.formState.errors.name) {
+                      if (e.target.value !== undefined || e.target.value === '') {
+                        setStatusName('focus')
+                        registerForm.clearErrors()
                       }
                     }
-                  })
+                    if (e.target.value === undefined || e.target.value === '') {
+                      setStatusName('error')
+                      registerForm.setError('name', { type: 'focus' })
+                    }
+                  }}
+                />
+              </FormGroup>
+              {registerForm.formState.errors.name && <Error message="Please enter a name!" />}
+              <FormGroup
+                status={statusEmail}
+                tabIndex={-1}
+                onFocus={() => {
+                  setStatusEmail('focus')
+                  if (regErrors.email) {
+                    setStatusEmail('error')
+                  }
                 }}
-                errors={regErrors}
-              ></InputFormError>
+                onBlur={() => {
+                  setStatusEmail('rest')
+                  if (regErrors.email) {
+                    setStatusEmail('error')
+                  }
+                }}
+              >
+                <AuthIcon icon="ic:baseline-alternate-email" width={16} />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  {...registerForm.register('email', {
+                    required: true,
+                    pattern: EMAIL_REG
+                  })}
+                  onChange={(e) => {
+                    if (regErrors.email) {
+                      if (e.target.value !== undefined || e.target.value !== '') {
+                        setStatusEmail('focus')
+                        registerForm.clearErrors()
+                      }
+                      if (!EMAIL_REG.test(e.target.value)) {
+                        setStatusEmail('error')
+                        registerForm.setError('email', { type: 'focus' })
+                      }
+                    }
+                    if (e.target.value === undefined || e.target.value === '') {
+                      registerForm.setError('email', { type: 'focus' })
+                      setStatusEmail('error')
+                    }
+                    if (!EMAIL_REG.test(e.target.value)) {
+                      setStatusEmail('error')
+                      registerForm.setError('email', { type: 'focus' })
+                    }
+                  }}
+                />
+              </FormGroup>
+              {regErrors.email && <Error message="Please enter a valid email!" />}
+              <FormGroup
+                status={statusSelect}
+                tabIndex={1}
+                onFocus={() => {
+                  setStatusSelect('focus')
+                  if (registerForm.formState.errors.roles) {
+                    setStatusSelect('error')
+                  }
+                }}
+                onBlur={() => {
+                  setStatusSelect('rest')
+                  if (registerForm.formState.errors.roles) {
+                    setStatusSelect('error')
+                  }
+                }}
+              >
+                <AuthIcon icon="system-uicons:user-male" width={18} />
+                <Controller
+                  control={registerForm.control}
+                  render={({ field }) => (
+                    <Creatable
+                      isCreatable
+                      isMulti
+                      options={UserRoleValues}
+                      closeMenuOnSelect={true}
+                      closeMenuOnBlur={false}
+                      styles={customStyles}
+                      rules={{ required: true }}
+                    />
+                  )}
+                  name="roles"
+                />
+              </FormGroup>
+              <FormGroup
+                status={statusAlias}
+                tabIndex={0}
+                onFocus={() => {
+                  setStatusAlias('focus')
+                  if (regErrors.alias) {
+                    setStatusAlias('error')
+                  }
+                }}
+                onBlur={() => {
+                  setStatusAlias('rest')
+                  if (regErrors.alias) {
+                    setStatusAlias('error')
+                  }
+                }}
+              >
+                <AuthIcon icon="system-uicons:user-male" width={16} />
+                <Input
+                  name="alias"
+                  type="text"
+                  placeholder="Alias"
+                  {...registerForm.register('alias', {
+                    required: true,
+                    pattern: ALIAS_REG
+                  })}
+                  onChange={(e) => {
+                    if (regErrors.alias) {
+                      if (e.target.value !== undefined || e.target.value !== '') {
+                        registerForm.clearErrors()
+                        setStatusAlias('focus')
+                      }
+                      if (!ALIAS_REG.test(e.target.value)) {
+                        setStatusAlias('error')
+                        registerForm.setError('alias', { type: 'focus' })
+                      }
+                    }
+                    if (e.target.value === undefined || e.target.value === '') {
+                      registerForm.setError('alias', { type: 'focus' })
+                      setStatusAlias('error')
+                    }
+                    if (!ALIAS_REG.test(e.target.value)) {
+                      setStatusAlias('error')
+                      registerForm.setError('alias', { type: 'focus' })
+                    }
+                  }}
+                />
+              </FormGroup>
+              {registerForm.formState.errors.alias && <Error message="Please enter an alias!" />}
+              <FormGroup
+                style={animateForm}
+                status={statusPass}
+                tabIndex={-1}
+                onFocus={() => {
+                  setStatusPass('focus')
+                  setShowStrength(true)
+                  if (registerForm.formState.errors.password) {
+                    setStatusPass('error')
+                  }
+                }}
+                onBlur={() => {
+                  setStatusPass('rest')
+                  if (registerForm.formState.errors.password) {
+                    setStatusPass('error')
+                  }
+                  setShowStrength(false)
+                }}
+              >
+                <AuthIcon icon="bx:lock" width={18} />
+                <Input
+                  type={show ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Password"
+                  {...registerForm.register('password', {
+                    required: true
+                  })}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    if (regErrors.password) {
+                      if (e.target.value !== undefined || e.target.value !== '') {
+                        setStatusPass('focus')
+                        registerForm.clearErrors()
+                      }
+                    }
+                    if (e.target.value === undefined || e.target.value === '') {
+                      registerForm.setError('password', { type: 'focus' })
+                      setStatusPass('error')
+                    }
+                    if (e.target.value.toString() !== confirmPassword) {
+                      setStatusConfirm('error')
+                      setArePasswordEqual(false)
+                    }
+                    if (e.target.value.toString() === confirmPassword) {
+                      setArePasswordEqual(true)
+                      setStatusConfirm('rest')
+                    }
+                  }}
+                />
+                <AuthIcon
+                  icon={show ? 'bxs:hide' : 'bxs:show'}
+                  width={18}
+                  onClick={() => {
+                    setShow(!show)
+                  }}
+                />
+              </FormGroup>
 
-              {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
-
-              <ButtonFields>
-                <LoadingButton
-                  loading={regSubmitting}
-                  alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
-                  buttonProps={{ type: 'submit', primary: true, large: true }}
-                >
-                  Send Verification Code
-                </LoadingButton>
-              </ButtonFields>
-            </AuthForm>
-            <GoogleLoginButton text={'Register via Google'} />
-          </>
-        ) : (
-          <AuthForm onSubmit={verifyForm.handleSubmit(onVerifySubmit)}>
-            <Input
-              name="code"
-              label="Code"
-              inputProps={{
-                ...verifyForm.register('code', {
-                  required: true
-                })
-              }}
-              error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
-            ></Input>
-
-            <LoadingButton
-              loading={reqCode}
-              buttonProps={{
-                id: 'resendCodeButton',
-                onClick: onResendRequest
-              }}
-            >
-              Resend Code
-            </LoadingButton>
-            <ButtonFields>
-              <Button large onClick={onCancelVerification}>
-                Cancel
-              </Button>
+              <PasswordChecker password={password} show={showStrength} />
+              {registerForm.formState.errors.password && <Error message="Please enter a valid password!" />}
+              <FormGroup
+                style={animateForm}
+                status={statusConfirm}
+                tabIndex={-1}
+                onFocus={() => {
+                  setStatusConfirm('foucs')
+                }}
+                onBlur={() => {
+                  setStatusConfirm('rest')
+                  if (!arePasswordEqual) {
+                    setStatusCode('error')
+                  }
+                }}
+              >
+                <AuthIcon icon="bx:lock" width={18} />
+                <Input
+                  type={showConfirm ? 'text' : 'password'}
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  {...registerForm.register('confirmPassword', {
+                    required: true,
+                    pattern: PASSWORD
+                  })}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value)
+                    if (e.target.value.toString() !== password) {
+                      setArePasswordEqual(false)
+                      setStatusConfirm('error')
+                    } else {
+                      setArePasswordEqual(true)
+                      setStatusConfirm('rest')
+                      registerForm.clearErrors('confirmPassword')
+                    }
+                  }}
+                />
+                <AuthIcon
+                  icon={showConfirm ? 'bxs:hide' : 'bxs:show'}
+                  width={18}
+                  onClick={() => {
+                    setShowConfirm(!showConfirm)
+                  }}
+                />
+              </FormGroup>
+              {!arePasswordEqual ? <Error message="Passwords did not match!" /> : undefined}
               <LoadingButton
-                loading={verSubmitting}
-                alsoDisabled={verErrors.code !== undefined}
+                loading={regSubmitting}
+                alsoDisabled={regErrors.email !== undefined || !arePasswordEqual}
                 buttonProps={{ type: 'submit', primary: true, large: true }}
               >
-                Verify Code
+                Send Verification Code
               </LoadingButton>
-            </ButtonFields>
-          </AuthForm>
+            </Form>
+            <SignInOptions>
+              <OptionHeader>
+                <Line></Line>
+                <p>or sign in with</p>
+                <Line></Line>
+              </OptionHeader>
+              <GoogleLoginButton text={'Google'} />
+            </SignInOptions>
+          </>
+        ) : (
+          nextForm
         )}
-        <br />
-      </BackCard>
-      <FooterCard>
-        <Link to={ROUTE_PATHS.login}>Login</Link>
-      </FooterCard>
-    </CenteredColumn>
+      </SectionForm>
+    </Container>
   )
 }

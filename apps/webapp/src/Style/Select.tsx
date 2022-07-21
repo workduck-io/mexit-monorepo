@@ -6,7 +6,8 @@ import styled from 'styled-components'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Control = styled(components.Control)`
-  margin: ${({ theme }) => theme.spacing.medium} 0;
+  /* margin: ${({ theme }) => theme.spacing.medium} 0; */
+  width: 100%;
 `
 
 const StyledLabel = styled.div`
