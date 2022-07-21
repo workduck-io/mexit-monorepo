@@ -61,6 +61,22 @@ const data = {
     followers: '(//div[@class="style_color-dark-grey__aN5DV style_fontSize-14___m2Wf style_fontWeight-600__Qmfob"])[2]',
     about:
       '//div[@class="style_flex___KlcI style_direction-column__w77hU style_flex-column-gap-4__87DvT style_pb-12__SqQ5M"]/div[@class="style_color-dark-grey__aN5DV style_fontSize-16__DCrgA style_fontWeight-400__5p97M"]'
+  },
+  Capterra: {
+    productName : '//h1[@class="sm:nb-type-2xl nb-type-xl"]',
+    companyName : '//h1[@class="sm:nb-type-2xl nb-type-xl"]',
+    rating: '//div[@class="nb-mr-xl"]/a/div/div[@class="nb-ml-3xs"]',
+    about: '//div[@class="nb-px-xl md:nb-pr-xl md:nb-pl-0 md:nb-w-1/2"]',
+    features: '//div[@class="nb-mb-xl nb-flex nb-flex-wrap"]',
+    pricing: '//div[@class="nb-mb-2xs"]',
+    pricingDetails: '//div[@class="nb-text-gray-400 nb-leading-md nb-tracking-md nb-text-md nb-mb-xl"]',
+  },
+  G2:{
+    productName: '//a[@class="c-midnight-100"]',
+    ratings: '//ul[@class="list--piped mb-0"]',
+    discription: '//div[@class="ws-pw"]',
+    "" : '(//div[@class="ml-1"])[3]',
+    pricing: '//div[@class="preview-cards preview-cards--responsive"]',
   }
 }
 const ValidUrl = {
@@ -91,6 +107,14 @@ const ValidUrl = {
   7: {
     WebPage: 'Producthunt',
     regex: /^(http(s)?:\/\/)?([\w]+\.)producthunt\.com\/products\//
+  },
+  8: {
+    WebPage: 'Capterra',
+    regex: /^(http(s)?:\/\/)?([\w]+\.)capterra\.com\/p\/[1-9]*/
+  },
+  9:{
+    WebPage: 'G2',
+    regex: /^(http(s)?:\/\/)?([\w]+\.)g2\.com\/products/
   }
 }
 const checkURL = (url) => {
