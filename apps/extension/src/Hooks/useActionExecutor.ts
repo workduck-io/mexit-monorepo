@@ -1,3 +1,6 @@
+import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
+import toast from 'react-hot-toast'
+
 import {
   ActionType,
   CategoryType,
@@ -6,6 +9,7 @@ import {
   createNodeWithUid,
   defaultCopyConverter,
   defaultCopyFilter,
+  ELEMENT_PARAGRAPH,
   ELEMENT_TAG,
   getNewDraftKey,
   getUntitledDraftKey,
@@ -16,23 +20,21 @@ import {
   QuickLinkType,
   SEPARATOR
 } from '@mexit/core'
-import toast from 'react-hot-toast'
+
 import Action from '../Components/Action'
 import { StyledInput } from '../Components/Search/styled'
+import { CopyTag } from '../Editor/components/Tags/CopyTag'
+import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
+import { getMexHTMLDeserializer } from '../Utils/deserialize'
+import { getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
+import { useInternalLinks } from './useInternalLinks'
+import { useNodes } from './useNodes'
+import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useSaveChanges } from './useSaveChanges'
-import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
-import { CopyTag } from '../Editor/components/Tags/CopyTag'
-
-import getPlugins from '../Editor/plugins/index'
-import { useNodes } from './useNodes'
-import getLinks from '../Utils/getProfileData'
-import { useInternalLinks } from './useInternalLinks'
-import { getMexHTMLDeserializer } from '../Utils/deserialize'
 
 export function useActionExecutor() {
   const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
@@ -147,25 +149,22 @@ export function useActionExecutor() {
             break
           }
           case ActionType.MAGICAL: {
-            // const editor = usePlateEditorRef(node.nodeid)
             setActiveItem(item)
-            getLinks()
+            getProfileData()
               .then((data) => {
-                console.log('data :', data)
-                const newData = data[0];
-                setTimeout(() => {
-                  setPersistedContent([
-                    {
-                      type: 'array',
-                      children: data
-                    }
-                  ])
-                }, 10)
+                setPersistedContent([
+                  {
+                    type: ELEMENT_PARAGRAPH,
+                    children: data
+                  }
+                ])
               })
               .catch((err) => {
-                console.log('err :', err)
+                console.log('err:', err)
               })
             setActiveIndex(0)
+            setInput('')
+            setSearch({ value: '', type: CategoryType.search })
             break
           }
           case ActionType.SCREENSHOT: {
