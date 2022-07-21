@@ -27,9 +27,6 @@ function MainGameScreen() {
 
   const [count, setCount] = useState<number>(1)
 
-  const [keyCount, setKeyCount] = useState<number>(0)
-  const [clickCount, setClickCount] = useState<number>(0)
-
   const score = useGameStore((store) => store.score)
   const setScore = useGameStore((store) => store.setScore)
   const cleanScore = useGameStore((store) => store.cleanScore)
@@ -64,19 +61,8 @@ function MainGameScreen() {
   }
 
   const generateRandomSprite = () => {
-    // setSpriteDec(random_sprite())
-    let num = random_sprite()
-    if (keyCount < 10 && clickCount === 10) {
-      if (num % 2 !== 0) {
-        num = num + 1
-      }
-    }
-    if (keyCount === 10 && clickCount < 10) {
-      if (num % 2 === 0) {
-        num = num - 1
-      }
-    }
-    setSpriteDec(num)
+    setSpriteDec(random_sprite())
+    console.log(random_sprite())
   }
 
   const getNewSize = () => {
@@ -86,29 +72,23 @@ function MainGameScreen() {
     }
   }
 
-  const checkGameOver = () => {
-    console.log(`click: ${clickCount} keys: ${keyCount}`)
-    if (clickCount === 10 && keyCount === 10) {
-      StopActionHandler()
-    }
-  }
-
   const calculateScore = () => {
     const pow = -Math.abs(Math.ceil(currentTime / 100))
+    console.log(pow)
     const factor = Math.exp(pow)
+    console.log(factor)
     const sc = count * factor
+    console.log(sc)
     setScore(Math.ceil(sc))
   }
 
   const clickHandler = () => {
     setClickTime((time) => time + currentTime)
     setCurrentTime(0)
-    setCount((prevCount) => prevCount + Math.ceil(currentTime / 100))
-    setClickCount((prevCount) => prevCount + 1)
+    setCount((prevCount) => prevCount + 1)
     generateRandomCoord()
     generateRandomSprite()
     calculateScore()
-    checkGameOver()
   }
 
   const modalHandler = () => {
@@ -119,13 +99,11 @@ function MainGameScreen() {
     if (e.key === randomKey) {
       setKeyTime((time) => time + currentTime)
       setCurrentTime(0)
-      setCount((prevCount) => prevCount + Math.ceil(currentTime / 100))
-      setKeyCount((prevCount) => prevCount + 1)
+      setCount((prevCount) => prevCount + 1)
       generateRandomCoord()
       generateRandomSprite()
       generateRandomLetter()
       calculateScore()
-      checkGameOver()
     }
   }
 
@@ -133,14 +111,12 @@ function MainGameScreen() {
     setStart(true)
     setTimer(true)
     cleanScore()
-    setCount(1)
-    setKeyCount(0)
-    setClickCount(0)
   }
   const StopActionHandler = () => {
     setStart(false)
     setTimer(false)
     setGameOver(true)
+    setCount(1)
   }
 
   const generateRandomLetter = () => {
