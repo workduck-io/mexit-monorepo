@@ -34,7 +34,7 @@ function MainGameScreen() {
   const [x, setX] = useState<number>(0)
   const [y, setY] = useState<number>(0)
 
-  const [spriteDec, setSpriteDec] = useState<number>(0)
+  const [spriteDec, setSpriteDec] = useState<number>(1)
   const containerRef = useRef<HTMLDivElement>()
 
   const [randomKey, setRandomKey] = useState<string>('')
@@ -61,8 +61,11 @@ function MainGameScreen() {
   }
 
   const generateRandomSprite = () => {
-    setSpriteDec(random_sprite())
-    console.log(random_sprite())
+    setSpriteDec((prevCount) => prevCount + 1)
+    console.log(spriteDec)
+    if (spriteDec === 20) {
+      StopActionHandler()
+    }
   }
 
   const getNewSize = () => {
@@ -74,11 +77,8 @@ function MainGameScreen() {
 
   const calculateScore = () => {
     const pow = -Math.abs(Math.ceil(currentTime / 100))
-    console.log(pow)
     const factor = Math.exp(pow)
-    console.log(factor)
     const sc = count * factor
-    console.log(sc)
     setScore(Math.ceil(sc))
   }
 
@@ -117,6 +117,7 @@ function MainGameScreen() {
     setTimer(false)
     setGameOver(true)
     setCount(1)
+    setSpriteDec(1)
   }
 
   const generateRandomLetter = () => {
