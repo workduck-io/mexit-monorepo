@@ -27,9 +27,8 @@ function MainGameScreen() {
 
   const [count, setCount] = useState<number>(1)
 
-  const score = useGameStore((store) => store.score)
-  const setScore = useGameStore((store) => store.setScore)
-  const cleanScore = useGameStore((store) => store.cleanScore)
+  const [score, setScore] = useState<number>(0)
+  const setFinalScore = useGameStore((store) => store.setFinalScore)
 
   const [x, setX] = useState<number>(0)
   const [y, setY] = useState<number>(0)
@@ -79,7 +78,7 @@ function MainGameScreen() {
     const pow = -Math.abs(Math.ceil(currentTime / 100))
     const factor = Math.exp(pow)
     const sc = count * factor
-    setScore(Math.ceil(sc))
+    setScore((prev) => prev + Math.ceil(sc))
   }
 
   const clickHandler = () => {
@@ -110,7 +109,7 @@ function MainGameScreen() {
   const StartActionHandler = () => {
     setStart(true)
     setTimer(true)
-    cleanScore()
+    setScore(0)
   }
   const StopActionHandler = () => {
     setStart(false)
@@ -118,6 +117,7 @@ function MainGameScreen() {
     setGameOver(true)
     setCount(1)
     setSpriteDec(1)
+    setFinalScore(score)
   }
 
   const generateRandomLetter = () => {

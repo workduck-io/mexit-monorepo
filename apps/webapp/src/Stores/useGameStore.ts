@@ -4,16 +4,14 @@ interface GameState {
   open: boolean
   openModal: () => void
   closeModal: () => void
-  score: number
-  setScore: (increment: number) => void
-  cleanScore: () => void
+  finalScore: number
+  setFinalScore: (f_score: number) => void
 }
 
 export const useGameStore = create<GameState>((set) => ({
   open: false,
   openModal: () => set((state) => ({ open: true })),
   closeModal: () => set((state) => ({ open: false })),
-  score: 0,
-  setScore: (increment) => set((state) => ({ score: state.score + increment })),
-  cleanScore: () => set((state) => ({ score: 0 }))
+  finalScore: 0,
+  setFinalScore: (f_score) => set((state) => ({ finalScore: f_score }))
 }))
