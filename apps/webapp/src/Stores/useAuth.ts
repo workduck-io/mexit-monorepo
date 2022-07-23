@@ -1,9 +1,11 @@
-import { useAuth, client } from '@workduck-io/dwindle'
-import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
-import { nanoid } from 'nanoid'
 import React, { useState } from 'react'
+
+import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { useAuth, client } from '@workduck-io/dwindle'
+import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
 import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
@@ -21,7 +23,6 @@ import { useLayoutStore } from './useLayoutStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
-import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
 
