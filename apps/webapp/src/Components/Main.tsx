@@ -1,7 +1,8 @@
+import React, { useEffect } from 'react'
+
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import { transparentize } from 'polished'
-import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import styled, { css } from 'styled-components'
@@ -26,16 +27,12 @@ const AppWrapper = styled.div`
   ${linkTooltip};
 `
 
-const Content = styled.div<{ grid?: boolean }>`
+const Content = styled.div`
   display: flex;
-  flex: 1;
-  overflow: auto;
-  /* ${({ grid }) =>
-    grid &&
-    css`
-      grid-column-start: 2;
-    `} */
+  flex-grow: 1;
+  grid-column-start: 2;
 `
+
 export type MainProps = { children: React.ReactNode }
 
 const Draggable = styled.div`
@@ -115,9 +112,7 @@ const Main = ({ children }: MainProps) => {
         // grid={authenticated && showNav() ? 'true' : 'false'}
       >
         {authenticated && showNav() && <Nav />}
-        <Content id="wd-mex-content-view" grid={authenticated && showNav() ? true : false}>
-          {children}
-        </Content>
+        <Content id="wd-mex-content-view">{children}</Content>
 
         {authenticated && <RHSidebar />}
       </GridWrapper>

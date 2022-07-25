@@ -31,7 +31,7 @@ const RHSidebar = () => {
   const { getFocusProps } = useLayout()
   const focusMode = useLayoutStore((store) => store.focusMode)
   const rhSidebar = useLayoutStore((store) => store.rhSidebar)
-  const { rhSidebarSpringProps } = useSidebarTransition()
+  const { rhSidebarSpringProps, overlaySidebar } = useSidebarTransition()
 
   mog('IS RHSIDEBAR', { rhSidebar })
 
@@ -40,6 +40,8 @@ const RHSidebar = () => {
       style={rhSidebarSpringProps}
       show={rhSidebar.show}
       expanded={rhSidebar.expanded}
+      overlaySidebar={overlaySidebar}
+      side="right"
       {...getFocusProps(focusMode)}
     >
       <RHSidebarContent />

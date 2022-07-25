@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
 import { transparentize } from 'polished'
+import { NavLink } from 'react-router-dom'
+import styled from 'styled-components'
 
 export const SettingsContainer = styled.section`
   display: flex;
@@ -49,4 +49,8 @@ export const SettingTitle = styled(NavLink)`
 
 export const SettingsContent = styled.div`
   flex: 4;
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '18rem' : '14rem')});
+  width: 98%;
+  overflow-y: auto;
+  padding: 2rem;
 `

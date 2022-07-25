@@ -167,6 +167,12 @@ export const CreateNewButton = styled.div`
     width: 32px;
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
+  :hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+    svg {
+      color: ${({ theme }) => transparentize(0.5, theme.colors.text.oppositePrimary)};
+    }
+  }
 `
 
 export const NavButton = styled.div<{ primary?: boolean }>`
@@ -228,13 +234,41 @@ export interface NavWrapperProps extends FocusModeProp {
   show: boolean
 }
 
-export const SideNav = styled(animated.div)<NavWrapperProps>`
-  width: 0px;
+export interface SideNavProps extends NavWrapperProps {
+  overlaySidebar: boolean
+  side: 'left' | 'right'
+}
+
+export const SideNav = styled(animated.div)<SideNavProps>`
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100%;
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+  z-index: 10;
+  background-color: ${({ theme, side }) => transparentize(side === 'left' ? 0.25 : 0.4, theme.colors.gray[9])};
   padding: ${({ theme }) => theme.spacing.large} 0;
+  backdrop-filter: blur(10px);
+
+  ${({ overlaySidebar, theme, side }) =>
+    side === 'left'
+      ? overlaySidebar
+        ? css`
+            position: fixed;
+            top: ${theme.additional.hasBlocks ? '2rem' : '0'};
+            left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : '86px'};
+          `
+        : css`
+            position: relative;
+          `
+      : overlaySidebar
+      ? // Now the RHS
+        css`
+          position: fixed;
+          top: ${theme.additional.hasBlocks ? '2rem' : '0'};
+          right: ${theme.additional.hasBlocks ? '1rem' : '0'};
+        `
+      : css`
+          position: relative;
+        `}
 
   ${({ theme, expanded, show }) =>
     expanded &&
@@ -246,6 +280,8 @@ export const SideNav = styled(animated.div)<NavWrapperProps>`
   ${TabBody} {
     height: calc(100vh - 9rem);
   }
+
+  ${(props) => focusStyles(props)}
 `
 
 export const NavWrapper = styled(animated.div)<NavWrapperProps>`
