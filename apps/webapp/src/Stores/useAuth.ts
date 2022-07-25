@@ -1,28 +1,30 @@
 import React, { useState } from 'react'
+
+import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
 import { useAuth, client } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
-import { nanoid } from 'nanoid'
 
 import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
+
 import { useApi } from '../Hooks/API/useNodeAPI'
+import { useInternalLinks } from '../Hooks/useInternalLinks'
+import { usePortals } from '../Hooks/usePortals'
+import { useSnippets } from '../Hooks/useSnippets'
+import { getEmailStart } from '../Utils/constants'
+import { useApiStore } from './useApiStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
-import { useSnippetStore } from './useSnippetStore'
 import { useLayoutStore } from './useLayoutStore'
-import { useApiStore } from './useApiStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import { useTodoStore } from './useTodoStore'
-import { usePortals } from '../Hooks/usePortals'
 import { useUserCacheStore } from './useUserCacheStore'
-import { useInternalLinks } from '../Hooks/useInternalLinks'
-import { getEmailStart } from '../Utils/constants'
-import { useSnippets } from '../Hooks/useSnippets'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -204,7 +206,7 @@ export const useInitializeAfterAuth = () => {
               }
             })
             .then(async (d: { status: number; data: any }) => {
-              if (d.status === 404 && isGoogle) {
+              if (isGoogle && (d.data.group === undefined || d.status === 404)) {
                 forceRefreshToken = true
                 return await registerNewUser(loginData)
               } else if (d.data.group) {
