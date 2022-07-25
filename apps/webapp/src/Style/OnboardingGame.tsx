@@ -43,7 +43,7 @@ export const ActionButton = styled.button<{ action: string }>`
   letter-spacing: 0.25rem;
   border: none;
   outline: none;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme, action }) => (action === 'start' ? theme.colors.primary : theme.colors.palette.red)};
 `
 
 export const PlayArea = styled.div`
@@ -88,6 +88,8 @@ export const InstructionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
 `
 
 export const InstructionCardContainer = styled.div`

@@ -49,22 +49,15 @@ function MainGameScreen() {
   const MIN_WIDTH = SCREEN_WIDTH / 2 - width / 2 + 100
   const MAX_WIDTH = SCREEN_WIDTH / 2 + width / 2 - 100
 
-  const x_random_coord = uniqueRandom(MIN_WIDTH, MAX_WIDTH)
-  const y_random_coord = uniqueRandom(MIN_HEIGHT, MAX_HEIGHT)
-
-  const random_sprite = uniqueRandom(1, 100)
-
-  const generateRandomCoord = () => {
-    setY(y_random_coord())
-    setX(x_random_coord())
-  }
-
   const generateRandomSprite = () => {
+    setX(uniqueRandom(MIN_WIDTH, MAX_WIDTH))
+    setY(uniqueRandom(MIN_HEIGHT, MAX_HEIGHT))
     setSpriteDec((prevCount) => prevCount + 1)
-    console.log(spriteDec)
     if (spriteDec === 20) {
       StopActionHandler()
     }
+    const alphabet = "abcdefghijklmnopqrstuvwxyz,.;']["
+    setRandomKey(alphabet[Math.floor(Math.random() * alphabet.length)])
   }
 
   const getNewSize = () => {
@@ -85,7 +78,6 @@ function MainGameScreen() {
     setClickTime((time) => time + currentTime)
     setCurrentTime(0)
     setCount((prevCount) => prevCount + 1)
-    generateRandomCoord()
     generateRandomSprite()
     calculateScore()
   }
@@ -99,9 +91,7 @@ function MainGameScreen() {
       setKeyTime((time) => time + currentTime)
       setCurrentTime(0)
       setCount((prevCount) => prevCount + 1)
-      generateRandomCoord()
       generateRandomSprite()
-      generateRandomLetter()
       calculateScore()
     }
   }
@@ -120,15 +110,8 @@ function MainGameScreen() {
     setFinalScore(score)
   }
 
-  const generateRandomLetter = () => {
-    const alphabet = "abcdefghijklmnopqrstuvwxyz,.;']["
-    setRandomKey(alphabet[Math.floor(Math.random() * alphabet.length)])
-  }
-
   useEffect(() => {
-    generateRandomCoord()
     generateRandomSprite()
-    generateRandomLetter()
     getNewSize()
   }, [])
 
@@ -162,6 +145,7 @@ function MainGameScreen() {
           ''
         )}
       </Scoreboard>
+      <PlayArea ref={containerRef}>{start ? play : <GameInstructions />}</PlayArea>
       <ActionBoard>
         {start ? (
           <ActionButton action={'stop'} onClick={StopActionHandler}>
@@ -173,7 +157,6 @@ function MainGameScreen() {
           </ActionButton>
         )}
       </ActionBoard>
-      <PlayArea ref={containerRef}>{start ? play : <GameInstructions />}</PlayArea>
     </Container>
   )
 }
