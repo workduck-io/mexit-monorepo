@@ -1,20 +1,23 @@
 import { transparentize } from 'polished'
 import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
+import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
-import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
+import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 import { GridWrapper } from '../Style/Grid'
-import { NavWrapper } from '../Style/Nav'
+import { InfobarTools, InfoBarWrapper } from '../Style/Infobar'
+import { ServiceCard } from '../Style/Integrations'
+import { NavWrapper, SideNav } from '../Style/Nav'
+import { ReminderStyled } from '../Style/Reminders.style'
 import { Result, SearchFilterListWrap } from '../Style/Search'
+import { SettingsOptions } from '../Style/Settings'
 import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
 import { StyledBoard } from '../Style/Todo'
-import { ArchivedNode } from '../Style/Archive'
-import { SettingsOptions } from '../Style/Settings'
-import { StyledEditor, NodeInfo, EditorWrapper, EditorStyles } from '../Style/Editor'
-import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 import { TodoContainer } from '../Style/Todo.style'
 
 interface SpaceProps {
@@ -38,24 +41,30 @@ export const SpaceBlocksCss = (props: SpaceProps) => {
     `}
   `
 
+  // const NeoContainer = css`
+  //   background-color: ${palette.body};
+  //   box-shadow: 0px 15px 40px ${({ theme }) => transparentize(0.9, theme.colors.palette.black)};
+  // `
+
+  const graphStyles = css`
+    ${InfobarTools} {
+      margin: 0 0;
+    }
+    ${InfoBarWrapper} {
+      overflow: auto;
+    }
+  `
+
   const edStyles = css`
     ${StyledEditor} {
       margin: 0 auto;
-      padding: 0 3rem;
       height: calc(100vh - 4rem);
-    }
-    ${NodeInfo} {
+      padding-top: 1rem;
       ${containerStyle}
     }
     ${DataInfobarWrapper} {
       margin-top: 0rem;
-      height: ${heightMain};
-      ${containerStyle}
       margin-top: 0;
-    }
-    ${EditorWrapper} {
-      ${containerStyle}
-      border-radius: ${({ theme }) => theme.borderRadius.small};
     }
     ${BalloonToolbarBase} {
       background-color: ${({ theme }) => theme.colors.gray[8]};
@@ -119,19 +128,27 @@ export const SpaceBlocksCss = (props: SpaceProps) => {
     }
   `
 
+  const integrationStyles = css`
+    ${ServiceCard} {
+      ${containerStyle}
+    }
+  `
+
   const navStyles = css`
     ${NavWrapper} {
       margin: 0;
       height: ${heightMain};
       min-height: ${heightMain};
-      padding: ${({ theme }) => theme.spacing.small} 0 0;
-      ${containerStyle}
+    }
+    ${SideNav} {
+      padding: 0;
+      border-radius: ${({ theme }) => theme.borderRadius.small};
+      height: ${heightMain};
+      min-height: ${heightMain};
     }
     ${GridWrapper} {
-      margin: 2rem;
-      margin-left: ${({ theme }) => theme.spacing.medium};
-      margin-right: -1rem;
-      margin-bottom: 0;
+      width: 100vw;
+      padding: 2rem 1rem;
       grid-gap: ${({ theme }) => theme.spacing.medium};
     }
   `
@@ -151,6 +168,12 @@ export const SpaceBlocksCss = (props: SpaceProps) => {
     }
   `
 
+  const remindersStyles = css`
+    ${ReminderStyled} {
+      ${containerStyle}
+    }
+  `
+
   const modalStyles = css`
     .ModalContent {
       ${containerStyle}
@@ -161,10 +184,13 @@ export const SpaceBlocksCss = (props: SpaceProps) => {
     ${navStyles}
   ${sidebarStyles}
   ${settingsStyles}
+  ${integrationStyles}
   ${searchStyles}
   ${gridCardStyles}
   ${edStyles}
+  ${graphStyles}
   ${todoStyles}
+  ${remindersStyles}
   `
   return mainCss
 }

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { useMatch } from 'react-router-dom'
+
 import { useTheme } from 'styled-components'
 
 import { mog } from '@mexit/core'
@@ -67,6 +68,8 @@ const SidebarTabs = () => {
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
   const isArchive = useMatch(ROUTE_PATHS.archive)
+  const isSnippetNote = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
+  const isSnippet = useMatch(ROUTE_PATHS.snippets)
 
   mog('IS SIDEBAR', { sidebar, isEditor, isArchive })
 
@@ -74,9 +77,11 @@ const SidebarTabs = () => {
 
   if (isEditor) return <NodeSidebar />
 
+  if (isSnippet || isSnippetNote) return <SnippetList />
+
   if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 
-  return <SnippetList />
+  return <> </>
 }
 
 export default SidebarTabs

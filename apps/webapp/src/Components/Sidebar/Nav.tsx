@@ -1,11 +1,11 @@
+import React, { useEffect, useMemo, useState } from 'react'
+
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useTheme } from 'styled-components'
 import tinykeys from 'tinykeys'
 
 import {
@@ -17,43 +17,27 @@ import {
   NavTitle,
   ComingSoon,
   Count,
-  NavDivider,
   EndLinkContainer,
   Link,
-  NavSpacer,
-  MexIcon,
-  SharedNodeIcon,
   SearchLink,
   MainNav,
   WDLogo,
   SideNav
 } from '@mexit/shared'
 
-import { BookmarksHelp, TreeHelp, SharedHelp } from '../../Data/defaultText'
 import useNavlinks, { GetIcon } from '../../Data/links'
-import { usePolling } from '../../Hooks/API/usePolling'
-import { useBookmarks } from '../../Hooks/useBookmarks'
 import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import useLayout from '../../Hooks/useLayout'
-import { useLinks } from '../../Hooks/useLinks'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import Collapse from '../../Layout/Collapse'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { NavProps } from '../../Types/Nav'
-import Tabs from '../../Views/Tabs'
 import { TooltipTitleWithShortcut } from '../Shortcuts'
-import { Logo, SidebarToggle, TrafficLightBG } from '../logo'
-import Bookmarks from './Bookmarks'
+import { SidebarToggles } from '../logo'
 import NavigationCluster from './NavigationCluster'
-import SharedNotes from './SharedNotes'
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
-import Tree, { TreeContainer } from './Tree'
 
 const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
   const { goTo } = useRouting()
@@ -235,7 +219,7 @@ const Nav = () => {
           <SidebarTabs />
         </SideNav>
       </NavWrapper>
-      <SidebarToggle />
+      <SidebarToggles />
     </>
   )
 }

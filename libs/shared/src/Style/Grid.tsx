@@ -1,5 +1,6 @@
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
+
 import { size } from './Responsive'
 
 export const GridCss = (smCol = 2, lgCol = 3, spacing?: string) => css`
@@ -20,6 +21,7 @@ export const GridWrapper = styled(animated.div)<{ grid?: string }>`
   height: 100vh;
   width: 100vw;
   overflow: auto;
+  overflow-x: hidden;
 
   /* ${({ grid }) =>
     grid &&

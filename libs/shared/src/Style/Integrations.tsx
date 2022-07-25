@@ -40,7 +40,7 @@ export const PlusIcon = styled.div`
   background: ${({ theme }) => theme.colors.primary};
 `
 
-export const Title = styled.h1`
+export const IntegrationTitle = styled.h1`
   padding: 2.5rem 1rem;
   font-size: 36px;
   line-height: 44px;
@@ -160,11 +160,11 @@ export const Margin = styled.div`
   justify-content: space-between;
 `
 
-export const StyledIcon = styled(Icon)`
+export const IntegrationStyledIcon = styled(Icon)`
   margin-right: 1rem;
 `
 
-export const Scroll = styled.div`
+export const IntegrationScroll = styled.div`
   max-height: 66%;
   overflow-y: scroll;
 `
@@ -196,7 +196,7 @@ export const NoWrap = styled(Flex)`
   white-space: nowrap;
 `
 
-export const CardTitle = styled.div`
+export const IntegrationCardTitle = styled.div`
   font-size: 1rem;
   line-height: 1.2rem;
   font-weight: bold;
@@ -215,7 +215,7 @@ export const IntentMapItem = styled.div`
 `
 
 // * Not in integration page
-export const MenuTrigger = styled.div<MenuTriggerProps>`
+export const IntegrationMenuTrigger = styled.div<MenuTriggerProps>`
   display: flex;
   align-items: center;
   width: max-content;
@@ -251,7 +251,7 @@ export const SyncIntentsWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
 
-  ${MenuTrigger} {
+  ${IntegrationMenuTrigger} {
     margin-right: ${({ theme }) => theme.spacing.small};
   }
 `

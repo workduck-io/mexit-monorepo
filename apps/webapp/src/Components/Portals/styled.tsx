@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
-// import { FlexBetween } from '@components/spotlight/Actions/styled'
 
-import { Button, CardShadow, StyledEditor, BodyFont } from '@mexit/shared'
-import { CenteredFlex, Title } from '../../Style/Integrations'
+// import { FlexBetween } from '@components/spotlight/Actions/styled'
+import { Button, CardShadow, StyledEditor, BodyFont, CenteredFlex, IntegrationTitle } from '@mexit/shared'
+
 import { FlexBetween } from '../FloatingButton'
 
 export const ServiceContainer = styled(StyledEditor)``
@@ -65,7 +65,7 @@ export const ActionGroupIcon = styled(CenteredFlex)`
 `
 
 export const GroupHeader = styled.div<{ connected?: boolean }>`
-  ${Title} {
+  ${IntegrationTitle} {
     padding: 0;
     font-size: 2.5rem;
   }

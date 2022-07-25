@@ -1,6 +1,10 @@
+import React, { useEffect, useMemo } from 'react'
+
 import Board from '@asseinfo/react-kanban'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
+import create from 'zustand'
+
 import {
   getReminderState,
   mog,
@@ -12,16 +16,14 @@ import {
   SearchFilter,
   upcoming
 } from '@mexit/core'
-import { PageContainer, MainHeader, Button } from '@mexit/shared'
-import React, { useEffect, useMemo } from 'react'
-import create from 'zustand'
+import { PageContainer, MainHeader, Button, IntegrationTitle } from '@mexit/shared'
+
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import ReminderUI, { reminderStateIcons } from '../../Components/Reminders/Reminder'
 import { FilterStore } from '../../Hooks/useFilters'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
 import { useReminderStore } from '../../Stores/useReminderStore'
-import { Title } from '../../Style/Integrations'
 import SearchFilters from '../SearchFilters'
 import { AllRemindersWrapper, ReminderColumnHeader } from './RemindersAll.style'
 import { ReminderBoardStyled } from './RemindersAll.style'
@@ -246,7 +248,7 @@ const RemindersAll = () => {
   return (
     <PageContainer>
       <MainHeader>
-        <Title>Reminders</Title>
+        <IntegrationTitle>Reminders</IntegrationTitle>
         <Button
           // large
           primary

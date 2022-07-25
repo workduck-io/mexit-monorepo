@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react'
+
 import timeLine from '@iconify-icons/ri/time-line'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshLine from '@iconify/icons-ri/refresh-line'
 import { Icon } from '@iconify/react'
-import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 import { mog, NodeMetadata, NodeProperties } from '@mexit/core'
@@ -69,7 +70,7 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
               {metadata.createdAt !== undefined && (
                 <Data>
                   <Icon icon={addCircleLine} width={16} />
-                  <RelativeTime prefix="created" dateNum={metadata.createdAt} />
+                  <RelativeTime prefix="Created" dateNum={metadata.createdAt} />
                 </Data>
               )}
             </div>
@@ -91,7 +92,7 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
               {metadata.updatedAt !== undefined && (
                 <Data>
                   <Icon icon={refreshLine} width={16} />
-                  <RelativeTime prefix={'Updated'} dateNum={metadata.updatedAt} />
+                  <RelativeTime prefix="Updated" dateNum={metadata.updatedAt} />
                 </Data>
               )}
             </div>

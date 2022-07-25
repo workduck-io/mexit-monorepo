@@ -1,11 +1,11 @@
 import React from 'react'
+
 import Check from '@iconify-icons/ri/check-line'
 
 import { camelCase } from '@mexit/core'
-import { MexIcon } from '@mexit/shared'
+import { MexIcon, ActiveStatus, CenteredFlex, RightCut, ServiceCard, ServiceName } from '@mexit/shared'
 
 import { ActionGroupType } from '../../Types/Actions'
-import { ActiveStatus, CenteredFlex, RightCut, ServiceCard, ServiceName } from '../../Style/Integrations'
 import { DEFAULT_LIST_ITEM_ICON, getIconType, ProjectIconMex } from './utils'
 
 type ActionGroupProps = {

@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
+
+import { useMediaQuery } from 'react-responsive'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
 import { mog } from '@mexit/core'
+import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import * as Actions from './Actions'
 import RouteNotFound from './Components/404'
@@ -41,10 +44,9 @@ import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
-  /* position: fixed; */
-  /* width: ${({ theme, $isAuth }) =>
-    !$isAuth ? '100% !important' : `calc(100% - 300px - ${theme.additional.hasBlocks ? '3rem' : '0px'})`}; */
-  width: 100% !important;
+  height: 100%;
+
+  width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 `
@@ -185,7 +187,10 @@ export const Switch = () => {
   const { saveAndClearBuffer: saveSnippetBuffer } = useSnippetBuffer()
   const authenticated = useAuthStore((s) => s.authenticated)
   const { saveNodeName } = useSaveNodeName()
-  const { showSidebar, showAllSidebars, hideAllSidebars, showRHSidebar, hideRHSidebar } = useLayoutStore()
+  const { showSidebar, showAllSidebars, hideAllSidebars, showRHSidebar, hideRHSidebar, collapseAllSidebars } =
+    useLayoutStore()
+
+  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   useEffect(() => {
     const editorNode = useEditorStore.getState().node
@@ -209,6 +214,9 @@ export const Switch = () => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         showSidebar()
         hideRHSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
+        showSidebar()
+        hideRHSidebar()
       } else {
         mog('Hiding all Sidebar', { location })
         hideAllSidebars()
@@ -216,12 +224,16 @@ export const Switch = () => {
     }
   }, [location])
 
-  const { switchWrapperSpringProps } = useSidebarTransition()
+  useEffect(() => {
+    if (overlaySidebar) {
+      collapseAllSidebars()
+    }
+  }, [overlaySidebar])
 
   return (
     // eslint-disable-next-line
     // @ts-ignore
-    <SwitchWrapper style={switchWrapperSpringProps} $isAuth={authenticated}>
+    <SwitchWrapper $isAuth={authenticated}>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />

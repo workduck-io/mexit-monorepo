@@ -1,8 +1,8 @@
 import { mix, transparentize } from 'polished'
 import styled, { createGlobalStyle, css } from 'styled-components'
-import { Button } from '@mexit/shared'
+
 import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
-import { Title } from '../../Style/Integrations'
+import { Button, IntegrationTitle } from '@mexit/shared'
 
 export const RemindersWrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.medium} 0;
@@ -22,7 +22,7 @@ export const ReminderGroupWrapper = styled.div`
   width: 100%;
   height: auto;
 
-  & > ${Title} {
+  & > ${IntegrationTitle} {
     font-size: 1.5rem;
     font-weight: normal;
     color: ${({ theme }) => theme.colors.primary};
@@ -112,7 +112,7 @@ export const ReminderStyled = styled.div<{ isNotification?: boolean; showControl
     ${({ theme }) => mix(0.2, theme.colors.primary, theme.colors.gray[9])} 100%
   );
 
-  ${Title} {
+  ${IntegrationTitle} {
     font-size: 1.25rem;
     line-height: 2rem;
     font-weight: normal;
@@ -243,7 +243,7 @@ export const ReminderInfobar = styled.div`
   padding: 0 ${({ theme }) => theme.spacing.medium};
   border-radius: 0px 0px ${({ theme }) => `calc(2 * ${theme.borderRadius.large}) calc(2* ${theme.borderRadius.large})`};
 
-  & > ${Title} {
+  & > ${IntegrationTitle} {
     margin: ${({ theme }) => theme.spacing.large} 0 0;
   }
 `

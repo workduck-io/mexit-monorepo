@@ -1,38 +1,38 @@
-import { add, startOfToday } from 'date-fns'
-import { nanoid } from 'nanoid'
-import toast from 'react-hot-toast'
 import React, { useEffect } from 'react'
+
+import { startOfToday } from 'date-fns'
 import ReactDatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 import create from 'zustand'
-import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
-import { SelectedDate } from './Reminders.style'
+
 import {
   NodeEditorContent,
   getTimeInText,
   getNextReminderTime,
-  getEventNameFromElement,
   mog,
   getRelativeDate,
   generateReminderId,
   Reminder,
   getNameFromPath
 } from '@mexit/core'
-import { DatePickerStyles, Label, TextAreaBlock, Button } from '@mexit/shared'
+import { DatePickerStyles, Label, TextAreaBlock, Button, SelectedDate } from '@mexit/shared'
+
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import useAnalytics from '../../Hooks/useAnalytics'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
+import useToggleElements from '../../Hooks/useToggleElements'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { LoadingButton } from '../Buttons/Buttons'
+import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
-import { ActionType } from '../../Hooks/useAnalytics/events'
 
 interface ModalValue {
   time?: number
@@ -118,7 +118,7 @@ export const useOpenReminderModal = () => {
     const node = useEditorStore.getState().node
     const addReminder = useReminderStore.getState().addReminder
     const setInfobarMode = useLayoutStore.getState().setInfobarMode
-    // {}
+    const { toggleReminder } = useToggleElements()
     const searchTerm = query.slice('remind'.length)
     const parsed = getTimeInText(searchTerm)
     const title = getNameFromPath(node.path)
@@ -141,7 +141,7 @@ export const useOpenReminderModal = () => {
         addReminder(reminder)
         toast(`Reminder added for ${parsed.textWithoutTime}`)
         saveAndClearBuffer(true)
-        setInfobarMode('reminders')
+        toggleReminder()
       } else
         openModal({
           time: parsed.time.getTime(),

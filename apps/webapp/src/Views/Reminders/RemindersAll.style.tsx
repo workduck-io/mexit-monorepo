@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { StyledBoard } from '@mexit/shared'
-import { ReminderStyled } from '../../Components/Reminders/Reminders.style'
+
+import { StyledBoard, ReminderStyled } from '@mexit/shared'
 
 export const AllRemindersWrapper = styled.div`
   position: relative;

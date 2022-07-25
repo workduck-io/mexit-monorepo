@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
+
+import { Flex, FullHeight, IntegrationContainer } from '@mexit/shared'
+
 import Section from '../Components/Portals/Section'
 import { usePortals } from '../Hooks/usePortals'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import usePortalStore from '../Stores/usePortalStore'
-import { Flex, FullHeight, IntegrationContainer } from '../Style/Integrations'
 import { ActionGroupType } from '../Types/Actions'
 
 const PortalsPage = () => {

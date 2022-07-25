@@ -1,11 +1,13 @@
+import React, { useMemo } from 'react'
+
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
-import React, { useMemo } from 'react'
 
 import { InfobarFull, InfobarTools } from '@mexit/shared'
 import { Button, IconButton, Title } from '@mexit/shared'
+import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper } from '@mexit/shared'
 
 import { useReminders } from '../../Hooks/useReminders'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -17,7 +19,6 @@ import { useReminderStore } from '../../Stores/useReminderStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { useCreateReminderModal } from './CreateReminderModal'
 import ReminderUI from './Reminder'
-import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper } from './Reminders.style'
 
 const RemindersInfobar = () => {
   const infobar = useLayoutStore((s) => s.infobar)

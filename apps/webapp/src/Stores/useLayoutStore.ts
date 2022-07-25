@@ -25,6 +25,8 @@ interface LayoutState {
   hideAllSidebars: () => void
   toggleAllSidebars: () => void
 
+  collapseAllSidebars: () => void
+
   toggleFocusMode: () => void
   setFocusMode: (focusMode: FocusMode) => void
   hoverFocusMode: () => void
@@ -63,6 +65,12 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
   setRHSidebarExpanded: (expanded) => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
   showRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
   hideRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: false } })),
+
+  collapseAllSidebars: () =>
+    set((state) => ({
+      sidebar: { ...state.sidebar, expanded: false },
+      rhSidebar: { ...state.rhSidebar, expanded: false }
+    })),
 
   showAllSidebars: () =>
     set((state) => ({
