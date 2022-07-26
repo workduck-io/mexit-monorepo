@@ -1,29 +1,28 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
-import shallow from 'zustand/shallow'
+import { useParams } from 'react-router-dom'
 import tinykeys from 'tinykeys'
+import shallow from 'zustand/shallow'
 
 import { defaultContent, mog } from '@mexit/core'
-
-import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
-import Editor from './Editor'
-import useBlockStore from '../../Stores/useBlockStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import useLoad from '../../Hooks/useLoad'
-
-import EditorInfoBar from '../EditorInfobar'
-import useLayout from '../../Hooks/useLayout'
-import { getEditorId } from '../../Utils/editor'
 import { StyledEditor, EditorWrapper } from '@mexit/shared'
 
-import Toolbar from './Toolbar'
-import Metadata from '../EditorInfobar/Metadata'
-import BlockInfoBar from '../EditorInfobar/BlockInfobar'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
+import useLayout from '../../Hooks/useLayout'
+import useLoad from '../../Hooks/useLoad'
 import { useNodes } from '../../Hooks/useNodes'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
+import useBlockStore from '../../Stores/useBlockStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { getEditorId } from '../../Utils/editor'
+import EditorInfoBar from '../EditorInfobar'
+import BlockInfoBar from '../EditorInfobar/BlockInfobar'
+import Metadata from '../EditorInfobar/Metadata'
+import Editor from './Editor'
+import Toolbar from './Toolbar'
 
 const ContentEditor = () => {
   const { nodeId } = useParams()
@@ -89,12 +88,19 @@ const ContentEditor = () => {
 
   const readOnly = accessWhenShared(node.nodeid) === 'READ' || !!fetchingContent
 
-  const onChangeSave = async (val: any[]) => {
-    if (val && node && node.nodeid !== '__null__') {
-      setIsEditing(false)
-      addOrUpdateValBuffer(node.nodeid, val)
-    }
-  }
+  const onChangeSave = useCallback(
+    async (val: any[]) => {
+      if (val && node && node.nodeid !== '__null__') {
+        setIsEditing(false)
+        addOrUpdateValBuffer(node.nodeid, val)
+      }
+    },
+    [node.nodeid]
+  )
+
+  const onAutoSave = useCallback((val) => {
+    saveAndClearBuffer(false)
+  }, [])
 
   useEffect(() => {
     if (node.nodeid !== nodeId) {
@@ -128,9 +134,7 @@ const ContentEditor = () => {
           readOnly={readOnly}
           nodeUID={nodeId}
           nodePath={node.path}
-          onAutoSave={(val) => {
-            saveAndClearBuffer()
-          }}
+          onAutoSave={onAutoSave}
           content={fsContent?.content?.length ? fsContent?.content : defaultContent.content}
           onChange={onChangeSave}
         />

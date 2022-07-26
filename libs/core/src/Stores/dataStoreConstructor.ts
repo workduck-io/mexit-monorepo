@@ -290,6 +290,7 @@ export interface FlatItem {
   tasks?: number
   reminders?: number
   icon?: string
+  createdAt?: number
 }
 
 export const sanatizeLinks = (links: ILink[]): FlatItem[] => {

@@ -26,7 +26,7 @@ import {
 } from '@mexit/shared'
 
 import useNavlinks, { GetIcon } from '../../Data/links'
-import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
@@ -41,7 +41,7 @@ import { useSidebarTransition } from './Transition'
 
 const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
   const { goTo } = useRouting()
-  const { createNewNode } = useCreateNewNode()
+  const { createNewNote } = useCreateNewNote()
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
   const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -51,7 +51,7 @@ const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
 
   const createNoteWithQABlock = () => {
     // const qaContent = getRandomQAContent()
-    const nodeId = createNewNode()
+    const nodeId = createNewNote()
 
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
   }

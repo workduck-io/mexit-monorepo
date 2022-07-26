@@ -1,20 +1,23 @@
+import React from 'react'
+
+import { TreeItem } from '@atlaskit/tree'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import editLine from '@iconify/icons-ri/edit-line'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshFill from '@iconify/icons-ri/refresh-fill'
 import shareLine from '@iconify/icons-ri/share-line'
 import { Icon } from '@iconify/react'
-import { isReserved } from '@mexit/core'
-import React from 'react'
 import { Item, ItemParams, Separator } from 'react-contexify'
 import 'react-contexify/dist/ReactContexify.css'
-import { useRenameStore } from '../../Stores/useRenameStore'
+
+import { isReserved } from '@mexit/core'
 import { StyledContexifyMenu } from '@mexit/shared'
-import { useDeleteStore } from '../Refactor/DeleteModal'
-import { useCreateNewNode } from '../../Hooks/useCreateNewNode'
-import { TreeItem } from '@atlaskit/tree'
+
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
+import { useRenameStore } from '../../Stores/useRenameStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
+import { useDeleteStore } from '../Refactor/DeleteModal'
 
 interface TreeContextMenuProps {
   item: TreeItem
@@ -25,7 +28,7 @@ export const MENU_ID = 'Tree-Menu'
 export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const openRenameModal = useRenameStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
-  const { createNewNode } = useCreateNewNode()
+  const { createNewNote } = useCreateNewNote()
   const openShareModal = useShareModalStore((store) => store.openModal)
 
   const handleRename = (item: TreeItem) => {
@@ -40,7 +43,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
 
   const handleCreateChild = (item: TreeItem) => {
     // mog('handleCreateChild', { item })
-    createNewNode({ parent: item.data.path })
+    createNewNote({ parent: item.data.path })
   }
 
   const handleShare = (item: TreeItem) => {

@@ -1,5 +1,6 @@
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import React, { useEffect, useMemo, useState } from 'react'
+
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -33,7 +34,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
-import Todo from '../Todo'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled(EditorStyles)`

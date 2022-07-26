@@ -39,18 +39,27 @@ export const useInternalLinks = () => {
   }
 
   const updateILinksFromAddedRemovedPaths = (addedPaths: ILink[], removedPaths: ILink[]) => {
-    const currILinks = useDataStore.getState().ilinks
-    removedPaths.forEach((path) => {
+    let currILinks = useDataStore.getState().ilinks
+
+    const intersection = removedPaths.filter((l) => addedPaths.find((rem) => l.nodeid == rem.nodeid))
+    intersection.forEach((path) => {
       currILinks.splice(
         currILinks.findIndex((item) => item.nodeid === path.nodeid),
         1
       )
     })
+
     addedPaths.forEach((p) => {
-      const idx = currILinks.find((link) => link.nodeid === p.nodeid && link.path === p.path)
-      if (idx === undefined) currILinks.push(p)
+      const idx = currILinks.find((link) => link.nodeid === p.nodeid)
+
+      if (idx && idx.path !== p.path) {
+        currILinks = currILinks.map((link) => (link.nodeid === p.nodeid ? { ...link, path: p.path } : link))
+      } else if (idx === undefined) {
+        currILinks.push({ ...p, createdAt: Infinity })
+      }
     })
     mog('Setting ILinks', { currILinks })
+
     setILinks([...currILinks])
   }
 

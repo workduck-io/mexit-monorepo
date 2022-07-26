@@ -51,10 +51,10 @@ export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
     };
   }
   transition: opacity 0.3s ease-in-out;
-  ${({ focusMode, focusHover, mode, hasPinnedSuggestions }) => {
-    if (focusMode) {
+  ${({ $focusMode, $focusHover, mode, hasPinnedSuggestions }) => {
+    if ($focusMode) {
       if (mode === 'suggestions' && hasPinnedSuggestions) {
-        return focusHover
+        return $focusHover
           ? css`
               opacity: 1;
               ${InfobarTools} {
@@ -70,7 +70,7 @@ export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
               }
             `
       }
-      return focusHover
+      return $focusHover
         ? css`
             opacity: 1;
           `
