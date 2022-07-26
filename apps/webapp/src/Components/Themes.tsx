@@ -1,8 +1,11 @@
 import React from 'react'
+
 import { useTransition } from 'react-spring'
 import { ThemeProvider } from 'styled-components'
-import useThemeStore from '../Stores/useThemeStore'
+
 import { Wrapper } from '@mexit/shared'
+
+import useThemeStore from '../Stores/useThemeStore'
 import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
 
 const Themes = () => {
@@ -11,16 +14,20 @@ const Themes = () => {
   const setTheme = useThemeStore((state) => state.setTheme)
 
   const transition = useTransition(themes, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    keys: (item) => {
-      return item.id
+    from: {
+      opacity: 0,
+      transform: 'translate3d(-100px,0,0) scale(0.5) '
     },
-    trail: 100,
-    duration: 300,
+    enter: {
+      opacity: 1,
+      transform: 'translate3d(0px,0,0) scale(1) '
+    },
+    keys: (item) => item.id,
+    trail: 50,
+    duration: 100,
     config: {
       mass: 1,
-      tension: 200,
+      tension: 100,
       friction: 16
     }
   })
