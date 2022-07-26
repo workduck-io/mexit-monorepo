@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+
 import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
+import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import {
@@ -15,26 +16,25 @@ import {
 } from '@mexit/core'
 import { useEditorChange, EditorStyles } from '@mexit/shared'
 
-import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import Todo from '../Todo'
-import { useDataStore } from '../../Stores/useDataStore'
-import { ComboboxKey } from '../../Editor/Types/Combobox'
-import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
-import { ComboboxConfig, ComboboxItem, ComboboxType, ComboConfigData } from '../../Editor/Types/MultiCombobox'
-import { useRouting } from '../../Hooks/useRouting'
-import { useSnippets } from '../../Hooks/useSnippets'
-import { CategoryType, QuickLinkType } from '../../Editor/constants'
+import components from '../../Editor/Components/EditorPreviewComponents'
+import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../../Editor/Components/SlashCommands/SlashComboboxItem'
 import { TagComboboxItem } from '../../Editor/Components/Tags/TagComboboxItem'
-import { QuickLinkComboboxItem } from '../../Editor/Components/QuickLink/QuickLinkComboboxItem'
-import components from '../../Editor/Components/EditorPreviewComponents'
-import { useNewNodes } from '../../Hooks/useNewNodes'
-import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
-import { useMentionStore } from '../../Stores/useMentionsStore'
+import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
+import { ComboboxKey } from '../../Editor/Types/Combobox'
+import { ComboboxConfig, ComboboxItem, ComboboxType, ComboConfigData } from '../../Editor/Types/MultiCombobox'
+import { CategoryType, QuickLinkType } from '../../Editor/constants'
 import { useMentions } from '../../Hooks/useMentions'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useNewNodes } from '../../Hooks/useNewNodes'
+import { useRouting } from '../../Hooks/useRouting'
+import { useSnippets } from '../../Hooks/useSnippets'
 import { useAuthStore } from '../../Stores/useAuth'
+import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -152,7 +152,7 @@ const Editor: React.FC<EditorProps> = ({
       inline_block: {
         slateElementType: ELEMENT_INLINE_BLOCK,
         newItemHandler: (newItem, parentId?) => {
-          const link = addILink({ ilink: newItem, parentId })
+          const link = addILink({ ilink: newItem, openedNodePath: parentId })
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem

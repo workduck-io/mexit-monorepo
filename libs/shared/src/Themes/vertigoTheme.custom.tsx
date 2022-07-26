@@ -1,23 +1,22 @@
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
+import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
-import { DataInfobarWrapper } from '../Style/DataInfobar'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
-import { Title } from '../Style/Typography'
-import { SILink } from '../Style/QuickLinkElement.styles'
-import { NavWrapper, NavButton } from '../Style/Nav'
-import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
-import { SidebarDiv } from '../Style/Sidebar'
-import { CreateSnippet } from '../Style/Snippets'
-import { ArchivedNode } from '../Style/Archive'
-import { SettingsOptions, SettingTitle } from '../Style/Settings'
-import { SpaceBlocksCss } from './spaceBlocks'
 import { MenuTrigger, EditorStyles, Widget } from '../Style/Editor'
 import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
+import { NavWrapper, NavButton, SideNav, MainNav } from '../Style/Nav'
 import { StyledMenu } from '../Style/NodeSelect.styles'
+import { SILink } from '../Style/QuickLinkElement.styles'
+import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
+import { SettingsOptions, SettingTitle } from '../Style/Settings'
+import { CreateSnippet } from '../Style/Snippets'
+import { TabBody } from '../Style/Tab.Styles'
 import { TodoContainer } from '../Style/Todo.style'
+import { Title } from '../Style/Typography'
+import { SpaceBlocksCss } from './spaceBlocks'
 
 const textStyleColors = css`
   b,
@@ -64,7 +63,6 @@ const edStyles = css`
     background-color: ${({ theme }) => theme.colors.gray[10]};
   }
   ${EditorStyles} {
-    border-radius: 1rem;
     transition: all 0.25s ease-in-out;
     blockquote {
       background-color: ${({ theme }) => theme.colors.gray[9]};
@@ -89,9 +87,6 @@ const edStyles = css`
   }
   ${Widget} {
     background-color: ${grayMixerTrans(9)};
-  }
-  ${DataInfobarWrapper} {
-    border-radius: ${({ theme }) => theme.borderRadius.small};
   }
   ${BalloonToolbarBase} {
     background-color: ${({ theme }) => theme.colors.gray[8]};
@@ -168,6 +163,9 @@ const searchStyles = css`
 
 const navStyles = css`
   ${NavWrapper} {
+    overflow: hidden;
+  }
+  ${MainNav} {
     border-radius: ${({ theme }) => theme.borderRadius.small};
   }
   ${NavButton} {
@@ -175,11 +173,7 @@ const navStyles = css`
   }
 `
 
-const sidebarStyles = css`
-  ${SidebarDiv} {
-    border-radius: ${({ theme }) => theme.borderRadius.small};
-  }
-`
+const sidebarStyles = css``
 
 const modalStyles = css`
   .ModalContent {
@@ -221,7 +215,7 @@ const palette = { body: '#211E33', border: '#332A47' }
 const containerStyle = css`
   background-color: ${transparentize(0.15, palette.body)};
   box-shadow: 0px 15px 40px ${({ theme }) => transparentize(0.9, theme.colors.palette.black)};
-  border: 1px solid ${palette.border};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 const containerStyleReset = css`

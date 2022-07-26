@@ -1,4 +1,5 @@
-const BATCH_SIZE = 25
+const BATCH_SIZE = 10
+
 const batchArray = (array: any[], batchSize: number): any[][] => {
   const batches = []
   for (let i = 0; i < array.length; i += batchSize) {

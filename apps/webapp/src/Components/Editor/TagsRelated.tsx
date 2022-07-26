@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react'
 import hashtagIcon from '@iconify/icons-ri/hashtag'
+import React, { useEffect, useState } from 'react'
 
 import { InfoSubHeading, Note, TagFlex, TagsFlex } from '@mexit/shared'
+import { InfoWidgetWrapper } from '@mexit/shared'
 
 import { TagsHelp } from '../../Data/defaultText'
-import { useTags } from '../../Hooks/useTags'
-import { InfoWidgetWrapper } from '../../Style/Infobar'
-
-import Collapse from '../../Layout/Collapse'
-import NodeLink from './NodeLink'
-
-import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { useTags } from '../../Hooks/useTags'
+import Collapse from '../../Layout/Collapse'
+import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
+import NodeLink from './NodeLink'
 
 interface TagsRelated {
   nodeid: string

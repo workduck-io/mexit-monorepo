@@ -1,6 +1,8 @@
 // import { Services, Title } from '@style/Integration'
 import React from 'react'
-import { Services, Title } from '../../Style/Integrations'
+
+import { Services, IntegrationTitle } from '@mexit/shared'
+
 import ActionGroup from './ActionGroup'
 
 type SectionProps<T> = {
@@ -12,7 +14,7 @@ type SectionProps<T> = {
 const Section = <T,>({ items, title, onClick }: SectionProps<T>) => {
   return (
     <>
-      <Title>{title}</Title>
+      <IntegrationTitle>{title}</IntegrationTitle>
       <Services>
         {items.map((item, index) => (
           <ActionGroup key={index} group={item} onClick={() => onClick(item)} />

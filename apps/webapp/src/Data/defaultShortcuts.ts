@@ -91,5 +91,17 @@ export const defaultShortcuts = {
     title: 'Reminders',
     keystrokes: '$mod+Shift+KeyM',
     category: 'Actions'
+  },
+
+  // Goto
+  gotoForward: {
+    title: 'Move Forward History',
+    keystrokes: '$mod+]',
+    category: 'Navigate'
+  },
+  gotoBackwards: {
+    title: 'Move Backwards History',
+    keystrokes: '$mod+[',
+    category: 'Navigate'
   }
 }

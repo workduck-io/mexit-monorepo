@@ -2,8 +2,8 @@ import { client } from '@workduck-io/dwindle'
 
 import { apiURLs, generateNodeUID, ILink, mog, SEPARATOR, getAllParentPaths, getNodeIcon } from '@mexit/core'
 
-import { useAuthStore } from './useAuth'
 import useDataStore from '../Stores/useDataStore'
+import { useAuthStore } from './useAuth'
 import { getNodeidFromPathAndLinks } from './useLinks'
 
 const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {
@@ -82,7 +82,7 @@ export const useInternalLinks = () => {
 
     const newILinks: ILink[] = newPaths.map((l) => {
       const addedILink = { nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(), path: l, icon: getNodeIcon(l) }
-      addedILink.path = checkValidILink({ ilink: addedILink.path, showAlert: true, parentId: undefined })
+      addedILink.path = checkValidILink({ nodePath: addedILink.path, showAlert: true, openedNodePath: undefined })
 
       return addedILink
     })

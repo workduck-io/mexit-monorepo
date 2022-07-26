@@ -3,10 +3,10 @@ import { Editor, Transforms } from 'slate'
 import { ReactEditor } from 'slate-react'
 
 import { getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
 import {
@@ -15,8 +15,8 @@ import {
   ConfigDataSlashCommands,
   SingleComboboxConfig
 } from '../../Types/MultiCombobox'
-import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 import { QuickLinkType } from '../../constants'
+import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 
 export interface ComboTypeHandlers {
   slateElementType: string
@@ -75,7 +75,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
         const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
         const activeBlock = useComboboxStore.getState().activeBlock
 
-        mog('Inserting from here', { item, isBlockTriggered })
+        // mog('Inserting from here', { item, isBlockTriggered })
         let InsertedElement: InsertableElement = {
           type,
           children: [{ text: '' }],
@@ -116,7 +116,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           InsertedElement = { ...InsertedElement, ...item.additional }
         }
 
-        mog('Inserting', { InsertedElement })
+        // mog('Inserting', { InsertedElement })
         insertNodes<TElement>(editor, InsertedElement)
 
         // move the selection after the ilink element

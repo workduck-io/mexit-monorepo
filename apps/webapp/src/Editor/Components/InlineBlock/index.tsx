@@ -1,15 +1,18 @@
 import React, { useMemo } from 'react'
+
 import { useSelected } from 'slate-react'
 import styled from 'styled-components'
 
 import { mog, NodeType } from '@mexit/core'
 import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
-import { useContentStore } from '../../../Stores/useContentStore'
 import useArchive from '../../../Hooks/useArchive'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNavigation } from '../../../Hooks/useNavigation'
+import { useNodes } from '../../../Hooks/useNodes'
 import { useSaver } from '../../../Hooks/useSaver'
+import { useContentStore } from '../../../Stores/useContentStore'
+import { getBlock } from '../../../Utils/parseData'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import {
   Chip,
@@ -20,8 +23,6 @@ import {
   StyledInlineBlock,
   StyledInlineBlockPreview
 } from '../../Styles/InlineBlock'
-import { getBlock } from '../../../Utils/parseData'
-import { useNodes } from '../../../Hooks/useNodes'
 
 const StyledArchiveText = styled.text`
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -59,7 +60,7 @@ const InlineBlock = (props: any) => {
   }
 
   const selected = useSelected()
-  mog('InlineBlock', { nodeid, selected, content, nodeType, path })
+  // mog('InlineBlock', { nodeid, selected, content, nodeType, path })
 
   return (
     <RootElement {...props.attributes}>

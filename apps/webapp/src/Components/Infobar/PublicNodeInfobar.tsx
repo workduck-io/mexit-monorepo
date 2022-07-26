@@ -33,7 +33,7 @@ const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
   useEffect(() => {
     const getAnalysis = async () => {
       const analysis = await analyseContent({ nodeid: nodeId, content: content })
-      mog('RecvAnalysis', { analysis })
+      mog('RecvAnalysis', { analysis, nodeId, content })
       setAnalysis(analysis)
     }
     getAnalysis()

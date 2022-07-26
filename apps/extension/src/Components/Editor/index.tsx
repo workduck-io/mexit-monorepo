@@ -1,24 +1,23 @@
-import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import { useSpring } from 'react-spring'
 import downIcon from '@iconify/icons-ph/arrow-down-bold'
 import { Icon } from '@iconify/react'
+import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
+import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
-import React, { useState, useMemo, useRef, useEffect } from 'react'
-
-import { EditorStyles, useEditorChange } from '@mexit/shared'
-import { useAuthStore } from '../../Hooks/useAuth'
-import { EditorWrapper, SeePreview } from './styled'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
-
-import components from './Components'
-import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import { Tag, QuickLinkType, ActionType, ELEMENT_TAG, ELEMENT_ILINK } from '@mexit/core'
-import { useEditorContext } from '../../Hooks/useEditorContext'
-import useDataStore from '../../Stores/useDataStore'
-import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
+import { EditorStyles, useEditorChange } from '@mexit/shared'
+
 import MexEditor from '../../Editor/MexEditor'
+import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
 import { MexEditorOptions } from '../../Editor/types/editor'
+import { useAuthStore } from '../../Hooks/useAuth'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import useDataStore from '../../Stores/useDataStore'
+import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
+import components from './Components'
+import { EditorWrapper, SeePreview } from './styled'
 
 interface EditorProps {
   nodePath?: string
@@ -84,7 +83,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         },
         ilink: {
           slateElementType: ELEMENT_ILINK,
-          newItemHandler: (newItem, parentId?) => addILink({ ilink: newItem, parentId })
+          newItemHandler: (newItem, parentId?) => addILink({ ilink: newItem, openedNodePath: parentId })
         },
         slash_command: {
           slateElementType: 'slash_command',

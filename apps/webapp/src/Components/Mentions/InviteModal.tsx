@@ -1,24 +1,24 @@
 import React, { useMemo, useEffect, useState } from 'react'
+
+import { getPlateEditorRef } from '@udecode/plate'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { getPlateEditorRef } from '@udecode/plate'
 
 import { mog, AccessLevel, DefaultPermission, DefaultPermissionValue, permissionOptions } from '@mexit/core'
-import { Label, StyledCreatatbleSelect, ButtonFields, SelectWrapper } from '@mexit/shared'
+import { Label, StyledCreatatbleSelect, ButtonFields, SelectWrapper, IntegrationTitle } from '@mexit/shared'
 
+import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
+import { usePermission } from '../../Hooks/API/usePermission'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions } from '../../Hooks/useMentions'
+import { useNodes } from '../../Hooks/useNodes'
+import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useShareModalStore, InviteModalData } from '../../Stores/useShareModalStore'
-import { Title } from '../../Style/Integrations'
 import { EMAIL_REG } from '../../Utils/constants'
 import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
 import { InviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
-import { useUserService } from '../../Hooks/API/useUserAPI'
-import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
-import { usePermission } from '../../Hooks/API/usePermission'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useNodes } from '../../Hooks/useNodes'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
@@ -107,7 +107,7 @@ export const InviteModalContent = () => {
 
   return (
     <InviteWrapper>
-      <Title>Invite</Title>
+      <IntegrationTitle>Invite</IntegrationTitle>
       <p>Invite your friends to your Note.</p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={readOnly}>

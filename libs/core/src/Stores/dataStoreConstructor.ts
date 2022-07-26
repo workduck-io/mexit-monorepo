@@ -1,5 +1,5 @@
 import { defaultCommands } from '../Data/defaultCommands'
-import { Tag, CachedILink } from '../Types/Editor'
+import { Tag, CachedILink, ILink } from '../Types/Editor'
 import { Settify, withoutContinuousDelimiter, typeInvert } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
@@ -66,8 +66,8 @@ export const dataStoreConstructor = (set, get) => ({
         - with existing add numeric suffix
         - not allowed with reserved keywords
    */
-  addILink: ({ ilink, nodeid, parentId, archived, showAlert }) => {
-    const uniquePath = get().checkValidILink({ ilink, parentId, showAlert })
+  addILink: ({ ilink, nodeid, openedNodePath, archived, showAlert }) => {
+    const uniquePath = get().checkValidILink({ nodePath: ilink, openedNodePath, showAlert })
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
@@ -91,23 +91,27 @@ export const dataStoreConstructor = (set, get) => ({
     })
 
     if (newLink) return newLink
+
     return
   },
 
-  checkValidILink: ({ ilink, parentId, showAlert }) => {
-    const { key, isChild } = withoutContinuousDelimiter(ilink)
+  checkValidILink: ({ nodePath, openedNodePath, showAlert }) => {
+    const { key, isChild } = withoutContinuousDelimiter(nodePath)
 
+    // * If `notePath` starts with '.', than create note under 'opened note'.
     if (key) {
-      ilink = isChild && parentId ? `${parentId}${key}` : key
+      nodePath = isChild && openedNodePath ? `${openedNodePath}${key}` : key
     }
 
     const ilinks = get().ilinks
 
     const linksStrings = ilinks.map((l) => l.path)
-    const reservedOrUnique = getUniquePath(ilink, linksStrings, showAlert)
+    const reservedOrUnique = getUniquePath(nodePath, linksStrings, showAlert)
+
+    mog('RESERVED', { reservedOrUnique })
 
     if (!reservedOrUnique) {
-      throw Error(`ERROR-RESERVED: PATH (${ilink}) IS RESERVED. YOU DUMB`)
+      throw Error(`ERROR-RESERVED: PATH (${nodePath}) IS RESERVED. YOU DUMB`)
     }
 
     return reservedOrUnique.unique
@@ -279,16 +283,27 @@ export const getLevel = (path: string) => path.split(SEPARATOR).length
 
 type treeMap = { id: string; nodeid: string; icon?: string }[]
 
-export const sanatizeLinks = (links: treeMap): treeMap => {
+export interface FlatItem {
+  id: string
+  nodeid: string
+  parentNodeId?: string
+  tasks?: number
+  reminders?: number
+  icon?: string
+  createdAt?: number
+}
+
+export const sanatizeLinks = (links: ILink[]): FlatItem[] => {
   let oldLinks = links
-  const newLinks: treeMap = []
+  const newLinks: FlatItem[] = []
   let currentDepth = 1
 
   while (oldLinks.length > 0) {
     for (const l of links) {
-      if (getLevel(l.id) === currentDepth) {
-        newLinks.push(l)
-        oldLinks = oldLinks.filter((k) => k !== l)
+      if (getLevel(l.path) === currentDepth) {
+        const ilink = { id: l.path, nodeid: l.nodeid, icon: l.icon }
+        newLinks.push(l.parentNodeId ? { ...ilink, parentNodeId: l.parentNodeId } : ilink)
+        oldLinks = oldLinks.filter((k) => k.nodeid !== l.nodeid)
       }
     }
     currentDepth += 1

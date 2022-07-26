@@ -1,3 +1,9 @@
+import { Icon } from '@iconify/react'
+import { serializeHtml, createPlateEditor, createPlateUI } from '@udecode/plate'
+import fuzzysort from 'fuzzysort'
+import React, { useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
+
 import {
   apiURLs,
   convertContentToRawText,
@@ -14,25 +20,27 @@ import {
   SEPARATOR,
   Snippet
 } from '@mexit/core'
-import React, { useEffect, useRef, useState } from 'react'
-import { Icon } from '@iconify/react'
-import fuzzysort from 'fuzzysort'
+import {
+  ActionTitle,
+  ComboboxItemTitle,
+  ComboboxShortcuts,
+  ComboSeperator,
+  DisplayShortcut,
+  ShortcutText
+} from '@mexit/shared'
 
+import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
+import { CopyTag } from '../../Editor/components/Tags/CopyTag'
+import getPlugins from '../../Editor/plugins/index'
+import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
+import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
-import { getDibbaText } from '../../Utils/getDibbaText'
-import { ActionTitle, ComboboxShortcuts, ComboSeperator, DisplayShortcut, ShortcutText } from '@mexit/shared'
-import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
-import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
-import useDataStore from '../../Stores/useDataStore'
 import { useContentStore } from '../../Stores/useContentStore'
-import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
-import toast from 'react-hot-toast'
-import { serializeHtml, createPlateEditor, createPlateUI } from '@udecode/plate'
-import getPlugins from '../../Editor/plugins/index'
-import { CopyTag } from '../../Editor/components/Tags/CopyTag'
+import useDataStore from '../../Stores/useDataStore'
+import { getDibbaText } from '../../Utils/getDibbaText'
+import EditorPreviewRenderer from '../EditorPreviewRenderer'
+import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
 
 interface PublicNode {
   type: 'Public Nodes'
@@ -322,7 +330,7 @@ export default function Dibba() {
               >
                 <Icon height={18} key={item.id} icon={item.icon} />
                 <ItemCenterWrapper>
-                  <ItemTitle>{item.title}</ItemTitle>
+                  <ComboboxItemTitle>{item.title}</ComboboxItemTitle>
                   {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
                 </ItemCenterWrapper>
                 {item.rightIcons && (

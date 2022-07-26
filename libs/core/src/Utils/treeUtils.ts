@@ -34,6 +34,12 @@ export const getNodeIcon = (path: string) => {
 
 export const DefaultNodeIcon = 'ri:file-list-2-line'
 
+export const getParentNodePath = (path: string, separator = SEPARATOR) => {
+  const lastIndex = path.lastIndexOf(separator)
+  if (lastIndex === -1) return null
+  return path.slice(0, lastIndex)
+}
+
 export const getParentId = (id: string, separator = SEPARATOR) => {
   const lastIndex = id.lastIndexOf(separator)
   if (lastIndex === -1) return null
@@ -80,6 +86,8 @@ export const isTopNode = (id: string) => {
 }
 
 export const getParentFromPath = (id: string) => {
+  if (!id) return []
+
   const split = id.split(SEPARATOR)
   if (split.length > 1) {
     split.pop()

@@ -1,11 +1,14 @@
-import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
-import { Input, Button } from '@mexit/shared'
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import tinykeys from 'tinykeys'
-import { useLinks } from '../../../Hooks/useLinks'
+
+import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
+import { Input, Button } from '@mexit/shared'
+
 import { useApi } from '../../../Hooks/API/useNodeAPI'
+import { useInternalLinks } from '../../../Hooks/useInternalLinks'
+import { useLinks } from '../../../Hooks/useLinks'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
@@ -17,7 +20,6 @@ import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 import { DisplayShortcut } from '../../Shortcuts'
 import { Wrapper, TitleStatic, ButtonWrapper } from './NodeRename.style'
-import { useInternalLinks } from '../../../Hooks/useInternalLinks'
 
 const NodeRenameOnlyTitle = () => {
   const { getNodeidFromPath } = useLinks()

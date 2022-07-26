@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { useTheme } from 'styled-components'
-import { PortalBody, useEditorState } from '@udecode/plate'
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
+import { PortalBody, useEditorState } from '@udecode/plate'
+import React, { useEffect, useState } from 'react'
+import { useTheme } from 'styled-components'
 
-import { ComboboxItem, MexIcon, PreviewMeta } from '@mexit/shared'
 import { mog, NodeEditorContent } from '@mexit/core'
-
-import { CategoryType, QuickLinkType } from '../../constants'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { useComboboxControls } from '../../Hooks/useComboboxControls'
-import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
-import { useContentStore } from '../../../Stores/useContentStore'
-import { useSnippets } from '../../../Hooks/useSnippets'
-import { setElementPositionByRange } from '../../Utils/setElementPositionByRange'
-import { ComboboxProps } from '../../Types/Combobox'
+import { ComboboxItem, ComboboxItemTitle, MexIcon, PreviewMeta } from '@mexit/shared'
 import {
   ActionTitle,
   ComboboxRoot,
@@ -26,11 +17,20 @@ import {
   ItemTitle,
   ShortcutText
 } from '@mexit/shared'
-import { Shortcut } from '../../../Stores/useHelpStore'
+
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { DisplayShortcut } from '../../../Components/Shortcuts'
-import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
+import { useSnippets } from '../../../Hooks/useSnippets'
+import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { useContentStore } from '../../../Stores/useContentStore'
+import { Shortcut } from '../../../Stores/useHelpStore'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
+import { useComboboxControls } from '../../Hooks/useComboboxControls'
+import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
+import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
+import { ComboboxProps } from '../../Types/Combobox'
+import { setElementPositionByRange } from '../../Utils/setElementPositionByRange'
+import { CategoryType, QuickLinkType } from '../../constants'
 import BlockCombo from './BlockCombo'
 
 export const spotlightShortcuts = {
@@ -226,11 +226,11 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                           )}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
-                              <ItemTitle>{Item}</ItemTitle>
+                              <ComboboxItemTitle>{Item}</ComboboxItemTitle>
                             ) : (
-                              <ItemTitle>
+                              <ComboboxItemTitle>
                                 {item.prefix} <PrimaryText>{Item}</PrimaryText>
-                              </ItemTitle>
+                              </ComboboxItemTitle>
                             )}
                             {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
                           </ItemCenterWrapper>

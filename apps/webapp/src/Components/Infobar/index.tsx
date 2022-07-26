@@ -1,32 +1,57 @@
-import React, { useEffect } from 'react'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import React, { useEffect, useMemo } from 'react'
+import { useMatch } from 'react-router-dom'
 import tinykeys from 'tinykeys'
-import useToggleElements from '../../Hooks/useToggleElements'
+
+import { MexIcon } from '@mexit/shared'
+import { InfoBarWrapper } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
+import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
+import useToggleElements from '../../Hooks/useToggleElements'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { InfoBarWrapper } from '../../Style/Infobar'
+import { InfobarMode, useLayoutStore } from '../../Stores/useLayoutStore'
+import Tabs, { TabType } from '../../Views/Tabs'
 import RemindersInfobar from '../Reminders/Reminders'
 import DataInfoBar from './DataInfobar'
+import PublicDataInfobar from './PublicNodeInfobar'
 
 const InfoBarItems = () => {
   const infobar = useLayoutStore((s) => s.infobar)
+  const shortcuts = useHelpStore((store) => store.shortcuts)
+  const setInfobarMode = useLayoutStore((s) => s.setInfobarMode)
+  const isPublicView = useMatch(`${ROUTE_PATHS.share}/:nodeid`)
 
-  switch (infobar.mode) {
-    // case 'graph':
-    // return <Graph graphData={graphData} />
-    // case 'flow':
-    // return <SyncBlockInfo />
-    // case 'suggestions':
-    // return <SuggestionInfoBar />
-    case 'reminders':
-      return <RemindersInfobar />
-    case 'default':
-      return <DataInfoBar />
-    default:
-      return <DataInfoBar />
-  }
+  // Ensure the tabs have InfobarType in type
+  const tabs: Array<TabType> = useMemo(
+    () => [
+      {
+        label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
+        type: 'default',
+        component: <DataInfoBar />,
+        tooltip: 'Context'
+      },
+      {
+        label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
+        type: 'reminders',
+        component: <RemindersInfobar />,
+        tooltip: 'Reminders'
+      }
+    ],
+    []
+  )
+
+  return (
+    <Tabs
+      visible={true}
+      openedTab={infobar.mode}
+      onChange={(tab) => {
+        setInfobarMode(tab as InfobarMode)
+      }}
+      tabs={tabs}
+    />
+  )
 }
 
 const InfoBar = () => {
@@ -40,25 +65,7 @@ const InfoBar = () => {
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
-      //   [shortcuts.showGraph.keystrokes]: (event) => {
-      //     event.preventDefault()
-      //     shortcutHandler(shortcuts.showGraph, () => {
-      //       toggleGraph()
-      //     })
-      //   },
-      //   [shortcuts.showSyncBlocks.keystrokes]: (event) => {
-      //     event.preventDefault()
-      //     shortcutHandler(shortcuts.showSyncBlocks, () => {
-      //       toggleSyncBlocks()
-      //     })
-      //   },
-      //   [shortcuts.showSuggestedNodes.keystrokes]: (event) => {
-      //     event.preventDefault()
-      //     shortcutHandler(shortcuts.showSuggestedNodes, () => {
-      //       toggleSuggestedNodes()
-      //     })
-      //   },
-      [shortcuts?.showReminder?.keystrokes]: (event) => {
+      [shortcuts.showReminder.keystrokes]: (event) => {
         event.preventDefault()
         shortcutHandler(shortcuts.showReminder, () => {
           toggleReminder()

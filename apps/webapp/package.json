@@ -55,6 +55,7 @@
     "react-hot-toast": "^2.2.0",
     "react-modal": "^3.14.4",
     "react-oembed-container": "^1.0.0",
+    "react-responsive": "^9.0.0-beta.10",
     "react-router-dom": "^6.2.1",
     "react-router-v6-instrumentation": "^2.0.1",
     "react-select": "^4.3.1",

@@ -1,5 +1,10 @@
 import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
+import { useSlashCommands } from '@mexit/shared'
+
+import { useSlashCommandOnChange } from '../Editor/Components/SlashCommands/useSlashCommandOnChange'
 import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'
@@ -11,6 +16,14 @@ export const useUpdater = () => {
   const setContent = useContentStore((store) => store.setContent)
   const { updateTagsFromContent } = useTags()
   const { updateDocument } = useSearch()
+  const { generateSlashCommands } = useSlashCommands()
+  const setSlashCommands = useDataStore((store) => store.setSlashCommands)
+
+  const updater = () => {
+    const slashCommands = generateSlashCommands(useSnippetStore.getState().snippets)
+
+    setSlashCommands(slashCommands)
+  }
 
   const updateFromContent = async (noteId: string, content: NodeEditorContent) => {
     if (content) {
@@ -19,11 +32,12 @@ export const useUpdater = () => {
       updateTagsFromContent(noteId, content)
       updateNodeTodos(noteId, getTodosFromContent(content))
 
-      await updateDocument('node', noteId, content)
+      updateDocument('node', noteId, content)
     }
   }
 
   return {
+    updater,
     updateFromContent
   }
 }

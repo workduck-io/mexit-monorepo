@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+
 import { Button } from './Buttons'
 import { BodyFont } from './Search'
 
@@ -81,7 +82,7 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
     `}
 `
 
-export const ItemTitle = styled.div`
+export const ComboboxItemTitle = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

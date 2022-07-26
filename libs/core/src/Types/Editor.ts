@@ -1,6 +1,7 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
-import { AccessLevel } from './Mentions'
+
 import { ElementHighlightMetadata } from '../Utils/serializer'
+import { AccessLevel } from './Mentions'
 
 export interface Content {
   id: string
@@ -92,6 +93,10 @@ export interface ILink {
 
   /** Iconify Icon string */
   icon?: string
+
+  createdAt?: number
+
+  parentNodeId?: string
 }
 
 type UserID = string
@@ -163,14 +168,14 @@ export interface NodeLink {
 export interface AddILinkProps {
   ilink: string
   nodeid?: string
-  parentId?: string
+  openedNodePath?: string
   archived?: boolean
   showAlert?: boolean
 }
 
 export interface CheckValidILinkProps {
-  ilink: string
-  parentId?: string
+  nodePath: string
+  openedNodePath?: string
   showAlert?: boolean
 }
 

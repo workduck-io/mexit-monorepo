@@ -154,7 +154,7 @@ export const useTags = () => {
       const oldTagsFromStore = oldTags.map((t) => t.value)
       const alltags = Settify([...oldTagsFromStore, ...newTagsForStore]).map(generateTag)
 
-      console.log('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags, alltags })
+      // console.log('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags, alltags })
       setTags(alltags)
       updateTagsCache(newTagsCache)
     }

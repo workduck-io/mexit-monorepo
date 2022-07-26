@@ -1,11 +1,11 @@
-import { AccessLevel, mog } from '@mexit/core'
+import { AccessLevel, mog, runBatch } from '@mexit/core'
 
-import { useMentions } from './useMentions'
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
+import { getEmailStart } from '../Utils/constants'
 import { usePermission } from './API/usePermission'
 import { useUserService } from './API/useUserAPI'
-import { getEmailStart } from '../Utils/constants'
+import { useMentions } from './useMentions'
 
 interface UsersRaw {
   nodeid: string
@@ -39,13 +39,11 @@ export const useFetchShareData = () => {
       return getUsersOfSharedNode(node.nodeid)
     })
 
-    const nodeDetails = await Promise.allSettled(sharedNodeDetails)
+    const nodeDetails = (await runBatch(sharedNodeDetails)).fulfilled
 
-    const usersWithAccess = nodeDetails
-      .filter((p) => p.status === 'fulfilled')
-      .map((p: any) => {
-        return p.value as UsersRaw
-      })
+    const usersWithAccess = nodeDetails.map((p: any) => {
+      return p.value as UsersRaw
+    })
 
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
       // mog('getUserAccess', { p, n })
@@ -55,7 +53,7 @@ export const useFetchShareData = () => {
 
     // Then finally fetch the user detail: email
     const mentionableU = (
-      await Promise.allSettled([
+      await runBatch([
         ...UserAccessDetails.map(async (u) => {
           const uDetails = await getUserDetailsUserId(u.userid)
           return { ...u, email: uDetails.email, alias: uDetails.alias }
@@ -73,9 +71,7 @@ export const useFetchShareData = () => {
           }
         })
       ])
-    )
-      .filter((p) => p.status === 'fulfilled')
-      .map((p: any) => p.value as MUsersRaw)
+    ).fulfilled.map((p: any) => p.value as MUsersRaw)
 
     mentionableU.forEach((u) =>
       addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, u.nodeid, u.access)

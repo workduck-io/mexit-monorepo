@@ -1,21 +1,22 @@
 import { getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
+
 import { useNavigation } from './useNavigation'
 import { useNewNodes } from './useNewNodes'
 
-export type NewNodeOptions = {
+export type NewNoteOptions = {
   path?: string
   parent?: string
-  nodeId?: string
-  nodeContent?: NodeEditorContent
-  openedNodePath?: string
+  noteId?: string
+  noteContent?: NodeEditorContent
+  openedNotePath?: string
   noRedirect?: boolean
 }
 
-export const useCreateNewNode = () => {
+export const useCreateNewNote = () => {
   const { push } = useNavigation()
   const { addNodeOrNodesFast } = useNewNodes()
 
-  const createNewNode = (options?: NewNodeOptions) => {
+  const createNewNote = (options?: NewNoteOptions) => {
     const newNodeId = options?.parent ? getUntitledKey(options.parent) : getUntitledDraftKey()
 
     const { id } = addNodeOrNodesFast(newNodeId, true, options?.parent)
@@ -25,5 +26,5 @@ export const useCreateNewNode = () => {
     return id
   }
 
-  return { createNewNode }
+  return { createNewNote }
 }

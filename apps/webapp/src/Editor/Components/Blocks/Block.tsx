@@ -1,16 +1,18 @@
-import { BlockElement, BlockSelectorInput } from '../../Styles/Block'
 import React from 'react'
-import useBlockStore from '../../../Stores/useBlockStore'
+
 import { BlockType } from '@mexit/core'
+
+import useBlockStore from '../../../Stores/useBlockStore'
+import { BlockElement, BlockSelectorInput } from '../../Styles/Block'
 
 type BlockProps = {
   blockId: string
   block: BlockType
-  isEmpty: boolean
-  isBlock: boolean
+  isEmpty?: boolean
+  isBlock?: boolean
 }
 
-const Block: React.FC<BlockProps> = ({ children, blockId, block, isEmpty, isBlock }) => {
+const Block: React.FC<BlockProps> = ({ children, blockId, block }) => {
   const [isSelected, setIsSelected] = React.useState(0)
   const addBlock = useBlockStore((store) => store.addBlock)
   const deleteBlock = useBlockStore((store) => store.deleteBlock)

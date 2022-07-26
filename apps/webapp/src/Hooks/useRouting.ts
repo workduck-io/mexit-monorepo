@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+
+import { matchPath, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export const ROUTE_PATHS = {
   home: '/',
@@ -45,5 +46,11 @@ export const useRouting = () => {
     if (type === NavigationType.replace) navigate(path, { replace: true, state })
   }
 
-  return { goTo, location, params }
+  const getParams = (path: string) => {
+    const match = matchPath(location.pathname, path)
+
+    return match?.params
+  }
+
+  return { goTo, location, params, getParams }
 }

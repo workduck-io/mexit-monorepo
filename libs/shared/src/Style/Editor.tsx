@@ -2,6 +2,7 @@ import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
+
 import { Button, AsyncButton } from './Buttons'
 
 export interface FocusModeProp {
@@ -72,7 +73,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   padding: 0 ${({ theme }) => theme.spacing.medium};
   margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
   width: 100%;
-  max-width: 1000px;
+  max-width: 860px;
   min-width: 400px;
   height: calc(100vh - 3rem);
   flex: 1;

@@ -1,6 +1,13 @@
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import { Icon } from '@iconify/react'
 import React from 'react'
+
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import { add } from 'date-fns/fp'
+
+import { getRelativeDate, mog, getNameFromPath } from '@mexit/core'
+import { ReminderStatus, getReminderState } from '@mexit/core'
+import { Reminder, DisplayReminder } from '@mexit/core'
 import {
   ReminderButtonControlsWrapper,
   ReminderControlsWrapper,
@@ -11,14 +18,9 @@ import {
   ReminderStyled,
   ReminderTime,
   SnoozeControls
-} from './Reminders.style'
-import { add } from 'date-fns/fp'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { getRelativeDate, mog, getNameFromPath } from '@mexit/core'
-import { Button, RelativeTime } from '@mexit/shared'
-import { ReminderStatus, getReminderState } from '@mexit/core'
-import { Title } from '../../Style/Integrations'
-import { Reminder, DisplayReminder } from '@mexit/core'
+} from '@mexit/shared'
+import { Button, RelativeTime, IntegrationTitle } from '@mexit/shared'
+
 import { Description } from '../Portals/styled'
 
 export interface ReminderControl {
@@ -194,7 +196,7 @@ const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: P
         )}
         <ReminderExact>{getRelativeDate(new Date(reminder.time))}</ReminderExact>
       </ReminderTime>
-      <Title>{reminder.title}</Title>
+      <IntegrationTitle>{reminder.title}</IntegrationTitle>
       {reminder.description && <Description>{reminder.description}</Description>}
       <ReminderControlsUI
         isNotification={isNotification}

@@ -16,9 +16,9 @@ export const useNavigation = () => {
   const getCurrentUID = useHistoryStore((store) => store.getCurrentUId)
 
   const push = (nodeid: string, options?: LoadNodeOptions) => {
+    loadNode(nodeid, options)
     pushHs(nodeid)
     addRecent(nodeid)
-    loadNode(nodeid, options)
   }
 
   const replace = (nodeid: string) => {

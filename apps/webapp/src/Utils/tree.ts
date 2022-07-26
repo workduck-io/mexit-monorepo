@@ -1,6 +1,8 @@
 import { TreeItem, TreeData } from '@atlaskit/tree'
-import { Contents, mog, NodeMetadata, isElder, isParent, getParentId, getNameFromPath } from '@mexit/core'
+
+import { Contents, mog, NodeMetadata, isElder, isParent, getParentId, getNameFromPath, FlatItem } from '@mexit/core'
 import { TreeNode } from '@mexit/shared'
+
 import { useContentStore } from '../Stores/useContentStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -72,14 +74,6 @@ const insertInNested = (iNode: BaseTreeNode, nestedTree: BaseTreeNode[]) => {
   })
 
   return newNested
-}
-
-interface FlatItem {
-  id: string
-  nodeid: string
-  tasks?: number
-  reminders?: number
-  icon?: string
 }
 
 export const TREE_SEPARATOR = '-'

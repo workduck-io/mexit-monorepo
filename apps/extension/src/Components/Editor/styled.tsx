@@ -1,6 +1,7 @@
-import styled, { css } from 'styled-components'
-import { Scroll } from '../Results/styled'
 import { animated } from 'react-spring'
+import styled, { css } from 'styled-components'
+
+import { Scroll } from '@mexit/shared'
 
 export const EditorWrapper = styled(animated.div)`
   display: flex;

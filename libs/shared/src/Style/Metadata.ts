@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+
 import { FocusModeProp, focusStyles } from './Editor'
 import { Label } from './Form'
 import { HoverFade } from './Helpers'
@@ -21,6 +22,11 @@ export const DataWrapper = styled.div<DataWrapperProps>`
     margin-right: ${({ theme }) => theme.spacing.small};
   }
 
+  svg,
+  img {
+    box-shadow: none;
+  }
+
   ${({ theme, interactive }) =>
     interactive &&
     css`
@@ -36,16 +42,17 @@ export const DataWrapper = styled.div<DataWrapperProps>`
 export const DataGroup = styled.div``
 
 interface MetaDataWrapperProps extends FocusModeProp {
-  fadeOnHover?: boolean
+  $fadeOnHover?: boolean
 }
 
 export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  padding: 0 ${({ theme }) => theme.spacing.large};
 
-  ${({ theme, fadeOnHover }) =>
-    fadeOnHover &&
+  ${({ theme, $fadeOnHover }) =>
+    $fadeOnHover &&
     css`
       ${HoverFade}
       ${ProfileIcon} {
@@ -63,7 +70,7 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   ${(props) => focusStyles(props)}
 
   ${Label} {
-    color: ${({ theme }) => theme.colors.gray[6]};
+    color: ${({ theme }) => theme.colors.gray[5]};
     font-size: 0.9rem;
     margin: 0 0 0.2rem;
   }

@@ -1,14 +1,19 @@
+export type BlockMetaDataType = {
+  source?: string // * NodeId or Website URL
+  origin?: string
+}
+
 export type BlockType = {
   id: string
   children: BlockType[]
   type: string
   text?: string
+  blockMeta?: BlockMetaDataType
 }
 
 export enum ContextMenuActionType {
   move = 'Move',
-  send = 'Send',
-  del = 'Delete'
+  send = 'Send'
 }
 
 export type ModalOpenType = ContextMenuActionType | undefined
@@ -34,7 +39,7 @@ export const blockStoreConstructor = (set, get) => ({
   },
   getBlocks: () => {
     const blocks = get().blocks
-    return Object.values<BlockType>(blocks)
+    return Object.values(blocks)
   },
   deleteBlock: (blockId: string) => {
     const blocks = get().blocks

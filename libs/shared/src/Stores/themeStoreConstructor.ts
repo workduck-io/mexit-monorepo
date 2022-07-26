@@ -1,5 +1,6 @@
-import { defaultThemes, neoDark } from '../Themes'
 import { DefaultTheme } from 'styled-components'
+
+import { defaultThemes, mexTheme } from '../Themes'
 
 export interface Theme {
   id: string
@@ -14,7 +15,7 @@ export interface ThemeStoreState {
 }
 
 export const themeStoreConstructor = (set) => ({
-  theme: { id: 'Neo Dark', themeData: neoDark },
+  theme: { id: 'Mex', themeData: mexTheme },
 
   themes: defaultThemes,
 
