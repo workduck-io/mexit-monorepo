@@ -1,6 +1,7 @@
+import React from 'react'
+
 import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
-import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { FocusModeProp, focusStyles } from './Editor'
@@ -150,6 +151,7 @@ export const StyledTreeItem = styled.div<{
   isDragging?: boolean
   isBeingDroppedAt?: boolean
   hasMenuOpen?: boolean
+  noSwitcher?: boolean
 }>`
   display: flex;
   align-items: center;
@@ -158,6 +160,12 @@ export const StyledTreeItem = styled.div<{
   padding-right: 16px;
 
   transition: 0.1s ease;
+
+  ${({ noSwitcher, theme }) =>
+    noSwitcher &&
+    css`
+      padding-left: ${theme.spacing.small};
+    `}
 
   ${({ hasMenuOpen, theme }) =>
     hasMenuOpen &&
@@ -171,7 +179,7 @@ export const StyledTreeItem = styled.div<{
     background: ${({ theme }) => theme.colors.gray[7]};
   }
 
-  ${({ selected, theme }) =>
+  ${({ selected, hasMenuOpen, theme }) =>
     selected &&
     css`
       background: ${theme.colors.primary};
@@ -182,6 +190,10 @@ export const StyledTreeItem = styled.div<{
       :hover {
         background: ${transparentize(0.3, theme.colors.primary)};
       }
+      ${hasMenuOpen &&
+      css`
+        color: ${transparentize(0.5, theme.colors.text.oppositePrimary)};
+      `}
       ${StyledTreeItemSwitcher} {
         &:hover svg {
           color: ${theme.colors.primary};

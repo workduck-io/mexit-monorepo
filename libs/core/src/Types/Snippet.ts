@@ -5,7 +5,7 @@ export interface Snippet {
   title: string
   icon?: string
   content?: NodeEditorContent
-  isTemplate?: boolean
+  template?: boolean
 }
 
 export interface SnippetEditorStore {
