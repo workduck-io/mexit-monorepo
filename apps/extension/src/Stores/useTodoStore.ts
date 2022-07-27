@@ -8,23 +8,36 @@ import {
   PriorityType,
   TodosType,
   TodoType,
-  convertContentToRawText
+  convertContentToRawText,
+  getTagsFromContent,
+  getMentionsFromContent
 } from '@mexit/core'
 
-import { useReminderStore } from './useReminderStore'
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
+import { useReminderStore } from './useReminderStore'
 
-const createTodo = (nodeid: string, todoId: string, content: NodeEditorContent = defaultContent.content) => ({
-  id: todoId,
-  nodeid,
-  content,
-  metadata: {
-    status: TodoStatus.todo,
-    priority: PriorityType.noPriority
-  },
-  createdAt: Date.now(),
-  updatedAt: Date.now()
-})
+const createTodo = (
+  nodeid: string,
+  todoId: string,
+  content: NodeEditorContent = defaultContent.content,
+  mentions: string[] = [],
+  tags: string[] = []
+) => {
+  // mog('createTodo', { nodeid, todoId, content })
+  return {
+    id: todoId,
+    nodeid,
+    content,
+    metadata: {
+      status: TodoStatus.todo,
+      priority: PriorityType.noPriority
+    },
+    mentions,
+    tags,
+    createdAt: Date.now(),
+    updatedAt: Date.now()
+  }
+}
 
 type TodoStoreType = {
   // * For all nodes
@@ -138,8 +151,12 @@ const useTodoStore = create<TodoStoreType>(
         const nTodo = todos[nodeid] ?? []
         const nodeTodos = todosContent.map((content) => {
           const todo = nTodo.find((todo) => todo.id === content.id && nodeid === todo.nodeid)
-          // mog('replaceContent', { nodeid, todosContent, nodeTodos, todo, content })
-          return todo ? { ...todo, content: [content] } : createTodo(nodeid, content.id, [content])
+          const tags = getTagsFromContent([content])
+          const mentions = getMentionsFromContent([content])
+          // mog('replaceContent', { nodeid, tags, mentions, todosContent, nodeTodos, todo, content })
+          return todo
+            ? { ...todo, mentions, tags, content: [content] }
+            : createTodo(nodeid, content.id, [content], mentions, tags)
         })
 
         const leftOutTodos = nTodo.filter((todo) => !nodeTodos.find((t) => t.id === todo.id && nodeid === t.nodeid))
