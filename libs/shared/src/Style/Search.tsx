@@ -49,9 +49,16 @@ const iconStyle = (primary?: boolean) => css`
     color: ${({ theme }) => (primary ? theme.colors.primary : theme.colors.gray[9])};
   }
 `
-export const InputWrapper = styled.div`
+export const InputWrapper = styled.div<{ transparent?: boolean }>`
   width: 100%;
-  ${iconStyle(true)};
+  ${({ transparent }) =>
+    transparent &&
+    css`
+      background-color: ${({ theme }) => theme.colors.gray[8]};
+      padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+      border-radius: ${({ theme }) => theme.borderRadius.small};
+      margin-bottom: ${({ theme }) => theme.spacing.medium};
+    `}
 `
 
 export const SearchInput = styled(Input)`

@@ -1,12 +1,13 @@
-import { transparentize } from 'polished'
 import React from 'react'
-import styled, { css } from 'styled-components'
+
 import { Icon } from '@iconify/react'
 import { TippyProps } from '@tippyjs/react'
+import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
 
+import { ToolbarTooltip } from '../Components/Tooltips'
 import { centeredCss } from './Layouts'
 import { LoadingWrapper } from './Loading'
-import { ToolbarTooltip } from '../Components/Tooltips'
 import { TooltipTitleWithShortcut } from './Tooltip'
 
 export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
@@ -27,14 +28,23 @@ export const Button = styled.button<ButtonProps>`
   transition: 0.3s ease;
   background-color: ${({ theme }) => theme.colors.form.button.bg};
 
+  flex-shrink: 0;
+
+  &:focus {
+    color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0px 6px 12px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
+  }
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
     box-shadow: 0px 6px 12px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
   }
 
   &:disabled {
-    opacity: 0.33;
-    cursor: default;
+    background-color: ${({ theme }) => theme.colors.form.button.bg};
+    color: ${({ theme }) => transparentize(0.5, theme.colors.form.button.fg)};
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   ${({ primary, transparent, theme }) =>
@@ -44,6 +54,10 @@ export const Button = styled.button<ButtonProps>`
       background-color: transparent;
       &:hover {
         background-color: ${theme.colors.form.button.bg};
+      }
+      &:disabled {
+        background-color: ${({ theme }) => theme.colors.gray[6]};
+        cursor: default;
       }
     `}
 
@@ -68,6 +82,14 @@ export const Button = styled.button<ButtonProps>`
             background-color: ${theme.colors.fade.primary};
             color: ${theme.colors.text.oppositePrimary};
           }
+          &:disabled {
+            background-color: ${({ theme }) => theme.colors.gray[6]};
+            cursor: default;
+          }
+          &:focus {
+            color: ${theme.colors.text.oppositePrimary};
+            box-shadow: 0px 6px 12px ${({ theme }) => transparentize(0.75, theme.colors.primary)};
+          }
         `
       : ''}
 
@@ -81,6 +103,9 @@ export const Button = styled.button<ButtonProps>`
             background-color: ${theme.colors.fade.primary};
             color: ${theme.colors.text.oppositePrimary};
           }
+          &:disabled {
+            background-color: ${({ theme }) => theme.colors.gray[6]};
+          }
         `
       : ''}
 `
@@ -91,10 +116,11 @@ export type IconButtonProps = {
   size?: string | number
   onClick?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   singleton?: TippyProps['singleton']
-  highlight?: boolean
-  shortcut?: string
-  disabled?: boolean
   transparent?: boolean
+  highlight?: boolean
+  disabled?: boolean
+  color?: string
+  shortcut?: string
 }
 
 export const HeadlessButton = styled.button`
@@ -111,9 +137,9 @@ export const IconButton = ({
   transparent,
   shortcut,
   highlight,
+  color,
   singleton
 }: IconButtonProps) => {
-  transparent = transparent ?? true
   return (
     <ToolbarTooltip
       content={
@@ -122,12 +148,12 @@ export const IconButton = ({
       singleton={singleton}
     >
       <Button
-        transparent={transparent ? transparent : true}
+        transparent={transparent !== undefined ? transparent : true}
         disabled={disabled}
         onClick={onClick}
         highlight={highlight}
       >
-        <Icon icon={icon} height={size} />
+        <Icon color={color} icon={icon} height={size} />
       </Button>
     </ToolbarTooltip>
   )

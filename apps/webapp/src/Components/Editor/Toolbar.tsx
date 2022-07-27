@@ -1,8 +1,9 @@
+import React from 'react'
+
 import focusLine from '@iconify/icons-ri/focus-line'
 import shareLine from '@iconify/icons-ri/share-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { useSingleton } from '@tippyjs/react'
-import React from 'react'
 
 import { Loading, ToolbarTooltip, IconButton } from '@mexit/shared'
 import { InfoTools, NodeInfo } from '@mexit/shared'
@@ -30,14 +31,15 @@ const Toolbar = () => {
   const { toggleReminder } = useToggleElements()
 
   return (
-    <NodeInfo {...getFocusProps(focusMode)}>
+    <NodeInfo>
       <NodeRenameOnlyTitle />
       {fetchingContent && <Loading dots={3} />}
-      <InfoTools>
+      <InfoTools {...getFocusProps(focusMode)}>
         <ToolbarTooltip singleton={source} />
         <IconButton
           size={24}
           singleton={target}
+          transparent={false}
           icon={shareLine}
           title="Share"
           highlight={shareModalState}
@@ -52,6 +54,7 @@ const Toolbar = () => {
         <IconButton
           singleton={target}
           size={24}
+          transparent={false}
           icon={focusLine}
           title="Focus Mode"
           shortcut={shortcuts.toggleFocusMode.keystrokes}

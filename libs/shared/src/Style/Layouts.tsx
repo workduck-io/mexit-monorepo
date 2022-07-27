@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { Icon } from '@iconify/react'
+import styled, { css } from 'styled-components'
 
 import { Title } from './Typography'
 
@@ -65,12 +65,12 @@ export const MainHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.medium};
-  color: ${({ theme }) => theme.colors.primary};
   margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
 
   ${Title} {
     font-size: 2rem;
     font-weight: bold;
     flex-grow: 1;
+    margin: 0;
   }
 `

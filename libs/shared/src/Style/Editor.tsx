@@ -25,12 +25,11 @@ export const focusStyles = ({ $focusMode, $focusHover }: FocusModeProp) => {
 
 export const NoteTitle = styled.h1``
 
-export const NodeInfo = styled.div<FocusModeProp>`
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+export const NodeInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.small}`};
+  padding: 0.5rem 2rem 0.5rem 1.25rem;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: opacity 0.3s ease-in-out;
 
@@ -40,11 +39,9 @@ export const NodeInfo = styled.div<FocusModeProp>`
     font-weight: normal;
     margin: 0 0 0 ${({ theme }) => theme.spacing.small};
   }
-
-  ${(props) => focusStyles(props)}
 `
 
-export const InfoTools = styled.div`
+export const InfoTools = styled.div<FocusModeProp>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,6 +49,7 @@ export const InfoTools = styled.div`
   ${Button}, ${AsyncButton} {
     margin: 0;
   }
+  ${(props) => focusStyles(props)}
 `
 
 export const EditorPreviewStyles = styled.div`

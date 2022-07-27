@@ -144,6 +144,7 @@ const SettingsRoutes = () => {
           </ProtectedRoute>
         }
       >
+        <Route index element={<UserPage />} />
         <Route path="about" element={<About />} />
         <Route path="themes" element={<Themes />} />
         <Route path="user" element={<UserPage />} />
@@ -177,6 +178,12 @@ const IntegrationRoutes = () => {
     </Routes>
   )
 }
+
+const Home = () => (
+  <>
+    <Outlet />
+  </>
+)
 
 export const Switch = () => {
   const location = useLocation()
@@ -244,29 +251,31 @@ export const Switch = () => {
           path={ROUTE_PATHS.home}
           element={
             <ProtectedRoute>
-              <EditorView />
+              <Home />
             </ProtectedRoute>
           }
         >
           <Route index element={<DraftView />} />
-          <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
           <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
-          <Route
-            path={ROUTE_PATHS.reminders}
-            element={
-              <ProtectedRoute>
-                <RemindersAll />
-              </ProtectedRoute>
-            }
-          />
-          <Route path={ROUTE_PATHS.archive} element={<Archive />} />
+          <Route path={ROUTE_PATHS.reminders} element={<RemindersAll />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
+        <Route
+          path={ROUTE_PATHS.node}
+          element={
+            <ProtectedRoute>
+              <EditorView />
+            </ProtectedRoute>
+          }
+        >
+          <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
+        </Route>
+        <Route path={ROUTE_PATHS.archive} element={<Archive />} />
         <Route path="*" element={<RouteNotFound />} />
       </Routes>
     </SwitchWrapper>

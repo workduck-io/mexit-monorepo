@@ -55,6 +55,11 @@ export interface WorkspaceDetails {
   id: string
 }
 
+export interface UpdatableUserDetails {
+  name?: string
+  alias?: string
+}
+
 export interface AuthStoreState extends State {
   isForgottenPassword: boolean
   authenticated: boolean
@@ -66,6 +71,7 @@ export interface AuthStoreState extends State {
   setRegistered: (val: boolean) => void
   setIsForgottenPassword: (val: boolean) => void
   getWorkspaceId: () => string | undefined
+  updateUserDetails: (userDetails: UpdatableUserDetails) => void
 }
 
 export interface MexUser {

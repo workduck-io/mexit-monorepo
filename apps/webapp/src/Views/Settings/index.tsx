@@ -1,20 +1,26 @@
 import React from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
-import styled from 'styled-components'
+
 import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
-import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
 import user3Line from '@iconify-icons/ri/user-3-line'
+import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
 import informationLine from '@iconify/icons-ri/information-line'
 import { Icon } from '@iconify/react'
+import { NavLink, Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { useAuthentication } from '../../Stores/useAuth'
-import { Button, SettingsContainer, SettingsContent, SettingsOptions, SettingTitle, Title } from '@mexit/shared'
+import {
+  Button,
+  IntegrationContainer,
+  IntegrationTitle,
+  MainHeader,
+  SettingsContainer,
+  SettingsContent,
+  SettingsOptions,
+  SettingTitle
+} from '@mexit/shared'
+
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-
-const IntegrationContainer = styled.section`
-  margin-left: 4rem;
-  flex: 1;
-`
+import { useAuthentication } from '../../Stores/useAuth'
 
 const Margin = styled.div`
   margin: 1rem 1rem 0.5rem 0;
@@ -34,26 +40,27 @@ const Settings = () => {
 
   return (
     <IntegrationContainer>
-      <Title>Settings</Title>
+      <MainHeader>
+        <IntegrationTitle>Settings</IntegrationTitle>
+      </MainHeader>
       <SettingsContainer>
         <SettingsOptions>
-          <SettingTitle tabIndex={-1} to="about">
-            <Icon icon={informationLine} />
-            About
+          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="user">
+            <Icon icon={user3Line} />
+            Profile
           </SettingTitle>
           <SettingTitle tabIndex={-1} to="themes">
             <Icon icon={paintBrushFill} />
             Themes
           </SettingTitle>
-          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="user">
-            <Icon icon={user3Line} />
-            Profile
-          </SettingTitle>
           <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="shortcuts">
             <Icon icon={keyboardBoxLine} />
             Shortcuts
           </SettingTitle>
-
+          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
+            <Icon icon={informationLine} />
+            About
+          </SettingTitle>
           <Margin />
           <Button onClick={onLogout}>Logout</Button>
         </SettingsOptions>
