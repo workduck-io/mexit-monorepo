@@ -1,3 +1,6 @@
+import { ELEMENT_TODO_LI } from '@udecode/plate'
+import create from 'zustand'
+
 import {
   TodoType,
   TodoStatus,
@@ -8,15 +11,18 @@ import {
   SNIPPET_PREFIX,
   SearchFilter,
   isElder,
-  getAllParentPaths
+  getAllParentPaths,
+  mog
 } from '@mexit/core'
-import { ELEMENT_TODO_LI } from '@udecode/plate'
-import create from 'zustand'
+
 import { defaultContent } from '../Data/baseData'
+import { getAllParentIds } from '../Editor/Utils/helper'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { KanbanCard, KanbanColumn, KanbanBoard } from '../Types/Kanban'
+import { useTaskFilterFunctions } from './useFilterFunctions'
 import { FilterStore } from './useFilters'
 import { useLinks } from './useLinks'
+import { useMentions } from './useMentions'
 import { useNodes } from './useNodes'
 import { useSearchExtra } from './useSearch'
 
@@ -47,6 +53,8 @@ export const getPureContent = (todo: TodoType) => {
 export const useKanbanFilterStore = create<FilterStore<TodoType>>((set) => ({
   currentFilters: [],
   setCurrentFilters: (filters: SearchFilter<TodoType>[]) => set({ currentFilters: filters }),
+  indexes: [],
+  setIndexes: () => undefined,
   filters: [],
   setFilters: (filters: SearchFilter<TodoType>[]) => set({ filters })
 }))
@@ -57,9 +65,12 @@ export const useTodoKanban = () => {
   const setCurrentFilters = useKanbanFilterStore((state) => state.setCurrentFilters)
   const setFilters = useKanbanFilterStore((s) => s.setFilters)
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
+
   const { getPathFromNodeid } = useLinks()
   const { isInArchive } = useNodes()
   const { getSearchExtra } = useSearchExtra()
+  const { getUserFromUserid } = useMentions()
+  const taskFilterFunctions = useTaskFilterFunctions()
 
   const changeStatus = (todo: TodoType, newStatus: TodoStatus) => {
     updateTodo(todo.nodeid, { ...todo, metadata: { ...todo.metadata, status: newStatus } })
@@ -69,11 +80,17 @@ export const useTodoKanban = () => {
     updateTodo(todo.nodeid, { ...todo, metadata: { ...todo.metadata, priority: newPriority } })
   }
 
-  const generateTodoNodeFilters = (board: TodoKanbanBoard) => {
+  const generateTodoFilters = (board: TodoKanbanBoard) => {
+    // Nodes and tags
     const todoNodes: string[] = []
+    const todoTags: string[] = []
+    const todoMentions: string[] = []
+
     board.columns.forEach((column) => {
       column.cards.forEach((card) => {
         todoNodes.push(card.todo.nodeid)
+        todoTags.push(...(card.todo.tags ?? []))
+        todoMentions.push(...(card.todo.mentions ?? []))
       })
     })
 
@@ -81,7 +98,7 @@ export const useTodoKanban = () => {
     const rankedPaths = todoNodes.reduce((acc, item) => {
       const path = getPathFromNodeid(item)
       if (!path) return acc
-      const allPaths = getAllParentPaths(path)
+      const allPaths = getAllParentIds(path)
       // const allPaths =
       allPaths.forEach((path) => {
         if (acc[path]) {
@@ -95,26 +112,74 @@ export const useTodoKanban = () => {
 
     const nodeFilters = Object.entries(rankedPaths).reduce((acc, c) => {
       const [path, rank] = c
-      if (rank > 1) {
+      if (rank >= 1) {
         // mog('path', { path, rank })
         acc.push({
           key: 'note',
           id: `node_${path}`,
           icon: 'ri:file-list-2-line',
           label: path,
-          filter: (item: TodoType) => {
-            const itemPath = getPathFromNodeid(item.nodeid)
-            if (!itemPath) return false
-            // mog('itemPath being filtered', { item, itemPath, path })
-            return isElder(itemPath, path) || itemPath === path
-          }
+          value: path
+          // filter: (item: TodoType) => {
+          //   const itemPath = getPathFromNodeid(item.nodeid)
+          //   if (!itemPath) return false
+          //   // mog('itemPath being filtered', { item, itemPath, path })
+          //   return isElder(itemPath, path) || itemPath === path
+          // }
         })
       }
       return acc
     }, [] as SearchFilter<TodoType>[])
 
-    // mog('nodeFilters', { rankedPaths, nodeFilters })
-    return nodeFilters
+    const rankedTags = todoTags.reduce((acc, tag) => {
+      if (!acc[tag]) {
+        acc[tag] = 1
+      } else {
+        acc[tag] += 1
+      }
+      return acc
+    }, {} as { [tag: string]: number })
+
+    const tagFilters = Object.entries(rankedTags).reduce((acc, c) => {
+      const [tag, rank] = c
+      if (rank >= 1) {
+        acc.push({
+          key: 'tag',
+          id: `tag_${tag}`,
+          icon: 'ri:hashtag',
+          label: tag,
+          value: tag
+        })
+      }
+      return acc
+    }, [] as SearchFilter<TodoType>[])
+
+    const rankedMentions = todoMentions.reduce((acc, mention) => {
+      if (!acc[mention]) {
+        acc[mention] = 1
+      } else {
+        acc[mention] += 1
+      }
+      return acc
+    }, {} as { [mention: string]: number })
+
+    const mentionFilters = Object.entries(rankedMentions).reduce((acc, c) => {
+      const [mention, rank] = c
+      if (rank >= 1) {
+        acc.push({
+          key: 'mention',
+          id: `mention_${mention}`,
+          icon: 'ri:at-line',
+          label: getUserFromUserid(mention)?.alias ?? mention,
+          value: mention
+        })
+      }
+      return acc
+    }, [] as SearchFilter<TodoType>[])
+
+    const allFilters = [...nodeFilters, ...tagFilters, ...mentionFilters]
+    mog('nodeFilters', { board, todoTags, rankedTags, rankedPaths, nodeFilters })
+    return allFilters
   }
 
   const getTodoBoard = () => {
@@ -144,7 +209,12 @@ export const useTodoKanban = () => {
       if (nodeid.startsWith(SNIPPET_PREFIX)) return
       if (isInArchive(nodeid)) return
       todos
-        .filter((todo) => currentFilters.every((filter) => filter.filter(todo)))
+        .filter((todo) =>
+          currentFilters.every(
+            (filter) => taskFilterFunctions[filter.key](todo, filter.value)
+            // filter.filter(todo)
+          )
+        )
         .filter((todo) => {
           // TODO: Find a faster way to check for empty content // May not need to convert content to raw text
           const text = convertContentToRawText(todo.content, ' ', { extra }).trim()
@@ -165,8 +235,8 @@ export const useTodoKanban = () => {
         })
     })
 
-    const nodeFilters = generateTodoNodeFilters(todoBoard)
-    setFilters(nodeFilters)
+    const todoFilters = generateTodoFilters(todoBoard)
+    setFilters(todoFilters)
 
     todoBoard.columns.forEach((column) => {
       column.cards.sort((a, b) => {
@@ -209,6 +279,7 @@ export const useTodoKanban = () => {
     resetCurrentFilters,
     resetFilters,
     filters,
-    currentFilters
+    currentFilters,
+    setCurrentFilters
   }
 }

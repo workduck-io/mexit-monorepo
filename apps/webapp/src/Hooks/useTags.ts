@@ -160,5 +160,10 @@ export const useTags = () => {
     }
   }
 
-  return { getRelatedNodes, getNodesAndCleanCacheForTag, updateTagsFromContent, getTags, hasTags }
+  const getAllTags = (): string[] => {
+    const tagsCache = useDataStore.getState().tagsCache
+    return Object.keys(tagsCache)
+  }
+
+  return { getRelatedNodes, getNodesAndCleanCacheForTag, updateTagsFromContent, getTags, hasTags, getAllTags }
 }

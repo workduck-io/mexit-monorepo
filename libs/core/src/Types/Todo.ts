@@ -1,5 +1,5 @@
-import { Shortcut } from './Help'
 import { NodeEditorContent } from './Editor'
+import { Shortcut } from './Help'
 
 export enum PriorityType {
   low = 'low',
@@ -46,6 +46,8 @@ export type TodoType = {
   }
   createdAt: number
   updatedAt: number
+  mentions: Array<string>
+  tags: Array<string>
 }
 
 export const getNextStatus = (status: TodoStatus): TodoStatus => {

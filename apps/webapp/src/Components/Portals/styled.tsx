@@ -1,11 +1,19 @@
 import styled, { css } from 'styled-components'
 
 // import { FlexBetween } from '@components/spotlight/Actions/styled'
-import { Button, CardShadow, StyledEditor, BodyFont, CenteredFlex, IntegrationTitle } from '@mexit/shared'
+import {
+  Button,
+  CardShadow,
+  StyledEditor,
+  BodyFont,
+  CenteredFlex,
+  IntegrationTitle,
+  CenteredMainContent
+} from '@mexit/shared'
 
 import { FlexBetween } from '../FloatingButton'
 
-export const ServiceContainer = styled(StyledEditor)``
+export const ServiceContainer = styled(CenteredMainContent)``
 
 export const CardStyles = css`
   padding: ${({ theme }) => theme.spacing.medium};

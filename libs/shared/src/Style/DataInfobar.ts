@@ -4,7 +4,6 @@ import { CollapsableHeaderTitle } from './Collapse'
 
 export const DataInfobarWrapper = styled.div`
   display: flex;
-  height: calc(100% - 10rem);
   margin-top: 2rem;
   flex-direction: column;
   justify-content: flex-start;

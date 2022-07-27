@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
-import { useMatch } from 'react-router-dom'
 
+import { useMatch } from 'react-router-dom'
 import { useTheme } from 'styled-components'
 
 import { mog } from '@mexit/core'
@@ -16,6 +16,8 @@ import ArchiveSidebar from './ArchiveSidebar'
 import Bookmarks from './Bookmarks'
 import SharedNotes from './SharedNotes'
 import SnippetList from './SnippetList'
+import TagList from './TagList'
+import TaskViewList from './TaskViewList'
 import { TreeContainer } from './Tree'
 
 const NodeSidebar = () => {
@@ -70,6 +72,9 @@ const SidebarTabs = () => {
   const isArchive = useMatch(ROUTE_PATHS.archive)
   const isSnippetNote = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
   const isSnippet = useMatch(ROUTE_PATHS.snippets)
+  const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
+  const isTasks = useMatch(ROUTE_PATHS.tasks)
+  const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
 
   mog('IS SIDEBAR', { sidebar, isEditor, isArchive })
 
@@ -80,6 +85,10 @@ const SidebarTabs = () => {
   if (isSnippet || isSnippetNote) return <SnippetList />
 
   if (isArchive || isArchiveEditor) return <ArchiveSidebar />
+
+  if (isTasks || isTasksView) return <TaskViewList />
+
+  if (isTagsView) return <TagList />
 
   return <> </>
 }

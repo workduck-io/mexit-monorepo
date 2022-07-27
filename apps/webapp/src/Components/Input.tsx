@@ -1,6 +1,11 @@
-import Tippy from '@tippyjs/react/headless' // different import path!
+// different import path!
 import React from 'react'
+
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+
 import { InputBlock, Label, InputWrapper } from '@mexit/shared'
+
 import { ErrorTooltip } from '../Style/Tippy'
 import Infobox from './Infobox'
 
@@ -29,15 +34,28 @@ export interface LabeledInputProps {
   label: string
   inputProps?: any
   labelProps?: any
+  labelIcon?: any
   additionalInfo?: string
+  // Whether the input is transparent or not
+  // Current transparent inputs lie on a card background with their label
+  transparent?: boolean
   error?: string
 }
 
-const Input = ({ name, label, inputProps, labelProps, error, additionalInfo }: LabeledInputProps) => {
+const Input = ({
+  name,
+  label,
+  inputProps,
+  labelProps,
+  labelIcon,
+  error,
+  additionalInfo,
+  transparent
+}: LabeledInputProps) => {
   // console.log({ name, label, inputProps, labelProps, error })
 
   return (
-    <InputWrapper key={`FormInput_${name}_${label}`}>
+    <InputWrapper transparent={transparent} key={`FormInput_${name}_${label}`}>
       <Tippy
         render={(attrs) => (
           <ErrorTooltip tabIndex={-1} {...attrs}>
@@ -49,11 +67,11 @@ const Input = ({ name, label, inputProps, labelProps, error, additionalInfo }: L
         appendTo={() => document.body}
         visible={error !== undefined}
       >
-        <Label error={error !== undefined} htmlFor={name} {...labelProps}>
-          {label} {additionalInfo && <Infobox text={additionalInfo} />}
+        <Label transparent={transparent} error={error !== undefined} htmlFor={name} {...labelProps}>
+          {label} {labelIcon && <Icon icon={labelIcon} />} {additionalInfo && <Infobox text={additionalInfo} />}
         </Label>
       </Tippy>
-      <InputBlock error={error !== undefined} key={`login-form-${name} `} {...inputProps} />
+      <InputBlock error={error !== undefined} transparent={transparent} key={`form-input-${name} `} {...inputProps} />
     </InputWrapper>
   )
 }

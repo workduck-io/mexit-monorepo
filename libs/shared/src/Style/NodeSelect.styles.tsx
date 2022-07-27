@@ -1,6 +1,6 @@
+import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { transparentize } from 'polished'
 import { Input } from './ToggleButton'
 
 export const StyledInputWrapper = styled.div`
@@ -26,6 +26,21 @@ export const StyledCombobox = styled.div`
     &.okayIcon {
       color: ${({ theme }) => theme.colors.palette.green};
     }
+  }
+`
+
+export const FilterComboboxToggle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.small};
+  padding: 0 ${({ theme }) => theme.spacing.small};
+  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: ${({ theme }) => theme.colors.text.fade};
   }
 `
 
