@@ -12,7 +12,6 @@ import {
   today,
   upcoming
 } from '@mexit/core'
-
 import {
   DisplayReminderGroup,
   NodeReminderGroup,
@@ -23,6 +22,7 @@ import {
   DisplayReminder,
   isInSameMinute
 } from '@mexit/core'
+
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
@@ -65,16 +65,16 @@ export const useReminders = () => {
     updateReminderState(reminder.id, newReminderState)
   }
 
-  const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
-    const filteredReminders = filter ? getFilteredReminders(filter) : reminders
-    filteredReminders.filter(today)
-  }
+  // const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
+  //   const filteredReminders = filter ? getFilteredReminders(filter) : reminders
+  //   filteredReminders.filter(today)
+  // }
 
-  const getFilteredReminders = (filter: SearchFilter<Reminder>) => {
-    return reminders.filter((reminder) => {
-      return filter.filter(reminder)
-    })
-  }
+  // const getFilteredReminders = (filter: SearchFilter<Reminder>) => {
+  //   return reminders.filter((reminder) => {
+  //     return filter.filter(reminder)
+  //   })
+  // }
 
   const isArmed = (reminder: Reminder) => {
     return useReminderStore.getState().armedReminders.some((r) => r.reminderId === reminder.id)
@@ -475,8 +475,6 @@ export const useReminders = () => {
     updateReminder,
     clearReminders,
     setReminders,
-    getTodayReminders,
-    getFilteredReminders,
     getNodeReminders,
     getToArmReminders,
     clearNodeReminders,

@@ -46,8 +46,8 @@ export type TodoType = {
   }
   createdAt: number
   updatedAt: number
-  mentions: Array<string>
-  tags: Array<string>
+  mentions?: Array<string>
+  tags?: Array<string>
 }
 
 export const getNextStatus = (status: TodoStatus): TodoStatus => {
