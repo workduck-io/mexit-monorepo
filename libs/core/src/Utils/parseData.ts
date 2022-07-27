@@ -168,7 +168,7 @@ export const convertDataToIndexable = (data: PersistentData) => {
       })
     } else if (idxName === indexNames.snippet) {
       data.snippets
-        .filter((snip) => !snip.isTemplate)
+        .filter((snip) => !snip.template)
         .map((snip) => {
           const title = titleNodeMap.get(snip.id)
           const temp: GenericSearchData = {
@@ -180,7 +180,7 @@ export const convertDataToIndexable = (data: PersistentData) => {
         })
     } else if (idxName === indexNames.template) {
       data.snippets
-        .filter((snip) => snip.isTemplate)
+        .filter((snip) => snip.template)
         .map((template) => {
           const title = titleNodeMap.get(template.id)
           const temp: GenericSearchData = {

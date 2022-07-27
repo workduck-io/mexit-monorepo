@@ -4,8 +4,8 @@ import styled, { css } from 'styled-components'
 import { CenteredColumn } from '@mexit/shared'
 
 export const IntegrationContainer = styled.section`
-  margin-left: 4rem;
-  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '5rem' : '1rem')});
+  margin: 0 4rem;
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '6rem' : '1rem')});
 `
 
 export const TemplateContainer = styled.section`
@@ -196,7 +196,7 @@ export const NoWrap = styled(Flex)`
   white-space: nowrap;
 `
 
-export const IntegrationCardTitle = styled.div`
+export const CardTitle = styled.div`
   font-size: 1rem;
   line-height: 1.2rem;
   font-weight: bold;

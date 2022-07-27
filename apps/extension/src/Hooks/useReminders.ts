@@ -12,7 +12,6 @@ import {
   today,
   upcoming
 } from '@mexit/core'
-
 import {
   DisplayReminderGroup,
   NodeReminderGroup,
@@ -23,6 +22,7 @@ import {
   DisplayReminder,
   isInSameMinute
 } from '@mexit/core'
+
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
@@ -65,16 +65,16 @@ export const useReminders = () => {
     updateReminderState(reminder.id, newReminderState)
   }
 
-  const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
-    const filteredReminders = filter ? getFilteredReminders(filter) : reminders
-    filteredReminders.filter(today)
-  }
+  // const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
+  //   const filteredReminders = filter ? getFilteredReminders(filter) : reminders
+  //   filteredReminders.filter(today)
+  // }
 
-  const getFilteredReminders = (filter: SearchFilter<Reminder>) => {
-    return reminders.filter((reminder) => {
-      return filter.filter(reminder)
-    })
-  }
+  // const getFilteredReminders = (filter: SearchFilter<Reminder>) => {
+  //   return reminders.filter((reminder) => {
+  //     return filter.filter(reminder)
+  //   })
+  // }
 
   const isArmed = (reminder: Reminder) => {
     return useReminderStore.getState().armedReminders.some((r) => r.reminderId === reminder.id)
@@ -278,8 +278,6 @@ export const useReminders = () => {
         })
         mog('ReminderArmer: IpcAction.ACTION_REMINDER USE OPEN_REMINDER ACTION', { action, reminder })
         // appNotifierWindow(IpcAction.OPEN_REMINDER_IN_MEX, AppType.SPOTLIGHT, { reminder: reminder })
-        // TODO: even clicking on any button runs this, commenting it out for now. On mac, one has to click on options first to see all the notification buttons
-        // window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${reminder.nodeid}`, '_blank')
         break
       case 'delete':
         deleteReminder(reminder.id)
@@ -384,9 +382,6 @@ export const useReminders = () => {
       //     independent: true,
       //     attachment: reminderGroups
       // })
-      chrome.runtime.sendMessage({ type: 'SHOW_REMINDER', attachment: reminderGroups }, (response) => {
-        console.log('response post SHOW_REMINDER', response)
-      })
     }, time - now.getTime())
     toArmRems.forEach((r) => addArmReminder({ reminderId: r.id, timeoutId: id }))
   }
@@ -475,8 +470,8 @@ export const useReminders = () => {
     updateReminder,
     clearReminders,
     setReminders,
-    getTodayReminders,
-    getFilteredReminders,
+    // getTodayReminders,
+    // getFilteredReminders,
     getNodeReminders,
     getToArmReminders,
     clearNodeReminders,

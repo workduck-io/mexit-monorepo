@@ -6,6 +6,7 @@ export const authStoreConstructor = (set, get) => ({
   workspaceDetails: undefined,
   setAuthenticated: (userDetails, workspaceDetails) =>
     set({ authenticated: true, userDetails, workspaceDetails, registered: false }),
+  // setAuthenticatedUserDetails: (userDetails: UserDetails) => set({ authenticated: true, userDetails }),
   setUnAuthenticated: () => set({ authenticated: false, userDetails: undefined, workspaceDetails: undefined }),
   setRegistered: (val) => set({ registered: val }),
   setIsForgottenPassword: (val) => set({ isForgottenPassword: val }),
@@ -15,5 +16,8 @@ export const authStoreConstructor = (set, get) => ({
       return workspaceDetails.id
     }
     return undefined
+  },
+  updateUserDetails: (userDetails) => {
+    set({ userDetails: { ...get().userDetails, ...userDetails } })
   }
 })

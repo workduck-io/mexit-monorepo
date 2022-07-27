@@ -127,6 +127,7 @@ export const apiURLs = {
 
   user: {
     getFromEmail: (email: string) => `${BASE_USER_URL}/email/${encodeURIComponent(email)}`,
-    getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`
+    getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`,
+    updateInfo: `${BASE_USER_URL}/info`
   }
 }

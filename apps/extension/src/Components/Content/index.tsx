@@ -87,7 +87,10 @@ export default function Content() {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
-      } else if (activeItem?.type === ActionType.SCREENSHOT && persistedContent) {
+      } else if (
+        (activeItem?.type === ActionType.MAGICAL || activeItem?.type === ActionType.SCREENSHOT) &&
+        persistedContent
+      ) {
         setNodeContent([...content, { children: persistedContent }])
       } else {
         setNodeContent(content)

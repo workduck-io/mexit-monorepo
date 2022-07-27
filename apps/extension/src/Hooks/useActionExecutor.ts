@@ -1,3 +1,6 @@
+import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
+import toast from 'react-hot-toast'
+
 import {
   ActionType,
   CategoryType,
@@ -6,6 +9,7 @@ import {
   createNodeWithUid,
   defaultCopyConverter,
   defaultCopyFilter,
+  ELEMENT_PARAGRAPH,
   ELEMENT_TAG,
   getNewDraftKey,
   getUntitledDraftKey,
@@ -16,30 +20,32 @@ import {
   QuickLinkType,
   SEPARATOR
 } from '@mexit/core'
-import toast from 'react-hot-toast'
+
 import Action from '../Components/Action'
 import { StyledInput } from '../Components/Search/styled'
+import { CopyTag } from '../Editor/components/Tags/CopyTag'
+import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
+import { getMexHTMLDeserializer } from '../Utils/deserialize'
+import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
+import { useInternalLinks } from './useInternalLinks'
+import { useNodes } from './useNodes'
+import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useSaveChanges } from './useSaveChanges'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import { CopyTag } from '../Editor/components/Tags/CopyTag'
-
-import getPlugins from '../Editor/plugins/index'
-import { useNodes } from './useNodes'
 
 export function useActionExecutor() {
-  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults } =
+  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
     useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode, setPersistedContent } = useEditorContext()
+  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, node } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
+  const { getParentILink } = useInternalLinks()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
@@ -140,6 +146,32 @@ export function useActionExecutor() {
             setActiveItem(item)
             setInput('')
             setSearchResults([])
+            break
+          }
+          case ActionType.MAGICAL: {
+            const webpage = checkURL(window.location.href)
+
+            if (!webpage) {
+              toast.error('No data available for extracting')
+            } else {
+              setActiveItem(item)
+              getProfileData(webpage)
+                .then((data) => {
+                  setPersistedContent([
+                    {
+                      type: ELEMENT_PARAGRAPH,
+                      children: data
+                    }
+                  ])
+                })
+                .catch((err) => {
+                  console.log('err:', err)
+                })
+              setActiveIndex(0)
+              setInput('')
+              setSearch({ value: '', type: CategoryType.search })
+            }
+
             break
           }
           case ActionType.SCREENSHOT: {

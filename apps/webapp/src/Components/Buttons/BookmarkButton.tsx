@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
+
 import bookmarkFill from '@iconify/icons-ri/bookmark-fill'
 import bookmarkLine from '@iconify/icons-ri/bookmark-line'
 import { Icon } from '@iconify/react'
 
-import { LoadingButton } from './Buttons'
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import { useDataStore } from '../../Stores/useDataStore'
+import { LoadingButton } from './Buttons'
 
 interface BookmarkButtonProps {
   nodeid: string
@@ -38,7 +39,11 @@ const BookmarkButton = ({ nodeid }: BookmarkButtonProps) => {
   }
 
   return (
-    <LoadingButton dots={2} loading={loading} buttonProps={{ highlight: bmed, onClick: onBookmark, transparent: true }}>
+    <LoadingButton
+      dots={2}
+      loading={loading}
+      buttonProps={{ highlight: bmed, onClick: onBookmark, transparent: false }}
+    >
       <Icon width={24} icon={bmed ? bookmarkFill : bookmarkLine} />
     </LoadingButton>
   )

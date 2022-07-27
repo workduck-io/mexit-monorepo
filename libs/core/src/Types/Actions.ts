@@ -6,7 +6,8 @@ export enum ActionType {
   OPEN = 'Open Link',
   RENDER = 'Render Action',
   BROWSER_EVENT = 'Browser Action',
-  SCREENSHOT = 'Screenshot Action'
+  SCREENSHOT = 'Screenshot Action',
+  MAGICAL = 'Magical Action'
 }
 
 export interface MexitAction {
