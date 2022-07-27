@@ -1,44 +1,43 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import tinykeys from 'tinykeys'
+
 import Board from '@asseinfo/react-kanban'
-import { Icon } from '@iconify/react'
-import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
-import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
-import trashIcon from '@iconify/icons-codicon/trash'
+import { useMediaQuery } from 'react-responsive'
+import { useMatch } from 'react-router-dom'
+import tinykeys from 'tinykeys'
 
 import { getNextStatus, getPrevStatus, PriorityType, TodoType, mog } from '@mexit/core'
 import {
-  ShortcutToken,
-  ShortcutTokens,
   StyledTasksKanban,
   TaskCard,
   TaskColumnHeader,
-  TaskHeader,
   Heading,
-  Button,
   PageContainer,
-  Title
+  OverlaySidebarWindowWidth
 } from '@mexit/shared'
 
-import Infobox from '../Components/Infobox'
-import { DisplayShortcut, ShortcutMid } from '../Components/Shortcuts'
-import { TasksHelp } from '../Data/defaultText'
+import TaskHeader from '../Components/TaskHeader'
+import { TodoBase as Todo } from '../Components/Todo/Todo'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import useLoad from '../Hooks/useLoad'
 import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import SearchFilters from './SearchFilters'
+import { useViewStore } from '../Hooks/useTaskViews'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
-import { TodoBase } from '../Components/Todo/Todo'
-import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+import SearchFilters from './SearchFilters'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
   const nodesTodo = useTodoStore((store) => store.todos)
   const clearTodos = useTodoStore((store) => store.clearTodos)
+  const sidebar = useLayoutStore((store) => store.sidebar)
+  const match = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
+  const currentView = useViewStore((store) => store.currentView)
+  const setCurrentView = useViewStore((store) => store.setCurrentView)
 
   const { loadNode } = useLoad()
   const { goTo } = useRouting()
@@ -51,7 +50,7 @@ const Tasks = () => {
 
   const todos = useMemo(() => Object.entries(nodesTodo), [nodesTodo])
 
-  // console.log('todos', nodesTodo)
+  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   const {
     getTodoBoard,
@@ -61,7 +60,7 @@ const Tasks = () => {
     addCurrentFilter,
     removeCurrentFilter,
     resetCurrentFilters,
-    resetFilters,
+    setCurrentFilters,
     filters,
     currentFilters
   } = useTodoKanban()
@@ -292,10 +291,24 @@ const Tasks = () => {
     }
   }, [board, selectedCard])
 
+  useEffect(() => {
+    if (match && match.params && match.params.viewid) {
+      // const viewid = match.params.viewid
+      // loadView(viewid)
+      if (currentView) {
+        setCurrentFilters(currentView.filters)
+      }
+      // goTo(ROUTE_PATHS.view, NavigationType.push, viewid)
+    } else {
+      setCurrentView(undefined)
+      setCurrentFilters([])
+    }
+  }, [match])
+
   const onDoubleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, nodeid: string) => {
     event.preventDefault()
     //double click
-    // mog('double click', { event })
+    mog('double click', { event })
     if (event.detail === 2) {
       push(nodeid)
       // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, nodeid)
@@ -303,29 +316,27 @@ const Tasks = () => {
     }
   }
 
-  // mog('Tasks', { nodesTodo, board, selectedCard })
+  mog('Tasks', { nodesTodo, board, selectedCard, match })
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     const pC = getPureContent(todo)
-    mog('RenderTodo', { id, todo, dragging })
-
+    // mog('RenderTodo', { id, todo, dragging, sidebar })
     return (
       <TaskCard
         ref={selectedCard && id === selectedCard.id ? selectedRef : null}
         selected={selectedCard && selectedCard.id === id}
-        // TODO: for some reason the dragging is not as smooth as mex
-        // Dragging is consistent when holding the checkbox or priority icon
         dragging={dragging}
+        sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         onMouseDown={(event) => {
           event.preventDefault()
           onDoubleClick(event, todo.nodeid)
         }}
       >
-        <TodoBase
+        <Todo
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly={false}
+          readOnly
           parentNodeId={todo.nodeid}
         >
           <EditorPreviewRenderer
@@ -333,49 +344,15 @@ const Tasks = () => {
             content={pC}
             editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
           />
-        </TodoBase>
+        </Todo>
       </TaskCard>
     )
   }
 
   return (
     <PageContainer>
-      <TaskHeader>
-        <Title>Tasks</Title>
-        <ShortcutTokens>
-          <ShortcutToken>
-            Select:
-            <Icon icon={dragMove2Fill} />
-          </ShortcutToken>
-
-          <>
-            <ShortcutToken>
-              Navigate:
-              <DisplayShortcut shortcut="$mod+Enter" />
-            </ShortcutToken>
-            <ShortcutToken>
-              Move:
-              <DisplayShortcut shortcut="Shift" />
-              <ShortcutMid>+</ShortcutMid>
-              <Icon icon={arrowLeftRightLine} />
-            </ShortcutToken>
-            <ShortcutToken>
-              Change Priority:
-              <DisplayShortcut shortcut="$mod+0-3" />
-            </ShortcutToken>
-          </>
-          <ShortcutToken>
-            {selectedCard || currentFilters.length > 0 ? 'Clear Filters:' : 'Navigate to Editor:'}
-            <DisplayShortcut shortcut="Esc" />
-          </ShortcutToken>
-        </ShortcutTokens>
-        {/* <Button onClick={onClearClick}>
-          <Icon icon={trashIcon} height={24} />
-          Clear Todos
-        </Button> */}
-        <Infobox text={TasksHelp} />
-      </TaskHeader>
-      <StyledTasksKanban>
+      <StyledTasksKanban sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}>
+        <TaskHeader currentFilters={currentFilters} cardSelected={!!selectedCard} currentView={currentView} />
         <SearchFilters
           result={board}
           addCurrentFilter={addCurrentFilter}

@@ -1,27 +1,24 @@
 import React, { useMemo } from 'react'
-import { nanoid } from 'nanoid'
-import { startCase } from 'lodash'
-import { Icon } from '@iconify/react'
-import filterOffLine from '@iconify-icons/ri/filter-off-line'
+
 import filter2Line from '@iconify-icons/ri/filter-2-line'
+import filterOffLine from '@iconify-icons/ri/filter-off-line'
+import { Icon } from '@iconify/react'
+import { startCase } from 'lodash'
+import { nanoid } from 'nanoid'
 
 import { mog, FilterKey, SearchFilter } from '@mexit/core'
 import {
   SearchFilterCancel,
-  SearchFilterCategoryLabel,
-  SearchFilterCount,
   SearchFilterLabel,
   SearchFilterList,
-  SearchFilterListCurrent,
-  SearchFilterListSuggested,
-  SearchFilterListWrap,
-  SearchFilterStyled,
-  SearchFilterWrapper
+  SearchFiltersWrapper,
+  SearchFilterWrapper,
+  ToolbarTooltip
 } from '@mexit/shared'
 
 import Infobox from '../Components/Infobox'
-import { SearchFiltersHelp } from '../Data/defaultText'
 import SearchFilterInput from '../Components/SearchFilterInput'
+import { SearchFiltersHelp } from '../Data/defaultText'
 
 interface SearchFiltersProps<Item> {
   result?: any
@@ -32,6 +29,12 @@ interface SearchFiltersProps<Item> {
   resetCurrentFilters: () => void
 }
 
+const filterIcons: Partial<{ [key in FilterKey]: string }> = {
+  note: 'ri:file-list-2-line',
+  tag: 'ri:hashtag',
+  mention: 'ri:at-line'
+}
+
 const getGroupedFilters = <Item,>(filters: SearchFilter<Item>[], currentFilters: SearchFilter<Item>[]) => {
   const randomId = nanoid()
   // Remove current filters from filters
@@ -39,12 +42,12 @@ const getGroupedFilters = <Item,>(filters: SearchFilter<Item>[], currentFilters:
     (filter) => !currentFilters.find((currentFilter) => currentFilter.id === filter.id)
   )
 
-  const filtersByKey: {
-    [key: string]: {
+  const filtersByKey: Partial<{
+    [key in FilterKey]: {
       current: SearchFilter<Item>[]
       suggested: SearchFilter<Item>[]
     }
-  } = {}
+  }> = {}
 
   suggestedFilters.forEach((filter) => {
     const key = filter.key as FilterKey
@@ -105,70 +108,39 @@ const SearchFilters = <Item,>({
   return (
     <SearchFilterWrapper>
       <SearchFilterLabel>
-        <Icon icon={filter2Line} />
-        Filter By
+        {currentFilters.length > 0 ? (
+          <ToolbarTooltip content={'Clear all filters'}>
+            <SearchFilterCancel onClick={() => resetCurrentFilters()}>
+              <Icon icon={filterOffLine} />
+            </SearchFilterCancel>
+          </ToolbarTooltip>
+        ) : (
+          <Icon icon={filter2Line} />
+        )}
+        <Infobox text={SearchFiltersHelp} />
       </SearchFilterLabel>
-      {Object.entries(filtersByKey)
-        .sort(([key1], [key2]) => startCase(key1).localeCompare(startCase(key2)))
-        .map(([k, filter]) => {
-          return (
-            <SearchFilterList key={`filter_options${k}`}>
-              <SearchFilterCategoryLabel>{startCase(k)}:</SearchFilterCategoryLabel>
-
-              <SearchFilterListWrap>
-                {filter.current.length > 0 && (
-                  <SearchFilterListCurrent>
-                    {filter.current.map((f) => (
-                      <SearchFilterStyled
-                        selected
-                        key={`current_f_${f.id}`}
-                        onClick={() => {
-                          removeCurrentFilter(f)
-                          // updateResults()
-                        }}
-                      >
-                        {f.icon ? <Icon icon={f.icon} /> : null}
-                        {f.label}
-                        {f.count && <SearchFilterCount>{f.count}</SearchFilterCount>}
-                      </SearchFilterStyled>
-                    ))}
-                  </SearchFilterListCurrent>
-                )}
-                {filter.suggested.length > 0 && (
-                  <SearchFilterListSuggested>
-                    {filter.suggested.slice(0, 5).map((f) => (
-                      <SearchFilterStyled
-                        key={`suggested_f_${f.id}`}
-                        onClick={() => {
-                          addCurrentFilter(f)
-                          // updateResults()
-                        }}
-                      >
-                        {f.icon ? <Icon icon={f.icon} /> : null}
-                        {f.label}
-                        {f.count && <SearchFilterCount>{f.count}</SearchFilterCount>}
-                      </SearchFilterStyled>
-                    ))}
-                  </SearchFilterListSuggested>
-                )}
-              </SearchFilterListWrap>
-              <SearchFilterInput
-                key={`filter_input_${randomId}`}
-                items={[...filter.current, ...filter.suggested]}
-                onChange={(value) => {
-                  toggleForFilter(value)
-                }}
-              />
-            </SearchFilterList>
-          )
-        })}
-      {currentFilters.length > 0 && (
-        <SearchFilterCancel onClick={() => resetCurrentFilters()}>
-          <Icon icon={filterOffLine} />
-          Reset
-        </SearchFilterCancel>
-      )}
-      <Infobox text={SearchFiltersHelp} />
+      <SearchFiltersWrapper>
+        {Object.entries(filtersByKey)
+          .sort(([key1], [key2]) => startCase(key1).localeCompare(startCase(key2)))
+          .map(([k, filter]) => {
+            return (
+              <SearchFilterList key={`filter_options${k}`}>
+                <SearchFilterInput
+                  key={`filter_input_${randomId}`}
+                  filterKey={k as FilterKey}
+                  currentFilters={filter.current}
+                  removeCurrentFilter={removeCurrentFilter}
+                  items={[...filter.current, ...filter.suggested]}
+                  placeholder={`Filter by ${startCase(k)} ...`}
+                  icon={filterIcons[k] ?? 'ri:filter-2-line'}
+                  onChange={(value) => {
+                    toggleForFilter(value)
+                  }}
+                />
+              </SearchFilterList>
+            )
+          })}
+      </SearchFiltersWrapper>
     </SearchFilterWrapper>
   )
 }

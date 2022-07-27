@@ -1,16 +1,17 @@
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
+
+import { View } from '../Style/ViewSelector'
+import { EditorStyles } from './Editor'
+import { Input } from './Form'
+import { CardShadow } from './Helpers'
 import { DataGroup, MetadataWrapper } from './Metadata'
 import { StyledInputWrapper } from './NodeSelect.styles'
-import { View } from '../Style/ViewSelector'
-import { Input } from './Form'
 import { size } from './Responsive'
-import { ProfileIcon } from './UserPage'
-import { EditorStyles } from './Editor'
-import { CardShadow } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 import { Title } from './Typography'
+import { ProfileIcon } from './UserPage'
 
 interface ResultProps {
   selected?: boolean
@@ -35,14 +36,14 @@ const SearchTransition = css`
 `
 
 const SearchHeight = css`
-  height: calc(100vh - 22rem);
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 22rem);
 `
 
 const iconStyle = (primary?: boolean) => css`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
-  svg {
+  & > svg {
     height: 1.5rem;
     width: 1.5rem;
     color: ${({ theme }) => (primary ? theme.colors.primary : theme.colors.gray[9])};
@@ -50,15 +51,13 @@ const iconStyle = (primary?: boolean) => css`
 `
 export const InputWrapper = styled.div`
   width: 100%;
+  ${iconStyle(true)};
 `
 
 export const SearchInput = styled(Input)`
   width: 100%;
   max-width: 20rem;
   transition: all 0.25s ease-in-out;
-  &:focus {
-    max-width: 30rem;
-  }
 `
 
 export const SearchHeader = styled.div`
@@ -74,18 +73,39 @@ export const SearchHeader = styled.div`
 export const SearchFilterWrapper = styled(SearchHeader)`
   flex-grow: 1;
   justify-content: flex-start;
+`
+
+export const SearchFiltersWrapper = styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.large}`};
 `
 
 export const SearchFilterCategoryLabel = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};
-  margin: 0 ${({ theme }) => theme.spacing.small} 0 ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => `${theme.spacing.small} 0`};
 `
 
 export const SearchFilterLabel = styled.div`
-  ${iconStyle(true)}
+  flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  ${iconStyle(true)};
   color: ${({ theme }) => theme.colors.text.fade};
+`
+
+export const SearchFilterListWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: ${({ theme }) => theme.spacing.small};
+  margin-right: ${({ theme }) => theme.spacing.medium};
+  max-width: 70vw;
+  overflow-x: auto;
 `
 
 export const SearchFilterListCurrent = styled.div`
@@ -101,35 +121,28 @@ export const SearchFilterList = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: ${({ theme }) => theme.spacing.small};
-`
-
-export const SearchFilterListWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: ${({ theme }) => theme.spacing.small};
-  margin-right: ${({ theme }) => theme.spacing.medium};
-  max-width: 70vw;
-  overflow-x: auto;
+  border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 export const SearchFilterCancel = styled.div`
   cursor: pointer;
   display: flex;
-  padding: ${({ theme }) => ` ${theme.spacing.small}`};
+  padding: ${({ theme }) => ` ${theme.spacing.tiny}`};
   transition: all 0.25s ease-in-out;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  margin-left: ${({ theme }) => theme.spacing.large};
 
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
 
   background-color: ${({ theme }) => theme.colors.gray[8]};
   transition: all 0.25s ease-in-out;
+  color: ${({ theme }) => theme.colors.palette.red};
 
   svg {
-    opacity: 0.66;
+    height: 1.5rem;
+    width: 1.5rem;
+    opacity: 1;
   }
 
   &:hover {
@@ -153,7 +166,11 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
   background-color: ${({ theme }) => theme.colors.gray[8]};
   transition: all 0.25s ease-in-out;
 
+  width: max-content;
+
   svg {
+    height: 1rem;
+    width: 1rem;
     opacity: 0.66;
   }
 
@@ -169,10 +186,15 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
       background-color: ${({ theme }) => theme.colors.primary};
       color: ${({ theme }) => theme.colors.text.oppositePrimary};
 
+      svg {
+        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      }
+
       &:hover {
         background-color: ${({ theme }) => transparentize(0.4, theme.colors.primary)};
         color: ${({ theme }) => theme.colors.text.oppositePrimary};
         svg {
+          color: ${({ theme }) => theme.colors.text.oppositePrimary};
           opacity: 1;
         }
       }
@@ -201,7 +223,6 @@ export const SearchViewContainer = styled.div`
 export const SearchContainer = styled.div`
   margin: ${({ theme: { spacing } }) => `calc(2 * ${spacing.large}) ${spacing.large} ${spacing.medium}`};
   position: relative;
-  width: 100%;
   min-height: 60vh;
 `
 
@@ -306,6 +327,14 @@ export const ResultDesc = styled.div`
 
   ${Ellipsis}
 `
+export const ResultPreviewMetaData = styled.div`
+  ${MetadataWrapper} {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: ${({ theme }) => theme.spacing.tiny};
+  }
+`
 export const ResultMetaData = styled.div`
   display: flex;
   flex-shrink: 1;
@@ -322,8 +351,6 @@ export const ResultMetaData = styled.div`
 
 export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
   background-color: ${({ theme }) => theme.colors.gray[9]};
-  user-select: none;
-
   :hover {
     cursor: pointer;
   }
@@ -333,10 +360,13 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         max-height: 400px;
         overflow-y: auto;
         border: 1px solid transparent !important;
+        display: flex;
+        flex-direction: column;
 
         ${SearchPreviewWrapper} {
           max-height: 300px;
           overflow: hidden;
+          flex-grow: 1;
         }
 
         ${selected &&
@@ -401,6 +431,10 @@ export const Results = styled.div<{ view: View }>`
         @media (min-width: ${size.wide}) {
           grid-template-columns: repeat(3, 1fr);
         }
+
+        @media (max-width: ${size.small}) {
+          grid-template-columns: repeat(1, 1fr);
+        }
       `
     } else if (view === View.List) {
       return css`
@@ -449,8 +483,21 @@ export const SearchFilterInputWrapper = styled(StyledInputWrapper)`
   margin: 0;
 `
 
+export const SearchIndexValue = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+
+  background-color: ${({ theme }) => theme.colors.gray[8]};
+  padding: ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+
+  svg:first-child {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
 export const SplitSearchPreviewWrapper = styled.div`
-  height: calc(100vh - 22rem);
+  ${SearchHeight}
   overflow-y: auto;
   border-radius: ${({ theme }) => theme.borderRadius.large};
   background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};

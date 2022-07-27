@@ -1,5 +1,7 @@
 import { uniq } from 'lodash'
+
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
+import { ELEMENT_MENTION } from './editorElements'
 import { generateTempId } from './idGenerator'
 
 const ELEMENT_TODO_LI = 'action_item'
@@ -19,6 +21,22 @@ export const getTagsFromContent = (content: any[]): string[] => {
   })
 
   return uniq(tags)
+}
+
+export const getMentionsFromContent = (content: any[]): string[] => {
+  let mentions: string[] = []
+
+  content.forEach((n) => {
+    if (n.type === ELEMENT_MENTION) {
+      // mog('mention in content', { n })
+      mentions.push(n.value)
+    }
+    if (n.children && n.children.length > 0) {
+      mentions = mentions.concat(getMentionsFromContent(n.children))
+    }
+  })
+
+  return uniq(mentions)
 }
 
 export const getTodosFromContent = (content: NodeEditorContent): NodeEditorContent => {

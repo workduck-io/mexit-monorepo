@@ -6,12 +6,15 @@
 - Sorting [:?]
 */
 
-export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has'
+export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has' | 'mention'
+
 export interface SearchFilter<Item> {
   key: FilterKey
   id: string
   label: string
-  filter: (item: Item) => boolean | number
+  // Value to filter with
+  value: string
+  // filter: (item: Item) => boolean | number -> Replaced by FilterFunctions
   icon?: string
   // No. of items that match this filter
   count?: number

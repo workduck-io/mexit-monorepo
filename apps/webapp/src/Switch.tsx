@@ -254,6 +254,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
+          <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
           <Route
             path={ROUTE_PATHS.reminders}
             element={
