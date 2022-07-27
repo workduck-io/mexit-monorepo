@@ -27,7 +27,7 @@ import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
 import { getMexHTMLDeserializer } from '../Utils/deserialize'
-import { getProfileData } from '../Utils/getProfileData'
+import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useInternalLinks } from './useInternalLinks'
@@ -149,22 +149,29 @@ export function useActionExecutor() {
             break
           }
           case ActionType.MAGICAL: {
-            setActiveItem(item)
-            getProfileData()
-              .then((data) => {
-                setPersistedContent([
-                  {
-                    type: ELEMENT_PARAGRAPH,
-                    children: data
-                  }
-                ])
-              })
-              .catch((err) => {
-                console.log('err:', err)
-              })
-            setActiveIndex(0)
-            setInput('')
-            setSearch({ value: '', type: CategoryType.search })
+            const webpage = checkURL(window.location.href)
+
+            if (!webpage) {
+              toast.error('No data available for extracting')
+            } else {
+              setActiveItem(item)
+              getProfileData(webpage)
+                .then((data) => {
+                  setPersistedContent([
+                    {
+                      type: ELEMENT_PARAGRAPH,
+                      children: data
+                    }
+                  ])
+                })
+                .catch((err) => {
+                  console.log('err:', err)
+                })
+              setActiveIndex(0)
+              setInput('')
+              setSearch({ value: '', type: CategoryType.search })
+            }
+
             break
           }
           case ActionType.SCREENSHOT: {

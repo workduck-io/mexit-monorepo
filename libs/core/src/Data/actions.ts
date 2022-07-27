@@ -1,6 +1,6 @@
-import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 import { ActionType, MexitAction } from '../Types/Actions'
 import { CategoryType, QuickLinkType } from '../Types/Editor'
+import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 
 export const CREATE_NEW_ITEM = {
   title: 'Create new ',
@@ -44,10 +44,10 @@ export const initActions: Array<MexitAction> = [
   },
   {
     id: 'ACTION_9x34kgj23j4234ojin',
-    title: 'Magical Feature',
+    title: 'Data Extracter',
     category: QuickLinkType.action,
     icon: 'eva:color-picker-fill',
-    description: "Save any profile data you want in the webapp",
+    description: 'Extract any useful data from the current page',
     type: ActionType.MAGICAL,
     data: {},
     shortcut: {

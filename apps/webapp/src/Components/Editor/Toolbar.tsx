@@ -33,7 +33,7 @@ const Toolbar = () => {
   return (
     <NodeInfo>
       <NodeRenameOnlyTitle />
-      {fetchingContent && <Loading dots={3} />}
+      {fetchingContent && <Loading transparent dots={3} />}
       <InfoTools {...getFocusProps(focusMode)}>
         <ToolbarTooltip singleton={source} />
         <IconButton
