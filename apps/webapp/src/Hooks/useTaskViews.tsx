@@ -1,4 +1,5 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 import { SearchFilter } from '@mexit/core'
 
@@ -28,35 +29,40 @@ export interface ViewStore<Item> {
 //   setIndexes: (indexes) => set((state) => ({ ...state, indexes }))
 // }))
 
-export const useViewStore = create<ViewStore<any>>((set) => ({
-  views: [],
-  currentView: undefined,
-  setCurrentView: (view) =>
-    set((state) => ({
-      ...state,
-      currentView: view
-    })),
-  setViews: (views) =>
-    set((state) => ({
-      ...state,
-      views
-    })),
-  addView: (view) =>
-    set((state) => ({
-      ...state,
-      views: [...state.views.filter((v) => v.id !== view.id), view]
-    })),
-  removeView: (id) =>
-    set((state) => ({
-      ...state,
-      views: state.views.filter((v) => v.id !== id)
-    })),
-  updateView: (view) =>
-    set((state) => ({
-      ...state,
-      views: state.views.map((v) => (v.id === view.id ? view : v))
-    }))
-}))
+export const useViewStore = create<ViewStore<any>>(
+  persist(
+    (set) => ({
+      views: [],
+      currentView: undefined,
+      setCurrentView: (view) =>
+        set((state) => ({
+          ...state,
+          currentView: view
+        })),
+      setViews: (views) =>
+        set((state) => ({
+          ...state,
+          views
+        })),
+      addView: (view) =>
+        set((state) => ({
+          ...state,
+          views: [...state.views.filter((v) => v.id !== view.id), view]
+        })),
+      removeView: (id) =>
+        set((state) => ({
+          ...state,
+          views: state.views.filter((v) => v.id !== id)
+        })),
+      updateView: (view) =>
+        set((state) => ({
+          ...state,
+          views: state.views.map((v) => (v.id === view.id ? view : v))
+        }))
+    }),
+    { name: 'mexit-task-view' }
+  )
+)
 
 export const useTaskViews = () => {
   const getView = (id: string) => {
