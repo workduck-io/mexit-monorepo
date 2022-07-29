@@ -1,10 +1,12 @@
 import React from 'react'
-import { getNodes, getPlateEditorRef, usePlateId } from '@udecode/plate'
+
+import { deleteText, getNodeEntries, getNodes, getPlateEditorRef, usePlateId } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
-import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
 import toast from 'react-hot-toast'
-import { Transforms } from 'slate'
 import { useReadOnly } from 'slate-react'
+
+import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
+
 import { TodoBase } from './Todo'
 
 const cleanEditorId = (editorId: string) => {
@@ -40,14 +42,14 @@ const Todo = (props: any) => {
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
-    const blockNode = getNodes(editor, {
+    const blockNode = getNodeEntries(editor, {
       at: [],
       match: (node) => element.id === node.id,
       block: true
     })
     try {
       const [_, path] = Array.from(blockNode)[0]
-      Transforms.delete(editor, { at: [path[0]] })
+      deleteText(editor, { at: [path[0]] })
       editor.insertText('')
     } catch (error) {
       toast('Unable to delete this todo')

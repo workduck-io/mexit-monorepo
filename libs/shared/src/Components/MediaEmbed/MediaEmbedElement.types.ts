@@ -1,4 +1,4 @@
-import { MediaEmbedNodeData } from '@udecode/plate-media-embed'
+import { TMediaEmbedElement, Value } from '@udecode/plate'
 import { StyledElementProps } from '@udecode/plate-styled-components'
 import { CSSProp } from 'styled-components'
 
@@ -8,4 +8,4 @@ export interface MediaEmbedElementStyles {
   input: CSSProp
 }
 
-export type MediaEmbedElementProps = StyledElementProps<MediaEmbedNodeData, MediaEmbedElementStyles>
+export type MediaEmbedElementProps = StyledElementProps<Value, TMediaEmbedElement, MediaEmbedElementStyles>

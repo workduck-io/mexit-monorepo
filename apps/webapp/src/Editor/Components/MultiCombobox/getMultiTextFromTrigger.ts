@@ -1,9 +1,16 @@
+import {
+  getParentNode,
+  isCollapsed,
+  isElement,
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
+  PlateEditor
+} from '@udecode/plate'
 import { Range } from 'slate'
-import { getParent, isCollapsed, isElement, ELEMENT_CODE_BLOCK, ELEMENT_CODE_LINE, PlateEditor } from '@udecode/plate'
 
-import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
 import { ComboTriggerType } from '../../../Stores/useComboboxStore'
 import { ComboboxType, ComboTriggerDataType } from '../../Types/MultiCombobox'
+import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
 
 export const getTriggeredData = (
   editor: PlateEditor,
@@ -50,7 +57,7 @@ const getTextFromTriggers = (
   if (selection && isCollapsed(selection)) {
     let triggerSelection
 
-    const parentEntry = getParent(editor, editor.selection.focus)
+    const parentEntry = getParentNode(editor, editor.selection.focus)
 
     if (!parentEntry) return
     const [node] = parentEntry

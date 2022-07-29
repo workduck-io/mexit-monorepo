@@ -11,7 +11,7 @@ export interface TagNodeData {
 }
 
 // Element node
-export type TagNode = TElement<TagNodeData>
+export interface TagNode extends TElement, TagNodeData {}
 
 export interface TagElementStyleProps extends ClassName {
   selected?: boolean
@@ -22,6 +22,4 @@ export interface TagElementStyleSet extends RootStyled {
   link?: IStyle
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export type TagElementProps = StyledElementProps<TagNode, TagElementStyleProps, TagElementStyleSet>
+export type TagElementProps = StyledElementProps<Value, TagNode, TagElementStyleSet>

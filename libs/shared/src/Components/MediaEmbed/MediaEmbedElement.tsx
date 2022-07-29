@@ -1,14 +1,15 @@
-import { TElement, useEditorRef, setNodes } from '@udecode/plate-core'
-import { MediaEmbedNodeData } from '@udecode/plate-media-embed'
-import { debounce } from 'lodash'
 import * as React from 'react'
 import { useEffect } from 'react'
+
+import { findNodePath } from '@udecode/plate'
+import { useEditorRef, setNodes } from '@udecode/plate-core'
+import { debounce } from 'lodash'
 import EmbedContainer from 'react-oembed-container'
-import { ReactEditor } from 'slate-react'
-import { getEmbedData } from './getEmbedUrl'
+
 import { IFrame, IFrameWrapper, MediaHtml, RootElement } from './MediaEmbedElement.styles'
 import { MediaEmbedElementProps } from './MediaEmbedElement.types'
 import { MediaEmbedUrlInput } from './MediaEmbedUrlInput'
+import { getEmbedData } from './getEmbedUrl'
 
 export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
   const { attributes, children, element, nodeProps } = props
@@ -31,7 +32,7 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
       }
     }
 
-    if (url.startsWith('http://') || url.startsWith('https://')) getData()
+    getData()
   }, [url])
 
   return (
@@ -60,8 +61,8 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
             // console.log(val)
 
             try {
-              const path = ReactEditor.findPath(editor, element)
-              setNodes<TElement<MediaEmbedNodeData>>(editor, { url: val }, { at: path })
+              const path = findNodePath(editor, element)
+              setNodes(editor, { url: val }, { at: path })
             } catch (e) {
               console.error(e)
             }

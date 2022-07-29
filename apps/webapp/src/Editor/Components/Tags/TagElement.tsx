@@ -1,20 +1,24 @@
 import * as React from 'react'
-import { useEditorRef } from '@udecode/plate'
+
+import { moveSelection, useEditorRef } from '@udecode/plate'
 import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
-import { TagElementProps } from '../../Types/TagElement'
-import { STag, STagRoot } from '../../Styles/TagElement'
+
+import { STag, STagRoot, TagElementProps } from '@mexit/shared'
+
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 
 /**
  * TagElement with no default styles.
  * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
  */
-const TagElement = ({ attributes, children, element, onClick }: TagElementProps) => {
+const TagElement = ({ attributes, children, element }: TagElementProps) => {
   const editor = useEditorRef()
   const selected = useSelected()
   const focused = useFocused()
+  const { goTo } = useRouting()
 
   const onClickProps = useOnMouseClick(() => {
     openTag(element.value)
@@ -24,28 +28,32 @@ const TagElement = ({ attributes, children, element, onClick }: TagElementProps)
     'backspace',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor)
+        moveSelection(editor)
       }
     },
     [selected, focused]
   )
+
   useHotkeys(
     'delete',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor, { reverse: true })
+        // mog('delete', { selected, focused, sel: editor.selection })
+        moveSelection(editor, { reverse: true })
       }
     },
     [selected, focused]
   )
 
   const openTag = (tag: string) => {
-    onClick(tag)
+    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
   }
 
   return (
     <STagRoot {...attributes} data-slate-value={element.value} contentEditable={false}>
-      <STag {...onClickProps}>#{element.value}</STag>
+      <STag {...onClickProps} selected={selected}>
+        #{element.value}
+      </STag>
       {children}
     </STagRoot>
   )

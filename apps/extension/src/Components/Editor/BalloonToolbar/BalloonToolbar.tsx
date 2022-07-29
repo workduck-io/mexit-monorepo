@@ -1,42 +1,33 @@
-import { withPlateProvider } from '@udecode/plate-core'
+import React from 'react'
+
+import { withPlateEventProvider } from '@udecode/plate-core'
 import { PortalBody } from '@udecode/plate-styled-components'
-import { UsePopperPositionOptions } from '@udecode/plate-ui-popper'
-import React, { useRef } from 'react'
-// import { ToolbarBase } from '../Toolbar/Toolbar'
-import { BalloonToolbarBase, getBalloonToolbarStyles } from '@mexit/shared'
-import { BalloonToolbarProps } from '@mexit/shared'
-import { useBalloonToolbarPopper } from './useBalloonToolbarPopper'
 
-export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => {
-  const { children, theme = 'dark', arrow = false, portalElement, $popperOptions: _popperOptions = {} } = props
+import { BalloonToolbarProps, getBalloonToolbarStyles, BalloonToolbarBase, useFloatingToolbar } from '@mexit/shared'
 
-  const popperRef = useRef<HTMLDivElement>(null)
+export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
+  const { children, theme = 'dark', arrow = false, portalElement, floatingOptions } = props
 
-  const popperOptions: UsePopperPositionOptions = {
-    popperElement: popperRef.current,
-    placement: 'top' as any,
-    // TODO: not able to fix the position on the balloon toolbar, approximation for now
-    offset: [window.innerWidth / 3.5, window.innerHeight / 5.5],
-    ..._popperOptions
-  }
-
-  const { styles: popperStyles, attributes } = useBalloonToolbarPopper(popperOptions)
+  const { floating, style, placement, open } = useFloatingToolbar({
+    floatingOptions
+  })
 
   const styles = getBalloonToolbarStyles({
-    $popperOptions: popperOptions,
+    placement,
     theme,
     arrow,
     ...props
   })
 
+  if (!open) return null
+
   return (
     <PortalBody element={portalElement}>
       <BalloonToolbarBase
-        ref={popperRef}
+        // css={styles.root.css}
         className={styles.root.className}
-        style={popperStyles.popper}
-        popperOptions={popperOptions}
-        {...attributes.popper}
+        ref={floating}
+        style={style}
       >
         {children}
       </BalloonToolbarBase>

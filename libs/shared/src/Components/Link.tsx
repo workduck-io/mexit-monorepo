@@ -1,9 +1,12 @@
 import React from 'react'
+
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
-import { LinkNodeData } from '@udecode/plate-link'
+import { Value } from '@udecode/plate'
 import { StyledElementProps } from '@udecode/plate-styled-components'
 import styled, { css } from 'styled-components'
+
+import { ILinkNode } from '../Types/QuickLink.types'
 import { EditorIcons } from './Icons'
 
 const Link = styled.a`
@@ -65,8 +68,8 @@ const getSanatizedLink = (raw: string) => {
  * LinkElement with no default styles.
  * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
  */
-export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<LinkNodeData>) => {
-  const isExternal = element.url.startsWith('#')
+export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<Value, ILinkNode>) => {
+  const isExternal = element['url'].startsWith('#')
 
   const openLink = (e: React.MouseEvent, meta: boolean) => {
     e.preventDefault()
@@ -76,18 +79,18 @@ export const LinkElement = ({ attributes, children, element, nodeProps }: Styled
     if (meta) {
       if (e.metaKey) {
         // Only open the link if meta key is pressed
-        window.open(getSanatizedLink(element.url))
+        window.open(getSanatizedLink(element['url']))
       }
     } else {
-      window.open(getSanatizedLink(element.url))
+      window.open(getSanatizedLink(element['url']))
     }
   }
 
   return (
-    <Tippy content={element.url} maxWidth="none" theme="mex-bright">
+    <Tippy content={element['url']} theme="mex-bright">
       <Link
         {...attributes}
-        href={element.url}
+        href={element['url']}
         onClick={(e) => {
           openLink(e, true)
         }}

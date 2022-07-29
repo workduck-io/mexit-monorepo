@@ -1,7 +1,17 @@
+import {
+  getBlockAbove,
+  getPluginType,
+  insertNodes,
+  insertTable,
+  moveSelection,
+  PlateEditor,
+  select,
+  TElement
+} from '@udecode/plate'
+
 import { isElder } from '@mexit/core'
-import { getBlockAbove, getPluginType, insertNodes, insertTable, PlateEditor, TElement } from '@udecode/plate'
+
 import { useSnippets } from '../../../Hooks/useSnippets'
-import { Editor, Transforms } from 'slate'
 import { useComboboxStore } from '../../store/combobox'
 import { IComboboxItem, SlashCommandConfig } from '../ComboBox/types'
 
@@ -20,17 +30,17 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
           const content = getSnippetContent(commandConfig.command)
 
           if (content) {
-            Transforms.select(editor, targetRange)
+            select(editor, targetRange)
             insertNodes<TElement>(editor, content)
           }
         } else if (item.key === 'table') {
-          Transforms.select(editor, targetRange)
+          select(editor, targetRange)
           insertTable(editor, { header: true })
         } else {
           const type = getPluginType(editor, commandConfig.slateElementType)
           const data = commandConfig.getData ? commandConfig.getData(item) : {}
 
-          Transforms.select(editor, targetRange)
+          select(editor, targetRange)
 
           insertNodes<TElement>(editor, {
             type: type as any, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -40,7 +50,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
           })
 
           // move the selection after the inserted content
-          Transforms.move(editor)
+          moveSelection(editor)
         }
       } catch (e) {
         console.error(e)

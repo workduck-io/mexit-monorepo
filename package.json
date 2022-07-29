@@ -14,7 +14,14 @@
     ]
   },
   "dependencies": {
-    "@udecode/plate": "10.2.4",
+    "@udecode/plate": "~15.0.2",
+    "date-fns": "^2.28.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "slate": "^0.78.0",
+    "slate-history": "^0.66.0",
+    "slate-hyperscript": "^0.77.0",
+    "slate-react": "^0.79.0",
     "color-scheme": "^1.0.1",
     "fast-equals": "^2.0.4",
     "chrono-node": "^2.3.8",

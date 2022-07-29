@@ -39,15 +39,17 @@ import {
   ELEMENT_H4,
   ELEMENT_H5,
   ELEMENT_H6,
-  createPlateUI,
   ELEMENT_PARAGRAPH,
-  PlatePluginComponent,
-  createTablePlugin,
-  PEditor
+  createTablePlugin
 } from '@udecode/plate'
 
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { TableWrapper } from '@mexit/shared'
 
+import { createQuickLinkPlugin } from './QuickLink'
+import { createHighlightTextPlugin } from './createHighlightTextPlugin'
+import { createTagPlugin } from './createTagPlugin'
+import { createTodoPlugin } from './createTodoPlugin'
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -56,13 +58,7 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
-
-import { createTagPlugin } from './createTagPlugin'
-import { createTodoPlugin } from './createTodoPlugin'
-import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { createQuickLinkPlugin } from './QuickLink'
 import { optionsImagePlugin } from './options'
-import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 
 export type PluginOptionType = {
   exclude: {
@@ -151,7 +147,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createMediaEmbedPlugin(),
 
     // Custom Plugins
-    // createBlurSelectionPlugin() as PlatePlugin<PEditor>,
+    // createBlurSelectionPlugin() ,
 
     // Comboboxes
     createTagPlugin(), // Tags

@@ -1,16 +1,18 @@
 import React from 'react'
-import { Item } from 'react-contexify'
-import toast from 'react-hot-toast'
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+
 import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { Icon } from '@iconify/react'
-import { getNodes, usePlateEditorRef } from '@udecode/plate'
+import { getNodeEntries, getNodes, usePlateEditorRef } from '@udecode/plate'
+import { Item } from 'react-contexify'
+import toast from 'react-hot-toast'
+
+import { BlockType, ContextMenuActionType } from '@mexit/core'
+import { StyledContexifyMenu, StyledMenu } from '@mexit/shared'
 
 import { useTransform } from '../../Components/Editor/BalloonToolbar/components/useTransform'
 import useBlockStore from '../../Stores/useBlockStore'
-import { StyledMenu } from '@mexit/shared'
-import { BlockType, ContextMenuActionType } from '@mexit/core'
 
 type BlockOptionsProps = {
   blockId: string
@@ -26,7 +28,7 @@ export const BlockOptionsMenu: React.FC<BlockOptionsProps> = () => {
 
   const convertToBlocks = () => {
     const nodes = Array.from(
-      getNodes(editor, {
+      getNodeEntries(editor, {
         mode: 'highest',
         block: true,
         at: editor.selection
@@ -66,11 +68,10 @@ export const BlockOptionsMenu: React.FC<BlockOptionsProps> = () => {
 
   const onDeleteClick = (item: any) => {
     convertToBlocks()
-    setIsModalOpen(ContextMenuActionType.del)
   }
 
   return (
-    <StyledMenu id={MENU_ID}>
+    <StyledContexifyMenu id={MENU_ID}>
       <Item id="send-to" onClick={onSendToClick}>
         <Icon icon={sendToIcon} />
         Send
@@ -83,6 +84,6 @@ export const BlockOptionsMenu: React.FC<BlockOptionsProps> = () => {
         <Icon icon={deleteBin6Line} />
         Delete
       </Item>
-    </StyledMenu>
+    </StyledContexifyMenu>
   )
 }

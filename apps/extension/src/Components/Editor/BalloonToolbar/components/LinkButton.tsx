@@ -1,24 +1,28 @@
-import Tippy, { TippyProps } from '@tippyjs/react' // optional
+import React, { useEffect, useState } from 'react'
+
+import Tippy, { TippyProps } from '@tippyjs/react'
+// optional
 import {
   ELEMENT_LINK,
-  getAbove,
+  getAboveNode,
   getPlateEditorRef,
   getPluginType,
   isCollapsed,
+  isEditorFocused,
   LinkToolbarButtonProps,
   someNode,
   unwrapNodes
 } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ReactEditor } from 'slate-react'
-import { useBalloonToolbarStore } from '..'
-import { HeadlessButton } from '@mexit/shared'
-// import { Input } from '../../../../style/Form'
-import { clearAllSelection } from '@mexit/shared'
-import { upsertLinkAtSelection } from '../upsertLinkAtSelection'
-import { LinkButtonStyled } from './LinkButton.styles'
+
 import { mog } from '@mexit/core'
+import {
+  useBalloonToolbarStore,
+  upsertLinkAtSelection,
+  clearAllSelection,
+  HeadlessButton,
+  LinkButtonStyled
+} from '@mexit/shared'
 
 type LinkButtonProps = LinkToolbarButtonProps
 
@@ -46,7 +50,7 @@ const LinkButton = ({ getLinkUrl, ...props }: LinkButtonProps) => {
 
   useEffect(() => {
     if (!editor) return
-    const linkNode = getAbove(editor, {
+    const linkNode = getAboveNode(editor, {
       match: { type }
     })
     try {
@@ -62,9 +66,9 @@ const LinkButton = ({ getLinkUrl, ...props }: LinkButtonProps) => {
 
   const extractLinkUrl = async (): Promise<{ url: string; linkNode: any }> => {
     // Blur focus returns
-    if (!editor || ReactEditor.isFocused(editor)) return
+    if (!editor || isEditorFocused(editor)) return
 
-    const linkNode = getAbove(editor, {
+    const linkNode = getAboveNode(editor, {
       match: { type }
     })
 
@@ -93,7 +97,7 @@ const LinkButton = ({ getLinkUrl, ...props }: LinkButtonProps) => {
 
     // mog('Insertion Insterion', { url, linkNode })
     // Inserting of the link
-    const sel = editor.prevSelection
+    const sel = editor.selection
     if (url) {
       // mog('Insertion Insterion 2', { url, linkNode, sel })
       if (linkNode && sel) {

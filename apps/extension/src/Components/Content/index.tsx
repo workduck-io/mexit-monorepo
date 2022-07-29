@@ -1,12 +1,8 @@
-import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
-import { nanoid } from 'nanoid'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { getDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../../Utils/deserialize'
-import { Editor } from '../Editor'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
-import Results from '../Results'
-import { StyledContent } from './styled'
+import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
+import { nanoid } from 'nanoid'
+
 import {
   ActionType,
   CategoryType,
@@ -18,11 +14,17 @@ import {
   QuickLinkType
 } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
+
 import { useEditorContext } from '../../Hooks/useEditorContext'
-import { useSnippets } from '../../Hooks/useSnippets'
-import { useContentStore } from '../../Stores/useContentStore'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useSnippets } from '../../Hooks/useSnippets'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useContentStore } from '../../Stores/useContentStore'
 import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
+import { getDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../../Utils/deserialize'
+import { Editor } from '../Editor'
+import Results from '../Results'
+import { StyledContent } from './styled'
 
 export default function Content() {
   const { selection, searchResults, activeIndex, activeItem } = useSputlitContext()

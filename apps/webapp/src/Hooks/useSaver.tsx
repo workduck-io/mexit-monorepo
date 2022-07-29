@@ -1,10 +1,11 @@
-import { getPlateId, platesStore } from '@udecode/plate'
+import { getPlateEditorRef, platesStore } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
 import { NodeProperties } from '@mexit/core'
-import { useDataSaverFromContent } from './useSave'
+
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useNodes } from './useNodes'
+import { useDataSaverFromContent } from './useSave'
 
 export const useSaver = () => {
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
@@ -26,7 +27,7 @@ export const useSaver = () => {
     const cnode = node || defaultNode
 
     // * Editor Id is different from nodeId
-    const editorId = getPlateId()
+    const editorId = getPlateEditorRef().id
     const hasState = !!state[editorId]
     const isShared = isSharedNode(cnode.nodeid)
 

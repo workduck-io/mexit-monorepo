@@ -1,7 +1,6 @@
 import React from 'react'
-import { Editor, Transforms } from 'slate'
-import { findNode, getPlateEditorRef } from '@udecode/plate'
-import { ReactEditor } from 'slate-react'
+
+import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
 import create from 'zustand'
 
 import { mog } from '@mexit/core'
@@ -88,8 +87,8 @@ export const useFocusBlock = () => {
         if (!headingNodePath) return
 
         // setHighlightedBlockIds([blockid], key)
-        Transforms.select(editor, Editor.start(editor, headingNodePath))
-        ReactEditor.focus(editor)
+        select(editor, getStartPoint(editor, headingNodePath))
+        focusEditor(editor)
       }
     } catch (e) {
       console.log('select block error', e)
@@ -103,7 +102,7 @@ export const useFocusBlock = () => {
         const headingNode = findNode(editor, {
           at: [],
           match: (n) => {
-            console.log('n', n)
+            // console.log('n', n)
             return n.id === blockid
           },
           mode: 'all'
@@ -116,7 +115,7 @@ export const useFocusBlock = () => {
         if (!headingNodePath) return
 
         // setHighlightedBlockIds([blockid], key)
-        Transforms.select(editor, Editor.start(editor, headingNodePath))
+        select(editor, getStartPoint(editor, headingNodePath))
         setTimeout(() => {
           const highlightEl = document.getElementsByClassName('slate-highlight')[0]
           if (highlightEl) {
