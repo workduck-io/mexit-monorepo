@@ -1,3 +1,5 @@
+import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
+
 import {
   CategoryType,
   createNodeWithUid,
@@ -8,7 +10,6 @@ import {
   NodeEditorContent,
   NodeProperties
 } from '@mexit/core'
-import React, { createContext, useContext, useState } from 'react'
 
 type EditorContextType = {
   node: NodeProperties
@@ -24,7 +25,7 @@ type EditorContextType = {
 const EditorContext = createContext<EditorContextType>(undefined!)
 export const useEditorContext = () => useContext(EditorContext)
 
-export const EditorProvider: React.FC = ({ children }: any) => {
+export const EditorProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [node, setNode] = useState(createNodeWithUid(getNewDraftKey()))
   const [nodeContent, setNodeContent] = useState(defaultContent.content)
   const [previewMode, setPreviewMode] = useState(true)

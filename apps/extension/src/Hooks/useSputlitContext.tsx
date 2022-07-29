@@ -1,5 +1,6 @@
+import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
+
 import { CategoryType, MexitAction, NodeContent } from '@mexit/core'
-import React, { createContext, useContext, useState } from 'react'
 
 export type Search = {
   value: string
@@ -49,7 +50,7 @@ type SputlitContextType = {
 const SputlitContext = createContext<SputlitContextType>(undefined!)
 export const useSputlitContext = () => useContext(SputlitContext)
 
-export const SputlitProvider: React.FC = ({ children }: any) => {
+export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [search, setSearch] = useState<Search>({ value: '', type: CategoryType.search })
   const [input, setInput] = useState('')
   const [selection, setSelection] = useState<any>()
