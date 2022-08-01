@@ -1,4 +1,5 @@
-import { PlateEditor } from '@udecode/plate'
+import { PlateEditor, Value } from '@udecode/plate'
+
 import { useComboboxOnKeyDown } from '../../hooks/useComboboxOnKeyDown'
 import { useElementOnChange } from '../../hooks/useElementOnChange'
 import {
@@ -9,6 +10,7 @@ import {
   SlashCommandConfig
 } from '../ComboBox/types'
 import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
+
 export interface ComboTypeHandlers {
   slateElementType: string
   newItemHandler: (newItem: string, parentId?) => any // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -24,7 +26,8 @@ export const useOnSelectItem = (
 
   const isSlash = comboboxKey === ComboboxKey.SLASH_COMMAND
 
-  const changeHandler = (editor: PlateEditor, item: IComboboxItem) => (isSlash ? slashCommandOnChange : elementOnChange)
+  const changeHandler = (editor: PlateEditor<Value>, item: IComboboxItem) =>
+    isSlash ? slashCommandOnChange : elementOnChange
 
   return { changeHandler, isSlash }
 }

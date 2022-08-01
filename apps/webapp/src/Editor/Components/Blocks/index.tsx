@@ -14,16 +14,6 @@ const BlockOptions = (props: BlockOptionProps) => {
 
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const editor = usePlateEditorRef()
-  // const theme = useTheme()
-  // const selected = useSelected()
-  // const { isFlowBlock } = useTransform()
-
-  // const elementStyles = {
-  //   borderRadius: theme.borderRadius.tiny,
-  //   margin: '4px 0',
-  //   backgroundColor:
-  //     selected && !isCollapsed(editor.selection) && transparentize(0.05, theme.colors.background.highlight)
-  // }
 
   const isBlock = useMemo(() => {
     const isThisBlock = element && editor && findNodePath(editor, element)?.length === 1

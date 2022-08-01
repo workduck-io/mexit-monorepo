@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { BlockType } from '@mexit/core'
 
@@ -10,6 +10,7 @@ type BlockProps = {
   block: BlockType
   isEmpty?: boolean
   isBlock?: boolean
+  children?: ReactNode
 }
 
 const Block: React.FC<BlockProps> = ({ children, blockId, block }) => {

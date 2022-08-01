@@ -1,11 +1,11 @@
-import { getNextWrappingIndex, PlateEditor } from '@udecode/plate'
+import { getNextWrappingIndex, insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
+
 import { ComboboxKey, IComboboxItem } from '../components/ComboBox/types'
 import { useSlashCommandOnChange } from '../components/SlashCommands/useSlashCommandOnChange'
 import { useComboboxStore } from '../store/combobox'
 import { useMexEditorStore } from '../store/editor'
 import { useElementOnChange } from './useElementOnChange'
-import { Transforms, Editor } from 'slate'
 
 const pure = (id: string) => {
   if (id.endsWith(']]')) {
@@ -44,8 +44,8 @@ export const replaceFragment = (editor: any, range: any, text: string) => {
   const sel = editor.selection
 
   if (sel) {
-    Transforms.select(editor, range)
-    Editor.insertText(editor, text)
+    select(editor, range)
+    insertText(editor, text)
   }
 }
 

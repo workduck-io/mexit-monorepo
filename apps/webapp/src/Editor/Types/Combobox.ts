@@ -1,5 +1,6 @@
+import { PlateEditor, Value, TElement } from '@udecode/plate'
+
 import { QuickLinkType } from '@mexit/core'
-import { PlateEditor } from '@udecode/plate'
 
 import { CustomElements } from '../constants'
 import { ComboboxItem } from './MultiCombobox'
@@ -117,12 +118,12 @@ export interface ComboboxItemType {
 
 export interface ComboboxProps {
   isSlash?: boolean
-  onSelectItem: (editor: PlateEditor, item: string) => void
+  onSelectItem: (editor: PlateEditor<Value>, item: string) => void
   onRenderItem?: RenderFunction<ComboboxItemProps>
   portalElement?: Element
 }
 
-export interface InsertableElement {
+export interface InsertableElement extends TElement {
   type: string
   children: any[]
   value: string

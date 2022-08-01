@@ -1,23 +1,23 @@
-import Tippy, { TippyProps } from '@tippyjs/react' // optional
+import React, { useEffect, useState } from 'react'
+
+import Tippy, { TippyProps } from '@tippyjs/react'
 import {
   ELEMENT_LINK,
-  getAbove,
+  getAboveNode,
   getPlateEditorRef,
   getPluginType,
   isCollapsed,
+  isEditorFocused,
   LinkToolbarButtonProps,
   someNode,
   unwrapNodes
 } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ReactEditor } from 'slate-react'
-import { useBalloonToolbarStore } from '..'
-import { HeadlessButton } from '@mexit/shared'
+
 import { mog } from '@mexit/core'
-// import { Input } from '../../../../style/Form'
+import { HeadlessButton, upsertLinkAtSelection, useBalloonToolbarStore } from '@mexit/shared'
 import { clearAllSelection } from '@mexit/shared'
-import { upsertLinkAtSelection } from '../upsertLinkAtSelection'
+
 import { LinkButtonStyled } from './LinkButton.styles'
 
 type LinkButtonProps = LinkToolbarButtonProps
@@ -46,7 +46,7 @@ const LinkButton = ({ getLinkUrl, ...props }: LinkButtonProps) => {
 
   useEffect(() => {
     if (!editor) return
-    const linkNode = getAbove(editor, {
+    const linkNode = getAboveNode(editor, {
       match: { type }
     })
     try {
@@ -62,9 +62,9 @@ const LinkButton = ({ getLinkUrl, ...props }: LinkButtonProps) => {
 
   const extractLinkUrl = async (): Promise<{ url: string; linkNode: any }> => {
     // Blur focus returns
-    if (!editor || ReactEditor.isFocused(editor)) return
+    if (!editor || isEditorFocused(editor)) return
 
-    const linkNode = getAbove(editor, {
+    const linkNode = getAboveNode(editor, {
       match: { type }
     })
 

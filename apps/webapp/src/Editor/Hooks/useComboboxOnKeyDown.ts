@@ -1,17 +1,15 @@
-import { PlateEditor } from '@udecode/plate'
+import { insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
 
 import { mog, isElder } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
-import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
-import { Editor, Transforms } from 'slate'
-import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
-import { ELEMENT_INLINE_BLOCK } from '@mexit/core'
-import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
+import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
+import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
+import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
+import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 import { useMexEditorStore } from './useMexEditorStore'
 
 const pure = (id: string) => {
@@ -75,8 +73,8 @@ export const replaceFragment = (editor: any, range: any, text: string) => {
   const sel = editor.selection
 
   if (sel) {
-    Transforms.select(editor, range)
-    Editor.insertText(editor, text)
+    select(editor, range)
+    insertText(editor, text)
   }
 }
 
