@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react'
+
+import { AsyncMethodReturns, connectToParent } from 'penpal'
+
 import {
   AddILinkProps,
   CategoryType,
@@ -11,22 +14,21 @@ import {
   Reminder,
   ReminderActions
 } from '@mexit/core'
-import { AsyncMethodReturns, connectToParent } from 'penpal'
+
+import { useInternalLinks } from '../Hooks/useInternalLinks'
+import { useIndexedDBData } from '../Hooks/usePersistentData'
+import { useReminders } from '../Hooks/useReminders'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
-import { useIndexedDBData } from '../Hooks/usePersistentData'
-import { useShortenerStore } from '../Stores/useShortener'
-import useThemeStore from '../Stores/useThemeStore'
-import { initSearchIndex, searchWorker } from '../Workers/controller'
-
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useReminders } from '../Hooks/useReminders'
-import { useInternalLinks } from '../Hooks/useInternalLinks'
-import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
+import { useReminderStore } from '../Stores/useReminderStore'
+import { useShortenerStore } from '../Stores/useShortener'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import useThemeStore from '../Stores/useThemeStore'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
+import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
   const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
@@ -37,9 +39,8 @@ export default function Chotu() {
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
-  const publicNodes = useDataStore((store) => store.publicNodes)
 
-  const { ilinks, archive, sharedNodes } = useDataStore()
+  const { ilinks, archive, sharedNodes, tags, publicNodes } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
@@ -98,6 +99,7 @@ export default function Chotu() {
             reminders,
             publicNodes,
             sharedNodes,
+            tags,
             cache,
             mentionable,
             invitedUsers
@@ -122,6 +124,7 @@ export default function Chotu() {
     reminders,
     publicNodes,
     sharedNodes,
+    tags,
     cache,
     connection
   ])
