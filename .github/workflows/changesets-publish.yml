@@ -1,0 +1,73 @@
+name: Version and Publish Extension + Webapp
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release Extension and Webapp
+    env:
+      YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Publish Webapp
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          yarn nx release webapp
+          aws s3 sync ./dist/apps/webapp s3://mexit-monorepo-webapp
+
+      - name: Build Extension for release
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: yarn nx release extension
+
+      - name: Zip Extension Bundle
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        working-directory: ./dist/apps/extension
+        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip Assets background.js content.js index.html manifest.json
+
+      - name: Create Release and Upload Extension ZIP Bundle
+        id: upload-release-asset
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          tag_name: ${{ fromJson(steps.get_package_version.outputs.packageJson).version }}
+          files: |
+            dist/apps/extension/*.zip
+
+      - name: Upload Zip to Chrome Store
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: node apps/extension/build/upload-extension.mjs
+
+      - name: Send Message to Slack with Zip
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: node apps/extension/build/slack-message.mjs
+ 
