@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - mukul-wd-1442-setup-changesets-to-auto-version-and 
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
