@@ -1,14 +1,16 @@
+import { useEffect } from 'react'
+
 import create from 'zustand'
 
-import { NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent } from '@mexit/core'
 
-import { areEqual } from '../Utils/hash'
-import { useSnippets } from './useSnippets'
-import { useDataSaverFromContent } from './useSave'
 import { getContent } from '../Stores/useEditorStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { areEqual } from '../Utils/hash'
 import { useApi } from './API/useNodeAPI'
 import { useNodes } from './useNodes'
+import { useDataSaverFromContent } from './useSave'
+import { useSnippets } from './useSnippets'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>
@@ -63,10 +65,10 @@ export const useEditorBuffer = () => {
 }
 
 interface SnippetBufferStore {
-  buffer: Record<string, { content: NodeEditorContent; title: string; isTemplate?: boolean }>
+  buffer: Record<string, { content: NodeEditorContent; title: string; template?: boolean }>
   add: (nodeid: string, val: NodeEditorContent) => void
   addTitle: (nodeid: string, title: string) => void
-  toggleIsTemplate: (nodeid: string, isTemplate: boolean) => void
+  toggleTemplate: (nodeid: string, template: boolean) => void
   addAll: (nodeid: string, val: NodeEditorContent, title: string) => void
   remove: (nodeid: string) => void
   clear: () => void
@@ -82,9 +84,9 @@ export const useSnippetBufferStore = create<SnippetBufferStore>((set, get) => ({
     const prev = get().buffer[nodeid]
     set({ buffer: { ...get().buffer, [nodeid]: { ...prev, title } } })
   },
-  toggleIsTemplate: (nodeid: string, isTemplate: boolean) => {
+  toggleTemplate: (nodeid: string, template: boolean) => {
     const prev = get().buffer[nodeid]
-    set({ buffer: { ...get().buffer, [nodeid]: { ...prev, isTemplate } } })
+    set({ buffer: { ...get().buffer, [nodeid]: { ...prev, template } } })
   },
   addAll: (nodeid, val, title) => {
     const prev = get().buffer[nodeid]
@@ -118,12 +120,21 @@ export const useSnippetBuffer = () => {
     if (Object.keys(buffer).length > 0) {
       const saved = Object.entries(buffer)
         .map(([snippetId, val]) => {
-          api.saveSnippetAPI(snippetId, val.title, val?.content)
-          updateSnippetContent(snippetId, val.content, val.title, val.isTemplate)
           const snippet = getSnippet(snippetId)
-
-          // TODO: Switch snippet to template index
-          if (snippet) updateSnippetIndex({ ...snippet, content: val.content, title: val.title })
+          api.saveSnippetAPI({
+            snippetId,
+            snippetTitle: val.title ?? snippet.title,
+            content: val?.content ?? snippet?.content,
+            template: val?.template ?? snippet?.template ?? false
+          })
+          // mog('snipppet', { snippetId, val, buffer, snippet })
+          if (snippet)
+            updateSnippetIndex({
+              ...snippet,
+              content: val.content ?? snippet.content,
+              template: val.template ?? snippet.template,
+              title: val.title ?? snippet.title
+            })
           return true
         })
         .reduce((acc, cur) => acc || cur, false)
