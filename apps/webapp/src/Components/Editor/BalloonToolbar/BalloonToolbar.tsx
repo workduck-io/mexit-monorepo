@@ -3,6 +3,7 @@ import React from 'react'
 import { withPlateEventProvider } from '@udecode/plate-core'
 import { PortalBody } from '@udecode/plate-styled-components'
 
+import { mog } from '@mexit/core'
 import { BalloonToolbarProps, getBalloonToolbarStyles, BalloonToolbarBase, useFloatingToolbar } from '@mexit/shared'
 
 export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
@@ -23,7 +24,13 @@ export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps
 
   return (
     <PortalBody element={portalElement}>
-      <BalloonToolbarBase css={styles.root.css} className={styles.root.className} ref={floating} style={style}>
+      <BalloonToolbarBase
+        // TODO: the following properties are overwriting our styles
+        // css={styles.root.css}
+        // className={styles.root.className}
+        ref={floating}
+        style={style}
+      >
         {children}
       </BalloonToolbarBase>
     </PortalBody>

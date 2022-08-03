@@ -34,7 +34,8 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   ToolbarButtonProps,
-  usePlateEditorRef
+  usePlateEditorRef,
+  UseVirtualFloatingOptions
 } from '@udecode/plate'
 import { styleSlot } from 'apps/extension/src/contentScript'
 
@@ -52,8 +53,10 @@ const BallonMarkToolbarButtons = () => {
   const theme = 'dark'
   const top = 'top' as const
 
-  const floatingOptions = {
-    placement: top
+  const floatingOptions: UseVirtualFloatingOptions = {
+    placement: top,
+    getBoundingClientRect: () =>
+      document.getElementById('mexit').shadowRoot.getElementById('sputlit-main').getBoundingClientRect()
   }
 
   const tooltip = {
@@ -67,7 +70,12 @@ const BallonMarkToolbarButtons = () => {
   } as any
 
   return (
-    <BalloonToolbar floatingOptions={floatingOptions} theme={theme} arrow={arrow}>
+    <BalloonToolbar
+      floatingOptions={floatingOptions}
+      theme={theme}
+      arrow={arrow}
+      portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-container')}
+    >
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}
         icon={<Icon height={20} icon={h1} />}

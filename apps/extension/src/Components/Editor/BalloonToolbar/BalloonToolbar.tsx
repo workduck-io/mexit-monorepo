@@ -24,8 +24,9 @@ export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps
   return (
     <PortalBody element={portalElement}>
       <BalloonToolbarBase
+        // TODO: the css prop needs babel-plugin-styled-components
         // css={styles.root.css}
-        className={styles.root.className}
+        // className={styles.root.className}
         ref={floating}
         style={style}
       >
