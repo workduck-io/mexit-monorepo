@@ -3,6 +3,7 @@ export * from './Components/AccessTag'
 export * from './Components/Icons'
 export * from './Components/Link'
 export * from './Components/Notification'
+export * from './Components/ProjectIcon'
 export * from './Components/PreviewMeta'
 export * from './Components/RelativeTime'
 export * from './Components/ToggleButton'
@@ -14,6 +15,8 @@ export * from './Hooks/useBalloonToolbarPopper'
 export * from './Hooks/useEditorActions'
 export * from './Hooks/useRelativeTime'
 export * from './Hooks/useSlashCommands'
+
+export * from './Plugins/createBlockModifierPlugin'
 
 export * from './Stores/themeStoreConstructor'
 

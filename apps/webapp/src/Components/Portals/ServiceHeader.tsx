@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Button, Title } from '@mexit/shared'
+import { DEFAULT_LIST_ITEM_ICON, getIconType, ProjectIconMex } from '@mexit/shared'
 
-import { DEFAULT_LIST_ITEM_ICON, getIconType, ProjectIconMex } from './utils'
 import { FlexBetween } from '../FloatingButton'
 import { ActionGroupIcon, ServiceDescription, GroupHeader } from './styled'
 

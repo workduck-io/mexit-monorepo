@@ -44,7 +44,7 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper } from '@mexit/shared'
+import { TableWrapper, createBlockModifierPlugin } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -144,6 +144,7 @@ export const generatePlugins = (options: PluginOptionType) => {
       }
     }),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
+    createBlockModifierPlugin(),
 
     // serialization / deseriailization
 
