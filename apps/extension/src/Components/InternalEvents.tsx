@@ -72,7 +72,7 @@ function useToggleHandler() {
             if (window.getSelection().toString() !== '') {
               const { url, html, range } = getSelectionHTML()
               const saveableRange = highlighter.fromRange(range)
-              const sanitizedHTML = sanitizeHTML(html) + getHtmlString(window.location.href)
+              const sanitizedHTML = sanitizeHTML(html)
 
               setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
             } else {
