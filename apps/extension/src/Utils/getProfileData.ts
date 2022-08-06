@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 
-import { defaultContent } from '@mexit/core'
+import { defaultContent, ELEMENT_PARAGRAPH } from '@mexit/core'
 
 const data = {
   LinkedIN: {
@@ -180,15 +180,12 @@ export const getProfileData = async (webPage: string) => {
     // console.log(d)
     if (ele !== null) {
       sendData.push({
+        type: ELEMENT_PARAGRAPH,
         children: [
           {
             text: d + ': ' + ele.textContent.trim()
-          },
-          {
-            text: '\n'
           }
-        ],
-        type: 'text'
+        ]
       })
     } else {
       console.log('value is null')
