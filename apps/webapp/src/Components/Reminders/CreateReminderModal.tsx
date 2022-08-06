@@ -18,7 +18,7 @@ import {
   Reminder,
   getNameFromPath
 } from '@mexit/core'
-import { DatePickerStyles, Label, TextAreaBlock, Button, SelectedDate } from '@mexit/shared'
+import { DatePickerStyles, Label, TextAreaBlock, Button, SelectedDate, TextFieldHeight } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import useAnalytics from '../../Hooks/useAnalytics'
@@ -264,6 +264,7 @@ const CreateReminderModal = () => {
               disabled={modalValue.todoid !== undefined}
               autoFocus={modalValue.description !== undefined}
               placeholder="Ex. Remember to share new developments"
+              height={TextFieldHeight.MEDIUM}
               {...register('description')}
             />
           </>

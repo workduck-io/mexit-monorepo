@@ -1,6 +1,7 @@
 // Any kind of DOM manipulation is done here.
 import React from 'react'
-import ReactDOM from 'react-dom'
+
+import { createRoot } from 'react-dom/client'
 import { StyleSheetManager } from 'styled-components'
 import tinykeys from 'tinykeys'
 
@@ -29,14 +30,14 @@ shadowRoot.addEventListener('keydown', (event) => {
   }
 })
 
-const root = document.createElement('div')
-root.id = 'chotu-container'
+const container = document.createElement('div')
+container.id = 'chotu-container'
 
-styleSlot.appendChild(root)
+styleSlot.appendChild(container)
 
-ReactDOM.render(
+const root = createRoot(container)
+root.render(
   <StyleSheetManager target={styleSlot}>
     <Index />
-  </StyleSheetManager>,
-  root
+  </StyleSheetManager>
 )

@@ -1,3 +1,9 @@
+import { useEffect } from 'react'
+
+import { addMinutes } from 'date-fns'
+import { AsyncMethodReturns, Methods } from 'penpal'
+import toast from 'react-hot-toast'
+
 import {
   AddILinkProps,
   CacheUser,
@@ -12,26 +18,24 @@ import {
   ReminderActions,
   SharedNode,
   Snippet,
+  Tag,
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
-import { AsyncMethodReturns, Methods } from 'penpal'
-import { useEffect } from 'react'
-import { addMinutes } from 'date-fns'
-import toast from 'react-hot-toast'
+
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
-import useThemeStore from './useThemeStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useUserCacheStore } from '../Stores/useUserCacheStore'
-import { useMentionStore } from '../Stores/useMentionsStore'
 import { useSnippets } from './useSnippets'
+import useThemeStore from './useThemeStore'
 
 export interface ParentMethods {
   // Custom events is not a good option when we want to receive a response,
@@ -55,6 +59,7 @@ export default function useRaju() {
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
+  const setTags = useDataStore((store) => store.setTags)
   const { updateSnippets } = useSnippets()
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
@@ -109,6 +114,7 @@ export default function useRaju() {
       reminders: Reminder[],
       publicNodes: any[],
       sharedNodes: SharedNode[],
+      tags: Tag[],
       cache: CacheUser[],
       mentionable: Mentionable[],
       inivitedUsers: InvitedUser[]
@@ -122,6 +128,7 @@ export default function useRaju() {
       setReminders(reminders)
       setPublicNodes(publicNodes)
       setSharedNodes(sharedNodes)
+      setTags(tags)
       setCache(cache)
       initMentionData(mentionable, inivitedUsers)
 

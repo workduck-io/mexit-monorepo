@@ -1,6 +1,7 @@
 import { apiURLs, defaultContent } from '@mexit/core'
-import client from './fetchClient'
+
 import { Tab } from '../Types/Tabs'
+import client from './fetchClient'
 import { serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
@@ -150,7 +151,7 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
               }
             )
             .then((resp) => resp.data)
-            .then((path) => {
+            .then((path: string) => {
               return { message: apiURLs.getImagePublicLink(path), error: null }
             })
             .catch((error) => {

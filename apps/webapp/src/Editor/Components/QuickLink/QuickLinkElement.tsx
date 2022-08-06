@@ -1,25 +1,23 @@
 import React, { useState } from 'react'
-import { Transforms } from 'slate'
-import { useReadOnly, useFocused, useSelected } from 'slate-react'
-import shareLine from '@iconify/icons-ri/share-line'
+
 import archivedIcon from '@iconify/icons-ri/archive-line'
 import eyeOffLine from '@iconify/icons-ri/eye-off-line'
-import { useEditorRef } from '@udecode/plate'
+import shareLine from '@iconify/icons-ri/share-line'
+import { moveSelection, useEditorRef } from '@udecode/plate'
+import { useReadOnly, useFocused, useSelected } from 'slate-react'
 
 import { ILink, mog, NodeType, SharedNode } from '@mexit/core'
-import { SILinkRoot, SILink, StyledIcon, SharedNodeIcon } from '@mexit/shared'
+import { SILinkRoot, SILink, StyledIcon, ILinkElementProps } from '@mexit/shared'
 
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useNavigation } from '../../../Hooks/useNavigation'
 import useArchive from '../../../Hooks/useArchive'
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
+import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
-
-import { ILinkElementProps } from '../../Types/QuickLink'
-import EditorPreview from '../EditorPreview/EditorPreview'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { getBlock } from '../../../Utils/parseData'
+import EditorPreview from '../EditorPreview/EditorPreview'
 
 const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNode: SharedNode }) => {
   return (
@@ -90,7 +88,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     'backspace',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor)
+        moveSelection(editor)
       }
     },
     [element]
@@ -117,7 +115,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     'delete',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor, { reverse: true })
+        moveSelection(editor, { reverse: true })
       }
     },
     [selected, focused]

@@ -1,26 +1,27 @@
 import { ReactNode } from 'react'
-import { StyledProps } from '@udecode/plate-styled-components'
-import { UsePopperPositionOptions } from '@udecode/plate-ui-popper'
+
 import { ToolbarProps } from '@udecode/plate'
-// import { ToolbarProps } from '../Toolbar/Toolbar.types';
+import { UseVirtualFloatingOptions } from '@udecode/plate-floating'
+import { StyledProps } from '@udecode/plate-styled-components'
 
-export type BalloonToolbarStyleProps = BalloonToolbarProps
-
-export interface BalloonToolbarStyling {
-  $popperOptions?: Partial<UsePopperPositionOptions>
-
-  /**
-   * Show an arrow pointing to up or down depending on the direction.
-   */
-  arrow?: boolean
+export interface BalloonToolbarStyleProps extends BalloonToolbarProps {
+  placement?: string
 }
 
-export interface BalloonToolbarProps extends StyledProps<ToolbarProps>, BalloonToolbarStyling {
+export interface BalloonToolbarProps extends StyledProps<ToolbarProps> {
   children: ReactNode
+
   /**
    * Color theme for the background/foreground.
    */
   theme?: 'dark' | 'light'
 
+  /**
+   * Show an arrow pointing to up or down depending on the direction.
+   */
+  arrow?: boolean
+
   portalElement?: Element
+
+  floatingOptions?: UseVirtualFloatingOptions
 }

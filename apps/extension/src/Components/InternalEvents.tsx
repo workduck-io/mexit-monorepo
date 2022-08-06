@@ -1,9 +1,10 @@
+import React, { useCallback, useEffect, useRef } from 'react'
+
 import { CaptureConsole } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
 import { forEach } from 'lodash'
 import mixpanel from 'mixpanel-browser'
-import React, { useCallback, useEffect, useRef } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import Highlighter from 'web-highlighter'
 
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
@@ -71,7 +72,7 @@ function useToggleHandler() {
             if (window.getSelection().toString() !== '') {
               const { url, html, range } = getSelectionHTML()
               const saveableRange = highlighter.fromRange(range)
-              const sanitizedHTML = sanitizeHTML(html) + getHtmlString(window.location.href)
+              const sanitizedHTML = sanitizeHTML(html)
 
               setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
             } else {
@@ -201,12 +202,13 @@ function badgeRenderer() {
   function renderBadge() {
     const header = document.getElementsByClassName('pv-top-card__badge-wrap')[0]
     if (header && !document.getElementById('badge-root')) {
-      const badgeRoot = document.createElement('div')
-      badgeRoot.id = 'badge-root'
+      const badgeContainer = document.createElement('div')
+      badgeContainer.id = 'badge-root'
 
-      header.prepend(badgeRoot)
+      header.prepend(badgeContainer)
+      const badgeRoot = createRoot(badgeContainer)
 
-      ReactDOM.render(<LinkedInBadge />, document.getElementById('badge-root'))
+      badgeRoot.render(<LinkedInBadge />)
     }
   }
 

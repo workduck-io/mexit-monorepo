@@ -1,5 +1,4 @@
 import {
-  AnyObject,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -18,7 +17,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TODO_LI,
   ELEMENT_UL,
-  getParent,
   getPluginType,
   insertEmptyCodeBlock,
   isBlockAboveEmpty,
@@ -31,70 +29,103 @@ import {
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   PlateEditor,
-  TEditor,
   toggleList,
   unwrapList,
-  AutoformatRule
+  AutoformatRule,
+  autoformatComparison,
+  autoformatEquality,
+  autoformatFraction,
+  AutoformatQueryOptions,
+  autoformatSubscriptNumbers,
+  autoformatSubscriptSymbols,
+  autoformatSuperscriptNumbers,
+  autoformatSuperscriptSymbols,
+  getParentNode,
+  Value
 } from '@udecode/plate'
 
-import { generateTempId } from '@mexit/core'
+import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
 import { uploadImageToWDCDN } from '@mexit/shared'
 
-const preFormat = (editor: TEditor<AnyObject>) => unwrapList(editor as PlateEditor)
+const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
+
+/*
+ * Returns true if the autoformat can be applied:
+ * Is outside of code
+ */
+const formatQuery = (editor: PlateEditor<Value>, options: AutoformatQueryOptions) => {
+  const parentEntry = getParentNode(editor, editor.selection.focus)
+  if (!parentEntry) return
+  const [node] = parentEntry
+
+  // mog('formatQuery', { editor, options, node })
+
+  if (isElement(node) && node.type !== ELEMENT_CODE_LINE && node.type !== ELEMENT_CODE_BLOCK) {
+    // mog('formatNodeConversion', {
+    //   node,
+    //   parentEntry
+    // })
+    return true
+  }
+  return false
+}
 
 export const optionsAutoFormatRule: Array<AutoformatRule> = [
   {
     mode: 'block',
     type: ELEMENT_H1,
-    match: 'h1',
+    match: ['h1', 'H1'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H2,
-    match: 'h2',
+    match: ['h2', 'H2'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H3,
-    match: 'h3',
+    match: ['h3', 'H3'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H4,
-    match: 'h4',
+    match: ['h4', 'H4'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H5,
-    match: 'h5',
+    match: ['h5', 'H5'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_H6,
-    match: 'h6',
+    match: ['h6', 'H6'],
+    query: formatQuery,
     preFormat
   },
   {
     mode: 'block',
     type: ELEMENT_LI,
     match: ['* ', '- '],
+    query: formatQuery,
     preFormat,
-    format: (editor: TEditor<AnyObject>) => {
+    format: (editor: PlateEditor<Value>) => {
       if (editor.selection) {
-        const parentEntry = getParent(editor, editor.selection)
+        const parentEntry = getParentNode(editor, editor.selection)
         if (!parentEntry) return
         const [node] = parentEntry
-        if (
-          isElement(node) &&
-          !isType(editor as PlateEditor, node, ELEMENT_CODE_BLOCK) &&
-          !isType(editor as PlateEditor, node, ELEMENT_CODE_LINE)
-        ) {
-          toggleList(editor as PlateEditor, {
+        if (isElement(node) && !isType(editor, node, ELEMENT_CODE_BLOCK) && !isType(editor, node, ELEMENT_CODE_LINE)) {
+          toggleList(editor, {
             type: ELEMENT_UL
           })
         }
@@ -103,21 +134,17 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
   },
   {
     mode: 'block',
-
     type: ELEMENT_LI,
     match: ['1.', '1)'],
     preFormat,
-    format: (editor: TEditor<AnyObject>) => {
+    query: formatQuery,
+    format: (editor: PlateEditor<Value>) => {
       if (editor.selection) {
-        const parentEntry = getParent(editor, editor.selection)
+        const parentEntry = getParentNode(editor, editor.selection)
         if (!parentEntry) return
         const [node] = parentEntry
-        if (
-          isElement(node) &&
-          !isType(editor as PlateEditor, node, ELEMENT_CODE_BLOCK) &&
-          !isType(editor as PlateEditor, node, ELEMENT_CODE_LINE)
-        ) {
-          toggleList(editor as PlateEditor, {
+        if (isElement(node) && !isType(editor, node, ELEMENT_CODE_BLOCK) && !isType(editor, node, ELEMENT_CODE_LINE)) {
+          toggleList(editor, {
             type: ELEMENT_OL
           })
         }
@@ -127,49 +154,51 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
   {
     mode: 'block',
     type: ELEMENT_TODO_LI,
-    match: ['[]']
+    match: '[]',
+    query: formatQuery
   },
   {
     mode: 'block',
     type: ELEMENT_BLOCKQUOTE,
     match: ['>'],
+    query: formatQuery,
     preFormat
   },
   {
     type: MARK_BOLD,
     match: ['**', '**'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     type: MARK_BOLD,
     match: ['__', '__'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     type: MARK_ITALIC,
     match: ['*', '*'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     type: MARK_ITALIC,
     match: ['_', '_'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     type: MARK_CODE,
     match: ['`', '`'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     type: MARK_STRIKETHROUGH,
     match: ['~~', '~~'],
     mode: 'mark',
-    insertTrigger: true
+    query: formatQuery
   },
   {
     mode: 'block',
@@ -177,9 +206,9 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     match: '``',
     trigger: '`',
     triggerAtBlockStart: false,
-    format: (editor: TEditor<AnyObject>) => {
-      insertEmptyCodeBlock(editor as PlateEditor, {
-        defaultType: getPluginType(editor as PlateEditor, ELEMENT_DEFAULT),
+    format: (editor: PlateEditor<Value>) => {
+      insertEmptyCodeBlock(editor, {
+        defaultType: getPluginType(editor, ELEMENT_DEFAULT),
         insertNodesOptions: { select: true }
       })
     }
@@ -199,6 +228,31 @@ export const optionsSoftBreakPlugin = {
     ]
   }
 }
+
+export const autoformatMath: AutoformatRule[] = [
+  ...autoformatComparison,
+  ...autoformatEquality,
+  ...autoformatFraction,
+  {
+    mode: 'text',
+    match: '+-',
+    format: '±'
+  },
+  {
+    mode: 'text',
+    match: '%%',
+    format: '‰'
+  },
+  {
+    mode: 'text',
+    match: ['%%%', '‰%'],
+    format: '‱'
+  },
+  ...autoformatSuperscriptSymbols,
+  ...autoformatSubscriptSymbols,
+  ...autoformatSuperscriptNumbers,
+  ...autoformatSubscriptNumbers
+]
 
 export const optionsExitBreakPlugin = {
   options: {
@@ -245,15 +299,15 @@ export const optionsResetBlockTypePlugin = {
 }
 
 export const optionsSelectOnBackspacePlugin = {
-  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED] } }
+  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_INLINE_BLOCK] } }
 }
 
 export const optionsCreateNodeIdPlugin = {
   options: {
     reuseId: true,
     filterText: false,
-    idCreator: () => generateTempId()
-    // exclude: [ELEMENT_SYNC_BLOCK],
+    idCreator: () => generateTempId(),
+    exclude: [ELEMENT_SYNC_BLOCK]
   }
 }
 

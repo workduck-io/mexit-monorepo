@@ -1,3 +1,5 @@
+import React from 'react'
+
 import AlignLeftIcon from '@iconify/icons-bx/bx-align-left'
 import AlignCenterIcon from '@iconify/icons-bx/bx-align-middle'
 import AlignRightIcon from '@iconify/icons-bx/bx-align-right'
@@ -13,9 +15,8 @@ import italicIcon from '@iconify/icons-ri/italic'
 import listOrdered from '@iconify/icons-ri/list-ordered'
 import listUnordered from '@iconify/icons-ri/list-unordered'
 import strikeThrough from '@iconify/icons-ri/strikethrough'
-
+import taskLine from '@iconify/icons-ri/task-line'
 import { Icon } from '@iconify/react'
-import { ButtonSeparator } from '@mexit/shared'
 import {
   AlignToolbarButton,
   BlockToolbarButton,
@@ -35,10 +36,13 @@ import {
   ToolbarButtonProps,
   usePlateEditorRef
 } from '@udecode/plate'
-import React from 'react'
+
+import { ButtonSeparator } from '@mexit/shared'
+
 import { BalloonToolbar } from './BalloonToolbar'
 import { SelectionToNode } from './components/SelectionToNode'
 import { SelectionToSnippet } from './components/SelectionToSnippet'
+import { SelectionToTask } from './components/SelectionToTask'
 
 const BallonMarkToolbarButtons = () => {
   const editor = usePlateEditorRef()
@@ -46,9 +50,11 @@ const BallonMarkToolbarButtons = () => {
   const arrow = false
   const theme = 'dark'
   const top = 'top' as const
-  const popperOptions = {
+
+  const floatingOptions = {
     placement: top
   }
+
   const tooltip = {
     arrow: true,
     delay: 0,
@@ -60,7 +66,7 @@ const BallonMarkToolbarButtons = () => {
   } as any
 
   return (
-    <BalloonToolbar $popperOptions={popperOptions} theme={theme} arrow={arrow}>
+    <BalloonToolbar floatingOptions={floatingOptions} theme={theme} arrow={arrow}>
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}
         icon={<Icon height={20} icon={h1} />}
@@ -126,20 +132,20 @@ const BallonMarkToolbarButtons = () => {
       <MarkToolbarButton
         type={getPluginType(editor, MARK_STRIKETHROUGH)}
         icon={<Icon height={20} icon={strikeThrough} />}
-        tooltip={{ content: 'Strikethrough', ...tooltip }}
       />
       <MarkToolbarButton
         type={getPluginType(editor, MARK_ITALIC)}
         icon={<Icon height={20} icon={italicIcon} />}
         tooltip={{ content: 'Italic (⌘I)', ...tooltip }}
       />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_CODE)}
-        icon={<Icon height={20} icon={codeLine} />}
-        tooltip={{ content: 'CodeBlock', ...tooltip }}
-      />
+      <MarkToolbarButton type={getPluginType(editor, MARK_CODE)} icon={<Icon height={20} icon={codeLine} />} />
 
       <ButtonSeparator />
+
+      <SelectionToTask
+        icon={<Icon height={20} icon={taskLine} />}
+        tooltip={{ content: 'Convert Blocks to Task', ...tooltip }}
+      />
 
       <SelectionToNode
         icon={<Icon height={20} icon={addLine} />}

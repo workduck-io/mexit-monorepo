@@ -2,8 +2,7 @@ import { BalloonToolbarProps, getToolbarStyles, ToolbarBase } from '@udecode/pla
 import { createStyles } from '@udecode/plate-styled-components'
 import { transparentize } from 'polished'
 import styled, { css, CSSProp } from 'styled-components'
-// import tw from 'twin.macro'
-// import { getToolbarStyles } from '../Toolbar/Toolbar.styles';
+
 import { BalloonToolbarStyleProps } from '../Types/BalloonToolbar.types'
 
 export const getBalloonToolbarStyles = (props: BalloonToolbarStyleProps) => {
@@ -19,7 +18,7 @@ export const getBalloonToolbarStyles = (props: BalloonToolbarStyleProps) => {
     borderColor = 'rgb(196, 196, 196)'
   }
 
-  const { placement = 'top' } = props.$popperOptions ?? {}
+  const { placement = 'top' } = props
 
   const arrowStyle: CSSProp = [
     props.arrow &&

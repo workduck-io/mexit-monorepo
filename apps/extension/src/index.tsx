@@ -1,20 +1,22 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import Sputlit from './Components/Sputlit'
+
 import { ThemeProvider } from 'styled-components'
-import { GlobalStyle } from './Styles/GlobalStyle'
-import Tooltip from './Components/Tooltip'
-import Chotu from './Components/Chotu'
-import { SputlitProvider } from './Hooks/useSputlitContext'
-import { SputlitPortal } from './Components/Sputlit/SputlitPortal'
-import { InternalEvents } from './Components/InternalEvents'
-import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
-import useThemeStore from './Hooks/useThemeStore'
+
 import { defaultThemes } from '@mexit/shared'
+
+import Chotu from './Components/Chotu'
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
-import { EditorProvider } from './Hooks/useEditorContext'
+import { InternalEvents } from './Components/InternalEvents'
 import ReminderArmer from './Components/ReminderArmer'
+import Sputlit from './Components/Sputlit'
+import { SputlitPortal } from './Components/Sputlit/SputlitPortal'
+import Tooltip from './Components/Tooltip'
+import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
+import { EditorProvider } from './Hooks/useEditorContext'
+import { SputlitProvider } from './Hooks/useSputlitContext'
+import useThemeStore from './Hooks/useThemeStore'
+import { GlobalStyle } from './Styles/GlobalStyle'
 
 export default function Index() {
   const theme = useThemeStore((state) => state.theme)

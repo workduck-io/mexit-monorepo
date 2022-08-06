@@ -1,6 +1,8 @@
 import create from 'zustand'
-import { Contents, ElementHighlightMetadata, ILink, mog, NodeContent, NodeEditorContent, SharedNode } from '@mexit/core'
 import { persist } from 'zustand/middleware'
+
+import { Contents, ElementHighlightMetadata, ILink, mog, NodeContent, NodeEditorContent, SharedNode } from '@mexit/core'
+
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 interface Highlighted {
@@ -31,7 +33,7 @@ export const useHighlightStore = create<HighlightStore>(
         const highlighted = {}
 
         ilinks.forEach((ilink) => {
-          contents[ilink.nodeid]?.content.forEach(function (block) {
+          contents[ilink.nodeid]?.content?.forEach(function (block) {
             if (block?.metadata?.elementMetadata && this) {
               highlighted[block.metadata.elementMetadata.sourceUrl] = {
                 ...highlighted[block.metadata.elementMetadata.sourceUrl],

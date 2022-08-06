@@ -1,22 +1,25 @@
 import React from 'react'
+
 import DeleteTableIcon from '@iconify/icons-fluent/delete-20-filled'
 import DeleteColumnIcon from '@iconify/icons-fluent/table-delete-column-20-filled'
 import DeleteRowIcon from '@iconify/icons-fluent/table-delete-row-20-filled'
 import AddRowIcon from '@iconify/icons-fluent/table-stack-down-20-filled'
 import AddColumnIcon from '@iconify/icons-fluent/table-stack-right-20-filled'
 import {
-  addColumn,
-  addRow,
+  insertTableColumn,
+  insertTableRow,
   deleteColumn,
   deleteRow,
   deleteTable,
   Popover,
   TableElement,
   TableElementProps,
-  TableToolbarButton
+  TableToolbarButton,
+  Value
 } from '@udecode/plate'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { useTheme } from 'styled-components'
+
 import { MexIcon } from '../Style/Layouts'
 import { ButtonSeparator } from '../Style/Toolbar'
 
@@ -45,12 +48,12 @@ const TableToolbarButtons = () => {
       <TableToolbarButton
         tooltip={{ content: 'Add Row', ...tooltip }}
         icon={<MexIcon icon={AddRowIcon} />}
-        transform={addRow}
+        transform={insertTableRow}
       />
       <TableToolbarButton
         tooltip={{ content: 'Add Column', ...tooltip }}
         icon={<MexIcon icon={AddColumnIcon} />}
-        transform={addColumn}
+        transform={insertTableColumn}
       />
       <TableToolbarButton
         tooltip={{ content: 'Delete Row', ...tooltip }}
@@ -66,7 +69,6 @@ const TableToolbarButtons = () => {
         <ButtonSeparator />
       </JustifyCenter>
       <TableToolbarButton
-        // @ts-ignore
         icon={<MexIcon color={theme.colors.primary} icon={DeleteTableIcon} />}
         transform={deleteTable}
         tooltip={{ content: 'Delete Table', ...tooltip }}
@@ -75,7 +77,7 @@ const TableToolbarButtons = () => {
   )
 }
 
-export const TableModal = ({ element, popoverProps, children }: TableElementProps) => (
+export const TableModal = ({ element, popoverProps, children }: TableElementProps<Value>) => (
   <Popover content={<TableToolbarButtons />} {...popoverProps}>
     {children}
   </Popover>

@@ -1,6 +1,19 @@
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
-import { getBlockAbove, getPluginType, insertNodes, PlateEditor, TElement } from '@udecode/plate'
+import {
+  deleteText,
+  getBlockAbove,
+  getPluginType,
+  insertNodes,
+  insertText,
+  isEndPoint,
+  moveSelection,
+  PlateEditor,
+  select,
+  TElement
+} from '@udecode/plate'
 import { Editor, Transforms } from 'slate'
+
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
+
 import { useLinks } from '../../Hooks/useLinks'
 import { useComboboxStore } from '../store/combobox'
 import { ComboboxItemType, IComboboxItem } from '../types'
@@ -30,11 +43,11 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
 
       if (targetRange) {
         const pathAbove = getBlockAbove(editor)?.[1]
-        const isBlockEnd = editor.selection && pathAbove && Editor.isEnd(editor, editor.selection.anchor, pathAbove)
+        const isBlockEnd = editor.selection && pathAbove && isEndPoint(editor, editor.selection.anchor, pathAbove)
 
         // insert a space to fix the bug
         if (isBlockEnd) {
-          Transforms.insertText(editor, ' ')
+          insertText(editor, ' ')
         }
 
         let itemValue = item.text
@@ -44,7 +57,7 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
           itemValue = nodeId
         }
 
-        Transforms.select(editor, targetRange)
+        select(editor, targetRange)
 
         const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
         const activeBlock = useComboboxStore.getState().activeBlock
@@ -78,11 +91,11 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
             value: itemValue
           })
         }
-        Transforms.move(editor)
+        moveSelection(editor)
 
         // delete the inserted space
         if (isBlockEnd) {
-          Transforms.delete(editor)
+          deleteText(editor)
         }
 
         return closeMenu()

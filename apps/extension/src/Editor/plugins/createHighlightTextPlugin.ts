@@ -1,11 +1,12 @@
 import { getNodesRange } from '@udecode/plate'
 import { createPluginFactory, Decorate } from '@udecode/plate-core'
+
 import { useBlockHighlightStore } from '../../Stores/useFocusBlock'
 
 interface HighlightPlugin {} // eslint-disable-line @typescript-eslint/no-empty-interface
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const decorateHighlightElement: Decorate<{}, HighlightPlugin> =
+export const decorateHighlightElement: Decorate =
   (editor, { key, type }) =>
   ([node, path]: any) => {
     const ranges = []

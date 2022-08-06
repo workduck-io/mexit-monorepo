@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react'
+
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
+import tinykeys from 'tinykeys'
 
-import Editor from './Editor'
+import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 import { Input } from '@mexit/shared'
-import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
 import { IconButton } from '@mexit/shared'
-import { debounce } from 'lodash'
-import tinykeys from 'tinykeys'
+
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { SnippetSaverButton } from '../Saver'
-import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { SnippetSaverButton } from '../Saver'
+import Editor from './Editor'
 
 type Inputs = {
   title: string
@@ -38,7 +39,7 @@ const SnippetEditor = () => {
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
   const buffer = useSnippetBufferStore((store) => store.buffer)
   const addAll = useSnippetBufferStore((store) => store.addAll)
-  const toggleIsTemplate = useSnippetBufferStore((store) => store.toggleIsTemplate)
+  const toggleTemplate = useSnippetBufferStore((store) => store.toggleTemplate)
 
   useEffect(() => {
     if (snippet) {
@@ -52,7 +53,7 @@ const SnippetEditor = () => {
 
   const getSnippetExtras = () => {
     const val = getBufferVal(snippet?.id)
-    return { title: val?.title || snippet?.title || '', isTemplate: val?.isTemplate || snippet?.isTemplate || false }
+    return { title: val?.title || snippet?.title || '', template: val?.template || snippet?.template || false }
   }
 
   const onChangeSave = (val: any[]) => {
@@ -79,9 +80,9 @@ const SnippetEditor = () => {
 
   const onToggleTemplate = () => {
     const val = getBufferVal(snippet.id)
-    if (val && val.isTemplate !== undefined) {
-      toggleIsTemplate(snippet.id, !val.isTemplate)
-    } else toggleIsTemplate(snippet.id, !snippet.isTemplate)
+    if (val && val.template !== undefined) {
+      toggleTemplate(snippet.id, !val.template)
+    } else toggleTemplate(snippet.id, !snippet.template)
   }
 
   useEffect(() => {

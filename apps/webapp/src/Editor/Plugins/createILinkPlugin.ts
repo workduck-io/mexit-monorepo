@@ -1,8 +1,11 @@
-import { deleteFragment, PlatePlugin, WithOverride } from '@udecode/plate-core'
-import { Editor, Range } from 'slate'
+import { getPreviousNode, insertText } from '@udecode/plate'
+import { PlatePlugin, WithOverride } from '@udecode/plate-core'
+import { Range } from 'slate'
+
+import { ELEMENT_ILINK, mog } from '@mexit/core'
+
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { ELEMENT_ILINK } from '@mexit/core'
 import { ComboboxKey } from '../Types/Combobox'
 
 /**
@@ -31,24 +34,26 @@ export const createILinkPlugin = (): PlatePlugin => ({
  * Check if the node above is a ILink and if so, delete it and insert the Ilink value to be edited by the user
  *
  */
-export const withILink: WithOverride<any, PlatePlugin> = (editor, { type, options }) => {
+export const withILink: WithOverride = (editor, { type, options }) => {
   // mog('Setup Plugin with ILink', { type, options })
   const { deleteBackward } = editor
 
   editor.deleteBackward = (options) => {
-    const prev = Editor.previous(editor)
+    const prev = getPreviousNode(editor)
     if (prev && prev[0]) {
       const node = prev[0] as any
+      mog('NODE TYPE', { node })
       if (node.type && node.type === ELEMENT_ILINK && node.value) {
-        deleteFragment(editor, { at: prev[1], unit: 'block' })
+        deleteBackward('block')
         const val = getPathFromNodeIdHookless(node.value)
+        mog('value in editor is', { node, val })
 
         // * On delete, cursor location
         const start = editor.selection
         const cursor = Range.start(start)
 
         // * Replace The ILink with the values
-        Editor.insertText(editor, `[[${val} `)
+        insertText(editor, `[[${val} `)
 
         // * Set the cursor to the end of the inserted text
         useEditorStore

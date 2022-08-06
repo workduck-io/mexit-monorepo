@@ -1,14 +1,17 @@
 import React from 'react'
-import styled, { useTheme } from 'styled-components'
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import xBold from '@iconify/icons-ph/x-bold'
-import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
-import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 
-import useBlockStore from '../../Stores/useBlockStore'
-import { Button, MexIcon } from '@mexit/shared'
-import { ButtonWrapper } from '../../Style/Settings'
+import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
+import xBold from '@iconify/icons-ph/x-bold'
+import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import styled, { useTheme } from 'styled-components'
+
 import { ContextMenuActionType } from '@mexit/core'
+import { Button, MexIcon } from '@mexit/shared'
+
+import { useEditorBlockSelection } from '../../Editor/Actions/useEditorBlockSelection'
+import useBlockStore from '../../Stores/useBlockStore'
+import { ButtonWrapper } from '../../Style/Settings'
 
 export const PrimaryText = styled.span`
   color: ${({ theme }) => theme.colors.primary};
@@ -34,9 +37,15 @@ const BlockInfoBar = () => {
   const blocks = useBlockStore((store) => store.blocks)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
+  const { deleteSelectedBlock } = useEditorBlockSelection()
   const theme = useTheme()
   const length = Object.values(blocks).length
   const blockHeading = length === 0 ? 'Select Blocks' : `Block${length > 1 ? 's' : ''} selected:`
+
+  const handleDelete = () => {
+    deleteSelectedBlock()
+    setIsModalOpen(undefined)
+  }
 
   return (
     <BlockMenu>
@@ -55,7 +64,7 @@ const BlockInfoBar = () => {
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
           <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={sendToIcon} /> Send
         </Button>
-        <Button onClick={() => setIsModalOpen(ContextMenuActionType.del)}>
+        <Button onClick={() => handleDelete()}>
           <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={deleteBin6Line} />
           Delete
         </Button>

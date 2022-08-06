@@ -15,17 +15,17 @@ import {
   hierarchyParser
 } from '@mexit/core'
 
-import { useAuthStore } from '../../Stores/useAuth'
 import { isRequestedWithin } from '../../Stores/useApiStore'
-import { deserializeContent, serializeContent } from '../../Utils/serializer'
-import { useInternalLinks } from '../useInternalLinks'
+import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
-import { useLinks } from '../useLinks'
-import { useTags } from '../useTags'
-import { useNodes } from '../useNodes'
-import { useUpdater } from '../useUpdater'
 import '../../Utils/apiClient'
+import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { useInternalLinks } from '../useInternalLinks'
+import { useLinks } from '../useLinks'
+import { useNodes } from '../useNodes'
+import { useTags } from '../useTags'
+import { useUpdater } from '../useUpdater'
 
 interface SnippetResponse {
   snippetID: string
@@ -345,13 +345,24 @@ export const useApi = () => {
     return checkNodePublic(nodeid)
   }
 
-  const saveSnippetAPI = async (snippetId: string, snippetTitle: string, content: any[]) => {
+  const saveSnippetAPI = async ({
+    snippetId,
+    snippetTitle,
+    content,
+    template
+  }: {
+    snippetId: string
+    snippetTitle: string
+    content: any[]
+    template?: boolean
+  }) => {
     const reqData = {
       id: snippetId,
       type: 'SnippetRequest',
       title: snippetTitle,
       namespaceIdentifier: DEFAULT_NAMESPACE,
-      data: serializeContent(content ?? defaultContent.content, snippetId)
+      data: serializeContent(content ?? defaultContent.content, snippetId),
+      template: template ?? false
     }
 
     const data = await client

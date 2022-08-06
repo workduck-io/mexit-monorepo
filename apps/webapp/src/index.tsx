@@ -1,10 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+
+import { createRoot } from 'react-dom/client'
+import 'threads/register'
+
 import App from './App'
 
-import "threads/register"
+const root = createRoot(document.getElementById('root'))
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
-)
+root.render(<App />)

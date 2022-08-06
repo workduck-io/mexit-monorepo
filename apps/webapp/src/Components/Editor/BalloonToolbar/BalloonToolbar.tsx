@@ -1,41 +1,35 @@
-import { withPlateProvider } from '@udecode/plate-core'
+import React from 'react'
+
+import { withPlateEventProvider } from '@udecode/plate-core'
 import { PortalBody } from '@udecode/plate-styled-components'
-import { UsePopperPositionOptions } from '@udecode/plate-ui-popper'
-import React, { useRef } from 'react'
-// import { ToolbarBase } from '../Toolbar/Toolbar'
-import { BalloonToolbarBase, getBalloonToolbarStyles } from '@mexit/shared'
-import { BalloonToolbarProps } from '@mexit/shared'
-import { useBalloonToolbarPopper } from './useBalloonToolbarPopper'
 
-export const BalloonToolbar = withPlateProvider((props: BalloonToolbarProps) => {
-  const { children, theme = 'dark', arrow = false, portalElement, $popperOptions: _popperOptions = {} } = props
+import { mog } from '@mexit/core'
+import { BalloonToolbarProps, getBalloonToolbarStyles, BalloonToolbarBase, useFloatingToolbar } from '@mexit/shared'
 
-  const popperRef = useRef<HTMLDivElement>(null)
+export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
+  const { children, theme = 'dark', arrow = false, portalElement, floatingOptions } = props
 
-  const popperOptions: UsePopperPositionOptions = {
-    popperElement: popperRef.current,
-    placement: 'top' as any,
-    offset: [0, 8],
-    ..._popperOptions
-  }
-
-  const { styles: popperStyles, attributes } = useBalloonToolbarPopper(popperOptions)
+  const { floating, style, placement, open } = useFloatingToolbar({
+    floatingOptions
+  })
 
   const styles = getBalloonToolbarStyles({
-    $popperOptions: popperOptions,
+    placement,
     theme,
     arrow,
     ...props
   })
 
+  if (!open) return null
+
   return (
     <PortalBody element={portalElement}>
       <BalloonToolbarBase
-        ref={popperRef}
-        className={styles.root.className}
-        style={popperStyles.popper}
-        popperOptions={popperOptions}
-        {...attributes.popper}
+        // TODO: the following properties are overwriting our styles
+        // css={styles.root.css}
+        // className={styles.root.className}
+        ref={floating}
+        style={style}
       >
         {children}
       </BalloonToolbarBase>

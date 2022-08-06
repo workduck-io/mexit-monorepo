@@ -39,15 +39,23 @@ import {
   ELEMENT_H4,
   ELEMENT_H5,
   ELEMENT_H6,
-  createPlateUI,
   ELEMENT_PARAGRAPH,
-  PlatePluginComponent,
-  createTablePlugin,
-  PEditor
+  createTablePlugin
 } from '@udecode/plate'
 
-import { TableWrapper } from '@mexit/shared'
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { TableWrapper, createBlockModifierPlugin } from '@mexit/shared'
 
+import { withStyledDraggables } from '../Actions/withDraggables'
+import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
+import { withBlockOptions } from '../Components/Blocks'
+import { createBlurSelectionPlugin } from './createBlurSelection'
+import { createHighlightTextPlugin } from './createHighlightTextPlugin'
+import { createILinkPlugin } from './createILinkPlugin'
+import { createInlineBlockPlugin } from './createInlineBlockPlugin'
+import { createMentionPlugin } from './createMentionsPlugin'
+import { createTagPlugin } from './createTagPlugin'
+import { createTodoPlugin } from './createTodoPlugin'
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -57,18 +65,6 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
-
-import { createBlurSelectionPlugin } from './createBlurSelection'
-import { createTagPlugin } from './createTagPlugin'
-import { createTodoPlugin } from './createTodoPlugin'
-import { createInlineBlockPlugin } from './createInlineBlockPlugin'
-import { createILinkPlugin } from './createILinkPlugin'
-import { createHighlightTextPlugin } from './createHighlightTextPlugin'
-import { withStyledDraggables } from '../Actions/withDraggables'
-import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
-import { withBlockOptions } from '../Components/Blocks'
-import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { createMentionPlugin } from './createMentionsPlugin'
 
 export type PluginOptionType = {
   exclude: {
@@ -148,6 +144,7 @@ export const generatePlugins = (options: PluginOptionType) => {
       }
     }),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
+    createBlockModifierPlugin(),
 
     // serialization / deseriailization
 
@@ -158,7 +155,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createMediaEmbedPlugin(),
 
     // Custom Plugins
-    createBlurSelectionPlugin() as PlatePlugin<PEditor>,
+    createBlurSelectionPlugin(),
 
     // Comboboxes
     createTagPlugin(), // Tags

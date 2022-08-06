@@ -1,7 +1,8 @@
+import React, { useMemo, useEffect } from 'react'
+
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
-import { MentionElementProps, useEditorRef } from '@udecode/plate'
-import React, { useMemo, useEffect } from 'react'
+import { moveSelection, useEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 // different import path!
 import { Transforms } from 'slate'
@@ -29,6 +30,7 @@ import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useMentionStore } from '../../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../../Stores/useShareModalStore'
 import { useUserCacheStore } from '../../../Stores/useUserCacheStore'
+import { MentionElementProps } from './MentionElement.types'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'
 
@@ -126,7 +128,7 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
     'backspace',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor)
+        moveSelection(editor)
       }
     },
     [selected, focused]
@@ -137,7 +139,7 @@ export const MentionElement = ({ attributes, children, element }: MentionElement
     () => {
       if (selected && focused && editor.selection) {
         // mog('delete', { selected, focused, sel: editor.selection })
-        Transforms.move(editor, { reverse: true })
+        moveSelection(editor, { reverse: true })
       }
     },
     [selected, focused]

@@ -1,17 +1,19 @@
-import { getPlateId, platesStore } from '@udecode/plate'
+import { platesStore } from '@udecode/plate'
+import toast from 'react-hot-toast'
+
 import { CaptureType, extractMetadata, mog, NodeProperties, SEPARATOR } from '@mexit/core'
+
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { useSputlitContext, VisualState } from './useSputlitContext'
-import toast from 'react-hot-toast'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
+import { deserializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
-import useRaju from './useRaju'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useInternalLinks } from './useInternalLinks'
-import { deserializeContent } from '../Utils/serializer'
-import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useNodes } from './useNodes'
+import useRaju from './useRaju'
+import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)

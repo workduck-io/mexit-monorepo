@@ -1,7 +1,15 @@
-import { getNodes, getSelectionText, insertNodes, TEditor } from '@udecode/plate'
+import {
+  deleteText,
+  getNodeEntries,
+  getPath,
+  getSelectionText,
+  insertNodes,
+  removeNodes,
+  TEditor,
+  withoutNormalizing
+} from '@udecode/plate'
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import { Editor, Transforms } from 'slate'
 
 import {
   NodeEditorContent,
@@ -11,26 +19,75 @@ import {
   NODE_PATH_SPACER,
   SEPARATOR,
   ELEMENT_ILINK,
-  convertContentToRawText
+  convertContentToRawText,
+  ELEMENT_SYNC_BLOCK,
+  defaultContent,
+  generateTempId,
+  NODE_PATH_CHAR_LENGTH,
+  ELEMENT_QA_BLOCK
 } from '@mexit/core'
+import { ILinkNode } from '@mexit/shared'
 
-import { useSnippetStore } from '../../../../Stores/useSnippetStore'
-import { ILinkNode } from '../../../../Editor/Types/QuickLink'
+import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
+import { useSnippets } from '../../../../Hooks/useSnippets'
+import { useUpdater } from '../../../../Hooks/useUpdater'
 import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
-import { useNewNodes } from './../../../../Hooks/useNewNodes'
 
 export const useTransform = () => {
-  const { addNodeOrNodesFast } = useNewNodes()
-  const addSnippet = useSnippetStore((s) => s.addSnippet)
+  const { updateSnippet } = useSnippets()
+  const { createNewNote } = useCreateNewNote()
+  const { updater } = useUpdater()
+
+  // Checks whether a node is a flowblock
+  const isFlowBlock = (node: any): boolean => {
+    if (node.type === ELEMENT_SYNC_BLOCK) return true
+    if (node.children) {
+      if (node.children.length > 0)
+        return node.children.map(isFlowBlock).reduce((p: boolean, c: boolean) => p || c, false)
+    }
+    return false
+  }
+
+  // Checks whether current editor selection can be converted
+  const addQABlock = (editor: TEditor, block: { question: string; questionId: string }): boolean => {
+    if (!editor) return false
+    if (!editor?.selection) return false
+    const { question, questionId } = block
+
+    deleteText(editor)
+    // If editor selection has flowblock it is not convertable
+    insertNodes<any>(editor, [{ type: ELEMENT_QA_BLOCK, question, questionId, id: generateTempId(), children: [] }], {
+      at: editor.selection
+    })
+  }
+
+  const convertSelectionToQABlock = (editor: TEditor) => {
+    try {
+      // const selectionPath = getPath(editor, editor.selection)
+      const val = selectionToValue(editor)
+      const valText = convertContentToRawText(val)
+
+      // mog('replaceSelectionWithLink  selPath', { selectionPath })
+
+      removeNodes(editor, { at: editor.selection, hanging: false })
+      // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
+
+      // mog('replaceSelectionWithQA  ', { selectionPath, val, valText })
+      //
+      addQABlock(editor, { question: valText, questionId: generateSnippetId() })
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
 
   const replaceSelectionWithTask = (editor: TEditor, todoVal: NodeEditorContent) => {
     try {
-      Transforms.removeNodes(editor, { at: editor.selection, hanging: false })
-      Transforms.delete(editor)
+      removeNodes(editor, { at: editor.selection, mode: 'highest' })
 
       const convertedVal = convertValueToTasks(todoVal)
-      mog('replaceSelectionWithTask  ', { todoVal, convertedVal })
+      // mog('replaceSelectionWithTask  ', { todoVal, convertedVal })
 
       insertNodes<any>(editor, convertedVal, {
         at: editor.selection
@@ -47,19 +104,23 @@ export const useTransform = () => {
     if (!editor?.selection) return false
     // If editor selection has flowblock it is not convertable
     return !Array.from(
-      getNodes(editor, {
+      getNodeEntries(editor, {
         block: true
       })
     ).reduce((p: boolean, [node, _path]: any) => {
       // mog('isConvertable', { editor, p, node, ifb: isFlowBlock(node) })
-      return p
+      return p || isFlowBlock(node)
     }, false)
   }
 
   const replaceSelectionWithLink = (editor: TEditor, ilink: string, inline: boolean) => {
     try {
-      if (inline) Transforms.delete(editor)
-      else Transforms.removeNodes(editor, { at: editor.selection, hanging: false })
+      const selectionPath = getPath(editor, editor.selection)
+
+      // mog('replaceSelectionWithLink  selPath', { selectionPath })
+
+      if (inline) deleteText(editor)
+      else removeNodes(editor, { at: editor.selection, hanging: false })
       // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
 
       // mog('replaceSelectionWithLink  detFrag', { selectionPath })
@@ -83,7 +144,7 @@ export const useTransform = () => {
     if (!isConvertable(editor)) return
 
     const nodes = Array.from(
-      getNodes(editor, {
+      getNodeEntries(editor, {
         mode: 'highest',
         block: true,
         at: editor.selection
@@ -106,16 +167,17 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, () => {
+    withoutNormalizing(editor, () => {
+      // const selectionPath = getPath(editor, editor.selection)
       const nodes = Array.from(
-        getNodes(editor, {
+        getNodeEntries(editor, {
           mode: 'highest',
           block: true,
           at: editor.selection
         })
       )
       const lowest = Array.from(
-        getNodes(editor, {
+        getNodeEntries(editor, {
           mode: 'lowest',
           block: true,
           at: editor.selection
@@ -128,15 +190,15 @@ export const useTransform = () => {
         return node
       })
       const isInline = lowest.length === 1
+      const putContent = selText.length > NODE_PATH_CHAR_LENGTH
 
       const text = convertContentToRawText(value, NODE_PATH_SPACER)
       const parentPath = useEditorStore.getState().node.title
       const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
 
-      const { id } = addNodeOrNodesFast(path, true, undefined, value)
+      const noteId = createNewNote({ path, noteContent: putContent ? value : defaultContent.content, noRedirect: true })
 
-      replaceSelectionWithLink(editor, id, isInline)
-      mog('SelectionToNode', { selText, value, isInline, path, parentPath, nodeid: id })
+      replaceSelectionWithLink(editor, noteId, isInline)
     })
   }
 
@@ -148,10 +210,10 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, () => {
-      // const selectionPath = Editor.path(editor, editor.selection)
+    withoutNormalizing(editor, () => {
+      // const selectionPath = getPath(editor, editor.selection)
       const nodes = Array.from(
-        getNodes(editor, {
+        getNodeEntries(editor, {
           mode: 'highest',
           block: true,
           at: editor.selection
@@ -176,10 +238,10 @@ export const useTransform = () => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
-    Editor.withoutNormalizing(editor, () => {
-      const selectionPath = Editor.path(editor, editor.selection)
+    withoutNormalizing(editor, () => {
+      const selectionPath = getPath(editor, editor.selection)
       const nodes = Array.from(
-        getNodes(editor, {
+        getNodeEntries(editor, {
           mode: 'highest',
           block: true,
           at: editor.selection
@@ -192,16 +254,19 @@ export const useTransform = () => {
 
       const snippetId = generateSnippetId()
       const snippetTitle = genereateName().dashed
-      addSnippet({
+      const newSnippet = {
         id: snippetId,
         title: snippetTitle,
         content: value,
         icon: 'ri:quill-pen-line'
-      })
+      }
+      updateSnippet(newSnippet)
+      updater()
+      // addSnippet()
 
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value })
 
-      toast(`Snippet created '${snippetTitle}'`, { duration: 5000 })
+      toast(`Snippet created [[${snippetTitle}]]`, { duration: 5000 })
       // setContent(nodeid, value)
       // saveData()
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
@@ -210,7 +275,9 @@ export const useTransform = () => {
 
   return {
     selectionToNode,
+    convertSelectionToQABlock,
     isConvertable,
+    isFlowBlock,
     selectionToSnippet,
     selectionToTask,
     selectionToValue

@@ -1,11 +1,11 @@
-import { getNodes, getPlateEditorRef, usePlateId } from '@udecode/plate'
+import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
-import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
 import toast from 'react-hot-toast'
-import { Transforms } from 'slate'
 import { useReadOnly } from 'slate-react'
+
+import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
+
 import { TodoBase } from './Todo'
-import { useNodes } from '../../Hooks/useNodes'
 
 const cleanEditorId = (editorId: string) => {
   /*
@@ -21,6 +21,7 @@ const cleanEditorId = (editorId: string) => {
   const snippetReg = new RegExp(`${SNIPPET_PREFIX}_[A-Za-z0-9]+`)
   const snippetnodeidReg = editorId.match(snippetReg)
   // mog('nodeId', { snippetReg, snippetnodeidReg })
+
   if (snippetnodeidReg) {
     return snippetnodeidReg[0]
   }
@@ -32,23 +33,22 @@ const Todo = (props: any) => {
   const rootProps = getRootProps(props)
 
   const readOnly = useReadOnly()
-  const { accessWhenShared } = useNodes()
-
   const editorId = usePlateId()
   // const nodeid = useEditorStore((store) => store.node.nodeid)
   const nodeid = cleanEditorId(editorId)
-  const isSharedRead = accessWhenShared(nodeid) === 'READ'
+
+  // mog('Todo', { nodeid, editorId, readOnly })
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
-    const blockNode = getNodes(editor, {
+    const blockNode = getNodeEntries(editor, {
       at: [],
       match: (node) => element.id === node.id,
       block: true
     })
     try {
       const [_, path] = Array.from(blockNode)[0]
-      Transforms.delete(editor, { at: [path[0]] })
+      deleteText(editor, { at: [path[0]] })
       editor.insertText('')
     } catch (error) {
       toast('Unable to delete this todo')
@@ -59,7 +59,7 @@ const Todo = (props: any) => {
     <TodoBase
       {...rootProps}
       {...attributes}
-      readOnly={readOnly || isSharedRead}
+      readOnly={readOnly}
       oid={'EditorTodo'}
       todoid={element.id}
       parentNodeId={nodeid}

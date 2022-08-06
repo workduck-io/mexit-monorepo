@@ -1,18 +1,20 @@
-import { Icon } from '@iconify/react'
+import React, { useState } from 'react'
+
 import archivedIcon from '@iconify/icons-ri/archive-line'
-import { useEditorRef } from '@udecode/plate'
+import { Icon } from '@iconify/react'
+import { moveSelection, useEditorRef } from '@udecode/plate'
 import { Transforms } from 'slate'
 import { useFocused, useSelected, useReadOnly } from 'slate-react'
 import styled from 'styled-components'
-import { useHotkeys } from '../../../hooks/useHotKeys'
-import { SILink, SILinkRoot } from '@mexit/shared'
-import { ILinkElementProps, ILinkProps } from './QuickLink.types'
-import React, { useState } from 'react'
-import { useLinks } from '../../../../Hooks/useLinks'
-import { getBlock } from '../../../../Utils/parseData'
-import EditorPreview from '../../../../Components/Editor/EditorPreview'
-import { useNodes } from '../../../../Hooks/useNodes'
+
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { SILink, SILinkRoot, ILinkElementProps } from '@mexit/shared'
+
+import EditorPreview from '../../../../Components/Editor/EditorPreview'
+import { useLinks } from '../../../../Hooks/useLinks'
+import { useNodes } from '../../../../Hooks/useNodes'
+import { getBlock } from '../../../../Utils/parseData'
+import { useHotkeys } from '../../../hooks/useHotKeys'
 import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
 
 const StyledIcon = styled(Icon)`
@@ -57,7 +59,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     'backspace',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor)
+        moveSelection(editor)
       }
     },
     [element]
@@ -85,7 +87,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     'delete',
     () => {
       if (selected && focused && editor.selection) {
-        Transforms.move(editor, { reverse: true })
+        moveSelection(editor, { reverse: true })
       }
     },
     [selected, focused]
