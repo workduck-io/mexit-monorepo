@@ -153,24 +153,11 @@ export const getProfileData = async (webPage: string) => {
   const sendData = []
 
   sendData.push({
+    type: ELEMENT_PARAGRAPH,
     children: [
       {
-        text: 'Profile data of webpage: ' + document.title
-      },
-      {
-        text: ' ['
-      },
-      {
-        type: 'a',
-        url: window.location.href,
-        children: [
-          {
-            text: 'Ref'
-          }
-        ]
-      },
-      {
-        text: ' ]\n'
+        text: document.title,
+        type: ELEMENT_PARAGRAPH
       }
     ]
   })
@@ -183,7 +170,8 @@ export const getProfileData = async (webPage: string) => {
         type: ELEMENT_PARAGRAPH,
         children: [
           {
-            text: d + ': ' + ele.textContent.trim()
+            text: d + ': ' + ele.textContent.trim(),
+            type: ELEMENT_PARAGRAPH
           }
         ]
       })
