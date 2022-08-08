@@ -9,21 +9,20 @@ import {
   TNodeEntry
 } from '@udecode/plate'
 
-import { mog, updateIds, NodeEditorContent, generateTempId, BlockType, BlockMetaDataType } from '@mexit/core'
+import {
+  mog,
+  updateIds,
+  NodeEditorContent,
+  generateTempId,
+  BlockType,
+  BlockMetaDataType,
+  getBlockMetadata
+} from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-
-export const getBlockMetadata = (text: string, meta?: BlockMetaDataType): BlockMetaDataType => {
-  const metadata = meta || {}
-
-  // * Origin of the block
-  if (!metadata?.origin) return { ...metadata, source: text, origin: text }
-
-  return { ...metadata, source: text }
-}
 
 export const useEditorBlockSelection = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)

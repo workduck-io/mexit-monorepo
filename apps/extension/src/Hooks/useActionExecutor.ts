@@ -11,6 +11,7 @@ import {
   defaultCopyFilter,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAG,
+  getBlockMetadata,
   getNewDraftKey,
   getUntitledDraftKey,
   ILink,
@@ -160,7 +161,8 @@ export function useActionExecutor() {
                   setPersistedContent([
                     {
                       type: ELEMENT_PARAGRAPH,
-                      children: data
+                      children: data,
+                      blockMeta: getBlockMetadata(window.location.href)
                     }
                   ])
                 })
