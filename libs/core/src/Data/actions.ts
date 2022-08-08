@@ -44,7 +44,7 @@ export const initActions: Array<MexitAction> = [
   },
   {
     id: 'ACTION_9x34kgj23j4234ojin',
-    title: 'Data Extractor',
+    title: 'Metadata Aggregator',
     category: QuickLinkType.action,
     icon: 'eva:color-picker-fill',
     description: 'Extract any useful data from the current page',

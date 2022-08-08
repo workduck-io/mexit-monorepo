@@ -1,17 +1,28 @@
 // Direct properties are collated in the properties for api
+import { BlockMetaDataType } from '../Stores/blockStoreConstructor'
+
 // and then unfurled when converting back to editor content
 export const directPropertyKeys = [
   'bold',
   'italic',
   'underline',
+  'strikethrough',
   'highlight',
   'code',
+  'email',
   'url',
+  'caption',
   'value',
   'blockValue',
   'checked',
   'blockId',
-  'body'
+  'body',
+  'align',
+  'questionId',
+  'question',
+  'answer',
+  'actionContext',
+  'blockMeta'
 ]
 export const PropKeysArray = [...directPropertyKeys] as const
 export type PropKeys = typeof PropKeysArray[number]
@@ -52,4 +63,13 @@ export const generateElementMetadata = (
     ...elementMetadata,
     type: 'highlight'
   }
+}
+
+export const getBlockMetadata = (text: string, meta?: BlockMetaDataType): BlockMetaDataType => {
+  const metadata = meta || {}
+
+  // * Origin of the block
+  if (!metadata?.origin) return { ...metadata, source: text, origin: text }
+
+  return { ...metadata, source: text }
 }
