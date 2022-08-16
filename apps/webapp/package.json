@@ -25,6 +25,7 @@
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
     "@workduck-io/dwindle": "^0.0.18",
+    "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
     "compress.js": "^1.2.2",
     "core-js": "^3.21.1",
@@ -62,7 +63,6 @@
     "shared-zustand": "^1.0.4",
     "styled-components": "^5.3.3",
     "threads": "^1.7.0",
-    "tinykeys": "^1.4.0",
     "universal-cookie": "^4.0.4",
     "use-debounce": "^7.0.1",
     "zustand": "^3.7.2"
