@@ -4,7 +4,8 @@ import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'

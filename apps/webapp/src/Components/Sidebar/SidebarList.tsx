@@ -5,7 +5,8 @@ import { Icon, IconifyIcon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import { debounce } from 'lodash'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
 import { Input, ItemTitle, StyledTreeItem } from '@mexit/shared'

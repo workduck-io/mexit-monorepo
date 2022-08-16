@@ -1,7 +1,9 @@
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import React, { useEffect, useMemo } from 'react'
+
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { useMatch } from 'react-router-dom'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MexIcon } from '@mexit/shared'
 import { InfoBarWrapper } from '@mexit/shared'

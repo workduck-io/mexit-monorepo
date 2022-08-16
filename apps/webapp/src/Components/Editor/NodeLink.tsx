@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { NodeType } from '@mexit/core'
 import { SharedNodeIcon } from '@mexit/shared'
+
+import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 // import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
@@ -10,7 +13,6 @@ import { useNodes } from '../../Hooks/useNodes'
 import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { NodeLinkStyled } from '../../Style/Backlinks'
-import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 
 interface NodeLinkProps {
   keyStr: string

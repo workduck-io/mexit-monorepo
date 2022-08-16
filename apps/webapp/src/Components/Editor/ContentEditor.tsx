@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import { useParams } from 'react-router-dom'
-import tinykeys from 'tinykeys'
 import shallow from 'zustand/shallow'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, mog } from '@mexit/core'
 import { StyledEditor, EditorWrapper } from '@mexit/shared'

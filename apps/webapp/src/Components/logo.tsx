@@ -3,7 +3,8 @@ import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 import styled, { css, useTheme } from 'styled-components'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { FocusModeProp, focusStyles } from '@mexit/shared'
 

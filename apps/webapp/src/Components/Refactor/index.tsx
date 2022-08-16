@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react'
+
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved, NodeLink } from '@mexit/core'
 import { Button } from '@mexit/shared'
+
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import { useRefactorStore } from '../../Stores/useRefactorStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
-import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
-import { doesLinkRemain } from './doesLinkRemain'
-import { useLinks } from '../../Hooks/useLinks'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { useHelpStore } from '../../Stores/useHelpStore'
+import { useRefactorStore } from '../../Stores/useRefactorStore'
+import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
+import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
+import { doesLinkRemain } from './doesLinkRemain'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
