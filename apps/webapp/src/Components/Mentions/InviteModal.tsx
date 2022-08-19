@@ -4,6 +4,8 @@ import { getPlateEditorRef } from '@udecode/plate'
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { LoadingButton } from '@workduck-io/mex-components'
+
 import { mog, AccessLevel, DefaultPermission, DefaultPermissionValue, permissionOptions } from '@mexit/core'
 import { Label, StyledCreatatbleSelect, ButtonFields, SelectWrapper, IntegrationTitle } from '@mexit/shared'
 
@@ -16,7 +18,6 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useShareModalStore, InviteModalData } from '../../Stores/useShareModalStore'
 import { EMAIL_REG } from '../../Utils/constants'
-import { LoadingButton } from '../Buttons/Buttons'
 import { InputFormError } from '../Input'
 import { InviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
 

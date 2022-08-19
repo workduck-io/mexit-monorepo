@@ -1,7 +1,9 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { Title, Button, SelectWrapper } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+
+import { Title, SelectWrapper } from '@mexit/shared'
 
 export const InviteWrapper = styled.div``
 export const MultipleInviteWrapper = styled.div`

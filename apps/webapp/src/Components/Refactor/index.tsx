@@ -3,14 +3,11 @@ import React, { useEffect } from 'react'
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-
-import { tinykeys } from '@workduck-io/tinykeys'
+import tinykeys from 'tinykeys'
 
 import { isReserved, NodeLink } from '@mexit/core'
 import { Button } from '@mexit/shared'
 
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useKeyListener } from '../../Hooks/useShortcutListener'

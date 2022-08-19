@@ -9,9 +9,10 @@ import { useSingleton } from '@tippyjs/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { NavTooltip } from '@workduck-io/mex-components'
+
 import {
   NavWrapper,
-  NavTooltip,
   NavLogoWrapper,
   MainLinkContainer,
   CreateNewButton,

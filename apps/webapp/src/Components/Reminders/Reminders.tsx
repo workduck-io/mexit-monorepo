@@ -5,8 +5,10 @@ import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
 
+import { Button, IconButton } from '@workduck-io/mex-components'
+
 import { InfobarFull, InfobarTools } from '@mexit/shared'
-import { Button, IconButton, Title } from '@mexit/shared'
+import { Title } from '@mexit/shared'
 import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper } from '@mexit/shared'
 
 import { useReminders } from '../../Hooks/useReminders'

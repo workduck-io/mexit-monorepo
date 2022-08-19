@@ -4,15 +4,16 @@ import deleteBack2Line from '@iconify/icons-ri/delete-back-2-line'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import { useForm } from 'react-hook-form'
 
+import { IconButton, LoadingButton } from '@workduck-io/mex-components'
+
 import { IS_DEV } from '@mexit/core'
-import { AuthForm, BackCard, ButtonFields, IconButton, SettingsCard } from '@mexit/shared'
+import { AuthForm, BackCard, ButtonFields, SettingsCard } from '@mexit/shared'
 import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '@mexit/shared'
 import { CenteredColumn, Title } from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
 import { ALIAS_REG } from '../../Utils/constants'
-import { LoadingButton } from '../Buttons/Buttons'
 import { CopyButton } from '../Buttons/CopyButton'
 import { InputFormError } from '../Input'
 import { ProfileImage } from './ProfileImage'

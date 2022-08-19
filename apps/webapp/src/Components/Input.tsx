@@ -4,10 +4,11 @@ import React from 'react'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
 
+import { Infobox } from '@workduck-io/mex-components'
+
 import { InputBlock, Label, InputWrapper } from '@mexit/shared'
 
 import { ErrorTooltip } from '../Style/Tippy'
-import Infobox from './Infobox'
 
 export const errorMessages = {
   required: (field: string) => `${field} is required`,

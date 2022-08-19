@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { ErrorBoundary } from 'react-error-boundary'
-
-import { tinykeys } from '@workduck-io/tinykeys'
 
 // import { ServiceContainer, GroupHeaderContainer, FloatingIcon } from './styled'
 import { Button, IconButton } from '@mexit/shared'

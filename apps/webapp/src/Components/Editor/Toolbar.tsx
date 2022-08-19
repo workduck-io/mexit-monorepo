@@ -5,7 +5,9 @@ import shareLine from '@iconify/icons-ri/share-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { useSingleton } from '@tippyjs/react'
 
-import { Loading, ToolbarTooltip, IconButton } from '@mexit/shared'
+import { ToolbarTooltip, IconButton } from '@workduck-io/mex-components'
+
+import { Loading } from '@mexit/shared'
 import { InfoTools, NodeInfo } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'

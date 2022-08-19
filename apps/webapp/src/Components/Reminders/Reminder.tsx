@@ -5,6 +5,8 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { add } from 'date-fns/fp'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { getRelativeDate, mog, getNameFromPath } from '@mexit/core'
 import { ReminderStatus, getReminderState } from '@mexit/core'
 import { Reminder, DisplayReminder } from '@mexit/core'
@@ -19,7 +21,7 @@ import {
   ReminderTime,
   SnoozeControls
 } from '@mexit/shared'
-import { Button, RelativeTime, IntegrationTitle } from '@mexit/shared'
+import { RelativeTime, IntegrationTitle } from '@mexit/shared'
 
 import { Description } from '../Portals/styled'
 

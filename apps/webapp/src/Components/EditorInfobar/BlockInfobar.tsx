@@ -6,8 +6,10 @@ import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import styled, { useTheme } from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { ContextMenuActionType } from '@mexit/core'
-import { Button, MexIcon } from '@mexit/shared'
+import { MexIcon } from '@mexit/shared'
 
 import { useEditorBlockSelection } from '../../Editor/Actions/useEditorBlockSelection'
 import useBlockStore from '../../Stores/useBlockStore'
