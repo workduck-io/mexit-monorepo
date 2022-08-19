@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
-import Modal from 'react-modal'
-import tinykeys from 'tinykeys'
-import ShortcutTable from '../Components/ShortcutTable'
 
+import Modal from 'react-modal'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import ShortcutTable from '../Components/ShortcutTable'
 import { useKeyListener } from '../Hooks/useShortcutListener'
 import { useHelpStore } from '../Stores/useHelpStore'
 

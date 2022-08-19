@@ -1,8 +1,10 @@
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+
 import searchLine from '@iconify-icons/ri/search-line'
 import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog, SearchFilter } from '@mexit/core'
 import {

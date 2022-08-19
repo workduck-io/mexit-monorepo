@@ -3,7 +3,6 @@ import React from 'react'
 
 import { createRoot } from 'react-dom/client'
 import { StyleSheetManager } from 'styled-components'
-import tinykeys from 'tinykeys'
 
 import Index from '.'
 

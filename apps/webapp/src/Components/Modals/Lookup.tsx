@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+
 import Modal from 'react-modal'
-import tinykeys from 'tinykeys'
+import styled from 'styled-components'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { generateNodeId, mog } from '@mexit/core'
-
 import { Input } from '@mexit/shared'
-import { useApi } from '../../Hooks/API/useNodeAPI'
-
-import { useNavigation } from '../../Hooks/useNavigation'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 import { StyledCombobox, StyledInputWrapper } from '@mexit/shared'
+
+import { useApi } from '../../Hooks/API/useNodeAPI'
+import { useNavigation } from '../../Hooks/useNavigation'
+import { useNewNodes } from '../../Hooks/useNewNodes'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { useNewNodes } from '../../Hooks/useNewNodes'
+import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;

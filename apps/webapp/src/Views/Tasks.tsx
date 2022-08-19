@@ -3,7 +3,8 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import Board from '@asseinfo/react-kanban'
 import { useMediaQuery } from 'react-responsive'
 import { useMatch } from 'react-router-dom'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNextStatus, getPrevStatus, PriorityType, TodoType, mog } from '@mexit/core'
 import {

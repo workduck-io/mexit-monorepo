@@ -1,7 +1,9 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
 import { Input, Button } from '@mexit/shared'

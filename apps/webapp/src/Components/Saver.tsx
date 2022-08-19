@@ -3,7 +3,8 @@ import React, { useEffect } from 'react'
 import saveLine from '@iconify/icons-ri/save-line'
 import { TippyProps } from '@tippyjs/react'
 import toast from 'react-hot-toast'
-import tinykeys from 'tinykeys'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getEventNameFromElement, mog } from '@mexit/core'
 import { IconButton } from '@mexit/shared'

@@ -1,12 +1,16 @@
+import React, { useEffect } from 'react'
+
 import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
-import { isReserved, mog, USE_API } from '@mexit/core'
-import { Button } from '@mexit/shared'
-import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
-import tinykeys from 'tinykeys'
 import create from 'zustand'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { isReserved, mog, USE_API } from '@mexit/core'
+import { Button } from '@mexit/shared'
+
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLoad from '../../Hooks/useLoad'
