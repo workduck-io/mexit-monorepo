@@ -1,20 +1,17 @@
+import React, { useEffect, useState } from 'react'
+
 import unarchiveLine from '@iconify/icons-clarity/unarchive-line'
 import trashIcon from '@iconify/icons-codicon/trash'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog, SEPARATOR } from '@mexit/core'
-import { MainHeader, Button } from '@mexit/shared'
-import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import styled, { useTheme } from 'styled-components'
-import Infobox from '../Components/Infobox'
-import { defaultContent } from '../Data/baseData'
-import { ArchiveHelp } from '../Data/defaultText'
-import useArchive from '../Hooks/useArchive'
-import useLoad from '../Hooks/useLoad'
-import { useSearch } from '../Hooks/useSearch'
+
+import { Button, Infobox } from '@workduck-io/mex-components'
+
+import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog, SEPARATOR } from '@mexit/core'
+import { MainHeader } from '@mexit/shared'
 import { Title } from '@mexit/shared'
-import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
 import {
   Result,
   ResultHeader,
@@ -26,15 +23,22 @@ import {
   SplitSearchPreviewWrapper,
   SearchContainer
 } from '@mexit/shared'
-import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 import { View } from '@mexit/shared'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
+
+import { defaultContent } from '../Data/baseData'
+import { ArchiveHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { getContent } from '../Stores/useEditorStore'
+import { useApi } from '../Hooks/API/useNodeAPI'
+import useArchive from '../Hooks/useArchive'
+import useLoad from '../Hooks/useLoad'
 import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
-import { useApi } from '../Hooks/API/useNodeAPI'
+import { useSearch } from '../Hooks/useSearch'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { getContent } from '../Stores/useEditorStore'
+import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
+import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;

@@ -6,6 +6,8 @@ import { Icon } from '@iconify/react'
 import { startCase } from 'lodash'
 import { nanoid } from 'nanoid'
 
+import Infobox from '@workduck-io/mex-components'
+
 import { mog, FilterKey, SearchFilter } from '@mexit/core'
 import {
   SearchFilterCancel,
@@ -16,7 +18,6 @@ import {
   ToolbarTooltip
 } from '@mexit/shared'
 
-import Infobox from '../Components/Infobox'
 import SearchFilterInput from '../Components/SearchFilterInput'
 import { SearchFiltersHelp } from '../Data/defaultText'
 

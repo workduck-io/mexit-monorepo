@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
+
 import { debounce } from 'lodash'
 import { matchSorter } from 'match-sorter'
-
 import Modal from 'react-modal'
-import useShortcutTableData from '../Hooks/useShortcutTableData'
-import { useShortcutStore } from '../Hooks/useShortcutStore'
+
+import { DisplayShortcut } from '@workduck-io/mex-components'
+
 import { Input } from '@mexit/shared'
-import { DisplayShortcut } from './Shortcuts'
+
+import { useShortcutStore } from '../Hooks/useShortcutStore'
+import useShortcutTableData from '../Hooks/useShortcutTableData'
+import { Shortcut } from '../Stores/useHelpStore'
 import {
   StyledRow,
   StyledTable,
@@ -17,7 +21,6 @@ import {
   TableHeader,
   TableWrapperScrollable
 } from '../Style/ShortcutTable'
-import { Shortcut } from '../Stores/useHelpStore'
 import InputShortcut from './InputShortcut'
 
 function fuzzyTextFilterFn(data: Shortcut[], search: any) {

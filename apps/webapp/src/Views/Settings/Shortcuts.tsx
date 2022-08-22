@@ -1,12 +1,15 @@
 import React from 'react'
+
 import lodash from 'lodash'
-import Modal from 'react-modal'
 import { transparentize } from 'polished'
+import Modal from 'react-modal'
 import styled, { css } from 'styled-components'
+
+import { DisplayShortcut } from '@workduck-io/mex-components'
+
+import InputShortcut from '../../Components/InputShortcut'
 import { useShortcutStore } from '../../Hooks/useShortcutStore'
 import useShortcutTableData from '../../Hooks/useShortcutTableData'
-import InputShortcut from '../../Components/InputShortcut'
-import { DisplayShortcut } from '../../Components/Shortcuts'
 
 const Shortcut = styled.div<{ highlight: boolean }>`
   width: 100%;

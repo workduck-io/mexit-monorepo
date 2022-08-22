@@ -1,7 +1,10 @@
 import React from 'react'
-import { Icon } from '@iconify/react'
+
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import shareLine from '@iconify/icons-ri/share-line'
+import { Icon } from '@iconify/react'
+
+import Infobox from '@workduck-io/mex-components'
 
 import {
   GenericSearchResult,
@@ -12,11 +15,6 @@ import {
   getInitialNode
 } from '@mexit/core'
 import { MainHeader, TitleText, ResultCardFooter, Title } from '@mexit/shared'
-
-import { useFilters } from '../Hooks/useFilters'
-import useLoad from '../Hooks/useLoad'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import { useSearch } from '../Hooks/useSearch'
 import {
   Result,
   ResultDesc,
@@ -30,21 +28,25 @@ import {
   SplitSearchPreviewWrapper,
   View
 } from '@mexit/shared'
-import { SplitType } from './SplitView'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+
 import Backlinks from '../Components/Editor/Backlinks'
-import Metadata from '../Components/EditorInfobar/Metadata'
 import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
-import SearchFilters from './SearchFilters'
-import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
+import Metadata from '../Components/EditorInfobar/Metadata'
+import { SearchHelp } from '../Data/defaultText'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useFilters } from '../Hooks/useFilters'
+import useLoad from '../Hooks/useLoad'
+import { useNodes } from '../Hooks/useNodes'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useSearch } from '../Hooks/useSearch'
+import { useTags } from '../Hooks/useTags'
+import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
-import { useContentStore } from '../Stores/useContentStore'
-import { useNodes } from '../Hooks/useNodes'
-import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { useTags } from '../Hooks/useTags'
-import { SearchHelp } from '../Data/defaultText'
-import Infobox from '../Components/Infobox'
+import { useRecentsStore } from '../Stores/useRecentsStore'
+import SearchFilters from './SearchFilters'
+import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
+import { SplitType } from './SplitView'
 
 const Search = () => {
   const { loadNode } = useLoad()
