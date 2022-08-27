@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-import tinykeys from 'tinykeys'
+import { tinykeys } from 'tinykeys'
 
 import { Button } from '@workduck-io/mex-components'
 

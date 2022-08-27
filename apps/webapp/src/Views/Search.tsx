@@ -4,7 +4,7 @@ import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import shareLine from '@iconify/icons-ri/share-line'
 import { Icon } from '@iconify/react'
 
-import Infobox from '@workduck-io/mex-components'
+import { Infobox } from '@workduck-io/mex-components'
 
 import {
   GenericSearchResult,

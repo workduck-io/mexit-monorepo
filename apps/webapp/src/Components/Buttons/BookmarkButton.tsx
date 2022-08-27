@@ -40,7 +40,7 @@ const BookmarkButton = ({ nodeid }: BookmarkButtonProps) => {
   }
 
   return (
-    <LoadingButton dots={2} loading={loading} onClick={onBookmark} transparent={false} highlight={bmed} id={}>
+    <LoadingButton dots={2} loading={loading} onClick={onBookmark} transparent={false} highlight={bmed}>
       <Icon width={24} icon={bmed ? bookmarkFill : bookmarkLine} />
     </LoadingButton>
   )

@@ -12,7 +12,7 @@ import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
 import { Button, IconButton, DisplayShortcut, ToolbarTooltip } from '@workduck-io/mex-components'
-import Infobox from '@workduck-io/mex-components'
+import { Infobox } from '@workduck-io/mex-components'
 
 import { SearchFilter } from '@mexit/core'
 import {
