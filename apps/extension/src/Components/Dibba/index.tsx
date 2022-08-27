@@ -1,8 +1,11 @@
+import React, { useEffect, useRef, useState } from 'react'
+
 import { Icon } from '@iconify/react'
 import { serializeHtml, createPlateEditor, createPlateUI } from '@udecode/plate'
 import fuzzysort from 'fuzzysort'
-import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
+
+import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import {
   apiURLs,
@@ -20,14 +23,7 @@ import {
   SEPARATOR,
   Snippet
 } from '@mexit/core'
-import {
-  ActionTitle,
-  ComboboxItemTitle,
-  ComboboxShortcuts,
-  ComboSeperator,
-  DisplayShortcut,
-  ShortcutText
-} from '@mexit/shared'
+import { ActionTitle, ComboboxItemTitle, ComboboxShortcuts, ComboSeperator, ShortcutText } from '@mexit/shared'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'

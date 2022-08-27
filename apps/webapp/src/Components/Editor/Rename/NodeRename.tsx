@@ -4,6 +4,7 @@ import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { Button } from '@workduck-io/mex-components'
+import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
@@ -21,7 +22,6 @@ import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRefactorStore } from '../../../Stores/useRefactorStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
-import { DisplayShortcut } from '../../Shortcuts'
 import { Wrapper, TitleStatic, ButtonWrapper } from './NodeRename.style'
 
 const NodeRenameOnlyTitle = () => {

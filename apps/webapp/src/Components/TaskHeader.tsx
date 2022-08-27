@@ -12,6 +12,7 @@ import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
 import { Button, IconButton, DisplayShortcut, ToolbarTooltip } from '@workduck-io/mex-components'
+import Infobox from '@workduck-io/mex-components'
 
 import { SearchFilter } from '@mexit/core'
 import {
@@ -30,7 +31,6 @@ import {
 import { TasksHelp } from '../Data/defaultText'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViewStore, View } from '../Hooks/useTaskViews'
-import Infobox from './Infobox'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface TaskHeaderProps {

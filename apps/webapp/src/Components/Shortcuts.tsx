@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { shade } from 'polished'
 import styled from 'styled-components'
 
@@ -52,16 +53,3 @@ const TooltipShortcut = styled.span`
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
 `
-export interface TooltipTitleWithShortcutProps {
-  title: string
-  shortcut?: string
-}
-
-export const TooltipTitleWithShortcut = ({ title, shortcut }: TooltipTitleWithShortcutProps) => {
-  return (
-    <TooltipShortcut>
-      {title}
-      {shortcut && <DisplayShortcut shortcut={shortcut} />}
-    </TooltipShortcut>
-  )
-}

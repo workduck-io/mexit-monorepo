@@ -6,11 +6,11 @@ import { Icon } from '@iconify/react'
 import { useLocation } from 'react-router-dom'
 
 import { NavTooltip } from '@workduck-io/mex-components'
+import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { NavigationButton, NavigationClusterWrapper } from '@mexit/shared'
 
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { TooltipTitleWithShortcut } from '../Shortcuts'
 
 const NavigationCluster = () => {
   const location = useLocation()
@@ -37,7 +37,7 @@ const NavigationCluster = () => {
     <NavigationClusterWrapper>
       <NavTooltip
         placement="top-start"
-        content={<TooltipTitleWithShortcut title="Backward" shortcut={shortcuts.gotoForward.keystrokes} />}
+        content={<TitleWithShortcut title="Backward" shortcut={shortcuts.gotoForward.keystrokes} />}
       >
         <NavigationButton disabled={!canGoBack} onClick={onBack}>
           <Icon icon={arrowLeftSLine} width={20} />
@@ -45,7 +45,7 @@ const NavigationCluster = () => {
       </NavTooltip>
       <NavTooltip
         placement="top-start"
-        content={<TooltipTitleWithShortcut title="Forward" shortcut={shortcuts.gotoForward.keystrokes} />}
+        content={<TitleWithShortcut title="Forward" shortcut={shortcuts.gotoForward.keystrokes} />}
       >
         <NavigationButton disabled={!canGoForward} onClick={onForward}>
           <Icon icon={arrowRightSLine} width={20} />
