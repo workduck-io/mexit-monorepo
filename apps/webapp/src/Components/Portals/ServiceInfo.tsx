@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 
 // import { ServiceContainer, GroupHeaderContainer, FloatingIcon } from './styled'
-import { Button, IconButton } from '@mexit/shared'
+import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'

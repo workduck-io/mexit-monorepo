@@ -1,40 +1,18 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
-import { AsyncButton, AsyncButtonProps, GoogleAuthButton, Loading } from '@mexit/shared'
-import { Icon } from '@iconify/react'
-import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
-import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-import config from '../../config'
 
-export interface LoadingButtonProps {
-  children?: React.ReactNode
-  loading?: boolean
-  dots?: number
-  /** Also disable the button with a boolean condition */
-  alsoDisabled?: boolean
-  buttonProps?: AsyncButtonProps
-  style?: any
-}
+import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
+
+import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { AsyncButton, AsyncButtonProps, GoogleAuthButton, Loading } from '@mexit/shared'
+
+import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
+import config from '../../config'
 
 export interface GoogleLoginButtonProps {
   text: string
 }
 
-
-export const LoadingButton = ({ children, dots, loading, alsoDisabled, buttonProps, style }: LoadingButtonProps) => {
-  const theme = useTheme()
-  return (
-    <AsyncButton disabled={alsoDisabled || loading} {...buttonProps} style={style}>
-      {!loading && children}
-      {loading && (
-        <>
-          <Loading transparent dots={dots ?? 5} color={theme.colors.primary} />
-          {children}
-        </>
-      )}
-    </AsyncButton>
-  )
-}
 export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   const { loginViaGoogle } = useAuthentication()
   const baseAuthURL = 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize'

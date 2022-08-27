@@ -1,5 +1,8 @@
-import { StyledInputWrapper, Button, Input } from '@mexit/shared'
 import styled from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
+
+import { StyledInputWrapper, Input } from '@mexit/shared'
 
 export const Wrapper = styled.div`
   position: relative;

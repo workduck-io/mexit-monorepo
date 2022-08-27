@@ -1,15 +1,9 @@
 import styled, { css } from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 // import { FlexBetween } from '@components/spotlight/Actions/styled'
-import {
-  Button,
-  CardShadow,
-  StyledEditor,
-  BodyFont,
-  CenteredFlex,
-  IntegrationTitle,
-  CenteredMainContent
-} from '@mexit/shared'
+import { CardShadow, StyledEditor, BodyFont, CenteredFlex, IntegrationTitle, CenteredMainContent } from '@mexit/shared'
 
 import { FlexBetween } from '../FloatingButton'
 

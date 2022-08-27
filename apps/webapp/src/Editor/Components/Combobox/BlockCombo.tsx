@@ -4,10 +4,10 @@ import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { getPlateEditorRef } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { DisplayShortcut } from '@workduck-io/mex-components'
+import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
-import { MexIcon, IconButton, ComboboxItemTitle } from '@mexit/shared'
+import { MexIcon, ComboboxItemTitle } from '@mexit/shared'
 import { ActionTitle, ComboboxShortcuts, ComboSeperator, StyledComboHeader, ShortcutText } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'

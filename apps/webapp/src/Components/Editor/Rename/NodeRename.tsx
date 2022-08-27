@@ -3,10 +3,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
+import { Button } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
-import { Input, Button } from '@mexit/shared'
+import { Input } from '@mexit/shared'
 
 import { useApi } from '../../../Hooks/API/useNodeAPI'
 import { useInternalLinks } from '../../../Hooks/useInternalLinks'

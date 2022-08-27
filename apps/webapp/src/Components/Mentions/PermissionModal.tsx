@@ -6,7 +6,7 @@ import React, { useMemo, useEffect, useState } from 'react'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { useForm, Controller } from 'react-hook-form'
 
-import { LoadingButton } from '@workduck-io/mex-components'
+import { LoadingButton, IconButton, Button } from '@workduck-io/mex-components'
 
 import {
   mog,
@@ -16,7 +16,7 @@ import {
   DefaultPermission,
   Mentionable
 } from '@mexit/core'
-import { Label, StyledCreatatbleSelect, IconButton, Button, SelectWrapper } from '@mexit/shared'
+import { Label, StyledCreatatbleSelect, SelectWrapper } from '@mexit/shared'
 
 import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'
