@@ -209,7 +209,7 @@ export const Register = () => {
               error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
             ></Input>
 
-            <LoadingButton loading={reqCode} onClick={onResendRequest}>
+            <LoadingButton loading={reqCode} onClick={onResendRequest} id="resendCodeButton">
               Resend Code
             </LoadingButton>
             <ButtonFields>
