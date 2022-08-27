@@ -160,7 +160,9 @@ export const InviteModalContent = () => {
             <LoadingButton
               loading={isSubmitting}
               alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-              buttonProps={{ type: 'submit', primary: true, large: true }}
+              type="submit"
+              primary
+              large
             >
               Invite
             </LoadingButton>

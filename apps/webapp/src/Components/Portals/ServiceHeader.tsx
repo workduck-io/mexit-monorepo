@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Button, Title } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+
+import { Title } from '@mexit/shared'
 import { DEFAULT_LIST_ITEM_ICON, getIconType, ProjectIconMex } from '@mexit/shared'
 
 import { FlexBetween } from '../FloatingButton'

@@ -4,9 +4,10 @@ import bookmarkFill from '@iconify/icons-ri/bookmark-fill'
 import bookmarkLine from '@iconify/icons-ri/bookmark-line'
 import { Icon } from '@iconify/react'
 
+import { LoadingButton } from '@workduck-io/mex-components'
+
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import { useDataStore } from '../../Stores/useDataStore'
-import { LoadingButton } from './Buttons'
 
 interface BookmarkButtonProps {
   nodeid: string
@@ -39,11 +40,7 @@ const BookmarkButton = ({ nodeid }: BookmarkButtonProps) => {
   }
 
   return (
-    <LoadingButton
-      dots={2}
-      loading={loading}
-      buttonProps={{ highlight: bmed, onClick: onBookmark, transparent: false }}
-    >
+    <LoadingButton dots={2} loading={loading} onClick={onBookmark} transparent>
       <Icon width={24} icon={bmed ? bookmarkFill : bookmarkLine} />
     </LoadingButton>
   )

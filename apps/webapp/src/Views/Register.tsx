@@ -186,7 +186,9 @@ export const Register = () => {
                 <LoadingButton
                   loading={regSubmitting}
                   alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
-                  buttonProps={{ type: 'submit', primary: true, large: true }}
+                  type="submit"
+                  primary
+                  large
                 >
                   Send Verification Code
                 </LoadingButton>
@@ -207,13 +209,7 @@ export const Register = () => {
               error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
             ></Input>
 
-            <LoadingButton
-              loading={reqCode}
-              buttonProps={{
-                id: 'resendCodeButton',
-                onClick: onResendRequest
-              }}
-            >
+            <LoadingButton loading={reqCode} onClick={onResendRequest}>
               Resend Code
             </LoadingButton>
             <ButtonFields>
@@ -223,7 +219,9 @@ export const Register = () => {
               <LoadingButton
                 loading={verSubmitting}
                 alsoDisabled={verErrors.code !== undefined}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Verify Code
               </LoadingButton>

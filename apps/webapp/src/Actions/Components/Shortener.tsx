@@ -197,7 +197,7 @@ export const Shortener = () => {
         <Label>Shortcut</Label>
         <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
       </InputRow>
-      <LoadingButton loading={isLoading} buttonProps={{ type: 'submit', onClick: onShortenLinkSubmit }}>
+      <LoadingButton loading={isLoading} onClick={onShortenLinkSubmit} type="submit">
         Save
       </LoadingButton>
     </Form>

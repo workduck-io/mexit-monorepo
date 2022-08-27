@@ -324,7 +324,9 @@ const CreateReminderModal = () => {
           <LoadingButton
             loading={isSubmitting}
             alsoDisabled={!modalValue.time || modalValue.time < Date.now()}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
+            type="submit"
+            primary
+            large
           >
             Save Reminder
           </LoadingButton>

@@ -191,11 +191,7 @@ const TaskViewModal = () => {
           <Button large onClick={handleCancel}>
             Cancel
           </Button>
-          <LoadingButton
-            loading={isSubmitting}
-            alsoDisabled={filters?.length === 0}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
-          >
+          <LoadingButton loading={isSubmitting} alsoDisabled={filters?.length === 0} type="submit" primary large>
             {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'} View
           </LoadingButton>
         </ModalControls>

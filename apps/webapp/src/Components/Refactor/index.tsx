@@ -5,8 +5,9 @@ import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import tinykeys from 'tinykeys'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { isReserved, NodeLink } from '@mexit/core'
-import { Button } from '@mexit/shared'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'

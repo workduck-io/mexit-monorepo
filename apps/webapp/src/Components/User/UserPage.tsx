@@ -103,10 +103,7 @@ const UserPage = () => {
 
             {updateUserForm.formState.isDirty && Object.keys(updateUserForm.formState.dirtyFields).length > 0 && (
               <ButtonFields>
-                <LoadingButton
-                  loading={updateUserForm.formState.isSubmitting}
-                  buttonProps={{ type: 'submit', primary: true, large: true }}
-                >
+                <LoadingButton loading={updateUserForm.formState.isSubmitting} type="submit" primary large>
                   Save Changes
                 </LoadingButton>
                 <IconButton

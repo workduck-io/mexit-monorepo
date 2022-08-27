@@ -144,8 +144,10 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
           <ModalControls>
             <LoadingButton
               loading={isSubmitting}
+              type="submit"
+              primary
+              large
               alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-              buttonProps={{ type: 'submit', primary: true, large: true }}
             >
               Invite
             </LoadingButton>

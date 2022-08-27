@@ -5,13 +5,14 @@ import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
 import { useTheme } from 'styled-components'
 
+import { LoadingButton } from '@workduck-io/mex-components'
+
 import { mog } from '@mexit/core'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { usePortals } from '../../Hooks/usePortals'
 import usePortalStore from '../../Stores/usePortalStore'
 import { GlobalSectionHeader, GlobalSectionContainer } from '../../Style/GlobalSection'
-import { LoadingButton } from '../Buttons/Buttons'
 import { QuickLink } from '../NodeSelect/NodeSelect'
 import CreateInput from '../createInput'
 import ServiceHeader from './ServiceHeader'
@@ -116,7 +117,7 @@ const Portals = () => {
               onChange={onNodeChange}
             />
           </GlobalSectionHeader>
-          <LoadingButton dots={2} loading={isLoading} buttonProps={{ onClick: onSaveDetails, transparent: true }}>
+          <LoadingButton dots={2} loading={isLoading} onClick={onSaveDetails} transparent>
             <Icon
               color={theme.colors.primary}
               width={24}

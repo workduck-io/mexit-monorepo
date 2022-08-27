@@ -126,7 +126,9 @@ export const ForgotPassword = () => {
               <LoadingButton
                 loading={regSubmitting}
                 alsoDisabled={regErrors.email !== undefined || regErrors.newpassword !== undefined || !arePasswordEqual}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Send Verification Code
               </LoadingButton>
@@ -152,7 +154,9 @@ export const ForgotPassword = () => {
               <LoadingButton
                 loading={verSubmitting}
                 alsoDisabled={verErrors.code !== undefined}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Verify Code
               </LoadingButton>

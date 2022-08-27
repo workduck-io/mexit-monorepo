@@ -75,7 +75,9 @@ export const Login = () => {
             <LoadingButton
               loading={isSubmitting}
               alsoDisabled={errors.email !== undefined || errors.password !== undefined}
-              buttonProps={{ type: 'submit', primary: true, large: true }}
+              type="submit"
+              primary
+              large
             >
               Login
             </LoadingButton>
