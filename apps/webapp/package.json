@@ -3,7 +3,7 @@
   "version": "0.10.0",
   "license": "MIT",
   "scripts": {
-    "dev": "vite",
+    "dev": "NX_BUILD_MODE=development vite",
     "build": "tsc --noEmit && vite build --emptyOutDir",
     "preview": "vite preview",
     "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
@@ -25,6 +25,7 @@
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
     "@workduck-io/dwindle": "^0.0.18",
+    "@workduck-io/mex-components": "^0.0.9",
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
     "compress.js": "^1.2.2",
