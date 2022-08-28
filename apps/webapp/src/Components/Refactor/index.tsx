@@ -3,21 +3,22 @@ import React, { useEffect } from 'react'
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-import { tinykeys } from 'tinykeys'
 
 import { Button } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved, NodeLink } from '@mexit/core'
 
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
-import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
+import { ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
-import { doesLinkRemain } from './doesLinkRemain'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)
