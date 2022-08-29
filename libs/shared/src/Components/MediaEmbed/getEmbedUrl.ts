@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import { oembedProviders } from './embedProviders'
 
 const fetchOembed = async (url: string, endpoint: string): Promise<string | undefined> => {
@@ -50,8 +51,8 @@ export const getEmbedData = async (url: string): Promise<string | undefined> => 
 
           // console.log({ s, matchUrl, re, url });
           if (match) {
-          // We save the endpoint where we have to call for oembed data
-          // console.log({ s, matchUrl, re, url });
+            // We save the endpoint where we have to call for oembed data
+            // console.log({ s, matchUrl, re, url });
             matchUrl = end.url
             foundMarker = true
           }
