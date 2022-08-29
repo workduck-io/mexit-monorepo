@@ -14,7 +14,7 @@
     ]
   },
   "dependencies": {
-    "@udecode/plate": "~15.0.2",
+    "@udecode/plate": "~16.4.1",
     "date-fns": "^2.28.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
