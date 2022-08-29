@@ -35,7 +35,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
           }
         } else if (item.key === 'table') {
           select(editor, targetRange)
-          insertTable(editor, { header: true })
+          insertTable(editor, { header: true, rowCount: 3 })
         } else {
           const type = getPluginType(editor, commandConfig.slateElementType)
           const data = commandConfig.getData ? commandConfig.getData(item) : {}
