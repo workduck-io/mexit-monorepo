@@ -1,5 +1,6 @@
 // const nrwlConfig = require('@nrwl/react/plugins/webpack.js') // require the main @nrwl/react/plugins/webpack configuration function.
 const { ESBuildMinifyPlugin } = require('esbuild-loader')
+const webpack = require('webpack')
 
 const devtool = process.env.NO_SOURCE_MAP ? false : 'inline-source-map'
 
@@ -52,6 +53,11 @@ module.exports = (config, context) => {
     ]
   })
 
+  config.plugins.push(
+    new webpack.ProvidePlugin({
+      process: 'process/browser'
+    })
+  )
   // then override your config.
   return {
     ...config,
