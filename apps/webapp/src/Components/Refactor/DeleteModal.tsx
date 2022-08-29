@@ -6,10 +6,10 @@ import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
 import create from 'zustand'
 
+import { Button } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved, mog, USE_API } from '@mexit/core'
-import { Button } from '@mexit/shared'
 
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'

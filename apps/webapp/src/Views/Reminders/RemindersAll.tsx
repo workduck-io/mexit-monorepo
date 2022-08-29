@@ -5,6 +5,8 @@ import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
 import create from 'zustand'
 
+import { Button } from '@workduck-io/mex-components'
+
 import {
   getReminderState,
   mog,
@@ -16,7 +18,7 @@ import {
   SearchFilter,
   upcoming
 } from '@mexit/core'
-import { PageContainer, MainHeader, Button, IntegrationTitle } from '@mexit/shared'
+import { PageContainer, MainHeader, IntegrationTitle } from '@mexit/shared'
 
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import ReminderUI, { reminderStateIcons } from '../../Components/Reminders/Reminder'

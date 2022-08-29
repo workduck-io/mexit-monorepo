@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+
 import { useAuth } from '@workduck-io/dwindle'
+import { Button, LoadingButton } from '@workduck-io/mex-components'
 
 import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
 import {
   AuthForm,
   BackCard,
-  Button,
   ButtonFields,
   CenteredColumn,
   FooterCard,
@@ -17,12 +19,12 @@ import {
   Title
 } from '@mexit/shared'
 
+import { GoogleLoginButton } from '../Components/Buttons/Buttons'
+import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
+import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
-import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { EMAIL_REG, PASSWORD, ALIAS_REG } from '../Utils/constants'
-import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
-import { ROUTE_PATHS } from '../Hooks/useRouting'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -184,7 +186,9 @@ export const Register = () => {
                 <LoadingButton
                   loading={regSubmitting}
                   alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
-                  buttonProps={{ type: 'submit', primary: true, large: true }}
+                  type="submit"
+                  primary
+                  large
                 >
                   Send Verification Code
                 </LoadingButton>
@@ -205,13 +209,7 @@ export const Register = () => {
               error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
             ></Input>
 
-            <LoadingButton
-              loading={reqCode}
-              buttonProps={{
-                id: 'resendCodeButton',
-                onClick: onResendRequest
-              }}
-            >
+            <LoadingButton loading={reqCode} onClick={onResendRequest} id="resendCodeButton">
               Resend Code
             </LoadingButton>
             <ButtonFields>
@@ -221,7 +219,9 @@ export const Register = () => {
               <LoadingButton
                 loading={verSubmitting}
                 alsoDisabled={verErrors.code !== undefined}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Verify Code
               </LoadingButton>

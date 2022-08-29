@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
-import Tippy from '@tippyjs/react'
+
 import CloseIcon from '@iconify/icons-ri/close-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
+import { useLocation } from 'react-router-dom'
+import styled, { css } from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
-import { FocusModeProp, Button, MexIcon } from '@mexit/shared'
+import { FocusModeProp, MexIcon } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import AutoformatHelp from './Autoformathelp'
-import { useLocation } from 'react-router-dom'
 
 export const Float = styled.div<FocusModeProp>`
   position: fixed;

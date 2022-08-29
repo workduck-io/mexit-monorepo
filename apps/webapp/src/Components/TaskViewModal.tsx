@@ -5,20 +5,14 @@ import { useForm } from 'react-hook-form'
 import Modal from 'react-modal'
 import create from 'zustand'
 
+import { Button, LoadingButton } from '@workduck-io/mex-components'
+
 import { SearchFilter, getPathNum, mog, generateTaskViewId } from '@mexit/core'
-import {
-  TextAreaBlock,
-  SearchFilterListCurrent,
-  SearchFilterStyled,
-  SearchFilterCount,
-  Label,
-  Button
-} from '@mexit/shared'
+import { TextAreaBlock, SearchFilterListCurrent, SearchFilterStyled, SearchFilterCount, Label } from '@mexit/shared'
 
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useViewStore, useTaskViews } from '../Hooks/useTaskViews'
 import { ModalHeader, ModalControls } from '../Style/Refactor'
-import { LoadingButton } from './Buttons/Buttons'
 import Input from './Input'
 
 // Prefill modal has been added to the Tree via withRefactor from useRefactor
@@ -197,11 +191,7 @@ const TaskViewModal = () => {
           <Button large onClick={handleCancel}>
             Cancel
           </Button>
-          <LoadingButton
-            loading={isSubmitting}
-            alsoDisabled={filters?.length === 0}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
-          >
+          <LoadingButton loading={isSubmitting} alsoDisabled={filters?.length === 0} type="submit" primary large>
             {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'} View
           </LoadingButton>
         </ModalControls>

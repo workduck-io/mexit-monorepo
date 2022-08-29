@@ -1,9 +1,12 @@
 import React, { useMemo } from 'react'
-import repeatLine from '@iconify/icons-ri/repeat-line'
+
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import repeatLine from '@iconify/icons-ri/repeat-line'
+
+import { IconButton, Button } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
-import { StyledCreatatbleSelect, IconButton, Button } from '@mexit/shared'
+import { StyledCreatatbleSelect } from '@mexit/shared'
 
 import { usePermission } from '../../Hooks/API/usePermission'
 import { useUserService } from '../../Hooks/API/useUserAPI'

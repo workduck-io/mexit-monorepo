@@ -8,6 +8,8 @@ import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 import create from 'zustand'
 
+import { LoadingButton, Button } from '@workduck-io/mex-components'
+
 import {
   NodeEditorContent,
   getTimeInText,
@@ -18,7 +20,7 @@ import {
   Reminder,
   getNameFromPath
 } from '@mexit/core'
-import { DatePickerStyles, Label, TextAreaBlock, Button, SelectedDate, TextFieldHeight } from '@mexit/shared'
+import { DatePickerStyles, Label, TextAreaBlock, SelectedDate, TextFieldHeight } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import useAnalytics from '../../Hooks/useAnalytics'
@@ -30,7 +32,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
-import { LoadingButton } from '../Buttons/Buttons'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
 
@@ -323,7 +324,9 @@ const CreateReminderModal = () => {
           <LoadingButton
             loading={isSubmitting}
             alsoDisabled={!modalValue.time || modalValue.time < Date.now()}
-            buttonProps={{ type: 'submit', primary: true, large: true }}
+            type="submit"
+            primary
+            large
           >
             Save Reminder
           </LoadingButton>

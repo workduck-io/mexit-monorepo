@@ -8,8 +8,9 @@ import toast from 'react-hot-toast'
 import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { mog, Mentionable, InvitedUser, AccessLevel, SelfMention } from '@mexit/core'
-import { Button } from '@mexit/shared'
 import {
   MentionTooltip,
   TooltipMail,

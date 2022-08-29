@@ -7,10 +7,11 @@ import { useForm } from 'react-hook-form'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { IconButton } from '@workduck-io/mex-components'
+
 import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 import { Input } from '@mexit/shared'
-import { IconButton } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'

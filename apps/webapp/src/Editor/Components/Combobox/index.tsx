@@ -1,8 +1,11 @@
+import React, { useEffect, useState } from 'react'
+
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
 import { PortalBody, useEditorState } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
+
+import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import { mog, NodeEditorContent } from '@mexit/core'
 import { ComboboxItem, ComboboxItemTitle, MexIcon, PreviewMeta } from '@mexit/shared'
@@ -19,7 +22,6 @@ import {
 } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
-import { DisplayShortcut } from '../../../Components/Shortcuts'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useContentStore } from '../../../Stores/useContentStore'

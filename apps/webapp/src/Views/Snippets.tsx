@@ -1,14 +1,12 @@
 import React, { useMemo } from 'react'
+
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { Icon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 
-import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
-import PreviewEditor from '../Components/Editor/PreviewEditor'
-import { useSnippets } from '../Hooks/useSnippets'
-import { Button, IconButton } from '@mexit/shared'
+import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { defaultContent, generateSnippetId, generateTempId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
 import {
@@ -29,10 +27,13 @@ import {
   View
 } from '@mexit/shared'
 
+import PreviewEditor from '../Components/Editor/PreviewEditor'
+import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
+import { useSnippets } from '../Hooks/useSnippets'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
 export type SnippetsProps = {
   title?: string

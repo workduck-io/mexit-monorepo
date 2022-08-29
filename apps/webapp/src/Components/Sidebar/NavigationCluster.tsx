@@ -1,13 +1,16 @@
+import React, { useMemo } from 'react'
+
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import { Icon } from '@iconify/react'
-import React, { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import { NavigationButton, NavigationClusterWrapper, NavTooltip } from '@mexit/shared'
+import { NavTooltip } from '@workduck-io/mex-components'
+import { TitleWithShortcut } from '@workduck-io/mex-components'
+
+import { NavigationButton, NavigationClusterWrapper } from '@mexit/shared'
 
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { TooltipTitleWithShortcut } from '../Shortcuts'
 
 const NavigationCluster = () => {
   const location = useLocation()
@@ -34,7 +37,7 @@ const NavigationCluster = () => {
     <NavigationClusterWrapper>
       <NavTooltip
         placement="top-start"
-        content={<TooltipTitleWithShortcut title="Backward" shortcut={shortcuts.gotoForward.keystrokes} />}
+        content={<TitleWithShortcut title="Backward" shortcut={shortcuts.gotoForward.keystrokes} />}
       >
         <NavigationButton disabled={!canGoBack} onClick={onBack}>
           <Icon icon={arrowLeftSLine} width={20} />
@@ -42,7 +45,7 @@ const NavigationCluster = () => {
       </NavTooltip>
       <NavTooltip
         placement="top-start"
-        content={<TooltipTitleWithShortcut title="Forward" shortcut={shortcuts.gotoForward.keystrokes} />}
+        content={<TitleWithShortcut title="Forward" shortcut={shortcuts.gotoForward.keystrokes} />}
       >
         <NavigationButton disabled={!canGoForward} onClick={onForward}>
           <Icon icon={arrowRightSLine} width={20} />

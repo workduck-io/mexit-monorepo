@@ -1,10 +1,12 @@
-import Tippy from '@tippyjs/react'
 import React, { useState } from 'react'
+
+import Tippy from '@tippyjs/react'
 import { useSpring } from 'react-spring'
+
+import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { TabsContainer, TabHeaderContainer, StyledTab, TabPanel, TabBody, TabsWrapper } from '@mexit/shared'
 
-import { TooltipTitleWithShortcut } from '../Components/Shortcuts'
 import { InfobarMode } from '../Stores/useLayoutStore'
 
 export enum SidebarTab {
@@ -56,7 +58,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
               delay={200}
               key={tab.type}
               theme="mex-bright"
-              content={<TooltipTitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
+              content={<TitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
             >
               <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
                 {tab.label}

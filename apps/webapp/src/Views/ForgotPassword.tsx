@@ -1,18 +1,22 @@
 import { useState } from 'react'
+
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
+
 import { useAuth } from '@workduck-io/dwindle'
-import { useAuthentication, useAuthStore } from '../Stores/useAuth'
-import { Button, CenteredColumn } from '@mexit/shared'
+import { LoadingButton, Button } from '@workduck-io/mex-components'
+
+import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
+import { CenteredColumn } from '@mexit/shared'
 import { BackCard, FooterCard } from '@mexit/shared'
 import { Title } from '@mexit/shared'
-import { EMAIL_REG, PASSWORD } from '../Utils/constants'
-import { LoadingButton } from '../Components/Buttons/Buttons'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
 import { AuthForm, ButtonFields } from '@mexit/shared'
+
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
-import { Link } from 'react-router-dom'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useAuthentication, useAuthStore } from '../Stores/useAuth'
+import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 
 export const ForgotPassword = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -122,7 +126,9 @@ export const ForgotPassword = () => {
               <LoadingButton
                 loading={regSubmitting}
                 alsoDisabled={regErrors.email !== undefined || regErrors.newpassword !== undefined || !arePasswordEqual}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Send Verification Code
               </LoadingButton>
@@ -148,7 +154,9 @@ export const ForgotPassword = () => {
               <LoadingButton
                 loading={verSubmitting}
                 alsoDisabled={verErrors.code !== undefined}
-                buttonProps={{ type: 'submit', primary: true, large: true }}
+                type="submit"
+                primary
+                large
               >
                 Verify Code
               </LoadingButton>

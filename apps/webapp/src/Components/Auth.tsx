@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button } from '@mexit/shared'
+
+import { Button } from '@workduck-io/mex-components'
 
 import { useAuthentication } from '../Stores/useAuth'
 import Analytics from '../Utils/analytics'

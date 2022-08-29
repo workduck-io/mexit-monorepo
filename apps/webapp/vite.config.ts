@@ -7,6 +7,9 @@ const sourceMap = process.env.NO_SOURCE_MAP ? false : true
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    include: ['react/jsx-runtime']
+  },
   server: {
     port: 3333
   },

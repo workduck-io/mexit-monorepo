@@ -11,11 +11,11 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
+import { Button, IconButton, DisplayShortcut, ToolbarTooltip } from '@workduck-io/mex-components'
+import { Infobox } from '@workduck-io/mex-components'
+
 import { SearchFilter } from '@mexit/core'
 import {
-  Button,
-  DisplayShortcut,
-  IconButton,
   ShortcutMid,
   ShortcutToken,
   ShortcutTokens,
@@ -25,14 +25,12 @@ import {
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle,
-  Title,
-  ToolbarTooltip
+  Title
 } from '@mexit/shared'
 
 import { TasksHelp } from '../Data/defaultText'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViewStore, View } from '../Hooks/useTaskViews'
-import Infobox from './Infobox'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface TaskHeaderProps {

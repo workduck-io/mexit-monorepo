@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/exhaustive-deps */
 
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo, useEffect, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import { useForm, Controller } from 'react-hook-form'
+
+import { LoadingButton, IconButton, Button } from '@workduck-io/mex-components'
 
 import {
   mog,
@@ -13,14 +16,23 @@ import {
   DefaultPermission,
   Mentionable
 } from '@mexit/core'
-import { Label, StyledCreatatbleSelect, IconButton, Button, SelectWrapper } from '@mexit/shared'
+import { Label, StyledCreatatbleSelect, SelectWrapper } from '@mexit/shared'
 
+import { usePermission } from '../../Hooks/API/usePermission'
+import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
+import { useNodes } from '../../Hooks/useNodes'
+import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalHeader, ModalControls, ModalSectionScroll, ModalSection } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
-import { LoadingButton } from '../Buttons/Buttons'
+import ShareOptions from '../EditorInfobar/ShareOptions'
 import { InputFormError } from '../Input'
+import { ProfileImage } from '../User/ProfileImage'
+import { InvitedUsersContent } from './InvitedUsersContent'
+import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {
   InviteFormWrapper,
   ShareAlias,
@@ -36,16 +48,6 @@ import {
   ShareOwnerTag,
   MultipleInviteWrapper
 } from './styles'
-import { usePermission } from '../../Hooks/API/usePermission'
-import { useUserService } from '../../Hooks/API/useUserAPI'
-import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useAuthStore } from '../../Stores/useAuth'
-import { ProfileImage } from '../User/ProfileImage'
-import { useNodes } from '../../Hooks/useNodes'
-import ShareOptions from '../EditorInfobar/ShareOptions'
-import { InvitedUsersContent } from './InvitedUsersContent'
-import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)

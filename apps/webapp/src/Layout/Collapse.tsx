@@ -1,10 +1,15 @@
+import React, { useMemo } from 'react'
+
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import { Icon, IconifyIcon } from '@iconify/react'
-import React, { useMemo } from 'react'
 import { useSpring } from 'react-spring'
 import styled from 'styled-components'
-import Infobox, { InfoboxProps } from '../Components/Infobox'
+
+import { Infobox } from '@workduck-io/mex-components'
+
 import { CollapsableHeaderTitle, CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '@mexit/shared'
+
+import { InfoboxProps } from '../Components/Infobox'
 
 interface CollapseProps {
   oid?: string

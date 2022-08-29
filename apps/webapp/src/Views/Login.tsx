@@ -1,19 +1,22 @@
 import React from 'react'
+
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 
+import { LoadingButton } from '@workduck-io/mex-components'
+
 import { LoginFormData, mog } from '@mexit/core'
 import { CenteredColumn } from '@mexit/shared'
-
-import { GoogleLoginButton, LoadingButton } from '../Components/Buttons/Buttons'
-import { InputFormError } from '../Components/Input'
-import { useAuthentication, useInitializeAfterAuth } from '../Stores/useAuth'
 import { BackCard, FooterCard } from '@mexit/shared'
 import { Title } from '@mexit/shared'
 import { ButtonFields, AuthForm } from '@mexit/shared'
-import { EMAIL_REG } from '../Utils/constants'
+
+import { GoogleLoginButton } from '../Components/Buttons/Buttons'
+import { InputFormError } from '../Components/Input'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
+import { useAuthentication, useInitializeAfterAuth } from '../Stores/useAuth'
+import { EMAIL_REG } from '../Utils/constants'
 
 export const Login = () => {
   const { login } = useAuthentication()
@@ -72,7 +75,9 @@ export const Login = () => {
             <LoadingButton
               loading={isSubmitting}
               alsoDisabled={errors.email !== undefined || errors.password !== undefined}
-              buttonProps={{ type: 'submit', primary: true, large: true }}
+              type="submit"
+              primary
+              large
             >
               Login
             </LoadingButton>

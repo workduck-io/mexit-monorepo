@@ -6,8 +6,9 @@ import toast from 'react-hot-toast'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { IconButton } from '@workduck-io/mex-components'
+
 import { getEventNameFromElement, mog } from '@mexit/core'
-import { IconButton } from '@mexit/shared'
 
 import useAnalytics from '../Hooks/useAnalytics'
 import { ActionType } from '../Hooks/useAnalytics/events'
