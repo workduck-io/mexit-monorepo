@@ -36,7 +36,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
           }
         } else if (item.key === 'table') {
           select(editor, targetRange)
-          insertTable(editor, { header: true })
+          insertTable(editor, { header: true, rowCount: 3 })
         } else if (item.extended) {
           select(editor, targetRange)
           deleteText(editor)

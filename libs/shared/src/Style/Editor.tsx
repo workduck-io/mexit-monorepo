@@ -1,4 +1,4 @@
-import { mix, transparentize } from 'polished'
+import { lighten, mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
@@ -100,6 +100,18 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   .slate-Draggable {
     > div {
       overflow: inherit;
+    }
+  }
+
+  div[class^='PlateFloatingMedia'] {
+    background: ${({ theme }) => theme.colors.background.card};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    > button,
+    input {
+      background: ${({ theme }) => theme.colors.background.modal};
+    }
+    > button:hover {
+      background: ${({ theme }) => lighten(0.1, theme.colors.background.highlight)};
     }
   }
 

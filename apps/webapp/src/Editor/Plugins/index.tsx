@@ -40,11 +40,16 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
-  createTablePlugin
+  createTablePlugin,
+  parseIframeUrl,
+  parseTwitterUrl,
+  parseVideoUrl,
+  MediaEmbedTweet,
+  MediaEmbedVideo
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, createBlockModifierPlugin } from '@mexit/shared'
+import { TableWrapper, createBlockModifierPlugin, parseRestMediaUrls, MediaIFrame } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -152,7 +157,25 @@ export const generatePlugins = (options: PluginOptionType) => {
     // createDeserializeMDPlugin(),
 
     // Media and link embed
-    createMediaEmbedPlugin(),
+    createMediaEmbedPlugin({
+      options: {
+        transformUrl: parseIframeUrl,
+        rules: [
+          {
+            parser: parseTwitterUrl,
+            component: MediaEmbedTweet
+          },
+          {
+            parser: parseVideoUrl,
+            component: MediaEmbedVideo
+          },
+          {
+            parser: parseRestMediaUrls,
+            component: MediaIFrame
+          }
+        ]
+      }
+    }),
 
     // Custom Plugins
     createBlurSelectionPlugin(),
