@@ -41,9 +41,10 @@ const SourceInfo = (props: any) => {
   const { children, element, attributes } = props
 
   if (element?.blockMeta || element?.metadata?.elementMetadata) {
-    const { mexIcon } = getIconType(element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl)
+    const iconSource = element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl
+    const icon = iconSource && getIconType(iconSource)
 
-    if (!mexIcon)
+    if (!icon?.mexIcon)
       return (
         <SourceInfoWrapper {...attributes}>
           <Source source={element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl} />
