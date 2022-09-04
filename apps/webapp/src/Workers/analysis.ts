@@ -1,3 +1,5 @@
+import { expose } from 'threads/worker'
+
 import {
   NodeEditorContent,
   TodoType,
@@ -10,9 +12,8 @@ import {
   convertContentToRawText,
   mog
 } from '@mexit/core'
-import { expose } from 'threads/worker'
-
 import { getTitleFromContent } from '@mexit/core'
+
 export interface OutlineItem {
   id: string
   title: string
@@ -123,7 +124,7 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
     editorTodos: getTodosFromContent(content)
   }
 
-  return options.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
+  return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
 
 expose({ analyseContent })
