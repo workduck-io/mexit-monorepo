@@ -18,7 +18,7 @@
     "@tippyjs/react": "^4.2.6",
     "@vespaiach/axios-fetch-adapter": "^0.1.1",
     "@workduck-io/dwindle": "^0.0.18",
-    "@workduck-io/mex-components": "^0.0.10",
+    "@workduck-io/mex-components": "^0.0.11",
     "@workduck-io/tinykeys": "^1.5.0",
     "chrome-extension-async": "^3.4.1",
     "core-js": "^3.21.1",
