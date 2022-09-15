@@ -1,7 +1,12 @@
 import { toast } from 'react-hot-toast'
+
+import { BreadcrumbItem } from '@workduck-io/mex-components'
+
+import { ILink } from '../Types/Editor'
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
-import { mog } from './mog'
 import { SEPARATOR } from './idGenerator'
+import { mog } from './mog'
+import { getNameFromPath } from './treeUtils'
 
 const RESERVED_PATHS: string[] = [BASE_DRAFT_PATH, BASE_TASKS_PATH, 'mex', 'sync', 'root']
 
@@ -55,4 +60,30 @@ export const isMatch = (path: string, testPath: string) => {
 
 export const isReservedOrClash = (path: string, paths: string[]) => {
   return isReserved(path) || isClash(path, paths)
+}
+
+export const getAllParentIds = (id: string) =>
+  id
+    .split(SEPARATOR)
+    .reduce((p, c) => [...p, p.length > 0 ? `${p[p.length - 1]}${SEPARATOR}${c}` : c], [] as Array<string>)
+
+export const getParentBreadcurmbs = (path: string, nodes: ILink[]) => {
+  const allParents = getAllParentIds(path)
+
+  const parents: BreadcrumbItem[] = allParents.reduce((val, p) => {
+    const parentNode = nodes.find((l) => l.path === p)
+    if (parentNode) {
+      return [
+        ...val,
+        {
+          id: parentNode.nodeid,
+          icon: parentNode.icon ?? 'ri:file-list-2-line',
+          label: getNameFromPath(parentNode.path)
+        }
+      ]
+    }
+    return val
+  }, [])
+
+  return parents
 }

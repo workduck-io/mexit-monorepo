@@ -1,5 +1,6 @@
-import { SEPARATOR } from '@mexit/core'
 import { deepEqual } from 'fast-equals'
+
+import { SEPARATOR } from '@mexit/core'
 
 export const withoutDelimiter = (text: string, delimiter = '.') => {
   const key = text
@@ -26,11 +27,6 @@ export const removeNulls = (obj: any): any => {
 export const removeLink = <T>(item: T, list: T[]): T[] => {
   return list.filter((l) => !deepEqual(l, item))
 }
-
-export const getAllParentIds = (id: string) =>
-  id
-    .split(SEPARATOR)
-    .reduce((p, c) => [...p, p.length > 0 ? `${p[p.length - 1]}${SEPARATOR}${c}` : c], [] as Array<string>)
 
 export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 

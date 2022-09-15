@@ -14,6 +14,7 @@ export const useUpdater = () => {
   const { updateLinksFromContent } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const setContent = useContentStore((store) => store.setContent)
+  const setMetadata = useContentStore((store) => store.setMetadata)
   const { updateTagsFromContent } = useTags()
   const { updateDocument } = useSearch()
   const { generateSlashCommands } = useSlashCommands()
@@ -25,9 +26,10 @@ export const useUpdater = () => {
     setSlashCommands(slashCommands)
   }
 
-  const updateFromContent = async (noteId: string, content: NodeEditorContent) => {
+  const updateFromContent = async (noteId: string, content: NodeEditorContent, metadata?: any) => {
     if (content) {
       setContent(noteId, content)
+      setMetadata(noteId, metadata)
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
       updateNodeTodos(noteId, getTodosFromContent(content))

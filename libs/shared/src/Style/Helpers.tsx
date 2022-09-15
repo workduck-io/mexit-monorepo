@@ -1,6 +1,7 @@
 import { transparentize } from 'polished'
-import { MexIcons, MexNodeIcons } from '../Components/Icons'
 import { css } from 'styled-components'
+
+import { MexIcons, MexNodeIcons } from '../Components/Icons'
 
 type Pixels = number // Pixels in integer
 
@@ -30,17 +31,17 @@ export const PixelToCSS = (x: Pixels): string => {
   return `${String(x)}px`
 }
 
-export const ThinScrollbar = css`
+export const ScrollStyles = (color = undefined, width = 10) => css`
   scrollbar-color: dark;
 
   &::-webkit-scrollbar {
-    width: 12px;
+    width: ${width}px;
   }
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[8]};
+    background: ${color ? color : ({ theme }) => theme.colors.gray[8]};
     border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
@@ -54,6 +55,8 @@ export const ThinScrollbar = css`
     background: none;
   }
 `
+
+export const ThinScrollbar = ScrollStyles()
 
 export const CardShadow = css`
   box-shadow: 0px 3px 9px ${({ theme }) => transparentize(0.5, theme.colors.palette.black)};
