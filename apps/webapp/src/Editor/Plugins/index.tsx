@@ -49,11 +49,12 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, createBlockModifierPlugin, parseRestMediaUrls, MediaIFrame } from '@mexit/shared'
+import { TableWrapper, parseRestMediaUrls, MediaIFrame } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
 import { withBlockOptions } from '../Components/Blocks'
+import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'

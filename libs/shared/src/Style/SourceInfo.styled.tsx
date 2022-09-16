@@ -1,6 +1,8 @@
 import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
 
+import { FadeInOut } from '..'
+
 export const TemplateCss = css`
   margin: 0 0.25rem;
   color: ${({ theme }) => theme.colors.text.default};
@@ -65,19 +67,24 @@ export const SourceInfoWrapper = styled.div`
   user-select: none;
 `
 
-export const StyledSource = styled.div`
-  cursor: pointer;
+export const StyledSource = styled.div<{ $isVisible?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
   justify-content: center;
+
+  z-index: 2;
   position: absolute;
   left: 98%;
+
+  cursor: pointer;
   user-select: none;
+
   * {
     box-sizing: border-box;
   }
+
+  ${({ $isVisible }) => FadeInOut($isVisible)}
 `
 
 export const BlockModal = styled.div``
