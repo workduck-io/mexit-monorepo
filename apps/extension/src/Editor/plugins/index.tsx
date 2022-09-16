@@ -49,9 +49,10 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { createBlockModifierPlugin, MediaIFrame, parseRestMediaUrls, TableWrapper } from '@mexit/shared'
+import { MediaIFrame, parseRestMediaUrls, TableWrapper } from '@mexit/shared'
 
 import { createQuickLinkPlugin } from './QuickLink'
+import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'

@@ -1,22 +1,23 @@
 import React, { useState, useEffect, ReactElement } from 'react'
+
 import {
   Plate,
   selectEditor,
-  usePlateEditorRef,
-  Options,
-  PlaceholderProps,
+  usePlateEditorRef, // Options,
+  // PlaceholderProps,
   PlatePlugin,
   PlatePluginComponent,
   SelectEditorOptions
 } from '@udecode/plate'
-import { EditableProps } from 'slate-react/dist/components/editable'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { EditableProps } from 'slate-react/dist/components/editable'
 
-import { MexEditorValue } from './Types/Editor'
-import { useMexEditorStore } from './Hooks/useMexEditorStore'
-import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
+import { useGlobalListener } from '../Hooks/useGlobalListener'
 import { useComboboxConfig } from './Components/Combobox/config'
+import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
+import { useMexEditorStore } from './Hooks/useMexEditorStore'
+import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
 
 export interface MexEditorOptions {
@@ -37,7 +38,7 @@ export interface MexEditorProps {
   editorId: string // * Unique ID for the Mex Editor
   className?: string // * Pass className to styled Mex Editor
   value: MexEditorValue // * Initial value of editor, to set onChange content, use `editor.children = content`
-  placeholders?: Options<Array<PlaceholderProps>> // * Array of objects with `placeholder` text and element `key
+  // placeholders?: Options<Array<PlaceholderProps>> // * Array of objects with `placeholder` text and element `key
   onChange?: (value: MexEditorValue) => void // * Callback on change
   options?: MexEditorOptions // * Power the editor with options
   meta?: InternalMetadata // * MetaData of current editor
@@ -78,10 +79,9 @@ const MexEditor = (props: MexEditorProps) => {
         plugins={plugins}
         onChange={onChange}
       >
-        <>
-          {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
-          <MultiComboboxContainer config={comboConfigData} />
-        </>
+        {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
+        <MultiComboboxContainer config={comboConfigData} />
+        <GlobalEditorListener />
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
     </>
@@ -95,6 +95,11 @@ const withDndProvider = (Component: any) => {
     </DndProvider>
   )
   return DndDefaultEditor
+}
+
+const GlobalEditorListener = () => {
+  useGlobalListener()
+  return null
 }
 
 withDndProvider.displayName = 'DefaultEditor'

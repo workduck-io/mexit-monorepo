@@ -2,10 +2,9 @@ import React from 'react'
 
 import Tippy from '@tippyjs/react'
 
-import { mog } from '@mexit/core'
-import { ProjectIconMex, getIconType } from '@mexit/shared'
+import { ProjectIconMex, getIconType, ProjectIconContainer, SourceInfoWrapper, StyledSource } from '@mexit/shared'
 
-import { StyledSource, SourceInfoWrapper, ProjectIconContainer } from '../Style/SourceInfo.styled'
+import { useEditorStore } from '../Stores/useEditorStore'
 
 // * Get Favicon url
 const getFavicon = (source: string) => {
@@ -13,6 +12,7 @@ const getFavicon = (source: string) => {
 }
 
 const Source: React.FC<{ source: string }> = ({ source }) => {
+  const isUserEditing = useEditorStore((state) => state.isEditing)
   const icon = getFavicon(source)
 
   const onClick = () => {
@@ -20,7 +20,7 @@ const Source: React.FC<{ source: string }> = ({ source }) => {
   }
 
   return (
-    <StyledSource contentEditable={false} onClick={onClick}>
+    <StyledSource $isVisible={!isUserEditing} contentEditable={false} onClick={onClick}>
       <ProjectIconContainer isView={false}>
         <Tippy
           delay={100}
@@ -37,7 +37,7 @@ const Source: React.FC<{ source: string }> = ({ source }) => {
   )
 }
 
-const SourceInfo = (props: any) => {
+export const SourceInfo = (props: any) => {
   const { children, element, attributes } = props
 
   if (element?.blockMeta || element?.metadata?.elementMetadata) {
@@ -57,5 +57,3 @@ const SourceInfo = (props: any) => {
 
   return children
 }
-
-export default SourceInfo

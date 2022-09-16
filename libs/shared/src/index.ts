@@ -16,8 +16,6 @@ export * from './Hooks/useEditorActions'
 export * from './Hooks/useRelativeTime'
 export * from './Hooks/useSlashCommands'
 
-export * from './Plugins/createBlockModifierPlugin'
-
 export * from './Stores/themeStoreConstructor'
 
 export * from './Style/Archive'
@@ -54,6 +52,7 @@ export * from './Style/SharedNotes.style'
 export * from './Style/Shortcut'
 export * from './Style/Sidebar'
 export * from './Style/Snippets'
+export * from './Style/SourceInfo.styled'
 export * from './Style/Tab.Styles'
 export * from './Style/TagElement.styles'
 export * from './Style/TagsRelated.styles'

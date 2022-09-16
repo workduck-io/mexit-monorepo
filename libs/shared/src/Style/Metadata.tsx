@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { FocusModeProp, focusStyles } from './Editor'
 import { Label } from './Form'
 import { HoverFade } from './Helpers'
+import { FadeInOut } from './Layouts'
 import { ProfileIcon } from './UserPage'
 
 interface DataWrapperProps {
@@ -43,6 +44,7 @@ export const DataGroup = styled.div``
 
 interface MetaDataWrapperProps extends FocusModeProp {
   $fadeOnHover?: boolean
+  $isVisible?: boolean
 }
 
 export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
@@ -81,4 +83,6 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   ${DataWrapper}:not(:first-child) {
     margin-top: ${({ theme }) => theme.spacing.small};
   }
+
+  ${({ $isVisible }) => FadeInOut($isVisible)}
 `

@@ -44,6 +44,8 @@ export const TitleStatic = styled.div`
   padding: ${({ theme }) => theme.spacing.small} 8px;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   margin-right: ${({ theme }) => theme.spacing.small};
+  font-size: 2.488rem;
+  font-weight: bold;
 
   &:hover,
   &:focus,
