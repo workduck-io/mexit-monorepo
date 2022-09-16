@@ -7,13 +7,14 @@ import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
 import { mog, NodeMetadata, NodeProperties } from '@mexit/core'
-import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
+import { DataGroup, DataWrapper, FocusModeProp, MetadataWrapper } from '@mexit/shared'
 import { Label } from '@mexit/shared'
 import { ProfileIcon } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 
@@ -35,6 +36,7 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
   const getContent = useContentStore((state) => state.getContent)
   const content = getContent(node.nodeid)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
+  const isUserEditing = useEditorStore((state) => state.isEditing)
 
   const isEmpty =
     metadata &&
@@ -55,7 +57,7 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
     return null
 
   return (
-    <MetadataWrapper $fadeOnHover={fadeOnHover}>
+    <MetadataWrapper $fadeOnHover={fadeOnHover} $isVisible={!isUserEditing}>
       <DataGroup>
         {metadata.createdBy !== undefined && (
           <DataWrapper interactive={metadata.createdAt !== undefined}>
