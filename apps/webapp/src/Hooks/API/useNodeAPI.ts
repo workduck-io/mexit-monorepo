@@ -209,10 +209,10 @@ export const useApi = () => {
     return data
   }
 
-  const getDataAPI = async (nodeid: string, isShared = false) => {
+  const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
     mog('GetNodeOptions', { isShared, url })
-    if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url)) {
+    if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
     }
@@ -226,7 +226,7 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const content = deserializeContent(d.data.data)
-        updateFromContent(nodeid, content)
+        if (isUpdate) updateFromContent(nodeid, content)
 
         return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
       })

@@ -4803,10 +4803,10 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/78facf234f5d5157ef2a7bf2d514f554afcfae084bd4bd996eb16c8309fd93d4#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-"@workduck-io/mex-components@^0.0.10":
-  version "0.0.10"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.10/9beff1718d790b1479a81fadbf647797ecb31973#9beff1718d790b1479a81fadbf647797ecb31973"
-  integrity sha512-CWqFIWr3xBbWCzPnVFJjKi7jeIHE5S+8nKRli4HtqwIBncx8IqMcFzVmnQBeJq6nD90P/sYqNoqpRVksISwaVg==
+"@workduck-io/mex-components@^0.0.11":
+  version "0.0.11"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.11/034b0c2a3bc146c95544cf1abb9f607f24f0408f#034b0c2a3bc146c95544cf1abb9f607f24f0408f"
+  integrity sha512-C87UeUqubvnInjUjj/HH8bo9+HlCRNudStZwuLqVUozHKiQvdVNqiycRKsp14z3PoTavbExhDhdWqugQj9mHXg==
   dependencies:
     "@tippyjs/react" "^4.2.6"
     core-js "^3.21.0"

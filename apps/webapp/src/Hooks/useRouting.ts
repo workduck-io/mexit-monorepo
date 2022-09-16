@@ -52,5 +52,9 @@ export const useRouting = () => {
     return match?.params
   }
 
-  return { goTo, location, params, getParams }
+  const goBack = () => {
+    navigate(-1)
+  }
+
+  return { goTo, location, params, getParams, goBack }
 }

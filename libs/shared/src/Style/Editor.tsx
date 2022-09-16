@@ -4,6 +4,8 @@ import styled, { css } from 'styled-components'
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
 import { Button, AsyncButton } from './Buttons'
+import { ScrollStyles } from './Helpers'
+import { FadeInOut } from './Layouts'
 
 export interface FocusModeProp {
   // Focus mode is on?
@@ -59,9 +61,15 @@ interface StyledEditorProps {
   showGraph?: boolean
 }
 
-export const EditorWrapper = styled.div`
+export const EditorWrapper = styled.div<{ comboboxOpen?: boolean; isUserEditing?: boolean }>`
   height: 100%;
   overflow-y: auto;
+  ${({ isUserEditing }) => ScrollStyles(isUserEditing ? 'transparent' : undefined)}
+  ${({ comboboxOpen }) =>
+    comboboxOpen &&
+    css`
+      overflow-y: hidden;
+    `}
 `
 
 export const CenteredMainContent = styled.div`
@@ -84,6 +92,20 @@ export const CenteredMainContent = styled.div`
 `
 
 export const StyledEditor = styled(CenteredMainContent)<StyledEditorProps>``
+
+export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  overflow: hidden;
+
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+
+  ${({ isVisible }) => FadeInOut(isVisible, '0.5', '0.5')}
+`
 
 export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   ${({ readOnly }) =>

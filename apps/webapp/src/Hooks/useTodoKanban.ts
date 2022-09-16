@@ -10,13 +10,11 @@ import {
   TodoStatusRanks,
   SNIPPET_PREFIX,
   SearchFilter,
-  isElder,
-  getAllParentPaths,
+  getAllParentIds,
   mog
 } from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
-import { getAllParentIds } from '../Editor/Utils/helper'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { KanbanCard, KanbanColumn, KanbanBoard } from '../Types/Kanban'
 import { useTaskFilterFunctions } from './useFilterFunctions'

@@ -1,4 +1,7 @@
-import { AccessLevel, ILink, SharedNode, NodeType } from '@mexit/core'
+import { BreadcrumbItem } from '@workduck-io/mex-components'
+
+import { AccessLevel, ILink, SharedNode, NodeType, getParentBreadcurmbs } from '@mexit/core'
+
 import { useDataStore } from '../Stores/useDataStore'
 
 // Used to ensure no path clashes while adding ILink.
@@ -57,5 +60,51 @@ export const useNodes = () => {
     return NodeType.MISSING
   }
 
-  return { isInArchive, getIcon, getNode, getArchiveNode, getSharedNode, isSharedNode, accessWhenShared, getNodeType }
+  const getNodeBreadcrumbs = (nodeid: string): BreadcrumbItem[] => {
+    const nodes = useDataStore.getState().ilinks
+    const node = nodes.find((l) => l.nodeid === nodeid)
+
+    if (node) {
+      const parents = getParentBreadcurmbs(node.path, nodes)
+
+      parents.unshift({
+        id: 'space-personal',
+        icon: 'ri:user-line',
+        label: 'Personal',
+        hideLabel: true
+      })
+
+      // mog('We have them breadcrumbs', { parents, nodeid, allParents })
+      return parents
+    }
+
+    const sharedNodes = useDataStore.getState().sharedNodes
+    const sharedNode = sharedNodes.find((n) => n.nodeid === nodeid)
+    if (sharedNode) {
+      const parents = getParentBreadcurmbs(sharedNode.path, sharedNodes)
+
+      parents.unshift({
+        id: 'space-shared',
+        icon: 'ri:share-line',
+        label: 'Shared Notes',
+        hideLabel: true
+      })
+
+      return parents
+    }
+
+    return []
+  }
+
+  return {
+    isInArchive,
+    getIcon,
+    getNode,
+    getArchiveNode,
+    getSharedNode,
+    isSharedNode,
+    accessWhenShared,
+    getNodeType,
+    getNodeBreadcrumbs
+  }
 }
