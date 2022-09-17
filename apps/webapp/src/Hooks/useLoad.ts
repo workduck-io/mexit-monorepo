@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast'
+
 import {
   NodeEditorContent,
   NodeProperties,
@@ -9,18 +11,17 @@ import {
   updateEmptyBlockTypes,
   getParentId
 } from '@mexit/core'
-import { toast } from 'react-hot-toast'
-
-import { useApi } from './API/useNodeAPI'
-import { useEditorBuffer } from './useEditorBuffer'
-import { useAnalysisStore } from '../Stores/useAnalysis'
-import { useRefactor } from './useRefactor'
 import { checkIfUntitledDraftNode } from '@mexit/core'
-import { useBlockHighlightStore } from '../Stores/useFocusBlock'
+
+import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore, getContent } from '../Stores/useEditorStore'
+import { useBlockHighlightStore } from '../Stores/useFocusBlock'
+import { useApi } from './API/useNodeAPI'
+import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
 import { getPathFromNodeIdHookless } from './useLinks'
+import { useRefactor } from './useRefactor'
 import { useUpdater } from './useUpdater'
 
 export interface LoadNodeOptions {
@@ -223,6 +224,11 @@ const useLoad = () => {
     loadNodeEditor(nodeProps)
   }
 
+  const getNoteContent = (noteId: string) => {
+    const buffer = useBufferStore.getState().buffer?.[noteId] || getContent(noteId)?.content
+    return buffer
+  }
+
   const loadNodeAndAppend = async (nodeid: string, content: NodeEditorContent) => {
     const nodeProps = getNode(nodeid)
     const nodeContent = getContent(nodeid)
@@ -237,6 +243,7 @@ const useLoad = () => {
     loadNode,
     fetchAndSaveNode,
     saveNodeName,
+    getNoteContent,
     loadNodeAndAppend,
     isLocalNode,
     loadNodeProps,

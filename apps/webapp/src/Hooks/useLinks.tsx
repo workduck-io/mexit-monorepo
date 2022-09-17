@@ -9,6 +9,7 @@ import {
   SEPARATOR,
   TodoStatus
 } from '@mexit/core'
+
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -160,10 +161,22 @@ export const useLinks = () => {
     }
   }
 
-  const getILinkFromNodeid = (nodeid: string) => {
+  const getILinkFromNodeid = (nodeid: string, shared?: boolean, archived?: boolean) => {
     const links = useDataStore.getState().ilinks
     const link = links.find((l) => l.nodeid === nodeid)
     if (link) return link
+
+    if (archived) {
+      const archiveNoteLinks = useDataStore.getState().archive
+      const noteLink = archiveNoteLinks?.find((l) => l.nodeid === nodeid)
+      return noteLink
+    }
+
+    if (shared) {
+      const sharedLinks = useDataStore.getState().sharedNodes
+      const sharedLink = sharedLinks?.find((l) => l.nodeid === nodeid)
+      if (sharedLink) return sharedLink
+    }
   }
 
   const getNodeidFromPath = (path: string) => {

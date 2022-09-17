@@ -1,27 +1,38 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import archivedIcon from '@iconify/icons-ri/archive-line'
 import eyeOffLine from '@iconify/icons-ri/eye-off-line'
 import shareLine from '@iconify/icons-ri/share-line'
 import { moveSelection, useEditorRef } from '@udecode/plate'
+import { useMatch } from 'react-router-dom'
 import { useReadOnly, useFocused, useSelected } from 'slate-react'
 
-import { ILink, mog, NodeType, SharedNode } from '@mexit/core'
+import { AccessLevel, ILink, mog, NodeType, SharedNode } from '@mexit/core'
 import { SILinkRoot, SILink, StyledIcon, ILinkElementProps } from '@mexit/shared'
 
-import useArchive from '../../../Hooks/useArchive'
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
+import useLoad from '../../../Hooks/useLoad'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
-import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreview from '../EditorPreview/EditorPreview'
 
-const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNode: SharedNode }) => {
+/**
+ * ILinkElement with no default styles. [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling) */
+const SharedNodeLink = ({
+  selected,
+  sharedNode,
+  onClick
+}: {
+  selected: boolean
+  sharedNode: SharedNode
+  onClick: any
+}) => {
   return (
-    <SILink $selected={selected}>
+    <SILink $selected={selected} onClick={onClick}>
       <StyledIcon icon={shareLine} />
       <span className="ILink_decoration ILink_decoration_left">[[</span>
       <span className="ILink_decoration ILink_decoration_value"> {sharedNode?.path}</span>
@@ -32,7 +43,7 @@ const SharedNodeLink = ({ selected, sharedNode }: { selected: boolean; sharedNod
 
 const ArchivedNode = ({ selected, archivedNode }: { selected: boolean; archivedNode: ILink }) => {
   return (
-    <SILink $selected={selected} color="#df7777" $archived={true}>
+    <SILink $selected={selected} color="#df7777">
       <StyledIcon icon={archivedIcon} color="#df7777" />
       <span className="ILink_decoration ILink_decoration_left">[[</span>
       <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span>
@@ -60,29 +71,90 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const { push } = useNavigation()
   const { getPathFromNodeid } = useLinks()
   const { getArchiveNode, getSharedNode, getNodeType } = useNodes()
-  // mog('We reached here', { selected, focused })
+  // const spotlightCtx = useSpotlightContext()
+  // const noteCtx = useNoteContext()
+  const { getNode } = useLoad()
+  const timer = React.useRef(undefined)
 
-  // const nodeid = getNodeidFromPath(element.value)
-  const readOnly = useReadOnly()
   const path = getPathFromNodeid(element.value)
-  const { archived } = useArchive()
   const { goTo } = useRouting()
+  // const isSpotlightCtx = useSpotlightContext()
+  const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
 
-  const onClickProps = useOnMouseClick(() => {
-    // Show preview on click, if preview is shown, navigate to link
-    if (!preview) {
-      setPreview(true)
-    } else {
-      push(element.value)
-      goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+  // const { setPreviewEditorNode } = useSpotlightEditorStore((store) => ({
+  //   setPreviewEditorNode: store.setNode
+  // }))
+  const addPreviewInEditors = useMultipleEditors((store) => store.addEditor)
+  const changeEditorState = useMultipleEditors((store) => store.changeEditorState)
+  const isEditingPreview = useMultipleEditors((store) => store.isEditingAnyPreview)
+
+  const loadLinkNode = async (nodeid: string) => {
+    // if (spotlightCtx) {
+    //   const node = getNode(nodeid)
+    //   nodeid = node.nodeid
+    //   setPreviewEditorNode(node)
+    // } else if (noteCtx) {
+    //   openNodeInMex(nodeid)
+    // } else {
+    push(nodeid)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    // }
+  }
+
+  const blinkPreview = (noteId: string) => {
+    if (timer.current) clearTimeout(timer.current)
+    changeEditorState(noteId, { blink: true })
+
+    // * After 2 seconds set blink false
+    timer.current = setTimeout(() => changeEditorState(noteId, { blink: false }), 2000)
+  }
+
+  const isPreviewPresent = (noteId: string) => {
+    const existingPreview = useMultipleEditors.getState().editors[noteId]
+    return existingPreview
+  }
+
+  const onPreviewShow = (noteId: string) => {
+    const existingPreview = isPreviewPresent(noteId)
+    const currentMainNode = match?.params?.nodeid
+
+    if (currentMainNode === noteId) return
+
+    // if (isSpotlightCtx) {
+    //   setPreview(true)
+    //   return
+    // }
+
+    if (existingPreview) {
+      blinkPreview(noteId)
+      return
     }
-  })
 
-  // useEffect(() => {
-  //   // If the preview is shown and the element losses focus --> Editor focus is moved
-  //   // Hide the preview
-  //   if (preview && !selected) setPreview(false)
-  // }, [selected])
+    addPreviewInEditors(noteId)
+    setPreview(true)
+  }
+
+  const onClickProps = (e) => {
+    // Show preview on click, if preview is shown, navigate to link
+    e.preventDefault()
+    e.stopPropagation()
+
+    const noteId = element.value
+
+    if (!preview) {
+      onPreviewShow(noteId)
+    } else {
+      loadLinkNode(noteId)
+    }
+  }
+
+  useEffect(() => {
+    // If the preview is shown and the element losses focus --> Editor focus is moved
+    // Hide the preview
+    if (preview && !selected) {
+      setPreview(false)
+    }
+  }, [selected])
 
   useHotkeys(
     'backspace',
@@ -96,21 +168,22 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
 
   useHotkeys(
     'enter',
-    () => {
-      // mog('Enter the dragon', { selected, preview, focused, esl: editor.selection })
+    (ev) => {
       // Show preview on Enter, if preview is shown, navigate to link
       if (selected && focused && editor.selection) {
-        if (!preview) setPreview(true)
+        if (!preview) {
+          onPreviewShow(element.value)
+        }
       }
+
       // Once preview is shown the link looses focus
-      if (preview) {
-        mog('working', { element })
-        push(element.value)
-        goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
+      if (preview && !isEditingPreview()) {
+        loadLinkNode(element.value)
       }
     },
-    [selected, preview]
+    [selected, focused, preview]
   )
+
   useHotkeys(
     'delete',
     () => {
@@ -120,11 +193,19 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     },
     [selected, focused]
   )
+
   const nodeType = getNodeType(element.value)
   const block = element.blockId ? getBlock(element.value, element.blockId) : undefined
   const content = block ? [block] : undefined
   const archivedNode = nodeType === NodeType.ARCHIVED ? getArchiveNode(element.value) : undefined
   const sharedNode = nodeType === NodeType.SHARED ? getSharedNode(element.value) : undefined
+
+  const sharedAccessIcon: Record<AccessLevel, string> = {
+    READ: 'bi:eye-fill',
+    WRITE: 'fa-solid:user-edit',
+    MANAGE: 'fa6-solid:user-lock',
+    OWNER: 'fa:user'
+  }
 
   return (
     <SILinkRoot
@@ -137,18 +218,39 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       {
         // The key to the temporary object defines what to render
         {
-          [NodeType.SHARED]: <SharedNodeLink selected={selected} sharedNode={sharedNode} />,
+          [NodeType.SHARED]: (
+            <EditorPreview
+              placement="auto"
+              preview={preview}
+              nodeid={element.value}
+              allowClosePreview
+              iconTooltip={
+                sharedNode?.currentUserAccess && `You have ${sharedNode?.currentUserAccess?.toLowerCase()} access`
+              }
+              icon={sharedAccessIcon[sharedNode?.currentUserAccess]}
+              editable={sharedNode?.currentUserAccess !== 'READ'}
+              content={content}
+              setPreview={setPreview}
+            >
+              <SILink $selected={selected} onClick={onClickProps}>
+                <StyledIcon icon={shareLine} />
+                <span className="ILink_decoration ILink_decoration_left">[[</span>
+                <span className="ILink_decoration ILink_decoration_value"> {sharedNode?.path}</span>
+                <span className="ILink_decoration ILink_decoration_right">]]</span>
+              </SILink>
+            </EditorPreview>
+          ),
           [NodeType.ARCHIVED]: <ArchivedNode selected={selected} archivedNode={archivedNode} />,
           [NodeType.DEFAULT]: (
             <EditorPreview
               placement="auto"
-              allowClosePreview={readOnly}
               preview={preview}
               nodeid={element.value}
+              allowClosePreview
               content={content}
-              closePreview={() => setPreview(false)}
+              setPreview={setPreview}
             >
-              <SILink $selected={selected} {...onClickProps}>
+              <SILink $selected={selected} onClick={onClickProps}>
                 <span className="ILink_decoration ILink_decoration_left">[[</span>
                 <span className="ILink_decoration ILink_decoration_value">
                   {' '}

@@ -1,30 +1,36 @@
 // different import path!
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { useMatch } from 'react-router-dom'
+import { useTheme } from 'styled-components'
 
-import { Button } from '@workduck-io/mex-components'
+import { Button, MexIcon } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { NodeEditorContent, generateTempId, mog, getNameFromPath } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
-  EditorPreviewWrapper
+  EditorPreviewWrapper,
+  PreviewActionHeader
 } from '@mexit/shared'
 
 import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
+import { NestedFloating } from '../../../Components/FloatingElements/NestedFloating'
+import { Tooltip } from '../../../Components/FloatingElements/Tooltip'
+import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'
+import useMultipleEditors from '../../../Stores/useEditorsStore'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
-import useMemoizedPlugins from '../../Plugins'
-import { editorPreviewComponents } from '../EditorPreviewComponents'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -33,105 +39,193 @@ export interface EditorPreviewProps {
   delay?: number
   preview?: boolean
   previewRef?: any
+  hover?: boolean
+  editable?: boolean
+  label?: string
   content?: NodeEditorContent
   allowClosePreview?: boolean
-  closePreview?: () => void
+  icon?: string
+  iconTooltip?: string
+  setPreview?: (open: boolean) => void
 }
-
-export const LazyTippy = forwardRef(function LT(props: any, ref) {
-  const [mounted, setMounted] = useState(false)
-
-  const lazyPlugin = {
-    fn: () => ({
-      onMount: () => {
-        setMounted(true)
-      },
-      onHidden: () => {
-        setMounted(false)
-      }
-    })
-  }
-
-  const computedProps = { ...props }
-
-  computedProps.plugins = [lazyPlugin, ...(props.plugins || [])]
-
-  if (props.render) {
-    computedProps.render = (...args) => (mounted ? props.render(...args) : '')
-  } else {
-    computedProps.content = mounted ? props.content : ''
-  }
-
-  return <Tippy {...computedProps} ref={ref} />
-})
 
 const EditorPreview = ({
   nodeid,
-  placement,
   allowClosePreview,
-  closePreview,
-  preview,
   children,
-  delay,
   content,
-  ...props
+  hover,
+  label,
+  editable = true,
+  setPreview,
+  icon,
+  iconTooltip,
+  preview
 }: EditorPreviewProps) => {
   const { getILinkFromNodeid } = useLinks()
-  const getContent = useContentStore((store) => store.getContent)
-  const nodeContent = getContent(nodeid)
-  const cc = content ?? (nodeContent && nodeContent.content)
+
   const { hasTags } = useTags()
-  const { loadNode } = useLoad()
+  const editorContentFromStore = useContentStore((store) => store.contents?.[nodeid])
+  const { loadNode, getNoteContent } = useLoad()
+  const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const { goTo } = useRouting()
 
-  const ilink = getILinkFromNodeid(nodeid)
+  const cc = useMemo(() => {
+    const nodeContent = getNoteContent(nodeid)
 
-  const editorId = `__preview__${nodeid}_${generateTempId()}`
+    const ccx = content ?? nodeContent
+    return ccx
+  }, [nodeid, editorContentFromStore])
 
-  const onClickNavigate = (e) => {
+  const ilink = getILinkFromNodeid(nodeid, true)
+
+  const editorId = `${nodeid}_Preview`
+
+  const onClickNavigate = (e: any) => {
     e.preventDefault()
-    mog('OnClickNavigate', { e })
+    e.stopPropagation()
     loadNode(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
+  const checkIfAlreadyPresent = (noteId: string) => {
+    const params = match?.params
+    const isPresent = useMultipleEditors.getState().editors?.[noteId]?.blink
+    const isEditorNote = params?.nodeid === noteId
+
+    return isPresent || isEditorNote
+  }
+
+  const theme = useTheme()
+  const showPreview = !checkIfAlreadyPresent(nodeid)
 
   if (cc) {
     return (
-      <LazyTippy
-        interactive
-        delay={delay ?? 250}
-        interactiveDebounce={100}
-        placement={placement ?? 'bottom'}
-        visible={preview}
-        appendTo={() => document.body}
-        render={(attrs) => (
-          <EditorPreviewWrapper className="__editor__preview" tabIndex={-1} {...attrs}>
-            {(allowClosePreview || hasTags(nodeid) || ilink?.path) && (
-              <EditorPreviewControls hasTags={hasTags(nodeid)}>
-                {ilink?.path && (
-                  <EditorPreviewNoteName onClick={onClickNavigate}>
-                    <Icon icon={ilink?.icon ?? fileList2Line} />
-                    {getNameFromPath(ilink.path)}
-                  </EditorPreviewNoteName>
-                )}
-                <TagsRelatedTiny nodeid={nodeid} />
-                <Button transparent onClick={() => closePreview && closePreview()}>
-                  <Icon icon={closeCircleLine} />
-                </Button>
-              </EditorPreviewControls>
-            )}
-            <EditorPreviewEditorWrapper>
-              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} draftView />
-            </EditorPreviewEditorWrapper>
-          </EditorPreviewWrapper>
-        )}
+      <NestedFloating
+        hover={hover}
+        label={label}
+        persist={!allowClosePreview}
+        open={preview}
+        setOpen={setPreview}
+        render={({ close, labelId }) =>
+          showPreview && (
+            <EditorPreviewWrapper id={labelId} className="__editor__preview" tabIndex={-1}>
+              {(allowClosePreview || hasTags(nodeid) || ilink?.path) && (
+                <EditorPreviewControls hasTags={hasTags(nodeid)}>
+                  {ilink?.path && (
+                    <PreviewActionHeader>
+                      <EditorPreviewNoteName onClick={onClickNavigate}>
+                        <Icon icon={ilink?.icon ?? fileList2Line} />
+                        {getNameFromPath(ilink.path)}
+                      </EditorPreviewNoteName>
+                      {icon && iconTooltip && (
+                        <Tooltip key={labelId} content={iconTooltip}>
+                          <MexIcon color={theme.colors.gray[5]} noHover icon={icon} height="14" width="14" />
+                        </Tooltip>
+                      )}
+                    </PreviewActionHeader>
+                  )}
+                  <PreviewActionHeader>
+                    <TagsRelatedTiny nodeid={nodeid} />
+                    <Button
+                      transparent
+                      onClick={(ev) => {
+                        ev.preventDefault()
+                        ev.stopPropagation()
+                        close()
+                      }}
+                    >
+                      <Icon icon={closeCircleLine} />
+                    </Button>
+                  </PreviewActionHeader>
+                </EditorPreviewControls>
+              )}
+              <EditablePreview
+                editable={editable}
+                onClose={close}
+                id={nodeid}
+                hover={hover}
+                editorId={editorId}
+                content={cc}
+              />
+            </EditorPreviewWrapper>
+          )
+        }
       >
         {children}
-      </LazyTippy>
+      </NestedFloating>
     )
   } else return children
+}
+
+const EditablePreview = ({ content, editable, editorId, id: nodeId, onClose, hover }: any) => {
+  const addToBuffer = useBufferStore((store) => store.add)
+  const removeEditor = useMultipleEditors((store) => store.removeEditor)
+  const presentEditor = useMultipleEditors((store) => store.editors)?.[nodeId]
+  const changeEditorState = useMultipleEditors((store) => store.changeEditorState)
+  const lastOpenedEditorId = useMultipleEditors((store) => store.lastOpenedEditor)
+
+  const { saveAndClearBuffer } = useEditorBuffer()
+  const ref = useRef()
+
+  const onEditorClick = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (editable) changeEditorState(nodeId, { editing: true })
+  }
+
+  useEffect(() => {
+    return () => {
+      if (onClose) onClose()
+
+      saveAndClearBuffer(false)
+      removeEditor(nodeId)
+    }
+  }, [])
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      KeyE: (e) => {
+        const lastOpened = lastOpenedEditorId()
+        if (editable && (nodeId === lastOpened?.nodeId || hover) && !lastOpened?.editorState?.editing) {
+          onEditorClick(e)
+          const editor = getPlateEditorRef(editorId)
+          if (editor) selectEditor(editor, { edge: 'start', focus: true })
+        } else {
+          unsubscribe()
+        }
+      }
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  const onChange = (val: NodeEditorContent) => {
+    addToBuffer(nodeId, val)
+  }
+
+  return (
+    <EditorPreviewEditorWrapper
+      ref={ref}
+      tabIndex={-1}
+      id={nodeId}
+      blink={presentEditor?.blink}
+      editable={!!presentEditor?.editing}
+      onClick={(ev) => {
+        if (ev.detail === 2) {
+          onEditorClick(ev)
+        }
+      }}
+    >
+      <EditorPreviewRenderer
+        // onChange={onChange}
+        content={content}
+        readOnly={!editable || !presentEditor?.editing}
+        editorId={editorId}
+      />
+    </EditorPreviewEditorWrapper>
+  )
 }
 
 export default EditorPreview

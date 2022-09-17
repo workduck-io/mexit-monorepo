@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from 'react'
+
+import { Plate, PlatePlugin } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
-
-import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { useEditorChange } from '@mexit/shared'
-import { editorPreviewComponents } from './Components/EditorPreviewComponents'
 
-import { Plate, PlatePlugin } from '@udecode/plate'
-import useMemoizedPlugins from './Plugins'
 import PreviewEditor from '../Components/Editor/PreviewEditor'
+import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+import { editorPreviewComponents } from './Components/EditorPreviewComponents'
+import useMemoizedPlugins from './Plugins'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -22,6 +22,7 @@ interface EditorPreviewRendererProps {
   noMouseEvents?: boolean
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   plugins?: PlatePlugin[]
+  readOnly?: boolean
   draftView?: boolean
 }
 
@@ -48,18 +49,23 @@ const EditorPreviewRenderer = ({
   noStyle,
   noMouseEvents,
   onDoubleClick,
+  readOnly = true,
   draftView
 }: EditorPreviewRendererProps) => {
-  const editableProps = {
-    placeholder: 'Murmuring the mex hype... ',
-    spellCheck: false,
-    style: noStyle
-      ? {}
-      : {
-          padding: '15px'
-        },
-    readOnly: true
-  }
+  const editableProps = useMemo(
+    () => ({
+      placeholder: 'Murmuring the mex hype... ',
+      spellCheck: false,
+      style: noStyle
+        ? {}
+        : {
+            padding: '15px'
+          },
+      readOnly,
+      autoFocus: !readOnly
+    }),
+    []
+  )
 
   // We get memoized plugins
   const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })

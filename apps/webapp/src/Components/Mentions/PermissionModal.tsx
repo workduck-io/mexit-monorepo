@@ -97,8 +97,8 @@ export const PermissionModalContent = () => {
     // mog('onPermissionChange', { userid, alias })
 
     // Change the user and add to changedUsers
-    const changedUser = changedUsers.find((u) => u.userID === userid)
-    const dataUser = sharedUsers.find((u) => u.userID === userid)
+    const changedUser = changedUsers?.find((u) => u.userID === userid)
+    const dataUser = sharedUsers?.find((u) => u.userID === userid)
 
     if (changedUser) {
       changedUser.alias = alias
@@ -107,7 +107,7 @@ export const PermissionModalContent = () => {
     } else if (dataUser) {
       dataUser.alias = alias
       const changeUser = { ...dataUser, change: ['alias' as const] }
-      setChangedUsers([...changedUsers, changeUser])
+      setChangedUsers([...(changedUsers ?? []), changeUser])
     }
   }
 
@@ -116,8 +116,8 @@ export const PermissionModalContent = () => {
     // mog('onPermissionChange', { userid, alias })
 
     // Change the user and add to changedUsers
-    const changedUser = changedUsers.find((u) => u.userID === userid)
-    const dataUser = sharedUsers.find((u) => u.userID === userid)
+    const changedUser = changedUsers?.find((u) => u.userID === userid)
+    const dataUser = sharedUsers?.find((u) => u.userID === userid)
 
     if (changedUser) {
       const hasBeenRevoked = changedUser.change.includes('revoke')
@@ -130,14 +130,14 @@ export const PermissionModalContent = () => {
       }
     } else if (dataUser) {
       const changeUser = { ...dataUser, change: ['revoke' as const] }
-      setChangedUsers([...changedUsers, changeUser])
+      setChangedUsers([...(changedUsers ?? []), changeUser])
     }
   }
 
   const onPermissionChange = (userid: string, access: AccessLevel) => {
     // Change the user and add to changedUsers
-    const changedUser = changedUsers.find((u) => u.userID === userid)
-    const dataUser = sharedUsers.find((u) => u.userID === userid)
+    const changedUser = changedUsers?.find((u) => u.userID === userid)
+    const dataUser = sharedUsers?.find((u) => u.userID === userid)
 
     // TODO: Filter for the case when user permission is reverted to the og one
     if (changedUser) {
@@ -178,7 +178,7 @@ export const PermissionModalContent = () => {
           access: { ...dataUser.access, [node.nodeid]: access }
         }
         // changeUser.access[node.nodeid] = access
-        setChangedUsers([...changedUsers, changeUser])
+        setChangedUsers([...(changedUsers ?? []), changeUser])
       }
     }
   }
