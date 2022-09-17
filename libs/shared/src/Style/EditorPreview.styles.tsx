@@ -1,5 +1,6 @@
 import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
+
 import { Button } from './Buttons'
 import { CardShadow } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
@@ -11,8 +12,10 @@ export const EditorPreviewWrapper = styled.div`
 
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.colors.fade};
-  max-height: 400px;
-  max-width: 700px;
+  height: 32vh;
+  max-height: 32vh;
+  width: 36vw;
+  max-width: 36vw;
 
   overflow-y: auto;
   overflow-x: hidden;
@@ -21,7 +24,6 @@ export const EditorPreviewWrapper = styled.div`
   flex-direction: column;
 
   ${CardShadow}
-  min-width: 400px;
 `
 
 export const EditorPreviewNoteName = styled.div`
@@ -43,10 +45,44 @@ export const EditorPreviewNoteName = styled.div`
   }
 `
 
-export const EditorPreviewEditorWrapper = styled.div`
+const PrimaryBorderKeyFrames = (theme: any) => keyframes`
+  0% { border-color: transparent; }
+  50% { border-color: ${theme.colors.primary}; }
+  100% { border-color: transparent; }
+`
+
+export const PreviewActionHeader = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0 ${({ theme }) => theme.spacing.small};
+`
+
+export const EditorPreviewEditorWrapper = styled.div<{ editable?: boolean; blink?: boolean }>`
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-width: 1px;
+  border-style: solid;
+
+  ${({ blink, editable, theme }) =>
+    blink &&
+    !editable &&
+    css`
+      animation: 1s ease-out 1 ${PrimaryBorderKeyFrames(theme)};
+    `}
+
+  /* width: 36vw; */
+  ${({ editable, theme }) =>
+    editable
+      ? css`
+          transition: border-color 0.15s ease-in-out 0s;
+          border-color: ${theme.colors.primary};
+        `
+      : css`
+          transition: border-color 0.15s ease-in-out 0s;
+          border-color: transparent;
+        `}
 `
 
 export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
