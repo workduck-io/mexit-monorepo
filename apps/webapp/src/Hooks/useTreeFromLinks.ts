@@ -1,25 +1,60 @@
-import { useMemo } from 'react'
+import { uniqBy } from 'lodash'
 
-import { sanatizeLinks, ILink } from '@mexit/core'
+import { sanatizeLinks, ILink, getAllParentIds, mog } from '@mexit/core'
 
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
 import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
 
-export const useTreeFromLinks = () => {
-  const getTreeFromLinks = (links: ILink[]) => {
-    const expanded = useTreeStore.getState().expanded
+export const getTreeFromLinks = (links: ILink[]) => {
+  const expanded = useTreeStore.getState().expanded
+  mog('Expanded', { expanded })
 
-    const sanatizedLinks = sanatizeLinks(links)
-    const tree = generateTree(sanatizedLinks, expanded)
+  const sanatizedLinks = sanatizeLinks(links)
+  const tree = generateTree(sanatizedLinks, expanded)
 
-    return tree
-  }
-
-  return { getTreeFromLinks }
+  return tree
 }
 
-export const useFlatTreeFromILinks = () => {
-  return useTreeFromLinks()
+/**
+ * returns tree data and also the matched items in flat order of occurrence
+ */
+export const getPartialTreeFromLinks = (matchedLinks: ILink[], allLinks: ILink[]) => {
+  // Contains duplicates
+  const dirtyTreeFlatItems = matchedLinks.reduce((p, c) => {
+    const parents = getAllParentIds(c.path)
+      .filter((par) => par !== undefined)
+      .map((par) => allLinks.find((l) => l.path === par))
+      .filter((l) => l !== undefined)
+      .map((l) => ({
+        id: l.path,
+        nodeid: l.nodeid,
+        icon: l.icon,
+        stub: l.path !== c.path
+      }))
+    return [...p, ...parents]
+  }, [])
+
+  console.log('dirty trr', dirtyTreeFlatItems)
+
+  const treeFlatItems = uniqBy(dirtyTreeFlatItems, 'id')
+
+  const allExpanded = treeFlatItems.map((l) => l.id)
+
+  const tree = generateTree(
+    treeFlatItems,
+    allExpanded,
+    // No need to sort as already ordered by search
+    (a, b) => {
+      return 0
+    }
+  )
+
+  const matchedFlatItems = Object.keys(tree.items)
+    .sort()
+    .filter((i) => tree.items[i].data.stub === false)
+    .map((i) => tree.items[i])
+
+  // mog('Made the partialTree From Links', { matchedLinks, allLinks, tree, treeFlatItems })
+
+  return { tree, matchedFlatItems }
 }

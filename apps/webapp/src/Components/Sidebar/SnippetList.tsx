@@ -5,6 +5,8 @@ import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { SidebarHeaderLite } from './Sidebar.space.header'
+import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
 const SnippetList = () => {
@@ -32,20 +34,24 @@ const SnippetList = () => {
       })
       .map((snippet) => ({
         id: snippet.id,
-        title: snippet.title,
-        icon: snippet.template ? magicLine : quillPenLine
+        label: snippet.title,
+        icon: snippet.template ? magicLine : quillPenLine,
+        data: snippet
       }))
   }, [snippets])
 
   return (
-    <SidebarList
-      items={sortedSnippets}
-      onClick={onOpenSnippet}
-      selectedItemId={currentSnippet?.id}
-      showSearch
-      searchPlaceholder="Filter Snippets..."
-      emptyMessage="No Snippets Found"
-    />
+    <SidebarWrapper>
+      <SidebarHeaderLite title="Snippets" icon={quillPenLine} />
+      <SidebarList
+        items={sortedSnippets}
+        onClick={onOpenSnippet}
+        selectedItemId={currentSnippet?.id}
+        showSearch
+        searchPlaceholder="Filter Snippets..."
+        emptyMessage="No Snippets Found"
+      />
+    </SidebarWrapper>
   )
 }
 

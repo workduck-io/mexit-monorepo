@@ -32,6 +32,7 @@ import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { SidebarToggles } from '../logo'
@@ -174,6 +175,7 @@ const Nav = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const focusMode = useLayoutStore((store) => store.focusMode)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
+  const isUserEditing = useEditorStore((state) => state.isEditing)
   const { getFocusProps } = useLayout()
 
   const [source, target] = useSingleton()
@@ -195,8 +197,8 @@ const Nav = () => {
     <>
       <NavWrapper
         onMouseUp={(e) => onDoubleClickToogle(e)}
-        expanded={sidebar.expanded}
-        show={sidebar.show}
+        $expanded={sidebar.expanded}
+        $show={sidebar.show}
         {...getFocusProps(focusMode)}
       >
         <MainNav {...getFocusProps(focusMode)}>
@@ -211,10 +213,11 @@ const Nav = () => {
         <SideNav
           onMouseUp={(e) => e.stopPropagation()}
           style={springProps}
-          expanded={sidebar.expanded}
-          show={sidebar.show}
-          overlaySidebar={overlaySidebar}
-          side="left"
+          $expanded={sidebar.expanded}
+          $show={sidebar.show}
+          $isUserEditing={isUserEditing}
+          $overlaySidebar={overlaySidebar}
+          $side="left"
           {...getFocusProps(focusMode)}
         >
           {/* Notes, Shared, Bookmarks */}

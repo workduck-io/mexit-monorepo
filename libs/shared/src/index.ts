@@ -70,6 +70,7 @@ export * from './Themes/customStyles'
 
 // export * from './Types/Combobox'
 export * from './Types/BalloonToolbar.types'
+export * from './Types/design'
 export * from './Types/QuickLink.types'
 export * from './Types/TagElement'
 export * from './Types/Theme'

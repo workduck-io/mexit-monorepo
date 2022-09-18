@@ -1,10 +1,11 @@
+import React, { useEffect } from 'react'
+
 import Tree, { RenderItemParams, ItemId, mutateTree, TreeItem, TreeData } from '@atlaskit/tree'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy, { useSingleton } from '@tippyjs/react'
-import React, { useEffect } from 'react'
 import { useMatch } from 'react-router-dom'
 import styled, { useTheme } from 'styled-components'
 
@@ -12,9 +13,10 @@ import { mog } from '@mexit/core'
 import { ItemContent, ItemCount, ItemTitle, MexIcon, StyledTreeItem } from '@mexit/shared'
 
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
+import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useDataStore } from '../../Stores/useDataStore'
 import { Centered } from './Bookmarks'
+import { SidebarWrapper } from './Sidebar.style'
 import { GetIcon, TooltipContent } from './Tree'
 
 export const Margin = styled.div<{ margin: string }>`
@@ -119,16 +121,15 @@ const NoArchiveNotes = () => {
 
 const ArchiveSidebar = () => {
   const archiveNotes = useDataStore((store) => store.archive)
-  const { getTreeFromLinks } = useTreeFromLinks()
 
   if (!archiveNotes || archiveNotes.length === 0) return <NoArchiveNotes />
 
   const tree = getTreeFromLinks(archiveNotes)
 
   return (
-    <>
+    <SidebarWrapper>
       <ArchiveTree tree={tree} />
-    </>
+    </SidebarWrapper>
   )
 }
 

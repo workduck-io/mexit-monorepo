@@ -1,3 +1,5 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import {
   default as AtlaskitTree,
   ItemId,
@@ -12,7 +14,6 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy, { useSingleton } from '@tippyjs/react'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useContextMenu } from 'react-contexify'
 import { useLocation, useMatch } from 'react-router-dom'
 
@@ -30,12 +31,13 @@ import {
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useTreeFromLinks } from '../../Hooks/useTreeFromLinks'
+import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
+import { RenderTreeItem } from './TreeItem'
 import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
 
 interface GetIconProps {
@@ -97,21 +99,13 @@ const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
     </ItemTitle>
   )
 }
+
 interface TreeProps {
   initTree: TreeData
+  selectedItemId?: string
 }
 
-const defaultSnap = {
-  isDragging: false,
-  isDropAnimating: false,
-  dropAnimation: null,
-  mode: null,
-  draggingOver: null,
-  combineTargetFor: null,
-  combineWith: null
-}
-
-const Tree = ({ initTree }: TreeProps) => {
+const Tree = ({ initTree, selectedItemId }: TreeProps) => {
   const [tree, setTreeState] = React.useState<TreeData>(initTree)
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
@@ -138,10 +132,10 @@ const Tree = ({ initTree }: TreeProps) => {
   const [source, target] = useSingleton()
 
   const onOpenItem = (itemId: string, nodeid: string) => {
+    console.log('nodeid', nodeid)
     push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
     changeTree(mutateTree(tree, itemId, { isExpanded: true }))
-    // appNotifierWindow(IpcAction.NEW_RECENT_ITEM, AppType.MEX, nodeid)
   }
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: TreeItem) => {
@@ -153,47 +147,18 @@ const Tree = ({ initTree }: TreeProps) => {
 
   const isInEditor = location.pathname.startsWith(ROUTE_PATHS.node)
 
-  const renderItem = ({ item, onExpand, onCollapse, provided, snapshot }: RenderItemParams) => {
-    const isTrue = JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
-
+  const renderItem = (renderProps: RenderItemParams) => {
     return (
-      <Tippy theme="mex" placement="right" singleton={target} content={<TooltipContent item={item} />}>
-        <span>
-          <ContextMenu.Root
-            onOpenChange={(open) => {
-              if (open) {
-                setContextOpenNodeId(item.data.nodeid)
-              } else setContextOpenNodeId(null)
-            }}
-          >
-            <ContextMenu.Trigger asChild>
-              <StyledTreeItem
-                ref={provided.innerRef}
-                selected={isInEditor && item.data && match?.params?.nodeid === item.data.nodeid}
-                isDragging={snapshot.isDragging}
-                hasMenuOpen={contextOpenNodeId === item.data.nodeid}
-                isBeingDroppedAt={isTrue}
-                onContextMenu={(e) => {
-                  console.log('ContextySe', e, item)
-                }}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-              >
-                <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
-
-                <ItemContent onMouseDown={(e) => onClick(e, item)}>
-                  <ItemTitleWithAnalysis item={item} />
-                </ItemContent>
-
-                {item.hasChildren && item.children && item.children.length > 0 && (
-                  <ItemCount>{item.children.length}</ItemCount>
-                )}
-              </StyledTreeItem>
-            </ContextMenu.Trigger>
-            <TreeContextMenu item={item} />
-          </ContextMenu.Root>
-        </span>
-      </Tippy>
+      <RenderTreeItem
+        {...renderProps}
+        onClick={onClick}
+        match={match}
+        isInEditor={isInEditor}
+        isHighlighted={renderProps.item?.data?.nodeid === selectedItemId}
+        target={target}
+        contextOpenNodeId={contextOpenNodeId}
+        setContextOpenNodeId={setContextOpenNodeId}
+      />
     )
   }
 
@@ -281,8 +246,6 @@ const Tree = ({ initTree }: TreeProps) => {
 export const TreeContainer = () => {
   const node = useEditorStore((store) => store.node)
   const ilinks = useDataStore((store) => store.ilinks)
-
-  const { getTreeFromLinks } = useTreeFromLinks()
 
   const initTree = useMemo(() => getTreeFromLinks(ilinks), [node, ilinks])
 

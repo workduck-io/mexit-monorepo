@@ -3,7 +3,7 @@ import React from 'react'
 import { useMatch } from 'react-router-dom'
 
 import { defaultContent, mog } from '@mexit/core'
-import { SideNav } from '@mexit/shared'
+import { RHSideNav } from '@mexit/shared'
 
 import InfoBar from '.'
 import useLayout from '../../Hooks/useLayout'
@@ -36,16 +36,16 @@ const RHSidebar = () => {
   mog('IS RHSIDEBAR', { rhSidebar })
 
   return (
-    <SideNav
+    <RHSideNav
       style={rhSidebarSpringProps}
-      show={rhSidebar.show}
-      expanded={rhSidebar.expanded}
-      overlaySidebar={overlaySidebar}
-      side="right"
+      $show={rhSidebar.show}
+      $expanded={rhSidebar.expanded}
+      $overlaySidebar={overlaySidebar}
+      $side="right"
       {...getFocusProps(focusMode)}
     >
       <RHSidebarContent />
-    </SideNav>
+    </RHSideNav>
   )
 }
 

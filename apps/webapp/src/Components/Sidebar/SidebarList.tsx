@@ -2,29 +2,41 @@ import React, { useEffect, useState } from 'react'
 
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon, IconifyIcon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
-import { Input, ItemTitle, StyledTreeItem } from '@mexit/shared'
+import { DesignItem, Input, ItemTitle, StyledTreeItem } from '@mexit/shared'
 
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import { ItemContent } from './SharedNotes'
-import { SidebarListWrapper, SidebarListFilter, FilteredItemsWrapper } from './SidebarList.style'
-import { TooltipContent } from './Tree'
+import { SidebarListWrapper, SidebarListFilter, FilteredItemsWrapper, EmptyMessage } from './SidebarList.style'
+import SidebarListItemComponent from './SidebarListItem'
 
-interface SidebarListItem {
-  id: string
-  title: string
-  icon?: string | IconifyIcon
-  // tooltip?: string
+export enum LastOpenedState {
+  UNREAD = 'unread',
+  OPENED = 'opened',
+  MUTED = 'muted'
 }
 
-interface SidebarListProps {
-  items: SidebarListItem[]
+export interface SidebarListItem<T> extends DesignItem {
+  // Used to calculate the last opened state once in the list item component
+  data: T
+  lastOpenedId?: string
+  // Used to pass the state computed to the context menu
+  lastOpenedState?: LastOpenedState
+
+  /**
+   * Icon to show when the user hovers over the icon
+   */
+  hoverIcon?: string | IconifyIcon
+  onIconClick?: (id: string) => void
+}
+
+export interface SidebarListProps<T> {
+  items: SidebarListItem<T>[]
   // Action on item click
   onClick: (itemId: string) => void
 
@@ -32,10 +44,10 @@ interface SidebarListProps {
   selectedItemId?: string
 
   // If true, the list will be preceded by the default item
-  defaultItem?: SidebarListItem
+  defaultItem?: SidebarListItem<T>
 
   // To render the context menu if the item is right-clicked
-  ItemContextMenu?: (props: { item: SidebarListItem }) => JSX.Element
+  ItemContextMenu?: (props: { item: SidebarListItem<T> }) => JSX.Element
 
   // Searches by title of the items
   showSearch?: boolean
@@ -54,7 +66,7 @@ const SidebarList = ({
   searchPlaceholder,
   emptyMessage,
   noMargin
-}: SidebarListProps) => {
+}: SidebarListProps<any>) => {
   const [contextOpenViewId, setContextOpenViewId] = useState<string>(null)
   const [search, setSearch] = useState('')
   const [listItems, setListItems] = useState(items)
@@ -87,7 +99,7 @@ const SidebarList = ({
   useEffect(() => {
     if (showSearch) {
       if (search && search !== '') {
-        const filtered = fuzzySearch(listItems, search, (item) => item.title)
+        const filtered = fuzzySearch(items, search, (item) => item.label)
         mog('Search', { search, filtered })
         setListItems(filtered)
       }
@@ -147,7 +159,7 @@ const SidebarList = ({
           <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
             <ItemTitle>
               <Icon icon={defaultItem.icon} />
-              <span>{defaultItem.title}</span>
+              <span>{defaultItem.label}</span>
             </ItemTitle>
           </ItemContent>
         </StyledTreeItem>
@@ -167,43 +179,26 @@ const SidebarList = ({
 
       <FilteredItemsWrapper hasDefault={!!defaultItem}>
         {listItems.map((item, index) => (
-          <Tippy
-            theme="mex"
-            placement="right"
-            singleton={target}
-            key={`DisplayTippy_${item.id}`}
-            content={<TooltipContent item={{ id: item.id, children: [], data: { title: item.title } }} />}
-          >
-            <span>
-              <ContextMenu.Root
-                onOpenChange={(open) => {
-                  if (open && ItemContextMenu) {
-                    setContextOpenViewId(item.id)
-                  } else setContextOpenViewId(null)
-                }}
-              >
-                <ContextMenu.Trigger asChild>
-                  <StyledTreeItem
-                    hasMenuOpen={contextOpenViewId === item.id || selected === index}
-                    noSwitcher
-                    selected={item?.id === selectedItemId}
-                  >
-                    <ItemContent onClick={() => onSelectItem(item?.id)}>
-                      <ItemTitle>
-                        <Icon icon={item.icon} />
-                        <span>{item.title}</span>
-                      </ItemTitle>
-                    </ItemContent>
-                  </StyledTreeItem>
-                </ContextMenu.Trigger>
-                {ItemContextMenu && <ItemContextMenu item={item} />}
-              </ContextMenu.Root>
-            </span>
-          </Tippy>
+          <SidebarListItemComponent
+            key={item.id}
+            tippyTarget={target}
+            item={item}
+            index={index}
+            select={{
+              selectedItemId: selectedItemId,
+              selectIndex: selected,
+              onSelect: onSelectItem
+            }}
+            // To render the context menu if the item is right-clicked
+            contextMenu={{
+              ItemContextMenu: ItemContextMenu,
+              setContextOpenViewId: setContextOpenViewId,
+              contextOpenViewId: contextOpenViewId
+            }}
+          />
         ))}
+        {listItems.length === 0 && search !== '' && <EmptyMessage>{emptyMessage ?? 'No Items Found'}</EmptyMessage>}
       </FilteredItemsWrapper>
-
-      {listItems.length === 0 && search !== '' && <p>{emptyMessage ?? 'No Items Found'}</p>}
     </SidebarListWrapper>
   )
 }

@@ -3,6 +3,7 @@ import {
   convertContentToRawText,
   defaultContent,
   getLinksFromContent,
+  HASH_SEPARATOR,
   hasLink,
   ILink,
   NodeLink,
@@ -16,6 +17,13 @@ import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useNodes } from './useNodes'
+
+export const getTitleFromPath = (path: string, withNoteId = false) => {
+  const separator = withNoteId ? HASH_SEPARATOR : SEPARATOR
+  const titleAt = withNoteId ? -2 : -1
+
+  return path?.split(separator)?.slice(titleAt)[0]
+}
 
 export const useLinks = () => {
   const contents = useContentStore((state) => state.contents)
@@ -251,7 +259,6 @@ export const useLinks = () => {
     getILinkFromNodeid,
     getPathFromNodeid,
     createLink,
-    getTitleFromPath,
     getPathFromShared,
     getNodePathForSave,
     getNodePathAndTitle,

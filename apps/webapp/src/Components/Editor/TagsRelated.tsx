@@ -1,6 +1,8 @@
-import hashtagIcon from '@iconify/icons-ri/hashtag'
 import React, { useEffect, useState } from 'react'
 
+import hashtagIcon from '@iconify/icons-ri/hashtag'
+
+import { mog } from '@mexit/core'
 import { InfoSubHeading, Note, TagFlex, TagsFlex } from '@mexit/shared'
 import { InfoWidgetWrapper } from '@mexit/shared'
 
@@ -10,6 +12,7 @@ import { useTags } from '../../Hooks/useTags'
 import Collapse from '../../Layout/Collapse'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
+import { TagsLabel } from '../Sidebar/TagLabel'
 import NodeLink from './NodeLink'
 
 interface TagsRelated {
@@ -52,7 +55,6 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   const analysisTags = useAnalysisStore((state) => state.analysis.tags)
   const [relNodes, setRelNodes] = useState<string[]>([])
   const [tags, setTags] = useState<string[]>([])
-  const { goTo } = useRouting()
 
   useEffect(() => {
     setRelNodes(getRelatedNodes(nodeid, fromAnalysis))
@@ -61,10 +63,6 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   useEffect(() => {
     setTags(getTags(nodeid, fromAnalysis))
   }, [nodeid, tagsCache, analysisTags])
-
-  const navigateToTag = (tag: string) => {
-    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
-  }
 
   // mog('TagsRelated', { nodeid, relNodes, tags, analysisTags })
 
@@ -81,20 +79,8 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
       >
         {tags.length > 0 ? (
           <>
-            <TagsFlex>
-              {tags.map((t) => (
-                <TagFlex
-                  key={`info_tags_${nodeid}_${t}`}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    navigateToTag(t)
-                  }}
-                >
-                  #{t}
-                </TagFlex>
-              ))}
-            </TagsFlex>
-            {relNodes.length > 0 ? <InfoSubHeading>Related Nodes</InfoSubHeading> : null}
+            <TagsLabel tags={tags.map((t) => ({ value: t }))} />
+            {relNodes.length > 0 ? <InfoSubHeading>Related Notes</InfoSubHeading> : null}
             {relNodes.map((n) => (
               <NodeLink key={`info_tag_related_${nodeid}_${n}`} keyStr={`info_tag_related_${nodeid}_${n}`} nodeid={n} />
             ))}
@@ -102,7 +88,7 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
         ) : (
           <>
             <Note>No Tags found.</Note>
-            <Note>Create tags with # view them and related nodes here.</Note>
+            <Note>Create Tags with # view them and related Notes here.</Note>
           </>
         )}
       </Collapse>
@@ -114,33 +100,13 @@ export const TagsRelatedTiny = ({ nodeid }: TagsRelated) => {
   const { getTags } = useTags()
   const tagsCache = useDataStore((state) => state.tagsCache)
   const [tags, setTags] = useState<string[]>([])
-  const { goTo } = useRouting()
 
   useEffect(() => {
+    mog('TAGS ARE', { tagsCache, tags, t: getTags(nodeid) })
     setTags(getTags(nodeid))
   }, [nodeid, tagsCache])
 
-  const navigateToTag = (tag: string) => {
-    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
-  }
-
-  // mog('TagsRelated', { nodeid, tags })
-
-  return tags.length > 0 ? (
-    <TagsFlex>
-      {tags.map((t) => (
-        <TagFlex
-          key={`info_tags_${nodeid}_${t}`}
-          onClick={(e) => {
-            e.preventDefault()
-            navigateToTag(t)
-          }}
-        >
-          #{t}
-        </TagFlex>
-      ))}
-    </TagsFlex>
-  ) : null
+  return tags.length > 0 ? <TagsLabel tags={tags.map((tag) => ({ value: tag }))} /> : null
 }
 
 export default TagsRelated

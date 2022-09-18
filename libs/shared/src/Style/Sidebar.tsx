@@ -98,6 +98,13 @@ export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
   }
 `
 
+export const ItemTitleText = styled.div`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 export const ItemTitle = styled.div`
   flex-grow: 1;
   flex-shrink: 1;
@@ -105,9 +112,6 @@ export const ItemTitle = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  span {
-    ${Ellipsis}
-  }
 
   svg {
     flex-shrink: 0;
@@ -146,20 +150,38 @@ export const ItemContent = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
 `
 
+export const UnreadIndicator = styled.div`
+  color: ${({ theme }) => theme.colors.primary};
+  svg {
+    height: 0.75rem;
+    width: 0.75rem;
+  }
+`
+
 export const StyledTreeItem = styled.div<{
   selected?: boolean
+  hasIconHover?: boolean
+  isStub?: boolean
   isDragging?: boolean
   isBeingDroppedAt?: boolean
   hasMenuOpen?: boolean
   noSwitcher?: boolean
+  isUnread?: boolean
+  isHighlighted?: boolean
 }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding-right: 16px;
+  padding-right: 8px;
 
-  transition: 0.1s ease;
+  transition: 0.25s ease;
+
+  ${({ isUnread }) =>
+    isUnread &&
+    css`
+      font-weight: bold;
+    `}
 
   ${({ noSwitcher, theme }) =>
     noSwitcher &&
@@ -167,8 +189,8 @@ export const StyledTreeItem = styled.div<{
       padding-left: ${theme.spacing.small};
     `}
 
-  ${({ hasMenuOpen, theme }) =>
-    hasMenuOpen &&
+  ${({ hasMenuOpen, isHighlighted, theme }) =>
+    (hasMenuOpen || isHighlighted) &&
     css`
       background: ${transparentize(0.5, theme.colors.gray[7])};
       color: ${theme.colors.text.fade};
@@ -201,6 +223,16 @@ export const StyledTreeItem = styled.div<{
       }
     `}
 
+  ${({ isStub }) =>
+    isStub &&
+    css`
+      color: ${({ theme }) => theme.colors.gray[5]};
+      svg {
+        color: ${({ theme }) => theme.colors.gray[5]};
+      }
+      background-color: transparent;
+    `}
+
   ${({ isBeingDroppedAt, isDragging, theme }) =>
     (isBeingDroppedAt || isDragging) &&
     css`
@@ -210,6 +242,23 @@ export const StyledTreeItem = styled.div<{
       `}
       background: ${theme.colors.gray[7]};
       box-shadow: inset 0 0 0 1px ${isDragging ? theme.colors.secondary : theme.colors.secondary};
+    `}
+
+
+  ${({ hasIconHover }) =>
+    hasIconHover === true &&
+    css`
+      .iconOnHover {
+        display: none;
+      }
+      &:hover {
+        .iconOnHover {
+          display: inherit;
+        }
+        .defaultIcon {
+          display: none;
+        }
+      }
     `}
 `
 

@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 
 import { CollapseHeader, CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
+import { ScrollStyles } from './Helpers'
 import { Ellipsis } from './Search'
 import { TabBody } from './Tab.Styles'
 
@@ -218,10 +219,10 @@ export const MainNav = styled.div<FocusModeProp>`
   align-items: center;
   flex-shrink: 0;
   width: 86px;
+  z-index: 11;
 
   min-height: 100%;
   transition: opacity 0.3s ease-in-out;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
   padding: 0 0;
   gap: ${({ theme }) => theme.spacing.small};
   user-select: none;
@@ -230,49 +231,58 @@ export const MainNav = styled.div<FocusModeProp>`
 `
 
 export interface NavWrapperProps extends FocusModeProp {
-  expanded: boolean
-  show: boolean
+  $expanded: boolean
+  $show: boolean
 }
 
 export interface SideNavProps extends NavWrapperProps {
-  overlaySidebar: boolean
-  side: 'left' | 'right'
+  $overlaySidebar: boolean
+  $side: 'left' | 'right'
+  $isUserEditing?: boolean
 }
+
+const sidebarPos = ({ $overlaySidebar, theme, $side }) =>
+  $side === 'left'
+    ? $overlaySidebar
+      ? css`
+          position: fixed;
+          top: ${theme.additional.hasBlocks ? '2rem' : '0'};
+          left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : '86px'};
+          background: ${transparentize(0.5, theme.colors.background.sidebar)};
+          backdrop-filter: blur(10px);
+        `
+      : css`
+          position: relative;
+        `
+    : $overlaySidebar
+    ? // Now the RHS
+      css`
+        position: fixed;
+        top: ${theme.additional.hasBlocks ? '2rem' : '0'};
+        right: ${theme.additional.hasBlocks ? '1rem' : '0'};
+        background: ${transparentize(0.5, theme.colors.background.sidebar)};
+        backdrop-filter: blur(10px);
+      `
+    : css`
+        position: relative;
+      `
 
 export const SideNav = styled(animated.div)<SideNavProps>`
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100%;
+  height: 100%;
   z-index: 10;
-  background-color: ${({ theme, side }) => transparentize(side === 'left' ? 0.25 : 0.4, theme.colors.gray[9])};
-  padding: ${({ theme }) => theme.spacing.large} 0;
-  backdrop-filter: blur(10px);
+  padding: ${({ theme }) => theme.spacing.large} 0 0;
 
-  ${({ overlaySidebar, theme, side }) =>
-    side === 'left'
-      ? overlaySidebar
-        ? css`
-            position: fixed;
-            top: ${theme.additional.hasBlocks ? '2rem' : '0'};
-            left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : '86px'};
-          `
-        : css`
-            position: relative;
-          `
-      : overlaySidebar
-      ? // Now the RHS
-        css`
-          position: fixed;
-          top: ${theme.additional.hasBlocks ? '2rem' : '0'};
-          right: ${theme.additional.hasBlocks ? '1rem' : '0'};
-        `
-      : css`
-          position: relative;
-        `}
+  & div {
+    ${({ $isUserEditing }) => ScrollStyles($isUserEditing ? 'transparent' : undefined)}
+  }
+  ${sidebarPos}
 
-  ${({ theme, expanded, show }) =>
-    expanded &&
-    show &&
+  ${({ $expanded, $show }) =>
+    $expanded &&
+    $show &&
     css`
       width: 100%;
     `}
@@ -281,7 +291,11 @@ export const SideNav = styled(animated.div)<SideNavProps>`
     height: calc(100vh - 9rem);
   }
 
-  ${(props) => focusStyles(props)}
+  ${focusStyles}
+`
+
+export const RHSideNav = styled(SideNav)`
+  background: ${({ theme }) => theme.colors.background.sidebar};
 `
 
 export const NavWrapper = styled(animated.div)<NavWrapperProps>`
@@ -292,6 +306,8 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
   min-height: 100%;
   padding: 0 0;
   user-select: none;
+
+  background: ${({ theme }) => theme.colors.background.sidebar};
 
   ${(props) => focusStyles(props)}
 
