@@ -1,10 +1,15 @@
 import { client, useAuth } from '@workduck-io/dwindle'
 
 import { apiURLs, WORKSPACE_HEADER } from '@mexit/core'
+
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLinks } from './useLinks'
 
+/**
+ * Has been repurposed into starred notes
+ * TODO: Refactor after namespaces from backend
+ */
 export const useBookmarks = () => {
   const setBookmarks = useDataStore((state) => state.setBookmarks)
   const addBookmarks = useDataStore((state) => state.addBookmarks)
@@ -16,7 +21,7 @@ export const useBookmarks = () => {
 
   const isBookmark = (nodeid: string) => {
     const bookmarks = useDataStore.getState().bookmarks
-    return bookmarks.indexOf(nodeid) > -1
+    return [...bookmarks].indexOf(nodeid) > -1
   }
 
   const addBookmark = async (nodeid: string): Promise<boolean> => {
