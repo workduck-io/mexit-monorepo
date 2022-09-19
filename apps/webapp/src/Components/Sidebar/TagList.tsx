@@ -7,6 +7,8 @@ import { mog } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
+import { SidebarHeaderLite } from './Sidebar.space.header'
+import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
 const TagList = () => {
@@ -16,8 +18,9 @@ const TagList = () => {
   // const [tags, setTags] = useState(Object.keys(cleanCache))
   const tags = getAllTags().map((t) => ({
     id: t,
-    title: t,
-    icon: hashtag
+    label: t,
+    icon: hashtag,
+    data: t
   }))
 
   const tag = isTagsView && isTagsView.params?.tag
@@ -31,14 +34,18 @@ const TagList = () => {
   mog('Tags', { tags, isTagsView, tag })
 
   return (
-    <SidebarList
-      showSearch
-      searchPlaceholder="Filter tags..."
-      emptyMessage="No tags found"
-      items={tags}
-      selectedItemId={tag}
-      onClick={navigateToTag}
-    />
+    <SidebarWrapper>
+      <SidebarHeaderLite title="Tags" icon={hashtag} />
+
+      <SidebarList
+        showSearch
+        searchPlaceholder="Filter tags..."
+        emptyMessage="No tags found"
+        items={tags}
+        selectedItemId={tag}
+        onClick={navigateToTag}
+      />
+    </SidebarWrapper>
   )
 }
 

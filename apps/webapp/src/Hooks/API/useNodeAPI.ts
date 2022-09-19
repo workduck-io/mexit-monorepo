@@ -22,7 +22,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { useInternalLinks } from '../useInternalLinks'
-import { useLinks } from '../useLinks'
+import { getTitleFromPath, useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useTags } from '../useTags'
 import { useUpdater } from '../useUpdater'
@@ -44,7 +44,7 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTags } = useTags()
-  const { getPathFromNodeid, getTitleFromPath, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
+  const { getPathFromNodeid, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
   const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore(
     ({ setNodePublic, setNodePrivate, checkNodePublic }) => ({

@@ -11,6 +11,15 @@ export const SidebarListWrapper = styled.div<SidebarListWrapperProps>`
   flex-grow: 1;
 `
 
+export const EmptyMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.text.fade};
+
+  padding: ${({ theme }) => theme.spacing.medium};
+`
+
 export const FilteredItemsWrapper = styled.div<{ hasDefault?: boolean }>`
   display: flex;
   flex-direction: column;

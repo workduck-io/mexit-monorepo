@@ -1,14 +1,16 @@
 import React from 'react'
 
+import { ContextMenuContent } from '@radix-ui/react-context-menu'
 import styled, { useTheme } from 'styled-components'
 
+import { SharedNode } from '@mexit/core'
 import { Centered, SharedNodeIcon, SharedNodeIconify } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
-import SidebarList from '../SidebarList'
+import SidebarList, { SidebarListItem } from '../SidebarList'
 
 export const ItemContent = styled.div`
   cursor: pointer;
@@ -20,6 +22,20 @@ export const ItemContent = styled.div`
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.tiny};
 `
+
+interface SharedNoteContextMenuProps {
+  item: SidebarListItem<SharedNode>
+}
+
+const SharedNoteContextMenu = ({ item }: SharedNoteContextMenuProps) => {
+  return (
+    <>
+      <ContextMenuContent>
+        {/* <MuteMenuItem lastOpenedState={item?.lastOpenedState} nodeid={item.id} /> */}
+      </ContextMenuContent>
+    </>
+  )
+}
 
 const SharedNotes = () => {
   const sharedNodes = useDataStore((store) => store.sharedNodes)
@@ -40,13 +56,16 @@ const SharedNotes = () => {
       noMargin
       items={sharedNodes.map((node) => ({
         id: node.nodeid,
-        title: node.path,
-        icon: SharedNodeIconify
+        label: node.path,
+        icon: SharedNodeIconify,
+        lastOpenedId: node.nodeid,
+        data: node
       }))}
       onClick={onOpenNode}
       showSearch
+      ItemContextMenu={SharedNoteContextMenu}
       selectedItemId={node.nodeid}
-      searchPlaceholder="Filter shared notes..."
+      searchPlaceholder="Filter Shared Notes"
       emptyMessage="No shared notes found"
     />
   ) : (

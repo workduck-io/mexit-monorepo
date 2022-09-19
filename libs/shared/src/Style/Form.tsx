@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { transparentize } from 'polished'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
-import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
 
 export enum TextFieldHeight {
@@ -11,7 +12,10 @@ export enum TextFieldHeight {
 }
 
 interface InputProps {
+  transparent?: boolean
+  isDirty?: boolean
   isSelected?: boolean
+  // appType?: AppType
   error?: boolean
   center?: boolean
 }
@@ -28,6 +32,23 @@ export const Input = styled.input<InputProps>`
     border-color: ${({ theme }) => theme.colors.primary};
     outline: none;
   }
+
+  ${({ transparent, isDirty, theme }) =>
+    transparent &&
+    css`
+      background-color: transparent;
+      border: 1px solid transparent;
+      &:hover,
+      &:focus {
+        background-color: ${theme.colors.form.input.bg};
+        border: 1px solid ${theme.colors.form.input.border};
+      }
+      ${isDirty &&
+      css`
+        background-color: ${theme.colors.form.input.bg};
+        border: 1px solid ${theme.colors.form.input.border};
+      `}
+    `}
 
   ${({ center }) =>
     center &&

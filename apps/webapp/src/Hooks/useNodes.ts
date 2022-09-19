@@ -1,12 +1,15 @@
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
-import { AccessLevel, ILink, SharedNode, NodeType, getParentBreadcurmbs } from '@mexit/core'
+import { AccessLevel, ILink, SharedNode, NodeType, getParentBreadcurmbs, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used
 export const useNodes = () => {
+  const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
+
   const isInArchive = (nodeid: string): boolean => {
     const archive = useDataStore.getState().archive
     const res = archive.map((l) => l.nodeid).includes(nodeid)
@@ -60,6 +63,38 @@ export const useNodes = () => {
     return NodeType.MISSING
   }
 
+  const updateBaseNode = (): ILink => {
+    const nodeILinks = useDataStore.getState().ilinks
+    const baseNodePath = useDataStore.getState().baseNodeId
+    const localBaseNode = nodeILinks.find((l) => l.path === baseNodePath)
+
+    if (!localBaseNode) {
+      const lastOpenedNodeId = useRecentsStore.getState().lastOpened?.at(0)
+      if (lastOpenedNodeId) {
+        const node = getNode(lastOpenedNodeId)
+
+        if (node) {
+          mog(`Setting Recent Node ${node.path}: ${node.nodeid}`)
+
+          setBaseNodeId(node?.path)
+          return node
+        }
+      }
+
+      if (!lastOpenedNodeId) {
+        const topNode = nodeILinks.at(0)
+
+        if (topNode) {
+          mog(`Setting Base Node to first Node of hierarchy ${topNode.path}: ${topNode.nodeid}`)
+          setBaseNodeId(topNode?.path)
+          return topNode
+        }
+      }
+    }
+
+    return localBaseNode
+  }
+
   const getNodeBreadcrumbs = (nodeid: string): BreadcrumbItem[] => {
     const nodes = useDataStore.getState().ilinks
     const node = nodes.find((l) => l.nodeid === nodeid)
@@ -105,6 +140,7 @@ export const useNodes = () => {
     isSharedNode,
     accessWhenShared,
     getNodeType,
+    updateBaseNode,
     getNodeBreadcrumbs
   }
 }

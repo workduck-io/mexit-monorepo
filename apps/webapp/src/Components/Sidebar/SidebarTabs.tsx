@@ -15,55 +15,11 @@ import Tabs, { SidebarTab, SingleTabType, TabType } from '../../Views/Tabs'
 import ArchiveSidebar from './ArchiveSidebar'
 import Bookmarks from './Bookmarks'
 import SharedNotes from './SharedNotes'
+import { NoteSidebar } from './Sidebar.notes'
 import SnippetList from './SnippetList'
 import TagList from './TagList'
 import TaskViewList from './TaskViewList'
 import { TreeContainer } from './Tree'
-
-const NodeSidebar = () => {
-  const sidebar = useLayoutStore((store) => store.sidebar)
-  const [openedTab, setOpenedTab] = useState<SingleTabType>(SidebarTab.hierarchy)
-  const replaceAndAddActionToPoll = useApiStore((store) => store.replaceAndAddActionToPoll)
-  const theme = useTheme()
-
-  const tabs: Array<TabType> = useMemo(
-    () => [
-      {
-        label: <MexIcon $noHover icon="ri:draft-line" width={24} height={24} />,
-        type: SidebarTab.hierarchy,
-        component: <TreeContainer />,
-        tooltip: 'All Notes'
-      },
-      {
-        label: <SharedNodeIcon fill={theme.colors.text.default} height={22} width={22} />,
-        component: <SharedNotes />,
-        type: SidebarTab.shared,
-        tooltip: 'Shared Notes'
-      },
-      {
-        label: <MexIcon $noHover icon="ri:bookmark-line" width={24} height={24} />,
-        type: SidebarTab.bookmarks,
-        component: <Bookmarks />,
-        tooltip: 'Bookmarks'
-      }
-    ],
-    [theme]
-  )
-
-  usePolling()
-
-  return (
-    <Tabs
-      visible={sidebar.expanded}
-      openedTab={openedTab}
-      onChange={(tab) => {
-        setOpenedTab(tab)
-        replaceAndAddActionToPoll(tab as PollActions)
-      }}
-      tabs={tabs}
-    />
-  )
-}
 
 const SidebarTabs = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
@@ -80,7 +36,7 @@ const SidebarTabs = () => {
 
   if (!sidebar.show) return <></>
 
-  if (isEditor) return <NodeSidebar />
+  if (isEditor) return <NoteSidebar />
 
   if (isSnippet || isSnippetNote) return <SnippetList />
 

@@ -13,7 +13,10 @@ import { authStoreConstructor } from '@mexit/core'
 
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
+import useLoad from '../Hooks/useLoad'
+import { useNodes } from '../Hooks/useNodes'
 import { usePortals } from '../Hooks/usePortals'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSnippets } from '../Hooks/useSnippets'
 import { getEmailStart } from '../Utils/constants'
 import { useApiStore } from './useApiStore'
@@ -180,6 +183,9 @@ export const useInitializeAfterAuth = () => {
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const addUser = useUserCacheStore((s) => s.addUser)
   const { updateSnippets } = useSnippets()
+  const { updateBaseNode } = useNodes()
+  const { loadNode } = useLoad()
+  const { goTo } = useRouting()
 
   const { refreshToken } = useAuth()
   const { initPortals } = usePortals()
@@ -239,10 +245,26 @@ export const useInitializeAfterAuth = () => {
       const initPortalsP = initPortals()
       const refreshILinksP = refreshILinks()
 
-      const initialSnippetsResult = (await Promise.allSettled([initialSnippetsP, initPortalsP, refreshILinksP]))[0]
+      const [initialSnippetsResult, initialPortalsResult, initialILinksResult] = await Promise.allSettled([
+        initialSnippetsP,
+        initPortalsP,
+        refreshILinksP
+      ])
 
       if (initialSnippetsResult.status === 'fulfilled') updateSnippets(initialSnippetsResult.value)
       getInitialSnippets()
+
+      if (initialILinksResult.status === 'fulfilled') {
+        const baseNode = updateBaseNode()
+
+        loadNode(baseNode?.nodeid, {
+          fetch: true,
+          savePrev: false,
+          withLoading: false
+        })
+
+        goTo(ROUTE_PATHS.node, NavigationType.replace, baseNode?.nodeid)
+      }
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {

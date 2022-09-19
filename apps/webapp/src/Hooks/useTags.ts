@@ -18,9 +18,8 @@ export interface RelatedNodes {
 }
 
 export const useTags = () => {
-  // const contents = useContentStore((state) => state.contents)
-  const setTags = useDataStore((store) => store.setTags)
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
+  const setTags = useDataStore((state) => state.setTags)
   const { getPathFromNodeid } = useLinks()
   const { isInArchive } = useNodes()
 
@@ -33,10 +32,12 @@ export const useTags = () => {
       return _getTags(nodeid, tagsCache)
     }
     const analTags = useAnalysisStore.getState().analysis.tags
-
-    // mog('getTags', { analTags })
-
     return analTags
+  }
+
+  const getAllTags = (): string[] => {
+    const tagsCache = useDataStore.getState().tagsCache
+    return Object.keys(tagsCache)
   }
 
   const hasTags = (nodeid: string): boolean => {
@@ -154,16 +155,27 @@ export const useTags = () => {
       const oldTagsFromStore = oldTags.map((t) => t.value)
       const alltags = Settify([...oldTagsFromStore, ...newTagsForStore]).map(generateTag)
 
-      // console.log('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags, alltags })
+      // mog('We are updating', { nodeid, content, tagsCache, updatedTags, newCacheTags, alltags })
       setTags(alltags)
       updateTagsCache(newTagsCache)
     }
   }
 
-  const getAllTags = (): string[] => {
+  const getMostUsedTags = () => {
     const tagsCache = useDataStore.getState().tagsCache
-    return Object.keys(tagsCache)
+    const tagsWithFreq: Array<{ tag: string; freq: number }> = Object.entries(tagsCache).reduce((p, [k, v]) => {
+      return [...p, { tag: k, freq: v.nodes.length }]
+    }, [])
+    return tagsWithFreq
   }
 
-  return { getRelatedNodes, getNodesAndCleanCacheForTag, updateTagsFromContent, getTags, hasTags, getAllTags }
+  return {
+    getRelatedNodes,
+    getMostUsedTags,
+    getNodesAndCleanCacheForTag,
+    updateTagsFromContent,
+    getTags,
+    getAllTags,
+    hasTags
+  }
 }

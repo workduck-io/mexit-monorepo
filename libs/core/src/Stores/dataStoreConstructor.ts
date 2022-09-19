@@ -289,8 +289,9 @@ export interface FlatItem {
   parentNodeId?: string
   tasks?: number
   reminders?: number
+  // lastOpenedState?: LastOpenedState
   icon?: string
-  createdAt?: number
+  stub?: boolean
 }
 
 export const sanatizeLinks = (links: ILink[]): FlatItem[] => {

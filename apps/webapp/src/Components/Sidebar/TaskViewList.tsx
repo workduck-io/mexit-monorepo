@@ -5,6 +5,8 @@ import stackLine from '@iconify/icons-ri/stack-line'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
+import { SidebarHeaderLite } from './Sidebar.space.header'
+import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 import TaskViewContextMenu from './TaskViewContextMenu'
 
@@ -60,19 +62,23 @@ const TaskViewList = () => {
   // mog('Snippy', { snippets, showSelected, location })
 
   return (
-    <SidebarList
-      ItemContextMenu={TaskViewContextMenu}
-      items={sortedViews}
-      onClick={(item) => onOpenView(item)}
-      selectedItemId={currentView?.id}
-      showSearch
-      searchPlaceholder="Filter Task Views..."
-      defaultItem={{
-        title: 'Default',
-        id: 'default',
-        icon: home7Line
-      }}
-    />
+    <SidebarWrapper>
+      <SidebarHeaderLite title="Task Views" icon={stackLine} />
+      <SidebarList
+        ItemContextMenu={TaskViewContextMenu}
+        items={sortedViews.map(({ title, ...t }) => ({ ...t, label: title, data: t }))}
+        onClick={(item) => onOpenView(item)}
+        selectedItemId={currentView?.id}
+        showSearch
+        searchPlaceholder="Filter Task Views..."
+        defaultItem={{
+          label: 'Default',
+          id: 'default',
+          icon: home7Line,
+          data: {}
+        }}
+      />
+    </SidebarWrapper>
   )
 }
 

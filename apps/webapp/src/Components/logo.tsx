@@ -7,10 +7,11 @@ import styled, { css, useTheme } from 'styled-components'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { FocusModeProp, focusStyles } from '@mexit/shared'
+import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
 
 import useLayout from '../Hooks/useLayout'
 import { useKeyListener } from '../Hooks/useShortcutListener'
+import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSidebarTransition } from './Sidebar/Transition'
@@ -36,6 +37,7 @@ export const Logo = () => {
 
 interface SidebarToggleWrappperProps extends FocusModeProp {
   expanded: boolean
+  $isVisible?: boolean
   show: boolean
   side: 'right' | 'left'
   endColumnWidth?: string
@@ -43,36 +45,48 @@ interface SidebarToggleWrappperProps extends FocusModeProp {
 
 export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
   position: absolute;
+  display: flex;
+  align-items: center;
   ${(props) => focusStyles(props)}
+
   ${({ expanded, side, theme, endColumnWidth }) =>
     side === 'left'
       ? expanded
         ? css`
-            top: ${theme.additional.hasBlocks ? 67 : 64}px;
-            left: ${theme.additional.hasBlocks ? 359 : 346}px;
+            display: none;
           `
         : css`
-            top: ${theme.additional.hasBlocks ? 67 : 64}px;
+            top: ${theme.additional.hasBlocks ? 67 : 44}px;
             left: ${theme.additional.hasBlocks ? 86 : 70}px;
           `
       : expanded
       ? css`
-          top: ${theme.additional.hasBlocks ? 67 : 64}px;
+          top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: calc(${(endColumnWidth ?? '400px') + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
         `
       : css`
-          top: ${theme.additional.hasBlocks ? 67 : 64}px;
+          top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: ${theme.additional.hasBlocks ? 8 : 8}px;
         `}
 
-  transition: left 0.5s ease, top 0.5s ease, right 0.5s ease, background 0.5s ease, box-shadow 0.5s ease;
+  ${({ $isVisible, $focusMode }) => !$focusMode && FadeInOut($isVisible)}
+
+  ${({ $isVisible }) =>
+    $isVisible &&
+    css`
+      transition: left 0.5s ease, top 0.5s ease, right 0.5s ease, background 0.5s ease, box-shadow 0.5s ease;
+    `}
+
   z-index: 11;
   padding: 8px;
-  display: flex;
-  align-items: center;
   border-radius: 100%;
-  background: ${({ theme }) => theme.colors.secondary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background: ${({ theme }) => theme.colors.background.sidebar};
+  color: ${({ theme }) => theme.colors.text.fade};
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
 
   ${({ show }) =>
     !show &&
@@ -83,12 +97,14 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
   &:hover {
     cursor: pointer;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-    background: ${({ theme }) => theme.colors.secondary};
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
 
   &:active {
     transition: background 0.1s ease;
     background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
 `
 
@@ -111,6 +127,7 @@ export const SidebarToggles = () => {
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const toggleRHSidebar = useLayoutStore((store) => store.toggleRHSidebar)
   const toggleAllSidebars = useLayoutStore((store) => store.toggleAllSidebars)
+  const isUserEditing = useEditorStore((state) => state.isEditing)
 
   /** Set shortcuts */
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -143,6 +160,7 @@ export const SidebarToggles = () => {
       >
         <SidebarToggleWrapper
           side="left"
+          $isVisible={!isUserEditing}
           onClick={toggleSidebar}
           expanded={sidebar.expanded}
           show={sidebar.show}
@@ -160,6 +178,7 @@ export const SidebarToggles = () => {
       >
         <SidebarToggleWrapper
           side="right"
+          $isVisible={!isUserEditing}
           onClick={toggleRHSidebar}
           expanded={rhSidebar.expanded}
           show={rhSidebar.show}

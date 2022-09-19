@@ -22,6 +22,8 @@ export const REMINDER_ID_PREFIX = 'REMINDER'
 export const TASK_VIEW_PREFIX = 'TASK_VIEW'
 export const SnippetCommandPrefix = `snip`
 
+export const HASH_SEPARATOR = '#'
+
 export const getSnippetCommand = (title: string) => `${SnippetCommandPrefix}${SEPARATOR}${title}`
 export const generateNodeUID = () => `${NODE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 export const generateNodeId = () => `${NODE_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
