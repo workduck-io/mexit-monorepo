@@ -1,7 +1,0 @@
-{
-  "root": "libs/shared",
-  "sourceRoot": "libs/shared/src",
-  "projectType": "library",
-  "tags": [],
-  "targets": {}
-}
