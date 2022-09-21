@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import GlobalStyle from './Styles/GlobalStyle'
+import WDLogo from './Logo'
 
 const StyledApp = styled.div`
   display: flex;
@@ -31,7 +32,24 @@ const Container = styled.div`
 
     img {
       width: 100%;
+      padding: 1rem;
     }
+  }
+`
+
+const LogoWrapper = styled.div`
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.5rem;
+  transition: padding 0.5s ease;
+
+  @media (max-width: 600px) {
+    top: 0.5rem;
+    left: 0.5rem;
   }
 `
 
@@ -39,6 +57,9 @@ const App = () => {
   return (
     <StyledApp>
       <GlobalStyle />
+      <LogoWrapper>
+        <WDLogo height={'56'} width={'56'} />
+      </LogoWrapper>
 
       <Container>
         <div>

@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: #FB4D3D;
+    color: #ffcc32;
   }
 
   #root {
