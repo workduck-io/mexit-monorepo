@@ -19,7 +19,7 @@ export const useInternalLinks = () => {
 
   const getILinks = async () => {
     return await client
-      .get(apiURLs.getILink(), {
+      .get(apiURLs.namespaces.getHierarchy, {
         headers: {
           'mex-workspace-id': getWorkspaceId()
         }

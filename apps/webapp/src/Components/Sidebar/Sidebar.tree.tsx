@@ -1,25 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ILink } from '@mexit/core'
+import { defaultContent, ILink } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { getTreeFromLinks, getPartialTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
-import { MexTreeWrapper, SpaceList } from './Sidebar.style'
+import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
 import { SidebarListFilter } from './SidebarList.style'
 import Tree from './Tree'
 
 interface SpaceTreeProps {
+  spaceId: string
   items: ILink[]
   filterText?: string
 }
@@ -30,7 +33,7 @@ interface SpaceTreeProps {
  * - Displayes items in a Tree
  * - Filterable
  */
-export const MexTree = ({ items, filterText }: SpaceTreeProps) => {
+export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
   /* To Add
    *
    * - MultiSelect
@@ -40,7 +43,7 @@ export const MexTree = ({ items, filterText }: SpaceTreeProps) => {
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<number>(-1)
   const { goTo } = useRouting()
-  const { push } = useNavigation()
+  const { createNewNote } = useCreateNewNote()
 
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -80,8 +83,17 @@ export const MexTree = ({ items, filterText }: SpaceTreeProps) => {
   }, [selected, matchedFlatItems])
 
   const onOpenItem = (nodeid: string) => {
-    push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+  }
+
+  const createNewNoteInNamespace = () => {
+    // mog('New Note', { spaceId })
+    const note = createNewNote({ namespace: spaceId, noteContent: defaultContent.content })
+    goTo(ROUTE_PATHS.node, NavigationType.push, note?.nodeid)
+    // updater({
+    //   id: note?.nodeid,
+    //   namespaceId: namespaceId,
+    // })
   }
 
   useEffect(() => {
@@ -128,18 +140,27 @@ export const MexTree = ({ items, filterText }: SpaceTreeProps) => {
 
   return (
     <MexTreeWrapper>
-      <SidebarListFilter noMargin>
-        <Icon icon={searchLine} />
-        <Input
-          placeholder={filterText ?? 'Filter items'}
-          onChange={debounce((e) => onSearchChange(e), 250)}
-          ref={inputRef}
-          // onKeyUp={debounce(onKeyUpSearch, 250)}
-        />
-      </SidebarListFilter>
-      <SpaceList>
-        <Tree initTree={filteredTree ? filteredTree : initTree} selectedItemId={selectedItem?.data?.nodeid} />
-      </SpaceList>
+      {items.length > 0 ? (
+        <>
+          <SidebarListFilter noMargin>
+            <Icon icon={searchLine} />
+            <Input
+              placeholder={filterText ?? 'Filter items'}
+              onChange={debounce((e) => onSearchChange(e), 250)}
+              ref={inputRef}
+              // onKeyUp={debounce(onKeyUpSearch, 250)}
+            />
+          </SidebarListFilter>
+          <SpaceList>
+            <Tree initTree={filteredTree ? filteredTree : initTree} selectedItemId={selectedItem?.data?.nodeid} />
+          </SpaceList>
+        </>
+      ) : (
+        <CreateNewNoteSidebarButton onClick={createNewNoteInNamespace}>
+          <Icon width={24} icon={addCircleLine} />
+          Create a new note
+        </CreateNewNoteSidebarButton>
+      )}
     </MexTreeWrapper>
   )
 }

@@ -91,10 +91,13 @@ export interface ILink {
    * Uses separator for heirarchy */
   path: string
 
+  namespace: string
+
   /** Iconify Icon string */
   icon?: string
 
   createdAt?: number
+  updatedAt?: number
 
   parentNodeId?: string
 }
@@ -167,6 +170,7 @@ export interface NodeLink {
 
 export interface AddILinkProps {
   ilink: string
+  namespace: string
   nodeid?: string
   openedNodePath?: string
   archived?: boolean
@@ -174,9 +178,10 @@ export interface AddILinkProps {
 }
 
 export interface CheckValidILinkProps {
-  nodePath: string
-  openedNodePath?: string
+  notePath: string
+  openedNotePath?: string
   showAlert?: boolean
+  namespace?: string
 }
 
 export interface NodeProperties {
@@ -184,6 +189,7 @@ export interface NodeProperties {
   id: string
   nodeid: string
   path: string
+  namespace: string
 }
 
 export enum QuickLinkType {

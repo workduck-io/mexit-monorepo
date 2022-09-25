@@ -25,12 +25,14 @@ import {
 } from '@mexit/shared'
 import { View } from '@mexit/shared'
 
+import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
 import { ArchiveHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
+import { useNamespaces } from '../Hooks/useNamespaces'
 import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
@@ -57,6 +59,7 @@ const ActionContainer = styled.div`
 const Archive = () => {
   const archive = useDataStore((store) => store.archive)
 
+  const { getNamespace } = useNamespaces()
   const { unArchiveData, removeArchiveData } = useArchive()
   const [delNode, setDelNode] = useState(undefined)
   const [showModal, setShowModal] = useState(false)
@@ -108,7 +111,8 @@ const Archive = () => {
       id: node.path,
       path: node.path,
       title: node.path.split(SEPARATOR).pop(),
-      nodeid: node.nodeid
+      nodeid: node.nodeid,
+      namespace: node?.namespace
     }
 
     loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
@@ -162,6 +166,7 @@ const Archive = () => {
     const node = archive.find((node) => node.nodeid === item.id)
     const id = `${item.id}_ResultFor_ArchiveSearch`
     const icon = fileList2Line
+    const namespace = getNamespace(node?.namespace)
     if (!item || !node) return null
 
     if (props.view === View.Card) {
@@ -172,6 +177,7 @@ const Archive = () => {
           <ResultHeader>
             <ResultTitle>{node.path}</ResultTitle>
             <ActionContainer>
+              {namespace && <NamespaceTag namespace={namespace} />}
               {/* <StyledIcon
                 fontSize={32}
                 color={theme.colors.primary}
@@ -181,6 +187,7 @@ const Archive = () => {
                 }}
                 icon={unarchiveLine}
               /> */}
+
               <StyledIcon
                 fontSize={32}
                 color="#df7777"
@@ -204,7 +211,10 @@ const Archive = () => {
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
             <Icon icon={icon} />
             <ResultMain>
-              <ResultTitle>{node.path}</ResultTitle>
+              <ResultTitle>
+                {node.path}
+                {namespace && <NamespaceTag namespace={namespace} />}
+              </ResultTitle>
               <ResultDesc>{convertContentToRawText(content, ' ')}</ResultDesc>
             </ResultMain>
           </ResultRow>
@@ -223,12 +233,13 @@ const Archive = () => {
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
     const icon = fileList2Line
+    const namespace = getNamespace(node?.namespace)
     if (item) {
       return (
         <SplitSearchPreviewWrapper id={`splitArchiveSearchPreview_for_${item.id}`}>
           <Title>
             {node.path}
-
+            {namespace && <NamespaceTag namespace={namespace} />}
             <ActionContainer>
               {/* <StyledIcon
                 fontSize={32}

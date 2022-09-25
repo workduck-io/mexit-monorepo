@@ -8,8 +8,17 @@ export interface FocusMode {
 export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'
 
 interface LayoutState {
-  sidebar: { expanded: boolean; show: boolean }
-  rhSidebar: { expanded: boolean; show: boolean }
+  sidebar: {
+    expanded: boolean
+    show: boolean
+    // Width of the sidebar, it does not include the nav
+    width: number
+  }
+  rhSidebar: {
+    expanded: boolean
+    show: boolean
+    // TODO: Add width
+  }
   infobar: { mode: InfobarMode }
   focusMode: FocusMode
   toggleSidebar: () => void
@@ -20,6 +29,8 @@ interface LayoutState {
   setRHSidebarExpanded: (expanded: boolean) => void
   showRHSidebar: () => void
   hideRHSidebar: () => void
+
+  expandSidebar: () => void
 
   showAllSidebars: () => void
   hideAllSidebars: () => void
@@ -36,6 +47,8 @@ interface LayoutState {
   setShowLoader?: (showLoader: boolean) => void
 }
 
+const SidebarWidth = 276
+
 export const useLayoutStore = create<LayoutState>((set, get) => ({
   // Focus mode
   focusMode: { on: false, hover: false },
@@ -50,9 +63,13 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
   // Sidebar
   sidebar: {
     expanded: true,
-    show: false
+    show: false,
+    width: SidebarWidth
   },
-  toggleSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, expanded: !state.sidebar.expanded } })),
+  toggleSidebar: () =>
+    set((state) => ({
+      sidebar: { ...state.sidebar, expanded: !state.sidebar.expanded, width: state.sidebar.expanded ? 0 : SidebarWidth }
+    })),
   showSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: true } })),
   hideSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, show: false } })),
 
@@ -65,6 +82,8 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
   setRHSidebarExpanded: (expanded) => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
   showRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
   hideRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: false } })),
+
+  expandSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, expanded: true, width: SidebarWidth } })),
 
   collapseAllSidebars: () =>
     set((state) => ({
@@ -81,13 +100,13 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
   hideAllSidebars: () =>
     set((state) => ({
       sidebar: { ...state.sidebar, show: false },
-      rhSidebar: { ...state.rhSidebar, show: false }
+      rhSidebar: { ...state.rhSidebar, show: false, expanded: false }
     })),
 
   toggleAllSidebars: () =>
     set((state) => ({
       sidebar: { ...state.sidebar, expanded: !state.sidebar.expanded },
-      rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded }
+      rhSidebar: { ...state.rhSidebar, expanded: state.rhSidebar.show && !state.rhSidebar.expanded }
     })),
 
   // Infobar

@@ -12,6 +12,20 @@ import {
   SharedNode
 } from './Editor'
 
+// M stands for Multi/Mex/Many (yet to decide)
+export interface MIcon {
+  type: 'URL' | 'ICON' | 'EMOJI'
+  value: string
+}
+
+export interface SingleNamespace {
+  id: string
+  name: string
+  createdAt: number
+  updatedAt: number
+  icon?: MIcon
+}
+
 export interface DataStoreState {
   tags: Tag[]
   ilinks: ILink[]
@@ -23,11 +37,16 @@ export interface DataStoreState {
   publicNodes: any[]
   sharedNodes: SharedNode[]
   slashCommands: SlashCommands
+  namespaces: SingleNamespace[]
 
   initializeDataStore: (initData: InitDataStoreType) => void
 
   // Just to reset everything to initial data
   resetDataStore: () => void
+
+  // Namespaces
+  setNamespaces: (namespaces: SingleNamespace[]) => void
+  addNamespace: (namespace: SingleNamespace) => void
 
   // adds the node
   addILink: (props: AddILinkProps) => ILink | undefined

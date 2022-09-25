@@ -1,24 +1,42 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
+import { StyledNamespaceTag } from './NamespaceTag.style'
+import { Ellipsis } from './Search'
 import { Input } from './ToggleButton'
 
-export const StyledInputWrapper = styled.div`
+export const StyledInputWrapper = styled.div<{ isOverlay: boolean }>`
   width: 100%;
   position: relative;
-  margin: ${({ theme }) => theme.spacing.small} 0;
+  ${({ isOverlay, theme }) =>
+    isOverlay
+      ? css`
+          margin: ${theme.spacing.small} 0;
+        `
+      : css`
+          width: calc(100% - 5rem);
+        `}
+
   ${Input} {
     width: 100%;
   }
 `
 
+export const StyledNodeSelectWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+`
+
 export const StyledCombobox = styled.div`
   display: flex;
-  width: 100%;
   font-size: 1rem;
   align-items: center;
+  flex-grow: 1;
+  flex-shrink: 1;
   svg {
-    margin-left: ${({ theme }) => theme.spacing.small};
+    margin-left: ${({ theme }) => theme.spacing.tiny};
     color: ${({ theme }) => theme.colors.text.fade};
     &.errorIcon {
       color: ${({ theme }) => theme.colors.palette.red};
@@ -45,10 +63,24 @@ export const FilterComboboxToggle = styled.div`
 `
 
 export const SuggestionContentWrapper = styled.div`
-  width: 90%;
+  width: 60%;
+  flex-grow: 1;
 `
-export const SuggestionText = styled.div``
+
+export const SuggestionText = styled.div`
+  flex-shrink: 1;
+  ${Ellipsis}
+`
+
+export const SuggestionTextWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
 export const SuggestionDesc = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
   font-size: 0.8rem;
@@ -86,6 +118,12 @@ export const Suggestion = styled.li<SuggestionProps>`
       ${SuggestionDesc} {
         color: ${({ theme }) => transparentize(0.25, theme.colors.text.oppositePrimary)};
       }
+      ${StyledNamespaceTag} {
+        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        svg {
+          color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        }
+      }
     `}
 `
 
@@ -110,6 +148,7 @@ export const SuggestionError = styled.div`
 
 interface MenuProps {
   isOpen: boolean
+  isOverlay: boolean
   highlightFirst: boolean
 }
 
@@ -117,7 +156,6 @@ export const StyledMenu = styled.ul<MenuProps>`
   padding: ${({ theme }) => theme.spacing.small};
   margin-top: 8px;
   margin-bottom: 8px;
-  position: absolute;
   background-color: ${({ theme }) => theme.colors.gray[8]};
   width: 100%;
   max-height: 16.2rem;
@@ -126,7 +164,6 @@ export const StyledMenu = styled.ul<MenuProps>`
   outline: 0;
   transition: opacity 0.1s ease;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  /* border: 1px solid ${({ theme }) => theme.colors.gray[7]}; */
   z-index: 1000;
   box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 11px hsla(0, 0%, 0%, 0.1);
 
@@ -134,18 +171,25 @@ export const StyledMenu = styled.ul<MenuProps>`
     background: ${({ theme }) => theme.colors.gray[7]};
   }
 
+  ${({ isOverlay }) =>
+    isOverlay
+      ? css`
+          position: absolute;
+        `
+      : css`
+          position: relative;
+          width: 100%;
+          height: 18rem;
+          box-shadow: none;
+          z-index: inherit;
+        `}
+
   ${({ isOpen }) =>
     !isOpen &&
     css`
       border: none;
       display: none;
-    `}/* ${({ highlightFirst, theme }) =>
-    highlightFirst &&
-    css`
-      ${Suggestion}:first-child {
-        background-color: ${theme.colors.gray[7]};
-      }
-    `} */
+    `}
 `
 
 export const StyledSpotlightInputWrapper = styled.div`

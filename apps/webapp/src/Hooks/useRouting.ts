@@ -23,6 +23,7 @@ export const ROUTE_PATHS = {
   oauth: '/oauth',
   oauthdesktop: '/oauth/desktop',
   share: '/share',
+  namespaceShare: '/share/namespace',
   forgotpassword: '/auth/forgotpassword',
   integrations: '/integrations'
 }

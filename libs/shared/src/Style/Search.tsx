@@ -7,7 +7,7 @@ import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
 import { DataGroup, MetadataWrapper } from './Metadata'
-import { StyledInputWrapper } from './NodeSelect.styles'
+import { StyledInputWrapper } from './NodeSelect.style'
 import { size } from './Responsive'
 import { TagFlex } from './TagsRelated.styles'
 import { Title } from './Typography'
@@ -300,6 +300,9 @@ export const ResultMain = styled.div`
 export const ResultTitle = styled.div`
   ${MainFont};
   ${SearchTransition}
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.tiny};
+
   color: ${({ theme }) => theme.colors.text.default};
 `
 
@@ -536,8 +539,21 @@ export const SplitSearchPreviewWrapper = styled.div`
     gap: ${({ theme }) => theme.spacing.small};
     flex-wrap: wrap;
     cursor: pointer;
-    .title {
+    .title,
+    ${TitleText} {
+      display: flex;
+      align-items: center;
+      gap: ${({ theme }) => theme.spacing.small};
+      padding: 0.75rem 0;
       flex-grow: 1;
+      ${StyledNamespaceTag} {
+        font-size: 1rem;
+        font-weight: 500;
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
     }
     & > svg {
       color: ${({ theme }) => theme.colors.primary};

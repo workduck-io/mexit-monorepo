@@ -3,12 +3,30 @@ import { toast } from 'react-hot-toast'
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
 import { ILink } from '../Types/Editor'
+import { SingleNamespace } from '../Types/Store'
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
-import { SEPARATOR } from './idGenerator'
+import { SEPARATOR, SnippetCommandPrefix } from './idGenerator'
 import { mog } from './mog'
 import { getNameFromPath } from './treeUtils'
 
-const RESERVED_PATHS: string[] = [BASE_DRAFT_PATH, BASE_TASKS_PATH, 'mex', 'sync', 'root']
+const RESERVED_PATHS: string[] = [BASE_DRAFT_PATH, BASE_TASKS_PATH, 'mex', SnippetCommandPrefix, 'sync', 'root']
+
+export const RESERVED_NAMESPACES = {
+  default: 'Personal',
+  shared: 'Shared'
+}
+
+export const SHARED_NAMESPACE: SingleNamespace = {
+  id: 'NAMESPACE_shared',
+  name: RESERVED_NAMESPACES.shared,
+  createdAt: 0,
+  updatedAt: 0,
+  icon: { type: 'ICON', value: 'mex:shared-note' }
+}
+
+export const getNewNamespaceName = (num: number): string => {
+  return `Space ${num}`
+}
 
 export const getPathNum = (path: string) => {
   const numMatch = path.match(/\d+$/)

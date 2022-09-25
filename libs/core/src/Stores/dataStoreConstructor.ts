@@ -1,10 +1,13 @@
+import { produce } from 'immer'
+
 import { defaultCommands } from '../Data/defaultCommands'
 import { Tag, CachedILink, ILink } from '../Types/Editor'
+import { DataStoreState } from '../Types/Store'
 import { Settify, withoutContinuousDelimiter, typeInvert } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
 import { mog } from '../Utils/mog'
-import { getUniquePath } from '../Utils/path'
+import { getAllParentIds, getUniquePath } from '../Utils/path'
 import { getAllParentPaths, getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
@@ -21,13 +24,16 @@ export const dataStoreConstructor = (set, get) => ({
   archive: [],
   publicNodes: [],
   sharedNodes: [],
+  namespaces: [],
   slashCommands: { default: defaultCommands, internal: [] },
+
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
     set({
       ...initData
     })
   },
+
   resetDataStore: () => {
     set({
       tags: [],
@@ -43,6 +49,12 @@ export const dataStoreConstructor = (set, get) => ({
       }
     })
   },
+
+  addNamespace: (namespace) => {
+    set({ namespaces: [...get().namespaces, namespace] })
+  },
+
+  setNamespaces: (namespaces) => set({ namespaces }),
 
   addTag: (tag) => {
     const currentTags = get().tags
@@ -66,28 +78,30 @@ export const dataStoreConstructor = (set, get) => ({
         - with existing add numeric suffix
         - not allowed with reserved keywords
    */
-  addILink: ({ ilink, nodeid, openedNodePath, archived, showAlert }) => {
-    const uniquePath = get().checkValidILink({ nodePath: ilink, openedNodePath, showAlert })
+  addILink: ({ ilink, namespace, nodeid, openedNotePath, archived, showAlert }) => {
+    const uniquePath = get().checkValidILink({ notePath: ilink, openedNotePath, namespace, showAlert })
+    // mog('Unique Path', { uniquePath })
+
     const ilinks = get().ilinks
+    const linksStrings = ilinks.filter((l) => l.namespace === namespace).map((l) => l.path)
 
-    const linksStrings = ilinks.map((l) => l.path)
-
-    const parents = getAllParentPaths(uniquePath) // includes link of child
+    const parents = getAllParentIds(uniquePath) // includes link of child
     const newLinks = parents.filter((l) => !linksStrings.includes(l)) // only create links for non existing
 
     const newILinks = newLinks.map((l) => ({
       nodeid: nodeid && l === uniquePath ? nodeid : generateNodeUID(),
+      namespace,
       path: l,
       icon: getNodeIcon(l)
     }))
 
-    const newLink = newILinks.find((l) => l.path === uniquePath)
+    const newLink = newILinks.find((l) => l.path === uniquePath && l.namespace === namespace)
 
     const userILinks = archived ? ilinks.map((val) => (val.path === uniquePath ? { ...val, nodeid } : val)) : ilinks
+    const createdILinks = [...userILinks, ...newILinks]
 
-    // mog('Adding ILink', { ilink, uniquePath, nodeid, parentId, archived, newLink, newLinks, userILinks, parents })
     set({
-      ilinks: [...userILinks, ...newILinks]
+      ilinks: createdILinks
     })
 
     if (newLink) return newLink
@@ -95,33 +109,34 @@ export const dataStoreConstructor = (set, get) => ({
     return
   },
 
-  checkValidILink: ({ nodePath, openedNodePath, showAlert }) => {
-    const { key, isChild } = withoutContinuousDelimiter(nodePath)
+  checkValidILink: ({ notePath, openedNotePath, showAlert, namespace }) => {
+    const { key, isChild } = withoutContinuousDelimiter(notePath)
 
     // * If `notePath` starts with '.', than create note under 'opened note'.
     if (key) {
-      nodePath = isChild && openedNodePath ? `${openedNodePath}${key}` : key
+      notePath = isChild && openedNotePath ? `${openedNotePath}${key}` : key
     }
 
-    const ilinks = get().ilinks
+    const iLinksOfNamespace = namespace ? get().ilinks.filter((link) => link.namespace === namespace) : get().ilinks
+    // mog('ILINKS OF NOTE ARE', { iLinksOfNamespace, notePath, namespace })
 
-    const linksStrings = ilinks.map((l) => l.path)
-    const reservedOrUnique = getUniquePath(nodePath, linksStrings, showAlert)
-
-    mog('RESERVED', { reservedOrUnique })
+    const linksStrings = iLinksOfNamespace.map((l) => l.path)
+    const reservedOrUnique = getUniquePath(notePath, linksStrings, showAlert)
 
     if (!reservedOrUnique) {
-      throw Error(`ERROR-RESERVED: PATH (${nodePath}) IS RESERVED. YOU DUMB`)
+      throw Error(`ERROR-RESERVED: PATH (${notePath}) IS RESERVED. YOU DUMB`)
     }
 
     return reservedOrUnique.unique
   },
 
   setIlinks: (ilinks) => {
-    // mog('Setting ILinks', { ilinks })
-    set({
-      ilinks
-    })
+    set(
+      produce((draft) => {
+        // @ts-ignore
+        draft.ilinks = ilinks
+      })
+    )
   },
 
   setSlashCommands: (slashCommands) => set({ slashCommands }),
@@ -228,7 +243,9 @@ export const dataStoreConstructor = (set, get) => ({
   },
 
   addInArchive: (archive) => {
-    const userArchive = [...get().archive, ...archive]
+    const prevArchive = get().archive
+    const prevNodeids = prevArchive.map((a) => a.nodeid)
+    const userArchive = [...prevArchive, ...archive.filter((a) => !prevNodeids.includes(a.nodeid))]
     set({ archive: userArchive })
   },
 

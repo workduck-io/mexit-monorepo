@@ -45,7 +45,6 @@ export const ScrollStyles = (color = undefined, width = 10) => css`
     border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
-    min-width: 10px;
     min-height: 32px;
   }
   &::-webkit-scrollbar-thumb:hover {

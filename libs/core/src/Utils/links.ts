@@ -1,6 +1,6 @@
-import { isEqual } from 'lodash'
+import { isEqual, uniq } from 'lodash'
+
 import { CachedILink } from '../Types/Editor'
-import { uniq } from './lodashUtils'
 
 const ELEMENT_INLINE_BLOCK = 'inline_block'
 

@@ -125,6 +125,7 @@ const insertInNested = (iNode: BaseTreeNode, nestedTree: BaseTreeNode[]) => {
 export interface FlatItem {
   id: string
   nodeid: string
+  namespace: string
   parentNodeId?: string
   tasks?: number
   reminders?: number
@@ -316,6 +317,7 @@ export const generateTree = (
           nodeid: n.nodeid,
           path: n.id,
           mex_icon: n.icon,
+          namespace: n.namespace,
           stub: n.stub,
           tasks: nestedItem.tasks,
           reminders: nestedItem.reminders
@@ -343,6 +345,7 @@ export const generateTree = (
             nodeid: n.nodeid,
             path: n.id,
             mex_icon: n.icon,
+            namespace: n.namespace,
             stub: n.stub,
             tasks: nestedItem.tasks,
             reminders: nestedItem.reminders
