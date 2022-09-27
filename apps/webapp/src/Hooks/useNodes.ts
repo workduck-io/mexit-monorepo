@@ -102,12 +102,12 @@ export const useNodes = () => {
     if (node) {
       const parents = getParentBreadcurmbs(node.path, nodes)
 
-      parents.unshift({
-        id: 'space-personal',
-        icon: 'ri:user-line',
-        label: 'Personal',
-        hideLabel: true
-      })
+      // parents.unshift({
+      //   id: 'space-personal',
+      //   icon: 'ri:user-line',
+      //   label: 'Personal',
+      //   hideLabel: true
+      // })
 
       // mog('We have them breadcrumbs', { parents, nodeid, allParents })
       return parents
@@ -118,12 +118,12 @@ export const useNodes = () => {
     if (sharedNode) {
       const parents = getParentBreadcurmbs(sharedNode.path, sharedNodes)
 
-      parents.unshift({
-        id: 'space-shared',
-        icon: 'ri:share-line',
-        label: 'Shared Notes',
-        hideLabel: true
-      })
+      // parents.unshift({
+      //   id: 'space-shared',
+      //   icon: 'ri:share-line',
+      //   label: 'Shared Notes',
+      //   hideLabel: true
+      // })
 
       return parents
     }

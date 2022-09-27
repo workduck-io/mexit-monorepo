@@ -144,7 +144,7 @@ export const NoteSidebar = () => {
   }, [index])
 
   useEffect(() => {
-    if (currentSpace.pollAction) {
+    if (currentSpace?.pollAction) {
       replaceAndAddActionToPoll(currentSpace.pollAction)
     }
   }, [currentSpace])

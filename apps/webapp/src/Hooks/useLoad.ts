@@ -73,7 +73,8 @@ const useLoad = () => {
 
   // const { saveNodeAPIandFs } = useDataSaverFromContent()
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { execRefactorAsync } = useRefactor()
+  // TODO: check why we need execRefactorAsync()
+  const { execRefactor } = useRefactor()
   // const { saveQ } = useSaveQ()
 
   const saveNodeName = (nodeId: string, title?: string) => {
@@ -93,7 +94,7 @@ const useLoad = () => {
 
     if (newNodePath !== nodePath)
       try {
-        execRefactorAsync(
+        execRefactor(
           {
             path: nodePath,
             namespaceID: namespace

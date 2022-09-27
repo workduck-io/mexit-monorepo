@@ -1,7 +1,7 @@
-import { NodeLink } from '@mexit/core'
+import { ILink, NodeLink } from '@mexit/core'
 
-export const doesLinkRemain = (id: string, refactored: NodeLink[]): boolean => {
-  return refactored.map((r) => r.from).indexOf(id) === -1
+export const doesLinkRemain = (nodeid: string, refactored: ILink[]): boolean => {
+  return refactored.map((r) => r.nodeid).indexOf(nodeid) !== -1
 }
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {

@@ -400,7 +400,7 @@ export const useApi = () => {
         console.log(error)
       })
 
-    return data
+    return data as any
   }
 
   const getAllNamespaces = async () => {

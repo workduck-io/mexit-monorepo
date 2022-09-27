@@ -1,57 +1,84 @@
 import create from 'zustand'
 
-import { GenericSearchResult, mog, SearchFilter, isElder, getAllParentPaths } from '@mexit/core'
+import {
+  GenericSearchResult,
+  mog,
+  SearchFilter,
+  isElder,
+  getAllParentPaths,
+  FilterTypeWithOptions,
+  getAllParentIds,
+  Filter,
+  GlobalFilterJoin,
+  SearchFilterFunctions,
+  Filters,
+  idxKey
+} from '@mexit/core'
 
-import { useTags } from './useTags'
-import { useLinks } from './useLinks'
 import { useDataStore } from '../Stores/useDataStore'
+import { useGenericFilterFunctions } from './useFilterFunctions'
+import { getTitleFromPath, useLinks } from './useLinks'
+import { useTags } from './useTags'
 
-export interface FilterStore<Item> {
-  filters: SearchFilter<Item>[]
-  currentFilters: SearchFilter<Item>[]
-  setFilters: (filters: SearchFilter<Item>[]) => void
-  setCurrentFilters: (currentFilters: SearchFilter<Item>[]) => void
+export interface FilterStore {
+  filters: Filters
+  currentFilters: Filter[]
+  globalJoin: GlobalFilterJoin
+  indexes?: idxKey[]
+  setIndexes?: (indexes: idxKey[]) => void
+  setFilters: (filters: Filters) => void
+  setGlobalJoin: (join: GlobalFilterJoin) => void
+  setCurrentFilters: (currentFilters: Filter[]) => void
 }
 
-export const useFilterStoreBase = create<FilterStore<any>>((set) => ({
+export const useFilterStoreBase = create<FilterStore>((set) => ({
   filters: [],
   currentFilters: [],
+  indexes: ['node', 'shared'],
+  globalJoin: 'all',
   setFilters: (filters) => set((state) => ({ ...state, filters })),
-  setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters }))
+  setGlobalJoin: (join) => set((state) => ({ ...state, globalJoin: join })),
+  setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters })),
+  setIndexes: (indexes) => set((state) => ({ ...state, indexes }))
 }))
 
-export const useFilterStore = <Item, Slice>(selector: (state: FilterStore<Item>) => Slice) =>
-  useFilterStoreBase(selector)
+export const useFilterStore = <Slice>(selector: (state: FilterStore) => Slice) => useFilterStoreBase(selector)
 
 export const useFilters = <Item>() => {
-  const filters = useFilterStore((state) => state.filters) as SearchFilter<Item>[]
-  const setFilters = useFilterStore((state) => state.setFilters) as (filters: SearchFilter<Item>[]) => void
-  const currentFilters = useFilterStore((state) => state.currentFilters) as SearchFilter<Item>[]
-  const setCurrentFilters = useFilterStore((state) => state.setCurrentFilters) as (
-    currentFilters: SearchFilter<Item>[]
-  ) => void
+  const filters = useFilterStore((state) => state.filters)
+  const setFilters = useFilterStore((state) => state.setFilters)
+  const currentFilters = useFilterStore((state) => state.currentFilters)
+  const setCurrentFilters = useFilterStore((state) => state.setCurrentFilters)
+  const setGlobalJoin = useFilterStore((state) => state.setGlobalJoin)
+  const tags = useDataStore((state) => state.tags)
+  const ilinks = useDataStore((state) => state.ilinks)
+  const namespaces = useDataStore((state) => state.namespaces)
+  const globalJoin = useFilterStore((state) => state.globalJoin)
+
   const { getTags } = useTags()
 
-  const { getPathFromNodeid } = useLinks()
-  // setFilters: (filters: SearchFilter<any>[]) => void
-  const addFilter = (filter: SearchFilter<Item>) => {
-    setFilters([...filters, filter])
-  }
+  const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
+  const filterFunctions = useGenericFilterFunctions()
 
   const resetFilters = () => {
     setFilters([])
   }
 
-  const addCurrentFilter = (filter: SearchFilter<Item>) => {
+  const addCurrentFilter = (filter: Filter) => {
+    // mog('addCurrentFilter', { filter })
     setCurrentFilters([...currentFilters, filter])
   }
 
-  const removeCurrentFilter = (filter: SearchFilter<Item>) => {
+  const removeCurrentFilter = (filter: Filter) => {
     setCurrentFilters(currentFilters.filter((f) => f.id !== filter.id))
   }
 
+  const changeCurrentFilter = (filter: Filter) => {
+    setCurrentFilters(currentFilters.map((f) => (f.id === filter.id ? filter : f)))
+  }
+
   const applyCurrentFilters = (items: Item[]) => {
-    return applyFilters(items, currentFilters)
+    return applyFilters(items, currentFilters, filterFunctions, globalJoin)
   }
 
   const resetCurrentFilters = () => {
@@ -59,11 +86,7 @@ export const useFilters = <Item>() => {
   }
 
   const generateTagFilters = (items: GenericSearchResult[]) => {
-    const tagsCache = useDataStore.getState().tagsCache
-    const currentFilters_ = currentFilters as unknown as SearchFilter<GenericSearchResult>[]
-    const filteredItems = currentFilters_.length > 0 ? applyFilters(items, currentFilters_) : items
-
-    const rankedTags = filteredItems.reduce((acc, item) => {
+    const rankedTags = items.reduce((acc, item) => {
       const tags = getTags(item.id)
       if (tags) {
         tags.forEach((tag) => {
@@ -77,39 +100,41 @@ export const useFilters = <Item>() => {
       return acc
     }, {} as { [tag: string]: number })
 
-    const tagsFilter: SearchFilter<GenericSearchResult>[] = Object.entries(rankedTags).reduce(
-      (p: SearchFilter<GenericSearchResult>[], [tag, rank]) => {
-        const tags = tagsCache[tag]
-        if (rank > 1)
-          return [
+    const tagsFilter: FilterTypeWithOptions = tags.reduce(
+      (p: FilterTypeWithOptions, t) => {
+        // const tags = tagsCache[tag]
+        const rank = rankedTags[t?.value] || 0
+        if (rank >= 0 && t?.value)
+          return {
             ...p,
-            {
-              key: 'tag',
-              icon: 'ri:hashtag',
-              id: `tag_filter_${tag}`,
-              label: tag,
-              count: rank,
-              filter: (item: GenericSearchResult) => {
-                return tags && tags.nodes.includes(item.id)
+            options: [
+              ...p.options,
+              {
+                id: `tag_filter_${t.value}`,
+                label: t.value,
+                count: rank as number,
+                value: t.value
               }
-            }
-          ]
+            ]
+          }
         else return p
       },
-      []
+      {
+        type: 'tag',
+        label: 'Tags',
+        options: []
+      }
     )
 
-    // mog('tagsFilter', { tagsCache, currentFilters_, rankedTags, tagsFilter })
     return tagsFilter
   }
 
-  const generateNodeFilters = <T extends { id: string }>(items: T[]) => {
-    // Known
-    const currentFilters_ = currentFilters as unknown as SearchFilter<GenericSearchResult>[]
-    const filteredItems = currentFilters_.length > 0 ? applyFilters(items, currentFilters_) : items
-    const rankedPaths = filteredItems.reduce((acc, item) => {
-      const path = getPathFromNodeid(item.id)
-      const allPaths = getAllParentPaths(path)
+  const generateNodeFilters = (items: GenericSearchResult[]) => {
+    // const filteredItems = currentFilters.length > 0 ? applyFilters(items, currentFilters, filterFunctions) : items
+
+    const rankedPaths = items.reduce((acc, item) => {
+      const path = getPathFromNodeid(item.id, true)
+      const allPaths = getAllParentIds(path)
       // const allPaths =
       allPaths.forEach((path) => {
         if (acc[path]) {
@@ -121,38 +146,87 @@ export const useFilters = <Item>() => {
       return acc
     }, {} as { [path: string]: number })
 
-    const nodeFilters = Object.entries(rankedPaths).reduce((acc, c) => {
-      const [path, rank] = c
-      if (rank > 1) {
-        // mog('path', { path, rank })
-        acc.push({
-          key: 'note',
-          id: `node_${path}`,
-          icon: 'ri:file-list-2-line',
-          label: path,
-          count: rank,
-          filter: (item: GenericSearchResult) => {
-            const itemPath = getPathFromNodeid(item.id)
-            mog('itemPath being filtered', { item, itemPath, path })
-            return isElder(itemPath, path) || itemPath === path
-          }
-        })
-      }
-      return acc
-    }, [] as SearchFilter<GenericSearchResult>[])
+    // mog('rankedPaths', { rankedPaths, ilinks })
+    const nodeFilters: FilterTypeWithOptions = ilinks.reduce(
+      (acc: FilterTypeWithOptions, ilink) => {
+        const rank = rankedPaths[ilink?.path] || 0
+        // const [path, rank] = ilink
+        if (rank >= 0) {
+          // mog('path', { path, rank })
+          acc.options.push({
+            id: `node_${ilink.path}`,
+            value: ilink.path,
+            label: getTitleFromPath(ilink.path),
+            count: rank as number
+          })
+        }
+        return acc
+      },
+      {
+        type: 'note',
+        label: 'Notes',
+        options: []
+      } as FilterTypeWithOptions
+    )
 
     // mog('nodeFilters', { nodeFilters })
     return nodeFilters
   }
 
+  const generateNamespaceFilters = <T extends { id: string }>(items: T[]) => {
+    // Known
+    // const filteredItems = currentFilters.length > 0 ? applyFilters(items, currentFilters, filterFunctions) : items
+
+    const rankedNamespaces = items.reduce((acc, item) => {
+      const node = getILinkFromNodeid(item.id, true)
+      const namespace = node?.namespace
+
+      if (namespace) {
+        if (!acc[namespace]) {
+          acc[namespace] = 1
+        } else {
+          acc[namespace] += 1
+        }
+      }
+
+      return acc
+    }, {} as { [namespace: string]: number })
+
+    const namespaceFilters = namespaces.reduce(
+      (acc, namespace) => {
+        const rank = rankedNamespaces[namespace?.id] || 0
+        const namespaceID = namespace?.id
+        if (rank >= 0 && namespace) {
+          // mog('path', { path, rank })
+          acc.options.push({
+            id: `namespace_${namespace.id}`,
+            // Use Namespace icon
+            value: namespaceID,
+            label: namespace?.name,
+            count: rank as number
+          })
+        }
+        return acc
+      },
+      {
+        type: 'space',
+        label: 'Spaces',
+        options: []
+      } as FilterTypeWithOptions
+    )
+
+    // mog('nodeFilters', { nodeFilters })
+    return namespaceFilters
+  }
+
   const generateNodeSearchFilters = (items: GenericSearchResult[]) => {
     const nodeFilters = generateNodeFilters(items)
     const tagFilters = generateTagFilters(items)
-    return [...nodeFilters, ...tagFilters]
+    const namespaceFilters = generateNamespaceFilters(items)
+    return [nodeFilters, tagFilters, namespaceFilters]
   }
 
   return {
-    addFilter,
     filters,
     resetFilters,
     applyCurrentFilters,
@@ -163,15 +237,34 @@ export const useFilters = <Item>() => {
     currentFilters,
     removeCurrentFilter,
     generateNodeSearchFilters,
-    resetCurrentFilters
+    resetCurrentFilters,
+    generateNamespaceFilters
   }
 }
 
-export const applyFilters = <Item>(items: Item[], filters: SearchFilter<Item>[]): Item[] => {
+export const applyFilters = <Item>(
+  items: Item[],
+  filters: Filter[],
+  filterFunctions: SearchFilterFunctions,
+  globalFilterJoin: GlobalFilterJoin = 'all'
+): Item[] => {
+  // TODO: Insert the global any and all filters match condition here
+  if (filters.length === 0) return items
+
+  // For any
+  if (globalFilterJoin === 'any') {
+    return items.filter((item) => {
+      return filters.some((filter) => {
+        return filterFunctions[filter.type](item, filter)
+      })
+    })
+  }
+
+  // For all
   const filtered = filters.reduce((acc, filter) => {
-    return acc.filter(filter.filter)
+    return acc.filter((i) => filterFunctions[filter.type](i, filter))
   }, items)
 
-  mog('applyFilters', { items, filters, filtered })
+  // mog('applyFilters', { items, filters, filtered })
   return filtered
 }

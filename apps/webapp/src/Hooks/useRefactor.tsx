@@ -2,13 +2,12 @@
 import React from 'react'
 
 import { NodeLink, mog, getUniquePath, isMatch, generateNodeUID } from '@mexit/core'
-import { getAllParentPaths, getNodeIcon } from '@mexit/shared'
 
-import { useEditorBuffer } from './useEditorBuffer'
-
-import { useRefactorStore } from '../Stores/useRefactorStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useRefactorStore } from '../Stores/useRefactorStore'
+import { RefactorPath } from '../Stores/useRenameStore'
 import { useApi } from './API/useNodeAPI'
+import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
@@ -71,53 +70,12 @@ export const useRefactor = () => {
     return refactored
   }
 
-  const execRefactor = async (from: string, to: string, clearBuffer = true) => {
+  const execRefactor = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
     // const refactored = getMockRefactor(from, to, clearBuffer)
 
-    const nodeId = getNodeidFromPath(from)
-    // mog('execRefactor', { from, to, refactored })
-
-    // // Generate the new links
-    // const ilinks = useDataStore.getState().ilinks
-
-    // const newIlinks = ilinks.map((i) => {
-    //   for (const ref of refactored) {
-    //     if (ref.from === i.path) {
-    //       return {
-    //         ...i,
-    //         path: ref.to,
-    //         icon: getNodeIcon(ref.to)
-    //       }
-    //     }
-    //   }
-    //   return i
-    // })
-
-    // const isInNewlinks = (l: string) => {
-    //   const ft = newIlinks.filter((i) => i.path === l)
-    //   return ft.length > 0
-    // }
-
-    // const newParents = refactored
-    //   .map((r) => getAllParentIds(r.to))
-    //   .flat()
-    //   .filter((x) => !isInNewlinks(x))
-
-    // const newParentIlinks = newParents.map((p) => ({
-    //   path: p,
-    //   nodeid: generateNodeUID(),
-    //   icon: getNodeIcon(p)
-    // }))
-
-    // setILinks([...newIlinks, ...newParentIlinks])
-
-    // const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
-    // if (baseId !== false) {
-    //   setBaseNodeId(baseId.to)
-    // }
-
+    const nodeId = getNodeidFromPath(from.path, from.namespaceID)
     const data = await api
-      .refactorHeirarchy({ path: from.split('.').join('#') }, { path: to.split('.').join('#') }, nodeId)
+      .refactorHeirarchy({ path: from.path.split('.').join('#') }, { path: to.path.split('.').join('#') }, nodeId)
       .then((response) => {
         return response
       })

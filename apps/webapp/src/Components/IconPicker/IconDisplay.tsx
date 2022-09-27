@@ -11,6 +11,8 @@ interface IconDisplayProps {
 }
 
 const IconDisplay = ({ icon, size }: IconDisplayProps) => {
+  if (!icon) return
+
   return (
     <IconWrapper size={size}>
       {

@@ -9,17 +9,16 @@ import {
 } from '@mexit/core'
 
 import { PersistentData } from './../Types/Data'
-
-import { initialSnippets } from './initData/snippets'
-import { onboardingContent } from './initData/onboardingDoc'
 import { draftContent } from './initData/draftDoc'
+import { onboardingContent } from './initData/onboardingDoc'
+import { initialSnippets } from './initData/snippets'
 
-export const generateIlink = (path: string): ILink => ({
+export const generateTempLinks = (path: string): { path: string; nodeid: string } => ({
   path,
   nodeid: generateNodeUID()
 })
 
-export const generateILinks = (items: string[]) => items.map(generateIlink)
+export const generateILinks = (items: string[]) => items.map(generateTempLinks)
 
 const links = generateILinks(['doc', 'dev', 'design', '@'])
 
@@ -34,7 +33,7 @@ const draftLink = {
   icon: 'ri:draft-line'
 }
 
-const linksWithSpecialContent = [onboardingLink, draftLink]
+// const linksWithSpecialContent = [onboardingLink, draftLink]
 
 export const defaultContent: NodeContent = {
   type: 'init',
@@ -66,7 +65,7 @@ const contents: Contents = links.reduce(
 export const DefaultPersistentData: PersistentData = {
   baseNodeId: 'doc',
 
-  ilinks: [...linksWithSpecialContent, ...links],
+  ilinks: [],
   tags: [{ value: 'mex' }],
 
   contents,

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
-import { getPathFromNodeIdHookless } from './useLinks'
+import { getLinkFromNodeIdHookless, getPathFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
 
 export const useSaveNodeName = () => {
@@ -14,7 +14,9 @@ export const useSaveNodeName = () => {
     const draftNodeTitle = title ?? useAnalysisStore.getState().analysis.title
     if (!draftNodeTitle) return
 
-    const nodePath = getPathFromNodeIdHookless(nodeId)
+    const node = getLinkFromNodeIdHookless(nodeId)
+    const nodePath = node?.path
+    const namespace = node?.namespace
     const isUntitled = checkIfUntitledDraftNode(nodePath)
 
     if (!isUntitled) return
@@ -25,7 +27,7 @@ export const useSaveNodeName = () => {
     if (newNodePath !== nodePath)
       try {
         mog('SAVE NODE NAME, 2', { nodeId, title, nodePath, newNodePath, isUntitled, draftNodeTitle })
-        execRefactor(nodePath, newNodePath, false)
+        execRefactor({ path: nodePath, namespaceID: namespace }, { path: newNodePath, namespaceID: namespace }, false)
       } catch (err) {
         toast('Unable to rename node')
       }

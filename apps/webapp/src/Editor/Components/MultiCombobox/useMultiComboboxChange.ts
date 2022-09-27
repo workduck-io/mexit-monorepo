@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
@@ -6,12 +7,12 @@ import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuou
 import { useLinks } from '../../../Hooks/useLinks'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { ComboboxType } from '../../Types/MultiCombobox'
+import { fuzzySearch } from '../../../Utils/fuzzysearch'
 import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey } from '../../Types/Combobox'
+import { ComboboxType } from '../../Types/MultiCombobox'
 import { QuickLinkType } from '../../constants'
-import { fuzzySearch } from '../../../Utils/fuzzysearch'
 
 export const CreateNewPrefix = `Create `
 
@@ -130,7 +131,8 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
           text: item.text,
           extended: item.extended,
           type,
-          additional: item.additional
+          additional: item.additional,
+          namespace: item.namespace
         })
 
       return acc
