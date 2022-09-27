@@ -9,6 +9,7 @@ export interface ContentStoreState {
   getContentFromLink: (url: string) => NodeContent[]
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
   getAllMetadata: () => Record<string, NodeMetadata>
+  getMetadata: (nodeid: string) => NodeMetadata
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
   initContents: (contents: Contents) => void
 }
@@ -36,6 +37,10 @@ export const contentStoreConstructor = (set, get) => ({
       }
     })
     return metadata
+  },
+  getMetadata: (nodeid) => {
+    const contents = get().contents
+    return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : {}
   },
   setMetadata: (nodeid: string, metadata: NodeMetadata) => {
     const oldContent = get().contents

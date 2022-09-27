@@ -16,7 +16,8 @@ import {
   iLinksToUpdate,
   hierarchyParser,
   generateNamespaceId,
-  MIcon
+  MIcon,
+  NodeEditorContent
 } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
@@ -48,7 +49,7 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTags } = useTags()
-  const { getPathFromNodeid, getNodePathAndTitle, getNodeParentIdFromPath } = useLinks()
+  const { getPathFromNodeid, getTitleFromNoteId, ge } = useLinks()
   const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
@@ -66,26 +67,31 @@ export const useApi = () => {
    */
 
   const saveSingleNewNode = async (
-    nodeid: string,
-    path: string,
-    referenceID?: string,
-    content?: any[] // eslint-disable-line
+    noteId: string,
+    namespace: string,
+    options?: {
+      path: string
+      parentNoteId: string
+      content: NodeEditorContent
+    }
   ) => {
     const reqData = {
-      id: nodeid,
-      title: getTitleFromPath(path),
-      referenceID: referenceID,
-      data: serializeContent(content ?? defaultContent.content, nodeid)
+      id: noteId,
+      title: getTitleFromNoteId(noteId),
+      referenceID: options?.parentNoteId,
+      namespaceID: namespace,
+      data: serializeContent(options.content ?? defaultContent.content, noteId)
     }
 
-    setContent(nodeid, content ?? defaultContent.content)
+    setContent(noteId, options.content ?? defaultContent.content)
 
     const data = await client
       .post(apiURLs.createNode, reqData, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        setMetadata(nodeid, extractMetadata(d.data))
+        const metadata = extractMetadata(d.data)
+        updateFromContent(noteId, d.data ?? options.content, metadata)
         return d.data
       })
       .catch((e) => {
