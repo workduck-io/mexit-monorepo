@@ -24,6 +24,7 @@ import { useEditorStore, getContent } from '../Stores/useEditorStore'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useTreeStore } from '../Stores/useTreeStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useApi } from './API/useNodeAPI'
 import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
 import { useFetchShareData } from './useFetchShareData'
@@ -256,7 +257,7 @@ const useLoad = () => {
 
     setLoadingNodeid(nodeid)
 
-    quitFullscreenGraph()
+    // quitFullscreenGraph()
     // setNodePreview(false)
     // setSuggestions([])
     if (infobar.mode === 'suggestions') toggleSuggestedNodes()
@@ -288,7 +289,7 @@ const useLoad = () => {
       expandNodes(allParents)
     }
 
-    debouncedAddLastOpened(nodeid)
+    // debouncedAddLastOpened(nodeid)
 
     mog('Loading that here', { node })
     changeSpace(node.namespace)

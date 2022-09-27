@@ -7,10 +7,11 @@ import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
 import { DataGroup, MetadataWrapper } from './Metadata'
-import { StyledInputWrapper } from './NodeSelect.style'
+import { StyledNamespaceTag } from './NamespaceTag.style'
+import { Ellipsis, StyledInputWrapper } from './NodeSelect.style'
 import { size } from './Responsive'
 import { TagFlex } from './TagsRelated.styles'
-import { Title } from './Typography'
+import { Title, TitleText } from './Typography'
 import { ProfileIcon } from './UserPage'
 
 interface ResultProps {
@@ -23,12 +24,6 @@ export const MainFont = css`
 
 export const BodyFont = css`
   font-size: 12px;
-`
-
-export const Ellipsis = css`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 `
 
 const SearchTransition = css`

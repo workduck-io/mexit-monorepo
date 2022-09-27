@@ -2,8 +2,13 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { StyledNamespaceTag } from './NamespaceTag.style'
-import { Ellipsis } from './Search'
 import { Input } from './ToggleButton'
+
+export const Ellipsis = css`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
 
 export const StyledInputWrapper = styled.div<{ isOverlay: boolean }>`
   width: 100%;

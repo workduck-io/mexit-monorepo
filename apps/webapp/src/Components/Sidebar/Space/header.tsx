@@ -2,22 +2,29 @@ import React, { useEffect, useState } from 'react'
 
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
-import useLayout from 'apps/webapp/src/Hooks/useLayout'
-import { useNamespaces } from 'apps/webapp/src/Hooks/useNamespaces'
-import { useDataStore } from 'apps/webapp/src/Stores/useDataStore'
-import { useEditorStore } from 'apps/webapp/src/Stores/useEditorStore'
-import { useLayoutStore } from 'apps/webapp/src/Stores/useLayoutStore'
 import toast from 'react-hot-toast'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
+import { Input } from '@mexit/shared'
 
+import useLayout from '../../../Hooks/useLayout'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
+import { useDataStore } from '../../../Stores/useDataStore'
+import { useEditorStore } from '../../../Stores/useEditorStore'
+import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import { Tooltip } from '../../FloatingElements/Tooltip'
 import IconPicker from '../../IconPicker/IconPicker'
-import Input from '../../Input'
-import { SidebarToggle, SpaceHeader, SpaceSeparator, SpaceTitle, SpaceTitleWrapper } from '../Sidebar.style'
+import {
+  SidebarToggle,
+  SpaceHeader,
+  SpaceSeparator,
+  SpaceTitle,
+  SpaceTitleFakeInput,
+  SpaceTitleWrapper
+} from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 import { TagsLabel } from '../TagLabel'
 
@@ -32,7 +39,7 @@ const Header = ({ space }: { space: SidebarSpace }) => {
   const titleRef = React.useRef<HTMLDivElement>(null)
   const { changeNamespaceName, changeNamespaceIcon } = useNamespaces()
   const [showInput, setShowInput] = useState(false)
-  const [title, setTitle] = useState(space.label)
+  const [title, setTitle] = useState(space?.label)
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
