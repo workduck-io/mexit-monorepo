@@ -473,7 +473,7 @@ export const useApi = () => {
             headers: workspaceHeaders()
           }
         )
-        .then((d) => ({
+        .then((d: any) => ({
           id: d?.data?.id,
           name: d?.data?.name,
           iconUrl: d?.data?.metadata?.iconUrl,
