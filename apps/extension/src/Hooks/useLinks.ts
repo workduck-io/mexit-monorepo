@@ -6,8 +6,10 @@ import {
   hasLink,
   ILink,
   NodeLink,
+  SEPARATOR,
   TodoStatus
 } from '@mexit/core'
+
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -183,6 +185,16 @@ export const useLinks = () => {
     if (link) return link.path
   }
 
+  const getParentILink = (path: string, namespace?: string) => {
+    const links = useDataStore.getState().ilinks
+    const parentPath = path.split(SEPARATOR).slice(0, -1).join(SEPARATOR)
+
+    const namespaceILinks = !namespace ? links : links.filter((l) => l.namespace === namespace)
+    const note = namespaceILinks.find((ilink) => ilink.path === parentPath)
+
+    return note
+  }
+
   return {
     getAllLinks,
     getLinkCount,
@@ -192,7 +204,8 @@ export const useLinks = () => {
     getNodeidFromPath,
     getILinkFromNodeid,
     getPathFromNodeid,
-    createLink
+    createLink,
+    getParentILink
   }
 }
 
