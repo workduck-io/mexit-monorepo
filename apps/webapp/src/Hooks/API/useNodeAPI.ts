@@ -17,7 +17,8 @@ import {
   hierarchyParser,
   generateNamespaceId,
   MIcon,
-  NodeEditorContent
+  NodeEditorContent,
+  getTagsFromContent
 } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
@@ -27,9 +28,8 @@ import { useDataStore } from '../../Stores/useDataStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { useInternalLinks } from '../useInternalLinks'
-import { getTitleFromPath, useLinks } from '../useLinks'
+import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
-import { useTags } from '../useTags'
 import { useUpdater } from '../useUpdater'
 
 interface SnippetResponse {
@@ -48,9 +48,8 @@ export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
-  const { getTags } = useTags()
-  const { getPathFromNodeid, getTitleFromNoteId, ge } = useLinks()
-  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
+  const { getTitleFromNoteId } = useLinks()
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
 
@@ -67,8 +66,8 @@ export const useApi = () => {
    */
 
   const saveSingleNewNode = async (
-    noteId: string,
-    namespace: string,
+    noteID: string,
+    namespaceID: string,
     options?: {
       path: string
       parentNoteId: string
@@ -76,14 +75,15 @@ export const useApi = () => {
     }
   ) => {
     const reqData = {
-      id: noteId,
-      title: getTitleFromNoteId(noteId),
+      id: noteID,
+      title: getTitleFromNoteId(noteID),
       referenceID: options?.parentNoteId,
-      namespaceID: namespace,
-      data: serializeContent(options.content ?? defaultContent.content, noteId)
+      namespaceID: namespaceID,
+      data: serializeContent(options.content ?? defaultContent.content, noteID),
+      tags: getTagsFromContent(options.content)
     }
 
-    setContent(noteId, options.content ?? defaultContent.content)
+    setContent(noteID, options.content ?? defaultContent.content)
 
     const data = await client
       .post(apiURLs.createNode, reqData, {
@@ -91,7 +91,7 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const metadata = extractMetadata(d.data)
-        updateFromContent(noteId, d.data ?? options.content, metadata)
+        updateFromContent(noteID, d.data ?? options.content, metadata)
         return d.data
       })
       .catch((e) => {
@@ -101,70 +101,44 @@ export const useApi = () => {
     return data
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const bulkCreateNodes = async (nodeid: string, namespace: string, path: string, content?: any[]) => {
-    const noteHierarchyString = createNoteHierarchyString(path)
-    mog('BulkCreateNoteHierarchyString', { noteHierarchyString })
+  const bulkCreateNodes = async (
+    noteID: string,
+    namespaceID: string,
+    options: {
+      path: string
+      content: NodeEditorContent
+    }
+  ) => {
+    options.content = options.content ?? defaultContent.content
     const reqData = {
       nodePath: {
-        path: noteHierarchyString,
-        namespaceID: namespace
+        path: options.path,
+        namespaceID: namespaceID
       },
-      id: nodeid,
-      title: getTitleFromPath(path),
-      data: serializeContent(content ?? defaultContent.content, nodeid),
-      namespaceID: namespace,
-      tags: getTags(nodeid)
+      title: getTitleFromNoteId(noteID),
+      namespaceID: namespaceID,
+      tags: getTagsFromContent(options.content),
+      data: serializeContent(options.content, noteID)
     }
 
-    setContent(nodeid, content ?? defaultContent.content)
+    setContent(noteID, options.content)
 
     const data = await client
       .post(apiURLs.bulkCreateNodes, reqData, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('d', { d })
-        // const { addedILinks, removedILinks, node } = d.data
-        // setMetadata(nodeid, extractMetadata(node))
-        // updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-        // return node
-      })
+        const addedILinks = []
+        const removedILinks = []
+        const { changedPaths, node } = d.data
+        Object.entries(changedPaths).forEach(([nsId, changed]: [string, any]) => {
+          const { addedPaths: nsAddedILinks, removedPaths: nsRemovedILinks } = changed
+          addedILinks.push(...nsAddedILinks)
+          removedILinks.push(...nsRemovedILinks)
+        })
 
-    return data
-  }
-
-  const saveNewNodeAPI = async (nodeid: string, namespace: string, path?: string) => {
-    if (!path) path = getPathFromNodeid(nodeid)
-
-    const paths = path.split(SEPARATOR)
-    console.log('Sendin this path to the API: ', path)
-
-    const reqData = {
-      nodePath: {
-        path: paths.join('#')
-      },
-      id: nodeid,
-      title: paths.slice(-1)[0],
-      type: 'NodeBulkRequest',
-      namespaceIdentifier: namespace,
-      data: serializeContent(defaultContent.content, nodeid)
-    }
-
-    setContent(nodeid, defaultContent.content)
-
-    const data = await client
-      .post(apiURLs.bulkCreateNodes, reqData, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        const { addedILinks, removedILinks } = d.data
-        setMetadata(nodeid, extractMetadata(d.data))
         updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-        return d.data
-      })
-      .catch((e) => {
-        console.error(e)
+        setMetadata(noteID, extractMetadata(node))
       })
 
     return data
@@ -175,38 +149,32 @@ export const useApi = () => {
    * Also updates the incoming data in the store
    */
   const saveDataAPI = async (
-    nodeid: string,
-    namespace: string,
-    content: any[],
+    noteID: string,
+    namespaceID: string,
+    content: NodeEditorContent,
     isShared = false,
-    updatedPath?: string
+    title?: string
   ) => {
-    const { title, path } = getNodePathAndTitle(nodeid)
     const reqData = {
-      id: nodeid,
-      title: updatedPath?.split(SEPARATOR).slice(-1)[0] ?? title,
-      namespaceID: namespace,
-      data: serializeContent(content ?? defaultContent.content, nodeid),
-      tags: getTags(nodeid)
+      id: noteID,
+      title: title || getTitleFromNoteId(noteID),
+      namespaceID: namespaceID,
+      tags: getTagsFromContent(content),
+      data: serializeContent(content ?? defaultContent.content, noteID)
     }
 
-    const parentNodeId = getNodeParentIdFromPath(path)
-    if (parentNodeId) reqData['referenceID'] = parentNodeId
-
     if (isShared) {
-      const node = getSharedNode(nodeid)
-      if (node.currentUserAccess[nodeid] === 'READ') return
+      const node = getSharedNode(noteID)
+      if (node.currentUserAccess[noteID] === 'READ') return
     }
 
     const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
-
     const data = await client
       .post(url, reqData, {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        mog('savedData', { d })
-        setMetadata(nodeid, extractMetadata(d.data))
+        setMetadata(noteID, extractMetadata(d.data))
         return d.data
       })
       .catch((e) => {
@@ -414,18 +382,19 @@ export const useApi = () => {
       .get(apiURLs.namespaces.getAll, {
         headers: workspaceHeaders()
       })
-      .then((d) => {
+      .then((d: any) => {
         mog('namespaces all', d.data)
-        return d.data.map((item: any) => ({
-          ns: {
-            id: item.id,
-            name: item.name,
-            icon: item.namespaceMetadata?.icon ?? undefined,
-            createdAt: item.createdAt,
-            updatedAt: item.updatedAt
-          },
-          archiveHierarchy: item.archivedNodeHierarchyInformation
-        }))
+        return d.data
+        // return d.data.map((item: any) => ({
+        //   ns: {
+        //     id: item.id,
+        //     name: item.name,
+        //     icon: item.namespaceMetadata?.icon ?? undefined,
+        //     createdAt: item.createdAt,
+        //     updatedAt: item.updatedAt
+        //   },
+        //   archiveHierarchy: item.archivedNodeHierarchyInformation
+        // }))
       })
       .catch((e) => {
         mog('Save error', e)
@@ -435,28 +404,25 @@ export const useApi = () => {
     if (namespaces) {
       setNamespaces(namespaces.map((n) => n.ns))
       namespaces.map((n) => {
-        const archivedNotes = hierarchyParser(n.archiveHierarchy, n.ns.id, {
-          withParentNodeId: true,
-          allowDuplicates: true
-        })
+        const archivedILinks = n.archivedNodeHierarchyInformation
 
-        if (archivedNotes && archivedNotes.length > 0) {
+        if (archivedILinks && archivedILinks.length > 0) {
           const localILinks = useDataStore.getState().archive
-          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedNotes)
+          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
-          mog('toUpdateLocal', { n, toUpdateLocal, archivedNotes })
-
-          runBatch(
-            toUpdateLocal.map((ilink) =>
-              getDataAPI(ilink.nodeid, false, false, false).then((data) => {
-                mog('toUpdateLocal', { ilink, data })
-                setContent(ilink.nodeid, data.content, data.metadata)
-                updateDocument('archive', ilink.nodeid, data.content)
-              })
-            )
-          ).then(() => {
-            addInArchive(archivedNotes)
-          })
+          mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
+          addInArchive(archivedILinks)
+          // runBatch(
+          //   toUpdateLocal.map((ilink) =>
+          //     getDataAPI(ilink.nodeid, false, false, false).then((data) => {
+          //       mog('toUpdateLocal', { ilink, data })
+          //       setContent(ilink.nodeid, data.content, data.metadata)
+          //       // updateDocument('archive', ilink.nodeid, data.content)
+          //     })
+          //   )
+          // ).then(() => {
+          //   addInArchive(archivedILinks)
+          // })
         }
       })
     }
@@ -545,7 +511,6 @@ export const useApi = () => {
     getDataAPI,
     bulkCreateNodes,
     saveSingleNewNode,
-    saveNewNodeAPI,
     makeNotePublic,
     makeNotePrivate,
     isPublic,

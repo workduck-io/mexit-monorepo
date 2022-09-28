@@ -52,8 +52,7 @@ export const useHierarchy = () => {
             parentNoteId,
             content
           })
-        : // TODO: add namespace support to bulk create
-          await bulkCreateNodes(noteId, options.namespace, {
+        : await bulkCreateNodes(noteId, options.namespace, {
             path: bulkNotePath,
             content
           })

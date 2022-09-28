@@ -46,8 +46,11 @@ export const useNewNodes = () => {
 
       if (save === false) return
       ;(parentILink && parentILink?.nodeid) || isRoot
-        ? saveSingleNewNode(nodeUID, ilink, parentILink?.nodeid, content)
-        : bulkCreateNodes(nodeUID, ns, ilink, content)
+        ? saveSingleNewNode(nodeUID, ns, { path: ilink, parentNoteId: parentILink?.nodeid, content: content })
+        : bulkCreateNodes(nodeUID, ns, {
+            path: ilink,
+            content: content
+          })
 
       if (content) updateFromContent(nodeUID, content)
 
@@ -85,8 +88,11 @@ export const useNewNodes = () => {
 
       const node =
         (parentILink && parentILink?.nodeid) || isRoot
-          ? await saveSingleNewNode(nodeUID, ilink, parentILink?.nodeid, content)
-          : await bulkCreateNodes(nodeUID, ns, ilink, content)
+          ? await saveSingleNewNode(nodeUID, ns, { path: ilink, parentNoteId: parentILink?.nodeid, content: content })
+          : await bulkCreateNodes(nodeUID, ns, {
+              path: ilink,
+              content: content
+            })
 
       updateFromContent(nodeUID, content)
 
