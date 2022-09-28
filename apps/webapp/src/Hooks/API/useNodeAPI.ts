@@ -6,15 +6,12 @@ import {
   defaultContent,
   apiURLs,
   mog,
-  SEPARATOR,
   extractMetadata,
   removeNulls,
   WORKSPACE_HEADER,
   DEFAULT_NAMESPACE,
-  GET_REQUEST_MINIMUM_GAP,
-  runBatch,
+  GET_REQUEST_MINIMUM_GAP, // runBatch,
   iLinksToUpdate,
-  hierarchyParser,
   generateNamespaceId,
   MIcon,
   NodeEditorContent,
@@ -351,8 +348,7 @@ export const useApi = () => {
 
     return data
   }
-
-  const refactorHeirarchy = async (
+  const refactorHierarchy = async (
     existingNodePath: { path: string; namespaceID?: string },
     newNodePath: { path: string; namespaceID?: string },
     nodeId: string
@@ -362,6 +358,7 @@ export const useApi = () => {
       newNodePath,
       nodeID: nodeId
     }
+
     const data = await client
       .post(apiURLs.refactorHeirarchy, reqData, {
         headers: workspaceHeaders()
@@ -374,7 +371,7 @@ export const useApi = () => {
         console.log(error)
       })
 
-    return data as any
+    return data
   }
 
   const getAllNamespaces = async () => {
@@ -518,7 +515,7 @@ export const useApi = () => {
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getSnippetById,
-    refactorHeirarchy,
+    refactorHierarchy,
     createNewNamespace,
     getAllNamespaces,
     changeNamespaceName,

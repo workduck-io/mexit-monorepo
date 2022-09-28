@@ -7,7 +7,7 @@ import { getLinkFromNodeIdHookless, getPathFromNodeIdHookless } from './useLinks
 import { useRefactor } from './useRefactor'
 
 export const useSaveNodeName = () => {
-  const { execRefactor } = useRefactor()
+  const { execRefactorAsync } = useRefactor()
 
   const saveNodeName = (nodeId: string, title?: string) => {
     if (nodeId !== useAnalysisStore.getState().analysis.nodeid) return
@@ -27,7 +27,11 @@ export const useSaveNodeName = () => {
     if (newNodePath !== nodePath)
       try {
         mog('SAVE NODE NAME, 2', { nodeId, title, nodePath, newNodePath, isUntitled, draftNodeTitle })
-        execRefactor({ path: nodePath, namespaceID: namespace }, { path: newNodePath, namespaceID: namespace }, false)
+        execRefactorAsync(
+          { path: nodePath, namespaceID: namespace },
+          { path: newNodePath, namespaceID: namespace },
+          false
+        )
       } catch (err) {
         toast('Unable to rename node')
       }

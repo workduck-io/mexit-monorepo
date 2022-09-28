@@ -16,7 +16,6 @@ import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
 import useModalStore from '../../Stores/useModalStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
-import { useRenameStore } from '../../Stores/useRenameStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 import { useDeleteStore } from '../Refactor/DeleteModal'
@@ -35,12 +34,12 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const { createNewNote } = useCreateNewNote()
   const openShareModal = useShareModalStore((store) => store.openModal)
   // const { onPinNote, onUnpinNote, isPinned } = usePinnedWindows()
-  const toggleModal = useModalStore((store) => store.toggleOpen)
+  // const toggleModal = useModalStore((store) => store.toggleOpen)
   const { goTo } = useRouting()
   const namespaces = useDataStore((store) => store.namespaces)
   const { getNamespaceIcon } = useNamespaces()
 
-  const { execRefactor } = useRefactor()
+  const { execRefactorAsync } = useRefactor()
   const { push } = useNavigation()
 
   const handleRefactor = (item: TreeItem) => {
@@ -64,7 +63,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
 
   // BUG: The backend doesn't return the new added path in the selected namespace
   const handleMoveNamespaces = async (newNamespaceID: string) => {
-    const refactored = await execRefactor(
+    const refactored = await execRefactorAsync(
       { path: item.data?.path, namespaceID: item.data?.namespace },
       { path: item.data?.path, namespaceID: newNamespaceID }
     )
@@ -75,10 +74,9 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   }
 
   return (
-    <>
-      <ContextMenuPrimitive.Portal>
-        <ContextMenuContent>
-          {/* Fix after refactor modal proper state transfer to ModalStore
+    <ContextMenuPrimitive.Portal>
+      <ContextMenuContent>
+        {/* Fix after refactor modal proper state transfer to ModalStore
           <ContextMenuItem
             onSelect={(args) => {
               handleRefactor(item)
@@ -87,56 +85,54 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
             <Icon icon={editLine} />
             Refactor
           </ContextMenuItem> */}
-          <ContextMenuItem
-            onSelect={(args) => {
-              handleCreateChild(item)
-            }}
-          >
-            <Icon icon={addCircleLine} />
-            New Note
-          </ContextMenuItem>
-          <ContextMenuItem
-            onSelect={(args) => {
-              handleShare(item)
-            }}
-          >
-            <Icon icon={shareLine} />
-            Share
-          </ContextMenuItem>
-          <ContextMenuListWithFilter
-            item={{
-              id: 'menu_for_namespace',
-              label: 'Move to Space',
-              icon: { type: 'ICON', value: 'ri:file-transfer-line' }
-            }}
-            items={namespaces
-              // Don't move in same namespace
-              .filter((ns) => ns.id !== item.data.namespace)
-              .map((ns) => ({
-                id: ns.id,
-                icon: getNamespaceIcon(ns),
-                label: ns.name
-              }))}
-            onSelectItem={(args) => {
-              handleMoveNamespaces(args)
-            }}
-            filter={false}
-          />
-          <ContextMenuSeparator />
-          {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
-
-          <ContextMenuItem
-            color="#df7777"
-            // disabled
-            onSelect={(args) => {
-              handleArchive(item)
-            }}
-          >
-            <Icon icon={archiveLine} />
-            Archive
-          </ContextMenuItem>
-        </ContextMenuContent>
-      </ContextMenuPrimitive.Portal>
-    </>
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleCreateChild(item)
+          }}
+        >
+          <Icon icon={addCircleLine} />
+          New Note
+        </ContextMenuItem>
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleShare(item)
+          }}
+        >
+          <Icon icon={shareLine} />
+          Share
+        </ContextMenuItem>
+        <ContextMenuListWithFilter
+          item={{
+            id: 'menu_for_namespace',
+            label: 'Move to Space',
+            icon: { type: 'ICON', value: 'ri:file-transfer-line' }
+          }}
+          items={namespaces
+            // Don't move in same namespace
+            .filter((ns) => ns.id !== item.data.namespace)
+            .map((ns) => ({
+              id: ns.id,
+              icon: getNamespaceIcon(ns),
+              label: ns.name
+            }))}
+          onSelectItem={(args) => {
+            handleMoveNamespaces(args)
+          }}
+          filter={false}
+        />
+        <ContextMenuSeparator />{' '}
+        {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
+        <ContextMenuItem
+          color="#df7777"
+          // disabled
+          onSelect={(args) => {
+            handleArchive(item)
+          }}
+        >
+          <Icon icon={archiveLine} />
+          Archive
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenuPrimitive.Portal>
   )
 }

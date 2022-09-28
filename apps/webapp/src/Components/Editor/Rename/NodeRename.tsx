@@ -2,19 +2,22 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import toast from 'react-hot-toast'
 
 import { Button } from '@workduck-io/mex-components'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { SEPARATOR, isClash, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
+import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
 import { useApi } from '../../../Hooks/API/useNodeAPI'
 import { useInternalLinks } from '../../../Hooks/useInternalLinks'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNavigation } from '../../../Hooks/useNavigation'
+import { useNodes } from '../../../Hooks/useNodes'
 import { useRefactor } from '../../../Hooks/useRefactor'
+import { useKeyListener } from '../../../Hooks/useShortcutListener'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
@@ -25,32 +28,21 @@ import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 import { Wrapper, TitleStatic, ButtonWrapper } from './NodeRename.style'
 
 const NodeRenameOnlyTitle = () => {
-  const { getNodeidFromPath } = useLinks()
-  const { execRefactor, getMockRefactor } = useRefactor()
+  const { execRefactorAsync, getMockRefactor } = useRefactor()
 
-  // const focus = useRenameStore((store) => store.focus)
   const to = useRenameStore((store) => store.to)
   const ilinks = useDataStore((store) => store.ilinks)
-  // const from = useRenameStore((store) => store.from)
-  const mockRefactored = useRenameStore((store) => store.mockRefactored)
   const nodeTitle = useAnalysisStore((state) => state.analysis.title)
 
   const { push } = useNavigation()
-  const prefillRefactorModal = useRefactorStore((store) => store.prefillModal)
-  const openModal = useRenameStore((store) => store.openModal)
-  // const closeModal = useRenameStore((store) => store.closeModal)
   const setMockRefactored = useRenameStore((store) => store.setMockRefactored)
   const modalReset = useRenameStore((store) => store.closeModal)
-  const setTo = useRenameStore((store) => store.setTo)
-  const nodeFrom = useEditorStore((store) => store.node.path ?? '')
-  const setNode = useEditorStore((store) => store.setNode)
+  const { path: nodeFrom, namespace: nodeFromNS } = useEditorStore((store) => store.node)
   const setFrom = useRenameStore((store) => store.setFrom)
   const [editable, setEditable] = useState(false)
   const [newTitle, setNewTitle] = useState(getNameFromPath(nodeFrom))
-  const updateSingleILink = useInternalLinks().updateSingleILink
   const inpRef = useRef<HTMLInputElement>()
-  const saveDataAPI = useApi().saveDataAPI
-  const { node, content } = useEditorStore()
+  const { updateBaseNode } = useNodes()
 
   const reset = () => {
     if (editable) modalReset()
@@ -72,6 +64,7 @@ const NodeRenameOnlyTitle = () => {
     )
   }, [ilinks, newTitle])
 
+  const { shortcutHandler } = useKeyListener()
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
   useEffect(() => {
@@ -79,14 +72,13 @@ const NodeRenameOnlyTitle = () => {
       [shortcuts.showRename.keystrokes]: (event) => {
         event.preventDefault()
         // TODO: Fix the shortcut handler (not working after the shortcut is renamed)
-        // shortcutHandler(shortcuts.showRename, () => {
-        // console.log({ event })
-        setEditable(true)
-        inpRef.current.focus()
-        // })
+        shortcutHandler(shortcuts.showRename, () => {
+          setEditable(true)
+          inpRef.current?.focus()
+        })
       }
     })
-    // console.log(shortcuts.showRename)
+
     return () => {
       unsubscribe()
     }
@@ -95,14 +87,22 @@ const NodeRenameOnlyTitle = () => {
   const handleSubmit: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (e.shiftKey) {
-        // mog('Opening refactor')
-        const to = getTo(newTitle)
-        prefillRefactorModal(nodeFrom, to)
-      } else {
-        // mog('Renaming')
-        onRename()
+
+      const to = getTo(newTitle)
+
+      if (isMatch(to, nodeFrom)) {
+        toast('Note itself cannot be used')
+        return
       }
+
+      // if (e.shiftKey) {
+      //   // mog('Opening refactor')
+
+      //   prefillRefactorModal(nodeFrom, to)
+      // } else {
+      // mog('Renaming')
+      onRename()
+      // }
     } else if (e.key === 'Escape') reset()
   }
 
@@ -120,24 +120,57 @@ const NodeRenameOnlyTitle = () => {
   }
 
   const onRename = async () => {
+    // console.log('renaming', {})
     if (newTitle === getNameFromPath(nodeFrom) || isClashed || newTitle.indexOf(SEPARATOR) !== -1) {
       reset()
       return
     }
 
     const parent = getParentFromPath(nodeFrom)
-    const updatedPath = parent ? `${parent}${SEPARATOR}${newTitle}` : newTitle
 
-    await saveDataAPI(node.nodeid, content.content, false, updatedPath)
-    updateSingleILink(node.nodeid, updatedPath)
-    setNode({ ...node, title: newTitle, path: updatedPath })
+    if (newTitle && nodeFrom) {
+      let newPath = newTitle
+      if (parent) newPath = `${parent}${SEPARATOR}${newTitle}`
+      setFrom({ path: nodeFrom, namespaceID: nodeFromNS })
 
-    setEditable(false)
-    const editorRef = getPlateEditorRef()
-    if (editorRef) {
-      selectEditor(editorRef, { edge: 'start', focus: true })
+      const refactored = await execRefactorAsync(
+        { path: nodeFrom, namespaceID: nodeFromNS },
+        { path: newPath, namespaceID: nodeFromNS }
+      )
+
+      updateBaseNode()
+
+      const path = useEditorStore.getState().node.id
+      const nodeid = useEditorStore.getState().node.nodeid
+      setEditable(false)
+
+      if (doesLinkRemain(nodeid, refactored)) {
+        push(nodeid)
+      }
+      // What is this code? Isn't res an object, what does res[0] refer to?
+      else if (refactored.length > 0) {
+        const nodeid = refactored[0].nodeid
+        push(nodeid, { savePrev: false })
+      }
+      reset()
+
+      const editorRef = getPlateEditorRef()
+      if (editorRef) {
+        selectEditor(editorRef, { edge: 'start', focus: true })
+      }
     }
   }
+
+  const onCancel: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault()
+    reset()
+  }
+
+  // useEffect(() => {
+  //   if (nodeFrom && isReserved(nodeFrom)) {
+  //     mog('ISRESERVED', { nodeFrom })
+  //   }
+  // }, [nodeFrom])
 
   useEffect(() => {
     if (newTitle && editable) {
@@ -155,7 +188,7 @@ const NodeRenameOnlyTitle = () => {
     <Wrapper>
       {isReserved(nodeFrom) ? (
         <Tippy theme="mex" placement="bottom-start" content="Reserved Node">
-          <TitleStatic>{getNameFromPath(nodeFrom)}</TitleStatic>
+          <TitleStatic>{nodeTitle?.length > 0 ? getNameFromPath(nodeTitle) : getNameFromPath(nodeFrom)}</TitleStatic>
         </Tippy>
       ) : editable ? (
         <Input
@@ -164,6 +197,7 @@ const NodeRenameOnlyTitle = () => {
           onKeyDown={handleSubmit}
           onChange={(e) => handleTitleChange(e)}
           onBlur={() => reset()}
+          error={(getNameFromPath(nodeFrom) !== newTitle && isClashed) || newTitle.indexOf(SEPARATOR) !== -1}
           autoFocus
           defaultValue={newTitle}
           ref={inpRef}
@@ -179,20 +213,6 @@ const NodeRenameOnlyTitle = () => {
             {getNameFromPath(nodeTitle?.length > 0 ? nodeTitle : nodeFrom)}
           </TitleStatic>
         </Tippy>
-      )}
-      {editable && (
-        <ButtonWrapper>
-          <Button
-            primary
-            key="ButtonRename"
-            disabled={getNameFromPath(nodeFrom) === newTitle || isClashed || newTitle.indexOf(SEPARATOR) !== -1}
-            // OnMouseDown instead of onClick to prevent onBlur from triggering first
-            onMouseDown={onRenameClick}
-          >
-            <DisplayShortcut shortcut="Enter" />
-            Rename
-          </Button>
-        </ButtonWrapper>
       )}
     </Wrapper>
   )

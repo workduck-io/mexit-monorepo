@@ -9,10 +9,8 @@ import {
   ELEMENT_PARAGRAPH,
   SEPARATOR,
   updateEmptyBlockTypes,
-  getParentId,
   getAllParentIds,
-  getParentNodePath,
-  USE_API
+  getParentNodePath
 } from '@mexit/core'
 import { checkIfUntitledDraftNode } from '@mexit/core'
 
@@ -28,10 +26,9 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useApi } from './API/useNodeAPI'
 import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
 import { useFetchShareData } from './useFetchShareData'
-import { getLinkFromNodeIdHookless, getPathFromNodeIdHookless } from './useLinks'
+import { getLinkFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
 import useToggleElements from './useToggleElements'
-import { useUpdater } from './useUpdater'
 
 export interface LoadNodeOptions {
   savePrev?: boolean
@@ -74,7 +71,7 @@ const useLoad = () => {
   // const { saveNodeAPIandFs } = useDataSaverFromContent()
   const { saveAndClearBuffer } = useEditorBuffer()
   // TODO: check why we need execRefactorAsync()
-  const { execRefactor } = useRefactor()
+  const { execRefactorAsync } = useRefactor()
   // const { saveQ } = useSaveQ()
 
   const saveNodeName = (nodeId: string, title?: string) => {
@@ -94,7 +91,7 @@ const useLoad = () => {
 
     if (newNodePath !== nodePath)
       try {
-        execRefactor(
+        execRefactorAsync(
           {
             path: nodePath,
             namespaceID: namespace
@@ -106,7 +103,6 @@ const useLoad = () => {
           false
         )
 
-        // execRefactor(nodePath, newNodePath, false)
         loadNode(nodeId, { fetch: false })
       } catch (err) {
         toast('Unable to rename node')

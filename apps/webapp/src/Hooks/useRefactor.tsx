@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
-import { NodeLink, mog, getUniquePath, isMatch, generateNodeUID } from '@mexit/core'
+import { NodeLink, mog, getUniquePath, isMatch, ILink } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useRefactorStore } from '../Stores/useRefactorStore'
@@ -9,6 +9,15 @@ import { RefactorPath } from '../Stores/useRenameStore'
 import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'
+
+interface NamespaceChangedPaths {
+  removedPaths: ILink[]
+  addedPaths: ILink[]
+}
+
+interface RefactorResponse {
+  changedPaths: Array<Record<string, NamespaceChangedPaths>>
+}
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
   const index = refactored.map((r) => r.from).indexOf(id)
@@ -31,8 +40,8 @@ export const useRefactor = () => {
   const setILinks = useDataStore((state) => state.setIlinks)
   const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { getNodeidFromPath } = useLinks()
-  const api = useApi()
+  const { getNodeidFromPath, updateILinks } = useLinks()
+  const { refactorHierarchy } = useApi()
 
   /*
    * Returns a mock array of refactored paths
@@ -70,36 +79,63 @@ export const useRefactor = () => {
     return refactored
   }
 
-  const execRefactor = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
-    // const refactored = getMockRefactor(from, to, clearBuffer)
+  // const execRefactor = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
+  //   // const refactored = getMockRefactor(from, to, clearBuffer)
 
-    const nodeId = getNodeidFromPath(from.path, from.namespaceID)
-    const data = await api
-      .refactorHeirarchy({ path: from.path.split('.').join('#') }, { path: to.path.split('.').join('#') }, nodeId)
-      .then((response) => {
-        return response
+  //   const nodeId = getNodeidFromPath(from.path, from.namespaceID)
+  //   const data = await api
+  //     .refactorHeirarchy({ path: from.path.split('.').join('#') }, { path: to.path.split('.').join('#') }, nodeId)
+  //     .then((response) => {
+  //       return response
+  //     })
+
+  //   return data
+  // }
+
+  const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
+    mog('REFACTOR: FROM < TO', { from, to })
+    const nodeID = getNodeidFromPath(from.path, from.namespaceID)
+
+    const res = await refactorHierarchy(
+      { path: from.path.split('.').join('#'), namespaceID: from.namespaceID },
+      { path: to.path.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
+      nodeID
+    ).then((response: RefactorResponse) => {
+      const addedILinks: ILink[] = []
+      const removedILinks: ILink[] = []
+
+      response.changedPaths.forEach((nsObject) => {
+        Object.entries(nsObject).forEach(([nsId, { addedPaths: nsAddedILinks, removedPaths: nsRemovedILinks }]) => {
+          addedILinks.push(...nsAddedILinks)
+          removedILinks.push(...nsRemovedILinks)
+        })
       })
+      mog('AfterRefactor', { addedILinks, removedILinks })
+      const refactored = updateILinks(addedILinks, removedILinks)
+      return refactored
+    })
 
-    return data
+    return res
   }
 
-  return { getMockRefactor, execRefactor }
+  return { getMockRefactor, execRefactorAsync }
 }
 
-// Used to wrap a class component to provide hooks
-export const withRefactor = (Component: any) => {
-  return function C2(props: any) {
-    const { getMockRefactor, execRefactor } = useRefactor()
+// DO NOT DELETE. FOR REFERENCE
+// // Used to wrap a class component to provide hooks
+// export const withRefactor = (Component: any) => {
+//   return function C2(props: any) {
+//     const { getMockRefactor, execRefactor } = useRefactor()
 
-    const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
+//     const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
 
-    return (
-      <Component
-        getMockRefactor={getMockRefactor}
-        execRefactor={execRefactor}
-        prefillRefactorModal={prefillRefactorModal}
-        {...props}
-      />
-    )
-  }
-}
+//     return (
+//       <Component
+//         getMockRefactor={getMockRefactor}
+//         execRefactor={execRefactor}
+//         prefillRefactorModal={prefillRefactorModal}
+//         {...props}
+//       />
+//     )
+//   }
+// }
