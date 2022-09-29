@@ -381,17 +381,16 @@ export const useApi = () => {
       })
       .then((d: any) => {
         mog('namespaces all', d.data)
-        return d.data
-        // return d.data.map((item: any) => ({
-        //   ns: {
-        //     id: item.id,
-        //     name: item.name,
-        //     icon: item.namespaceMetadata?.icon ?? undefined,
-        //     createdAt: item.createdAt,
-        //     updatedAt: item.updatedAt
-        //   },
-        //   archiveHierarchy: item.archivedNodeHierarchyInformation
-        // }))
+        return d.data.map((item: any) => ({
+          ns: {
+            id: item.id,
+            name: item.name,
+            icon: item.namespaceMetadata?.icon ?? undefined,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
+          },
+          archiveHierarchy: item.archivedNodeHierarchyInformation
+        }))
       })
       .catch((e) => {
         mog('Save error', e)
@@ -400,28 +399,17 @@ export const useApi = () => {
 
     if (namespaces) {
       setNamespaces(namespaces.map((n) => n.ns))
-      namespaces.map((n) => {
-        const archivedILinks = n.archivedNodeHierarchyInformation
+      // namespaces.map((n) => {
+      //   const archivedILinks = n.archivedNodeHierarchyInformation
 
-        if (archivedILinks && archivedILinks.length > 0) {
-          const localILinks = useDataStore.getState().archive
-          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
+      //   if (archivedILinks && archivedILinks.length > 0) {
+      //     const localILinks = useDataStore.getState().archive
+      //     const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
-          mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
-          addInArchive(archivedILinks)
-          // runBatch(
-          //   toUpdateLocal.map((ilink) =>
-          //     getDataAPI(ilink.nodeid, false, false, false).then((data) => {
-          //       mog('toUpdateLocal', { ilink, data })
-          //       setContent(ilink.nodeid, data.content, data.metadata)
-          //       // updateDocument('archive', ilink.nodeid, data.content)
-          //     })
-          //   )
-          // ).then(() => {
-          //   addInArchive(archivedILinks)
-          // })
-        }
-      })
+      //     mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
+      //     addInArchive(archivedILinks)
+      //   }
+      // })
     }
   }
 
