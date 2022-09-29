@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { useTransition, useSpringRef } from '@react-spring/web'
 
@@ -27,6 +27,7 @@ export const NoteSidebar = () => {
   const tags = useDataStore((s) => s.tags)
   const replaceAndAddActionToPoll = useApiStore((store) => store.replaceAndAddActionToPoll)
   const { getNodesByNamespaces } = useNamespaces()
+  const isAnimate = useRef(false)
 
   const mostUsedTags = useMemo(() => {
     const topUsedTags = getMostUsedTags()
@@ -86,6 +87,9 @@ export const NoteSidebar = () => {
     if (nextSpaceId) {
       if (updateStores) {
         changeSidebarSpace(nextSpaceId)
+        isAnimate.current = true
+      } else {
+        isAnimate.current = false
       }
       setIndex({ current: newIndex, prev: index.current })
     }
@@ -99,15 +103,16 @@ export const NoteSidebar = () => {
   }, [spaceId, spaces])
 
   const currentSpace = spaces[index.current]
-
   const transRef = useSpringRef()
   const defaultStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
+  const fadeStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
   const transitions = useTransition(index, {
     ref: transRef,
     keys: null,
     from: () => {
       // Skip if there is no previous index
       if (index.prev === -1) return defaultStyles
+      if (!isAnimate.current) return fadeStyles
       const direction = index.prev > -1 ? Math.sign(index.current - index.prev) : 1
       // mog('from', { index, direction })
       return { opacity: 0, transform: `translate3d(${direction * 100}%,0,0)` }
@@ -116,6 +121,7 @@ export const NoteSidebar = () => {
     leave: () => {
       // Skip if there is no previous index
       if (index.prev === -1) return defaultStyles
+      if (!isAnimate.current) return fadeStyles
       const direction = index.prev > -1 ? -Math.sign(index.current - index.prev) : -1
       // mog('leave', { index, direction })
       return { opacity: 0, transform: `translate3d(${direction * 100}%,0,0)` }

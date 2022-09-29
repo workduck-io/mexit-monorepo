@@ -133,6 +133,7 @@ export const dataStoreConstructor = (set, get) => ({
   setIlinks: (ilinks) => {
     set(
       produce((draft) => {
+        // eslint-disable-next-line
         // @ts-ignore
         draft.ilinks = ilinks
       })
