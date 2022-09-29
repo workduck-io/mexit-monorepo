@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react'
+
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+
 import { useAuth } from '@workduck-io/dwindle'
 
+import { addIconsToIconify, defaultThemes } from '@mexit/shared'
+import { Notification } from '@mexit/shared'
+
+import FloatingButton from './Components/FloatingButton'
+import Main from './Components/Main'
+import Modals from './Components/Modals'
+import './Stores'
+import useThemeStore from './Stores/useThemeStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
-import useThemeStore from './Stores/useThemeStore'
-import { defaultThemes } from '@mexit/shared'
-import Modals from './Components/Modals'
-import { Notification } from '@mexit/shared'
-import Main from './Components/Main'
 import config from './config'
-import FloatingButton from './Components/FloatingButton'
-
-import './Stores'
 
 function App() {
   const theme = useThemeStore((state) => state.theme)
@@ -25,6 +27,8 @@ function App() {
       ClientId: config.cognito.APP_CLIENT_ID
     })
   }, []) // eslint-disable-line
+
+  addIconsToIconify()
 
   return (
     <Router>

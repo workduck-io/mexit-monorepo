@@ -6,7 +6,6 @@ import styled, { css } from 'styled-components'
 
 import { FocusModeProp, focusStyles } from './Editor'
 import { PixelToCSS, ThinScrollbar } from './Helpers'
-import { Ellipsis } from './Search'
 
 export const Sicon = styled(Icon)`
   height: 26px;
