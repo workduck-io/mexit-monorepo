@@ -1,3 +1,5 @@
+import { normalizeDescendantsToDocumentFragment } from '@udecode/plate'
+
 import { client } from '@workduck-io/dwindle'
 
 import { apiURLs, generateNodeUID, ILink, mog, SEPARATOR, getAllParentPaths, getNodeIcon } from '@mexit/core'
@@ -31,11 +33,34 @@ export const useInternalLinks = () => {
   }
 
   const refreshILinks = async () => {
-    const updatedILinks: any[] = (await getILinks()).ilinks
-    mog('UpdatingILinks', { updatedILinks })
-    if (updatedILinks && updatedILinks.length > 0) {
-      setILinks(updatedILinks)
-    }
+    const updatedILinks: any[] = await getILinks()
+    // mog('UpdatingILinks', { updatedILinks })
+    // if (updatedILinks && updatedILinks.length > 0) {
+    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
+      (p, [namespaceid, namespaceData]) => {
+        return {
+          namespaces: [
+            ...p.namespaces,
+            {
+              id: namespaceid,
+              name: namespaceData.name,
+              ...namespaceData?.namespaceMetadata
+            }
+          ],
+          nodes: [
+            ...p.nodes,
+            ...namespaceData.nodeHierarchy.map((ilink) => ({
+              ...ilink,
+              namespace: namespaceid
+            }))
+          ]
+        }
+      },
+      { nodes: [], namespaces: [] }
+    )
+    mog('UpdatingILinks', { nodes, namespaces })
+    setILinks(nodes)
+    // }
   }
 
   const updateILinksFromAddedRemovedPaths = (addedPaths: ILink[], removedPaths: ILink[]) => {
@@ -92,7 +117,7 @@ export const useInternalLinks = () => {
 
     const newILinks: ILink[] = newPaths.map((l) => {
       const addedILink = { nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(), path: l, icon: getNodeIcon(l) }
-      addedILink.path = checkValidILink({ nodePath: addedILink.path, showAlert: true, openedNodePath: undefined })
+      addedILink.path = checkValidILink({ notePath: addedILink.path, showAlert: true, openedNotePath: undefined })
 
       return addedILink
     })
@@ -101,14 +126,14 @@ export const useInternalLinks = () => {
     return newILinks
   }
 
-  const createNoteHierarchyString = (notePath: string) => {
+  const createNoteHierarchyString = (notePath: string, namespace: string) => {
     const ilinks = useDataStore.getState().ilinks
     let prefix = ''
 
     const noteLink = notePath.split(SEPARATOR).reduce((prevPath, currentNotePath) => {
       prefix = appendToText(prefix, currentNotePath)
 
-      const currentNoteId = getNodeidFromPathAndLinks(ilinks, prefix)
+      const currentNoteId = getNodeidFromPathAndLinks(ilinks, prefix, namespace)
       const linkWithTitle = appendToText(prevPath, currentNotePath, '#')
       const link = appendToText(linkWithTitle, currentNoteId, '#')
 
