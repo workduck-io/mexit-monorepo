@@ -102,9 +102,6 @@ const Refactor = () => {
 
       if (doesLinkRemain(nodeid, refactored)) {
         push(nodeid, { savePrev: false })
-      } else if (refactored.length > 0) {
-        const nodeid = refactored[0].nodeid
-        push(nodeid, { savePrev: false })
       }
     }
 
