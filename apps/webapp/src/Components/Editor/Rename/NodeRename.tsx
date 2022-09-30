@@ -146,9 +146,7 @@ const NodeRenameOnlyTitle = () => {
 
       if (doesLinkRemain(nodeid, refactored)) {
         push(nodeid)
-      }
-      // What is this code? Isn't res an object, what does res[0] refer to?
-      else if (refactored.length > 0) {
+      } else if (refactored.length > 0) {
         const nodeid = refactored[0].nodeid
         push(nodeid, { savePrev: false })
       }
