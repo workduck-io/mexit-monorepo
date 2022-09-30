@@ -389,7 +389,7 @@ export const useApi = () => {
             createdAt: item.createdAt,
             updatedAt: item.updatedAt
           },
-          archiveHierarchy: item.archivedNodeHierarchyInformation
+          archiveHierarchy: item?.archivedNodeHierarchyInformation
         }))
       })
       .catch((e) => {
@@ -399,17 +399,17 @@ export const useApi = () => {
 
     if (namespaces) {
       setNamespaces(namespaces.map((n) => n.ns))
-      // namespaces.map((n) => {
-      //   const archivedILinks = n.archivedNodeHierarchyInformation
+      namespaces.map((n) => {
+        const archivedILinks = n?.archivedNodeHierarchyInformation
 
-      //   if (archivedILinks && archivedILinks.length > 0) {
-      //     const localILinks = useDataStore.getState().archive
-      //     const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
+        if (archivedILinks && archivedILinks.length > 0) {
+          const localILinks = useDataStore.getState().archive
+          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
-      //     mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
-      //     addInArchive(archivedILinks)
-      //   }
-      // })
+          mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
+          addInArchive(archivedILinks)
+        }
+      })
     }
   }
 

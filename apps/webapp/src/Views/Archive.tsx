@@ -83,7 +83,7 @@ const Archive = () => {
   }
   const onSearch = async (newSearchTerm: string) => {
     const res = await queryIndex('archive', newSearchTerm)
-    if (newSearchTerm === '' && res.length === 0) {
+    if (newSearchTerm === '' && res?.length === 0) {
       return initialArchive
     }
     return res
