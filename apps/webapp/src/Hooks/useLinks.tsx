@@ -168,8 +168,8 @@ export const useLinks = () => {
         return !hasLink(l, currentLinks)
       })
 
-      toLinkstoDelete.map((l) => removeInternalLink(l, nodeid))
-      toLinkstoAdd.map((l) => addInternalLink(l, nodeid))
+      toLinkstoDelete.forEach((l) => removeInternalLink(l, nodeid))
+      toLinkstoAdd.forEach((l) => addInternalLink(l, nodeid))
     }
   }
 

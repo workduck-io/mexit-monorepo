@@ -88,11 +88,12 @@ export const useInternalLinks = () => {
     setILinks([...currILinks])
   }
 
-  const updateSingleILink = (nodeId: string, path: string) => {
+  const updateSingleILink = (nodeId: string, path: string, namespace: string) => {
     const newILink: ILink = {
       nodeid: nodeId,
       path: path,
-      icon: getNodeIcon(path)
+      icon: getNodeIcon(path),
+      namespace: namespace
     }
     const currILinks = useDataStore.getState().ilinks.filter((item) => item.nodeid !== nodeId)
     setILinks([...currILinks, newILink])
@@ -109,14 +110,19 @@ export const useInternalLinks = () => {
     return ilinks.find((ilink) => ilink.path === parentPath)
   }
 
-  const getEntirePathILinks = (ilink: string, nodeID: string) => {
+  const getEntirePathILinks = (ilink: string, nodeID: string, namespace: string) => {
     const pathStrings = useDataStore.getState().ilinks.map((ilink) => ilink.path)
     const parents = getAllParentPaths(ilink) // includes link of child
 
     const newPaths = parents.filter((l) => !pathStrings.includes(l)) // only create links for non existing
 
     const newILinks: ILink[] = newPaths.map((l) => {
-      const addedILink = { nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(), path: l, icon: getNodeIcon(l) }
+      const addedILink = {
+        nodeid: nodeID && l === ilink ? nodeID : generateNodeUID(),
+        path: l,
+        icon: getNodeIcon(l),
+        namespace: namespace
+      }
       addedILink.path = checkValidILink({ notePath: addedILink.path, showAlert: true, openedNotePath: undefined })
 
       return addedILink
