@@ -12,8 +12,6 @@ import {
 } from '@mexit/core'
 import { TreeNode } from '@mexit/shared'
 
-import { LastOpenedState } from '../Components/Sidebar/SidebarList'
-import { useContentStore } from '../Stores/useContentStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { filterIncompleteTodos } from './filter'
@@ -125,6 +123,7 @@ const insertInNested = (iNode: BaseTreeNode, nestedTree: BaseTreeNode[]) => {
 export interface FlatItem {
   id: string
   nodeid: string
+  namespace: string
   parentNodeId?: string
   tasks?: number
   reminders?: number
@@ -243,7 +242,7 @@ export const getBaseNestedTree = (flatTree: FlatItem[]): BaseTreeNode[] => {
   let baseNestedTree: BaseTreeNode[] = []
 
   flatTree.forEach((n) => {
-    console.log('n', n.id)
+    // console.log('n', n.id)
     const parentId = getParentNodePath(n.id)
     const tasks = todos[n.nodeid] ? todos[n.nodeid].filter(filterIncompleteTodos).length : 0
     const reminders = reminderGroups[n.nodeid] ? reminderGroups[n.nodeid].length : 0
@@ -316,6 +315,7 @@ export const generateTree = (
           nodeid: n.nodeid,
           path: n.id,
           mex_icon: n.icon,
+          namespace: n.namespace,
           stub: n.stub,
           tasks: nestedItem.tasks,
           reminders: nestedItem.reminders
@@ -343,6 +343,7 @@ export const generateTree = (
             nodeid: n.nodeid,
             path: n.id,
             mex_icon: n.icon,
+            namespace: n.namespace,
             stub: n.stub,
             tasks: nestedItem.tasks,
             reminders: nestedItem.reminders

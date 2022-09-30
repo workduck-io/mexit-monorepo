@@ -9,20 +9,26 @@ import {
   ELEMENT_PARAGRAPH,
   SEPARATOR,
   updateEmptyBlockTypes,
-  getParentId
+  getAllParentIds,
+  getParentNodePath
 } from '@mexit/core'
 import { checkIfUntitledDraftNode } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
+import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore, getContent } from '../Stores/useEditorStore'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
+import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useTreeStore } from '../Stores/useTreeStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useApi } from './API/useNodeAPI'
 import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
-import { getPathFromNodeIdHookless } from './useLinks'
+import { useFetchShareData } from './useFetchShareData'
+import { getLinkFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
-import { useUpdater } from './useUpdater'
+import useToggleElements from './useToggleElements'
 
 export interface LoadNodeOptions {
   savePrev?: boolean
@@ -36,44 +42,73 @@ export interface LoadNodeOptions {
 export interface IsLocalType {
   isLocal: boolean
   ilink?: ILink
-  isShared?: boolean
+  isShared: boolean
 }
 
 export type LoadNodeFn = (nodeid: string, options?: LoadNodeOptions) => void
 
 const useLoad = () => {
   const loadNodeEditor = useEditorStore((store) => store.loadNode)
-  const loadNodeAndReplaceContent = useEditorStore((store) => store.loadNodeAndReplaceContent)
   const setFetchingContent = useEditorStore((store) => store.setFetchingContent)
   const setContent = useContentStore((store) => store.setContent)
+  // const setNodePreview = useGraphStore((store) => store.setNodePreview)
   const { getDataAPI, saveDataAPI } = useApi()
+  // const setSuggestions = useSuggestionStore((store) => store.setSuggestions)
+  const { toggleSuggestedNodes } = useToggleElements()
+  const infobar = useLayoutStore((store) => store.infobar)
   const setHighlights = useBlockHighlightStore((store) => store.setHighlightedBlockIds)
+  const { fetchSharedNodeUsers } = useFetchShareData()
+  // const { debouncedAddLastOpened } = useLastOpened()
+  const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
 
   const setLoadingNodeid = useEditorStore((store) => store.setLoadingNodeid)
+  // const { push } = useNavigation()
+  // const clearLoadingNodeid = useEditorStore((store) => store.clearLoadingNodeid)
+  const expandNodes = useTreeStore((store) => store.expandNodes)
+
+  // const quitFullscreenGraph = useGraphStore((store) => store.quitFullscreen)
+
+  // const { saveNodeAPIandFs } = useDataSaverFromContent()
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { execRefactor } = useRefactor()
-  const { updateFromContent } = useUpdater()
+  // TODO: check why we need execRefactorAsync()
+  const { execRefactorAsync } = useRefactor()
+  // const { saveQ } = useSaveQ()
 
   const saveNodeName = (nodeId: string, title?: string) => {
+    if (nodeId !== useAnalysisStore.getState().analysis.nodeid) return
     const draftNodeTitle = title ?? useAnalysisStore.getState().analysis.title
     mog('SAVE NODE NAME', { draftNodeTitle })
     if (!draftNodeTitle) return
 
-    const nodePath = getPathFromNodeIdHookless(nodeId)
+    const node = getLinkFromNodeIdHookless(nodeId)
+    const { path: nodePath, namespace } = node
     const isUntitled = checkIfUntitledDraftNode(nodePath)
 
     if (!isUntitled) return
 
-    const parentNodePath = getParentId(nodePath)
+    const parentNodePath = getParentNodePath(nodePath)
     const newNodePath = `${parentNodePath}.${draftNodeTitle}`
 
     if (newNodePath !== nodePath)
       try {
-        execRefactor(nodePath, newNodePath, false)
+        execRefactorAsync(
+          {
+            path: nodePath,
+            namespaceID: namespace
+          },
+          {
+            path: newNodePath,
+            namespaceID: namespace
+          },
+          false
+        )
+
         loadNode(nodeId, { fetch: false })
       } catch (err) {
         toast('Unable to rename node')
       }
+
+    return newNodePath
   }
 
   const getNode = (nodeid: string): NodeProperties => {
@@ -83,16 +118,18 @@ const useLoad = () => {
 
     const archiveLink = archive.find((i) => i.nodeid === nodeid)
     const respectiveLink = ilinks.find((i) => i.nodeid === nodeid)
-
     const sharedLink = sharedNodes.find((i) => i.nodeid === nodeid)
+
     const UID = respectiveLink?.nodeid ?? archiveLink?.nodeid ?? sharedLink?.nodeid ?? nodeid
     const text = respectiveLink?.path ?? archiveLink?.path ?? sharedLink?.path
+    const namespace = respectiveLink?.namespace ?? archiveLink?.namespace ?? sharedLink?.namespace
 
     const node = {
       title: text,
       id: text,
       nodeid: UID,
-      path: text
+      path: text,
+      namespace
     }
 
     return node
@@ -128,14 +165,31 @@ const useLoad = () => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const isShared = !!sharedNodes.find((i) => i.nodeid === node.nodeid)
     setFetchingContent(true)
-    saveDataAPI(node.nodeid, content, isShared)
+    saveDataAPI(node.nodeid, node.namespace, content, isShared)
       .then((data) => {
         if (data) {
-          mog('SAVED DATA', { data })
+          // const { data, metadata, version } = res
+          // goTo(ROUTE_PATHS.node, NavigationType.replace, node.nodeid)
+          // mog('SAVED DATA', { data })
+          // if (data) {
+          //   updateEmptyBlockTypes(data, ELEMENT_PARAGRAPH)
+          //   const nodeContent = {
+          //     type: 'editor',
+          //     content: data,
+          //     version,
+          //     metadata
+          //   }
+          // loadNodeAndReplaceContent(node, nodeContent)
+          //   setContent(node.nodeid, data, metadata)
+          // setFetchingContent(false)
+          // }
         }
       })
       .catch(console.error)
       .finally(() => setFetchingContent(false))
+    if (isShared) {
+      fetchSharedNodeUsers(node.nodeid)
+    }
   }
 
   /*
@@ -146,32 +200,24 @@ const useLoad = () => {
     // console.log('Fetch and save', { node })
     // const node = getNode(nodeid)
     if (options.withLoading) setFetchingContent(true)
+
     getDataAPI(node.nodeid, options.isShared)
       .then((nodeData) => {
         if (nodeData) {
-          // console.log(res)
           const { content, metadata, version } = nodeData
 
           if (content) {
             updateEmptyBlockTypes(content, ELEMENT_PARAGRAPH)
-            const nodeContent = {
-              type: 'editor',
-              content,
-              version,
-              metadata
-            }
 
             // mog('Fetch and load data', { data, metadata, version })
             const loadingNodeid = useEditorStore.getState().loadingNodeid
 
+            setContent(node.nodeid, content, metadata)
             if (node.nodeid === loadingNodeid) {
-              loadNodeAndReplaceContent(node, nodeContent)
+              loadNodeEditor(node)
             } else {
               mog('CurrentNode is not same for loadNode', { node, loadingNodeid })
             }
-
-            setContent(node.nodeid, content, metadata)
-            updateFromContent(node.nodeid, content)
           }
         }
         if (options.withLoading) setFetchingContent(false)
@@ -187,12 +233,18 @@ const useLoad = () => {
   /**
    * Loads a node in the editor.
    * This does not navigate to editor.
+   *
+   * For shared:
+   * fetchAndSave different
    */
   const loadNode: LoadNodeFn = (nodeid, options = { savePrev: true, fetch: true, withLoading: true }) => {
+    // mog('Load Node Called', { nodeid, options })
     const hasBeenLoaded = false
     const currentNodeId = useEditorStore.getState().node.nodeid
+    const isAuthenticated = useAuthStore.getState().authenticated
 
-    // mog('LOAD NODE', { nodeid, options })
+    if (!isAuthenticated) return
+
     const localCheck = isLocalNode(nodeid)
 
     if (!options.node && !localCheck.isLocal && !localCheck.isShared) {
@@ -202,21 +254,42 @@ const useLoad = () => {
 
     setLoadingNodeid(nodeid)
 
+    // quitFullscreenGraph()
+    // setNodePreview(false)
+    // setSuggestions([])
+    if (infobar.mode === 'suggestions') toggleSuggestedNodes()
+
+    // setSelectedNode(undefined)
+
     if (options.savePrev) {
       saveNodeName(currentNodeId)
-      saveAndClearBuffer()
+      saveAndClearBuffer(false)
     }
 
     const node = options.node ?? getNode(nodeid)
-    mog('LOAD NODE', { nodeid, options, cond: options.fetch && !hasBeenLoaded, hasBeenLoaded })
+
     if (options.fetch && !hasBeenLoaded) {
+      mog('Fetching')
       if (localCheck.isShared) {
+        // TODO: Change fetch for shared
         fetchAndSaveNode(node, { withLoading: true, isShared: true })
+        fetchSharedNodeUsers(node.nodeid)
       } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
     }
+
     if (options.highlightBlockId) {
       setHighlights([options.highlightBlockId], 'editor')
     }
+
+    if (!localCheck.isShared) {
+      const allParents = getAllParentIds(node.path)
+      expandNodes(allParents)
+    }
+
+    // debouncedAddLastOpened(nodeid)
+
+    mog('Loading that here', { node })
+    changeSpace(node.namespace)
     loadNodeEditor(node)
   }
 
@@ -235,19 +308,20 @@ const useLoad = () => {
 
     const appendedContent = [...nodeContent.content, ...content]
     mog('Appended content', { appendedContent })
+    setContent(nodeid, appendedContent)
 
-    loadNodeAndReplaceContent(nodeProps, { ...nodeContent, content: appendedContent })
+    loadNodeEditor(nodeProps)
   }
 
   return {
     loadNode,
     fetchAndSaveNode,
     saveNodeName,
-    getNoteContent,
     loadNodeAndAppend,
     isLocalNode,
     loadNodeProps,
     getNode,
+    getNoteContent,
     saveApiAndUpdate
   }
 }

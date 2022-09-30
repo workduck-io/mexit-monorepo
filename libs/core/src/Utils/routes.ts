@@ -68,6 +68,7 @@ export const apiURLs = {
   deleteArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive/delete`,
   getArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
   unArchiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
+  archiveInNamespace: (namespaceId: string) => `${MEXIT_BACKEND_URL_BASE}/node/archive/${namespaceId}`,
 
   // Refactor
   refactorHeirarchy: `${MEXIT_BACKEND_URL_BASE}/node/refactor`,
@@ -76,6 +77,18 @@ export const apiURLs = {
   createWorkspace: `${BASE_API_URL}/workspace`,
   getNodesByWorkspace: (workspaceId: string) => `${BASE_API_URL}/node/workspace/${workspaceId}/namespace/NAMESPACE1`,
   getHierarchy: `${BASE_API_URL}/workspace/hierarchy`,
+
+  // Namespaces
+  namespaces: {
+    getHierarchy: `${MEXIT_BACKEND_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
+    get: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/${id}`,
+    getAll: `${MEXIT_BACKEND_URL_BASE}/namespace/all`,
+    create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
+    makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
+    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/public/${id}`
+  },
 
   // Link Shortener URLs
   updateShort: `${LINK_SHORTENER_URL_BASE}/update`,
@@ -92,7 +105,7 @@ export const apiURLs = {
   fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
   getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
   createNode: `${MEXIT_BACKEND_URL_BASE}/node`,
-  bulkCreateNodes: `${MEXIT_BACKEND_URL_BASE}/node/bulkCreate`,
+  bulkCreateNodes: `${MEXIT_BACKEND_URL_BASE}/node/bulk`,
   makeNotePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
   makeNotePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
   getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/public/${uid}`,

@@ -1,13 +1,12 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { Input, StyledMenu } from '@mexit/shared'
 
 import NodeSelect from './NodeSelect/NodeSelect'
 
-export type CreateInputType = { value?: string; onChange; disabled?: boolean; autoFocus?: boolean }
-
-export const StyleCreateInputWrapper = styled.div`
+export const StyledCreateInputWrapper = styled.div`
   width: 100%;
   position: relative;
   ${StyledMenu} {
@@ -20,9 +19,16 @@ export const StyleCreateInputWrapper = styled.div`
   }
 `
 
+export type CreateInputType = {
+  value?: { path: string; namespace: string }
+  onChange
+  disabled?: boolean
+  autoFocus?: boolean
+}
+
 const CreateInput: React.FC<CreateInputType> = ({ autoFocus, onChange, value, disabled }) => {
   return (
-    <StyleCreateInputWrapper>
+    <StyledCreateInputWrapper>
       <NodeSelect
         autoFocus={autoFocus}
         disabled={disabled}
@@ -32,7 +38,7 @@ const CreateInput: React.FC<CreateInputType> = ({ autoFocus, onChange, value, di
         placeholder="Search for a note"
         handleSelectItem={onChange}
       />
-    </StyleCreateInputWrapper>
+    </StyledCreateInputWrapper>
   )
 }
 

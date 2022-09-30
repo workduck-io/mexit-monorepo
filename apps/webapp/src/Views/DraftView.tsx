@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
+
+import { uniq } from 'lodash'
 import shallow from 'zustand/shallow'
 
+import { defaultContent, ILink, mog } from '@mexit/core'
 import { Wrapper } from '@mexit/shared'
-import { defaultContent, ILink, mog, uniq } from '@mexit/core'
-
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { Title } from '@mexit/shared'
 import { SSnippets, SSnippet, SnippetHeader, SnippetCommand, StyledSnippetPreview } from '@mexit/shared'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useContentStore } from '../Stores/useContentStore'
+
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
+import { useContentStore } from '../Stores/useContentStore'
+import { useDataStore } from '../Stores/useDataStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 
 function DraftView() {
   const { contents } = useContentStore()

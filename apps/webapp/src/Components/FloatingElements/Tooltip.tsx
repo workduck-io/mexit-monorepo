@@ -1,4 +1,5 @@
 import React, { cloneElement, useMemo, useState } from 'react'
+
 import {
   Placement,
   offset,
@@ -9,9 +10,10 @@ import {
   useInteractions,
   useHover,
   useRole,
-  useDismiss,
+  useDismiss
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
+
 import { TooltipWrapper } from './Tooltip.style'
 
 interface Props {
@@ -50,7 +52,6 @@ export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placemen
     useDismiss(context)
   ])
 
-  // Preserve the consumer's ref
   const ref = useMemo(() => mergeRefs([reference, (children as any).ref]), [reference, children])
 
   return (

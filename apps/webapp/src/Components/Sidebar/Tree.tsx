@@ -38,7 +38,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { RenderTreeItem } from './TreeItem'
-import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
 
 interface GetIconProps {
   item: TreeItem
@@ -206,7 +205,9 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
     }
 
     const from = draggedRef.current.data.path
+    const fromItem = tree.items[source.parentId]
     const toItem = tree.items[destination.parentId]
+    const nsID = fromItem.data?.namespace ?? toItem.data?.namespace
     let to: string | null = null
     if (toItem) {
       if (toItem.id === '1') {
@@ -221,7 +222,7 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
 
     draggedRef.current = null
 
-    prefillModal(from, to)
+    prefillModal({ path: from, namespaceID: nsID }, { path: to, namespaceID: nsID })
     // changeTree(newTree)
   }
 

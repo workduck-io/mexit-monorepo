@@ -1,11 +1,16 @@
 import { IconifyIcon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
+import toast from 'react-hot-toast'
 
 import { defaultContent, generateSnippetId } from '@mexit/core'
+import { InteractiveToast } from '@mexit/shared'
 
+import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useCreateNewNote } from './useCreateNewNote'
+import { useNamespaces } from './useNamespaces'
 import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
 import { useSnippets } from './useSnippets'
 import { useUpdater } from './useUpdater'
@@ -17,24 +22,44 @@ interface CreateNewMenuItem {
   onSelect: () => void
 }
 
-// TODO: Add ordering and filtering based on Path
-interface CreateNewMenuConfig {
-  // If passed, and the path matches/starts with this path
-  // The menu item is moved above
-  path?: string
-}
-
 export const useCreateNewMenu = () => {
   const { goTo } = useRouting()
   const { createNewNote } = useCreateNewNote()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { addSnippet } = useSnippets()
   const { updater } = useUpdater()
+  const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
+  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
+  const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
+  const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 
-  const createNoteWithDefaultContent = () => {
-    const noteId = createNewNote({ noteContent: defaultContent.content })
+  const createNewNamespace = () => {
+    addDefaultNewNamespace()
+      .then((ns) => {
+        if (ns) changeSpace(ns.id)
+        return ns
+      })
+      .then((ns) => {
+        toast.custom((t) => (
+          <InteractiveToast
+            tid={t.id}
+            message={`Created new space: ${ns?.name}`}
+            actionName="Open"
+            onClick={() => {
+              if (ns) changeSpace(ns.id)
+              expandSidebar()
+            }}
+          />
+        ))
+      })
+  }
 
-    goTo(ROUTE_PATHS.node, NavigationType.push, noteId)
+  const createNewNoteInNamespace = (namespaceId: string) => {
+    const note = createNewNote({ namespace: namespaceId, noteContent: defaultContent.content })
+
+    if (note) {
+      goTo(ROUTE_PATHS.node, NavigationType.push, note?.nodeid)
+    }
   }
 
   const onCreateNewSnippet = () => {
@@ -54,13 +79,21 @@ export const useCreateNewMenu = () => {
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
-  const getCreateNewMenuItems = (path: string): CreateNewMenuItem[] => {
+
+  const getCreateNewMenuItems = (_path: string): CreateNewMenuItem[] => {
     return [
       {
         id: 'new-note',
         label: 'New Note',
         onSelect: () => {
-          createNoteWithDefaultContent()
+          createNewNoteInNamespace(currentSpace || getDefaultNamespaceId())
+        }
+      },
+      {
+        id: 'new-space',
+        label: 'New Space',
+        onSelect: () => {
+          createNewNamespace()
         }
       },
       {

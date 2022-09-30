@@ -7,7 +7,7 @@ import { generateTree } from '../Utils/tree'
 
 export const getTreeFromLinks = (links: ILink[]) => {
   const expanded = useTreeStore.getState().expanded
-  mog('Expanded', { expanded })
+  // mog('Expanded', { expanded })
 
   const sanatizedLinks = sanatizeLinks(links)
   const tree = generateTree(sanatizedLinks, expanded)

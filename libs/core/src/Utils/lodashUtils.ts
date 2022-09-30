@@ -58,4 +58,9 @@ const uniqBy = (data: Array<any>, by: string | ByFunction): Array<any> => {
   return [...setElems]
 }
 
-export { throttle, remove, range, uniq, uniqBy }
+export {
+  throttle,
+  remove,
+  range
+  // uniq, uniqBy
+}

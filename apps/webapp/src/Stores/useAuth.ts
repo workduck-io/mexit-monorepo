@@ -240,16 +240,14 @@ export const useInitializeAfterAuth = () => {
 
       setAuthenticated(userDetails, workspaceDetails)
 
-      const initialSnippetsP = await api.getAllSnippetsByWorkspace()
+      const initialSnippetsP = api.getAllSnippetsByWorkspace()
 
       const initPortalsP = initPortals()
       const refreshILinksP = refreshILinks()
+      const getAllNamespacesP = api.getAllNamespaces()
 
-      const [initialSnippetsResult, initialPortalsResult, initialILinksResult] = await Promise.allSettled([
-        initialSnippetsP,
-        initPortalsP,
-        refreshILinksP
-      ])
+      const [initialNamespacesResult, initialILinksResult, initialPortalsResult, initialSnippetsResult] =
+        await Promise.allSettled([getAllNamespacesP, refreshILinksP, initPortalsP, initialSnippetsP])
 
       if (initialSnippetsResult.status === 'fulfilled') updateSnippets(initialSnippetsResult.value)
       getInitialSnippets()

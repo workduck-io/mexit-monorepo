@@ -1,12 +1,36 @@
-import { Icon } from '@iconify/react'
 import React from 'react'
+
+import { Icon } from '@iconify/react'
 import { components } from 'react-select'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const Control = styled(components.Control)`
   margin: ${({ theme }) => theme.spacing.medium} 0;
+`
+
+const NamespaceControl = styled(components.Control)`
+  margin: 0 !important;
+  border-color: transparent !important;
+  padding: 0.25rem 0;
+  border-radius: 0;
+  opacity: 0.5;
+  min-width: 10rem;
+  ${({ menuIsOpen, isFocused }) =>
+    (menuIsOpen || isFocused) &&
+    css`
+      opacity: 1;
+    `}
+  :hover,
+  :focus {
+    opacity: 1;
+  }
+`
+
+const SpotlightNamespaceControl = styled(NamespaceControl)`
+  width: 14rem;
+  padding: 0 !important;
 `
 
 const StyledLabel = styled.div`
@@ -96,3 +120,5 @@ const Input = (props: any) => {
 
 export const StyledServiceSelectComponents = { Control, MultiValueLabel, Option, ValueContainer, Input, Placeholder }
 export const StyledRolesSelectComponents = { Control, Input, ValueContainer, Placeholder }
+export const StyledNamespaceSelectComponents = { Control: NamespaceControl }
+export const StyledNamespaceSpotlightSelectComponents = { Control: SpotlightNamespaceControl }

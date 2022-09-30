@@ -3,6 +3,7 @@ import React from 'react'
 import BlockModal from '../Editor/Components/Blocks/BlockModal'
 import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
+import FleetContainer from './FleetContainer'
 import ShareModal from './Mentions/ShareModal'
 import Lookup from './Modals/Lookup'
 import Refactor from './Refactor'
@@ -24,6 +25,7 @@ const Modals = () => {
       <ShareModal />
       <CreateReminderModal />
       <TaskViewModal />
+      <FleetContainer />
     </>
   )
 }

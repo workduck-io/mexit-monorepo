@@ -1,5 +1,7 @@
-import { NodeEditorContent, TodoType, TodoStatus, ELEMENT_SYNC_BLOCK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 import { useMemo } from 'react'
+
+import { NodeEditorContent, TodoType, TodoStatus, ELEMENT_SYNC_BLOCK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
+
 import { useEditorStore } from '../Stores/useEditorStore'
 
 export type ContentBlockType = typeof ELEMENT_SYNC_BLOCK | typeof ELEMENT_INLINE_BLOCK
@@ -34,7 +36,7 @@ export const useFilteredContent = (filter: FilterContentType) => {
 }
 
 export const filterIncompleteTodos = (todo: TodoType) => {
-  if (todo.metadata.status === TodoStatus.completed) {
+  if (todo?.metadata?.status === TodoStatus?.completed) {
     return false
   }
   return true

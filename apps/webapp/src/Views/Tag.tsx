@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
+
 import { debounce } from 'lodash'
+import { useParams } from 'react-router-dom'
 import { useTransition } from 'react-spring'
 import styled, { css } from 'styled-components'
-import { useParams } from 'react-router-dom'
 
-import { defaultContent } from '../Data/baseData'
-import useLoad from '../Hooks/useLoad'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useTags } from '../Hooks/useTags'
 import { HoverSubtleGlow } from '@mexit/shared'
 import { Results, Result, ResultHeader, ResultTitle, SearchPreviewWrapper, Input, View } from '@mexit/shared'
-import { fuzzySearch } from '../Utils/fuzzysearch'
+
+import NamespaceTag from '../Components/NamespaceTag'
+import { defaultContent } from '../Data/baseData'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useLinks } from '../Hooks/useLinks'
+import useLoad from '../Hooks/useLoad'
+import { useNamespaces } from '../Hooks/useNamespaces'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
+import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
+import { fuzzySearch } from '../Utils/fuzzysearch'
 
 const TagsWrapper = styled.div`
   display: flex;
@@ -73,7 +77,8 @@ const Tag = () => {
   const { tag } = useParams<{ tag: string }>()
   // const tagsCache = useDataStore((store) => store.tagsCache)
   const { getNodesAndCleanCacheForTag } = useTags()
-  const { getPathFromNodeid } = useLinks()
+  const { getILinkFromNodeid } = useLinks()
+  const { getNamespace } = useNamespaces()
   const { nodes, cleanCache } = getNodesAndCleanCacheForTag(tag)
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
@@ -179,8 +184,10 @@ const Tag = () => {
         <Results view={View.Card}>
           {transition((styles, nodeid, _t, _i) => {
             const con = contents[nodeid]
-            const path = getPathFromNodeid(nodeid, true)
+            const node = getILinkFromNodeid(nodeid, true)
             const content = con ? con.content : defaultContent.content
+            const namespace = getNamespace(node?.namespace)
+
             return (
               <Result
                 // eslint-disable-next-line
@@ -194,7 +201,8 @@ const Tag = () => {
                 key={`tag_res_prev_${tag}_${nodeid}${_i}`}
               >
                 <ResultHeader>
-                  <ResultTitle>{path}</ResultTitle>
+                  <ResultTitle>{node?.path}</ResultTitle>
+                  <NamespaceTag namespace={namespace} />
                 </ResultHeader>
                 <SearchPreviewWrapper>
                   <EditorPreviewRenderer content={content} editorId={`editor_${tag}_preview_${nodeid}`} />

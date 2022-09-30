@@ -161,12 +161,63 @@ export const useTags = () => {
     }
   }
 
+  // Get most used tags by namespaces
+  // Limits the max no. of tags to 5
   const getMostUsedTags = () => {
     const tagsCache = useDataStore.getState().tagsCache
-    const tagsWithFreq: Array<{ tag: string; freq: number }> = Object.entries(tagsCache).reduce((p, [k, v]) => {
-      return [...p, { tag: k, freq: v.nodes.length }]
+    const ilinks = useDataStore.getState().ilinks
+
+    // Calculate frequency of a tag in notes belonging to namespace
+    const tagsWithNSFreq: Array<{ tag: string; freq: Record<string, number> }> = Object.entries(tagsCache).reduce(
+      (p, [k, v]) => {
+        const tagFreq = v.nodes.reduce((p, c) => {
+          const ilink = ilinks.find((i) => i.nodeid === c)
+          const ns = ilink?.namespace
+          if (ns) {
+            if (p[ns]) {
+              return { ...p, [ns]: p[ns] + 1 }
+            }
+            return { ...p, [ns]: 1 }
+          }
+          return p
+        }, {})
+
+        return [...p, { tag: k, freq: tagFreq }]
+      },
+      []
+    )
+
+    // All namespaces that have tags
+    const namespacesWithFreq = tagsWithNSFreq.reduce((p: string[], c) => {
+      const freq = c.freq
+      return [...p, ...Object.keys(freq)]
     }, [])
-    return tagsWithFreq
+
+    const allNamespaces = Settify(namespacesWithFreq)
+
+    // Namespaces with tag and their frequency
+    const nsWithTagFreq = allNamespaces.reduce((p, nsid) => {
+      const freq = tagsWithNSFreq
+        .reduce((p2, t) => {
+          if (t.freq[nsid] > 0) {
+            return [...p2, { tag: { value: t.tag }, freq: t.freq[nsid] }]
+          }
+          return p2
+        }, [])
+        // Sort by frequency
+        .sort((a, b) => b.freq - a.freq)
+        // Return the tag only
+        .map((t) => t.tag)
+        // Limit no of results
+        .slice(0, 5)
+
+      return {
+        ...p,
+        [nsid]: freq
+      }
+    }, {})
+
+    return nsWithTagFreq
   }
 
   return {

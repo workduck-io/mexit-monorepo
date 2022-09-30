@@ -20,13 +20,10 @@ import {
   StyledTreeItemSwitcher,
   StyledTreeSwitcher,
   TooltipContentWrapper,
-  TooltipCount,
-  UnreadIndicator
+  TooltipCount
 } from '@mexit/shared'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
-import useMultipleEditors from '../../Stores/useEditorsStore'
-import { LastOpenedState } from './SidebarList'
 import { TreeContextMenu } from './TreeWithContextMenu'
 
 const defaultSnap = {

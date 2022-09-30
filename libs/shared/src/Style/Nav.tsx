@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import { CollapseHeader, CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
 import { ScrollStyles } from './Helpers'
-import { Ellipsis } from './Search'
+import { Ellipsis } from './NodeSelect.style'
 import { TabBody } from './Tab.Styles'
 
 export const Scroll = css`

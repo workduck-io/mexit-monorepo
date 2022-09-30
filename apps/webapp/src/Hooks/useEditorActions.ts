@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react'
-import create from 'zustand'
+
 import { usePlateEditorRef } from '@udecode/plate-core'
+import create from 'zustand'
 
 import { NodeEditorContent } from '@mexit/core'
 
-import { useEditorBuffer } from './useEditorBuffer'
-import useLoad from './useLoad'
-import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'
+import useLoad from './useLoad'
+import { useNamespaces } from './useNamespaces'
+import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
 
 interface ErrorState {
   prevNode: string
@@ -38,10 +40,12 @@ const useEditorActions = () => {
   const setAlreadyErrored = useEditorErrorStore((s) => s.setAlreadyErrored)
   const setErrorState = useEditorErrorStore((s) => s.setErrorState)
   const { getNodeidFromPath } = useLinks()
+  const { getDefaultNamespace } = useNamespaces()
 
   const resetEditor = () => {
     let nodeIdToLoad = node.nodeid
-    const basenode_nodeId = getNodeidFromPath(baseNodePath)
+    const defaultNamespace = getDefaultNamespace()
+    const basenode_nodeId = getNodeidFromPath(baseNodePath, defaultNamespace.id)
     // mog('resetEditor', { nodeIdToLoad, node, prevNode })
     const loadNodeL = (nodeIdToLoad: string) => {
       clearBuffer()

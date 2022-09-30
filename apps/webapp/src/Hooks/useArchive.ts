@@ -1,10 +1,14 @@
 import { client, useAuth } from '@workduck-io/dwindle'
 
-import { ILink, apiURLs, mog, WORKSPACE_HEADER } from '@mexit/core'
+import { ILink, apiURLs, mog, WORKSPACE_HEADER, USE_API } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
-import { useSaver } from './useSaver'
+import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useApi } from './API/useNodeAPI'
+import { getTitleFromPath } from './useLinks'
+import { useSaver } from './useSaver'
+import { useSearch } from './useSearch'
 
 const useArchive = () => {
   const setArchive = useDataStore((state) => state.setArchive)
@@ -12,25 +16,48 @@ const useArchive = () => {
   const unArchive = useDataStore((state) => state.unArchive)
   const addInArchive = useDataStore((state) => state.addInArchive)
   const removeArchive = useDataStore((state) => state.removeFromArchive)
+  const { getDataAPI } = useApi()
 
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
+  const setContent = useContentStore((store) => store.setContent)
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
 
-  const { onSave } = useSaver()
-  // const { saveData } = useSaveData()
+  const { updateDocument } = useSearch()
   const { userCred } = useAuth()
+
+  const updateArchiveLinks = (addedILinks: Array<ILink>, removedILinks: Array<ILink>): Array<ILink> => {
+    const archive = useDataStore.getState().archive
+
+    // * Find the Removed Notes
+    const intersection = removedILinks.filter((l) => {
+      const note = addedILinks.find((rem) => l.nodeid === rem.nodeid)
+      return !note
+    })
+
+    const newArchiveNotes = [...archive, ...intersection]
+    setArchive(newArchiveNotes)
+
+    mog('Archiving notes', { newArchiveNotes, intersection })
+
+    return newArchiveNotes
+  }
 
   const archived = (nodeid: string) => {
     return archive.find((node) => node.nodeid === nodeid)
   }
 
-  const addArchiveData = async (nodes: ILink[]): Promise<boolean> => {
+  const addArchiveData = async (nodes: ILink[], namespaceID: string): Promise<boolean> => {
+    if (!USE_API) {
+      addInArchive(nodes)
+      return true
+    }
+
     if (userCred) {
       return await client
         .put(
-          apiURLs.archiveNodes,
+          apiURLs.archiveInNamespace(namespaceID),
           {
             ids: nodes.map((i) => i.nodeid)
           },
@@ -41,11 +68,36 @@ const useArchive = () => {
             }
           }
         )
-        // .then(console.log)
-        .then(() => {
-          addInArchive(nodes)
+        .then((d) => {
+          // We only get the data for archived nodeids in this response
+
+          const archivedNodeids = d.data
+
+          mog('Archived Nodes', { archivedNodeids, d })
+          if (archivedNodeids && archivedNodeids?.length > 0) {
+            const archivedNodes = nodes
+              .filter((n) => archivedNodeids.includes(n.nodeid))
+              .map((n) => ({ ...n, path: getTitleFromPath(n.path) }))
+            addInArchive(archivedNodes)
+          }
+          // TODO: Once middleware is setup, use returned hierarchy to update the archived notes
+          // const { archivedHierarchy } = d.data
+          // mog('archivedHierarchy', { archivedHierarchy })
+
+          // if (archivedHierarchy) {
+          //   const addedArchivedLinks = hierarchyParser(archivedHierarchy, namespaceID, {
+          //     withParentNodeId: true,
+          //     allowDuplicates: true
+          //   })
+
+          //   if (addedArchivedLinks) {
+          //     // * set the new hierarchy in the tree
+
+          //     mog('addedArchivedLinks', { addedArchivedLinks })
+          //     setArchive(addedArchivedLinks)
+          //   }
+          // }
         })
-        .then(() => onSave())
         .then(() => {
           return true
         })
@@ -58,6 +110,9 @@ const useArchive = () => {
   }
 
   const unArchiveData = async (nodes: ILink[]) => {
+    if (!USE_API) {
+      return unArchive(nodes[0])
+    }
     await client
       .put(
         apiURLs.unArchiveNodes,
@@ -79,7 +134,12 @@ const useArchive = () => {
       .catch(console.error)
   }
 
-  const getArchiveData = async () => {
+  // TODO: figure how namespaces are working with archive hierarchy
+  const getArchiveNotesHierarchy = async () => {
+    if (!USE_API) {
+      return archive
+    }
+
     await client
       .get(apiURLs.getArchivedNodes, {
         headers: {
@@ -87,15 +147,33 @@ const useArchive = () => {
           Accept: 'application/json, text/plain, */*'
         }
       })
-      .then((d: any) => {
+      .then((d) => {
         if (d.data) {
-          const ids = d.data
-          const links = ids.filter((id) => archive.filter((ar) => ar.nodeid === id).length === 0)
-          setArchive(links)
+          const hierarchy = d.data
+
+          mog('getArchiveNotesHierarchy', { hierarchy })
+
+          // const archivedNotes = hierarchyParser(hierarchy, { withParentNodeId: true, allowDuplicates: true })
+
+          // if (archivedNotes && archivedNotes.length > 0) {
+          //   const localILinks = useDataStore.getState().archive
+          //   const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedNotes)
+
+          //   runBatch(
+          //     toUpdateLocal.map((ilink) =>
+          //       getDataAPI(ilink.nodeid, false, false, false).then((data) => {
+          //         setContent(ilink.nodeid, data.content, data.metadata)
+          //         updateDocument('archive', ilink.nodeid, data.content)
+          //       })
+          //     )
+          //   )
+          // }
+
+          // setArchive(archivedNotes)
         }
         return d.data
       })
-      .catch(console.error)
+      .catch(mog)
   }
 
   const cleanCachesAfterDelete = (nodes: ILink[]) => {
@@ -115,6 +193,11 @@ const useArchive = () => {
   }
 
   const removeArchiveData = async (nodeids: ILink[]): Promise<boolean> => {
+    if (!USE_API) {
+      removeArchive(nodeids)
+      return true
+    }
+
     if (userCred) {
       const res = await client
         .post(
@@ -148,7 +231,7 @@ const useArchive = () => {
     return false
   }
 
-  return { archived, addArchiveData, removeArchiveData, getArchiveData, unArchiveData }
+  return { archived, addArchiveData, updateArchiveLinks, removeArchiveData, getArchiveNotesHierarchy, unArchiveData }
 }
 
 export default useArchive

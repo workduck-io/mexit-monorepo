@@ -8,6 +8,7 @@ import { getContent } from '../Stores/useEditorStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { areEqual } from '../Utils/hash'
 import { useApi } from './API/useNodeAPI'
+import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useDataSaverFromContent } from './useSave'
 import { useSnippets } from './useSnippets'
@@ -34,6 +35,7 @@ export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)
   const clearBuffer = useBufferStore((s) => s.clear)
   const { isSharedNode } = useNodes()
+  const { getNamespaceOfNodeid } = useNamespaces()
 
   const addOrUpdateValBuffer = (nodeid: string, val: NodeEditorContent) => {
     add2Buffer(nodeid, val)
@@ -51,9 +53,10 @@ export const useEditorBuffer = () => {
         const content = getContent(nodeid)
         const res = areEqual(content.content, val)
         const isShared = isSharedNode(nodeid)
+        const namespace = getNamespaceOfNodeid(nodeid)
 
         if (!res) {
-          saveEditorValueAndUpdateStores(nodeid, val, { saveApi: true, isShared })
+          saveEditorValueAndUpdateStores(nodeid, namespace.id, val, { saveApi: true, isShared })
         }
         return !res
       })
@@ -61,7 +64,25 @@ export const useEditorBuffer = () => {
     clearBuffer()
   }
 
-  return { addOrUpdateValBuffer, saveAndClearBuffer, getBuffer, getBufferVal, clearBuffer }
+  const saveNoteBuffer = async (noteId: string): Promise<boolean> => {
+    const buffer = useBufferStore.getState().buffer?.[noteId]
+    const content = getContent(noteId)?.content
+
+    if (content) {
+      const res = areEqual(content, buffer)
+      if (!res) {
+        const namespace = getNamespaceOfNodeid(noteId)
+        try {
+          await saveEditorValueAndUpdateStores(noteId, namespace.id, buffer, { saveApi: true })
+          return true
+        } catch (err) {
+          mog('Unable to save content', { err })
+        }
+      }
+    }
+  }
+
+  return { addOrUpdateValBuffer, saveAndClearBuffer, getBuffer, getBufferVal, clearBuffer, saveNoteBuffer }
 }
 
 interface SnippetBufferStore {

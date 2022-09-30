@@ -1,10 +1,13 @@
+import { clamp } from 'lodash'
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
-import { Ellipsis, LoadingButton } from '@workduck-io/mex-components'
+import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
 
-import { TagsFlex } from '@mexit/shared'
+import { IconWrapper, TagsFlex } from '@mexit/shared'
+
+import { SidebarListWrapper } from './SidebarList.style'
 
 export const SidebarWrapper = styled.div`
   display: flex;
@@ -12,6 +15,10 @@ export const SidebarWrapper = styled.div`
   flex-grow: 1;
   height: 100%;
   padding: ${({ theme }) => theme.spacing.small};
+
+  ${SidebarListWrapper} {
+    height: 90%;
+  }
 `
 
 export const SpaceWrapper = styled(SidebarWrapper)`
@@ -22,6 +29,7 @@ export const SpaceContentWrapper = styled.div`
   height: calc(100% - 4rem);
   overflow: hidden;
 `
+
 export const SingleSpace = styled(animated.div)`
   position: absolute;
   display: flex;
@@ -35,11 +43,12 @@ export const SingleSpace = styled(animated.div)`
 export const SpaceHeader = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   gap: ${({ theme }) => theme.spacing.medium};
 
   ${TagsFlex} {
-    min-width: 276px;
+    min-width: 266px;
   }
 `
 
@@ -51,12 +60,30 @@ export const SpaceTitleWrapper = styled.div`
   padding-left: ${({ theme }) => theme.spacing.small};
 `
 
+export const SpaceTitleFakeInput = styled.div`
+  display: inline-block;
+
+  color: ${({ theme }) => theme.colors.form.input.fg};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
+  border: none;
+  width: 100%;
+  max-width: 200px;
+  flex-shrink: 1;
+  ${Ellipsis};
+
+  :hover {
+    background-color: ${({ theme }) => theme.colors.form.input.bg};
+  }
+`
+
 export const SpaceTitle = styled.div`
   font-size: 16px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
+  flex-grow: 1;
+  gap: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const SidebarToggle = styled.div<{ isVisible?: boolean }>`
@@ -110,39 +137,96 @@ export const SpaceSwitcher = styled.div`
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const SwitcherSpaceItems = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.small};
-  flex-grow: 1;
+  display: -webkit-box;
   align-items: center;
-  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  flex-grow: 1;
+  overflow-y: hidden;
+  overflow-x: auto;
+  padding: 0 ${({ theme }) => theme.spacing.medium};
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `
 
-export const SpaceItem = styled.div<{ active: boolean }>`
+export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sidebarWidth: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => theme.spacing.small};
+  padding: 4px;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  transition: 0.15s transform ease-out, 0.2s color ease-in;
+  flex-shrink: 0;
+  transition: 0.2s color ease-out, 0.2s font-size ease-out, 0.2s background-color ease-out, 0.2s height ease-out,
+    0.2s width ease-out, border 0.2s ease-out;
 
-  color: ${({ theme }) => theme.colors.gray[6]};
-  ${({ theme, active }) =>
-    active &&
-    css`
-      color: ${theme.colors.text.heading};
-    `}
+  ${IconWrapper} {
+    transition: 0.2s color ease-out, 0.2s font-size ease-out, 0.2s background-color ease-out, 0.2s height ease-out,
+      0.2s width ease-out;
+  }
+  // To set icon size
+  max-height: 34px;
+  max-width: 34px;
+
+  ${({ theme, sidebarWidth, totalItems, active }) => {
+    // Calculate apparent size of icons
+    const calcSize = active ? 28 : (sidebarWidth - 150) / totalItems
+    // Limit it
+    const size = clamp(calcSize, 8, 28)
+
+    // We show size greater than 16px as icons
+    if (calcSize > 20) {
+      return css`
+        background-color: ${active ? theme.colors.gray[8] : 'transparent'};
+        color: ${active ? theme.colors.primary : theme.colors.text.fade};
+
+        ${IconWrapper} {
+          height: ${size}px;
+          width: ${size}px;
+          font-size: ${size}px;
+        }
+        :hover {
+          background-color: ${theme.colors.gray[8]};
+        }
+      `
+    }
+
+    // Otherwise hide svg and show a dot
+    return css`
+      background-color: ${theme.colors.gray[7]};
+      border: 3px solid ${theme.colors.background.sidebar};
+      ${IconWrapper} {
+        height: 0%;
+        width: 0%;
+        font-size: 0px;
+      }
+      height: 8px;
+      width: 8px;
+      :hover {
+        background-color: ${theme.colors.gray[8]};
+        height: ${28}px;
+        width: ${28}px;
+        border: 3px solid ${theme.colors.gray[8]};
+
+        ${IconWrapper} {
+          height: ${24}px;
+          width: ${24}px;
+          font-size: ${24}px;
+        }
+      }
+    `
+  }}
 
   :hover {
-    transform: scale(1.25);
     background-color: ${({ theme }) => theme.colors.gray[8]};
   }
 
   svg {
-    height: 20px;
-    width: 20px;
+    height: 100%;
+    width: 100%;
   }
 `
 
@@ -201,7 +285,7 @@ export const CreateNewMenuItemWrapper = styled.div`
   }
 `
 
-export const SStarNoteButton = styled(LoadingButton)`
+const SpecialNoteStyle = css`
   background: ${({ theme }) => transparentize(0.75, theme.colors.gray[9])};
   border: 1px dashed ${({ theme }) => theme.colors.gray[8]};
   padding: 0.5rem;
@@ -232,6 +316,15 @@ export const SStarNoteButton = styled(LoadingButton)`
     background: transparent;
   }
 
+  svg {
+    flex-shrink: 0;
+    height: 16px;
+    width: 16px;
+  }
+`
+
+export const SStarNoteButton = styled(LoadingButton)`
+  ${SpecialNoteStyle}
   ${({ highlight }) =>
     highlight &&
     css`
@@ -239,10 +332,8 @@ export const SStarNoteButton = styled(LoadingButton)`
       opacity: 0;
       pointer-events: none;
     `}
+`
 
-  svg {
-    flex-shrink: 0;
-    height: 16px;
-    width: 16px;
-  }
+export const CreateNewNoteSidebarButton = styled(Button)`
+  ${SpecialNoteStyle}
 `

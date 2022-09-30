@@ -27,26 +27,24 @@ export const useFetchShareData = () => {
   const { addMentionable } = useMentions()
   const setSharedNodes = useDataStore((s) => s.setSharedNodes)
 
-  const fetchShareData = async () => {
-    const sharedNodesPreset = await getAllSharedNodes()
-    if (sharedNodesPreset.status === 'error') return
-
-    const sharedNodes = sharedNodesPreset.data
-
-    setSharedNodes(sharedNodes)
+  const fetchSharedNodeUsers = async (nodeid: string) => {
+    const sharedNodes = useDataStore.getState().sharedNodes
+    const node = sharedNodes.find((n) => n.nodeid === nodeid)
     // Then fetch the users with access to the shared node
-    const sharedNodeDetails = sharedNodes.map((node) => {
-      return getUsersOfSharedNode(node.nodeid)
-    })
+    if (!node) return
+    const sharedNodeDetails = [getUsersOfSharedNode(nodeid)]
 
     const nodeDetails = (await runBatch(sharedNodeDetails)).fulfilled
 
-    const usersWithAccess = nodeDetails.map((p: any) => {
-      return p.value as UsersRaw
-    })
+    const usersWithAccess = nodeDetails
+      // .filter((p) => p.status === 'fulfilled')
+      .map((p: any) => {
+        // mog('p', { p })
+        return p[0].value as UsersRaw
+      })
 
+    // mog('getUserAccess', { usersWithAccess, nodeDetails })
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
-      // mog('getUserAccess', { p, n })
       const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ nodeid: n.nodeid, userid: uid, access }))
       return [...p, ...rawUsers]
     }, [])
@@ -59,26 +57,42 @@ export const useFetchShareData = () => {
           return { ...u, email: uDetails.email, alias: uDetails.alias }
         }),
 
-        ...sharedNodes.map(async (node) => {
+        ...[node].map(async (node) => {
           const uDetails = await getUserDetailsUserId(node.owner)
           return {
             access: 'OWNER',
             userid: uDetails.userID,
             nodeid: node.nodeid,
-            name: uDetails.name,
             email: uDetails.email,
+            name: uDetails.name,
             alias: uDetails.alias
           }
         })
       ])
-    ).fulfilled.map((p: any) => p.value as MUsersRaw)
+    ).fulfilled
+      // .filter((p) => p.status === 'fulfilled')
+      .reduce((arr, p: any) => {
+        // mog('p', { p })
+        return [...arr, ...p.map((u) => u.value as MUsersRaw)]
+      }, [])
+    // .filter((u) => u.userid !== userDetails?.userID)
 
+    // mog('mentionableU', { mentionableU })
     mentionableU.forEach((u) =>
       addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, u.nodeid, u.access)
     )
-
-    mog('SharedNode', { sharedNodes, usersWithAccess, mentionableU, UserAccessDetails })
   }
 
-  return { fetchShareData }
+  const fetchShareData = async () => {
+    // First fetch the shared nodes
+    const sharedNodesPreset = await getAllSharedNodes()
+    // mog('SharedNode', { sharedNodes })
+    if (sharedNodesPreset.status === 'error') return
+
+    const sharedNodes = sharedNodesPreset.data
+
+    setSharedNodes(sharedNodes)
+  }
+
+  return { fetchShareData, fetchSharedNodeUsers }
 }

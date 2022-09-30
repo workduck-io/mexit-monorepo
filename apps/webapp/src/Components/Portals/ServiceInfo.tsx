@@ -1,17 +1,21 @@
 import React, { useEffect } from 'react'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
+import { ErrorBoundary } from 'react-error-boundary'
 
 // import { ServiceContainer, GroupHeaderContainer, FloatingIcon } from './styled'
 import { Button, IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { FloatingIcon, ServiceContainer, GroupHeaderContainer } from './styled'
 
-// type ServiceInfoProps = {}
+type ServiceInfoProps = {
+  children: React.ReactElement
+}
 
-const ServiceInfo: React.FC<any> = ({ children }) => {
+const ServiceInfo: React.FC<ServiceInfoProps> = ({ children }) => {
   const { goTo } = useRouting()
   const { shortcutDisabled } = useKeyListener()
 

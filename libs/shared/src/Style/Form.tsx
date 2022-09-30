@@ -195,8 +195,8 @@ export const ReactSelectStyles = (theme: DefaultTheme) => ({
     // width: state.selectProps.width,
     color: state.selectProps.menuColor,
     backgroundColor: theme.colors.background.modal,
-    padding: `${theme.spacing.small} ${theme.spacing.small}`
-    // padding: 20,
+    padding: `${theme.spacing.small} ${theme.spacing.small}`,
+    zIndex: 1020
   }),
 
   control: (provided) => ({

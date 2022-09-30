@@ -20,6 +20,10 @@ const GlobalStyle = createGlobalStyle`
     opacity: 0.5;
   }
 
+  html {
+    font-size: 14px;
+  }
+
 
   * {
     box-sizing: border-box;
@@ -82,6 +86,10 @@ const GlobalStyle = createGlobalStyle`
 
   button {
     border: none;
+  }
+
+  #floating-picker-root {
+    z-index: 100000;
   }
 
   ${({ theme }) => theme.custom && customStyles[theme.custom]}

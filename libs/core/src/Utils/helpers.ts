@@ -1,6 +1,6 @@
 import { NodeContent, NodeEditorContent, NodeProperties } from '../Types/Editor'
 import { ELEMENT_PARAGRAPH } from './editorElements'
-import { generateNodeUID, SEPARATOR } from './idGenerator'
+import { generateNodeUID, generateTempId, SEPARATOR } from './idGenerator'
 
 export function wrapErr<T>(f: (result: T) => void) {
   return (err: any, result: T) => {
@@ -16,6 +16,8 @@ export const defaultContent: NodeContent = {
   content: [{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }],
   version: -1
 }
+
+export const getDefaultContent = () => ({ ...defaultContent.content[0], id: generateTempId() })
 
 export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 

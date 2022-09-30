@@ -1,15 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
-import { NodeLink, mog, getUniquePath, isMatch, generateNodeUID } from '@mexit/core'
-import { getAllParentPaths, getNodeIcon } from '@mexit/shared'
+import { NodeLink, mog, getUniquePath, isMatch, ILink } from '@mexit/core'
 
-import { useEditorBuffer } from './useEditorBuffer'
-
-import { useRefactorStore } from '../Stores/useRefactorStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useRefactorStore } from '../Stores/useRefactorStore'
+import { RefactorPath } from '../Stores/useRenameStore'
 import { useApi } from './API/useNodeAPI'
+import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'
+
+interface NamespaceChangedPaths {
+  removedPaths: ILink[]
+  addedPaths: ILink[]
+}
+
+interface RefactorResponse {
+  changedPaths: Record<string, NamespaceChangedPaths>
+}
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
   const index = refactored.map((r) => r.from).indexOf(id)
@@ -32,8 +40,8 @@ export const useRefactor = () => {
   const setILinks = useDataStore((state) => state.setIlinks)
   const setBaseNodeId = useDataStore((store) => store.setBaseNodeId)
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { getNodeidFromPath } = useLinks()
-  const api = useApi()
+  const { getNodeidFromPath, updateILinks } = useLinks()
+  const { refactorHierarchy } = useApi()
 
   /*
    * Returns a mock array of refactored paths
@@ -71,77 +79,59 @@ export const useRefactor = () => {
     return refactored
   }
 
-  const execRefactor = async (from: string, to: string, clearBuffer = true) => {
-    // const refactored = getMockRefactor(from, to, clearBuffer)
+  // const execRefactor = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
+  //   // const refactored = getMockRefactor(from, to, clearBuffer)
 
-    const nodeId = getNodeidFromPath(from)
-    // mog('execRefactor', { from, to, refactored })
+  //   const nodeId = getNodeidFromPath(from.path, from.namespaceID)
+  //   const data = await api
+  //     .refactorHeirarchy({ path: from.path.split('.').join('#') }, { path: to.path.split('.').join('#') }, nodeId)
+  //     .then((response) => {
+  //       return response
+  //     })
 
-    // // Generate the new links
-    // const ilinks = useDataStore.getState().ilinks
+  //   return data
+  // }
 
-    // const newIlinks = ilinks.map((i) => {
-    //   for (const ref of refactored) {
-    //     if (ref.from === i.path) {
-    //       return {
-    //         ...i,
-    //         path: ref.to,
-    //         icon: getNodeIcon(ref.to)
-    //       }
-    //     }
-    //   }
-    //   return i
-    // })
+  const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
+    mog('REFACTOR: FROM < TO', { from, to })
+    const nodeID = getNodeidFromPath(from.path, from.namespaceID)
+    const res = await refactorHierarchy(
+      { path: from.path.split('.').join('#'), namespaceID: from.namespaceID },
+      { path: to.path.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
+      nodeID
+    ).then((response: RefactorResponse) => {
+      const addedILinks: ILink[] = []
+      const removedILinks: ILink[] = []
 
-    // const isInNewlinks = (l: string) => {
-    //   const ft = newIlinks.filter((i) => i.path === l)
-    //   return ft.length > 0
-    // }
-
-    // const newParents = refactored
-    //   .map((r) => getAllParentIds(r.to))
-    //   .flat()
-    //   .filter((x) => !isInNewlinks(x))
-
-    // const newParentIlinks = newParents.map((p) => ({
-    //   path: p,
-    //   nodeid: generateNodeUID(),
-    //   icon: getNodeIcon(p)
-    // }))
-
-    // setILinks([...newIlinks, ...newParentIlinks])
-
-    // const baseId = linkInRefactor(useDataStore.getState().baseNodeId, refactored)
-    // if (baseId !== false) {
-    //   setBaseNodeId(baseId.to)
-    // }
-
-    const data = await api
-      .refactorHeirarchy({ path: from.split('.').join('#') }, { path: to.split('.').join('#') }, nodeId)
-      .then((response) => {
-        return response
+      Object.values(response.changedPaths).forEach((nsObject) => {
+        addedILinks.push(...nsObject.addedPaths)
+        removedILinks.push(...nsObject.removedPaths)
       })
+      const refactored = updateILinks(addedILinks, removedILinks)
+      return refactored
+    })
 
-    return data
+    return res
   }
 
-  return { getMockRefactor, execRefactor }
+  return { getMockRefactor, execRefactorAsync }
 }
 
-// Used to wrap a class component to provide hooks
-export const withRefactor = (Component: any) => {
-  return function C2(props: any) {
-    const { getMockRefactor, execRefactor } = useRefactor()
+// DO NOT DELETE. FOR REFERENCE
+// // Used to wrap a class component to provide hooks
+// export const withRefactor = (Component: any) => {
+//   return function C2(props: any) {
+//     const { getMockRefactor, execRefactor } = useRefactor()
 
-    const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
+//     const prefillRefactorModal = useRefactorStore((state) => state.prefillModal)
 
-    return (
-      <Component
-        getMockRefactor={getMockRefactor}
-        execRefactor={execRefactor}
-        prefillRefactorModal={prefillRefactorModal}
-        {...props}
-      />
-    )
-  }
-}
+//     return (
+//       <Component
+//         getMockRefactor={getMockRefactor}
+//         execRefactor={execRefactor}
+//         prefillRefactorModal={prefillRefactorModal}
+//         {...props}
+//       />
+//     )
+//   }
+// }

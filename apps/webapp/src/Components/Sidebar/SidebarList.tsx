@@ -15,12 +15,6 @@ import { ItemContent } from './SharedNotes'
 import { SidebarListWrapper, SidebarListFilter, FilteredItemsWrapper, EmptyMessage } from './SidebarList.style'
 import SidebarListItemComponent from './SidebarListItem'
 
-export enum LastOpenedState {
-  UNREAD = 'unread',
-  OPENED = 'opened',
-  MUTED = 'muted'
-}
-
 export interface SidebarListItem<T> extends DesignItem {
   // Used to calculate the last opened state once in the list item component
   data: T

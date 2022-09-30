@@ -7,12 +7,14 @@ import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { SearchFilter, getPathNum, mog, generateTaskViewId } from '@mexit/core'
+import { SearchFilter, getPathNum, mog, generateTaskViewId, Filter, GlobalFilterJoin } from '@mexit/core'
 import { TextAreaBlock, SearchFilterListCurrent, SearchFilterStyled, SearchFilterCount, Label } from '@mexit/shared'
 
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useViewStore, useTaskViews } from '../Hooks/useTaskViews'
 import { ModalHeader, ModalControls } from '../Style/Refactor'
+import { DisplayFilter } from './Filters/Filter'
+import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
 
 // Prefill modal has been added to the Tree via withRefactor from useRefactor
@@ -23,8 +25,14 @@ interface TaskViewModalState {
   updateViewId?: string
   // If present, title, description will be cloned from the view with viewid
   cloneViewId?: string
-  filters: SearchFilter<any>[]
-  openModal: (args: { filters: SearchFilter<any>[]; updateViewId?: string; cloneViewId?: string }) => void
+  filters: Filter[]
+  globalJoin: GlobalFilterJoin
+  openModal: (args: {
+    filters: Filter[]
+    updateViewId?: string
+    cloneViewId?: string
+    globalJoin: GlobalFilterJoin
+  }) => void
   closeModal: () => void
 }
 
@@ -33,19 +41,22 @@ export const useTaskViewModalStore = create<TaskViewModalState>((set) => ({
   filters: [],
   updateViewId: undefined,
   cloneViewId: undefined,
-  openModal: ({ filters, updateViewId, cloneViewId }) =>
+  globalJoin: 'all',
+  openModal: ({ filters, updateViewId, cloneViewId, globalJoin }) =>
     set({
       open: true,
       filters,
       updateViewId,
-      cloneViewId
+      cloneViewId,
+      globalJoin
     }),
   closeModal: () => {
     set({
       open: false,
       filters: [],
       updateViewId: undefined,
-      cloneViewId: undefined
+      cloneViewId: undefined,
+      globalJoin: 'all'
     })
   }
 }))
@@ -60,18 +71,17 @@ const TaskViewModal = () => {
   const updateViewId = useTaskViewModalStore((store) => store.updateViewId)
   const cloneViewId = useTaskViewModalStore((store) => store.cloneViewId)
   const filters = useTaskViewModalStore((store) => store.filters)
+  const globalJoin = useTaskViewModalStore((store) => store.globalJoin)
 
-  const openModal = useTaskViewModalStore((store) => store.openModal)
+  // const openModal = useTaskViewModalStore((store) => store.openModal)
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
 
-  const addView = useViewStore((store) => store.addView)
-  const updateView = useViewStore((store) => store.updateView)
-  const currentView = useViewStore((store) => store.currentView)
+  // const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
 
   // const { saveData } = useSaveData()
 
-  const { getView } = useTaskViews()
+  const { getView, addView, updateView } = useTaskViews()
 
   const { goTo } = useRouting()
 
@@ -85,6 +95,11 @@ const TaskViewModal = () => {
   } = useForm<TaskViewModalFormData>()
 
   const curView = useMemo(() => {
+    // Loads up the values of the current View to prefill the inputs
+    // Current view is the view to be changed
+    //
+    // updateViewId loads the view to update
+    // cloneViewId loads the view to clone with modified title
     if (updateViewId) {
       const updateView = getView(updateViewId)
       if (updateView) {
@@ -114,16 +129,17 @@ const TaskViewModal = () => {
   }, [cloneViewId, updateViewId])
 
   const onSubmit = async (data: TaskViewModalFormData) => {
-    mog('onSubmit', { data, filters, cloneViewId })
+    // mog('onSubmit', { data, filters, cloneViewId })
     if (updateViewId) {
       const oldview = { ...getView(updateViewId) }
       const newView = {
         ...oldview,
         title: data.title ?? oldview.title,
         description: data.description ?? oldview.description,
+        globalJoin,
         filters
       }
-      updateView(newView)
+      await updateView(newView)
       // saveData()
       setCurrentView(newView)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, newView.id)
@@ -132,9 +148,10 @@ const TaskViewModal = () => {
         title: data.title,
         description: data.description,
         filters: filters,
-        id: generateTaskViewId()
+        id: generateTaskViewId(),
+        globalJoin
       }
-      addView(view)
+      await addView(view)
       // saveData()
       setCurrentView(view)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
@@ -178,12 +195,9 @@ const TaskViewModal = () => {
         {filters?.length > 0 && (
           <SearchFilterListCurrent>
             {filters.map((f) => (
-              <SearchFilterStyled selected key={`current_f_${f.id}`}>
-                {f.icon ? <Icon icon={f.icon} /> : null}
-                {f.label}
-                {f.count && <SearchFilterCount>{f.count}</SearchFilterCount>}
-              </SearchFilterStyled>
+              <DisplayFilter key={f.id} filter={f} />
             ))}
+            <RenderGlobalJoin globalJoin={globalJoin} />
           </SearchFilterListCurrent>
         )}
 
