@@ -16,7 +16,7 @@ interface NamespaceChangedPaths {
 }
 
 interface RefactorResponse {
-  changedPaths: Array<Record<string, NamespaceChangedPaths>>
+  changedPaths: Record<string, NamespaceChangedPaths>
 }
 
 export const linkInRefactor = (id: string, refactored: NodeLink[]): false | NodeLink => {
@@ -104,13 +104,10 @@ export const useRefactor = () => {
       const addedILinks: ILink[] = []
       const removedILinks: ILink[] = []
 
-      response.changedPaths.forEach((nsObject) => {
-        Object.entries(nsObject).forEach(([nsId, { addedPaths: nsAddedILinks, removedPaths: nsRemovedILinks }]) => {
-          addedILinks.push(...nsAddedILinks)
-          removedILinks.push(...nsRemovedILinks)
+      Object.values(response.changedPaths).forEach((nsObject) => {
+          addedILinks.push(...nsObject.addedPaths)
+          removedILinks.push(...nsObject.removedPaths)
         })
-      })
-      mog('AfterRefactor', { addedILinks, removedILinks })
       const refactored = updateILinks(addedILinks, removedILinks)
       return refactored
     })

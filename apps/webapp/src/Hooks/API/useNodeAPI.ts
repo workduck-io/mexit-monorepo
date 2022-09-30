@@ -46,7 +46,7 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
-  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
 
@@ -109,9 +109,10 @@ export const useApi = () => {
     options.content = options.content ?? defaultContent.content
     const reqData = {
       nodePath: {
-        path: options.path,
+        path: createNoteHierarchyString(options.path, namespaceID),
         namespaceID: namespaceID
       },
+      id: noteID,
       title: getTitleFromNoteId(noteID),
       namespaceID: namespaceID,
       tags: getTagsFromContent(options.content),
@@ -193,10 +194,12 @@ export const useApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
+        if (d) {
         const content = deserializeContent(d.data.data)
         if (isUpdate) updateFromContent(nodeid, content)
 
-        return { data: d.data.data, metadata: extractMetadata(d.data.data[0]), version: d.data.version ?? undefined }
+        return { data: d.data.data, metadata: extractMetadata(d.data), version: d.data.version ?? undefined }
+        }
       })
       .catch((e) => {
         console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
@@ -354,8 +357,8 @@ export const useApi = () => {
     nodeId: string
   ) => {
     const reqData = {
-      existingNodePath,
-      newNodePath,
+    existingNodePath: {path: createNoteHierarchyString(existingNodePath.path, existingNodePath.namespaceID), namespaceID: existingNodePath.namespaceID},
+      newNodePath: {...newNodePath, path: createNoteHierarchyString(newNodePath.path, newNodePath.namespaceID)},
       nodeID: nodeId
     }
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Icon } from '@iconify/react'
 import { components } from 'react-select'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
