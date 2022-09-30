@@ -14,7 +14,6 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
-import useModalStore from '../../Stores/useModalStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
@@ -63,6 +62,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
 
   // BUG: The backend doesn't return the new added path in the selected namespace
   const handleMoveNamespaces = async (newNamespaceID: string) => {
+    console.log(`Item: ${JSON.stringify(item)}`)
     const refactored = await execRefactorAsync(
       { path: item.data?.path, namespaceID: item.data?.namespace },
       { path: item.data?.path, namespaceID: newNamespaceID }

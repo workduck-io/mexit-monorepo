@@ -95,7 +95,6 @@ export const useRefactor = () => {
   const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
     mog('REFACTOR: FROM < TO', { from, to })
     const nodeID = getNodeidFromPath(from.path, from.namespaceID)
-
     const res = await refactorHierarchy(
       { path: from.path.split('.').join('#'), namespaceID: from.namespaceID },
       { path: to.path.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
@@ -105,9 +104,9 @@ export const useRefactor = () => {
       const removedILinks: ILink[] = []
 
       Object.values(response.changedPaths).forEach((nsObject) => {
-          addedILinks.push(...nsObject.addedPaths)
-          removedILinks.push(...nsObject.removedPaths)
-        })
+        addedILinks.push(...nsObject.addedPaths)
+        removedILinks.push(...nsObject.removedPaths)
+      })
       const refactored = updateILinks(addedILinks, removedILinks)
       return refactored
     })

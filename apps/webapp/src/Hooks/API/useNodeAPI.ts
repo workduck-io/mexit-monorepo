@@ -195,10 +195,10 @@ export const useApi = () => {
       })
       .then((d: any) => {
         if (d) {
-        const content = deserializeContent(d.data.data)
-        if (isUpdate) updateFromContent(nodeid, content)
+          const content = deserializeContent(d.data.data)
+          if (isUpdate) updateFromContent(nodeid, content)
 
-        return { data: d.data.data, metadata: extractMetadata(d.data), version: d.data.version ?? undefined }
+          return { data: d.data.data, metadata: extractMetadata(d.data), version: d.data.version ?? undefined }
         }
       })
       .catch((e) => {
@@ -351,14 +351,15 @@ export const useApi = () => {
 
     return data
   }
+
   const refactorHierarchy = async (
     existingNodePath: { path: string; namespaceID?: string },
     newNodePath: { path: string; namespaceID?: string },
     nodeId: string
   ) => {
     const reqData = {
-    existingNodePath: {path: createNoteHierarchyString(existingNodePath.path, existingNodePath.namespaceID), namespaceID: existingNodePath.namespaceID},
-      newNodePath: {...newNodePath, path: createNoteHierarchyString(newNodePath.path, newNodePath.namespaceID)},
+      existingNodePath,
+      newNodePath,
       nodeID: nodeId
     }
 

@@ -38,7 +38,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { RenderTreeItem } from './TreeItem'
-import { MENU_ID, TreeContextMenu } from './TreeWithContextMenu'
 
 interface GetIconProps {
   item: TreeItem

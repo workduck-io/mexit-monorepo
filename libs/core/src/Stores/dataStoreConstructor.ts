@@ -310,8 +310,14 @@ export interface FlatItem {
   // lastOpenedState?: LastOpenedState
   icon?: string
   stub?: boolean
+  namespace: string
 }
 
+/** Link sanatization
+ *
+ * Orders the links according to their level in tree
+ * Guarantees parent is before child -> Condition required for correct tree
+ */
 export const sanatizeLinks = (links: ILink[]): FlatItem[] => {
   let oldLinks = links
   const newLinks: FlatItem[] = []
@@ -320,7 +326,7 @@ export const sanatizeLinks = (links: ILink[]): FlatItem[] => {
   while (oldLinks.length > 0) {
     for (const l of links) {
       if (getLevel(l.path) === currentDepth) {
-        const ilink = { id: l.path, nodeid: l.nodeid, icon: l.icon }
+        const ilink = { id: l.path, nodeid: l.nodeid, icon: l.icon, namespace: l.namespace }
         newLinks.push(l.parentNodeId ? { ...ilink, parentNodeId: l.parentNodeId } : ilink)
         oldLinks = oldLinks.filter((k) => k.nodeid !== l.nodeid)
       }
