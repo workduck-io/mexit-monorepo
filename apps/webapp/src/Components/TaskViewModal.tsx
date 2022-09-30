@@ -13,6 +13,8 @@ import { TextAreaBlock, SearchFilterListCurrent, SearchFilterStyled, SearchFilte
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useViewStore, useTaskViews } from '../Hooks/useTaskViews'
 import { ModalHeader, ModalControls } from '../Style/Refactor'
+import { DisplayFilter } from './Filters/Filter'
+import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
 
 // Prefill modal has been added to the Tree via withRefactor from useRefactor
@@ -190,14 +192,14 @@ const TaskViewModal = () => {
         />
 
         <Label htmlFor="description">Filters </Label>
-        {/* {filters?.length > 0 && (
+        {filters?.length > 0 && (
           <SearchFilterListCurrent>
             {filters.map((f) => (
               <DisplayFilter key={f.id} filter={f} />
             ))}
             <RenderGlobalJoin globalJoin={globalJoin} />
           </SearchFilterListCurrent>
-        )} */}
+        )}
 
         <ModalControls>
           <Button large onClick={handleCancel}>

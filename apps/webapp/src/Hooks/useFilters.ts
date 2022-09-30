@@ -130,8 +130,6 @@ export const useFilters = <Item>() => {
   }
 
   const generateNodeFilters = (items: GenericSearchResult[]) => {
-    // const filteredItems = currentFilters.length > 0 ? applyFilters(items, currentFilters, filterFunctions) : items
-
     const rankedPaths = items.reduce((acc, item) => {
       const path = getPathFromNodeid(item.id, true)
       const allPaths = getAllParentIds(path)
@@ -146,13 +144,10 @@ export const useFilters = <Item>() => {
       return acc
     }, {} as { [path: string]: number })
 
-    // mog('rankedPaths', { rankedPaths, ilinks })
     const nodeFilters: FilterTypeWithOptions = ilinks.reduce(
       (acc: FilterTypeWithOptions, ilink) => {
         const rank = rankedPaths[ilink?.path] || 0
-        // const [path, rank] = ilink
         if (rank >= 0) {
-          // mog('path', { path, rank })
           acc.options.push({
             id: `node_${ilink.path}`,
             value: ilink.path,
@@ -169,14 +164,10 @@ export const useFilters = <Item>() => {
       } as FilterTypeWithOptions
     )
 
-    // mog('nodeFilters', { nodeFilters })
     return nodeFilters
   }
 
   const generateNamespaceFilters = <T extends { id: string }>(items: T[]) => {
-    // Known
-    // const filteredItems = currentFilters.length > 0 ? applyFilters(items, currentFilters, filterFunctions) : items
-
     const rankedNamespaces = items.reduce((acc, item) => {
       const node = getILinkFromNodeid(item.id, true)
       const namespace = node?.namespace
@@ -234,11 +225,13 @@ export const useFilters = <Item>() => {
     generateNodeFilters,
     generateTagFilters,
     addCurrentFilter,
+    changeCurrentFilter,
     currentFilters,
     removeCurrentFilter,
     generateNodeSearchFilters,
     resetCurrentFilters,
-    generateNamespaceFilters
+    globalJoin,
+    setGlobalJoin
   }
 }
 
@@ -265,6 +258,5 @@ export const applyFilters = <Item>(
     return acc.filter((i) => filterFunctions[filter.type](i, filter))
   }, items)
 
-  // mog('applyFilters', { items, filters, filtered })
   return filtered
 }

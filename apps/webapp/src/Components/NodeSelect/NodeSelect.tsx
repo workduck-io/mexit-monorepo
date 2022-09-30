@@ -22,7 +22,7 @@ import {
   SHARED_NAMESPACE,
   SingleNamespace
 } from '@mexit/core'
-import { Input, StyledCreatatbleSelect } from '@mexit/shared'
+import { Input, StyledCreatatbleSelect, SuggestionTextWrapper } from '@mexit/shared'
 import {
   StyledCombobox,
   StyledInputWrapper,
@@ -41,6 +41,8 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { StyledNamespaceSelectComponents } from '../../Style/Select'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import NamespaceTag from '../NamespaceTag'
 

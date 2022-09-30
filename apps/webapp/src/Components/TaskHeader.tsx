@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import trashIcon from '@iconify/icons-codicon/trash'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
@@ -11,10 +11,10 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { Button, IconButton, DisplayShortcut, ToolbarTooltip } from '@workduck-io/mex-components'
+import { Button, IconButton, DisplayShortcut, ToolbarTooltip, LoadingButton } from '@workduck-io/mex-components'
 import { Infobox } from '@workduck-io/mex-components'
 
-import { SearchFilter } from '@mexit/core'
+import { Filter, GlobalFilterJoin, SearchFilter } from '@mexit/core'
 import {
   ShortcutMid,
   ShortcutToken,
@@ -30,31 +30,37 @@ import {
 
 import { TasksHelp } from '../Data/defaultText'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useViewStore, View } from '../Hooks/useTaskViews'
+import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface TaskHeaderProps {
-  currentView?: View<any>
-  currentFilters: SearchFilter<any>[]
+  currentView?: View
+  currentFilters: Filter[]
   cardSelected: boolean
+  globalJoin: GlobalFilterJoin
 }
 
-const TaskHeader = ({ currentView, currentFilters, cardSelected }: TaskHeaderProps) => {
+const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: TaskHeaderProps) => {
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
-  const removeView = useViewStore((store) => store.removeView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const { deleteView } = useTaskViews()
 
   const { goTo } = useRouting()
 
   const [source, target] = useSingleton()
+  const [deleting, setDeleting] = useState(false)
 
-  const isCurrentFiltersUnchanged = useMemo(() => {
-    return JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters)
-  }, [currentFilters, currentView])
+  const isCurrentViewChanged = useMemo(() => {
+    return !(
+      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) && globalJoin === currentView?.globalJoin
+    )
+  }, [currentFilters, currentView, globalJoin])
 
-  const onRemoveView = () => {
+  const onDeleteView = async () => {
     if (currentView) {
-      removeView(currentView.id)
+      setDeleting(true)
+      await deleteView(currentView.id)
+      setDeleting(false)
       setCurrentView(undefined)
       goTo(ROUTE_PATHS.tasks, NavigationType.push)
     }
@@ -73,44 +79,55 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected }: TaskHeaderPro
               <TaskViewTitle>
                 <Icon icon={stackLine} />
                 {currentView?.title}
-                {!isCurrentFiltersUnchanged && '*'}
+                {isCurrentViewChanged && '*'}
               </TaskViewTitle>
               <TaskViewControls>
                 <Button
                   onClick={() =>
                     openTaskViewModal({
                       filters: currentFilters,
-                      updateViewId: currentView?.id
+                      updateViewId: currentView?.id,
+                      globalJoin
                     })
                   }
                   disabled={currentFilters.length === 0}
-                  primary={!isCurrentFiltersUnchanged && currentFilters.length > 0}
+                  primary={isCurrentViewChanged && currentFilters.length > 0}
                 >
                   <Icon icon={edit2Line} />
                   Update View
                 </Button>
                 <IconButton
                   title="Clone View"
-                  onClick={() => openTaskViewModal({ filters: currentView?.filters, cloneViewId: currentView?.id })}
+                  onClick={() =>
+                    openTaskViewModal({
+                      filters: currentView?.filters,
+                      cloneViewId: currentView?.id,
+                      globalJoin: currentView?.globalJoin
+                    })
+                  }
                   disabled={currentFilters.length === 0}
                   singleton={target}
                   icon={fileCopyLine}
                   transparent={false}
                 />
-                <IconButton
-                  title="Remove View"
-                  onClick={() => onRemoveView()}
+                <LoadingButton
+                  title="Delete View"
+                  loading={deleting}
+                  onClick={() => onDeleteView()}
                   singleton={target}
-                  icon={trashIcon}
                   transparent={false}
-                />
+                >
+                  <Icon icon={trashIcon} />
+                </LoadingButton>
                 <IconButton
                   title="Create New View"
-                  onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id })}
+                  onClick={() =>
+                    openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })
+                  }
                   disabled={currentFilters.length === 0}
                   singleton={target}
-                  icon={addCircleLine}
                   transparent={false}
+                  icon={addCircleLine}
                 />
               </TaskViewControls>
             </TaskViewHeaderWrapper>
@@ -119,7 +136,7 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected }: TaskHeaderPro
           <>
             <Title>Tasks</Title>
             <Button
-              onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id })}
+              onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })}
               disabled={currentFilters.length === 0}
             >
               <Icon icon={addCircleLine} />
@@ -136,30 +153,27 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected }: TaskHeaderPro
         {cardSelected && (
           <>
             <ShortcutToken>
-              Navigate:
+              Open:
               <DisplayShortcut shortcut="$mod+Enter" />
             </ShortcutToken>
             <ShortcutToken>
               Move:
               <DisplayShortcut shortcut="Shift" />
-              <ShortcutMid>+</ShortcutMid>
               <Icon icon={arrowLeftRightLine} />
             </ShortcutToken>
             <ShortcutToken>
-              Change Priority:
+              Priority:
               <DisplayShortcut shortcut="$mod+0-3" />
             </ShortcutToken>
           </>
         )}
-        <ShortcutToken>
-          {cardSelected || currentFilters.length > 0 ? 'Clear Filters:' : 'Navigate to Editor:'}
-          <DisplayShortcut shortcut="Esc" />
-        </ShortcutToken>
+        {currentFilters.length > 0 && (
+          <ShortcutToken>
+            Remove Filter:
+            <DisplayShortcut shortcut="Shift+F" />
+          </ShortcutToken>
+        )}
       </ShortcutTokens>
-      {/*<Button onClick={onClearClick}>
-   <Icon icon={trashIcon} height={24} />
-   Clear Todos
-   </Button> */}
       <Infobox text={TasksHelp} />
     </StyledTaskHeader>
   )

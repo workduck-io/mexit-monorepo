@@ -3,6 +3,13 @@ import { useEffect, useCallback, useMemo } from 'react'
 import { MiscKeys, ShortcutListner, Key, mog } from '@mexit/core'
 import { getEventNameFromElement } from '@mexit/core'
 
+import {
+  MenuItemClassName,
+  MenuClassName,
+  RootMenuClassName,
+  MenuFilterInputClassName
+} from '../Components/FloatingElements/Dropdown.classes'
+import useMultipleEditors from '../Stores/useEditorsStore'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore from '../Stores/useModalStore'
@@ -119,3 +126,51 @@ export const useKeyListener = () => {
 }
 
 export default useShortcutListener
+
+const MEX_KEYBOARD_IGNORE_CLASSES = {
+  all: ['mex-search-input', 'FilterInput', MenuItemClassName, MenuClassName, RootMenuClassName],
+  input: ['mex-search-input', 'FilterInput', MenuFilterInputClassName],
+  dropdown: [MenuItemClassName, MenuClassName, RootMenuClassName]
+}
+
+type IgnoreClasses = 'all' | 'input' | 'dropdown'
+interface LocalSkipOptions {
+  ignoreClasses?: IgnoreClasses
+  skipLocal?: boolean
+}
+
+export const useEnableShortcutHandler = () => {
+  const isEditingPreview = useMultipleEditors((store) => store.isEditingAnyPreview)
+
+  const isOnElementClass = (ignoreClasses?: IgnoreClasses) => {
+    const allIgnore: IgnoreClasses = ignoreClasses ?? 'all'
+    const classesToIgnore = MEX_KEYBOARD_IGNORE_CLASSES[allIgnore]
+    const fElement = document.activeElement as HTMLElement
+    mog('fElement', {
+      hasClass: classesToIgnore.some((c) => fElement.classList.contains(c)),
+      cl: fElement.classList,
+      tagName: fElement.tagName
+    })
+    const ignoredInputTags =
+      ignoreClasses === 'input' || ignoreClasses === 'all'
+        ? fElement.tagName === 'INPUT' || fElement.tagName === 'TEXTAREA'
+        : false
+
+    return fElement && ignoredInputTags && classesToIgnore.some((c) => fElement.classList.contains(c))
+  }
+
+  const enableShortcutHandler = (callback: () => void, options?: LocalSkipOptions) => {
+    const allOp = options ?? {
+      ignoreClasses: 'all',
+      skipLocal: false
+    }
+    // mog('enableShortcutHandler', { allOp, isEditingPreview, isOnSearchFilter: isOnElementClass(allOp.ignoreClasses) })
+    if (isEditingPreview() || !useMultipleEditors.getState().editors) return
+
+    if (!allOp.skipLocal && isOnElementClass(allOp.ignoreClasses)) return
+
+    callback()
+  }
+
+  return { enableShortcutHandler }
+}

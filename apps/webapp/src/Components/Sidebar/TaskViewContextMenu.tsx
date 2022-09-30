@@ -11,7 +11,7 @@ import { useTaskViewModalStore } from '../TaskViewModal'
 import { SidebarListItem } from './SidebarList'
 
 interface TaskViewContextMenuProps {
-  item: SidebarListItem<View<any>>
+  item: SidebarListItem<View>
 }
 
 const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
@@ -21,7 +21,7 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
   const { goTo } = useRouting()
   // const { deleteView } = useTaskViews()
 
-  const handleDelete = async (view: View<any>) => {
+  const handleDelete = async (view: View) => {
     const currentView = useViewStore.getState().currentView
     // TODO: this is related to syncing tasks views with backend, needs to be done but now
     // await deleteView(view.id)
@@ -31,8 +31,8 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
     }
   }
 
-  const handleClone = (view: View<any>) => {
-    openModal({ filters: view.filters, cloneViewId: view.id })
+  const handleClone = (view: View) => {
+    openModal({ filters: view.filters, cloneViewId: view.id, globalJoin: view.globalJoin })
   }
 
   return (
