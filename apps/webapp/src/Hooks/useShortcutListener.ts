@@ -111,13 +111,13 @@ const useShortcutListener = (): ShortcutListner => {
 
 export const useKeyListener = () => {
   const shortcutDisabled = useShortcutStore((state) => state.editMode)
-  const { trackEvent } = useAnalytics()
+  // const { trackEvent } = useAnalytics()
 
   const shortcutHandler = (shortcut: Shortcut, callback: any) => {
     const showLoader = useLayoutStore.getState().showLoader
     const isModalOpen = !!useModalStore.getState().open
     if (!shortcutDisabled && !shortcut.disabled && !showLoader && !isModalOpen) {
-      trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.KEY_PRESS, 'Shortcut'), shortcut)
+      // trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.KEY_PRESS, 'Shortcut'), shortcut)
       callback()
     }
   }

@@ -12,8 +12,6 @@ import {
 } from '@mexit/core'
 import { TreeNode } from '@mexit/shared'
 
-import { LastOpenedState } from '../Components/Sidebar/SidebarList'
-import { useContentStore } from '../Stores/useContentStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { filterIncompleteTodos } from './filter'
@@ -244,7 +242,7 @@ export const getBaseNestedTree = (flatTree: FlatItem[]): BaseTreeNode[] => {
   let baseNestedTree: BaseTreeNode[] = []
 
   flatTree.forEach((n) => {
-    console.log('n', n.id)
+    // console.log('n', n.id)
     const parentId = getParentNodePath(n.id)
     const tasks = todos[n.nodeid] ? todos[n.nodeid].filter(filterIncompleteTodos).length : 0
     const reminders = reminderGroups[n.nodeid] ? reminderGroups[n.nodeid].length : 0
