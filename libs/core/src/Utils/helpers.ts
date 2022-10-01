@@ -24,11 +24,12 @@ export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 // Returns an array of unique values via Set
 export const Settify = <T>(arr: T[]): T[] => Array.from(new Set(arr))
 
-export const createNodeWithUid = (key: string): NodeProperties => ({
+export const createNodeWithUid = (key: string, namespace: string): NodeProperties => ({
   title: key.split(SEPARATOR).slice(-1)[0],
   id: key,
   nodeid: generateNodeUID(),
-  path: key
+  path: key,
+  namespace
 })
 
 /*

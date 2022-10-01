@@ -26,7 +26,7 @@ const EditorContext = createContext<EditorContextType>(undefined!)
 export const useEditorContext = () => useContext(EditorContext)
 
 export const EditorProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [node, setNode] = useState(createNodeWithUid(getNewDraftKey()))
+  const [node, setNode] = useState(createNodeWithUid(getNewDraftKey(), ''))
   const [nodeContent, setNodeContent] = useState(defaultContent.content)
   const [previewMode, setPreviewMode] = useState(true)
   const [persistedContent, setPersistedContent] = useState(defaultContent.content)
