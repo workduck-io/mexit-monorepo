@@ -59,6 +59,7 @@ export function useSaveChanges() {
           content: editorState,
           referenceID: parentILink?.nodeid,
           workspaceID: workspaceDetails.id,
+          namespaceID: namespace.id,
           metadata: metadata
         }
       }
@@ -75,6 +76,7 @@ export function useSaveChanges() {
           title: node.title,
           content: editorState,
           workspaceID: workspaceDetails.id,
+          namespaceID: namespace.id,
           metadata: metadata
         }
       }

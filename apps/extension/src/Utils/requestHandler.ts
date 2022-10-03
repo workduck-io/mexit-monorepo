@@ -17,7 +17,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
         id: data.id,
         title: data.title,
         data: serializeContent(data.content ?? defaultContent.content, data.id, elementMetadata),
-        referenceID: data.referenceID
+        referenceID: data.referenceID,
+        namespaceID: data.namespaceID
       }
 
       return client
@@ -48,7 +49,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         title: data.title,
         data: serializeContent(data?.content ?? defaultContent, data.id, elementMetadata),
         // TODO: replace this with DEFAULT_NAMESPACE constant (added in another PR)
-        namespaceIdentifier: 'NAMESPACE1',
+        namespaceID: data.namespaceID,
         tags: []
       }
       return client
