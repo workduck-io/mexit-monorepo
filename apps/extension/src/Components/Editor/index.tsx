@@ -1,7 +1,8 @@
+import React, { useState, useMemo, useRef, useEffect } from 'react'
+
 import downIcon from '@iconify/icons-ph/arrow-down-bold'
 import { Icon } from '@iconify/react'
 import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
-import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -13,6 +14,7 @@ import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
 import { MexEditorOptions } from '../../Editor/types/editor'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
@@ -47,6 +49,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const ref = useRef<HTMLDivElement>()
   const { tags, addTag, ilinks, addILink, sharedNodes, slashCommands } = useDataStore()
+  const { getDefaultNamespace } = useNamespaces()
 
   useEditorChange(node.nodeid, nodeContent, onChange)
 
@@ -83,7 +86,10 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
         },
         ilink: {
           slateElementType: ELEMENT_ILINK,
-          newItemHandler: (newItem, parentId?) => addILink({ ilink: newItem, openedNodePath: parentId })
+          newItemHandler: (newItem, parentId?) => {
+            const defaultNamespace = getDefaultNamespace()
+            addILink({ ilink: newItem, openedNodePath: parentId, namespace: defaultNamespace.id })
+          }
         },
         slash_command: {
           slateElementType: 'slash_command',

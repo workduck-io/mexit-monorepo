@@ -32,6 +32,7 @@ import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useInternalLinks } from './useInternalLinks'
+import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
@@ -47,6 +48,7 @@ export function useActionExecutor() {
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
   const { getParentILink } = useInternalLinks()
+  const { getDefaultNamespace } = useNamespaces()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
@@ -54,9 +56,10 @@ export function useActionExecutor() {
         let node: ILink
         const val = search.type === CategoryType.backlink ? search.value.slice(2) : search.value
         const nodeValue = val || getNewDraftKey()
+        const defaultNamespace = getDefaultNamespace()
 
         if (item?.extras?.new) {
-          node = createNodeWithUid(nodeValue)
+          node = createNodeWithUid(nodeValue, defaultNamespace.id)
         } else {
           node = isSharedNode(item.id)
             ? sharedNodes.find((i) => i.nodeid === item.id)
@@ -67,7 +70,8 @@ export function useActionExecutor() {
           id: node.nodeid,
           title: node.path.split(SEPARATOR).slice(-1)[0],
           path: node.path,
-          nodeid: node.nodeid
+          nodeid: node.nodeid,
+          namespace: defaultNamespace.id
         })
 
         if (metaKeyPressed) {

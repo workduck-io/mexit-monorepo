@@ -21,6 +21,7 @@ export const DRAFT_NODE = 'Untitled'
 export const REMINDER_ID_PREFIX = 'REMINDER'
 export const NAMESPACE_ID_PREFIX = 'NAMESPACE'
 export const TASK_VIEW_PREFIX = 'TASKVIEW'
+export const CreateNewPrefix = `Create `
 export const SnippetCommandPrefix = `snip`
 export const FILTER_ID_PREFIX = 'FILTER'
 

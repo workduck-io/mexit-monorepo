@@ -18,11 +18,13 @@ export const sampleFlatTree = [
 ]
 
 export const getInitialNode = (): NodeProperties => ({
-  title: '@',
-  id: '@',
-  path: '@',
-  nodeid: '__null__'
+  title: '__loading__',
+  id: '__loading__',
+  path: '__loading__',
+  nodeid: '__null__',
+  namespace: '__null__'
 })
+
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH)) {
     return 'ri:draft-line'

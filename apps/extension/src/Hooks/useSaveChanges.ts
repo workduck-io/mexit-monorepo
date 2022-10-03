@@ -11,6 +11,7 @@ import { deserializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useInternalLinks } from './useInternalLinks'
+import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
@@ -27,8 +28,10 @@ export function useSaveChanges() {
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
   const { isSharedNode } = useNodes()
+  const { getDefaultNamespace } = useNamespaces()
 
   const saveIt = (saveAndExit = false, notification = false) => {
+    const namespace = getDefaultNamespace()
     const state = platesStore.get.state()
 
     // Editor Id is different from nodeId
@@ -43,10 +46,10 @@ export function useSaveChanges() {
     let request
     if (parentILink || isRoot) {
       if (!isSharedNode(node.nodeid)) {
-        updateSingleILink(node.nodeid, node.path)
+        updateSingleILink(node.nodeid, node.path, namespace.id)
       }
 
-      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path })
+      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path, namespace: namespace.id })
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'SAVE_NODE',
@@ -56,22 +59,24 @@ export function useSaveChanges() {
           content: editorState,
           referenceID: parentILink?.nodeid,
           workspaceID: workspaceDetails.id,
+          namespaceID: namespace.id,
           metadata: metadata
         }
       }
     } else {
-      const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid)
+      const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       updateMultipleILinks(linksToBeCreated)
       dispatch('ADD_MULTIPLE_ILINKS', { linksToBeCreated: linksToBeCreated })
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'BULK_CREATE_NODES',
         data: {
-          path: createNoteHierarchyString(node.path),
+          path: createNoteHierarchyString(node.path, namespace.id),
           id: node.nodeid,
           title: node.title,
           content: editorState,
           workspaceID: workspaceDetails.id,
+          namespaceID: namespace.id,
           metadata: metadata
         }
       }

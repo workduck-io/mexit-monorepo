@@ -1,6 +1,10 @@
 import React, { Children, createRef, useRef, useState } from 'react'
-import { useAuthStore } from '../../Hooks/useAuth'
-import { useShortenerStore } from '../../Hooks/useShortener'
+import { useEffect } from 'react'
+
+import fuzzysort from 'fuzzysort'
+import { AsyncMethodReturns, connectToChild } from 'penpal'
+import toast from 'react-hot-toast'
+
 import {
   ActionType,
   CategoryType,
@@ -19,27 +23,26 @@ import {
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
-import { ParentMethods } from '../../Hooks/useRaju'
-import { useEffect } from 'react'
-import { Container, CopyButton, Icon, StyledChotu } from './styled'
-import useThemeStore from '../../Hooks/useThemeStore'
-import useInternalAuthStore from '../../Hooks/useAuthStore'
 import { Notification, Theme } from '@mexit/shared'
-import { Search, useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import toast from 'react-hot-toast'
-import { AsyncMethodReturns, connectToChild } from 'penpal'
-import fuzzysort from 'fuzzysort'
-import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
-import { useSnippets } from '../../Hooks/useSnippets'
+
+import { useAuthStore } from '../../Hooks/useAuth'
+import useInternalAuthStore from '../../Hooks/useAuthStore'
+import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useQuickLinks } from '../../Hooks/useQuickLinks'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { ParentMethods } from '../../Hooks/useRaju'
+import useRaju from '../../Hooks/useRaju'
+import { useShortenerStore } from '../../Hooks/useShortener'
+import { useSnippets } from '../../Hooks/useSnippets'
+import { Search, useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import useThemeStore from '../../Hooks/useThemeStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
-import useRaju from '../../Hooks/useRaju'
-import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { ListItemType } from '../../Types/List'
-import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useRecentsStore } from '../../Stores/useRecentsStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { ListItemType } from '../../Types/List'
+import { getListItemFromNode, getListItemFromSnippet } from '../../Utils/helper'
+import { Container, CopyButton, Icon, StyledChotu } from './styled'
 
 const MAX_RECENT_ITEMS = 3
 

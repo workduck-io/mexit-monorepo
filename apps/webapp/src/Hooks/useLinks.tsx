@@ -196,12 +196,13 @@ export const useLinks = () => {
     const archive = useDataStore.getState().archive
     const sharedNodes = useDataStore.getState().sharedNodes
 
-    const link = links.find((l) => l.path === path && l.namespace === namespace)
-    const archivedLink = archive.find((l) => l.path === path && l.namespace === namespace)
-    const sharedNode = sharedNodes.find((l) => l.path === path && l.namespace === namespace)
-
+    const link = links.find((l) => l.namespace === namespace && l.path === path)
     if (link) return link.nodeid
+
+    const archivedLink = archive.find((l) => l.namespace === namespace && l.path === path)
     if (archivedLink) return archivedLink.nodeid
+
+    const sharedNode = sharedNodes.find((l) => l.namespace === namespace && l.path === path)
     if (sharedNode) return sharedNode.nodeid
   }
 
@@ -298,7 +299,7 @@ export const useLinks = () => {
 }
 
 export const getNodeidFromPathAndLinks = (links: ILink[], path: string, namespace: string) => {
-  const link = links.find((l) => l.path === path && l.namespace === namespace)
+  const link = links.find((l) => l.namespace === namespace && l.path === path)
   if (link) return link.nodeid
 }
 
@@ -307,9 +308,9 @@ export const getLinkFromNodeIdHookless = (nodeid: string) => {
   const archive = useDataStore.getState().archive
 
   const link = links.find((l) => l.nodeid === nodeid)
-  const archivedLink = archive.find((l) => l.nodeid === nodeid)
-
   if (link) return link
+
+  const archivedLink = archive.find((l) => l.nodeid === nodeid)
   if (archivedLink) return archivedLink
 }
 
@@ -318,8 +319,8 @@ export const getPathFromNodeIdHookless = (nodeid: string) => {
   const archive = useDataStore.getState().archive
 
   const link = links.find((l) => l.nodeid === nodeid)
-  const archivedLink = archive.find((l) => l.nodeid === nodeid)
-
   if (link) return link.path
+
+  const archivedLink = archive.find((l) => l.nodeid === nodeid)
   if (archivedLink) return archivedLink.path
 }

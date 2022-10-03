@@ -17,6 +17,7 @@ import {
   Reminder,
   ReminderActions,
   SharedNode,
+  SingleNamespace,
   Snippet,
   Tag,
   UserDetails,
@@ -43,7 +44,7 @@ export interface ParentMethods {
   // TODO: implement the above and then we can move useSearch away from chotu
   // ['SEARCH']: (key: idxKey | idxKey[], query: string) => Promise<any>
   ['SET_CONTENT']: [props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }]
-  ['ADD_SINGLE_ILINK']: [props: { nodeid: string; path: string }]
+  ['ADD_SINGLE_ILINK']: [props: { nodeid: string; path: string; namespace: string }]
   ['ADD_MULTIPLE_ILINKS']: [props: { linksToBeCreated: ILink[] }]
   ['ACT_ON_REMINDER']: [props: { action: ReminderActions; reminder: Reminder }]
 }
@@ -57,6 +58,7 @@ export default function useRaju() {
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
+  const setNamespaces = useDataStore((store) => store.setNamespaces)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const setTags = useDataStore((store) => store.setTags)
@@ -111,6 +113,7 @@ export default function useRaju() {
       snippets: Snippet[],
       contents: Contents,
       ilinks: any[],
+      namespaces: SingleNamespace[],
       reminders: Reminder[],
       publicNodes: any[],
       sharedNodes: SharedNode[],
@@ -124,6 +127,7 @@ export default function useRaju() {
       setInternalAuthStore(authAWS)
       updateSnippets(snippets)
       setIlinks(ilinks)
+      setNamespaces(namespaces)
       initContents(contents)
       setReminders(reminders)
       setPublicNodes(publicNodes)
