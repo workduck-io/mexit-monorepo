@@ -1,5 +1,13 @@
 # mexit
 
+## 0.11.1
+
+### Patch Changes
+
+- 065698ec: Updated extension's API requests and other functions calls to support namespaces. Also updated the connection between webapp and extension to sync namespaces.
+- dbe0cb4c: Added extension manifest.json version update in changeset action, this would fix the extension's publishing to chrome store.
+- 82bf5a4a: Added documentation for setting up monorepo, also added a small fix to changeset publish action
+
 ## 0.11.0
 
 ### Minor Changes
