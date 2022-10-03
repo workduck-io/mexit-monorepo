@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.11.1
+
+### Patch Changes
+
+- 065698ec: Updated extension's API requests and other functions calls to support namespaces. Also updated the connection between webapp and extension to sync namespaces.
+- 82bf5a4a: Added documentation for setting up monorepo, also added a small fix to changeset publish action
+
 ## 0.11.0
 
 ### Minor Changes
