@@ -14,6 +14,6 @@
     yarn dev
   ```
 
-- Open up `chrome://extensions` and load the `build` folder
+- Open up `chrome://extensions` and load the `dist/apps/extension` folder
 
 Note: One would have to turn on developer options to load an unpacked extension.
