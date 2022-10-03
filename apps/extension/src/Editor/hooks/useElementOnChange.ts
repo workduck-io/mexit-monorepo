@@ -15,6 +15,7 @@ import { Editor, Transforms } from 'slate'
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
 
 import { useLinks } from '../../Hooks/useLinks'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useComboboxStore } from '../store/combobox'
 import { ComboboxItemType, IComboboxItem } from '../types'
 
@@ -22,6 +23,7 @@ import { ComboboxItemType, IComboboxItem } from '../types'
 
 export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Array<any>) => {
   const { getNodeidFromPath } = useLinks()
+  const { getDefaultNamespace } = useNamespaces()
   const closeMenu = useComboboxStore((state) => state.closeMenu)
 
   return (editor: PlateEditor, item: IComboboxItem, elementType?: string) => {
@@ -53,7 +55,8 @@ export const useElementOnChange = (elementComboType: ComboboxItemType, keys?: Ar
         let itemValue = item.text
 
         if ((type === ELEMENT_ILINK || type === ELEMENT_INLINE_BLOCK) && !itemValue.startsWith(`${NODE_ID_PREFIX}_`)) {
-          const nodeId = getNodeidFromPath(itemValue)
+          const defaultNamespace = getDefaultNamespace()
+          const nodeId = getNodeidFromPath(itemValue, defaultNamespace.id)
           itemValue = nodeId
         }
 

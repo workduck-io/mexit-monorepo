@@ -43,7 +43,7 @@ export interface ParentMethods {
   // TODO: implement the above and then we can move useSearch away from chotu
   // ['SEARCH']: (key: idxKey | idxKey[], query: string) => Promise<any>
   ['SET_CONTENT']: [props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }]
-  ['ADD_SINGLE_ILINK']: [props: { nodeid: string; path: string }]
+  ['ADD_SINGLE_ILINK']: [props: { nodeid: string; path: string; namespace: string }]
   ['ADD_MULTIPLE_ILINKS']: [props: { linksToBeCreated: ILink[] }]
   ['ACT_ON_REMINDER']: [props: { action: ReminderActions; reminder: Reminder }]
 }

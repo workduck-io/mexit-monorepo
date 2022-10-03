@@ -68,8 +68,8 @@ export default function Chotu() {
         setContent(props.nodeid, props.content, props?.metadata)
         return
       },
-      updateSingleILink(props: { nodeid: string; path: string }) {
-        updateSingleILink(props.nodeid, props.path)
+      updateSingleILink(props: { nodeid: string; path: string; namespace: string }) {
+        updateSingleILink(props.nodeid, props.path, props.namespace)
         return
       },
       updateMultipleILinks(props: { linksToBeCreated: ILink[] }) {

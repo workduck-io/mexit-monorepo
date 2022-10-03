@@ -49,7 +49,7 @@ export function useSaveChanges() {
         updateSingleILink(node.nodeid, node.path, namespace.id)
       }
 
-      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path })
+      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path, namespace: namespace.id })
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'SAVE_NODE',
