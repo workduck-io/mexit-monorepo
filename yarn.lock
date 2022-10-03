@@ -4835,6 +4835,11 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
+"@webcomponents/custom-elements@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
+  integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
+
 "@workduck-io/dwindle@^0.0.18":
   version "0.0.18"
   resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.18/55cb983b5d8771b5aa5f592c3d7af753f748832615642ff557e9786958982802#7626d39dec01aa72c4b4987fd041af74c571c619"
@@ -4853,17 +4858,6 @@
   version "0.7.22"
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/78facf234f5d5157ef2a7bf2d514f554afcfae084bd4bd996eb16c8309fd93d4#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
-
-"@workduck-io/mex-components@^0.0.11":
-  version "0.0.11"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.11/034b0c2a3bc146c95544cf1abb9f607f24f0408f#034b0c2a3bc146c95544cf1abb9f607f24f0408f"
-  integrity sha512-C87UeUqubvnInjUjj/HH8bo9+HlCRNudStZwuLqVUozHKiQvdVNqiycRKsp14z3PoTavbExhDhdWqugQj9mHXg==
-  dependencies:
-    "@tippyjs/react" "^4.2.6"
-    core-js "^3.21.0"
-    deepmerge "^4.2.2"
-    polished "^4.1.4"
-    react-spring "^9.5.2"
 
 "@workduck-io/mex-components@^0.0.15":
   version "0.0.15"

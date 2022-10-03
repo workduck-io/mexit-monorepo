@@ -1,6 +1,7 @@
 // Any kind of DOM manipulation is done here.
 import React from 'react'
 
+import '@webcomponents/custom-elements'
 import { createRoot } from 'react-dom/client'
 import { StyleSheetManager } from 'styled-components'
 
