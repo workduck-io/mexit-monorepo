@@ -56,6 +56,11 @@ jobs:
           yarn nx release webapp
           aws s3 sync ./dist/apps/webapp s3://mexit-monorepo-webapp
 
+      - name: Update Extension's manifest version
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          cat ./apps/extension/src/manifest.json | jq  '.version=${{ fromJson(steps.get_package_version.outputs.packageJson).version }}' | tee  ./apps/extension/src/manifest.json
+
       - name: Build Extension for release
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: yarn nx release extension
