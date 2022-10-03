@@ -17,6 +17,7 @@ import {
   Reminder,
   ReminderActions,
   SharedNode,
+  SingleNamespace,
   Snippet,
   Tag,
   UserDetails,
@@ -57,6 +58,7 @@ export default function useRaju() {
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
+  const setNamespaces = useDataStore((store) => store.setNamespaces)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const setTags = useDataStore((store) => store.setTags)
@@ -111,6 +113,7 @@ export default function useRaju() {
       snippets: Snippet[],
       contents: Contents,
       ilinks: any[],
+      namespaces: SingleNamespace[],
       reminders: Reminder[],
       publicNodes: any[],
       sharedNodes: SharedNode[],
@@ -124,6 +127,7 @@ export default function useRaju() {
       setInternalAuthStore(authAWS)
       updateSnippets(snippets)
       setIlinks(ilinks)
+      setNamespaces(namespaces)
       initContents(contents)
       setReminders(reminders)
       setPublicNodes(publicNodes)

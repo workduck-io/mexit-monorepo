@@ -40,7 +40,7 @@ export default function Chotu() {
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
 
-  const { ilinks, archive, sharedNodes, tags, publicNodes } = useDataStore()
+  const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
   const [first, setFirst] = useState(true)
@@ -96,6 +96,7 @@ export default function Chotu() {
             snippets,
             contents,
             ilinks,
+            namespaces,
             reminders,
             publicNodes,
             sharedNodes,
@@ -121,6 +122,7 @@ export default function Chotu() {
     snippets,
     contents,
     ilinks,
+    namespaces,
     reminders,
     publicNodes,
     sharedNodes,
