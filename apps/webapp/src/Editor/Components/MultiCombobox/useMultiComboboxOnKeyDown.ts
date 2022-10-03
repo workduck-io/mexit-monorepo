@@ -4,6 +4,7 @@ import {
   getPluginType,
   insertNodes,
   insertText,
+  isBlock,
   isEndPoint,
   moveSelection,
   PlateEditor,
@@ -34,7 +35,6 @@ export interface ComboTypeHandlers {
 }
 
 export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?: any) => {
-  const { getNodeidFromPath } = useLinks()
   const closeMenu = useComboboxStore((state) => state.closeMenu)
 
   return (editor: PlateEditor, item: IComboboxItem, elementType?: string, tab?: boolean) => {
@@ -57,6 +57,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
       if (tab) {
         // console.log('TAB', { comboType, type })
         type = type === ELEMENT_ILINK ? ELEMENT_INLINE_BLOCK : type
+        mog('TYPE OF ELEMENT CHANGED TO INLINEEEE BLOCKKKK')
         // if (type)
       }
 
@@ -71,11 +72,11 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
         let itemValue = item.text
 
-        if ((type === ELEMENT_ILINK || type === ELEMENT_INLINE_BLOCK) && !itemValue.startsWith(`${NODE_ID_PREFIX}_`)) {
+        if ((type === ELEMENT_ILINK || type === ELEMENT_INLINE_BLOCK) && !itemValue?.startsWith(`${NODE_ID_PREFIX}_`)) {
           // mog('Replacing itemValue', { comboType, type, itemValue, item })
-
-          const nodeId = getNodeidFromPath(itemValue)
+          const nodeId = item.key // getNodeidFromPath(itemValue, namespace.id)
           itemValue = nodeId
+          // mog('Value of Item', { itemValue })
         }
 
         // select the ilink text and insert the ilink element
@@ -84,6 +85,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
         const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
         const activeBlock = useComboboxStore.getState().activeBlock
+        const textAfterBlockTrigger = useComboboxStore.getState().search.textAfterBlockTrigger
 
         // mog('Inserting from here', { item, isBlockTriggered })
         let InsertedElement: InsertableElement = {
@@ -91,7 +93,6 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           children: [{ text: '' }],
           value: itemValue ?? item.key
         }
-
         if (
           (item.type === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) &&
           isBlockTriggered &&
@@ -127,14 +128,16 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
         }
 
         // mog('Inserting', { InsertedElement })
+
         insertNodes<TElement>(editor, InsertedElement)
 
         // move the selection after the ilink element
         moveSelection(editor)
+        const isBlockComponent = isBlock(editor, InsertedElement)
 
-        // delete the inserted space
-        if (isBlockEnd) {
-          deleteText(editor)
+        if (isBlockEnd && !isBlockComponent) {
+          // delete the inserted space
+          deleteText(editor, { unit: 'character', reverse: true })
         }
 
         // return true
