@@ -40,7 +40,7 @@ jobs:
         # Doing this before changeset action so that the updated manifest file also gets committed in the PR
       - name: Update Extension's manifest version
         run: |
-          cat ./apps/extension/src/manifest.json | jq  '.version=${{ fromJson(steps.get_package_version.outputs.packageJson).version }}' | tee  ./apps/extension/src/manifest.json
+          cat ./apps/extension/src/manifest.json | jq  '.version="${{ fromJson(steps.get_package_version.outputs.packageJson).version }}"' | tee  ./apps/extension/src/manifest.json
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
