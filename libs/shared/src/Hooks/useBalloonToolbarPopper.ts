@@ -11,6 +11,7 @@ import {
   flip,
   getSelectionBoundingClientRect,
   offset,
+  shift,
   useVirtualFloating,
   UseVirtualFloatingOptions,
   UseVirtualFloatingReturn
@@ -18,18 +19,30 @@ import {
 import { useFocused } from 'slate-react'
 import create from 'zustand'
 
+
+
+type ToolbarState = 'normal' | 'new-note' | 'new-snippet'
+
 interface BalloonToolbarStore {
-  isHidden: boolean
-  setIsHidden: (isHidden: boolean) => void
-  isFocused: boolean
-  setIsFocused: (isFocused: boolean) => void
+  open: boolean
+  setOpen: (open: boolean) => void
+  // isHidden: boolean
+  // setIsHidden: (isHidden: boolean) => void
+  // isFocused: boolean
+  // setIsFocused: (isFocused: boolean) => void
+  toolbarState: ToolbarState
+  setToolbarState: (state: ToolbarState) => void
 }
 
 export const useBalloonToolbarStore = create<BalloonToolbarStore>((set, get) => ({
-  isHidden: true,
-  setIsHidden: (isHidden) => set({ isHidden }),
-  isFocused: false,
-  setIsFocused: (isFocused) => set({ isFocused })
+  open: false,
+  setOpen: (open) => set({ open }),
+  // isHidden: true,
+  // setIsHidden: (isHidden) => set({ isHidden }),
+  // isFocused: false,
+  // setIsFocused: (isFocused) => set({ isFocused }),
+  toolbarState: 'normal',
+  setToolbarState: (state) => set({ toolbarState: state })
 }))
 
 export const useFloatingToolbar = ({
@@ -42,10 +55,14 @@ export const useFloatingToolbar = ({
   const focusedEditorId = useEventEditorSelectors.focus()
   const editor = useEditorState()
   const focused = useFocused()
+  const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)
+  const setToolbarState = useBalloonToolbarStore((s) => s.setToolbarState)
 
   const [waitForCollapsedSelection, setWaitForCollapsedSelection] = useState(false)
 
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
+  const open = useBalloonToolbarStore((s) => s.open)
+  const setOpen = useBalloonToolbarStore((s) => s.setOpen)
 
   const selectionExpanded = editor && isSelectionExpanded(editor)
   const selectionText = editor && getSelectionText(editor)
@@ -63,7 +80,9 @@ export const useFloatingToolbar = ({
   }, [focused, selectionExpanded])
 
   useEffect(() => {
-    if (!selectionExpanded || !selectionText || editor.id !== focusedEditorId) {
+    if ((!selectionExpanded || !selectionText || editor.id !== focusedEditorId) && toolbarState === 'normal') {
+      setOpen(false)
+    } else if (toolbarState !== 'normal' && editor.id === focusedEditorId) {
       setOpen(false)
     } else if (selectionText && selectionExpanded && !waitForCollapsedSelection) {
       setOpen(true)
@@ -75,6 +94,7 @@ export const useFloatingToolbar = ({
       {
         middleware: [
           offset(12),
+          shift(),
           flip({
             padding: 150
           })
@@ -93,6 +113,12 @@ export const useFloatingToolbar = ({
   const selectionTextLength = selectionText?.length ?? 0
 
   useEffect(() => {
+    if (!open) {
+      setToolbarState('normal')
+    }
+  }, [open])
+
+  useEffect(() => {
     if (selectionTextLength > 0) {
       update?.()
     }
@@ -100,3 +126,4 @@ export const useFloatingToolbar = ({
 
   return { ...floatingResult, open }
 }
+

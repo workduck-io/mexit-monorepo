@@ -37,14 +37,18 @@ import {
   usePlateEditorRef
 } from '@udecode/plate'
 
-import { ButtonSeparator } from '@mexit/shared'
+import { ButtonSeparator, useBalloonToolbarStore } from '@mexit/shared'
 
 import { BalloonToolbar } from './BalloonToolbar'
-import { SelectionToNode } from './components/SelectionToNode'
-import { SelectionToSnippet } from './components/SelectionToSnippet'
+
+import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
+import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
 import { SelectionToTask } from './components/SelectionToTask'
 
 const BallonMarkToolbarButtons = () => {
+  const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)
+  // const setToolbarState = useBalloonToolbarStore((s) => s.setToolbarState)
+
   const editor = usePlateEditorRef()
 
   const arrow = false
@@ -67,98 +71,105 @@ const BallonMarkToolbarButtons = () => {
 
   return (
     <BalloonToolbar floatingOptions={floatingOptions} theme={theme} arrow={arrow}>
-      <BlockToolbarButton
-        type={getPluginType(editor, ELEMENT_H1)}
-        icon={<Icon height={20} icon={h1} />}
-        tooltip={{ content: 'Heading 1', ...tooltip }}
-      />
+      {
+        {
+          normal: (
+            <>
+              <BlockToolbarButton
+                type={getPluginType(editor, ELEMENT_H1)}
+                icon={<Icon height={20} icon={h1} />}
+                tooltip={{ content: 'Heading 1', ...tooltip }}
+              />
 
-      <BlockToolbarButton
-        type={getPluginType(editor, ELEMENT_H2)}
-        icon={<Icon height={20} icon={h2} />}
-        tooltip={{ content: 'Heading 2', ...tooltip }}
-      />
+              <BlockToolbarButton
+                type={getPluginType(editor, ELEMENT_H2)}
+                icon={<Icon height={20} icon={h2} />}
+                tooltip={{ content: 'Heading 2', ...tooltip }}
+              />
 
-      <BlockToolbarButton
-        type={getPluginType(editor, ELEMENT_H3)}
-        icon={<Icon height={20} icon={h3} />}
-        tooltip={{ content: 'Heading 3', ...tooltip }}
-      />
-      <ButtonSeparator />
+              <BlockToolbarButton
+                type={getPluginType(editor, ELEMENT_H3)}
+                icon={<Icon height={20} icon={h3} />}
+                tooltip={{ content: 'Heading 3', ...tooltip }}
+              />
+              <ButtonSeparator />
 
-      <AlignToolbarButton
-        value="left"
-        tooltip={{ content: 'Align Left', ...tooltip }}
-        icon={<Icon icon={AlignLeftIcon} />}
-      />
-      <AlignToolbarButton
-        value="center"
-        tooltip={{ content: 'Align Center', ...tooltip }}
-        icon={<Icon icon={AlignCenterIcon} />}
-      />
-      <AlignToolbarButton
-        value="right"
-        tooltip={{ content: 'Align Right', ...tooltip }}
-        icon={<Icon icon={AlignRightIcon} />}
-      />
+              <AlignToolbarButton
+                value="left"
+                tooltip={{ content: 'Align Left', ...tooltip }}
+                icon={<Icon icon={AlignLeftIcon} />}
+              />
+              <AlignToolbarButton
+                value="center"
+                tooltip={{ content: 'Align Center', ...tooltip }}
+                icon={<Icon icon={AlignCenterIcon} />}
+              />
+              <AlignToolbarButton
+                value="right"
+                tooltip={{ content: 'Align Right', ...tooltip }}
+                icon={<Icon icon={AlignRightIcon} />}
+              />
 
-      <ButtonSeparator />
+              <ButtonSeparator />
 
-      <BlockToolbarButton
-        type={getPluginType(editor, ELEMENT_BLOCKQUOTE)}
-        icon={<Icon height={20} icon={doubleQuotesL} />}
-        tooltip={{ content: 'Quote', ...tooltip }}
-      />
+              <BlockToolbarButton
+                type={getPluginType(editor, ELEMENT_BLOCKQUOTE)}
+                icon={<Icon height={20} icon={doubleQuotesL} />}
+                tooltip={{ content: 'Quote', ...tooltip }}
+              />
 
-      <ListToolbarButton
-        type={getPluginType(editor, ELEMENT_UL)}
-        icon={<Icon height={20} icon={listUnordered} />}
-        tooltip={{ content: 'Bullet List', ...tooltip }}
-      />
+              <ListToolbarButton
+                type={getPluginType(editor, ELEMENT_UL)}
+                icon={<Icon height={20} icon={listUnordered} />}
+                tooltip={{ content: 'Bullet List', ...tooltip }}
+              />
 
-      <ListToolbarButton
-        type={getPluginType(editor, ELEMENT_OL)}
-        icon={<Icon height={20} icon={listOrdered} />}
-        tooltip={{ content: 'Ordered List', ...tooltip }}
-      />
+              <ListToolbarButton
+                type={getPluginType(editor, ELEMENT_OL)}
+                icon={<Icon height={20} icon={listOrdered} />}
+                tooltip={{ content: 'Ordered List', ...tooltip }}
+              />
 
-      <ButtonSeparator />
+              <ButtonSeparator />
 
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_BOLD)}
-        icon={<Icon height={20} icon={boldIcon} />}
-        tooltip={{ content: 'Bold (⌘B)', ...tooltip }}
-      />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_STRIKETHROUGH)}
-        icon={<Icon height={20} icon={strikeThrough} />}
-      />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_ITALIC)}
-        icon={<Icon height={20} icon={italicIcon} />}
-        tooltip={{ content: 'Italic (⌘I)', ...tooltip }}
-      />
-      <MarkToolbarButton type={getPluginType(editor, MARK_CODE)} icon={<Icon height={20} icon={codeLine} />} />
+              <MarkToolbarButton
+                type={getPluginType(editor, MARK_BOLD)}
+                icon={<Icon height={20} icon={boldIcon} />}
+                tooltip={{ content: 'Bold (⌘B)', ...tooltip }}
+              />
+              <MarkToolbarButton
+                type={getPluginType(editor, MARK_STRIKETHROUGH)}
+                icon={<Icon height={20} icon={strikeThrough} />}
+              />
+              <MarkToolbarButton
+                type={getPluginType(editor, MARK_ITALIC)}
+                icon={<Icon height={20} icon={italicIcon} />}
+                tooltip={{ content: 'Italic (⌘I)', ...tooltip }}
+              />
+              <MarkToolbarButton type={getPluginType(editor, MARK_CODE)} icon={<Icon height={20} icon={codeLine} />} />
 
-      <ButtonSeparator />
+              <ButtonSeparator />
 
-      <SelectionToTask
-        icon={<Icon height={20} icon={taskLine} />}
-        tooltip={{ content: 'Convert Blocks to Task', ...tooltip }}
-      />
+              <SelectionToTask
+                icon={<Icon height={20} icon={taskLine} />}
+                tooltip={{ content: 'Convert Blocks to Task', ...tooltip }}
+              />
 
-      <SelectionToNode
-        icon={<Icon height={20} icon={addLine} />}
-        tooltip={{ content: 'Convert Blocks to New Node', ...tooltip }}
-      />
+              <SelectionToNode
+                icon={<Icon height={20} icon={addLine} />}
+                tooltip={{ content: 'Convert Blocks to New Node', ...tooltip }}
+              />
 
-      <SelectionToSnippet
-        icon={<Icon height={20} icon={fileAddLine} />}
-        tooltip={{ content: 'Convert Blocks to New Snippet', ...tooltip }}
-      />
-      {/* <ButtonSeparator />
-      <LinkButton tooltip={{ content: 'Link', ...tooltip }} icon={<Icon height={20} icon={linkIcon} />} /> */}
-      {/* Looses focus when used. */}
+              <SelectionToSnippet
+                icon={<Icon height={20} icon={fileAddLine} />}
+                tooltip={{ content: 'Convert Blocks to New Snippet', ...tooltip }}
+              />
+            </>
+          ),
+          'new-note': <SelectionToNodeInput />,
+          'new-snippet': <SelectionToSnippetInput />
+        }[toolbarState]
+      }
     </BalloonToolbar>
   )
 }

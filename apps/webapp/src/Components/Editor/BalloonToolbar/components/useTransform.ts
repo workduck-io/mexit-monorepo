@@ -1,6 +1,7 @@
 import {
   deleteText,
   getNodeEntries,
+  getNodeFragment,
   getPath,
   getSelectionText,
   insertNodes,
@@ -33,9 +34,12 @@ import { useSnippets } from '../../../../Hooks/useSnippets'
 import { useUpdater } from '../../../../Hooks/useUpdater'
 import { useEditorStore } from '../../../../Stores/useEditorStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
+import { cleanEditorId } from '../../../Todo'
+import { useDataStore } from '../../../../Stores/useDataStore'
+import { useOpenToast } from '../../../Toast/useOpenToast'
 
 export const useTransform = () => {
-  const node = useEditorStore((state) => state.node)
+  const { openNoteToast, openSnippetToast } = useOpenToast()
   const { updateSnippet } = useSnippets()
   const { createNewNote } = useCreateNewNote()
   const { updater } = useUpdater()
@@ -164,7 +168,7 @@ export const useTransform = () => {
    * Inserts the link of new node in place of the selection
    * @param editor
    */
-  const selectionToNode = (editor: TEditor) => {
+  const selectionToNode = (editor: TEditor, title?: string) => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
@@ -187,24 +191,55 @@ export const useTransform = () => {
 
       const selText = getSelectionText(editor)
 
-      const value = nodes.map(([node, _path]) => {
-        return node
-      })
       const isInline = lowest.length === 1
-      const putContent = selText.length > NODE_PATH_CHAR_LENGTH
+      // Only query for lowest value if selection is inline
+      const lowestValue = isInline ? getNodeFragment(editor, editor.selection) : []
+      const value = isInline
+        ? lowestValue
+        : nodes.map(([node, _path]) => {
+            return node
+          })
 
       const text = convertContentToRawText(value, NODE_PATH_SPACER)
-      const parentPath = useEditorStore.getState().node.title
-      const path = parentPath + SEPARATOR + (isInline ? getSlug(selText) : getSlug(text))
 
-      const note = createNewNote({
-        path,
-        noteContent: putContent ? value : defaultContent.content,
-        namespace: node?.namespace,
-        noRedirect: true
-      })
+      const editorId = editor.id as string
+      const nodeid = cleanEditorId(editorId)
 
-      replaceSelectionWithLink(editor, note?.nodeid, isInline)
+      const ilinks = useDataStore.getState().ilinks
+      const node = ilinks.find((n) => n.nodeid === nodeid)
+
+      if (node) {
+        const parentPath = node.path
+        const namespace = node.namespace
+        const childTitle = title ?? (isInline ? getSlug(selText) : getSlug(text))
+        const path = parentPath + SEPARATOR + childTitle
+
+        // mog('selectionToNode  ', {
+        //   parentPath,
+        //   lowest,
+        //   lowestValue,
+        //   value,
+        //   childTitle,
+        //   path,
+        //   namespace,
+        //   editorId,
+        //   nodeid
+        // })
+
+        const note = createNewNote({
+          path,
+          noteContent: value,
+          namespace: namespace,
+          noRedirect: true
+        })
+
+        replaceSelectionWithLink(editor, note?.nodeid, isInline)
+
+        if (note) {
+          // TODO: Add Open Toast
+          openNoteToast(note.nodeid, note.path)
+        }
+      }
     })
   }
 
@@ -235,12 +270,13 @@ export const useTransform = () => {
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
     })
   }
+
   /**
    * Converts selection to new snippet
    * Shows notification of snippet creation
    * @param editor
    */
-  const selectionToSnippet = (editor: TEditor) => {
+  const selectionToSnippet = (editor: TEditor, title?: string) => {
     if (!editor.selection) return
     if (!isConvertable(editor)) return
 
@@ -259,7 +295,7 @@ export const useTransform = () => {
       })
 
       const snippetId = generateSnippetId()
-      const snippetTitle = genereateName().dashed
+      const snippetTitle = title ?? genereateName().dashed
       const newSnippet = {
         id: snippetId,
         title: snippetTitle,
@@ -271,8 +307,9 @@ export const useTransform = () => {
       // addSnippet()
 
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value })
+      // TODO: Show toast with open
+      openSnippetToast(snippetId, snippetTitle)
 
-      toast(`Snippet created [[${snippetTitle}]]`, { duration: 5000 })
       // setContent(nodeid, value)
       // saveData()
       // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })

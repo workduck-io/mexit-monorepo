@@ -7,7 +7,7 @@ import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
 
 import { TodoBase } from './Todo'
 
-const cleanEditorId = (editorId: string) => {
+export const cleanEditorId = (editorId: string) => {
   /*
    * Find substring of form NODE_{} in editorid
    */
