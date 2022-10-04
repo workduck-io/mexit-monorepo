@@ -12,7 +12,7 @@ import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
 import config from '../../config'
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 
-const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear']
+const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear', 'whatsapp']
 
 const GenericOAuthRedirect = () => {
   const [hasDesktopApp, setHasDesktopApp] = useState<boolean>(true)
