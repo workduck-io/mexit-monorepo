@@ -31,6 +31,7 @@ const GenericOAuthRedirect = () => {
     switch (serviceName) {
       case 'telegram':
       case 'google':
+      case 'whatsapp':
       case 'slack':
         return true
 
@@ -61,6 +62,7 @@ const GenericOAuthRedirect = () => {
       }
 
       case 'telegram':
+      case 'whatsapp':
       case 'slack': {
         const serviceId = searchParams.get('serviceId')
         navigate(`/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`)
@@ -100,6 +102,7 @@ const GenericOAuthRedirect = () => {
       }
 
       case 'slack':
+      case 'whatsapp':
       case 'telegram': {
         const serviceId = searchParams.get('serviceId')
         const url = `mex://navigate/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`
