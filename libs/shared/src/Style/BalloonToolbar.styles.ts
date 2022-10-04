@@ -135,3 +135,15 @@ export const BalloonToolbarBase = styled(ToolbarBase)<BalloonToolbarProps>`
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
   }
 `
+
+export const BalloonToolbarInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.tiny};
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+`
