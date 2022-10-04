@@ -32,13 +32,13 @@ const GenericOAuthRedirect = () => {
       case 'telegram':
       case 'google':
       case 'slack':
+      case 'whatsapp':
         return true
 
       case 'asana':
       case 'figma':
       case 'github':
       case 'jira':
-      case 'whatsapp':
       case 'linear':
       default:
         return false
@@ -62,7 +62,8 @@ const GenericOAuthRedirect = () => {
       }
 
       case 'telegram':
-      case 'slack': {
+      case 'slack':
+      case 'whatsapp': {
         const serviceId = searchParams.get('serviceId')
         navigate(`/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`)
         break
@@ -70,8 +71,7 @@ const GenericOAuthRedirect = () => {
       case 'asana':
       case 'figma':
       case 'github':
-      case 'hira':
-      case 'whatsapp':
+      case 'jira':
       case 'linear': {
         navigate('/404')
         break
