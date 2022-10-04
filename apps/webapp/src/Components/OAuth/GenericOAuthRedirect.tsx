@@ -12,7 +12,7 @@ import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
 import config from '../../config'
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 
-const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear']
+const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear', 'whatsapp']
 
 const GenericOAuthRedirect = () => {
   const [hasDesktopApp, setHasDesktopApp] = useState<boolean>(true)
@@ -38,6 +38,7 @@ const GenericOAuthRedirect = () => {
       case 'figma':
       case 'github':
       case 'jira':
+      case 'whatsapp':
       case 'linear':
       default:
         return false
@@ -70,6 +71,7 @@ const GenericOAuthRedirect = () => {
       case 'figma':
       case 'github':
       case 'hira':
+      case 'whatsapp':
       case 'linear': {
         navigate('/404')
         break
@@ -100,6 +102,7 @@ const GenericOAuthRedirect = () => {
       }
 
       case 'slack':
+      case 'whatsapp':
       case 'telegram': {
         const serviceId = searchParams.get('serviceId')
         const url = `mex://navigate/integrations/portal/${serviceName.toUpperCase()}?serviceId=${serviceId}`
