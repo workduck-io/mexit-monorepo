@@ -103,7 +103,13 @@ export const useRefactor = () => {
       const addedILinks: ILink[] = []
       const removedILinks: ILink[] = []
 
-      Object.values(response.changedPaths).forEach((nsObject) => {
+      Object.entries(response.changedPaths).forEach(([nsId, nsObject]) => {
+          nsObject.addedPaths.forEach((ilink) => {
+            ilink.namespace = nsId
+          })
+          nsObject.removedPaths.forEach((ilink) => {
+            ilink.namespace = nsId
+          })
         addedILinks.push(...nsObject.addedPaths)
         removedILinks.push(...nsObject.removedPaths)
       })
