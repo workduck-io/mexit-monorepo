@@ -10,37 +10,67 @@ import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useNodes } from '../../Hooks/useNodes'
-import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
+import useMultipleEditors from '../../Stores/useEditorsStore';
+// import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { NodeLinkStyled } from '../../Style/Backlinks'
+import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'
+import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
 interface NodeLinkProps {
   keyStr: string
   nodeid: string
 
+  blockId?: string
+
   // Show preview (default true)
   preview?: boolean
   icon?: boolean
+
+  /**
+   * Replace the default onclick action on node link
+   */
+  onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+
+  /**
+   * RenderActions
+   */
+  RenderActions?: () => JSX.Element
 }
 
-const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
+const NodeLink = ({ nodeid, blockId, preview = true, icon, keyStr, onClick, RenderActions }: NodeLinkProps) => {
   const [visible, setVisible] = React.useState(false)
-  const [fixVisible, setFixVisible] = React.useState(false)
-  const { getPathFromNodeid } = useLinks()
+  const isEditorPresent = useMultipleEditors((store) => store.editors)?.[nodeid]
+  const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
   const { getNodeType } = useNodes()
   const { goTo } = useRouting()
   const { push } = useNavigation()
 
+  const addPreviewInEditors = useMultipleEditors((store) => store.addEditor)
   const nodeType = getNodeType(nodeid)
+  const node = getILinkFromNodeid(nodeid)
+  // const node = getNodeFrom
 
-  const onClickProps = useOnMouseClick(() => {
+  const onClickProps = (ev) => {
     // Show preview on click, if preview is shown, navigate to link
-    if (!fixVisible) setFixVisible(true)
-    else {
-      push(nodeid)
-      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    if (ev.detail === 2) {
+      if (onClick) {
+        onClick(ev)
+      } else {
+        push(nodeid)
+        goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+      }
     }
-  })
+
+    addPreviewInEditors(nodeid)
+
+    if (!visible) {
+      setVisible(true)
+    }
+  }
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
@@ -49,6 +79,7 @@ const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
         closePreview()
       }
     })
+
     return () => {
       unsubscribe()
     }
@@ -56,31 +87,38 @@ const NodeLink = ({ nodeid, preview = true, icon, keyStr }: NodeLinkProps) => {
 
   const closePreview = () => {
     setVisible(false)
-    setFixVisible(false)
   }
 
   return (
     <EditorPreview
       key={keyStr}
-      preview={visible || fixVisible}
-      closePreview={() => closePreview()}
-      allowClosePreview={fixVisible}
+      preview={visible}
+      label={nodeid}
+      setPreview={setVisible}
+      allowClosePreview={!isEditorPresent}
+      // blockId={blockId}
+      hover
       nodeid={nodeid}
       placement="auto-start"
     >
-      <NodeLinkStyled
-        onMouseEnter={() => setVisible(true)}
-        onMouseLeave={() => setVisible(false)}
-        selected={fixVisible}
-        key={`NodeLink_${keyStr}`}
-        {...onClickProps}
-      >
-        {nodeType === NodeType.SHARED && <SharedNodeIcon />}
-
-        {getPathFromNodeid(nodeid, true)}
-      </NodeLinkStyled>
+      <NodeLinkWrapper onClick={onClickProps}>
+        <NodeLinkStyled selected={!!isEditorPresent} key={`NodeLink_${keyStr}`}>
+          <NodeLinkTitleWrapper>
+            {node?.icon ? (
+              <Icon icon={node.icon} />
+            ) : nodeType === NodeType.SHARED ? (
+              <SharedNodeIcon />
+            ) : (
+              <Icon icon={fileList2Line} />
+            )}
+            {getPathFromNodeid(nodeid, true)}
+          </NodeLinkTitleWrapper>
+          {RenderActions && <RenderActions />}
+        </NodeLinkStyled>
+      </NodeLinkWrapper>
     </EditorPreview>
   )
 }
 
 export default NodeLink
+

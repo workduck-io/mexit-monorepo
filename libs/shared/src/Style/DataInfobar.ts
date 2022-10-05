@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
 import { CollapsableHeaderTitle } from './Collapse'
+import { Title } from './Typography'
 
 export const DataInfobarWrapper = styled.div`
   display: flex;
-  margin-top: 2rem;
   flex-direction: column;
   justify-content: flex-start;
   gap: calc(2 * ${({ theme }) => theme.spacing.large});
@@ -13,6 +13,22 @@ export const DataInfobarWrapper = styled.div`
   overflow-y: auto;
 
   ${CollapsableHeaderTitle} {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+  }
+`
+
+export const DataInfobarHeader = styled.div`
+  margin-bottom: -3rem;
+  ${Title} {
+    display: flex;
+    gap: ${({ theme }) => theme.spacing.tiny};
+    align-items: center;
+    font-size: 16px;
+    font-weight: normal;
+    margin: ${({ theme }) => theme.spacing.small} 0;
+
+    svg {
+      color: ${({ theme }) => theme.colors.text.fade};
+    }
   }
 `

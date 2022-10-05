@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react'
 
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
+import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import { Icon, IconifyIcon } from '@iconify/react'
 import { useSpring } from 'react-spring'
 import styled from 'styled-components'
 
-import { Infobox } from '@workduck-io/mex-components'
+import { Infobox, InfoboxProps } from '@workduck-io/mex-components'
 
 import { CollapsableHeaderTitle, CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '@mexit/shared'
-
-import { InfoboxProps } from '../Components/Infobox'
+import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 
 interface CollapseProps {
   oid?: string
@@ -20,6 +20,7 @@ interface CollapseProps {
   children?: React.ReactNode
   infoProps?: InfoboxProps
   stopPropagation?: boolean
+  onTitleClick?: (e?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
 const Collapse = ({
@@ -30,19 +31,18 @@ const Collapse = ({
   children,
   oid,
   title,
-  stopPropagation
+  stopPropagation,
+  onTitleClick
 }: CollapseProps) => {
   const [hide, setHide] = React.useState(!defaultOpen ?? true)
 
   const springProps = useMemo(() => {
     const style = { maxHeight: '0vh' }
-
     if (!hide) {
-      style.maxHeight = maximumHeight ?? '100vh'
+      style.maxHeight = maximumHeight
     } else {
       style.maxHeight = '0vh'
     }
-
     return style
   }, [hide])
 
@@ -50,22 +50,19 @@ const Collapse = ({
 
   return (
     <CollapseWrapper id={`Collapse_${oid}`} onMouseUp={(e) => stopPropagation && e.stopPropagation()}>
-      <CollapseHeader collapsed={hide}>
+      <CollapseHeader collapsed={!hide} canClick={!!onTitleClick}>
+        <CollapsableHeaderTitle onClick={(e) => onTitleClick && onTitleClick(e)}>
+          <Icon className={'SidebarCollapseSectionIcon'} icon={icon} />
+          {title}
+          {infoProps && <Infobox {...infoProps} />}
+        </CollapsableHeaderTitle>
         <CollapseToggle
           onClick={() => {
             setHide((b) => !b)
           }}
         >
-          <Icon icon={hide ? arrowRightSLine : icon} />
+          <Icon icon={hide ? arrowLeftSLine : arrowDownSLine} />
         </CollapseToggle>
-        <CollapsableHeaderTitle
-          onClick={() => {
-            setHide((b) => !b)
-          }}
-        >
-          {title}
-        </CollapsableHeaderTitle>
-        {infoProps && <Infobox {...infoProps} />}
       </CollapseHeader>
 
       <CollapseContent style={animationProps}>{children}</CollapseContent>

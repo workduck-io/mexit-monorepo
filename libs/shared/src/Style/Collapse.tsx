@@ -2,8 +2,17 @@ import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
 export const CollapsableHeaderTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
   font-size: 1.25rem;
   font-weight: bolder;
+  flex-grow: 1;
+  svg.SidebarCollapseSectionIcon {
+    height: 1.5rem;
+    width: 1.5rem;
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 export const CollapseWrapper = styled.div`
@@ -23,13 +32,19 @@ export const CollapseToggle = styled.div`
   }
 `
 
-export const CollapseHeader = styled.div<{ collapsed?: boolean }>`
+export const CollapseHeader = styled.div<{ collapsed?: boolean; canClick?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  cursor: pointer;
+  user-select: none;
 
   gap: ${({ theme }) => theme.spacing.tiny};
+
+  ${({ canClick }) =>
+    canClick &&
+    css`
+      cursor: pointer;
+    `}
 
   :hover {
     ${CollapseToggle} {
