@@ -142,7 +142,7 @@ export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
     <MexTreeWrapper>
       {items.length > 0 ? (
         <>
-          <SidebarListFilter noMargin>
+          <SidebarListFilter>
             <Icon icon={searchLine} />
             <Input
               placeholder={filterText ?? 'Filter items'}

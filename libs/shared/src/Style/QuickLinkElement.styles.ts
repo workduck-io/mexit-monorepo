@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
-import { transparentize } from 'polished'
+import { transparentize, mix } from 'polished'
 
 export const SILinkRoot = styled.div`
   display: inline-block;
@@ -56,4 +56,28 @@ export const SILink = styled.div<SILinkProps>`
           color: ${theme.colors.palette.red};
         `
       : ''}
+`
+
+export const TaskSLink = styled(SILink)`
+  svg {
+    color: ${({ theme }) => theme.colors.secondary};
+  }
+  .ILink_decoration {
+    &_value {
+      ${({ theme, $archived }) =>
+        $archived
+          ? css`
+              color: ${theme.colors.gray[6]};
+            `
+          : css`
+              background: -webkit-linear-gradient(
+                60deg,
+                ${theme.colors.secondary},
+                ${mix(0.25, theme.colors.secondary, theme.colors.primary)}
+              );
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            `}
+    }
+  }
 `

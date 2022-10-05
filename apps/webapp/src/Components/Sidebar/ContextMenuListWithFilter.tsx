@@ -127,7 +127,7 @@ const ContextMenuListWithFilter = ({
         <ContextMenuPrimitive.Portal>
           <ContextMenuPrimitive.ContextMenuSubContent sideOffset={2} alignOffset={-5}>
             {filter && items.length > 0 && (
-              <SidebarListFilter noMargin={true}>
+              <SidebarListFilter>
                 <Icon icon={searchLine} />
                 <Input
                   placeholder={filterPlaceholder}

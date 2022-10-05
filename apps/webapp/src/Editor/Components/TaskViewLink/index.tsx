@@ -3,7 +3,7 @@ import { useSelected } from 'slate-react'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 // import { mog } from '@mexit/core'
-import { SILink, SILinkRoot } from '@mexit/shared'
+import { TaskSLink, SILinkRoot } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useSaver } from '../../../Hooks/useSaver'
 import { useTaskViews, useViewStore } from '../../../Hooks/useTaskViews'
@@ -39,12 +39,12 @@ const TaskViewLink = (props: any) => {
       data-slate-value={viewid}
       contentEditable={false}
     >
-      <SILink onClick={openTaskView} $selected={selected} $archived={!view}>
+      <TaskSLink onClick={openTaskView} $selected={selected} $archived={!view}>
         <Icon icon={stackLine} />
         <span className="ILink_decoration ILink_decoration_left">[[</span>
-        <span className="ILink_decoration ILink_decoration_value"> {view ? view?.title : 'View Missing'}</span>
+        <span className="ILink_decoration ILink_decoration_value"> {view ? view?.title : 'Private/Missing'}</span>
         <span className="ILink_decoration ILink_decoration_right">]]</span>
-      </SILink>
+      </TaskSLink>
       {props.children}
     </SILinkRoot>
   )

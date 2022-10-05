@@ -307,7 +307,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                 })}
               >
                 {allowSearch && children && (
-                  <SidebarListFilter noMargin>
+                  <SidebarListFilter>
                     <Icon icon={searchLine} />
                     <Input
                       placeholder={searchPlaceholder ?? 'Filter items'}

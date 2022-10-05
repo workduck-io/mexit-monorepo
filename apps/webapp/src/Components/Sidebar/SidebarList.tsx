@@ -47,7 +47,6 @@ export interface SidebarListProps<T> {
   showSearch?: boolean
   searchPlaceholder?: string
   emptyMessage?: string
-  noMargin?: boolean
 }
 
 const SidebarList = ({
@@ -58,8 +57,7 @@ const SidebarList = ({
   defaultItem,
   showSearch,
   searchPlaceholder,
-  emptyMessage,
-  noMargin
+  emptyMessage
 }: SidebarListProps<any>) => {
   const [contextOpenViewId, setContextOpenViewId] = useState<string>(null)
   const [search, setSearch] = useState('')
@@ -145,7 +143,7 @@ const SidebarList = ({
   }, [listItems, selected])
 
   return (
-    <SidebarListWrapper noMargin={noMargin}>
+    <SidebarListWrapper>
       <Tippy theme="mex" placement="right" singleton={source} />
 
       {defaultItem && (
@@ -160,7 +158,7 @@ const SidebarList = ({
       )}
 
       {showSearch && items.length > 0 && (
-        <SidebarListFilter noMargin={noMargin}>
+        <SidebarListFilter>
           <Icon icon={searchLine} />
           <Input
             placeholder={searchPlaceholder ?? 'Filter items'}

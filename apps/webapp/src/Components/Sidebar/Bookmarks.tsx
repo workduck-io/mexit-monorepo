@@ -60,7 +60,6 @@ const Bookmarks = () => {
     <SidebarList
       items={bookmarkItems}
       onClick={onOpenNode}
-      noMargin
       selectedItemId={match?.params?.nodeid}
       showSearch
       searchPlaceholder="Filter bookmarks..."

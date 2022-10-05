@@ -2,11 +2,7 @@ import styled from 'styled-components'
 
 import { Input } from '@mexit/shared'
 
-interface SidebarListWrapperProps {
-  noMargin?: boolean
-}
-export const SidebarListWrapper = styled.div<SidebarListWrapperProps>`
-  margin-top: ${({ noMargin }) => (noMargin ? '0' : '4rem')};
+export const SidebarListWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   flex-grow: 1;
 `
@@ -33,12 +29,11 @@ export const FilteredItemsWrapper = styled.div<{ hasDefault?: boolean }>`
   overflow-x: hidden;
 `
 
-export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
+export const SidebarListFilter = styled.div`
   display: flex;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing.small};
   margin: ${({ theme }) => `0 0 ${theme.spacing.small}`};
-  margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
   background: ${({ theme }) => theme.colors.form.input.bg};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 

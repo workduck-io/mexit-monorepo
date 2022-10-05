@@ -53,7 +53,6 @@ const SharedNotes = () => {
 
   return sharedNodes.length > 0 ? (
     <SidebarList
-      noMargin
       items={sharedNodes.map((node) => ({
         id: node.nodeid,
         label: node.path,
