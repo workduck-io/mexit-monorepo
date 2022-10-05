@@ -19,6 +19,8 @@ export const Wrapper = styled.div`
   ${Input} {
     width: 100%;
     margin-right: ${({ theme }) => theme.spacing.small};
+    font-size: 2.488rem;
+    font-weight: bold;
     &:hover,
     &:focus,
     &:active {
