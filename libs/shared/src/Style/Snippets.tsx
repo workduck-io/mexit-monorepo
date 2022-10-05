@@ -43,6 +43,7 @@ export const SnippetCommand = styled.div`
   font-size: 1.5rem;
   margin: ${({ theme }) => theme.spacing.small} 0;
   color: ${({ theme }) => theme.colors.text.heading};
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const CreateSnippet = styled(Card)`
