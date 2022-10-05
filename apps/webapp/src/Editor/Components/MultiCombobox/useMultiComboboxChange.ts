@@ -4,6 +4,7 @@ import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
 
+import { cleanEditorId } from '../../../Components/Todo/index'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -104,7 +105,8 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     if (params.snippetid && textAfterTrigger?.startsWith('.')) return
 
     const { isChild, key: pathKey } = withoutContinuousDelimiter(textAfterTrigger)
-    const searchTerm = isChild ? `${getPathFromNodeid(editorId)}${pathKey}` : pathKey
+    const noteId = cleanEditorId(editorId)
+    const searchTerm = isChild ? `${getPathFromNodeid(noteId)}${pathKey}` : pathKey
 
     mog('data', { data })
 
@@ -119,7 +121,7 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     }
 
     const groups = (searchTerm !== '' ? searchItems : data).reduce((acc, item) => {
-      const type = item.type
+      const type = item?.type
       if (!acc[type]) {
         acc[type] = []
       }
