@@ -5,6 +5,7 @@ import { transparentize } from 'polished'
 export const SILinkRoot = styled.div`
   display: inline-block;
   line-height: 1.2;
+  vertical-align: middle;
 `
 
 interface SILinkProps {
