@@ -66,6 +66,7 @@ interface StyledEditorProps {
 export const EditorWrapper = styled.div<{ comboboxOpen?: boolean; isUserEditing?: boolean }>`
   height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   ${({ isUserEditing }) => ScrollStyles(isUserEditing ? 'transparent' : undefined)}
   ${({ comboboxOpen }) =>
     comboboxOpen &&

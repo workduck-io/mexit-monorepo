@@ -62,6 +62,8 @@ import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
+import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
+
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -71,12 +73,18 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
+import { PlateFloatingLink } from '../Components/FloatingLink'
 
 export type PluginOptionType = {
   exclude: {
     dnd?: boolean
     mentions?: boolean
   }
+}
+
+
+export const linkPlugin = {
+  renderAfterEditable: PlateFloatingLink
 }
 
 /**
@@ -106,7 +114,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 
     // Special Elements
     createImagePlugin(optionsImagePlugin), // Image
-    createLinkPlugin(), // Link
+    createLinkPlugin(linkPlugin), // Link
     createListPlugin(), // List
     createTodoPlugin(),
     createTablePlugin({ component: TableWrapper }), // Table
@@ -191,7 +199,9 @@ export const generatePlugins = (options: PluginOptionType) => {
     createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
     createHighlightTextPlugin(),
 
-    createMentionPlugin() // Mentions
+    createMentionPlugin(), // Mentions
+
+    createTaskViewLinkPlugin() // Task View Links
   ]
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins

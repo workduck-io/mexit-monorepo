@@ -11,7 +11,7 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import { MIcon, mog } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
-import { ContextMenuItem, RightSlot } from '../../Style/contextMenu'
+import { ContextMenuItem, ContextMenuSubContent, ContextMenuSubTrigger, RightSlot } from '../../Style/contextMenu'
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import IconDisplay from '../IconPicker/IconDisplay'
 import { SidebarListFilter } from './SidebarList.style'
@@ -109,49 +109,48 @@ const ContextMenuListWithFilter = ({
   }, [listItems, selected])
 
   return (
-    <>
-      <ContextMenuPrimitive.Sub
-        onOpenChange={(open) => {
-          if (!open) {
-            reset()
-          }
-        }}
-      >
-        <ContextMenuPrimitive.ContextMenuSubTrigger>
-          {item.icon && <IconDisplay icon={item.icon} />}
-          {item.label}
-          <RightSlot>
-            <Icon icon={arrowRightSLine} />
-          </RightSlot>
-        </ContextMenuPrimitive.ContextMenuSubTrigger>
-        <ContextMenuPrimitive.Portal>
-          <ContextMenuPrimitive.ContextMenuSubContent sideOffset={2} alignOffset={-5}>
-            {filter && items.length > 0 && (
-              <SidebarListFilter noMargin={true}>
-                <Icon icon={searchLine} />
-                <Input
-                  placeholder={filterPlaceholder}
-                  onChange={debounce((e) => onSearchChange(e), 250)}
-                  ref={inputRef}
-                  // onKeyUp={debounce(onKeyUpSearch, 250)}
-                />
-              </SidebarListFilter>
-            )}
+    <ContextMenuPrimitive.Sub
+      onOpenChange={(open) => {
+        if (!open) {
+          reset()
+        }
+      }}
+    >
+      <ContextMenuSubTrigger>
+        {item.icon && <IconDisplay icon={item.icon} />}
+        {item.label}
+        <RightSlot>
+          <Icon icon={arrowRightSLine} />
+        </RightSlot>
+      </ContextMenuSubTrigger>
 
-            {listItems.map((item, index) => (
-              <ContextMenuItem
-                selected={selected === index}
-                onSelect={() => onSelectingItem(item.id)}
-                key={`ContextMenuList_${item.id}`}
-              >
-                {item.icon && <IconDisplay icon={item.icon} />}
-                {item.label}
-              </ContextMenuItem>
-            ))}
-          </ContextMenuPrimitive.ContextMenuSubContent>
-        </ContextMenuPrimitive.Portal>
-      </ContextMenuPrimitive.Sub>
-    </>
+      <ContextMenuPrimitive.Portal>
+        <ContextMenuSubContent sideOffset={2} alignOffset={-5}>
+          {filter && items.length > 0 && (
+            <SidebarListFilter>
+              <Icon icon={searchLine} />
+              <Input
+                placeholder={filterPlaceholder}
+                onChange={debounce((e) => onSearchChange(e), 250)}
+                ref={inputRef}
+                // onKeyUp={debounce(onKeyUpSearch, 250)}
+              />
+            </SidebarListFilter>
+          )}
+
+          {listItems.map((item, index) => (
+            <ContextMenuItem
+              selected={selected === index}
+              onSelect={() => onSelectingItem(item.id)}
+              key={`ContextMenuList_${item.id}`}
+            >
+              {item.icon && <IconDisplay icon={item.icon} />}
+              {item.label}
+            </ContextMenuItem>
+          ))}
+        </ContextMenuSubContent>
+      </ContextMenuPrimitive.Portal>
+    </ContextMenuPrimitive.Sub>
   )
 }
 

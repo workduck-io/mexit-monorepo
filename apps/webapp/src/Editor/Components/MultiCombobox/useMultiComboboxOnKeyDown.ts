@@ -13,7 +13,7 @@ import {
   Value
 } from '@udecode/plate'
 
-import { getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
+import { ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
@@ -113,6 +113,12 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             value: item.key
           }
           if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
+        } else if (item.type === QuickLinkType.taskView) {
+          InsertedElement = {
+            ...InsertedElement,
+            type: ELEMENT_TASK_VIEW_LINK,
+            value: item.key
+          }
         } else {
           if (item.type === QuickLinkType.snippet) {
             itemValue = item.key

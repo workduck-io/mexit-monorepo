@@ -118,7 +118,7 @@ const Snippets = () => {
         <Result {...props} key={id} ref={ref}>
           <SnippetHeader>
             <SnippetCommand onClick={() => onOpenSnippet(snip.id)}>
-              <SnippetCommandPrefix>/snip.</SnippetCommandPrefix>
+              <Icon icon={icon} />
               {snip.title}
             </SnippetCommand>
 
@@ -211,6 +211,7 @@ const Snippets = () => {
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
+        options={{ view: View.Card }}
         onSearch={onSearch}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}

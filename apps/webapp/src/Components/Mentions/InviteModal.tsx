@@ -20,6 +20,7 @@ import { useShareModalStore, InviteModalData } from '../../Stores/useShareModalS
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 import { InviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
+import { ModalHeader } from '../../Style/Refactor'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
@@ -108,7 +109,7 @@ export const InviteModalContent = () => {
 
   return (
     <InviteWrapper>
-      <IntegrationTitle>Invite</IntegrationTitle>
+      <ModalHeader>Invite</ModalHeader>
       <p>Invite your friends to your Note.</p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={readOnly}>

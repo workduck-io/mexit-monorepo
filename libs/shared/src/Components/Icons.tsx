@@ -1,6 +1,9 @@
 // Icons for sidebar and UI
 import React from 'react'
 
+import editLine from '@iconify/icons-ri/edit-line'
+import linkUnlinkM from '@iconify/icons-ri/link-unlink-m'
+
 import arrowDownCircleLine from '@iconify-icons/ri/arrow-down-circle-line'
 import checkboxBlankCircleFill from '@iconify-icons/ri/checkbox-blank-circle-fill'
 import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-line'
@@ -35,7 +38,10 @@ export const MexNodeIcons: { [key: string]: [any, any] } = {
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export const EditorIcons: { [name: string]: any } = {
-  externalLink: externalLinkLine
+  externalLink: externalLinkLine,
+  text: 'icon-park-outline:add-text',
+  edit: editLine,
+  linkUnlink: linkUnlinkM
 }
 
 type SharedNodeIconProps = {

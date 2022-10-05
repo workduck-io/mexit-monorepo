@@ -44,6 +44,7 @@ export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
   const [selected, setSelected] = useState<number>(-1)
   const { goTo } = useRouting()
   const { createNewNote } = useCreateNewNote()
+  const { push } = useNavigation()
 
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -83,6 +84,7 @@ export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
   }, [selected, matchedFlatItems])
 
   const onOpenItem = (nodeid: string) => {
+    push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
@@ -142,7 +144,7 @@ export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
     <MexTreeWrapper>
       {items.length > 0 ? (
         <>
-          <SidebarListFilter noMargin>
+          <SidebarListFilter>
             <Icon icon={searchLine} />
             <Input
               placeholder={filterText ?? 'Filter items'}

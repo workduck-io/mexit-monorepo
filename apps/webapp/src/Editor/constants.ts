@@ -15,7 +15,8 @@ export enum QuickLinkType {
   backlink = 'Backlinks',
   snippet = 'Snippets',
   tags = 'Tags',
-  mentions = 'Mentions'
+  mentions = 'Mentions',
+  taskView = 'Task View'
 }
 
 export enum SlashType {

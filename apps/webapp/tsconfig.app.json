@@ -6,6 +6,7 @@
       "node",
       "vite/client"
     ],
+    "skipLibCheck": true,
     "isolatedModules": true
   },
   "files": [

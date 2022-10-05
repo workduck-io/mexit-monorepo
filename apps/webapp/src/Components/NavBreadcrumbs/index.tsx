@@ -13,6 +13,7 @@ import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import IconDisplay from '../IconPicker/IconDisplay'
 import { StyledTopNavigation } from './styled'
+import { useNavigation } from '../../Hooks/useNavigation'
 
 type NavBreadCrumbsType = {
   nodeId: string
@@ -23,9 +24,11 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
   const { getNodeBreadcrumbs } = useNodes()
   const { getNamespaceIconForNode } = useNamespaces()
   const isUserEditing = useEditorStore((store) => store.isEditing)
+  const { push } = useNavigation()
 
   const openBreadcrumb = (nodeId: string) => {
     if (nodeId.startsWith(NAMESPACE_ID_PREFIX)) return
+      push(nodeId)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
   }
 

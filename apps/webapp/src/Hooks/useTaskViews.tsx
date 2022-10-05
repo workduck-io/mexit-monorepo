@@ -1,9 +1,10 @@
+import React, { useEffect } from 'react'
+
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
-import { Filter, GlobalFilterJoin, mog, SearchFilter } from '@mexit/core'
+import { Filter, GlobalFilterJoin, mog } from '@mexit/core'
 
-import { useApi } from './API/useNodeAPI'
+import { useViewAPI } from './API/useViewsAPI'
 
 export interface View {
   title: string
@@ -69,7 +70,7 @@ export const useTaskViews = () => {
   const addViewStore = useViewStore((store) => store.addView)
   const updateViewStore = useViewStore((store) => store.updateView)
   const removeViewStore = useViewStore((store) => store.removeView)
-  // const { saveView, deleteView: deleteViewApi } = useApi()
+  const { saveView, deleteView: deleteViewApi } = useViewAPI()
 
   const getView = (id: string) => {
     const views = useViewStore.getState().views
@@ -78,22 +79,43 @@ export const useTaskViews = () => {
 
   // TODO: add request calls and middleware support for tasks views
   const addView = async (view: View) => {
-    // const resp = await saveView(view)
-    // mog('After Svaing that view', { resp })
+    const resp = await saveView(view)
+    mog('After Svaing that view', { resp })
     addViewStore(view)
   }
 
   const updateView = async (view: View) => {
-    // const resp = await saveView(view)
-    // mog('After update via saving that view', { resp })
+    const resp = await saveView(view)
+    mog('After update via saving that view', { resp })
     updateViewStore(view)
   }
 
   const deleteView = async (viewid: string) => {
-    // const resp = await deleteViewApi(viewid)
-    // mog('After deleting that view', { resp })
+    const resp = await deleteViewApi(viewid)
+    mog('After deleting that view', { resp })
     removeViewStore(viewid)
   }
 
   return { getView, addView, updateView, deleteView }
+}
+
+export const useSyncTaskViews = () => {
+  const { getAllViews } = useViewAPI()
+  const setViews = useViewStore((store) => store.setViews)
+
+  const fetchAndSetAllViews = async () => {
+    try {
+      const allViews = await getAllViews()
+      if (allViews !== undefined) {
+        mog('All Views', { allViews })
+        setViews(allViews)
+      }
+    } catch (e) {
+      mog('Error fetching the views', { e })
+    }
+  }
+
+  useEffect(() => {
+    fetchAndSetAllViews()
+  }, [])
 }
