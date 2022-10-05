@@ -23,7 +23,6 @@ import {
 import { DatePickerStyles, Label, TextAreaBlock, SelectedDate, TextFieldHeight } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
-import useAnalytics from '../../Hooks/useAnalytics'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
@@ -34,6 +33,7 @@ import { useReminderStore } from '../../Stores/useReminderStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
+
 
 interface ModalValue {
   time?: number
@@ -114,13 +114,13 @@ export const useCreateReminderModal = create<CreateReminderModalState>((set) => 
 
 export const useOpenReminderModal = () => {
   const { saveAndClearBuffer } = useEditorBuffer()
+  const { toggleReminder } = useToggleElements()
+  
   const openReminderModal = (query: string) => {
     const openModal = useCreateReminderModal.getState().openModal
     const node = useEditorStore.getState().node
     const addReminder = useReminderStore.getState().addReminder
-    const setInfobarMode = useLayoutStore.getState().setInfobarMode
-    const { toggleReminder } = useToggleElements()
-    const searchTerm = query.slice('remind'.length)
+    const searchTerm = query.slice(6) // 6 because 'remind'.length
     const parsed = getTimeInText(searchTerm)
     const title = getNameFromPath(node.path)
     if (parsed) {
@@ -141,7 +141,9 @@ export const useOpenReminderModal = () => {
       if (parsed.textWithoutTime !== '') {
         addReminder(reminder)
         toast(`Reminder added for ${parsed.textWithoutTime}`)
-        saveAndClearBuffer(true)
+        setTimeout(() => {
+          saveAndClearBuffer(true)
+        }, 500)
         toggleReminder()
       } else
         openModal({
@@ -159,6 +161,7 @@ export const useOpenReminderModal = () => {
   }
   return { openReminderModal }
 }
+
 const CreateReminderModal = () => {
   const modalOpen = useCreateReminderModal((state) => state.open)
   const closeModal = useCreateReminderModal((state) => state.closeModal)
@@ -172,7 +175,6 @@ const CreateReminderModal = () => {
   const { getNodeidFromPath, getPathFromNodeid } = useLinks()
 
   const {
-    // control,
     reset,
     register,
     setValue,
@@ -193,14 +195,12 @@ const CreateReminderModal = () => {
     const newValue = quickLink.value
     if (newValue) {
       // mog('newValue', { newValue, quickLink })
-      setNodeId(getNodeidFromPath(newValue))
+      setNodeId(getNodeidFromPath(newValue, quickLink.namespace))
     }
   }
-  const { trackEvent } = useAnalytics()
-
   const onSubmit = async ({ description }) => {
     // console.log({ intents, command, title, description })
-    const { time, nodeid, todoid, blockContent } = modalValue
+    const { time, nodeid, todoid } = modalValue
 
     const path = getPathFromNodeid(nodeid)
     const title = getNameFromPath(path)
@@ -220,10 +220,6 @@ const CreateReminderModal = () => {
       updatedAt: Date.now()
     }
 
-    // trackEvent(getEventNameFromElement('Reminders', ActionType.CREATE, 'Reminder'), {
-    //   'mex-template': reminder
-    // })
-
     mog('Creating Reminder', {
       reminder
     })
@@ -237,11 +233,6 @@ const CreateReminderModal = () => {
     closeModal()
   }
 
-  // mog('CreateReminderModal', {
-  //   modalOpen,
-  //   modalValue
-  // })
-
   return (
     <Modal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={handleCancel} isOpen={modalOpen}>
       <ModalHeader>Reminder</ModalHeader>
@@ -249,9 +240,12 @@ const CreateReminderModal = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="node">Note</Label>
         <WrappedNodeSelect
-          placeholder="Reminder for node"
+          placeholder="Reminder for Note"
           disabled={modalValue.blockContent !== undefined}
-          defaultValue={useEditorStore.getState().node.id ?? ''}
+          defaultValue={useEditorStore.getState().node && {
+            path: useEditorStore.getState().node.path,
+            namespace: useEditorStore.getState().node.namespace
+          }}
           disallowReserved
           highlightWhenSelected
           iconHighlight={modalValue.nodeid !== undefined}
