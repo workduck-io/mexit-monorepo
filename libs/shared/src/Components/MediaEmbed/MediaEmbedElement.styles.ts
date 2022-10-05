@@ -15,6 +15,7 @@ export const IFrameWrapper = styled.div<IFrameWrapperProps>`
   justify-content: center;
   align-items: center;
   iframe {
+    width: 100%;
     ${({ max, expand }) =>
       max
         ? css`

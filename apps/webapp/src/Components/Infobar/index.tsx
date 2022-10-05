@@ -20,40 +20,39 @@ import DataInfoBar from './DataInfobar'
 import PublicDataInfobar from './PublicNodeInfobar'
 
 const InfoBarItems = () => {
-  const infobar = useLayoutStore((s) => s.infobar)
-  const shortcuts = useHelpStore((store) => store.shortcuts)
-  const setInfobarMode = useLayoutStore((s) => s.setInfobarMode)
-  const isPublicView = useMatch(`${ROUTE_PATHS.share}/:nodeid`)
+  // const infobar = useLayoutStore((s) => s.infobar)
+  // const shortcuts = useHelpStore((store) => store.shortcuts)
+  // const setInfobarMode = useLayoutStore((s) => s.setInfobarMode)
+  // const isPublicView = useMatch(`${ROUTE_PATHS.share}/:nodeid`)
 
-  // Ensure the tabs have InfobarType in type
-  const tabs: Array<TabType> = useMemo(
-    () => [
-      {
-        label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
-        type: 'default',
-        component: <DataInfoBar />,
-        tooltip: 'Context'
-      },
-      {
-        label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
-        type: 'reminders',
-        component: <RemindersInfobar />,
-        tooltip: 'Reminders'
-      }
-    ],
-    []
-  )
+//   // Ensure the tabs have InfobarType in type
+//   const tabs: Array<TabType> = useMemo(
+//     () => [
+//       {
+//         label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
+//         type: 'default',
+//         component: <DataInfoBar />,
+//         tooltip: 'Context'
+//       },
+//       {
+//         label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
+//         type: 'reminders',
+//         component: <RemindersInfobar />,
+//         tooltip: 'Reminders'
+//       }
+//     ],
+//     []
+//   )
 
-  return (
-    <Tabs
-      visible={true}
-      openedTab={infobar.mode}
-      onChange={(tab) => {
-        setInfobarMode(tab as InfobarMode)
-      }}
-      tabs={tabs}
-    />
-  )
+  return (<DataInfoBar />)
+    // <Tabs
+    //   visible={true}
+    //   openedTab={infobar.mode}
+    //   onChange={(tab) => {
+    //     setInfobarMode(tab as InfobarMode)
+    //   }}
+    //   tabs={tabs}
+    // />
 }
 
 const InfoBar = () => {

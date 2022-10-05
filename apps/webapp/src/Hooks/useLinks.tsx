@@ -148,6 +148,15 @@ export const useLinks = () => {
     return []
   }
 
+  const getForwardlinks = (nodeid: string): CachedILink[] => {
+    const links = Object.entries(linkCache).reduce((p, [linknodeid, l]) => {
+      const matchedLinks = l.filter((l) => l.type === 'from' && l.nodeid === nodeid)
+
+      return matchedLinks.length > 0 ? [...p, { nodeid: linknodeid, type: 'to' as const }] : p
+    }, [] as CachedILink[])
+    return links
+  }
+
   const updateLinksFromContent = (nodeid: string, content: any[]) => {
     if (content) {
       const links: CachedILink[] = getLinksFromContent(content).map((l) => ({
@@ -294,7 +303,8 @@ export const useLinks = () => {
     createLink,
     updateILinks,
     getTitleFromNoteId,
-    getParentILink
+    getParentILink,
+    getForwardlinks
   }
 }
 

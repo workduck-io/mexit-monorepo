@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { HoverSubtleGlow, SubtleGlow } from '@mexit/shared'
+import { Button, HoverSubtleGlow, SubtleGlow } from '@mexit/shared'
 
 export const SBackLinks = styled.div`
   width: 100%;
@@ -10,9 +10,25 @@ export const SBackLinks = styled.div`
   margin: 3rem 0;
 `
 
+export const NodeLinkWrapper = styled.div`
+  padding-bottom: ${({ theme }) => theme.spacing.small};
+  background: none;
+`
+
+export const NodeLinkTitleWrapper = styled.div<{ selected?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+
+  svg {
+    flex-shrink: 0;
+  }
+`
+
 export const NodeLinkStyled = styled.div<{ selected?: boolean }>`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.small};
   cursor: pointer;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
@@ -24,12 +40,26 @@ export const NodeLinkStyled = styled.div<{ selected?: boolean }>`
     width: 16px;
     height: 16px;
   }
+  ${Button} {
+    padding: ${({ theme }) => theme.spacing.tiny};
+  }
+  &:hover {
+    ${Button} {
+      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      &:hover {
+        color: ${({ theme }) => theme.colors.primary};
+      }
+    }
+  }
   ${({ selected, theme }) =>
     selected
       ? css`
           background: ${theme.colors.primary};
           color: ${theme.colors.text.oppositePrimary};
           ${SubtleGlow}
+          svg {
+            fill: ${theme.colors.text.oppositePrimary};
+          }
         `
       : css`
           &:nth-child(2n + 1) {
