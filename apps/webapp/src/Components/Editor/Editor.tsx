@@ -33,6 +33,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useViewStore } from '../../Hooks/useTaskViews'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
@@ -80,6 +81,7 @@ const Editor: React.FC<EditorProps> = ({
   const sharedNodes = useDataStore((store) => store.sharedNodes)
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
+  const views = useViewStore((state) => state.views)
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -112,6 +114,12 @@ const Editor: React.FC<EditorProps> = ({
       text: l.path,
       icon: l.icon ?? 'ri:share-line',
       type: QuickLinkType.backlink
+    })),
+    ...views.map((l) => ({
+      value: l.id,
+      text: l.title,
+      icon: 'ri:stack-line',
+      type: QuickLinkType.taskView
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
   ]

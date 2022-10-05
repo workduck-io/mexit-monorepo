@@ -17,9 +17,11 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
+  ELEMENT_TASK_VIEW_LINK,
   ELEMENT_TODO_LI
 } from '@mexit/core'
 import { MentionElement } from './Mentions/MentionElement'
+import TaskViewLink from './TaskViewLink'
 
 export const editorPreviewComponents = {
   [ELEMENT_LINK]: withProps(LinkElement, {
@@ -37,7 +39,8 @@ export const editorPreviewComponents = {
   [ELEMENT_ILINK]: QuickLinkElement as any,
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,
   [ELEMENT_TABLE]: TableWrapper,
-  [ELEMENT_MENTION]: MentionElement as any
+  [ELEMENT_MENTION]: MentionElement as any,
+  [ELEMENT_TASK_VIEW_LINK]: TaskViewLink as any
 }
 
 const components = createPlateUI({

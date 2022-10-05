@@ -62,6 +62,8 @@ import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
+import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
+
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -191,7 +193,9 @@ export const generatePlugins = (options: PluginOptionType) => {
     createSelectOnBackspacePlugin(optionsSelectOnBackspacePlugin),
     createHighlightTextPlugin(),
 
-    createMentionPlugin() // Mentions
+    createMentionPlugin(), // Mentions
+
+    createTaskViewLinkPlugin() // Task View Links
   ]
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins

@@ -48,4 +48,11 @@ export const SILink = styled.div<SILinkProps>`
           }
         `
       : ''}
+
+  ${({ theme, $archived }) =>
+    $archived
+      ? css`
+          color: ${theme.colors.palette.red};
+        `
+      : ''}
 `
