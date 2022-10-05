@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, TodoType, mog } from '@mexit/core'
+import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
 import {
   StyledTasksKanban,
   TaskCard,
@@ -19,16 +19,12 @@ import {
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import useLoad from '../Hooks/useLoad'
 import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
-import { useViewStore } from '../Hooks/useTaskViews'
+import { useSyncTaskViews, useViewStore } from '../Hooks/useTaskViews'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 
@@ -201,8 +197,7 @@ const Tasks = () => {
     }
   }
 
-  // Fetch all task views
-  // useSyncTaskViews()
+  useSyncTaskViews()
 
   useEffect(() => {
     if (selectedRef.current) {

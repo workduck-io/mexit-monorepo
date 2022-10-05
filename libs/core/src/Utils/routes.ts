@@ -142,5 +142,12 @@ export const apiURLs = {
     getFromEmail: (email: string) => `${BASE_USER_URL}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`,
     updateInfo: `${BASE_USER_URL}/info`
+  },
+
+  view: {
+    saveView: `${MEXIT_BACKEND_URL_BASE}/view`,
+    deleteView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`,
+    getAllViews: `${MEXIT_BACKEND_URL_BASE}/view/all/workspace`,
+    getView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`
   }
 }
