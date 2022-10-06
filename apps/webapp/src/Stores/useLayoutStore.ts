@@ -1,11 +1,11 @@
 import create from 'zustand'
 
+import { InfobarMode } from '@mexit/shared'
+
 export interface FocusMode {
   on: boolean
   hover: boolean
 }
-
-export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'
 
 interface LayoutState {
   sidebar: {

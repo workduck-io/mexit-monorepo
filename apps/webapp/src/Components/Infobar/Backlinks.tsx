@@ -1,14 +1,13 @@
-import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 import React from 'react'
 
-import { Note } from '@mexit/shared'
-import { InfoWidgetWrapper } from '@mexit/shared'
+import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 
-import { BacklinksHelp, ForwardlinksHelp } from '../../Data/defaultText'
+import { capitalize } from '@mexit/core'
+import { Note, InfoWidgetWrapper, BacklinksHelp, ForwardlinksHelp } from '@mexit/shared'
+
 import { useLinks } from '../../Hooks/useLinks'
 import Collapse from '../../Layout/Collapse'
 import NodeLink from '../Editor/NodeLink'
-import { capitalize } from '@mexit/core'
 
 interface BackLinkProps {
   nodeid: string

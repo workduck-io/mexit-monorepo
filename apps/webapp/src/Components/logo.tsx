@@ -65,11 +65,11 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
             }
           `
       : expanded
-      ? css`
+        ? css`
           top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: calc(${(endColumnWidth ?? '400px') + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
         `
-      : css`
+        : css`
           top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: ${theme.additional.hasBlocks ? 8 : 8}px;
         `}

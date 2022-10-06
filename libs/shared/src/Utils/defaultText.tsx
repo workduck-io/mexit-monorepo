@@ -42,6 +42,16 @@ export const ForwardlinksHelp = (
   </div>
 )
 
+export const SnippetSidebarHelp = (
+  <div>
+    <h1>Snippets</h1>
+    <p>Hover over snippet to preview.</p>
+    <p>Click on title to insert snippet in note.</p>
+    <p>Click on the title of the preview to open the snippet.</p>
+    <p>Search for snippets</p>
+  </div>
+)
+
 export const TreeHelp = (
   <div>
     <h1>Notes</h1>

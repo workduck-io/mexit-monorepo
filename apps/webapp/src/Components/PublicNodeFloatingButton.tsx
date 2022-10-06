@@ -10,11 +10,9 @@ import styled, { css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { FOCUS_MODE_OPACITY } from '@mexit/core'
-import { FocusModeProp, MexIcon } from '@mexit/shared'
+import { Float } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import { Float, FlexBetween, ClickableIcon, MenuItem } from './FloatingButton'
 
 interface PublicNodeFloatingButtonProps {
   firstVisit: boolean

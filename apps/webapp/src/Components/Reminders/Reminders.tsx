@@ -9,7 +9,7 @@ import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { InfobarFull, InfobarTools } from '@mexit/shared'
 import { Title } from '@mexit/shared'
-import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper } from '@mexit/shared'
+import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper, ReminderUI } from '@mexit/shared'
 
 import { useReminders } from '../../Hooks/useReminders'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -20,7 +20,6 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { useCreateReminderModal } from './CreateReminderModal'
-import ReminderUI from './Reminder'
 
 const RemindersInfobar = () => {
   const infobar = useLayoutStore((s) => s.infobar)

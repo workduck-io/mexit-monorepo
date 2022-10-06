@@ -47,6 +47,46 @@ interface PublicNode {
   content: NodeEditorContent
 }
 
+export const insertSnippet = async (item: Snippet) => {
+  const text = convertContentToRawText(item.content, '\n')
+
+  let html = text
+
+  try {
+    const filterdContent = convertToCopySnippet(item.content)
+    const convertedContent = convertToCopySnippet(filterdContent, {
+      filter: defaultCopyFilter,
+      converter: defaultCopyConverter
+    })
+
+    const tempEditor = createPlateEditor({
+      plugins: getPlugins(
+        createPlateUI({
+          [ELEMENT_TAG]: CopyTag as any
+        }),
+        {
+          exclude: { dnd: true }
+        }
+      )
+    })
+
+    html = serializeHtml(tempEditor, {
+      nodes: convertedContent
+    })
+  } catch (err) {
+    mog('Something went wrong', { err })
+  }
+
+  //Copying both the html and text in clipboard
+  const textBlob = new Blob([text], { type: 'text/plain' })
+  const htmlBlob = new Blob([html], { type: 'text/html' })
+  const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
+
+  await navigator.clipboard.write(data)
+
+  toast.success('Snippet copied to clipboard!')
+}
+
 // This functions provides the 'to be' range and text content
 // Needed because keydown event happens before there is a selection or content change
 function getUpcomingData(selection: Selection) {
@@ -134,46 +174,6 @@ export default function Dibba() {
     dibbaState.extra.range.insertNode(linkEle)
 
     toast.success('Inserted Public Link!')
-  }
-
-  const insertSnippet = async (item: Snippet) => {
-    const text = convertContentToRawText(item.content, '\n')
-
-    let html = text
-
-    try {
-      const filterdContent = convertToCopySnippet(item.content)
-      const convertedContent = convertToCopySnippet(filterdContent, {
-        filter: defaultCopyFilter,
-        converter: defaultCopyConverter
-      })
-
-      const tempEditor = createPlateEditor({
-        plugins: getPlugins(
-          createPlateUI({
-            [ELEMENT_TAG]: CopyTag as any
-          }),
-          {
-            exclude: { dnd: true }
-          }
-        )
-      })
-
-      html = serializeHtml(tempEditor, {
-        nodes: convertedContent
-      })
-    } catch (err) {
-      mog('Something went wrong', { err })
-    }
-
-    //Copying both the html and text in clipboard
-    const textBlob = new Blob([text], { type: 'text/plain' })
-    const htmlBlob = new Blob([html], { type: 'text/html' })
-    const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
-
-    await navigator.clipboard.write(data)
-
-    toast.success('Snippet copied to clipboard!')
   }
 
   const insertLink = (item: any) => {

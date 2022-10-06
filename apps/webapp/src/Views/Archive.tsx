@@ -22,11 +22,10 @@ import {
   SplitSearchPreviewWrapper,
   SearchContainer
 } from '@mexit/shared'
-import { View } from '@mexit/shared'
+import { View, ArchiveHelp } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
-import { ArchiveHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import useArchive from '../Hooks/useArchive'

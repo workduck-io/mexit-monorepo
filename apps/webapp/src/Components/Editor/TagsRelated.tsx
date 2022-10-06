@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
 
+import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 import hashtagIcon from '@iconify/icons-ri/hashtag'
+import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
+
+import { IconButton } from '@workduck-io/mex-components'
 
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, generateTempId, mog, NodeEditorContent } from '@mexit/core'
-import { InfoSubHeading, Note, TagFlex, TagsFlex } from '@mexit/shared'
-import { InfoWidgetWrapper, SuggestionIconsGroup } from '@mexit/shared'
+import { Note, TagFlex, TagsFlex, InfoWidgetWrapper, SuggestionIconsGroup, TagsHelp } from '@mexit/shared'
 
-import { TagsHelp } from '../../Data/defaultText'
+import { useLinks } from '../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
 import Collapse from '../../Layout/Collapse'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
+import { getContent } from '../../Stores/useEditorStore'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import NodeLink from './NodeLink'
-import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
-import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
-import { getContent } from '../../Stores/useEditorStore'
-import { useLinks } from '../../Hooks/useLinks'
-import { IconButton } from '@workduck-io/mex-components'
 
 interface TagsRelated {
   nodeid: string
