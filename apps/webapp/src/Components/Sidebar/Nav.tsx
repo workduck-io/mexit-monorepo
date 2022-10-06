@@ -94,7 +94,6 @@ const NavHeader: React.FC<{ target: any }> = ({ target }) => {
 
   return (
     <MainLinkContainer onMouseUp={(e) => e.stopPropagation()}>
-      <CreateNewNote target={target} />
       <NavTooltip
         key={ROUTE_PATHS.search}
         singleton={target}

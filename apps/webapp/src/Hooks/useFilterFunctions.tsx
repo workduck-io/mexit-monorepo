@@ -117,8 +117,7 @@ export const useTaskFilterFunctions = (): SearchFilterFunctions => {
     },
 
     tag: (item, f) => {
-      const tagsCache = useDataStore.getState().tagsCache
-      const res = filterAndJoin(f, (v) => tagsCache[v.value]?.nodes?.includes(item.nodeid))
+      const res = filterAndJoin(f, (v) => item.tags.includes(v.value))
       return res
     },
 
