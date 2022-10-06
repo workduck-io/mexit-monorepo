@@ -40,6 +40,7 @@ export const dataStoreConstructor = (set, get) => ({
       ilinks: [],
       linkCache: {},
       tagsCache: {},
+      namespaces: [],
       bookmarks: [],
       namespaces: [],
       archive: [],
