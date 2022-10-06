@@ -14,14 +14,14 @@ import {
   SearchFilterLabel,
   SearchFilterList,
   SearchFiltersWrapper,
-  SearchFilterWrapper
+  SearchFilterWrapper,
+  SearchFiltersHelp
 } from '@mexit/shared'
 
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
 import SearchFilterInput from '../Components/SearchFilterInput'
-import { SearchFiltersHelp } from '../Data/defaultText'
 
 interface SearchFiltersProps {
   result?: any
