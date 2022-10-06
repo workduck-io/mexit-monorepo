@@ -4873,6 +4873,20 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
+"@workduck-io/mex-components@^0.0.16":
+  version "0.0.16"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.16/d5e5e2ebde8719853e10e43115820f54ebcda028#d5e5e2ebde8719853e10e43115820f54ebcda028"
+  integrity sha512-6FZjxB69k/7Jr/pvuzv+RvDJoWwIv9V61SngUQa3xcRNsNnV5HQy/z6TUi/f++wlU6whDD2z5KERVBPMOsoSbA==
+  dependencies:
+    "@emoji-mart/data" "^1.0.6"
+    "@emoji-mart/react" "^1.0.1"
+    "@tippyjs/react" "^4.2.6"
+    core-js "^3.21.0"
+    deepmerge "^4.2.2"
+    emoji-mart "^5.2.2"
+    polished "^4.1.4"
+    react-spring "^9.5.2"
+
 "@workduck-io/tinykeys@^1.5.0":
   version "1.5.0"
   resolved "https://npm.pkg.github.com/download/@workduck-io/tinykeys/1.5.0/612c3fcc3301ccd3b89f33cf0330c887ac92758e#612c3fcc3301ccd3b89f33cf0330c887ac92758e"
