@@ -122,7 +122,16 @@ const Snippets = () => {
               {snip.title}
             </SnippetCommand>
 
-            <IconButton size={20} icon={deleteBin6Line} title="delete" onClick={() => onDeleteSnippet(snip.id)} />
+            <IconButton
+              size={20}
+              icon={deleteBin6Line}
+              title="delete"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onDeleteSnippet(snip.id)
+              }}
+            />
           </SnippetHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')}>
             <PreviewEditor content={snip.content} editorId={`editor_${item.id}`} />
