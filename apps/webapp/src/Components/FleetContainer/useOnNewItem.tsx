@@ -79,8 +79,8 @@ export const useOnNewItem = () => {
   }
 
   const getQuickNewItems = () => {
-    const data = [
-      {
+    const data = {
+      note: {
         id: 0,
         name: 'New Note',
         icon: ICONS.note,
@@ -91,19 +91,19 @@ export const useOnNewItem = () => {
           onNewNote(spaceId)
         }
       },
-      {
+      space: {
         id: 1,
         name: 'New Space',
         icon: ICONS.space,
         onSelect: onNewSpace
       },
-      {
+      snippet: {
         id: 2,
         name: 'New Snippet',
         icon: ICONS.snippet,
         onSelect: onNewSnippet
       }
-    ]
+    }
 
     return data
   }
