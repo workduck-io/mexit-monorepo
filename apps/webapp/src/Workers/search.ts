@@ -1,3 +1,5 @@
+import { expose } from 'threads/worker'
+
 import {
   SearchIndex,
   SearchWorker,
@@ -8,7 +10,7 @@ import {
   mog,
   SearchRepExtra
 } from '@mexit/core'
-import { expose } from 'threads/worker'
+
 import {
   createSearchIndex,
   createIndexCompositeKey,

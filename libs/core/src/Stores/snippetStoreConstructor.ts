@@ -1,4 +1,33 @@
-import { Snippet } from '../Types/Snippet'
+import { NodeEditorContent } from '../Types/Editor'
+
+export interface Snippet {
+  id: string
+  title: string
+  icon?: string
+  content?: NodeEditorContent
+  template?: boolean
+}
+
+export interface SnippetEditorStore {
+  snippet?: Snippet
+}
+
+export interface SnippetStoreState {
+  snippets: Snippet[]
+
+  initSnippets: (snippets: Snippet[]) => void
+  addSnippet: (snippets: Snippet) => void
+  updateSnippet: (id: string, snippets: Snippet) => void
+  updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => void
+  updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => void
+  deleteSnippet: (id: string) => void
+
+  editor: SnippetEditorStore
+  loadSnippet: (id: string) => void
+
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
+}
 
 export const snippetStoreConstructor = (set, get) => ({
   snippets: [],

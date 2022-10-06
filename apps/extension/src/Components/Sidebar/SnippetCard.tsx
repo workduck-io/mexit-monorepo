@@ -15,6 +15,7 @@ import {
   RelativeTime
 } from '@mexit/shared'
 
+import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 interface SnippetCardProps {
@@ -33,7 +34,7 @@ interface SnippetCardProps {
 
 const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: SnippetCardProps) => {
   const [visible, setVisible] = React.useState(false)
-  // const { goTo } = useRouting()
+  const descriptions = useDescriptionStore((store) => store.descriptions)
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   // TODO: make and sync a last used snippet store
   // const { getLastUsed } = useLastUsedSnippets()
@@ -101,7 +102,7 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
         {snippet.title}
       </SnippetCardHeader>
 
-      <SnippetContentPreview>{convertContentToRawText(snippet.content, ' ')}</SnippetContentPreview>
+      <SnippetContentPreview>{descriptions[snippet?.id].rawText}</SnippetContentPreview>
       <SnippetCardFooter>
         {/* <TagsLabel tags={snippetTags} /> */}
         {lastUsed && (

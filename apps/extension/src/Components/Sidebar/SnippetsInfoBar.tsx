@@ -37,7 +37,7 @@ export const SnippetsInfoBar = () => {
   return (
     <SnippetCards>
       <SidebarListFilterWrapper>
-        <SidebarListFilter noMargin={true}>
+        <SidebarListFilter>
           <Icon icon={searchLine} />
           <Input
             autoFocus

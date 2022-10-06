@@ -22,6 +22,9 @@ import {
   SingleNamespace
 } from '@mexit/core'
 
+import Action from '../Components/Action'
+import { insertSnippet } from '../Components/Dibba'
+import { StyledInput } from '../Components/Search/styled'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
@@ -108,43 +111,7 @@ export function useActionExecutor() {
 
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
-        const text = convertContentToRawText(snippet.content, '\n')
-
-        let html = text
-
-        try {
-          const filterdContent = convertToCopySnippet(snippet.content)
-          const convertedContent = convertToCopySnippet(filterdContent, {
-            filter: defaultCopyFilter,
-            converter: defaultCopyConverter
-          })
-
-          const tempEditor = createPlateEditor({
-            plugins: getPlugins(
-              createPlateUI({
-                [ELEMENT_TAG]: CopyTag as any
-              }),
-              {
-                exclude: { dnd: true }
-              }
-            )
-          })
-
-          html = serializeHtml(tempEditor, {
-            nodes: convertedContent
-          })
-        } catch (err) {
-          mog('Something went wrong', { err })
-        }
-
-        //Copying both the html and text in clipboard
-        const textBlob = new Blob([text], { type: 'text/plain' })
-        const htmlBlob = new Blob([html], { type: 'text/html' })
-        const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
-
-        navigator.clipboard.write(data)
-
-        toast.success('Snippet copied to clipboard!')
+        insertSnippet(snippet)
         setVisualState(VisualState.hidden)
         break
       }

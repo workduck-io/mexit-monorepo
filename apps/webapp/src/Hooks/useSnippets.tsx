@@ -1,8 +1,9 @@
-import { getSnippetCommand, mog, SEPARATOR, Snippet } from '@mexit/core'
+import { convertContentToRawText, getSnippetCommand, mog, SEPARATOR, Snippet } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
 import { useDataStore } from '../Stores/useDataStore'
+import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useApi } from './API/useNodeAPI'
 import { useSearch } from './useSearch'
@@ -13,6 +14,7 @@ export const useSnippets = () => {
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
+  const updateDescription = useDescriptionStore((store) => store.updateDescription)
 
   const { generateSlashCommands } = useSlashCommands()
   const { updateDocument, addDocument, removeDocument } = useSearch()
@@ -67,6 +69,8 @@ export const useSnippets = () => {
 
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
+
+    updateDescription(snippet.id, convertContentToRawText(snippet.content, ' '))
   }
 
   const deleteSnippet = async (id: string) => {
@@ -87,6 +91,8 @@ export const useSnippets = () => {
 
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
+
+    updateDescription(snippet.id, convertContentToRawText(snippet.content, ' '))
   }
 
   const getInitialSnippets = () => {
