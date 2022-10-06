@@ -73,7 +73,7 @@ export const ExtInfoBar = () => {
   const infobar = useLayoutStore((s) => s.infobar)
 
   return (
-    <>
+    <div id="ext-side-nav">
       <ExtSideNav
         style={rhSidebarSpringProps}
         $show={rhSidebar.show}
@@ -107,6 +107,6 @@ export const ExtInfoBar = () => {
           />
         </SidebarToggleWrapper>
       </Tippy>
-    </>
+    </div>
   )
 }

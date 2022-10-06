@@ -17,6 +17,7 @@ import {
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import SnippetPreview from '../Editor/SnippetPreview'
 
 interface SnippetCardProps {
   snippet: Snippet
@@ -86,37 +87,37 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
   // mog('SnippetCard', { snippet, lastUsed })
 
   return (
-    // TODO: add back preview
-    // <SnippetPreview
-    //   key={keyStr}
-    //   preview={visible}
-    //   setPreview={setVisible}
-    //   hover
-    //   allowClosePreview
-    //   snippetId={snippet.id}
-    //   placement="left"
-    // >
-    <SnippetCardWrapper>
-      <SnippetCardHeader onClick={(e) => onClickProps(e)}>
-        <Icon icon={snippet.template ? magicLine : quillPenLine} />
-        {snippet.title}
-      </SnippetCardHeader>
+    // TODO: Not able to scroll these previews using mouse
+    <SnippetPreview
+      key={keyStr}
+      preview={visible}
+      setPreview={setVisible}
+      hover
+      allowClosePreview
+      snippetId={snippet.id}
+      placement="left"
+    >
+      <SnippetCardWrapper>
+        <SnippetCardHeader onClick={(e) => onClickProps(e)}>
+          <Icon icon={snippet.template ? magicLine : quillPenLine} />
+          {snippet.title}
+        </SnippetCardHeader>
 
-      <SnippetContentPreview>{descriptions[snippet?.id].rawText}</SnippetContentPreview>
-      <SnippetCardFooter>
-        {/* <TagsLabel tags={snippetTags} /> */}
-        {lastUsed && (
-          <RelativeTime
-            tippy
-            dateNum={lastUsed}
-            prefix="Last used"
-            refreshMs={1000 * 30}
-            tippyProps={{ placement: 'left', theme: 'mex-bright' }}
-          />
-        )}
-      </SnippetCardFooter>
-    </SnippetCardWrapper>
-    // </SnippetPreview>
+        <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>
+        <SnippetCardFooter>
+          {/* <TagsLabel tags={snippetTags} /> */}
+          {lastUsed && (
+            <RelativeTime
+              tippy
+              dateNum={lastUsed}
+              prefix="Last used"
+              refreshMs={1000 * 30}
+              tippyProps={{ placement: 'left', theme: 'mex-bright' }}
+            />
+          )}
+        </SnippetCardFooter>
+      </SnippetCardWrapper>
+    </SnippetPreview>
   )
 }
 

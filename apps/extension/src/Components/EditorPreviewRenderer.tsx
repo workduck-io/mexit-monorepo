@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
 import styled from 'styled-components'
@@ -17,6 +17,7 @@ interface EditorPreviewRendererProps {
    * Block that will be focused on render
    */
   blockId?: string
+  readOnly?: boolean
   noMouseEvents?: boolean
   onDoubleClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   plugins?: PlatePlugin[]
@@ -36,20 +37,25 @@ const EditorPreviewRenderer = ({
   content,
   editorId,
   blockId,
+  readOnly = false,
   noStyle,
   noMouseEvents,
   onDoubleClick
 }: EditorPreviewRendererProps) => {
-  const editableProps = {
-    placeholder: 'Murmuring the mex hype... ',
-    spellCheck: false,
-    style: noStyle
-      ? {}
-      : {
-          padding: '15px'
-        },
-    readOnly: true
-  }
+  const editableProps = useMemo(
+    () => ({
+      placeholder: 'Murmuring the mex hype... ',
+      spellCheck: !readOnly,
+      style: noStyle
+        ? {}
+        : {
+            padding: '15px'
+          },
+      readOnly,
+      autoFocus: !readOnly
+    }),
+    [readOnly]
+  )
 
   // We get memoized plugins
   const plugins = useMemoizedPlugins(components, { exclude: { dnd: true } })

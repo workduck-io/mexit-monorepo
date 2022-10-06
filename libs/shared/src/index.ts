@@ -1,3 +1,4 @@
+export * from './Components/FloatingElements'
 export * from './Components/MediaEmbed'
 export * from './Components/Access'
 export * from './Components/AccessTag'
