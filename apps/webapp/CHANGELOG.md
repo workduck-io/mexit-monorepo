@@ -1,5 +1,19 @@
 # mexit-webapp
 
+## 0.12.0
+
+### Minor Changes
+
+- fc9451fc: Update RHSidebar with no tabs, tags at top, title as "Note Content", forward backlinks, related notes in suggestions. Also fixed width of web embeds.
+- 926be3da: Task view changes, styling fixes, minor bug fixes and improvements
+- a8046772: Added Fleet in MexIt
+
+### Patch Changes
+
+- 92ed10c3: Live Suggested; Task View and Filter Fixes
+- 3afbe511: This adds the redirect to desktop app for the whatsapp integration service.
+- bcf2b5bd: Fixed issues with OAuth redirect (for whatsapp flows), fixed reminders creation error and added new filters on reminders view. Refactor works properly now.
+
 ## 0.11.1
 
 ### Patch Changes
