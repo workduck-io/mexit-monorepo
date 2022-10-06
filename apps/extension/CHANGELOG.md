@@ -1,5 +1,11 @@
 # mexit
 
+## 0.11.2
+
+### Patch Changes
+
+- 92ed10c3: Live Suggested; Task View and Filter Fixes
+
 ## 0.11.1
 
 ### Patch Changes
