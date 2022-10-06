@@ -164,6 +164,7 @@ export const useApi = () => {
     if (isShared) {
       const node = getSharedNode(noteID)
       if (node.currentUserAccess[noteID] === 'READ') return
+      reqData['namespaceID'] = undefined
     }
 
     const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
