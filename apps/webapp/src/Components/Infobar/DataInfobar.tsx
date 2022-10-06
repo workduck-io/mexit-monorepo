@@ -20,7 +20,7 @@ const DataInfoBar = () => {
         </Title>
       </DataInfobarHeader>
       <TagsRelated nodeid={node.nodeid} fromAnalysis />
-      <TagsRelatedSuggestions nodeid={node.nodeid} />
+      <TagsRelatedSuggestions nodeid={node.nodeid} fromAnalysis />
       <Outline editorId={node.nodeid} />
       <Backlinks nodeid={node.nodeid} />
     </DataInfobarWrapper>
