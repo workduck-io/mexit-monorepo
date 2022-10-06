@@ -19,12 +19,12 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
   const openModal = useTaskViewModalStore((store) => store.openModal)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { goTo } = useRouting()
-  // const { deleteView } = useTaskViews()
+  const { deleteView } = useTaskViews()
 
   const handleDelete = async (view: View) => {
     const currentView = useViewStore.getState().currentView
     // TODO: this is related to syncing tasks views with backend, needs to be done but now
-    // await deleteView(view.id)
+    await deleteView(view.id)
     if (currentView?.id === view.id) {
       setCurrentView(undefined)
       goTo(ROUTE_PATHS.tasks, NavigationType.push)
@@ -36,28 +36,26 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
   }
 
   return (
-    <>
-      <ContextMenuContent>
-        <ContextMenuItem
-          onSelect={(args) => {
-            handleClone(item.data)
-          }}
-        >
-          <Icon icon={fileCopyLine} />
-          Clone
-        </ContextMenuItem>
-        <ContextMenuSeparator />
-        <ContextMenuItem
-          color="#df7777"
-          onSelect={(args) => {
-            handleDelete(item.data)
-          }}
-        >
-          <Icon icon={trashIcon} />
-          Delete
-        </ContextMenuItem>
-      </ContextMenuContent>
-    </>
+    <ContextMenuContent>
+      <ContextMenuItem
+        onSelect={(args) => {
+          handleClone(item.data)
+        }}
+      >
+        <Icon icon={fileCopyLine} />
+        Clone
+      </ContextMenuItem>
+      <ContextMenuSeparator />
+      <ContextMenuItem
+        color="#df7777"
+        onSelect={(args) => {
+          handleDelete(item.data)
+        }}
+      >
+        <Icon icon={trashIcon} />
+        Delete
+      </ContextMenuItem>
+    </ContextMenuContent>
   )
 }
 

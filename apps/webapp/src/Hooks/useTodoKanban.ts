@@ -101,8 +101,8 @@ export const useTodoKanban = () => {
 
     board.columns.forEach((column) => {
       column.cards.forEach((card) => {
-        // Use tags of the node instead of tags
-        const tags = getTags(card.todo.nodeid)
+        // Use tags of the tag
+        const tags = card.todo.tags
         todoNodes.push(card.todo.nodeid)
         todoTags.push(...(tags ?? []))
         todoMentions.push(...(card.todo.mentions ?? []))
