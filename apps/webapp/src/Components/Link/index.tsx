@@ -27,11 +27,11 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
 
   const onAddNewTag = (tag: Tag) => {
     mog('onAddNewTag', { tag })
-    addTag(link.id, tag.value)
+    addTag(link.url, tag.value)
   }
 
   const onAddCreateTag = (tagStr: string) => {
-    addTag(link.id, tagStr)
+    addTag(link.url, tagStr)
   }
 
   return (

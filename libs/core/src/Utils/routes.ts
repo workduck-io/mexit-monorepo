@@ -150,5 +150,12 @@ export const apiURLs = {
     deleteView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`,
     getAllViews: `${MEXIT_BACKEND_URL_BASE}/view/all/workspace`,
     getView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`
+  },
+
+  links: {
+    getLinks: (workspaceId: string) => `https://url-staging.workduck.io/link/${workspaceId}/stats`,
+    saveLink: `https://url-staging.workduck.io/link/shorten`,
+    shortendLink: (shortId: string, workspaceId: string) =>
+      `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
   }
 }

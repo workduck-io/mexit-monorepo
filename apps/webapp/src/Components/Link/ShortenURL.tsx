@@ -3,6 +3,8 @@ import linkM from '@iconify/icons-ri/link-m'
 import { Link } from '../../Stores/useLinkStore'
 import { Icon } from '@iconify/react'
 import { Button } from '@workduck-io/mex-components'
+import { useAuthStore } from '../../Stores/useAuth'
+import { apiURLs } from '@mexit/core'
 
 interface ShortenURLProps {
   link?: Link
@@ -10,11 +12,13 @@ interface ShortenURLProps {
 
 // TODO: Add a input to enter shorten url
 const ShortenURL = ({ link }: ShortenURLProps) => {
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const isShortend = link?.shortend !== undefined
 
   const onShortenClick = () => {
     if (isShortend) {
-      navigator.clipboard.writeText(link?.shortend || '')
+      const url = apiURLs.links.shortendLink(link?.shortend, getWorkspaceId())
+      navigator.clipboard.writeText(url || '')
     } else {
       console.log('Shorten here')
     }

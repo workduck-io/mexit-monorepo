@@ -1,4 +1,5 @@
 import {
+  apiURLs,
   Filter,
   Filters,
   FilterTypeWithOptions,
@@ -7,13 +8,15 @@ import {
   GlobalFilterJoin,
   mog,
   Settify,
-  Tag
+  WORKSPACE_HEADER
 } from '@mexit/core'
 import create from 'zustand'
+import { useAuthStore } from '../Stores/useAuth'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import { applyFilters, FilterStore } from './useFilters'
 import { useDataStore } from '../Stores/useDataStore'
 import { linkFilterFunctions } from './useFilterFunctions'
+import { client } from '@workduck-io/dwindle'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
@@ -35,15 +38,15 @@ export const useLinkURLs = () => {
     return mergedTags
   }
 
-  const addTag = (linkid: string, tag: string) => {
+  const addTag = (linkurl: string, tag: string) => {
     const newLinks = links.map((l) => {
-      if (l.id === linkid) {
+      if (l.url === linkurl) {
         return { ...l, tags: Settify([...l.tags, tag]) }
       }
       return l
     })
 
-    mog('addTag', { linkid, tag, newLinks })
+    mog('addTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
 
@@ -144,10 +147,10 @@ export const useURLFilters = () => {
     return [tagFilters, hasShortenedFilter]
   }
 
-  const applyCurrentFilters = (results: GenericSearchResult[]) => {
+  const applyCurrentFilters = (results: Link[]) => {
     const linksFromResults = results
       .map((result) => {
-        const link = links.find((link) => link.id === result.id)
+        const link = links.find((link) => link.url === result.url)
         return link
       })
       .filter((link) => !!link)
@@ -206,4 +209,54 @@ export const useURLFilters = () => {
     applyCurrentFilters,
     addTagFilter
   }
+}
+
+export const useURLsAPI = () => {
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+
+  const workspaceHeaders = () => ({
+    [WORKSPACE_HEADER]: getWorkspaceId(),
+    Accept: 'application/json, text/plain, */*'
+  })
+
+  /**
+   * Fetches all links of the workspace
+   */
+  const getAllLinks = async () => {
+    const data = await client
+      .get(apiURLs.links.getLinks(getWorkspaceId()), {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        mog('getAllLinks', d)
+        return d.data
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
+    return data
+  }
+
+  const saveLink = async (link: Link) => {
+    const req = {
+      workspace: getWorkspaceId(),
+      url: link.url,
+      alias: link.shortend,
+      properties: { title: link.title },
+      tags: link.tags
+    }
+
+    const data = await client
+      .post(apiURLs.links.saveLink, req, {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        mog('saveLink', d)
+        return d.data
+      })
+    return data
+  }
+
+  return { getAllLinks, saveLink }
 }
