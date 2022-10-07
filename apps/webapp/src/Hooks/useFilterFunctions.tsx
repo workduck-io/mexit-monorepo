@@ -106,6 +106,10 @@ export const reminderFilterFunctions: SearchFilterFunctions = {
 }
 
 export const linkFilterFunctions: SearchFilterFunctions = {
+  domain: (item, f) => {
+    const res = filterAndJoin(f, (v) => item.url.includes(v.value))
+    return res
+  },
   has: (item: Link, f) => {
     const res = filterAndJoin(f, (v) => item.alias !== undefined)
     return res

@@ -19,5 +19,6 @@ export const FilterTypeIcons = {
   mention: 'ri:at-line',
   date: 'ri:calendar-2-line',
   state: 'ri:checkbox-circle-line',
-  has: 'ri:checkbox-circle-line'
+  has: 'ri:checkbox-circle-line',
+  domain: 'ri:link-m'
 }

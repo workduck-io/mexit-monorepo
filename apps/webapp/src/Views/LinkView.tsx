@@ -29,6 +29,10 @@ const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
   return newItems
 }
 
+const sortByCreated = (a: Link, b: Link) => {
+  return b.createdAt - a.createdAt
+}
+
 const LinkView = () => {
   const links = useLinkStore((store) => store.links)
   const { getAllLinks, saveLink } = useURLsAPI()
@@ -38,9 +42,9 @@ const LinkView = () => {
   useEffect(() => {
     getAllLinks()
     saveLink({
-      title: 'test',
-      url: 'https://www.google.com',
-      tags: ['test', 'test2', 'wonder']
+      title: 'Magnus Hirschfeld',
+      url: 'https://en.wikipedia.org/wiki/Magnus_Hirschfeld',
+      tags: ['wiki', 'magnus hirschfeld']
     })
   }, [])
 
@@ -60,7 +64,7 @@ const LinkView = () => {
   } = useURLFilters()
 
   const { initialLinks, randId } = useMemo(() => {
-    return { initialLinks: links.sort((a, b) => a.createdAt - b.createdAt), randId: nanoid() }
+    return { initialLinks: links.sort(sortByCreated), randId: nanoid() }
   }, [links])
 
   // mog('Initial links', { initialLinks, links })

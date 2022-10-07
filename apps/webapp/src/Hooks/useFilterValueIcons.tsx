@@ -61,6 +61,9 @@ export const useFilterIcons = () => {
       case 'has':
         return { type: 'ICON', value: 'ri:checkbox-circle-line' }
 
+      case 'domain':
+        return { type: 'ICON', value: 'ri:link-m' }
+
       default: {
         return { type: 'ICON', value: 'ri:filter-3-line' }
       }

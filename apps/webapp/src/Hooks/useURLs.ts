@@ -17,11 +17,14 @@ import { applyFilters, FilterStore } from './useFilters'
 import { useDataStore } from '../Stores/useDataStore'
 import { linkFilterFunctions } from './useFilterFunctions'
 import { client } from '@workduck-io/dwindle'
+import { URL_DOMAIN_REG } from '../Utils/constants'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
+
+  const { saveLink } = useURLsAPI()
 
   const getTags = (present: string[]) => {
     const linkTags = links.reduce((acc, link) => {
@@ -46,6 +49,8 @@ export const useLinkURLs = () => {
       return l
     })
 
+    const newLink = newLinks.find((l) => l.url === linkurl)
+    saveLink(newLink)
     mog('addTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
@@ -66,6 +71,13 @@ export const useURLsFilterStore = create<FilterStore>((set) => ({
   filters: [],
   setFilters: (filters: Filters) => set({ filters })
 }))
+
+const getDomain = (url: string) => {
+  const match = url.match(URL_DOMAIN_REG)
+  if (match) {
+    return match[1]
+  }
+}
 
 export const useURLFilters = () => {
   const setFilters = useURLsFilterStore((state) => state.setFilters)
@@ -122,8 +134,6 @@ export const useURLFilters = () => {
       } as FilterTypeWithOptions
     )
 
-    mog('tagFilters', { tagFilters, mergedTags, rankedTags, linkTags })
-
     const shortendCount = links.reduce((acc, link) => {
       if (link.alias) {
         acc += 1
@@ -144,7 +154,43 @@ export const useURLFilters = () => {
       ]
     }
 
-    return [tagFilters, hasShortenedFilter]
+    const rankedDomains = links.reduce((acc, link) => {
+      const domain = getDomain(link.url)
+      mog('domain', { domain, link })
+      if (!domain) return acc
+      if (acc[domain]) {
+        acc[domain] += 1
+      } else {
+        acc[domain] = 1
+      }
+      return acc
+    }, {} as { [domain: string]: number })
+
+    const domainFilters = Object.keys(rankedDomains).reduce(
+      (acc, c) => {
+        const rank = rankedDomains[c] ?? 0
+        const domain = c
+        // const [tag, rank] = c
+        if (rank >= 0 && acc.options.findIndex((o) => o.value === domain) === -1) {
+          acc.options.push({
+            id: `filter_tag_${domain}`,
+            label: domain,
+            value: domain,
+            count: rank
+          })
+        }
+        return acc
+      },
+      {
+        type: 'domain',
+        label: 'Domain',
+        options: []
+      } as FilterTypeWithOptions
+    )
+
+    mog('domains', { rankedDomains, domainFilters })
+
+    return [tagFilters, domainFilters, hasShortenedFilter]
   }
 
   const applyCurrentFilters = (results: Link[]) => {
@@ -298,11 +344,6 @@ export const useURLsAPI = () => {
         return d.data
       })
     return data
-  }
-
-  const shortenLink = async (url: string) => {
-    const links = useLinkStore.getState().links
-    const existingLink = links.find((link) => link.url === url)
   }
 
   return { getAllLinks, saveLink }

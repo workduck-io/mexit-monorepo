@@ -15,6 +15,8 @@ export const PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)
  */
 export const ALIAS_REG = /^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/
 
+export const URL_DOMAIN_REG = /:\/\/(.[^/]+)/
+
 export const MultiEmailValidate = (emailsRaw: string): boolean => {
   const isValid = getWrongEmails(emailsRaw).length === 0
   return isValid
