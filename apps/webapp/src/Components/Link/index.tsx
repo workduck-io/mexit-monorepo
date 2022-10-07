@@ -3,6 +3,7 @@ import { ProjectIconMex } from '@mexit/shared'
 import React from 'react'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { Link } from '../../Stores/useLinkStore'
+import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
 import { LinkShortenAndTagsWrapper, LinkTagSection, LinkTitleWrapper, LinkWrapper } from './Link.style'
@@ -10,7 +11,7 @@ import ShortenURL from './ShortenURL'
 
 // * Get Favicon url
 const getFavicon = (source: string) => {
-  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&size=64`
+  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&SIZE=64`
 }
 
 interface LinkProps {
@@ -26,8 +27,15 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const toAddTags = getTags(link.tags)
 
   const onAddNewTag = (tag: Tag) => {
-    mog('onAddNewTag', { tag })
+    // mog('onAddNewTag', { tag })
     addTag(link.url, tag.value)
+  }
+
+  const onOpenLink = (url: string) => {
+    mog('Opening link', { url })
+    if (url) {
+      window.open(url, '_blank')
+    }
   }
 
   const onAddCreateTag = (tagStr: string) => {
@@ -36,10 +44,12 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
 
   return (
     <LinkWrapper>
-      <LinkTitleWrapper>
-        <ProjectIconMex icon={favUrl} isMex={false} size={20} />
-        {link.title}
-      </LinkTitleWrapper>
+      <Tooltip content={link.url}>
+        <LinkTitleWrapper onClick={() => onOpenLink(link.url)}>
+          <ProjectIconMex icon={favUrl} isMex={false} size={20} />
+          {link.title}
+        </LinkTitleWrapper>
+      </Tooltip>
       <LinkShortenAndTagsWrapper>
         <ShortenURL link={link} />
         <LinkTagSection>

@@ -96,7 +96,7 @@ const LinkView = () => {
 
   // console.log({ result })
   const onSelect = (item: any) => {
-    const linkid = item.id
+    const linkid = item.url
     onOpenLink(linkid)
   }
 
@@ -149,11 +149,15 @@ const LinkView = () => {
         id={`view_link`}
         key={`view_link`}
         initialItems={initialLinks}
-        getItemKey={(i) => i.id}
+        getItemKey={(i) => i.url}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
-        options={{ view: View.List }}
+        options={{
+          inputPlaceholder: 'Search links',
+          view: View.List
+        }}
         onSearch={onSearch}
+        // place="Search links"
         RenderItem={RenderItem}
         filterResults={filterResults}
         filterActions={{

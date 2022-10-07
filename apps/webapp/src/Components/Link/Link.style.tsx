@@ -14,6 +14,7 @@ export const LinkTitleWrapper = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
+  width: min-content;
 
   font-size: 1.2rem;
 
