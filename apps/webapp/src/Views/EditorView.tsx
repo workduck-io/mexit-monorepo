@@ -7,8 +7,6 @@ import styled from 'styled-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
-import InfoBar from '../Components/Infobar'
-import { usePermission } from '../Hooks/API/usePermission'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useFetchShareData } from '../Hooks/useFetchShareData'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
@@ -89,7 +87,7 @@ const EditorView = () => {
         event.preventDefault()
         shortcutHandler(shortcuts.showEditor, () => {
           if (node.nodeid === '__null__') {
-            const baseNodeId = getNodeidFromPathAndLinks(ilinks, node.path)
+            const baseNodeId = getNodeidFromPathAndLinks(ilinks, node.path, node.namespace)
             loadNode(baseNodeId)
           }
 

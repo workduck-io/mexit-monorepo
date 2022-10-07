@@ -279,8 +279,12 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                 <section>
                   <EditorPreviewRenderer
                     noMouseEvents
-                    content={preview}
-                    editorId={isBlockTriggered && activeBlock ? activeBlock.blockId : items[itemIndex]?.key}
+                    content={preview?.content || preview}
+                    readOnly
+                    draftView
+                    editorId={
+                      isBlockTriggered && activeBlock ? activeBlock.blockId : `${items[itemIndex]?.key}_Preview_Block`
+                    }
                   />
                 </section>
                 {preview && <PreviewMeta meta={metaData} />}

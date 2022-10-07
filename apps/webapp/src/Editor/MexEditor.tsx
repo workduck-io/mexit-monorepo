@@ -2,21 +2,22 @@ import React, { useState, useEffect, ReactElement } from 'react'
 
 import {
   Plate,
-  selectEditor,
-  usePlateEditorRef, // Options,
-  // PlaceholderProps,
-  PlatePlugin,
+  selectEditor, // PlaceholderProps,
   PlatePluginComponent,
-  SelectEditorOptions
+  SelectEditorOptions,
+  getPlateEditorRef
 } from '@udecode/plate'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
+import { mog } from '@mexit/core'
+
 import { useGlobalListener } from '../Hooks/useGlobalListener'
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import { useMexEditorStore } from './Hooks/useMexEditorStore'
+import { PluginOptionType } from './Plugins'
 import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
 
@@ -25,6 +26,7 @@ export interface MexEditorOptions {
   focusOptions?: SelectEditorOptions
   withDraggable?: boolean
   withBalloonToolbar?: boolean
+  withGlobalListener?: boolean
 }
 
 export interface InternalMetadata {
@@ -42,29 +44,36 @@ export interface MexEditorProps {
   onChange?: (value: MexEditorValue) => void // * Callback on change
   options?: MexEditorOptions // * Power the editor with options
   meta?: InternalMetadata // * MetaData of current editor
-  plugins?: Array<PlatePlugin> // * Plugins to power the editor
+  pluginOptions?: PluginOptionType // * Plugins to power the editor
   debug?: boolean // * Debug mode for content
   exclude?: Array<string> // * Array of elements from MEX_EDITOR_ELEMENTS
   BalloonMarkToolbarButtons?: ReactElement
   portalElement?: Element
 }
 
-const MexEditor = (props: MexEditorProps) => {
-  const editorRef = usePlateEditorRef()
+export const MexEditorBase = (props: MexEditorProps) => {
+  mog('EDITOR IS', { props })
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
 
   useEffect(() => {
+    const editorRef = getPlateEditorRef()
+
     if (editorRef && props?.options?.focusOptions) {
       selectEditor(editorRef, props.options.focusOptions)
     }
     if (props.meta) setInternalMetadata(props.meta)
-  }, [editorRef, props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig, props?.components)
+  const { plugins, comboConfigData } = useComboboxConfig(
+    props.editorId,
+    props?.comboboxConfig,
+    props?.components,
+    props?.pluginOptions
+  )
 
   const onChange = (value: MexEditorValue) => {
-    setContent(value)
+    if (props?.debug) setContent(value)
     if (props.onChange) {
       props.onChange(value)
     }
@@ -81,7 +90,7 @@ const MexEditor = (props: MexEditorProps) => {
       >
         {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
         <MultiComboboxContainer config={comboConfigData} />
-        <GlobalEditorListener />
+        {props.options?.withGlobalListener !== false && <GlobalEditorListener />}
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
     </>
@@ -104,4 +113,4 @@ const GlobalEditorListener = () => {
 
 withDndProvider.displayName = 'DefaultEditor'
 
-export default withDndProvider(MexEditor)
+export default withDndProvider(MexEditorBase)

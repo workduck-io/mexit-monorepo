@@ -10,6 +10,7 @@ export interface ComboboxKeyDownConfig {
   slashCommands: Record<string, SlashCommandConfig>
   portalElement?: Element
 }
+
 export interface ComboboxItemOnChangeConfig {
   cbKey: ComboboxKey
   icon?: string

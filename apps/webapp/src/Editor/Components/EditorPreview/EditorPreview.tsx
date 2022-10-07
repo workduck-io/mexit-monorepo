@@ -11,7 +11,7 @@ import { useTheme } from 'styled-components'
 import { Button, MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { NodeEditorContent, generateTempId, mog, getNameFromPath } from '@mexit/core'
+import { NodeEditorContent, getNameFromPath, mog } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -42,6 +42,7 @@ export interface EditorPreviewProps {
   hover?: boolean
   editable?: boolean
   label?: string
+  blockId?: string
   content?: NodeEditorContent
   allowClosePreview?: boolean
   icon?: string
@@ -55,6 +56,7 @@ const EditorPreview = ({
   children,
   content,
   hover,
+  blockId,
   label,
   editable = true,
   setPreview,
@@ -144,6 +146,7 @@ const EditorPreview = ({
                 editable={editable}
                 onClose={close}
                 id={nodeid}
+                blockId={blockId}
                 hover={hover}
                 editorId={editorId}
                 content={cc}
@@ -158,7 +161,7 @@ const EditorPreview = ({
   } else return children
 }
 
-const EditablePreview = ({ content, editable, editorId, id: nodeId, onClose, hover }: any) => {
+const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onClose, hover }: any) => {
   const addToBuffer = useBufferStore((store) => store.add)
   const removeEditor = useMultipleEditors((store) => store.removeEditor)
   const presentEditor = useMultipleEditors((store) => store.editors)?.[nodeId]
@@ -191,6 +194,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, onClose, hov
         if (editable && (nodeId === lastOpened?.nodeId || hover) && !lastOpened?.editorState?.editing) {
           onEditorClick(e)
           const editor = getPlateEditorRef(editorId)
+          mog("IS EDITOR FOCUESED", { editor })
           if (editor) selectEditor(editor, { edge: 'start', focus: true })
         } else {
           unsubscribe()
@@ -209,7 +213,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, onClose, hov
     <EditorPreviewEditorWrapper
       ref={ref}
       tabIndex={-1}
-      id={nodeId}
+      id={editorId}
       blink={presentEditor?.blink}
       editable={!!presentEditor?.editing}
       onClick={(ev) => {
@@ -219,8 +223,10 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, onClose, hov
       }}
     >
       <EditorPreviewRenderer
-        // onChange={onChange}
+        onChange={onChange}
         content={content}
+        blockId={blockId}
+        draftView={false}
         readOnly={!editable || !presentEditor?.editing}
         editorId={editorId}
       />
