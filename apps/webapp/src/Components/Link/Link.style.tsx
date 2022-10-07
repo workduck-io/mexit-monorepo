@@ -1,3 +1,4 @@
+import { Relative } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import styled from 'styled-components'
 
@@ -7,6 +8,21 @@ export const LinkWrapper = styled.div`
   width: 100%;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+`
+
+export const LinkHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  gap: ${({ theme }) => theme.spacing.small};
+
+  ${Relative} {
+    color: ${({ theme }) => theme.colors.text.fade};
+  }
 `
 
 export const LinkTitleWrapper = styled.div`

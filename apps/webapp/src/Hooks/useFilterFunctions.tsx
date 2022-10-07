@@ -107,7 +107,7 @@ export const reminderFilterFunctions: SearchFilterFunctions = {
 
 export const linkFilterFunctions: SearchFilterFunctions = {
   has: (item: Link, f) => {
-    const res = filterAndJoin(f, (v) => item.shortend !== undefined)
+    const res = filterAndJoin(f, (v) => item.alias !== undefined)
     return res
   },
   tag: (item: Link, f) => {

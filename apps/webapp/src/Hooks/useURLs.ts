@@ -125,7 +125,7 @@ export const useURLFilters = () => {
     mog('tagFilters', { tagFilters, mergedTags, rankedTags, linkTags })
 
     const shortendCount = links.reduce((acc, link) => {
-      if (link.shortend) {
+      if (link.alias) {
         acc += 1
       }
       return acc
@@ -156,6 +156,8 @@ export const useURLFilters = () => {
       .filter((link) => !!link)
 
     const filteredLinks = applyFilters(linksFromResults, currentFilters, linkFilterFunctions, globalJoin)
+
+    // mog('applyCurrentFilters', { results, linksFromResults, currentFilters, globalJoin, filteredLinks })
 
     return filteredLinks
   }
@@ -211,8 +213,44 @@ export const useURLFilters = () => {
   }
 }
 
+const extractLinksFromData = (data: any): Link[] => {
+  return data.URL.map((l: any) => {
+    if (l) {
+      /*
+      {
+    "modified": "2022-10-07T13:24:31.331Z",
+    "properties": {
+        "title": "Google"
+    },
+    "alias": "good",
+    "expiry": 1696685071331,
+    "entity": "URL",
+    "workspace": "WORKSPACE_Fh6RzxkgCe6a4LtkwkELn",
+    "url": "https://google.com",
+    "created": "2022-10-07T13:24:31.331Z",
+    "tags": [
+        "XYZ",
+        "YXA"
+    ]
+    }
+      */
+      const createdAtTime = new Date(l?.created)?.getTime()
+      const updatedAtTime = new Date(l?.modified)?.getTime()
+      return {
+        title: l.properties.title,
+        url: l.url,
+        tags: l.tags,
+        shortend: l?.alias,
+        createdAt: createdAtTime,
+        updatedAt: updatedAtTime
+      }
+    } else return undefined
+  }).filter((l) => !!l) as Link[]
+}
+
 export const useURLsAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const setLinks = useLinkStore((store) => store.setLinks)
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -228,8 +266,12 @@ export const useURLsAPI = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('getAllLinks', d)
-        return d.data
+        const links = extractLinksFromData(d.data)
+        mog('getAllLinks', { d, links })
+        return links
+      })
+      .then((links: Link[]) => {
+        setLinks(links)
       })
       .catch((e) => {
         console.error(e)
@@ -242,7 +284,7 @@ export const useURLsAPI = () => {
     const req = {
       workspace: getWorkspaceId(),
       url: link.url,
-      alias: link.shortend,
+      alias: link.alias,
       properties: { title: link.title },
       tags: link.tags
     }
@@ -256,6 +298,11 @@ export const useURLsAPI = () => {
         return d.data
       })
     return data
+  }
+
+  const shortenLink = async (url: string) => {
+    const links = useLinkStore.getState().links
+    const existingLink = links.find((link) => link.url === url)
   }
 
   return { getAllLinks, saveLink }

@@ -1,12 +1,12 @@
 import { mog, Tag } from '@mexit/core'
-import { ProjectIconMex } from '@mexit/shared'
+import { ProjectIconMex, RelativeTime } from '@mexit/shared'
 import React from 'react'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
-import { LinkShortenAndTagsWrapper, LinkTagSection, LinkTitleWrapper, LinkWrapper } from './Link.style'
+import { LinkHeader, LinkShortenAndTagsWrapper, LinkTagSection, LinkTitleWrapper, LinkWrapper } from './Link.style'
 import ShortenURL from './ShortenURL'
 
 // * Get Favicon url
@@ -44,12 +44,15 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
 
   return (
     <LinkWrapper>
-      <Tooltip content={link.url}>
-        <LinkTitleWrapper onClick={() => onOpenLink(link.url)}>
-          <ProjectIconMex icon={favUrl} isMex={false} size={20} />
-          {link.title}
-        </LinkTitleWrapper>
-      </Tooltip>
+      <LinkHeader>
+        <Tooltip content={link.url}>
+          <LinkTitleWrapper onClick={() => onOpenLink(link.url)}>
+            <ProjectIconMex icon={favUrl} isMex={false} size={20} />
+            {link.title}
+          </LinkTitleWrapper>
+        </Tooltip>
+        {link.createdAt && <RelativeTime prefix="Saved on" dateNum={link.createdAt} />}
+      </LinkHeader>
       <LinkShortenAndTagsWrapper>
         <ShortenURL link={link} />
         <LinkTagSection>

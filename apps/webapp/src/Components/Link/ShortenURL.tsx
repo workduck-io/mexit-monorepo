@@ -18,9 +18,9 @@ interface ShortenURLProps {
 const ShortenURL = ({ link }: ShortenURLProps) => {
   const [isCopied, setIsCopied] = useState(false)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const isShortend = link?.shortend !== undefined
+  const isShortend = link?.alias !== undefined
   const [editable, setEditable] = useState(false)
-  const [short, setShort] = useState(link?.shortend)
+  const [short, setShort] = useState(link?.alias)
 
   const handleShortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -29,7 +29,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
 
   const onShortenClick = () => {
     if (isShortend) {
-      const url = apiURLs.links.shortendLink(link?.shortend, getWorkspaceId())
+      const url = apiURLs.links.shortendLink(link?.alias, getWorkspaceId())
       navigator.clipboard.writeText(url || '')
 
       // If successful, update the isCopied state value
@@ -60,7 +60,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
 
   const reset = () => {
     setEditable(false)
-    setShort(link?.shortend)
+    setShort(link?.alias)
   }
 
   return !editable ? (
@@ -68,7 +68,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
       <Tooltip content={isShortend ? (isCopied ? 'Copied to clipboard!' : 'Click to copy') : 'Shorten URL'}>
         <ShortenButton isShortend={isShortend} transparent onClick={onShortenClick}>
           <Icon icon={linkM} />
-          {isShortend ? link?.shortend : 'Shorten URL'}
+          {isShortend ? link?.alias : 'Shorten URL'}
         </ShortenButton>
       </Tooltip>
       {isShortend && (

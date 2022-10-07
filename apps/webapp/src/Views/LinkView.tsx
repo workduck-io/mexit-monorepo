@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { GenericSearchResult, mog } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title, View } from '@mexit/shared'
@@ -18,8 +18,8 @@ export type SnippetsProps = {
 const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
   const getKeys = (link: Link) => {
     const keys = [link.title, link.url]
-    if (link.shortend) {
-      keys.push(link.shortend)
+    if (link.alias) {
+      keys.push(link.alias)
     }
     return keys
   }
@@ -58,7 +58,9 @@ const LinkView = () => {
     addTagFilter
   } = useURLFilters()
 
-  const initialLinks = links
+  const initialLinks = useMemo(() => {
+    return links.sort((a, b) => a.createdAt - b.createdAt)
+  }, [links])
 
   // mog('Initial links', { initialLinks, links })
 
