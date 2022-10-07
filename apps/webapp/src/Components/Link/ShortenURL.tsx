@@ -66,7 +66,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
   return !editable ? (
     <ShortenSectionWrapper>
       <Tooltip content={isShortend ? (isCopied ? 'Copied to clipboard!' : 'Click to copy') : 'Shorten URL'}>
-        <ShortenButton transparent onClick={onShortenClick}>
+        <ShortenButton isShortend={isShortend} transparent onClick={onShortenClick}>
           <Icon icon={linkM} />
           {isShortend ? link?.shortend : 'Shorten URL'}
         </ShortenButton>
