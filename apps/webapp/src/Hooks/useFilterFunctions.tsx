@@ -1,6 +1,7 @@
 import { isElder, getReminderState, Filter, FilterJoin, FilterValue, SearchFilterFunctions } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { Link } from '../Stores/useLinkStore'
 import { useLinks } from './useLinks'
 
 const joinNewRes = (acc: boolean, curRes: boolean, join: FilterJoin) => {
@@ -100,6 +101,17 @@ export const reminderFilterFunctions: SearchFilterFunctions = {
 
   has: (item, f) => {
     const res = filterAndJoin(f, (v) => item.todo !== undefined)
+    return res
+  }
+}
+
+export const linkFilterFunctions: SearchFilterFunctions = {
+  has: (item: Link, f) => {
+    const res = filterAndJoin(f, (v) => item.shortend !== undefined)
+    return res
+  },
+  tag: (item: Link, f) => {
+    const res = filterAndJoin(f, (v) => item.tags.includes(v.value))
     return res
   }
 }

@@ -16,6 +16,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   // share the property "count" of the state with other tabs
   share('theme', useThemeStore, { ref: 'share-theme' })
   share('ilinks', useDataStore, { ref: 'share-ilinks' })
+  share('namespaces', useDataStore, { ref: 'share-namespaces' })
   share('archive', useDataStore, { ref: 'share-archive' })
   share('sharedNodes', useDataStore, { ref: 'share-mentions' })
   share('contents', useContentStore, { ref: 'share-content' })

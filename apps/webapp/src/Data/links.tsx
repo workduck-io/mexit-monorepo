@@ -66,6 +66,14 @@ const useNavlinks = () => {
         shortcut: shortcuts.showReminder.keystrokes
         // isComingSoon: true
       },
+      {
+        title: 'Links',
+        path: ROUTE_PATHS.links,
+        icon: GetIcon(timerFlashLine)
+        // count: count.reminders
+        // shortcut: shortcuts.showReminder.keystrokes
+        // isComingSoon: true
+      },
 
       {
         title: 'Integrations',

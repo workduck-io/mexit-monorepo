@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { idxKey, mog, SearchFilter } from '@mexit/core'
+import { idxKey, Filter, Filters, mog, SearchFilter } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -115,6 +115,12 @@ interface SearchViewProps<Item> {
    */
   filterResults?: (result: Item[]) => Item[]
 
+  filterActions?: {
+    filters: Filters
+    resetCurrentFilters: () => void
+    currentFilters: Filter[]
+  }
+
   /**
    * IndexeGroups
    *
@@ -187,18 +193,23 @@ const SearchView = <Item,>({
   RenderPreview,
   RenderNotFound,
   RenderFilters,
-  options = { view: View.List }
+  options = { view: View.List },
+  filterActions
 }: SearchViewProps<Item>) => {
   const [searchState, setSS] = useState<SearchViewState<Item>>({
     selected: -1,
     searchTerm: '',
     result: []
   })
+  const { resetCurrentFilters, filters, currentFilters } = filterActions ?? {
+    filters: [],
+    currentFilters: [],
+    resetCurrentFilters: () => {
+      /* do nothing */
+    }
+  }
 
   // For filters
-  const { applyCurrentFilters, resetCurrentFilters } = useFilters<Item>()
-  const currentFilters = useFilterStore((store) => store.currentFilters)
-  const filters = useFilterStore((store) => store.filters)
   const globalJoin = useFilterStore((store) => store.globalJoin)
 
   const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]

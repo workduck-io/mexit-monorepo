@@ -243,6 +243,11 @@ const Search = () => {
         RenderFilters={RenderFilters}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
+        filterActions={{
+          filters,
+          currentFilters,
+          resetCurrentFilters
+        }}
       />
     </SearchContainer>
   )
