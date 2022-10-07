@@ -71,6 +71,7 @@ const Search = () => {
     generateNodeSearchFilters,
     removeCurrentFilter,
     filters,
+    globalJoin,
     currentFilters,
     resetCurrentFilters
   } = useFilters<GenericSearchResult>()
@@ -246,7 +247,8 @@ const Search = () => {
         filterActions={{
           filters,
           currentFilters,
-          resetCurrentFilters
+          resetCurrentFilters,
+          globalJoin
         }}
       />
     </SearchContainer>

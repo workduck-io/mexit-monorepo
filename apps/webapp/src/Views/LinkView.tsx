@@ -159,7 +159,8 @@ const LinkView = () => {
         filterActions={{
           filters,
           currentFilters,
-          resetCurrentFilters
+          resetCurrentFilters,
+          globalJoin
         }}
         // RenderPreview={RenderPreview}
         RenderFilters={RenderFilters}

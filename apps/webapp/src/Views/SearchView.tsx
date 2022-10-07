@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { idxKey, Filter, Filters, mog, SearchFilter } from '@mexit/core'
+import { idxKey, Filter, Filters, GlobalFilterJoin, mog, SearchFilter } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -119,6 +119,7 @@ interface SearchViewProps<Item> {
     filters: Filters
     resetCurrentFilters: () => void
     currentFilters: Filter[]
+    globalJoin: GlobalFilterJoin
   }
 
   /**
@@ -202,21 +203,20 @@ const SearchView = <Item,>({
     result: []
   })
 
-  const { resetCurrentFilters, filters, currentFilters } = useMemo(
+  const { resetCurrentFilters, filters, currentFilters, globalJoin } = useMemo(
     () =>
       filterActions ?? {
         filters: [],
         currentFilters: [],
         resetCurrentFilters: () => {
           /* do nothing */
-        }
+        },
+        globalJoin: 'all'
       },
     [filterActions]
   )
 
   // For filters
-  const globalJoin = useFilterStore((store) => store.globalJoin)
-
   const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
   const [view, setView] = useState<View>(options?.view)
   const setIndexes = useFilterStore((store) => store.setIndexes)
@@ -280,7 +280,7 @@ const SearchView = <Item,>({
       // setOnlyResult(results)
       executeSearch(searchTerm)
     },
-    [currentFilters, result, initialItems, idxKeys]
+    [currentFilters, globalJoin, result, initialItems, idxKeys]
   )
 
   useEffect(() => {
