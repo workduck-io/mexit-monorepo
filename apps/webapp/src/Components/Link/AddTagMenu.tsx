@@ -15,13 +15,13 @@ interface AddTagMenuProps {
 export const AddTagClassName = 'new-tag-menu'
 
 const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
-  mog('AddTagMenu', { tags })
+  // mog('AddTagMenu', { tags })
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
   }
 
   const onCreateNewTag = (tagStr: string) => {
-    mog('onCreateNewTag', { tagStr })
+    // mog('onCreateNewTag', { tagStr })
     createTag(tagStr)
   }
 

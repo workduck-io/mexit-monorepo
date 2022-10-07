@@ -1,8 +1,10 @@
+import { Button } from '@workduck-io/mex-components'
 import styled from 'styled-components'
 
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
@@ -29,4 +31,16 @@ export const LinkShortenAndTagsWrapper = styled.div`
   width: 100%;
 
   gap: ${({ theme }) => theme.spacing.small};
+
+  ${Button} {
+    padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+    gap: ${({ theme }) => theme.spacing.tiny};
+  }
+`
+
+export const LinkTagSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.small};
+  align-items: center;
 `

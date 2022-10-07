@@ -5,7 +5,8 @@ import { useLinkURLs } from '../../Hooks/useURLs'
 import { Link } from '../../Stores/useLinkStore'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
-import { LinkShortenAndTagsWrapper, LinkTitleWrapper, LinkWrapper } from './Link.style'
+import { LinkShortenAndTagsWrapper, LinkTagSection, LinkTitleWrapper, LinkWrapper } from './Link.style'
+import ShortenURL from './ShortenURL'
 
 // * Get Favicon url
 const getFavicon = (source: string) => {
@@ -40,8 +41,11 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         {link.title}
       </LinkTitleWrapper>
       <LinkShortenAndTagsWrapper>
-        <TagsLabel tags={tags} onClick={addTagFilter} />
-        <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
+        <ShortenURL link={link} />
+        <LinkTagSection>
+          <TagsLabel tags={tags} onClick={addTagFilter} />
+          <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
+        </LinkTagSection>
       </LinkShortenAndTagsWrapper>
     </LinkWrapper>
   )
