@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  version:
+  release:
     name: Release Extension and Webapp
     env:
       GITHUB_TOKEN: ${{ github.token }}
