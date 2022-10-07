@@ -20,9 +20,9 @@ import {
 
 import SearchIndexInput from '../Components/Search/IndexInput'
 import { useFilters, useFilterStore } from '../Hooks/useFilters'
-import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
+import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 
 interface SearchViewState<Item> {
   selected: number
@@ -201,13 +201,18 @@ const SearchView = <Item,>({
     searchTerm: '',
     result: []
   })
-  const { resetCurrentFilters, filters, currentFilters } = filterActions ?? {
-    filters: [],
-    currentFilters: [],
-    resetCurrentFilters: () => {
-      /* do nothing */
-    }
-  }
+
+  const { resetCurrentFilters, filters, currentFilters } = useMemo(
+    () =>
+      filterActions ?? {
+        filters: [],
+        currentFilters: [],
+        resetCurrentFilters: () => {
+          /* do nothing */
+        }
+      },
+    [filterActions]
+  )
 
   // For filters
   const globalJoin = useFilterStore((store) => store.globalJoin)

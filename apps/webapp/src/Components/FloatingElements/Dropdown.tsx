@@ -88,16 +88,39 @@ MenuItem.displayName = 'MenuItem'
 interface Props {
   className?: string
   label?: string
+  /**
+   * Is the menu nested
+   */
   nested?: boolean
+  /**
+   * MenuItems or Menus
+   */
   children?: React.ReactNode
+  /**
+   * Additional values to render in the menu trigger
+   */
   values?: React.ReactNode
+  /**
+   * Whether to show search input?
+   */
   allowSearch?: boolean
+  /**
+   * Placeholder for search input
+   */
   searchPlaceholder?: string
+  /**
+   * Does it allow multiple selections?
+   */
   multiSelect?: boolean
+
+  /**
+   * Creatable?
+   */
+  onCreate?: (value: string) => void
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
-  ({ children, label, values, multiSelect, allowSearch, searchPlaceholder, className, ...props }, ref) => {
+  ({ children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, ...props }, ref) => {
     const [open, setOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [allowHover, setAllowHover] = useState(false)
@@ -175,6 +198,18 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         }
       }
     }, [open, inputRef, allowSearch])
+
+    const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      // mog('keyDownHandler', { code: event.code })
+      if (event.code === 'Enter' && !!onCreate) {
+        event.preventDefault()
+        event.stopPropagation()
+        const inpVal = event.currentTarget.value
+        onCreate(inpVal)
+        setOpen(false)
+        resetSearch()
+      }
+    }
 
     // Event emitter allows you to communicate across tree components.
     // This effect closes all menus when an item gets clicked anywhere
@@ -313,6 +348,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                       placeholder={searchPlaceholder ?? 'Filter items'}
                       className={MenuFilterInputClassName}
                       onChange={debounce((e) => onSearchChange(e), 250)}
+                      onKeyDown={keyDownHandler}
                       ref={inputRef}
                     />
                   </SidebarListFilter>

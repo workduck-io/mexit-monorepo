@@ -1,8 +1,10 @@
-import { mog } from '@mexit/core'
+import { mog, Tag } from '@mexit/core'
 import { ProjectIconMex } from '@mexit/shared'
 import React from 'react'
+import { useLinkURLs } from '../../Hooks/useURLs'
 import { Link } from '../../Stores/useLinkStore'
 import { TagsLabel } from '../Sidebar/TagLabel'
+import AddTagMenu from './AddTagMenu'
 import { LinkShortenAndTagsWrapper, LinkTitleWrapper, LinkWrapper } from './Link.style'
 
 // * Get Favicon url
@@ -18,10 +20,17 @@ interface LinkProps {
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const favUrl = getFavicon(link.url)
   const tags = link.tags.map((t) => ({ value: t }))
+  const { getTags, addTag } = useLinkURLs()
 
-  const onClickApplyFilter = (tag: string) => {
-    mog('onClickApplyFilter', { tag })
-    addTagFilter(tag)
+  const toAddTags = getTags(link.tags)
+
+  const onAddNewTag = (tag: Tag) => {
+    mog('onAddNewTag', { tag })
+    addTag(link.id, tag.value)
+  }
+
+  const onAddCreateTag = (tagStr: string) => {
+    addTag(link.id, tagStr)
   }
 
   return (
@@ -31,7 +40,8 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         {link.title}
       </LinkTitleWrapper>
       <LinkShortenAndTagsWrapper>
-        <TagsLabel tags={tags} onClick={onClickApplyFilter} />
+        <TagsLabel tags={tags} onClick={addTagFilter} />
+        <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
       </LinkShortenAndTagsWrapper>
     </LinkWrapper>
   )

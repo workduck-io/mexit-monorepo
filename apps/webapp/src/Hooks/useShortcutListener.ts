@@ -16,6 +16,7 @@ import useModalStore from '../Stores/useModalStore'
 import useAnalytics from './useAnalytics'
 import { ActionType } from './useAnalytics/events'
 import { useShortcutStore } from './useShortcutStore'
+import { AddTagClassName } from '../Components/Link/AddTagMenu'
 
 export const usePlatformInfo = () =>
   useMemo(
@@ -130,7 +131,7 @@ export default useShortcutListener
 const MEX_KEYBOARD_IGNORE_CLASSES = {
   all: ['mex-search-input', 'FilterInput', MenuItemClassName, MenuClassName, RootMenuClassName],
   input: ['mex-search-input', 'FilterInput', MenuFilterInputClassName],
-  dropdown: [MenuItemClassName, MenuClassName, RootMenuClassName]
+  dropdown: [MenuItemClassName, MenuClassName, RootMenuClassName, AddTagClassName]
 }
 
 type IgnoreClasses = 'all' | 'input' | 'dropdown'
@@ -138,7 +139,6 @@ interface LocalSkipOptions {
   ignoreClasses?: IgnoreClasses
   skipLocal?: boolean
 }
-
 
 export const useEnableShortcutHandler = () => {
   const isEditingPreview = useMultipleEditors((store) => store.isEditingAnyPreview)
@@ -178,4 +178,3 @@ export const useEnableShortcutHandler = () => {
 
   return { enableShortcutHandler }
 }
-

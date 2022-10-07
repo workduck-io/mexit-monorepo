@@ -129,7 +129,7 @@ const LinkView = () => {
       return <Result key={id} ref={ref}></Result>
     } else if (props.view === View.List) {
       return (
-        <Result {...props} key={id} ref={ref}>
+        <Result {...props} onClick={undefined} key={id} ref={ref}>
           <LinkComponent addTagFilter={addTagFilter} link={link} />
         </Result>
       )

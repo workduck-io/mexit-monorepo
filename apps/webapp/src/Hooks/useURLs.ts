@@ -6,13 +6,52 @@ import {
   GenericSearchResult,
   GlobalFilterJoin,
   mog,
-  Settify
+  Settify,
+  Tag
 } from '@mexit/core'
 import create from 'zustand'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import { applyFilters, FilterStore } from './useFilters'
 import { useDataStore } from '../Stores/useDataStore'
 import { linkFilterFunctions } from './useFilterFunctions'
+
+export const useLinkURLs = () => {
+  const links = useLinkStore((store) => store.links)
+  const tags = useDataStore((store) => store.tags)
+  const setLinks = useLinkStore((store) => store.setLinks)
+
+  const getTags = (present: string[]) => {
+    const linkTags = links.reduce((acc, link) => {
+      if (link.tags) {
+        acc.push(...link.tags)
+      }
+      return acc
+    }, [] as string[])
+
+    const mergedTags = Settify([...linkTags, ...tags.map((t) => t.value)])
+      .filter((tag) => !present.includes(tag))
+      .map((t) => ({ value: t }))
+
+    return mergedTags
+  }
+
+  const addTag = (linkid: string, tag: string) => {
+    const newLinks = links.map((l) => {
+      if (l.id === linkid) {
+        return { ...l, tags: Settify([...l.tags, tag]) }
+      }
+      return l
+    })
+
+    mog('addTag', { linkid, tag, newLinks })
+    setLinks(newLinks)
+  }
+
+  return {
+    getTags,
+    addTag
+  }
+}
 
 export const useURLsFilterStore = create<FilterStore>((set) => ({
   currentFilters: [],
