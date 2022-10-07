@@ -30,6 +30,7 @@ import EditorView from './Views/EditorView'
 import { ForgotPassword } from './Views/ForgotPassword'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
+import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
 import RemindersAll from './Views/Reminders/RemindersAll'
@@ -238,6 +239,9 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
+        <Route path={`${ROUTE_PATHS.namespaceShare}/:namespaceID`} element={<PublicNamespaceView />}>
+          <Route path="node/:nodeId" element={<PublicNodeView />} />
+        </Route>
         <Route
           path={ROUTE_PATHS.home}
           element={

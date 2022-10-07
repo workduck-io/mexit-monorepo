@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Cookies from 'universal-cookie'
@@ -11,7 +12,7 @@ import PublicNodeFloatingButton from '../Components/PublicNodeFloatingButton'
 import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import { usePublicNodeStore, PublicNode } from '../Stores/usePublicNodes'
+import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicEditorWrapper = styled.div`
   display: flex;
@@ -22,10 +23,9 @@ const PublicEditorWrapper = styled.div`
 
 const PublicNodeView = () => {
   const nodeId = useParams().nodeId
-  const getPublicNode = usePublicNodeStore((store) => store.getPublicNode)
   const { getPublicNodeAPI } = useApi()
   const navigate = useNavigate()
-  const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
+  const [node, setNode] = useState<any>()
   const [showLoader, setShowLoader] = useState(true)
   const [firstVisit, setFirstVisit] = useState<boolean>(true)
 
@@ -55,7 +55,7 @@ const PublicNodeView = () => {
 
   return (
     <PublicEditorWrapper>
-      {showLoader ? (
+      {showLoader && node ? (
         <SplashScreen />
       ) : (
         <>

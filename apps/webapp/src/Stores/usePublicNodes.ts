@@ -1,38 +1,38 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { IDBStorage, NodeEditorContent, NodeMetadata } from '@mexit/core'
-
-export interface PublicNode {
-  id: string
-  title: string
-  content: NodeEditorContent
-  metadata: NodeMetadata
-}
+import { Contents, IDBStorage, ILink, NodeEditorContent, NodeMetadata, SingleNamespace } from '@mexit/core'
 
 export interface PublicNodeStoreType {
-  nodes: Record<string, PublicNode>
-  addPublicNode: (node: PublicNode) => void
-  getPublicNode: (nodeID: string) => PublicNode
-  reset: () => void
+  iLinks: ILink[]
+  setILinks: (nodes: ILink[]) => void
+  contents: Contents
+  setContent: (nodeID: string, content: NodeEditorContent) => void
+  namespace: SingleNamespace
+  setNamespace: (namespace: SingleNamespace) => void
 }
 
 export const usePublicNodeStore = create<PublicNodeStoreType>(
   persist(
     (set, get) => ({
-      nodes: {},
-      addPublicNode: (node: PublicNode) => {
-        set({ nodes: { ...get().nodes, [node.id]: node } })
+      iLinks: [],
+      contents: {},
+      namespace: undefined,
+      setNamespace: (namespace: SingleNamespace) => {
+        set({ namespace })
       },
-      getPublicNode: (nodeID: string) => {
-        return get().nodes[nodeID]
+      setILinks: (nodes: ILink[]) => {
+        set({ iLinks: nodes })
       },
-      reset: () => {
+      setContent: (nodeID: string, content: NodeEditorContent) => {
+        const oldContent = get().contents
+
+        delete oldContent[nodeID]
         set({
-          nodes: {}
+          contents: { [nodeID]: { type: 'editor', content }, ...oldContent }
         })
       }
     }),
-    { name: 'mexit-public-node-store', getStorage: () => IDBStorage }
+    { name: 'mexit-public-node-store', version: 2 }
   )
 )

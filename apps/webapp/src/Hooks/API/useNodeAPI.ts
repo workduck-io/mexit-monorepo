@@ -15,7 +15,8 @@ import {
   generateNamespaceId,
   MIcon,
   NodeEditorContent,
-  getTagsFromContent
+  getTagsFromContent,
+  hierarchyParser
 } from '@mexit/core'
 
 import { isRequestedWithin, RequestData, useApiStore } from '../../Stores/useApiStore'
@@ -292,6 +293,21 @@ export const useApi = () => {
         version: res.version
       }
     }
+  }
+
+  const getPublicNamespaceAPI = async (namespaceID: string) => {
+    const res = await client
+      .get(`https://http-test.workduck.io/mex/namespace/public/${namespaceID}`, {
+        headers: workspaceHeaders()
+      })
+      .then((response: any) => {
+        // TODO: remove this hierarchy parser once the middleware starts working
+        response.data.nodeHierarchy = hierarchyParser(response.data.nodeHierarchy, namespaceID)
+
+        return response.data
+      })
+
+    return res
   }
 
   const isPublic = (nodeid: string) => {
@@ -646,6 +662,7 @@ export const useApi = () => {
     getAllNamespaces,
     changeNamespaceName,
     changeNamespaceIcon,
-    getNodesByWorkspace
+    getNodesByWorkspace,
+    getPublicNamespaceAPI
   }
 }
