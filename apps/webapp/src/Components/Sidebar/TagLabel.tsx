@@ -5,20 +5,23 @@ import { TagFlex, TagsFlex } from '@mexit/shared'
 
 import { NavigationType, useRouting, ROUTE_PATHS } from '../../Hooks/useRouting'
 
-const TagLabel = ({ tag }: { tag: Tag }) => {
+const TagLabel = ({ tag, onClick }: { tag: Tag; onClick?: (tag: string) => void }) => {
   const { goTo } = useRouting()
   // const isSpotlight = useSpotlightContext()
 
-  const navigateToTag = (tag: string) => {
+  const onClickTag = (tag: string) => {
     // if (isSpotlight) return
-    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+    if (onClick) {
+      onClick(tag)
+    } else goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
   }
 
   return (
     <TagFlex
       onClick={(e) => {
         e.preventDefault()
-        navigateToTag(tag.value)
+        e.stopPropagation()
+        onClickTag(tag.value)
       }}
     >
       #{tag.value}
@@ -26,11 +29,11 @@ const TagLabel = ({ tag }: { tag: Tag }) => {
   )
 }
 
-export const TagsLabel = ({ tags }: { tags: Tag[] }) => {
+export const TagsLabel = ({ tags, onClick }: { tags: Tag[]; onClick?: (tag: string) => void }) => {
   return (
     <TagsFlex>
       {tags.map((tag) => (
-        <TagLabel key={`Tags_Label_${tag.value}`} tag={tag} />
+        <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} tag={tag} />
       ))}
     </TagsFlex>
   )

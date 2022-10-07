@@ -26,6 +26,7 @@ import { useURLFilters } from '../Hooks/useURLs'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
+import LinkComponent from '../Components/Link'
 
 export type SnippetsProps = {
   title?: string
@@ -47,7 +48,8 @@ const LinkView = () => {
     resetCurrentFilters,
     generateLinkFilters,
     setFilters,
-    applyCurrentFilters
+    applyCurrentFilters,
+    addTagFilter
   } = useURLFilters()
 
   const initialLinks = links
@@ -128,24 +130,25 @@ const LinkView = () => {
     } else if (props.view === View.List) {
       return (
         <Result {...props} key={id} ref={ref}>
-          <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
-            <Icon icon={icon} />
-            <ResultMain>
-              <ResultTitle>{link.title}</ResultTitle>
-              <ResultDesc>Description and stuff</ResultDesc>
-            </ResultMain>
-            <IconButton
-              size={20}
-              icon={deleteBin6Line}
-              title="delete"
-              onClick={(ev) => {
-                ev.stopPropagation()
-                onDeleteLink(link.id)
-              }}
-            />
-          </ResultRow>
+          <LinkComponent addTagFilter={addTagFilter} link={link} />
         </Result>
       )
+      // <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
+      //   <Icon icon={icon} />
+      //   <ResultMain>
+      //     <ResultTitle>{link.title}</ResultTitle>
+      //     <ResultDesc>Description and stuff</ResultDesc>
+      //   </ResultMain>
+      //   <IconButton
+      //     size={20}
+      //     icon={deleteBin6Line}
+      //     title="delete"
+      //     onClick={(ev) => {
+      //       ev.stopPropagation()
+      //       onDeleteLink(link.id)
+      //     }}
+      //   />
+      // </ResultRow>
     }
 
     return null

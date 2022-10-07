@@ -2,6 +2,7 @@ import {
   Filter,
   Filters,
   FilterTypeWithOptions,
+  generateFilterId,
   GenericSearchResult,
   GlobalFilterJoin,
   mog,
@@ -121,6 +122,23 @@ export const useURLFilters = () => {
     setCurrentFilters([...currentFilters, filter])
   }
 
+  const addTagFilter = (tag: string) => {
+    const filter: Filter = {
+      id: generateFilterId(),
+      type: 'tag',
+      values: [
+        {
+          id: `filter_tag_${tag}`,
+          label: tag,
+          value: tag
+        }
+      ],
+      join: 'all',
+      multiple: true
+    }
+    addCurrentFilter(filter)
+  }
+
   const removeCurrentFilter = (filter: Filter) => {
     setCurrentFilters(currentFilters.filter((f) => f.id !== filter.id))
   }
@@ -146,6 +164,7 @@ export const useURLFilters = () => {
     setGlobalJoin,
     setFilters,
     generateLinkFilters,
-    applyCurrentFilters
+    applyCurrentFilters,
+    addTagFilter
   }
 }
