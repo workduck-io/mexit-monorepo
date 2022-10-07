@@ -32,7 +32,7 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
-  : 'https://mexit-backend-test.workduck.io/api/v1'
+  : 'https://mex-webapp-dev.workduck.io/api/v1'
 
 export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
 export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`

@@ -9,7 +9,14 @@ jobs:
   release:
     name: Release Extension and Webapp
     env:
+      GITHUB_TOKEN: ${{ github.token }}
       YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
+      CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+      CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+      CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+      CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
 
     runs-on: ubuntu-latest
     steps:
@@ -37,16 +44,9 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
 
-        # Doing this before changeset action so that the updated manifest file also gets committed in the PR
-      - name: Update Extension's manifest version
-        run: |
-          cat ./apps/extension/src/manifest.json | jq  '.version="${{ fromJson(steps.get_package_version.outputs.packageJson).version }}"' | tee  ./apps/extension/src/manifest.json
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: aws-actions/configure-aws-credentials@v1
         if: steps.changesets.outputs.hasChangesets == 'false'
