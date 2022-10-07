@@ -10,6 +10,7 @@ import { fuzzySearch } from '../Utils/fuzzysearch'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
+import { nanoid } from 'nanoid'
 
 export type SnippetsProps = {
   title?: string
@@ -58,8 +59,8 @@ const LinkView = () => {
     addTagFilter
   } = useURLFilters()
 
-  const initialLinks = useMemo(() => {
-    return links.sort((a, b) => a.createdAt - b.createdAt)
+  const { initialLinks, randId } = useMemo(() => {
+    return { initialLinks: links.sort((a, b) => a.createdAt - b.createdAt), randId: nanoid() }
   }, [links])
 
   // mog('Initial links', { initialLinks, links })
@@ -126,7 +127,6 @@ const LinkView = () => {
   const RenderItem = React.forwardRef(BaseItem)
 
   const RenderFilters = (props: RenderFilterProps<GenericSearchResult>) => {
-    mog('RenderFilters', { props })
     return (
       <SearchFilters
         {...props}
@@ -148,8 +148,8 @@ const LinkView = () => {
         <Title>Links</Title>
       </MainHeader>
       <SearchView
-        id={`view_link`}
-        key={`view_link`}
+        id={`view_link_${randId}`}
+        key={`view_link_${randId}`}
         initialItems={initialLinks}
         getItemKey={(i) => i.url}
         onSelect={onSelect}

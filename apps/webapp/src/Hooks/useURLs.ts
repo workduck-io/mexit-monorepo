@@ -240,7 +240,7 @@ const extractLinksFromData = (data: any): Link[] => {
         title: l.properties.title,
         url: l.url,
         tags: l.tags,
-        shortend: l?.alias,
+        alias: l?.alias,
         createdAt: createdAtTime,
         updatedAt: updatedAtTime
       }
