@@ -1,8 +1,11 @@
 import { spawn } from 'threads'
+
 import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '@mexit/core'
 
 import analysisWorkerConstructor from './analysis?worker'
+import requestsWorkerConstructor from './requests?worker'
 import searchWorkerConstructor from './search?worker'
+
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
   title?: boolean
@@ -17,6 +20,30 @@ export interface AnalyseContentProps {
 
 export let analysisWorker = null
 export let searchWorker = null
+export let requestsWorker = null
+
+export const startRequestsWorkerService = async () => {
+  if (!requestsWorker) requestsWorker = await spawn(new requestsWorkerConstructor())
+}
+
+enum RequestType {
+  'GET_NODE' = 'GET_NODE'
+}
+
+export const runBatchWorker = async (
+  { token, workspaceID },
+  requestType: RequestType,
+  batchSize = 6,
+  args: string[]
+) => {
+  if (!requestsWorker) {
+    await startRequestsWorkerService()
+    requestsWorker.initializeClient(token, workspaceID)
+  }
+
+  const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
+  return res
+}
 
 export const startAnalysisWorkerService = async () => {
   // console.log('startWorkerService')

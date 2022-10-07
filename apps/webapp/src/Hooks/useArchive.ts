@@ -68,7 +68,7 @@ const useArchive = () => {
             }
           }
         )
-        .then((d) => {
+        .then((d: any) => {
           // We only get the data for archived nodeids in this response
 
           const archivedNodeids = d.data

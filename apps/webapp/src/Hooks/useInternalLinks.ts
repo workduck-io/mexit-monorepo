@@ -60,7 +60,6 @@ export const useInternalLinks = () => {
     )
     mog('UpdatingILinks', { nodes, namespaces })
     setILinks(nodes)
-    // }
   }
 
   const updateILinksFromAddedRemovedPaths = (addedPaths: ILink[], removedPaths: ILink[]) => {

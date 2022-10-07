@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 
 import { client } from '@workduck-io/dwindle'
+import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 
 import {
   defaultContent,
@@ -15,7 +16,8 @@ import {
   generateNamespaceId,
   MIcon,
   NodeEditorContent,
-  getTagsFromContent
+  getTagsFromContent,
+  runBatch
 } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
@@ -24,10 +26,16 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
+import { useSearch } from '../useSearch'
 import { useUpdater } from '../useUpdater'
+
+enum RequestType {
+  'GET_NODE' = 'GET_NODE'
+}
 
 interface SnippetResponse {
   snippetID: string
@@ -49,8 +57,9 @@ export const useApi = () => {
   const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
-
+  const setILinks = useDataStore((store) => store.setIlinks)
   const { getSharedNode } = useNodes()
+  const { updateDocument } = useSearch()
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -202,7 +211,6 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
-    mog('GetNodeOptions', { isShared, url })
     if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
@@ -430,7 +438,18 @@ export const useApi = () => {
           const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
           mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
-          addInArchive(archivedILinks)
+
+          runBatch(
+            toUpdateLocal.map((ilink) =>
+              getDataAPI(ilink.nodeid, false, false, false).then((data) => {
+                mog('toUpdateLocalArchive', { ilink, data })
+                setContent(ilink.nodeid, data.content, data.metadata)
+                updateDocument('archive', ilink.nodeid, data.content)
+              })
+            )
+          ).then(() => {
+            addInArchive(archivedILinks)
+          })
         }
       })
     }
@@ -514,6 +533,66 @@ export const useApi = () => {
     }
   }
 
+  const getNodesByWorkspace = async () => {
+    const updatedILinks: any[] = await client
+      .get(apiURLs.namespaces.getHierarchy, {
+        headers: {
+          'mex-workspace-id': getWorkspaceId()
+        }
+      })
+      .then((res: any) => {
+        return res.data
+      })
+      .catch(console.error)
+
+    mog(`UpdatedILinks`, { updatedILinks })
+
+    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
+      (p, [namespaceid, namespaceData]) => {
+        return {
+          namespaces: [
+            ...p.namespaces,
+            {
+              id: namespaceid,
+              name: namespaceData.name,
+              ...namespaceData?.namespaceMetadata
+            }
+          ],
+          nodes: [
+            ...p.nodes,
+            ...namespaceData.nodeHierarchy.map((ilink) => ({
+              ...ilink,
+              namespace: namespaceid
+            }))
+          ]
+        }
+      },
+      { nodes: [], namespaces: [] }
+    )
+    mog('UpdatingILinks', { nodes, namespaces })
+    if (nodes && nodes.length > 0) {
+      const localILinks = useDataStore.getState().ilinks
+      const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+      const ids = toUpdateLocal.map((i) => i.nodeid)
+      const token = useInternalAuthStore.getState().userCred.token
+      const { fulfilled } = await runBatchWorker(
+        { token: token, workspaceID: getWorkspaceId() },
+        RequestType.GET_NODE,
+        6,
+        ids
+      )
+
+      fulfilled.forEach((node) => {
+        const { rawResponse, nodeid } = node
+        const content = deserializeContent(rawResponse.data)
+        updateFromContent(nodeid, content)
+      })
+    }
+
+    // setNamespaces(namespaces)
+    setILinks(nodes)
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -531,6 +610,7 @@ export const useApi = () => {
     createNewNamespace,
     getAllNamespaces,
     changeNamespaceName,
-    changeNamespaceIcon
+    changeNamespaceIcon,
+    getNodesByWorkspace
   }
 }

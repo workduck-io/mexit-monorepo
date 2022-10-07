@@ -93,18 +93,18 @@ export const useSnippets = () => {
     const snippets = getSnippets()
     const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
 
-    try {
-      Promise.allSettled(
-        unfetchedSnippets.map(
-          async (item) =>
-            await api.getSnippetById(item.id).then((response) => {
-              updateSnippet(response as Snippet)
-            })
-        )
-      )
-    } catch (err) {
-      mog('Failed to fetch snippets', { err })
-    }
+    // try {
+    //   Promise.allSettled(
+    //     unfetchedSnippets.map(
+    //       async (item) =>
+    //         await api.getSnippetById(item.id).then((response) => {
+    //           updateSnippet(response as Snippet)
+    //         })
+    //     )
+    //   )
+    // } catch (err) {
+    //   mog('Failed to fetch snippets', { err })
+    // }
   }
 
   // * Updates snippets in store and adds them in combobox

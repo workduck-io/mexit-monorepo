@@ -1,9 +1,10 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE } from '@mexit/core'
+import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, runBatch } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useApi } from './useNodeAPI'
 
 interface SharedNodesPreset {
   status: 'success'
@@ -17,6 +18,7 @@ interface SharedNodesErrorPreset {
 
 export const usePermission = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
+  const { getDataAPI } = useApi()
 
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     const payload = {
@@ -121,8 +123,7 @@ export const usePermission = () => {
           const localSharedNodes = useDataStore.getState().sharedNodes
           const { toUpdateLocal } = iLinksToUpdate(localSharedNodes, sharedNodes)
 
-          // TODO
-          // runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid, true)))
+          runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid, true)))
 
           mog('SharedNodes', { sharedNodes })
           return { status: 'success', data: sharedNodes }
@@ -135,14 +136,13 @@ export const usePermission = () => {
 
   const getUsersOfSharedNode = async (nodeid: string): Promise<{ nodeid: string; users: Record<string, string> }> => {
     try {
-      // @ts-ignore
       return await client
         .get(apiURLs.getUsersOfSharedNode(nodeid), {
           headers: {
             'mex-workspace-id': workspaceDetails.id
           }
         })
-        .then((resp) => {
+        .then((resp: any) => {
           return { nodeid, users: resp.data }
         })
     } catch (e) {

@@ -8,7 +8,15 @@ import genereateName from 'project-name-generator'
 
 import { Button, IconButton } from '@workduck-io/mex-components'
 
-import { defaultContent, generateSnippetId, generateTempId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
+import {
+  convertContentToRawText,
+  defaultContent,
+  generateSnippetId,
+  generateTempId,
+  GenericSearchResult,
+  mog,
+  parseBlock
+} from '@mexit/core'
 import {
   CreateSnippet,
   SnippetCommand,
@@ -29,6 +37,7 @@ import {
 
 import PreviewEditor from '../Components/Editor/PreviewEditor'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useApi } from '../Hooks/API/useNodeAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
@@ -41,19 +50,25 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
+  const api = useApi()
+
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
-  //   const { getNode } = useNodes()
   const { goTo } = useRouting()
 
-  const initialSnippets: any[] = snippets.map((snippet) => ({
-    id: snippet.id,
-    title: snippet.title,
-    text: parseBlock(snippet.content || [{ text: '' }])
-  }))
+  const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
+    () => ({
+      initialSnippets: snippets.map((snippet) => ({
+        id: snippet.id,
+        title: snippet.title,
+        text: convertContentToRawText(snippet.content)
+      }))
+    }),
+    [snippets]
+  )
 
-  mog('Initial snippets', { snippets })
+  const randId = useMemo(() => nanoid(), [initialSnippets])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
@@ -115,6 +130,8 @@ const Snippets = () => {
 
     if (props.view === View.Card) {
       return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Result {...props} key={id} ref={ref}>
           <SnippetHeader>
             <SnippetCommand onClick={() => onOpenSnippet(snip.id)}>
@@ -201,8 +218,6 @@ const Snippets = () => {
         </SplitSearchPreviewWrapper>
       )
   }
-
-  const randId = useMemo(() => generateTempId(), [initialSnippets])
 
   return (
     <SearchContainer>

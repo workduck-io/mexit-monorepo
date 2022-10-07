@@ -13,6 +13,7 @@ import { GridWrapper } from '@mexit/shared'
 import { navTooltip } from '@mexit/shared'
 
 import useNavlinks from '../Data/links'
+import { useInitLoader } from '../Hooks/useInitLoader'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import Analytics from '../Utils/analytics'
@@ -101,6 +102,7 @@ const Main = ({ children }: MainProps) => {
   }
 
   const { gridSpringProps } = useSidebarTransition()
+  useInitLoader()
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>

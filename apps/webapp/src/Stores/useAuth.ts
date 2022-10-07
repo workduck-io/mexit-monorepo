@@ -12,6 +12,7 @@ import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
 
 import { useApi } from '../Hooks/API/useNodeAPI'
+import { useInitLoader } from '../Hooks/useInitLoader'
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import useLoad from '../Hooks/useLoad'
 import { useNodes } from '../Hooks/useNodes'
@@ -182,17 +183,9 @@ export const useInitializeAfterAuth = () => {
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const addUser = useUserCacheStore((s) => s.addUser)
-  const { updateSnippets } = useSnippets()
-  const { updateBaseNode } = useNodes()
-  const { loadNode } = useLoad()
-  const { goTo } = useRouting()
 
   const { refreshToken } = useAuth()
-  const { initPortals } = usePortals()
-  const { refreshILinks } = useInternalLinks()
-  const api = useApi()
   const { registerNewUser } = useAuthentication()
-  const { getInitialSnippets } = useSnippets()
 
   const initializeAfterAuth = async (
     loginData: UserCred,
@@ -239,30 +232,6 @@ export const useInitializeAfterAuth = () => {
       if (forceRefreshToken) await refreshToken()
 
       setAuthenticated(userDetails, workspaceDetails)
-
-      const initialSnippetsP = api.getAllSnippetsByWorkspace()
-
-      const initPortalsP = initPortals()
-      const refreshILinksP = refreshILinks()
-      const getAllNamespacesP = api.getAllNamespaces()
-
-      const [initialNamespacesResult, initialILinksResult, initialPortalsResult, initialSnippetsResult] =
-        await Promise.allSettled([getAllNamespacesP, refreshILinksP, initPortalsP, initialSnippetsP])
-
-      if (initialSnippetsResult.status === 'fulfilled') updateSnippets(initialSnippetsResult.value)
-      getInitialSnippets()
-
-      if (initialILinksResult.status === 'fulfilled') {
-        const baseNode = updateBaseNode()
-
-        loadNode(baseNode?.nodeid, {
-          fetch: true,
-          savePrev: false,
-          withLoading: false
-        })
-
-        goTo(ROUTE_PATHS.node, NavigationType.replace, baseNode?.nodeid)
-      }
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {

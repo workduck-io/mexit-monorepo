@@ -1,6 +1,6 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE } from '@mexit/core'
+import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, runBatch } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useAuthStore } from './useAuth'
@@ -17,7 +17,7 @@ interface SharedNodesErrorPreset {
 
 export const usePermission = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
-
+  // const {getDataAPI} = useApi()
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     const payload = {
       type: 'SharedNodeRequest',
@@ -135,14 +135,13 @@ export const usePermission = () => {
 
   const getUsersOfSharedNode = async (nodeid: string): Promise<{ nodeid: string; users: Record<string, string> }> => {
     try {
-      // @ts-ignore
       return await client
         .get(apiURLs.getUsersOfSharedNode(nodeid), {
           headers: {
             'mex-workspace-id': workspaceDetails.id
           }
         })
-        .then((resp) => {
+        .then((resp: any) => {
           return { nodeid, users: resp.data }
         })
     } catch (e) {
