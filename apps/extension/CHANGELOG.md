@@ -1,5 +1,11 @@
 # mexit
 
+## 0.11.3
+
+### Patch Changes
+
+- a7fe1622: Went back to old middleware deployment url, added env variables in publish action for extension
+
 ## 0.11.2
 
 ### Patch Changes
