@@ -117,6 +117,10 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
       pointer-events: none;
     `};
 
+  /* span[data-slate-string="true"] { */
+  /*   white-space: prewrap; */
+  /* } */
+
   font-family: 'Inter', sans-serif;
   /* font-weight: 400; */
   line-height: 1.75;

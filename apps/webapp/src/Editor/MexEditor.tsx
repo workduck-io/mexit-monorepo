@@ -20,6 +20,7 @@ import { useMexEditorStore } from './Hooks/useMexEditorStore'
 import { PluginOptionType } from './Plugins'
 import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
+import useMultipleEditors from '../Stores/useEditorsStore'
 
 export interface MexEditorOptions {
   editableProps?: EditableProps
@@ -55,7 +56,8 @@ export const MexEditorBase = (props: MexEditorProps) => {
   mog('EDITOR IS', { props })
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
-
+  const isEmpty = useMultipleEditors((store) => store.isEmpty)
+  
   useEffect(() => {
     const editorRef = getPlateEditorRef()
 
@@ -89,7 +91,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
         onChange={onChange}
       >
         {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
-        <MultiComboboxContainer config={comboConfigData} />
+        {isEmpty && <MultiComboboxContainer config={comboConfigData} />}
         {props.options?.withGlobalListener !== false && <GlobalEditorListener />}
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}
