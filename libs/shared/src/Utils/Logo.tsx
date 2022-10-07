@@ -1,7 +1,8 @@
 import React from 'react'
+
 import styled, { css } from 'styled-components'
 
-const StyledLogo = styled.svg<{ bubble?: boolean; padding: string }>`
+const StyledLogo = styled.svg<{ padding: string; bubble?: boolean; primaryColor?: string }>`
   padding-right: 8px;
   ${({ padding }) => css`
     padding: ${padding};
@@ -10,16 +11,22 @@ const StyledLogo = styled.svg<{ bubble?: boolean; padding: string }>`
   /* cursor: pointer; */
 
   & path {
-    fill: ${({ theme }) => theme.colors.primary};
+    fill: ${({ theme, primaryColor }) => primaryColor ?? theme.colors.primary};
   }
 `
 
-const WDLogo: React.FC<{ height?: string; width?: string; padding?: string }> = ({ height, width, padding }) => {
+const WDLogo: React.FC<{ height?: string; width?: string; padding?: string; primaryColor?: string }> = ({
+  height,
+  width,
+  padding,
+  primaryColor
+}) => {
   return (
     <StyledLogo
       width={width ?? '25'}
       height={height ?? '25'}
       padding={padding}
+      primaryColor={primaryColor}
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

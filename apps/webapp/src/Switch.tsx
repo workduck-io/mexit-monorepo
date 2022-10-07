@@ -5,9 +5,9 @@ import { animated } from 'react-spring'
 import styled from 'styled-components'
 
 import RouteNotFound from './Components/404'
-import DownForMaintenance from './Components/DownForMaintenance'
 import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
 import { ROUTE_PATHS } from './Hooks/useRouting'
+import { DownForMaintenance } from './Views/DownForMaintenance'
 import PublicNodeView from './Views/PublicNodeView'
 
 export const SwitchWrapper = styled(animated.div)`
