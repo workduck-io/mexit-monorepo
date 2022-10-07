@@ -1,12 +1,20 @@
 import { mog, Tag } from '@mexit/core'
 import { ProjectIconMex, RelativeTime } from '@mexit/shared'
+import { IconButton } from '@workduck-io/mex-components'
 import React from 'react'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
-import { LinkHeader, LinkShortenAndTagsWrapper, LinkTagSection, LinkTitleWrapper, LinkWrapper } from './Link.style'
+import {
+  LinkHeader,
+  LinkMetadataAndDelete,
+  LinkShortenAndTagsWrapper,
+  LinkTagSection,
+  LinkTitleWrapper,
+  LinkWrapper
+} from './Link.style'
 import ShortenURL from './ShortenURL'
 
 // * Get Favicon url
@@ -22,7 +30,7 @@ interface LinkProps {
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const favUrl = getFavicon(link.url)
   const tags = link.tags.map((t) => ({ value: t }))
-  const { getTags, addTag } = useLinkURLs()
+  const { getTags, addTag, deleteLink } = useLinkURLs()
 
   const toAddTags = getTags(link.tags)
 
@@ -42,6 +50,10 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
     addTag(link.url, tagStr)
   }
 
+  const onDeleteLink = (url: string) => {
+    deleteLink(url)
+  }
+
   return (
     <LinkWrapper>
       <LinkHeader>
@@ -51,7 +63,14 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
             {link.title}
           </LinkTitleWrapper>
         </Tooltip>
-        {link.createdAt && <RelativeTime prefix="Saved on" dateNum={link.createdAt} />}
+        <LinkMetadataAndDelete>
+          {link.createdAt && <RelativeTime prefix="Saved on" dateNum={link.createdAt} />}
+          <IconButton
+            title="Delete"
+            icon="ri:delete-bin-5-line"
+            onClick={() => onDeleteLink(link.url)}
+          />
+        </LinkMetadataAndDelete>
       </LinkHeader>
       <LinkShortenAndTagsWrapper>
         <ShortenURL link={link} />

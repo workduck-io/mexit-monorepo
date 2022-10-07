@@ -11,6 +11,7 @@ import {
   WORKSPACE_HEADER
 } from '@mexit/core'
 import create from 'zustand'
+import md5 from 'md5'
 import { useAuthStore } from '../Stores/useAuth'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import { applyFilters, FilterStore } from './useFilters'
@@ -24,7 +25,7 @@ export const useLinkURLs = () => {
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
 
-  const { saveLink } = useURLsAPI()
+  const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
   const getTags = (present: string[]) => {
     const linkTags = links.reduce((acc, link) => {
@@ -55,9 +56,38 @@ export const useLinkURLs = () => {
     setLinks(newLinks)
   }
 
+  const isDuplicateAlias = (alias: string): boolean => {
+    return !!links.some((l) => l.alias === alias)
+  }
+
+  const updateAlias = (linkurl: string, alias: string) => {
+    const newLinks = links.map((l) => {
+      if (l.url === linkurl) {
+        return { ...l, alias: alias }
+      }
+      return l
+    })
+
+    const newLink = newLinks.find((l) => l.url === linkurl)
+    saveLink(newLink)
+    mog('updateAlias', { linkurl, alias, newLinks })
+    setLinks(newLinks)
+  }
+
+  const deleteLink = (linkurl: string) => {
+    const toDelete = links.find((l) => l.url === linkurl)
+    const newLinks = links.filter((l) => l.url !== linkurl)
+    mog('deleteLink', { linkurl, toDelete, newLinks })
+    deleteLinkAPI(toDelete)
+    setLinks(newLinks)
+  }
+
   return {
     getTags,
-    addTag
+    addTag,
+    updateAlias,
+    isDuplicateAlias,
+    deleteLink
   }
 }
 
@@ -346,5 +376,21 @@ export const useURLsAPI = () => {
     return data
   }
 
-  return { getAllLinks, saveLink }
+  const deleteLink = async (link: Link) => {
+    const workspaceId = getWorkspaceId()
+    // Need hashed url
+    const hashedURL = md5(`${workspaceId}${link.url}`)
+    const data = await client
+      .delete(apiURLs.links.getLinkStat(hashedURL, getWorkspaceId()), {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        mog('delete Link', d)
+        return d
+      })
+    return data
+    // OOK
+  }
+
+  return { getAllLinks, saveLink, deleteLink }
 }

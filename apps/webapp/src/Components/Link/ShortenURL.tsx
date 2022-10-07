@@ -5,14 +5,18 @@ import { Icon } from '@iconify/react'
 import { Button } from '@workduck-io/mex-components'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import { useAuthStore } from '../../Stores/useAuth'
-import { apiURLs } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 import { Input } from '@mexit/shared'
 import { ShortenButton, ShortenSectionWrapper } from './ShortenURL.style'
 import { Tooltip } from '../FloatingElements/Tooltip'
+import { useLinkURLs } from '../../Hooks/useURLs'
+import toast from 'react-hot-toast'
 
 interface ShortenURLProps {
   link?: Link
 }
+
+const validLink = /^[a-z0-9]+$/i
 
 // TODO: Add a input to enter shorten url
 const ShortenURL = ({ link }: ShortenURLProps) => {
@@ -21,6 +25,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
   const isShortend = link?.alias !== undefined
   const [editable, setEditable] = useState(false)
   const [short, setShort] = useState(link?.alias)
+  const { updateAlias, isDuplicateAlias } = useLinkURLs()
 
   const handleShortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -38,7 +43,6 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
         setIsCopied(false)
       }, 2000)
     } else {
-      console.log('Shorten enabled')
       setEditable(true)
     }
   }
@@ -47,7 +51,17 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       e.stopPropagation()
-      console.log('Shorten here', { short })
+      const valid = validLink.test(short)
+      mog('handleSubmit', { valid, short })
+      if (short && !validLink.test(short)) {
+        toast.error('Invalid alias! Only alphanumeric characters are allowed.')
+        return
+      }
+      if (!isDuplicateAlias(short)) {
+        updateAlias(link?.url, short)
+      } else {
+        toast.error('Alias already exists')
+      }
       setEditable(false)
       reset()
       // }

@@ -155,6 +155,8 @@ export const apiURLs = {
   links: {
     getLinks: (workspaceId: string) => `https://url-staging.workduck.io/link/${workspaceId}/stats`,
     saveLink: `https://url-staging.workduck.io/link/shorten`,
+    getLinkStat: (linkId: string, workspaceId: string) =>
+      `https://url-staging.workduck.io/link/${workspaceId}/stats/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) =>
       `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
   }

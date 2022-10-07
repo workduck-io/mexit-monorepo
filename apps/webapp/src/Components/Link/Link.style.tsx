@@ -39,6 +39,24 @@ export const LinkTitleWrapper = styled.div`
   }
 `
 
+export const LinkMetadataAndDelete = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.small};
+  align-items: center;
+
+  ${Button} {
+    opacity: 0.5;
+    color: ${({ theme }) => theme.colors.palette.red};
+  }
+
+  &:hover {
+    ${Button} {
+      opacity: 1;
+    }
+  }
+`
+
 export const LinkShortenAndTagsWrapper = styled.div`
   display: flex;
   flex-direction: row;

@@ -41,11 +41,11 @@ const LinkView = () => {
 
   useEffect(() => {
     getAllLinks()
-    saveLink({
-      title: 'Magnus Hirschfeld',
-      url: 'https://en.wikipedia.org/wiki/Magnus_Hirschfeld',
-      tags: ['wiki', 'magnus hirschfeld']
-    })
+    // saveLink({
+    //   title: 'Magnus Hirschfeld',
+    //   url: 'https://en.wikipedia.org/wiki/Magnus_Hirschfeld',
+    //   tags: ['wiki', 'magnus hirschfeld']
+    // })
   }, [])
 
   const {
