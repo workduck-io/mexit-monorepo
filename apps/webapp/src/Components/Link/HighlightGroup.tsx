@@ -20,6 +20,8 @@ import {
 } from './Link.style'
 import { Icon } from '@iconify/react'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import useLoad from '../../Hooks/useLoad'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
 interface HighlightGroupProps {
   highlights?: SourceHighlights
@@ -44,7 +46,10 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
   ) : null
 }
 
-export const SingleHighlightWithToggle = ({ highlight }: { highlight: SingleHighlight }) => {
+export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: SingleHighlight; blockId: string }) => {
+  const { loadNode } = useLoad()
+  const { goTo } = useRouting()
+
   const [open, setOpen] = React.useState(false)
   // const showOpen =
   const highlightText = highlight.elementMetadata.saveableRange.text
@@ -56,11 +61,14 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: SingleHigh
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
   const openHighlight = () => {
+    const nodeid = highlight.nodeId
     // Pass
+    loadNode(nodeid, { highlightBlockId: blockId })
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
   return (
-    <SingleHighlightWrapper>
+    <SingleHighlightWrapper onDoubleClick={() => openHighlight()}>
       <HighlightText>{toShowText}</HighlightText>
       {willCollapse ? (
         <HighlightCollapsedToggle onClick={() => setOpen(!open)}>
@@ -73,10 +81,18 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: SingleHigh
 }
 
 const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProps) => {
-  const grouped = highlights ? groupBy(Object.values(highlights), 'nodeId') : {}
+  const { loadNode } = useLoad()
+  const { goTo } = useRouting()
+  const grouped = highlights ? groupBy(Object.entries(highlights), (val) => val[1].nodeId) : {}
   const { getPathFromNodeid } = useLinks()
 
   // mog('grouped Highlights', { grouped })
+
+  const openNote = (nodeid: string) => {
+    // Pass
+    loadNode(nodeid)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+  }
 
   return open && highlights ? (
     <HighlightGroupsWrapper>
@@ -84,15 +100,17 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
         const nodeHighlights = grouped[nodeId]
         const path = getPathFromNodeid(nodeId)
         const title = getTitleFromPath(path)
-        // mog('nodeHighlights', { nodeHighlights, path, title })
+        mog('nodeHighlights', { nodeHighlights, path, title })
         return (
           <HighlightGroupWrapper key={nodeId}>
-            <HighlightGroupHeader>
+            <HighlightGroupHeader onDoubleClick={() => openNote(nodeId)}>
               <Icon icon={fileList2Line} />
               {title}
             </HighlightGroupHeader>
-            {nodeHighlights.map((highlight, i) => {
-              return <SingleHighlightWithToggle key={`${highlight.nodeId}_${i}`} highlight={highlight} />
+            {nodeHighlights.map(([blockId, highlight], i) => {
+              return (
+                <SingleHighlightWithToggle key={`${highlight.nodeId}_${i}`} blockId={blockId} highlight={highlight} />
+              )
             })}
           </HighlightGroupWrapper>
         )
