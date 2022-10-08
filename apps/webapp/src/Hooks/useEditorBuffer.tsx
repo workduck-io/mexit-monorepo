@@ -15,6 +15,7 @@ import { useSnippets } from './useSnippets'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>
+  getBuffer: (nodeId: string) => NodeEditorContent
   add: (nodeid: string, val: NodeEditorContent) => void
   remove: (nodeid: string) => void
   clear: () => void
@@ -23,6 +24,10 @@ interface BufferStore {
 export const useBufferStore = create<BufferStore>((set, get) => ({
   buffer: {},
   add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
+  getBuffer: (nodeId) => {
+    const bufferVal = get().buffer?.[nodeId]
+    return bufferVal
+  },
   remove: (nodeid) => {
     const newBuffer = get().buffer
     if (newBuffer[nodeid]) delete newBuffer[nodeid]

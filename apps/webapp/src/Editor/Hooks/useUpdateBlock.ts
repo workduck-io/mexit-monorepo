@@ -31,14 +31,21 @@ const useUpdateBlock = () => {
     blockData: BlockDataType,
     useBuffer: boolean
   }) => {
-    const content = useContentStore.getState().getContent(noteId)?.content
+    const bufferContent = useBufferStore.getState().getBuffer(noteId)
+    const existingContent = useContentStore.getState().getContent(noteId)?.content;
+
+
+    const content = bufferContent || existingContent
+
     const updateInBuffer = options.useBuffer !== false
 
-    if (content) {
+    if (content?.length > 0) {
       const updatedContent = content.map(block => {
-        if (block.id === options.blockId) return {
-          ...block,
-          ...options.blockData
+        if (block.id === options.blockId) {
+          return {
+            ...block,
+            ...options.blockData
+          }
         }
 
         return block

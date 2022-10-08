@@ -326,6 +326,16 @@ const Tasks = () => {
     const todos = useTodoStore((store) => store.todos)
     const pC = useMemo(() => getPureContent(todo), [id, todos])
 
+    const controls = useMemo(() => ({
+      onChangePriority: (todoId: string, priority) => {
+        changePriority(todo, priority)
+      },
+      onChangeStatus: (todoId: string, status) => {
+        changeStatus(todo, status)
+      }
+    }), [])
+
+
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
 
@@ -347,6 +357,7 @@ const Tasks = () => {
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
           readOnly
+          controls={controls}
           parentNodeId={todo.nodeid}
         >
           <EditorPreviewRenderer
