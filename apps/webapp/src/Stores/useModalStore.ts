@@ -11,7 +11,8 @@ export enum ModalsType {
   share,
   help,
   template,
-  quickNew
+  quickNew,
+  previewNote
 }
 
 type ModalStoreType = {

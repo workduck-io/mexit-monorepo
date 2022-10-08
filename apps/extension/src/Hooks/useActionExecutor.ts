@@ -13,21 +13,16 @@ import {
   ELEMENT_TAG,
   getBlockMetadata,
   getNewDraftKey,
-  getUntitledDraftKey,
   ILink,
   MexitAction,
   mog,
-  parseSnippet,
   QuickLinkType,
   SEPARATOR
 } from '@mexit/core'
 
-import Action from '../Components/Action'
-import { StyledInput } from '../Components/Search/styled'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
-import { getMexHTMLDeserializer } from '../Utils/deserialize'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'

@@ -6,6 +6,7 @@ import HelpModal from '../Views/HelpModal'
 import FleetContainer from './FleetContainer'
 import ShareModal from './Mentions/ShareModal'
 import Lookup from './Modals/Lookup'
+import PreviewNoteModal from './PreviewNoteModal'
 import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
@@ -25,6 +26,7 @@ const Modals = () => {
       <ShareModal />
       <CreateReminderModal />
       <TaskViewModal />
+      <PreviewNoteModal />
       <FleetContainer />
     </>
   )

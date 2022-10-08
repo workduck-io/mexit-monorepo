@@ -97,7 +97,7 @@ export const useFocusBlock = () => {
   const focusBlock = (blockid: string, editorId?: string) => {
     try {
       const editor = editorId ? getPlateEditorRef(editorId) : getPlateEditorRef()
-      mog('editor', { editor })
+      mog('editor', { blockid, editorId, editor })
       if (editor) {
         const headingNode = findNode(editor, {
           at: [],
@@ -127,7 +127,7 @@ export const useFocusBlock = () => {
         }, 50)
       }
     } catch (e) {
-      console.log('select block error', e)
+      mog('select block error', { e })
     }
   }
 

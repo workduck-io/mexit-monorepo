@@ -89,7 +89,9 @@ export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
   display: flex;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
-  background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])} !important;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  width: 100%;
+  background: ${({ theme }) => transparentize(0.2, theme.colors.gray[9])} !important;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray[8]};
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.small};

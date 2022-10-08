@@ -58,7 +58,7 @@ const MexEditor = (props: MexEditorProps) => {
     if (editorRef && props?.options?.focusOptions) {
       selectEditor(editorRef, props.options.focusOptions)
     }
-    setInternalMetadata(props.meta)
+    if (props.meta) setInternalMetadata(props.meta)
   }, [editorRef, props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const { plugins, comboConfigData } = useComboboxConfig(props.editorId, props?.comboboxConfig, props?.components)

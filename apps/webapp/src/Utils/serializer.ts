@@ -7,7 +7,6 @@ import {
   generateElementMetadata,
   generateTempId,
   mappedKeys,
-  mog,
   PartialBy
 } from '@mexit/core'
 
