@@ -1,6 +1,7 @@
 import { Relative } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import styled from 'styled-components'
+import { transparentize } from 'polished'
 
 export const LinkWrapper = styled.div`
   display: flex;
@@ -73,9 +74,60 @@ export const LinkShortenAndTagsWrapper = styled.div`
   }
 `
 
+export const LinkShortenAndHighlightSection = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.small};
+  align-items: center;
+`
+
 export const LinkTagSection = styled.div`
   display: flex;
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
+`
+
+export const HighlightGroupToggleButton = styled.div``
+
+export const HighlightCollapsedToggle = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  align-items: center;
+  width: max-content;
+  color: ${({ theme }) => theme.colors.text.fade};
+`
+
+export const HighlightGroupHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: ${({ theme }) => theme.spacing.tiny};
+  color: ${({ theme }) => theme.colors.text.fade};
+`
+
+export const HighlightGroupsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.small} 0;
+`
+
+export const HighlightText = styled.div``
+
+export const HighlightGroupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
+export const SingleHighlightWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.small};
+  background-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[5])};
+  border-radius: ${({ theme }) => theme.borderRadius.tiny};
 `

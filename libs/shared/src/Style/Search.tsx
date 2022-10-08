@@ -398,14 +398,13 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         width: 100%;
         border: 1px solid transparent;
         transition: 0.3s ease;
+        overflow: hidden;
         ${selected &&
         css`
           transition: 0s ease;
           background-color: ${theme.colors.gray[8]};
           border: 1px solid ${theme.colors.primary} !important;
 
-          max-height: 400px;
-          overflow-y: auto;
           ${ResultTitle} {
             font-weight: bold;
             color: ${theme.colors.primary};

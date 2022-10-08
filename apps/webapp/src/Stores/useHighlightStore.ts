@@ -1,19 +1,33 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Contents, ElementHighlightMetadata, IDBStorage, ILink, mog, NodeContent, NodeEditorContent, SharedNode } from '@mexit/core'
+import {
+  Contents,
+  ElementHighlightMetadata,
+  IDBStorage,
+  ILink,
+  mog,
+  NodeContent,
+  NodeEditorContent,
+  SharedNode
+} from '@mexit/core'
 
 // import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
-interface Highlighted {
-  [sourceURL: string]: {
-    [blockId: string]: {
-      elementMetadata: ElementHighlightMetadata
-      nodeId: string
-      shared?: boolean
-    }
-  }
+export interface SingleHighlight {
+  elementMetadata: ElementHighlightMetadata
+  nodeId: string
+  shared?: boolean
 }
+
+export interface SourceHighlights {
+  [blockId: string]: SingleHighlight
+}
+
+interface Highlighted {
+  [sourceURL: string]: SourceHighlights
+}
+
 interface HighlightStore {
   /*
    * The current ids for specific editors to highlight
@@ -23,6 +37,77 @@ interface HighlightStore {
   addHighlightedBlock: (nodeId: string, content: NodeEditorContent, url: string) => void
   clearHighlightedBlock: (url: string, blockId: string) => void
   clearAllHighlightedBlocks: () => void
+}
+
+export const sampleHighlightData = {
+  'https://sahil-shubham.in/about/': {
+    TEMP_gHyML: {
+      elementMetadata: {
+        type: 'highlight',
+        saveableRange: {
+          startMeta: {
+            parentTagName: 'P',
+            parentIndex: 1,
+            textOffset: 80
+          },
+          endMeta: {
+            parentTagName: 'P',
+            parentIndex: 2,
+            textOffset: 215
+          },
+          text: 'ks and crannies of containers and container orchestration. You also have a high chance of catching me writing css in an effort to make something “just right”. \nI also spend an ample amount of time with people from Kharagpur Open Source Society (KOSS), we are just a bunch of students passionate about FOSS and building things just for the fun  of it. We also conduct workshop',
+          id: '0f8b52f1-7f6a-4ccb-b814-f6c52634d19b'
+        },
+        sourceUrl: 'https://sahil-shubham.in/about/'
+      },
+      nodeId: 'NODE_RWKHzd4BRE9bwNJqBR9x7',
+      shared: false
+    },
+    TEMP_aWbi9: {
+      elementMetadata: {
+        type: 'highlight',
+        saveableRange: {
+          startMeta: {
+            parentTagName: 'P',
+            parentIndex: 0,
+            textOffset: 0
+          },
+          endMeta: {
+            parentTagName: 'P',
+            parentIndex: 2,
+            textOffset: 26
+          },
+          text: "I'm Sahil, a third year undergraduate student at IIT Kharagpur. I'm an Open Source enthusiast, and it is the reason for my love for programming. I mostly spend my time writing half broken code in JavaScript, sometimes Python, and recently started dabbling with Go. \nCurrently spending most of my time writing yaml and trying to understand the nooks and crannies of containers and container orchestration. You also have a high chance of catching me writing css in an effort to make something “just right”. \nI also spend an ample amou",
+          id: '087ab0d1-5dec-4f42-a8d0-ca3a7727b21d'
+        },
+        sourceUrl: 'https://sahil-shubham.in/about/'
+      },
+      nodeId: 'NODE_RwGHXecFyMMF3LdhAMYaM',
+      shared: false
+    },
+    TEMP_TBbHt: {
+      elementMetadata: {
+        type: 'highlight',
+        saveableRange: {
+          startMeta: {
+            parentTagName: 'P',
+            parentIndex: 3,
+            textOffset: 0
+          },
+          endMeta: {
+            parentTagName: 'P',
+            parentIndex: 3,
+            textOffset: 359
+          },
+          text: "At almost any time, I am listening to music. Over the time, I have gone from lofi to classical and finally been listening to a lot of jazz. I'm in love with Japanese jazz of the 90s, Jiro Inagaki, Ryo Fukui, and Indigo Jam Unit just to name a few of my favourites. I have also picked up neo-psychedelic music from a few people around me. Here’s one of my pers",
+          id: '116eeda9-2592-4035-a2bf-2dd045529232'
+        },
+        sourceUrl: 'https://sahil-shubham.in/about/'
+      },
+      nodeId: 'NODE_RwGHXecFyMMF3LdhAMYaM',
+      shared: false
+    }
+  }
 }
 
 export const useHighlightStore = create<HighlightStore>(

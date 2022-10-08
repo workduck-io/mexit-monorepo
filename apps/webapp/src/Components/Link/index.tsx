@@ -7,9 +7,11 @@ import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
+import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'
 import {
   LinkHeader,
   LinkMetadataAndDelete,
+  LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
   LinkTagSection,
   LinkTitleWrapper,
@@ -31,6 +33,8 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const favUrl = getFavicon(link.url)
   const tags = link.tags.map((t) => ({ value: t }))
   const { getTags, addTag, deleteLink, getHighlights } = useLinkURLs()
+
+  const [highlightsOpen, setHighlightsOpen] = React.useState(false)
 
   const toAddTags = getTags(link.tags)
 
@@ -71,12 +75,16 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         </LinkMetadataAndDelete>
       </LinkHeader>
       <LinkShortenAndTagsWrapper>
-        <ShortenURL link={link} />
+        <LinkShortenAndHighlightSection>
+          <HighlightGroupToggle open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
+          <ShortenURL link={link} />
+        </LinkShortenAndHighlightSection>
         <LinkTagSection>
           <TagsLabel tags={tags} onClick={addTagFilter} />
           <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>
+      <HighlightGroups open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
     </LinkWrapper>
   )
 }

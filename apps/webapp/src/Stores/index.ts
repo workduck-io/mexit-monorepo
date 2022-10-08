@@ -7,6 +7,7 @@ import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useReminderStore } from './useReminderStore'
 import { nanoid } from 'nanoid'
+import { useHighlightStore } from './useHighlightStore'
 
 // This is required for event driven messaging, as the tabs or in our
 // case a tab and a iframe don't know about their state updates, we
@@ -28,6 +29,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('snippets', useSnippetStore, { ref: 'share-snippets' })
   share('reminders', useReminderStore, { ref: 'share-reminders' })
   share('publicNodes', useDataStore, { ref: 'share-publicNodes' })
+  share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
 }
 
 export default {}
