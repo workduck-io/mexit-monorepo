@@ -34,7 +34,7 @@ interface EditorPreviewRendererProps {
   draftView?: boolean
 }
 
-const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean }>`
+const PreviewStyles = styled(EditorStyles) <{ draftView?: boolean, readOnly?: boolean }>`
   ${({ draftView }) =>
     draftView &&
     css`
@@ -43,11 +43,13 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean }>`
       }
     `}
 
-  overflow: hidden;
-
+  ${({ readOnly }) => readOnly && css`
   ${TodoContainer}, button, input, textarea, select, option {
     pointer-events: none;
   }
+  `} 
+  overflow: hidden;
+
 `
 
 const EditorPreviewRenderer = ({
@@ -67,9 +69,10 @@ const EditorPreviewRenderer = ({
       style: noStyle
         ? {}
         : {
-            padding: '15px'
-          },
+          padding: '15px'
+        },
       readOnly,
+      spellCheck: false,
       autoFocus: !readOnly
     }),
     [readOnly]
@@ -89,7 +92,7 @@ const EditorPreviewRenderer = ({
     }
   }
 
-  const { show } = useContextMenu({ id: MENU_ID})
+  const { show } = useContextMenu({ id: MENU_ID })
   const plugins = [
     ...oldPlugins,
     {
@@ -103,7 +106,7 @@ const EditorPreviewRenderer = ({
       }
     }
   ]
-  
+
   // We get memoized plugins
   const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
   const { focusBlock } = useFocusBlock()
@@ -133,7 +136,7 @@ const EditorPreviewRenderer = ({
   return (
     <ErrorBoundary fallbackRender={() => <></>}>
       <PreviewStyles
-        readOnly={noMouseEvents}
+        readOnly={noMouseEvents && readOnly}
         draftView={draftView}
         onClick={(ev) => {
           if (onDoubleClick && ev.detail === 2) {

@@ -53,7 +53,6 @@ export interface MexEditorProps {
 }
 
 export const MexEditorBase = (props: MexEditorProps) => {
-  mog('EDITOR IS', { props })
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
   const isEmpty = useMultipleEditors((store) => store.isEmpty)

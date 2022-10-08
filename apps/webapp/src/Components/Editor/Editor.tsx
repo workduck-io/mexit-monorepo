@@ -54,6 +54,7 @@ const Editor: React.FC<EditorProps> = ({
 
   const editorOptions: MexEditorOptions = {
     editableProps: {
+      spellCheck: false,
       readOnly,
       // placeholder: "Let's try something here...",
       autoFocus: options?.editableProps?.autoFocus ?? true
