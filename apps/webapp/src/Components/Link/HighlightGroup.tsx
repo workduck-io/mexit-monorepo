@@ -100,7 +100,7 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
         const nodeHighlights = grouped[nodeId]
         const path = getPathFromNodeid(nodeId)
         const title = getTitleFromPath(path)
-        mog('nodeHighlights', { nodeHighlights, path, title })
+        // mog('nodeHighlights', { nodeHighlights, path, title })
         return (
           <HighlightGroupWrapper key={nodeId}>
             <HighlightGroupHeader onDoubleClick={() => openNote(nodeId)}>

@@ -16,7 +16,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import { Link, useLinkStore } from '../Stores/useLinkStore'
 import { applyFilters, FilterStore } from './useFilters'
 import { useDataStore } from '../Stores/useDataStore'
-import { linkFilterFunctions } from './useFilterFunctions'
+import { useLinkFilterFunctions } from './useFilterFunctions'
 import { client } from '@workduck-io/dwindle'
 import { URL_DOMAIN_REG } from '../Utils/constants'
 import { sampleHighlightData, useHighlightStore } from '../Stores/useHighlightStore'
@@ -131,6 +131,8 @@ export const useURLFilters = () => {
   const globalJoin = useURLsFilterStore((state) => state.globalJoin)
   const tags = useDataStore((state) => state.tags)
   const links = useLinkStore((state) => state.links)
+  const highlights = useHighlightStore((state) => state.highlighted)
+  const linkFilterFunctions = useLinkFilterFunctions()
 
   const resetFilters = () => {
     setFilters([])
@@ -184,15 +186,28 @@ export const useURLFilters = () => {
       return acc
     }, 0)
 
-    const hasShortenedFilter = {
+    const highlightsCount = links.reduce((acc, link) => {
+      if (highlights[link.url]) {
+        acc += 1
+      }
+      return acc
+    }, 0)
+
+    const hasHighlightsFilter = {
       type: 'has' as const,
-      label: 'Shortend',
+      label: 'Has',
       options: [
         {
+          id: 'block_highlights',
+          label: 'Highlights',
+          count: highlightsCount,
+          value: 'highlights'
+        },
+        {
           id: 'block_shortend',
-          label: 'Shortened',
+          label: 'Shortened URL',
           count: shortendCount,
-          value: 'block_todo'
+          value: 'alias'
         }
       ]
     }
@@ -231,9 +246,10 @@ export const useURLFilters = () => {
       } as FilterTypeWithOptions
     )
 
-    mog('domains', { rankedDomains, domainFilters })
+    // mog('domains', { rankedDomains, domainFilters })
+    //
 
-    return [tagFilters, domainFilters, hasShortenedFilter]
+    return [tagFilters, domainFilters, hasHighlightsFilter]
   }
 
   const applyCurrentFilters = (results: Link[]) => {

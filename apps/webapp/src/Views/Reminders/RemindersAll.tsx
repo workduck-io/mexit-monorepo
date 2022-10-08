@@ -205,7 +205,7 @@ const useReminderFilters = () => {
             label: 'Task',
             //'ri:ri-task-line',
             count: todoRemindersLen,
-            value: 'block_todo'
+            value: 'todo'
           }
         ]
         // filter: (reminder: Reminder) => reminder.todoid !== undefined

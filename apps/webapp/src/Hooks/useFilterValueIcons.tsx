@@ -59,7 +59,16 @@ export const useFilterIcons = () => {
         return { type: 'ICON', value: 'ri:checkbox-circle-line' }
 
       case 'has':
-        return { type: 'ICON', value: 'ri:checkbox-circle-line' }
+        switch (value) {
+          case 'todo':
+            return { type: 'ICON', value: 'ri:checkbox-circle-line' }
+          case 'highlights':
+            return { type: 'ICON', value: 'ri:mark-pen-line' }
+          case 'alias':
+            return { type: 'ICON', value: 'ri:link-m' }
+          default:
+            return { type: 'ICON', value: 'ri:checkbox-circle-line' }
+        }
 
       case 'domain':
         return { type: 'ICON', value: 'ri:earth-line' }
