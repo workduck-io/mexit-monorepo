@@ -82,18 +82,17 @@ const PreviewNoteModal = () => {
     >
       <PlateProvider id={modalData?.noteId}>
         <PreviewNoteContainer>
-          {/* <ModalHeader>{noteTitle}</ModalHeader> */}
           <EditorPreviewControls hasTags={hasTags(modalData?.noteId)}>
             {
               <PreviewActionHeader>
                 <EditorPreviewNoteName onClick={onClickNoteTitle}>
-                  <Icon icon={noteLink?.icon} />
+                  <MexIcon height={20} width={20} noHover icon={noteLink?.icon || 'ri:file-list-2-line'} />
                   {noteTitle}
                   {namespace && <NamespaceTag namespace={namespace} />}
                 </EditorPreviewNoteName>
                 {icon && iconTooltip && (
-                  <Tooltip key="hello" content={iconTooltip}>
-                    <MexIcon color={theme.colors.gray[5]} noHover icon={icon} height="14" width="14" />
+                  <Tooltip key="close-icon" content={iconTooltip}>
+                    <MexIcon color={theme.colors.gray[5]} noHover icon={icon} height={16} width={16} />
                   </Tooltip>
                 )}
               </PreviewActionHeader>
@@ -109,7 +108,7 @@ const PreviewNoteModal = () => {
                   onRequestClose()
                 }}
               >
-                <Icon icon={closeCircleLine} />
+                <MexIcon noHover height={20} width={20} icon={closeCircleLine} />
               </Button>
             </PreviewActionHeader>
           </EditorPreviewControls>

@@ -80,7 +80,7 @@ export const TodoBase = ({ parentNodeId, element, todoid, children, readOnly, oi
       onMouseLeave={() => !readOnly && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
-        <StyledTodoStatus animate={animate} status={todo.metadata.status} disabled={readOnly} onClick={changeStatus} />
+        <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
       </CheckBoxWrapper>
 
       <TodoText contentEditable={!readOnly} suppressContentEditableWarning>
