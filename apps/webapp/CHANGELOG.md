@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.13.0
+
+### Minor Changes
+
+- a9b9039a: Added ability to update tasks from tasks view through previews
+
 ## 0.12.1
 
 ### Patch Changes
