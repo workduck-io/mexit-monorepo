@@ -19,11 +19,13 @@ import { useDataStore } from '../Stores/useDataStore'
 import { linkFilterFunctions } from './useFilterFunctions'
 import { client } from '@workduck-io/dwindle'
 import { URL_DOMAIN_REG } from '../Utils/constants'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
+  const highlights = useHighlightStore((state) => state.highlighted)
 
   const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
@@ -40,6 +42,11 @@ export const useLinkURLs = () => {
       .map((t) => ({ value: t }))
 
     return mergedTags
+  }
+
+  const getHighlights = (link: Link) => {
+    const highlightsStatic = useHighlightStore.getState().highlighted
+    mog('getting highlights for', { link, highlights, highlightsStatic })
   }
 
   const addTag = (linkurl: string, tag: string) => {
@@ -87,7 +94,8 @@ export const useLinkURLs = () => {
     addTag,
     updateAlias,
     isDuplicateAlias,
-    deleteLink
+    deleteLink,
+    getHighlights
   }
 }
 

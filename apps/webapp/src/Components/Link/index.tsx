@@ -30,9 +30,11 @@ interface LinkProps {
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const favUrl = getFavicon(link.url)
   const tags = link.tags.map((t) => ({ value: t }))
-  const { getTags, addTag, deleteLink } = useLinkURLs()
+  const { getTags, addTag, deleteLink, getHighlights } = useLinkURLs()
 
   const toAddTags = getTags(link.tags)
+
+  const highlights = getHighlights(link)
 
   const onAddNewTag = (tag: Tag) => {
     // mog('onAddNewTag', { tag })
@@ -65,11 +67,7 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         </Tooltip>
         <LinkMetadataAndDelete>
           {link.createdAt && <RelativeTime prefix="Saved on" dateNum={link.createdAt} />}
-          <IconButton
-            title="Delete"
-            icon="ri:delete-bin-5-line"
-            onClick={() => onDeleteLink(link.url)}
-          />
+          <IconButton title="Delete" icon="ri:delete-bin-5-line" onClick={() => onDeleteLink(link.url)} />
         </LinkMetadataAndDelete>
       </LinkHeader>
       <LinkShortenAndTagsWrapper>

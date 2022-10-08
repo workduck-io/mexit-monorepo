@@ -30,6 +30,7 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 
 export default function Chotu() {
   const [parent, setParent] = useState<any>(null)
@@ -41,6 +42,7 @@ export default function Chotu() {
   const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
+  const { highlighted } = useHighlightStore()
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const { cache } = useUserCacheStore()
