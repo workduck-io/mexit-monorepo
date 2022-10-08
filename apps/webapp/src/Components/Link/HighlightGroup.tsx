@@ -4,13 +4,16 @@ import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import markPenLine from '@iconify/icons-ri/mark-pen-line'
 import { SingleHighlight, SourceHighlights } from '../../Stores/useHighlightStore'
 import { Link } from '../../Stores/useLinkStore'
 import { mog } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
+  HighlightCount,
   HighlightGroupHeader,
   HighlightGroupsWrapper,
+  HighlightGroupToggleButton,
   HighlightGroupWrapper,
   HighlightText,
   SingleHighlightWrapper
@@ -32,7 +35,13 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
     setOpen(!open)
   }
 
-  return highlightCount > 0 ? <div onClick={() => toggleOpen()}>Highlights {highlightCount}</div> : null
+  return highlightCount > 0 ? (
+    <HighlightGroupToggleButton onClick={() => toggleOpen()}>
+      <Icon icon={markPenLine} />
+      Highlights <HighlightCount>{highlightCount}</HighlightCount>
+      <Icon icon={open ? arrowUpSLine : arrowDownSLine} />
+    </HighlightGroupToggleButton>
+  ) : null
 }
 
 export const SingleHighlightWithToggle = ({ highlight }: { highlight: SingleHighlight }) => {
@@ -67,7 +76,7 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
   const grouped = highlights ? groupBy(Object.values(highlights), 'nodeId') : {}
   const { getPathFromNodeid } = useLinks()
 
-  mog('grouped Highlights', { grouped })
+  // mog('grouped Highlights', { grouped })
 
   return open && highlights ? (
     <HighlightGroupsWrapper>
@@ -75,7 +84,7 @@ const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProp
         const nodeHighlights = grouped[nodeId]
         const path = getPathFromNodeid(nodeId)
         const title = getTitleFromPath(path)
-        mog('nodeHighlights', { nodeHighlights, path, title })
+        // mog('nodeHighlights', { nodeHighlights, path, title })
         return (
           <HighlightGroupWrapper key={nodeId}>
             <HighlightGroupHeader>

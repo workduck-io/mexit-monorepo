@@ -12,7 +12,7 @@ export const ShortenButton = styled(Button)<ComponentPropsWithRef<typeof Button>
 export const ShortenSectionWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.tiny};
   align-items: center;
   .showOnHover {
     transition: width 0.2s ease-in-out;

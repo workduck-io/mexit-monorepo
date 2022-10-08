@@ -76,8 +76,8 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
       </LinkHeader>
       <LinkShortenAndTagsWrapper>
         <LinkShortenAndHighlightSection>
-          <HighlightGroupToggle open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
           <ShortenURL link={link} />
+          <HighlightGroupToggle open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
         </LinkShortenAndHighlightSection>
         <LinkTagSection>
           <TagsLabel tags={tags} onClick={addTagFilter} />

@@ -77,7 +77,7 @@ export const LinkShortenAndTagsWrapper = styled.div`
 export const LinkShortenAndHighlightSection = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.medium};
   align-items: center;
 `
 
@@ -88,7 +88,21 @@ export const LinkTagSection = styled.div`
   align-items: center;
 `
 
-export const HighlightGroupToggleButton = styled.div``
+export const HighlightGroupToggleButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  align-items: center;
+  cursor: pointer;
+  background: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+`
+
+export const HighlightCount = styled.div`
+  color: ${({ theme }) => theme.colors.text.heading};
+  font-weight: 600;
+`
 
 export const HighlightCollapsedToggle = styled.div`
   display: flex;
@@ -104,6 +118,8 @@ export const HighlightGroupHeader = styled.div`
   flex-direction: row;
   align-items: center;
 
+  padding-left: ${({ theme }) => theme.spacing.medium};
+
   gap: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
 `
@@ -111,7 +127,7 @@ export const HighlightGroupHeader = styled.div`
 export const HighlightGroupsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.medium};
+  gap: ${({ theme }) => theme.spacing.large};
   padding: ${({ theme }) => theme.spacing.small} 0;
 `
 
