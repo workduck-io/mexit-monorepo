@@ -113,7 +113,7 @@ const PreviewNoteModal = () => {
               </Button>
             </PreviewActionHeader>
           </EditorPreviewControls>
-          <Editor content={content} autoFocus nodeUID={modalData?.noteId} />
+          <Editor focusBlockId={modalData?.blockId} content={content} onChange={onChange} options={{ focusOptions: false }} autoFocus nodeUID={modalData?.noteId} />
         </PreviewNoteContainer>
       </PlateProvider>
     </Modal>

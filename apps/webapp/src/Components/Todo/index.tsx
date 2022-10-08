@@ -61,6 +61,7 @@ const Todo = (props: any) => {
       {...attributes}
       readOnly={readOnly}
       oid={'EditorTodo'}
+      element={element}
       todoid={element.id}
       parentNodeId={nodeid}
       controls={{

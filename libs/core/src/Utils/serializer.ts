@@ -22,7 +22,9 @@ export const directPropertyKeys = [
   'question',
   'answer',
   'actionContext',
-  'blockMeta'
+  'blockMeta',
+  'status',
+  'priority'
 ]
 export const PropKeysArray = [...directPropertyKeys] as const
 export type PropKeys = typeof PropKeysArray[number]

@@ -36,6 +36,7 @@ import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useOpenReminderModal } from '../Reminders/CreateReminderModal'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
+import { useFocusBlock } from '../../Stores/useFocusBlock'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
@@ -49,6 +50,7 @@ interface EditorProps {
   nodePath?: string
   nodeUID: string
   readOnly?: boolean
+  focusBlockId?: string // * Block to focus
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
   options?: any
@@ -61,6 +63,7 @@ const Editor: React.FC<EditorProps> = ({
   content,
   readOnly,
   onChange,
+  focusBlockId,
   autoFocus,
   onAutoSave,
   options
@@ -82,6 +85,9 @@ const Editor: React.FC<EditorProps> = ({
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
+
+  const { focusBlock } = useFocusBlock()
+
 
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
@@ -128,29 +134,29 @@ const Editor: React.FC<EditorProps> = ({
     () =>
       userDetails
         ? [
-            {
-              value: userDetails.userID,
-              text: `${userDetails.alias} (you)`,
-              icon: 'ri:user-line',
-              type: QuickLinkType.mentions
-            },
-            ...mentionable
-              .filter((m) => m.alias !== undefined)
-              .filter((m) => m.userID !== userDetails.userID)
-              .map((m) => ({
-                value: m.userID,
-                text: m.alias,
-                icon: 'ri:user-line',
-                type: QuickLinkType.mentions
-              })),
-            ...invitedUsers.map((m) => ({
-              value: m.alias,
+          {
+            value: userDetails.userID,
+            text: `${userDetails.alias} (you)`,
+            icon: 'ri:user-line',
+            type: QuickLinkType.mentions
+          },
+          ...mentionable
+            .filter((m) => m.alias !== undefined)
+            .filter((m) => m.userID !== userDetails.userID)
+            .map((m) => ({
+              value: m.userID,
               text: m.alias,
               icon: 'ri:user-line',
-              type: QuickLinkType.mentions,
-              additional: { email: m.email }
-            }))
-          ]
+              type: QuickLinkType.mentions
+            })),
+          ...invitedUsers.map((m) => ({
+            value: m.alias,
+            text: m.alias,
+            icon: 'ri:user-line',
+            type: QuickLinkType.mentions,
+            additional: { email: m.email }
+          }))
+        ]
         : [],
     [mentionable, invitedUsers, userDetails]
   )
@@ -188,17 +194,17 @@ const Editor: React.FC<EditorProps> = ({
       },
       mention: !options?.exclude?.mentions
         ? {
-            slateElementType: ELEMENT_MENTION,
-            onItemInsert: (alias) => {
-              mog('Inserted new item', { alias })
-              grantUserAccessOnMention(alias, nodeid)
-            },
-            newItemHandler: (newAlias) => {
-              prefillShareModal('invite', { alias: newAlias, fromEditor: true })
-              return newAlias
-            },
-            renderElement: TagComboboxItem
-          }
+          slateElementType: ELEMENT_MENTION,
+          onItemInsert: (alias) => {
+            mog('Inserted new item', { alias })
+            grantUserAccessOnMention(alias, nodeid)
+          },
+          newItemHandler: (newAlias) => {
+            prefillShareModal('invite', { alias: newAlias, fromEditor: true })
+            return newAlias
+          },
+          renderElement: TagComboboxItem
+        }
         : undefined
     },
     internal: {
@@ -267,17 +273,23 @@ const Editor: React.FC<EditorProps> = ({
     }
   }
 
+  useEffect(() => {
+    if (focusBlockId) {
+      focusBlock(focusBlockId, nodeUID)
+    }
+  }, [focusBlockId, nodeUID])
+
   comboOnChangeConfig = options?.exclude?.mentions
     ? comboOnChangeConfig
     : {
-        ...comboOnChangeConfig,
-        mention: {
-          cbKey: ComboboxKey.MENTION,
-          trigger: '@',
-          data: mentions,
-          icon: 'ri:at-line'
-        }
+      ...comboOnChangeConfig,
+      mention: {
+        cbKey: ComboboxKey.MENTION,
+        trigger: '@',
+        data: mentions,
+        icon: 'ri:at-line'
       }
+    }
 
   useEditorChange(nodeUID, content)
 
@@ -285,9 +297,9 @@ const Editor: React.FC<EditorProps> = ({
     editableProps: {
       readOnly,
       // placeholder: "Let's try something here...",
-      autoFocus: true
+      autoFocus: options?.editableProps?.autoFocus ?? true
     },
-    focusOptions: {
+    focusOptions: options?.focusOptions ?? {
       edge: 'start',
       focus: true
     },

@@ -328,7 +328,7 @@ const Tasks = () => {
 
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
-    // mog('RenderTodo', { id, todo, dragging, sidebar })
+
     return (
       <TaskCard
         ref={selectedCard && id === selectedCard.id ? selectedRef : null}

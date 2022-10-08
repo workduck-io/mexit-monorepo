@@ -1,6 +1,7 @@
 import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 import React, { useEffect, useMemo, useState } from 'react'
+import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import PrioritySelect from './PrioritySelect'
 
@@ -13,6 +14,7 @@ export interface TodoControls {
 
 interface TodoProps {
   parentNodeId: string
+  element?: any
   todoid: string
   oid?: string
   controls?: TodoControls
@@ -21,11 +23,12 @@ interface TodoProps {
   showDelete?: boolean
 }
 
-export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
+export const TodoBase = ({ parentNodeId, element, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
 
   const [animate, setAnimate] = useState(false)
+  const { insertInEditor } = useUpdateBlock()
 
   const updatePriority = useTodoStore((store) => store.updatePriorityOfTodo)
   const updateStatus = useTodoStore((store) => store.updateStatusOfTodo)
@@ -47,14 +50,22 @@ export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, contro
 
   const onPriorityChange = (priority: PriorityDataType) => {
     if (controls && controls.onChangePriority) controls.onChangePriority(todoid, priority.type)
-    else updatePriority(parentNodeId, todoid, priority.type)
+    else {
+      updatePriority(parentNodeId, todoid, priority.type)
+      element && insertInEditor(element, { priority: priority.type })
+    }
     setAnimate(true)
   }
 
   const changeStatus = () => {
     if (readOnly) return
-    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, getNextStatus(todo.metadata.status))
-    else updateStatus(parentNodeId, todoid, getNextStatus(todo.metadata.status))
+    const nextStatus = getNextStatus(todo.metadata.status);
+
+    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, nextStatus)
+    else {
+      element && insertInEditor(element, { status: nextStatus })
+      updateStatus(parentNodeId, todoid, nextStatus)
+    }
     setAnimate(true)
   }
 
