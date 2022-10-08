@@ -398,7 +398,7 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         width: 100%;
         border: 1px solid transparent;
         transition: 0.3s ease;
-        overflow: hidden;
+        overflow: visible;
         ${selected &&
         css`
           transition: 0s ease;

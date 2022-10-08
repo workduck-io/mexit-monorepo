@@ -32,7 +32,7 @@ interface LinkProps {
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const favUrl = getFavicon(link.url)
   const tags = link.tags.map((t) => ({ value: t }))
-  const { getTags, addTag, deleteLink, getHighlights } = useLinkURLs()
+  const { getTags, addTag, removeTag, deleteLink, getHighlights } = useLinkURLs()
 
   const [highlightsOpen, setHighlightsOpen] = React.useState(false)
 
@@ -54,6 +54,10 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
 
   const onAddCreateTag = (tagStr: string) => {
     addTag(link.url, tagStr)
+  }
+
+  const onRemoveTag = (tagStr: string) => {
+    removeTag(link.url, tagStr)
   }
 
   const onDeleteLink = (url: string) => {
@@ -80,7 +84,7 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
           <HighlightGroupToggle open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
         </LinkShortenAndHighlightSection>
         <LinkTagSection>
-          <TagsLabel tags={tags} onClick={addTagFilter} />
+          <TagsLabel tags={tags} onClick={addTagFilter} onDelete={(val: string) => onRemoveTag(val)} />
           <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>

@@ -87,7 +87,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
       </Tooltip>
       {isShortend && (
         <Tooltip content={'Edit Shortened URL'}>
-          <Icon className="showOnHover" onClick={() => setEditable(true)} icon={edit2Line} />
+          <Icon className="showOnHoverIcon" onClick={() => setEditable(true)} icon={edit2Line} />
         </Tooltip>
       )}
     </ShortenSectionWrapper>

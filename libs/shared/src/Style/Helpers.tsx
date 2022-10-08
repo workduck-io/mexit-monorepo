@@ -13,6 +13,32 @@ export const HoverFade = css`
   }
 `
 
+export const ShowOnHoverIconStyles = css`
+  position: relative;
+  .showOnHoverIcon {
+    z-index: 10;
+    position: absolute;
+    right: 0;
+    transition: right 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    background-color: ${({ theme }) => theme.colors.gray[7]};
+    border-radius: ${({ theme }) => theme.borderRadius.tiny};
+    width: 0rem;
+    overflow: hidden;
+    color: ${({ theme }) => theme.colors.text.fade};
+    padding: 0.25rem;
+    height: 1.5rem;
+    opacity: 0;
+  }
+
+  &:hover {
+    .showOnHoverIcon {
+      right: -1.45em;
+      width: 1.5rem;
+      opacity: 1;
+    }
+  }
+`
+
 export const SubtleGlow = css`
   background-color: ${({ theme }) => theme.colors.primary};
   box-shadow: 0px 2px 6px ${({ theme }) => theme.colors.primary};

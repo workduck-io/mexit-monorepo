@@ -1,3 +1,4 @@
+import { ShowOnHoverIconStyles } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import { ComponentPropsWithRef } from 'react'
 import styled from 'styled-components'
@@ -14,17 +15,5 @@ export const ShortenSectionWrapper = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.tiny};
   align-items: center;
-  .showOnHover {
-    transition: width 0.2s ease-in-out;
-    margin-left: ${({ theme }) => theme.spacing.tiny};
-    width: 0%;
-    overflow: hidden;
-    color: ${({ theme }) => theme.colors.text.fade};
-  }
-
-  &:hover {
-    .showOnHover {
-      width: initial;
-    }
-  }
+  ${ShowOnHoverIconStyles}
 `

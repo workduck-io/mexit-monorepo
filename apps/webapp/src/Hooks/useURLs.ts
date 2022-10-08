@@ -49,7 +49,7 @@ export const useLinkURLs = () => {
     const highlightOfUrl = _highlights[link.url]
 
     if (highlightOfUrl) {
-      mog('getting highlights for', { link, highlightOfUrl, _highlights })
+      // mog('getting highlights for', { link, highlightOfUrl, _highlights })
       return highlightOfUrl
     }
   }
@@ -65,6 +65,20 @@ export const useLinkURLs = () => {
     const newLink = newLinks.find((l) => l.url === linkurl)
     saveLink(newLink)
     mog('addTag', { linkurl, tag, newLinks })
+    setLinks(newLinks)
+  }
+
+  const removeTag = (linkurl: string, tag: string) => {
+    const newLinks = links.map((l) => {
+      if (l.url === linkurl) {
+        return { ...l, tags: l.tags.filter((t) => t !== tag) }
+      }
+      return l
+    })
+
+    const newLink = newLinks.find((l) => l.url === linkurl)
+    saveLink(newLink)
+    mog('removeTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
 
@@ -97,6 +111,7 @@ export const useLinkURLs = () => {
   return {
     getTags,
     addTag,
+    removeTag,
     updateAlias,
     isDuplicateAlias,
     deleteLink,

@@ -1,11 +1,18 @@
 import React from 'react'
 
-import { Tag } from '@mexit/core'
-import { TagFlex, TagsFlex } from '@mexit/shared'
+import { mog, Tag } from '@mexit/core'
+import { TagFlex, TagsFlex, TagFlexText, IconButton } from '@mexit/shared'
 
 import { NavigationType, useRouting, ROUTE_PATHS } from '../../Hooks/useRouting'
+import { Icon } from '@iconify/react'
 
-const TagLabel = ({ tag, onClick }: { tag: Tag; onClick?: (tag: string) => void }) => {
+interface TagLabelProps {
+  tag: Tag
+  onClick?: (tag: string) => void
+  onDelete?: (tag: string) => void
+}
+
+const TagLabel = ({ tag, onClick, onDelete }: TagLabelProps) => {
   const { goTo } = useRouting()
   // const isSpotlight = useSpotlightContext()
 
@@ -17,23 +24,42 @@ const TagLabel = ({ tag, onClick }: { tag: Tag; onClick?: (tag: string) => void 
   }
 
   return (
-    <TagFlex
-      onClick={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        onClickTag(tag.value)
-      }}
-    >
-      #{tag.value}
+    <TagFlex>
+      <TagFlexText
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          onClickTag(tag.value)
+        }}
+      >
+        #{tag.value}
+      </TagFlexText>
+      {onDelete && (
+        <Icon
+          icon="ri:close-line"
+          className="showOnHoverIcon"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onDelete(tag.value)
+          }}
+        />
+      )}
     </TagFlex>
   )
 }
 
-export const TagsLabel = ({ tags, onClick }: { tags: Tag[]; onClick?: (tag: string) => void }) => {
+interface TagsLabelProps {
+  tags: Tag[]
+  onClick?: (tag: string) => void
+  onDelete?: (tag: string) => void
+}
+
+export const TagsLabel = ({ tags, onClick, onDelete }: TagsLabelProps) => {
   return (
     <TagsFlex>
       {tags.map((tag) => (
-        <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} tag={tag} />
+        <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} onDelete={onDelete} tag={tag} />
       ))}
     </TagsFlex>
   )
