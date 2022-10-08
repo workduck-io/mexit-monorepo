@@ -25,6 +25,7 @@ import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import { useSyncTaskViews, useViewStore } from '../Hooks/useTaskViews'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 
@@ -321,20 +322,12 @@ const Tasks = () => {
     }
   }, [match])
 
-  const onDoubleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, nodeid: string) => {
-    event.preventDefault()
-    //double click
-    // mog('double click', { event })
-    if (event.detail === 2) {
-      push(nodeid)
-      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
-    }
-  }
-
-  // mog('Tasks', { nodesTodo, board, selectedCard, match, currentFilters })
-
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
-    const pC = getPureContent(todo)
+    const todos = useTodoStore((store) => store.todos)
+    const pC = useMemo(() => getPureContent(todo), [id, todos])
+
+    const toggleModal = useModalStore((store) => store.toggleOpen)
+
     // mog('RenderTodo', { id, todo, dragging, sidebar })
     return (
       <TaskCard
@@ -344,7 +337,9 @@ const Tasks = () => {
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         onMouseDown={(event) => {
           event.preventDefault()
-          onDoubleClick(event, todo.nodeid)
+          if (event.detail === 2) {
+            toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
+          }
         }}
       >
         <Todo

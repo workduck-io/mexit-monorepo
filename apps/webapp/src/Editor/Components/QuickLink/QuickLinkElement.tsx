@@ -8,7 +8,7 @@ import { useMatch } from 'react-router-dom'
 import { useReadOnly, useFocused, useSelected } from 'slate-react'
 
 import { AccessLevel, ILink, mog, NodeType, SharedNode } from '@mexit/core'
-import { SILinkRoot, SILink, StyledIcon, ILinkElementProps } from '@mexit/shared'
+import { SILinkRoot, SILink, StyledIcon, ILinkElementProps, sharedAccessIcon } from '@mexit/shared'
 
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
@@ -199,13 +199,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const content = block ? [block] : undefined
   const archivedNode = nodeType === NodeType.ARCHIVED ? getArchiveNode(element.value) : undefined
   const sharedNode = nodeType === NodeType.SHARED ? getSharedNode(element.value) : undefined
-
-  const sharedAccessIcon: Record<AccessLevel, string> = {
-    READ: 'bi:eye-fill',
-    WRITE: 'fa-solid:user-edit',
-    MANAGE: 'fa6-solid:user-lock',
-    OWNER: 'fa:user'
-  }
 
   return (
     <SILinkRoot
