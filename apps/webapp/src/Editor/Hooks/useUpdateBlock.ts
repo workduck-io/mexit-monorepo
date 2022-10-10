@@ -1,11 +1,14 @@
-import { findNodePath, getPlateEditorRef, setNodes } from "@udecode/plate"
-import { useBufferStore } from "../../Hooks/useEditorBuffer"
-import { useContentStore } from "../../Stores/useContentStore"
+import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
+
+import { useBufferStore } from '../../Hooks/useEditorBuffer'
+import { useUpdater } from '../../Hooks/useUpdater'
+import { useContentStore } from '../../Stores/useContentStore'
 
 type BlockDataType = Record<string, any>
 
 const useUpdateBlock = () => {
-  const addInBuffer = useBufferStore(b => b.add)
+  const addInBuffer = useBufferStore((b) => b.add)
+  const { updateFromContent } = useUpdater()
 
   /*
     Update block's data in an Editor using element. 
@@ -26,21 +29,23 @@ const useUpdateBlock = () => {
 
     Use this if you can't access editor directly. For eg, in Tasks view to update status of a task.
   */
-  const setInfoOfBlockInContent = (noteId: string, options: {
-    blockId: string,
-    blockData: BlockDataType,
-    useBuffer: boolean
-  }) => {
+  const setInfoOfBlockInContent = (
+    noteId: string,
+    options: {
+      blockId: string
+      blockData: BlockDataType
+      useBuffer: boolean
+    }
+  ) => {
     const bufferContent = useBufferStore.getState().getBuffer(noteId)
-    const existingContent = useContentStore.getState().getContent(noteId)?.content;
-
+    const existingContent = useContentStore.getState().getContent(noteId)?.content
 
     const content = bufferContent || existingContent
 
     const updateInBuffer = options.useBuffer !== false
 
     if (content?.length > 0) {
-      const updatedContent = content.map(block => {
+      const updatedContent = content.map((block) => {
         if (block.id === options.blockId) {
           return {
             ...block,
@@ -59,11 +64,23 @@ const useUpdateBlock = () => {
     }
   }
 
+  const addBlockInContent = (noteId: string, block: BlockDataType) => {
+    const bufferContent = useBufferStore.getState().getBuffer(noteId)
+    const existingContent = useContentStore.getState().getContent(noteId)?.content
+
+    const content = bufferContent || existingContent
+
+    if (content?.length > 0) {
+      const updatedContent = [...content, ...(block as any)]
+      updateFromContent(noteId, updatedContent)
+    }
+  }
 
   return {
     insertInEditor,
-    setInfoOfBlockInContent
+    setInfoOfBlockInContent,
+    addBlockInContent
   }
 }
 
-export default useUpdateBlock 
+export default useUpdateBlock

@@ -32,11 +32,10 @@ import { ILinkNode } from '@mexit/shared'
 import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
 import { useSnippets } from '../../../../Hooks/useSnippets'
 import { useUpdater } from '../../../../Hooks/useUpdater'
-import { useEditorStore } from '../../../../Stores/useEditorStore'
-import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
-import { cleanEditorId } from '../../../Todo'
 import { useDataStore } from '../../../../Stores/useDataStore'
+import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 import { useOpenToast } from '../../../Toast/useOpenToast'
+import { cleanEditorId } from '../../../Todo'
 
 export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()

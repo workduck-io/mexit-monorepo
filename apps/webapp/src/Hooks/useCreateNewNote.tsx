@@ -35,7 +35,6 @@ export const useCreateNewNote = () => {
   const addILink = useDataStore((s) => s.addILink)
   const checkValidILink = useDataStore((s) => s.checkValidILink)
   const getMetadata = useContentStore((s) => s.getMetadata)
-  const { getSnippet } = useSnippets()
   // const spotlightContext = useSpotlightContext()
 
   const { saveNodeName } = useLoad()

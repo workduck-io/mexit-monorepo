@@ -1,14 +1,16 @@
-import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus } from '@mexit/core'
-import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 import React, { useEffect, useMemo, useState } from 'react'
+
+import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus, mog } from '@mexit/core'
+import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
+
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import PrioritySelect from './PrioritySelect'
 
 export interface TodoControls {
   onDeleteClick?: (todoid: string) => void
-  onChangeStatus?: (todoid: string, status: TodoStatus) => void
-  onChangePriority?: (todoid: string, priority: PriorityType) => void
+  onChangeStatus?: (todoid: string, status: TodoStatus, element?: any) => void
+  onChangePriority?: (todoid: string, priority: PriorityType, element?: any) => void
   getTodo?: (parentNodeId: string, todoId: string) => TodoType
 }
 
@@ -23,7 +25,16 @@ interface TodoProps {
   showDelete?: boolean
 }
 
-export const TodoBase = ({ parentNodeId, element, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
+export const TodoBase = ({
+  parentNodeId,
+  element,
+  todoid,
+  children,
+  readOnly,
+  oid,
+  controls,
+  showDelete = true
+}: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
 
@@ -41,15 +52,12 @@ export const TodoBase = ({ parentNodeId, element, todoid, children, readOnly, oi
       : getTodoFromStore(parentNodeId, todoid)
   }, [parentNodeId, todoid, animate, todos])
 
-  // const { getBlockReminder } = useReminders()
-  // const reminder = getBlockReminder(todoid)
-
   useEffect(() => {
     if (animate) setAnimate(false)
   }, [animate])
 
   const onPriorityChange = (priority: PriorityDataType) => {
-    if (controls && controls.onChangePriority) controls.onChangePriority(todoid, priority.type)
+    if (controls && controls.onChangePriority) controls.onChangePriority(todoid, priority.type, element)
     else {
       updatePriority(parentNodeId, todoid, priority.type)
       element && insertInEditor(element, { priority: priority.type })
@@ -59,9 +67,9 @@ export const TodoBase = ({ parentNodeId, element, todoid, children, readOnly, oi
 
   const changeStatus = () => {
     if (readOnly) return
-    const nextStatus = getNextStatus(todo.metadata.status);
+    const nextStatus = getNextStatus(todo.metadata.status)
 
-    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, nextStatus)
+    if (controls && controls.onChangeStatus) controls.onChangeStatus(todoid, nextStatus, element)
     else {
       element && insertInEditor(element, { status: nextStatus })
       updateStatus(parentNodeId, todoid, nextStatus)

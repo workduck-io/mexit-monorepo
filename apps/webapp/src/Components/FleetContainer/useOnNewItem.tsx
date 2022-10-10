@@ -3,15 +3,25 @@ import React from 'react'
 import generateName from 'project-name-generator'
 import toast from 'react-hot-toast'
 
-import { generateSnippetId, getDefaultContent } from '@mexit/core'
+import {
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI,
+  generateSnippetId,
+  generateTempId,
+  getDefaultContent,
+  mog
+} from '@mexit/core'
 import { InteractiveToast } from '@mexit/shared'
 
+import { createDefaultTodo } from '../../Editor/Plugins/todoUtils'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
+import { useTaskFromSelection } from '../../Hooks/useTaskFromSelection'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
@@ -19,7 +29,8 @@ export const useOnNewItem = () => {
   const ICONS = {
     snippet: 'ri:quill-pen-line',
     note: 'ri:file-list-2-line',
-    space: 'heroicons-outline:view-grid'
+    space: 'heroicons-outline:view-grid',
+    todo: 'ri:task-line'
   }
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
@@ -28,13 +39,29 @@ export const useOnNewItem = () => {
   const { goTo } = useRouting()
   const { addSnippet } = useSnippets()
   const { createNewNote } = useCreateNewNote()
+  const { getNewTaskNode } = useTaskFromSelection()
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
+
+  const openModal = useModalStore((store) => store.toggleOpen)
 
   const onNewNote = (spaceId: string) => {
     const note = createNewNote({ namespace: spaceId })
 
     if (note) goTo(ROUTE_PATHS.node, NavigationType.push, note?.nodeid)
+  }
+
+  const onNewTask = () => {
+    const dailyTasksNoteId = getNewTaskNode(true)?.nodeid
+    const todo = createDefaultTodo(dailyTasksNoteId, [
+      {
+        type: ELEMENT_TODO_LI,
+        children: [{ text: '', type: ELEMENT_PARAGRAPH, id: generateTempId() }],
+        id: generateTempId()
+      }
+    ])
+
+    openModal(ModalsType.todo, todo)
   }
 
   const onNewSnippet = () => {
@@ -97,8 +124,14 @@ export const useOnNewItem = () => {
         icon: ICONS.space,
         onSelect: onNewSpace
       },
-      snippet: {
+      task: {
         id: 2,
+        name: 'New Task',
+        icon: ICONS.todo,
+        onSelect: onNewTask
+      },
+      snippet: {
+        id: 3,
         name: 'New Snippet',
         icon: ICONS.snippet,
         onSelect: onNewSnippet

@@ -5,6 +5,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
 import FleetContainer from './FleetContainer'
 import ShareModal from './Mentions/ShareModal'
+import CreateTodoModal from './Modals/CreateTodoModal'
 import Lookup from './Modals/Lookup'
 import PreviewNoteModal from './PreviewNoteModal'
 import Refactor from './Refactor'
@@ -25,6 +26,7 @@ const Modals = () => {
       <BlockModal />
       <ShareModal />
       <CreateReminderModal />
+      <CreateTodoModal />
       <TaskViewModal />
       <PreviewNoteModal />
       <FleetContainer />

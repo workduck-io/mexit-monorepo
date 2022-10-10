@@ -16,7 +16,7 @@ import {
 
 import { useReminderStore } from './useReminderStore'
 
-const createTodo = (
+export const createTodo = (
   nodeid: string,
   todoId: string,
   content: NodeEditorContent = defaultContent.content,
