@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "bump-version": "node version.js"
   },
   "private": true,
   "workspaces": {
@@ -52,6 +53,8 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "prettier": "^2.5.1",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+    "ts-node": "^10.7.0",
+    "spawndamnit": "^2.0.0",
     "swc-loader": "^0.1.15"
   }
 }
