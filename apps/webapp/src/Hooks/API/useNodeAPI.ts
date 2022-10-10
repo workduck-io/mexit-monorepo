@@ -468,18 +468,22 @@ export const useApi = () => {
           const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
           mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
+          const ids = toUpdateLocal.map((i) => i.nodeid)
 
-          runBatch(
-            toUpdateLocal.map((ilink) =>
-              getDataAPI(ilink.nodeid, false, false, false).then((data) => {
-                mog('toUpdateLocalArchive', { ilink, data })
-                setContent(ilink.nodeid, data.content, data.metadata)
-                updateDocument('archive', ilink.nodeid, data.content)
+          runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+            .then((res) => {
+              const { fulfilled } = res
+
+              fulfilled.forEach((node) => {
+                const { rawResponse, nodeid } = node
+                const content = deserializeContent(rawResponse.data)
+                setContent(nodeid, content, extractMetadata(rawResponse))
+                updateDocument('archive', nodeid, content)
               })
-            )
-          ).then(() => {
-            addInArchive(archivedILinks)
-          })
+            })
+            .then(() => {
+              addInArchive(archivedILinks)
+            })
         }
       })
     }
@@ -610,7 +614,8 @@ export const useApi = () => {
       fulfilled.forEach((node) => {
         const { rawResponse, nodeid } = node
         const content = deserializeContent(rawResponse.data)
-        updateFromContent(nodeid, content)
+        const metadata = extractMetadata(rawResponse)
+        updateFromContent(nodeid, content, metadata)
       })
     }
 
