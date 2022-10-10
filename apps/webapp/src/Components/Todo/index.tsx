@@ -5,6 +5,7 @@ import { useReadOnly } from 'slate-react'
 
 import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
 
+import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { TodoBase } from './Todo'
 
 export const cleanEditorId = (editorId: string) => {
@@ -31,6 +32,7 @@ const Todo = (props: any) => {
   const { attributes, children, element } = props
 
   const rootProps = getRootProps(props)
+  const hideDelete = useModalStore((m) => m.open === ModalsType.todo)
 
   const readOnly = useReadOnly()
   const editorId = usePlateId()
@@ -62,7 +64,8 @@ const Todo = (props: any) => {
       readOnly={readOnly}
       oid={'EditorTodo'}
       element={element}
-      todoid={element.id}
+      todoid={element?.id}
+      showDelete={!hideDelete}
       parentNodeId={nodeid}
       controls={{
         onDeleteClick

@@ -1,6 +1,9 @@
-import { InteractiveToast } from '@mexit/shared'
 import React from 'react'
+
 import toast from 'react-hot-toast'
+
+import { InteractiveToast } from '@mexit/shared'
+
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
@@ -19,7 +22,6 @@ export const useOpenToast = () => {
         onClick={() => {
           push(nodeid)
           goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
-          // console.log('We are here')
         }}
       />
     ))
@@ -42,4 +44,3 @@ export const useOpenToast = () => {
 
   return { openNoteToast, openSnippetToast }
 }
-

@@ -281,7 +281,7 @@ const useLoad = () => {
       setHighlights([options.highlightBlockId], 'editor')
     }
 
-    if (!localCheck.isShared) {
+    if (!localCheck.isShared && node.path) {
       const allParents = getAllParentIds(node.path)
       expandNodes(allParents)
     }
