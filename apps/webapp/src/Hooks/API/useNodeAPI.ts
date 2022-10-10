@@ -18,39 +18,36 @@ import {
   getTagsFromContent
 } from '@mexit/core'
 
-import { isRequestedWithin } from '../../Stores/useApiStore'
+import { isRequestedWithin, RequestData, useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { WorkerRequestType } from '../../Utils/worker'
+import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
+import { useSearch } from '../useSearch'
 import { useUpdater } from '../useUpdater'
-
-interface SnippetResponse {
-  snippetID: string
-  title: string
-  version: number
-}
-
-interface SnippetMetadata {
-  id: string
-  title: string
-  icon: string
-}
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
-  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
-
+  const setILinks = useDataStore((store) => store.setIlinks)
   const { getSharedNode } = useNodes()
+  const { updateDocument, removeDocument } = useSearch()
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const updateSnippet = useSnippetStore((store) => store.updateSnippet)
+
+  const setRequest = useApiStore.getState().setRequest
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -202,7 +199,6 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
-    mog('GetNodeOptions', { isShared, url })
     if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
@@ -337,20 +333,64 @@ export const useApi = () => {
     return data
   }
 
-  const getAllSnippetsByWorkspace = async (): Promise<SnippetMetadata[]> => {
+  const getAllSnippetsByWorkspace = async () => {
     const data = await client
       .get(apiURLs.getAllSnippetsByWorkspace, {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        const snippetResp = d.data as SnippetResponse[]
-        return snippetResp.map((item) => {
-          return {
-            id: item.snippetID,
-            title: item.title,
-            icon: 'ri:quill-pen-line'
-          }
+        return d.data
+      })
+      .then((d: any) => {
+        const snippets = useSnippetStore.getState().snippets
+
+        const newSnippets = d.filter((snippet) => {
+          const existSnippet = snippets.find((s) => s.id === snippet.snippetID)
+          return existSnippet === undefined
         })
+
+        initSnippets([
+          ...snippets,
+          ...newSnippets.map((item) => ({
+            icon: 'ri:quill-pen-line',
+            id: item.snippetID,
+            template: item.template,
+            title: item.title,
+            content: []
+          }))
+        ])
+
+        return newSnippets
+      })
+      .then(async (newSnippets) => {
+        const ids = newSnippets?.map((item) => item.snippetID)
+        mog('NewSnippets', { newSnippets, ids })
+
+        if (ids && ids.length > 0) {
+          const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+          const requestData = { time: Date.now(), method: 'GET' }
+
+          res.fulfilled.forEach(async (snippet) => {
+            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
+            if (snippet) {
+              updateSnippet(snippet.id, snippet)
+              const isTemplate = snippet.template ?? false
+
+              const tags = isTemplate ? ['template'] : ['snippet']
+              const idxName = isTemplate ? 'template' : 'snippet'
+
+              if (isTemplate) {
+                await removeDocument('snippet', snippet.id)
+              } else {
+                await removeDocument('template', snippet.id)
+              }
+
+              await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+            }
+          })
+
+          mog('RunBatchWorkerSnippetsRes', { res, ids })
+        }
       })
 
     return data
@@ -430,7 +470,23 @@ export const useApi = () => {
           const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
 
           mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
-          addInArchive(archivedILinks)
+          const ids = toUpdateLocal.map((i) => i.nodeid)
+          const requestData = { time: Date.now(), method: 'GET' }
+          runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+            .then((res) => {
+              const { fulfilled } = res
+
+              fulfilled.forEach((node) => {
+                const { rawResponse, nodeid } = node
+                setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+                const content = deserializeContent(rawResponse.data)
+                setContent(nodeid, content, extractMetadata(rawResponse))
+                updateDocument('archive', nodeid, content)
+              })
+            })
+            .then(() => {
+              addInArchive(archivedILinks)
+            })
         }
       })
     }
@@ -514,6 +570,64 @@ export const useApi = () => {
     }
   }
 
+  const getNodesByWorkspace = async () => {
+    const updatedILinks: any[] = await client
+      .get(apiURLs.namespaces.getHierarchy, {
+        headers: {
+          'mex-workspace-id': getWorkspaceId()
+        }
+      })
+      .then((res: any) => {
+        return res.data
+      })
+      .catch(console.error)
+
+    mog(`UpdatedILinks`, { updatedILinks })
+
+    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
+      (p, [namespaceid, namespaceData]) => {
+        return {
+          namespaces: [
+            ...p.namespaces,
+            {
+              id: namespaceid,
+              name: namespaceData.name,
+              ...namespaceData?.namespaceMetadata
+            }
+          ],
+          nodes: [
+            ...p.nodes,
+            ...namespaceData.nodeHierarchy.map((ilink) => ({
+              ...ilink,
+              namespace: namespaceid
+            }))
+          ]
+        }
+      },
+      { nodes: [], namespaces: [] }
+    )
+    mog('UpdatingILinks', { nodes, namespaces })
+    if (nodes && nodes.length > 0) {
+      const localILinks = useDataStore.getState().ilinks
+      const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+      const ids = toUpdateLocal.map((i) => i.nodeid)
+
+      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+      const requestData = { time: Date.now(), method: 'GET' }
+
+      fulfilled.forEach((node) => {
+        const { rawResponse, nodeid } = node
+        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+        const content = deserializeContent(rawResponse.data)
+        const metadata = extractMetadata(rawResponse) // added by Varshitha
+        updateFromContent(nodeid, content, metadata)
+      })
+    }
+
+    // setNamespaces(namespaces)
+    setILinks(nodes)
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -531,6 +645,7 @@ export const useApi = () => {
     createNewNamespace,
     getAllNamespaces,
     changeNamespaceName,
-    changeNamespaceIcon
+    changeNamespaceIcon,
+    getNodesByWorkspace
   }
 }

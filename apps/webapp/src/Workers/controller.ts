@@ -1,8 +1,15 @@
 import { spawn } from 'threads'
+
+import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
+
 import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '@mexit/core'
 
+import { useAuthStore } from '../Stores/useAuth'
+import { WorkerRequestType } from '../Utils/worker'
 import analysisWorkerConstructor from './analysis?worker'
+import requestsWorkerConstructor from './requests?worker'
 import searchWorkerConstructor from './search?worker'
+
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
   title?: boolean
@@ -17,6 +24,24 @@ export interface AnalyseContentProps {
 
 export let analysisWorker = null
 export let searchWorker = null
+export let requestsWorker = null
+
+export const startRequestsWorkerService = async () => {
+  if (!requestsWorker) requestsWorker = await spawn(new requestsWorkerConstructor())
+}
+
+export const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[]) => {
+  const token = useInternalAuthStore.getState().userCred.token
+  const workspaceID = useAuthStore.getState().getWorkspaceId()
+
+  if (!requestsWorker) {
+    await startRequestsWorkerService()
+    requestsWorker.initializeClient(token, workspaceID)
+  }
+
+  const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
+  return res
+}
 
 export const startAnalysisWorkerService = async () => {
   // console.log('startWorkerService')

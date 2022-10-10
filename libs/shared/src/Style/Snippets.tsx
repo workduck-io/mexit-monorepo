@@ -1,6 +1,9 @@
 import styled from 'styled-components'
+
 import { Card } from './Card'
 import { GridCss } from './Grid'
+import { size } from './Responsive'
+import { ResultDesc, SearchContainer } from './Search'
 
 export const SSnippets = styled.div`
   /* ${GridCss(2, 3)} */
@@ -60,5 +63,13 @@ export const CreateSnippet = styled(Card)`
   svg {
     color: ${({ theme }) => theme.colors.primary};
     filter: drop-shadow(0px 4px 10px ${({ theme }) => theme.colors.primary});
+  }
+`
+
+export const SnippetsSearchContainer = styled(SearchContainer)`
+  ${ResultDesc} {
+    @media (max-width: ${size.normal}) {
+      max-width: 15rem;
+    }
   }
 `

@@ -1,38 +1,52 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
+import magicLine from '@iconify/icons-ri/magic-line'
 import { Icon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
+import { nanoid } from 'nanoid'
 import genereateName from 'project-name-generator'
 
-import { Button, IconButton } from '@workduck-io/mex-components'
+import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
+import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
-import { defaultContent, generateSnippetId, generateTempId, GenericSearchResult, mog, parseBlock } from '@mexit/core'
 import {
-  CreateSnippet,
-  SnippetCommand,
-  SnippetCommandPrefix,
-  SnippetHeader,
+  apiURLs,
+  convertContentToRawText,
+  DRAFT_NODE,
+  generateSnippetId,
+  GenericSearchResult,
+  mog,
+  runBatch,
+  Snippet
+} from '@mexit/core'
+import {
+  ItemTag,
   MainHeader,
   Result,
   ResultDesc,
+  ResultHeader,
   ResultMain,
   ResultRow,
   ResultTitle,
-  SearchContainer,
   SearchPreviewWrapper,
+  SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
   Title,
   View
 } from '@mexit/shared'
 
-import PreviewEditor from '../Components/Editor/PreviewEditor'
+import { SnippetHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
+import { useUpdater } from '../Hooks/useUpdater'
+import { useApiStore } from '../Stores/useApiStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { WorkerRequestType } from '../Utils/worker'
+import { runBatchWorker } from '../Workers/controller'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
 export type SnippetsProps = {
@@ -41,100 +55,137 @@ export type SnippetsProps = {
 
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
-  const { addSnippet, deleteSnippet, getSnippet } = useSnippets()
+  const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
+  const { updater } = useUpdater()
+
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
-  //   const { getNode } = useNodes()
   const { goTo } = useRouting()
 
-  const initialSnippets: any[] = snippets.map((snippet) => ({
-    id: snippet.id,
-    title: snippet.title,
-    text: parseBlock(snippet.content || [{ text: '' }])
-  }))
+  const setRequest = useApiStore.getState().setRequest
 
-  mog('Initial snippets', { snippets })
+  const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
+    () => ({
+      initialSnippets: snippets.map((snippet) => ({
+        id: snippet.id,
+        title: snippet.title,
+        text: convertContentToRawText(snippet.content)
+      }))
+    }),
+    [snippets]
+  )
+
+  const randId = useMemo(() => nanoid(), [initialSnippets])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
 
-    mog('new search is here', { newSearchTerm, res })
     if (!newSearchTerm && res?.length === 0) {
-      mog('Inside', {})
       return initialSnippets
     }
 
-    mog('Got search results: ', { res })
     return res
   }
 
-  const onCreateNew = () => {
+  const onCreateNew = (generateTitle = false) => {
     // Create a better way.
     const snippetId = generateSnippetId()
+    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
     addSnippet({
       id: snippetId,
-      title: genereateName().dashed,
+      title: snippetName,
       icon: 'ri:quill-pen-line',
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
 
     loadSnippet(snippetId)
+    updater()
 
-    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId)
+    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
+  }
+
+  const onCreateSpecialSnippet = (generateTitle = false) => {
+    const snippetId = generateSnippetId()
+    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+
+    addSnippet({
+      id: snippetId,
+      title: snippetName,
+      template: true,
+      icon: 'ri:quill-pen-line',
+      content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
+    })
+
+    loadSnippet(snippetId)
+    updater()
+
+    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
+  }
+
+  const onDoubleClick = (e: React.MouseEvent<HTMLElement>, id: string, title: string) => {
+    e.preventDefault()
+    if (e.detail === 2) {
+      onOpenSnippet(id)
+      goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title })
+    }
+  }
+  const onDeleteSnippet = (id: string) => {
+    deleteSnippet(id)
+    goTo(ROUTE_PATHS.snippets, NavigationType.replace)
   }
 
   const onOpenSnippet = (id: string) => {
     loadSnippet(id)
-    goTo(ROUTE_PATHS.snippet, NavigationType.push, id)
-  }
-
-  const onDeleteSnippet = (id: string) => {
-    deleteSnippet(id)
   }
 
   // console.log({ result })
-  const onSelect = (item: any) => {
-    const snippetid = item.id
-    onOpenSnippet(snippetid)
+  const onSelect = (item: GenericSearchResult, e?: React.MouseEvent) => {
+    if (e) {
+      return
+    }
+    const snippetId = item.id
+    const snippetName = item.title
+    onOpenSnippet(snippetId)
+    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
 
   const onEscapeExit = () => {
-    // const nodeid = nodeUID ?? lastOpened[0] ?? baseNodeId
-    // loadNode(nodeid)
     goTo(ROUTE_PATHS.snippets, NavigationType.push)
   }
 
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
+    if (!item) {
+      return null
+    }
     const snip = getSnippet(item.id)
-    if (!item || !snip) {
+    if (!snip) {
       return null
     }
     const icon = quillPenLine
-    const id = `${item.id}_ResultFor_SearchSnippet`
+    const id = `${item.id}_ResultFor_SearchSnippet_${randId}`
 
     if (props.view === View.Card) {
       return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Result {...props} key={id} ref={ref}>
-          <SnippetHeader>
-            <SnippetCommand onClick={() => onOpenSnippet(snip.id)}>
-              <Icon icon={icon} />
-              {snip.title}
-            </SnippetCommand>
-
-            <IconButton
-              size={20}
-              icon={deleteBin6Line}
-              title="delete"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                onDeleteSnippet(snip.id)
-              }}
-            />
-          </SnippetHeader>
-          <SearchPreviewWrapper active={item.matchField?.includes('text')}>
-            <PreviewEditor content={snip.content} editorId={`editor_${item.id}`} />
+          <ResultHeader>
+            <Icon icon={icon} />
+            <ResultTitle onClick={() => onSelect({ id: snip.id, title: snip.title })}>{snip.title}</ResultTitle>
+            {snip.template && (
+              <ItemTag large>
+                <Icon icon={magicLine} />
+                Template
+              </ItemTag>
+            )}
+            <IconButton size={20} icon={deleteBin6Line} title="delete" onClick={() => onDeleteSnippet(snip.id)} />
+          </ResultHeader>
+          <SearchPreviewWrapper
+            onClick={() => onSelect({ id: snip.id, title: snip.title })}
+            active={item.matchField?.includes('text')}
+          >
+            <EditorPreviewRenderer content={snip.content} editorId={`editor_${item.id}`} />
           </SearchPreviewWrapper>
         </Result>
       )
@@ -143,19 +194,17 @@ const Snippets = () => {
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
             <Icon icon={icon} />
-            <ResultMain>
+            <ResultMain onClick={() => onSelect({ id: snip.id, title: snip.title })}>
               <ResultTitle>{snip.title}</ResultTitle>
-              <ResultDesc>{parseBlock(snip.content, ' ')}</ResultDesc>
+              <ResultDesc>{convertContentToRawText(snip.content, ' ')}</ResultDesc>
             </ResultMain>
-            <IconButton
-              size={20}
-              icon={deleteBin6Line}
-              title="delete"
-              onClick={(ev) => {
-                ev.stopPropagation()
-                onDeleteSnippet(snip.id)
-              }}
-            />
+            {snip.template && (
+              <ItemTag>
+                <Icon icon={magicLine} />
+                Template
+              </ItemTag>
+            )}
+            <IconButton size={20} icon={deleteBin6Line} title="delete" onClick={() => onDeleteSnippet(snip.id)} />
           </ResultRow>
         </Result>
       )
@@ -165,53 +214,75 @@ const Snippets = () => {
   }
   const RenderItem = React.forwardRef(BaseItem)
 
-  const RenderStartCard = () => {
-    // mog('RenderPreview', { item })
-    return (
-      <CreateSnippet onClick={onCreateNew}>
-        <Icon icon={quillPenLine} height={100} />
-        <p>Create New Snippet</p>
-      </CreateSnippet>
-    )
-  }
-
-  const RenderPreview = ({ item }: RenderPreviewProps<any>) => {
+  const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
     // mog('RenderPreview', { item })
     if (item) {
-      const snip = getSnippet(item.id)
       const icon = quillPenLine
-
+      const snip = getSnippet(item.id)
       // const edNode = { ...node, title: node.path, id: node.nodeid }
-      return (
-        <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}`}>
-          <Title>
-            {snip.title}
-            <Icon icon={icon} />
-          </Title>
-          <EditorPreviewRenderer
-            content={snip?.content?.length ? snip.content : defaultContent?.content}
-            editorId={`SnippetSearchPreview_editor_${item?.id}`}
-          />
-        </SplitSearchPreviewWrapper>
-      )
-    } else
-      return (
-        <SplitSearchPreviewWrapper>
-          <Title></Title>
-        </SplitSearchPreviewWrapper>
-      )
+      if (snip)
+        return (
+          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
+            <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
+              <span className="title">{snip.title}</span>
+              {snip.template && (
+                <ItemTag large>
+                  <Icon icon={magicLine} />
+                  Template
+                </ItemTag>
+              )}
+              <Icon icon={icon} />
+            </Title>
+            <EditorPreviewRenderer
+              onDoubleClick={(e) => onDoubleClick(e, item.id, item.title)}
+              content={snip.content}
+              editorId={`${item.id}_Snippet_Preview_Editor`}
+            />
+          </SplitSearchPreviewWrapper>
+        )
+    }
+    return null
   }
 
-  const randId = useMemo(() => generateTempId(), [initialSnippets])
+  useEffect(() => {
+    async function getInitialSnippets() {
+      mog('Idhar tera baap aayega?')
+      const snippets = getSnippets()
+      const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
+      const ids = unfetchedSnippets.map((i) => i.id)
+
+      mog('AllSnippets', { snippets })
+
+      if (ids && ids.length > 0) {
+        const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+        const requestData = { time: Date.now(), method: 'GET' }
+
+        res.fulfilled.forEach((snippet) => {
+          if (snippet) {
+            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
+            updateSnippet(snippet)
+          }
+        })
+
+        mog('RunBatchWorkerSnippetsRes', { res, ids })
+      }
+    }
+    getInitialSnippets()
+  }, [])
 
   return (
-    <SearchContainer>
+    <SnippetsSearchContainer>
       <MainHeader>
         <Title>Snippets</Title>
-        <Button primary large onClick={onCreateNew}>
+        <Button primary onClick={() => onCreateNew()}>
           <Icon icon={quillPenLine} height={24} />
           Create New Snippet
         </Button>
+        <Button primary onClick={() => onCreateSpecialSnippet()}>
+          <Icon icon={magicLine} height={24} />
+          Create New Template Snippet
+        </Button>
+        <Infobox text={SnippetHelp} />
       </MainHeader>
       <SearchView
         id={`searchSnippet_${randId}`}
@@ -219,14 +290,14 @@ const Snippets = () => {
         initialItems={initialSnippets}
         getItemKey={(i) => i.id}
         onSelect={onSelect}
+        onDelete={(i) => onDeleteSnippet(i.id)}
         onEscapeExit={onEscapeExit}
-        options={{ view: View.Card }}
         onSearch={onSearch}
+        options={{ view: View.Card }}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
-        // RenderStartCard={RenderStartCard}
       />
-    </SearchContainer>
+    </SnippetsSearchContainer>
   )
 }
 

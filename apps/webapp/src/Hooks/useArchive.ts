@@ -68,7 +68,7 @@ const useArchive = () => {
             }
           }
         )
-        .then((d) => {
+        .then((d: any) => {
           // We only get the data for archived nodeids in this response
 
           const archivedNodeids = d.data
@@ -136,10 +136,6 @@ const useArchive = () => {
 
   // TODO: figure how namespaces are working with archive hierarchy
   const getArchiveNotesHierarchy = async () => {
-    if (!USE_API) {
-      return archive
-    }
-
     await client
       .get(apiURLs.getArchivedNodes, {
         headers: {

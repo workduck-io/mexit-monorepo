@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import unarchiveLine from '@iconify/icons-clarity/unarchive-line'
 import trashIcon from '@iconify/icons-codicon/trash'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'

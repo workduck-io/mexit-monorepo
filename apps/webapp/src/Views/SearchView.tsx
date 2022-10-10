@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, SearchFilter } from '@mexit/core'
+import { idxKey, mog, SearchFilter } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -18,7 +18,9 @@ import {
   View
 } from '@mexit/shared'
 
+import SearchIndexInput from '../Components/Search/IndexInput'
 import { useFilters, useFilterStore } from '../Hooks/useFilters'
+import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
 
@@ -26,7 +28,6 @@ interface SearchViewState<Item> {
   selected: number
   searchTerm: string
   result: Item[]
-  view: View
 }
 
 export interface RenderPreviewProps<Item> extends RenderSplitProps {
@@ -50,15 +51,9 @@ export interface RenderItemProps<Item> extends Partial<RenderSplitProps> {
   onMouseEnter?: React.MouseEventHandler
 }
 
-// export interface SearchViewStoreState<Item> extends SearchViewState<Item> {
-//   setSelected: (selected: number) => void
-//   setResult: (result: Item[], searchTerm: string) => void
-//   setView: (view: View) => void
-//   clearSearch: () => void
-// }
-
-// export const useSearchStore = <Item, Slice>(selector: (state: SearchViewStoreState<Item>) => Slice) =>
-//   useSearchStoreBase(selector)
+interface IndexGroups {
+  [key: string]: idxKey[]
+}
 
 interface SearchOptions {
   /**
@@ -91,7 +86,7 @@ interface SearchViewProps<Item> {
   /**
    * The initial items to display
    */
-  initialItems: Item[]
+  initialItems: Item[] | { [indexGroupKey: string]: Item[] }
 
   /**
    * Get next resut for current search term
@@ -99,13 +94,19 @@ interface SearchViewProps<Item> {
    * @param index Index of the item
    * @param view View to render
    */
-  onSearch: (searchTerm: string) => Promise<Item[]>
+  onSearch: (searchTerm: string, idxKeys?: idxKey[]) => Promise<Item[]>
 
   /**
    * Handle select item
    * @param item - The selected item
    */
-  onSelect: (item: Item) => void
+  onSelect: (item: Item, e?: React.MouseEvent<Element>) => void
+
+  /**
+   * Handle delete keypress on selected item
+   * @param item - The selected item
+   */
+  onDelete?: (item: Item) => void
 
   /**
    * On search result update, the filterResults is called to get the filtered results
@@ -113,6 +114,13 @@ interface SearchViewProps<Item> {
    * @param results Results to filter
    */
   filterResults?: (result: Item[]) => Item[]
+
+  /**
+   * IndexeGroups
+   *
+   * Default key of index groups to show initially
+   */
+  indexes?: { indexes: IndexGroups; default: string }
 
   /**
    * Handle select item
@@ -168,66 +176,82 @@ interface SearchViewProps<Item> {
 const SearchView = <Item,>({
   id,
   initialItems,
-  // views,
+  indexes,
   onSearch,
   onSelect,
+  onDelete,
   onEscapeExit,
   getItemKey,
   filterResults,
   RenderItem,
   RenderPreview,
   RenderNotFound,
-  RenderStartCard,
   RenderFilters,
-  options
+  options = { view: View.List }
 }: SearchViewProps<Item>) => {
   const [searchState, setSS] = useState<SearchViewState<Item>>({
     selected: -1,
     searchTerm: '',
-    result: [],
-    view: options?.view ?? View.List
+    result: []
   })
-  const { applyCurrentFilters, resetCurrentFilters } = useFilters<Item>()
-  const currentFilters = useFilterStore((store) => store.currentFilters) as SearchFilter<Item>[]
-  const filters = useFilterStore((store) => store.filters) as SearchFilter<Item>[]
-  const setSelected = (selected: number) => setSS((s) => ({ ...s, selected }))
-  const setView = (view: View) => {
-    mog('setview', { view })
-    setSS((s) => ({ ...s, view }))
-  }
-  const setOnlyResult = (result: Item[]) => {
-    setSS((s) => ({ ...s, result }))
-  }
-  const setResult = (result: Item[], searchTerm: string) => {
-    mog('setresult', { result, searchTerm })
 
+  // For filters
+  const { applyCurrentFilters, resetCurrentFilters } = useFilters<Item>()
+  const currentFilters = useFilterStore((store) => store.currentFilters)
+  const filters = useFilterStore((store) => store.filters)
+  const globalJoin = useFilterStore((store) => store.globalJoin)
+
+  const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
+  const [view, setView] = useState<View>(options?.view)
+  const setIndexes = useFilterStore((store) => store.setIndexes)
+  const setSelected = (selected: number) => setSS((s) => ({ ...s, selected }))
+  const { enableShortcutHandler } = useEnableShortcutHandler()
+
+  const setResult = (result: Item[], searchTerm: string) => {
+    // mog('setresult', { result, searchTerm })
     setSS((s) => ({ ...s, result, searchTerm, selected: -1 }))
   }
-  const clearSearch = () => setSS((s) => ({ ...s, result: [], searchTerm: '', selected: -1 }))
-  const { selected, searchTerm, result, view } = searchState
+  const onToggleIndexGroup = (indexGroup: string) => {
+    const indexesOfGroup = indexes?.indexes[indexGroup]
+    // mog('onToggleIndex', { indexesOfGroup, idxKeys })
+    setIndexes(indexesOfGroup)
+  }
+  const clearSearch = () => {
+    setSS((s) => ({ ...s, result: [], searchTerm: '', selected: -1 }))
+    const defaultIndexes = indexes?.indexes[indexes?.default]
+    setIndexes(defaultIndexes ?? [])
+  }
+  const { selected, searchTerm, result } = searchState
 
   const inpRef = useRef<HTMLInputElement>(null)
   const selectedRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    mog('Setting View', { view, id })
-    if (options?.view) {
-      setView(options.view)
-    }
-  }, [options?.view])
-
-  useEffect(() => {
-    mog('clearing search on ID change', { searchTerm, id })
+    // mog('clearing search on ID change', { searchTerm, id })
     clearSearch()
   }, [id])
 
+  const findCurrentIndex = () => {
+    const indexGroup = Object.keys(indexes?.indexes ?? {})?.find(
+      (indexGroup) => JSON.stringify(indexes?.indexes[indexGroup]) === JSON.stringify(idxKeys)
+    )
+    return indexGroup
+  }
+
   const executeSearch = async (newSearchTerm: string) => {
-    if (newSearchTerm === '' && initialItems.length > 0) {
-      const filtered = filterResults ? filterResults(initialItems) : initialItems
-      setResult(filtered, newSearchTerm)
+    if (newSearchTerm === '') {
+      // const res = onSearch(newSearchTerm)
+      const curIndexGroup = findCurrentIndex()
+      const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
+      const filtered = filterResults ? filterResults(initItems) : initItems
+      // mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered, initialItems, curIndexGroup })
+      if (filtered.length > 0 || currentFilters.length > 0) {
+        setResult(filtered, newSearchTerm)
+      }
     } else {
-      const res = await onSearch(newSearchTerm)
+      const res = await onSearch(newSearchTerm, idxKeys)
       const filtered = filterResults ? filterResults(res) : res
+      // mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
       setResult(filtered, newSearchTerm)
     }
   }
@@ -236,16 +260,16 @@ const SearchView = <Item,>({
     () => () => {
       // mog('SearchFiltersUpdate', { result, currentFilters })
       // const results = applyCurrentFilters(result)
-      mog('updating results', { result, currentFilters })
+      // mog('updating results', { result, currentFilters })
       // setOnlyResult(results)
       executeSearch(searchTerm)
     },
-    [currentFilters, result]
+    [currentFilters, result, initialItems, idxKeys]
   )
 
   useEffect(() => {
     updateResults()
-  }, [currentFilters])
+  }, [currentFilters, idxKeys, globalJoin])
 
   useEffect(() => {
     executeSearch(searchTerm)
@@ -295,59 +319,74 @@ const SearchView = <Item,>({
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       Escape: (event) => {
-        event.preventDefault()
-
-        resetCurrentFilters()
-        if (inpRef.current) {
-          if (inpRef.current.value !== '') {
-            inpRef.current.value = ''
-            if (selected > -1) {
-              setSelected(-1)
+        enableShortcutHandler(() => {
+          event.preventDefault()
+          event.stopPropagation()
+          if (inpRef.current) {
+            if (inpRef.current.value !== '') {
+              inpRef.current.value = ''
+              executeSearch('')
+              if (selected > -1) {
+                setSelected(-1)
+              }
+            } else {
+              if (currentFilters.length === 0) {
+                onEscapeExit()
+              }
             }
-          } else {
-            onEscapeExit()
           }
-        }
+        })
       },
-      Tab: (event) => {
-        event.preventDefault()
-        // Blur the input if necessary (not needed currently)
-        // if (inputRef.current) inputRef.current.blur()
-        if (event.shiftKey) {
-          selectPrev()
-        } else {
-          selectNext()
-        }
-      },
+      // Tab: (event) => {
+      //   enableShortcutHandler(() => {
+      //     // Blur the input if necessary (not needed currently)
+      //     // if (inputRef.current) inputRef.current.blur()
+      //     event.preventDefault()
+      //     if (event.shiftKey) {
+      //       selectPrev()
+      //     } else {
+      //       selectNext()
+      //     }
+      //   })
+      // },
       ArrowDown: (event) => {
-        event.preventDefault()
-        selectNext()
+        // event.preventDefault()
+        enableShortcutHandler(selectNext, { ignoreClasses: 'dropdown', skipLocal: false })
       },
 
       ArrowUp: (event) => {
-        event.preventDefault()
-        selectPrev()
+        enableShortcutHandler(selectPrev, { ignoreClasses: 'dropdown', skipLocal: false })
       },
 
       Enter: (event) => {
         // Only when the selected index is -1
-        if (selected > -1) {
-          onSelect(result[selected] as Item)
-        }
+        enableShortcutHandler(
+          () => {
+            if (selected > -1) {
+              onSelect(result[selected] as Item)
+            }
+          },
+          { ignoreClasses: 'dropdown', skipLocal: false }
+        )
+      },
+
+      Delete: (event) => {
+        // Only when the selected index is -1
+        enableShortcutHandler(
+          () => {
+            if (selected > -1) {
+              onDelete(result[selected] as Item)
+              setSelected(-1)
+            }
+          },
+          { ignoreClasses: 'dropdown', skipLocal: false }
+        )
       }
     })
     return () => {
       unsubscribe()
     }
-  }, [result, selected])
-
-  // onKeyDown handler function
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    // mog('keyDownHandler', { code: event.code })
-    if (event.code === 'Escape') {
-      // setInput()
-    }
-  }
+  }, [result, currentFilters, selected, initialItems])
 
   const splitOptions = options?.splitOptions ?? {
     type: selected > -1 ? SplitType.SIDE : SplitType.NONE,
@@ -356,8 +395,9 @@ const SearchView = <Item,>({
 
   const ResultsView = (
     <Results key={`ResultForSearch_${id}`} view={view}>
-      {view === View.Card && RenderStartCard && <RenderStartCard />}
-      {result?.map((c, i) => {
+      {/* {view === View.Card && RenderStartCard && <RenderStartCard />} */}
+      {result.map((c, i) => {
+        // mog('item from result', { c, i })
         return (
           <RenderItem
             view={view}
@@ -366,23 +406,23 @@ const SearchView = <Item,>({
               e.preventDefault()
               if (selected !== i) setSelected(i)
             }}
-            onClick={() => {
-              onSelect(c)
+            onClick={(e) => {
+              onSelect(c, e)
             }}
             splitOptions={splitOptions}
             selected={i === selected}
             ref={i === selected ? selectedRef : null}
-            id={`ResultForSearch_${getItemKey(c)}`}
-            key={`ResultForSearch_${getItemKey(c)}`}
+            id={`ResultForSearch_${getItemKey(c)}_${i}`}
+            key={`ResultForSearch_${getItemKey(c)}_${i}`}
           />
         )
       })}
     </Results>
   )
 
-  // mog('SearchContainer', { options, result, id, selected, view })
+  // mog('SearchContainer', { options, result, initialItems, id, selected, view })
   return (
-    <SearchViewContainer key={id} id={id} onKeyDown={keyDownHandler}>
+    <SearchViewContainer key={id} id={id}>
       <SearchHeader>
         <InputWrapper>
           <Icon icon={searchLine} />
@@ -395,26 +435,35 @@ const SearchView = <Item,>({
             type="text"
             defaultValue={searchTerm}
             onChange={debounce((e) => onChange(e), 250)}
+            className="mex-search-input"
             onFocus={() => {
               if (inpRef.current) inpRef.current.select()
             }}
             ref={inpRef}
           />
+          {indexes !== undefined && (
+            <SearchIndexInput
+              indexGroups={Object.keys(indexes.indexes)}
+              onChange={(i) => {
+                onToggleIndexGroup(i)
+              }}
+            />
+          )}
         </InputWrapper>
-        {!options?.view && (
-          <ViewSelector
-            currentView={view}
-            onChangeView={(view) => {
-              setView(view)
-            }}
-          />
-        )}
+
+        <ViewSelector
+          currentView={view}
+          onChangeView={(view) => {
+            mog('onChangeView', { view })
+            setView(view)
+          }}
+        />
       </SearchHeader>
 
       {RenderFilters && filters.length > 0 ? <RenderFilters result={result} /> : null}
 
       <ResultsWrapper>
-        {result?.length > 0 ? (
+        {result.length > 0 ? (
           view === View.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
             <SplitView
               id={`SplitViewForSearch_${id}`}

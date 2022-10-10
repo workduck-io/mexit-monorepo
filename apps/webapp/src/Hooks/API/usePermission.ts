@@ -1,9 +1,13 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE } from '@mexit/core'
+import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, extractMetadata } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
+import { deserializeContent } from '../../Utils/serializer'
+import { WorkerRequestType } from '../../Utils/worker'
+import { runBatchWorker } from '../../Workers/controller'
+import { useUpdater } from '../useUpdater'
 
 interface SharedNodesPreset {
   status: 'success'
@@ -17,6 +21,7 @@ interface SharedNodesErrorPreset {
 
 export const usePermission = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
+  const { updateFromContent } = useUpdater()
 
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     const payload = {
@@ -120,9 +125,17 @@ export const usePermission = () => {
 
           const localSharedNodes = useDataStore.getState().sharedNodes
           const { toUpdateLocal } = iLinksToUpdate(localSharedNodes, sharedNodes)
+          const ids = toUpdateLocal.map((ilink) => ilink.nodeid)
+          runBatchWorker(WorkerRequestType.GET_SHARED_NODES, 6, ids).then((res) => {
+            const { fulfilled } = res
 
-          // TODO
-          // runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid, true)))
+            fulfilled.forEach((node) => {
+              const { rawResponse, nodeid } = node
+              const content = deserializeContent(rawResponse.data)
+              const metadata = extractMetadata(rawResponse)
+              updateFromContent(nodeid, content, metadata)
+            })
+          })
 
           mog('SharedNodes', { sharedNodes })
           return { status: 'success', data: sharedNodes }
@@ -135,14 +148,13 @@ export const usePermission = () => {
 
   const getUsersOfSharedNode = async (nodeid: string): Promise<{ nodeid: string; users: Record<string, string> }> => {
     try {
-      // @ts-ignore
       return await client
         .get(apiURLs.getUsersOfSharedNode(nodeid), {
           headers: {
             'mex-workspace-id': workspaceDetails.id
           }
         })
-        .then((resp) => {
+        .then((resp: any) => {
           return { nodeid, users: resp.data }
         })
     } catch (e) {
