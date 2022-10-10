@@ -62,7 +62,7 @@ const options = {
         href = `${origin}${href}`
       }
 
-      mog('transformTags', { tagName, attribs, href, origin })
+      // mog('transformTags', { tagName, attribs, href, origin })
       return {
         tagName,
         attribs: {
