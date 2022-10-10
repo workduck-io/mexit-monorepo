@@ -28,10 +28,10 @@ export function useSaveChanges() {
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
   const { isSharedNode } = useNodes()
-  const { getDefaultNamespace } = useNamespaces()
+  const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
   const saveIt = (saveAndExit = false, notification = false) => {
-    const namespace = getDefaultNamespace()
+    const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
     const state = platesStore.get.state()
 
     // Editor Id is different from nodeId

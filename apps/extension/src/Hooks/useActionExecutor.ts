@@ -17,7 +17,8 @@ import {
   MexitAction,
   mog,
   QuickLinkType,
-  SEPARATOR
+  SEPARATOR,
+  SingleNamespace
 } from '@mexit/core'
 
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
@@ -43,22 +44,25 @@ export function useActionExecutor() {
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
   const { getParentILink } = useInternalLinks()
-  const { getDefaultNamespace } = useNamespaces()
+  const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     switch (item.category) {
       case QuickLinkType.backlink: {
         let node: ILink
+        let namespace: SingleNamespace
         const val = search.type === CategoryType.backlink ? search.value.slice(2) : search.value
         const nodeValue = val || getNewDraftKey()
         const defaultNamespace = getDefaultNamespace()
 
         if (item?.extras?.new) {
           node = createNodeWithUid(nodeValue, defaultNamespace.id)
+          namespace = defaultNamespace
         } else {
           node = isSharedNode(item.id)
             ? sharedNodes.find((i) => i.nodeid === item.id)
             : ilinks.find((i) => i.nodeid === item.id)
+          namespace = getNamespaceOfNodeid(node.nodeid)
         }
 
         setNode({
@@ -66,7 +70,7 @@ export function useActionExecutor() {
           title: node.path.split(SEPARATOR).slice(-1)[0],
           path: node.path,
           nodeid: node.nodeid,
-          namespace: defaultNamespace.id
+          namespace: namespace.id
         })
 
         if (metaKeyPressed) {
