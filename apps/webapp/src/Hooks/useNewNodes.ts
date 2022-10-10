@@ -38,9 +38,9 @@ export const useNewNodes = () => {
       const ns = namespace ?? getDefaultNamespace().id
 
       if ((parentILink && parentILink?.nodeid) || isRoot) {
-        updateSingleILink(nodeUID, ilink)
+        updateSingleILink(nodeUID, ilink, ns)
       } else {
-        const linksToBeCreated = getEntirePathILinks(ilink, nodeUID)
+        const linksToBeCreated = getEntirePathILinks(ilink, nodeUID, ns)
         updateMultipleILinks(linksToBeCreated)
       }
 
@@ -78,9 +78,9 @@ export const useNewNodes = () => {
       const isRoot = ilink.split(SEPARATOR).length === 1
 
       if ((parentILink && parentILink?.nodeid) || isRoot) {
-        updateSingleILink(nodeUID, ilink)
+        updateSingleILink(nodeUID, ilink, ns)
       } else {
-        const linksToBeCreated = getEntirePathILinks(ilink, nodeUID)
+        const linksToBeCreated = getEntirePathILinks(ilink, nodeUID, ns)
         updateMultipleILinks(linksToBeCreated)
       }
 
