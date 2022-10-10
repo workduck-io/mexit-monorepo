@@ -17,6 +17,7 @@ jobs:
       CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+      MEXIT_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.MEXIT_CLOUDFRONT_DISTRIBUTION_ID }}
 
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +48,8 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
+        with:
+          version: yarn bump-version
 
       - uses: aws-actions/configure-aws-credentials@v1
         if: steps.changesets.outputs.hasChangesets == 'false'
@@ -60,6 +63,7 @@ jobs:
         run: |
           yarn nx release webapp
           aws s3 sync ./dist/apps/webapp s3://mexit-monorepo-webapp
+          aws cloudfront create-invalidation --distribution-id $MEXIT_CLOUDFRONT_DISTRIBUTION_ID --paths '/*'
 
       - name: Build Extension for release
         if: steps.changesets.outputs.hasChangesets == 'false'
