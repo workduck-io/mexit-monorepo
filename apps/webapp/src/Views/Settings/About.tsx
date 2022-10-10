@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
 import twitterIcon from '@iconify/icons-logos/twitter'
@@ -10,6 +10,7 @@ import { CenteredColumn, Title } from '@mexit/shared'
 import { BackCard } from '@mexit/shared'
 
 import { version } from '../../../package.json'
+import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 
 // import { BackCard } from '../../../style/Card'
 // import { CenteredColumn } from '../../../style/Layouts'
@@ -41,6 +42,13 @@ const Flex = styled.div`
 `
 
 const About = () => {
+  // TESTING
+  //
+  const { getAllNamespaces } = useNamespaceApi()
+
+  useEffect(() => {
+    getAllNamespaces()
+  }, [])
   return (
     <CenteredColumn>
       <BackCard>

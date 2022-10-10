@@ -8,7 +8,7 @@ import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { IconButton, Input } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -115,6 +115,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
+          <IconButton title="Share Space" icon="ri:share-line" onClick={toggleSidebar} />
           <Tippy
             theme="mex-bright"
             placement="right"

@@ -1,51 +1,61 @@
+import toast from 'react-hot-toast'
+
 import { client } from '@workduck-io/dwindle'
 
 import {
-  apiURLs,
   defaultContent,
-  DEFAULT_NAMESPACE,
-  extractMetadata,
-  getTagsFromContent,
-  GET_REQUEST_MINIMUM_GAP,
-  iLinksToUpdate,
+  apiURLs,
   mog,
+  extractMetadata,
+  removeNulls,
+  WORKSPACE_HEADER,
+  DEFAULT_NAMESPACE,
+  GET_REQUEST_MINIMUM_GAP, // runBatch,
+  iLinksToUpdate,
+  generateNamespaceId,
+  MIcon,
   NodeEditorContent,
-  removeNulls
+  getTagsFromContent
 } from '@mexit/core'
 
-import { isRequestedWithin, useApiStore } from '../../Stores/useApiStore'
+import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
-import { WorkerRequestType } from '../../Utils/worker'
-import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
-import { useSearch } from '../useSearch'
 import { useUpdater } from '../useUpdater'
-import { useAPIHeaders } from './useAPIHeaders'
+
+interface SnippetResponse {
+  snippetID: string
+  title: string
+  version: number
+}
+
+interface SnippetMetadata {
+  id: string
+  title: string
+  icon: string
+}
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
-  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
-  const setILinks = useDataStore((store) => store.setIlinks)
+
   const { getSharedNode } = useNodes()
-  const { updateDocument, removeDocument } = useSearch()
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const updateSnippet = useSnippetStore((store) => store.updateSnippet)
 
-  const setRequest = useApiStore.getState().setRequest
-
-  const { workspaceHeaders } = useAPIHeaders()
+  const workspaceHeaders = () => ({
+    [WORKSPACE_HEADER]: getWorkspaceId(),
+    Accept: 'application/json, text/plain, */*'
+  })
 
   /*
    * Saves new node data in the backend
@@ -78,8 +88,7 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const metadata = extractMetadata(d.data)
-        const content = deserializeContent(d.data.data ?? options.content)
-        updateFromContent(noteID, content, metadata)
+        updateFromContent(noteID, d.data ?? options.content, metadata)
         return d.data
       })
       .catch((e) => {
@@ -98,10 +107,9 @@ export const useApi = () => {
     }
   ) => {
     options.content = options.content ?? defaultContent.content
-
     const reqData = {
       nodePath: {
-        path: options.path,
+        path: createNoteHierarchyString(options.path, namespaceID),
         namespaceID: namespaceID
       },
       id: noteID,
@@ -110,7 +118,7 @@ export const useApi = () => {
       tags: getTagsFromContent(options.content),
       data: serializeContent(options.content, noteID)
     }
-    mog('BulkCreateNodes', { reqData, noteID, namespaceID, options })
+
     setContent(noteID, options.content)
 
     const data = await client
@@ -132,22 +140,6 @@ export const useApi = () => {
       })
 
     return data
-  }
-
-  const appendToNode = async (noteId: string, content: NodeEditorContent, options?: { isShared?: boolean }) => {
-    const reqData = {
-      type: 'ElementRequest',
-      elements: serializeContent(content, noteId)
-    }
-
-    // * TODO: Add append to Note for shared notes
-    const url = apiURLs.appendNode(noteId)
-
-    const res = await client.patch(url, reqData, { headers: workspaceHeaders() })
-
-    if (res?.data) {
-      // toast('Task added!')
-    }
   }
 
   /*
@@ -192,6 +184,7 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
+    mog('GetNodeOptions', { isShared, url })
     if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
@@ -287,18 +280,6 @@ export const useApi = () => {
     }
   }
 
-  const getPublicNamespaceAPI = async (namespaceID: string) => {
-    const res = await client
-      .get(apiURLs.namespaces.getPublic(namespaceID), {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
-
-    return res
-  }
-
   const isPublic = (nodeid: string) => {
     return checkNodePublic(nodeid)
   }
@@ -338,64 +319,20 @@ export const useApi = () => {
     return data
   }
 
-  const getAllSnippetsByWorkspace = async () => {
+  const getAllSnippetsByWorkspace = async (): Promise<SnippetMetadata[]> => {
     const data = await client
       .get(apiURLs.getAllSnippetsByWorkspace, {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        return d.data
-      })
-      .then((d: any) => {
-        const snippets = useSnippetStore.getState().snippets
-
-        const newSnippets = d.filter((snippet) => {
-          const existSnippet = snippets.find((s) => s.id === snippet.snippetID)
-          return existSnippet === undefined
-        })
-
-        initSnippets([
-          ...snippets,
-          ...newSnippets.map((item) => ({
-            icon: 'ri:quill-pen-line',
+        const snippetResp = d.data as SnippetResponse[]
+        return snippetResp.map((item) => {
+          return {
             id: item.snippetID,
-            template: item.template,
             title: item.title,
-            content: []
-          }))
-        ])
-
-        return newSnippets
-      })
-      .then(async (newSnippets) => {
-        const ids = newSnippets?.map((item) => item.snippetID)
-        mog('NewSnippets', { newSnippets, ids })
-
-        if (ids && ids.length > 0) {
-          const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-          const requestData = { time: Date.now(), method: 'GET' }
-
-          res.fulfilled.forEach(async (snippet) => {
-            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
-            if (snippet) {
-              updateSnippet(snippet.id, snippet)
-              const isTemplate = snippet.template ?? false
-
-              const tags = isTemplate ? ['template'] : ['snippet']
-              const idxName = isTemplate ? 'template' : 'snippet'
-
-              if (isTemplate) {
-                await removeDocument('snippet', snippet.id)
-              } else {
-                await removeDocument('template', snippet.id)
-              }
-
-              await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
-            }
-          })
-
-          mog('RunBatchWorkerSnippetsRes', { res, ids })
-        }
+            icon: 'ri:quill-pen-line'
+          }
+        })
       })
 
     return data
@@ -442,62 +379,121 @@ export const useApi = () => {
     return data
   }
 
-  const getNodesByWorkspace = async () => {
-    const updatedILinks: any[] = await client
-      .get(apiURLs.namespaces.getHierarchy, {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
+  const getAllNamespaces = async () => {
+    const namespaces = await client
+      .get(apiURLs.namespaces.getAll, {
+        headers: workspaceHeaders()
       })
-      .then((res: any) => {
-        return res.data
+      .then((d: any) => {
+        mog('namespaces all', d.data)
+        return d.data.map((item: any) => ({
+          ns: {
+            id: item.id,
+            name: item.name,
+            icon: item.namespaceMetadata?.icon ?? undefined,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
+          },
+          archiveHierarchy: item?.archivedNodeHierarchyInformation
+        }))
       })
-      .catch(console.error)
+      .catch((e) => {
+        mog('Save error', e)
+        return undefined
+      })
 
-    mog(`UpdatedILinks`, { updatedILinks })
+    if (namespaces) {
+      setNamespaces(namespaces.map((n) => n.ns))
+      namespaces.map((n) => {
+        const archivedILinks = n?.archivedNodeHierarchyInformation
 
-    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
-      (p, [namespaceid, namespaceData]) => {
-        return {
-          namespaces: [
-            ...p.namespaces,
-            {
-              id: namespaceid,
-              name: namespaceData.name,
-              ...namespaceData?.namespaceMetadata
-            }
-          ],
-          nodes: [
-            ...p.nodes,
-            ...namespaceData.nodeHierarchy.map((ilink) => ({
-              ...ilink,
-              namespace: namespaceid
-            }))
-          ]
+        if (archivedILinks && archivedILinks.length > 0) {
+          const localILinks = useDataStore.getState().archive
+          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
+
+          mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
+          addInArchive(archivedILinks)
         }
-      },
-      { nodes: [], namespaces: [] }
-    )
-    mog('UpdatingILinks', { nodes, namespaces })
-    if (nodes && nodes.length > 0) {
-      const localILinks = useDataStore.getState().ilinks
-      const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
-      const ids = toUpdateLocal.map((i) => i.nodeid)
-
-      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-      const requestData = { time: Date.now(), method: 'GET' }
-
-      fulfilled.forEach((node) => {
-        const { rawResponse, nodeid } = node
-        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-        const content = deserializeContent(rawResponse.data)
-        const metadata = extractMetadata(rawResponse) // added by Varshitha
-        updateFromContent(nodeid, content, metadata)
       })
     }
+  }
 
-    // setNamespaces(namespaces)
-    setILinks(nodes)
+  const createNewNamespace = async (name: string) => {
+    try {
+      const res = await client
+        .post(
+          apiURLs.namespaces.create,
+          {
+            type: 'NamespaceRequest',
+            name,
+            id: generateNamespaceId(),
+            metadata: {
+              iconUrl: 'heroicons-outline:view-grid'
+            }
+          },
+          {
+            headers: workspaceHeaders()
+          }
+        )
+        .then((d: any) => ({
+          id: d?.data?.id,
+          name: d?.data?.name,
+          iconUrl: d?.data?.metadata?.iconUrl,
+          createdAt: d?.data?.createdAt,
+          updatedAt: d?.data?.updatedAt
+        }))
+
+      mog('We created a namespace', { res })
+
+      return res
+    } catch (err) {
+      toast('Unable to Create New Namespace')
+    }
+  }
+
+  const changeNamespaceName = async (id: string, name: string) => {
+    try {
+      const res = await client
+        .patch(
+          apiURLs.namespaces.update,
+          {
+            type: 'NamespaceRequest',
+            id,
+            name
+          },
+          {
+            headers: workspaceHeaders()
+          }
+        )
+        .then(() => true)
+      return res
+    } catch (err) {
+      throw new Error('Unable to update namespace')
+    }
+  }
+
+  const changeNamespaceIcon = async (id: string, name: string, icon: MIcon) => {
+    try {
+      const res = await client
+        .patch(
+          apiURLs.namespaces.update,
+          {
+            type: 'NamespaceRequest',
+            id,
+            name,
+            metadata: {
+              icon
+            }
+          },
+          {
+            headers: workspaceHeaders()
+          }
+        )
+        .then(() => icon)
+      return res
+    } catch (err) {
+      throw new Error('Unable to update namespace icon')
+    }
   }
 
   return {
@@ -509,11 +505,13 @@ export const useApi = () => {
     makeNotePrivate,
     isPublic,
     getPublicNodeAPI,
-    appendToNode,
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getSnippetById,
     refactorHierarchy,
-    getNodesByWorkspace
+    createNewNamespace,
+    getAllNamespaces,
+    changeNamespaceName,
+    changeNamespaceIcon
   }
 }

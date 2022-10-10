@@ -6,19 +6,20 @@ import {
   mog,
   SHARED_NAMESPACE,
   RESERVED_NAMESPACES,
-  getNewNamespaceName
+  getNewNamespaceName,
+  Mentionable
 } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { useApi } from './API/useNodeAPI'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {
   const namespaces = useDataStore((state) => state.namespaces)
-  const { createNewNamespace } = useApi()
+  const { createNewNamespace } = useNamespaceApi()
   const { getNode, getNodeType } = useNodes()
   const addNamespace = useDataStore((s) => s.addNamespace)
-  const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useApi()
+  const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useNamespaceApi()
 
   const getNamespace = (id: string): SingleNamespace | undefined => {
     const namespaces = useDataStore.getState().namespaces
@@ -197,6 +198,11 @@ export const useNamespaces = () => {
     })
   }
 
+  const getSharedUsersForNamespace = (namespaceId: string): Mentionable[] => {
+    mog('Getting shared users for namespace', { namespaceId })
+    return []
+  }
+
   return {
     getNamespace,
     getNodesOfNamespace,
@@ -211,6 +217,8 @@ export const useNamespaces = () => {
     getNamespaceIconForNode,
     addDefaultNewNamespace,
     getNamespaceOfNode,
-    getNamespaceOptions
+    getNamespaceOptions,
+    // Sharing
+    getSharedUsersForNamespace
   }
 }

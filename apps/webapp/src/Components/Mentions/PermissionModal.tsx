@@ -1,58 +1,50 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import { useForm, Controller } from 'react-hook-form'
 
-import { LoadingButton, IconButton, Button } from '@workduck-io/mex-components'
+import { Button, IconButton } from '@workduck-io/mex-components'
 
-import {
-  mog,
-  AccessLevel,
-  DefaultPermissionValue,
-  permissionOptions,
-  DefaultPermission,
-  Mentionable
-} from '@mexit/core'
-import { Label, StyledCreatatbleSelect, SelectWrapper } from '@mexit/shared'
+import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
+import { StyledCreatatbleSelect } from '@mexit/shared'
 
 import { usePermission } from '../../Hooks/API/usePermission'
-import { useUserService } from '../../Hooks/API/useUserAPI'
-import { useMentions, getAccessValue } from '../../Hooks/useMentions'
+import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNodes } from '../../Hooks/useNodes'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalHeader, ModalControls, ModalSectionScroll, ModalSection } from '../../Style/Refactor'
-import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { ModalControls, ModalHeader, ModalSection, ModalSectionScroll } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
-import { InputFormError } from '../Input'
 import { ProfileImage } from '../User/ProfileImage'
 import { InvitedUsersContent } from './InvitedUsersContent'
 import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {
-  InviteFormWrapper,
   ShareAlias,
+  ShareAliasWithImage,
   SharedPermissionsTable,
   ShareEmail,
-  SharePermission,
-  ShareRowAction,
-  ShareRow,
-  ShareRowHeading,
-  ShareRowActionsWrapper,
-  InviteFormFieldset,
-  ShareAliasWithImage,
   ShareOwnerTag,
-  MultipleInviteWrapper
+  SharePermission,
+  ShareRow,
+  ShareRowAction,
+  ShareRowActionsWrapper,
+  ShareRowHeading
 } from './styles'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 
-export const PermissionModalContent = () => {
+interface PermissionModalProps {
+  type: 'node' | 'space'
+}
+
+export const PermissionModalContent = ({ type = 'node' }: PermissionModalProps) => {
   const closeModal = useShareModalStore((s) => s.closeModal)
   const open = useShareModalStore((s) => s.open)
   const { getSharedUsersForNode, getInvitedUsersForNode, applyChangesMentionable } = useMentions()
+  const { getSharedUsersForNamespace, getDefaultNamespace } = useNamespaces()
   const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
   const currentUserDetails = useAuthStore((s) => s.userDetails)
@@ -60,9 +52,11 @@ export const PermissionModalContent = () => {
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = usePermission()
   const { accessWhenShared } = useNodes()
+  const defaultNamespace = getDefaultNamespace()
 
   const modalData = useShareModalStore((state) => state.data)
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
+  const namespaceid = useMemo(() => modalData?.namespaceid ?? defaultNamespace?.id, [modalData.namespaceid, node])
 
   const readOnly = useMemo(() => {
     // to test: return true
@@ -75,10 +69,10 @@ export const PermissionModalContent = () => {
 
   useEffect(() => {
     if (nodeid) {
-      const sUsers = getSharedUsersForNode(nodeid)
+      const sUsers = type === 'node' ? getSharedUsersForNode(nodeid) : getSharedUsersForNamespace(namespaceid)
       setSharedUsers(sUsers)
     }
-  }, [nodeid, mentionable, open])
+  }, [nodeid, namespaceid, mentionable, open])
 
   const invitedUsers = useMemo(() => {
     if (nodeid) {
@@ -87,31 +81,6 @@ export const PermissionModalContent = () => {
     return []
   }, [nodeid])
 
-  const onCopyLink = () => {
-    closeModal()
-  }
-
-  // This is called for every keystroke
-  // eslint-disable-next-line
-  const onAliasChange = (userid: string, alias: string) => {
-    // mog('onPermissionChange', { userid, alias })
-
-    // Change the user and add to changedUsers
-    const changedUser = changedUsers?.find((u) => u.userID === userid)
-    const dataUser = sharedUsers?.find((u) => u.userID === userid)
-
-    if (changedUser) {
-      changedUser.alias = alias
-      changedUser.change.push('alias')
-      setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
-    } else if (dataUser) {
-      dataUser.alias = alias
-      const changeUser = { ...dataUser, change: ['alias' as const] }
-      setChangedUsers([...(changedUsers ?? []), changeUser])
-    }
-  }
-
-  // This is called for every keystroke
   const onRevokeAccess = (userid: string) => {
     // mog('onPermissionChange', { userid, alias })
 

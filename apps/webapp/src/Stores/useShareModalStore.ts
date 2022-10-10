@@ -30,6 +30,9 @@ interface ShareModalData {
   nodeid?: string
   alias?: string
 
+  // Used only for share permissions of namespace
+  namespaceid?: string
+
   fromEditor?: boolean
   // When sharing to a preexisting user from a mention
   userid?: string

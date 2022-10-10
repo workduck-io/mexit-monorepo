@@ -4,6 +4,8 @@ export const IS_DEV = (() => {
   return false
 })()
 
+type AllNamespaceOption = 'onlyShared' | 'onlyWorkspace'
+
 export const USE_API = () => {
   /** Useful for tracking stopped API calls */
   // if (IS_DEV) console.info('API is set to false')
@@ -33,6 +35,8 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
+
+export const MEXIT_STAGING_URL_BASE = 'https://http-staging.workduck.io/mex'
 
 export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
 export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
@@ -80,14 +84,15 @@ export const apiURLs = {
 
   // Namespaces
   namespaces: {
-    getHierarchy: `${MEXIT_BACKEND_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
-    get: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/${id}`,
-    getAll: `${MEXIT_BACKEND_URL_BASE}/namespace/all`,
-    create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
-    update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
-    makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
-    makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`
+    getHierarchy: `${MEXIT_STAGING_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
+    get: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/${id}`,
+    getAll: (opt?: AllNamespaceOption) => `${MEXIT_STAGING_URL_BASE}/v1/namespace/all${opt ? `?${opt}=true` : ''}`,
+    // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
+    create: `${MEXIT_STAGING_URL_BASE}/namespace`,
+    update: `${MEXIT_STAGING_URL_BASE}/namespace`,
+    makePublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePublic/${id}`,
+    makePrivate: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePrivate/${id}`,
+    getPublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/public/${id}`
   },
 
   // Link Shortener URLs

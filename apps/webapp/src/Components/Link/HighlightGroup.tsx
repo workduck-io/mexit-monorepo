@@ -5,9 +5,7 @@ import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import markPenLine from '@iconify/icons-ri/mark-pen-line'
-import { SingleHighlight, SourceHighlights } from '../../Stores/useHighlightStore'
-import { Link } from '../../Stores/useLinkStore'
-import { mog } from '@mexit/core'
+import { mog, SingleHighlight, SourceHighlights, Link } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightCount,

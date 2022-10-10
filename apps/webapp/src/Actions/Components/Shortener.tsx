@@ -4,14 +4,14 @@ import styled from 'styled-components'
 
 import { LoadingButton } from '@workduck-io/mex-components'
 
-import { getValidTitle, metadataParser, Tag } from '@mexit/core'
+import { Link, getValidTitle, metadataParser, Tag } from '@mexit/core'
 import { copyTextToClipboard, Input, Label, resize } from '@mexit/shared'
 
 import AddTagMenu from '../../Components/Link/AddTagMenu'
 import { LinkTagSection } from '../../Components/Link/Link.style'
 import { TagsLabel } from '../../Components/Sidebar/TagLabel'
 import { useURLsAPI } from '../../Hooks/useURLs'
-import { Link, useLinkStore } from '../../Stores/useLinkStore'
+import { useLinkStore } from '../../Stores/useLinkStore'
 
 const Form = styled.form`
   display: flex;

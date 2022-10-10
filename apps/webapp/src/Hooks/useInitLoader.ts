@@ -15,6 +15,7 @@ import useLoad from './useLoad'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -25,7 +26,8 @@ export const useInitLoader = () => {
 
   const { goTo } = useRouting()
 
-  const { getNodesByWorkspace, getAllSnippetsByWorkspace, getAllNamespaces } = useApi()
+  const { getNodesByWorkspace, getAllSnippetsByWorkspace } = useApi()
+  const { getAllNamespaces } = useNamespaceApi()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
 

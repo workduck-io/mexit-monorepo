@@ -42,6 +42,7 @@ const RHSidebar = () => {
       $expanded={rhSidebar.expanded}
       $overlaySidebar={overlaySidebar}
       $side="right"
+      $publicNamespace={false}
       {...getFocusProps(focusMode)}
     >
       <RHSidebarContent />
