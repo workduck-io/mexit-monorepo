@@ -254,15 +254,8 @@ const Snippets = () => {
 
       mog('AllSnippets', { snippets })
 
-      const token = useInternalAuthStore.getState().userCred.token
-
       if (ids && ids.length > 0) {
-        const res = await runBatchWorker(
-          { token: token, workspaceID: getWorkspaceId() },
-          WorkerRequestType.GET_SNIPPETS,
-          6,
-          ids
-        )
+        const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
 
         res.fulfilled.forEach((snippet) => {
           if (snippet) updateSnippet(snippet)

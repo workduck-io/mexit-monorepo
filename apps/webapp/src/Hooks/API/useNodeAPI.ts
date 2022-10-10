@@ -365,15 +365,9 @@ export const useApi = () => {
       .then(async (newSnippets) => {
         const ids = newSnippets?.map((item) => item.snippetID)
         mog('NewSnippets', { newSnippets, ids })
-        const token = useInternalAuthStore.getState().userCred.token
 
         if (ids && ids.length > 0) {
-          const res = await runBatchWorker(
-            { token: token, workspaceID: getWorkspaceId() },
-            WorkerRequestType.GET_SNIPPETS,
-            6,
-            ids
-          )
+          const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
 
           res.fulfilled.forEach(async (snippet) => {
             if (snippet) {
@@ -610,14 +604,8 @@ export const useApi = () => {
       const localILinks = useDataStore.getState().ilinks
       const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
       const ids = toUpdateLocal.map((i) => i.nodeid)
-      const token = useInternalAuthStore.getState().userCred.token
 
-      const { fulfilled } = await runBatchWorker(
-        { token: token, workspaceID: getWorkspaceId() },
-        WorkerRequestType.GET_NODES,
-        6,
-        ids
-      )
+      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
 
       fulfilled.forEach((node) => {
         const { rawResponse, nodeid } = node
