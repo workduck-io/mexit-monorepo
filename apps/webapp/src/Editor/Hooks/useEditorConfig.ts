@@ -167,7 +167,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
               grantUserAccessOnMention(alias, nodeid)
             },
             newItemHandler: (newAlias) => {
-              prefillShareModal('invite', { alias: newAlias, fromEditor: true })
+              prefillShareModal('invite', 'note', { alias: newAlias, fromEditor: true })
               return newAlias
             },
             renderElement: TagComboboxItem

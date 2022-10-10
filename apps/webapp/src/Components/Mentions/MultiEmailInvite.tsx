@@ -18,16 +18,19 @@ import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 import { MultipleInviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
   const addMentionable = useMentionStore((state) => state.addMentionable)
+  const context = useShareModalStore((state) => state.context)
   // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getPathFromNodeid } = useLinks()
   const { getUserDetails } = useUserService()
   const { grantUsersPermission } = usePermission()
   const localuserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
+  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
   const {
     handleSubmit,
     register,
@@ -37,6 +40,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
 
   const modalData = useShareModalStore((state) => state.data)
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
+  const namespaceid = useMemo(() => modalData?.namespaceid ?? currentSpace, [modalData.namespaceid, node, currentSpace])
 
   const onSubmit = async (data: InviteModalData) => {
     mog('data', data)
@@ -103,7 +107,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     <MultipleInviteWrapper>
       <ModalHeader>Invite Users</ModalHeader>
       <p>
-        Invite your friends to your note <strong>{getPathFromNodeid(nodeid)}</strong>
+        Invite your friends to your {context} <strong>{getPathFromNodeid(nodeid)}</strong>
       </p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={disabled}>

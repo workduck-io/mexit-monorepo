@@ -51,7 +51,7 @@ export const MentionTooltipComponent = ({ user, access, hideAccess }: MentionToo
       toast('Changing your own permission is not allowed')
     }
     if (user?.type === 'mentionable') {
-      prefillShareModal('invite', {
+      prefillShareModal('invite', 'note', {
         userid: user?.userID
       })
     }

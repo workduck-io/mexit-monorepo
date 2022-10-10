@@ -54,7 +54,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   }
 
   const handleShare = (item: TreeItem) => {
-    openShareModal('permission', item.data.nodeid)
+    openShareModal('permission', 'note', item.data.nodeid)
   }
 
   // BUG: The backend doesn't return the new added path in the selected namespace

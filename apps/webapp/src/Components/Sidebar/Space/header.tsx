@@ -27,6 +27,7 @@ import {
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 import { TagsLabel } from '../TagLabel'
+import { useShareModalStore } from '../../../Stores/useShareModalStore'
 
 const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
@@ -40,6 +41,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const { changeNamespaceName, changeNamespaceIcon } = useNamespaces()
   const [showInput, setShowInput] = useState(false)
   const [title, setTitle] = useState(space?.label)
+  const openShareModal = useShareModalStore((store) => store.openModal)
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
@@ -67,6 +69,10 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
 
   const onChangeIcon = (icon: MIcon) => {
     changeNamespaceIcon(space?.id, space?.label, icon)
+  }
+
+  const onShareSpace = () => {
+    openShareModal('permission', 'space', space?.id)
   }
 
   useEffect(() => {
@@ -115,7 +121,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
-          <IconButton title="Share Space" icon="ri:share-line" onClick={toggleSidebar} />
+          <IconButton title="Share Space" icon="ri:share-line" onClick={onShareSpace} />
           <Tippy
             theme="mex-bright"
             placement="right"

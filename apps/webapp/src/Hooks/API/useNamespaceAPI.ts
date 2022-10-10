@@ -2,7 +2,16 @@ import toast from 'react-hot-toast'
 
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, generateNamespaceId, runBatch, iLinksToUpdate, MIcon, mog, WORKSPACE_HEADER } from '@mexit/core'
+import {
+  apiURLs,
+  generateNamespaceId,
+  runBatch,
+  iLinksToUpdate,
+  MIcon,
+  mog,
+  WORKSPACE_HEADER,
+  AccessLevel
+} from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -51,7 +60,7 @@ export const useNamespaceApi = () => {
         ])
       ).fulfilled
 
-      mog('updatedILinks', { updatedILinks })
+      // mog('updatedILinks', { updatedILinks })
       const newILinks = updatedILinks[0]
         .filter((p) => p.status === 'fulfilled')
         .map((p) => p.value)
@@ -60,7 +69,7 @@ export const useNamespaceApi = () => {
           return [...arr, ...ns.nodeHierarchy]
         }, [])
 
-      mog('updatedILinks', { updatedILinks, newILinks })
+      // mog('updatedILinks', { updatedILinks, newILinks })
       setNamespaces(namespaces.map((n) => n.ns))
     }
   }
@@ -170,10 +179,60 @@ export const useNamespaceApi = () => {
     }
   }
 
+  const shareNamespace = async (id: string, userIDs: string[], accessType: AccessLevel) => {
+    try {
+      const res = await client.post(
+        apiURLs.namespaces.update,
+        {
+          type: 'SharedNamespaceRequest',
+          namespaceID: id,
+          accessType,
+          userIDs
+        },
+        {
+          headers: workspaceHeaders()
+        }
+      )
+      return res
+    } catch (err) {
+      throw new Error(`Unable to share namespace: ${err}`)
+    }
+  }
+
+  const revokeNamespaceShare = async (id: string, userIDs: string[]) => {
+    try {
+      const res = await client.delete(apiURLs.namespaces.update, {
+        data: {
+          type: 'SharedNamespaceRequest',
+          namespaceID: id,
+          userIDs
+        },
+        headers: workspaceHeaders()
+      })
+      return res
+    } catch (err) {
+      throw new Error(`Unable to revoke namespace access: ${err}`)
+    }
+  }
+
+  const getAllSharedUsers = async (id: string) => {
+    try {
+      const res = await client.get(apiURLs.namespaces.getUsersOfShared(id), {
+        headers: workspaceHeaders()
+      })
+      return res
+    } catch (err) {
+      throw new Error(`Unable to get shared namespace users: ${err}`)
+    }
+  }
+
   return {
     createNewNamespace,
     getAllNamespaces,
     changeNamespaceName,
-    changeNamespaceIcon
+    changeNamespaceIcon,
+    shareNamespace,
+    revokeNamespaceShare,
+    getAllSharedUsers
   }
 }

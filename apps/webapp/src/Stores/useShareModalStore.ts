@@ -8,6 +8,7 @@ type ShareModalMode = 'invite' | 'permission'
 // To denote what has changed
 // Alias changes should not require a network call
 type UserChange = 'permission' | 'alias' | 'revoke'
+type ModalContext = 'note' | 'space'
 
 interface ChangedUser extends Mentionable {
   change: UserChange[]
@@ -44,27 +45,34 @@ interface ShareModalState {
   open: boolean
   focus: boolean
   mode: ShareModalMode
+  context: ModalContext
   data: ShareModalData
-  openModal: (mode: ShareModalMode, nodeid?: string) => void
+  openModal: (mode: ShareModalMode, context: ModalContext, id?: string) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) => void
-  prefillModal: (mode: ShareModalMode, data: ShareModalData) => void
+  prefillModal: (mode: ShareModalMode, context: ModalContext, data: ShareModalData) => void
 }
 
 export const useShareModalStore = create<ShareModalState>((set, get) => ({
   open: false,
   focus: true,
+  context: 'note',
   mode: 'permission',
   data: {
     changedUsers: [],
     changedInvitedUsers: []
   },
-  openModal: (mode: ShareModalMode) =>
+  openModal: (mode: ShareModalMode, context, id) =>
     set({
       mode,
-      open: true
+      context,
+      open: true,
+      data: {
+        nodeid: context === 'note' ? id : undefined,
+        namespaceid: context === 'space' ? id : undefined
+      }
     }),
   closeModal: () => {
     set({
@@ -80,10 +88,11 @@ export const useShareModalStore = create<ShareModalState>((set, get) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, data) =>
+  prefillModal: (mode: ShareModalMode, context, data) =>
     set({
       mode,
       open: true,
+      context,
       data: {
         ...get().data,
         ...data

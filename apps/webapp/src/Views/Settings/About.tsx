@@ -49,6 +49,7 @@ const About = () => {
   useEffect(() => {
     getAllNamespaces()
   }, [])
+
   return (
     <CenteredColumn>
       <BackCard>

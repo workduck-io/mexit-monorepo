@@ -35,14 +35,12 @@ import {
   ShareRowHeading
 } from './styles'
 import { useNamespaces } from '../../Hooks/useNamespaces'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
-interface PermissionModalProps {
-  type: 'node' | 'space'
-}
-
-export const PermissionModalContent = ({ type = 'node' }: PermissionModalProps) => {
+export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)
   const open = useShareModalStore((s) => s.open)
+  const context = useShareModalStore((s) => s.context)
   const { getSharedUsersForNode, getInvitedUsersForNode, applyChangesMentionable } = useMentions()
   const { getSharedUsersForNamespace, getDefaultNamespace } = useNamespaces()
   const mentionable = useMentionStore((s) => s.mentionable)
@@ -52,11 +50,11 @@ export const PermissionModalContent = ({ type = 'node' }: PermissionModalProps) 
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = usePermission()
   const { accessWhenShared } = useNodes()
-  const defaultNamespace = getDefaultNamespace()
+  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
 
   const modalData = useShareModalStore((state) => state.data)
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
-  const namespaceid = useMemo(() => modalData?.namespaceid ?? defaultNamespace?.id, [modalData.namespaceid, node])
+  const namespaceid = useMemo(() => modalData?.namespaceid ?? currentSpace, [modalData.namespaceid, node, currentSpace])
 
   const readOnly = useMemo(() => {
     // to test: return true
@@ -69,7 +67,7 @@ export const PermissionModalContent = ({ type = 'node' }: PermissionModalProps) 
 
   useEffect(() => {
     if (nodeid) {
-      const sUsers = type === 'node' ? getSharedUsersForNode(nodeid) : getSharedUsersForNamespace(namespaceid)
+      const sUsers = context === 'note' ? getSharedUsersForNode(nodeid) : getSharedUsersForNamespace(namespaceid)
       setSharedUsers(sUsers)
     }
   }, [nodeid, namespaceid, mentionable, open])
@@ -206,7 +204,7 @@ export const PermissionModalContent = ({ type = 'node' }: PermissionModalProps) 
           <ModalHeader>Manage Sharing</ModalHeader>
           <ModalSectionScroll>
             <SharedPermissionsTable>
-              <caption>Users with access to this note</caption>
+              <caption>Users with access to this {context}</caption>
               <ShareRowHeading>
                 <tr>
                   <td>Alias</td>

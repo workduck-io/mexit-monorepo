@@ -92,7 +92,9 @@ export const apiURLs = {
     update: `${MEXIT_STAGING_URL_BASE}/namespace`,
     makePublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePublic/${id}`,
     makePrivate: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/public/${id}`
+    getPublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/public/${id}`,
+    share: `${MEXIT_STAGING_URL_BASE}/shared/namespace`,
+    getUsersOfShared: (id: string) => `https://localhost:4000/v1/shared/namespace/${id}/users`
   },
 
   // Link Shortener URLs
