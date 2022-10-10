@@ -24,30 +24,17 @@ import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
+import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useSearch } from '../useSearch'
+import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
-
-enum RequestType {
-  'GET_NODE' = 'GET_NODE'
-}
-
-interface SnippetResponse {
-  snippetID: string
-  title: string
-  version: number
-}
-
-interface SnippetMetadata {
-  id: string
-  title: string
-  icon: string
-}
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -59,7 +46,9 @@ export const useApi = () => {
   const { updateFromContent } = useUpdater()
   const setILinks = useDataStore((store) => store.setIlinks)
   const { getSharedNode } = useNodes()
-  const { updateDocument } = useSearch()
+  const { updateDocument, removeDocument } = useSearch()
+  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const { updateSnippet } = useSnippets()
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -345,20 +334,56 @@ export const useApi = () => {
     return data
   }
 
-  const getAllSnippetsByWorkspace = async (): Promise<SnippetMetadata[]> => {
+  const getAllSnippetsByWorkspace = async () => {
     const data = await client
       .get(apiURLs.getAllSnippetsByWorkspace, {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        const snippetResp = d.data as SnippetResponse[]
-        return snippetResp.map((item) => {
-          return {
-            id: item.snippetID,
-            title: item.title,
-            icon: 'ri:quill-pen-line'
-          }
+        return d.data
+      })
+      .then((d: any) => {
+        const snippets = useSnippetStore.getState().snippets
+
+        const newSnippets = d.filter((snippet) => {
+          const existSnippet = snippets.find((s) => s.id === snippet.snippetID)
+          return existSnippet === undefined
         })
+
+        initSnippets([
+          ...snippets,
+          ...newSnippets.map((item) => ({
+            icon: 'ri:quill-pen-line',
+            id: item.snippetID,
+            template: item.template,
+            title: item.title,
+            content: []
+          }))
+        ])
+
+        return newSnippets
+      })
+      .then(async (newSnippets) => {
+        const ids = newSnippets?.map((item) => item.snippetID)
+        mog('NewSnippets', { newSnippets, ids })
+        const token = useInternalAuthStore.getState().userCred.token
+
+        if (ids && ids.length > 0) {
+          const res = await runBatchWorker(
+            { token: token, workspaceID: getWorkspaceId() },
+            WorkerRequestType.GET_SNIPPETS,
+            6,
+            ids
+          )
+
+          res.fulfilled.forEach(async (snippet) => {
+            if (snippet) {
+              updateSnippet(snippet)
+            }
+          })
+
+          mog('RunBatchWorkerSnippetsRes', { res, ids })
+        }
       })
 
     return data
@@ -575,9 +600,10 @@ export const useApi = () => {
       const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
       const ids = toUpdateLocal.map((i) => i.nodeid)
       const token = useInternalAuthStore.getState().userCred.token
+
       const { fulfilled } = await runBatchWorker(
         { token: token, workspaceID: getWorkspaceId() },
-        RequestType.GET_NODE,
+        WorkerRequestType.GET_NODES,
         6,
         ids
       )

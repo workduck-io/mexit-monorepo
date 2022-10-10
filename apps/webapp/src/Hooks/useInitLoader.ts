@@ -28,7 +28,7 @@ export const useInitLoader = () => {
 
   const backgroundFetch = async () => {
     try {
-      runBatch<any>([fetchShareData(), getAllSnippetsByWorkspace(), initPortals()])
+      runBatch<any>([fetchShareData(), initPortals(), getAllSnippetsByWorkspace()])
     } catch (err) {
       mog('Background fetch failed')
     }

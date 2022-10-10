@@ -246,22 +246,32 @@ const Snippets = () => {
   }
 
   useEffect(() => {
-    mog('Idhar tera baap aayega?')
-    const snippets = getSnippets()
-    const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
-    const ids = unfetchedSnippets.map((i) => i.id)
-    const userCred = useInternalAuthStore.getState().userCred
+    async function getInitialSnippets() {
+      mog('Idhar tera baap aayega?')
+      const snippets = getSnippets()
+      const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
+      const ids = unfetchedSnippets.map((i) => i.id)
 
-    mog('AllSnippets', { snippets })
+      mog('AllSnippets', { snippets })
 
-    runBatchWorker(
-      { token: userCred.token, workspaceID: getWorkspaceId() },
-      WorkerRequestType.GET_SNIPPETS,
-      6,
-      ids
-    ).then((res) => {
-      mog('InitialSnippetsRunBatch', { res })
-    })
+      const token = useInternalAuthStore.getState().userCred.token
+
+      if (ids && ids.length > 0) {
+        const res = await runBatchWorker(
+          { token: token, workspaceID: getWorkspaceId() },
+          WorkerRequestType.GET_SNIPPETS,
+          6,
+          ids
+        )
+
+        res.fulfilled.forEach((snippet) => {
+          if (snippet) updateSnippet(snippet)
+        })
+
+        mog('RunBatchWorkerSnippetsRes', { res, ids })
+      }
+    }
+    getInitialSnippets()
   }, [])
 
   return (
