@@ -4840,10 +4840,10 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
   integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
 
-"@workduck-io/dwindle@^0.0.18":
-  version "0.0.18"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.18/55cb983b5d8771b5aa5f592c3d7af753f748832615642ff557e9786958982802#7626d39dec01aa72c4b4987fd041af74c571c619"
-  integrity sha512-KfsJvcBrk8edFrCXhbXRbt1A3dC02X40M6u5ZsYYyOjQwfEj+7KKiD7c6MqxuoqM/+DHpKkzJ+sUX5sKrJhQFQ==
+"@workduck-io/dwindle@^0.0.20":
+  version "0.0.20"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.20/4d2aca6481c2282f44b70b4d0a24b755233ebb64#4d2aca6481c2282f44b70b4d0a24b755233ebb64"
+  integrity sha512-GaIY0RNMrc37NoL9eiAvUgwrSkJhpDQiprLaGBPgvQz+hQkyxKDxa/dssPFWFISSy7lehdR8ZadN0fNyAiYLZA==
   dependencies:
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
