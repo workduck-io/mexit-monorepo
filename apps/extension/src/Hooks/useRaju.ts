@@ -39,18 +39,18 @@ import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import { useSnippets } from './useSnippets'
+import { useSputlitContext } from './useSputlitContext'
 import useThemeStore from './useThemeStore'
 
 export interface ParentMethods {
-  // Custom events is not a good option when we want to receive a response,
-  // I may have to go with postmessage or broadcast channel for this,
-  // TODO: implement the above and then we can move useSearch away from chotu
   SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>
   SET_CONTENT: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
   ADD_SINGLE_ILINK: (nodeid: string, path: string, namespace: string) => void
   ADD_MULTIPLE_ILINKS: (linksToBeCreated: ILink[]) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
 }
+
+const IFRAME_ID = 'something-nothing'
 
 // Ref: https://stackoverflow.com/a/53039092/13011527
 type ArgumentsType<T extends (...args: any[]) => any> = T extends (...args: infer A) => any ? A : never
@@ -59,7 +59,10 @@ type ArgumentsType<T extends (...args: any[]) => any> = T extends (...args: infe
 // He doesn't carry out things on his own, but tells people what to do and when
 // e.g. watch his scene when negotiating with taxi driver and construction worker to understand what useRaju does
 export default function useRaju() {
-  const [iframe, setIframe] = useState<HTMLIFrameElement>(null)
+  // For some reason, using useState wasn't making dispatch() make use of the new variable
+  // So added in the context for now
+  const { child, setChild } = useSputlitContext()
+
   const setTheme = useThemeStore((store) => store.setTheme)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
@@ -133,6 +136,9 @@ export default function useRaju() {
     bootContents(contents: Contents) {
       initContents(contents)
     },
+    bootSnippets(snippets: Snippet[]) {
+      updateSnippets(snippets)
+    },
     bootPublicNodes(publicNodes: any[]) {
       setPublicNodes(publicNodes)
     },
@@ -144,16 +150,25 @@ export default function useRaju() {
   useEffect(() => {
     const iframe = document.createElement('iframe')
     iframe.src = `${MEXIT_FRONTEND_URL_BASE}/chotu`
-    const IFRAME_ID = 'something-nothing'
     iframe.id = IFRAME_ID
 
     if (!getElementById(IFRAME_ID)) {
       styleSlot.appendChild(iframe)
     }
+    const connection = connectToChild({
+      iframe,
+      methods
+      // debug: true
+    })
 
     const handleIframeLoad = () => {
-      console.log('loaded', getElementById(IFRAME_ID))
-      setIframe(getElementById(IFRAME_ID) as HTMLIFrameElement)
+      connection.promise
+        .then((child: any) => {
+          setChild(child)
+        })
+        .catch((error) => {
+          mog('ErrorConnectingToChild', error)
+        })
     }
 
     iframe.addEventListener('load', handleIframeLoad)
@@ -161,60 +176,30 @@ export default function useRaju() {
     return () => iframe.removeEventListener('load', handleIframeLoad)
   }, [])
 
-  const connection = useMemo(() => {
-    if (!iframe) return
-
-    return connectToChild({
-      iframe,
-      methods,
-      debug: true
-    })
-  }, [iframe])
-
-  const init = () => {
-    console.log('calling initi', iframe)
-    connection.promise
-      .then((child: any) => {
-        child.log('Hi there')
-      })
-      .catch((error) => {
-        mog('ErrorWithInitConection', error)
-      })
-  }
-
   const dispatch = <K extends keyof ParentMethods>(
     type: K,
     ...params: ArgumentsType<ParentMethods[K]>
   ): ReturnType<ParentMethods[K]> => {
-    console.log('calling dispatch', iframe)
+    switch (type) {
+      case 'SET_CONTENT':
+        return child.updateContentStore(...params)
+      case 'ADD_SINGLE_ILINK':
+        return child.updateSingleILink(...params)
+      case 'ADD_MULTIPLE_ILINKS':
+        return child.updateMultipleILinks(...params)
+      case 'ACT_ON_REMINDER':
+        return child.reminderAction(...params)
+      case 'SEARCH':
+        const res = child.search(...params).then((result) => {
+          return result
+        })
 
-    const result = connection.promise.then((child: any) => {
-      switch (type) {
-        case 'SET_CONTENT':
-          return child.updateContentStore(params)
-        case 'ADD_SINGLE_ILINK':
-          return child.updateSingleILink(params)
-        case 'ADD_MULTIPLE_ILINKS':
-          return child.updateMultipleILinks(params)
-        case 'ACT_ON_REMINDER':
-          return child.reminderAction(params)
-        case 'SEARCH':
-          console.log('params', params)
-          return child.search(params).then((result) => {
-            console.log('result', result)
-            return result
-          })
-      }
-    })
-
-    connection.destroy()
-    return result as ReturnType<ParentMethods[K]>
+        return res
+    }
   }
 
   return {
-    iframe,
     methods,
-    init,
     dispatch
   }
 }

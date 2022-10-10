@@ -19,7 +19,7 @@ import { useSputlitContext } from './useSputlitContext'
 
 export const useSearch = () => {
   const { search, setSearchResults } = useSputlitContext()
-  const { dispatch, iframe } = useRaju()
+  const { dispatch } = useRaju()
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
   const ilinks = useDataStore((state) => state.ilinks)
