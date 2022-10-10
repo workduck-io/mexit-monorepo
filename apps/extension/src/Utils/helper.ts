@@ -10,10 +10,10 @@ import {
   MexitAction,
   NODE_ID_PREFIX,
   SNIPPET_PREFIX
+  ListItemType
 } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
-import { ListItemType } from '../Types/List'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content

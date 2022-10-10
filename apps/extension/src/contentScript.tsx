@@ -30,6 +30,10 @@ shadowRoot.addEventListener('keydown', (event) => {
   }
 })
 
+export const getElementById = (id: string) => {
+  return document.getElementById('mexit').shadowRoot.getElementById(id)
+}
+
 const container = document.createElement('div')
 container.id = 'chotu-container'
 

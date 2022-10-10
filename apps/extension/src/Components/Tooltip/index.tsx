@@ -1,19 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Highlighter from 'web-highlighter'
-import {
-  AccessTag,
-  Button,
-  copyTextToClipboard,
-  MentionTooltip,
-  MentionTooltipContent,
-  SMention,
-  SMentionRoot,
-  TooltipAlias,
-  TooltipMail
-} from '@mexit/shared'
-import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+
+import Tippy from '@tippyjs/react/headless'
 import toast from 'react-hot-toast'
+import Highlighter from 'web-highlighter'
+
 import {
   AccessLevel,
   CacheUser,
@@ -25,23 +15,37 @@ import {
   SelfMention,
   SEPARATOR
 } from '@mexit/core'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useLinks } from '../../Hooks/useLinks'
-import { useEditorContext } from '../../Hooks/useEditorContext'
-import { useHighlightStore } from '../../Stores/useHighlightStore'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import {
+  AccessTag,
+  Button,
+  copyTextToClipboard,
+  MentionTooltip,
+  MentionTooltipContent,
+  SMention,
+  SMentionRoot,
+  TooltipAlias,
+  TooltipMail
+} from '@mexit/shared'
+
 import { useAuthStore } from '../../Hooks/useAuth'
-import useRaju from '../../Hooks/useRaju'
-import { deserializeContent } from '../../Utils/serializer'
-import { useNodes } from '../../Hooks/useNodes'
-import { useUserCacheStore } from '../../Stores/useUserCacheStore'
-import { ProfileImage } from '../ProfileImage'
-import Tippy from '@tippyjs/react/headless' // different import path!
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useInternalLinks } from '../../Hooks/useInternalLinks'
+import { useLinks } from '../../Hooks/useLinks'
+// different import path!
 import { useMentions } from '../../Hooks/useMentions'
+import { useNodes } from '../../Hooks/useNodes'
+import useRaju from '../../Hooks/useRaju'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import { useContentStore } from '../../Stores/useContentStore'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useUserCacheStore } from '../../Stores/useUserCacheStore'
+import { deserializeContent } from '../../Utils/serializer'
 import { styleSlot } from '../../contentScript'
 import { MentionTooltipComponent } from '../MentionTooltip'
+import { ProfileImage } from '../ProfileImage'
+import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
@@ -101,11 +105,7 @@ function Tooltip() {
         const content = deserializeContent(message.data)
         const metadata = extractMetadata(message)
 
-        dispatch('SET_CONTENT', {
-          nodeid,
-          content,
-          metadata
-        })
+        dispatch('SET_CONTENT', nodeid, content, metadata)
 
         toast.success('Highlight removed')
       }

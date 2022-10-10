@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import { connect } from 'http2'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 
 import {
@@ -31,12 +32,10 @@ import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
-  const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
   const { userDetails, workspaceDetails } = useAuthStore()
   // const linkCaptures = useShortenerStore((state) => state.linkCaptures)
   const theme = useThemeStore((state) => state.theme)
   // TODO: this is stupid, it would never know if auth changes
-  const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
 
@@ -61,11 +60,12 @@ export default function Chotu() {
   const connection = connectToParent({
     methods: {
       search(key: idxKey | idxKey[], query: string) {
+        console.log('params', key, query)
         const res = searchWorker ? queryIndex(key, query) : []
         return res
       },
-      updateContentStore(props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }) {
-        setContent(props.nodeid, props.content, props?.metadata)
+      updateContentStore(nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) {
+        setContent(nodeid, content, metadata)
         return
       },
       updateSingleILink(props: { nodeid: string; path: string; namespace: string }) {
@@ -85,51 +85,57 @@ export default function Chotu() {
   })
 
   useEffect(() => {
-    if (connection) {
-      connection.promise
-        .then((parent: any) => {
-          parent.init(
-            userDetails,
-            workspaceDetails,
-            theme,
-            authAWS,
-            snippets,
-            contents,
-            ilinks,
-            namespaces,
-            reminders,
-            publicNodes,
-            sharedNodes,
-            tags,
-            cache,
-            mentionable,
-            invitedUsers
-          )
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+    connection.promise
+      .then((parent: any) => {
+        const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
 
-      return () => {
-        connection.destroy()
-      }
-    }
-  }, [
-    userDetails,
-    workspaceDetails,
-    theme,
-    authAWS,
-    snippets,
-    contents,
-    ilinks,
-    namespaces,
-    reminders,
-    publicNodes,
-    sharedNodes,
-    tags,
-    cache,
-    connection
-  ])
+        parent.bootAuth(userDetails, workspaceDetails)
+        parent.bootDwindle(authAWS)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    return () => connection.destroy()
+  }, [userDetails, workspaceDetails])
+
+  useEffect(() => {
+    connection.promise
+      .then((parent: any) => {
+        parent.bootIlinks(ilinks)
+        parent.bootContents(contents)
+        parent.bootNamespaces(namespaces)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    return () => connection.destroy()
+  }, [ilinks, contents, namespaces])
+
+  useEffect(() => {
+    connection.promise
+      .then((parent: any) => {
+        parent.bootTheme(theme)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    return () => connection.destroy()
+  }, [theme])
+
+  useEffect(() => {
+    connection.promise
+      .then((parent: any) => {
+        parent.bootReminders()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    return () => connection.destroy()
+  }, [reminders])
 
   return (
     <div>

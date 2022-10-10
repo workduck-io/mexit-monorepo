@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 
 import { defaultThemes } from '@mexit/shared'
 
-import Chotu from './Components/Chotu'
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { InternalEvents } from './Components/InternalEvents'
@@ -32,8 +31,6 @@ export default function Index() {
 
         <EditorProvider>
           <InternalEvents />
-
-          <Chotu />
 
           <TooltipPortal>
             <Tooltip />

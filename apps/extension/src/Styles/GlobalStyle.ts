@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+
 import { customStyles, EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
@@ -31,7 +32,11 @@ export const GlobalStyle = createGlobalStyle`
     src: url(${chrome.runtime.getURL('/Assets/Inter-Bold.ttf')});
   }
 
-  #chotu-container, #sputlit-container, #dibba-container, #mexit-tooltip {
+  #something-nothing {
+    display: none;
+  }
+
+  #sputlit-container, #dibba-container, #mexit-tooltip {
     ${normalize}; // NormalizeCSS normalization
     letter-spacing: normal;
     font-family: "Inter", sans-serif;
