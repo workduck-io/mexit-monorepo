@@ -43,7 +43,7 @@ const FleetContainer = () => {
     if (atTasks) return [sections.task, sections.note, sections.snippet, sections.space]
 
     return [sections.note, sections.space, sections.task, sections.snippet]
-  }, [atSnippets])
+  }, [atSnippets, atTasks])
 
   return <Fleet sections={sections} isOpen={open} onClose={handleClose} onOpen={handleOpen} />
 }
