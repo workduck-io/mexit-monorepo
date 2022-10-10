@@ -9,7 +9,7 @@ import {
   ActionType,
   MexitAction,
   NODE_ID_PREFIX,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
   ListItemType
 } from '@mexit/core'
 
