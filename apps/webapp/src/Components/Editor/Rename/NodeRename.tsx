@@ -4,16 +4,11 @@ import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
-import { Button } from '@workduck-io/mex-components'
-import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
+import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath, mog } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
-import { useApi } from '../../../Hooks/API/useNodeAPI'
-import { useInternalLinks } from '../../../Hooks/useInternalLinks'
-import { useLinks } from '../../../Hooks/useLinks'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useRefactor } from '../../../Hooks/useRefactor'
@@ -22,10 +17,9 @@ import { useAnalysisStore } from '../../../Stores/useAnalysis'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useHelpStore } from '../../../Stores/useHelpStore'
-import { useRefactorStore } from '../../../Stores/useRefactorStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
-import { Wrapper, TitleStatic, ButtonWrapper } from './NodeRename.style'
+import { Wrapper, TitleStatic } from './NodeRename.style'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()
@@ -37,7 +31,12 @@ const NodeRenameOnlyTitle = () => {
   const { push } = useNavigation()
   const setMockRefactored = useRenameStore((store) => store.setMockRefactored)
   const modalReset = useRenameStore((store) => store.closeModal)
-  const { path: nodeFrom, namespace: nodeFromNS } = useEditorStore((store) => store.node)
+  const node = useEditorStore((store) => store.node)
+  const { path: nodeFrom, namespace: nodeFromNS } = useMemo(() => {
+    const noteLink = ilinks.find((i) => i.nodeid === node?.nodeid)
+
+    return noteLink
+  }, [ilinks, node])
   const setFrom = useRenameStore((store) => store.setFrom)
   const [editable, setEditable] = useState(false)
   const [newTitle, setNewTitle] = useState(getNameFromPath(nodeFrom))
