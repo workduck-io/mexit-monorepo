@@ -34,9 +34,10 @@ const NodeRenameOnlyTitle = () => {
   const node = useEditorStore((store) => store.node)
   const { path: nodeFrom, namespace: nodeFromNS } = useMemo(() => {
     const noteLink = ilinks.find((i) => i.nodeid === node?.nodeid)
-
-    return noteLink
+    if (noteLink) return noteLink
+    return node
   }, [ilinks, node])
+
   const setFrom = useRenameStore((store) => store.setFrom)
   const [editable, setEditable] = useState(false)
   const [newTitle, setNewTitle] = useState(getNameFromPath(nodeFrom))
