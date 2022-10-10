@@ -33,7 +33,6 @@ import { useApi } from '../Hooks/API/useNodeAPI'
 import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
-import { useNewNodes } from '../Hooks/useNewNodes'
 import { NavigationType, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useContentStore } from '../Stores/useContentStore'
@@ -90,34 +89,33 @@ const Archive = () => {
   }
 
   const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
-  const { addNodeOrNodes } = useNewNodes()
   const { goTo } = useRouting()
-  const onUnarchiveClick = async (node: ILink) => {
-    // const present = ilinks.find((link) => link.key === node.key)
+  // const onUnarchiveClick = async (node: ILink) => {
+  //   // const present = ilinks.find((link) => link.key === node.key)
 
-    // if (present) {
-    //   setShowModal(true)
-    // }
+  //   // if (present) {
+  //   //   setShowModal(true)
+  //   // }
 
-    await unArchiveData([node])
-    await addNodeOrNodes(node.path, false, undefined, undefined, false)
+  //   await unArchiveData([node])
+  //   await addNodeOrNodes(node.path, false, undefined, undefined, false)
 
-    const content = getContent(node.nodeid)
-    await removeDocument('archive', node.nodeid)
+  //   const content = getContent(node.nodeid)
+  //   await removeDocument('archive', node.nodeid)
 
-    await updateDocument('node', node.nodeid, content.content, node.path)
+  //   await updateDocument('node', node.nodeid, content.content, node.path)
 
-    const archiveNode: NodeProperties = {
-      id: node.path,
-      path: node.path,
-      title: node.path.split(SEPARATOR).pop(),
-      nodeid: node.nodeid,
-      namespace: node?.namespace
-    }
+  //   const archiveNode: NodeProperties = {
+  //     id: node.path,
+  //     path: node.path,
+  //     title: node.path.split(SEPARATOR).pop(),
+  //     nodeid: node.nodeid,
+  //     namespace: node?.namespace
+  //   }
 
-    loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
-    goTo(node.path, NavigationType.replace)
-  }
+  //   loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
+  //   goTo(node.path, NavigationType.replace)
+  // }
 
   const onDeleteClick = async () => {
     const nodesToDelete = archive.filter((i) => {

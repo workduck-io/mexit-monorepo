@@ -1,14 +1,17 @@
-import { insertText, PlateEditor, select } from '@udecode/plate'
+import { getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
+import { findIndex, groupBy } from 'lodash'
 
 import { mog, isElder } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
+import { useDataStore } from '../../Stores/useDataStore'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
 import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
+import { getNodeIdFromEditor } from '../Utils/helper'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 import { useMexEditorStore } from './useMexEditorStore'
 
@@ -41,7 +44,10 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
     tab?: boolean
   ) => {
     const items = useComboboxStore.getState().items
-    const currentNodeKey = useMexEditorStore.getState().internalMetadata.path
+    const editorId = getPlateEditorRef().id
+    const noteId = getNodeIdFromEditor(editorId)
+
+    const currentNodeKey = useDataStore.getState().ilinks.find((i) => i.nodeid === noteId)?.path
     const itemIndex = useComboboxStore.getState().itemIndex
 
     mog('getCreatableInSelect', { items, selectVal, creatable, itemIndex })
@@ -132,28 +138,41 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
       comboboxKey !== ComboboxKey.SLASH_COMMAND
     )
 
+    const groups = Object.keys(groupBy(items, (n) => n.type))
+    const indexes = groups.map((gn) => findIndex(items, (n: any) => n.type === gn))
+
     if (isOpen) {
       // if (!isBlockTriggered) {
       if (!isBlockTriggered) {
         if (e.key === 'ArrowDown') {
           e.preventDefault()
 
-          const newIndex = getNextWrappingIndex(1, itemIndex, items.length, () => undefined, true)
-
-          // * Replace current searched text with list item
-          // replaceFragment(editor, targetRange, items[newIndex].text)
-
-          return setItemIndex(newIndex)
+          if (e.metaKey) {
+            for (let i = 0; i < indexes.length; i++) {
+              const categoryIndex = indexes[i]
+              if (categoryIndex > itemIndex && items[categoryIndex].type !== items[itemIndex].type) {
+                return setItemIndex(categoryIndex)
+              }
+            }
+          } else {
+            const newIndex = getNextWrappingIndex(1, itemIndex, items.length, () => undefined, false)
+            return setItemIndex(newIndex)
+          }
         }
         if (e.key === 'ArrowUp') {
           e.preventDefault()
 
-          const newIndex = getNextWrappingIndex(-1, itemIndex, items.length, () => undefined, true)
-
-          // * Replace current searched text with list item
-          // replaceFragment(editor, targetRange, items[newIndex].text)
-
-          return setItemIndex(newIndex)
+          if (e.metaKey) {
+            for (let i = indexes[indexes.length - 1]; i > -1; i--) {
+              const categoryIndex = indexes[i]
+              if (categoryIndex < itemIndex && items[categoryIndex].type !== items[itemIndex].type) {
+                return setItemIndex(categoryIndex)
+              }
+            }
+          } else {
+            const newIndex = getNextWrappingIndex(-1, itemIndex, items.length, () => undefined, false)
+            return setItemIndex(newIndex)
+          }
         }
 
         if (e.key === 'Escape') {

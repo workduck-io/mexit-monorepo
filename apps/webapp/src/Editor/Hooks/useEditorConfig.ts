@@ -12,9 +12,8 @@ import {
 } from '@mexit/core'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
-import { cleanEditorId } from '../../Components/Todo'
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useMentions } from '../../Hooks/useMentions'
-import { useNewNodes } from '../../Hooks/useNewNodes'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -29,6 +28,7 @@ import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboboxType, ComboConfigData } from '../Types/MultiCombobox'
+import { getNodeIdFromEditor } from '../Utils/helper'
 import { CategoryType, QuickLinkType } from '../constants'
 
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {
@@ -36,7 +36,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const addTag = useDataStore((store) => store.addTag)
 
   const ilinks = useDataStore((store) => store.ilinks)
-  const nodeUID = cleanEditorId(editorId)
+  const nodeUID = getNodeIdFromEditor(editorId)
   const addILink = useDataStore((store) => store.addILink)
   const slashCommands = useDataStore((store) => store.slashCommands)
   const { openReminderModal } = useOpenReminderModal()
@@ -52,6 +52,8 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
 
+  const { createNewNote } = useCreateNewNote()
+
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
 
@@ -66,8 +68,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
 
     return slashCommands.internal
   }, [slashCommands.internal])
-
-  const { addNodeOrNodesFast } = useNewNodes()
 
   const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
@@ -130,7 +130,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: ELEMENT_INLINE_BLOCK,
         newItemHandler: (newItem, openedNotePath?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
-
+          // mog('OPENED NODE PATH', { openedNotePath, openedNode })
           const link = addILink({ ilink: newItem, openedNodePath: openedNotePath, namespace: openedNode?.namespace })
           return link.nodeid
         },
@@ -151,9 +151,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       internal: {
         slateElementType: 'internal',
-        newItemHandler: (newItem, parentId?) => {
-          const { id } = addNodeOrNodesFast(newItem, true, parentId)
-          return id
+        newItemHandler: (path, openedNotePath?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
+          mog('new item here is', { path, openedNotePath, openedNode })
+          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+          return note?.nodeid
         },
         renderElement: SlashComboboxItem
       },
@@ -175,9 +177,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     internal: {
       ilink: {
         slateElementType: ELEMENT_ILINK,
-        newItemHandler: (newItem, parentId?) => {
-          const { id } = addNodeOrNodesFast(newItem, true, parentId)
-          return id
+        newItemHandler: (path, openedNotePath?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
+          mog('new item here is', { path, openedNotePath, openedNode })
+          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+          return note?.nodeid
         },
         renderElement: QuickLinkComboboxItem
       },

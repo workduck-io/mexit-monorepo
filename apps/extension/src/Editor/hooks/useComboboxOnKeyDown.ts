@@ -1,10 +1,11 @@
-import { getNextWrappingIndex, insertText, PlateEditor, select } from '@udecode/plate'
+import { getNextWrappingIndex, getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
 
+import useDataStore from '../../Stores/useDataStore'
 import { ComboboxKey, IComboboxItem } from '../components/ComboBox/types'
 import { useSlashCommandOnChange } from '../components/SlashCommands/useSlashCommandOnChange'
 import { useComboboxStore } from '../store/combobox'
-import { useMexEditorStore } from '../store/editor'
+import { getNodeIdFromEditor } from '../utils/helper'
 import { useElementOnChange } from './useElementOnChange'
 
 const pure = (id: string) => {
@@ -20,7 +21,9 @@ export type OnNewItem = (name: string, parentId?) => void
 export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnNewItem, creatable?: boolean) => {
   const creatableOnSelect = (editor: any, textVal: string) => {
     const items = useComboboxStore.getState().items
-    const currentNodeKey = useMexEditorStore.getState().metaData.path
+    const editorId = getPlateEditorRef().id
+    const nodeId = getNodeIdFromEditor(editorId)
+    const currentNodeKey = useDataStore.getState().ilinks.find((l) => l.nodeid === nodeId)?.path
     const itemIndex = useComboboxStore.getState().itemIndex
 
     const val = pure(textVal)

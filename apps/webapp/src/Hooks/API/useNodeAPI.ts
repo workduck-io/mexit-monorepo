@@ -88,7 +88,8 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const metadata = extractMetadata(d.data)
-        updateFromContent(noteID, d.data ?? options.content, metadata)
+        const content = deserializeContent(d.data.data ?? options.content)
+        updateFromContent(noteID, content, metadata)
         return d.data
       })
       .catch((e) => {
@@ -107,9 +108,10 @@ export const useApi = () => {
     }
   ) => {
     options.content = options.content ?? defaultContent.content
+
     const reqData = {
       nodePath: {
-        path: createNoteHierarchyString(options.path, namespaceID),
+        path: options.path,
         namespaceID: namespaceID
       },
       id: noteID,
@@ -118,7 +120,7 @@ export const useApi = () => {
       tags: getTagsFromContent(options.content),
       data: serializeContent(options.content, noteID)
     }
-
+    mog('BulkCreateNodes', { reqData, noteID, namespaceID, options })
     setContent(noteID, options.content)
 
     const data = await client

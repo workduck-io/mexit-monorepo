@@ -4,7 +4,6 @@ import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
 
-import { cleanEditorId } from '../../../Components/Todo/index'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -13,6 +12,7 @@ import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey } from '../../Types/Combobox'
 import { ComboboxType } from '../../Types/MultiCombobox'
+import { getNodeIdFromEditor } from '../../Utils/helper'
 import { QuickLinkType } from '../../constants'
 
 export const CreateNewPrefix = `Create `
@@ -105,7 +105,9 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     if (params.snippetid && textAfterTrigger?.startsWith('.')) return
 
     const { isChild, key: pathKey } = withoutContinuousDelimiter(textAfterTrigger)
-    const noteId = cleanEditorId(editorId)
+
+    const noteId = getNodeIdFromEditor(editorId)
+    // mog('EDITOR ID', { editorId, noteId })
     const searchTerm = isChild ? `${getPathFromNodeid(noteId)}${pathKey}` : pathKey
 
     mog('data', { data })
