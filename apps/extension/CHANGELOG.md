@@ -1,5 +1,18 @@
 # mexit
 
+## 0.12.0
+
+### Minor Changes
+
+- 789adc67: Better messaging between webapp and extension, things are synced on change and message can be sent from any component in extension now
+- 2180238f: Added nested editable previews in webapp
+- 3e3011a8: Added new task creation to webapp fleet, updated dwindle to v0.0.20
+
+### Patch Changes
+
+- 626ec88f: Create New Note Fixes; Combobox Create Child Fixes; Base Node Fixes
+- 2e752f8d: Invalidate Webapp CloudFront Cache; Bump version automatically in manifest.json
+
 ## 0.11.3
 
 ### Patch Changes
