@@ -5,6 +5,7 @@ import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '
 import analysisWorkerConstructor from './analysis?worker'
 import requestsWorkerConstructor from './requests?worker'
 import searchWorkerConstructor from './search?worker'
+import { WorkerRequestType } from '../Utils/worker'
 
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
@@ -26,13 +27,9 @@ export const startRequestsWorkerService = async () => {
   if (!requestsWorker) requestsWorker = await spawn(new requestsWorkerConstructor())
 }
 
-enum RequestType {
-  'GET_NODE' = 'GET_NODE'
-}
-
 export const runBatchWorker = async (
   { token, workspaceID },
-  requestType: RequestType,
+  requestType: WorkerRequestType,
   batchSize = 6,
   args: string[]
 ) => {

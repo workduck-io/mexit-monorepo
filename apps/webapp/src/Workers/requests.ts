@@ -5,6 +5,7 @@ import { expose } from 'threads/worker'
 import { apiURLs, runBatch, mog, extractMetadata } from '@mexit/core'
 
 import { deserializeContent } from '../Utils/serializer'
+import { WorkerRequestType } from '../Utils/worker'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
@@ -23,12 +24,10 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   })
 }
 
-const getNodeAPI = async (nodeid: string) => {
-  const url = apiURLs.getNode(nodeid)
+const getNodeAPI = async (nodeid: string, isShared = false) => {
+  const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
   return client
-    .get(url, {
-      headers: {}
-    })
+    .get(url)
     .then((d: any) => {
       if (d) {
         return { rawResponse: d.data, nodeid }
@@ -39,16 +38,30 @@ const getNodeAPI = async (nodeid: string) => {
     })
 }
 
-enum RequestType {
-  'GET_NODE' = 'GET_NODE'
+const getSnippetAPI = async (id: string) => {
+  const url = apiURLs.getSnippetById(id)
+
+  return client.get(url).then((d) => {
+    return d.data
+  })
 }
 
-const runBatchWorker = async (requestType: RequestType, batchSize = 6, args: string[]) => {
+const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[]) => {
   const requestsToMake: Promise<any>[] = []
 
   switch (requestType) {
-    case RequestType.GET_NODE: {
+    case WorkerRequestType.GET_NODES: {
       args.forEach((i) => requestsToMake.push(getNodeAPI(i)))
+      break
+    }
+
+    case WorkerRequestType.GET_SHARED_NODES: {
+      args.forEach((i) => requestsToMake.push(getNodeAPI(i, true)))
+      break
+    }
+
+    case WorkerRequestType.GET_SNIPPETS: {
+      args.forEach((i) => requestsToMake.push(getSnippetAPI(i)))
       break
     }
   }

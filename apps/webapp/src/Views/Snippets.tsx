@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
@@ -8,13 +8,24 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import genereateName from 'project-name-generator'
 
-import { Button, IconButton } from '@workduck-io/mex-components'
+import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
+import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
-import { convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult } from '@mexit/core'
 import {
+  convertContentToRawText,
+  DRAFT_NODE,
+  generateSnippetId,
+  GenericSearchResult,
+  mog,
+  runBatch,
+  Snippet
+} from '@mexit/core'
+import {
+  ItemTag,
   MainHeader,
   Result,
   ResultDesc,
+  ResultHeader,
   ResultMain,
   ResultRow,
   ResultTitle,
@@ -25,12 +36,17 @@ import {
   View
 } from '@mexit/shared'
 
+import { SnippetHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
+import { useUpdater } from '../Hooks/useUpdater'
+import { useAuthStore } from '../Stores/useAuth'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { WorkerRequestType } from '../Utils/worker'
+import { runBatchWorker } from '../Workers/controller'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
 export type SnippetsProps = {
@@ -46,6 +62,8 @@ const Snippets = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   const { goTo } = useRouting()
+
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
   const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
     () => ({
@@ -77,6 +95,24 @@ const Snippets = () => {
     addSnippet({
       id: snippetId,
       title: snippetName,
+      icon: 'ri:quill-pen-line',
+      content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
+    })
+
+    loadSnippet(snippetId)
+    updater()
+
+    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
+  }
+
+  const onCreateSpecialSnippet = (generateTitle = false) => {
+    const snippetId = generateSnippetId()
+    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+
+    addSnippet({
+      id: snippetId,
+      title: snippetName,
+      template: true,
       icon: 'ri:quill-pen-line',
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
@@ -208,6 +244,25 @@ const Snippets = () => {
     }
     return null
   }
+
+  useEffect(() => {
+    mog('Idhar tera baap aayega?')
+    const snippets = getSnippets()
+    const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
+    const ids = unfetchedSnippets.map((i) => i.id)
+    const userCred = useInternalAuthStore.getState().userCred
+
+    mog('AllSnippets', { snippets })
+
+    runBatchWorker(
+      { token: userCred.token, workspaceID: getWorkspaceId() },
+      WorkerRequestType.GET_SNIPPETS,
+      6,
+      ids
+    ).then((res) => {
+      mog('InitialSnippetsRunBatch', { res })
+    })
+  }, [])
 
   return (
     <SnippetsSearchContainer>
