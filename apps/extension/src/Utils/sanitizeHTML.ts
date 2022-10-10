@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { mog } from '@mexit/core'
 import sanitize from 'sanitize-html'
 
 const options = {
@@ -51,19 +52,24 @@ const options = {
       }
     },
     a: (tagName, attribs) => {
+      // get url of the current tab
+      // const url = window.location.href
+      const origin = window?.location?.origin
+      let href = attribs?.href
+
+      // if href doesn't have protocol, add origin to it
+      if (origin && href && !href.includes('://')) {
+        href = `${origin}${href}`
+      }
+
+      mog('transformTags', { tagName, attribs, href, origin })
       return {
         tagName,
         attribs: {
-          href: attribs.href,
+          href,
           target: '_blank',
           rel: 'noopener noreferrer',
-          style: `
-          color: #5b94ff;
-          font-family: Inter, -apple-system, system-ui, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-          text-decoration: underline;
-          -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-          outline: 0px;
-        `
+          style: `font-family: Inter, -apple-system, system-ui, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;`
         }
       }
     },
