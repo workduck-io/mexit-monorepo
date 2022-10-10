@@ -12,18 +12,34 @@ import {
   defaultActions,
   ActionType,
   withoutContinuousDelimiter,
-  CategoryType
+  CategoryType,
+  CREATE_NEW_ITEM,
+  insertItemInArray,
+  BASE_TASKS_PATH,
+  isParent,
+  ListItemType,
+  MAX_RECENT_ITEMS
 } from '@mexit/core'
 import { useTheme } from 'styled-components'
 import { useSearchProps } from '../../Hooks/useSearchProps'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useSearch } from "../../Hooks/useSearch"
+import events from "events"
+import { useRecentsStore } from "../../Stores/useRecentsStore"
+import { getListItemFromNode } from "../../Utils/helper"
+import { useLinks } from "../../Hooks/useLinks"
+import useDataStore from "../../Stores/useDataStore"
 
 const Search = () => {
-  const { input, setInput, setSearch, isLoading } = useSputlitContext()
+  const { input, setInput,search, selection, activeItem, setSearch, setSearchResults, isLoading } = useSputlitContext()
+  const {searchInList} = useSearch()
   const { previewMode, setPreviewMode } = useEditorContext()
   const { icon, placeholder } = useSearchProps()
   const { saveIt } = useSaveChanges()
+  const {getILinkFromNodeid} = useLinks()
+  const lastOpenedNodes = useRecentsStore((state) => state.lastOpened)
+  const ilinks = useDataStore((state) => state.ilinks)
   const theme = useTheme()
 
   const getQuery = (value: string): Search => {
@@ -63,7 +79,57 @@ const Search = () => {
 
     setInput(replaceContinousDots)
     handleSearchInput(query)
+
   }
+
+  const getRecentList = (noteIds: Array<string>, limit = MAX_RECENT_ITEMS) => {
+    const recentList: Array<ListItemType> = []
+
+    // const extra = getSearchExtra()
+
+    noteIds.forEach((noteId) => {
+
+      const noteLink = getILinkFromNodeid(noteId)
+
+        if (noteLink && !isParent(noteLink.path, BASE_TASKS_PATH)) {
+          const item = getListItemFromNode(noteLink
+            // { searchRepExtra: extra }
+            )
+          recentList.push(item)
+        }
+    })
+
+    if (recentList.length > limit) {
+      return recentList.slice(0, limit)
+    }
+
+    return recentList
+  }
+
+  // * For setting the results
+  useEffect(() => {
+    async function getSearchItems() {
+      if (!activeItem) {
+        if (search.value) {
+          const listWithNew = await searchInList()
+          setSearchResults(listWithNew)
+        } else {
+          if (!previewMode) return
+
+          const notesOpened =  lastOpenedNodes
+
+          const recents = getRecentList(notesOpened).reverse()
+
+          const listWithNew = insertItemInArray(recents, CREATE_NEW_ITEM, 1)
+
+          const results = [ ...listWithNew, ...initActions]
+          setSearchResults(results)
+        }
+      }
+    }
+
+    if (previewMode) getSearchItems()
+  }, [search.value,  selection, activeItem, previewMode,  ilinks])
 
   const onBackClick = () => {
     if (!previewMode) {

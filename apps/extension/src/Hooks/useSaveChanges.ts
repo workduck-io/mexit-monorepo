@@ -49,7 +49,7 @@ export function useSaveChanges() {
         updateSingleILink(node.nodeid, node.path, namespace.id)
       }
 
-      dispatch('ADD_SINGLE_ILINK', { nodeid: node.nodeid, path: node.path, namespace: namespace.id })
+      dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'SAVE_NODE',
@@ -66,7 +66,7 @@ export function useSaveChanges() {
     } else {
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       updateMultipleILinks(linksToBeCreated)
-      dispatch('ADD_MULTIPLE_ILINKS', { linksToBeCreated: linksToBeCreated })
+      dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'BULK_CREATE_NODES',
@@ -106,11 +106,7 @@ export function useSaveChanges() {
         // console.log('message', message)
         // setContent(node.nodeid, deserializeContent(message.data))
 
-        dispatch('SET_CONTENT', {
-          nodeid,
-          content,
-          metadata
-        })
+        dispatch('SET_CONTENT', nodeid, content, metadata)
 
         addHighlightedBlock(nodeid, content, window.location.href)
 

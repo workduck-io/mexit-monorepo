@@ -1,4 +1,6 @@
-import { ActionType, CategoryType, QuickLinkType, Shortcut } from '@mexit/core'
+import { ActionType } from './Actions'
+import { QuickLinkType } from './Editor'
+import { Shortcut } from './Help'
 
 export interface ListItemType {
   id: string
@@ -23,4 +25,6 @@ export interface ItemExtraType {
   customAction: () => void
   componentName: string
   base_url: string
+  // browser actions
+  event_name: string
 }

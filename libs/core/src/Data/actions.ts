@@ -1,5 +1,6 @@
 import { ActionType, MexitAction } from '../Types/Actions'
 import { CategoryType, QuickLinkType } from '../Types/Editor'
+import { ListItemType } from '../Types/List'
 import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 
 export const CREATE_NEW_ITEM = {
@@ -26,7 +27,7 @@ export const CREATE_NEW_ITEM = {
 }
 
 // TODO: change shortcut keys based on user's OS
-export const initActions: Array<MexitAction> = [
+export const initActions: Array<ListItemType> = [
   {
     id: 'ACTION_1',
     title: 'Capture Screenshot',
@@ -49,7 +50,6 @@ export const initActions: Array<MexitAction> = [
     icon: 'eva:color-picker-fill',
     description: 'Extract any useful data from the current page',
     type: ActionType.MAGICAL,
-    data: {},
     shortcut: {
       pick: {
         title: 'to pick',
@@ -72,7 +72,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: { src: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
+    extras: { base_url: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
   },
   {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
@@ -88,7 +88,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: { base_url: 'https://twitter.com/search?q=' }
+    extras: { base_url: 'https://twitter.com/search?q=' }
   },
   {
     id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
@@ -104,7 +104,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: { base_url: 'https://gmail.com' }
+    extras: { base_url: 'https://gmail.com' }
   },
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
@@ -113,14 +113,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Reload current tab',
     type: ActionType.BROWSER_EVENT,
     icon: 'eva:refresh-outline',
-    data: { event_name: 'reload' },
     shortcut: {
       reload: {
         title: 'to reload',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { event_name: 'reload' }
   },
   {
     id: 'ACTION_nlTaC5-ZcMXgaJrNg_NfL',
@@ -129,14 +129,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new Google Doc',
     type: ActionType.OPEN,
     icon: 'material-symbols:docs',
-    data: { base_url: 'https://docs.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://docs.new' }
   },
   {
     id: 'ACTION_H77GDKfBFVriXpplM-b1x',
@@ -145,14 +145,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new Google Sheet',
     type: ActionType.OPEN,
     icon: 'simple-icons:googlesheets',
-    data: { base_url: 'https://sheets.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://sheets.new' }
   },
   {
     id: 'ACTION_gpymSN3oEOd4gfCdfwK4E',
@@ -161,14 +161,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new Google Slides',
     type: ActionType.OPEN,
     icon: 'material-symbols:slides',
-    data: { base_url: 'https://slides.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://slides.new' }
   },
   {
     id: 'ACTION_XGHlAYLbMrcROQbgIJMBl',
@@ -177,14 +177,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new GitHub Gist',
     type: ActionType.OPEN,
     icon: 'bi:github',
-    data: { base_url: 'https://gist.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://gist.new' }
   },
   {
     id: 'ACTION_WMORyqSCI5gdYq-0ZEXTx',
@@ -193,14 +193,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new GitHub Repository',
     type: ActionType.OPEN,
     icon: 'bi:github',
-    data: { base_url: 'https://repo.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://repo.new' }
   },
   {
     id: 'ACTION_30FPylVvxZDAfeoyTdxOY',
@@ -209,14 +209,15 @@ export const initActions: Array<MexitAction> = [
     description: 'Create new empty Figma File',
     type: ActionType.OPEN,
     icon: 'ph:figma-logo-fill',
-    data: { base_url: 'https://figma.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+
+    extras: { base_url: 'https://figma.new' }
   },
   {
     id: 'ACTION_w5lK-B2y5p8-vxuq-254_',
@@ -225,14 +226,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create a new Linear issue',
     type: ActionType.OPEN,
     icon: 'gg:linear',
-    data: { base_url: 'https://linear.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://linear.new' }
   },
   {
     id: 'ACTION_dh7Hq50UFvK3LQP5_E-70',
@@ -241,14 +242,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create a new Notion page',
     type: ActionType.OPEN,
     icon: 'simple-icons:notion',
-    data: { base_url: 'https://notion.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://notion.new' }
   },
   {
     id: 'ACTION_2vWe76dH6sXpxOH081X7J',
@@ -257,14 +258,14 @@ export const initActions: Array<MexitAction> = [
     description: 'Create a new Google form',
     type: ActionType.OPEN,
     icon: 'ri:drive-fill',
-    data: { base_url: 'https://forms.new' },
     shortcut: {
       open: {
         title: 'to open',
         category: 'action',
         keystrokes: 'Enter'
       }
-    }
+    },
+    extras: { base_url: 'https://forms.new' }
   },
   {
     id: 'ACTION_o1LA-TFz5-szRUaMPSsqh',
@@ -273,7 +274,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Make a new Tweet',
     type: ActionType.OPEN,
     icon: 'bi:twitter',
-    data: {
+    extras: {
       base_url: 'https://twitter.com/intent/tweet'
     },
     shortcut: {
@@ -291,7 +292,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Browse through your downloads',
     type: ActionType.BROWSER_EVENT,
     icon: 'bx:download',
-    data: {
+    extras: {
       event_name: 'chrome-url',
       base_url: 'chrome://downloads'
     },
@@ -310,7 +311,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Manage your chrome extensions',
     type: ActionType.BROWSER_EVENT,
     icon: 'bx:extension',
-    data: {
+    extras: {
       event_name: 'chrome-url',
       base_url: 'chrome://extensions'
     },
@@ -336,7 +337,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       base_url: 'https://mail.google.com/mail/#search/'
     }
   },
@@ -354,7 +355,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       base_url: 'http://en.wikipedia.org/?search='
     }
   },
@@ -372,7 +373,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       base_url:
         'http://www.youtube.com/results?search_type=search_videos&search_sort=relevance&search=Search&search_query='
     }
@@ -391,7 +392,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       base_url: 'https://drive.google.com/drive/search?q='
     }
   },
@@ -409,7 +410,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       base_url: 'https://github.com/search?ref=opensearch&q='
     }
   },
@@ -427,7 +428,7 @@ export const initActions: Array<MexitAction> = [
         keystrokes: 'Enter'
       }
     },
-    data: {
+    extras: {
       componentName: 'CreateTabCapture'
     }
   },
@@ -436,7 +437,7 @@ export const initActions: Array<MexitAction> = [
   //   title: 'Show Captured Tab Groups',
   //   description: 'List and Open Tab Saved Tab Groups',
   //   type: ActionType.RENDER,
-  //   data: {
+  //   extras: {
   //     componentName: 'ShowTabCaptures'
   //   }
   // },
@@ -447,8 +448,8 @@ export const initActions: Array<MexitAction> = [
     icon: 'eva:color-picker-fill',
     description: "Pretend you're a designer and steal some colours",
     type: ActionType.RENDER,
-    data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
+    extras: {
+      base_url: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
     },
     shortcut: {
       pick: {
@@ -465,8 +466,8 @@ export const initActions: Array<MexitAction> = [
     description: 'Convert Epoch Timestamp to Datetime and vice versa',
     icon: 'material-symbols:date-range',
     type: ActionType.RENDER,
-    data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/epoch`
+    extras: {
+      base_url: `${MEXIT_ACTIONS_URL_BASE}/epoch`
     },
     shortcut: {
       convert: {
@@ -483,8 +484,8 @@ export const initActions: Array<MexitAction> = [
     description: 'Gimme some Corporate BS Buzzwords',
     icon: 'material-symbols:corporate-fare-rounded',
     type: ActionType.RENDER,
-    data: {
-      src: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
+    extras: {
+      base_url: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
     },
     shortcut: {
       get: {
@@ -501,7 +502,7 @@ export const initActions: Array<MexitAction> = [
     description: 'Get to know more about Workduck.io',
     type: ActionType.OPEN,
     icon: 'workduck.svg',
-    data: { base_url: 'https://workduck.io' },
+    extras: { base_url: 'https://workduck.io' },
     shortcut: {
       open: {
         title: 'to open',
@@ -513,6 +514,7 @@ export const initActions: Array<MexitAction> = [
 ]
 
 export const defaultActions: MexitAction[] = initActions
+export const MAX_RECENT_ITEMS = 3
 
 export const searchBrowserAction = (query: string, activeItem?: MexitAction) => {
   return {
@@ -522,7 +524,7 @@ export const searchBrowserAction = (query: string, activeItem?: MexitAction) => 
     description: `Search for ${query}`,
     type: ActionType.SEARCH,
     icon: activeItem?.icon || 'ph:magnifying-glass',
-    data: {
+    extras: {
       base_url: activeItem?.data?.base_url || 'https://google.com/search?q='
     },
     shortcut: {
@@ -532,5 +534,5 @@ export const searchBrowserAction = (query: string, activeItem?: MexitAction) => 
         keystrokes: 'Enter'
       }
     }
-  } as MexitAction
+  } as ListItemType
 }

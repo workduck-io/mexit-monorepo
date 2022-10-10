@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
+import { connect } from 'http2'
 import { AsyncMethodReturns, connectToParent } from 'penpal'
 
 import {
@@ -31,12 +32,9 @@ import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
-  const [parent, setParent] = useState<AsyncMethodReturns<any>>(null)
+  const [parent, setParent] = useState<any>(null)
   const { userDetails, workspaceDetails } = useAuthStore()
-  // const linkCaptures = useShortenerStore((state) => state.linkCaptures)
   const theme = useThemeStore((state) => state.theme)
-  // TODO: this is stupid, it would never know if auth changes
-  const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
 
@@ -58,78 +56,80 @@ export default function Chotu() {
 
   const { queryIndex } = useSearch()
 
-  const connection = connectToParent({
-    methods: {
-      search(key: idxKey | idxKey[], query: string) {
-        const res = searchWorker ? queryIndex(key, query) : []
-        return res
-      },
-      updateContentStore(props: { nodeid: string; content: NodeEditorContent; metadata?: NodeMetadata }) {
-        setContent(props.nodeid, props.content, props?.metadata)
-        return
-      },
-      updateSingleILink(props: { nodeid: string; path: string; namespace: string }) {
-        updateSingleILink(props.nodeid, props.path, props.namespace)
-        return
-      },
-      updateMultipleILinks(props: { linksToBeCreated: ILink[] }) {
-        updateMultipleILinks(props.linksToBeCreated)
-        return
-      },
-      reminderAction(props: { action: ReminderActions; reminder: Reminder }) {
-        actOnReminder(props.action, props.reminder)
-        return
-      }
+  const methods = {
+    search(key: idxKey | idxKey[], query: string) {
+      return new Promise((resolve) => {
+        resolve(searchWorker ? queryIndex(key, query) : [])
+      })
+    },
+    updateContentStore(nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) {
+      setContent(nodeid, content, metadata)
+      return
+    },
+    updateSingleILink(nodeid: string, path: string, namespace: string) {
+      updateSingleILink(nodeid, path, namespace)
+      return
+    },
+    updateMultipleILinks(linksToBeCreated: ILink[]) {
+      updateMultipleILinks(linksToBeCreated)
+      return
+    },
+    reminderAction(action: ReminderActions, reminder: Reminder) {
+      actOnReminder(action, reminder)
+      return
     }
-    // debug: true
-  })
+  }
 
   useEffect(() => {
-    if (connection) {
-      connection.promise
-        .then((parent: any) => {
-          parent.init(
-            userDetails,
-            workspaceDetails,
-            theme,
-            authAWS,
-            snippets,
-            contents,
-            ilinks,
-            namespaces,
-            reminders,
-            publicNodes,
-            sharedNodes,
-            tags,
-            cache,
-            mentionable,
-            invitedUsers
-          )
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+    const connection = connectToParent({
+      methods,
+      debug: true
+    })
 
-      return () => {
-        connection.destroy()
-      }
-    }
-  }, [
-    userDetails,
-    workspaceDetails,
-    theme,
-    authAWS,
-    snippets,
-    contents,
-    ilinks,
-    namespaces,
-    reminders,
-    publicNodes,
-    sharedNodes,
-    tags,
-    cache,
-    connection
-  ])
+    connection.promise
+      .then((parent) => {
+        setParent(parent)
+      })
+      .catch((error) => {
+        mog('ErrorConnectingToParent', error)
+      })
+  }, [])
+
+  // Couldn't think of a way other than multiple useEffects
+  useEffect(() => {
+    if (!parent) return
+
+    const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
+
+    parent.bootAuth(userDetails, workspaceDetails)
+    parent.bootDwindle(authAWS)
+  }, [parent, userDetails, workspaceDetails])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootIlinks(ilinks)
+    parent.bootContents(contents)
+    parent.bootNamespaces(namespaces)
+  }, [parent, ilinks, contents, namespaces])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootReminders()
+  }, [parent, reminders])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootTheme(theme)
+  }, [parent, theme])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootSnippets(snippets)
+  }, [parent, snippets])
 
   return (
     <div>

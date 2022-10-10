@@ -30,12 +30,11 @@ shadowRoot.addEventListener('keydown', (event) => {
   }
 })
 
-const container = document.createElement('div')
-container.id = 'chotu-container'
+export const getElementById = (id: string) => {
+  return document.getElementById('mexit').shadowRoot.getElementById(id)
+}
 
-styleSlot.appendChild(container)
-
-const root = createRoot(container)
+const root = createRoot(styleSlot)
 root.render(
   <StyleSheetManager target={styleSlot}>
     <Index />

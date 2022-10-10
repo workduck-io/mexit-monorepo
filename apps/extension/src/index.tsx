@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components'
 
 import { defaultThemes } from '@mexit/shared'
 
-import Chotu from './Components/Chotu'
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { InternalEvents } from './Components/InternalEvents'
@@ -24,7 +23,8 @@ export default function Index() {
   return (
     <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
       <GlobalStyle />
-      <ReminderArmer />
+      {/* TODO: runnign into an error 'Cannot read properties of undefined (reading filter) useReminders.ts 155 */}
+      {/* <ReminderArmer /> */}
       <SputlitProvider>
         <DibbaPortal>
           <Dibba />
@@ -32,8 +32,6 @@ export default function Index() {
 
         <EditorProvider>
           <InternalEvents />
-
-          <Chotu />
 
           <TooltipPortal>
             <Tooltip />
