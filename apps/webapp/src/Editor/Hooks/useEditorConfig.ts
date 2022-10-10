@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import {
   ELEMENT_ILINK,
@@ -12,7 +12,6 @@ import {
 } from '@mexit/core'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
-import { cleanEditorId } from '../../Components/Todo'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useMentions } from '../../Hooks/useMentions'
 import { useRouting } from '../../Hooks/useRouting'
@@ -29,6 +28,7 @@ import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboboxType, ComboConfigData } from '../Types/MultiCombobox'
+import { getNodeIdFromEditor } from '../Utils/helper'
 import { CategoryType, QuickLinkType } from '../constants'
 
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {
@@ -36,7 +36,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const addTag = useDataStore((store) => store.addTag)
 
   const ilinks = useDataStore((store) => store.ilinks)
-  const nodeUID = cleanEditorId(editorId)
+  const nodeUID = getNodeIdFromEditor(editorId)
   const addILink = useDataStore((store) => store.addILink)
   const slashCommands = useDataStore((store) => store.slashCommands)
   const { openReminderModal } = useOpenReminderModal()
@@ -130,7 +130,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: ELEMENT_INLINE_BLOCK,
         newItemHandler: (newItem, openedNotePath?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
-
+          // mog('OPENED NODE PATH', { openedNotePath, openedNode })
           const link = addILink({ ilink: newItem, openedNodePath: openedNotePath, namespace: openedNode?.namespace })
           return link.nodeid
         },

@@ -1,14 +1,16 @@
-import { insertText, PlateEditor, select } from '@udecode/plate'
+import { getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
 
 import { mog, isElder } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
+import { useDataStore } from '../../Stores/useDataStore'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
 import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
+import { getNodeIdFromEditor } from '../Utils/helper'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 import { useMexEditorStore } from './useMexEditorStore'
 
@@ -41,7 +43,10 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
     tab?: boolean
   ) => {
     const items = useComboboxStore.getState().items
-    const currentNodeKey = useMexEditorStore.getState().internalMetadata.path
+    const editorId = getPlateEditorRef().id
+    const noteId = getNodeIdFromEditor(editorId)
+
+    const currentNodeKey = useDataStore.getState().ilinks.find((i) => i.nodeid === noteId)?.path
     const itemIndex = useComboboxStore.getState().itemIndex
 
     mog('getCreatableInSelect', { items, selectVal, creatable, itemIndex })

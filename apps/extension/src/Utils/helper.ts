@@ -7,8 +7,11 @@ import {
   defaultContent,
   NodeContent,
   ActionType,
-  MexitAction
+  MexitAction,
+  NODE_ID_PREFIX,
+  SNIPPET_PREFIX
 } from '@mexit/core'
+
 import { useContentStore } from '../Stores/useContentStore'
 import { ListItemType } from '../Types/List'
 

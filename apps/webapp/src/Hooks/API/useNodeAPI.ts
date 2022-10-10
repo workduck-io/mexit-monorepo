@@ -88,7 +88,8 @@ export const useApi = () => {
       })
       .then((d: any) => {
         const metadata = extractMetadata(d.data)
-        updateFromContent(noteID, d.data ?? options.content, metadata)
+        const content = deserializeContent(d.data.data ?? options.content)
+        updateFromContent(noteID, content, metadata)
         return d.data
       })
       .catch((e) => {

@@ -66,7 +66,7 @@ export const useCreateNewNote = () => {
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 
     const node = addILink({
-      ilink: newNotePath,
+      ilink: uniquePath,
       nodeid: options?.noteId,
       openedNodePath: options?.openedNotePath,
       showAlert: false,
@@ -78,7 +78,7 @@ export const useCreateNewNote = () => {
       return undefined
     }
 
-    mog('AddInHierarchy', { namespace, parentNoteId, uniquePath, newNotePath, node })
+    mog('AddInHierarchy', { namespace, parentNoteId, parentNote, uniquePath, newNotePath, node })
 
     addInHierarchy({
       noteId: node.nodeid,

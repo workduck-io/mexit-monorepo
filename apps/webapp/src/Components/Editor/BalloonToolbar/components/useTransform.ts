@@ -29,13 +29,13 @@ import {
 } from '@mexit/core'
 import { ILinkNode } from '@mexit/shared'
 
+import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
 import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
 import { useSnippets } from '../../../../Hooks/useSnippets'
 import { useUpdater } from '../../../../Hooks/useUpdater'
 import { useDataStore } from '../../../../Stores/useDataStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 import { useOpenToast } from '../../../Toast/useOpenToast'
-import { cleanEditorId } from '../../../Todo'
 
 export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()
@@ -202,7 +202,7 @@ export const useTransform = () => {
       const text = convertContentToRawText(value, NODE_PATH_SPACER)
 
       const editorId = editor.id as string
-      const nodeid = cleanEditorId(editorId)
+      const nodeid = getNodeIdFromEditor(editorId)
 
       const ilinks = useDataStore.getState().ilinks
       const node = ilinks.find((n) => n.nodeid === nodeid)

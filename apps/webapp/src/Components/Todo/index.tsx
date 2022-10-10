@@ -3,30 +3,9 @@ import { getRootProps } from '@udecode/plate-styled-components'
 import toast from 'react-hot-toast'
 import { useReadOnly } from 'slate-react'
 
-import { NODE_ID_PREFIX, SNIPPET_PREFIX } from '@mexit/core'
-
+import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { TodoBase } from './Todo'
-
-export const cleanEditorId = (editorId: string) => {
-  /*
-   * Find substring of form NODE_{} in editorid
-   */
-  const nodeReg = new RegExp(`${NODE_ID_PREFIX}_[A-Za-z0-9]+`)
-  const nodeIdReg = editorId?.match(nodeReg)
-  // mog('nodeId', { nodeIdReg, editorId })
-  if (nodeIdReg) {
-    return nodeIdReg[0]
-  }
-
-  const snippetReg = new RegExp(`${SNIPPET_PREFIX}_[A-Za-z0-9]+`)
-  const snippetnodeidReg = editorId?.match(snippetReg)
-  // mog('nodeId', { snippetReg, snippetnodeidReg })
-
-  if (snippetnodeidReg) {
-    return snippetnodeidReg[0]
-  }
-}
 
 const Todo = (props: any) => {
   const { attributes, children, element } = props
@@ -37,7 +16,7 @@ const Todo = (props: any) => {
   const readOnly = useReadOnly()
   const editorId = usePlateId()
   // const nodeid = useEditorStore((store) => store.node.nodeid)
-  const nodeid = cleanEditorId(editorId)
+  const nodeid = getNodeIdFromEditor(editorId)
 
   // mog('Todo', { nodeid, editorId, readOnly })
 

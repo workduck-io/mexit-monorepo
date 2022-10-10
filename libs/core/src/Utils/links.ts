@@ -1,6 +1,7 @@
 import { isEqual, uniq } from 'lodash'
 
 import { CachedILink } from '../Types/Editor'
+import { mog } from './mog'
 
 const ELEMENT_INLINE_BLOCK = 'inline_block'
 
@@ -17,8 +18,7 @@ export const removeLink = (link: CachedILink, setLinks: CachedILink[]): CachedIL
 
 export const getLinksFromContent = (content: any[]): string[] => {
   let links: string[] = []
-
-  content.forEach((n) => {
+  content?.forEach((n) => {
     if (n.type === 'ilink' || n.type === ELEMENT_INLINE_BLOCK) {
       links.push(n.value)
     }
