@@ -31,6 +31,7 @@ export function useSaveChanges() {
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
   const saveIt = (saveAndExit = false, notification = false) => {
+    setVisualState(VisualState.animatingOut)
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
     const state = platesStore.get.state()
 
