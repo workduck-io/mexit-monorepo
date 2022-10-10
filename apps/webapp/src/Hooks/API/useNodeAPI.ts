@@ -33,7 +33,6 @@ import { useInternalLinks } from '../useInternalLinks'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useSearch } from '../useSearch'
-import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
 
 export const useApi = () => {
@@ -48,7 +47,7 @@ export const useApi = () => {
   const { getSharedNode } = useNodes()
   const { updateDocument, removeDocument } = useSearch()
   const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { updateSnippet } = useSnippets()
+  const updateSnippet = useSnippetStore((store) => store.updateSnippet)
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -378,7 +377,19 @@ export const useApi = () => {
 
           res.fulfilled.forEach(async (snippet) => {
             if (snippet) {
-              updateSnippet(snippet)
+              updateSnippet(snippet.id, snippet)
+              const isTemplate = snippet.template ?? false
+
+              const tags = isTemplate ? ['template'] : ['snippet']
+              const idxName = isTemplate ? 'template' : 'snippet'
+
+              if (isTemplate) {
+                await removeDocument('snippet', snippet.id)
+              } else {
+                await removeDocument('template', snippet.id)
+              }
+
+              await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
             }
           })
 
