@@ -71,6 +71,8 @@ const Search = () => {
     generateNodeSearchFilters,
     removeCurrentFilter,
     filters,
+    changeCurrentFilter,
+    setGlobalJoin,
     globalJoin,
     currentFilters,
     resetCurrentFilters
@@ -185,7 +187,10 @@ const Search = () => {
         removeCurrentFilter={removeCurrentFilter}
         resetCurrentFilters={resetCurrentFilters}
         filters={filters}
+        globalJoin={globalJoin}
+        setGlobalJoin={setGlobalJoin}
         currentFilters={currentFilters}
+        changeCurrentFilter={changeCurrentFilter}
       />
     )
   }

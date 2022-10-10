@@ -8,7 +8,7 @@ import { debounce } from 'lodash'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
-import { DesignItem, Input, ItemTitle, StyledTreeItem } from '@mexit/shared'
+import { DesignItem, Input, ItemTitle, LastOpenedState, StyledTreeItem } from '@mexit/shared'
 
 import { fuzzySearch } from '../../Utils/fuzzysearch'
 import { ItemContent } from './SharedNotes'
