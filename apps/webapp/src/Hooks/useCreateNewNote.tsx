@@ -10,7 +10,6 @@ import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
-import { useNewNodes } from './useNewNodes'
 import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
 import { useSnippets } from './useSnippets'
 
@@ -35,8 +34,6 @@ export const useCreateNewNote = () => {
   const addILink = useDataStore((s) => s.addILink)
   const checkValidILink = useDataStore((s) => s.checkValidILink)
   const getMetadata = useContentStore((s) => s.getMetadata)
-  // const spotlightContext = useSpotlightContext()
-
   const { saveNodeName } = useLoad()
   const { getParentILink } = useLinks()
   const { addInHierarchy } = useHierarchy()
@@ -46,7 +43,6 @@ export const useCreateNewNote = () => {
   const createNewNote = (options?: NewNoteOptions) => {
     const childNodepath = options?.parent !== undefined ? getUntitledKey(options?.parent.path) : getUntitledDraftKey()
     const defaultNamespace = getDefaultNamespace()
-
     const namespacePath = options?.namespace && options?.namespace !== defaultNamespace?.id ? DRAFT_NODE : childNodepath
 
     const newNotePath = options?.path || namespacePath
@@ -63,10 +59,10 @@ export const useCreateNewNote = () => {
     const parentNoteId = parentNote?.nodeid
 
     const nodeMetadata = getMetadata(parentNoteId)
+
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent = options?.noteContent
 
-    // TODO: Get default namespace name here
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 
     const node = addILink({
@@ -79,9 +75,10 @@ export const useCreateNewNote = () => {
 
     if (node === undefined) {
       toast.error('The node clashed')
-
       return undefined
     }
+
+    mog('AddInHierarchy', { namespace, parentNoteId, uniquePath, newNotePath, node })
 
     addInHierarchy({
       noteId: node.nodeid,

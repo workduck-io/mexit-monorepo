@@ -9,8 +9,8 @@ import { mog, QuickLinkType } from '@mexit/core'
 import { Input, StyledInputWrapper } from '@mexit/shared'
 import { StyledCombobox } from '@mexit/shared'
 
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useNewNodes } from '../../Hooks/useNewNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useHelpStore } from '../../Stores/useHelpStore'
@@ -58,6 +58,7 @@ const Lookup = () => {
 
   const { goTo, location } = useRouting()
   const shortcuts = useHelpStore((store) => store.shortcuts)
+  const { createNewNote } = useCreateNewNote()
 
   const openModal = () => {
     setOpen(true)
@@ -108,13 +109,9 @@ const Lookup = () => {
     openNode(quickLink)
   }
 
-  const { addNodeOrNodesFast } = useNewNodes()
-
   const handleCreateItem = async (inputValue: QuickLink) => {
-    const { id } = addNodeOrNodesFast(inputValue.text, true)
+    createNewNote({ path: inputValue.value, namespace: inputValue?.namespace })
     closeModal()
-    mog('Created Hierarchy: ', { nodeid: id, inputValue })
-    push(id)
   }
 
   return (
