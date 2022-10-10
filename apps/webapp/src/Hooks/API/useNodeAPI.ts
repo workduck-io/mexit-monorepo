@@ -1,7 +1,6 @@
 import toast from 'react-hot-toast'
 
 import { client } from '@workduck-io/dwindle'
-import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 
 import {
   defaultContent,
@@ -16,11 +15,10 @@ import {
   generateNamespaceId,
   MIcon,
   NodeEditorContent,
-  getTagsFromContent,
-  runBatch
+  getTagsFromContent
 } from '@mexit/core'
 
-import { isRequestedWithin } from '../../Stores/useApiStore'
+import { isRequestedWithin, RequestData, useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -40,7 +38,7 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
-  const { updateILinksFromAddedRemovedPaths, createNoteHierarchyString } = useInternalLinks()
+  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
   const setILinks = useDataStore((store) => store.setIlinks)
@@ -48,6 +46,8 @@ export const useApi = () => {
   const { updateDocument, removeDocument } = useSearch()
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const updateSnippet = useSnippetStore((store) => store.updateSnippet)
+
+  const setRequest = useApiStore.getState().setRequest
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -368,8 +368,10 @@ export const useApi = () => {
 
         if (ids && ids.length > 0) {
           const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+          const requestData = { time: Date.now(), method: 'GET' }
 
           res.fulfilled.forEach(async (snippet) => {
+            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
             if (snippet) {
               updateSnippet(snippet.id, snippet)
               const isTemplate = snippet.template ?? false
@@ -469,13 +471,14 @@ export const useApi = () => {
 
           mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
           const ids = toUpdateLocal.map((i) => i.nodeid)
-
+          const requestData = { time: Date.now(), method: 'GET' }
           runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
             .then((res) => {
               const { fulfilled } = res
 
               fulfilled.forEach((node) => {
                 const { rawResponse, nodeid } = node
+                setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
                 const content = deserializeContent(rawResponse.data)
                 setContent(nodeid, content, extractMetadata(rawResponse))
                 updateDocument('archive', nodeid, content)
@@ -610,9 +613,11 @@ export const useApi = () => {
       const ids = toUpdateLocal.map((i) => i.nodeid)
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+      const requestData = { time: Date.now(), method: 'GET' }
 
       fulfilled.forEach((node) => {
         const { rawResponse, nodeid } = node
+        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
         const content = deserializeContent(rawResponse.data)
         const metadata = extractMetadata(rawResponse) // added by Varshitha
         updateFromContent(nodeid, content, metadata)

@@ -2,7 +2,7 @@ import { sub } from 'date-fns'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface RequestData {
+export interface RequestData {
   time: number
   url: string
   method: string

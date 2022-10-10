@@ -12,6 +12,7 @@ import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
 import {
+  apiURLs,
   convertContentToRawText,
   DRAFT_NODE,
   generateSnippetId,
@@ -38,12 +39,11 @@ import {
 
 import { SnippetHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { useApi } from '../Hooks/API/useNodeAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useUpdater } from '../Hooks/useUpdater'
-import { useAuthStore } from '../Stores/useAuth'
+import { useApiStore } from '../Stores/useApiStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
@@ -56,14 +56,13 @@ export type SnippetsProps = {
 const Snippets = () => {
   const snippets = useSnippetStore((store) => store.snippets)
   const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
-  const api = useApi()
   const { updater } = useUpdater()
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   const { goTo } = useRouting()
 
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const setRequest = useApiStore.getState().setRequest
 
   const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
     () => ({
@@ -256,9 +255,13 @@ const Snippets = () => {
 
       if (ids && ids.length > 0) {
         const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+        const requestData = { time: Date.now(), method: 'GET' }
 
         res.fulfilled.forEach((snippet) => {
-          if (snippet) updateSnippet(snippet)
+          if (snippet) {
+            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
+            updateSnippet(snippet)
+          }
         })
 
         mog('RunBatchWorkerSnippetsRes', { res, ids })
