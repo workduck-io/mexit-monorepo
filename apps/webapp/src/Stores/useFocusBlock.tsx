@@ -69,7 +69,7 @@ export const useFocusBlock = () => {
   const selectBlock = (blockid: string, editorId?: string) => {
     try {
       const editor = editorId ? getPlateEditorRef(editorId) : getPlateEditorRef()
-      mog('editor', { editor })
+      mog('selection editor', { editor, editorId })
       if (editor) {
         const headingNode = findNode(editor, {
           at: [],
@@ -111,7 +111,7 @@ export const useFocusBlock = () => {
         if (!headingNode) return
         const headingNodePath = headingNode[1]
 
-        mog('select block', { blockid, headingNode, headingNodePath })
+        mog('focus block', { blockid, headingNode, headingNodePath })
         if (!headingNodePath) return
 
         // setHighlightedBlockIds([blockid], key)
@@ -124,7 +124,7 @@ export const useFocusBlock = () => {
               inline: 'center'
             })
           }
-        }, 50)
+        }, 100)
       }
     } catch (e) {
       mog('select block error', { e })

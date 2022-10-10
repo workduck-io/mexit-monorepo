@@ -17,6 +17,10 @@ import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiCombobo
 import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from './Hooks/useEditorConfig'
 import generatePlugins from './Plugins'
+import { MENU_ID } from './Components/BlockContextMenu'
+import { useContextMenu } from 'react-contexify'
+import { debounce } from 'lodash'
+import { transparentize } from 'polished'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -49,9 +53,14 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boo
       ${TodoContainer}, button, input, textarea, select, option {
         pointer-events: none;
       }
-    `} 
-
+    `}
   overflow: hidden;
+
+  .slate-highlight {
+    background-color: ${(props) => transparentize(0.75, props.theme.colors.primary)};
+    color: ${(props) => props.theme.colors.text.default};
+    transition: all 0.3s ease-in-out;
+  }
 `
 
 const EditorPreviewRenderer = ({
@@ -116,7 +125,6 @@ const EditorPreviewRenderer = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (blockId) {
-        // mog('editorPreviewRenderer', { blockId, editorId })
         focusBlock(blockId, editorId)
         setHighlights([blockId], 'preview')
       }

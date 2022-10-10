@@ -75,7 +75,7 @@ const searchWorker: SearchWorker = {
 
       parsedBlocks.forEach((block) => {
         block.blockId = createIndexCompositeKey(nodeId, block.blockId)
-        mog(`${block.title} updating block`, { block })
+        // mog(`${block.title} updating block`, { block })
         globalSearchIndex[key].update({ ...block, tag: [...tags, nodeId] })
       })
     }
