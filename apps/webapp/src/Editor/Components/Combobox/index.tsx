@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
-import { PortalBody, useEditorState } from '@udecode/plate'
+import { getPlateEditorRef, getRangeBoundingClientRect,  PortalBody,  useEditorState, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
+import { shift, offset, flip } from '@floating-ui/react-dom-interactions'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { mog, NodeEditorContent } from '@mexit/core'
+import {  mog, NodeEditorContent } from '@mexit/core'
 import { ComboboxItem, ComboboxItemTitle, MexIcon, PreviewMeta } from '@mexit/shared'
 import {
   ActionTitle,
@@ -17,7 +18,6 @@ import {
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
-  ItemTitle,
   ShortcutText
 } from '@mexit/shared'
 
@@ -31,7 +31,6 @@ import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
-import { setElementPositionByRange } from '../../Utils/setElementPositionByRange'
 import { CategoryType, QuickLinkType } from '../../constants'
 import BlockCombo from './BlockCombo'
 
@@ -105,23 +104,11 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const { getSnippetContent } = useSnippets()
   const setIsSlash = useComboboxStore((store) => store.setIsSlash)
   const [metaData, setMetaData] = useState(undefined)
-  const ref = React.useRef<any>(null) // eslint-disable-line @typescript-eslint/no-explicit-any
-  const editor = useEditorState()
+  const editor = usePlateEditorRef()
   const theme = useTheme()
 
-  useEffect(() => {
-    // Throws error when the combobox is open and editor is switched or removed
-    try {
-      if (editor) setElementPositionByRange(editor, { ref, at })
-    } catch (e) {
-      closeMenu()
-      console.error(e)
-    }
-  }, [at, editor])
 
-  const menuProps = combobox ? combobox.getMenuProps() : { ref: null }
-
-  const multiRef = useMergedRef(menuProps.ref, ref)
+  const menuProps = combobox ? combobox.getMenuProps({}, { suppressRefError: true }) : { ref: null }
 
   const comboProps = (item, index) => {
     if (combobox) {
@@ -151,6 +138,10 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
     }
   }, [isBlockTriggered])
 
+  useEffect(() => {
+    return () => closeMenu()
+  }, [])
+  
   useEffect(() => {
     const comboItem = items[itemIndex]
 
@@ -188,15 +179,31 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
     }
   }, [itemIndex, items, activeBlock, isOpen, search])
 
+const getBoundingClientRect = useCallback(
+    () => { 
+  
+      return getRangeBoundingClientRect(editor, targetRange)
+  
+    }, [editor, targetRange]
+  )
+
+  // Update popper position
+  const { style, floating } = useVirtualFloating({
+    placement: 'bottom-start',
+    getBoundingClientRect,
+    middleware: [offset(4), shift(), flip()]
+  })
+
   if (!combobox) return null
 
   const listItem = items[itemIndex]
   const itemShortcut = listItem?.type ? ElementTypeBasedShortcut[listItem?.type] : undefined
 
   return (
-    <PortalBody element={portalElement}>
-      <ComboboxRoot {...menuProps} ref={multiRef} isOpen={isOpen}>
+    <PortalBody>
         {isOpen && (
+
+      <ComboboxRoot {...menuProps} ref={floating} style={style} isOpen={isOpen}>
           <>
             {!isBlockTriggered && (
               <div id="List" style={{ flex: 1 }}>
@@ -279,16 +286,21 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                 <section>
                   <EditorPreviewRenderer
                     noMouseEvents
-                    content={preview}
-                    editorId={isBlockTriggered && activeBlock ? activeBlock.blockId : items[itemIndex]?.key}
+                    content={preview?.content || preview}
+                    readOnly
+                    draftView
+                    editorId={
+                      isBlockTriggered && activeBlock ? activeBlock.blockId : `${items[itemIndex]?.key}_Preview_Block`
+                    }
                   />
                 </section>
                 {preview && <PreviewMeta meta={metaData} />}
               </ComboSeperator>
             )}
           </>
-        )}
       </ComboboxRoot>
+        )}
+
     </PortalBody>
   )
 }

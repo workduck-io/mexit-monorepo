@@ -5,12 +5,13 @@ import eyeOffLine from '@iconify/icons-ri/eye-off-line'
 import shareLine from '@iconify/icons-ri/share-line'
 import { moveSelection, useEditorRef } from '@udecode/plate'
 import { useMatch } from 'react-router-dom'
-import { useReadOnly, useFocused, useSelected } from 'slate-react'
+import { useFocused, useSelected } from 'slate-react'
 
-import { AccessLevel, ILink, mog, NodeType, SharedNode } from '@mexit/core'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { ILink, NodeType, SharedNode } from '@mexit/core'
 import { SILinkRoot, SILink, StyledIcon, ILinkElementProps, sharedAccessIcon } from '@mexit/shared'
 
-import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { useNavigation } from '../../../Hooks/useNavigation'
@@ -156,43 +157,35 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
     }
   }, [selected])
 
-  useHotkeys(
-    'backspace',
-    () => {
-      if (selected && focused && editor.selection) {
-        moveSelection(editor)
-      }
-    },
-    [element]
-  )
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      Backspace: (event) => {
+        if (selected && focused && editor.selection) {
+          moveSelection(editor)
+        }
+      },
+      Enter: (ev) => {
+        // Show preview on Enter, if preview is shown, navigate to link
+        if (selected && focused && editor.selection) {
+          if (!preview) {
+            onPreviewShow(element.value)
+          }
+        }
 
-  useHotkeys(
-    'enter',
-    (ev) => {
-      // Show preview on Enter, if preview is shown, navigate to link
-      if (selected && focused && editor.selection) {
-        if (!preview) {
-          onPreviewShow(element.value)
+        // Once preview is shown the link looses focus
+        if (preview && !isEditingPreview()) {
+          loadLinkNode(element.value)
+        }
+      },
+      Delete: (ev) => {
+        if (selected && focused && editor.selection) {
+          moveSelection(editor, { reverse: true })
         }
       }
+    })
 
-      // Once preview is shown the link looses focus
-      if (preview && !isEditingPreview()) {
-        loadLinkNode(element.value)
-      }
-    },
-    [selected, focused, preview]
-  )
-
-  useHotkeys(
-    'delete',
-    () => {
-      if (selected && focused && editor.selection) {
-        moveSelection(editor, { reverse: true })
-      }
-    },
-    [selected, focused]
-  )
+    return () => unsubscribe()
+  }, [element, selected, focused, preview])
 
   const nodeType = getNodeType(element.value)
   const block = element.blockId ? getBlock(element.value, element.blockId) : undefined

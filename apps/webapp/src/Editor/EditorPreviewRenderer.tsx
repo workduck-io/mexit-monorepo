@@ -1,20 +1,28 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
+import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
 
-import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
-import { useEditorChange } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
+import { EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
 
-import PreviewEditor from '../Components/Editor/PreviewEditor'
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
-import { editorPreviewComponents } from './Components/EditorPreviewComponents'
-import useMemoizedPlugins from './Plugins'
+import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
+import { useEditorPluginConfig } from './Hooks/useEditorConfig'
+import generatePlugins from './Plugins'
+import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
+import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiComboboxChange'
+import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
+import { MENU_ID } from './Components/BlockContextMenu'
+import { useContextMenu } from 'react-contexify'
+import { debounce } from 'lodash'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
   editorId: string
   noStyle?: boolean
+  onChange?: (val: NodeEditorContent) => void
   /**
    * Block that will be focused on render
    */
@@ -26,7 +34,7 @@ interface EditorPreviewRendererProps {
   draftView?: boolean
 }
 
-const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean }>`
+const PreviewStyles = styled(EditorStyles) <{ draftView?: boolean, readOnly?: boolean }>`
   ${({ draftView }) =>
     draftView &&
     css`
@@ -35,11 +43,13 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean }>`
       }
     `}
 
-  overflow: hidden;
-
+  ${({ readOnly }) => readOnly && css`
   ${TodoContainer}, button, input, textarea, select, option {
     pointer-events: none;
   }
+  `} 
+  overflow: hidden;
+
 `
 
 const EditorPreviewRenderer = ({
@@ -48,27 +58,56 @@ const EditorPreviewRenderer = ({
   blockId,
   noStyle,
   noMouseEvents,
+  onChange,
   onDoubleClick,
   readOnly = true,
-  draftView
+  draftView = true
 }: EditorPreviewRendererProps) => {
   const editableProps = useMemo(
     () => ({
       placeholder: 'Murmuring the mex hype... ',
-      spellCheck: false,
       style: noStyle
         ? {}
         : {
-            padding: '15px'
-          },
+          padding: '15px'
+        },
       readOnly,
+      spellCheck: false,
       autoFocus: !readOnly
     }),
-    []
+    [readOnly]
   )
 
   // We get memoized plugins
-  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
+  const oldPlugins = useMemo(
+    () => generatePlugins(readOnly ? editorPreviewComponents : components, { exclude: { dnd: true } }),
+    [readOnly]
+  )
+
+  const comboboxConfig = useEditorPluginConfig(editorId, { exclude: { dnd: true } })
+  const pluginConfigs = {
+    combobox: {
+      onChange: useMultiComboboxOnChange(editorId, comboboxConfig.onChangeConfig),
+      onKeyDown: useMultiComboboxOnKeyDown(comboboxConfig.onKeyDownConfig)
+    }
+  }
+
+  const { show } = useContextMenu({ id: MENU_ID })
+  const plugins = [
+    ...oldPlugins,
+    {
+      key: 'MULTI_COMBOBOX',
+      handlers: {
+        onContextMenu: () => (ev) => {
+          show(ev)
+        },
+        onChange: pluginConfigs.combobox.onChange,
+        onKeyDown: pluginConfigs.combobox.onKeyDown
+      }
+    }
+  ]
+
+  // We get memoized plugins
   const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
   const { focusBlock } = useFocusBlock()
 
@@ -84,28 +123,42 @@ const EditorPreviewRenderer = ({
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [blockId, editorId, content])
+  }, [blockId, editorId])
 
-  useEditorChange(editorId, content)
+  // useEditorChange(editorId, content)
+
+  const onDelayPerform = debounce(!readOnly && typeof onChange === 'function' ? onChange : () => undefined, 200)
+
+  const onContentChange = (val: NodeEditorContent) => {
+    if (onChange) onDelayPerform(val)
+  }
 
   return (
-    <PreviewStyles
-      readOnly={noMouseEvents}
-      draftView={draftView}
-      onClick={(ev) => {
-        if (onDoubleClick && ev.detail === 2) {
-          onDoubleClick(ev)
-        }
-      }}
-    >
-      <FadeContainer fade={blockId !== undefined}>
-        {draftView ? (
-          <PreviewEditor editorId={editorId} content={content} />
-        ) : (
-          <Plate id={editorId} value={content} plugins={plugins} editableProps={editableProps} />
-        )}
-      </FadeContainer>
-    </PreviewStyles>
+    <ErrorBoundary fallbackRender={() => <></>}>
+      <PreviewStyles
+        readOnly={noMouseEvents && readOnly}
+        draftView={draftView}
+        onClick={(ev) => {
+          if (onDoubleClick && ev.detail === 2) {
+            onDoubleClick(ev)
+          }
+        }}
+      >
+        <FadeContainer fade={blockId !== undefined}>
+          <Plate
+            id={editorId}
+            editableProps={editableProps}
+            onChange={onContentChange}
+            initialValue={content}
+            plugins={plugins}
+          >
+            {!readOnly && <MultiComboboxContainer config={comboboxConfig.onKeyDownConfig} />}
+          </Plate>
+        </FadeContainer>
+      </PreviewStyles>
+    </ErrorBoundary>
   )
 }
+
+
 export default EditorPreviewRenderer

@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import archivedIcon from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
 import { moveSelection, useEditorRef } from '@udecode/plate'
-import { Transforms } from 'slate'
 import { useFocused, useSelected, useReadOnly } from 'slate-react'
 import styled from 'styled-components'
 

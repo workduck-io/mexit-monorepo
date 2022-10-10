@@ -1,16 +1,17 @@
-import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
+import { PlatePluginComponent } from '@udecode/plate'
 import { useContextMenu } from 'react-contexify'
-import useMemoizedPlugins from '../../Plugins/index'
+
+import useMemoizedPlugins, { PluginOptionType } from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
 import { MENU_ID } from '../BlockContextMenu'
-
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDown'
 
 export const useComboboxConfig = (
   editorId: string,
   config: ComboboxConfig,
-  components: Record<string, PlatePluginComponent<any | undefined>> = {}
+  components: Record<string, PlatePluginComponent<any | undefined>> = {},
+  pluginOptions: PluginOptionType = { exclude: { dnd: false } }
 ) => {
   const pluginConfigs = {
     combobox: {
@@ -22,7 +23,7 @@ export const useComboboxConfig = (
 
   const { show } = useContextMenu({ id: MENU_ID })
 
-  const prePlugins = useMemoizedPlugins(components, { exclude: { dnd: false } })
+  const prePlugins = useMemoizedPlugins(components, pluginOptions)
   const plugins = [
     ...prePlugins,
     {

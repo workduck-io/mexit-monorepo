@@ -1,5 +1,7 @@
 import React from 'react'
+
 import styled from 'styled-components'
+
 import { RelativeTime } from './RelativeTime'
 
 export const Data = styled.div`
