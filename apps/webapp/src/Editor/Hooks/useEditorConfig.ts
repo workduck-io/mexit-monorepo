@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import {
   ELEMENT_ILINK,
@@ -13,8 +13,8 @@ import {
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { cleanEditorId } from '../../Components/Todo'
+import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useMentions } from '../../Hooks/useMentions'
-import { useNewNodes } from '../../Hooks/useNewNodes'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -52,6 +52,8 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
 
+  const { createNewNote } = useCreateNewNote()
+
   const ilinksForCurrentNode = useMemo(() => {
     if (params.snippetid) return ilinks
 
@@ -66,8 +68,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
 
     return slashCommands.internal
   }, [slashCommands.internal])
-
-  const { addNodeOrNodesFast } = useNewNodes()
 
   const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
@@ -151,9 +151,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       internal: {
         slateElementType: 'internal',
-        newItemHandler: (newItem, parentId?) => {
-          const { id } = addNodeOrNodesFast(newItem, true, parentId)
-          return id
+        newItemHandler: (path, openedNotePath?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
+          mog('new item here is', { path, openedNotePath, openedNode })
+          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+          return note?.nodeid
         },
         renderElement: SlashComboboxItem
       },
@@ -175,9 +177,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     internal: {
       ilink: {
         slateElementType: ELEMENT_ILINK,
-        newItemHandler: (newItem, parentId?) => {
-          const { id } = addNodeOrNodesFast(newItem, true, parentId)
-          return id
+        newItemHandler: (path, openedNotePath?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
+          mog('new item here is', { path, openedNotePath, openedNode })
+          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+          return note?.nodeid
         },
         renderElement: QuickLinkComboboxItem
       },
