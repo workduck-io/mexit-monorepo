@@ -136,10 +136,6 @@ const useArchive = () => {
 
   // TODO: figure how namespaces are working with archive hierarchy
   const getArchiveNotesHierarchy = async () => {
-    if (!USE_API) {
-      return archive
-    }
-
     await client
       .get(apiURLs.getArchivedNodes, {
         headers: {

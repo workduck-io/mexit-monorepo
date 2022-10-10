@@ -614,7 +614,7 @@ export const useApi = () => {
       fulfilled.forEach((node) => {
         const { rawResponse, nodeid } = node
         const content = deserializeContent(rawResponse.data)
-        const metadata = extractMetadata(rawResponse)
+        const metadata = extractMetadata(rawResponse) // added by Varshitha
         updateFromContent(nodeid, content, metadata)
       })
     }
