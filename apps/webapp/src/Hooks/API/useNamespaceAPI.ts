@@ -41,6 +41,7 @@ export const useNamespaceApi = () => {
               id: item.namespaceID,
               name: item.namespaceTitle,
               icon: metadata?.metadata?.icon ?? undefined,
+              access: item.accessType,
               createdAt: metadata?.createdAt,
               updatedAt: metadata?.updatedAt,
               granterID: item.granterId ?? undefined
