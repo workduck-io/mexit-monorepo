@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { transparentize } from 'polished'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
@@ -60,7 +58,7 @@ export const Input = styled.input<InputProps>`
   ${({ theme, error }) =>
     error &&
     css`
-      border-color: ${theme.colors.palette.red};
+      border-color: ${theme.colors.palette.red} !important;
     `}
 `
 

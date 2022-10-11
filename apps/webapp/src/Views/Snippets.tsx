@@ -8,19 +8,9 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import genereateName from 'project-name-generator'
 
-import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
-import {
-  apiURLs,
-  convertContentToRawText,
-  DRAFT_NODE,
-  generateSnippetId,
-  GenericSearchResult,
-  mog,
-  runBatch,
-  Snippet
-} from '@mexit/core'
+import { apiURLs, convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult, mog } from '@mexit/core'
 import {
   ItemTag,
   MainHeader,
@@ -159,6 +149,7 @@ const Snippets = () => {
       return null
     }
     const snip = getSnippet(item.id)
+
     if (!snip) {
       return null
     }
@@ -185,7 +176,7 @@ const Snippets = () => {
             onClick={() => onSelect({ id: snip.id, title: snip.title })}
             active={item.matchField?.includes('text')}
           >
-            <EditorPreviewRenderer content={snip.content} editorId={`editor_${item.id}`} />
+            <EditorPreviewRenderer content={snip.content} readOnly editorId={`${item.id}_snippet_preview`} />
           </SearchPreviewWrapper>
         </Result>
       )
@@ -212,6 +203,7 @@ const Snippets = () => {
 
     return null
   }
+
   const RenderItem = React.forwardRef(BaseItem)
 
   const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
@@ -219,6 +211,7 @@ const Snippets = () => {
     if (item) {
       const icon = quillPenLine
       const snip = getSnippet(item.id)
+
       // const edNode = { ...node, title: node.path, id: node.nodeid }
       if (snip)
         return (
@@ -234,6 +227,7 @@ const Snippets = () => {
               <Icon icon={icon} />
             </Title>
             <EditorPreviewRenderer
+              readOnly
               onDoubleClick={(e) => onDoubleClick(e, item.id, item.title)}
               content={snip.content}
               editorId={`${item.id}_Snippet_Preview_Editor`}

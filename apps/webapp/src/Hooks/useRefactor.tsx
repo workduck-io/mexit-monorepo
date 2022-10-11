@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react'
-
 import { NodeLink, mog, getUniquePath, isMatch, ILink } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { useRefactorStore } from '../Stores/useRefactorStore'
 import { RefactorPath } from '../Stores/useRenameStore'
 import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'
@@ -95,21 +91,27 @@ export const useRefactor = () => {
   const execRefactorAsync = async (from: RefactorPath, to: RefactorPath, clearBuffer = true) => {
     mog('REFACTOR: FROM < TO', { from, to })
     const nodeID = getNodeidFromPath(from.path, from.namespaceID)
+    const uniquePath = useDataStore
+      .getState()
+      .checkValidILink({ notePath: to.path, namespace: to.namespaceID, showAlert: false })
+
+    mog('UNIQU', { uniquePath })
+
     const res = await refactorHierarchy(
       { path: from.path.split('.').join('#'), namespaceID: from.namespaceID },
-      { path: to.path.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
+      { path: uniquePath.split('.').join('#'), namespaceID: to.namespaceID ?? from.namespaceID },
       nodeID
     ).then((response: RefactorResponse) => {
       const addedILinks: ILink[] = []
       const removedILinks: ILink[] = []
 
       Object.entries(response.changedPaths).forEach(([nsId, nsObject]) => {
-          nsObject.addedPaths.forEach((ilink) => {
-            ilink.namespace = nsId
-          })
-          nsObject.removedPaths.forEach((ilink) => {
-            ilink.namespace = nsId
-          })
+        nsObject.addedPaths.forEach((ilink) => {
+          ilink.namespace = nsId
+        })
+        nsObject.removedPaths.forEach((ilink) => {
+          ilink.namespace = nsId
+        })
         addedILinks.push(...nsObject.addedPaths)
         removedILinks.push(...nsObject.removedPaths)
       })
