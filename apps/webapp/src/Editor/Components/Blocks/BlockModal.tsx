@@ -1,8 +1,11 @@
 import Modal from 'react-modal'
 
+import { ContextMenuActionType } from '@mexit/core'
+
 import { QuickLink, WrappedNodeSelect } from '../../../Components/NodeSelect/NodeSelect'
 import { useCreateNewNote } from '../../../Hooks/useCreateNewNote'
 import { useLinks } from '../../../Hooks/useLinks'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useDataSaverFromContent } from '../../../Hooks/useSave'
 import useBlockStore from '../../../Stores/useBlockStore'
 import { useEditorBlockSelection } from '../../Actions/useEditorBlockSelection'
@@ -11,10 +14,12 @@ const BlockModal = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)
   const isModalOpen = useBlockStore((store) => store.isModalOpen)
   const setIsModalOpen = useBlockStore((store) => store.setIsModalOpen)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
   const { createNewNote } = useCreateNewNote()
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
   const { getNodeidFromPath } = useLinks()
+  const { getDefaultNamespaceId } = useNamespaces()
 
   const { getContentWithNewBlocks, deleteSelectedBlock } = useEditorBlockSelection()
 
@@ -22,19 +27,26 @@ const BlockModal = () => {
     setIsModalOpen(undefined)
   }
 
+  const isDeleteBlock = () => {
+    return isModalOpen === ContextMenuActionType.move
+  }
+
   const onNodeCreate = (quickLink: QuickLink): void => {
-    const editorBlocks = deleteSelectedBlock()
+    const editorBlocks = deleteSelectedBlock(isDeleteBlock())
     const blocksContent = getContentWithNewBlocks(quickLink.value, editorBlocks, false)
-    createNewNote({ path: quickLink.value, noteContent: blocksContent })
+    createNewNote({ path: quickLink.value, noteContent: blocksContent, namespace: quickLink.namespace })
+    setIsBlockMode(false)
     setIsModalOpen(undefined)
   }
 
   const onNodeSelect = (quickLink: QuickLink) => {
-    const nodeid = getNodeidFromPath(quickLink.value)
-    const editorBlocks = deleteSelectedBlock()
+    const nodeid = getNodeidFromPath(quickLink.value, quickLink.namespace)
+    const editorBlocks = deleteSelectedBlock(isDeleteBlock())
     const content = getContentWithNewBlocks(nodeid, editorBlocks)
+    const namespace = quickLink.namespace ?? getDefaultNamespaceId()
 
-    saveEditorValueAndUpdateStores(nodeid, content)
+    saveEditorValueAndUpdateStores(nodeid, namespace, content)
+    setIsBlockMode(false)
     setIsModalOpen(undefined)
   }
 

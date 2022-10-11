@@ -1,5 +1,3 @@
-import React from 'react'
-
 import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import xBold from '@iconify/icons-ph/x-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
@@ -40,7 +38,7 @@ const BlockInfoBar = () => {
   const blockHeading = length === 0 ? 'Select Blocks' : `Block${length > 1 ? 's' : ''} selected:`
 
   const handleDelete = () => {
-    deleteSelectedBlock()
+    deleteSelectedBlock(true)
     setIsModalOpen(undefined)
   }
 
