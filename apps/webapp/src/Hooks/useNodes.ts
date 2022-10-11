@@ -1,6 +1,6 @@
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
-import { AccessLevel, ILink, SharedNode, NodeType, getParentBreadcurmbs, mog } from '@mexit/core'
+import { ILink, SharedNode, NodeType, getParentBreadcurmbs, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
@@ -47,13 +47,6 @@ export const useNodes = () => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const res = sharedNodes.map((l) => l.nodeid).includes(nodeid)
     return res
-  }
-
-  const accessWhenShared = (nodeid: string): AccessLevel => {
-    const sharedNodes = useDataStore.getState().sharedNodes
-    const res = sharedNodes.find((n) => n.nodeid === nodeid)
-    if (res) return res.currentUserAccess
-    return undefined
   }
 
   const getNodeType = (nodeid: string) => {
@@ -138,7 +131,6 @@ export const useNodes = () => {
     getArchiveNode,
     getSharedNode,
     isSharedNode,
-    accessWhenShared,
     getNodeType,
     updateBaseNode,
     getNodeBreadcrumbs

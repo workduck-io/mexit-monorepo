@@ -88,33 +88,44 @@ export const useMentions = () => {
     }
   }
 
+  /**
+   * Adds a new mentionable user
+   *
+   * If access details are not provided, it will be added without access,
+   * this happens in the case of mentioning without sharing a note
+   */
   const addMentionable = (
     alias: string,
     email: string,
     userID: string,
     name: string,
-    context: ShareContext,
-    nodeid: string,
-    access: AccessLevel
+    accessDetails?: {
+      context: ShareContext
+      nodeid: string
+      access: AccessLevel
+    }
   ) => {
     const mentionable = useMentionStore.getState().mentionable
     const mentionExists = mentionable.find((user) => user.userID === userID)
 
     // mog('adding mentionable user ', { userID, mentionExists, mentionable })
     if (mentionExists) {
-      if (nodeid && access) {
-        mentionExists.access[context][nodeid] = access
+      if (accessDetails.nodeid && accessDetails.access) {
+        mentionExists.access[accessDetails.context][accessDetails.nodeid] = accessDetails.access
       }
       setMentionable([...mentionable.filter((u) => u.userID !== userID), mentionExists])
     } else {
+      const newAccess = accessDetails
+        ? {
+            [accessDetails.context]: { [accessDetails.nodeid]: accessDetails.access }
+          }
+        : emptyAccessTable
       const newMention: Mentionable = {
         type: 'mentionable',
         alias,
         name,
         email,
-        access: mergeAccess(emptyAccessTable, {
-          [context]: { [nodeid]: access }
-        }),
+        access: mergeAccess(emptyAccessTable, newAccess),
         userID
       }
       setMentionable([...mentionable, newMention])

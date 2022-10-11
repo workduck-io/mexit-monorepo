@@ -30,13 +30,14 @@ import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
+import { usePermissions } from '../../Hooks/usePermissions'
 
 const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
   const { toggleFocusMode } = useLayout()
   const { saveApiAndUpdate } = useLoad()
-  const { accessWhenShared } = useNodes()
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+  const { accessWhenShared } = usePermissions()
 
   const { getDataAPI } = useApi()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)

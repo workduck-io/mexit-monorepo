@@ -79,7 +79,11 @@ export const useFetchShareData = () => {
 
     mog('mentionableU', { mentionableU })
     mentionableU.forEach((u) =>
-      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, 'note', u.nodeid, u.access)
+      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, {
+        context: 'note',
+        nodeid: u.nodeid,
+        access: u.access
+      })
     )
   }
 

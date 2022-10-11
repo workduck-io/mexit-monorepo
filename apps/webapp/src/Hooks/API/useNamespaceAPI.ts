@@ -173,9 +173,7 @@ export const useNamespaceApi = () => {
             type: 'NamespaceRequest',
             id,
             name,
-            metadata: {
-              icon
-            }
+            metadata: { icon }
           },
           {
             headers: workspaceHeaders()
@@ -202,6 +200,7 @@ export const useNamespaceApi = () => {
           headers: workspaceHeaders()
         }
       )
+      mog('Shared a namespace', { res })
       return res
     } catch (err) {
       throw new Error(`Unable to share namespace: ${err}`)
@@ -218,6 +217,7 @@ export const useNamespaceApi = () => {
         },
         headers: workspaceHeaders()
       })
+      mog('revoke access users', res)
       return res
     } catch (err) {
       throw new Error(`Unable to revoke namespace access: ${err}`)
@@ -229,6 +229,7 @@ export const useNamespaceApi = () => {
       const res = await client.get(apiURLs.namespaces.getUsersOfShared(id), {
         headers: workspaceHeaders()
       })
+      mog('get all shared users', res)
       return res
     } catch (err) {
       throw new Error(`Unable to get shared namespace users: ${err}`)
