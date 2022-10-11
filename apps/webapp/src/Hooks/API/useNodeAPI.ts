@@ -297,13 +297,10 @@ export const useApi = () => {
 
   const getPublicNamespaceAPI = async (namespaceID: string) => {
     const res = await client
-      .get(`https://http-test.workduck.io/mex/namespace/public/${namespaceID}`, {
+      .get(apiURLs.namespaces.getPublic(namespaceID), {
         headers: workspaceHeaders()
       })
       .then((response: any) => {
-        // TODO: remove this hierarchy parser once the middleware starts working
-        response.data.nodeHierarchy = hierarchyParser(response.data.nodeHierarchy, namespaceID)
-
         return response.data
       })
 
