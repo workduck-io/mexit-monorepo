@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const lightTheme = generateTheme({
+  type: 'light',
   // Colors
   primary: '#34be79',
   secondary: '#2b76cc',

@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const xemTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#2D9EDF',
   secondary: '#128C7E',

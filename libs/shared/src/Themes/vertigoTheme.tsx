@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const vertigoTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#E56895',
   secondary: '#B877EC',

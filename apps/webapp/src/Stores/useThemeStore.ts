@@ -6,7 +6,7 @@ import { themeStoreConstructor, ThemeStoreState, defaultThemes } from '@mexit/sh
 const useThemeStore = create<ThemeStoreState>(
   persist(themeStoreConstructor, {
     name: 'mexit-theme-store',
-    version: 3,
+    version: 4,
     migrate: (persistedState: ThemeStoreState, version: number) => {
       persistedState.themes = defaultThemes
       return persistedState

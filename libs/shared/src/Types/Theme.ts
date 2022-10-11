@@ -46,6 +46,7 @@ export interface BackgroundImages {
   preview?: string
 }
 export interface ThemePalette {
+  type: 'dark' | 'light'
   // Colors
   primary: string
   secondary: string

@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const reduxTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#b8bb26',
   secondary: '#fabd2f',

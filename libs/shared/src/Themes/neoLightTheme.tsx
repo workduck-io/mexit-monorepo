@@ -1,10 +1,8 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const neoLight = generateTheme({
-  // border-radius: 43px;
-  // background: #c4cce0;
-  // box-shadow:  13px 13px 26px #acb4c5,
-  //              -13px -13px 26px #dce4fb;
+  type: 'light',
+
   // Colors
   primary: '#4293F2',
   secondary: '#c31575',

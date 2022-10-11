@@ -9,6 +9,7 @@ import { neoDark } from './neoDarkTheme'
 import { neoLight } from './neoLightTheme'
 import { reduxTheme } from './reduxTheme'
 import { renarTheme } from './renarTheme'
+import { soLightTheme } from './soLightTheme'
 import { spotlightTheme } from './spotlightTheme'
 import { vertigoTheme } from './vertigoTheme'
 import { vvkTheme } from './vvkTheme'
@@ -25,6 +26,7 @@ export const defaultThemes = [
   // { id: 'Dev+', themeData: matrixTheme },
   { id: 'Amethyst', themeData: vvkTheme },
   { id: 'Light', themeData: lightTheme },
+  { id: 'soLight', themeData: soLightTheme },
   { id: 'Clean', themeData: spotlightTheme },
   { id: 'Yellowy', themeData: yellowyTheme },
   { id: 'Neo Light', themeData: neoLight },

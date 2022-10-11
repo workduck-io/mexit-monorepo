@@ -2,6 +2,7 @@ import ColorScheme from 'color-scheme'
 import merge from 'deepmerge'
 import { getLuminance, lighten, mix, tint } from 'polished'
 import { DefaultTheme } from 'styled-components'
+
 import { LayoutStyle, ThemePalette } from '../Types/Theme'
 
 const LayoutTheme: LayoutStyle = {
@@ -25,7 +26,7 @@ const LayoutTheme: LayoutStyle = {
   }
 }
 
-const generateTheme = (p: ThemePalette): DefaultTheme => {
+export const generateTheme = (p: ThemePalette): DefaultTheme => {
   const mp = (c: string) => mix(0.033, p.primary, c)
   const cc = new ColorScheme()
   const pP = cc
@@ -67,10 +68,10 @@ const generateTheme = (p: ThemePalette): DefaultTheme => {
 
         //
         background: {
-          app: p.gray[10],
+          app: p.type === 'dark' ? mix(0.5, p.gray[10], p.gray[9]) : p.gray[10],
           card: p.gray[9],
           modal: p.gray[9],
-          sidebar: p.gray[10],
+          sidebar: p.type === 'dark' ? p.gray[10] : p.gray[9],
           highlight: p.gray[8]
         },
         divider: p.gray[4],
@@ -140,5 +141,3 @@ const generateTheme = (p: ThemePalette): DefaultTheme => {
     p
   )
 }
-
-export default generateTheme
