@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const hackerTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#2bff30',
   secondary: '#2bff30',

@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const devTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#31d181',
   secondary: '#937cfc',

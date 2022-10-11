@@ -1,4 +1,10 @@
 export const defaultShortcuts = {
+  showHome: {
+    title: 'Home',
+    //TODO: don't know what to put here
+    keystrokes: '',
+    category: 'Navigate'
+  },
   showSettings: {
     title: 'Settings',
     keystrokes: '$mod+,',

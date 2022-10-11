@@ -1,6 +1,7 @@
-import generateTheme from '../Utils/themeGenerator'
+import { generateTheme } from '../Utils/themeGenerator'
 
 export const imperialTheme = generateTheme({
+  type: 'dark',
   // Colors
   primary: '#c31575',
   secondary: '#748EFF',
