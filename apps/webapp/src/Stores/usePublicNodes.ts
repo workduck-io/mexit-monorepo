@@ -5,6 +5,7 @@ import {
   Contents,
   IDBStorage,
   ILink,
+  NodeContent,
   NodeEditorContent,
   NodeMetadata,
   NodeProperties,
@@ -12,14 +13,23 @@ import {
 } from '@mexit/core'
 
 export interface PublicNodeStoreType {
+  // This is the hierarchy of a public namespace
+  // This is overwritten on opening another namespace
   iLinks: ILink[]
-  currentNode: NodeProperties
-  setCurrentNode: (node: NodeProperties) => void
   setILinks: (nodes: ILink[]) => void
-  contents: Contents
-  setContent: (nodeID: string, content: NodeEditorContent) => void
+
   namespace: SingleNamespace
   setNamespace: (namespace: SingleNamespace) => void
+
+  // Current opened node
+  currentNode: NodeProperties
+  setCurrentNode: (node: NodeProperties) => void
+
+  // Contents and metadata of nodes of public namespace
+  contents: Contents
+  getContent: (nodeID: string) => NodeContent
+  setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
+  getMetadata: (nodeid: string) => NodeMetadata
 }
 
 export const usePublicNodeStore = create<PublicNodeStoreType>(
@@ -38,13 +48,22 @@ export const usePublicNodeStore = create<PublicNodeStoreType>(
       setILinks: (nodes: ILink[]) => {
         set({ iLinks: nodes })
       },
-      setContent: (nodeID: string, content: NodeEditorContent) => {
+      getContent: (nodeID: string) => {
+        return get().contents[nodeID]
+      },
+      setContent: (nodeid, content, metadata) => {
         const oldContent = get().contents
 
-        delete oldContent[nodeID]
+        const oldMetadata = oldContent[nodeid] && oldContent[nodeid].metadata ? oldContent[nodeid].metadata : undefined
+        delete oldContent[nodeid]
+        const nmetadata = { ...oldMetadata, ...metadata }
         set({
-          contents: { [nodeID]: { type: 'editor', content }, ...oldContent }
+          contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
         })
+      },
+      getMetadata: (nodeid) => {
+        const contents = get().contents
+        return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : ({} as NodeMetadata)
       }
     }),
     { name: 'mexit-public-node-store', version: 2 }
