@@ -95,6 +95,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           New Note
         </ContextMenuItem>
         <ContextMenuItem
+          disabled={isInSharedNamespace}
           onSelect={(args) => {
             handleShare(item)
           }}
