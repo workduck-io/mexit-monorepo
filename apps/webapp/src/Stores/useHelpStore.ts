@@ -64,7 +64,7 @@ export const useHelpStore = create<HelpState>(
     {
       name: 'mexit-help-store',
       getStorage: () => IDBStorage,
-      version: 1,
+      version: 2,
       migrate: (persistedState: any, version: number) => {
         persistedState.shortcuts = mergeShortcuts(persistedState.shortcuts, defaultShortcuts)
         return persistedState

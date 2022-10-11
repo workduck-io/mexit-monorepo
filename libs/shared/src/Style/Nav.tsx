@@ -156,6 +156,8 @@ export const NavLogoWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   padding-left: 5rem;
   transition: padding 0.5s ease;
+
+  cursor: pointer;
 `
 
 export const CreateNewButton = styled.div`

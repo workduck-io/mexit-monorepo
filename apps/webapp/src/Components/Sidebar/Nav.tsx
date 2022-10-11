@@ -6,6 +6,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
+import { NavLink } from 'react-router-dom'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -177,6 +178,7 @@ const Nav = () => {
   const { getFocusProps } = useLayout()
 
   const [source, target] = useSingleton()
+  const shortcuts = useHelpStore((store) => store.shortcuts)
 
   const onDoubleClickToogle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.detail === 2) {
@@ -202,9 +204,17 @@ const Nav = () => {
         <MainNav {...getFocusProps(focusMode)}>
           <NavTooltip singleton={source} />
 
-          <NavLogoWrapper>
-            <WDLogo height={'56'} width={'56'} />
-          </NavLogoWrapper>
+          <NavTooltip
+            key={shortcuts.showHome.title}
+            singleton={target}
+            content={<TitleWithShortcut title="Home" shortcut={shortcuts.showHome.keystrokes} />}
+          >
+            <NavLogoWrapper>
+              <NavLink to={ROUTE_PATHS.home}>
+                <WDLogo height={'56'} width={'56'} />
+              </NavLink>
+            </NavLogoWrapper>
+          </NavTooltip>
           <NavHeader target={target} />
           <NavFooter target={target} />
         </MainNav>
