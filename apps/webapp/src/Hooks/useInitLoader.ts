@@ -26,7 +26,7 @@ export const useInitLoader = () => {
 
   const { goTo } = useRouting()
 
-  const { getNodesByWorkspace, getAllSnippetsByWorkspace } = useApi()
+  const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   // const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
@@ -44,7 +44,7 @@ export const useInitLoader = () => {
     setShowLoader(true)
     try {
       await getAllNamespaces()
-      await getNodesByWorkspace()
+      // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
       initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)

@@ -442,63 +442,63 @@ export const useApi = () => {
     return data
   }
 
-  const getNodesByWorkspace = async () => {
-    const updatedILinks: any[] = await client
-      .get(apiURLs.namespaces.getHierarchy, {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
+  // const getNodesByWorkspace = async () => {
+  //   const updatedILinks: any[] = await client
+  //     .get(apiURLs.namespaces.getHierarchy, {
+  //       headers: {
+  //         'mex-workspace-id': getWorkspaceId()
+  //       }
+  //     })
+  //     .then((res: any) => {
+  //       return res.data
+  //     })
+  //     .catch(console.error)
 
-    mog(`UpdatedILinks`, { updatedILinks })
+  //   mog(`UpdatedILinks`, { updatedILinks })
 
-    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
-      (p, [namespaceid, namespaceData]) => {
-        return {
-          namespaces: [
-            ...p.namespaces,
-            {
-              id: namespaceid,
-              name: namespaceData.name,
-              ...namespaceData?.namespaceMetadata
-            }
-          ],
-          nodes: [
-            ...p.nodes,
-            ...namespaceData.nodeHierarchy.map((ilink) => ({
-              ...ilink,
-              namespace: namespaceid
-            }))
-          ]
-        }
-      },
-      { nodes: [], namespaces: [] }
-    )
-    mog('UpdatingILinks', { nodes, namespaces })
-    if (nodes && nodes.length > 0) {
-      const localILinks = useDataStore.getState().ilinks
-      const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
-      const ids = toUpdateLocal.map((i) => i.nodeid)
+  //   const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
+  //     (p, [namespaceid, namespaceData]) => {
+  //       return {
+  //         namespaces: [
+  //           ...p.namespaces,
+  //           {
+  //             id: namespaceid,
+  //             name: namespaceData.name,
+  //             ...namespaceData?.namespaceMetadata
+  //           }
+  //         ],
+  //         nodes: [
+  //           ...p.nodes,
+  //           ...namespaceData.nodeHierarchy.map((ilink) => ({
+  //             ...ilink,
+  //             namespace: namespaceid
+  //           }))
+  //         ]
+  //       }
+  //     },
+  //     { nodes: [], namespaces: [] }
+  //   )
+  //   mog('UpdatingILinks', { nodes, namespaces })
+  //   if (nodes && nodes.length > 0) {
+  //     const localILinks = useDataStore.getState().ilinks
+  //     const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+  //     const ids = toUpdateLocal.map((i) => i.nodeid)
 
-      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-      const requestData = { time: Date.now(), method: 'GET' }
+  //     const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+  //     const requestData = { time: Date.now(), method: 'GET' }
 
-      fulfilled.forEach((node) => {
-        const { rawResponse, nodeid } = node
-        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-        const content = deserializeContent(rawResponse.data)
-        const metadata = extractMetadata(rawResponse) // added by Varshitha
-        updateFromContent(nodeid, content, metadata)
-      })
-    }
+  //     fulfilled.forEach((node) => {
+  //       const { rawResponse, nodeid } = node
+  //       setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+  //       const content = deserializeContent(rawResponse.data)
+  //       const metadata = extractMetadata(rawResponse) // added by Varshitha
+  //       updateFromContent(nodeid, content, metadata)
+  //     })
+  //   }
 
-    // setNamespaces(namespaces)
-    setILinks(nodes)
-  }
+  //   // setNamespaces(namespaces)
+  //   setILinks(nodes)
+  // }
 
   return {
     saveDataAPI,
@@ -514,6 +514,6 @@ export const useApi = () => {
     getAllSnippetsByWorkspace,
     getSnippetById,
     refactorHierarchy,
-    getNodesByWorkspace
+    // getNodesByWorkspace
   }
 }
