@@ -5,18 +5,16 @@ import { BrowserTracing } from '@sentry/tracing'
 import { transparentize } from 'polished'
 import { useLocation } from 'react-router-dom'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { IS_DEV } from '@mexit/core'
 import { linkTooltip } from '@mexit/shared'
 import { GridWrapper } from '@mexit/shared'
 import { navTooltip } from '@mexit/shared'
 
-import useNavlinks from '../Data/links'
 import { useInitLoader } from '../Hooks/useInitLoader'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import Analytics from '../Utils/analytics'
 import RHSidebar from './Infobar/RHSidebar'
 import Nav from './Sidebar/Nav'
 import { useSidebarTransition } from './Sidebar/Transition'
@@ -73,6 +71,7 @@ const Main = ({ children }: MainProps) => {
   }, [routingInstrumentation])
 
   const location = useLocation()
+  const isGettingIntialized = useLayoutStore((store) => store.showLoader)
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
 
@@ -104,6 +103,8 @@ const Main = ({ children }: MainProps) => {
   const { gridSpringProps } = useSidebarTransition()
   useInitLoader()
 
+  const initialized = !isGettingIntialized && authenticated
+
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       {/* <Draggable style={styles as any} /> eslint-disable-line @typescript-eslint/no-explicit-any */}
@@ -113,10 +114,10 @@ const Main = ({ children }: MainProps) => {
         // @ts-ignore
         // grid={authenticated && showNav() ? 'true' : 'false'}
       >
-        {authenticated && showNav() && <Nav />}
+        {initialized && showNav() && <Nav />}
         <Content id="wd-mex-content-view">{children}</Content>
 
-        {authenticated && <RHSidebar />}
+        {initialized && <RHSidebar />}
       </GridWrapper>
     </AppWrapper>
   )
