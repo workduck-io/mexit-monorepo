@@ -1,5 +1,11 @@
 # mexit
 
+## 0.12.1
+
+### Patch Changes
+
+- b9d0b2ad: Removed redirect to base node for `/chotu`, clickable sidebar logo and better contrast on themes
+
 ## 0.12.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.14.1
+
+### Patch Changes
+
+- b9d0b2ad: Removed redirect to base node for `/chotu`, clickable sidebar logo and better contrast on themes
+
 ## 0.14.0
 
 ### Minor Changes
