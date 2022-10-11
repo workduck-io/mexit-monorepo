@@ -82,8 +82,8 @@ export default function Chotu() {
 
   useEffect(() => {
     const connection = connectToParent({
-      methods,
-      debug: true
+      methods
+      // debug: true
     })
 
     connection.promise

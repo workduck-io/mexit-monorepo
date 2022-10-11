@@ -42,8 +42,10 @@ export const useInitLoader = () => {
 
       const baseNode = updateBaseNode()
       mog('Base Node: ', baseNode)
-      loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
-      goTo(ROUTE_PATHS.node, NavigationType.push, baseNode?.nodeid)
+      if (window.location.pathname !== '/chotu') {
+        loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
+        goTo(ROUTE_PATHS.node, NavigationType.push, baseNode?.nodeid)
+      }
 
       setShowLoader(false)
     } catch (err) {
