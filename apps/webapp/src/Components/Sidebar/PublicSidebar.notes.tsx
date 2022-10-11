@@ -37,7 +37,7 @@ export const PublicNoteSidebar = () => {
   return (
     <SidebarWrapper>
       <SpaceContentWrapper>
-        <SidebarSpaceComponent space={space} style={defaultStyles} />
+        <SidebarSpaceComponent space={space} style={defaultStyles} readOnly={true} />
       </SpaceContentWrapper>
       {/* <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces} setCurrentIndex={changeIndex} /> */}
     </SidebarWrapper>

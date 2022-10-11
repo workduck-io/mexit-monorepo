@@ -10,12 +10,13 @@ import Header from './header'
 interface SidebarSpaceProps {
   space: SidebarSpace
   style: CSSProperties
+  readOnly?: boolean
 }
 
-export const SidebarSpaceComponent = ({ space, style }: AnimatedProps<SidebarSpaceProps>) => {
+export const SidebarSpaceComponent = ({ space, style, readOnly }: AnimatedProps<SidebarSpaceProps>) => {
   return (
     <SingleSpace style={style}>
-      <Header space={space} />
+      <Header space={space} readOnly={readOnly as boolean} />
       {
         {
           hierarchy: space?.list?.type === 'hierarchy' && (

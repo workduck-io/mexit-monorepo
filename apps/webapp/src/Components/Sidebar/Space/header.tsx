@@ -28,7 +28,7 @@ import {
 import { SidebarSpace } from '../Sidebar.types'
 import { TagsLabel } from '../TagLabel'
 
-const Header = ({ space }: { space: SidebarSpace }) => {
+const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
   // const node = useEditorStore((store) => store.node)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
@@ -88,7 +88,7 @@ const Header = ({ space }: { space: SidebarSpace }) => {
   }, [inpRef, showInput])
 
   const isNamespaceInputDisabled =
-    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared
+    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared || readOnly
 
   const isNamespaceIconDisabled = isNamespaceInputDisabled
   const showTags = space?.popularTags && space?.popularTags.length > 0
@@ -103,7 +103,7 @@ const Header = ({ space }: { space: SidebarSpace }) => {
             {showInput && !isNamespaceInputDisabled ? (
               <Input defaultValue={space?.label} onBlur={(e) => onChangeName(e.target.value)} ref={inpRef} />
             ) : (
-              <Tooltip content="Click to rename Space">
+              <Tooltip content={readOnly ? 'Space Name' : 'Click to rename Space'}>
                 <SpaceTitleFakeInput
                   ref={titleRef}
                   onClick={() => {
