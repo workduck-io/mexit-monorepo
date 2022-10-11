@@ -30,7 +30,12 @@ const Block: React.FC<BlockProps> = ({ children, blockId, block }) => {
 
   return (
     <BlockElement contentEditable={false} id={blockId}>
-      <BlockSelectorInput type="checkbox" value={isSelected} onClick={handleBlockSelect} />
+      <BlockSelectorInput
+        key={`is-selected-${blockId}-${isSelected}`}
+        type="checkbox"
+        checked={Boolean(isSelected)}
+        onChange={handleBlockSelect}
+      />
       {children}
     </BlockElement>
   )

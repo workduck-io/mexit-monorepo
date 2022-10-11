@@ -5,9 +5,8 @@ import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
 
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
@@ -39,7 +38,6 @@ const SnippetEditor = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
-  const buffer = useSnippetBufferStore((store) => store.buffer)
   const addAll = useSnippetBufferStore((store) => store.addAll)
   const toggleTemplate = useSnippetBufferStore((store) => store.toggleTemplate)
 
@@ -114,8 +112,7 @@ const SnippetEditor = () => {
   }
 
   const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
-
-  const defaultValue = snippet && snippet.title !== DRAFT_NODE ? snippet.title : ''
+  const defaultValue = useMemo(() => (snippet && snippet.title !== DRAFT_NODE ? snippet.title : ''), [snippet])
 
   const onDelay = debounce((value) => onChangeTitle(value), 250)
 

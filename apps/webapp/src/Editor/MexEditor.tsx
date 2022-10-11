@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from 'react'
+import { useState, useEffect, ReactElement } from 'react'
 
 import {
   Plate,
@@ -11,16 +11,14 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
-import { mog } from '@mexit/core'
-
 import { useGlobalListener } from '../Hooks/useGlobalListener'
+import useMultipleEditors from '../Stores/useEditorsStore'
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import { useMexEditorStore } from './Hooks/useMexEditorStore'
 import { PluginOptionType } from './Plugins'
 import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
-import useMultipleEditors from '../Stores/useEditorsStore'
 
 export interface MexEditorOptions {
   editableProps?: EditableProps
@@ -56,7 +54,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
   const [content, setContent] = useState<MexEditorValue>([])
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
   const isEmpty = useMultipleEditors((store) => store.isEmpty)
-  
+
   useEffect(() => {
     const editorRef = getPlateEditorRef()
 
