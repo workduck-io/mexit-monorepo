@@ -1,4 +1,4 @@
-import { AccessLevel } from '@mexit/core'
+import { AccessLevel, SHARED_NAMESPACE } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useNamespaces } from './useNamespaces'
@@ -19,7 +19,7 @@ export const usePermissions = () => {
     if (res) return res.currentUserAccess
 
     const namespaceOfNode = getNamespaceOfNodeid(nodeid)
-    if (namespaceOfNode) return namespaceOfNode.access
+    if (namespaceOfNode && namespaceOfNode.id !== SHARED_NAMESPACE.id) return namespaceOfNode.access
 
     return undefined
   }

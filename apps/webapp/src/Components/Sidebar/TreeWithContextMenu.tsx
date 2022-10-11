@@ -87,6 +87,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
             Refactor
           </ContextMenuItem> */}
         <ContextMenuItem
+          disabled={isInSharedNamespace && itemNamespace.access === 'READ'}
           onSelect={(args) => {
             handleCreateChild(item)
           }}
@@ -129,7 +130,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
         {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
         <ContextMenuItem
           color="#df7777"
-          disabled={isInSharedNamespace}
+          disabled={isInSharedNamespace && itemNamespace.access === 'READ'}
           onSelect={(args) => {
             handleArchive(item)
           }}

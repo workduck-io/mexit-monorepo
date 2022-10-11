@@ -122,26 +122,36 @@ const Refactor = () => {
   }, [shortcuts, shortcutDisabled, open, handleRefactor])
 
   const disallowRefactor = useMemo(() => {
+    // If fields are not filled
     if (!to || !from || !toNS || !fromNS) {
       return true
     }
+    // If reserved paths are used
     if (isReserved(from) || isReserved(to)) {
       return true
     }
+    // If the paths are the same
     if (to === from) {
       return true
     }
     const tons = namespaces.find((ns) => ns.id === toNS)
     const fromns = namespaces.find((ns) => ns.id === fromNS)
 
+    // If the namespaces are not present
     if (!tons || !fromns) {
       return true
     }
 
-    // Disallow refactor if it is a shared namespace and the namespaces are different
+    // If access to either namesapces is readonly
+    if (tons.access === 'READ' || fromns.access === 'READ') {
+      return true
+    }
+
+    // If either is a shared namespace and the namespaces are different
     if ((tons.granterID !== undefined || fromns.granterID !== undefined) && toNS !== fromNS) {
       return true
     }
+
     return false
   }, [to, from, toNS, namespaces, fromNS])
 
