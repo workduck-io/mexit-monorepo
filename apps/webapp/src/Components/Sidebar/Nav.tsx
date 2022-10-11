@@ -6,7 +6,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -181,6 +181,7 @@ const Nav = () => {
   const [source, target] = useSingleton()
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
+  const location = useLocation()
   const onDoubleClickToogle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.detail === 2) {
       toggleSidebar()
@@ -248,6 +249,7 @@ const Nav = () => {
           $expanded={sidebar.expanded}
           $show={sidebar.show}
           $isUserEditing={isUserEditing}
+          $publicNamespace={location.pathname.startsWith(ROUTE_PATHS.namespaceShare)}
           $overlaySidebar={overlaySidebar}
           $side="left"
           {...getFocusProps(focusMode)}
