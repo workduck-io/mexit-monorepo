@@ -133,6 +133,7 @@ export const useNamespaceApi = () => {
           id: d?.data?.id,
           name: d?.data?.name,
           iconUrl: d?.data?.metadata?.iconUrl,
+          access: 'MANAGE' as const,
           createdAt: d?.data?.createdAt,
           updatedAt: d?.data?.updatedAt
         }))

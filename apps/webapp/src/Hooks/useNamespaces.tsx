@@ -34,21 +34,16 @@ export const useNamespaces = () => {
   const getNamespaceOptions = () => {
     const namespaces = useDataStore.getState().namespaces.map((n) => ({
       ...n,
-      value: n.name,
+      value: n.id,
       label: n.name
     }))
     const defaultNamespace = getDefaultNamespace() ?? namespaces[0]
-    // namespaces.push({
-    //   ...SHARED_NAMESPACE,
-    //   value: SHARED_NAMESPACE.name,
-    //   label: SHARED_NAMESPACE.name
-    // })
     return {
       namespaces,
       defaultNamespace: defaultNamespace
         ? {
             ...defaultNamespace,
-            value: defaultNamespace.name,
+            value: defaultNamespace.id,
             label: defaultNamespace.name
           }
         : undefined

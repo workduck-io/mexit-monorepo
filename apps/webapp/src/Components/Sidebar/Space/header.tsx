@@ -96,8 +96,9 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const isNamespaceReserved =
     space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared
 
-  const isNamespaceInputDisabled = isNamespaceReserved || readOnly
-  const isNamespaceIconDisabled = isNamespaceReserved || readOnly
+  const isNamespaceReadonly = space.data.access === 'READ'
+  const isNamespaceInputDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
+  const isNamespaceIconDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
 

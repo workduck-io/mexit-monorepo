@@ -37,6 +37,7 @@ import {
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { usePermissions } from '../../Hooks/usePermissions'
+import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)
@@ -50,6 +51,7 @@ export const PermissionModalContent = () => {
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
+  const { getAllSharedUsers } = useNamespaceApi()
   const { accessWhenShared } = usePermissions()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
 
@@ -68,6 +70,13 @@ export const PermissionModalContent = () => {
     if (access) return access !== 'MANAGE'
     return false
   }, [nodeid])
+
+  useEffect(() => {
+    if (open && context === 'space') {
+      // Fetch all user details for the space
+      getAllSharedUsers(id)
+    }
+  }, [open, context, id])
 
   const [sharedUsers, setSharedUsers] = useState<Mentionable[]>([])
 
