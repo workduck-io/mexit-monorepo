@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
@@ -7,10 +7,9 @@ import Modal from 'react-modal'
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { isMatch, isReserved, NodeLink } from '@mexit/core'
+import { isMatch, isReserved } from '@mexit/core'
 
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
-import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
