@@ -93,10 +93,11 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
     }
   }, [inpRef, showInput])
 
-  const isNamespaceInputDisabled =
-    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared || readOnly
+  const isNamespaceReserved =
+    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared
 
-  const isNamespaceIconDisabled = isNamespaceInputDisabled
+  const isNamespaceInputDisabled = isNamespaceReserved || readOnly
+  const isNamespaceIconDisabled = isNamespaceReserved || readOnly
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
 
@@ -121,7 +122,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
-          <IconButton title="Share Space" icon="ri:share-line" onClick={onShareSpace} />
+          {!isNamespaceReserved && <IconButton title="Share Space" icon="ri:share-line" onClick={onShareSpace} />}
           <Tippy
             theme="mex-bright"
             placement="right"

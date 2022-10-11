@@ -26,6 +26,8 @@ import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 import { MultipleInviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
@@ -34,10 +36,13 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
   // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getPathFromNodeid } = useLinks()
   const { getUserDetails } = useUserService()
-  const { grantUsersPermission } = useNodeShareAPI()
+  const { grantUsersPermission: grantUsersPermissionNode } = useNodeShareAPI()
+  const { shareNamespace } = useNamespaceApi()
+  const { getNamespace } = useNamespaces()
   const localuserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
+
   const {
     handleSubmit,
     register,
@@ -50,6 +55,14 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     if (context === 'note') return modalData?.nodeid ?? node?.nodeid
     else return modalData?.namespaceid ?? currentSpace
   }, [modalData.nodeid, node, modalData.namespaceid, currentSpace, context])
+
+  const title = useMemo(() => {
+    if (context === 'note') return getPathFromNodeid(id)
+    else {
+      const ns = getNamespace(id)
+      return ns?.name
+    }
+  }, [id, context])
 
   const onSubmit = async (data: InviteModalData) => {
     mog('data', data)
@@ -82,7 +95,10 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
       // Only share with users registered,
       if (givePermToExisting.length > 0) {
         // TODO: use context
-        const permGiven = await grantUsersPermission(id, givePermToExisting, access)
+        const permGiven =
+          context === 'note'
+            ? await grantUsersPermissionNode(id, givePermToExisting, access)
+            : await shareNamespace(id, givePermToExisting, access)
         mog('userDetails', { userDetails, permGiven, existing, absent, givePermToExisting })
       }
 
@@ -121,7 +137,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     <MultipleInviteWrapper>
       <ModalHeader>Invite Users</ModalHeader>
       <p>
-        Invite your friends to your {context} <strong>{getPathFromNodeid(id)}</strong>
+        Invite your friends to your {context} <strong>{title}</strong>
       </p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={disabled}>

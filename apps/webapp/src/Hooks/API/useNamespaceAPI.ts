@@ -19,7 +19,7 @@ import '../../Utils/apiClient'
 
 export const useNamespaceApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { setNamespaces, addInArchive } = useDataStore()
+  const { setNamespaces, setIlinks, addInArchive } = useDataStore()
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -80,6 +80,7 @@ export const useNamespaceApi = () => {
       )
 
       mog('update namespaces and ILinks', { nsDetails, newILinks })
+      // SetILinks once middleware is integrated
       setNamespaces(namespaces.map((n) => n.ns))
     }
   }
