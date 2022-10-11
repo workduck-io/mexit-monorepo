@@ -9,8 +9,10 @@ import {
   getNewNamespaceName,
   Mentionable
 } from '@mexit/core'
+import { useAuthStore } from '../Stores/useAuth'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodes } from './useNodes'
 
@@ -199,8 +201,31 @@ export const useNamespaces = () => {
   }
 
   const getSharedUsersForNamespace = (namespaceId: string): Mentionable[] => {
-    mog('Getting shared users for namespace', { namespaceId })
-    return []
+    const mentionable = useMentionStore.getState().mentionable
+    const namespace = getNamespace(namespaceId)
+    const isNamespaceShared = !!namespace.granterID
+    const users = mentionable
+      .filter((mention) => mention.access.space[namespaceId] !== undefined)
+      // Get the owner to the top
+      .sort((a, b) => (a.access.space[namespaceId] === 'OWNER' ? -1 : b.access.space[namespaceId] === 'OWNER' ? 1 : 0))
+
+    const currentUser = useAuthStore.getState().userDetails
+    // const sharedNodes = useDataStore.getState().sharedNodes
+
+    if (!isNamespaceShared) {
+      const curUser: Mentionable = {
+        type: 'mentionable',
+        access: { note: {}, space: { [namespaceId]: 'OWNER' } },
+        email: currentUser.email,
+        name: currentUser.name,
+        alias: currentUser.alias,
+        userID: currentUser.userID
+      }
+      return [curUser, ...users]
+    }
+
+    mog('Getting shared users for namespace', { namespaceId, users })
+    return users
   }
 
   return {
