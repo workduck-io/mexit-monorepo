@@ -28,6 +28,7 @@ export const useInitLoader = () => {
 
   const { getNodesByWorkspace, getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
+  // const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
 
@@ -65,7 +66,7 @@ export const useInitLoader = () => {
 
       setShowLoader(false)
     } catch (err) {
-      console.log('Error in Init Loader: ', err)
+      console.error('Error in Init Loader: ', err)
       setShowLoader(false)
       // logout()
       toast('Something went wrong while initializing')

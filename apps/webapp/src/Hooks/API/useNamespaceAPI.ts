@@ -60,16 +60,13 @@ export const useNamespaceApi = () => {
         ])
       ).fulfilled
 
-      // mog('updatedILinks', { updatedILinks })
-      const newILinks = updatedILinks[0]
-        .filter((p) => p.status === 'fulfilled')
-        .map((p) => p.value)
-        .reduce((arr, ns) => {
-          // mog('ns', { ns })
-          return [...arr, ...ns.nodeHierarchy]
-        }, [])
+      mog('updatedILinks', { updatedILinks })
+      const newILinks = updatedILinks.reduce((arr, ns) => {
+        // mog('ns', { ns })
+        return [...arr, ...ns.nodeHierarchy]
+      }, [])
 
-      // mog('updatedILinks', { updatedILinks, newILinks })
+      mog('updatedILinks', { updatedILinks, newILinks })
       setNamespaces(namespaces.map((n) => n.ns))
     }
   }
