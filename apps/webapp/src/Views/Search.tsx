@@ -92,8 +92,9 @@ const Search = () => {
   // console.log({ result })
   const onSelect = (item: GenericSearchResult) => {
     const nodeid = item.id
+    // mog('NODE IS ', { nodeid })
     loadNode(nodeid)
-    goTo(ROUTE_PATHS.home, NavigationType.push, nodeid)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
   const onEscapeExit = () => {
