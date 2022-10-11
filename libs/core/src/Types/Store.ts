@@ -24,6 +24,9 @@ export interface SingleNamespace {
   createdAt: number
   updatedAt: number
   icon?: MIcon
+
+  publicAccess?: boolean
+  granterID?: string
 }
 
 export interface DataStoreState {

@@ -1,13 +1,13 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { IDBStorage, InvitedUser, Mentionable, AccessLevel, mog } from '@mexit/core'
+import { IDBStorage, InvitedUser, Mentionable, UserAccessTable, AccessLevel, ShareContext, mog } from '@mexit/core'
 
 interface MentionStore {
   invitedUsers: InvitedUser[]
   mentionable: Mentionable[]
   addInvitedUser: (invitedUser: InvitedUser) => void
-  addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => void
+  addAccess: (email: string, id: string, context: ShareContext, accessLevel: AccessLevel) => void
   addMentionable: (mentionable: Mentionable) => void
   initMentionData: (mentionable: Mentionable[], invitedUser: InvitedUser[]) => void
   setInvited: (invitedUsers: InvitedUser[]) => void
@@ -27,7 +27,7 @@ export const useMentionStore = create<MentionStore>(
             mentionable: [...get().mentionable, mentionable]
           })
         } else {
-          exists.access = { ...exists.access, ...mentionable.access }
+          exists.access = mergeAccess(exists.access, mentionable.access)
           set({ mentionable: [...get().mentionable.filter((iu) => iu.email !== mentionable.email), exists] })
         }
       },
@@ -38,22 +38,22 @@ export const useMentionStore = create<MentionStore>(
             invitedUsers: [...get().invitedUsers, invitedUser]
           })
         } else {
-          exists.access = { ...exists.access, ...invitedUser.access }
+          exists.access = mergeAccess(exists.access, invitedUser.access)
           set({ invitedUsers: [...get().invitedUsers.filter((iu) => iu.email !== invitedUser.email), exists] })
         }
       },
-      addAccess: (email: string, nodeid: string, accessLevel: AccessLevel) => {
+      addAccess: (email: string, id: string, context: ShareContext, accessLevel: AccessLevel) => {
         const invitedExists = get().invitedUsers.find((user) => user.email === email)
         const mentionExists = get().mentionable.find((user) => user.email === email)
         if (invitedExists && !mentionExists) {
-          const newInvited: InvitedUser = addAccessToUser(invitedExists, nodeid, accessLevel)
+          const newInvited: InvitedUser = addAccessToUser(invitedExists, id, context, accessLevel)
           set({
             invitedUsers: [...get().invitedUsers.filter((user) => user.email !== email), newInvited]
           })
           return 'invite'
         } else if (!invitedExists && mentionExists) {
           // We know it is guaranteed to be mentionable
-          const newMentioned: Mentionable = addAccessToUser(mentionExists, nodeid, accessLevel) as Mentionable
+          const newMentioned: Mentionable = addAccessToUser(mentionExists, id, context, accessLevel) as Mentionable
           set({
             mentionable: [...get().mentionable.filter((user) => user.email !== email), newMentioned]
           })
@@ -75,9 +75,12 @@ export const useMentionStore = create<MentionStore>(
   )
 )
 
-export const addAccessToUser = (user: any, nodeid: string, accessLevel: AccessLevel) => {
-  const access = user.access || {}
-  access[nodeid] = accessLevel
+export const addAccessToUser = (user: any, id: string, context: ShareContext, accessLevel: AccessLevel) => {
+  const access: UserAccessTable = user.access || {
+    note: {},
+    space: {}
+  }
+  access[context][id] = accessLevel
   user.access = access
   return user
 }
@@ -88,4 +91,14 @@ export const getUserFromUseridHookless = (userid: string) => {
   const user = mentionable.find((user) => user.userID === userid)
 
   if (user) return user
+}
+
+export const mergeAccess = (access: UserAccessTable, access2: Partial<UserAccessTable>): UserAccessTable => {
+  const newAccess = { ...access }
+  Object.keys(access2).forEach((context) => {
+    Object.keys(access2[context]).forEach((id) => {
+      newAccess[context][id] = access2[context][id]
+    })
+  })
+  return newAccess
 }

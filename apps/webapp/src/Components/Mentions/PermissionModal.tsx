@@ -10,12 +10,12 @@ import { Button, IconButton } from '@workduck-io/mex-components'
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
 
-import { usePermission } from '../../Hooks/API/usePermission'
+import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNodes } from '../../Hooks/useNodes'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
+import { mergeAccess, useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalControls, ModalHeader, ModalSection, ModalSectionScroll } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
@@ -41,20 +41,25 @@ export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)
   const open = useShareModalStore((s) => s.open)
   const context = useShareModalStore((s) => s.context)
-  const { getSharedUsersForNode, getInvitedUsersForNode, applyChangesMentionable } = useMentions()
-  const { getSharedUsersForNamespace, getDefaultNamespace } = useNamespaces()
+  const { getSharedUsersForNode, getInvitedUsers, applyChangesMentionable } = useMentions()
+  const { getSharedUsersForNamespace } = useNamespaces()
   const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
-  const { changeUserPermission, revokeUserAccess } = usePermission()
+  const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
   const { accessWhenShared } = useNodes()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
 
   const modalData = useShareModalStore((state) => state.data)
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
   const namespaceid = useMemo(() => modalData?.namespaceid ?? currentSpace, [modalData.namespaceid, node, currentSpace])
+
+  const id = useMemo(() => {
+    if (context === 'note') return modalData?.nodeid ?? node?.nodeid
+    else return modalData?.namespaceid ?? currentSpace
+  }, [modalData.nodeid, node, modalData.namespaceid, currentSpace, context])
 
   const readOnly = useMemo(() => {
     // to test: return true
@@ -66,21 +71,21 @@ export const PermissionModalContent = () => {
   const [sharedUsers, setSharedUsers] = useState<Mentionable[]>([])
 
   useEffect(() => {
-    if (nodeid) {
+    if (nodeid || namespaceid) {
       const sUsers = context === 'note' ? getSharedUsersForNode(nodeid) : getSharedUsersForNamespace(namespaceid)
       setSharedUsers(sUsers)
     }
-  }, [nodeid, namespaceid, mentionable, open])
+  }, [nodeid, namespaceid, context, mentionable, open])
 
   const invitedUsers = useMemo(() => {
-    if (nodeid) {
-      return getInvitedUsersForNode(nodeid)
+    if (id) {
+      return getInvitedUsers(id, context)
     }
     return []
-  }, [nodeid])
+  }, [id, context])
 
   const onRevokeAccess = (userid: string) => {
-    // mog('onPermissionChange', { userid, alias })
+    mog('onrevokeAccess', { userid })
 
     // Change the user and add to changedUsers
     const changedUser = changedUsers?.find((u) => u.userID === userid)
@@ -102,14 +107,15 @@ export const PermissionModalContent = () => {
   }
 
   const onPermissionChange = (userid: string, access: AccessLevel) => {
+    mog('onPermissionChange', { userid, access })
     // Change the user and add to changedUsers
     const changedUser = changedUsers?.find((u) => u.userID === userid)
     const dataUser = sharedUsers?.find((u) => u.userID === userid)
 
     // TODO: Filter for the case when user permission is reverted to the og one
     if (changedUser) {
-      const prevAccess = changedUser?.access[node.nodeid]
-      const ogAccess = dataUser?.access[node.nodeid]
+      const prevAccess = changedUser?.access[context][id]
+      const ogAccess = dataUser?.access[context][id]
       if (ogAccess && access === ogAccess) {
         // mog('removing user from changedUsers', { changedUser, access, ogAccess })
         if (changedUser.change.includes('permission')) {
@@ -121,7 +127,7 @@ export const PermissionModalContent = () => {
           }
         }
       } else if (prevAccess !== access) {
-        changedUser.access[node.nodeid] = access
+        changedUser.access[context][id] = access
         changedUser.change.push('permission')
         setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
       } else {
@@ -135,14 +141,14 @@ export const PermissionModalContent = () => {
         }
       }
     } else if (dataUser) {
-      const prevAccess = dataUser?.access[node.nodeid]
+      const prevAccess = dataUser?.access[context][id]
       // mog('onPermissionChange only DataUser', { userid, access, dataUser, prevAccess, node })
       // return
       if (prevAccess !== access) {
         const changeUser = {
           ...dataUser,
           change: ['permission' as const],
-          access: { ...dataUser.access, [node.nodeid]: access }
+          access: mergeAccess(dataUser.access, { [context]: { [id]: access } })
         }
         // changeUser.access[node.nodeid] = access
         setChangedUsers([...(changedUsers ?? []), changeUser])
@@ -158,13 +164,7 @@ export const PermissionModalContent = () => {
     const newPermissions: { [userid: string]: AccessLevel } = withoutRevokeChanges
       .filter((u) => u.change.includes('permission'))
       .reduce((acc, user) => {
-        return { ...acc, [user.userID]: user.access[node.nodeid] }
-      }, {})
-
-    const newAliases = withoutRevokeChanges
-      .filter((u) => u.change.includes('alias'))
-      .reduce((acc, user) => {
-        return { ...acc, [user.userID]: user.alias }
+        return { ...acc, [user.userID]: user.access[context][id] }
       }, {})
 
     const revokedUsers = changedUsers
@@ -174,21 +174,25 @@ export const PermissionModalContent = () => {
         return acc
       }, [])
 
-    mog('Updating after the table changes ', { newAliases, revokedUsers, newPermissions })
+    mog('Updating after the table changes ', { revokedUsers, newPermissions })
 
     const applyPermissions = async () => {
+      // TODO: Use Context
+      mog('TODO: applyPermissions for namespace', { context, node, newPermissions, revokedUsers })
       if (Object.keys(newPermissions).length > 0) await changeUserPermission(node.nodeid, newPermissions)
 
+      // TODO: Use context
+      mog('TODO: revokeAccess for namespace', { context, node, newPermissions, revokedUsers })
       if (revokedUsers.length > 0) await revokeUserAccess(node.nodeid, revokedUsers)
       // mog('set new permissions', { userRevoke })
-      applyChangesMentionable(newPermissions, newAliases, revokedUsers, node.nodeid)
+      applyChangesMentionable(newPermissions, revokedUsers, context, id)
     }
 
     await applyPermissions()
 
     closeModal()
 
-    mog('onSave', { changedUsers, newPermissions, newAliases, revokedUsers })
+    mog('onSave', { changedUsers, newPermissions, revokedUsers })
   }
 
   return (

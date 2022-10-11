@@ -3,7 +3,7 @@ import { AccessLevel, mog, runBatch } from '@mexit/core'
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { getEmailStart } from '../Utils/constants'
-import { usePermission } from './API/usePermission'
+import { useNodeShareAPI } from './API/useNodeShareAPI'
 import { useUserService } from './API/useUserAPI'
 import { useMentions } from './useMentions'
 
@@ -22,7 +22,7 @@ interface MUsersRaw {
 }
 
 export const useFetchShareData = () => {
-  const { getAllSharedNodes, getUsersOfSharedNode } = usePermission()
+  const { getAllSharedNodes, getUsersOfSharedNode } = useNodeShareAPI()
   const { getUserDetailsUserId } = useUserService()
   const { addMentionable } = useMentions()
   const setSharedNodes = useDataStore((s) => s.setSharedNodes)
@@ -43,7 +43,7 @@ export const useFetchShareData = () => {
         return p[0].value as UsersRaw
       })
 
-    // mog('getUserAccess', { usersWithAccess, nodeDetails })
+    mog('getUserAccess', { usersWithAccess, nodeDetails })
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
       const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ nodeid: n.nodeid, userid: uid, access }))
       return [...p, ...rawUsers]
@@ -77,9 +77,9 @@ export const useFetchShareData = () => {
       }, [])
     // .filter((u) => u.userid !== userDetails?.userID)
 
-    // mog('mentionableU', { mentionableU })
+    mog('mentionableU', { mentionableU })
     mentionableU.forEach((u) =>
-      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, u.nodeid, u.access)
+      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, 'note', u.nodeid, u.access)
     )
   }
 

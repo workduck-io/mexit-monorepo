@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-import { AccessLevel, InvitedUser, Mentionable } from '@mexit/core'
+import { AccessLevel, ShareContext, InvitedUser, Mentionable } from '@mexit/core'
 
 // The invite mode is only when the editor is open and used to open on new combobox invite
 type ShareModalMode = 'invite' | 'permission'
@@ -8,7 +8,6 @@ type ShareModalMode = 'invite' | 'permission'
 // To denote what has changed
 // Alias changes should not require a network call
 type UserChange = 'permission' | 'alias' | 'revoke'
-type ModalContext = 'note' | 'space'
 
 interface ChangedUser extends Mentionable {
   change: UserChange[]
@@ -26,6 +25,7 @@ export interface InviteModalData {
     label: string
   }
 }
+
 interface ShareModalData {
   //  Used only for share permissions mode
   nodeid?: string
@@ -45,14 +45,14 @@ interface ShareModalState {
   open: boolean
   focus: boolean
   mode: ShareModalMode
-  context: ModalContext
+  context: ShareContext
   data: ShareModalData
-  openModal: (mode: ShareModalMode, context: ModalContext, id?: string) => void
+  openModal: (mode: ShareModalMode, context: ShareContext, id?: string) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) => void
-  prefillModal: (mode: ShareModalMode, context: ModalContext, data: ShareModalData) => void
+  prefillModal: (mode: ShareModalMode, context: ShareContext, data: ShareModalData) => void
 }
 
 export const useShareModalStore = create<ShareModalState>((set, get) => ({

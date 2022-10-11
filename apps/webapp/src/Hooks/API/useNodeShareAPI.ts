@@ -19,7 +19,7 @@ interface SharedNodesErrorPreset {
   data: SharedNode[]
 }
 
-export const usePermission = () => {
+export const useNodeShareAPI = () => {
   const { updateFromContent } = useUpdater()
   const { workspaceHeaders } = useAPIHeaders()
 

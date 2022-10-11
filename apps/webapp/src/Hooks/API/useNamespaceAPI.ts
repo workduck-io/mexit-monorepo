@@ -32,17 +32,22 @@ export const useNamespaceApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('namespaces all', d.data)
-        return d.data.map((item: any) => ({
-          ns: {
-            id: item.namespaceID,
-            name: item.namespaceTitle,
-            icon: item.namespaceMetadata?.metadata?.icon ?? undefined,
-            createdAt: item.metadata?.createdAt,
-            updatedAt: item.metadata?.updatedAt
-          },
-          archiveHierarchy: item?.archivedNodeHierarchyInformation
-        }))
+        // mog('namespaces all', d.data)
+        return d.data.map((item: any) => {
+          // metadata is json string parse to object
+          const metadata = item.namespaceMetadata ? JSON.parse(item.namespaceMetadata) : {}
+          return {
+            ns: {
+              id: item.namespaceID,
+              name: item.namespaceTitle,
+              icon: metadata?.metadata?.icon ?? undefined,
+              createdAt: metadata?.createdAt,
+              updatedAt: metadata?.updatedAt,
+              granterID: item.granterId ?? undefined
+            },
+            archiveHierarchy: item?.archivedNodeHierarchyInformation
+          }
+        })
       })
       .catch((e) => {
         mog('Save error', e)
@@ -50,23 +55,30 @@ export const useNamespaceApi = () => {
       })
 
     if (namespaces) {
-      const updatedILinks = (
+      const nsDetails = (
         await runBatch([
           ...namespaces.map(async ({ ns }) => {
             const nsDetails = await getNamespace(ns.id)
-            mog('nsDetails', { nsDetails })
             return nsDetails
           })
         ])
       ).fulfilled
 
-      mog('updatedILinks', { updatedILinks })
-      const newILinks = updatedILinks.reduce((arr, ns) => {
-        // mog('ns', { ns })
-        return [...arr, ...ns.nodeHierarchy]
-      }, [])
+      const newILinks = nsDetails.reduce(
+        (arr, ns) => {
+          const nsInNamespaces = namespaces.find((n) => n.ns.id === ns.id)
+          return {
+            nodes: [...arr.nodes, ...ns.nodeHierarchy],
+            namespaces: [
+              ...arr.namespaces.filter((n) => n.id !== ns.id),
+              { ...nsInNamespaces.ns, publicAccess: ns.publicAccess }
+            ]
+          }
+        },
+        { nodes: [], namespaces: [] }
+      )
 
-      mog('updatedILinks', { updatedILinks, newILinks })
+      mog('update namespaces and ILinks', { nsDetails, newILinks })
       setNamespaces(namespaces.map((n) => n.ns))
     }
   }
@@ -77,13 +89,13 @@ export const useNamespaceApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('namespaces specific', { data: d.data, id })
+        // mog('namespaces specific', { data: d.data, id })
         // return d.data?.nodeHierarchy
 
         return {
           id: d.data?.id,
           name: d.data?.name,
-          icon: d.data?.namespaceMetadata?.metadata?.icon ?? undefined,
+          icon: d.data?.metadata?.icon ?? undefined,
           nodeHierarchy: d.data?.nodeHierarchy,
           createdAt: d.data?.createdAt,
           updatedAt: d.data?.updatedAt,

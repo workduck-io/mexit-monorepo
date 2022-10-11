@@ -4,15 +4,22 @@ import { useForm, Controller } from 'react-hook-form'
 
 import { LoadingButton } from '@workduck-io/mex-components'
 
-import { mog, AccessLevel, DefaultPermission, DefaultPermissionValue, permissionOptions } from '@mexit/core'
+import {
+  mog,
+  AccessLevel,
+  DefaultPermission,
+  DefaultPermissionValue,
+  permissionOptions,
+  emptyAccessTable
+} from '@mexit/core'
 import { Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
-import { usePermission } from '../../Hooks/API/usePermission'
+import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useLinks } from '../../Hooks/useLinks'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
+import { mergeAccess, useMentionStore } from '../../Stores/useMentionsStore'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
@@ -27,7 +34,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
   // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getPathFromNodeid } = useLinks()
   const { getUserDetails } = useUserService()
-  const { grantUsersPermission } = usePermission()
+  const { grantUsersPermission } = useNodeShareAPI()
   const localuserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
@@ -39,13 +46,15 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
   } = useForm<InviteModalData>()
 
   const modalData = useShareModalStore((state) => state.data)
-  const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
-  const namespaceid = useMemo(() => modalData?.namespaceid ?? currentSpace, [modalData.namespaceid, node, currentSpace])
+  const id = useMemo(() => {
+    if (context === 'note') return modalData?.nodeid ?? node?.nodeid
+    else return modalData?.namespaceid ?? currentSpace
+  }, [modalData.nodeid, node, modalData.namespaceid, currentSpace, context])
 
   const onSubmit = async (data: InviteModalData) => {
     mog('data', data)
 
-    if (nodeid) {
+    if (id) {
       const allMails = data.email.split(',').map((e) => e.trim())
       const access = (data?.access?.value as AccessLevel) ?? DefaultPermission
 
@@ -72,7 +81,8 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
 
       // Only share with users registered,
       if (givePermToExisting.length > 0) {
-        const permGiven = await grantUsersPermission(nodeid, givePermToExisting, access)
+        // TODO: use context
+        const permGiven = await grantUsersPermission(id, givePermToExisting, access)
         mog('userDetails', { userDetails, permGiven, existing, absent, givePermToExisting })
       }
 
@@ -83,9 +93,11 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
           email: u?.value?.email,
           userID: u?.value?.userID,
           name: u?.value?.name,
-          access: {
-            [nodeid]: access
-          }
+          access: mergeAccess(emptyAccessTable, {
+            [context]: {
+              [id]: access
+            }
+          })
         })
       })
 
@@ -95,9 +107,11 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
           type: 'invite',
           alias: getEmailStart(u?.value?.email),
           email: u?.value?.email,
-          access: {
-            [nodeid]: access
-          }
+          access: mergeAccess(emptyAccessTable, {
+            [context]: {
+              [id]: access
+            }
+          })
         })
       })
     }
@@ -107,7 +121,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     <MultipleInviteWrapper>
       <ModalHeader>Invite Users</ModalHeader>
       <p>
-        Invite your friends to your {context} <strong>{getPathFromNodeid(nodeid)}</strong>
+        Invite your friends to your {context} <strong>{getPathFromNodeid(id)}</strong>
       </p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={disabled}>
