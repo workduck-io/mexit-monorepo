@@ -15,9 +15,10 @@ interface SharedNodesErrorPreset {
   data: SharedNode[]
 }
 
-export const usePermission = () => {
+export const useNodeShareAPI = () => {
   const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
-  // const {getDataAPI} = useApi()
+  // const { updateFromContent } = useUpdater()
+
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     const payload = {
       type: 'SharedNodeRequest',
@@ -120,9 +121,18 @@ export const usePermission = () => {
 
           const localSharedNodes = useDataStore.getState().sharedNodes
           const { toUpdateLocal } = iLinksToUpdate(localSharedNodes, sharedNodes)
-
           // TODO
-          // runBatch(toUpdateLocal.map((ilink) => getDataAPI(ilink.nodeid, true)))
+          // const ids = toUpdateLocal.map((ilink) => ilink.nodeid)
+          // runBatchWorker(WorkerRequestType.GET_SHARED_NODES, 6, ids).then((res) => {
+          //   const { fulfilled } = res
+
+          //   fulfilled.forEach((node) => {
+          //     const { rawResponse, nodeid } = node
+          //     const content = deserializeContent(rawResponse.data)
+          //     const metadata = extractMetadata(rawResponse)
+          //     updateFromContent(nodeid, content, metadata)
+          //   })
+          // })
 
           mog('SharedNodes', { sharedNodes })
           return { status: 'success', data: sharedNodes }
