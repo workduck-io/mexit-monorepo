@@ -19,7 +19,7 @@ const SidebarTabs = () => {
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
   const isTasks = useMatch(ROUTE_PATHS.tasks)
   const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
-  const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid`)
+  const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
   // mog('IS SIDEBAR', { sidebar, isEditor, isArchive })
 

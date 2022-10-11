@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react'
 
 import { useParams, useNavigate, Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { mog } from '@mexit/core'
 
-import { PublicNoteSidebar } from '../Components/Sidebar/PublicSidebar.notes'
-import { SidebarSpace } from '../Components/Sidebar/Sidebar.types'
+import { useSidebarTransition } from '../Components/Sidebar/Transition'
 import SplashScreen from '../Components/SplashScreen'
 import { useApi } from '../Hooks/API/useNodeAPI'
+import useLayout from '../Hooks/useLayout'
+import { useLayoutStore } from '../Stores/useLayoutStore'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 function PublicNamespaceView() {
   const [showLoader, setShowLoader] = useState(true)
-  const { setNamespace, setILinks } = usePublicNodeStore()
+  const { setNamespace, setILinks, setCurrentNode } = usePublicNodeStore()
   const namespaceID = useParams().namespaceID
   const navigate = useNavigate()
   const { getPublicNamespaceAPI } = useApi()
@@ -30,34 +32,25 @@ function PublicNamespaceView() {
           updatedAt: response.updatedAt
         })
 
-        setILinks(response.nodeHierarchy)
-        navigate(`node/${response.nodeHierarchy[0]?.nodeid}`)
+        const firstNode = response.nodeHierarchy[0]
 
-        mog('namespace', { response })
+        setILinks(response.nodeHierarchy)
+        navigate(`node/${firstNode.nodeid}`)
+        setCurrentNode(firstNode)
+
         setTimeout(() => {
           setShowLoader(false)
         }, 1000)
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNamespace', { error })
-        // navigate('/404', { replace: false })
+        navigate('/404', { replace: false })
       }
     }
 
     getPublicNamespace()
   }, [])
 
-  return (
-    <div>
-      {showLoader ? (
-        <SplashScreen />
-      ) : (
-        <div>
-          {/* <PublicNoteSidebar /> */}
-          <Outlet />
-        </div>
-      )}
-    </div>
-  )
+  return <div>{showLoader ? <SplashScreen /> : <Outlet />}</div>
 }
 
 export default PublicNamespaceView

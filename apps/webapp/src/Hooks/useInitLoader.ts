@@ -49,7 +49,11 @@ export const useInitLoader = () => {
 
       const baseNode = updateBaseNode()
       // mog('Base Node: ', baseNode)
-      if (window.location.pathname !== '/chotu' && !window.location.pathname.startsWith('/actions')) {
+      if (
+        window.location.pathname !== '/chotu' &&
+        (!window.location.pathname.startsWith('/actions') || !window.location.pathname.startsWith('/share'))
+      ) {
+        mog('Base Node: ', baseNode)
         loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
         goTo(ROUTE_PATHS.node, NavigationType.push, baseNode?.nodeid)
       }

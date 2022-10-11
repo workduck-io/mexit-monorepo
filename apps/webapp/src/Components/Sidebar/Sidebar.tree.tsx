@@ -42,7 +42,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink }: SpaceTreePr
    * - Drop to Different space
    */
   const editorNode = useEditorStore((store) => store.node)
-  const publicNode = usePublicNodeStore((store) => store.iLinks)[0]
+  const publicNode = usePublicNodeStore((store) => store.currentNode)
   const node = publicILink ? publicNode : editorNode
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<number>(-1)

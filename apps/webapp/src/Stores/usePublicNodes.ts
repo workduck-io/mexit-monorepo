@@ -1,10 +1,20 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Contents, IDBStorage, ILink, NodeEditorContent, NodeMetadata, SingleNamespace } from '@mexit/core'
+import {
+  Contents,
+  IDBStorage,
+  ILink,
+  NodeEditorContent,
+  NodeMetadata,
+  NodeProperties,
+  SingleNamespace
+} from '@mexit/core'
 
 export interface PublicNodeStoreType {
   iLinks: ILink[]
+  currentNode: NodeProperties
+  setCurrentNode: (node: NodeProperties) => void
   setILinks: (nodes: ILink[]) => void
   contents: Contents
   setContent: (nodeID: string, content: NodeEditorContent) => void
@@ -17,6 +27,10 @@ export const usePublicNodeStore = create<PublicNodeStoreType>(
     (set, get) => ({
       iLinks: [],
       contents: {},
+      currentNode: null,
+      setCurrentNode: (node: NodeProperties) => {
+        set({ currentNode: node })
+      },
       namespace: undefined,
       setNamespace: (namespace: SingleNamespace) => {
         set({ namespace })

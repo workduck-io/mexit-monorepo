@@ -115,6 +115,7 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
   const { goTo } = useRouting()
 
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
+  const publicNamespaceMatch = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/node/:nodeid`)
 
   const { execRefactorAsync } = useRefactor()
   const draggedRef = useRef<TreeItem | null>(null)
@@ -126,9 +127,12 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
   const [source, target] = useSingleton()
 
   const onOpenItem = (itemId: string, nodeid: string) => {
-    console.log('nodeid', nodeid)
-    push(nodeid)
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    if (publicNamespaceMatch) {
+      goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeid)
+    } else {
+      push(nodeid)
+      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    }
     changeTree(mutateTree(tree, itemId, { isExpanded: true }))
   }
 
@@ -139,14 +143,15 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
     }
   }
 
-  const isInEditor = location.pathname.startsWith(ROUTE_PATHS.node)
+  const isInEditor =
+    location.pathname.startsWith(ROUTE_PATHS.node) || location.pathname.startsWith(ROUTE_PATHS.namespaceShare)
 
   const renderItem = (renderProps: RenderItemParams) => {
     return (
       <RenderTreeItem
         {...renderProps}
         onClick={onClick}
-        match={match}
+        match={match || publicNamespaceMatch}
         isInEditor={isInEditor}
         isHighlighted={renderProps.item?.data?.nodeid === selectedItemId}
         target={target}

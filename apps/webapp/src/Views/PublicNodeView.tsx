@@ -39,9 +39,12 @@ const PublicNodeView = () => {
     cookies.set('mexit-sharing', timestamp, { path: '/' })
   }, [])
 
+  // TODO: check api store and before making a request again
+  // content would be available inside usePublicNodesStore
   useEffect(() => {
     async function getPublicNodeContent() {
       try {
+        setShowLoader(true)
         const node = await getPublicNodeAPI(nodeId)
         setNode({ ...node, id: nodeId })
         setShowLoader(false)
@@ -51,7 +54,7 @@ const PublicNodeView = () => {
       }
     }
     getPublicNodeContent()
-  }, [])
+  }, [nodeId])
 
   return (
     <PublicEditorWrapper>
