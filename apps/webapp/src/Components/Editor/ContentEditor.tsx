@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import toast from 'react-hot-toast'
@@ -6,7 +6,7 @@ import shallow from 'zustand/shallow'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, mog } from '@mexit/core'
+import { defaultContent } from '@mexit/core'
 import { StyledEditor, EditorWrapper } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -36,6 +36,7 @@ const ContentEditor = () => {
   const { toggleFocusMode } = useLayout()
   const { saveApiAndUpdate } = useLoad()
   const { accessWhenShared } = useNodes()
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
   const { getDataAPI } = useApi()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
@@ -74,6 +75,14 @@ const ContentEditor = () => {
 
   const onAutoSave = useCallback((val) => {
     saveAndClearBuffer(false)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      const isBlockMode = useBlockStore.getState().isBlockMode
+      if (isBlockMode) setIsBlockMode(true)
+      saveAndClearBuffer(false)
+    }
   }, [])
 
   const editorId = useMemo(() => getEditorId(node.nodeid, false), [node, fetchingContent])
@@ -135,9 +144,6 @@ const ContentEditor = () => {
   }, [shortcuts, toggleFocusMode])
 
   const viewOnly = accessWhenShared(node.nodeid) === 'READ'
-  // const readOnly = !!fetchingContent
-
-  // mog('ContentEditor', { node, fsContent, nodeContent })
 
   return (
     <>

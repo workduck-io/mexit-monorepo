@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { useMediaQuery } from 'react-responsive'
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
@@ -15,11 +15,9 @@ import ContentEditor from './Components/Editor/ContentEditor'
 import SnippetEditor from './Components/Editor/SnippetEditor'
 import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
 import Portals from './Components/Portals'
-import { useSidebarTransition } from './Components/Sidebar/Transition'
 import SplashScreen from './Components/SplashScreen'
 import Themes from './Components/Themes'
 import UserPage from './Components/User/UserPage'
-import { useEditorBuffer, useSnippetBuffer } from './Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import { useAuthStore } from './Stores/useAuth'
@@ -179,23 +177,16 @@ const IntegrationRoutes = () => {
   )
 }
 
-const Home = () => (
-  <>
-    <Outlet />
-  </>
-)
+const Home = () => <Outlet />
 
 export const Switch = () => {
   const location = useLocation()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
-  const { saveAndClearBuffer: saveEditorBuffer } = useEditorBuffer()
-  const { saveAndClearBuffer: saveSnippetBuffer } = useSnippetBuffer()
   const authenticated = useAuthStore((s) => s.authenticated)
   const { saveNodeName } = useSaveNodeName()
-  const { showSidebar, showAllSidebars, hideAllSidebars, showRHSidebar, hideRHSidebar, collapseAllSidebars } =
-    useLayoutStore()
+  const { showSidebar, showAllSidebars, hideAllSidebars, hideRHSidebar, collapseAllSidebars } = useLayoutStore()
 
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
@@ -206,8 +197,7 @@ export const Switch = () => {
     if (authenticated) {
       if (isBlockMode) setIsBlockMode(false)
       if (editorNode) saveNodeName(editorNode.nodeid)
-      saveEditorBuffer()
-      saveSnippetBuffer()
+      // saveEditorBuffer()
     }
 
     if (location.pathname) {
