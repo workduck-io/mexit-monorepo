@@ -32,7 +32,7 @@ export const useNamespaceApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        // mog('namespaces all', d.data)
+        mog('namespaces all', d.data)
         return d.data.map((item: any) => {
           // metadata is json string parse to object
           const metadata = item.namespaceMetadata ? JSON.parse(item.namespaceMetadata) : {}
@@ -56,30 +56,29 @@ export const useNamespaceApi = () => {
       })
 
     if (namespaces) {
-      const nsDetails = (
-        await runBatch([
-          ...namespaces.map(async ({ ns }) => {
-            const nsDetails = await getNamespace(ns.id)
-            return nsDetails
-          })
-        ])
-      ).fulfilled
+      // const nsDetails = (
+      //   await runBatch([
+      //     ...namespaces.map(async ({ ns }) => {
+      //       const nsDetails = await getNamespace(ns.id)
+      //       return nsDetails
+      //     })
+      //   ])
+      // ).fulfilled
 
-      const newILinks = nsDetails.reduce(
-        (arr, ns) => {
-          const nsInNamespaces = namespaces.find((n) => n.ns.id === ns.id)
-          return {
-            nodes: [...arr.nodes, ...ns.nodeHierarchy],
-            namespaces: [
-              ...arr.namespaces.filter((n) => n.id !== ns.id),
-              { ...nsInNamespaces.ns, publicAccess: ns.publicAccess }
-            ]
-          }
-        },
-        { nodes: [], namespaces: [] }
-      )
-
-      mog('update namespaces and ILinks', { nsDetails, newILinks })
+      // const newILinks = nsDetails.reduce(
+      //   (arr, ns) => {
+      //     const nsInNamespaces = namespaces.find((n) => n.ns.id === ns.id)
+      //     return {
+      //       nodes: [...arr.nodes, ...ns.nodeHierarchy],
+      //       namespaces: [
+      //         ...arr.namespaces.filter((n) => n.id !== ns.id),
+      //         { ...nsInNamespaces.ns, publicAccess: ns.publicAccess }
+      //       ]
+      //     }
+      //   },
+      //   { nodes: [], namespaces: [] }
+      // )
+      // mog('update namespaces and ILinks', { nsDetails, newILinks })
       // SetILinks once middleware is integrated
       setNamespaces(namespaces.map((n) => n.ns))
     }
@@ -91,7 +90,7 @@ export const useNamespaceApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        // mog('namespaces specific', { data: d.data, id })
+        mog('namespaces specific', { data: d.data, id })
         // return d.data?.nodeHierarchy
 
         return {
@@ -227,6 +226,25 @@ export const useNamespaceApi = () => {
     }
   }
 
+  const updateNamespaceShare = async (id: string, userIDToAccessTypeMap: { [userid: string]: AccessLevel }) => {
+    try {
+      const payload = {
+        namespaceID: id,
+        userIDToAccessTypeMap
+      }
+      return await client
+        .put(apiURLs.sharedNode, payload, {
+          headers: workspaceHeaders()
+        })
+        .then((resp) => {
+          mog('changeUsers resp', { resp })
+          return resp
+        })
+    } catch (err) {
+      throw new Error(`Unable to update namespace access: ${err}`)
+    }
+  }
+
   const getAllSharedUsers = async (id: string) => {
     try {
       const res = await client.get(apiURLs.namespaces.getUsersOfShared(id), {
@@ -246,6 +264,7 @@ export const useNamespaceApi = () => {
     changeNamespaceIcon,
     shareNamespace,
     revokeNamespaceShare,
-    getAllSharedUsers
+    getAllSharedUsers,
+    updateNamespaceShare
   }
 }

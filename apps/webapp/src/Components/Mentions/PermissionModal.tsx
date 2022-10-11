@@ -44,14 +44,14 @@ export const PermissionModalContent = () => {
   const open = useShareModalStore((s) => s.open)
   const context = useShareModalStore((s) => s.context)
   const { getSharedUsersForNode, getInvitedUsers, applyChangesMentionable } = useMentions()
-  const { getSharedUsersForNamespace } = useNamespaces()
+  const { getSharedUsersForNamespace, getNamespace } = useNamespaces()
   const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
-  const { getAllSharedUsers } = useNamespaceApi()
+  const { getAllSharedUsers, revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
   const { accessWhenShared } = usePermissions()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
 
@@ -184,16 +184,26 @@ export const PermissionModalContent = () => {
         return acc
       }, [])
 
-    mog('Updating after the table changes ', { revokedUsers, newPermissions })
+    // mog('Updating after the table changes ', { revokedUsers, newPermissions })
 
     const applyPermissions = async () => {
-      // TODO: Use Context
-      mog('TODO: applyPermissions for namespace', { context, node, newPermissions, revokedUsers })
-      if (Object.keys(newPermissions).length > 0) await changeUserPermission(node.nodeid, newPermissions)
+      if (Object.keys(newPermissions).length > 0) {
+        if (context === 'note') {
+          await changeUserPermission(node.nodeid, newPermissions)
+        } else {
+          mog('applyPermissions for namespace', { context, node, newPermissions, revokedUsers })
+          await updateNamespaceShare(namespaceid, newPermissions)
+        }
+      }
 
-      // TODO: Use context
-      mog('TODO: revokeAccess for namespace', { context, node, newPermissions, revokedUsers })
-      if (revokedUsers.length > 0) await revokeUserAccess(node.nodeid, revokedUsers)
+      if (revokedUsers.length > 0) {
+        if (context === 'note') {
+          await revokeUserAccess(node.nodeid, revokedUsers)
+        } else {
+          mog('revokeAccess for namespace', { context, node, newPermissions, revokedUsers })
+          await revokeNamespaceShare(namespaceid, revokedUsers)
+        }
+      }
       // mog('set new permissions', { userRevoke })
       applyChangesMentionable(newPermissions, revokedUsers, context, id)
     }

@@ -84,17 +84,17 @@ export const apiURLs = {
 
   // Namespaces
   namespaces: {
-    getHierarchy: `${MEXIT_STAGING_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
-    get: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/${id}`,
-    getAll: (opt?: AllNamespaceOption) => `${MEXIT_STAGING_URL_BASE}/v1/namespace/all${opt ? `?${opt}=true` : ''}`,
+    getHierarchy: `${MEXIT_BACKEND_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
+    get: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/${id}`,
+    getAll: (opt?: AllNamespaceOption) => `${MEXIT_BACKEND_URL_BASE}/namespace/all${opt ? `?${opt}=true` : ''}`,
     // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
-    create: `${MEXIT_STAGING_URL_BASE}/namespace`,
-    update: `${MEXIT_STAGING_URL_BASE}/namespace`,
-    makePublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePublic/${id}`,
-    makePrivate: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_STAGING_URL_BASE}/namespace/public/${id}`,
-    share: `${MEXIT_STAGING_URL_BASE}/shared/namespace`,
-    getUsersOfShared: (id: string) => `https://localhost:4000/v1/shared/namespace/${id}/users`
+    create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
+    makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
+    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/public/${id}`,
+    share: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
+    getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/share/${id}/users`
   },
 
   // Link Shortener URLs
