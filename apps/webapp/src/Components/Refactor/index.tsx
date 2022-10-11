@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
@@ -121,6 +121,30 @@ const Refactor = () => {
     }
   }, [shortcuts, shortcutDisabled, open, handleRefactor])
 
+  const disallowRefactor = useMemo(() => {
+    if (!to || !from || !toNS || !fromNS) {
+      return true
+    }
+    if (isReserved(from) || isReserved(to)) {
+      return true
+    }
+    if (to === from) {
+      return true
+    }
+    const tons = namespaces.find((ns) => ns.id === toNS)
+    const fromns = namespaces.find((ns) => ns.id === fromNS)
+
+    if (!tons || !fromns) {
+      return true
+    }
+
+    // Disallow refactor if it is a shared namespace and the namespaces are different
+    if ((tons.granterID !== undefined || fromns.granterID !== undefined) && toNS !== fromNS) {
+      return true
+    }
+    return false
+  }, [to, from, toNS, namespaces, fromNS])
+
   return (
     // eslint-disable-next-line
     // @ts-ignore
@@ -178,7 +202,7 @@ const Refactor = () => {
         </MockRefactorMap>
       )}
       <ModalControls>
-        <Button primary autoFocus={!focus} large onClick={handleRefactor}>
+        <Button primary autoFocus={!focus} large disabled={disallowRefactor} onClick={handleRefactor}>
           Apply
           <DisplayShortcut shortcut={'$mod+Enter'} />
         </Button>

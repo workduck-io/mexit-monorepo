@@ -38,10 +38,14 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const { execRefactorAsync } = useRefactor()
   const { push } = useNavigation()
 
+  const itemNamespace = namespaces.find((ns) => ns.id === item.data?.namespace)
+
   // const handleRefactor = (item: TreeItem) => {
   //   prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
   //   // openRefactorModal()
   // }
+
+  const isInSharedNamespace = itemNamespace.granterID !== undefined
 
   const handleArchive = (item: TreeItem) => {
     openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })
@@ -99,6 +103,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           Share
         </ContextMenuItem>
         <ContextMenuListWithFilter
+          disabled={isInSharedNamespace}
           item={{
             id: 'menu_for_namespace',
             label: 'Move to Space',
@@ -106,10 +111,12 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           }}
           items={namespaces
             // Don't move in same namespace
-            .filter((ns) => ns.id !== item.data.namespace)
+            // And don't move to spaces that are not of the user
+            .filter((ns) => ns.id !== item.data.namespace && !!ns.granterID)
             .map((ns) => ({
               id: ns.id,
               icon: getNamespaceIcon(ns),
+              disabled: isInSharedNamespace,
               label: ns.name
             }))}
           onSelectItem={(args) => {
@@ -121,7 +128,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
         {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
         <ContextMenuItem
           color="#df7777"
-          // disabled
+          disabled={isInSharedNamespace}
           onSelect={(args) => {
             handleArchive(item)
           }}
