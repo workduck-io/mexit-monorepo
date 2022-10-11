@@ -6,9 +6,10 @@ import toast from 'react-hot-toast'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath, mog } from '@mexit/core'
+import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
 import { useRefactor } from '../../../Hooks/useRefactor'
@@ -32,12 +33,14 @@ const NodeRenameOnlyTitle = () => {
   const setMockRefactored = useRenameStore((store) => store.setMockRefactored)
   const modalReset = useRenameStore((store) => store.closeModal)
   const node = useEditorStore((store) => store.node)
+
   const { path: nodeFrom, namespace: nodeFromNS } = useMemo(() => {
     const noteLink = ilinks.find((i) => i.nodeid === node?.nodeid)
     if (noteLink) return noteLink
     return node
   }, [ilinks, node])
 
+  const { getNodesOfNamespace } = useNamespaces()
   const setFrom = useRenameStore((store) => store.setFrom)
   const [editable, setEditable] = useState(false)
   const [newTitle, setNewTitle] = useState(getNameFromPath(nodeFrom))
@@ -58,11 +61,12 @@ const NodeRenameOnlyTitle = () => {
   }
 
   const isClashed = useMemo(() => {
-    return isClash(
+    const checkClash = isClash(
       getTo(newTitle),
-      ilinks.map((n) => n.path)
+      getNodesOfNamespace(nodeFromNS)?.map((l) => l.path)
     )
-  }, [ilinks, newTitle])
+    return checkClash
+  }, [ilinks, newTitle, nodeFromNS])
 
   const { shortcutHandler } = useKeyListener()
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -190,7 +194,7 @@ const NodeRenameOnlyTitle = () => {
         </Tippy>
       ) : editable ? (
         <Input
-          id={`NodeRenameTitleSelect_${nodeFrom}_${to}`}
+          key={`NodeRenameTitleSelect_${nodeFrom}_${to}`}
           name="NodeRenameTitleSelect"
           onKeyDown={handleSubmit}
           onChange={(e) => handleTitleChange(e)}
