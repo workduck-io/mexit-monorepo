@@ -48,6 +48,7 @@ export interface ParentMethods {
   ADD_SINGLE_ILINK: (nodeid: string, path: string, namespace: string) => void
   ADD_MULTIPLE_ILINKS: (linksToBeCreated: ILink[]) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
+  ADD_HIGHLIGHTED_BLOCK: (nodeid: string, content: NodeEditorContent) => void
 }
 
 const IFRAME_ID = 'something-nothing'
@@ -71,13 +72,9 @@ export default function useRaju() {
   const setNamespaces = useDataStore((store) => store.setNamespaces)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
-  const setTags = useDataStore((store) => store.setTags)
   const { updateSnippets } = useSnippets()
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
-  const { initHighlights } = useHighlightStore()
-  const { setCache } = useUserCacheStore()
-  const initMentionData = useMentionStore((store) => store.initMentionData)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -189,6 +186,8 @@ export default function useRaju() {
         return child.updateMultipleILinks(...params)
       case 'ACT_ON_REMINDER':
         return child.reminderAction(...params)
+      case 'ADD_HIGHLIGHTED_BLOCK':
+        return child.addHighlighted(...params)
       case 'SEARCH':
         const res = child.search(...params).then((result) => {
           return result

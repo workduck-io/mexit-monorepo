@@ -103,13 +103,11 @@ export function useSaveChanges() {
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
-        // setMetadata(message.id, metadata)
-        // console.log('message', message)
-        // setContent(node.nodeid, deserializeContent(message.data))
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
-        addHighlightedBlock(nodeid, content, window.location.href)
+        addHighlightedBlock(nodeid, content)
+        dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
 
         // mog('deserialized content from backend', {
         //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
