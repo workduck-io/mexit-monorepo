@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { transparentize } from 'polished'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
