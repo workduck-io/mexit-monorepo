@@ -1,5 +1,7 @@
-import { Tag } from '../Types/Editor'
 import { nanoid } from 'nanoid'
+
+import { Tag } from '../Types/Editor'
+import { getValidTitle } from './strings'
 
 interface SitesMetadata {
   appName?: string
@@ -80,7 +82,7 @@ export const sitesMetadataDict: SitesMetadata[] = [
   }
 ]
 
-export const CreateTags = (
+export const createTags = (
   appName: string,
   appUrl: string,
   keyword?: string,
@@ -170,7 +172,7 @@ export const CreateTags = (
   }
 }
 
-export const CreateAlias = (appName: string, tag?: { name: string; value: any }) => {
+export const createAlias = (appName: string, tag?: { name: string; value: any }) => {
   switch (appName) {
     case 'github':
       if (tag.name === 'title') {
@@ -189,5 +191,53 @@ export const CreateAlias = (appName: string, tag?: { name: string; value: any })
       return
     default:
       return tag.value
+  }
+}
+
+export const metadataParser = (url: string, pageTags: { name: string; value: string }[]) => {
+  const matchedURL = sitesMetadataDict.filter((e) => url.toString().includes(e.baseUrl))
+  let resultUserTags: Tag[] = []
+  let resultShortAlias: string = undefined
+  // console.log({ matchedURL })
+
+  if (matchedURL.length > 0) {
+    const matchedMetaTags = []
+    for (const metaTag of matchedURL[0].metaTags) {
+      for (const tag of pageTags) {
+        if (tag.name === metaTag) {
+          resultShortAlias = createAlias(matchedURL[0].appName, tag)
+          matchedMetaTags.push(tag)
+          break
+        }
+      }
+      if (resultShortAlias) break
+    }
+
+    // Add user tags for the keyword from the URL
+    for (const keyword of matchedURL[0].keywords) {
+      if (url.toString().includes(keyword) && resultUserTags.length === 0) {
+        resultUserTags.push(...createTags(matchedURL[0].appName, url.toString(), keyword, matchedMetaTags[0]))
+      }
+    }
+
+    // Add title as user tags if needed
+    if (matchedURL[0].titleAsTag) {
+      resultUserTags.push(
+        ...createTags(matchedURL[0].appName, url.toString(), 'NA', matchedMetaTags[0], matchedURL[0].titleAsTag)
+      )
+    }
+    if (resultUserTags.length === 0) resultUserTags.push(...createTags(matchedURL[0].appName, url.toString()))
+
+    resultShortAlias = getValidTitle(resultShortAlias)
+  } else {
+    const title = pageTags.filter((el) => el.name === 'title')[0].value.trim()
+    if (!resultShortAlias) resultShortAlias = title
+    resultUserTags = [{ value: title.toString().split('-').join(', ').split('|').join(', ').split(', ')[0] }]
+    resultShortAlias = getValidTitle(resultShortAlias)
+  }
+
+  return {
+    resultUserTags,
+    resultShortAlias
   }
 }
