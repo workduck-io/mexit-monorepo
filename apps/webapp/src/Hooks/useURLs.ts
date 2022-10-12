@@ -50,8 +50,8 @@ export const useLinkURLs = () => {
   const getHighlights = (link: Link) => {
     const highlightOfUrl = highlights[link.url]
 
+    // mog('getting highlights for', { link, highlightOfUrl, highlights })
     if (highlightOfUrl) {
-      // mog('getting highlights for', { link, highlightOfUrl, _highlights })
       return highlightOfUrl
     }
   }
@@ -231,7 +231,7 @@ export const useURLFilters = () => {
 
     const rankedDomains = links.reduce((acc, link) => {
       const domain = getDomain(link.url)
-      mog('domain', { domain, link })
+      // mog('domain', { domain, link })
       if (!domain) return acc
       if (acc[domain]) {
         acc[domain] += 1

@@ -1,19 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { nanoid } from 'nanoid'
-import { useForm } from 'react-hook-form'
-import { toast, Toaster } from 'react-hot-toast'
 import styled from 'styled-components'
 
-import { LoadingButton, Button } from '@workduck-io/mex-components'
+import { LoadingButton } from '@workduck-io/mex-components'
 
 import { getValidTitle, metadataParser, Tag } from '@mexit/core'
 import { copyTextToClipboard, Input, Label, resize } from '@mexit/shared'
 
+import AddTagMenu from '../../Components/Link/AddTagMenu'
+import { LinkTagSection } from '../../Components/Link/Link.style'
 import { TagsLabel } from '../../Components/Sidebar/TagLabel'
 import { useURLsAPI } from '../../Hooks/useURLs'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useDataStore } from '../../Stores/useDataStore'
 import { Link } from '../../Stores/useLinkStore'
 
 const Form = styled.form`
@@ -55,7 +52,9 @@ export const Shortener = () => {
     const shortenedLink = await saveLink(reqBody)
     setIsLoading(false)
 
-    copyTextToClipboard(shortenedLink)
+    // mog('shorten', { shortenedLink, reqBody })
+
+    copyTextToClipboard(shortenedLink?.message)
   }
 
   const removeUserTag = (tag: string) => {
@@ -92,6 +91,14 @@ export const Shortener = () => {
     }
   }, [])
 
+  const onAddTag = (tag: Tag) => {
+    setTags([...tags.filter((t) => t.value !== tag.value), tag])
+  }
+
+  const onCreateNewTag = (tag: string) => {
+    setTags([...tags.filter((t) => t.value !== tag), { value: tag }])
+  }
+
   useEffect(() => {
     if (elementRef !== null) {
       resize(elementRef)
@@ -106,7 +113,10 @@ export const Shortener = () => {
         <Input placeholder="URL to shorten" defaultValue={tabUrl} onChange={(e) => setTabUrl(e.target.value)} />
       </InputRow>
       {/* TODO: temporarily removing ability to enter your own tags  */}
-      <TagsLabel tags={tags} onDelete={(t) => removeUserTag(t)} />
+      <LinkTagSection>
+        <TagsLabel tags={tags} onDelete={(t) => removeUserTag(t)} />
+        <AddTagMenu createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
+      </LinkTagSection>
 
       <InputRow>
         <Label>Shortcut</Label>
