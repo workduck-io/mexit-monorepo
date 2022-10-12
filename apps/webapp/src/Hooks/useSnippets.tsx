@@ -5,7 +5,6 @@ import { SlashCommandConfig } from '../Editor/Types/Combobox'
 import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useApi } from './API/useNodeAPI'
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {
@@ -18,7 +17,6 @@ export const useSnippets = () => {
 
   const { generateSlashCommands } = useSlashCommands()
   const { updateDocument, addDocument, removeDocument } = useSearch()
-  const api = useApi()
 
   const getSnippets = () => {
     return useSnippetStore.getState().snippets
@@ -95,24 +93,6 @@ export const useSnippets = () => {
     updateDescription(snippet.id, convertContentToRawText(snippet.content, '\n'))
   }
 
-  const getInitialSnippets = () => {
-    const snippets = getSnippets()
-    const unfetchedSnippets = snippets.filter((snippet) => !snippet.content)
-
-    // try {
-    //   Promise.allSettled(
-    //     unfetchedSnippets.map(
-    //       async (item) =>
-    //         await api.getSnippetById(item.id).then((response) => {
-    //           updateSnippet(response as Snippet)
-    //         })
-    //     )
-    //   )
-    // } catch (err) {
-    //   mog('Failed to fetch snippets', { err })
-    // }
-  }
-
   // * Updates snippets in store and adds them in combobox
   const updateSnippets = (snippets: Snippet[]) => {
     initSnippets(snippets)
@@ -128,7 +108,6 @@ export const useSnippets = () => {
     addSnippet,
     updateSnippet,
     deleteSnippet,
-    getInitialSnippets,
     updateSnippets
   }
 }

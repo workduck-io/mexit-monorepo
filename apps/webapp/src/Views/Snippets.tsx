@@ -248,6 +248,7 @@ const Snippets = () => {
 
   useEffect(() => {
     async function getInitialSnippets() {
+      // language
       const snippets = getSnippets()
       const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
       const ids = unfetchedSnippets.map((i) => i.id)
