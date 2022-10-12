@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
 import { debounce } from 'lodash'
+import { transparentize } from 'polished'
 import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
@@ -17,10 +18,6 @@ import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiCombobo
 import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from './Hooks/useEditorConfig'
 import generatePlugins from './Plugins'
-import { MENU_ID } from './Components/BlockContextMenu'
-import { useContextMenu } from 'react-contexify'
-import { debounce } from 'lodash'
-import { transparentize } from 'polished'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
