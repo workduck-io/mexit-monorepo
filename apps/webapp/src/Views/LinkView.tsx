@@ -39,13 +39,11 @@ const LinkView = () => {
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
 
+  /**
+   * Fetch all links on render
+   */
   useEffect(() => {
     getAllLinks()
-    // saveLink({
-    //   title: 'Magnus Hirschfeld',
-    //   url: 'https://en.wikipedia.org/wiki/Magnus_Hirschfeld',
-    //   tags: ['wiki', 'magnus hirschfeld']
-    // })
   }, [])
 
   const {
@@ -63,8 +61,8 @@ const LinkView = () => {
     addTagFilter
   } = useURLFilters()
 
-  const { initialLinks, randId } = useMemo(() => {
-    return { initialLinks: links.sort(sortByCreated), randId: nanoid() }
+  const initialLinks = useMemo(() => {
+    return links.sort(sortByCreated)
   }, [links])
 
   // mog('Initial links', { initialLinks, links })
@@ -122,7 +120,7 @@ const LinkView = () => {
     const id = `${item.url}_ResultFor_SearchLinks`
 
     return (
-      <Result {...props} onClick={undefined} key={id} ref={ref}>
+      <Result view={View.List} key={id} ref={ref}>
         <LinkComponent addTagFilter={addTagFilter} link={link} />
       </Result>
     )
@@ -146,14 +144,16 @@ const LinkView = () => {
     )
   }
 
+  // mog('Rendering LinkView', { links, initialLinks })
+
   return (
     <SearchContainer>
       <MainHeader>
         <Title>Links</Title>
       </MainHeader>
       <SearchView
-        id={`view_link_${randId}`}
-        key={`view_link_${randId}`}
+        id={`view_link_`}
+        key={`view_link_`}
         initialItems={initialLinks}
         getItemKey={(i) => i.url}
         onSelect={onSelect}

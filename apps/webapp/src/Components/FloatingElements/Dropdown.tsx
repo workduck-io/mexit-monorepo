@@ -150,7 +150,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     })
 
     const resetSearch = useCallback(() => {
-      mog('resetSearch')
+      // mog('resetSearch')
       setSearch('')
       setFilteredChildren(children)
     }, [children])

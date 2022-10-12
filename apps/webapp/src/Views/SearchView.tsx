@@ -276,7 +276,7 @@ const SearchView = <Item,>({
     () => () => {
       // mog('SearchFiltersUpdate', { result, currentFilters })
       // const results = applyCurrentFilters(result)
-      // mog('updating results', { result, currentFilters })
+      // mog('updating results', { result, currentFilters, initialItems })
       // setOnlyResult(results)
       executeSearch(searchTerm)
     },
@@ -285,7 +285,7 @@ const SearchView = <Item,>({
 
   useEffect(() => {
     updateResults()
-  }, [currentFilters, idxKeys, globalJoin])
+  }, [currentFilters, idxKeys, globalJoin, initialItems])
 
   useEffect(() => {
     executeSearch(searchTerm)

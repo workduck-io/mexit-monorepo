@@ -1,12 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { IconButton } from '@workduck-io/mex-components'
 
 import { mog, Tag } from '@mexit/core'
-import { ProjectIconMex, RelativeTime } from '@mexit/shared'
+import { RelativeTime } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
@@ -33,9 +32,13 @@ interface LinkProps {
   addTagFilter: (tag: string) => void
 }
 
+const FaviconImage = ({ source }: { source: string }) => {
+  // mog('Rendering favicon', { source })
+  return <img height="20px" width="20px" src={getFavicon(source)} alt="favicon" />
+}
+
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
-  const favUrl = getFavicon(link.url)
-  const tags = link.tags.map((t) => ({ value: t }))
+  const tags = link.tags?.map((t) => ({ value: t })) ?? []
   const { getTags, addTag, removeTag, deleteLink, getHighlights } = useLinkURLs()
 
   const [highlightsOpen, setHighlightsOpen] = React.useState(false)
@@ -68,12 +71,14 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
     deleteLink(url)
   }
 
+  // mog('LinkComponent', { link, highlights })
+
   return (
     <LinkWrapper>
       <LinkHeader>
         <Tooltip content={link.url}>
           <LinkTitleWrapper onClick={() => onOpenLink(link.url)}>
-            <ProjectIconMex icon={favUrl} isMex={false} size={20} />
+            <FaviconImage source={link.url} />
             {link.title}
           </LinkTitleWrapper>
         </Tooltip>

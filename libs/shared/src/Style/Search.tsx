@@ -399,6 +399,16 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         border: 1px solid transparent;
         transition: 0.3s ease;
         overflow: visible;
+        :hover {
+          transition: 0s ease;
+          background-color: ${theme.colors.gray[8]};
+          border: 1px solid ${theme.colors.primary} !important;
+
+          ${ResultTitle} {
+            font-weight: bold;
+            color: ${theme.colors.primary};
+          }
+        }
         ${selected &&
         css`
           transition: 0s ease;
@@ -411,7 +421,7 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
           }
         `}
       `
-    }
+    } else return ``
   }}
   border-radius: ${({ theme }) => theme.borderRadius.small};
   ${SearchTransition}
@@ -448,7 +458,7 @@ export const Results = styled.div<{ view: View }>`
         gap: ${theme.spacing.tiny};
         flex-grow: 1;
       `
-    }
+    } else return ``
   }}
 `
 

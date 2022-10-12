@@ -16,7 +16,7 @@ export const HoverFade = css`
 export const ShowOnHoverIconStyles = css`
   position: relative;
   .showOnHoverIcon {
-    z-index: 10;
+    z-index: 2;
     position: absolute;
     right: 0;
     transition: right 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease-in-out;

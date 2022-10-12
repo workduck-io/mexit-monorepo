@@ -32,7 +32,7 @@ export const useLinkURLs = () => {
 
   const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
-  const getTags = (present: string[]) => {
+  const getTags = (present?: string[]) => {
     const linkTags = links.reduce((acc, link) => {
       if (link.tags) {
         acc.push(...link.tags)
@@ -41,7 +41,7 @@ export const useLinkURLs = () => {
     }, [] as string[])
 
     const mergedTags = Settify([...linkTags, ...tags.map((t) => t.value)])
-      .filter((tag) => !present.includes(tag))
+      .filter((tag) => (present ? !present.includes(tag) : true))
       .map((t) => ({ value: t }))
 
     return mergedTags
@@ -59,7 +59,7 @@ export const useLinkURLs = () => {
   const addTag = (linkurl: string, tag: string) => {
     const newLinks = links.map((l) => {
       if (l.url === linkurl) {
-        return { ...l, tags: Settify([...l.tags, tag]) }
+        return { ...l, tags: Settify([...(l.tags ?? []), tag]) }
       }
       return l
     })
@@ -73,7 +73,7 @@ export const useLinkURLs = () => {
   const removeTag = (linkurl: string, tag: string) => {
     const newLinks = links.map((l) => {
       if (l.url === linkurl) {
-        return { ...l, tags: l.tags.filter((t) => t !== tag) }
+        return { ...l, tags: (l.tags ?? []).filter((t) => t !== tag) }
       }
       return l
     })
@@ -110,6 +110,10 @@ export const useLinkURLs = () => {
     setLinks(newLinks)
   }
 
+  const getLink = (linkurl: string) => {
+    return links.find((l) => l.url === linkurl)
+  }
+
   return {
     getTags,
     addTag,
@@ -117,6 +121,7 @@ export const useLinkURLs = () => {
     updateAlias,
     isDuplicateAlias,
     deleteLink,
+    getLink,
     getHighlights
   }
 }
@@ -340,21 +345,21 @@ const extractLinksFromData = (data: any): Link[] => {
     if (l) {
       /*
       {
-    "modified": "2022-10-07T13:24:31.331Z",
-    "properties": {
-        "title": "Google"
-    },
-    "alias": "good",
-    "expiry": 1696685071331,
-    "entity": "URL",
-    "workspace": "WORKSPACE_Fh6RzxkgCe6a4LtkwkELn",
-    "url": "https://google.com",
-    "created": "2022-10-07T13:24:31.331Z",
-    "tags": [
-        "XYZ",
-        "YXA"
-    ]
-    }
+        "modified": "2022-10-07T13:24:31.331Z",
+        "properties": {
+            "title": "Google"
+        },
+        "alias": "good",
+        "expiry": 1696685071331,
+        "entity": "URL",
+        "workspace": "WORKSPACE_Fh6RzxkgCe6a4LtkwkELn",
+        "url": "https://google.com",
+        "created": "2022-10-07T13:24:31.331Z",
+        "tags": [
+            "XYZ",
+            "YXA"
+        ]
+      }
       */
       const createdAtTime = new Date(l?.created)?.getTime()
       const updatedAtTime = new Date(l?.modified)?.getTime()

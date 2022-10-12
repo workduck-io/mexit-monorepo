@@ -134,7 +134,7 @@ export const useLinkFilterFunctions = () => {
     },
 
     tag: (item: Link, f) => {
-      const res = filterAndJoin(f, (v) => item.tags.includes(v.value))
+      const res = filterAndJoin(f, (v) => (item.tags ?? []).includes(v.value))
       return res
     }
   }
