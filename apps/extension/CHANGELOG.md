@@ -1,5 +1,15 @@
 # mexit
 
+## 0.13.0
+
+### Minor Changes
+
+- a2192598: Updated shortener action, added new links view to view shortened links and filter based on domain, highlights etc.
+
+### Patch Changes
+
+- 4ceae64f: Note, block refactoring with minor fixes
+
 ## 0.12.1
 
 ### Patch Changes
