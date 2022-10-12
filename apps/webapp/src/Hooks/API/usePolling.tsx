@@ -37,7 +37,6 @@ export const usePolling = () => {
 
   useIntervalWithTimeout(
     () => {
-      // TODO: commenting this out because it sends so many requests, it blocks the UI and slows down everything
       getNodesByWorkspace().then(() => mog('Successfully fetched hierarchy'))
       // refreshILinks().then(() => mog('Successfully fetched hierarchy'))
     },

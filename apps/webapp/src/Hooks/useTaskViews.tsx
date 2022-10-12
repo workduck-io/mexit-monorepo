@@ -77,7 +77,6 @@ export const useTaskViews = () => {
     return views.find((v) => v.id === id)
   }
 
-  // TODO: add request calls and middleware support for tasks views
   const addView = async (view: View) => {
     const resp = await saveView(view)
     mog('After Svaing that view', { resp })

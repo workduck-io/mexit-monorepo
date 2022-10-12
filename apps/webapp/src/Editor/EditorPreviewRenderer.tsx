@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
 import { debounce } from 'lodash'
+import { transparentize } from 'polished'
 import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
@@ -49,9 +50,14 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boo
       ${TodoContainer}, button, input, textarea, select, option {
         pointer-events: none;
       }
-    `} 
-
+    `}
   overflow: hidden;
+
+  .slate-highlight {
+    background-color: ${(props) => transparentize(0.75, props.theme.colors.primary)};
+    color: ${(props) => props.theme.colors.text.default};
+    transition: all 0.3s ease-in-out;
+  }
 `
 
 const EditorPreviewRenderer = ({
@@ -116,7 +122,6 @@ const EditorPreviewRenderer = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (blockId) {
-        // mog('editorPreviewRenderer', { blockId, editorId })
         focusBlock(blockId, editorId)
         setHighlights([blockId], 'preview')
       }

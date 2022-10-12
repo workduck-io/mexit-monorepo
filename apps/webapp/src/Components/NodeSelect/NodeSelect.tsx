@@ -22,6 +22,7 @@ import {
   SHARED_NAMESPACE,
   SingleNamespace
 } from '@mexit/core'
+import { fuzzySearch } from '@mexit/core'
 import { Input, StyledCreatatbleSelect, SuggestionTextWrapper } from '@mexit/shared'
 import {
   StyledCombobox,
@@ -43,7 +44,6 @@ import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { StyledNamespaceSelectComponents } from '../../Style/Select'
-import { fuzzySearch } from '../../Utils/fuzzysearch'
 import NamespaceTag from '../NamespaceTag'
 
 export type QuickLink = {

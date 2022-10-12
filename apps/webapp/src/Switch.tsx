@@ -40,6 +40,7 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
+import LinkView from './Views/LinkView'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;
@@ -249,6 +250,14 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
+          <Route
+            path={ROUTE_PATHS.links}
+            element={
+              <ProtectedRoute>
+                <LinkView />
+              </ProtectedRoute>
+            }
+          />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
           <Route path={ROUTE_PATHS.reminders} element={<RemindersAll />} />

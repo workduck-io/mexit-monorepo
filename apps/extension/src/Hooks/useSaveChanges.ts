@@ -28,10 +28,11 @@ export function useSaveChanges() {
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
   const { isSharedNode } = useNodes()
-  const { getDefaultNamespace } = useNamespaces()
+  const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
   const saveIt = (saveAndExit = false, notification = false) => {
-    const namespace = getDefaultNamespace()
+    setVisualState(VisualState.animatingOut)
+    const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
     const state = platesStore.get.state()
 
     // Editor Id is different from nodeId
@@ -102,13 +103,11 @@ export function useSaveChanges() {
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
-        // setMetadata(message.id, metadata)
-        // console.log('message', message)
-        // setContent(node.nodeid, deserializeContent(message.data))
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
-        addHighlightedBlock(nodeid, content, window.location.href)
+        addHighlightedBlock(nodeid, content)
+        dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
 
         // mog('deserialized content from backend', {
         //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)

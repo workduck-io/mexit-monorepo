@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { idxKey, mog, SearchFilter } from '@mexit/core'
+import { idxKey, Filter, Filters, GlobalFilterJoin, mog, SearchFilter } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -20,9 +20,9 @@ import {
 
 import SearchIndexInput from '../Components/Search/IndexInput'
 import { useFilters, useFilterStore } from '../Hooks/useFilters'
-import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
+import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 
 interface SearchViewState<Item> {
   selected: number
@@ -115,6 +115,13 @@ interface SearchViewProps<Item> {
    */
   filterResults?: (result: Item[]) => Item[]
 
+  filterActions?: {
+    filters: Filters
+    resetCurrentFilters: () => void
+    currentFilters: Filter[]
+    globalJoin: GlobalFilterJoin
+  }
+
   /**
    * IndexeGroups
    *
@@ -187,7 +194,8 @@ const SearchView = <Item,>({
   RenderPreview,
   RenderNotFound,
   RenderFilters,
-  options = { view: View.List }
+  options = { view: View.List },
+  filterActions
 }: SearchViewProps<Item>) => {
   const [searchState, setSS] = useState<SearchViewState<Item>>({
     selected: -1,
@@ -195,12 +203,20 @@ const SearchView = <Item,>({
     result: []
   })
 
-  // For filters
-  const { applyCurrentFilters, resetCurrentFilters } = useFilters<Item>()
-  const currentFilters = useFilterStore((store) => store.currentFilters)
-  const filters = useFilterStore((store) => store.filters)
-  const globalJoin = useFilterStore((store) => store.globalJoin)
+  const { resetCurrentFilters, filters, currentFilters, globalJoin } = useMemo(
+    () =>
+      filterActions ?? {
+        filters: [],
+        currentFilters: [],
+        resetCurrentFilters: () => {
+          /* do nothing */
+        },
+        globalJoin: 'all'
+      },
+    [filterActions]
+  )
 
+  // For filters
   const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
   const [view, setView] = useState<View>(options?.view)
   const setIndexes = useFilterStore((store) => store.setIndexes)
@@ -260,16 +276,16 @@ const SearchView = <Item,>({
     () => () => {
       // mog('SearchFiltersUpdate', { result, currentFilters })
       // const results = applyCurrentFilters(result)
-      // mog('updating results', { result, currentFilters })
+      // mog('updating results', { result, currentFilters, initialItems })
       // setOnlyResult(results)
       executeSearch(searchTerm)
     },
-    [currentFilters, result, initialItems, idxKeys]
+    [currentFilters, globalJoin, result, initialItems, idxKeys]
   )
 
   useEffect(() => {
     updateResults()
-  }, [currentFilters, idxKeys, globalJoin])
+  }, [currentFilters, idxKeys, globalJoin, initialItems])
 
   useEffect(() => {
     executeSearch(searchTerm)

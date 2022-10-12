@@ -23,7 +23,6 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
 
   const handleDelete = async (view: View) => {
     const currentView = useViewStore.getState().currentView
-    // TODO: this is related to syncing tasks views with backend, needs to be done but now
     await deleteView(view.id)
     if (currentView?.id === view.id) {
       setCurrentView(undefined)

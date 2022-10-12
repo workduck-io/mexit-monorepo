@@ -1,16 +1,28 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-import { HoverSubtleGlow } from './Helpers'
+import { HoverSubtleGlow, ShowOnHoverIconStyles, SubtleGlow } from './Helpers'
 
 export const TagFlex = styled.div`
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   background-color: ${({ theme }) => theme.colors.gray[9]};
   color: ${({ theme }) => theme.colors.text.fade};
 
   ${HoverSubtleGlow}
+  ${ShowOnHoverIconStyles}
+  .showOnHoverIcon {
+    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.colors.primary};
+    ${SubtleGlow}
+  }
 `
+
+export const TagFlexText = styled.div``
 
 export const TagsFlex = styled.div`
   display: flex;

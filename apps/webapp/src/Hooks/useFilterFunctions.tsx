@@ -1,6 +1,8 @@
 import { isElder, getReminderState, Filter, FilterJoin, FilterValue, SearchFilterFunctions } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+import { Link } from '../Stores/useLinkStore'
 import { useLinks } from './useLinks'
 
 const joinNewRes = (acc: boolean, curRes: boolean, join: FilterJoin) => {
@@ -104,6 +106,41 @@ export const reminderFilterFunctions: SearchFilterFunctions = {
   }
 }
 
+export const useLinkFilterFunctions = () => {
+  const highlights = useHighlightStore((s) => s.highlighted)
+
+  const hasHighlight = (link: Link) => {
+    const h = highlights[link.url]
+    return h !== undefined && Object.keys(h).length > 0
+  }
+
+  const filterFunctions: SearchFilterFunctions = {
+    domain: (item, f) => {
+      const res = filterAndJoin(f, (v) => item.url.includes(v.value))
+      return res
+    },
+
+    has: (item: Link, f) => {
+      const res = filterAndJoin(f, (v) => {
+        switch (v.value) {
+          case 'highlights':
+            return hasHighlight(item)
+          case 'alias':
+            return item.alias !== undefined
+        }
+        return false
+      })
+      return res
+    },
+
+    tag: (item: Link, f) => {
+      const res = filterAndJoin(f, (v) => (item.tags ?? []).includes(v.value))
+      return res
+    }
+  }
+
+  return filterFunctions
+}
 export const useTaskFilterFunctions = (): SearchFilterFunctions => {
   const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
 

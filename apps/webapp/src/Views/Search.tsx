@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import shareLine from '@iconify/icons-ri/share-line'
@@ -53,14 +53,18 @@ const Search = () => {
   const { queryIndexWithRanking } = useSearch()
   const contents = useContentStore((store) => store.contents)
   const ilinks = useDataStore((store) => store.ilinks)
-  const initialResults = ilinks
-    .map(
-      (link): GenericSearchResult => ({
-        id: link.nodeid,
-        title: link.path
-      })
-    )
-    .slice(0, 12)
+  const initialResults = useMemo(
+    () =>
+      ilinks
+        .map(
+          (link): GenericSearchResult => ({
+            id: link.nodeid,
+            title: link.path
+          })
+        )
+        .slice(0, 12),
+    [ilinks]
+  )
   const { getNode, getNodeType } = useNodes()
   const { goTo } = useRouting()
   const { hasTags } = useTags()
@@ -71,6 +75,9 @@ const Search = () => {
     generateNodeSearchFilters,
     removeCurrentFilter,
     filters,
+    changeCurrentFilter,
+    setGlobalJoin,
+    globalJoin,
     currentFilters,
     resetCurrentFilters
   } = useFilters<GenericSearchResult>()
@@ -92,9 +99,8 @@ const Search = () => {
   // console.log({ result })
   const onSelect = (item: GenericSearchResult) => {
     const nodeid = item.id
-    // mog('NODE IS ', { nodeid })
-    loadNode(nodeid)
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+    loadNode(nodeid, { highlightBlockId: item.blockId })
+    goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
   const onEscapeExit = () => {
@@ -184,7 +190,10 @@ const Search = () => {
         removeCurrentFilter={removeCurrentFilter}
         resetCurrentFilters={resetCurrentFilters}
         filters={filters}
+        globalJoin={globalJoin}
+        setGlobalJoin={setGlobalJoin}
         currentFilters={currentFilters}
+        changeCurrentFilter={changeCurrentFilter}
       />
     )
   }
@@ -225,6 +234,8 @@ const Search = () => {
       )
   }
 
+  // mog('RenderSearchResults', { filters, currentFilters, globalJoin })
+
   return (
     <SearchContainer>
       <MainHeader>
@@ -243,6 +254,12 @@ const Search = () => {
         RenderFilters={RenderFilters}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
+        filterActions={{
+          filters,
+          currentFilters,
+          resetCurrentFilters,
+          globalJoin
+        }}
       />
     </SearchContainer>
   )

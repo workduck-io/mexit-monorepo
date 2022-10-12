@@ -23,9 +23,10 @@ import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
-import { useShortenerStore } from '../Stores/useShortener'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
@@ -41,10 +42,12 @@ export default function Chotu() {
   const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
   const actOnReminder = useReminders().actOnReminder
+  const { addHighlightedBlock } = useHighlightStore()
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const { cache } = useUserCacheStore()
   const { mentionable, invitedUsers } = useMentionStore()
+  const links = useLinkStore((state) => state.links)
 
   useEffect(() => {
     if (!first) {
@@ -61,6 +64,10 @@ export default function Chotu() {
       return new Promise((resolve) => {
         resolve(searchWorker ? queryIndex(key, query) : [])
       })
+    },
+    addHighlight(nodeid: string, content: NodeEditorContent) {
+      addHighlightedBlock(nodeid, content)
+      return
     },
     updateContentStore(nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) {
       setContent(nodeid, content, metadata)
@@ -130,6 +137,12 @@ export default function Chotu() {
 
     parent.bootSnippets(snippets)
   }, [parent, snippets])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootLinks(links)
+  }, [parent, links])
 
   return (
     <div>

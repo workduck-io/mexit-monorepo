@@ -55,7 +55,7 @@ const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
     // const qaContent = getRandomQAContent()
     const nodeId = createNewNote()
 
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId.nodeid)
   }
 
   const { shortcutHandler } = useKeyListener()

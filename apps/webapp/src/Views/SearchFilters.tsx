@@ -74,7 +74,7 @@ const SearchFilters = ({
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
         {currentFilters.map((filter) => (
           <FilterRender
-            key={filter.id}
+            key={`${filter.id}_${filter.type}`}
             filter={filter}
             options={filters.find((f) => f.type === filter.type)?.options}
             onChangeFilter={(f) => changeCurrentFilter(f)}

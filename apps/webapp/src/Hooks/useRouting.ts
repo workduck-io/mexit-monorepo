@@ -18,6 +18,7 @@ export const ROUTE_PATHS = {
   //   integrations: '/integrations',
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid
+  links: '/links',
   chotu: '/chotu',
   actions: '/actions',
   oauth: '/oauth',

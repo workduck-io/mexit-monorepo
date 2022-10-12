@@ -11,8 +11,11 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
+import { mog } from '@mexit/core'
+
 import { useGlobalListener } from '../Hooks/useGlobalListener'
 import useMultipleEditors from '../Stores/useEditorsStore'
+import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import { useMexEditorStore } from './Hooks/useMexEditorStore'
@@ -55,6 +58,10 @@ export const MexEditorBase = (props: MexEditorProps) => {
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
   const isEmpty = useMultipleEditors((store) => store.isEmpty)
 
+  const { focusBlock, selectBlock } = useFocusBlock()
+  const clearHighlights = useBlockHighlightStore((store) => store.clearAllHighlightedBlockIds)
+  const hightlightedBlockIds = useBlockHighlightStore((store) => store.hightlighted.editor)
+
   useEffect(() => {
     const editorRef = getPlateEditorRef()
 
@@ -70,6 +77,27 @@ export const MexEditorBase = (props: MexEditorProps) => {
     props?.components,
     props?.pluginOptions
   )
+
+  useEffect(() => {
+    // Timeout inside a timeout
+    // Clear highlights when highlightedBlockIds present
+    const timeoutIds = []
+    const timeoutId = setTimeout(() => {
+      if (hightlightedBlockIds.length > 0) {
+        // mog('Focusing highlights', { hightlightedBlockIds, props })
+        selectBlock(hightlightedBlockIds[hightlightedBlockIds.length - 1], props.editorId)
+        const clearHighlightTimeoutId = setTimeout(() => {
+          // mog('clearing highlights')
+          if (!props?.options?.editableProps?.readOnly) clearHighlights()
+        }, 2000)
+        timeoutIds.push(clearHighlightTimeoutId)
+      }
+    }, 1000)
+    timeoutIds.push(timeoutId)
+    return () => {
+      timeoutIds.forEach((id) => clearTimeout(id))
+    }
+  }, [hightlightedBlockIds, props.editorId])
 
   const onChange = (value: MexEditorValue) => {
     if (props?.debug) setContent(value)

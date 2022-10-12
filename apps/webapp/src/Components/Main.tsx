@@ -86,7 +86,8 @@ const Main = ({ children }: MainProps) => {
       '/settings',
       '/tag',
       '/integrations',
-      '/reminders'
+      '/reminders',
+      '/links'
     ]
 
     for (const path of showNavPaths) {

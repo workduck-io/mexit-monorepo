@@ -3,11 +3,11 @@ import { useCallback } from 'react'
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
+import { fuzzySearch } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { fuzzySearch } from '../../../Utils/fuzzysearch'
 import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey } from '../../Types/Combobox'

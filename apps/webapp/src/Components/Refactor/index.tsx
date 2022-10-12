@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
@@ -7,7 +7,7 @@ import Modal from 'react-modal'
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { isMatch, isReserved } from '@mexit/core'
+import { isMatch, isReserved, mog, NodeLink } from '@mexit/core'
 
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
@@ -92,7 +92,7 @@ const Refactor = () => {
     }
   }, [to, from, open])
 
-  const handleRefactor = async () => {
+  const handleRefactor = useCallback(async () => {
     // mog('Refactor', { open, to, from })
     if (to && from && !isReserved(from) && !isReserved(to)) {
       const refactored = await execRefactorAsync({ path: from, namespaceID: fromNS }, { path: to, namespaceID: toNS })
@@ -105,7 +105,21 @@ const Refactor = () => {
     }
 
     closeModal()
-  }
+  }, [to, from, open, toNS, fromNS])
+
+  useEffect(() => {
+    if (open) {
+      const unsubscribe = tinykeys(window, {
+        '$mod+Enter': (event) => {
+          event.preventDefault()
+          handleRefactor()
+        }
+      })
+      return () => {
+        unsubscribe()
+      }
+    }
+  }, [shortcuts, shortcutDisabled, open, handleRefactor])
 
   return (
     // eslint-disable-next-line

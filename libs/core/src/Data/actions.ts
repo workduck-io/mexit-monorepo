@@ -26,7 +26,6 @@ export const CREATE_NEW_ITEM = {
   }
 }
 
-// TODO: change shortcut keys based on user's OS
 export const initActions: Array<ListItemType> = [
   {
     id: 'ACTION_1',

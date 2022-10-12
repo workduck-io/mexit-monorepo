@@ -7,7 +7,7 @@
 */
 import { MIcon } from './Store'
 
-export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has' | 'mention' | 'space'
+export type FilterKey = 'note' | 'tag' | 'date' | 'state' | 'has' | 'mention' | 'space' | 'domain'
 
 export interface SearchFilter<Item> {
   key: FilterKey
@@ -33,7 +33,9 @@ export const FilterTypeArray = [
   // For reminders, has is used to determine if the reminder has a todo attached
 
   'mention', // Does item mention a specific user
-  'space' // Does item belong to a specific space
+  'space', // Does item belong to a specific space
+
+  'domain' // Does item (mostly a URL) belong to a specific domain
 ] as const
 
 // Produces a union type of the values of FilterTypeArray

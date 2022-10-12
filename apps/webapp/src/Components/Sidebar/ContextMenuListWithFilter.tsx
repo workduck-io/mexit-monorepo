@@ -9,10 +9,10 @@ import { debounce } from 'lodash'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, mog } from '@mexit/core'
+import { fuzzySearch } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
 import { ContextMenuItem, ContextMenuSubContent, ContextMenuSubTrigger, RightSlot } from '../../Style/contextMenu'
-import { fuzzySearch } from '../../Utils/fuzzysearch'
 import IconDisplay from '../IconPicker/IconDisplay'
 import { SidebarListFilter } from './SidebarList.style'
 

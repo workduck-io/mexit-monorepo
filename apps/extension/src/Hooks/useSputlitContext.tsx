@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
 
-import { CategoryType, MexitAction, NodeContent } from '@mexit/core'
+import { CategoryType, ListItemType, MexitAction, NodeContent } from '@mexit/core'
 
 export type Search = {
   value: string
@@ -35,12 +35,12 @@ type SputlitContextType = {
   setIsLoading: (val: boolean) => void
   selection: any
   setSelection: (val: any) => void
-  searchResults: Array<MexitAction>
-  setSearchResults: (val: Array<MexitAction>) => void
+  searchResults: Array<ListItemType>
+  setSearchResults: (val: Array<ListItemType>) => void
   activeIndex: number
   setActiveIndex: any
   setActiveItem: any
-  activeItem: MexitAction
+  activeItem: ListItemType
   visualState: VisualState
   setVisualState: (vs: VisualState) => void
   tooltipState: TooltipState
@@ -57,9 +57,9 @@ export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [child, setChild] = useState<any>(null)
   const [input, setInput] = useState('')
   const [selection, setSelection] = useState<any>()
-  const [searchResults, setSearchResults] = useState<Array<MexitAction>>([])
+  const [searchResults, setSearchResults] = useState<Array<ListItemType>>([])
   const [activeIndex, setActiveIndex] = useState<number>(0)
-  const [activeItem, setActiveItem] = useState<MexitAction>()
+  const [activeItem, setActiveItem] = useState<ListItemType>()
   const [visualState, setVisualState] = useState<VisualState>(VisualState.hidden)
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     visualState: VisualState.hidden
