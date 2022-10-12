@@ -2,11 +2,10 @@ import React, { useMemo } from 'react'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { mog, Tag } from '@mexit/core'
+import { mog, Tag, Link } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'

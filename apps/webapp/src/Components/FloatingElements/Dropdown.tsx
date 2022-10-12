@@ -38,9 +38,9 @@ import { debounce } from 'lodash'
 import { mergeRefs } from 'react-merge-refs'
 
 import { MIcon, mog } from '@mexit/core'
+import { fuzzySearch } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
-import { fuzzySearch } from '../../Utils/fuzzysearch'
 import { GenericFlex } from '../Filters/Filter.style'
 import IconDisplay from '../IconPicker/IconDisplay'
 import { SidebarListFilter } from '../Sidebar/SidebarList.style'

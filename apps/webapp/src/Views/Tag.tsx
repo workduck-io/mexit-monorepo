@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { useTransition } from 'react-spring'
 import styled, { css } from 'styled-components'
 
+import { fuzzySearch } from '@mexit/core'
 import { HoverSubtleGlow } from '@mexit/shared'
 import { Results, Result, ResultHeader, ResultTitle, SearchPreviewWrapper, Input, View } from '@mexit/shared'
 
@@ -17,7 +18,6 @@ import { useNamespaces } from '../Hooks/useNamespaces'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
-import { fuzzySearch } from '../Utils/fuzzysearch'
 
 const TagsWrapper = styled.div`
   display: flex;

@@ -23,13 +23,15 @@ import {
   Snippet,
   Tag,
   UserDetails,
-  WorkspaceDetails
+  WorkspaceDetails,
+  Link
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
@@ -75,6 +77,7 @@ export default function useRaju() {
   const { updateSnippets } = useSnippets()
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
+  const setLinks = useLinkStore((store) => store.setLinks)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -141,6 +144,9 @@ export default function useRaju() {
     },
     bootSharedNodes(sharedNodes: SharedNode[]) {
       setSharedNodes(sharedNodes)
+    },
+    bootLinks(links: Link[]) {
+      setLinks(links)
     }
   }
 

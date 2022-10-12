@@ -7,11 +7,15 @@ import {
   CREATE_NEW_ITEM,
   initActions,
   searchBrowserAction,
-  ListItemType
+  ListItemType,
+  sortByCreated,
+  fuzzySearchLinks,
+  getListItemFromLink
 } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
-import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
+import { useLinkStore } from '../Stores/useLinkStore'
+import { getListItemFromAction, getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
@@ -23,6 +27,7 @@ export const useSearch = () => {
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
   const ilinks = useDataStore((state) => state.ilinks)
+  const links = useLinkStore((state) => state.links)
 
   const searchInList = async () => {
     let searchList: Array<ListItemType> = []
@@ -66,6 +71,9 @@ export const useSearch = () => {
         const nodeItems = await dispatch('SEARCH', ['node'], search.value)
         const snippetItems = await dispatch('SEARCH', ['snippet', 'template'], search.value)
 
+        const sortedLinks = links.sort(sortByCreated)
+
+        const resultLinks = fuzzySearchLinks(search.value, sortedLinks)
         const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
         const localNodes = []
 
@@ -80,6 +88,12 @@ export const useSearch = () => {
         snippetItems.forEach((snippet) => {
           const snip = getSnippet(snippet.id)
           const item = getListItemFromSnippet(snip)
+          localNodes.push(item)
+        })
+
+        resultLinks.forEach((link) => {
+          const item = getListItemFromLink(link)
+
           localNodes.push(item)
         })
 

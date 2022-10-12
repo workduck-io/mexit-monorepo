@@ -1,36 +1,19 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { GenericSearchResult, mog } from '@mexit/core'
+import { nanoid } from 'nanoid'
+
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title, View } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
-import { fuzzySearch } from '../Utils/fuzzysearch'
-import { Link, useLinkStore } from '../Stores/useLinkStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
-import { nanoid } from 'nanoid'
 
 export type SnippetsProps = {
   title?: string
-}
-
-const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
-  const getKeys = (link: Link) => {
-    const keys = [link.title, link.url]
-    if (link.alias) {
-      keys.push(link.alias)
-    }
-    return keys
-  }
-  const newItems = fuzzySearch(links, searchTerm, getKeys)
-  // mog('newItems', { newItems })
-  return newItems
-}
-
-const sortByCreated = (a: Link, b: Link) => {
-  return b.createdAt - a.createdAt
 }
 
 const LinkView = () => {

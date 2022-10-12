@@ -24,6 +24,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
@@ -46,6 +47,7 @@ export default function Chotu() {
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const { cache } = useUserCacheStore()
   const { mentionable, invitedUsers } = useMentionStore()
+  const links = useLinkStore((state) => state.links)
 
   useEffect(() => {
     if (!first) {
@@ -135,6 +137,12 @@ export default function Chotu() {
 
     parent.bootSnippets(snippets)
   }, [parent, snippets])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootLinks(links)
+  }, [parent, links])
 
   return (
     <div>

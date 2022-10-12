@@ -58,7 +58,7 @@ export const useInitLoader = () => {
     } catch (err) {
       console.log('Error in Init Loader: ', err)
       setShowLoader(false)
-      logout()
+      // logout()
       toast('Something went wrong while initializing')
     }
   }
