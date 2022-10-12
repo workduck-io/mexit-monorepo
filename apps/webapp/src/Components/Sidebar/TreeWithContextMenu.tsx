@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { TreeItem } from '@atlaskit/tree'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
@@ -14,7 +12,6 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
-import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 import { useDeleteStore } from '../Refactor/DeleteModal'
@@ -28,7 +25,7 @@ interface TreeContextMenuProps {
 export const MENU_ID = 'Tree-Menu'
 
 export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
-  const prefillRefactorModal = useRefactorStore((store) => store.prefillModal)
+  // const prefillRefactorModal = useRefactorStore((store) => store.prefillModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
   const { createNewNote } = useCreateNewNote()
   const openShareModal = useShareModalStore((store) => store.openModal)
@@ -41,10 +38,10 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const { execRefactorAsync } = useRefactor()
   const { push } = useNavigation()
 
-  const handleRefactor = (item: TreeItem) => {
-    prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
-    // openRefactorModal()
-  }
+  // const handleRefactor = (item: TreeItem) => {
+  //   prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
+  //   // openRefactorModal()
+  // }
 
   const handleArchive = (item: TreeItem) => {
     openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })

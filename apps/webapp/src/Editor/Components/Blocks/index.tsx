@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { findNodePath, usePlateEditorRef } from '@udecode/plate'
 import { createNodesHOC } from '@udecode/plate-core'

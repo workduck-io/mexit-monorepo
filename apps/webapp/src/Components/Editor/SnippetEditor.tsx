@@ -1,22 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+import { selectEditor, getPlateEditorRef } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
 
+import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { IconButton } from '@workduck-io/mex-components'
-
-import { DRAFT_NODE, getSlug, IS_DEV, mog } from '@mexit/core'
+import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
 import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 import { Input } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import { SnippetSaverButton } from '../Saver'
 import Editor from './Editor'
 
 type Inputs = {
@@ -39,7 +37,6 @@ const SnippetEditor = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
-  const buffer = useSnippetBufferStore((store) => store.buffer)
   const addAll = useSnippetBufferStore((store) => store.addAll)
   const toggleTemplate = useSnippetBufferStore((store) => store.toggleTemplate)
 
@@ -72,9 +69,10 @@ const SnippetEditor = () => {
 
   const { params } = useRouting()
   const snippetid = snippet?.id ?? params.snippetid
-  const editorRef = usePlateEditorRef()
 
   const onFocusClick = () => {
+    const editorRef = getPlateEditorRef()
+
     if (editorRef) {
       selectEditor(editorRef, { focus: true })
     }
@@ -110,12 +108,10 @@ const SnippetEditor = () => {
 
   const saveSnippet = () => {
     saveAndClearBuffer()
-    // updater()
   }
 
   const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
-
-  const defaultValue = snippet && snippet.title !== DRAFT_NODE ? snippet.title : ''
+  const defaultValue = useMemo(() => (snippet?.title !== DRAFT_NODE ? snippet?.title : ''), [snippet])
 
   const onDelay = debounce((value) => onChangeTitle(value), 250)
 
@@ -137,7 +133,15 @@ const SnippetEditor = () => {
           />
           <NoteTitle>
             <>
-              [[ <Input autoFocus placeholder={DRAFT_NODE} defaultValue={defaultValue} onChange={onChange} /> ]]
+              [[{' '}
+              <Input
+                autoFocus
+                key={defaultValue}
+                placeholder={DRAFT_NODE}
+                defaultValue={defaultValue}
+                onChange={onChange}
+              />{' '}
+              ]]
             </>
           </NoteTitle>
 
@@ -153,12 +157,12 @@ const SnippetEditor = () => {
                 highlight={isSnippetTemplate}
                 title={isSnippetTemplate ? 'Convert to Snippet' : 'Convert to Template'}
               /> */}
-              <SnippetSaverButton
+              {/* <SnippetSaverButton
                 getSnippetExtras={getSnippetExtras}
                 noButton
                 callbackAfterSave={callbackAfterSave}
                 title="Save Snippet"
-              />
+              /> */}
               {/* {IS_DEV && <SnippetCopierButton />} */}
             </InfoTools>
           )}

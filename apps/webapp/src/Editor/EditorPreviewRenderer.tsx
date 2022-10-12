@@ -1,22 +1,22 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
+import { debounce } from 'lodash'
+import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
 
 import { NodeEditorContent } from '@mexit/core'
-import { EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
+import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+import { MENU_ID } from './Components/BlockContextMenu'
 import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
-import { useEditorPluginConfig } from './Hooks/useEditorConfig'
-import generatePlugins from './Plugins'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
-import { MENU_ID } from './Components/BlockContextMenu'
-import { useContextMenu } from 'react-contexify'
-import { debounce } from 'lodash'
+import { useEditorPluginConfig } from './Hooks/useEditorConfig'
+import generatePlugins from './Plugins'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -34,7 +34,7 @@ interface EditorPreviewRendererProps {
   draftView?: boolean
 }
 
-const PreviewStyles = styled(EditorStyles) <{ draftView?: boolean, readOnly?: boolean }>`
+const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boolean }>`
   ${({ draftView }) =>
     draftView &&
     css`
@@ -43,13 +43,15 @@ const PreviewStyles = styled(EditorStyles) <{ draftView?: boolean, readOnly?: bo
       }
     `}
 
-  ${({ readOnly }) => readOnly && css`
-  ${TodoContainer}, button, input, textarea, select, option {
-    pointer-events: none;
-  }
-  `} 
-  overflow: hidden;
+  ${({ readOnly }) =>
+    readOnly &&
+    css`
+      ${TodoContainer}, button, input, textarea, select, option {
+        pointer-events: none;
+      }
+    `} 
 
+  overflow: hidden;
 `
 
 const EditorPreviewRenderer = ({
@@ -69,8 +71,8 @@ const EditorPreviewRenderer = ({
       style: noStyle
         ? {}
         : {
-          padding: '15px'
-        },
+            padding: '15px'
+          },
       readOnly,
       spellCheck: false,
       autoFocus: !readOnly
@@ -159,6 +161,5 @@ const EditorPreviewRenderer = ({
     </ErrorBoundary>
   )
 }
-
 
 export default EditorPreviewRenderer

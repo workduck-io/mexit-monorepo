@@ -12,30 +12,25 @@ import {
 } from '@atlaskit/tree'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy, { useSingleton } from '@tippyjs/react'
-import { useContextMenu } from 'react-contexify'
 import { useLocation, useMatch } from 'react-router-dom'
 
-import { mog, SEPARATOR, getNameFromPath, IS_DEV } from '@mexit/core'
+import { mog, SEPARATOR, getNameFromPath } from '@mexit/core'
 import {
   StyledTreeItemSwitcher,
   TooltipContentWrapper,
   TooltipCount,
-  StyledTreeItem,
-  ItemContent,
   ItemTitle,
-  ItemCount,
   StyledTreeSwitcher
 } from '@mexit/shared'
 
 import { useNavigation } from '../../Hooks/useNavigation'
+import { useRefactor } from '../../Hooks/useRefactor'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { RenderTreeItem } from './TreeItem'
 
@@ -116,12 +111,12 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
   // const node = useEditorStore((state) => state.node)
   const expandNode = useTreeStore((state) => state.expandNode)
   const collapseNode = useTreeStore((state) => state.collapseNode)
-  const prefillModal = useRefactorStore((state) => state.prefillModal)
   const { push } = useNavigation()
   const { goTo } = useRouting()
 
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
 
+  const { execRefactorAsync } = useRefactor()
   const draggedRef = useRef<TreeItem | null>(null)
 
   const changeTree = (newTree: TreeData) => {
@@ -222,8 +217,7 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
 
     draggedRef.current = null
 
-    prefillModal({ path: from, namespaceID: nsID }, { path: to, namespaceID: nsID })
-    // changeTree(newTree)
+    execRefactorAsync({ path: from, namespaceID: nsID }, { path: to, namespaceID: nsID })
   }
 
   return (

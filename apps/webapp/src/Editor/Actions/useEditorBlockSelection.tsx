@@ -9,15 +9,7 @@ import {
   TNodeEntry
 } from '@udecode/plate'
 
-import {
-  mog,
-  updateIds,
-  NodeEditorContent,
-  generateTempId,
-  BlockType,
-  BlockMetaDataType,
-  getBlockMetadata
-} from '@mexit/core'
+import { mog, updateIds, NodeEditorContent, generateTempId, BlockType, getBlockMetadata } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useBlockStore from '../../Stores/useBlockStore'
@@ -80,9 +72,9 @@ export const useEditorBlockSelection = () => {
       insertNodes(editor, { type: ELEMENT_PARAGRAPH, id: generateTempId(), children: [{ text: '' }] }, { at: [0] })
   }
 
-  const deleteSelectedBlock = (): any => {
+  const deleteSelectedBlock = (deleteBlock?: boolean): any => {
     const editorBlocks = getEditorBlocks()
-    deleteContentBlocks(editorBlocks)
+    if (deleteBlock) deleteContentBlocks(editorBlocks)
     return editorBlocks
   }
 

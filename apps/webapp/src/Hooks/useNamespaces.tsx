@@ -90,9 +90,9 @@ export const useNamespaces = () => {
     }
   }
 
-  const getNodesOfNamespace = (id: string): ILink[] => {
+  const getNodesOfNamespace = (namespaceId: string): ILink[] => {
     const ilinks = useDataStore.getState().ilinks
-    return ilinks.filter((l) => l.namespace === id)
+    return ilinks.filter((l) => l.namespace === namespaceId)
   }
 
   const getDefaultNamespace = (): SingleNamespace | undefined => {
