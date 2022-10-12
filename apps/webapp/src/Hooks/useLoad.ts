@@ -70,7 +70,6 @@ const useLoad = () => {
 
   // const { saveNodeAPIandFs } = useDataSaverFromContent()
   const { saveAndClearBuffer } = useEditorBuffer()
-  // TODO: check why we need execRefactorAsync()
   const { execRefactorAsync } = useRefactor()
   // const { saveQ } = useSaveQ()
 

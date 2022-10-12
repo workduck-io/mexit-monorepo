@@ -1,3 +1,8 @@
+import md5 from 'md5'
+import create from 'zustand'
+
+import { client } from '@workduck-io/dwindle'
+
 import {
   apiURLs,
   Filter,
@@ -10,16 +15,14 @@ import {
   Settify,
   WORKSPACE_HEADER
 } from '@mexit/core'
-import create from 'zustand'
-import md5 from 'md5'
+
 import { useAuthStore } from '../Stores/useAuth'
-import { Link, useLinkStore } from '../Stores/useLinkStore'
-import { applyFilters, FilterStore } from './useFilters'
 import { useDataStore } from '../Stores/useDataStore'
-import { useLinkFilterFunctions } from './useFilterFunctions'
-import { client } from '@workduck-io/dwindle'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+import { Link, useLinkStore } from '../Stores/useLinkStore'
 import { URL_DOMAIN_REG } from '../Utils/constants'
-import { sampleHighlightData, useHighlightStore } from '../Stores/useHighlightStore'
+import { useLinkFilterFunctions } from './useFilterFunctions'
+import { applyFilters, FilterStore } from './useFilters'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
@@ -45,8 +48,7 @@ export const useLinkURLs = () => {
   }
 
   const getHighlights = (link: Link) => {
-    const _highlights = sampleHighlightData
-    const highlightOfUrl = _highlights[link.url]
+    const highlightOfUrl = highlights[link.url]
 
     if (highlightOfUrl) {
       // mog('getting highlights for', { link, highlightOfUrl, _highlights })
