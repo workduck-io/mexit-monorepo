@@ -11,7 +11,7 @@ import AddTagMenu from '../../Components/Link/AddTagMenu'
 import { LinkTagSection } from '../../Components/Link/Link.style'
 import { TagsLabel } from '../../Components/Sidebar/TagLabel'
 import { useURLsAPI } from '../../Hooks/useURLs'
-import { Link } from '../../Stores/useLinkStore'
+import { Link, useLinkStore } from '../../Stores/useLinkStore'
 
 const Form = styled.form`
   display: flex;
@@ -35,6 +35,7 @@ export const Shortener = () => {
 
   const elementRef = useRef(null)
   const { saveLink } = useURLsAPI()
+  const addLink = useLinkStore((store) => store.addLink)
 
   const onShortenLinkSubmit = async (e: any) => {
     e.preventDefault()
@@ -54,6 +55,7 @@ export const Shortener = () => {
 
     // mog('shorten', { shortenedLink, reqBody })
 
+    addLink(reqBody)
     copyTextToClipboard(shortenedLink?.message)
   }
 

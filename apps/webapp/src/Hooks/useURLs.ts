@@ -421,7 +421,7 @@ export const useURLsAPI = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('saveLink', d)
+        // mog('saveLink', d)
         return d.data
       })
     return data
