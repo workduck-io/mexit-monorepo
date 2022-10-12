@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware'
 
 import {
   Contents,
-  IDBStorage,
   ILink,
   NodeContent,
   NodeEditorContent,
@@ -30,6 +29,7 @@ export interface PublicNodeStoreType {
   getContent: (nodeID: string) => NodeContent
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
   getMetadata: (nodeid: string) => NodeMetadata
+  reset: () => void
 }
 
 export const usePublicNodeStore = create<PublicNodeStoreType>(
@@ -64,6 +64,9 @@ export const usePublicNodeStore = create<PublicNodeStoreType>(
       getMetadata: (nodeid) => {
         const contents = get().contents
         return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : ({} as NodeMetadata)
+      },
+      reset: () => {
+        set({ contents: {}, currentNode: null, iLinks: [] })
       }
     }),
     { name: 'mexit-public-node-store', version: 2 }
