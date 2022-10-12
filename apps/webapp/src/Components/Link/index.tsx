@@ -1,8 +1,12 @@
+import React from 'react'
+
+import { IconButton } from '@workduck-io/mex-components'
+
 import { mog, Tag } from '@mexit/core'
 import { ProjectIconMex, RelativeTime } from '@mexit/shared'
-import { IconButton } from '@workduck-io/mex-components'
-import React from 'react'
+
 import { useLinkURLs } from '../../Hooks/useURLs'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { Link } from '../../Stores/useLinkStore'
 import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'

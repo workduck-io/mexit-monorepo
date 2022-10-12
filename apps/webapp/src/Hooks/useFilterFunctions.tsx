@@ -1,7 +1,7 @@
 import { isElder, getReminderState, Filter, FilterJoin, FilterValue, SearchFilterFunctions } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { sampleHighlightData, useHighlightStore } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { Link } from '../Stores/useLinkStore'
 import { useLinks } from './useLinks'
 
@@ -108,10 +108,9 @@ export const reminderFilterFunctions: SearchFilterFunctions = {
 
 export const useLinkFilterFunctions = () => {
   const highlights = useHighlightStore((s) => s.highlighted)
-  const sample_highlights = sampleHighlightData
 
   const hasHighlight = (link: Link) => {
-    const h = sample_highlights[link.url]
+    const h = highlights[link.url]
     return h !== undefined && Object.keys(h).length > 0
   }
 
