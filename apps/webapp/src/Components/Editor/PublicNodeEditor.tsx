@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { usePlateEditorRef, selectEditor } from '@udecode/plate'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -8,6 +6,7 @@ import { defaultContent } from '@mexit/core'
 import { StyledEditor, EditorWrapper, Title } from '@mexit/shared'
 
 import Metadata from '../EditorInfobar/Metadata'
+import PublicNoteFooter from '../PublicNoteFooter'
 import Editor from './Editor'
 
 const PublicStyledEditor = styled(StyledEditor)`
@@ -52,6 +51,7 @@ const PublicNodeEditor = ({ nodeId, node }) => {
           content={node?.content ?? defaultContent.content}
           onChange={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
         />
+        {node && <PublicNoteFooter nodeId={nodeId} />}
       </EditorWrapper>
     </PublicStyledEditor>
   )

@@ -5,7 +5,6 @@ import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
-import { mog } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import * as Actions from './Actions'

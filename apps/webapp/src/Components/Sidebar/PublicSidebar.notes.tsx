@@ -1,6 +1,4 @@
-import React, { useMemo } from 'react'
-
-import { mog } from '@mexit/core'
+import { useMemo } from 'react'
 
 import { PollActions } from '../../Stores/useApiStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
@@ -14,7 +12,6 @@ export const PublicNoteSidebar = () => {
 
   const space: SidebarSpace = useMemo(() => {
     const namespaceIlinks = iLinks?.filter((item) => item?.namespace === ns?.id)
-    // mog('ILinks', { iLinks, namespaceIlinks, ns })
 
     return {
       id: ns.id,
