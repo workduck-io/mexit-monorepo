@@ -6,10 +6,10 @@ import { debounce, reduce } from 'lodash'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { mog } from '@mexit/core'
+import { mog, SourceHighlights } from '@mexit/core'
 import { SnippetCards, SidebarListFilterWrapper, SidebarListFilter, Input, SnippetSidebarHelp } from '@mexit/shared'
 
-import { Highlighted, useHighlightStore } from '../../Stores/useHighlightStore'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { HighlightCard } from './HighlightCard'
 
 export function ContextInfoBar() {
@@ -18,7 +18,7 @@ export function ContextInfoBar() {
   const highlighted = useHighlightStore((state) => state.highlighted)
 
   const [pageHighlights, setPageHighlights] = useState<any>()
-  const [searchedHighlights, setSearchedHighlights] = useState<Highlighted['sourceURL']>()
+  const [searchedHighlights, setSearchedHighlights] = useState<SourceHighlights>()
 
   useEffect(() => {
     // This groups the highlights as a object with nodeId as index and highlights of that node in an array

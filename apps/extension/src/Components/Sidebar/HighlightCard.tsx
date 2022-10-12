@@ -2,17 +2,17 @@ import React from 'react'
 
 import styled from 'styled-components'
 
+import { SingleHighlight } from '@mexit/core'
 import { SnippetCardWrapper, SnippetContentPreview } from '@mexit/shared'
 
 import { useNodes } from '../../Hooks/useNodes'
-import { Highlighted } from '../../Stores/useHighlightStore'
 
 const HighlightCardWrapper = styled(SnippetCardWrapper)`
   margin: 0.5rem 0;
 `
 
 interface HighlightCardProps {
-  highlights: Highlighted['sourceURL']['blockId'][]
+  highlights: SingleHighlight[]
   nodeId: string
   preview?: boolean
   onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
