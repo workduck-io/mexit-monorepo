@@ -488,9 +488,14 @@ export const ItemTag = styled.div<{ large?: boolean }>`
     `}
 `
 
-export const SearchPreviewWrapper = styled.div<{ active?: boolean }>`
-  ${({ theme, active }) => active && css``};
-  height: 40vh;
+export const SearchPreviewWrapper = styled.div<{ active?: boolean; padding?: boolean }>`
+  ${({ theme, active }) => active && css``}
+
+  ${({ padding }) =>
+    padding &&
+    css`
+      padding: ${({ theme }) => theme.spacing.medium};
+    `}
 `
 
 export const SearchFilterInputWrapper = styled(StyledInputWrapper)`

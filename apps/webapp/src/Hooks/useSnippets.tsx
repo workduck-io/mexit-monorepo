@@ -1,4 +1,4 @@
-import { convertContentToRawText, getSnippetCommand, mog, SEPARATOR, Snippet } from '@mexit/core'
+import { convertContentToRawText, getSnippetCommand, mog, Snippet } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
@@ -70,7 +70,7 @@ export const useSnippets = () => {
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
 
-    updateDescription(snippet.id, convertContentToRawText(snippet.content, ' '))
+    updateDescription(snippet.id, convertContentToRawText(snippet.content, '\n'))
   }
 
   const deleteSnippet = async (id: string) => {
@@ -92,7 +92,7 @@ export const useSnippets = () => {
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
 
-    updateDescription(snippet.id, convertContentToRawText(snippet.content, ' '))
+    updateDescription(snippet.id, convertContentToRawText(snippet.content, '\n'))
   }
 
   const getInitialSnippets = () => {

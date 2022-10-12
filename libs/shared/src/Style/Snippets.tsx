@@ -45,7 +45,7 @@ export const SnippetCommand = styled.div`
   display: flex;
   font-size: 1.5rem;
   margin: ${({ theme }) => theme.spacing.small} 0;
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.colors.primary};
   gap: ${({ theme }) => theme.spacing.small};
 `
 
