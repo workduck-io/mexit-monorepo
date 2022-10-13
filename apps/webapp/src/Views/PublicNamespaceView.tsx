@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useParams, useNavigate, Outlet } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { mog } from '@mexit/core'
 
-import { useSidebarTransition } from '../Components/Sidebar/Transition'
 import SplashScreen from '../Components/SplashScreen'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import useLayout from '../Hooks/useLayout'
-import { useLayoutStore } from '../Stores/useLayoutStore'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 function PublicNamespaceView() {
@@ -50,7 +46,7 @@ function PublicNamespaceView() {
     getPublicNamespace()
   }, [])
 
-  return <div>{showLoader ? <SplashScreen /> : <Outlet />}</div>
+  return showLoader ? <SplashScreen /> : <Outlet />
 }
 
 export default PublicNamespaceView

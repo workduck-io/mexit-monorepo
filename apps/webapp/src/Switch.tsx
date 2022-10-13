@@ -27,6 +27,7 @@ import Archive from './Views/Archive'
 import DraftView from './Views/DraftView'
 import EditorView from './Views/EditorView'
 import { ForgotPassword } from './Views/ForgotPassword'
+import LinkView from './Views/LinkView'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
@@ -40,7 +41,6 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
-import LinkView from './Views/LinkView'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;
