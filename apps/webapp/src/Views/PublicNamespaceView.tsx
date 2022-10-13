@@ -33,10 +33,12 @@ function PublicNamespaceView() {
         setILinks(response.nodeHierarchy)
         navigate(`node/${firstNode.nodeid}`)
         setCurrentNode(firstNode)
-
+        document.title = `Mexit - ${response.name}`
         setTimeout(() => {
           setShowLoader(false)
         }, 1000)
+
+
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNamespace', { error })
         navigate('/404', { replace: false })

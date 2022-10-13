@@ -31,7 +31,7 @@ const PublicNodeView = () => {
   const [showLoader, setShowLoader] = useState(true)
   const [firstVisit, setFirstVisit] = useState<boolean>(true)
 
-  const { getContent, setContent, iLinks } = usePublicNodeStore()
+  const { getContent, setContent, iLinks, namespace } = usePublicNodeStore()
 
   useEffect(() => {
     const cookies = new Cookies()
@@ -58,6 +58,7 @@ const PublicNodeView = () => {
           const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
           setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
 
+
           // mog('check', { nodeContent, nodeProperties })
         } else {
           setShowLoader(true)
@@ -69,6 +70,7 @@ const PublicNodeView = () => {
 
           setShowLoader(false)
         }
+
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNode', { error })
         navigate('/404')
@@ -76,6 +78,10 @@ const PublicNodeView = () => {
     }
     getPublicNodeContent()
   }, [nodeId])
+
+  useEffect(() => {
+      document.title = namespace  && node?.title ? `Mexit - ${namespace.name} | ${node.title}` : document.title
+  }, [node?.title, namespace])
 
   return (
     <PublicEditorWrapper>
