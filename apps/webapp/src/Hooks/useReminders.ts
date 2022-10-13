@@ -24,11 +24,9 @@ export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)
   const setReminders = useReminderStore((state) => state.setReminders)
   const addReminderStore = useReminderStore((state) => state.addReminder)
-  const deleteReminder = useReminderStore((state) => state.deleteReminder)
+  const deleteReminderStore = useReminderStore((state) => state.deleteReminder)
   const updateReminder = useReminderStore((state) => state.updateReminder)
   const clearReminders = useReminderStore((state) => state.clearReminders)
-  // const updateReminderStateStore = useReminderStore((state) => state.updateReminderState)
-  const snoozeReminder = useReminderStore((state) => state.snoozeReminder)
   const getTodo = useTodoStore((state) => state.getTodoOfNodeWithoutCreating)
 
   // const setArmedReminders = useReminderStore((state) => state.setArmedReminders)
@@ -38,12 +36,29 @@ export const useReminders = () => {
   const updatePriorityOfTodo = useTodoStore((store) => store.updatePriorityOfTodo)
   const updateStatusOfTodo = useTodoStore((store) => store.updateStatusOfTodo)
 
-  const { saveReminder } = useReminderAPI()
+  const { saveReminder, deleteAllNode, deleteReminder: deleteReminderAPI } = useReminderAPI()
+
+  const snoozeReminder = (reminder: Reminder, time: number) => {
+    const newReminder = { ...reminder, state: { ...reminder.state, done: false, snooze: true }, time }
+    saveReminder(newReminder).then((res) => {
+      mog('Updated reminder state', res)
+      updateReminder(newReminder)
+    })
+  }
 
   const updateReminderState = (reminder: Reminder, state: ReminderState) => {
     const newReminder = { ...reminder, state }
-    updateReminder(newReminder)
-    saveReminder(reminder)
+    saveReminder(newReminder).then((res) => {
+      mog('Updated reminder state', res)
+      updateReminder(newReminder)
+    })
+  }
+
+  const deleteReminder = (id: string) => {
+    deleteReminderAPI(id).then((res) => {
+      mog('Deleted reminder', res)
+      deleteReminderStore(id)
+    })
   }
 
   // TODO: Figure out save data scenes
@@ -284,7 +299,7 @@ export const useReminders = () => {
         deleteReminder(reminder.id)
         break
       case 'snooze':
-        snoozeReminder(reminder.id, action.value)
+        snoozeReminder(reminder, action.value)
         break
       case 'dismiss':
         dismissReminder(reminder)
@@ -449,10 +464,11 @@ export const useReminders = () => {
   }
 
   const clearNodeReminders = (nodeid: string) => {
-    const newReminders = reminders.filter(
-      (reminder) => reminder.nodeid !== nodeid || (reminder.nodeid === nodeid && !reminder.state.done)
-    )
-    setReminders(newReminders)
+    // const toDeleteReminders = reminders.filter((reminder) => reminder.nodeid === nodeid)
+    deleteAllNode(nodeid).then(() => {
+      const newReminders = reminders.filter((reminder) => reminder.nodeid !== nodeid)
+      setReminders(newReminders)
+    })
   }
 
   const getRemindersForNextNMinutes = (minutes: number) => {

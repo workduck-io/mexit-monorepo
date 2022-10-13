@@ -33,6 +33,7 @@ import { useReminderStore } from '../../Stores/useReminderStore'
 import SearchFilters from '../SearchFilters'
 import { AllRemindersWrapper, ReminderColumnHeader } from './RemindersAll.style'
 import { ReminderBoardStyled } from './RemindersAll.style'
+import { useReminderAPI } from '../../Hooks/API/useReminderAPI'
 
 interface AllReminderFilterStore extends FilterStore {
   board: ReminderBoard
@@ -77,7 +78,7 @@ const useReminderFilters = () => {
     const remindersBase = useReminderStore.getState().reminders
     const currentFilters = useReminderFilter.getState().currentFilters
 
-    // mog('remindersBase', { remindersBase, currentFilters })
+    mog('remindersBase', { remindersBase, currentFilters })
 
     const reminders = (
       currentFilters.length > 0
@@ -245,17 +246,33 @@ const RemindersAll = () => {
   const openModal = useCreateReminderModal((state) => state.openModal)
   const reminders = useReminderStore((s) => s.reminders)
   const addCurrentFilter = useReminderFilter((s) => s.addCurrentFilter)
+  const setReminders = useReminderStore((s) => s.setReminders)
   const removeCurrentFilter = useReminderFilter((s) => s.removeCurrentFilter)
   const resetCurrentFilters = useReminderFilter((s) => s.resetCurrentFilters)
   const currentFilters = useReminderFilter((s) => s.currentFilters)
   const armedReminders = useReminderStore((s) => s.armedReminders)
+  const { getAllWorkspaceReminders } = useReminderAPI()
   const { getRemindersBoard, changeCurrentFilter } = useReminderFilters()
 
   const globalJoin = useReminderFilter((s) => s.globalJoin)
   const setGlobalJoin = useReminderFilter((s) => s.setGlobalJoin)
 
+  useEffect(() => {
+    getAllWorkspaceReminders().then((remindersData: { Items: any[] }) => {
+      const reminders = remindersData?.Items?.map((reminder) => reminder.properties as Reminder)
+      mog('Got reminders', {
+        remindersData,
+        reminders
+      })
+      if (reminders) {
+        setReminders(reminders)
+      }
+    })
+  }, [])
+
   const { board, filters } = useMemo(() => {
     const { board, filters } = getRemindersBoard()
+    mog('Board and Filters', { board, filters })
 
     return { board, filters }
   }, [reminders, armedReminders, currentFilters])
