@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.17.0
+
+### Minor Changes
+
+- 016f51df: Reminders back in extension, they are now synced with backend. Also, added `/links` in `showNav()`.
+
 ## 0.16.0
 
 ### Minor Changes
