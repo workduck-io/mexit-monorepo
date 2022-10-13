@@ -33,27 +33,8 @@ export const useReminderAPI = () => {
       workspaceId: workspaceIdStr,
       // This is entity id
       nodeid: getReminderAssociatedId(reminder, workspaceIdStr),
-      properties: {
-        title: reminder.title,
-        description: reminder.description,
 
-        associated: reminder.associated,
-
-        time: reminder.time,
-        state: reminder.state,
-
-        createdAt: reminder.createdAt,
-        updatedAt: reminder.updatedAt,
-
-        // AssociatedData
-        nodeid: reminder.nodeid,
-        todoid: reminder.todoid,
-        url: reminder.url,
-
-        // is not supported by implementation
-        priority: reminder.priority,
-        frequency: reminder.frequency
-      }
+      properties: reminder
     }
     const res = await client.post(apiURLs.reminders.base, reqData, {
       headers: workspaceHeaders()
