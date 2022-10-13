@@ -45,13 +45,13 @@ const PublicNoteFooter = ({ nodeId }: { nodeId: string }) => {
   const prevNode = useMemo(() => {
     const currentAt = iLinks.findIndex((i) => i.nodeid === nodeId)
 
-    return iLinks.at(currentAt - 1)
+    return currentAt - 1 >= 0 && iLinks.at(currentAt - 1)
   }, [nodeId, iLinks])
 
   const nextNode = useMemo(() => {
     const currentAt = iLinks.findIndex((i) => i.nodeid === nodeId)
 
-    return iLinks.at(currentAt + 1)
+    return currentAt + 1 <= iLinks.length - 1 && iLinks.at(currentAt + 1)
   }, [nodeId, iLinks])
 
   const handleClick = (nodeId: string) => {
