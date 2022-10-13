@@ -51,7 +51,8 @@ export const useInitLoader = () => {
       // mog('Base Node: ', baseNode)
       if (
         window.location.pathname !== '/chotu' &&
-        (!window.location.pathname.startsWith('/actions') || !window.location.pathname.startsWith('/share'))
+        !window.location.pathname.startsWith('/actions') &&
+        !window.location.pathname.startsWith('/share')
       ) {
         mog('Base Node: ', baseNode)
         loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
