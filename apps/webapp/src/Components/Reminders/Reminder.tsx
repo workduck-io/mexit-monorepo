@@ -21,9 +21,7 @@ import {
   ReminderTime,
   SnoozeControls
 } from '@mexit/shared'
-import { RelativeTime, IntegrationTitle } from '@mexit/shared'
-
-import { Description } from '../Portals/styled'
+import { IntegrationTitle, Description } from '@mexit/shared'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'
@@ -157,7 +155,7 @@ export const reminderStateIcons: Record<ReminderStatus, string> = {
 }
 
 const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: Props) => {
-  mog('ReminderUI', { reminder, isNotification, showNodeInfo })
+  // mog('ReminderUI', { reminder, isNotification, showNodeInfo })
   const [snoozeControls, setSnoozeControls] = React.useState(false)
   // mog('reminder', { reminder })
   const reminderState = getReminderState(reminder)
@@ -175,21 +173,13 @@ const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: P
             <Icon icon={reminderStateIcons[reminderState]} />
             {reminderState}
           </ReminderStateTag>
-          {!isNotification && (
-            <RelativeTime
-              tippy
-              dateNum={reminder.time}
-              refreshMs={1000 * 30}
-              tippyProps={{ placement: 'right', theme: 'mex-bright' }}
-            />
+          {showNodeInfo && reminder.path && (
+            <ReminderStateTag>
+              <Icon icon={fileList2Line} />
+              {reminder.path}
+            </ReminderStateTag>
           )}
         </ReminderRelative>
-        {showNodeInfo && reminder.path && (
-          <ReminderStateTag>
-            <Icon icon={fileList2Line} />
-            {reminder.path}
-          </ReminderStateTag>
-        )}
         {reminder.todoid && (
           <ReminderStateTag>
             <Icon icon="ri-task-line" />

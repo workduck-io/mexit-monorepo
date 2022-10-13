@@ -33,6 +33,7 @@ import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useSearch } from '../useSearch'
 import { useUpdater } from '../useUpdater'
+import { useAPIHeaders } from './useAPIHeaders'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -50,10 +51,7 @@ export const useApi = () => {
 
   const setRequest = useApiStore.getState().setRequest
 
-  const workspaceHeaders = () => ({
-    [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*'
-  })
+  const { workspaceHeaders } = useAPIHeaders()
 
   /*
    * Saves new node data in the backend

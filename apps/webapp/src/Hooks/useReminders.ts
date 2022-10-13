@@ -1,4 +1,5 @@
 import { add, startOfTomorrow, sub } from 'date-fns'
+import md5 from 'md5'
 import { uniqBy } from 'lodash'
 
 import { getReminderState, mog, past, ReminderControls, SnoozeControl, today, upcoming } from '@mexit/core'
@@ -17,16 +18,15 @@ import {
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
+import { useReminderAPI } from './API/useReminderAPI'
 
 export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)
   const setReminders = useReminderStore((state) => state.setReminders)
-  const addReminder = useReminderStore((state) => state.addReminder)
-  const deleteReminder = useReminderStore((state) => state.deleteReminder)
+  const addReminderStore = useReminderStore((state) => state.addReminder)
+  const deleteReminderStore = useReminderStore((state) => state.deleteReminder)
   const updateReminder = useReminderStore((state) => state.updateReminder)
   const clearReminders = useReminderStore((state) => state.clearReminders)
-  const updateReminderState = useReminderStore((state) => state.updateReminderState)
-  const snoozeReminder = useReminderStore((state) => state.snoozeReminder)
   const getTodo = useTodoStore((state) => state.getTodoOfNodeWithoutCreating)
 
   // const setArmedReminders = useReminderStore((state) => state.setArmedReminders)
@@ -35,6 +35,31 @@ export const useReminders = () => {
 
   const updatePriorityOfTodo = useTodoStore((store) => store.updatePriorityOfTodo)
   const updateStatusOfTodo = useTodoStore((store) => store.updateStatusOfTodo)
+
+  const { saveReminder, deleteAllNode, deleteReminder: deleteReminderAPI } = useReminderAPI()
+
+  const snoozeReminder = (reminder: Reminder, time: number) => {
+    const newReminder = { ...reminder, state: { ...reminder.state, done: false, snooze: true }, time }
+    saveReminder(newReminder).then((res) => {
+      mog('Updated reminder state', res)
+      updateReminder(newReminder)
+    })
+  }
+
+  const updateReminderState = (reminder: Reminder, state: ReminderState) => {
+    const newReminder = { ...reminder, state }
+    saveReminder(newReminder).then((res) => {
+      mog('Updated reminder state', res)
+      updateReminder(newReminder)
+    })
+  }
+
+  const deleteReminder = (id: string) => {
+    deleteReminderAPI(id).then((res) => {
+      mog('Deleted reminder', res)
+      deleteReminderStore(id)
+    })
+  }
 
   // TODO: Figure out save data scenes
   // const { saveData } = useSaveData()
@@ -45,7 +70,7 @@ export const useReminders = () => {
       ...reminder.state,
       done: true
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   const markUndone = (reminder: Reminder) => {
@@ -53,7 +78,7 @@ export const useReminders = () => {
       ...reminder.state,
       done: false
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   // const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
@@ -263,7 +288,7 @@ export const useReminders = () => {
     mog('ReminderArmer: IpcAction.ACTION_REMINDER', { action, reminder })
     switch (action.type) {
       case 'open':
-        updateReminderState(reminder.id, {
+        updateReminderState(reminder, {
           ...reminder.state,
           done: true
         })
@@ -274,7 +299,7 @@ export const useReminders = () => {
         deleteReminder(reminder.id)
         break
       case 'snooze':
-        snoozeReminder(reminder.id, action.value)
+        snoozeReminder(reminder, action.value)
         break
       case 'dismiss':
         dismissReminder(reminder)
@@ -439,10 +464,11 @@ export const useReminders = () => {
   }
 
   const clearNodeReminders = (nodeid: string) => {
-    const newReminders = reminders.filter(
-      (reminder) => reminder.nodeid !== nodeid || (reminder.nodeid === nodeid && !reminder.state.done)
-    )
-    setReminders(newReminders)
+    // const toDeleteReminders = reminders.filter((reminder) => reminder.nodeid === nodeid)
+    deleteAllNode(nodeid).then(() => {
+      const newReminders = reminders.filter((reminder) => reminder.nodeid !== nodeid)
+      setReminders(newReminders)
+    })
   }
 
   const getRemindersForNextNMinutes = (minutes: number) => {
@@ -453,6 +479,14 @@ export const useReminders = () => {
       return reminderDate.getTime() > now.getTime() && reminderDate.getTime() < nextMinute.getTime()
     })
   }
+
+  const addReminder = async (reminder: Reminder) => {
+    addReminderStore(reminder)
+    const res = await saveReminder(reminder)
+    console.log('addReminder', { res })
+  }
+
+  // const updateRemider
 
   return {
     reminders,
@@ -477,5 +511,20 @@ export const useReminders = () => {
     getReminderControls,
     attachBlockData,
     getRemindersForNextNMinutes
+  }
+}
+
+export const getReminderAssociatedId = (reminder: Reminder, workspaceId: string): string => {
+  switch (reminder.associated) {
+    case 'node':
+      return reminder.nodeid
+    case 'todo':
+      return reminder.todoid
+    case 'url': {
+      const hashedURL = md5(`${workspaceId}${reminder.url}`)
+      return hashedURL
+    }
+    default:
+      return reminder.nodeid
   }
 }

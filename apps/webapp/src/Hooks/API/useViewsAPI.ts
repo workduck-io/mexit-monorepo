@@ -1,21 +1,19 @@
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, mog, WORKSPACE_HEADER } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import '../../Utils/apiClient'
 import type { View } from '../useTaskViews'
+import { useAPIHeaders } from './useAPIHeaders'
 
 const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
 export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
-  const workspaceHeaders = () => ({
-    [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*'
-  })
+  const { workspaceHeaders } = useAPIHeaders()
 
   const viewHeaders = () => ({
     ...workspaceHeaders(),

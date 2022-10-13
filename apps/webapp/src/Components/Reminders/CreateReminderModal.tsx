@@ -18,27 +18,26 @@ import {
   getRelativeDate,
   generateReminderId,
   Reminder,
-  getNameFromPath
+  getNameFromPath,
+  ReminderAssociatedType
 } from '@mexit/core'
-import { DatePickerStyles, Label, TextAreaBlock, SelectedDate, TextFieldHeight } from '@mexit/shared'
+import { DatePickerStyles, Label, TextAreaBlock, SelectedDate, TextFieldHeight, Input } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
-import useToggleElements from '../../Hooks/useToggleElements'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { useReminderStore } from '../../Stores/useReminderStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
 
-
 interface ModalValue {
+  associated?: ReminderAssociatedType
   time?: number
   nodeid?: string
   todoid?: string
+  title: string
   description?: string
   blockContent?: NodeEditorContent
 }
@@ -62,7 +61,9 @@ export const initModal = {
   blockContent: undefined,
   description: undefined,
   nodeid: undefined,
-  time: undefined
+  time: undefined,
+  title: undefined,
+  associated: undefined
 }
 
 export const useCreateReminderModal = create<CreateReminderModalState>((set) => ({
@@ -114,22 +115,22 @@ export const useCreateReminderModal = create<CreateReminderModalState>((set) => 
 
 export const useOpenReminderModal = () => {
   const { saveAndClearBuffer } = useEditorBuffer()
-  const { toggleReminder } = useToggleElements()
-  
-  const openReminderModal = (query: string) => {
+  const { addReminder } = useReminders()
+
+  const openReminderModal = (query: string, associated: ReminderAssociatedType) => {
     const openModal = useCreateReminderModal.getState().openModal
     const node = useEditorStore.getState().node
-    const addReminder = useReminderStore.getState().addReminder
     const searchTerm = query.slice(6) // 6 because 'remind'.length
     const parsed = getTimeInText(searchTerm)
-    const title = getNameFromPath(node.path)
+    const noteName = getNameFromPath(node.path)
     if (parsed) {
       const reminder: Reminder = {
         id: generateReminderId(),
+        associated,
         nodeid: node.nodeid,
         time: parsed.time.getTime(),
-        title,
-        description: parsed.textWithoutTime,
+        title: parsed.textWithoutTime,
+        // description: noteName,
         state: {
           done: false,
           snooze: false
@@ -144,19 +145,29 @@ export const useOpenReminderModal = () => {
         setTimeout(() => {
           saveAndClearBuffer(true)
         }, 500)
-        toggleReminder()
       } else
         openModal({
+          title: parsed.textWithoutTime,
+          associated,
+          // description: noteName,
           time: parsed.time.getTime(),
           nodeid: node.nodeid
         })
     } else if (!parsed && searchTerm !== '') {
       // mog('openModal Without time', { parsed, query, searchTerm })
       openModal({
-        nodeid: node.nodeid,
-        description: searchTerm
+        title: searchTerm,
+        associated,
+        nodeid: node.nodeid
+        // description: noteName
       })
-    } else openModal({ nodeid: node.nodeid })
+    } else
+      openModal({
+        title: noteName,
+        associated,
+        // description: noteName,
+        nodeid: node.nodeid
+      })
     // const text = parsed ? ` ${toLocaleString(parsed.time)}: ${parsed.textWithoutTime}` : undefined
   }
   return { openReminderModal }
@@ -180,7 +191,7 @@ const CreateReminderModal = () => {
     setValue,
     handleSubmit,
     formState: { isSubmitting }
-  } = useForm()
+  } = useForm<{ title: string; description: string }>()
 
   useEffect(() => {
     if (modalValue.time === undefined) setTime(getNextReminderTime().getTime())
@@ -198,17 +209,15 @@ const CreateReminderModal = () => {
       setNodeId(getNodeidFromPath(newValue, quickLink.namespace))
     }
   }
-  const onSubmit = async ({ description }) => {
+  const onSubmit = async ({ title, description }) => {
     // console.log({ intents, command, title, description })
     const { time, nodeid, todoid } = modalValue
 
-    const path = getPathFromNodeid(nodeid)
-    const title = getNameFromPath(path)
-
     const reminder: Reminder = {
       id: generateReminderId(),
+      associated: todoid ? 'todo' : 'node',
       title,
-      description: !todoid ? description : undefined,
+      description,
       nodeid,
       time,
       state: {
@@ -223,7 +232,8 @@ const CreateReminderModal = () => {
     mog('Creating Reminder', {
       reminder
     })
-    addReminder(reminder)
+    const res = await addReminder(reminder)
+    mog('Created Reminder', { reminder, res })
     saveAndClearBuffer(true)
     reset()
     closeModal()
@@ -238,45 +248,51 @@ const CreateReminderModal = () => {
       <ModalHeader>Reminder</ModalHeader>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Label htmlFor="node">Note</Label>
-        <WrappedNodeSelect
-          placeholder="Reminder for Note"
-          disabled={modalValue.blockContent !== undefined}
-          defaultValue={useEditorStore.getState().node && {
-            path: useEditorStore.getState().node.path,
-            namespace: useEditorStore.getState().node.namespace
-          }}
-          disallowReserved
-          highlightWhenSelected
-          iconHighlight={modalValue.nodeid !== undefined}
-          handleSelectItem={handleNodeChange}
+        <Label htmlFor="Associated">For</Label>
+        {modalValue.associated === 'todo' ? (
+          <Todo oid="Tasks_Modal" todoid={modalValue.todoid} readOnly parentNodeId={modalValue.nodeid}>
+            {modalValue.blockContent ? (
+              <EditorPreviewRenderer
+                noStyle
+                content={modalValue.blockContent}
+                editorId={`NodeTodoPreview_CreateTodo_${modalValue.todoid}`}
+              />
+            ) : null}
+          </Todo>
+        ) : modalValue.associated === 'node' ? (
+          <WrappedNodeSelect
+            placeholder="Reminder for Note"
+            disabled={modalValue.blockContent !== undefined}
+            defaultValue={
+              useEditorStore.getState().node && {
+                path: useEditorStore.getState().node.path,
+                namespace: useEditorStore.getState().node.namespace
+              }
+            }
+            disallowReserved
+            highlightWhenSelected
+            iconHighlight={modalValue.nodeid !== undefined}
+            handleSelectItem={handleNodeChange}
+          />
+        ) : (
+          <div>TODO: This will be used to show url/aka links</div>
+        )}
+
+        <Label htmlFor="title">Title</Label>
+        <Input
+          autoFocus={modalValue.title !== undefined}
+          placeholder="Ex. Remember to share new developments"
+          height={TextFieldHeight.MEDIUM}
+          {...register('title')}
         />
 
-        {modalValue.todoid === undefined ? (
-          <>
-            <Label htmlFor="description">Description </Label>
-            <TextAreaBlock
-              disabled={modalValue.todoid !== undefined}
-              autoFocus={modalValue.description !== undefined}
-              placeholder="Ex. Remember to share new developments"
-              height={TextFieldHeight.MEDIUM}
-              {...register('description')}
-            />
-          </>
-        ) : (
-          <>
-            <Label htmlFor="task">Task </Label>
-            <Todo oid="Tasks_Modal" todoid={modalValue.todoid} readOnly parentNodeId={modalValue.nodeid}>
-              {modalValue.blockContent ? (
-                <EditorPreviewRenderer
-                  noStyle
-                  content={modalValue.blockContent}
-                  editorId={`NodeTodoPreview_CreateTodo_${modalValue.todoid}`}
-                />
-              ) : null}
-            </Todo>
-          </>
-        )}
+        <Label htmlFor="description">Description </Label>
+        <TextAreaBlock
+          autoFocus={modalValue.description !== undefined}
+          placeholder="Ex. Remember to share new developments with whom and when??"
+          height={TextFieldHeight.MEDIUM}
+          {...register('description')}
+        />
 
         <Label htmlFor="time">Time</Label>
         <DatePickerStyles>
@@ -285,15 +301,15 @@ const CreateReminderModal = () => {
             showTimeInput
             timeFormat="p"
             timeIntervals={15}
-            filterDate={(date) => {
+            filterDate={(date: Date) => {
               const todayStart = startOfToday()
               return date.getTime() >= todayStart.getTime()
             }}
-            filterTime={(date) => {
+            filterTime={(date: Date) => {
               const now = Date.now()
               return date.getTime() >= now
             }}
-            onChange={(date) => {
+            onChange={(date: Date) => {
               setTime(date.getTime())
             }}
             inline

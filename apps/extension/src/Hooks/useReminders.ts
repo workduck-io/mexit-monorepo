@@ -34,7 +34,7 @@ export const useReminders = () => {
   const deleteReminder = useReminderStore((state) => state.deleteReminder)
   const updateReminder = useReminderStore((state) => state.updateReminder)
   const clearReminders = useReminderStore((state) => state.clearReminders)
-  const updateReminderState = useReminderStore((state) => state.updateReminderState)
+  // const updateReminderState = useReminderStore((state) => state.updateReminderState)
   const snoozeReminder = useReminderStore((state) => state.snoozeReminder)
   const getTodo = useTodoStore((state) => state.getTodoOfNodeWithoutCreating)
 
@@ -49,12 +49,16 @@ export const useReminders = () => {
   // const { saveData } = useSaveData()
   const { getPathFromNodeid } = useLinks()
 
+  const updateReminderState = (reminder: Reminder, state: ReminderState) => {
+    updateReminder({ ...reminder, state })
+  }
+
   const dismissReminder = (reminder: Reminder) => {
     const newReminderState: ReminderState = {
       ...reminder.state,
       done: true
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   const markUndone = (reminder: Reminder) => {
@@ -62,7 +66,7 @@ export const useReminders = () => {
       ...reminder.state,
       done: false
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   // const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
@@ -272,7 +276,7 @@ export const useReminders = () => {
     mog('ReminderArmer: IpcAction.ACTION_REMINDER', { action, reminder })
     switch (action.type) {
       case 'open':
-        updateReminderState(reminder.id, {
+        updateReminderState(reminder, {
           ...reminder.state,
           done: true
         })
@@ -382,6 +386,9 @@ export const useReminders = () => {
       //     independent: true,
       //     attachment: reminderGroups
       // })
+      chrome.runtime.sendMessage({ type: 'SHOW_REMINDER', attachment: reminderGroups }, (response) => {
+        console.log('response post SHOW_REMINDER', response)
+      })
     }, time - now.getTime())
     toArmRems.forEach((r) => addArmReminder({ reminderId: r.id, timeoutId: id }))
   }

@@ -43,11 +43,21 @@ export interface ReminderState {
   done: boolean
 }
 
+export type ReminderAssociatedType = 'node' | 'todo' | 'url'
+
 export interface Reminder {
   id: string
   title: string
   description?: string
-  nodeid: string
+
+  // Associated
+  // What is the reminder for
+  associated: ReminderAssociatedType
+
+  // Id of the associated entity
+  nodeid?: string
+  todoid?: string
+  url?: string
 
   // If snooze is set, then snooze time is used
   time: number
@@ -63,7 +73,6 @@ export interface Reminder {
   // TODO: Combine with time
   frequency?: ReminderFrequency
   priority?: PriorityType
-  todoid?: string
 }
 
 export interface DisplayReminder extends Reminder {

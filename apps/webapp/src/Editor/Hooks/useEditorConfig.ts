@@ -206,7 +206,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
           slateElementType: ELEMENT_PARAGRAPH,
           command: 'remind',
           onExtendedCommand: (newValue, editor) => {
-            openReminderModal(newValue)
+            openReminderModal(newValue, 'node')
           }
         }
       })

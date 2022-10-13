@@ -2,7 +2,7 @@ import { mix, transparentize } from 'polished'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
 import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
-import { Button, IntegrationTitle } from '@mexit/shared'
+import { Button, Description, IntegrationTitle } from '@mexit/shared'
 
 export const RemindersWrapper = styled.div`
   margin: ${({ theme }) => theme.spacing.medium} 0;
@@ -116,8 +116,14 @@ export const ReminderStyled = styled.div<{ isNotification?: boolean; showControl
     font-size: 1.25rem;
     line-height: 2rem;
     font-weight: normal;
-    padding: 0 1rem;
+    padding: 0;
     user-select: none;
+    margin: 0;
+  }
+
+  ${Description} {
+    padding: 0;
+    margin: 0;
   }
 
   ${({ isNotification, showControls }) =>

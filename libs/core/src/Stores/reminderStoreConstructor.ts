@@ -12,7 +12,7 @@ export interface ReminderStoreState {
   addReminder(reminder: Reminder): void
   deleteReminder(id: string): void
   updateReminder(newReminder: Reminder): void
-  updateReminderState: (id: string, rstate: ReminderState) => void
+  // updateReminderState: (id: string, rstate: ReminderState) => void
   clearReminders(): void
   getNodeReminderGroup(): Record<string, Reminder[]>
 
@@ -41,10 +41,6 @@ export const reminderStoreConstructor = (set, get) => ({
         reminder.id === newReminder.id ? { ...reminder, ...newReminder } : reminder
       )
     })),
-  updateReminderState: (id: string, rstate: ReminderState) => {
-    mog('ReminderArmer: updateReminderState', { id, rstate })
-    get().updateReminder({ ...get().reminders.find((reminder) => reminder.id === id), state: rstate })
-  },
 
   clearReminders: () => set({ reminders: [] }),
 
