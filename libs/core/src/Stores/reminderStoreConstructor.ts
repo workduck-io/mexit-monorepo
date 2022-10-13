@@ -41,10 +41,6 @@ export const reminderStoreConstructor = (set, get) => ({
         reminder.id === newReminder.id ? { ...reminder, ...newReminder } : reminder
       )
     })),
-  // updateReminderState: (id: string, rstate: ReminderState) => {
-  //   mog('ReminderArmer: updateReminderState', { id, rstate })
-  //   get().updateReminder({ ...get().reminders.find((reminder) => reminder.id === id), state: rstate })
-  // },
 
   clearReminders: () => set({ reminders: [] }),
 
