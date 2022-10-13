@@ -47,6 +47,8 @@ export const USER_SERVICE_HELPER_URL = 'https://3jeonl1fee.execute-api.us-east-1
 export const USER_SERVICE_EMAIL_URL = (email: string) =>
   `https://http.workduck.io/user/email/${encodeURIComponent(email)}`
 
+export const __STAGING_REMINDER_URL__ = 'https://http-staging.workduck.io/reminder'
+
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -159,5 +161,12 @@ export const apiURLs = {
       `https://url-staging.workduck.io/link/${workspaceId}/stats/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) =>
       `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
+  },
+
+  reminders: {
+    base: `${__STAGING_REMINDER_URL__}/`,
+    byId: (id: string) => `${__STAGING_REMINDER_URL__}/${id}`,
+    allWorkspace: `${__STAGING_REMINDER_URL__}/all/workspace`,
+    allNode: (nodeid: string) => `${__STAGING_REMINDER_URL__}/all/node/${nodeid}`
   }
 }
