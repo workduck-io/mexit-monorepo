@@ -1,14 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { connect } from 'http2'
-import { AsyncMethodReturns, connectToParent } from 'penpal'
+import { connectToParent } from 'penpal'
 
 import {
-  AddILinkProps,
-  CategoryType,
   idxKey,
   ILink,
-  initActions,
   mog,
   NodeEditorContent,
   NodeMetadata,
@@ -17,7 +13,6 @@ import {
 } from '@mexit/core'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
-import { useIndexedDBData } from '../Hooks/usePersistentData'
 import { useReminders } from '../Hooks/useReminders'
 import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
@@ -25,11 +20,9 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
-import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
-import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
@@ -45,9 +38,8 @@ export default function Chotu() {
   const { addHighlightedBlock } = useHighlightStore()
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
-  const { cache } = useUserCacheStore()
-  const { mentionable, invitedUsers } = useMentionStore()
   const links = useLinkStore((state) => state.links)
+  const { queryIndex } = useSearch()
 
   useEffect(() => {
     if (!first) {
@@ -56,8 +48,6 @@ export default function Chotu() {
       setFirst(false)
     }
   }, [ilinks, archive, contents, snippets])
-
-  const { queryIndex } = useSearch()
 
   const methods = {
     search(key: idxKey | idxKey[], query: string) {
@@ -123,9 +113,10 @@ export default function Chotu() {
   useEffect(() => {
     if (!parent) return
 
-    mog('booting reminders', { reminders })
     parent.bootReminders(reminders)
-  }, [parent, reminders])
+
+    // stringifying reminders because useEffect runs twice even though no change
+  }, [parent, JSON.stringify(reminders)])
 
   useEffect(() => {
     if (!parent) return
@@ -144,6 +135,7 @@ export default function Chotu() {
 
     parent.bootLinks(links)
   }, [parent, links])
+
 
   return (
     <div>
