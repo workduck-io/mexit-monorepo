@@ -18,15 +18,16 @@ import {
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
+import { useReminderAPI } from './API/useReminderAPI'
 
 export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)
   const setReminders = useReminderStore((state) => state.setReminders)
-  const addReminder = useReminderStore((state) => state.addReminder)
+  const addReminderStore = useReminderStore((state) => state.addReminder)
   const deleteReminder = useReminderStore((state) => state.deleteReminder)
   const updateReminder = useReminderStore((state) => state.updateReminder)
   const clearReminders = useReminderStore((state) => state.clearReminders)
-  const updateReminderState = useReminderStore((state) => state.updateReminderState)
+  // const updateReminderStateStore = useReminderStore((state) => state.updateReminderState)
   const snoozeReminder = useReminderStore((state) => state.snoozeReminder)
   const getTodo = useTodoStore((state) => state.getTodoOfNodeWithoutCreating)
 
@@ -37,6 +38,14 @@ export const useReminders = () => {
   const updatePriorityOfTodo = useTodoStore((store) => store.updatePriorityOfTodo)
   const updateStatusOfTodo = useTodoStore((store) => store.updateStatusOfTodo)
 
+  const { saveReminder } = useReminderAPI()
+
+  const updateReminderState = (reminder: Reminder, state: ReminderState) => {
+    const newReminder = { ...reminder, state }
+    updateReminder(newReminder)
+    saveReminder(reminder)
+  }
+
   // TODO: Figure out save data scenes
   // const { saveData } = useSaveData()
   const { getPathFromNodeid } = useLinks()
@@ -46,7 +55,7 @@ export const useReminders = () => {
       ...reminder.state,
       done: true
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   const markUndone = (reminder: Reminder) => {
@@ -54,7 +63,7 @@ export const useReminders = () => {
       ...reminder.state,
       done: false
     }
-    updateReminderState(reminder.id, newReminderState)
+    updateReminderState(reminder, newReminderState)
   }
 
   // const getTodayReminders = (filter?: SearchFilter<Reminder>) => {
@@ -264,7 +273,7 @@ export const useReminders = () => {
     mog('ReminderArmer: IpcAction.ACTION_REMINDER', { action, reminder })
     switch (action.type) {
       case 'open':
-        updateReminderState(reminder.id, {
+        updateReminderState(reminder, {
           ...reminder.state,
           done: true
         })
@@ -454,6 +463,14 @@ export const useReminders = () => {
       return reminderDate.getTime() > now.getTime() && reminderDate.getTime() < nextMinute.getTime()
     })
   }
+
+  const addReminder = async (reminder: Reminder) => {
+    addReminderStore(reminder)
+    const res = await saveReminder(reminder)
+    console.log('addReminder', { res })
+  }
+
+  // const updateRemider
 
   return {
     reminders,

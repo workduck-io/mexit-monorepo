@@ -1,4 +1,4 @@
-import { apiURLs, Reminder } from '@mexit/core'
+import { apiURLs, mog, Reminder } from '@mexit/core'
 import { client } from '@workduck-io/dwindle'
 import { getReminderAssociatedId } from '../useReminders'
 import { useAPIHeaders } from './useAPIHeaders'
@@ -32,10 +32,13 @@ export const useReminderAPI = () => {
     const reqData = {
       workspaceId: workspaceIdStr,
       // This is entity id
-      nodeid: getReminderAssociatedId(reminder, workspaceIdStr),
-
+      nodeId: getReminderAssociatedId(reminder, workspaceIdStr),
+      entityId: reminder.id,
       properties: reminder
     }
+
+    // mog('Saving reminder', { reminder, reqData })
+
     const res = await client.post(apiURLs.reminders.base, reqData, {
       headers: workspaceHeaders()
     })

@@ -115,11 +115,11 @@ export const useCreateReminderModal = create<CreateReminderModalState>((set) => 
 export const useOpenReminderModal = () => {
   const { saveAndClearBuffer } = useEditorBuffer()
   const { toggleReminder } = useToggleElements()
+  const { addReminder } = useReminders()
 
   const openReminderModal = (query: string, associated: ReminderAssociatedType) => {
     const openModal = useCreateReminderModal.getState().openModal
     const node = useEditorStore.getState().node
-    const addReminder = useReminderStore.getState().addReminder
     const searchTerm = query.slice(6) // 6 because 'remind'.length
     const parsed = getTimeInText(searchTerm)
     const title = getNameFromPath(node.path)
@@ -138,7 +138,7 @@ export const useOpenReminderModal = () => {
         createdAt: Date.now(),
         updatedAt: Date.now()
       }
-      // mog('openReminderModal has time', { parsed, query, reminder })
+      mog('openReminderModal has time', { parsed, query, reminder })
       if (parsed.textWithoutTime !== '') {
         addReminder(reminder)
         toast(`Reminder added for ${parsed.textWithoutTime}`)
