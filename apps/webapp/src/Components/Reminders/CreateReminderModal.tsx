@@ -130,7 +130,7 @@ export const useOpenReminderModal = () => {
         nodeid: node.nodeid,
         time: parsed.time.getTime(),
         title: parsed.textWithoutTime,
-        description: noteName,
+        // description: noteName,
         state: {
           done: false,
           snooze: false
@@ -149,7 +149,7 @@ export const useOpenReminderModal = () => {
         openModal({
           title: parsed.textWithoutTime,
           associated,
-          description: noteName,
+          // description: noteName,
           time: parsed.time.getTime(),
           nodeid: node.nodeid
         })
@@ -158,14 +158,14 @@ export const useOpenReminderModal = () => {
       openModal({
         title: searchTerm,
         associated,
-        nodeid: node.nodeid,
-        description: noteName
+        nodeid: node.nodeid
+        // description: noteName
       })
     } else
       openModal({
         title: noteName,
         associated,
-        description: noteName,
+        // description: noteName,
         nodeid: node.nodeid
       })
     // const text = parsed ? ` ${toLocaleString(parsed.time)}: ${parsed.textWithoutTime}` : undefined
