@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.16.0
+
+### Minor Changes
+
+- 5951eb53: Public namespaces view for desktop and mobile devices
+
 ## 0.15.0
 
 ### Minor Changes
