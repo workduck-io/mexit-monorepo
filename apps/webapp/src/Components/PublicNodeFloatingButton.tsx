@@ -144,23 +144,8 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
       const style = { height: '0', padding: '0' }
 
       if (showMenu) {
-        style.height = '125px'
+        style.height = '145px'
         style.padding = '1rem'
-      }
-
-      return style
-    }, [showMenu])
-  )
-
-  const headerProps = useSpring(
-    useMemo(() => {
-      const style = {
-        top: '-3.5rem',
-        right: '3.8rem'
-      }
-
-      if (showMenu) {
-        style.top = '-8rem'
       }
 
       return style
@@ -176,16 +161,12 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
         visible={showMenu}
       >
         <Icon icon={QuestionMarkIcon} />
-
-        <FloatingMenuHeader visible={showMenu} style={headerProps}>
-          Connect with us
-        </FloatingMenuHeader>
       </FloatingButton>
 
       {/* @ts-ignore */}
       <FloatingMenu style={menuProps}>
+        Connect with us
         <ConnectButton onClick={openCalendlyLink}>Calendly Link</ConnectButton>
-
         <HorizontalRule> </HorizontalRule>
         <Link href="https://workduck.io" target="__blank">
           <Icon icon={externalLinkLine} />

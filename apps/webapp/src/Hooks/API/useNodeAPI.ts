@@ -15,7 +15,8 @@ import {
   generateNamespaceId,
   MIcon,
   NodeEditorContent,
-  getTagsFromContent
+  getTagsFromContent,
+  hierarchyParser
 } from '@mexit/core'
 
 import { isRequestedWithin, RequestData, useApiStore } from '../../Stores/useApiStore'
@@ -292,6 +293,18 @@ export const useApi = () => {
         version: res.version
       }
     }
+  }
+
+  const getPublicNamespaceAPI = async (namespaceID: string) => {
+    const res = await client
+      .get(apiURLs.namespaces.getPublic(namespaceID), {
+        headers: workspaceHeaders()
+      })
+      .then((response: any) => {
+        return response.data
+      })
+
+    return res
   }
 
   const isPublic = (nodeid: string) => {
@@ -646,6 +659,7 @@ export const useApi = () => {
     getAllNamespaces,
     changeNamespaceName,
     changeNamespaceIcon,
-    getNodesByWorkspace
+    getNodesByWorkspace,
+    getPublicNamespaceAPI
   }
 }

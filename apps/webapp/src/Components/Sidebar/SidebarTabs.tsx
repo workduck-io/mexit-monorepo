@@ -1,8 +1,11 @@
 import { useMatch } from 'react-router-dom'
 
+import { mog } from '@mexit/core'
+
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import ArchiveSidebar from './ArchiveSidebar'
+import { PublicNoteSidebar } from './PublicSidebar.notes'
 import { NoteSidebar } from './Sidebar.notes'
 import SnippetList from './SnippetList'
 import TagList from './TagList'
@@ -18,10 +21,13 @@ const SidebarTabs = () => {
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
   const isTasks = useMatch(ROUTE_PATHS.tasks)
   const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
+  const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
-  // mog('IS SIDEBAR', { sidebar, isEditor, isArchive })
+  // mog('IS SIDEBAR', { sidebar, isEditor, isArchive, isPublicNamespaceView })
 
   if (!sidebar.show) return <></>
+
+  if (isPublicNamespaceView) return <PublicNoteSidebar />
 
   if (isEditor) return <NoteSidebar />
 

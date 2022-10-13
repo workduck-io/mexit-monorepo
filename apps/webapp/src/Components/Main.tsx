@@ -75,28 +75,6 @@ const Main = ({ children }: MainProps) => {
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
 
-  const showNav = (): boolean => {
-    if (location.pathname === '/') return true
-    const showNavPaths = [
-      '/editor',
-      '/search',
-      '/snippets',
-      '/archive',
-      '/tasks',
-      '/settings',
-      '/tag',
-      '/integrations',
-      '/reminders',
-      '/links'
-    ]
-
-    for (const path of showNavPaths) {
-      if (location.pathname.startsWith(path)) return true
-    }
-
-    return false
-  }
-
   const styles = {
     WebkitAppRegion: 'drag'
   }
@@ -115,7 +93,7 @@ const Main = ({ children }: MainProps) => {
         // @ts-ignore
         // grid={authenticated && showNav() ? 'true' : 'false'}
       >
-        {initialized && showNav() && <Nav />}
+        {!isGettingIntialized && <Nav />}
         <Content id="wd-mex-content-view">{children}</Content>
 
         {initialized && <RHSidebar />}

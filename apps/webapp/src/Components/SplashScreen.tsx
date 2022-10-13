@@ -7,7 +7,7 @@ const OverlayLoader = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 9999999997;
   height: 100%;
   width: 100%;
   display: flex;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
@@ -6,7 +6,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -32,12 +32,12 @@ import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
+import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { SidebarToggles } from '../logo'
-import NavigationCluster from './NavigationCluster'
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
 
@@ -55,7 +55,7 @@ const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
     // const qaContent = getRandomQAContent()
     const nodeId = createNewNote()
 
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId.nodeid)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId?.nodeid)
   }
 
   const { shortcutHandler } = useKeyListener()
@@ -176,10 +176,12 @@ const Nav = () => {
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const isUserEditing = useEditorStore((state) => state.isEditing)
   const { getFocusProps } = useLayout()
+  const authenticated = useAuthStore((state) => state.authenticated)
 
   const [source, target] = useSingleton()
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
+  const location = useLocation()
   const onDoubleClickToogle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.detail === 2) {
       toggleSidebar()
@@ -193,6 +195,27 @@ const Nav = () => {
 
   const { springProps, overlaySidebar } = useSidebarTransition()
 
+  const showNav = (): boolean => {
+    if (location.pathname === '/') return true
+    const showNavPaths = [
+      '/editor',
+      '/search',
+      '/snippets',
+      '/archive',
+      '/tasks',
+      '/settings',
+      '/tag',
+      '/integrations',
+      '/reminders'
+    ]
+
+    for (const path of showNavPaths) {
+      if (location.pathname.startsWith(path)) return true
+    }
+
+    return false
+  }
+
   return (
     <>
       <NavWrapper
@@ -201,29 +224,32 @@ const Nav = () => {
         $show={sidebar.show}
         {...getFocusProps(focusMode)}
       >
-        <MainNav {...getFocusProps(focusMode)}>
-          <NavTooltip singleton={source} />
+        {authenticated && showNav() && (
+          <MainNav {...getFocusProps(focusMode)}>
+            <NavTooltip singleton={source} />
 
-          <NavTooltip
-            key={shortcuts.showHome.title}
-            singleton={target}
-            content={<TitleWithShortcut title="Home" shortcut={shortcuts.showHome.keystrokes} />}
-          >
-            <NavLogoWrapper>
-              <NavLink to={ROUTE_PATHS.home}>
-                <WDLogo height={'56'} width={'56'} />
-              </NavLink>
-            </NavLogoWrapper>
-          </NavTooltip>
-          <NavHeader target={target} />
-          <NavFooter target={target} />
-        </MainNav>
+            <NavTooltip
+              key={shortcuts.showHome.title}
+              singleton={target}
+              content={<TitleWithShortcut title="Home" shortcut={shortcuts.showHome.keystrokes} />}
+            >
+              <NavLogoWrapper>
+                <NavLink to={ROUTE_PATHS.home}>
+                  <WDLogo height={'56'} width={'56'} />
+                </NavLink>
+              </NavLogoWrapper>
+            </NavTooltip>
+            <NavHeader target={target} />
+            <NavFooter target={target} />
+          </MainNav>
+        )}
         <SideNav
           onMouseUp={(e) => e.stopPropagation()}
           style={springProps}
           $expanded={sidebar.expanded}
           $show={sidebar.show}
           $isUserEditing={isUserEditing}
+          $publicNamespace={location.pathname.startsWith(ROUTE_PATHS.namespaceShare)}
           $overlaySidebar={overlaySidebar}
           $side="left"
           {...getFocusProps(focusMode)}

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Cookies from 'universal-cookie'
 
-import { mog } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
@@ -11,7 +12,9 @@ import PublicNodeFloatingButton from '../Components/PublicNodeFloatingButton'
 import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import { usePublicNodeStore, PublicNode } from '../Stores/usePublicNodes'
+import { getTitleFromPath } from '../Hooks/useLinks'
+import { isRequestedWithin } from '../Stores/useApiStore'
+import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicEditorWrapper = styled.div`
   display: flex;
@@ -22,12 +25,13 @@ const PublicEditorWrapper = styled.div`
 
 const PublicNodeView = () => {
   const nodeId = useParams().nodeId
-  const getPublicNode = usePublicNodeStore((store) => store.getPublicNode)
   const { getPublicNodeAPI } = useApi()
   const navigate = useNavigate()
-  const [node, setNode] = useState<PublicNode>(getPublicNode(nodeId))
+  const [node, setNode] = useState<any>()
   const [showLoader, setShowLoader] = useState(true)
   const [firstVisit, setFirstVisit] = useState<boolean>(true)
+
+  const { getContent, setContent, iLinks, namespace } = usePublicNodeStore()
 
   useEffect(() => {
     const cookies = new Cookies()
@@ -39,23 +43,49 @@ const PublicNodeView = () => {
     cookies.set('mexit-sharing', timestamp, { path: '/' })
   }, [])
 
+  // TODO: check api store and before making a request again
+  // content would be available inside usePublicNodesStore
   useEffect(() => {
     async function getPublicNodeContent() {
       try {
-        const node = await getPublicNodeAPI(nodeId)
-        setNode({ ...node, id: nodeId })
-        setShowLoader(false)
+        // Only checking these for public namespaces view
+        // No need for trying this for individual nodes on frontend
+        if (
+          isRequestedWithin(5, `${apiURLs.getPublicNode(nodeId)}`) &&
+          window.location.pathname.startsWith('/share/namespace')
+        ) {
+          const nodeContent = getContent(nodeId)
+          const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
+          setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
+
+
+          // mog('check', { nodeContent, nodeProperties })
+        } else {
+          setShowLoader(true)
+
+          const node = await getPublicNodeAPI(nodeId)
+
+          setNode({ ...node, id: nodeId })
+          setContent(node.id, node.content, node?.metadata)
+
+          setShowLoader(false)
+        }
+
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNode', { error })
         navigate('/404')
       }
     }
     getPublicNodeContent()
-  }, [])
+  }, [nodeId])
+
+  useEffect(() => {
+      document.title = namespace  && node?.title ? `Mexit - ${namespace.name} | ${node.title}` : document.title
+  }, [node?.title, namespace])
 
   return (
     <PublicEditorWrapper>
-      {showLoader ? (
+      {showLoader && node ? (
         <SplashScreen />
       ) : (
         <>

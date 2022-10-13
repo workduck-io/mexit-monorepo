@@ -7,8 +7,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, ILink } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
+import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -17,6 +16,7 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { getTreeFromLinks, getPartialTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { usePublicNodeStore } from '../../Stores/usePublicNodes'
 import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
 import { SidebarListFilter } from './SidebarList.style'
 import Tree from './Tree'
@@ -25,6 +25,7 @@ interface SpaceTreeProps {
   spaceId: string
   items: ILink[]
   filterText?: string
+  publicILink?: boolean
 }
 
 /**
@@ -33,13 +34,15 @@ interface SpaceTreeProps {
  * - Displayes items in a Tree
  * - Filterable
  */
-export const MexTree = ({ items, filterText, spaceId }: SpaceTreeProps) => {
+export const MexTree = ({ items, filterText, spaceId, publicILink }: SpaceTreeProps) => {
   /* To Add
    *
    * - MultiSelect
    * - Drop to Different space
    */
-  const node = useEditorStore((store) => store.node)
+  const editorNode = useEditorStore((store) => store.node)
+  const publicNode = usePublicNodeStore((store) => store.currentNode)
+  const node = publicILink ? publicNode : editorNode
   const [search, setSearch] = useState('')
   const [selected, setSelected] = useState<number>(-1)
   const { goTo } = useRouting()

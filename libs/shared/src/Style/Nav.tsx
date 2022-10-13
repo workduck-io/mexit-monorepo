@@ -240,16 +240,17 @@ export interface NavWrapperProps extends FocusModeProp {
 export interface SideNavProps extends NavWrapperProps {
   $overlaySidebar: boolean
   $side: 'left' | 'right'
+  $publicNamespace: boolean
   $isUserEditing?: boolean
 }
 
-const sidebarPos = ({ $overlaySidebar, theme, $side }) =>
+const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace }) =>
   $side === 'left'
     ? $overlaySidebar
       ? css`
           position: fixed;
           top: ${theme.additional.hasBlocks ? '2rem' : '0'};
-          left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : '86px'};
+          left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : $publicNamespace ? '0px' : '86px'};
           background: ${transparentize(0.5, theme.colors.background.sidebar)};
           backdrop-filter: blur(10px);
         `

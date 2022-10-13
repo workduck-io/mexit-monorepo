@@ -5,7 +5,6 @@ import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
-import { mog } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import * as Actions from './Actions'
@@ -28,8 +27,10 @@ import Archive from './Views/Archive'
 import DraftView from './Views/DraftView'
 import EditorView from './Views/EditorView'
 import { ForgotPassword } from './Views/ForgotPassword'
+import LinkView from './Views/LinkView'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
+import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
 import RemindersAll from './Views/Reminders/RemindersAll'
@@ -40,7 +41,6 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
-import LinkView from './Views/LinkView'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;
@@ -215,6 +215,9 @@ export const Switch = () => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
         showSidebar()
         hideRHSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {
+        showSidebar()
+        hideRHSidebar()
       } else {
         // mog('Hiding all Sidebar', { location })
         hideAllSidebars()
@@ -238,6 +241,9 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
+        <Route path={`${ROUTE_PATHS.namespaceShare}/:namespaceID`} element={<PublicNamespaceView />}>
+          <Route path="node/:nodeId" element={<PublicNodeView />} />
+        </Route>
         <Route
           path={ROUTE_PATHS.home}
           element={
