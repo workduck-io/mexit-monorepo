@@ -80,10 +80,11 @@ export const ExtInfoBar = () => {
         $expanded={rhSidebar.expanded}
         $overlaySidebar={true}
         $side="right"
+        $publicNamespace={false}
       >
         <InfoBarWrapper
           mode={infobar.mode}
-          // {...getFocusProps(focusMode)}
+        // {...getFocusProps(focusMode)}
         >
           <ExtInfoBarItems />
         </InfoBarWrapper>
@@ -100,7 +101,7 @@ export const ExtInfoBar = () => {
           expanded={rhSidebar.expanded}
           show={rhSidebar.show}
           endColumnWidth={endColumnWidth}
-          // {...getFocusProps(focusMode)}
+        // {...getFocusProps(focusMode)}
         >
           <Icon
             icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
