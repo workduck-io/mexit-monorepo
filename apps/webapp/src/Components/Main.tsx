@@ -93,7 +93,7 @@ const Main = ({ children }: MainProps) => {
         // @ts-ignore
         // grid={authenticated && showNav() ? 'true' : 'false'}
       >
-        <Nav />
+        {!isGettingIntialized && <Nav />}
         <Content id="wd-mex-content-view">{children}</Content>
 
         {initialized && <RHSidebar />}
