@@ -1,4 +1,5 @@
 import { add, startOfTomorrow, sub } from 'date-fns'
+import md5 from 'md5'
 import { uniqBy } from 'lodash'
 
 import { getReminderState, mog, past, ReminderControls, SnoozeControl, today, upcoming } from '@mexit/core'
@@ -477,5 +478,20 @@ export const useReminders = () => {
     getReminderControls,
     attachBlockData,
     getRemindersForNextNMinutes
+  }
+}
+
+export const getReminderAssociatedId = (reminder: Reminder, workspaceId: string): string => {
+  switch (reminder.associated) {
+    case 'node':
+      return reminder.nodeid
+    case 'todo':
+      return reminder.todoid
+    case 'url': {
+      const hashedURL = md5(`${workspaceId}${reminder.url}`)
+      return hashedURL
+    }
+    default:
+      return reminder.nodeid
   }
 }

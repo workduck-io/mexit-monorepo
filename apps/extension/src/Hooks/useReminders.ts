@@ -1,4 +1,5 @@
 import { add, startOfTomorrow, sub } from 'date-fns'
+import md5 from 'md5'
 import { uniqBy } from 'lodash'
 
 import {
@@ -26,6 +27,7 @@ import {
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
+import { useAuthStore } from './useAuth'
 
 export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)
@@ -382,6 +384,9 @@ export const useReminders = () => {
       //     independent: true,
       //     attachment: reminderGroups
       // })
+      chrome.runtime.sendMessage({ type: 'SHOW_REMINDER', attachment: reminderGroups }, (response) => {
+        console.log('response post SHOW_REMINDER', response)
+      })
     }, time - now.getTime())
     toArmRems.forEach((r) => addArmReminder({ reminderId: r.id, timeoutId: id }))
   }

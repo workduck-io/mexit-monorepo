@@ -18,7 +18,8 @@ import {
   getRelativeDate,
   generateReminderId,
   Reminder,
-  getNameFromPath
+  getNameFromPath,
+  ReminderAssociatedType
 } from '@mexit/core'
 import { DatePickerStyles, Label, TextAreaBlock, SelectedDate, TextFieldHeight } from '@mexit/shared'
 
@@ -33,7 +34,6 @@ import { useReminderStore } from '../../Stores/useReminderStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
-
 
 interface ModalValue {
   time?: number
@@ -115,8 +115,8 @@ export const useCreateReminderModal = create<CreateReminderModalState>((set) => 
 export const useOpenReminderModal = () => {
   const { saveAndClearBuffer } = useEditorBuffer()
   const { toggleReminder } = useToggleElements()
-  
-  const openReminderModal = (query: string) => {
+
+  const openReminderModal = (query: string, associated: ReminderAssociatedType) => {
     const openModal = useCreateReminderModal.getState().openModal
     const node = useEditorStore.getState().node
     const addReminder = useReminderStore.getState().addReminder
@@ -126,6 +126,7 @@ export const useOpenReminderModal = () => {
     if (parsed) {
       const reminder: Reminder = {
         id: generateReminderId(),
+        associated,
         nodeid: node.nodeid,
         time: parsed.time.getTime(),
         title,
@@ -207,6 +208,7 @@ const CreateReminderModal = () => {
 
     const reminder: Reminder = {
       id: generateReminderId(),
+      associated: todoid ? 'todo' : 'node',
       title,
       description: !todoid ? description : undefined,
       nodeid,
@@ -242,10 +244,12 @@ const CreateReminderModal = () => {
         <WrappedNodeSelect
           placeholder="Reminder for Note"
           disabled={modalValue.blockContent !== undefined}
-          defaultValue={useEditorStore.getState().node && {
-            path: useEditorStore.getState().node.path,
-            namespace: useEditorStore.getState().node.namespace
-          }}
+          defaultValue={
+            useEditorStore.getState().node && {
+              path: useEditorStore.getState().node.path,
+              namespace: useEditorStore.getState().node.namespace
+            }
+          }
           disallowReserved
           highlightWhenSelected
           iconHighlight={modalValue.nodeid !== undefined}

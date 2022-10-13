@@ -123,7 +123,7 @@ export default function Chotu() {
   useEffect(() => {
     if (!parent) return
 
-    parent.bootReminders()
+    parent.bootReminders(reminders)
   }, [parent, reminders])
 
   useEffect(() => {

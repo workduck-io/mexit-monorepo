@@ -24,7 +24,7 @@ export default function Index() {
     <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
       <GlobalStyle />
       {/* TODO: runnign into an error 'Cannot read properties of undefined (reading filter) useReminders.ts 155 */}
-      {/* <ReminderArmer /> */}
+      <ReminderArmer />
       <SputlitProvider>
         <DibbaPortal>
           <Dibba />

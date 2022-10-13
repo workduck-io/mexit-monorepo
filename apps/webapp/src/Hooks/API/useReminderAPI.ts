@@ -1,9 +1,10 @@
 import { apiURLs, Reminder } from '@mexit/core'
 import { client } from '@workduck-io/dwindle'
+import { getReminderAssociatedId } from '../useReminders'
 import { useAPIHeaders } from './useAPIHeaders'
 
 export const useReminderAPI = () => {
-  const { workspaceHeaders } = useAPIHeaders()
+  const { workspaceHeaders, workspaceId } = useAPIHeaders()
 
   const getReminder = async (id: string) => {
     const res = await client.get(apiURLs.reminders.byId(id), {
@@ -26,15 +27,35 @@ export const useReminderAPI = () => {
     return res.data
   }
 
-  const createReminder = async (reminder: Reminder) => {
-    const res = await client.post(apiURLs.reminders.base, reminder, {
-      headers: workspaceHeaders()
-    })
-    return res.data
-  }
+  const saveReminder = async (reminder: Reminder) => {
+    const workspaceIdStr = workspaceId()
+    const reqData = {
+      workspaceId: workspaceIdStr,
+      // This is entity id
+      nodeid: getReminderAssociatedId(reminder, workspaceIdStr),
+      properties: {
+        title: reminder.title,
+        description: reminder.description,
 
-  const updateReminder = async (reminder: Reminder) => {
-    const res = await client.put(apiURLs.reminders.base, reminder, {
+        associated: reminder.associated,
+
+        time: reminder.time,
+        state: reminder.state,
+
+        createdAt: reminder.createdAt,
+        updatedAt: reminder.updatedAt,
+
+        // AssociatedData
+        nodeid: reminder.nodeid,
+        todoid: reminder.todoid,
+        url: reminder.url,
+
+        // is not supported by implementation
+        priority: reminder.priority,
+        frequency: reminder.frequency
+      }
+    }
+    const res = await client.post(apiURLs.reminders.base, reqData, {
       headers: workspaceHeaders()
     })
     return res.data
@@ -58,8 +79,7 @@ export const useReminderAPI = () => {
     getReminder,
     getAllWorkspaceReminders,
     getAllNodeReminders,
-    createReminder,
-    updateReminder,
+    saveReminder,
     deleteReminder,
     deleteAllNode
   }

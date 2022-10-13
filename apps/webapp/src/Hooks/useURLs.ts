@@ -12,6 +12,7 @@ import {
   GenericSearchResult,
   GlobalFilterJoin,
   mog,
+  Link,
   Settify,
   WORKSPACE_HEADER
 } from '@mexit/core'
@@ -19,7 +20,7 @@ import {
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
-import { Link, useLinkStore } from '../Stores/useLinkStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { URL_DOMAIN_REG } from '../Utils/constants'
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'

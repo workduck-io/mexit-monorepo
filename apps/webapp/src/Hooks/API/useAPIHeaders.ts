@@ -6,8 +6,9 @@ export const useAPIHeaders = () => {
 
   return {
     workspaceHeaders: () => ({
-    [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*'
-  })
+      [WORKSPACE_HEADER]: getWorkspaceId(),
+      Accept: 'application/json, text/plain, */*'
+    }),
+    workspaceId: () => getWorkspaceId()
   }
 }
