@@ -1,27 +1,33 @@
 import React, { useEffect, useRef } from 'react'
-import Search from '../Search'
-import Content from '../Content'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
+
+import { ActionType, QuickLinkType } from '@mexit/core'
+
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import useWindowSelection from '../../Hooks/useWindowSelection'
+import Content from '../Content'
+import Search from '../Search'
+import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
 
 const appearanceAnimationKeyframes = [
   {
     opacity: 0,
-    transform: 'scale(0.99)'
+    transform: 'scale(0.97)'
   },
   { opacity: 1, transform: 'scale(1.01)' },
   { opacity: 1, transform: 'scale(1)' }
 ]
 
 const Sputlit = () => {
-  const { visualState, setVisualState } = useSputlitContext()
+  const { visualState, setVisualState, activeItem } = useSputlitContext()
   const { previewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
+
+  useWindowSelection()
 
   const enterMs = 200
   const exitMs = 100
@@ -44,6 +50,7 @@ const Sputlit = () => {
     })
   }, [visualState])
 
+  const isExternalSearchAction = activeItem?.category === QuickLinkType.action && activeItem?.type === ActionType.SEARCH
   // Height animation
   const previousHeight = useRef<number>()
   useEffect(() => {
@@ -57,7 +64,7 @@ const Sputlit = () => {
       }
 
       const ro = new ResizeObserver((entries) => {
-        for (let entry of entries) {
+        for (const entry of entries) {
           const cr = entry.contentRect
 
           if (!previousHeight.current) {
@@ -93,15 +100,10 @@ const Sputlit = () => {
 
   return (
     <SputlitContainer id="sputlit-container">
-      <Wrapper
-        ref={outerRef}
-        // style={{
-        //   ...appearanceAnimationKeyframes[0]
-        // }}
-      >
+      <Wrapper ref={outerRef}>
         <Main id="sputlit-main" ref={innerRef}>
           <Search />
-          <Content />
+          {!isExternalSearchAction && <Content />}
         </Main>
       </Wrapper>
       <Overlay

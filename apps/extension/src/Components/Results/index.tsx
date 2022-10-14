@@ -1,41 +1,24 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
-import styled, { css } from 'styled-components'
-import {
-  ActionType,
-  CategoryType,
-  MexitAction,
-  MEXIT_FRONTEND_URL_BASE,
-  parseSnippet,
-  QuickLinkType,
-  searchBrowserAction
-} from '@mexit/core'
-import { useVirtual } from 'react-virtual'
+import React, { useEffect, useMemo, useRef } from 'react'
+
 import { findIndex, groupBy } from 'lodash'
-import Action from '../Action'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { List, ListItem, StyledResults, Subtitle } from './styled'
-import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
-import { useEditorContext } from '../../Hooks/useEditorContext'
-import { useSnippets } from '../../Hooks/useSnippets'
+import { useVirtual } from 'react-virtual'
+
+import { ActionType, CategoryType, mog } from '@mexit/core'
+
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
+import Action from '../Action'
+import Renderer from '../Renderer'
+import { List, ListItem, StyledResults, Subtitle } from './styled'
 
 function Results() {
-  const {
-    search,
-    setInput,
-    searchResults,
-    activeItem,
-    setActiveItem,
-    activeIndex,
-    setActiveIndex,
-    setSearchResults,
-    setVisualState,
-    setSearch,
-    input
-  } = useSputlitContext()
+  const { searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, input } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
+  const setSearch = useSputlitStore((store) => store.setSearch)
   const { execute } = useActionExecutor()
 
   const parentRef = useRef(null)
@@ -44,7 +27,6 @@ function Results() {
   const groups = Object.keys(groupBy(searchResults, (n) => n.category))
 
   const indexes = useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
-  const { getSnippet } = useSnippets()
 
   const rowVirtualizer = useVirtual({
     size: searchResults.length,
@@ -53,15 +35,10 @@ function Results() {
 
   const springProps = useSpring(
     useMemo(() => {
-      const style = { width: '55%', marginRight: '0.75em' }
+      const style = { width: '100%' }
 
       if (!previewMode) {
         style.width = '0%'
-        style.marginRight = '0'
-      }
-
-      if (searchResults[activeIndex] && searchResults[activeIndex]?.category === QuickLinkType.action) {
-        style.width = '100%'
       }
 
       if (activeItem?.type === ActionType.RENDER) {

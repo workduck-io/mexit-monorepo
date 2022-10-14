@@ -24,10 +24,10 @@ import {
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
-import { useInternalLinks } from './useInternalLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
@@ -35,18 +35,20 @@ import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
-  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
-    useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, node } = useEditorContext()
+  const { setVisualState, activeItem, setActiveItem, setInput, setSearchResults, setActiveIndex } = useSputlitContext()
+  const { setPreviewMode, setNode, setPersistedContent } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
-  const { getParentILink } = useInternalLinks()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
+  const setSearch = useSputlitStore((store) => store.setSearch)
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
+    const search = useSputlitStore.getState().search
+    mog('Exe', { item, search })
+
     switch (item.category) {
       case QuickLinkType.backlink: {
         let node: ILink
@@ -130,17 +132,18 @@ export function useActionExecutor() {
             chrome.runtime.sendMessage({ ...item })
             break
           case ActionType.OPEN:
-            window.open(item.data.base_url, '_blank').focus()
+            window.open(item.extras.base_url, '_blank').focus()
             setVisualState(VisualState.hidden)
             break
           case ActionType.SEARCH: {
+            mog('I want to search this', { activeItem, item, search })
             // Ignore the case for search type action when it is the generic search action
             // As it is not a two step action
             if (activeItem?.title !== item?.title && item?.id !== '0') {
               setActiveItem(item)
               setInput('')
             } else {
-              const url = encodeURI(item.data.base_url + search.value)
+              const url = encodeURI(item.extras.base_url + search.value)
               window.open(url, '_blank').focus()
               setVisualState(VisualState.hidden)
             }

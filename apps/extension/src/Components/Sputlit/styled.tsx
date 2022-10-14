@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components'
+
 import { normalize } from '@mexit/shared'
 
 export const SputlitContainer = styled.div`

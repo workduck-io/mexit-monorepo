@@ -8,6 +8,7 @@ import { DisplayShortcut } from '@workduck-io/mex-components'
 import { CategoryType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import {
   StyledAction,
   Container,
@@ -27,9 +28,10 @@ interface ActionProps {
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
-  const { search, selection } = useSputlitContext()
+  const { selection } = useSputlitContext()
+  const search = useSputlitStore((store) => store.search)
 
-  const newNodeName = cleanString(search.type === CategoryType.backlink ? search.value.slice(2) : search.value)
+  const newNodeName = cleanString(search?.type === CategoryType.backlink ? search.value.slice(2) : search.value)
 
   return (
     <StyledAction active={active}>
@@ -39,7 +41,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
           <Title>
             {action?.extras?.new ? (
               <>
-                Create a <PrimaryText>{search.value ? newNodeName : 'Quick note'}</PrimaryText>
+                Create a <PrimaryText>{search?.value ? newNodeName : 'Quick note'}</PrimaryText>
               </>
             ) : (
               <>{action?.category === QuickLinkType.backlink ? cleanString(action?.title) : action?.title}</>
