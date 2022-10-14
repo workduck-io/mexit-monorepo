@@ -26,7 +26,6 @@ export const useInitLoader = () => {
   const { goTo } = useRouting()
 
   const { getNodesByWorkspace, getAllSnippetsByWorkspace, getAllNamespaces } = useApi()
-  const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
 
@@ -49,10 +48,13 @@ export const useInitLoader = () => {
 
       const baseNode = updateBaseNode()
       // mog('Base Node: ', baseNode)
+
+      // TODO: I will come back to this
       if (
         window.location.pathname !== '/chotu' &&
-        !window.location.pathname.startsWith('/actions') &&
-        !window.location.pathname.startsWith('/share')
+        !window.location.pathname.startsWith(ROUTE_PATHS.actions) &&
+        !window.location.pathname.startsWith(ROUTE_PATHS.share) &&
+        !window.location.pathname.startsWith(ROUTE_PATHS.integrations)
       ) {
         mog('Base Node: ', baseNode)
         loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
