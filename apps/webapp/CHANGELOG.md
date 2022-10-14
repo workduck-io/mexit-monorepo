@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.17.1
+
+### Patch Changes
+
+- b021995b: Update useInitLoader() to not redirect on /integrations route
+
 ## 0.17.0
 
 ### Minor Changes
