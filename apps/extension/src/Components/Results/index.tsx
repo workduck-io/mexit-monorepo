@@ -16,10 +16,12 @@ import Renderer from '../Renderer'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 
 function Results() {
-  const { searchResults, activeItem, setActiveItem, activeIndex, setActiveIndex, input } = useSputlitContext()
+  const { searchResults, activeIndex, setActiveIndex, input } = useSputlitContext()
   const { previewMode, setPreviewMode } = useEditorContext()
-  const setSearch = useSputlitStore((store) => store.setSearch)
   const { execute } = useActionExecutor()
+
+  const activeItem = useSputlitStore((s) => s.activeItem)
+  const resetSpotlitState = useSputlitStore((store) => store.reset)
 
   const parentRef = useRef(null)
   const pointerMoved = usePointerMovedSinceMount()
@@ -121,8 +123,7 @@ function Results() {
         const item = searchResults[activeIndex]
         execute(item)
       } else if (event.key === 'Backspace' && activeItem && input === '') {
-        setActiveItem()
-        setSearch({ value: '', type: CategoryType.search })
+        resetSpotlitState()
       }
     }
 

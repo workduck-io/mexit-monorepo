@@ -36,7 +36,7 @@ import { getListItemFromNode } from '../../Utils/helper'
 import { CenterIcon, StyledInput, StyledSearch } from './styled'
 
 const Search = () => {
-  const { input, setInput, selection, activeItem, setSearchResults, isLoading } = useSputlitContext()
+  const { input, setInput, selection, setSearchResults, isLoading } = useSputlitContext()
   const { searchInList } = useSearch()
   const search = useSputlitStore((store) => store.search)
   const setSearch = useSputlitStore((store) => store.setSearch)
@@ -78,12 +78,13 @@ const Search = () => {
   useEffect(() => {
     const unsubscribe = tinykeys(ref.current, {
       Enter: (ev) => {
+        const activeItem = useSputlitStore.getState().activeItem
         execute(activeItem)
       }
     })
 
     return () => unsubscribe()
-  }, [activeItem])
+  }, [])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -126,6 +127,8 @@ const Search = () => {
   // * For setting the results
   useEffect(() => {
     async function getSearchItems() {
+      const activeItem = useSputlitStore.getState().activeItem
+
       if (!activeItem) {
         if (search.value) {
           const listWithNew = await searchInList()
@@ -148,7 +151,7 @@ const Search = () => {
     }
 
     if (previewMode) getSearchItems()
-  }, [search.value, selection, activeItem, previewMode, ilinks])
+  }, [search.value, selection, previewMode, ilinks])
 
   const onBackClick = () => {
     if (!previewMode) {

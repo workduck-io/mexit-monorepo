@@ -7,6 +7,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
@@ -22,7 +23,8 @@ export function useSaveChanges() {
   const { ilinks, addILink, checkValidILink } = useDataStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
-  const { selection, setVisualState, setSelection, setActiveItem } = useSputlitContext()
+  const { selection, setVisualState, setSelection } = useSputlitContext()
+  const setActiveItem = useSputlitStore((s) => s.setActiveItem)
   const { setContent, setMetadata } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)

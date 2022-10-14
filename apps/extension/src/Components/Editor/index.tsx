@@ -17,6 +17,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import components from './Components'
 import { EditorWrapper, SeePreview } from './styled'
@@ -45,7 +46,8 @@ const commands = [
 ]
 
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
-  const { searchResults, activeIndex, activeItem, selection } = useSputlitContext()
+  const { searchResults, activeIndex, selection } = useSputlitContext()
+  const activeItem = useSputlitStore((s) => s.activeItem)
   const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
   const ref = useRef<HTMLDivElement>()
   const { tags, addTag, ilinks, addILink, sharedNodes, slashCommands } = useDataStore()

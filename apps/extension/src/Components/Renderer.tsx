@@ -1,15 +1,14 @@
-import React, { createRef, Suspense, useState } from 'react'
-import { useCallback } from 'react'
+import React from 'react'
 import { useRef } from 'react'
 import { useEffect } from 'react'
 
-import { AsyncMethodReturns, connectToChild } from 'penpal'
 import styled from 'styled-components'
 
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
 
 import { useSputlitContext } from '../Hooks/useSputlitContext'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 
 const Iframe = styled.iframe`
   border: none;
@@ -19,7 +18,10 @@ const Iframe = styled.iframe`
 `
 
 const Renderer = () => {
-  const { activeItem, setActiveItem, setIsLoading } = useSputlitContext()
+  const { setIsLoading } = useSputlitContext()
+  const activeItem = useSputlitStore((s) => s.activeItem)
+  const setActiveItem = useSputlitStore((s) => s.setActiveItem)
+
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const handleEvent = (event) => {

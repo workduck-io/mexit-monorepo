@@ -20,7 +20,6 @@ import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
-import { useSputlitContext } from './useSputlitContext'
 
 export const useSearch = () => {
   const { dispatch } = useRaju()

@@ -6,6 +6,7 @@ import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import useWindowSelection from '../../Hooks/useWindowSelection'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import Search from '../Search'
 import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
@@ -20,7 +21,8 @@ const appearanceAnimationKeyframes = [
 ]
 
 const Sputlit = () => {
-  const { visualState, setVisualState, activeItem } = useSputlitContext()
+  const { visualState, setVisualState } = useSputlitContext()
+  const activeItem = useSputlitStore((s) => s.activeItem)
   const { previewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
 

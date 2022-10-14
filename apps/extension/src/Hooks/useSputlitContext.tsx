@@ -1,6 +1,6 @@
-import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
+import React, { createContext, PropsWithChildren, useContext, useState } from 'react'
 
-import { CategoryType, ListItemType, MexitAction, NodeContent } from '@mexit/core'
+import { ListItemType } from '@mexit/core'
 
 // export type Search = {
 //   value: string
@@ -73,10 +73,8 @@ export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setSelection,
     activeIndex,
     setActiveIndex,
-    activeItem,
     searchResults,
     setSearchResults,
-    setActiveItem,
     visualState,
     setVisualState,
     tooltipState,

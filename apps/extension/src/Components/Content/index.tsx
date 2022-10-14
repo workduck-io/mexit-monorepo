@@ -10,12 +10,13 @@ import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { getDeserializeSelectionToNodes } from '../../Utils/deserialize'
 import Results from '../Results'
 import { StyledContent } from './styled'
 
 export default function Content() {
-  const { selection, searchResults, activeIndex, activeItem } = useSputlitContext()
+  const { selection, searchResults, activeIndex } = useSputlitContext()
   const { node, setNodeContent, previewMode, persistedContent } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
@@ -63,6 +64,8 @@ export default function Content() {
 
   useEffect(() => {
     const item = searchResults[activeIndex]
+    const activeItem = useSputlitStore.getState().activeItem
+
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
@@ -79,7 +82,7 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-  }, [activeIndex, searchResults, deserializedContent, selection, activeItem, persistedContent])
+  }, [activeIndex, searchResults, deserializedContent, selection, persistedContent])
 
   return (
     <StyledContent>

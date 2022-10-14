@@ -35,7 +35,7 @@ import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
-  const { setVisualState, activeItem, setActiveItem, setInput, setSearchResults, setActiveIndex } = useSputlitContext()
+  const { setVisualState, setInput, setSearchResults, setActiveIndex } = useSputlitContext()
   const { setPreviewMode, setNode, setPersistedContent } = useEditorContext()
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
@@ -44,10 +44,12 @@ export function useActionExecutor() {
   const { saveIt } = useSaveChanges()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const setSearch = useSputlitStore((store) => store.setSearch)
+  const setActiveItem = useSputlitStore((store) => store.setActiveItem)
+  const resetSputlitState = useSputlitStore((s) => s.reset)
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     const search = useSputlitStore.getState().search
-    mog('Exe', { item, search })
+    const activeItem = useSputlitStore.getState().activeItem
 
     switch (item.category) {
       case QuickLinkType.backlink: {
@@ -84,6 +86,7 @@ export function useActionExecutor() {
         setInput('')
         break
       }
+
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
         const text = convertContentToRawText(snippet.content, '\n')
@@ -126,6 +129,7 @@ export function useActionExecutor() {
         setVisualState(VisualState.hidden)
         break
       }
+
       case QuickLinkType.action: {
         switch (item.type) {
           case ActionType.BROWSER_EVENT:
@@ -146,6 +150,7 @@ export function useActionExecutor() {
               const url = encodeURI(item.extras.base_url + search.value)
               window.open(url, '_blank').focus()
               setVisualState(VisualState.hidden)
+              resetSputlitState()
             }
             break
           }
