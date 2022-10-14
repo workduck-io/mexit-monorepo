@@ -37,6 +37,7 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { showNav } from '../../Utils/nav'
 import { SidebarToggles } from '../logo'
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
@@ -195,28 +196,6 @@ const Nav = () => {
 
   const { springProps, overlaySidebar } = useSidebarTransition()
 
-  const showNav = (): boolean => {
-    if (location.pathname === '/') return true
-    const showNavPaths = [
-      '/editor',
-      '/search',
-      '/snippets',
-      '/archive',
-      '/tasks',
-      '/settings',
-      '/tag',
-      '/integrations',
-      '/reminders',
-      '/links'
-    ]
-
-    for (const path of showNavPaths) {
-      if (location.pathname.startsWith(path)) return true
-    }
-
-    return false
-  }
-
   return (
     <>
       <NavWrapper
@@ -225,7 +204,7 @@ const Nav = () => {
         $show={sidebar.show}
         {...getFocusProps(focusMode)}
       >
-        {authenticated && showNav() && (
+        {authenticated && showNav(location.pathname) && (
           <MainNav {...getFocusProps(focusMode)}>
             <NavTooltip singleton={source} />
 

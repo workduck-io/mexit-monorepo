@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { Ellipsis } from '@workduck-io/mex-components'
-
 import { IconWrapper } from './IconPicker.style'
+import { Ellipsis } from './NodeSelect.style'
 
 export const NamespaceText = styled.span`
   min-width: 4rem;

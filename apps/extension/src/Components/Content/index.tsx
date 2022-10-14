@@ -1,18 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { usePlateEditorRef, getPlateEditorRef } from '@udecode/plate'
-import { nanoid } from 'nanoid'
+import { usePlateEditorRef } from '@udecode/plate'
 
-import {
-  ActionType,
-  CategoryType,
-  createNodeWithUid,
-  defaultContent,
-  getNewDraftKey,
-  ILink,
-  mog,
-  QuickLinkType
-} from '@mexit/core'
+import { ActionType, defaultContent, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 
 import { useEditorContext } from '../../Hooks/useEditorContext'
@@ -20,15 +10,13 @@ import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
-import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
-import { getDeserializeSelectionToNodes, getMexHTMLDeserializer } from '../../Utils/deserialize'
-import { Editor } from '../Editor'
+import { getDeserializeSelectionToNodes } from '../../Utils/deserialize'
 import Results from '../Results'
 import { StyledContent } from './styled'
 
 export default function Content() {
   const { selection, searchResults, activeIndex, activeItem } = useSputlitContext()
-  const { node, setNodeContent, previewMode, setNode, persistedContent } = useEditorContext()
+  const { node, setNodeContent, previewMode, persistedContent } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
   const { getContent } = useContentStore()
@@ -36,37 +24,27 @@ export default function Content() {
   const getSnippet = useSnippets().getSnippet
 
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
-  const { highlighted, clearHighlightedBlockIds } = useBlockHighlightStore()
-  const { focusBlock } = useFocusBlock()
+  // const { highlighted, clearHighlightedBlockIds } = useBlockHighlightStore()
+  // const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
     const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
-
-    // mog('deserialized content', { content })
-
     if (selection?.range && content && selection?.url && previewMode) {
-      // setNodeContent([...activeNodeContent, { text: '\n' }, { children: deserializedContent }])
       setDeserializedContent(content)
     }
   }, [editor])
 
-  const onChangeSave = (val: any[]) => {
-    if (val) {
-      // setNodeContent(val)
-    }
-  }
+  // useEffect(() => {
+  //   const highlights = highlighted.editor
+  //   if (!previewMode && highlights.length > 0) {
+  //     focusBlock(highlights[highlights.length - 1], node.nodeid)
+  //     const clearHighlightTimeout = setTimeout(() => {
+  //       clearHighlightedBlockIds('editor')
+  //     }, 2000)
 
-  useEffect(() => {
-    const highlights = highlighted.editor
-    if (!previewMode && highlights.length > 0) {
-      focusBlock(highlights[highlights.length - 1], node.nodeid)
-      const clearHighlightTimeout = setTimeout(() => {
-        clearHighlightedBlockIds('editor')
-      }, 2000)
-
-      return () => clearTimeout(clearHighlightTimeout)
-    }
-  }, [highlighted, node.nodeid, previewMode])
+  //     return () => clearTimeout(clearHighlightTimeout)
+  //   }
+  // }, [highlighted, node.nodeid, previewMode])
 
   useEffect(() => {
     const handleSaveKeydown = (event: KeyboardEvent) => {
@@ -106,7 +84,7 @@ export default function Content() {
   return (
     <StyledContent>
       <Results />
-      <Editor readOnly={previewMode} onChange={onChangeSave} />
+      {/* <Editor readOnly={previewMode} onChange={onChangeSave} /> */}
     </StyledContent>
   )
 }
