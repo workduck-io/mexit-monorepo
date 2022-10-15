@@ -287,18 +287,6 @@ export const useApi = () => {
     }
   }
 
-  const getPublicNamespaceAPI = async (namespaceID: string) => {
-    const res = await client
-      .get(apiURLs.namespaces.getPublic(namespaceID), {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
-
-    return res
-  }
-
   const isPublic = (nodeid: string) => {
     return checkNodePublic(nodeid)
   }
@@ -513,7 +501,7 @@ export const useApi = () => {
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getSnippetById,
-    refactorHierarchy,
+    refactorHierarchy
     // getNodesByWorkspace
   }
 }

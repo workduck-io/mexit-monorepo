@@ -24,6 +24,7 @@ function PublicNamespaceView() {
         setNamespace({
           id: response.id,
           name: response.name,
+          access: 'READ', // Set read for public namespaces
           icon: response.metadata?.icon,
           createdAt: response.createdAt,
           updatedAt: response.updatedAt

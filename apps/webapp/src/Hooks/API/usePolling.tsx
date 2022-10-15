@@ -17,7 +17,7 @@ export const usePolling = () => {
   const polling = useApiStore((store) => store.polling)
   const isAuthenticated = useAuthStore((store) => store.authenticated)
 
-  const { getNodesByWorkspace } = useApi()
+  // const { getNodesByWorkspace } = useApi()
   const { getAllBookmarks } = useBookmarks()
   const { fetchShareData } = useFetchShareData()
 
@@ -37,7 +37,6 @@ export const usePolling = () => {
 
   useIntervalWithTimeout(
     () => {
-      getNodesByWorkspace().then(() => mog('Successfully fetched hierarchy'))
       // TODO: commenting this out because it sends so many requests, it blocks the UI and slows down everything
       // getNodesByWorkspace().then(() => mog('Successfully fetched hierarchy'))
       // refreshILinks().then(() => mog('Successfully fetched hierarchy'))

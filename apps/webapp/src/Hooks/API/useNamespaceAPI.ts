@@ -111,6 +111,17 @@ export const useNamespaceApi = () => {
     return namespace
   }
 
+  const getPublicNamespaceAPI = async (namespaceID: string) => {
+    const res = await client
+      .get(apiURLs.namespaces.getPublic(namespaceID), {
+        headers: workspaceHeaders()
+      })
+      .then((response: any) => {
+        return response.data
+      })
+    return res
+  }
+
   const createNewNamespace = async (name: string) => {
     try {
       const res = await client
@@ -265,6 +276,7 @@ export const useNamespaceApi = () => {
     shareNamespace,
     revokeNamespaceShare,
     getAllSharedUsers,
-    updateNamespaceShare
+    updateNamespaceShare,
+    getPublicNamespaceAPI
   }
 }
