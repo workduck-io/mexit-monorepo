@@ -130,28 +130,28 @@ export const useNamespaceApi = () => {
 
   const createNewNamespace = async (name: string) => {
     try {
-      const res = await client
-        .post(
-          apiURLs.namespaces.create,
-          {
-            type: 'NamespaceRequest',
-            name,
-            id: generateNamespaceId(),
-            metadata: {
-              iconUrl: 'heroicons-outline:view-grid'
-            }
-          },
-          {
-            headers: workspaceHeaders()
+      const req = {
+        type: 'NamespaceRequest',
+        name,
+        id: generateNamespaceId(),
+        metadata: {
+          icon: {
+            type: 'ICON',
+            value: 'heroicons-outline:view-grid'
           }
-        )
+        }
+      }
+      const res = await client
+        .post(apiURLs.namespaces.create, req, {
+          headers: workspaceHeaders()
+        })
         .then((d: any) => ({
-          id: d?.data?.id,
-          name: d?.data?.name,
-          iconUrl: d?.data?.metadata?.iconUrl,
+          id: req.id,
+          name: name,
+          iconUrl: req.metadata.icon,
           access: 'MANAGE' as const,
-          createdAt: d?.data?.createdAt,
-          updatedAt: d?.data?.updatedAt
+          createdAt: Date.now(),
+          updatedAt: Date.now()
         }))
 
       mog('We created a namespace', { res })
@@ -208,12 +208,14 @@ export const useNamespaceApi = () => {
   const shareNamespace = async (id: string, userIDs: string[], accessType: AccessLevel) => {
     try {
       const res = await client.post(
-        apiURLs.namespaces.update,
+        apiURLs.namespaces.share,
         {
           type: 'SharedNamespaceRequest',
           namespaceID: id,
-          accessType,
-          userIDs
+          userIDToAccessTypeMap: userIDs.reduce((acc, userID) => {
+            acc[userID] = accessType
+            return acc
+          }, {} as Record<string, AccessLevel>)
         },
         {
           headers: workspaceHeaders()
@@ -250,7 +252,7 @@ export const useNamespaceApi = () => {
         userIDToAccessTypeMap
       }
       return await client
-        .put(apiURLs.sharedNode, payload, {
+        .put(apiURLs.namespaces.share, payload, {
           headers: workspaceHeaders()
         })
         .then((resp) => {

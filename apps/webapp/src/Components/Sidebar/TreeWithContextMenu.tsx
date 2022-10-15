@@ -46,6 +46,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   // }
 
   const isInSharedNamespace = itemNamespace?.granterID !== undefined
+  const isReadonly = itemNamespace?.access === 'READ'
 
   const handleArchive = (item: TreeItem) => {
     openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })
@@ -87,7 +88,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
             Refactor
           </ContextMenuItem> */}
         <ContextMenuItem
-          disabled={isInSharedNamespace && itemNamespace?.access === 'READ'}
+          disabled={isInSharedNamespace && isReadonly}
           onSelect={(args) => {
             handleCreateChild(item)
           }}
@@ -96,7 +97,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           New Note
         </ContextMenuItem>
         <ContextMenuItem
-          disabled={isInSharedNamespace}
+          disabled={isInSharedNamespace && isReadonly}
           onSelect={(args) => {
             handleShare(item)
           }}

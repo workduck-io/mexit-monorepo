@@ -140,8 +140,8 @@ export const useNamespaces = () => {
     }
   }
 
-  const changeNamespaceName = (id: string, name: string) => {
-    chageNamespaceNameApi(id, name)
+  const changeNamespaceName = async (id: string, name: string) => {
+    return await chageNamespaceNameApi(id, name)
       .then((res) => {
         if (res) {
           const namespaces = useDataStore.getState().namespaces
@@ -155,10 +155,12 @@ export const useNamespaces = () => {
               : n
           )
           useDataStore.setState({ namespaces: newNamespaces })
+          return true
         }
       })
       .catch((err) => {
         console.log('Error changing namespace name', err)
+        return undefined
       })
   }
 
@@ -178,21 +180,26 @@ export const useNamespaces = () => {
     )
     useDataStore.setState({ namespaces: newNamespaces })
 
-    await changeNamespaceIconApi(id, name, icon).catch((err) => {
-      console.log('Error changing namespace icon', err)
-      // We revert the icon
-      const namespaces = useDataStore.getState().namespaces
-      const newNamespaces = namespaces.map((n) =>
-        n.id === id
-          ? {
-              ...n,
-              icon: oldIcon,
-              updatedAt: Date.now()
-            }
-          : n
-      )
-      useDataStore.setState({ namespaces: newNamespaces })
-    })
+    const res = await changeNamespaceIconApi(id, name, icon)
+      .then((res) => true)
+      .catch((err) => {
+        console.log('Error changing namespace icon', err)
+        // We revert the icon
+        const namespaces = useDataStore.getState().namespaces
+        const newNamespaces = namespaces.map((n) =>
+          n.id === id
+            ? {
+                ...n,
+                icon: oldIcon,
+                updatedAt: Date.now()
+              }
+            : n
+        )
+        useDataStore.setState({ namespaces: newNamespaces })
+        return undefined
+      })
+
+    return res
   }
 
   const getSharedUsersForNamespace = (namespaceId: string): Mentionable[] => {

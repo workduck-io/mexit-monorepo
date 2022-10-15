@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
+import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
 import { IconButton, Input } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
@@ -54,7 +54,11 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
       !namespaceNames.includes(name) && name !== RESERVED_NAMESPACES.default && name !== RESERVED_NAMESPACES.shared
 
     if (allowRename) {
-      changeNamespaceName(space?.id, name)
+      changeNamespaceName(space?.id, name).then((res) => {
+        if (res === undefined) {
+          setTitle(space?.label)
+        }
+      })
       setTitle(name)
     } else {
       toast.error('Space already exists!')
@@ -67,8 +71,8 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
     setShowInput(false)
   }
 
-  const onChangeIcon = (icon: MIcon) => {
-    changeNamespaceIcon(space?.id, space?.label, icon)
+  const onChangeIcon = async (icon: MIcon) => {
+    return await changeNamespaceIcon(space?.id, space?.label, icon)
   }
 
   const onShareSpace = () => {
@@ -99,6 +103,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const isNamespaceReadonly = space?.data?.access === 'READ'
   const isNamespaceInputDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
   const isNamespaceIconDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
+  const isShared = space?.data?.granterID !== undefined
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
 
@@ -123,7 +128,9 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
-          {!isNamespaceReserved && <IconButton title="Share Space" icon="ri:share-line" onClick={onShareSpace} />}
+          {!isNamespaceReserved && (
+            <IconButton highlight={isShared} title="Share Space" icon="ri:share-line" onClick={onShareSpace} />
+          )}
           <Tippy
             theme="mex-bright"
             placement="right"

@@ -30,7 +30,7 @@ interface IconPickerProps {
    * Call API or data store and if the call succeeds return the icon
    * Otherwise if null the previous value is restored
    */
-  onChange: (icon: MIcon) => void
+  onChange: (icon: MIcon) => Promise<undefined | boolean>
 }
 
 const IconPicker = ({ value, size, tooltipText, onChange, allowPicker = false }: IconPickerProps) => {
@@ -84,7 +84,11 @@ const IconPicker = ({ value, size, tooltipText, onChange, allowPicker = false }:
     setMenuOpen(false)
     const newEmojiVal = { type: 'EMOJI' as const, value: emoji.native }
     setEmoji(newEmojiVal)
-    onChange(newEmojiVal)
+    onChange(newEmojiVal).then((success) => {
+      if (success === undefined) {
+        setEmoji(value)
+      }
+    })
   }
 
   return (
