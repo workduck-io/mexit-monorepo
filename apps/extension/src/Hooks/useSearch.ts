@@ -10,7 +10,8 @@ import {
   sortByCreated,
   fuzzySearchLinks,
   getListItemFromLink,
-  searchBrowserAction
+  searchBrowserAction,
+  mog
 } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
@@ -71,7 +72,9 @@ export const useSearch = () => {
           quickLinks.map((i) => i.title)
         )
 
-        searchList = isNew && selection ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
+        mog('RESULTS ', { localNodes, nodeItems, snippetItems })
+
+        searchList = isNew ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
         break
 
       case CategoryType.action:
