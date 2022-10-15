@@ -1,5 +1,7 @@
-import { apiURLs, mog, Reminder } from '@mexit/core'
 import { client } from '@workduck-io/dwindle'
+
+import { apiURLs, mog, Reminder } from '@mexit/core'
+
 import { getReminderAssociatedId } from '../useReminders'
 import { useAPIHeaders } from './useAPIHeaders'
 
@@ -7,21 +9,21 @@ export const useReminderAPI = () => {
   const { workspaceHeaders, workspaceId } = useAPIHeaders()
 
   const getReminder = async (id: string) => {
-    const res = await client.get(apiURLs.reminders.byId(id), {
+    const res = await client.get(apiURLs.reminders.reminderByID(id), {
       headers: workspaceHeaders()
     })
     return res.data
   }
 
   const getAllWorkspaceReminders = async () => {
-    const res = await client.get(apiURLs.reminders.allWorkspace, {
+    const res = await client.get(apiURLs.reminders.remindersOfWorkspace, {
       headers: workspaceHeaders()
     })
     return res.data
   }
 
   const getAllNodeReminders = async (nodeId: string) => {
-    const res = await client.get(apiURLs.reminders.allNode(nodeId), {
+    const res = await client.get(apiURLs.reminders.remindersOfNode(nodeId), {
       headers: workspaceHeaders()
     })
     return res.data
@@ -39,21 +41,21 @@ export const useReminderAPI = () => {
 
     // mog('Saving reminder', { reminder, reqData })
 
-    const res = await client.post(apiURLs.reminders.base, reqData, {
+    const res = await client.post(apiURLs.reminders.saveReminder, reqData, {
       headers: workspaceHeaders()
     })
     return res.data
   }
 
   const deleteReminder = async (id: string) => {
-    const res = await client.delete(apiURLs.reminders.byId(id), {
+    const res = await client.delete(apiURLs.reminders.reminderByID(id), {
       headers: workspaceHeaders()
     })
     return res.data
   }
 
   const deleteAllNode = async (nodeId: string) => {
-    const res = await client.delete(apiURLs.reminders.allNode(nodeId), {
+    const res = await client.delete(apiURLs.reminders.remindersOfNode(nodeId), {
       headers: workspaceHeaders()
     })
     return res.data
