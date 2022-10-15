@@ -38,6 +38,12 @@ export const NoteSidebar = () => {
     const nodesByNamespaces = getNodesByNamespaces()
     const nspaces = nodesByNamespaces
       .sort((a, b) => a.createdAt - b.createdAt)
+      .sort((a, b) => {
+        // if granter id is present, move to end
+        if (a.granterID) return 1
+        if (b.granterID) return -1
+        return 0
+      })
       .map((ns) => {
         return {
           id: ns.id,

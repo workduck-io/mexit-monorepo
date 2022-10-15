@@ -32,55 +32,39 @@ export const useNamespaceApi = () => {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
-        mog('namespaces all', d.data)
+        // mog('namespaces all', d.data)
         return d.data.map((item: any) => {
           // metadata is json string parse to object
-          const metadata = item.namespaceMetadata ? JSON.parse(item.namespaceMetadata) : {}
           return {
             ns: {
-              id: item.namespaceID,
-              name: item.namespaceTitle,
-              icon: metadata?.metadata?.icon ?? undefined,
+              id: item.id,
+              name: item.name,
+              icon: item.metadata?.icon ?? undefined,
               access: item.accessType,
-              createdAt: metadata?.createdAt,
-              updatedAt: metadata?.updatedAt,
-              granterID: item.granterId ?? undefined
+              createdAt: item.createdAt,
+              updatedAt: item.updatedAt,
+              granterID: item.granterID ?? undefined,
+              publicAccess: item.publicAccess
             },
+            nodeHierarchy: item.nodeHierarchy.map((i) => ({ ...i, namespace: item.id })),
             archiveHierarchy: item?.archivedNodeHierarchyInformation
           }
         })
       })
       .catch((e) => {
-        mog('Save error', e)
+        mog('Error fetching all namespaces', e)
         return undefined
       })
 
     if (namespaces) {
-      // const nsDetails = (
-      //   await runBatch([
-      //     ...namespaces.map(async ({ ns }) => {
-      //       const nsDetails = await getNamespace(ns.id)
-      //       return nsDetails
-      //     })
-      //   ])
-      // ).fulfilled
-
-      // const newILinks = nsDetails.reduce(
-      //   (arr, ns) => {
-      //     const nsInNamespaces = namespaces.find((n) => n.ns.id === ns.id)
-      //     return {
-      //       nodes: [...arr.nodes, ...ns.nodeHierarchy],
-      //       namespaces: [
-      //         ...arr.namespaces.filter((n) => n.id !== ns.id),
-      //         { ...nsInNamespaces.ns, publicAccess: ns.publicAccess }
-      //       ]
-      //     }
-      //   },
-      //   { nodes: [], namespaces: [] }
-      // )
-      // mog('update namespaces and ILinks', { nsDetails, newILinks })
+      const newILinks = namespaces.reduce((arr, { nodeHierarchy }) => {
+        return [...arr, ...nodeHierarchy]
+      }, [])
+      mog('update namespaces and ILinks', { namespaces, newILinks })
       // SetILinks once middleware is integrated
       setNamespaces(namespaces.map((n) => n.ns))
+      // TODO: Also set archive links
+      setIlinks(newILinks)
     }
   }
 
