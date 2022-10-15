@@ -47,8 +47,6 @@ export const USER_SERVICE_HELPER_URL = 'https://3jeonl1fee.execute-api.us-east-1
 export const USER_SERVICE_EMAIL_URL = (email: string) =>
   `https://http.workduck.io/user/email/${encodeURIComponent(email)}`
 
-export const __STAGING_REMINDER_URL__ = 'https://http-staging.workduck.io/reminder'
-
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -155,18 +153,17 @@ export const apiURLs = {
   },
 
   links: {
-    getLinks: (workspaceId: string) => `https://url-staging.workduck.io/link/${workspaceId}/stats`,
-    saveLink: `https://url-staging.workduck.io/link/shorten`,
-    getLinkStat: (linkId: string, workspaceId: string) =>
-      `https://url-staging.workduck.io/link/${workspaceId}/stats/${linkId}`,
+    getLinks: `${MEXIT_BACKEND_URL_BASE}/link`,
+    saveLink: `${MEXIT_BACKEND_URL_BASE}/link/shorten`,
+    deleteLink: (linkId: string) => `${MEXIT_BACKEND_URL_BASE}/link/${linkId}"`,
     shortendLink: (shortId: string, workspaceId: string) =>
       `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
   },
 
   reminders: {
-    base: `${__STAGING_REMINDER_URL__}/`,
-    byId: (id: string) => `${__STAGING_REMINDER_URL__}/${id}`,
-    allWorkspace: `${__STAGING_REMINDER_URL__}/all/workspace`,
-    allNode: (nodeid: string) => `${__STAGING_REMINDER_URL__}/all/node/${nodeid}`
+    saveReminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
+    reminderByID: (id: string) => `${MEXIT_BACKEND_URL_BASE}/reminder/${id}`,
+    remindersOfNode: (nodeID: string) => `${MEXIT_BACKEND_URL_BASE}/reminder/node/${nodeID}`,
+    remindersOfWorkspace: `${MEXIT_BACKEND_URL_BASE}/reminder/workspace`
   }
 }

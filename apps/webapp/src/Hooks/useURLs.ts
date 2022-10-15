@@ -390,7 +390,7 @@ export const useURLsAPI = () => {
    */
   const getAllLinks = async () => {
     const data = await client
-      .get(apiURLs.links.getLinks(getWorkspaceId()), {
+      .get(apiURLs.links.getLinks, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
@@ -410,7 +410,6 @@ export const useURLsAPI = () => {
 
   const saveLink = async (link: Link) => {
     const req = {
-      workspace: getWorkspaceId(),
       url: link.url,
       alias: link.alias,
       properties: { title: link.title },
@@ -433,7 +432,7 @@ export const useURLsAPI = () => {
     // Need hashed url
     const hashedURL = md5(`${workspaceId}${link.url}`)
     const data = await client
-      .delete(apiURLs.links.getLinkStat(hashedURL, getWorkspaceId()), {
+      .delete(apiURLs.links.deleteLink(hashedURL), {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
