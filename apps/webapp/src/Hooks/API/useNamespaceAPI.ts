@@ -106,6 +106,28 @@ export const useNamespaceApi = () => {
     return res
   }
 
+  const makeNamespacePublic = async (namespaceID: string) => {
+    const res = await client
+      .patch(apiURLs.namespaces.makePublic(namespaceID), null, {
+        headers: workspaceHeaders()
+      })
+      .then((response: any) => {
+        return response.data
+      })
+    return res
+  }
+
+  const makeNamespacePrivate = async (namespaceID: string) => {
+    const res = await client
+      .patch(apiURLs.namespaces.makePrivate(namespaceID), null, {
+        headers: workspaceHeaders()
+      })
+      .then((response: any) => {
+        return response.data
+      })
+    return res
+  }
+
   const createNewNamespace = async (name: string) => {
     try {
       const res = await client
@@ -261,6 +283,8 @@ export const useNamespaceApi = () => {
     revokeNamespaceShare,
     getAllSharedUsers,
     updateNamespaceShare,
-    getPublicNamespaceAPI
+    getPublicNamespaceAPI,
+    makeNamespacePublic,
+    makeNamespacePrivate
   }
 }

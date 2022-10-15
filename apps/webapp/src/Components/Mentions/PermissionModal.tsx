@@ -66,10 +66,17 @@ export const PermissionModalContent = () => {
 
   const readOnly = useMemo(() => {
     // to test: return true
-    const access = accessWhenShared(nodeid)
-    if (access) return access !== 'MANAGE'
+    if (context === 'note') {
+      const access = accessWhenShared(id)
+      if (access) return access !== 'MANAGE'
+      return false
+    } else if (context === 'space') {
+      const ns = getNamespace(id)
+      if (ns.access) return ns.access !== 'MANAGE'
+      return false
+    }
     return false
-  }, [nodeid])
+  }, [id])
 
   useEffect(() => {
     if (open && context === 'space') {
@@ -308,7 +315,7 @@ export const PermissionModalContent = () => {
 
       {!readOnly && (
         <ModalSection>
-          <ShareOptions />
+          <ShareOptions context={context} id={id} />
         </ModalSection>
       )}
     </>

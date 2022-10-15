@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import globalLine from '@iconify-icons/ri/global-line'
 import { transparentize } from 'polished'
 import styled, { css, useTheme } from 'styled-components'
 
-import { apiURLs, mog } from '@mexit/core'
+import { apiURLs, mog, ShareContext } from '@mexit/core'
 import { ToggleButton, Loading, CardTitle } from '@mexit/shared'
 import { MexIcon } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { CopyButton } from '../Buttons/CopyButton'
+import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 
 const Flex = css`
   display: flex;
@@ -33,45 +35,79 @@ const ItemDesc = styled.div`
   text-overflow: ellipsis;
 `
 
-const ShareOptions = () => {
-  const node = useEditorStore((store) => store.node)
+interface ShareOptionsProps {
+  context: ShareContext
+  id: string
+}
+
+const ShareOptions = ({ context, id }: ShareOptionsProps) => {
+  // const node = useEditorStore((store) => store.node)
   const theme = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
   const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
-  const publicUrl = isPublic(node.nodeid) ? apiURLs.getPublicNodePath(node.nodeid) : undefined
+  const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
+  const { isNamespacePublic } = useNamespaces()
+
+  const publicUrl = useMemo(() => {
+    if (context === 'note') {
+      return isPublic(id) ? apiURLs.getPublicNodePath(id) : undefined
+    } else if (context === 'space') {
+      return isNamespacePublic(id) ? apiURLs.namespaces.getPublicURL(id) : undefined
+    }
+  }, [id, isPublic, context])
+
+  // Helper function to set loading
+  const tryError = async (fn: () => Promise<void>) => {
+    try {
+      const resp = await fn()
+      mog('Try', { resp })
+    } catch (error) {
+      mog('Error', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const flipPublicAccess = async () => {
     setIsLoading(true)
-    // Go from public -> private
-    if (publicUrl) {
-      try {
-        const resp = await makeNotePrivate(node.nodeid)
-        mog('MakingNodePrivateResp', { resp })
-      } catch (error) {
-        mog('Error in making link private', error)
-      } finally {
-        setIsLoading(false)
+    if (context === 'note') {
+      // Go from public -> private
+      if (publicUrl) {
+        await tryError(async () => {
+          const resp = await makeNotePrivate(id)
+          mog('MakingNodePrivateResp', { resp })
+        })
+      } else {
+        // Private to Public
+        await tryError(async () => {
+          const resp = await makeNotePublic(id)
+          mog('MakingNodePulicResp', { resp })
+        })
       }
-    } else {
-      // Private to Public
-      try {
-        const resp = await makeNotePublic(node.nodeid)
-        mog('MakingNodePulicResp', { resp })
-      } catch (error) {
-        mog('Error in making link public', error)
-      } finally {
-        setIsLoading(false)
+    } else if (context === 'space') {
+      if (publicUrl) {
+        await tryError(async () => {
+          const resp = await makeNamespacePrivate(id)
+          mog('MakingNamespacePrivateResp', { resp })
+        })
+      } else {
+        // Private to Public
+        await tryError(async () => {
+          const resp = await makeNamespacePublic(id)
+          mog('MakingNamespacePulicResp', { resp })
+        })
       }
     }
   }
+  mog('PublicURL', { publicUrl, context, id })
 
   return (
     <Container>
       <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
         <MexIcon color={theme.colors.primary} icon={globalLine} fontSize={24} margin="0 1rem 0 0" />
         <div style={{ gap: '1', userSelect: 'none' }}>
-          <CardTitle>Make this node public?</CardTitle>
+          <CardTitle>Make this {context} public?</CardTitle>
           <ItemDesc>Publish and share the link with everyone!</ItemDesc>
         </div>
       </div>

@@ -29,7 +29,7 @@ export interface SingleNamespace {
 
   icon?: MIcon
 
-  publicAccTypeess?: boolean
+  publicAccess?: boolean
   granterID?: string
 }
 

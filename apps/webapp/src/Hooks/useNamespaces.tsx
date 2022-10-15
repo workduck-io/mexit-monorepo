@@ -223,6 +223,11 @@ export const useNamespaces = () => {
     return users
   }
 
+  const isNamespacePublic = (namespaceId: string): boolean => {
+    const namespace = getNamespace(namespaceId)
+    return namespace?.publicAccess ?? false
+  }
+
   return {
     getNamespace,
     getNodesOfNamespace,
@@ -239,6 +244,7 @@ export const useNamespaces = () => {
     getNamespaceOfNode,
     getNamespaceOptions,
     // Sharing
-    getSharedUsersForNamespace
+    getSharedUsersForNamespace,
+    isNamespacePublic
   }
 }

@@ -94,7 +94,9 @@ export const apiURLs = {
     makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
     getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/public/${id}`,
     share: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
-    getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/shared/${id}/users`
+    getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/shared/${id}/users`,
+
+    getPublicURL: (id: string) => `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${id}`
   },
 
   // Link Shortener URLs
