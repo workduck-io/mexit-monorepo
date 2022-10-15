@@ -36,7 +36,12 @@ import { getListItemFromNode } from '../../Utils/helper'
 import { CenterIcon, StyledInput, StyledSearch } from './styled'
 
 const Search = () => {
-  const { input, setInput, selection, setSearchResults, isLoading } = useSputlitContext()
+  const { isLoading } = useSputlitContext()
+  const selection = useSputlitStore((s) => s.selection)
+
+  const input = useSputlitStore((s) => s.input)
+  const setInput = useSputlitStore((s) => s.setInput)
+  const setResults = useSputlitStore((s) => s.setResults)
   const { searchInList } = useSearch()
   const search = useSputlitStore((store) => store.search)
   const setSearch = useSputlitStore((store) => store.setSearch)
@@ -51,14 +56,16 @@ const Search = () => {
   const { execute } = useActionExecutor()
 
   const getQuery = (value: string): SearchType => {
+    const selection = useSputlitStore.getState().selection
+
     const query: SearchType = {
       value: value.trim(),
-      type: CategoryType.search
+      type: CategoryType.action
     }
 
-    // if (value.startsWith('[[')) {
-    //   query.type = CategoryType.backlink
-    // }
+    if (selection) {
+      query.type = CategoryType.backlink
+    }
 
     // if (value.startsWith('/')) {
     //   query.type = CategoryType.action
@@ -94,7 +101,7 @@ const Search = () => {
 
     const key = withoutContinuousDelimiter(replaceContinousDots).key
 
-    const query = key.startsWith('.') || key.startsWith('[[.') ? key.replace('.', '') : key
+    const query = key.startsWith('.') ? key.replace('.', '') : key
 
     setInput(replaceContinousDots)
     handleSearchInput(query)
@@ -132,20 +139,18 @@ const Search = () => {
       if (!activeItem) {
         if (search.value) {
           const listWithNew = await searchInList()
-          setSearchResults(listWithNew)
+          setResults(listWithNew)
         } else if (selection) {
-          setSearchResults(initActions)
-        } else {
-          if (!previewMode) return
-
           const notesOpened = lastOpenedNodes
 
           const recents = getRecentList(notesOpened).reverse()
 
           const listWithNew = insertItemInArray(recents, CREATE_NEW_ITEM, 1)
 
-          const results = [...listWithNew, ...initActions]
-          setSearchResults(results)
+          const results = listWithNew
+          setResults(results)
+        } else {
+          setResults(initActions)
         }
       }
     }

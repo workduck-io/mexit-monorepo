@@ -13,7 +13,7 @@ export const useSearchProps = () => {
   const icon = !previewMode ? BackIcon : LensIcon
 
   const path = node.path
-  const placeholder = !previewMode ? cleanString(path) : '[[  for Backlinks or / for actions'
+  const placeholder = !previewMode ? cleanString(path) : 'Type something...'
 
   return {
     icon: activeItem?.icon ?? icon,

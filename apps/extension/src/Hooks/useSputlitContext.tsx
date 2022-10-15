@@ -25,16 +25,8 @@ export type TooltipState = {
 }
 
 type SputlitContextType = {
-  child: any
-  setChild: (any) => void
-  input: string
-  setInput: (val: string) => void
   isLoading: boolean
   setIsLoading: (val: boolean) => void
-  selection: any
-  setSelection: (val: any) => void
-  searchResults: Array<ListItemType>
-  setSearchResults: (val: Array<ListItemType>) => void
   activeIndex: number
   setActiveIndex: any
 
@@ -50,10 +42,6 @@ const SputlitContext = createContext<SputlitContextType>(undefined!)
 export const useSputlitContext = () => useContext(SputlitContext)
 
 export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [child, setChild] = useState<any>(null)
-  const [input, setInput] = useState('')
-  const [selection, setSelection] = useState<any>()
-  const [searchResults, setSearchResults] = useState<Array<ListItemType>>([])
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [visualState, setVisualState] = useState<VisualState>(VisualState.hidden)
   const [tooltipState, setTooltipState] = useState<TooltipState>({
@@ -63,18 +51,10 @@ export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const value = {
-    child,
-    setChild,
-    input,
-    setInput,
     isLoading,
     setIsLoading,
-    selection,
-    setSelection,
     activeIndex,
     setActiveIndex,
-    searchResults,
-    setSearchResults,
     visualState,
     setVisualState,
     tooltipState,

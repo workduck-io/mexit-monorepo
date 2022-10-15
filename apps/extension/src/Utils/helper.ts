@@ -43,15 +43,10 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
       new: false
     },
     shortcut: {
-      edit: {
-        category: 'action',
-        keystrokes: 'Enter',
-        title: 'to Edit'
-      },
       save: {
         category: 'action',
-        keystrokes: '$mod+Enter',
-        title: 'to save'
+        keystrokes: 'Enter',
+        title: 'to Save'
       }
     }
   }

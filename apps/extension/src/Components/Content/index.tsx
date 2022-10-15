@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
-import { usePlateEditorRef } from '@udecode/plate'
+import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
-import { ActionType, defaultContent, QuickLinkType } from '@mexit/core'
+import { ActionType, defaultContent, ELEMENT_TAG, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 
+import { CopyTag } from '../../Editor/components/Tags/CopyTag'
+import getPlugins from '../../Editor/plugins/index'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSnippets } from '../../Hooks/useSnippets'
@@ -16,12 +18,13 @@ import Results from '../Results'
 import { StyledContent } from './styled'
 
 export default function Content() {
-  const { selection, searchResults, activeIndex } = useSputlitContext()
+  const { activeIndex } = useSputlitContext()
+  const setResults = useSputlitStore((s) => s.results)
   const { node, setNodeContent, previewMode, persistedContent } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
+  const selection = useSputlitStore((s) => s.selection)
   const { getContent } = useContentStore()
-  const editor = usePlateEditorRef(node.nodeid)
   const getSnippet = useSnippets().getSnippet
 
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
@@ -29,11 +32,24 @@ export default function Content() {
   // const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
+    const editor = createPlateEditor({
+      plugins: getPlugins(
+        createPlateUI({
+          [ELEMENT_TAG]: CopyTag as any
+        }),
+        {
+          exclude: { dnd: true }
+        }
+      )
+    })
+
     const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
+    console.log({ content })
+
     if (selection?.range && content && selection?.url && previewMode) {
       setDeserializedContent(content)
     }
-  }, [editor])
+  }, [])
 
   // useEffect(() => {
   //   const highlights = highlighted.editor
@@ -63,7 +79,7 @@ export default function Content() {
   }, [node, previewMode])
 
   useEffect(() => {
-    const item = searchResults[activeIndex]
+    const item = setResults[activeIndex]
     const activeItem = useSputlitStore.getState().activeItem
 
     if (item?.category === QuickLinkType.backlink) {
@@ -82,7 +98,7 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-  }, [activeIndex, searchResults, deserializedContent, selection, persistedContent])
+  }, [activeIndex, setResults, deserializedContent, selection, persistedContent])
 
   return (
     <StyledContent>

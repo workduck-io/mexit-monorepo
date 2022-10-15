@@ -109,10 +109,15 @@ export const useInternalLinks = () => {
   }
 
   const getEntirePathILinks = (ilink: string, nodeID: string, namespace: string) => {
-    const pathStrings = useDataStore.getState().ilinks.map((ilink) => ilink.path)
+    const pathStrings = useDataStore
+      .getState()
+      .ilinks.filter((i) => i.namespace === namespace)
+      .map((ilink) => ilink.path)
+
     const parents = getAllParentPaths(ilink) // includes link of child
 
     const newPaths = parents.filter((l) => !pathStrings.includes(l)) // only create links for non existing
+    mog('NEWWWW', { newPaths, parents, pathStrings })
 
     const newILinks: ILink[] = newPaths.map((l) => {
       const addedILink = {
@@ -121,7 +126,15 @@ export const useInternalLinks = () => {
         icon: getNodeIcon(l),
         namespace: namespace
       }
-      addedILink.path = checkValidILink({ notePath: addedILink.path, showAlert: true, openedNotePath: undefined })
+
+      mog('CHECKING ILINKS', { addedILink, newPaths, ilink })
+
+      addedILink.path = checkValidILink({
+        namespace: namespace,
+        notePath: addedILink.path,
+        showAlert: true,
+        openedNotePath: undefined
+      })
 
       return addedILink
     })

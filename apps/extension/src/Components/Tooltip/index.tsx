@@ -25,23 +25,23 @@ import { ProfileImage } from '../ProfileImage'
 import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
 
 function Tooltip() {
-  const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
+  const { setVisualState, tooltipState, setTooltipState } = useSputlitContext()
   const { setNode, setPreviewMode, setNodeContent } = useEditorContext()
   const { highlighted } = useHighlightStore()
 
   const { getILinkFromNodeid } = useLinks()
-  const { getContent, removeContent } = useContentStore()
+  const { getContent } = useContentStore()
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
   const { isSharedNode, getSharedNode } = useNodes()
-  const { getUser, cache } = useUserCacheStore()
+  const { cache } = useUserCacheStore()
   const mentionable = useMentionStore((state) => state.mentionable)
 
   const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
   const [access, setAccess] = useState<AccessLevel>()
 
-  const { getUserFromUserid, getUserAccessLevelForNode } = useMentions()
+  const { getUserFromUserid } = useMentions()
   // const { getUserDetailsUserId } = useUserService()
 
   const user = useMemo(() => {

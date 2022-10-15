@@ -1,10 +1,8 @@
-import { platesStore } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
-import { CaptureType, extractMetadata, mog, NodeProperties, SEPARATOR } from '@mexit/core'
+import { extractMetadata, mog, SEPARATOR } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
@@ -19,13 +17,14 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { node, setPreviewMode } = useEditorContext()
-  const { ilinks, addILink, checkValidILink } = useDataStore()
+  const { node, setPreviewMode, nodeContent } = useEditorContext()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
-  const { selection, setVisualState, setSelection } = useSputlitContext()
+  const { setVisualState } = useSputlitContext()
+  const setSelection = useSputlitStore((s) => s.setSelection)
+
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
-  const { setContent, setMetadata } = useContentStore()
+  const { setContent } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
@@ -35,11 +34,12 @@ export function useSaveChanges() {
   const saveIt = (saveAndExit = false, notification = false) => {
     setVisualState(VisualState.animatingOut)
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
-    const state = platesStore.get.state()
+
+    const selection = useSputlitStore.getState().selection
 
     // Editor Id is different from nodeId
     // const editorId = getPlateId()
-    const editorState = state[node.nodeid].get.value()
+    const editorState = nodeContent
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
@@ -53,6 +53,7 @@ export function useSaveChanges() {
       }
 
       dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
+
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'SAVE_NODE',
@@ -67,6 +68,7 @@ export function useSaveChanges() {
         }
       }
     } else {
+      mog('Node is', { node })
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       updateMultipleILinks(linksToBeCreated)
       dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)

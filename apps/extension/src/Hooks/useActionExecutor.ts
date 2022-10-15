@@ -1,4 +1,5 @@
-import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { reset } from 'mixpanel-browser'
 import toast from 'react-hot-toast'
 
 import {
@@ -35,8 +36,9 @@ import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
-  const { setVisualState, setInput, setSearchResults, setActiveIndex } = useSputlitContext()
+  const { setVisualState, setActiveIndex } = useSputlitContext()
   const { setPreviewMode, setNode, setPersistedContent } = useEditorContext()
+  const setResults = useSputlitStore((store) => store.setResults)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
@@ -45,17 +47,25 @@ export function useActionExecutor() {
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const setSearch = useSputlitStore((store) => store.setSearch)
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
+  const setInput = useSputlitStore((s) => s.setInput)
   const resetSputlitState = useSputlitStore((s) => s.reset)
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     const search = useSputlitStore.getState().search
     const activeItem = useSputlitStore.getState().activeItem
 
+    mog('action itme', { item })
+
+    if (!item) {
+      mog('No item found')
+      return
+    }
+
     switch (item.category) {
       case QuickLinkType.backlink: {
         let node: ILink
         let namespace: SingleNamespace
-        const val = search.type === CategoryType.backlink ? search.value.slice(2) : search.value
+        const val = search.value
         const nodeValue = val || getNewDraftKey()
         const defaultNamespace = getDefaultNamespace()
 
@@ -77,13 +87,10 @@ export function useActionExecutor() {
           namespace: namespace.id
         })
 
-        if (metaKeyPressed) {
-          saveIt(false, true)
-        } else {
-          setPreviewMode(false)
-        }
+        saveIt(false, true)
 
-        setInput('')
+        resetSputlitState()
+
         break
       }
 
@@ -157,7 +164,7 @@ export function useActionExecutor() {
           case ActionType.RENDER: {
             setActiveItem(item)
             setInput('')
-            setSearchResults([])
+            setResults([])
             break
           }
           case ActionType.MAGICAL: {
@@ -182,7 +189,7 @@ export function useActionExecutor() {
                 })
               setActiveIndex(0)
               setInput('')
-              setSearch({ value: '', type: CategoryType.search })
+              setSearch({ value: '', type: CategoryType.action })
             }
 
             break

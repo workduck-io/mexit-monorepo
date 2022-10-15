@@ -26,6 +26,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useReminderStore } from '../Stores/useReminderStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../contentScript'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
@@ -54,8 +55,7 @@ type ArgumentsType<T extends (...args: any[]) => any> = T extends (...args: infe
 export default function useRaju() {
   // For some reason, using useState wasn't making dispatch() make use of the new variable
   // So added in the context for now
-  const { child, setChild } = useSputlitContext()
-
+  const setChild = useSputlitStore((s) => s.setChild)
   const setTheme = useThemeStore((store) => store.setTheme)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
@@ -157,6 +157,7 @@ export default function useRaju() {
     const handleIframeLoad = () => {
       connection.promise
         .then((child: any) => {
+          mog('setting content')
           setChild(child)
         })
         .catch((error) => {
@@ -173,6 +174,8 @@ export default function useRaju() {
     type: K,
     ...params: ArgumentsType<ParentMethods[K]>
   ): ReturnType<ParentMethods[K]> => {
+    const child = useSputlitStore.getState().child
+
     switch (type) {
       case 'SET_CONTENT':
         return child.updateContentStore(...params)
@@ -185,7 +188,7 @@ export default function useRaju() {
       case 'ADD_HIGHLIGHTED_BLOCK':
         return child.addHighlighted(...params)
       case 'SEARCH':
-        return child.search(...params).then((result) => {
+        const res = child?.search(...params)?.then((result) => {
           return result
         })
     }

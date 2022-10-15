@@ -4,7 +4,7 @@ import { findIndex, groupBy } from 'lodash'
 import { useSpring } from 'react-spring'
 import { useVirtual } from 'react-virtual'
 
-import { ActionType, CategoryType, mog } from '@mexit/core'
+import { ActionType } from '@mexit/core'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorContext } from '../../Hooks/useEditorContext'
@@ -16,7 +16,10 @@ import Renderer from '../Renderer'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
 
 function Results() {
-  const { searchResults, activeIndex, setActiveIndex, input } = useSputlitContext()
+  const { activeIndex, setActiveIndex } = useSputlitContext()
+  const results = useSputlitStore((s) => s.results)
+  const input = useSputlitStore((s) => s.input)
+
   const { previewMode, setPreviewMode } = useEditorContext()
   const { execute } = useActionExecutor()
 
@@ -26,12 +29,12 @@ function Results() {
   const parentRef = useRef(null)
   const pointerMoved = usePointerMovedSinceMount()
 
-  const groups = Object.keys(groupBy(searchResults, (n) => n.category))
+  const groups = Object.keys(groupBy(results, (n) => n.category))
 
-  const indexes = useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
+  const indexes = useMemo(() => groups.map((gn) => findIndex(results, (n) => n.category === gn)), [groups])
 
   const rowVirtualizer = useVirtual({
-    size: searchResults.length,
+    size: results.length,
     parentRef
   })
 
@@ -48,7 +51,7 @@ function Results() {
       }
 
       return style
-    }, [previewMode, activeIndex, searchResults, activeItem])
+    }, [previewMode, activeIndex, results, activeItem])
   )
 
   // destructuring here to prevent linter warning to pass
@@ -71,10 +74,7 @@ function Results() {
         if (event.metaKey) {
           for (let i = indexes[indexes.length - 1]; i > -1; i--) {
             const categoryIndex = indexes[i]
-            if (
-              categoryIndex < activeIndex &&
-              searchResults[categoryIndex].category !== searchResults[activeIndex].category
-            ) {
+            if (categoryIndex < activeIndex && results[categoryIndex].category !== results[activeIndex].category) {
               setActiveIndex(categoryIndex)
               break
             }
@@ -84,7 +84,7 @@ function Results() {
             let nextIndex = index > 0 ? index - 1 : index
 
             // avoid setting active index on a group
-            if (typeof searchResults[nextIndex] === 'string') {
+            if (typeof results[nextIndex] === 'string') {
               if (nextIndex === 0) nextIndex = index
               else nextIndex -= 1
             }
@@ -98,21 +98,18 @@ function Results() {
         if (event.metaKey) {
           for (let i = 0; i < indexes.length; i++) {
             const categoryIndex = indexes[i]
-            if (
-              categoryIndex > activeIndex &&
-              searchResults[categoryIndex].category !== searchResults[activeIndex].category
-            ) {
+            if (categoryIndex > activeIndex && results[categoryIndex].category !== results[activeIndex].category) {
               setActiveIndex(categoryIndex)
               break
             }
           }
         } else
           setActiveIndex((index) => {
-            let nextIndex = index < searchResults.length - 1 ? index + 1 : index
+            let nextIndex = index < results.length - 1 ? index + 1 : index
 
             // * avoid setting active index on a group
-            if (typeof searchResults[nextIndex] === 'string') {
-              if (nextIndex === searchResults.length - 1) nextIndex = index
+            if (typeof results[nextIndex] === 'string') {
+              if (nextIndex === results.length - 1) nextIndex = index
               else nextIndex += 1
             }
 
@@ -120,7 +117,7 @@ function Results() {
           })
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        const item = searchResults[activeIndex]
+        const item = results[activeIndex]
         execute(item)
       } else if (event.key === 'Backspace' && activeItem && input === '') {
         resetSpotlitState()
@@ -135,14 +132,14 @@ function Results() {
     return () => {
       document.getElementById('mexit')!.removeEventListener('keydown', handler)
     }
-  }, [searchResults, previewMode, activeIndex, activeItem, input])
+  }, [results, previewMode, activeIndex, activeItem, input])
 
   useEffect(() => {
     setActiveIndex(0)
-  }, [searchResults])
+  }, [results])
 
   function handleClick(id: number) {
-    const item = searchResults[id]
+    const item = results[id]
     execute(item)
   }
 
@@ -153,8 +150,8 @@ function Results() {
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {
-            const item = searchResults[virtualRow.index]
-            const lastItem = virtualRow.index > 0 ? searchResults[virtualRow.index - 1] : undefined
+            const item = results[virtualRow.index]
+            const lastItem = virtualRow.index > 0 ? results[virtualRow.index - 1] : undefined
             const handlers = {
               onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
               onClick: () => handleClick(virtualRow.index)

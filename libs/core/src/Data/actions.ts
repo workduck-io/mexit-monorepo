@@ -1,5 +1,5 @@
 import { ActionType, MexitAction } from '../Types/Actions'
-import { CategoryType, QuickLinkType } from '../Types/Editor'
+import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 
@@ -14,11 +14,6 @@ export const CREATE_NEW_ITEM = {
       category: 'action',
       keystrokes: 'Enter',
       title: 'to create'
-    },
-    save: {
-      category: 'action',
-      keystrokes: '$mod+Enter',
-      title: 'to save'
     }
   },
   extras: {
@@ -38,6 +33,36 @@ export const initActions: Array<ListItemType> = [
       capture: {
         category: 'action',
         title: 'to capture',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
+    id: 'ACTION_MEX_SEARCH',
+    title: 'Search in Mexit',
+    category: QuickLinkType.action,
+    description: 'Search your query within Mexit',
+    type: ActionType.USE,
+    icon: 'bx:mouse',
+    shortcut: {
+      search: {
+        category: 'action',
+        title: 'to search',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
+    id: 'ACTION_4d32gtj23agex34ojin',
+    title: 'Open Mexit Right Sidebar',
+    category: QuickLinkType.action,
+    description: 'Open sidebar',
+    type: ActionType.OPEN,
+    icon: 'codicon:layout-sidebar-right',
+    shortcut: {
+      open: {
+        category: 'action',
+        title: 'to open',
         keystrokes: 'Enter'
       }
     }
@@ -413,24 +438,25 @@ export const initActions: Array<ListItemType> = [
       base_url: 'https://github.com/search?ref=opensearch&q='
     }
   },
-  {
-    id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
-    title: 'Capture Multiple Tabs',
-    icon: 'bi:collection-fill',
-    category: QuickLinkType.action,
-    description: 'Save a group of tabs',
-    type: ActionType.RENDER,
-    shortcut: {
-      capture: {
-        category: 'action',
-        title: 'to capture',
-        keystrokes: 'Enter'
-      }
-    },
-    extras: {
-      componentName: 'CreateTabCapture'
-    }
-  },
+  // * Cool feature, but not for PH launch
+  // {
+  //   id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
+  //   title: 'Capture Multiple Tabs',
+  //   icon: 'bi:collection-fill',
+  //   category: QuickLinkType.action,
+  //   description: 'Save a group of tabs',
+  //   type: ActionType.RENDER,
+  //   shortcut: {
+  //     capture: {
+  //       category: 'action',
+  //       title: 'to capture',
+  //       keystrokes: 'Enter'
+  //     }
+  //   },
+  //   extras: {
+  //     componentName: 'CreateTabCapture'
+  //   }
+  // },
   // {
   //   id: 'ACTION_t4Gbp9x7f6jmkKB3LbYQ5',
   //   title: 'Show Captured Tab Groups',

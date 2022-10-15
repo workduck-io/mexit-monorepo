@@ -13,9 +13,19 @@ interface SputlitStore {
   search: SearchType
   setSearch: (query: SearchType) => void
 
+  input: string
+  setInput: (val: string) => void
+
+  // * Selection from page
+  selection?: any
+  setSelection: (selection?: any) => void
+
   // * Search Results
-  items?: Array<ListItemType>
-  setItems: (items: Array<ListItemType>) => void
+  results?: Array<ListItemType>
+  setResults: (items: Array<ListItemType>) => void
+
+  child?: any
+  setChild: (child?: any) => void
 
   // * Current Active action item from `items`
   activeItem?: ListItemType | MexitAction
@@ -27,12 +37,26 @@ interface SputlitStore {
 
 export const useSputlitStore = create<SputlitStore>(
   devtools((set) => ({
-    search: { value: '', type: CategoryType.search },
-
+    search: { value: '', type: CategoryType.action },
     setSearch: (query) => set({ search: query }),
-    setItems: (items) => set({ items }),
+
+    input: '',
+    setInput: (value) => set({ input: value }),
+
+    results: [],
+    setResults: (results) => set({ results }),
+
+    setSelection: (selection) => set({ selection }),
+    setChild: (child) => set({ child }),
 
     setActiveItem: (item) => set({ activeItem: item }),
-    reset: () => set({ search: { value: '', type: CategoryType.search }, activeItem: undefined, items: [] })
+    reset: () =>
+      set({
+        search: { value: '', type: CategoryType.action },
+        activeItem: undefined,
+        results: [],
+        selection: undefined,
+        input: ''
+      })
   }))
 )

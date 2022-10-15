@@ -14,6 +14,7 @@ import { useEditorContext } from '../Hooks/useEditorContext'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
@@ -36,7 +37,8 @@ type Timeout = ReturnType<typeof setTimeout>
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState, setSelection, setTooltipState } = useSputlitContext()
+  const { visualState, setVisualState, setTooltipState } = useSputlitContext()
+  const setSelection = useSputlitStore((s) => s.setSelection)
   const { previewMode, setPreviewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
 
@@ -72,7 +74,7 @@ function useToggleHandler() {
               const saveableRange = highlighter.fromRange(range)
               const sanitizedHTML = sanitizeHTML(html)
 
-              setSelection({ url: url, html: sanitizedHTML, range: saveableRange })
+              setSelection({ url, html: sanitizedHTML, range: saveableRange })
             } else {
               // To reset selection if a selection is made once
               setSelection(undefined)

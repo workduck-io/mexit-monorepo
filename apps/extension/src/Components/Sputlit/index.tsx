@@ -30,7 +30,6 @@ const Sputlit = () => {
   const innerRef = React.useRef<HTMLDivElement>(null)
 
   useWindowSelection()
-
   const enterMs = 200
   const exitMs = 100
 
@@ -53,6 +52,7 @@ const Sputlit = () => {
   }, [visualState])
 
   const isExternalSearchAction = activeItem?.category === QuickLinkType.action && activeItem?.type === ActionType.SEARCH
+
   // Height animation
   const previousHeight = useRef<number>()
   useEffect(() => {

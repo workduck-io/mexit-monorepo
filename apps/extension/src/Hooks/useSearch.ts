@@ -6,11 +6,11 @@ import {
   isReservedOrClash,
   CREATE_NEW_ITEM,
   initActions,
-  searchBrowserAction,
   ListItemType,
   sortByCreated,
   fuzzySearchLinks,
-  getListItemFromLink
+  getListItemFromLink,
+  searchBrowserAction
 } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
@@ -33,16 +33,17 @@ export const useSearch = () => {
     const quickLinks = getQuickLinks()
 
     const search = useSputlitStore.getState().search
+    const selection = useSputlitStore.getState().selection
+    console.log('Searching for', { search })
 
     switch (search?.type) {
-      case CategoryType.search:
+      case CategoryType.backlink:
         const nodeItems = await dispatch('SEARCH', ['node'], search.value)
         const snippetItems = await dispatch('SEARCH', ['snippet', 'template'], search.value)
 
         const sortedLinks = links.sort(sortByCreated)
 
         const resultLinks = fuzzySearchLinks(search.value, sortedLinks)
-        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
         const localNodes = []
 
         nodeItems.forEach((item) => {
@@ -70,9 +71,13 @@ export const useSearch = () => {
           quickLinks.map((i) => i.title)
         )
 
-        const mainItems = [...localNodes, ...actionItems]
-        searchList = isNew ? [CREATE_NEW_ITEM, ...mainItems] : mainItems
-        if (mainItems.length === 0) searchList.push(searchBrowserAction(search.value))
+        searchList = isNew && selection ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
+        break
+
+      case CategoryType.action:
+        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+        if (actionItems.length === 0) searchList.push(searchBrowserAction(search.value))
+        searchList = actionItems
 
         break
 
