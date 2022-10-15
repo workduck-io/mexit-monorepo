@@ -92,7 +92,7 @@ export const apiURLs = {
     update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
     makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
     makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/public/${id}`,
+    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,
     share: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
     getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/shared/${id}/users`,
 

@@ -25,9 +25,10 @@ export const PublicNoteSidebar = () => {
           type: 'hierarchy',
           items: iLinks
         },
+        data: ns,
         pollAction: PollActions.hierarchy
       } as SidebarSpace
-  }, [iLinks, ns?.id])
+  }, [iLinks, ns])
 
   const defaultStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
 
