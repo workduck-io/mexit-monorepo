@@ -22,17 +22,32 @@ export const CREATE_NEW_ITEM = {
 }
 
 export const initActions: Array<ListItemType> = [
+  {
+    id: 'ACTION_1',
+    title: 'Capture Screenshot',
+    category: QuickLinkType.action,
+    description: 'Capture tab screenshot',
+    type: ActionType.SCREENSHOT,
+    icon: 'bx:screenshot',
+    shortcut: {
+      capture: {
+        category: 'action',
+        title: 'to capture',
+        keystrokes: 'Enter'
+      }
+    }
+  },
   // {
-  //   id: 'ACTION_1',
-  //   title: 'Capture Screenshot',
+  //   id: 'ACTION_9x34kgj23j4234ojin',
+  //   title: 'Metadata Aggregator',
   //   category: QuickLinkType.action,
-  //   description: 'Capture tab screenshot',
-  //   type: ActionType.SCREENSHOT,
-  //   icon: 'bx:screenshot',
+  //   icon: 'eva:color-picker-fill',
+  //   description: 'Extract any useful data from the current page',
+  //   type: ActionType.MAGICAL,
   //   shortcut: {
-  //     capture: {
+  //     pick: {
+  //       title: 'to pick',
   //       category: 'action',
-  //       title: 'to capture',
   //       keystrokes: 'Enter'
   //     }
   //   }
