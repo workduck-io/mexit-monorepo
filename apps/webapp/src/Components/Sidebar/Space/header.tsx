@@ -117,7 +117,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
             {showInput && !isNamespaceInputDisabled ? (
               <Input defaultValue={space?.label} onBlur={(e) => onChangeName(e.target.value)} ref={inpRef} />
             ) : (
-              <Tooltip content={readOnly ? 'Space Name' : 'Click to rename Space'}>
+              <Tooltip content={readOnly ? 'Space Name' : `Rename ${title}`}>
                 <SpaceTitleFakeInput
                   ref={titleRef}
                   onClick={() => {

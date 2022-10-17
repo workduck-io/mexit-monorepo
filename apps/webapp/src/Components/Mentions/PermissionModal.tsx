@@ -38,6 +38,7 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { usePermissions } from '../../Hooks/usePermissions'
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
+import { useFetchShareData } from '../../Hooks/useFetchShareData'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)
@@ -53,6 +54,7 @@ export const PermissionModalContent = () => {
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
   const { getAllSharedUsers, revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
   const { accessWhenShared } = usePermissions()
+  const { fetchSharedUsers } = useFetchShareData()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
 
   const modalData = useShareModalStore((state) => state.data)
@@ -81,7 +83,7 @@ export const PermissionModalContent = () => {
   useEffect(() => {
     if (open && context === 'space') {
       // Fetch all user details for the space
-      getAllSharedUsers(id)
+      fetchSharedUsers(id, 'space')
     }
   }, [open, context, id])
 
@@ -221,6 +223,8 @@ export const PermissionModalContent = () => {
 
     mog('onSave', { changedUsers, newPermissions, revokedUsers })
   }
+
+  // mog('render', { context, id, changedUsers, sharedUsers, invitedUsers })
 
   return (
     <>

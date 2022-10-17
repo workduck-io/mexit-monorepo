@@ -1,14 +1,14 @@
-import { AccessLevel, mog, runBatch } from '@mexit/core'
+import { AccessLevel, mog, runBatch, ShareContext } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { getEmailStart } from '../Utils/constants'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodeShareAPI } from './API/useNodeShareAPI'
 import { useUserService } from './API/useUserAPI'
 import { useMentions } from './useMentions'
 
 interface UsersRaw {
-  nodeid: string
   users: Record<string, string>
 }
 
@@ -23,29 +23,30 @@ interface MUsersRaw {
 
 export const useFetchShareData = () => {
   const { getAllSharedNodes, getUsersOfSharedNode } = useNodeShareAPI()
+  const { getAllSharedUsers } = useNamespaceApi()
   const { getUserDetailsUserId } = useUserService()
   const { addMentionable } = useMentions()
   const setSharedNodes = useDataStore((s) => s.setSharedNodes)
 
-  const fetchSharedNodeUsers = async (nodeid: string) => {
+  const fetchSharedUsers = async (id: string, context: ShareContext) => {
     const sharedNodes = useDataStore.getState().sharedNodes
-    const node = sharedNodes.find((n) => n.nodeid === nodeid)
+    const node = sharedNodes.find((n) => n.nodeid === id)
     // Then fetch the users with access to the shared node
-    if (!node) return
-    const sharedNodeDetails = [getUsersOfSharedNode(nodeid)]
+    if (context === 'note' && !node) return
+    const sharedItemDetails = [context === 'note' ? getUsersOfSharedNode(id) : getAllSharedUsers(id)]
 
-    const nodeDetails = (await runBatch(sharedNodeDetails)).fulfilled
+    const itemDetails = (await runBatch(sharedItemDetails)).fulfilled
 
-    const usersWithAccess = nodeDetails
+    const usersWithAccess = itemDetails
       // .filter((p) => p.status === 'fulfilled')
       .map((p: any) => {
-        // mog('p', { p })
-        return p[0].value as UsersRaw
+        mog('p', { p })
+        return p as UsersRaw
       })
 
-    mog('getUserAccess', { usersWithAccess, nodeDetails })
+    // mog('getUserAccess', { usersWithAccess, itemDetails })
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
-      const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ nodeid: n.nodeid, userid: uid, access }))
+      const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ id, userid: uid, access }))
       return [...p, ...rawUsers]
     }, [])
 
@@ -57,12 +58,12 @@ export const useFetchShareData = () => {
           return { ...u, email: uDetails.email, alias: uDetails.alias }
         }),
 
-        ...[node].map(async (node) => {
+        ...(context === 'note' ? [node] : []).map(async (node) => {
           const uDetails = await getUserDetailsUserId(node.owner)
           return {
             access: 'OWNER',
             userid: uDetails.userID,
-            nodeid: node.nodeid,
+            id,
             email: uDetails.email,
             name: uDetails.name,
             alias: uDetails.alias
@@ -72,16 +73,16 @@ export const useFetchShareData = () => {
     ).fulfilled
       // .filter((p) => p.status === 'fulfilled')
       .reduce((arr, p: any) => {
-        // mog('p', { p })
-        return [...arr, ...p.map((u) => u.value as MUsersRaw)]
+        mog('p2', { p })
+        return [...arr, p as MUsersRaw]
       }, [])
     // .filter((u) => u.userid !== userDetails?.userID)
 
-    mog('mentionableU', { mentionableU })
+    mog('Fetched users for the shared item', { id, context, mentionableU })
     mentionableU.forEach((u) =>
       addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, {
-        context: 'note',
-        nodeid: u.nodeid,
+        context,
+        id: id,
         access: u.access
       })
     )
@@ -98,5 +99,5 @@ export const useFetchShareData = () => {
     setSharedNodes(sharedNodes)
   }
 
-  return { fetchShareData, fetchSharedNodeUsers }
+  return { fetchShareData, fetchSharedUsers }
 }

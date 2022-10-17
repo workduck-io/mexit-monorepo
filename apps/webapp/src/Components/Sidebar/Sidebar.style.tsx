@@ -73,7 +73,7 @@ export const SpaceTitleFakeInput = styled.div`
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
   border: none;
   width: 100%;
-  max-width: 180px;
+  max-width: 159px;
   flex-shrink: 1;
   ${Ellipsis};
 

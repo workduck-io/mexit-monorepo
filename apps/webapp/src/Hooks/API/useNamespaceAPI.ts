@@ -264,15 +264,19 @@ export const useNamespaceApi = () => {
     }
   }
 
-  const getAllSharedUsers = async (id: string) => {
+  const getAllSharedUsers = async (id: string): Promise<{ users: Record<string, string> }> => {
     try {
-      const res = await client.get(apiURLs.namespaces.getUsersOfShared(id), {
-        headers: workspaceHeaders()
-      })
-      mog('get all shared users', res)
-      return res
+      return await client
+        .get(apiURLs.namespaces.getUsersOfShared(id), {
+          headers: workspaceHeaders()
+        })
+        .then((resp: any) => {
+          mog('get all shared users', resp)
+          return { users: resp.data }
+        })
     } catch (err) {
-      throw new Error(`Unable to get shared namespace users: ${err}`)
+      mog(`Unable to get shared namespace users: ${err}`)
+      return { users: {} }
     }
   }
 

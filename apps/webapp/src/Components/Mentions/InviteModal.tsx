@@ -84,7 +84,7 @@ export const InviteModalContent = () => {
           mog('UserPermission given', { details, resp })
           addMentionable(details.alias, data.email, details.userID, details.name, {
             context,
-            nodeid: node.nodeid,
+            id: node.nodeid,
             access
           })
         } else {

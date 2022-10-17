@@ -101,7 +101,7 @@ export const useMentions = () => {
     name: string,
     accessDetails?: {
       context: ShareContext
-      nodeid: string
+      id: string
       access: AccessLevel
     }
   ) => {
@@ -110,14 +110,14 @@ export const useMentions = () => {
 
     // mog('adding mentionable user ', { userID, mentionExists, mentionable })
     if (mentionExists) {
-      if (accessDetails.nodeid && accessDetails.access) {
-        mentionExists.access[accessDetails.context][accessDetails.nodeid] = accessDetails.access
+      if (accessDetails.id && accessDetails.access) {
+        mentionExists.access[accessDetails.context][accessDetails.id] = accessDetails.access
       }
       setMentionable([...mentionable.filter((u) => u.userID !== userID), mentionExists])
     } else {
       const newAccess = accessDetails
         ? {
-            [accessDetails.context]: { [accessDetails.nodeid]: accessDetails.access }
+            [accessDetails.context]: { [accessDetails.id]: accessDetails.access }
           }
         : emptyAccessTable
       const newMention: Mentionable = {
@@ -272,6 +272,7 @@ export const useMentions = () => {
 }
 
 export const getAccessValue = (access: AccessLevel): { value: AccessLevel; label: string } => {
+  // mog('getAccessValue', { access })
   switch (access) {
     case 'READ':
       return { value: 'READ', label: 'View' }
