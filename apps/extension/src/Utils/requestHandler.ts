@@ -44,7 +44,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const reqData = {
         id: data.id,
         nodePath: {
-          path: data.path
+          path: data.path,
+          namespaceID: data.namespaceID
         },
         title: data.title,
         data: serializeContent(data?.content ?? defaultContent, data.id, elementMetadata),
