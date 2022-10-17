@@ -72,6 +72,7 @@ export const SnippetsInfoBar = () => {
             ref={inputRef}
           />
         </SidebarListFilter>
+        {/* TODO: need to add prop for target so that it can render in the foreground of shadow dom */}
         <Infobox text={SnippetSidebarHelp} />
       </SidebarListFilterWrapper>
       {searchedSnippets?.map((snippet) => (
