@@ -1,5 +1,11 @@
 # mexit
 
+## 0.14.1
+
+### Patch Changes
+
+- 2e98d8fa: Add shared namespaces
+
 ## 0.14.0
 
 ### Minor Changes
