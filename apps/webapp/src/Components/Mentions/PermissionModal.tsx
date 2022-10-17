@@ -233,66 +233,64 @@ export const PermissionModalContent = () => {
       {sharedUsers.length > 0 && (
         <ModalSection>
           <ModalHeader>Manage Sharing</ModalHeader>
-          <ModalSectionScroll>
-            <SharedPermissionsTable>
-              <caption>Users with access to this {context}</caption>
-              <ShareRowHeading>
-                <tr>
-                  <td>Alias</td>
-                  <td>Email</td>
-                  <td>Permission</td>
-                  <td></td>
-                </tr>
-              </ShareRowHeading>
+          <SharedPermissionsTable>
+            <caption>Users with access to this {context}</caption>
+            <ShareRowHeading>
+              <tr>
+                <td>Alias</td>
+                <td>Email</td>
+                <td>Permission</td>
+                <td></td>
+              </tr>
+            </ShareRowHeading>
 
-              <tbody>
-                {sharedUsers.map((user) => {
-                  const hasChanged = changedUsers?.find((u) => u.userID === user.userID)
-                  const access = hasChanged ? hasChanged.access[node.nodeid] : user.access[node.nodeid]
-                  const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
-                  const isCurrent = user.userID === currentUserDetails.userID
+            <tbody>
+              {sharedUsers.map((user) => {
+                const hasChanged = changedUsers?.find((u) => u.userID === user.userID)
+                const access = hasChanged ? hasChanged.access[context][id] : user.access[context][id]
+                const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
+                const isCurrent = user.userID === currentUserDetails.userID
 
-                  return (
-                    <ShareRow hasChanged={!!hasChanged} key={`${user.userID}`} isRevoked={isRevoked}>
-                      <ShareAlias hasChanged={!!hasChanged}>
-                        <ShareAliasWithImage>
-                          <ProfileImage email={user.email} size={24} />
-                          {`${user.alias}${isCurrent ? ' (you)' : ''}`}
-                        </ShareAliasWithImage>
-                      </ShareAlias>
-                      <ShareEmail>{user.email}</ShareEmail>
+                return (
+                  <ShareRow hasChanged={!!hasChanged} key={`${user.userID}`} isRevoked={isRevoked}>
+                    <ShareAlias hasChanged={!!hasChanged}>
+                      <ShareAliasWithImage>
+                        <ProfileImage email={user.email} size={24} />
+                        {`${user.alias}${isCurrent ? ' (you)' : ''}`}
+                      </ShareAliasWithImage>
+                    </ShareAlias>
+                    <ShareEmail>{user.email}</ShareEmail>
 
-                      <SharePermission disabled={readOnly || isCurrent}>
-                        {user.access[node.nodeid] === 'OWNER' ? (
-                          <ShareOwnerTag>Owner</ShareOwnerTag>
-                        ) : (
-                          <StyledCreatatbleSelect
-                            onChange={(access) => onPermissionChange(user.userID, access.value)}
-                            defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
-                            options={permissionOptions}
-                            closeMenuOnSelect={true}
-                            closeMenuOnBlur={true}
+                    <SharePermission disabled={readOnly || isCurrent}>
+                      {user.access[context][id] === 'OWNER' ? (
+                        <ShareOwnerTag>Owner</ShareOwnerTag>
+                      ) : (
+                        <StyledCreatatbleSelect
+                          onChange={(access) => onPermissionChange(user.userID, access.value)}
+                          defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
+                          options={permissionOptions}
+                          closeMenuOnSelect={true}
+                          closeMenuOnBlur={true}
+                        />
+                      )}
+                    </SharePermission>
+                    <ShareRowAction>
+                      <ShareRowActionsWrapper>
+                        {!isCurrent && access !== 'OWNER' && (
+                          <IconButton
+                            disabled={readOnly}
+                            onClick={() => onRevokeAccess(user.userID)}
+                            icon={deleteBin6Line}
+                            title="Remove"
                           />
                         )}
-                      </SharePermission>
-                      <ShareRowAction>
-                        <ShareRowActionsWrapper>
-                          {!isCurrent && access !== 'OWNER' && (
-                            <IconButton
-                              disabled={readOnly}
-                              onClick={() => onRevokeAccess(user.userID)}
-                              icon={deleteBin6Line}
-                              title="Remove"
-                            />
-                          )}
-                        </ShareRowActionsWrapper>
-                      </ShareRowAction>
-                    </ShareRow>
-                  )
-                })}
-              </tbody>
-            </SharedPermissionsTable>
-          </ModalSectionScroll>
+                      </ShareRowActionsWrapper>
+                    </ShareRowAction>
+                  </ShareRow>
+                )
+              })}
+            </tbody>
+          </SharedPermissionsTable>
 
           <ModalControls>
             {/* <Button disabled={readOnly} large onClick={onCopyLink}>
