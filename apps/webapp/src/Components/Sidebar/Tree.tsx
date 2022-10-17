@@ -97,9 +97,10 @@ const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
 interface TreeProps {
   initTree: TreeData
   selectedItemId?: string
+  readOnly?: boolean
 }
 
-const Tree = ({ initTree, selectedItemId }: TreeProps) => {
+const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const [tree, setTreeState] = React.useState<TreeData>(initTree)
   const [contextOpenNodeId, setContextOpenNodeId] = useState<string>(null)
   const location = useLocation()
@@ -151,6 +152,7 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
       <RenderTreeItem
         {...renderProps}
         onClick={onClick}
+        readOnly={readOnly}
         match={match || publicNamespaceMatch}
         isInEditor={isInEditor}
         isHighlighted={renderProps.item?.data?.nodeid === selectedItemId}
@@ -236,7 +238,7 @@ const Tree = ({ initTree, selectedItemId }: TreeProps) => {
         onCollapse={onCollapse}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
-        isDragEnabled
+        isDragEnabled={!readOnly}
         isNestingEnabled
       />
     </>

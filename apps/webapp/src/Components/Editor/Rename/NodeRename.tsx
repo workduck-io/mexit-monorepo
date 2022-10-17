@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath } from '@mexit/core'
+import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath, mog } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -21,9 +21,11 @@ import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 import { Wrapper, TitleStatic } from './NodeRename.style'
+import { usePermissions } from '../../../Hooks/usePermissions'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()
+  const { accessWhenShared } = usePermissions()
 
   const to = useRenameStore((store) => store.to)
   const ilinks = useDataStore((store) => store.ilinks)
@@ -186,9 +188,17 @@ const NodeRenameOnlyTitle = () => {
     reset()
   }, [nodeFrom])
 
+  const isInputReadonly = useMemo(() => {
+    if (nodeFrom) {
+      const access = accessWhenShared(node.nodeid)
+      return access === 'READ' || isReserved(nodeFrom)
+    }
+    return true
+  }, [node, nodeFrom])
+
   return (
     <Wrapper>
-      {isReserved(nodeFrom) ? (
+      {isInputReadonly ? (
         <Tippy theme="mex" placement="bottom-start" content="Reserved Node">
           <TitleStatic>{nodeTitle?.length > 0 ? getNameFromPath(nodeTitle) : getNameFromPath(nodeFrom)}</TitleStatic>
         </Tippy>

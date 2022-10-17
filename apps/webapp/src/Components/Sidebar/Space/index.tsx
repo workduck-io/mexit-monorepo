@@ -20,7 +20,12 @@ export const SidebarSpaceComponent = ({ space, style, readOnly }: AnimatedProps<
       {
         {
           hierarchy: space?.list?.type === 'hierarchy' && (
-            <MexTree items={space?.list?.items} spaceId={space?.id} filterText="Filter Notes" />
+            <MexTree
+              items={space?.list?.items}
+              readOnly={space?.data?.access === 'READ'}
+              spaceId={space?.id}
+              filterText="Filter Notes"
+            />
           ),
           flat: space?.list?.type === 'flat' && <space.list.renderItems />
         }[space?.list?.type]

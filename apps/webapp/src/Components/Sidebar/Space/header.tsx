@@ -104,6 +104,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const isNamespaceInputDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
   const isNamespaceIconDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
   const isShared = space?.data?.granterID !== undefined
+  const isReadonly = space?.data?.access === 'READ'
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
 
@@ -129,7 +130,12 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
             )}
           </SpaceTitle>
           {!isNamespaceReserved && (
-            <IconButton highlight={isShared} title="Share Space" icon="ri:share-line" onClick={onShareSpace} />
+            <IconButton
+              highlight={isShared && !isReadonly}
+              title={isReadonly ? 'You can only read the contents!' : 'Share Space'}
+              icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
+              onClick={isReadonly ? undefined : onShareSpace}
+            />
           )}
           <Tippy
             theme="mex-bright"

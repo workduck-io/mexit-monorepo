@@ -252,7 +252,7 @@ export const useNamespaceApi = () => {
         userIDToAccessTypeMap
       }
       return await client
-        .put(apiURLs.namespaces.share, payload, {
+        .post(apiURLs.namespaces.share, payload, {
           headers: workspaceHeaders()
         })
         .then((resp) => {

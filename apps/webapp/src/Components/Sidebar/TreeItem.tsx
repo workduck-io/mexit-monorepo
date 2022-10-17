@@ -102,6 +102,7 @@ interface TreeItemProps extends RenderItemParams {
   isInEditor: boolean
   match: PathMatch<'nodeid'>
   isHighlighted: boolean
+  readOnly?: boolean
   setContextOpenNodeId: (nodeid: string | null) => void
   onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: TreeItem) => void
 }
@@ -116,11 +117,12 @@ export const RenderTreeItem = ({
   contextOpenNodeId,
   setContextOpenNodeId,
   isInEditor,
+  readOnly,
   isHighlighted,
   match,
   onClick
 }: TreeItemProps) => {
-  const isTrue = JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
+  const isTrue = !readOnly && JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
 
   // const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.data?.nodeid])
   // const { getLastOpened } = useLastOpened()
