@@ -26,6 +26,7 @@ export default function Chotu() {
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
   const descriptions = useDescriptionStore((store) => store.descriptions)
+  const highlighted = useHighlightStore((state) => state.highlighted)
 
   const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
@@ -147,6 +148,12 @@ export default function Chotu() {
 
     parent.bootDescriptions(descriptions)
   }, [parent, descriptions])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootHighlights(highlighted)
+  }, [parent, highlighted])
 
   return (
     <div>
