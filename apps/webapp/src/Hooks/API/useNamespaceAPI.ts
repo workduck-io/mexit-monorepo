@@ -5,21 +5,29 @@ import { client } from '@workduck-io/dwindle'
 import {
   apiURLs,
   generateNamespaceId,
-  runBatch,
-  iLinksToUpdate,
   MIcon,
   mog,
   WORKSPACE_HEADER,
-  AccessLevel
+  AccessLevel,
+  iLinksToUpdate,
+  extractMetadata
 } from '@mexit/core'
 
+import { useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import '../../Utils/apiClient'
+import { deserializeContent } from '../../Utils/serializer'
+import { WorkerRequestType } from '../../Utils/worker'
+import { runBatchWorker } from '../../Workers/controller'
+import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { setNamespaces, setIlinks, addInArchive } = useDataStore()
+  const { setNamespaces, setIlinks } = useDataStore()
+
+  const setRequest = useApiStore.getState().setRequest
+  const { updateFromContent } = useUpdater()
 
   const workspaceHeaders = () => ({
     [WORKSPACE_HEADER]: getWorkspaceId(),
@@ -60,11 +68,27 @@ export const useNamespaceApi = () => {
       const newILinks = namespaces.reduce((arr, { nodeHierarchy }) => {
         return [...arr, ...nodeHierarchy]
       }, [])
+      const localILinks = useDataStore.getState().ilinks
+
       mog('update namespaces and ILinks', { namespaces, newILinks })
       // SetILinks once middleware is integrated
       setNamespaces(namespaces.map((n) => n.ns))
       // TODO: Also set archive links
       setIlinks(newILinks)
+
+      const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
+      const ids = toUpdateLocal.map((i) => i.nodeid)
+
+      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+      const requestData = { time: Date.now(), method: 'GET' }
+
+      fulfilled.forEach((node) => {
+        const { rawResponse, nodeid } = node
+        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+        const content = deserializeContent(rawResponse.data)
+        const metadata = extractMetadata(rawResponse) // added by Varshitha
+        updateFromContent(nodeid, content, metadata)
+      })
     }
   }
 
@@ -283,6 +307,7 @@ export const useNamespaceApi = () => {
   return {
     createNewNamespace,
     getAllNamespaces,
+    getNamespace,
     changeNamespaceName,
     changeNamespaceIcon,
     shareNamespace,

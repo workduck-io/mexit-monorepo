@@ -288,6 +288,12 @@ export const dataStoreConstructor = (set, get) => ({
     set({
       publicNodes: publicNodes
     })
+  },
+  _hasHydrated: false,
+  setHasHydrated: (state) => {
+    set({
+      _hasHydrated: state
+    })
   }
 })
 

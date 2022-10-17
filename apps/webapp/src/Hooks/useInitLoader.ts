@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 import { mog, runBatch } from '@mexit/core'
 
-import { useAuthStore, useAuthentication } from '../Stores/useAuth'
+import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
@@ -34,6 +34,7 @@ export const useInitLoader = () => {
   const { initPortals } = usePortals()
 
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
+  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -77,10 +78,10 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated && snippetHydrated) {
+    if (isAuthenticated && snippetHydrated && dataStoreHydrated) {
       mog('Inside InitLoader', { isAuthenticated })
       backgroundFetch()
       fetchAll()
     }
-  }, [isAuthenticated, snippetHydrated])
+  }, [isAuthenticated, snippetHydrated, dataStoreHydrated])
 }

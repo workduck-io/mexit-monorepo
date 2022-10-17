@@ -100,4 +100,7 @@ export interface DataStoreState {
   getSharedNodes: () => SharedNode[]
 
   setPublicNodes: (publicNodes: any[]) => void
+
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
 }
