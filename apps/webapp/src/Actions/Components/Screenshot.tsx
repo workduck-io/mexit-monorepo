@@ -35,13 +35,7 @@ export async function canvasPreview(
   rotate = 0
 ) {
   const ctx = canvas.getContext('2d')
-  // mog('ctx', {
-  //   image,
-  //   canvas,
-  //   crop,
-  //   scale,
-  //   rotate
-  // })
+  // mog('ctx', { image, canvas, crop, scale, rotate })
 
   if (!ctx) {
     throw new Error('No 2d context')
@@ -116,7 +110,13 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const [crop, setCrop] = useState<Crop>()
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>({
+    unit: 'px',
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+  })
   const [scale, setScale] = useState(1)
   const [rotate, setRotate] = useState(0)
   const [aspect, setAspect] = useState<number | undefined>(undefined)
@@ -153,6 +153,7 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
     async () => {
       if (imgRef.current && previewCanvasRef.current) {
         // We use canvasPreview as it's much faster than imgPreview.
+        // mog('imgRef.current', { completedCrop })
         canvasPreview(imgRef.current, previewCanvasRef.current, completedCrop, scale, rotate)
       }
     },
