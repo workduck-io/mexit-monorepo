@@ -14,12 +14,12 @@ import {
   LinkTitleWrapper,
   LinkWrapper,
   TagsLabel,
-  ShortenURL
+  ShortenURL,
+  AddTagMenu
 } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useAuthStore } from '../../Stores/useAuth'
-import AddTagMenu from './AddTagMenu'
 import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'
 
 interface LinkProps {

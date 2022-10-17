@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import { link } from 'fs'
-
-import { getFavicon, Tag } from '@mexit/core'
+import { getFavicon, Link, Tag } from '@mexit/core'
 import {
+  AddTagMenu,
   LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
   LinkTagSection,
@@ -13,6 +12,8 @@ import {
   TagsLabel
 } from '@mexit/shared'
 
+import { useAuthStore } from '../../Hooks/useAuth'
+import { useLinkURLs } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
 
 const FaviconImage = ({ source }: { source: string }) => {
@@ -21,14 +22,21 @@ const FaviconImage = ({ source }: { source: string }) => {
 }
 
 export const ShortenerComponent = () => {
+  const [link, setLink] = useState<Link>()
   const [tags, setTags] = useState<Tag[]>([])
+
   const { links } = useLinkStore()
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const { updateAlias, isDuplicateAlias, getTags } = useLinkURLs()
+
+  const toAddTags = getTags(link?.tags)
 
   useEffect(() => {
     const link = links.find((link) => link.url === window.location.href)
 
     if (link) {
       setTags(link.tags?.map((t) => ({ value: t })))
+      setLink(link)
     }
   }, [])
 
@@ -39,14 +47,23 @@ export const ShortenerComponent = () => {
         {window.location.href}
       </LinkTitleWrapper>
       <LinkShortenAndTagsWrapper>
-        {/* <ShortenURL link={link} /> */}
+        <ShortenURL
+          link={link}
+          workspaceId={getWorkspaceId()}
+          updateAlias={updateAlias}
+          isDuplicateAlias={isDuplicateAlias}
+        />
         <LinkTagSection>
           <TagsLabel
             tags={tags}
             onClick={() => console.log('clicked on tags')}
             onDelete={(val: string) => console.log('link delete', val)}
           />
-          {/* <AddTagMenu createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} /> */}
+          <AddTagMenu
+            createTag={() => console.log('Trying to create a new tag')}
+            tags={toAddTags}
+            addTag={() => console.log('add a new tag')}
+          />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>
     </LinkWrapper>

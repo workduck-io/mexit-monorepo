@@ -1,8 +1,12 @@
+import React from 'react'
+
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
 
-import { Tag } from '@mexit/core'
-import { FilterMenuDiv, Menu, MenuItem } from '@mexit/shared'
+import { mog, Tag } from '@mexit/core'
+
+import { FilterMenuDiv } from '../Style/Filter.style'
+import { Menu, MenuItem } from './FloatingElements/Dropdown'
 
 interface AddTagMenuProps {
   tags: Tag[]
@@ -12,7 +16,7 @@ interface AddTagMenuProps {
 
 export const AddTagClassName = 'new-tag-menu'
 
-const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
+export const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
   // mog('AddTagMenu', { tags })
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
@@ -49,5 +53,3 @@ const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
     </Menu>
   )
 }
-
-export default AddTagMenu

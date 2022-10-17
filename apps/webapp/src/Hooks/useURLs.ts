@@ -15,7 +15,8 @@ import {
   Link,
   Settify,
   WORKSPACE_HEADER,
-  URL_DOMAIN_REG
+  URL_DOMAIN_REG,
+  extractLinksFromData
 } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
@@ -339,41 +340,6 @@ export const useURLFilters = () => {
     applyCurrentFilters,
     addTagFilter
   }
-}
-
-const extractLinksFromData = (data: any): Link[] => {
-  return data.URL.map((l: any) => {
-    if (l) {
-      /*
-      {
-        "modified": "2022-10-07T13:24:31.331Z",
-        "properties": {
-            "title": "Google"
-        },
-        "alias": "good",
-        "expiry": 1696685071331,
-        "entity": "URL",
-        "workspace": "WORKSPACE_Fh6RzxkgCe6a4LtkwkELn",
-        "url": "https://google.com",
-        "created": "2022-10-07T13:24:31.331Z",
-        "tags": [
-            "XYZ",
-            "YXA"
-        ]
-      }
-      */
-      const createdAtTime = new Date(l?.created)?.getTime()
-      const updatedAtTime = new Date(l?.modified)?.getTime()
-      return {
-        title: l.properties.title,
-        url: l.url,
-        tags: l.tags,
-        alias: l?.alias,
-        createdAt: createdAtTime,
-        updatedAt: updatedAtTime
-      }
-    } else return undefined
-  }).filter((l) => !!l) as Link[]
 }
 
 export const useURLsAPI = () => {

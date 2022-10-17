@@ -1,8 +1,13 @@
-import { mog, Link, Settify, WORKSPACE_HEADER, URL_DOMAIN_REG } from '@mexit/core'
+import md5 from 'md5'
+
+import { client } from '@workduck-io/dwindle'
+
+import { mog, Link, Settify, WORKSPACE_HEADER, URL_DOMAIN_REG, apiURLs, extractLinksFromData } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useAuthStore } from './useAuth'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
@@ -105,4 +110,74 @@ export const useLinkURLs = () => {
     getLink,
     getHighlights
   }
+}
+
+export const useURLsAPI = () => {
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const setLinks = useLinkStore((store) => store.setLinks)
+
+  const workspaceHeaders = () => ({
+    [WORKSPACE_HEADER]: getWorkspaceId(),
+    Accept: 'application/json, text/plain, */*'
+  })
+
+  /**
+   * Fetches all links of the workspace
+   */
+  const getAllLinks = async () => {
+    const data = await client
+      .get(apiURLs.links.getLinks, {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        const links = extractLinksFromData(d.data)
+        mog('getAllLinks', { d, links })
+        return links
+      })
+      .then((links: Link[]) => {
+        setLinks(links)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
+    return data
+  }
+
+  const saveLink = async (link: Link) => {
+    const req = {
+      url: link.url,
+      alias: link.alias,
+      properties: { title: link.title },
+      tags: link.tags
+    }
+
+    const data = await client
+      .post(apiURLs.links.saveLink, req, {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        // mog('saveLink', d)
+        return d.data
+      })
+    return data
+  }
+
+  const deleteLink = async (link: Link) => {
+    const workspaceId = getWorkspaceId()
+    // Need hashed url
+    const hashedURL = md5(`${workspaceId}${link.url}`)
+    const data = await client
+      .delete(apiURLs.links.deleteLink(hashedURL), {
+        headers: workspaceHeaders()
+      })
+      .then((d: any) => {
+        mog('delete Link', d)
+        return d
+      })
+    return data
+    // OOK
+  }
+
+  return { getAllLinks, saveLink, deleteLink }
 }

@@ -7,9 +7,8 @@ import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Link, getValidTitle, metadataParser, Tag } from '@mexit/core'
-import { copyTextToClipboard, Input, Label, resize, LinkTagSection, TagsLabel } from '@mexit/shared'
+import { copyTextToClipboard, Input, Label, resize, LinkTagSection, TagsLabel, AddTagMenu } from '@mexit/shared'
 
-import AddTagMenu from '../../Components/Link/AddTagMenu'
 import { useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
 

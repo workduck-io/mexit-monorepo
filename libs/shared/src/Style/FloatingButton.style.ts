@@ -49,7 +49,7 @@ export const FloatingMenu = styled.div`
   background-color: ${({ theme }) => theme.colors.background.card};
 `
 
-export const MenuItem = styled.button`
+export const StyledMenuItem = styled.button`
   width: 100%;
   display: flex;
   align-items: center;

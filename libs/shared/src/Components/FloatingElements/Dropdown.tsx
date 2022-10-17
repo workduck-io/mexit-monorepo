@@ -40,24 +40,11 @@ import { mergeRefs } from 'react-merge-refs'
 import { MIcon } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
 
-<<<<<<<< HEAD:libs/shared/src/Components/FloatingElement/Dropdown.tsx
-import { GenericFlex } from '../../Style/Filter'
+import { GenericFlex } from '../../Style/Filter.style'
 import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
 import { Input } from './../../Style/Form'
-========
-import { GenericFlex } from '../../Style/Filter.style'
-import { IconDisplay } from '../IconDisplay'
->>>>>>>> e7f99475 (WIP: moved floating elements and shortener tag components to shared lib;):libs/shared/src/Components/FloatingElements/Dropdown.tsx
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
-import {
-  MenuItemCount,
-  ItemLabel,
-  MenuItemWrapper,
-  MenuWrapper,
-  MultiSelectIcon,
-  RootMenuWrapper
-} from './Dropdown.style'
 
 export const MenuItem = forwardRef<
   HTMLButtonElement,

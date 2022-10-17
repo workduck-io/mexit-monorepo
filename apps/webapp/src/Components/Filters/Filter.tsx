@@ -6,6 +6,10 @@ import { capitalize } from 'lodash'
 
 import { Filter, FilterValue, FilterJoin, FilterType, mog } from '@mexit/core'
 import {
+  FilterTypeIcons,
+  Menu,
+  MenuItem,
+  IconDisplay,
   FilterJoinDiv,
   IconDisplay,
   Menu,
@@ -16,7 +20,8 @@ import {
   FilterWrapper,
   FilterRemoveButton,
   FilterTypeDiv,
-  GenericFlex
+  GenericFlex,
+  ItemLabel
 } from '@mexit/shared'
 
 import { useFilterIcons, getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'
