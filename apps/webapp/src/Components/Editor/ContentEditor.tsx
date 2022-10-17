@@ -144,7 +144,7 @@ const ContentEditor = () => {
     }
   }, [shortcuts, toggleFocusMode])
 
-  const viewOnly = accessWhenShared(node.nodeid) === 'READ'
+  const viewOnly = accessWhenShared(node.nodeid)?.access === 'READ'
 
   return (
     <>

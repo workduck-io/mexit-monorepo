@@ -39,7 +39,7 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
     const access = accessWhenShared(nodeId)
     return {
       namespaceIcon: namespace?.icon,
-      isReadonly: access === 'READ'
+      isReadonly: access.access === 'READ'
     }
   }, [nodeId])
 

@@ -32,6 +32,7 @@ import { useAPIHeaders } from './useAPIHeaders'
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
+  const updateMetadata = useContentStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
@@ -46,6 +47,7 @@ export const useApi = () => {
   const setRequest = useApiStore.getState().setRequest
 
   const { workspaceHeaders } = useAPIHeaders()
+  const currentUser = useAuthStore((store) => store.userDetails)
 
   /*
    * Saves new node data in the backend
@@ -181,7 +183,14 @@ export const useApi = () => {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        setMetadata(noteID, extractMetadata(d.data))
+        if (!isShared) {
+          setMetadata(noteID, extractMetadata(d.data))
+        } else {
+          updateMetadata(noteID, {
+            updatedAt: Date.now(),
+            lastEditedBy: currentUser.userID
+          })
+        }
         return d.data
       })
       .catch((e) => {

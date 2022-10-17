@@ -70,7 +70,7 @@ export const PermissionModalContent = () => {
     // to test: return true
     if (context === 'note') {
       const access = accessWhenShared(id)
-      if (access) return access !== 'MANAGE'
+      if (access) return access.access !== 'MANAGE'
       return false
     } else if (context === 'space') {
       const ns = getNamespace(id)

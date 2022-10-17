@@ -191,7 +191,10 @@ const NodeRenameOnlyTitle = () => {
   const isInputReadonly = useMemo(() => {
     if (nodeFrom) {
       const access = accessWhenShared(node.nodeid)
-      return access === 'READ' || isReserved(nodeFrom)
+      // Is editable only when: access on space is write or above
+      return (
+        (access.context === 'space' && access.access === 'READ') || access.context === 'note' || isReserved(nodeFrom)
+      )
     }
     return true
   }, [node, nodeFrom])
@@ -199,7 +202,7 @@ const NodeRenameOnlyTitle = () => {
   return (
     <Wrapper>
       {isInputReadonly ? (
-        <Tippy theme="mex" placement="bottom-start" content="Reserved Node">
+        <Tippy theme="mex" placement="bottom-start" content={`Title ${getNameFromPath(nodeFrom)}`}>
           <TitleStatic>{nodeTitle?.length > 0 ? getNameFromPath(nodeTitle) : getNameFromPath(nodeFrom)}</TitleStatic>
         </Tippy>
       ) : editable ? (
