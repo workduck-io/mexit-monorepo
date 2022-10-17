@@ -1,17 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 
 import { addMinutes } from 'date-fns'
-import { AsyncMethodReturns, connectToChild, Methods } from 'penpal'
-import toast from 'react-hot-toast'
+import { connectToChild, Methods } from 'penpal'
 
 import {
-  AddILinkProps,
-  CacheUser,
   Contents,
   idxKey,
   ILink,
-  InvitedUser,
-  Mentionable,
+  Link,
   MEXIT_FRONTEND_URL_BASE,
   mog,
   NodeEditorContent,
@@ -21,21 +17,15 @@ import {
   SharedNode,
   SingleNamespace,
   Snippet,
-  Tag,
   UserDetails,
-  WorkspaceDetails,
-  Link
+  WorkspaceDetails
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
-import { useMentionStore } from '../Stores/useMentionsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { getElementById, styleSlot } from '../contentScript'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
@@ -195,11 +185,9 @@ export default function useRaju() {
       case 'ADD_HIGHLIGHTED_BLOCK':
         return child.addHighlighted(...params)
       case 'SEARCH':
-        const res = child.search(...params).then((result) => {
+        return child.search(...params).then((result) => {
           return result
         })
-
-        return res
     }
   }
 
