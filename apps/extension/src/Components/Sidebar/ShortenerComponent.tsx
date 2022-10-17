@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import styled from 'styled-components'
+
 import { getFavicon, Link, Tag } from '@mexit/core'
 import {
   AddTagMenu,
@@ -15,6 +17,24 @@ import {
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
+
+const ShortenerWrapper = styled(LinkWrapper)`
+  padding: 0;
+`
+
+const UrlTitleWrapper = styled(LinkTitleWrapper)`
+  background-color: ${({ theme }) => theme.colors.gray[9]};
+  color: ${({ theme }) => theme.colors.text.fade};
+  font-size: 1rem;
+  width: 100%;
+
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  padding: 0.25rem 0;
+
+  img {
+    margin: 0.25rem 0.5rem;
+  }
+`
 
 const FaviconImage = ({ source }: { source: string }) => {
   // mog('rendering favicon', { source })
@@ -41,11 +61,11 @@ export const ShortenerComponent = () => {
   }, [])
 
   return (
-    <LinkWrapper>
-      <LinkTitleWrapper>
+    <ShortenerWrapper>
+      <UrlTitleWrapper>
         <FaviconImage source={window.location.href} />
         {window.location.href}
-      </LinkTitleWrapper>
+      </UrlTitleWrapper>
       <LinkShortenAndTagsWrapper>
         <ShortenURL
           link={link}
@@ -66,6 +86,6 @@ export const ShortenerComponent = () => {
           />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>
-    </LinkWrapper>
+    </ShortenerWrapper>
   )
 }

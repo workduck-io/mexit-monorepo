@@ -17,7 +17,7 @@ export const useSidebarTransition = () => {
 
   const rhSidebarStyle = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '400px'}`
+    const visibleEndColumnWidth = `${isDesktop ? '600px' : '415px'}`
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     if (!overlaySidebar) {
       const style = {
@@ -35,7 +35,7 @@ export const useSidebarTransition = () => {
 
   const { style: gridStyle, endColumnWidth } = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '400px'}`
+    const visibleEndColumnWidth = `${isDesktop ? '600px' : '415px'}`
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
     const themeGap = `${theme.additional.hasBlocks ? '4rem' : '0rem'}`
     // mog('Overlay', { overlaySidebar, showSidebar, showRHSidebar })

@@ -10,6 +10,16 @@ export const MultiEmailValidate = (emailsRaw: string): boolean => {
   return isValid
 }
 
+/*
+ * The following regex is used to validate the format of the alias
+ *
+ * Rules: AlphaNumeric, no spaces, - and _ as spearator,
+ * separator cannot be in the beginning or end of the alias
+ *
+ * See: https://stackoverflow.com/a/1223146/
+ */
+export const ALIAS_REG = /^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/
+
 export const getWrongEmails = (emailsRaw: string): string[] => {
   const emails = emailsRaw.split(',').map((email) => email.trim())
   const wrongEmails = emails.filter((email: string): boolean => {

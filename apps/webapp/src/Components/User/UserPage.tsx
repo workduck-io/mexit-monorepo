@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import { IconButton, LoadingButton } from '@workduck-io/mex-components'
 
-import { IS_DEV, ALIAS_REG } from '@mexit/core'
+import { IS_DEV } from '@mexit/core'
 import {
   Info,
   InfoData,
@@ -21,6 +21,7 @@ import {
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
+import { ALIAS_REG } from '../../Utils/constants'
 import { CopyButton } from '../Buttons/CopyButton'
 import { InputFormError } from '../Input'
 import { ProfileImage } from './ProfileImage'

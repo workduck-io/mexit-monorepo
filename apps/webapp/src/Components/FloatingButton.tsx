@@ -12,7 +12,7 @@ import {
   Float,
   FloatButton,
   FocusModeProp,
-  MenuItem,
+  StyledMenuItem,
   MexIcon,
   FloatingMenu
 } from '@mexit/shared'
@@ -70,13 +70,13 @@ const FloatingButton = () => {
 
           <div>
             <Tippy interactive theme="markdown-help" placement="right" content={<AutoformatHelp />}>
-              <MenuItem key="wd-mex-shortcuts-button">
+              <StyledMenuItem key="wd-mex-shortcuts-button">
                 <MexIcon fontSize={20} margin="0 1rem 0 0" icon="ri:text" /> Markdown Hints
-              </MenuItem>
+              </StyledMenuItem>
             </Tippy>
-            <MenuItem key="wd-mex-shortcuts-button" onClick={onShortcutClick}>
+            <StyledMenuItem key="wd-mex-shortcuts-button" onClick={onShortcutClick}>
               <MexIcon fontSize={20} margin="0 1rem 0 0" icon="fluent:keyboard-24-filled" /> Keyboard Shortcuts
-            </MenuItem>
+            </StyledMenuItem>
           </div>
         </FloatingMenu>
       )}
