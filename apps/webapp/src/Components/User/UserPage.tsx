@@ -8,12 +8,11 @@ import { IconButton, LoadingButton } from '@workduck-io/mex-components'
 
 import { IS_DEV } from '@mexit/core'
 import { AuthForm, BackCard, ButtonFields, SettingsCard } from '@mexit/shared'
-import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '@mexit/shared'
+import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon, ALIAS_REG } from '@mexit/shared'
 import { CenteredColumn, Title } from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
-import { ALIAS_REG } from '../../Utils/constants'
 import { CopyButton } from '../Buttons/CopyButton'
 import { InputFormError } from '../Input'
 import { ProfileImage } from './ProfileImage'

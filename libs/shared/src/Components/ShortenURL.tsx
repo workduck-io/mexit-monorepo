@@ -6,26 +6,26 @@ import { Icon } from '@iconify/react'
 import toast from 'react-hot-toast'
 
 import { apiURLs, mog, Link } from '@mexit/core'
-import { Input, Tooltip } from '@mexit/shared'
 
-import { useLinkURLs } from '../../Hooks/useURLs'
-import { useAuthStore } from '../../Stores/useAuth'
-import { ShortenButton, ShortenSectionWrapper } from './ShortenURL.style'
+import { Input } from '../Style/Form'
+import { ShortenSectionWrapper, ShortenButton } from '../Style/ShortenURL.style'
+import { Tooltip } from './FloatingElements'
 
 interface ShortenURLProps {
   link?: Link
+  workspaceId?: string
+  updateAlias?: (linkurl: string, alias: string) => void
+  isDuplicateAlias?: (alias: string) => boolean
 }
 
 const validLink = /^[a-z0-9]+$/i
 
 // TODO: Add a input to enter shorten url
-const ShortenURL = ({ link }: ShortenURLProps) => {
+export const ShortenURL = ({ link, workspaceId, updateAlias, isDuplicateAlias }: ShortenURLProps) => {
   const [isCopied, setIsCopied] = useState(false)
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const isShortend = link?.alias !== undefined
   const [editable, setEditable] = useState(false)
   const [short, setShort] = useState(link?.alias)
-  const { updateAlias, isDuplicateAlias } = useLinkURLs()
 
   const handleShortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -34,7 +34,7 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
 
   const onShortenClick = () => {
     if (isShortend) {
-      const url = apiURLs.links.shortendLink(link?.alias, getWorkspaceId())
+      const url = apiURLs.links.shortendLink(link?.alias, workspaceId)
       navigator.clipboard.writeText(url || '')
 
       // If successful, update the isCopied state value
@@ -105,5 +105,3 @@ const ShortenURL = ({ link }: ShortenURLProps) => {
     />
   )
 }
-
-export default ShortenURL

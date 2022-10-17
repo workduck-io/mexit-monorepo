@@ -7,8 +7,8 @@ import toast from 'react-hot-toast'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
-import { IconButton, Input, Tooltip } from '@mexit/shared'
+import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
+import { Input, Tooltip, TagsLabel, IconButton } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -26,7 +26,6 @@ import {
   SpaceTitleWrapper
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
-import { TagsLabel } from '../TagLabel'
 
 const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)

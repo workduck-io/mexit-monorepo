@@ -11,6 +11,7 @@ import { SnippetCards, SidebarListFilterWrapper, SidebarListFilter, Input, Snipp
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { HighlightCard } from './HighlightCard'
+import { ShortenerComponent } from './ShortenerComponent'
 
 export function ContextInfoBar() {
   const [search, setSearch] = useState('')
@@ -47,6 +48,7 @@ export function ContextInfoBar() {
 
   return (
     <SnippetCards>
+      <ShortenerComponent />
       <SidebarListFilterWrapper>
         <SidebarListFilter>
           <Icon icon={searchLine} />

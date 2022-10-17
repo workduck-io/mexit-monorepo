@@ -7,7 +7,7 @@ import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
 import { IconButton } from '@workduck-io/mex-components'
 
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, generateTempId, mog, NodeEditorContent } from '@mexit/core'
-import { Note, TagFlex, TagsFlex, InfoWidgetWrapper, SuggestionIconsGroup, TagsHelp } from '@mexit/shared'
+import { Note, TagFlex, TagsFlex, InfoWidgetWrapper, SuggestionIconsGroup, TagsHelp, TagsLabel } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -16,7 +16,6 @@ import Collapse from '../../Layout/Collapse'
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { getContent } from '../../Stores/useEditorStore'
-import { TagsLabel } from '../Sidebar/TagLabel'
 import NodeLink from './NodeLink'
 
 interface TagsRelated {

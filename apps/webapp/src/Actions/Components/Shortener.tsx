@@ -6,12 +6,10 @@ import styled from 'styled-components'
 import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getValidTitle, Link, metadataParser, mog, Tag } from '@mexit/core'
-import { copyTextToClipboard, Input, Label, resize } from '@mexit/shared'
+import { Link, getValidTitle, metadataParser, Tag } from '@mexit/core'
+import { copyTextToClipboard, Input, Label, resize, LinkTagSection, TagsLabel } from '@mexit/shared'
 
 import AddTagMenu from '../../Components/Link/AddTagMenu'
-import { LinkTagSection } from '../../Components/Link/Link.style'
-import { TagsLabel } from '../../Components/Sidebar/TagLabel'
 import { useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
 

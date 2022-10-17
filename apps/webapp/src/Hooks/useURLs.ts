@@ -14,14 +14,14 @@ import {
   mog,
   Link,
   Settify,
-  WORKSPACE_HEADER
+  WORKSPACE_HEADER,
+  URL_DOMAIN_REG
 } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
-import { URL_DOMAIN_REG } from '../Utils/constants'
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'
 

@@ -1,22 +1,9 @@
+import { Link } from '../Stores/linkStoreConstructor'
 import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { fuzzySearch } from './fuzzysearch'
 import { LINK_SHORTENER_URL_BASE } from './routes'
-
-export interface Link {
-  url: string
-  title: string
-
-  /**
-   * If the link is shortend it has an alias
-   */
-  alias?: string
-  tags?: string[]
-
-  createdAt?: number
-  updatedAt?: number
-}
 
 export const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
   const getKeys = (link: Link) => {
@@ -61,4 +48,9 @@ export const getListItemFromLink = (link: Link, workspaceID: string) => {
   }
 
   return actionItem
+}
+
+// * Get Favicon url
+export const getFavicon = (source: string) => {
+  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&SIZE=64`
 }
