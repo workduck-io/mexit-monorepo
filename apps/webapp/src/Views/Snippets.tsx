@@ -240,12 +240,11 @@ const Snippets = () => {
 
   useEffect(() => {
     async function getInitialSnippets() {
-      mog('Idhar tera baap aayega?')
       const snippets = getSnippets()
       const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
       const ids = unfetchedSnippets.map((i) => i.id)
 
-      mog('AllSnippets', { snippets })
+      mog('SnippetsUseEffect', { snippets, unfetchedSnippets })
 
       if (ids && ids.length > 0) {
         const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)

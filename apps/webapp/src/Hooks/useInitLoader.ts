@@ -9,13 +9,14 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useFetchShareData } from './useFetchShareData'
 import useLoad from './useLoad'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
-import { useNamespaceApi } from './API/useNamespaceAPI'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -31,6 +32,8 @@ export const useInitLoader = () => {
   // const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
+
+  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -74,10 +77,10 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && snippetHydrated) {
       mog('Inside InitLoader', { isAuthenticated })
       backgroundFetch()
       fetchAll()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, snippetHydrated])
 }
