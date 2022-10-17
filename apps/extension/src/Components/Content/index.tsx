@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
-import { ActionType, defaultContent, ELEMENT_TAG, QuickLinkType } from '@mexit/core'
+import { ActionType, defaultContent, ELEMENT_TAG, mog, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import getPlugins from '../../Editor/plugins/index'
 import { useEditorContext } from '../../Hooks/useEditorContext'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -19,17 +18,13 @@ import { StyledContent } from './styled'
 
 export default function Content() {
   const { activeIndex } = useSputlitContext()
-  const setResults = useSputlitStore((s) => s.results)
-  const { node, setNodeContent, previewMode, persistedContent } = useEditorContext()
-  const { saveIt } = useSaveChanges()
+  const { setNodeContent, previewMode, persistedContent } = useEditorContext()
 
   const selection = useSputlitStore((s) => s.selection)
   const { getContent } = useContentStore()
   const getSnippet = useSnippets().getSnippet
 
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
-  // const { highlighted, clearHighlightedBlockIds } = useBlockHighlightStore()
-  // const { focusBlock } = useFocusBlock()
 
   useEffect(() => {
     const editor = createPlateEditor({
@@ -63,27 +58,32 @@ export default function Content() {
   //   }
   // }, [highlighted, node.nodeid, previewMode])
 
+  // useEffect(() => {
+  //   const handleSaveKeydown = (event: KeyboardEvent) => {
+  //     if (event.key === 's' && event.metaKey && !previewMode) {
+  //       event.preventDefault()
+  //       saveIt(true, true)
+  //     }
+  //   }
+
+  //   document.getElementById('mexit')!.addEventListener('keydown', handleSaveKeydown)
+
+  //   return () => {
+  //     document.getElementById('mexit')!.removeEventListener('keydown', handleSaveKeydown)
+  //   }
+  // }, [node, previewMode])
+
   useEffect(() => {
-    const handleSaveKeydown = (event: KeyboardEvent) => {
-      if (event.key === 's' && event.metaKey && !previewMode) {
-        event.preventDefault()
-        saveIt(true, true)
-      }
-    }
+    const results = useSputlitStore.getState().results
 
-    document.getElementById('mexit')!.addEventListener('keydown', handleSaveKeydown)
-
-    return () => {
-      document.getElementById('mexit')!.removeEventListener('keydown', handleSaveKeydown)
-    }
-  }, [node, previewMode])
-
-  useEffect(() => {
-    const item = setResults[activeIndex]
+    const item = results[activeIndex]
     const activeItem = useSputlitStore.getState().activeItem
+
+    mog('Saving this', { item, activeItem })
 
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
+
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
       } else if (
@@ -98,12 +98,11 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-  }, [activeIndex, setResults, deserializedContent, selection, persistedContent])
+  }, [activeIndex, deserializedContent, selection, persistedContent])
 
   return (
     <StyledContent>
       <Results />
-      {/* <Editor readOnly={previewMode} onChange={onChangeSave} /> */}
     </StyledContent>
   )
 }

@@ -49,7 +49,9 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const searchResults = useSputlitStore((s) => s.results)
   const activeItem = useSputlitStore((s) => s.activeItem)
   const selection = useSputlitStore((s) => s.selection)
-  const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
+  const { previewMode, nodeContent, setPreviewMode } = useEditorContext()
+  const node = useSputlitStore((s) => s.node)
+
   const ref = useRef<HTMLDivElement>()
   const { tags, addTag, ilinks, addILink, sharedNodes, slashCommands } = useDataStore()
   const { getDefaultNamespace } = useNamespaces()

@@ -18,6 +18,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { deserializeContent } from '../../Utils/serializer'
 import { MentionTooltipComponent } from '../MentionTooltip'
@@ -26,9 +27,9 @@ import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
 
 function Tooltip() {
   const { setVisualState, tooltipState, setTooltipState } = useSputlitContext()
-  const { setNode, setPreviewMode, setNodeContent } = useEditorContext()
+  const { setPreviewMode, setNodeContent } = useEditorContext()
   const { highlighted } = useHighlightStore()
-
+  const setNode = useSputlitStore((s) => s.setNode)
   const { getILinkFromNodeid } = useLinks()
   const { getContent } = useContentStore()
   const { getParentILink } = useInternalLinks()

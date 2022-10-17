@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import { ActionType, QuickLinkType } from '@mexit/core'
+import { QuickLinkType, ActionType } from '@mexit/core'
 
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'

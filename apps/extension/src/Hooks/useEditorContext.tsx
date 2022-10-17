@@ -1,19 +1,8 @@
 import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
 
-import {
-  CategoryType,
-  createNodeWithUid,
-  defaultContent,
-  getNewDraftKey,
-  MexitAction,
-  NodeContent,
-  NodeEditorContent,
-  NodeProperties
-} from '@mexit/core'
+import { createNodeWithUid, defaultContent, getNewDraftKey, NodeEditorContent, NodeProperties } from '@mexit/core'
 
 type EditorContextType = {
-  node: NodeProperties
-  setNode: (node: NodeProperties) => void
   nodeContent: NodeEditorContent
   setNodeContent: (content: NodeEditorContent) => void
   persistedContent: NodeEditorContent
@@ -26,14 +15,11 @@ const EditorContext = createContext<EditorContextType>(undefined!)
 export const useEditorContext = () => useContext(EditorContext)
 
 export const EditorProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [node, setNode] = useState(createNodeWithUid(getNewDraftKey(), ''))
   const [nodeContent, setNodeContent] = useState(defaultContent.content)
   const [previewMode, setPreviewMode] = useState(true)
   const [persistedContent, setPersistedContent] = useState(defaultContent.content)
 
   const value = {
-    node,
-    setNode,
     nodeContent,
     setNodeContent,
     persistedContent,

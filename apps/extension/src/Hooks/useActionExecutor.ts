@@ -37,7 +37,8 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
-  const { setPreviewMode, setNode, setPersistedContent } = useEditorContext()
+  const { setPersistedContent } = useEditorContext()
+  const setNode = useSputlitStore((s) => s.setNode)
   const setResults = useSputlitStore((store) => store.setResults)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()

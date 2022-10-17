@@ -2,7 +2,7 @@ import React from 'react'
 
 import { ThemeProvider } from 'styled-components'
 
-import { defaultThemes } from '@mexit/shared'
+import { defaultThemes, Notification } from '@mexit/shared'
 
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
@@ -28,6 +28,7 @@ export default function Index() {
         <DibbaPortal>
           <Dibba />
         </DibbaPortal>
+        <Notification />
 
         <EditorProvider>
           <InternalEvents />

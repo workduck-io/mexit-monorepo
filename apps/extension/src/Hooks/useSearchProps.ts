@@ -8,7 +8,8 @@ import { useEditorContext } from './useEditorContext'
 
 export const useSearchProps = () => {
   const activeItem = useSputlitStore((s) => s.activeItem)
-  const { previewMode, node } = useEditorContext()
+  const { previewMode } = useEditorContext()
+  const node = useSputlitStore((s) => s.node)
 
   const icon = !previewMode ? BackIcon : LensIcon
 

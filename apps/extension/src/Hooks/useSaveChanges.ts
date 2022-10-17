@@ -17,7 +17,7 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { node, setPreviewMode, nodeContent } = useEditorContext()
+  const { setPreviewMode, nodeContent } = useEditorContext()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
   const { setVisualState } = useSputlitContext()
@@ -33,6 +33,7 @@ export function useSaveChanges() {
 
   const saveIt = (saveAndExit = false, notification = false) => {
     setVisualState(VisualState.animatingOut)
+    const node = useSputlitStore.getState().node
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
 
     const selection = useSputlitStore.getState().selection

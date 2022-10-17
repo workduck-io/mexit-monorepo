@@ -34,7 +34,6 @@ export const useSearch = () => {
     const quickLinks = getQuickLinks()
 
     const search = useSputlitStore.getState().search
-    const selection = useSputlitStore.getState().selection
     console.log('Searching for', { search })
 
     switch (search?.type) {

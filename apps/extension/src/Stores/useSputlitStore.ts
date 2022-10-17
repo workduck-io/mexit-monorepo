@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 
-import { CategoryType, ListItemType, MexitAction } from '@mexit/core'
+import { CategoryType, createNodeWithUid, getNewDraftKey, ListItemType, MexitAction, NodeProperties } from '@mexit/core'
 
 export type SearchType = {
   value: string
@@ -19,6 +19,10 @@ interface SputlitStore {
   // * Selection from page
   selection?: any
   setSelection: (selection?: any) => void
+
+  // * Current node
+  node: NodeProperties
+  setNode: (node: NodeProperties) => void
 
   // * Search Results
   results?: Array<ListItemType>
@@ -39,6 +43,9 @@ export const useSputlitStore = create<SputlitStore>(
   devtools((set) => ({
     search: { value: '', type: CategoryType.action },
     setSearch: (query) => set({ search: query }),
+
+    node: createNodeWithUid(getNewDraftKey(), ''),
+    setNode: (node) => set({ node }),
 
     input: '',
     setInput: (value) => set({ input: value }),
