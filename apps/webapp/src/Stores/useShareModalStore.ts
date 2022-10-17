@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-import { AccessLevel, InvitedUser, Mentionable } from '@mexit/core'
+import { AccessLevel, ShareContext, InvitedUser, Mentionable } from '@mexit/core'
 
 // The invite mode is only when the editor is open and used to open on new combobox invite
 type ShareModalMode = 'invite' | 'permission'
@@ -25,10 +25,14 @@ export interface InviteModalData {
     label: string
   }
 }
+
 interface ShareModalData {
   //  Used only for share permissions mode
   nodeid?: string
   alias?: string
+
+  // Used only for share permissions of namespace
+  namespaceid?: string
 
   fromEditor?: boolean
   // When sharing to a preexisting user from a mention
@@ -41,27 +45,34 @@ interface ShareModalState {
   open: boolean
   focus: boolean
   mode: ShareModalMode
+  context: ShareContext
   data: ShareModalData
-  openModal: (mode: ShareModalMode, nodeid?: string) => void
+  openModal: (mode: ShareModalMode, context: ShareContext, id?: string) => void
   closeModal: () => void
   setFocus: (focus: boolean) => void
   setChangedUsers: (users: ChangedUser[]) => void
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) => void
-  prefillModal: (mode: ShareModalMode, data: ShareModalData) => void
+  prefillModal: (mode: ShareModalMode, context: ShareContext, data: ShareModalData) => void
 }
 
 export const useShareModalStore = create<ShareModalState>((set, get) => ({
   open: false,
   focus: true,
+  context: 'note',
   mode: 'permission',
   data: {
     changedUsers: [],
     changedInvitedUsers: []
   },
-  openModal: (mode: ShareModalMode) =>
+  openModal: (mode: ShareModalMode, context, id) =>
     set({
       mode,
-      open: true
+      context,
+      open: true,
+      data: {
+        nodeid: context === 'note' ? id : undefined,
+        namespaceid: context === 'space' ? id : undefined
+      }
     }),
   closeModal: () => {
     set({
@@ -77,10 +88,11 @@ export const useShareModalStore = create<ShareModalState>((set, get) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, data) =>
+  prefillModal: (mode: ShareModalMode, context, data) =>
     set({
       mode,
       open: true,
+      context,
       data: {
         ...get().data,
         ...data

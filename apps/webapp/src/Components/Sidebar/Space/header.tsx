@@ -7,8 +7,8 @@ import toast from 'react-hot-toast'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
+import { IconButton, Input } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -27,6 +27,7 @@ import {
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 import { TagsLabel } from '../TagLabel'
+import { useShareModalStore } from '../../../Stores/useShareModalStore'
 
 const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
@@ -40,6 +41,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const { changeNamespaceName, changeNamespaceIcon } = useNamespaces()
   const [showInput, setShowInput] = useState(false)
   const [title, setTitle] = useState(space?.label)
+  const openShareModal = useShareModalStore((store) => store.openModal)
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
@@ -52,7 +54,11 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
       !namespaceNames.includes(name) && name !== RESERVED_NAMESPACES.default && name !== RESERVED_NAMESPACES.shared
 
     if (allowRename) {
-      changeNamespaceName(space?.id, name)
+      changeNamespaceName(space?.id, name).then((res) => {
+        if (res === undefined) {
+          setTitle(space?.label)
+        }
+      })
       setTitle(name)
     } else {
       toast.error('Space already exists!')
@@ -65,8 +71,12 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
     setShowInput(false)
   }
 
-  const onChangeIcon = (icon: MIcon) => {
-    changeNamespaceIcon(space?.id, space?.label, icon)
+  const onChangeIcon = async (icon: MIcon) => {
+    return await changeNamespaceIcon(space?.id, space?.label, icon)
+  }
+
+  const onShareSpace = () => {
+    openShareModal('permission', 'space', space?.id)
   }
 
   useEffect(() => {
@@ -87,10 +97,14 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
     }
   }, [inpRef, showInput])
 
-  const isNamespaceInputDisabled =
-    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared || readOnly
+  const isNamespaceReserved =
+    space?.label === RESERVED_NAMESPACES.default || space?.label === RESERVED_NAMESPACES.shared
 
-  const isNamespaceIconDisabled = isNamespaceInputDisabled
+  const isNamespaceReadonly = space?.data?.access === 'READ'
+  const isNamespaceInputDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
+  const isNamespaceIconDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
+  const isShared = space?.data?.granterID !== undefined
+  const isReadonly = space?.data?.access === 'READ'
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
 
@@ -103,7 +117,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
             {showInput && !isNamespaceInputDisabled ? (
               <Input defaultValue={space?.label} onBlur={(e) => onChangeName(e.target.value)} ref={inpRef} />
             ) : (
-              <Tooltip content={readOnly ? 'Space Name' : 'Click to rename Space'}>
+              <Tooltip content={readOnly ? 'Space Name' : `Rename ${title}`}>
                 <SpaceTitleFakeInput
                   ref={titleRef}
                   onClick={() => {
@@ -115,6 +129,14 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
+          {!isNamespaceReserved && (
+            <IconButton
+              highlight={isShared && !isReadonly}
+              title={isReadonly ? 'You can only read the contents!' : 'Share Space'}
+              icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
+              onClick={isReadonly ? undefined : onShareSpace}
+            />
+          )}
           <Tippy
             theme="mex-bright"
             placement="right"

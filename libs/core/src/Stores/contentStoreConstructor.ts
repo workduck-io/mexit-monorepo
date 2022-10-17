@@ -1,4 +1,5 @@
 import { Contents, NodeContent, NodeEditorContent, NodeMetadata } from '../Types/Editor'
+import { mog } from '../Utils/mog'
 
 export interface ContentStoreState {
   contents: Contents
@@ -11,6 +12,7 @@ export interface ContentStoreState {
   getAllMetadata: () => Record<string, NodeMetadata>
   getMetadata: (nodeid: string) => NodeMetadata
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
+  updateMetadata: (nodeid: string, metadata: Partial<NodeMetadata>) => void
   initContents: (contents: Contents) => void
 }
 
@@ -41,6 +43,14 @@ export const contentStoreConstructor = (set, get) => ({
   getMetadata: (nodeid) => {
     const contents = get().contents
     return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : {}
+  },
+  updateMetadata: (nodeid: string, partialMetadata: Partial<NodeMetadata>) => {
+    const oldMetadata = get().getMetadata(nodeid)
+    const newMetadata = { ...oldMetadata, ...partialMetadata }
+    // mog('updateMetadata', { nodeid, oldMetadata, partialMetadata, newMetadata })
+    set((state) => {
+      state.contents[nodeid].metadata = newMetadata
+    })
   },
   setMetadata: (nodeid: string, metadata: NodeMetadata) => {
     const oldContent = get().contents

@@ -59,5 +59,11 @@ export const snippetStoreConstructor = (set, get) => ({
       if (snippet.length > 0) {
         return { editor: { snippet: snippet[0] } }
       }
+    }),
+  _hasHydrated: false,
+  setHasHydrated: (state) => {
+    set({
+      _hasHydrated: state
     })
+  }
 })

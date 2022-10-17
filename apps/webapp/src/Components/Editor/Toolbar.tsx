@@ -29,6 +29,7 @@ const Toolbar = () => {
   const infobar = useLayoutStore((store) => store.infobar)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const shareModalState = useShareModalStore((store) => store.open)
+  const shareModalContext = useShareModalStore((store) => store.context)
 
   const { toggleReminder } = useToggleElements()
 
@@ -44,8 +45,8 @@ const Toolbar = () => {
           transparent={false}
           icon={shareLine}
           title="Share"
-          highlight={shareModalState}
-          onClick={() => openShareModal('permission')}
+          highlight={shareModalState && shareModalContext === 'note'}
+          onClick={() => openShareModal('permission', 'note', nodeid)}
         />
         {/* <ToolbarTooltip singleton={target} content="Bookmark">
           <span tabIndex={0}>

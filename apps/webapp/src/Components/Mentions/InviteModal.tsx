@@ -10,10 +10,9 @@ import { mog, AccessLevel, DefaultPermission, DefaultPermissionValue, permission
 import { Label, StyledCreatatbleSelect, ButtonFields, SelectWrapper, IntegrationTitle } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
-import { usePermission } from '../../Hooks/API/usePermission'
+import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions } from '../../Hooks/useMentions'
-import { useNodes } from '../../Hooks/useNodes'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useShareModalStore, InviteModalData } from '../../Stores/useShareModalStore'
@@ -21,17 +20,19 @@ import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 import { InviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
 import { ModalHeader } from '../../Style/Refactor'
+import { usePermissions } from '../../Hooks/usePermissions'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
   // const data = useShareModalStore((state) => state.data)
   const closeModal = useShareModalStore((state) => state.closeModal)
+  const context = useShareModalStore((state) => state.context)
   const { getUserDetails, getUserDetailsUserId } = useUserService()
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)
   const { inviteUser, addMentionable } = useMentions()
-  const { grantUsersPermission } = usePermission()
-  const { accessWhenShared } = useNodes()
+  const { grantUsersPermission } = useNodeShareAPI()
+  const { accessWhenShared } = usePermissions()
 
   const {
     handleSubmit,
@@ -43,7 +44,8 @@ export const InviteModalContent = () => {
 
   const readOnly = useMemo(() => {
     const access = accessWhenShared(node.nodeid)
-    if (access) return access !== 'MANAGE'
+    if (access) return access.note !== 'MANAGE' && access.space !== 'MANAGE'
+
     // By default, if no access -> user is the owner
     return false
   }, [node])
@@ -81,9 +83,14 @@ export const InviteModalContent = () => {
         if (data?.access?.value !== 'NONE') {
           const resp = await grantUsersPermission(node.nodeid, [details.userID], access)
           mog('UserPermission given', { details, resp })
-          addMentionable(details.alias, data.email, details.userID, details.name, node.nodeid, access)
+          addMentionable(details.alias, data.email, details.userID, details.name, {
+            context,
+            id: node.nodeid,
+            access
+          })
         } else {
-          addMentionable(details.alias, data.email, details.userID, undefined, undefined)
+          // Case for inserting mention without sharing
+          addMentionable(details.alias, data.email, details.userID, details.name)
         }
         if (!sModalData.userid) {
           replaceUserMention(editor, data.alias, details.userID)
@@ -92,7 +99,7 @@ export const InviteModalContent = () => {
           toast(`Shared with: ${data.email}`)
         } else toast(`Added mention for: ${data.email}`)
       } else {
-        inviteUser(data.email, data.alias, node.nodeid, access)
+        inviteUser(data.email, data.alias, node.nodeid, context, access)
         if (!sModalData.userid) {
           replaceUserMentionEmail(editor, data.alias, details.email)
         }

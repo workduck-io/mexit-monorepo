@@ -6,19 +6,22 @@ import {
   mog,
   SHARED_NAMESPACE,
   RESERVED_NAMESPACES,
-  getNewNamespaceName
+  getNewNamespaceName,
+  Mentionable
 } from '@mexit/core'
+import { useAuthStore } from '../Stores/useAuth'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { useApi } from './API/useNodeAPI'
+import { useMentionStore } from '../Stores/useMentionsStore'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {
   const namespaces = useDataStore((state) => state.namespaces)
-  const { createNewNamespace } = useApi()
+  const { createNewNamespace } = useNamespaceApi()
   const { getNode, getNodeType } = useNodes()
   const addNamespace = useDataStore((s) => s.addNamespace)
-  const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useApi()
+  const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useNamespaceApi()
 
   const getNamespace = (id: string): SingleNamespace | undefined => {
     const namespaces = useDataStore.getState().namespaces
@@ -31,21 +34,16 @@ export const useNamespaces = () => {
   const getNamespaceOptions = () => {
     const namespaces = useDataStore.getState().namespaces.map((n) => ({
       ...n,
-      value: n.name,
+      value: n.id,
       label: n.name
     }))
     const defaultNamespace = getDefaultNamespace() ?? namespaces[0]
-    // namespaces.push({
-    //   ...SHARED_NAMESPACE,
-    //   value: SHARED_NAMESPACE.name,
-    //   label: SHARED_NAMESPACE.name
-    // })
     return {
       namespaces,
       defaultNamespace: defaultNamespace
         ? {
             ...defaultNamespace,
-            value: defaultNamespace.name,
+            value: defaultNamespace.id,
             label: defaultNamespace.name
           }
         : undefined
@@ -142,8 +140,8 @@ export const useNamespaces = () => {
     }
   }
 
-  const changeNamespaceName = (id: string, name: string) => {
-    chageNamespaceNameApi(id, name)
+  const changeNamespaceName = async (id: string, name: string) => {
+    return await chageNamespaceNameApi(id, name)
       .then((res) => {
         if (res) {
           const namespaces = useDataStore.getState().namespaces
@@ -157,10 +155,12 @@ export const useNamespaces = () => {
               : n
           )
           useDataStore.setState({ namespaces: newNamespaces })
+          return true
         }
       })
       .catch((err) => {
         console.log('Error changing namespace name', err)
+        return undefined
       })
   }
 
@@ -180,21 +180,59 @@ export const useNamespaces = () => {
     )
     useDataStore.setState({ namespaces: newNamespaces })
 
-    await changeNamespaceIconApi(id, name, icon).catch((err) => {
-      console.log('Error changing namespace icon', err)
-      // We revert the icon
-      const namespaces = useDataStore.getState().namespaces
-      const newNamespaces = namespaces.map((n) =>
-        n.id === id
-          ? {
-              ...n,
-              icon: oldIcon,
-              updatedAt: Date.now()
-            }
-          : n
-      )
-      useDataStore.setState({ namespaces: newNamespaces })
-    })
+    const res = await changeNamespaceIconApi(id, name, icon)
+      .then((res) => true)
+      .catch((err) => {
+        console.log('Error changing namespace icon', err)
+        // We revert the icon
+        const namespaces = useDataStore.getState().namespaces
+        const newNamespaces = namespaces.map((n) =>
+          n.id === id
+            ? {
+                ...n,
+                icon: oldIcon,
+                updatedAt: Date.now()
+              }
+            : n
+        )
+        useDataStore.setState({ namespaces: newNamespaces })
+        return undefined
+      })
+
+    return res
+  }
+
+  const getSharedUsersForNamespace = (namespaceId: string): Mentionable[] => {
+    const mentionable = useMentionStore.getState().mentionable
+    const namespace = getNamespace(namespaceId)
+    const isNamespaceShared = !!namespace.granterID
+    const users = mentionable
+      .filter((mention) => mention.access.space[namespaceId] !== undefined)
+      // Get the owner to the top
+      .sort((a, b) => (a.access.space[namespaceId] === 'OWNER' ? -1 : b.access.space[namespaceId] === 'OWNER' ? 1 : 0))
+
+    const currentUser = useAuthStore.getState().userDetails
+    // const sharedNodes = useDataStore.getState().sharedNodes
+
+    if (!isNamespaceShared) {
+      const curUser: Mentionable = {
+        type: 'mentionable',
+        access: { note: {}, space: { [namespaceId]: 'OWNER' } },
+        email: currentUser.email,
+        name: currentUser.name,
+        alias: currentUser.alias,
+        userID: currentUser.userID
+      }
+      return [curUser, ...users]
+    }
+
+    mog('Getting shared users for namespace', { namespaceId, users })
+    return users
+  }
+
+  const isNamespacePublic = (namespaceId: string): boolean => {
+    const namespace = getNamespace(namespaceId)
+    return namespace?.publicAccess ?? false
   }
 
   return {
@@ -211,6 +249,9 @@ export const useNamespaces = () => {
     getNamespaceIconForNode,
     addDefaultNewNamespace,
     getNamespaceOfNode,
-    getNamespaceOptions
+    getNamespaceOptions,
+    // Sharing
+    getSharedUsersForNamespace,
+    isNamespacePublic
   }
 }

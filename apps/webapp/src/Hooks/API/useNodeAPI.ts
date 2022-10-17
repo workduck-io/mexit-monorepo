@@ -1,25 +1,19 @@
-import toast from 'react-hot-toast'
-
 import { client } from '@workduck-io/dwindle'
 
 import {
-  defaultContent,
   apiURLs,
-  mog,
-  extractMetadata,
-  removeNulls,
-  WORKSPACE_HEADER,
+  defaultContent,
   DEFAULT_NAMESPACE,
-  GET_REQUEST_MINIMUM_GAP, // runBatch,
-  iLinksToUpdate,
-  generateNamespaceId,
-  MIcon,
-  NodeEditorContent,
+  extractMetadata,
   getTagsFromContent,
-  hierarchyParser
+  GET_REQUEST_MINIMUM_GAP,
+  iLinksToUpdate,
+  mog,
+  NodeEditorContent,
+  removeNulls
 } from '@mexit/core'
 
-import { isRequestedWithin, RequestData, useApiStore } from '../../Stores/useApiStore'
+import { isRequestedWithin, useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -38,6 +32,7 @@ import { useAPIHeaders } from './useAPIHeaders'
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setMetadata = useContentStore((store) => store.setMetadata)
+  const updateMetadata = useContentStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
@@ -52,6 +47,7 @@ export const useApi = () => {
   const setRequest = useApiStore.getState().setRequest
 
   const { workspaceHeaders } = useAPIHeaders()
+  const currentUser = useAuthStore((store) => store.userDetails)
 
   /*
    * Saves new node data in the backend
@@ -187,7 +183,14 @@ export const useApi = () => {
         headers: workspaceHeaders()
       })
       .then((d) => {
-        setMetadata(noteID, extractMetadata(d.data))
+        if (!isShared) {
+          setMetadata(noteID, extractMetadata(d.data))
+        } else {
+          updateMetadata(noteID, {
+            updatedAt: Date.now(),
+            lastEditedBy: currentUser.userID
+          })
+        }
         return d.data
       })
       .catch((e) => {
@@ -291,18 +294,6 @@ export const useApi = () => {
         version: res.version
       }
     }
-  }
-
-  const getPublicNamespaceAPI = async (namespaceID: string) => {
-    const res = await client
-      .get(apiURLs.namespaces.getPublic(namespaceID), {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
-
-    return res
   }
 
   const isPublic = (nodeid: string) => {
@@ -448,196 +439,63 @@ export const useApi = () => {
     return data
   }
 
-  const getAllNamespaces = async () => {
-    const namespaces = await client
-      .get(apiURLs.namespaces.getAll, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        mog('namespaces all', d.data)
-        return d.data.map((item: any) => ({
-          ns: {
-            id: item.id,
-            name: item.name,
-            icon: item.namespaceMetadata?.icon ?? undefined,
-            createdAt: item.createdAt,
-            updatedAt: item.updatedAt
-          },
-          archiveHierarchy: item?.archivedNodeHierarchyInformation
-        }))
-      })
-      .catch((e) => {
-        mog('Save error', e)
-        return undefined
-      })
+  // const getNodesByWorkspace = async () => {
+  //   const updatedILinks: any[] = await client
+  //     .get(apiURLs.namespaces.getHierarchy, {
+  //       headers: {
+  //         'mex-workspace-id': getWorkspaceId()
+  //       }
+  //     })
+  //     .then((res: any) => {
+  //       return res.data
+  //     })
+  //     .catch(console.error)
 
-    if (namespaces) {
-      setNamespaces(namespaces.map((n) => n.ns))
-      namespaces.map((n) => {
-        const archivedILinks = n?.archivedNodeHierarchyInformation
+  //   mog(`UpdatedILinks`, { updatedILinks })
 
-        if (archivedILinks && archivedILinks.length > 0) {
-          const localILinks = useDataStore.getState().archive
-          const { toUpdateLocal } = iLinksToUpdate(localILinks, archivedILinks)
+  //   const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
+  //     (p, [namespaceid, namespaceData]) => {
+  //       return {
+  //         namespaces: [
+  //           ...p.namespaces,
+  //           {
+  //             id: namespaceid,
+  //             name: namespaceData.name,
+  //             ...namespaceData?.namespaceMetadata
+  //           }
+  //         ],
+  //         nodes: [
+  //           ...p.nodes,
+  //           ...namespaceData.nodeHierarchy.map((ilink) => ({
+  //             ...ilink,
+  //             namespace: namespaceid
+  //           }))
+  //         ]
+  //       }
+  //     },
+  //     { nodes: [], namespaces: [] }
+  //   )
+  //   mog('UpdatingILinks', { nodes, namespaces })
+  //   if (nodes && nodes.length > 0) {
+  //     const localILinks = useDataStore.getState().ilinks
+  //     const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
+  //     const ids = toUpdateLocal.map((i) => i.nodeid)
 
-          mog('toUpdateLocal', { n, toUpdateLocal, archivedILinks })
-          const ids = toUpdateLocal.map((i) => i.nodeid)
-          const requestData = { time: Date.now(), method: 'GET' }
-          runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-            .then((res) => {
-              const { fulfilled } = res
+  //     const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+  //     const requestData = { time: Date.now(), method: 'GET' }
 
-              fulfilled.forEach((node) => {
-                const { rawResponse, nodeid } = node
-                setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-                const content = deserializeContent(rawResponse.data)
-                setContent(nodeid, content, extractMetadata(rawResponse))
-                updateDocument('archive', nodeid, content)
-              })
-            })
-            .then(() => {
-              addInArchive(archivedILinks)
-            })
-        }
-      })
-    }
-  }
+  //     fulfilled.forEach((node) => {
+  //       const { rawResponse, nodeid } = node
+  //       setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+  //       const content = deserializeContent(rawResponse.data)
+  //       const metadata = extractMetadata(rawResponse) // added by Varshitha
+  //       updateFromContent(nodeid, content, metadata)
+  //     })
+  //   }
 
-  const createNewNamespace = async (name: string) => {
-    try {
-      const res = await client
-        .post(
-          apiURLs.namespaces.create,
-          {
-            type: 'NamespaceRequest',
-            name,
-            id: generateNamespaceId(),
-            metadata: {
-              iconUrl: 'heroicons-outline:view-grid'
-            }
-          },
-          {
-            headers: workspaceHeaders()
-          }
-        )
-        .then((d: any) => ({
-          id: d?.data?.id,
-          name: d?.data?.name,
-          iconUrl: d?.data?.metadata?.iconUrl,
-          createdAt: d?.data?.createdAt,
-          updatedAt: d?.data?.updatedAt
-        }))
-
-      mog('We created a namespace', { res })
-
-      return res
-    } catch (err) {
-      toast('Unable to Create New Namespace')
-    }
-  }
-
-  const changeNamespaceName = async (id: string, name: string) => {
-    try {
-      const res = await client
-        .patch(
-          apiURLs.namespaces.update,
-          {
-            type: 'NamespaceRequest',
-            id,
-            name
-          },
-          {
-            headers: workspaceHeaders()
-          }
-        )
-        .then(() => true)
-      return res
-    } catch (err) {
-      throw new Error('Unable to update namespace')
-    }
-  }
-
-  const changeNamespaceIcon = async (id: string, name: string, icon: MIcon) => {
-    try {
-      const res = await client
-        .patch(
-          apiURLs.namespaces.update,
-          {
-            type: 'NamespaceRequest',
-            id,
-            name,
-            metadata: {
-              icon
-            }
-          },
-          {
-            headers: workspaceHeaders()
-          }
-        )
-        .then(() => icon)
-      return res
-    } catch (err) {
-      throw new Error('Unable to update namespace icon')
-    }
-  }
-
-  const getNodesByWorkspace = async () => {
-    const updatedILinks: any[] = await client
-      .get(apiURLs.namespaces.getHierarchy, {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
-
-    mog(`UpdatedILinks`, { updatedILinks })
-
-    const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
-      (p, [namespaceid, namespaceData]) => {
-        return {
-          namespaces: [
-            ...p.namespaces,
-            {
-              id: namespaceid,
-              name: namespaceData.name,
-              ...namespaceData?.namespaceMetadata
-            }
-          ],
-          nodes: [
-            ...p.nodes,
-            ...namespaceData.nodeHierarchy.map((ilink) => ({
-              ...ilink,
-              namespace: namespaceid
-            }))
-          ]
-        }
-      },
-      { nodes: [], namespaces: [] }
-    )
-    mog('UpdatingILinks', { nodes, namespaces })
-    if (nodes && nodes.length > 0) {
-      const localILinks = useDataStore.getState().ilinks
-      const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
-      const ids = toUpdateLocal.map((i) => i.nodeid)
-
-      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-      const requestData = { time: Date.now(), method: 'GET' }
-
-      fulfilled.forEach((node) => {
-        const { rawResponse, nodeid } = node
-        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-        const content = deserializeContent(rawResponse.data)
-        const metadata = extractMetadata(rawResponse) // added by Varshitha
-        updateFromContent(nodeid, content, metadata)
-      })
-    }
-
-    // setNamespaces(namespaces)
-    setILinks(nodes)
-  }
+  //   // setNamespaces(namespaces)
+  //   setILinks(nodes)
+  // }
 
   return {
     saveDataAPI,
@@ -652,12 +510,7 @@ export const useApi = () => {
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getSnippetById,
-    refactorHierarchy,
-    createNewNamespace,
-    getAllNamespaces,
-    changeNamespaceName,
-    changeNamespaceIcon,
-    getNodesByWorkspace,
-    getPublicNamespaceAPI
+    refactorHierarchy
+    // getNodesByWorkspace
   }
 }

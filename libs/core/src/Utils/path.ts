@@ -21,6 +21,8 @@ export const SHARED_NAMESPACE: SingleNamespace = {
   name: RESERVED_NAMESPACES.shared,
   createdAt: 0,
   updatedAt: 0,
+  // THIS SHOULD NOT BE USED
+  access: 'OWNER',
   icon: { type: 'ICON', value: 'mex:shared-note' }
 }
 
@@ -74,6 +76,7 @@ export const getUniquePath = (path: string, paths: string[], showNotification = 
 export const isMatch = (path: string, testPath: string) => {
   if (testPath === path) return true
   if (path.startsWith(testPath + SEPARATOR)) return true
+  return false
 }
 
 export const isReservedOrClash = (path: string, paths: string[]) => {

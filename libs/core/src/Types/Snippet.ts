@@ -24,4 +24,7 @@ export interface SnippetStoreState {
 
   editor: SnippetEditorStore
   loadSnippet: (id: string) => void
+
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
 }

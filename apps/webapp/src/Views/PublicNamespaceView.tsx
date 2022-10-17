@@ -5,15 +5,16 @@ import { useParams, useNavigate, Outlet } from 'react-router-dom'
 import { mog } from '@mexit/core'
 
 import SplashScreen from '../Components/SplashScreen'
-import { useApi } from '../Hooks/API/useNodeAPI'
+// import { useApi } from '../Hooks/API/useNodeAPI'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
+import { useNamespaceApi } from '../Hooks/API/useNamespaceAPI'
 
 function PublicNamespaceView() {
   const [showLoader, setShowLoader] = useState(true)
   const { setNamespace, setILinks, setCurrentNode } = usePublicNodeStore()
   const namespaceID = useParams().namespaceID
   const navigate = useNavigate()
-  const { getPublicNamespaceAPI } = useApi()
+  const { getPublicNamespaceAPI } = useNamespaceApi()
 
   useEffect(() => {
     async function getPublicNamespace() {
@@ -23,6 +24,7 @@ function PublicNamespaceView() {
         setNamespace({
           id: response.id,
           name: response.name,
+          access: 'READ', // Set read for public namespaces
           icon: response.metadata?.icon,
           createdAt: response.createdAt,
           updatedAt: response.updatedAt
@@ -37,8 +39,6 @@ function PublicNamespaceView() {
         setTimeout(() => {
           setShowLoader(false)
         }, 1000)
-
-
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNamespace', { error })
         navigate('/404', { replace: false })

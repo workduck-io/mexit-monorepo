@@ -46,12 +46,11 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
     metadata.lastEditedBy === undefined
 
   useEffect(() => {
-    // mog({ content })
-
+    // mog('metadata Update', { content, node })
     if (content === undefined || content.metadata === undefined) return
     const { metadata: contentMetadata } = content
     setMetadata(contentMetadata)
-  }, [node, content])
+  }, [node, content, content?.metadata])
 
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
     return null

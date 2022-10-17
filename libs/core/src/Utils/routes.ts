@@ -4,6 +4,8 @@ export const IS_DEV = (() => {
   return false
 })()
 
+type AllNamespaceOption = 'onlyShared' | 'onlyWorkspace'
+
 export const USE_API = () => {
   /** Useful for tracking stopped API calls */
   // if (IS_DEV) console.info('API is set to false')
@@ -33,6 +35,8 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
+
+export const MEXIT_STAGING_URL_BASE = 'https://http-staging.workduck.io/mex'
 
 export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
 export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
@@ -82,12 +86,17 @@ export const apiURLs = {
   namespaces: {
     getHierarchy: `${MEXIT_BACKEND_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
     get: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/${id}`,
-    getAll: `${MEXIT_BACKEND_URL_BASE}/namespace/all`,
+    getAll: (opt?: AllNamespaceOption) => `${MEXIT_BACKEND_URL_BASE}/namespace/all${opt ? `?${opt}=true` : ''}`,
+    // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
     create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
     update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
     makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
     makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`
+    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,
+    share: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
+    getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/shared/${id}/users`,
+
+    getPublicURL: (id: string) => `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${id}`
   },
 
   // Link Shortener URLs

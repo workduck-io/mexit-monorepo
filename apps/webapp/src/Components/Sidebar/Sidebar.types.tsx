@@ -1,6 +1,6 @@
 import { IconifyIcon } from '@iconify/react'
 
-import { ILink, MIcon, Tag } from '@mexit/core'
+import { ILink, MIcon, SingleNamespace, Tag } from '@mexit/core'
 import { DesignItem } from '@mexit/shared'
 
 import { PollActions } from '../../Stores/useApiStore'
@@ -63,6 +63,8 @@ export interface SidebarSpace {
    * The main list content of a space
    */
   list: SidebarMainList
+
+  data: SingleNamespace
 
   /**
    * Default Item for a space

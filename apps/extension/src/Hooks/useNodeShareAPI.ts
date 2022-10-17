@@ -1,13 +1,9 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, extractMetadata } from '@mexit/core'
+import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, runBatch } from '@mexit/core'
 
-import { useDataStore } from '../../Stores/useDataStore'
-import { deserializeContent } from '../../Utils/serializer'
-import { WorkerRequestType } from '../../Utils/worker'
-import { runBatchWorker } from '../../Workers/controller'
-import { useUpdater } from '../useUpdater'
-import { useAPIHeaders } from './useAPIHeaders'
+import useDataStore from '../Stores/useDataStore'
+import { useAuthStore } from './useAuth'
 
 interface SharedNodesPreset {
   status: 'success'
@@ -19,9 +15,9 @@ interface SharedNodesErrorPreset {
   data: SharedNode[]
 }
 
-export const usePermission = () => {
-  const { updateFromContent } = useUpdater()
-  const { workspaceHeaders } = useAPIHeaders()
+export const useNodeShareAPI = () => {
+  const workspaceDetails = useAuthStore((s) => s.workspaceDetails)
+  // const { updateFromContent } = useUpdater()
 
   const grantUsersPermission = async (nodeid: string, userids: string[], access: AccessLevel) => {
     const payload = {
@@ -32,7 +28,9 @@ export const usePermission = () => {
     }
     return await client
       .post(apiURLs.sharedNode, payload, {
-        headers: workspaceHeaders()
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
       })
       .then((resp) => {
         mog('grantPermission resp', { resp })
@@ -48,7 +46,9 @@ export const usePermission = () => {
     }
     return await client
       .put(apiURLs.sharedNode, payload, {
-        headers: workspaceHeaders()
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
       })
       .then((resp) => {
         mog('changeUsers resp', { resp })
@@ -65,7 +65,9 @@ export const usePermission = () => {
     return await client
       .delete(apiURLs.sharedNode, {
         data: payload,
-        headers: workspaceHeaders()
+        headers: {
+          'mex-workspace-id': workspaceDetails.id
+        }
       })
       .then((resp) => {
         mog('revoke That permission resp', { resp })
@@ -77,7 +79,9 @@ export const usePermission = () => {
     try {
       return await client
         .get(apiURLs.allSharedNodes, {
-          headers: workspaceHeaders()
+          headers: {
+            'mex-workspace-id': workspaceDetails.id
+          }
         })
         .then((resp) => {
           mog('getAllSharedNodes resp', { resp })
@@ -117,17 +121,18 @@ export const usePermission = () => {
 
           const localSharedNodes = useDataStore.getState().sharedNodes
           const { toUpdateLocal } = iLinksToUpdate(localSharedNodes, sharedNodes)
-          const ids = toUpdateLocal.map((ilink) => ilink.nodeid)
-          runBatchWorker(WorkerRequestType.GET_SHARED_NODES, 6, ids).then((res) => {
-            const { fulfilled } = res
+          // TODO
+          // const ids = toUpdateLocal.map((ilink) => ilink.nodeid)
+          // runBatchWorker(WorkerRequestType.GET_SHARED_NODES, 6, ids).then((res) => {
+          //   const { fulfilled } = res
 
-            fulfilled.forEach((node) => {
-              const { rawResponse, nodeid } = node
-              const content = deserializeContent(rawResponse.data)
-              const metadata = extractMetadata(rawResponse)
-              updateFromContent(nodeid, content, metadata)
-            })
-          })
+          //   fulfilled.forEach((node) => {
+          //     const { rawResponse, nodeid } = node
+          //     const content = deserializeContent(rawResponse.data)
+          //     const metadata = extractMetadata(rawResponse)
+          //     updateFromContent(nodeid, content, metadata)
+          //   })
+          // })
 
           mog('SharedNodes', { sharedNodes })
           return { status: 'success', data: sharedNodes }
@@ -142,7 +147,9 @@ export const usePermission = () => {
     try {
       return await client
         .get(apiURLs.getUsersOfSharedNode(nodeid), {
-          headers: workspaceHeaders()
+          headers: {
+            'mex-workspace-id': workspaceDetails.id
+          }
         })
         .then((resp: any) => {
           return { nodeid, users: resp.data }

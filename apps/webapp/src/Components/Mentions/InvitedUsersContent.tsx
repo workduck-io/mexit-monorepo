@@ -8,12 +8,13 @@ import { IconButton, Button } from '@workduck-io/mex-components'
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
 
-import { usePermission } from '../../Hooks/API/usePermission'
+import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions, getAccessValue } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { ModalHeader, ModalControls } from '../../Style/Refactor'
 import {
   SharedPermissionsWrapper,
@@ -30,23 +31,29 @@ import {
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
-  const { getInvitedUsersForNode } = useMentions()
+  const { getInvitedUsers } = useMentions()
   const node = useEditorStore((state) => state.node)
-  const { grantUsersPermission } = usePermission()
+  const { grantUsersPermission } = useNodeShareAPI()
   const { getUserDetails } = useUserService()
   const invitedUsers = useMentionStore((s) => s.invitedUsers)
   const changedIUsers = useShareModalStore((state) => state.data.changedInvitedUsers)
   const setChangedIUsers = useShareModalStore((state) => state.setChangedInvitedUsers)
 
   const modalData = useShareModalStore((state) => state.data)
-  const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
+  const context = useShareModalStore((state) => state.context)
+  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
+
+  const id = useMemo(() => {
+    if (context === 'note') return modalData?.nodeid ?? node?.nodeid
+    else return modalData?.namespaceid ?? currentSpace
+  }, [modalData.nodeid, node, modalData.namespaceid, currentSpace, context])
 
   const sharedIUsers = useMemo(() => {
-    if (nodeid) {
-      return getInvitedUsersForNode(node.nodeid)
+    if (id) {
+      return getInvitedUsers(id, context)
     }
     return []
-  }, [nodeid, invitedUsers])
+  }, [id, context, invitedUsers])
 
   // This is called for every keystroke
   const onAliasChange = (email: string, alias: string) => {

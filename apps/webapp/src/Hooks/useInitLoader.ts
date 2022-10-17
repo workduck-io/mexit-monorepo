@@ -4,11 +4,13 @@ import toast from 'react-hot-toast'
 
 import { mog, runBatch } from '@mexit/core'
 
-import { useAuthStore, useAuthentication } from '../Stores/useAuth'
+import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useFetchShareData } from './useFetchShareData'
 import useLoad from './useLoad'
@@ -25,9 +27,14 @@ export const useInitLoader = () => {
 
   const { goTo } = useRouting()
 
-  const { getNodesByWorkspace, getAllSnippetsByWorkspace, getAllNamespaces } = useApi()
+  const { getAllSnippetsByWorkspace } = useApi()
+  const { getAllNamespaces } = useNamespaceApi()
+  // const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
+
+  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
+  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -41,7 +48,7 @@ export const useInitLoader = () => {
     setShowLoader(true)
     try {
       await getAllNamespaces()
-      await getNodesByWorkspace()
+      // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
       initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
@@ -63,7 +70,7 @@ export const useInitLoader = () => {
 
       setShowLoader(false)
     } catch (err) {
-      console.log('Error in Init Loader: ', err)
+      console.error('Error in Init Loader: ', err)
       setShowLoader(false)
       // logout()
       toast('Something went wrong while initializing')
@@ -71,10 +78,10 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && snippetHydrated && dataStoreHydrated) {
       mog('Inside InitLoader', { isAuthenticated })
       backgroundFetch()
       fetchAll()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, snippetHydrated, dataStoreHydrated])
 }

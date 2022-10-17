@@ -11,6 +11,7 @@ import {
   TagsCache,
   SharedNode
 } from './Editor'
+import { AccessLevel } from './Mentions'
 
 // M stands for Multi/Mex/Many (yet to decide)
 export interface MIcon {
@@ -23,7 +24,13 @@ export interface SingleNamespace {
   name: string
   createdAt: number
   updatedAt: number
+  // Manage for owner if granterId is absent
+  access: AccessLevel
+
   icon?: MIcon
+
+  publicAccess?: boolean
+  granterID?: string
 }
 
 export interface DataStoreState {
@@ -93,4 +100,7 @@ export interface DataStoreState {
   getSharedNodes: () => SharedNode[]
 
   setPublicNodes: (publicNodes: any[]) => void
+
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
 }

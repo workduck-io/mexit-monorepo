@@ -26,6 +26,7 @@ interface SpaceTreeProps {
   items: ILink[]
   filterText?: string
   publicILink?: boolean
+  readOnly?: boolean
 }
 
 /**
@@ -34,7 +35,7 @@ interface SpaceTreeProps {
  * - Displayes items in a Tree
  * - Filterable
  */
-export const MexTree = ({ items, filterText, spaceId, publicILink }: SpaceTreeProps) => {
+export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: SpaceTreeProps) => {
   /* To Add
    *
    * - MultiSelect
@@ -157,7 +158,11 @@ export const MexTree = ({ items, filterText, spaceId, publicILink }: SpaceTreePr
             />
           </SidebarListFilter>
           <SpaceList>
-            <Tree initTree={filteredTree ? filteredTree : initTree} selectedItemId={selectedItem?.data?.nodeid} />
+            <Tree
+              initTree={filteredTree ? filteredTree : initTree}
+              readOnly={readOnly}
+              selectedItemId={selectedItem?.data?.nodeid}
+            />
           </SpaceList>
         </>
       ) : (

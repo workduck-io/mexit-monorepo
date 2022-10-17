@@ -38,7 +38,7 @@ export const SidebarSpaceSwitcher = ({ currentSpace, spaces, setCurrentIndex }: 
     <SpaceSwitcher>
       <SwitcherSpaceItems ref={parentRef}>
         {spaces.map((s, index) => (
-          <Tooltip key={`spaceSwitcherItem_${s.id}`} content={s.label}>
+          <Tooltip key={`spaceSwitcherItem_${s.id}`} content={s.data.granterID ? `Shared: ${s.label}` : s.label}>
             <SpaceItem
               sidebarWidth={sidebarWidth}
               totalItems={spaces.length}

@@ -57,7 +57,7 @@ const useLoad = () => {
   const { toggleSuggestedNodes } = useToggleElements()
   const infobar = useLayoutStore((store) => store.infobar)
   const setHighlights = useBlockHighlightStore((store) => store.setHighlightedBlockIds)
-  const { fetchSharedNodeUsers } = useFetchShareData()
+  const { fetchSharedUsers } = useFetchShareData()
   // const { debouncedAddLastOpened } = useLastOpened()
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
 
@@ -186,9 +186,9 @@ const useLoad = () => {
       })
       .catch(console.error)
       .finally(() => setFetchingContent(false))
-    if (isShared) {
-      fetchSharedNodeUsers(node.nodeid)
-    }
+    // if (isShared) {
+    fetchSharedUsers(node.nodeid, 'note')
+    // }
   }
 
   /*
@@ -272,9 +272,9 @@ const useLoad = () => {
       if (localCheck.isShared) {
         // TODO: Change fetch for shared
         fetchAndSaveNode(node, { withLoading: true, isShared: true })
-        fetchSharedNodeUsers(node.nodeid)
       } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
     }
+    fetchSharedUsers(node.nodeid, 'note')
 
     if (options.highlightBlockId) {
       setHighlights([options.highlightBlockId], 'editor')

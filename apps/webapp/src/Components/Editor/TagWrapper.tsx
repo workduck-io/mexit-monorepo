@@ -10,7 +10,7 @@ const TagWrapper = (props: TagElementProps) => {
     mog('Clicked on Tag', { tag })
   }
 
-  return <TagElement {...props} onClick={handleTagClick} />
+  return <TagElement {...props} onClick={() => handleTagClick(props?.element?.value)} />
 }
 
 export default TagWrapper

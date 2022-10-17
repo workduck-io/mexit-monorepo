@@ -3,10 +3,15 @@ import { UserDetails } from './Auth'
 export interface SelfMention extends UserDetails {
   type: 'self'
 }
+
+export type UserAccessTable = {
+  [key in ShareContext]: { [entityid: string]: AccessLevel }
+}
+
 export interface IUser {
   email: string
   alias: string
-  access: AccessMap
+  access: UserAccessTable
 }
 
 export interface InvitedUser extends IUser {
@@ -37,7 +42,14 @@ export interface Mentionable extends IUser {
   name: string
 }
 
+export type ShareContext = 'note' | 'space'
+
 export interface MentionData {
   mentionable: Mentionable[]
   invitedUsers: InvitedUser[]
+}
+
+export const emptyAccessTable: UserAccessTable = {
+  note: {},
+  space: {}
 }

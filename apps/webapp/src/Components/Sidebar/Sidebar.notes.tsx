@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react'
 
 import { useTransition, useSpringRef } from '@react-spring/web'
 
-import { RESERVED_NAMESPACES, mog } from '@mexit/core'
+import { RESERVED_NAMESPACES, mog, SHARED_NAMESPACE } from '@mexit/core'
 import { SharedNodeIconify } from '@mexit/shared'
 
 import { usePolling } from '../../Hooks/API/usePolling'
@@ -38,6 +38,12 @@ export const NoteSidebar = () => {
     const nodesByNamespaces = getNodesByNamespaces()
     const nspaces = nodesByNamespaces
       .sort((a, b) => a.createdAt - b.createdAt)
+      .sort((a, b) => {
+        // if granter id is present, move to end
+        if (a.granterID) return 1
+        if (b.granterID) return -1
+        return 0
+      })
       .map((ns) => {
         return {
           id: ns.id,
@@ -46,6 +52,7 @@ export const NoteSidebar = () => {
             type: 'ICON',
             value: ns.name === RESERVED_NAMESPACES.default ? 'ri:user-line' : 'heroicons-outline:view-grid'
           },
+          data: ns,
           tooltip: ns.name,
           list: {
             type: 'hierarchy',
@@ -63,6 +70,7 @@ export const NoteSidebar = () => {
       label: RESERVED_NAMESPACES.shared,
       tooltip: 'Shared Notes',
       icon: { type: 'ICON', value: 'mex:shared-note' },
+      data: SHARED_NAMESPACE,
       list: {
         type: 'flat',
         renderItems: () => <SharedNotes />

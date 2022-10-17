@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 
 import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
 
-import { IconWrapper, TagsFlex } from '@mexit/shared'
+import { IconWrapper, Input, TagsFlex } from '@mexit/shared'
 
 import { SidebarListWrapper } from './SidebarList.style'
 
@@ -58,6 +58,11 @@ export const SpaceTitleWrapper = styled.div`
   width: 100%;
   justify-content: space-between;
   padding-left: ${({ theme }) => theme.spacing.small};
+
+  ${Input} {
+    max-width: 159px;
+    flex-shrink: 1;
+  }
 `
 
 export const SpaceTitleFakeInput = styled.div`
@@ -68,7 +73,7 @@ export const SpaceTitleFakeInput = styled.div`
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
   border: none;
   width: 100%;
-  max-width: 200px;
+  max-width: 159px;
   flex-shrink: 1;
   ${Ellipsis};
 

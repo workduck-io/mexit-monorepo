@@ -20,11 +20,13 @@ interface ContextMenuItem {
   id: string
   label: string
   icon?: MIcon
+  disabled?: boolean
 }
 
 interface ContextMenuListWithFilterProps {
   item: ContextMenuItem
   items: ContextMenuItem[]
+  disabled?: boolean
   filter?: boolean
   filterPlaceholder?: string
   onSelectItem: (id: string) => void
@@ -33,6 +35,7 @@ interface ContextMenuListWithFilterProps {
 const ContextMenuListWithFilter = ({
   item,
   items,
+  disabled = false,
   filter = false,
   filterPlaceholder = 'Filter',
   onSelectItem
@@ -116,7 +119,7 @@ const ContextMenuListWithFilter = ({
         }
       }}
     >
-      <ContextMenuSubTrigger>
+      <ContextMenuSubTrigger disabled={disabled}>
         {item.icon && <IconDisplay icon={item.icon} />}
         {item.label}
         <RightSlot>
@@ -140,6 +143,7 @@ const ContextMenuListWithFilter = ({
 
           {listItems.map((item, index) => (
             <ContextMenuItem
+              disabled={item.disabled}
               selected={selected === index}
               onSelect={() => onSelectingItem(item.id)}
               key={`ContextMenuList_${item.id}`}
