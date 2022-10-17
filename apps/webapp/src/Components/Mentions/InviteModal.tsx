@@ -44,7 +44,8 @@ export const InviteModalContent = () => {
 
   const readOnly = useMemo(() => {
     const access = accessWhenShared(node.nodeid)
-    if (access) return access.access !== 'MANAGE'
+    if (access) return access.note !== 'MANAGE' && access.space !== 'MANAGE'
+
     // By default, if no access -> user is the owner
     return false
   }, [node])

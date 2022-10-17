@@ -144,7 +144,10 @@ const ContentEditor = () => {
     }
   }, [shortcuts, toggleFocusMode])
 
-  const viewOnly = accessWhenShared(node.nodeid)?.access === 'READ'
+  const viewOnly = useMemo(() => {
+    const access = accessWhenShared(node?.nodeid)
+    return access?.note === 'READ' || access?.space === 'READ'
+  }, [node?.nodeid])
 
   return (
     <>

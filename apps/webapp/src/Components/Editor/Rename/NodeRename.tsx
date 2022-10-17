@@ -190,11 +190,13 @@ const NodeRenameOnlyTitle = () => {
 
   const isInputReadonly = useMemo(() => {
     if (nodeFrom) {
+      if (isReserved(nodeFrom)) return true
       const access = accessWhenShared(node.nodeid)
       // Is editable only when: access on space is write or above
-      return (
-        (access.context === 'space' && access.access === 'READ') || access.context === 'note' || isReserved(nodeFrom)
-      )
+      if (access) {
+        if (access.space) return access.space === 'READ'
+        return access.note !== undefined
+      }
     }
     return true
   }, [node, nodeFrom])

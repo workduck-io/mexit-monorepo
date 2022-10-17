@@ -3,6 +3,10 @@ import { AccessLevel, ShareContext, SHARED_NAMESPACE } from '@mexit/core'
 import { useDataStore } from '../Stores/useDataStore'
 import { useNamespaces } from './useNamespaces'
 
+type NodeAccess = {
+  [context in ShareContext]?: AccessLevel
+}
+
 export const usePermissions = () => {
   const { getNamespaceOfNodeid } = useNamespaces()
   /**
@@ -13,15 +17,28 @@ export const usePermissions = () => {
    *
    * Note access overrides namespace access
    */
-  const accessWhenShared = (nodeid: string): { context: ShareContext; access: AccessLevel } | undefined => {
+  const accessWhenShared = (nodeid: string): NodeAccess | undefined => {
+    const access = {
+      note: undefined,
+      space: undefined
+    } as NodeAccess
+    let hasAccess = false
     const sharedNodes = useDataStore.getState().sharedNodes
     const res = sharedNodes.find((n) => n.nodeid === nodeid)
-    if (res) return { context: 'note', access: res.currentUserAccess }
+    if (res) {
+      hasAccess = true
+      access['note'] = res.currentUserAccess
+    }
 
     const namespaceOfNode = getNamespaceOfNodeid(nodeid)
-    if (namespaceOfNode && namespaceOfNode.id !== SHARED_NAMESPACE.id)
-      return { context: 'space', access: namespaceOfNode.access }
+    if (namespaceOfNode && namespaceOfNode.id !== SHARED_NAMESPACE.id) {
+      hasAccess = false
+      access['space'] = namespaceOfNode.access
+    }
 
+    if (hasAccess) {
+      return access
+    }
     return undefined
   }
 
