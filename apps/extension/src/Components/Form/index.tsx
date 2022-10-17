@@ -2,7 +2,7 @@ import React from 'react'
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import { ELEMENT_H2, ELEMENT_PARAGRAPH } from '@mexit/core'
+import { ELEMENT_H2, ELEMENT_PARAGRAPH, mog } from '@mexit/core'
 
 import { FormBuilder } from '../../Types/Form'
 
@@ -11,7 +11,9 @@ interface FormProps {
 }
 const Form: React.FC<FormProps> = ({ config }) => {
   const { register, handleSubmit } = useForm()
-  const onSubmit: SubmitHandler<any> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<any> = (data) => {
+    mog('OnSubmitMagicalForm', { data })
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
