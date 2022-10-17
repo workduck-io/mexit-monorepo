@@ -142,6 +142,12 @@ export default function Chotu() {
     parent.bootLinks(links)
   }, [parent, links])
 
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootDescriptions(descriptions)
+  }, [parent, descriptions])
+
   return (
     <div>
       <p>

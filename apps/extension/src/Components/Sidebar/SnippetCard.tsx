@@ -61,9 +61,10 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
     }
   }
 
-  const snippetTags = useMemo(() => {
-    return getTagsFromContent(snippet.content).map((tag) => ({ value: tag }))
-  }, [snippet])
+  // const snippetTags = useMemo(() => {
+  //   if(!snippet?.content) return 
+  //   return getTagsFromContent(snippet?.content).map((tag) => ({ value: tag }))
+  // }, [snippet])
 
   const lastUsed = undefined // getLastUsed(snippet.id)
 
