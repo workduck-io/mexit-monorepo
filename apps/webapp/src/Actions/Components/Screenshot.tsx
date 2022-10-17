@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import imageEditFill from '@iconify/icons-ri/image-edit-fill'
 import image2Fill from '@iconify/icons-ri/image-2-fill'
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
-import restartFill from '@iconify/icons-ri/restart-fill'
+import restartLine from '@iconify/icons-ri/restart-line'
 
 /* https://github.com/DominicTobias/react-image-crop */
 
@@ -23,6 +23,7 @@ import {
   RangeValue,
   ToggleAndSubmit
 } from './Screenshot.style'
+import { mog } from '@mexit/core'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -34,6 +35,13 @@ export async function canvasPreview(
   rotate = 0
 ) {
   const ctx = canvas.getContext('2d')
+  // mog('ctx', {
+  //   image,
+  //   canvas,
+  //   crop,
+  //   scale,
+  //   rotate
+  // })
 
   if (!ctx) {
     throw new Error('No 2d context')
@@ -48,14 +56,14 @@ export async function canvasPreview(
   const pixelRatio = window.devicePixelRatio
   // const pixelRatio = 1
 
-  canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
-  canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
+  canvas.width = Math.floor((crop.width === 0 ? image.width : crop.width) * scaleX * pixelRatio)
+  canvas.height = Math.floor((crop.height === 0 ? image.height : crop.height) * scaleY * pixelRatio)
 
   ctx.scale(pixelRatio, pixelRatio)
   ctx.imageSmoothingQuality = 'high'
 
-  const cropX = crop.x * scaleX
-  const cropY = crop.y * scaleY
+  const cropX = crop.width !== 0 ? crop.x * scaleX : 0
+  const cropY = crop.height !== 0 ? crop.y * scaleY : 0
 
   const rotateRads = rotate * TO_RADIANS
   const centerX = image.naturalWidth / 2
@@ -143,7 +151,7 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
 
   useDebounceEffect(
     async () => {
-      if (completedCrop?.width && completedCrop?.height && imgRef.current && previewCanvasRef.current) {
+      if (imgRef.current && previewCanvasRef.current) {
         // We use canvasPreview as it's much faster than imgPreview.
         canvasPreview(imgRef.current, previewCanvasRef.current, completedCrop, scale, rotate)
       }
@@ -184,7 +192,7 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
                   disabled={!imgSrc}
                   onChange={(e) => setScale(Number(e.target.value))}
                 />
-                <IconButton title="Reset" icon={restartFill} onClick={() => setScale(1)} />
+                <IconButton title="Reset Scale" icon={restartLine} onClick={() => setScale(1)} />
               </RangeControlWrapper>
               <RangeControlWrapper>
                 <label htmlFor="rotate-input">
@@ -199,7 +207,7 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
                   disabled={!imgSrc}
                   onChange={(e) => setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))}
                 />
-                <IconButton title="Reset" icon={restartFill} onClick={() => setRotate(0)} />
+                <IconButton title="Reset Rotation" icon={restartLine} onClick={() => setRotate(0)} />
               </RangeControlWrapper>
               <IconButton
                 onClick={handleToggleAspectClick}
@@ -250,10 +258,9 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
           <canvas
             ref={previewCanvasRef}
             style={{
-              border: '1px solid black',
               objectFit: 'contain',
-              width: completedCrop.width,
-              height: completedCrop.height
+              width: completedCrop.width === 0 ? imgRef?.current?.width : completedCrop.width,
+              height: completedCrop.height === 0 ? imgRef?.current?.height : completedCrop.height
             }}
           />
         )}
