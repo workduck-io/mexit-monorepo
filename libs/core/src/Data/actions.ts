@@ -22,36 +22,21 @@ export const CREATE_NEW_ITEM = {
 }
 
 export const initActions: Array<ListItemType> = [
-  {
-    id: 'ACTION_1',
-    title: 'Capture Screenshot',
-    category: QuickLinkType.action,
-    description: 'Capture tab screenshot',
-    type: ActionType.SCREENSHOT,
-    icon: 'bx:screenshot',
-    shortcut: {
-      capture: {
-        category: 'action',
-        title: 'to capture',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
-    id: 'ACTION_MEX_SEARCH',
-    title: 'Search in Mexit',
-    category: QuickLinkType.action,
-    description: 'Search your query within Mexit',
-    type: ActionType.USE,
-    icon: 'bx:mouse',
-    shortcut: {
-      search: {
-        category: 'action',
-        title: 'to search',
-        keystrokes: 'Enter'
-      }
-    }
-  },
+  // {
+  //   id: 'ACTION_1',
+  //   title: 'Capture Screenshot',
+  //   category: QuickLinkType.action,
+  //   description: 'Capture tab screenshot',
+  //   type: ActionType.SCREENSHOT,
+  //   icon: 'bx:screenshot',
+  //   shortcut: {
+  //     capture: {
+  //       category: 'action',
+  //       title: 'to capture',
+  //       keystrokes: 'Enter'
+  //     }
+  //   }
+  // },
   {
     id: 'ACTION_4d32gtj23agex34ojin',
     title: 'Open Mexit Right Sidebar',
@@ -67,21 +52,21 @@ export const initActions: Array<ListItemType> = [
       }
     }
   },
-  {
-    id: 'ACTION_9x34kgj23j4234ojin',
-    title: 'Metadata Aggregator',
-    category: QuickLinkType.action,
-    icon: 'eva:color-picker-fill',
-    description: 'Extract any useful data from the current page',
-    type: ActionType.MAGICAL,
-    shortcut: {
-      pick: {
-        title: 'to pick',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
+  // {
+  //   id: 'ACTION_9x34kgj23j4234ojin',
+  //   title: 'Metadata Aggregator',
+  //   category: QuickLinkType.action,
+  //   icon: 'eva:color-picker-fill',
+  //   description: 'Extract any useful data from the current page',
+  //   type: ActionType.MAGICAL,
+  //   shortcut: {
+  //     pick: {
+  //       title: 'to pick',
+  //       category: 'action',
+  //       keystrokes: 'Enter'
+  //     }
+  //   }
+  // },
   {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
