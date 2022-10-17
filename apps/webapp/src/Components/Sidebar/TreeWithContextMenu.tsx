@@ -115,7 +115,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           items={namespaces
             // Don't move in same namespace
             // And don't move to spaces that are not of the user
-            .filter((ns) => ns.id !== item.data.namespace && !!ns.granterID)
+            .filter((ns) => ns.id !== item.data.namespace && !ns.granterID)
             .map((ns) => ({
               id: ns.id,
               icon: getNamespaceIcon(ns),
