@@ -163,7 +163,7 @@ export const NoteSidebar = () => {
     }
   }, [currentSpace])
 
-  mog('Space', { ilinks, spaces, currentSpace, index, spaceId })
+  // mog('Space', { ilinks, spaces, currentSpace, index, spaceId })
 
   return (
     <SpaceWrapper>

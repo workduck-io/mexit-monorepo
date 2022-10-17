@@ -6,10 +6,17 @@ const IDBStorage = {
       return null
     }
 
+    if (name === '_hasHydrated') {
+      return null
+    }
+
     return (await get(name)) || null
   },
   setItem: async (name: string, value: string): Promise<void> => {
     if (typeof indexedDB === 'undefined') {
+      return null
+    }
+    if (name === '_hasHydrated') {
       return null
     }
     set(name, value)

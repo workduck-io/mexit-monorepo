@@ -100,7 +100,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
       }
     }
   }
-  mog('PublicURL', { publicUrl, context, id })
+  // mog('PublicURL', { publicUrl, context, id })
 
   return (
     <Container>

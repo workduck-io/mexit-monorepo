@@ -186,9 +186,9 @@ const useLoad = () => {
       })
       .catch(console.error)
       .finally(() => setFetchingContent(false))
-    if (isShared) {
-      fetchSharedUsers(node.nodeid, 'note')
-    }
+    // if (isShared) {
+    fetchSharedUsers(node.nodeid, 'note')
+    // }
   }
 
   /*
@@ -272,9 +272,9 @@ const useLoad = () => {
       if (localCheck.isShared) {
         // TODO: Change fetch for shared
         fetchAndSaveNode(node, { withLoading: true, isShared: true })
-        fetchSharedUsers(node.nodeid, 'note')
       } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
     }
+    fetchSharedUsers(node.nodeid, 'note')
 
     if (options.highlightBlockId) {
       setHighlights([options.highlightBlockId], 'editor')

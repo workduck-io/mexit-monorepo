@@ -32,7 +32,7 @@ export const useFetchShareData = () => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const node = sharedNodes.find((n) => n.nodeid === id)
     // Then fetch the users with access to the shared node
-    if (context === 'note' && !node) return
+    // if (context === 'note' && !node) return
     const sharedItemDetails = [context === 'note' ? getUsersOfSharedNode(id) : getAllSharedUsers(id)]
 
     const itemDetails = (await runBatch(sharedItemDetails)).fulfilled
@@ -40,7 +40,7 @@ export const useFetchShareData = () => {
     const usersWithAccess = itemDetails
       // .filter((p) => p.status === 'fulfilled')
       .map((p: any) => {
-        mog('p', { p })
+        // mog('p', { p })
         return p as UsersRaw
       })
 
@@ -58,7 +58,7 @@ export const useFetchShareData = () => {
           return { ...u, email: uDetails.email, alias: uDetails.alias }
         }),
 
-        ...(context === 'note' ? [node] : []).map(async (node) => {
+        ...(context === 'note' && node ? [node] : []).map(async (node) => {
           const uDetails = await getUserDetailsUserId(node.owner)
           return {
             access: 'OWNER',
@@ -73,7 +73,7 @@ export const useFetchShareData = () => {
     ).fulfilled
       // .filter((p) => p.status === 'fulfilled')
       .reduce((arr, p: any) => {
-        mog('p2', { p })
+        // mog('p2', { p })
         return [...arr, p as MUsersRaw]
       }, [])
     // .filter((u) => u.userid !== userDetails?.userID)

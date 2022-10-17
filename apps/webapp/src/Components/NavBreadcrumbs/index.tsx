@@ -14,7 +14,7 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import IconDisplay from '../IconPicker/IconDisplay'
 import { StyledTopNavigation } from './styled'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { usePermissions } from '../../Hooks/usePermissions'
+import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 
 type NavBreadCrumbsType = {
   nodeId: string
@@ -34,12 +34,12 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
   }
 
-  const { namespaceIcon, isReadonly } = useMemo(() => {
+  const { namespaceIcon, isReadOnly } = useMemo(() => {
     const namespace = getNamespaceOfNodeid(nodeId)
     const access = accessWhenShared(nodeId)
     return {
       namespaceIcon: namespace?.icon,
-      isReadonly: access?.note === 'READ' || access?.space === 'READ'
+      isReadOnly: isReadonly(access)
     }
   }, [nodeId])
 
@@ -54,7 +54,7 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
         )}
         <Breadcrumbs items={getNodeBreadcrumbs(nodeId)} key={`mex-breadcrumbs-${nodeId}`} onOpenItem={openBreadcrumb} />
       </EditorBreadcrumbs>
-      {isReadonly && <AccessTag access="READ" />}
+      {isReadOnly && <AccessTag access="READ" />}
     </StyledTopNavigation>
   )
 }

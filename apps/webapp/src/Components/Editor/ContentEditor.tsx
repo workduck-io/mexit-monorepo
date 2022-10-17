@@ -6,7 +6,7 @@ import shallow from 'zustand/shallow'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent } from '@mexit/core'
+import { defaultContent, mog } from '@mexit/core'
 import { StyledEditor, EditorWrapper } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -30,7 +30,7 @@ import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
-import { usePermissions } from '../../Hooks/usePermissions'
+import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
 
 const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -146,7 +146,8 @@ const ContentEditor = () => {
 
   const viewOnly = useMemo(() => {
     const access = accessWhenShared(node?.nodeid)
-    return access?.note === 'READ' || access?.space === 'READ'
+    // mog('Access', { access, node })
+    return isReadonly(access)
   }, [node?.nodeid])
 
   return (

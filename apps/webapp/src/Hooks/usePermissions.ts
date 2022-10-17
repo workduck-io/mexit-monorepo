@@ -44,3 +44,9 @@ export const usePermissions = () => {
 
   return { accessWhenShared }
 }
+
+export const isReadonly = (access: NodeAccess | undefined) => {
+  if (!access) return true
+  if (access?.note) return access?.note === 'READ'
+  return access?.space === 'READ'
+}
