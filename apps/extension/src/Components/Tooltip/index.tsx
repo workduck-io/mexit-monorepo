@@ -1,31 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import Tippy from '@tippyjs/react/headless'
 import toast from 'react-hot-toast'
-import Highlighter from 'web-highlighter'
 
-import {
-  AccessLevel,
-  CacheUser,
-  extractMetadata,
-  InvitedUser,
-  Mentionable,
-  MEXIT_FRONTEND_URL_BASE,
-  NodeEditorContent,
-  SelfMention,
-  SEPARATOR
-} from '@mexit/core'
-import {
-  AccessTag,
-  Button,
-  copyTextToClipboard,
-  MentionTooltip,
-  MentionTooltipContent,
-  SMention,
-  SMentionRoot,
-  TooltipAlias,
-  TooltipMail
-} from '@mexit/shared'
+import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
+import { copyTextToClipboard } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useEditorContext } from '../../Hooks/useEditorContext'
@@ -35,14 +14,12 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useMentions } from '../../Hooks/useMentions'
 import { useNodes } from '../../Hooks/useNodes'
 import useRaju from '../../Hooks/useRaju'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { deserializeContent } from '../../Utils/serializer'
-import { styleSlot } from '../../contentScript'
 import { MentionTooltipComponent } from '../MentionTooltip'
 import { ProfileImage } from '../ProfileImage'
 import { Icon, ProfileImageContainer, StyledTooltip } from './styled'

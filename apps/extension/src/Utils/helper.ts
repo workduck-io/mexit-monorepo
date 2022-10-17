@@ -1,16 +1,12 @@
 import {
-  ILink,
   convertContentToRawText,
-  QuickLinkType,
-  CategoryType,
-  Snippet,
   defaultContent,
-  NodeContent,
-  ActionType,
+  ILink,
+  ListItemType,
   MexitAction,
-  NODE_ID_PREFIX,
-  SNIPPET_PREFIX,
-  ListItemType
+  NodeContent,
+  QuickLinkType,
+  Snippet
 } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
@@ -23,6 +19,7 @@ export function getContent(nodeid: string): NodeContent {
 
   // mog('getContent', { nodeid, contents, nodeidCon: contents[nodeid] })
   if (contents[nodeid]) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // TODO: fix differences between node type of webapp and extension
     return contents[nodeid]
