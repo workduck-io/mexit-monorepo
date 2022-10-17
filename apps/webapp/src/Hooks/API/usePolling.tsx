@@ -5,6 +5,7 @@ import { PollActions, useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useBookmarks } from '../useBookmarks'
 import { useFetchShareData } from '../useFetchShareData'
+import { useNamespaceApi } from './useNamespaceAPI'
 import { useApi } from './useNodeAPI'
 
 export const PollingInterval = {
@@ -20,6 +21,7 @@ export const usePolling = () => {
   // const { getNodesByWorkspace } = useApi()
   const { getAllBookmarks } = useBookmarks()
   const { fetchShareData } = useFetchShareData()
+  const { getAllNamespaces } = useNamespaceApi()
 
   useIntervalWithTimeout(
     () => {
@@ -37,6 +39,7 @@ export const usePolling = () => {
 
   useIntervalWithTimeout(
     () => {
+      getAllNamespaces()
       // TODO: commenting this out because it sends so many requests, it blocks the UI and slows down everything
       // getNodesByWorkspace().then(() => mog('Successfully fetched hierarchy'))
       // refreshILinks().then(() => mog('Successfully fetched hierarchy'))
