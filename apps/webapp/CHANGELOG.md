@@ -1,5 +1,15 @@
 # mexit-webapp
 
+## 0.18.0
+
+### Minor Changes
+
+- 2e98d8fa: Add shared namespaces
+
+### Patch Changes
+
+- 73731cb3: Use middleware endpoints for URL and Reminders
+
 ## 0.17.1
 
 ### Patch Changes
