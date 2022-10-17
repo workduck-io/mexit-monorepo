@@ -20,6 +20,7 @@ import {
 
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { getElementById } from '../../contentScript'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 
 export interface SnippetPreviewProps {
@@ -82,7 +83,7 @@ const SnippetPreview = ({
     return (
       <NestedFloating
         hover={hover}
-        root={document.getElementById('mexit').shadowRoot.getElementById('ext-side-nav')}
+        root={getElementById('ext-side-nav')}
         label={label}
         placement={placement}
         persist={!allowClosePreview}

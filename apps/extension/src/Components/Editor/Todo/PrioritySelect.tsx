@@ -1,9 +1,12 @@
+import React from 'react'
+
+import Tippy from '@tippyjs/react'
+import { useContextMenu } from 'react-contexify'
+
 import { PriorityType, PriorityDataType, Priority } from '@mexit/core'
 import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
-import Tippy from '@tippyjs/react'
-import { styleSlot } from 'apps/extension/src/contentScript'
-import React from 'react'
-import { useContextMenu } from 'react-contexify'
+
+import { getElementById } from '../../../contentScript'
 import PriorityMenu from './PriorityMenu'
 
 interface PriorityMenuSelect {
@@ -23,7 +26,7 @@ const PrioritySelect = ({ id, value, onPriorityChange, withLabel = false }: Prio
           delay={100}
           interactiveDebounce={100}
           placement="bottom"
-          appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+          appendTo={() => getElementById('sputlit-main')}
           theme="mex"
           content={Priority[value]?.title}
         >

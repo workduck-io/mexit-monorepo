@@ -37,10 +37,10 @@ import {
   usePlateEditorRef,
   UseVirtualFloatingOptions
 } from '@udecode/plate'
-import { styleSlot } from 'apps/extension/src/contentScript'
 
 import { ButtonSeparator } from '@mexit/shared'
 
+import { getElementById, styleSlot } from '../../../contentScript'
 import { BalloonToolbar } from './BalloonToolbar'
 import { SelectionToNode } from './components/SelectionToNode'
 import { SelectionToSnippet } from './components/SelectionToSnippet'
@@ -55,8 +55,7 @@ const BallonMarkToolbarButtons = () => {
 
   const floatingOptions: UseVirtualFloatingOptions = {
     placement: top,
-    getBoundingClientRect: () =>
-      document.getElementById('mexit').shadowRoot.getElementById('sputlit-main').getBoundingClientRect()
+    getBoundingClientRect: () => getElementById('sputlit-main').getBoundingClientRect()
   }
 
   const tooltip = {
@@ -74,7 +73,7 @@ const BallonMarkToolbarButtons = () => {
       floatingOptions={floatingOptions}
       theme={theme}
       arrow={arrow}
-      portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-container')}
+      portalElement={getElementById('sputlit-container')}
     >
       <BlockToolbarButton
         type={getPluginType(editor, ELEMENT_H1)}

@@ -1,23 +1,28 @@
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless' // different import path!
+// different import path!
 import React, { forwardRef, useState } from 'react'
+
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+
+import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE, getNameFromPath } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper
 } from '@mexit/shared'
-import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE, getNameFromPath } from '@mexit/core'
 import { Button } from '@mexit/shared'
+
+import useMemoizedPlugins from '../../Editor/plugins'
 // import useLoad from '../../../Hooks/useLoad'
 // import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 // import { useTags } from '../../Hooks/useTags'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
+import { getElementById } from '../../contentScript'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import useMemoizedPlugins from '../../Editor/plugins'
 import components from './Components'
 
 export interface EditorPreviewProps {
@@ -100,7 +105,7 @@ const EditorPreview = ({
         interactiveDebounce={100}
         placement={placement ?? 'bottom'}
         visible={preview}
-        appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('sputlit-main')}
+        appendTo={() => getElementById('sputlit-main')}
         render={(attrs) => (
           <EditorPreviewWrapper className="__editor__preview" tabIndex={-1} {...attrs}>
             {(allowClosePreview ||

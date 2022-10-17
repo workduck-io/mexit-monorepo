@@ -22,6 +22,7 @@ import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { deserializeContent } from '../../Utils/serializer'
+import { getElementById } from '../../contentScript'
 import { MentionTooltipComponent } from '../MentionTooltip'
 import { ProfileImage } from '../ProfileImage'
 import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
@@ -198,7 +199,7 @@ function Tooltip() {
           onClick={() => window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeId}`, '_blank', 'noopener, noreferrer')}
         >
           <FloatingTooltip
-            root={document.getElementById('mexit').shadowRoot.getElementById('mexit-tooltip')}
+            root={getElementById('mexit-tooltip')}
             content={<MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
           >
             <ProfileImageContainer>

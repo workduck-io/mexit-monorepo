@@ -19,6 +19,7 @@ import {
 
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { getElementById } from '../../contentScript'
 import { ContextInfoBar } from './ContextInfoBar'
 import { SnippetsInfoBar } from './SnippetsInfoBar'
 import { ExtSideNav } from './styled'
@@ -84,7 +85,7 @@ export const ExtInfoBar = () => {
       >
         <InfoBarWrapper
           mode={infobar.mode}
-        // {...getFocusProps(focusMode)}
+          // {...getFocusProps(focusMode)}
         >
           <ExtInfoBarItems />
         </InfoBarWrapper>
@@ -92,6 +93,7 @@ export const ExtInfoBar = () => {
       <Tippy
         theme="mex-bright"
         placement="left"
+        appendTo={() => getElementById('ext-side-nav')}
         content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Cooler Sidebar' : 'Expand Cooler Sidebar'} />}
       >
         <SidebarToggleWrapper
@@ -101,7 +103,7 @@ export const ExtInfoBar = () => {
           expanded={rhSidebar.expanded}
           show={rhSidebar.show}
           endColumnWidth={endColumnWidth}
-        // {...getFocusProps(focusMode)}
+          // {...getFocusProps(focusMode)}
         >
           <Icon
             icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
