@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react'
 import imageEditFill from '@iconify/icons-ri/image-edit-fill'
 import image2Fill from '@iconify/icons-ri/image-2-fill'
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
+import restartFill from '@iconify/icons-ri/restart-fill'
 
 /* https://github.com/DominicTobias/react-image-crop */
 
@@ -18,6 +19,8 @@ import {
   ImageEditorWrapper,
   ImagePreview,
   PreviewTitle,
+  RangeControlWrapper,
+  RangeValue,
   ToggleAndSubmit
 } from './Screenshot.style'
 
@@ -96,10 +99,11 @@ function centerAspectCrop(mediaWidth: number, mediaHeight: number, aspect: numbe
 interface ImageEditorProps {
   // If not provided adds the file image input in toolbar
   src?: string
+  openAsEditing?: boolean
   onSubmit: (blob: Blob) => void
 }
 
-const ImageEditor = ({ src, onSubmit }: ImageEditorProps) => {
+const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
   const [imgSrc, setImgSrc] = useState(src ?? '')
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -108,7 +112,7 @@ const ImageEditor = ({ src, onSubmit }: ImageEditorProps) => {
   const [scale, setScale] = useState(1)
   const [rotate, setRotate] = useState(0)
   const [aspect, setAspect] = useState<number | undefined>(undefined)
-  const [isEditing, setIsEditing] = useState(true)
+  const [isEditing, setIsEditing] = useState(openAsEditing)
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -164,35 +168,45 @@ const ImageEditor = ({ src, onSubmit }: ImageEditorProps) => {
         <Controls>
           {isEditing ? (
             <>
-              <input type="file" accept="image/*" onChange={onSelectFile} />
-              <div>
-                <label htmlFor="scale-input">Scale: </label>
+              <PreviewTitle>Edit</PreviewTitle>
+              {!src && <input type="file" accept="image/*" onChange={onSelectFile} />}
+              <RangeControlWrapper>
+                <label htmlFor="scale-input">
+                  Scale <RangeValue>x{scale}</RangeValue>
+                </label>
                 <input
                   id="scale-input"
-                  type="number"
+                  type="range"
                   step="0.1"
+                  min="0.1"
+                  max="3"
                   value={scale}
                   disabled={!imgSrc}
                   onChange={(e) => setScale(Number(e.target.value))}
                 />
-              </div>
-              <div>
-                <label htmlFor="rotate-input">Rotate: </label>
+                <IconButton title="Reset" icon={restartFill} onClick={() => setScale(1)} />
+              </RangeControlWrapper>
+              <RangeControlWrapper>
+                <label htmlFor="rotate-input">
+                  Rotate <RangeValue>{rotate}&#176;</RangeValue>
+                </label>
                 <input
                   id="rotate-input"
-                  type="number"
+                  type="range"
+                  min="-180"
+                  max="180"
                   value={rotate}
                   disabled={!imgSrc}
                   onChange={(e) => setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))}
                 />
-              </div>
+                <IconButton title="Reset" icon={restartFill} onClick={() => setRotate(0)} />
+              </RangeControlWrapper>
               <IconButton
                 onClick={handleToggleAspectClick}
-                title={aspect ? 'Free Aspect Ratio' : "Image's Aspect Ratio"}
+                title={aspect === undefined ? "Image's Aspect Ratio" : 'Free Aspect Ratio'}
                 icon={aspectRatioLine}
-                highlight={aspect === 1}
+                highlight={aspect !== undefined}
               />
-              <Button onClick={handleToggleAspectClick}>Toggle aspect {aspect ? 'off' : 'on'}</Button>
             </>
           ) : (
             <>
