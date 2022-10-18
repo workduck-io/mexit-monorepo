@@ -13,7 +13,7 @@ interface SidebarToggleWrappperProps extends FocusModeProp {
 
 // TODO: this isn't relative to the sidebar so ends of staying at the top when the page is scrolled
 export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   ${(props) => focusStyles(props)}
