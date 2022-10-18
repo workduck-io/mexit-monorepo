@@ -1,7 +1,7 @@
 import { animated } from 'react-spring'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { Scroll, ScrollStyles } from '@mexit/shared'
+import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'
 
 export const StyledResults = styled(animated.div)`
   overflow: hidden auto;
@@ -30,7 +30,19 @@ export const ListItem = styled.div<{ start: number }>`
 
 export const Subtitle = styled.div`
   margin: 0.5em 1em;
-  text-transform: uppercase;
-  font-size: 0.75em;
-  opacity: 0.5;
+  display: flex;
+  align-items: center;
+
+  font-size: 0.85em;
+
+  ${PrimaryText} {
+    max-width: 70ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  span:not(.query) {
+    opacity: 0.5;
+  }
 `

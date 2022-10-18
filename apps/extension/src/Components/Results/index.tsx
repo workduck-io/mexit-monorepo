@@ -4,7 +4,8 @@ import { findIndex, groupBy } from 'lodash'
 import { useSpring } from 'react-spring'
 import { useVirtual } from 'react-virtual'
 
-import { ActionType } from '@mexit/core'
+import { ActionType, QuickLinkType } from '@mexit/core'
+import { PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorContext } from '../../Hooks/useEditorContext'
@@ -20,7 +21,7 @@ function Results() {
   const results = useSputlitStore((s) => s.results)
   const input = useSputlitStore((s) => s.input)
 
-  const { previewMode, setPreviewMode } = useEditorContext()
+  const { previewMode } = useEditorContext()
   const { execute } = useActionExecutor()
 
   const activeItem = useSputlitStore((s) => s.activeItem)
@@ -118,7 +119,7 @@ function Results() {
       } else if (event.key === 'Enter') {
         event.preventDefault()
         const item = results[activeIndex]
-        execute(item)
+        execute(item, event.metaKey)
       } else if (event.key === 'Backspace' && activeItem && input === '') {
         resetSpotlitState()
       }
@@ -156,11 +157,23 @@ function Results() {
               onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
               onClick: () => handleClick(virtualRow.index)
             }
+
             const active = virtualRow.index === activeIndex
 
             return (
               <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
-                {item.category !== lastItem?.category && <Subtitle key={item.category}>{item.category}</Subtitle>}
+                {item.category !== lastItem?.category && (
+                  <Subtitle key={item.category}>
+                    <span>{item.category}</span>
+                    {item.category === QuickLinkType.search && (
+                      <>
+                        <span>&emsp;"</span>
+                        <PrimaryText className="query">{input}</PrimaryText>
+                        <span>"&emsp;with</span>
+                      </>
+                    )}
+                  </Subtitle>
+                )}
                 <Action action={item} active={active} />
               </ListItem>
             )
