@@ -7,10 +7,11 @@ import mixpanel from 'mixpanel-browser'
 import { createRoot } from 'react-dom/client'
 import Highlighter from 'web-highlighter'
 
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
 import { useEditorContext } from '../Hooks/useEditorContext'
+import { useHighlighter } from '../Hooks/useHighlighter'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
@@ -37,9 +38,11 @@ type Timeout = ReturnType<typeof setTimeout>
  * `useToggleHandler` handles the keyboard events for toggling sputlit.
  */
 function useToggleHandler() {
-  const { visualState, setVisualState, setTooltipState } = useSputlitContext()
+  const { visualState, setVisualState } = useSputlitContext()
   const setSelection = useSputlitStore((s) => s.setSelection)
   const { previewMode, setPreviewMode } = useEditorContext()
+  const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
+
   const { saveIt } = useSaveChanges()
 
   const timeoutRef = useRef<Timeout>()
@@ -74,7 +77,7 @@ function useToggleHandler() {
               const saveableRange = highlighter.fromRange(range)
               const sanitizedHTML = sanitizeHTML(html)
 
-              setSelection({ url, html: sanitizedHTML, range: saveableRange })
+              setSelection({ url, html: sanitizedHTML, range: saveableRange, id: saveableRange?.id })
             } else {
               // To reset selection if a selection is made once
               setSelection(undefined)
@@ -165,13 +168,12 @@ function initAnalytics() {
 }
 
 function handleHighlighter() {
-  const { setTooltipState } = useSputlitContext()
-  const { highlighted } = useHighlightStore()
+  const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
+  const highlighted = useHighlightStore((s) => s.highlighted)
 
   useEffect(() => {
     const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
     const highlightOldRange = () => {
-      const highlighted = useHighlightStore.getState().highlighted
       const pageContents = highlighted[window.location.href]
 
       forEach(pageContents, (value, key) => {

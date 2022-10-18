@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 
-import { QuickLinkType, ActionType } from '@mexit/core'
+import { QuickLinkType, ActionType, mog } from '@mexit/core'
 
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import useWindowSelection from '../../Hooks/useWindowSelection'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import Search from '../Search'
@@ -25,6 +27,7 @@ const Sputlit = () => {
   const activeItem = useSputlitStore((s) => s.activeItem)
   const { previewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
+  const { removeHighlight } = useHighlighter()
 
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
@@ -51,7 +54,25 @@ const Sputlit = () => {
     })
   }, [visualState])
 
-  const isExternalSearchAction = activeItem?.category === QuickLinkType.action && activeItem?.type === ActionType.SEARCH
+  useEffect(() => {
+    // * Remove unsaved highlight from Page
+    return () => {
+      const selection = useSputlitStore.getState().selection
+      if (selection?.id) {
+        const highlighted = useHighlightStore.getState().highlighted
+        const isPresent = highlighted?.[window.location.href]?.[selection.id]
+
+        if (!isPresent) {
+          removeHighlight(selection?.id)
+        }
+      }
+    }
+  }, [])
+
+  const isExternalSearchAction =
+    activeItem?.category === QuickLinkType.action &&
+    !activeItem?.extras?.withinMex &&
+    activeItem?.type === ActionType.SEARCH
 
   // Height animation
   const previousHeight = useRef<number>()
