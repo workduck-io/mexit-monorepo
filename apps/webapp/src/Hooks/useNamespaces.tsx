@@ -21,7 +21,13 @@ export const useNamespaces = () => {
   const { createNewNamespace } = useNamespaceApi()
   const { getNode, getNodeType } = useNodes()
   const addNamespace = useDataStore((s) => s.addNamespace)
-  const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useNamespaceApi()
+  const updateNamespace = useDataStore((s) => s.updateNamespace)
+  const {
+    changeNamespaceName: chageNamespaceNameApi,
+    changeNamespaceIcon: changeNamespaceIconApi,
+    makeNamespacePublic: makePublicApi,
+    makeNamespacePrivate: makePrivateApi
+  } = useNamespaceApi()
 
   const getNamespace = (id: string): SingleNamespace | undefined => {
     const namespaces = useDataStore.getState().namespaces
@@ -235,6 +241,20 @@ export const useNamespaces = () => {
     return namespace?.publicAccess ?? false
   }
 
+  const makeNamespacePublic = async (namespaceId: string, isPublic: boolean) => {
+    const namespace = getNamespace(namespaceId)
+    if (namespace?.publicAccess === isPublic) return
+
+    if (isPublic)
+      makePublicApi(namespaceId).then(() => {
+        updateNamespace({ ...namespace, publicAccess: true })
+      })
+    else
+      makePrivateApi(namespaceId).then(() => {
+        updateNamespace({ ...namespace, publicAccess: false })
+      })
+  }
+
   return {
     getNamespace,
     getNodesOfNamespace,
@@ -252,6 +272,7 @@ export const useNamespaces = () => {
     getNamespaceOptions,
     // Sharing
     getSharedUsersForNamespace,
-    isNamespacePublic
+    isNamespacePublic,
+    makeNamespacePublic
   }
 }

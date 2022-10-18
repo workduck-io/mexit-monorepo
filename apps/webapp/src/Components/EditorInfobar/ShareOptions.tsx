@@ -46,8 +46,8 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
-  const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
-  const { isNamespacePublic } = useNamespaces()
+  // const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
+  const { isNamespacePublic, makeNamespacePublic } = useNamespaces()
 
   const publicUrl = useMemo(() => {
     if (context === 'note') {
@@ -55,7 +55,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
     } else if (context === 'space') {
       return isNamespacePublic(id) ? apiURLs.namespaces.getPublicURL(id) : undefined
     }
-  }, [id, isPublic, context])
+  }, [id, isPublic, context, isNamespacePublic])
 
   // Helper function to set loading
   const tryError = async (fn: () => Promise<void>) => {
@@ -88,13 +88,13 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
     } else if (context === 'space') {
       if (publicUrl) {
         await tryError(async () => {
-          const resp = await makeNamespacePrivate(id)
+          const resp = await makeNamespacePublic(id, false)
           mog('MakingNamespacePrivateResp', { resp })
         })
       } else {
         // Private to Public
         await tryError(async () => {
-          const resp = await makeNamespacePublic(id)
+          const resp = await makeNamespacePublic(id, true)
           mog('MakingNamespacePulicResp', { resp })
         })
       }

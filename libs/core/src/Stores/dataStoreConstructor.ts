@@ -56,6 +56,18 @@ export const dataStoreConstructor = (set, get) => ({
 
   setNamespaces: (namespaces) => set({ namespaces }),
 
+  updateNamespace: (namespace) => {
+    set(() => {
+      const namespaces = get().namespaces.map((ns) => {
+        if (ns.id === namespace.id) {
+          return namespace
+        }
+        return ns
+      })
+      return { namespaces }
+    })
+  },
+
   addTag: (tag) => {
     const currentTags = get().tags
     mog('currentTags', { currentTags, tag })
