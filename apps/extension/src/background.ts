@@ -29,25 +29,24 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 
   // * On update, show release notes
-  else if (details.reason === 'update') {
-    // * TODO: Use release notes url
-    const url = 'http://localhost:3333/share/namespace/NAMESPACE_88fFQAed8wNJ7jHxdKTa3'
-    chrome.tabs.create(
-      {
-        url,
-        pinned: false
-      },
-      (tab) => {
-        tab.active = true
-      }
-    )
-  }
+  // else if (details.reason === 'update') {
+  //   // * TODO: Use release notes url
+  //   const url = 'http://localhost:3333/share/namespace/id'
+  //   chrome.tabs.create(
+  //     {
+  //       url,
+  //       pinned: false
+  //     },
+  //     (tab) => {
+  //       tab.active = true
+  //     }
+  //   )
+  // }
 })
 
 chrome.commands.onCommand.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
-      console.log('Hey Im sputlit', { response })
       if (!response) {
         chrome.tabs.reload(tabs[0].id)
       }
