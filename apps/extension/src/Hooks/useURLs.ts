@@ -1,4 +1,5 @@
 import md5 from 'md5'
+import toast from 'react-hot-toast'
 
 import { client } from '@workduck-io/dwindle'
 
@@ -15,8 +16,7 @@ export const useLinkURLs = () => {
   const setLinks = useLinkStore((store) => store.setLinks)
   const highlights = useHighlightStore((state) => state.highlighted)
 
-  // TODO: update these with extension service worker requests
-  // const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
+  const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
   const getTags = (present?: string[]) => {
     const linkTags = links.reduce((acc, link) => {
@@ -51,7 +51,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    // saveLink(newLink)
+    saveLink(newLink)
     mog('addTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
@@ -65,7 +65,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    // saveLink(newLink)
+    saveLink(newLink)
     mog('removeTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
@@ -83,7 +83,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    // saveLink(newLink)
+    saveLink(newLink)
     mog('updateAlias', { linkurl, alias, newLinks })
     setLinks(newLinks)
   }
@@ -92,7 +92,7 @@ export const useLinkURLs = () => {
     const toDelete = links.find((l) => l.url === linkurl)
     const newLinks = links.filter((l) => l.url !== linkurl)
     mog('deleteLink', { linkurl, toDelete, newLinks })
-    // deleteLinkAPI(toDelete)
+    deleteLinkAPI(toDelete)
     setLinks(newLinks)
   }
 
@@ -125,56 +125,73 @@ export const useURLsAPI = () => {
    * Fetches all links of the workspace
    */
   const getAllLinks = async () => {
-    const data = await client
-      .get(apiURLs.links.getLinks, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        const links = extractLinksFromData(d.data)
-        mog('getAllLinks', { d, links })
-        return links
-      })
-      .then((links: Link[]) => {
-        setLinks(links)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
+    const request = {
+      type: 'SHORTENER',
+      subType: 'GET_ALL_LINKS',
+      headers: workspaceHeaders()
+    }
 
-    return data
+    const links = chrome.runtime.sendMessage(request, (response) => {
+      const { message, error } = response
+
+      if (error) {
+        mog('ErrorFetchingAllLinks', error)
+        toast.error('An error occured. Please try again.')
+      } else {
+        return extractLinksFromData(message)
+      }
+    })
+
+    return links
   }
 
   const saveLink = async (link: Link) => {
-    const req = {
-      url: link.url,
-      alias: link.alias,
-      properties: { title: link.title },
-      tags: link.tags
+    const request = {
+      type: 'SHORTENER',
+      subType: 'SAVE_LINK',
+      headers: workspaceHeaders(),
+      body: {
+        url: link.url,
+        alias: link.alias,
+        properties: { title: link.title },
+        tags: link.tags
+      }
     }
 
-    const data = await client
-      .post(apiURLs.links.saveLink, req, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        // mog('saveLink', d)
-        return d.data
-      })
+    const data = chrome.runtime.sendMessage(request, (response) => {
+      const { message, error } = response
+
+      if (error) {
+        mog('ErrorSavingLink', error)
+        toast.error('An error occured. Please try again.')
+      } else {
+        return message
+      }
+    })
+
     return data
   }
 
   const deleteLink = async (link: Link) => {
     const workspaceId = getWorkspaceId()
-    // Need hashed url
-    const hashedURL = md5(`${workspaceId}${link.url}`)
-    const data = await client
-      .delete(apiURLs.links.deleteLink(hashedURL), {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        mog('delete Link', d)
-        return d
-      })
+    const request = {
+      headers: workspaceHeaders(),
+      body: {
+        hashedURL: md5(`${workspaceId}${link.url}`)
+      }
+    }
+
+    const data = chrome.runtime.sendMessage(request, (response) => {
+      const { message, error } = response
+
+      if (error) {
+        mog('ErrorDeletingLink', error)
+        toast.error('An error occured. Please try again.')
+      } else {
+        return message
+      }
+    })
+
     return data
     // OOK
   }

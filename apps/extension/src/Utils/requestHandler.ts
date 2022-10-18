@@ -81,6 +81,47 @@ export const handleActionRequest = (request: ListItemType) => {
   }
 }
 
+export const handleShortenerRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'GET_ALL_LINKS': {
+      return client
+        .get(apiURLs.links.getLinks, {
+          headers: headers
+        })
+        .then((d: any) => {
+          return { message: d.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+    case 'SAVE_LINK': {
+      return client
+        .post(apiURLs.links.saveLink, body, {
+          headers: headers
+        })
+        .then((d: any) => {
+          return { message: d.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+    case 'DELETE_LINK': {
+      return client
+        .delete(apiURLs.links.deleteLink(body.hashedURL), {
+          headers: headers
+        })
+        .then((d: any) => {
+          return { message: d, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+  }
+}
+
 export const handleAsyncActionRequest = ({ subType, data }) => {
   switch (subType) {
     case 'GET_CURRENT_WINDOW_TABS': {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -17,6 +17,7 @@ import {
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
+import { getElementById } from '../../contentScript'
 
 const ShortenerWrapper = styled(LinkWrapper)`
   padding: 0;
@@ -42,23 +43,34 @@ const FaviconImage = ({ source }: { source: string }) => {
 }
 
 export const ShortenerComponent = () => {
-  const [link, setLink] = useState<Link>()
-  const [tags, setTags] = useState<Tag[]>([])
-
   const { links } = useLinkStore()
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { updateAlias, isDuplicateAlias, getTags } = useLinkURLs()
+  const { updateAlias, isDuplicateAlias, getTags, addTag, removeTag } = useLinkURLs()
+
+  const link = useMemo(() => {
+    return links.find((l) => l.url === window.location.href)
+  }, [links, window.location])
+
+  const tags = useMemo(() => {
+    if (!link) return []
+
+    return link.tags?.map((t) => ({ value: t })) ?? []
+  }, [link])
 
   const toAddTags = getTags(link?.tags)
 
-  useEffect(() => {
-    const link = links.find((link) => link.url === window.location.href)
+  const onAddNewTag = (tag: Tag) => {
+    // mog('onAddNewTag', { tag })
+    addTag(link.url, tag.value)
+  }
 
-    if (link) {
-      setTags(link.tags?.map((t) => ({ value: t })))
-      setLink(link)
-    }
-  }, [])
+  const onAddCreateTag = (tagStr: string) => {
+    addTag(link.url, tagStr)
+  }
+
+  const onRemoveTag = (tagStr: string) => {
+    removeTag(link.url, tagStr)
+  }
 
   return (
     <ShortenerWrapper>
@@ -80,9 +92,10 @@ export const ShortenerComponent = () => {
             onDelete={(val: string) => console.log('link delete', val)}
           />
           <AddTagMenu
-            createTag={() => console.log('Trying to create a new tag')}
+            root={getElementById('ext-side-nav')}
+            createTag={onAddCreateTag}
             tags={toAddTags}
-            addTag={() => console.log('add a new tag')}
+            addTag={onAddNewTag}
           />
         </LinkTagSection>
       </LinkShortenAndTagsWrapper>

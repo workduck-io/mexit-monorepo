@@ -6,7 +6,12 @@ import { ActionType, apiURLs, LINK_SHORTENER_URL_BASE, mog, SEPARATOR } from '@m
 
 import { useAuthStore } from './Hooks/useAuth'
 import useDataStore from './Stores/useDataStore'
-import { handleCaptureRequest, handleActionRequest, handleAsyncActionRequest } from './Utils/requestHandler'
+import {
+  handleCaptureRequest,
+  handleActionRequest,
+  handleAsyncActionRequest,
+  handleShortenerRequest
+} from './Utils/requestHandler'
 
 Sentry.init({
   dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',
@@ -91,6 +96,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleCaptureRequest(request)
         console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'SHORTENER': {
+      ;(async () => {
+        const res = await handleShortenerRequest(request)
+        console.log('SHORTENER_RESPONSE', res)
         sendResponse(res)
       })()
       return true
