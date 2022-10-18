@@ -28,7 +28,7 @@
     "@tippyjs/react": "^4.2.6",
     "@workduck-io/dwindle": "^0.0.20",
     "@workduck-io/flexsearch": "^0.7.22",
-    "@workduck-io/mex-components": "^0.0.16",
+    "@workduck-io/mex-components": "^0.0.17",
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
     "compress.js": "^1.2.2",
