@@ -1,23 +1,15 @@
-import React, { useEffect, useMemo } from 'react'
-
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import { useMatch } from 'react-router-dom'
+import React, { useEffect } from 'react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MexIcon } from '@mexit/shared'
 import { InfoBarWrapper } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
-import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import useToggleElements from '../../Hooks/useToggleElements'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { InfobarMode, useLayoutStore } from '../../Stores/useLayoutStore'
-import Tabs, { TabType } from '../../Views/Tabs'
-import RemindersInfobar from '../Reminders/Reminders'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import DataInfoBar from './DataInfobar'
-import PublicDataInfobar from './PublicNodeInfobar'
 
 const InfoBarItems = () => {
   // const infobar = useLayoutStore((s) => s.infobar)
@@ -25,34 +17,34 @@ const InfoBarItems = () => {
   // const setInfobarMode = useLayoutStore((s) => s.setInfobarMode)
   // const isPublicView = useMatch(`${ROUTE_PATHS.share}/:nodeid`)
 
-//   // Ensure the tabs have InfobarType in type
-//   const tabs: Array<TabType> = useMemo(
-//     () => [
-//       {
-//         label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
-//         type: 'default',
-//         component: <DataInfoBar />,
-//         tooltip: 'Context'
-//       },
-//       {
-//         label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
-//         type: 'reminders',
-//         component: <RemindersInfobar />,
-//         tooltip: 'Reminders'
-//       }
-//     ],
-//     []
-//   )
+  //   // Ensure the tabs have InfobarType in type
+  //   const tabs: Array<TabType> = useMemo(
+  //     () => [
+  //       {
+  //         label: <MexIcon $noHover icon="fluent:content-view-gallery-24-regular" width={24} height={24} />,
+  //         type: 'default',
+  //         component: <DataInfoBar />,
+  //         tooltip: 'Context'
+  //       },
+  //       {
+  //         label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
+  //         type: 'reminders',
+  //         component: <RemindersInfobar />,
+  //         tooltip: 'Reminders'
+  //       }
+  //     ],
+  //     []
+  //   )
 
-  return (<DataInfoBar />)
-    // <Tabs
-    //   visible={true}
-    //   openedTab={infobar.mode}
-    //   onChange={(tab) => {
-    //     setInfobarMode(tab as InfobarMode)
-    //   }}
-    //   tabs={tabs}
-    // />
+  return <DataInfoBar />
+  // <Tabs
+  //   visible={true}
+  //   openedTab={infobar.mode}
+  //   onChange={(tab) => {
+  //     setInfobarMode(tab as InfobarMode)
+  //   }}
+  //   tabs={tabs}
+  // />
 }
 
 const InfoBar = () => {

@@ -1,9 +1,11 @@
 import {
+  ActionType,
   convertContentToRawText,
   defaultContent,
   ILink,
   ListItemType,
   MexitAction,
+  MEXIT_FRONTEND_URL_BASE,
   NodeContent,
   QuickLinkType,
   Snippet
@@ -27,7 +29,7 @@ export function getContent(nodeid: string): NodeContent {
   return defaultContent
 }
 
-export const getListItemFromNode = (node: ILink, description?: string, blockid?: string) => {
+export const getListItemFromNode = (node: ILink, description?: string, blockid?: string, actionType?: ActionType) => {
   const rawText = description ?? convertContentToRawText(getContent(node?.nodeid)?.content ?? [], ' ')
 
   const listItem: ListItemType = {
@@ -36,17 +38,19 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
     id: node?.nodeid,
     description: rawText,
     category: QuickLinkType.backlink,
+    type: actionType,
     extras: {
       nodeid: node?.nodeid,
       blockid,
       path: node?.path,
-      new: false
+      new: false,
+      base_url: `${MEXIT_FRONTEND_URL_BASE}/editor/${node?.nodeid}`
     },
     shortcut: {
       save: {
         category: 'action',
         keystrokes: 'Enter',
-        title: 'to Save'
+        title: actionType === ActionType.OPEN ? 'to Open' : 'to Save'
       }
     }
   }
@@ -77,8 +81,9 @@ export const getListItemFromAction = (action: MexitAction) => {
   return actionItem
 }
 
-export const getListItemFromSnippet = (snippet: Snippet) => {
-  const rawText = convertContentToRawText(snippet?.content ?? [], ' ')
+export const getListItemFromSnippet = (snippet: Snippet, actionType?: ActionType) => {
+  const rawText = convertContentToRawText(snippet?.content ?? [], ' ') // Replace this with useDescriptionStore
+
   const listItem: ListItemType = {
     icon: snippet.icon ?? 'ri:quill-pen-line',
     title: snippet.title,
@@ -87,13 +92,14 @@ export const getListItemFromSnippet = (snippet: Snippet) => {
     category: QuickLinkType.snippet,
     extras: {
       nodeid: snippet.id,
-      path: snippet.title
+      path: snippet.title,
+      base_url: `${MEXIT_FRONTEND_URL_BASE}/snippets/${snippet.id}`
     },
     shortcut: {
       copy: {
         category: 'action',
         keystrokes: 'Enter',
-        title: 'to copy'
+        title: actionType === ActionType.OPEN ? 'to Open' : 'to copy'
       }
       // paste: {
       //   category: 'action',

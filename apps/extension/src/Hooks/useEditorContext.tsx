@@ -1,6 +1,6 @@
-import React, { createContext, PropsWithChildren, ReactNode, useContext, useState } from 'react'
+import React, { createContext, PropsWithChildren, useContext, useState } from 'react'
 
-import { createNodeWithUid, defaultContent, getNewDraftKey, NodeEditorContent, NodeProperties } from '@mexit/core'
+import { defaultContent, NodeEditorContent } from '@mexit/core'
 
 type EditorContextType = {
   nodeContent: NodeEditorContent

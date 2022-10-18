@@ -1,12 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext, useState } from 'react'
 
-import { ListItemType } from '@mexit/core'
-
-// export type Search = {
-//   value: string
-//   type: CategoryType
-// }
-
 export enum VisualState {
   animatingIn = 'animating-in',
   showing = 'showing',
@@ -29,11 +22,8 @@ type SputlitContextType = {
   setIsLoading: (val: boolean) => void
   activeIndex: number
   setActiveIndex: any
-
   visualState: VisualState
   setVisualState: (vs: VisualState) => void
-  tooltipState: TooltipState
-  setTooltipState: (vs: TooltipState) => void
   dibbaState: TooltipState
   setDibbaState: (vs: TooltipState) => void
 }
@@ -44,9 +34,6 @@ export const useSputlitContext = () => useContext(SputlitContext)
 export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [visualState, setVisualState] = useState<VisualState>(VisualState.hidden)
-  const [tooltipState, setTooltipState] = useState<TooltipState>({
-    visualState: VisualState.hidden
-  })
   const [dibbaState, setDibbaState] = useState<TooltipState>({ visualState: VisualState.hidden })
   const [isLoading, setIsLoading] = useState(false)
 
@@ -57,8 +44,6 @@ export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setActiveIndex,
     visualState,
     setVisualState,
-    tooltipState,
-    setTooltipState,
     dibbaState,
     setDibbaState
   }

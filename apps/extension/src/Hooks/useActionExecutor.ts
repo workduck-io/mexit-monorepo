@@ -1,5 +1,5 @@
+/* eslint-disable no-case-declarations */
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import { reset } from 'mixpanel-browser'
 import toast from 'react-hot-toast'
 
 import {
@@ -47,6 +47,8 @@ export function useActionExecutor() {
   const { saveIt } = useSaveChanges()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const setSearch = useSputlitStore((store) => store.setSearch)
+  const changeSearchType = useSputlitStore((s) => s.changeSearchType)
+
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
   const setInput = useSputlitStore((s) => s.setInput)
   const resetSputlitState = useSputlitStore((s) => s.reset)
@@ -55,8 +57,6 @@ export function useActionExecutor() {
     const search = useSputlitStore.getState().search
     const activeItem = useSputlitStore.getState().activeItem
 
-    mog('action itme', { item })
-
     if (!item) {
       mog('No item found')
       return
@@ -64,33 +64,44 @@ export function useActionExecutor() {
 
     switch (item.category) {
       case QuickLinkType.backlink: {
-        let node: ILink
-        let namespace: SingleNamespace
-        const val = search.value
-        const nodeValue = val || getNewDraftKey()
-        const defaultNamespace = getDefaultNamespace()
+        switch (item.type) {
+          case ActionType.OPEN:
+            const url = encodeURI(item.extras.base_url)
+            window.open(url, '_blank').focus()
+            setVisualState(VisualState.hidden)
+            resetSputlitState()
 
-        if (item?.extras?.new) {
-          node = createNodeWithUid(nodeValue, defaultNamespace.id)
-          namespace = defaultNamespace
-        } else {
-          node = isSharedNode(item.id)
-            ? sharedNodes.find((i) => i.nodeid === item.id)
-            : ilinks.find((i) => i.nodeid === item.id)
-          namespace = getNamespaceOfNodeid(node.nodeid)
+            break
+
+          default:
+            let node: ILink
+            let namespace: SingleNamespace
+            const val = search.value
+            const nodeValue = val || getNewDraftKey()
+            const defaultNamespace = getDefaultNamespace()
+
+            if (item?.extras?.new) {
+              node = createNodeWithUid(nodeValue, defaultNamespace.id)
+              namespace = defaultNamespace
+            } else {
+              node = isSharedNode(item.id)
+                ? sharedNodes.find((i) => i.nodeid === item.id)
+                : ilinks.find((i) => i.nodeid === item.id)
+              namespace = getNamespaceOfNodeid(node.nodeid)
+            }
+
+            setNode({
+              id: node.nodeid,
+              title: node.path.split(SEPARATOR).slice(-1)[0],
+              path: node.path,
+              nodeid: node.nodeid,
+              namespace: namespace.id
+            })
+
+            saveIt(false, true)
+
+            resetSputlitState()
         }
-
-        setNode({
-          id: node.nodeid,
-          title: node.path.split(SEPARATOR).slice(-1)[0],
-          path: node.path,
-          nodeid: node.nodeid,
-          namespace: namespace.id
-        })
-
-        saveIt(false, true)
-
-        resetSputlitState()
 
         break
       }
@@ -138,20 +149,45 @@ export function useActionExecutor() {
         break
       }
 
+      case QuickLinkType.search: {
+        if (item?.extras?.withinMex) {
+          setActiveItem(item)
+          changeSearchType(CategoryType.backlink)
+        } else {
+          const url = encodeURI(item.extras.base_url + search.value)
+          window.open(url, '_blank').focus()
+          setVisualState(VisualState.hidden)
+          resetSputlitState()
+        }
+
+        break
+      }
+
       case QuickLinkType.action: {
         switch (item.type) {
           case ActionType.BROWSER_EVENT:
             chrome.runtime.sendMessage({ ...item })
             break
           case ActionType.OPEN:
-            window.open(item.extras.base_url, '_blank').focus()
+            if (metaKeyPressed) {
+              navigator.clipboard.writeText(item.extras.base_url)
+              toast.success('URL copied to clipboard!')
+            } else {
+              window.open(item.extras.base_url, '_blank').focus()
+            }
+
             setVisualState(VisualState.hidden)
+            resetSputlitState()
+
             break
           case ActionType.SEARCH: {
-            mog('I want to search this', { activeItem, item, search })
             // Ignore the case for search type action when it is the generic search action
             // As it is not a two step action
-            if (activeItem?.title !== item?.title && item?.id !== '0') {
+            if (item.extras.withinMex) {
+              setActiveItem(item)
+              setInput('')
+              setSearch({ value: '', type: CategoryType.backlink })
+            } else if (activeItem?.title !== item?.title && item?.id !== '0') {
               setActiveItem(item)
               setInput('')
             } else {
@@ -160,6 +196,7 @@ export function useActionExecutor() {
               setVisualState(VisualState.hidden)
               resetSputlitState()
             }
+
             break
           }
           case ActionType.RENDER: {
