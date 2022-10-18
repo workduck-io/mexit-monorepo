@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { connectToParent } from 'penpal'
 
-import {
-  idxKey,
-  ILink,
-  mog,
-  NodeEditorContent,
-  NodeMetadata,
-  Reminder,
-  ReminderActions
-} from '@mexit/core'
+import { idxKey, ILink, mog, NodeEditorContent, NodeMetadata, Reminder, ReminderActions } from '@mexit/core'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useReminders } from '../Hooks/useReminders'
@@ -20,6 +12,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import useThemeStore from '../Stores/useThemeStore'
@@ -34,6 +27,8 @@ export default function Chotu() {
 
   const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
+  const recents = useRecentsStore((s) => s.lastOpened)
+  const addNodeInRecents = useRecentsStore((s) => s.addRecent)
   const actOnReminder = useReminders().actOnReminder
   const { addHighlightedBlock } = useHighlightStore()
   const [first, setFirst] = useState(true)
@@ -58,6 +53,9 @@ export default function Chotu() {
     addHighlight(nodeid: string, content: NodeEditorContent) {
       addHighlightedBlock(nodeid, content)
       return
+    },
+    addRecentNode(nodeid: string) {
+      addNodeInRecents(nodeid)
     },
     updateContentStore(nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) {
       setContent(nodeid, content, metadata)
@@ -121,6 +119,12 @@ export default function Chotu() {
   useEffect(() => {
     if (!parent) return
 
+    parent.bootRecents(recents)
+  }, [parent, recents])
+
+  useEffect(() => {
+    if (!parent) return
+
     parent.bootTheme(theme)
   }, [parent, theme])
 
@@ -135,7 +139,6 @@ export default function Chotu() {
 
     parent.bootLinks(links)
   }, [parent, links])
-
 
   return (
     <div>

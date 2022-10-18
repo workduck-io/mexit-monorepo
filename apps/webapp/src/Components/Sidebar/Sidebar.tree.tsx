@@ -8,7 +8,7 @@ import { debounce } from 'lodash'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { Input, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { getTitleFromPath } from '../../Hooks/useLinks'
@@ -18,7 +18,6 @@ import { getTreeFromLinks, getPartialTreeFromLinks } from '../../Hooks/useTreeFr
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
 import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
-import { SidebarListFilter } from './SidebarList.style'
 import Tree from './Tree'
 
 interface SpaceTreeProps {

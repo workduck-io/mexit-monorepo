@@ -109,14 +109,12 @@ export function useSaveChanges() {
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
 
+        dispatch('ADD_RECENT_NODE', nodeid)
+
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
         addHighlightedBlock(nodeid, content)
         dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
-
-        // mog('deserialized content from backend', {
-        //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
-        // })
 
         if (notification) {
           toast.success('Saved to Cloud')

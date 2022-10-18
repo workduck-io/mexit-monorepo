@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import LensIcon from '@iconify/icons-ph/magnifying-glass-bold'
 import { Icon } from '@iconify/react'
-import fuzzysort from 'fuzzysort'
 import { useTheme } from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -17,7 +15,9 @@ import {
   BASE_TASKS_PATH,
   isParent,
   ListItemType,
-  MAX_RECENT_ITEMS
+  MAX_RECENT_ITEMS,
+  mog,
+  ActionType
 } from '@mexit/core'
 import { Loading, WDLogo } from '@mexit/shared'
 
@@ -40,6 +40,7 @@ const Search = () => {
   const selection = useSputlitStore((s) => s.selection)
 
   const input = useSputlitStore((s) => s.input)
+  const activeItem = useSputlitStore((s) => s.activeItem)
   const setInput = useSputlitStore((s) => s.setInput)
   const setResults = useSputlitStore((s) => s.setResults)
   const { searchInList } = useSearch()
@@ -57,19 +58,16 @@ const Search = () => {
 
   const getQuery = (value: string): SearchType => {
     const selection = useSputlitStore.getState().selection
+    const activeItem = useSputlitStore.getState().activeItem
 
     const query: SearchType = {
       value: value.trim(),
       type: CategoryType.action
     }
 
-    if (selection) {
+    if (selection || activeItem?.extras?.withinMex) {
       query.type = CategoryType.backlink
     }
-
-    // if (value.startsWith('/')) {
-    //   query.type = CategoryType.action
-    // }
 
     return query
   }
@@ -86,7 +84,10 @@ const Search = () => {
     const unsubscribe = tinykeys(ref.current, {
       Enter: (ev) => {
         const activeItem = useSputlitStore.getState().activeItem
-        execute(activeItem)
+
+        if (activeItem?.type === ActionType.SEARCH && !activeItem?.extras?.withinMex) {
+          execute(activeItem)
+        }
       }
     })
 
@@ -107,7 +108,7 @@ const Search = () => {
     handleSearchInput(query)
   }
 
-  const getRecentList = (noteIds: Array<string>, limit = MAX_RECENT_ITEMS) => {
+  const getRecentList = (noteIds: Array<string>, actionType?: ActionType, limit = MAX_RECENT_ITEMS) => {
     const recentList: Array<ListItemType> = []
 
     // const extra = getSearchExtra()
@@ -117,7 +118,10 @@ const Search = () => {
 
       if (noteLink && !isParent(noteLink.path, BASE_TASKS_PATH)) {
         const item = getListItemFromNode(
-          noteLink
+          noteLink,
+          undefined,
+          undefined,
+          actionType
           // { searchRepExtra: extra }
         )
         recentList.push(item)
@@ -135,20 +139,20 @@ const Search = () => {
   useEffect(() => {
     async function getSearchItems() {
       const activeItem = useSputlitStore.getState().activeItem
+      const isSearchWithinMex = activeItem?.extras?.withinMex
+      const actionType = isSearchWithinMex ? ActionType.OPEN : undefined
 
-      if (!activeItem) {
-        if (search.value) {
-          const listWithNew = await searchInList()
-          setResults(listWithNew)
-        } else if (selection) {
+      if (!activeItem || isSearchWithinMex) {
+        if (selection || (!search.value && isSearchWithinMex)) {
           const notesOpened = lastOpenedNodes
 
-          const recents = getRecentList(notesOpened).reverse()
-
+          const recents = getRecentList(notesOpened, actionType).reverse()
           const listWithNew = insertItemInArray(recents, CREATE_NEW_ITEM, 1)
 
-          const results = listWithNew
-          setResults(results)
+          setResults(isSearchWithinMex ? recents : listWithNew)
+        } else if (search.value) {
+          const listWithNew = await searchInList(actionType)
+          setResults(listWithNew)
         } else {
           setResults(initActions)
         }
@@ -156,7 +160,7 @@ const Search = () => {
     }
 
     if (previewMode) getSearchItems()
-  }, [search.value, selection, previewMode, ilinks])
+  }, [search, selection, previewMode, ilinks])
 
   const onBackClick = () => {
     if (!previewMode) {
@@ -174,7 +178,7 @@ const Search = () => {
       <StyledInput
         ref={ref}
         autoFocus={previewMode}
-        disabled={!previewMode}
+        disabled={!previewMode || activeItem?.type === ActionType.RENDER}
         autoComplete="off"
         spellCheck="false"
         value={input}

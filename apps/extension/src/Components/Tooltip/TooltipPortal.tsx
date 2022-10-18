@@ -1,14 +1,17 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom'
+
+import { VisualState } from '../../Hooks/useSputlitContext'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { styleSlot } from '../../contentScript'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 
 interface Props {
   children: React.ReactNode
 }
 
 export function TooltipPortal(props: Props) {
-  const tooltipState = useSputlitContext().tooltipState
+  const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
 
   if (tooltipState.visualState === VisualState.hidden) {
     return null

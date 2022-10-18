@@ -38,36 +38,6 @@ export const initActions: Array<ListItemType> = [
   //   }
   // },
   {
-    id: 'ACTION_4d32gtj23agex34ojin',
-    title: 'Open Mexit Right Sidebar',
-    category: QuickLinkType.action,
-    description: 'Open sidebar',
-    type: ActionType.OPEN,
-    icon: 'codicon:layout-sidebar-right',
-    shortcut: {
-      open: {
-        category: 'action',
-        title: 'to open',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  // {
-  //   id: 'ACTION_9x34kgj23j4234ojin',
-  //   title: 'Metadata Aggregator',
-  //   category: QuickLinkType.action,
-  //   icon: 'eva:color-picker-fill',
-  //   description: 'Extract any useful data from the current page',
-  //   type: ActionType.MAGICAL,
-  //   shortcut: {
-  //     pick: {
-  //       title: 'to pick',
-  //       category: 'action',
-  //       keystrokes: 'Enter'
-  //     }
-  //   }
-  // },
-  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     category: QuickLinkType.action,
@@ -100,6 +70,37 @@ export const initActions: Array<ListItemType> = [
     extras: { base_url: 'https://twitter.com/search?q=' }
   },
   {
+    id: 'ACTION_4d32gtj23agex34ojin',
+    title: 'Open Mexit Right Sidebar',
+    category: QuickLinkType.action,
+    description: 'Open sidebar',
+    type: ActionType.OPEN,
+    icon: 'codicon:layout-sidebar-right',
+    shortcut: {
+      open: {
+        category: 'action',
+        title: 'to open',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  // {
+  //   id: 'ACTION_9x34kgj23j4234ojin',
+  //   title: 'Metadata Aggregator',
+  //   category: QuickLinkType.action,
+  //   icon: 'eva:color-picker-fill',
+  //   description: 'Extract any useful data from the current page',
+  //   type: ActionType.MAGICAL,
+  //   shortcut: {
+  //     pick: {
+  //       title: 'to pick',
+  //       category: 'action',
+  //       keystrokes: 'Enter'
+  //     }
+  //   }
+  // },
+
+  {
     id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
     type: ActionType.OPEN,
     title: 'Open Gmail',
@@ -114,6 +115,24 @@ export const initActions: Array<ListItemType> = [
       }
     },
     extras: { base_url: 'https://gmail.com' }
+  },
+  {
+    title: 'Search in Mex',
+    id: 'ACTION_A6VLKiPZeHGw0EFq_1mex',
+    icon: 'ph:magnifying-glass',
+    category: QuickLinkType.action,
+    type: ActionType.SEARCH,
+    description: 'Searchs query in Mex',
+    shortcut: {
+      search: {
+        category: 'action',
+        keystrokes: 'Enter',
+        title: 'to search'
+      }
+    },
+    extras: {
+      withinMex: true
+    }
   },
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
@@ -406,7 +425,7 @@ export const initActions: Array<ListItemType> = [
     }
   },
   {
-    id: 'ACTION_A6VLKiPZeHGw0EFq-dtV7',
+    id: 'ACTION_A6VLKiPZeHGw0EFq_dtV7',
     title: 'Search GitHub',
     category: QuickLinkType.action,
     description: 'Search on GitHub',

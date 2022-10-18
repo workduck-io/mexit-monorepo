@@ -5,9 +5,7 @@ import styled, { css } from 'styled-components'
 
 import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
 
-import { IconWrapper, Input, TagsFlex } from '@mexit/shared'
-
-import { SidebarListWrapper } from './SidebarList.style'
+import { IconWrapper, Input, TagsFlex, SidebarListWrapper } from '@mexit/shared'
 
 export const SidebarWrapper = styled.div`
   display: flex;

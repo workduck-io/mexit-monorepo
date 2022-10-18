@@ -25,6 +25,7 @@ import { Theme } from '@mexit/shared'
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../contentScript'
@@ -32,7 +33,6 @@ import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import { useSnippets } from './useSnippets'
-import { useSputlitContext } from './useSputlitContext'
 import useThemeStore from './useThemeStore'
 
 export interface ParentMethods {
@@ -40,6 +40,7 @@ export interface ParentMethods {
   SET_CONTENT: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
   ADD_SINGLE_ILINK: (nodeid: string, path: string, namespace: string) => void
   ADD_MULTIPLE_ILINKS: (linksToBeCreated: ILink[]) => void
+  ADD_RECENT_NODE: (nodeId: string) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
   ADD_HIGHLIGHTED_BLOCK: (nodeid: string, content: NodeEditorContent) => void
 }
@@ -64,6 +65,7 @@ export default function useRaju() {
   const setNamespaces = useDataStore((store) => store.setNamespaces)
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
+  const setRecents = useRecentsStore((s) => s.initRecents)
   const { updateSnippets } = useSnippets()
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
@@ -114,6 +116,9 @@ export default function useRaju() {
     bootDwindle(authAWS: any) {
       setInternalAuthStore(authAWS)
     },
+    bootRecents(recents: Array<string>) {
+      setRecents(recents)
+    },
     bootIlinks(ilinks: ILink[]) {
       setIlinks(ilinks)
     },
@@ -148,6 +153,7 @@ export default function useRaju() {
     if (!getElementById(IFRAME_ID)) {
       styleSlot.appendChild(iframe)
     }
+
     const connection = connectToChild({
       iframe,
       methods
@@ -183,6 +189,8 @@ export default function useRaju() {
         return child.updateSingleILink(...params)
       case 'ADD_MULTIPLE_ILINKS':
         return child.updateMultipleILinks(...params)
+      case 'ADD_RECENT_NODE':
+        return child.addRecentNode(...params)
       case 'ACT_ON_REMINDER':
         return child.reminderAction(...params)
       case 'ADD_HIGHLIGHTED_BLOCK':
