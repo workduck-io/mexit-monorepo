@@ -54,18 +54,7 @@ export const useInitLoader = () => {
 
       const baseNode = updateBaseNode()
 
-      // TODO: I will come back to this
-      if (
-        window.location.pathname !== '/chotu' &&
-        !window.location.pathname.startsWith(ROUTE_PATHS.actions) &&
-        !window.location.pathname.startsWith(ROUTE_PATHS.share) &&
-        !window.location.pathname.startsWith(ROUTE_PATHS.integrations)
-      ) {
-        mog('Base Node: ', baseNode)
-        loadNode(baseNode?.nodeid, { savePrev: false, fetch: false })
-        goTo(ROUTE_PATHS.node, NavigationType.push, baseNode?.nodeid)
-      }
-
+      // We only set showLoader to false here because when needed the loader would be made visible by another component
       setShowLoader(false)
     } catch (err) {
       console.error('Error in Init Loader: ', err)

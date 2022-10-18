@@ -80,7 +80,7 @@ export const useDelete = () => {
       // Update BaseNodeId
       const baseId = archivedNodes.map((item) => item.path).indexOf(useDataStore.getState().baseNodeId)
       if (baseId !== -1 && newIlinks.length > 0) {
-        setBaseNodeId(newIlinks[0].path)
+        setBaseNodeId(newIlinks[0].nodeid)
       }
 
       archivedNodes.map(async (item) => {

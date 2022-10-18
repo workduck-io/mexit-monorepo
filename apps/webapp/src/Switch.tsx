@@ -17,10 +17,12 @@ import Portals from './Components/Portals'
 import SplashScreen from './Components/SplashScreen'
 import Themes from './Components/Themes'
 import UserPage from './Components/User/UserPage'
+import useLoad from './Hooks/useLoad'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import { useAuthStore } from './Stores/useAuth'
 import useBlockStore from './Stores/useBlockStore'
+import { useDataStore } from './Stores/useDataStore'
 import { useEditorStore } from './Stores/useEditorStore'
 import { useLayoutStore } from './Stores/useLayoutStore'
 import Archive from './Views/Archive'
@@ -62,12 +64,22 @@ const ProtectedRoute = ({ children }) => {
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+  const { loadNode } = useLoad()
 
-  const { from } = (useLocation()?.state as { from: Location }) || { from: { pathname: ROUTE_PATHS.home } }
   const showLoader = useLayoutStore((store) => store.showLoader)
   if (showLoader) return <SplashScreen />
 
-  return !authenticated ? children : <Navigate to={from} />
+  if (!authenticated) {
+    return children
+  } else {
+    const baseNodeId = useDataStore.getState().baseNodeId
+    const { from } = {
+      from: { pathname: `${ROUTE_PATHS.node}/${baseNodeId}` }
+    }
+    loadNode(baseNodeId, { savePrev: false, fetch: false })
+
+    return <Navigate to={from} />
+  }
 }
 
 const OAuthRoute = () => {
