@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-import { CenteredColumn } from '@mexit/shared'
+// import { CenteredColumn } from './Layouts'
 
 export const IntegrationContainer = styled.section`
   margin: 0 4rem;
@@ -137,7 +137,14 @@ export const RightCut = styled.span`
   margin: 0 px;
 `
 
-export const CenteredFlex = styled(CenteredColumn)`
+export const CenteredFlex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  flex-direction: column;
   flex: 1;
 `
 

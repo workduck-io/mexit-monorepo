@@ -1,6 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+
 import { resolveValue, Toaster } from 'react-hot-toast'
+import styled from 'styled-components'
 
 const Notif = styled.div`
   visibility: visible;

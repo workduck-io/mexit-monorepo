@@ -168,11 +168,12 @@ export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?
 
 interface LabelProps {
   error?: boolean
+  noTopMargin?: boolean
 }
 
 export const Label = styled.label<LabelProps>`
   color: ${({ theme }) => theme.colors.text.fade};
-  margin: ${({ theme: { spacing } }) => `${spacing.medium} 0 3px`};
+  margin: ${({ theme: { spacing }, noTopMargin }) => `${noTopMargin ? 0 : spacing.medium} 0 3px`};
   display: flex;
   align-items: center;
   /*${({ theme, error }) =>

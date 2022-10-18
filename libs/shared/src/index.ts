@@ -69,6 +69,7 @@ export * from './Style/Typography'
 export * from './Style/UserPage'
 export * from './Style/ViewSelector'
 export * from './Style/Welcome'
+export * from './Style/SidebarList.style'
 
 export * from './Themes'
 export * from './Themes/customStyles'

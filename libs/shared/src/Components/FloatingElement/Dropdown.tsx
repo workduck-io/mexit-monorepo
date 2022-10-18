@@ -41,6 +41,7 @@ import { MIcon } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
 
 import { GenericFlex } from '../../Style/Filter'
+import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
 import { Input } from './../../Style/Form'
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'

@@ -10,7 +10,8 @@ import {
   useInteractions,
   useHover,
   useRole,
-  useDismiss
+  useDismiss,
+  FloatingPortal
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
 
@@ -22,6 +23,7 @@ interface Props {
   children: JSX.Element
   offsetPx?: number
   delay?: number
+  root?: HTMLElement
 }
 
 /**
@@ -29,7 +31,7 @@ interface Props {
  *
  * Ref: https://codesandbox.io/s/winter-tree-wmmffl?file=/src/App.tsx
  */
-export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placement = 'top' }: Props) => {
+export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placement = 'top', root }: Props) => {
   const [open, setOpen] = useState(false)
 
   const { x, y, reference, floating, strategy, context } = useFloating({
@@ -57,19 +59,21 @@ export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placemen
   return (
     <>
       {cloneElement(children, getReferenceProps({ ref, ...children.props }))}
-      {open && (
-        <TooltipWrapper
-          ref={floating}
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0
-          }}
-          {...getFloatingProps()}
-        >
-          {content}
-        </TooltipWrapper>
-      )}
+      <FloatingPortal root={root}>
+        {open && (
+          <TooltipWrapper
+            ref={floating}
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0
+            }}
+            {...getFloatingProps()}
+          >
+            {content}
+          </TooltipWrapper>
+        )}
+      </FloatingPortal>
     </>
   )
 }
