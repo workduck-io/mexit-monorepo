@@ -42,7 +42,6 @@ export const dataStoreConstructor = (set, get) => ({
       tagsCache: {},
       namespaces: [],
       bookmarks: [],
-      namespaces: [],
       archive: [],
       baseNodeId: '__loading__',
       slashCommands: {

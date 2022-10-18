@@ -109,10 +109,18 @@ interface Props {
    * Creatable?
    */
   onCreate?: (value: string) => void
+
+  /**
+   * Which element to render the portal in
+   */
+  root?: HTMLElement | null
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
-  ({ children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, ...props }, ref) => {
+  (
+    { children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, root, ...props },
+    ref
+  ) => {
     const [open, setOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [allowHover, setAllowHover] = useState(false)
@@ -304,7 +312,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
           {label} {values && values}
           {nested && <Icon style={{ marginLeft: 10 }} icon="ri:arrow-right-s-line" />}
         </RootMenuWrapper>
-        <FloatingPortal>
+        <FloatingPortal root={root}>
           {open && (
             <FloatingFocusManager
               context={context}

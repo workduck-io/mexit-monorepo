@@ -96,6 +96,7 @@ export const MenuWrapper = styled.div`
   outline: 0;
   max-height: 300px;
   overflow-y: auto;
+  z-index: 11;
   ${({ theme }) => ScrollStyles(theme.colors.gray[10])}
 `
 

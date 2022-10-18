@@ -275,7 +275,7 @@ export const SideNav = styled(animated.div)<SideNavProps>`
   overflow-y: auto;
   min-height: 100%;
   height: 100%;
-  z-index: 99999;
+  z-index: 10;
   padding: ${({ theme }) => theme.spacing.large} 0 0;
 
   & div {

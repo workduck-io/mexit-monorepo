@@ -9,11 +9,12 @@ import { Infobox } from '@workduck-io/mex-components'
 import { mog, Snippet } from '@mexit/core'
 import { SnippetCards, Input, SidebarListFilter, SidebarListFilterWrapper, SnippetSidebarHelp } from '@mexit/shared'
 
+import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { getElementById } from '../../contentScript'
 import { insertSnippet } from '../Dibba'
 import SnippetCard from './SnippetCard'
-import useRaju from '../../Hooks/useRaju'
 
 export const SnippetsInfoBar = () => {
   const [search, setSearch] = useState('')
@@ -39,11 +40,13 @@ export const SnippetsInfoBar = () => {
     if (newSearchTerm === '' && res.length === 0) {
       setSearchedSnippets(snippets)
     } else {
-      const searched = res.map((r) => {
-        const snippet = snippets.find((snippet) => snippet.id === r.id)
+      const searched = res
+        .map((r) => {
+          const snippet = snippets.find((snippet) => snippet.id === r.id)
 
-        return snippet
-      }).filter((s) => s !== undefined) as Snippet[]
+          return snippet
+        })
+        .filter((s) => s !== undefined) as Snippet[]
 
       setSearchedSnippets(searched)
     }
@@ -57,7 +60,6 @@ export const SnippetsInfoBar = () => {
     if (search === '') {
       setSearchedSnippets(snippets)
     }
-
   }, [search, snippets])
 
   return (
@@ -72,8 +74,7 @@ export const SnippetsInfoBar = () => {
             ref={inputRef}
           />
         </SidebarListFilter>
-        {/* TODO: need to add prop for target so that it can render in the foreground of shadow dom */}
-        <Infobox text={SnippetSidebarHelp} />
+        <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} />
       </SidebarListFilterWrapper>
       {searchedSnippets?.map((snippet) => (
         <SnippetCard

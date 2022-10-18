@@ -2,6 +2,7 @@ import React from 'react'
 
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
+import { getLeafNode } from '@udecode/plate'
 
 import { mog, Tag } from '@mexit/core'
 
@@ -12,11 +13,12 @@ interface AddTagMenuProps {
   tags: Tag[]
   addTag: (tag: Tag) => void
   createTag: (tag: string) => void
+  root?: HTMLElement | null
 }
 
 export const AddTagClassName = 'new-tag-menu'
 
-export const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
+export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) => {
   // mog('AddTagMenu', { tags })
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
@@ -39,6 +41,7 @@ export const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
       allowSearch
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}
+      root={root}
     >
       {tags.map((t) => (
         <MenuItem

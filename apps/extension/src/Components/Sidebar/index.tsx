@@ -22,7 +22,7 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { getElementById } from '../../contentScript'
 import { ContextInfoBar } from './ContextInfoBar'
 import { SnippetsInfoBar } from './SnippetsInfoBar'
-import { ExtSideNav } from './styled'
+import { ExtSideNav, SidebarContainer } from './styled'
 
 const ExtInfoBarItems = () => {
   const infobar = useLayoutStore((s) => s.infobar)
@@ -59,6 +59,7 @@ const ExtInfoBarItems = () => {
     <Tabs
       visible={true}
       openedTab={infobar.mode}
+      root={getElementById('ext-side-nav')}
       onChange={(tab) => {
         setInfobarMode(tab as ExtInfobarMode)
       }}
@@ -74,12 +75,12 @@ export const ExtInfoBar = () => {
   const infobar = useLayoutStore((s) => s.infobar)
 
   return (
-    <div id="ext-side-nav">
+    <SidebarContainer id="ext-side-nav">
       <ExtSideNav
         style={rhSidebarSpringProps}
         $show={rhSidebar.show}
         $expanded={rhSidebar.expanded}
-        $overlaySidebar={true}
+        $overlaySidebar={false}
         $side="right"
         $publicNamespace={false}
       >
@@ -94,7 +95,7 @@ export const ExtInfoBar = () => {
         theme="mex-bright"
         placement="left"
         appendTo={() => getElementById('ext-side-nav')}
-        content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Cooler Sidebar' : 'Expand Cooler Sidebar'} />}
+        content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
       >
         <SidebarToggleWrapper
           side="right"
@@ -110,6 +111,6 @@ export const ExtInfoBar = () => {
           />
         </SidebarToggleWrapper>
       </Tippy>
-    </div>
+    </SidebarContainer>
   )
 }

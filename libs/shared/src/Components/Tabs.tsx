@@ -25,9 +25,10 @@ type TabsProps = {
   openedTab: SingleTabType
   onChange: (tabType: SingleTabType) => void
   visible?: boolean
+  root?: Element
 }
 
-export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
+export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, root }) => {
   const [previousTab, setPreviousTab] = useState(openedTab)
 
   const animationProps = useSpring({
@@ -53,6 +54,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }
               delay={200}
               key={tab.type}
               theme="mex-bright"
+              appendTo={root}
               content={<TitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
             >
               <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
