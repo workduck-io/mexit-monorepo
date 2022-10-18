@@ -12,7 +12,6 @@ import { linkTooltip } from '@mexit/shared'
 import { GridWrapper } from '@mexit/shared'
 import { navTooltip } from '@mexit/shared'
 
-import { useInitLoader } from '../Hooks/useInitLoader'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import RHSidebar from './Infobar/RHSidebar'
@@ -80,7 +79,6 @@ const Main = ({ children }: MainProps) => {
   }
 
   const { gridSpringProps } = useSidebarTransition()
-  useInitLoader()
 
   const initialized = !isGettingIntialized && authenticated
 
