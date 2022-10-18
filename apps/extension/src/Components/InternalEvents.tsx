@@ -27,7 +27,7 @@ export function InternalEvents() {
   handleHighlighter()
   dibbaToggle()
   badgeRenderer()
-  useDocumentLock()
+  // useDocumentLock()
   // useFocusHandler()
   return null
 }
