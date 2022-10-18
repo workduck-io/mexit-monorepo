@@ -54,6 +54,73 @@ export const initActions: Array<ListItemType> = [
     extras: { base_url: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
   },
   {
+    id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
+    type: ActionType.OPEN,
+    title: 'Open Gmail',
+    category: QuickLinkType.action,
+    description: 'Open your Gmail account',
+    icon: 'simple-icons:gmail',
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    },
+    extras: { base_url: 'https://gmail.com' }
+  },
+  {
+    id: 'ACTION_30FPylVvxZDAfeoyTdxOY',
+    title: 'New Figma File',
+    category: QuickLinkType.action,
+    description: 'Create new empty Figma File',
+    type: ActionType.OPEN,
+    icon: 'ph:figma-logo-fill',
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    },
+
+    extras: { base_url: 'https://figma.new' }
+  },
+  {
+    id: 'ACTION_w5lK-B2y5p8-vxuq-254_',
+    title: 'New Linear issue',
+    category: QuickLinkType.action,
+    description: 'Create a new Linear issue',
+    type: ActionType.OPEN,
+    icon: 'gg:linear',
+    shortcut: {
+      open: {
+        title: 'to open',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    },
+    extras: { base_url: 'https://linear.new' }
+  },
+  {
+    title: 'Search in Mex',
+    id: 'ACTION_A6VLKiPZeHGw0EFq_1mex',
+    icon: 'ph:magnifying-glass',
+    category: QuickLinkType.action,
+    type: ActionType.SEARCH,
+    description: 'Searchs query in Mex',
+    shortcut: {
+      search: {
+        category: 'action',
+        keystrokes: 'Enter',
+        title: 'to search'
+      }
+    },
+    extras: {
+      withinMex: true
+    }
+  },
+  {
     id: 'ACTION_zQZg48LsKubhbZzVvNyZX',
     type: ActionType.SEARCH,
     category: QuickLinkType.action,
@@ -100,40 +167,6 @@ export const initActions: Array<ListItemType> = [
   //   }
   // },
 
-  {
-    id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',
-    type: ActionType.OPEN,
-    title: 'Open Gmail',
-    category: QuickLinkType.action,
-    description: 'Open your Gmail account',
-    icon: 'simple-icons:gmail',
-    shortcut: {
-      open: {
-        title: 'to open',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    },
-    extras: { base_url: 'https://gmail.com' }
-  },
-  {
-    title: 'Search in Mex',
-    id: 'ACTION_A6VLKiPZeHGw0EFq_1mex',
-    icon: 'ph:magnifying-glass',
-    category: QuickLinkType.action,
-    type: ActionType.SEARCH,
-    description: 'Searchs query in Mex',
-    shortcut: {
-      search: {
-        category: 'action',
-        keystrokes: 'Enter',
-        title: 'to search'
-      }
-    },
-    extras: {
-      withinMex: true
-    }
-  },
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
     title: 'Reload',
@@ -230,39 +263,7 @@ export const initActions: Array<ListItemType> = [
     },
     extras: { base_url: 'https://repo.new' }
   },
-  {
-    id: 'ACTION_30FPylVvxZDAfeoyTdxOY',
-    title: 'New Figma File',
-    category: QuickLinkType.action,
-    description: 'Create new empty Figma File',
-    type: ActionType.OPEN,
-    icon: 'ph:figma-logo-fill',
-    shortcut: {
-      open: {
-        title: 'to open',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    },
 
-    extras: { base_url: 'https://figma.new' }
-  },
-  {
-    id: 'ACTION_w5lK-B2y5p8-vxuq-254_',
-    title: 'New Linear issue',
-    category: QuickLinkType.action,
-    description: 'Create a new Linear issue',
-    type: ActionType.OPEN,
-    icon: 'gg:linear',
-    shortcut: {
-      open: {
-        title: 'to open',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    },
-    extras: { base_url: 'https://linear.new' }
-  },
   {
     id: 'ACTION_dh7Hq50UFvK3LQP5_E-70',
     title: 'New Notion page',
@@ -461,6 +462,7 @@ export const initActions: Array<ListItemType> = [
   //     componentName: 'CreateTabCapture'
   //   }
   // },
+  // * Uncomment this
   // {
   //   id: 'ACTION_t4Gbp9x7f6jmkKB3LbYQ5',
   //   title: 'Show Captured Tab Groups',
@@ -470,42 +472,42 @@ export const initActions: Array<ListItemType> = [
   //     componentName: 'ShowTabCaptures'
   //   }
   // },
-  {
-    id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
-    title: 'Colour Picker',
-    category: QuickLinkType.action,
-    icon: 'eva:color-picker-fill',
-    description: "Pretend you're a designer and steal some colours",
-    type: ActionType.RENDER,
-    extras: {
-      base_url: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
-    },
-    shortcut: {
-      pick: {
-        title: 'to pick',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
-    id: 'ACTION_9x7LbYQ5t4Gbpf6jmkKB3',
-    title: 'Unix Epoch Converter',
-    category: QuickLinkType.action,
-    description: 'Convert Epoch Timestamp to Datetime and vice versa',
-    icon: 'material-symbols:date-range',
-    type: ActionType.RENDER,
-    extras: {
-      base_url: `${MEXIT_ACTIONS_URL_BASE}/epoch`
-    },
-    shortcut: {
-      convert: {
-        title: 'to convert',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
+  // {
+  //   id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
+  //   title: 'Colour Picker',
+  //   category: QuickLinkType.action,
+  //   icon: 'eva:color-picker-fill',
+  //   description: "Pretend you're a designer and steal some colours",
+  //   type: ActionType.RENDER,
+  //   extras: {
+  //     base_url: `${MEXIT_ACTIONS_URL_BASE}/color-picker`
+  //   },
+  //   shortcut: {
+  //     pick: {
+  //       title: 'to pick',
+  //       category: 'action',
+  //       keystrokes: 'Enter'
+  //     }
+  //   }
+  // },
+  // {
+  //   id: 'ACTION_9x7LbYQ5t4Gbpf6jmkKB3',
+  //   title: 'Unix Epoch Converter',
+  //   category: QuickLinkType.action,
+  //   description: 'Convert Epoch Timestamp to Datetime and vice versa',
+  //   icon: 'material-symbols:date-range',
+  //   type: ActionType.RENDER,
+  //   extras: {
+  //     base_url: `${MEXIT_ACTIONS_URL_BASE}/epoch`
+  //   },
+  //   shortcut: {
+  //     convert: {
+  //       title: 'to convert',
+  //       category: 'action',
+  //       keystrokes: 'Enter'
+  //     }
+  //   }
+  // },
   {
     id: '007',
     title: 'Corporate Buzzwords',

@@ -36,6 +36,7 @@ export const useSearch = () => {
     const quickLinks = getQuickLinks()
 
     const search = useSputlitStore.getState().search
+    const selection = useSputlitStore.getState().selection
     const workspaceID = useAuthStore.getState().workspaceDetails?.id
 
     switch (search?.type) {
@@ -56,24 +57,26 @@ export const useSearch = () => {
           localNodes.push(listItem)
         })
 
-        snippetItems?.forEach((snippet) => {
-          const snip = getSnippet(snippet.id)
-          const item = getListItemFromSnippet(snip, actionType)
-          localNodes.push(item)
-        })
+        if (!selection) {
+          snippetItems?.forEach((snippet) => {
+            const snip = getSnippet(snippet.id)
+            const item = getListItemFromSnippet(snip, actionType)
+            localNodes.push(item)
+          })
 
-        resultLinks?.forEach((link) => {
-          // mog('Link to convert', { link })
-          const item = getListItemFromLink(link, workspaceID)
+          resultLinks?.forEach((link) => {
+            // mog('Link to convert', { link })
+            const item = getListItemFromLink(link, workspaceID)
 
-          localNodes.push(item)
-        })
+            localNodes.push(item)
+          })
+        }
 
         const isNew =
           !isReservedOrClash(
             search.value,
             quickLinks.map((i) => i.title)
-          ) && actionType === ActionType.OPEN
+          ) && actionType !== ActionType.OPEN
 
         searchList = isNew ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
         break

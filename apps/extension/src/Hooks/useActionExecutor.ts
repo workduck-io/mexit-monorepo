@@ -166,6 +166,7 @@ export function useActionExecutor() {
       case QuickLinkType.action: {
         switch (item.type) {
           case ActionType.BROWSER_EVENT:
+            mog('Perform this action', { item })
             chrome.runtime.sendMessage({ ...item })
             break
           case ActionType.OPEN:

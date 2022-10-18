@@ -18,6 +18,7 @@ import { StyledContent } from './styled'
 
 export default function Content() {
   const { activeIndex } = useSputlitContext()
+  const results = useSputlitStore((s) => s.results)
   const { setNodeContent, previewMode, persistedContent } = useEditorContext()
 
   const selection = useSputlitStore((s) => s.selection)
@@ -27,27 +28,24 @@ export default function Content() {
   const [deserializedContent, setDeserializedContent] = useState<NodeEditorContent>()
 
   useEffect(() => {
-    const editor = createPlateEditor({
-      plugins: getPlugins(
-        createPlateUI({
-          [ELEMENT_TAG]: CopyTag as any
-        }),
-        {
-          exclude: { dnd: true }
-        }
-      )
-    })
+    if (selection?.range && selection?.url && previewMode) {
+      const editor = createPlateEditor({
+        plugins: getPlugins(
+          createPlateUI({
+            [ELEMENT_TAG]: CopyTag as any
+          }),
+          {
+            exclude: { dnd: true }
+          }
+        )
+      })
+      const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
 
-    const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
-
-    if (selection?.range && content && selection?.url && previewMode) {
-      setDeserializedContent(content)
+      if (content) setDeserializedContent(content)
     }
-  }, [])
+  }, [selection])
 
   useEffect(() => {
-    const results = useSputlitStore.getState().results
-
     const item = results[activeIndex]
     // const activeItem = useSputlitStore.getState().activeItem
 
@@ -70,7 +68,7 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-  }, [activeIndex, deserializedContent, selection, persistedContent])
+  }, [activeIndex, results, deserializedContent, selection, persistedContent])
 
   return (
     <StyledContent>

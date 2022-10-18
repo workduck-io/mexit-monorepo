@@ -24,6 +24,7 @@ const appearanceAnimationKeyframes = [
 const Sputlit = () => {
   const { visualState, setVisualState } = useSputlitContext()
   const activeItem = useSputlitStore((s) => s.activeItem)
+  const resetSputlit = useSputlitStore((s) => s.reset)
   const { previewMode } = useEditorContext()
   const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
@@ -64,6 +65,7 @@ const Sputlit = () => {
           removeHighlight(selection?.id)
         }
       }
+      resetSputlit()
     }
   }, [])
 

@@ -129,10 +129,10 @@ const Search = () => {
     })
 
     if (recentList.length > limit) {
-      return recentList.slice(0, limit)
+      return recentList.reverse().slice(0, limit)
     }
 
-    return recentList
+    return recentList?.reverse()
   }
 
   // * For setting the results
@@ -143,10 +143,10 @@ const Search = () => {
       const actionType = isSearchWithinMex ? ActionType.OPEN : undefined
 
       if (!activeItem || isSearchWithinMex) {
-        if (selection || (!search.value && isSearchWithinMex)) {
+        if (!search.value && (selection || isSearchWithinMex)) {
           const notesOpened = lastOpenedNodes
 
-          const recents = getRecentList(notesOpened, actionType).reverse()
+          const recents = getRecentList(notesOpened, actionType)
           const listWithNew = insertItemInArray(recents, CREATE_NEW_ITEM, 1)
 
           setResults(isSearchWithinMex ? recents : listWithNew)
@@ -160,7 +160,7 @@ const Search = () => {
     }
 
     if (previewMode) getSearchItems()
-  }, [search, selection, previewMode, ilinks])
+  }, [search, selection, previewMode, ilinks, lastOpenedNodes])
 
   const onBackClick = () => {
     if (!previewMode) {

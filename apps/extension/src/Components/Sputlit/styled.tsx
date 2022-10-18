@@ -9,12 +9,12 @@ export const SputlitContainer = styled.div`
   position: fixed;
   z-index: 9999999999;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   height: 100%;
   width: 100%;
   inset: 0;
-  /* padding: 14vh 16px 16px; */
+  padding: 14vh 16px 16px;
 `
 
 export const Overlay = styled.div`
