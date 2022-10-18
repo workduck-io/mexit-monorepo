@@ -19,7 +19,7 @@ export const dataStoreConstructor = (set, get) => ({
   ilinks: [],
   linkCache: {},
   tagsCache: {},
-  baseNodeId: '@',
+  baseNodeId: '__loading__',
   bookmarks: [],
   archive: [],
   publicNodes: [],
@@ -41,8 +41,9 @@ export const dataStoreConstructor = (set, get) => ({
       linkCache: {},
       tagsCache: {},
       bookmarks: [],
+      namespaces: [],
       archive: [],
-      baseNodeId: '@',
+      baseNodeId: '__loading__',
       slashCommands: {
         default: defaultCommands,
         internal: []

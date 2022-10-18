@@ -69,7 +69,7 @@ export const useNodes = () => {
         if (node) {
           mog(`Setting Recent Node ${node.path}: ${node.nodeid}`)
 
-          setBaseNodeId(node?.path)
+          setBaseNodeId(node?.nodeid)
           return node
         }
       }
@@ -79,7 +79,7 @@ export const useNodes = () => {
 
         if (topNode) {
           mog(`Setting Base Node to first Node of hierarchy ${topNode.path}: ${topNode.nodeid}`)
-          setBaseNodeId(topNode?.path)
+          setBaseNodeId(topNode?.nodeid)
           return topNode
         }
       }
