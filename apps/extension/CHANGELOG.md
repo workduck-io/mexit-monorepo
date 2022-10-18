@@ -1,5 +1,12 @@
 # mexit
 
+## 0.14.2
+
+### Patch Changes
+
+- 5da68ac1: Added basic form component and utils to capture metadata as form
+- df470c2f: Updated useInitLoader hook to not redirect and show loader on all URLs
+
 ## 0.14.1
 
 ### Patch Changes

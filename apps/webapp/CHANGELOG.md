@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.18.1
+
+### Patch Changes
+
+- df470c2f: Updated useInitLoader hook to not redirect and show loader on all URLs
+
 ## 0.18.0
 
 ### Minor Changes
