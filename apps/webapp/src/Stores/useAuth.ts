@@ -228,7 +228,8 @@ export const useInitializeAfterAuth = () => {
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {
-      setShowLoader(false)
+      // Loader would be stopped inside useInitLoader
+      // setShowLoader(false)
     }
   }
 

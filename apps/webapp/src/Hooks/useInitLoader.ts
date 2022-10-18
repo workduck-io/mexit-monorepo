@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 import { mog, runBatch } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
+import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
@@ -29,7 +29,7 @@ export const useInitLoader = () => {
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
-  // const { logout } = useAuthentication()
+  const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
 
@@ -45,7 +45,6 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    setShowLoader(true)
     try {
       await getAllNamespaces()
       // await getNodesByWorkspace()
@@ -54,7 +53,6 @@ export const useInitLoader = () => {
       initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       const baseNode = updateBaseNode()
-      // mog('Base Node: ', baseNode)
 
       // TODO: I will come back to this
       if (
@@ -72,7 +70,7 @@ export const useInitLoader = () => {
     } catch (err) {
       console.error('Error in Init Loader: ', err)
       setShowLoader(false)
-      // logout()
+      logout()
       toast('Something went wrong while initializing')
     }
   }
