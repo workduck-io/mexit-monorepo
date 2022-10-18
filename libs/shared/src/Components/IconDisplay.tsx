@@ -3,14 +3,15 @@ import React from 'react'
 import { Icon } from '@iconify/react'
 
 import { MIcon } from '@mexit/core'
-import { IconWrapper } from '@mexit/shared'
+
+import { IconWrapper } from '../Style/IconPicker.style'
 
 interface IconDisplayProps {
   icon: MIcon
   size?: number
 }
 
-const IconDisplay = ({ icon, size }: IconDisplayProps) => {
+export const IconDisplay = ({ icon, size }: IconDisplayProps) => {
   if (!icon) return
 
   return (
@@ -25,5 +26,3 @@ const IconDisplay = ({ icon, size }: IconDisplayProps) => {
     </IconWrapper>
   )
 }
-
-export default IconDisplay

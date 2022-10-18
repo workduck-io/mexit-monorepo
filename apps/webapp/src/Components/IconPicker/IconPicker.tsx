@@ -16,10 +16,7 @@ import { mergeRefs } from 'react-merge-refs'
 import { Emoji, EmojiPicker } from '@workduck-io/mex-components'
 
 import { MIcon } from '@mexit/core'
-import { IconSelector } from '@mexit/shared'
-
-import { TooltipWrapper } from '../FloatingElements/Tooltip.style'
-import IconDisplay from './IconDisplay'
+import { IconSelector, TooltipWrapper, IconDisplay } from '@mexit/shared'
 
 interface IconPickerProps {
   value: MIcon

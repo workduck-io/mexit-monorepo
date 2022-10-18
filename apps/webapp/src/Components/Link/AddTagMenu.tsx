@@ -1,10 +1,8 @@
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
 
-import { mog, Tag } from '@mexit/core'
-
-import { FilterMenuDiv } from '../Filters/Filter.style'
-import { Menu, MenuItem } from '../FloatingElements/Dropdown'
+import { Tag } from '@mexit/core'
+import { FilterMenuDiv, Menu, MenuItem } from '@mexit/shared'
 
 interface AddTagMenuProps {
   tags: Tag[]

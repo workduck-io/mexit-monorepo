@@ -17,12 +17,12 @@ import {
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper,
-  PreviewActionHeader
+  PreviewActionHeader,
+  NestedFloating,
+  Tooltip
 } from '@mexit/shared'
 
 import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
-import { NestedFloating } from '../../../Components/FloatingElements/NestedFloating'
-import { Tooltip } from '../../../Components/FloatingElements/Tooltip'
 import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
@@ -194,7 +194,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
         if (editable && (nodeId === lastOpened?.nodeId || hover) && !lastOpened?.editorState?.editing) {
           onEditorClick(e)
           const editor = getPlateEditorRef(editorId)
-          mog("IS EDITOR FOCUESED", { editor })
+          mog('IS EDITOR FOCUESED', { editor })
           if (editor) selectEditor(editor, { edge: 'start', focus: true })
         } else {
           unsubscribe()

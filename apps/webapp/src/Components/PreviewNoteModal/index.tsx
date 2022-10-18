@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import { Icon } from '@iconify/react'
 import { PlateProvider } from '@udecode/plate'
 import Modal from 'react-modal'
 import { useTheme } from 'styled-components'
@@ -10,6 +9,7 @@ import { Button, MexIcon } from '@workduck-io/mex-components'
 
 import { defaultContent, mog, NodeEditorContent, NodeType } from '@mexit/core'
 import { EditorPreviewControls, EditorPreviewNoteName, PreviewActionHeader, sharedAccessIcon } from '@mexit/shared'
+import { Tooltip } from '@mexit/shared'
 
 import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
@@ -20,7 +20,6 @@ import { useContentStore } from '../../Stores/useContentStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import Editor from '../Editor/Editor'
 import { TagsRelatedTiny } from '../Editor/TagsRelated'
-import { Tooltip } from '../FloatingElements/Tooltip'
 import NamespaceTag from '../NamespaceTag'
 import { PreviewNoteContainer } from './styled'
 
@@ -112,7 +111,14 @@ const PreviewNoteModal = () => {
               </Button>
             </PreviewActionHeader>
           </EditorPreviewControls>
-          <Editor focusBlockId={modalData?.blockId} content={content} onChange={onChange} options={{ focusOptions: false }} autoFocus nodeUID={modalData?.noteId} />
+          <Editor
+            focusBlockId={modalData?.blockId}
+            content={content}
+            onChange={onChange}
+            options={{ focusOptions: false }}
+            autoFocus
+            nodeUID={modalData?.noteId}
+          />
         </PreviewNoteContainer>
       </PlateProvider>
     </Modal>

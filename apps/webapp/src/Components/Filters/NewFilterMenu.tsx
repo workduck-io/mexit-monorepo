@@ -7,12 +7,10 @@ import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
-import { FilterTypeIcons } from '@mexit/shared'
+import { FilterTypeIcons, GenericFlex, FilterMenuDiv, Menu, MenuItem } from '@mexit/shared'
 
 import { useFilterIcons } from '../../Hooks/useFilterValueIcons'
 import { useEnableShortcutHandler } from '../../Hooks/useShortcutListener'
-import { Menu, MenuItem } from '../FloatingElements/Dropdown'
-import { GenericFlex, FilterMenuDiv } from './Filter.style'
 
 interface NewFilterMenuProps {
   filters: Filters

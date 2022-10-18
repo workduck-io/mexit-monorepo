@@ -37,13 +37,12 @@ import cx from 'classnames'
 import { debounce } from 'lodash'
 import { mergeRefs } from 'react-merge-refs'
 
-import { MIcon, mog } from '@mexit/core'
+import { MIcon } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
-import { Input } from '@mexit/shared'
 
-import { GenericFlex } from '../Filters/Filter.style'
-import IconDisplay from '../IconPicker/IconDisplay'
-import { SidebarListFilter } from '../Sidebar/SidebarList.style'
+import { GenericFlex } from '../../Style/Filter'
+import { IconDisplay } from '../IconDisplay'
+import { Input } from './../../Style/Form'
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
 import {
   MenuItemCount,

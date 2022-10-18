@@ -2,9 +2,8 @@ import styled, { css } from 'styled-components'
 
 import { Ellipsis } from '@workduck-io/mex-components'
 
-import { ScrollStyles } from '@mexit/shared'
-
-import { GenericFlex } from '../Filters/Filter.style'
+import { GenericFlex } from '../../Style/Filter'
+import { ScrollStyles } from '../../Style/Helpers'
 import { MenuItemClassName } from './Dropdown.classes'
 
 export const MenuItemCount = styled(GenericFlex)`

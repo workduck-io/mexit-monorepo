@@ -3,9 +3,9 @@ import React, { useEffect } from 'react'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
 
+import { Tooltip, IconDisplay } from '@mexit/shared'
+
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { Tooltip } from '../FloatingElements/Tooltip'
-import IconDisplay from '../IconPicker/IconDisplay'
 import { CreateNewMenu } from './Sidebar.createNew'
 import { CreateNewButton, SpaceItem, SpaceSwitcher, SwitcherSpaceItems } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'

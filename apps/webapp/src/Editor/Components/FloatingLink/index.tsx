@@ -1,10 +1,13 @@
 // import { Tooltip } from '@components/FloatingElements/Tooltip'
+import React from 'react'
+
 import { Icon } from '@iconify/react'
 import { useFloatingLinkSelectors } from '@udecode/plate-link'
 import { FloatingIconWrapper } from '@udecode/plate-ui-toolbar'
-import { Tooltip } from '../../../Components/FloatingElements/Tooltip'
-import React from 'react'
+
+import { Tooltip } from '@mexit/shared'
 import { EditorIcons } from '@mexit/shared'
+
 import {
   EditButton,
   FloatingDivider,
@@ -12,7 +15,6 @@ import {
   FloatingLinkInputWrapper,
   FloatingLinkInsertRoot,
   InputWrapper,
-  OpenLinkButton,
   PlateFloatingCssDiv,
   TextInput,
   UnlinkButton,
