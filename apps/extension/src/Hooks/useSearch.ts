@@ -63,7 +63,7 @@ export const useSearch = () => {
         })
 
         resultLinks?.forEach((link) => {
-          mog('Link to convert', { link })
+          // mog('Link to convert', { link })
           const item = getListItemFromLink(link, workspaceID)
 
           localNodes.push(item)

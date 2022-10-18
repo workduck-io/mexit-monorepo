@@ -69,7 +69,6 @@ export function useSaveChanges() {
         }
       }
     } else {
-      mog('Node is', { node })
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       updateMultipleILinks(linksToBeCreated)
       dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)

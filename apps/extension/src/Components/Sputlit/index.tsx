@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 
-import { QuickLinkType, ActionType, mog } from '@mexit/core'
+import { QuickLinkType, ActionType } from '@mexit/core'
 
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import useWindowSelection from '../../Hooks/useWindowSelection'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
@@ -32,7 +31,6 @@ const Sputlit = () => {
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
 
-  useWindowSelection()
   const enterMs = 200
   const exitMs = 100
 

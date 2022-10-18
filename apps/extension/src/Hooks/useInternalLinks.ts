@@ -117,7 +117,6 @@ export const useInternalLinks = () => {
     const parents = getAllParentPaths(ilink) // includes link of child
 
     const newPaths = parents.filter((l) => !pathStrings.includes(l)) // only create links for non existing
-    mog('NEWWWW', { newPaths, parents, pathStrings })
 
     const newILinks: ILink[] = newPaths.map((l) => {
       const addedILink = {
@@ -126,8 +125,6 @@ export const useInternalLinks = () => {
         icon: getNodeIcon(l),
         namespace: namespace
       }
-
-      mog('CHECKING ILINKS', { addedILink, newPaths, ilink })
 
       addedILink.path = checkValidILink({
         namespace: namespace,
@@ -138,7 +135,6 @@ export const useInternalLinks = () => {
 
       return addedILink
     })
-    mog(`Entire Path ILinks`, { pathStrings, parents, newPaths, newILinks })
 
     return newILinks
   }

@@ -82,7 +82,7 @@ function Tooltip() {
 
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
-      mog('MESSAGE OF DELETION', { message, request })
+      // mog('MESSAGE OF DELETION', { message, request })
 
       if (error) {
         toast.error('An Error Occured. Please try again.')

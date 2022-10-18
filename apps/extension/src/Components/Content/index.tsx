@@ -39,7 +39,6 @@ export default function Content() {
     })
 
     const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
-    console.log({ content })
 
     if (selection?.range && content && selection?.url && previewMode) {
       setDeserializedContent(content)
