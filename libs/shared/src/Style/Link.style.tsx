@@ -122,6 +122,12 @@ export const HighlightGroupHeader = styled.div`
 
   gap: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
+
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 export const HighlightGroupsWrapper = styled.div`
@@ -137,12 +143,6 @@ export const HighlightGroupWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
-
-  cursor: pointer;
-  user-select: none;
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
 `
 
 export const SingleHighlightWrapper = styled.div`
@@ -152,4 +152,5 @@ export const SingleHighlightWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   background-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[5])};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  user-select: none;
 `
