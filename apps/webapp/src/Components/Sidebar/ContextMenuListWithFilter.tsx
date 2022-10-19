@@ -10,11 +10,9 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, mog } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { Input, IconDisplay, SidebarListFilter } from '@mexit/shared'
 
 import { ContextMenuItem, ContextMenuSubContent, ContextMenuSubTrigger, RightSlot } from '../../Style/contextMenu'
-import IconDisplay from '../IconPicker/IconDisplay'
-import { SidebarListFilter } from './SidebarList.style'
 
 interface ContextMenuItem {
   id: string

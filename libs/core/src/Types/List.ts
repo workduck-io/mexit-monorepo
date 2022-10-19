@@ -17,6 +17,7 @@ export interface ItemExtraType {
   nodeid: string
   blockid: string
   path: string
+  withinMex?: boolean
   // New Note
   new: boolean
   // New Task

@@ -5,20 +5,21 @@ import { Icon } from '@iconify/react'
 import { capitalize } from 'lodash'
 
 import { Filter, FilterValue, FilterJoin, FilterType, mog } from '@mexit/core'
-import { FilterTypeIcons } from '@mexit/shared'
-
-import { useFilterIcons, getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'
-import { Menu, MenuItem } from '../FloatingElements/Dropdown'
-import { ItemLabel } from '../FloatingElements/Dropdown.style'
-import IconDisplay from '../IconPicker/IconDisplay'
 import {
   FilterJoinDiv,
+  IconDisplay,
+  Menu,
+  MenuItem,
+  ItemLabel,
+  FilterTypeIcons,
   FilterValueDiv,
   FilterWrapper,
   FilterRemoveButton,
   FilterTypeDiv,
   GenericFlex
-} from './Filter.style'
+} from '@mexit/shared'
+
+import { useFilterIcons, getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'
 
 interface FilterProps {
   filter: Filter

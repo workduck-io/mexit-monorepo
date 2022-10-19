@@ -9,10 +9,19 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
-import { DesignItem, Input, ItemTitle, LastOpenedState, StyledTreeItem } from '@mexit/shared'
+import {
+  DesignItem,
+  Input,
+  ItemTitle,
+  LastOpenedState,
+  StyledTreeItem,
+  SidebarListWrapper,
+  SidebarListFilter,
+  FilteredItemsWrapper,
+  EmptyMessage
+} from '@mexit/shared'
 
 import { ItemContent } from './SharedNotes'
-import { SidebarListWrapper, SidebarListFilter, FilteredItemsWrapper, EmptyMessage } from './SidebarList.style'
 import SidebarListItemComponent from './SidebarListItem'
 
 export interface SidebarListItem<T> extends DesignItem {

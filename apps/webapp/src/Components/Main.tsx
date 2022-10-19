@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import { transparentize } from 'polished'
-import { useLocation } from 'react-router-dom'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import styled from 'styled-components'
 
@@ -69,7 +68,6 @@ const Main = ({ children }: MainProps) => {
     }
   }, [routingInstrumentation])
 
-  const location = useLocation()
   const isGettingIntialized = useLayoutStore((store) => store.showLoader)
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)

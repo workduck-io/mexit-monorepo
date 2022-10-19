@@ -1,110 +1,94 @@
+/* eslint-disable no-case-declarations */
 import fuzzysort from 'fuzzysort'
 
 import {
   CategoryType,
-  mog,
   isReservedOrClash,
   CREATE_NEW_ITEM,
   initActions,
-  searchBrowserAction,
   ListItemType,
   sortByCreated,
   fuzzySearchLinks,
-  getListItemFromLink
+  getListItemFromLink,
+  mog,
+  ActionType,
+  QuickLinkType
 } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
-import { getListItemFromAction, getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
+import { useSputlitStore } from '../Stores/useSputlitStore'
+import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
+import { useAuthStore } from './useAuth'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
-import { useSputlitContext } from './useSputlitContext'
 
 export const useSearch = () => {
-  const { search, setSearchResults } = useSputlitContext()
   const { dispatch } = useRaju()
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
   const ilinks = useDataStore((state) => state.ilinks)
   const links = useLinkStore((state) => state.links)
 
-  const searchInList = async () => {
+  const searchInList = async (actionType?: ActionType) => {
     let searchList: Array<ListItemType> = []
     const quickLinks = getQuickLinks()
 
-    let sQuery: string
-
-    if (search?.type === CategoryType.backlink) sQuery = search?.value.substring(2)
-    else sQuery = search?.value
+    const search = useSputlitStore.getState().search
+    const selection = useSputlitStore.getState().selection
+    const workspaceID = useAuthStore.getState().workspaceDetails?.id
 
     switch (search?.type) {
-      // * Search quick links using [[
       case CategoryType.backlink:
-        const query = search.value.substring(2)
-        if (query) {
-          const results = fuzzysort.go(query, quickLinks, { all: true, key: 'title' }).map((item) => item.obj)
-
-          const isNew = !isReservedOrClash(
-            query,
-            quickLinks.map((i) => i.title)
-          )
-
-          searchList = isNew ? [CREATE_NEW_ITEM, ...results] : results
-        } else {
-          searchList = quickLinks
-        }
-        break
-
-      // * Search actions using "/"
-      case CategoryType.action:
-        const val = search.value.substring(1)
-        if (val) {
-          const actionList = fuzzysort.go(val, initActions, { all: true, key: 'title' }).map((item) => item.obj)
-          searchList = actionList
-        } else {
-          searchList = initActions
-        }
-        break
-
-      case CategoryType.search:
         const nodeItems = await dispatch('SEARCH', ['node'], search.value)
         const snippetItems = await dispatch('SEARCH', ['snippet', 'template'], search.value)
 
         const sortedLinks = links.sort(sortByCreated)
 
         const resultLinks = fuzzySearchLinks(search.value, sortedLinks)
-        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
         const localNodes = []
 
-        nodeItems.forEach((item) => {
+        nodeItems?.forEach((item) => {
           // const localNode = isLocalNode(item.id)
 
           const node = ilinks.find((i) => i.nodeid === item.id)
-          const listItem = getListItemFromNode(node, item.text, item.blockId)
+          const listItem = getListItemFromNode(node, item.text, item.blockId, actionType)
           localNodes.push(listItem)
         })
 
-        snippetItems.forEach((snippet) => {
-          const snip = getSnippet(snippet.id)
-          const item = getListItemFromSnippet(snip)
-          localNodes.push(item)
-        })
+        if (!selection) {
+          snippetItems?.forEach((snippet) => {
+            const snip = getSnippet(snippet.id)
+            const item = getListItemFromSnippet(snip, actionType)
+            localNodes.push(item)
+          })
 
-        resultLinks.forEach((link) => {
-          const item = getListItemFromLink(link)
+          resultLinks?.forEach((link) => {
+            // mog('Link to convert', { link })
+            const item = getListItemFromLink(link, workspaceID)
 
-          localNodes.push(item)
-        })
+            localNodes.push(item)
+          })
+        }
 
-        const isNew = !isReservedOrClash(
-          search.value,
-          quickLinks.map((i) => i.title)
-        )
+        const isNew =
+          !isReservedOrClash(
+            search.value,
+            quickLinks.map((i) => i.title)
+          ) && actionType !== ActionType.OPEN
 
-        const mainItems = [...localNodes, ...actionItems]
-        searchList = isNew ? [CREATE_NEW_ITEM, ...mainItems] : mainItems
-        if (mainItems.length === 0) searchList.push(searchBrowserAction(sQuery))
+        searchList = isNew ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
+        break
+
+      case CategoryType.action:
+        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+
+        const useQueryActions = initActions
+          .filter((a) => a.type === ActionType.SEARCH)
+          .map((i) => ({ ...i, category: QuickLinkType.search }))
+
+        searchList = [...actionItems.slice(0, 5), ...useQueryActions]
 
         break
 

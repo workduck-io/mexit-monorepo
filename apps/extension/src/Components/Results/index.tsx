@@ -1,67 +1,50 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
-import styled, { css } from 'styled-components'
-import {
-  ActionType,
-  CategoryType,
-  MexitAction,
-  MEXIT_FRONTEND_URL_BASE,
-  parseSnippet,
-  QuickLinkType,
-  searchBrowserAction
-} from '@mexit/core'
-import { useVirtual } from 'react-virtual'
+import React, { useEffect, useMemo, useRef } from 'react'
+
 import { findIndex, groupBy } from 'lodash'
-import Action from '../Action'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { List, ListItem, StyledResults, Subtitle } from './styled'
-import Renderer from '../Renderer'
 import { useSpring } from 'react-spring'
-import { useEditorContext } from '../../Hooks/useEditorContext'
-import { useSnippets } from '../../Hooks/useSnippets'
+import { useVirtual } from 'react-virtual'
+
+import { ActionType, QuickLinkType } from '@mexit/core'
+import { PrimaryText } from '@mexit/shared'
+
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
+import { useEditorContext } from '../../Hooks/useEditorContext'
+import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
+import Action from '../Action'
+import Renderer from '../Renderer'
+import { List, ListItem, StyledResults, Subtitle } from './styled'
 
 function Results() {
-  const {
-    search,
-    setInput,
-    searchResults,
-    activeItem,
-    setActiveItem,
-    activeIndex,
-    setActiveIndex,
-    setSearchResults,
-    setVisualState,
-    setSearch,
-    input
-  } = useSputlitContext()
-  const { previewMode, setPreviewMode } = useEditorContext()
+  const { activeIndex, setActiveIndex } = useSputlitContext()
+  const results = useSputlitStore((s) => s.results)
+  const input = useSputlitStore((s) => s.input)
+
+  const { previewMode } = useEditorContext()
   const { execute } = useActionExecutor()
+
+  const activeItem = useSputlitStore((s) => s.activeItem)
+  const resetSpotlitState = useSputlitStore((store) => store.reset)
 
   const parentRef = useRef(null)
   const pointerMoved = usePointerMovedSinceMount()
 
-  const groups = Object.keys(groupBy(searchResults, (n) => n.category))
+  const groups = Object.keys(groupBy(results, (n) => n.category))
 
-  const indexes = useMemo(() => groups.map((gn) => findIndex(searchResults, (n) => n.category === gn)), [groups])
-  const { getSnippet } = useSnippets()
+  const indexes = useMemo(() => groups.map((gn) => findIndex(results, (n) => n.category === gn)), [groups])
 
   const rowVirtualizer = useVirtual({
-    size: searchResults.length,
+    size: results.length,
     parentRef
   })
 
   const springProps = useSpring(
     useMemo(() => {
-      const style = { width: '55%', marginRight: '0.75em' }
+      const style = { width: '100%' }
 
       if (!previewMode) {
         style.width = '0%'
-        style.marginRight = '0'
-      }
-
-      if (searchResults[activeIndex] && searchResults[activeIndex]?.category === QuickLinkType.action) {
-        style.width = '100%'
       }
 
       if (activeItem?.type === ActionType.RENDER) {
@@ -69,7 +52,7 @@ function Results() {
       }
 
       return style
-    }, [previewMode, activeIndex, searchResults, activeItem])
+    }, [previewMode, activeIndex, results, activeItem])
   )
 
   // destructuring here to prevent linter warning to pass
@@ -92,10 +75,7 @@ function Results() {
         if (event.metaKey) {
           for (let i = indexes[indexes.length - 1]; i > -1; i--) {
             const categoryIndex = indexes[i]
-            if (
-              categoryIndex < activeIndex &&
-              searchResults[categoryIndex].category !== searchResults[activeIndex].category
-            ) {
+            if (categoryIndex < activeIndex && results[categoryIndex].category !== results[activeIndex].category) {
               setActiveIndex(categoryIndex)
               break
             }
@@ -105,7 +85,7 @@ function Results() {
             let nextIndex = index > 0 ? index - 1 : index
 
             // avoid setting active index on a group
-            if (typeof searchResults[nextIndex] === 'string') {
+            if (typeof results[nextIndex] === 'string') {
               if (nextIndex === 0) nextIndex = index
               else nextIndex -= 1
             }
@@ -119,21 +99,18 @@ function Results() {
         if (event.metaKey) {
           for (let i = 0; i < indexes.length; i++) {
             const categoryIndex = indexes[i]
-            if (
-              categoryIndex > activeIndex &&
-              searchResults[categoryIndex].category !== searchResults[activeIndex].category
-            ) {
+            if (categoryIndex > activeIndex && results[categoryIndex].category !== results[activeIndex].category) {
               setActiveIndex(categoryIndex)
               break
             }
           }
         } else
           setActiveIndex((index) => {
-            let nextIndex = index < searchResults.length - 1 ? index + 1 : index
+            let nextIndex = index < results.length - 1 ? index + 1 : index
 
             // * avoid setting active index on a group
-            if (typeof searchResults[nextIndex] === 'string') {
-              if (nextIndex === searchResults.length - 1) nextIndex = index
+            if (typeof results[nextIndex] === 'string') {
+              if (nextIndex === results.length - 1) nextIndex = index
               else nextIndex += 1
             }
 
@@ -141,11 +118,10 @@ function Results() {
           })
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        const item = searchResults[activeIndex]
-        execute(item)
+        const item = results[activeIndex]
+        execute(item, event.metaKey)
       } else if (event.key === 'Backspace' && activeItem && input === '') {
-        setActiveItem()
-        setSearch({ value: '', type: CategoryType.search })
+        resetSpotlitState()
       }
     }
 
@@ -157,35 +133,45 @@ function Results() {
     return () => {
       document.getElementById('mexit')!.removeEventListener('keydown', handler)
     }
-  }, [searchResults, previewMode, activeIndex, activeItem, input])
+  }, [results, previewMode, activeIndex, activeItem, input])
 
   useEffect(() => {
     setActiveIndex(0)
-  }, [searchResults])
+  }, [results])
 
   function handleClick(id: number) {
-    const item = searchResults[id]
+    const item = results[id]
     execute(item)
   }
 
   return (
     <StyledResults style={springProps}>
-      {/* TODO: don't hardcode this subtitle as we want cmd+arrow key interaction later */}
-
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {
-            const item = searchResults[virtualRow.index]
-            const lastItem = virtualRow.index > 0 ? searchResults[virtualRow.index - 1] : undefined
+            const item = results[virtualRow.index]
+            const lastItem = virtualRow.index > 0 ? results[virtualRow.index - 1] : undefined
             const handlers = {
               onPointerMove: () => pointerMoved && setActiveIndex(virtualRow.index),
               onClick: () => handleClick(virtualRow.index)
             }
+
             const active = virtualRow.index === activeIndex
 
             return (
               <ListItem key={virtualRow.index} ref={virtualRow.measureRef} start={virtualRow.start} {...handlers}>
-                {item.category !== lastItem?.category && <Subtitle key={item.category}>{item.category}</Subtitle>}
+                {item.category !== lastItem?.category && (
+                  <Subtitle key={item.category}>
+                    <span>{item.category}</span>
+                    {item.category === QuickLinkType.search && (
+                      <>
+                        <span>&emsp;"</span>
+                        <PrimaryText className="query">{input}</PrimaryText>
+                        <span>"&emsp;with</span>
+                      </>
+                    )}
+                  </Subtitle>
+                )}
                 <Action action={item} active={active} />
               </ListItem>
             )

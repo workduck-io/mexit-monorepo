@@ -3,11 +3,12 @@ import React, { useMemo, useState } from 'react'
 import Tippy from '@tippyjs/react/headless'
 import toast from 'react-hot-toast'
 
-import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
-import { copyTextToClipboard } from '@mexit/shared'
+import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, mog, SEPARATOR } from '@mexit/core'
+import { copyTextToClipboard, Tooltip as FloatingTooltip } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useLinks } from '../../Hooks/useLinks'
 // different import path!
@@ -18,6 +19,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { deserializeContent } from '../../Utils/serializer'
 import { MentionTooltipComponent } from '../MentionTooltip'
@@ -25,23 +27,27 @@ import { ProfileImage } from '../ProfileImage'
 import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
 
 function Tooltip() {
-  const { setVisualState, tooltipState, setTooltipState, setSelection } = useSputlitContext()
-  const { setNode, setPreviewMode, setNodeContent } = useEditorContext()
+  const { setVisualState } = useSputlitContext()
+  const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
+  const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
+  const { setPreviewMode, setNodeContent } = useEditorContext()
   const { highlighted } = useHighlightStore()
-
+  const setNode = useSputlitStore((s) => s.setNode)
   const { getILinkFromNodeid } = useLinks()
-  const { getContent, removeContent } = useContentStore()
+  const { getContent } = useContentStore()
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
   const { isSharedNode, getSharedNode } = useNodes()
-  const { getUser, cache } = useUserCacheStore()
+  const { cache } = useUserCacheStore()
+  const { removeHighlight } = useHighlighter()
+  const removeHighlightFromStore = useHighlightStore((s) => s.clearHighlightedBlock)
   const mentionable = useMentionStore((state) => state.mentionable)
 
-  const nodeId = highlighted[window.location.href][tooltipState.id].nodeId
+  const nodeId = highlighted?.[window.location.href]?.[tooltipState?.id]?.nodeId
   const [access, setAccess] = useState<AccessLevel>()
 
-  const { getUserFromUserid, getUserAccessLevelForNode } = useMentions()
+  const { getUserFromUserid } = useMentions()
   // const { getUserDetailsUserId } = useUserService()
 
   const user = useMemo(() => {
@@ -67,13 +73,16 @@ function Tooltip() {
         title: node.path.split(SEPARATOR).slice(-1)[0],
         content: content.content.filter((item) => item.id !== tooltipState.id),
         referenceID: parentILink?.nodeid,
+        namespaceID: node.namespace,
         workspaceID: workspaceDetails.id,
         metadata: {}
-      }
+      },
+      blockId: tooltipState.id
     }
 
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
+      // mog('MESSAGE OF DELETION', { message, request })
 
       if (error) {
         toast.error('An Error Occured. Please try again.')
@@ -81,6 +90,9 @@ function Tooltip() {
         const nodeid = message.id
         const content = deserializeContent(message.data)
         const metadata = extractMetadata(message)
+
+        removeHighlight(request?.blockId)
+        removeHighlightFromStore(window.location.href, request?.blockId)
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
@@ -121,7 +133,7 @@ function Tooltip() {
       left={window.scrollX + tooltipState.coordinates.left}
       showTooltip={tooltipState.visualState === VisualState.hidden ? false : true}
     >
-      {access !== 'READ' && (
+      {/* {access !== 'READ' && (
         <Icon onClick={handleEdit}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +149,7 @@ function Tooltip() {
             <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
           </svg>
         </Icon>
-      )}
+      )} */}
 
       {access !== 'READ' && (
         <Icon onClick={handleDelete}>
@@ -185,16 +197,14 @@ function Tooltip() {
         <Icon
           onClick={() => window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeId}`, '_blank', 'noopener, noreferrer')}
         >
-          <Tippy
-            interactive
-            placement="bottom"
-            appendTo={() => document.getElementById('mexit').shadowRoot.getElementById('mexit-tooltip')}
-            render={(attrs) => <MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
+          <FloatingTooltip
+            root={document.getElementById('mexit').shadowRoot.getElementById('mexit-tooltip')}
+            content={<MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
           >
             <ProfileImageContainer>
               {user?.email && <ProfileImage email={user?.email} size={24} />}
             </ProfileImageContainer>
-          </Tippy>
+          </FloatingTooltip>
         </Icon>
       )}
     </StyledTooltip>

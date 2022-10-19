@@ -6,11 +6,10 @@ import { Icon } from '@iconify/react'
 import toast from 'react-hot-toast'
 
 import { apiURLs, mog, Link } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { Input, Tooltip } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useAuthStore } from '../../Stores/useAuth'
-import { Tooltip } from '../FloatingElements/Tooltip'
 import { ShortenButton, ShortenSectionWrapper } from './ShortenURL.style'
 
 interface ShortenURLProps {

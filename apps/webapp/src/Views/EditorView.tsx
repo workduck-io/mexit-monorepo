@@ -39,21 +39,19 @@ const EditorView = () => {
   const contents = useContentStore((state) => state.contents)
   const snippets = useSnippetStore((state) => state.snippets)
   const [first, setFirst] = useState(true)
-  const { fetchShareData } = useFetchShareData()
-  const { initPortals } = usePortals()
-  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
   useAnalysis()
 
-  useEffect(() => {
-    async function fetchSharedAndPortals() {
-      const fetchSharedDataPromise = fetchShareData()
-      const initPortalsPromise = initPortals()
+  // * Why do we need this?
+  // useEffect(() => {
+  //   async function fetchSharedAndPortals() {
+  //     const fetchSharedDataPromise = fetchShareData()
+  //     const initPortalsPromise = initPortals()
 
-      await Promise.allSettled([fetchSharedDataPromise, initPortalsPromise])
-    }
-    fetchSharedAndPortals()
-  }, [workspaceDetails]) // eslint-disable-line
+  //     await Promise.allSettled([fetchSharedDataPromise, initPortalsPromise])
+  //   }
+  //   fetchSharedAndPortals()
+  // }, [workspaceDetails]) // eslint-disable-line
 
   useEffect(() => {
     if (!first) {

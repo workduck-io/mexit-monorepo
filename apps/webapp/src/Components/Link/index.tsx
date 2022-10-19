@@ -3,10 +3,9 @@ import React, { useMemo } from 'react'
 import { IconButton } from '@workduck-io/mex-components'
 
 import { mog, Tag, Link } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
+import { RelativeTime, Tooltip } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { Tooltip } from '../FloatingElements/Tooltip'
 import { TagsLabel } from '../Sidebar/TagLabel'
 import AddTagMenu from './AddTagMenu'
 import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'

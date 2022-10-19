@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Input } from '@mexit/shared'
+import { Input } from './Form'
 
 export const SidebarListWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};

@@ -1,6 +1,8 @@
+import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { fuzzySearch } from './fuzzysearch'
+import { LINK_SHORTENER_URL_BASE } from './routes'
 
 export interface Link {
   url: string
@@ -33,17 +35,26 @@ export const sortByCreated = (a: Link, b: Link) => {
   return b.createdAt - a.createdAt
 }
 
-export const getListItemFromLink = (link: Link) => {
+export const getListItemFromLink = (link: Link, workspaceID: string) => {
   const actionItem: ListItemType = {
     icon: 'ri:link-m',
     title: link?.title,
     id: link?.url,
     description: link?.alias,
     category: QuickLinkType.action,
+    type: ActionType.OPEN,
+    extras: {
+      base_url: `${LINK_SHORTENER_URL_BASE}/${workspaceID}/${link?.alias}`
+    },
     shortcut: {
-      copy: {
+      open: {
         category: 'action',
         keystrokes: 'Enter',
+        title: 'to Open'
+      },
+      copy: {
+        category: 'action',
+        keystrokes: '$mod+Enter',
         title: 'to copy'
       }
     }

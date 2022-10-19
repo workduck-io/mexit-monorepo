@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { matchPath, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { matchPath, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 export const ROUTE_PATHS = {
   home: '/',

@@ -1,22 +1,22 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import downIcon from '@iconify/icons-ph/arrow-down-bold'
 import { Icon } from '@iconify/react'
-import { createPlugins, ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TABLE } from '@udecode/plate'
 import { useSpring } from 'react-spring'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { Tag, QuickLinkType, ActionType, ELEMENT_TAG, ELEMENT_ILINK } from '@mexit/core'
+import { QuickLinkType, ActionType, ELEMENT_TAG, ELEMENT_ILINK } from '@mexit/core'
 import { EditorStyles, useEditorChange } from '@mexit/shared'
 
 import MexEditor from '../../Editor/MexEditor'
 import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
 import { MexEditorOptions } from '../../Editor/types/editor'
-import { useAuthStore } from '../../Hooks/useAuth'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import components from './Components'
 import { EditorWrapper, SeePreview } from './styled'
@@ -45,8 +45,13 @@ const commands = [
 ]
 
 export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
-  const { searchResults, activeIndex, activeItem, selection } = useSputlitContext()
-  const { previewMode, nodeContent, node, setPreviewMode } = useEditorContext()
+  const { activeIndex } = useSputlitContext()
+  const searchResults = useSputlitStore((s) => s.results)
+  const activeItem = useSputlitStore((s) => s.activeItem)
+  const selection = useSputlitStore((s) => s.selection)
+  const { previewMode, nodeContent, setPreviewMode } = useEditorContext()
+  const node = useSputlitStore((s) => s.node)
+
   const ref = useRef<HTMLDivElement>()
   const { tags, addTag, ilinks, addILink, sharedNodes, slashCommands } = useDataStore()
   const { getDefaultNamespace } = useNamespaces()

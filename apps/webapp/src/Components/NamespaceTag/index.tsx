@@ -3,9 +3,7 @@ import React from 'react'
 import { useTheme } from 'styled-components'
 
 import { SingleNamespace, RESERVED_NAMESPACES } from '@mexit/core'
-import { NamespaceText, StyledNamespaceTag } from '@mexit/shared'
-
-import IconDisplay from '../IconPicker/IconDisplay'
+import { NamespaceText, StyledNamespaceTag, IconDisplay } from '@mexit/shared'
 
 type NamespaceTag = {
   namespace: SingleNamespace

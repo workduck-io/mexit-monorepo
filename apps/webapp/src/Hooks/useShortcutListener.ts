@@ -1,22 +1,14 @@
 import { useEffect, useCallback, useMemo } from 'react'
 
 import { MiscKeys, ShortcutListner, Key, mog } from '@mexit/core'
-import { getEventNameFromElement } from '@mexit/core'
+import { MenuItemClassName, MenuClassName, RootMenuClassName, MenuFilterInputClassName } from '@mexit/shared'
 
-import {
-  MenuItemClassName,
-  MenuClassName,
-  RootMenuClassName,
-  MenuFilterInputClassName
-} from '../Components/FloatingElements/Dropdown.classes'
+import { AddTagClassName } from '../Components/Link/AddTagMenu'
 import useMultipleEditors from '../Stores/useEditorsStore'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore from '../Stores/useModalStore'
-import useAnalytics from './useAnalytics'
-import { ActionType } from './useAnalytics/events'
 import { useShortcutStore } from './useShortcutStore'
-import { AddTagClassName } from '../Components/Link/AddTagMenu'
 
 export const usePlatformInfo = () =>
   useMemo(

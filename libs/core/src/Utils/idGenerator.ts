@@ -44,4 +44,4 @@ export const generateTaskViewId = () => `${TASK_VIEW_PREFIX}${ID_SEPARATOR}${sho
 export const generateFilterId = () => `${FILTER_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
 
 export const cleanString = (str: string) =>
-  str.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`) ? str.replace(`${DRAFT_PREFIX}${SEPARATOR}`, '') : str
+  str?.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`) ? str.replace(`${DRAFT_PREFIX}${SEPARATOR}`, '') : str

@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
+
 import { normalize } from '@mexit/shared'
 
 export const SputlitContainer = styled.div`
@@ -10,6 +11,7 @@ export const SputlitContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  height: 100%;
   width: 100%;
   inset: 0;
   padding: 14vh 16px 16px;

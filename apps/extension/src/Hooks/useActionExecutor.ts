@@ -1,4 +1,5 @@
-import { createPlateEditor, createPlateUI, serializeHtml, usePlateEditorRef } from '@udecode/plate'
+/* eslint-disable no-case-declarations */
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
 import {
@@ -24,10 +25,10 @@ import {
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
-import { useInternalLinks } from './useInternalLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
@@ -35,53 +36,76 @@ import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useActionExecutor() {
-  const { setVisualState, search, activeItem, setActiveItem, setSearch, setInput, setSearchResults, setActiveIndex } =
-    useSputlitContext()
-  const { setNodeContent, setPreviewMode, setNode, setPersistedContent, node } = useEditorContext()
+  const { setVisualState, setActiveIndex } = useSputlitContext()
+  const { setPersistedContent } = useEditorContext()
+  const setNode = useSputlitStore((s) => s.setNode)
+  const setResults = useSputlitStore((store) => store.setResults)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
-  const { getParentILink } = useInternalLinks()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
+  const setSearch = useSputlitStore((store) => store.setSearch)
+  const changeSearchType = useSputlitStore((s) => s.changeSearchType)
+
+  const setActiveItem = useSputlitStore((store) => store.setActiveItem)
+  const setInput = useSputlitStore((s) => s.setInput)
+  const resetSputlitState = useSputlitStore((s) => s.reset)
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
+    const search = useSputlitStore.getState().search
+    const activeItem = useSputlitStore.getState().activeItem
+
+    if (!item) {
+      mog('No item found')
+      return
+    }
+
     switch (item.category) {
       case QuickLinkType.backlink: {
-        let node: ILink
-        let namespace: SingleNamespace
-        const val = search.type === CategoryType.backlink ? search.value.slice(2) : search.value
-        const nodeValue = val || getNewDraftKey()
-        const defaultNamespace = getDefaultNamespace()
+        switch (item.type) {
+          case ActionType.OPEN:
+            const url = encodeURI(item.extras.base_url)
+            window.open(url, '_blank').focus()
+            setVisualState(VisualState.hidden)
+            resetSputlitState()
 
-        if (item?.extras?.new) {
-          node = createNodeWithUid(nodeValue, defaultNamespace.id)
-          namespace = defaultNamespace
-        } else {
-          node = isSharedNode(item.id)
-            ? sharedNodes.find((i) => i.nodeid === item.id)
-            : ilinks.find((i) => i.nodeid === item.id)
-          namespace = getNamespaceOfNodeid(node.nodeid)
+            break
+
+          default:
+            let node: ILink
+            let namespace: SingleNamespace
+            const val = search.value
+            const nodeValue = val || getNewDraftKey()
+            const defaultNamespace = getDefaultNamespace()
+
+            if (item?.extras?.new) {
+              node = createNodeWithUid(nodeValue, defaultNamespace.id)
+              namespace = defaultNamespace
+            } else {
+              node = isSharedNode(item.id)
+                ? sharedNodes.find((i) => i.nodeid === item.id)
+                : ilinks.find((i) => i.nodeid === item.id)
+              namespace = getNamespaceOfNodeid(node.nodeid)
+            }
+
+            setNode({
+              id: node.nodeid,
+              title: node.path.split(SEPARATOR).slice(-1)[0],
+              path: node.path,
+              nodeid: node.nodeid,
+              namespace: namespace.id
+            })
+
+            saveIt(false, true)
+
+            resetSputlitState()
         }
 
-        setNode({
-          id: node.nodeid,
-          title: node.path.split(SEPARATOR).slice(-1)[0],
-          path: node.path,
-          nodeid: node.nodeid,
-          namespace: namespace.id
-        })
-
-        if (metaKeyPressed) {
-          saveIt(false, true)
-        } else {
-          setPreviewMode(false)
-        }
-
-        setInput('')
         break
       }
+
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
         const text = convertContentToRawText(snippet.content, '\n')
@@ -124,32 +148,62 @@ export function useActionExecutor() {
         setVisualState(VisualState.hidden)
         break
       }
+
+      case QuickLinkType.search: {
+        if (item?.extras?.withinMex) {
+          setActiveItem(item)
+          changeSearchType(CategoryType.backlink)
+        } else {
+          const url = encodeURI(item.extras.base_url + search.value)
+          window.open(url, '_blank').focus()
+          setVisualState(VisualState.hidden)
+          resetSputlitState()
+        }
+
+        break
+      }
+
       case QuickLinkType.action: {
         switch (item.type) {
           case ActionType.BROWSER_EVENT:
+            // mog('Perform this action', { item })
             chrome.runtime.sendMessage({ ...item })
             break
           case ActionType.OPEN:
-            window.open(item.data.base_url, '_blank').focus()
+            if (metaKeyPressed) {
+              navigator.clipboard.writeText(item.extras.base_url)
+              toast.success('URL copied to clipboard!')
+            } else {
+              window.open(item.extras.base_url, '_blank').focus()
+            }
+
             setVisualState(VisualState.hidden)
+            resetSputlitState()
+
             break
           case ActionType.SEARCH: {
             // Ignore the case for search type action when it is the generic search action
             // As it is not a two step action
-            if (activeItem?.title !== item?.title && item?.id !== '0') {
+            if (item.extras.withinMex) {
+              setActiveItem(item)
+              setInput('')
+              setSearch({ value: '', type: CategoryType.backlink })
+            } else if (activeItem?.title !== item?.title && item?.id !== '0') {
               setActiveItem(item)
               setInput('')
             } else {
-              const url = encodeURI(item.data.base_url + search.value)
+              const url = encodeURI(item.extras.base_url + search.value)
               window.open(url, '_blank').focus()
               setVisualState(VisualState.hidden)
+              resetSputlitState()
             }
+
             break
           }
           case ActionType.RENDER: {
             setActiveItem(item)
             setInput('')
-            setSearchResults([])
+            setResults([])
             break
           }
           case ActionType.MAGICAL: {
@@ -174,7 +228,7 @@ export function useActionExecutor() {
                 })
               setActiveIndex(0)
               setInput('')
-              setSearch({ value: '', type: CategoryType.search })
+              setSearch({ value: '', type: CategoryType.action })
             }
 
             break

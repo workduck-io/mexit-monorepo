@@ -281,6 +281,7 @@ export const SideNav = styled(animated.div)<SideNavProps>`
   & div {
     ${({ $isUserEditing }) => ScrollStyles($isUserEditing ? 'transparent' : undefined)}
   }
+
   ${sidebarPos}
 
   ${({ $expanded, $show }) =>

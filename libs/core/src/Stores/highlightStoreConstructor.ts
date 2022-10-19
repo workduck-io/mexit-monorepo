@@ -69,8 +69,11 @@ export const highlightStoreConstructor = (set, get) => ({
   },
   clearHighlightedBlock: (url, blockId) => {
     const oldHighlighted = get().highlighted
-    delete oldHighlighted[url][blockId]
-    set({ highlighted: oldHighlighted })
+
+    if (oldHighlighted[url][blockId]) {
+      delete oldHighlighted[url][blockId]
+      set({ highlighted: oldHighlighted })
+    }
   },
   clearAllHighlightedBlocks: () => {
     const oldHighlighted = get().highlighted

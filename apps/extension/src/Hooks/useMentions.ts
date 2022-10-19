@@ -8,13 +8,13 @@ import {
   ShareContext,
   emptyAccessTable
 } from '@mexit/core'
-import { useAuthStore } from './useAuth'
-import useDataStore from '../Stores/useDataStore'
 
+import useDataStore from '../Stores/useDataStore'
 import { useMentionStore, addAccessToUser, mergeAccess } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
-import { useNodes } from './useNodes'
+import { useAuthStore } from './useAuth'
 import { useNodeShareAPI } from './useNodeShareAPI'
+import { useNodes } from './useNodes'
 
 export const useMentions = () => {
   const { grantUsersPermission } = useNodeShareAPI()
@@ -199,7 +199,7 @@ export const useMentions = () => {
 
   const getUserFromUserid = (userid: string): Mentionable | InvitedUser | SelfMention | undefined => {
     const currentUser = useAuthStore.getState().userDetails
-    if (currentUser.userID === userid) {
+    if (currentUser?.userID === userid) {
       return {
         type: 'self',
         ...currentUser

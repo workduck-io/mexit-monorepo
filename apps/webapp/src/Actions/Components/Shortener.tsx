@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
+import toast from 'react-hot-toast'
 import styled from 'styled-components'
 
 import { LoadingButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Link, getValidTitle, metadataParser, Tag } from '@mexit/core'
+import { getValidTitle, Link, metadataParser, mog, Tag } from '@mexit/core'
 import { copyTextToClipboard, Input, Label, resize } from '@mexit/shared'
 
 import AddTagMenu from '../../Components/Link/AddTagMenu'
@@ -17,13 +19,14 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 
-  padding: 1rem;
+  padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large} ${theme.spacing.large}`};
 `
 
-const InputRow = styled.div`
+const InputRow = styled.div<{ noTopMargin?: boolean }>`
   display: flex;
   flex-direction: column;
-  margin: 0.75rem 0;
+
+  margin: ${({ noTopMargin, theme }) => (noTopMargin ? `0 0 ${theme.spacing.large}` : `${theme.spacing.large} 0`)};
 `
 
 export const Shortener = () => {
@@ -37,27 +40,36 @@ export const Shortener = () => {
   const { saveLink } = useURLsAPI()
   const addLink = useLinkStore((store) => store.addLink)
 
-  const onShortenLinkSubmit = async (e: any) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const onShortenLinkSubmit = useCallback(
+    async (e?: any) => {
+      e.preventDefault()
+      mog('shortening', { short, tags, tabUrl, tabTitle })
 
-    const reqBody: Link = {
-      url: tabUrl,
-      title: tabTitle,
-      tags: tags.map((item) => item.value),
+      try {
+        setIsLoading(true)
 
-      alias: getValidTitle(short),
-      createdAt: Date.now()
-    }
+        const reqBody: Link = {
+          url: tabUrl,
+          title: tabTitle,
+          tags: tags.map((item) => item.value),
 
-    const shortenedLink = await saveLink(reqBody)
-    setIsLoading(false)
+          alias: getValidTitle(short),
+          createdAt: Date.now()
+        }
 
-    // mog('shorten', { shortenedLink, reqBody })
+        const shortenedLink = await saveLink(reqBody)
 
-    addLink(reqBody)
-    copyTextToClipboard(shortenedLink?.message)
-  }
+        addLink(reqBody)
+        copyTextToClipboard(shortenedLink?.message)
+      } catch (err) {
+        toast('Unable to save the shortened URL!')
+        mog('Something went wrong in Shorten URL', { err })
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [tags, short, tabTitle, tabUrl]
+  )
 
   const removeUserTag = (tag: string) => {
     const updatedUserTags = tags.filter((userTag) => tag !== userTag.value)
@@ -102,6 +114,16 @@ export const Shortener = () => {
   }
 
   useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      '$mod+Enter': (ev) => {
+        onShortenLinkSubmit(ev)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [onShortenLinkSubmit])
+
+  useEffect(() => {
     if (elementRef !== null) {
       resize(elementRef)
     }
@@ -110,8 +132,8 @@ export const Shortener = () => {
 
   return (
     <Form ref={elementRef} onSubmit={onShortenLinkSubmit}>
-      <InputRow>
-        <Label>Destination URL</Label>
+      <InputRow noTopMargin>
+        <Label noTopMargin>Destination URL</Label>
         <Input placeholder="URL to shorten" defaultValue={tabUrl} onChange={(e) => setTabUrl(e.target.value)} />
       </InputRow>
       {/* TODO: temporarily removing ability to enter your own tags  */}
@@ -121,7 +143,7 @@ export const Shortener = () => {
       </LinkTagSection>
 
       <InputRow>
-        <Label>Shortcut</Label>
+        <Label>Add an Alias</Label>
         <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
       </InputRow>
       <LoadingButton loading={isLoading} onClick={onShortenLinkSubmit} type="submit">

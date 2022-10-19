@@ -1,4 +1,4 @@
-import { apiURLs, defaultContent } from '@mexit/core'
+import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 import client from './fetchClient'
@@ -44,7 +44,8 @@ export const handleCaptureRequest = ({ subType, data }) => {
       const reqData = {
         id: data.id,
         nodePath: {
-          path: data.path
+          path: data.path,
+          namespaceID: data.namespaceID
         },
         title: data.title,
         data: serializeContent(data?.content ?? defaultContent, data.id, elementMetadata),
@@ -68,14 +69,14 @@ export const handleCaptureRequest = ({ subType, data }) => {
   }
 }
 
-export const handleActionRequest = (request: any) => {
-  const event_name = request.data.event_name
+export const handleActionRequest = (request: ListItemType) => {
+  const event_name = request?.extras.event_name
   switch (event_name) {
     case 'reload':
       chrome.tabs.reload()
       break
     case 'chrome-url':
-      chrome.tabs.create({ url: request.data.base_url })
+      chrome.tabs.create({ url: request.extras.base_url })
       break
   }
 }

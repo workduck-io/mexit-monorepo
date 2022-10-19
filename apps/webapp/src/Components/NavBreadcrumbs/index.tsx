@@ -5,16 +5,16 @@ import { Icon } from '@iconify/react'
 import { Breadcrumbs } from '@workduck-io/mex-components'
 
 import { NAMESPACE_ID_PREFIX } from '@mexit/core'
-import { AccessTag, EditorBreadcrumbs } from '@mexit/shared'
+import { AccessTag, EditorBreadcrumbs, IconDisplay } from '@mexit/shared'
 
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useNodes } from '../../Hooks/useNodes'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import IconDisplay from '../IconPicker/IconDisplay'
-import { StyledTopNavigation } from './styled'
 import { useNavigation } from '../../Hooks/useNavigation'
+import { useNodes } from '../../Hooks/useNodes'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
+import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
+import { StyledTopNavigation } from './styled'
 
 type NavBreadCrumbsType = {
   nodeId: string
@@ -22,6 +22,7 @@ type NavBreadCrumbsType = {
 
 const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
   const { goTo } = useRouting()
+  const _hasHydrated = useDataStore((state) => state._hasHydrated)
   const { getNodeBreadcrumbs } = useNodes()
   const { getNamespaceIconForNode, getNamespaceOfNodeid } = useNamespaces()
   const { accessWhenShared } = usePermissions()
@@ -41,7 +42,7 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
       namespaceIcon: namespace?.icon,
       isReadOnly: isReadonly(access)
     }
-  }, [nodeId])
+  }, [nodeId, _hasHydrated])
 
   return (
     <StyledTopNavigation>
@@ -54,7 +55,7 @@ const NavBreadCrumbs = ({ nodeId }: NavBreadCrumbsType) => {
         )}
         <Breadcrumbs items={getNodeBreadcrumbs(nodeId)} key={`mex-breadcrumbs-${nodeId}`} onOpenItem={openBreadcrumb} />
       </EditorBreadcrumbs>
-      {isReadOnly && <AccessTag access="READ" />}
+      {_hasHydrated && isReadOnly && <AccessTag access="READ" />}
     </StyledTopNavigation>
   )
 }

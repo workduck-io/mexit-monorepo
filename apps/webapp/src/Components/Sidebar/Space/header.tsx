@@ -8,14 +8,14 @@ import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
-import { IconButton, Input } from '@mexit/shared'
+import { IconButton, Input, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
-import { Tooltip } from '../../FloatingElements/Tooltip'
+import { useShareModalStore } from '../../../Stores/useShareModalStore'
 import IconPicker from '../../IconPicker/IconPicker'
 import {
   SidebarToggle,
@@ -27,7 +27,6 @@ import {
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 import { TagsLabel } from '../TagLabel'
-import { useShareModalStore } from '../../../Stores/useShareModalStore'
 
 const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)

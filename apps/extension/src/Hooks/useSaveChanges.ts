@@ -1,12 +1,11 @@
-import { platesStore } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
-import { CaptureType, extractMetadata, mog, NodeProperties, SEPARATOR } from '@mexit/core'
+import { extractMetadata, mog, SEPARATOR } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
@@ -18,12 +17,14 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { node, setPreviewMode } = useEditorContext()
-  const { ilinks, addILink, checkValidILink } = useDataStore()
+  const { setPreviewMode, nodeContent } = useEditorContext()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
-  const { selection, setVisualState, setSelection, setActiveItem } = useSputlitContext()
-  const { setContent, setMetadata } = useContentStore()
+  const { setVisualState } = useSputlitContext()
+  const setSelection = useSputlitStore((s) => s.setSelection)
+
+  const setActiveItem = useSputlitStore((s) => s.setActiveItem)
+  const { setContent } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
@@ -32,12 +33,14 @@ export function useSaveChanges() {
 
   const saveIt = (saveAndExit = false, notification = false) => {
     setVisualState(VisualState.animatingOut)
+    const node = useSputlitStore.getState().node
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
-    const state = platesStore.get.state()
+
+    const selection = useSputlitStore.getState().selection
 
     // Editor Id is different from nodeId
     // const editorId = getPlateId()
-    const editorState = state[node.nodeid].get.value()
+    const editorState = nodeContent
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
@@ -51,6 +54,7 @@ export function useSaveChanges() {
       }
 
       dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
+
       request = {
         type: 'CAPTURE_HANDLER',
         subType: 'SAVE_NODE',
@@ -104,14 +108,12 @@ export function useSaveChanges() {
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
 
+        dispatch('ADD_RECENT_NODE', nodeid)
+
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
         addHighlightedBlock(nodeid, content)
         dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
-
-        // mog('deserialized content from backend', {
-        //   content: deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
-        // })
 
         if (notification) {
           toast.success('Saved to Cloud')
