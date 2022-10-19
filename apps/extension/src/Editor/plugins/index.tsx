@@ -155,10 +155,10 @@ export const generatePlugins = (options: PluginOptionType) => {
       options: {
         transformUrl: parseIframeUrl,
         rules: [
-          {
-            parser: parseTwitterUrl,
-            component: MediaEmbedTweet
-          },
+          // {
+          //   parser: parseTwitterUrl,
+          //   component: MediaEmbedTweet
+          // },
           {
             parser: parseVideoUrl,
             component: MediaEmbedVideo
