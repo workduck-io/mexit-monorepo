@@ -8,9 +8,8 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, mog } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
-import { Input, IconDisplay, SidebarListFilter } from '@mexit/shared'
+import { MIcon, mog, fuzzySearch } from '@mexit/core'
+import { Input, SidebarListFilter, IconDisplay } from '@mexit/shared'
 
 import { ContextMenuItem, ContextMenuSubContent, ContextMenuSubTrigger, RightSlot } from '../../Style/contextMenu'
 

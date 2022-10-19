@@ -1,18 +1,24 @@
+import React from 'react'
+
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
+import { getLeafNode } from '@udecode/plate'
 
-import { Tag } from '@mexit/core'
-import { FilterMenuDiv, Menu, MenuItem } from '@mexit/shared'
+import { mog, Tag } from '@mexit/core'
+
+import { FilterMenuDiv } from '../Style/Filter.style'
+import { Menu, MenuItem } from './FloatingElements/Dropdown'
 
 interface AddTagMenuProps {
   tags: Tag[]
   addTag: (tag: Tag) => void
   createTag: (tag: string) => void
+  root?: HTMLElement | null
 }
 
 export const AddTagClassName = 'new-tag-menu'
 
-const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
+export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) => {
   // mog('AddTagMenu', { tags })
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
@@ -35,6 +41,7 @@ const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
       allowSearch
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}
+      root={root}
     >
       {tags.map((t) => (
         <MenuItem
@@ -49,5 +56,3 @@ const AddTagMenu = ({ tags, addTag, createTag }: AddTagMenuProps) => {
     </Menu>
   )
 }
-
-export default AddTagMenu

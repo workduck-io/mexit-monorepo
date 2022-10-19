@@ -7,9 +7,10 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Button, IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { FloatingIcon, ServiceContainer, GroupHeaderContainer } from '@mexit/shared'
+
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
-import { FloatingIcon, ServiceContainer, GroupHeaderContainer } from './styled'
 
 type ServiceInfoProps = {
   children: React.ReactElement

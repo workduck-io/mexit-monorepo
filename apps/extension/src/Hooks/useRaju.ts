@@ -7,7 +7,6 @@ import {
   Contents,
   idxKey,
   ILink,
-  Link,
   MEXIT_FRONTEND_URL_BASE,
   mog,
   NodeEditorContent,
@@ -18,12 +17,17 @@ import {
   SingleNamespace,
   Snippet,
   UserDetails,
-  WorkspaceDetails
+  WorkspaceDetails,
+  Link,
+  Description,
+  Highlighted
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
+import { useDescriptionStore } from '../Stores/useDescriptionStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -70,6 +74,8 @@ export default function useRaju() {
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
   const setLinks = useLinkStore((store) => store.setLinks)
+  const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
+  const setHighlights = useHighlightStore((store) => store.setHighlights)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -142,6 +148,12 @@ export default function useRaju() {
     },
     bootLinks(links: Link[]) {
       setLinks(links)
+    },
+    bootDescriptions(descriptions: Description) {
+      initDescriptions(descriptions)
+    },
+    bootHighlights(highlights: Highlighted) {
+      setHighlights(highlights)
     }
   }
 

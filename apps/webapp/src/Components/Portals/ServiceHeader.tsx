@@ -2,11 +2,16 @@ import React from 'react'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { Title } from '@mexit/shared'
-import { DEFAULT_LIST_ITEM_ICON, getIconType, ProjectIconMex } from '@mexit/shared'
-
-import { FlexBetween } from '../FloatingButton'
-import { ActionGroupIcon, ServiceDescription, GroupHeader } from './styled'
+import {
+  Title,
+  DEFAULT_LIST_ITEM_ICON,
+  getIconType,
+  ProjectIconMex,
+  ActionGroupIcon,
+  FlexBetween,
+  GroupHeader,
+  ServiceDescription
+} from '@mexit/shared'
 
 type ServiceHeaderProps = {
   icon: string

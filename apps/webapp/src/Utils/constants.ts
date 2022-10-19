@@ -5,6 +5,11 @@ export const EMAIL_REG =
 
 export const PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)?\-“!@#%&\/,><\’:;|_~`])\S{8,99}$/
 
+export const MultiEmailValidate = (emailsRaw: string): boolean => {
+  const isValid = getWrongEmails(emailsRaw).length === 0
+  return isValid
+}
+
 /*
  * The following regex is used to validate the format of the alias
  *
@@ -14,13 +19,6 @@ export const PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)
  * See: https://stackoverflow.com/a/1223146/
  */
 export const ALIAS_REG = /^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/
-
-export const URL_DOMAIN_REG = /:\/\/(.[^/]+)/
-
-export const MultiEmailValidate = (emailsRaw: string): boolean => {
-  const isValid = getWrongEmails(emailsRaw).length === 0
-  return isValid
-}
 
 export const getWrongEmails = (emailsRaw: string): string[] => {
   const emails = emailsRaw.split(',').map((email) => email.trim())

@@ -1,8 +1,6 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-// import { CenteredColumn } from './Layouts'
-
 export const IntegrationContainer = styled.section`
   margin: 0 4rem;
   height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '6rem' : '2rem')});

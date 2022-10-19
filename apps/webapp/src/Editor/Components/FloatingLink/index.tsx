@@ -5,8 +5,7 @@ import { Icon } from '@iconify/react'
 import { useFloatingLinkSelectors } from '@udecode/plate-link'
 import { FloatingIconWrapper } from '@udecode/plate-ui-toolbar'
 
-import { Tooltip } from '@mexit/shared'
-import { EditorIcons } from '@mexit/shared'
+import { EditorIcons, Tooltip } from '@mexit/shared'
 
 import {
   EditButton,

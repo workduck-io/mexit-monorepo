@@ -23,7 +23,7 @@ import { RemoveScroll } from 'react-remove-scroll'
 
 import { Props } from './types'
 
-export const Floating = ({ children, open, label, hover, persist, setOpen, render, placement }: Props) => {
+export const Floating = ({ children, open, label, hover, persist, setOpen, render, placement, root }: Props) => {
   const { delay, setCurrentId } = useDelayGroupContext()
   const nodeId = useFloatingNodeId()
 
@@ -63,7 +63,7 @@ export const Floating = ({ children, open, label, hover, persist, setOpen, rende
   return (
     <FloatingNode id={nodeId}>
       {cloneElement(children, getReferenceProps({ ref: reference, ...children.props }))}
-      <FloatingPortal>
+      <FloatingPortal root={root}>
         {open && (
           <FloatingFocusManager context={context}>
             <RemoveScroll>

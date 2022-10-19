@@ -16,10 +16,12 @@ import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { useNodes } from '../../Hooks/useNodes'
+import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
 import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useDataStore } from '../../Stores/useDataStore'
 import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
@@ -30,7 +32,6 @@ import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
-import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
 
 const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -42,6 +43,7 @@ const ContentEditor = () => {
   const { getDataAPI } = useApi()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const isComboOpen = useComboboxOpen()
+  const _hasHydrated = useDataStore((state) => state._hasHydrated)
 
   const infobar = useLayoutStore((store) => store.infobar)
 
@@ -148,7 +150,7 @@ const ContentEditor = () => {
     const access = accessWhenShared(node?.nodeid)
     // mog('Access', { access, node })
     return isReadonly(access)
-  }, [node?.nodeid])
+  }, [node?.nodeid, _hasHydrated])
 
   return (
     <>

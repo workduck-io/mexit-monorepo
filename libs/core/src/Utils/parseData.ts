@@ -10,7 +10,6 @@ import {
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
-  ELEMENT_MENTION,
   ELEMENT_TABLE
 } from './editorElements'
 import { getSlug } from './strings'
@@ -35,7 +34,7 @@ export const convertContentToRawText = (
   join?: string,
   options: ContentConverterOptions = {
     exclude: {
-      types: new Set([ELEMENT_EXCALIDRAW])
+      types: new Set([])
     }
   }
 ): string => {

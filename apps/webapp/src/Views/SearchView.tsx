@@ -20,9 +20,9 @@ import {
 
 import SearchIndexInput from '../Components/Search/IndexInput'
 import { useFilters, useFilterStore } from '../Hooks/useFilters'
+import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
-import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 
 interface SearchViewState<Item> {
   selected: number

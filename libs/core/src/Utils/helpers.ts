@@ -17,6 +17,8 @@ export const defaultContent: NodeContent = {
   version: -1
 }
 
+export const URL_DOMAIN_REG = /:\/\/(.[^/]+)/
+
 export const getDefaultContent = () => ({ ...defaultContent.content[0], id: generateTempId() })
 
 export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')

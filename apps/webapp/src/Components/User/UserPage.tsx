@@ -7,9 +7,17 @@ import { useForm } from 'react-hook-form'
 import { IconButton, LoadingButton } from '@workduck-io/mex-components'
 
 import { IS_DEV } from '@mexit/core'
-import { AuthForm, BackCard, ButtonFields, SettingsCard } from '@mexit/shared'
-import { Info, InfoData, InfoLabel, ProfileContainer, ProfileIcon } from '@mexit/shared'
-import { CenteredColumn, Title } from '@mexit/shared'
+import {
+  Info,
+  InfoData,
+  InfoLabel,
+  ProfileContainer,
+  ProfileIcon,
+  Title,
+  AuthForm,
+  ButtonFields,
+  SettingsCard
+} from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'

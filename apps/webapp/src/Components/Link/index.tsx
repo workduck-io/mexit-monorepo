@@ -2,28 +2,25 @@ import React, { useMemo } from 'react'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { mog, Tag, Link } from '@mexit/core'
-import { RelativeTime, Tooltip } from '@mexit/shared'
-
-import { useLinkURLs } from '../../Hooks/useURLs'
-import { TagsLabel } from '../Sidebar/TagLabel'
-import AddTagMenu from './AddTagMenu'
-import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'
+import { mog, Tag, Link, getFavicon } from '@mexit/core'
 import {
+  RelativeTime,
+  Tooltip,
   LinkHeader,
   LinkMetadataAndDelete,
   LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
   LinkTagSection,
   LinkTitleWrapper,
-  LinkWrapper
-} from './Link.style'
-import ShortenURL from './ShortenURL'
+  LinkWrapper,
+  TagsLabel,
+  ShortenURL,
+  AddTagMenu
+} from '@mexit/shared'
 
-// * Get Favicon url
-const getFavicon = (source: string) => {
-  return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&SIZE=64`
-}
+import { useLinkURLs } from '../../Hooks/useURLs'
+import { useAuthStore } from '../../Stores/useAuth'
+import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'
 
 interface LinkProps {
   link: Link
@@ -31,13 +28,14 @@ interface LinkProps {
 }
 
 const FaviconImage = ({ source }: { source: string }) => {
-  // mog('Rendering favicon', { source })
+  // mog('rendering favicon', { source })
   return <img height="20px" width="20px" src={getFavicon(source)} alt="favicon" />
 }
 
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const tags = link.tags?.map((t) => ({ value: t })) ?? []
-  const { getTags, addTag, removeTag, deleteLink, getHighlights } = useLinkURLs()
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const { getTags, addTag, removeTag, deleteLink, getHighlights, updateAlias, isDuplicateAlias } = useLinkURLs()
 
   const [highlightsOpen, setHighlightsOpen] = React.useState(false)
 
@@ -87,7 +85,12 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
       </LinkHeader>
       <LinkShortenAndTagsWrapper>
         <LinkShortenAndHighlightSection>
-          <ShortenURL link={link} />
+          <ShortenURL
+            link={link}
+            workspaceId={getWorkspaceId()}
+            updateAlias={updateAlias}
+            isDuplicateAlias={isDuplicateAlias}
+          />
           <HighlightGroupToggle open={highlightsOpen} setOpen={setHighlightsOpen} highlights={highlights} link={link} />
         </LinkShortenAndHighlightSection>
         <LinkTagSection>

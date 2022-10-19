@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { Ellipsis } from '@workduck-io/mex-components'
 
-import { GenericFlex } from '../../Style/Filter'
+import { GenericFlex } from '../../Style/Filter.style'
 import { ScrollStyles } from '../../Style/Helpers'
 import { MenuItemClassName } from './Dropdown.classes'
 
@@ -92,6 +92,7 @@ export const MenuWrapper = styled.div`
   outline: 0;
   max-height: 300px;
   overflow-y: auto;
+  z-index: 11;
   ${({ theme }) => ScrollStyles(theme.colors.gray[10])}
 `
 

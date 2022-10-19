@@ -17,6 +17,7 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+import { getElementById } from '../../contentScript'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 import components from './Components'
 import { EditorWrapper, SeePreview } from './styled'
@@ -203,7 +204,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
           options={editorOptions}
           editorId={node.nodeid}
           value={nodeContent}
-          portalElement={document.getElementById('mexit').shadowRoot.getElementById('sputlit-container')}
+          portalElement={getElementById('sputlit-container')}
         />
       </EditorStyles>
     </EditorWrapper>

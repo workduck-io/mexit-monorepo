@@ -22,9 +22,13 @@ import {
   SingleNamespace
 } from '@mexit/core'
 
+import Action from '../Components/Action'
+import { insertSnippet } from '../Components/Dibba'
+import { StyledInput } from '../Components/Search/styled'
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import getPlugins from '../Editor/plugins/index'
 import useDataStore from '../Stores/useDataStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { useAuthStore } from './useAuth'
@@ -48,6 +52,7 @@ export function useActionExecutor() {
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const setSearch = useSputlitStore((store) => store.setSearch)
   const changeSearchType = useSputlitStore((s) => s.changeSearchType)
+  const toggleRHSidebar = useLayoutStore((s) => s.toggleRHSidebar)
 
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
   const setInput = useSputlitStore((s) => s.setInput)
@@ -68,7 +73,7 @@ export function useActionExecutor() {
           case ActionType.OPEN:
             const url = encodeURI(item.extras.base_url)
             window.open(url, '_blank').focus()
-            setVisualState(VisualState.hidden)
+            setVisualState(VisualState.animatingOut)
             resetSputlitState()
 
             break
@@ -108,44 +113,8 @@ export function useActionExecutor() {
 
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
-        const text = convertContentToRawText(snippet.content, '\n')
-
-        let html = text
-
-        try {
-          const filterdContent = convertToCopySnippet(snippet.content)
-          const convertedContent = convertToCopySnippet(filterdContent, {
-            filter: defaultCopyFilter,
-            converter: defaultCopyConverter
-          })
-
-          const tempEditor = createPlateEditor({
-            plugins: getPlugins(
-              createPlateUI({
-                [ELEMENT_TAG]: CopyTag as any
-              }),
-              {
-                exclude: { dnd: true }
-              }
-            )
-          })
-
-          html = serializeHtml(tempEditor, {
-            nodes: convertedContent
-          })
-        } catch (err) {
-          mog('Something went wrong', { err })
-        }
-
-        //Copying both the html and text in clipboard
-        const textBlob = new Blob([text], { type: 'text/plain' })
-        const htmlBlob = new Blob([html], { type: 'text/html' })
-        const data = [new ClipboardItem({ ['text/plain']: textBlob, ['text/html']: htmlBlob })]
-
-        navigator.clipboard.write(data)
-
-        toast.success('Snippet copied to clipboard!')
-        setVisualState(VisualState.hidden)
+        insertSnippet(snippet)
+        setVisualState(VisualState.animatingOut)
         break
       }
 
@@ -156,7 +125,7 @@ export function useActionExecutor() {
         } else {
           const url = encodeURI(item.extras.base_url + search.value)
           window.open(url, '_blank').focus()
-          setVisualState(VisualState.hidden)
+          setVisualState(VisualState.animatingOut)
           resetSputlitState()
         }
 
@@ -169,6 +138,10 @@ export function useActionExecutor() {
             // mog('Perform this action', { item })
             chrome.runtime.sendMessage({ ...item })
             break
+          case ActionType.RIGHT_SIDEBAR:
+            toggleRHSidebar()
+            setVisualState(VisualState.animatingOut)
+            break
           case ActionType.OPEN:
             if (metaKeyPressed) {
               navigator.clipboard.writeText(item.extras.base_url)
@@ -177,7 +150,7 @@ export function useActionExecutor() {
               window.open(item.extras.base_url, '_blank').focus()
             }
 
-            setVisualState(VisualState.hidden)
+            setVisualState(VisualState.animatingOut)
             resetSputlitState()
 
             break
@@ -194,7 +167,7 @@ export function useActionExecutor() {
             } else {
               const url = encodeURI(item.extras.base_url + search.value)
               window.open(url, '_blank').focus()
-              setVisualState(VisualState.hidden)
+              setVisualState(VisualState.animatingOut)
               resetSputlitState()
             }
 

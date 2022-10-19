@@ -21,10 +21,9 @@ import {
   SearchFilter,
   upcoming
 } from '@mexit/core'
-import { PageContainer, MainHeader, IntegrationTitle } from '@mexit/shared'
+import { PageContainer, MainHeader, IntegrationTitle, reminderStateIcons, ReminderUI } from '@mexit/shared'
 
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
-import ReminderUI, { reminderStateIcons } from '../../Components/Reminders/Reminder'
 import { reminderFilterFunctions } from '../../Hooks/useFilterFunctions'
 import { FilterStore } from '../../Hooks/useFilters'
 import { useLinks } from '../../Hooks/useLinks'

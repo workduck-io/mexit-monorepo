@@ -40,8 +40,8 @@ export const dataStoreConstructor = (set, get) => ({
       ilinks: [],
       linkCache: {},
       tagsCache: {},
-      bookmarks: [],
       namespaces: [],
+      bookmarks: [],
       archive: [],
       baseNodeId: '__loading__',
       slashCommands: {

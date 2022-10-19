@@ -22,6 +22,7 @@ export interface HighlightStore {
    */
   highlighted: Highlighted
   initHighlights: (ilinks: (ILink | SharedNode)[], contents: Contents) => void
+  setHighlights: (highlights: Highlighted) => void
   addHighlightedBlock: (nodeId: string, content: NodeEditorContent) => void
   clearHighlightedBlock: (url: string, blockId: string) => void
   clearAllHighlightedBlocks: () => void
@@ -48,6 +49,9 @@ export const highlightStoreConstructor = (set, get) => ({
 
     mog('initing highlights', { highlighted })
     set({ highlighted: highlighted })
+  },
+  setHighlights: (highlights) => {
+    set({ highlighted: highlights })
   },
   addHighlightedBlock: (nodeId, content) => {
     const { highlighted } = get()

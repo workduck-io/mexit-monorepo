@@ -2,10 +2,11 @@ import styled, { css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-// import { FlexBetween } from '@components/spotlight/Actions/styled'
-import { CardShadow, StyledEditor, BodyFont, CenteredFlex, IntegrationTitle, CenteredMainContent } from '@mexit/shared'
-
-import { FlexBetween } from '../FloatingButton'
+import { CenteredMainContent } from './Editor'
+import { FlexBetween } from './FloatingButton.style'
+import { CardShadow } from './Helpers'
+import { CenteredFlex, IntegrationTitle } from './Integrations'
+import { BodyFont } from './Search'
 
 export const ServiceContainer = styled(CenteredMainContent)``
 
@@ -15,7 +16,7 @@ export const CardStyles = css`
   background-color: ${({ theme }) => theme.colors.gray[8]};
 `
 
-export const Description = styled.p`
+export const PortalDescription = styled.p`
   margin: 0 1rem;
   ${BodyFont};
   font-weight: 400;
@@ -137,7 +138,7 @@ export const ActionContainer = styled.div`
     color: ${({ theme }) => theme.colors.text.default};
   }
 
-  ${Description} {
+  ${PortalDescription} {
     font-size: 0.8rem;
   }
 `

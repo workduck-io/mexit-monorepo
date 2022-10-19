@@ -1,11 +1,14 @@
-import { groupBy } from 'lodash'
 import React from 'react'
+
 import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import markPenLine from '@iconify/icons-ri/mark-pen-line'
-import { mog, SingleHighlight, SourceHighlights, Link } from '@mexit/core'
+import { Icon } from '@iconify/react'
+import { groupBy } from 'lodash'
+
+import { Link, mog, SingleHighlight, SourceHighlights } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightCount,
@@ -15,8 +18,8 @@ import {
   HighlightGroupWrapper,
   HighlightText,
   SingleHighlightWrapper
-} from './Link.style'
-import { Icon } from '@iconify/react'
+} from '@mexit/shared'
+
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'

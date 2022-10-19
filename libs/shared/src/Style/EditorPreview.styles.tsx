@@ -2,7 +2,7 @@ import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
 
 import { Button } from './Buttons'
-import { CardShadow } from './Helpers'
+import { CardShadow, ScrollStyles } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`
@@ -24,6 +24,7 @@ export const EditorPreviewWrapper = styled.div`
   flex-direction: column;
 
   ${CardShadow}
+  ${ScrollStyles}
 `
 
 export const EditorPreviewNoteName = styled.div`

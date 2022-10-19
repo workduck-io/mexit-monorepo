@@ -1,7 +1,8 @@
 import { Document } from '@workduck-io/flexsearch'
+
+import { Snippet } from '../Stores/snippetStoreConstructor'
 import { ILink, Tag, NodeContent, LinkCache, TagsCache, SharedNode } from './Editor'
 import { Reminder } from './Reminders'
-import { Snippet } from './Snippet'
 import { TodosType } from './Todo'
 
 export interface PersistentData {

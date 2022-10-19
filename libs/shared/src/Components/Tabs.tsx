@@ -5,17 +5,12 @@ import { useSpring } from 'react-spring'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
-import { TabsContainer, TabHeaderContainer, StyledTab, TabPanel, TabBody, TabsWrapper } from '@mexit/shared'
+import { TabsContainer, TabHeaderContainer, TabsWrapper, StyledTab, TabPanel, TabBody } from '../Style/Tab.Styles'
 
-import { InfobarMode } from '../Stores/useLayoutStore'
+export type ExtInfobarMode = 'context' | 'snippets' | 'notes' | 'reminders'
+export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'
 
-export enum SidebarTab {
-  'hierarchy' = 'hierarchy',
-  'shared' = 'shared',
-  'bookmarks' = 'bookmarks'
-}
-
-export type SingleTabType = SidebarTab | InfobarMode
+export type SingleTabType = ExtInfobarMode | InfobarMode
 
 export type TabType = {
   label: JSX.Element | string
@@ -30,9 +25,10 @@ type TabsProps = {
   openedTab: SingleTabType
   onChange: (tabType: SingleTabType) => void
   visible?: boolean
+  root?: Element
 }
 
-const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
+export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, root }) => {
   const [previousTab, setPreviousTab] = useState(openedTab)
 
   const animationProps = useSpring({
@@ -58,6 +54,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
               delay={200}
               key={tab.type}
               theme="mex-bright"
+              appendTo={root}
               content={<TitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
             >
               <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
@@ -73,5 +70,3 @@ const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible }) => {
     </TabsContainer>
   )
 }
-
-export default Tabs

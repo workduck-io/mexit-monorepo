@@ -26,13 +26,13 @@ import {
   SearchContainer,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  View
+  View,
+  SearchHelp
 } from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
 import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
 import Metadata from '../Components/EditorInfobar/Metadata'
-import { SearchHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useFilters } from '../Hooks/useFilters'
 import useLoad from '../Hooks/useLoad'
@@ -189,11 +189,11 @@ const Search = () => {
         addCurrentFilter={addCurrentFilter}
         removeCurrentFilter={removeCurrentFilter}
         resetCurrentFilters={resetCurrentFilters}
+        changeCurrentFilter={changeCurrentFilter}
         filters={filters}
         globalJoin={globalJoin}
         setGlobalJoin={setGlobalJoin}
         currentFilters={currentFilters}
-        changeCurrentFilter={changeCurrentFilter}
       />
     )
   }

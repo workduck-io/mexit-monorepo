@@ -6,12 +6,12 @@ import { capitalize } from 'lodash'
 
 import { Filter, FilterValue, FilterJoin, FilterType, mog } from '@mexit/core'
 import {
-  FilterJoinDiv,
-  IconDisplay,
+  FilterTypeIcons,
   Menu,
   MenuItem,
+  IconDisplay,
+  FilterJoinDiv,
   ItemLabel,
-  FilterTypeIcons,
   FilterValueDiv,
   FilterWrapper,
   FilterRemoveButton,

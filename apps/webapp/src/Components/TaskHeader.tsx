@@ -25,10 +25,10 @@ import {
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle,
-  Title
+  Title,
+  TasksHelp
 } from '@mexit/shared'
 
-import { TasksHelp } from '../Data/defaultText'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
 import { useTaskViewModalStore } from './TaskViewModal'

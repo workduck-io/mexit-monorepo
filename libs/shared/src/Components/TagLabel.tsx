@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { mog, Tag } from '@mexit/core'
-import { TagFlex, TagsFlex, TagFlexText, IconButton } from '@mexit/shared'
-
-import { NavigationType, useRouting, ROUTE_PATHS } from '../../Hooks/useRouting'
 import { Icon } from '@iconify/react'
+
+import { Tag } from '@mexit/core'
+
+import { TagFlex, TagFlexText, TagsFlex } from '../Style/TagsRelated.styles'
 
 interface TagLabelProps {
   tag: Tag
@@ -13,14 +13,13 @@ interface TagLabelProps {
 }
 
 const TagLabel = ({ tag, onClick, onDelete }: TagLabelProps) => {
-  const { goTo } = useRouting()
   // const isSpotlight = useSpotlightContext()
 
   const onClickTag = (tag: string) => {
     // if (isSpotlight) return
     if (onClick) {
       onClick(tag)
-    } else goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+    }
   }
 
   return (

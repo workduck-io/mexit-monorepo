@@ -7,21 +7,28 @@ import { add } from 'date-fns/fp'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { getRelativeDate, mog, getNameFromPath } from '@mexit/core'
-import { ReminderStatus, getReminderState } from '@mexit/core'
-import { Reminder, DisplayReminder } from '@mexit/core'
 import {
-  ReminderButtonControlsWrapper,
+  Reminder,
+  DisplayReminder,
+  getNameFromPath,
+  ReminderStatus,
+  mog,
+  getReminderState,
+  getRelativeDate
+} from '@mexit/core'
+import {
   ReminderControlsWrapper,
-  ReminderExact,
-  ReminderGroupsWrapper,
-  ReminderRelative,
-  ReminderStateTag,
+  ReminderButtonControlsWrapper,
   ReminderStyled,
   ReminderTime,
-  SnoozeControls
+  SnoozeControls,
+  ReminderRelative,
+  ReminderStateTag,
+  ReminderExact,
+  IntegrationTitle
 } from '@mexit/shared'
-import { IntegrationTitle, Description } from '@mexit/shared'
+
+import { PortalDescription } from '../Style/Portals.style'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'
@@ -154,7 +161,7 @@ export const reminderStateIcons: Record<ReminderStatus, string> = {
   seen: 'ri-check-double-line'
 }
 
-const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: Props) => {
+export const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: Props) => {
   // mog('ReminderUI', { reminder, isNotification, showNodeInfo })
   const [snoozeControls, setSnoozeControls] = React.useState(false)
   // mog('reminder', { reminder })
@@ -189,7 +196,7 @@ const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: P
         <ReminderExact>{getRelativeDate(new Date(reminder.time))}</ReminderExact>
       </ReminderTime>
       <IntegrationTitle>{reminder.title}</IntegrationTitle>
-      {reminder.description && <Description>{reminder.description}</Description>}
+      {reminder.description && <PortalDescription>{reminder.description}</PortalDescription>}
       <ReminderControlsUI
         isNotification={isNotification}
         snoozeControls={snoozeControls}
@@ -200,5 +207,3 @@ const ReminderUI = ({ reminder, isNotification, showNodeInfo, controls, oid }: P
     </ReminderStyled>
   )
 }
-
-export default ReminderUI

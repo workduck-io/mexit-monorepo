@@ -10,6 +10,7 @@ import { useSearch } from '../Hooks/useSearch'
 import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
@@ -24,6 +25,8 @@ export default function Chotu() {
   const theme = useThemeStore((state) => state.theme)
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
+  const descriptions = useDescriptionStore((store) => store.descriptions)
+  const highlighted = useHighlightStore((state) => state.highlighted)
 
   const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
   const { contents, setContent } = useContentStore()
@@ -139,6 +142,18 @@ export default function Chotu() {
 
     parent.bootLinks(links)
   }, [parent, links])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootDescriptions(descriptions)
+  }, [parent, descriptions])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootHighlights(highlighted)
+  }, [parent, highlighted])
 
   return (
     <div>

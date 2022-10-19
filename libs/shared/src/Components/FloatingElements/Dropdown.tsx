@@ -40,18 +40,18 @@ import { mergeRefs } from 'react-merge-refs'
 import { MIcon } from '@mexit/core'
 import { fuzzySearch } from '@mexit/core'
 
-import { GenericFlex } from '../../Style/Filter'
+import { GenericFlex } from '../../Style/Filter.style'
 import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
 import { Input } from './../../Style/Form'
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
 import {
-  MenuItemCount,
-  ItemLabel,
   MenuItemWrapper,
-  MenuWrapper,
   MultiSelectIcon,
-  RootMenuWrapper
+  ItemLabel,
+  MenuItemCount,
+  RootMenuWrapper,
+  MenuWrapper
 } from './Dropdown.style'
 
 export const MenuItem = forwardRef<
@@ -117,10 +117,18 @@ interface Props {
    * Creatable?
    */
   onCreate?: (value: string) => void
+
+  /**
+   * Which element to render the portal in
+   */
+  root?: HTMLElement | null
 }
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
-  ({ children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, ...props }, ref) => {
+  (
+    { children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, root, ...props },
+    ref
+  ) => {
     const [open, setOpen] = useState(false)
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [allowHover, setAllowHover] = useState(false)
@@ -312,7 +320,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
           {label} {values && values}
           {nested && <Icon style={{ marginLeft: 10 }} icon="ri:arrow-right-s-line" />}
         </RootMenuWrapper>
-        <FloatingPortal>
+        <FloatingPortal root={root}>
           {open && (
             <FloatingFocusManager
               context={context}

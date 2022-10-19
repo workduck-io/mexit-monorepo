@@ -34,7 +34,15 @@ export const getElementById = (id: string) => {
   return document.getElementById('mexit').shadowRoot.getElementById(id)
 }
 
-const root = createRoot(styleSlot)
+// Adding another container inside styleSlot because it isn't able to handle multiple children if they are rendered at init
+// Why? I don't know. Will create a minimal reproducible example and test, will report to styled-components if an actual issue.
+const container = document.createElement('div')
+container.id = 'mexit-container'
+styleSlot.appendChild(container)
+
+const root = createRoot(container)
+
+
 root.render(
   <StyleSheetManager target={styleSlot}>
     <Index />

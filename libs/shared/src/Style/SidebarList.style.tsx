@@ -46,3 +46,14 @@ export const SidebarListFilter = styled.div`
     flex-shrink: 0;
   }
 `
+
+export const SidebarListFilterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.small};
+
+  ${SidebarListFilter} {
+    flex-grow: 1;
+  }
+`

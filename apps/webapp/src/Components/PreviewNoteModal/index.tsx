@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import { PlateProvider } from '@udecode/plate'
@@ -8,8 +8,13 @@ import { useTheme } from 'styled-components'
 import { Button, MexIcon } from '@workduck-io/mex-components'
 
 import { defaultContent, mog, NodeEditorContent, NodeType } from '@mexit/core'
-import { EditorPreviewControls, EditorPreviewNoteName, PreviewActionHeader, sharedAccessIcon } from '@mexit/shared'
-import { Tooltip } from '@mexit/shared'
+import {
+  EditorPreviewControls,
+  EditorPreviewNoteName,
+  PreviewActionHeader,
+  sharedAccessIcon,
+  Tooltip
+} from '@mexit/shared'
 
 import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'

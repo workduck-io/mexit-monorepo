@@ -13,6 +13,9 @@ import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 import { apiURLs, convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult, mog } from '@mexit/core'
 import {
   ItemTag,
+  CreateSnippet,
+  SnippetCommand,
+  SnippetHeader,
   MainHeader,
   Result,
   ResultDesc,
@@ -24,16 +27,17 @@ import {
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
   Title,
-  View
+  View,
+  SnippetHelp
 } from '@mexit/shared'
 
-import { SnippetHelp } from '../Data/defaultText'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useUpdater } from '../Hooks/useUpdater'
 import { useApiStore } from '../Stores/useApiStore'
+import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
@@ -145,9 +149,7 @@ const Snippets = () => {
 
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
-    if (!item) {
-      return null
-    }
+    const descriptions = useDescriptionStore((store) => store.descriptions)
     const snip = getSnippet(item.id)
 
     if (!snip) {
@@ -161,22 +163,26 @@ const Snippets = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         <Result {...props} key={id} ref={ref}>
-          <ResultHeader>
-            <Icon icon={icon} />
-            <ResultTitle onClick={() => onSelect({ id: snip.id, title: snip.title })}>{snip.title}</ResultTitle>
-            {snip.template && (
-              <ItemTag large>
-                <Icon icon={magicLine} />
-                Template
-              </ItemTag>
-            )}
-            <IconButton size={20} icon={deleteBin6Line} title="delete" onClick={() => onDeleteSnippet(snip.id)} />
-          </ResultHeader>
-          <SearchPreviewWrapper
-            onClick={() => onSelect({ id: snip.id, title: snip.title })}
-            active={item.matchField?.includes('text')}
-          >
-            <EditorPreviewRenderer content={snip.content} readOnly editorId={`${item.id}_snippet_preview`} />
+          <SnippetHeader>
+            <SnippetCommand onClick={() => onOpenSnippet(snip.id)}>
+              <Icon icon={icon} />
+              {snip.title}
+            </SnippetCommand>
+
+            <IconButton
+              size={20}
+              icon={deleteBin6Line}
+              title="delete"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onDeleteSnippet(snip.id)
+              }}
+            />
+          </SnippetHeader>
+          <SearchPreviewWrapper active={item.matchField?.includes('text')} padding>
+            {descriptions?.[snip.id]?.rawText}
+            {/* <PreviewEditor content={snip.content} editorId={`editor_${item.id}`} /> */}
           </SearchPreviewWrapper>
         </Result>
       )
@@ -187,15 +193,17 @@ const Snippets = () => {
             <Icon icon={icon} />
             <ResultMain onClick={() => onSelect({ id: snip.id, title: snip.title })}>
               <ResultTitle>{snip.title}</ResultTitle>
-              <ResultDesc>{convertContentToRawText(snip.content, ' ')}</ResultDesc>
+              <ResultDesc> {descriptions?.[snip.id]?.rawText}</ResultDesc>
             </ResultMain>
-            {snip.template && (
-              <ItemTag>
-                <Icon icon={magicLine} />
-                Template
-              </ItemTag>
-            )}
-            <IconButton size={20} icon={deleteBin6Line} title="delete" onClick={() => onDeleteSnippet(snip.id)} />
+            <IconButton
+              size={20}
+              icon={deleteBin6Line}
+              title="Delete"
+              onClick={(ev) => {
+                ev.stopPropagation()
+                onDeleteSnippet(snip.id)
+              }}
+            />
           </ResultRow>
         </Result>
       )
@@ -240,6 +248,7 @@ const Snippets = () => {
 
   useEffect(() => {
     async function getInitialSnippets() {
+      // language
       const snippets = getSnippets()
       const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
       const ids = unfetchedSnippets.map((i) => i.id)

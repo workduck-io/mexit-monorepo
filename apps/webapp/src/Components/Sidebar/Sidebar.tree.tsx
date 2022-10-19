@@ -153,7 +153,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
               placeholder={filterText ?? 'Filter items'}
               onChange={debounce((e) => onSearchChange(e), 250)}
               ref={inputRef}
-              // onKeyUp={debounce(onKeyUpSearch, 250)}
+            // onKeyUp={debounce(onKeyUpSearch, 250)}
             />
           </SidebarListFilter>
           <SpaceList>
