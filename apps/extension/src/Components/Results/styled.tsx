@@ -15,7 +15,7 @@ export const List = styled.div`
   position: relative;
   scroll-behavior: smooth;
 
-  max-height: 425px;
+  max-height: 300px;
   ${Scroll}
 `
 
