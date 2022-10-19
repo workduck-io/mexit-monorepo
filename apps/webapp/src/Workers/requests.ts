@@ -2,9 +2,8 @@ import axios from 'axios'
 import { customAlphabet } from 'nanoid'
 import { expose } from 'threads/worker'
 
-import { apiURLs, runBatch, mog, extractMetadata } from '@mexit/core'
+import { apiURLs, runBatch } from '@mexit/core'
 
-import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
@@ -26,16 +25,11 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 
 const getNodeAPI = async (nodeid: string, isShared = false) => {
   const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
-  return client
-    .get(url)
-    .then((d: any) => {
-      if (d) {
-        return { rawResponse: d.data, nodeid }
-      }
-    })
-    .catch((e) => {
-      console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
-    })
+  return client.get(url).then((d: any) => {
+    if (d) {
+      return { rawResponse: d.data, nodeid }
+    }
+  })
 }
 
 const getSnippetAPI = async (id: string) => {

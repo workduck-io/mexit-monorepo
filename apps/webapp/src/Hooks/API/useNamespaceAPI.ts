@@ -83,11 +83,13 @@ export const useNamespaceApi = () => {
       const requestData = { time: Date.now(), method: 'GET' }
 
       fulfilled.forEach((node) => {
-        const { rawResponse, nodeid } = node
-        setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-        const content = deserializeContent(rawResponse.data)
-        const metadata = extractMetadata(rawResponse) // added by Varshitha
-        updateFromContent(nodeid, content, metadata)
+        if (node) {
+          const { rawResponse, nodeid } = node
+          setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
+          const content = deserializeContent(rawResponse.data)
+          const metadata = extractMetadata(rawResponse) // added by Varshitha
+          updateFromContent(nodeid, content, metadata)
+        }
       })
     }
   }

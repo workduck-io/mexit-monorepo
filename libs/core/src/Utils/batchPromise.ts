@@ -1,5 +1,3 @@
-import { mog } from './mog'
-
 const BATCH_SIZE = 6
 
 const batchArray = (array: any[], batchSize: number): any[][] => {
