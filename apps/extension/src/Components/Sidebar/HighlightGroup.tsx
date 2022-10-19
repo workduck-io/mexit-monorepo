@@ -32,9 +32,13 @@ export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: S
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
   const openHighlight = () => {
-    const nodeid = highlight.nodeId
-    // Pass
-    // mog('highlight clikec', { highlight })
+    const element = document.querySelector(`[data-highlight-id="${blockId}"]`)
+    const coordinates = element.getBoundingClientRect()
+
+    window.scrollTo({
+      top: coordinates.top,
+      behavior: 'smooth'
+    })
   }
 
   return (

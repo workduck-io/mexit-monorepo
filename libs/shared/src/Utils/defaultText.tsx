@@ -56,8 +56,8 @@ export const HighlightSidebarHelp = (
   <div>
     <h1>Highlights</h1>
     <p>Search for highlights</p>
-    <p>Click to scroll to that highlight</p>
-    <p>Double click to open note in new tab</p>
+    <p>Click on highlight to bring it into view on the page</p>
+    <p>Double click on note title to open note in new tab</p>
   </div>
 )
 
