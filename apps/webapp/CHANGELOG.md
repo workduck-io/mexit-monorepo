@@ -1,5 +1,16 @@
 # mexit-webapp
 
+## 0.19.0
+
+### Minor Changes
+
+- f95af08f: New global sidebar in extension with context and snippets
+- 5cfbe525: New Sputlit Command Bar
+
+### Patch Changes
+
+- c367ab21: [FIX] Requests getting fullfilled in runBatch even on throwing error.
+
 ## 0.18.1
 
 ### Patch Changes

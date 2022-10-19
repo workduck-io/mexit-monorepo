@@ -1,5 +1,12 @@
 # mexit
 
+## 0.15.0
+
+### Minor Changes
+
+- f95af08f: New global sidebar in extension with context and snippets
+- 5cfbe525: New Sputlit Command Bar
+
 ## 0.14.2
 
 ### Patch Changes
