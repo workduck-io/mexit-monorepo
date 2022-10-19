@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Link, getValidTitle, metadataParser, Tag } from '@mexit/core'
+import { Link, getValidTitle, metadataParser, Tag, mog } from '@mexit/core'
 import { copyTextToClipboard, Input, Label, resize, LinkTagSection, TagsLabel, AddTagMenu } from '@mexit/shared'
 
 import { useURLsAPI } from '../../Hooks/useURLs'

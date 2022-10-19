@@ -1,7 +1,9 @@
-import { Relative } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
-import styled from 'styled-components'
 import { transparentize } from 'polished'
+import styled from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
+
+import { Relative } from '@mexit/shared'
 
 export const LinkWrapper = styled.div`
   display: flex;
@@ -118,8 +120,6 @@ export const HighlightGroupHeader = styled.div`
   flex-direction: row;
   align-items: center;
 
-  padding-left: ${({ theme }) => theme.spacing.medium};
-
   gap: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
 `
@@ -137,6 +137,12 @@ export const HighlightGroupWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
+
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `
 
 export const SingleHighlightWrapper = styled.div`

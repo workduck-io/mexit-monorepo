@@ -52,6 +52,15 @@ export const SnippetSidebarHelp = (
   </div>
 )
 
+export const HighlightSidebarHelp = (
+  <div>
+    <h1>Highlights</h1>
+    <p>Search for highlights</p>
+    <p>Click to scroll to that highlight</p>
+    <p>Double click to open note in new tab</p>
+  </div>
+)
+
 export const TreeHelp = (
   <div>
     <h1>Notes</h1>

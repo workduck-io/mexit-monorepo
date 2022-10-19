@@ -20,7 +20,7 @@ interface LayoutState {
 export const useLayoutStore = create<LayoutState>((set, get) => ({
   // RHSidebar
   rhSidebar: {
-    expanded: true,
+    expanded: false,
     show: true
   },
   toggleRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),

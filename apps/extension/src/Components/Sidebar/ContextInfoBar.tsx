@@ -6,38 +6,28 @@ import { debounce, reduce } from 'lodash'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { mog, SourceHighlights } from '@mexit/core'
-import { SnippetCards, SidebarListFilterWrapper, SidebarListFilter, Input, SnippetSidebarHelp } from '@mexit/shared'
+import { mog, SingleHighlight, SourceHighlights } from '@mexit/core'
+import {
+  SnippetCards,
+  SidebarListFilterWrapper,
+  SidebarListFilter,
+  Input,
+  SnippetSidebarHelp,
+  HighlightSidebarHelp
+} from '@mexit/shared'
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
-import { HighlightCard } from './HighlightCard'
+import { getElementById } from '../../contentScript'
+import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'
 
 export function ContextInfoBar() {
   const [search, setSearch] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const highlighted = useHighlightStore((state) => state.highlighted)
+  const pageHighlights = highlighted[window.location.href]
 
-  const [pageHighlights, setPageHighlights] = useState<any>()
   const [searchedHighlights, setSearchedHighlights] = useState<SourceHighlights>()
-
-  useEffect(() => {
-    // This groups the highlights as a object with nodeId as index and highlights of that node in an array
-    // TODO: Although need to sort this according to textOffset
-    const groupedHighlights = reduce(
-      highlighted[window.location.href],
-      function (result, value, key) {
-        value['blockId'] = key
-        ;(result[value['nodeId']] || (result[value['nodeId']] = [])).push(value)
-
-        return result
-      },
-      {}
-    )
-
-    // mog('grouped', { groupedHighlights })
-    setPageHighlights(groupedHighlights)
-  }, [window.location.href, highlighted])
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
@@ -59,13 +49,9 @@ export function ContextInfoBar() {
             ref={inputRef}
           />
         </SidebarListFilter>
-        {/* TODO: add a copy for HighlightSidebarHelp */}
-        {/* <Infobox text={SnippetSidebarHelp} /> */}
+        <Infobox root={getElementById('ext-side-nav')} text={HighlightSidebarHelp} />
       </SidebarListFilterWrapper>
-      {pageHighlights &&
-        Object.keys(pageHighlights).map((key) => (
-          <HighlightCard key={key} nodeId={key} highlights={pageHighlights[key]} />
-        ))}
+      <HighlightGroups highlights={pageHighlights} />
     </SnippetCards>
   )
 }
