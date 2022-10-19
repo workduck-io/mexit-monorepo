@@ -36,7 +36,7 @@ export const GlobalStyle = createGlobalStyle`
     display: none;
   }
 
-  #sputlit-container, #dibba-container, #mexit-tooltip {
+  #sputlit-container, #dibba-container, #mexit-tooltip, #notif {
     ${normalize}; // NormalizeCSS normalization
     letter-spacing: normal;
     font-family: "Inter", sans-serif;

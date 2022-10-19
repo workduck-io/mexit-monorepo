@@ -16,7 +16,11 @@ const Notif = styled.div`
 export const Notification = () => {
   return (
     <Toaster position="bottom-center" reverseOrder={false} gutter={20}>
-      {(t) => <Notif style={{ opacity: t.visible ? 1 : 0 }}>{resolveValue(t.message, t)}</Notif>}
+      {(t) => (
+        <Notif id="notif" style={{ opacity: t.visible ? 1 : 0 }}>
+          {resolveValue(t.message, t)}
+        </Notif>
+      )}
     </Toaster>
   )
 }
