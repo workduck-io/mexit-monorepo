@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType, TodoStatus, TodoType } from '@mexit/core'
+import { capitalize, getNextStatus, getPrevStatus, mog, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import {
   StyledTasksKanban,
   TaskCard,
@@ -108,7 +108,7 @@ const RenderCard = React.memo<ItemProps>((props: ItemProps) => {
 })
 
 const RenderColumnHeader = ({ columnId }: ColumnHeaderProps) => {
-  return <Title>{columnId}</Title>
+  return <Title>{capitalize(columnId)}</Title>
 }
 
 const Tasks = () => {
@@ -438,6 +438,7 @@ const Tasks = () => {
         <Kanban
           items={board}
           RenderItem={RenderCard}
+          kanbanHeight={'calc(100vh - 240px)'}
           getColumnKeys={() => [TodoStatus.todo, TodoStatus.pending, TodoStatus.completed]}
           virtualizerOptions={{ overscan: 10 }}
           RenderColumnHeader={RenderColumnHeader}
