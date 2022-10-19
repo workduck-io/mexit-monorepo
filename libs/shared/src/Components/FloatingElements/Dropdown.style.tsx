@@ -2,11 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { Ellipsis } from '@workduck-io/mex-components'
 
-<<<<<<<< HEAD:libs/shared/src/Components/FloatingElement/Dropdown.style.tsx
-import { GenericFlex } from '../../Style/Filter'
-========
 import { GenericFlex } from '../../Style/Filter.style'
->>>>>>>> e7f99475 (WIP: moved floating elements and shortener tag components to shared lib;):libs/shared/src/Components/FloatingElements/Dropdown.style.tsx
 import { ScrollStyles } from '../../Style/Helpers'
 import { MenuItemClassName } from './Dropdown.classes'
 

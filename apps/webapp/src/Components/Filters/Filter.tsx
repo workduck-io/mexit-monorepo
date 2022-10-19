@@ -11,17 +11,12 @@ import {
   MenuItem,
   IconDisplay,
   FilterJoinDiv,
-  IconDisplay,
-  Menu,
-  MenuItem,
   ItemLabel,
-  FilterTypeIcons,
   FilterValueDiv,
   FilterWrapper,
   FilterRemoveButton,
   FilterTypeDiv,
-  GenericFlex,
-  ItemLabel
+  GenericFlex
 } from '@mexit/shared'
 
 import { useFilterIcons, getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'

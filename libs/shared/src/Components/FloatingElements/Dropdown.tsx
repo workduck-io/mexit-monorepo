@@ -45,6 +45,14 @@ import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
 import { Input } from './../../Style/Form'
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
+import {
+  MenuItemWrapper,
+  MultiSelectIcon,
+  ItemLabel,
+  MenuItemCount,
+  RootMenuWrapper,
+  MenuWrapper
+} from './Dropdown.style'
 
 export const MenuItem = forwardRef<
   HTMLButtonElement,
