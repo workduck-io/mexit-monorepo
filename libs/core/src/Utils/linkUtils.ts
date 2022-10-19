@@ -54,7 +54,7 @@ export const getListItemFromLink = (link: Link, workspaceID: string) => {
       },
       copy: {
         category: 'action',
-        keystrokes: 'CMD + Enter',
+        keystrokes: '$mod+Enter',
         title: 'to copy'
       }
     }
