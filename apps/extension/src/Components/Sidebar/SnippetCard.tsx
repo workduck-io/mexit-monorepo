@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Snippet, getTagsFromContent, convertContentToRawText } from '@mexit/core'
+import { Snippet, getTagsFromContent, convertContentToRawText, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import {
   SnippetCardWrapper,
   SnippetCardHeader,
@@ -42,16 +42,12 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
   // const { push } = useNavigation()
 
   const onClickProps = (ev) => {
-    // Show preview on click, if preview is shown, navigate to link
     ev.preventDefault()
-    // ev.stopPropagation()
 
-    if (onClick) {
+    if (onClick && !visible) {
       onClick(ev)
     } else {
-      loadSnippet(snippet.id)
-      // TODO: open the snippet in a new tab
-      // goTo(ROUTE_PATHS.node, NavigationType.push, snippet.id)
+      window.open(`${MEXIT_FRONTEND_URL_BASE}/snippets/node/${snippet.id}`)
     }
 
     if (!visible) {
@@ -62,7 +58,7 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
   }
 
   // const snippetTags = useMemo(() => {
-  //   if(!snippet?.content) return 
+  //   if(!snippet?.content) return
   //   return getTagsFromContent(snippet?.content).map((tag) => ({ value: tag }))
   // }, [snippet])
 
@@ -84,8 +80,6 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
   const closePreview = () => {
     setVisible(false)
   }
-
-  // mog('SnippetCard', { snippet, lastUsed })
 
   return (
     // TODO: Not able to scroll these previews using mouse
