@@ -138,15 +138,15 @@ export const initActions: Array<ListItemType> = [
   },
   {
     id: 'ACTION_4d32gtj23agex34ojin',
-    title: 'Open Mexit Right Sidebar',
+    title: 'Toggle Mexit Right Sidebar',
     category: QuickLinkType.action,
     description: 'Open sidebar',
-    type: ActionType.OPEN,
+    type: ActionType.RIGHT_SIDEBAR,
     icon: 'codicon:layout-sidebar-right',
     shortcut: {
-      open: {
+      toggle: {
         category: 'action',
-        title: 'to open',
+        title: 'to toggle',
         keystrokes: 'Enter'
       }
     }
