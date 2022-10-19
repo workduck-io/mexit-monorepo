@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, mog, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import {
   StyledTasksKanban,
   TaskCard,
@@ -24,7 +24,7 @@ import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import { useSyncTaskViews, useViewStore } from '../Hooks/useTaskViews'
-import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
+import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn, getPureContent } from '../Hooks/useTodoKanban'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -43,18 +43,13 @@ function getStyle(provided: any, style?: Record<string, unknown>) {
   }
 }
 
-const RenderCard = (props: ItemProps) => {
-  const { getPureContent } = useTodoKanban()
+const RenderCard = React.memo<ItemProps>((props: ItemProps) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
-  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
+  // const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
   const getTodo = useTodoStore((store) => store.getTodoOfNode)
   const { item, recal, isDragging, isGroupedOver, provided, style, index } = props
-
-  // mog('RENDER CARD', { item })
-
-  // const todos = useTodoStore((store) => store.todos)
   const [nodeid, todoid] = item.id.split('#')
-  const todo = getTodo(nodeid, todoid)
+  const todo = useMemo(() => getTodo(nodeid, todoid), [item.id])
   const pC = useMemo(() => getPureContent(todo), [item.id])
 
   const controls = useMemo(
@@ -78,7 +73,7 @@ const RenderCard = (props: ItemProps) => {
       ref={provided.innerRef}
       selected={false}
       dragging={isDragging}
-      sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
+      sidebarExpanded={sidebar.show && sidebar.expanded}
       onMouseDown={(event) => {
         event.preventDefault()
         if (event.detail === 2) {
@@ -96,7 +91,7 @@ const RenderCard = (props: ItemProps) => {
         showDelete={false}
         key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
         todoid={todo.id}
-        oid={'Kanban'}
+        oid={'KanbanEJipir'}
         readOnly
         controls={controls}
         parentNodeId={todo.nodeid}
@@ -105,12 +100,12 @@ const RenderCard = (props: ItemProps) => {
         <EditorPreviewRenderer
           noStyle
           content={pC}
-          editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
+          editorId={`NodeTodoPreviewKanban_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
         />
       </Todo>
     </TaskCard>
   )
-}
+})
 
 const RenderColumnHeader = ({ columnId }: ColumnHeaderProps) => {
   return <Title>{columnId}</Title>
@@ -119,7 +114,7 @@ const RenderColumnHeader = ({ columnId }: ColumnHeaderProps) => {
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
   const nodesTodo = useTodoStore((store) => store.todos)
-  const clearTodos = useTodoStore((store) => store.clearTodos)
+  // const clearTodos = useTodoStore((store) => store.clearTodos)
   const sidebar = useLayoutStore((store) => store.sidebar)
   const match = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const currentView = useViewStore((store) => store.currentView)
@@ -440,7 +435,13 @@ const Tasks = () => {
           globalJoin={globalJoin}
           setGlobalJoin={setGlobalJoin}
         />
-        <Kanban items={board} RenderItem={RenderCard} RenderColumnHeader={RenderColumnHeader} />
+        <Kanban
+          items={board}
+          RenderItem={RenderCard}
+          getColumnKeys={() => [TodoStatus.todo, TodoStatus.pending, TodoStatus.completed]}
+          virtualizerOptions={{ overscan: 10 }}
+          RenderColumnHeader={RenderColumnHeader}
+        />
       </StyledTasksKanban>
       {todos.length < 1 && (
         <div>
