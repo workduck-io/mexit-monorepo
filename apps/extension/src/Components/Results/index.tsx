@@ -146,8 +146,6 @@ function Results() {
 
   return (
     <StyledResults style={springProps}>
-      {/* TODO: don't hardcode this subtitle as we want cmd+arrow key interaction later */}
-
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {

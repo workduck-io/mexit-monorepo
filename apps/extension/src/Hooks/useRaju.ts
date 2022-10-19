@@ -196,7 +196,7 @@ export default function useRaju() {
       case 'ADD_HIGHLIGHTED_BLOCK':
         return child.addHighlighted(...params)
       case 'SEARCH':
-        const res = child?.search(...params)?.then((result) => {
+        return child.search(...params).then((result) => {
           return result
         })
     }
