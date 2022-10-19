@@ -35,7 +35,7 @@ export const TodoBase = ({
   controls,
   showDelete = true
 }: TodoProps) => {
-  // mog('Todo', { parentNodeId, todoid, readOnly })
+  // mog('Todo', { parentNodeId, todoid, readOnly, children })
   const [showOptions, setShowOptions] = useState(false)
 
   const [animate, setAnimate] = useState(false)

@@ -11,7 +11,8 @@ import {
   convertContentToRawText,
   IDBStorage,
   getTagsFromContent,
-  getMentionsFromContent
+  getMentionsFromContent,
+  mog
 } from '@mexit/core'
 
 import { useReminderStore } from './useReminderStore'
@@ -49,6 +50,7 @@ type TodoStoreType = {
   setNodeTodos: (nodeid: string, todos: Array<TodoType>) => void
   addTodoInNode: (nodeid: string, todo: TodoType) => void
   getTodoOfNode: (nodeid: string, todoId: string) => TodoType | undefined
+  getTodo: (todoId: string) => TodoType | undefined
   getTodoOfNodeWithoutCreating: (nodeid: string, todoId: string) => TodoType | undefined
   updateTodoOfNode: (nodeid: string, todo: TodoType) => void
   replaceContentOfTodos: (nodeid: string, todosContent: NodeEditorContent) => void
@@ -94,6 +96,14 @@ const useTodoStore = create<TodoStoreType>(
           return newTodo
         }
 
+        return todo
+      },
+
+      getTodo: (todoId) => {
+        const todos = get().todos
+        const foundTodos = Object.values(todos).find((todos) => todos.find((todo) => todo.id === todoId))
+        const todo = foundTodos.find((todo) => todo.id === todoId)
+        // mog('getTodo', { todoId, todo })
         return todo
       },
 

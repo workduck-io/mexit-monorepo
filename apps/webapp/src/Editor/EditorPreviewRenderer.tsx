@@ -7,7 +7,7 @@ import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
 
-import { NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent } from '@mexit/core'
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
@@ -71,6 +71,7 @@ const EditorPreviewRenderer = ({
   readOnly = true,
   draftView = true
 }: EditorPreviewRendererProps) => {
+  // mog('EditorPreviewRenderer', { content, editorId, blockId })
   const editableProps = useMemo(
     () => ({
       placeholder: 'Murmuring the mex hype... ',
@@ -141,7 +142,7 @@ const EditorPreviewRenderer = ({
   }
 
   return (
-    <ErrorBoundary fallbackRender={() => <></>}>
+    <ErrorBoundary fallbackRender={() => <>Error COuld not render</>}>
       <PreviewStyles
         readOnly={noMouseEvents && readOnly}
         draftView={draftView}
