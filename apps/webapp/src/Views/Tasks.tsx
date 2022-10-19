@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, mog, PriorityType, TodoType } from '@mexit/core'
 import {
   StyledTasksKanban,
   TaskCard,
@@ -15,6 +15,7 @@ import {
   PageContainer,
   OverlaySidebarWindowWidth
 } from '@mexit/shared'
+import { ColumnHeaderProps, ItemProps, Kanban, Title } from '@workduck-io/mex-components'
 
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
@@ -29,6 +30,18 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 import useMultipleEditors from '../Stores/useEditorsStore'
+import { RenderItemProps } from './SearchView'
+
+function getStyle(provided: any, style?: Record<string, unknown>) {
+  if (!style) {
+    return provided.draggableProps.style
+  }
+
+  return {
+    ...provided.draggableProps.style,
+    ...style
+  }
+}
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
@@ -38,6 +51,7 @@ const Tasks = () => {
   const match = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const getTodo = useTodoStore((store) => store.getTodoOfNode)
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
 
@@ -65,7 +79,7 @@ const Tasks = () => {
     setGlobalJoin
   } = useTodoKanban()
 
-  const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters])
+  const board = useMemo(() => getTodoBoard(), [])
 
   const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
@@ -88,13 +102,13 @@ const Tasks = () => {
   }
 
   const selectFirst = () => {
-    const firstCardColumn = board.columns.find((column) => column.cards.length > 0)
-    if (firstCardColumn) {
-      if (firstCardColumn.cards) {
-        const firstCard = firstCardColumn.cards[0]
-        setSelectedCard(firstCard)
-      }
-    }
+    // const firstCardColumn = board.columns.find((column) => column.cards.length > 0)
+    // if (firstCardColumn) {
+    //   if (firstCardColumn.cards) {
+    //     const firstCard = firstCardColumn.cards[0]
+    //     setSelectedCard(firstCard)
+    //   }
+    // }
   }
 
   const handleCardMoveNext = () => {
@@ -333,28 +347,82 @@ const Tasks = () => {
     }
   }, [match])
 
-  const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
+  const RenderCard = (props: ItemProps) => {
+    const { item, recal, isDragging, isGroupedOver, provided, style, index } = props
+
+    mog('RENDER CARD', { item })
+    // Data of the current item
+    // const getItemData = useItemStore((state) => state.getItemData)
+    // const itemData = useMemo(() => getItemData(item.id), [item.id])
+
+    // To manage open/close or expand/collapse states of item
+    // const toggleOpen = useItemStore((state) => state.toggleOpen)
+    // const openStates = useItemStore((state) => state.openStates)
+    // const isOpen = useMemo(() => openStates[item.id], [item, openStates])
+
+    //   return (
+    //     <Container
+    //       isDragging={isDragging}
+    //       isGroupedOver={isGroupedOver}
+    //       ref={provided.innerRef}
+    //       {...provided.draggableProps}
+    //       {...provided.dragHandleProps}
+    //       style={getStyle(provided, style)}
+    //       data-is-dragging={isDragging}
+    //       data-testid={item.id}
+    //       data-index={index}
+    //       aria-label={`${itemData?.title} quote ${itemData?.description}`}
+    //     >
+    //       <Content>
+    //         <p
+    //           onClick={() => {
+    //             toggleOpen(item.id)
+    //             if (recal) recal()
+    //           }}
+    //         >
+    //           {itemData?.title}
+    //         </p>
+    //         <BlockQuote>{itemData?.description}</BlockQuote>
+    //         {isOpen && (
+    //           <>
+    //             <BlockQuote>{itemData?.description}</BlockQuote>
+    //             <Footer>
+    //               <QuoteId>
+    //                 id:{item.id} {itemData?.id}
+    //               </QuoteId>
+    //             </Footer>
+    //           </>
+    //         )}
+    //       </Content>
+    //     </Container>
+    //   )
+
     const todos = useTodoStore((store) => store.todos)
-    const pC = useMemo(() => getPureContent(todo), [id, todos])
+    const [nodeid, todoid] = item.id.split('#')
+    const todo = getTodo(nodeid, todoid)
+    const pC = useMemo(() => getPureContent(todo), [item.id, todos])
 
-    const controls = useMemo(() => ({
-      onChangePriority: (todoId: string, priority) => {
-        changePriority(todo, priority)
-      },
-      onChangeStatus: (todoId: string, status) => {
-        changeStatus(todo, status)
-      }
-    }), [])
+    const controls = useMemo(
+      () => ({
+        onChangePriority: (todoId: string, priority) => {
+          changePriority(todo, priority)
+        },
+        onChangeStatus: (todoId: string, status) => {
+          changeStatus(todo, status)
+        }
+      }),
+      []
+    )
 
+    mog('RENDER CARD', { item, todo, pC, style })
 
     const toggleModal = useModalStore((store) => store.toggleOpen)
 
-
     return (
       <TaskCard
-        ref={selectedCard && id === selectedCard.id ? selectedRef : null}
-        selected={selectedCard && selectedCard.id === id}
-        dragging={dragging}
+        ref={provided.innerRef}
+        selected={selectedCard && selectedCard.id === item.id}
+        dragging={isDragging}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         onMouseDown={(event) => {
           event.preventDefault()
@@ -362,15 +430,24 @@ const Tasks = () => {
             toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
           }
         }}
+        style={getStyle(provided, style)}
+        data-is-dragging={isDragging}
+        data-testid={item.id}
+        data-index={index}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
       >
         <Todo
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
+          oid={'Kanban'}
           readOnly
           controls={controls}
           parentNodeId={todo.nodeid}
         >
+          {/* JSON.stringify(pC)*/}
+          {todo.id}
           <EditorPreviewRenderer
             noStyle
             content={pC}
@@ -380,6 +457,12 @@ const Tasks = () => {
       </TaskCard>
     )
   }
+
+  const RenderColumnHeader = ({ columnId }: ColumnHeaderProps) => {
+    return <Title>{columnId}</Title>
+  }
+
+  mog('board', { board })
 
   return (
     <PageContainer>
@@ -401,14 +484,7 @@ const Tasks = () => {
           globalJoin={globalJoin}
           setGlobalJoin={setGlobalJoin}
         />
-        <Board
-          renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
-          disableColumnDrag
-          onCardDragEnd={handleCardMove}
-          renderCard={RenderCard}
-        >
-          {board}
-        </Board>
+        <Kanban items={board} RenderItem={RenderCard} RenderColumnHeader={RenderColumnHeader} />
       </StyledTasksKanban>
       {todos.length < 1 && (
         <div>
@@ -424,5 +500,21 @@ const Tasks = () => {
     </PageContainer>
   )
 }
+//       style={getStyle(provided, style)}
+//       data-is-dragging={isDragging}
+//       data-testid={item.id}
+//       data-index={index}
+//       style={getStyle(provided, style)}
+//       data-is-dragging={isDragging}
+//       data-testid={item.id}
+//       data-index={index}
+//       style={getStyle(provided, style)}
+//       data-is-dragging={isDragging}
+//       data-testid={item.id}
+//       data-index={index}
+//       style={getStyle(provided, style)}
+//       data-is-dragging={isDragging}
+//       data-testid={item.id}
+//       data-index={index}
 
 export default Tasks

@@ -30,6 +30,7 @@ import { useNodes } from './useNodes'
 import { useSearchExtra } from './useSearch'
 import { useTags } from './useTags'
 import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
+import { ItemMap } from '@workduck-io/mex-components'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType
@@ -260,24 +261,10 @@ export const useTodoKanban = () => {
   const getTodoBoard = () => {
     const nodetodos = useTodoStore.getState().todos
     const extra = getSearchExtra()
-    const todoBoard: TodoKanbanBoard = {
-      columns: [
-        {
-          id: TodoStatus.todo,
-          title: 'Todo',
-          cards: []
-        },
-        {
-          id: TodoStatus.pending,
-          title: 'In Progress',
-          cards: []
-        },
-        {
-          id: TodoStatus.completed,
-          title: 'Completed',
-          cards: []
-        }
-      ]
+    const todoBoard: ItemMap = {
+      [TodoStatus.todo]: [],
+      [TodoStatus.pending]: [],
+      [TodoStatus.completed]: []
     }
     const currentFilters = useKanbanFilterStore.getState().currentFilters
     Object.entries(nodetodos).forEach(([nodeid, todos]) => {
@@ -302,31 +289,32 @@ export const useTodoKanban = () => {
           return true
         })
         .forEach((todo) => {
-          todoBoard.columns
-            .find((column) => column.id === todo?.metadata?.status)
-            ?.cards.push({
-              id: `KANBAN_ID_${todo.nodeid}_${todo.id}`,
-              todo: todo
-            })
+          todoBoard[todo?.metadata?.status].push({
+            id: `${todo.nodeid}#${todo.id}`
+            // todo: todo
+          })
         })
     })
 
     // mog('getTodoBoard', { nodetodos, todoBoard })
 
-    const todoFilters = generateTodoFilters(todoBoard)
-    setFilters(todoFilters)
+    // const todoFilters = generateTodoFilters(todoBoard)
+    setFilters(
+      []
+      // todoFilters
+    )
 
-    todoBoard.columns.forEach((column) => {
-      column.cards.sort((a, b) => {
-        if (TodoRanks[a.todo?.metadata?.priority] < TodoRanks[b.todo?.metadata?.priority]) return 1
-        else return -1
-      })
-    })
+    // todoBoard.columns.forEach((column) => {
+    //   column.cards.sort((a, b) => {
+    //     if (TodoRanks[a.todo?.metadata?.priority] < TodoRanks[b.todo?.metadata?.priority]) return 1
+    //     else return -1
+    //   })
+    // })
 
-    todoBoard.columns.sort((a, b) => {
-      if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
-      else return -1
-    })
+    // todoBoard.columns.sort((a, b) => {
+    //   if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
+    //   else return -1
+    // })
 
     return todoBoard
   }
