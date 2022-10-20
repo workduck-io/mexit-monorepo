@@ -301,6 +301,7 @@ export const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const [isSaving, setIsSaving] = useState(false)
+  const [base64, setBase64] = useState<string | undefined>(undefined)
   const floatingPortalRef = useRef<HTMLDivElement>(null)
 
   // mog('screenshot', { screenshot })
@@ -308,26 +309,34 @@ export const Screenshot = () => {
   const onSubmit = async (blob: Blob) => {
     const base64base = await blobToBase64(blob)
     // Remove base64 header
-    const base64 = base64base?.toString().replace('data:image/png;base64,', '')
+    const base64State = base64base?.toString().replace('data:image/png;base64,', '')
+    setBase64(base64State)
+    setIsSaving(true)
+  }
 
-    chrome.runtime.sendMessage(
-      {
-        type: 'ASYNC_ACTION_HANDLER',
-        subType: 'UPLOAD_IMAGE',
-        data: {
-          workspaceId: workspaceDetails.id,
-          base64
+  const onSelectNote = (nodeid: string) => {
+    // Append screenshot to the note
+    if (base64) {
+      chrome.runtime.sendMessage(
+        {
+          type: 'ASYNC_ACTION_HANDLER',
+          subType: 'UPLOAD_IMAGE',
+          data: {
+            workspaceId: workspaceDetails.id,
+            base64
+          }
+        },
+        (response) => {
+          const { message, error } = response
+          if (error) {
+            console.error(error)
+            return
+          }
+          console.log(message)
         }
-      },
-      (response) => {
-        const { message, error } = response
-        if (error) {
-          console.error(error)
-          return
-        }
-        console.log(message)
-      }
-    )
+      )
+    }
+    setIsSaving(false)
   }
 
   return (
@@ -338,7 +347,6 @@ export const Screenshot = () => {
         onSubmit={(blob) => {
           console.log('Cropped image blob here', { blob })
           onSubmit(blob)
-          setIsSaving(true)
         }}
       />
       {isSaving && (
@@ -347,6 +355,7 @@ export const Screenshot = () => {
           root={floatingPortalRef.current}
           onSelect={(nodeid) => {
             mog('onSelect', { nodeid })
+            onSelectNote(nodeid)
           }}
         />
       )}

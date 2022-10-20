@@ -121,7 +121,12 @@ function Results() {
         event.preventDefault()
         const item = results[activeIndex]
         execute(item, event.metaKey)
-      } else if (event.key === 'Backspace' && activeItem && input === '') {
+      } else if (
+        event.key === 'Backspace' &&
+        activeItem &&
+        activeItem?.type !== ActionType.SCREENSHOT &&
+        input === ''
+      ) {
         resetSpotlitState()
       }
     }

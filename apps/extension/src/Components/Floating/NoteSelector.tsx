@@ -1,10 +1,12 @@
 import useDataStore from '../../Stores/useDataStore'
-import React, { cloneElement, useMemo, useState } from 'react'
+import React, { cloneElement, useEffect, useMemo, useState } from 'react'
+import { debounce } from 'lodash'
 
 import {
   useFloating,
   useInteractions,
   useClick,
+  useListNavigation,
   useRole,
   useDismiss,
   useId,
@@ -13,7 +15,13 @@ import {
   FloatingFocusManager
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
-import { Select, Option } from './Selector'
+import { SidebarListFilter, Input } from '@mexit/shared'
+import { fuzzySearch, mog } from '@mexit/core'
+import searchLine from '@iconify/icons-ri/search-line'
+import { Icon } from '@iconify/react'
+import { NoteItem, NoteItemsWrapper } from './NoteSelector.style'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { Button } from '@workduck-io/mex-components'
 
 interface Props {
   open?: boolean
@@ -36,9 +44,15 @@ export const Dialog = ({ render, root, open: passedOpen = false, children }: Pro
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
-    useRole(context),
-    useDismiss(context)
+    useRole(context)
+    // useDismiss(context)
   ])
+
+  useEffect(() => {
+    if (passedOpen !== open) {
+      setOpen(passedOpen)
+    }
+  }, [passedOpen])
 
   // Preserve the consumer's ref
   const ref = useMemo(
@@ -56,7 +70,7 @@ export const Dialog = ({ render, root, open: passedOpen = false, children }: Pro
             style={{
               display: 'grid',
               placeItems: 'center',
-              background: 'rgba(25, 25, 25, 0.8)'
+              background: 'rgba(0, 0, 0, 0.9)'
             }}
           >
             <FloatingFocusManager context={context}>
@@ -84,41 +98,141 @@ export const Dialog = ({ render, root, open: passedOpen = false, children }: Pro
 interface NoteSelectorProps {
   root?: HTMLElement
   selectionMessage?: string
+  searchPlaceholder?: string
   onSelect: (nodeid: string) => void
 }
 
-const NoteSelector = ({ root, selectionMessage = 'Select note' }: NoteSelectorProps) => {
+const NoteSelector = ({ root, searchPlaceholder, selectionMessage = 'Select note', onSelect }: NoteSelectorProps) => {
   const notes = useDataStore((state) => state.ilinks)
+  const [filteredNotes, setFilteredNotes] = useState(notes)
+  const [search, setSearch] = useState('')
+  const [open, setOpen] = useState(true)
+  const [selected, setSelected] = useState(-1)
+
+  const selectedRef = React.useRef<HTMLDivElement>(null)
+
+  const inputRef = React.useRef<HTMLInputElement>(null)
+
+  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const reset = () => {
+    setSearch('')
+    setFilteredNotes(notes)
+    setSelected(-1)
+    const inpEl = inputRef.current
+    if (inpEl) inpEl.value = ''
+  }
+
+  const onSelectItem = (id: string) => {
+    setSelected(-1)
+    onSelect(id)
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    if (inputRef.current) {
+      const unsubscribe = tinykeys(inputRef.current, {
+        Escape: (event) => {
+          event.stopPropagation()
+          reset()
+        },
+        Enter: (event) => {
+          event.stopPropagation()
+          if (selected >= 0) {
+            const item = filteredNotes[selected]
+            if (item) {
+              onSelectItem(item.nodeid)
+            }
+          }
+        },
+        ArrowDown: (event) => {
+          event.stopPropagation()
+          // Circular increment
+          setSelected((selected + 1) % filteredNotes.length)
+
+          // if (selected < listItems.length - 1) {
+          //   setSelected(selected + 1)
+          // }
+        },
+        ArrowUp: (event) => {
+          event.stopPropagation()
+          // Circular decrement with no negative
+          setSelected((selected - 1 + filteredNotes.length) % filteredNotes.length)
+          // setSelected((selected - 1) % listItems.length)
+          // if (selected > 0) {
+          //   setSelected(selected - 1)
+          // }
+        }
+      })
+      return () => {
+        unsubscribe()
+      }
+    }
+  }, [filteredNotes, selected])
+
+  useEffect(() => {
+    if (selectedRef.current) {
+      selectedRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
+      })
+    }
+  }, [selected])
+
+  // Search through the notes and filter out any that don't match
+  useEffect(() => {
+    if (search && search !== '') {
+      const filtered = fuzzySearch(notes, search, (item) => item.path)
+      // mog('Search', { search, filtered })
+      setFilteredNotes(filtered)
+    }
+    if (search === '') {
+      setFilteredNotes(notes)
+    }
+  }, [search, notes])
 
   return (
     <>
       <Dialog
-        open={true}
+        open={open}
         root={root}
         render={({ close, labelId, descriptionId }) => (
           <>
-            <h1 id={labelId}>{selectionMessage}</h1>
-            <Select
-              value=""
-              render={(selectedIndex) => (
-                <div>
-                  {notes[selectedIndex] ? (
-                    <img className="OptionIcon" alt="Poster" src={notes[selectedIndex]?.icon} />
-                  ) : null}
-                  {notes[selectedIndex]?.path ?? 'Select...'}{' '}
-                </div>
-              )}
-              onChange={console.log}
-            >
-              {notes.map(({ path, icon }) => (
-                <Option key={path} value={path}>
-                  <div>
-                    {icon && <img className="OptionIcon" alt="Poster" src={icon} />} <span>{path}</span>
-                  </div>
-                </Option>
-              ))}
-            </Select>
-            <button onClick={close}>Close</button>
+            <h3 id={labelId}>{selectionMessage}</h3>
+            <div>
+              <SidebarListFilter>
+                <Icon icon={searchLine} />
+                <Input
+                  placeholder={searchPlaceholder ?? 'Filter items'}
+                  className={'NoteSelectListFilter__Input'}
+                  onChange={debounce((e) => onSearchChange(e), 250)}
+                  autoFocus
+                  ref={inputRef}
+                />
+              </SidebarListFilter>
+              <NoteItemsWrapper>
+                {filteredNotes.length > 0 ? (
+                  filteredNotes.map((note, index) => (
+                    <NoteItem
+                      ref={selected === index ? selectedRef : undefined}
+                      onClick={() => onSelectItem(note.nodeid)}
+                      selected={selected === index}
+                      key={note.nodeid}
+                    >
+                      {note.path.slice(0, 40)}
+                    </NoteItem>
+                  ))
+                ) : (
+                  <div className="Dialog__Select__Empty">No notes found</div>
+                )}
+              </NoteItemsWrapper>
+            </div>
+            <Button onClick={close} className="Dialog__Close">
+              Cancel
+            </Button>
           </>
         )}
       />
