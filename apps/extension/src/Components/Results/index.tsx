@@ -15,6 +15,7 @@ import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Action from '../Action'
 import Renderer from '../Renderer'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
+import { Screenshot } from '../Screenshot/Screenshot'
 
 function Results() {
   const { activeIndex, setActiveIndex } = useSputlitContext()
@@ -180,6 +181,7 @@ function Results() {
       </List>
 
       {activeItem?.type === ActionType.RENDER && <Renderer />}
+      {activeItem?.type === ActionType.SCREENSHOT && <Screenshot />}
     </StyledResults>
   )
 }

@@ -23,6 +23,7 @@ export * from './Components/TableWrapper'
 export * from './Components/FloatingElements'
 export * from './Components/IconDisplay'
 
+export * from './Hooks/Helpers'
 export * from './Hooks/useBalloonToolbarPopper'
 export * from './Hooks/useEditorActions'
 export * from './Hooks/useRelativeTime'

@@ -10,7 +10,6 @@ import { CenteredColumn, Title } from '@mexit/shared'
 import { BackCard } from '@mexit/shared'
 
 import { version } from '../../../package.json'
-import { Screenshot } from '../../Actions'
 
 // import { BackCard } from '../../../style/Card'
 // import { CenteredColumn } from '../../../style/Layouts'
@@ -44,7 +43,7 @@ const Flex = styled.div`
 const About = () => {
   return (
     <>
-      <Screenshot />
+      {/* <Screenshot /> */}
       <CenteredColumn>
         <BackCard>
           <Title colored>Mexit</Title>

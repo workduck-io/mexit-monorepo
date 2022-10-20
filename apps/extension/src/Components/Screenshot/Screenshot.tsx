@@ -1,4 +1,4 @@
-import { IconButton } from '@mexit/shared'
+import { IconButton, useDebounceEffect } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import React, { useRef, useState } from 'react'
 import imageEditFill from '@iconify/icons-ri/image-edit-fill'
@@ -11,7 +11,7 @@ import restartLine from '@iconify/icons-ri/restart-line'
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop'
 
 import 'react-image-crop/dist/ReactCrop.css'
-import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
+// import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
 import {
   Controls,
   ImageEditorMain,
@@ -24,6 +24,7 @@ import {
   ToggleAndSubmit
 } from './Screenshot.style'
 import { mog } from '@mexit/core'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -271,8 +272,34 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
 }
 
 export const Screenshot = () => {
+  const screenshot = useSputlitStore((s) => s.screenshot)
+
+  mog('screenshot', { screenshot })
+
+  const onSubmit = async (blob: Blob) => {
+    // client
+    //   .post(
+    //     apiURLs.createImageLink,
+    //     {
+    //       encodedString: parsedImage
+    //     },
+    //     {
+    //       headers: {
+    //         'workspace-id': data.workspaceId
+    //       }
+    //     }
+    //   )
+    //   .then((resp) => resp.data)
+    //   .then((path: string) => {
+    //     return { message: apiURLs.getImagePublicLink(path), error: null }
+    //   })
+    //   .catch((error) => {
+    //     return { message: null, error: error }
+    //   })
+  }
   return (
     <div>
+      <h1>My Screen shot me down</h1>
       <ImageEditor
         onSubmit={(blob) => {
           console.log('Cropped image blob here', { blob })

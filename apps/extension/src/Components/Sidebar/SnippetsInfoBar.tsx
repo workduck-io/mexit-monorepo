@@ -74,7 +74,10 @@ export const SnippetsInfoBar = () => {
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} />
+        <Infobox
+          text={SnippetSidebarHelp}
+          // root={getElementById('ext-side-nav')}
+        />
       </SidebarListFilterWrapper>
       {searchedSnippets?.map((snippet) => (
         <SnippetCard

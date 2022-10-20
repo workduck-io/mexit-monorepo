@@ -1,5 +1,7 @@
 import { insertId, toLocaleString } from '@mexit/core'
 
+// TODO: Move smallContent from mex-electron to mex-space
+// TODO: Use smallContent from mex-space.
 const meetingTemplate = (title: string, date: number, link: string) => [
   { type: 'h1', children: [{ text: title }] },
   {

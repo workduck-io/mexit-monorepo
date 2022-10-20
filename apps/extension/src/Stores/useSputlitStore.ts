@@ -41,6 +41,9 @@ interface SputlitStore {
   activeItem?: ListItemType | MexitAction
   setActiveItem: (item?: ListItemType | MexitAction) => void
 
+  screenshot?: string
+  setScreenshot: (image?: string) => void
+
   // * Reset app State
   reset: () => void
 }
@@ -70,6 +73,8 @@ export const useSputlitStore = create<SputlitStore>(
 
     setSelection: (selection) => set({ selection }),
     setChild: (child) => set({ child }),
+
+    setScreenshot: (image) => set({ screenshot: image }),
 
     setActiveItem: (item) => set({ activeItem: item }),
     reset: () =>

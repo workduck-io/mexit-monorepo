@@ -44,6 +44,7 @@ export function useActionExecutor() {
   const { setPersistedContent } = useEditorContext()
   const setNode = useSputlitStore((s) => s.setNode)
   const setResults = useSputlitStore((store) => store.setResults)
+  const setScreenshot = useSputlitStore((store) => store.setScreenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
@@ -221,49 +222,30 @@ export function useActionExecutor() {
                 (response) => {
                   const { message, error } = response
                   if (error) {
+                    mog('Screen capture error', { error })
                     toast.error('Could not capture screenshot')
                   } else {
                     setVisualState(VisualState.animatingIn)
+                    // mog('Success! We got an image (w e t h i n k s)', { item })
+
+                    // Use renderer to render screenshot??
+                    // How to pass it to screenshot?
+                    const base64Image = message
+                    setScreenshot(base64Image)
+
                     // Adding a paragraph in the start due to errors caused by editor
                     // trying to focus in the start of the note
                     setActiveItem(item)
-                    setPersistedContent([
-                      {
-                        type: 'p',
-                        children: [
-                          {
-                            text: 'Screenshot'
-                          }
-                        ]
-                      },
-                      {
-                        children: [
-                          {
-                            text: ''
-                          }
-                        ],
-                        type: 'img',
-                        url: message
-                      },
-                      {
-                        text: '\n'
-                      },
-                      {
-                        text: '['
-                      },
-                      {
-                        type: 'a',
-                        url: message,
-                        children: [
-                          {
-                            text: 'Ref'
-                          }
-                        ]
-                      },
-                      {
-                        text: ' ]'
-                      }
-                    ])
+                    // TODO: Move smallContent from mex-electron to mex-space
+                    // TODO: Use smallContent from mex-space.
+                    // setPersistedContent([
+                    //   { type: 'p', children: [{ text: 'Screenshot' }] },
+                    //   { children: [{ text: '' }], type: 'img' /* url: message */ },
+                    //   { text: '\n' },
+                    //   { text: '[' },
+                    //   { type: 'a', url: message, children: [{ text: 'Ref' }] },
+                    //   { text: ' ]' }
+                    // ])
                   }
                 }
               )
