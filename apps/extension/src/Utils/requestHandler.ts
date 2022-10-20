@@ -184,9 +184,9 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
       return chrome.tabs
         .captureVisibleTab()
         .then((img) => {
-          const parsedImage = img.split(',')[1]
+          // const parsedImage = img.split(',')[1]
           // mog('MOG_IMAGE', { imgBase64: parsedImage })
-          return { message: parsedImage, error: null }
+          return { message: img, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }
@@ -195,12 +195,13 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
 
     /**
      * Action uploads the image to the server and returns the public link
+     * data should be base64 encoded string of screenshot without the frontmatter
      */
     case 'UPLOAD_IMAGE': {
       return client
         .post(
           apiURLs.createImageLink,
-          { encodedString: data.body },
+          { encodedString: data.base64 },
           {
             headers: { 'workspace-id': data.workspaceId }
           }

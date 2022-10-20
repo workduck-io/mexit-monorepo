@@ -83,6 +83,7 @@ export const useSputlitStore = create<SputlitStore>(
         activeItem: undefined,
         results: [],
         selection: undefined,
+        screenshot: undefined,
         input: ''
       })
   }))

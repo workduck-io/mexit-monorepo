@@ -2,6 +2,7 @@ import { IconButton, useDebounceEffect } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import React, { useRef, useState } from 'react'
 import imageEditFill from '@iconify/icons-ri/image-edit-fill'
+import { useAuthStore } from '../../Hooks/useAuth'
 import image2Fill from '@iconify/icons-ri/image-2-fill'
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
 import restartLine from '@iconify/icons-ri/restart-line'
@@ -14,17 +15,20 @@ import 'react-image-crop/dist/ReactCrop.css'
 // import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
 import {
   Controls,
+  ImageContent,
   ImageEditorMain,
   ImageEditorToolbar,
   ImageEditorWrapper,
   ImagePreview,
-  PreviewTitle,
   RangeControlWrapper,
   RangeValue,
-  ToggleAndSubmit
+  ToggleAndSubmit,
+  ViewToggle
 } from './Screenshot.style'
-import { mog } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+import { client } from '@workduck-io/dwindle'
+import { Icon } from '@iconify/react'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -172,139 +176,159 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
     }
   }
 
+  // mog('ImageEditor', { imgSrc, crop, completedCrop, scale, rotate, aspect })
+
   return (
     <ImageEditorWrapper>
       <ImageEditorToolbar>
         <Controls>
-          {isEditing ? (
-            <>
-              <PreviewTitle>Edit</PreviewTitle>
-              {!src && <input type="file" accept="image/*" onChange={onSelectFile} />}
-              <RangeControlWrapper>
-                <label htmlFor="scale-input">
-                  Scale <RangeValue>x{scale}</RangeValue>
-                </label>
-                <input
-                  id="scale-input"
-                  type="range"
-                  step="0.1"
-                  min="0.1"
-                  max="3"
-                  value={scale}
-                  disabled={!imgSrc}
-                  onChange={(e) => setScale(Number(e.target.value))}
-                />
-                <IconButton title="Reset Scale" icon={restartLine} onClick={() => setScale(1)} />
-              </RangeControlWrapper>
-              <RangeControlWrapper>
-                <label htmlFor="rotate-input">
-                  Rotate <RangeValue>{rotate}&#176;</RangeValue>
-                </label>
-                <input
-                  id="rotate-input"
-                  type="range"
-                  min="-180"
-                  max="180"
-                  value={rotate}
-                  disabled={!imgSrc}
-                  onChange={(e) => setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))}
-                />
-                <IconButton title="Reset Rotation" icon={restartLine} onClick={() => setRotate(0)} />
-              </RangeControlWrapper>
-              <IconButton
-                onClick={handleToggleAspectClick}
-                title={aspect === undefined ? "Image's Aspect Ratio" : 'Free Aspect Ratio'}
-                icon={aspectRatioLine}
-                highlight={aspect !== undefined}
+          <ViewToggle>
+            <Button primary={isEditing} transparent={!isEditing} onClick={() => setIsEditing(true)}>
+              <Icon icon="ri:crop-line" />
+              Crop
+            </Button>
+            <Button primary={!isEditing} transparent={isEditing} onClick={() => setIsEditing(false)}>
+              <Icon icon="ri:image-line" />
+              Preview
+            </Button>
+          </ViewToggle>
+          <>
+            {!src && <input type="file" accept="image/*" onChange={onSelectFile} />}
+            <RangeControlWrapper>
+              <label htmlFor="scale-input" onDoubleClick={() => setScale(1)}>
+                <Icon icon="ri:zoom-in-line" />
+                <RangeValue>x{scale}</RangeValue>
+              </label>
+              <input
+                id="scale-input"
+                type="range"
+                step="0.1"
+                min="0.1"
+                max="3"
+                value={scale}
+                disabled={!imgSrc}
+                onChange={(e) => setScale(Number(e.target.value))}
               />
-            </>
-          ) : (
-            <>
-              <PreviewTitle>Preview</PreviewTitle>
-              <Button onClick={() => setIsEditing(true)}>Edit</Button>
-            </>
-          )}
+            </RangeControlWrapper>
+            <RangeControlWrapper>
+              <label htmlFor="rotate-input" onDoubleClick={() => setRotate(0)}>
+                <Icon icon="bx:rotate-right" />
+                <RangeValue>{rotate}&#176;</RangeValue>
+              </label>
+              <input
+                id="rotate-input"
+                type="range"
+                min="-180"
+                max="180"
+                value={rotate}
+                disabled={!imgSrc}
+                onChange={(e) => setRotate(Math.min(180, Math.max(-180, Number(e.target.value))))}
+              />
+            </RangeControlWrapper>
+            <IconButton
+              onClick={handleToggleAspectClick}
+              title={aspect === undefined ? "Image's Aspect Ratio" : 'Free Aspect Ratio'}
+              icon={aspectRatioLine}
+              highlight={aspect !== undefined}
+            />
+          </>
         </Controls>
         <ToggleAndSubmit>
           <Button onClick={onEditSubmit} disabled={!imgSrc}>
             Save
           </Button>
-
-          <IconButton
-            title={isEditing ? 'Preview' : 'Edit'}
-            icon={isEditing ? image2Fill : imageEditFill}
-            onClick={() => setIsEditing((e) => !e)}
-          />
         </ToggleAndSubmit>
       </ImageEditorToolbar>
-      <ImageEditorMain isEditing={isEditing}>
-        {!!imgSrc && (
-          <ReactCrop
-            crop={crop}
-            onChange={(_, percentCrop) => setCrop(percentCrop)}
-            onComplete={(c) => setCompletedCrop(c)}
-            aspect={aspect}
-          >
-            <img
-              ref={imgRef}
-              alt="Crop me"
-              src={imgSrc}
-              style={{ transform: `scale(${scale}) rotate(${rotate}deg)` }}
-              onLoad={onImageLoad}
+      <ImageContent>
+        <ImageEditorMain isEditing={isEditing}>
+          {!!imgSrc && (
+            <ReactCrop
+              crop={crop}
+              onChange={(crop, percentCrop) => {
+                mog('onChange', { crop, percentCrop })
+                setCrop(percentCrop)
+              }}
+              onComplete={(c) => setCompletedCrop(c)}
+              aspect={aspect}
+            >
+              <img
+                ref={imgRef}
+                alt="Crop me"
+                src={imgSrc}
+                style={{ transform: `scale(${scale}) rotate(${rotate}deg)` }}
+                onLoad={onImageLoad}
+              />
+            </ReactCrop>
+          )}
+        </ImageEditorMain>
+        <ImagePreview isEditing={isEditing}>
+          {!!completedCrop && (
+            <canvas
+              ref={previewCanvasRef}
+              style={{
+                objectFit: 'contain',
+                width: completedCrop.width === 0 ? imgRef?.current?.width : completedCrop.width,
+                height: completedCrop.height === 0 ? imgRef?.current?.height : completedCrop.height
+              }}
             />
-          </ReactCrop>
-        )}
-      </ImageEditorMain>
-      <ImagePreview isEditing={isEditing}>
-        {!!completedCrop && (
-          <canvas
-            ref={previewCanvasRef}
-            style={{
-              objectFit: 'contain',
-              width: completedCrop.width === 0 ? imgRef?.current?.width : completedCrop.width,
-              height: completedCrop.height === 0 ? imgRef?.current?.height : completedCrop.height
-            }}
-          />
-        )}
-      </ImagePreview>
+          )}
+        </ImagePreview>
+      </ImageContent>
     </ImageEditorWrapper>
   )
 }
 
+function blobToBase64(blob: Blob) {
+  return new Promise((resolve, reject) => {
+    try {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+    } catch {
+      reject()
+    }
+  })
+}
+
 export const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
+  const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
 
-  mog('screenshot', { screenshot })
+  // mog('screenshot', { screenshot })
 
   const onSubmit = async (blob: Blob) => {
-    // client
-    //   .post(
-    //     apiURLs.createImageLink,
-    //     {
-    //       encodedString: parsedImage
-    //     },
-    //     {
-    //       headers: {
-    //         'workspace-id': data.workspaceId
-    //       }
-    //     }
-    //   )
-    //   .then((resp) => resp.data)
-    //   .then((path: string) => {
-    //     return { message: apiURLs.getImagePublicLink(path), error: null }
-    //   })
-    //   .catch((error) => {
-    //     return { message: null, error: error }
-    //   })
+    const base64base = await blobToBase64(blob)
+    // Remove base64 header
+    const base64 = base64base?.toString().replace('data:image/png;base64,', '')
+
+    chrome.runtime.sendMessage(
+      {
+        type: 'ASYNC_ACTION_HANDLER',
+        subType: 'UPLOAD_IMAGE',
+        data: {
+          workspaceId: workspaceDetails.id,
+          base64
+        }
+      },
+      (response) => {
+        const { message, error } = response
+        if (error) {
+          console.error(error)
+          return
+        }
+        console.log(message)
+      }
+    )
   }
+
   return (
-    <div>
-      <h1>My Screen shot me down</h1>
-      <ImageEditor
-        onSubmit={(blob) => {
-          console.log('Cropped image blob here', { blob })
-        }}
-      />
-    </div>
+    <ImageEditor
+      src={screenshot}
+      openAsEditing
+      onSubmit={(blob) => {
+        console.log('Cropped image blob here', { blob })
+        onSubmit(blob)
+      }}
+    />
   )
 }
