@@ -22,6 +22,7 @@ import {
   ImagePreview,
   RangeControlWrapper,
   RangeValue,
+  SpotlightScreenshotWrapper,
   ToggleAndSubmit,
   ViewToggle
 } from './Screenshot.style'
@@ -29,6 +30,7 @@ import { apiURLs, mog } from '@mexit/core'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { client } from '@workduck-io/dwindle'
 import { Icon } from '@iconify/react'
+import NoteSelector from '../Floating/NoteSelector'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -170,9 +172,14 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
     if (aspect) {
       setAspect(undefined)
     } else if (imgRef.current) {
-      const { width, height } = imgRef.current
-      setAspect(16 / 9)
-      setCrop(centerAspectCrop(width, height, 16 / 9))
+      if (crop.width !== 0 && crop.height !== 0) {
+        const cropAspect = crop.width / crop.height
+        setAspect(cropAspect)
+      } else {
+        const { width, height } = imgRef.current
+        setAspect(width / height)
+        setCrop(centerAspectCrop(width, height, width / height))
+      }
     }
   }
 
@@ -244,8 +251,8 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
           {!!imgSrc && (
             <ReactCrop
               crop={crop}
-              onChange={(crop, percentCrop) => {
-                mog('onChange', { crop, percentCrop })
+              onChange={(_crop, percentCrop) => {
+                // mog('onChange', { crop, percentCrop })
                 setCrop(percentCrop)
               }}
               onComplete={(c) => setCompletedCrop(c)}
@@ -293,6 +300,8 @@ function blobToBase64(blob: Blob) {
 export const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+  const [isSaving, setIsSaving] = useState(false)
+  const floatingPortalRef = useRef<HTMLDivElement>(null)
 
   // mog('screenshot', { screenshot })
 
@@ -322,13 +331,26 @@ export const Screenshot = () => {
   }
 
   return (
-    <ImageEditor
-      src={screenshot}
-      openAsEditing
-      onSubmit={(blob) => {
-        console.log('Cropped image blob here', { blob })
-        onSubmit(blob)
-      }}
-    />
+    <SpotlightScreenshotWrapper>
+      <ImageEditor
+        src={screenshot}
+        openAsEditing
+        onSubmit={(blob) => {
+          console.log('Cropped image blob here', { blob })
+          onSubmit(blob)
+          setIsSaving(true)
+        }}
+      />
+      {isSaving && (
+        <NoteSelector
+          selectionMessage="Select a note to save the screenshot to"
+          root={floatingPortalRef.current}
+          onSelect={(nodeid) => {
+            mog('onSelect', { nodeid })
+          }}
+        />
+      )}
+      <div style={{ zIndex: 20 }} id="screenshot-note-select-modal" ref={floatingPortalRef} />
+    </SpotlightScreenshotWrapper>
   )
 }

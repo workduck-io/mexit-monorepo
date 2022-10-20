@@ -4,7 +4,7 @@ import { findIndex, groupBy } from 'lodash'
 import { useSpring } from 'react-spring'
 import { useVirtual } from 'react-virtual'
 
-import { ActionType, QuickLinkType } from '@mexit/core'
+import { ActionType, mog, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
@@ -145,8 +145,10 @@ function Results() {
     execute(item)
   }
 
+  // mog('rendering results', { activeItem, results })
+
   return (
-    <StyledResults style={springProps}>
+    <StyledResults isScreenshot={activeItem?.type === ActionType.SCREENSHOT} style={springProps}>
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {

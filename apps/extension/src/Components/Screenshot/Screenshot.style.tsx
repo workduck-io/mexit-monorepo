@@ -1,3 +1,4 @@
+import { ScrollStyles } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
 import styled, { css } from 'styled-components'
 
@@ -51,7 +52,7 @@ export const ViewToggle = styled.div`
 export const RangeControlWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.tiny};
 
   background: ${({ theme }) => theme.colors.gray[9]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -77,9 +78,9 @@ export const RangeControlWrapper = styled.div`
     &::-webkit-slider-thumb {
       -webkit-appearance: none !important;
       background: ${({ theme }) => theme.colors.primary};
-      border-radius: 4px;
-      height: 8px;
-      width: 8px;
+      border-radius: 5px;
+      height: 10px;
+      width: 10px;
     }
   }
 `
@@ -109,6 +110,9 @@ interface ImageEditState {
 export const ImagePreview = styled.div<ImageEditState>`
   flex-grow: 1;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   ${({ isEditing }) =>
     isEditing
       ? css`
@@ -381,4 +385,16 @@ export const ImageEditorMain = styled.div<ImageEditState>`
           z-index: -1;
           position: absolute;
         `}
+`
+
+/**
+ * Styles for the screenshot component in the context of being rendered inside spotlight
+ */
+export const SpotlightScreenshotWrapper = styled.div`
+  display: flex;
+  margin-top: -${({ theme }) => theme.spacing.medium};
+  ${ImageContent} {
+    max-height: 100%;
+    overflow: auto;
+  }
 `
