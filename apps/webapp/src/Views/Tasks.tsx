@@ -30,7 +30,6 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 import useMultipleEditors from '../Stores/useEditorsStore'
-import { RenderItemProps } from './SearchView'
 
 function getStyle(provided: any, style?: Record<string, unknown>) {
   if (!style) {
@@ -46,11 +45,13 @@ function getStyle(provided: any, style?: Record<string, unknown>) {
 const RenderCard = React.memo<ItemProps>((props: ItemProps) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   // const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
-  const getTodo = useTodoStore((store) => store.getTodoOfNode)
+  // const getTodo = useTodoStore((store) => store.getTodoOfNode)
   const { item, recal, isDragging, isGroupedOver, provided, style, index } = props
-  const [nodeid, todoid] = item.id.split('#')
-  const todo = useMemo(() => getTodo(nodeid, todoid), [item.id])
-  const pC = useMemo(() => getPureContent(todo), [item.id])
+  const todo = useMemo(() => {
+    const [nodeid, todoid] = item.id.split('#')
+    return useTodoStore.getState().getTodoOfNode(nodeid, todoid)
+  }, [item.id])
+  const pC = useMemo(() => getPureContent(todo), [todo])
 
   const controls = useMemo(
     () => ({
