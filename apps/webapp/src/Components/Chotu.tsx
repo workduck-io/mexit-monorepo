@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import { connectToParent } from 'penpal'
 
+import { useAuth } from '@workduck-io/dwindle'
+
 import { idxKey, ILink, mog, NodeEditorContent, NodeMetadata, Reminder, ReminderActions } from '@mexit/core'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
@@ -38,6 +40,7 @@ export default function Chotu() {
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const links = useLinkStore((state) => state.links)
   const { queryIndex } = useSearch()
+  const { uploadImageToS3 } = useAuth()
 
   useEffect(() => {
     if (!first) {
@@ -75,6 +78,11 @@ export default function Chotu() {
     reminderAction(action: ReminderActions, reminder: Reminder) {
       actOnReminder(action, reminder)
       return
+    },
+    uploadImageToS3Dwindle(base64string: string) {
+      return new Promise((resolve) => {
+        resolve(uploadImageToS3(base64string, { giveCloudFrontURL: true }))
+      })
     }
   }
 

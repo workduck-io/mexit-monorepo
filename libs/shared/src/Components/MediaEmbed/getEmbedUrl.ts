@@ -8,7 +8,7 @@ const fetchOembed = async (url: string, endpoint: string): Promise<string | unde
 
   const resp = await axios
     .get(requestUrl)
-    .then((r) => {
+    .then((r: any) => {
       return r.data.html
     })
     .catch((e) => console.error(e)) // eslint-disable-line no-console

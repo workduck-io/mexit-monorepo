@@ -1,17 +1,25 @@
-import { IconButton, useDebounceEffect } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
 import React, { useRef, useState } from 'react'
-import imageEditFill from '@iconify/icons-ri/image-edit-fill'
-import { useAuthStore } from '../../Hooks/useAuth'
-import image2Fill from '@iconify/icons-ri/image-2-fill'
+
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
+import image2Fill from '@iconify/icons-ri/image-2-fill'
+import imageEditFill from '@iconify/icons-ri/image-edit-fill'
 import restartLine from '@iconify/icons-ri/restart-line'
+import { Icon } from '@iconify/react'
 
 /* https://github.com/DominicTobias/react-image-crop */
-
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop'
-
 import 'react-image-crop/dist/ReactCrop.css'
+
+import { Button } from '@workduck-io/mex-components'
+
+import { apiURLs, mog } from '@mexit/core'
+import { IconButton, useDebounceEffect } from '@mexit/shared'
+
+import { useAuthStore } from '../../Hooks/useAuth'
+import useRaju from '../../Hooks/useRaju'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
+import NoteSelector from '../Floating/NoteSelector'
 // import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
 import {
   Controls,
@@ -26,12 +34,6 @@ import {
   ToggleAndSubmit,
   ViewToggle
 } from './Screenshot.style'
-import { apiURLs, mog } from '@mexit/core'
-import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { client } from '@workduck-io/dwindle'
-import { Icon } from '@iconify/react'
-import NoteSelector from '../Floating/NoteSelector'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -308,59 +310,40 @@ export const Screenshot = () => {
   const [base64, setBase64] = useState<string | undefined>(undefined)
   const floatingPortalRef = useRef<HTMLDivElement>(null)
   const { appendAndSave } = useSaveChanges()
+  const { dispatch } = useRaju()
 
   // mog('screenshot', { screenshot })
 
   const onSubmit = async (blob: Blob) => {
     const base64base = await blobToBase64(blob)
     // Remove base64 header
-    const base64State = base64base?.toString().replace('data:image/png;base64,', '')
-    setBase64(base64State)
+    // const base64State = base64base?.toString().replace('data:image/png;base64,', '')
+    setBase64(base64base?.toString())
     setScreenshotState('selecting-note')
   }
 
-  const onSelectNote = (nodeid: string) => {
+  const onSelectNote = async (nodeid: string) => {
     setScreenshotState('saving')
     // Append screenshot to the note
     try {
       if (base64) {
-        chrome.runtime.sendMessage(
-          {
-            type: 'ASYNC_ACTION_HANDLER',
-            subType: 'UPLOAD_IMAGE',
-            data: {
-              workspaceId: workspaceDetails.id,
-              base64
-            }
-          },
-          (response) => {
-            const { message, error } = response
-            if (error) {
-              console.error(error)
-              resetSpotlitState()
-            }
-            if (message) {
-              console.log(message)
-              const appendContent = [
-                { type: 'p', children: [{ text: 'Screenshot' }] },
-                { children: [{ text: '' }], type: 'img', url: message },
-                { text: '\n' },
-                { text: '[' },
-                { type: 'a', url: message, children: [{ text: 'Ref' }] },
-                { text: ' ]' }
-              ]
-              appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
-              resetSpotlitState()
-            }
-          }
-        )
+        const imageURL = await dispatch('UPLOAD_IMAGE_TO_S3', base64)
+        const appendContent = [
+          { type: 'p', children: [{ text: 'Screenshot' }] },
+          { children: [{ text: '' }], type: 'img', url: imageURL },
+          { text: '\n' },
+          { text: '[' },
+          { type: 'a', url: imageURL, children: [{ text: 'Ref' }] },
+          { text: ' ]' }
+        ]
+        appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
+        resetSpotlitState()
       }
     } catch (error) {
+      mog('SSCaptureError', { error })
       resetSpotlitState()
     }
   }
-
-  // mog('Screenshot', { isSaving })
 
   return (
     <SpotlightScreenshotWrapper>
