@@ -106,6 +106,14 @@ interface NoteSelectorProps {
   open?: boolean
 }
 
+/**
+ * The selector of notes
+ *
+ * Opens a modal interface with a input and a list of notes
+ * The list is only of the notes that can be edited by the user
+ * The list is filtred by the input
+ * Arrow keys to move around and Enter to select
+ */
 const NoteSelector = ({
   root,
   open: passedOpen,
