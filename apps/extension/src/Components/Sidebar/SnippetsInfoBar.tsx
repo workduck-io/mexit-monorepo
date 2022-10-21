@@ -13,7 +13,7 @@ import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getElementById } from '../../contentScript'
-import { insertSnippet } from '../Dibba'
+import { copySnippetToClipboard } from '../Dibba'
 import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {
@@ -31,7 +31,7 @@ export const SnippetsInfoBar = () => {
   const onInsertSnippet = (snippetId: string) => {
     const snippet = getSnippet(snippetId)
 
-    insertSnippet(snippet)
+    copySnippetToClipboard(snippet)
   }
 
   const onSearch = async (newSearchTerm: string) => {

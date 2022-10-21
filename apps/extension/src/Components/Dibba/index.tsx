@@ -47,7 +47,15 @@ interface PublicNode {
   content: NodeEditorContent
 }
 
-export const insertSnippet = async (item: Snippet) => {
+// TODO: add more domains and their supported types
+// Also a better matching for the domains
+const supportedDomains: Record<string, 'plain' | 'html'> = {
+  'https://mail.google.com': 'html',
+  'https://www.figma.com': 'plain',
+  'https://keep.google.com': 'plain'
+}
+
+export const copySnippetToClipboard = async (item: Snippet) => {
   const text = convertContentToRawText(item.content, '\n')
 
   let html = text
@@ -101,6 +109,21 @@ function getUpcomingData(selection: Selection) {
   const text = selection.anchorNode.textContent.slice(0, -1)
 
   return { range, text }
+}
+
+function simulateOnChange() {
+  const inputEvent = new InputEvent('input', {
+    bubbles: true,
+    cancelable: false
+  })
+
+  const changeEvent = new Event('change', {
+    bubbles: true,
+    cancelable: false
+  })
+
+  document.activeElement.dispatchEvent(inputEvent)
+  document.activeElement.dispatchEvent(changeEvent)
 }
 
 // TODO: whether or not to enable dibba should be a user's preference
@@ -205,9 +228,50 @@ export default function Dibba() {
       console.log(error)
     }
 
+    const originMatch = supportedDomains[window.location.origin]
+
     switch (item.type) {
       case QuickLinkType.snippet: {
-        await insertSnippet(item as Snippet)
+        if (originMatch === 'html') {
+          const filterdContent = convertToCopySnippet(item.content)
+          const convertedContent = convertToCopySnippet(filterdContent, {
+            filter: defaultCopyFilter,
+            converter: defaultCopyConverter
+          })
+
+          const tempEditor = createPlateEditor({
+            plugins: getPlugins(
+              createPlateUI({
+                [ELEMENT_TAG]: CopyTag as any
+              }),
+              {
+                exclude: { dnd: true }
+              }
+            )
+          })
+
+          const html = serializeHtml(tempEditor, {
+            nodes: convertedContent
+          })
+
+          const node = new DOMParser().parseFromString(html, 'text/html').body
+          dibbaState.extra.range.insertNode(node)
+          dibbaState.extra.range.collapse(false)
+
+          // Combining the inserted text node into one
+          document.activeElement.normalize()
+          simulateOnChange()
+        } else if (originMatch === 'plain') {
+          dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
+          dibbaState.extra.range.collapse(false)
+
+          // Combining the inserted text node into one
+          document.activeElement.normalize()
+          simulateOnChange()
+        } else {
+          simulateOnChange()
+          await copySnippetToClipboard(item as Snippet)
+        }
         break
       }
       case 'Links': {
@@ -257,6 +321,7 @@ export default function Dibba() {
         setDibbaState({ visualState: VisualState.hidden })
       } else if (['Tab', 'Enter', ' ', ']'].includes(event.key)) {
         event.preventDefault()
+        event.stopPropagation()
 
         handleClick(results[activeIndex])
       }
@@ -356,7 +421,7 @@ export default function Dibba() {
       {listItem?.content && (
         <ComboSeperator>
           <section>
-            <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} />
+            <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} readOnly={true} />
           </section>
         </ComboSeperator>
       )}

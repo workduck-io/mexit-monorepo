@@ -1,17 +1,11 @@
 /* eslint-disable no-case-declarations */
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import toast from 'react-hot-toast'
 
 import {
   ActionType,
   CategoryType,
-  convertContentToRawText,
-  convertToCopySnippet,
   createNodeWithUid,
-  defaultCopyConverter,
-  defaultCopyFilter,
   ELEMENT_PARAGRAPH,
-  ELEMENT_TAG,
   getBlockMetadata,
   getNewDraftKey,
   ILink,
@@ -22,11 +16,7 @@ import {
   SingleNamespace
 } from '@mexit/core'
 
-import Action from '../Components/Action'
-import { insertSnippet } from '../Components/Dibba'
-import { StyledInput } from '../Components/Search/styled'
-import { CopyTag } from '../Editor/components/Tags/CopyTag'
-import getPlugins from '../Editor/plugins/index'
+import { copySnippetToClipboard } from '../Components/Dibba'
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
@@ -114,7 +104,7 @@ export function useActionExecutor() {
 
       case QuickLinkType.snippet: {
         const snippet = getSnippet(item.id)
-        insertSnippet(snippet)
+        copySnippetToClipboard(snippet)
         setVisualState(VisualState.animatingOut)
         break
       }
