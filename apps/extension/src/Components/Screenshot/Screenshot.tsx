@@ -1,9 +1,6 @@
 import React, { useRef, useState } from 'react'
 
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
-import image2Fill from '@iconify/icons-ri/image-2-fill'
-import imageEditFill from '@iconify/icons-ri/image-edit-fill'
-import restartLine from '@iconify/icons-ri/restart-line'
 import { Icon } from '@iconify/react'
 
 /* https://github.com/DominicTobias/react-image-crop */
@@ -12,7 +9,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { apiURLs, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 import { IconButton, useDebounceEffect } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
@@ -34,6 +31,7 @@ import {
   ToggleAndSubmit,
   ViewToggle
 } from './Screenshot.style'
+import { Dialog } from '../Floating/Dialog'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -309,6 +307,7 @@ export const Screenshot = () => {
   const [screenshotState, setScreenshotState] = useState<ScreenshotState>('editing')
   const [base64, setBase64] = useState<string | undefined>(undefined)
   const floatingPortalRef = useRef<HTMLDivElement>(null)
+  const loadingFloating = useRef<HTMLDivElement>(null)
   const { appendAndSave } = useSaveChanges()
   const { dispatch } = useRaju()
 
@@ -342,6 +341,7 @@ export const Screenshot = () => {
     } catch (error) {
       mog('SSCaptureError', { error })
       resetSpotlitState()
+      setScreenshotState('editing')
     }
   }
 
@@ -366,7 +366,11 @@ export const Screenshot = () => {
           }}
         />
       )}
+      {screenshotState && screenshotState === 'saving' && (
+        <Dialog root={loadingFloating.current} open={true} render={() => 'Saving Screenshot ...'} />
+      )}
       <div style={{ zIndex: 20 }} id="screenshot-note-select-modal" ref={floatingPortalRef} />
+      <div style={{ zIndex: 30 }} id="screenshot-note-loading" ref={loadingFloating} />
     </SpotlightScreenshotWrapper>
   )
 }
