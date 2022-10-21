@@ -12,6 +12,7 @@ import {
 } from '@floating-ui/react-dom-interactions'
 
 import { mergeRefs } from 'react-merge-refs'
+import { DialogOverlay } from './Dialog.style'
 
 interface Props {
   open?: boolean
@@ -59,7 +60,7 @@ export const Dialog = ({ render, root, open: passedOpen = false, children }: Pro
       {children && cloneElement(children, getReferenceProps({ ref, ...children.props }))}
       <FloatingPortal root={root}>
         {open && (
-          <FloatingOverlay
+          <DialogOverlay
             lockScroll
             style={{
               display: 'grid',
@@ -82,7 +83,7 @@ export const Dialog = ({ render, root, open: passedOpen = false, children }: Pro
                 })}
               </div>
             </FloatingFocusManager>
-          </FloatingOverlay>
+          </DialogOverlay>
         )}
       </FloatingPortal>
     </>
