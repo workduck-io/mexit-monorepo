@@ -224,8 +224,6 @@ export default function Dibba() {
         triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
       )
       triggerRange.deleteContents()
-
-      simulateOnChange()
     } catch (error) {
       console.log(error)
     }
@@ -271,6 +269,7 @@ export default function Dibba() {
           document.activeElement.normalize()
           simulateOnChange()
         } else {
+          simulateOnChange()
           await copySnippetToClipboard(item as Snippet)
         }
         break
