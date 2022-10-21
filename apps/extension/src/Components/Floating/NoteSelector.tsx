@@ -24,6 +24,7 @@ import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
 import { tinykeys } from '@workduck-io/tinykeys'
 import { Button } from '@workduck-io/mex-components'
 import { getTitleFromPath } from '../../Hooks/useLinks'
+import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 
 interface Props {
   open?: boolean
@@ -113,10 +114,17 @@ const NoteSelector = ({
   onSelect
 }: NoteSelectorProps) => {
   const notes = useDataStore((state) => state.ilinks)
+  const { accessWhenShared } = usePermissions()
   const [filteredNotes, setFilteredNotes] = useState(notes)
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(passedOpen)
   const [selected, setSelected] = useState(-1)
+
+  const appendableNotes = useMemo(() => {
+    const appendable = notes.filter((note) => !isReadonly(accessWhenShared(note.nodeid)))
+    // mog('appendable', { appendable, notes })
+    return appendable
+  }, [notes])
 
   const selectedRef = React.useRef<HTMLDivElement>(null)
 
@@ -128,7 +136,7 @@ const NoteSelector = ({
 
   const reset = () => {
     setSearch('')
-    setFilteredNotes(notes)
+    setFilteredNotes(appendableNotes)
     setSelected(-1)
     const inpEl = inputRef.current
     if (inpEl) inpEl.value = ''
@@ -192,14 +200,14 @@ const NoteSelector = ({
   // Search through the notes and filter out any that don't match
   useEffect(() => {
     if (search && search !== '') {
-      const filtered = fuzzySearch(notes, search, (item) => item.path)
+      const filtered = fuzzySearch(appendableNotes, search, (item) => item.path)
       // mog('Search', { search, filtered })
       setFilteredNotes(filtered)
     }
     if (search === '') {
-      setFilteredNotes(notes)
+      setFilteredNotes(appendableNotes)
     }
-  }, [search, notes])
+  }, [search, appendableNotes])
 
   return (
     <>
@@ -230,16 +238,16 @@ const NoteSelector = ({
                       key={note.nodeid}
                     >
                       <Icon icon={note.icon ?? fileList2Line} />
-                      {getTitleFromPath( note.path )}
+                      {getTitleFromPath(note.path)}
                     </NoteItem>
                   ))
                 ) : (
                   <div className="Dialog__Select__Empty">No notes found</div>
                 )}
               </NoteItemsWrapper>
-            <Button onClick={close} className="Dialog__Close">
-              Cancel
-            </Button>
+              <Button onClick={close} className="Dialog__Close">
+                Cancel
+              </Button>
             </SelectionList>
           </>
         )}

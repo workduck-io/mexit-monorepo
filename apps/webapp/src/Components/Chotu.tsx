@@ -155,6 +155,12 @@ export default function Chotu() {
     parent.bootHighlights(highlighted)
   }, [parent, highlighted])
 
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootSharedNodes(sharedNodes)
+  }, [parent, sharedNodes])
+
   return (
     <div>
       <p>
