@@ -5868,8 +5868,8 @@
 
 "@workduck-io/dwindle@^0.0.21":
   version "0.0.21"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.21/0c2ae8839b59248021523df6047a5cd5e969a1f9#0c2ae8839b59248021523df6047a5cd5e969a1f9"
-  integrity sha512-B2xEWlauYEz9/9g4UuULI96x96gznJD3c79k/yE2MfTFmypto6TKPHXnn/c9tQ3h5G52KlOneVDcCGi6mrzU2g==
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.21/f3e68b45c46ec747eb52a29830910c2865b16015#f3e68b45c46ec747eb52a29830910c2865b16015"
+  integrity sha512-5i8wNKeRDAaec0+GCdSNrx434orG3m/7UY+KR79nX6mGV+AvsQVaaMlqAYuSBl760SC4RSF0OtckztnbkWmq6A==
   dependencies:
     "@aws-sdk/client-cognito-identity" "^3.17.0"
     "@aws-sdk/client-s3" "^3.17.0"
