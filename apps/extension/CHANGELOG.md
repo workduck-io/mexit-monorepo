@@ -1,5 +1,11 @@
 # mexit
 
+## 0.16.0
+
+### Minor Changes
+
+- e2c0f573: Better mechanism for pasting snippets. Also screenshot action with cropping.
+
 ## 0.15.0
 
 ### Minor Changes

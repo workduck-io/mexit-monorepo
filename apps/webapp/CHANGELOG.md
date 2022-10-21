@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.1
+
+### Patch Changes
+
+- e2c0f573: Better mechanism for pasting snippets. Also screenshot action with cropping.
+
 ## 0.19.0
 
 ### Minor Changes
