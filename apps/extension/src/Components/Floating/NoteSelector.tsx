@@ -1,102 +1,18 @@
-import useDataStore from '../../Stores/useDataStore'
-import React, { cloneElement, useEffect, useMemo, useState } from 'react'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { debounce } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
+import useDataStore from '../../Stores/useDataStore'
 
-import {
-  useFloating,
-  useInteractions,
-  useClick,
-  useListNavigation,
-  useRole,
-  useDismiss,
-  useId,
-  FloatingPortal,
-  FloatingOverlay,
-  FloatingFocusManager
-} from '@floating-ui/react-dom-interactions'
-import { mergeRefs } from 'react-merge-refs'
-import { SidebarListFilter, Input } from '@mexit/shared'
-import { fuzzySearch, mog } from '@mexit/core'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
-import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
-import { tinykeys } from '@workduck-io/tinykeys'
+import { fuzzySearch } from '@mexit/core'
+import { Input, SidebarListFilter } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-
-interface Props {
-  open?: boolean
-  render: (props: { close: () => void; labelId: string; descriptionId: string }) => React.ReactNode
-  children?: JSX.Element
-  root?: HTMLElement
-}
-
-export const Dialog = ({ render, root, open: passedOpen = false, children }: Props) => {
-  const [open, setOpen] = useState(passedOpen)
-
-  const { reference, floating, context } = useFloating({
-    open,
-    onOpenChange: setOpen
-  })
-
-  const id = useId()
-  const labelId = `${id}-label`
-  const descriptionId = `${id}-description`
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    useClick(context),
-    useRole(context)
-    // useDismiss(context)
-  ])
-
-  useEffect(() => {
-    if (passedOpen !== open) {
-      setOpen(passedOpen)
-    }
-  }, [passedOpen])
-
-  // Preserve the consumer's ref
-  const ref = useMemo(
-    () => mergeRefs(children ? [reference, (children as any).ref] : [reference]),
-    [reference, children]
-  )
-
-  return (
-    <>
-      {children && cloneElement(children, getReferenceProps({ ref, ...children.props }))}
-      <FloatingPortal root={root}>
-        {open && (
-          <FloatingOverlay
-            lockScroll
-            style={{
-              display: 'grid',
-              placeItems: 'center',
-              background: 'rgba(0, 0, 0, 0.9)'
-            }}
-          >
-            <FloatingFocusManager context={context}>
-              <div
-                ref={floating}
-                className="Dialog"
-                aria-labelledby={labelId}
-                aria-describedby={descriptionId}
-                {...getFloatingProps()}
-              >
-                {render({
-                  close: () => setOpen(false),
-                  labelId,
-                  descriptionId
-                })}
-              </div>
-            </FloatingFocusManager>
-          </FloatingOverlay>
-        )}
-      </FloatingPortal>
-    </>
-  )
-}
+import { Dialog } from './Dialog'
+import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
 
 interface NoteSelectorProps {
   root?: HTMLElement
