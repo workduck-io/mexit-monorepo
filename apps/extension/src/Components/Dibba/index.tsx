@@ -201,6 +201,19 @@ export default function Dibba() {
         triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
       )
       triggerRange.deleteContents()
+
+      const inputEvent = new InputEvent('input', {
+        bubbles: true,
+        cancelable: false
+      })
+
+      const changeEvent = new Event('change', {
+        bubbles: true,
+        cancelable: false
+      })
+
+      document.activeElement.dispatchEvent(inputEvent)
+      document.activeElement.dispatchEvent(changeEvent)
     } catch (error) {
       console.log(error)
     }
@@ -257,6 +270,7 @@ export default function Dibba() {
         setDibbaState({ visualState: VisualState.hidden })
       } else if (['Tab', 'Enter', ' ', ']'].includes(event.key)) {
         event.preventDefault()
+        event.stopPropagation()
 
         handleClick(results[activeIndex])
       }
@@ -356,7 +370,7 @@ export default function Dibba() {
       {listItem?.content && (
         <ComboSeperator>
           <section>
-            <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} />
+            <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} readOnly={true} />
           </section>
         </ComboSeperator>
       )}
