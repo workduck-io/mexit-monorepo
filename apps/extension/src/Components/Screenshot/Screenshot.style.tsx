@@ -8,7 +8,7 @@ export const ImageEditorWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
   flex-grow: 1;
-  padding: ${({ theme }) => theme.spacing.medium};
+  width: 100%;
 `
 
 export const ImageEditorToolbar = styled.div`
@@ -24,7 +24,7 @@ export const ImageEditorToolbar = styled.div`
 export const Controls = styled.div`
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.large};
+  gap: ${({ theme }) => theme.spacing.medium};
   align-items: center;
 `
 
@@ -39,8 +39,8 @@ export const ViewToggle = styled.div`
   padding: ${({ theme }) => theme.spacing.tiny};
 
   ${Button} {
-    padding: ${({ theme }) => theme.spacing.small};
-    font-size: 1.25rem !important;
+    padding: ${({ theme }) => `${theme.spacing.small}`};
+    font-size: 0.9rem !important;
     gap: ${({ theme }) => theme.spacing.tiny};
     &.active {
       background: ${({ theme }) => theme.colors.primary};
@@ -53,6 +53,7 @@ export const RangeControlWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
+  user-select: none;
 
   background: ${({ theme }) => theme.colors.gray[9]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -65,12 +66,12 @@ export const RangeControlWrapper = styled.div`
     color: ${({ theme }) => theme.colors.text.fade};
 
     svg {
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 1.25rem;
+      height: 1.25rem;
     }
   }
   input[type='range'] {
-    width: 8rem;
+    width: 5rem;
     -webkit-appearance: none !important;
     background: ${({ theme }) => theme.colors.gray[6]};
     height: 4px;
@@ -87,7 +88,7 @@ export const RangeControlWrapper = styled.div`
 
 export const RangeValue = styled.div`
   color: ${({ theme }) => theme.colors.primary};
-  width: 3.25rem;
+  width: 2rem;
 `
 
 export const ToggleAndSubmit = styled.div`
@@ -392,7 +393,7 @@ export const ImageEditorMain = styled.div<ImageEditState>`
  */
 export const SpotlightScreenshotWrapper = styled.div`
   display: flex;
-  margin-top: -${({ theme }) => theme.spacing.medium};
+  width: 100%;
   ${ImageContent} {
     max-height: 100%;
     overflow: auto;

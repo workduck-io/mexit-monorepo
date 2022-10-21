@@ -300,6 +300,7 @@ function blobToBase64(blob: Blob) {
 export const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
+  const resetSpotlitState = useSputlitStore((store) => store.reset)
   const [isSaving, setIsSaving] = useState(false)
   const [base64, setBase64] = useState<string | undefined>(undefined)
   const floatingPortalRef = useRef<HTMLDivElement>(null)
@@ -337,7 +338,10 @@ export const Screenshot = () => {
       )
     }
     setIsSaving(false)
+    resetSpotlitState()
   }
+
+  mog('Screenshot', { isSaving })
 
   return (
     <SpotlightScreenshotWrapper>
@@ -353,6 +357,7 @@ export const Screenshot = () => {
         <NoteSelector
           selectionMessage="Select a note to save the screenshot to"
           root={floatingPortalRef.current}
+          open={isSaving}
           onSelect={(nodeid) => {
             mog('onSelect', { nodeid })
             onSelectNote(nodeid)

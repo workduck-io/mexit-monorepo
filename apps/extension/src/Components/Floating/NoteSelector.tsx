@@ -100,13 +100,20 @@ interface NoteSelectorProps {
   selectionMessage?: string
   searchPlaceholder?: string
   onSelect: (nodeid: string) => void
+  open?: boolean
 }
 
-const NoteSelector = ({ root, searchPlaceholder, selectionMessage = 'Select note', onSelect }: NoteSelectorProps) => {
+const NoteSelector = ({
+  root,
+  open: passedOpen,
+  searchPlaceholder,
+  selectionMessage = 'Select note',
+  onSelect
+}: NoteSelectorProps) => {
   const notes = useDataStore((state) => state.ilinks)
   const [filteredNotes, setFilteredNotes] = useState(notes)
   const [search, setSearch] = useState('')
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(passedOpen)
   const [selected, setSelected] = useState(-1)
 
   const selectedRef = React.useRef<HTMLDivElement>(null)
@@ -130,6 +137,12 @@ const NoteSelector = ({ root, searchPlaceholder, selectionMessage = 'Select note
     onSelect(id)
     setOpen(false)
   }
+
+  useEffect(() => {
+    if (passedOpen !== open) {
+      setOpen(passedOpen)
+    }
+  }, [passedOpen])
 
   useEffect(() => {
     if (inputRef.current) {
