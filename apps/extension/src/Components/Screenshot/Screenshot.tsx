@@ -322,46 +322,42 @@ export const Screenshot = () => {
   const onSelectNote = (nodeid: string) => {
     setScreenshotState('saving')
     // Append screenshot to the note
-    if (base64) {
-      chrome.runtime.sendMessage(
-        {
-          type: 'ASYNC_ACTION_HANDLER',
-          subType: 'UPLOAD_IMAGE',
-          data: {
-            workspaceId: workspaceDetails.id,
-            base64
+    try {
+      if (base64) {
+        chrome.runtime.sendMessage(
+          {
+            type: 'ASYNC_ACTION_HANDLER',
+            subType: 'UPLOAD_IMAGE',
+            data: {
+              workspaceId: workspaceDetails.id,
+              base64
+            }
+          },
+          (response) => {
+            const { message, error } = response
+            if (error) {
+              console.error(error)
+              resetSpotlitState()
+            }
+            if (message) {
+              console.log(message)
+              const appendContent = [
+                { type: 'p', children: [{ text: 'Screenshot' }] },
+                { children: [{ text: '' }], type: 'img', url: message },
+                { text: '\n' },
+                { text: '[' },
+                { type: 'a', url: message, children: [{ text: 'Ref' }] },
+                { text: ' ]' }
+              ]
+              appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
+              resetSpotlitState()
+            }
           }
-        },
-        (response) => {
-          const { message, error } = response
-          if (error) {
-            console.error(error)
-            const appendContent = [
-              { type: 'p', children: [{ text: 'Screenshot Had error' }] },
-              { type: 'p', children: [{ text: 'LMAOLOL' }] },
-              { children: [{ text: '' }], type: 'img', url: 'https://i.imgur.com/2kQtqI7.jpeg' }
-            ]
-            console.log('Append and save', { appendContent, nodeid })
-            appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
-            return
-          }
-          if (message) {
-            console.log(message)
-            const appendContent = [
-              { type: 'p', children: [{ text: 'Screenshot' }] },
-              { children: [{ text: '' }], type: 'img', url: message },
-              { text: '\n' },
-              { text: '[' },
-              { type: 'a', url: message, children: [{ text: 'Ref' }] },
-              { text: ' ]' }
-            ]
-            appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
-          }
-        }
-      )
+        )
+      }
+    } catch (error) {
+      resetSpotlitState()
     }
-    setScreenshotState('success')
-    resetSpotlitState()
   }
 
   // mog('Screenshot', { isSaving })
@@ -376,7 +372,7 @@ export const Screenshot = () => {
           onSubmit(blob)
         }}
       />
-      {screenshotState && (
+      {screenshotState && screenshotState === 'selecting-note' && (
         <NoteSelector
           selectionMessage="Select a note to save the screenshot to"
           root={floatingPortalRef.current}

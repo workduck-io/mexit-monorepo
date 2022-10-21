@@ -194,14 +194,12 @@ export function useSaveChanges() {
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
-        addHighlightedBlock(nodeid, content)
-        dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
-
         if (notification) {
           toast.success('Saved to Cloud')
         }
 
         if (saveAndExit) {
+          mog('Save and exit NOW')
           setVisualState(VisualState.animatingOut)
           // So that sputlit opens with preview true when it opens the next time
           setPreviewMode(true)

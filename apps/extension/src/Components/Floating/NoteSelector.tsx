@@ -1,5 +1,6 @@
 import useDataStore from '../../Stores/useDataStore'
 import React, { cloneElement, useEffect, useMemo, useState } from 'react'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { debounce } from 'lodash'
 
 import {
@@ -22,6 +23,7 @@ import { Icon } from '@iconify/react'
 import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
 import { tinykeys } from '@workduck-io/tinykeys'
 import { Button } from '@workduck-io/mex-components'
+import { getTitleFromPath } from '../../Hooks/useLinks'
 
 interface Props {
   open?: boolean
@@ -164,19 +166,11 @@ const NoteSelector = ({
           event.stopPropagation()
           // Circular increment
           setSelected((selected + 1) % filteredNotes.length)
-
-          // if (selected < listItems.length - 1) {
-          //   setSelected(selected + 1)
-          // }
         },
         ArrowUp: (event) => {
           event.stopPropagation()
           // Circular decrement with no negative
           setSelected((selected - 1 + filteredNotes.length) % filteredNotes.length)
-          // setSelected((selected - 1) % listItems.length)
-          // if (selected > 0) {
-          //   setSelected(selected - 1)
-          // }
         }
       })
       return () => {
@@ -235,17 +229,18 @@ const NoteSelector = ({
                       selected={selected === index}
                       key={note.nodeid}
                     >
-                      {note.path.slice(0, 40)}
+                      <Icon icon={note.icon ?? fileList2Line} />
+                      {getTitleFromPath( note.path )}
                     </NoteItem>
                   ))
                 ) : (
                   <div className="Dialog__Select__Empty">No notes found</div>
                 )}
               </NoteItemsWrapper>
-            </SelectionList>
             <Button onClick={close} className="Dialog__Close">
               Cancel
             </Button>
+            </SelectionList>
           </>
         )}
       />
