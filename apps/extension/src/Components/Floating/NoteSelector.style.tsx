@@ -38,6 +38,15 @@ export const NoteItem = styled.div<{ selected?: boolean }>`
     color: ${({ theme }) => theme.colors.text.disabled};
   }
 `
+
+export const SelectionList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  max-height: 200px;
+  overflow: auto;
+`
+
 export const NoteItemsWrapper = styled.div`
   max-height: 20rem;
   overflow-y: auto;

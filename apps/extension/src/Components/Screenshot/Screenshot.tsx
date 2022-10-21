@@ -31,6 +31,7 @@ import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { client } from '@workduck-io/dwindle'
 import { Icon } from '@iconify/react'
 import NoteSelector from '../Floating/NoteSelector'
+import { useSaveChanges } from '../../Hooks/useSaveChanges'
 
 const TO_RADIANS = Math.PI / 180
 
@@ -297,13 +298,16 @@ function blobToBase64(blob: Blob) {
   })
 }
 
+type ScreenshotState = 'editing' | 'selecting-note' | 'saving' | 'success'
+
 export const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const resetSpotlitState = useSputlitStore((store) => store.reset)
-  const [isSaving, setIsSaving] = useState(false)
+  const [screenshotState, setScreenshotState] = useState<ScreenshotState>('editing')
   const [base64, setBase64] = useState<string | undefined>(undefined)
   const floatingPortalRef = useRef<HTMLDivElement>(null)
+  const { appendAndSave } = useSaveChanges()
 
   // mog('screenshot', { screenshot })
 
@@ -312,10 +316,11 @@ export const Screenshot = () => {
     // Remove base64 header
     const base64State = base64base?.toString().replace('data:image/png;base64,', '')
     setBase64(base64State)
-    setIsSaving(true)
+    setScreenshotState('selecting-note')
   }
 
   const onSelectNote = (nodeid: string) => {
+    setScreenshotState('saving')
     // Append screenshot to the note
     if (base64) {
       chrome.runtime.sendMessage(
@@ -331,17 +336,35 @@ export const Screenshot = () => {
           const { message, error } = response
           if (error) {
             console.error(error)
+            const appendContent = [
+              { type: 'p', children: [{ text: 'Screenshot Had error' }] },
+              { type: 'p', children: [{ text: 'LMAOLOL' }] },
+              { children: [{ text: '' }], type: 'img', url: 'https://i.imgur.com/2kQtqI7.jpeg' }
+            ]
+            console.log('Append and save', { appendContent, nodeid })
+            appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
             return
           }
-          console.log(message)
+          if (message) {
+            console.log(message)
+            const appendContent = [
+              { type: 'p', children: [{ text: 'Screenshot' }] },
+              { children: [{ text: '' }], type: 'img', url: message },
+              { text: '\n' },
+              { text: '[' },
+              { type: 'a', url: message, children: [{ text: 'Ref' }] },
+              { text: ' ]' }
+            ]
+            appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
+          }
         }
       )
     }
-    setIsSaving(false)
+    setScreenshotState('success')
     resetSpotlitState()
   }
 
-  mog('Screenshot', { isSaving })
+  // mog('Screenshot', { isSaving })
 
   return (
     <SpotlightScreenshotWrapper>
@@ -353,11 +376,11 @@ export const Screenshot = () => {
           onSubmit(blob)
         }}
       />
-      {isSaving && (
+      {screenshotState && (
         <NoteSelector
           selectionMessage="Select a note to save the screenshot to"
           root={floatingPortalRef.current}
-          open={isSaving}
+          open={screenshotState === 'selecting-note'}
           onSelect={(nodeid) => {
             mog('onSelect', { nodeid })
             onSelectNote(nodeid)

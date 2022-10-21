@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
-import { defaultContent, ELEMENT_TAG, mog, QuickLinkType } from '@mexit/core'
+import { ActionType, defaultContent, ELEMENT_TAG, mog, QuickLinkStatus, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
@@ -55,12 +55,6 @@ export default function Content() {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
       }
       // * We'll enable this later
-      // else if (
-      //   (activeItem?.type === ActionType.MAGICAL || activeItem?.type === ActionType.SCREENSHOT) &&
-      //   persistedContent
-      // ) {
-      //   setNodeContent([...content, { children: persistedContent }])
-      // }
       else {
         setNodeContent(content)
       }
@@ -68,6 +62,12 @@ export default function Content() {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
+    // else if (item?.category === QuickLinkType.action && item?.type === ActionType.SCREENSHOT && persistedContent) {
+    // const node = useSputlitStore.getState().node
+    // const content = getContent(node?.nodeid)?.content ?? defaultContent.content
+    // mog('We be setting persistedContent', { content, persistedContent })
+    // setNodeContent([...content, { children: persistedContent }])
+    // }
   }, [activeIndex, results, deserializedContent, selection, persistedContent])
 
   return (

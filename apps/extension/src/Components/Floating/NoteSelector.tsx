@@ -19,7 +19,7 @@ import { SidebarListFilter, Input } from '@mexit/shared'
 import { fuzzySearch, mog } from '@mexit/core'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
-import { NoteItem, NoteItemsWrapper } from './NoteSelector.style'
+import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
 import { tinykeys } from '@workduck-io/tinykeys'
 import { Button } from '@workduck-io/mex-components'
 
@@ -215,7 +215,7 @@ const NoteSelector = ({
         render={({ close, labelId, descriptionId }) => (
           <>
             <h3 id={labelId}>{selectionMessage}</h3>
-            <div>
+            <SelectionList>
               <SidebarListFilter>
                 <Icon icon={searchLine} />
                 <Input
@@ -242,7 +242,7 @@ const NoteSelector = ({
                   <div className="Dialog__Select__Empty">No notes found</div>
                 )}
               </NoteItemsWrapper>
-            </div>
+            </SelectionList>
             <Button onClick={close} className="Dialog__Close">
               Cancel
             </Button>
