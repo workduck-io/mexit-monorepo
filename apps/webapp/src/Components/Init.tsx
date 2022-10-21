@@ -12,10 +12,16 @@ const Init = () => {
 
   useEffect(() => {
     const initUserAndApp = () => {
-      initCognito({
-        UserPoolId: config.cognito.USER_POOL_ID,
-        ClientId: config.cognito.APP_CLIENT_ID
-      })
+      initCognito(
+        {
+          UserPoolId: config.cognito.USER_POOL_ID,
+          ClientId: config.cognito.APP_CLIENT_ID
+        },
+        {
+          identityPoolID: config.cognito.IDENTITY_POOL_ID,
+          CDN_BASE_URL: 'https://cdn.workduck.io'
+        }
+      )
 
       addIconsToIconify()
     }

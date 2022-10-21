@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 
-import { extractMetadata, mog, SEPARATOR } from '@mexit/core'
+import { defaultContent, extractMetadata, ILink, mog, SEPARATOR } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
@@ -14,17 +14,28 @@ import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
+import useDataStore from '../Stores/useDataStore'
+import { getTitleFromPath } from './useLinks'
+
+export interface AppendAndSaveProps {
+  nodeid: string
+  content: any[]
+  saveAndExit?: boolean
+  notification?: boolean
+}
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { setPreviewMode, nodeContent } = useEditorContext()
+  const { setPreviewMode, nodeContent, setNodeContent } = useEditorContext()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
   const { setVisualState } = useSputlitContext()
+  const setNode = useSputlitStore((s) => s.setNode)
   const setSelection = useSputlitStore((s) => s.setSelection)
 
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
-  const { setContent } = useContentStore()
+  const { ilinks, sharedNodes } = useDataStore()
+  const { getContent, setContent } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
@@ -97,6 +108,7 @@ export function useSaveChanges() {
       toast.success('Saved')
     }
 
+    // mog('Request and things', { request, node, nodeContent, editorState })
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
 
@@ -128,7 +140,76 @@ export function useSaveChanges() {
     })
   }
 
+  const appendAndSave = ({ nodeid, content: toAppendContent, saveAndExit, notification }: AppendAndSaveProps) => {
+    const node = isSharedNode(nodeid)
+      ? sharedNodes.find((i) => i.nodeid === nodeid)
+      : ilinks.find((i) => i.nodeid === nodeid)
+
+    const namespace = getNamespaceOfNodeid(node.nodeid)
+
+    setNode({
+      id: node.nodeid,
+      title: node.path.split(SEPARATOR).slice(-1)[0],
+      path: node.path,
+      nodeid: node.nodeid,
+      namespace: namespace.id
+    })
+    const storeContent = getContent(node?.nodeid)?.content ?? defaultContent.content
+    // mog('We be setting persistedContent', { toAppendContent, storeContent })
+    const content = [...storeContent, ...toAppendContent]
+    // setNodeContent([...storeContent, ...content])
+    const request = {
+      type: 'CAPTURE_HANDLER',
+      subType: 'SAVE_NODE',
+      data: {
+        id: node.nodeid,
+        title: getTitleFromPath(node.path),
+        content,
+        workspaceID: workspaceDetails.id,
+        namespaceID: namespace.id,
+        metadata: {}
+      }
+    }
+
+    setContent(node.nodeid, content)
+
+    setSelection(undefined)
+    addRecent(node.nodeid)
+    setActiveItem()
+    // mog('Request and things', { request, node, nodeContent, content })
+    // TODO: Merge this with the savit request call. DRY
+    chrome.runtime.sendMessage(request, (response) => {
+      const { message, error } = response
+
+      if (error && notification) {
+        toast.error('An Error Occured. Please try again.')
+      } else {
+        // mog('Response and things', { response })
+        const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
+        const nodeid = !bulkCreateRequest ? message.id : message.node.id
+        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
+
+        dispatch('ADD_RECENT_NODE', nodeid)
+
+        dispatch('SET_CONTENT', nodeid, content, metadata)
+
+        if (notification) {
+          toast.success('Saved to Cloud')
+        }
+
+        if (saveAndExit) {
+          mog('Save and exit NOW')
+          setVisualState(VisualState.animatingOut)
+          // So that sputlit opens with preview true when it opens the next time
+          setPreviewMode(true)
+        }
+      }
+    })
+  }
+
   return {
-    saveIt
+    saveIt,
+    appendAndSave
   }
 }

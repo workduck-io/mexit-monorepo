@@ -4,7 +4,7 @@ import { findIndex, groupBy } from 'lodash'
 import { useSpring } from 'react-spring'
 import { useVirtual } from 'react-virtual'
 
-import { ActionType, QuickLinkType } from '@mexit/core'
+import { ActionType, mog, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
@@ -15,6 +15,7 @@ import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Action from '../Action'
 import Renderer from '../Renderer'
 import { List, ListItem, StyledResults, Subtitle } from './styled'
+import { Screenshot } from '../Screenshot/Screenshot'
 
 function Results() {
   const { activeIndex, setActiveIndex } = useSputlitContext()
@@ -120,7 +121,12 @@ function Results() {
         event.preventDefault()
         const item = results[activeIndex]
         execute(item, event.metaKey)
-      } else if (event.key === 'Backspace' && activeItem && input === '') {
+      } else if (
+        event.key === 'Backspace' &&
+        activeItem &&
+        activeItem?.type !== ActionType.SCREENSHOT &&
+        input === ''
+      ) {
         resetSpotlitState()
       }
     }
@@ -144,8 +150,10 @@ function Results() {
     execute(item)
   }
 
+  // mog('rendering results', { activeItem, results })
+
   return (
-    <StyledResults style={springProps}>
+    <StyledResults isScreenshot={activeItem?.type === ActionType.SCREENSHOT} style={springProps}>
       <List ref={parentRef}>
         <div style={{ height: rowVirtualizer.totalSize }}>
           {rowVirtualizer.virtualItems.map((virtualRow) => {
@@ -180,6 +188,7 @@ function Results() {
       </List>
 
       {activeItem?.type === ActionType.RENDER && <Renderer />}
+      {activeItem?.type === ActionType.SCREENSHOT && <Screenshot />}
     </StyledResults>
   )
 }

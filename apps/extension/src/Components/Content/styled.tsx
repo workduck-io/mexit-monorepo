@@ -4,5 +4,4 @@ export const StyledContent = styled.div`
   display: flex;
   padding: 0.75em;
   min-height: fit-content;
-  max-height: 300px;
 `

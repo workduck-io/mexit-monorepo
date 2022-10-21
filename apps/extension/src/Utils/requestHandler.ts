@@ -1,4 +1,4 @@
-import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
+import { apiURLs, defaultContent, ListItemType, mog } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 import client from './fetchClient'
@@ -7,7 +7,7 @@ import { serializeContent } from './serializer'
 export const handleCaptureRequest = ({ subType, data }) => {
   switch (subType) {
     case 'SAVE_NODE': {
-      const elementMetadata = data.metadata.saveableRange
+      const elementMetadata = data.metadata?.saveableRange
         ? {
             saveableRange: data.metadata?.saveableRange,
             sourceUrl: data.metadata?.sourceUrl
@@ -35,7 +35,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
     case 'BULK_CREATE_NODES': {
-      const elementMetadata = data.metadata.saveableRange
+      const elementMetadata = data.metadata?.saveableRange
         ? {
             saveableRange: data.metadata?.saveableRange,
             sourceUrl: data.metadata?.sourceUrl
@@ -176,30 +176,39 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
           return { message: null, error: error }
         })
     }
+
+    /**
+     * Action captures the current tab screenshot and returns the base64 encoded image
+     */
     case 'CAPTURE_VISIBLE_TAB': {
       return chrome.tabs
         .captureVisibleTab()
         .then((img) => {
-          const parsedImage = img.split(',')[1]
-          return client
-            .post(
-              apiURLs.createImageLink,
-              {
-                encodedString: parsedImage
-              },
-              {
-                headers: {
-                  'workspace-id': data.workspaceId
-                }
-              }
-            )
-            .then((resp) => resp.data)
-            .then((path: string) => {
-              return { message: apiURLs.getImagePublicLink(path), error: null }
-            })
-            .catch((error) => {
-              return { message: null, error: error }
-            })
+          // const parsedImage = img.split(',')[1]
+          // mog('MOG_IMAGE', { imgBase64: parsedImage })
+          return { message: img, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+
+    /**
+     * Action uploads the image to the server and returns the public link
+     * data should be base64 encoded string of screenshot without the frontmatter
+     */
+    case 'UPLOAD_IMAGE': {
+      return client
+        .post(
+          apiURLs.createImageLink,
+          { encodedString: data.base64 },
+          {
+            headers: { 'workspace-id': data.workspaceId }
+          }
+        )
+        .then((resp) => resp.data)
+        .then((path: string) => {
+          return { message: apiURLs.getImagePublicLink(path), error: null }
         })
         .catch((error) => {
           return { message: null, error: error }

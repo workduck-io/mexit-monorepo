@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import { QuickLinkType, ActionType } from '@mexit/core'
+import { QuickLinkType, ActionType, mog } from '@mexit/core'
 
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useHighlighter } from '../../Hooks/useHighlighter'
@@ -120,6 +120,8 @@ const Sputlit = () => {
       }
     }
   }, [visualState])
+
+  // mog('Sputlit', { visualState, activeItem, isExternalSearchAction })
 
   return (
     <SputlitContainer id="sputlit-container">

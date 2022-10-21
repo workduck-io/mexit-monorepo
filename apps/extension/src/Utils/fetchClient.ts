@@ -1,9 +1,10 @@
-import axios from 'axios'
 import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js'
+import axios from 'axios'
+
+import { wrapErr } from '@mexit/core'
 
 import useAuthStore from '../Hooks/useAuthStore'
-import { wrapErr } from '@mexit/core'
 
 const client = axios.create({
   adapter: fetchAdapter
@@ -36,7 +37,13 @@ const refreshToken = () => {
                 const payload = session.getAccessToken().payload
                 const expiry = session.getAccessToken().getExpiration()
                 useAuthStore.setState({
-                  userCred: { email: userCred.email, url: userCred.url, token, expiry, userId: payload.sub }
+                  userCred: {
+                    email: userCred.email,
+                    url: userCred.url,
+                    token,
+                    expiry,
+                    userId: payload.sub
+                  }
                 })
               }
             })

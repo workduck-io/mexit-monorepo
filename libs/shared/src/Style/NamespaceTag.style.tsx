@@ -1,7 +1,13 @@
 import styled, { css } from 'styled-components'
 
 import { IconWrapper } from './IconPicker.style'
-import { Ellipsis } from './NodeSelect.style'
+// import { Ellipsis } from './NodeSelect.style'
+
+const Ellipsis = css`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
 
 export const NamespaceText = styled.span`
   min-width: 4rem;

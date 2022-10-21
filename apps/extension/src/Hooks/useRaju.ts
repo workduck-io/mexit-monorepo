@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import { addMinutes } from 'date-fns'
 import { connectToChild, Methods } from 'penpal'
 
+import { useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
+
 import {
   Contents,
   idxKey,
@@ -47,6 +49,7 @@ export interface ParentMethods {
   ADD_RECENT_NODE: (nodeId: string) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
   ADD_HIGHLIGHTED_BLOCK: (nodeid: string, content: NodeEditorContent) => void
+  UPLOAD_IMAGE_TO_S3: (base64string: string) => Promise<string>
 }
 
 const IFRAME_ID = 'something-nothing'
@@ -64,6 +67,8 @@ export default function useRaju() {
   const setTheme = useThemeStore((store) => store.setTheme)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
+  const setUserPool = useDwindleAuthStore((store) => store.setUserPool)
+  const setUserCred = useDwindleAuthStore((store) => store.setUserCred)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setNamespaces = useDataStore((store) => store.setNamespaces)
@@ -119,7 +124,7 @@ export default function useRaju() {
     bootTheme(theme: Theme) {
       setTheme(theme)
     },
-    bootDwindle(authAWS: any) {
+    bootDwindle(authAWS: { userPool; userCred }) {
       setInternalAuthStore(authAWS)
     },
     bootRecents(recents: Array<string>) {
@@ -211,6 +216,12 @@ export default function useRaju() {
         return child.search(...params).then((result) => {
           return result
         })
+      case 'UPLOAD_IMAGE_TO_S3': {
+        return child.uploadImageToS3Dwindle(...params).then((result) => {
+          mog('UploadImageToS3', { result })
+          return result
+        })
+      }
     }
   }
 
