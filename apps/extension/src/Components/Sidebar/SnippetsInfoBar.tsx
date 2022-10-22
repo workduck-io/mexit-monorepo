@@ -2,18 +2,30 @@ import React, { useRef, useState, useEffect } from 'react'
 
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
+import toast from 'react-hot-toast'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { mog, Snippet } from '@mexit/core'
+import {
+  convertToCopySnippet,
+  defaultCopyConverter,
+  defaultCopyFilter,
+  ELEMENT_TAG,
+  mog,
+  parseSnippet,
+  Snippet
+} from '@mexit/core'
 import { SnippetCards, Input, SidebarListFilter, SidebarListFilterWrapper, SnippetSidebarHelp } from '@mexit/shared'
 
+import { CopyTag } from '../../Editor/components/Tags/CopyTag'
+import getPlugins from '../../Editor/plugins/index'
 import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import { getElementById } from '../../contentScript'
-import { copySnippetToClipboard } from '../Dibba'
 import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {
@@ -28,10 +40,65 @@ export const SnippetsInfoBar = () => {
     setSearch(e.target.value)
   }
 
-  const onInsertSnippet = (snippetId: string) => {
+  const onInsertSnippet = async (snippetId: string) => {
     const snippet = getSnippet(snippetId)
+    const originMatch = supportedDomains[window.location.origin]
 
-    copySnippetToClipboard(snippet)
+    if (originMatch) {
+      toast.loading('Click where you want to insert the snippet')
+
+      window.addEventListener(
+        'click',
+        (event) => {
+          const element = event.target
+          const range = window.getSelection().getRangeAt(0)
+
+          mog('check', { element, range })
+          if (originMatch === 'html') {
+            const filterdContent = convertToCopySnippet(snippet.content)
+            const convertedContent = convertToCopySnippet(filterdContent, {
+              filter: defaultCopyFilter,
+              converter: defaultCopyConverter
+            })
+
+            const tempEditor = createPlateEditor({
+              plugins: getPlugins(
+                createPlateUI({
+                  [ELEMENT_TAG]: CopyTag as any
+                }),
+                {
+                  exclude: { dnd: true }
+                }
+              )
+            })
+
+            const html = serializeHtml(tempEditor, {
+              nodes: convertedContent
+            })
+
+            const node = new DOMParser().parseFromString(html, 'text/html').body
+            range.insertNode(node)
+            range.collapse(false)
+
+            // Combining the inserted text node into one
+            document.activeElement.normalize()
+            simulateOnChange()
+          } else if (originMatch === 'plain') {
+            range.insertNode(document.createTextNode(parseSnippet(snippet).text))
+            range.collapse(false)
+
+            // Combining the inserted text node into one
+            document.activeElement.normalize()
+            simulateOnChange()
+          }
+
+          toast.dismiss()
+        },
+        { once: true }
+      )
+    } else {
+      await copySnippetToClipboard(snippet)
+    }
   }
 
   const onSearch = async (newSearchTerm: string) => {

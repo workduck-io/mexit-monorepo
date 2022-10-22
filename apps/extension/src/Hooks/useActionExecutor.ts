@@ -16,11 +16,11 @@ import {
   SingleNamespace
 } from '@mexit/core'
 
-import { copySnippetToClipboard } from '../Components/Dibba'
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
+import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useNamespaces } from './useNamespaces'

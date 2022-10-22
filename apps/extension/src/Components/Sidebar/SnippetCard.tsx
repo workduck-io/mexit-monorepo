@@ -41,14 +41,17 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
   // const { getLastUsed } = useLastUsedSnippets()
   // const { push } = useNavigation()
 
-  const onClickProps = (ev) => {
+  const onClickProps = (ev: any) => {
     ev.preventDefault()
+    ev.stopPropagation()
 
-    if (onClick && !visible) {
+    // TODO: commenting this our for a while, need to have better click and hover interaction
+    if (onClick) {
       onClick(ev)
-    } else {
-      window.open(`${MEXIT_FRONTEND_URL_BASE}/snippets/node/${snippet.id}`)
     }
+    // else {
+    //   window.open(`${MEXIT_FRONTEND_URL_BASE}/snippets/node/${snippet.id}`)
+    // }
 
     if (!visible) {
       setVisible(true)
@@ -92,8 +95,8 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       snippetId={snippet.id}
       placement="left"
     >
-      <SnippetCardWrapper>
-        <SnippetCardHeader onClick={(e) => onClickProps(e)}>
+      <SnippetCardWrapper onClick={(e) => onClickProps(e)}>
+        <SnippetCardHeader>
           <Icon icon={snippet.template ? magicLine : quillPenLine} />
           {snippet.title}
         </SnippetCardHeader>
