@@ -16,6 +16,7 @@ import { getEmailStart } from '../Utils/constants'
 import { useApiStore } from './useApiStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
+import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
@@ -42,6 +43,7 @@ export const useAuthentication = () => {
   const clearRecents = useRecentsStore().clear
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
+  const resetShortcuts = useHelpStore((s) => s.reset)
 
   const login = async (email: string, password: string): Promise<LoginResult> => {
     const loginResult = await signIn(email, password)
@@ -92,6 +94,7 @@ export const useAuthentication = () => {
     clearRecents()
     clearReminders()
     updateSnippets([])
+    resetShortcuts()
     clearTodos()
   }
 

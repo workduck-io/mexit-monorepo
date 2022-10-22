@@ -1,177 +1,114 @@
-import { useEffect, useCallback, useMemo } from 'react'
+import { useEffect } from 'react'
 
-import { MiscKeys, ShortcutListner, Key, mog } from '@mexit/core'
-import {
-  MenuItemClassName,
-  MenuClassName,
-  RootMenuClassName,
-  MenuFilterInputClassName,
-  AddTagClassName
-} from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
 
-import useMultipleEditors from '../Stores/useEditorsStore'
-import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import useModalStore from '../Stores/useModalStore'
-import { useShortcutStore } from './useShortcutStore'
+import { blurEditableElement, isOnEditableElement } from '@mexit/shared'
 
-export const usePlatformInfo = () =>
-  useMemo(
-    () => (typeof navigator === 'object' && /Mac|iPod|iPhone|iPad/.test(navigator.platform) ? 'Meta' : 'Control'),
-    []
-  )
+import { useDataStore } from '../Stores/useDataStore'
+import { useEditorStore } from '../Stores/useEditorStore'
+import { useHelpStore } from '../Stores/useHelpStore'
+import { useKeyListener } from './useChangeShortcutListener'
+import { getNodeidFromPathAndLinks } from './useLinks'
+import useLoad from './useLoad'
+import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 
-export const getKey = (name: string, alias?: string): Key => {
-  return {
-    name,
-    code: name,
-    alias: alias ?? name,
-    isModifier: true,
-    modifiers: []
-  }
-}
+export const useShortcutListener = () => {
+  const { goTo } = useRouting()
+  const { loadNode } = useLoad()
+  const { shortcutHandler, shortcutDisabled } = useKeyListener()
+  const shortcuts = useHelpStore((s) => s.shortcuts)
 
-const useShortcutListener = (): ShortcutListner => {
-  const shortcut = useShortcutStore((state) => state.keybinding)
-  const setEditMode = useShortcutStore((state) => state.setEditMode)
-  const setWithModifier = useShortcutStore((state) => state.setWithModifier)
-  const addInKeystrokes = useShortcutStore((state) => state.addInKeystrokes)
-  const changeShortcut = useHelpStore((state) => state.changeShortcut)
-  const currentShortcut = useShortcutStore((state) => state.currentShortcut)
-
-  // const { trackEvent } = useAnalytics()
-
-  const MOD = usePlatformInfo()
-
-  const getKeyModifiers = (event: KeyboardEvent): Array<Key> => {
-    const modifiers = []
-    if (event.metaKey) modifiers.push(getKey(MOD, '$mod'))
-    if (event.ctrlKey) modifiers.push(getKey('Control'))
-    if (event.shiftKey) modifiers.push(getKey('Shift'))
-    if (event.altKey) modifiers.push(getKey('Alt'))
-
-    return modifiers
-  }
-
-  const pressedWithModifier = (event: KeyboardEvent) => {
-    return event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
-  }
-
-  const onKeyUp = useCallback((event: KeyboardEvent) => {
-    const withModifier = pressedWithModifier(event)
-
-    if (!withModifier) setWithModifier(false)
-  }, [])
-
-  const onKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        if (shortcut.key.length > 0) {
-          changeShortcut({
-            ...currentShortcut,
-            keystrokes: shortcut.key.trim()
-          })
-          // trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.CHANGE, 'Shortcut'), {
-          //   from: currentShortcut.keystrokes,
-          //   to: shortcut.key.trim()
-          // })
-          setEditMode(false)
-        }
-        return
-      }
-
-      const key: Key = {
-        name: MiscKeys[event.code] ?? event.key,
-        code: event.code,
-        alias: MiscKeys[event.code] ?? event.code,
-        isModifier: pressedWithModifier(event),
-        modifiers: getKeyModifiers(event)
-      }
-
-      mog('key', { key })
-      addInKeystrokes(key)
-    },
-    [currentShortcut, shortcut]
-  )
+  const ilinks = useDataStore((s) => s.ilinks)
 
   useEffect(() => {
-    window.addEventListener('keyup', onKeyUp)
-    window.addEventListener('keydown', onKeyDown)
+    const unsubscribe = tinykeys(window, {
+      Escape: (event: any) => {
+        if (isOnEditableElement(event)) {
+          blurEditableElement(event.target)
+        }
+      },
+      [shortcuts.showSnippets.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showSnippets, () => {
+            goTo(ROUTE_PATHS.snippets, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showIntegrations.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showIntegrations, () => {
+            goTo(ROUTE_PATHS.integrations, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showEditor.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showEditor, () => {
+            const node = useEditorStore.getState().node
+            if (node.nodeid === '__null__') {
+              const baseNodeId = getNodeidFromPathAndLinks(ilinks, node.path, node.namespace)
+              loadNode(baseNodeId)
+            }
 
+            loadNode(node.nodeid)
+            goTo(ROUTE_PATHS.node, NavigationType.push, node.nodeid)
+          })
+        }
+      },
+      [shortcuts.showTasks.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showEditor, () => {
+            goTo(ROUTE_PATHS.tasks, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showReminder.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showReminder, () => {
+            goTo(ROUTE_PATHS.reminders, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.goToLinks.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.goToLinks, () => {
+            goTo(ROUTE_PATHS.links, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showArchive.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showArchive, () => {
+            goTo(ROUTE_PATHS.archive, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showSearch.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showSearch, () => {
+            goTo(ROUTE_PATHS.search, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showSettings.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showSettings, () => {
+            goTo(`${ROUTE_PATHS.settings}/about`, NavigationType.push)
+          })
+        }
+      }
+    })
     return () => {
-      window.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('keyup', onKeyUp)
+      unsubscribe()
     }
-  }, [onKeyDown, onKeyUp])
-
-  return { shortcut }
-}
-
-export const useKeyListener = () => {
-  const shortcutDisabled = useShortcutStore((state) => state.editMode)
-  // const { trackEvent } = useAnalytics()
-
-  const shortcutHandler = (shortcut: Shortcut, callback: any) => {
-    const showLoader = useLayoutStore.getState().showLoader
-    const isModalOpen = !!useModalStore.getState().open
-    if (!shortcutDisabled && !shortcut.disabled && !showLoader && !isModalOpen) {
-      // trackEvent(getEventNameFromElement('Shortcut Settings', ActionType.KEY_PRESS, 'Shortcut'), shortcut)
-      callback()
-    }
-  }
-
-  return { shortcutDisabled, shortcutHandler }
-}
-
-export default useShortcutListener
-
-const MEX_KEYBOARD_IGNORE_CLASSES = {
-  all: ['mex-search-input', 'FilterInput', MenuItemClassName, MenuClassName, RootMenuClassName],
-  input: ['mex-search-input', 'FilterInput', MenuFilterInputClassName],
-  dropdown: [MenuItemClassName, MenuClassName, RootMenuClassName, AddTagClassName]
-}
-
-type IgnoreClasses = 'all' | 'input' | 'dropdown'
-interface LocalSkipOptions {
-  ignoreClasses?: IgnoreClasses
-  skipLocal?: boolean
-}
-
-export const useEnableShortcutHandler = () => {
-  const isEditingPreview = useMultipleEditors((store) => store.isEditingAnyPreview)
-
-  const isOnElementClass = (ignoreClasses?: IgnoreClasses) => {
-    const allIgnore: IgnoreClasses = ignoreClasses ?? 'all'
-    const classesToIgnore = MEX_KEYBOARD_IGNORE_CLASSES[allIgnore]
-    const fElement = document.activeElement as HTMLElement
-    const ignoredInputTags =
-      ignoreClasses === 'input' || ignoreClasses === 'all'
-        ? fElement.tagName === 'INPUT' || fElement.tagName === 'TEXTAREA'
-        : false
-
-    // mog('fElement', {
-    //   ignoreClasses,
-    //   hasClass: classesToIgnore.some((c) => fElement.classList.contains(c)),
-    //   ignoredInputTags,
-    //   cl: fElement.classList,
-    //   tagName: fElement.tagName
-    // })
-
-    return fElement && (ignoredInputTags || classesToIgnore.some((c) => fElement.classList.contains(c)))
-  }
-
-  const enableShortcutHandler = (callback: () => void, options?: LocalSkipOptions) => {
-    const allOp = options ?? {
-      ignoreClasses: 'all',
-      skipLocal: false
-    }
-    // mog('enableShortcutHandler', { allOp, isEditingPreview, isOnSearchFilter: isOnElementClass(allOp.ignoreClasses) })
-    if (isEditingPreview() || !useMultipleEditors.getState().editors) return
-
-    if (!allOp.skipLocal && isOnElementClass(allOp.ignoreClasses)) return
-
-    callback()
-  }
-
-  return { enableShortcutHandler }
+  }, [shortcuts, shortcutDisabled, ilinks])
 }

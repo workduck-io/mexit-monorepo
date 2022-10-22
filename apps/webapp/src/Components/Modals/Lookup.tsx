@@ -5,14 +5,14 @@ import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, QuickLinkType } from '@mexit/core'
-import { Input, StyledInputWrapper } from '@mexit/shared'
+import { QuickLinkType } from '@mexit/core'
+import { blurEditableElement, Input, StyledInputWrapper } from '@mexit/shared'
 import { StyledCombobox } from '@mexit/shared'
 
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
@@ -72,9 +72,12 @@ const Lookup = () => {
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
-      [shortcuts.showLookup.keystrokes]: (event) => {
+      [shortcuts.showLookup.keystrokes]: (event: any) => {
         event.preventDefault()
+        event.stopPropagation()
+
         shortcutHandler(shortcuts.showLookup, () => {
+          blurEditableElement(event.target)
           openModal()
         })
       }

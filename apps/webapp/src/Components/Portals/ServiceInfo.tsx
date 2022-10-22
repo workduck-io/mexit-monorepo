@@ -9,8 +9,8 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { FloatingIcon, ServiceContainer, GroupHeaderContainer } from '@mexit/shared'
 
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 
 type ServiceInfoProps = {
   children: React.ReactElement

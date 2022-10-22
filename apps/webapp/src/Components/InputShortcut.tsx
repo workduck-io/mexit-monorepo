@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { CenterSpace, Description, Heading } from '@mexit/shared'
 
-import useShortcutListener from '../Hooks/useShortcutListener'
-import { useShortcutStore } from '../Hooks/useShortcutStore'
+import { CenterSpace, Description, Heading } from '@mexit/shared'
 import { InputBlock } from '@mexit/shared'
+
+import useChangeShortcutListener from '../Hooks/useChangeShortcutListener'
+import { useShortcutStore } from '../Hooks/useShortcutStore'
 
 const InputShortcut = () => {
   const keybinding = useShortcutStore((state) => state.keybinding)
@@ -12,7 +13,7 @@ const InputShortcut = () => {
   const currentShortcut = useShortcutStore((state) => state.currentShortcut)
   const resetStore = useShortcutStore((state) => state.resetStore)
 
-  useShortcutListener()
+  useChangeShortcutListener()
 
   useEffect(() => {
     return () => resetStore()

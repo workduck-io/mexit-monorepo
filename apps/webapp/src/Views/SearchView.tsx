@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { idxKey, Filter, Filters, GlobalFilterJoin, mog, SearchFilter } from '@mexit/core'
+import { idxKey, Filter, Filters, GlobalFilterJoin, mog } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -19,8 +19,8 @@ import {
 } from '@mexit/shared'
 
 import SearchIndexInput from '../Components/Search/IndexInput'
-import { useFilters, useFilterStore } from '../Hooks/useFilters'
-import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
+import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
+import { useFilterStore } from '../Hooks/useFilters'
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
 
@@ -37,6 +37,7 @@ export interface RenderPreviewProps<Item> extends RenderSplitProps {
 export interface RenderFilterProps<Item> {
   result: Item[]
 }
+
 // export interface RenderStartCard extends RenderSplitProps {}
 
 export interface RenderItemProps<Item> extends Partial<RenderSplitProps> {
@@ -261,7 +262,7 @@ const SearchView = <Item,>({
       const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
       const filtered = filterResults ? filterResults(initItems) : initItems
       // mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered, initialItems, curIndexGroup })
-      if (filtered.length > 0 || currentFilters.length > 0) {
+      if (filtered?.length > 0 || currentFilters.length > 0) {
         setResult(filtered, newSearchTerm)
       }
     } else {
@@ -314,8 +315,8 @@ const SearchView = <Item,>({
   }, [selected])
 
   const selectNext = () => {
-    const newSelected = (selected + 1) % result.length
-    if (result.length === 0 || (result.length === 1 && selected === newSelected)) return
+    const newSelected = (selected + 1) % result?.length
+    if (result?.length === 0 || (result?.length === 1 && selected === newSelected)) return
     setSelected(newSelected)
   }
 
@@ -345,13 +346,21 @@ const SearchView = <Item,>({
               if (selected > -1) {
                 setSelected(-1)
               }
-            } else {
-              if (currentFilters.length === 0) {
-                onEscapeExit()
-              }
             }
+            // else {
+            //   if (currentFilters.length === 0) {
+            //     onEscapeExit()
+            //   }
+            // }
           }
         })
+      },
+      KeyF: (event) => {
+        if (!RenderFilters) {
+          event.preventDefault()
+
+          inpRef.current?.focus()
+        }
       },
       // Tab: (event) => {
       //   enableShortcutHandler(() => {
@@ -412,7 +421,7 @@ const SearchView = <Item,>({
   const ResultsView = (
     <Results key={`ResultForSearch_${id}`} view={view}>
       {/* {view === View.Card && RenderStartCard && <RenderStartCard />} */}
-      {result.map((c, i) => {
+      {result?.map((c, i) => {
         // mog('item from result', { c, i })
         return (
           <RenderItem
@@ -447,7 +456,7 @@ const SearchView = <Item,>({
             id={`search_nodes_${id}`}
             name="search_nodes"
             tabIndex={-1}
-            placeholder={options?.inputPlaceholder ?? 'Search Anything....'}
+            placeholder={options?.inputPlaceholder ?? 'Find Anything....'}
             type="text"
             defaultValue={searchTerm}
             onChange={debounce((e) => onChange(e), 250)}
@@ -476,15 +485,15 @@ const SearchView = <Item,>({
         />
       </SearchHeader>
 
-      {RenderFilters && filters.length > 0 ? <RenderFilters result={result} /> : null}
+      {RenderFilters && filters?.length > 0 ? <RenderFilters result={result} /> : null}
 
       <ResultsWrapper>
-        {result.length > 0 ? (
+        {result?.length > 0 ? (
           view === View.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
             <SplitView
               id={`SplitViewForSearch_${id}`}
               RenderSplitPreview={(props) => (
-                <RenderPreview {...props} item={selected > -1 ? result[selected] : undefined} />
+                <RenderPreview {...props} item={selected > -1 ? result?.[selected] : undefined} />
               )}
               splitOptions={splitOptions}
             >

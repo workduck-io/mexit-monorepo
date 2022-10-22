@@ -4,11 +4,13 @@ import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
+import { useTheme } from 'styled-components'
 
+import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
-import { Input, SidebarListFilter } from '@mexit/shared'
+import { Input, isOnEditableElement, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { getTitleFromPath } from '../../Hooks/useLinks'
@@ -16,6 +18,7 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
 import { getTreeFromLinks, getPartialTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
 import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
 import Tree from './Tree'
@@ -48,8 +51,10 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
   const { goTo } = useRouting()
   const { createNewNote } = useCreateNewNote()
   const { push } = useNavigation()
+  const theme = useTheme()
 
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 
   const initTree = useMemo(() => getTreeFromLinks(items), [node, items])
 
@@ -105,11 +110,12 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
     if (inputRef.current) {
       const unsubscribe = tinykeys(inputRef.current, {
         Escape: (event) => {
-          event.stopPropagation()
+          // event.stopPropagation()
           reset()
         },
+
         Enter: (event) => {
-          event.stopPropagation()
+          // event.stopPropagation()
           if (selected >= 0) {
             // Select the item
             // const item = listItems[selected]
@@ -120,6 +126,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
         },
         ArrowDown: (event) => {
           event.stopPropagation()
+          event.preventDefault()
           // Circular increment
           const newSelected = (selected + 1) % matchedFlatItems.length
           if (newSelected >= 0) {
@@ -127,6 +134,8 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
           }
         },
         ArrowUp: (event) => {
+          event.preventDefault()
+
           event.stopPropagation()
           // Circular decrement with no negative
           const newSelected = (selected - 1 + matchedFlatItems.length) % matchedFlatItems.length
@@ -135,11 +144,29 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
           }
         }
       })
+
       return () => {
         unsubscribe()
       }
     }
   }, [matchedFlatItems, selected])
+
+  useEffect(() => {
+    if (!inputRef.current?.isContentEditable) {
+      const unsubscribe = tinykeys(window, {
+        Slash: (event) => {
+          if (!isOnEditableElement(event)) {
+            event.preventDefault()
+            expandSidebar()
+
+            if (inputRef) inputRef.current.focus()
+          }
+        }
+      })
+
+      return () => unsubscribe()
+    }
+  }, [])
 
   // mog('Selected', { matchedFlatItems, selected, selectedItem })
 
@@ -153,8 +180,9 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
               placeholder={filterText ?? 'Filter items'}
               onChange={debounce((e) => onSearchChange(e), 250)}
               ref={inputRef}
-            // onKeyUp={debounce(onKeyUpSearch, 250)}
+              // onKeyUp={debounce(onKeyUpSearch, 250)}
             />
+            <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.colors.text.disabled} />
           </SidebarListFilter>
           <SpaceList>
             <Tree

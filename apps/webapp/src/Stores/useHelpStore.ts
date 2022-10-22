@@ -29,6 +29,7 @@ export interface HelpState {
   shortcuts: Record<keyof typeof defaultShortcuts, Shortcut>
   toggleModal: () => void
   closeModal: () => void
+  reset: () => void
 }
 
 export const useHelpStore = create<HelpState>(
@@ -59,7 +60,8 @@ export const useHelpStore = create<HelpState>(
           })
         )
       },
-      shortcuts: defaultShortcuts
+      shortcuts: defaultShortcuts,
+      reset: () => set({ shortcuts: defaultShortcuts })
     }),
     {
       name: 'mexit-help-store',

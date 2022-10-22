@@ -110,8 +110,6 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     // mog('EDITOR ID', { editorId, noteId })
     const searchTerm = isChild ? `${getPathFromNodeid(noteId)}${pathKey}` : pathKey
 
-    mog('data', { data })
-
     const searchItems = fuzzySearch(data, searchTerm || '', (item) => item?.text || '')
 
     const { isExtended, extendedCommands } = getCommandExtended(search.textAfterTrigger, keys)

@@ -9,10 +9,10 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isMatch, isReserved, mog, NodeLink } from '@mexit/core'
 
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'

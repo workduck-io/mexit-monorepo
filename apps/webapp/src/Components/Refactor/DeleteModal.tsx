@@ -10,12 +10,13 @@ import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved, mog, USE_API } from '@mexit/core'
+import { isOnEditableElement } from '@mexit/shared'
 
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLoad from '../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { RefactorPath } from '../../Stores/useRenameStore'
@@ -84,15 +85,17 @@ const Delete = () => {
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.showArchiveModal.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showArchiveModal, () => {
-          const node = useEditorStore.getState().node
-          goTo(ROUTE_PATHS.node, NavigationType.push, node.nodeid)
-          openModal({
-            path: useEditorStore.getState().node.path,
-            namespaceID: useEditorStore.getState().node.namespace
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showArchiveModal, () => {
+            const node = useEditorStore.getState().node
+            goTo(ROUTE_PATHS.node, NavigationType.push, node.nodeid)
+            openModal({
+              path: useEditorStore.getState().node.path,
+              namespaceID: useEditorStore.getState().node.namespace
+            })
           })
-        })
+        }
       },
       '$mod+Enter': (event) => {
         if (open) {

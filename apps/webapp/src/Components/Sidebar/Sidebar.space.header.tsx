@@ -19,6 +19,7 @@ export const SidebarHeaderLite = ({ title, icon }: SidebarHeaderLiteProps) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
   const isUserEdititng = useEditorStore((store) => store.isEditing)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
+
   const focusMode = useLayoutStore((state) => state.focusMode)
   const { getFocusProps } = useLayout()
   return (

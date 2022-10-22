@@ -7,13 +7,13 @@ import styled from 'styled-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
+import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useFetchShareData } from '../Hooks/useFetchShareData'
 import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { usePortals } from '../Hooks/usePortals'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useKeyListener } from '../Hooks/useShortcutListener'
 import { useAnalysis } from '../Stores/useAnalysis'
 import { useAuthStore } from '../Stores/useAuth'
 import useBlockStore from '../Stores/useBlockStore'
@@ -73,56 +73,6 @@ const EditorView = () => {
   const { goTo } = useRouting()
   const { loadNode } = useLoad()
 
-  useEffect(() => {
-    const unsubscribe = tinykeys(window, {
-      [shortcuts.showSnippets.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showSnippets, () => {
-          goTo(ROUTE_PATHS.snippets, NavigationType.push)
-        })
-      },
-      [shortcuts.showEditor.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showEditor, () => {
-          if (node.nodeid === '__null__') {
-            const baseNodeId = getNodeidFromPathAndLinks(ilinks, node.path, node.namespace)
-            loadNode(baseNodeId)
-          }
-
-          loadNode(node.nodeid)
-          goTo(ROUTE_PATHS.node, NavigationType.push, node.nodeid)
-        })
-      },
-      [shortcuts.showTasks.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showEditor, () => {
-          goTo(ROUTE_PATHS.tasks, NavigationType.push)
-        })
-      },
-      [shortcuts.showArchive.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showArchive, () => {
-          goTo(ROUTE_PATHS.archive, NavigationType.push)
-        })
-      },
-      [shortcuts.showSearch.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showSearch, () => {
-          goTo(ROUTE_PATHS.search, NavigationType.push)
-        })
-      },
-      [shortcuts.showSettings.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showSettings, () => {
-          goTo(`${ROUTE_PATHS.settings}/about`, NavigationType.push)
-        })
-      }
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [shortcuts, shortcutDisabled, node.nodeid, ilinks]) // eslint-disable-line react-hooks/exhaustive-deps
-
   const focusMode = useLayoutStore((s) => s.focusMode)
   const toggleFocusMode = useLayoutStore((s) => s.toggleFocusMode)
 
@@ -134,6 +84,7 @@ const EditorView = () => {
           toggleFocusMode()
         }
       })
+
       return () => {
         unsubscribe()
       }

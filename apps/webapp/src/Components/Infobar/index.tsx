@@ -4,8 +4,8 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { InfoBarWrapper } from '@mexit/shared'
 
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import useLayout from '../../Hooks/useLayout'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import useToggleElements from '../../Hooks/useToggleElements'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
