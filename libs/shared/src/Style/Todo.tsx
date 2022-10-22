@@ -154,7 +154,7 @@ export const TaskCard = styled.div<{ dragging: boolean; selected: boolean; sideb
     }
   }
   ${TodoText} {
-    width: 100%;
+    max-width: 100%;
   }
   width: 100%;
   margin: ${({ theme }) => theme.spacing.tiny} 0;
