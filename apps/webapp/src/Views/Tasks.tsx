@@ -29,6 +29,7 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 import useMultipleEditors from '../Stores/useEditorsStore'
+import Plateless from '../Components/Editor/Plateless'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
@@ -337,18 +338,20 @@ const Tasks = () => {
     const todos = useTodoStore((store) => store.todos)
     const pC = useMemo(() => getPureContent(todo), [id, todos])
 
-    const controls = useMemo(() => ({
-      onChangePriority: (todoId: string, priority) => {
-        changePriority(todo, priority)
-      },
-      onChangeStatus: (todoId: string, status) => {
-        changeStatus(todo, status)
-      }
-    }), [])
-
+    const controls = useMemo(
+      () => ({
+        onChangePriority: (todoId: string, priority) => {
+          changePriority(todo, priority)
+        },
+        onChangeStatus: (todoId: string, status) => {
+          changeStatus(todo, status)
+        }
+      }),
+      []
+    )
 
     const toggleModal = useModalStore((store) => store.toggleOpen)
-
+    const priorityShown = todo.metadata.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
@@ -356,6 +359,7 @@ const Tasks = () => {
         selected={selectedCard && selectedCard.id === id}
         dragging={dragging}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
+        priorityShown={priorityShown}
         onMouseDown={(event) => {
           event.preventDefault()
           if (event.detail === 2) {
@@ -371,11 +375,13 @@ const Tasks = () => {
           controls={controls}
           parentNodeId={todo.nodeid}
         >
+          {/*
           <EditorPreviewRenderer
             noStyle
             content={pC}
             editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-          />
+          /> */}
+          <Plateless content={pC} />
         </Todo>
       </TaskCard>
     )
