@@ -27,23 +27,28 @@ const useTypeMap = () => {
         <Plateless content={children} />
       </p>
     ),
+
     a: (children, node) => (
       <a href={node?.href}>
         {node.text && node.text}
         <Plateless content={children} />
       </a>
     ),
-    /* {
-    "type": "ilink",
-    "children": [
-        {
-            "text": "",
-            "id": "TEMP_yqiYm"
-        }
-    ],
-    "value": "NODE_8RBWkaMrNDNBD8PyFeqjn",
-    "id": "TEMP_VUwh7"
-} */
+
+    /*
+     * ILink
+     {
+      "type": "ilink",
+      "children": [
+          {
+              "text": "",
+              "id": "TEMP_yqiYm"
+          }
+      ],
+      "value": "NODE_8RBWkaMrNDNBD8PyFeqjn",
+      "id": "TEMP_VUwh7"
+    }
+    */
     ilink: (children, node) => {
       const title = getTitleFromPath(getPathFromNodeid(node?.value))
       return (
@@ -53,19 +58,20 @@ const useTypeMap = () => {
         </a>
       )
     },
-    /*
 
-{
-    "type": "mention",
-    "children": [
-        {
-            "text": "",
-            "id": "TEMP_iXQcF"
-        }
-    ],
-    "value": "cbb01181-a048-4a2d-adef-0dc0c3490ab6",
-    "id": "TEMP_AjeM9"
-}
+    /*
+     * Mentions
+    {
+      "type": "mention",
+      "children": [
+          {
+              "text": "",
+              "id": "TEMP_iXQcF"
+          }
+      ],
+      "value": "cbb01181-a048-4a2d-adef-0dc0c3490ab6",
+      "id": "TEMP_AjeM9"
+    }
     */
     mention: (children, node) => {
       const u = getUserFromUserid(node?.value)
@@ -78,7 +84,8 @@ const useTypeMap = () => {
         </a>
       )
     },
-    /*
+
+    /* Tag
     {
     "type": "tag",
     "children": [
@@ -172,6 +179,7 @@ const Plateless = ({ content }: PlatelessProps) => {
             return plainTextRenderer(node)
           }
           mog('Plateless Error: Cannot render node', { node })
+          // Unrenderable elements are skipped
           return null
         })}
     </PlatelessStyled>

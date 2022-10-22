@@ -416,6 +416,10 @@ const Tasks = () => {
     }
   }, [match])
 
+  // const onDrop = (result: DropResult) => {
+  //   // This is not a empty function
+  // }
+
   // mog('board', { board })
 
   return (
@@ -444,6 +448,7 @@ const Tasks = () => {
           kanbanHeight={'calc(100vh - 240px)'}
           getColumnKeys={() => [TodoStatus.todo, TodoStatus.pending, TodoStatus.completed]}
           virtualizerOptions={{ overscan: 10 }}
+          // onDrop={onDrop}
           RenderColumnHeader={RenderColumnHeader}
         />
       </StyledTasksKanban>
