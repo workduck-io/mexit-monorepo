@@ -21,6 +21,7 @@ import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { getElementById } from '../../contentScript'
 import { ContextInfoBar } from './ContextInfoBar'
+import { NotesInfoBar } from './NotesInfoBar'
 import { SnippetsInfoBar } from './SnippetsInfoBar'
 import { ExtSideNav, SidebarContainer } from './styled'
 
@@ -42,7 +43,14 @@ const ExtInfoBarItems = () => {
         type: 'snippets',
         component: <SnippetsInfoBar />,
         tooltip: 'Snippets'
+      },
+      {
+        label: <MexIcon $noHover icon="gg:file-document" width={24} height={24} />,
+        type: 'notes',
+        component: <NotesInfoBar />,
+        tooltip: 'Notes'
       }
+
       // TODO: add this back when we have url based reminders
       // The reminderUI components already moved to @mexit/shared
       // {

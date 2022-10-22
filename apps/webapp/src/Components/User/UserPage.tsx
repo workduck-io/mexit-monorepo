@@ -16,13 +16,13 @@ import {
   Title,
   AuthForm,
   ButtonFields,
-  SettingsCard
+  SettingsCard,
+  CopyButton
 } from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
 import { ALIAS_REG } from '../../Utils/constants'
-import { CopyButton } from '../Buttons/CopyButton'
 import { InputFormError } from '../Input'
 import { ProfileImage } from './ProfileImage'
 
