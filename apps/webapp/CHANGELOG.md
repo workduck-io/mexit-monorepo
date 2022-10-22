@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.19.2
+
+### Patch Changes
+
+- 4572280b: Task view with faux render
+- 3f6266d5: Added wait for click to paste snippets in sidebar, new public nodes infobar.
+
 ## 0.19.1
 
 ### Patch Changes

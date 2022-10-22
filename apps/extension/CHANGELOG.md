@@ -1,5 +1,12 @@
 # mexit
 
+## 0.17.0
+
+### Minor Changes
+
+- 3f6266d5: Added wait for click to paste snippets in sidebar, new public nodes infobar.
+- c4c5acbd: Keyboard navigation flow using shortcuts
+
 ## 0.16.0
 
 ### Minor Changes
