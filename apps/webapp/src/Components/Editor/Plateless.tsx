@@ -1,6 +1,6 @@
-import { mog } from '@mexit/core'
-import { EditorStyles } from '@mexit/shared'
-import React from 'react'
+import { IS_DEV, mog } from '@mexit/core'
+import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import { useMentions } from '../../Hooks/useMentions'
 import { PlatelessStyled } from './Plateless.style'
 
 export interface PlatelessProps {
@@ -16,9 +16,24 @@ const headingrender = (children: any, node: any) => {
   )
 }
 
-/*
- *
- * {
+const useTypeMap = () => {
+  const { getPathFromNodeid } = useLinks()
+  const { getUserFromUserid } = useMentions()
+
+  const typeMap = {
+    p: (children, node) => (
+      <p>
+        {node.text && node.text}
+        <Plateless content={children} />
+      </p>
+    ),
+    a: (children, node) => (
+      <a href={node?.href}>
+        {node.text && node.text}
+        <Plateless content={children} />
+      </a>
+    ),
+    /* {
     "type": "ilink",
     "children": [
         {
@@ -28,7 +43,18 @@ const headingrender = (children: any, node: any) => {
     ],
     "value": "NODE_8RBWkaMrNDNBD8PyFeqjn",
     "id": "TEMP_VUwh7"
-}
+} */
+    ilink: (children, node) => {
+      const title = getTitleFromPath(getPathFromNodeid(node?.value))
+      return (
+        <a href={node?.value}>
+          [[{title}]]
+          <Plateless content={children} />
+        </a>
+      )
+    },
+    /*
+
 {
     "type": "mention",
     "children": [
@@ -40,99 +66,101 @@ const headingrender = (children: any, node: any) => {
     "value": "cbb01181-a048-4a2d-adef-0dc0c3490ab6",
     "id": "TEMP_AjeM9"
 }
- */
+    */
+    mention: (children, node) => {
+      const u = getUserFromUserid(node?.value)
+      // if (u) return u
 
-const typeMap = {
-  p: (children, node) => (
-    <p>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </p>
-  ),
-  a: (children, node) => (
-    <a href={node?.href}>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </a>
-  ),
-  ilink: (children, node) => (
-    <a href={node?.value}>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </a>
-  ),
-  mention: (children, node) => (
-    <a href={node?.value}>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </a>
-  ),
-
-  h1: headingrender,
-  h2: headingrender,
-  h3: headingrender,
-  h4: headingrender,
-  h5: headingrender,
-  h6: headingrender
-}
-
-/**
- *
- * [
-    {
-        "id": "TEMP_3iwCL",
-        "text": "Hello there "
+      return (
+        <a href={node?.value}>
+          @{u ? u?.alias : node?.email ?? node?.value}
+          <Plateless content={children} />
+        </a>
+      )
     },
+    /*
     {
-        "id": "TEMP_ByWdY",
-        "text": "styles",
-        "bold": true
-    },
-    {
-        "id": "TEMP_f74b3",
-        "text": " "
-    },
-    {
-        "id": "TEMP_daMpy",
-        "text": "are",
-        "strikethrough": true
-    },
-    {
-        "id": "TEMP_nxbct",
-        "text": " my "
-    },
-    {
-        "id": "TEMP_d6i8a",
-        "text": "best",
-        "italic": true
-    },
-    {
-        "id": "TEMP_ExPJf",
-        "text": " "
+    "type": "tag",
+    "children": [
+        {
+            "text": "",
+            "id": "TEMP_nABX4"
+        }
+    ],
+    "value": "taggerHalo",
+    "id": "TEMP_aGFct"
     }
-]
- */
+    */
+    tag: (children, node) => (
+      <a href={node?.value}>
+        #{node?.value}
+        <Plateless content={children} />
+      </a>
+    ),
+
+    h1: headingrender,
+    h2: headingrender,
+    h3: headingrender,
+    h4: headingrender,
+    h5: headingrender,
+    h6: headingrender
+  }
+
+  return typeMap
+}
 
 const plainTextRenderer = (node: any) => {
   const render = node.text || ''
   let final = render
+  /*
+   * Bold
+  {
+    "id": "TEMP_ByWdY",
+    "text": "styles",
+    "bold": true
+  }
+  */
   if (node.bold) {
     final = <b>{render}</b>
   }
+
+  /*
+   * Italic
+  {
+    "id": "TEMP_d6i8a",
+    "text": "best",
+    "italic": true
+  }
+   */
   if (node.italic) {
     final = <i>{render}</i>
   }
+
+  /*
+   * Strikethrough
+  {
+    "id": "TEMP_daMpy",
+    "text": "are",
+    "strikethrough": true
+  },
+  */
   if (node.strikethrough) {
     final = <s>{render}</s>
   }
+
+  /*
+   * Code
+   */
   if (node.code) {
     final = <code>{render}</code>
   }
+
   return final
 }
 
 const Plateless = ({ content }: PlatelessProps) => {
-  mog('Plateless', { content })
+  const typeMap = useTypeMap()
+  // mog('Plateless', { content })
   return (
     <PlatelessStyled readOnly>
       {content &&
@@ -143,8 +171,9 @@ const Plateless = ({ content }: PlatelessProps) => {
           if (node.type === undefined && node.text !== undefined) {
             return plainTextRenderer(node)
           }
-          return <p>CannotRender [{JSON.stringify(node)}]</p>
-        })}{' '}
+          mog('Plateless Error: Cannot render node', { node })
+          return null
+        })}
     </PlatelessStyled>
   )
 }
