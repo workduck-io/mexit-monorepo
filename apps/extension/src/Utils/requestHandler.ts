@@ -81,6 +81,37 @@ export const handleActionRequest = (request: ListItemType) => {
   }
 }
 
+export const handleSharingRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'MAKE_PUBLIC': {
+      return client
+        .patch(apiURLs.makeNotePublic(body?.nodeId), null, {
+          withCredentials: false,
+          headers: headers
+        })
+        .then((response) => {
+          return { message: body?.nodeId, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+    case 'MAKE_PRIVATE': {
+      return client
+        .patch(apiURLs.makeNotePrivate(body?.nodeId), null, {
+          withCredentials: false,
+          headers: headers
+        })
+        .then((response) => {
+          return { message: body?.nodeId, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+  }
+}
+
 export const handleShortenerRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'GET_ALL_LINKS': {

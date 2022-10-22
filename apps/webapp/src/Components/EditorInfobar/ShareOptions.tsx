@@ -6,13 +6,12 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { apiURLs, mog, ShareContext } from '@mexit/core'
 import { ToggleButton, Loading, CardTitle } from '@mexit/shared'
-import { MexIcon } from '@mexit/shared'
+import { MexIcon, CopyButton } from '@mexit/shared'
 
-import { useApi } from '../../Hooks/API/useNodeAPI'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { CopyButton } from '../Buttons/CopyButton'
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
+import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../../Hooks/useNamespaces'
+import { useEditorStore } from '../../Stores/useEditorStore'
 
 const Flex = css`
   display: flex;

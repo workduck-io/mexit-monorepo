@@ -19,10 +19,6 @@ export const NotesInfoBar = () => {
 
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const onClick = async (nodeId: string) => {
-    await copyTextToClipboard(`${MEXIT_FRONTEND_URL_BASE}/share/${nodeId}`)
-  }
-
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
   }
@@ -49,14 +45,14 @@ export const NotesInfoBar = () => {
           <Icon icon={searchLine} />
           <Input
             autoFocus
-            placeholder={'Search Notes'}
+            placeholder={'Search notes'}
             onChange={debounce((e) => onSearchChange(e), 250)}
             ref={inputRef}
           />
         </SidebarListFilter>
       </SidebarListFilterWrapper>
       {searchedNodes?.map((nodeId) => (
-        <NodeCard key={nodeId} nodeId={nodeId} onClick={onClick} />
+        <NodeCard key={nodeId} nodeId={nodeId} />
       ))}
     </SnippetCards>
   )

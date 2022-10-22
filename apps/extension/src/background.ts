@@ -10,7 +10,8 @@ import {
   handleCaptureRequest,
   handleActionRequest,
   handleAsyncActionRequest,
-  handleShortenerRequest
+  handleShortenerRequest,
+  handleSharingRequest
 } from './Utils/requestHandler'
 
 Sentry.init({
@@ -96,6 +97,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleCaptureRequest(request)
         console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'PUBLIC_SHARING': {
+      ;(async () => {
+        const res = await handleSharingRequest(request)
+        console.log('PUBLIC_SHARING_RESPONSE', res)
         sendResponse(res)
       })()
       return true
