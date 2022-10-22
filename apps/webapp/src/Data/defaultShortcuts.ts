@@ -1,8 +1,44 @@
 export const defaultShortcuts = {
   showHome: {
     title: 'Home',
-    //TODO: don't know what to put here
     keystrokes: '',
+    category: 'Navigate'
+  },
+
+  // * Go to actions (g  key)
+  showEditor: {
+    title: 'Notes',
+    keystrokes: 'KeyG KeyN',
+    category: 'Navigate'
+  },
+  showSnippets: {
+    title: 'Snippets',
+    keystrokes: 'KeyG KeyS',
+    category: 'Navigate'
+  },
+  showReminder: {
+    title: 'Reminders',
+    keystrokes: 'KeyG KeyR',
+    category: 'Actions'
+  },
+  showTasks: {
+    title: 'Tasks',
+    keystrokes: 'KeyG KeyT',
+    category: 'Navigate'
+  },
+  showHelp: {
+    title: 'Help',
+    keystrokes: 'Shift+?',
+    category: 'Navigate'
+  },
+  goToLinks: {
+    title: 'Go to Links',
+    keystrokes: 'KeyG KeyL',
+    category: 'Navigate'
+  },
+  showIntegrations: {
+    title: 'Integrations',
+    keystrokes: 'KeyG KeyI',
     category: 'Navigate'
   },
   showSettings: {
@@ -10,41 +46,20 @@ export const defaultShortcuts = {
     keystrokes: '$mod+,',
     category: 'Navigate'
   },
-  showEditor: {
-    title: 'Notes',
-    keystrokes: '$mod+Shift+KeyE',
-    category: 'Navigate'
-  },
   showSearch: {
     title: 'Search',
-    keystrokes: '$mod+F',
+    keystrokes: 'Alt+Slash',
     category: 'Navigate'
-  },
-  showSnippets: {
-    title: 'Snippets',
-    keystrokes: '$mod+Shift+KeyS',
-    category: 'Navigate'
-  },
-  showTasks: {
-    title: 'Tasks',
-    keystrokes: '$mod+Shift+KeyT',
-    category: 'Navigate'
-  },
-  showHelp: {
-    title: 'Help',
-    keystrokes: '$mod+Shift+KeyH',
-    category: 'Navigate'
-  },
-  showIntegrations: {
-    title: 'Flows',
-    keystrokes: '$mod+Shift+KeyI',
-    category: 'Navigate',
-    disabled: true
   },
   // Actions
   newNode: {
     title: 'New Note',
-    keystrokes: '$mod+KeyN',
+    keystrokes: 'Alt+KeyN',
+    category: 'Actions'
+  },
+  toggleRightSidebar: {
+    title: 'Toggle Right Sidebar',
+    keystrokes: '$mod+/',
     category: 'Actions'
   },
   save: {
@@ -70,33 +85,28 @@ export const defaultShortcuts = {
   },
   showArchive: {
     title: 'Archive',
-    keystrokes: '$mod+Shift+KeyA',
-    category: 'Actions'
+    keystrokes: 'KeyG KeyA',
+    category: 'Navigate'
   },
   showLookup: {
     title: 'Open Lookup',
-    keystrokes: '$mod+KeyL',
+    keystrokes: '$mod+KeyK',
     category: 'Actions'
   },
   showArchiveModal: {
     title: 'Archive Note',
-    keystrokes: '$mod+Shift+KeyD',
+    keystrokes: 'KeyO KeyA',
     category: 'Actions'
   },
-  showRefactor: {
-    title: 'Refactor',
-    keystrokes: '$mod+Shift+KeyR',
-    category: 'Actions',
-    disabled: true
-  },
+  // showRefactor: {
+  //   title: 'Refactor',
+  //   keystrokes: 'KeyO KeyR',
+  //   category: 'Actions',
+  //   disabled: true
+  // },
   showRename: {
     title: 'Rename',
-    keystrokes: '$mod+Shift+KeyN',
-    category: 'Actions'
-  },
-  showReminder: {
-    title: 'Reminders',
-    keystrokes: '$mod+Shift+KeyM',
+    keystrokes: 'KeyR',
     category: 'Actions'
   },
 

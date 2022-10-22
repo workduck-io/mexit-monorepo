@@ -274,6 +274,7 @@ const useLoad = () => {
         fetchAndSaveNode(node, { withLoading: true, isShared: true })
       } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
     }
+
     fetchSharedUsers(node.nodeid, 'note')
 
     if (options.highlightBlockId) {

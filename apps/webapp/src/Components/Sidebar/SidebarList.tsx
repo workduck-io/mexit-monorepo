@@ -4,7 +4,9 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { Icon, IconifyIcon } from '@iconify/react'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import { debounce } from 'lodash'
+import { useTheme } from 'styled-components'
 
+import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
@@ -18,9 +20,11 @@ import {
   SidebarListWrapper,
   SidebarListFilter,
   FilteredItemsWrapper,
-  EmptyMessage
+  EmptyMessage,
+  isOnEditableElement
 } from '@mexit/shared'
 
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { ItemContent } from './SharedNotes'
 import SidebarListItemComponent from './SidebarListItem'
 
@@ -76,7 +80,9 @@ const SidebarList = ({
 
   const [source, target] = useSingleton()
 
+  const theme = useTheme()
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
@@ -114,7 +120,7 @@ const SidebarList = ({
     if (inputRef.current) {
       const unsubscribe = tinykeys(inputRef.current, {
         Escape: (event) => {
-          event.stopPropagation()
+          // event.stopPropagation()
           reset()
         },
         Enter: (event) => {
@@ -151,6 +157,22 @@ const SidebarList = ({
     }
   }, [listItems, selected])
 
+  useEffect(() => {
+    if (!inputRef.current?.isContentEditable) {
+      const unsubscribe = tinykeys(window, {
+        Slash: (event) => {
+          if (!isOnEditableElement(event)) {
+            event.preventDefault()
+            expandSidebar()
+            if (inputRef) inputRef.current.focus()
+          }
+        }
+      })
+
+      return () => unsubscribe()
+    }
+  }, [])
+
   return (
     <SidebarListWrapper>
       <Tippy theme="mex" placement="right" singleton={source} />
@@ -175,6 +197,7 @@ const SidebarList = ({
             ref={inputRef}
             // onKeyUp={debounce(onKeyUpSearch, 250)}
           />
+          <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.colors.text.disabled} />
         </SidebarListFilter>
       )}
 

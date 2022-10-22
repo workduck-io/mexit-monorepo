@@ -5,7 +5,7 @@ import Modal from 'react-modal'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import ShortcutTable from '../Components/ShortcutTable'
-import { useKeyListener } from '../Hooks/useShortcutListener'
+import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import { useHelpStore } from '../Stores/useHelpStore'
 
 const HelpModal = () => {

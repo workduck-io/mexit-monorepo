@@ -7,13 +7,14 @@ import toast from 'react-hot-toast'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath, mog } from '@mexit/core'
-import { Input } from '@mexit/shared'
+import { Input, isOnEditableElement } from '@mexit/shared'
 
+import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
+import { usePermissions } from '../../../Hooks/usePermissions'
 import { useRefactor } from '../../../Hooks/useRefactor'
-import { useKeyListener } from '../../../Hooks/useShortcutListener'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
@@ -21,7 +22,6 @@ import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 import { Wrapper, TitleStatic } from './NodeRename.style'
-import { usePermissions } from '../../../Hooks/usePermissions'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()
@@ -76,12 +76,16 @@ const NodeRenameOnlyTitle = () => {
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
       [shortcuts.showRename.keystrokes]: (event) => {
-        event.preventDefault()
-        // TODO: Fix the shortcut handler (not working after the shortcut is renamed)
-        shortcutHandler(shortcuts.showRename, () => {
-          setEditable(true)
-          inpRef.current?.focus()
-        })
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+
+          // TODO: Fix the shortcut handler (not working after the shortcut is renamed)
+          shortcutHandler(shortcuts.showRename, () => {
+            setEditable(true)
+            mog('RENAME', { inpRef })
+            inpRef.current?.focus()
+          })
+        }
       }
     })
 

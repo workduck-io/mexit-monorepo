@@ -4,8 +4,7 @@ import { debounce } from 'lodash'
 import { matchSorter } from 'match-sorter'
 import Modal from 'react-modal'
 
-import { DisplayShortcut } from '@workduck-io/mex-components'
-
+// import { DisplayShortcut } from '@workduck-io/mex-components'
 import { Input } from '@mexit/shared'
 
 import { useShortcutStore } from '../Hooks/useShortcutStore'
@@ -22,6 +21,7 @@ import {
   TableWrapperScrollable
 } from '../Style/ShortcutTable'
 import InputShortcut from './InputShortcut'
+import { DisplayShortcut } from './Shortcuts'
 
 function fuzzyTextFilterFn(data: Shortcut[], search: any) {
   return matchSorter(data, search, { keys: ['title', 'keystrokes', 'category'] })

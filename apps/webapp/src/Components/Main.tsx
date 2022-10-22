@@ -11,6 +11,7 @@ import { linkTooltip } from '@mexit/shared'
 import { GridWrapper } from '@mexit/shared'
 import { navTooltip } from '@mexit/shared'
 
+import { useShortcutListener } from '../Hooks/useShortcutListener'
 import { useAuthStore } from '../Stores/useAuth'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import RHSidebar from './Infobar/RHSidebar'
@@ -32,21 +33,21 @@ const Content = styled.div`
 
 export type MainProps = { children: React.ReactNode }
 
-const Draggable = styled.div`
-  height: 24px;
-  width: 100vw;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 10000;
+// const Draggable = styled.div`
+//   height: 24px;
+//   width: 100vw;
+//   cursor: pointer;
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   background-color: rgba(0, 0, 0, 0);
+//   z-index: 10000;
 
-  &:hover,
-  &:active {
-    background-color: ${({ theme }) => transparentize(0.85, theme.colors.primary)};
-  }
-`
+//   &:hover,
+//   &:active {
+//     background-color: ${({ theme }) => transparentize(0.85, theme.colors.primary)};
+//   }
+// `
 
 const Main = ({ children }: MainProps) => {
   const routingInstrumentation = useRoutingInstrumentation()
@@ -72,30 +73,25 @@ const Main = ({ children }: MainProps) => {
   const authenticated = useAuthStore((state) => state.authenticated)
   const focusMode = useLayoutStore((s) => s.focusMode)
 
-  const styles = {
-    WebkitAppRegion: 'drag'
-  }
-
   const { gridSpringProps } = useSidebarTransition()
 
   const initialized = !isGettingIntialized && authenticated
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
-      {/* <Draggable style={styles as any} /> eslint-disable-line @typescript-eslint/no-explicit-any */}
-      <GridWrapper
-        style={gridSpringProps}
-        // eslint-disable-next-line
-        // @ts-ignore
-        // grid={authenticated && showNav() ? 'true' : 'false'}
-      >
+      <GridWrapper style={gridSpringProps}>
         {!isGettingIntialized && <Nav />}
         <Content id="wd-mex-content-view">{children}</Content>
-
+        <Shortcut />
         {initialized && <RHSidebar />}
       </GridWrapper>
     </AppWrapper>
   )
+}
+
+const Shortcut = () => {
+  useShortcutListener()
+  return undefined
 }
 
 export default Main

@@ -28,10 +28,10 @@ import {
 } from '@mexit/shared'
 
 import useNavlinks, { GetIcon } from '../../Data/links'
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import useLayout from '../../Hooks/useLayout'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -42,51 +42,51 @@ import { SidebarToggles } from '../logo'
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
 
-const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
-  const { goTo } = useRouting()
-  const { createNewNote } = useCreateNewNote()
-  const shortcuts = useHelpStore((store) => store.shortcuts)
+// const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
+//   const { goTo } = useRouting()
+//   const { createNewNote } = useCreateNewNote()
+//   const shortcuts = useHelpStore((store) => store.shortcuts)
 
-  const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault()
-    createNoteWithQABlock()
-  }
+//   const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
+//     e.preventDefault()
+//     createNoteWithQABlock()
+//   }
 
-  const createNoteWithQABlock = () => {
-    // const qaContent = getRandomQAContent()
-    const nodeId = createNewNote()
+//   const createNoteWithQABlock = () => {
+//     // const qaContent = getRandomQAContent()
+//     const nodeId = createNewNote()
 
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeId?.nodeid)
-  }
+//     goTo(ROUTE_PATHS.node, NavigationType.push, nodeId?.nodeid)
+//   }
 
-  const { shortcutHandler } = useKeyListener()
+//   const { shortcutHandler } = useKeyListener()
 
-  useEffect(() => {
-    const unsubscribe = tinykeys(window, {
-      [shortcuts.newNode.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.newNode, () => {
-          createNoteWithQABlock()
-        })
-      }
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [shortcuts])
+//   useEffect(() => {
+//     const unsubscribe = tinykeys(window, {
+//       [shortcuts.newNode.keystrokes]: (event) => {
+//         event.preventDefault()
+//         shortcutHandler(shortcuts.newNode, () => {
+//           createNoteWithQABlock()
+//         })
+//       }
+//     })
+//     return () => {
+//       unsubscribe()
+//     }
+//   }, [shortcuts])
 
-  return (
-    <NavTooltip
-      key={shortcuts.newNode.title}
-      singleton={target}
-      content={<TitleWithShortcut title="New Note" shortcut={shortcuts.newNode.keystrokes} />}
-    >
-      <CreateNewButton onClick={onNewNote}>
-        <Icon icon={addCircleLine} />
-      </CreateNewButton>
-    </NavTooltip>
-  )
-}
+//   return (
+//     <NavTooltip
+//       key={shortcuts.newNode.title}
+//       singleton={target}
+//       content={<TitleWithShortcut title="New Note" shortcut={shortcuts.newNode.keystrokes} />}
+//     >
+//       <CreateNewButton onClick={onNewNote}>
+//         <Icon icon={addCircleLine} />
+//       </CreateNewButton>
+//     </NavTooltip>
+//   )
+// }
 
 const NavHeader: React.FC<{ target: any }> = ({ target }) => {
   const { getLinks } = useNavlinks()
@@ -208,11 +208,7 @@ const Nav = () => {
           <MainNav {...getFocusProps(focusMode)}>
             <NavTooltip singleton={source} />
 
-            <NavTooltip
-              key={shortcuts.showHome.title}
-              singleton={target}
-              content={<TitleWithShortcut title="Home" shortcut={shortcuts.showHome.keystrokes} />}
-            >
+            <NavTooltip key={shortcuts.showHome.title} singleton={target} content={<TitleWithShortcut title="Home" />}>
               <NavLogoWrapper>
                 <NavLink to={ROUTE_PATHS.home}>
                   <WDLogo height={'56'} width={'56'} />

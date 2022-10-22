@@ -4,17 +4,16 @@ import saveLine from '@iconify/icons-ri/save-line'
 import { TippyProps } from '@tippyjs/react'
 import toast from 'react-hot-toast'
 
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getEventNameFromElement, mog } from '@mexit/core'
 
 import useAnalytics from '../Hooks/useAnalytics'
 import { ActionType } from '../Hooks/useAnalytics/events'
+import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import { useSnippetBuffer } from '../Hooks/useEditorBuffer'
 import { useSaver } from '../Hooks/useSaver'
-import { useKeyListener } from '../Hooks/useShortcutListener'
 import { useUpdater } from '../Hooks/useUpdater'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'

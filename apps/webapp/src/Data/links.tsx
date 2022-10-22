@@ -71,9 +71,9 @@ const useNavlinks = () => {
       {
         title: 'Links',
         path: ROUTE_PATHS.links,
-        icon: GetIcon(linkM)
+        icon: GetIcon(linkM),
         // count: count.reminders
-        // shortcut: shortcuts.showReminder.keystrokes
+        shortcut: shortcuts.goToLinks.keystrokes
         // isComingSoon: true
       },
 

@@ -1,10 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
-import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 // import { complexTree } from '../mockdata/complexTree'
-import PinIcon from '@iconify/icons-ri/pushpin-2-fill'
 import { Icon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'

@@ -1,23 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+import { usePlateEditorRef, selectEditor, focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 import shallow from 'zustand/shallow'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, mog } from '@mexit/core'
-import { StyledEditor, EditorWrapper } from '@mexit/shared'
+import { StyledEditor, EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
+import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
-import { useNodes } from '../../Hooks/useNodes'
 import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
-import { useKeyListener } from '../../Hooks/useShortcutListener'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -59,8 +58,6 @@ const ContentEditor = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const isUserEditing = useEditorStore((store) => store.isEditing)
 
-  const editorRef = usePlateEditorRef()
-
   const nodeContent = useMemo(() => {
     if (fsContent?.content) return fsContent.content
     return defaultContent.content
@@ -88,17 +85,18 @@ const ContentEditor = () => {
     }
   }, [])
 
-  const editorId = useMemo(() => getEditorId(node.nodeid, false), [node, fetchingContent])
+  const editorId = useMemo(() => getEditorId(node.nodeid, fetchingContent), [node, fetchingContent])
 
   const onFocusClick = (ev) => {
     ev.preventDefault()
     ev.stopPropagation()
 
+    const editorRef = getPlateEditorRef()
+
     if (editorRef) {
       if (editorWrapperRef.current) {
         const el = editorWrapperRef.current
         const hasScrolled = el.scrollTop > 0
-        // mog('ElScroll', { hasScrolled })
         if (!hasScrolled) {
           selectEditor(editorRef, { focus: true })
         }
@@ -115,6 +113,13 @@ const ContentEditor = () => {
         shortcutHandler(shortcuts.toggleFocusMode, () => {
           toggleFocusMode()
         })
+      },
+      Enter: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          const editorRef = getPlateEditorRef()
+          focusEditor(editorRef)
+        }
       },
       [shortcuts.refreshNode.keystrokes]: (event) => {
         event.preventDefault()

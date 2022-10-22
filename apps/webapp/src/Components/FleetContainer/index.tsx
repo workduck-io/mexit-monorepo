@@ -17,7 +17,9 @@ const FleetContainer = () => {
   const atSnippets = useMatch(`${ROUTE_PATHS.snippets}/*`)
   const atTasks = useMatch(ROUTE_PATHS.tasks)
 
-  const handleOpen = () => toggleOpen(ModalsType.quickNew)
+  const handleOpen = () => {
+    toggleOpen(ModalsType.quickNew)
+  }
 
   const handleClose = useCallback(() => {
     const isFleetOpen = useModalStore.getState().open === ModalsType.quickNew

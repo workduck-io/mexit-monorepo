@@ -9,8 +9,8 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
 
+import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import useLayout from '../Hooks/useLayout'
-import { useKeyListener } from '../Hooks/useShortcutListener'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
@@ -65,11 +65,11 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
             }
           `
       : expanded
-        ? css`
+      ? css`
           top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: calc(${(endColumnWidth ?? '400px') + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
         `
-        : css`
+      : css`
           top: ${theme.additional.hasBlocks ? 67 : 44}px;
           right: ${theme.additional.hasBlocks ? 8 : 8}px;
         `}
@@ -149,8 +149,15 @@ export const SidebarToggles = () => {
         shortcutHandler(shortcuts.showSnippets, () => {
           toggleAllSidebars()
         })
+      },
+      [shortcuts?.toggleRightSidebar.keystrokes]: (event) => {
+        event.preventDefault()
+        shortcutHandler(shortcuts.toggleRightSidebar, () => {
+          toggleRHSidebar()
+        })
       }
     })
+
     return () => {
       unsubscribe()
     }
@@ -179,7 +186,12 @@ export const SidebarToggles = () => {
       <Tippy
         theme="mex-bright"
         placement="left"
-        content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Cooler Sidebar' : 'Expand Cooler Sidebar'} />}
+        content={
+          <TitleWithShortcut
+            shortcut={shortcuts.toggleRightSidebar.keystrokes}
+            title={rhSidebar.expanded ? 'Collapse Cooler Sidebar' : 'Expand Cooler Sidebar'}
+          />
+        }
       >
         <SidebarToggleWrapper
           side="right"

@@ -9,8 +9,8 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
 import { FilterTypeIcons, Menu, MenuItem, GenericFlex, FilterMenuDiv } from '@mexit/shared'
 
+import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useFilterIcons } from '../../Hooks/useFilterValueIcons'
-import { useEnableShortcutHandler } from '../../Hooks/useShortcutListener'
 
 interface NewFilterMenuProps {
   filters: Filters

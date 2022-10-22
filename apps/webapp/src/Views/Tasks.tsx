@@ -16,20 +16,20 @@ import {
   OverlaySidebarWindowWidth
 } from '@mexit/shared'
 
+import Plateless from '../Components/Editor/Plateless'
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../Hooks/useNavigation'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useEnableShortcutHandler } from '../Hooks/useShortcutListener'
 import { useSyncTaskViews, useViewStore } from '../Hooks/useTaskViews'
 import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
+import useMultipleEditors from '../Stores/useEditorsStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
-import useMultipleEditors from '../Stores/useEditorsStore'
-import Plateless from '../Components/Editor/Plateless'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)

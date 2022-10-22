@@ -51,7 +51,6 @@ export const useSearch = () => {
 
         nodeItems?.forEach((item) => {
           // const localNode = isLocalNode(item.id)
-
           const node = ilinks.find((i) => i.nodeid === item.id)
           const listItem = getListItemFromNode(node, item.text, item.blockId, actionType)
           localNodes.push(listItem)
