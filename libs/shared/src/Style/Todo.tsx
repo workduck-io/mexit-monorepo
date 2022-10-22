@@ -153,6 +153,9 @@ export const TaskCard = styled.div<{ dragging: boolean; selected: boolean; sideb
       ${Ellipsis}
     }
   }
+  ${TodoText} {
+    width: 100%;
+  }
   width: 100%;
   margin: ${({ theme }) => theme.spacing.tiny} 0;
   background: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};

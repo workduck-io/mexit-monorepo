@@ -30,6 +30,7 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 import useMultipleEditors from '../Stores/useEditorsStore'
+import Plateless from '../Components/Editor/Plateless'
 
 function getStyle(provided: any, style?: Record<string, unknown>) {
   if (!style) {
@@ -65,7 +66,7 @@ const RenderCard = React.memo<ItemProps>((props: ItemProps) => {
     []
   )
 
-  // mog('RENDER CARD', { item, todo, pC, style })
+  mog('RENDER CARD', { item, todo, pC, style })
 
   const toggleModal = useModalStore((store) => store.toggleOpen)
 
@@ -97,12 +98,13 @@ const RenderCard = React.memo<ItemProps>((props: ItemProps) => {
         controls={controls}
         parentNodeId={todo.nodeid}
       >
-        {/* JSON.stringify(pC)*/}
+        {/* JSON.stringify(pC)
         <EditorPreviewRenderer
           noStyle
           content={pC}
           editorId={`NodeTodoPreviewKanban_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-        />
+        />*/}
+        <Plateless content={pC} />
       </Todo>
     </TaskCard>
   )
