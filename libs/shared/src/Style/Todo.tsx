@@ -2,7 +2,7 @@ import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { MainHeader } from './Layouts'
-import { TodoContainer } from './Todo.style'
+import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
 
 /*
@@ -145,11 +145,20 @@ export const TaskColumnHeader = styled.div`
   font-size: 1.5rem;
 `
 
-export const TaskCard = styled.div<{ dragging: boolean; selected: boolean; sidebarExpanded?: boolean }>`
+export const TaskCard = styled.div<{
+  dragging: boolean
+  selected: boolean
+  sidebarExpanded?: boolean
+  priorityShown?: boolean
+}>`
   ${TodoContainer} {
     width: ${({ sidebarExpanded, theme }) =>
       css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
     padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+  }
+  ${TodoText} {
+    max-width: calc(100% - ${({ priorityShown }) => (priorityShown ? '5rem' : '0px')});
+    overflow: hidden;
   }
   width: ${({ sidebarExpanded, theme }) =>
     css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
