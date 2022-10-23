@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
@@ -7,9 +7,15 @@ import { Icon } from '@iconify/react'
 
 import { Button, IconButton } from '@workduck-io/mex-components'
 
-import { InfobarFull, InfobarTools } from '@mexit/shared'
-import { Title } from '@mexit/shared'
-import { ReminderGroupWrapper, ReminderInfobar, RemindersWrapper, ReminderUI } from '@mexit/shared'
+import {
+  InfobarFull,
+  InfobarTools,
+  ReminderGroupWrapper,
+  ReminderInfobar,
+  RemindersWrapper,
+  ReminderUI,
+  Title
+} from '@mexit/shared'
 
 import { useReminders } from '../../Hooks/useReminders'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -70,7 +76,7 @@ const RemindersInfobar = () => {
 
       <ReminderInfobar>
         <Title>Reminders</Title>
-        <Button large primary onClick={() => openModal({ nodeid: nodeid })}>
+        <Button large primary onClick={() => openModal({ nodeid, title: 'Create reminder' })}>
           <Icon icon={addCircleLine} />
           Create Reminder
         </Button>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useMediaQuery } from 'react-responsive'
-import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
@@ -227,6 +227,9 @@ export const Switch = () => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
         showSidebar()
         hideRHSidebar()
+      } else if (location.pathname.startsWith(ROUTE_PATHS.reminders)) {
+        showSidebar()
+        hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {
         showSidebar()
         hideRHSidebar()
@@ -277,8 +280,8 @@ export const Switch = () => {
             }
           />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
+          <Route path={`${ROUTE_PATHS.tasks}${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
           <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
-          <Route path={ROUTE_PATHS.reminders} element={<RemindersAll />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>

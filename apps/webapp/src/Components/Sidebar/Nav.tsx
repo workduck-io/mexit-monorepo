@@ -1,37 +1,31 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
-import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
-  NavWrapper,
-  NavLogoWrapper,
-  MainLinkContainer,
-  CreateNewButton,
-  NavTitle,
   ComingSoon,
   Count,
   EndLinkContainer,
   Link,
-  SearchLink,
+  MainLinkContainer,
   MainNav,
-  WDLogo,
-  SideNav
+  NavLogoWrapper,
+  NavTitle,
+  NavWrapper,
+  SearchLink,
+  SideNav,
+  WDLogo
 } from '@mexit/shared'
 
 import useNavlinks, { GetIcon } from '../../Data/links'
-import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
-import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import useLayout from '../../Hooks/useLayout'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -183,7 +177,7 @@ const Nav = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
   const location = useLocation()
-  const onDoubleClickToogle = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onDoubleClickToggle = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.detail === 2) {
       toggleSidebar()
 
@@ -199,7 +193,7 @@ const Nav = () => {
   return (
     <>
       <NavWrapper
-        onMouseUp={(e) => onDoubleClickToogle(e)}
+        onMouseUp={(e) => onDoubleClickToggle(e)}
         $expanded={sidebar.expanded}
         $show={sidebar.show}
         {...getFocusProps(focusMode)}

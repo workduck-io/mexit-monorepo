@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import Board from '@asseinfo/react-kanban'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
+import { useMediaQuery } from 'react-responsive'
 import create from 'zustand'
 
 import { Button } from '@workduck-io/mex-components'
@@ -18,21 +20,33 @@ import {
   ReminderBoard,
   ReminderBoardCard,
   ReminderBoardColumn,
-  SearchFilter,
+  reminderViewPlaceholderData,
   upcoming
 } from '@mexit/core'
-import { PageContainer, MainHeader, IntegrationTitle, reminderStateIcons, ReminderUI } from '@mexit/shared'
+import {
+  OverlaySidebarWindowWidth,
+  PageContainer,
+  reminderStateIcons,
+  ReminderUI,
+  StyledTasksKanban,
+  TaskHeader as StyledTaskHeader,
+  TaskHeaderIcon,
+  TaskHeaderTitleSection,
+  TaskViewHeaderWrapper,
+  TaskViewTitle
+} from '@mexit/shared'
 
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
+import { useReminderAPI } from '../../Hooks/API/useReminderAPI'
 import { reminderFilterFunctions } from '../../Hooks/useFilterFunctions'
 import { FilterStore } from '../../Hooks/useFilters'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
+import { useViewStore } from '../../Hooks/useTaskViews'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import SearchFilters from '../SearchFilters'
-import { AllRemindersWrapper, ReminderColumnHeader } from './RemindersAll.style'
-import { ReminderBoardStyled } from './RemindersAll.style'
-import { useReminderAPI } from '../../Hooks/API/useReminderAPI'
+import { AllRemindersWrapper, ReminderBoardStyled, ReminderColumnHeader } from './RemindersAll.style'
 
 interface AllReminderFilterStore extends FilterStore {
   board: ReminderBoard
@@ -244,7 +258,9 @@ const useReminderFilters = () => {
 const RemindersAll = () => {
   const openModal = useCreateReminderModal((state) => state.openModal)
   const reminders = useReminderStore((s) => s.reminders)
+  const sidebar = useLayoutStore((store) => store.sidebar)
   const addCurrentFilter = useReminderFilter((s) => s.addCurrentFilter)
+  const setCurrentView = useViewStore((store) => store.setCurrentView)
   const setReminders = useReminderStore((s) => s.setReminders)
   const removeCurrentFilter = useReminderFilter((s) => s.removeCurrentFilter)
   const resetCurrentFilters = useReminderFilter((s) => s.resetCurrentFilters)
@@ -255,6 +271,8 @@ const RemindersAll = () => {
 
   const globalJoin = useReminderFilter((s) => s.globalJoin)
   const setGlobalJoin = useReminderFilter((s) => s.setGlobalJoin)
+
+  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
 
   useEffect(() => {
     getAllWorkspaceReminders().then((remindersData: { Items: any[] }) => {
@@ -267,6 +285,7 @@ const RemindersAll = () => {
         setReminders(reminders)
       }
     })
+    setCurrentView(reminderViewPlaceholderData)
   }, [])
 
   const { board, filters } = useMemo(() => {
@@ -297,41 +316,50 @@ const RemindersAll = () => {
 
   return (
     <PageContainer>
-      <MainHeader>
-        <IntegrationTitle>Reminders</IntegrationTitle>
-        <Button
-          // large
-          primary
-          onClick={() => openModal()}
-        >
-          <Icon icon={addCircleLine} />
-          Create Reminder
-        </Button>
-      </MainHeader>
-      <AllRemindersWrapper>
-        <SearchFilters
-          result={board}
-          addCurrentFilter={addCurrentFilter}
-          removeCurrentFilter={removeCurrentFilter}
-          resetCurrentFilters={resetCurrentFilters}
-          changeCurrentFilter={changeCurrentFilter}
-          filters={filters}
-          currentFilters={currentFilters}
-          globalJoin={globalJoin}
-          setGlobalJoin={setGlobalJoin}
-        />
-        <ReminderBoardStyled>
-          <Board
-            renderColumnHeader={({ title }) => <ReminderColumnHeader>{title}</ReminderColumnHeader>}
-            disableColumnDrag
-            disableCardDrag
-            onCardDragEnd={handleCardMove}
-            renderCard={RenderCard}
+      <StyledTasksKanban sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}>
+        <StyledTaskHeader>
+          <TaskHeaderTitleSection>
+            <TaskViewHeaderWrapper>
+              <TaskHeaderIcon>
+                <Icon icon={timerFlashLine} />
+              </TaskHeaderIcon>
+              <TaskViewTitle>Reminders</TaskViewTitle>
+            </TaskViewHeaderWrapper>
+          </TaskHeaderTitleSection>
+          <Button
+            // large
+            primary
+            onClick={() => openModal()}
           >
-            {board}
-          </Board>
-        </ReminderBoardStyled>
-      </AllRemindersWrapper>
+            <Icon icon={addCircleLine} />
+            Create Reminder
+          </Button>
+        </StyledTaskHeader>
+        <AllRemindersWrapper>
+          <SearchFilters
+            result={board}
+            addCurrentFilter={addCurrentFilter}
+            removeCurrentFilter={removeCurrentFilter}
+            resetCurrentFilters={resetCurrentFilters}
+            changeCurrentFilter={changeCurrentFilter}
+            filters={filters}
+            currentFilters={currentFilters}
+            globalJoin={globalJoin}
+            setGlobalJoin={setGlobalJoin}
+          />
+          <ReminderBoardStyled>
+            <Board
+              renderColumnHeader={({ title }) => <ReminderColumnHeader>{title}</ReminderColumnHeader>}
+              disableColumnDrag
+              disableCardDrag
+              onCardDragEnd={handleCardMove}
+              renderCard={RenderCard}
+            >
+              {board}
+            </Board>
+          </ReminderBoardStyled>
+        </AllRemindersWrapper>
+      </StyledTasksKanban>
     </PageContainer>
   )
 }

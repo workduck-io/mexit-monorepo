@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react'
-
 import create from 'zustand'
 
 import { Filter, GlobalFilterJoin, mog } from '@mexit/core'
@@ -96,25 +94,4 @@ export const useTaskViews = () => {
   }
 
   return { getView, addView, updateView, deleteView }
-}
-
-export const useSyncTaskViews = () => {
-  const { getAllViews } = useViewAPI()
-  const setViews = useViewStore((store) => store.setViews)
-
-  const fetchAndSetAllViews = async () => {
-    try {
-      const allViews = await getAllViews()
-      if (allViews !== undefined) {
-        mog('All Views', { allViews })
-        setViews(allViews)
-      }
-    } catch (e) {
-      mog('Error fetching the views', { e })
-    }
-  }
-
-  useEffect(() => {
-    fetchAndSetAllViews()
-  }, [])
 }

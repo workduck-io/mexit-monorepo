@@ -1,4 +1,4 @@
-import { InvitedUser, Mentionable } from '@mexit/core'
+import { InvitedUser, Mentionable } from '../Types/Mentions'
 
 const randomUser = (s: string) => ({
   type: 'mentionable' as const,

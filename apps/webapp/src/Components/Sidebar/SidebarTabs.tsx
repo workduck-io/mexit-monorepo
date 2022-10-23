@@ -20,10 +20,11 @@ const SidebarTabs = () => {
   const isSnippet = useMatch(ROUTE_PATHS.snippets)
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
   const isTasks = useMatch(ROUTE_PATHS.tasks)
+  const isReminder = useMatch(ROUTE_PATHS.reminders)
   const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
-  // mog('IS SIDEBAR', { sidebar, isEditor, isArchive, isPublicNamespaceView })
+  mog('IS SIDEBAR', { show: sidebar.show })
 
   if (!sidebar.show) return <></>
 
@@ -35,7 +36,7 @@ const SidebarTabs = () => {
 
   if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 
-  if (isTasks || isTasksView) return <TaskViewList />
+  if (isTasks || isTasksView || isReminder) return <TaskViewList />
 
   if (isTagsView) return <TagList />
 

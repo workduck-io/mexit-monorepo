@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { StyledBoard, ReminderStyled } from '@mexit/shared'
+import { ReminderStyled, StyledBoard } from '@mexit/shared'
 
 export const AllRemindersWrapper = styled.div`
   position: relative;
-  margin: ${({ theme: { spacing } }) => `0 ${spacing.large}`};
+  margin: ${({ theme: { spacing } }) => `0 ${spacing.small}`};
   display: flex;
   gap: ${({ theme }) => theme.spacing.medium};
   flex-direction: column;

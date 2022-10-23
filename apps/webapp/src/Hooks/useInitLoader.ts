@@ -12,11 +12,12 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
+import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import useLoad from './useLoad'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
-import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
+import { useRouting } from './useRouting'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -29,6 +30,7 @@ export const useInitLoader = () => {
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
+  const { getAllViews } = useViewAPI()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
@@ -38,7 +40,7 @@ export const useInitLoader = () => {
 
   const backgroundFetch = async () => {
     try {
-      runBatch<any>([fetchShareData(), initPortals(), getAllSnippetsByWorkspace()])
+      runBatch<any>([fetchShareData(), initPortals(), getAllSnippetsByWorkspace(), getAllViews()])
     } catch (err) {
       mog('Background fetch failed')
     }

@@ -1,10 +1,7 @@
-import { IconifyIcon } from '@iconify/react'
-
 import { ILink, MIcon, SingleNamespace, Tag } from '@mexit/core'
-import { DesignItem } from '@mexit/shared'
+import { DesignItem, LastOpenedState } from '@mexit/shared'
 
 import { PollActions } from '../../Stores/useApiStore'
-import { LastOpenedState } from './SidebarList'
 
 /**
  * A generic item to be shown in sidebar

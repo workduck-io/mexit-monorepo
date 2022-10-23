@@ -9,19 +9,18 @@ import { useTheme } from 'styled-components'
 import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
+import { fuzzySearch, mog } from '@mexit/core'
 import {
   DesignItem,
+  EmptyMessage,
+  FilteredItemsWrapper,
   Input,
+  isOnEditableElement,
   ItemTitle,
   LastOpenedState,
-  StyledTreeItem,
-  SidebarListWrapper,
   SidebarListFilter,
-  FilteredItemsWrapper,
-  EmptyMessage,
-  isOnEditableElement
+  SidebarListWrapper,
+  StyledTreeItem
 } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
@@ -51,7 +50,7 @@ export interface SidebarListProps<T> {
   selectedItemId?: string
 
   // If true, the list will be preceded by the default item
-  defaultItem?: SidebarListItem<T>
+  defaultItems?: SidebarListItem<T>[]
 
   // To render the context menu if the item is right-clicked
   ItemContextMenu?: (props: { item: SidebarListItem<T> }) => JSX.Element
@@ -67,7 +66,7 @@ const SidebarList = ({
   selectedItemId,
   onClick,
   items,
-  defaultItem,
+  defaultItems,
   showSearch,
   searchPlaceholder,
   emptyMessage
@@ -177,16 +176,17 @@ const SidebarList = ({
     <SidebarListWrapper>
       <Tippy theme="mex" placement="right" singleton={source} />
 
-      {defaultItem && (
-        <StyledTreeItem noSwitcher selected={selectedItemId === undefined}>
-          <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
-            <ItemTitle>
-              <Icon icon={defaultItem.icon} />
-              <span>{defaultItem.label}</span>
-            </ItemTitle>
-          </ItemContent>
-        </StyledTreeItem>
-      )}
+      {defaultItems &&
+        defaultItems.map((defaultItem) => (
+          <StyledTreeItem noSwitcher selected={selectedItemId === defaultItem.id}>
+            <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
+              <ItemTitle>
+                <Icon icon={defaultItem.icon} />
+                <span>{defaultItem.label}</span>
+              </ItemTitle>
+            </ItemContent>
+          </StyledTreeItem>
+        ))}
 
       {showSearch && items.length > 0 && (
         <SidebarListFilter>
@@ -201,7 +201,7 @@ const SidebarList = ({
         </SidebarListFilter>
       )}
 
-      <FilteredItemsWrapper hasDefault={!!defaultItem}>
+      <FilteredItemsWrapper hasDefault={!!defaultItems}>
         {listItems.map((item, index) => (
           <SidebarListItemComponent
             key={item.id}
