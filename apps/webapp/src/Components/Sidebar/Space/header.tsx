@@ -8,10 +8,11 @@ import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
-import { Input, Tooltip, TagsLabel, IconButton } from '@mexit/shared'
+import { IconButton, Input, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
@@ -40,6 +41,11 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const [showInput, setShowInput] = useState(false)
   const [title, setTitle] = useState(space?.label)
   const openShareModal = useShareModalStore((store) => store.openModal)
+  const { goTo } = useRouting()
+
+  const onTagClick = (tag: string) => {
+    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+  }
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
@@ -148,7 +154,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
           </Tippy>
         </SpaceTitleWrapper>
         {/*space.pinnedItems && <space.pinnedItems />*/}
-        {showTags && <TagsLabel tags={space?.popularTags} />}
+        {showTags && <TagsLabel tags={space?.popularTags} onClick={onTagClick} />}
       </SpaceHeader>
       {showSeparator && <SpaceSeparator />}
     </>
