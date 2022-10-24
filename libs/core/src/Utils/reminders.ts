@@ -1,4 +1,5 @@
 import { startOfTomorrow, sub } from 'date-fns'
+
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../Types/Kanban'
 import { Reminder } from '../Types/Reminders'
 
@@ -77,4 +78,11 @@ export const upcoming = (reminder: Reminder) => {
   const todayExact = new Date()
   const today = sub(todayExact, { minutes: 1 })
   return today.getTime() <= reminder.time
+}
+
+export const reminderViewPlaceholderData: any = {
+  id: 'reminder',
+  title: '',
+  filters: [],
+  globalJoin: 'all'
 }

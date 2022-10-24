@@ -2,6 +2,9 @@ import React from 'react'
 
 import home7Line from '@iconify/icons-ri/home-7-line'
 import stackLine from '@iconify/icons-ri/stack-line'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+
+import { reminderViewPlaceholderData } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -21,11 +24,18 @@ const TaskViewList = () => {
     setCurrentView(undefined)
     goTo(ROUTE_PATHS.tasks, NavigationType.push)
   }
+  const onOpenReminderView = () => {
+    //Doing this as a temporary fix for switching to reminder view
+    setCurrentView(reminderViewPlaceholderData)
+    goTo(`${ROUTE_PATHS.tasks}${ROUTE_PATHS.reminders}`, NavigationType.push)
+  }
 
   const onOpenView = (viewid: string) => {
     // loadSnippet(id)
     if (viewid === 'default') {
       onOpenDefaultView()
+    } else if (viewid === 'reminder') {
+      onOpenReminderView()
     } else {
       const view = views.find((view) => view.id === viewid)
       if (view) {
@@ -53,30 +63,38 @@ const TaskViewList = () => {
         }
         return 0
       })
-      .map((view) => ({
-        ...view,
+      .map(({ title, ...t }) => ({
+        ...t,
+        label: title,
+        data: t,
         icon: stackLine
       }))
   }, [views])
-
-  // mog('Snippy', { snippets, showSelected, location })
 
   return (
     <SidebarWrapper>
       <SidebarHeaderLite title="Task Views" icon={stackLine} />
       <SidebarList
         ItemContextMenu={TaskViewContextMenu}
-        items={sortedViews.map(({ title, ...t }) => ({ ...t, label: title, data: t }))}
+        items={sortedViews}
         onClick={(item) => onOpenView(item)}
-        selectedItemId={currentView?.id}
+        selectedItemId={currentView?.id || 'default'}
         showSearch
         searchPlaceholder="Filter Task Views..."
-        defaultItem={{
-          label: 'Default',
-          id: 'default',
-          icon: home7Line,
-          data: {}
-        }}
+        defaultItems={[
+          {
+            label: 'Default',
+            id: 'default',
+            icon: home7Line,
+            data: {}
+          },
+          {
+            label: 'Reminder',
+            id: 'reminder',
+            icon: timerFlashLine,
+            data: {}
+          }
+        ]}
       />
     </SidebarWrapper>
   )

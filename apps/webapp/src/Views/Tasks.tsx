@@ -6,25 +6,24 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
 import {
+  Heading,
+  OverlaySidebarWindowWidth,
+  PageContainer,
   StyledTasksKanban,
   TaskCard,
-  TaskColumnHeader,
-  Heading,
-  PageContainer,
-  OverlaySidebarWindowWidth
+  TaskColumnHeader
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
-import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../Hooks/useNavigation'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useSyncTaskViews, useViewStore } from '../Hooks/useTaskViews'
-import { TodoKanbanCard, useTodoKanban, KanbanBoardColumn } from '../Hooks/useTodoKanban'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useTaskViews, useViewStore } from '../Hooks/useTaskViews'
+import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../Hooks/useTodoKanban'
 import useMultipleEditors from '../Stores/useEditorsStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
@@ -39,10 +38,14 @@ const Tasks = () => {
   const match = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const _hasHydrated = useViewStore((store) => store._hasHydrated)
+
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
 
   const { goTo } = useRouting()
+
+  const { getView } = useTaskViews()
 
   const { push } = useNavigation()
 
@@ -202,8 +205,6 @@ const Tasks = () => {
     }
   }
 
-  useSyncTaskViews()
-
   useEffect(() => {
     if (selectedRef.current) {
       const el = selectedRef.current
@@ -321,18 +322,19 @@ const Tasks = () => {
 
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
-      // const viewid = match.params.viewid
-      // loadView(viewid)
-      if (currentView) {
-        setCurrentFilters(currentView.filters)
-        setGlobalJoin(currentView.globalJoin)
+      const activeView = currentView ?? getView(match.params.viewid)
+      if (match.params.viewid === 'reminder') {
+        setCurrentView(reminderViewPlaceholderData)
+      } else if (activeView) {
+        setCurrentView(activeView)
+        setCurrentFilters(activeView.filters)
+        setGlobalJoin(activeView.globalJoin)
       }
-      // goTo(ROUTE_PATHS.view, NavigationType.push, viewid)
     } else {
       setCurrentView(undefined)
       setCurrentFilters([])
     }
-  }, [match])
+  }, [match, _hasHydrated])
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     const todos = useTodoStore((store) => store.todos)

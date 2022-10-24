@@ -5,13 +5,14 @@ import { apiURLs, mog } from '@mexit/core'
 import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import '../../Utils/apiClient'
-import type { View } from '../useTaskViews'
+import { useViewStore, View } from '../useTaskViews'
 import { useAPIHeaders } from './useAPIHeaders'
 
 const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
 export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const setViews = useViewStore((store) => store.setViews)
 
   const { workspaceHeaders } = useAPIHeaders()
 
@@ -66,9 +67,16 @@ export const useViewAPI = () => {
             : undefined
         })
         .filter((v: undefined | View) => !!v)
+      try {
+        if (views !== undefined) {
+          setViews(views)
+        }
+      } catch (e) {
+        mog('Error fetching the views', { e })
+      }
+
       return views
     })
-
     return resp
   }
 

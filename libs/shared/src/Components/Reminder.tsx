@@ -8,27 +8,26 @@ import { add } from 'date-fns/fp'
 import { Button } from '@workduck-io/mex-components'
 
 import {
-  Reminder,
   DisplayReminder,
   getNameFromPath,
-  ReminderStatus,
-  mog,
+  getRelativeDate,
   getReminderState,
-  getRelativeDate
+  Reminder,
+  ReminderStatus
 } from '@mexit/core'
+
+import { IntegrationTitle } from '../Style/Integrations'
+import { PortalDescription } from '../Style/Portals.style'
 import {
-  ReminderControlsWrapper,
   ReminderButtonControlsWrapper,
-  ReminderStyled,
-  ReminderTime,
-  SnoozeControls,
+  ReminderControlsWrapper,
+  ReminderExact,
   ReminderRelative,
   ReminderStateTag,
-  ReminderExact,
-  IntegrationTitle
-} from '@mexit/shared'
-
-import { PortalDescription } from '../Style/Portals.style'
+  ReminderStyled,
+  ReminderTime,
+  SnoozeControls
+} from '../Style/Reminders.style'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'

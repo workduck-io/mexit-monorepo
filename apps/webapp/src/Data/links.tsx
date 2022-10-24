@@ -5,7 +5,6 @@ import appsLine from '@iconify/icons-ri/apps-line'
 import checkboxLine from '@iconify/icons-ri/checkbox-line'
 import linkM from '@iconify/icons-ri/link-m'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
 import { useMatch } from 'react-router-dom'
 
@@ -60,14 +59,14 @@ const useNavlinks = () => {
         // count: count.tasks
         // isComingSoon: true
       },
-      {
-        title: 'Reminders',
-        path: ROUTE_PATHS.reminders,
-        icon: GetIcon(timerFlashLine),
-        // count: count.reminders
-        shortcut: shortcuts.showReminder.keystrokes
-        // isComingSoon: true
-      },
+      // { //NOTE: Doing away with the dedicated reminder view. Keeping for future reference
+      //   title: 'Reminders',
+      //   path: ROUTE_PATHS.reminders,
+      //   icon: GetIcon(timerFlashLine),
+      //   // count: count.reminders
+      //   shortcut: shortcuts.showReminder.keystrokes
+      //   // isComingSoon: true
+      // },
       {
         title: 'Links',
         path: ROUTE_PATHS.links,

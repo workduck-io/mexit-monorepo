@@ -1,12 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
+import { DataInfobarHeader, DataInfobarWrapper, MexIcon, Title } from '@mexit/shared'
 
-import Outline from './Outline'
-import Backlinks from './Backlinks'
-import TagsRelated, { TagsRelatedSuggestions } from '../Editor/TagsRelated'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { DataInfobarWrapper, DataInfobarHeader, MexIcon, Title } from '@mexit/shared'
-import { SidebarHeaderLite } from '../Sidebar/Sidebar.space.header'
+import TagsRelated, { TagsRelatedSuggestions } from '../Editor/TagsRelated'
+import Backlinks from './Backlinks'
+import Outline from './Outline'
 
 const DataInfoBar = () => {
   const node = useEditorStore((state) => state.node)

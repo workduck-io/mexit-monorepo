@@ -1,5 +1,3 @@
-import React from 'react'
-
 import hashtag from '@iconify/icons-ri/hashtag'
 import { useMatch } from 'react-router-dom'
 

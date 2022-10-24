@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import trashIcon from '@iconify/icons-codicon/trash'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
@@ -11,22 +11,27 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import { Button, IconButton, DisplayShortcut, ToolbarTooltip, LoadingButton } from '@workduck-io/mex-components'
-import { Infobox } from '@workduck-io/mex-components'
-
-import { Filter, GlobalFilterJoin, SearchFilter } from '@mexit/core'
 import {
-  ShortcutMid,
+  Button,
+  DisplayShortcut,
+  IconButton,
+  Infobox,
+  LoadingButton,
+  ToolbarTooltip
+} from '@workduck-io/mex-components'
+
+import { Filter, GlobalFilterJoin } from '@mexit/core'
+import {
   ShortcutToken,
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
   TaskHeaderIcon,
   TaskHeaderTitleSection,
+  TasksHelp,
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle,
-  Title,
-  TasksHelp
+  Title
 } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -74,64 +79,60 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
           <Icon icon={checkboxLine} />
         </TaskHeaderIcon>
         {currentView ? (
-          <>
-            <TaskViewHeaderWrapper>
-              <TaskViewTitle>
-                <Icon icon={stackLine} />
-                {currentView?.title}
-                {isCurrentViewChanged && '*'}
-              </TaskViewTitle>
-              <TaskViewControls>
-                <Button
-                  onClick={() =>
-                    openTaskViewModal({
-                      filters: currentFilters,
-                      updateViewId: currentView?.id,
-                      globalJoin
-                    })
-                  }
-                  disabled={currentFilters.length === 0}
-                  primary={isCurrentViewChanged && currentFilters.length > 0}
-                >
-                  <Icon icon={edit2Line} />
-                  Update View
-                </Button>
-                <IconButton
-                  title="Clone View"
-                  onClick={() =>
-                    openTaskViewModal({
-                      filters: currentView?.filters,
-                      cloneViewId: currentView?.id,
-                      globalJoin: currentView?.globalJoin
-                    })
-                  }
-                  disabled={currentFilters.length === 0}
-                  singleton={target}
-                  icon={fileCopyLine}
-                  transparent={false}
-                />
-                <LoadingButton
-                  title="Delete View"
-                  loading={deleting}
-                  onClick={() => onDeleteView()}
-                  singleton={target}
-                  transparent={false}
-                >
-                  <Icon icon={trashIcon} />
-                </LoadingButton>
-                <IconButton
-                  title="Create New View"
-                  onClick={() =>
-                    openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })
-                  }
-                  disabled={currentFilters.length === 0}
-                  singleton={target}
-                  transparent={false}
-                  icon={addCircleLine}
-                />
-              </TaskViewControls>
-            </TaskViewHeaderWrapper>
-          </>
+          <TaskViewHeaderWrapper>
+            <TaskViewTitle>
+              <Icon icon={stackLine} />
+              {currentView?.title}
+              {isCurrentViewChanged && '*'}
+            </TaskViewTitle>
+            <TaskViewControls>
+              <Button
+                onClick={() =>
+                  openTaskViewModal({
+                    filters: currentFilters,
+                    updateViewId: currentView?.id,
+                    globalJoin
+                  })
+                }
+                disabled={currentFilters.length === 0}
+                primary={isCurrentViewChanged && currentFilters.length > 0}
+              >
+                <Icon icon={edit2Line} />
+                Update View
+              </Button>
+              <IconButton
+                title="Clone View"
+                onClick={() =>
+                  openTaskViewModal({
+                    filters: currentView?.filters,
+                    cloneViewId: currentView?.id,
+                    globalJoin: currentView?.globalJoin
+                  })
+                }
+                disabled={currentFilters.length === 0}
+                singleton={target}
+                icon={fileCopyLine}
+                transparent={false}
+              />
+              <LoadingButton
+                title="Delete View"
+                loading={deleting}
+                onClick={() => onDeleteView()}
+                singleton={target}
+                transparent={false}
+              >
+                <Icon icon={trashIcon} />
+              </LoadingButton>
+              <IconButton
+                title="Create New View"
+                onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })}
+                disabled={currentFilters.length === 0}
+                singleton={target}
+                transparent={false}
+                icon={addCircleLine}
+              />
+            </TaskViewControls>
+          </TaskViewHeaderWrapper>
         ) : (
           <>
             <Title>Tasks</Title>
