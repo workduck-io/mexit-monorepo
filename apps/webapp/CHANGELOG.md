@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.3
+
+### Patch Changes
+
+- b5180571: Move reminders to task view
+
 ## 0.19.2
 
 ### Patch Changes
