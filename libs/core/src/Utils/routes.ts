@@ -33,7 +33,7 @@ export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5002/api/v1'
+  ? 'http://localhost:5000/api/v1'
   : 'https://mex-webapp-dev.workduck.io/api/v1'
 
 export const MEXIT_STAGING_URL_BASE = 'https://http-staging.workduck.io/mex'

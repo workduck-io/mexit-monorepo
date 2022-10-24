@@ -1,6 +1,7 @@
 import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
-import { Filter, GlobalFilterJoin, mog } from '@mexit/core'
+import { Filter, GlobalFilterJoin, IDBStorage, mog } from '@mexit/core'
 
 import { useViewAPI } from './API/useViewsAPI'
 
@@ -16,6 +17,8 @@ export interface View {
 }
 
 export interface ViewStore {
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
   views: View[]
   currentView: View | undefined
   setCurrentView: (view: View) => void
@@ -34,35 +37,52 @@ export interface ViewStore {
 //   setIndexes: (indexes) => set((state) => ({ ...state, indexes }))
 // }))
 
-export const useViewStore = create<ViewStore>((set) => ({
-  views: [],
-  currentView: undefined,
-  setCurrentView: (view) =>
-    set((state) => ({
-      ...state,
-      currentView: view
-    })),
-  setViews: (views) =>
-    set((state) => ({
-      ...state,
-      views
-    })),
-  addView: (view) =>
-    set((state) => ({
-      ...state,
-      views: [...state.views.filter((v) => v.id !== view.id), view]
-    })),
-  removeView: (id) =>
-    set((state) => ({
-      ...state,
-      views: state.views.filter((v) => v.id !== id)
-    })),
-  updateView: (view) =>
-    set((state) => ({
-      ...state,
-      views: state.views.map((v) => (v.id === view.id ? view : v))
-    }))
-}))
+export const useViewStore = create<ViewStore>(
+  persist(
+    (set) => ({
+      views: [],
+      currentView: undefined,
+      _hasHydrated: false,
+      setHasHydrated: (state) => {
+        set({
+          _hasHydrated: state
+        })
+      },
+      setCurrentView: (view) =>
+        set((state) => ({
+          ...state,
+          currentView: view
+        })),
+      setViews: (views) =>
+        set((state) => ({
+          ...state,
+          views
+        })),
+      addView: (view) =>
+        set((state) => ({
+          ...state,
+          views: [...state.views.filter((v) => v.id !== view.id), view]
+        })),
+      removeView: (id) =>
+        set((state) => ({
+          ...state,
+          views: state.views.filter((v) => v.id !== id)
+        })),
+      updateView: (view) =>
+        set((state) => ({
+          ...state,
+          views: state.views.map((v) => (v.id === view.id ? view : v))
+        }))
+    }),
+    {
+      name: 'mexit-view-store',
+      getStorage: () => IDBStorage,
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      }
+    }
+  )
+)
 
 export const useTaskViews = () => {
   const addViewStore = useViewStore((store) => store.addView)
@@ -77,7 +97,7 @@ export const useTaskViews = () => {
 
   const addView = async (view: View) => {
     const resp = await saveView(view)
-    mog('After Svaing that view', { resp })
+    mog('After Saving that view', { resp })
     addViewStore(view)
   }
 

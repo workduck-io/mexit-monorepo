@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
 import {
   Heading,
   OverlaySidebarWindowWidth,
@@ -38,6 +38,8 @@ const Tasks = () => {
   const match = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const _hasHydrated = useViewStore((store) => store._hasHydrated)
+
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
 
@@ -321,7 +323,6 @@ const Tasks = () => {
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
       const activeView = currentView ?? getView(match.params.viewid)
-      mog('ACTIVE_HERE', { activeView })
       if (match.params.viewid === 'reminder') {
         setCurrentView(reminderViewPlaceholderData)
       } else if (activeView) {
@@ -333,7 +334,7 @@ const Tasks = () => {
       setCurrentView(undefined)
       setCurrentFilters([])
     }
-  }, [match])
+  }, [match, _hasHydrated])
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     const todos = useTodoStore((store) => store.todos)

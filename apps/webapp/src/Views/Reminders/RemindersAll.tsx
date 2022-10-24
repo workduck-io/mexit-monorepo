@@ -324,16 +324,16 @@ const RemindersAll = () => {
                 <Icon icon={timerFlashLine} />
               </TaskHeaderIcon>
               <TaskViewTitle>Reminders</TaskViewTitle>
+              <Button
+                // large
+                primary
+                onClick={() => openModal()}
+              >
+                <Icon icon={addCircleLine} />
+                Create Reminder
+              </Button>
             </TaskViewHeaderWrapper>
           </TaskHeaderTitleSection>
-          <Button
-            // large
-            primary
-            onClick={() => openModal()}
-          >
-            <Icon icon={addCircleLine} />
-            Create Reminder
-          </Button>
         </StyledTaskHeader>
         <AllRemindersWrapper>
           <SearchFilters
