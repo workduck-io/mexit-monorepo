@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.4
+
+### Patch Changes
+
+- 0d4e1548: Navigation fixes onclick snippets and tags
+
 ## 0.19.3
 
 ### Patch Changes
