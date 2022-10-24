@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
 import hashtagIcon from '@iconify/icons-ri/hashtag'
@@ -6,8 +6,8 @@ import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, generateTempId, mog, NodeEditorContent } from '@mexit/core'
-import { Note, TagFlex, TagsFlex, InfoWidgetWrapper, SuggestionIconsGroup, TagsHelp, TagsLabel } from '@mexit/shared'
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, generateTempId, NodeEditorContent } from '@mexit/core'
+import { InfoWidgetWrapper, Note, SuggestionIconsGroup, TagFlex, TagsFlex, TagsHelp, TagsLabel } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -56,9 +56,12 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   const { getTags } = useTags()
   const tagsCache = useDataStore((state) => state.tagsCache)
   const analysisTags = useAnalysisStore((state) => state.analysis.tags)
-  // const [relNodes, setRelNodes] = useState<string[]>([])
   const [tags, setTags] = useState<string[]>([])
+  const { goTo } = useRouting()
 
+  const onTagClick = (tag: string) => {
+    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+  }
   useEffect(() => {
     setTags(getTags(nodeid, fromAnalysis))
   }, [nodeid, tagsCache, fromAnalysis, analysisTags])
@@ -66,7 +69,7 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   // mog('TagsRelated', { nodeid, relNodes, tags, analysisTags })
 
   if (tags.length === 0) return
-  return <TagsLabel tags={tags.map((t) => ({ value: t }))} />
+  return <TagsLabel tags={tags.map((t) => ({ value: t }))} onClick={onTagClick} />
 }
 
 export const TagsRelatedTiny = ({ nodeid }: TagsRelated) => {

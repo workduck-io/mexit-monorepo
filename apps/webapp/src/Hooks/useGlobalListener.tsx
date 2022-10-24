@@ -11,7 +11,6 @@ export const useGlobalListener = () => {
 
   useEffect(() => {
     const keyboardHandler = (event: KeyboardEvent) => {
-      console.log('hey there', { event })
       if (event.ctrlKey || event.altKey || event.metaKey) return
       setIsUserTyping(true)
     }

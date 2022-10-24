@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { selectEditor, getPlateEditorRef } from '@udecode/plate'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
 
@@ -9,11 +9,10 @@ import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
-import { EditorWrapper, InfoTools, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
-import { Input } from '@mexit/shared'
+import { EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import Editor from './Editor'
 
@@ -35,6 +34,7 @@ const SnippetEditor = () => {
   // const [value, setValue] = useState('')
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
+  const _hasHydrated = useSnippetStore((store) => store._hasHydrated)
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
   const addAll = useSnippetBufferStore((store) => store.addAll)
@@ -46,9 +46,12 @@ const SnippetEditor = () => {
       addAll(snippet.id, snippet.content, snippet.title)
       setContent(snippet.content)
     } else {
-      returnToSnippets()
+      if (_hasHydrated) {
+        mog('Snippy', { snippet })
+        returnToSnippets()
+      }
     }
-  }, [snippet])
+  }, [snippet, _hasHydrated])
 
   const getSnippetExtras = () => {
     const val = getBufferVal(snippet?.id)

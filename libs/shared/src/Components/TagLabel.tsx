@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Icon } from '@iconify/react'
 
 import { Tag } from '@mexit/core'
@@ -55,6 +53,7 @@ interface TagsLabelProps {
 }
 
 export const TagsLabel = ({ tags, onClick, onDelete }: TagsLabelProps) => {
+  //TODO: Add a default onclick function which will open the tags view
   return (
     <TagsFlex>
       {tags.map((tag) => (

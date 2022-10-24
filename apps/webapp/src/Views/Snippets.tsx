@@ -13,22 +13,20 @@ import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 import { apiURLs, convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult, mog } from '@mexit/core'
 import {
   ItemTag,
-  CreateSnippet,
-  SnippetCommand,
-  SnippetHeader,
   MainHeader,
   Result,
   ResultDesc,
-  ResultHeader,
   ResultMain,
   ResultRow,
   ResultTitle,
   SearchPreviewWrapper,
+  SnippetCommand,
+  SnippetHeader,
+  SnippetHelp,
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
   Title,
-  View,
-  SnippetHelp
+  View
 } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
@@ -130,6 +128,8 @@ const Snippets = () => {
 
   const onOpenSnippet = (id: string) => {
     loadSnippet(id)
+    const snippet = snippets.find((snippet) => snippet.id === id)
+    goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
   }
 
   // console.log({ result })
@@ -162,9 +162,9 @@ const Snippets = () => {
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        <Result {...props} key={id} ref={ref}>
+        <Result {...props} key={id} ref={ref} onClick={() => onOpenSnippet(snip.id)}>
           <SnippetHeader>
-            <SnippetCommand onClick={() => onOpenSnippet(snip.id)}>
+            <SnippetCommand>
               <Icon icon={icon} />
               {snip.title}
             </SnippetCommand>
