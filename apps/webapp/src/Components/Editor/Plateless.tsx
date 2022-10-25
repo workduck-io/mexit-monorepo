@@ -250,38 +250,44 @@ const plainTextRenderer = (node) => {
 export interface PlatelessProps {
   content: any[]
   multiline?: boolean
-  root?: boolean
+}
+
+interface RenderPlatelessProps {
+  content: any[]
+  multiline?: boolean
   typeMap: TypeMap
 }
 
-const RenderPlateless = React.memo<PlatelessProps>(({ content, typeMap, multiline = false }: PlatelessProps) => {
-  // mog('Plateless', { content })
-  const childrenRender =
-    content &&
-    content.map((node) => {
-      if (Object.keys(typeMap).includes(node?.type)) {
-        const RenderItem = typeMap[node?.type]
-        return (
-          <RenderItem node={node}>
-            <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
-          </RenderItem>
-        )
-      }
-      if (node.type === undefined && node.text !== undefined) {
-        return plainTextRenderer(node)
-      }
-      mog('Plateless Error: Cannot render node', { node })
-      // Unrenderable elements are skipped
-      return null
-    })
-  return <>{childrenRender}</>
-})
+const RenderPlateless = React.memo<RenderPlatelessProps>(
+  ({ content, typeMap, multiline = false }: RenderPlatelessProps) => {
+    // mog('Plateless', { content })
+    const childrenRender =
+      content &&
+      content.map((node) => {
+        if (Object.keys(typeMap).includes(node?.type)) {
+          const RenderItem = typeMap[node?.type]
+          return (
+            <RenderItem node={node}>
+              <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
+            </RenderItem>
+          )
+        }
+        if (node.type === undefined && node.text !== undefined) {
+          return plainTextRenderer(node)
+        }
+        mog('Plateless Error: Cannot render node', { node })
+        // Unrenderable elements are skipped
+        return null
+      })
+    return <>{childrenRender}</>
+  }
+)
 
 /**
  * A barebones renderer for plate content in html
  * Single line for now
  */
-const Plateless = ({ content, multiline = false, root = false }: PlatelessProps) => {
+const Plateless = ({ content, multiline = false }: PlatelessProps) => {
   const typeMap = useTypeMap(multiline)
 
   return (
