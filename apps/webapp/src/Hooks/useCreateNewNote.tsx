@@ -21,7 +21,6 @@ export type NewNoteOptions = {
   }
   noteId?: string
   noteContent?: NodeEditorContent
-  openedNotePath?: string
   noRedirect?: boolean
   // If provided added to that namespace
   // Otherwise default namespace
@@ -49,7 +48,6 @@ export const useCreateNewNote = () => {
 
     const uniquePath = checkValidILink({
       notePath: newNotePath,
-      openedNotePath: options?.openedNotePath,
       showAlert: false,
       namespace: options?.parent?.namespace ?? options?.namespace
     })
@@ -68,7 +66,6 @@ export const useCreateNewNote = () => {
     const node = addILink({
       ilink: uniquePath,
       nodeid: options?.noteId,
-      openedNodePath: options?.openedNotePath,
       showAlert: false,
       namespace
     })

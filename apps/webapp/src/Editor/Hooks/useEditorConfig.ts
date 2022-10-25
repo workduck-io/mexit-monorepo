@@ -8,7 +8,8 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
-  mog
+  mog,
+  SEPARATOR
 } from '@mexit/core'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
@@ -128,10 +129,9 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     keys: {
       inline_block: {
         slateElementType: ELEMENT_INLINE_BLOCK,
-        newItemHandler: (newItem, openedNotePath?) => {
-          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
-          // mog('OPENED NODE PATH', { openedNotePath, openedNode })
-          const link = addILink({ ilink: newItem, openedNodePath: openedNotePath, namespace: openedNode?.namespace })
+        newItemHandler: (newItem, openedNoteId?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
+          const link = addILink({ ilink: newItem, openedNodePath: openedNode?.path, namespace: openedNode?.namespace })
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem
@@ -151,10 +151,20 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       },
       internal: {
         slateElementType: 'internal',
-        newItemHandler: (path, openedNotePath?) => {
-          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
-          mog('new item here is', { path, openedNotePath, openedNode })
-          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+        newItemHandler: (path, openedNoteId?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
+          mog('new item here is', { path, openedNoteId, openedNode })
+          const note = createNewNote({
+            path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
+            parent: path.startsWith(SEPARATOR)
+              ? {
+                  path: openedNode?.path,
+                  namespace: openedNode?.namespace
+                }
+              : undefined,
+            noRedirect: true,
+            namespace: openedNode?.namespace
+          })
           return note?.nodeid
         },
         renderElement: SlashComboboxItem
@@ -177,10 +187,20 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     internal: {
       ilink: {
         slateElementType: ELEMENT_ILINK,
-        newItemHandler: (path, openedNotePath?) => {
-          const openedNode = useDataStore.getState().ilinks.find((l) => l.path === openedNotePath)
-          mog('new item here is', { path, openedNotePath, openedNode })
-          const note = createNewNote({ path, openedNotePath, noRedirect: true, namespace: openedNode?.namespace })
+        newItemHandler: (path, openedNoteId?) => {
+          const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
+          mog('new item here is', { path, openedNoteId, openedNode })
+          const note = createNewNote({
+            path: path.startsWith(SEPARATOR) ? `${openedNode?.path}${path}` : path,
+            parent: path.startsWith(SEPARATOR)
+              ? {
+                  path: openedNode?.path,
+                  namespace: openedNode?.namespace
+                }
+              : undefined,
+            noRedirect: true,
+            namespace: openedNode?.namespace
+          })
           return note?.nodeid
         },
         renderElement: QuickLinkComboboxItem
