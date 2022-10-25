@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { transparentize } from 'polished'
+import { transparentize, mix } from 'polished'
 import { TodoStatus } from '@mexit/core'
 import { CompleteWave, WaterWave } from './Welcome'
 
@@ -34,7 +34,7 @@ export const TodoActionButton = styled.button`
   align-items: center;
   border-radius: 1rem;
   border: none;
-  background-color: transparent;
+  background-color: ${({ theme }) => mix(0.8, theme.colors.gray[8], theme.colors.secondary)};
   color: ${({ theme }) => theme.colors.secondary};
   :hover {
     background-color: ${({ theme }) => theme.colors.background.card};

@@ -29,6 +29,7 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
+import { isReadonly, usePermissions } from '../Hooks/usePermissions'
 
 interface RenderTaskProps {
   id: string
@@ -44,8 +45,9 @@ const RenderTask = React.memo<RenderTaskProps>(
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
 
     const sidebar = useLayoutStore((store) => store.sidebar)
-    const todos = useTodoStore((store) => store.todos)
-    const pC = useMemo(() => getPureContent(todo), [id, todos])
+    const pC = useMemo(() => getPureContent(todo), [id, todo])
+    const { accessWhenShared } = usePermissions()
+    const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
 
     const controls = useMemo(
       () => ({
@@ -80,7 +82,7 @@ const RenderTask = React.memo<RenderTaskProps>(
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly
+          readOnly={readOnly}
           controls={controls}
           parentNodeId={todo.nodeid}
         >
