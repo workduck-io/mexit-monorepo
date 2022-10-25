@@ -27,7 +27,7 @@ const TaskViewList = () => {
   const onOpenReminderView = () => {
     //Doing this as a temporary fix for switching to reminder view
     setCurrentView(reminderViewPlaceholderData)
-    goTo(`${ROUTE_PATHS.tasks}${ROUTE_PATHS.reminders}`, NavigationType.push)
+    goTo(`${ROUTE_PATHS.reminders}`, NavigationType.push)
   }
 
   const onOpenView = (viewid: string) => {
