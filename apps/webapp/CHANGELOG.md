@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.5
+
+### Patch Changes
+
+- 5d48ee25: Fixes to plateless renderer
+
 ## 0.19.4
 
 ### Patch Changes
