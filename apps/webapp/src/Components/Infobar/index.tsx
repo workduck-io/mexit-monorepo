@@ -1,13 +1,7 @@
-import React, { useEffect } from 'react'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
+import React from 'react'
 import { InfoBarWrapper } from '@mexit/shared'
 
-import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import useLayout from '../../Hooks/useLayout'
-import useToggleElements from '../../Hooks/useToggleElements'
-import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import DataInfoBar from './DataInfobar'
 
@@ -49,27 +43,27 @@ const InfoBarItems = () => {
 
 const InfoBar = () => {
   const focusMode = useLayoutStore((s) => s.focusMode)
-  const shortcuts = useHelpStore((store) => store.shortcuts)
+  // const shortcuts = useHelpStore((store) => store.shortcuts)
   const { getFocusProps } = useLayout()
 
   const infobar = useLayoutStore((s) => s.infobar)
-  const { toggleReminder } = useToggleElements()
-  const { shortcutHandler } = useKeyListener()
+  // const { toggleReminder } = useToggleElements()
+  // const { shortcutHandler } = useKeyListener()
 
-  useEffect(() => {
-    const unsubscribe = tinykeys(window, {
-      [shortcuts.showReminder.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showReminder, () => {
-          toggleReminder()
-        })
-      }
-    })
+  // useEffect(() => {
+  //   const unsubscribe = tinykeys(window, {
+  //     [shortcuts.showReminder.keystrokes]: (event) => {
+  //       event.preventDefault()
+  //       shortcutHandler(shortcuts.showReminder, () => {
+  //         toggleReminder()
+  //       })
+  //     }
+  //   })
 
-    return () => {
-      unsubscribe()
-    }
-  }, [shortcuts])
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, [shortcuts])
 
   return (
     <InfoBarWrapper mode={infobar.mode} {...getFocusProps(focusMode)}>

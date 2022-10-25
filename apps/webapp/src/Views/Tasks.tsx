@@ -130,7 +130,6 @@ const Tasks = () => {
     getTodoBoard,
     changeStatus,
     changePriority,
-    getPureContent,
     addCurrentFilter,
     changeCurrentFilter,
     removeCurrentFilter,
@@ -402,7 +401,8 @@ const Tasks = () => {
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
       const activeView = currentView ?? getView(match.params.viewid)
-      if (match.params.viewid === 'reminder') {
+      // mog('activeView', { activeView, match, currentView })
+      if (match.params.viewid === 'reminders') {
         setCurrentView(reminderViewPlaceholderData)
       } else if (activeView) {
         setCurrentView(activeView)
