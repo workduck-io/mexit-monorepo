@@ -247,7 +247,7 @@ export const Switch = () => {
     }
   }, [overlaySidebar])
 
-  mog('Rendering Switch', { location, poath: `${ROUTE_PATHS.reminders}` })
+  // mog('Rendering Switch', { location  })
 
   return (
     // eslint-disable-next-line
