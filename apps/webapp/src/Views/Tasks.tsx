@@ -83,8 +83,9 @@ const RenderTask = React.memo<RenderTaskProps>(
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly
-          showPriority={!readOnly}
+          readOnly={readOnly}
+          readOnlyContent
+          showPriority
           controls={controls}
           parentNodeId={todo.nodeid}
         >

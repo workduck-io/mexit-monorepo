@@ -21,7 +21,7 @@ const Todo = (props: any) => {
 
   const showDelete = !hideDelete && !readOnly
 
-  // mog('Todo', { nodeid, editorId, readOnly, hideDelete, showDelete })
+  mog('Todo', { nodeid, editorId, readOnly, hideDelete, showDelete })
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
@@ -44,11 +44,12 @@ const Todo = (props: any) => {
       {...rootProps}
       {...attributes}
       readOnly={readOnly}
+      readOnlyContent={readOnly}
       oid={'EditorTodo'}
       element={element}
       todoid={element?.id}
       showDelete={showDelete}
-      showPriority={!readOnly}
+      showPriority
       parentNodeId={nodeid}
       controls={{
         onDeleteClick

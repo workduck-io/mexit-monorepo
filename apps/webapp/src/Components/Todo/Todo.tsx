@@ -21,8 +21,15 @@ interface TodoProps {
   oid?: string
   controls?: TodoControls
   children?: React.ReactNode
+
+  /** Is the task readonly */
   readOnly?: boolean
+
+  /** Is the content of the task being rendered readonly in contentEditable */
+  readOnlyContent?: boolean
+
   showDelete?: boolean
+
   // If not set, assumed to be false or if the priority doesn't exist
   showPriority?: boolean
 }
@@ -33,6 +40,7 @@ export const TodoBase = ({
   todoid,
   children,
   readOnly,
+  readOnlyContent = false,
   oid,
   controls,
   showDelete = true,
@@ -85,16 +93,14 @@ export const TodoBase = ({
       key={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       checked={todo?.metadata.status === TodoStatus.completed}
-      onMouseEnter={() => {
-        if (showPriority || showDelete) setShowOptions(true)
-      }}
-      onMouseLeave={() => (showPriority || showDelete) && setShowOptions(false)}
+      onMouseEnter={() => !readOnly && setShowOptions(true)}
+      onMouseLeave={() => !readOnly && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
         <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
       </CheckBoxWrapper>
 
-      <TodoText contentEditable={!readOnly} suppressContentEditableWarning>
+      <TodoText contentEditable={!readOnlyContent} suppressContentEditableWarning>
         {children}
       </TodoText>
       <TodoOptions id={`TodoOptionsFor_${oid}_${todoid}`} contentEditable={false}>
@@ -113,7 +119,12 @@ export const TodoBase = ({
           (showOptions || (reminder && !reminder.state.done)) && (<TodoReminder oid={oid} todoid={todo.id} nodeid={parentNodeId} content={getPureContent(todo)} />)
         */}
         {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
-          <PrioritySelect value={todo.metadata.priority} onPriorityChange={onPriorityChange} id={todo.id} />
+          <PrioritySelect
+            readOnly={readOnly}
+            value={todo.metadata.priority}
+            onPriorityChange={onPriorityChange}
+            id={todo.id}
+          />
         )}
         {/* <TaskPriority background="#114a9e" transparent={0.25}>
             assignee
