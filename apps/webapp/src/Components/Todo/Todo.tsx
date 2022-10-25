@@ -23,6 +23,8 @@ interface TodoProps {
   children?: React.ReactNode
   readOnly?: boolean
   showDelete?: boolean
+  // If not set, assumed to be false or if the priority doesn't exist
+  showPriority?: boolean
 }
 
 export const TodoBase = ({
@@ -33,7 +35,8 @@ export const TodoBase = ({
   readOnly,
   oid,
   controls,
-  showDelete = true
+  showDelete = true,
+  showPriority = false
 }: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
@@ -83,9 +86,9 @@ export const TodoBase = ({
       id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       checked={todo?.metadata.status === TodoStatus.completed}
       onMouseEnter={() => {
-        if (!readOnly) setShowOptions(true)
+        if (showPriority || showDelete) setShowOptions(true)
       }}
-      onMouseLeave={() => !readOnly && setShowOptions(false)}
+      onMouseLeave={() => (showPriority || showDelete) && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
         <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
@@ -109,7 +112,7 @@ export const TodoBase = ({
         {/*
           (showOptions || (reminder && !reminder.state.done)) && (<TodoReminder oid={oid} todoid={todo.id} nodeid={parentNodeId} content={getPureContent(todo)} />)
         */}
-        {(showOptions || todo.metadata.priority !== PriorityType.noPriority) && (
+        {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
           <PrioritySelect value={todo.metadata.priority} onPriorityChange={onPriorityChange} id={todo.id} />
         )}
         {/* <TaskPriority background="#114a9e" transparent={0.25}>

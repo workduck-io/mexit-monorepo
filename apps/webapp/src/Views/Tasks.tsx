@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, mog, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
 import {
   Heading,
   OverlaySidebarWindowWidth,
@@ -30,6 +30,7 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 import { isReadonly, usePermissions } from '../Hooks/usePermissions'
+import toast from 'react-hot-toast'
 
 interface RenderTaskProps {
   id: string
@@ -82,7 +83,8 @@ const RenderTask = React.memo<RenderTaskProps>(
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly={readOnly}
+          readOnly
+          showPriority={!readOnly}
           controls={controls}
           parentNodeId={todo.nodeid}
         >
@@ -108,6 +110,7 @@ const Tasks = () => {
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const _hasHydrated = useViewStore((store) => store._hasHydrated)
+  const { accessWhenShared } = usePermissions()
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
@@ -142,9 +145,15 @@ const Tasks = () => {
 
   const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
+
   const handleCardMove = (card, source, destination) => {
-    // mog('card moved', { card, source, destination })
-    changeStatus(card.todo, destination.toColumnId)
+    const readOnly = card?.todo?.nodeid && isReadonly(accessWhenShared(card?.todo?.nodeid))
+    // mog('card moved', { card, source, destination, readOnly })
+    if (!readOnly) {
+      changeStatus(card.todo, destination.toColumnId)
+    } else {
+      toast('Cannot move task in a note with Read only permission')
+    }
   }
 
   const onClearClick = () => {
