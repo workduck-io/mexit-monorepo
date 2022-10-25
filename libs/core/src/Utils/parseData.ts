@@ -1,10 +1,10 @@
-import { ELEMENT_TODO_LI } from '../Data/outline'
 import { indexNames, diskIndex } from '../Data/search'
 import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
 import {
   ELEMENT_CODE_BLOCK,
+  ELEMENT_TODO_LI,
   ELEMENT_EXCALIDRAW,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_BLOCK,

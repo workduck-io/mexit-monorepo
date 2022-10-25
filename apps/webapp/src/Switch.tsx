@@ -43,6 +43,7 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
+import { mog } from '@mexit/core'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;
@@ -246,6 +247,8 @@ export const Switch = () => {
     }
   }, [overlaySidebar])
 
+  // mog('Rendering Switch', { location  })
+
   return (
     // eslint-disable-next-line
     // @ts-ignore
@@ -280,7 +283,7 @@ export const Switch = () => {
             }
           />
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
-          <Route path={`${ROUTE_PATHS.tasks}${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
+          <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
           <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />

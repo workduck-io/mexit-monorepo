@@ -1,4 +1,4 @@
-import { PriorityType, PriorityDataType, Priority } from '@mexit/core'
+import { PriorityType, PriorityDataType, Priority, mog } from '@mexit/core'
 import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
 import Tippy from '@tippyjs/react'
 import React from 'react'
@@ -10,18 +10,28 @@ interface PriorityMenuSelect {
   value: PriorityType
   onPriorityChange: (priority: PriorityDataType) => void
   withLabel?: boolean
+  readOnly?: boolean
 }
 
-const PrioritySelect = ({ id, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
+const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
   const menuId = `${id}-priority-menu`
   const { show, hideAll } = useContextMenu({ id: menuId })
+
   const onPriorityChangeHide = (priority: PriorityDataType) => {
     onPriorityChange(priority)
     hideAll()
   }
   return (
     <>
-      <TodoActionWrapper onClick={show}>
+      <TodoActionWrapper
+        onClick={
+          readOnly
+            ? () => {
+                /*empty*/
+              }
+            : show
+        }
+      >
         <Tippy
           delay={100}
           interactiveDebounce={100}
@@ -31,7 +41,18 @@ const PrioritySelect = ({ id, value, onPriorityChange, withLabel = false }: Prio
           content={Priority[value]?.title}
         >
           <TodoActionButton>
-            <MexIcon onClick={show} icon={Priority[value]?.icon} fontSize={20} cursor="pointer" />
+            <MexIcon
+              onClick={
+                readOnly
+                  ? () => {
+                      /*empty*/
+                    }
+                  : show
+              }
+              icon={Priority[value]?.icon}
+              fontSize={20}
+              cursor="pointer"
+            />
             {withLabel && <span>{Priority[value]?.title}</span>}
           </TodoActionButton>
         </Tippy>

@@ -1,37 +1,101 @@
 import { IS_DEV, mog } from '@mexit/core'
+import React from 'react'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useMentions } from '../../Hooks/useMentions'
 import { PlatelessStyled } from './Plateless.style'
 
-export interface PlatelessProps {
-  content: any[]
+import {
+  ELEMENT_ILINK,
+  ELEMENT_TAG,
+  ELEMENT_TODO_LI,
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_LINK,
+  ELEMENT_PARAGRAPH,
+  ELEMENT_MENTION,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_LI,
+  ELEMENT_LIC
+} from '@mexit/core'
+
+const InlineElementsArray = [
+  ELEMENT_PARAGRAPH,
+  ELEMENT_LINK,
+  ELEMENT_ILINK,
+
+  ELEMENT_MENTION,
+  ELEMENT_TAG,
+
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6
+] as const
+
+const MultiLineElementsArray = [
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_TODO_LI,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_LI,
+  ELEMENT_LIC
+] as const
+
+export type InlineElements = typeof InlineElementsArray[number]
+export type MultiLineElements = typeof MultiLineElementsArray[number]
+
+interface ItemRenderProps {
+  children: React.ReactNode
+  node: any
 }
 
-const headingrender = (children: any, node: any) => {
-  return (
-    <b>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </b>
-  )
+type InlineTypeMap = {
+  [key in InlineElements]: (props: ItemRenderProps) => JSX.Element
 }
 
-const useTypeMap = () => {
+type MultilineTypeMap = {
+  [key in MultiLineElements]: (props: ItemRenderProps) => JSX.Element
+}
+
+type TypeMap = (InlineTypeMap & MultilineTypeMap) | InlineTypeMap
+
+const useTypeMap = (multiline: boolean): TypeMap => {
   const { getPathFromNodeid } = useLinks()
   const { getUserFromUserid } = useMentions()
 
-  const typeMap = {
-    p: (children, node) => (
+  const headingRender = ({ children, node }) => {
+    return (
+      <b>
+        {node.text && node.text}
+        {children}
+      </b>
+    )
+  }
+
+  /**
+   * This is the common type map for single line and multiline
+   * For elements specific to multiline, see multilineTypeMap
+   */
+  const typeMap: InlineTypeMap = {
+    [ELEMENT_PARAGRAPH]: ({ children, node }) => (
       <p>
         {node.text && node.text}
-        <Plateless content={children} />
+        {children}
       </p>
     ),
 
-    a: (children, node) => (
+    [ELEMENT_LINK]: ({ children, node }) => (
       <a href={node?.href}>
         {node.text && node.text}
-        <Plateless content={children} />
+        {children}
       </a>
     ),
 
@@ -49,12 +113,12 @@ const useTypeMap = () => {
       "id": "TEMP_VUwh7"
     }
     */
-    ilink: (children, node) => {
+    [ELEMENT_ILINK]: ({ children, node }) => {
       const title = getTitleFromPath(getPathFromNodeid(node?.value))
       return (
         <a href={node?.value}>
-          [[{title}]]
-          <Plateless content={children} />
+          [[{title ?? 'Private/Missing'}]]
+          {children}
         </a>
       )
     },
@@ -73,14 +137,14 @@ const useTypeMap = () => {
       "id": "TEMP_AjeM9"
     }
     */
-    mention: (children, node) => {
+    [ELEMENT_MENTION]: ({ children, node }) => {
       const u = getUserFromUserid(node?.value)
       // if (u) return u
 
       return (
         <a href={node?.value}>
           @{u ? u?.alias : node?.email ?? node?.value}
-          <Plateless content={children} />
+          {children}
         </a>
       )
     },
@@ -98,25 +162,43 @@ const useTypeMap = () => {
     "id": "TEMP_aGFct"
     }
     */
-    tag: (children, node) => (
+    [ELEMENT_TAG]: ({ children, node }) => (
       <a href={node?.value}>
         #{node?.value}
-        <Plateless content={children} />
+        {children}
       </a>
     ),
 
-    h1: headingrender,
-    h2: headingrender,
-    h3: headingrender,
-    h4: headingrender,
-    h5: headingrender,
-    h6: headingrender
+    [ELEMENT_H1]: headingRender,
+    [ELEMENT_H2]: headingRender,
+    [ELEMENT_H3]: headingRender,
+    [ELEMENT_H4]: headingRender,
+    [ELEMENT_H5]: headingRender,
+    [ELEMENT_H6]: headingRender
   }
 
-  return typeMap
+  const multilineTypeMap: MultilineTypeMap = {
+    /**
+     * Blockquote
+     */
+    [ELEMENT_BLOCKQUOTE]: ({ children, node }) => (
+      <blockquote>
+        {node.text && node.text}
+        {children}
+      </blockquote>
+    ),
+
+    [ELEMENT_UL]: ({ children }) => <ul>{children}</ul>,
+    [ELEMENT_OL]: ({ children }) => <ol>{children}</ol>,
+    [ELEMENT_LIC]: ({ children }) => <>{children}</>,
+    [ELEMENT_LI]: ({ children }) => <li>{children}</li>,
+    [ELEMENT_TODO_LI]: ({ children, node }) => <li>{children}</li>
+  }
+
+  return multiline ? { ...multilineTypeMap, ...typeMap } : typeMap
 }
 
-const plainTextRenderer = (node: any) => {
+const plainTextRenderer = (node) => {
   const render = node.text || ''
   let final = render
   /*
@@ -165,23 +247,52 @@ const plainTextRenderer = (node: any) => {
   return <span>{final}</span>
 }
 
-const Plateless = ({ content }: PlatelessProps) => {
-  const typeMap = useTypeMap()
-  // mog('Plateless', { content })
+export interface PlatelessProps {
+  content: any[]
+  multiline?: boolean
+}
+
+interface RenderPlatelessProps {
+  content: any[]
+  multiline?: boolean
+  typeMap: TypeMap
+}
+
+const RenderPlateless = React.memo<RenderPlatelessProps>(
+  ({ content, typeMap, multiline = false }: RenderPlatelessProps) => {
+    // mog('Plateless', { content })
+    const childrenRender =
+      content &&
+      content.map((node) => {
+        if (Object.keys(typeMap).includes(node?.type)) {
+          const RenderItem = typeMap[node?.type]
+          return (
+            <RenderItem node={node}>
+              <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
+            </RenderItem>
+          )
+        }
+        if (node.type === undefined && node.text !== undefined) {
+          return plainTextRenderer(node)
+        }
+        mog('Plateless Error: Cannot render node', { node })
+        // Unrenderable elements are skipped
+        return null
+      })
+    return <>{childrenRender}</>
+  }
+)
+
+/**
+ * A barebones renderer for plate content in html
+ * Single line for now
+ */
+const Plateless = ({ content, multiline = false }: PlatelessProps) => {
+  const typeMap = useTypeMap(multiline)
+
   return (
-    <PlatelessStyled readOnly>
-      {content &&
-        content.map((node) => {
-          if (Object.keys(typeMap).includes(node?.type)) {
-            return typeMap[node.type](node.children, node)
-          }
-          if (node.type === undefined && node.text !== undefined) {
-            return plainTextRenderer(node)
-          }
-          mog('Plateless Error: Cannot render node', { node })
-          // Unrenderable elements are skipped
-          return null
-        })}
+    <PlatelessStyled readOnly multiline={multiline}>
+      <RenderPlateless content={content} typeMap={typeMap} multiline={multiline} />
     </PlatelessStyled>
   )
 }

@@ -1,3 +1,4 @@
+import { mog } from '@mexit/core'
 import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
 import toast from 'react-hot-toast'
@@ -18,7 +19,9 @@ const Todo = (props: any) => {
   // const nodeid = useEditorStore((store) => store.node.nodeid)
   const nodeid = getNodeIdFromEditor(editorId)
 
-  // mog('Todo', { nodeid, editorId, readOnly })
+  const showDelete = !hideDelete && !readOnly
+
+  mog('Todo', { nodeid, editorId, readOnly, hideDelete, showDelete })
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
@@ -41,10 +44,12 @@ const Todo = (props: any) => {
       {...rootProps}
       {...attributes}
       readOnly={readOnly}
+      readOnlyContent={readOnly}
       oid={'EditorTodo'}
       element={element}
       todoid={element?.id}
-      showDelete={!hideDelete}
+      showDelete={showDelete}
+      showPriority
       parentNodeId={nodeid}
       controls={{
         onDeleteClick

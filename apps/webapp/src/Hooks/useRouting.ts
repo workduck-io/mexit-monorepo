@@ -9,7 +9,7 @@ export const ROUTE_PATHS = {
   register: '/auth/register',
   archive: '/archive',
   tasks: '/tasks',
-  reminders: '/reminders',
+  reminders: '/tasks/reminders',
   tag: '/tag', // * /tag/:tag
   editor: '/editor',
   node: '/editor', // * /node/:nodeid

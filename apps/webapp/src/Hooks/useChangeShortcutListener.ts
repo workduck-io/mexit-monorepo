@@ -135,10 +135,17 @@ type IgnoreClasses = 'all' | 'input' | 'dropdown'
 interface LocalSkipOptions {
   ignoreClasses?: IgnoreClasses
   skipLocal?: boolean
+
+  /**
+   * By default if a modal is open, the shortcuts are ignored
+   * If you want to override this behaviour, you can pass this prop as true
+   */
+  ignoreModals?: boolean
 }
 
 export const useEnableShortcutHandler = () => {
   const isEditingPreview = useMultipleEditors((store) => store.isEditingAnyPreview)
+  const isModalOpen = useModalStore((store) => store.open)
 
   const isOnElementClass = (ignoreClasses?: IgnoreClasses) => {
     const allIgnore: IgnoreClasses = ignoreClasses ?? 'all'
@@ -163,10 +170,17 @@ export const useEnableShortcutHandler = () => {
   const enableShortcutHandler = (callback: () => void, options?: LocalSkipOptions) => {
     const allOp = options ?? {
       ignoreClasses: 'all',
-      skipLocal: false
+      skipLocal: false,
+      ignoreModals: false
     }
-    // mog('enableShortcutHandler', { allOp, isEditingPreview, isOnSearchFilter: isOnElementClass(allOp.ignoreClasses) })
+    // mog('enableShortcutHandler', {
+    //   allOp,
+    //   isModalOpen,
+    //   isEditingPreview,
+    //   isOnSearchFilter: isOnElementClass(allOp.ignoreClasses)
+    // })
     if (isEditingPreview() || !useMultipleEditors.getState().editors) return
+    if (isModalOpen !== undefined && !allOp.ignoreModals) return
 
     if (!allOp.skipLocal && isOnElementClass(allOp.ignoreClasses)) return
 

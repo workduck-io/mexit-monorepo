@@ -68,7 +68,10 @@ export const useSnippets = () => {
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
 
-    updateDescription(snippet.id, convertContentToRawText(snippet.content, '\n'))
+    updateDescription(snippet.id, {
+      rawText: convertContentToRawText(snippet.content, '\n'),
+      truncatedContent: snippet.content.slice(0, 8)
+    })
   }
 
   const deleteSnippet = async (id: string) => {
@@ -90,7 +93,10 @@ export const useSnippets = () => {
     const slashCommands = generateSlashCommands(getSnippets())
     setSlashCommands(slashCommands)
 
-    updateDescription(snippet.id, convertContentToRawText(snippet.content, '\n'))
+    updateDescription(snippet.id, {
+      rawText: convertContentToRawText(snippet.content, '\n'),
+      truncatedContent: snippet.content.slice(0, 8)
+    })
   }
 
   // * Updates snippets in store and adds them in combobox

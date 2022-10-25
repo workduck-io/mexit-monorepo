@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { Input } from './Form'
 
 export const SidebarListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
   flex-grow: 1;
 `
@@ -33,7 +36,6 @@ export const SidebarListFilter = styled.div`
   display: flex;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing.small};
-  margin: ${({ theme }) => `0 0 ${theme.spacing.small}`};
   background: ${({ theme }) => theme.colors.form.input.bg};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 

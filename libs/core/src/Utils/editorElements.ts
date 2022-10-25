@@ -2,6 +2,7 @@ export const ELEMENT_ILINK = 'ilink'
 export const ELEMENT_TAG = 'tag'
 export const ELEMENT_EXCALIDRAW = 'excalidraw'
 export const ELEMENT_INLINE_BLOCK = 'inline_block'
+export const ELEMENT_BLOCKQUOTE = 'blockquote'
 
 export const ELEMENT_TASK_VIEW_LINK = 'task_view_link'
 
@@ -24,6 +25,13 @@ export const ELEMENT_SYNC_BLOCK = 'sync_block'
 
 export const ELEMENT_MENTION = 'mention'
 export const ELEMENT_QA_BLOCK = 'agent-based-question'
+
+export const ELEMENT_TODO_LI = 'action_item'
+
+export const ELEMENT_UL = 'ul'
+export const ELEMENT_OL = 'ol'
+export const ELEMENT_LI = 'li'
+export const ELEMENT_LIC = 'lic'
 
 export const ELEMENT_H1 = 'h1'
 export const ELEMENT_H2 = 'h2'

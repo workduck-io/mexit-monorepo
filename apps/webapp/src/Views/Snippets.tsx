@@ -40,6 +40,7 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
+import Plateless from '../Components/Editor/Plateless'
 
 export type SnippetsProps = {
   title?: string
@@ -158,6 +159,8 @@ const Snippets = () => {
     const icon = quillPenLine
     const id = `${item.id}_ResultFor_SearchSnippet_${randId}`
 
+    // mog('item', { item, descriptions })
+
     if (props.view === View.Card) {
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -181,7 +184,8 @@ const Snippets = () => {
             />
           </SnippetHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')} padding>
-            {descriptions?.[snip.id]?.rawText}
+            {/* descriptions?.[snip.id]?.rawText */}
+            <Plateless content={descriptions?.[snip.id]?.truncatedContent} multiline />
             {/* <PreviewEditor content={snip.content} editorId={`editor_${item.id}`} /> */}
           </SearchPreviewWrapper>
         </Result>

@@ -27,6 +27,7 @@ import Editor from '../Editor/Editor'
 import { TagsRelatedTiny } from '../Editor/TagsRelated'
 import NamespaceTag from '../NamespaceTag'
 import { PreviewNoteContainer } from './styled'
+import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 
 const PreviewNoteModal = () => {
   const isOpen = useModalStore((store) => store.open === ModalsType.previewNote)
@@ -54,6 +55,9 @@ const PreviewNoteModal = () => {
       noteLink: getILinkFromNodeid(modalData?.noteId, true)
     }
   }, [modalData?.noteId])
+
+  const { accessWhenShared } = usePermissions()
+  const readOnly = useMemo(() => isReadonly(accessWhenShared(modalData?.noteId)), [modalData?.noteId])
 
   if (!isOpen) return <></>
 
@@ -121,6 +125,7 @@ const PreviewNoteModal = () => {
             content={content}
             onChange={onChange}
             options={{ focusOptions: false }}
+            readOnly={readOnly}
             autoFocus
             nodeUID={modalData?.noteId}
           />
