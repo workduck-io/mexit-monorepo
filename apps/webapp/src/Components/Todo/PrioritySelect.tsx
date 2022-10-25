@@ -16,7 +16,7 @@ interface PriorityMenuSelect {
 const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
   const menuId = `${id}-priority-menu`
   const { show, hideAll } = useContextMenu({ id: menuId })
-  mog('PrioritySelect', { id, value, withLabel, readOnly })
+
   const onPriorityChangeHide = (priority: PriorityDataType) => {
     onPriorityChange(priority)
     hideAll()
