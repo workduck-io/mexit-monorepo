@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
-import { CollapseHeader, CollapseWrapper } from './Collapse'
+import { CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
 import { ScrollStyles } from './Helpers'
 import { Ellipsis } from './NodeSelect.style'

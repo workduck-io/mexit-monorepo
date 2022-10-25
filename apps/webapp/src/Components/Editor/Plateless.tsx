@@ -7,7 +7,7 @@ export interface PlatelessProps {
   content: any[]
 }
 
-const headingrender = (children: any, node: any) => {
+const headingRender = (children: any, node: any) => {
   return (
     <b>
       {node.text && node.text}
@@ -53,7 +53,7 @@ const useTypeMap = () => {
       const title = getTitleFromPath(getPathFromNodeid(node?.value))
       return (
         <a href={node?.value}>
-          [[{title}]]
+          [[{title ?? 'Private/Missing'}]]
           <Plateless content={children} />
         </a>
       )
@@ -105,12 +105,12 @@ const useTypeMap = () => {
       </a>
     ),
 
-    h1: headingrender,
-    h2: headingrender,
-    h3: headingrender,
-    h4: headingrender,
-    h5: headingrender,
-    h6: headingrender
+    h1: headingRender,
+    h2: headingRender,
+    h3: headingRender,
+    h4: headingRender,
+    h5: headingRender,
+    h6: headingRender
   }
 
   return typeMap
