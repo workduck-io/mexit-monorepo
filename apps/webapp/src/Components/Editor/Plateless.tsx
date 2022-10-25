@@ -24,35 +24,78 @@ import {
   ELEMENT_LIC
 } from '@mexit/core'
 
-const headingRender = (children: any, node: any) => {
-  return (
-    <b>
-      {node.text && node.text}
-      <Plateless content={children} />
-    </b>
-  )
+const InlineElementsArray = [
+  ELEMENT_PARAGRAPH,
+  ELEMENT_LINK,
+  ELEMENT_ILINK,
+
+  ELEMENT_MENTION,
+  ELEMENT_TAG,
+
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6
+] as const
+
+const MultiLineElementsArray = [
+  ELEMENT_BLOCKQUOTE,
+  ELEMENT_TODO_LI,
+  ELEMENT_UL,
+  ELEMENT_OL,
+  ELEMENT_LI,
+  ELEMENT_LIC
+] as const
+
+export type InlineElements = typeof InlineElementsArray[number]
+export type MultiLineElements = typeof MultiLineElementsArray[number]
+
+interface ItemRenderProps {
+  children: React.ReactNode
+  node: any
 }
 
-const useTypeMap = (multiline: boolean) => {
+type InlineTypeMap = {
+  [key in InlineElements]: (props: ItemRenderProps) => JSX.Element
+}
+
+type MultilineTypeMap = {
+  [key in MultiLineElements]: (props: ItemRenderProps) => JSX.Element
+}
+
+type TypeMap = (InlineTypeMap & MultilineTypeMap) | InlineTypeMap
+
+const useTypeMap = (multiline: boolean): TypeMap => {
   const { getPathFromNodeid } = useLinks()
   const { getUserFromUserid } = useMentions()
+
+  const headingRender = ({ children, node }) => {
+    return (
+      <b>
+        {node.text && node.text}
+        {children}
+      </b>
+    )
+  }
 
   /**
    * This is the common type map for single line and multiline
    * For elements specific to multiline, see multilineTypeMap
    */
-  const typeMap = {
-    [ELEMENT_PARAGRAPH]: (children, node) => (
+  const typeMap: InlineTypeMap = {
+    [ELEMENT_PARAGRAPH]: ({ children, node }) => (
       <p>
         {node.text && node.text}
-        <RenderPlateless content={children} />
+        {children}
       </p>
     ),
 
-    [ELEMENT_LINK]: (children, node) => (
+    [ELEMENT_LINK]: ({ children, node }) => (
       <a href={node?.href}>
         {node.text && node.text}
-        <RenderPlateless content={children} />
+        {children}
       </a>
     ),
 
@@ -70,12 +113,12 @@ const useTypeMap = (multiline: boolean) => {
       "id": "TEMP_VUwh7"
     }
     */
-    [ELEMENT_ILINK]: (children, node) => {
+    [ELEMENT_ILINK]: ({ children, node }) => {
       const title = getTitleFromPath(getPathFromNodeid(node?.value))
       return (
         <a href={node?.value}>
           [[{title ?? 'Private/Missing'}]]
-          <RenderPlateless content={children} />
+          {children}
         </a>
       )
     },
@@ -94,14 +137,14 @@ const useTypeMap = (multiline: boolean) => {
       "id": "TEMP_AjeM9"
     }
     */
-    [ELEMENT_MENTION]: (children, node) => {
+    [ELEMENT_MENTION]: ({ children, node }) => {
       const u = getUserFromUserid(node?.value)
       // if (u) return u
 
       return (
         <a href={node?.value}>
           @{u ? u?.alias : node?.email ?? node?.value}
-          <RenderPlateless content={children} />
+          {children}
         </a>
       )
     },
@@ -119,10 +162,10 @@ const useTypeMap = (multiline: boolean) => {
     "id": "TEMP_aGFct"
     }
     */
-    [ELEMENT_TAG]: (children, node) => (
+    [ELEMENT_TAG]: ({ children, node }) => (
       <a href={node?.value}>
         #{node?.value}
-        <RenderPlateless content={children} />
+        {children}
       </a>
     ),
 
@@ -134,47 +177,28 @@ const useTypeMap = (multiline: boolean) => {
     [ELEMENT_H6]: headingRender
   }
 
-  const multilineTypeMap = {
+  const multilineTypeMap: MultilineTypeMap = {
     /**
      * Blockquote
      */
-    [ELEMENT_BLOCKQUOTE]: (children, node) => (
+    [ELEMENT_BLOCKQUOTE]: ({ children, node }) => (
       <blockquote>
         {node.text && node.text}
-        <RenderPlateless content={children} multiline />
+        {children}
       </blockquote>
     ),
 
-    [ELEMENT_UL]: (children, node) => (
-      <ul>
-        <RenderPlateless content={children} multiline />
-      </ul>
-    ),
-    [ELEMENT_OL]: (children, node) => (
-      <ol>
-        <RenderPlateless content={children} multiline />
-      </ol>
-    ),
-    [ELEMENT_LIC]: (children, node) => <Plateless content={children} multiline />,
-    [ELEMENT_LI]: (children, node) => (
-      <li>
-        <RenderPlateless content={children} multiline />
-      </li>
-    ),
-    [ELEMENT_TODO_LI]: (children, node) => {
-      mog('action-item', { node, children })
-      return (
-        <li>
-          <RenderPlateless content={children} multiline />
-        </li>
-      )
-    }
+    [ELEMENT_UL]: ({ children }) => <ul>{children}</ul>,
+    [ELEMENT_OL]: ({ children }) => <ol>{children}</ol>,
+    [ELEMENT_LIC]: ({ children }) => <>{children}</>,
+    [ELEMENT_LI]: ({ children }) => <li>{children}</li>,
+    [ELEMENT_TODO_LI]: ({ children, node }) => <li>{children}</li>
   }
 
   return multiline ? { ...multilineTypeMap, ...typeMap } : typeMap
 }
 
-const plainTextRenderer = (node: any) => {
+const plainTextRenderer = (node) => {
   const render = node.text || ''
   let final = render
   /*
@@ -227,16 +251,21 @@ export interface PlatelessProps {
   content: any[]
   multiline?: boolean
   root?: boolean
+  typeMap: TypeMap
 }
 
-const RenderPlateless = React.memo<PlatelessProps>(({ content, multiline = false }: PlatelessProps) => {
-  const typeMap = useTypeMap(multiline)
+const RenderPlateless = React.memo<PlatelessProps>(({ content, typeMap, multiline = false }: PlatelessProps) => {
   // mog('Plateless', { content })
   const childrenRender =
     content &&
     content.map((node) => {
       if (Object.keys(typeMap).includes(node?.type)) {
-        return typeMap[node.type](node.children, node)
+        const RenderItem = typeMap[node?.type]
+        return (
+          <RenderItem node={node}>
+            <RenderPlateless typeMap={typeMap} content={node.children} multiline={multiline} />
+          </RenderItem>
+        )
       }
       if (node.type === undefined && node.text !== undefined) {
         return plainTextRenderer(node)
@@ -253,9 +282,11 @@ const RenderPlateless = React.memo<PlatelessProps>(({ content, multiline = false
  * Single line for now
  */
 const Plateless = ({ content, multiline = false, root = false }: PlatelessProps) => {
+  const typeMap = useTypeMap(multiline)
+
   return (
     <PlatelessStyled readOnly multiline={multiline}>
-      <RenderPlateless content={content} multiline={multiline} />
+      <RenderPlateless content={content} typeMap={typeMap} multiline={multiline} />
     </PlatelessStyled>
   )
 }
