@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.6
+
+### Patch Changes
+
+- 17e1dc22: Fix bug with task note preview editor
+
 ## 0.19.5
 
 ### Patch Changes
