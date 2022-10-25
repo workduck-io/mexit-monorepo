@@ -165,6 +165,10 @@ const plainTextRenderer = (node: any) => {
   return <span>{final}</span>
 }
 
+/**
+ * A barebones renderer for plate content in html
+ * Single line for now
+ */
 const Plateless = ({ content }: PlatelessProps) => {
   const typeMap = useTypeMap()
   // mog('Plateless', { content })

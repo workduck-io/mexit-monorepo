@@ -30,6 +30,73 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
 
+interface RenderTaskProps {
+  id: string
+  todo: TodoType
+  selectedRef: React.RefObject<HTMLDivElement>
+  selectedCard: TodoKanbanCard | null
+  overlaySidebar: boolean
+  dragging: boolean
+}
+
+const RenderTask = React.memo<RenderTaskProps>(
+  ({ id, overlaySidebar, todo, selectedCard, selectedRef, dragging }: RenderTaskProps) => {
+    const { changeStatus, changePriority, getPureContent } = useTodoKanban()
+
+    const sidebar = useLayoutStore((store) => store.sidebar)
+    const todos = useTodoStore((store) => store.todos)
+    const pC = useMemo(() => getPureContent(todo), [id, todos])
+
+    const controls = useMemo(
+      () => ({
+        onChangePriority: (todoId: string, priority) => {
+          changePriority(todo, priority)
+        },
+        onChangeStatus: (todoId: string, status) => {
+          changeStatus(todo, status)
+        }
+      }),
+      []
+    )
+
+    const toggleModal = useModalStore((store) => store.toggleOpen)
+    const priorityShown = todo.metadata.priority !== PriorityType.noPriority
+
+    return (
+      <TaskCard
+        ref={selectedCard && id === selectedCard.id ? selectedRef : null}
+        selected={selectedCard && selectedCard.id === id}
+        dragging={dragging}
+        sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
+        priorityShown={priorityShown}
+        onMouseDown={(event) => {
+          event.preventDefault()
+          if (event.detail === 2) {
+            toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
+          }
+        }}
+      >
+        <Todo
+          showDelete={false}
+          key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
+          todoid={todo.id}
+          readOnly
+          controls={controls}
+          parentNodeId={todo.nodeid}
+        >
+          {/*
+          <EditorPreviewRenderer
+            noStyle
+            content={pC}
+            editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
+          /> */}
+          <Plateless content={pC} />
+        </Todo>
+      </TaskCard>
+    )
+  }
+)
+
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
   const nodesTodo = useTodoStore((store) => store.todos)
@@ -337,55 +404,15 @@ const Tasks = () => {
   }, [match, _hasHydrated])
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
-    const todos = useTodoStore((store) => store.todos)
-    const pC = useMemo(() => getPureContent(todo), [id, todos])
-
-    const controls = useMemo(
-      () => ({
-        onChangePriority: (todoId: string, priority) => {
-          changePriority(todo, priority)
-        },
-        onChangeStatus: (todoId: string, status) => {
-          changeStatus(todo, status)
-        }
-      }),
-      []
-    )
-
-    const toggleModal = useModalStore((store) => store.toggleOpen)
-    const priorityShown = todo.metadata.priority !== PriorityType.noPriority
-
     return (
-      <TaskCard
-        ref={selectedCard && id === selectedCard.id ? selectedRef : null}
-        selected={selectedCard && selectedCard.id === id}
+      <RenderTask
+        id={id}
+        todo={todo}
+        selectedRef={selectedRef}
+        selectedCard={selectedCard}
+        overlaySidebar={overlaySidebar}
         dragging={dragging}
-        sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
-        priorityShown={priorityShown}
-        onMouseDown={(event) => {
-          event.preventDefault()
-          if (event.detail === 2) {
-            toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
-          }
-        }}
-      >
-        <Todo
-          showDelete={false}
-          key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
-          todoid={todo.id}
-          readOnly
-          controls={controls}
-          parentNodeId={todo.nodeid}
-        >
-          {/*
-          <EditorPreviewRenderer
-            noStyle
-            content={pC}
-            editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-          /> */}
-          <Plateless content={pC} />
-        </Todo>
-      </TaskCard>
+      />
     )
   }
 
