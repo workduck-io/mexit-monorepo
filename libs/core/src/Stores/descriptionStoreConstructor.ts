@@ -1,27 +1,28 @@
+interface DescriptionState {
+  rawText: string
+  truncatedContent: any[]
+}
+
 export interface Description {
-  [snippetID: string]: {
-    rawText: string
-  }
+  [snippetID: string]: DescriptionState
 }
 
 export interface DescriptionStoreState {
   descriptions: Description
-  updateDescription: (snippetID: string, rawText: string) => void
+  updateDescription: (snippetID: string, state: DescriptionState) => void
   initDescriptions: (descriptions: Description) => void
   resetDescriptionStore: () => void
 }
 
 export const descriptionStoreConstructor = (set, get) => ({
   descriptions: {},
-  updateDescription: (snippetID, rawText) => {
+  updateDescription: (snippetID, state) => {
     const oldDescriptions = get().descriptions
     delete oldDescriptions[snippetID]
 
     set({
       descriptions: {
-        [snippetID]: {
-          rawText
-        },
+        [snippetID]: state,
         ...oldDescriptions
       }
     })
