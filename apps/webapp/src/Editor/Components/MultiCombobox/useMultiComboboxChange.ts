@@ -14,6 +14,7 @@ import { ComboboxKey } from '../../Types/Combobox'
 import { ComboboxType } from '../../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../../Utils/helper'
 import { QuickLinkType } from '../../constants'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 
 export const CreateNewPrefix = `Create `
 
@@ -71,6 +72,7 @@ export const getCommandExtended = (search: string, keys: Record<string, Combobox
 // Handle multiple combobox
 const useMultiComboboxOnChange = (editorId: string, keys: Record<string, ComboboxType>): OnChange => {
   const editor = usePlateEditorRef(editorId)! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  const { getNamespaceOfNodeid } = useNamespaces()
 
   const closeMenu = useComboboxStore((state) => state.closeMenu)
   const { params } = useRouting()
@@ -107,6 +109,7 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     const { isChild, key: pathKey } = withoutContinuousDelimiter(textAfterTrigger)
 
     const noteId = getNodeIdFromEditor(editorId)
+    const namespace = getNamespaceOfNodeid(noteId)
     // mog('EDITOR ID', { editorId, noteId })
     const searchTerm = isChild ? `${getPathFromNodeid(noteId)}${pathKey}` : pathKey
 
@@ -141,7 +144,8 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     }, {} as any)
 
     const items = Object.values(groups).flat()
-    const dataKeys = items.map((i: any) => i.text)
+    const dataKeys = items.filter((i: any) => i?.namespace === namespace.id).map((i: any) => i.text)
+
     // Create for new item
     if (
       key !== ComboboxKey.SLASH_COMMAND &&

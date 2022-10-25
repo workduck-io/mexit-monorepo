@@ -57,7 +57,7 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
       mog('getCreatableInSelect', { item, selectVal, creatable })
       if (item.key === '__create_new' && selectVal) {
         const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)
-        const res = await onNewItem(val, currentNodeKey)
+        const res = await onNewItem(val, noteId)
         if (res) {
           onSelectItem(editor, { key: String(items.length), text: res }, elementType, tab)
         }
@@ -65,7 +65,7 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
       } else onSelectItem(editor, item, elementType, tab)
     } else if (selectVal && creatable) {
       const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)
-      const res = onNewItem(val, currentNodeKey)
+      const res = onNewItem(val, noteId)
       mog('SelectElse clause', { val, selectVal, creatable, res })
       // onSelectItem(editor, { key: String(items.length), text: res ?? val })
       if (res) onSelectItem(editor, { key: String(items.length), text: val }, elementType, tab)
@@ -103,6 +103,8 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
 
   return (editor) => (e) => {
     const comboboxKey: string = useComboboxStore.getState().key
+    const editorId = getPlateEditorRef().id
+    const noteId = getNodeIdFromEditor(editorId)
 
     const comboType = keys[comboboxKey]
 
@@ -131,9 +133,9 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
         // mog('CreatableOnSelect', { comboType, comboboxKey, il: internal.ilink })
         if (comboboxKey === ComboboxKey.INTERNAL && !isInternalCommand(search)) {
           // mog('CreatableOnSelect', { comboType, comboboxKey })
-          return internal.ilink.newItemHandler(newItem, parentId)
+          return internal.ilink.newItemHandler(newItem, noteId)
         }
-        if (comboType) return comboType.newItemHandler(newItem, parentId)
+        if (comboType) return comboType.newItemHandler(newItem, noteId)
       },
       comboboxKey !== ComboboxKey.SLASH_COMMAND
     )
