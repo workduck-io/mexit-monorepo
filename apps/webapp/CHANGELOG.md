@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.19.7
+
+### Patch Changes
+
+- e03a54d4: Fix note cache calls
+- 50184d81: Fix Image upload and help modal
+
 ## 0.19.6
 
 ### Patch Changes
