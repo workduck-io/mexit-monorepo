@@ -7,3 +7,5 @@ export interface Reaction {
   // ICON
   reaction: MIcon
 }
+
+export type APIReaction = Omit<Reaction, 'userId'>

@@ -1,6 +1,6 @@
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, mog, Comment, MIcon, Reaction } from '@mexit/core'
+import { apiURLs, mog, MIcon, APIComment, APIReaction } from '@mexit/core'
 
 import { useAPIHeaders } from './useAPIHeaders'
 
@@ -12,18 +12,14 @@ interface ReactionRequests {
 }
 
 export const useReactionAPI = () => {
-  const { workspaceHeaders, workspaceId } = useAPIHeaders()
+  const { workspaceHeaders } = useAPIHeaders()
   // NOt empty
-  const addReaction = async (reaction: Omit<Reaction, 'userId'>) => {
-    const workspaceIdStr = workspaceId()
+  const addReaction = async (reaction: APIReaction) => {
     const reqData: ReactionRequests = {
-      // Check this is necessary or not
-      // workspaceId: workspaceIdStr,
       action: 'ADD',
       nodeId: reaction.nodeId,
       blockId: reaction.blockId,
       reaction: reaction.reaction
-      // properties: comment.properties
     }
 
     mog('Saving reaction', { reaction, reqData })
@@ -34,16 +30,12 @@ export const useReactionAPI = () => {
     return res.data
   }
 
-  const deleteReaction = async (reaction: Omit<Reaction, 'userId'>) => {
-    const workspaceIdStr = workspaceId()
+  const deleteReaction = async (reaction: APIReaction) => {
     const reqData: ReactionRequests = {
-      // Check this is necessary or not
-      // workspaceId: workspaceIdStr,
       action: 'DELETE',
       nodeId: reaction.nodeId,
       blockId: reaction.blockId,
       reaction: reaction.reaction
-      // properties: comment.properties
     }
     mog('Deleting reaction', { reaction, reqData })
 
@@ -99,19 +91,15 @@ export const useReactionAPI = () => {
 }
 
 export const useCommentAPI = () => {
-  const { workspaceHeaders, workspaceId } = useAPIHeaders()
+  const { workspaceHeaders } = useAPIHeaders()
 
-  const saveComment = async (comment: Omit<Comment, 'userId'>) => {
-    const workspaceIdStr = workspaceId()
+  const saveComment = async (comment: APIComment) => {
     const reqData = {
-      // Check this is necessary or not
-      // workspaceId: workspaceIdStr,
       nodeId: comment.nodeId,
       blockId: comment.blockId,
       threadId: comment.threadId,
       content: comment.content,
       entityId: comment.entityId
-      // properties: comment.properties
     }
 
     mog('Saving comment', { comment, reqData })

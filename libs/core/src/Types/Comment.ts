@@ -28,3 +28,5 @@ export interface Comment {
   // Editor Format
   content: NodeEditorContent
 }
+
+export type APIComment = Omit<Comment, 'userId'>
