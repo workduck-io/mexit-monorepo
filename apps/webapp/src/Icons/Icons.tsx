@@ -19,6 +19,7 @@ import Slack from './slack'
 import { ReactComponent as Jira } from './Jira.svg'
 import { ReactComponent as Figma } from './Figma.svg'
 import { ReactComponent as Google } from './Google.svg'
+import Whatsapp from './whatsapp'
 
 // `any` is used in type signature as `IconifyIcon` type doesn't work
 
@@ -94,6 +95,8 @@ export const ServiceIcon = ({ serviceName, height, width }) => {
       return <Linear height={height} width={width} />
     case 'TELEGRAM':
       return <Telegram height={height} width={width} />
+    case 'WHATSAPP':
+      return <Whatsapp height={height} width={width} />
     case 'SLACK':
       return <Slack height={height} width={width} />
   }
