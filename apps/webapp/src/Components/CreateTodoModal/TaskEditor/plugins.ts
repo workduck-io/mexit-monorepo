@@ -28,7 +28,13 @@ import {
 import { createHighlightPlugin } from '@udecode/plate-highlight'
 
 import { ELEMENT_ILINK, ELEMENT_TAG, ELEMENT_TODO_LI } from '@mexit/core'
-import { createBlurSelectionPlugin, MediaEmbedElement, MediaIFrame, parseRestMediaUrls } from '@mexit/shared'
+import {
+  createBlurSelectionPlugin,
+  MediaEmbedElement,
+  MediaIFrame,
+  parseRestMediaUrls,
+  UploadImageFn
+} from '@mexit/shared'
 
 import { MentionElement } from '../../../Editor/Components/Mentions/MentionElement'
 import { QuickLinkElement } from '../../../Editor/Components/QuickLink/QuickLinkElement'
@@ -39,20 +45,20 @@ import { createInlineBlockPlugin } from '../../../Editor/Plugins/createInlineBlo
 import { createMentionPlugin } from '../../../Editor/Plugins/createMentionsPlugin'
 import { createTagPlugin } from '../../../Editor/Plugins/createTagPlugin'
 import { createTodoPlugin } from '../../../Editor/Plugins/createTodoPlugin'
-import {
-  optionsCreateNodeIdPlugin,
-  optionsImagePlugin,
-  optionsSelectOnBackspacePlugin
-} from '../../../Editor/Plugins/options'
+import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../../../Editor/Plugins/options'
 import Todo from '../../Todo'
 
-const generateTodoPlugins = () => {
+const generateTodoPlugins = (uploadImage?: UploadImageFn) => {
   return [
     // elements
     createParagraphPlugin(), // paragraph element
 
     createSelectOnBackspacePlugin(),
-    createImagePlugin(optionsImagePlugin), // Image
+    createImagePlugin({
+      options: {
+        uploadImage
+      }
+    }), // Image
     createLinkPlugin(), // Link
 
     // Marks
@@ -125,7 +131,7 @@ export const getComponents = () =>
     [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any
   })
 
-export const getTodoPlugins = () => {
-  const plugins = createPlugins(generateTodoPlugins(), { components: getComponents() })
+export const getTodoPlugins = (uploadImage?: UploadImageFn) => {
+  const plugins = createPlugins(generateTodoPlugins(uploadImage), { components: getComponents() })
   return plugins
 }

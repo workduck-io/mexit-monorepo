@@ -49,7 +49,7 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, parseRestMediaUrls, MediaIFrame } from '@mexit/shared'
+import { TableWrapper, parseRestMediaUrls, MediaIFrame, useUploadToCDN } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -68,20 +68,20 @@ import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
   optionsExitBreakPlugin,
-  optionsImagePlugin,
   optionsResetBlockTypePlugin,
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
 import { PlateFloatingLink } from '../Components/FloatingLink'
+import { useAuth } from '@workduck-io/dwindle'
 
 export type PluginOptionType = {
   exclude: {
     dnd?: boolean
     mentions?: boolean
   }
+  uploadImage?: (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 }
-
 
 export const linkPlugin = {
   renderAfterEditable: PlateFloatingLink
@@ -113,7 +113,11 @@ export const generatePlugins = (options: PluginOptionType) => {
     // createTodoListPlugin(),
 
     // Special Elements
-    createImagePlugin(optionsImagePlugin), // Image
+    createImagePlugin({
+      options: {
+        uploadImage: options.uploadImage
+      }
+    }),
     createLinkPlugin(linkPlugin), // Link
     createListPlugin(), // List
     createTodoPlugin(),
@@ -209,7 +213,7 @@ export const generatePlugins = (options: PluginOptionType) => {
   return withPlugins
 }
 
-const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+export const generateEditorPluginsWithComponents = (components: Record<string, any>, options?: PluginOptionType) => {
   const wrappedComponents = options?.exclude.dnd
     ? components
     : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
@@ -221,4 +225,25 @@ const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOpt
   return plugins
 }
 
-export default useMemoizedPlugins
+const useEditorPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+  const { uploadImageToS3 } = useAuth()
+  const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
+
+  const wrappedComponents = options?.exclude.dnd
+    ? components
+    : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
+
+  const plugins = createPlugins(
+    generatePlugins({
+      ...options,
+      uploadImage: options.uploadImage ?? uploadImageToWDCDN
+    }),
+    {
+      components: wrappedComponents
+    }
+  )
+
+  return plugins
+}
+
+export default useEditorPlugins

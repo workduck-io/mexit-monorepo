@@ -49,7 +49,7 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { MediaIFrame, parseRestMediaUrls, TableWrapper } from '@mexit/shared'
+import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
 
 import { createQuickLinkPlugin } from './QuickLink'
 import { createBlockModifierPlugin } from './createBlockModifierPlugin'
@@ -64,12 +64,13 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
-import { optionsImagePlugin } from './options'
+import { useAuth } from '@workduck-io/dwindle'
 
 export type PluginOptionType = {
   exclude: {
     dnd: boolean
   }
+  uploadImage?: (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 }
 
 /**
@@ -98,7 +99,12 @@ export const generatePlugins = (options: PluginOptionType) => {
     // createTodoListPlugin(),
 
     // Special Elements
-    createImagePlugin(optionsImagePlugin), // Image
+    // Special Elements
+    createImagePlugin({
+      options: {
+        uploadImage: options.uploadImage
+      }
+    }),
     createLinkPlugin(), // Link
     createListPlugin(), // List
     createTodoPlugin(),
@@ -192,10 +198,20 @@ export const generatePlugins = (options: PluginOptionType) => {
 
 const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
   const wrappedComponents = components
+  // Raw uploader
+  const { uploadImageToS3 } = useAuth()
+  // Compresses image and Shows toasts about upload
+  const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
 
-  const plugins = createPlugins(generatePlugins(options), {
-    components: wrappedComponents
-  })
+  const plugins = createPlugins(
+    generatePlugins({
+      ...options,
+      uploadImage: options.uploadImage ?? uploadImageToWDCDN
+    }),
+    {
+      components: wrappedComponents
+    }
+  )
 
   return plugins
 }
