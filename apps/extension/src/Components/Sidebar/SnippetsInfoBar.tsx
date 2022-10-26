@@ -20,7 +20,7 @@ import {
 import { SnippetCards, Input, SidebarListFilter, SidebarListFilterWrapper, SnippetSidebarHelp } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
-import getPlugins from '../../Editor/plugins/index'
+import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
@@ -62,7 +62,7 @@ export const SnippetsInfoBar = () => {
             })
 
             const tempEditor = createPlateEditor({
-              plugins: getPlugins(
+              plugins: generateEditorPluginsWithComponents(
                 createPlateUI({
                   [ELEMENT_TAG]: CopyTag as any
                 }),

@@ -15,7 +15,7 @@ import {
 } from '@mexit/shared'
 import { Button } from '@mexit/shared'
 
-import useMemoizedPlugins from '../../Editor/plugins'
+import { generateEditorPluginsWithComponents } from '../../Editor/plugins'
 // import useLoad from '../../../Hooks/useLoad'
 // import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 // import { useTags } from '../../Hooks/useTags'
@@ -95,7 +95,7 @@ const EditorPreview = ({
     // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
+  const plugins = generateEditorPluginsWithComponents(components, { exclude: { dnd: true } })
 
   if (cc) {
     return (

@@ -27,7 +27,7 @@ import { ActionTitle, ComboboxItemTitle, ComboboxShortcuts, ComboSeperator, Shor
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
-import getPlugins from '../../Editor/plugins/index'
+import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSnippets } from '../../Hooks/useSnippets'
@@ -162,7 +162,7 @@ export default function Dibba() {
           })
 
           const tempEditor = createPlateEditor({
-            plugins: getPlugins(
+            plugins: generateEditorPluginsWithComponents(
               createPlateUI({
                 [ELEMENT_TAG]: CopyTag as any
               }),

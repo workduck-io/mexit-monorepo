@@ -1,5 +1,5 @@
 import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
-import useMemoizedPlugins, { generatePlugins } from '../../plugins'
+import { useMemoizedPlugins, generatePlugins } from '../../plugins'
 import { QuickLinkComboboxItem } from '../../plugins/QuickLink/components/QuickLinkComboboxItem'
 import { ELEMENT_ILINK, ELEMENT_TAG } from '@mexit/core'
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'

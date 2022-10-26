@@ -6,7 +6,7 @@ import { ActionType, defaultContent, ELEMENT_TAG, mog, QuickLinkStatus, QuickLin
 import { NodeEditorContent } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
-import getPlugins from '../../Editor/plugins/index'
+import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
@@ -30,7 +30,7 @@ export default function Content() {
   useEffect(() => {
     if (selection?.range && selection?.url && previewMode) {
       const editor = createPlateEditor({
-        plugins: getPlugins(
+        plugins: generateEditorPluginsWithComponents(
           createPlateUI({
             [ELEMENT_TAG]: CopyTag as any
           }),

@@ -195,8 +195,17 @@ export const generatePlugins = (options: PluginOptionType) => {
 
   return withPlugins
 }
+export const generateEditorPluginsWithComponents = (components: Record<string, any>, options?: PluginOptionType) => {
+  const wrappedComponents = components
 
-const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+  const plugins = createPlugins(generatePlugins(options), {
+    components: wrappedComponents
+  })
+
+  return plugins
+}
+
+export const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
   const wrappedComponents = components
   // Raw uploader
   const { uploadImageToS3 } = useAuth()
@@ -215,5 +224,3 @@ const useMemoizedPlugins = (components: Record<string, any>, options?: PluginOpt
 
   return plugins
 }
-
-export default useMemoizedPlugins
