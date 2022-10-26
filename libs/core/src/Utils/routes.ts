@@ -51,6 +51,15 @@ export const USER_SERVICE_HELPER_URL = 'https://3jeonl1fee.execute-api.us-east-1
 export const USER_SERVICE_EMAIL_URL = (email: string) =>
   `https://http.workduck.io/user/email/${encodeURIComponent(email)}`
 
+export const BASE_URLS = {
+  reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
+
+  // TODO: Update these to main endpoint after testing
+  // Or after being added to the middleware
+  comment: `https://http-test.workduck.io/comment`,
+  reaction: `https://http-test.workduck.io/reaction`
+}
+
 export const apiURLs = {
   // * User Preference
   getUserPreferences: (userId: string) => `/userPreference/all/${userId}`,
@@ -172,9 +181,41 @@ export const apiURLs = {
   },
 
   reminders: {
-    saveReminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
-    reminderByID: (id: string) => `${MEXIT_BACKEND_URL_BASE}/reminder/${id}`,
-    remindersOfNode: (nodeID: string) => `${MEXIT_BACKEND_URL_BASE}/reminder/node/${nodeID}`,
-    remindersOfWorkspace: `${MEXIT_BACKEND_URL_BASE}/reminder/workspace`
+    saveReminder: BASE_URLS.reminder,
+    reminderByID: (id: string) => `${BASE_URLS.reminder}/${id}`,
+    remindersOfNode: (nodeID: string) => `${BASE_URLS.reminder}/node/${nodeID}`,
+    remindersOfWorkspace: `${BASE_URLS.reminder}/workspace`
+  },
+
+  comments: {
+    /** POST */
+    saveComment: `${BASE_URLS.comment}/`,
+
+    /** GET, DELETE */
+    comment: (commentId: string) => `${BASE_URLS.comment}/${commentId}`,
+
+    /** GET, DELETE */
+    allNote: (nodeId: string) => `${BASE_URLS.comment}/all/${nodeId}`,
+
+    /** GET, DELETE */
+    allBlock: (nodeId: string, blockId: string) => `${BASE_URLS.comment}/all/${nodeId}/block/${blockId}`,
+
+    /** GET, DELETE */
+    allThread: (nodeId: string, blockId: string, threadId: string) =>
+      `${BASE_URLS.comment}/all/${nodeId}/block/${blockId}/thread/${threadId}`
+  },
+  reactions: {
+    /** POST */
+    react: `${BASE_URLS.reaction}/`,
+
+    /** GET */
+    allNote: (nodeId: string) => `${BASE_URLS.reaction}/node/${nodeId}`,
+
+    /** GET */
+    allBlock: (nodeId: string, blockId: string) => `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}`,
+
+    /** GET */
+    blockReactionDetails: (nodeId: string, blockId: string) =>
+      `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}/details`
   }
 }
