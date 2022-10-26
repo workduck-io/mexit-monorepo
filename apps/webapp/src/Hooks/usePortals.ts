@@ -30,10 +30,10 @@ export const usePortals = () => {
     }
   }
 
-  const connectToPortal = async (actionGroupId: string, serviceId: string, parentNodeId: string) => {
+  const connectToPortal = async (actionGroupId: string, serviceId: string, parentNodeId: string, namespaceId: string) => {
     const workspaceId = getWorkspaceId()
 
-    const portal: PortalType = { serviceId, parentNodeId, serviceType: actionGroupId, mexId: workspaceId }
+    const portal: PortalType = { serviceId, parentNodeId, serviceType: actionGroupId, mexId: workspaceId, namespaceId }
 
     try {
       const res = client.post(apiURLs.connectToLochService(), portal, {
@@ -49,11 +49,17 @@ export const usePortals = () => {
     }
   }
 
-  const updateParentNote = async (actionGroupId: string, serviceId: string, parentNodeId: string) => {
+  const updateParentNote = async (
+    actionGroupId: string,
+    serviceId: string,
+    parentNodeId: string,
+    namespaceId: string
+  ) => {
     const reqBody = {
       serviceId,
       serviceType: actionGroupId,
-      parentNodeId
+      parentNodeId,
+      namespaceId
     }
 
     try {

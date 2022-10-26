@@ -17,6 +17,7 @@ import { QuickLink } from '../NodeSelect/NodeSelect'
 import CreateInput from '../createInput'
 import ServiceHeader from './ServiceHeader'
 import ServiceInfo from './ServiceInfo'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 
 const Portals = () => {
   const theme = useTheme()
@@ -36,6 +37,7 @@ const Portals = () => {
   const apps = usePortalStore((store) => store.apps)
   const connectedPortals = usePortalStore((store) => store.connectedPortals)
   const getIsPortalConnected = usePortalStore((store) => store.getIsPortalConnected)
+  const { getNamespaceOfNodeid } = useNamespaces()
 
   const actionGroup = apps[params.actionGroupId]
 
@@ -44,9 +46,13 @@ const Portals = () => {
   const { connectedPortalInfo, parentNoteName } = useMemo(() => {
     const connectedPortalInfo = getIsPortalConnected(actionGroup.actionGroupId)
 
-    let parentNoteName = ''
+    let parentNoteName = undefined
     if (connectedPortalInfo) {
-      parentNoteName = getPathFromNodeid(connectedPortalInfo?.parentNodeId)
+      const namespace = getNamespaceOfNodeid(connectedPortalInfo?.parentNodeId)
+      parentNoteName = {
+        path: getPathFromNodeid(connectedPortalInfo?.parentNodeId),
+        namespace: namespace?.id
+      }
     }
 
     return {
@@ -79,10 +85,15 @@ const Portals = () => {
       const isUpdate = connectedPortalInfo && connectedPortalInfo.parentNodeId !== parentNote?.nodeid
 
       if (isUpdate) {
-        await updateParentNote(params.actionGroupId, connectedPortalInfo.serviceId, parentNote.nodeid)
+        await updateParentNote(
+          params.actionGroupId,
+          connectedPortalInfo.serviceId,
+          parentNote.nodeid,
+          parentNote?.namespace
+        )
         toast(`Updated Successfully! All new notes will be added under "${parentNote.text}"`)
       } else {
-        await connectToPortal(params.actionGroupId, serviceId, parentNote?.nodeid)
+        await connectToPortal(params.actionGroupId, serviceId, parentNote?.nodeid, parentNote?.namespace)
         toast(`Updated Successfully! All new notes will be added under "${parentNoteName}"`)
       }
     } catch (err) {
