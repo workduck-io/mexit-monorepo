@@ -1,5 +1,11 @@
 # mexit
 
+## 0.17.1
+
+### Patch Changes
+
+- 50184d81: Fix Image upload and help modal
+
 ## 0.17.0
 
 ### Minor Changes
