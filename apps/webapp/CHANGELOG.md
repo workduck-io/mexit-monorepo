@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.8
+
+### Patch Changes
+
+- 64919a67: Fix extension, portal calls
+
 ## 0.19.7
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # mexit
 
+## 0.17.2
+
+### Patch Changes
+
+- 64919a67: Fix extension, portal calls
+
 ## 0.17.1
 
 ### Patch Changes
