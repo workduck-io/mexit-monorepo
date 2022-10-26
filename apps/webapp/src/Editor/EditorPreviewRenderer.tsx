@@ -17,7 +17,7 @@ import { MultiComboboxContainer } from './Components/MultiCombobox/multiCombobox
 import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from './Hooks/useEditorConfig'
-import generatePlugins from './Plugins'
+import { generateEditorPluginsWithComponents } from './Plugins'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -88,7 +88,8 @@ const EditorPreviewRenderer = ({
 
   // We get memoized plugins
   const oldPlugins = useMemo(
-    () => generatePlugins(readOnly ? editorPreviewComponents : components, { exclude: { dnd: true } }),
+    () =>
+      generateEditorPluginsWithComponents(readOnly ? editorPreviewComponents : components, { exclude: { dnd: true } }),
     [readOnly]
   )
 

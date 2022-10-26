@@ -17,6 +17,7 @@ export const useShortcutListener = () => {
   const { loadNode } = useLoad()
   const { shortcutHandler, shortcutDisabled } = useKeyListener()
   const shortcuts = useHelpStore((s) => s.shortcuts)
+  const toggleHelpModal = useHelpStore((s) => s.toggleModal)
 
   const ilinks = useDataStore((s) => s.ilinks)
 
@@ -32,6 +33,14 @@ export const useShortcutListener = () => {
           event.preventDefault()
           shortcutHandler(shortcuts.showSnippets, () => {
             goTo(ROUTE_PATHS.snippets, NavigationType.push)
+          })
+        }
+      },
+      [shortcuts.showHelp.keystrokes]: (event) => {
+        if (!isOnEditableElement(event)) {
+          event.preventDefault()
+          shortcutHandler(shortcuts.showHelp, () => {
+            toggleHelpModal()
           })
         }
       },

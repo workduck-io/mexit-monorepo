@@ -1,36 +1,46 @@
-import { client } from '@workduck-io/dwindle'
 import Compress from 'compress.js'
 
-import { apiURLs } from '@mexit/core'
+import { apiURLs, mog } from '@mexit/core'
 
 import toast from 'react-hot-toast'
 
-export const uploadImageToWDCDN = async (data: string | ArrayBuffer): Promise<string | ArrayBuffer> => {
-  if (typeof data === 'string') {
-    try {
-      const compress = new Compress()
-      const parsedImage = data.split(',')[1]
+export type UploadImageFn = (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 
-      const file = Compress.convertBase64ToFile(parsedImage)
-      const compressedImg = (
-        await compress.compress([file], {
-          size: 4,
-          quality: 0.9
+export const useUploadToCDN = (uploader: (base64string: string, options?: any) => Promise<string>) => {
+  const uploadImageToWDCDN = async (data: string): Promise<string> => {
+    // mog('uploadImageToWDCDN', { data, tp: typeof data })
+    if (typeof data === 'string') {
+      try {
+        const compress = new Compress()
+        const parsedImage = data.split(',')[1]
+
+        const file = Compress.convertBase64ToFile(parsedImage)
+        const compressedImg = (
+          await compress.compress([file], {
+            size: 4,
+            quality: 0.9
+          })
+        )[0]
+
+        toast('Uploading image')
+        // mog('uploadImageToWDCDN', { compressedImg })
+        const resp = await uploader(`${compressedImg.prefix}${compressedImg.data}`, { giveCloudFrontURL: true })
+        const path = resp as string
+        toast('Image Uploaded')
+
+        mog('image', {
+          path
         })
-      )[0]
-
-      toast('Uploading image')
-      const resp = await client.post(apiURLs.createImageLink, {
-        encodedString: compressedImg.data
-      })
-      const path = (await resp.data) as string
-      toast('Image Uploaded')
-      return apiURLs.getImagePublicLink(path)
-    } catch (error) {
-      toast('Image Upload Failed :(')
+        return path
+      } catch (error) {
+        toast('Image Upload Failed :(')
+        console.error('uploadImageToWDCDN', { error })
+        return data
+      }
+    } else {
       return data
     }
-  } else {
-    return data
   }
+
+  return { uploadImageToWDCDN }
 }

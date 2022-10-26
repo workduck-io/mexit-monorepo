@@ -4,13 +4,14 @@ import { Plate } from '@udecode/plate'
 import { debounce } from 'lodash'
 
 import { NodeEditorContent } from '@mexit/core'
-import { useEditorChange } from '@mexit/shared'
+import { useEditorChange, useUploadToCDN } from '@mexit/shared'
 
 import { MultiComboboxContainer } from '../../../Editor/Components/MultiCombobox/multiComboboxContainer'
 import useMultiComboboxOnChange from '../../../Editor/Components/MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from '../../../Editor/Hooks/useEditorConfig'
 import { getTodoPlugins } from './plugins'
+import { useAuth } from '@workduck-io/dwindle'
 
 type TaskEditorType = {
   editorId: string
@@ -21,8 +22,10 @@ type TaskEditorType = {
 
 const TaskEditor = ({ editorId, readOnly, content, onChange }: TaskEditorType) => {
   const config = useEditorPluginConfig(editorId)
+  const { uploadImageToS3 } = useAuth()
+  const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
 
-  const plugins = useMemo(() => getTodoPlugins(), [])
+  const plugins = useMemo(() => getTodoPlugins(uploadImageToWDCDN), [])
 
   const pluginConfigs = {
     combobox: {

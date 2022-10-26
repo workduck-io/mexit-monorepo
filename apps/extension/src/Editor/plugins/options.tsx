@@ -45,7 +45,6 @@ import {
 } from '@udecode/plate'
 
 import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
-import { uploadImageToWDCDN } from '@mexit/shared'
 
 const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 
@@ -308,11 +307,5 @@ export const optionsCreateNodeIdPlugin = {
     filterText: false,
     idCreator: () => generateTempId(),
     exclude: [ELEMENT_SYNC_BLOCK]
-  }
-}
-
-export const optionsImagePlugin = {
-  options: {
-    uploadImage: uploadImageToWDCDN
   }
 }
