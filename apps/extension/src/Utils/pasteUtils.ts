@@ -13,7 +13,7 @@ import {
 } from '@mexit/core'
 
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
-import getPlugins from '../Editor/plugins/index'
+import { generateEditorPluginsWithComponents } from '../Editor/plugins/index'
 
 // Also a better matching for the domains
 export const supportedDomains: Record<string, 'plain' | 'html'> = {
@@ -35,7 +35,7 @@ export const copySnippetToClipboard = async (item: Snippet) => {
     })
 
     const tempEditor = createPlateEditor({
-      plugins: getPlugins(
+      plugins: generateEditorPluginsWithComponents(
         createPlateUI({
           [ELEMENT_TAG]: CopyTag as any
         }),

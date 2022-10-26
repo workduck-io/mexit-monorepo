@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 import { useEditorChange } from '@mexit/shared'
 
-import useMemoizedPlugins from '../Editor/plugins'
+import { useMemoizedPlugins } from '../Editor/plugins'
 import components from './Editor/Components'
 
 interface EditorPreviewRendererProps {

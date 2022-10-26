@@ -225,7 +225,7 @@ export const generateEditorPluginsWithComponents = (components: Record<string, a
   return plugins
 }
 
-const useEditorPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
+export const useEditorPlugins = (components: Record<string, any>, options?: PluginOptionType) => {
   const { uploadImageToS3 } = useAuth()
   const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
 
@@ -246,4 +246,3 @@ const useEditorPlugins = (components: Record<string, any>, options?: PluginOptio
   return plugins
 }
 
-export default useEditorPlugins
