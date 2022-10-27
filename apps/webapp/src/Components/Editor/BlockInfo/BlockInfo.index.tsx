@@ -14,6 +14,7 @@ import { useComments } from '../../../Hooks/useComments'
 import { useReactions } from '../../../Hooks/useReactions'
 import { useAuthStore } from '../../../Stores/useAuth'
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
+import { isRangeInSameBlock, isSelectionAtBlockStart, isSelectionExpanded } from '@udecode/plate'
 
 /**
  *
@@ -26,11 +27,20 @@ export const BlockInfo = (props: any) => {
   const { children, element, attributes } = props
   const selected = useSelected()
   const focused = useFocused()
+
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
   const { getCommentsOfBlock } = useComments()
   const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
+
+  const selectionExpanded = props?.editor && isSelectionExpanded(props?.editor)
+  // const selectionAtStart = props?.editor && isSelectionAtBlockStart(props?.editor)
+  //
+  // TODO: Fix check of whether the selection is inside a single block
+  // const inSingleBlock = props?.editor?.selection && isRangeInSameBlock(props?.editor?.selection)
+
+  const mergedSelected = selectionExpanded ? false : selected
 
   // Whether to show all elements when hovering over the fixed blockinfo
   // For example: when only source is present
@@ -68,8 +78,8 @@ export const BlockInfo = (props: any) => {
 
   // Whether to show the blockinfo popup beside the block
   const showBlockInfo = useMemo(() => {
-    return (selected && focused) || interactive || hasComments || hasReactions || hasMetadata
-  }, [selected, hasComments, focused, hasReactions, hasMetadata, interactive])
+    return (mergedSelected && focused) || interactive || hasComments || hasReactions || hasMetadata
+  }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive])
 
   // if (hasReactions) {
   //   mog('BlockInfo', { reactions, hasComments, hasReactions })
@@ -94,7 +104,14 @@ export const BlockInfo = (props: any) => {
       })
     }
   }
-  // mog('BlockInfo', { id: element?.id, selected, element, attributes, isInline, focused, showBlockInfo })
+  // mog('BlockInfo', {
+  //   id: element?.id,
+  //   ed: props?.editor,
+  //   focused,
+  //   showBlockInfo,
+  //   // inSingleBlock,
+  //   edSel: props?.editor?.selection
+  // })
 
   return (
     <BlockInfoBlockWrapper {...attributes}>
@@ -107,7 +124,7 @@ export const BlockInfo = (props: any) => {
           onMouseLeave={() => setHover(false)}
         >
           {hasMetadata && !icon?.mexIcon && <Source source={sourceURL} />}
-          {(hasReactions || (selected && focused) || interactive || hover) && (
+          {(hasReactions || (mergedSelected && focused) || interactive || hover) && (
             <Popover
               onClose={() => setInteractive(false)}
               render={() => <Reactions onToggleReaction={onToggleReaction} reactions={reactions} />}
@@ -118,7 +135,7 @@ export const BlockInfo = (props: any) => {
               </BlockInfoButton>
             </Popover>
           )}
-          {(hasComments || hover || (focused && selected) || interactive) && (
+          {(hasComments || hover || (focused && mergedSelected) || interactive) && (
             <Popover
               onClose={() => setInteractive(false)}
               render={() => <CommentsComponent comments={comments} />}
