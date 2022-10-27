@@ -1,7 +1,6 @@
 import { PlateEditor, PlatePlugin, queryNode, TNode, Value } from '@udecode/plate'
-import BlockInfo from '../../Components/Editor/BlockInfo/BlockInfo.index'
+import { BlockInfo } from '../../Components/Editor/BlockInfo/BlockInfo.index'
 
-import { SourceInfo } from '../../Components/SourceInfo'
 export const BLOCK_MODIFIER_PLUGIN = 'BLOCK_MODIFIER_PLUGIN'
 
 const withSourceOverride = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(editor: E) => {
@@ -35,6 +34,7 @@ const withSourceOverride = <V extends Value = Value, E extends PlateEditor<V> = 
 export const createBlockModifierPlugin = (): PlatePlugin => ({
   key: BLOCK_MODIFIER_PLUGIN,
   withOverrides: withSourceOverride,
+  isInline: false,
   inject: {
     aboveComponent: () => BlockInfo
   }

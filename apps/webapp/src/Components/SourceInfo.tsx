@@ -21,39 +21,16 @@ export const Source: React.FC<{ source: string }> = ({ source }) => {
 
   return (
     <StyledSource $isVisible={!isUserEditing} contentEditable={false} onClick={onClick}>
-      <ProjectIconContainer isView={false}>
-        <Tippy
-          delay={100}
-          interactiveDebounce={100}
-          placement="top"
-          appendTo={() => document.body}
-          theme="mex-bright"
-          content={source}
-        >
-          <ProjectIconMex icon={icon} isMex={false} size={20} />
-        </Tippy>
-      </ProjectIconContainer>
+      <Tippy
+        delay={100}
+        interactiveDebounce={100}
+        placement="top"
+        appendTo={() => document.body}
+        theme="mex-bright"
+        content={source}
+      >
+        <ProjectIconMex icon={icon} isMex={false} />
+      </Tippy>
     </StyledSource>
   )
-}
-
-export const SourceInfo = (props: any) => {
-  const { children, element, attributes } = props
-
-  if (element?.blockMeta || element?.metadata?.elementMetadata) {
-    const iconSource = element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl
-    const icon = iconSource && getIconType(iconSource)
-
-    if (!icon?.mexIcon)
-      return (
-        <SourceInfoWrapper {...attributes}>
-          <Source source={element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl} />
-          {children}
-        </SourceInfoWrapper>
-      )
-
-    return children
-  }
-
-  return children
 }

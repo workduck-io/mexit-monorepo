@@ -43,5 +43,9 @@ export const useComments = () => {
       })
   }
 
-  return { comments, addComment, deleteComment, getAllCommentsOfNode }
+  const getCommentsOfBlock = (blockId: string) => {
+    return comments.filter((comment) => comment.blockId === blockId)
+  }
+
+  return { comments, addComment, deleteComment, getAllCommentsOfNode, getCommentsOfBlock }
 }

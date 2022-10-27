@@ -81,6 +81,14 @@ export const StyledSource = styled.div<{ $isVisible?: boolean }>`
   }
 
   ${({ $isVisible }) => FadeInOut($isVisible)}
+
+  img {
+    height: calc(16px + ${({ theme }) => theme.spacing.tiny});
+    width: calc(16px + ${({ theme }) => theme.spacing.tiny});
+    border-radius: 50%;
+    padding: ${({ theme }) => theme.spacing.tiny};
+    background-color: ${({ theme }) => theme.colors.background.card};
+  }
 `
 
 export const BlockModal = styled.div``

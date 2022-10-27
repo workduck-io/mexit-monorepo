@@ -90,20 +90,19 @@ const ContentEditor = () => {
   const editorId = useMemo(() => getEditorId(nodeid, fetchingContent), [nodeid, fetchingContent])
 
   const onFocusClick = (ev) => {
-    ev.preventDefault()
-    ev.stopPropagation()
-
-    const editorRef = getPlateEditorRef()
-
-    if (editorRef) {
-      if (editorWrapperRef.current) {
-        const el = editorWrapperRef.current
-        const hasScrolled = el.scrollTop > 0
-        if (!hasScrolled) {
-          selectEditor(editorRef, { focus: true })
-        }
-      }
-    }
+    // ev.preventDefault()
+    // ev.stopPropagation()
+    // mog('focus beeches')
+    // const editorRef = getPlateEditorRef()
+    // if (editorRef) {
+    //   if (editorWrapperRef.current) {
+    //     const el = editorWrapperRef.current
+    //     const hasScrolled = el.scrollTop > 0
+    //     if (!hasScrolled) {
+    //       selectEditor(editorRef, { focus: true })
+    //     }
+    //   }
+    // }
   }
 
   useAnalysisTodoAutoUpdate()
