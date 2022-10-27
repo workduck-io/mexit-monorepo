@@ -31,7 +31,7 @@ export const BlockInfo = (props: any) => {
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
-  const { getCommentsOfBlock } = useComments()
+  const { getCommentsOfBlock, addComment } = useComments()
   const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
 
   const selectionExpanded = props?.editor && isSelectionExpanded(props?.editor)
@@ -138,7 +138,15 @@ export const BlockInfo = (props: any) => {
           {(hasComments || hover || (focused && mergedSelected) || interactive) && (
             <Popover
               onClose={() => setInteractive(false)}
-              render={() => <CommentsComponent comments={comments} />}
+              render={() => (
+                <CommentsComponent
+                  comments={comments}
+                  onAddComment={(content) => {
+                    mog('Adding comment', { content })
+                    // Add the content to comment
+                  }}
+                />
+              )}
               placement="bottom-end"
             >
               <BlockInfoButton transparent primary={hasComments}>

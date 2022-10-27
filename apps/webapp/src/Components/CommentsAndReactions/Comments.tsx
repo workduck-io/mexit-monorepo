@@ -1,6 +1,9 @@
 import React from 'react'
-import { Comment as CommentType } from '@mexit/core'
+import { APIComment, Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
 import Plateless from '../Editor/Plateless'
+import { CommentsWrapper } from './Comments.style'
+import { Title } from '@workduck-io/mex-components'
+import TaskEditor from '../CreateTodoModal/TaskEditor'
 
 export const Comment = ({ comment }: { comment: CommentType }) => {
   return (
@@ -13,18 +16,33 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
 
 interface CommentsProps {
   comments: CommentType[]
+  onAddComment: (content: NodeEditorContent) => void
 }
 
-export const CommentsComponent = ({ comments }: CommentsProps) => {
+export const NewComment = ({ onAddComment }: { onAddComment: (comment: NodeEditorContent) => void }) => {
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
+  const onSubmit = () => {
+    // if (textAreaRef.current) {
+    // const content = textAreaRef.current.value
+    onAddComment([{ children: [{ text: 'content' }] }])
+    // }
+  }
   return (
     <div>
-      <p>Comments</p>
+      <TaskEditor content={defaultContent.content} editorId="comment-editor-max" onChange={(con) => console.log(con)} />
+      <button onClick={() => onSubmit()}>Submit</button>
+    </div>
+  )
+}
+
+export const CommentsComponent = ({ comments, onAddComment }: CommentsProps) => {
+  return (
+    <CommentsWrapper>
+      <Title>Comments</Title>
       {comments.map((comment) => (
         <Comment comment={comment} />
       ))}
-      <div>
-        <textarea placeholder="Add a comment" />
-      </div>
-    </div>
+      <NewComment onAddComment={onAddComment} />
+    </CommentsWrapper>
   )
 }
