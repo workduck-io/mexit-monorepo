@@ -1,6 +1,7 @@
 import { useCommentStore } from '../Stores/useCommentStore'
 import { useCommentAPI } from './API/useCommentAndReactionAPI'
 import { APIComment, mog } from '@mexit/core'
+import { useAuthStore } from '../Stores/useAuth'
 
 export const useComments = () => {
   const commentAPI = useCommentAPI()
@@ -8,11 +9,12 @@ export const useComments = () => {
   const setComments = useCommentStore((state) => state.setComments)
 
   const addComment = (comment: APIComment) => {
+    const currentUserDetails = useAuthStore.getState().userDetails
     commentAPI
       .saveComment(comment)
       .then((res) => {
         mog('Saved comment', { res })
-        setComments([...comments, { ...comment, userId: '' }])
+        setComments([...comments, { ...comment, userId: currentUserDetails.userID }])
       })
       .catch((err) => {
         mog('Error saving comment', { err })

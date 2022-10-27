@@ -1,8 +1,17 @@
 import create from 'zustand'
 
-import { ReactionStore } from '@mexit/core'
+import { IDBStorage, ReactionStore } from '@mexit/core'
+import { persist } from 'zustand/middleware'
 
-export const useReactionStore = create<ReactionStore>((set) => ({
-  reactions: [],
-  setReactions: (reactions) => set({ reactions })
-}))
+export const useReactionStore = create<ReactionStore>(
+  persist(
+    (set) => ({
+      reactions: [],
+      setReactions: (reactions) => set({ reactions })
+    }),
+    {
+      name: 'mexit-reactions-store',
+      getStorage: () => IDBStorage
+    }
+  )
+)

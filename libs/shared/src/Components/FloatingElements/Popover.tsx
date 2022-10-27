@@ -15,6 +15,7 @@ import {
   FloatingPortal
 } from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
+import { PopoverWrapper } from './Popover.style'
 
 interface Props {
   render: (data: { close: () => void; labelId: string; descriptionId: string }) => React.ReactNode
@@ -48,7 +49,9 @@ export const Popover = ({ children, onClose, render, placement }: Props) => {
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useClick(context),
     useRole(context),
-    useDismiss(context)
+    useDismiss(context, {
+      referencePointerDown: false
+    })
   ])
 
   // Preserve the consumer's ref
@@ -60,17 +63,10 @@ export const Popover = ({ children, onClose, render, placement }: Props) => {
       <FloatingPortal>
         {open && (
           <FloatingFocusManager context={context}>
-            <div
+            <PopoverWrapper
               ref={floating}
               className="Popover"
               style={{
-                background: '#222',
-                color: 'white',
-                borderRadius: '6px',
-                padding: '4px 6px',
-                fontSize: '14px',
-                textAlign: 'left',
-                width: 'max-content',
                 position: strategy,
                 top: y ?? 0,
                 left: x ?? 0
@@ -86,7 +82,7 @@ export const Popover = ({ children, onClose, render, placement }: Props) => {
                   setOpen(false)
                 }
               })}
-            </div>
+            </PopoverWrapper>
           </FloatingFocusManager>
         )}
       </FloatingPortal>

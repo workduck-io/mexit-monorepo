@@ -1,40 +1,44 @@
 import { useReactionAPI } from './API/useCommentAndReactionAPI'
 import { useReactionStore } from '../Stores/useReactionStore'
-import { mog, Reaction } from '@mexit/core'
+import { useAuthStore } from '../Stores/useAuth'
+import { mog, APIReaction } from '@mexit/core'
 
 export const useReactions = () => {
   const reactionsAPI = useReactionAPI()
   const reactions = useReactionStore((state) => state.reactions)
   const setReactions = useReactionStore((state) => state.setReactions)
 
-  const addReaction = (reaction: Reaction) => {
+  const addReaction = (reaction: APIReaction) => {
+    const currentUserDetails = useAuthStore.getState().userDetails
     reactionsAPI
       .addReaction(reaction)
       .then((res) => {
-        mog('Saved comment', { res })
-        setReactions([...reactions, { ...reaction, userId: '' }])
+        mog('Saved reaction', { res })
+        setReactions([...reactions, { ...reaction, userId: currentUserDetails.userID }])
       })
       .catch((err) => {
-        mog('Error saving comment', { err })
+        mog('Error saving reaction', { err })
       })
   }
 
-  const deleteReaction = (reaction: Reaction) => {
+  const deleteReaction = (reaction: APIReaction) => {
+    const currentUserDetails = useAuthStore.getState().userDetails
     reactionsAPI
       .deleteReaction(reaction)
       .then((res) => {
-        mog('Deleted comment', { res })
-        setReactions(
-          reactions.filter(
-            (r) =>
-              r.blockId !== reaction.blockId &&
-              r.userId !== reaction.userId &&
-              r.reaction.value !== reaction.reaction.value
-          )
+        const newReactions = reactions.filter(
+          (r) =>
+            !(
+              r.blockId === reaction.blockId &&
+              r.userId === currentUserDetails.userID &&
+              r.reaction.value === reaction.reaction.value
+            )
         )
+        mog('Deleted reaction', { res, reaction })
+        setReactions(newReactions)
       })
       .catch((err) => {
-        mog('Error deleting comment', { err })
+        mog('Error deleting reaction', { err })
       })
   }
 
@@ -42,11 +46,11 @@ export const useReactions = () => {
     reactionsAPI
       .getReactionsOfNote(nodeId)
       .then((res) => {
-        mog('Got comments', { res })
+        mog('Got reactions', { res })
         // setComments(res)
       })
       .catch((err) => {
-        mog('Error getting comments', { err })
+        mog('Error getting reactions', { err })
       })
   }
 
