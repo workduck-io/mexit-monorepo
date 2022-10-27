@@ -162,6 +162,8 @@ export const generatePlugins = (options: PluginOptionType) => {
       }
     }),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
+
+    // Shows share link, comments and reactions attached to the block
     createBlockModifierPlugin(),
 
     // serialization / deseriailization

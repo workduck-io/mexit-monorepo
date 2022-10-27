@@ -21,7 +21,7 @@ export const ProjectIconContainer = styled.span<{ isView: boolean }>`
           display: flex;
           align-items: center;
         `}
-  
+
   font-size: 0.9rem;
 
   img {
@@ -72,10 +72,6 @@ export const StyledSource = styled.div<{ $isVisible?: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  z-index: 2;
-  position: absolute;
-  left: 98%;
 
   cursor: pointer;
   user-select: none;
