@@ -2,7 +2,7 @@
   "name": "Mexit",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
   "manifest_version": 3,
-  "version": "0.17.2",
+  "version": "0.17.3",
   "icons": { "16": "Assets/icon16x16.png", "48": "Assets/icon48x48.png", "128": "Assets/icon128x128.png" },
   "commands": {
     "open-mexit": {

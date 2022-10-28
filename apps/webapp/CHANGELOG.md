@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.19.9
+
+### Patch Changes
+
+- 311a6068: Fix share note link of public space
+- 311a6068: Fix public share links
+
 ## 0.19.8
 
 ### Patch Changes
