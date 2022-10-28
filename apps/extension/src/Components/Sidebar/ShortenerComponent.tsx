@@ -102,20 +102,18 @@ export const ShortenerComponent = () => {
           updateAlias={onUpdateAlias}
           isDuplicateAlias={isDuplicateAlias}
         />
-        <LinkTagSection>
-          <TagsLabel
-            tags={tags}
-            onClick={() => console.log('clicked on tags')}
-            onDelete={(val: string) => console.log('link delete', val)}
-          />
-          <AddTagMenu
-            root={getElementById('ext-side-nav')}
-            createTag={onAddCreateTag}
-            tags={toAddTags}
-            addTag={onAddNewTag}
-          />
-        </LinkTagSection>
+        <AddTagMenu
+          root={getElementById('ext-side-nav')}
+          createTag={onAddCreateTag}
+          tags={toAddTags}
+          addTag={onAddNewTag}
+        />
       </LinkShortenAndTagsWrapper>
+      <TagsLabel
+        tags={tags}
+        onClick={() => console.log('clicked on tags')}
+        onDelete={(val: string) => console.log('link delete', val)}
+      />
     </ShortenerWrapper>
   )
 }
