@@ -13,6 +13,7 @@ function PublicNamespaceView() {
   const [showLoader, setShowLoader] = useState(true)
   const { setNamespace, setILinks, setCurrentNode } = usePublicNodeStore()
   const namespaceID = useParams().namespaceID
+  const noteID = useParams().nodeId
   const navigate = useNavigate()
   const { getPublicNamespaceAPI } = useNamespaceApi()
 
@@ -30,7 +31,12 @@ function PublicNamespaceView() {
           updatedAt: response.updatedAt
         })
 
-        const firstNode = response.nodeHierarchy[0]
+        // Use noteID in path params if found, otherwise open the first note in hierarchy
+        const firstNode = noteID
+          ? response.nodeHierarchy.find((node: any) => node.nodeid === noteID) ?? response.nodeHierarchy[0]
+          : response.nodeHierarchy[0]
+
+        // mog('firstNode', { firstNode, noteID })
 
         setILinks(response.nodeHierarchy)
         navigate(`node/${firstNode.nodeid}`)

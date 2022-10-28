@@ -46,7 +46,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
   // const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
-  const { isNamespacePublic, makeNamespacePublic } = useNamespaces()
+  const { getNamespaceOfNodeid, isNamespacePublic, makeNamespacePublic } = useNamespaces()
 
   const publicUrl = useMemo(() => {
     if (context === 'note') {
@@ -55,6 +55,16 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
       return isNamespacePublic(id) ? apiURLs.namespaces.getPublicURL(id) : undefined
     }
   }, [id, isPublic, context, isNamespacePublic])
+
+  const noteNamespacePublicLink = useMemo(() => {
+    if (context === 'note') {
+      const namespace = getNamespaceOfNodeid(id)
+      return namespace && isNamespacePublic(namespace.id)
+        ? apiURLs.namespaces.getPublicURLofNote(namespace.id, id)
+        : undefined
+    }
+    return undefined
+  }, [id, context])
 
   // Helper function to set loading
   const tryError = async (fn: () => Promise<void>) => {
@@ -106,26 +116,46 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
       <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
         <MexIcon color={theme.colors.primary} icon={globalLine} fontSize={24} margin="0 1rem 0 0" />
         <div style={{ gap: '1', userSelect: 'none' }}>
-          <CardTitle>Make this {context} public?</CardTitle>
-          <ItemDesc>Publish and share the link with everyone!</ItemDesc>
+          {context === 'note' && noteNamespacePublicLink ? (
+            <>
+              <CardTitle>This note is in a public space.</CardTitle>
+              <ItemDesc>Share the public space link</ItemDesc>
+            </>
+          ) : (
+            <>
+              <CardTitle>Make this {context} public?</CardTitle>
+              <ItemDesc>Publish and share the link with everyone!</ItemDesc>
+            </>
+          )}
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <span style={{ marginRight: '.5rem' }}>
-          {publicUrl && (
-            <CopyButton text={publicUrl} size="20px" beforeCopyTooltip="Copy link" afterCopyTooltip="Link copied!" />
+          {noteNamespacePublicLink ? (
+            <CopyButton
+              text={noteNamespacePublicLink}
+              size="20px"
+              beforeCopyTooltip="Copy link"
+              afterCopyTooltip="Link copied!"
+            />
+          ) : (
+            publicUrl && (
+              <CopyButton text={publicUrl} size="20px" beforeCopyTooltip="Copy link" afterCopyTooltip="Link copied!" />
+            )
           )}
         </span>
         {isLoading ? (
           <Loading dots={3} transparent />
         ) : (
-          <ToggleButton
-            id="toggle-public"
-            value={!!publicUrl}
-            size="sm"
-            onChange={flipPublicAccess}
-            checked={!!publicUrl}
-          />
+          noteNamespacePublicLink === undefined && (
+            <ToggleButton
+              id="toggle-public"
+              value={!!publicUrl}
+              size="sm"
+              onChange={flipPublicAccess}
+              checked={!!publicUrl}
+            />
+          )
         )}
       </div>
     </Container>
