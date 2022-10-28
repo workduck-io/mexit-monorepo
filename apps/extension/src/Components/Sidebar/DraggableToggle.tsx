@@ -13,6 +13,14 @@ import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { getElementById } from '../../contentScript'
 
+const DragIcon = styled(Icon)<{ $show: boolean }>`
+  ${(props) =>
+    !props.$show &&
+    css`
+      display: none;
+    `}
+`
+
 const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
   position: fixed;
   display: flex;
@@ -41,9 +49,14 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
   }
 
   &:hover {
+    cursor: pointer;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  }
+
+  ${DragIcon} {
+    cursor: ns-resize;
   }
 
   &:active {
@@ -51,15 +64,6 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
     background-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
-`
-
-const DragIcon = styled(Icon)<{ $show: boolean }>`
-  ${(props) =>
-    !props.$show &&
-    css`
-      display: none;
-      cursor: ns-resize;
-    `}
 `
 
 export const DraggableToggle = () => {
