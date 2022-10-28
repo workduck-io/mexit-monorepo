@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.37.0",
     "react-hot-toast": "^2.2.0",
+    "react-use-hoverintent": "^1.2.9",
     "react-spring": "^9.4.3",
     "react-virtual": "^2.10.4",
     "sanitize-html": "^2.6.1",

@@ -12846,6 +12846,11 @@ react-universal-interface@^0.6.2:
   resolved "https://registry.yarnpkg.com/react-universal-interface/-/react-universal-interface-0.6.2.tgz#5e8d438a01729a4dbbcbeeceb0b86be146fe2b3b"
   integrity sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==
 
+react-use-hoverintent@^1.2.9:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/react-use-hoverintent/-/react-use-hoverintent-1.2.9.tgz#a56a2117028448f3eb2cd0a75be64eb50c8d3490"
+  integrity sha512-wS0mUCK0G8VTECj1Gyetm4+z/iRO4zuydNYmWDy7Z+dmyUzXODMFrQSDqiCBxksXyrr56Dd2M2YnL1kGoQ7/BA==
+
 react-use@^17.3.2:
   version "17.4.0"
   resolved "https://registry.yarnpkg.com/react-use/-/react-use-17.4.0.tgz#cefef258b0a6c534a5c8021c2528ac6e1a4cdc6d"
