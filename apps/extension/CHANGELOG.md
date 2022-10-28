@@ -1,5 +1,12 @@
 # mexit
 
+## 0.17.3
+
+### Patch Changes
+
+- 1e77592c: This PR fixes new link shortening in extension sidebar, and some styling fixes
+- 6f4ddd8a: Draggable extension sidebar toggle
+
 ## 0.17.2
 
 ### Patch Changes
