@@ -22,16 +22,16 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
     $expanded
       ? css`
           top: ${$top}px;
-          right: calc(${'400px' + ' + ' + (theme.additional.hasBlocks ? 0 : -15)}px);
+          right: 405px;
         `
       : css`
           top: ${$top}px;
-          right: ${theme.additional.hasBlocks ? 8 : 8}px;
+          right: 8px;
         `}
 
   z-index: 9999999999;
   padding: 8px;
-  border-radius: 100%;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   background: ${({ theme }) => theme.colors.background.sidebar};
   color: ${({ theme }) => theme.colors.text.fade};
 
@@ -41,7 +41,6 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
   }
 
   &:hover {
-    cursor: pointer;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
@@ -54,8 +53,17 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
   }
 `
 
+const DragIcon = styled(Icon)<{ $show: boolean }>`
+  ${(props) =>
+    !props.$show &&
+    css`
+      display: none;
+      cursor: ns-resize;
+    `}
+`
+
 export const DraggableToggle = () => {
-  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 250 })
+  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 600 })
   const [tracking, setTracking] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
   const { endColumnWidth } = useSidebarTransition()
@@ -63,14 +71,13 @@ export const DraggableToggle = () => {
   const handleRef = useRef<any>(null)
 
   useEffect(() => {
-    const handleMouseDown = (event) => {
+    const handleMouseDown = (event: MouseEvent) => {
       event.preventDefault()
       event.stopPropagation()
       setTracking(true)
     }
 
     if (handleRef?.current) {
-      mog('attaching event listener')
       handleRef.current.addEventListener('mousedown', handleMouseDown)
     }
 
@@ -80,10 +87,9 @@ export const DraggableToggle = () => {
   }, [handleRef?.current])
 
   useEffect(() => {
-    const handleMouseMove = (event) => {
+    const handleMouseMove = (event: MouseEvent) => {
       if (tracking) {
-        const newHeight = event.screenY
-        // mog('height', { newHeight })
+        const newHeight = event.clientY
         setToggleTop(newHeight)
       }
     }
@@ -118,7 +124,7 @@ export const DraggableToggle = () => {
           icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
         />
 
-        <Icon ref={handleRef} icon="ic:outline-drag-indicator" />
+        <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
       </ToggleWrapper>
     </Tippy>
   )
