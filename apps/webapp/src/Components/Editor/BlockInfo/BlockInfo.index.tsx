@@ -4,17 +4,18 @@ import { Source } from '../../SourceInfo'
 import { useEffect, useMemo, useState } from 'react'
 
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
-import { getIconType, Popover } from '@mexit/shared'
+import { getIconType, IconDisplay, Popover } from '@mexit/shared'
 import { Icon } from '@iconify/react'
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { useFocused, useSelected } from 'slate-react'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
-import { Reactions } from '../../CommentsAndReactions/Reactions'
+import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { useComments } from '../../../Hooks/useComments'
-import { useReactions } from '../../../Hooks/useReactions'
+import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
 import { useAuthStore } from '../../../Stores/useAuth'
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { isRangeInSameBlock, isSelectionAtBlockStart, isSelectionExpanded } from '@udecode/plate'
+import { CompressedReactionGroup } from '../../CommentsAndReactions/Reactions.style'
 
 /**
  *
@@ -69,10 +70,15 @@ export const BlockInfo = (props: any) => {
   const hasComments = useMemo(() => comments.length > 0, [comments])
 
   // Reactions of the block
-  const reactions = useMemo(() => {
+  const { reactions, previewReactions } = useMemo(() => {
     const blockId = element?.id
     const reactions = getReactionsOfBlock(blockId)
-    return reactions
+    const previewReactions = reactionsWithCount(reactions)
+      .sort((a, b) => b.count - a.count)
+      .filter((r) => r.count > 0)
+      .slice(0, 3)
+    mog('previewReactions', { previewReactions, reactions })
+    return { reactions, previewReactions }
   }, [element?.id, interactive, hover])
   const hasReactions = useMemo(() => reactions.length > 0, [reactions])
 
@@ -130,12 +136,12 @@ export const BlockInfo = (props: any) => {
               render={() => <Reactions onToggleReaction={onToggleReaction} reactions={reactions} />}
               placement="bottom-end"
             >
-              <BlockInfoButton onClick={() => setInteractive(true)} transparent primary={hasReactions}>
-                <Icon icon="fluent:emoji-add-20-regular" />
+              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!hasReactions}>
+                <BlockReaction previewReactions={previewReactions} />
               </BlockInfoButton>
             </Popover>
           )}
-          {(hasComments || hover || (focused && mergedSelected) || interactive) && (
+          {(hasComments || hover || interactive || (focused && mergedSelected)) && (
             <Popover
               onClose={() => setInteractive(false)}
               render={() => (

@@ -1,7 +1,42 @@
 import { useReactionAPI } from './API/useCommentAndReactionAPI'
 import { useReactionStore } from '../Stores/useReactionStore'
 import { useAuthStore } from '../Stores/useAuth'
-import { mog, APIReaction } from '@mexit/core'
+import { mog, APIReaction, MIcon, Reaction } from '@mexit/core'
+
+export const defaultReactions: MIcon[] = [
+  {
+    type: 'EMOJI',
+    value: '👍'
+  },
+  {
+    type: 'EMOJI',
+    value: '👎'
+  },
+  {
+    type: 'EMOJI',
+    value: '😂'
+  },
+  {
+    type: 'EMOJI',
+    value: '😮'
+  },
+  {
+    type: 'EMOJI',
+    value: '😢'
+  },
+  {
+    type: 'EMOJI',
+    // fire emoji
+    value: '🔥'
+  }
+]
+
+export const reactionsWithCount = (reactions: Reaction[]) => {
+return defaultReactions.map((reaction) => {
+    const count = reactions.filter((r) => r.reaction.value === reaction.value)
+    return { reaction: reaction, count: count.length }
+  })
+}
 
 export const useReactions = () => {
   const reactionsAPI = useReactionAPI()

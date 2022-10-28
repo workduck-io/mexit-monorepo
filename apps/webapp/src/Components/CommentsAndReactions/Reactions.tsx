@@ -1,46 +1,16 @@
+import { Icon } from '@iconify/react'
 import { MIcon, mog, Reaction as ReactionType } from '@mexit/core'
 import { IconDisplay } from '@mexit/shared'
-import { ReactionButton, ReactionCount, ReactionsWrapper } from './Reactions.style'
+import { reactionsWithCount } from '../../Hooks/useReactions'
+import { CompressedReactionGroup, ReactionButton, ReactionCount, ReactionsWrapper } from './Reactions.style'
 
 interface ReactionsProps {
   reactions: ReactionType[]
   onToggleReaction: (reactionVal: MIcon) => void
 }
 
-const defaultReactions: MIcon[] = [
-  {
-    type: 'EMOJI',
-    value: '👍'
-  },
-  {
-    type: 'EMOJI',
-    value: '👎'
-  },
-  {
-    type: 'EMOJI',
-    value: '😂'
-  },
-  {
-    type: 'EMOJI',
-    value: '😮'
-  },
-  {
-    type: 'EMOJI',
-    value: '😢'
-  },
-  {
-    type: 'EMOJI',
-    // fire emoji
-    value: '🔥'
-  }
-]
-
 export const Reactions = ({ reactions, onToggleReaction }: ReactionsProps) => {
-  const BlockReactions = defaultReactions.map((reaction) => {
-    const count = reactions.filter((r) => r.reaction.value === reaction.value)
-    return { reaction: reaction, count: count.length }
-  })
-
+  const BlockReactions = reactionsWithCount(reactions)
   const toggleReaction = (reactionVal: MIcon) => {
     onToggleReaction(reactionVal)
   }
@@ -53,10 +23,29 @@ export const Reactions = ({ reactions, onToggleReaction }: ReactionsProps) => {
     <ReactionsWrapper>
       {BlockReactions.map((reaction) => (
         <ReactionButton onClick={() => toggleReaction(reaction.reaction)} key={reaction.reaction.value}>
-          <IconDisplay icon={reaction.reaction} />
+          <IconDisplay size={20} icon={reaction.reaction} />
           {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
         </ReactionButton>
       ))}
     </ReactionsWrapper>
+  )
+}
+
+interface BlockReactionProps {
+  previewReactions: {
+    reaction: MIcon
+    count: number
+  }[]
+}
+
+export const BlockReaction = ({ previewReactions }: BlockReactionProps) => {
+  return previewReactions.length > 0 ? (
+    <CompressedReactionGroup>
+      {previewReactions.map((r, i) => (
+        <IconDisplay key={i} size={12} icon={r.reaction} />
+      ))}
+    </CompressedReactionGroup>
+  ) : (
+    <Icon icon="fluent:emoji-add-20-regular" />
   )
 }
