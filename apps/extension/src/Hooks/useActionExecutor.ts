@@ -18,6 +18,7 @@ import {
 
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
@@ -28,6 +29,7 @@ import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
+import { useURLsAPI } from './useURLs'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
@@ -48,6 +50,9 @@ export function useActionExecutor() {
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
   const setInput = useSputlitStore((s) => s.setInput)
   const resetSputlitState = useSputlitStore((s) => s.reset)
+
+  const { links, addLink } = useLinkStore()
+  const saveLink = useURLsAPI().saveLink
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     const search = useSputlitStore.getState().search
@@ -95,6 +100,12 @@ export function useActionExecutor() {
             })
 
             saveIt(false, true)
+
+            if (!links.find((l) => l.url === window.location.href)) {
+              const link = { url: window.location.href, title: document.title }
+              saveLink(link)
+              addLink(link)
+            }
 
             resetSputlitState()
         }

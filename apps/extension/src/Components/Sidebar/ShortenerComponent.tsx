@@ -15,7 +15,7 @@ import {
 } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
-import { useLinkURLs } from '../../Hooks/useURLs'
+import { useLinkURLs, useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
 import { getElementById } from '../../contentScript'
 
@@ -32,6 +32,10 @@ const UrlTitleWrapper = styled(LinkTitleWrapper)`
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: 0.25rem 0;
 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
   img {
     margin: 0.25rem 0.5rem;
   }
@@ -39,16 +43,18 @@ const UrlTitleWrapper = styled(LinkTitleWrapper)`
 
 const FaviconImage = ({ source }: { source: string }) => {
   // mog('rendering favicon', { source })
-  return <img height="20px" width="20px" src={getFavicon(source)} alt="favicon" />
+  return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 
 export const ShortenerComponent = () => {
-  const { links } = useLinkStore()
+  const { links, addLink } = useLinkStore()
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const { updateAlias, isDuplicateAlias, getTags, addTag, removeTag } = useLinkURLs()
+  const { saveLink } = useURLsAPI()
 
   const link = useMemo(() => {
-    return links.find((l) => l.url === window.location.href)
+    const l = links.find((l) => l.url === window.location.href)
+    return l ?? { url: window.location.href, title: document.title }
   }, [links, window.location])
 
   const tags = useMemo(() => {
@@ -58,6 +64,17 @@ export const ShortenerComponent = () => {
   }, [link])
 
   const toAddTags = getTags(link?.tags)
+
+  const onUpdateAlias = (linkurl: string, alias: string) => {
+    if (links.find((l) => l.url === linkurl)) {
+      updateAlias(linkurl, alias)
+    } else {
+      const link = { url: linkurl, title: document.title, alias: alias }
+      saveLink(link)
+
+      addLink(link)
+    }
+  }
 
   const onAddNewTag = (tag: Tag) => {
     // mog('onAddNewTag', { tag })
@@ -82,23 +99,21 @@ export const ShortenerComponent = () => {
         <ShortenURL
           link={link}
           workspaceId={getWorkspaceId()}
-          updateAlias={updateAlias}
+          updateAlias={onUpdateAlias}
           isDuplicateAlias={isDuplicateAlias}
         />
-        <LinkTagSection>
-          <TagsLabel
-            tags={tags}
-            onClick={() => console.log('clicked on tags')}
-            onDelete={(val: string) => console.log('link delete', val)}
-          />
-          <AddTagMenu
-            root={getElementById('ext-side-nav')}
-            createTag={onAddCreateTag}
-            tags={toAddTags}
-            addTag={onAddNewTag}
-          />
-        </LinkTagSection>
+        <AddTagMenu
+          root={getElementById('ext-side-nav')}
+          createTag={onAddCreateTag}
+          tags={toAddTags}
+          addTag={onAddNewTag}
+        />
       </LinkShortenAndTagsWrapper>
+      <TagsLabel
+        tags={tags}
+        onClick={() => console.log('clicked on tags')}
+        onDelete={(val: string) => console.log('link delete', val)}
+      />
     </ShortenerWrapper>
   )
 }
