@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { APIComment, Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
 import Plateless from '../Editor/Plateless'
 import { CommentsWrapper } from './Comments.style'
 import { Title } from '@workduck-io/mex-components'
 import TaskEditor from '../CreateTodoModal/TaskEditor'
+import { CommentEditor } from '../CommentEditor'
+import { PlateProvider } from '@udecode/plate'
+import { CommentEditorWrapper } from '../CommentEditor/styled'
 
 export const Comment = ({ comment }: { comment: CommentType }) => {
   return (
@@ -20,7 +23,7 @@ interface CommentsProps {
 }
 
 export const NewComment = ({ onAddComment }: { onAddComment: (comment: NodeEditorContent) => void }) => {
-  const textAreaRef = React.useRef<HTMLTextAreaElement>(null)
+  const commentEditorId = useMemo(() => `CommentEditor-new`, [])
   const onSubmit = () => {
     // if (textAreaRef.current) {
     // const content = textAreaRef.current.value
@@ -29,7 +32,15 @@ export const NewComment = ({ onAddComment }: { onAddComment: (comment: NodeEdito
   }
   return (
     <div>
-      <TaskEditor content={defaultContent.content} editorId="comment-editor-max" onChange={(con) => console.log(con)} />
+      <CommentEditorWrapper>
+        <PlateProvider id={commentEditorId}>
+          <CommentEditor
+            content={defaultContent.content}
+            editorId={commentEditorId}
+            onChange={(con) => console.log(con)}
+          />
+        </PlateProvider>
+      </CommentEditorWrapper>
       <button onClick={() => onSubmit()}>Submit</button>
     </div>
   )
