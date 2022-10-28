@@ -67,7 +67,7 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
 `
 
 export const DraggableToggle = () => {
-  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 600 })
+  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 1500 })
   const [tracking, setTracking] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
   const { endColumnWidth } = useSidebarTransition()
