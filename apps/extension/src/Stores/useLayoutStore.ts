@@ -7,6 +7,9 @@ interface LayoutState {
     expanded: boolean
     show: boolean
   }
+  toggleTop: number
+  setToggleTop: (height: number) => void
+
   infobar: { mode: ExtInfobarMode }
 
   toggleRHSidebar: () => void
@@ -23,6 +26,8 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
     expanded: false,
     show: true
   },
+  toggleTop: 44,
+  setToggleTop: (height) => set({ toggleTop: height }),
   toggleRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),
   setRHSidebarExpanded: (expanded) => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
   showRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
