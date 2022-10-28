@@ -8,6 +8,7 @@ import styled, { css } from 'styled-components'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
+import { MexIcon, WDLogo } from '@mexit/shared'
 
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
@@ -53,6 +54,12 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
+
+    svg {
+      path {
+        fill: ${({ theme }) => theme.colors.background.sidebar};
+      }
+    }
   }
 
   ${DragIcon} {
@@ -67,7 +74,7 @@ const ToggleWrapper = styled.div<{ $expanded?: boolean; $top: number }>`
 `
 
 export const DraggableToggle = () => {
-  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 1500 })
+  const [isHovering, intentRef, setIsHovering] = useHoverIntent({ timeout: 500 })
   const [tracking, setTracking] = useState(false)
   const { rhSidebar, toggleRHSidebar, toggleTop, setToggleTop } = useLayoutStore()
   const { endColumnWidth } = useSidebarTransition()
@@ -124,9 +131,7 @@ export const DraggableToggle = () => {
       content={<TitleWithShortcut title={rhSidebar.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
     >
       <ToggleWrapper ref={intentRef as any} $top={toggleTop} $expanded={rhSidebar.expanded} onClick={toggleRHSidebar}>
-        <Icon
-          icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
-        />
+        <WDLogo />
 
         <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
       </ToggleWrapper>
