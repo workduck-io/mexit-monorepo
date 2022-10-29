@@ -169,6 +169,20 @@ const Search = () => {
     }
   }
 
+  const getIsPreviewMode = () => {
+    if (activeItem)
+      switch (activeItem?.type) {
+        case ActionType.RENDER:
+        case ActionType.MAGICAL:
+        case ActionType.SCREENSHOT:
+          return true
+      }
+
+    return !previewMode
+  }
+
+  const isDisabled = getIsPreviewMode()
+
   return (
     <StyledSearch>
       {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
@@ -178,7 +192,7 @@ const Search = () => {
       <StyledInput
         ref={ref}
         autoFocus={previewMode}
-        disabled={!previewMode || activeItem?.type === ActionType.RENDER}
+        disabled={isDisabled}
         autoComplete="off"
         spellCheck="false"
         value={input}

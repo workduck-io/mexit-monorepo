@@ -12,8 +12,8 @@ export const SourceHeaderStyled = styled.div`
 
   img {
     border-radius: 50%;
-    padding: 4px;
-    background-color: ${({ theme }) => theme.colors.background.card};
+    padding: 2px;
+    background-color: ${({ theme }) => theme.colors.primary};
   }
 `
 
