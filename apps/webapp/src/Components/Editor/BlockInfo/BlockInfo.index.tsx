@@ -117,15 +117,19 @@ export const BlockInfo = (props: any) => {
     }
   }
 
-  const onAddComment = (content: any[]) => {
-    addComment({
+  const onAddComment = async (content: any[]) => {
+    return addComment({
       entityId: generateCommentId(),
       blockId: element?.id,
       nodeId: getNodeIdFromEditor(props?.editor?.id),
       content
-    }).then(() => {
-      setInstanceId(nanoid())
     })
+      .then(() => {
+        setInstanceId(nanoid())
+      })
+      .catch(() => {
+        throw Error('Error adding comment')
+      })
   }
   // mog('BlockInfo', {
   //   id: element?.id,

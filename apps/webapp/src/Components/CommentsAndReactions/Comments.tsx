@@ -48,18 +48,18 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
 
 interface CommentsProps {
   comments: CommentType[]
-  onAddComment: (content: NodeEditorContent) => void
+  onAddComment: (content: NodeEditorContent) => Promise<void>
 }
 
 export const NewComment = ({
   onAddComment,
   byUser
 }: {
-  onAddComment: (comment: NodeEditorContent) => void
+  onAddComment: (comment: NodeEditorContent) => Promise<void>
   byUser: string
 }) => {
   const [content, setContent] = React.useState<NodeEditorContent>(defaultContent.content)
-  const commentEditorId = useMemo(() => `CommentEditor-new`, [])
+  const [commentEditorId = '', setCommentEditorId] = React.useState(() => Math.random().toString(36).substring(7))
 
   const onChange = (content: NodeEditorContent) => {
     setContent(content)
@@ -69,6 +69,14 @@ export const NewComment = ({
     // if (textAreaRef.current) {
     // const content = textAreaRef.current.value
     onAddComment(content)
+      .then(() => {
+        setContent(defaultContent.content)
+        setCommentEditorId(Math.random().toString(36).substring(7))
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
     // }
     // setIsWriting(false)
   }

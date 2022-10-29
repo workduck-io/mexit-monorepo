@@ -18,6 +18,7 @@ export const useComments = () => {
       })
       .catch((err) => {
         mog('Error saving comment', { err })
+        throw Error('Error Saving comment')
       })
     return
   }

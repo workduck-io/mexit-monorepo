@@ -14,14 +14,14 @@ import { getCommentPlugins } from './plugins'
 import { useAuth } from '@workduck-io/dwindle'
 import { CommentEditorWrapper } from './styled'
 
-type TaskEditorType = {
+type CommentEditorType = {
   editorId: string
   content: NodeEditorContent
   readOnly?: boolean
   onChange?: (val: any) => void
 }
 
-export const CommentEditor = ({ editorId, readOnly, content, onChange }: TaskEditorType) => {
+export const CommentEditor = ({ editorId, readOnly, content, onChange }: CommentEditorType) => {
   const config = useEditorPluginConfig(editorId)
 
   const plugins = useMemo(() => getCommentPlugins(), [])
