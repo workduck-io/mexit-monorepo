@@ -1,7 +1,8 @@
 import { useReactionAPI } from './API/useCommentAndReactionAPI'
 import { useReactionStore } from '../Stores/useReactionStore'
 import { useAuthStore } from '../Stores/useAuth'
-import { mog, APIReaction, MIcon, Reaction } from '@mexit/core'
+import { mog, APIReaction, MIcon, Reaction, UserReaction } from '@mexit/core'
+import { StringToMIcon } from '@mexit/shared'
 
 export const defaultReactions: MIcon[] = [
   {
@@ -111,11 +112,23 @@ export const useReactions = () => {
     return reactions.filter((r) => r.blockId === blockId)
   }
 
+  const getReactionDetails = async (blockId: string, nodeId: string) => {
+    const reactionDetails = await reactionsAPI.getBlockReactionDetails(nodeId, blockId)
+    const userReactions = (Array.isArray(reactionDetails) ? reactionDetails : [])
+      .filter((r) => r?.reaction && Array.isArray(r?.reaction) && r?.reaction.length > 0)
+      .map((r) => ({ userId: r.userId, reactions: r?.reaction?.map(StringToMIcon) }))
+      .flat()
+    // mog('reactionDetails', { reactionDetails, userReactions })
+    // mog('reactionDetails', { reactionDetails })
+    return userReactions as UserReaction[]
+  }
+
   return {
     reactions,
     addReaction,
     deleteReaction,
     getAllReactionsOfNode,
+    getReactionDetails,
     getReactionsOfBlock
   }
 }

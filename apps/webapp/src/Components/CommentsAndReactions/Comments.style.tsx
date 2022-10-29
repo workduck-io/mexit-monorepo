@@ -79,5 +79,12 @@ export const CommentActions = styled.div`
 export const CommentTime = styled.div`
   display: flex;
   align-items: center;
+  color: ${({ theme }) => theme.colors.text.fade};
   gap: ${({ theme }) => theme.spacing.tiny};
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
+
+  :hover {
+    opacity: 1;
+  }
 `

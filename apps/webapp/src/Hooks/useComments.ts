@@ -77,5 +77,6 @@ export const useComments = () => {
     return comments.filter((comment) => comment.blockId === blockId)
   }
 
+
   return { comments, addComment, deleteComment, getAllCommentsOfNode, getCommentsOfBlock }
 }

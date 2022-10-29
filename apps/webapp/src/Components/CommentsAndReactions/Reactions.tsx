@@ -52,7 +52,7 @@ const ReactionDetails = ({ details }: ReactionDetailsProps) => {
   // mog('ReactionDetailsRender', { details })
   return (
     <>
-      {details.map((reaction) => (
+      {(details ?? []).map((reaction) => (
         <UserReactionRow userReaction={reaction} />
       ))}
     </>

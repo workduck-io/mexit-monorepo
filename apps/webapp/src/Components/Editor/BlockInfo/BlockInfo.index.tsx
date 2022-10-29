@@ -34,7 +34,7 @@ export const BlockInfo = (props: any) => {
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
-  const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
+  const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
   const { getBlockReactionDetails } = useReactionAPI()
   const [instanceId, setInstanceId] = useState<string>(nanoid())
 
@@ -124,7 +124,7 @@ export const BlockInfo = (props: any) => {
         setInstanceId(nanoid())
       })
       .catch(() => {
-        throw Error('Error deleting comment')
+        throw Error('Error adding comment')
       })
   }
 
@@ -143,15 +143,10 @@ export const BlockInfo = (props: any) => {
       })
   }
 
-  const getReactionDetails = async () => {
+  const getReactionDetailsForBlock = async () => {
     const blockId = element?.id
     const nodeId = getNodeIdFromEditor(props?.editor?.id)
-    const reactionDetails = await getBlockReactionDetails(nodeId, blockId)
-    const userReactions = (Array.isArray(reactionDetails) ? reactionDetails : [])
-      .map((r) => ({ userId: r.userId, reactions: r?.reaction?.map(StringToMIcon) }))
-      .flat()
-    // mog('reactionDetails', { reactionDetails, userReactions })
-    // mog('reactionDetails', { reactionDetails })
+    const userReactions = await getReactionDetails(nodeId, blockId)
     return userReactions as UserReaction[]
   }
 
@@ -179,7 +174,7 @@ export const BlockInfo = (props: any) => {
               onClose={() => setInteractive(false)}
               render={() => (
                 <Reactions
-                  getReactionDetails={getReactionDetails}
+                  getReactionDetails={getReactionDetailsForBlock}
                   onToggleReaction={onToggleReaction}
                   reactions={reactions}
                 />
