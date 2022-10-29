@@ -175,6 +175,7 @@ const ContentEditor = () => {
           <Editor
             // showBalloonToolbar
             onAutoSave={onAutoSave}
+            includeBlockInfo={true}
             // getSuggestions={getSuggestions}
             onChange={onChangeSave}
             content={nodeContent?.length ? nodeContent : defaultContent.content}
