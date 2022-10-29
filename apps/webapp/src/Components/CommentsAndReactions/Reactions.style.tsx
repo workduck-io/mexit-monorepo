@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components'
+import { transparentize } from 'polished'
 
 //
 
@@ -17,6 +18,13 @@ export const ReactionsWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny};
+
+  background: ${({ theme }) => transparentize(0.6, theme.colors.gray[7])};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  backdrop-filter: blur(10px);
+
+  max-height: 50vh;
+  overflow-y: auto;
 `
 
 export const ReactionButton = styled.button`

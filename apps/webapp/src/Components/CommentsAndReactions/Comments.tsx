@@ -130,9 +130,16 @@ export const CommentsComponent = ({ comments, onAddComment, onDeleteComment }: C
   const currentUserDetails = useAuthStore((state) => state.userDetails)
   return (
     <CommentsWrapper>
-      {comments.map((comment) => (
-        <Comment comment={comment} onDeleteComment={onDeleteComment} />
-      ))}
+      {comments
+        .sort((a, b) => {
+          if (a.metadata?.createdAt && b.metadata?.createdAt) {
+            return b.metadata?.createdAt - a.metadata?.createdAt
+          }
+          return 0
+        })
+        .map((comment) => (
+          <Comment key={comment.entityId} comment={comment} onDeleteComment={onDeleteComment} />
+        ))}
       <NewComment onAddComment={onAddComment} byUser={currentUserDetails.email} />
     </CommentsWrapper>
   )
