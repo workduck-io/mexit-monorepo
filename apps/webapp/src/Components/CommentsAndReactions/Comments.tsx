@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
 import Plateless from '../Editor/Plateless'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import {
   CommentActions,
   CommentAuthor,
@@ -20,9 +21,26 @@ import { ProfileImage } from '../User/ProfileImage'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useMentions } from '../../Hooks/useMentions'
 import { tinykeys } from '@workduck-io/tinykeys'
+import { useComments } from '../../Hooks/useComments'
+import { RelativeTime } from '@mexit/shared'
 
-export const Comment = ({ comment }: { comment: CommentType }) => {
+type OnAddComment = (content: NodeEditorContent) => Promise<void>
+type OnDeleteComment = (commentId: string) => Promise<void>
+
+interface CommentsProps {
+  comments: CommentType[]
+  onAddComment: OnAddComment
+  onDeleteComment: OnDeleteComment
+}
+
+interface CommentProps {
+  comment: CommentType
+  onDeleteComment: OnDeleteComment
+}
+
+export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
   const { getUserFromUserid } = useMentions()
+  // const { deleteComment } = useComments()
   const currentUserDetails = useAuthStore((state) => state.userDetails)
 
   const user = useMemo(() => {
@@ -37,10 +55,18 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
           <ProfileImage size={20} email={user?.email} />@{user && user.alias}
         </CommentAuthor>
         <CommentActions>
-          <CommentTime></CommentTime>
+          {comment.metadata?.createdAt && (
+            <CommentTime>
+              <RelativeTime dateNum={comment.metadata?.createdAt} />
+            </CommentTime>
+          )}
           {comment.userId === currentUserDetails?.userID && (
             /* Show delete button only when comment made by current user */
-            <IconButton icon="mdi:dots-vertical" title="Delete Comment" />
+            <IconButton
+              icon={deleteBin6Line}
+              title="Delete Comment"
+              onClick={() => onDeleteComment(comment.entityId)}
+            />
           )}
         </CommentActions>
       </CommentHeader>
@@ -51,18 +77,12 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
   )
 }
 
-interface CommentsProps {
-  comments: CommentType[]
-  onAddComment: (content: NodeEditorContent) => Promise<void>
+interface NewCommentProps {
+  onAddComment: OnAddComment
+  byUser: string
 }
 
-export const NewComment = ({
-  onAddComment,
-  byUser
-}: {
-  onAddComment: (comment: NodeEditorContent) => Promise<void>
-  byUser: string
-}) => {
+export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
   const [content, setContent] = React.useState<NodeEditorContent>(defaultContent.content)
   const [commentEditorId = '', setCommentEditorId] = React.useState(() => Math.random().toString(36).substring(7))
 
@@ -106,12 +126,12 @@ export const NewComment = ({
   )
 }
 
-export const CommentsComponent = ({ comments, onAddComment }: CommentsProps) => {
+export const CommentsComponent = ({ comments, onAddComment, onDeleteComment }: CommentsProps) => {
   const currentUserDetails = useAuthStore((state) => state.userDetails)
   return (
     <CommentsWrapper>
       {comments.map((comment) => (
-        <Comment comment={comment} />
+        <Comment comment={comment} onDeleteComment={onDeleteComment} />
       ))}
       <NewComment onAddComment={onAddComment} byUser={currentUserDetails.email} />
     </CommentsWrapper>

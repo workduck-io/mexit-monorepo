@@ -33,7 +33,7 @@ export const BlockInfo = (props: any) => {
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
-  const { getCommentsOfBlock, addComment } = useComments()
+  const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
   const { getBlockReactionDetails } = useReactionAPI()
   const [instanceId, setInstanceId] = useState<string>(nanoid())
@@ -118,6 +118,16 @@ export const BlockInfo = (props: any) => {
     }
   }
 
+  const onDeleteComment = async (commentId: string) => {
+    return deleteComment(commentId)
+      .then(() => {
+        setInstanceId(nanoid())
+      })
+      .catch(() => {
+        throw Error('Error deleting comment')
+      })
+  }
+
   const onAddComment = async (content: any[]) => {
     return addComment({
       entityId: generateCommentId(),
@@ -140,8 +150,8 @@ export const BlockInfo = (props: any) => {
     const userReactions = (Array.isArray(reactionDetails) ? reactionDetails : [])
       .map((r) => ({ userId: r.userId, reactions: r?.reaction?.map(StringToMIcon) }))
       .flat()
-    mog('reactionDetails', { reactionDetails, userReactions })
-    mog('reactionDetails', { reactionDetails })
+    // mog('reactionDetails', { reactionDetails, userReactions })
+    // mog('reactionDetails', { reactionDetails })
     return userReactions as UserReaction[]
   }
 
@@ -184,7 +194,9 @@ export const BlockInfo = (props: any) => {
           {(hasComments || (!interactive && hover) || interactive || (focused && mergedSelected)) && (
             <Popover
               onClose={() => setInteractive(false)}
-              render={({ close }) => <CommentsComponent comments={comments} onAddComment={onAddComment} />}
+              render={({ close }) => (
+                <CommentsComponent comments={comments} onAddComment={onAddComment} onDeleteComment={onDeleteComment} />
+              )}
               placement="bottom-end"
               transparent
             >

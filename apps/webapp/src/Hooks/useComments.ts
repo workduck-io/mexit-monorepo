@@ -14,8 +14,17 @@ export const useComments = () => {
     await commentAPI
       .saveComment(comment)
       .then((res) => {
-        // mog('Saved comment', { res })
-        setComments([...comments, { ...comment, userId: currentUserDetails.userID }])
+        mog('Saved comment', { res })
+        setComments([
+          ...comments,
+          {
+            ...comment,
+            userId: currentUserDetails.userID,
+            metadata: {
+              createdAt: res ? new Date((res as any)?.created).getTime() : new Date().getTime()
+            }
+          }
+        ])
       })
       .catch((err) => {
         mog('Error saving comment', { err })
@@ -24,8 +33,8 @@ export const useComments = () => {
     return
   }
 
-  const deleteComment = (id: string) => {
-    commentAPI
+  const deleteComment = async (id: string) => {
+    await commentAPI
       .deleteComment(id)
       .then((res) => {
         // mog('Deleted comment', { res })
@@ -34,6 +43,7 @@ export const useComments = () => {
       .catch((err) => {
         mog('Error deleting comment', { err })
       })
+    return
   }
 
   const getAllCommentsOfNode = (nodeId: string) => {
