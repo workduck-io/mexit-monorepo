@@ -61,26 +61,30 @@ export const BlockInfo = (props: any) => {
   const icon = sourceURL && getIconType(sourceURL)
 
   // Comments of the block
-  const comments = useMemo(() => {
+  const { comments, userHasComments } = useMemo(() => {
     const blockId = element?.id
     const comments = getCommentsOfBlock(blockId)
+    const currentUserDetail = useAuthStore.getState().userDetails
     // get whether the block has comment
     // And return true
-    mog('getting comments', { comments, instanceId })
-    return comments
+    // mog('getting comments', { comments, instanceId })
+    const userHasComments = !!comments.some((c) => c.userId === currentUserDetail?.userID)
+    return { comments, userHasComments }
   }, [element?.id, interactive, hover, instanceId])
+
   const hasComments = useMemo(() => comments.length > 0, [comments])
 
   // Reactions of the block
-  const { reactions, previewReactions } = useMemo(() => {
+  const { reactions, previewReactions, userHasReacted } = useMemo(() => {
     const blockId = element?.id
     const reactions = getReactionsOfBlock(blockId)
     const previewReactions = reactionsWithCount(reactions)
       .sort((a, b) => b.count - a.count)
       .filter((r) => r.count > 0)
       .slice(0, 3)
-    mog('previewReactions', { previewReactions, reactions })
-    return { reactions, previewReactions }
+    // mog('previewReactions', { previewReactions, reactions })
+    const userHasReacted = !!reactions.find((r) => r.userId === useAuthStore.getState().userDetails?.userID)
+    return { reactions, previewReactions, userHasReacted }
   }, [element?.id, interactive, hover, instanceId])
   const hasReactions = useMemo(() => reactions.length > 0, [reactions])
 
@@ -89,16 +93,11 @@ export const BlockInfo = (props: any) => {
     return (mergedSelected && focused) || interactive || hasComments || hasReactions || hasMetadata
   }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive, instanceId])
 
-  // if (hasReactions) {
-  //   mog('BlockInfo', { reactions, hasComments, hasReactions })
-  // }
-
   const onToggleReaction = (reactionVal: MIcon) => {
     // mog('Toggling reaction', { reactionVal, props })
     const nodeid = getNodeIdFromEditor(props?.editor?.id)
     const blockId = element?.id
     const currentUserDetail = useAuthStore.getState().userDetails
-    // console.log('Reacting with', reactionVal)
     const existingUserReaction = reactions.find(
       (r) => r.userId === currentUserDetail.userID && r.reaction.value === reactionVal.value
     )
@@ -131,6 +130,7 @@ export const BlockInfo = (props: any) => {
         throw Error('Error adding comment')
       })
   }
+
   // mog('BlockInfo', {
   //   id: element?.id,
   //   ed: props?.editor,
@@ -157,7 +157,7 @@ export const BlockInfo = (props: any) => {
               render={() => <Reactions onToggleReaction={onToggleReaction} reactions={reactions} />}
               placement="bottom-end"
             >
-              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!hasReactions}>
+              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!userHasReacted}>
                 <BlockReaction previewReactions={previewReactions} />
               </BlockInfoButton>
             </Popover>
@@ -169,7 +169,7 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton transparent primary={hasComments}>
+              <BlockInfoButton transparent primary={userHasComments}>
                 <Icon icon={message2Line} />
                 {hasComments && comments.length}
               </BlockInfoButton>

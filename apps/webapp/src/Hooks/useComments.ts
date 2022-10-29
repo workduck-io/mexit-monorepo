@@ -1,12 +1,13 @@
 import { useCommentStore } from '../Stores/useCommentStore'
 import { useCommentAPI } from './API/useCommentAndReactionAPI'
-import { APIComment, mog } from '@mexit/core'
+import { APIComment, Comment, mog } from '@mexit/core'
 import { useAuthStore } from '../Stores/useAuth'
 
 export const useComments = () => {
   const commentAPI = useCommentAPI()
   const comments = useCommentStore((state) => state.comments)
   const setComments = useCommentStore((state) => state.setComments)
+  const addComments = useCommentStore((state) => state.addNoteComments)
 
   const addComment = async (comment: APIComment): Promise<void> => {
     const currentUserDetails = useAuthStore.getState().userDetails
@@ -39,8 +40,23 @@ export const useComments = () => {
     commentAPI
       .getCommentsByNodeId(nodeId)
       .then((res) => {
-        mog('Got comments', { res })
-        // setComments(res)
+        if (!res) return
+        const comments: Comment[] = (Array.isArray(res) ? res : []).map((comment) => {
+          return {
+            entityId: comment.entityId,
+            blockId: comment.blockId,
+            nodeId: comment.nodeId,
+            threadId: comment.threadId,
+            userId: comment.userId,
+            content: comment.content,
+            metadata: {
+              createdAt: comment?.created ? new Date(comment.created).getTime() : undefined
+            }
+          }
+        })
+        mog('Got comments', { res, comments })
+
+        addComments(comments, nodeId)
       })
       .catch((err) => {
         mog('Error getting comments', { err })

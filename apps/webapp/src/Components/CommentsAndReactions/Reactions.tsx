@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import { MIcon, mog, Reaction as ReactionType } from '@mexit/core'
 import { IconDisplay } from '@mexit/shared'
+import { debounce } from 'lodash'
 import { reactionsWithCount } from '../../Hooks/useReactions'
 import { CompressedReactionGroup, ReactionButton, ReactionCount, ReactionsWrapper } from './Reactions.style'
 
@@ -15,14 +16,24 @@ export const Reactions = ({ reactions, onToggleReaction }: ReactionsProps) => {
     onToggleReaction(reactionVal)
   }
 
-  if (reactions.length > 0) {
-    mog('BlockReactions', { BlockReactions, reactions })
+  // if (reactions.length > 0) {
+  //   mog('BlockReactions', { BlockReactions, reactions })
+  // }
+
+  const onHover = (reaction: MIcon) => {
+    mog('onHover we shall fetch details', { reaction })
   }
+
+  const onDelayPerform = debounce(onHover, 500)
 
   return (
     <ReactionsWrapper>
       {BlockReactions.map((reaction) => (
-        <ReactionButton onClick={() => toggleReaction(reaction.reaction)} key={reaction.reaction.value}>
+        <ReactionButton
+          onMouseEnter={() => onDelayPerform(reaction.reaction)}
+          onClick={() => toggleReaction(reaction.reaction)}
+          key={reaction.reaction.value}
+        >
           <IconDisplay size={20} icon={reaction.reaction} />
           {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
         </ReactionButton>

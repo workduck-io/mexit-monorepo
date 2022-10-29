@@ -30,6 +30,8 @@ import { useLastOpened } from './useLastOpened'
 import { getLinkFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
 import useToggleElements from './useToggleElements'
+import { useComments } from './useComments'
+import { useReactions } from './useReactions'
 
 export interface LoadNodeOptions {
   savePrev?: boolean
@@ -54,6 +56,8 @@ const useLoad = () => {
   const setContent = useContentStore((store) => store.setContent)
   // const setNodePreview = useGraphStore((store) => store.setNodePreview)
   const { getDataAPI, saveDataAPI } = useApi()
+  const { getAllCommentsOfNode } = useComments()
+  const { getAllReactionsOfNode } = useReactions()
   // const setSuggestions = useSuggestionStore((store) => store.setSuggestions)
   const { toggleSuggestedNodes } = useToggleElements()
   const infobar = useLayoutStore((store) => store.infobar)
@@ -274,6 +278,8 @@ const useLoad = () => {
         // TODO: Change fetch for shared
         fetchAndSaveNode(node, { withLoading: true, isShared: true })
       } else fetchAndSaveNode(node, { withLoading: true, isShared: false })
+      getAllCommentsOfNode(nodeid)
+      getAllReactionsOfNode(nodeid)
     }
 
     fetchSharedUsers(node.nodeid, 'note')

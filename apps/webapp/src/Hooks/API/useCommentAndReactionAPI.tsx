@@ -1,8 +1,9 @@
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, mog, MIcon, APIComment, APIReaction } from '@mexit/core'
+import { apiURLs, mog, MIcon, APIComment, APIReaction, GET_REQUEST_MINIMUM_GAP } from '@mexit/core'
 
 import { useAPIHeaders } from './useAPIHeaders'
+import { isRequestedWithin } from '../../Stores/useApiStore'
 
 interface ReactionRequests {
   nodeId: string
@@ -60,8 +61,13 @@ export const useReactionAPI = () => {
           ]
       }
       */
-  const getReactionsOfNote = async (nodeId: string) => {
-    const res = await client.get(apiURLs.reactions.allNote(nodeId), {
+  const getReactionsOfNote = async (nodeId: string, force = false) => {
+    const url = apiURLs.reactions.allNote(nodeId)
+    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !force) {
+      console.warn('\nAPI has been requested before, cancelling\n')
+      return
+    }
+    const res = await client.get(url, {
       headers: workspaceHeaders()
     })
     return res.data
@@ -124,8 +130,13 @@ export const useCommentAPI = () => {
     return res.data
   }
 
-  const getCommentsByNodeId = async (nodeId: string) => {
-    const res = await client.get(apiURLs.comments.allNote(nodeId), {
+  const getCommentsByNodeId = async (nodeId: string, force = false) => {
+    const url = apiURLs.comments.allNote(nodeId)
+    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !force) {
+      console.warn('\nAPI has been requested before, cancelling\n')
+      return
+    }
+    const res = await client.get(url, {
       headers: workspaceHeaders()
     })
     return res.data

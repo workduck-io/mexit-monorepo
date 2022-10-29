@@ -1,18 +1,16 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
-import { Plate, PlateProvider } from '@udecode/plate'
+import { Plate } from '@udecode/plate'
 import { debounce } from 'lodash'
 
-import { defaultContent, getDefaultContent, NodeEditorContent } from '@mexit/core'
-import { useEditorChange, useUploadToCDN } from '@mexit/shared'
+import { NodeEditorContent } from '@mexit/core'
+import { useEditorChange } from '@mexit/shared'
 
 import { MultiComboboxContainer } from '../../Editor/Components/MultiCombobox/multiComboboxContainer'
 import useMultiComboboxOnChange from '../../Editor/Components/MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'
 import { getCommentPlugins } from './plugins'
-import { useAuth } from '@workduck-io/dwindle'
-import { CommentEditorWrapper } from './styled'
 
 type CommentEditorType = {
   editorId: string

@@ -22,6 +22,7 @@ import { useMentions } from '../../Hooks/useMentions'
 
 export const Comment = ({ comment }: { comment: CommentType }) => {
   const { getUserFromUserid } = useMentions()
+  const currentUserDetails = useAuthStore((state) => state.userDetails)
 
   const user = useMemo(() => {
     const u = getUserFromUserid(comment.userId)
@@ -36,7 +37,10 @@ export const Comment = ({ comment }: { comment: CommentType }) => {
         </CommentAuthor>
         <CommentActions>
           <CommentTime></CommentTime>
-          <IconButton icon="mdi:dots-vertical" title="Delete Comment" />
+          {comment.userId === currentUserDetails?.userID && (
+            /* Show delete button only when comment made by current user */
+            <IconButton icon="mdi:dots-vertical" title="Delete Comment" />
+          )}
         </CommentActions>
       </CommentHeader>
       <CommentContentWrapper>
@@ -66,8 +70,6 @@ export const NewComment = ({
   }
 
   const onSubmit = () => {
-    // if (textAreaRef.current) {
-    // const content = textAreaRef.current.value
     onAddComment(content)
       .then(() => {
         setContent(defaultContent.content)
@@ -76,9 +78,6 @@ export const NewComment = ({
       .catch((e) => {
         console.error(e)
       })
-
-    // }
-    // setIsWriting(false)
   }
 
   return (

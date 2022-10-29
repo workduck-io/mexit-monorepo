@@ -42,6 +42,7 @@ export const useReactions = () => {
   const reactionsAPI = useReactionAPI()
   const reactions = useReactionStore((state) => state.reactions)
   const setReactions = useReactionStore((state) => state.setReactions)
+  const addReactions = useReactionStore((state) => state.addNoteReactions)
 
   const addReaction = async (reaction: APIReaction) => {
     const currentUserDetails = useAuthStore.getState().userDetails
@@ -83,8 +84,23 @@ export const useReactions = () => {
     reactionsAPI
       .getReactionsOfNote(nodeId)
       .then((res) => {
-        mog('Got reactions', { res })
-        // setComments(res)
+        if (!res) return
+        const reactions = Object.entries(res)
+          .map(([blockId, reactions]) => {
+            return reactions.map((reaction: any) => ({
+              blockId,
+              nodeId,
+              // If the user is true, current user added the reaction
+              userId: reaction.user ? useAuthStore.getState().userDetails.userID : undefined,
+              reaction: {
+                type: reaction?.reaction?.split('_')[0],
+                value: reaction?.reaction?.split('_')[1]
+              }
+            }))
+          })
+          .flat()
+        mog('Got reactions', { res, reactions })
+        addReactions(reactions, nodeId)
       })
       .catch((err) => {
         mog('Error getting reactions', { err })
