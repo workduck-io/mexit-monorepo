@@ -1,5 +1,15 @@
 # mexit
 
+## 0.18.0
+
+### Minor Changes
+
+- e038d8c9: Smart Capture in Command Bar
+
+### Patch Changes
+
+- 9529df1c: Added lorem ipsum action to copy placeholder text
+
 ## 0.17.3
 
 ### Patch Changes
