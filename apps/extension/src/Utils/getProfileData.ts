@@ -18,9 +18,10 @@ export const checkURL = (url: string) => {
 export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
   if (convertToTable) {
     const dataArray = formData.map((item) => {
-      return [item.label, item.data]
+      return [item.label, item.value]
     })
-    return convert2DArrayToTable(dataArray)
+
+    return [convert2DArrayToTable(dataArray)]
   } else
     return formData.map((item) => {
       //TODO: Add cases for all types
@@ -30,14 +31,10 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
           children: [
             {
               text: item.label + ': ',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: '' }],
               properties: { bold: true }
             },
             {
-              text: item.data,
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: '' }]
+              text: item.value
             }
           ]
         }
@@ -46,8 +43,7 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
           type: ELEMENT_H2,
           children: [
             {
-              text: item.data,
-              type: ELEMENT_PARAGRAPH,
+              text: item.value,
               children: [{ text: '' }]
             }
           ]
@@ -60,7 +56,7 @@ export const getProfileData = async (webPage: string) => {
   const formData: FormBuilder = []
   formData.push({
     label: 'Title',
-    data: document.title,
+    value: document.title,
     properties: {
       type: ELEMENT_PARAGRAPH
     }
@@ -68,10 +64,11 @@ export const getProfileData = async (webPage: string) => {
   const captureRules = SmartCaptureConfig[webPage]
   for (const rule of captureRules) {
     const ele = document.evaluate(rule.path, document, null, XPathResult.ANY_TYPE, null).iterateNext()
+
     if (ele !== null) {
       formData.push({
         label: rule.label,
-        data: ele.textContent.trim(),
+        value: ele.textContent.trim(),
         properties: rule.properties
       })
     } else {
@@ -80,5 +77,5 @@ export const getProfileData = async (webPage: string) => {
   }
 
   mog('FormData', { formData, serialized: formToBlocks(formData) })
-  return formToBlocks(formData)
+  return formData
 }
