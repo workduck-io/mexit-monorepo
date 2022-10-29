@@ -35,6 +35,7 @@ export * from './Types/Shortener'
 export * from './Types/Store'
 export * from './Types/Todo'
 
+export * from './Utils/actionUtils'
 export * from './Utils/batchPromise'
 export * from './Utils/content'
 export * from './Utils/dataTransform'

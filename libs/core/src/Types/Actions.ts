@@ -9,7 +9,8 @@ export enum ActionType {
   BROWSER_EVENT = 'Browser Action',
   SCREENSHOT = 'Screenshot Action',
   MAGICAL = 'Magical Action',
-  RIGHT_SIDEBAR = 'Right Sidebar Action'
+  RIGHT_SIDEBAR = 'Right Sidebar Action',
+  LOREM_IPSUM = 'lorem ipsum generator'
 }
 
 export interface MexitAction {

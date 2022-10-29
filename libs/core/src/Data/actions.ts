@@ -53,6 +53,21 @@ export const initActions: Array<ListItemType> = [
   //   }
   // },
   {
+    id: 'ACTION_9aoweruw2321bub',
+    title: 'Lorem Ipsum',
+    category: QuickLinkType.action,
+    icon: 'bi:text-paragraph',
+    description: 'Generate placeholder content',
+    type: ActionType.LOREM_IPSUM,
+    shortcut: {
+      copy: {
+        title: 'to copy',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     category: QuickLinkType.action,
