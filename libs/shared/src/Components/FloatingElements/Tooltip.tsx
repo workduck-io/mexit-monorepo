@@ -18,7 +18,8 @@ import { mergeRefs } from 'react-merge-refs'
 import { TooltipWrapper } from './Tooltip.style'
 
 interface Props {
-  content: JSX.Element | string
+  // Pass null to hide the tooltip
+  content: JSX.Element | string | null
   placement?: Placement
   children: JSX.Element
   offsetPx?: number
@@ -56,11 +57,12 @@ export const Tooltip = ({ children, content, delay = 500, offsetPx = 5, placemen
 
   const ref = useMemo(() => mergeRefs([reference, (children as any).ref]), [reference, children])
 
+  // console.log('Tooltip', { content })
   return (
     <>
       {cloneElement(children, getReferenceProps({ ref, ...children.props }))}
       <FloatingPortal root={root}>
-        {open && (
+        {open && content !== null && (
           <TooltipWrapper
             ref={floating}
             style={{

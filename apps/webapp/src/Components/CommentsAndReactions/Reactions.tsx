@@ -93,7 +93,7 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
   const onDelayPerform = debounce(onHover, 500)
 
   return (
-    <Tooltip content={<ReactionDetails details={details || []} />}>
+    <Tooltip content={details && details.length > 0 ? <ReactionDetails details={details} /> : null}>
       <ReactionsWrapper>
         {BlockReactions.map((reaction) => (
           <ReactionButton
