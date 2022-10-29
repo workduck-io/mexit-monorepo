@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { TextAreaBlock } from '@mexit/shared'
+import { Label, TextAreaBlock } from '@mexit/shared'
 
 export const SourceHeaderStyled = styled.div`
   display: flex;
@@ -10,10 +10,14 @@ export const SourceHeaderStyled = styled.div`
   width: 100%;
   justify-content: space-between;
 
+  * > ${Label} {
+    margin: 0;
+  }
+
   img {
     border-radius: 50%;
-    padding: 2px;
-    background-color: ${({ theme }) => theme.colors.primary};
+    padding: 1px;
+    background-color: ${({ theme }) => theme.colors.background.highlight};
   }
 `
 

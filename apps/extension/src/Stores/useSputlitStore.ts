@@ -10,6 +10,8 @@ export type SearchType = {
   type: CategoryType
 }
 
+export type SmartCaptureSaveType = 'basic' | 'tabular'
+
 interface SputlitStore {
   // * Search Query
   search: SearchType
@@ -40,6 +42,9 @@ interface SputlitStore {
   smartCaptureFormData?: any
   setSmartCaptureFormData: (data: any) => void
 
+  smartCaptureSaveType?: SmartCaptureSaveType
+  toggleSmartCaptureSaveType: () => void
+
   // * Current Active action item from `items`
   activeItem?: ListItemType | MexitAction
   setActiveItem: (item?: ListItemType | MexitAction) => void
@@ -57,6 +62,15 @@ export const useSputlitStore = create<SputlitStore>(
     changeSearchType: (type) => {
       const search = get().search
       set({ search: { ...search, type } })
+    },
+
+    smartCaptureSaveType: 'basic',
+    toggleSmartCaptureSaveType: () => {
+      const currentSaveType = get().smartCaptureSaveType
+      let nextSaveTypeState: SmartCaptureSaveType = 'tabular'
+      if (currentSaveType === 'tabular') nextSaveTypeState = 'basic'
+
+      set({ smartCaptureSaveType: nextSaveTypeState })
     },
 
     setSmartCaptureFormData: (formData) => set({ smartCaptureFormData: formData }),

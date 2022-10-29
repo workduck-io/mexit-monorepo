@@ -43,7 +43,7 @@ export const initActions: Array<ListItemType> = [
     id: 'ACTION_9x34kgj23j4234ojin',
     title: 'Smart Capture',
     category: QuickLinkType.action,
-    icon: 'eva:color-picker-fill',
+    icon: 'fluent:screen-search-24-filled',
     description: 'Smartly captures any useful data from the current page',
     type: ActionType.MAGICAL,
     shortcut: {

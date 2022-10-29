@@ -46,8 +46,9 @@ const Form: React.FC<FormProps> = ({ config }) => {
 
   const onNodeSelect = async (nodeId: string) => {
     const formData = config.map((item) => ({ ...item, value: data?.[item.label] }))
+    const convertToTable = useSputlitStore.getState().smartCaptureSaveType === 'tabular'
 
-    const blocks = formToBlocks(formData, true) as NodeEditorContent
+    const blocks = formToBlocks(formData, convertToTable) as NodeEditorContent
     // mog('Block are ready to save', { blocks })
 
     try {
