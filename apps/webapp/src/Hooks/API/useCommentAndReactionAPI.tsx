@@ -54,6 +54,7 @@ export const useReactionAPI = () => {
    {
     "TEMP_W6nEW": [
         {
+        // TF this can also be { type , val }
             "reaction": "EMOJI_👍",
             "count": 1,
             "user": true

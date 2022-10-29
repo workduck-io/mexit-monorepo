@@ -1,11 +1,11 @@
-import { generateCommentId, MIcon, mog } from '@mexit/core'
+import { generateCommentId, MIcon, mog, UserReaction } from '@mexit/core'
 import { Source } from '../../SourceInfo'
 
 import { useMemo, useState } from 'react'
 
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
-import { getIconType, Popover } from '@mexit/shared'
+import { getIconType, Popover, StringToMIcon } from '@mexit/shared'
 import { isSelectionExpanded } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import { useFocused, useSelected } from 'slate-react'
@@ -14,6 +14,7 @@ import { useComments } from '../../../Hooks/useComments'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
 import { useAuthStore } from '../../../Stores/useAuth'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
+import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
 
@@ -34,6 +35,7 @@ export const BlockInfo = (props: any) => {
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
   const { getCommentsOfBlock, addComment } = useComments()
   const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
+  const { getBlockReactionDetails } = useReactionAPI()
   const [instanceId, setInstanceId] = useState<string>(nanoid())
 
   const selectionExpanded = props?.editor && isSelectionExpanded(props?.editor)
@@ -131,6 +133,18 @@ export const BlockInfo = (props: any) => {
       })
   }
 
+  const getReactionDetails = async () => {
+    const blockId = element?.id
+    const nodeId = getNodeIdFromEditor(props?.editor?.id)
+    const reactionDetails = await getBlockReactionDetails(nodeId, blockId)
+    const userReactions = (Array.isArray(reactionDetails) ? reactionDetails : [])
+      .map((r) => ({ userId: r.userId, reactions: r?.reaction?.map(StringToMIcon) }))
+      .flat()
+    mog('reactionDetails', { reactionDetails, userReactions })
+    mog('reactionDetails', { reactionDetails })
+    return userReactions as UserReaction[]
+  }
+
   // mog('BlockInfo', {
   //   id: element?.id,
   //   ed: props?.editor,
@@ -154,7 +168,13 @@ export const BlockInfo = (props: any) => {
           {(hasReactions || (mergedSelected && focused) || interactive || (!interactive && hover)) && (
             <Popover
               onClose={() => setInteractive(false)}
-              render={() => <Reactions onToggleReaction={onToggleReaction} reactions={reactions} />}
+              render={() => (
+                <Reactions
+                  getReactionDetails={getReactionDetails}
+                  onToggleReaction={onToggleReaction}
+                  reactions={reactions}
+                />
+              )}
               placement="bottom-end"
             >
               <BlockInfoButton onClick={() => setInteractive(true)} transparent={!userHasReacted}>

@@ -9,3 +9,8 @@ export interface Reaction {
 }
 
 export type APIReaction = Omit<Reaction, 'userId'>
+
+export interface UserReaction {
+  reactions: MIcon[]
+  userId: string
+}

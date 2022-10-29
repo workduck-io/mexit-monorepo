@@ -14,7 +14,7 @@ export const useComments = () => {
     await commentAPI
       .saveComment(comment)
       .then((res) => {
-        mog('Saved comment', { res })
+        // mog('Saved comment', { res })
         setComments([...comments, { ...comment, userId: currentUserDetails.userID }])
       })
       .catch((err) => {
@@ -28,7 +28,7 @@ export const useComments = () => {
     commentAPI
       .deleteComment(id)
       .then((res) => {
-        mog('Deleted comment', { res })
+        // mog('Deleted comment', { res })
         setComments(comments.filter((comment) => comment.entityId !== id))
       })
       .catch((err) => {
@@ -54,7 +54,7 @@ export const useComments = () => {
             }
           }
         })
-        mog('Got comments', { res, comments })
+        // mog('Got comments', { res, comments })
 
         addComments(comments, nodeId)
       })
