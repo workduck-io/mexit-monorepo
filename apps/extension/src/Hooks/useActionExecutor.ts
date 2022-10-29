@@ -9,12 +9,14 @@ import {
   getBlockMetadata,
   getNewDraftKey,
   ILink,
+  loremIpsum,
   MexitAction,
   mog,
   QuickLinkType,
   SEPARATOR,
   SingleNamespace
 } from '@mexit/core'
+import { copyTextToClipboard } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
@@ -30,7 +32,6 @@ import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 import { useURLsAPI } from './useURLs'
-import generateLoremIpsum from '../Utils/generateLoremIpsum'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
@@ -157,10 +158,12 @@ export function useActionExecutor() {
             resetSputlitState()
 
             break
-          case ActionType.LOREM_IPSUM: 
-            const data = generateLoremIpsum();
-            navigator.clipboard.writeText(data);
-            toast.success('lorem ipsum is copied to clipboard!')
+          case ActionType.LOREM_IPSUM:
+            // Copy a random paragraph from the lorem ipsum array
+            copyTextToClipboard(loremIpsum[Math.floor(Math.random() * loremIpsum.length)])
+
+            setVisualState(VisualState.animatingOut)
+            resetSputlitState()
             break
           case ActionType.SEARCH: {
             // Ignore the case for search type action when it is the generic search action
