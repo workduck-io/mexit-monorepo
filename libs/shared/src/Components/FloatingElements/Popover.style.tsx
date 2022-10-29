@@ -11,8 +11,13 @@ const scale = keyframes`
     opacity: 1;
   }
 `
-export const PopoverWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.gray[9]};
+
+interface PopoverWrapperProps {
+  transparent?: boolean
+}
+export const PopoverWrapper = styled.div<PopoverWrapperProps>`
+  z-index: 10;
+  background: ${({ theme, transparent }) => (transparent ? 'transparent' : theme.colors.gray[9])};
   color: ${({ theme }) => theme.colors.text.default};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   text-align: left;

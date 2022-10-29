@@ -8,9 +8,9 @@ export const useComments = () => {
   const comments = useCommentStore((state) => state.comments)
   const setComments = useCommentStore((state) => state.setComments)
 
-  const addComment = (comment: APIComment) => {
+  const addComment = async (comment: APIComment): Promise<void> => {
     const currentUserDetails = useAuthStore.getState().userDetails
-    commentAPI
+    await commentAPI
       .saveComment(comment)
       .then((res) => {
         mog('Saved comment', { res })
@@ -19,6 +19,7 @@ export const useComments = () => {
       .catch((err) => {
         mog('Error saving comment', { err })
       })
+    return
   }
 
   const deleteComment = (id: string) => {

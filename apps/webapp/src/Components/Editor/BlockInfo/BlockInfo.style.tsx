@@ -15,7 +15,7 @@ const scale = keyframes`
 
 export const BlockInfoWrapper = styled.div`
   background: ${({ theme }) => theme.colors.gray[9]};
-  z-index: 20;
+  z-index: 5;
   color: ${({ theme }) => theme.colors.text.default};
   border-radius: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
@@ -36,6 +36,9 @@ export const BlockInfoBlockWrapper = styled.div`
 `
 
 export const BlockInfoButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny};
   svg {
     width: 16px;

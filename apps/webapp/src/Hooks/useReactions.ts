@@ -32,7 +32,7 @@ export const defaultReactions: MIcon[] = [
 ]
 
 export const reactionsWithCount = (reactions: Reaction[]) => {
-return defaultReactions.map((reaction) => {
+  return defaultReactions.map((reaction) => {
     const count = reactions.filter((r) => r.reaction.value === reaction.value)
     return { reaction: reaction, count: count.length }
   })
@@ -43,9 +43,9 @@ export const useReactions = () => {
   const reactions = useReactionStore((state) => state.reactions)
   const setReactions = useReactionStore((state) => state.setReactions)
 
-  const addReaction = (reaction: APIReaction) => {
+  const addReaction = async (reaction: APIReaction) => {
     const currentUserDetails = useAuthStore.getState().userDetails
-    reactionsAPI
+    await reactionsAPI
       .addReaction(reaction)
       .then((res) => {
         mog('Saved reaction', { res })
@@ -54,11 +54,12 @@ export const useReactions = () => {
       .catch((err) => {
         mog('Error saving reaction', { err })
       })
+    return
   }
 
-  const deleteReaction = (reaction: APIReaction) => {
+  const deleteReaction = async (reaction: APIReaction) => {
     const currentUserDetails = useAuthStore.getState().userDetails
-    reactionsAPI
+    await reactionsAPI
       .deleteReaction(reaction)
       .then((res) => {
         const newReactions = reactions.filter(
@@ -75,6 +76,7 @@ export const useReactions = () => {
       .catch((err) => {
         mog('Error deleting reaction', { err })
       })
+    return
   }
 
   const getAllReactionsOfNode = (nodeId: string) => {

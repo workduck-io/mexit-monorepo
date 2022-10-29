@@ -53,7 +53,7 @@ export const CommentEditor = ({ editorId, readOnly, content, onChange }: TaskEdi
     onDelayPerform(val)
   }
 
-  const editableProps = { placeholder: 'Add description...', readOnly, autoFocus: true }
+  const editableProps = { placeholder: 'Add Comment...', readOnly, autoFocus: true }
 
   return (
     <Plate

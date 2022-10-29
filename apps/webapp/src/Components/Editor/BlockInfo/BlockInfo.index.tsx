@@ -1,21 +1,21 @@
-import { MIcon, mog } from '@mexit/core'
+import { generateCommentId, MIcon, mog } from '@mexit/core'
 import { Source } from '../../SourceInfo'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
-import { getIconType, IconDisplay, Popover } from '@mexit/shared'
-import { Icon } from '@iconify/react'
 import message2Line from '@iconify/icons-ri/message-2-line'
+import { Icon } from '@iconify/react'
+import { getIconType, Popover } from '@mexit/shared'
+import { isSelectionExpanded } from '@udecode/plate'
+import { nanoid } from 'nanoid'
 import { useFocused, useSelected } from 'slate-react'
-import { CommentsComponent } from '../../CommentsAndReactions/Comments'
-import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
+import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { useComments } from '../../../Hooks/useComments'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
 import { useAuthStore } from '../../../Stores/useAuth'
-import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
-import { isRangeInSameBlock, isSelectionAtBlockStart, isSelectionExpanded } from '@udecode/plate'
-import { CompressedReactionGroup } from '../../CommentsAndReactions/Reactions.style'
+import { CommentsComponent } from '../../CommentsAndReactions/Comments'
+import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
+import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
 
 /**
  *
@@ -34,10 +34,11 @@ export const BlockInfo = (props: any) => {
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
   const { getCommentsOfBlock, addComment } = useComments()
   const { getReactionsOfBlock, addReaction, deleteReaction } = useReactions()
+  const [instanceId, setInstanceId] = useState<string>(nanoid())
 
   const selectionExpanded = props?.editor && isSelectionExpanded(props?.editor)
   // const selectionAtStart = props?.editor && isSelectionAtBlockStart(props?.editor)
-  //
+
   // TODO: Fix check of whether the selection is inside a single block
   // const inSingleBlock = props?.editor?.selection && isRangeInSameBlock(props?.editor?.selection)
 
@@ -65,8 +66,9 @@ export const BlockInfo = (props: any) => {
     const comments = getCommentsOfBlock(blockId)
     // get whether the block has comment
     // And return true
+    mog('getting comments', { comments, instanceId })
     return comments
-  }, [element?.id, interactive, hover])
+  }, [element?.id, interactive, hover, instanceId])
   const hasComments = useMemo(() => comments.length > 0, [comments])
 
   // Reactions of the block
@@ -79,13 +81,13 @@ export const BlockInfo = (props: any) => {
       .slice(0, 3)
     mog('previewReactions', { previewReactions, reactions })
     return { reactions, previewReactions }
-  }, [element?.id, interactive, hover])
+  }, [element?.id, interactive, hover, instanceId])
   const hasReactions = useMemo(() => reactions.length > 0, [reactions])
 
   // Whether to show the blockinfo popup beside the block
   const showBlockInfo = useMemo(() => {
     return (mergedSelected && focused) || interactive || hasComments || hasReactions || hasMetadata
-  }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive])
+  }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive, instanceId])
 
   // if (hasReactions) {
   //   mog('BlockInfo', { reactions, hasComments, hasReactions })
@@ -101,14 +103,29 @@ export const BlockInfo = (props: any) => {
       (r) => r.userId === currentUserDetail.userID && r.reaction.value === reactionVal.value
     )
     if (existingUserReaction) {
-      deleteReaction(existingUserReaction)
+      deleteReaction(existingUserReaction).then(() => {
+        setInstanceId(nanoid())
+      })
     } else {
       addReaction({
         nodeId: nodeid,
         blockId,
         reaction: reactionVal
+      }).then(() => {
+        setInstanceId(nanoid())
       })
     }
+  }
+
+  const onAddComment = (content: any[]) => {
+    addComment({
+      entityId: generateCommentId(),
+      blockId: element?.id,
+      nodeId: getNodeIdFromEditor(props?.editor?.id),
+      content
+    }).then(() => {
+      setInstanceId(nanoid())
+    })
   }
   // mog('BlockInfo', {
   //   id: element?.id,
@@ -130,7 +147,7 @@ export const BlockInfo = (props: any) => {
           onMouseLeave={() => setHover(false)}
         >
           {hasMetadata && !icon?.mexIcon && <Source source={sourceURL} />}
-          {(hasReactions || (mergedSelected && focused) || interactive || hover) && (
+          {(hasReactions || (mergedSelected && focused) || interactive || (!interactive && hover)) && (
             <Popover
               onClose={() => setInteractive(false)}
               render={() => <Reactions onToggleReaction={onToggleReaction} reactions={reactions} />}
@@ -141,22 +158,16 @@ export const BlockInfo = (props: any) => {
               </BlockInfoButton>
             </Popover>
           )}
-          {(hasComments || hover || interactive || (focused && mergedSelected)) && (
+          {(hasComments || (!interactive && hover) || interactive || (focused && mergedSelected)) && (
             <Popover
               onClose={() => setInteractive(false)}
-              render={() => (
-                <CommentsComponent
-                  comments={comments}
-                  onAddComment={(content) => {
-                    mog('Adding comment', { content })
-                    // Add the content to comment
-                  }}
-                />
-              )}
+              render={({ close }) => <CommentsComponent comments={comments} onAddComment={onAddComment} />}
               placement="bottom-end"
+              transparent
             >
               <BlockInfoButton transparent primary={hasComments}>
                 <Icon icon={message2Line} />
+                {hasComments && comments.length}
               </BlockInfoButton>
             </Popover>
           )}

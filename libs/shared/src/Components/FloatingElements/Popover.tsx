@@ -20,11 +20,12 @@ import { PopoverWrapper } from './Popover.style'
 interface Props {
   render: (data: { close: () => void; labelId: string; descriptionId: string }) => React.ReactNode
   placement?: Placement
+  transparent?: boolean
   children: JSX.Element
   onClose?: () => void
 }
 
-export const Popover = ({ children, onClose, render, placement }: Props) => {
+export const Popover = ({ children, onClose, render, placement, transparent }: Props) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (isOpen: boolean) => {
@@ -66,6 +67,7 @@ export const Popover = ({ children, onClose, render, placement }: Props) => {
             <PopoverWrapper
               ref={floating}
               className="Popover"
+              transparent={transparent}
               style={{
                 position: strategy,
                 top: y ?? 0,
