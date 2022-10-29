@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
 import Plateless from '../Editor/Plateless'
 import {
@@ -19,6 +19,7 @@ import { Icon } from '@iconify/react'
 import { ProfileImage } from '../User/ProfileImage'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useMentions } from '../../Hooks/useMentions'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 export const Comment = ({ comment }: { comment: CommentType }) => {
   const { getUserFromUserid } = useMentions()
@@ -69,7 +70,7 @@ export const NewComment = ({
     setContent(content)
   }
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     onAddComment(content)
       .then(() => {
         setContent(defaultContent.content)
@@ -78,7 +79,17 @@ export const NewComment = ({
       .catch((e) => {
         console.error(e)
       })
-  }
+  }, [content])
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      '$mod+Enter': (ev) => {
+        onSubmit()
+      }
+    })
+
+    return () => unsubscribe()
+  }, [onSubmit])
 
   return (
     <NewCommentWrapper>

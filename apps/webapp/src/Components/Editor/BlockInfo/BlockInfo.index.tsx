@@ -148,10 +148,9 @@ export const BlockInfo = (props: any) => {
   // mog('BlockInfo', {
   //   id: element?.id,
   //   ed: props?.editor,
-  //   focused,
   //   showBlockInfo,
-  //   // inSingleBlock,
-  //   edSel: props?.editor?.selection
+  //   hasComments,
+  //   interactive
   // })
 
   return (
@@ -189,7 +188,7 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton transparent primary={userHasComments}>
+              <BlockInfoButton onClick={() => setInteractive(true)} transparent primary={userHasComments}>
                 <Icon icon={message2Line} />
                 {hasComments && comments.length}
               </BlockInfoButton>

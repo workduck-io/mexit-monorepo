@@ -39,6 +39,7 @@ export const NewCommentWrapper = styled.div<NewCommentWrapperProps>`
 export const CommentContentWrapper = styled.div`
   color: ${({ theme }) => theme.colors.text.default};
   max-width: 400px;
+  padding-left: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const CommentWrapper = styled.div`
@@ -47,7 +48,7 @@ export const CommentWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.small};
   background: ${({ theme }) => transparentize(0.1, theme.colors.gray[7])};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 export const CommentHeader = styled.div`
