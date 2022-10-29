@@ -30,6 +30,7 @@ import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 import { useURLsAPI } from './useURLs'
+import generateLoremIpsum from '../Utils/generateLoremIpsum'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
@@ -156,6 +157,12 @@ export function useActionExecutor() {
             resetSputlitState()
 
             break
+          case ActionType.COPY_TO_CLIPBOARD: 
+            console.log("This is the lorem ipsum!!")
+            const data = generateLoremIpsum();
+            navigator.clipboard.writeText(data);
+            toast.success('URL copied to clipboard!')
+            break
           case ActionType.SEARCH: {
             // Ignore the case for search type action when it is the generic search action
             // As it is not a two step action
@@ -179,6 +186,9 @@ export function useActionExecutor() {
             setActiveItem(item)
             setInput('')
             setResults([])
+            break
+          }
+          case ActionType.COPY_TO_CLIPBOARD: {
             break
           }
           case ActionType.MAGICAL: {

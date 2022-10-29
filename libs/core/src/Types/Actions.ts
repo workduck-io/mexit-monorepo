@@ -9,7 +9,8 @@ export enum ActionType {
   BROWSER_EVENT = 'Browser Action',
   SCREENSHOT = 'Screenshot Action',
   MAGICAL = 'Magical Action',
-  RIGHT_SIDEBAR = 'Right Sidebar Action'
+  RIGHT_SIDEBAR = 'Right Sidebar Action',
+  COPY_TO_CLIPBOARD = 'Copy To clipboard'
 }
 
 export interface MexitAction {

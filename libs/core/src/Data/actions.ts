@@ -53,6 +53,21 @@ export const initActions: Array<ListItemType> = [
   //   }
   // },
   {
+    id: 'ACTION_9aoweruw2321bub',
+    title: 'Lorem Ipsum Generator',
+    category: QuickLinkType.action,
+    icon: 'eva:color-picker-fill',
+    description: 'Lorem Ipsum is copied to the clipboard!',
+    type: ActionType.COPY_TO_CLIPBOARD,
+    shortcut: {
+      pick: {
+        title: 'to copy lorem ipsum',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     category: QuickLinkType.action,
@@ -187,7 +202,7 @@ export const initActions: Array<ListItemType> = [
     title: 'Reload',
     category: QuickLinkType.action,
     description: 'Reload current tab',
-    type: ActionType.BROWSER_EVENT,
+    type: ActionType.COPY_TO_CLIPBOARD,
     icon: 'eva:refresh-outline',
     shortcut: {
       reload: {
