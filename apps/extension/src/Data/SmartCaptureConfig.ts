@@ -1,6 +1,6 @@
 import { ELEMENT_PARAGRAPH } from '@mexit/core'
 
-import { SmartCaptureConfigType, SmartCaptureURLRegexType } from '../Types/SmartCapture'
+import { SmartCaptureConfigType, SmartCaptureFieldTypes, SmartCaptureURLRegexType } from '../Types/SmartCapture'
 
 export const SmartCaptureConfig: SmartCaptureConfigType = {
   LinkedIN: [
@@ -8,56 +8,64 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Name',
       path: '//h1[@class="text-heading-xlarge inline t-24 v-align-middle break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Headline',
       path: '//div[@class="text-body-medium break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Location',
       path: '//span[@class="text-body-small inline t-black--light break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Current Company',
       path: '//div[@aria-label="Current company"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Education',
       path: '//div[@aria-label="Education"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'About',
       path: '//div[@class="display-flex ph5 pv3"]/div/div[@class="pv-shared-text-with-see-more t-14 t-normal t-black display-flex align-items-center"]/div/span[@aria-hidden="true"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Conections',
       path: '//li[@class="text-body-small"]/span',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     },
     {
       label: 'Mutual Connections',
       path: '//span[@class="t-normal t-black--light t-14 hoverable-link-text"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        row: 0
       }
     }
   ],
@@ -242,28 +250,35 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Name',
       path: '//span[@class="p-r_member_profile__name__text"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        renderType: SmartCaptureFieldTypes.TEXT,
+        row: 0
       }
     },
     {
       label: 'Subtitle',
       path: '//div[@class="p-r_member_profile__subtitle"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        renderType: SmartCaptureFieldTypes.TEXT,
+        row: 0
       }
     },
     {
       label: 'Email',
       path: '(//div[@class="p-rimeto_member_profile_field__value"])[1]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        renderType: SmartCaptureFieldTypes.TEXT,
+        row: 0
       }
     },
     {
       label: 'Phone Number',
       path: '(//div[@class="p-rimeto_member_profile_field__value"])[2]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: ELEMENT_PARAGRAPH,
+        renderType: SmartCaptureFieldTypes.NUMBER
       }
     }
   ],
@@ -441,7 +456,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       }
     },
     {
-      label: '',
+      label: 'Languages',
       path: '(//div[@class="ml-1"])[3]',
       properties: {
         type: ELEMENT_PARAGRAPH
@@ -456,6 +471,19 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
     }
   ]
 }
+
+export const SmartCapturePageSource: Record<string, string> = {
+  LinkedIN: 'http://linkedin.com',
+  Instagram: 'http://instagram.com',
+  GitHub: 'http://github.com',
+  Twitter: 'http://twitter.com',
+  YouTube: 'http://youtube.com',
+  Slack: 'http://slack.com',
+  Producthunt: 'http://producthunt.com',
+  Capterra: 'http://capterra.com',
+  G2: 'http://g2.com'
+}
+
 export const SmartCaptureURLRegex: SmartCaptureURLRegexType = [
   {
     WebPage: 'LinkedIN',

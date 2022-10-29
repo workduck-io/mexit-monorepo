@@ -37,6 +37,9 @@ interface SputlitStore {
   child?: any
   setChild: (child?: any) => void
 
+  smartCaptureFormData?: any
+  setSmartCaptureFormData: (data: any) => void
+
   // * Current Active action item from `items`
   activeItem?: ListItemType | MexitAction
   setActiveItem: (item?: ListItemType | MexitAction) => void
@@ -55,6 +58,8 @@ export const useSputlitStore = create<SputlitStore>(
       const search = get().search
       set({ search: { ...search, type } })
     },
+
+    setSmartCaptureFormData: (formData) => set({ smartCaptureFormData: formData }),
     setSearch: (query) => set({ search: query }),
 
     node: createNodeWithUid(getNewDraftKey(), ''),

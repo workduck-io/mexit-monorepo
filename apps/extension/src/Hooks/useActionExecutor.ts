@@ -18,11 +18,12 @@ import {
 } from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
 
+import { SmartCapturePageSource } from '../Data/SmartCaptureConfig'
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { checkURL, getProfileData } from '../Utils/getProfileData'
+import { checkURL, formToBlocks, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
@@ -52,6 +53,7 @@ export function useActionExecutor() {
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
   const setInput = useSputlitStore((s) => s.setInput)
   const resetSputlitState = useSputlitStore((s) => s.reset)
+  const setSmartCaptureFormData = useSputlitStore((s) => s.setSmartCaptureFormData)
 
   const { links, addLink } = useLinkStore()
   const saveLink = useURLsAPI().saveLink
@@ -196,16 +198,21 @@ export function useActionExecutor() {
             if (!webpage) {
               toast.error('No data available for extracting')
             } else {
-              setActiveItem(item)
               getProfileData(webpage)
                 .then((data) => {
+                  setSmartCaptureFormData({
+                    page: webpage,
+                    source: SmartCapturePageSource[webpage],
+                    data
+                  })
                   setPersistedContent([
                     {
                       type: ELEMENT_PARAGRAPH,
-                      children: data,
+                      children: formToBlocks(data),
                       blockMeta: getBlockMetadata(window.location.href)
                     }
                   ])
+                  setActiveItem(item)
                 })
                 .catch((err) => {
                   console.log('err:', err)
@@ -226,7 +233,7 @@ export function useActionExecutor() {
                   type: 'ASYNC_ACTION_HANDLER',
                   subType: 'CAPTURE_VISIBLE_TAB',
                   data: {
-                    workspaceId: workspaceDetails.id
+                    workspaceId: workspaceDetails?.id
                   }
                 },
                 (response) => {

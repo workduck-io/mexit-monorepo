@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
 
-import { useSputlitContext } from '../Hooks/useSputlitContext'
-import { useSputlitStore } from '../Stores/useSputlitStore'
+import { useSputlitContext } from '../../Hooks/useSputlitContext'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
 
 const Iframe = styled.iframe`
   border: none;
@@ -17,7 +17,7 @@ const Iframe = styled.iframe`
   width: 100%;
 `
 
-const Renderer = () => {
+const IFrameActionRenderer = () => {
   const { setIsLoading } = useSputlitContext()
   const activeItem = useSputlitStore((s) => s.activeItem)
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
@@ -64,4 +64,4 @@ const Renderer = () => {
   return <Iframe ref={iframeRef} id="action-component" src={activeItem?.extras?.base_url} allow="clipboard-write" />
 }
 
-export default Renderer
+export default IFrameActionRenderer

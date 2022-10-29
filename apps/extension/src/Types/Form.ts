@@ -1,1 +1,1 @@
-export type FormBuilder = { label: string; data; properties }[]
+export type FormBuilder = { label: string; value; properties }[]

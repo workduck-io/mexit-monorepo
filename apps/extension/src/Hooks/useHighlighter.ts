@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast'
-
 import { mog } from '@mexit/core'
 
 import { useHighlighterContext } from './useHighlighterContext'
@@ -12,7 +10,7 @@ export const useHighlighter = () => {
       highlighter?.remove(blockId)
     } else {
       mog('Something went wrong on highlight', { highlighter, blockId })
-      toast('Please refresh to see updates')
+      // toast('Please refresh to see updates')
     }
   }
 

@@ -8,7 +8,7 @@ export enum ActionType {
   RENDER = 'Render Action',
   BROWSER_EVENT = 'Browser Action',
   SCREENSHOT = 'Screenshot Action',
-  MAGICAL = 'Magical Action',
+  MAGICAL = 'Smart Capture',
   RIGHT_SIDEBAR = 'Right Sidebar Action',
   LOREM_IPSUM = 'lorem ipsum generator'
 }
