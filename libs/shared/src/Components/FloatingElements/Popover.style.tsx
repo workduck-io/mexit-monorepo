@@ -23,7 +23,7 @@ export const PopoverWrapper = styled.div<PopoverWrapperProps>`
   text-align: left;
   width: max-content;
   max-width: 600px;
-  transform-origin: top right;
+  transform-origin: center right;
   animation: ${scale} 0.3s;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 `
