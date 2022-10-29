@@ -23,51 +23,6 @@ export const CREATE_NEW_ITEM = {
 
 export const initActions: Array<ListItemType> = [
   {
-    id: 'ACTION_1',
-    title: 'Capture Screenshot',
-    category: QuickLinkType.action,
-    description: 'Capture tab screenshot',
-    type: ActionType.SCREENSHOT,
-    icon: 'bx:screenshot',
-    shortcut: {
-      capture: {
-        category: 'action',
-        title: 'to capture',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  // {
-  //   id: 'ACTION_9x34kgj23j4234ojin',
-  //   title: 'Metadata Aggregator',
-  //   category: QuickLinkType.action,
-  //   icon: 'eva:color-picker-fill',
-  //   description: 'Extract any useful data from the current page',
-  //   type: ActionType.MAGICAL,
-  //   shortcut: {
-  //     pick: {
-  //       title: 'to pick',
-  //       category: 'action',
-  //       keystrokes: 'Enter'
-  //     }
-  //   }
-  // },
-  {
-    id: 'ACTION_9aoweruw2321bub',
-    title: 'Lorem Ipsum',
-    category: QuickLinkType.action,
-    icon: 'bi:text-paragraph',
-    description: 'Generate placeholder content',
-    type: ActionType.LOREM_IPSUM,
-    shortcut: {
-      copy: {
-        title: 'to copy',
-        category: 'action',
-        keystrokes: 'Enter'
-      }
-    }
-  },
-  {
     id: 'ACTION_LHQhtM9eA3avcNvy8RYgS',
     title: 'Shorten URL',
     category: QuickLinkType.action,
@@ -82,6 +37,52 @@ export const initActions: Array<ListItemType> = [
       }
     },
     extras: { base_url: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
+  },
+
+  {
+    id: 'ACTION_9x34kgj23j4234ojin',
+    title: 'Smart Capture',
+    category: QuickLinkType.action,
+    icon: 'fluent:screen-search-24-filled',
+    description: 'Smartly captures any useful data from the current page',
+    type: ActionType.MAGICAL,
+    shortcut: {
+      pick: {
+        title: 'to pick',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
+    id: 'ACTION_1',
+    title: 'Take Screenshot',
+    category: QuickLinkType.action,
+    description: 'Takes screenshot of current tab',
+    type: ActionType.SCREENSHOT,
+    icon: 'bx:screenshot',
+    shortcut: {
+      capture: {
+        category: 'action',
+        title: 'to capture',
+        keystrokes: 'Enter'
+      }
+    }
+  },
+  {
+    id: 'ACTION_9aoweruw2321bub',
+    title: 'Lorem Ipsum',
+    category: QuickLinkType.action,
+    icon: 'bi:text-paragraph',
+    description: 'Generate placeholder content',
+    type: ActionType.LOREM_IPSUM,
+    shortcut: {
+      copy: {
+        title: 'to copy',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
   },
   {
     id: 'ACTION__JZ7DbTRtgVyUWIZ6Rvjs',

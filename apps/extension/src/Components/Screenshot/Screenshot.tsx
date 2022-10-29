@@ -16,6 +16,7 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import useRaju from '../../Hooks/useRaju'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+import { Dialog } from '../Floating/Dialog'
 import NoteSelector from '../Floating/NoteSelector'
 // import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
 import {
@@ -31,7 +32,6 @@ import {
   ToggleAndSubmit,
   ViewToggle
 } from './Screenshot.style'
-import { Dialog } from '../Floating/Dialog'
 
 const TO_RADIANS = Math.PI / 180
 

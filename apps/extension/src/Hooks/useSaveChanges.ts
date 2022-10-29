@@ -3,19 +3,19 @@ import toast from 'react-hot-toast'
 import { defaultContent, extractMetadata, ILink, mog, SEPARATOR } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
+import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { deserializeContent } from '../Utils/serializer'
+import { deserializeContent, serializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorContext } from './useEditorContext'
 import { useInternalLinks } from './useInternalLinks'
+import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import useDataStore from '../Stores/useDataStore'
-import { getTitleFromPath } from './useLinks'
 
 export interface AppendAndSaveProps {
   nodeid: string
@@ -155,7 +155,7 @@ export function useSaveChanges() {
       namespace: namespace.id
     })
     const storeContent = getContent(node?.nodeid)?.content ?? defaultContent.content
-    // mog('We be setting persistedContent', { toAppendContent, storeContent })
+    mog('We be setting persistedContent', { toAppendContent, storeContent })
     const content = [...storeContent, ...toAppendContent]
     // setNodeContent([...storeContent, ...content])
     const request = {

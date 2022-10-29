@@ -62,6 +62,8 @@ const NoteSelector = ({
   }
 
   const reset = () => {
+    if (search === '') setOpen(false)
+
     setSearch('')
     setFilteredNotes(appendableNotes)
     setSelected(-1)

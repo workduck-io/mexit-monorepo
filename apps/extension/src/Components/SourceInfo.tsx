@@ -9,7 +9,7 @@ const getFavicon = (source: string) => {
   return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&size=32`
 }
 
-const Source: React.FC<{ source: string }> = ({ source }) => {
+export const Source: React.FC<{ source: string }> = ({ source }) => {
   const icon = getFavicon(source)
 
   const onClick = () => {
