@@ -157,11 +157,10 @@ export function useActionExecutor() {
             resetSputlitState()
 
             break
-          case ActionType.COPY_TO_CLIPBOARD: 
-            console.log("This is the lorem ipsum!!")
+          case ActionType.LOREM_IPSUM: 
             const data = generateLoremIpsum();
             navigator.clipboard.writeText(data);
-            toast.success('URL copied to clipboard!')
+            toast.success('lorem ipsum is copied to clipboard!')
             break
           case ActionType.SEARCH: {
             // Ignore the case for search type action when it is the generic search action
@@ -186,9 +185,6 @@ export function useActionExecutor() {
             setActiveItem(item)
             setInput('')
             setResults([])
-            break
-          }
-          case ActionType.COPY_TO_CLIPBOARD: {
             break
           }
           case ActionType.MAGICAL: {

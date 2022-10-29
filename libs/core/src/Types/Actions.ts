@@ -10,7 +10,7 @@ export enum ActionType {
   SCREENSHOT = 'Screenshot Action',
   MAGICAL = 'Magical Action',
   RIGHT_SIDEBAR = 'Right Sidebar Action',
-  COPY_TO_CLIPBOARD = 'Copy To clipboard'
+  LOREM_IPSUM = 'lorem ipsum generator'
 }
 
 export interface MexitAction {

@@ -58,7 +58,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     icon: 'eva:color-picker-fill',
     description: 'Lorem Ipsum is copied to the clipboard!',
-    type: ActionType.COPY_TO_CLIPBOARD,
+    type: ActionType.LOREM_IPSUM,
     shortcut: {
       pick: {
         title: 'to copy lorem ipsum',
@@ -202,7 +202,7 @@ export const initActions: Array<ListItemType> = [
     title: 'Reload',
     category: QuickLinkType.action,
     description: 'Reload current tab',
-    type: ActionType.COPY_TO_CLIPBOARD,
+    type: ActionType.BROWSER_EVENT,
     icon: 'eva:refresh-outline',
     shortcut: {
       reload: {
