@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
 
 export const getTippyStyles = (name: string, textColor: string, background: string, border?: string) => css`
   .tippy-box[data-theme~='${name}'] {

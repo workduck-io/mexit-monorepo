@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react'
-import { useTheme } from 'styled-components'
+
 import { isUrl } from '@udecode/plate'
+import { useTheme } from 'styled-components'
 
 import { MexIcon } from '@mexit/shared'
 

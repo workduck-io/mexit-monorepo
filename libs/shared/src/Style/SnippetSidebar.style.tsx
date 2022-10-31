@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { Ellipsis } from './NodeSelect.style'
 
 export const SnippetCards = styled.div`

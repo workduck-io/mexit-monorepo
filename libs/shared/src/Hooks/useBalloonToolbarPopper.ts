@@ -19,8 +19,6 @@ import {
 import { useFocused } from 'slate-react'
 import create from 'zustand'
 
-
-
 type ToolbarState = 'normal' | 'new-note' | 'new-snippet'
 
 interface BalloonToolbarStore {
@@ -126,4 +124,3 @@ export const useFloatingToolbar = ({
 
   return { ...floatingResult, open }
 }
-

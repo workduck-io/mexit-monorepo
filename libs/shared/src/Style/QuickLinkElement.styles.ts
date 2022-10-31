@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
-import styled, { css } from 'styled-components'
 import { transparentize, mix } from 'polished'
+import styled, { css } from 'styled-components'
 
 export const SILinkRoot = styled.div`
   display: inline-block;

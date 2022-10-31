@@ -1,4 +1,5 @@
 import { trim } from 'lodash'
+
 import { CustomEvents } from './events'
 import { SEPARATOR, DRAFT_PREFIX, DRAFT_NODE } from './idGenerator'
 
