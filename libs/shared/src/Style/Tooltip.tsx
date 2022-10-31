@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { shade } from 'polished'
 import styled from 'styled-components'
 
@@ -21,21 +22,21 @@ const ShortcutBox = styled.div`
 `
 
 export interface DisplayShortcutProps {
-    shortcut: string
+  shortcut: string
 }
 
 export const DisplayShortcut = ({ shortcut }: DisplayShortcutProps) => {
-    const keys = getSplitDisplayShortcut(shortcut)
-    return (
-        <ShortcutWrapper>
-            {keys.map((k, i) => (
-                <ShortcutWrapper key={k}>
-                    <ShortcutBox>{k}</ShortcutBox>
-                    {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>}
-                </ShortcutWrapper>
-            ))}
+  const keys = getSplitDisplayShortcut(shortcut)
+  return (
+    <ShortcutWrapper>
+      {keys.map((k, i) => (
+        <ShortcutWrapper key={k}>
+          <ShortcutBox>{k}</ShortcutBox>
+          {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>}
         </ShortcutWrapper>
-    )
+      ))}
+    </ShortcutWrapper>
+  )
 }
 
 const TooltipShortcut = styled.span`
@@ -53,14 +54,14 @@ const TooltipShortcut = styled.span`
   }
 `
 export interface TooltipTitleWithShortcutProps {
-    title: string
-    shortcut: string
+  title: string
+  shortcut: string
 }
 
 export const TooltipTitleWithShortcut = ({ title, shortcut }: TooltipTitleWithShortcutProps) => {
-    return (
-        <TooltipShortcut>
-            {title} <DisplayShortcut shortcut={shortcut} />
-        </TooltipShortcut>
-    )
+  return (
+    <TooltipShortcut>
+      {title} <DisplayShortcut shortcut={shortcut} />
+    </TooltipShortcut>
+  )
 }

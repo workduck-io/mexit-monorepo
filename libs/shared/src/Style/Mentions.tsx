@@ -1,5 +1,6 @@
 import { transparentize, mix } from 'polished'
 import styled, { css } from 'styled-components'
+
 import { CardShadow } from './Helpers'
 
 export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`

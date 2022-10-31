@@ -1,6 +1,7 @@
-import { formatDistanceToNow, formatRelative, format, add, sub, startOfToday } from 'date-fns'
-import { capitalize } from './strings'
 import * as chrono from 'chrono-node'
+import { formatDistanceToNow, formatRelative, format, add, sub, startOfToday } from 'date-fns'
+
+import { capitalize } from './strings'
 
 export const toLocaleString = (date: Date) => {
   return date.toLocaleString('en-US', {

@@ -1,19 +1,19 @@
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
-import { DataInfobarWrapper } from '../Style/DataInfobar'
+import { ArchivedNode } from '../Style/Archive'
+import { AsyncButton, Button } from '../Style/Buttons'
 import { BackCard } from '../Style/Card'
 import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
+import { DataInfobarWrapper } from '../Style/DataInfobar'
+import { EditorStyles, NodeInfo, Widget } from '../Style/Editor'
+import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 import { GridWrapper } from '../Style/Grid'
 import { NavWrapper, NavButton, Link } from '../Style/Nav'
 import { Result, ResultHeader, SearchContainer } from '../Style/Search'
+import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SidebarDiv } from '../Style/Sidebar'
 import { SSnippet, CreateSnippet } from '../Style/Snippets'
-import { ArchivedNode } from '../Style/Archive'
-import { SettingsOptions, SettingTitle } from '../Style/Settings'
-import { AsyncButton, Button } from '../Style/Buttons'
-import { EditorStyles, NodeInfo, Widget } from '../Style/Editor'
-import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}

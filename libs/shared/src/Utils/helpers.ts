@@ -1,5 +1,7 @@
 import React from 'react'
+
 import toast from 'react-hot-toast'
+
 import { NodeContent } from '@mexit/core'
 
 export async function copyTextToClipboard(text: any) {

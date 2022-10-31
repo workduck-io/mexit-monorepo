@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { FloatingTree, useFloatingParentNodeId } from '@floating-ui/react-dom-interactions'
-import { Props } from './types'
+
 import { Floating } from './Floating'
+import { Props } from './types'
 
 export const NestedFloating: React.FC<Props> = (props) => {
   const parentId = useFloatingParentNodeId()

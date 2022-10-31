@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { IconWrapper } from './IconPicker.style'
+
 // import { Ellipsis } from './NodeSelect.style'
 
 const Ellipsis = css`
