@@ -138,6 +138,7 @@ export const useURLsAPI = () => {
         mog('ErrorFetchingAllLinks', error)
         toast.error('An error occured. Please try again.')
       } else {
+        mog('extract links', { message })
         return extractLinksFromData(message)
       }
     })

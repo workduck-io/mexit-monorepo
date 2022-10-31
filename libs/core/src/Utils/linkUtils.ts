@@ -56,7 +56,9 @@ export const getFavicon = (source: string) => {
 }
 
 export const extractLinksFromData = (data: any): Link[] => {
-  return data.URL.map((l: any) => {
+  if (!data?.URL) return []
+
+  return data?.URL?.map((l: any) => {
     if (l) {
       /*
       {
@@ -87,5 +89,5 @@ export const extractLinksFromData = (data: any): Link[] => {
         updatedAt: updatedAtTime
       }
     } else return undefined
-  }).filter((l) => !!l) as Link[]
+  })?.filter((l) => !!l) as Link[]
 }

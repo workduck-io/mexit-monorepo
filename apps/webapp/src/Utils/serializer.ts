@@ -135,7 +135,7 @@ export const deserializeSpecial: { [elementType: string]: (element: any) => any 
 
 // From API to content
 export const deserializeContent = (sanatizedContent: any[]) => {
-  return sanatizedContent.map((el) => {
+  return sanatizedContent?.map((el) => {
     if (Object.keys(deserializeSpecial).includes(el.elementType)) {
       const dEl = deserializeSpecial[el.elementType](el)
       return dEl

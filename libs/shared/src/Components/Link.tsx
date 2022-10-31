@@ -69,7 +69,7 @@ const getSanatizedLink = (raw: string) => {
  * [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling)
  */
 export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<Value, ILinkNode>) => {
-  const isExternal = element['url'].startsWith('#')
+  const isExternal = element['url']?.startsWith('#')
 
   const openLink = (e: React.MouseEvent, meta: boolean) => {
     e.preventDefault()

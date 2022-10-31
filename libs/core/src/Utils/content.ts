@@ -90,14 +90,17 @@ export const removeNulls = (obj: any): any => {
 }
 
 export const extractMetadata = (data: any): NodeMetadata => {
-  const metadata: any = {
-    lastEditedBy: data.lastEditedBy,
-    updatedAt: data.updatedAt,
-    createdBy: data.createdBy,
-    createdAt: data.createdAt,
-    elementMetadata: data?.elementMetadata
+  if (data) {
+    const metadata: any = {
+      lastEditedBy: data.lastEditedBy,
+      updatedAt: data.updatedAt,
+      createdBy: data.createdBy,
+      createdAt: data.createdAt,
+      elementMetadata: data?.elementMetadata
+    }
+
+    return removeNulls(metadata)
   }
-  return removeNulls(metadata)
 }
 
 export const updateEmptyBlockTypes = (content: NodeEditorContent, type: string = ELEMENT_PARAGRAPH) => {
