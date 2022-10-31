@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.19.10
+
+### Patch Changes
+
+- 391e24db: Null checks for extractLinkFromData and deserialzeContent
+- 1df9ae9f: Update middleware URL
+
 ## 0.19.9
 
 ### Patch Changes
