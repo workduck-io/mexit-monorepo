@@ -86,9 +86,12 @@ export const useNamespaceApi = () => {
         if (node) {
           const { rawResponse, nodeid } = node
           setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-          const content = deserializeContent(rawResponse.data)
           const metadata = extractMetadata(rawResponse) // added by Varshitha
-          updateFromContent(nodeid, content, metadata)
+
+          if (rawResponse?.data) {
+            const content = deserializeContent(rawResponse.data)
+            updateFromContent(nodeid, content, metadata)
+          }
         }
       })
     }
