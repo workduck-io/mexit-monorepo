@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.1
+
+### Patch Changes
+
+- 1df9ae9f: Update middleware URL
+
 ## 0.18.0
 
 ### Minor Changes
