@@ -55,7 +55,7 @@ export const PublicTagsView = ({ nodeid, tags }) => {
 const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   const { getTags } = useTags()
   const tagsCache = useDataStore((state) => state.tagsCache)
-  const analysisTags = useAnalysisStore((state) => state.analysis.tags)
+  const analysisTags = useAnalysisStore((state) => state.analysis?.tags)
   const [tags, setTags] = useState<string[]>([])
   const { goTo } = useRouting()
 
