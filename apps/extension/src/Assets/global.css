@@ -13,12 +13,13 @@
 }
 
 .mexit-highlight {
-  -webkit-animation: 1.5s highlight 1.5s 1 normal forwards;
-  animation: 1.5s highlight 1.5s 1 normal forwards;
-  background-color: none;
-  background: linear-gradient(90deg, #c3b1e1a2, 50%, rgba(255, 255, 255, 0) 50%);
-  background-size: 200% 100%;
-  background-position: 100% 0;
+  /* -webkit-animation: 1.5s highlight 1.5s 1 normal forwards; */
+  /* animation: 1.5s highlight 1.5s 1 normal forwards; */
+  /* background-color: none; */
+  /* background-color: linear-gradient(90deg, #c3b1e1a2, 50%, rgba(255, 255, 255, 0) 50%); */
+  background-color: #c3b1e1a2;
+  /* background-size: 200% 100%;
+  background-position: 100% 0; */
   filter: contrast(1.25);
 }
 
