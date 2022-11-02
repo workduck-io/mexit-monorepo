@@ -3,16 +3,23 @@ import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { fuzzySearch } from './fuzzysearch'
+import { mog } from './mog'
 import { LINK_SHORTENER_URL_BASE } from './routes'
 
 export const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
   const getKeys = (link: Link) => {
-    const keys = [link.title, link.url]
+    const keys = [link.url]
     if (link.alias) {
       keys.push(link.alias)
     }
+
+    if (link.title) {
+      keys.push(link.title)
+    }
+
     return keys
   }
+
   const newItems = fuzzySearch(links, searchTerm, getKeys)
   // mog('newItems', { newItems })
   return newItems

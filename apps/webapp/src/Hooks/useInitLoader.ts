@@ -10,24 +10,20 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { initSearchIndex } from '../Workers/controller'
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
-import useLoad from './useLoad'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
-import { useRouting } from './useRouting'
 import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
-  const { loadNode } = useLoad()
   const { updateBaseNode } = useNodes()
   const initHighlights = useHighlightStore((store) => store.initHighlights)
-
-  const { goTo } = useRouting()
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -56,7 +52,7 @@ export const useInitLoader = () => {
       // TODO: can and should be done by a worker
       initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
-      const baseNode = updateBaseNode()
+      updateBaseNode()
 
       // We only set showLoader to false here because when needed the loader would be made visible by another component
       setShowLoader(false)
@@ -71,8 +67,18 @@ export const useInitLoader = () => {
   useEffect(() => {
     if (isAuthenticated && snippetHydrated && dataStoreHydrated) {
       mog('Inside InitLoader', { isAuthenticated })
-      backgroundFetch()
-      fetchAll()
+      const initData = {
+        ilinks: useDataStore.getState().ilinks,
+        archive: useDataStore.getState().archive,
+        sharedNodes: useDataStore.getState().sharedNodes,
+        snippets: useSnippetStore.getState().snippets,
+        contents: useContentStore.getState().contents
+      }
+
+      initSearchIndex(initData).then(() => {
+        backgroundFetch()
+        fetchAll()
+      })
     }
   }, [isAuthenticated, snippetHydrated, dataStoreHydrated])
 }
