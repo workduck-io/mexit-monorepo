@@ -14,6 +14,9 @@ export interface ContentStoreState {
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
   updateMetadata: (nodeid: string, metadata: Partial<NodeMetadata>) => void
   initContents: (contents: Contents) => void
+
+  _hasHydrated: boolean
+  setHasHydrated: (state) => void
 }
 
 export const contentStoreConstructor = (set, get) => ({
@@ -76,6 +79,12 @@ export const contentStoreConstructor = (set, get) => ({
   initContents: (contents) => {
     set({
       contents
+    })
+  },
+  _hasHydrated: false,
+  setHasHydrated: (state) => {
+    set({
+      _hasHydrated: state
     })
   }
 })
