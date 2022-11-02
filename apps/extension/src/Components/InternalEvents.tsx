@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { CaptureConsole } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
@@ -170,6 +170,7 @@ function initAnalytics() {
 function handleHighlighter() {
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const highlighted = useHighlightStore((s) => s.highlighted)
+  let highlighedIds: string[] = []
 
   useEffect(() => {
     const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
@@ -177,11 +178,16 @@ function handleHighlighter() {
       const pageContents = highlighted[window.location.href]
 
       forEach(pageContents, (value, key) => {
-        const { startMeta, endMeta, text } = value.elementMetadata.saveableRange
-        highlighter.fromStore(startMeta, endMeta, text, key)
+        const { startMeta, endMeta, text, id } = value.elementMetadata.saveableRange
+        // mog('check', { id, highlighedIds })
 
-        if (value?.shared) {
-          highlighter.addClass('shared', key)
+        if (!highlighedIds.includes(id)) {
+          highlighter.fromStore(startMeta, endMeta, text, key)
+          highlighedIds.push(id)
+
+          if (value?.shared) {
+            highlighter.addClass('shared', key)
+          }
         }
       })
     }
