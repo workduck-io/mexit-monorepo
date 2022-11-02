@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.2
+
+### Patch Changes
+
+- 32dcc7e4: Fix issues with search worker
+
 ## 0.18.1
 
 ### Patch Changes
