@@ -80,7 +80,7 @@ export default function useRaju() {
   const { actOnReminder } = useReminders()
   const setLinks = useLinkStore((store) => store.setLinks)
   const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
-  const setHighlights = useHighlightStore((store) => store.setHighlights)
+  const initHighlights = useHighlightStore((store) => store.initHighlights)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -130,17 +130,17 @@ export default function useRaju() {
     bootRecents(recents: Array<string>) {
       setRecents(recents)
     },
-    bootIlinks(ilinks: ILink[]) {
-      setIlinks(ilinks)
-    },
     bootNamespaces(namespaces: SingleNamespace[]) {
       setNamespaces(namespaces)
     },
     bootReminders(reminders: Reminder[]) {
       setReminders(reminders)
     },
-    bootContents(contents: Contents) {
+    bootIlinksAndContents(ilinks: ILink[], contents: Contents) {
+      setIlinks(ilinks)
       initContents(contents)
+
+      initHighlights(ilinks, contents)
     },
     bootSnippets(snippets: Snippet[]) {
       updateSnippets(snippets)
@@ -156,9 +156,6 @@ export default function useRaju() {
     },
     bootDescriptions(descriptions: Description) {
       initDescriptions(descriptions)
-    },
-    bootHighlights(highlights: Highlighted) {
-      setHighlights(highlights)
     }
   }
 
