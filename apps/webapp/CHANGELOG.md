@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.11
+
+### Patch Changes
+
+- 32dcc7e4: Fix issues with search worker
+
 ## 0.19.10
 
 ### Patch Changes
