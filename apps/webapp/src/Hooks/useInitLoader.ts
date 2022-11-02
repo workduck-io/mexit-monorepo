@@ -15,12 +15,14 @@ import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
+import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
+  const { updateBaseNode } = useNodes()
   const initHighlights = useHighlightStore((store) => store.initHighlights)
 
   const { getAllSnippetsByWorkspace } = useApi()
@@ -49,6 +51,8 @@ export const useInitLoader = () => {
 
       // TODO: can and should be done by a worker
       initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
+
+      updateBaseNode()
 
       // We only set showLoader to false here because when needed the loader would be made visible by another component
       setShowLoader(false)
