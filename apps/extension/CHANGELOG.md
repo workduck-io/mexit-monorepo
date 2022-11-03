@@ -1,5 +1,12 @@
 # mexit
 
+## 0.18.3
+
+### Patch Changes
+
+- e2f5a887: Lesser re-highlighting, removed two way syncing of highlights and added hydration state to content store
+- 5e58096d: Navigate tree, spaces and tabs in sidebar using shortcuts
+
 ## 0.18.2
 
 ### Patch Changes
