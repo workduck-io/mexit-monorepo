@@ -45,7 +45,7 @@ jobs:
         run: npm install -g yarn
 
       - name: Install Dependencies
-        run: yarn
+        run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
       - name: Get Package Version
         id: get_package_version
