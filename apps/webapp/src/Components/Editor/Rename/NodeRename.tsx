@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -34,13 +35,14 @@ const NodeRenameOnlyTitle = () => {
   const { push } = useNavigation()
   const setMockRefactored = useRenameStore((store) => store.setMockRefactored)
   const modalReset = useRenameStore((store) => store.closeModal)
-  const node = useEditorStore((store) => store.node)
+  const nodeId = useParams().nodeId
 
   const { path: nodeFrom, namespace: nodeFromNS } = useMemo(() => {
-    const noteLink = ilinks.find((i) => i.nodeid === node?.nodeid)
+    const noteLink = ilinks.find((i) => i.nodeid === nodeId)
+    mog('noteLink', { noteLink })
     if (noteLink) return noteLink
-    return node
-  }, [ilinks, node])
+    return { path: '', namespace: '' }
+  }, [ilinks, nodeId])
 
   const { getNodesOfNamespace } = useNamespaces()
   const setFrom = useRenameStore((store) => store.setFrom)
@@ -151,11 +153,11 @@ const NodeRenameOnlyTitle = () => {
       updateBaseNode()
 
       const path = useEditorStore.getState().node.id
-      const nodeid = useEditorStore.getState().node.nodeid
+
       setEditable(false)
 
-      if (doesLinkRemain(nodeid, refactored)) {
-        push(nodeid)
+      if (doesLinkRemain(nodeId, refactored)) {
+        push(nodeId)
       } else if (refactored.length > 0) {
         const nodeid = refactored[0].nodeid
         push(nodeid, { savePrev: false })
@@ -195,7 +197,7 @@ const NodeRenameOnlyTitle = () => {
   const isInputReadonly = useMemo(() => {
     if (nodeFrom) {
       if (isReserved(nodeFrom)) return true
-      const access = accessWhenShared(node.nodeid)
+      const access = accessWhenShared(nodeId)
       // Is editable only when: access on space is write or above
       if (access) {
         if (access.space) return access.space === 'READ'
@@ -203,7 +205,7 @@ const NodeRenameOnlyTitle = () => {
       }
     }
     return true
-  }, [node, nodeFrom])
+  }, [nodeId, nodeFrom])
 
   return (
     <Wrapper>

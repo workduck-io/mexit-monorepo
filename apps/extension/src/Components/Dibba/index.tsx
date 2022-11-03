@@ -9,7 +9,6 @@ import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import {
   apiURLs,
-  convertContentToRawText,
   convertToCopySnippet,
   defaultContent,
   defaultCopyConverter,
@@ -37,7 +36,7 @@ import useDataStore from '../../Stores/useDataStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { supportedDomains, simulateOnChange, copySnippetToClipboard, getUpcomingData } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from './styled'
+import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from './styled'
 
 interface PublicNode {
   type: 'Public Nodes'

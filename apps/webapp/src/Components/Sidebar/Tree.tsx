@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   default as AtlaskitTree,
@@ -15,15 +15,19 @@ import { Icon } from '@iconify/react'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import { useLocation, useMatch } from 'react-router-dom'
 
+import { tinykeys } from '@workduck-io/tinykeys'
+
 import { mog, SEPARATOR, getNameFromPath } from '@mexit/core'
 import {
   StyledTreeItemSwitcher,
   TooltipContentWrapper,
   TooltipCount,
   ItemTitle,
-  StyledTreeSwitcher
+  StyledTreeSwitcher,
+  isOnEditableElement
 } from '@mexit/shared'
 
+import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
@@ -32,6 +36,7 @@ import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
+import { flattenNestedTreeFromIds } from '../../Utils/tree'
 import { RenderTreeItem } from './TreeItem'
 
 interface GetIconProps {
@@ -118,6 +123,58 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const publicNamespaceMatch = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/node/:nodeid`)
 
+  const flattenTree = useMemo(() => {
+    const newTree = flattenNestedTreeFromIds(Object.values(initTree.items['1']), initTree.items)
+    return newTree.slice(1)
+  }, [initTree])
+
+  const recursivelyExpand = (tree, item, treeRecord) => {
+    if (item.data?.parentId) {
+      const parentItem = treeRecord[item.data?.parentId]
+
+      if (!parentItem?.isExpanded) {
+        const newTree = mutateTree(tree, parentItem.id, { isExpanded: true })
+        expandNode(parentItem.data.path)
+        return recursivelyExpand(newTree, parentItem, treeRecord)
+      }
+    }
+
+    return tree
+  }
+
+  const onTreeNavigatePress = useCallback(
+    (reverse = false) =>
+      (e) => {
+        if (!isOnEditableElement(e)) {
+          e.preventDefault()
+          const at = flattenTree.findIndex((i) => match?.params?.nodeid === i.data.nodeid)
+
+          let index = 0
+          if (at >= 0) index = getNextWrappingIndex(reverse ? -1 : 1, at, flattenTree.length, () => undefined, false)
+
+          const newNote = flattenTree[index]
+          expandNode(newNote.data.path)
+
+          if (newNote.data?.parentId) {
+            goToNodeId(newNote.data?.nodeid)
+            changeTree(recursivelyExpand(tree, newNote, tree.items))
+          } else {
+            onOpenItem(newNote.id, newNote.data?.nodeid)
+          }
+        }
+      },
+    [match, flattenTree, tree]
+  )
+
+  useEffect(() => {
+    const unsuscribe = tinykeys(window, {
+      'Alt+ArrowUp': onTreeNavigatePress(true),
+      'Alt+ArrowDown': onTreeNavigatePress()
+    })
+
+    return () => unsuscribe()
+  }, [onTreeNavigatePress])
+
   const { execRefactorAsync } = useRefactor()
   const draggedRef = useRef<TreeItem | null>(null)
 
@@ -127,13 +184,17 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
 
   const [source, target] = useSingleton()
 
-  const onOpenItem = (itemId: string, nodeid: string) => {
+  const goToNodeId = (nodeId: string) => {
     if (publicNamespaceMatch) {
-      goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeid)
+      goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeId)
     } else {
-      push(nodeid)
-      goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+      push(nodeId)
+      goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
     }
+  }
+
+  const onOpenItem = (itemId: string, nodeid: string) => {
+    goToNodeId(nodeid)
     changeTree(mutateTree(tree, itemId, { isExpanded: true }))
   }
 

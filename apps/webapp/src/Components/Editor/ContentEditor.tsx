@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { usePlateEditorRef, selectEditor, focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
-import shallow from 'zustand/shallow'
+import { useLocation, useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -17,6 +17,7 @@ import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
+import { useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -50,8 +51,8 @@ const ContentEditor = () => {
   // const { debouncedAddLastOpened } = useLastOpened()
 
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
-  const { node } = useEditorStore((state) => ({ nodeid: state.node.nodeid, node: state.node }), shallow)
-  const fsContent = useContentStore((state) => state.contents[node.nodeid])
+  const nodeid = useParams()?.nodeId
+  const fsContent = useContentStore((state) => state.contents[nodeid])
 
   const { shortcutHandler } = useKeyListener()
   // const { getSuggestions } = useSuggestions()
@@ -61,16 +62,16 @@ const ContentEditor = () => {
   const nodeContent = useMemo(() => {
     if (fsContent?.content) return fsContent.content
     return defaultContent.content
-  }, [node.nodeid, fsContent])
+  }, [nodeid, fsContent])
 
   const onChangeSave = useCallback(
     async (val: any[]) => {
-      if (val && node && node.nodeid !== '__null__') {
-        addOrUpdateValBuffer(node.nodeid, val)
+      if (val && nodeid !== '__null__') {
+        addOrUpdateValBuffer(nodeid, val)
         // debouncedAddLastOpened(node.nodeid)
       }
     },
-    [node.nodeid]
+    [nodeid]
   )
 
   const onAutoSave = useCallback((val) => {
@@ -85,7 +86,7 @@ const ContentEditor = () => {
     }
   }, [])
 
-  const editorId = useMemo(() => getEditorId(node.nodeid, fetchingContent), [node, fetchingContent])
+  const editorId = useMemo(() => getEditorId(nodeid, fetchingContent), [nodeid, fetchingContent])
 
   const onFocusClick = (ev) => {
     ev.preventDefault()
@@ -117,7 +118,7 @@ const ContentEditor = () => {
       Enter: (event) => {
         if (!isOnEditableElement(event)) {
           event.preventDefault()
-          const editorRef = getPlateEditorRef()
+          const editorRef = getPlateEditorRef(editorId) ?? getPlateEditorRef()
           focusEditor(editorRef)
         }
       },
@@ -152,18 +153,18 @@ const ContentEditor = () => {
   }, [shortcuts, toggleFocusMode])
 
   const viewOnly = useMemo(() => {
-    const access = accessWhenShared(node?.nodeid)
+    const access = accessWhenShared(nodeid)
     // mog('Access', { access, node })
     return isReadonly(access)
-  }, [node?.nodeid, _hasHydrated])
+  }, [nodeid, _hasHydrated])
 
   return (
     <>
       <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
-        <NavBreadCrumbs nodeId={node.nodeid} />
+        <NavBreadCrumbs nodeId={nodeid} />
         <Toolbar />
 
-        {isBlockMode ? <BlockInfoBar /> : <Metadata node={node} />}
+        {isBlockMode ? <BlockInfoBar /> : <Metadata nodeId={nodeid} />}
 
         <EditorWrapper
           comboboxOpen={isComboOpen}
@@ -179,6 +180,7 @@ const ContentEditor = () => {
             content={nodeContent?.length ? nodeContent : defaultContent.content}
             nodeUID={editorId}
             readOnly={viewOnly}
+            autoFocus={false}
           />
         </EditorWrapper>
       </StyledEditor>

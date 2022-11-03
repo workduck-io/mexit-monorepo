@@ -2,7 +2,6 @@ import React from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-import { defaultContent, mog } from '@mexit/core'
 import { RHSideNav } from '@mexit/shared'
 
 import InfoBar from '.'
@@ -10,7 +9,6 @@ import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useSidebarTransition } from '../Sidebar/Transition'
-import PublicDataInfobar from './PublicNodeInfobar'
 
 const RHSidebarContent = () => {
   const sidebar = useLayoutStore((store) => store.rhSidebar)

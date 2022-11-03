@@ -41,7 +41,7 @@ const PublicNodeEditor = ({ nodeId, node }) => {
         <Link to={'/'}>{node?.title}</Link>
       </Title>
 
-      {node && <Metadata node={node} publicMetadata={node?.metadata} />}
+      {node && <Metadata nodeId={nodeId} publicMetadata={node?.metadata} />}
 
       <EditorWrapper onClick={onFocusClick}>
         <Editor

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
@@ -121,6 +121,14 @@ export const RenderTreeItem = ({
   onClick
 }: TreeItemProps) => {
   const isTrue = !readOnly && JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
+  const ref = useRef<HTMLElement>()
+  // const highlightedAt = useTreeStore((s) => s.highlightedAt)
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [ref?.current])
 
   // const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.data?.nodeid])
   // const { getLastOpened } = useLastOpened()
@@ -133,6 +141,8 @@ export const RenderTreeItem = ({
   // const isUnread = useMemo(() => {
   //   return lastOpenedState === LastOpenedState.UNREAD
   // }, [lastOpenedState])
+
+  // console.log('Highlighted at', { highlightedAt, item })
 
   return (
     <Tippy theme="mex" placement="right" singleton={target} content={<TooltipContent item={item} />}>

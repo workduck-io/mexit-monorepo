@@ -217,6 +217,8 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
       blink={presentEditor?.blink}
       editable={!!presentEditor?.editing}
       onClick={(ev) => {
+        ev.stopPropagation()
+
         if (ev.detail === 2) {
           onEditorClick(ev)
         }

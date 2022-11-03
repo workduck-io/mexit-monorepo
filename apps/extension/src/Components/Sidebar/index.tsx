@@ -1,55 +1,23 @@
 import React, { useMemo } from 'react'
 
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { ExtInfobarMode, InfoBarWrapper, Tabs } from '@mexit/shared'
 
-import { ExtInfobarMode, InfoBarWrapper, MexIcon, Tabs, TabType } from '@mexit/shared'
-
+import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { useRightSidebarItems } from '../../Stores/useRightSidebarItems'
 import { getElementById } from '../../contentScript'
-import { ContextInfoBar } from './ContextInfoBar'
 import { DraggableToggle } from './DraggableToggle'
-import { NotesInfoBar } from './NotesInfoBar'
-import { SnippetsInfoBar } from './SnippetsInfoBar'
 import { ExtSideNav, SidebarContainer } from './styled'
 
 const ExtInfoBarItems = () => {
+  const { getRHSTabs } = useRightSidebarItems()
+  const tabs = useMemo(() => getRHSTabs(), [])
+
   const infobar = useLayoutStore((s) => s.infobar)
   const setInfobarMode = useLayoutStore((s) => s.setInfobarMode)
 
-  // Ensure the tabs have InfobarType in type
-  const tabs: Array<TabType> = useMemo(
-    () => [
-      {
-        label: <MexIcon $noHover icon="mdi:web-plus" width={24} height={24} />,
-        type: 'context',
-        component: <ContextInfoBar />,
-        tooltip: 'Context'
-      },
-      {
-        label: <MexIcon $noHover icon={quillPenLine} width={24} height={24} />,
-        type: 'snippets',
-        component: <SnippetsInfoBar />,
-        tooltip: 'Snippets'
-      },
-      {
-        label: <MexIcon $noHover icon="gg:file-document" width={24} height={24} />,
-        type: 'notes',
-        component: <NotesInfoBar />,
-        tooltip: 'Notes'
-      }
-
-      // TODO: add this back when we have url based reminders
-      // The reminderUI components already moved to @mexit/shared
-      // {
-      //   label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
-      //   type: 'reminders',
-      //   component: <ReminderInfobar />,
-      //   tooltip: 'Reminders'
-      // }
-    ],
-    []
-  )
+  useRightSidebarShortcuts()
 
   return (
     <Tabs

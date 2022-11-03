@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
-import { transparentize } from 'polished'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import styled from 'styled-components'
 

@@ -3,7 +3,9 @@ import React, { useEffect } from 'react'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
 
-import { Tooltip, IconDisplay } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { Tooltip, IconDisplay, isOnEditableElement } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { CreateNewMenu } from './Sidebar.createNew'
@@ -14,9 +16,15 @@ interface SidebarSpaceSwitcherProps {
   currentSpace: string
   spaces: SidebarSpace[]
   setCurrentIndex: (index: number) => void
+  setNextSpaceIndex: (reverse?: boolean) => void
 }
 
-export const SidebarSpaceSwitcher = ({ currentSpace, spaces, setCurrentIndex }: SidebarSpaceSwitcherProps) => {
+export const SidebarSpaceSwitcher = ({
+  currentSpace,
+  setNextSpaceIndex,
+  spaces,
+  setCurrentIndex
+}: SidebarSpaceSwitcherProps) => {
   const sidebarWidth = useLayoutStore((s) => s.sidebar.width)
   const currentItemRef = React.useRef<HTMLDivElement>(null)
   const parentRef = React.useRef<HTMLDivElement>(null)
@@ -24,6 +32,19 @@ export const SidebarSpaceSwitcher = ({ currentSpace, spaces, setCurrentIndex }: 
   const changeSpaceIndex = (index: number) => {
     setCurrentIndex(index)
   }
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      'Alt+ArrowRight': (e) => {
+        if (!isOnEditableElement(e)) setNextSpaceIndex()
+      },
+      'Alt+ArrowLeft': (e) => {
+        if (!isOnEditableElement(e)) setNextSpaceIndex(true)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [currentSpace])
 
   useEffect(() => {
     if (currentItemRef.current && parentRef.current) {

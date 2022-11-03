@@ -63,11 +63,11 @@ export const MexEditorBase = (props: MexEditorProps) => {
   const hightlightedBlockIds = useBlockHighlightStore((store) => store.hightlighted.editor)
 
   useEffect(() => {
-    const editorRef = getPlateEditorRef()
+    // const editorRef = getPlateEditorRef()
 
-    if (editorRef && props?.options?.focusOptions) {
-      selectEditor(editorRef, props.options.focusOptions)
-    }
+    // if (editorRef && props?.options?.focusOptions) {
+    //   selectEditor(editorRef, props.options.focusOptions)
+    // }
     if (props.meta) setInternalMetadata(props.meta)
   }, [props.editorId]) // eslint-disable-line react-hooks/exhaustive-deps
 

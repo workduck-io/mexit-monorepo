@@ -20,7 +20,6 @@ export const focusEditableElement = (target: HTMLElement): void => {
 
 export const blurEditableElement = (target: HTMLElement): void => {
   if (target) {
-    mog('Blur Element')
     target.blur()
   }
 }

@@ -1,7 +1,9 @@
 import { PlatePlugin, PlatePluginComponent } from '@udecode/plate'
-import { useMemoizedPlugins, generatePlugins } from '../../plugins'
-import { QuickLinkComboboxItem } from '../../plugins/QuickLink/components/QuickLinkComboboxItem'
+
 import { ELEMENT_ILINK, ELEMENT_TAG } from '@mexit/core'
+
+import { useMemoizedPlugins } from '../../plugins'
+import { QuickLinkComboboxItem } from '../../plugins/QuickLink/components/QuickLinkComboboxItem'
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDown'
 import { SlashComboboxItem } from '../SlashCommands/SlashComboboxItem'

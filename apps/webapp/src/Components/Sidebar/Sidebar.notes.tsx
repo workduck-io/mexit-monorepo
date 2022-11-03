@@ -3,8 +3,8 @@ import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useTransition, useSpringRef } from '@react-spring/web'
 
 import { RESERVED_NAMESPACES, mog, SHARED_NAMESPACE } from '@mexit/core'
-import { SharedNodeIconify } from '@mexit/shared'
 
+import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
@@ -63,6 +63,7 @@ export const NoteSidebar = () => {
           pollAction: PollActions.hierarchy
         } as SidebarSpace
       })
+
     // .slice(0, 5)
     // Add shared notes namespace
     nspaces.push({
@@ -101,6 +102,12 @@ export const NoteSidebar = () => {
       }
       setIndex({ current: newIndex, prev: index.current })
     }
+  }
+
+  const setNextSpaceIndex = (reverse = false) => {
+    const at = index.current
+    const nextIndex = getNextWrappingIndex(reverse ? -1 : 1, at, spaces.length, () => undefined, false)
+    changeIndex(nextIndex)
   }
 
   useEffect(() => {
@@ -173,7 +180,12 @@ export const NoteSidebar = () => {
         })}
       </SpaceContentWrapper>
       {/* currentSpace && <SidebarSpaceComponent style={} space={currentSpace} />*/}
-      <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces} setCurrentIndex={changeIndex} />
+      <SidebarSpaceSwitcher
+        currentSpace={currentSpace?.id}
+        spaces={spaces}
+        setCurrentIndex={changeIndex}
+        setNextSpaceIndex={setNextSpaceIndex}
+      />
       {/* For testing purposes
         <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces.slice(0, 4)} setCurrentIndex={changeIndex} />
         <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces.slice(0, 6)} setCurrentIndex={changeIndex} />

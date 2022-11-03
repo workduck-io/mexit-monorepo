@@ -57,7 +57,7 @@ const Editor: React.FC<EditorProps> = ({
       spellCheck: false,
       readOnly,
       // placeholder: "Let's try something here...",
-      autoFocus: options?.editableProps?.autoFocus ?? true
+      autoFocus
     },
     focusOptions: options?.focusOptions ?? {
       edge: 'start',
