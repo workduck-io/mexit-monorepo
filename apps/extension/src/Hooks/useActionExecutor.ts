@@ -33,10 +33,11 @@ import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 import { useURLsAPI } from './useURLs'
+import generateAvatar from '../Utils/generateAvatar'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
-  const { setPersistedContent } = useEditorContext()
+  const { persistedContent , setPersistedContent } = useEditorContext()
   const setNode = useSputlitStore((s) => s.setNode)
   const setResults = useSputlitStore((store) => store.setResults)
   const setScreenshot = useSputlitStore((store) => store.setScreenshot)
@@ -223,6 +224,21 @@ export function useActionExecutor() {
             }
 
             break
+          }
+          case ActionType.AVATAR_GENERATOR: {
+            const data = generateAvatar();
+            setPersistedContent([
+              {
+                type: ELEMENT_PARAGRAPH,
+                content: data.seed
+              },{
+                type: "img",
+                content: data.svg
+              }
+            ]);
+            console.log(persistedContent); // wasn't able to use mog
+            setActiveItem(item)
+            mog("avatar Generated!!");
           }
           case ActionType.SCREENSHOT: {
             setVisualState(VisualState.animatingOut)

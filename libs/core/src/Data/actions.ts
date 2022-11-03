@@ -197,6 +197,21 @@ export const initActions: Array<ListItemType> = [
   //     }
   //   }
   // },
+  {
+    id: 'ACTION_9234nueb23uXoerIHF',
+    title: 'Avatar Generator',
+    category: QuickLinkType.action,
+    icon: 'eva:color-picker-fill',
+    description: 'Get Random Avatar from DiceBear',
+    type: ActionType.AVATAR_GENERATOR,
+    shortcut: {
+      pick: {
+        title: 'to generate',
+        category: 'action',
+        keystrokes: 'Enter'
+      }
+    }
+  },
 
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
