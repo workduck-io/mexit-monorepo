@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.19.12
+
+### Patch Changes
+
+- e2f5a887: Lesser re-highlighting, removed two way syncing of highlights and added hydration state to content store
+- 5e58096d: Navigate tree, spaces and tabs in sidebar using shortcuts
+
 ## 0.19.11
 
 ### Patch Changes
