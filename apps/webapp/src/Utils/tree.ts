@@ -1,15 +1,7 @@
 import { TreeItem, TreeData } from '@atlaskit/tree'
+import { ItemId } from '@atlaskit/tree/dist/types/types'
 
-import {
-  Contents,
-  mog,
-  NodeMetadata,
-  isElder,
-  isParent,
-  getParentId,
-  getNameFromPath,
-  getParentNodePath
-} from '@mexit/core'
+import { Contents, mog, NodeMetadata, isElder, isParent, getNameFromPath, getParentNodePath } from '@mexit/core'
 import { TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -344,6 +336,7 @@ export const generateTree = (
             path: n.id,
             mex_icon: n.icon,
             namespace: n.namespace,
+            parentId,
             stub: n.stub,
             tasks: nestedItem.tasks,
             reminders: nestedItem.reminders
@@ -371,6 +364,22 @@ const getFlatTree = (nestedTree: TreeNode[]) => {
     newTree.push({ ...c, children: [] })
     if (c.children.length > 0) {
       newTree = newTree.concat(getFlatTree(c.children))
+    }
+  })
+
+  return newTree
+}
+
+export const flattenNestedTreeFromIds = (nestedTree: ItemId[], treeRecord: TreeData['items']) => {
+  let newTree = []
+
+  nestedTree.forEach((item) => {
+    const treeItem = treeRecord[item]
+    if (treeItem) {
+      newTree.push(treeItem)
+      if (treeItem.children?.length > 0) {
+        newTree = newTree.concat(flattenNestedTreeFromIds(treeItem.children, treeRecord))
+      }
     }
   })
 

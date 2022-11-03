@@ -4,18 +4,15 @@ import timeLine from '@iconify-icons/ri/time-line'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshLine from '@iconify/icons-ri/refresh-line'
 import { Icon } from '@iconify/react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { mog, NodeMetadata, NodeProperties } from '@mexit/core'
-import { DataGroup, DataWrapper, FocusModeProp, MetadataWrapper } from '@mexit/shared'
-import { Label } from '@mexit/shared'
+import { NodeMetadata } from '@mexit/core'
+import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { ProfileIcon } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
-import useLayout from '../../Hooks/useLayout'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 
 export const Data = styled.div`
@@ -26,15 +23,15 @@ export const Data = styled.div`
 `
 
 interface MetadataProps {
-  node: NodeProperties
+  nodeId: string
   fadeOnHover?: boolean
   publicMetadata?: NodeMetadata
 }
 
-const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) => {
+const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
   const getContent = useContentStore((state) => state.getContent)
-  const content = getContent(node.nodeid)
+  const content = getContent(nodeId)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
 
@@ -50,7 +47,7 @@ const Metadata = ({ node, fadeOnHover = true, publicMetadata }: MetadataProps) =
     if (content === undefined || content.metadata === undefined) return
     const { metadata: contentMetadata } = content
     setMetadata(contentMetadata)
-  }, [node, content, content?.metadata])
+  }, [nodeId, content, content?.metadata])
 
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
     return null

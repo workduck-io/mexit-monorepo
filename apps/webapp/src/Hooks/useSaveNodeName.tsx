@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
-import { getLinkFromNodeIdHookless, getPathFromNodeIdHookless } from './useLinks'
+import { getLinkFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
 
 export const useSaveNodeName = () => {

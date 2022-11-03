@@ -7,6 +7,7 @@ import styled, { css, useTheme } from 'styled-components'
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { mog } from '@mexit/core'
 import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
 
 import { useKeyListener } from '../Hooks/useChangeShortcutListener'
@@ -151,6 +152,7 @@ export const SidebarToggles = () => {
         })
       },
       [shortcuts?.toggleRightSidebar.keystrokes]: (event) => {
+        mog('Triggered')
         event.preventDefault()
         shortcutHandler(shortcuts.toggleRightSidebar, () => {
           toggleRHSidebar()

@@ -9,7 +9,7 @@ import { useTheme } from 'styled-components'
 import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
+import { defaultContent, fuzzySearch, ILink, mog } from '@mexit/core'
 import { Input, isOnEditableElement, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -56,7 +56,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
   const inputRef = React.useRef<HTMLInputElement>(null)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 
-  const initTree = useMemo(() => getTreeFromLinks(items), [node, items])
+  const initTree = useMemo(() => getTreeFromLinks(items), [items])
 
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
@@ -180,7 +180,6 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
               placeholder={filterText ?? 'Filter items'}
               onChange={debounce((e) => onSearchChange(e), 250)}
               ref={inputRef}
-              // onKeyUp={debounce(onKeyUpSearch, 250)}
             />
             <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.colors.text.disabled} />
           </SidebarListFilter>
