@@ -5,7 +5,6 @@ import { HighlightStore, highlightStoreConstructor, IDBStorage } from '@mexit/co
 
 export const useHighlightStore = create<HighlightStore>(
   persist(highlightStoreConstructor, {
-    name: 'highlights-store',
-    getStorage: () => IDBStorage
+    name: 'highlights-store'
   })
 )

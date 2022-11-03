@@ -30,8 +30,16 @@ export default function Chotu() {
   const descriptions = useDescriptionStore((store) => store.descriptions)
   const highlighted = useHighlightStore((state) => state.highlighted)
 
-  const { ilinks, archive, sharedNodes, tags, publicNodes, namespaces } = useDataStore()
-  const { contents, setContent } = useContentStore()
+  const {
+    ilinks,
+    archive,
+    sharedNodes,
+    tags,
+    publicNodes,
+    namespaces,
+    _hasHydrated: _areIlinksHydrated
+  } = useDataStore()
+  const { contents, setContent, _hasHydrated: _isContentHydrated } = useContentStore()
   const recents = useRecentsStore((s) => s.lastOpened)
   const addNodeInRecents = useRecentsStore((s) => s.addRecent)
   const actOnReminder = useReminders().actOnReminder
@@ -114,10 +122,11 @@ export default function Chotu() {
   useEffect(() => {
     if (!parent) return
 
-    parent.bootIlinks(ilinks)
-    parent.bootContents(contents)
-    parent.bootNamespaces(namespaces)
-  }, [parent, ilinks, contents, namespaces])
+    if (_isContentHydrated && _areIlinksHydrated) {
+      parent.bootIlinksAndContents(ilinks, contents)
+      parent.bootNamespaces(namespaces)
+    }
+  }, [parent, _isContentHydrated, _areIlinksHydrated, ilinks, contents, namespaces])
 
   useEffect(() => {
     if (!parent) return
@@ -156,12 +165,6 @@ export default function Chotu() {
 
     parent.bootDescriptions(descriptions)
   }, [parent, descriptions])
-
-  useEffect(() => {
-    if (!parent) return
-
-    parent.bootHighlights(highlighted)
-  }, [parent, highlighted])
 
   useEffect(() => {
     if (!parent) return

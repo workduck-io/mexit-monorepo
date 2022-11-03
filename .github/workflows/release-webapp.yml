@@ -22,7 +22,7 @@ jobs:
         run: npm install -g yarn
 
       - name: Install dependencies
-        run: yarn install --network-timeout 1000000 --frozen-lockfile
+        run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
       - name: Build Webapp for Release
         run: yarn nx release webapp
