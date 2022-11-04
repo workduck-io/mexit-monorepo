@@ -182,37 +182,21 @@ export const initActions: Array<ListItemType> = [
       }
     }
   },
-  // {
-  //   id: 'ACTION_9x34kgj23j4234ojin',
-  //   title: 'Metadata Aggregator',
-  //   category: QuickLinkType.action,
-  //   icon: 'eva:color-picker-fill',
-  //   description: 'Extract any useful data from the current page',
-  //   type: ActionType.MAGICAL,
-  //   shortcut: {
-  //     pick: {
-  //       title: 'to pick',
-  //       category: 'action',
-  //       keystrokes: 'Enter'
-  //     }
-  //   }
-  // },
   {
     id: 'ACTION_9234nueb23uXoerIHF',
     title: 'Avatar Generator',
     category: QuickLinkType.action,
-    icon: 'eva:color-picker-fill',
-    description: 'Get Random Avatar from DiceBear',
+    icon: 'material-symbols:account-box',
+    description: 'Generate random avatar image',
     type: ActionType.AVATAR_GENERATOR,
     shortcut: {
-      pick: {
+      generate: {
         title: 'to generate',
         category: 'action',
         keystrokes: 'Enter'
       }
     }
   },
-
   {
     id: 'ACTION_G7vQElzF0MXhcRVCJsoIP',
     title: 'Reload',
