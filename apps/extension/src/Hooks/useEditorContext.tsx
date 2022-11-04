@@ -5,8 +5,6 @@ import { defaultContent, NodeEditorContent } from '@mexit/core'
 type EditorContextType = {
   nodeContent: NodeEditorContent
   setNodeContent: (content: NodeEditorContent) => void
-  persistedContent: NodeEditorContent
-  setPersistedContent: (content: NodeEditorContent) => void
   previewMode: boolean
   setPreviewMode: (val: boolean) => void
 }
@@ -17,13 +15,10 @@ export const useEditorContext = () => useContext(EditorContext)
 export const EditorProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [nodeContent, setNodeContent] = useState(defaultContent.content)
   const [previewMode, setPreviewMode] = useState(true)
-  const [persistedContent, setPersistedContent] = useState(defaultContent.content)
 
   const value = {
     nodeContent,
     setNodeContent,
-    persistedContent,
-    setPersistedContent,
     previewMode,
     setPreviewMode
   }
