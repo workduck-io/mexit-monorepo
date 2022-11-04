@@ -8,9 +8,9 @@ import {
   ShareContext,
   emptyAccessTable
 } from '@mexit/core'
+
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-
 import { useMentionStore, addAccessToUser, mergeAccess } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useNodeShareAPI } from './API/useNodeShareAPI'
@@ -199,29 +199,33 @@ export const useMentions = () => {
 
   const getUserFromUserid = (userid: string): Mentionable | InvitedUser | SelfMention | undefined => {
     const currentUser = useAuthStore.getState().userDetails
-    if (currentUser.userID === userid) {
+    if (currentUser?.userID === userid) {
       return {
         type: 'self',
         ...currentUser
       }
     }
+
     const mentionable = useMentionStore.getState().mentionable
-    const user = mentionable.find((mention) => mention.userID === userid)
+    const user = mentionable?.find((mention) => mention.userID === userid)
+
     if (user) {
       return user
     } else {
       // If the user is invited only, the userid is the alias
       const invited = useMentionStore.getState().invitedUsers
-      const invitedUser = invited.find((u) => u.alias === userid)
+      const invitedUser = invited?.find((u) => u.alias === userid)
       if (invitedUser) {
         return invitedUser
       }
     }
     const cache = useUserCacheStore.getState().cache
-    const userFromCache = cache.find((u) => u.userID === userid)
+    const userFromCache = cache?.find((u) => u.userID === userid)
+
     if (userFromCache) {
       return { ...userFromCache, type: 'mentionable', access: emptyAccessTable }
     }
+
     return undefined
   }
 
