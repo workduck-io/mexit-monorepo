@@ -7,8 +7,7 @@ import { ActionType } from '@mexit/core'
 import { useEditorContext } from '../../Hooks/useEditorContext'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { IFrameActionRenderer, SmartCapture } from '../Renderers'
-import { Screenshot } from '../Screenshot/Screenshot'
+import { IFrameActionRenderer, SmartCapture, ScreenshotRenderer, AvatarRenderer } from '../Renderers'
 import ResultList from './ResultList'
 import { StyledResults } from './styled'
 
@@ -40,8 +39,9 @@ function Results() {
     <StyledResults isScreenshot={activeItem?.type === ActionType.SCREENSHOT} style={springProps}>
       {{
         [ActionType.RENDER]: <IFrameActionRenderer />,
-        [ActionType.SCREENSHOT]: <Screenshot />,
-        [ActionType.MAGICAL]: <SmartCapture />
+        [ActionType.SCREENSHOT]: <ScreenshotRenderer />,
+        [ActionType.MAGICAL]: <SmartCapture />,
+        [ActionType.AVATAR_GENERATOR]: <AvatarRenderer />
       }[activeItem?.type] || <ResultList results={results} />}
     </StyledResults>
   )

@@ -12,12 +12,12 @@ import { Button } from '@workduck-io/mex-components'
 import { mog } from '@mexit/core'
 import { IconButton, useDebounceEffect } from '@mexit/shared'
 
-import { useAuthStore } from '../../Hooks/useAuth'
-import useRaju from '../../Hooks/useRaju'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
-import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { Dialog } from '../Floating/Dialog'
-import NoteSelector from '../Floating/NoteSelector'
+import { useAuthStore } from '../../../Hooks/useAuth'
+import useRaju from '../../../Hooks/useRaju'
+import { useSaveChanges } from '../../../Hooks/useSaveChanges'
+import { useSputlitStore } from '../../../Stores/useSputlitStore'
+import { Dialog } from '../../Floating/Dialog'
+import NoteSelector from '../../Floating/NoteSelector'
 // import { useDebounceEffect } from '../../Hooks/Helpers/useDebouncedEffect'
 import {
   Controls,
@@ -300,7 +300,7 @@ function blobToBase64(blob: Blob) {
 
 type ScreenshotState = 'editing' | 'selecting-note' | 'saving' | 'success'
 
-export const Screenshot = () => {
+const Screenshot = () => {
   const screenshot = useSputlitStore((s) => s.screenshot)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const resetSpotlitState = useSputlitStore((store) => store.reset)
@@ -374,3 +374,5 @@ export const Screenshot = () => {
     </SpotlightScreenshotWrapper>
   )
 }
+
+export default Screenshot
