@@ -23,7 +23,7 @@ import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import generateAvatar from '../Utils/generateAvatar'
+import { generateAvatar } from '../Utils/generateAvatar'
 import { checkURL, formToBlocks, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
@@ -217,11 +217,10 @@ export function useActionExecutor() {
             break
           }
           case ActionType.AVATAR_GENERATOR: {
-            const data = generateAvatar()
-            setScreenshot(data.svg)
-            mog('data', { data })
-            setActiveItem(item)
+            setScreenshot(generateAvatar())
 
+            setActiveItem(item)
+            setInput('')
             break
           }
           case ActionType.SCREENSHOT: {
