@@ -55,6 +55,7 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
 export const getProfileData = async (webPage: string) => {
   const formData: FormBuilder = []
   formData.push({
+    id: 'LABEL_1001',
     label: 'Title',
     value: document.title,
     properties: {
@@ -67,6 +68,7 @@ export const getProfileData = async (webPage: string) => {
 
     if (ele !== null) {
       formData.push({
+        id: rule.id,
         label: rule.label,
         value: ele.textContent.trim(),
         properties: rule.properties

@@ -20,7 +20,7 @@ const SmartCapture = () => {
   return (
     <SmartCaptureContainer>
       <SourceHeader title={`${data.page} Profile`} source={data.source} />
-      <Form config={data.data} />
+      <Form page={data.page} config={data.data} />
     </SmartCaptureContainer>
   )
 }

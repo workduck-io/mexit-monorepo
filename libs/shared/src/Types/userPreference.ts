@@ -30,5 +30,6 @@ export interface UserPreferences {
   lastOpenedNotes: LastOpenedNotes
   /** Current mex Theme */
   theme?: string
+  smartCaptureExcludedFields?: Record<string, Array<string>>
   activeNamespace?: string // * Namespace Id
 }
