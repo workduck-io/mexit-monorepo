@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 import { TextAreaBlock } from '@mexit/shared'
 
+import { Controls } from '../Screenshot/Screenshot.style'
+
 export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -20,4 +22,16 @@ export const StyledRowItem = styled.div`
 
 export const StyledTextAreaBlock = styled(TextAreaBlock)`
   margin-top: ${({ theme }) => theme.spacing.tiny} !important;
+`
+
+export const UserPreferedFieldsContainer = styled.section`
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
+`
+
+export const ExcludeFormFieldsContainer = styled.section`
+  border-top: 2px solid ${({ theme }) => theme.colors.gray[8]};
+
+  ${Controls} {
+    margin: ${({ theme }) => theme.spacing.medium} 0;
+  }
 `

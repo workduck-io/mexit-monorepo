@@ -31,6 +31,7 @@ export * from './Hooks/useRelativeTime'
 export * from './Hooks/useSlashCommands'
 
 export * from './Stores/themeStoreConstructor'
+export * from './Stores/preferenceStoreConstructor'
 
 export * from './Style/Archive'
 export * from './Style/BalloonToolbar.styles'

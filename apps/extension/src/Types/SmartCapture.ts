@@ -1,5 +1,5 @@
 export type SmartCaptureConfigType = {
-  [webPage: string]: { label: string; path: string; properties: SmartCaptureFieldPropertiesType }[]
+  [webPage: string]: { id: string; label: string; path: string; properties: SmartCaptureFieldPropertiesType }[]
 }
 
 export type SmartCaptureURLRegexType = {
