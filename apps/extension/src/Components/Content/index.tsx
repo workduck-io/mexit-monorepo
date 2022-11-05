@@ -19,7 +19,7 @@ import { StyledContent } from './styled'
 export default function Content() {
   const { activeIndex } = useSputlitContext()
   const results = useSputlitStore((s) => s.results)
-  const { setNodeContent, previewMode, persistedContent } = useEditorContext()
+  const { setNodeContent, previewMode } = useEditorContext()
 
   const selection = useSputlitStore((s) => s.selection)
   const { getContent } = useContentStore()
@@ -47,28 +47,19 @@ export default function Content() {
 
   useEffect(() => {
     const item = results[activeIndex]
-    // const activeItem = useSputlitStore.getState().activeItem
 
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
-      }
-      // * We'll enable this later
-      else {
+      } else {
         setNodeContent(content)
       }
     } else if (item?.category === QuickLinkType.snippet) {
       const content = getSnippet(item.id).content
       setNodeContent(content)
     }
-    // else if (item?.category === QuickLinkType.action && item?.type === ActionType.SCREENSHOT && persistedContent) {
-    // const node = useSputlitStore.getState().node
-    // const content = getContent(node?.nodeid)?.content ?? defaultContent.content
-    // mog('We be setting persistedContent', { content, persistedContent })
-    // setNodeContent([...content, { children: persistedContent }])
-    // }
-  }, [activeIndex, results, deserializedContent, selection, persistedContent])
+  }, [activeIndex, results, deserializedContent, selection])
 
   return (
     <StyledContent>

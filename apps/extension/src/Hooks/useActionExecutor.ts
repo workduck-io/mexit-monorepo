@@ -23,10 +23,10 @@ import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { generateAvatar } from '../Utils/generateAvatar'
 import { checkURL, formToBlocks, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
-import { useEditorContext } from './useEditorContext'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
@@ -36,7 +36,6 @@ import { useURLsAPI } from './useURLs'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
-  const { setPersistedContent } = useEditorContext()
   const setNode = useSputlitStore((s) => s.setNode)
   const setResults = useSputlitStore((store) => store.setResults)
   const setScreenshot = useSputlitStore((store) => store.setScreenshot)
@@ -205,13 +204,6 @@ export function useActionExecutor() {
                     source: SmartCapturePageSource[webpage],
                     data
                   })
-                  setPersistedContent([
-                    {
-                      type: ELEMENT_PARAGRAPH,
-                      children: formToBlocks(data),
-                      blockMeta: getBlockMetadata(window.location.href)
-                    }
-                  ])
                   setActiveItem(item)
                 })
                 .catch((err) => {
@@ -222,6 +214,13 @@ export function useActionExecutor() {
               setSearch({ value: '', type: CategoryType.action })
             }
 
+            break
+          }
+          case ActionType.AVATAR_GENERATOR: {
+            setScreenshot(generateAvatar())
+
+            setActiveItem(item)
+            setInput('')
             break
           }
           case ActionType.SCREENSHOT: {

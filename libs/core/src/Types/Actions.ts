@@ -10,7 +10,8 @@ export enum ActionType {
   SCREENSHOT = 'Screenshot Action',
   MAGICAL = 'Smart Capture',
   RIGHT_SIDEBAR = 'Right Sidebar Action',
-  LOREM_IPSUM = 'lorem ipsum generator'
+  LOREM_IPSUM = 'lorem ipsum generator',
+  AVATAR_GENERATOR = 'Generate random avatar from dicebear'
 }
 
 export interface MexitAction {
