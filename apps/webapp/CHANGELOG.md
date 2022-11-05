@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.13
+
+### Patch Changes
+
+- 77186a54: Public namespace fixes
+
 ## 0.19.12
 
 ### Patch Changes
