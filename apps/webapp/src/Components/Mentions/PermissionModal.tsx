@@ -10,13 +10,18 @@ import { Button, IconButton } from '@workduck-io/mex-components'
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
 
+import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
+import { useFetchShareData } from '../../Hooks/useFetchShareData'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
+import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
+import { usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { mergeAccess, useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { ModalControls, ModalHeader, ModalSection, ModalSectionScroll } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'
@@ -34,11 +39,6 @@ import {
   ShareRowActionsWrapper,
   ShareRowHeading
 } from './styles'
-import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { usePermissions } from '../../Hooks/usePermissions'
-import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
-import { useFetchShareData } from '../../Hooks/useFetchShareData'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)

@@ -147,7 +147,9 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
       (e) => {
         if (!isOnEditableElement(e)) {
           e.preventDefault()
-          const at = flattenTree.findIndex((i) => match?.params?.nodeid === i.data.nodeid)
+          const at = flattenTree.findIndex(
+            (i) => match?.params?.nodeid === i.data.nodeid || publicNamespaceMatch?.params?.nodeid === i.data.nodeid
+          )
 
           let index = 0
           if (at >= 0) index = getNextWrappingIndex(reverse ? -1 : 1, at, flattenTree.length, () => undefined, false)
@@ -163,7 +165,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
           }
         }
       },
-    [match, flattenTree, tree]
+    [match, publicNamespaceMatch, flattenTree, tree]
   )
 
   useEffect(() => {

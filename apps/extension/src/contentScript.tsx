@@ -25,7 +25,7 @@ shadowRoot.attachShadow({ mode: 'open' }).appendChild(styleSlot)
 // And this too: https://github.com/facebook/react/issues/24136
 // event propagation is stopped for all keydown events except the ones required for opening/closing sputlit
 shadowRoot.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape' || (event.metaKey && event.code === 'Slash')) {
+  if (event.key !== 'Escape' && !(event.metaKey && event.code === 'Slash')) {
     event.stopPropagation()
   }
 })
