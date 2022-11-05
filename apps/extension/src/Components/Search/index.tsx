@@ -175,6 +175,7 @@ const Search = () => {
         case ActionType.RENDER:
         case ActionType.MAGICAL:
         case ActionType.SCREENSHOT:
+        case ActionType.AVATAR_GENERATOR:
           return true
       }
 
