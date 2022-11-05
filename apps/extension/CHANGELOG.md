@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.4
+
+### Patch Changes
+
+- 77186a54: Public namespace fixes
+
 ## 0.18.3
 
 ### Patch Changes
