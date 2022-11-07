@@ -101,6 +101,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })()
       return true
     }
+    case 'DOWNLOAD_AVATAR': {
+      chrome.downloads.download({
+        url: request.data.url,
+        filename: 'avatar.svg'
+      })
+      return true
+    }
 
     case 'PUBLIC_SHARING': {
       ;(async () => {

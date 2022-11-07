@@ -17,7 +17,7 @@ import { formToBlocks } from '../../Utils/getProfileData'
 import { Title } from '../Action/styled'
 import { Dialog } from '../Floating/Dialog'
 import NoteSelector from '../Floating/NoteSelector'
-import { Controls } from '../Screenshot/Screenshot.style'
+import { Controls } from '../Renderers/Screenshot/Screenshot.style'
 import Field from './Field'
 import { ExcludeFormFieldsContainer, StyledForm, StyledRowItem, UserPreferedFieldsContainer } from './styled'
 

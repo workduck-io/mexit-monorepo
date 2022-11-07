@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { TextAreaBlock } from '@mexit/shared'
 
-import { Controls } from '../Screenshot/Screenshot.style'
+import { Controls } from '../Renderers/Screenshot/Screenshot.style'
 
 export const StyledForm = styled.form`
   display: flex;
