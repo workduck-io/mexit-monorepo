@@ -1,5 +1,13 @@
 # mexit
 
+## 0.18.5
+
+### Patch Changes
+
+- 06c0cb67: Added new avatar generator action
+- 2ce6d95d: Smart Capture Preference
+- 77677961: Added download button for avatar generator action
+
 ## 0.18.4
 
 ### Patch Changes

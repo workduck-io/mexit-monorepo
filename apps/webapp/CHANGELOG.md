@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.19.14
+
+### Patch Changes
+
+- 2ce6d95d: Smart Capture Preference
+
 ## 0.19.13
 
 ### Patch Changes
