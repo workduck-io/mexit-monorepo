@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { Button } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
+import { copyTextToClipboard } from '@mexit/shared'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { generateAvatar } from '../../Utils/generateAvatar'
@@ -43,12 +44,19 @@ const AvatarRenderer = () => {
       }
     )
   }
+  const CopyAvatarURL = () => {
+    copyTextToClipboard(screenshot)
+  }
 
   return (
     <Container>
       <Button onClick={DownloadAvatar}>
         <Icon icon="pepicons:arrow-down" />
         Download Avatar
+      </Button>
+      <Button onClick={CopyAvatarURL}>
+        <Icon icon="pepicons:clipboard" />
+        Copy Avatar URL
       </Button>
       <img src={screenshot} />
       <Button onClick={randomizeAvatar}>
