@@ -52,7 +52,8 @@ const AvatarRenderer = () => {
       }
     )
   }
-  const CopyAvatarURL = () => {
+
+  const copyAvatarURL = () => {
     copyTextToClipboard(screenshot)
   }
 
