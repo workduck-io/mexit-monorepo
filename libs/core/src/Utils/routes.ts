@@ -33,12 +33,12 @@ export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5000/api/v1'
+  ? 'http://localhost:5002/api/v1'
   : 'https://mexit-backend-test.workduck.io/api/v1'
 
 export const MEXIT_STAGING_URL_BASE = 'https://http-staging.workduck.io/mex'
 
-export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
+export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'ht`tps://mexit.workduck.io'
 export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
 export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
