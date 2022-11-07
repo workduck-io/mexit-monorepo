@@ -14,6 +14,6 @@
   "background": { "service_worker": "background.js", "type": "module" },
   "omnibox": { "keyword": "[[" },
   "content_scripts": [{ "matches": ["http://*/*", "https://*/*"], "js": ["content.js"], "css": ["Assets/global.css"] }],
-  "permissions": ["contextMenus", "storage", "tabs", "activeTab", "search", "notifications"],
+  "permissions": ["contextMenus", "storage", "tabs", "activeTab", "search", "notifications", "downloads"],
   "web_accessible_resources": [{ "resources": ["Assets/*"], "matches": ["http://*/*", "https://*/*"] }]
 }
