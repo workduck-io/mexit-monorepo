@@ -67,7 +67,7 @@ const AvatarRenderer = () => {
         </Button>
         <Button onClick={copyAvatarURL}>
           <MexIcon noHover icon="pepicons:clipboard" color={theme.colors.primary} />
-          Copy Avatar URL
+          Copy URL
         </Button>
         <Button onClick={downloadAvatar}>
           <MexIcon noHover icon="pepicons:arrow-down" color={theme.colors.primary} />
