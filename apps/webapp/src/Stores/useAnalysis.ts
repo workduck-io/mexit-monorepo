@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
+
 import create from 'zustand'
 
-import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
-import { areEqual } from '../Utils/hash'
-import { TodoType, checkIfUntitledDraftNode } from '@mexit/core'
+import { TodoType, checkIfUntitledDraftNode, getParentNodePath } from '@mexit/core'
 
+import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
+import { useLinks } from '../Hooks/useLinks'
+import { useSearchExtra } from '../Hooks/useSearch'
+import { areEqual } from '../Utils/hash'
 import { analyseContent, AnalysisOptions } from '../Workers/controller'
 import { useEditorStore, getContent } from './useEditorStore'
 import { useTodoStore } from './useTodoStore'
-import { useSearchExtra } from '../Hooks/useSearch'
 
 export interface OutlineItem {
   id: string
@@ -61,7 +63,13 @@ export const useAnalysis = () => {
   const setAnalysis = useAnalysisStore((s) => s.setAnalysis)
   const { getSearchExtra } = useSearchExtra()
 
+  const { getNodeidFromPath } = useLinks()
+
   useEffect(() => {
+    const parentNodePath = getParentNodePath(node.path)
+    const parentNodeId = getNodeidFromPath(parentNodePath, node.namespace)
+    const parentMetadata = getContent(parentNodeId)?.metadata
+
     const bufferContent = getBufferVal(node.nodeid)
     const content = getContent(node.nodeid)
     const metadata = content.metadata
@@ -72,7 +80,7 @@ export const useAnalysis = () => {
     const isNewDraftNode = metadata?.createdAt === metadata?.updatedAt
 
     // * New Draft node, get Title from its content
-    if (isUntitledDraftNode && isNewDraftNode) {
+    if (isUntitledDraftNode && isNewDraftNode && !parentMetadata?.templateID) {
       options['title'] = true
     }
 

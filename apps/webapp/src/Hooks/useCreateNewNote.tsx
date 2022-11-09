@@ -32,12 +32,14 @@ export const useCreateNewNote = () => {
   const { goTo } = useRouting()
   const addILink = useDataStore((s) => s.addILink)
   const checkValidILink = useDataStore((s) => s.checkValidILink)
-  const getMetadata = useContentStore((s) => s.getMetadata)
   const { saveNodeName } = useLoad()
   const { getParentILink } = useLinks()
   const { addInHierarchy } = useHierarchy()
   // const { addLastOpened } = useLastOpened()
   const { getDefaultNamespace } = useNamespaces()
+
+  const getMetadata = useContentStore((s) => s.getMetadata)
+  const { getSnippet } = useSnippets()
 
   const createNewNote = (options?: NewNoteOptions) => {
     const childNodepath = options?.parent !== undefined ? getUntitledKey(options?.parent.path) : getUntitledDraftKey()
@@ -57,9 +59,10 @@ export const useCreateNewNote = () => {
     const parentNoteId = parentNote?.nodeid
 
     const nodeMetadata = getMetadata(parentNoteId)
-
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
-    const noteContent = options?.noteContent
+    const noteContent =
+      options?.noteContent ||
+      (nodeMetadata?.templateID && parentNote?.path !== 'Drafts' && getSnippet(nodeMetadata.templateID)?.content)
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 

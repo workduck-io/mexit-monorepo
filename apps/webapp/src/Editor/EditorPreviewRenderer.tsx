@@ -33,6 +33,7 @@ interface EditorPreviewRendererProps {
   plugins?: PlatePlugin[]
   readOnly?: boolean
   draftView?: boolean
+  placeholder?: string
 }
 
 const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boolean }>`
@@ -69,11 +70,12 @@ const EditorPreviewRenderer = ({
   onChange,
   onDoubleClick,
   readOnly = true,
-  draftView = true
+  draftView = true,
+  placeholder
 }: EditorPreviewRendererProps) => {
   const editableProps = useMemo(
     () => ({
-      placeholder: 'Murmuring the mex hype... ',
+      placeholder: placeholder ?? 'Murmuring the mex hype... ',
       style: noStyle
         ? {}
         : {

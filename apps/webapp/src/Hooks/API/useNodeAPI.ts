@@ -32,6 +32,7 @@ import { useAPIHeaders } from './useAPIHeaders'
 
 export const useApi = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+  const getMetadata = useContentStore((store) => store.getMetadata)
   const setMetadata = useContentStore((store) => store.setMetadata)
   const updateMetadata = useContentStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
@@ -162,14 +163,19 @@ export const useApi = () => {
     namespaceID: string,
     content: NodeEditorContent,
     isShared = false,
-    title?: string
+    title?: string,
+    templateID?: string
   ) => {
     const reqData = {
       id: noteID,
       title: title || getTitleFromNoteId(noteID),
       namespaceID: namespaceID,
       tags: getTagsFromContent(content),
-      data: serializeContent(content ?? defaultContent.content, noteID)
+      data: serializeContent(content ?? defaultContent.content, noteID),
+      // Because we have to send templateID with every node save call so that it doesn't get unset
+      // We are checking if the id is __null__ for the case when the user wants to remove the template
+      // If not, we send what was passed as prop, if nothing then from metadata
+      metadata: { templateID: templateID === '__null__' ? null : templateID ?? getMetadata(noteID)?.templateID }
     }
 
     if (isShared) {
@@ -428,64 +434,6 @@ export const useApi = () => {
 
     return data
   }
-
-  // const getNodesByWorkspace = async () => {
-  //   const updatedILinks: any[] = await client
-  //     .get(apiURLs.namespaces.getHierarchy, {
-  //       headers: {
-  //         'mex-workspace-id': getWorkspaceId()
-  //       }
-  //     })
-  //     .then((res: any) => {
-  //       return res.data
-  //     })
-  //     .catch(console.error)
-
-  //   mog(`UpdatedILinks`, { updatedILinks })
-
-  //   const { nodes, namespaces } = Object.entries(updatedILinks).reduce(
-  //     (p, [namespaceid, namespaceData]) => {
-  //       return {
-  //         namespaces: [
-  //           ...p.namespaces,
-  //           {
-  //             id: namespaceid,
-  //             name: namespaceData.name,
-  //             ...namespaceData?.namespaceMetadata
-  //           }
-  //         ],
-  //         nodes: [
-  //           ...p.nodes,
-  //           ...namespaceData.nodeHierarchy.map((ilink) => ({
-  //             ...ilink,
-  //             namespace: namespaceid
-  //           }))
-  //         ]
-  //       }
-  //     },
-  //     { nodes: [], namespaces: [] }
-  //   )
-  //   mog('UpdatingILinks', { nodes, namespaces })
-  //   if (nodes && nodes.length > 0) {
-  //     const localILinks = useDataStore.getState().ilinks
-  //     const { toUpdateLocal } = iLinksToUpdate(localILinks, nodes)
-  //     const ids = toUpdateLocal.map((i) => i.nodeid)
-
-  //     const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-  //     const requestData = { time: Date.now(), method: 'GET' }
-
-  //     fulfilled.forEach((node) => {
-  //       const { rawResponse, nodeid } = node
-  //       setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-  //       const content = deserializeContent(rawResponse.data)
-  //       const metadata = extractMetadata(rawResponse) // added by Varshitha
-  //       updateFromContent(nodeid, content, metadata)
-  //     })
-  //   }
-
-  //   // setNamespaces(namespaces)
-  //   setILinks(nodes)
-  // }
 
   return {
     saveDataAPI,

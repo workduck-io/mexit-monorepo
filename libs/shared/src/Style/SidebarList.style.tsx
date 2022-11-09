@@ -2,12 +2,17 @@ import styled from 'styled-components'
 
 import { Input } from './Form'
 
-export const SidebarListWrapper = styled.div`
+interface SidebarListWrapperProps {
+  noMargin?: boolean
+}
+
+export const SidebarListWrapper = styled.div<SidebarListWrapperProps>`
+  margin-top: ${({ noMargin }) => (noMargin ? '0' : '1rem')};
+  height: inherit;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
-  padding: ${({ theme }) => theme.spacing.small};
-  flex-grow: 1;
 `
 
 export const EmptyMessage = styled.div`
@@ -32,10 +37,12 @@ export const FilteredItemsWrapper = styled.div<{ hasDefault?: boolean }>`
   overflow-x: hidden;
 `
 
-export const SidebarListFilter = styled.div`
+export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   display: flex;
   align-items: center;
   padding: 0 ${({ theme }) => theme.spacing.small};
+  margin: ${({ theme }) => `0 0`};
+  margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
   background: ${({ theme }) => theme.colors.form.input.bg};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 

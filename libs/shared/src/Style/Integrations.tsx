@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react'
+import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const IntegrationContainer = styled.section`
@@ -6,8 +7,21 @@ export const IntegrationContainer = styled.section`
   height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '6rem' : '2rem')});
 `
 
-export const TemplateContainer = styled.section`
-  margin: 0 4rem;
+export const TemplateContainer = styled.div`
+  display: flex;
+  max-height: 350px;
+  margin: 1rem -0.5rem;
+
+  & > section {
+    height: 30vh !important;
+    width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0 1rem;
+
+    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+    border-radius: ${({ theme }) => theme.borderRadius.large};
+  }
 `
 
 export const TemplateList = styled.div`
