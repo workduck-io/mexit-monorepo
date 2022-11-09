@@ -39,6 +39,7 @@ export function useActionExecutor() {
   const setNode = useSputlitStore((s) => s.setNode)
   const setResults = useSputlitStore((store) => store.setResults)
   const setScreenshot = useSputlitStore((store) => store.setScreenshot)
+  const setAvatarSeed = useSputlitStore((store) => store.setAvatarSeed)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
@@ -217,8 +218,10 @@ export function useActionExecutor() {
             break
           }
           case ActionType.AVATAR_GENERATOR: {
-            setScreenshot(generateAvatar())
-
+            const data = generateAvatar();
+            setScreenshot(data.svg);
+            setAvatarSeed(data.seed)
+            
             setActiveItem(item)
             setInput('')
             break
