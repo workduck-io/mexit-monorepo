@@ -52,6 +52,10 @@ interface SputlitStore {
   screenshot?: string
   setScreenshot: (image?: string) => void
 
+  // * Avatar seed string
+  avatarSeed?: string
+  setAvatarSeed: (seed?: string) => void
+
   // * Reset app State
   reset: () => void
 }
@@ -93,7 +97,9 @@ export const useSputlitStore = create<SputlitStore>(
     setSelection: (selection) => set({ selection }),
     setChild: (child) => set({ child }),
 
-    setScreenshot: (image) => set({ screenshot: image }),
+    setScreenshot: (image) => set({ screenshot: image }), 
+
+    setAvatarSeed : (seed) => set({avatarSeed : seed}) ,
 
     setActiveItem: (item) => set({ activeItem: item }),
     reset: () =>
@@ -103,6 +109,7 @@ export const useSputlitStore = create<SputlitStore>(
         results: [],
         selection: undefined,
         screenshot: undefined,
+        avatarSeed : '',
         input: ''
       })
   }))
