@@ -1,9 +1,12 @@
 import { client } from '@workduck-io/dwindle'
 
 import { apiURLs, mog } from '@mexit/core'
+import { UserPreferences } from '@mexit/shared'
 
+import { version } from '../../../package.json'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
 export interface TempUser {
   email: string
@@ -19,30 +22,41 @@ export interface TempUserUserID {
   name?: string
 }
 
+export interface UserDetails {
+  /** User ID */
+  id: string
+  /** Workspace ID */
+  group: string
+  entity: 'User'
+  email: string
+  name: string
+  alias: string
+  preference: UserPreferences
+}
+
 export const useUserService = () => {
   const addUser = useUserCacheStore((s) => s.addUser)
   const getUser = useUserCacheStore((s) => s.getUser)
   const updateUserDetails = useAuthStore((s) => s.updateUserDetails)
-
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
     if (user) return user
 
     try {
-      return await client.get(apiURLs.user.getFromEmail(email)).then((resp: any) => {
+      return await client.get<any>(apiURLs.user.getFromEmail(email)).then((resp) => {
         mog('Response', { data: resp.data })
         if (resp?.data?.userId && resp?.data?.name) {
           addUser({
             email,
             userID: resp?.data?.userId,
-            alias: resp?.data?.alias ?? resp?.data?.properties?.alias ?? resp?.data?.name,
+            alias: resp?.data?.alias ?? resp?.data?.name,
             name: resp?.data?.name
           })
         }
         return {
           email,
           userID: resp?.data?.userId,
-          alias: resp?.data?.alias ?? resp?.data?.properties?.alias ?? resp?.data?.name,
+          alias: resp?.data?.alias ?? resp?.data?.name,
           name: resp?.data?.name
         }
       })
@@ -55,9 +69,10 @@ export const useUserService = () => {
   const getUserDetailsUserId = async (userID: string): Promise<TempUserUserID> => {
     const user = getUser({ userID })
     if (user) return user
+
     try {
       return await client.get(apiURLs.user.getFromUserId(userID)).then((resp: any) => {
-        mog('Response', { data: resp.data })
+        // mog('Response', { data: resp.data })
         if (resp?.data?.email && resp?.data?.name) {
           addUser({
             userID,
@@ -78,6 +93,7 @@ export const useUserService = () => {
       return { userID }
     }
   }
+
   const updateUserInfo = async (userID: string, name?: string, alias?: string): Promise<boolean> => {
     try {
       if (name === undefined && alias === undefined) return false
@@ -92,5 +108,52 @@ export const useUserService = () => {
     }
   }
 
-  return { getUserDetails, getUserDetailsUserId, updateUserInfo }
+  const updateUserPreferences = async (): Promise<boolean> => {
+    const lastOpenedNotes = useUserPreferenceStore.getState().lastOpenedNotes
+    const lastUsedSnippets = useUserPreferenceStore.getState().lastUsedSnippets
+    const theme = useUserPreferenceStore.getState().theme
+    const userID = useAuthStore.getState().userDetails.userID
+
+    const userPreferences: UserPreferences = {
+      version,
+      lastOpenedNotes,
+      lastUsedSnippets,
+      theme
+    }
+
+    try {
+      return await client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }).then((resp) => {
+        return true
+      })
+    } catch (e) {
+      mog('Error Updating User Info', { error: e, userID })
+      return false
+    }
+  }
+
+  const getCurrentUser = async (): Promise<UserDetails | undefined> => {
+    try {
+      return await client.get<UserDetails>(apiURLs.getUserRecords).then((resp) => {
+        mog('Response', { data: resp.data })
+        return resp?.data
+      })
+    } catch (e) {
+      mog('Error Fetching Current User Info', { error: e })
+      return undefined
+    }
+  }
+
+  const getAllKnownUsers = () => {
+    const cache = useUserCacheStore.getState().cache
+    return cache
+  }
+
+  return {
+    getAllKnownUsers,
+    getUserDetails,
+    getUserDetailsUserId,
+    updateUserInfo,
+    updateUserPreferences,
+    getCurrentUser
+  }
 }

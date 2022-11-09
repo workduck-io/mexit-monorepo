@@ -26,6 +26,7 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useApi } from './API/useNodeAPI'
 import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
 import { useFetchShareData } from './useFetchShareData'
+import { useLastOpened } from './useLastOpened'
 import { getLinkFromNodeIdHookless } from './useLinks'
 import { useRefactor } from './useRefactor'
 import useToggleElements from './useToggleElements'
@@ -58,7 +59,7 @@ const useLoad = () => {
   const infobar = useLayoutStore((store) => store.infobar)
   const setHighlights = useBlockHighlightStore((store) => store.setHighlightedBlockIds)
   const { fetchSharedUsers } = useFetchShareData()
-  // const { debouncedAddLastOpened } = useLastOpened()
+  const { debouncedAddLastOpened } = useLastOpened()
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
 
   const setLoadingNodeid = useEditorStore((store) => store.setLoadingNodeid)
@@ -286,7 +287,7 @@ const useLoad = () => {
       expandNodes(allParents)
     }
 
-    // debouncedAddLastOpened(nodeid)
+    debouncedAddLastOpened(nodeid)
 
     mog('Loading that here', { node })
     changeSpace(node.namespace)

@@ -6,6 +6,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHierarchy } from './useHierarchy'
+import { useLastOpened } from './useLastOpened'
 import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
@@ -35,7 +36,7 @@ export const useCreateNewNote = () => {
   const { saveNodeName } = useLoad()
   const { getParentILink } = useLinks()
   const { addInHierarchy } = useHierarchy()
-  // const { addLastOpened } = useLastOpened()
+  const { addLastOpened } = useLastOpened()
   const { getDefaultNamespace } = useNamespaces()
 
   const getMetadata = useContentStore((s) => s.getMetadata)
@@ -89,7 +90,7 @@ export const useCreateNewNote = () => {
     }).then(() => {
       saveNodeName(useEditorStore.getState().node.nodeid)
 
-      // addLastOpened(node.nodeid)
+      addLastOpened(node.nodeid)
     })
     if (!options?.noRedirect) {
       push(node.nodeid, { withLoading: false, fetch: false })

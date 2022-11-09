@@ -80,7 +80,6 @@ const SidebarList = ({
 
   const [source, target] = useSingleton()
 
-  const theme = useTheme()
   const inputRef = useRef<HTMLInputElement>(null)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 

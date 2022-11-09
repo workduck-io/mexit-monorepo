@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { ThemeProvider } from 'styled-components'
 
@@ -16,14 +16,23 @@ import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
 import { EditorProvider } from './Hooks/useEditorContext'
 import { HighlighterProvider } from './Hooks/useHighlighterContext'
 import { SputlitProvider } from './Hooks/useSputlitContext'
-import useThemeStore from './Hooks/useThemeStore'
+import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import { GlobalStyle } from './Styles/GlobalStyle'
 
-export default function Index() {
-  const theme = useThemeStore((state) => state.theme)
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const theme = useUserPreferenceStore((state) => state.theme)
 
+  const themeData = useMemo(() => {
+    const ctheme = defaultThemes.find((t) => t.id === theme)
+    return ctheme ? ctheme.themeData : defaultThemes[0].themeData
+  }, [theme])
+
+  return <ThemeProvider theme={themeData}>{children}</ThemeProvider>
+}
+
+export default function Index() {
   return (
-    <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
+    <Providers>
       <GlobalStyle />
       <ReminderArmer />
       <SputlitProvider>
@@ -49,6 +58,6 @@ export default function Index() {
           </EditorProvider>
         </HighlighterProvider>
       </SputlitProvider>
-    </ThemeProvider>
+    </Providers>
   )
 }

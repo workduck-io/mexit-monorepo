@@ -11,6 +11,7 @@ import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouti
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import SidebarList, { SidebarListItem } from '../SidebarList'
+import { MuteMenuItem } from '../TreeWithContextMenu'
 
 export const ItemContent = styled.div`
   cursor: pointer;
@@ -29,11 +30,9 @@ interface SharedNoteContextMenuProps {
 
 const SharedNoteContextMenu = ({ item }: SharedNoteContextMenuProps) => {
   return (
-    <>
-      <ContextMenuContent>
-        {/* <MuteMenuItem lastOpenedState={item?.lastOpenedState} nodeid={item.id} /> */}
-      </ContextMenuContent>
-    </>
+    <ContextMenuContent>
+      <MuteMenuItem lastOpenedState={item?.lastOpenedState} nodeid={item.id} />
+    </ContextMenuContent>
   )
 }
 
@@ -53,6 +52,7 @@ const SharedNotes = () => {
 
   return sharedNodes.length > 0 ? (
     <SidebarList
+      noMargin
       items={sharedNodes.map((node) => ({
         id: node.nodeid,
         label: node.path,
@@ -70,7 +70,7 @@ const SharedNotes = () => {
   ) : (
     <Centered>
       <SharedNodeIcon height={64} width={64} fill={theme.colors.text.default} margin="0 0 1rem 0" />
-      <span>No one has shared Notes with you yet!</span>
+      <span>No one has shared Notes with you yet HAHAHAHA!</span>
     </Centered>
   )
 }

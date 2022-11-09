@@ -5,12 +5,17 @@ import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import magicLine from '@iconify/icons-ri/magic-line'
 import shareLine from '@iconify/icons-ri/share-line'
+import volumeDownLine from '@iconify/icons-ri/volume-down-line'
+import volumeMuteLine from '@iconify/icons-ri/volume-mute-line'
 import { Icon } from '@iconify/react'
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 import 'react-contexify/dist/ReactContexify.css'
 import toast from 'react-hot-toast'
 
+import { LastOpenedState } from '@mexit/shared'
+
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
+import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
@@ -24,6 +29,39 @@ import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../..
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { doesLinkRemain } from '../Refactor/doesLinkRemain'
 import ContextMenuListWithFilter from './ContextMenuListWithFilter'
+
+interface MuteMenuItemProps {
+  nodeid: string
+  lastOpenedState: LastOpenedState
+}
+
+export const MuteMenuItem = ({ nodeid, lastOpenedState }: MuteMenuItemProps) => {
+  const { muteNode, unmuteNode } = useLastOpened()
+
+  const isMuted = useMemo(() => {
+    return lastOpenedState === LastOpenedState.MUTED
+  }, [lastOpenedState])
+
+  const handleMute = () => {
+    // mog('handleMute', { item })
+    if (isMuted) {
+      unmuteNode(nodeid)
+    } else {
+      muteNode(nodeid)
+    }
+  }
+
+  return (
+    <ContextMenuItem
+      onSelect={(args) => {
+        handleMute()
+      }}
+    >
+      <Icon icon={isMuted ? volumeDownLine : volumeMuteLine} />
+      {isMuted ? 'Unmute' : 'Mute'}
+    </ContextMenuItem>
+  )
+}
 
 interface TreeContextMenuProps {
   item: TreeItem
@@ -160,8 +198,8 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           }}
           filter={false}
         />
-        <ContextMenuSeparator />{' '}
-        {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
+        <ContextMenuSeparator />
+        <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} />
         <ContextMenuItem
           color="#df7777"
           disabled={isInSharedNamespace && itemNamespace?.access === 'READ'}

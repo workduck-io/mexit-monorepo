@@ -8,9 +8,11 @@ import { Entity } from 'rc-tree/lib/interface'
 
 import { ItemContent, ItemTitle, ItemCount } from '@workduck-io/mex-components'
 
-import { ItemTitleText, StyledTreeItem } from '@mexit/shared'
+import { ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
-import { SidebarListItem, LastOpenedState } from './SidebarList'
+import { useLastOpened } from '../../Hooks/useLastOpened'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { SidebarListItem } from './SidebarList'
 import { TooltipContent } from './Tree'
 
 interface SidebarListItemProps<T> {
@@ -42,17 +44,17 @@ const SidebarListItemComponent = <T extends Entity>({
   const { ItemContextMenu, setContextOpenViewId, contextOpenViewId } = contextMenu
   const { selectedItemId, selectIndex, onSelect } = select
 
-  // const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.lastOpenedId])
-  // const { getLastOpened } = useLastOpened()
+  const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.lastOpenedId])
+  const { getLastOpened } = useLastOpened()
 
-  // const lastOpenedState = useMemo(() => {
-  //   const loState = getLastOpened(item?.lastOpenedId, lastOpenedNote)
-  //   return loState
-  // }, [lastOpenedNote, item?.lastOpenedId])
+  const lastOpenedState = useMemo(() => {
+    const loState = getLastOpened(item?.lastOpenedId, lastOpenedNote)
+    return loState
+  }, [lastOpenedNote, item?.lastOpenedId])
 
-  // const isUnread = useMemo(() => {
-  //   return lastOpenedState === LastOpenedState.UNREAD
-  // }, [lastOpenedState])
+  const isUnread = useMemo(() => {
+    return lastOpenedState === LastOpenedState.UNREAD
+  }, [lastOpenedState])
 
   return (
     <Tippy
@@ -95,13 +97,13 @@ const SidebarListItemComponent = <T extends Entity>({
                   <ItemTitleText>{item.label}</ItemTitleText>
                 </ItemTitle>
               </ItemContent>
-              {/* {isUnread && (
+              {isUnread && (
                 <ItemCount>
                   <UnreadIndicator>
                     <Icon icon={checkboxBlankCircleFill} />
                   </UnreadIndicator>
                 </ItemCount>
-              )} */}
+              )}
             </StyledTreeItem>
           </ContextMenu.Trigger>
           {ItemContextMenu && (

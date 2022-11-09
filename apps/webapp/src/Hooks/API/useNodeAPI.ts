@@ -23,6 +23,7 @@ import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useInternalLinks } from '../useInternalLinks'
+import { useLastOpened } from '../useLastOpened'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useSearch } from '../useSearch'
@@ -38,11 +39,9 @@ export const useApi = () => {
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
-  const { setNodePublic, setNodePrivate, checkNodePublic, setNamespaces, addInArchive } = useDataStore()
+  const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore()
   const { updateFromContent } = useUpdater()
-  const setILinks = useDataStore((store) => store.setIlinks)
   const { getSharedNode } = useNodes()
-  const { updateDocument, removeDocument } = useSearch()
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { updateSnippet } = useSnippets()
 
@@ -50,6 +49,8 @@ export const useApi = () => {
 
   const { workspaceHeaders } = useAPIHeaders()
   const currentUser = useAuthStore((store) => store.userDetails)
+
+  const { addLastOpened } = useLastOpened()
 
   /*
    * Saves new node data in the backend
@@ -84,6 +85,7 @@ export const useApi = () => {
         const metadata = extractMetadata(d.data)
         const content = deserializeContent(d.data.data ?? options.content)
         updateFromContent(noteID, content, metadata)
+        addLastOpened(noteID)
         return d.data
       })
       .catch((e) => {
@@ -133,6 +135,7 @@ export const useApi = () => {
 
         updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
         setMetadata(noteID, extractMetadata(node))
+        addLastOpened(noteID)
       })
 
     return data
@@ -198,6 +201,7 @@ export const useApi = () => {
             lastEditedBy: currentUser.userID
           })
         }
+        addLastOpened(noteID)
         return d.data
       })
       .catch((e) => {

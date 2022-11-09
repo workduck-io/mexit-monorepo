@@ -1,7 +1,6 @@
 import { share } from 'shared-zustand'
 
 import { useAuthStore } from './useAuth'
-import useThemeStore from './useThemeStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useSnippetStore } from './useSnippetStore'
@@ -15,7 +14,6 @@ import { useHighlightStore } from './useHighlightStore'
 // progressive enhancement check.
 if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   // share the property "count" of the state with other tabs
-  share('theme', useThemeStore, { ref: 'share-theme' })
   share('ilinks', useDataStore, { ref: 'share-ilinks' })
   share('namespaces', useDataStore, { ref: 'share-namespaces' })
   share('archive', useDataStore, { ref: 'share-archive' })

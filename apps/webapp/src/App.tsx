@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useMemo } from 'react'
 
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
@@ -11,16 +11,25 @@ import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
 import './Stores'
-import useThemeStore from './Stores/useThemeStore'
+import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
-function App() {
-  const theme = useThemeStore((state) => state.theme)
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const theme = useUserPreferenceStore((state) => state.theme)
 
+  const themeData = useMemo(() => {
+    const ctheme = defaultThemes.find((t) => t.id === theme)
+    return ctheme ? ctheme.themeData : defaultThemes[0].themeData
+  }, [theme])
+
+  return <ThemeProvider theme={themeData}>{children}</ThemeProvider>
+}
+
+const App = () => {
   return (
     <Router>
-      <ThemeProvider theme={theme?.themeData ?? defaultThemes[0].themeData}>
+      <Providers>
         <Init />
         <Main>
           <Modals />
@@ -29,7 +38,7 @@ function App() {
           <FloatingButton />
           <Notification />
         </Main>
-      </ThemeProvider>
+      </Providers>
     </Router>
   )
 }

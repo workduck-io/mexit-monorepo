@@ -2,7 +2,7 @@ import { TreeItem, TreeData } from '@atlaskit/tree'
 import { ItemId } from '@atlaskit/tree/dist/types/types'
 
 import { Contents, mog, NodeMetadata, isElder, isParent, getNameFromPath, getParentNodePath } from '@mexit/core'
-import { TreeNode } from '@mexit/shared'
+import { LastOpenedState, TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -21,15 +21,12 @@ export const sortTree = (tree: TreeNode[], contents: Contents): TreeNode[] => {
     if (aMeta.createdAt && bMeta.createdAt) {
       return bMeta.createdAt - aMeta.createdAt
     }
-
     if (aMeta.createdAt && !bMeta.createdAt) {
       return -1
     }
-
     if (bMeta.createdAt && !aMeta.createdAt) {
       return 1
     }
-
     return 0
   }
 
@@ -115,33 +112,13 @@ const insertInNested = (iNode: BaseTreeNode, nestedTree: BaseTreeNode[]) => {
 export interface FlatItem {
   id: string
   nodeid: string
-  namespace: string
+  namespace?: string
   parentNodeId?: string
   tasks?: number
   reminders?: number
-  // lastOpenedState?: LastOpenedState
+  lastOpenedState?: LastOpenedState
   icon?: string
   stub?: boolean
-}
-
-const getItem = (treeFlat: FlatItem[], id: string): number | undefined => {
-  const item = treeFlat.findIndex((n) => n.id === id)
-  return item ? item : null
-}
-
-const getParentItemId = (path: string, treeData: TreeData): string | undefined => {
-  const parentPath = getParentNodePath(path)
-
-  if (parentPath) {
-    const parentItem = Object.entries(treeData.items).find(([_k, n]) => {
-      return n.data.path === parentPath
-    })
-    // mog('parentPath', { parentPath, parentItem, treeData })
-    if (parentItem) {
-      return parentItem[0]
-    }
-  }
-  return undefined
 }
 
 export const TREE_SEPARATOR = '-'
@@ -154,7 +131,7 @@ interface BaseTreeNode {
   icon?: string
   tasks?: number
   reminders?: number
-  // lastOpenedState?: LastOpenedState
+  lastOpenedState?: LastOpenedState
 }
 
 const getItemFromBaseNestedTree = (
@@ -234,7 +211,6 @@ export const getBaseNestedTree = (flatTree: FlatItem[]): BaseTreeNode[] => {
   let baseNestedTree: BaseTreeNode[] = []
 
   flatTree.forEach((n) => {
-    // console.log('n', n.id)
     const parentId = getParentNodePath(n.id)
     const tasks = todos[n.nodeid] ? todos[n.nodeid].filter(filterIncompleteTodos).length : 0
     const reminders = reminderGroups[n.nodeid] ? reminderGroups[n.nodeid].length : 0
@@ -271,7 +247,7 @@ export const generateTree = (
   sort?: (a: BaseTreeNode, b: BaseTreeNode) => number
 ): TreeData => {
   // tree should be sorted
-  mog('FLAT TREE', { treeFlat })
+  // mog('GenerateTree ', { treeFlat })
   const unsortedBaseNestedTree = getBaseNestedTree(treeFlat)
   const baseNestedTree = sort ? unsortedBaseNestedTree.sort(sort) : sortTreeWithPriority(unsortedBaseNestedTree)
   const nestedTree: TreeData = {
@@ -310,8 +286,8 @@ export const generateTree = (
           namespace: n.namespace,
           stub: n.stub,
           tasks: nestedItem.tasks,
-          reminders: nestedItem.reminders
-          // lastOpenedState: nestedItem.lastOpenedState
+          reminders: nestedItem.reminders,
+          lastOpenedState: nestedItem.lastOpenedState
         }),
         isExpanded: expanded.includes(n.id)
       }
@@ -336,11 +312,10 @@ export const generateTree = (
             path: n.id,
             mex_icon: n.icon,
             namespace: n.namespace,
-            parentId,
             stub: n.stub,
             tasks: nestedItem.tasks,
-            reminders: nestedItem.reminders
-            // lastOpenedState: nestedItem.lastOpenedState
+            reminders: nestedItem.reminders,
+            lastOpenedState: nestedItem.lastOpenedState
           }),
           isExpanded: expanded.includes(n.id)
         }

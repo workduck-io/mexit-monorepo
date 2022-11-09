@@ -1,28 +1,33 @@
-import { LastOpenedNotes, UserPreferences } from '../Types/userPreference'
+import { LastOpenedData, LastOpenedNotes, LastUsedSnippets, UserPreferences } from '../Types/userPreference'
 
 export interface UserPreferenceStore extends UserPreferences {
   _hasHydrated: boolean
+  smartCaptureExcludedFields?: any
   setHasHydrated: (state) => void
   setTheme: (theme: string) => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
+  setLastUsedSnippets: (lastUsedSnippets: LastUsedSnippets) => void
   getUserPreferences: () => UserPreferences
   setUserPreferences: (userPreferences: UserPreferences) => void
+  setActiveNamespace: (namespace: string) => void
   excludeSmartCaptureField: (page: string, fieldId: string) => void
   removeExcludedSmartCaptureField: (page: string, fieldId: string) => void
-  setActiveNamespace: (namespace: string) => void
 }
 
 export const preferenceStoreConstructor = (set, get) => ({
-  lastOpenedNotes: {},
-  version: 'unset',
-  smartCaptureExcludedFields: {},
-  theme: 'xeM',
   _hasHydrated: false,
+  version: 'unset',
+  theme: 'xeM',
+  lastOpenedNotes: {},
+  lastUsedSnippets: {},
+  smartCaptureExcludedFields: {},
+
   excludeSmartCaptureField: (page: string, fieldId: string) => {
     const webPageConfigs = get().smartCaptureExcludedFields
 
     set({ smartCaptureExcludedFields: { ...webPageConfigs, [page]: [...(webPageConfigs[page] ?? []), fieldId] } })
   },
+
   removeExcludedSmartCaptureField: (page: string, fieldId: string) => {
     const webPageConfigs = get().smartCaptureExcludedFields
 
@@ -40,7 +45,7 @@ export const preferenceStoreConstructor = (set, get) => ({
     return {
       lastOpenedNotes: get().lastOpenedNotes,
       version: get().version,
-      smartCapture: get().smartCapture,
+      lastUsedSnippets: get().lastUsedSnippets,
       theme: get().theme
     }
   },
@@ -57,23 +62,19 @@ export const preferenceStoreConstructor = (set, get) => ({
     set({
       lastOpenedNotes: lastOpenedNotes
     })
+  },
+  setLastUsedSnippets: (lastUsedSnippets) => {
+    set({ lastUsedSnippets })
   }
 })
 
-/**
- * Merging user preferences from the remote server with the local preferences
- *
- * The remote user preferences may be lagging as the local preferences
- * have not been saved on exit
- */
-export const mergeUserPreferences = (local: UserPreferences, remote: UserPreferences): UserPreferences => {
-  const { version, lastOpenedNotes, theme, smartCaptureExcludedFields } = local
-  const { lastOpenedNotes: remoteLastOpenedNotes } = remote
-
-  // For all lastOpened of remote
-  const mergedLastOpenedNotes = Object.keys(remoteLastOpenedNotes).reduce((acc, key) => {
-    const localLastOpenedNote = lastOpenedNotes[key]
-    const remoteLastOpenedNote = remoteLastOpenedNotes[key]
+export const mergeLastOpenedData = (
+  remote: Record<string, LastOpenedData>,
+  local: Record<string, LastOpenedData>
+): Record<string, LastOpenedData> => {
+  const merged = Object.keys(remote).reduce((acc, key) => {
+    const localLastOpenedNote = local[key]
+    const remoteLastOpenedNote = remote[key]
     // If a local lastOpenedNote exists
     if (localLastOpenedNote) {
       // Get the latest of the two which has the latest lastOpened
@@ -89,12 +90,28 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     return acc
   }, {})
 
+  return merged
+}
+
+/**
+ * Merging user preferences from the remote server with the local preferences
+ *
+ * The remote user preferences may be lagging as the local preferences
+ * have not been saved on exit
+ */
+export const mergeUserPreferences = (local: UserPreferences, remote: UserPreferences): UserPreferences => {
+  // For all lastOpened of remote
+  const mergedLastOpenedNotes = mergeLastOpenedData(remote.lastOpenedNotes, local.lastOpenedNotes)
+  const mergedLastUsedSnippets = mergeLastOpenedData(remote.lastUsedSnippets, local.lastUsedSnippets)
+
+  // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
   return {
-    version,
+    version: local.version,
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
-    lastOpenedNotes: { ...lastOpenedNotes, ...mergedLastOpenedNotes },
-    theme,
-    smartCaptureExcludedFields
+    lastOpenedNotes: { ...local.lastOpenedNotes, ...mergedLastOpenedNotes },
+    lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
+    theme: local.theme,
+    smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }
 }
