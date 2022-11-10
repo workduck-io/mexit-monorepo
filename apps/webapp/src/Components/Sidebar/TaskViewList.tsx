@@ -34,7 +34,7 @@ const TaskViewList = () => {
     // loadSnippet(id)
     if (viewid === 'default') {
       onOpenDefaultView()
-    } else if (viewid === 'reminder') {
+    } else if (viewid === 'reminders') {
       onOpenReminderView()
     } else {
       const view = views.find((view) => view.id === viewid)
@@ -90,7 +90,7 @@ const TaskViewList = () => {
           },
           {
             label: 'Reminder',
-            id: 'reminder',
+            id: 'reminders',
             icon: timerFlashLine,
             data: {}
           }

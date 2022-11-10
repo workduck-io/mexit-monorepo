@@ -81,7 +81,7 @@ export const upcoming = (reminder: Reminder) => {
 }
 
 export const reminderViewPlaceholderData: any = {
-  id: 'reminder',
+  id: 'reminders',
   title: '',
   filters: [],
   globalJoin: 'all'
