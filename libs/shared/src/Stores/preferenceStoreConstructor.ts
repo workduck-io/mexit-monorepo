@@ -44,6 +44,7 @@ export const preferenceStoreConstructor = (set, get) => ({
   getUserPreferences: () => {
     return {
       lastOpenedNotes: get().lastOpenedNotes,
+      smartCaptureExcludedFields: get().smartCaptureExcludedFields,
       version: get().version,
       lastUsedSnippets: get().lastUsedSnippets,
       theme: get().theme
