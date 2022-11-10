@@ -166,7 +166,7 @@ export const apiURLs = {
   links: {
     getLinks: `${MEXIT_BACKEND_URL_BASE}/link`,
     saveLink: `${MEXIT_BACKEND_URL_BASE}/link/shorten`,
-    deleteLink: (linkId: string) => `${MEXIT_BACKEND_URL_BASE}/link/${linkId}"`,
+    deleteLink: (linkId: string) => `${MEXIT_BACKEND_URL_BASE}/link/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) =>
       `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
   },
