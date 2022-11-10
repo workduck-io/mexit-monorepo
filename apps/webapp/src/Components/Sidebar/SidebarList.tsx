@@ -49,7 +49,7 @@ export interface SidebarListProps<T> {
   selectedItemId?: string
 
   // If true, the list will be preceded by the default item
-  defaultItem?: SidebarListItem<T>
+  defaultItems?: SidebarListItem<T>[]
 
   // To render the context menu if the item is right-clicked
   ItemContextMenu?: (props: { item: SidebarListItem<T> }) => JSX.Element
@@ -66,7 +66,7 @@ const SidebarList = ({
   selectedItemId,
   onClick,
   items,
-  defaultItem,
+  defaultItems,
   showSearch,
   searchPlaceholder,
   emptyMessage,
@@ -174,16 +174,17 @@ const SidebarList = ({
     <SidebarListWrapper noMargin={noMargin}>
       <Tippy theme="mex" placement="right" singleton={source} />
 
-      {defaultItem && (
-        <StyledTreeItem noSwitcher selected={selectedItemId === undefined}>
-          <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
-            <ItemTitle>
-              <Icon icon={defaultItem.icon} />
-              <span>{defaultItem.label}</span>
-            </ItemTitle>
-          </ItemContent>
-        </StyledTreeItem>
-      )}
+      {defaultItems &&
+        defaultItems.map((defaultItem) => (
+          <StyledTreeItem noSwitcher selected={selectedItemId === defaultItem.id}>
+            <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
+              <ItemTitle>
+                <Icon icon={defaultItem.icon} />
+                <span>{defaultItem.label}</span>
+              </ItemTitle>
+            </ItemContent>
+          </StyledTreeItem>
+        ))}
 
       {showSearch && items.length > 0 && (
         <SidebarListFilter noMargin={noMargin}>
@@ -197,7 +198,7 @@ const SidebarList = ({
         </SidebarListFilter>
       )}
 
-      <FilteredItemsWrapper hasDefault={!!defaultItem}>
+      <FilteredItemsWrapper hasDefault={!!defaultItems}>
         {listItems.map((item, index) => (
           <SidebarListItemComponent
             key={item.id}
