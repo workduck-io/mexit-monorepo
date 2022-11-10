@@ -1,5 +1,5 @@
 import { Title } from '@workduck-io/mex-components'
-import { transparentize } from 'polished'
+import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const CommentsWrapper = styled.div`
@@ -42,13 +42,23 @@ export const CommentContentWrapper = styled.div`
   padding-left: ${({ theme }) => theme.spacing.tiny};
 `
 
-export const CommentWrapper = styled.div`
+export const CommentWrapper = styled.div<{ userCommented?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.small};
   background: ${({ theme }) => transparentize(0.1, theme.colors.gray[7])};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  ${({ userCommented, theme }) =>
+    userCommented &&
+    css`
+      background: linear-gradient(
+        120deg,
+        ${mix(0.1, theme.colors.primary, theme.colors.gray[8])} 0%,
+        ${mix(0.0, theme.colors.primary, theme.colors.gray[7])} 100%
+      );
+    `}
 `
 
 export const CommentHeader = styled.div`
@@ -58,7 +68,7 @@ export const CommentHeader = styled.div`
   justify-content: space-between;
 `
 
-export const CommentAuthor = styled.div`
+export const CommentAuthor = styled.div<{ userCommented?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
@@ -68,6 +78,12 @@ export const CommentAuthor = styled.div`
   img {
     border-radius: 50%;
   }
+
+  ${({ userCommented, theme }) =>
+    userCommented &&
+    css`
+      color: ${theme.colors.primary};
+    `}
 `
 
 export const CommentActions = styled.div`

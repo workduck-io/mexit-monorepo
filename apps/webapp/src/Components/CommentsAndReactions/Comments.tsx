@@ -47,11 +47,12 @@ export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
     const u = getUserFromUserid(comment.userId)
     if (u) return u
   }, [comment.userId])
+  const currentUserComment = comment.userId === currentUserDetails?.userID
 
   return (
-    <CommentWrapper>
+    <CommentWrapper userCommented={currentUserComment}>
       <CommentHeader>
-        <CommentAuthor>
+        <CommentAuthor userCommented={currentUserComment}>
           <ProfileImage size={20} email={user?.email} />@{user && user.alias}
         </CommentAuthor>
         <CommentActions>
@@ -60,7 +61,7 @@ export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
               <RelativeTime dateNum={comment.metadata?.createdAt} />
             </CommentTime>
           )}
-          {comment.userId === currentUserDetails?.userID && (
+          {currentUserComment && (
             /* Show delete button only when comment made by current user */
             <IconButton
               icon={deleteBin6Line}
