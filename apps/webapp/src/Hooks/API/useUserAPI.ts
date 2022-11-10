@@ -112,13 +112,15 @@ export const useUserService = () => {
     const lastOpenedNotes = useUserPreferenceStore.getState().lastOpenedNotes
     const lastUsedSnippets = useUserPreferenceStore.getState().lastUsedSnippets
     const theme = useUserPreferenceStore.getState().theme
+    const smartCaptureExcludedFields = useUserPreferenceStore.getState().smartCaptureExcludedFields
     const userID = useAuthStore.getState().userDetails.userID
-
+    
     const userPreferences: UserPreferences = {
       version,
       lastOpenedNotes,
       lastUsedSnippets,
-      theme
+      smartCaptureExcludedFields,
+      theme,
     }
 
     try {
