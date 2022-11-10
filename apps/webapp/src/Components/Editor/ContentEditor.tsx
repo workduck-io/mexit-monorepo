@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { usePlateEditorRef, selectEditor, focusEditor, getPlateEditorRef } from '@udecode/plate'
+import { selectEditor, focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, mog } from '@mexit/core'
+import { defaultContent } from '@mexit/core'
 import { StyledEditor, EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -18,7 +18,7 @@ import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
-import { useRouting } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -26,11 +26,13 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { getEditorId } from '../../Utils/editor'
 import { areEqual } from '../../Utils/hash'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
+import Banner from './Banner'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
 import { useComments } from '../../Hooks/useComments'
@@ -57,7 +59,14 @@ const ContentEditor = () => {
 
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const nodeid = useParams()?.nodeId
+  const location = useLocation()
   const fsContent = useContentStore((state) => state.contents[nodeid])
+
+  const isBannerVisible = useRouteStore((s) =>
+    s.routes?.[`${ROUTE_PATHS.node}/${nodeid}`]?.banners?.includes(BannerType.editor)
+  )
+
+  const { goTo } = useRouting()
 
   const { shortcutHandler } = useKeyListener()
   // const { getSuggestions } = useSuggestions()
@@ -164,12 +173,22 @@ const ContentEditor = () => {
     return isReadonly(access)
   }, [nodeid, _hasHydrated])
 
+  const handleBannerButtonClick = (e) => {
+    goTo(ROUTE_PATHS.namespaceShare, NavigationType.replace, 'NODE_ID_OF_SHARED_NODE')
+  }
+
   return (
     <>
       <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
+        {isBannerVisible && (
+          <Banner
+            route={location.pathname}
+            onClick={handleBannerButtonClick}
+            title="Same Note is being accessed by multiple users. Data may get lost!"
+          />
+        )}
         <NavBreadCrumbs nodeId={nodeid} />
         <Toolbar />
-
         {isBlockMode ? <BlockInfoBar /> : <Metadata nodeId={nodeid} />}
 
         <EditorWrapper

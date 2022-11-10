@@ -5,6 +5,7 @@ import { persist } from 'zustand/middleware'
 
 import { NodeContent, NodeProperties, defaultContent, getInitialNode } from '@mexit/core'
 
+import { Settify } from '../Editor/Utils/helper'
 import { ComboTriggerType } from './useComboboxStore'
 import { useContentStore } from './useContentStore'
 
@@ -56,6 +57,14 @@ export type EditorContextType = {
 
   loadNodeAndReplaceContent: (node: NodeProperties, content: NodeContent) => void
 
+  activeUsers?: Array<string>
+  setActiveUsers?: (users: Array<string>) => void
+  addUser: (userId: string) => void
+  removeUser: (usersId: string) => void
+
+  isBannerVisible?: boolean
+  notifyWithBanner: (showBanner: boolean) => void
+
   setReadOnly: (isReadOnly: boolean) => void
 }
 
@@ -65,8 +74,31 @@ export const useEditorStore = create<EditorContextType>(
       node: getInitialNode(),
       content: defaultContent,
       readOnly: false,
+
+      isBannerVisible: false,
+      notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
+
       fetchingContent: false,
       setTrigger: (trigger) => set({ trigger }),
+
+      activeUsers: [],
+      setActiveUsers: (users) => {
+        set({ activeUsers: users, isBannerVisible: users.length !== 0 })
+      },
+      addUser: (userId) => {
+        const s = get().activeUsers
+        set({ activeUsers: [...s, userId], isBannerVisible: true })
+      },
+      removeUser: (userId) => {
+        const userToRemoveAtIndex = get().activeUsers.findIndex((id) => id === userId)
+
+        if (userToRemoveAtIndex >= 0) {
+          const newUsers = get().activeUsers
+          newUsers.splice(userToRemoveAtIndex, 1)
+
+          set({ activeUsers: newUsers, isBannerVisible: newUsers.length !== 0 })
+        }
+      },
 
       setReadOnly: (isReadOnly: boolean) => {
         set({ readOnly: isReadOnly })

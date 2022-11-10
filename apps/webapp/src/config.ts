@@ -7,6 +7,6 @@ export default {
     SCOPES: 'email openid profile'
   },
   websocket: {
-    URL: 'ws://localhost:3001'
+    URL: 'wss://ws.workduck.io/route'
   }
 }

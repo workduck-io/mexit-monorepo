@@ -1,17 +1,17 @@
 // different import path!
-import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { useMatch } from 'react-router-dom'
+import { useLocation, useMatch } from 'react-router-dom'
 import { useTheme } from 'styled-components'
 
 import { Button, MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { NodeEditorContent, getNameFromPath, mog } from '@mexit/core'
+import { NodeEditorContent, getNameFromPath } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -22,14 +22,18 @@ import {
   Tooltip
 } from '@mexit/shared'
 
+import Banner from '../../../Components/Editor/Banner'
 import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
 import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
+import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
+import useRouteStore, { BannerType } from '../../../Stores/useRouteStore'
+import { SocketActionType } from '../../../Types/Socket'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 
 export interface EditorPreviewProps {
@@ -162,20 +166,36 @@ const EditorPreview = ({
 }
 
 const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onClose, hover }: any) => {
+  const ref = useRef()
+
   const addToBuffer = useBufferStore((store) => store.add)
   const removeEditor = useMultipleEditors((store) => store.removeEditor)
   const presentEditor = useMultipleEditors((store) => store.editors)?.[nodeId]
   const changeEditorState = useMultipleEditors((store) => store.changeEditorState)
   const lastOpenedEditorId = useMultipleEditors((store) => store.lastOpenedEditor)
 
+  const fromSocket = useSocket()
+  const location = useLocation()
   const { saveAndClearBuffer } = useEditorBuffer()
-  const ref = useRef()
+  const routePath = `${ROUTE_PATHS.node}/${nodeId}`
+
+  const removeRouteInfo = useRouteStore((r) => r.removeRouteInfo)
+  const removePreviousRouteInfo = useRouteStore((r) => r.removePreviousRouteInfo)
+  const isBannerVisible = useRouteStore((r) => r.routes?.[routePath]?.banners?.includes(BannerType.editor))
 
   const onEditorClick = (e: any) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (editable) changeEditorState(nodeId, { editing: true })
+    if (editable) {
+      changeEditorState(nodeId, { editing: true })
+
+      removePreviousRouteInfo()
+      fromSocket.sendJsonMessage({
+        action: SocketActionType.ROUTE_CHANGE,
+        data: { route: routePath }
+      })
+    }
   }
 
   useEffect(() => {
@@ -184,6 +204,8 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
 
       saveAndClearBuffer(false)
       removeEditor(nodeId)
+      removeRouteInfo(routePath)
+      fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
     }
   }, [])
 
@@ -194,7 +216,6 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
         if (editable && (nodeId === lastOpened?.nodeId || hover) && !lastOpened?.editorState?.editing) {
           onEditorClick(e)
           const editor = getPlateEditorRef(editorId)
-          mog('IS EDITOR FOCUESED', { editor })
           if (editor) selectEditor(editor, { edge: 'start', focus: true })
         } else {
           unsubscribe()
@@ -209,30 +230,42 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
     addToBuffer(nodeId, val)
   }
 
-  return (
-    <EditorPreviewEditorWrapper
-      ref={ref}
-      tabIndex={-1}
-      id={editorId}
-      blink={presentEditor?.blink}
-      editable={!!presentEditor?.editing}
-      onClick={(ev) => {
-        ev.stopPropagation()
+  const handleBannerButtonClick = () => {}
 
-        if (ev.detail === 2) {
-          onEditorClick(ev)
-        }
-      }}
-    >
-      <EditorPreviewRenderer
-        onChange={onChange}
-        content={content}
-        blockId={blockId}
-        draftView={false}
-        readOnly={!editable || !presentEditor?.editing}
-        editorId={editorId}
-      />
-    </EditorPreviewEditorWrapper>
+  return (
+    <>
+      {isBannerVisible && (
+        <Banner
+          route={routePath}
+          onClick={handleBannerButtonClick}
+          title="Same Note is being accessed by multiple users. Data may get lost!"
+          withDetails={false}
+        />
+      )}
+      <EditorPreviewEditorWrapper
+        ref={ref}
+        tabIndex={-1}
+        id={editorId}
+        blink={presentEditor?.blink}
+        editable={!!presentEditor?.editing}
+        onClick={(ev) => {
+          ev.stopPropagation()
+
+          if (ev.detail === 2) {
+            onEditorClick(ev)
+          }
+        }}
+      >
+        <EditorPreviewRenderer
+          onChange={onChange}
+          content={content}
+          blockId={blockId}
+          draftView={false}
+          readOnly={!editable || !presentEditor?.editing}
+          editorId={editorId}
+        />
+      </EditorPreviewEditorWrapper>
+    </>
   )
 }
 

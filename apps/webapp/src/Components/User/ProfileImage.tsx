@@ -1,10 +1,11 @@
+import React, { useEffect, useMemo, useState } from 'react'
+
 import user3Line from '@iconify-icons/ri/user-3-line'
 // different import path!
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
 import Avatar from 'boring-avatars'
 import md5 from 'md5'
-import React, { useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { mog } from '@mexit/core'
@@ -99,6 +100,23 @@ interface ProfileImageTooltipProps {
 interface ProfileImageWithToolTipProps {
   props: ProfileImageTooltipProps
   placement?: string
+}
+
+export const ProfileAvatar: React.FC<{ userId: string; size: number }> = ({ userId, size }) => {
+  const { getUserFromUserid } = useMentions()
+  const { getUserDetailsUserId } = useUserService()
+
+  const user = useMemo(() => {
+    const u = getUserFromUserid(userId)
+    if (u) return u
+    else {
+      getUserDetailsUserId(userId)
+        .then((d) => mog('GOT userId', { d }))
+        .catch((err) => mog('GOT ERROR', { err }))
+    }
+  }, [userId])
+
+  return <ProfileImage size={size} email={user?.email} />
 }
 
 export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {

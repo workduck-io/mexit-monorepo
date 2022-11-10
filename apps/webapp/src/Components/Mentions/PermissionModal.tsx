@@ -8,21 +8,20 @@ import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
-import { StyledCreatatbleSelect } from '@mexit/shared'
+import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useFetchShareData } from '../../Hooks/useFetchShareData'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useNodes } from '../../Hooks/useNodes'
 import { usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { mergeAccess, useMentionStore } from '../../Stores/useMentionsStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { ModalControls, ModalHeader, ModalSection, ModalSectionScroll } from '../../Style/Refactor'
+import { ModalControls, ModalHeader, ModalSection } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'
 import { InvitedUsersContent } from './InvitedUsersContent'
@@ -52,7 +51,7 @@ export const PermissionModalContent = () => {
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
-  const { getAllSharedUsers, revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
+  const { revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
   const { accessWhenShared } = usePermissions()
   const { fetchSharedUsers } = useFetchShareData()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)

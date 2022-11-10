@@ -5,7 +5,6 @@ import Tippy from '@tippyjs/react/headless'
 import { moveSelection, useEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 // different import path!
-import { Transforms } from 'slate'
 import { useFocused, useSelected } from 'slate-react'
 
 import { Button } from '@workduck-io/mex-components'

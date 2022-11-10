@@ -3,10 +3,8 @@ import { useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { animated } from 'react-spring'
-import useWebSocket from 'react-use-websocket'
 import styled from 'styled-components'
 
-import { mog } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import * as Actions from './Actions'
@@ -22,11 +20,13 @@ import UserPage from './Components/User/UserPage'
 import useLoad from './Hooks/useLoad'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
+import useSocket from './Hooks/useSocket'
 import { useAuthStore } from './Stores/useAuth'
 import useBlockStore from './Stores/useBlockStore'
 import { useDataStore } from './Stores/useDataStore'
 import { useEditorStore } from './Stores/useEditorStore'
 import { useLayoutStore } from './Stores/useLayoutStore'
+import { SocketActionType } from './Types/Socket'
 import Archive from './Views/Archive'
 import DraftView from './Views/DraftView'
 import EditorView from './Views/EditorView'
@@ -45,11 +45,6 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
-
-// In functional React component
-
-// This can also be an async getter function. See notes below on Async Urls.
-const socketUrl = 'ws://localhost:3001'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;
@@ -205,15 +200,21 @@ export const Switch = () => {
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
   const authenticated = useAuthStore((s) => s.authenticated)
-  const { userID } = useAuthStore((s) => s.userDetails)
   const { saveNodeName } = useSaveNodeName()
   const { showSidebar, showAllSidebars, hideAllSidebars, hideRHSidebar, collapseAllSidebars } = useLayoutStore()
 
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
-  const { sendJsonMessage } = useWebSocket(socketUrl, {
-    onOpen: () => mog('CONNECTION OPENED'),
-    queryParams: { userId: userID }
-  })
+
+  const fromSocket = useSocket()
+
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: 'Connecting',
+  //   [ReadyState.OPEN]: 'Open',
+  //   [ReadyState.CLOSING]: 'Closing',
+  //   [ReadyState.CLOSED]: 'Closed',
+  //   [ReadyState.UNINSTANTIATED]: 'Uninstantiated'
+  // }[readyState]
+
   useEffect(() => {
     const editorNode = useEditorStore.getState().node
     // ? Do we need to save data locally on every route change?
@@ -227,17 +228,18 @@ export const Switch = () => {
     if (location.pathname) {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         // mog('Showing Sidebar', { location })
-        sendJsonMessage({ action: 'update', data: { route: location.pathname } })
+        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.node)) {
-        sendJsonMessage({ action: 'update', data: { route: location.pathname } })
+        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: location.pathname } })
         // mog('Showing Sidebar', { location })
         showAllSidebars()
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
+        fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.reminders)) {

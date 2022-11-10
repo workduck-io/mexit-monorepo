@@ -37,7 +37,7 @@ const Toolbar = () => {
     <NodeInfo>
       <NodeRenameOnlyTitle />
       {fetchingContent && <Loading transparent dots={3} />}
-      <InfoTools {...getFocusProps(focusMode)}>
+      {/* <InfoTools {...getFocusProps(focusMode)}>
         <ToolbarTooltip singleton={source} />
         <IconButton
           size={24}
@@ -48,12 +48,6 @@ const Toolbar = () => {
           highlight={shareModalState && shareModalContext === 'note'}
           onClick={() => openShareModal('permission', 'note', nodeid)}
         />
-        {/* <ToolbarTooltip singleton={target} content="Bookmark">
-          <span tabIndex={0}>
-            <BookmarkButton nodeid={nodeid} />
-          </span>
-        </ToolbarTooltip> */}
-
         <IconButton
           singleton={target}
           size={24}
@@ -64,7 +58,7 @@ const Toolbar = () => {
           highlight={focusMode.on}
           onClick={toggleFocusMode}
         />
-      </InfoTools>
+      </InfoTools> */}
     </NodeInfo>
   )
 }

@@ -4,6 +4,7 @@ import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
+import { useLocation } from 'react-router-dom'
 
 import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
@@ -13,7 +14,9 @@ import { EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } fr
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import Banner from './Banner'
 import Editor from './Editor'
 
 type Inputs = {
@@ -34,6 +37,8 @@ const SnippetEditor = () => {
   // const [value, setValue] = useState('')
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
+  const location = useLocation()
+  const isBannerVisible = useRouteStore((s) => s.routes?.[location.pathname]?.banners?.includes(BannerType.editor))
   const _hasHydrated = useSnippetStore((store) => store._hasHydrated)
   const { addOrUpdateValBuffer, saveAndClearBuffer, getBufferVal } = useSnippetBuffer()
   const addTitle = useSnippetBufferStore((store) => store.addTitle)
@@ -123,9 +128,17 @@ const SnippetEditor = () => {
     onDelay(value)
   }
 
+  const handleBannerButtonClick = () => {}
+
   return (
     <>
       <StyledEditor className="snippets_editor">
+        {isBannerVisible && (
+          <Banner
+            onClick={handleBannerButtonClick}
+            title="Same Snippet is being accessed by multiple users. Data may get lost!"
+          />
+        )}
         <NodeInfo>
           <IconButton
             size={24}
