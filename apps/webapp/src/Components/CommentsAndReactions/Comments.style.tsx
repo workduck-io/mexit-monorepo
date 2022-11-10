@@ -55,7 +55,7 @@ export const CommentWrapper = styled.div<{ userCommented?: boolean }>`
     css`
       background: linear-gradient(
         120deg,
-        ${mix(0.1, theme.colors.primary, theme.colors.gray[8])} 0%,
+        ${mix(0.2, theme.colors.primary, theme.colors.gray[8])} 0%,
         ${mix(0.0, theme.colors.primary, theme.colors.gray[7])} 100%
       );
     `}
