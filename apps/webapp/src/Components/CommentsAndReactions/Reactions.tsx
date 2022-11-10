@@ -13,7 +13,7 @@ import {
   ReactionDetailsUser,
   ReactionsWrapper
 } from './Reactions.style'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useMentions } from '../../Hooks/useMentions'
 import { ProfileImage } from '../User/ProfileImage'
 
@@ -67,6 +67,7 @@ interface ReactionsProps {
 
 export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: ReactionsProps) => {
   const BlockReactions = reactionsWithCount(reactions)
+  const [fetchingDetails, setFetchingDetails] = useState(false)
   const [details, setDetails] = useState<UserReaction[] | null>(null)
   const toggleReaction = (reactionVal: MIcon) => {
     onToggleReaction(reactionVal)
@@ -76,31 +77,29 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
   //   mog('BlockReactions', { BlockReactions, reactions })
   // }
 
-  const onHover = () => {
+  const onHover = useCallback(() => {
     // mog('onHover we shall fetch details')
     if (!getReactionDetails) {
       return
     }
 
     // Fetch if not fetched before
-    if (details === null)
+    if (details === null && !fetchingDetails) {
+      setFetchingDetails(true)
       getReactionDetails().then((res) => {
         // mog('got reaction details', { res })
         setDetails(res)
       })
-  }
+    }
+  }, [details, fetchingDetails, getReactionDetails])
 
   const onDelayPerform = debounce(onHover, 500)
 
   return (
     <Tooltip content={details && details.length > 0 ? <ReactionDetails details={details} /> : null}>
-      <ReactionsWrapper>
+      <ReactionsWrapper onMouseEnter={() => onDelayPerform()}>
         {BlockReactions.map((reaction) => (
-          <ReactionButton
-            onMouseEnter={() => onDelayPerform()}
-            onClick={() => toggleReaction(reaction.reaction)}
-            key={reaction.reaction.value}
-          >
+          <ReactionButton onClick={() => toggleReaction(reaction.reaction)} key={reaction.reaction.value}>
             <IconDisplay size={20} icon={reaction.reaction} />
             {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
           </ReactionButton>

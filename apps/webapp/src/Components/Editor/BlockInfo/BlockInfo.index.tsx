@@ -146,7 +146,7 @@ export const BlockInfo = (props: any) => {
   const getReactionDetailsForBlock = async () => {
     const blockId = element?.id
     const nodeId = getNodeIdFromEditor(props?.editor?.id)
-    const userReactions = await getReactionDetails(nodeId, blockId)
+    const userReactions = await getReactionDetails(blockId, nodeId)
     return userReactions as UserReaction[]
   }
 
