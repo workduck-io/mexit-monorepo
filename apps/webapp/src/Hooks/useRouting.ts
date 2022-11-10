@@ -1,3 +1,4 @@
+import { ReminderViewData } from '@mexit/core'
 import { useEffect } from 'react'
 
 import { matchPath, useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -9,7 +10,7 @@ export const ROUTE_PATHS = {
   register: '/auth/register',
   archive: '/archive',
   tasks: '/tasks',
-  reminders: '/tasks/reminders',
+  reminders: `/tasks/${ReminderViewData.id}`,
   tag: '/tag', // * /tag/:tag
   editor: '/editor',
   node: '/editor', // * /node/:nodeid

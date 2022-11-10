@@ -80,7 +80,7 @@ export const upcoming = (reminder: Reminder) => {
   return today.getTime() <= reminder.time
 }
 
-export const reminderViewPlaceholderData: any = {
+export const ReminderViewData: any = {
   id: 'reminders',
   title: '',
   filters: [],

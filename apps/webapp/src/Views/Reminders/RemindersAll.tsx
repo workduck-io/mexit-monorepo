@@ -20,7 +20,7 @@ import {
   ReminderBoard,
   ReminderBoardCard,
   ReminderBoardColumn,
-  reminderViewPlaceholderData,
+  ReminderViewData,
   upcoming
 } from '@mexit/core'
 import {
@@ -285,7 +285,7 @@ const RemindersAll = () => {
         setReminders(reminders)
       }
     })
-    setCurrentView(reminderViewPlaceholderData)
+    setCurrentView(ReminderViewData)
   }, [])
 
   const { board, filters } = useMemo(() => {
