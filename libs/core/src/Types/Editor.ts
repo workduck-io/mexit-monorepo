@@ -33,6 +33,10 @@ export interface NodeMetadata {
   updatedAt: number
 
   elementMetadata: ElementHighlightMetadata
+  publicAccess?: boolean
+  iconUrl?: string
+  // The snippet ID with which all the children nodes should be populated
+  templateID?: string
 }
 
 export interface Block {
@@ -138,13 +142,6 @@ export interface BlockIndexData {
   blockUID: string
   nodeUID: string
   text: string
-}
-
-export interface NodeMetadata {
-  createdBy: string
-  createdAt: number
-  lastEditedBy: string
-  updatedAt: number
 }
 
 export type NodeEditorContent = any[]

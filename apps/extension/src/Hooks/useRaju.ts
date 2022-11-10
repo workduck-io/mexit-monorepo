@@ -3,8 +3,6 @@ import { useEffect } from 'react'
 import { addMinutes } from 'date-fns'
 import { connectToChild, Methods } from 'penpal'
 
-import { useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
-
 import {
   Contents,
   idxKey,
@@ -21,8 +19,7 @@ import {
   UserDetails,
   WorkspaceDetails,
   Link,
-  Description,
-  Highlighted
+  Description
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
@@ -34,12 +31,12 @@ import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { getElementById, styleSlot } from '../contentScript'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import { useSnippets } from './useSnippets'
-import useThemeStore from './useThemeStore'
 
 export interface ParentMethods {
   SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>
@@ -64,11 +61,9 @@ export default function useRaju() {
   // For some reason, using useState wasn't making dispatch() make use of the new variable
   // So added in the context for now
   const setChild = useSputlitStore((s) => s.setChild)
-  const setTheme = useThemeStore((store) => store.setTheme)
+  const setTheme = useUserPreferenceStore((store) => store.setTheme)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const setInternalAuthStore = useInternalAuthStore((store) => store.setAllStore)
-  const setUserPool = useDwindleAuthStore((store) => store.setUserPool)
-  const setUserCred = useDwindleAuthStore((store) => store.setUserCred)
   const initContents = useContentStore((store) => store.initContents)
   const setIlinks = useDataStore((store) => store.setIlinks)
   const setNamespaces = useDataStore((store) => store.setNamespaces)
@@ -121,7 +116,7 @@ export default function useRaju() {
     bootAuth(userDetails: UserDetails, workspaceDetails: WorkspaceDetails) {
       setAuthenticated(userDetails, workspaceDetails)
     },
-    bootTheme(theme: Theme) {
+    bootTheme(theme: string) {
       setTheme(theme)
     },
     bootDwindle(authAWS: { userPool; userCred }) {

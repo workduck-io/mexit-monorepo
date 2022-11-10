@@ -1,22 +1,67 @@
+import { useMemo } from 'react'
+
 import { TreeItem } from '@atlaskit/tree'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
+import magicLine from '@iconify/icons-ri/magic-line'
 import shareLine from '@iconify/icons-ri/share-line'
+import volumeDownLine from '@iconify/icons-ri/volume-down-line'
+import volumeMuteLine from '@iconify/icons-ri/volume-mute-line'
 import { Icon } from '@iconify/react'
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 import 'react-contexify/dist/ReactContexify.css'
+import toast from 'react-hot-toast'
+
+import { LastOpenedState } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
+import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { doesLinkRemain } from '../Refactor/doesLinkRemain'
 import ContextMenuListWithFilter from './ContextMenuListWithFilter'
+
+interface MuteMenuItemProps {
+  nodeid: string
+  lastOpenedState: LastOpenedState
+}
+
+export const MuteMenuItem = ({ nodeid, lastOpenedState }: MuteMenuItemProps) => {
+  const { muteNode, unmuteNode } = useLastOpened()
+
+  const isMuted = useMemo(() => {
+    return lastOpenedState === LastOpenedState.MUTED
+  }, [lastOpenedState])
+
+  const handleMute = () => {
+    // mog('handleMute', { item })
+    if (isMuted) {
+      unmuteNode(nodeid)
+    } else {
+      muteNode(nodeid)
+    }
+  }
+
+  return (
+    <ContextMenuItem
+      onSelect={(args) => {
+        handleMute()
+      }}
+    >
+      <Icon icon={isMuted ? volumeDownLine : volumeMuteLine} />
+      {isMuted ? 'Unmute' : 'Mute'}
+    </ContextMenuItem>
+  )
+}
 
 interface TreeContextMenuProps {
   item: TreeItem
@@ -30,7 +75,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const { createNewNote } = useCreateNewNote()
   const openShareModal = useShareModalStore((store) => store.openModal)
   // const { onPinNote, onUnpinNote, isPinned } = usePinnedWindows()
-  // const toggleModal = useModalStore((store) => store.toggleOpen)
+  const toggleModal = useModalStore((store) => store.toggleOpen)
   const { goTo } = useRouting()
   const namespaces = useDataStore((store) => store.namespaces)
   const { getNamespaceIcon } = useNamespaces()
@@ -44,6 +89,16 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   //   prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
   //   // openRefactorModal()
   // }
+  const contents = useContentStore((store) => store.contents)
+  const hasTemplate = useMemo(() => {
+    const metadata = contents[item.data.nodeid]?.metadata
+
+    const templates = useSnippetStore
+      .getState()
+      .snippets.filter((item) => item?.template && item.id === metadata?.templateID)
+
+    return templates.length !== 0
+  }, [item.data.nodeid, contents])
 
   const isInSharedNamespace = itemNamespace?.granterID !== undefined
   const isReadonly = itemNamespace?.access === 'READ'
@@ -75,6 +130,14 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
     }
   }
 
+  const handleTemplate = (item: TreeItem) => {
+    if (item.data.path !== 'Drafts') {
+      toggleModal(ModalsType.template, item.data)
+    } else {
+      toast.error('Template cannot be set for Drafts hierarchy')
+    }
+  }
+
   return (
     <ContextMenuPrimitive.Portal>
       <ContextMenuContent>
@@ -95,6 +158,14 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
         >
           <Icon icon={addCircleLine} />
           New Note
+        </ContextMenuItem>
+        <ContextMenuItem
+          onSelect={(args) => {
+            handleTemplate(item)
+          }}
+        >
+          <Icon icon={magicLine} />
+          {hasTemplate ? 'Change Template' : 'Set Template'}
         </ContextMenuItem>
         <ContextMenuItem
           disabled={isInSharedNamespace && isReadonly}
@@ -127,8 +198,8 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           }}
           filter={false}
         />
-        <ContextMenuSeparator />{' '}
-        {/* <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} /> */}
+        <ContextMenuSeparator />
+        <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} />
         <ContextMenuItem
           color="#df7777"
           disabled={isInSharedNamespace && itemNamespace?.access === 'READ'}

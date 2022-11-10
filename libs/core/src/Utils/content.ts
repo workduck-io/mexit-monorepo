@@ -91,12 +91,15 @@ export const removeNulls = (obj: any): any => {
 
 export const extractMetadata = (data: any): NodeMetadata => {
   if (data) {
-    const metadata: any = {
+    const metadata: NodeMetadata = {
       lastEditedBy: data.lastEditedBy,
       updatedAt: data.updatedAt,
       createdBy: data.createdBy,
       createdAt: data.createdAt,
-      elementMetadata: data?.elementMetadata
+      elementMetadata: data?.elementMetadata,
+      publicAccess: data?.publicAccess,
+      iconUrl: data?.metadata?.iconUrl,
+      templateID: data?.metadata?.templateID
     }
 
     return removeNulls(metadata)

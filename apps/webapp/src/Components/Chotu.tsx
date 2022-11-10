@@ -18,13 +18,13 @@ import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import useThemeStore from '../Stores/useThemeStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
   const [parent, setParent] = useState<any>(null)
   const { userDetails, workspaceDetails } = useAuthStore()
-  const theme = useThemeStore((state) => state.theme)
+  const theme = useUserPreferenceStore((store) => store.theme)
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
   const descriptions = useDescriptionStore((store) => store.descriptions)

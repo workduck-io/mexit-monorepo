@@ -5,6 +5,7 @@ import { useAuth } from '@workduck-io/dwindle'
 import { addIconsToIconify } from '@mexit/shared'
 
 import { useInitLoader } from '../Hooks/useInitLoader'
+import { useAutoSyncUserPreference } from '../Hooks/useSyncUserPreferences'
 import config from '../config'
 
 const Init = () => {
@@ -30,6 +31,7 @@ const Init = () => {
   }, [])
 
   useInitLoader()
+  useAutoSyncUserPreference()
 
   return null
 }

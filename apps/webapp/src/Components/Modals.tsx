@@ -10,6 +10,7 @@ import PreviewNoteModal from './PreviewNoteModal'
 import Delete from './Refactor/DeleteModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
 import TaskViewModal from './TaskViewModal'
+import TemplateModal from './Template/TemplateModal'
 
 const Modals = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -28,6 +29,7 @@ const Modals = () => {
       <TaskViewModal />
       <PreviewNoteModal />
       <FleetContainer />
+      <TemplateModal />
     </>
   )
 }

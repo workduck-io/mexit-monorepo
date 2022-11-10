@@ -3,15 +3,18 @@ import React from 'react'
 import { useTransition } from 'react-spring'
 import { ThemeProvider } from 'styled-components'
 
-import { Wrapper } from '@mexit/shared'
+import { defaultThemes } from '@mexit/shared'
 
-import useThemeStore from '../Stores/useThemeStore'
+import { useUserService } from '../Hooks/API/useUserAPI'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
 
 const Themes = () => {
-  const themes = useThemeStore((state) => state.themes)
-  const theme = useThemeStore((state) => state.theme)
-  const setTheme = useThemeStore((state) => state.setTheme)
+  const themes = defaultThemes
+  const theme = useUserPreferenceStore((state) => state.theme)
+  const setTheme = useUserPreferenceStore((state) => state.setTheme)
+
+  const { updateUserPreferences } = useUserService()
 
   const transition = useTransition(themes, {
     from: {
@@ -34,8 +37,10 @@ const Themes = () => {
 
   const onThemeSelect = (i: number) => {
     if (themes[i]) {
-      setTheme(themes[i])
+      setTheme(themes[i].id)
     }
+
+    updateUserPreferences()
   }
 
   return (
@@ -43,7 +48,9 @@ const Themes = () => {
       {transition((styles, t, _t, i) => {
         return (
           <ThemeProvider key={`mex_theme_key_${t.id}`} theme={t.themeData}>
-            <Theme selected={t.id === theme.id} onClick={() => onThemeSelect(i)} style={styles}>
+            {/* eslint-disable-next-line */}
+            {/* @ts-ignore */}
+            <Theme selected={t.id === theme} onClick={() => onThemeSelect(i)} style={styles}>
               <ThemePreview back={t.themeData.backgroundImages ? t.themeData.backgroundImages.app : undefined}>
                 <ThemeColorDots>
                   <div className="primary"></div>

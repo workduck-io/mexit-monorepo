@@ -14,6 +14,7 @@ import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
+import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
@@ -48,7 +49,7 @@ const ContentEditor = () => {
   const infobar = useLayoutStore((store) => store.infobar)
 
   const editorWrapperRef = useRef<HTMLDivElement>(null)
-  // const { debouncedAddLastOpened } = useLastOpened()
+  const { debouncedAddLastOpened } = useLastOpened()
 
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const nodeid = useParams()?.nodeId
@@ -68,7 +69,7 @@ const ContentEditor = () => {
     async (val: any[]) => {
       if (val && nodeid !== '__null__') {
         addOrUpdateValBuffer(nodeid, val)
-        // debouncedAddLastOpened(node.nodeid)
+        debouncedAddLastOpened(nodeid)
       }
     },
     [nodeid]

@@ -1,13 +1,13 @@
+import { nanoid } from 'nanoid'
 import { share } from 'shared-zustand'
 
 import { useAuthStore } from './useAuth'
-import useThemeStore from './useThemeStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
-import { useSnippetStore } from './useSnippetStore'
-import { useReminderStore } from './useReminderStore'
-import { nanoid } from 'nanoid'
 import { useHighlightStore } from './useHighlightStore'
+import { useReminderStore } from './useReminderStore'
+import { useSnippetStore } from './useSnippetStore'
+import { useUserPreferenceStore } from './userPreferenceStore'
 
 // This is required for event driven messaging, as the tabs or in our
 // case a tab and a iframe don't know about their state updates, we
@@ -15,7 +15,6 @@ import { useHighlightStore } from './useHighlightStore'
 // progressive enhancement check.
 if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   // share the property "count" of the state with other tabs
-  share('theme', useThemeStore, { ref: 'share-theme' })
   share('ilinks', useDataStore, { ref: 'share-ilinks' })
   share('namespaces', useDataStore, { ref: 'share-namespaces' })
   share('archive', useDataStore, { ref: 'share-archive' })
@@ -30,6 +29,7 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('reminders', useReminderStore, { ref: 'share-reminders' })
   share('publicNodes', useDataStore, { ref: 'share-publicNodes' })
   share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
+  share('theme', useUserPreferenceStore, { ref: 'share-theme' })
 }
 
 export default {}

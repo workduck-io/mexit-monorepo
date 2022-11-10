@@ -6,6 +6,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHierarchy } from './useHierarchy'
+import { useLastOpened } from './useLastOpened'
 import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
@@ -32,12 +33,14 @@ export const useCreateNewNote = () => {
   const { goTo } = useRouting()
   const addILink = useDataStore((s) => s.addILink)
   const checkValidILink = useDataStore((s) => s.checkValidILink)
-  const getMetadata = useContentStore((s) => s.getMetadata)
   const { saveNodeName } = useLoad()
   const { getParentILink } = useLinks()
   const { addInHierarchy } = useHierarchy()
-  // const { addLastOpened } = useLastOpened()
+  const { addLastOpened } = useLastOpened()
   const { getDefaultNamespace } = useNamespaces()
+
+  const getMetadata = useContentStore((s) => s.getMetadata)
+  const { getSnippet } = useSnippets()
 
   const createNewNote = (options?: NewNoteOptions) => {
     const childNodepath = options?.parent !== undefined ? getUntitledKey(options?.parent.path) : getUntitledDraftKey()
@@ -57,9 +60,10 @@ export const useCreateNewNote = () => {
     const parentNoteId = parentNote?.nodeid
 
     const nodeMetadata = getMetadata(parentNoteId)
-
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
-    const noteContent = options?.noteContent
+    const noteContent =
+      options?.noteContent ||
+      (nodeMetadata?.templateID && parentNote?.path !== 'Drafts' && getSnippet(nodeMetadata.templateID)?.content)
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 
@@ -86,7 +90,7 @@ export const useCreateNewNote = () => {
     }).then(() => {
       saveNodeName(useEditorStore.getState().node.nodeid)
 
-      // addLastOpened(node.nodeid)
+      addLastOpened(node.nodeid)
     })
     if (!options?.noRedirect) {
       push(node.nodeid, { withLoading: false, fetch: false })

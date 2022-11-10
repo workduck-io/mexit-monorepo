@@ -35,9 +35,6 @@ const useModalStore = create<ModalStoreType>((set, get) => ({
   setData: (modalData) => set({ data: modalData }),
   toggleOpen: (modalType, modalData, initialize) => {
     const open = get().open
-    const init = get().init
-
-    // if (init) ipcRenderer.send(IpcAction.SHOW_RELEASE_NOTES)
 
     const changeModalState = open === modalType ? undefined : modalType
     // As only one modal is going to be open at any time, better to reset data on Modal close

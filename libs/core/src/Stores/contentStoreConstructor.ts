@@ -1,5 +1,4 @@
 import { Contents, NodeContent, NodeEditorContent, NodeMetadata } from '../Types/Editor'
-import { mog } from '../Utils/mog'
 
 export interface ContentStoreState {
   contents: Contents

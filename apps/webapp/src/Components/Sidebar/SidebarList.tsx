@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, ChangeEventHandler } from 'react'
 
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon, IconifyIcon } from '@iconify/react'
@@ -6,7 +6,6 @@ import Tippy, { useSingleton } from '@tippyjs/react'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { fuzzySearch, mog } from '@mexit/core'
@@ -59,6 +58,7 @@ export interface SidebarListProps<T> {
   showSearch?: boolean
   searchPlaceholder?: string
   emptyMessage?: string
+  noMargin?: boolean
 }
 
 const SidebarList = ({
@@ -69,7 +69,8 @@ const SidebarList = ({
   defaultItems,
   showSearch,
   searchPlaceholder,
-  emptyMessage
+  emptyMessage,
+  noMargin
 }: SidebarListProps<any>) => {
   const [contextOpenViewId, setContextOpenViewId] = useState<string>(null)
   const [search, setSearch] = useState('')
@@ -79,11 +80,10 @@ const SidebarList = ({
 
   const [source, target] = useSingleton()
 
-  const theme = useTheme()
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
 
-  const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
   }
 
@@ -95,7 +95,6 @@ const SidebarList = ({
     if (inpEl) inpEl.value = ''
     setContextOpenViewId(null)
   }
-
   const onSelectItem = (id: string) => {
     setSelected(-1)
     setContextOpenViewId(null)
@@ -114,7 +113,6 @@ const SidebarList = ({
       }
     }
   }, [search, showSearch, items])
-
   useEffect(() => {
     if (inputRef.current) {
       const unsubscribe = tinykeys(inputRef.current, {
@@ -173,7 +171,7 @@ const SidebarList = ({
   }, [])
 
   return (
-    <SidebarListWrapper>
+    <SidebarListWrapper noMargin={noMargin}>
       <Tippy theme="mex" placement="right" singleton={source} />
 
       {defaultItems &&
@@ -189,7 +187,7 @@ const SidebarList = ({
         ))}
 
       {showSearch && items.length > 0 && (
-        <SidebarListFilter>
+        <SidebarListFilter noMargin={noMargin}>
           <Icon icon={searchLine} />
           <Input
             placeholder={searchPlaceholder ?? 'Filter items'}
@@ -197,7 +195,6 @@ const SidebarList = ({
             ref={inputRef}
             // onKeyUp={debounce(onKeyUpSearch, 250)}
           />
-          <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.colors.text.disabled} />
         </SidebarListFilter>
       )}
 

@@ -184,10 +184,20 @@ export const Label = styled.label<LabelProps>`
   max-width: max-content;
 `
 
-export const ButtonFields = styled.div`
+export const ButtonFields = styled.div<{ position?: string }>`
   display: flex;
   align-items: center;
   margin: ${({ theme }) => theme.spacing.large} 0 ${({ theme }) => theme.spacing.medium};
+  gap: ${({ theme }) => theme.spacing.medium};
+
+  ${({ position }) => {
+    switch (position) {
+      case 'end':
+        return css`
+          justify-content: end;
+        `
+    }
+  }}
 `
 
 export const ReactSelectStyles = (theme: DefaultTheme) => ({
