@@ -27,12 +27,12 @@ const AvatarImage = styled.img`
 
 const AvatarRenderer = () => {
   const theme = useTheme()
-  const { screenshot, setScreenshot } = useSputlitStore()
+  const { screenshot, setScreenshot , avatarSeed , setAvatarSeed} = useSputlitStore()
 
   const randomizeAvatar = () => {
     const imgData = generateAvatar()
-
-    setScreenshot(imgData)
+    setScreenshot(imgData.svg)
+    setAvatarSeed(imgData.seed)
   }
   const downloadAvatar = () => {
     chrome.runtime.sendMessage(
@@ -52,9 +52,9 @@ const AvatarRenderer = () => {
       }
     )
   }
-
+  
   const copyAvatarURL = () => {
-    copyTextToClipboard(screenshot)
+    copyTextToClipboard(`https://avatars.dicebear.com/api/male/${avatarSeed}.svg`)
   }
 
   return (
@@ -65,10 +65,10 @@ const AvatarRenderer = () => {
           <MexIcon noHover icon="pepicons:reload" color={theme.colors.primary} />
           Randomize
         </Button>
-        {/* <Button onClick={copyAvatarURL}>
-          <Icon icon="pepicons:clipboard" />
-          Copy Avatar URL
-        </Button> */}
+        <Button onClick={copyAvatarURL}>
+          <MexIcon noHover icon="pepicons:clipboard" color={theme.colors.primary} />
+          Copy URL
+        </Button>
         <Button onClick={downloadAvatar}>
           <MexIcon noHover icon="pepicons:arrow-down" color={theme.colors.primary} />
           Download
