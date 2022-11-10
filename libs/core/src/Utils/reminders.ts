@@ -80,8 +80,8 @@ export const upcoming = (reminder: Reminder) => {
   return today.getTime() <= reminder.time
 }
 
-export const reminderViewPlaceholderData: any = {
-  id: 'reminder',
+export const ReminderViewData: any = {
+  id: 'reminders',
   title: '',
   filters: [],
   globalJoin: 'all'

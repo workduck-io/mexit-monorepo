@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType, reminderViewPlaceholderData, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, mog, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
 import {
   Heading,
   OverlaySidebarWindowWidth,
@@ -402,8 +402,8 @@ const Tasks = () => {
     if (match && match.params && match.params.viewid) {
       const activeView = currentView ?? getView(match.params.viewid)
       // mog('activeView', { activeView, match, currentView })
-      if (match.params.viewid === 'reminders') {
-        setCurrentView(reminderViewPlaceholderData)
+      if (match.params.viewid === ReminderViewData.id) {
+        setCurrentView(ReminderViewData)
       } else if (activeView) {
         setCurrentView(activeView)
         setCurrentFilters(activeView.filters)

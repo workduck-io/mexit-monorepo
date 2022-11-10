@@ -4,7 +4,7 @@ import home7Line from '@iconify/icons-ri/home-7-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 
-import { reminderViewPlaceholderData } from '@mexit/core'
+import { ReminderViewData } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -26,7 +26,7 @@ const TaskViewList = () => {
   }
   const onOpenReminderView = () => {
     //Doing this as a temporary fix for switching to reminder view
-    setCurrentView(reminderViewPlaceholderData)
+    setCurrentView(ReminderViewData)
     goTo(`${ROUTE_PATHS.reminders}`, NavigationType.push)
   }
 
@@ -34,7 +34,7 @@ const TaskViewList = () => {
     // loadSnippet(id)
     if (viewid === 'default') {
       onOpenDefaultView()
-    } else if (viewid === 'reminder') {
+    } else if (viewid === 'reminders') {
       onOpenReminderView()
     } else {
       const view = views.find((view) => view.id === viewid)
@@ -90,7 +90,7 @@ const TaskViewList = () => {
           },
           {
             label: 'Reminder',
-            id: 'reminder',
+            id: ReminderViewData.id,
             icon: timerFlashLine,
             data: {}
           }
