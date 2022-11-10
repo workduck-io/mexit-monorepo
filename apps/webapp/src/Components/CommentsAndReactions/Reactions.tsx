@@ -72,6 +72,8 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
   const [details, setDetails] = useState<UserReaction[] | null>(null)
   const toggleReaction = (reactionVal: MIcon) => {
     onToggleReaction(reactionVal)
+    setFetchingDetails(false)
+    setDetails(null)
   }
 
   // if (reactions.length > 0) {

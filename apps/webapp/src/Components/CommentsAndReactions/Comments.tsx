@@ -1,28 +1,26 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
-import Plateless from '../Editor/Plateless'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import {
-  CommentActions,
-  CommentAuthor,
-  CommentContentWrapper,
-  CommentHeader,
-  CommentsWrapper,
-  CommentTime,
-  CommentWrapper,
-  NewCommentWrapper
-} from './Comments.style'
-import { Button, IconButton, Title } from '@workduck-io/mex-components'
-import { CommentEditor } from '../CommentEditor'
-import { PlateProvider } from '@udecode/plate'
-import { CommentEditorWrapper } from '../CommentEditor/styled'
-import { Icon } from '@iconify/react'
-import { ProfileImage } from '../User/ProfileImage'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useMentions } from '../../Hooks/useMentions'
-import { tinykeys } from '@workduck-io/tinykeys'
-import { useComments } from '../../Hooks/useComments'
+import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
+import { PlateProvider } from '@udecode/plate'
+import { IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { useMentions } from '../../Hooks/useMentions'
+import { useAuthStore } from '../../Stores/useAuth'
+import { CommentEditor } from '../CommentEditor'
+import { CommentEditorWrapper } from '../CommentEditor/styled'
+import Plateless from '../Editor/Plateless'
+import { ProfileImage } from '../User/ProfileImage'
+import {
+    CommentActions,
+    CommentAuthor,
+    CommentContentWrapper,
+    CommentHeader,
+    CommentsWrapper,
+    CommentTime,
+    CommentWrapper,
+    NewCommentWrapper
+} from './Comments.style'
 
 type OnAddComment = (content: NodeEditorContent) => Promise<void>
 type OnDeleteComment = (nodeid: string, commentId: string) => Promise<void>

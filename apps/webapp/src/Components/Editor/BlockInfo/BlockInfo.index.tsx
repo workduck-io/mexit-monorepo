@@ -85,7 +85,7 @@ export const BlockInfo = (props: any) => {
       .filter((r) => r.count > 0)
       .slice(0, 3)
     // mog('previewReactions', { previewReactions, reactions })
-    const userHasReacted = !!reactions.find((r) => r.userId === useAuthStore.getState().userDetails?.userID)
+    const userHasReacted = !!reactions.find((r) => r.userId?.includes(useAuthStore.getState().userDetails?.userID))
     return { reactions, previewReactions, userHasReacted }
   }, [element?.id, interactive, hover, instanceId])
   const hasReactions = useMemo(() => reactions.length > 0, [reactions])
@@ -101,7 +101,7 @@ export const BlockInfo = (props: any) => {
     const blockId = element?.id
     const currentUserDetail = useAuthStore.getState().userDetails
     const existingUserReaction = reactions.find(
-      (r) => r.userId === currentUserDetail.userID && r.reaction.value === reactionVal.value
+      (r) => r.userId?.includes(currentUserDetail.userID) && r.reaction.value === reactionVal.value
     )
     if (existingUserReaction) {
       deleteReaction(existingUserReaction).then(() => {

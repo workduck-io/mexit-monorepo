@@ -60,7 +60,34 @@ export const useReactions = () => {
       .addReaction(reaction)
       .then((res) => {
         mog('Saved reaction', { res })
-        setReactions([...reactions, { ...reaction, userId: [currentUserDetails.userID], count: 1 }])
+        // Find whether there is a reaction with the same value
+        const prevReaction = reactions.find(
+          (r) =>
+            r.blockId === reaction.blockId &&
+            r.nodeId === reaction.nodeId &&
+            r.reaction.value === reaction.reaction.value
+        )
+        // If there is a reaction with the same value, then update the count and append currentUserId
+        if (prevReaction) {
+          const newReactions = reactions.map((r) => {
+            if (
+              r.blockId === reaction.blockId &&
+              r.nodeId === reaction.nodeId &&
+              r.reaction.value === reaction.reaction.value
+            ) {
+              return {
+                ...r,
+                count: r.count + 1,
+                userId: [...(r.userId ?? []), currentUserDetails.userID]
+              }
+            }
+            return r
+          })
+          setReactions(newReactions)
+        } else {
+          // Otherwise just append the new reaction
+          setReactions([...reactions, { ...reaction, userId: [currentUserDetails.userID], count: 1 }])
+        }
       })
       .catch((err) => {
         mog('Error saving reaction', { err })
@@ -73,14 +100,29 @@ export const useReactions = () => {
     await reactionsAPI
       .deleteReaction(reaction)
       .then((res) => {
-        const newReactions = reactions.filter(
-          (r) =>
-            !(
+        const newReactions = reactions
+          // Filter reactions with only reaction by user
+          .filter(
+            (r) =>
+              !(
+                r.blockId === reaction.blockId &&
+                r.userId?.includes(currentUserDetails.userID) &&
+                r.reaction.value === reaction.reaction.value &&
+                r.count === 1
+              )
+          )
+          // Remove user from userId array and reduce count by 1 for reactions with more than 1 user
+          .map((r) => {
+            if (
               r.blockId === reaction.blockId &&
-              r.userId.includes(currentUserDetails.userID) &&
-              r.reaction.value === reaction.reaction.value
-            )
-        )
+              r.userId?.includes(currentUserDetails.userID) &&
+              r.reaction.value === reaction.reaction.value &&
+              r.count > 1
+            ) {
+              return { ...r, userId: r.userId?.filter((id) => id !== currentUserDetails.userID), count: r.count - 1 }
+            }
+            return r
+          })
         mog('Deleted reaction', { res, reaction })
         setReactions(newReactions)
       })
