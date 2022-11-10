@@ -100,7 +100,9 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
     <Tooltip content={details && details.length > 0 ? <ReactionDetails details={details} /> : null}>
       <ReactionsWrapper onMouseEnter={() => onDelayPerform()}>
         {BlockReactions.map((reaction) => (
-          <ReactionButton onClick={() => toggleReaction(reaction.reaction)} key={reaction.reaction.value}>
+              <ReactionButton
+              userReacted={reaction.userReacted}
+              onClick={() => toggleReaction(reaction.reaction)} key={reaction.reaction.value}>
             <IconDisplay size={20} icon={reaction.reaction} />
             {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
           </ReactionButton>

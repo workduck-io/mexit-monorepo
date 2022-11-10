@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components'
-import { transparentize } from 'polished'
+import { mix, transparentize } from 'polished'
 
 //
 
@@ -27,7 +27,7 @@ export const ReactionsWrapper = styled.div`
   overflow-y: auto;
 `
 
-export const ReactionButton = styled.button`
+export const ReactionButton = styled.button<{ userReacted?: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
@@ -45,6 +45,16 @@ export const ReactionButton = styled.button`
     background: ${({ theme }) => theme.colors.gray[7]};
     animation: ${expandOnClick} 0.2s ease-in-out;
   }
+
+  ${({ userReacted, theme }) =>
+    userReacted &&
+    css`
+      background: linear-gradient(
+        120deg,
+        ${mix(0.0, theme.colors.primary, theme.colors.gray[7])} 0%,
+        ${mix(0.3, theme.colors.primary, theme.colors.gray[8])} 100%
+      );
+    `}
 `
 
 export const ReactionCount = styled.span`

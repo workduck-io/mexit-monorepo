@@ -39,7 +39,12 @@ export const reactionsWithCount = (reactions: Reaction[]) => {
       .filter((r) => r.reaction.value === reaction.value)
       .map((r) => r.count)
       .reduce((a, b) => a + b, 0)
-    return { reaction: reaction, count: count }
+
+    const userReacted = reactions
+      .find((r) => r.reaction.value === reaction.value)
+      ?.userId?.includes(useAuthStore.getState().userDetails?.userID ?? '')
+    // const userReacted = reactions.find((r) => r.reaction.value === reaction.value)
+    return { reaction: reaction, count: count, userReacted }
   })
 }
 
