@@ -33,9 +33,13 @@ export const defaultReactions: MIcon[] = [
 ]
 
 export const reactionsWithCount = (reactions: Reaction[]) => {
+  // mog('reactionsWithCount', { reactions })
   return defaultReactions.map((reaction) => {
-    const count = reactions.filter((r) => r.reaction.value === reaction.value)
-    return { reaction: reaction, count: count.length }
+    const count = reactions
+      .filter((r) => r.reaction.value === reaction.value)
+      .map((r) => r.count)
+      .reduce((a, b) => a + b, 0)
+    return { reaction: reaction, count: count }
   })
 }
 
@@ -51,7 +55,7 @@ export const useReactions = () => {
       .addReaction(reaction)
       .then((res) => {
         mog('Saved reaction', { res })
-        setReactions([...reactions, { ...reaction, userId: currentUserDetails.userID }])
+        setReactions([...reactions, { ...reaction, userId: [currentUserDetails.userID], count: 1 }])
       })
       .catch((err) => {
         mog('Error saving reaction', { err })
@@ -68,7 +72,7 @@ export const useReactions = () => {
           (r) =>
             !(
               r.blockId === reaction.blockId &&
-              r.userId === currentUserDetails.userID &&
+              r.userId.includes(currentUserDetails.userID) &&
               r.reaction.value === reaction.reaction.value
             )
         )
@@ -92,11 +96,12 @@ export const useReactions = () => {
               blockId,
               nodeId,
               // If the user is true, current user added the reaction
-              userId: reaction.user ? useAuthStore.getState().userDetails.userID : undefined,
+              userId: reaction.user ? [useAuthStore.getState().userDetails.userID] : undefined,
               reaction: {
                 type: reaction?.reaction?.split('_')[0],
                 value: reaction?.reaction?.split('_')[1]
-              }
+              },
+              count: reaction?.count
             }))
           })
           .flat()
