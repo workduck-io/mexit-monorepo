@@ -118,8 +118,8 @@ export const BlockInfo = (props: any) => {
     }
   }
 
-  const onDeleteComment = async (commentId: string) => {
-    return deleteComment(commentId)
+  const onDeleteComment = async (nodeid: string, commentId: string) => {
+    return deleteComment(nodeid, commentId)
       .then(() => {
         setInstanceId(nanoid())
       })

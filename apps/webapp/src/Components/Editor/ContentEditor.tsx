@@ -33,6 +33,8 @@ import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
+import { useComments } from '../../Hooks/useComments'
+import { useReactions } from '../../Hooks/useReactions'
 
 const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -40,6 +42,8 @@ const ContentEditor = () => {
   const { saveApiAndUpdate } = useLoad()
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
   const { accessWhenShared } = usePermissions()
+  const { getAllCommentsOfNode } = useComments()
+  const { getAllReactionsOfNode } = useReactions()
 
   const { getDataAPI } = useApi()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
@@ -135,6 +139,8 @@ const ContentEditor = () => {
           } else {
             // * If buffer hasn't changed, refresh the note
             getDataAPI(node.nodeid, false, true)
+            getAllCommentsOfNode(node.nodeid)
+            getAllReactionsOfNode(node.nodeid)
           }
         })
       },

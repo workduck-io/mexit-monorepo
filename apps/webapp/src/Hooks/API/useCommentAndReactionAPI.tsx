@@ -117,15 +117,15 @@ export const useCommentAPI = () => {
     return res.data
   }
 
-  const getComment = async (id: string) => {
-    const res = await client.get(apiURLs.comments.comment(id), {
+  const getComment = async (nodeid: string, id: string) => {
+    const res = await client.get(apiURLs.comments.comment(nodeid, id), {
       headers: workspaceHeaders()
     })
     return res.data
   }
 
-  const deleteComment = async (id: string) => {
-    const res = await client.delete(apiURLs.comments.comment(id), {
+  const deleteComment = async (nodeid: string, id: string) => {
+    const res = await client.delete(apiURLs.comments.comment(nodeid, id), {
       headers: workspaceHeaders()
     })
     return res.data

@@ -192,7 +192,7 @@ export const apiURLs = {
     saveComment: `${BASE_URLS.comment}/`,
 
     /** GET, DELETE */
-    comment: (commentId: string) => `${BASE_URLS.comment}/${commentId}`,
+    comment: (nodeid: string, commentId: string) => `${BASE_URLS.comment}/${nodeid}/${commentId}`,
 
     /** GET, DELETE */
     allNote: (nodeId: string) => `${BASE_URLS.comment}/all/${nodeId}`,

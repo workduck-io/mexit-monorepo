@@ -11,6 +11,7 @@ import {
   ReactionDetailsReactions,
   ReactionDetailsRow,
   ReactionDetailsUser,
+  ReactionDetailsWrapper,
   ReactionsWrapper
 } from './Reactions.style'
 import { useCallback, useMemo, useState } from 'react'
@@ -51,11 +52,11 @@ interface ReactionDetailsProps {
 const ReactionDetails = ({ details }: ReactionDetailsProps) => {
   // mog('ReactionDetailsRender', { details })
   return (
-    <>
+    <ReactionDetailsWrapper>
       {(details ?? []).map((reaction) => (
         <UserReactionRow userReaction={reaction} />
       ))}
-    </>
+    </ReactionDetailsWrapper>
   )
 }
 

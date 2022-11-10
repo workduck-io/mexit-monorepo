@@ -25,7 +25,7 @@ import { useComments } from '../../Hooks/useComments'
 import { RelativeTime } from '@mexit/shared'
 
 type OnAddComment = (content: NodeEditorContent) => Promise<void>
-type OnDeleteComment = (commentId: string) => Promise<void>
+type OnDeleteComment = (nodeid: string, commentId: string) => Promise<void>
 
 interface CommentsProps {
   comments: CommentType[]
@@ -65,7 +65,7 @@ export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
             <IconButton
               icon={deleteBin6Line}
               title="Delete Comment"
-              onClick={() => onDeleteComment(comment.entityId)}
+              onClick={() => onDeleteComment(comment.nodeId, comment.entityId)}
             />
           )}
         </CommentActions>
@@ -133,7 +133,7 @@ export const CommentsComponent = ({ comments, onAddComment, onDeleteComment }: C
       {comments
         .sort((a, b) => {
           if (a.metadata?.createdAt && b.metadata?.createdAt) {
-            return b.metadata?.createdAt - a.metadata?.createdAt
+            return a.metadata?.createdAt - b.metadata?.createdAt
           }
           return 0
         })

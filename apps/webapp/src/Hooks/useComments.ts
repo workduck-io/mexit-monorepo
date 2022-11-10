@@ -33,9 +33,9 @@ export const useComments = () => {
     return
   }
 
-  const deleteComment = async (id: string) => {
+  const deleteComment = async (nodeid: string, id: string) => {
     await commentAPI
-      .deleteComment(id)
+      .deleteComment(nodeid, id)
       .then((res) => {
         // mog('Deleted comment', { res })
         setComments(comments.filter((comment) => comment.entityId !== id))
@@ -76,7 +76,6 @@ export const useComments = () => {
   const getCommentsOfBlock = (blockId: string) => {
     return comments.filter((comment) => comment.blockId === blockId)
   }
-
 
   return { comments, addComment, deleteComment, getAllCommentsOfNode, getCommentsOfBlock }
 }
