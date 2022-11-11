@@ -34,8 +34,11 @@ const useRouteStore = create<RouteStoreType>(
       routes: {},
       setRoute: (routes) => set({ routes }),
       addRouteInfo: (route, info) => {
-        const routes = get().routes
-        set({ routes: { ...routes, [route]: info } })
+        set(
+          produce((draft) => {
+            draft.routes[route] = info
+          })
+        )
       },
       removePreviousRouteInfo: () => {
         const routes = get().routes
@@ -55,22 +58,23 @@ const useRouteStore = create<RouteStoreType>(
         if (routes[route]) {
           const users = routes[route].users
           const banners = routes[route].banners
-          set({
-            routes: {
-              ...routes,
-              [route]: {
-                users: [...users, userId],
-                banners: [...banners.filter((f) => f !== BannerType.editor), BannerType.editor]
-              }
-            }
-          })
+          set(
+            produce((draft) => {
+              draft.routes[route]['users'] = [...users, userId]
+              draft.routes[route]['banners'] = [...banners.filter((f) => f !== BannerType.editor), BannerType.editor]
+            })
+          )
         } else {
           const routeInfo: RouteInformation = {
             users: [userId],
             banners: [BannerType.editor]
           }
 
-          set({ routes: { ...routes, [route]: routeInfo } })
+          set(
+            produce((draft) => {
+              draft.routes[route] = routeInfo
+            })
+          )
         }
       },
       removeUserFromRoute: (route, userId) => {

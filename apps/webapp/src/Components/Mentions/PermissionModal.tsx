@@ -15,7 +15,7 @@ import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useFetchShareData } from '../../Hooks/useFetchShareData'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { compareAccessLevel, getUserAccess, usePermissions } from '../../Hooks/usePermissions'
+import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -86,7 +86,7 @@ export const PermissionModalContent = () => {
   useEffect(() => {
     if (open) {
       // Fetch all user details for the space
-      fetchSharedUsers(id, 'space')
+      fetchSharedUsers(context === 'space' ? id : node.namespace, 'space')
     }
   }, [open, context, id])
 

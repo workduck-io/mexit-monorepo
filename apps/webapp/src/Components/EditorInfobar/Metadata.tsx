@@ -12,7 +12,6 @@ import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
-import { usePermissions } from '../../Hooks/usePermissions'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -53,7 +52,6 @@ const Metadata = ({
   const mentionable = useMentionStore((s) => s.mentionable)
   const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
   const { getSharedUsersOfNodeOfSpace } = useMentions()
-  const { accessWhenShared } = usePermissions()
 
   const isEmpty =
     metadata &&

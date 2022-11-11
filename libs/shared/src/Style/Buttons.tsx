@@ -41,25 +41,11 @@ export const Button = styled.button<ButtonProps>`
   }
 
   &:disabled {
-    background-color: ${({ theme }) => theme.colors.form.button.bg};
+    /* background-color: ${({ theme }) => theme.colors.form.button.bg}; */
     color: ${({ theme }) => transparentize(0.5, theme.colors.form.button.fg)};
     cursor: not-allowed;
     pointer-events: none;
   }
-
-  ${({ primary, transparent, theme }) =>
-    !primary &&
-    transparent &&
-    css`
-      background-color: transparent;
-      &:hover {
-        background-color: ${theme.colors.form.button.bg};
-      }
-      &:disabled {
-        background-color: ${({ theme }) => theme.colors.gray[6]};
-        cursor: default;
-      }
-    `}
 
   ${({ theme: { spacing }, large }) =>
     large
@@ -108,6 +94,20 @@ export const Button = styled.button<ButtonProps>`
           }
         `
       : ''}
+
+       ${({ primary, transparent, theme }) =>
+    !primary &&
+    transparent &&
+    css`
+      background-color: transparent;
+      &:hover {
+        background-color: ${theme.colors.form.button.bg};
+      }
+      &:disabled {
+        background-color: ${({ theme }) => theme.colors.gray[6]};
+        cursor: default;
+      }
+    `}
 `
 
 export type IconButtonProps = {
@@ -147,14 +147,16 @@ export const IconButton = ({
       }
       singleton={singleton}
     >
-      <Button
-        transparent={transparent !== undefined ? transparent : true}
-        disabled={disabled}
-        onClick={onClick}
-        highlight={highlight}
-      >
-        <Icon color={color} icon={icon} height={size} />
-      </Button>
+      <span>
+        <Button
+          transparent={transparent !== undefined ? transparent : true}
+          disabled={disabled}
+          onClick={onClick}
+          highlight={highlight}
+        >
+          <Icon color={color} icon={icon} height={size} />
+        </Button>
+      </span>
     </ToolbarTooltip>
   )
 }

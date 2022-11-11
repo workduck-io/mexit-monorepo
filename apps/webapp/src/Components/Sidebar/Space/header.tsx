@@ -109,8 +109,15 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   const isNamespaceIconDisabled = isNamespaceReserved || isNamespaceReadonly || readOnly
   const isShared = space?.data?.granterID !== undefined
   const isReadonly = space?.data?.access === 'READ'
+  const isWriteOnly = space?.data?.access === 'WRITE'
   const showTags = space?.popularTags && space?.popularTags.length > 0
   const showSeparator = showTags
+
+  const shareSpaceTooltip = () => {
+    if (isWriteOnly) return "You don't have share permission"
+    if (isReadonly) return 'You can only read the contents!'
+    return 'Share Space'
+  }
 
   return (
     <>
@@ -135,9 +142,10 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
           </SpaceTitle>
           {!isNamespaceReserved && (
             <IconButton
-              highlight={isShared && !isReadonly}
-              title={isReadonly ? 'You can only read the contents!' : 'Share Space'}
+              highlight={isShared && !isReadonly && !isWriteOnly}
+              title={shareSpaceTooltip()}
               icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
+              disabled={isWriteOnly}
               onClick={isReadonly ? undefined : onShareSpace}
             />
           )}
