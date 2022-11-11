@@ -8,7 +8,7 @@ import Avatar from 'boring-avatars'
 import md5 from 'md5'
 import styled, { useTheme } from 'styled-components'
 
-import { mog } from '@mexit/core'
+import { AccessLevel, mog } from '@mexit/core'
 import { Centered, CardShadow } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
@@ -93,7 +93,7 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
 interface ProfileImageTooltipProps {
   userid: string
   size: number
-  hideAccess?: boolean
+  access?: AccessLevel
   // Component to replace the default image
   DefaultFallback?: React.ComponentType
 }
@@ -122,7 +122,7 @@ export const ProfileAvatar: React.FC<{ userId: string; size: number }> = ({ user
 }
 
 export const ProfileImageWithToolTip = ({ props, placement, interactive }: ProfileImageWithToolTipProps) => {
-  const { userid, size, DefaultFallback, hideAccess = true } = props // eslint-disable-line react/prop-types
+  const { userid, size, DefaultFallback, access } = props // eslint-disable-line react/prop-types
   const { getUserFromUserid } = useMentions()
   const { getUserDetailsUserId } = useUserService()
 
@@ -143,7 +143,7 @@ export const ProfileImageWithToolTip = ({ props, placement, interactive }: Profi
       interactive={interactive}
       placement={(placement as any) ?? 'auto'}
       appendTo={() => document.body}
-      render={(attrs) => <MentionTooltipComponent user={user} hideAccess={hideAccess} />}
+      render={(attrs) => <MentionTooltipComponent user={user} access={access} hideAccess={!access} />}
     >
       <Centered>
         <ProfileImage size={size} email={user?.email} DefaultFallback={DefaultFallback} />

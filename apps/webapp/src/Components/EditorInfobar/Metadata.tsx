@@ -12,7 +12,7 @@ import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
-import { compareAccessLevel, getUserAccess, isReadonly, usePermissions } from '../../Hooks/usePermissions'
+import { usePermissions } from '../../Hooks/usePermissions'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'

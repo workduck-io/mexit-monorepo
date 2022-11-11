@@ -182,11 +182,10 @@ export const useMentions = () => {
     const users = mentionable
       .filter((mention) => {
         const access = mention.access
-
         return access.note[nodeid] !== undefined || access.space[spaceId] !== undefined
       })
       .sort((a, b) => (a.access.note[nodeid] === 'OWNER' ? -1 : b.access.note[nodeid] === 'OWNER' ? 1 : 0))
-    mog('USERS FOR SPACE', { users })
+
     return users
   }
 

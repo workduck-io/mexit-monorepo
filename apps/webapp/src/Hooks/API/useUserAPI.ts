@@ -74,23 +74,27 @@ export const useUserService = () => {
     if (user) return user
 
     try {
-      return await client.get(apiURLs.user.getFromUserId(userID), { headers: workspaceHeaders() }).then((resp: any) => {
-        // mog('Response', { data: resp.data })
-        if (resp?.data?.email && resp?.data?.name) {
-          addUser({
+      return await client
+        .get(apiURLs.user.getFromUserId(userID), {
+          headers: workspaceHeaders()
+        })
+        .then((resp: any) => {
+          mog('Response', { data: resp.data })
+          if (resp?.data?.email && resp?.data?.name) {
+            addUser({
+              userID,
+              email: resp?.data?.email,
+              alias: resp?.data?.alias ?? resp?.data?.name,
+              name: resp?.data?.name
+            })
+          }
+          return {
             userID,
-            email: resp?.data?.email,
+            email: resp?.data?.email ?? undefined,
             alias: resp?.data?.alias ?? resp?.data?.name,
             name: resp?.data?.name
-          })
-        }
-        return {
-          userID,
-          email: resp?.data?.email ?? undefined,
-          alias: resp?.data?.alias ?? resp?.data?.name,
-          name: resp?.data?.name
-        }
-      })
+          }
+        })
     } catch (e) {
       mog('Error Fetching User Details', { error: e, userID })
       return { userID }
