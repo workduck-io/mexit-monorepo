@@ -21,10 +21,14 @@ export const BlockInfoWrapper = styled.div<{ animate?: boolean }>`
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   font-size: 14px;
   ${({ animate }) =>
-    animate &&
-    css`
-      animation: ${scale} 0.2s;
-    `}
+    animate
+      ? css`
+          animation: ${scale} 0.2s;
+          opacity: 1;
+        `
+      : css`
+          opacity: 0;
+        `}
   position: absolute;
   right: 0;
   top: 0;

@@ -33,7 +33,7 @@ export const BlockInfo = (props: any) => {
 
   const path = useMemo(() => findNodePath(editor, element), [editor, element])
   const isNested = useMemo(() => path && 0 !== path.length - 1, [path])
-  const isEditing = useEditorStore.getState().isEditing
+  const isUserEditing = useEditorStore((state) => state.isEditing)
 
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
@@ -172,7 +172,7 @@ export const BlockInfo = (props: any) => {
       {children}
       {showBlockInfo && !isInline && (
         <BlockInfoWrapper
-          animate={!isEditing}
+          animate={!isUserEditing}
           contentEditable={false}
           className="slate-block-info"
           onMouseEnter={() => setHover(true)}

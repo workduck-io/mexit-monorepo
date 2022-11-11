@@ -12,7 +12,6 @@ const getFavicon = (source: string) => {
 }
 
 export const Source: React.FC<{ source: string }> = ({ source }) => {
-  const isUserEditing = useEditorStore((state) => state.isEditing)
   const icon = getFavicon(source)
 
   const onClick = () => {
@@ -20,7 +19,7 @@ export const Source: React.FC<{ source: string }> = ({ source }) => {
   }
 
   return (
-    <StyledSource $isVisible={!isUserEditing} contentEditable={false} onClick={onClick}>
+    <StyledSource $isVisible={true} contentEditable={false} onClick={onClick}>
       <Tippy
         delay={100}
         interactiveDebounce={100}
