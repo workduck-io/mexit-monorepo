@@ -82,15 +82,16 @@ const useRouteStore = create<RouteStoreType>(
 
         if (routes[route]) {
           const users = routes[route].users
-          const banners = routes[route].banners
-          const userToRemoveAtIndex = users.findIndex((id) => id === userId)
+          const banners = routes[route].banners?.filter((f) => f !== BannerType.editor) ?? []
+          const userToRemoveAtIndex = users?.findIndex((id) => id === userId)
 
           if (userToRemoveAtIndex >= 0) {
-            const newBanners =
-              users.length > 0 ? [...banners, BannerType.editor] : banners.filter((f) => f !== BannerType.editor)
+            const newUsers = users.filter((user, i) => i !== userToRemoveAtIndex)
+            const newBanners = newUsers.length > 0 ? [...banners, BannerType.editor] : banners
+
             set(
               produce((draft) => {
-                draft.routes[route].users.splice(userToRemoveAtIndex, 1)
+                draft.routes[route].users = newUsers
                 draft.routes[route].banners = newBanners
               })
             )

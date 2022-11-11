@@ -18,9 +18,9 @@ import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicEditorWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
 `
 
 const PublicNodeView = () => {
