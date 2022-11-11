@@ -13,6 +13,7 @@ import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { useComments } from '../../../Hooks/useComments'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
 import { useAuthStore } from '../../../Stores/useAuth'
+import { useEditorStore } from '../../../Stores/useEditorStore'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
@@ -32,6 +33,7 @@ export const BlockInfo = (props: any) => {
 
   const path = useMemo(() => findNodePath(editor, element), [editor, element])
   const isNested = useMemo(() => path && 0 !== path.length - 1, [path])
+  const isEditing = useEditorStore.getState().isEditing
 
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
@@ -173,6 +175,7 @@ export const BlockInfo = (props: any) => {
       {children}
       {showBlockInfo && !isInline && (
         <BlockInfoWrapper
+          animate={!isEditing}
           contentEditable={false}
           className="slate-block-info"
           onMouseEnter={() => setHover(true)}

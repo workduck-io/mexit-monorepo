@@ -1,5 +1,5 @@
 import { Button } from '@workduck-io/mex-components'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 const scale = keyframes`
   from {
@@ -13,14 +13,18 @@ const scale = keyframes`
   }
 `
 
-export const BlockInfoWrapper = styled.div`
+export const BlockInfoWrapper = styled.div<{ animate?: boolean }>`
   background: ${({ theme }) => theme.colors.gray[9]};
   z-index: 5;
   color: ${({ theme }) => theme.colors.text.default};
   border-radius: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   font-size: 14px;
-  animation: ${scale} 0.2s;
+  ${({ animate }) =>
+    animate &&
+    css`
+      animation: ${scale} 0.2s;
+    `}
   position: absolute;
   right: 0;
   top: 0;

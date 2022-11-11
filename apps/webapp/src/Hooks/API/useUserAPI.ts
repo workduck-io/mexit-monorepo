@@ -7,6 +7,7 @@ import { version } from '../../../package.json'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { useAPIHeaders } from './useAPIHeaders'
 
 export interface TempUser {
   email: string
@@ -38,12 +39,14 @@ export const useUserService = () => {
   const addUser = useUserCacheStore((s) => s.addUser)
   const getUser = useUserCacheStore((s) => s.getUser)
   const updateUserDetails = useAuthStore((s) => s.updateUserDetails)
+  const { workspaceHeaders } = useAPIHeaders()
+
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
     if (user) return user
 
     try {
-      return await client.get<any>(apiURLs.user.getFromEmail(email)).then((resp) => {
+      return await client.get<any>(apiURLs.user.getFromEmail(email), { headers: workspaceHeaders() }).then((resp) => {
         mog('Response', { data: resp.data })
         if (resp?.data?.userId && resp?.data?.name) {
           addUser({
@@ -71,7 +74,7 @@ export const useUserService = () => {
     if (user) return user
 
     try {
-      return await client.get(apiURLs.user.getFromUserId(userID)).then((resp: any) => {
+      return await client.get(apiURLs.user.getFromUserId(userID), { headers: workspaceHeaders() }).then((resp: any) => {
         // mog('Response', { data: resp.data })
         if (resp?.data?.email && resp?.data?.name) {
           addUser({
@@ -114,13 +117,13 @@ export const useUserService = () => {
     const theme = useUserPreferenceStore.getState().theme
     const smartCaptureExcludedFields = useUserPreferenceStore.getState().smartCaptureExcludedFields
     const userID = useAuthStore.getState().userDetails.userID
-    
+
     const userPreferences: UserPreferences = {
       version,
       lastOpenedNotes,
       lastUsedSnippets,
       smartCaptureExcludedFields,
-      theme,
+      theme
     }
 
     try {
