@@ -20,6 +20,7 @@ const PublicStyledEditor = styled(StyledEditor)`
 
   padding: 0 2rem;
   margin: 1rem;
+  padding-bottom: ${({ theme }) => theme.spacing.large};
 
   && > div {
     width: 100%;
