@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 import message2Line from '@iconify/icons-ri/message-2-line'
 import { Icon } from '@iconify/react'
 import { getIconType, Popover, StringToMIcon } from '@mexit/shared'
-import { isSelectionExpanded } from '@udecode/plate'
+import { findNodePath, isSelectionExpanded } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import { useFocused, useSelected } from 'slate-react'
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
@@ -26,13 +26,17 @@ import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './Bloc
  * Comment
  */
 export const BlockInfo = (props: any) => {
-  const { children, element, attributes } = props
+  const { children, element, attributes, editor } = props
   const selected = useSelected()
   const focused = useFocused()
+
+  const path = useMemo(() => findNodePath(editor, element), [editor, element])
+  const isNested = useMemo(() => path && 0 !== path.length - 1, [path])
 
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
+  // const isTable = useMemo(() => attributes['data-slate-table'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
   const { getBlockReactionDetails } = useReactionAPI()
@@ -150,15 +154,21 @@ export const BlockInfo = (props: any) => {
     return userReactions as UserReaction[]
   }
 
-  // mog('BlockInfo', {
-  //   id: element?.id,
-  //   ed: props?.editor,
-  //   showBlockInfo,
-  //   hasComments,
-  //   interactive
-  // })
+  //   mog('BlockInfo', {
+  //     element,
+  //     showBlockInfo,
+  //     hasComments,
+  //     isInline,
+  //     props,
+  //     isNested,
+  //     path,
+  //     interactive
+  //   })
 
-  return (
+  // Do not wrap the blockinfo around the inline / nested elements
+  return isInline || isNested ? (
+    <>{children}</>
+  ) : (
     <BlockInfoBlockWrapper {...attributes}>
       {children}
       {showBlockInfo && !isInline && (
