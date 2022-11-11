@@ -93,6 +93,7 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
 interface ProfileImageTooltipProps {
   userid: string
   size: number
+  hideAccess?: boolean
   // Component to replace the default image
   DefaultFallback?: React.ComponentType
 }
@@ -100,6 +101,7 @@ interface ProfileImageTooltipProps {
 interface ProfileImageWithToolTipProps {
   props: ProfileImageTooltipProps
   placement?: string
+  interactive?: boolean
 }
 
 export const ProfileAvatar: React.FC<{ userId: string; size: number }> = ({ userId, size }) => {
@@ -119,8 +121,8 @@ export const ProfileAvatar: React.FC<{ userId: string; size: number }> = ({ user
   return <ProfileImage size={size} email={user?.email} />
 }
 
-export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {
-  const { userid, size, DefaultFallback } = props // eslint-disable-line react/prop-types
+export const ProfileImageWithToolTip = ({ props, placement, interactive }: ProfileImageWithToolTipProps) => {
+  const { userid, size, DefaultFallback, hideAccess = true } = props // eslint-disable-line react/prop-types
   const { getUserFromUserid } = useMentions()
   const { getUserDetailsUserId } = useUserService()
 
@@ -138,9 +140,10 @@ export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithTo
     <Tippy
       delay={100}
       interactiveDebounce={100}
+      interactive={interactive}
       placement={(placement as any) ?? 'auto'}
       appendTo={() => document.body}
-      render={(attrs) => <MentionTooltipComponent user={user} hideAccess />}
+      render={(attrs) => <MentionTooltipComponent user={user} hideAccess={hideAccess} />}
     >
       <Centered>
         <ProfileImage size={size} email={user?.email} DefaultFallback={DefaultFallback} />

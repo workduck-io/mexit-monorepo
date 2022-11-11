@@ -84,5 +84,5 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
     margin-top: ${({ theme }) => theme.spacing.small};
   }
 
-  ${({ $isVisible }) => FadeInOut($isVisible)}
+  /* ${({ $isVisible }) => FadeInOut($isVisible)} */
 `

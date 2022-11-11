@@ -27,10 +27,12 @@ import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
 import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
+import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'
+import { useDataStore } from '../../../Stores/useDataStore'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import useRouteStore, { BannerType } from '../../../Stores/useRouteStore'
 import { SocketActionType } from '../../../Types/Socket'
@@ -75,6 +77,8 @@ const EditorPreview = ({
   const { loadNode, getNoteContent } = useLoad()
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const { goTo } = useRouting()
+  const { accessWhenShared } = usePermissions()
+  const _hasHydrated = useDataStore((state) => state._hasHydrated)
 
   const cc = useMemo(() => {
     const nodeContent = getNoteContent(nodeid)
@@ -104,6 +108,11 @@ const EditorPreview = ({
 
   const theme = useTheme()
   const showPreview = !checkIfAlreadyPresent(nodeid)
+
+  const viewOnly = useMemo(() => {
+    const access = accessWhenShared(nodeid)
+    return isReadonly(access)
+  }, [nodeid, _hasHydrated])
 
   if (cc) {
     return (
@@ -147,7 +156,7 @@ const EditorPreview = ({
                 </EditorPreviewControls>
               )}
               <EditablePreview
-                editable={editable}
+                editable={editable && !viewOnly}
                 onClose={close}
                 id={nodeid}
                 blockId={blockId}

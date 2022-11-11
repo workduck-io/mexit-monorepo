@@ -99,6 +99,7 @@ export const apiURLs = {
     // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
     create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
     update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    delete: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
     makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
     makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
     getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,

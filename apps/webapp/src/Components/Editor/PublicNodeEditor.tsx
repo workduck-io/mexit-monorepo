@@ -26,7 +26,7 @@ const PublicStyledEditor = styled(StyledEditor)`
   }
 `
 
-const PublicNodeEditor = ({ nodeId, node }) => {
+const PublicNodeEditor = ({ nodeId, node, namespaceId }) => {
   const editorRef = usePlateEditorRef()
 
   const onFocusClick = () => {
@@ -41,7 +41,7 @@ const PublicNodeEditor = ({ nodeId, node }) => {
         <Link to={'/'}>{node?.title}</Link>
       </Title>
 
-      {node && <Metadata nodeId={nodeId} publicMetadata={node?.metadata} />}
+      {node && <Metadata namespaceId={namespaceId} nodeId={nodeId} publicMetadata={node?.metadata} />}
 
       <EditorWrapper onClick={onFocusClick}>
         <Editor

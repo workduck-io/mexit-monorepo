@@ -12,6 +12,7 @@ import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
+import { compareAccessLevel, getUserAccess, isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -29,11 +30,19 @@ export const Data = styled.div`
 
 interface MetadataProps {
   nodeId: string
+  namespaceId: string
   fadeOnHover?: boolean
   publicMetadata?: NodeMetadata
+  hideShareDetails?: boolean
 }
 
-const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
+const Metadata = ({
+  nodeId,
+  namespaceId,
+  hideShareDetails = false,
+  fadeOnHover = true,
+  publicMetadata
+}: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
   const getContent = useContentStore((state) => state.getContent)
   const location = useLocation()
@@ -42,8 +51,9 @@ const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
   const mentionable = useMentionStore((s) => s.mentionable)
-  const activeUsers = useRouteStore.getState().routes[location.pathname]?.users ?? []
-  const { getSharedUsersForNode } = useMentions()
+  const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
+  const { getSharedUsersOfNodeOfSpace } = useMentions()
+  const { accessWhenShared } = usePermissions()
 
   const isEmpty =
     metadata &&
@@ -58,21 +68,19 @@ const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps)
     setMetadata(contentMetadata)
   }, [nodeId, content, content?.metadata])
 
-  mog('ACTIVE USERS', { activeUsers, mentionable })
-
   const sharedUsers = useMemo(() => {
-    const sharedUsersOfNode = getSharedUsersForNode(nodeId)
-
+    const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
+    mog('ACTIVE USERS', { activeUsers, mentionable })
     return sharedUsersOfNode
       .map((user) => ({ userId: user.userID, active: activeUsers.includes(user.userID) }))
       .sort((a, b) => Number(a.active) - Number(b.active))
-  }, [location, activeUsers, mentionable, nodeId])
+  }, [location, activeUsers, mentionable, namespaceId, nodeId])
 
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
     return null
 
   return (
-    <MetadataWrapper $fadeOnHover={fadeOnHover} $isVisible={!isUserEditing}>
+    <MetadataWrapper $isVisible={!isUserEditing}>
       <FlexBetween>
         <DataGroup>
           {metadata.lastEditedBy !== undefined && (
@@ -94,7 +102,7 @@ const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps)
             </DataWrapper>
           )}
         </DataGroup>
-        {!publicMetadata && (
+        {!publicMetadata && !hideShareDetails && (
           <Data>
             <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
             <Menu values={<MexIcon noHover icon="bi:three-dots-vertical" width={20} height={20} />}>

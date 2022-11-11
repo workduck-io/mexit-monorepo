@@ -1,4 +1,4 @@
-import { AccessLevel, mog, ShareContext, SHARED_NAMESPACE } from '@mexit/core'
+import { AccessLevel, AccessLevelPrority, ShareContext, SHARED_NAMESPACE } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useNamespaces } from './useNamespaces'
@@ -25,6 +25,7 @@ export const usePermissions = () => {
     let hasAccess = false
     const sharedNodes = useDataStore.getState().sharedNodes
     const res = sharedNodes.find((n) => n.nodeid === nodeid)
+
     if (res) {
       hasAccess = true
       access['note'] = res.currentUserAccess
@@ -45,8 +46,26 @@ export const usePermissions = () => {
   return { accessWhenShared }
 }
 
+export const getUserAccess = (user, context, nodeId, namespaceId) => {
+  const isContextNote = context === 'note'
+
+  const noteAccess = user?.access?.note?.[nodeId]
+  const noteAccessFromSpace = user?.access?.space?.[namespaceId]
+
+  if (!isContextNote) return noteAccessFromSpace
+
+  return compareAccessLevel(noteAccess, noteAccessFromSpace)
+}
+
 export const isReadonly = (access: NodeAccess | undefined) => {
   if (!access) return true
-  if (access?.note) return access?.note === 'READ'
-  return access?.space === 'READ'
+  const accessLevel = compareAccessLevel(access.note, access.space)
+  return accessLevel === 'READ'
+}
+
+export const compareAccessLevel = (node: AccessLevel, space: AccessLevel): AccessLevel => {
+  if (!space) return node
+
+  if (AccessLevelPrority[node] > AccessLevelPrority[space]) return node
+  return space
 }

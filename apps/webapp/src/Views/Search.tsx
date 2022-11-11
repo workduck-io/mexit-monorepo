@@ -164,7 +164,7 @@ const Search = () => {
             </ResultMain>
             {(!splitOptions || splitOptions.type === SplitType.NONE) && (
               <ResultMetaData>
-                <Metadata fadeOnHover={false} nodeId={edNode?.nodeid} />
+                <Metadata fadeOnHover={false} namespaceId={edNode?.namespace} nodeId={edNode?.nodeid} />
               </ResultMetaData>
             )}
           </ResultRow>
@@ -213,7 +213,7 @@ const Search = () => {
           <Title onMouseUp={(e) => onDoubleClick(e, item)}>
             <Icon icon={icon} />
             <TitleText>{node.path}</TitleText>
-            <Metadata fadeOnHover={false} nodeId={edNode.nodeid} />
+            <Metadata namespaceId={node.namespace} fadeOnHover={false} nodeId={edNode.nodeid} />
           </Title>
           <EditorPreviewRenderer
             content={content}

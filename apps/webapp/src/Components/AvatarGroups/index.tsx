@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ProfileAvatar } from '../User/ProfileImage'
+import { ProfileImageWithToolTip } from '../User/ProfileImage'
 import { AvatarGroupContainer, ProfileAvatarContainer } from './styled'
 
 type UserAvatarType = {
@@ -26,7 +26,7 @@ const AvatarGroups: React.FC<AvatarGroupsPropsType> = ({ users, margin, limit = 
         if (user)
           return (
             <ProfileAvatarContainer offline={!user.active} key={`mex-user-${user.userId}${index}`}>
-              <ProfileAvatar userId={user.userId} size={20} />
+              <ProfileImageWithToolTip interactive placement="bottom" props={{ userid: user.userId, size: 20 }} />
             </ProfileAvatarContainer>
           )
         return <></>

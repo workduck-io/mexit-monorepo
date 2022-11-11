@@ -13,11 +13,14 @@ import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
+import { useComments } from '../../Hooks/useComments'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
-import { usePermissions, isReadonly } from '../../Hooks/usePermissions'
+import { useNamespaces } from '../../Hooks/useNamespaces'
+import { usePermissions, isReadonly, compareAccessLevel } from '../../Hooks/usePermissions'
+import { useReactions } from '../../Hooks/useReactions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
@@ -35,8 +38,6 @@ import NavBreadCrumbs from '../NavBreadcrumbs'
 import Banner from './Banner'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
-import { useComments } from '../../Hooks/useComments'
-import { useReactions } from '../../Hooks/useReactions'
 
 const ContentEditor = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
@@ -56,6 +57,7 @@ const ContentEditor = () => {
 
   const editorWrapperRef = useRef<HTMLDivElement>(null)
   const { debouncedAddLastOpened } = useLastOpened()
+  const { getNamespaceOfNodeid } = useNamespaces()
 
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const nodeid = useParams()?.nodeId
@@ -177,6 +179,13 @@ const ContentEditor = () => {
     goTo(ROUTE_PATHS.namespaceShare, NavigationType.replace, 'NODE_ID_OF_SHARED_NODE')
   }
 
+  const hideShareDetails = () => {
+    const access = accessWhenShared(nodeid)
+    const accessPriority = compareAccessLevel(access?.note, access?.space)
+
+    return accessPriority !== 'MANAGE' && accessPriority !== 'OWNER'
+  }
+
   return (
     <>
       <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
@@ -189,7 +198,15 @@ const ContentEditor = () => {
         )}
         <NavBreadCrumbs nodeId={nodeid} />
         <Toolbar />
-        {isBlockMode ? <BlockInfoBar /> : <Metadata nodeId={nodeid} />}
+        {isBlockMode ? (
+          <BlockInfoBar />
+        ) : (
+          <Metadata
+            hideShareDetails={hideShareDetails()}
+            namespaceId={getNamespaceOfNodeid(nodeid)?.id}
+            nodeId={nodeid}
+          />
+        )}
 
         <EditorWrapper
           comboboxOpen={isComboOpen}

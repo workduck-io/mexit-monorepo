@@ -1,5 +1,8 @@
+import { produce } from 'immer'
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
+
+import { mog } from '@mexit/core'
 
 type Route = string
 
@@ -79,18 +82,14 @@ const useRouteStore = create<RouteStoreType>(
           const userToRemoveAtIndex = users.findIndex((id) => id === userId)
 
           if (userToRemoveAtIndex >= 0) {
-            users.splice(userToRemoveAtIndex, 1)
             const newBanners =
               users.length > 0 ? [...banners, BannerType.editor] : banners.filter((f) => f !== BannerType.editor)
-            set({
-              routes: {
-                ...routes,
-                [route]: {
-                  users,
-                  banners: newBanners
-                }
-              }
-            })
+            set(
+              produce((draft) => {
+                draft.routes[route].users.splice(userToRemoveAtIndex, 1)
+                draft.routes[route].banners = newBanners
+              })
+            )
           }
         }
       },

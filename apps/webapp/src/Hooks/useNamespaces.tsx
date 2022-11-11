@@ -10,7 +10,6 @@ import {
   Mentionable
 } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
 import { useNamespaceApi } from './API/useNamespaceAPI'

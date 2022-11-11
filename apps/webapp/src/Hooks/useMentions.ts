@@ -15,7 +15,6 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useNodeShareAPI } from './API/useNodeShareAPI'
-import { useNodes } from './useNodes'
 
 export const useMentions = () => {
   const { grantUsersPermission } = useNodeShareAPI()
@@ -178,6 +177,19 @@ export const useMentions = () => {
     return users
   }
 
+  const getSharedUsersOfNodeOfSpace = (nodeid: string, spaceId: string) => {
+    const mentionable = useMentionStore.getState().mentionable
+    const users = mentionable
+      .filter((mention) => {
+        const access = mention.access
+
+        return access.note[nodeid] !== undefined || access.space[spaceId] !== undefined
+      })
+      .sort((a, b) => (a.access.note[nodeid] === 'OWNER' ? -1 : b.access.note[nodeid] === 'OWNER' ? 1 : 0))
+    mog('USERS FOR SPACE', { users })
+    return users
+  }
+
   const getInvitedUsers = (id: string, context: ShareContext): InvitedUser[] => {
     const invitedUsers = useMentionStore.getState().invitedUsers
     const users = invitedUsers.filter((mention) => mention.access[context][id] !== undefined)
@@ -256,6 +268,7 @@ export const useMentions = () => {
     addMentionable,
     getUserAccessLevelForNode,
     getSharedUsersForNode,
+    getSharedUsersOfNodeOfSpace,
     getInvitedUsers,
     grantUserAccessOnMention,
     applyChangesMentionable
