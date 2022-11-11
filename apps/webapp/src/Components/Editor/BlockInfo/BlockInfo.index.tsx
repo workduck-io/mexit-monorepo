@@ -209,7 +209,7 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton onClick={() => setInteractive(true)} transparent primary={userHasComments}>
+              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!userHasComments}>
                 <Icon icon={message2Line} />
                 {hasComments && comments.length}
               </BlockInfoButton>

@@ -107,7 +107,7 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
             onClick={() => toggleReaction(reaction.reaction)}
             key={reaction.reaction.value}
           >
-            <IconDisplay size={20} icon={reaction.reaction} />
+            <IconDisplay size={16} icon={reaction.reaction} />
             {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
           </ReactionButton>
         ))}
