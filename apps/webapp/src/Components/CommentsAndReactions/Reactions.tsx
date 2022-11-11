@@ -14,9 +14,10 @@ import {
   ReactionDetailsWrapper,
   ReactionsWrapper
 } from './Reactions.style'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useMentions } from '../../Hooks/useMentions'
 import { ProfileImage } from '../User/ProfileImage'
+import Sparkles from './Sparkle'
 
 interface UserReactionRowProps {
   userReaction: UserReaction
@@ -62,7 +63,7 @@ const ReactionDetails = ({ details }: ReactionDetailsProps) => {
 
 interface ReactionsProps {
   reactions: ReactionType[]
-  onToggleReaction: (reactionVal: MIcon) => void
+  onToggleReaction: (reactionVal: MIcon) => Promise<void>
   getReactionDetails?: () => Promise<UserReaction[]>
 }
 
@@ -70,11 +71,22 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
   const BlockReactions = reactionsWithCount(reactions)
   const [fetchingDetails, setFetchingDetails] = useState(false)
   const [details, setDetails] = useState<UserReaction[] | null>(null)
+  const [sparkle, setSparkle] = useState<MIcon | null>(null)
+
   const toggleReaction = (reactionVal: MIcon) => {
-    onToggleReaction(reactionVal)
-    setFetchingDetails(false)
-    setDetails(null)
+    setSparkle(reactionVal)
+    onToggleReaction(reactionVal).then(() => {
+      setFetchingDetails(false)
+      setDetails(null)
+    })
   }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSparkle(null)
+    }, 1000)
+    return () => clearTimeout(timeout)
+  }, [sparkle])
 
   // if (reactions.length > 0) {
   //   mog('BlockReactions', { BlockReactions, reactions })
@@ -102,14 +114,20 @@ export const Reactions = ({ reactions, onToggleReaction, getReactionDetails }: R
     <Tooltip content={details && details.length > 0 ? <ReactionDetails details={details} /> : null}>
       <ReactionsWrapper onMouseEnter={() => onDelayPerform()}>
         {BlockReactions.map((reaction) => (
-          <ReactionButton
-            userReacted={reaction.userReacted}
-            onClick={() => toggleReaction(reaction.reaction)}
-            key={reaction.reaction.value}
+          <Sparkles
+            count={3}
+            icon={reaction?.reaction?.value}
+            show={sparkle && sparkle?.value === reaction?.reaction?.value}
           >
-            <IconDisplay size={16} icon={reaction.reaction} />
-            {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
-          </ReactionButton>
+            <ReactionButton
+              userReacted={reaction.userReacted}
+              onClick={() => toggleReaction(reaction.reaction)}
+              key={reaction.reaction.value}
+            >
+              <IconDisplay size={16} icon={reaction.reaction} />
+              {reaction.count > 0 && <ReactionCount>{reaction.count}</ReactionCount>}
+            </ReactionButton>
+          </Sparkles>
         ))}
       </ReactionsWrapper>
     </Tooltip>

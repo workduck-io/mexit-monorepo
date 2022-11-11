@@ -101,7 +101,7 @@ export const BlockInfo = (props: any) => {
     return (mergedSelected && focused) || interactive || hasComments || hasReactions || hasMetadata
   }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive, instanceId])
 
-  const onToggleReaction = (reactionVal: MIcon) => {
+  const onToggleReaction = async (reactionVal: MIcon) => {
     // mog('Toggling reaction', { reactionVal, props })
     const nodeid = getNodeIdFromEditor(props?.editor?.id)
     const blockId = element?.id
@@ -110,18 +110,15 @@ export const BlockInfo = (props: any) => {
       (r) => r.userId?.includes(currentUserDetail.userID) && r.reaction.value === reactionVal.value
     )
     if (existingUserReaction) {
-      deleteReaction(existingUserReaction).then(() => {
-        setInstanceId(nanoid())
-      })
+      await deleteReaction(existingUserReaction)
     } else {
-      addReaction({
+      await addReaction({
         nodeId: nodeid,
         blockId,
         reaction: reactionVal
-      }).then(() => {
-        setInstanceId(nanoid())
       })
     }
+    setInstanceId(nanoid())
   }
 
   const onDeleteComment = async (nodeid: string, commentId: string) => {

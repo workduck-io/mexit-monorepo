@@ -24,7 +24,6 @@ export const ReactionsWrapper = styled.div`
   backdrop-filter: blur(10px);
 
   max-height: 50vh;
-  overflow-y: auto;
 `
 
 export const ReactionButton = styled.button<{ userReacted?: boolean }>`
