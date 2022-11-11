@@ -1,5 +1,13 @@
 # mexit
 
+## 0.18.6
+
+### Patch Changes
+
+- 74a71866: Route Based Online Users
+- 4b0c600f: add copy url button in avatar generator
+- fa78e83c: Templated Notes; User Preferences Sync with Cloud
+
 ## 0.18.5
 
 ### Patch Changes
