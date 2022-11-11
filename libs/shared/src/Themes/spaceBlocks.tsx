@@ -58,7 +58,6 @@ export const SpaceBlocksCss = (props: SpaceProps) => {
   const edStyles = css`
     ${StyledEditor} {
       margin: 0 auto;
-      height: calc(100vh - 4rem);
       padding-top: 1rem;
       ${containerStyle}
     }

@@ -1,5 +1,5 @@
 // import { MexNodeIcons } from 'src/components/icons/Icons'
-import { isElder, BASE_DRAFT_PATH, BASE_TASKS_PATH } from '@mexit/core'
+import { isElder, BASE_DRAFT_PATH, BASE_TASKS_PATH, MIcon, iconTypes } from '@mexit/core'
 
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH) || path === BASE_DRAFT_PATH) {
@@ -21,4 +21,14 @@ export const FilterTypeIcons = {
   state: 'ri:checkbox-circle-line',
   has: 'ri:shape-line',
   domain: 'ri:earth-line'
+}
+
+export const StringToMIcon = (iconString: string): MIcon | undefined => {
+  const [type, value] = iconString.split('_')
+  return iconTypes.includes(type as any)
+    ? ({
+        type,
+        value
+      } as MIcon)
+    : undefined
 }

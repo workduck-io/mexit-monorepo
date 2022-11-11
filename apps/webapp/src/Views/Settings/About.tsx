@@ -10,11 +10,7 @@ import { CenteredColumn, Title } from '@mexit/shared'
 import { BackCard } from '@mexit/shared'
 
 import { version } from '../../../package.json'
-
-// import { BackCard } from '../../../style/Card'
-// import { CenteredColumn } from '../../../style/Layouts'
-// import { Title } from '../../../style/Typography'
-// import { NavigationType, ROUTE_PATHS, useRouting } from '../../../views/routes/urls'
+import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'
 
 const Margin = styled.div`
   margin: 0.5rem 1rem;
@@ -41,9 +37,11 @@ const Flex = styled.div`
 `
 
 const About = () => {
+  // Comment PRODUCTION
+
   return (
     <>
-      {/* <Screenshot /> */}
+      <APIScratchpad />
       <CenteredColumn>
         <BackCard>
           <Title colored>Mexit</Title>

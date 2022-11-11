@@ -1,13 +1,13 @@
 import { PlateEditor, PlatePlugin, queryNode, TNode, Value } from '@udecode/plate'
+import { BlockInfo } from '../../Components/Editor/BlockInfo/BlockInfo.index'
 
-import { SourceInfo } from '../../Components/SourceInfo'
-
-export const SOURCE_PLUGIN = 'BLOCK_MODIFIER_PLUGIN'
+export const BLOCK_MODIFIER_PLUGIN = 'BLOCK_MODIFIER_PLUGIN'
 
 const withSourceOverride = <V extends Value = Value, E extends PlateEditor<V> = PlateEditor<V>>(editor: E) => {
   const { apply } = editor
 
   editor.apply = (operation) => {
+    // Preserve the source info when splitting
     if (operation.type === 'split_node') {
       const node = operation.properties as TNode
 
@@ -30,10 +30,12 @@ const withSourceOverride = <V extends Value = Value, E extends PlateEditor<V> = 
   return editor
 }
 
+/** Shows share link, comments and reactions attached to the block */
 export const createBlockModifierPlugin = (): PlatePlugin => ({
-  key: SOURCE_PLUGIN,
+  key: BLOCK_MODIFIER_PLUGIN,
   withOverrides: withSourceOverride,
+  isInline: false,
   inject: {
-    aboveComponent: () => SourceInfo
+    aboveComponent: () => BlockInfo
   }
 })

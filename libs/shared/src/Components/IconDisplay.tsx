@@ -12,7 +12,7 @@ interface IconDisplayProps {
 }
 
 export const IconDisplay = ({ icon, size }: IconDisplayProps) => {
-  if (!icon) return
+  if (!icon) return null
 
   return (
     <IconWrapper size={size}>
@@ -20,7 +20,7 @@ export const IconDisplay = ({ icon, size }: IconDisplayProps) => {
         {
           EMOJI: <span>{icon.value}</span>,
           ICON: <Icon icon={icon.value} />,
-          URL: <img src={icon.value} />
+          URL: <img alt="Icon" src={icon.value} />
         }[icon.type]
       }
     </IconWrapper>

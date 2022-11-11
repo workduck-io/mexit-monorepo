@@ -76,9 +76,12 @@ import { PlateFloatingLink } from '../Components/FloatingLink'
 import { useAuth } from '@workduck-io/dwindle'
 
 export type PluginOptionType = {
-  exclude: {
+  exclude?: {
     dnd?: boolean
     mentions?: boolean
+  }
+  include?: {
+    blockModifier?: boolean
   }
   uploadImage?: (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 }
@@ -162,7 +165,9 @@ export const generatePlugins = (options: PluginOptionType) => {
       }
     }),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
-    createBlockModifierPlugin(),
+
+    // Shows share link, comments and reactions attached to the block
+    options?.include?.blockModifier !== true ? undefined : createBlockModifierPlugin(),
 
     // serialization / deseriailization
 
@@ -206,7 +211,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createMentionPlugin(), // Mentions
 
     createTaskViewLinkPlugin() // Task View Links
-  ]
+  ].filter((p) => p !== undefined)
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins
 
@@ -214,7 +219,7 @@ export const generatePlugins = (options: PluginOptionType) => {
 }
 
 export const generateEditorPluginsWithComponents = (components: Record<string, any>, options?: PluginOptionType) => {
-  const wrappedComponents = options?.exclude.dnd
+  const wrappedComponents = options?.exclude?.dnd
     ? components
     : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
 
@@ -229,7 +234,7 @@ export const useEditorPlugins = (components: Record<string, any>, options?: Plug
   const { uploadImageToS3 } = useAuth()
   const { uploadImageToWDCDN } = useUploadToCDN(uploadImageToS3)
 
-  const wrappedComponents = options?.exclude.dnd
+  const wrappedComponents = options?.exclude?.dnd
     ? components
     : withStyledDraggables(withStyledPlaceHolders(withBlockOptions(components, {})))
 
@@ -245,4 +250,3 @@ export const useEditorPlugins = (components: Record<string, any>, options?: Plug
 
   return plugins
 }
-

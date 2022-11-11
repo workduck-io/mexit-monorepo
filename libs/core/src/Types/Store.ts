@@ -13,9 +13,10 @@ import {
 } from './Editor'
 import { AccessLevel } from './Mentions'
 
+export const iconTypes = ['URL', 'ICON', 'EMOJI'] as const
 // M stands for Multi/Mex/Many (yet to decide)
 export interface MIcon {
-  type: 'URL' | 'ICON' | 'EMOJI'
+  type: typeof iconTypes[number]
   value: string
 }
 

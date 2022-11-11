@@ -65,8 +65,6 @@ interface StyledEditorProps {
 
 export const EditorWrapper = styled.div<{ comboboxOpen?: boolean; isUserEditing?: boolean }>`
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   ${({ isUserEditing }) => ScrollStyles(isUserEditing ? 'transparent' : undefined)}
   ${({ comboboxOpen }) =>
     comboboxOpen &&
@@ -94,7 +92,22 @@ export const CenteredMainContent = styled.div`
   }
 `
 
-export const StyledEditor = styled(CenteredMainContent)<StyledEditorProps>``
+export const StyledEditor = styled.div<StyledEditorProps>`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.medium};
+  padding: 0 ${({ theme }) => theme.spacing.medium};
+  margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
+  width: 100%;
+  max-width: 860px;
+  min-width: 400px;
+  flex: 1;
+
+  && > div {
+    width: 100%;
+  }
+`
 
 export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
   display: flex;

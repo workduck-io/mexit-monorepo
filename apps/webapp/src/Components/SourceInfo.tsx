@@ -11,8 +11,7 @@ const getFavicon = (source: string) => {
   return `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${source}&size=32`
 }
 
-const Source: React.FC<{ source: string }> = ({ source }) => {
-  const isUserEditing = useEditorStore((state) => state.isEditing)
+export const Source: React.FC<{ source: string }> = ({ source }) => {
   const icon = getFavicon(source)
 
   const onClick = () => {
@@ -20,40 +19,17 @@ const Source: React.FC<{ source: string }> = ({ source }) => {
   }
 
   return (
-    <StyledSource $isVisible={!isUserEditing} contentEditable={false} onClick={onClick}>
-      <ProjectIconContainer isView={false}>
-        <Tippy
-          delay={100}
-          interactiveDebounce={100}
-          placement="top"
-          appendTo={() => document.body}
-          theme="mex-bright"
-          content={source}
-        >
-          <ProjectIconMex icon={icon} isMex={false} size={20} />
-        </Tippy>
-      </ProjectIconContainer>
+    <StyledSource $isVisible={true} contentEditable={false} onClick={onClick}>
+      <Tippy
+        delay={100}
+        interactiveDebounce={100}
+        placement="top"
+        appendTo={() => document.body}
+        theme="mex-bright"
+        content={source}
+      >
+        <ProjectIconMex icon={icon} isMex={false} />
+      </Tippy>
     </StyledSource>
   )
-}
-
-export const SourceInfo = (props: any) => {
-  const { children, element, attributes } = props
-
-  if (element?.blockMeta || element?.metadata?.elementMetadata) {
-    const iconSource = element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl
-    const icon = iconSource && getIconType(iconSource)
-
-    if (!icon?.mexIcon)
-      return (
-        <SourceInfoWrapper {...attributes}>
-          <Source source={element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl} />
-          {children}
-        </SourceInfoWrapper>
-      )
-
-    return children
-  }
-
-  return children
 }

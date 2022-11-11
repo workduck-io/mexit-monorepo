@@ -21,7 +21,7 @@ export const ProjectIconContainer = styled.span<{ isView: boolean }>`
           display: flex;
           align-items: center;
         `}
-  
+
   font-size: 0.9rem;
 
   img {
@@ -73,10 +73,6 @@ export const StyledSource = styled.div<{ $isVisible?: boolean }>`
   align-items: center;
   justify-content: center;
 
-  z-index: 2;
-  position: absolute;
-  left: 98%;
-
   cursor: pointer;
   user-select: none;
 
@@ -85,6 +81,14 @@ export const StyledSource = styled.div<{ $isVisible?: boolean }>`
   }
 
   ${({ $isVisible }) => FadeInOut($isVisible)}
+
+  img {
+    height: calc(16px + ${({ theme }) => theme.spacing.tiny});
+    width: calc(16px + ${({ theme }) => theme.spacing.tiny});
+    border-radius: 50%;
+    padding: ${({ theme }) => theme.spacing.tiny};
+    background-color: ${({ theme }) => theme.colors.background.card};
+  }
 `
 
 export const BlockModal = styled.div``

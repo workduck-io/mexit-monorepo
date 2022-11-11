@@ -25,6 +25,7 @@ interface EditorProps {
   nodePath?: string
   nodeUID: string
   readOnly?: boolean
+  includeBlockInfo?: boolean
   focusBlockId?: string // * Block to focus
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
@@ -40,6 +41,7 @@ const Editor: React.FC<EditorProps> = ({
   onChange,
   focusBlockId,
   autoFocus = true,
+  includeBlockInfo = false,
   onAutoSave,
   options
 }) => {
@@ -101,6 +103,11 @@ const Editor: React.FC<EditorProps> = ({
         options={editorOptions}
         editorId={nodeUID}
         value={content}
+        pluginOptions={{
+          include: {
+            blockModifier: includeBlockInfo
+          }
+        }}
       />
     </EditorWrapper>
   )

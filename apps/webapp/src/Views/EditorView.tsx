@@ -31,6 +31,9 @@ export const EditorViewWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  max-width: 860px;
+  min-width: 400px;
+  margin: 0 auto;
 `
 
 const EditorView = () => {
