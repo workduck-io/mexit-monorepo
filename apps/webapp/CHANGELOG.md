@@ -1,5 +1,17 @@
 # mexit-webapp
 
+## 0.20.0
+
+### Minor Changes
+
+- 60c8ea3f: Add Comments and Reactions
+
+### Patch Changes
+
+- 74a71866: Route Based Online Users
+- 5d3b13fa: Fix bugs related to combobox, links, reminder view
+- fa78e83c: Templated Notes; User Preferences Sync with Cloud
+
 ## 0.19.14
 
 ### Patch Changes
