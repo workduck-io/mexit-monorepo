@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import timeLine from '@iconify-icons/ri/time-line'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import refreshLine from '@iconify/icons-ri/refresh-line'
-import { Icon } from '@iconify/react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { NodeMetadata } from '@mexit/core'
+import { MexIcon } from '@workduck-io/mex-components'
+
+import { mog, NodeMetadata } from '@mexit/core'
+import { FlexBetween, Menu, MenuItem, ProfileIcon } from '@mexit/shared'
 import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
-import { ProfileIcon } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
+import { useMentions } from '../../Hooks/useMentions'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
+import useRouteStore from '../../Stores/useRouteStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import AvatarGroups from '../AvatarGroups'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 
 export const Data = styled.div`
@@ -24,16 +29,29 @@ export const Data = styled.div`
 
 interface MetadataProps {
   nodeId: string
+  namespaceId: string
   fadeOnHover?: boolean
   publicMetadata?: NodeMetadata
+  hideShareDetails?: boolean
 }
 
-const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
+const Metadata = ({
+  nodeId,
+  namespaceId,
+  hideShareDetails = false,
+  fadeOnHover = true,
+  publicMetadata
+}: MetadataProps) => {
   // const node = useEditorStore((state) => state.node)
   const getContent = useContentStore((state) => state.getContent)
+  const location = useLocation()
   const content = getContent(nodeId)
+  const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
+  const mentionable = useMentionStore((s) => s.mentionable)
+  const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
+  const { getSharedUsersOfNodeOfSpace } = useMentions()
 
   const isEmpty =
     metadata &&
@@ -43,60 +61,59 @@ const Metadata = ({ nodeId, fadeOnHover = true, publicMetadata }: MetadataProps)
     metadata.lastEditedBy === undefined
 
   useEffect(() => {
-    // mog('metadata Update', { content, node })
     if (content === undefined || content.metadata === undefined) return
     const { metadata: contentMetadata } = content
     setMetadata(contentMetadata)
   }, [nodeId, content, content?.metadata])
 
+  const sharedUsers = useMemo(() => {
+    const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
+    mog('ACTIVE USERS', { activeUsers, mentionable })
+    return sharedUsersOfNode
+      .map((user) => ({ userId: user.userID, active: activeUsers.includes(user.userID) }))
+      .sort((a, b) => Number(a.active) - Number(b.active))
+  }, [location, activeUsers, mentionable, namespaceId, nodeId])
+
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
     return null
 
   return (
-    <MetadataWrapper $fadeOnHover={fadeOnHover} $isVisible={!isUserEditing}>
-      <DataGroup>
-        {metadata.createdBy !== undefined && (
-          <DataWrapper interactive={metadata.createdAt !== undefined}>
-            {metadata.createdBy !== undefined && !publicMetadata ? (
-              <ProfileIcon>
-                <ProfileImageWithToolTip props={{ userid: metadata.createdBy, size: 16 }} placement="bottom" />
-              </ProfileIcon>
-            ) : (
-              <Icon icon={timeLine}></Icon>
-            )}
-            <div>
-              {metadata.createdAt !== undefined && (
-                <Data>
-                  <Icon icon={addCircleLine} width={16} />
-                  <RelativeTime prefix="Created" dateNum={metadata.createdAt} />
-                </Data>
+    <MetadataWrapper $isVisible={!isUserEditing}>
+      <FlexBetween>
+        <DataGroup>
+          {metadata.lastEditedBy !== undefined && (
+            <DataWrapper interactive={metadata.updatedAt !== undefined}>
+              {metadata.lastEditedBy !== undefined && !publicMetadata ? (
+                <ProfileIcon data-title={metadata.lastEditedBy}>
+                  <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
+                </ProfileIcon>
+              ) : (
+                <MexIcon noHover height={20} width={20} icon={timeLine}></MexIcon>
               )}
-            </div>
-          </DataWrapper>
+              <div>
+                {metadata.updatedAt !== undefined && (
+                  <Data>
+                    <RelativeTime prefix="Last Edited" dateNum={metadata.updatedAt} />
+                  </Data>
+                )}
+              </div>
+            </DataWrapper>
+          )}
+        </DataGroup>
+        {!publicMetadata && !hideShareDetails && (
+          <Data>
+            <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
+            <Menu values={<MexIcon noHover icon="bi:three-dots-vertical" width={20} height={20} />}>
+              <MenuItem
+                key="share-menu"
+                icon={{ type: 'ICON', value: 'ri:share-line' }}
+                onClick={() => openShareModal('permission', 'note', nodeId)}
+                label="Share"
+              />
+            </Menu>
+          </Data>
         )}
-      </DataGroup>
-
-      <DataGroup>
-        {metadata.lastEditedBy !== undefined && (
-          <DataWrapper interactive={metadata.updatedAt !== undefined}>
-            {metadata.lastEditedBy !== undefined && !publicMetadata ? (
-              <ProfileIcon data-title={metadata.lastEditedBy}>
-                <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
-              </ProfileIcon>
-            ) : (
-              <Icon icon={timeLine}></Icon>
-            )}
-            <div>
-              {metadata.updatedAt !== undefined && (
-                <Data>
-                  <Icon icon={refreshLine} width={16} />
-                  <RelativeTime prefix="Updated" dateNum={metadata.updatedAt} />
-                </Data>
-              )}
-            </div>
-          </DataWrapper>
-        )}
-      </DataGroup>
+      </FlexBetween>
     </MetadataWrapper>
   )
 }

@@ -2,6 +2,8 @@ import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { InvitedUser, Mentionable, UserAccessTable, AccessLevel, ShareContext, mog } from '@mexit/core'
+import { mergeAccess } from '@mexit/shared'
+
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 interface MentionStore {
@@ -92,14 +94,4 @@ export const getUserFromUseridHookless = (userid: string) => {
   const user = mentionable.find((user) => user.userID === userid)
 
   if (user) return user
-}
-
-export const mergeAccess = (access: UserAccessTable, access2: Partial<UserAccessTable>): UserAccessTable => {
-  const newAccess = { ...access }
-  Object.keys(access2).forEach((context) => {
-    Object.keys(access2[context]).forEach((id) => {
-      newAccess[context][id] = access2[context][id]
-    })
-  })
-  return newAccess
 }

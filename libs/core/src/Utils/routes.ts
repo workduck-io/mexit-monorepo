@@ -33,7 +33,7 @@ export const BOOKMARK_URL = BASE_API_URL
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5000/api/v1'
+  ? 'http://localhost:5002/api/v1'
   : 'https://mexit-backend-test.workduck.io/api/v1'
 
 export const MEXIT_STAGING_URL_BASE = 'https://http-staging.workduck.io/mex'
@@ -99,6 +99,7 @@ export const apiURLs = {
     // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
     create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
     update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+    delete: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
     makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
     makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
     getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,

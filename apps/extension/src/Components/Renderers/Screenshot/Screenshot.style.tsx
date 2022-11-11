@@ -1,6 +1,6 @@
-import { ScrollStyles } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
 import styled, { css } from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
 
 export const ImageEditorWrapper = styled.div`
   display: flex;
@@ -42,6 +42,7 @@ export const ViewToggle = styled.div`
     padding: ${({ theme }) => `${theme.spacing.small}`};
     font-size: 0.9rem !important;
     gap: ${({ theme }) => theme.spacing.tiny};
+
     &.active {
       background: ${({ theme }) => theme.colors.primary};
       color: ${({ theme }) => theme.colors.text.oppositePrimary};

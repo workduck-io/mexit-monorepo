@@ -1,6 +1,6 @@
 import { AccessLevel, mog, ShareContext, SHARED_NAMESPACE } from '@mexit/core'
-import useDataStore from '../Stores/useDataStore'
 
+import useDataStore from '../Stores/useDataStore'
 import { useNamespaces } from './useNamespaces'
 
 type NodeAccess = {

@@ -8,9 +8,10 @@ import {
   ShareContext,
   emptyAccessTable
 } from '@mexit/core'
+import { mergeAccess } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
-import { useMentionStore, addAccessToUser, mergeAccess } from '../Stores/useMentionsStore'
+import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useAuthStore } from './useAuth'
 import { useNodeShareAPI } from './useNodeShareAPI'

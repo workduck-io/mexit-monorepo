@@ -35,20 +35,15 @@ export const useFetchShareData = () => {
     // if (context === 'note' && !node) return
     const sharedItemDetails = [context === 'note' ? getUsersOfSharedNode(id) : getAllSharedUsers(id)]
 
-    const itemDetails = (await runBatch(sharedItemDetails)).fulfilled
+    const usersWithAccess = (await runBatch(sharedItemDetails)).fulfilled
 
-    const usersWithAccess = itemDetails
-      // .filter((p) => p.status === 'fulfilled')
-      .map((p: any) => {
-        // mog('p', { p })
-        return p as UsersRaw
-      })
-
-    // mog('getUserAccess', { usersWithAccess, itemDetails })
+    // mog('getUserAccess', { usersWithAccess })
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
       const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ id, userid: uid, access }))
       return [...p, ...rawUsers]
     }, [])
+
+    mog('USER ACCESS DETAILS', { UserAccessDetails })
 
     // Then finally fetch the user detail: email
     const mentionableU = (

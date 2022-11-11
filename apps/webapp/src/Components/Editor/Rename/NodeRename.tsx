@@ -11,6 +11,7 @@ import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFrom
 import { Input, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
+import { useLinks } from '../../../Hooks/useLinks'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
@@ -39,9 +40,8 @@ const NodeRenameOnlyTitle = () => {
 
   const { path: nodeFrom, namespace: nodeFromNS } = useMemo(() => {
     const noteLink = ilinks.find((i) => i.nodeid === nodeId)
-    mog('noteLink', { noteLink })
     if (noteLink) return noteLink
-    return { path: '', namespace: '' }
+    return useEditorStore.getState().node
   }, [ilinks, nodeId])
 
   const { getNodesOfNamespace } = useNamespaces()

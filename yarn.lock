@@ -12926,6 +12926,11 @@ react-use-hoverintent@^1.2.9:
   resolved "https://registry.yarnpkg.com/react-use-hoverintent/-/react-use-hoverintent-1.2.9.tgz#a56a2117028448f3eb2cd0a75be64eb50c8d3490"
   integrity sha512-wS0mUCK0G8VTECj1Gyetm4+z/iRO4zuydNYmWDy7Z+dmyUzXODMFrQSDqiCBxksXyrr56Dd2M2YnL1kGoQ7/BA==
 
+react-use-websocket@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-use-websocket/-/react-use-websocket-4.2.0.tgz#658c4e44ee5e0fc3d29a66c2a753a72754a5db87"
+  integrity sha512-ZovaTlc/tWX6a590fi3kMWImhyoWj46BWJWvO5oucZJzRnVVhYtes2D9g+5MKXjSdR7Es3456hB89v4/1pcBKg==
+
 react-use@^17.3.2:
   version "17.4.0"
   resolved "https://registry.yarnpkg.com/react-use/-/react-use-17.4.0.tgz#cefef258b0a6c534a5c8021c2528ac6e1a4cdc6d"

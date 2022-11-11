@@ -5,5 +5,8 @@ export default {
     APP_CLIENT_ID: '6pvqt64p0l2kqkk2qafgdh13qe',
     IDENTITY_POOL_ID: 'us-east-1:4bdb5a8f-7db1-4af0-8a4d-79099b847165',
     SCOPES: 'email openid profile'
+  },
+  websocket: {
+    URL: 'wss://ws.workduck.io/route'
   }
 }

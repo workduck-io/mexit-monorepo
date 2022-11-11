@@ -18,6 +18,7 @@ import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
+import { useMentionStore } from './useMentionsStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
@@ -41,6 +42,7 @@ export const useAuthentication = () => {
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
+  const clearMentions = useMentionStore((m) => m.reset)
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
   const resetShortcuts = useHelpStore((s) => s.reset)
@@ -90,6 +92,7 @@ export const useAuthentication = () => {
     clearRequests()
     initContents({})
     resetDataStore()
+    clearMentions()
     resetPublicNodes()
     clearRecents()
     clearReminders()

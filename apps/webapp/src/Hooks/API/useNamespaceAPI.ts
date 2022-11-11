@@ -259,7 +259,7 @@ export const useNamespaceApi = () => {
 
   const revokeNamespaceShare = async (id: string, userIDs: string[]) => {
     try {
-      const res = await client.delete(apiURLs.namespaces.update, {
+      const res = await client.delete(apiURLs.namespaces.delete, {
         data: {
           type: 'SharedNamespaceRequest',
           namespaceID: id,

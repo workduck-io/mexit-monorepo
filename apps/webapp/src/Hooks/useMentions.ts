@@ -8,22 +8,20 @@ import {
   ShareContext,
   emptyAccessTable
 } from '@mexit/core'
+import { mergeAccess } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-import { useMentionStore, addAccessToUser, mergeAccess } from '../Stores/useMentionsStore'
+import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useNodeShareAPI } from './API/useNodeShareAPI'
-import { useNodes } from './useNodes'
 
 export const useMentions = () => {
   const { grantUsersPermission } = useNodeShareAPI()
-  const localUserDetails = useAuthStore((s) => s.userDetails)
   const addInvitedUser = useMentionStore((s) => s.addInvitedUser)
   const addAccess = useMentionStore((s) => s.addAccess)
   const setInvited = useMentionStore((s) => s.setInvited)
   const setMentionable = useMentionStore((s) => s.setMentionable)
-  const { isSharedNode } = useNodes()
 
   // Add access level that is returned from the backend after permissions have been given
   const inviteUser = (email: string, alias: string, id: string, context: ShareContext, accessLevel: AccessLevel) => {
@@ -108,7 +106,7 @@ export const useMentions = () => {
     const mentionable = useMentionStore.getState().mentionable
     const mentionExists = mentionable.find((user) => user.userID === userID)
 
-    // mog('adding mentionable user ', { userID, mentionExists, mentionable })
+    mog('adding mentionable user ', { userID, mentionExists, mentionable, accessDetails })
     if (mentionExists) {
       if (accessDetails.id && accessDetails.access) {
         mentionExists.access[accessDetails.context][accessDetails.id] = accessDetails.access
@@ -128,6 +126,8 @@ export const useMentions = () => {
         access: mergeAccess(emptyAccessTable, newAccess),
         userID
       }
+      mog('new access', { userID, newMention, newAccess, af: mergeAccess(emptyAccessTable, newAccess) })
+
       setMentionable([...mentionable, newMention])
     }
   }
@@ -143,7 +143,9 @@ export const useMentions = () => {
   /** Context is note level access */
   const getUserAccessLevelForNode = (userid: string, nodeid: string): AccessLevel | undefined => {
     const mentionable = useMentionStore.getState().mentionable
-    const user = mentionable.find((mention) => mention.userID === userid)
+    const localUserDetails = useAuthStore.getState().userDetails
+
+    const user = mentionable.find((mention) => mention?.userID === userid)
 
     if (user && user.access.note[nodeid]) {
       return user.access.note[nodeid]
@@ -152,7 +154,7 @@ export const useMentions = () => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const sharedNode = sharedNodes.find((node) => node.nodeid === nodeid)
 
-    if (userid === localUserDetails.userID) {
+    if (userid === localUserDetails?.userID) {
       if (sharedNode) {
         return sharedNode.currentUserAccess
       } else {
@@ -167,26 +169,22 @@ export const useMentions = () => {
   /** Context is note level access */
   const getSharedUsersForNode = (nodeid: string): Mentionable[] => {
     const mentionable = useMentionStore.getState().mentionable
-    const isShared = isSharedNode(nodeid)
     const users = mentionable
       .filter((mention) => mention.access.note[nodeid] !== undefined)
       // Get the owner to the top
       .sort((a, b) => (a.access.note[nodeid] === 'OWNER' ? -1 : b.access.note[nodeid] === 'OWNER' ? 1 : 0))
 
-    const currentUser = useAuthStore.getState().userDetails
-    // const sharedNodes = useDataStore.getState().sharedNodes
+    return users
+  }
 
-    if (!isShared) {
-      const curUser: Mentionable = {
-        type: 'mentionable',
-        access: { note: { [nodeid]: 'OWNER' }, space: {} },
-        email: currentUser.email,
-        name: currentUser.name,
-        alias: currentUser.alias,
-        userID: currentUser.userID
-      }
-      return [curUser, ...users]
-    }
+  const getSharedUsersOfNodeOfSpace = (nodeid: string, spaceId: string) => {
+    const mentionable = useMentionStore.getState().mentionable
+    const users = mentionable
+      .filter((mention) => {
+        const access = mention.access
+        return access.note[nodeid] !== undefined || access.space[spaceId] !== undefined
+      })
+      .sort((a, b) => (a.access.note[nodeid] === 'OWNER' ? -1 : b.access.note[nodeid] === 'OWNER' ? 1 : 0))
 
     return users
   }
@@ -269,6 +267,7 @@ export const useMentions = () => {
     addMentionable,
     getUserAccessLevelForNode,
     getSharedUsersForNode,
+    getSharedUsersOfNodeOfSpace,
     getInvitedUsers,
     grantUserAccessOnMention,
     applyChangesMentionable

@@ -1,13 +1,14 @@
+import React, { useEffect, useMemo, useState } from 'react'
+
 import user3Line from '@iconify-icons/ri/user-3-line'
 // different import path!
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
 import Avatar from 'boring-avatars'
 import md5 from 'md5'
-import React, { useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
-import { mog } from '@mexit/core'
+import { AccessLevel, mog } from '@mexit/core'
 import { Centered, CardShadow } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
@@ -92,6 +93,7 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
 interface ProfileImageTooltipProps {
   userid: string
   size: number
+  access?: AccessLevel
   // Component to replace the default image
   DefaultFallback?: React.ComponentType
 }
@@ -99,10 +101,28 @@ interface ProfileImageTooltipProps {
 interface ProfileImageWithToolTipProps {
   props: ProfileImageTooltipProps
   placement?: string
+  interactive?: boolean
 }
 
-export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {
-  const { userid, size, DefaultFallback } = props // eslint-disable-line react/prop-types
+export const ProfileAvatar: React.FC<{ userId: string; size: number }> = ({ userId, size }) => {
+  const { getUserFromUserid } = useMentions()
+  const { getUserDetailsUserId } = useUserService()
+
+  const user = useMemo(() => {
+    const u = getUserFromUserid(userId)
+    if (u) return u
+    else {
+      getUserDetailsUserId(userId)
+        .then((d) => mog('GOT userId', { d }))
+        .catch((err) => mog('GOT ERROR', { err }))
+    }
+  }, [userId])
+
+  return <ProfileImage size={size} email={user?.email} />
+}
+
+export const ProfileImageWithToolTip = ({ props, placement, interactive }: ProfileImageWithToolTipProps) => {
+  const { userid, size, DefaultFallback, access } = props // eslint-disable-line react/prop-types
   const { getUserFromUserid } = useMentions()
   const { getUserDetailsUserId } = useUserService()
 
@@ -120,9 +140,10 @@ export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithTo
     <Tippy
       delay={100}
       interactiveDebounce={100}
+      interactive={interactive}
       placement={(placement as any) ?? 'auto'}
       appendTo={() => document.body}
-      render={(attrs) => <MentionTooltipComponent user={user} hideAccess />}
+      render={(attrs) => <MentionTooltipComponent user={user} access={access} hideAccess={!access} />}
     >
       <Centered>
         <ProfileImage size={size} email={user?.email} DefaultFallback={DefaultFallback} />

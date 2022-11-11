@@ -8,21 +8,20 @@ import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
-import { StyledCreatatbleSelect } from '@mexit/shared'
+import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useFetchShareData } from '../../Hooks/useFetchShareData'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useNodes } from '../../Hooks/useNodes'
-import { usePermissions } from '../../Hooks/usePermissions'
+import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { mergeAccess, useMentionStore } from '../../Stores/useMentionsStore'
+import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { ModalControls, ModalHeader, ModalSection, ModalSectionScroll } from '../../Style/Refactor'
+import { ModalControls, ModalHeader, ModalSection } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'
 import { InvitedUsersContent } from './InvitedUsersContent'
@@ -44,7 +43,7 @@ export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)
   const open = useShareModalStore((s) => s.open)
   const context = useShareModalStore((s) => s.context)
-  const { getSharedUsersForNode, getInvitedUsers, applyChangesMentionable } = useMentions()
+  const { getSharedUsersOfNodeOfSpace, getInvitedUsers, applyChangesMentionable } = useMentions()
   const { getSharedUsersForNamespace, getNamespace } = useNamespaces()
   const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
@@ -52,7 +51,7 @@ export const PermissionModalContent = () => {
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
   const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
-  const { getAllSharedUsers, revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
+  const { revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
   const { accessWhenShared } = usePermissions()
   const { fetchSharedUsers } = useFetchShareData()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
@@ -78,16 +77,16 @@ export const PermissionModalContent = () => {
       return false
     } else if (context === 'space') {
       const ns = getNamespace(id)
-      if (ns.access) return ns.access !== 'MANAGE'
+      if (ns?.access) return ns.access !== 'MANAGE'
       return false
     }
     return false
   }, [id])
 
   useEffect(() => {
-    if (open && context === 'space') {
+    if (open) {
       // Fetch all user details for the space
-      fetchSharedUsers(id, 'space')
+      fetchSharedUsers(context === 'space' ? id : node.namespace, 'space')
     }
   }, [open, context, id])
 
@@ -95,7 +94,8 @@ export const PermissionModalContent = () => {
 
   useEffect(() => {
     if (nodeid || namespaceid) {
-      const sUsers = context === 'note' ? getSharedUsersForNode(nodeid) : getSharedUsersForNamespace(namespaceid)
+      const sUsers =
+        context === 'note' ? getSharedUsersOfNodeOfSpace(nodeid, namespaceid) : getSharedUsersForNamespace(namespaceid)
       setSharedUsers(sUsers)
     }
   }, [nodeid, namespaceid, context, mentionable, open])
@@ -255,7 +255,7 @@ export const PermissionModalContent = () => {
             <tbody>
               {sharedUsers.map((user) => {
                 const hasChanged = changedUsers?.find((u) => u.userID === user.userID)
-                const access = hasChanged ? hasChanged.access[context][id] : user.access[context][id]
+                const access = getUserAccess(hasChanged ?? user, context, id, namespaceid)
                 const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
                 const isCurrent = user.userID === currentUserDetails.userID
 
@@ -270,7 +270,7 @@ export const PermissionModalContent = () => {
                     <ShareEmail>{user.email}</ShareEmail>
 
                     <SharePermission disabled={readOnly || isCurrent}>
-                      {user.access[context][id] === 'OWNER' ? (
+                      {access === 'OWNER' ? (
                         <ShareOwnerTag>Owner</ShareOwnerTag>
                       ) : (
                         <StyledCreatatbleSelect

@@ -58,7 +58,6 @@ const PublicNodeView = () => {
           const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
           setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
 
-
           // mog('check', { nodeContent, nodeProperties })
         } else {
           setShowLoader(true)
@@ -70,7 +69,6 @@ const PublicNodeView = () => {
 
           setShowLoader(false)
         }
-
       } catch (error) {
         mog('ErrorOccuredWhenFetchingPublicNode', { error })
         navigate('/404')
@@ -80,7 +78,7 @@ const PublicNodeView = () => {
   }, [nodeId])
 
   useEffect(() => {
-      document.title = namespace  && node?.title ? `Mexit - ${namespace.name} | ${node.title}` : document.title
+    document.title = namespace && node?.title ? `Mexit - ${namespace.name} | ${node.title}` : document.title
   }, [node?.title, namespace])
 
   return (
@@ -89,7 +87,7 @@ const PublicNodeView = () => {
         <SplashScreen />
       ) : (
         <>
-          <PublicNodeEditor nodeId={nodeId} node={node} />
+          <PublicNodeEditor nodeId={nodeId} node={node} namespaceId={namespace} />
           <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
           <PublicNodeFloatingButton firstVisit={firstVisit} />
         </>
