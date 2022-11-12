@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.7
+
+### Patch Changes
+
+- 2f3d2495: Sanitize apiURLs file; Move to staging
+
 ## 0.18.6
 
 ### Patch Changes
