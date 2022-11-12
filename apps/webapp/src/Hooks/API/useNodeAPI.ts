@@ -442,6 +442,19 @@ export const useApi = () => {
     return data
   }
 
+  const deleteAllVersionOfSnippet = async (snippetID: string) => {
+    await client
+      .delete(apiURLs.snippet.deleteAllVersionsOfSnippet(snippetID), {
+        headers: workspaceHeaders()
+      })
+      .then((response) => {
+        mog('SnippetDeleteSuccessful')
+      })
+      .catch((error) => {
+        mog('SnippetDeleteFailed', { error })
+      })
+  }
+
   return {
     saveDataAPI,
     getDataAPI,
@@ -455,7 +468,7 @@ export const useApi = () => {
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
     getSnippetById,
-    refactorHierarchy
-    // getNodesByWorkspace
+    refactorHierarchy,
+    deleteAllVersionOfSnippet
   }
 }

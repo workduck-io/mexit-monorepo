@@ -31,6 +31,7 @@ import {
 
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useApi } from '../Hooks/API/useNodeAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
@@ -54,6 +55,7 @@ const Snippets = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
   const { goTo } = useRouting()
+  const { deleteAllVersionOfSnippet } = useApi()
 
   const setRequest = useApiStore.getState().setRequest
 
@@ -123,8 +125,10 @@ const Snippets = () => {
     }
   }
   const onDeleteSnippet = (id: string) => {
-    deleteSnippet(id)
-    goTo(ROUTE_PATHS.snippets, NavigationType.replace)
+    deleteAllVersionOfSnippet(id).then(() => {
+      deleteSnippet(id)
+      goTo(ROUTE_PATHS.snippets, NavigationType.replace)
+    })
   }
 
   const onOpenSnippet = (id: string) => {

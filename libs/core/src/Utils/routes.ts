@@ -90,7 +90,14 @@ export const apiURLs = {
   snippet: {
     create: BASE_URLS.snippet,
     getAllSnippetsByWorkspace: `${BASE_URLS.snippet}/all`,
-    getSnippetById: (uid: string) => `${BASE_URLS.snippet}/${uid}`
+    getSnippetById: (uid: string) => `${BASE_URLS.snippet}/${uid}`,
+    deleteAllVersionsOfSnippet: (uid: string) => `${BASE_URLS.snippet}/${uid}/all`,
+    deleteSpecificVersionOfSnippet: (uid: string, version?: number) => {
+      let baseURL = `${BASE_URLS.snippet}/${uid}`
+      if (version) baseURL += `?version=${version}`
+
+      return baseURL
+    }
   },
 
   loch: {
