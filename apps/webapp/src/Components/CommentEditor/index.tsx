@@ -7,8 +7,8 @@ import { NodeEditorContent } from '@mexit/core'
 import { useEditorChange } from '@mexit/shared'
 
 import { MultiComboboxContainer } from '../../Editor/Components/MultiCombobox/multiComboboxContainer'
-import useMultiComboboxOnChange from '../../Editor/Components/MultiCombobox/useMultiComboboxChange'
-import useMultiComboboxOnKeyDown from '../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
+// import useMultiComboboxOnChange from '../../Editor/Components/MultiCombobox/useMultiComboboxChange'
+// import useMultiComboboxOnKeyDown from '../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'
 import { getCommentPlugins } from './plugins'
 
@@ -24,24 +24,24 @@ export const CommentEditor = ({ editorId, readOnly, content, onChange }: Comment
 
   const plugins = useMemo(() => getCommentPlugins(), [])
 
-  const pluginConfigs = {
-    combobox: {
-      onChange: useMultiComboboxOnChange(editorId, config.onChangeConfig),
+  // const pluginConfigs = {
+  //   combobox: {
+  //     onChange: useMultiComboboxOnChange(editorId, config.onChangeConfig),
 
-      onKeyDown: useMultiComboboxOnKeyDown(config.onKeyDownConfig)
-    }
-  }
+  //     onKeyDown: useMultiComboboxOnKeyDown(config.onKeyDownConfig)
+  //   }
+  // }
 
-  const pluginsWithCombobox = [
-    ...plugins,
-    {
-      key: 'MULTI_COMBOBOX',
-      handlers: {
-        onChange: pluginConfigs.combobox.onChange,
-        onKeyDown: pluginConfigs.combobox.onKeyDown
-      }
-    }
-  ]
+  // const pluginsWithCombobox = [
+  //   ...plugins,
+  //   {
+  //     key: 'MULTI_COMBOBOX',
+  //     handlers: {
+  //       onChange: pluginConfigs.combobox.onChange,
+  //       onKeyDown: pluginConfigs.combobox.onKeyDown
+  //     }
+  //   }
+  // ]
 
   useEditorChange(editorId, content)
 
@@ -57,7 +57,7 @@ export const CommentEditor = ({ editorId, readOnly, content, onChange }: Comment
     <Plate
       id={editorId}
       initialValue={content}
-      plugins={pluginsWithCombobox}
+      plugins={plugins}
       onChange={onChangeContent}
       editableProps={editableProps}
     >
