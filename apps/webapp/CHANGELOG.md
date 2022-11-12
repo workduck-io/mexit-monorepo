@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.20.1
+
+### Patch Changes
+
+- e990f8da: Batch get nodes while initialization
+- 519bd036: Auth check in update preferences & active current user
+- 2f3d2495: Sanitize apiURLs file; Move to staging
+
 ## 0.20.0
 
 ### Minor Changes
