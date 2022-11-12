@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.20.2
+
+### Patch Changes
+
+- 6da5c84f: Fixes 12nov task, comments
+
 ## 0.20.1
 
 ### Patch Changes
