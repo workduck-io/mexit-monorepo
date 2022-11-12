@@ -94,7 +94,6 @@ export const useNamespaceApi = () => {
             rawResponse.map((nodeResponse) => {
               const metadata = extractMetadata(nodeResponse) // added by Varshitha
               const content = deserializeContent(nodeResponse.data)
-              mog('KING KONG', { metadata, content })
               updateFromContent(nodeResponse.id, content, metadata)
             })
           }
