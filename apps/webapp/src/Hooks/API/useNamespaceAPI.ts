@@ -89,7 +89,8 @@ export const useNamespaceApi = () => {
       fulfilled.forEach((nodes) => {
         if (nodes) {
           const { rawResponse } = nodes
-          setRequest(apiURLs.getMultipleNode(), { ...requestData, url: apiURLs.getMultipleNode() })
+          setRequest(apiURLs.node.getMultipleNode, { ...requestData, url: apiURLs.node.getMultipleNode })
+
           if (rawResponse) {
             rawResponse.map((nodeResponse) => {
               const metadata = extractMetadata(nodeResponse) // added by Varshitha
@@ -131,7 +132,7 @@ export const useNamespaceApi = () => {
 
   const getPublicNamespaceAPI = async (namespaceID: string) => {
     const res = await client
-      .get(apiURLs.namespaces.getPublic(namespaceID), {
+      .get(apiURLs.public.getPublicNS(namespaceID), {
         headers: workspaceHeaders()
       })
       .then((response: any) => {

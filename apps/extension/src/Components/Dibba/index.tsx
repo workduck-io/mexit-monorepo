@@ -78,7 +78,7 @@ export default function Dibba() {
       type: 'Public Nodes',
       id: nodeID,
       icon: 'ri:external-link-line',
-      url: apiURLs.getPublicNodePath(nodeID),
+      url: apiURLs.frontend.getPublicNodePath(nodeID),
       title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop(),
       content: _content?.content || defaultContent.content
     }

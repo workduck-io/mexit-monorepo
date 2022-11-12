@@ -143,7 +143,7 @@ export const useAuthentication = () => {
     const newWorkspaceName = `WD_${nanoid()}`
     const result = await client
       .post(
-        apiURLs.registerUser,
+        apiURLs.user.registerUser,
         {
           type: 'RegisterUserRequest',
           user: {
@@ -198,7 +198,7 @@ export const useInitializeAfterAuth = () => {
       const { userDetails, workspaceDetails } = registerUser
         ? await registerNewUser(loginData)
         : await client
-            .get(apiURLs.getUserRecords, {
+            .get(apiURLs.user.getUserRecords, {
               validateStatus: (status: number) => {
                 return (status >= 200 && status < 300) || status === 404
               }

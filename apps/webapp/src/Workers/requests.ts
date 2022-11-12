@@ -24,8 +24,8 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 }
 
 const getNodeAPI = async (nodeid: string, isShared = false) => {
-  const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
-  return client.get(url).then((d) => {
+  const url = isShared ? apiURLs.share.getSharedNode(nodeid) : apiURLs.node.get(nodeid)
+  return client.get(url).then((d: any) => {
     if (d) {
       return { rawResponse: d.data, nodeid }
     }
@@ -33,7 +33,7 @@ const getNodeAPI = async (nodeid: string, isShared = false) => {
 }
 
 const getMultipleNodeAPI = async (nodeids: string) => {
-  const url = apiURLs.getMultipleNode()
+  const url = apiURLs.node.getMultipleNode
   return client.post(url, { ids: nodeids.split(',') }).then((d) => {
     if (d) {
       return { rawResponse: d.data, nodeids }
@@ -42,7 +42,7 @@ const getMultipleNodeAPI = async (nodeids: string) => {
 }
 
 const getSnippetAPI = async (id: string) => {
-  const url = apiURLs.getSnippetById(id)
+  const url = apiURLs.snippet.getSnippetById(id)
 
   return client.get(url).then((d) => {
     return d.data

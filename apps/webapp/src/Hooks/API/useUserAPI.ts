@@ -100,11 +100,13 @@ export const useUserService = () => {
   const updateUserInfo = async (userID: string, name?: string, alias?: string): Promise<boolean> => {
     try {
       if (name === undefined && alias === undefined) return false
-      return await client.put(apiURLs.user.updateInfo, { id: userID, name, alias }).then((resp: any) => {
-        mog('Response', { data: resp.data })
-        updateUserDetails({ name: resp?.data?.name, alias: resp?.data?.alias })
-        return true
-      })
+      return await client
+        .put(apiURLs.user.updateInfo, { id: userID, name, alias }, { headers: workspaceHeaders() })
+        .then((resp: any) => {
+          mog('Response', { data: resp.data })
+          updateUserDetails({ name: resp?.data?.name, alias: resp?.data?.alias })
+          return true
+        })
     } catch (e) {
       mog('Error Updating User Info', { error: e, userID })
       return false
@@ -140,7 +142,7 @@ export const useUserService = () => {
 
   const getCurrentUser = async (): Promise<UserDetails | undefined> => {
     try {
-      return await client.get<UserDetails>(apiURLs.getUserRecords).then((resp) => {
+      return await client.get<UserDetails>(apiURLs.user.getUserRecords).then((resp) => {
         mog('Response', { data: resp.data })
         return resp?.data
       })

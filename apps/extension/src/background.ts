@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import fuzzysort from 'fuzzysort'
 
-import { ActionType, apiURLs, LINK_SHORTENER_URL_BASE, mog, SEPARATOR } from '@mexit/core'
+import { ActionType, LINK_SHORTENER_URL_BASE, SEPARATOR, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 
 import { useAuthStore } from './Hooks/useAuth'
 import useDataStore from './Stores/useDataStore'
@@ -21,7 +21,7 @@ Sentry.init({
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    const url = apiURLs.mexitHome
+    const url = MEXIT_FRONTEND_URL_BASE
     chrome.tabs.create(
       {
         url: url,

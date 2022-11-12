@@ -28,7 +28,7 @@ export const useBookmarks = () => {
     if (userCred) {
       return await client
         .post(
-          apiURLs.bookmark(userCred.userId, nodeid),
+          apiURLs.bookmarks.create(nodeid),
           {
             type: 'BookmarkRequest'
           },
@@ -55,7 +55,7 @@ export const useBookmarks = () => {
 
   const getAllBookmarks = async () => {
     await client
-      .get(apiURLs.getBookmarks(userCred.userId), {
+      .get(apiURLs.bookmarks.getAll, {
         headers: {
           [WORKSPACE_HEADER]: workspaceDetails.id,
           Accept: 'application/json, text/plain, */*'
@@ -75,7 +75,7 @@ export const useBookmarks = () => {
     if (userCred) {
       const res = await client
         .patch(
-          apiURLs.bookmark(userCred.userId, nodeid),
+          apiURLs.bookmarks.create(nodeid),
           {
             type: 'BookmarkRequest'
           },

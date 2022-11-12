@@ -35,8 +35,6 @@ const Banner: React.FC<BannerType> = ({
 
   const isUserOnly = activeUsers.includes(currentUser?.userID)
 
-  if (activeUsers?.length === 1 && isUserOnly) return
-
   return (
     <BannerContainer>
       <Group>

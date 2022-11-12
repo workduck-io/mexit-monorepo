@@ -1,11 +1,12 @@
 import { orderBy } from 'lodash'
+
 import { client } from '@workduck-io/dwindle'
 
 import { apiURLs, mog, WORKSPACE_HEADER } from '@mexit/core'
 
-import { useAuthStore } from './../Stores/useAuth'
 import usePortalStore from '../Stores/usePortalStore'
 import { ActionGroupType, PortalType } from '../Types/Actions'
+import { useAuthStore } from './../Stores/useAuth'
 
 export const usePortals = () => {
   const setApps = usePortalStore((store) => store.setApps)
@@ -16,7 +17,7 @@ export const usePortals = () => {
 
   const getPortals = async () => {
     try {
-      const res = await client.get<Record<string, ActionGroupType>>(apiURLs.getLochServices(), {
+      const res = await client.get<Record<string, ActionGroupType>>(apiURLs.loch.getAllServices, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId()
         }
@@ -30,13 +31,18 @@ export const usePortals = () => {
     }
   }
 
-  const connectToPortal = async (actionGroupId: string, serviceId: string, parentNodeId: string, namespaceId: string) => {
+  const connectToPortal = async (
+    actionGroupId: string,
+    serviceId: string,
+    parentNodeId: string,
+    namespaceId: string
+  ) => {
     const workspaceId = getWorkspaceId()
 
     const portal: PortalType = { serviceId, parentNodeId, serviceType: actionGroupId, mexId: workspaceId, namespaceId }
 
     try {
-      const res = client.post(apiURLs.connectToLochService(), portal, {
+      const res = client.post(apiURLs.loch.connectToService, portal, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId()
         }
@@ -63,7 +69,7 @@ export const usePortals = () => {
     }
 
     try {
-      const res = await client.put(apiURLs.updateParentNoteOfService(), reqBody, {
+      const res = await client.put(apiURLs.loch.updateParentNoteOfService, reqBody, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId()
         }
@@ -78,7 +84,7 @@ export const usePortals = () => {
 
   const getConnectedPortals = async () => {
     try {
-      const res = (await client.get(apiURLs.getConnectedLochServices(), {
+      const res = (await client.get(apiURLs.loch.getConnectedServices, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId()
         }
