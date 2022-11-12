@@ -124,10 +124,11 @@ export const useTransform = () => {
       // mog('replaceSelectionWithLink  selPath', { selectionPath })
 
       if (inline) deleteText(editor)
-      else removeNodes(editor, { at: editor.selection, hanging: false })
+      else removeNodes(editor, { at: editor.selection, hanging: true, mode: inline ? undefined : 'highest' })
+
       // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
 
-      // mog('replaceSelectionWithLink  detFrag', { selectionPath })
+      // mog('replaceSelectionWithLink  detFrag', { selectionPath, ilink, inline })
 
       insertNodes<ILinkNode>(editor, [{ type: ELEMENT_ILINK, value: ilink, children: [] }], {
         at: editor.selection

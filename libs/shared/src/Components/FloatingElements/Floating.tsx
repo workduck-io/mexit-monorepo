@@ -73,7 +73,7 @@ export const Floating = ({ children, open, label, hover, persist, setOpen, rende
                   ref: floating,
                   style: {
                     position: strategy,
-                    zIndex: 12,
+                    zIndex: 120,
                     top: y ?? 0,
                     left: x ?? 0
                   },

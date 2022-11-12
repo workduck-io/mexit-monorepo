@@ -8,7 +8,6 @@ import { CompleteWave, WaterWave } from './Welcome'
 export const TodoContainer = styled.div<{ checked?: boolean }>`
   display: flex;
   flex-direction: row;
-  /* align-items: center; */
   position: relative;
   width: 100%;
 
