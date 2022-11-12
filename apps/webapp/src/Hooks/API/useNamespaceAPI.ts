@@ -3,14 +3,15 @@ import toast from 'react-hot-toast'
 import { client } from '@workduck-io/dwindle'
 
 import {
+  AccessLevel,
   apiURLs,
+  batchArray,
+  extractMetadata,
   generateNamespaceId,
+  iLinksToUpdate,
   MIcon,
   mog,
-  WORKSPACE_HEADER,
-  AccessLevel,
-  iLinksToUpdate,
-  extractMetadata
+  WORKSPACE_HEADER
 } from '@mexit/core'
 
 import { useApiStore } from '../../Stores/useApiStore'
@@ -77,20 +78,25 @@ export const useNamespaceApi = () => {
       setIlinks(newILinks)
 
       const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
-      const ids = toUpdateLocal.map((i) => i.nodeid)
+      const ids = batchArray(
+        toUpdateLocal.map((i) => i.nodeid),
+        10
+      ).map((id: string[]) => id.join(','))
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
       const requestData = { time: Date.now(), method: 'GET' }
 
-      fulfilled.forEach((node) => {
-        if (node) {
-          const { rawResponse, nodeid } = node
-          setRequest(apiURLs.getNode(nodeid), { ...requestData, url: apiURLs.getNode(nodeid) })
-          const metadata = extractMetadata(rawResponse) // added by Varshitha
-
-          if (rawResponse?.data) {
-            const content = deserializeContent(rawResponse.data)
-            updateFromContent(nodeid, content, metadata)
+      fulfilled.forEach((nodes) => {
+        if (nodes) {
+          const { rawResponse } = nodes
+          setRequest(apiURLs.getMultipleNode(), { ...requestData, url: apiURLs.getMultipleNode() })
+          if (rawResponse) {
+            rawResponse.map((nodeResponse) => {
+              const metadata = extractMetadata(nodeResponse) // added by Varshitha
+              const content = deserializeContent(nodeResponse.data)
+              mog('KING KONG', { metadata, content })
+              updateFromContent(nodeResponse.id, content, metadata)
+            })
           }
         }
       })

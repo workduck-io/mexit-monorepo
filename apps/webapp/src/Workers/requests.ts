@@ -25,9 +25,18 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 
 const getNodeAPI = async (nodeid: string, isShared = false) => {
   const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
-  return client.get(url).then((d: any) => {
+  return client.get(url).then((d) => {
     if (d) {
       return { rawResponse: d.data, nodeid }
+    }
+  })
+}
+
+const getMultipleNodeAPI = async (nodeids: string) => {
+  const url = apiURLs.getMultipleNode()
+  return client.post(url, { ids: nodeids.split(',') }).then((d) => {
+    if (d) {
+      return { rawResponse: d.data, nodeids }
     }
   })
 }
@@ -45,7 +54,7 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
 
   switch (requestType) {
     case WorkerRequestType.GET_NODES: {
-      args.forEach((i) => requestsToMake.push(getNodeAPI(i)))
+      args.forEach((i) => requestsToMake.push(getMultipleNodeAPI(i)))
       break
     }
 

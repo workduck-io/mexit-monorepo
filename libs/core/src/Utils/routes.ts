@@ -125,6 +125,7 @@ export const apiURLs = {
   // Mexit Backend URLs
   fetchActivities: `${MEXIT_BACKEND_URL_BASE}/node/getactivityblocks`,
   getNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
+  getMultipleNode: () => `${MEXIT_BACKEND_URL_BASE}/node/ids`,
   createNode: `${MEXIT_BACKEND_URL_BASE}/node`,
   appendNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
   bulkCreateNodes: `${MEXIT_BACKEND_URL_BASE}/node/bulk`,
