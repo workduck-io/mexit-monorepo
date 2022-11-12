@@ -6,7 +6,6 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useBookmarks } from '../useBookmarks'
 import { useFetchShareData } from '../useFetchShareData'
 import { useNamespaceApi } from './useNamespaceAPI'
-import { useApi } from './useNodeAPI'
 
 export const PollingInterval = {
   [PollActions.shared]: 5 * 60 * 1000, // 5 minutes

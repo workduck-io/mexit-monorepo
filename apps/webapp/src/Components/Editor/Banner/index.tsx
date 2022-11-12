@@ -32,10 +32,10 @@ const Banner: React.FC<BannerType> = ({
 
   const currentUser = useAuthStore((s) => s.userDetails)
   const activeUsers = useRouteStore((s) => Settify(s.routes[route]?.users))
-  // const usersExcludingMe = activeUsers.filter((userId) => currentUser?.userID !== userId)
 
   const isUserOnly = activeUsers.includes(currentUser?.userID)
-  // const layoutChange = useMediaQuery({ minWidth: size.tiny })
+
+  if (activeUsers?.length === 1 && isUserOnly) return
 
   return (
     <BannerContainer>

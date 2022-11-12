@@ -1,12 +1,6 @@
 import { useState, useEffect, ReactElement } from 'react'
 
-import {
-  Plate,
-  selectEditor, // PlaceholderProps,
-  PlatePluginComponent,
-  SelectEditorOptions,
-  getPlateEditorRef
-} from '@udecode/plate'
+import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { EditableProps } from 'slate-react/dist/components/editable'

@@ -3,12 +3,14 @@ import { useEffect } from 'react'
 import { mog } from '@mexit/core'
 import { mergeUserPreferences } from '@mexit/shared'
 
+import { useAuthStore } from '../Stores/useAuth'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useUserService } from './API/useUserAPI'
 
 const USER_PREF_AUTO_SAVE_MS = 30 * 60 * 1000 // 30 minutes
 
 export const useAutoSyncUserPreference = () => {
+  const isAuthenticated = useAuthStore((store) => store.authenticated)
   const getUserPreferences = useUserPreferenceStore((s) => s.getUserPreferences)
   const setUserPreferences = useUserPreferenceStore((store) => store.setUserPreferences)
   const hasHydrated = useUserPreferenceStore((s) => s._hasHydrated)
@@ -34,17 +36,20 @@ export const useAutoSyncUserPreference = () => {
     // mog(`Fetching User Preferences`)
     if (hasHydrated) {
       // mog('Hydration finished')
-      updateCurrentUserPreferences()
+      if (isAuthenticated) updateCurrentUserPreferences()
     }
-  }, [hasHydrated])
+  }, [hasHydrated, isAuthenticated])
 
   /**
    * Saves the user preference at every interval
    */
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      updateUserPreferences()
-    }, USER_PREF_AUTO_SAVE_MS)
-    return () => clearInterval(intervalId)
-  }, [])
+    if (isAuthenticated) {
+      const intervalId = setInterval(() => {
+        updateUserPreferences()
+      }, USER_PREF_AUTO_SAVE_MS)
+
+      return () => clearInterval(intervalId)
+    }
+  }, [isAuthenticated])
 }
