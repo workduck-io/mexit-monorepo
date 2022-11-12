@@ -1,6 +1,6 @@
 const BATCH_SIZE = 6
 
-const batchArray = (array: any[], batchSize: number): any[][] => {
+export const batchArray = (array: any[], batchSize = BATCH_SIZE): any[][] => {
   const batches = []
   for (let i = 0; i < array.length; i += batchSize) {
     batches.push(array.slice(i, i + batchSize))
