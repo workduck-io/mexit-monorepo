@@ -132,7 +132,7 @@ export const useNamespaceApi = () => {
 
   const getPublicNamespaceAPI = async (namespaceID: string) => {
     const res = await client
-      .get(apiURLs.namespaces.getPublic(namespaceID), {
+      .get(apiURLs.public.getPublicNS(namespaceID), {
         headers: workspaceHeaders()
       })
       .then((response: any) => {

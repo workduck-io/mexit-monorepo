@@ -15,118 +15,119 @@ export const USE_API = () => {
 
 export const BASE_USER_URL = 'https://http.workduck.io/user'
 
-export const BOOKMARK_URL = 'https://http-staging.workduck.io/mex'
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5000/api/v1'
   : 'https://mexit-backend-staging.workduck.io/api/v1'
 
-export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
-export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
-export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
-
 export const CDN_BASE = 'https://cdn.workduck.io'
 
 export const MEX_LOCH_BASE_URL = 'https://http-staging.workduck.io/loch'
 
 export const BASE_URLS = {
+  bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
+  archive: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
+  unarchive: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
+  namespace: `${MEXIT_BACKEND_URL_BASE}/namespace`,
+  node: `${MEXIT_BACKEND_URL_BASE}/node`,
+  snippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
+  loch: `${MEX_LOCH_BASE_URL}/connect`,
+  share: `${MEXIT_BACKEND_URL_BASE}/shared`,
+  user: `${BASE_USER_URL}`,
+  view: `${MEXIT_BACKEND_URL_BASE}/view`,
+  link: `${MEXIT_BACKEND_URL_BASE}/link`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
-
-  // TODO: Update these to main endpoint after testing
-  // Or after being added to the middleware
-  comment: `https://http-test.workduck.io/comment`,
-  reaction: `https://http-test.workduck.io/reaction`
+  comment: `https://http-staging.workduck.io/comment`,
+  reaction: `https://http-staging.workduck.io/reaction`,
+  frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
 }
+
+export const MEXIT_FRONTEND_URL_BASE = BASE_URLS.frontend
+export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
+export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
 export const apiURLs = {
   bookmarks: {
-    create: (nodeID: string) => `${MEXIT_BACKEND_URL_BASE}/userStar/${nodeID}`,
-    getAll: `${MEXIT_BACKEND_URL_BASE}/userStar`
+    create: (nodeID: string) => `${BASE_URLS.bookmarks}/${nodeID}`,
+    getAll: `${BASE_URLS.bookmarks}`
   },
 
   archive: {
-    archiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
-    deleteArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive/delete`,
-    getArchivedNodes: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
-    unArchiveNodes: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
-    archiveInNamespace: (namespaceId: string) => `${MEXIT_BACKEND_URL_BASE}/node/archive/${namespaceId}`
+    archiveNodes: `${BASE_URLS.archive}`,
+    deleteArchivedNodes: `${BASE_URLS.archive}/delete`,
+    getArchivedNodes: `${BASE_URLS.archive}`,
+    unArchiveNodes: `${BASE_URLS.unarchive}`,
+    archiveInNamespace: (namespaceId: string) => `${BASE_URLS.archive}/${namespaceId}`
   },
 
   // Namespaces
   namespaces: {
-    getHierarchy: `${MEXIT_BACKEND_URL_BASE}/namespace/all/hierarchy?getMetadata=true`,
-    get: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/${id}`,
-    getAll: (opt?: AllNamespaceOption) => `${MEXIT_BACKEND_URL_BASE}/namespace/all${opt ? `?${opt}=true` : ''}`,
+    getHierarchy: `${BASE_URLS.namespace}/all/hierarchy?getMetadata=true`,
+    get: (id: string) => `${BASE_URLS.namespace}/${id}`,
     // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
-    create: `${MEXIT_BACKEND_URL_BASE}/namespace`,
-    update: `${MEXIT_BACKEND_URL_BASE}/namespace`,
-    delete: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
-    makePublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePublic/${id}`,
-    makePrivate: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/makePrivate/${id}`,
-    getPublic: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,
-    share: `${MEXIT_BACKEND_URL_BASE}/namespace/share`,
-    getUsersOfShared: (id: string) => `${MEXIT_BACKEND_URL_BASE}/namespace/shared/${id}/users`,
-
-    getPublicURL: (id: string) => `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${id}`,
-    getPublicURLofNote: (namespaceid: string, noteid: string) =>
-      `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${namespaceid}/node/${noteid}`
+    getAll: (opt?: AllNamespaceOption) => `${BASE_URLS.namespace}/all${opt ? `?${opt}=true` : ''}`,
+    create: `${BASE_URLS.namespace}`,
+    update: `${BASE_URLS.namespace}`,
+    delete: `${BASE_URLS.namespace}/share`,
+    makePublic: (id: string) => `${BASE_URLS.namespace}/makePublic/${id}`,
+    makePrivate: (id: string) => `${BASE_URLS.namespace}/makePrivate/${id}`,
+    share: `${BASE_URLS.namespace}/share`,
+    getUsersOfShared: (id: string) => `${BASE_URLS.namespace}/shared/${id}/users`
   },
 
   node: {
     get: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
-    create: `${MEXIT_BACKEND_URL_BASE}/node`,
-    append: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
-    bulkCreate: `${MEXIT_BACKEND_URL_BASE}/node/bulk`,
-    refactor: `${MEXIT_BACKEND_URL_BASE}/node/refactor`,
-    getMultipleNode: `${MEXIT_BACKEND_URL_BASE}/node/ids`,
-    makePublic: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePublic`,
-    makePrivate: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}/makePrivate`,
-    getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/public/${uid}`,
-    getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`
+    create: `${BASE_URLS.node}`,
+    append: (uid: string) => `${BASE_URLS.node}/${uid}`,
+    bulkCreate: `${BASE_URLS.node}/bulk`,
+    refactor: `${BASE_URLS.node}/refactor`,
+    makePublic: (uid: string) => `${BASE_URLS.node}/${uid}/makePublic`,
+    makePrivate: (uid: string) => `${BASE_URLS.node}/${uid}/makePrivate`,
+    getMultipleNode: `${BASE_URLS.node}/ids`
   },
 
   snippet: {
-    create: `${MEXIT_BACKEND_URL_BASE}/snippet`,
-    getAllSnippetsByWorkspace: `${MEXIT_BACKEND_URL_BASE}/snippet/all`,
-    getSnippetById: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/snippet/${uid}`
+    create: BASE_URLS.snippet,
+    getAllSnippetsByWorkspace: `${BASE_URLS.snippet}/all`,
+    getSnippetById: (uid: string) => `${BASE_URLS.snippet}/${uid}`
   },
 
   loch: {
-    getAllServices: `${MEX_LOCH_BASE_URL}/connect/all`,
-    getConnectedServices: `${MEX_LOCH_BASE_URL}/connect`,
-    connectToService: `${MEX_LOCH_BASE_URL}/connect`,
-    updateParentNoteOfService: `${MEX_LOCH_BASE_URL}/connect`
+    getAllServices: `${BASE_URLS.loch}/all`,
+    getConnectedServices: `${BASE_URLS.loch}`,
+    connectToService: `${BASE_URLS.loch}`,
+    updateParentNoteOfService: `${BASE_URLS.loch}`
   },
 
   share: {
-    sharedNode: `${MEXIT_BACKEND_URL_BASE}/shared`,
-    allSharedNodes: `${MEXIT_BACKEND_URL_BASE}/shared/all`,
-    getSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}`,
-    updateNode: `${MEXIT_BACKEND_URL_BASE}/shared/update`,
-    getUsersOfSharedNode: (nodeid: string) => `${MEXIT_BACKEND_URL_BASE}/shared/${nodeid}/users`
+    sharedNode: `${BASE_URLS.share}`,
+    allSharedNodes: `${BASE_URLS.share}/all`,
+    getSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}`,
+    updateNode: `${BASE_URLS.share}/update`,
+    getUsersOfSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}/users`
   },
 
   user: {
-    getUserRecords: `${BASE_USER_URL}/`,
+    getUserRecords: `${BASE_URLS.user}/`,
     registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
-    getFromEmail: (email: string) => `${BASE_USER_URL}/email/${encodeURIComponent(email)}`,
-    getFromUserId: (userId: string) => `${BASE_USER_URL}/${encodeURIComponent(userId)}`,
-    updateInfo: `${BASE_USER_URL}/info`,
+    getFromEmail: (email: string) => `${BASE_URLS.user}/email/${encodeURIComponent(email)}`,
+    getFromUserId: (userId: string) => `${BASE_URLS.user}/${encodeURIComponent(userId)}`,
+    updateInfo: `${BASE_URLS.user}/info`,
     getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`
   },
 
   view: {
-    saveView: `${MEXIT_BACKEND_URL_BASE}/view`,
-    deleteView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`,
-    getAllViews: `${MEXIT_BACKEND_URL_BASE}/view/all/workspace`,
-    getView: (id: string) => `${MEXIT_BACKEND_URL_BASE}/view/${id}`
+    saveView: `${BASE_URLS.view}`,
+    deleteView: (id: string) => `${BASE_URLS.view}/${id}`,
+    getAllViews: `${BASE_URLS.view}/all/workspace`,
+    getView: (id: string) => `${BASE_URLS.view}/${id}`
   },
 
   links: {
-    getLinks: `${MEXIT_BACKEND_URL_BASE}/link`,
-    saveLink: `${MEXIT_BACKEND_URL_BASE}/link/shorten`,
-    deleteLink: (linkId: string) => `${MEXIT_BACKEND_URL_BASE}/link/${linkId}`,
+    getLinks: `${BASE_URLS.link}`,
+    saveLink: `${BASE_URLS.link}/shorten`,
+    deleteLink: (linkId: string) => `${BASE_URLS.link}/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) =>
       `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
   },
@@ -169,6 +170,18 @@ export const apiURLs = {
     /** GET */
     blockReactionDetails: (nodeId: string, blockId: string) =>
       `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}/details`
+  },
+
+  public: {
+    getPublicNS: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,
+    getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/public/${uid}`
+  },
+
+  frontend: {
+    getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
+    getPublicNSURL: (id: string) => `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${id}`,
+    getPublicURLofNoteInNS: (namespaceid: string, noteid: string) =>
+      `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${namespaceid}/node/${noteid}`
   },
 
   misc: {

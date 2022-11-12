@@ -51,7 +51,7 @@ const PublicNodeView = () => {
         // Only checking these for public namespaces view
         // No need for trying this for individual nodes on frontend
         if (
-          isRequestedWithin(5, `${apiURLs.node.getPublicNode(nodeId)}`) &&
+          isRequestedWithin(5, `${apiURLs.public.getPublicNode(nodeId)}`) &&
           window.location.pathname.startsWith('/share/namespace')
         ) {
           const nodeContent = getContent(nodeId)

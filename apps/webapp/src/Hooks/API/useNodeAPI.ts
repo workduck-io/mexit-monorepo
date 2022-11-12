@@ -274,7 +274,7 @@ export const useApi = () => {
 
   const getPublicNodeAPI = async (nodeId: string) => {
     const res = await client
-      .get(apiURLs.node.getPublicNode(nodeId), {
+      .get(apiURLs.public.getPublicNode(nodeId), {
         headers: {
           Accept: 'application/json, text/plain, */*'
         }
