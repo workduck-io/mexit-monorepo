@@ -22,7 +22,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
       }
 
       return client
-        .post(apiURLs.createNode, reqData, {
+        .post(apiURLs.node.create, reqData, {
           headers: {
             'mex-workspace-id': data.workspaceID
           }
@@ -54,7 +54,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         tags: []
       }
       return client
-        .post(apiURLs.bulkCreateNodes, reqData, {
+        .post(apiURLs.node.bulkCreate, reqData, {
           headers: {
             'mex-workspace-id': data.workspaceID
           }
@@ -85,7 +85,7 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'MAKE_PUBLIC': {
       return client
-        .patch(apiURLs.makeNotePublic(body?.nodeId), null, {
+        .patch(apiURLs.node.makePublic(body?.nodeId), null, {
           withCredentials: false,
           headers: headers
         })
@@ -98,7 +98,7 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
     }
     case 'MAKE_PRIVATE': {
       return client
-        .patch(apiURLs.makeNotePrivate(body?.nodeId), null, {
+        .patch(apiURLs.node.makePrivate(body?.nodeId), null, {
           withCredentials: false,
           headers: headers
         })
@@ -196,7 +196,7 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
 
     // TODO: complete this
     case 'MEX_USER': {
-      const URL = apiURLs.getUserByLinkedin
+      const URL = apiURLs.user.getUserByLinkedin
 
       return client
         .post(URL, data.body)
@@ -231,7 +231,7 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
     case 'UPLOAD_IMAGE': {
       return client
         .post(
-          apiURLs.createImageLink,
+          apiURLs.misc.createImageLink,
           { encodedString: data.base64 },
           {
             headers: { 'workspace-id': data.workspaceId }
@@ -239,7 +239,7 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
         )
         .then((resp) => resp.data)
         .then((path: string) => {
-          return { message: apiURLs.getImagePublicLink(path), error: null }
+          return { message: apiURLs.misc.getImagePublicLink(path), error: null }
         })
         .catch((error) => {
           return { message: null, error: error }

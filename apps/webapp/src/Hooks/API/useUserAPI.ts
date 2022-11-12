@@ -140,7 +140,7 @@ export const useUserService = () => {
 
   const getCurrentUser = async (): Promise<UserDetails | undefined> => {
     try {
-      return await client.get<UserDetails>(apiURLs.getUserRecords).then((resp) => {
+      return await client.get<UserDetails>(apiURLs.user.getUserRecords).then((resp) => {
         mog('Response', { data: resp.data })
         return resp?.data
       })

@@ -50,7 +50,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
 
   const publicUrl = useMemo(() => {
     if (context === 'note') {
-      return isPublic(id) ? apiURLs.getPublicNodePath(id) : undefined
+      return isPublic(id) ? apiURLs.node.getPublicNodePath(id) : undefined
     } else if (context === 'space') {
       return isNamespacePublic(id) ? apiURLs.namespaces.getPublicURL(id) : undefined
     }

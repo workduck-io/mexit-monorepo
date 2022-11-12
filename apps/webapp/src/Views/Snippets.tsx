@@ -29,6 +29,7 @@ import {
   View
 } from '@mexit/shared'
 
+import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
@@ -40,7 +41,6 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
-import Plateless from '../Components/Editor/Plateless'
 
 export type SnippetsProps = {
   title?: string
@@ -265,7 +265,10 @@ const Snippets = () => {
 
         res.fulfilled.forEach((snippet) => {
           if (snippet) {
-            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
+            setRequest(apiURLs.snippet.getSnippetById(snippet.id), {
+              ...requestData,
+              url: apiURLs.snippet.getSnippetById(snippet.id)
+            })
             updateSnippet(snippet)
           }
         })

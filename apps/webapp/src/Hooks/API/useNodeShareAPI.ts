@@ -31,7 +31,7 @@ export const useNodeShareAPI = () => {
       accessType: access
     }
     return await client
-      .post(apiURLs.sharedNode, payload, {
+      .post(apiURLs.share.sharedNode, payload, {
         headers: workspaceHeaders()
       })
       .then((resp) => {
@@ -47,7 +47,7 @@ export const useNodeShareAPI = () => {
       userIDToAccessTypeMap
     }
     return await client
-      .put(apiURLs.sharedNode, payload, {
+      .put(apiURLs.share.sharedNode, payload, {
         headers: workspaceHeaders()
       })
       .then((resp) => {
@@ -63,7 +63,7 @@ export const useNodeShareAPI = () => {
       userIDs: userids
     }
     return await client
-      .delete(apiURLs.sharedNode, {
+      .delete(apiURLs.share.sharedNode, {
         data: payload,
         headers: workspaceHeaders()
       })
@@ -76,7 +76,7 @@ export const useNodeShareAPI = () => {
   const getAllSharedNodes = async (): Promise<SharedNodesPreset | SharedNodesErrorPreset> => {
     try {
       return await client
-        .get(apiURLs.allSharedNodes, {
+        .get(apiURLs.share.allSharedNodes, {
           headers: workspaceHeaders()
         })
         .then((resp) => {
@@ -141,7 +141,7 @@ export const useNodeShareAPI = () => {
   const getUsersOfSharedNode = async (nodeid: string): Promise<{ users: Record<string, string> }> => {
     try {
       return await client
-        .get(apiURLs.getUsersOfSharedNode(nodeid), {
+        .get(apiURLs.share.getUsersOfSharedNode(nodeid), {
           headers: workspaceHeaders()
         })
         .then((resp: any) => {

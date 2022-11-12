@@ -57,7 +57,7 @@ const useArchive = () => {
     if (userCred) {
       return await client
         .put(
-          apiURLs.archiveInNamespace(namespaceID),
+          apiURLs.archive.archiveInNamespace(namespaceID),
           {
             ids: nodes.map((i) => i.nodeid)
           },
@@ -115,7 +115,7 @@ const useArchive = () => {
     }
     await client
       .put(
-        apiURLs.unArchiveNodes,
+        apiURLs.archive.unArchiveNodes,
         {
           ids: nodes.map((i) => i.nodeid)
         },
@@ -137,7 +137,7 @@ const useArchive = () => {
   // TODO: figure how namespaces are working with archive hierarchy
   const getArchiveNotesHierarchy = async () => {
     await client
-      .get(apiURLs.getArchivedNodes, {
+      .get(apiURLs.archive.getArchivedNodes, {
         headers: {
           [WORKSPACE_HEADER]: getWorkspaceId(),
           Accept: 'application/json, text/plain, */*'
@@ -197,7 +197,7 @@ const useArchive = () => {
     if (userCred) {
       const res = await client
         .post(
-          apiURLs.deleteArchivedNodes,
+          apiURLs.archive.deleteArchivedNodes,
           {
             ids: nodeids.map((i) => i.nodeid)
           },

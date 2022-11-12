@@ -78,7 +78,7 @@ export const useApi = () => {
     setContent(noteID, options.content ?? defaultContent.content)
 
     const data = await client
-      .post(apiURLs.createNode, reqData, {
+      .post(apiURLs.node.create, reqData, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
@@ -120,7 +120,7 @@ export const useApi = () => {
     setContent(noteID, options.content)
 
     const data = await client
-      .post(apiURLs.bulkCreateNodes, reqData, {
+      .post(apiURLs.node.bulkCreate, reqData, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
@@ -148,7 +148,7 @@ export const useApi = () => {
     }
 
     // * TODO: Add append to Note for shared notes
-    const url = apiURLs.appendNode(noteId)
+    const url = apiURLs.node.append(noteId)
 
     const res = await client.patch(url, reqData, { headers: workspaceHeaders() })
 
@@ -187,7 +187,7 @@ export const useApi = () => {
       reqData['namespaceID'] = undefined
     }
 
-    const url = isShared ? apiURLs.updateSharedNode : apiURLs.createNode
+    const url = isShared ? apiURLs.share.updateNode : apiURLs.node.create
     const data = await client
       .post(url, reqData, {
         headers: workspaceHeaders()
@@ -211,7 +211,7 @@ export const useApi = () => {
   }
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
-    const url = isShared ? apiURLs.getSharedNode(nodeid) : apiURLs.getNode(nodeid)
+    const url = isShared ? apiURLs.share.getSharedNode(nodeid) : apiURLs.node.get(nodeid)
     if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
       console.warn('\nAPI has been requested before, cancelling\n')
       return
@@ -239,7 +239,7 @@ export const useApi = () => {
   }
 
   const makeNotePublic = async (nodeId: string) => {
-    const URL = apiURLs.makeNotePublic(nodeId)
+    const URL = apiURLs.node.makePublic(nodeId)
     return await client
       .patch(URL, null, {
         withCredentials: false,
@@ -256,7 +256,7 @@ export const useApi = () => {
   }
 
   const makeNotePrivate = async (nodeId: string) => {
-    const URL = apiURLs.makeNotePrivate(nodeId)
+    const URL = apiURLs.node.makePrivate(nodeId)
 
     return await client
       .patch(URL, null, {
@@ -274,7 +274,7 @@ export const useApi = () => {
 
   const getPublicNodeAPI = async (nodeId: string) => {
     const res = await client
-      .get(apiURLs.getPublicNode(nodeId), {
+      .get(apiURLs.node.getPublicNode(nodeId), {
         headers: {
           Accept: 'application/json, text/plain, */*'
         }
@@ -332,7 +332,7 @@ export const useApi = () => {
     }
 
     const data = await client
-      .post(apiURLs.createSnippet, reqData, {
+      .post(apiURLs.snippet.create, reqData, {
         headers: workspaceHeaders()
       })
       .then((d) => {
@@ -348,7 +348,7 @@ export const useApi = () => {
 
   const getAllSnippetsByWorkspace = async () => {
     const data = await client
-      .get(apiURLs.getAllSnippetsByWorkspace, {
+      .get(apiURLs.snippet.getAllSnippetsByWorkspace, {
         headers: workspaceHeaders()
       })
       .then((d) => {
@@ -384,7 +384,10 @@ export const useApi = () => {
           const requestData = { time: Date.now(), method: 'GET' }
 
           res.fulfilled.forEach(async (snippet) => {
-            setRequest(apiURLs.getSnippetById(snippet.id), { ...requestData, url: apiURLs.getSnippetById(snippet.id) })
+            setRequest(apiURLs.snippet.getSnippetById(snippet.id), {
+              ...requestData,
+              url: apiURLs.snippet.getSnippetById(snippet.id)
+            })
 
             if (snippet) {
               updateSnippet(snippet)
@@ -399,7 +402,7 @@ export const useApi = () => {
   }
 
   const getSnippetById = async (id: string) => {
-    const url = apiURLs.getSnippetById(id)
+    const url = apiURLs.snippet.getSnippetById(id)
 
     const data = await client
       .get(url, {
@@ -425,7 +428,7 @@ export const useApi = () => {
     }
 
     const data = await client
-      .post(apiURLs.refactorHeirarchy, reqData, {
+      .post(apiURLs.node.refactor, reqData, {
         headers: workspaceHeaders()
       })
       .then((response) => {
