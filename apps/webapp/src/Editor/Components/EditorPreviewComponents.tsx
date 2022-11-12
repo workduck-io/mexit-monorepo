@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { createPlateUI, withProps } from '@udecode/plate'
 import { StyledElement } from '@udecode/plate-styled-components'
 
-import Todo from '../../Components/Todo'
-import { QuickLinkElement } from './QuickLink/QuickLinkElement'
-import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
-import InlineBlock from './InlineBlock'
-import TagWrapper from '../../Components/Editor/TagWrapper'
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -20,10 +14,16 @@ import {
   ELEMENT_TASK_VIEW_LINK,
   ELEMENT_TODO_LI
 } from '@mexit/core'
+import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
+
+import TagWrapper from '../../Components/Editor/TagWrapper'
+import Todo from '../../Components/Todo'
+import InlineBlock from './InlineBlock'
 import { MentionElement } from './Mentions/MentionElement'
+import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import TaskViewLink from './TaskViewLink'
 
-export const editorPreviewComponents = {
+export const editorPreviewComponents = createPlateUI({
   [ELEMENT_LINK]: withProps(LinkElement, {
     as: 'a'
   }),
@@ -41,7 +41,7 @@ export const editorPreviewComponents = {
   [ELEMENT_TABLE]: TableWrapper,
   [ELEMENT_MENTION]: MentionElement as any,
   [ELEMENT_TASK_VIEW_LINK]: TaskViewLink as any
-}
+})
 
 const components = createPlateUI({
   ...editorPreviewComponents,

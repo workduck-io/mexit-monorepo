@@ -82,6 +82,10 @@ const Metadata = ({
     return usersWithStatus
   }, [location, activeUsers, mentionable, namespaceId, nodeId])
 
+  const onNoteShareClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    openShareModal('permission', 'note', nodeId)
+  }
+
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
     return null
 
@@ -111,11 +115,14 @@ const Metadata = ({
         {!publicMetadata && !hideShareDetails && (
           <Data>
             <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
-            <Menu values={<MexIcon noHover icon="bi:three-dots-vertical" width={20} height={20} />}>
+            <Menu
+              key={`Share-modal-menu-${nodeId}`}
+              values={<MexIcon noHover icon="bi:three-dots-vertical" width={20} height={20} />}
+            >
               <MenuItem
                 key="share-menu"
                 icon={{ type: 'ICON', value: 'ri:share-line' }}
-                onClick={() => openShareModal('permission', 'note', nodeId)}
+                onClick={onNoteShareClick}
                 label="Share"
               />
             </Menu>

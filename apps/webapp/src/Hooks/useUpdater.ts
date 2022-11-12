@@ -1,4 +1,4 @@
-import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
+import { getTodosFromContent, mog, NodeEditorContent } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
@@ -31,7 +31,9 @@ export const useUpdater = () => {
       if (metadata) setMetadata(noteId, metadata)
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
-      updateNodeTodos(noteId, getTodosFromContent(content))
+      const todos = getTodosFromContent(content)
+      mog('CONTENT FOR TODOS', { todos })
+      updateNodeTodos(noteId, todos)
 
       updateDocument('node', noteId, content)
     }
