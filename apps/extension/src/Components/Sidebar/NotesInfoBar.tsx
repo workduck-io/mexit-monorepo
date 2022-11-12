@@ -4,8 +4,8 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { SidebarListFilterWrapper, SidebarListFilter, Input, SnippetCards, copyTextToClipboard } from '@mexit/shared'
+import { mog } from '@mexit/core'
+import { SidebarListFilterWrapper, SidebarListFilter, Input, SnippetCards } from '@mexit/shared'
 
 import useRaju from '../../Hooks/useRaju'
 import useDataStore from '../../Stores/useDataStore'
@@ -25,7 +25,6 @@ export const NotesInfoBar = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     const res = await dispatch('SEARCH', ['node'], newSearchTerm)
-    mog('node search results', { res, newSearchTerm })
 
     setSearchedNodes(res?.map((item) => item.id))
   }

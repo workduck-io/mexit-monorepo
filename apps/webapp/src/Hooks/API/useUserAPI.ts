@@ -46,7 +46,7 @@ export const useUserService = () => {
     if (user) return user
 
     try {
-      return await client.get<any>(apiURLs.user.getFromEmail(email), { headers: workspaceHeaders() }).then((resp) => {
+      return await client.get<any>(apiURLs.user.getFromEmail(email)).then((resp) => {
         mog('Response', { data: resp.data })
         if (resp?.data?.userId && resp?.data?.name) {
           addUser({
@@ -74,27 +74,23 @@ export const useUserService = () => {
     if (user) return user
 
     try {
-      return await client
-        .get(apiURLs.user.getFromUserId(userID), {
-          headers: workspaceHeaders()
-        })
-        .then((resp: any) => {
-          mog('Response', { data: resp.data })
-          if (resp?.data?.email && resp?.data?.name) {
-            addUser({
-              userID,
-              email: resp?.data?.email,
-              alias: resp?.data?.alias ?? resp?.data?.name,
-              name: resp?.data?.name
-            })
-          }
-          return {
+      return await client.get(apiURLs.user.getFromUserId(userID)).then((resp: any) => {
+        mog('Response', { data: resp.data })
+        if (resp?.data?.email && resp?.data?.name) {
+          addUser({
             userID,
-            email: resp?.data?.email ?? undefined,
+            email: resp?.data?.email,
             alias: resp?.data?.alias ?? resp?.data?.name,
             name: resp?.data?.name
-          }
-        })
+          })
+        }
+        return {
+          userID,
+          email: resp?.data?.email ?? undefined,
+          alias: resp?.data?.alias ?? resp?.data?.name,
+          name: resp?.data?.name
+        }
+      })
     } catch (e) {
       mog('Error Fetching User Details', { error: e, userID })
       return { userID }
@@ -131,9 +127,11 @@ export const useUserService = () => {
     }
 
     try {
-      return await client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }).then((resp) => {
-        return true
-      })
+      return await client
+        .put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }, { headers: workspaceHeaders() })
+        .then((resp) => {
+          return true
+        })
     } catch (e) {
       mog('Error Updating User Info', { error: e, userID })
       return false

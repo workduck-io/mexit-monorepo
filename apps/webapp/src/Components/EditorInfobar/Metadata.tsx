@@ -12,6 +12,7 @@ import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
 import { RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
+import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -68,10 +69,17 @@ const Metadata = ({
 
   const sharedUsers = useMemo(() => {
     const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
+    const currentUser = useAuthStore.getState().userDetails
     mog('ACTIVE USERS', { activeUsers, mentionable })
-    return sharedUsersOfNode
-      .map((user) => ({ userId: user.userID, active: activeUsers.includes(user.userID) }))
+
+    const usersWithStatus = sharedUsersOfNode
+      .map((user) => {
+        const isUserActive = currentUser?.userID === user.userID || activeUsers?.includes(user.userID)
+        return { userId: user.userID, active: isUserActive }
+      })
       .sort((a, b) => Number(a.active) - Number(b.active))
+
+    return usersWithStatus
   }, [location, activeUsers, mentionable, namespaceId, nodeId])
 
   if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
@@ -83,7 +91,7 @@ const Metadata = ({
         <DataGroup>
           {metadata.lastEditedBy !== undefined && (
             <DataWrapper interactive={metadata.updatedAt !== undefined}>
-              {metadata.lastEditedBy !== undefined && !publicMetadata ? (
+              {metadata.lastEditedBy !== undefined ? (
                 <ProfileIcon data-title={metadata.lastEditedBy}>
                   <ProfileImageWithToolTip props={{ userid: metadata.lastEditedBy, size: 16 }} placement="bottom" />
                 </ProfileIcon>
