@@ -32,13 +32,14 @@ export const highlightStoreConstructor = (set, get) => ({
   initHighlights: (ilinks, contents) => {
     const highlighted = {}
 
-    ilinks.forEach((ilink) => {
+    ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
-        if (block?.metadata?.elementMetadata && this) {
-          highlighted[block.metadata.elementMetadata.sourceUrl] = {
-            ...highlighted[block.metadata.elementMetadata.sourceUrl],
+        const elementMetadata = block?.metadata?.elementMetadata
+        if (elementMetadata?.sourceURL && this) {
+          highlighted[elementMetadata.sourceUrl] = {
+            ...highlighted[elementMetadata.sourceUrl],
             [block.id]: {
-              elementMetadata: block.metadata.elementMetadata,
+              elementMetadata,
               nodeId: this.nodeid,
               shared: !!this?.owner
             }
