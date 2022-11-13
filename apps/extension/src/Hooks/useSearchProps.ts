@@ -4,11 +4,11 @@ import LensIcon from '@iconify/icons-ph/magnifying-glass-bold'
 import { cleanString } from '@mexit/core'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { useEditorContext } from './useEditorContext'
+import { useEditorStore } from './useEditorStore'
 
 export const useSearchProps = () => {
   const activeItem = useSputlitStore((s) => s.activeItem)
-  const { previewMode } = useEditorContext()
+  const { previewMode } = useEditorStore()
   const node = useSputlitStore((s) => s.node)
 
   const icon = !previewMode ? BackIcon : LensIcon

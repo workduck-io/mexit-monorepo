@@ -22,7 +22,7 @@ import {
 import { Loading, WDLogo } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useLinks } from '../../Hooks/useLinks'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSearch } from '../../Hooks/useSearch'
@@ -46,7 +46,7 @@ const Search = () => {
   const { searchInList } = useSearch()
   const search = useSputlitStore((store) => store.search)
   const setSearch = useSputlitStore((store) => store.setSearch)
-  const { previewMode, setPreviewMode } = useEditorContext()
+  const { previewMode, setPreviewMode } = useEditorStore()
   const { icon, placeholder } = useSearchProps()
   const { saveIt } = useSaveChanges()
   const { getILinkFromNodeid } = useLinks()

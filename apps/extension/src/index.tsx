@@ -13,7 +13,6 @@ import Sputlit from './Components/Sputlit'
 import { SputlitPortal } from './Components/Sputlit/SputlitPortal'
 import Tooltip from './Components/Tooltip'
 import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
-import { EditorProvider } from './Hooks/useEditorContext'
 import { HighlighterProvider } from './Hooks/useHighlighterContext'
 import { SputlitProvider } from './Hooks/useSputlitContext'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
@@ -42,20 +41,18 @@ export default function Index() {
           </DibbaPortal>
           <Notification />
 
-          <EditorProvider>
-            <InternalEvents />
+          <InternalEvents />
 
-            {/* TODO: think of a better name, and use it everywhere for consistency */}
-            <ExtInfoBar />
+          {/* TODO: think of a better name, and use it everywhere for consistency */}
+          <ExtInfoBar />
 
-            <TooltipPortal>
-              <Tooltip />
-            </TooltipPortal>
+          <TooltipPortal>
+            <Tooltip />
+          </TooltipPortal>
 
-            <SputlitPortal>
-              <Sputlit />
-            </SputlitPortal>
-          </EditorProvider>
+          <SputlitPortal>
+            <Sputlit />
+          </SputlitPortal>
         </HighlighterProvider>
       </SputlitProvider>
     </Providers>

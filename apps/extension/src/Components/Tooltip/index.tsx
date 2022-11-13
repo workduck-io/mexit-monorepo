@@ -7,7 +7,7 @@ import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, mog, SEPARATOR }
 import { copyTextToClipboard, Tooltip as FloatingTooltip } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useLinks } from '../../Hooks/useLinks'
@@ -31,7 +31,7 @@ function Tooltip() {
   const { setVisualState } = useSputlitContext()
   const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-  const { setPreviewMode, setNodeContent } = useEditorContext()
+  const { setPreviewMode, setNodeContent } = useEditorStore()
   const { highlighted } = useHighlightStore()
   const setNode = useSputlitStore((s) => s.setNode)
   const { getILinkFromNodeid } = useLinks()

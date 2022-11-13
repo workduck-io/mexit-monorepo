@@ -12,7 +12,7 @@ import { EditorStyles, useEditorChange } from '@mexit/shared'
 import MexEditor from '../../Editor/MexEditor'
 import { ComboboxConfig, ComboboxKey } from '../../Editor/types'
 import { MexEditorOptions } from '../../Editor/types/editor'
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
@@ -50,7 +50,7 @@ export const Editor: React.FC<EditorProps> = ({ readOnly, onChange }) => {
   const searchResults = useSputlitStore((s) => s.results)
   const activeItem = useSputlitStore((s) => s.activeItem)
   const selection = useSputlitStore((s) => s.selection)
-  const { previewMode, nodeContent, setPreviewMode } = useEditorContext()
+  const { previewMode, nodeContent, setPreviewMode } = useEditorStore()
   const node = useSputlitStore((s) => s.node)
 
   const ref = useRef<HTMLDivElement>()

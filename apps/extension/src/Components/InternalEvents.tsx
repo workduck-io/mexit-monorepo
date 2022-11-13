@@ -10,7 +10,7 @@ import Highlighter from 'web-highlighter'
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
-import { useEditorContext } from '../Hooks/useEditorContext'
+import { useEditorStore } from '../Hooks/useEditorStore'
 import { useHighlighter } from '../Hooks/useHighlighter'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
@@ -40,7 +40,7 @@ type Timeout = ReturnType<typeof setTimeout>
 function useToggleHandler() {
   const { visualState, setVisualState } = useSputlitContext()
   const setSelection = useSputlitStore((s) => s.setSelection)
-  const { previewMode, setPreviewMode } = useEditorContext()
+  const { previewMode, setPreviewMode } = useEditorStore()
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
 
   const { saveIt } = useSaveChanges()

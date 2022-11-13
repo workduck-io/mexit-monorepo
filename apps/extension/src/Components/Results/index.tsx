@@ -4,7 +4,7 @@ import { useSpring } from 'react-spring'
 
 import { ActionType } from '@mexit/core'
 
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { IFrameActionRenderer, SmartCapture, ScreenshotRenderer, AvatarRenderer } from '../Renderers'
@@ -15,7 +15,7 @@ function Results() {
   const { activeIndex } = useSputlitContext()
   const results = useSputlitStore((s) => s.results)
 
-  const { previewMode } = useEditorContext()
+  const { previewMode } = useEditorStore()
 
   const activeItem = useSputlitStore((s) => s.activeItem)
 
