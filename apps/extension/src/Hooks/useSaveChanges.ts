@@ -53,7 +53,7 @@ export function useSaveChanges() {
     // const editorId = getPlateId()
     const editorState = useEditorStore.getState().nodeContent
 
-    mog('nodeContent', editorState)
+    // mog('nodeContent', editorState)
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
