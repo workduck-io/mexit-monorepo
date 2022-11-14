@@ -67,11 +67,11 @@ function useToggleHandler() {
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
       const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
-
       switch (request.type) {
         case 'sputlit':
           if (visualState === VisualState.hidden) {
-            if (window.getSelection().toString() !== '') {
+            const selection = window.getSelection()
+            if (selection?.toString() !== '') {
               const { url, html, range } = getSelectionHTML()
               const saveableRange = highlighter.fromRange(range)
               const sanitizedHTML = sanitizeHTML(html)

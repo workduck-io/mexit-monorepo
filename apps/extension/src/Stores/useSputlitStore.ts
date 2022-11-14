@@ -97,9 +97,9 @@ export const useSputlitStore = create<SputlitStore>(
     setSelection: (selection) => set({ selection }),
     setChild: (child) => set({ child }),
 
-    setScreenshot: (image) => set({ screenshot: image }), 
+    setScreenshot: (image) => set({ screenshot: image }),
 
-    setAvatarSeed : (seed) => set({avatarSeed : seed}) ,
+    setAvatarSeed: (seed) => set({ avatarSeed: seed }),
 
     setActiveItem: (item) => set({ activeItem: item }),
     reset: () =>
@@ -107,9 +107,9 @@ export const useSputlitStore = create<SputlitStore>(
         search: { value: '', type: CategoryType.action },
         activeItem: undefined,
         results: [],
-        selection: undefined,
+        // selection: undefined,
         screenshot: undefined,
-        avatarSeed : '',
+        avatarSeed: '',
         input: ''
       })
   }))

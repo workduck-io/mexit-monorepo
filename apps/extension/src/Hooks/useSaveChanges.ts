@@ -106,9 +106,9 @@ export function useSaveChanges() {
     addRecent(node.nodeid)
     setActiveItem()
 
-    if (notification) {
-      toast.success('Saved')
-    }
+    // if (notification) {
+    //   toast.success('Saved')
+    // }
 
     // mog('Request and things', { request, node, nodeContent, editorState })
     chrome.runtime.sendMessage(request, (response) => {
