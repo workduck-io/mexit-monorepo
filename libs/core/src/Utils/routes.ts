@@ -13,12 +13,10 @@ export const USE_API = () => {
   return !IS_DEV
 }
 
-export const BASE_USER_URL = 'https://http.workduck.io/user'
-
 export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5000/api/v1'
+  ? 'http://localhost:5002/api/v1'
   : 'https://mexit-backend-staging.workduck.io/api/v1'
 
 export const CDN_BASE = 'https://cdn.workduck.io'
@@ -34,7 +32,7 @@ export const BASE_URLS = {
   snippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
   loch: `${MEX_LOCH_BASE_URL}/connect`,
   share: `${MEXIT_BACKEND_URL_BASE}/shared`,
-  user: `${BASE_USER_URL}`,
+  user: `${MEXIT_BACKEND_URL_BASE}/user`,
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
@@ -117,11 +115,11 @@ export const apiURLs = {
 
   user: {
     getUserRecords: `${BASE_URLS.user}/`,
-    registerUser: `${MEXIT_BACKEND_URL_BASE}/user/register`,
+    registerUser: `${BASE_URLS.user}/register`,
     getFromEmail: (email: string) => `${BASE_URLS.user}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${BASE_URLS.user}/${encodeURIComponent(userId)}`,
-    updateInfo: `${BASE_URLS.user}/info`,
-    getUserByLinkedin: `${MEXIT_BACKEND_URL_BASE}/user/linkedin`
+    updateInfo: `${BASE_URLS.user}/update`,
+    getUserByLinkedin: `${BASE_URLS.user}/linkedin`
   },
 
   view: {
