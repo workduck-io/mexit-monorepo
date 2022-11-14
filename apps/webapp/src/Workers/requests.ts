@@ -41,12 +41,9 @@ const getMultipleNodeAPI = async (nodeids: string) => {
   })
 }
 
-const getSnippetAPI = async (id: string) => {
-  const url = apiURLs.snippet.getSnippetById(id)
-
-  return client.get(url).then((d) => {
-    return d.data
-  })
+const getMultipleSnippetAPI = async (ids: string) => {
+  const url = apiURLs.node.getMultipleNode
+  return client.post(url, { ids: ids.split(',') }).then((d) => d.data)
 }
 
 const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[]) => {
@@ -64,7 +61,7 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
     }
 
     case WorkerRequestType.GET_SNIPPETS: {
-      args.forEach((i) => requestsToMake.push(getSnippetAPI(i)))
+      args.forEach((i) => requestsToMake.push(getMultipleSnippetAPI(i)))
       break
     }
   }
