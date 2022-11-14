@@ -2,12 +2,12 @@ import { client } from '@workduck-io/dwindle'
 
 import {
   apiURLs,
+  batchArray,
   defaultContent,
   DEFAULT_NAMESPACE,
   extractMetadata,
   getTagsFromContent,
   GET_REQUEST_MINIMUM_GAP,
-  iLinksToUpdate,
   mog,
   NodeEditorContent,
   removeNulls
@@ -26,7 +26,6 @@ import { useInternalLinks } from '../useInternalLinks'
 import { useLastOpened } from '../useLastOpened'
 import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
-import { useSearch } from '../useSearch'
 import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
 import { useAPIHeaders } from './useAPIHeaders'
@@ -376,33 +375,35 @@ export const useApi = () => {
         return newSnippets
       })
       .then(async (newSnippets) => {
-        const ids = newSnippets?.map((item) => item.snippetID)
-        mog('NewSnippets', { newSnippets, ids })
+        const toUpdateSnippets = newSnippets?.map((item) => item.snippetID)
+        mog('NewSnippets', { newSnippets, toUpdateSnippets })
+        if (toUpdateSnippets && toUpdateSnippets.length > 0) {
+          const ids = batchArray(toUpdateSnippets, 10).map((id: string[]) => id.join(','))
+          if (ids && ids.length > 0) {
+            const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+            const requestData = { time: Date.now(), method: 'GET' }
 
-        if (ids && ids.length > 0) {
-          const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-          const requestData = { time: Date.now(), method: 'GET' }
+            res.fulfilled.forEach(async (snippets) => {
+              setRequest(apiURLs.snippet.bulkGet, {
+                ...requestData,
+                url: apiURLs.snippet.bulkGet
+              })
 
-          res.fulfilled.forEach(async (snippet) => {
-            setRequest(apiURLs.snippet.getSnippetById(snippet.id), {
-              ...requestData,
-              url: apiURLs.snippet.getSnippetById(snippet.id)
+              if (snippets) {
+                snippets.forEach((snippet) => updateSnippet(snippet))
+              }
             })
 
-            if (snippet) {
-              updateSnippet(snippet)
-            }
-          })
-
-          mog('RunBatchWorkerSnippetsRes', { res, ids })
+            mog('RunBatchWorkerSnippetsRes', { res, ids })
+          }
         }
       })
 
     return data
   }
 
-  const getSnippetById = async (id: string) => {
-    const url = apiURLs.snippet.getSnippetById(id)
+  const getById = async (id: string) => {
+    const url = apiURLs.snippet.getById(id)
 
     const data = await client
       .get(url, {
@@ -467,7 +468,7 @@ export const useApi = () => {
     appendToNode,
     saveSnippetAPI,
     getAllSnippetsByWorkspace,
-    getSnippetById,
+    getById,
     refactorHierarchy,
     deleteAllVersionOfSnippet
   }

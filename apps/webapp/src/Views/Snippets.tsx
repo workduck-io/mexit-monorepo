@@ -12,21 +12,21 @@ import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
 import { apiURLs, convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult, mog } from '@mexit/core'
 import {
-  ItemTag,
-  MainHeader,
-  Result,
-  ResultDesc,
-  ResultMain,
-  ResultRow,
-  ResultTitle,
-  SearchPreviewWrapper,
-  SnippetCommand,
-  SnippetHeader,
-  SnippetHelp,
-  SnippetsSearchContainer,
-  SplitSearchPreviewWrapper,
-  Title,
-  View
+    ItemTag,
+    MainHeader,
+    Result,
+    ResultDesc,
+    ResultMain,
+    ResultRow,
+    ResultTitle,
+    SearchPreviewWrapper,
+    SnippetCommand,
+    SnippetHeader,
+    SnippetHelp,
+    SnippetsSearchContainer,
+    SplitSearchPreviewWrapper,
+    Title,
+    View
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
@@ -269,9 +269,9 @@ const Snippets = () => {
 
         res.fulfilled.forEach((snippet) => {
           if (snippet) {
-            setRequest(apiURLs.snippet.getSnippetById(snippet.id), {
+            setRequest(apiURLs.snippet.getById(snippet.id), {
               ...requestData,
-              url: apiURLs.snippet.getSnippetById(snippet.id)
+              url: apiURLs.snippet.getById(snippet.id)
             })
             updateSnippet(snippet)
           }
