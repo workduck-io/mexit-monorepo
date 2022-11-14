@@ -18,7 +18,7 @@ interface ShortenURLProps {
   isDuplicateAlias?: (alias: string) => boolean
 }
 
-const validLink = /^[a-z0-9]+$/i
+const validLink = /^[a-z0-9_-]+$/i
 
 // TODO: Add a input to enter shorten url
 export const ShortenURL = ({ link, workspaceId, updateAlias, isDuplicateAlias }: ShortenURLProps) => {

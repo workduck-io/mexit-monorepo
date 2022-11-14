@@ -7,7 +7,7 @@ import { NodeEditorContent } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -19,7 +19,7 @@ import { StyledContent } from './styled'
 export default function Content() {
   const { activeIndex } = useSputlitContext()
   const results = useSputlitStore((s) => s.results)
-  const { setNodeContent, previewMode } = useEditorContext()
+  const { setNodeContent, previewMode } = useEditorStore()
 
   const selection = useSputlitStore((s) => s.selection)
   const { getContent } = useContentStore()
@@ -50,6 +50,7 @@ export default function Content() {
 
     if (item?.category === QuickLinkType.backlink) {
       const content = getContent(item.id)?.content ?? defaultContent.content
+
       if (selection?.range && deserializedContent) {
         setNodeContent([...content, { children: deserializedContent, highlight: true }])
       } else {

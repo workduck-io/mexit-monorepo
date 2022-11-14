@@ -3,10 +3,12 @@ import styled, { css } from 'styled-components'
 
 import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'
 
-export const StyledResults = styled(animated.div)<{ isScreenshot?: boolean }>`
+export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
   overflow: hidden auto;
-  color: ${({ theme }) => theme.colors.text.fade};
   max-height: ${({ isScreenshot }) => (isScreenshot ? '75vh' : '300px')};
+  width: 100%;
+
+  color: ${({ theme }) => theme.colors.text.fade};
   ${({ isScreenshot }) =>
     isScreenshot &&
     css`

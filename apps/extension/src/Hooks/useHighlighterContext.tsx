@@ -10,13 +10,9 @@ const HighlighterContext = createContext<HighlighterContextType>(undefined!)
 export const useHighlighterContext = () => useContext(HighlighterContext)
 
 export const HighlighterProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const highlighter = useRef(null)
+  const highlighter = useRef(new Highlighter({ style: { className: 'mexit-highlight' } }))
 
   useEffect(() => {
-    if (!highlighter.current) {
-      highlighter.current = new Highlighter({ style: { className: 'mexit-highlight' } })
-    }
-
     return () => {
       if (highlighter.current) {
         highlighter.current?.dispose()

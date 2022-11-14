@@ -7,7 +7,7 @@ import { ActionType, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
@@ -32,7 +32,7 @@ const ResultList = ({ results }: { results: Array<any> }) => {
   const resetSpotlitState = useSputlitStore((store) => store.reset)
 
   const groups = Object.keys(groupBy(results, (n) => n.category))
-  const { previewMode } = useEditorContext()
+  const { previewMode } = useEditorStore()
 
   const indexes = useMemo(() => groups.map((gn) => findIndex(results, (n) => n.category === gn)), [groups])
 

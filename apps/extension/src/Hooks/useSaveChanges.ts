@@ -9,7 +9,7 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
-import { useEditorContext } from './useEditorContext'
+import { useEditorStore } from './useEditorStore'
 import { useInternalLinks } from './useInternalLinks'
 import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
@@ -26,7 +26,7 @@ export interface AppendAndSaveProps {
 
 export function useSaveChanges() {
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { setPreviewMode, nodeContent, setNodeContent } = useEditorContext()
+  const { setPreviewMode, setNodeContent } = useEditorStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
   const { setVisualState } = useSputlitContext()
@@ -51,7 +51,9 @@ export function useSaveChanges() {
 
     // Editor Id is different from nodeId
     // const editorId = getPlateId()
-    const editorState = nodeContent
+    const editorState = useEditorStore.getState().nodeContent
+
+    // mog('nodeContent', editorState)
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
@@ -104,9 +106,9 @@ export function useSaveChanges() {
     addRecent(node.nodeid)
     setActiveItem()
 
-    if (notification) {
-      toast.success('Saved')
-    }
+    // if (notification) {
+    //   toast.success('Saved')
+    // }
 
     // mog('Request and things', { request, node, nodeContent, editorState })
     chrome.runtime.sendMessage(request, (response) => {

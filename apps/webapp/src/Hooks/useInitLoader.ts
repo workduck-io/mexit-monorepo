@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import toast from 'react-hot-toast'
+import StateManager from 'react-select'
 
 import { mog, runBatch } from '@mexit/core'
 
@@ -35,6 +36,7 @@ export const useInitLoader = () => {
 
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
+  const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -65,7 +67,7 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated && snippetHydrated && dataStoreHydrated) {
+    if (isAuthenticated && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       mog('Inside InitLoader', { isAuthenticated })
       const initData = {
         ilinks: useDataStore.getState().ilinks,
@@ -80,5 +82,5 @@ export const useInitLoader = () => {
         fetchAll()
       })
     }
-  }, [isAuthenticated, snippetHydrated, dataStoreHydrated])
+  }, [isAuthenticated, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 
 import { QuickLinkType, ActionType, mog } from '@mexit/core'
 
-import { useEditorContext } from '../../Hooks/useEditorContext'
+import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
@@ -25,7 +25,7 @@ const Sputlit = () => {
   const { visualState, setVisualState } = useSputlitContext()
   const activeItem = useSputlitStore((s) => s.activeItem)
   const resetSputlit = useSputlitStore((s) => s.reset)
-  const { previewMode } = useEditorContext()
+  const { previewMode } = useEditorStore()
   const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
 

@@ -203,7 +203,7 @@ export default function useRaju() {
       case 'ACT_ON_REMINDER':
         return child.reminderAction(...params)
       case 'ADD_HIGHLIGHTED_BLOCK':
-        return child.addHighlighted(...params)
+        return child.addHighlight(...params)
       case 'SEARCH':
         return child.search(...params).then((result) => {
           return result

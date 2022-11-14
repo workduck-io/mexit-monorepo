@@ -10,7 +10,7 @@ import Highlighter from 'web-highlighter'
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
-import { useEditorContext } from '../Hooks/useEditorContext'
+import { useEditorStore } from '../Hooks/useEditorStore'
 import { useHighlighter } from '../Hooks/useHighlighter'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
@@ -40,10 +40,9 @@ type Timeout = ReturnType<typeof setTimeout>
 function useToggleHandler() {
   const { visualState, setVisualState } = useSputlitContext()
   const setSelection = useSputlitStore((s) => s.setSelection)
-  const { previewMode, setPreviewMode } = useEditorContext()
+  const { previewMode, setPreviewMode } = useEditorStore()
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-
-  const { saveIt } = useSaveChanges()
+  const resetSputlitState = useSputlitStore((s) => s.reset)
 
   const timeoutRef = useRef<Timeout>()
   const runAnimateTimer = useCallback((vs: VisualState.animatingIn | VisualState.animatingOut) => {
@@ -68,11 +67,11 @@ function useToggleHandler() {
   useEffect(() => {
     function messageHandler(request: any, sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) {
       const highlighter = new Highlighter({ style: { className: 'mexit-highlight' } })
-
       switch (request.type) {
         case 'sputlit':
           if (visualState === VisualState.hidden) {
-            if (window.getSelection().toString() !== '') {
+            const selection = window.getSelection()
+            if (selection?.toString() !== '') {
               const { url, html, range } = getSelectionHTML()
               const saveableRange = highlighter.fromRange(range)
               const sanitizedHTML = sanitizeHTML(html)
@@ -93,13 +92,10 @@ function useToggleHandler() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (previewMode) {
-          setVisualState(VisualState.animatingOut)
-          setTooltipState({ visualState: VisualState.hidden })
-        } else {
-          setPreviewMode(true)
-          saveIt(false, true)
-        }
+        setVisualState(VisualState.animatingOut)
+        setTooltipState({ visualState: VisualState.hidden })
+        resetSputlitState()
+        setPreviewMode(true)
       }
     }
 

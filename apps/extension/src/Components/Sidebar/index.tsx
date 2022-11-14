@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 
 import { ExtInfobarMode, InfoBarWrapper, Tabs } from '@mexit/shared'
 
+import useRaju from '../../Hooks/useRaju'
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
@@ -35,6 +36,9 @@ const ExtInfoBarItems = () => {
 export const ExtInfoBar = () => {
   const { rhSidebar } = useLayoutStore()
   const { rhSidebarSpringProps } = useSidebarTransition()
+  // Not being used but needed so that messaging starts right when the sidebar renders
+  // and not when the command bar is rendered
+  const { dispatch } = useRaju()
 
   const infobar = useLayoutStore((s) => s.infobar)
 
