@@ -89,6 +89,22 @@ export const SpaceTitle = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
 `
 
+export const VisibleFade = styled.div<{ visible: boolean }>`
+  display: flex;
+  flex-direction: column;
+
+  ${({ visible }) =>
+    visible
+      ? css`
+          opacity: 1;
+          pointer-events: all;
+        `
+      : css`
+          opacity: 0;
+          pointer-events: none;
+        `}
+`
+
 export const SidebarToggle = styled.div<{ isVisible?: boolean }>`
   display: flex;
   align-items: center;
