@@ -14,7 +14,7 @@ export const useEditorStore = create<EditorStoreType>((set, get) => ({
   setNodeContent: (content) => {
     set({ nodeContent: content })
   },
-  previewMode: false,
+  previewMode: true,
   setPreviewMode: (val) => {
     set({ previewMode: val })
   }

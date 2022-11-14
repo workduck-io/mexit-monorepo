@@ -8,7 +8,7 @@ import { useEditorStore } from './useEditorStore'
 
 export const useSearchProps = () => {
   const activeItem = useSputlitStore((s) => s.activeItem)
-  const { previewMode } = useEditorStore()
+  const previewMode = useEditorStore((s) => s.previewMode)
   const node = useSputlitStore((s) => s.node)
 
   const icon = !previewMode ? BackIcon : LensIcon

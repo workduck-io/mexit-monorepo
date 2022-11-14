@@ -159,7 +159,7 @@ const Search = () => {
       }
     }
 
-    if (previewMode) getSearchItems()
+    getSearchItems()
   }, [search, selection, previewMode, ilinks, lastOpenedNodes])
 
   const onBackClick = () => {

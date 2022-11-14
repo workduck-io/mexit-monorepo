@@ -42,8 +42,7 @@ function useToggleHandler() {
   const setSelection = useSputlitStore((s) => s.setSelection)
   const { previewMode, setPreviewMode } = useEditorStore()
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-
-  const { saveIt } = useSaveChanges()
+  const resetSputlitState = useSputlitStore((s) => s.reset)
 
   const timeoutRef = useRef<Timeout>()
   const runAnimateTimer = useCallback((vs: VisualState.animatingIn | VisualState.animatingOut) => {
@@ -93,13 +92,10 @@ function useToggleHandler() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (previewMode) {
-          setVisualState(VisualState.animatingOut)
-          setTooltipState({ visualState: VisualState.hidden })
-        } else {
-          setPreviewMode(true)
-          saveIt(false, true)
-        }
+        setVisualState(VisualState.animatingOut)
+        setTooltipState({ visualState: VisualState.hidden })
+        resetSputlitState()
+        setPreviewMode(true)
       }
     }
 
