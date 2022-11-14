@@ -99,7 +99,7 @@ export const ShortenerComponent = () => {
       <UrlTitleWrapper>
         <GenericFlex>
           <FaviconImage source={window.location.href} />
-          {window.location.origin}
+          {window.location.hostname}
         </GenericFlex>
 
         <CopyButton text={window.location.href} />
