@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { getFavicon, Link, Tag } from '@mexit/core'
 import {
   AddTagMenu,
+  CopyButton,
+  GenericFlex,
   LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
   LinkTagSection,
@@ -24,11 +26,14 @@ const ShortenerWrapper = styled(LinkWrapper)`
 `
 
 const UrlTitleWrapper = styled(LinkTitleWrapper)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   background-color: ${({ theme }) => theme.colors.gray[9]};
   color: ${({ theme }) => theme.colors.text.fade};
   font-size: 1rem;
   width: 100%;
-
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: 0.25rem 0;
 
@@ -92,8 +97,12 @@ export const ShortenerComponent = () => {
   return (
     <ShortenerWrapper>
       <UrlTitleWrapper>
-        <FaviconImage source={window.location.href} />
-        {window.location.href}
+        <GenericFlex>
+          <FaviconImage source={window.location.href} />
+          {window.location.origin}
+        </GenericFlex>
+
+        <CopyButton text={window.location.href} />
       </UrlTitleWrapper>
       <LinkShortenAndTagsWrapper>
         <ShortenURL
