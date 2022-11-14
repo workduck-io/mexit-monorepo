@@ -24,7 +24,8 @@ import {
   SpaceSeparator,
   SpaceTitle,
   SpaceTitleFakeInput,
-  SpaceTitleWrapper
+  SpaceTitleWrapper,
+  VisibleFade
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 
@@ -33,7 +34,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
   // const node = useEditorStore((store) => store.node)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const focusMode = useLayoutStore((state) => state.focusMode)
-  const isUserEdititng = useEditorStore((store) => store.isEditing)
+  const isUserEditing = useEditorStore((store) => store.isEditing)
   const { getFocusProps } = useLayout()
   const inpRef = React.useRef<HTMLInputElement>(null)
   const titleRef = React.useRef<HTMLDivElement>(null)
@@ -141,20 +142,22 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
             )}
           </SpaceTitle>
           {!isNamespaceReserved && (
-            <IconButton
-              highlight={isShared && !isReadonly && !isWriteOnly}
-              title={shareSpaceTooltip()}
-              icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
-              disabled={isWriteOnly}
-              onClick={isReadonly ? undefined : onShareSpace}
-            />
+            <VisibleFade visible={!isUserEditing}>
+              <IconButton
+                highlight={isShared && !isReadonly && !isWriteOnly}
+                title={shareSpaceTooltip()}
+                icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
+                disabled={isWriteOnly}
+                onClick={isReadonly ? undefined : onShareSpace}
+              />
+            </VisibleFade>
           )}
           <Tippy
             theme="mex-bright"
             placement="right"
             content={<TitleWithShortcut title={sidebar?.expanded ? 'Collapse Sidebar' : 'Expand Sidebar'} />}
           >
-            <SidebarToggle isVisible={!isUserEdititng} onClick={toggleSidebar} {...getFocusProps(focusMode)}>
+            <SidebarToggle isVisible={!isUserEditing} onClick={toggleSidebar} {...getFocusProps(focusMode)}>
               <Icon
                 icon={sidebar.expanded ? 'heroicons-solid:chevron-double-left' : 'heroicons-solid:chevron-double-right'}
               />

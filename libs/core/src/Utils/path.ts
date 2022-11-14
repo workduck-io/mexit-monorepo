@@ -88,11 +88,11 @@ export const getAllParentIds = (id: string) =>
     ?.split(SEPARATOR)
     ?.reduce((p, c) => [...p, p.length > 0 ? `${p[p.length - 1]}${SEPARATOR}${c}` : c], [] as Array<string>)
 
-export const getParentBreadcurmbs = (path: string, nodes: ILink[]) => {
-  const allParents = getAllParentIds(path)
+export const getParentBreadcrumbs = (node: { path: string; namespace?: string }, nodes: ILink[]) => {
+  const allParents = getAllParentIds(node.path)
 
   const parents: BreadcrumbItem[] = allParents.reduce((val, p) => {
-    const parentNode = nodes.find((l) => l.path === p)
+    const parentNode = nodes.find((l) => l.path === p && (node.namespace ? node.namespace === l.namespace : true))
     if (parentNode) {
       return [
         ...val,

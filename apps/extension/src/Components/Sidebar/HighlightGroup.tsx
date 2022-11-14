@@ -33,12 +33,8 @@ export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: S
 
   const openHighlight = () => {
     const element = document.querySelector(`[data-highlight-id="${blockId}"]`)
-    const coordinates = element.getBoundingClientRect()
 
-    window.scrollTo({
-      top: coordinates.top,
-      behavior: 'smooth'
-    })
+    element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   return (

@@ -1,6 +1,6 @@
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
-import { ILink, SharedNode, NodeType, getParentBreadcurmbs, mog } from '@mexit/core'
+import { ILink, SharedNode, NodeType, getParentBreadcrumbs, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
@@ -93,7 +93,7 @@ export const useNodes = () => {
     const node = nodes.find((l) => l.nodeid === nodeid)
 
     if (node) {
-      const parents = getParentBreadcurmbs(node.path, nodes)
+      const parents = getParentBreadcrumbs({ path: node.path, namespace: node.namespace }, nodes)
 
       // parents.unshift({
       //   id: 'space-personal',
@@ -109,7 +109,7 @@ export const useNodes = () => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const sharedNode = sharedNodes.find((n) => n.nodeid === nodeid)
     if (sharedNode) {
-      const parents = getParentBreadcurmbs(sharedNode.path, sharedNodes)
+      const parents = getParentBreadcrumbs({ path: sharedNode.path }, sharedNodes)
 
       // parents.unshift({
       //   id: 'space-shared',

@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ErrorBoundary } from 'react-error-boundary'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
-import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import useEditorActions from '../Hooks/useEditorActions'
-import { useFetchShareData } from '../Hooks/useFetchShareData'
-import { getNodeidFromPathAndLinks } from '../Hooks/useLinks'
-import useLoad from '../Hooks/useLoad'
-import { usePortals } from '../Hooks/usePortals'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
 import { useAnalysis } from '../Stores/useAnalysis'
-import { useAuthStore } from '../Stores/useAuth'
 import useBlockStore from '../Stores/useBlockStore'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
-import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex } from '../Workers/controller'
@@ -64,17 +55,17 @@ const EditorView = () => {
     }
   }, [ilinks, archive, contents, snippets]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const location = useLocation()
-  const showInfoBar = () => {
-    if (location.pathname.startsWith('/editor')) return true
-  }
+  // const location = useLocation()
+  // const showInfoBar = () => {
+  //   if (location.pathname.startsWith('/editor')) return true
+  // }
 
-  const shortcuts = useHelpStore((store) => store.shortcuts)
-  const node = useEditorStore((store) => store.node)
-  const { shortcutDisabled, shortcutHandler } = useKeyListener()
+  // const shortcuts = useHelpStore((store) => store.shortcuts)
+  // const node = useEditorStore((store) => store.node)
+  // const { shortcutDisabled, shortcutHandler } = useKeyListener()
 
-  const { goTo } = useRouting()
-  const { loadNode } = useLoad()
+  // const { goTo } = useRouting()
+  // const { loadNode } = useLoad()
 
   const focusMode = useLayoutStore((s) => s.focusMode)
   const toggleFocusMode = useLayoutStore((s) => s.toggleFocusMode)
