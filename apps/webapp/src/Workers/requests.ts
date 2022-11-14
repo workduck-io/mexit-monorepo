@@ -42,7 +42,7 @@ const getMultipleNodeAPI = async (nodeids: string) => {
 }
 
 const getMultipleSnippetAPI = async (ids: string) => {
-  const url = apiURLs.node.getMultipleNode
+  const url = apiURLs.snippet.bulkGet
   return client.post(url, { ids: ids.split(',') }).then((d) => d.data)
 }
 

@@ -384,9 +384,9 @@ export const useApi = () => {
             const requestData = { time: Date.now(), method: 'GET' }
 
             res.fulfilled.forEach(async (snippets) => {
-              setRequest(apiURLs.snippet.bulkGet(), {
+              setRequest(apiURLs.snippet.bulkGet, {
                 ...requestData,
-                url: apiURLs.snippet.bulkGet()
+                url: apiURLs.snippet.bulkGet
               })
 
               if (snippets) {
