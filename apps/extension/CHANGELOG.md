@@ -1,5 +1,13 @@
 # mexit
 
+## 0.18.8
+
+### Patch Changes
+
+- cee329e9: User service routes updated to call the middleware
+- ff1e216e: Fix task selection, reactions store, source url behavior
+- 8508fb3d: Fixed content mixups during capture, added copy url button to sidebar, allowed underscores and dashes for shortener
+
 ## 0.18.7
 
 ### Patch Changes

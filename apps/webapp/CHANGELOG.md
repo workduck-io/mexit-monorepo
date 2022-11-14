@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.20.3
+
+### Patch Changes
+
+- cee329e9: User service routes updated to call the middleware
+- 555961f7: Added bulk snippet get endpoint
+- ff1e216e: Fix task selection, reactions store, source url behavior
+
 ## 0.20.2
 
 ### Patch Changes
