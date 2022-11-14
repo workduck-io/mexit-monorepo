@@ -143,7 +143,6 @@ export default function Chotu() {
   }, [parent, recents])
 
   useEffect(() => {
-    mog('THEME', { theme })
     if (!parent) return
 
     parent.bootTheme(theme)

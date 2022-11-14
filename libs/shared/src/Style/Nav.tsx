@@ -292,7 +292,7 @@ export const SideNav = styled(animated.div)<SideNavProps>`
     `}
 
   ${TabBody} {
-    height: 100vh;
+    height: calc(100vh - 9rem);
   }
 
   ${focusStyles}

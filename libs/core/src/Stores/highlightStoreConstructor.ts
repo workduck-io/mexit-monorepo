@@ -34,8 +34,8 @@ export const highlightStoreConstructor = (set, get) => ({
 
     ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
-        const elementMetadata = block?.metadata?.elementMetadata
-        if (elementMetadata?.sourceURL && this) {
+        const elementMetadata: ElementHighlightMetadata = block?.metadata?.elementMetadata
+        if (elementMetadata?.sourceUrl && this) {
           highlighted[elementMetadata.sourceUrl] = {
             ...highlighted[elementMetadata.sourceUrl],
             [block.id]: {
@@ -48,7 +48,7 @@ export const highlightStoreConstructor = (set, get) => ({
       }, ilink)
     })
 
-    mog('initing highlights', { highlighted })
+    // mog('initing highlights', { highlighted })
     set({ highlighted: highlighted })
   },
   setHighlights: (highlights) => {
