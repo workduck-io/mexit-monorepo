@@ -82,7 +82,13 @@ export const CreateNewMenu = ({ children, placement }: Props) => {
             {...getFloatingProps()}
           >
             {menuItems.map((i) => (
-              <CreateNewMenuItemWrapper onClick={() => i.onSelect()} key={`create_new_${i.id}`}>
+              <CreateNewMenuItemWrapper
+                onClick={() => {
+                  i.onSelect()
+                  setOpen(false)
+                }}
+                key={`create_new_${i.id}`}
+              >
                 <Icon icon={i.icon ?? addCircleLine} />
                 {i.label}
               </CreateNewMenuItemWrapper>
