@@ -4,24 +4,27 @@ import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { useAuth, client } from '@workduck-io/dwindle'
+import { useAuth, client, useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
 import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
 
-import { useSnippets } from '../Hooks/useSnippets'
+import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
 import { useApiStore } from './useApiStore'
+import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
 import { useMentionStore } from './useMentionsStore'
 import { usePublicNodeStore } from './usePublicNodes'
+import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
+import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
 
@@ -31,18 +34,23 @@ type LoginResult = { loginData: UserCred; loginStatus: string }
 
 export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
+  const clearUserCreds = useDwindleStore((s) => s.clearStore)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
-  const { updateSnippets } = useSnippets()
   const initContents = useContentStore((store) => store.initContents)
+  const clearSnippets = useSnippetStore((s) => s.clear)
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
   const clearMentions = useMentionStore((m) => m.reset)
+  const clearComments = useCommentStore((s) => s.clear)
+  const clearReactions = useReactionStore((s) => s.clear)
+  const clearViews = useViewStore((s) => s.clear)
+
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
   const resetShortcuts = useHelpStore((s) => s.reset)
@@ -85,20 +93,24 @@ export const useAuthentication = () => {
   const logout = async () => {
     await signOut()
     setUnAuthenticated()
+    clearUserCreds()
 
     // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
     // This is because zustand maintains it's state post logout as we don't go through a reload
     // Which results in zustand recreating everything post logout
     clearRequests()
     initContents({})
+    clearReactions()
+    clearComments()
     resetDataStore()
     clearMentions()
     resetPublicNodes()
     clearRecents()
     clearReminders()
-    updateSnippets([])
+    clearSnippets()
     resetShortcuts()
     clearTodos()
+    clearViews()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {

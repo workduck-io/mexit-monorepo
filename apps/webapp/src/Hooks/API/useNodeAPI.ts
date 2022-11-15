@@ -368,7 +368,7 @@ export const useApi = () => {
             id: item.snippetID,
             template: item.template,
             title: item.title,
-            content: []
+            content: defaultContent.content
           }))
         ])
 

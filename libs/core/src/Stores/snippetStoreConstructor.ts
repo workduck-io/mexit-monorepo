@@ -23,6 +23,7 @@ export interface SnippetStoreState {
   deleteSnippet: (id: string) => void
 
   editor: SnippetEditorStore
+  clear: () => void
   loadSnippet: (id: string) => void
 
   _hasHydrated: boolean
@@ -70,6 +71,10 @@ export const snippetStoreConstructor = (set, get) => ({
       return s
     })
     set({ snippets })
+  },
+
+  clear: () => {
+    set({ snippets: [], editor: { snippet: undefined } })
   },
 
   deleteSnippet: (id: string) =>
