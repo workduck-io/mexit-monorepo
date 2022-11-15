@@ -5,6 +5,9 @@ export const EMAIL_REG =
 
 export const PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\^$*.\[\]{}\(\)?\-“!@#%&\/,><\’:;|_~`])\S{8,99}$/
 
+// User id 833cae89-dd14-445e-8f40-8f8fde047665
+export const USER_ID_REGEX = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/
+
 export const MultiEmailValidate = (emailsRaw: string): boolean => {
   const isValid = getWrongEmails(emailsRaw).length === 0
   return isValid

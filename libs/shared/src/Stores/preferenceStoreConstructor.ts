@@ -112,7 +112,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     // The local notes which do not exist in the remote notes will be left alone
     lastOpenedNotes: { ...local.lastOpenedNotes, ...mergedLastOpenedNotes },
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
-    theme: local.theme,
+    theme: remote.theme ?? local.theme,
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }
 }

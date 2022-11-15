@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import create from 'zustand'
 
-import { TodoType, checkIfUntitledDraftNode, getParentNodePath } from '@mexit/core'
+import { TodoType, checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { useLinks } from '../Hooks/useLinks'
@@ -51,7 +51,10 @@ export const useAnalysisTodoAutoUpdate = () => {
   const node = useEditorStore((state) => state.node)
 
   useEffect(() => {
-    const { editorTodos, nodeid } = useAnalysisStore.getState().analysis
+    const analysis = useAnalysisStore.getState().analysis
+    const nodeid = analysis?.nodeid
+    const editorTodos = analysis?.editorTodos ?? []
+    // mog('useAnalysisTodoAutoUpdate', { editorTodos, nodeid })
     updateNodeTodos(nodeid, editorTodos)
   }, [analysis, node])
 }

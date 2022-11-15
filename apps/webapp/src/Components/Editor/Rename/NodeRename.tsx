@@ -31,7 +31,7 @@ const NodeRenameOnlyTitle = () => {
 
   const to = useRenameStore((store) => store.to)
   const ilinks = useDataStore((store) => store.ilinks)
-  const nodeTitle = useAnalysisStore((state) => state.analysis.title)
+  const nodeTitle = useAnalysisStore((state) => state.analysis?.title)
 
   const { push } = useNavigation()
   const setMockRefactored = useRenameStore((store) => store.setMockRefactored)

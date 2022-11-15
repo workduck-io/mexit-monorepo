@@ -31,7 +31,7 @@ export const useTags = () => {
     if (!fromAnalysis) {
       return _getTags(nodeid, tagsCache)
     }
-    const analTags = useAnalysisStore.getState().analysis.tags
+    const analTags = useAnalysisStore.getState().analysis?.tags || []
     return analTags
   }
 

@@ -1,12 +1,8 @@
-import React from 'react'
-
 import { Icon } from '@iconify/react'
-import { useTheme } from 'styled-components'
 
-import { IS_DEV, MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-import { AsyncButton, AsyncButtonProps, GoogleAuthButton, Loading } from '@mexit/shared'
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { GoogleAuthButton } from '@mexit/shared'
 
-import { useAuthentication, useAuthStore } from '../../Stores/useAuth'
 import config from '../../config'
 
 export interface GoogleLoginButtonProps {
@@ -14,7 +10,7 @@ export interface GoogleLoginButtonProps {
 }
 
 export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
-  const { loginViaGoogle } = useAuthentication()
+  // const { loginViaGoogle } = useAuthentication()
   const baseAuthURL = 'https://workduck.auth.us-east-1.amazoncognito.com/oauth2/authorize'
   const searchParams = new URLSearchParams({
     identity_provider: 'Google',
@@ -29,10 +25,11 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
 
   const authURL = URLObject.toString()
 
-  const openUrl = (url) => {
+  const openUrl = (url: string) => {
     window.open(url, '_self')
     // if (newWindow) newWindow.opener = null
   }
+
   return (
     <GoogleAuthButton
       large={true}

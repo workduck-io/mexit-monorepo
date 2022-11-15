@@ -16,14 +16,15 @@ export const sampleFlatTree = [
   'com',
   'com.workduck'
 ]
-
-export const getInitialNode = (): NodeProperties => ({
+export const InitialNode = {
   title: '__loading__',
   id: '__loading__',
   path: '__loading__',
   nodeid: '__null__',
   namespace: '__null__'
-})
+}
+
+export const getInitialNode = (): NodeProperties => InitialNode
 
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH)) {

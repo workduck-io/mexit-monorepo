@@ -10,8 +10,8 @@ export const useSaveNodeName = () => {
   const { execRefactorAsync } = useRefactor()
 
   const saveNodeName = (nodeId: string, title?: string) => {
-    if (nodeId !== useAnalysisStore.getState().analysis.nodeid) return
-    const draftNodeTitle = title ?? useAnalysisStore.getState().analysis.title
+    if (nodeId !== useAnalysisStore.getState().analysis?.nodeid) return
+    const draftNodeTitle = title ?? useAnalysisStore.getState().analysis?.title
     if (!draftNodeTitle) return
 
     const node = getLinkFromNodeIdHookless(nodeId)

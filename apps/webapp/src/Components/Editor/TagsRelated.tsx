@@ -90,8 +90,8 @@ export const TagsRelatedTiny = ({ nodeid }: TagsRelated) => {
  */
 export const TagsRelatedSuggestions = ({ nodeid, fromAnalysis }: TagsRelated) => {
   const { getRelatedNodes } = useTags()
-  const tagsCache = useDataStore((state) => state.tagsCache)
-  const analysisTags = useAnalysisStore((state) => state.analysis.tags)
+  const tagsCache = useDataStore((state) => state?.tagsCache)
+  const analysisTags = useAnalysisStore((state) => state?.analysis?.tags)
   const [relNodes, setRelNodes] = useState<string[]>([])
   const { getPathFromNodeid } = useLinks()
 
