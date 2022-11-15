@@ -1,13 +1,15 @@
 import { Contents, NodeContent, NodeEditorContent, NodeMetadata } from '../Types/Editor'
 
 export interface ContentStoreState {
+  internalUpdate: boolean
+  setInternalUpdate: (value: boolean) => void
   contents: Contents
   saved: boolean
   setSaved: (saved: boolean) => void
   removeContent: (nodeid: string) => void
   getContent: (nodeid: string) => NodeContent
   getContentFromLink: (url: string) => NodeContent[]
-  setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata) => void
+  setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
   getAllMetadata: () => Record<string, NodeMetadata>
   getMetadata: (nodeid: string) => NodeMetadata
   setMetadata: (nodeid: string, metadata: NodeMetadata) => void
@@ -19,18 +21,24 @@ export interface ContentStoreState {
 }
 
 export const contentStoreConstructor = (set, get) => ({
+  internalUpdate: false,
+  setInternalUpdate: (value: boolean) => {
+    set({ internalUpdate: value })
+  },
   contents: {},
   saved: false,
   setSaved: (saved) => set(() => ({ saved })),
-  setContent: (nodeid, content, metadata) => {
+  setContent: (nodeid, content, metadata, internalUpdate) => {
     const oldContent = get().contents
 
-    const oldMetadata = oldContent[nodeid] && oldContent[nodeid].metadata ? oldContent[nodeid].metadata : undefined
+    const oldMetadata = oldContent[nodeid]?.metadata ?? {}
     delete oldContent[nodeid]
-    const nmetadata = { ...oldMetadata, ...metadata }
+    const nmetadata = metadata ? { ...oldMetadata, ...metadata } : oldMetadata
     set({
       contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
     })
+
+    if (internalUpdate) get().setInternalUpdate(true)
   },
   getAllMetadata: () => {
     const contents = get().contents

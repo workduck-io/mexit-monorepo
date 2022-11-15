@@ -4,6 +4,7 @@ import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
 
 import { IconButton } from '@workduck-io/mex-components'
@@ -98,6 +99,11 @@ const SnippetEditor = () => {
       Escape: (event) => {
         event.preventDefault()
         returnToSnippets()
+      },
+      '$mod+s': (event) => {
+        event.preventDefault()
+        saveSnippet()
+        toast('Saved')
       }
     })
 
@@ -105,7 +111,7 @@ const SnippetEditor = () => {
       saveSnippet()
       unsubscribe()
     }
-  }, [])
+  }, [snippetid])
 
   const callbackAfterSave = () => {
     const { title } = getSnippetExtras()
@@ -128,6 +134,7 @@ const SnippetEditor = () => {
     onDelay(value)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const handleBannerButtonClick = () => {}
 
   return (

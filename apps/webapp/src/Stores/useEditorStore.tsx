@@ -5,7 +5,6 @@ import { persist } from 'zustand/middleware'
 
 import { NodeContent, NodeProperties, defaultContent, getInitialNode } from '@mexit/core'
 
-import { Settify } from '../Editor/Utils/helper'
 import { ComboTriggerType } from './useComboboxStore'
 import { useContentStore } from './useContentStore'
 

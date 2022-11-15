@@ -26,7 +26,7 @@
     "@sentry/react": "^6.17.4",
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
-    "@workduck-io/dwindle": "^0.0.21",
+    "@workduck-io/dwindle": "^0.0.23",
     "@workduck-io/flexsearch": "^0.7.22",
     "@workduck-io/mex-components": "^0.0.17",
     "@workduck-io/tinykeys": "^1.5.0",

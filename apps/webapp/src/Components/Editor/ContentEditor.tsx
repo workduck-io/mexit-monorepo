@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
@@ -6,7 +6,7 @@ import { useLocation, useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent } from '@mexit/core'
+import { defaultContent, NodeEditorContent } from '@mexit/core'
 import { StyledEditor, EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -73,9 +73,17 @@ const ContentEditor = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const isUserEditing = useEditorStore((store) => store.isEditing)
 
-  const nodeContent = useMemo(() => {
-    if (fsContent?.content) return fsContent.content
-    return defaultContent.content
+  const setInternalUpdate = useContentStore((store) => store.setInternalUpdate)
+
+  const [nodeContent, setNodeContent] = useState<NodeEditorContent>(
+    useContentStore.getState().contents?.[nodeid]?.content ?? defaultContent.content
+  )
+
+  useEffect(() => {
+    const internalUpdate = useContentStore.getState().internalUpdate
+
+    if (!internalUpdate && fsContent?.content) setNodeContent(fsContent?.content)
+    else setInternalUpdate(false)
   }, [nodeid, fsContent])
 
   const onChangeSave = useCallback(
@@ -216,7 +224,7 @@ const ContentEditor = () => {
             includeBlockInfo={true}
             // getSuggestions={getSuggestions}
             onChange={onChangeSave}
-            content={nodeContent?.length ? nodeContent : defaultContent.content}
+            content={nodeContent}
             nodeUID={nodeid}
             readOnly={viewOnly}
             autoFocus={false}
