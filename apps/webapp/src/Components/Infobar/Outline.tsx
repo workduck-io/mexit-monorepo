@@ -23,7 +23,7 @@ interface OutlineProps {
 }
 
 const Outline = ({ staticOutline, editorId }: OutlineProps) => {
-  const storeOutline = useAnalysisStore((state) => state.analysis.outline)
+  const storeOutline = useAnalysisStore((state) => state.analysis?.outline)
 
   const outline = staticOutline ? staticOutline : storeOutline
 
