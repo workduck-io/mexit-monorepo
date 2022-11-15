@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.20.4
+
+### Patch Changes
+
+- 0f794c1b: User Logout fixes
+- 0e87147a: Editor Frequent Save Fixes; Image Upload Client Expiry Fixed
+- 89748744: Fix analysis worker crashes, theme init, user fetch
+
 ## 0.20.3
 
 ### Patch Changes
