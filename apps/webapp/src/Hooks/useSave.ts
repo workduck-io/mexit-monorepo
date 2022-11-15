@@ -21,7 +21,7 @@ interface SaveEditorValueOptions {
 }
 
 export const useDataSaverFromContent = () => {
-  const setContent = useContentStore((state) => state.setContent)
+  const setInternalUpdate = useContentStore((state) => state.setInternalUpdate)
   const getContent = useContentStore((state) => state.getContent)
 
   const { updateLinksFromContent } = useLinks()
@@ -40,9 +40,9 @@ export const useDataSaverFromContent = () => {
     options?: SaveEditorValueOptions
   ) => {
     if (editorValue) {
-      setContent(nodeId, editorValue)
       mog('saveEditorValueAndUpdateStores', { nodeId, editorValue, options })
 
+      setInternalUpdate(true)
       if (options?.saveApi !== false) await saveDataAPI(nodeId, namespace, editorValue, options?.isShared ?? false)
 
       updateLinksFromContent(nodeId, editorValue)

@@ -74,15 +74,13 @@ export const useApi = () => {
       tags: getTagsFromContent(options.content)
     }
 
-    setContent(noteID, options.content ?? defaultContent.content)
-
     const data = await client
       .post(apiURLs.node.create, reqData, {
         headers: workspaceHeaders()
       })
       .then((d: any) => {
         const metadata = extractMetadata(d.data)
-        const content = deserializeContent(d.data.data ?? options.content)
+        const content = d.data.data ? deserializeContent(d.data.data) : options.content
         updateFromContent(noteID, content, metadata)
         addLastOpened(noteID)
         return d.data
@@ -191,15 +189,19 @@ export const useApi = () => {
       .post(url, reqData, {
         headers: workspaceHeaders()
       })
-      .then((d) => {
-        if (!isShared) {
-          setMetadata(noteID, extractMetadata(d.data))
-        } else {
-          updateMetadata(noteID, {
-            updatedAt: Date.now(),
-            lastEditedBy: currentUser.userID
-          })
-        }
+      .then((d: any) => {
+        const contentToSet = d.data.data ? deserializeContent(d.data.data) : content
+        const origMetadata = extractMetadata(d.data)
+        const metadata = isShared
+          ? {
+              ...origMetadata,
+              updatedAt: Date.now(),
+              lastEditedBy: currentUser.userID
+            }
+          : extractMetadata(d.data)
+
+        setContent(noteID, contentToSet, metadata)
+
         addLastOpened(noteID)
         return d.data
       })
