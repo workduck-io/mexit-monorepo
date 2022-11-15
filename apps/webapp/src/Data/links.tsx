@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import fileDocument from '@iconify/icons-gg/file-document'
 import appsLine from '@iconify/icons-ri/apps-line'
@@ -13,6 +13,8 @@ import { useViewStore } from '../Hooks/useTaskViews'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
+import { useDataStore } from '../Stores/useDataStore'
+import { InitialNode, mog } from '@mexit/core'
 
 /*
 Sidebar links are defined here
@@ -25,8 +27,19 @@ export const GetIcon = (icon: any): React.ReactNode => <Icon icon={icon} />
 const useNavlinks = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)
 
+  const baseNodeId = useDataStore((store) => store.baseNodeId)
   const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
-  const nodeid = match?.params?.nodeid || useEditorStore.getState().node.nodeid
+  const nodeid = useMemo(() => {
+    const editorNode = useEditorStore.getState().node
+    // mog('match', { match, baseNodeId, editorNode })
+    if (match?.params?.nodeid) {
+      return match.params.nodeid
+    } else if (editorNode && editorNode.nodeid !== InitialNode.nodeid) {
+      return editorNode.nodeid
+    } else if (baseNodeId) {
+      return baseNodeId
+    }
+  }, [match, baseNodeId])
 
   // const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks])
 
