@@ -24,6 +24,7 @@ import { usePublicNodeStore } from './usePublicNodes'
 import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
+import useRouteStore from './useRouteStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
@@ -50,6 +51,7 @@ export const useAuthentication = () => {
   const clearComments = useCommentStore((s) => s.clear)
   const clearReactions = useReactionStore((s) => s.clear)
   const clearViews = useViewStore((s) => s.clear)
+  const clearRoutesInformation = useRouteStore((s) => s.clear)
 
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
@@ -104,6 +106,7 @@ export const useAuthentication = () => {
     clearComments()
     resetDataStore()
     clearMentions()
+    clearRoutesInformation()
     resetPublicNodes()
     clearRecents()
     clearReminders()

@@ -33,7 +33,8 @@ const useSocket = () => {
         }
 
         if (data.users) {
-          setActiveUsers(data.route, { users: data.users, banners: data.users.length > 0 ? [BannerType.editor] : [] })
+          const filterUser = data.users?.filter((user: string) => !!user)
+          setActiveUsers(data.route, { users: filterUser, banners: filterUser.length > 0 ? [BannerType.editor] : [] })
         }
         break
       default:
@@ -60,7 +61,7 @@ const useSocket = () => {
       queryParams: { userId, Authorizer: idToken },
       share: true
     },
-    !!idToken
+    !!(idToken && userId)
   )
 
   return utilFunctions
