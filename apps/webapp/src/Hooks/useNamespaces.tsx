@@ -100,7 +100,7 @@ export const useNamespaces = () => {
 
   const getDefaultNamespace = (): SingleNamespace | undefined => {
     const namespaces = useDataStore.getState().namespaces
-    const namespace = namespaces.find((ns) => ns.name === RESERVED_NAMESPACES.default)
+    const namespace = namespaces.find((ns) => ns.name === RESERVED_NAMESPACES.default) ?? namespaces[0]
     return namespace
   }
 
