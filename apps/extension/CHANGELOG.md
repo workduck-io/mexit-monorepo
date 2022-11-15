@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.9
+
+### Patch Changes
+
+- 0e87147a: Editor Frequent Save Fixes; Image Upload Client Expiry Fixed
+
 ## 0.18.8
 
 ### Patch Changes
