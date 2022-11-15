@@ -1,4 +1,4 @@
-import { spawn } from 'threads'
+import { spawn, Thread } from 'threads'
 
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 
@@ -36,11 +36,21 @@ export const runBatchWorker = async (requestType: WorkerRequestType, batchSize =
 
   if (!requestsWorker) {
     await startRequestsWorkerService()
-    requestsWorker.initializeClient(token, workspaceID)
+    initRequestClient(token, workspaceID)
   }
 
   const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
   return res
+}
+
+export const initRequestClient = (token: string, workspaceId: string) => {
+  if (requestsWorker) {
+    requestsWorker.initializeClient(token, workspaceId)
+  }
+}
+
+export const terminateRequestWorker = async () => {
+  if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
 }
 
 export const startAnalysisWorkerService = async () => {

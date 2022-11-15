@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { useAuth, client, useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
+import { useAuth, client } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
 import { apiURLs, AuthStoreState, mog } from '@mexit/core'
@@ -13,6 +13,7 @@ import { authStoreConstructor } from '@mexit/core'
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
+import { terminateRequestWorker } from '../Workers/controller'
 import { useApiStore } from './useApiStore'
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
@@ -35,7 +36,6 @@ type LoginResult = { loginData: UserCred; loginStatus: string }
 
 export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
-  const clearUserCreds = useDwindleStore((s) => s.clearStore)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
@@ -94,8 +94,9 @@ export const useAuthentication = () => {
 
   const logout = async () => {
     await signOut()
+    await terminateRequestWorker()
+
     setUnAuthenticated()
-    clearUserCreds()
 
     // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
     // This is because zustand maintains it's state post logout as we don't go through a reload
@@ -208,7 +209,6 @@ export const useInitializeAfterAuth = () => {
     registerUser = false
   ) => {
     try {
-      setShowLoader(true)
       const { email } = loginData
       const { userDetails, workspaceDetails } = registerUser
         ? await registerNewUser(loginData)
@@ -244,8 +244,9 @@ export const useInitializeAfterAuth = () => {
       })
 
       if (forceRefreshToken) await refreshToken()
-
+      mog('WORKSPACE ID', { d: loginData.token, workspaceDetails })
       setAuthenticated(userDetails, workspaceDetails)
+      setShowLoader(true)
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {
