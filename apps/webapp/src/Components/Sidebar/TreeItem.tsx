@@ -59,8 +59,8 @@ export const TooltipContent = ({ item }: { item: TreeItem }) => {
 const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
   const anal = useAnalysisStore((state) => state.analysis)
   const title =
-    anal.nodeid && anal.nodeid === item.data.nodeid && anal.title !== undefined && anal.title !== ''
-      ? anal.title
+    anal?.nodeid && anal?.nodeid === item.data.nodeid && anal?.title !== undefined && anal?.title !== ''
+      ? anal?.title
       : item.data
       ? item.data.title
       : 'NoTitle'

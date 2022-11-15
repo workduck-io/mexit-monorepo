@@ -1,38 +1,32 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
-  default as AtlaskitTree,
-  ItemId,
-  mutateTree,
-  RenderItemParams,
-  TreeData,
-  TreeDestinationPosition,
-  TreeItem,
-  TreeSourcePosition
+    default as AtlaskitTree,
+    ItemId,
+    mutateTree,
+    RenderItemParams,
+    TreeData,
+    TreeDestinationPosition,
+    TreeItem,
+    TreeSourcePosition
 } from '@atlaskit/tree'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import { useLocation, useMatch } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, SEPARATOR, getNameFromPath } from '@mexit/core'
+import { getNameFromPath, mog, SEPARATOR } from '@mexit/core'
 import {
-  StyledTreeItemSwitcher,
-  TooltipContentWrapper,
-  TooltipCount,
-  ItemTitle,
-  StyledTreeSwitcher,
-  isOnEditableElement
+    isOnEditableElement, StyledTreeItemSwitcher, StyledTreeSwitcher, TooltipContentWrapper,
+    TooltipCount
 } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
@@ -79,23 +73,6 @@ export const TooltipContent = ({ item }: { item: TreeItem }) => {
         </TooltipCount>
       )}
     </TooltipContentWrapper>
-  )
-}
-
-const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
-  const anal = useAnalysisStore((state) => state.analysis)
-  const title =
-    anal.nodeid && anal.nodeid === item.data.nodeid && anal.title !== undefined && anal.title !== ''
-      ? anal.title
-      : item.data
-      ? item.data.title
-      : 'NoTitle'
-
-  return (
-    <ItemTitle>
-      <Icon icon={item.data.mex_icon ?? fileList2Line} />
-      <span>{title}</span>
-    </ItemTitle>
   )
 }
 
