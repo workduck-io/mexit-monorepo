@@ -105,7 +105,7 @@ const SnippetEditor = () => {
       saveSnippet()
       unsubscribe()
     }
-  }, [])
+  }, [snippetid])
 
   const callbackAfterSave = () => {
     const { title } = getSnippetExtras()
