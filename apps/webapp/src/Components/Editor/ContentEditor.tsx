@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { selectEditor, focusEditor, getPlateEditorRef } from '@udecode/plate'
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
 
@@ -30,7 +30,6 @@ import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
-import { getEditorId } from '../../Utils/editor'
 import { areEqual } from '../../Utils/hash'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import Metadata from '../EditorInfobar/Metadata'
@@ -40,7 +39,6 @@ import Editor from './Editor'
 import Toolbar from './Toolbar'
 
 const ContentEditor = () => {
-  const fetchingContent = useEditorStore((state) => state.fetchingContent)
   const { toggleFocusMode } = useLayout()
   const { saveApiAndUpdate } = useLoad()
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
@@ -102,8 +100,6 @@ const ContentEditor = () => {
     }
   }, [])
 
-  const editorId = useMemo(() => getEditorId(nodeid, fetchingContent), [nodeid, fetchingContent])
-
   const onFocusClick = (ev) => {
     // ev.preventDefault()
     // ev.stopPropagation()
@@ -133,7 +129,7 @@ const ContentEditor = () => {
       Enter: (event) => {
         if (!isOnEditableElement(event)) {
           event.preventDefault()
-          const editorRef = getPlateEditorRef(editorId) ?? getPlateEditorRef()
+          const editorRef = getPlateEditorRef(nodeid) ?? getPlateEditorRef()
           focusEditor(editorRef)
         }
       },
@@ -221,7 +217,7 @@ const ContentEditor = () => {
             // getSuggestions={getSuggestions}
             onChange={onChangeSave}
             content={nodeContent?.length ? nodeContent : defaultContent.content}
-            nodeUID={editorId}
+            nodeUID={nodeid}
             readOnly={viewOnly}
             autoFocus={false}
           />
