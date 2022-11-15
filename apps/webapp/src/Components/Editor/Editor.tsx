@@ -72,7 +72,7 @@ const Editor: React.FC<EditorProps> = ({
   const onDelayPerform = useDebouncedCallback((value) => {
     const f = !readOnly && typeof onChange === 'function' ? onChange : () => undefined
     f(value)
-  }, 400)
+  }, 200)
 
   const saveAfterDelay = useDebouncedCallback(
     typeof onAutoSave === 'function' ? onAutoSave : () => undefined,
