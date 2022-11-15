@@ -8,6 +8,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useAPIHeaders } from './useAPIHeaders'
+import { USER_ID_REGEX } from '../../Utils/constants'
 
 export interface TempUser {
   email: string
@@ -70,8 +71,13 @@ export const useUserService = () => {
   }
 
   const getUserDetailsUserId = async (userID: string): Promise<TempUserUserID> => {
+    // Get from cache
     const user = getUser({ userID })
     if (user) return user
+
+    // Check if the userid is of valid format
+    const match = userID.match(USER_ID_REGEX)
+    if (!match) return { userID }
 
     try {
       return await client.get(apiURLs.user.getFromUserId(userID)).then((resp: any) => {
