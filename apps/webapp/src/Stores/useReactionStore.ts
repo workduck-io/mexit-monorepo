@@ -1,13 +1,14 @@
 import create from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 import { ReactionStore } from '@mexit/core'
-import { devtools, persist } from 'zustand/middleware'
 
 export const useReactionStore = create<ReactionStore>(
   devtools(
     persist(
       (set, get) => ({
         reactions: [],
+        clear: () => set({ reactions: [] }),
         setReactions: (reactions) => set({ reactions }),
         addNoteReactions: (reactions, nodeid) => {
           // mog('addNoteReactions', { reactions, nodeid })

@@ -26,6 +26,7 @@ type RouteStoreType = {
   showBannerInRoute: (route: Route, banner: BannerType) => void
   removePreviousRouteInfo: () => void
   removeRouteInfo: (route: Route) => void
+  clear: () => void
 }
 
 const useRouteStore = create<RouteStoreType>(
@@ -52,6 +53,7 @@ const useRouteStore = create<RouteStoreType>(
 
         return banners?.includes(banner)
       },
+      clear: () => set({ routes: {} }),
       addUserInRoute: (route, userId) => {
         const routes = get().routes
 

@@ -19,6 +19,7 @@ export interface View {
 export interface ViewStore {
   _hasHydrated: boolean
   setHasHydrated: (state) => void
+  clear: () => void
   views: View[]
   currentView: View | undefined
   setCurrentView: (view: View) => void
@@ -48,6 +49,7 @@ export const useViewStore = create<ViewStore>(
           _hasHydrated: state
         })
       },
+      clear: () => set({ views: [], currentView: undefined }),
       setCurrentView: (view) =>
         set((state) => ({
           ...state,

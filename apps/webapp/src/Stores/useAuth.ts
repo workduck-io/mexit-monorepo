@@ -11,17 +11,22 @@ import { apiURLs, AuthStoreState, mog } from '@mexit/core'
 import { RegisterFormData } from '@mexit/core'
 import { authStoreConstructor } from '@mexit/core'
 
-import { useSnippets } from '../Hooks/useSnippets'
+import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
+import { terminateRequestWorker } from '../Workers/controller'
 import { useApiStore } from './useApiStore'
+import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
 import { useMentionStore } from './useMentionsStore'
 import { usePublicNodeStore } from './usePublicNodes'
+import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
+import useRouteStore from './useRouteStore'
+import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
 
@@ -36,13 +41,18 @@ export const useAuthentication = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
-  const { updateSnippets } = useSnippets()
   const initContents = useContentStore((store) => store.initContents)
+  const clearSnippets = useSnippetStore((s) => s.clear)
   const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
   const clearMentions = useMentionStore((m) => m.reset)
+  const clearComments = useCommentStore((s) => s.clear)
+  const clearReactions = useReactionStore((s) => s.clear)
+  const clearViews = useViewStore((s) => s.clear)
+  const clearRoutesInformation = useRouteStore((s) => s.clear)
+
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
   const resetShortcuts = useHelpStore((s) => s.reset)
@@ -84,6 +94,8 @@ export const useAuthentication = () => {
 
   const logout = async () => {
     await signOut()
+    await terminateRequestWorker()
+
     setUnAuthenticated()
 
     // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
@@ -91,14 +103,18 @@ export const useAuthentication = () => {
     // Which results in zustand recreating everything post logout
     clearRequests()
     initContents({})
+    clearReactions()
+    clearComments()
     resetDataStore()
     clearMentions()
+    clearRoutesInformation()
     resetPublicNodes()
     clearRecents()
     clearReminders()
-    updateSnippets([])
+    clearSnippets()
     resetShortcuts()
     clearTodos()
+    clearViews()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {
@@ -193,7 +209,6 @@ export const useInitializeAfterAuth = () => {
     registerUser = false
   ) => {
     try {
-      setShowLoader(true)
       const { email } = loginData
       const { userDetails, workspaceDetails } = registerUser
         ? await registerNewUser(loginData)
@@ -229,8 +244,9 @@ export const useInitializeAfterAuth = () => {
       })
 
       if (forceRefreshToken) await refreshToken()
-
+      mog('WORKSPACE ID', { d: loginData.token, workspaceDetails })
       setAuthenticated(userDetails, workspaceDetails)
+      setShowLoader(true)
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
     } finally {
