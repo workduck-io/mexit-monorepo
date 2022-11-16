@@ -151,7 +151,9 @@ const useTodoStore = create<TodoStoreType>(
           }
 
           const nTodo = todos[nodeid] ?? []
+          mog('NUN TOODS', { nTodo })
           const nodeTodos = todosContent.map((content) => {
+            mog('found todo', { content })
             const todo = nTodo.find((todo) => todo.id === content.id && nodeid === todo.nodeid)
             const tags = getTagsFromContent([content])
             const mentions = getMentionsFromContent([content])

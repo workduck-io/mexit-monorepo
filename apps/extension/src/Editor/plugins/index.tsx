@@ -40,16 +40,13 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
   ELEMENT_PARAGRAPH,
-  createTablePlugin,
-  parseIframeUrl,
-  parseTwitterUrl,
-  MediaEmbedTweet,
-  parseVideoUrl,
-  MediaEmbedVideo
+  createTablePlugin
 } from '@udecode/plate'
 
+import { useAuth } from '@workduck-io/dwindle'
+
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
+import { TableWrapper, useUploadToCDN } from '@mexit/shared'
 
 import { createQuickLinkPlugin } from './QuickLink'
 import { createBlockModifierPlugin } from './createBlockModifierPlugin'
@@ -64,7 +61,6 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
-import { useAuth } from '@workduck-io/dwindle'
 
 export type PluginOptionType = {
   exclude: {
@@ -157,26 +153,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     // createDeserializeMDPlugin(),
 
     // Media and link embed
-    createMediaEmbedPlugin({
-      options: {
-        transformUrl: parseIframeUrl,
-        rules: [
-          // {
-          //   parser: parseTwitterUrl,
-          //   component: MediaEmbedTweet
-          // },
-          {
-            parser: parseVideoUrl,
-            component: MediaEmbedVideo
-          },
-          {
-            parser: parseRestMediaUrls,
-            component: MediaIFrame
-          }
-        ]
-      }
-    }),
-
+    createMediaEmbedPlugin(),
     // Custom Plugins
     // createBlurSelectionPlugin() ,
 

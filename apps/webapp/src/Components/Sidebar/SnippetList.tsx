@@ -25,15 +25,7 @@ const SnippetList = () => {
 
   const sortedSnippets = React.useMemo(() => {
     return snippets
-      .sort((a, b) => {
-        if (a.title < b.title) {
-          return -1
-        }
-        if (a.title > b.title) {
-          return 1
-        }
-        return 0
-      })
+      .sort((a, b) => (a.title < b.title ? 1 : -1))
       .map((snippet) => ({
         id: snippet.id,
         label: snippet.title,
@@ -42,9 +34,11 @@ const SnippetList = () => {
       }))
   }, [snippets])
 
+  mog('Snippets', { sortedSnippets, snippets })
+
   return (
     <SidebarWrapper>
-      <SidebarHeaderLite title="Snippets" icon={quillPenLine} />
+      <SidebarHeaderLite title={`Snippets (${snippets.length})`} icon={quillPenLine} />
       <SidebarList
         items={sortedSnippets}
         onClick={onOpenSnippet}

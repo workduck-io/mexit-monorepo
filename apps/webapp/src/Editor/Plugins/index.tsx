@@ -42,11 +42,12 @@ import {
   ELEMENT_PARAGRAPH,
   createTablePlugin,
   parseIframeUrl,
-  parseTwitterUrl,
   parseVideoUrl,
   MediaEmbedTweet,
   MediaEmbedVideo
 } from '@udecode/plate'
+
+import { useAuth } from '@workduck-io/dwindle'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { TableWrapper, parseRestMediaUrls, MediaIFrame, useUploadToCDN } from '@mexit/shared'
@@ -54,6 +55,7 @@ import { TableWrapper, parseRestMediaUrls, MediaIFrame, useUploadToCDN } from '@
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
 import { withBlockOptions } from '../Components/Blocks'
+import { PlateFloatingLink } from '../Components/FloatingLink'
 import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createBlurSelectionPlugin } from './createBlurSelection'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'
@@ -61,9 +63,8 @@ import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
 import { createTagPlugin } from './createTagPlugin'
-import { createTodoPlugin } from './createTodoPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
-
+import { createTodoPlugin } from './createTodoPlugin'
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -72,8 +73,7 @@ import {
   optionsSelectOnBackspacePlugin,
   optionsSoftBreakPlugin
 } from './options'
-import { PlateFloatingLink } from '../Components/FloatingLink'
-import { useAuth } from '@workduck-io/dwindle'
+import { parseTwitterUrl } from './parseTwitterUrl'
 
 export type PluginOptionType = {
   exclude?: {

@@ -10,23 +10,31 @@ import genereateName from 'project-name-generator'
 
 import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
-import { apiURLs, convertContentToRawText, DRAFT_NODE, generateSnippetId, GenericSearchResult, mog } from '@mexit/core'
 import {
-    ItemTag,
-    MainHeader,
-    Result,
-    ResultDesc,
-    ResultMain,
-    ResultRow,
-    ResultTitle,
-    SearchPreviewWrapper,
-    SnippetCommand,
-    SnippetHeader,
-    SnippetHelp,
-    SnippetsSearchContainer,
-    SplitSearchPreviewWrapper,
-    Title,
-    View
+  apiURLs,
+  batchArray,
+  convertContentToRawText,
+  DRAFT_NODE,
+  generateSnippetId,
+  GenericSearchResult,
+  mog
+} from '@mexit/core'
+import {
+  ItemTag,
+  MainHeader,
+  Result,
+  ResultDesc,
+  ResultMain,
+  ResultRow,
+  ResultTitle,
+  SearchPreviewWrapper,
+  SnippetCommand,
+  SnippetHeader,
+  SnippetHelp,
+  SnippetsSearchContainer,
+  SplitSearchPreviewWrapper,
+  Title,
+  View
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
@@ -259,7 +267,7 @@ const Snippets = () => {
       // language
       const snippets = getSnippets()
       const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
-      const ids = unfetchedSnippets.map((i) => i.id)
+      const ids = batchArray(unfetchedSnippets, 10).map((id: string[]) => id.join(','))
 
       mog('SnippetsUseEffect', { snippets, unfetchedSnippets })
 
@@ -267,13 +275,15 @@ const Snippets = () => {
         const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
         const requestData = { time: Date.now(), method: 'GET' }
 
-        res.fulfilled.forEach((snippet) => {
-          if (snippet) {
-            setRequest(apiURLs.snippet.getById(snippet.id), {
-              ...requestData,
-              url: apiURLs.snippet.getById(snippet.id)
+        res.fulfilled.forEach((snippets) => {
+          if (snippets) {
+            snippets.forEach((snippet) => {
+              setRequest(apiURLs.snippet.getById(snippet.id), {
+                ...requestData,
+                url: apiURLs.snippet.getById(snippet.id)
+              })
+              updateSnippet(snippet)
             })
-            updateSnippet(snippet)
           }
         })
 

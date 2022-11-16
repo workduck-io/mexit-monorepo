@@ -13,7 +13,6 @@ import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
 import { getNodeIdFromEditor } from '../Utils/helper'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
-import { useMexEditorStore } from './useMexEditorStore'
 
 const pure = (id: string) => {
   let newId = id

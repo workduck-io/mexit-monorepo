@@ -20,7 +20,6 @@ import {
   createPlugins,
   createSingleLinePlugin,
   parseIframeUrl,
-  parseTwitterUrl,
   MediaEmbedVideo,
   parseVideoUrl,
   MediaEmbedTweet
@@ -46,6 +45,7 @@ import { createMentionPlugin } from '../../../Editor/Plugins/createMentionsPlugi
 import { createTagPlugin } from '../../../Editor/Plugins/createTagPlugin'
 import { createTodoPlugin } from '../../../Editor/Plugins/createTodoPlugin'
 import { optionsCreateNodeIdPlugin, optionsSelectOnBackspacePlugin } from '../../../Editor/Plugins/options'
+import { parseTwitterUrl } from '../../../Editor/Plugins/parseTwitterUrl'
 import Todo from '../../Todo'
 
 const generateTodoPlugins = (uploadImage?: UploadImageFn) => {
