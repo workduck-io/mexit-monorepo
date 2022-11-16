@@ -1,14 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { shift, offset, flip } from '@floating-ui/react-dom-interactions'
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
-import { getPlateEditorRef, getRangeBoundingClientRect,  PortalBody,  useEditorState, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
+import {
+  getPlateEditorRef,
+  getRangeBoundingClientRect,
+  PortalBody,
+  useEditorState,
+  usePlateEditorRef,
+  useVirtualFloating
+} from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { shift, offset, flip } from '@floating-ui/react-dom-interactions'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import {  mog, NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent } from '@mexit/core'
 import { ComboboxItem, ComboboxItemTitle, MexIcon, PreviewMeta } from '@mexit/shared'
 import {
   ActionTitle,
@@ -107,7 +114,6 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const editor = usePlateEditorRef()
   const theme = useTheme()
 
-
   const menuProps = combobox ? combobox.getMenuProps({}, { suppressRefError: true }) : { ref: null }
 
   const comboProps = (item, index) => {
@@ -141,7 +147,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   useEffect(() => {
     return () => closeMenu()
   }, [])
-  
+
   useEffect(() => {
     const comboItem = items[itemIndex]
 
@@ -179,13 +185,9 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
     }
   }, [itemIndex, items, activeBlock, isOpen, search])
 
-const getBoundingClientRect = useCallback(
-    () => { 
-  
-      return getRangeBoundingClientRect(editor, targetRange)
-  
-    }, [editor, targetRange]
-  )
+  const getBoundingClientRect = useCallback(() => {
+    return getRangeBoundingClientRect(editor, targetRange)
+  }, [editor, targetRange])
 
   // Update popper position
   const { style, floating } = useVirtualFloating({
@@ -201,9 +203,8 @@ const getBoundingClientRect = useCallback(
 
   return (
     <PortalBody>
-        {isOpen && (
-
-      <ComboboxRoot {...menuProps} ref={floating} style={style} isOpen={isOpen}>
+      {isOpen && (
+        <ComboboxRoot {...menuProps} ref={floating} style={style} isOpen={isOpen}>
           <>
             {!isBlockTriggered && (
               <div id="List" style={{ flex: 1 }}>
@@ -290,7 +291,7 @@ const getBoundingClientRect = useCallback(
                     readOnly
                     draftView
                     editorId={
-                      isBlockTriggered && activeBlock ? activeBlock.blockId : `${items[itemIndex]?.key}_Preview_Block`
+                      isBlockTriggered && activeBlock ? activeBlock?.blockId : `${items[itemIndex]?.key}_Preview_Block`
                     }
                   />
                 </section>
@@ -298,9 +299,8 @@ const getBoundingClientRect = useCallback(
               </ComboSeperator>
             )}
           </>
-      </ComboboxRoot>
-        )}
-
+        </ComboboxRoot>
+      )}
     </PortalBody>
   )
 }

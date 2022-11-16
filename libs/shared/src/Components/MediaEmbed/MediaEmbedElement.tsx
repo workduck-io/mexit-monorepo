@@ -25,11 +25,13 @@ export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
 
   useEffect(() => {
     const getData = async () => {
-      const d = await getEmbedData(url)
-      if (d) {
-        setHtmlData(d)
-      } else {
-        setHtmlData('')
+      if (url) {
+        const d = await getEmbedData(url)
+        if (d) {
+          setHtmlData(d)
+        } else {
+          setHtmlData('')
+        }
       }
     }
 

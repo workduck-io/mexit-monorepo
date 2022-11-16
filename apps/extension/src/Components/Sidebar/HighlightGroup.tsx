@@ -56,7 +56,7 @@ export const HighlightGroups = ({ highlights }: { highlights: SourceHighlights }
   const { getPathFromNodeid } = useLinks()
 
   const openNote = (nodeid: string) => {
-    window.open(`${MEXIT_FRONTEND_URL_BASE}/node/${nodeid}`, '_blank')
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank')
   }
 
   return (

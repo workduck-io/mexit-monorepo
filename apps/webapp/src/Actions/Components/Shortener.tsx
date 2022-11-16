@@ -143,7 +143,7 @@ export const Shortener = () => {
         <Label>Add an Alias</Label>
         <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
       </InputRow>
-      <LoadingButton loading={isLoading} onClick={onShortenLinkSubmit} type="submit">
+      <LoadingButton id="mex-save-shortened-url" loading={isLoading} type="submit">
         Save
       </LoadingButton>
     </Form>

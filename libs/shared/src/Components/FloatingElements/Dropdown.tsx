@@ -212,6 +212,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       if (event.code === 'Enter' && !!onCreate) {
         event.preventDefault()
         event.stopPropagation()
+
         const inpVal = event.currentTarget.value
         onCreate(inpVal)
         setOpen(false)
@@ -293,6 +294,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     return (
       <FloatingNode id={nodeId}>
         <RootMenuWrapper
+          type="button"
           {...getReferenceProps({
             ...props,
             ref: mergedReferenceRef,
