@@ -128,7 +128,7 @@ export const Shortener = () => {
   }, [elementRef, tags])
 
   return (
-    <Form ref={elementRef} onSubmit={onShortenLinkSubmit}>
+    <Form ref={elementRef}>
       <InputRow noTopMargin>
         <Label noTopMargin>Destination URL</Label>
         <Input placeholder="URL to shorten" defaultValue={tabUrl} onChange={(e) => setTabUrl(e.target.value)} />
@@ -136,7 +136,7 @@ export const Shortener = () => {
       {/* TODO: temporarily removing ability to enter your own tags  */}
       <LinkTagSection>
         <TagsLabel tags={tags} onDelete={(t) => removeUserTag(t)} />
-        <AddTagMenu createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
+        <AddTagMenu root={elementRef.current} createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
       </LinkTagSection>
 
       <InputRow>

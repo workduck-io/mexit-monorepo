@@ -1,27 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo } from 'react'
 
-import edit2Line from '@iconify/icons-ri/edit-2-line'
-import linkM from '@iconify/icons-ri/link-m'
-import searchLine from '@iconify/icons-ri/search-line'
-import { Icon } from '@iconify/react'
-import fuzzysort from 'fuzzysort'
-import { debounce, reduce } from 'lodash'
-
-import { Infobox } from '@workduck-io/mex-components'
-
-import { mog, SingleHighlight, SourceHighlights } from '@mexit/core'
-import {
-  SnippetCards,
-  SidebarListFilterWrapper,
-  SidebarListFilter,
-  Input,
-  SnippetSidebarHelp,
-  HighlightSidebarHelp,
-  CenteredFlex
-} from '@mexit/shared'
+import { SnippetCards, CenteredFlex } from '@mexit/shared'
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
-import { getElementById } from '../../contentScript'
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'

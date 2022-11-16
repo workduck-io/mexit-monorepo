@@ -47,7 +47,10 @@ export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) =
         <MenuItem
           key={`NewTagMenu-${t.value}`}
           icon={{ type: 'ICON', value: 'ri:hashtag' }}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+
             onAddNewTag(t)
           }}
           label={t.value}

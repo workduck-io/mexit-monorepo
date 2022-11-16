@@ -121,7 +121,7 @@ export const ShortenerComponent = () => {
       <TagsLabel
         tags={tags}
         onClick={() => console.log('clicked on tags')}
-        onDelete={(val: string) => console.log('link delete', val)}
+        onDelete={(val: string) => onRemoveTag(val)}
       />
     </ShortenerWrapper>
   )
