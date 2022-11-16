@@ -2,9 +2,8 @@ import React from 'react'
 
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
-import { getLeafNode } from '@udecode/plate'
 
-import { mog, Tag } from '@mexit/core'
+import { Tag } from '@mexit/core'
 
 import { FilterMenuDiv } from '../Style/Filter.style'
 import { Menu, MenuItem } from './FloatingElements/Dropdown'

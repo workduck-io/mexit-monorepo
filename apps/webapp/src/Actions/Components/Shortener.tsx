@@ -128,7 +128,7 @@ export const Shortener = () => {
   }, [elementRef, tags])
 
   return (
-    <Form ref={elementRef}>
+    <Form ref={elementRef} onSubmit={onShortenLinkSubmit}>
       <InputRow noTopMargin>
         <Label noTopMargin>Destination URL</Label>
         <Input placeholder="URL to shorten" defaultValue={tabUrl} onChange={(e) => setTabUrl(e.target.value)} />
@@ -136,14 +136,14 @@ export const Shortener = () => {
       {/* TODO: temporarily removing ability to enter your own tags  */}
       <LinkTagSection>
         <TagsLabel tags={tags} onDelete={(t) => removeUserTag(t)} />
-        <AddTagMenu root={elementRef.current} createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
+        <AddTagMenu createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
       </LinkTagSection>
 
       <InputRow>
         <Label>Add an Alias</Label>
         <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
       </InputRow>
-      <LoadingButton loading={isLoading} onClick={onShortenLinkSubmit} type="submit">
+      <LoadingButton id="mex-save-shortened-url" loading={isLoading} type="submit">
         Save
       </LoadingButton>
     </Form>
