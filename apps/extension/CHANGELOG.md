@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.10
+
+### Patch Changes
+
+- 79ea3c8e: Bulk snippets, Media embed URL fixed
+
 ## 0.18.9
 
 ### Patch Changes

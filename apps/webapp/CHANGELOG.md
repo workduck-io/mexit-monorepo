@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.20.5
+
+### Patch Changes
+
+- 79ea3c8e: Bulk snippets, Media embed URL fixed
+
 ## 0.20.4
 
 ### Patch Changes
