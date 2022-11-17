@@ -279,8 +279,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
           const newChildren = Children.map(children, (child) => {
             if (isValidElement(child) && filtered.includes(child.props.label)) {
               return child
-            }
-          })
+            } else return null
+          }).filter((child) => child !== null)
           setFilteredChildren(newChildren)
         }
         if (search === '') {
@@ -376,8 +376,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
                         ref(node: HTMLButtonElement) {
                           listItemsRef.current[index] = node
                         },
-                        onClick() {
-                          child.props.onClick?.()
+                        onClick(e) {
+                          child.props.onClick?.(e)
                           tree?.events.emit('click')
                         },
                         // By default `focusItemOnHover` uses `mousemove` to sync focus,
