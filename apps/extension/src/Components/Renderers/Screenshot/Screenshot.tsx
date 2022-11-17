@@ -337,6 +337,8 @@ const Screenshot = () => {
         ]
         appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
         resetSpotlitState()
+      } else {
+        mog('Base 64 string not found')
       }
     } catch (error) {
       mog('SSCaptureError', { error })

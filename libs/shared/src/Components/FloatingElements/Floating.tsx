@@ -23,7 +23,18 @@ import { RemoveScroll } from 'react-remove-scroll'
 
 import { Props } from './types'
 
-export const Floating = ({ children, open, label, hover, persist, setOpen, render, placement, root }: Props) => {
+export const Floating = ({
+  children,
+  scrollLock = true,
+  open,
+  label,
+  hover,
+  persist,
+  setOpen,
+  render,
+  placement,
+  root
+}: Props) => {
   const { delay, setCurrentId } = useDelayGroupContext()
   const nodeId = useFloatingNodeId()
 
@@ -66,7 +77,7 @@ export const Floating = ({ children, open, label, hover, persist, setOpen, rende
       <FloatingPortal root={root}>
         {open && (
           <FloatingFocusManager context={context}>
-            <RemoveScroll>
+            <RemoveScroll enabled={scrollLock}>
               <div
                 {...getFloatingProps({
                   className: 'Popover',

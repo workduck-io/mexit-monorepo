@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
+import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { Icon } from '@iconify/react'
@@ -12,7 +13,11 @@ import {
   SnippetCardHeader,
   SnippetContentPreview,
   SnippetCardFooter,
-  RelativeTime
+  RelativeTime,
+  GroupHeader,
+  MexIcon,
+  CopyButton,
+  IconButton
 } from '@mexit/shared'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
@@ -90,15 +95,15 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       key={keyStr}
       preview={visible}
       setPreview={setVisible}
-      hover
       allowClosePreview
       snippetId={snippet.id}
       placement="left"
     >
-      <SnippetCardWrapper onClick={(e) => onClickProps(e)}>
+      <SnippetCardWrapper>
         <SnippetCardHeader>
           <Icon icon={snippet.template ? magicLine : quillPenLine} />
           {snippet.title}
+          <IconButton onClick={(e) => onClickProps(e)} icon={fileCopyLine} size="20px" title="Copied to Clipboard" />
         </SnippetCardHeader>
 
         <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>

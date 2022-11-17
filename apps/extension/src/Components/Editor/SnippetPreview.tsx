@@ -85,6 +85,7 @@ const SnippetPreview = ({
         hover={hover}
         root={getElementById('ext-side-nav')}
         label={label}
+        scrollLock={false}
         placement={placement}
         persist={!allowClosePreview}
         open={preview}

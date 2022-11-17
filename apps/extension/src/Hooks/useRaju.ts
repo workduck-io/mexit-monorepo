@@ -205,14 +205,24 @@ export default function useRaju() {
       case 'ADD_HIGHLIGHTED_BLOCK':
         return child.addHighlight(...params)
       case 'SEARCH':
-        return child.search(...params).then((result) => {
-          return result
-        })
+        return child
+          .search(...params)
+          .then((result) => {
+            return result
+          })
+          .catch((err) => {
+            mog('[SEARCH]: Unable to search with', { err })
+          })
       case 'UPLOAD_IMAGE_TO_S3': {
-        return child.uploadImageToS3Dwindle(...params).then((result) => {
-          mog('UploadImageToS3', { result })
-          return result
-        })
+        return child
+          .uploadImageToS3Dwindle(...params)
+          .then((result) => {
+            mog('UploadImageToS3', { result })
+            return result
+          })
+          .catch((err) => {
+            mog('[IMAGE UPLOAD]: Failed!', { err })
+          })
       }
     }
   }
