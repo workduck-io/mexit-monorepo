@@ -38,6 +38,7 @@ export const BASE_URLS = {
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
   comment: `https://http-staging.workduck.io/comment`,
   reaction: `https://http-staging.workduck.io/reaction`,
+  highlight: `https://http-test.workduck.io/highlight`,
   frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
 }
 
@@ -174,6 +175,20 @@ export const apiURLs = {
     /** GET */
     blockReactionDetails: (nodeId: string, blockId: string) =>
       `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}/details`
+  },
+
+  highlights: {
+    /** POST */
+    saveHighlight: `${BASE_URLS.highlight}/`,
+
+    /** GET, DELETE */
+    byId: (entityId: string) => `${BASE_URLS.highlight}/${entityId}`,
+
+    /** GET */
+    all: `${BASE_URLS.highlight}/all`,
+
+    /** GET, DELETE */
+    allOfUrl: (urlHash: string) => `${BASE_URLS.highlight}/all/${urlHash}`
   },
 
   public: {
