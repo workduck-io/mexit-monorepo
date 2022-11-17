@@ -1,6 +1,6 @@
 import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
 import { Contents, ILink, NodeEditorContent, SharedNode } from '../Types/Editor'
-import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
+import { ElementHighlightMetadata2, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { mog } from '../Utils/mog'
 
 interface AddHighlightBlockToMap {
@@ -14,7 +14,7 @@ interface AddHighlightBlocksToMap {
   blockIds: string[]
 }
 
-interface HighlightStore {
+export interface HighlightStore2 {
   highlights: Highlights
   highlightBlockMap: HighlightBlockMap
 
@@ -24,8 +24,9 @@ interface HighlightStore {
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => void
 
   addHighlight: (highlight: Highlight, mapOptions: AddHighlightBlocksToMap) => void
-
   removeHighlight: (highlightId: string) => void
+
+  getHighlightsOfUrl: (url: string) => Highlights
 
   clearAllHighlightedBlocks: () => void
 }
@@ -54,10 +55,10 @@ const addToHighlightBlockMap = (
 
 // LOOK Typed constructor
 export const highlightStoreConstructor2: StateCreator<
-  HighlightStore,
-  SetState<HighlightStore>,
-  GetState<HighlightStore>,
-  StoreApi<HighlightStore>
+  HighlightStore2,
+  SetState<HighlightStore2>,
+  GetState<HighlightStore2>,
+  StoreApi<HighlightStore2>
 > = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
@@ -68,7 +69,7 @@ export const highlightStoreConstructor2: StateCreator<
 
     ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
-        const elementMetadata: ElementHighlightMetadata = block?.metadata?.elementMetadata
+        const elementMetadata: ElementHighlightMetadata2 = block?.metadata?.elementMetadata
         if (elementMetadata?.highlightId && this) {
           addToHighlightBlockMap(highlightBlockMap, {
             highlightId: elementMetadata.highlightId,
@@ -111,6 +112,12 @@ export const highlightStoreConstructor2: StateCreator<
     delete newHighlightBlockMap[highlightId]
     mog('removeHighlighted', { newHighlights, newHighlightBlockMap })
     set({ highlights: newHighlights, highlightBlockMap: newHighlightBlockMap })
+  },
+
+
+  getHighlightsOfUrl: (url) => {
+    const { highlights } = get()
+    return highlights.filter((h) => h.sourceUrl === url)
   },
 
   clearAllHighlightedBlocks: () => {
