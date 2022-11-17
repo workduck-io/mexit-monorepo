@@ -1,4 +1,4 @@
-import { apiURLs, defaultContent, ListItemType, mog } from '@mexit/core'
+import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 import client from './fetchClient'
@@ -104,6 +104,31 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
         })
         .then((response) => {
           return { message: body?.nodeId, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+  }
+}
+
+export const handleHighlightRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'ADD_HIGHLIGHT': {
+      return client
+        .post(apiURLs.highlights.saveHighlight, body, { headers: headers })
+        .then((d: any) => {
+          return { message: d.data, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+    case 'DELETE_HIGHLIGHT': {
+      return client
+        .delete(apiURLs.highlights.byId(body?.highlightId), { headers: headers })
+        .then((d: any) => {
+          return { message: d.data, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }

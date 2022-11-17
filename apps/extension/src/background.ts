@@ -11,7 +11,8 @@ import {
   handleActionRequest,
   handleAsyncActionRequest,
   handleShortenerRequest,
-  handleSharingRequest
+  handleSharingRequest,
+  handleHighlightRequest
 } from './Utils/requestHandler'
 
 Sentry.init({
@@ -122,6 +123,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleShortenerRequest(request)
         console.log('SHORTENER_RESPONSE', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'HIGHLIGHT': {
+      ;(async () => {
+        const res = await handleHighlightRequest(request)
+        console.log('HIGHLIGHT_RESPONSE', res)
         sendResponse(res)
       })()
       return true

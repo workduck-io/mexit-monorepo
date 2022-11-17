@@ -1,13 +1,11 @@
 import { client } from '@workduck-io/dwindle'
 
-import { apiURLs, mog } from '@mexit/core'
+import { apiURLs, Highlight, mog } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import '../../Utils/apiClient'
 import { useAPIHeaders } from './useAPIHeaders'
-
-type Highlight = any // FIXME
 
 const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
@@ -23,11 +21,9 @@ export const useHighlightAPI = () => {
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
       // workspaceId: getWorkspaceId(),
-      properties: {
-        title: h.title,
-        description: h.description
-      },
-      entityId: h.id
+      sourceUrl: h.sourceUrl,
+      properties: h.properties,
+      entityId: h.entityId
     }
 
     const resp = await client
@@ -56,12 +52,9 @@ export const useHighlightAPI = () => {
       const highlights = resp.data
         .map((item: any) => {
           return {
-            // FIXME
-            title: item.properties.title,
-            description: item.properties.description,
-            filters: item.filters,
-            id: item.entityId,
-            globalJoin: item.properties.globalJoin ?? 'all'
+            properties: item.properties,
+            entityId: item.entityId,
+            sourceUrl: item.sourceUrl
           } as Highlight
         })
         .filter((v: undefined | Highlight) => !!v)
