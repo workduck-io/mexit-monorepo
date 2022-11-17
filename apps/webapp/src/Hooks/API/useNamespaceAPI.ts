@@ -81,7 +81,7 @@ export const useNamespaceApi = () => {
       const ids = batchArray(
         toUpdateLocal.map((i) => i.nodeid),
         10
-      ).map((id: string[]) => id.join(','))
+      )
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
       const requestData = { time: Date.now(), method: 'GET' }

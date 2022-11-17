@@ -23,7 +23,7 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   })
 }
 
-const getMultipleNodeAPI = async (nodeids: string, namespaceID?: string) => {
+const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   if (nodeids.length === 0) return
   if (nodeids.length === 1) {
     return client.get(apiURLs.node.get(nodeids[0])).then((d) => {
@@ -32,7 +32,7 @@ const getMultipleNodeAPI = async (nodeids: string, namespaceID?: string) => {
   }
 
   const url = apiURLs.node.getMultipleNode(namespaceID)
-  return client.post(url, { ids: nodeids.split(',') }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }
@@ -40,7 +40,7 @@ const getMultipleNodeAPI = async (nodeids: string, namespaceID?: string) => {
   })
 }
 
-const getMultipleSharedNodeAPI = async (nodeids: string) => {
+const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
   if (nodeids.length === 0) return
   if (nodeids.length === 1) {
     return client.get(apiURLs.share.getSharedNode(nodeids[0])).then((d) => {
@@ -49,7 +49,7 @@ const getMultipleSharedNodeAPI = async (nodeids: string) => {
   }
 
   const url = apiURLs.share.getBulk
-  return client.post(url, { ids: nodeids.split(',') }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }
@@ -57,7 +57,7 @@ const getMultipleSharedNodeAPI = async (nodeids: string) => {
   })
 }
 
-const getMultipleSnippetAPI = async (ids: string) => {
+const getMultipleSnippetAPI = async (ids: string[]) => {
   if (ids.length === 0) return
   if (ids.length === 1) {
     return client.get(apiURLs.snippet.getById(ids[0])).then((d) => {
@@ -74,7 +74,7 @@ const getMultipleSnippetAPI = async (ids: string) => {
   })
 }
 
-const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: any[]) => {
+const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[] | string[][]) => {
   const requestsToMake: Promise<any>[] = []
 
   switch (requestType) {

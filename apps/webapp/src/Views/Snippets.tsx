@@ -267,7 +267,7 @@ const Snippets = () => {
       // language
       const snippets = getSnippets()
       const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
-      const ids = batchArray(unfetchedSnippets, 10).map((id: string[]) => id.join(','))
+      const ids = batchArray(unfetchedSnippets, 10)
 
       mog('SnippetsUseEffect', { snippets, unfetchedSnippets })
 
