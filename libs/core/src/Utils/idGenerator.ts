@@ -26,6 +26,7 @@ export const SnippetCommandPrefix = `snip`
 export const FILTER_ID_PREFIX = 'FILTER'
 export const COMMENT_ID_PREFIX = 'COMMENT'
 export const REACTION_ID_PREFIX = 'REACTION'
+export const HIGHLIGHT_ID_PREFIX = 'HIGHLIGHT'
 
 export const HASH_SEPARATOR = '#'
 
@@ -46,6 +47,7 @@ export const generateTaskViewId = () => `${TASK_VIEW_PREFIX}${ID_SEPARATOR}${sho
 export const generateFilterId = () => `${FILTER_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
 export const generateCommentId = () => `${COMMENT_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
 export const generateReactionId = () => `${REACTION_ID_PREFIX}${ID_SEPARATOR}${shortId()}`
+export const generateHighlightId = () => `${HIGHLIGHT_ID_PREFIX}${ID_SEPARATOR}${nanoid()}`
 
 export const cleanString = (str: string) =>
   str?.startsWith(`${DRAFT_PREFIX}${SEPARATOR}`) ? str.replace(`${DRAFT_PREFIX}${SEPARATOR}`, '') : str

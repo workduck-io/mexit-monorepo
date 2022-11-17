@@ -21,6 +21,10 @@ interface BlockHighlightStore {
   isBlockHighlighted: (id: string) => boolean
 }
 
+/**
+ * Used to store the state related to the highlighted blocks in the editor
+ * NOTE: This is not affiliated with highlights captured from web
+ */
 export const useBlockHighlightStore = create<BlockHighlightStore>((set, get) => ({
   hightlighted: {
     preview: [],

@@ -22,14 +22,12 @@ export const useHighlightAPI = () => {
 
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
-      workspaceId: getWorkspaceId(),
+      // workspaceId: getWorkspaceId(),
       properties: {
         title: h.title,
-        description: h.description,
-        globalJoin: h.globalJoin
+        description: h.description
       },
-      entityId: h.id,
-      filters: h.filters
+      entityId: h.id
     }
 
     const resp = await client
