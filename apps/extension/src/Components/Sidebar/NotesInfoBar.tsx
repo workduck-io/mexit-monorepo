@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 
 import { mog } from '@mexit/core'
-import { SidebarListFilterWrapper, SidebarListFilter, Input, SnippetCards } from '@mexit/shared'
+import { SidebarListFilterWrapper, SidebarListFilter, Input, SnippetCards, MexIcon } from '@mexit/shared'
 
 import useRaju from '../../Hooks/useRaju'
 import useDataStore from '../../Stores/useDataStore'
@@ -45,7 +45,7 @@ export const NotesInfoBar = () => {
     <SnippetCards>
       <SidebarListFilterWrapper>
         <SidebarListFilter>
-          <Icon icon={searchLine} />
+          <MexIcon height={20} width={20} icon={searchLine} />
           <Input
             autoFocus
             placeholder={'Search notes'}

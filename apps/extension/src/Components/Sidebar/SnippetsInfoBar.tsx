@@ -17,7 +17,14 @@ import {
   parseSnippet,
   Snippet
 } from '@mexit/core'
-import { SnippetCards, Input, SidebarListFilter, SidebarListFilterWrapper, SnippetSidebarHelp } from '@mexit/shared'
+import {
+  SnippetCards,
+  Input,
+  SidebarListFilter,
+  SidebarListFilterWrapper,
+  SnippetSidebarHelp,
+  MexIcon
+} from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -133,7 +140,7 @@ export const SnippetsInfoBar = () => {
     <SnippetCards>
       <SidebarListFilterWrapper>
         <SidebarListFilter>
-          <Icon icon={searchLine} />
+          <MexIcon height={20} width={20} icon={searchLine} />
           <Input
             autoFocus
             placeholder={'Search snippets'}
