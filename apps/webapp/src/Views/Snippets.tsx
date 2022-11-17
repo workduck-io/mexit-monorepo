@@ -309,7 +309,6 @@ const Snippets = () => {
       </MainHeader>
       <SearchView
         id={`searchSnippet_${randId}`}
-        key={`searchSnippet_${randId}`}
         initialItems={initialSnippets}
         getItemKey={(i) => i.id}
         onSelect={onSelect}
