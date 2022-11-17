@@ -31,10 +31,8 @@ import { useUpdater } from '../useUpdater'
 import { useAPIHeaders } from './useAPIHeaders'
 
 export const useApi = () => {
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const getMetadata = useContentStore((store) => store.getMetadata)
   const setMetadata = useContentStore((store) => store.setMetadata)
-  const updateMetadata = useContentStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
@@ -380,7 +378,7 @@ export const useApi = () => {
         const toUpdateSnippets = newSnippets?.map((item) => item.snippetID)
         mog('NewSnippets', { newSnippets, toUpdateSnippets })
         if (toUpdateSnippets && toUpdateSnippets.length > 0) {
-          const ids = batchArray(toUpdateSnippets, 10).map((id: string[]) => id.join(','))
+          const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
             const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
             const requestData = { time: Date.now(), method: 'GET' }

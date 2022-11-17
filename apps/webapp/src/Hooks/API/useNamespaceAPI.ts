@@ -89,7 +89,7 @@ export const useNamespaceApi = () => {
       fulfilled.forEach((nodes) => {
         if (nodes) {
           const { rawResponse } = nodes
-          setRequest(apiURLs.node.getMultipleNode, { ...requestData, url: apiURLs.node.getMultipleNode })
+          setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
 
           if (rawResponse) {
             rawResponse.map((nodeResponse) => {

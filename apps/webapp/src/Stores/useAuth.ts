@@ -244,7 +244,6 @@ export const useInitializeAfterAuth = () => {
       })
 
       if (forceRefreshToken) await refreshToken()
-      mog('WORKSPACE ID', { d: loginData.token, workspaceDetails })
       setAuthenticated(userDetails, workspaceDetails)
       setShowLoader(true)
     } catch (error) {

@@ -30,7 +30,7 @@ export const startRequestsWorkerService = async () => {
   if (!requestsWorker) requestsWorker = await spawn(new requestsWorkerConstructor())
 }
 
-export const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[]) => {
+export const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: any[]) => {
   const token = useInternalAuthStore.getState().userCred.token
   const workspaceID = useAuthStore.getState().getWorkspaceId()
 

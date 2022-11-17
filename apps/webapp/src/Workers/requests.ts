@@ -2,7 +2,7 @@ import axios from 'axios'
 import { customAlphabet } from 'nanoid'
 import { expose } from 'threads/worker'
 
-import { apiURLs, runBatch } from '@mexit/core'
+import { apiURLs, mog, runBatch } from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -23,30 +23,58 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   })
 }
 
-const getNodeAPI = async (nodeid: string, isShared = false) => {
-  const url = isShared ? apiURLs.share.getSharedNode(nodeid) : apiURLs.node.get(nodeid)
-  return client.get(url).then((d: any) => {
+const getMultipleNodeAPI = async (nodeids: string, namespaceID?: string) => {
+  if (nodeids.length === 0) return
+  if (nodeids.length === 1) {
+    return client.get(apiURLs.node.get(nodeids[0])).then((d) => {
+      if (d) return { rawResponse: [d.data], nodeids }
+    })
+  }
+
+  const url = apiURLs.node.getMultipleNode(namespaceID)
+  return client.post(url, { ids: nodeids.split(',') }).then((d) => {
     if (d) {
-      return { rawResponse: d.data, nodeid }
+      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
+      return { rawResponse: d.data.successful, nodeids }
     }
   })
 }
 
-const getMultipleNodeAPI = async (nodeids: string) => {
-  const url = apiURLs.node.getMultipleNode
+const getMultipleSharedNodeAPI = async (nodeids: string) => {
+  if (nodeids.length === 0) return
+  if (nodeids.length === 1) {
+    return client.get(apiURLs.share.getSharedNode(nodeids[0])).then((d) => {
+      if (d) return { rawResponse: [d.data], nodeids }
+    })
+  }
+
+  const url = apiURLs.share.getBulk
   return client.post(url, { ids: nodeids.split(',') }).then((d) => {
     if (d) {
-      return { rawResponse: d.data, nodeids }
+      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
+      return { rawResponse: d.data.successful, nodeids }
     }
   })
 }
 
 const getMultipleSnippetAPI = async (ids: string) => {
+  if (ids.length === 0) return
+  if (ids.length === 1) {
+    return client.get(apiURLs.snippet.getById(ids[0])).then((d) => {
+      if (d) return [d.data]
+    })
+  }
+
   const url = apiURLs.snippet.bulkGet
-  return client.post(url, { ids: ids.split(',') }).then((d) => d.data)
+  return client.post(url, { ids: ids }).then((d: any) => {
+    if (d) {
+      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
+      return d.data.successful
+    }
+  })
 }
 
-const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[]) => {
+const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: any[]) => {
   const requestsToMake: Promise<any>[] = []
 
   switch (requestType) {
@@ -56,7 +84,7 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
     }
 
     case WorkerRequestType.GET_SHARED_NODES: {
-      args.forEach((i) => requestsToMake.push(getNodeAPI(i, true)))
+      args.forEach((i) => requestsToMake.push(getMultipleSharedNodeAPI(i)))
       break
     }
 
