@@ -1,5 +1,5 @@
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
+import { Comment as CommentType, defaultContent, mog, NodeEditorContent } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
 import { PlateProvider } from '@udecode/plate'
 import { IconButton } from '@workduck-io/mex-components'
@@ -7,19 +7,20 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
+import { areEqual } from '../../Utils/hash'
 import { CommentEditor } from '../CommentEditor'
 import { CommentEditorWrapper } from '../CommentEditor/styled'
 import Plateless from '../Editor/Plateless'
 import { ProfileImage } from '../User/ProfileImage'
 import {
-    CommentActions,
-    CommentAuthor,
-    CommentContentWrapper,
-    CommentHeader,
-    CommentsWrapper,
-    CommentTime,
-    CommentWrapper,
-    NewCommentWrapper
+  CommentActions,
+  CommentAuthor,
+  CommentContentWrapper,
+  CommentHeader,
+  CommentsWrapper,
+  CommentTime,
+  CommentWrapper,
+  NewCommentWrapper
 } from './Comments.style'
 
 type OnAddComment = (content: NodeEditorContent) => Promise<void>
@@ -90,6 +91,7 @@ export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
   }
 
   const onSubmit = useCallback(() => {
+    if (areEqual(content, defaultContent.content)) return
     onAddComment(content)
       .then(() => {
         setContent(defaultContent.content)
