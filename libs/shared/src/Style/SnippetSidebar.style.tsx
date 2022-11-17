@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Ellipsis } from './NodeSelect.style'
 
 export const SnippetCards = styled.div`
-  padding: ${({ theme }) => theme.spacing.large} ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.medium};
   display: flex;
   gap: ${({ theme }) => theme.spacing.medium};
   flex-direction: column;

@@ -17,12 +17,14 @@ import {
   GroupHeader,
   MexIcon,
   CopyButton,
-  IconButton
+  IconButton,
+  GenericFlex
 } from '@mexit/shared'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import SnippetPreview from '../Editor/SnippetPreview'
+import { NodeCardHeader } from './NodeCard'
 
 interface SnippetCardProps {
   snippet: Snippet
@@ -100,11 +102,15 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       placement="left"
     >
       <SnippetCardWrapper>
-        <SnippetCardHeader>
-          <Icon icon={snippet.template ? magicLine : quillPenLine} />
-          {snippet.title}
-          <IconButton onClick={(e) => onClickProps(e)} icon={fileCopyLine} size="20px" title="Copied to Clipboard" />
-        </SnippetCardHeader>
+        <NodeCardHeader>
+          <GenericFlex>
+            <Icon icon={snippet.template ? magicLine : quillPenLine} />
+            {snippet.title}
+          </GenericFlex>
+          <GenericFlex>
+            <IconButton onClick={onClickProps} icon={fileCopyLine} size="20px" title="Copied to Clipboard" />
+          </GenericFlex>
+        </NodeCardHeader>
 
         <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>
         <SnippetCardFooter>

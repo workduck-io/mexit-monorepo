@@ -99,9 +99,9 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         </GenericFlex>
         <GenericFlex>
           {isNodePublic ? (
-            <Icon icon="bi:cloud" onClick={() => flipPublicAccess()} />
+            <Icon icon="material-symbols:public-off-rounded" onClick={() => flipPublicAccess()} />
           ) : (
-            <Icon icon="bi:cloud-slash" onClick={() => flipPublicAccess()} />
+            <Icon icon="material-symbols:public" onClick={() => flipPublicAccess()} />
           )}
           {isNodePublic && (
             <CopyButton

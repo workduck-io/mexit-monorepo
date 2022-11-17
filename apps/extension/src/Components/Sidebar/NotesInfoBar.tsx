@@ -24,9 +24,13 @@ export const NotesInfoBar = () => {
   }
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await dispatch('SEARCH', ['node'], newSearchTerm)
-
-    setSearchedNodes(res?.map((item) => item.id))
+    try {
+      const res = await dispatch('SEARCH', ['node'], newSearchTerm)
+      const results = res?.map((item) => item.id) ?? []
+      setSearchedNodes(results)
+    } catch (err) {
+      mog('[NOTE SEARCH]: Unable to search', { err })
+    }
   }
 
   useEffect(() => {
