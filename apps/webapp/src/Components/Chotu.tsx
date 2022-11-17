@@ -88,8 +88,13 @@ export default function Chotu() {
       return
     },
     uploadImageToS3Dwindle(base64string: string) {
-      return new Promise((resolve) => {
-        resolve(uploadImageToS3(base64string, { giveCloudFrontURL: true }))
+      return new Promise<string>((resolve, reject) => {
+        try {
+          const val = uploadImageToS3(base64string, { giveCloudFrontURL: true, parseBase64String: true })
+          resolve(val)
+        } catch (error) {
+          reject(error)
+        }
       })
     }
   }
