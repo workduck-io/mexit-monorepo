@@ -92,7 +92,7 @@ export const useNamespaceApi = () => {
           setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
 
           if (rawResponse) {
-            rawResponse.map((nodeResponse) => {
+            rawResponse.forEach((nodeResponse) => {
               const metadata = extractMetadata(nodeResponse) // added by Varshitha
               const content = deserializeContent(nodeResponse.data)
               updateFromContent(nodeResponse.id, content, metadata)
