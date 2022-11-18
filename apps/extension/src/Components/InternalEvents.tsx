@@ -179,7 +179,7 @@ function handleHighlighter() {
         mog('check', { id, highlighedIds })
 
         if (!highlighedIds.includes(id)) {
-          highlighter.fromStore(startMeta, endMeta, text, highlight.sourceUrl)
+          highlighter.fromStore(startMeta, endMeta, text, highlight.properties.sourceUrl)
           highlighedIds.push(id)
 
           // if (highlight?.shared) {

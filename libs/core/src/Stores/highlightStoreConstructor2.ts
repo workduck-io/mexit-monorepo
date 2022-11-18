@@ -117,7 +117,7 @@ export const highlightStoreConstructor2: StateCreator<
 
   getHighlightsOfUrl: (url) => {
     const { highlights } = get()
-    return highlights.filter((h) => h.sourceUrl === url)
+    return highlights.filter((h) => h.properties.sourceUrl === url)
   },
 
   clearAllHighlightedBlocks: () => {

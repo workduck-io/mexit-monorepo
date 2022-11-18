@@ -1,10 +1,18 @@
 import toast from 'react-hot-toast'
 
-import { defaultContent, extractMetadata, ILink, mog, SEPARATOR } from '@mexit/core'
+import {
+  defaultContent,
+  extractMetadata,
+  generateHighlightId,
+  getHighlightBlockMap,
+  ILink,
+  mog,
+  SEPARATOR
+} from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useHighlightStore, useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
@@ -39,6 +47,7 @@ export function useSaveChanges() {
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
   const { addHighlightedBlock } = useHighlightStore()
+  const { addHighlight } = useHighlightStore2()
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
@@ -126,6 +135,20 @@ export function useSaveChanges() {
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
+        // Create highlight and add to node, block map, replace metadata from block
+        // TODO: Extract the blockids for which we have captured highlights
+        // Here vvvv
+        const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+        addHighlight(
+          {
+            entityId: generateHighlightId(),
+            properties: {
+              saveableRange: selection?.range,
+              sourceUrl: selection?.range && window.location.href
+            }
+          },
+          blockHighlightMap
+        )
         addHighlightedBlock(nodeid, content)
         dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
 

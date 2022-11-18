@@ -1,7 +1,6 @@
 import { Highlight, mog, WORKSPACE_HEADER } from '@mexit/core'
-import { useAuthStore } from './useAuth'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import toast from 'react-hot-toast'
+import { useAuthStore } from './useAuth'
 
 export const useHighlights = () => {
   const addHighlight = () => {
@@ -67,7 +66,7 @@ export const useHighlightAPI = () => {
       subType: 'ADD_HIGHLIGHT',
       headers: workspaceHeaders(),
       body: {
-        sourceUrl: highlight.sourceUrl,
+        sourceUrl: highlight.properties.sourceUrl,
         properties: highlight.properties,
         entityId: highlight.entityId
       }

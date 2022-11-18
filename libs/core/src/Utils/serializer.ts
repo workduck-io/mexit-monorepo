@@ -75,3 +75,19 @@ export const getBlockMetadata = (text: string, meta?: BlockMetaDataType): BlockM
 
   return { ...metadata, source: text }
 }
+
+/**
+ *
+ */
+export const getHighlightBlockMap = (nodeId: string, content: any[]) => {
+  const nodeBlockMap = {
+    nodeId,
+    blockIds: []
+  }
+  content.forEach((item) => {
+    if (item?.metadata?.elementMetadata) {
+      nodeBlockMap.blockIds.push(item.id)
+    }
+  })
+  return nodeBlockMap
+}

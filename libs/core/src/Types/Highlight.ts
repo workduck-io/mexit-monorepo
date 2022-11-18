@@ -50,7 +50,6 @@ export interface HighlightMetaBlock2 {
   textOffset: number
 }
 
-
 export interface ElementHighlightMetadata2 {
   highlightId: string
 }
@@ -75,13 +74,15 @@ export interface Highlight {
    * Properties of the highlight
    */
   properties: {
+    /**
+     * Range of the highlighted content in page
+     */
     saveableRange: SaveableRange
+    /**
+     * Source URL of the webpage on which the highlight was made
+     */
+    sourceUrl: string
   }
-
-  /**
-   * Source URL of the webpage on which the highlight was made
-   */
-  sourceUrl: string
 
   /**
    * ID of the note where the content was added

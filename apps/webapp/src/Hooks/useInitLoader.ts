@@ -18,6 +18,7 @@ import { useFetchShareData } from './useFetchShareData'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useURLsAPI } from './useURLs'
+import { useHighlightSync } from './useHighlights'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -30,6 +31,7 @@ export const useInitLoader = () => {
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
+  const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
@@ -40,7 +42,14 @@ export const useInitLoader = () => {
 
   const backgroundFetch = async () => {
     try {
-      runBatch<any>([fetchShareData(), initPortals(), getAllSnippetsByWorkspace(), getAllViews(), getAllLinks()])
+      runBatch<any>([
+        fetchShareData(),
+        initPortals(),
+        getAllSnippetsByWorkspace(),
+        getAllViews(),
+        getAllLinks(),
+        fetchAllHighlights()
+      ])
     } catch (err) {
       mog('Background fetch failed')
     }

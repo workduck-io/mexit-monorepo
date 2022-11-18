@@ -3,25 +3,17 @@ import { client } from '@workduck-io/dwindle'
 import { apiURLs, Highlight, mog } from '@mexit/core'
 
 import { isRequestedWithin } from '../../Stores/useApiStore'
-import { useAuthStore } from '../../Stores/useAuth'
 import '../../Utils/apiClient'
 import { useAPIHeaders } from './useAPIHeaders'
 
 const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
 export const useHighlightAPI = () => {
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-
   const { workspaceHeaders } = useAPIHeaders()
-  const setHighlights = (highlights: any) => {
-    // FIXME
-    //pass
-  }
 
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
       // workspaceId: getWorkspaceId(),
-      sourceUrl: h.sourceUrl,
       properties: h.properties,
       entityId: h.entityId
     }
@@ -49,24 +41,17 @@ export const useHighlightAPI = () => {
 
     const resp = await client.get(url, { headers: workspaceHeaders() }).then((resp: any) => {
       // mog('We fetched them view', { resp })
-      const highlights = resp.data
-        .map((item: any) => {
-          return {
-            properties: item.properties,
-            entityId: item.entityId,
-            sourceUrl: item.sourceUrl
-          } as Highlight
-        })
-        .filter((v: undefined | Highlight) => !!v)
       try {
-        if (highlights !== undefined) {
-          setHighlights(highlights)
-        }
+        const highlights = resp.data?.Items?.map((item: any) => {
+          return {
+            properties: item?.properties,
+            entityId: item?.entityId
+          } as Highlight
+        }).filter((v: undefined | Highlight) => !!v)
+        return highlights
       } catch (e) {
-        mog('Error fetching the views', { e })
+        mog('Error fetching highlights', { e })
       }
-
-      return highlights
     })
     return resp
   }

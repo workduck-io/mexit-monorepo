@@ -1,7 +1,8 @@
-import { defaultContent, generateCommentId, mog } from '@mexit/core'
+import { defaultContent, generateCommentId, generateHighlightId, mog } from '@mexit/core'
 import { Button } from '@workduck-io/mex-components'
 import { useEffect } from 'react'
 import { useCommentAPI, useReactionAPI } from './useCommentAndReactionAPI'
+import { useHighlightAPI } from './useHighlightAPI'
 
 const sampleContent = [
   {
@@ -19,6 +20,7 @@ const sampleContent = [
 export const useAPIScratchpad = () => {
   const commentAPI = useCommentAPI()
   const reactionAPI = useReactionAPI()
+  const highlightAPI = useHighlightAPI()
 
   useEffect(() => {
     mog('useAPIScratchpad')
@@ -60,7 +62,7 @@ export const useAPIScratchpad = () => {
 
   const testDeleteComment = () => {
     commentAPI
-      .deleteComment('COMMENT_gphad')
+      .deleteComment('NODE_xJQt6DWHwqXgVxAJUR3gx', 'COMMENT_faAE7')
       .then((res) => {
         mog('Deleted comment', { res })
       })
@@ -206,6 +208,58 @@ export const useAPIScratchpad = () => {
       })
   }
 
+  const testAddHighlight = () => {
+    highlightAPI
+      .saveHighlight({
+        entityId: generateHighlightId(),
+        properties: {
+          sourceUrl: 'https://www.wired.com/story/elon-musk-tesla-elon-musk-tesla/',
+          saveableRange: {
+            startMeta: {
+              parentTagName: 'A',
+              parentIndex: 128,
+              textOffset: 0
+            },
+            endMeta: {
+              parentTagName: 'LI',
+              parentIndex: 56,
+              textOffset: 60
+            },
+            text: 'Elon Musk’s Tesla Is a Car That Can Drive Itself. But Is It Safe?',
+            id: '63023772-32e9-4d85-b0e8-933cd429eab3'
+          }
+        }
+      })
+      .then((res) => {
+        mog('Added highlight', { res })
+      })
+      .catch((err) => {
+        mog('Error adding highlight', { err })
+      })
+  }
+
+  const testDeleteHighlight = () => {
+    highlightAPI
+      .deleteHighlight('HIGHLIGHT_h7kcGPpGcAiCg663AcKGw')
+      .then((res) => {
+        mog('Deleted highlight', { res })
+      })
+      .catch((err) => {
+        mog('Error deleting highlight', { err })
+      })
+  }
+
+  const testFetchAllHighlights = () => {
+    highlightAPI
+      .getAllHighlights()
+      .then((res) => {
+        mog('Fetched highlights', { res })
+      })
+      .catch((err) => {
+        mog('Error fetching highlights', { err })
+      })
+  }
+
   return {
     comments: {
       testCommentSave,
@@ -224,6 +278,11 @@ export const useAPIScratchpad = () => {
       testGetReactionsOfNote,
       testGetReactionsOfBlock,
       testBlockReactionDetails
+    },
+    highlights: {
+      testAddHighlight,
+      testDeleteHighlight,
+      testFetchAllHighlights
     }
   }
 }
