@@ -10,7 +10,8 @@ import {
   getTodosFromContent,
   SearchRepExtra,
   convertContentToRawText,
-  mog
+  mog,
+  HighlightAnalysis
 } from '@mexit/core'
 import { getTitleFromContent } from '@mexit/core'
 
@@ -21,7 +22,7 @@ export interface OutlineItem {
   level?: number
 }
 
-export interface NodeAnalysis {
+export interface NodeAnalysis extends HighlightAnalysis {
   nodeid: string
   tags: string[]
   outline: OutlineItem[]
@@ -108,20 +109,44 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
   return outline
 }
 
+/**
+ * Finds whether the block has a highlight
+ * Ignores repeated block with same highlight
+ */
+const getHighlightBlocks = (content: NodeEditorContent): HighlightAnalysis => {
+  const displayBlocksWithHighlight = []
+  let prevBlockHighlightId: string | null = null
+  for (const block of content) {
+    const hasMetadata = block?.metadata?.highlightId
+    if (hasMetadata) {
+      if (prevBlockHighlightId !== block?.metadata?.highlightId) {
+        displayBlocksWithHighlight.push(block.id)
+      }
+      prevBlockHighlightId = block?.metadata?.highlightId
+    } else {
+      prevBlockHighlightId = null
+    }
+  }
+
+  return { displayBlocksWithHighlight }
+}
+
 function analyseContent({ content, nodeid, options }: AnalyseContentProps): NodeAnalysis {
   if (!content)
     return {
       nodeid,
       outline: [],
       tags: [],
-      editorTodos: []
+      editorTodos: [],
+      displayBlocksWithHighlight: []
     }
 
   const analysisResult = {
     nodeid,
     outline: getOutline(content, options),
     tags: getTagsFromContent(content),
-    editorTodos: getTodosFromContent(content)
+    editorTodos: getTodosFromContent(content),
+    displayBlocksWithHighlight: getHighlightBlocks(content).displayBlocksWithHighlight
   }
 
   return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult

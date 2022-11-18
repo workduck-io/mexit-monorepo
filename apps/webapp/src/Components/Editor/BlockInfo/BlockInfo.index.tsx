@@ -18,6 +18,7 @@ import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
+import { useAnalysisStore } from '../../../Stores/useAnalysis'
 
 /**
  *
@@ -38,6 +39,7 @@ export const BlockInfo = (props: any) => {
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
+  const anal = useAnalysisStore((state) => state.analysis)
   // const isTable = useMemo(() => attributes['data-slate-table'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
@@ -67,6 +69,15 @@ export const BlockInfo = (props: any) => {
     [element]
   )
   const icon = sourceURL && getIconType(sourceURL)
+
+  const showSource = useMemo(() => {
+    if (anal?.displayBlocksWithHighlight) {
+      if (anal?.displayBlocksWithHighlight?.includes(element?.id)) {
+        return true
+      }
+    }
+    return false
+  }, [anal?.displayBlocksWithHighlight, element?.id])
 
   // Comments of the block
   const { comments, userHasComments } = useMemo(() => {
@@ -153,16 +164,18 @@ export const BlockInfo = (props: any) => {
     return userReactions as UserReaction[]
   }
 
-  //   mog('BlockInfo', {
-  //     element,
-  //     showBlockInfo,
-  //     hasComments,
-  //     isInline,
-  //     props,
-  //     isNested,
-  //     path,
-  //     interactive
-  //   })
+    mog('BlockInfo', {
+      element,
+      showBlockInfo,
+      hasComments,
+      isInline,
+      props,
+      isNested,
+      path,
+      interactive,
+      showSource,
+      anal
+    })
 
   // Do not wrap the blockinfo around the inline / nested elements
   return isInline || isNested ? (

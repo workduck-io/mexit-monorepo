@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import create from 'zustand'
 
-import { TodoType, checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
+import { TodoType, checkIfUntitledDraftNode, getParentNodePath, mog, HighlightAnalysis } from '@mexit/core'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { useLinks } from '../Hooks/useLinks'
@@ -19,7 +19,7 @@ export interface OutlineItem {
   level?: number
 }
 
-export interface NodeAnalysis {
+export interface NodeAnalysis extends HighlightAnalysis {
   nodeid: string
   tags: string[]
   outline: OutlineItem[]
@@ -37,7 +37,8 @@ export const useAnalysisStore = create<AnalysisStore>((set, get) => ({
     nodeid: undefined,
     tags: [],
     outline: [],
-    editorTodos: []
+    editorTodos: [],
+    displayBlocksWithHighlight: []
   },
   setAnalysis: (analysis: NodeAnalysis) => {
     set({ analysis })

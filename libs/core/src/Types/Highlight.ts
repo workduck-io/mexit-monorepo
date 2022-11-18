@@ -15,7 +15,7 @@ IN STORE
                     "parentIndex": 2,
                     "textOffset": 355
                 },
-                "text": "The species is both terrestrial (ground-living) and arboreal (tree-living); it inhabits savannah, woodland, rocky slopes and in some regions, dense forest. It is diurnal and is known to prey on birds and small mammals. Over suitable surfaces, it can move at speeds up to 16 km/h (10 mph) for short distances. Adult black mambas have few natural predators.",
+                "text": "The species is both terrestrial (ground-living) and arboreal (tree-living); it inhabits savannah, woodland, rocky slopes and in some regions, dense forest. It is diurnal and is known to prey on birds and small mammals. Over suitable surfaces, it can move at speeds up to 16km/h (10mph) for short distances. Adult black mambas have few natural predators.",
                 "id": "f0cda665-6660-47bd-99cd-46b48020e253"
             },
             "sourceUrl": "https://en.wikipedia.org/wiki/Black_mamba"
@@ -99,4 +99,11 @@ export interface HighlightBlockMap {
   [highlightId: string]: {
     [noteId: string]: string[]
   }
+}
+
+export interface HighlightAnalysis {
+  /**
+   * Blocks with highlights for whom the source needs to be displayed
+   */
+  displayBlocksWithHighlight: string[]
 }
