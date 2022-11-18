@@ -10,7 +10,7 @@ import { Ellipsis } from './NodeSelect.style'
 import { TabBody } from './Tab.Styles'
 
 export const Scroll = css`
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 
   ::-webkit-scrollbar {

@@ -69,7 +69,7 @@ export const EditorWrapper = styled.div<{ comboboxOpen?: boolean; isUserEditing?
   ${({ comboboxOpen }) =>
     comboboxOpen &&
     css`
-      overflow-y: hidden;
+      overflow: hidden auto;
     `}
 `
 
@@ -90,6 +90,10 @@ export const CenteredMainContent = styled.div`
   && > div {
     width: 100%;
   }
+`
+
+export const EditorHeader = styled.section`
+  width: 100%;
 `
 
 export const StyledEditor = styled.div<StyledEditorProps>`

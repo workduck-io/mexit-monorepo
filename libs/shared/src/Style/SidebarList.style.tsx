@@ -56,6 +56,12 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   }
 `
 
+export const List = styled.section<{ scrollable?: boolean }>`
+  margin-top: ${({ theme }) => theme.spacing.medium};
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+`
+
 export const SidebarListFilterWrapper = styled.div`
   display: flex;
   align-items: center;

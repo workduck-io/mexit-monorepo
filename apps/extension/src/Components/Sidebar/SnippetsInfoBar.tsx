@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 
 import searchLine from '@iconify/icons-ri/search-line'
-import { Icon } from '@iconify/react'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
 import toast from 'react-hot-toast'
@@ -23,7 +22,8 @@ import {
   SidebarListFilter,
   SidebarListFilterWrapper,
   SnippetSidebarHelp,
-  MexIcon
+  MexIcon,
+  List
 } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
@@ -139,28 +139,31 @@ export const SnippetsInfoBar = () => {
   return (
     <SnippetCards>
       <SidebarListFilterWrapper>
-        <SidebarListFilter>
-          <MexIcon height={20} width={20} icon={searchLine} />
+        <SidebarListFilter noMargin>
+          <MexIcon height={20} width={20} icon={searchLine} margin="0.6rem 0" />
           <Input
             autoFocus
+            fontSize="1rem"
             placeholder={'Search snippets'}
             onChange={debounce((e) => onSearchChange(e), 250)}
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox
-          text={SnippetSidebarHelp}
-          // root={getElementById('ext-side-nav')}
-        />
+        <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} />
       </SidebarListFilterWrapper>
-      {searchedSnippets?.map((snippet) => (
-        <SnippetCard
-          key={snippet?.id}
-          keyStr={snippet?.id}
-          snippet={snippet}
-          onClick={() => onInsertSnippet(snippet.id)}
-        />
-      ))}
+      <List scrollable>
+        {searchedSnippets?.map((snippet) => (
+          <SnippetCard
+            key={snippet?.id}
+            keyStr={snippet?.id}
+            snippet={snippet}
+            onClick={(event) => {
+              event.stopPropagation()
+              onInsertSnippet(snippet.id)
+            }}
+          />
+        ))}
+      </List>
     </SnippetCards>
   )
 }

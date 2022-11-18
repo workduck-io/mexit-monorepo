@@ -1,22 +1,18 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { Icon } from '@iconify/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Snippet, getTagsFromContent, convertContentToRawText, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { Snippet } from '@mexit/core'
 import {
   SnippetCardWrapper,
-  SnippetCardHeader,
   SnippetContentPreview,
   SnippetCardFooter,
   RelativeTime,
-  GroupHeader,
   MexIcon,
-  CopyButton,
   IconButton,
   GenericFlex
 } from '@mexit/shared'
@@ -53,9 +49,9 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
     ev.stopPropagation()
 
     // TODO: commenting this our for a while, need to have better click and hover interaction
-    if (onClick) {
-      onClick(ev)
-    }
+    // if (onClick) {
+    //   onClick(ev)
+    // }
     // else {
     //   window.open(`${MEXIT_FRONTEND_URL_BASE}/snippets/node/${snippet.id}`)
     // }
@@ -95,6 +91,7 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
     // TODO: Not able to scroll these previews using mouse
     <SnippetPreview
       key={keyStr}
+      hover
       preview={visible}
       setPreview={setVisible}
       allowClosePreview
@@ -104,17 +101,16 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       <SnippetCardWrapper>
         <NodeCardHeader>
           <GenericFlex>
-            <Icon icon={snippet.template ? magicLine : quillPenLine} />
+            <MexIcon icon={snippet.template ? magicLine : quillPenLine} />
             {snippet.title}
           </GenericFlex>
           <GenericFlex>
-            <IconButton onClick={onClickProps} icon={fileCopyLine} size="20px" title="Copied to Clipboard" />
+            <IconButton onClick={onClick} icon={fileCopyLine} size="16px" title="Copied to Clipboard" />
           </GenericFlex>
         </NodeCardHeader>
 
         <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>
         <SnippetCardFooter>
-          {/* <TagsLabel tags={snippetTags} /> */}
           {lastUsed && (
             <RelativeTime
               tippy

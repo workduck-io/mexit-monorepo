@@ -32,6 +32,7 @@ export const Floating = ({
   persist,
   setOpen,
   render,
+  disableClick,
   placement,
   root
 }: Props) => {
@@ -65,7 +66,7 @@ export const Floating = ({
         buffer: 1
       })
     }),
-    useClick(context),
+    !disableClick && useClick(context),
     useRole(context),
     useDismiss(context),
     label && useDelayGroup(context, { id: label })

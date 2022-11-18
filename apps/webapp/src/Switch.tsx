@@ -51,7 +51,6 @@ export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
 
   width: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
 `
 
 const ProtectedRoute = ({ children }) => {

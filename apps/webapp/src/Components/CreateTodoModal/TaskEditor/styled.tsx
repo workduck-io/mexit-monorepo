@@ -12,7 +12,7 @@ export const TaskEditorStyle = styled(EditorStyles)`
   min-width: 40vw;
   max-width: 40vw;
   max-height: 40vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   background: #333;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   margin: ${({ theme }) => theme.spacing.medium};

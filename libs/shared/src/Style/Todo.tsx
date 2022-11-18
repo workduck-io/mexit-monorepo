@@ -44,7 +44,7 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
     width: ${({ sidebarExpanded, theme }) =>
       css`calc(${KANBAN_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
     max-height: ${KANBAN_HEIGHT};
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     transition: width 0.5s ease-in-out;
     background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};

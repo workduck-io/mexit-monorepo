@@ -185,7 +185,7 @@ export const IntegrationStyledIcon = styled(Icon)`
 
 export const IntegrationScroll = styled.div`
   max-height: 66%;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 export const Text = styled.div`

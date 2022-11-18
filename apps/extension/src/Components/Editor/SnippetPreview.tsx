@@ -33,6 +33,7 @@ export interface SnippetPreviewProps {
   hover?: boolean
   // editable?: boolean
   label?: string
+  disableClick?: boolean
   allowClosePreview?: boolean
   icon?: string
   iconTooltip?: string
@@ -46,6 +47,7 @@ const SnippetPreview = ({
   hover,
   label,
   placement,
+  disableClick,
   // editable = true,
   setPreview,
   icon,
@@ -83,6 +85,7 @@ const SnippetPreview = ({
     return (
       <NestedFloating
         hover={hover}
+        disableClick={disableClick}
         root={getElementById('ext-side-nav')}
         label={label}
         scrollLock={false}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { SnippetCards, CenteredFlex } from '@mexit/shared'
+import { SnippetCards, CenteredFlex, List } from '@mexit/shared'
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { GenericCard } from './GenericCard'
@@ -67,7 +67,7 @@ export function ContextInfoBar() {
   // }, [search])
 
   return (
-    <SnippetCards>
+    <SnippetCards fullHeight={false}>
       <ShortenerComponent />
       {/* <SidebarListFilterWrapper>
         <SidebarListFilter>
@@ -82,14 +82,16 @@ export function ContextInfoBar() {
         <Infobox root={getElementById('ext-side-nav')} text={HighlightSidebarHelp} />
       </SidebarListFilterWrapper> */}
       {pageHighlights ? (
-        <HighlightGroups highlights={pageHighlights} />
+        <List scrollable>
+          <HighlightGroups highlights={pageHighlights} />
+        </List>
       ) : (
         <div>
           <CenteredFlex>
             <h2>Hi there</h2>
             <p>Let's get you started</p>
           </CenteredFlex>
-          <SnippetCards>
+          <SnippetCards fullHeight={false}>
             {basicOnboarding.map((item) => (
               <GenericCard icon={item.icon} title={item.title} description={item.description} />
             ))}

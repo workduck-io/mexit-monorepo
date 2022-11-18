@@ -58,11 +58,12 @@ export const PixelToCSS = (x: Pixels): string => {
 }
 
 export const ScrollStyles = (color = undefined, width = 10) => css`
-  scrollbar-color: dark;
+  scrollbar-color: auto;
+  scrollbar-width: thin;
 
-  &::-webkit-scrollbar {
+  /* &::-webkit-scrollbar {
     width: ${width}px;
-  }
+  } */
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }

@@ -1,19 +1,16 @@
 import React, { useMemo } from 'react'
 
-import { Icon } from '@iconify/react'
-import toast from 'react-hot-toast'
 import styled from 'styled-components'
 
 import { convertContentToRawText, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
-  CenteredFlex,
   CopyButton,
   GenericFlex,
+  IconButton,
+  MexIcon,
   SnippetCardFooter,
-  SnippetCardHeader,
   SnippetCardWrapper,
-  SnippetContentPreview,
-  TagsLabel
+  SnippetContentPreview
 } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
@@ -21,6 +18,7 @@ import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNodes } from '../../Hooks/useNodes'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import { useRecentsStore } from '../../Stores/useRecentsStore'
 
 export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
   display: flex;
@@ -36,6 +34,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
   const { publicNodes, setNodePrivate, setNodePublic, checkNodePublic } = useDataStore()
   const { getNode } = useNodes()
   const getContent = useContentStore((store) => store.getContent)
+  const addInRecents = useRecentsStore((s) => s.addRecent)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
   const isNodePublic = useMemo(() => {
@@ -66,6 +65,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         if (error) {
           mog('ErrorMakingNodePrivate', error)
         } else {
+          addInRecents(nodeId)
           setNodePrivate(nodeId)
         }
       })
@@ -84,29 +84,40 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         if (error) {
           mog('ErrorMakingNodePublic', error)
         } else {
+          addInRecents(nodeId)
           setNodePublic(nodeId)
         }
       })
     }
   }
 
+  const onNotePublic = (event) => {
+    event.stopPropagation()
+    flipPublicAccess()
+  }
+
   return (
     <SnippetCardWrapper>
       <NodeCardHeader $noHover>
         <GenericFlex>
-          <Icon icon="gg:file-document" />
+          <MexIcon $noHover icon="gg:file-document" />
           {getTitleFromPath(node?.path)}
         </GenericFlex>
         <GenericFlex>
           {isNodePublic ? (
-            <Icon icon="material-symbols:public-off-rounded" onClick={() => flipPublicAccess()} />
+            <IconButton
+              title="Make Note Public"
+              size="16px"
+              icon="material-symbols:public-off-rounded"
+              onClick={onNotePublic}
+            />
           ) : (
-            <Icon icon="material-symbols:public" onClick={() => flipPublicAccess()} />
+            <IconButton title="Make Note Private" size="16px" icon="material-symbols:public" onClick={onNotePublic} />
           )}
           {isNodePublic && (
             <CopyButton
               text={`${MEXIT_FRONTEND_URL_BASE}/share/${nodeId}`}
-              size="20px"
+              size="16px"
               beforeCopyTooltip="Copy link"
               afterCopyTooltip="Link copied!"
             />

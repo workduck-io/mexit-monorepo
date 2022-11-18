@@ -23,8 +23,6 @@ const infoWidths = {
 }
 
 export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
-  overflow-x: hidden;
-
   @media (max-width: ${size.wide}) {
     min-width: ${infoWidths.small.normal};
     max-width: ${infoWidths.small.normal};

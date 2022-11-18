@@ -1,12 +1,19 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Ellipsis } from './NodeSelect.style'
 
-export const SnippetCards = styled.div`
+export const SnippetCards = styled.div<{ fullHeight?: boolean }>`
   padding: ${({ theme }) => theme.spacing.medium};
   display: flex;
   gap: ${({ theme }) => theme.spacing.medium};
   flex-direction: column;
+  overflow: hidden;
+  /* overscroll-behavior: contain; */
+  ${({ fullHeight }) =>
+    fullHeight !== false &&
+    css`
+      height: 100%;
+    `}
 `
 
 export const SnippetCardWrapper = styled.div`
@@ -15,7 +22,8 @@ export const SnippetCardWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   background-color: ${({ theme }) => theme.colors.gray[8]};
-  padding: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.small};
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
 `
 
 export const SnippetCardHeader = styled.div`
