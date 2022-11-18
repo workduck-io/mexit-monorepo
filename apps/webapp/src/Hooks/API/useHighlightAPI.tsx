@@ -9,7 +9,7 @@ import { useAPIHeaders } from './useAPIHeaders'
 const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
 export const useHighlightAPI = () => {
-  const { workspaceHeaders } = useAPIHeaders()
+  const { workspaceHeaders, workspaceId } = useAPIHeaders()
 
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
@@ -58,10 +58,14 @@ export const useHighlightAPI = () => {
 
   const deleteHighlight = async (highlightId: string) => {
     const tempUrl = apiURLs.highlights.byId(highlightId)
-    const resp = await client.delete(tempUrl).then((resp) => {
-      mog('We deleted that view', { resp })
-      return resp.data
-    })
+    const resp = await client
+      .delete(tempUrl, {
+        headers: workspaceHeaders()
+      })
+      .then((resp) => {
+        mog('We deleted that view', { resp })
+        return resp.data
+      })
 
     return resp
   }

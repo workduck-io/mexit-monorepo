@@ -17,6 +17,7 @@ import { useAuthStore } from '../Hooks/useAuth'
 export const serializeContent = (
   content: any[],
   nodeid: string,
+  // If present, and if element.highlight is true, adds the metadata to the element
   elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
 ) => {
   return content.map((el) => {
