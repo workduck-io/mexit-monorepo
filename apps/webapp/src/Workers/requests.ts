@@ -74,12 +74,15 @@ const getMultipleSnippetAPI = async (ids: string[]) => {
   })
 }
 
-const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: string[] | string[][]) => {
+const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: any) => {
   const requestsToMake: Promise<any>[] = []
-
   switch (requestType) {
     case WorkerRequestType.GET_NODES: {
-      args.forEach((i) => requestsToMake.push(getMultipleNodeAPI(i)))
+      // Args is of type Record<string, string[][]>
+      Object.entries<string[][]>(args).forEach(([nsID, batches]) => {
+        if (nsID === 'NOT_SHARED') batches.forEach((b) => requestsToMake.push(getMultipleNodeAPI(b)))
+        else batches.forEach((b) => requestsToMake.push(getMultipleNodeAPI(b, nsID)))
+      })
       break
     }
 

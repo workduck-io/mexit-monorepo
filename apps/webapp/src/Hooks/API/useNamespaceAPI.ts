@@ -6,6 +6,7 @@ import {
   AccessLevel,
   apiURLs,
   batchArray,
+  batchArrayWithNamespaces,
   extractMetadata,
   generateNamespaceId,
   iLinksToUpdate,
@@ -73,15 +74,14 @@ export const useNamespaceApi = () => {
 
       mog('update namespaces and ILinks', { namespaces, newILinks })
       // SetILinks once middleware is integrated
-      setNamespaces(namespaces.map((n) => n.ns))
+      const ns = namespaces.map((n) => n.ns)
+      setNamespaces(ns)
       // TODO: Also set archive links
       setIlinks(newILinks)
 
       const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
-      const ids = batchArray(
-        toUpdateLocal.map((i) => i.nodeid),
-        10
-      )
+
+      const ids = batchArrayWithNamespaces(toUpdateLocal, ns, 10)
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
       const requestData = { time: Date.now(), method: 'GET' }
