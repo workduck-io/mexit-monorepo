@@ -12,7 +12,7 @@ import {
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore, useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
@@ -24,6 +24,7 @@ import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
+import { useHighlightAPI } from './useHighlights'
 
 export interface AppendAndSaveProps {
   nodeid: string
@@ -46,15 +47,15 @@ export function useSaveChanges() {
   const { getContent, setContent } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const { addHighlightedBlock } = useHighlightStore()
   const { addHighlight } = useHighlightStore2()
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
 
-  const saveIt = (saveAndExit = false, notification = false) => {
+  const saveIt = async (saveAndExit = false, notification = false) => {
     setVisualState(VisualState.animatingOut)
     const node = useSputlitStore.getState().node
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
+    const { saveHighlight } = useHighlightAPI()
 
     const selection = useSputlitStore.getState().selection
 
@@ -67,7 +68,7 @@ export function useSaveChanges() {
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
 
-    const metadata = { saveableRange: selection?.range, sourceUrl: selection?.range && window.location.href }
+    // const metadata = { saveableRange: selection?.range, sourceUrl: selection?.range && window.location.href }
 
     let request
     if (parentILink || isRoot) {
@@ -86,8 +87,7 @@ export function useSaveChanges() {
           content: editorState,
           referenceID: parentILink?.nodeid,
           workspaceID: workspaceDetails.id,
-          namespaceID: namespace.id,
-          metadata: metadata
+          namespaceID: namespace.id
         }
       }
     } else {
@@ -103,8 +103,7 @@ export function useSaveChanges() {
           title: node.title,
           content: editorState,
           workspaceID: workspaceDetails.id,
-          namespaceID: namespace.id,
-          metadata: metadata
+          namespaceID: namespace.id
         }
       }
     }
@@ -115,9 +114,20 @@ export function useSaveChanges() {
     addRecent(node.nodeid)
     setActiveItem()
 
-    // if (notification) {
-    //   toast.success('Saved')
-    // }
+    // const metadata = { saveableRange: selection?.range, sourceUrl: selection?.range && window.location.href }
+    const isCapturedHighlight = selection?.range && window.location.href
+    const highlight = isCapturedHighlight && {
+      entityId: generateHighlightId(),
+      properties: {
+        sourceUrl: selection?.range && window.location.href,
+        saveableRange: selection?.range
+      }
+    }
+    if (highlight) {
+      // Save highlight
+      await saveHighlight(highlight)
+      request.data.highlightId = highlight.entityId
+    }
 
     // mog('Request and things', { request, node, nodeContent, editorState })
     chrome.runtime.sendMessage(request, (response) => {
@@ -135,22 +145,16 @@ export function useSaveChanges() {
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
-        // Create highlight and add to node, block map, replace metadata from block
-        // TODO: Extract the blockids for which we have captured highlights
-        // Here vvvv
+        // Create highlight in local store and add to node, block map, replace metadata from block
+        // Extract the blockids for which we have captured highlights
         const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+        // Add highlight to local store
         addHighlight(
-          {
-            entityId: generateHighlightId(),
-            properties: {
-              saveableRange: selection?.range,
-              sourceUrl: selection?.range && window.location.href
-            }
-          },
+          highlight,
           blockHighlightMap
         )
-        addHighlightedBlock(nodeid, content)
-        dispatch('ADD_HIGHLIGHTED_BLOCK', nodeid, content)
+        // addHighlightedBlock(nodeid, content)
+        dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
         if (notification) {
           toast.success('Saved to Cloud')

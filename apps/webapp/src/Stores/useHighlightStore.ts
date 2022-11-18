@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 
 import { HighlightStore, HighlightStore2, highlightStoreConstructor, highlightStoreConstructor2 } from '@mexit/core'
 
+// DEPRECATED
 export const useHighlightStore = create<HighlightStore>(
   persist(highlightStoreConstructor, {
     name: 'highlights-store'

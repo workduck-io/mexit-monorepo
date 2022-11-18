@@ -213,7 +213,7 @@ export const useAPIScratchpad = () => {
       .saveHighlight({
         entityId: generateHighlightId(),
         properties: {
-          sourceUrl: 'https://www.wired.com/story/elon-musk-tesla-elon-musk-tesla/',
+          sourceUrl: 'https://www.wired.com/story/real-reason-elon-musk-population-panic/',
           saveableRange: {
             startMeta: {
               parentTagName: 'A',

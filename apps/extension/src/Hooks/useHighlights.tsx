@@ -1,18 +1,21 @@
 import { Highlight, mog, WORKSPACE_HEADER } from '@mexit/core'
 import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
+import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useCallback } from 'react'
 
 export const useHighlights = () => {
-  const addHighlight = () => {
-    //Pass
-  }
-  const removeHighlight = () => {
-    //Pass
-  }
+  const highlightBlockMap = useHighlightStore2((store) => store.highlightBlockMap)
+  const getHighlightMap = useCallback(
+    (highlighId: string) => {
+      const highlightMap = highlightBlockMap[highlighId]
+      return highlightMap
+    },
+    [highlightBlockMap]
+  )
 
   return {
-    addHighlight,
-    removeHighlight
+    getHighlightMap
   }
 }
 

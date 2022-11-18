@@ -1,5 +1,5 @@
 import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
-import { Contents, ILink, NodeEditorContent, SharedNode } from '../Types/Editor'
+import { Contents, ILink, SharedNode } from '../Types/Editor'
 import { ElementHighlightMetadata2, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { mog } from '../Utils/mog'
 
@@ -14,6 +14,8 @@ interface AddHighlightBlocksToMap {
   blockIds: string[]
 }
 
+export type AddHighlightFn = (highlight: Highlight, mapOptions?: AddHighlightBlocksToMap) => void
+
 export interface HighlightStore2 {
   highlights: Highlights
   highlightBlockMap: HighlightBlockMap
@@ -23,7 +25,7 @@ export interface HighlightStore2 {
   setHighlights: (highlights: Highlights) => void
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => void
 
-  addHighlight: (highlight: Highlight, mapOptions: AddHighlightBlocksToMap) => void
+  addHighlight: AddHighlightFn
   removeHighlight: (highlightId: string) => void
 
   getHighlightsOfUrl: (url: string) => Highlights
@@ -113,7 +115,6 @@ export const highlightStoreConstructor2: StateCreator<
     mog('removeHighlighted', { newHighlights, newHighlightBlockMap })
     set({ highlights: newHighlights, highlightBlockMap: newHighlightBlockMap })
   },
-
 
   getHighlightsOfUrl: (url) => {
     const { highlights } = get()

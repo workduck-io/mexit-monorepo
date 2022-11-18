@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { extractLinksFromData, Link, mog, Settify, WORKSPACE_HEADER } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useAuthStore } from './useAuth'
 
@@ -12,7 +12,7 @@ export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
-  const highlights = useHighlightStore((state) => state.highlighted)
+  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
 
   const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
@@ -32,7 +32,7 @@ export const useLinkURLs = () => {
   }
 
   const getHighlights = (link: Link) => {
-    const highlightOfUrl = highlights[link.url]
+    const highlightOfUrl = getHighlightsOfUrl(link.url)
 
     // mog('getting highlights for', { link, highlightOfUrl, highlights })
     if (highlightOfUrl) {

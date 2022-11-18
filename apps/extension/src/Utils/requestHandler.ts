@@ -5,14 +5,14 @@ import client from './fetchClient'
 import { serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
+  const elementMetadata = data?.highlightId
+    ? {
+        highlightId: data.highlightId
+      }
+    : undefined
   switch (subType) {
     case 'SAVE_NODE': {
-      const elementMetadata = data.metadata?.saveableRange
-        ? {
-            saveableRange: data.metadata?.saveableRange,
-            sourceUrl: data.metadata?.sourceUrl
-          }
-        : undefined
+      // We need the highlightid to add to the highlighted elementMetadata
       const reqData = {
         id: data.id,
         title: data.title,
@@ -35,12 +35,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
     case 'BULK_CREATE_NODES': {
-      const elementMetadata = data.metadata?.saveableRange
-        ? {
-            saveableRange: data.metadata?.saveableRange,
-            sourceUrl: data.metadata?.sourceUrl
-          }
-        : undefined
       const reqData = {
         id: data.id,
         nodePath: {

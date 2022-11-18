@@ -7,7 +7,7 @@ import { API, mog, runBatch } from '@mexit/core'
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex } from '../Workers/controller'
@@ -25,7 +25,7 @@ export const useInitLoader = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const { updateBaseNode } = useNodes()
-  const initHighlights = useHighlightStore((store) => store.initHighlights)
+  const initHighlightBlockMap = useHighlightStore2((store) => store.initHighlightBlockMap)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -61,7 +61,7 @@ export const useInitLoader = () => {
       // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
-      initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
+      initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       updateBaseNode()
 

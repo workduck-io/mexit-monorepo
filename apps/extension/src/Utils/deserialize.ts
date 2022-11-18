@@ -10,6 +10,7 @@ const isInlineNode = (editor: Pick<Editor, 'isInline'>) => (node: Descendant) =>
 export const getDeserializeSelectionToNodes = (
   selection: { text: string; metadata: string },
   editor: any,
+  // If true, adds the highlight: true to blocks
   highlight?: boolean
 ): NodeEditorContent => {
   let nodes

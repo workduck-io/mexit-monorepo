@@ -3,6 +3,7 @@ import {
   DirectProperties,
   directPropertyKeys,
   ElementHighlightMetadata,
+  ElementHighlightMetadata2,
   extractMetadata,
   generateElementMetadata,
   generateTempId,
@@ -18,7 +19,7 @@ export const serializeContent = (
   content: any[],
   nodeid: string,
   // If present, and if element.highlight is true, adds the metadata to the element
-  elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
+  elementMetadata?: ElementHighlightMetadata2
 ) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
@@ -34,7 +35,7 @@ export const serializeContent = (
     }
 
     if (elementMetadata && el?.highlight) {
-      nl.elementMetadata = generateElementMetadata(elementMetadata)
+      nl.elementMetadata = elementMetadata
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]

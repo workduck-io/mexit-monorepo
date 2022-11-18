@@ -1,18 +1,20 @@
 import { mog } from '@mexit/core'
+import { useCallback } from 'react'
 import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useHighlightAPI } from './API/useHighlightAPI'
 
 export const useHighlights = () => {
-  const addHighlight = () => {
-    //Pass
-  }
-  const removeHighlight = () => {
-    //Pass
-  }
+  const highlightBlockMap = useHighlightStore2((store) => store.highlightBlockMap)
+  const getHighlightMap = useCallback(
+    (highlighId: string) => {
+      const highlightMap = highlightBlockMap[highlighId]
+      return highlightMap
+    },
+    [highlightBlockMap]
+  )
 
   return {
-    addHighlight,
-    removeHighlight
+    getHighlightMap
   }
 }
 

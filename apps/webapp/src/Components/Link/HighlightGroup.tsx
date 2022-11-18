@@ -8,13 +8,14 @@ import markPenLine from '@iconify/icons-ri/mark-pen-line'
 import { Icon } from '@iconify/react'
 import { groupBy } from 'lodash'
 
-import { Link, mog, SingleHighlight, SourceHighlights } from '@mexit/core'
+import { Highlight, Highlights, Link, mog, SingleHighlight, SourceHighlights } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightCount,
   HighlightGroupHeader,
   HighlightGroupsWrapper,
   HighlightGroupToggleButton,
+  HighlightNoteLink,
   HighlightGroupWrapper,
   HighlightText,
   SingleHighlightWrapper
@@ -23,16 +24,17 @@ import {
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import useLoad from '../../Hooks/useLoad'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { useHighlights } from '../../Hooks/useHighlights'
 
 interface HighlightGroupProps {
-  highlights?: SourceHighlights
+  highlights?: Highlights
   link: Link
   setOpen: (open: boolean) => void
   open: boolean
 }
 
 export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGroupProps) => {
-  const highlightCount = Object.keys(highlights ?? {}).length
+  const highlightCount = (highlights ?? []).length
 
   const toggleOpen = () => {
     setOpen(!open)
@@ -47,13 +49,15 @@ export const HighlightGroupToggle = ({ highlights, open, setOpen }: HighlightGro
   ) : null
 }
 
-export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: SingleHighlight; blockId: string }) => {
+export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
   const { loadNode } = useLoad()
   const { goTo } = useRouting()
+  const { getHighlightMap } = useHighlights()
+  const { getPathFromNodeid } = useLinks()
 
   const [open, setOpen] = React.useState(false)
-  // const showOpen =
-  const highlightText = highlight.elementMetadata.saveableRange.text
+  const highlightMap = getHighlightMap(highlight.entityId)
+  const highlightText = highlight?.properties?.saveableRange?.text ?? ''
 
   const willCollapse = highlightText.length > 300
 
@@ -61,15 +65,16 @@ export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: S
 
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
-  const openHighlight = () => {
-    const nodeid = highlight.nodeId
+  const openHighlightLocation = ({ nodeid }: { nodeid?: string }) => {
+    // const nodeid = highlight.nodeId
     // Pass
+    const blockId = highlightMap[nodeid][0]
     loadNode(nodeid, { highlightBlockId: blockId })
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
   return (
-    <SingleHighlightWrapper onDoubleClick={() => openHighlight()}>
+    <SingleHighlightWrapper onDoubleClick={() => openHighlightLocation({})}>
       <HighlightText>{toShowText}</HighlightText>
       {willCollapse ? (
         <HighlightCollapsedToggle onClick={() => setOpen(!open)}>
@@ -77,47 +82,51 @@ export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: S
           {open ? 'Less' : 'More'}
         </HighlightCollapsedToggle>
       ) : null}
+      {Object.keys(highlightMap).map((nodeid) => (
+        <HighlightNoteLink onClick={() => openHighlightLocation({ nodeid })}>
+          {getTitleFromPath(getPathFromNodeid(nodeid))}
+        </HighlightNoteLink>
+      ))}
     </SingleHighlightWrapper>
   )
 }
 
 const HighlightGroups = ({ highlights, link, open, setOpen }: HighlightGroupProps) => {
-  const { loadNode } = useLoad()
-  const { goTo } = useRouting()
-  const grouped = highlights ? groupBy(Object.entries(highlights), (val) => val[1].nodeId) : {}
-  const { getPathFromNodeid } = useLinks()
+  // const { loadNode } = useLoad()
+  // const { goTo } = useRouting()
+  // const grouped = highlights ? groupBy(highlights, (val) => val[1].nodeId) : {}
+  // const { getPathFromNodeid } = useLinks()
 
   // mog('grouped Highlights', { grouped })
 
-  const openNote = (nodeid: string) => {
-    // Pass
-    loadNode(nodeid)
-    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
-  }
+  // const openNote = (nodeid: string) => {
+  //   // Pass
+  //   loadNode(nodeid)
+  //   goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
+  // }
 
   return open && highlights ? (
     <HighlightGroupsWrapper>
-      {Object.keys(grouped).map((nodeId) => {
-        const nodeHighlights = grouped[nodeId]
-        const path = getPathFromNodeid(nodeId)
-        const title = getTitleFromPath(path)
+      {highlights.map((highlight) => {
+        // const nodeHighlights = grouped[nodeId]
+        // const path = getPathFromNodeid(nodeId)
+        // const title = getTitleFromPath(path)
         // mog('nodeHighlights', { nodeHighlights, path, title })
-        return (
-          <HighlightGroupWrapper key={nodeId}>
-            <HighlightGroupHeader onDoubleClick={() => openNote(nodeId)}>
-              <Icon icon={fileList2Line} />
-              {title}
-            </HighlightGroupHeader>
-            {nodeHighlights.map(([blockId, highlight], i) => {
-              return (
-                <SingleHighlightWithToggle key={`${highlight.nodeId}_${i}`} blockId={blockId} highlight={highlight} />
-              )
-            })}
-          </HighlightGroupWrapper>
-        )
+        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
       })}
     </HighlightGroupsWrapper>
-  ) : null
+  ) : // <HighlightGroupWrapper key={nodeId}>
+  //   <HighlightGroupHeader onDoubleClick={() => openNote(nodeId)}>
+  //     <Icon icon={fileList2Line} />
+  //     {title}
+  //   </HighlightGroupHeader>
+  //   {nodeHighlights.map(([blockId, highlight], i) => {
+  //     return (
+  //       <SingleHighlightWithToggle key={`${highlight.nodeId}_${i}`} blockId={blockId} highlight={highlight} />
+  //     )
+  //   })}
+  // </HighlightGroupWrapper>
+  null
 }
 
 export default HighlightGroups

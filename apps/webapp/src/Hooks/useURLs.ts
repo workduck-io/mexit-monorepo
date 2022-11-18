@@ -1,5 +1,6 @@
 import md5 from 'md5'
 import create from 'zustand'
+import { groupBy } from 'lodash'
 
 import {
   API,
@@ -17,7 +18,7 @@ import {
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'
@@ -26,7 +27,7 @@ export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
-  const highlights = useHighlightStore((state) => state.highlighted)
+  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
 
   const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
@@ -45,10 +46,9 @@ export const useLinkURLs = () => {
     return mergedTags
   }
 
-  const getHighlights = (link: Link) => {
-    const highlightOfUrl = highlights[link.url]
+  const getGroupedHighlights = (link: Link) => {
+    const highlightOfUrl = getHighlightsOfUrl(link.url)
 
-    // mog('getting highlights for', { link, highlightOfUrl, highlights })
     if (highlightOfUrl) {
       return highlightOfUrl
     }
@@ -120,7 +120,7 @@ export const useLinkURLs = () => {
     isDuplicateAlias,
     deleteLink,
     getLink,
-    getHighlights
+    getGroupedHighlights
   }
 }
 
@@ -151,7 +151,7 @@ export const useURLFilters = () => {
   const globalJoin = useURLsFilterStore((state) => state.globalJoin)
   const tags = useDataStore((state) => state.tags)
   const links = useLinkStore((state) => state.links)
-  const highlights = useHighlightStore((state) => state.highlighted)
+  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
   const linkFilterFunctions = useLinkFilterFunctions()
 
   const resetFilters = () => {
@@ -207,7 +207,8 @@ export const useURLFilters = () => {
     }, 0)
 
     const highlightsCount = links.reduce((acc, link) => {
-      if (highlights[link.url]) {
+      const urlHighlights = getHighlightsOfUrl(link.url)
+      if (urlHighlights?.length > 0) {
         acc += 1
       }
       return acc

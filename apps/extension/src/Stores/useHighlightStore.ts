@@ -5,6 +5,7 @@ import { HighlightStore, HighlightStore2, highlightStoreConstructor, highlightSt
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
+// DEPRECATED
 export const useHighlightStore = create<HighlightStore>(
   persist(highlightStoreConstructor, {
     name: 'highlights-store',

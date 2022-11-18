@@ -17,7 +17,7 @@ import { useNodes } from '../../Hooks/useNodes'
 import useRaju from '../../Hooks/useRaju'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
-import { useHighlightStore } from '../../Stores/useHighlightStore'
+import { useHighlightStore, useHighlightStore2 } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
@@ -26,13 +26,15 @@ import { getElementById } from '../../contentScript'
 import { MentionTooltipComponent } from '../MentionTooltip'
 import { ProfileImage } from '../ProfileImage'
 import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
+import { useHighlights } from '../../Hooks/useHighlights'
 
 function Tooltip() {
   const { setVisualState } = useSputlitContext()
   const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const { setPreviewMode, setNodeContent } = useEditorStore()
-  const { highlighted } = useHighlightStore()
+  const highlights = useHighlightStore2((s) => s.highlights)
+  const { getHighlightMap } = useHighlights()
   const setNode = useSputlitStore((s) => s.setNode)
   const { getILinkFromNodeid } = useLinks()
   const { getContent } = useContentStore()
@@ -42,10 +44,13 @@ function Tooltip() {
   const { isSharedNode, getSharedNode } = useNodes()
   const { cache } = useUserCacheStore()
   const { removeHighlight } = useHighlighter()
-  const removeHighlightFromStore = useHighlightStore((s) => s.clearHighlightedBlock)
+  const removeHighlightFromStore = useHighlightStore2((s) => s.removeHighlight)
   const mentionable = useMentionStore((state) => state.mentionable)
 
-  const nodeId = highlighted?.[window.location.href]?.[tooltipState?.id]?.nodeId
+  const highlightMap = getHighlightMap(tooltipState?.id)
+  // FIXME: A single nodeid is dangerous
+  const nodeId = Object.keys(highlightMap)[0] ?? undefined
+  const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
   const [access, setAccess] = useState<AccessLevel>()
 
   const { getUserFromUserid } = useMentions()
@@ -62,6 +67,14 @@ function Tooltip() {
   }, [mentionable, cache, nodeId])
 
   const handleDelete = () => {
+    /** FIXME:
+     *
+     * The delete now requires deletion of blocks across notes!
+     * Add new subtype to the runtime
+     */
+
+    mog('delete, UNIMPLEMENTED')
+    return
     const content = getContent(nodeId)
     const node = getILinkFromNodeid(nodeId)
     const parentILink = getParentILink(node.path)
@@ -77,13 +90,12 @@ function Tooltip() {
         namespaceID: node.namespace,
         workspaceID: workspaceDetails.id,
         metadata: {}
-      },
-      blockId: tooltipState.id
+      }
     }
 
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
-      // mog('MESSAGE OF DELETION', { message, request })
+      mog('MESSAGE OF DELETION', { message, request })
 
       if (error) {
         toast.error('An Error Occured. Please try again.')
@@ -92,8 +104,8 @@ function Tooltip() {
         const content = deserializeContent(message.data)
         const metadata = extractMetadata(message)
 
-        removeHighlight(request?.blockId)
-        removeHighlightFromStore(window.location.href, request?.blockId)
+        removeHighlight(tooltipState?.id)
+        removeHighlightFromStore(tooltipState?.id)
 
         dispatch('SET_CONTENT', nodeid, content, metadata)
 
@@ -105,6 +117,8 @@ function Tooltip() {
   }
 
   const handleEdit = () => {
+    mog('edit, UNIMPLEMENTED')
+    return
     const content = getContent(nodeId)
     const node = getILinkFromNodeid(nodeId)
     setVisualState(VisualState.animatingIn)
@@ -173,11 +187,7 @@ function Tooltip() {
         </Icon>
       )}
 
-      <Icon
-        onClick={() =>
-          handleCopyClipboard(highlighted[window.location.href][tooltipState.id].elementMetadata.saveableRange.text)
-        }
-      >
+      <Icon onClick={() => handleCopyClipboard(highlight.properties.saveableRange.text)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

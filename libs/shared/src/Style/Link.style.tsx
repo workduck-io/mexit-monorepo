@@ -115,6 +115,17 @@ export const HighlightCollapsedToggle = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};
 `
 
+export const HighlightNoteLink = styled.div`
+  display: flex;
+  color: ${({ theme }) => theme.colors.text.fade};
+
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
 export const HighlightGroupHeader = styled.div`
   display: flex;
   flex-direction: row;

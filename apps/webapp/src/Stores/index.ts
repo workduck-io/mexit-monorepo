@@ -4,7 +4,7 @@ import { share } from 'shared-zustand'
 import { useAuthStore } from './useAuth'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
-import { useHighlightStore } from './useHighlightStore'
+import { useHighlightStore2 } from './useHighlightStore'
 import { useReminderStore } from './useReminderStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useUserPreferenceStore } from './userPreferenceStore'
@@ -28,7 +28,9 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('snippets', useSnippetStore, { ref: 'share-snippets' })
   share('reminders', useReminderStore, { ref: 'share-reminders' })
   share('publicNodes', useDataStore, { ref: 'share-publicNodes' })
-  share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
+  // share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
+  share('highlights', useHighlightStore2, { ref: 'share-highlights' })
+  share('highlightBlockMap', useHighlightStore2, { ref: 'share-highlight-block-map' })
   share('theme', useUserPreferenceStore, { ref: 'share-theme' })
 }
 
