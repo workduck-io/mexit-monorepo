@@ -22,6 +22,7 @@ export const EditorViewWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  overflow: inherit hidden;
   max-width: 860px;
   min-width: 400px;
   margin: 0 auto;

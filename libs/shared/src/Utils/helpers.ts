@@ -19,7 +19,7 @@ export async function copyTextToClipboard(text: any) {
 export function getScrollbarWidth() {
   const outer = document.createElement('div')
   outer.style.visibility = 'hidden'
-  outer.style.overflow = 'scroll'
+  outer.style.overflow = 'auto'
   document.body.appendChild(outer)
   const inner = document.createElement('div')
   outer.appendChild(inner)

@@ -28,7 +28,11 @@ const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
   /* user-select: none; */
   font-size: 0.9rem;
 
-  ${TodoContainer}, button, input, textarea, select, option {
+  ${TodoContainer}, button,
+  input,
+  textarea,
+  select,
+  option {
     pointer-events: none;
   }
 `

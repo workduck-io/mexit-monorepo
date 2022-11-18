@@ -102,6 +102,14 @@ export const SearchHelp = (
   </div>
 )
 
+export const NotesInfoBarHelp = (
+  <div>
+    <h1>Notes</h1>
+    <p>All your notes are visible here</p>
+    <p>Click public and that note would be available to everyone!</p>
+  </div>
+)
+
 export const SnippetHelp = (
   <div>
     <h1>Snippets</h1>

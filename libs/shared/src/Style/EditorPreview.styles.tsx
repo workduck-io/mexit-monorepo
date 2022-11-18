@@ -9,7 +9,7 @@ export const EditorPreviewWrapper = styled.div`
   background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])} !important;
 
   backdrop-filter: blur(10px);
-
+  overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.colors.fade};
   height: 32vh;

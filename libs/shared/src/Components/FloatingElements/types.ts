@@ -6,8 +6,10 @@ export interface Props {
   placement?: Placement
   children: JSX.Element
   hover?: boolean
+  scrollLock?: boolean
   open: boolean
   persist?: boolean
   label?: string
+  disableClick?: boolean
   setOpen: (open: boolean) => void
 }

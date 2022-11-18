@@ -6,6 +6,8 @@ export const ExtSideNav = styled(RHSideNav)`
   position: fixed;
   bottom: 0;
   right: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
 `
 
 export const SidebarContainer = styled.div`

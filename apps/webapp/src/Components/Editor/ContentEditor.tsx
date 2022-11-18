@@ -7,7 +7,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, NodeEditorContent } from '@mexit/core'
-import { StyledEditor, EditorWrapper, isOnEditableElement } from '@mexit/shared'
+import { StyledEditor, EditorHeader, EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -193,24 +193,26 @@ const ContentEditor = () => {
   return (
     <>
       <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
-        {isBannerVisible && (
-          <Banner
-            route={location.pathname}
-            onClick={handleBannerButtonClick}
-            title="Same Note is being accessed by multiple users. Data may get lost!"
-          />
-        )}
-        <NavBreadCrumbs nodeId={nodeid} />
-        <Toolbar />
-        {isBlockMode ? (
-          <BlockInfoBar />
-        ) : (
-          <Metadata
-            hideShareDetails={hideShareDetails()}
-            namespaceId={getNamespaceOfNodeid(nodeid)?.id}
-            nodeId={nodeid}
-          />
-        )}
+        <EditorHeader>
+          {isBannerVisible && (
+            <Banner
+              route={location.pathname}
+              onClick={handleBannerButtonClick}
+              title="Same Note is being accessed by multiple users. Data may get lost!"
+            />
+          )}
+          <NavBreadCrumbs nodeId={nodeid} />
+          <Toolbar />
+          {isBlockMode ? (
+            <BlockInfoBar />
+          ) : (
+            <Metadata
+              hideShareDetails={hideShareDetails()}
+              namespaceId={getNamespaceOfNodeid(nodeid)?.id}
+              nodeId={nodeid}
+            />
+          )}
+        </EditorHeader>
 
         <EditorWrapper
           comboboxOpen={isComboOpen}

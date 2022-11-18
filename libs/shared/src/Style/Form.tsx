@@ -15,6 +15,7 @@ interface InputProps {
   transparent?: boolean
   isDirty?: boolean
   isSelected?: boolean
+  fontSize?: string
   // appType?: AppType
   error?: boolean
   center?: boolean
@@ -55,6 +56,12 @@ export const Input = styled.input<InputProps>`
     css`
       text-align: center;
       color: ${({ theme }) => theme.colors.primary};
+    `}
+
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
     `}
 
   ${({ theme, error }) =>

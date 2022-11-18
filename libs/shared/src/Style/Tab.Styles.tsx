@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
@@ -6,7 +5,7 @@ export const TabPanel = styled(animated.div)`
   width: 100%;
   height: 100%;
 
-  overflow: hidden auto;
+  overflow: hidden;
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
@@ -49,7 +48,7 @@ export const StyledTab = styled.div.attrs({
 export const TabBody = styled(animated.div)<{ selected?: boolean }>`
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 `
 
 export const TabsContainer = styled(animated.section)<{ visible?: boolean }>`
