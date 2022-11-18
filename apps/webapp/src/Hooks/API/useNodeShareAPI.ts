@@ -1,6 +1,15 @@
 import { client } from '@workduck-io/dwindle'
 
-import { mog, apiURLs, AccessLevel, SharedNode, iLinksToUpdate, SHARED_NAMESPACE, extractMetadata } from '@mexit/core'
+import {
+  mog,
+  apiURLs,
+  AccessLevel,
+  SharedNode,
+  iLinksToUpdate,
+  SHARED_NAMESPACE,
+  extractMetadata,
+  batchArray
+} from '@mexit/core'
 
 import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'
@@ -117,15 +126,21 @@ export const useNodeShareAPI = () => {
 
           const localSharedNodes = useDataStore.getState().sharedNodes
           const { toUpdateLocal } = iLinksToUpdate(localSharedNodes, sharedNodes)
-          const ids = toUpdateLocal.map((ilink) => ilink.nodeid)
+          const ids = batchArray(
+            toUpdateLocal.map((val) => val.nodeid),
+            10
+          )
           runBatchWorker(WorkerRequestType.GET_SHARED_NODES, 6, ids).then((res) => {
             const { fulfilled } = res
 
-            fulfilled.forEach((node) => {
-              const { rawResponse, nodeid } = node
-              const content = deserializeContent(rawResponse.data)
-              const metadata = extractMetadata(rawResponse)
-              updateFromContent(nodeid, content, metadata)
+            fulfilled.forEach((batchResponse) => {
+              const { rawResponse } = batchResponse
+
+              rawResponse.forEach((node) => {
+                const content = deserializeContent(node.data)
+                const metadata = extractMetadata(node)
+                updateFromContent(node.id, content, metadata)
+              })
             })
           })
 

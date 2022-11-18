@@ -32,7 +32,6 @@ export const useUpdater = () => {
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
-      mog(`[${noteId}]: Updating from Contnet`, { todos })
       updateNodeTodos(noteId, todos)
       updateDocument('node', noteId, content)
     }

@@ -12,7 +12,8 @@ export interface RequestData {
 export enum PollActions {
   'hierarchy' = 'hierarchy',
   'shared' = 'shared',
-  'bookmarks' = 'bookmarks'
+  'bookmarks' = 'bookmarks',
+  'snippets' = 'snippets'
 }
 
 interface ApiStore {

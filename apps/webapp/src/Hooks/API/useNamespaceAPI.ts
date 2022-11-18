@@ -6,6 +6,7 @@ import {
   AccessLevel,
   apiURLs,
   batchArray,
+  batchArrayWithNamespaces,
   extractMetadata,
   generateNamespaceId,
   iLinksToUpdate,
@@ -73,15 +74,14 @@ export const useNamespaceApi = () => {
 
       mog('update namespaces and ILinks', { namespaces, newILinks })
       // SetILinks once middleware is integrated
-      setNamespaces(namespaces.map((n) => n.ns))
+      const ns = namespaces.map((n) => n.ns)
+      setNamespaces(ns)
       // TODO: Also set archive links
       setIlinks(newILinks)
 
       const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
-      const ids = batchArray(
-        toUpdateLocal.map((i) => i.nodeid),
-        10
-      ).map((id: string[]) => id.join(','))
+
+      const ids = batchArrayWithNamespaces(toUpdateLocal, ns, 10)
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
       const requestData = { time: Date.now(), method: 'GET' }
@@ -89,10 +89,10 @@ export const useNamespaceApi = () => {
       fulfilled.forEach((nodes) => {
         if (nodes) {
           const { rawResponse } = nodes
-          setRequest(apiURLs.node.getMultipleNode, { ...requestData, url: apiURLs.node.getMultipleNode })
+          setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
 
           if (rawResponse) {
-            rawResponse.map((nodeResponse) => {
+            rawResponse.forEach((nodeResponse) => {
               const metadata = extractMetadata(nodeResponse) // added by Varshitha
               const content = deserializeContent(nodeResponse.data)
               updateFromContent(nodeResponse.id, content, metadata)

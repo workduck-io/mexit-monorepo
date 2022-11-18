@@ -82,21 +82,18 @@ export const apiURLs = {
     refactor: `${BASE_URLS.node}/refactor`,
     makePublic: (uid: string) => `${BASE_URLS.node}/${uid}/makePublic`,
     makePrivate: (uid: string) => `${BASE_URLS.node}/${uid}/makePrivate`,
-    getMultipleNode: `${BASE_URLS.node}/ids`
+    getMultipleNode: (namespaceID?: string) =>
+      `${BASE_URLS.node}/ids${namespaceID ? `?namespaceID=${namespaceID}` : ''}`
   },
 
   snippet: {
     create: BASE_URLS.snippet,
     getAllSnippetsByWorkspace: `${BASE_URLS.snippet}/all`,
     getById: (uid: string) => `${BASE_URLS.snippet}/${uid}`,
-    bulkGet: `${BASE_URLS.snippet}/bulk`,
+    bulkGet: `${BASE_URLS.snippet}/ids`,
     deleteAllVersionsOfSnippet: (uid: string) => `${BASE_URLS.snippet}/${uid}/all`,
-    deleteSpecificVersionOfSnippet: (uid: string, version?: number) => {
-      let baseURL = `${BASE_URLS.snippet}/${uid}`
-      if (version) baseURL += `?version=${version}`
-
-      return baseURL
-    }
+    deleteSpecificVersionOfSnippet: (uid: string, version?: number) =>
+      `${BASE_URLS.snippet}/${uid}${version ? `?version=${version}` : ''}`
   },
 
   loch: {
@@ -111,7 +108,8 @@ export const apiURLs = {
     allSharedNodes: `${BASE_URLS.share}/all`,
     getSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}`,
     updateNode: `${BASE_URLS.share}/update`,
-    getUsersOfSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}/users`
+    getUsersOfSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}/users`,
+    getBulk: `${BASE_URLS.share}/ids`
   },
 
   user: {
