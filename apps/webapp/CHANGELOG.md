@@ -1,5 +1,14 @@
 # mexit-webapp
 
+## 0.20.6
+
+### Patch Changes
+
+- a7044a37: Fix bulk get methods; Pass namespaceID in case of shared namespace notes
+- 1d26f35b: Right Sidebar UX fixes
+- 96a275d0: Dwindle bump version; Screenshot action works now
+- caafbb54: Fix tag menu, no empty comments
+
 ## 0.20.5
 
 ### Patch Changes

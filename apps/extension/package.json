@@ -1,7 +1,7 @@
 {
   "name": "mexit",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
-  "version": "0.18.10",
+  "version": "0.18.11",
   "private": true,
   "dependencies": {
     "@iconify/react": "^3.1.3",
