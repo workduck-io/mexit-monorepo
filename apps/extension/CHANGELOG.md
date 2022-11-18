@@ -1,5 +1,12 @@
 # mexit
 
+## 0.18.11
+
+### Patch Changes
+
+- 1d26f35b: Right Sidebar UX fixes
+- 96a275d0: Dwindle bump version; Screenshot action works now
+
 ## 0.18.10
 
 ### Patch Changes
