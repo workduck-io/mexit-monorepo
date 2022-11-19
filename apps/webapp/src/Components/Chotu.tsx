@@ -52,6 +52,7 @@ export default function Chotu() {
   const addNodeInRecents = useRecentsStore((s) => s.addRecent)
   const actOnReminder = useReminders().actOnReminder
   const addHighlight = useHighlightStore2((s) => s.addHighlight)
+  const highlights = useHighlightStore2((s) => s.highlights)
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const links = useLinkStore((state) => state.links)
@@ -184,6 +185,12 @@ export default function Chotu() {
 
     parent.bootSharedNodes(sharedNodes)
   }, [parent, sharedNodes])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootHighlights(highlights)
+  }, [parent, highlights])
 
   return (
     <div>

@@ -20,7 +20,8 @@ import {
   WorkspaceDetails,
   Link,
   Description,
-  AddHighlightFn
+  AddHighlightFn,
+  Highlights
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
@@ -81,6 +82,7 @@ export default function useRaju() {
   const setLinks = useLinkStore((store) => store.setLinks)
   const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
   const initHighlightBlockMap = useHighlightStore2((store) => store.initHighlightBlockMap)
+  const setHighlights = useHighlightStore2((store) => store.setHighlights)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -150,6 +152,9 @@ export default function useRaju() {
     },
     bootSharedNodes(sharedNodes: SharedNode[]) {
       setSharedNodes(sharedNodes)
+    },
+    bootHighlights(highlights: Highlights) {
+      setHighlights(highlights)
     },
     bootLinks(links: Link[]) {
       setLinks(links)
