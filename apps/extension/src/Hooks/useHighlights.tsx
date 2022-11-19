@@ -69,7 +69,6 @@ export const useHighlightAPI = () => {
       subType: 'ADD_HIGHLIGHT',
       headers: workspaceHeaders(),
       body: {
-        sourceUrl: highlight.properties.sourceUrl,
         properties: highlight.properties,
         entityId: highlight.entityId
       }

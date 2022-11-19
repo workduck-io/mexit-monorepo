@@ -164,6 +164,7 @@ export const BlockInfo = (props: any) => {
     return userReactions as UserReaction[]
   }
 
+  if (showSource)
     mog('BlockInfo', {
       element,
       showBlockInfo,

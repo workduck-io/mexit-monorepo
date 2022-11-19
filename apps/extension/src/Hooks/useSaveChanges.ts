@@ -50,12 +50,13 @@ export function useSaveChanges() {
   const { addHighlight } = useHighlightStore2()
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
+  const { saveHighlight } = useHighlightAPI()
 
   const saveIt = async (saveAndExit = false, notification = false) => {
+    mog('saveIt', { saveAndExit, notification })
     setVisualState(VisualState.animatingOut)
     const node = useSputlitStore.getState().node
     const namespace = getNamespaceOfNodeid(node?.nodeid) ?? getDefaultNamespace()
-    const { saveHighlight } = useHighlightAPI()
 
     const selection = useSputlitStore.getState().selection
 
@@ -63,7 +64,7 @@ export function useSaveChanges() {
     // const editorId = getPlateId()
     const editorState = useEditorStore.getState().nodeContent
 
-    // mog('nodeContent', editorState)
+    mog('nodeContent', editorState)
 
     const parentILink = getParentILink(node.path)
     const isRoot = node.path.split(SEPARATOR).length === 1
@@ -129,9 +130,11 @@ export function useSaveChanges() {
       request.data.highlightId = highlight.entityId
     }
 
-    // mog('Request and things', { request, node, nodeContent, editorState })
+    mog('Request and things', { request, node, editorState, highlight })
     chrome.runtime.sendMessage(request, (response) => {
       const { message, error } = response
+
+      mog('Response', { response })
 
       if (error && notification) {
         toast.error('An Error Occured. Please try again.')
@@ -149,10 +152,7 @@ export function useSaveChanges() {
         // Extract the blockids for which we have captured highlights
         const blockHighlightMap = getHighlightBlockMap(nodeid, content)
         // Add highlight to local store
-        addHighlight(
-          highlight,
-          blockHighlightMap
-        )
+        addHighlight(highlight, blockHighlightMap)
         // addHighlightedBlock(nodeid, content)
         dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
