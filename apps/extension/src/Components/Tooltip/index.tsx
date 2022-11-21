@@ -49,7 +49,7 @@ function Tooltip() {
 
   const highlightMap = getHighlightMap(tooltipState?.id)
   // FIXME: A single nodeid is dangerous
-  const nodeId = Object.keys(highlightMap)[0] ?? undefined
+  const nodeId = highlightMap ? Object.keys(highlightMap)[0] ?? undefined : undefined
   const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
   const [access, setAccess] = useState<AccessLevel>()
 

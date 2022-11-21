@@ -174,13 +174,13 @@ function handleHighlighter() {
     const highlightOldRange = () => {
       const highlightsOfUrl = getHighlightsOfUrl(window.location.href)
 
-      highlightsOfUrl.forEach((highlight, key) => {
+      highlightsOfUrl.forEach((highlight) => {
         const { startMeta, endMeta, text, id } = highlight.properties.saveableRange
         mog('check', { id, highlighedIds })
 
         if (!highlighedIds.includes(id)) {
-          highlighter.fromStore(startMeta, endMeta, text, highlight.properties.sourceUrl)
-          highlighedIds.push(id)
+          highlighter.fromStore(startMeta, endMeta, text, highlight.entityId)
+          highlighedIds.push(highlight.entityId)
 
           // if (highlight?.shared) {
           //   highlighter.addClass('shared', key)
