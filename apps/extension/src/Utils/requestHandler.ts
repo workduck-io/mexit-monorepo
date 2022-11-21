@@ -7,7 +7,8 @@ import { serializeContent } from './serializer'
 export const handleCaptureRequest = ({ subType, data }) => {
   const elementMetadata = data?.highlightId
     ? {
-        highlightId: data.highlightId
+        type: 'highlightV1' as const,
+        id: data.highlightId
       }
     : undefined
   switch (subType) {

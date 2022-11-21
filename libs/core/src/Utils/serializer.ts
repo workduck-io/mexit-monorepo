@@ -1,5 +1,6 @@
 // Direct properties are collated in the properties for api
 import { BlockMetaDataType } from '../Stores/blockStoreConstructor'
+import { ElementHighlightMetadata2 } from '../Types/Highlight'
 
 // and then unfurled when converting back to editor content
 export const directPropertyKeys = [
@@ -57,13 +58,11 @@ export interface ElementHighlightMetadata {
   sourceUrl: string
 }
 
-export const generateElementMetadata = (
-  elementMetadata: PartialBy<ElementHighlightMetadata, 'type'>
-): ElementHighlightMetadata => {
-  delete elementMetadata.saveableRange['__isHighlightSource']
+export const generateElementMetadata = (elementMetadata: ElementHighlightMetadata2): ElementHighlightMetadata2 => {
+  // delete elementMetadata.saveableRange['__isHighlightSource']
   return {
     ...elementMetadata,
-    type: 'highlight'
+    type: 'highlightV1'
   }
 }
 

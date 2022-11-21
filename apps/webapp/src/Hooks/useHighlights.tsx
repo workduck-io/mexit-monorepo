@@ -4,6 +4,7 @@ import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useHighlightAPI } from './API/useHighlightAPI'
 
 export const useHighlights = () => {
+  const highlights = useHighlightStore2((s) => s.highlights)
   const highlightBlockMap = useHighlightStore2((store) => store.highlightBlockMap)
   const getHighlightMap = useCallback(
     (highlighId: string) => {
@@ -13,8 +14,17 @@ export const useHighlights = () => {
     [highlightBlockMap]
   )
 
+  const getHighlight = useCallback(
+    (highlightId: string) => {
+      const highlight = highlights.find((h) => h.entityId === highlightId)
+      return highlight
+    },
+    [highlights]
+  )
+
   return {
-    getHighlightMap
+    getHighlightMap,
+    getHighlight
   }
 }
 

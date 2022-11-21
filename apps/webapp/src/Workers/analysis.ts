@@ -10,7 +10,6 @@ import {
   getTodosFromContent,
   SearchRepExtra,
   convertContentToRawText,
-  mog,
   HighlightAnalysis
 } from '@mexit/core'
 import { getTitleFromContent } from '@mexit/core'
@@ -117,16 +116,18 @@ const getHighlightBlocks = (content: NodeEditorContent): HighlightAnalysis => {
   const displayBlocksWithHighlight = []
   let prevBlockHighlightId: string | null = null
   for (const block of content) {
-    const hasMetadata = block?.metadata?.highlightId
+    const elMetadata = block.metadata?.elementMetadata
+    const hasMetadata = elMetadata && elMetadata?.type === 'highlightV1' && elMetadata?.id
     if (hasMetadata) {
-      if (prevBlockHighlightId !== block?.metadata?.highlightId) {
+      if (prevBlockHighlightId !== elMetadata?.id) {
         displayBlocksWithHighlight.push(block.id)
       }
-      prevBlockHighlightId = block?.metadata?.highlightId
+      prevBlockHighlightId = elMetadata?.id
     } else {
       prevBlockHighlightId = null
     }
   }
+  // mog('getHighlightBlocks', { content, displayBlocksWithHighlight })
 
   return { displayBlocksWithHighlight }
 }

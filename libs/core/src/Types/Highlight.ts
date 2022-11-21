@@ -50,8 +50,11 @@ export interface HighlightMetaBlock2 {
   textOffset: number
 }
 
+const MetdataTypes = 'highlightV1' as const
+
 export interface ElementHighlightMetadata2 {
-  highlightId: string
+  type: typeof MetdataTypes
+  id: string
 }
 
 /**

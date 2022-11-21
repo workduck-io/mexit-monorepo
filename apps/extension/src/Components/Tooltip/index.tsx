@@ -85,6 +85,7 @@ function Tooltip() {
       data: {
         id: node.nodeid,
         title: node.path.split(SEPARATOR).slice(-1)[0],
+        // This is not blockID anymore mia amore
         content: content.content.filter((item) => item.id !== tooltipState.id),
         referenceID: parentILink?.nodeid,
         namespaceID: node.namespace,

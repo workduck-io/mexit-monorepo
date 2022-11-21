@@ -72,9 +72,9 @@ export const highlightStoreConstructor2: StateCreator<
     ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
         const elementMetadata: ElementHighlightMetadata2 = block?.metadata?.elementMetadata
-        if (elementMetadata?.highlightId && this) {
+        if (elementMetadata?.type === 'highlightV1' && elementMetadata?.id && this) {
           addToHighlightBlockMap(highlightBlockMap, {
-            highlightId: elementMetadata.highlightId,
+            highlightId: elementMetadata.id,
             nodeId: ilink.nodeid,
             blockId: block.id
           })
