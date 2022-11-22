@@ -68,7 +68,7 @@ export function ContextInfoBar() {
   // }, [search])
 
   return (
-    <SnippetCards fullHeight={false}>
+    <SnippetCards fullHeight>
       <ShortenerComponent />
       {/* <SidebarListFilterWrapper>
         <SidebarListFilter>

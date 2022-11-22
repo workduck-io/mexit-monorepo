@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { transparentize } from 'polished'
 
 export const StyledTooltip = styled.div<{ top: number; left: number; showTooltip: boolean }>`
   position: absolute;
@@ -12,6 +13,8 @@ export const StyledTooltip = styled.div<{ top: number; left: number; showTooltip
   border-radius: 5px;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
+
+  z-index: 1000;
 
   /* Done because the root is removed before the component is umounted, hence it still stays there */
   &:empty {
@@ -40,4 +43,17 @@ export const ProfileImageContainer = styled.div`
   display: flex;
   border-radius: 5px;
   overflow: hidden;
+`
+
+export const NoteListWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  padding: ${({ theme }) => theme.spacing.small};
+
+  background: ${({ theme }) => theme.colors.gray[8]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  max-height: 50vh;
 `

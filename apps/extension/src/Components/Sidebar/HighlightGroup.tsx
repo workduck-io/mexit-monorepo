@@ -1,27 +1,45 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import { Icon } from '@iconify/react'
 
+import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import {
-    Highlight,
-    Highlights
-} from '@mexit/core'
-import {
-    HighlightCollapsedToggle, HighlightGroupsWrapper, HighlightText,
-    SingleHighlightWrapper
+  HighlightCollapsedToggle,
+  HighlightGroupsWrapper,
+  HighlightNote,
+  HighlightNotes,
+  HighlightText,
+  SingleHighlightWrapper
 } from '@mexit/shared'
+import { useHighlights } from '../../Hooks/useHighlights'
+import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 
+const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
 export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
   const [open, setOpen] = React.useState(false)
   // const showOpen =
   const highlightText = highlight.properties.saveableRange.text
+  const { getEditableMap } = useHighlights()
+  const { getILinkFromNodeid } = useLinks()
 
-  const willCollapse = highlightText.length > 300
+  const editableMap = getEditableMap(highlight.entityId)
 
-  const strippedText = highlightText.substring(0, 300) + (willCollapse ? '...' : '')
+  const editNodes = useMemo(() => {
+    return Object.keys(editableMap).map((nodeId) => {
+      const node = getILinkFromNodeid(nodeId, true)
+      return node
+    })
+  }, [editableMap])
+
+  const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
+  const nodeId = editNodes[0]?.nodeid
+
+  const willCollapse = highlightText.length > HIGHLIGHT_TEXT_MAX_LENGTH
+
+  const strippedText = highlightText.substring(0, HIGHLIGHT_TEXT_MAX_LENGTH) + (willCollapse ? '...' : '')
 
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
@@ -29,6 +47,10 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
     const element = document.querySelector(`[data-highlight-id="${highlight.entityId}"]`)
 
     element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+
+  const openNodeInMexit = (nodeid: string) => {
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
   return (
@@ -40,6 +62,17 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
           {open ? 'Less' : 'More'}
         </HighlightCollapsedToggle>
       ) : null}
+
+      <HighlightNotes>
+        {isEditable
+          ? editNodes.map((node) => (
+              <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
+                <Icon icon="mdi:file-document-outline" />
+                {getTitleFromPath(node.path)}
+              </HighlightNote>
+            ))
+          : null}
+      </HighlightNotes>
     </SingleHighlightWrapper>
   )
 }

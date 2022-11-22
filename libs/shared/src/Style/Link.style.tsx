@@ -146,6 +146,7 @@ export const HighlightGroupsWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.large};
   padding: ${({ theme }) => theme.spacing.small} 0;
+  padding-bottom: ${({ theme }) => theme.spacing.large};
 `
 
 export const HighlightText = styled.div``
@@ -164,4 +165,24 @@ export const SingleHighlightWrapper = styled.div`
   background-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[5])};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   user-select: none;
+`
+
+export const HighlightNotes = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.tiny};
+`
+
+export const HighlightNote = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+
+  color: ${({ theme }) => theme.colors.text.fade};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `

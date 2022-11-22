@@ -179,19 +179,20 @@ export const BlockInfo = (props: any) => {
     return userReactions as UserReaction[]
   }
 
-  //   if (showSource)
-  //     mog('BlockInfo', {
-  //       element,
-  //       showBlockInfo,
-  //       hasComments,
-  //       isInline,
-  //       props,
-  //       isNested,
-  //       path,
-  //       interactive,
-  //       showSource,
-  //       anal
-  //     })
+  // if (showSource)
+    // mog('BlockInfo', {
+    //   element,
+    //   showBlockInfo,
+    //   hasComments,
+    //   isInline,
+    //   props,
+    //   isNested,
+    //   path,
+    //   interactive,
+    //   showSource,
+    //   sourceURL,
+    //   anal
+    // })
 
   // Do not wrap the blockinfo around the inline / nested elements
   return isInline || isNested ? (

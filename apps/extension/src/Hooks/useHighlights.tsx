@@ -1,11 +1,17 @@
-import { Highlight, mog, WORKSPACE_HEADER } from '@mexit/core'
+import { Highlight, HighlightBlockMap, mog, WORKSPACE_HEADER } from '@mexit/core'
 import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
 import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useCallback } from 'react'
+import { isReadonly, usePermissions } from './usePermissions'
 
 export const useHighlights = () => {
   const highlightBlockMap = useHighlightStore2((store) => store.highlightBlockMap)
+  const { accessWhenShared } = usePermissions()
+
+  /**
+   * Returns the map of nodeids and blockids in which the content of the highlight is present
+   */
   const getHighlightMap = useCallback(
     (highlighId: string) => {
       const highlightMap = highlightBlockMap[highlighId]
@@ -14,8 +20,27 @@ export const useHighlights = () => {
     [highlightBlockMap]
   )
 
+  const getEditableMap = useCallback(
+    (highlighId: string) => {
+      const highlightMap = highlightBlockMap[highlighId]
+      const editableMap = Object.keys(highlightMap ?? {}).reduce((acc, nodeId) => {
+        const access = accessWhenShared(nodeId)
+        // mog('Access', { access, node })
+        const isNodeEditable = !isReadonly(access)
+
+        if (isNodeEditable) {
+          acc[nodeId] = highlightMap[nodeId]
+        }
+        return acc
+      }, {} as Record<string, string[]>)
+      return editableMap
+    },
+    [highlightBlockMap]
+  )
+
   return {
-    getHighlightMap
+    getHighlightMap,
+    getEditableMap
   }
 }
 

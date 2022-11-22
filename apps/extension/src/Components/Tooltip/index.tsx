@@ -1,32 +1,32 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 
-import Tippy from '@tippyjs/react/headless'
 import toast from 'react-hot-toast'
 
 import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, mog, SEPARATOR } from '@mexit/core'
-import { copyTextToClipboard, Tooltip as FloatingTooltip } from '@mexit/shared'
+import { copyTextToClipboard, HighlightNote, Popover, Tooltip as FloatingTooltip } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useInternalLinks } from '../../Hooks/useInternalLinks'
-import { useLinks } from '../../Hooks/useLinks'
+import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 // different import path!
+import { getElementById } from '../../contentScript'
+import { useHighlights } from '../../Hooks/useHighlights'
 import { useMentions } from '../../Hooks/useMentions'
 import { useNodes } from '../../Hooks/useNodes'
 import useRaju from '../../Hooks/useRaju'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
-import { useHighlightStore, useHighlightStore2 } from '../../Stores/useHighlightStore'
+import { useHighlightStore2 } from '../../Stores/useHighlightStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { deserializeContent } from '../../Utils/serializer'
-import { getElementById } from '../../contentScript'
 import { MentionTooltipComponent } from '../MentionTooltip'
 import { ProfileImage } from '../ProfileImage'
-import { Icon, ProfileImageContainer, StyledTooltip } from './styled'
-import { useHighlights } from '../../Hooks/useHighlights'
+import { Icon as Iconify } from '@iconify/react'
+import { Icon, NoteListWrapper, ProfileImageContainer, StyledTooltip } from './styled'
 
 function Tooltip() {
   const { setVisualState } = useSputlitContext()
@@ -34,7 +34,7 @@ function Tooltip() {
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const { setPreviewMode, setNodeContent } = useEditorStore()
   const highlights = useHighlightStore2((s) => s.highlights)
-  const { getHighlightMap } = useHighlights()
+  const { getHighlightMap, getEditableMap } = useHighlights()
   const setNode = useSputlitStore((s) => s.setNode)
   const { getILinkFromNodeid } = useLinks()
   const { getContent } = useContentStore()
@@ -46,12 +46,28 @@ function Tooltip() {
   const { removeHighlight } = useHighlighter()
   const removeHighlightFromStore = useHighlightStore2((s) => s.removeHighlight)
   const mentionable = useMentionStore((state) => state.mentionable)
+  const [editListOpen, setEditListOpen] = useState(false)
+
+  mog('tooltipState', { tooltipState })
 
   const highlightMap = getHighlightMap(tooltipState?.id)
+  const editableMap = getEditableMap(tooltipState?.id)
+
+  const editNodes = useMemo(() => {
+    return Object.keys(editableMap).map((nodeId) => {
+      const node = getILinkFromNodeid(nodeId, true)
+      return node
+    })
+  }, [editableMap])
+
+  const rootRef = useRef<HTMLDivElement>(null)
+
   // FIXME: A single nodeid is dangerous
-  const nodeId = highlightMap ? Object.keys(highlightMap)[0] ?? undefined : undefined
+  // This node id is the first node id in the editable notes
+  const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
+  const nodeId = editNodes[0]?.nodeid
+
   const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
-  const [access, setAccess] = useState<AccessLevel>()
 
   const { getUserFromUserid } = useMentions()
   // const { getUserDetailsUserId } = useUserService()
@@ -60,7 +76,6 @@ function Tooltip() {
     if (isSharedNode(nodeId)) {
       const sharedNode = getSharedNode(nodeId)
       const u = getUserFromUserid(sharedNode?.owner)
-      setAccess(sharedNode.currentUserAccess)
 
       return u
     }
@@ -117,30 +132,45 @@ function Tooltip() {
     setTooltipState({ visualState: VisualState.hidden })
   }
 
-  const handleEdit = () => {
-    mog('edit, UNIMPLEMENTED')
-    return
-    const content = getContent(nodeId)
-    const node = getILinkFromNodeid(nodeId)
-    setVisualState(VisualState.animatingIn)
+  // used to open the note in the sputlit editor
+  //const handleEdit = () => {
+  //   mog('edit, UNIMPLEMENTED')
+  //   return
+  //   const content = getContent(nodeId)
+  //   const node = getILinkFromNodeid(nodeId)
+  //   setVisualState(VisualState.animatingIn)
 
-    // TODO: the timeout is because the nodeContent setting in the content/index.ts according to the active item works as well
-    // will optimize later
-    setTimeout(() => {
-      setNode({ ...node, title: node.path.split(SEPARATOR).slice(-1)[0], id: node.nodeid })
-      setNodeContent(content.content)
-      setPreviewMode(false)
-    }, 500)
+  //   // TODO: the timeout is because the nodeContent setting in the content/index.ts according to the active item works as well
+  //   // will optimize later
+  //   setTimeout(() => {
+  //     setNode({ ...node, title: node.path.split(SEPARATOR).slice(-1)[0], id: node.nodeid })
+  //     setNodeContent(content.content)
+  //     setPreviewMode(false)
+  //   }, 500)
 
-    setTooltipState({ visualState: VisualState.hidden })
-  }
+  //   setTooltipState({ visualState: VisualState.hidden })
+  // }
 
   const handleCopyClipboard = async (text: string) => {
     await copyTextToClipboard(text)
     setTooltipState({ visualState: VisualState.hidden })
   }
 
+  const openNodeInMexit = (nodeid: string) => {
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
+  }
+
   // TODO: add multiple color choice in tooltip
+  // mog('tooltipState', {
+  //   tooltipState,
+  //   editListOpen,
+  //   highlightMap,
+  //   editableMap,
+  //   editNodes,
+  //   nodeId,
+  //   highlight,
+  //   isEditable
+  // })
 
   return (
     <StyledTooltip
@@ -149,25 +179,59 @@ function Tooltip() {
       left={window.scrollX + tooltipState.coordinates.left}
       showTooltip={tooltipState.visualState === VisualState.hidden ? false : true}
     >
-      {/* {access !== 'READ' && (
-        <Icon onClick={handleEdit}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-          </svg>
-        </Icon>
-      )} */}
-
-      {access !== 'READ' && (
+      {isEditable &&
+        (editNodes.length > 1 ? (
+          <>
+            <Popover
+              rootRef={rootRef}
+              placement="top"
+              render={() => (
+                <NoteListWrapper>
+                  {editNodes.map((node) => (
+                    <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
+                      <Iconify icon="mdi:file-document-outline" />
+                      {getTitleFromPath(node.path)}
+                    </HighlightNote>
+                  ))}
+                </NoteListWrapper>
+              )}
+            >
+              <Icon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </Icon>
+            </Popover>
+            <div ref={rootRef} />
+          </>
+        ) : (
+          <Icon onClick={() => openNodeInMexit(nodeId)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </Icon>
+        ))}
+      {isEditable && (
         <Icon onClick={handleDelete}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -205,20 +269,23 @@ function Tooltip() {
         </svg>
       </Icon>
 
-      {user?.email && (
-        <Icon
-          onClick={() => window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeId}`, '_blank', 'noopener, noreferrer')}
-        >
-          <FloatingTooltip
-            root={getElementById('mexit-tooltip')}
-            content={<MentionTooltipComponent user={user} nodeid={nodeId} access={access} />}
+      {/* {access !== 'READ' && (
+        <Icon onClick={handleEdit}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            <ProfileImageContainer>
-              {user?.email && <ProfileImage email={user?.email} size={24} />}
-            </ProfileImageContainer>
-          </FloatingTooltip>
+            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+          </svg>
         </Icon>
-      )}
+      )} */}
     </StyledTooltip>
   )
 }
