@@ -24,7 +24,7 @@ import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useHighlightAPI } from './useHighlights'
+import { useHighlightAPI, useHighlights } from './useHighlights'
 
 export interface AppendAndSaveProps {
   nodeid: string
@@ -50,7 +50,7 @@ export function useSaveChanges() {
   const { addHighlight } = useHighlightStore2()
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
-  const { saveHighlight } = useHighlightAPI()
+  const { saveHighlight } = useHighlights()
 
   const saveIt = async (saveAndExit = false, notification = false) => {
     mog('saveIt', { saveAndExit, notification })
@@ -126,7 +126,8 @@ export function useSaveChanges() {
     }
     if (highlight) {
       // Save highlight
-      await saveHighlight(highlight)
+      const sourceTitle = document.title
+      await saveHighlight(highlight, sourceTitle)
       request.data.highlightId = highlight.entityId
     }
 

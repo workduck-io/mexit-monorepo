@@ -15,6 +15,9 @@ import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'
 
 function Tooltip() {
+  //
+  // TODO: add multiple color choice in tooltip
+  //
   const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
   const highlights = useHighlightStore2((s) => s.highlights)
@@ -35,9 +38,8 @@ function Tooltip() {
 
   const rootRef = useRef<HTMLDivElement>(null)
 
-  // FIXME: A single nodeid is dangerous
-  // This node id is the first node id in the editable notes
   const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
+  // This node id is the first node id in the editable notes
   const nodeId = editNodes[0]?.nodeid
 
   const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
@@ -80,7 +82,6 @@ function Tooltip() {
     window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
-  // TODO: add multiple color choice in tooltip
   // mog('tooltipState', {
   //   tooltipState,
   //   editListOpen,

@@ -1,18 +1,11 @@
-import {
-  extractMetadata,
-  Highlight,
-  HighlightBlockMap,
-  mog,
-  NodeEditorContent,
-  SEPARATOR,
-  WORKSPACE_HEADER
-} from '@mexit/core'
+import { extractMetadata, Highlight, mog, NodeEditorContent, SEPARATOR, WORKSPACE_HEADER } from '@mexit/core'
 import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
 import { useHighlightStore2 } from '../Stores/useHighlightStore'
 import { useCallback } from 'react'
 import { isReadonly, usePermissions } from './usePermissions'
 import { useContentStore } from '../Stores/useContentStore'
+import { useLinkURLs } from '../Hooks/useURLs'
 import { useLinks } from './useLinks'
 import { useInternalLinks } from './useInternalLinks'
 import { deserializeContent } from '../Utils/serializer'
@@ -27,7 +20,8 @@ export const useHighlights = () => {
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
-  const { deleteHighlight: deleteHighlightAPI } = useHighlightAPI()
+  const { deleteHighlight: deleteHighlightAPI, saveHighlight: saveHighlightAPI } = useHighlightAPI()
+  const { getLink, saveLink } = useLinkURLs()
 
   /**
    * Returns the map of nodeids and blockids in which the content of the highlight is present
@@ -117,10 +111,26 @@ export const useHighlights = () => {
     })
   }
 
+  /**
+   * Saves the highlight in the backend database
+   * Adds a link if the source url is not already saved
+   *
+   * Doesn't add to the store.
+   *   That will need the block map.
+   */
+  const saveHighlight = async (highlight: Highlight, sourceTitle: string) => {
+    const link = getLink(highlight.properties.sourceUrl)
+    if (!link) {
+      await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })
+    }
+    await saveHighlightAPI(highlight)
+  }
+
   return {
     getHighlightMap,
     getEditableMap,
-    deleteHighlight
+    deleteHighlight,
+    saveHighlight
   }
 }
 

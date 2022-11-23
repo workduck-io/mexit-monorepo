@@ -32,7 +32,7 @@ import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useURLsAPI } from './useURLs'
+import { useLinkURLs, useURLsAPI } from './useURLs'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
@@ -55,8 +55,8 @@ export function useActionExecutor() {
   const resetSputlitState = useSputlitStore((s) => s.reset)
   const setSmartCaptureFormData = useSputlitStore((s) => s.setSmartCaptureFormData)
 
-  const { links, addLink } = useLinkStore()
-  const saveLink = useURLsAPI().saveLink
+  const links = useLinkStore((s) => s.links)
+  const { saveLink } = useLinkURLs()
 
   function execute(item: MexitAction, metaKeyPressed?: boolean) {
     const search = useSputlitStore.getState().search
@@ -108,7 +108,6 @@ export function useActionExecutor() {
             if (!links.find((l) => l.url === window.location.href)) {
               const link = { url: window.location.href, title: document.title }
               saveLink(link)
-              addLink(link)
             }
 
             resetSputlitState()
@@ -218,10 +217,10 @@ export function useActionExecutor() {
             break
           }
           case ActionType.AVATAR_GENERATOR: {
-            const data = generateAvatar();
-            setScreenshot(data.svg);
+            const data = generateAvatar()
+            setScreenshot(data.svg)
             setAvatarSeed(data.seed)
-            
+
             setActiveItem(item)
             setInput('')
             break
