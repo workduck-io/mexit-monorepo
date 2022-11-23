@@ -1,56 +1,29 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import toast from 'react-hot-toast'
 
-import { AccessLevel, extractMetadata, MEXIT_FRONTEND_URL_BASE, mog, SEPARATOR } from '@mexit/core'
-import { copyTextToClipboard, HighlightNote, Popover, Tooltip as FloatingTooltip } from '@mexit/shared'
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
 
-import { useAuthStore } from '../../Hooks/useAuth'
-import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
-// different import path!
-import { getElementById } from '../../contentScript'
-import { useHighlights } from '../../Hooks/useHighlights'
-import { useMentions } from '../../Hooks/useMentions'
-import { useNodes } from '../../Hooks/useNodes'
-import useRaju from '../../Hooks/useRaju'
-import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useHighlightStore2 } from '../../Stores/useHighlightStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { useUserCacheStore } from '../../Stores/useUserCacheStore'
-import { deserializeContent } from '../../Utils/serializer'
-import { MentionTooltipComponent } from '../MentionTooltip'
-import { ProfileImage } from '../ProfileImage'
 import { Icon as Iconify } from '@iconify/react'
-import { Icon, NoteListWrapper, ProfileImageContainer, StyledTooltip } from './styled'
+import { useHighlights } from '../../Hooks/useHighlights'
+import { VisualState } from '../../Hooks/useSputlitContext'
+import { useHighlightStore2 } from '../../Stores/useHighlightStore'
+import { useSputlitStore } from '../../Stores/useSputlitStore'
+import { Icon, NoteListWrapper, StyledTooltip } from './styled'
 
 function Tooltip() {
-  const { setVisualState } = useSputlitContext()
   const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-  const { setPreviewMode, setNodeContent } = useEditorStore()
   const highlights = useHighlightStore2((s) => s.highlights)
-  const { getHighlightMap, getEditableMap } = useHighlights()
-  const setNode = useSputlitStore((s) => s.setNode)
+  const { deleteHighlight, getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
-  const { getContent } = useContentStore()
-  const { getParentILink } = useInternalLinks()
-  const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
-  const { dispatch } = useRaju()
-  const { isSharedNode, getSharedNode } = useNodes()
-  const { cache } = useUserCacheStore()
   const { removeHighlight } = useHighlighter()
-  const removeHighlightFromStore = useHighlightStore2((s) => s.removeHighlight)
-  const mentionable = useMentionStore((state) => state.mentionable)
-  const [editListOpen, setEditListOpen] = useState(false)
 
   mog('tooltipState', { tooltipState })
 
-  const highlightMap = getHighlightMap(tooltipState?.id)
   const editableMap = getEditableMap(tooltipState?.id)
 
   const editNodes = useMemo(() => {
@@ -69,67 +42,14 @@ function Tooltip() {
 
   const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
 
-  const { getUserFromUserid } = useMentions()
-  // const { getUserDetailsUserId } = useUserService()
-
-  const user = useMemo(() => {
-    if (isSharedNode(nodeId)) {
-      const sharedNode = getSharedNode(nodeId)
-      const u = getUserFromUserid(sharedNode?.owner)
-
-      return u
-    }
-  }, [mentionable, cache, nodeId])
-
   const handleDelete = () => {
-    /** FIXME:
-     *
-     * The delete now requires deletion of blocks across notes!
-     * Add new subtype to the runtime
-     */
-
-    mog('delete, UNIMPLEMENTED')
-    return
-    const content = getContent(nodeId)
-    const node = getILinkFromNodeid(nodeId)
-    const parentILink = getParentILink(node.path)
-
-    const request = {
-      type: 'CAPTURE_HANDLER',
-      subType: 'SAVE_NODE',
-      data: {
-        id: node.nodeid,
-        title: node.path.split(SEPARATOR).slice(-1)[0],
-        // This is not blockID anymore mia amore
-        content: content.content.filter((item) => item.id !== tooltipState.id),
-        referenceID: parentILink?.nodeid,
-        namespaceID: node.namespace,
-        workspaceID: workspaceDetails.id,
-        metadata: {}
-      }
-    }
-
-    chrome.runtime.sendMessage(request, (response) => {
-      const { message, error } = response
-      mog('MESSAGE OF DELETION', { message, request })
-
-      if (error) {
-        toast.error('An Error Occured. Please try again.')
-      } else {
-        const nodeid = message.id
-        const content = deserializeContent(message.data)
-        const metadata = extractMetadata(message)
-
-        removeHighlight(tooltipState?.id)
-        removeHighlightFromStore(tooltipState?.id)
-
-        dispatch('SET_CONTENT', nodeid, content, metadata)
-
-        toast.success('Highlight removed')
-      }
+    // mog('delete, UNIMPLEMENTED')
+    deleteHighlight(tooltipState?.id).then(() => {
+      // mog('deleted')
+      toast.success('Highlight removed')
+      removeHighlight(tooltipState?.id)
+      setTooltipState({ visualState: VisualState.hidden })
     })
-
-    setTooltipState({ visualState: VisualState.hidden })
   }
 
   // used to open the note in the sputlit editor
