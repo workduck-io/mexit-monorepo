@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
 import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import {
@@ -67,7 +68,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
         {isEditable
           ? editNodes.map((node) => (
               <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
-                <Icon icon="mdi:file-document-outline" />
+                <Icon icon={fileList2Line} />
                 {getTitleFromPath(node.path)}
               </HighlightNote>
             ))

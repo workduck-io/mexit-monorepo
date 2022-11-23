@@ -13,6 +13,7 @@ import { VisualState } from '../../Hooks/useSputlitContext'
 import { useHighlightStore2 } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
 function Tooltip() {
   //
@@ -110,7 +111,7 @@ function Tooltip() {
                 <NoteListWrapper>
                   {editNodes.map((node) => (
                     <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
-                      <Iconify icon="mdi:file-document-outline" />
+                      <Iconify icon={fileList2Line} />
                       {getTitleFromPath(node.path)}
                     </HighlightNote>
                   ))}

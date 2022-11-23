@@ -117,6 +117,9 @@ export const HighlightCollapsedToggle = styled.div`
 
 export const HighlightNoteLink = styled.div`
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
   color: ${({ theme }) => theme.colors.text.fade};
 
   cursor: pointer;
@@ -179,6 +182,7 @@ export const HighlightNote = styled.div`
   flex-direction: row;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
+  cursor: pointer;
 
   color: ${({ theme }) => theme.colors.text.fade};
 

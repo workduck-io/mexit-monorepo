@@ -84,6 +84,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
       ) : null}
       {Object.keys(highlightMap).map((nodeid) => (
         <HighlightNoteLink onClick={() => openHighlightLocation({ nodeid })}>
+          <Icon icon={fileList2Line} />
           {getTitleFromPath(getPathFromNodeid(nodeid))}
         </HighlightNoteLink>
       ))}
