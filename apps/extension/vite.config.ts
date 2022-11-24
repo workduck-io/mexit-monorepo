@@ -1,19 +1,23 @@
 import react from '@vitejs/plugin-react'
+import fs from 'fs'
 import path, { resolve } from 'path'
 import { defineConfig } from 'vite'
+import svgr from 'vite-plugin-svgr'
 
 import addHmr from './build/add-hmr'
 import customDynamicImport from './build/custom-dynamic-import'
 import makeManifest from './build/make-manifest'
 import manifest from './manifest'
 
-const root = resolve(__dirname, 'src')
-const pagesDir = resolve(root, 'pages')
-const assetsDir = resolve(root, 'assets')
-const outDir = resolve(__dirname, 'dist')
-const publicDir = resolve(__dirname, 'public')
+const outDir = resolve(__dirname, '../..', 'dist', 'extension')
+const coreLibDir = resolve(__dirname, '../..', 'libs/core', 'src')
+const sharedLibDir = resolve(__dirname, '../..', 'libs/shared', 'src')
+const publicDir = resolve(__dirname, 'src', 'Assets')
+
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
 
 const isDev = process.env.__DEV__ === 'true'
+const sourceMap = process.env.NO_SOURCE_MAP ? false : true
 
 // ENABLE HMR IN BACKGROUND SCRIPT
 const enableHmrInBackgroundScript = true
@@ -30,33 +34,47 @@ const firstUpperCase = (str: string) => {
 }
 
 export default defineConfig({
+  optimizeDeps: {
+    include: ['reac/jsx-runtime']
+  },
   resolve: {
     alias: {
-      '@src': root,
-      '@assets': assetsDir,
-      '@pages': pagesDir
+      '@mexit/shared': sharedLibDir,
+      '@mexit/core': coreLibDir
     }
   },
+  server: {
+    port: 6666
+  },
   plugins: [
-    react(),
+    react({
+      babel: {
+        compact: true,
+        plugins: [
+          [
+            'babel-plugin-styled-components',
+            {
+              displayName: true,
+              fileName: false
+            }
+          ]
+        ]
+      }
+    }),
     makeManifest(manifest),
     customDynamicImport(),
-    addHmr({ background: enableHmrInBackgroundScript, view: true })
+    addHmr({ background: enableHmrInBackgroundScript, view: true }),
+    svgr() as any
   ],
-  publicDir,
+  publicDir: publicDir,
   build: {
-    outDir,
-    sourcemap: isDev,
+    minify: !isDev,
+    outDir: outDir,
+    sourcemap: sourceMap,
     rollupOptions: {
       input: {
-        devtools: resolve(pagesDir, 'devtools', 'index.html'),
-        panel: resolve(pagesDir, 'panel', 'index.html'),
-        content: resolve(pagesDir, 'content', 'index.ts'),
-        background: resolve(pagesDir, 'background', 'index.ts'),
-        contentStyle: resolve(pagesDir, 'content', 'style.scss'),
-        popup: resolve(pagesDir, 'popup', 'index.html'),
-        newtab: resolve(pagesDir, 'newtab', 'index.html'),
-        options: resolve(pagesDir, 'options', 'index.html')
+        content: resolve('src', 'content-index.ts'),
+        background: resolve('src', 'background.ts')
       },
       output: {
         entryFileNames: 'src/pages/[name]/index.js',

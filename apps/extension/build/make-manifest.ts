@@ -6,8 +6,7 @@ import colorLog from './log'
 
 const { resolve } = path
 
-const outDir = resolve(__dirname, '..', '..', 'public')
-console.log('Outdir: ', outDir)
+const outDir = resolve(__dirname, '..', '../..', 'dist', 'extension')
 export default function makeManifest(manifest: chrome.runtime.ManifestV3): PluginOption {
   return {
     name: 'make-manifest',

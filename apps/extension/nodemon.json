@@ -1,0 +1,8 @@
+{
+  "env": {
+    "__DEV__": "true"
+  },
+  "watch": ["src", "build", "vite.config.ts", "../../libs/core", "../../libs/shared"],
+  "ext": "tsx,ts",
+  "exec": "node_modules/.bin/vite build"
+}
