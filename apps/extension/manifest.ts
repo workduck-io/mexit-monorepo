@@ -5,7 +5,6 @@ const manifest: chrome.runtime.ManifestV3 = {
   name: packageJson.name,
   version: packageJson.version,
   description: packageJson.description,
-  options_page: 'src/pages/options/index.html',
   icons: { '16': 'Assets/icon16x16.png', '48': 'Assets/icon48x48.png', '128': 'Assets/icon128x128.png' },
   commands: {
     'open-mexit': {
@@ -19,7 +18,7 @@ const manifest: chrome.runtime.ManifestV3 = {
   content_scripts: [{ matches: ['http://*/*', 'https://*/*'], js: ['content.js'], css: ['Assets/global.css'] }],
   externally_connectable: {
     ids: ['*'],
-    matches: ['*://localhost:3000/*']
+    matches: ['http://localhost:3000/*', 'https://mexit.workduck.io/*']
   },
   permissions: ['contextMenus', 'storage', 'tabs', 'activeTab', 'search', 'notifications', 'downloads'],
   web_accessible_resources: [{ resources: ['Assets/*'], matches: ['http://*/*', 'https://*/*'] }]

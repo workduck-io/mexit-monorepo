@@ -68,7 +68,7 @@ export default defineConfig({
   ],
   publicDir: publicDir,
   build: {
-    minify: !isDev,
+    minify: false,
     outDir: outDir,
     sourcemap: sourceMap,
     rollupOptions: {
@@ -77,7 +77,7 @@ export default defineConfig({
         background: resolve('src', 'background.ts')
       },
       output: {
-        entryFileNames: 'src/pages/[name]/index.js',
+        entryFileNames: '[name].js',
         chunkFileNames: isDev ? 'assets/js/[name].js' : 'assets/js/[name].[hash].js',
         assetFileNames: (assetInfo) => {
           const { dir, name: _name } = path.parse(assetInfo.name)
