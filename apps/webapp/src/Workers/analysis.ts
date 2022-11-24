@@ -42,9 +42,14 @@ export interface AnalyseContentProps {
 }
 
 const getSingle = (content: NodeEditorContent) => {
-  if (content[0] && content[0].children.length === 1) {
-    return content[0].children
-  } else return getSingle(content[0].children)
+  if (!content || content.length === 0) return ''
+  if (content[0] && content[0]?.children?.length === 1) {
+    return content[0]?.children
+  } else {
+    if (content[0]?.children) {
+      return content[0]?.children
+    } else return content[0]
+  }
 }
 
 const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): OutlineItem[] => {
@@ -80,7 +85,9 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
       } // Lists
       else if (LIST_ELEMENTS.includes(item.type.toLowerCase())) {
         if (item.children && item.children[0]) {
-          title = convertContentToRawText(getSingle(item.children), ' ', { extra: options?.modifier })
+          title = convertContentToRawText(item.children ? getSingle(item.children) : '', ' ', {
+            extra: options?.modifier
+          })
           if (title.trim() !== '')
             outline.push({
               type: item.type,
@@ -127,7 +134,7 @@ const getHighlightBlocks = (content: NodeEditorContent): HighlightAnalysis => {
       prevBlockHighlightId = null
     }
   }
-  // mog('getHighlightBlocks', { content, displayBlocksWithHighlight })
+  // console.log('getHighlightBlocks', { content, displayBlocksWithHighlight })
 
   return { displayBlocksWithHighlight }
 }
