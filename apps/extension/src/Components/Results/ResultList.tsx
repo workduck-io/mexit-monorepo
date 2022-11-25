@@ -103,11 +103,11 @@ const ResultList = ({ results }: { results: Array<any> }) => {
 
     if (previewMode) {
       // Not adding event listener to window as the event never reaches there
-      document.getElementById('mexit')!.addEventListener('keydown', handler)
+      document.getElementById('mexit')?.addEventListener('keydown', handler)
     }
 
     return () => {
-      document.getElementById('mexit')!.removeEventListener('keydown', handler)
+      document.getElementById('mexit')?.removeEventListener('keydown', handler)
     }
   }, [results, previewMode, activeIndex, activeItem, input])
 

@@ -2,7 +2,7 @@ import packageJson from './package.json'
 
 const manifest: chrome.runtime.ManifestV3 = {
   manifest_version: 3,
-  name: packageJson.name,
+  name: 'Mexit',
   version: packageJson.version,
   description: packageJson.description,
   icons: { '16': 'icon16x16.png', '48': 'icon48x48.png', '128': 'icon128x128.png' },

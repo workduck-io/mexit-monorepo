@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import sanitize from 'sanitize-html'
 
 const options = {

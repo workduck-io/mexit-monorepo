@@ -28,7 +28,7 @@ type SputlitContextType = {
   setDibbaState: (vs: TooltipState) => void
 }
 
-const SputlitContext = createContext<SputlitContextType>(undefined!)
+const SputlitContext = createContext<SputlitContextType>(undefined)
 export const useSputlitContext = () => useContext(SputlitContext)
 
 export const SputlitProvider: React.FC<PropsWithChildren> = ({ children }) => {
