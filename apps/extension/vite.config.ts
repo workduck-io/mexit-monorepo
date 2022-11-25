@@ -68,7 +68,7 @@ export default defineConfig({
   ],
   publicDir: publicDir,
   build: {
-    minify: false,
+    minify: !sourceMap,
     outDir: outDir,
     sourcemap: sourceMap,
     rollupOptions: {

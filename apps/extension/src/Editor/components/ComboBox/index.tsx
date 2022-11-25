@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from 'react'
+
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
-import { PortalBody, useEditorState } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
+import { PortalBody, useEditorState, select, insertText } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
 import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
@@ -23,10 +24,18 @@ import { useSnippets } from '../../../Hooks/useSnippets'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { useComboboxControls } from '../../hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../hooks/useComboboxIsOpen'
-import { replaceFragment } from '../../hooks/useComboboxOnKeyDown'
 import { useComboboxStore } from '../../store/combobox'
 import { setElementPositionByRange } from '../../utils/setElementPositionByRange'
 import { ComboboxProps } from './types'
+
+export const replaceFragment = (editor: any, range: any, text: string) => {
+  const sel = editor.selection
+
+  if (sel) {
+    select(editor, range)
+    insertText(editor, text)
+  }
+}
 
 export const spotlightShortcuts = {
   save: {
