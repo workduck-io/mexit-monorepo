@@ -5,7 +5,7 @@ const manifest: chrome.runtime.ManifestV3 = {
   name: packageJson.name,
   version: packageJson.version,
   description: packageJson.description,
-  icons: { '16': 'Assets/icon16x16.png', '48': 'Assets/icon48x48.png', '128': 'Assets/icon128x128.png' },
+  icons: { '16': 'icon16x16.png', '48': 'icon48x48.png', '128': 'icon128x128.png' },
   commands: {
     'open-mexit': {
       suggested_key: { default: 'Ctrl+Shift+X', mac: 'Command+Shift+X' },
@@ -15,13 +15,13 @@ const manifest: chrome.runtime.ManifestV3 = {
   action: { default_title: 'Click To Open Spotlight' },
   omnibox: { keyword: '[[' },
   background: { service_worker: 'background.js', type: 'module' },
-  content_scripts: [{ matches: ['http://*/*', 'https://*/*'], js: ['content.js'], css: ['Assets/global.css'] }],
+  content_scripts: [{ matches: ['http://*/*', 'https://*/*'], js: ['content.js'], css: ['global.css'] }],
   externally_connectable: {
     ids: ['*'],
     matches: ['http://localhost:3000/*', 'https://mexit.workduck.io/*']
   },
   permissions: ['contextMenus', 'storage', 'tabs', 'activeTab', 'search', 'notifications', 'downloads'],
-  web_accessible_resources: [{ resources: ['Assets/*'], matches: ['http://*/*', 'https://*/*'] }]
+  web_accessible_resources: [{ resources: ['assets/*'], matches: ['http://*/*', 'https://*/*'] }]
 }
 
 export default manifest
