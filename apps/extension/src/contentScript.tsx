@@ -5,15 +5,13 @@ import '@webcomponents/custom-elements'
 import { createRoot } from 'react-dom/client'
 import { StyleSheetManager } from 'styled-components'
 
-import Index from '.'
+import { styleSlot } from './Utils/cs-utils'
+import Index from './index'
 
 const shadowRoot = document.createElement('div')
 shadowRoot.id = 'mexit'
 shadowRoot.style.cssText = 'all: initial'
 document.documentElement.appendChild(shadowRoot)
-
-export const styleSlot = document.createElement('div')
-styleSlot.id = 'style-sheet-target'
 
 // keeping the shadow dom open so that extensions or websites can see the actual
 // target of the event, closed shadow dom results in shadow root being the
@@ -29,10 +27,6 @@ shadowRoot.addEventListener('keydown', (event) => {
     event.stopPropagation()
   }
 })
-
-export const getElementById = (id: string) => {
-  return document.getElementById('mexit').shadowRoot.getElementById(id)
-}
 
 // Adding another container inside styleSlot because it isn't able to handle multiple children if they are rendered at init
 // Why? I don't know. Will create a minimal reproducible example and test, will report to styled-components if an actual issue.

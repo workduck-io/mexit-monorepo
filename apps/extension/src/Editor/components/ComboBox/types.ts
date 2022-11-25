@@ -2,7 +2,7 @@ import { PlateEditor, RenderFunction } from '@udecode/plate'
 
 import { QuickLinkType } from '@mexit/core'
 
-import { CustomElements } from '../../types/editor'
+import type { CustomElements } from '../../types/editor'
 
 export interface ComboboxKeyDownConfig {
   keys: Record<CustomElements, ComboboxItemType>

@@ -17,7 +17,7 @@ import {
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs, useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 
 const ShortenerWrapper = styled(LinkWrapper)`
   padding: 0;

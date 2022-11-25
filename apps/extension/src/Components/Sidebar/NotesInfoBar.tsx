@@ -21,7 +21,7 @@ import {
 import { useLinks } from '../../Hooks/useLinks'
 import useRaju from '../../Hooks/useRaju'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import { NodeCard } from './NodeCard'
 
 export const NotesInfoBar = () => {

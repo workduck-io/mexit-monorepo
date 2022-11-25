@@ -20,7 +20,7 @@ import {
 
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 
 export interface SnippetPreviewProps {

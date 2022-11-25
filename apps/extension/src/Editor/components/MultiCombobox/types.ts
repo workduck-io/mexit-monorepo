@@ -1,4 +1,4 @@
-import { ComboboxKey } from '../../types'
+import { ComboboxKey } from '../ComboBox/types'
 
 export interface ComboboxItem {
   text: string

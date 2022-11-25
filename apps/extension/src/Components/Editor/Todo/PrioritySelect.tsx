@@ -6,7 +6,7 @@ import { useContextMenu } from 'react-contexify'
 import { PriorityType, PriorityDataType, Priority } from '@mexit/core'
 import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
 
-import { getElementById } from '../../../contentScript'
+import { getElementById } from '../../../Utils/cs-utils'
 import PriorityMenu from './PriorityMenu'
 
 interface PriorityMenuSelect {

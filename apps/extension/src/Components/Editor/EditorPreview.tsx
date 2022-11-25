@@ -21,7 +21,7 @@ import { generateEditorPluginsWithComponents } from '../../Editor/plugins'
 // import { useTags } from '../../Hooks/useTags'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import components from './Components'
 

@@ -31,8 +31,8 @@ import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
-import { getElementById } from '../../contentScript'
 import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {

@@ -11,7 +11,7 @@ import { WDLogo } from '@mexit/shared'
 
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 
 const DragIcon = styled(Icon)<{ $show: boolean }>`
   margin-right: -18px;

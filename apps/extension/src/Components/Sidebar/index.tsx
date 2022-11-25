@@ -7,7 +7,7 @@ import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useRightSidebarItems } from '../../Stores/useRightSidebarItems'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import { DraggableToggle } from './DraggableToggle'
 import { ExtSideNav, SidebarContainer } from './styled'
 
