@@ -15,7 +15,7 @@ IN STORE
                     "parentIndex": 2,
                     "textOffset": 355
                 },
-                "text": "The species is both terrestrial (ground-living) and arboreal (tree-living); it inhabits savannah, woodland, rocky slopes and in some regions, dense forest. It is diurnal and is known to prey on birds and small mammals. Over suitable surfaces, it can move at speeds up to 16km/h (10mph) for short distances. Adult black mambas have few natural predators.",
+                "text": "The species is both",
                 "id": "f0cda665-6660-47bd-99cd-46b48020e253"
             },
             "sourceUrl": "https://en.wikipedia.org/wiki/Black_mamba"
@@ -37,7 +37,7 @@ IN STORE
       "parentIndex": 56,
       "textOffset": 60
     },
-    "text": "Village pump – Forum for discussions about Wikipedia itself, including policies and technical issues.\nSite news – Sources of news about Wikipedia and the broader Wikimedia movement.\nTeahouse – Ask basic questions about using or editing Wikipedia.\nHelp desk – Ask questions about using or editing Wikipedia.\nReference desk – Ask research questions about encyclopedic topics.\nContent portals – A unique way to navigate the encyclopedia.",
+    "text": "Village pump – Forum for",
     "id": "63023772-32e9-4d85-b0e8-933cd429eab3"
   },
   "sourceUrl": "https://en.wikipedia.org/wiki/Main_Page"

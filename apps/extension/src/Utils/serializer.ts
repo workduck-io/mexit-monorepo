@@ -2,14 +2,10 @@ import {
   directKeys,
   DirectProperties,
   directPropertyKeys,
-  ElementHighlightMetadata,
   ElementHighlightMetadata2,
   extractMetadata,
-  generateElementMetadata,
   generateTempId,
   mappedKeys,
-  mog,
-  PartialBy
 } from '@mexit/core'
 
 import { useAuthStore } from '../Hooks/useAuth'

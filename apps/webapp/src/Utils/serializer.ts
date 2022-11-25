@@ -2,10 +2,8 @@ import {
   directKeys,
   DirectProperties,
   directPropertyKeys,
-  ElementHighlightMetadata,
   ElementHighlightMetadata2,
   extractMetadata,
-  generateElementMetadata,
   generateTempId,
   mappedKeys,
   PartialBy

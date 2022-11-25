@@ -41,23 +41,6 @@ export const mappedKeys = {
 
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
-export interface HighlightMetaBlock {
-  parentTagName: string
-  parentIndex: number
-  textOffset: number
-}
-
-export interface ElementHighlightMetadata {
-  type: string
-  saveableRange: {
-    startMeta: HighlightMetaBlock
-    endMeta: HighlightMetaBlock
-    text: string
-    id: string
-  }
-  sourceUrl: string
-}
-
 export const generateElementMetadata = (elementMetadata: ElementHighlightMetadata2): ElementHighlightMetadata2 => {
   // delete elementMetadata.saveableRange['__isHighlightSource']
   return {
