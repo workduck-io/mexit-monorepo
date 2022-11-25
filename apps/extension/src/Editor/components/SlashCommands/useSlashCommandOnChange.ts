@@ -1,5 +1,4 @@
 import {
-  getBlockAbove,
   getPluginType,
   insertNodes,
   insertTable,

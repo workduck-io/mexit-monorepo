@@ -1,5 +1,5 @@
 import { animated } from 'react-spring'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { Scroll } from '@mexit/shared'
 

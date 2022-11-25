@@ -1,4 +1,3 @@
-import React from 'react'
 
 import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
 import create from 'zustand'

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
-import { ActionType, defaultContent, ELEMENT_TAG, mog, QuickLinkStatus, QuickLinkType } from '@mexit/core'
+import { defaultContent, ELEMENT_TAG, QuickLinkType } from '@mexit/core'
 import { NodeEditorContent } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'

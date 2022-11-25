@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { Icon } from '@iconify/react'
-import styled, { css, useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { CategoryType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import {

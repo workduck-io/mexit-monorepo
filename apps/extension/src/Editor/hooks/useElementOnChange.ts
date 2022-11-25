@@ -10,7 +10,6 @@ import {
   select,
   TElement
 } from '@udecode/plate'
-import { Editor, Transforms } from 'slate'
 
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, getSlug, NODE_ID_PREFIX, QuickLinkType } from '@mexit/core'
 

@@ -1,7 +1,7 @@
 {
   "root": true,
-  "ignorePatterns": ["!**/*"],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": ["!**/*", "src/Assets/**/*"],
+  "plugins": ["@nrwl/nx", "unused-imports"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -18,7 +18,8 @@
               }
             ]
           }
-        ]
+        ],
+        "unused-imports/no-unused-imports": "warn"
       }
     },
     {

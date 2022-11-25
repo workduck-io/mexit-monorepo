@@ -1,9 +1,7 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { ActionType } from '@mexit/core'
 
-import { useEditorStore } from '../../Hooks/useEditorStore'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { IFrameActionRenderer, SmartCapture, ScreenshotRenderer, AvatarRenderer } from '../Renderers'
 import ResultList from './ResultList'

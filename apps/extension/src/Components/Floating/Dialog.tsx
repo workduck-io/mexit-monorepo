@@ -2,7 +2,6 @@ import React, { cloneElement, useEffect, useMemo, useState } from 'react'
 
 import {
   FloatingFocusManager,
-  FloatingOverlay,
   FloatingPortal,
   useClick,
   useFloating,

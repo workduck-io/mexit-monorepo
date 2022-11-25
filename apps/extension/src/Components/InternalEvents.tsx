@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import { CaptureConsole } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
-import { forEach } from 'lodash'
 import mixpanel from 'mixpanel-browser'
 import { createRoot } from 'react-dom/client'
 import Highlighter from 'web-highlighter'
@@ -11,8 +10,6 @@ import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
-import { useHighlighter } from '../Hooks/useHighlighter'
-import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'

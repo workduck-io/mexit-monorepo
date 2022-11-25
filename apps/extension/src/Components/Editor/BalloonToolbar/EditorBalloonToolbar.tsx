@@ -15,7 +15,6 @@ import italicIcon from '@iconify/icons-ri/italic'
 import listOrdered from '@iconify/icons-ri/list-ordered'
 import listUnordered from '@iconify/icons-ri/list-unordered'
 import strikeThrough from '@iconify/icons-ri/strikethrough'
-import taskLine from '@iconify/icons-ri/task-line'
 import { Icon } from '@iconify/react'
 import {
   AlignToolbarButton,
@@ -40,11 +39,10 @@ import {
 
 import { ButtonSeparator } from '@mexit/shared'
 
-import { getElementById, styleSlot } from '../../../contentScript'
+import { getElementById } from '../../../contentScript'
 import { BalloonToolbar } from './BalloonToolbar'
 import { SelectionToNode } from './components/SelectionToNode'
 import { SelectionToSnippet } from './components/SelectionToSnippet'
-import { SelectionToTask } from './components/SelectionToTask'
 
 const BallonMarkToolbarButtons = () => {
   const editor = usePlateEditorRef()

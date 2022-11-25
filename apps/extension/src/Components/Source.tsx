@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { NodeMetadata } from '@mexit/core'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 

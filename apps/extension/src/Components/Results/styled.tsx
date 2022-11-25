@@ -1,4 +1,3 @@
-import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 
 import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'

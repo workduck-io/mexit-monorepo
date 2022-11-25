@@ -23,7 +23,6 @@ import {
   AddHighlightFn,
   Highlights
 } from '@mexit/core'
-import { Theme } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'

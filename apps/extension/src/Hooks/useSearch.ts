@@ -10,7 +10,6 @@ import {
   sortByCreated,
   fuzzySearchLinks,
   getListItemFromLink,
-  mog,
   ActionType,
   QuickLinkType
 } from '@mexit/core'

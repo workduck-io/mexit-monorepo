@@ -16,7 +16,6 @@ import {
   isParent,
   ListItemType,
   MAX_RECENT_ITEMS,
-  mog,
   ActionType
 } from '@mexit/core'
 import { Loading, WDLogo } from '@mexit/shared'

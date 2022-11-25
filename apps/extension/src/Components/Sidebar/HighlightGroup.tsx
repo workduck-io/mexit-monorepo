@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
 import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+
 import {
   HighlightCollapsedToggle,
   HighlightGroupsWrapper,

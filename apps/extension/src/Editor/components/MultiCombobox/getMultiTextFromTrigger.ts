@@ -1,4 +1,4 @@
-import { isCollapsed, PlateEditor, TEditor } from '@udecode/plate'
+import { isCollapsed, PlateEditor } from '@udecode/plate'
 import { Range } from 'slate'
 
 import { getTextFromTrigger } from '../../utils/getTextFromTrigger'

@@ -1,15 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import styled from 'styled-components'
 
-import { getFavicon, Link, Tag } from '@mexit/core'
+import { getFavicon, Tag } from '@mexit/core'
 import {
   AddTagMenu,
   CopyButton,
   GenericFlex,
-  LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
-  LinkTagSection,
   LinkTitleWrapper,
   LinkWrapper,
   ShortenURL,

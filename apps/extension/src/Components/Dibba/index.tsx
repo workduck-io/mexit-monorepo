@@ -14,7 +14,6 @@ import {
   defaultCopyConverter,
   defaultCopyFilter,
   ELEMENT_TAG,
-  mog,
   NodeEditorContent,
   parseBlock,
   parseSnippet,

@@ -1,4 +1,4 @@
-import create, { State } from 'zustand'
+import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { contentStoreConstructor, ContentStoreState } from '@mexit/core'

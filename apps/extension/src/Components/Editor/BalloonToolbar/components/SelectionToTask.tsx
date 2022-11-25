@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate'
-import { getPreventDefaultHandler, usePlateEditorState } from '@udecode/plate-core'
+import { usePlateEditorState } from '@udecode/plate-core'
 
 import { useTransform } from './useTransform'
 

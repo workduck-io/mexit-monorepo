@@ -1,6 +1,5 @@
 import {
   TEditor,
-  getNodes,
   getSelectionText,
   insertNodes,
   getNodeEntries,
@@ -11,22 +10,17 @@ import {
 } from '@udecode/plate'
 import genereateName from 'project-name-generator'
 import toast from 'react-hot-toast'
-import { Editor, Transforms } from 'slate'
 
 import {
   convertContentToRawText,
-  defaultContent,
   ELEMENT_QA_BLOCK,
   ELEMENT_SYNC_BLOCK,
   generateTempId,
-  getSlug,
   NODE_PATH_CHAR_LENGTH,
-  NODE_PATH_SPACER,
-  SEPARATOR
+  NODE_PATH_SPACER
 } from '@mexit/core'
-import { generateSnippetId, mog } from '@mexit/core'
+import { generateSnippetId } from '@mexit/core'
 
-import { useContentStore } from '../../../../Stores/useContentStore'
 import { useSnippetStore } from '../../../../Stores/useSnippetStore'
 
 export const useTransform = () => {

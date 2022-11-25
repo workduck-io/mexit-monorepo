@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react'
 import useMergedRef from '@react-hook/merged-ref'
-import { getPreventDefaultHandler, PortalBody, useEditorState } from '@udecode/plate'
+import { PortalBody, useEditorState } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 
-import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut, mog } from '@mexit/core'
-import { ComboboxItemTitle, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from '@mexit/shared'
+import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
+import { ComboboxItemTitle, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from '@mexit/shared'
 import {
   ActionTitle,
   ComboboxShortcuts,

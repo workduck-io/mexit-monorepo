@@ -5,8 +5,6 @@ import {
   ActionType,
   CategoryType,
   createNodeWithUid,
-  ELEMENT_PARAGRAPH,
-  getBlockMetadata,
   getNewDraftKey,
   ILink,
   loremIpsum,
@@ -24,7 +22,7 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { generateAvatar } from '../Utils/generateAvatar'
-import { checkURL, formToBlocks, getProfileData } from '../Utils/getProfileData'
+import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
 import { useNamespaces } from './useNamespaces'
