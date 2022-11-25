@@ -1,0 +1,24 @@
+{
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts",
+    "**/Assets/**/*"
+  ],
+  "ignoreUnimported": [
+    "src/polyfills.ts",
+    "**/Types/*",
+    "src/Hooks/useTabCaptures.ts",
+    "src/Components/TabCaptures.tsx",
+    "src/Stores/useActionsStore.ts",
+    "src/Stores/useShortcutStore.ts"
+  ],
+  "ignoreUnused": ["core-js", "crypto-browserify", "process", "stream-browserify"],
+  "ignoreUnresolved": [],
+  "extensions": [".js", ".ts", ".jsx", ".tsx"],
+  "entry": ["src/background.ts", "src/content-index.ts"]
+}

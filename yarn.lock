@@ -3014,20 +3014,6 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
-"@iconify/icons-logos@^1.1.10":
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-logos/-/icons-logos-1.2.6.tgz#06bc216ecd6829bcecedb259e3bad8ede6b51ec8"
-  integrity sha512-MeD6hgrxsD/lN6Ou+yLmo3ix+7U3Sfg7krZSpH3GTtnzUnRavD52IUhVCFVC7R6ZjERtSpqUDBFqtXuA9w5E/g==
-  dependencies:
-    "@iconify/types" "^1.0.12"
-
-"@iconify/icons-material-symbols@^1.2.2":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-material-symbols/-/icons-material-symbols-1.2.3.tgz#5dbc52b6aca89fdef126afe6abb097804f1ebacf"
-  integrity sha512-lP9OnvwcYYLu/2Qxa77NpgoIkwFUB2OErHRRfvwLzvCAvheN7IhOQSm9F4YQft8iIY9q62EuU9xqXuh4oer8aA==
-  dependencies:
-    "@iconify/types" "^1.1.0"
-
 "@iconify/icons-ph@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify/icons-ph/-/icons-ph-1.2.1.tgz#292155d05e660d24a65c1510ccb61cd1ad15676a"
@@ -3046,13 +3032,6 @@
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@iconify/icons-ri/-/icons-ri-1.2.2.tgz#df93030bb2ba8ea09f808a82d4e3d5ece23798d5"
   integrity sha512-s+EaW72qx/wL0lh4j9tm0Uv/y08WUmk7Fd3wgqeaTDHaczVrOsD/R17Yp+uWBOjkgPqj08pQnWvtE+y1xaIiJA==
-  dependencies:
-    "@iconify/types" "^1.1.0"
-
-"@iconify/icons-simple-icons@^1.1.36":
-  version "1.2.15"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-simple-icons/-/icons-simple-icons-1.2.15.tgz#1422c1059bd6bb33d4f0e50aff69b4a214d01679"
-  integrity sha512-o505dPrDSEwlFCrbeSoSRGpep1ELZZWkioniosWBQrKTUXHXaullocUOJTSsJ/S/4BvCCiL5EqHWG+3SZgb2wQ==
   dependencies:
     "@iconify/types" "^1.1.0"
 
@@ -7426,11 +7405,6 @@ chownr@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-2.0.0.tgz#15bfbe53d2eab4cf70f18a8cd68ebe5b3cb1dece"
   integrity sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==
-
-chrome-extension-async@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/chrome-extension-async/-/chrome-extension-async-3.4.1.tgz#bac9b1924e85c0968ed19b4d56ec98cddaf42567"
-  integrity sha512-YBkFGFL+8MpkHvZ4nB/NU0uPkJU4LWjSlqxgXOwHcBe5sGs/YT0etEkmQXay3Op6p2c+34zf1k4Osi0ma4HtiQ==
 
 chrome-trace-event@^1.0.2:
   version "1.0.3"

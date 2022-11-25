@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
-import { EditableProps } from 'slate-react/dist/components/editable'
+import type { EditableProps } from 'slate-react/dist/components/editable'
 
 import { ComboboxConfig } from '.'
 
