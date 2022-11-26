@@ -17,7 +17,7 @@ export class AxiosX {
       return
     } else {
       const item = await this.client.get(url, config)
-      if (config.cache) {
+      if (config?.cache) {
         this.urlHash[key] = Date.now()
       }
       return getData(item)

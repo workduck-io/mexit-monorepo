@@ -45,7 +45,7 @@ export const useNamespaceApi = () => {
         })
       })
       .catch((e) => {
-        mog('Error fetching all namespaces', e)
+        mog('Error fetching all namespaces', { e })
         return undefined
       })
 
