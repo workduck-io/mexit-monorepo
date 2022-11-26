@@ -10,7 +10,7 @@ import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { Icon as Iconify } from '@iconify/react'
 import { useHighlights } from '../../Hooks/useHighlights'
 import { VisualState } from '../../Hooks/useSputlitContext'
-import { useHighlightStore2 } from '../../Stores/useHighlightStore'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
@@ -21,7 +21,7 @@ function Tooltip() {
   //
   const tooltipState = useSputlitStore((s) => s.highlightTooltipState)
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-  const highlights = useHighlightStore2((s) => s.highlights)
+  const highlights = useHighlightStore((s) => s.highlights)
   const { deleteHighlight, getEditableMap } = useHighlights()
   const { getILinkFromNodeid } = useLinks()
   const { removeHighlight } = useHighlighter()

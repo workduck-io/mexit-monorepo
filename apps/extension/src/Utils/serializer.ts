@@ -2,10 +2,10 @@ import {
   directKeys,
   DirectProperties,
   directPropertyKeys,
-  ElementHighlightMetadata2,
+  ElementHighlightMetadata,
   extractMetadata,
   generateTempId,
-  mappedKeys,
+  mappedKeys
 } from '@mexit/core'
 
 import { useAuthStore } from '../Hooks/useAuth'
@@ -15,7 +15,7 @@ export const serializeContent = (
   content: any[],
   nodeid: string,
   // If present, and if element.highlight is true, adds the metadata to the element
-  elementMetadata?: ElementHighlightMetadata2
+  elementMetadata?: ElementHighlightMetadata
 ) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {

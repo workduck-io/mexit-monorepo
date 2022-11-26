@@ -28,7 +28,7 @@ import { Theme } from '@mexit/shared'
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -81,8 +81,8 @@ export default function useRaju() {
   const { actOnReminder } = useReminders()
   const setLinks = useLinkStore((store) => store.setLinks)
   const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
-  const initHighlightBlockMap = useHighlightStore2((store) => store.initHighlightBlockMap)
-  const setHighlights = useHighlightStore2((store) => store.setHighlights)
+  const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
+  const setHighlights = useHighlightStore((store) => store.setHighlights)
 
   useEffect(() => {
     const handleMessage = (message) => {

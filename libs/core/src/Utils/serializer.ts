@@ -1,6 +1,6 @@
 // Direct properties are collated in the properties for api
 import { BlockMetaDataType } from '../Stores/blockStoreConstructor'
-import { ElementHighlightMetadata2 } from '../Types/Highlight'
+import { ElementHighlightMetadata } from '../Types/Highlight'
 
 // and then unfurled when converting back to editor content
 export const directPropertyKeys = [
@@ -41,7 +41,7 @@ export const mappedKeys = {
 
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
-export const generateElementMetadata = (elementMetadata: ElementHighlightMetadata2): ElementHighlightMetadata2 => {
+export const generateElementMetadata = (elementMetadata: ElementHighlightMetadata): ElementHighlightMetadata => {
   // delete elementMetadata.saveableRange['__isHighlightSource']
   return {
     ...elementMetadata,

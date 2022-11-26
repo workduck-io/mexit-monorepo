@@ -1,5 +1,5 @@
 import HighlightSource from 'web-highlighter/dist/model/source'
-import { ElementHighlightMetadata2 } from './Highlight'
+import { ElementHighlightMetadata } from './Highlight'
 
 import { AccessLevel } from './Mentions'
 
@@ -32,7 +32,7 @@ export interface NodeMetadata {
   lastEditedBy: string
   updatedAt: number
 
-  elementMetadata: ElementHighlightMetadata2
+  elementMetadata: ElementHighlightMetadata
   publicAccess?: boolean
   iconUrl?: string
   // The snippet ID with which all the children nodes should be populated

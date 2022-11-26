@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import { SnippetCards, CenteredFlex, List } from '@mexit/shared'
 
-import { useHighlightStore2 } from '../../Stores/useHighlightStore'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'
@@ -31,8 +31,8 @@ const basicOnboarding = [
 export function ContextInfoBar() {
   // const [search, setSearch] = useState('')
   // const inputRef = useRef<HTMLInputElement>(null)
-  const highlights = useHighlightStore2((state) => state.highlights)
-  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
+  const highlights = useHighlightStore((state) => state.highlights)
+  const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
   // const [searchedHighlights, setSearchedHighlights] = useState<SourceHighlights>()
 
   const pageHighlights = useMemo(() => {

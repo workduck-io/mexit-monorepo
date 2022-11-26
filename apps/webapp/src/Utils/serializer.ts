@@ -2,7 +2,7 @@ import {
   directKeys,
   DirectProperties,
   directPropertyKeys,
-  ElementHighlightMetadata2,
+  ElementHighlightMetadata,
   extractMetadata,
   generateTempId,
   mappedKeys,
@@ -12,7 +12,7 @@ import {
 import { useAuthStore } from '../Stores/useAuth'
 
 // From content to api
-export const serializeContent = (content: any[], nodeid: string, elementMetadata?: ElementHighlightMetadata2) => {
+export const serializeContent = (content: any[], nodeid: string, elementMetadata?: ElementHighlightMetadata) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
       return serializeSpecial[el.type](el, nodeid)

@@ -22,7 +22,7 @@ import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -51,8 +51,8 @@ export default function Chotu() {
   const recents = useRecentsStore((s) => s.lastOpened)
   const addNodeInRecents = useRecentsStore((s) => s.addRecent)
   const actOnReminder = useReminders().actOnReminder
-  const addHighlight = useHighlightStore2((s) => s.addHighlight)
-  const highlights = useHighlightStore2((s) => s.highlights)
+  const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const highlights = useHighlightStore((s) => s.highlights)
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const links = useLinkStore((state) => state.links)

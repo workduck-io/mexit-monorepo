@@ -1,7 +1,7 @@
 import { extractMetadata, Highlight, mog, NodeEditorContent, SEPARATOR, WORKSPACE_HEADER } from '@mexit/core'
 import toast from 'react-hot-toast'
 import { useAuthStore } from './useAuth'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useCallback } from 'react'
 import { isReadonly, usePermissions } from './usePermissions'
 import { useContentStore } from '../Stores/useContentStore'
@@ -12,8 +12,8 @@ import { deserializeContent } from '../Utils/serializer'
 import useRaju from './useRaju'
 
 export const useHighlights = () => {
-  const highlightBlockMap = useHighlightStore2((store) => store.highlightBlockMap)
-  const removeHighlightFromStore = useHighlightStore2((s) => s.removeHighlight)
+  const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
+  const removeHighlightFromStore = useHighlightStore((s) => s.removeHighlight)
   const { accessWhenShared } = usePermissions()
   const { getContent } = useContentStore()
   const { getILinkFromNodeid } = useLinks()

@@ -44,7 +44,7 @@ IN STORE
 }
  */
 
-export interface HighlightMetaBlock2 {
+export interface HighlightMetaBlock {
   parentTagName: string
   parentIndex: number
   textOffset: number
@@ -52,7 +52,7 @@ export interface HighlightMetaBlock2 {
 
 const MetdataTypes = 'highlightV1' as const
 
-export interface ElementHighlightMetadata2 {
+export interface ElementHighlightMetadata {
   type: typeof MetdataTypes
   id: string
 }
@@ -61,8 +61,8 @@ export interface ElementHighlightMetadata2 {
  * SaveableRange is info about where the highlight is in the document.
  */
 export interface SaveableRange {
-  startMeta: HighlightMetaBlock2
-  endMeta: HighlightMetaBlock2
+  startMeta: HighlightMetaBlock
+  endMeta: HighlightMetaBlock
   text: string
   id: string
 }

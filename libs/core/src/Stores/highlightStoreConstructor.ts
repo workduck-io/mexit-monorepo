@@ -1,6 +1,6 @@
 import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
 import { Contents, ILink, SharedNode } from '../Types/Editor'
-import { ElementHighlightMetadata2, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
+import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { mog } from '../Utils/mog'
 
 interface AddHighlightBlockToMap {
@@ -16,7 +16,7 @@ interface AddHighlightBlocksToMap {
 
 export type AddHighlightFn = (highlight: Highlight, mapOptions?: AddHighlightBlocksToMap) => void
 
-export interface HighlightStore2 {
+export interface HighlightStore {
   highlights: Highlights
   highlightBlockMap: HighlightBlockMap
 
@@ -56,11 +56,11 @@ const addToHighlightBlockMap = (
 }
 
 // LOOK Typed constructor
-export const highlightStoreConstructor2: StateCreator<
-  HighlightStore2,
-  SetState<HighlightStore2>,
-  GetState<HighlightStore2>,
-  StoreApi<HighlightStore2>
+export const highlightStoreConstructor: StateCreator<
+  HighlightStore,
+  SetState<HighlightStore>,
+  GetState<HighlightStore>,
+  StoreApi<HighlightStore>
 > = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
@@ -71,7 +71,7 @@ export const highlightStoreConstructor2: StateCreator<
 
     ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
-        const elementMetadata: ElementHighlightMetadata2 = block?.metadata?.elementMetadata
+        const elementMetadata: ElementHighlightMetadata = block?.metadata?.elementMetadata
         if (elementMetadata?.type === 'highlightV1' && elementMetadata?.id && this) {
           addToHighlightBlockMap(highlightBlockMap, {
             highlightId: elementMetadata.id,

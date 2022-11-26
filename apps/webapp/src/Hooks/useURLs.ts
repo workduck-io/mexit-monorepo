@@ -18,7 +18,7 @@ import {
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'
@@ -27,7 +27,7 @@ export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
-  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
+  const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
 
   const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
 
@@ -151,7 +151,7 @@ export const useURLFilters = () => {
   const globalJoin = useURLsFilterStore((state) => state.globalJoin)
   const tags = useDataStore((state) => state.tags)
   const links = useLinkStore((state) => state.links)
-  const getHighlightsOfUrl = useHighlightStore2((state) => state.getHighlightsOfUrl)
+  const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
   const linkFilterFunctions = useLinkFilterFunctions()
 
   const resetFilters = () => {

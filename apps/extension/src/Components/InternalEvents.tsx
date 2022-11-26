@@ -14,7 +14,7 @@ import { useEditorStore } from '../Hooks/useEditorStore'
 import { useHighlighter } from '../Hooks/useHighlighter'
 import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
@@ -165,8 +165,8 @@ function initAnalytics() {
 
 function handleHighlighter() {
   const setTooltipState = useSputlitStore((s) => s.setHighlightTooltipState)
-  const highlights = useHighlightStore2((s) => s.highlights)
-  const getHighlightsOfUrl = useHighlightStore2((s) => s.getHighlightsOfUrl)
+  const highlights = useHighlightStore((s) => s.highlights)
+  const getHighlightsOfUrl = useHighlightStore((s) => s.getHighlightsOfUrl)
   const highlighedIds: string[] = []
 
   useEffect(() => {

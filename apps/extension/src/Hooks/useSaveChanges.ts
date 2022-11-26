@@ -16,7 +16,7 @@ import {
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore2 } from '../Stores/useHighlightStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent, serializeContent } from '../Utils/serializer'
@@ -51,7 +51,7 @@ export function useSaveChanges() {
   const { getContent, setContent } = useContentStore()
   const { dispatch } = useRaju()
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const { addHighlight } = useHighlightStore2()
+  const { addHighlight } = useHighlightStore()
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()

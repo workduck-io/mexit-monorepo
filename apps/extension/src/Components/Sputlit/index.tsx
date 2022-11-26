@@ -6,7 +6,7 @@ import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { useHighlightStore2 } from '../../Stores/useHighlightStore'
+import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import Search from '../Search'
@@ -28,7 +28,7 @@ const Sputlit = () => {
   const { previewMode } = useEditorStore()
   const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
-  const getHighlightsOfUrl = useHighlightStore2((s) => s.getHighlightsOfUrl)
+  const getHighlightsOfUrl = useHighlightStore((s) => s.getHighlightsOfUrl)
 
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
