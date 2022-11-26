@@ -1,9 +1,7 @@
 import md5 from 'md5'
 import toast from 'react-hot-toast'
 
-import { client } from '@workduck-io/dwindle'
-
-import { mog, Link, Settify, WORKSPACE_HEADER, URL_DOMAIN_REG, apiURLs, extractLinksFromData } from '@mexit/core'
+import { extractLinksFromData, Link, mog, Settify, WORKSPACE_HEADER } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'

@@ -1,49 +1,32 @@
 import toast from 'react-hot-toast'
 
-import { client } from '@workduck-io/dwindle'
-
 import {
   AccessLevel,
-  apiURLs,
-  batchArray,
+  API,
   batchArrayWithNamespaces,
   extractMetadata,
   generateNamespaceId,
   iLinksToUpdate,
   MIcon,
-  mog,
-  WORKSPACE_HEADER
+  mog
 } from '@mexit/core'
 
-import { useApiStore } from '../../Stores/useApiStore'
-import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
-import '../../Utils/apiClient'
 import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
 import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const { setNamespaces, setIlinks } = useDataStore()
-
-  const setRequest = useApiStore.getState().setRequest
   const { updateFromContent } = useUpdater()
 
-  const workspaceHeaders = () => ({
-    [WORKSPACE_HEADER]: getWorkspaceId(),
-    Accept: 'application/json, text/plain, */*'
-  })
-
   const getAllNamespaces = async () => {
-    const namespaces = await client
-      .get(apiURLs.namespaces.getAll(), {
-        headers: workspaceHeaders()
-      })
+    const namespaces = await API.namespace
+      .getAll()
       .then((d: any) => {
         // mog('namespaces all', d.data)
-        return d.data.map((item: any) => {
+        return d.map((item: any) => {
           // metadata is json string parse to object
           return {
             ns: {
@@ -62,7 +45,7 @@ export const useNamespaceApi = () => {
         })
       })
       .catch((e) => {
-        mog('Error fetching all namespaces', e)
+        mog('Error fetching all namespaces', { e })
         return undefined
       })
 
@@ -84,12 +67,11 @@ export const useNamespaceApi = () => {
       const ids = batchArrayWithNamespaces(toUpdateLocal, ns, 10)
 
       const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
-      const requestData = { time: Date.now(), method: 'GET' }
 
       fulfilled.forEach((nodes) => {
         if (nodes) {
           const { rawResponse } = nodes
-          setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
+          // setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
 
           if (rawResponse) {
             rawResponse.forEach((nodeResponse) => {
@@ -104,22 +86,20 @@ export const useNamespaceApi = () => {
   }
 
   const getNamespace = async (id: string) => {
-    const namespace = await client
-      .get(apiURLs.namespaces.get(id), {
-        headers: workspaceHeaders()
-      })
+    const namespace = await API.namespace
+      .get(id)
       .then((d: any) => {
-        mog('namespaces specific', { data: d.data, id })
-        // return d.data?.nodeHierarchy
+        mog('namespaces specific', { data: d, id })
+        // return d?.nodeHierarchy
 
         return {
-          id: d.data?.id,
-          name: d.data?.name,
-          icon: d.data?.metadata?.icon ?? undefined,
-          nodeHierarchy: d.data?.nodeHierarchy,
-          createdAt: d.data?.createdAt,
-          updatedAt: d.data?.updatedAt,
-          publicAccess: d.data?.publicAccess
+          id: d?.id,
+          name: d?.name,
+          icon: d?.metadata?.icon ?? undefined,
+          nodeHierarchy: d?.nodeHierarchy,
+          createdAt: d?.createdAt,
+          updatedAt: d?.updatedAt,
+          publicAccess: d?.publicAccess
         }
       })
       .catch((e) => {
@@ -131,35 +111,17 @@ export const useNamespaceApi = () => {
   }
 
   const getPublicNamespaceAPI = async (namespaceID: string) => {
-    const res = await client
-      .get(apiURLs.public.getPublicNS(namespaceID), {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
+    const res = await API.namespace.getPublic(namespaceID)
     return res
   }
 
   const makeNamespacePublic = async (namespaceID: string) => {
-    const res = await client
-      .patch(apiURLs.namespaces.makePublic(namespaceID), null, {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
+    const res = await API.namespace.makePublic(namespaceID)
     return res
   }
 
   const makeNamespacePrivate = async (namespaceID: string) => {
-    const res = await client
-      .patch(apiURLs.namespaces.makePrivate(namespaceID), null, {
-        headers: workspaceHeaders()
-      })
-      .then((response: any) => {
-        return response.data
-      })
+    const res = await API.namespace.makePrivate(namespaceID)
     return res
   }
 
@@ -176,18 +138,14 @@ export const useNamespaceApi = () => {
           }
         }
       }
-      const res = await client
-        .post(apiURLs.namespaces.create, req, {
-          headers: workspaceHeaders()
-        })
-        .then((d: any) => ({
-          id: req.id,
-          name: name,
-          iconUrl: req.metadata.icon,
-          access: 'MANAGE' as const,
-          createdAt: Date.now(),
-          updatedAt: Date.now()
-        }))
+      const res = await API.namespace.create(req).then((d: any) => ({
+        id: req.id,
+        name: name,
+        iconUrl: req.metadata.icon,
+        access: 'MANAGE' as const,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      }))
 
       mog('We created a namespace', { res })
 
@@ -199,19 +157,7 @@ export const useNamespaceApi = () => {
 
   const changeNamespaceName = async (id: string, name: string) => {
     try {
-      const res = await client
-        .patch(
-          apiURLs.namespaces.update,
-          {
-            type: 'NamespaceRequest',
-            id,
-            name
-          },
-          {
-            headers: workspaceHeaders()
-          }
-        )
-        .then(() => true)
+      const res = await API.namespace.update({ id, name }).then(() => true)
       return res
     } catch (err) {
       throw new Error('Unable to update namespace')
@@ -220,19 +166,12 @@ export const useNamespaceApi = () => {
 
   const changeNamespaceIcon = async (id: string, name: string, icon: MIcon) => {
     try {
-      const res = await client
-        .patch(
-          apiURLs.namespaces.update,
-          {
-            type: 'NamespaceRequest',
-            id,
-            name,
-            metadata: { icon }
-          },
-          {
-            headers: workspaceHeaders()
-          }
-        )
+      const res = await API.namespace
+        .update({
+          id,
+          name,
+          metadata: { icon }
+        })
         .then(() => icon)
       return res
     } catch (err) {
@@ -242,20 +181,7 @@ export const useNamespaceApi = () => {
 
   const shareNamespace = async (id: string, userIDs: string[], accessType: AccessLevel) => {
     try {
-      const res = await client.post(
-        apiURLs.namespaces.share,
-        {
-          type: 'SharedNamespaceRequest',
-          namespaceID: id,
-          userIDToAccessTypeMap: userIDs.reduce((acc, userID) => {
-            acc[userID] = accessType
-            return acc
-          }, {} as Record<string, AccessLevel>)
-        },
-        {
-          headers: workspaceHeaders()
-        }
-      )
+      const res = await API.namespace.share(id, userIDs, accessType)
       mog('Shared a namespace', { res })
       return res
     } catch (err) {
@@ -265,14 +191,7 @@ export const useNamespaceApi = () => {
 
   const revokeNamespaceShare = async (id: string, userIDs: string[]) => {
     try {
-      const res = await client.delete(apiURLs.namespaces.delete, {
-        data: {
-          type: 'SharedNamespaceRequest',
-          namespaceID: id,
-          userIDs
-        },
-        headers: workspaceHeaders()
-      })
+      const res = await API.namespace.revokeAccess(id, userIDs)
       mog('revoke access users', res)
       return res
     } catch (err) {
@@ -282,18 +201,10 @@ export const useNamespaceApi = () => {
 
   const updateNamespaceShare = async (id: string, userIDToAccessTypeMap: { [userid: string]: AccessLevel }) => {
     try {
-      const payload = {
-        namespaceID: id,
-        userIDToAccessTypeMap
-      }
-      return await client
-        .post(apiURLs.namespaces.share, payload, {
-          headers: workspaceHeaders()
-        })
-        .then((resp) => {
-          mog('changeUsers resp', { resp })
-          return resp
-        })
+      return await API.namespace.updateAccess(id, userIDToAccessTypeMap).then((resp) => {
+        mog('changeUsers resp', { resp })
+        return resp
+      })
     } catch (err) {
       throw new Error(`Unable to update namespace access: ${err}`)
     }
@@ -301,14 +212,10 @@ export const useNamespaceApi = () => {
 
   const getAllSharedUsers = async (id: string): Promise<{ users: Record<string, string> }> => {
     try {
-      return await client
-        .get(apiURLs.namespaces.getUsersOfShared(id), {
-          headers: workspaceHeaders()
-        })
-        .then((resp: any) => {
-          mog('get all shared users', resp)
-          return { users: resp.data }
-        })
+      return await API.share.getNamespacePermissions(id).then((resp: any) => {
+        mog('get all shared users', resp)
+        return { users: resp }
+      })
     } catch (err) {
       mog(`Unable to get shared namespace users: ${err}`)
       return { users: {} }

@@ -1,14 +1,10 @@
-import { client, useAuth } from '@workduck-io/dwindle'
+import { useAuth } from '@workduck-io/dwindle'
 
-import { ILink, apiURLs, mog, WORKSPACE_HEADER, USE_API } from '@mexit/core'
+import { API, ILink, mog, USE_API } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
-import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useApi } from './API/useNodeAPI'
 import { getTitleFromPath } from './useLinks'
-import { useSaver } from './useSaver'
-import { useSearch } from './useSearch'
 
 const useArchive = () => {
   const setArchive = useDataStore((state) => state.setArchive)
@@ -16,15 +12,12 @@ const useArchive = () => {
   const unArchive = useDataStore((state) => state.unArchive)
   const addInArchive = useDataStore((state) => state.addInArchive)
   const removeArchive = useDataStore((state) => state.removeFromArchive)
-  const { getDataAPI } = useApi()
 
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
-  const setContent = useContentStore((store) => store.setContent)
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
 
-  const { updateDocument } = useSearch()
   const { userCred } = useAuth()
 
   const updateArchiveLinks = (addedILinks: Array<ILink>, removedILinks: Array<ILink>): Array<ILink> => {
@@ -55,25 +48,15 @@ const useArchive = () => {
     }
 
     if (userCred) {
-      return await client
-        .put(
-          apiURLs.archive.archiveInNamespace(namespaceID),
-          {
-            ids: nodes.map((i) => i.nodeid)
-          },
-          {
-            headers: {
-              [WORKSPACE_HEADER]: getWorkspaceId(),
-              Accept: 'application/json, text/plain, */*'
-            }
-          }
+      return await API.node
+        .archive(
+          namespaceID,
+          nodes.map((node) => node.nodeid)
         )
-        .then((d: any) => {
+        .then((archivedNodeids: any) => {
           // We only get the data for archived nodeids in this response
 
-          const archivedNodeids = d.data
-
-          mog('Archived Nodes', { archivedNodeids, d })
+          mog('Archived Nodes', { archivedNodeids })
           if (archivedNodeids && archivedNodeids?.length > 0) {
             const archivedNodes = nodes
               .filter((n) => archivedNodeids.includes(n.nodeid))
@@ -113,40 +96,22 @@ const useArchive = () => {
     if (!USE_API) {
       return unArchive(nodes[0])
     }
-    await client
-      .put(
-        apiURLs.archive.unArchiveNodes,
-        {
-          ids: nodes.map((i) => i.nodeid)
-        },
-        {
-          headers: {
-            [WORKSPACE_HEADER]: getWorkspaceId(),
-            Accept: 'application/json, text/plain, */*'
-          }
-        }
-      )
+    await API.node
+      .unarchive(nodes.map((node) => node.nodeid))
       .then((d) => {
-        mog('Unarchive Data', d.data)
-        if (d.data) unArchive(nodes[0])
-        return d.data
+        mog('Unarchive Data', d)
+        if (d) unArchive(nodes[0])
+        return d
       })
       .catch(console.error)
   }
 
   // TODO: figure how namespaces are working with archive hierarchy
   const getArchiveNotesHierarchy = async () => {
-    await client
-      .get(apiURLs.archive.getArchivedNodes, {
-        headers: {
-          [WORKSPACE_HEADER]: getWorkspaceId(),
-          Accept: 'application/json, text/plain, */*'
-        }
-      })
-      .then((d) => {
-        if (d.data) {
-          const hierarchy = d.data
-
+    await API.node
+      .allArchived()
+      .then((hierarchy) => {
+        if (hierarchy) {
           mog('getArchiveNotesHierarchy', { hierarchy })
 
           // const archivedNotes = hierarchyParser(hierarchy, { withParentNodeId: true, allowDuplicates: true })
@@ -167,7 +132,7 @@ const useArchive = () => {
 
           // setArchive(archivedNotes)
         }
-        return d.data
+        return hierarchy
       })
       .catch(mog)
   }
@@ -195,20 +160,8 @@ const useArchive = () => {
     }
 
     if (userCred) {
-      const res = await client
-        .post(
-          apiURLs.archive.deleteArchivedNodes,
-          {
-            ids: nodeids.map((i) => i.nodeid)
-          },
-          {
-            headers: {
-              [WORKSPACE_HEADER]: getWorkspaceId(),
-              Accept: 'application/json, text/plain, */*'
-            }
-          }
-        )
-        // .then(console.log)
+      const res = await API.node
+        .deleteArchived(nodeids.map((i) => i.nodeid))
         .then(() => {
           removeArchive(nodeids)
         })

@@ -1,6 +1,6 @@
-import { client, useAuth } from '@workduck-io/dwindle'
+import { useAuth } from '@workduck-io/dwindle'
 
-import { apiURLs, WORKSPACE_HEADER } from '@mexit/core'
+import { API } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
@@ -24,82 +24,40 @@ export const useBookmarks = () => {
     return [...bookmarks].indexOf(nodeid) > -1
   }
 
-  const addBookmark = async (nodeid: string): Promise<boolean> => {
+  const addBookmark = async (nodeid: string) => {
     if (userCred) {
-      return await client
-        .post(
-          apiURLs.bookmarks.create(nodeid),
-          {
-            type: 'BookmarkRequest'
-          },
-          {
-            headers: {
-              [WORKSPACE_HEADER]: workspaceDetails.id,
-              Accept: 'application/json, text/plain, */*'
-            }
-          }
-        )
+      await API.bookmark
+        .create(nodeid)
         .then(() => {
           addBookmarks([nodeid])
         })
-        .then(() => {
-          return true
-        })
-        .catch((e) => {
-          console.log(e)
-          return false
-        })
+        .catch(console.error)
     }
-    return false
   }
 
   const getAllBookmarks = async () => {
-    await client
-      .get(apiURLs.bookmarks.getAll, {
-        headers: {
-          [WORKSPACE_HEADER]: workspaceDetails.id,
-          Accept: 'application/json, text/plain, */*'
-        }
-      })
+    await API.bookmark
+      .getAll()
       .then((d: any) => {
-        if (d.data) {
-          const bookmarks = d.data.filter((nodeid: string) => getPathFromNodeid(nodeid) !== undefined)
+        if (d) {
+          const bookmarks = d.filter((nodeid: string) => getPathFromNodeid(nodeid) !== undefined)
           setBookmarks(bookmarks)
         }
-        return d.data
+        return d
       })
       .catch(console.error)
   }
 
-  const removeBookmark = async (nodeid: string): Promise<boolean> => {
+  const removeBookmark = async (nodeid: string) => {
     if (userCred) {
-      const res = await client
-        .patch(
-          apiURLs.bookmarks.create(nodeid),
-          {
-            type: 'BookmarkRequest'
-          },
-          {
-            headers: {
-              [WORKSPACE_HEADER]: workspaceDetails.id,
-              Accept: 'application/json, text/plain, */*'
-            }
-          }
-        )
+      return await API.bookmark
+        .remove(nodeid)
         // .then(console.log)
         .then(() => {
           removeBookmarks([nodeid])
         })
-        .then(() => {
-          return true
-        })
-        .catch((e) => {
-          console.log(e)
-          return false
-        })
-      return res
+        .catch(console.error)
     }
-    return false
   }
 
   return { isBookmark, addBookmark, removeBookmark, getAllBookmarks }

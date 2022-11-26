@@ -1,32 +1,24 @@
-import { client } from '@workduck-io/dwindle'
-
-import { apiURLs, mog, Reminder } from '@mexit/core'
+import { API, Reminder } from '@mexit/core'
 
 import { getReminderAssociatedId } from '../useReminders'
 import { useAPIHeaders } from './useAPIHeaders'
 
 export const useReminderAPI = () => {
-  const { workspaceHeaders, workspaceId } = useAPIHeaders()
+  const { workspaceId } = useAPIHeaders()
 
   const getReminder = async (id: string) => {
-    const res = await client.get(apiURLs.reminders.reminderByID(id), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.get(id)
+    return res
   }
 
   const getAllWorkspaceReminders = async () => {
-    const res = await client.get(apiURLs.reminders.remindersOfWorkspace, {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.getAllOfWorkspace()
+    return res
   }
 
   const getAllNodeReminders = async (nodeId: string) => {
-    const res = await client.get(apiURLs.reminders.remindersOfNode(nodeId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.getAllOfNode(nodeId)
+    return res
   }
 
   const saveReminder = async (reminder: Reminder) => {
@@ -39,26 +31,18 @@ export const useReminderAPI = () => {
       properties: reminder
     }
 
-    // mog('Saving reminder', { reminder, reqData })
-
-    const res = await client.post(apiURLs.reminders.saveReminder, reqData, {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.save(reqData)
+    return res
   }
 
   const deleteReminder = async (id: string) => {
-    const res = await client.delete(apiURLs.reminders.reminderByID(id), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.delete(id)
+    return res
   }
 
   const deleteAllNode = async (nodeId: string) => {
-    const res = await client.delete(apiURLs.reminders.remindersOfNode(nodeId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reminder.deleteAllOfNode(nodeId)
+    return res
   }
 
   return {

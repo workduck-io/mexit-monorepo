@@ -1,24 +1,20 @@
-import { client } from '@workduck-io/dwindle'
-
 import {
-  apiURLs,
+  API,
   batchArray,
   defaultContent,
   DEFAULT_NAMESPACE,
   extractMetadata,
   getTagsFromContent,
-  GET_REQUEST_MINIMUM_GAP,
+  GET_REQUEST_MINIMUM_GAP_IN_MS,
   mog,
   NodeEditorContent,
   removeNulls
 } from '@mexit/core'
 
-import { isRequestedWithin, useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
@@ -28,7 +24,6 @@ import { useLinks } from '../useLinks'
 import { useNodes } from '../useNodes'
 import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
-import { useAPIHeaders } from './useAPIHeaders'
 
 export const useApi = () => {
   const getMetadata = useContentStore((store) => store.getMetadata)
@@ -42,9 +37,6 @@ export const useApi = () => {
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { updateSnippet } = useSnippets()
 
-  const setRequest = useApiStore.getState().setRequest
-
-  const { workspaceHeaders } = useAPIHeaders()
   const currentUser = useAuthStore((store) => store.userDetails)
 
   const { addLastOpened } = useLastOpened()
@@ -72,16 +64,14 @@ export const useApi = () => {
       tags: getTagsFromContent(options.content)
     }
 
-    const data = await client
-      .post(apiURLs.node.create, reqData, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        const metadata = extractMetadata(d.data)
-        const content = d.data.data ? deserializeContent(d.data.data) : options.content
+    const data = await API.node
+      .save(reqData)
+      .then((d) => {
+        const metadata = extractMetadata(d)
+        const content = d.data ? deserializeContent(d.data) : options.content
         updateFromContent(noteID, content, metadata)
         addLastOpened(noteID)
-        return d.data
+        return d
       })
       .catch((e) => {
         console.error(e)
@@ -114,24 +104,20 @@ export const useApi = () => {
     mog('BulkCreateNodes', { reqData, noteID, namespaceID, options })
     setContent(noteID, options.content)
 
-    const data = await client
-      .post(apiURLs.node.bulkCreate, reqData, {
-        headers: workspaceHeaders()
+    const data = await API.node.bulkCreate(reqData).then((d) => {
+      const addedILinks = []
+      const removedILinks = []
+      const { changedPaths, node } = d
+      Object.entries(changedPaths).forEach(([nsId, changed]: [string, any]) => {
+        const { addedPaths: nsAddedILinks, removedPaths: nsRemovedILinks } = changed
+        addedILinks.push(...nsAddedILinks)
+        removedILinks.push(...nsRemovedILinks)
       })
-      .then((d: any) => {
-        const addedILinks = []
-        const removedILinks = []
-        const { changedPaths, node } = d.data
-        Object.entries(changedPaths).forEach(([nsId, changed]: [string, any]) => {
-          const { addedPaths: nsAddedILinks, removedPaths: nsRemovedILinks } = changed
-          addedILinks.push(...nsAddedILinks)
-          removedILinks.push(...nsRemovedILinks)
-        })
 
-        updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-        setMetadata(noteID, extractMetadata(node))
-        addLastOpened(noteID)
-      })
+      updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
+      setMetadata(noteID, extractMetadata(node))
+      addLastOpened(noteID)
+    })
 
     return data
   }
@@ -143,11 +129,10 @@ export const useApi = () => {
     }
 
     // * TODO: Add append to Note for shared notes
-    const url = apiURLs.node.append(noteId)
 
-    const res = await client.patch(url, reqData, { headers: workspaceHeaders() })
+    const res = await API.node.append(noteId, reqData)
 
-    if (res?.data) {
+    if (res) {
       // toast('Task added!')
     }
   }
@@ -182,26 +167,24 @@ export const useApi = () => {
       reqData['namespaceID'] = undefined
     }
 
-    const url = isShared ? apiURLs.share.updateNode : apiURLs.node.create
-    const data = await client
-      .post(url, reqData, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
-        const contentToSet = d.data.data ? deserializeContent(d.data.data) : content
-        const origMetadata = extractMetadata(d.data)
+    const dataPromise = isShared ? API.share.updateNode(reqData) : API.node.save(reqData)
+
+    const data = await dataPromise
+      .then((d) => {
+        const contentToSet = d.data ? deserializeContent(d.data) : content
+        const origMetadata = extractMetadata(d)
         const metadata = isShared
           ? {
               ...origMetadata,
               updatedAt: Date.now(),
               lastEditedBy: currentUser.userID
             }
-          : extractMetadata(d.data)
+          : extractMetadata(d)
 
         setContent(noteID, contentToSet, metadata)
 
         addLastOpened(noteID)
-        return d.data
+        return d
       })
       .catch((e) => {
         console.error(e)
@@ -210,58 +193,39 @@ export const useApi = () => {
   }
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
-    const url = isShared ? apiURLs.share.getSharedNode(nodeid) : apiURLs.node.get(nodeid)
-    if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
-      console.warn('\nAPI has been requested before, cancelling\n')
-      return
-    }
-
-    const res = await client
-      .get(url, {
-        headers: workspaceHeaders()
-      })
-      .then((d: any) => {
+    const res = await API.node
+      .getById(nodeid, { cache: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
+      .then((d) => {
         if (d) {
-          const content = deserializeContent(d.data.data)
+          const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
+          // mog('[API]: Get Note data', { content })
           if (isUpdate) updateFromContent(nodeid, content)
 
-          return { data: d.data.data, metadata: extractMetadata(d.data), version: d.data.version ?? undefined }
+          return { data: content, metadata: extractMetadata(d), version: d.version ?? undefined }
         }
       })
       .catch((e) => {
         console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
       })
 
-    if (res) {
-      return { content: deserializeContent(res.data), metadata: res.metadata ?? undefined, version: res.version }
-    }
+    return res
   }
 
   const makeNotePublic = async (nodeId: string) => {
-    const URL = apiURLs.node.makePublic(nodeId)
-    return await client
-      .patch(URL, null, {
-        withCredentials: false,
-        headers: workspaceHeaders()
-      })
+    return await API.node
+      .makePublic(nodeId)
       .then((resp) => {
         setNodePublic(nodeId)
         return nodeId
       })
-
       .catch((error) => {
         mog('makeNotePublicError', { error })
       })
   }
 
   const makeNotePrivate = async (nodeId: string) => {
-    const URL = apiURLs.node.makePrivate(nodeId)
-
-    return await client
-      .patch(URL, null, {
-        withCredentials: false,
-        headers: workspaceHeaders()
-      })
+    return await API.node
+      .makePrivate(nodeId)
       .then((resp) => {
         setNodePrivate(nodeId)
         return nodeId
@@ -272,28 +236,23 @@ export const useApi = () => {
   }
 
   const getPublicNodeAPI = async (nodeId: string) => {
-    const res = await client
-      .get(apiURLs.public.getPublicNode(nodeId), {
-        headers: {
-          Accept: 'application/json, text/plain, */*'
-        }
-      })
-      .then((d: any) => {
-        const metadata = {
-          createdBy: d.data.createdBy,
-          createdAt: d.data.createdAt,
-          lastEditedBy: d.data.lastEditedBy,
-          updatedAt: d.data.updatedAt
-        }
+    const res = await API.node.getPublic(nodeId, { cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
+      if (!d) return
+      const metadata = {
+        createdBy: d.createdBy,
+        createdAt: d.createdAt,
+        lastEditedBy: d.lastEditedBy,
+        updatedAt: d.updatedAt
+      }
 
-        // console.log(metadata, d.data)
-        return {
-          title: d.data.title,
-          data: d.data.data,
-          metadata: removeNulls(metadata),
-          version: d.data.version ?? undefined
-        }
-      })
+      // console.log(metadata, d.data)
+      return {
+        title: d.title,
+        data: d.data,
+        metadata: removeNulls(metadata),
+        version: d.version ?? undefined
+      }
+    })
 
     if (res) {
       return {
@@ -330,14 +289,12 @@ export const useApi = () => {
       template: template ?? false
     }
 
-    const data = await client
-      .post(apiURLs.snippet.create, reqData, {
-        headers: workspaceHeaders()
-      })
+    const data = await API.snippet
+      .create(reqData)
       .then((d) => {
         mog('savedData', { d })
-        setMetadata(snippetId, extractMetadata(d.data))
-        return d.data
+        setMetadata(snippetId, extractMetadata(d))
+        return d
       })
       .catch((e) => {
         console.error(e)
@@ -346,14 +303,9 @@ export const useApi = () => {
   }
 
   const getAllSnippetsByWorkspace = async () => {
-    const data = await client
-      .get(apiURLs.snippet.getAllSnippetsByWorkspace, {
-        headers: workspaceHeaders()
-      })
+    const data = await API.snippet
+      .allOfWorkspace()
       .then((d) => {
-        return d.data
-      })
-      .then((d: any) => {
         const snippets = useSnippetStore.getState().snippets
 
         const newSnippets = d.filter((snippet) => {
@@ -381,19 +333,11 @@ export const useApi = () => {
           const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
             const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-            const requestData = { time: Date.now(), method: 'GET' }
-
             res.fulfilled.forEach(async (snippets) => {
-              setRequest(apiURLs.snippet.bulkGet, {
-                ...requestData,
-                url: apiURLs.snippet.bulkGet
-              })
-
               if (snippets) {
                 snippets.forEach((snippet) => updateSnippet(snippet))
               }
             })
-
             mog('RunBatchWorkerSnippetsRes', { res, ids })
           }
         }
@@ -403,17 +347,7 @@ export const useApi = () => {
   }
 
   const getById = async (id: string) => {
-    const url = apiURLs.snippet.getById(id)
-
-    const data = await client
-      .get(url, {
-        headers: workspaceHeaders()
-      })
-      .then((d) => {
-        mog('snippet by id', { d })
-        return d.data
-      })
-
+    const data = await API.snippet.getById(id)
     return data
   }
 
@@ -428,26 +362,16 @@ export const useApi = () => {
       nodeID: nodeId
     }
 
-    const data = await client
-      .post(apiURLs.node.refactor, reqData, {
-        headers: workspaceHeaders()
-      })
-      .then((response) => {
-        mog('refactor', response.data)
-        return response.data
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    const data = await API.node.refactor(reqData).catch((error) => {
+      console.error(error)
+    })
 
     return data
   }
 
   const deleteAllVersionOfSnippet = async (snippetID: string) => {
-    await client
-      .delete(apiURLs.snippet.deleteAllVersionsOfSnippet(snippetID), {
-        headers: workspaceHeaders()
-      })
+    await API.snippet
+      .deleteAllVersions(snippetID)
       .then((response) => {
         mog('SnippetDeleteSuccessful')
       })

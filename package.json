@@ -19,6 +19,7 @@
     "@dicebear/avatars-male-sprites": "^4.10.5",
     "@udecode/plate": "~16.4.1",
     "@uifabric/styling": "^7.20.0",
+    "axios": "latest",
     "chrono-node": "^2.3.8",
     "color-scheme": "^1.0.1",
     "date-fns": "^2.28.0",

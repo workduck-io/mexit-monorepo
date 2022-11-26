@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Cookies from 'universal-cookie'
 
-import { apiURLs, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
@@ -13,7 +13,6 @@ import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { getTitleFromPath } from '../Hooks/useLinks'
-import { isRequestedWithin } from '../Stores/useApiStore'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicEditorWrapper = styled.div`
@@ -48,12 +47,10 @@ const PublicNodeView = () => {
   useEffect(() => {
     async function getPublicNodeContent() {
       try {
+        const node = await getPublicNodeAPI(nodeId)
         // Only checking these for public namespaces view
         // No need for trying this for individual nodes on frontend
-        if (
-          isRequestedWithin(5, `${apiURLs.public.getPublicNode(nodeId)}`) &&
-          window.location.pathname.startsWith('/share/namespace')
-        ) {
+        if (!node && window.location.pathname.startsWith('/share/namespace')) {
           const nodeContent = getContent(nodeId)
           const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
           setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
@@ -61,12 +58,8 @@ const PublicNodeView = () => {
           // mog('check', { nodeContent, nodeProperties })
         } else {
           setShowLoader(true)
-
-          const node = await getPublicNodeAPI(nodeId)
-
           setNode({ ...node, id: nodeId })
           setContent(node.id, node.content, node?.metadata)
-
           setShowLoader(false)
         }
       } catch (error) {

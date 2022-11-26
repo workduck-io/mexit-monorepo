@@ -3,8 +3,7 @@ import React, { useMemo } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 
-import { defaultThemes } from '@mexit/shared'
-import { Notification } from '@mexit/shared'
+import { defaultThemes, Notification } from '@mexit/shared'
 
 import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'

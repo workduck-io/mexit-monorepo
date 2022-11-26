@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
 
 import toast from 'react-hot-toast'
-import StateManager from 'react-select'
 
-import { mog, runBatch } from '@mexit/core'
+import { API, mog, runBatch } from '@mexit/core'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
@@ -22,6 +21,7 @@ import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const { updateBaseNode } = useNodes()
   const initHighlights = useHighlightStore((store) => store.initHighlights)
@@ -68,7 +68,7 @@ export const useInitLoader = () => {
 
   useEffect(() => {
     if (isAuthenticated && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
-      mog('Inside InitLoader', { isAuthenticated })
+      API.setWorkspaceHeader(getWorkspaceId())
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
