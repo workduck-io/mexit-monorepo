@@ -167,8 +167,8 @@ export const useApi = () => {
       reqData['namespaceID'] = undefined
     }
 
-    const req = API.node.save
-    const data = await req(reqData)
+    const data = await API.node
+      .save(reqData)
       .then((d) => {
         const contentToSet = d.data ? deserializeContent(d.data) : content
         const origMetadata = extractMetadata(d)
@@ -196,19 +196,18 @@ export const useApi = () => {
       .getById(nodeid, { cache: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
       .then((d) => {
         if (d) {
-          const content = deserializeContent(d.data)
+          const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
+          // mog('[API]: Get Note data', { content })
           if (isUpdate) updateFromContent(nodeid, content)
 
-          return { data: d.data, metadata: extractMetadata(d), version: d.version ?? undefined }
+          return { data: content, metadata: extractMetadata(d), version: d.version ?? undefined }
         }
       })
       .catch((e) => {
         console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
       })
 
-    if (res) {
-      return { content: deserializeContent(res.data), metadata: res.metadata ?? undefined, version: res.version }
-    }
+    return res
   }
 
   const makeNotePublic = async (nodeId: string) => {

@@ -121,7 +121,8 @@ export const useNodeShareAPI = () => {
 
   const getUsersOfSharedNode = async (nodeid: string): Promise<{ users: Record<string, string> }> => {
     try {
-      return await API.share.getNodePermissions(nodeid)
+      const users = await API.share.getNodePermissions(nodeid)
+      return { users }
     } catch (e) {
       mog('Failed to get SharedUsers', { e })
       return { users: {} }
