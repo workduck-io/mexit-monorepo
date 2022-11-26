@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { useAuth } from '@workduck-io/dwindle'
+import { client, useAuth } from '@workduck-io/dwindle'
 
+import { API } from '@mexit/core'
 import { addIconsToIconify } from '@mexit/shared'
 
 import { useInitLoader } from '../Hooks/useInitLoader'
@@ -10,8 +11,8 @@ import config from '../config'
 
 const Init = () => {
   const { initCognito } = useAuth()
-
   useEffect(() => {
+    API.init(client as any)
     const initUserAndApp = () => {
       initCognito(
         {
