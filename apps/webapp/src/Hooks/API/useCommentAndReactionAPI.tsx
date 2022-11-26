@@ -1,9 +1,4 @@
-import { client } from '@workduck-io/dwindle'
-
-import { apiURLs, mog, MIcon, APIComment, APIReaction, GET_REQUEST_MINIMUM_GAP } from '@mexit/core'
-
-import { useAPIHeaders } from './useAPIHeaders'
-import { isRequestedWithin } from '../../Stores/useApiStore'
+import { API, APIComment, APIReaction, GET_REQUEST_MINIMUM_GAP_IN_MS, MIcon, mog } from '@mexit/core'
 
 interface ReactionRequests {
   nodeId: string
@@ -13,8 +8,6 @@ interface ReactionRequests {
 }
 
 export const useReactionAPI = () => {
-  const { workspaceHeaders } = useAPIHeaders()
-  // NOt empty
   const addReaction = async (reaction: APIReaction) => {
     const reqData: ReactionRequests = {
       action: 'ADD',
@@ -25,10 +18,8 @@ export const useReactionAPI = () => {
 
     mog('Saving reaction', { reaction, reqData })
 
-    const res = await client.post(apiURLs.reactions.react, reqData, {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reaction.react(reqData)
+    return res
   }
 
   const deleteReaction = async (reaction: APIReaction) => {
@@ -40,10 +31,8 @@ export const useReactionAPI = () => {
     }
     mog('Deleting reaction', { reaction, reqData })
 
-    const res = await client.post(apiURLs.reactions.react, reqData, {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reaction.react(reqData)
+    return res
   }
 
   /**
@@ -63,29 +52,21 @@ export const useReactionAPI = () => {
       }
       */
   const getReactionsOfNote = async (nodeId: string, force = false) => {
-    const url = apiURLs.reactions.allNote(nodeId)
-    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !force) {
-      console.warn('\nAPI has been requested before, cancelling\n')
-      return
-    }
-    const res = await client.get(url, {
-      headers: workspaceHeaders()
+    const res = await API.reaction.getAllOfNode(nodeId, {
+      cache: true,
+      expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
-    return res.data
+    return res
   }
 
   const getReactionsOfBlock = async (nodeId: string, blockId: string) => {
-    const res = await client.get(apiURLs.reactions.allBlock(nodeId, blockId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reaction.getAllOfBlock(nodeId, blockId)
+    return res
   }
 
   const getBlockReactionDetails = async (nodeId: string, blockId: string) => {
-    const res = await client.get(apiURLs.reactions.blockReactionDetails(nodeId, blockId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.reaction.getDetailedOfBlock(nodeId, blockId)
+    return res
   }
 
   return {
@@ -98,8 +79,6 @@ export const useReactionAPI = () => {
 }
 
 export const useCommentAPI = () => {
-  const { workspaceHeaders } = useAPIHeaders()
-
   const saveComment = async (comment: APIComment) => {
     const reqData = {
       nodeId: comment.nodeId,
@@ -111,71 +90,51 @@ export const useCommentAPI = () => {
 
     mog('Saving comment', { comment, reqData })
 
-    const res = await client.post(apiURLs.comments.saveComment, reqData, {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.create(reqData)
+    return res
   }
 
   const getComment = async (nodeid: string, id: string) => {
-    const res = await client.get(apiURLs.comments.comment(nodeid, id), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.get(nodeid, id)
+    return res
   }
 
   const deleteComment = async (nodeid: string, id: string) => {
-    const res = await client.delete(apiURLs.comments.comment(nodeid, id), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.delete(nodeid, id)
+    return res
   }
 
   const getCommentsByNodeId = async (nodeId: string, force = false) => {
-    const url = apiURLs.comments.allNote(nodeId)
-    if (isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !force) {
-      console.warn('\nAPI has been requested before, cancelling\n')
-      return
-    }
-    const res = await client.get(url, {
-      headers: workspaceHeaders()
+    const res = await API.comment.getAllOfNode(nodeId, {
+      cache: true,
+      expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
-    return res.data
+    return res
   }
 
   const deleteCommentsByNodeId = async (nodeId: string) => {
-    const res = await client.delete(apiURLs.comments.allNote(nodeId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.deleteAllOfNode(nodeId)
+    return res
   }
 
   const getCommentsByBlockId = async (nodeId: string, blockId: string) => {
-    const res = await client.get(apiURLs.comments.allBlock(nodeId, blockId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.getAllOfBlock(nodeId, blockId)
+    return res
   }
 
   const deleteCommentsByBlockId = async (nodeId: string, blockId: string) => {
-    const res = await client.delete(apiURLs.comments.allBlock(nodeId, blockId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.deleteAllOfBlock(nodeId, blockId)
+    return res
   }
 
   const getCommentsByThreadId = async (nodeId: string, blockId: string, threadId: string) => {
-    const res = await client.get(apiURLs.comments.allThread(nodeId, blockId, threadId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.getAllOfThread(nodeId, blockId, threadId)
+    return res
   }
 
   const deleteCommentsByThreadId = async (nodeId: string, blockId: string, threadId: string) => {
-    const res = await client.delete(apiURLs.comments.allThread(nodeId, blockId, threadId), {
-      headers: workspaceHeaders()
-    })
-    return res.data
+    const res = await API.comment.deleteAllOfThread(nodeId, blockId, threadId)
+    return res
   }
 
   return {

@@ -1,25 +1,11 @@
-import { client } from '@workduck-io/dwindle'
+import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog } from '@mexit/core'
 
-import { apiURLs, mog } from '@mexit/core'
-
-import { isRequestedWithin } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
-import '../../Utils/apiClient'
 import { useViewStore, View } from '../useTaskViews'
-import { useAPIHeaders } from './useAPIHeaders'
-
-const API_CACHE_LOG = `\nAPI has been requested before, cancelling.\n`
 
 export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setViews = useViewStore((store) => store.setViews)
-
-  const { workspaceHeaders } = useAPIHeaders()
-
-  const viewHeaders = () => ({
-    ...workspaceHeaders(),
-    'mex-api-ver': 'v2'
-  })
 
   const saveView = async (view: View) => {
     const reqData = {
@@ -33,11 +19,7 @@ export const useViewAPI = () => {
       filters: view.filters
     }
 
-    const resp = await client.post(apiURLs.view.saveView, reqData, { headers: viewHeaders() }).then((resp) => {
-      mog('We saved that view', { resp })
-      return resp.data
-    })
-
+    const resp = await API.view.create(reqData)
     return resp
   }
 
@@ -45,16 +27,10 @@ export const useViewAPI = () => {
    * Returns undefined when request is not made
    */
   const getAllViews = async (): Promise<View[] | undefined> => {
-    const url = apiURLs.view.getAllViews
-
-    if (isRequestedWithin(5, url)) {
-      console.log(API_CACHE_LOG)
-      return
-    }
-
-    const resp = await client.get(url, { headers: viewHeaders() }).then((resp: any) => {
+    const resp = await API.view.getAll({ cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((resp: any) => {
+      if (!resp) return
       // mog('We fetched them view', { resp })
-      const views = resp.data
+      const views = resp
         .map((item: any) => {
           return item.entity === 'view'
             ? ({
@@ -81,9 +57,9 @@ export const useViewAPI = () => {
   }
 
   const deleteView = async (viewid: string) => {
-    const resp = await client.delete(apiURLs.view.deleteView(viewid), { headers: viewHeaders() }).then((resp) => {
+    const resp = await API.view.delete(viewid).then((resp) => {
       mog('We deleted that view', { resp })
-      return resp.data
+      return resp
     })
 
     return resp

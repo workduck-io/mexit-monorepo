@@ -39,4 +39,38 @@ export class NodeAPI {
   async bulkCreate(data) {
     return await this.client.post(apiURLs.node.bulkCreate, data)
   }
+
+  async archive(namespaceId: string, nodeIds: string[], config?) {
+    return await this.client.put(
+      apiURLs.archive.archiveInNamespace(namespaceId),
+      {
+        ids: nodeIds
+      },
+      config
+    )
+  }
+
+  async unarchive(nodeIds: string[], config?) {
+    return await this.client.put(
+      apiURLs.archive.unArchiveNodes,
+      {
+        ids: nodeIds
+      },
+      config
+    )
+  }
+
+  async allArchived(config?) {
+    return await this.client.get(apiURLs.archive.getArchivedNodes, config)
+  }
+
+  async deleteArchived(nodeIds: string[], config?) {
+    return await this.client.put(
+      apiURLs.archive.deleteArchivedNodes,
+      {
+        ids: nodeIds
+      },
+      config
+    )
+  }
 }

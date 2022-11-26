@@ -1,10 +1,5 @@
-import { normalizeDescendantsToDocumentFragment } from '@udecode/plate'
+import { API, generateNodeUID, getAllParentPaths, getNodeIcon, ILink, mog, SEPARATOR } from '@mexit/core'
 
-import { client } from '@workduck-io/dwindle'
-
-import { apiURLs, generateNodeUID, ILink, mog, SEPARATOR, getAllParentPaths, getNodeIcon } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { getNodeidFromPathAndLinks } from './useLinks'
 
@@ -15,21 +10,11 @@ const appendToText = (text: string, textToAppend: string, separator = SEPARATOR)
 
 export const useInternalLinks = () => {
   const setILinks = useDataStore((store) => store.setIlinks)
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const ilinks = useDataStore((store) => store.ilinks)
   const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const getILinks = async () => {
-    return await client
-      .get(apiURLs.namespaces.getHierarchy, {
-        headers: {
-          'mex-workspace-id': getWorkspaceId()
-        }
-      })
-      .then((res: any) => {
-        return res.data
-      })
-      .catch(console.error)
+    return await API.namespace.getHeirarchy().catch(console.error)
   }
 
   const refreshILinks = async () => {

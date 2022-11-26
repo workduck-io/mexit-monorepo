@@ -1,13 +1,4 @@
-import {
-  SingleNamespace,
-  NodeType,
-  MIcon,
-  ILink,
-  mog,
-  SHARED_NAMESPACE,
-  RESERVED_NAMESPACES,
-  getNewNamespaceName
-} from '@mexit/core'
+import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useNodes } from './useNodes'
@@ -16,7 +7,6 @@ export const useNamespaces = () => {
   const namespaces = useDataStore((state) => state.namespaces)
   // const { createNewNamespace } = useApi()
   const { getNode, getNodeType } = useNodes()
-  const addNamespace = useDataStore((s) => s.addNamespace)
   // const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useApi()
 
   const getNamespace = (id: string): SingleNamespace | undefined => {

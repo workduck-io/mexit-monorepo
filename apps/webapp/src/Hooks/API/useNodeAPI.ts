@@ -1,6 +1,5 @@
 import {
   API,
-  apiURLs,
   batchArray,
   defaultContent,
   DEFAULT_NAMESPACE,
@@ -12,12 +11,10 @@ import {
   removeNulls
 } from '@mexit/core'
 
-import { useApiStore } from '../../Stores/useApiStore'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import '../../Utils/apiClient'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
@@ -39,8 +36,6 @@ export const useApi = () => {
   const { getSharedNode } = useNodes()
   const initSnippets = useSnippetStore((store) => store.initSnippets)
   const { updateSnippet } = useSnippets()
-
-  const setRequest = useApiStore.getState().setRequest
 
   const currentUser = useAuthStore((store) => store.userDetails)
 
@@ -71,7 +66,7 @@ export const useApi = () => {
 
     const data = await API.node
       .save(reqData)
-      .then((d: any) => {
+      .then((d) => {
         const metadata = extractMetadata(d)
         const content = d.data ? deserializeContent(d.data) : options.content
         updateFromContent(noteID, content, metadata)
@@ -109,7 +104,7 @@ export const useApi = () => {
     mog('BulkCreateNodes', { reqData, noteID, namespaceID, options })
     setContent(noteID, options.content)
 
-    const data = await API.node.bulkCreate(reqData).then((d: any) => {
+    const data = await API.node.bulkCreate(reqData).then((d) => {
       const addedILinks = []
       const removedILinks = []
       const { changedPaths, node } = d
@@ -174,7 +169,7 @@ export const useApi = () => {
 
     const req = isShared ? API.share.updateNode : API.node.save
     const data = await req(reqData)
-      .then((d: any) => {
+      .then((d) => {
         const contentToSet = d.data.data ? deserializeContent(d.data.data) : content
         const origMetadata = extractMetadata(d.data)
         const metadata = isShared
@@ -197,14 +192,9 @@ export const useApi = () => {
   }
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
-    const url = isShared ? apiURLs.share.getSharedNode(nodeid) : apiURLs.node.get(nodeid)
-    // if (!isShared && isRequestedWithin(GET_REQUEST_MINIMUM_GAP, url) && !isRefresh) {
-    //   console.warn('\nAPI has been requested before, cancelling\n')
-    //   return
-    // }
     const res = await API.node
-      .getById(nodeid, { cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
-      .then((d: any) => {
+      .getById(nodeid, { cache: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
+      .then((d) => {
         if (d) {
           const content = deserializeContent(d.data)
           if (isUpdate) updateFromContent(nodeid, content)
@@ -246,7 +236,8 @@ export const useApi = () => {
   }
 
   const getPublicNodeAPI = async (nodeId: string) => {
-    const res = await API.node.getPublic(nodeId, {}).then((d: any) => {
+    const res = await API.node.getPublic(nodeId, { cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
+      if (!d) return
       const metadata = {
         createdBy: d.createdBy,
         createdAt: d.createdAt,
@@ -314,7 +305,7 @@ export const useApi = () => {
   const getAllSnippetsByWorkspace = async () => {
     const data = await API.snippet
       .allOfWorkspace()
-      .then((d: any) => {
+      .then((d) => {
         const snippets = useSnippetStore.getState().snippets
 
         const newSnippets = d.filter((snippet) => {
@@ -342,19 +333,11 @@ export const useApi = () => {
           const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
             const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-            const requestData = { time: Date.now(), method: 'GET' }
-
             res.fulfilled.forEach(async (snippets) => {
-              setRequest(apiURLs.snippet.bulkGet, {
-                ...requestData,
-                url: apiURLs.snippet.bulkGet
-              })
-
               if (snippets) {
                 snippets.forEach((snippet) => updateSnippet(snippet))
               }
             })
-
             mog('RunBatchWorkerSnippetsRes', { res, ids })
           }
         }
