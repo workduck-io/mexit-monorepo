@@ -81,6 +81,7 @@ export const apiURLs = {
     append: (uid: string) => `${BASE_URLS.node}/${uid}`,
     bulkCreate: `${BASE_URLS.node}/bulk`,
     refactor: `${BASE_URLS.node}/refactor`,
+    deleteBlock: `${BASE_URLS.node}/delete`,
     makePublic: (uid: string) => `${BASE_URLS.node}/${uid}/makePublic`,
     makePrivate: (uid: string) => `${BASE_URLS.node}/${uid}/makePrivate`,
     getMultipleNode: (namespaceID?: string) =>

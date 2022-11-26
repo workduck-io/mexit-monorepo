@@ -20,7 +20,11 @@ export const useHighlights = () => {
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
-  const { deleteHighlight: deleteHighlightAPI, saveHighlight: saveHighlightAPI } = useHighlightAPI()
+  const {
+    deleteHighlight: deleteHighlightAPI,
+    saveHighlight: saveHighlightAPI,
+    deleteHighlightContent
+  } = useHighlightAPI()
   const { getLink, saveLink } = useLinkURLs()
 
   /**
@@ -55,21 +59,37 @@ export const useHighlights = () => {
   const deleteHighlight = useCallback(
     async (highlightId: string) => {
       // mog('deleteHighlight', { highlightId })
-      const notesToDelete = Object.keys(highlightBlockMap[highlightId] ?? {})
-      const deleteContentInNotePromises = Array.from(new Set(notesToDelete)).map((nodeId) => {
-        return deleteHighlightContent(nodeId, highlightId)
-      })
-      await Promise.all(deleteContentInNotePromises).then(() => {
-        deleteHighlightAPI(highlightId).then(() => {
-          removeHighlightFromStore(highlightId)
+      try {
+        const noteBlocksToDelete = highlightBlockMap[highlightId] ?? {}
+
+        if (Object.keys(noteBlocksToDelete).length === 0) {
+          // mog('No notes to delete')
+          return
+        }
+        await deleteHighlightContent(noteBlocksToDelete)
+        mog('Deleted highlight content')
+        await deleteHighlightAPI(highlightId)
+        mog('Deleted highlight in API')
+
+        removeHighlightFromStore(highlightId)
+        mog('Removed highlight from store')
+
+        const deleteContentInNotePromises = Array.from(new Set(Object.keys(noteBlocksToDelete))).map((nodeId) => {
+          return deleteHighlightContentInStores(nodeId, highlightId)
         })
-      })
-      return
+        await Promise.all(deleteContentInNotePromises).then(() => {
+          mog('Deleted highlight content in notes')
+        })
+        return
+      } catch (error) {
+        mog('Error deleting highlight', { error })
+        toast.error('Error deleting highlight')
+      }
     },
     [highlightBlockMap]
   )
 
-  const deleteHighlightContent = (nodeId: string, highlightId: string) => {
+  const deleteHighlightContentInStores = (nodeId: string, highlightId: string) => {
     const content = getContent(nodeId)
     const node = getILinkFromNodeid(nodeId)
     // mog('deleteHighlightContent', { nodeId, highlightId, content, node })
@@ -77,8 +97,6 @@ export const useHighlights = () => {
 
     return new Promise<void>((resolve, reject) => {
       const request = {
-        type: 'CAPTURE_HANDLER',
-        subType: 'SAVE_NODE',
         data: {
           id: node.nodeid,
           title: node.path.split(SEPARATOR).slice(-1)[0],
@@ -91,23 +109,11 @@ export const useHighlights = () => {
         }
       }
 
-      chrome.runtime.sendMessage(request, (response) => {
-        const { message, error } = response
-        // mog('MESSAGE OF DELETION', { message, request })
+      const nodeid = node.nodeid
 
-        if (error) {
-          toast.error('An Error Occured. Please try again.')
-          reject(error)
-        } else {
-          const nodeid = message.id
-          const content = deserializeContent(message.data)
-          const metadata = extractMetadata(message)
+      dispatch('SET_CONTENT', nodeid, request.data.content)
 
-          dispatch('SET_CONTENT', nodeid, content, metadata)
-
-          resolve()
-        }
-      })
+      resolve()
     })
   }
 
@@ -232,9 +238,39 @@ export const useHighlightAPI = () => {
     })
   }
 
+  const deleteHighlightContent = async (blockMap: Record<string, string[]>) => {
+    return new Promise<void>((resolve, reject) => {
+      const request = {
+        type: 'NODE_CONTENT',
+        subType: 'DELETE_BLOCKS',
+        headers: workspaceHeaders(),
+        body: {
+          blockMap
+        }
+      }
+
+      chrome.runtime.sendMessage(request, (response) => {
+        const { message, error } = response
+
+        if (error) {
+          mog('ErrorDeletingLink', error)
+          toast.error('An error occured. Please try again.')
+          reject(error)
+        } else {
+          mog('Deleted highlight', { message })
+          // return message
+          resolve(message)
+        }
+      })
+
+      // OOK
+    })
+  }
+
   return {
     saveHighlight,
-    deleteHighlight
+    deleteHighlight,
+    deleteHighlightContent
   }
 }
 

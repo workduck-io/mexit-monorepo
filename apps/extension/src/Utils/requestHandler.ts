@@ -64,6 +64,49 @@ export const handleCaptureRequest = ({ subType, data }) => {
   }
 }
 
+export const handleNodeContentRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'DELETE_BLOCKS': {
+      console.log('Delete blocks', { body })
+      const blockMap = body?.blockMap
+      const reqData = {
+        type: 'DeleteBlocksRequest',
+        data: blockMap
+      }
+
+      return client
+        .patch(apiURLs.node.deleteBlock, blockMap, { headers })
+        .then((response: any) => {
+          return { message: response.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+    case 'APPEND_NODE': {
+      const elementMetadata = body?.highlightId
+        ? {
+            type: 'highlightV1' as const,
+            id: body.highlightId
+          }
+        : undefined
+      const reqData = {
+        type: 'ElementRequest',
+        elements: serializeContent(body.content ?? defaultContent.content, body.id, elementMetadata)
+      }
+
+      return client
+        .post(apiURLs.node.append(body.id), reqData, { headers })
+        .then((response: any) => {
+          return { message: response.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+  }
+}
+
 export const handleActionRequest = (request: ListItemType) => {
   const event_name = request?.extras.event_name
   switch (event_name) {
