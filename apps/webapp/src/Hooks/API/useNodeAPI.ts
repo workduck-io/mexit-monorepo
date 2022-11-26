@@ -167,8 +167,9 @@ export const useApi = () => {
       reqData['namespaceID'] = undefined
     }
 
-    const data = await API.node
-      .save(reqData)
+    const dataPromise = isShared ? API.share.updateNode(reqData) : API.node.save(reqData)
+
+    const data = await dataPromise
       .then((d) => {
         const contentToSet = d.data ? deserializeContent(d.data) : content
         const origMetadata = extractMetadata(d)

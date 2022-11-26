@@ -13,15 +13,19 @@ export class ShareAPI {
   }
 
   async grantNodePermission(data, config?) {
+    return await this.client.post(apiURLs.share.sharedNode, data, config)
+  }
+
+  async updateNode(data, config?) {
     return await this.client.post(apiURLs.share.updateNode, data, config)
   }
 
   async updateNodePermission(data, config?) {
-    return await this.client.put(apiURLs.share.updateNode, data, config)
+    return await this.client.put(apiURLs.share.sharedNode, data, config)
   }
 
   async revokeNodeAccess(data, config?) {
-    return await this.client.delete(apiURLs.share.updateNode, { ...config, data })
+    return await this.client.delete(apiURLs.share.sharedNode, { ...config, data })
   }
 
   async getNodePermissions(id: string, config?) {

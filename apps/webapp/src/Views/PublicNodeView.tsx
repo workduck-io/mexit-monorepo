@@ -50,7 +50,7 @@ const PublicNodeView = () => {
         const node = await getPublicNodeAPI(nodeId)
         // Only checking these for public namespaces view
         // No need for trying this for individual nodes on frontend
-        if (node && window.location.pathname.startsWith('/share/namespace')) {
+        if (!node && window.location.pathname.startsWith('/share/namespace')) {
           const nodeContent = getContent(nodeId)
           const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
           setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
