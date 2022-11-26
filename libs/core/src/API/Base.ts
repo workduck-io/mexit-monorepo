@@ -3,12 +3,15 @@ import { AxiosInstance } from 'axios'
 import { AxiosX } from './AxiosX'
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
+import { LinkAPI } from './Link'
 import { LochAPI } from './Loch'
 import { NamespaceAPI } from './Namespace'
 import { NodeAPI } from './Node'
 import { ReactionAPI } from './Reaction'
+import { ReminderAPI } from './Reminder'
 import { ShareAPI } from './Share'
 import { SnippetAPI } from './Snippet'
+import { UserAPI } from './User'
 import { ViewAPI } from './View.ts'
 
 let instance
@@ -23,7 +26,9 @@ class APIClass {
   public namespace: NamespaceAPI
   public view: ViewAPI
   public loch: LochAPI
-
+  public link: LinkAPI
+  public reminder: ReminderAPI
+  public user: UserAPI
   constructor() {
     if (instance) {
       throw new Error('New instance cannot be created!!')
@@ -42,6 +47,9 @@ class APIClass {
     this.namespace = new NamespaceAPI(this.client)
     this.loch = new LochAPI(this.client)
     this.view = new ViewAPI(this.client)
+    this.link = new LinkAPI(this.client)
+    this.reminder = new ReminderAPI(this.client)
+    this.user = new UserAPI(this.client)
   }
 
   setWorkspaceHeader(workspaceId: string) {

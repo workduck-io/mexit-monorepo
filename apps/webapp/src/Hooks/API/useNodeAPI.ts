@@ -167,23 +167,23 @@ export const useApi = () => {
       reqData['namespaceID'] = undefined
     }
 
-    const req = isShared ? API.share.updateNode : API.node.save
+    const req = API.node.save
     const data = await req(reqData)
       .then((d) => {
-        const contentToSet = d.data.data ? deserializeContent(d.data.data) : content
-        const origMetadata = extractMetadata(d.data)
+        const contentToSet = d.data ? deserializeContent(d.data) : content
+        const origMetadata = extractMetadata(d)
         const metadata = isShared
           ? {
               ...origMetadata,
               updatedAt: Date.now(),
               lastEditedBy: currentUser.userID
             }
-          : extractMetadata(d.data)
+          : extractMetadata(d)
 
         setContent(noteID, contentToSet, metadata)
 
         addLastOpened(noteID)
-        return d.data
+        return d
       })
       .catch((e) => {
         console.error(e)

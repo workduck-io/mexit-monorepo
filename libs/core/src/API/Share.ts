@@ -12,7 +12,7 @@ export class ShareAPI {
     return await this.client.get(apiURLs.share.allSharedNodes, config)
   }
 
-  async updateNode(data, config?) {
+  async grantNodePermission(data, config?) {
     return await this.client.post(apiURLs.share.updateNode, data, config)
   }
 
