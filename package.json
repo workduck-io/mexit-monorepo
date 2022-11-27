@@ -43,7 +43,6 @@
     "@swc/cli": "~0.1.52",
     "@swc/core": "^1.2.146",
     "@swc/helpers": "~0.2.14",
-    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/chrome": "^0.0.176",
     "@typescript-eslint/eslint-plugin": "~5.10.0",
     "@typescript-eslint/parser": "~5.10.0",
