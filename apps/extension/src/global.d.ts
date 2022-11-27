@@ -1,7 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
-import Chrome from 'chrome'
-
 import { ThemeType } from '@mexit/shared'
+import Chrome from 'chrome'
 
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -24,6 +23,7 @@ declare module 'virtual:reload-on-update-in-view' {
 
 declare module '*.svg' {
   import React = require('react')
+
   export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>
   const src: string
   export default src

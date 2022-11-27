@@ -1,7 +1,6 @@
-import styled from 'styled-components'
-import { transparentize } from 'polished'
-
 import { FloatingOverlay } from '@floating-ui/react-dom-interactions'
+import { transparentize } from 'polished'
+import styled from 'styled-components'
 
 export const DialogOverlay = styled(FloatingOverlay)`
   display: grid;

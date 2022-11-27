@@ -1,12 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-
 import { Icon } from '@iconify/react'
-import { serializeHtml, createPlateEditor, createPlateUI } from '@udecode/plate'
-import fuzzysort from 'fuzzysort'
-import toast from 'react-hot-toast'
-
-import { DisplayShortcut } from '@workduck-io/mex-components'
-
 import {
   apiURLs,
   convertToCopySnippet,
@@ -22,6 +14,11 @@ import {
   Snippet
 } from '@mexit/core'
 import { ActionTitle, ComboboxItemTitle, ComboboxShortcuts, ComboSeperator, ShortcutText } from '@mexit/shared'
+import { createPlateEditor, createPlateUI,serializeHtml } from '@udecode/plate'
+import { DisplayShortcut } from '@workduck-io/mex-components'
+import fuzzysort from 'fuzzysort'
+import React, { useEffect, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
@@ -33,7 +30,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
-import { supportedDomains, simulateOnChange, copySnippetToClipboard, getUpcomingData } from '../../Utils/pasteUtils'
+import { copySnippetToClipboard, getUpcomingData,simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from './styled'
 

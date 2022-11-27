@@ -1,6 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
-
 import { customStyles, EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyle = createGlobalStyle`
 

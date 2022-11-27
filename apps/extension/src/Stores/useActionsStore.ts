@@ -1,4 +1,4 @@
-import { MexitAction, initActions } from '@mexit/core'
+import { initActions,MexitAction } from '@mexit/core'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
 

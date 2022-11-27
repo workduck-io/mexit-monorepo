@@ -1,8 +1,7 @@
+import { AccessLevel, InvitedUser, Mentionable, mog,ShareContext, UserAccessTable } from '@mexit/core'
+import { mergeAccess } from '@mexit/shared'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { InvitedUser, Mentionable, UserAccessTable, AccessLevel, ShareContext, mog } from '@mexit/core'
-import { mergeAccess } from '@mexit/shared'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

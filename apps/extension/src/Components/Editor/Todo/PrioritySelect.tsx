@@ -1,10 +1,8 @@
-import React from 'react'
-
-import Tippy from '@tippyjs/react'
-import { useContextMenu } from 'react-contexify'
-
-import { PriorityType, PriorityDataType, Priority } from '@mexit/core'
+import { Priority,PriorityDataType, PriorityType } from '@mexit/core'
 import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
+import Tippy from '@tippyjs/react'
+import React from 'react'
+import { useContextMenu } from 'react-contexify'
 
 import { getElementById } from '../../../Utils/cs-utils'
 import PriorityMenu from './PriorityMenu'

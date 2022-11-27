@@ -1,24 +1,20 @@
-import { add, sub } from 'date-fns'
-import { uniqBy } from 'lodash'
-
 import {
-  getReminderState,
-  mog,
-  past,
-  ReminderControls,
-  SnoozeControl,
-  upcoming
-} from '@mexit/core'
-import {
+  DisplayReminder,
   DisplayReminderGroup,
+  getReminderState,
+  isInSameMinute,
+  mog,
   NodeReminderGroup,
+  past,
   Reminder,
   ReminderActions,
+  ReminderControls,
   ReminderGroup,
-  ReminderState,
-  DisplayReminder,
-  isInSameMinute
+  ReminderState,  SnoozeControl,
+  upcoming
 } from '@mexit/core'
+import { add, sub } from 'date-fns'
+import { uniqBy } from 'lodash'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'

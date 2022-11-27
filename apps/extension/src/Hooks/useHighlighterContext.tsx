@@ -1,5 +1,4 @@
 import React, { createContext, PropsWithChildren, useContext, useEffect, useRef } from 'react'
-
 import Highlighter from 'web-highlighter'
 
 type HighlighterContextType = {

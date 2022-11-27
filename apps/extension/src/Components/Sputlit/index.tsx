@@ -1,6 +1,5 @@
+import { ActionType,QuickLinkType } from '@mexit/core'
 import React, { useEffect, useRef } from 'react'
-
-import { QuickLinkType, ActionType } from '@mexit/core'
 
 import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'

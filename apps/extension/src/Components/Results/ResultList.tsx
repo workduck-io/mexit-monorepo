@@ -1,10 +1,8 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-
-import { findIndex, groupBy } from 'lodash'
-import { useVirtual } from 'react-virtual'
-
 import { ActionType, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
+import { findIndex, groupBy } from 'lodash'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { useVirtual } from 'react-virtual'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'

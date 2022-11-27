@@ -1,12 +1,12 @@
 // Any kind of DOM manipulation is done here.
-import React from 'react'
-
 import '@webcomponents/custom-elements'
+
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { StyleSheetManager } from 'styled-components'
 
-import { styleSlot } from './Utils/cs-utils'
 import Index from './index'
+import { styleSlot } from './Utils/cs-utils'
 
 const shadowRoot = document.createElement('div')
 shadowRoot.id = 'mexit'

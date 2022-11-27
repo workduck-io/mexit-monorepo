@@ -1,6 +1,5 @@
-import React from 'react'
-
 import { TagElementProps } from '@mexit/shared'
+import React from 'react'
 
 export const CopyTag = ({ attributes, children, element }: TagElementProps) => {
   return (

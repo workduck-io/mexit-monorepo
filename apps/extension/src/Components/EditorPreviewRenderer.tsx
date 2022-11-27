@@ -1,10 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
-
+import { EditorStyles, FadeContainer, TodoContainer , useEditorChange } from '@mexit/shared'
 import { Plate, PlatePlugin } from '@udecode/plate'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
-
-import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
-import { useEditorChange } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 import { editorPreviewComponents } from './Editor/EditorPreviewComponents'

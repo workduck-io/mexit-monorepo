@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
-
+import { defaultContent, ELEMENT_TAG, NodeEditorContent,QuickLinkType  } from '@mexit/core'
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
-
-import { defaultContent, ELEMENT_TAG, QuickLinkType } from '@mexit/core'
-import { NodeEditorContent } from '@mexit/core'
+import React, { useEffect, useState } from 'react'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'

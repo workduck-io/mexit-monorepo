@@ -1,12 +1,11 @@
-import { useEffect } from 'react'
-
-import { addMinutes } from 'date-fns'
-import { connectToChild, Methods } from 'penpal'
-
 import {
+  AddHighlightFn,
   Contents,
+  Description,
+  Highlights,
   idxKey,
   ILink,
+  Link,
   MEXIT_FRONTEND_URL_BASE,
   mog,
   NodeEditorContent,
@@ -17,12 +16,10 @@ import {
   SingleNamespace,
   Snippet,
   UserDetails,
-  WorkspaceDetails,
-  Link,
-  Description,
-  AddHighlightFn,
-  Highlights
-} from '@mexit/core'
+  WorkspaceDetails} from '@mexit/core'
+import { addMinutes } from 'date-fns'
+import { connectToChild, Methods } from 'penpal'
+import { useEffect } from 'react'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -31,8 +28,8 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
-import { useSputlitStore } from '../Stores/useSputlitStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'

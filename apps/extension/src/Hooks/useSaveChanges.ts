@@ -1,5 +1,3 @@
-import toast from 'react-hot-toast'
-
 import {
   defaultContent,
   extractMetadata,
@@ -11,6 +9,7 @@ import {
   SEPARATOR,
   SingleNamespace
 } from '@mexit/core'
+import toast from 'react-hot-toast'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -20,13 +19,13 @@ import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent } from '../Utils/serializer'
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
+import { useHighlights } from './useHighlights'
 import { useInternalLinks } from './useInternalLinks'
 import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useHighlights } from './useHighlights'
 
 export interface AppendAndSaveProps {
   nodeid: string

@@ -1,24 +1,20 @@
-import React from 'react'
-
 import { Icon } from '@iconify/react'
-import { useTheme } from 'styled-components'
-
-import { DisplayShortcut } from '@workduck-io/mex-components'
-
 import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import { DisplayShortcut } from '@workduck-io/mex-components'
+import React from 'react'
+import { useTheme } from 'styled-components'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import {
-  StyledAction,
   Container,
   Content,
-  Title,
   Description,
+  ItemIcon,
+  PrimaryText,
   ShortcutContainer,
   ShortcutText,
-  ItemIcon,
-  PrimaryText
-} from './styled'
+  StyledAction,
+  Title} from './styled'
 
 interface ActionProps {
   action: MexitAction

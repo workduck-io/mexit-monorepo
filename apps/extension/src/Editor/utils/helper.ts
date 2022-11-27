@@ -1,6 +1,5 @@
-import { deepEqual } from 'fast-equals'
-
 import { NODE_ID_PREFIX, SEPARATOR, SNIPPET_PREFIX } from '@mexit/core'
+import { deepEqual } from 'fast-equals'
 
 export const withoutDelimiter = (text: string, delimiter = '.') => {
   const key = text

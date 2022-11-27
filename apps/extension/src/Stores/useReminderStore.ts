@@ -1,7 +1,7 @@
+import { reminderStoreConstructor,ReminderStoreState } from '@mexit/core'
 import create from 'zustand'
-
-import { ReminderStoreState, reminderStoreConstructor } from '@mexit/core'
 import { persist } from 'zustand/middleware'
+
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 export const useReminderStore = create<ReminderStoreState>(

@@ -1,17 +1,15 @@
+import {
+  convertContentToRawText,
+  defaultContent,
+  getMentionsFromContent,
+  getTagsFromContent,
+  NodeEditorContent,
+  PriorityType,
+  TodoStatus,
+  TodosType,
+  TodoType} from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import {
-  NodeEditorContent,
-  defaultContent,
-  TodoStatus,
-  PriorityType,
-  TodosType,
-  TodoType,
-  convertContentToRawText,
-  getTagsFromContent,
-  getMentionsFromContent
-} from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 import { useReminderStore } from './useReminderStore'

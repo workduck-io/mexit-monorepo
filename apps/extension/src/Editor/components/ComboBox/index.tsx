@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from 'react'
-
 import { Icon } from '@iconify/react'
-import useMergedRef from '@react-hook/merged-ref'
-import { PortalBody, useEditorState, select, insertText } from '@udecode/plate'
-import { useTheme } from 'styled-components'
-
 import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
-import { ComboboxItemTitle, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from '@mexit/shared'
-import {
-  ActionTitle,
-  ComboboxShortcuts,
+import {   ActionTitle,
+ComboboxItemTitle, ComboboxRoot,   ComboboxShortcuts,
   ComboSeperator,
   DisplayShortcut,
+ItemCenterWrapper, ItemDesc, ItemRightIcons ,
   MexIcon,
   PreviewMeta,
   ShortcutText
 } from '@mexit/shared'
+import useMergedRef from '@react-hook/merged-ref'
+import { insertText,PortalBody, select, useEditorState } from '@udecode/plate'
+import React, { useEffect, useState } from 'react'
+import { useTheme } from 'styled-components'
 
 import { PrimaryText } from '../../../Components/Action/styled'
 import { ComboboxItem } from '../../../Components/Dibba/styled'

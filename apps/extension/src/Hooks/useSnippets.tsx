@@ -1,5 +1,6 @@
 import { getSnippetCommand, Snippet } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
+
 import useDataStore from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 

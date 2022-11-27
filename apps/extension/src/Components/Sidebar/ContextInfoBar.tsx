@@ -1,6 +1,5 @@
+import { CenteredFlex, List,SnippetCards } from '@mexit/shared'
 import React, { useMemo } from 'react'
-
-import { SnippetCards, CenteredFlex, List } from '@mexit/shared'
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { GenericCard } from './GenericCard'

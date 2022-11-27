@@ -1,6 +1,4 @@
 /* eslint-disable no-case-declarations */
-import toast from 'react-hot-toast'
-
 import {
   ActionType,
   CategoryType,
@@ -15,6 +13,7 @@ import {
   SingleNamespace
 } from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
+import toast from 'react-hot-toast'
 
 import { SmartCapturePageSource } from '../Data/SmartCaptureConfig'
 import useDataStore from '../Stores/useDataStore'

@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react'
-
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
-import { debounce } from 'lodash'
-
-import { Button } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { fuzzySearch } from '@mexit/core'
 import { Input, SidebarListFilter } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { debounce } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'

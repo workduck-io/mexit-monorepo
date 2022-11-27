@@ -1,7 +1,3 @@
-import React, { useMemo } from 'react'
-
-import styled from 'styled-components'
-
 import { getFavicon, Tag } from '@mexit/core'
 import {
   AddTagMenu,
@@ -13,6 +9,8 @@ import {
   ShortenURL,
   TagsLabel
 } from '@mexit/shared'
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs, useURLsAPI } from '../../Hooks/useURLs'

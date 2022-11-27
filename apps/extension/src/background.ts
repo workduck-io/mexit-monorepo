@@ -1,19 +1,18 @@
+import { ActionType, LINK_SHORTENER_URL_BASE, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import fuzzysort from 'fuzzysort'
 
-import { ActionType, LINK_SHORTENER_URL_BASE, SEPARATOR, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
-
 import { useAuthStore } from './Hooks/useAuth'
 import useDataStore from './Stores/useDataStore'
 import {
-  handleCaptureRequest,
   handleActionRequest,
   handleAsyncActionRequest,
-  handleShortenerRequest,
-  handleSharingRequest,
+  handleCaptureRequest,
   handleHighlightRequest,
-  handleNodeContentRequest
+  handleNodeContentRequest,
+  handleSharingRequest,
+  handleShortenerRequest
 } from './Utils/requestHandler'
 
 Sentry.init({

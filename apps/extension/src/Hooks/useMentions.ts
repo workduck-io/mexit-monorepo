@@ -1,21 +1,20 @@
 import {
-  mog,
   AccessLevel,
   DefaultPermission,
+  emptyAccessTable,
   InvitedUser,
   Mentionable,
+  mog,
   SelfMention,
-  ShareContext,
-  emptyAccessTable
-} from '@mexit/core'
+  ShareContext} from '@mexit/core'
 import { mergeAccess } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
-import { useMentionStore, addAccessToUser } from '../Stores/useMentionsStore'
+import { addAccessToUser,useMentionStore } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 import { useAuthStore } from './useAuth'
-import { useNodeShareAPI } from './useNodeShareAPI'
 import { useNodes } from './useNodes'
+import { useNodeShareAPI } from './useNodeShareAPI'
 
 export const useMentions = () => {
   const { grantUsersPermission } = useNodeShareAPI()
