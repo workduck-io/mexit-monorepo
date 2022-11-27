@@ -18,7 +18,7 @@
     "src/Stores/useShortcutStore.ts"
   ],
   "ignoreUnused": ["core-js", "crypto-browserify", "process", "stream-browserify"],
-  "ignoreUnresolved": [],
+  "ignoreUnresolved": ["encoding", "react-merge-refs", "slate-react/dist/components/editable"],
   "extensions": [".js", ".ts", ".jsx", ".tsx"],
   "entry": ["src/background.ts", "src/content-index.ts"]
 }

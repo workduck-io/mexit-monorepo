@@ -45,3 +45,23 @@ export interface MexEditorProps {
   BalloonMarkToolbarButtons?: ReactElement
   portalElement?: Element
 }
+
+export enum ComboboxKey {
+  TAG = 'tag',
+  ILINK = 'ilink',
+  INLINE_BLOCK = 'inline_block',
+  SLASH_COMMAND = 'slash_command'
+}
+
+export interface ComboboxItem {
+  text: string
+  value: string
+  icon?: string
+}
+
+export interface ComboboxType {
+  cbKey: ComboboxKey
+  icon?: string
+  trigger: string
+  data: ComboboxItem[]
+}
