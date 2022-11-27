@@ -23,7 +23,7 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
 import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import components from './Components'
+import { editorPreviewComponents } from './EditorPreviewComponents'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -95,8 +95,6 @@ const EditorPreview = ({
     // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = generateEditorPluginsWithComponents(components, { exclude: { dnd: true } })
-
   if (cc) {
     return (
       <LazyTippy
@@ -131,7 +129,7 @@ const EditorPreview = ({
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>
-              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} />
+              <EditorPreviewRenderer content={cc} editorId={editorId} />
             </EditorPreviewEditorWrapper>
           </EditorPreviewWrapper>
         )}
