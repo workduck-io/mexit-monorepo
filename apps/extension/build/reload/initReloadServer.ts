@@ -1,6 +1,7 @@
 import chokidar from 'chokidar'
 import { WebSocketServer, WebSocket } from 'ws'
 
+import colorLog from '../log'
 import {
   LOCAL_RELOAD_SOCKET_PORT,
   UPDATE_COMPLETE_MESSAGE,
@@ -20,12 +21,15 @@ function initReloadServer() {
 
     ws.addEventListener('close', () => clientsThatNeedToUpdate.delete(ws))
     ws.addEventListener('message', (event) => {
+      console.log('Yo, an update was received: ', event.data)
       const message = Interpreter.Receive(String(event.data))
       if (message.type === UPDATE_COMPLETE_MESSAGE) {
         ws.close()
       }
     })
   })
+
+  colorLog('Starting Reload Server', 'info')
 }
 
 /** CHECK:: src file was updated **/
