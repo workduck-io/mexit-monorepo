@@ -51,12 +51,6 @@ export const highlightNodes = (blockToHighlight: BlockType, highlight?: boolean)
     block['highlight'] = true
   } else delete block['highlight']
 
-  // if (block.children) {
-  //   block.children = block.children.map((bl) => {
-  //     return highlightNodes(bl, highlight)
-  //   })
-  // }
-
   return block
 }
 

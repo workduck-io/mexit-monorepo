@@ -46,7 +46,9 @@ function Tooltip() {
   const highlight = highlights.find((h) => h.entityId === tooltipState?.id)
 
   const handleDelete = () => {
-    // mog('delete, UNIMPLEMENTED')
+    const blockMap = useHighlightStore.getState().highlightBlockMap
+    mog('delete, IMPLEMENTED', { blockMap })
+
     deleteHighlight(tooltipState?.id).then(() => {
       // mog('deleted')
       toast.success('Highlight removed')
@@ -82,17 +84,6 @@ function Tooltip() {
   const openNodeInMexit = (nodeid: string) => {
     window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
-
-  // mog('tooltipState', {
-  //   tooltipState,
-  //   editListOpen,
-  //   highlightMap,
-  //   editableMap,
-  //   editNodes,
-  //   nodeId,
-  //   highlight,
-  //   isEditable
-  // })
 
   return (
     <StyledTooltip

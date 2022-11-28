@@ -140,17 +140,6 @@ export const useHighlights = () => {
   }
 }
 
-export const useHighlightSync = () => {
-  // const highlightAPI = useHighlightAPI()
-  const fetchAllHighlights = () => {
-    //
-  }
-
-  return {
-    fetchAllHighlights
-  }
-}
-
 export const useHighlightAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
@@ -158,31 +147,6 @@ export const useHighlightAPI = () => {
     [WORKSPACE_HEADER]: getWorkspaceId(),
     Accept: 'application/json, text/plain, */*'
   })
-
-  //   /**
-  //    * Fetches all links of the workspace
-  //    */
-  //   const getAllLinks = async () => {
-  //     const request = {
-  //       type: 'HIGHLIGHT',
-  //       subType: 'GET_ALL_LINKS',
-  //       headers: workspaceHeaders()
-  //     }
-
-  //     const links = chrome.runtime.sendMessage(request, (response) => {
-  //       const { message, error } = response
-
-  //       if (error) {
-  //         mog('ErrorFetchingAllLinks', error)
-  //         toast.error('An error occured. Please try again.')
-  //       } else {
-  //         mog('extract highlights', { message })
-  //         return message
-  //       }
-  //     })
-
-  //     return links
-  //   }
 
   const saveHighlight = async (highlight: Highlight) => {
     const request = {
@@ -233,8 +197,6 @@ export const useHighlightAPI = () => {
           resolve(message)
         }
       })
-
-      // OOK
     })
   }
 
@@ -262,8 +224,6 @@ export const useHighlightAPI = () => {
           resolve(message)
         }
       })
-
-      // OOK
     })
   }
 

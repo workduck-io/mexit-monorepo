@@ -1,8 +1,5 @@
 import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, Highlight, mog } from '@mexit/core'
 
-// import { isRequestedWithin } from '../../Stores/useApiStore'
-// import '../../Utils/apiClient'
-
 export const useHighlightAPI = () => {
   const saveHighlight = async (h: Highlight) => {
     const reqData = {
