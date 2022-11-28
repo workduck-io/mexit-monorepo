@@ -41,7 +41,7 @@ const Outline = ({ staticOutline, editorId }: OutlineProps) => {
           text: OutlineHelp
         }}
       >
-        {outline.length > 0 ? (
+        {outline?.length > 0 ? (
           <OutlineWrapper>
             {outline.map((outlineItem) => {
               const icon = getOutlineIcon(outlineItem.type)

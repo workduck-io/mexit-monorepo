@@ -1,18 +1,19 @@
-import { apiURLs, defaultContent, ListItemType, mog } from '@mexit/core'
+import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 import client from './fetchClient'
 import { serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
+  const elementMetadata = data?.highlightId
+    ? {
+        type: 'highlightV1' as const,
+        id: data.highlightId
+      }
+    : undefined
   switch (subType) {
     case 'SAVE_NODE': {
-      const elementMetadata = data.metadata?.saveableRange
-        ? {
-            saveableRange: data.metadata?.saveableRange,
-            sourceUrl: data.metadata?.sourceUrl
-          }
-        : undefined
+      // We need the highlightid to add to the highlighted elementMetadata
       const reqData = {
         id: data.id,
         title: data.title,
@@ -35,12 +36,6 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
     case 'BULK_CREATE_NODES': {
-      const elementMetadata = data.metadata?.saveableRange
-        ? {
-            saveableRange: data.metadata?.saveableRange,
-            sourceUrl: data.metadata?.sourceUrl
-          }
-        : undefined
       const reqData = {
         id: data.id,
         nodePath: {
@@ -64,6 +59,49 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
         .catch((error) => {
           return { message: null, error: error }
+        })
+    }
+  }
+}
+
+export const handleNodeContentRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'DELETE_BLOCKS': {
+      console.log('Delete blocks', { body })
+      const blockMap = body?.blockMap
+      const reqData = {
+        type: 'DeleteBlocksRequest',
+        data: blockMap
+      }
+
+      return client
+        .patch(apiURLs.node.deleteBlock, blockMap, { headers })
+        .then((response: any) => {
+          return { message: response.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
+        })
+    }
+    case 'APPEND_NODE': {
+      const elementMetadata = body?.highlightId
+        ? {
+            type: 'highlightV1' as const,
+            id: body.highlightId
+          }
+        : undefined
+      const reqData = {
+        type: 'ElementRequest',
+        elements: serializeContent(body.content ?? defaultContent.content, body.id, elementMetadata)
+      }
+
+      return client
+        .post(apiURLs.node.append(body.id), reqData, { headers })
+        .then((response: any) => {
+          return { message: response.data, error: null }
+        })
+        .catch((err) => {
+          return { message: null, error: err }
         })
     }
   }
@@ -104,6 +142,31 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
         })
         .then((response) => {
           return { message: body?.nodeId, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+  }
+}
+
+export const handleHighlightRequest = ({ subType, body, headers }) => {
+  switch (subType) {
+    case 'ADD_HIGHLIGHT': {
+      return client
+        .post(apiURLs.highlights.saveHighlight, body, { headers: headers })
+        .then((d: any) => {
+          return { message: d.data, error: null }
+        })
+        .catch((error) => {
+          return { message: null, error: error }
+        })
+    }
+    case 'DELETE_HIGHLIGHT': {
+      return client
+        .delete(apiURLs.highlights.byId(body?.highlightId), { headers: headers })
+        .then((d: any) => {
+          return { message: d.data, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }

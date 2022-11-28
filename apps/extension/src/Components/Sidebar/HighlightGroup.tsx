@@ -1,40 +1,57 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import { groupBy } from 'lodash'
-import styled from 'styled-components'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
-import { MEXIT_FRONTEND_URL_BASE, mog, SingleHighlight, SourceHighlights } from '@mexit/core'
+import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
-  HighlightGroupHeader,
   HighlightGroupsWrapper,
-  HighlightGroupWrapper,
+  HighlightNote,
+  HighlightNotes,
   HighlightText,
-  SingleHighlightWrapper,
-  SnippetCardWrapper
+  SingleHighlightWrapper
 } from '@mexit/shared'
-
+import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 
-export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: SingleHighlight; blockId: string }) => {
+const HIGHLIGHT_TEXT_MAX_LENGTH = 300
+
+export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight }) => {
   const [open, setOpen] = React.useState(false)
   // const showOpen =
-  const highlightText = highlight.elementMetadata.saveableRange.text
+  const highlightText = highlight.properties.saveableRange.text
+  const { getEditableMap } = useHighlights()
+  const { getILinkFromNodeid } = useLinks()
 
-  const willCollapse = highlightText.length > 300
+  const editableMap = getEditableMap(highlight.entityId)
 
-  const strippedText = highlightText.substring(0, 300) + (willCollapse ? '...' : '')
+  const editNodes = useMemo(() => {
+    return Object.keys(editableMap).map((nodeId) => {
+      const node = getILinkFromNodeid(nodeId, true)
+      return node
+    })
+  }, [editableMap])
+
+  const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
+  const nodeId = editNodes[0]?.nodeid
+
+  const willCollapse = highlightText.length > HIGHLIGHT_TEXT_MAX_LENGTH
+
+  const strippedText = highlightText.substring(0, HIGHLIGHT_TEXT_MAX_LENGTH) + (willCollapse ? '...' : '')
 
   const toShowText = willCollapse ? (open ? highlightText : strippedText) : highlightText
 
   const openHighlight = () => {
-    const element = document.querySelector(`[data-highlight-id="${blockId}"]`)
+    const element = document.querySelector(`[data-highlight-id="${highlight.entityId}"]`)
 
     element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+
+  const openNodeInMexit = (nodeid: string) => {
+    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
   return (
@@ -46,40 +63,27 @@ export const SingleHighlightWithToggle = ({ highlight, blockId }: { highlight: S
           {open ? 'Less' : 'More'}
         </HighlightCollapsedToggle>
       ) : null}
+
+      <HighlightNotes>
+        {isEditable
+          ? editNodes.map((node) => (
+              <HighlightNote onClick={() => openNodeInMexit(node.nodeid)}>
+                <Icon icon={fileList2Line} />
+                {getTitleFromPath(node.path)}
+              </HighlightNote>
+            ))
+          : null}
+      </HighlightNotes>
     </SingleHighlightWrapper>
   )
 }
 
-export const HighlightGroups = ({ highlights }: { highlights: SourceHighlights }) => {
-  const grouped = highlights ? groupBy(Object.entries(highlights), (val) => val[1].nodeId) : {}
-
-  const { getPathFromNodeid } = useLinks()
-
-  const openNote = (nodeid: string) => {
-    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank')
-  }
-
-  return (
+export const HighlightGroups = ({ highlights }: { highlights: Highlights }) => {
+  return open && highlights ? (
     <HighlightGroupsWrapper>
-      {Object.keys(grouped).map((nodeId) => {
-        const nodeHighlights = grouped[nodeId]
-        const path = getPathFromNodeid(nodeId)
-        const title = getTitleFromPath(path)
-        // mog('nodeHighlights', { nodeHighlights, path, title })
-        return (
-          <HighlightGroupWrapper key={nodeId}>
-            <HighlightGroupHeader onDoubleClick={() => openNote(nodeId)}>
-              <Icon icon={fileList2Line} />
-              {title}
-            </HighlightGroupHeader>
-            {nodeHighlights.map(([blockId, highlight], i) => {
-              return (
-                <SingleHighlightWithToggle key={`${highlight.nodeId}_${i}`} blockId={blockId} highlight={highlight} />
-              )
-            })}
-          </HighlightGroupWrapper>
-        )
+      {highlights.map((highlight) => {
+        return <SingleHighlightWithToggle key={`${highlight.entityId}`} highlight={highlight} />
       })}
     </HighlightGroupsWrapper>
-  )
+  ) : null
 }

@@ -4,7 +4,6 @@ import {
   directPropertyKeys,
   ElementHighlightMetadata,
   extractMetadata,
-  generateElementMetadata,
   generateTempId,
   mappedKeys,
   PartialBy
@@ -13,11 +12,7 @@ import {
 import { useAuthStore } from '../Stores/useAuth'
 
 // From content to api
-export const serializeContent = (
-  content: any[],
-  nodeid: string,
-  elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
-) => {
+export const serializeContent = (content: any[], nodeid: string, elementMetadata?: ElementHighlightMetadata) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
       return serializeSpecial[el.type](el, nodeid)
@@ -32,7 +27,7 @@ export const serializeContent = (
     }
 
     if (elementMetadata && el?.highlight) {
-      nl.elementMetadata = generateElementMetadata(elementMetadata)
+      nl.elementMetadata = elementMetadata
       delete el['highlight']
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {

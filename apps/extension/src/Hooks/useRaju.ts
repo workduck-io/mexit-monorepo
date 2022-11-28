@@ -19,7 +19,9 @@ import {
   UserDetails,
   WorkspaceDetails,
   Link,
-  Description
+  Description,
+  AddHighlightFn,
+  Highlights
 } from '@mexit/core'
 import { Theme } from '@mexit/shared'
 
@@ -45,7 +47,10 @@ export interface ParentMethods {
   ADD_MULTIPLE_ILINKS: (linksToBeCreated: ILink[]) => void
   ADD_RECENT_NODE: (nodeId: string) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
-  ADD_HIGHLIGHTED_BLOCK: (nodeid: string, content: NodeEditorContent) => void
+  /**
+   * Sends hightlight and blockhighlight map to be added to highlight store
+   */
+  ADD_HIGHLIGHTED_BLOCK: AddHighlightFn
   UPLOAD_IMAGE_TO_S3: (base64string: string) => Promise<string>
 }
 
@@ -57,6 +62,7 @@ type ArgumentsType<T extends (...args: any[]) => any> = T extends (...args: infe
 // Raju is great with doing Hera Pheri
 // He doesn't carry out things on his own, but tells people what to do and when
 // e.g. watch his scene when negotiating with taxi driver and construction worker to understand what useRaju does
+// Also see Chotu
 export default function useRaju() {
   // For some reason, using useState wasn't making dispatch() make use of the new variable
   // So added in the context for now
@@ -75,7 +81,8 @@ export default function useRaju() {
   const { actOnReminder } = useReminders()
   const setLinks = useLinkStore((store) => store.setLinks)
   const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
-  const initHighlights = useHighlightStore((store) => store.initHighlights)
+  const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
+  const setHighlights = useHighlightStore((store) => store.setHighlights)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -135,7 +142,7 @@ export default function useRaju() {
       setIlinks(ilinks)
       initContents(contents)
 
-      initHighlights(ilinks, contents)
+      initHighlightBlockMap(ilinks, contents)
     },
     bootSnippets(snippets: Snippet[]) {
       updateSnippets(snippets)
@@ -145,6 +152,9 @@ export default function useRaju() {
     },
     bootSharedNodes(sharedNodes: SharedNode[]) {
       setSharedNodes(sharedNodes)
+    },
+    bootHighlights(highlights: Highlights) {
+      setHighlights(highlights)
     },
     bootLinks(links: Link[]) {
       setLinks(links)

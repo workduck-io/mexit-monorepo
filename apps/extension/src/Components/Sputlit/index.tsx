@@ -28,6 +28,7 @@ const Sputlit = () => {
   const { previewMode } = useEditorStore()
   const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
+  const getHighlightsOfUrl = useHighlightStore((s) => s.getHighlightsOfUrl)
 
   const outerRef = React.useRef<HTMLDivElement>(null)
   const innerRef = React.useRef<HTMLDivElement>(null)
@@ -58,8 +59,8 @@ const Sputlit = () => {
     return () => {
       const selection = useSputlitStore.getState().selection
       if (selection?.id) {
-        const highlighted = useHighlightStore.getState().highlighted
-        const isPresent = highlighted?.[window.location.href]?.[selection.id]
+        const highlighted = getHighlightsOfUrl(window.location.href)
+        const isPresent = !!highlighted?.find((h) => h.entityId === selection.id)
 
         if (!isPresent) {
           removeHighlight(selection?.id)

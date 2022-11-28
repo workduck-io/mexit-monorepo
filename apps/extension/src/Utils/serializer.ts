@@ -4,11 +4,8 @@ import {
   directPropertyKeys,
   ElementHighlightMetadata,
   extractMetadata,
-  generateElementMetadata,
   generateTempId,
-  mappedKeys,
-  mog,
-  PartialBy
+  mappedKeys
 } from '@mexit/core'
 
 import { useAuthStore } from '../Hooks/useAuth'
@@ -17,7 +14,8 @@ import { useAuthStore } from '../Hooks/useAuth'
 export const serializeContent = (
   content: any[],
   nodeid: string,
-  elementMetadata?: PartialBy<ElementHighlightMetadata, 'type'>
+  // If present, and if element.highlight is true, adds the metadata to the element
+  elementMetadata?: ElementHighlightMetadata
 ) => {
   return content.map((el) => {
     if (Object.keys(serializeSpecial).includes(el.type)) {
@@ -33,7 +31,7 @@ export const serializeContent = (
     }
 
     if (elementMetadata && el?.highlight) {
-      nl.elementMetadata = generateElementMetadata(elementMetadata)
+      nl.elementMetadata = elementMetadata
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]

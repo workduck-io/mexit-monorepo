@@ -28,7 +28,9 @@ if ('BroadcastChannel' in globalThis /* || isSupported() */) {
   share('snippets', useSnippetStore, { ref: 'share-snippets' })
   share('reminders', useReminderStore, { ref: 'share-reminders' })
   share('publicNodes', useDataStore, { ref: 'share-publicNodes' })
-  share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
+  // share('highlighted', useHighlightStore, { ref: 'share-highlighted' })
+  share('highlights', useHighlightStore, { ref: 'share-highlights' })
+  share('highlightBlockMap', useHighlightStore, { ref: 'share-highlight-block-map' })
   share('theme', useUserPreferenceStore, { ref: 'share-theme' })
 }
 

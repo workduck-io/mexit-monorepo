@@ -5,11 +5,11 @@ import { useHighlighterContext } from './useHighlighterContext'
 export const useHighlighter = () => {
   const { highlighter } = useHighlighterContext()
 
-  const removeHighlight = (blockId: string) => {
-    if (highlighter && blockId) {
-      highlighter?.remove(blockId)
+  const removeHighlight = (highlightId: string) => {
+    if (highlighter && highlightId) {
+      highlighter?.remove(highlightId)
     } else {
-      mog('Something went wrong on highlight', { highlighter, blockId })
+      mog('Something went wrong on highlight', { highlighter, highlightId })
       // toast('Please refresh to see updates')
     }
   }

@@ -31,12 +31,13 @@ const basicOnboarding = [
 export function ContextInfoBar() {
   // const [search, setSearch] = useState('')
   // const inputRef = useRef<HTMLInputElement>(null)
-  const highlighted = useHighlightStore((state) => state.highlighted)
+  const highlights = useHighlightStore((state) => state.highlights)
+  const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
   // const [searchedHighlights, setSearchedHighlights] = useState<SourceHighlights>()
 
   const pageHighlights = useMemo(() => {
-    return highlighted[window.location.href]
-  }, [highlighted, window.location])
+    return getHighlightsOfUrl(window.location.href)
+  }, [window.location, highlights])
 
   // TODO: add highlight search later
   // const searchableHighlights = useMemo(() => {
@@ -67,7 +68,7 @@ export function ContextInfoBar() {
   // }, [search])
 
   return (
-    <SnippetCards fullHeight={false}>
+    <SnippetCards fullHeight>
       <ShortenerComponent />
       {/* <SidebarListFilterWrapper>
         <SidebarListFilter>

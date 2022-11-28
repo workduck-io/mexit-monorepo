@@ -12,9 +12,10 @@ export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)
   const tags = useDataStore((store) => store.tags)
   const setLinks = useLinkStore((store) => store.setLinks)
-  const highlights = useHighlightStore((state) => state.highlighted)
+  const addLink = useLinkStore((store) => store.addLink)
+  const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
 
-  const { saveLink, deleteLink: deleteLinkAPI } = useURLsAPI()
+  const { saveLink: saveLinkAPI, deleteLink: deleteLinkAPI } = useURLsAPI()
 
   const getTags = (present?: string[]) => {
     const linkTags = links.reduce((acc, link) => {
@@ -32,11 +33,22 @@ export const useLinkURLs = () => {
   }
 
   const getHighlights = (link: Link) => {
-    const highlightOfUrl = highlights[link.url]
+    const highlightOfUrl = getHighlightsOfUrl(link.url)
 
     // mog('getting highlights for', { link, highlightOfUrl, highlights })
     if (highlightOfUrl) {
       return highlightOfUrl
+    }
+  }
+
+  const saveLink = async (link: Link) => {
+    const existingLink = links.find((l) => l.url === link.url)
+    if (existingLink) {
+      await saveLinkAPI(link)
+    } else {
+      await saveLinkAPI(link).then(() => {
+        addLink(link)
+      })
     }
   }
 
@@ -49,7 +61,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    saveLink(newLink)
+    saveLinkAPI(newLink)
     mog('addTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
@@ -63,7 +75,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    saveLink(newLink)
+    saveLinkAPI(newLink)
     mog('removeTag', { linkurl, tag, newLinks })
     setLinks(newLinks)
   }
@@ -81,7 +93,7 @@ export const useLinkURLs = () => {
     })
 
     const newLink = newLinks.find((l) => l.url === linkurl)
-    saveLink(newLink)
+    saveLinkAPI(newLink)
     mog('updateAlias', { linkurl, alias, newLinks })
     setLinks(newLinks)
   }
@@ -94,7 +106,7 @@ export const useLinkURLs = () => {
     setLinks(newLinks)
   }
 
-  const getLink = (linkurl: string) => {
+  const getLink = (linkurl: string): Link | undefined => {
     return links.find((l) => l.url === linkurl)
   }
 
@@ -102,6 +114,7 @@ export const useLinkURLs = () => {
     getTags,
     addTag,
     removeTag,
+    saveLink,
     updateAlias,
     isDuplicateAlias,
     deleteLink,

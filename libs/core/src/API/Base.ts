@@ -3,6 +3,7 @@ import { AxiosInstance } from 'axios'
 import { AxiosX } from './AxiosX'
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
+import { HighlightAPI } from './Highlight'
 import { LinkAPI } from './Link'
 import { LochAPI } from './Loch'
 import { NamespaceAPI } from './Namespace'
@@ -29,6 +30,7 @@ class APIClass {
   public link: LinkAPI
   public reminder: ReminderAPI
   public user: UserAPI
+  public highlight: HighlightAPI
   constructor() {
     if (instance) {
       throw new Error('New instance cannot be created!!')
@@ -50,6 +52,7 @@ class APIClass {
     this.link = new LinkAPI(this.client)
     this.reminder = new ReminderAPI(this.client)
     this.user = new UserAPI(this.client)
+    this.highlight = new HighlightAPI(this.client)
   }
 
   setWorkspaceHeader(workspaceId: string) {

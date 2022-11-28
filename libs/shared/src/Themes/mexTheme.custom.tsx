@@ -11,6 +11,5 @@ export const MexThemeStyles = css`
   }
 
   ${SideNav} {
-    background: rgba(34, 36, 55, 0.5);
   }
 `

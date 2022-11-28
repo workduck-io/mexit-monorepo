@@ -18,18 +18,20 @@ import { useFetchShareData } from './useFetchShareData'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useURLsAPI } from './useURLs'
+import { useHighlightSync } from './useHighlights'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const { updateBaseNode } = useNodes()
-  const initHighlights = useHighlightStore((store) => store.initHighlights)
+  const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
+  const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
@@ -40,7 +42,14 @@ export const useInitLoader = () => {
 
   const backgroundFetch = async () => {
     try {
-      runBatch<any>([fetchShareData(), initPortals(), getAllSnippetsByWorkspace(), getAllViews(), getAllLinks()])
+      runBatch<any>([
+        fetchShareData(),
+        initPortals(),
+        getAllSnippetsByWorkspace(),
+        getAllViews(),
+        getAllLinks(),
+        fetchAllHighlights()
+      ])
     } catch (err) {
       mog('Background fetch failed')
     }
@@ -52,7 +61,7 @@ export const useInitLoader = () => {
       // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
-      initHighlights(useDataStore.getState().ilinks, useContentStore.getState().contents)
+      initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       updateBaseNode()
 

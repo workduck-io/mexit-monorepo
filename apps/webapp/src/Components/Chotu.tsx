@@ -4,7 +4,16 @@ import { connectToParent } from 'penpal'
 
 import { useAuth } from '@workduck-io/dwindle'
 
-import { idxKey, ILink, mog, NodeEditorContent, NodeMetadata, Reminder, ReminderActions } from '@mexit/core'
+import {
+  AddHighlightFn,
+  idxKey,
+  ILink,
+  mog,
+  NodeEditorContent,
+  NodeMetadata,
+  Reminder,
+  ReminderActions
+} from '@mexit/core'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useReminders } from '../Hooks/useReminders'
@@ -28,7 +37,6 @@ export default function Chotu() {
   const snippets = useSnippetStore((store) => store.snippets)
   const reminders = useReminderStore((store) => store.reminders)
   const descriptions = useDescriptionStore((store) => store.descriptions)
-  const highlighted = useHighlightStore((state) => state.highlighted)
 
   const {
     ilinks,
@@ -43,7 +51,8 @@ export default function Chotu() {
   const recents = useRecentsStore((s) => s.lastOpened)
   const addNodeInRecents = useRecentsStore((s) => s.addRecent)
   const actOnReminder = useReminders().actOnReminder
-  const { addHighlightedBlock } = useHighlightStore()
+  const addHighlight = useHighlightStore((s) => s.addHighlight)
+  const highlights = useHighlightStore((s) => s.highlights)
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const links = useLinkStore((state) => state.links)
@@ -64,10 +73,10 @@ export default function Chotu() {
         resolve(searchWorker ? queryIndex(key, query) : [])
       })
     },
-    addHighlight(nodeid: string, content: NodeEditorContent) {
-      addHighlightedBlock(nodeid, content)
+    addHighlight: ((...params) => {
+      addHighlight(...params)
       return
-    },
+    }) as AddHighlightFn,
     addRecentNode(nodeid: string) {
       addNodeInRecents(nodeid)
     },
@@ -176,6 +185,12 @@ export default function Chotu() {
 
     parent.bootSharedNodes(sharedNodes)
   }, [parent, sharedNodes])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootHighlights(highlights)
+  }, [parent, highlights])
 
   return (
     <div>

@@ -8,6 +8,7 @@ import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 export const useHighlightStore = create<HighlightStore>(
   persist(highlightStoreConstructor, {
     name: 'highlights-store',
-    getStorage: () => asyncLocalStorage
+    getStorage: () => asyncLocalStorage,
+    version: 2
   })
 )

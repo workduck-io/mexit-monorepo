@@ -35,13 +35,13 @@ const FaviconImage = ({ source }: { source: string }) => {
 const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
   const tags = link.tags?.map((t) => ({ value: t })) ?? []
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { getTags, addTag, removeTag, deleteLink, getHighlights, updateAlias, isDuplicateAlias } = useLinkURLs()
+  const { getTags, addTag, removeTag, deleteLink, getGroupedHighlights, updateAlias, isDuplicateAlias } = useLinkURLs()
 
   const [highlightsOpen, setHighlightsOpen] = React.useState(false)
 
   const toAddTags = getTags(link.tags)
 
-  const highlights = getHighlights(link)
+  const highlights = getGroupedHighlights(link)
 
   const onAddNewTag = (tag: Tag) => {
     // mog('onAddNewTag', { tag })

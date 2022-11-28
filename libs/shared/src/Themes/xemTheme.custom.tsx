@@ -12,6 +12,5 @@ export const xemThemeStyles = css`
   }
 
   ${SideNav} {
-    background: rgba(34, 36, 55, 0.5);
   }
 `

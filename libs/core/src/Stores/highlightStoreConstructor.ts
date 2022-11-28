@@ -1,89 +1,129 @@
-import { ILink, SharedNode, Contents, NodeEditorContent } from '../Types/Editor'
+import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
+import { Contents, ILink, SharedNode } from '../Types/Editor'
+import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { mog } from '../Utils/mog'
-import { ElementHighlightMetadata } from '../Utils/serializer'
 
-export interface SingleHighlight {
-  elementMetadata: ElementHighlightMetadata
+interface AddHighlightBlockToMap {
+  highlightId: string
   nodeId: string
-  shared?: boolean
+  blockId: string
 }
 
-export interface SourceHighlights {
-  [blockId: string]: SingleHighlight
+interface AddHighlightBlocksToMap {
+  nodeId: string
+  blockIds: string[]
 }
 
-export interface Highlighted {
-  [sourceURL: string]: SourceHighlights
-}
+export type AddHighlightFn = (highlight: Highlight, mapOptions?: AddHighlightBlocksToMap) => void
 
 export interface HighlightStore {
-  /*
-   * The current ids for specific editors to highlight
-   */
-  highlighted: Highlighted
-  initHighlights: (ilinks: (ILink | SharedNode)[], contents: Contents) => void
-  setHighlights: (highlights: Highlighted) => void
-  addHighlightedBlock: (nodeId: string, content: NodeEditorContent) => void
-  clearHighlightedBlock: (url: string, blockId: string) => void
+  highlights: Highlights
+  highlightBlockMap: HighlightBlockMap
+
+  initHighlightBlockMap: (ilinks: (ILink | SharedNode)[], contents: Contents) => void
+
+  setHighlights: (highlights: Highlights) => void
+  setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => void
+
+  addHighlight: AddHighlightFn
+  removeHighlight: (highlightId: string) => void
+
+  getHighlightsOfUrl: (url: string) => Highlights
+
   clearAllHighlightedBlocks: () => void
 }
-export const highlightStoreConstructor = (set, get) => ({
-  highlighted: {},
-  initHighlights: (ilinks, contents) => {
-    const highlighted = {}
+
+/**
+ * Helper function that adds a { highlight, note, block } to the highlightBlockMap in place
+ */
+const addToHighlightBlockMap = (
+  hMap: HighlightBlockMap,
+  { highlightId, nodeId, blockId }: AddHighlightBlockToMap
+): void => {
+  if (hMap[highlightId] === undefined) {
+    hMap[highlightId] = {}
+  }
+
+  if (hMap[highlightId][nodeId] === undefined) {
+    hMap[highlightId][nodeId] = []
+  }
+
+  if (hMap[highlightId][nodeId].includes(blockId)) {
+    return
+  } else {
+    hMap[highlightId][nodeId].push(blockId)
+  }
+}
+
+// LOOK Typed constructor
+export const highlightStoreConstructor: StateCreator<
+  HighlightStore,
+  SetState<HighlightStore>,
+  GetState<HighlightStore>,
+  StoreApi<HighlightStore>
+> = (set, get) => ({
+  highlights: [],
+  highlightBlockMap: {},
+  setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
+
+  initHighlightBlockMap: (ilinks, contents) => {
+    const highlightBlockMap = {}
 
     ilinks?.forEach((ilink) => {
       contents[ilink.nodeid]?.content?.forEach(function (block) {
         const elementMetadata: ElementHighlightMetadata = block?.metadata?.elementMetadata
-        if (elementMetadata?.sourceUrl && this) {
-          highlighted[elementMetadata.sourceUrl] = {
-            ...highlighted[elementMetadata.sourceUrl],
-            [block.id]: {
-              elementMetadata,
-              nodeId: this.nodeid,
-              shared: !!this?.owner
-            }
-          }
+        if (elementMetadata?.type === 'highlightV1' && elementMetadata?.id && this) {
+          addToHighlightBlockMap(highlightBlockMap, {
+            highlightId: elementMetadata.id,
+            nodeId: ilink.nodeid,
+            blockId: block.id
+          })
         }
       }, ilink)
     })
 
-    // mog('initing highlights', { highlighted })
-    set({ highlighted: highlighted })
+    mog('initing highlights', { highlightBlockMap })
+    set({ highlightBlockMap })
   },
-  setHighlights: (highlights) => {
-    set({ highlighted: highlights })
-  },
-  addHighlightedBlock: (nodeId, content) => {
-    const { highlighted } = get()
-    const newHighlighted = { ...highlighted }
 
-    content.forEach((item) => {
-      if (item?.metadata?.elementMetadata) {
-        newHighlighted[item.metadata.elementMetadata.sourceUrl] = {
-          ...newHighlighted[item.metadata.elementMetadata.sourceUrl],
-          [item.id]: {
-            elementMetadata: item.metadata.elementMetadata,
-            nodeId
-          }
-        }
-      }
+  setHighlights: (highlights: Highlights) => {
+    set({ highlights })
+  },
+
+  addHighlight: (highlight, { nodeId, blockIds }) => {
+    const { highlights, highlightBlockMap } = get()
+    const newHighlighted: Highlights = [...highlights, highlight]
+    const newHighlightBlockMap = { ...highlightBlockMap }
+
+    blockIds.forEach((blockId) => {
+      addToHighlightBlockMap(newHighlightBlockMap, {
+        highlightId: highlight.entityId,
+        nodeId,
+        blockId
+      })
     })
-    mog('addHighlighted', { newHighlighted })
-    set({ highlighted: newHighlighted })
-  },
-  clearHighlightedBlock: (url, blockId) => {
-    const oldHighlighted = get().highlighted
 
-    if (oldHighlighted[url][blockId]) {
-      delete oldHighlighted[url][blockId]
-      set({ highlighted: oldHighlighted })
-    }
+    mog('addHighlighted', { newHighlighted, newHighlightBlockMap })
+    set({ highlights: newHighlighted, highlightBlockMap: newHighlightBlockMap })
   },
+
+  removeHighlight: (highlightId) => {
+    const { highlights, highlightBlockMap } = get()
+    const newHighlights = [...highlights.filter((h) => h.entityId !== highlightId)]
+    const newHighlightBlockMap = { ...highlightBlockMap }
+    delete newHighlightBlockMap[highlightId]
+    mog('removeHighlighted', { newHighlights, newHighlightBlockMap })
+    set({ highlights: newHighlights, highlightBlockMap: newHighlightBlockMap })
+  },
+
+  getHighlightsOfUrl: (url) => {
+    const { highlights } = get()
+    return highlights.filter((h) => h.properties.sourceUrl === url)
+  },
+
   clearAllHighlightedBlocks: () => {
-    const oldHighlighted = get().highlighted
-    const newHighlighted = {}
-    mog('clearAllHighlighted', { oldHighlighted })
-    set({ highlighted: newHighlighted })
+    const { highlights: oldHighlighted, highlightBlockMap: oldHighlightBlockMap } = get()
+    mog('clearAllHighlighted', { oldHighlighted, oldHighlightBlockMap })
+    set({ highlights: [], highlightBlockMap: {} })
   }
 })

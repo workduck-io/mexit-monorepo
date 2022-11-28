@@ -10,7 +10,7 @@ import {
   getTodosFromContent,
   SearchRepExtra,
   convertContentToRawText,
-  mog
+  HighlightAnalysis
 } from '@mexit/core'
 import { getTitleFromContent } from '@mexit/core'
 
@@ -21,7 +21,7 @@ export interface OutlineItem {
   level?: number
 }
 
-export interface NodeAnalysis {
+export interface NodeAnalysis extends HighlightAnalysis {
   nodeid: string
   tags: string[]
   outline: OutlineItem[]
@@ -42,9 +42,14 @@ export interface AnalyseContentProps {
 }
 
 const getSingle = (content: NodeEditorContent) => {
-  if (content[0] && content[0].children.length === 1) {
-    return content[0].children
-  } else return getSingle(content[0].children)
+  if (!content || content.length === 0) return ''
+  if (content[0] && content[0]?.children?.length === 1) {
+    return content[0]?.children
+  } else {
+    if (content[0]?.children) {
+      return content[0]?.children
+    } else return content[0]
+  }
 }
 
 const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): OutlineItem[] => {
@@ -80,7 +85,9 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
       } // Lists
       else if (LIST_ELEMENTS.includes(item.type.toLowerCase())) {
         if (item.children && item.children[0]) {
-          title = convertContentToRawText(getSingle(item.children), ' ', { extra: options?.modifier })
+          title = convertContentToRawText(item.children ? getSingle(item.children) : '', ' ', {
+            extra: options?.modifier
+          })
           if (title.trim() !== '')
             outline.push({
               type: item.type,
@@ -108,20 +115,46 @@ const getOutline = (content: NodeEditorContent, options?: AnalysisOptions): Outl
   return outline
 }
 
+/**
+ * Finds whether the block has a highlight
+ * Ignores repeated block with same highlight
+ */
+const getHighlightBlocks = (content: NodeEditorContent): HighlightAnalysis => {
+  const displayBlocksWithHighlight = []
+  let prevBlockHighlightId: string | null = null
+  for (const block of content) {
+    const elMetadata = block.metadata?.elementMetadata
+    const hasMetadata = elMetadata && elMetadata?.type === 'highlightV1' && elMetadata?.id
+    if (hasMetadata) {
+      if (prevBlockHighlightId !== elMetadata?.id) {
+        displayBlocksWithHighlight.push(block.id)
+      }
+      prevBlockHighlightId = elMetadata?.id
+    } else {
+      prevBlockHighlightId = null
+    }
+  }
+  // console.log('getHighlightBlocks', { content, displayBlocksWithHighlight })
+
+  return { displayBlocksWithHighlight }
+}
+
 function analyseContent({ content, nodeid, options }: AnalyseContentProps): NodeAnalysis {
   if (!content)
     return {
       nodeid,
       outline: [],
       tags: [],
-      editorTodos: []
+      editorTodos: [],
+      displayBlocksWithHighlight: []
     }
 
   const analysisResult = {
     nodeid,
     outline: getOutline(content, options),
     tags: getTagsFromContent(content),
-    editorTodos: getTodosFromContent(content)
+    editorTodos: getTodosFromContent(content),
+    displayBlocksWithHighlight: getHighlightBlocks(content).displayBlocksWithHighlight
   }
 
   return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult

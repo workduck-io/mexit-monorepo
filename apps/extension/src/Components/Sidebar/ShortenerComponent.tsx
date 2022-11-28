@@ -52,10 +52,10 @@ const FaviconImage = ({ source }: { source: string }) => {
 }
 
 export const ShortenerComponent = () => {
-  const { links, addLink } = useLinkStore()
+  const { links } = useLinkStore()
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { updateAlias, isDuplicateAlias, getTags, addTag, removeTag } = useLinkURLs()
-  const { saveLink } = useURLsAPI()
+  const { updateAlias, saveLink, isDuplicateAlias, getTags, addTag, removeTag } = useLinkURLs()
+  // const { saveLink: saveLinkAPI } = useURLsAPI()
 
   const link = useMemo(() => {
     const l = links.find((l) => l.url === window.location.href)
@@ -76,8 +76,6 @@ export const ShortenerComponent = () => {
     } else {
       const link = { url: linkurl, title: document.title, alias: alias }
       saveLink(link)
-
-      addLink(link)
     }
   }
 

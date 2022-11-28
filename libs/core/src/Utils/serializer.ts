@@ -1,5 +1,6 @@
 // Direct properties are collated in the properties for api
 import { BlockMetaDataType } from '../Stores/blockStoreConstructor'
+import { ElementHighlightMetadata } from '../Types/Highlight'
 
 // and then unfurled when converting back to editor content
 export const directPropertyKeys = [
@@ -40,30 +41,11 @@ export const mappedKeys = {
 
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
-export interface HighlightMetaBlock {
-  parentTagName: string
-  parentIndex: number
-  textOffset: number
-}
-
-export interface ElementHighlightMetadata {
-  type: string
-  saveableRange: {
-    startMeta: HighlightMetaBlock
-    endMeta: HighlightMetaBlock
-    text: string
-    id: string
-  }
-  sourceUrl: string
-}
-
-export const generateElementMetadata = (
-  elementMetadata: PartialBy<ElementHighlightMetadata, 'type'>
-): ElementHighlightMetadata => {
-  delete elementMetadata.saveableRange['__isHighlightSource']
+export const generateElementMetadata = (elementMetadata: ElementHighlightMetadata): ElementHighlightMetadata => {
+  // delete elementMetadata.saveableRange['__isHighlightSource']
   return {
     ...elementMetadata,
-    type: 'highlight'
+    type: 'highlightV1'
   }
 }
 
@@ -74,4 +56,20 @@ export const getBlockMetadata = (text: string, meta?: BlockMetaDataType): BlockM
   if (!metadata?.origin) return { ...metadata, source: text, origin: text }
 
   return { ...metadata, source: text }
+}
+
+/**
+ *
+ */
+export const getHighlightBlockMap = (nodeId: string, content: any[]) => {
+  const nodeBlockMap = {
+    nodeId,
+    blockIds: []
+  }
+  content.forEach((item) => {
+    if (item?.metadata?.elementMetadata) {
+      nodeBlockMap.blockIds.push(item.id)
+    }
+  })
+  return nodeBlockMap
 }

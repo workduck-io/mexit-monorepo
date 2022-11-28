@@ -26,4 +26,6 @@ export const PopoverWrapper = styled.div<PopoverWrapperProps>`
   transform-origin: center right;
   animation: ${scale} 0.3s;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+  border: none;
 `

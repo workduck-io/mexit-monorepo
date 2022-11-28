@@ -22,10 +22,11 @@ interface Props {
   placement?: Placement
   transparent?: boolean
   children: JSX.Element
+  rootRef?: React.RefObject<HTMLElement>
   onClose?: () => void
 }
 
-export const Popover = ({ children, onClose, render, placement, transparent }: Props) => {
+export const Popover = ({ children, onClose, render, placement, transparent, rootRef }: Props) => {
   const [open, setOpen] = useState(false)
 
   const onOpenChange = (isOpen: boolean) => {
@@ -61,7 +62,7 @@ export const Popover = ({ children, onClose, render, placement, transparent }: P
   return (
     <>
       {cloneElement(children, getReferenceProps({ ref, ...children.props }))}
-      <FloatingPortal>
+      <FloatingPortal root={rootRef ? rootRef.current : undefined}>
         {open && (
           <FloatingFocusManager context={context}>
             <PopoverWrapper
@@ -81,7 +82,7 @@ export const Popover = ({ children, onClose, render, placement, transparent }: P
                 labelId,
                 descriptionId,
                 close: () => {
-                  setOpen(false)
+                  onOpenChange(false)
                 }
               })}
             </PopoverWrapper>

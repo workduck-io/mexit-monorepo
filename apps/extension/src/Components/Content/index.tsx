@@ -41,6 +41,8 @@ export default function Content() {
       })
       const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
 
+      mog('deserializedContent', { content })
+
       if (content) setDeserializedContent(content)
     }
   }, [selection])
@@ -52,7 +54,7 @@ export default function Content() {
       const content = getContent(item.id)?.content ?? defaultContent.content
 
       if (selection?.range && deserializedContent) {
-        setNodeContent([...content, { children: deserializedContent, highlight: true }])
+        setNodeContent([...content, ...deserializedContent])
       } else {
         setNodeContent(content)
       }

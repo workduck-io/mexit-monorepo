@@ -11,7 +11,9 @@ import {
   handleActionRequest,
   handleAsyncActionRequest,
   handleShortenerRequest,
-  handleSharingRequest
+  handleSharingRequest,
+  handleHighlightRequest,
+  handleNodeContentRequest
 } from './Utils/requestHandler'
 
 Sentry.init({
@@ -101,6 +103,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       })()
       return true
     }
+
+    case 'NODE_CONTENT': {
+      // eslint-disable-next-line @typescript-eslint/no-extra-semi
+      ;(async () => {
+        const res = await handleNodeContentRequest(request)
+        console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
     case 'DOWNLOAD_AVATAR': {
       chrome.downloads.download({
         url: request.data.url,
@@ -122,6 +135,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleShortenerRequest(request)
         console.log('SHORTENER_RESPONSE', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'HIGHLIGHT': {
+      ;(async () => {
+        const res = await handleHighlightRequest(request)
+        console.log('HIGHLIGHT_RESPONSE', res)
         sendResponse(res)
       })()
       return true

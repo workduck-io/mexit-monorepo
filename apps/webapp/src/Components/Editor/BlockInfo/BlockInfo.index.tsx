@@ -18,6 +18,8 @@ import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
+import { useAnalysisStore } from '../../../Stores/useAnalysis'
+import { useHighlights } from '../../../Hooks/useHighlights'
 
 /**
  *
@@ -38,9 +40,11 @@ export const BlockInfo = (props: any) => {
   // Whether the element is inline
   // TODO: Find a way to only show this for first level blocks only
   const isInline = useMemo(() => attributes['data-slate-inline'], [attributes])
+  const anal = useAnalysisStore((state) => state.analysis)
   // const isTable = useMemo(() => attributes['data-slate-table'], [attributes])
   const { getCommentsOfBlock, addComment, deleteComment } = useComments()
   const { getReactionsOfBlock, getReactionDetails, addReaction, deleteReaction } = useReactions()
+  const { getHighlight } = useHighlights()
   const { getBlockReactionDetails } = useReactionAPI()
   const [instanceId, setInstanceId] = useState<string>(nanoid())
 
@@ -60,12 +64,34 @@ export const BlockInfo = (props: any) => {
   // when displaying the popups for comments and reactions
   const [interactive, setInteractive] = useState(false)
 
-  // Source url
-  const hasMetadata = useMemo(() => element?.blockMeta || element?.metadata?.elementMetadata, [element])
-  const sourceURL = useMemo(
-    () => element?.blockMeta?.source || element?.metadata?.elementMetadata?.sourceUrl,
+  // Whether to show source info
+  const showSource = useMemo(() => {
+    if (anal?.displayBlocksWithHighlight) {
+      if (anal?.displayBlocksWithHighlight?.includes(element?.id)) {
+        return true
+      }
+    }
+    return false
+  }, [anal?.displayBlocksWithHighlight, element?.id])
+
+  // Does the element have sourceUrl
+  const hasAssociatedHighlight = useMemo(
+    () => element?.metadata?.elementMetadata && element?.metadata?.elementMetadata?.type === 'highlightV1',
     [element]
   )
+
+  // Source url
+  const sourceURL = useMemo(() => {
+    if (!hasAssociatedHighlight) {
+      return undefined
+    } else {
+      // Extract the source from the highlight entity
+      const highlightId = element?.metadata?.elementMetadata?.id
+      const highlight = getHighlight(highlightId)
+      return highlight?.properties?.sourceUrl
+    }
+  }, [element, hasAssociatedHighlight])
+
   const icon = sourceURL && getIconType(sourceURL)
 
   // Comments of the block
@@ -98,8 +124,8 @@ export const BlockInfo = (props: any) => {
 
   // Whether to show the blockinfo popup beside the block
   const showBlockInfo = useMemo(() => {
-    return (mergedSelected && focused) || interactive || hasComments || hasReactions || hasMetadata
-  }, [mergedSelected, hasComments, focused, hasReactions, hasMetadata, interactive, instanceId])
+    return (mergedSelected && focused) || interactive || hasComments || hasReactions || showSource
+  }, [mergedSelected, hasComments, focused, hasReactions, showSource, interactive, instanceId])
 
   const onToggleReaction = async (reactionVal: MIcon) => {
     // mog('Toggling reaction', { reactionVal, props })
@@ -153,17 +179,6 @@ export const BlockInfo = (props: any) => {
     return userReactions as UserReaction[]
   }
 
-  //   mog('BlockInfo', {
-  //     element,
-  //     showBlockInfo,
-  //     hasComments,
-  //     isInline,
-  //     props,
-  //     isNested,
-  //     path,
-  //     interactive
-  //   })
-
   // Do not wrap the blockinfo around the inline / nested elements
   return isInline || isNested ? (
     <>{children}</>
@@ -178,7 +193,7 @@ export const BlockInfo = (props: any) => {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
         >
-          {hasMetadata && !icon?.mexIcon && <Source source={sourceURL} />}
+          {showSource && !icon?.mexIcon && <Source source={sourceURL} />}
           {(hasReactions || (mergedSelected && focused) || interactive || (!interactive && hover)) && (
             <Popover
               onClose={() => setInteractive(false)}
