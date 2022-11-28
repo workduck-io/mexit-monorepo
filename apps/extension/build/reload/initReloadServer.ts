@@ -1,5 +1,5 @@
 import chokidar from 'chokidar'
-import { WebSocketServer, WebSocket } from 'ws'
+import { WebSocket, WebSocketServer } from 'ws'
 
 import colorLog from '../log'
 import {
@@ -21,7 +21,6 @@ function initReloadServer() {
 
     ws.addEventListener('close', () => clientsThatNeedToUpdate.delete(ws))
     ws.addEventListener('message', (event) => {
-      console.log('Yo, an update was received: ', event.data)
       const message = Interpreter.Receive(String(event.data))
       if (message.type === UPDATE_COMPLETE_MESSAGE) {
         ws.close()
@@ -48,8 +47,8 @@ function sendPendingUpdateMessage(ws: WebSocket, path: string) {
 }
 
 /** CHECK:: build was completed **/
-chokidar.watch('dist').on('all', () => {
-  debounce(sendUpdateMessageToAllSockets, 200)()
+chokidar.watch(['../../dist/extension/content.js']).on('all', () => {
+  debounce(sendUpdateMessageToAllSockets, 600)()
 })
 
 function sendUpdateMessageToAllSockets() {

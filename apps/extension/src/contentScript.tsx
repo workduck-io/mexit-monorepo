@@ -1,3 +1,6 @@
+// eslint-disable-next-line
+import refreshOnUpdate from 'virtual:reload-on-update-in-view'
+
 // Any kind of DOM manipulation is done here.
 import '@webcomponents/custom-elements'
 
@@ -7,6 +10,8 @@ import { StyleSheetManager } from 'styled-components'
 
 import Index from './index'
 import { styleSlot } from './Utils/cs-utils'
+
+refreshOnUpdate('src')
 
 const shadowRoot = document.createElement('div')
 shadowRoot.id = 'mexit'
