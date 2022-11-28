@@ -14,10 +14,16 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { getElementById } from '../../contentScript'
 
 const DragIcon = styled(Icon)<{ $show: boolean }>`
+  margin-right: -18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: margin-right 0.2s ease-in-out, opacity 0.2s ease-in-out;
   ${(props) =>
-    !props.$show &&
+    props.$show &&
     css`
-      display: none;
+      margin-right: 0;
+      opacity: 1;
+      pointer-events: all;
     `}
 `
 
@@ -25,6 +31,7 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
   position: fixed;
   display: flex;
   align-items: center;
+  width: max-content;
 
   ${({ $expanded, $top, $endColumnWidth, theme }) =>
     $expanded
@@ -42,6 +49,7 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
   border-radius: ${({ theme }) => theme.borderRadius.small};
   background: ${({ theme }) => theme.colors.background.sidebar};
   color: ${({ theme }) => theme.colors.text.fade};
+  transition: right 0.2s ease-in-out, background 0.2s ease-in-out, width 0.2s ease-in-out;
 
   svg {
     height: 16px;
@@ -137,7 +145,6 @@ export const DraggableToggle = () => {
         onClick={toggleRHSidebar}
       >
         <WDLogo />
-
         <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
       </ToggleWrapper>
     </Tippy>
