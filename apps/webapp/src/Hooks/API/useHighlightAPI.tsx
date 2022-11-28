@@ -26,7 +26,7 @@ export const useHighlightAPI = () => {
       expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
     try {
-      const highlights = res.data?.Items?.map((item: any) => {
+      const highlights = res.Items?.map((item: any) => {
         return {
           properties: item?.properties,
           entityId: item?.entityId
