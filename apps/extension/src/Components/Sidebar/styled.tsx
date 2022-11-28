@@ -8,10 +8,11 @@ export const ExtSideNav = styled(RHSideNav)`
   right: 0;
   overflow: hidden;
   overscroll-behavior: contain;
+  background: ${({ theme }) => theme.colors.background.app};
 `
 
 export const SidebarContainer = styled.div`
-  background: ${({ theme }) => theme.colors.background.app};
+  background: ${({ theme }) => theme.colors.background.sidebar};
 
   position: fixed;
   z-index: 9999999999;
