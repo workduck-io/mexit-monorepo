@@ -103,7 +103,7 @@ function sendPendingUpdateMessage(ws, path) {
   ws.send(Interpreter.Send({ type: UPDATE_PENDING_MESSAGE, path }));
 }
 chokidar.watch(["../../dist/extension/content.js"]).on("all", () => {
-  debounce(sendUpdateMessageToAllSockets, 600)();
+  debounce(sendUpdateMessageToAllSockets, 200)();
 });
 function sendUpdateMessageToAllSockets() {
   clientsThatNeedToUpdate.forEach(sendUpdateMessage);
