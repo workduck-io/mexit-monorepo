@@ -1,6 +1,5 @@
-import mixpanel from 'mixpanel-browser'
-
 import { IS_DEV } from '@mexit/core'
+import mixpanel from 'mixpanel-browser'
 
 const mixpanelMethods = {
   init: (token: string) => {

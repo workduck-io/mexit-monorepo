@@ -1,13 +1,22 @@
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
 import {
+  autoformatArrow,
+  autoformatLegal,
+  autoformatLegalHtml,
+  autoformatMath,
+  autoformatSmartQuotes,
+  createAlignPlugin,
   createAutoformatPlugin,
   createBlockquotePlugin,
   createBoldPlugin,
   createCodeBlockPlugin,
   createCodePlugin,
+  createDndPlugin,
   createExitBreakPlugin,
   createHeadingPlugin,
-  createDndPlugin,
   createHighlightPlugin,
+  createHorizontalRulePlugin,
   createImagePlugin,
   createItalicPlugin,
   createLinkPlugin,
@@ -15,42 +24,30 @@ import {
   createMediaEmbedPlugin,
   createNodeIdPlugin,
   createParagraphPlugin,
+  createPlugins,
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
   createSoftBreakPlugin,
   createStrikethroughPlugin,
+  createTablePlugin,
   createUnderlinePlugin,
-  PlatePlugin,
-  autoformatArrow,
-  autoformatLegal,
-  autoformatLegalHtml,
-  autoformatMath,
-  autoformatSmartQuotes,
-  ELEMENT_HR,
-  createHorizontalRulePlugin,
-  setNodes,
-  createAlignPlugin,
   ELEMENT_DEFAULT,
-  insertNodes,
-  createPlugins,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_H4,
   ELEMENT_H5,
   ELEMENT_H6,
+  ELEMENT_HR,
   ELEMENT_PARAGRAPH,
-  createTablePlugin,
+  insertNodes,
+  MediaEmbedTweet,
+  MediaEmbedVideo,
   parseIframeUrl,
   parseVideoUrl,
-  MediaEmbedTweet,
-  MediaEmbedVideo
-} from '@udecode/plate'
-
+  PlatePlugin,
+  setNodes} from '@udecode/plate'
 import { useAuth } from '@workduck-io/dwindle'
-
-import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, parseRestMediaUrls, MediaIFrame, useUploadToCDN } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'

@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid'
 import { share } from 'shared-zustand'
 
 import { useAuthStore } from './useAuth'
@@ -6,8 +5,8 @@ import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useHighlightStore } from './useHighlightStore'
 import { useReminderStore } from './useReminderStore'
-import { useSnippetStore } from './useSnippetStore'
 import { useUserPreferenceStore } from './userPreferenceStore'
+import { useSnippetStore } from './useSnippetStore'
 
 // This is required for event driven messaging, as the tabs or in our
 // case a tab and a iframe don't know about their state updates, we

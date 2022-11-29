@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
 import { NodeType } from '@mexit/core'
 import { SharedNodeIcon } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect } from 'react'
 
 import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 // import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useNodes } from '../../Hooks/useNodes'
-import useMultipleEditors from '../../Stores/useEditorsStore';
 // import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import useMultipleEditors from '../../Stores/useEditorsStore';
 import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'
-import { Icon } from '@iconify/react'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 
 interface NodeLinkProps {
   keyStr: string

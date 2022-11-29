@@ -1,7 +1,6 @@
-import { Editor, Transforms } from 'slate'
-import { insertNodes } from '@udecode/plate'
-
 import { ELEMENT_MENTION, generateTempId } from '@mexit/core'
+import { insertNodes } from '@udecode/plate'
+import { Editor, Transforms } from 'slate'
 
 export const replaceUserMention = (editor: any, alias: string, userid: string) => {
   const mentionELs = Editor.nodes(editor, {

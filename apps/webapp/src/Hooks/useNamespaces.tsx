@@ -1,14 +1,13 @@
 import {
-  SingleNamespace,
-  NodeType,
-  MIcon,
-  ILink,
-  mog,
-  SHARED_NAMESPACE,
-  RESERVED_NAMESPACES,
   getNewNamespaceName,
-  Mentionable
-} from '@mexit/core'
+  ILink,
+  Mentionable,
+  MIcon,
+  mog,
+  NodeType,
+  RESERVED_NAMESPACES,
+  SHARED_NAMESPACE,
+  SingleNamespace} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useMentionStore } from '../Stores/useMentionsStore'

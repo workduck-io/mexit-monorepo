@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Input } from '@mexit/shared'
+import { copyTextToClipboard , Input , resize } from '@mexit/shared'
+import React, { useEffect, useRef,useState } from 'react'
 import styled from 'styled-components'
-import { copyTextToClipboard } from '@mexit/shared'
-import { Toaster } from 'react-hot-toast'
-import { resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

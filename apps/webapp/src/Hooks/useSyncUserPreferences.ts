@@ -1,7 +1,6 @@
-import { useEffect } from 'react'
-
 import { mog } from '@mexit/core'
 import { mergeUserPreferences } from '@mexit/shared'
+import { useEffect } from 'react'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'

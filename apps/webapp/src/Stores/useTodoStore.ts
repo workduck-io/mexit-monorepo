@@ -1,18 +1,16 @@
+import {
+  convertContentToRawText,
+  defaultContent,
+  getMentionsFromContent,
+  getTagsFromContent,
+  mog,
+  NodeEditorContent,
+  PriorityType,
+  TodoStatus,
+  TodosType,
+  TodoType} from '@mexit/core'
 import create from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-
-import {
-  NodeEditorContent,
-  defaultContent,
-  TodoStatus,
-  PriorityType,
-  TodosType,
-  TodoType,
-  convertContentToRawText,
-  getTagsFromContent,
-  getMentionsFromContent,
-  mog
-} from '@mexit/core'
 
 import { getTodoMetadata } from '../Editor/Plugins/todoUtils'
 import { useReminderStore } from './useReminderStore'

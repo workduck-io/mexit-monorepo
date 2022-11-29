@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react'
-
 import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
-import toast from 'react-hot-toast'
-
-import { TitleWithShortcut } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
 import { IconButton, Input, TagsLabel, Tooltip } from '@mexit/shared'
+import Tippy from '@tippyjs/react'
+import { TitleWithShortcut } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'

@@ -1,14 +1,12 @@
-import React from 'react'
-
 import { Icon, IconifyIcon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
-
 import { TitleWithShortcut } from '@workduck-io/mex-components'
+import React from 'react'
 
 import useLayout from '../../Hooks/useLayout'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { SpaceHeader, SpaceTitleWrapper, SpaceTitle, SidebarToggle } from './Sidebar.style'
+import { SidebarToggle,SpaceHeader, SpaceTitle, SpaceTitleWrapper } from './Sidebar.style'
 
 interface SidebarHeaderLiteProps {
   title: string

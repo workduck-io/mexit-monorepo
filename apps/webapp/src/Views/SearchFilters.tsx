@@ -1,27 +1,20 @@
-import React, { useMemo } from 'react'
-
+import { Icon } from '@iconify/react'
 import filter2Line from '@iconify-icons/ri/filter-2-line'
 import filterOffLine from '@iconify-icons/ri/filter-off-line'
-import { Icon } from '@iconify/react'
-import { startCase } from 'lodash'
-import { nanoid } from 'nanoid'
-
-import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
-
-import { mog, FilterKey, SearchFilter, Filter, Filters, GlobalFilterJoin } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
 import {
   SearchFilterCancel,
   SearchFilterLabel,
-  SearchFilterList,
+  SearchFiltersHelp,
   SearchFiltersWrapper,
-  SearchFilterWrapper,
-  SearchFiltersHelp
-} from '@mexit/shared'
+  SearchFilterWrapper} from '@mexit/shared'
+import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
+import { nanoid } from 'nanoid'
+import React, { useMemo } from 'react'
 
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
-import SearchFilterInput from '../Components/SearchFilterInput'
 
 interface SearchFiltersProps {
   result?: any

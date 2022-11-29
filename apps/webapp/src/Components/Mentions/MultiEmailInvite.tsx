@@ -1,18 +1,14 @@
-import { useMemo } from 'react'
-
-import { useForm, Controller } from 'react-hook-form'
-
-import { LoadingButton } from '@workduck-io/mex-components'
-
 import {
-  mog,
   AccessLevel,
   DefaultPermission,
   DefaultPermissionValue,
-  permissionOptions,
-  emptyAccessTable
-} from '@mexit/core'
+  emptyAccessTable,
+  mog,
+  permissionOptions} from '@mexit/core'
 import { Label, mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
+import { LoadingButton } from '@workduck-io/mex-components'
+import { useMemo } from 'react'
+import { Controller,useForm } from 'react-hook-form'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -22,12 +18,12 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { ModalHeader, ModalControls } from '../../Style/Refactor'
+import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
+import { ModalControls,ModalHeader } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { InputFormError } from '../Input'
-import { MultipleInviteWrapper, InviteFormWrapper, InviteFormFieldset } from './styles'
+import { InviteFormFieldset,InviteFormWrapper, MultipleInviteWrapper } from './styles'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)

@@ -1,5 +1,5 @@
-import styled, { keyframes } from 'styled-components'
 import { transparentize } from 'polished'
+import styled, { keyframes } from 'styled-components'
 
 export const Element = styled.span<{ show: boolean }>`
   border-radius: ${(props) => props.theme.borderRadius.tiny};

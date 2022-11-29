@@ -1,26 +1,23 @@
 // different import path!
-import React, { useEffect, useMemo, useRef } from 'react'
-
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { useLocation, useMatch } from 'react-router-dom'
-import { useTheme } from 'styled-components'
-
-import { Button, MexIcon } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-
-import { NodeEditorContent, getNameFromPath } from '@mexit/core'
+import { getNameFromPath,NodeEditorContent } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper,
-  PreviewActionHeader,
   NestedFloating,
+  PreviewActionHeader,
   Tooltip
 } from '@mexit/shared'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { Button, MexIcon } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { useLocation, useMatch } from 'react-router-dom'
+import { useTheme } from 'styled-components'
 
 import Banner from '../../../Components/Editor/Banner'
 import { TagsRelatedTiny } from '../../../Components/Editor/TagsRelated'
@@ -28,7 +25,7 @@ import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'

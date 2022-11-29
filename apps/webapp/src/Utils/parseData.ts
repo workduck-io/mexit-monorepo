@@ -1,4 +1,4 @@
-import { NodeEditorContent, convertContentToRawText, getBlocks } from '@mexit/core'
+import { getBlocks } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 

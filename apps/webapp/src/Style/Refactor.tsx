@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { rgba, transparentize } from 'polished'
+import styled, { css } from 'styled-components'
 
 const ModalContent = (multi = false) => css`
   width: max-content;

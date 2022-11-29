@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
-
+import { mog } from '@mexit/core'
 import { getPlateEditorRef, PlateProvider } from '@udecode/plate'
-import toast from 'react-hot-toast'
-import Modal from 'react-modal'
-
 import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
-
-import { mog } from '@mexit/core'
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import Modal from 'react-modal'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'

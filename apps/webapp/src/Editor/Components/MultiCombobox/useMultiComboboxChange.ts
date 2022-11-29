@@ -1,20 +1,17 @@
+import { fuzzySearch,getTimeInText, isReservedOrClash, toLocaleString, withoutContinuousDelimiter  } from '@mexit/core'
+import { OnChange, usePlateEditorRef } from '@udecode/plate'
 import { useCallback } from 'react'
 
-import { OnChange, usePlateEditorRef } from '@udecode/plate'
-
-import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
-
 import { useLinks } from '../../../Hooks/useLinks'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
+import { QuickLinkType } from '../../constants'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
+import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { ComboboxKey } from '../../Types/Combobox'
 import { ComboboxType } from '../../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../../Utils/helper'
-import { QuickLinkType } from '../../constants'
-import { useNamespaces } from '../../../Hooks/useNamespaces'
 
 export const CreateNewPrefix = `Create `
 

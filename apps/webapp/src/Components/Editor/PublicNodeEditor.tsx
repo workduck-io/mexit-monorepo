@@ -1,9 +1,8 @@
-import { usePlateEditorRef, selectEditor } from '@udecode/plate'
+import { defaultContent } from '@mexit/core'
+import { EditorWrapper, StyledEditor, Title } from '@mexit/shared'
+import { selectEditor,usePlateEditorRef } from '@udecode/plate'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { defaultContent } from '@mexit/core'
-import { StyledEditor, EditorWrapper, Title } from '@mexit/shared'
 
 import Metadata from '../EditorInfobar/Metadata'
 import PublicNoteFooter from '../PublicNoteFooter'

@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from 'react'
-
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-
-import { Button, IconButton } from '@workduck-io/mex-components'
-
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
+import { Button, IconButton } from '@workduck-io/mex-components'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -19,8 +16,8 @@ import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalControls, ModalHeader, ModalSection } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'

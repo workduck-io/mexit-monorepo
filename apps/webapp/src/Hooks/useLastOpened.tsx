@@ -1,8 +1,6 @@
-import { useCallback } from 'react'
-
-import { debounce } from 'lodash'
-
 import { LastOpenedData, LastOpenedState } from '@mexit/shared'
+import { debounce } from 'lodash'
+import { useCallback } from 'react'
 
 import { getInitialNode, NodeType } from '../../../../libs/core/src'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'

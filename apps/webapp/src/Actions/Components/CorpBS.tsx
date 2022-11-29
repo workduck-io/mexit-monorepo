@@ -1,6 +1,6 @@
+import { resize } from '@mexit/shared'
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

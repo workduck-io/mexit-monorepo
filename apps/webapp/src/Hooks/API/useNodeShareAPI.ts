@@ -5,9 +5,8 @@ import {
   extractMetadata,
   iLinksToUpdate,
   mog,
-  SharedNode,
-  SHARED_NAMESPACE
-} from '@mexit/core'
+  SHARED_NAMESPACE,
+  SharedNode} from '@mexit/core'
 
 import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'

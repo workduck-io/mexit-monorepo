@@ -1,25 +1,21 @@
-import React, { useMemo, useEffect } from 'react'
-
 import { Icon } from '@iconify/react'
+import { AccessLevel, InvitedUser, Mentionable, mog, SelfMention } from '@mexit/core'
+import {
+  AccessTag,
+  MentionTooltip,
+  MentionTooltipContent,
+  SMention,
+  SMentionRoot,
+  TooltipAlias,
+  TooltipMail,
+  Username} from '@mexit/shared'
 import Tippy from '@tippyjs/react/headless'
 import { moveSelection, useEditorRef } from '@udecode/plate'
+import { Button } from '@workduck-io/mex-components'
+import React, { useEffect,useMemo } from 'react'
 import toast from 'react-hot-toast'
 // different import path!
 import { useFocused, useSelected } from 'slate-react'
-
-import { Button } from '@workduck-io/mex-components'
-
-import { mog, Mentionable, InvitedUser, AccessLevel, SelfMention } from '@mexit/core'
-import {
-  MentionTooltip,
-  TooltipMail,
-  SMentionRoot,
-  SMention,
-  Username,
-  MentionTooltipContent,
-  TooltipAlias,
-  AccessTag
-} from '@mexit/shared'
 
 import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useUserService } from '../../../Hooks/API/useUserAPI'

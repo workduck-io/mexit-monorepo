@@ -1,26 +1,22 @@
-import React, { useEffect } from 'react'
-
 import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
+import { isReserved } from '@mexit/core'
+import { isOnEditableElement } from '@mexit/shared'
+import { Button, DisplayShortcut } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
 import create from 'zustand'
 
-import { Button, DisplayShortcut } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-
-import { isReserved, mog, USE_API } from '@mexit/core'
-import { isOnEditableElement } from '@mexit/shared'
-
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
-import useLoad from '../../Hooks/useLoad'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { RefactorPath } from '../../Stores/useRenameStore'
-import { ModalHeader, MockRefactorMap, MRMHead, MRMRow, DeleteIcon, ModalControls } from '../../Style/Refactor'
+import { DeleteIcon, MockRefactorMap, ModalControls,ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 
 interface DeleteStoreState {

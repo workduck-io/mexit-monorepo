@@ -1,12 +1,5 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-
 import Board from '@asseinfo/react-kanban'
-import { useMediaQuery } from 'react-responsive'
-import { useMatch } from 'react-router-dom'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
-import { getNextStatus, getPrevStatus, mog, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
 import {
   Heading,
   OverlaySidebarWindowWidth,
@@ -15,12 +8,18 @@ import {
   TaskCard,
   TaskColumnHeader
 } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect, useMemo, useRef } from 'react'
+import toast from 'react-hot-toast'
+import { useMediaQuery } from 'react-responsive'
+import { useMatch } from 'react-router-dom'
 
 import Plateless from '../Components/Editor/Plateless'
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
 import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../Hooks/useNavigation'
+import { isReadonly, usePermissions } from '../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore } from '../Hooks/useTaskViews'
 import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../Hooks/useTodoKanban'
@@ -29,8 +28,6 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
-import { isReadonly, usePermissions } from '../Hooks/usePermissions'
-import toast from 'react-hot-toast'
 
 interface RenderTaskProps {
   id: string

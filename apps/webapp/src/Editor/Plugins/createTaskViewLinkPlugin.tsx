@@ -1,5 +1,6 @@
-import { PlatePlugin } from '@udecode/plate-core'
 import { ELEMENT_TASK_VIEW_LINK } from '@mexit/core'
+import { PlatePlugin } from '@udecode/plate-core'
+
 import { getTaskViewLinkDeserializer } from '../Components/TaskViewLink/getTaskViewLinkDeserializer'
 
 export const createTaskViewLinkPlugin = (): PlatePlugin => ({

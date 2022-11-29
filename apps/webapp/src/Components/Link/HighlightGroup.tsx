@@ -1,5 +1,3 @@
-import React from 'react'
-
 import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
@@ -17,6 +15,8 @@ import {
   HighlightText,
   SingleHighlightWrapper
 } from '@mexit/shared'
+import { groupBy } from 'lodash'
+import React from 'react'
 
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'

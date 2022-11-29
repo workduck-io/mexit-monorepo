@@ -1,6 +1,5 @@
+import { getParentBreadcrumbs, ILink, mog,NodeType, SharedNode } from '@mexit/core'
 import { BreadcrumbItem } from '@workduck-io/mex-components'
-
-import { ILink, SharedNode, NodeType, getParentBreadcrumbs, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'

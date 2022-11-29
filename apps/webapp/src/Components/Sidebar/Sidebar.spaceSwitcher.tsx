@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react'
-
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
-
+import { IconDisplay, isOnEditableElement,Tooltip } from '@mexit/shared'
 import { tinykeys } from '@workduck-io/tinykeys'
-
-import { Tooltip, IconDisplay, isOnEditableElement } from '@mexit/shared'
+import React, { useEffect } from 'react'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { CreateNewMenu } from './Sidebar.createNew'

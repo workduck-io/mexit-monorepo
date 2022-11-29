@@ -1,39 +1,33 @@
-import React, { useEffect, useMemo, useState } from 'react'
-
+import { Icon } from '@iconify/react'
 import addCircleLine from '@iconify-icons/ri/add-circle-line'
 import checkboxCircleLine from '@iconify-icons/ri/checkbox-circle-line'
 import errorWarningLine from '@iconify-icons/ri/error-warning-line'
 import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import lock2Line from '@iconify-icons/ri/lock-2-line'
-import { Icon } from '@iconify/react'
-import { useCombobox } from 'downshift'
-import toast from 'react-hot-toast'
-import { useDebouncedCallback } from 'use-debounce'
-
 import {
+  convertContentToRawText,
+fuzzySearch,  ILink,
   isClash,
   isReserved,
-  ILink,
-  QuickLinkType,
   QuickLinkStatus,
+  QuickLinkType,
   SEPARATOR,
-  withoutContinuousDelimiter,
-  convertContentToRawText,
   SHARED_NAMESPACE,
-  SingleNamespace
-} from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
-import { Input, StyledCreatatbleSelect, SuggestionTextWrapper } from '@mexit/shared'
-import {
-  StyledCombobox,
-  StyledInputWrapper,
+  SingleNamespace,
+  withoutContinuousDelimiter } from '@mexit/core'
+import { Input,   StyledCombobox,
+StyledCreatatbleSelect,   StyledInputWrapper,
   StyledMenu,
   Suggestion,
   SuggestionContentWrapper,
   SuggestionDesc,
   SuggestionError,
-  SuggestionText
-} from '@mexit/shared'
+  SuggestionText,
+SuggestionTextWrapper } from '@mexit/shared'
+import { useCombobox } from 'downshift'
+import React, { useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
@@ -41,8 +35,8 @@ import { useSearchExtra } from '../../Hooks/useSearch'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { StyledNamespaceSelectComponents } from '../../Style/Select'
 import NamespaceTag from '../NamespaceTag'
 

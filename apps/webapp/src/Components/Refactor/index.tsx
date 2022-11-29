@@ -1,13 +1,10 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
-
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
-import Modal from 'react-modal'
-
+import { isMatch, isReserved } from '@mexit/core'
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
-
-import { isMatch, isReserved } from '@mexit/core'
+import React, { useCallback, useEffect,useMemo } from 'react'
+import Modal from 'react-modal'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'

@@ -1,8 +1,7 @@
+import { apiURLs, mog, runBatch } from '@mexit/core'
 import axios from 'axios'
 import { customAlphabet } from 'nanoid'
 import { expose } from 'threads/worker'
-
-import { apiURLs, mog, runBatch } from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
 

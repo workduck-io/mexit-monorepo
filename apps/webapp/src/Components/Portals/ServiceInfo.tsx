@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react'
-
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { ErrorBoundary } from 'react-error-boundary'
-
+import { FloatingIcon, GroupHeaderContainer,ServiceContainer } from '@mexit/shared'
 // import { ServiceContainer, GroupHeaderContainer, FloatingIcon } from './styled'
 import { Button, IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
-
-import { FloatingIcon, ServiceContainer, GroupHeaderContainer } from '@mexit/shared'
+import React, { useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'

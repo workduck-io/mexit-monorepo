@@ -1,6 +1,5 @@
 import md5 from 'md5'
 import create from 'zustand'
-import { groupBy } from 'lodash'
 
 import {
   API,

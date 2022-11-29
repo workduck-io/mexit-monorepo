@@ -1,18 +1,16 @@
-import { expose } from 'threads/worker'
-
-import {
-  NodeEditorContent,
-  TodoType,
+import { 
+  getTitleFromContent,
+  HighlightAnalysis,
   ELEMENTS_IN_OUTLINE,
-  LIST_ELEMENTS,
-  HIGHLIGHTED_ELEMENTS,
+  convertContentToRawText,
   getTagsFromContent,
   getTodosFromContent,
+  HIGHLIGHTED_ELEMENTS,
+  LIST_ELEMENTS,
+  NodeEditorContent,
   SearchRepExtra,
-  convertContentToRawText,
-  HighlightAnalysis
-} from '@mexit/core'
-import { getTitleFromContent } from '@mexit/core'
+  TodoType } from '@mexit/core'
+import { expose } from 'threads/worker'
 
 export interface OutlineItem {
   id: string

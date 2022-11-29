@@ -1,31 +1,3 @@
-import {
-  createParagraphPlugin,
-  createImagePlugin,
-  createLinkPlugin,
-  createBoldPlugin,
-  createItalicPlugin,
-  createUnderlinePlugin,
-  createStrikethroughPlugin,
-  createMediaEmbedPlugin,
-  createNodeIdPlugin,
-  createPlateUI,
-  ELEMENT_LINK,
-  ELEMENT_MEDIA_EMBED,
-  ELEMENT_MENTION,
-  ELEMENT_PARAGRAPH,
-  LinkElement,
-  StyledElement,
-  withProps,
-  createSelectOnBackspacePlugin,
-  createPlugins,
-  createSingleLinePlugin,
-  parseIframeUrl,
-  MediaEmbedVideo,
-  parseVideoUrl,
-  MediaEmbedTweet
-} from '@udecode/plate'
-import { createHighlightPlugin } from '@udecode/plate-highlight'
-
 import { ELEMENT_ILINK, ELEMENT_TAG, ELEMENT_TODO_LI } from '@mexit/core'
 import {
   createBlurSelectionPlugin,
@@ -34,6 +6,32 @@ import {
   parseRestMediaUrls,
   UploadImageFn
 } from '@mexit/shared'
+import {
+  createBoldPlugin,
+  createImagePlugin,
+  createItalicPlugin,
+  createLinkPlugin,
+  createMediaEmbedPlugin,
+  createNodeIdPlugin,
+  createParagraphPlugin,
+  createPlateUI,
+  createPlugins,
+  createSelectOnBackspacePlugin,
+  createSingleLinePlugin,
+  createStrikethroughPlugin,
+  createUnderlinePlugin,
+  ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
+  ELEMENT_MENTION,
+  ELEMENT_PARAGRAPH,
+  LinkElement,
+  MediaEmbedTweet,
+  MediaEmbedVideo,
+  parseIframeUrl,
+  parseVideoUrl,
+  StyledElement,
+  withProps} from '@udecode/plate'
+import { createHighlightPlugin } from '@udecode/plate-highlight'
 
 import { MentionElement } from '../../../Editor/Components/Mentions/MentionElement'
 import { QuickLinkElement } from '../../../Editor/Components/QuickLink/QuickLinkElement'

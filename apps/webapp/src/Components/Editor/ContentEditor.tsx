@@ -1,13 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
+import { defaultContent, NodeEditorContent } from '@mexit/core'
+import { EditorHeader, EditorWrapper, isOnEditableElement,StyledEditor } from '@mexit/shared'
 import { focusEditor, getPlateEditorRef } from '@udecode/plate'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
-import { defaultContent, NodeEditorContent } from '@mexit/core'
-import { StyledEditor, EditorHeader, EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -19,7 +16,7 @@ import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { usePermissions, isReadonly, compareAccessLevel } from '../../Hooks/usePermissions'
+import { compareAccessLevel,isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useReactions } from '../../Hooks/useReactions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'

@@ -1,9 +1,7 @@
-import arrowGoBackLine from '@iconify-icons/ri/arrow-go-back-line'
 import { Icon } from '@iconify/react'
+import arrowGoBackLine from '@iconify-icons/ri/arrow-go-back-line'
+import { InfoWidgetScroll, InfoWidgetWrapper , Note } from '@mexit/shared'
 import React from 'react'
-
-import { InfoWidgetScroll, InfoWidgetWrapper } from '@mexit/shared'
-import { Note } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { DataInfoHeader } from '../../Style/Backlinks'

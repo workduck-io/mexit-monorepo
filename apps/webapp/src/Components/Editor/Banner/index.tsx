@@ -1,11 +1,8 @@
-import React from 'react'
-
 import { IconifyIcon } from '@iconify/react'
-import { useTheme } from 'styled-components'
-
-import { MexIcon, TitleText } from '@workduck-io/mex-components'
-
 import { Settify } from '@mexit/core'
+import { MexIcon, TitleText } from '@workduck-io/mex-components'
+import React from 'react'
+import { useTheme } from 'styled-components'
 
 import { useAuthStore } from '../../../Stores/useAuth'
 import useRouteStore from '../../../Stores/useRouteStore'

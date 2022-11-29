@@ -1,11 +1,9 @@
-import React from 'react'
-
+import { DisplayShortcut } from '@workduck-io/mex-components'
 import lodash from 'lodash'
 import { transparentize } from 'polished'
+import React from 'react'
 import Modal from 'react-modal'
 import styled, { css } from 'styled-components'
-
-import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import InputShortcut from '../../Components/InputShortcut'
 import { useShortcutStore } from '../../Hooks/useShortcutStore'

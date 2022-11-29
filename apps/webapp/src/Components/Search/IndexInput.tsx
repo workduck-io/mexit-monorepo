@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
-
 import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import gridLine from '@iconify/icons-ri/grid-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { Icon } from '@iconify/react'
+import { capitalize,mog } from '@mexit/core'
+import { SearchFilterInputWrapper, SearchIndexValue, StyledCombobox, StyledMenu, Suggestion } from '@mexit/shared'
 import { useCombobox } from 'downshift'
-
-import { mog, capitalize } from '@mexit/core'
-import { SearchFilterInputWrapper, StyledCombobox, SearchIndexValue, StyledMenu, Suggestion } from '@mexit/shared'
+import React, { useState } from 'react'
 
 import Input from '../Input'
 

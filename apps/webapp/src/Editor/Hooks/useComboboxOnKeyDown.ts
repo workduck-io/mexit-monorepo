@@ -1,18 +1,17 @@
+import { isElder,mog } from '@mexit/core'
 import { getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/plate'
 import { KeyboardHandler } from '@udecode/plate-core'
 import { findIndex, groupBy } from 'lodash'
-
-import { mog, isElder } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
+import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 import { ComboboxKey, IComboboxItem } from '../Types/Combobox'
 import { ComboConfigData, ComboSearchType } from '../Types/MultiCombobox'
 import { getNextWrappingIndex } from '../Utils/getNextWrappingIndex'
 import { getNodeIdFromEditor } from '../Utils/helper'
-import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
 
 const pure = (id: string) => {
   let newId = id

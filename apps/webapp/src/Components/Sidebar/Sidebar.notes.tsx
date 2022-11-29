@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react'
-
-import { useTransition, useSpringRef } from '@react-spring/web'
-
-import { RESERVED_NAMESPACES, mog, SHARED_NAMESPACE } from '@mexit/core'
+import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
+import { useSpringRef,useTransition } from '@react-spring/web'
+import React, { useEffect, useMemo, useRef,useState } from 'react'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
-import { useApiStore, PollActions } from '../../Stores/useApiStore'
+import { PollActions,useApiStore } from '../../Stores/useApiStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import SharedNotes from './SharedNotes'

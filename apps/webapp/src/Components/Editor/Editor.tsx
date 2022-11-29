@@ -1,10 +1,8 @@
+import { NodeEditorContent } from '@mexit/core'
+import { EditorStyles,useEditorChange } from '@mexit/shared'
 import React, { useEffect } from 'react'
-
 import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
-
-import { NodeEditorContent } from '@mexit/core'
-import { useEditorChange, EditorStyles } from '@mexit/shared'
 
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'

@@ -1,13 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
 import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
 import twitterIcon from '@iconify/icons-logos/twitter'
 import globeIcon from '@iconify/icons-ph/globe'
 import { Icon } from '@iconify/react'
-
-import { CenteredColumn, Title } from '@mexit/shared'
-
-import { BackCard } from '@mexit/shared'
+import { BackCard,CenteredColumn, Title  } from '@mexit/shared'
+import React from 'react'
+import styled from 'styled-components'
 
 import { version } from '../../../package.json'
 // import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'

@@ -1,10 +1,8 @@
+import { GridCss } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 import styled, { css } from 'styled-components'
-
-import { Button } from '@workduck-io/mex-components'
-
-import { GridCss } from '@mexit/shared'
 
 export const ThemePreviews = styled.div`
   ${GridCss(3, 5)}

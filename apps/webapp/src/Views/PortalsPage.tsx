@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo } from 'react'
-
 import { Flex, FullHeight, IntegrationContainer } from '@mexit/shared'
+import React, { useEffect, useMemo } from 'react'
 
 import Section from '../Components/Portals/Section'
 import { usePortals } from '../Hooks/usePortals'

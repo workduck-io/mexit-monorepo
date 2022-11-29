@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react'
-
+import { fuzzySearch } from '@mexit/core'
+import { HoverSubtleGlow , Input, Result, ResultHeader, Results, ResultTitle, SearchPreviewWrapper, View } from '@mexit/shared'
 import { debounce } from 'lodash'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTransition } from 'react-spring'
 import styled, { css } from 'styled-components'
-
-import { fuzzySearch } from '@mexit/core'
-import { HoverSubtleGlow } from '@mexit/shared'
-import { Results, Result, ResultHeader, ResultTitle, SearchPreviewWrapper, Input, View } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
@@ -15,7 +12,7 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
 

@@ -1,9 +1,7 @@
+import { SelectWrapper } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-
-import { Button } from '@workduck-io/mex-components'
-
-import { Title, SelectWrapper } from '@mexit/shared'
 
 export const InviteWrapper = styled.div``
 export const MultipleInviteWrapper = styled.div`

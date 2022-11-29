@@ -1,5 +1,4 @@
 import { ThemeType } from '@mexit/shared'
-
 import { CSSProp } from 'styled-components'
 
 declare module 'react' {

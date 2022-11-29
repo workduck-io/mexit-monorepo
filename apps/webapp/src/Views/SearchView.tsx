@@ -1,12 +1,6 @@
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
-
-import searchLine from '@iconify-icons/ri/search-line'
 import { Icon } from '@iconify/react'
-import { debounce } from 'lodash'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
-import { idxKey, Filter, Filters, GlobalFilterJoin, mog } from '@mexit/core'
+import searchLine from '@iconify-icons/ri/search-line'
+import { Filter, Filters, GlobalFilterJoin, idxKey, mog } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -17,6 +11,9 @@ import {
   SearchViewContainer,
   View
 } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { debounce } from 'lodash'
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 
 import SearchIndexInput from '../Components/Search/IndexInput'
 import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'

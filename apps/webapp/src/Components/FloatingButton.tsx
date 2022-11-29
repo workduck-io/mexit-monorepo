@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react'
-
 import CloseIcon from '@iconify/icons-ri/close-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
-import { useLocation } from 'react-router-dom'
-
 import {
   ClickableIcon,
   FlexBetween,
   Float,
   FloatButton,
-  FocusModeProp,
-  StyledMenuItem,
+  FloatingMenu,
   MexIcon,
-  FloatingMenu
-} from '@mexit/shared'
+  StyledMenuItem} from '@mexit/shared'
+import Tippy from '@tippyjs/react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useHelpStore } from '../Stores/useHelpStore'

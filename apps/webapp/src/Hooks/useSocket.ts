@@ -1,13 +1,11 @@
+import { mog } from '@mexit/core'
+import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
 import useWebSocket from 'react-use-websocket'
 
-import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
-
-import { mog } from '@mexit/core'
-
+import config from '../config'
 import { useAuthStore } from '../Stores/useAuth'
 import useRouteStore, { BannerType } from '../Stores/useRouteStore'
 import { SocketActionType } from '../Types/Socket'
-import config from '../config'
 
 const useSocket = () => {
   const userId = useAuthStore((s) => s.userDetails?.userID)

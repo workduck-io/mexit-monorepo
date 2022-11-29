@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-
 import { useFocused } from 'slate-react'
 
 import { useEditorStore } from '../Stores/useEditorStore'

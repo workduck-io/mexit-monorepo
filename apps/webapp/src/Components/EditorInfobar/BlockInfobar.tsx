@@ -2,12 +2,10 @@ import sendToIcon from '@iconify/icons-ph/arrow-bend-up-right-bold'
 import xBold from '@iconify/icons-ph/x-bold'
 import moveToIcon from '@iconify/icons-ri/anticlockwise-2-fill'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import styled, { useTheme } from 'styled-components'
-
-import { Button } from '@workduck-io/mex-components'
-
 import { ContextMenuActionType } from '@mexit/core'
 import { MexIcon } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+import styled, { useTheme } from 'styled-components'
 
 import { useEditorBlockSelection } from '../../Editor/Actions/useEditorBlockSelection'
 import useBlockStore from '../../Stores/useBlockStore'

@@ -1,8 +1,6 @@
-import { useEffect } from 'react'
-
-import create from 'zustand'
 
 import { mog, NodeEditorContent } from '@mexit/core'
+import create from 'zustand'
 
 import { getContent } from '../Stores/useEditorStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'

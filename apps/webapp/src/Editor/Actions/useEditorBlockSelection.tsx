@@ -1,15 +1,14 @@
+import { BlockType, generateTempId, getBlockMetadata,mog, NodeEditorContent, updateIds } from '@mexit/core'
 import {
-  ELEMENT_PARAGRAPH,
-  TNode,
-  insertNodes,
   deleteText,
+  ELEMENT_PARAGRAPH,
   getNodeEntries,
   getPlateEditorRef,
+  insertNodes,
   removeNodes,
+  TNode,
   TNodeEntry
 } from '@udecode/plate'
-
-import { mog, updateIds, NodeEditorContent, generateTempId, BlockType, getBlockMetadata } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useBlockStore from '../../Stores/useBlockStore'

@@ -50,7 +50,7 @@ export const useInternalLinks = () => {
   const updateILinksFromAddedRemovedPaths = (addedPaths: ILink[], removedPaths: ILink[]) => {
     let currILinks = useDataStore.getState().ilinks
 
-    const intersection = removedPaths.filter((l) => addedPaths.find((rem) => l.nodeid == rem.nodeid))
+    const intersection = removedPaths.filter((l) => addedPaths.find((rem) => l.nodeid === rem.nodeid))
     intersection.forEach((path) => {
       currILinks.splice(
         currILinks.findIndex((item) => item.nodeid === path.nodeid),

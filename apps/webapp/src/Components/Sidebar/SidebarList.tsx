@@ -1,13 +1,5 @@
-import { useEffect, useRef, useState, ChangeEventHandler } from 'react'
-
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon, IconifyIcon } from '@iconify/react'
-import Tippy, { useSingleton } from '@tippyjs/react'
-import { debounce } from 'lodash'
-import { useTheme } from 'styled-components'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { fuzzySearch, mog } from '@mexit/core'
 import {
   DesignItem,
@@ -21,6 +13,10 @@ import {
   SidebarListWrapper,
   StyledTreeItem
 } from '@mexit/shared'
+import Tippy, { useSingleton } from '@tippyjs/react'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { debounce } from 'lodash'
+import { ChangeEventHandler,useEffect, useRef, useState } from 'react'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { ItemContent } from './SharedNotes'

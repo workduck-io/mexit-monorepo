@@ -1,6 +1,5 @@
+import { AccessLevel, InvitedUser, Mentionable,ShareContext } from '@mexit/core'
 import create from 'zustand'
-
-import { AccessLevel, ShareContext, InvitedUser, Mentionable } from '@mexit/core'
 
 // The invite mode is only when the editor is open and used to open on new combobox invite
 type ShareModalMode = 'invite' | 'permission'

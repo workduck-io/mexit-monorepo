@@ -1,25 +1,22 @@
-import React, { useMemo } from 'react'
-
 import closeLine from '@iconify/icons-ri/close-line'
 import { Icon } from '@iconify/react'
-import { capitalize } from 'lodash'
-
-import { Filter, FilterValue, FilterJoin, FilterType, mog } from '@mexit/core'
+import { Filter, FilterJoin, FilterType, FilterValue, mog } from '@mexit/core'
 import {
-  FilterTypeIcons,
-  Menu,
-  MenuItem,
-  IconDisplay,
   FilterJoinDiv,
-  ItemLabel,
-  FilterValueDiv,
-  FilterWrapper,
   FilterRemoveButton,
   FilterTypeDiv,
-  GenericFlex
-} from '@mexit/shared'
+  FilterTypeIcons,
+  FilterValueDiv,
+  FilterWrapper,
+  GenericFlex,
+  IconDisplay,
+  ItemLabel,
+  Menu,
+  MenuItem} from '@mexit/shared'
+import { capitalize } from 'lodash'
+import React, { useMemo } from 'react'
 
-import { useFilterIcons, getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'
+import { getFilterJoinIcon,useFilterIcons } from '../../Hooks/useFilterValueIcons'
 
 interface FilterProps {
   filter: Filter

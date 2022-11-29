@@ -1,19 +1,13 @@
-import create from 'zustand'
-
 import {
-  GenericSearchResult,
-  mog,
-  SearchFilter,
-  isElder,
-  getAllParentPaths,
-  FilterTypeWithOptions,
-  getAllParentIds,
   Filter,
-  GlobalFilterJoin,
-  SearchFilterFunctions,
   Filters,
-  idxKey
-} from '@mexit/core'
+  FilterTypeWithOptions,
+  GenericSearchResult,
+  getAllParentIds,
+  GlobalFilterJoin,
+  idxKey,
+  SearchFilterFunctions} from '@mexit/core'
+import create from 'zustand'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useGenericFilterFunctions } from './useFilterFunctions'

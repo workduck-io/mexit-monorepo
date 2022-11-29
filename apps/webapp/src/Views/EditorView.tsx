@@ -1,10 +1,8 @@
+import { tinykeys } from '@workduck-io/tinykeys'
 import { useEffect, useState } from 'react'
-
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { tinykeys } from '@workduck-io/tinykeys'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 import useEditorActions from '../Hooks/useEditorActions'

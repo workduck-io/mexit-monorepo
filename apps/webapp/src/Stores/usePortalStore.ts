@@ -1,8 +1,6 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { IDBStorage } from '@mexit/core'
-
 import { ActionGroupType, PortalType } from '../Types/Actions'
 
 type PortalStoreType = {

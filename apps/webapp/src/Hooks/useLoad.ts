@@ -1,37 +1,34 @@
-import { toast } from 'react-hot-toast'
-
 import {
+checkIfUntitledDraftNode,  DRAFT_PREFIX,
+  ELEMENT_PARAGRAPH,
+  getAllParentIds,
+  getParentNodePath,
+  ILink,
+  mog,
   NodeEditorContent,
   NodeProperties,
-  ILink,
-  DRAFT_PREFIX,
-  mog,
-  ELEMENT_PARAGRAPH,
   SEPARATOR,
-  updateEmptyBlockTypes,
-  getAllParentIds,
-  getParentNodePath
-} from '@mexit/core'
-import { checkIfUntitledDraftNode } from '@mexit/core'
+  updateEmptyBlockTypes } from '@mexit/core'
+import { toast } from 'react-hot-toast'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore, getContent } from '../Stores/useEditorStore'
+import { getContent,useEditorStore } from '../Stores/useEditorStore'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useTreeStore } from '../Stores/useTreeStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useTreeStore } from '../Stores/useTreeStore'
 import { useApi } from './API/useNodeAPI'
+import { useComments } from './useComments'
 import { useBufferStore, useEditorBuffer } from './useEditorBuffer'
 import { useFetchShareData } from './useFetchShareData'
 import { useLastOpened } from './useLastOpened'
 import { getLinkFromNodeIdHookless } from './useLinks'
+import { useReactions } from './useReactions'
 import { useRefactor } from './useRefactor'
 import useToggleElements from './useToggleElements'
-import { useComments } from './useComments'
-import { useReactions } from './useReactions'
 
 export interface LoadNodeOptions {
   savePrev?: boolean

@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react'
-
 import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
-import styled, { css, useTheme } from 'styled-components'
-
-import { TitleWithShortcut } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { mog } from '@mexit/core'
 import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
+import Tippy from '@tippyjs/react'
+import { TitleWithShortcut } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect } from 'react'
+import styled, { css, useTheme } from 'styled-components'
 
 import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import useLayout from '../Hooks/useLayout'

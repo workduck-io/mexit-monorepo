@@ -1,9 +1,9 @@
 import {
+  ELEMENT_CODE_BLOCK,
+  ELEMENT_CODE_LINE,
   getParentNode,
   isCollapsed,
   isElement,
-  ELEMENT_CODE_BLOCK,
-  ELEMENT_CODE_LINE,
   PlateEditor
 } from '@udecode/plate'
 import { Range } from 'slate'

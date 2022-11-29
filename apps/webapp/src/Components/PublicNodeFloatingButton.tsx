@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react'
-
 import externalLinkLine from '@iconify/icons-ri/external-link-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
+import { Float } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
 import { transparentize } from 'polished'
+import React, { useEffect, useMemo, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 import styled from 'styled-components'
-
-import { Button } from '@workduck-io/mex-components'
-
-import { Float } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 

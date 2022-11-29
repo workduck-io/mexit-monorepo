@@ -1,14 +1,6 @@
-import React from 'react'
-
-import focusLine from '@iconify/icons-ri/focus-line'
-import shareLine from '@iconify/icons-ri/share-line'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import { Loading , NodeInfo } from '@mexit/shared'
 import { useSingleton } from '@tippyjs/react'
-
-import { ToolbarTooltip, IconButton } from '@workduck-io/mex-components'
-
-import { Loading } from '@mexit/shared'
-import { InfoTools, NodeInfo } from '@mexit/shared'
+import React from 'react'
 
 import useLayout from '../../Hooks/useLayout'
 import useToggleElements from '../../Hooks/useToggleElements'
@@ -16,7 +8,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
-import BookmarkButton from '../Buttons/BookmarkButton'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
 
 const Toolbar = () => {

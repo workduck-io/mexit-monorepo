@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from 'react'
 import hotkeys, { HotkeysEvent } from 'hotkeys-js'
+import { useCallback, useEffect } from 'react'
 
 type CallbackFn = (event: KeyboardEvent, handler: HotkeysEvent) => void
 

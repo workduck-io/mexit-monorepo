@@ -1,15 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react'
-
-import user3Line from '@iconify-icons/ri/user-3-line'
 // different import path!
 import { Icon } from '@iconify/react'
+import user3Line from '@iconify-icons/ri/user-3-line'
+import { AccessLevel, mog } from '@mexit/core'
+import { CardShadow,Centered } from '@mexit/shared'
 import Tippy from '@tippyjs/react/headless'
 import Avatar from 'boring-avatars'
 import md5 from 'md5'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-
-import { AccessLevel, mog } from '@mexit/core'
-import { Centered, CardShadow } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
 import { useUserService } from '../../Hooks/API/useUserAPI'

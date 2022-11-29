@@ -1,9 +1,12 @@
 import { Icon } from '@iconify/react'
-import { MIcon, mog, Reaction as ReactionType, UserReaction } from '@mexit/core'
+import { MIcon, Reaction as ReactionType, UserReaction } from '@mexit/core'
 import { IconDisplay, Tooltip } from '@mexit/shared'
 import { debounce } from 'lodash'
+import { useCallback, useMemo, useState } from 'react'
+
+import { useMentions } from '../../Hooks/useMentions'
 import { reactionsWithCount } from '../../Hooks/useReactions'
-import { useReactionAPI } from '../../Hooks/API/useCommentAndReactionAPI'
+import { ProfileImage } from '../User/ProfileImage'
 import {
   CompressedReactionGroup,
   ReactionButton,
@@ -14,10 +17,6 @@ import {
   ReactionDetailsWrapper,
   ReactionsWrapper
 } from './Reactions.style'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMentions } from '../../Hooks/useMentions'
-import { ProfileImage } from '../User/ProfileImage'
-import Sparkles from './Sparkle'
 
 interface UserReactionRowProps {
   userReaction: UserReaction

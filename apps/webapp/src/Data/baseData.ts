@@ -1,12 +1,10 @@
 import {
   BASE_DRAFT_PATH,
-  NodeContent,
+  Contents,
   ELEMENT_PARAGRAPH,
   generateNodeUID,
   generateTempId,
-  ILink,
-  Contents
-} from '@mexit/core'
+  NodeContent} from '@mexit/core'
 
 import { PersistentData } from './../Types/Data'
 import { draftContent } from './initData/draftDoc'

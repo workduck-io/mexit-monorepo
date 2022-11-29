@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react'
-
-import { transparentize } from 'polished'
-import { FallbackProps } from 'react-error-boundary'
-import styled from 'styled-components'
-
-import { Button } from '@workduck-io/mex-components'
-
 import { IS_DEV, mog } from '@mexit/core'
 import { CardShadow, Title } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+import { transparentize } from 'polished'
+import React, { useEffect } from 'react'
+import { FallbackProps } from 'react-error-boundary'
+import styled from 'styled-components'
 
 import { useEditorErrorStore } from '../../Hooks/useEditorActions'
 

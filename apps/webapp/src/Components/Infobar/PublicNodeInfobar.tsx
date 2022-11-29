@@ -1,7 +1,6 @@
+import { mog,NodeEditorContent } from '@mexit/core'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-
-import { NodeEditorContent, mog } from '@mexit/core'
 
 import { analyseContent } from '../../Workers/controller'
 import { PublicTagsView } from '../Editor/TagsRelated'

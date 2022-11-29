@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { MexIconType } from './mex'
 
 const Telegram: React.FC<MexIconType> = ({ height, width }) => {

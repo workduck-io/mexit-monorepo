@@ -1,10 +1,8 @@
+import { NodeType } from '@mexit/core'
+import { RootElement, SharedNodeIcon } from '@mexit/shared'
 import React, { useMemo } from 'react'
-
 import { useSelected } from 'slate-react'
 import styled from 'styled-components'
-
-import { mog, NodeType } from '@mexit/core'
-import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
 import useArchive from '../../../Hooks/useArchive'
 import { useLinks } from '../../../Hooks/useLinks'

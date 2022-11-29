@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
-
-import { debounce } from 'lodash'
-import { matchSorter } from 'match-sorter'
-import Modal from 'react-modal'
-
 // import { DisplayShortcut } from '@workduck-io/mex-components'
 import { Input } from '@mexit/shared'
+import { debounce } from 'lodash'
+import { matchSorter } from 'match-sorter'
+import React, { useEffect, useState } from 'react'
+import Modal from 'react-modal'
 
 import { useShortcutStore } from '../Hooks/useShortcutStore'
 import useShortcutTableData from '../Hooks/useShortcutTableData'

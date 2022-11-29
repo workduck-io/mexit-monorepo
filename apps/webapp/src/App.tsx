@@ -1,15 +1,14 @@
-import React, { useMemo } from 'react'
-
-import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import './Stores'
 
 import { defaultThemes, Notification } from '@mexit/shared'
+import React, { useMemo } from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
 
 import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
-import './Stores'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'

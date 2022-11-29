@@ -1,4 +1,4 @@
-import { getTodosFromContent, mog, NodeEditorContent } from '@mexit/core'
+import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'

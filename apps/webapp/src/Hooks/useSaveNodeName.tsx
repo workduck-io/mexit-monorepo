@@ -1,6 +1,5 @@
-import toast from 'react-hot-toast'
-
 import { checkIfUntitledDraftNode, getParentNodePath, mog } from '@mexit/core'
+import toast from 'react-hot-toast'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { getLinkFromNodeIdHookless } from './useLinks'

@@ -1,12 +1,4 @@
-import { useMemo } from 'react'
-
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import { PlateProvider } from '@udecode/plate'
-import Modal from 'react-modal'
-import { useTheme } from 'styled-components'
-
-import { Button, MexIcon } from '@workduck-io/mex-components'
-
 import { defaultContent, mog, NodeEditorContent, NodeType } from '@mexit/core'
 import {
   EditorPreviewControls,
@@ -15,11 +7,17 @@ import {
   sharedAccessIcon,
   Tooltip
 } from '@mexit/shared'
+import { PlateProvider } from '@udecode/plate'
+import { Button, MexIcon } from '@workduck-io/mex-components'
+import { useMemo } from 'react'
+import Modal from 'react-modal'
+import { useTheme } from 'styled-components'
 
 import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
+import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useTags } from '../../Hooks/useTags'
 import { useContentStore } from '../../Stores/useContentStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
@@ -27,7 +25,6 @@ import Editor from '../Editor/Editor'
 import { TagsRelatedTiny } from '../Editor/TagsRelated'
 import NamespaceTag from '../NamespaceTag'
 import { PreviewNoteContainer } from './styled'
-import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 
 const PreviewNoteModal = () => {
   const isOpen = useModalStore((store) => store.open === ModalsType.previewNote)

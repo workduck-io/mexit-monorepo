@@ -1,15 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
-
-import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
-import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import magicLine from '@iconify/icons-ri/magic-line'
 import { Icon } from '@iconify/react'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
-import { nanoid } from 'nanoid'
-import genereateName from 'project-name-generator'
-
-import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
-
+import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
+import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import {
   apiURLs,
   batchArray,
@@ -36,6 +28,11 @@ import {
   Title,
   View
 } from '@mexit/shared'
+import { ELEMENT_PARAGRAPH } from '@udecode/plate'
+import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
+import { nanoid } from 'nanoid'
+import genereateName from 'project-name-generator'
+import React, { useEffect, useMemo } from 'react'
 
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'

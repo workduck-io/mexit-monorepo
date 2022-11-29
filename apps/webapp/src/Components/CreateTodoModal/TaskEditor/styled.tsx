@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { CheckBoxWrapper, EditorStyles } from '@mexit/shared'
+import styled from 'styled-components'
 
 import { ModalSection } from '../../../Style/Refactor'
 

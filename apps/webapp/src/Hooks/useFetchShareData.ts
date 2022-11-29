@@ -1,6 +1,5 @@
 import { AccessLevel, mog, runBatch, ShareContext } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 import { getEmailStart } from '../Utils/constants'
 import { useNamespaceApi } from './API/useNamespaceAPI'

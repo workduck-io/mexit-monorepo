@@ -1,12 +1,9 @@
 // different import path!
-import React from 'react'
-
 import { Icon } from '@iconify/react'
+import { InputBlock, InputWrapper,Label } from '@mexit/shared'
 import Tippy from '@tippyjs/react/headless'
-
 import { Infobox } from '@workduck-io/mex-components'
-
-import { InputBlock, Label, InputWrapper } from '@mexit/shared'
+import React from 'react'
 
 import { ErrorTooltip } from '../Style/Tippy'
 

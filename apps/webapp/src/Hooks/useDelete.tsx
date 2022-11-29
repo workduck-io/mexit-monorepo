@@ -1,7 +1,7 @@
-import { mog, ILink, isMatch, getAllParentPaths, getAllParentIds } from '@mexit/core'
+import { getAllParentIds, ILink, isMatch, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore, getContent } from '../Stores/useEditorStore'
+import { getContent,useEditorStore } from '../Stores/useEditorStore'
 import { useHistoryStore } from '../Stores/useHistoryStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { RefactorPath } from '../Stores/useRenameStore'

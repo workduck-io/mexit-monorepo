@@ -1,9 +1,3 @@
-import { useEffect, useState } from 'react'
-
-import { connectToParent } from 'penpal'
-
-import { useAuth } from '@workduck-io/dwindle'
-
 import {
   AddHighlightFn,
   idxKey,
@@ -14,6 +8,9 @@ import {
   Reminder,
   ReminderActions
 } from '@mexit/core'
+import { useAuth } from '@workduck-io/dwindle'
+import { connectToParent } from 'penpal'
+import { useEffect, useState } from 'react'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useReminders } from '../Hooks/useReminders'

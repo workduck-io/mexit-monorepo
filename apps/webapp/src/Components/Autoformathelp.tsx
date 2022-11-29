@@ -1,8 +1,7 @@
+import { Title } from '@mexit/shared'
 import { transparentize } from 'polished'
 import React from 'react'
 import styled from 'styled-components'
-
-import { Title } from '@mexit/shared'
 
 const HintColumn = styled.div`
   display: flex;

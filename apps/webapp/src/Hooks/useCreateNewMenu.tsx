@@ -1,17 +1,16 @@
 import { IconifyIcon } from '@iconify/react'
+import { defaultContent, generateSnippetId } from '@mexit/core'
+import { InteractiveToast } from '@mexit/shared'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 import toast from 'react-hot-toast'
 
-import { defaultContent, generateSnippetId } from '@mexit/core'
-import { InteractiveToast } from '@mexit/shared'
-
 import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
-import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 import { useUpdater } from './useUpdater'
 

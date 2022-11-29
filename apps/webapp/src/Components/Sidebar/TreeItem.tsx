@@ -1,13 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 // import { complexTree } from '../mockdata/complexTree'
 import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
-import Tippy from '@tippyjs/react'
-import { PathMatch } from 'react-router-dom'
-
 import { IS_DEV } from '@mexit/core'
 import {
   ItemContent,
@@ -20,6 +14,10 @@ import {
   TooltipContentWrapper,
   TooltipCount
 } from '@mexit/shared'
+import * as ContextMenu from '@radix-ui/react-context-menu'
+import Tippy from '@tippyjs/react'
+import React, { useEffect, useRef } from 'react'
+import { PathMatch } from 'react-router-dom'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { TreeContextMenu } from './TreeWithContextMenu'

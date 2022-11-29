@@ -1,11 +1,9 @@
+import { OverlaySidebarWindowWidth } from '@mexit/shared'
 import { useEffect } from 'react'
-
 import { useMediaQuery } from 'react-responsive'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
-
-import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import * as Actions from './Actions'
 import RouteNotFound from './Components/404'

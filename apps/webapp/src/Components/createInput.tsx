@@ -1,8 +1,6 @@
-import React from 'react'
-
-import styled from 'styled-components'
-
 import { Input, StyledMenu } from '@mexit/shared'
+import React from 'react'
+import styled from 'styled-components'
 
 import NodeSelect from './NodeSelect/NodeSelect'
 

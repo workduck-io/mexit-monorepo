@@ -1,6 +1,5 @@
-import React, { CSSProperties } from 'react'
-
 import { AnimatedProps } from '@react-spring/web'
+import React, { CSSProperties } from 'react'
 
 import { SingleSpace } from '../Sidebar.style'
 import { MexTree } from '../Sidebar.tree'

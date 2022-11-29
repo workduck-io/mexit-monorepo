@@ -1,6 +1,5 @@
-import create from 'zustand'
-
 import { NodeLink } from '@mexit/core'
+import create from 'zustand'
 
 import { RefactorPath } from './useRenameStore'
 

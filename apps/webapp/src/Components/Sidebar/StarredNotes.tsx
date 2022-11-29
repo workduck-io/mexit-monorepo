@@ -1,14 +1,13 @@
-import React, { useEffect, useMemo } from 'react'
-
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import starFill from '@iconify/icons-ri/star-fill'
 import Tippy, { useSingleton } from '@tippyjs/react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { useLinks, getTitleFromPath } from '../../Hooks/useLinks'
+import { getTitleFromPath,useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import StarNoteButton from '../Buttons/StarNoteButton'

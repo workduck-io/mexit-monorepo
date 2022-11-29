@@ -1,10 +1,10 @@
-import React from 'react'
-
 import checkboxBlankCircleLine from '@iconify/icons-radix-icons/drag-handle-dots-2'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshLine from '@iconify/icons-ri/refresh-line'
 import timeLine from '@iconify/icons-ri/time-line'
 import { Icon } from '@iconify/react'
+import { IS_DEV } from '@mexit/core'
+import { RelativeTime } from '@mexit/shared'
 import Tippy, { TippyProps } from '@tippyjs/react'
 import { default as TippyHeadless, TippyProps as TippyHeadlessProps } from '@tippyjs/react/headless'
 import {
@@ -26,10 +26,8 @@ import {
   ELEMENT_UL,
   withDraggables
 } from '@udecode/plate'
+import React from 'react'
 import styled, { css } from 'styled-components'
-
-import { IS_DEV } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
 
 import { ProfileImage } from '../../Components/User/ProfileImage'
 import useBlockStore from '../../Stores/useBlockStore'

@@ -1,9 +1,7 @@
+import { defaultThemes } from '@mexit/shared'
 import React from 'react'
-
 import { useTransition } from 'react-spring'
 import { ThemeProvider } from 'styled-components'
-
-import { defaultThemes } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'

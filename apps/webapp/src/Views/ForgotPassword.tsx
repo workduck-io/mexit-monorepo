@@ -1,17 +1,11 @@
+import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
+import { AuthForm, BackCard, ButtonFields,CenteredColumn , FooterCard , Title  } from '@mexit/shared'
+import { useAuth } from '@workduck-io/dwindle'
+import { Button,LoadingButton } from '@workduck-io/mex-components'
 import { useState } from 'react'
-
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
-
-import { useAuth } from '@workduck-io/dwindle'
-import { LoadingButton, Button } from '@workduck-io/mex-components'
-
-import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
-import { CenteredColumn } from '@mexit/shared'
-import { BackCard, FooterCard } from '@mexit/shared'
-import { Title } from '@mexit/shared'
-import { AuthForm, ButtonFields } from '@mexit/shared'
 
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'

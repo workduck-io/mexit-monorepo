@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
-
 import { CenteredColumn, Link, Title } from '@mexit/shared'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
 
 export const ImageWrapper = styled.div`
   display: flex;

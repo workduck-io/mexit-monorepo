@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo } from 'react'
-
+import { NodeEditorContent } from '@mexit/core'
+import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 import { Plate, PlatePlugin } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { transparentize } from 'polished'
+import React, { useEffect, useMemo } from 'react'
 import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 import styled, { css } from 'styled-components'
-
-import { NodeEditorContent } from '@mexit/core'
-import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { MENU_ID } from './Components/BlockContextMenu'

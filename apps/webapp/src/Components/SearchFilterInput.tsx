@@ -1,22 +1,19 @@
-import React, { useState } from 'react'
-
 import { Icon } from '@iconify/react'
-import { useCombobox } from 'downshift'
-import { startCase } from 'lodash'
-
-import { FilterKey, mog, SearchFilter } from '@mexit/core'
+import { FilterKey, SearchFilter } from '@mexit/core'
 import {
-  StyledMenu,
+  FilterComboboxToggle,
   Input,
-  SearchFilterInputWrapper,
-  StyledCombobox,
-  Suggestion,
   SearchFilterCategoryLabel,
   SearchFilterCount,
+  SearchFilterInputWrapper,
   SearchFilterListCurrent,
   SearchFilterStyled,
-  FilterComboboxToggle
-} from '@mexit/shared'
+  StyledCombobox,
+  StyledMenu,
+  Suggestion} from '@mexit/shared'
+import { useCombobox } from 'downshift'
+import { startCase } from 'lodash'
+import React, { useState } from 'react'
 
 interface SearchFilterInputProps<Item> {
   filterKey: FilterKey

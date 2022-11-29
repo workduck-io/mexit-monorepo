@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react'
-
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { GoogleAuthButton } from '@mexit/shared'
 

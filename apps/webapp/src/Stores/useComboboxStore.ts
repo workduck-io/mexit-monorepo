@@ -1,7 +1,7 @@
 import { UseComboboxReturnValue } from 'downshift'
 import { BaseRange, Point, Range } from 'slate'
 
-import { IComboboxItem, ComboboxKey } from '../Editor/Types/Combobox'
+import { ComboboxKey,IComboboxItem } from '../Editor/Types/Combobox'
 import { ComboboxType, ComboSearchType } from '../Editor/Types/MultiCombobox'
 import { createStore, setStoreValue } from '../Editor/Utils/store'
 import { useEditorStore } from './useEditorStore'

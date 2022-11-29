@@ -1,10 +1,8 @@
-import React from 'react'
-
 import home7Line from '@iconify/icons-ri/home-7-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-
 import { ReminderViewData } from '@mexit/core'
+import React from 'react'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'

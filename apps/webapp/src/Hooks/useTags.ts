@@ -1,4 +1,4 @@
-import { getTagsFromContent, TagsCache, generateTag } from '@mexit/core'
+import { generateTag,getTagsFromContent, TagsCache } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useDataStore } from '../Stores/useDataStore'

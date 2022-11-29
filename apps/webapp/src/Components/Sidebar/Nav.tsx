@@ -1,13 +1,6 @@
-import React from 'react'
-
 import archiveLine from '@iconify/icons-ri/archive-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import settings4Line from '@iconify/icons-ri/settings-4-line'
-import { useSingleton } from '@tippyjs/react'
-import { NavLink, useLocation } from 'react-router-dom'
-
-import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
-
 import {
   ComingSoon,
   Count,
@@ -22,6 +15,10 @@ import {
   SideNav,
   WDLogo
 } from '@mexit/shared'
+import { useSingleton } from '@tippyjs/react'
+import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
+import React from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import useNavlinks, { GetIcon } from '../../Data/links'
 import useLayout from '../../Hooks/useLayout'

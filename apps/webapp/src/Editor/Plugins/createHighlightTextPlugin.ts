@@ -1,7 +1,6 @@
+import { mog } from '@mexit/core'
 import { getNodesRange } from '@udecode/plate'
 import { createPluginFactory, Decorate } from '@udecode/plate-core'
-
-import { mog } from '@mexit/core'
 
 import { useBlockHighlightStore } from '../../Stores/useFocusBlock'
 

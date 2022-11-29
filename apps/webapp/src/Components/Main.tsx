@@ -1,14 +1,10 @@
-import React, { useEffect } from 'react'
-
+import { IS_DEV } from '@mexit/core'
+import { GridWrapper , linkTooltip , navTooltip } from '@mexit/shared'
 import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
+import React, { useEffect } from 'react'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
 import styled from 'styled-components'
-
-import { IS_DEV } from '@mexit/core'
-import { linkTooltip } from '@mexit/shared'
-import { GridWrapper } from '@mexit/shared'
-import { navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'
 import { useAuthStore } from '../Stores/useAuth'

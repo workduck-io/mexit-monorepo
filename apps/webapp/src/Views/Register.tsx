@@ -1,13 +1,4 @@
-import React, { useState } from 'react'
-
-import { useForm, Controller } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
-
-import { useAuth } from '@workduck-io/dwindle'
-import { Button, LoadingButton } from '@workduck-io/mex-components'
-
-import { RegisterFormData, VerifyFormData, UserRoleValues } from '@mexit/core'
+import { RegisterFormData, UserRoleValues,VerifyFormData } from '@mexit/core'
 import {
   AuthForm,
   BackCard,
@@ -18,13 +9,19 @@ import {
   StyledCreatatbleSelect,
   Title
 } from '@mexit/shared'
+import { useAuth } from '@workduck-io/dwindle'
+import { Button, LoadingButton } from '@workduck-io/mex-components'
+import React, { useState } from 'react'
+import { Controller,useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
-import { EMAIL_REG, PASSWORD, ALIAS_REG } from '../Utils/constants'
+import { ALIAS_REG,EMAIL_REG, PASSWORD } from '../Utils/constants'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)

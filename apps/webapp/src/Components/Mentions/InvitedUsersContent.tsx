@@ -1,33 +1,29 @@
-import React, { useMemo } from 'react'
-
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import repeatLine from '@iconify/icons-ri/repeat-line'
-
-import { IconButton, Button } from '@workduck-io/mex-components'
-
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
+import { Button,IconButton } from '@workduck-io/mex-components'
+import React, { useMemo } from 'react'
 
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { useMentions, getAccessValue } from '../../Hooks/useMentions'
+import { getAccessValue,useMentions } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { ModalHeader, ModalControls } from '../../Style/Refactor'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { ModalControls,ModalHeader } from '../../Style/Refactor'
 import {
-  SharedPermissionsWrapper,
-  SharedPermissionsTable,
-  ShareRowHeading,
-  ShareRow,
   ShareAlias,
   ShareAliasInput,
+  SharedPermissionsTable,
+  SharedPermissionsWrapper,
   ShareEmail,
   SharePermission,
+  ShareRow,
   ShareRowAction,
-  ShareRowActionsWrapper
-} from './styles'
+  ShareRowActionsWrapper,
+  ShareRowHeading} from './styles'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {

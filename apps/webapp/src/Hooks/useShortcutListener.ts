@@ -1,8 +1,6 @@
-import { useEffect } from 'react'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import { blurEditableElement, isOnEditableElement } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import { useEffect } from 'react'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'

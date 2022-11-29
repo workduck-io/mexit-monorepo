@@ -1,6 +1,5 @@
-import Modal from 'react-modal'
-
 import { ContextMenuActionType } from '@mexit/core'
+import Modal from 'react-modal'
 
 import { QuickLink, WrappedNodeSelect } from '../../../Components/NodeSelect/NodeSelect'
 import { useCreateNewNote } from '../../../Hooks/useCreateNewNote'

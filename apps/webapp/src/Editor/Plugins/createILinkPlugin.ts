@@ -1,8 +1,7 @@
+import { ELEMENT_ILINK, mog } from '@mexit/core'
 import { getPreviousNode, insertText } from '@udecode/plate'
 import { PlatePlugin, WithOverride } from '@udecode/plate-core'
 import { Range } from 'slate'
-
-import { ELEMENT_ILINK, mog } from '@mexit/core'
 
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'

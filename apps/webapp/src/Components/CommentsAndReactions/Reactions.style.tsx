@@ -1,5 +1,5 @@
-import styled, { css, keyframes } from 'styled-components'
 import { mix, transparentize } from 'polished'
+import styled, { css, keyframes } from 'styled-components'
 
 //
 

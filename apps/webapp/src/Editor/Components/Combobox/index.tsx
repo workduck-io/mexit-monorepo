@@ -1,44 +1,37 @@
-import React, { useCallback, useEffect, useState } from 'react'
-
-import { shift, offset, flip } from '@floating-ui/react-dom-interactions'
+import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
 import { Icon } from '@iconify/react'
-import useMergedRef from '@react-hook/merged-ref'
-import {
-  getPlateEditorRef,
-  getRangeBoundingClientRect,
-  PortalBody,
-  useEditorState,
-  usePlateEditorRef,
-  useVirtualFloating
-} from '@udecode/plate'
-import { useTheme } from 'styled-components'
-
-import { DisplayShortcut } from '@workduck-io/mex-components'
-
-import { mog, NodeEditorContent } from '@mexit/core'
-import { ComboboxItem, ComboboxItemTitle, MexIcon, PreviewMeta } from '@mexit/shared'
-import {
-  ActionTitle,
-  ComboboxRoot,
+import { NodeEditorContent } from '@mexit/core'
+import {   ActionTitle,
+ComboboxItem, ComboboxItemTitle,   ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
+MexIcon, PreviewMeta ,
   ShortcutText
 } from '@mexit/shared'
+import {
+  getRangeBoundingClientRect,
+  PortalBody,
+  usePlateEditorRef,
+  useVirtualFloating
+} from '@udecode/plate'
+import { DisplayShortcut } from '@workduck-io/mex-components'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTheme } from 'styled-components'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { Shortcut } from '../../../Stores/useHelpStore'
+import { CategoryType, QuickLinkType } from '../../constants'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
-import { CategoryType, QuickLinkType } from '../../constants'
 import BlockCombo from './BlockCombo'
 
 export const spotlightShortcuts = {

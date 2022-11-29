@@ -1,7 +1,6 @@
+import { ELEMENT_MENTION } from '@mexit/core'
 import { getPreviousNode, insertText } from '@udecode/plate'
 import { PlatePlugin, WithOverride } from '@udecode/plate-core'
-
-import { ELEMENT_MENTION } from '@mexit/core'
 
 import { getUserFromUseridHookless } from '../../Stores/useMentionsStore'
 

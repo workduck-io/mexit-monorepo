@@ -1,4 +1,4 @@
-import { NodeLink, mog, getUniquePath, isMatch, ILink } from '@mexit/core'
+import { getUniquePath, ILink,isMatch, mog, NodeLink } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { RefactorPath } from '../Stores/useRenameStore'

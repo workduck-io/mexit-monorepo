@@ -1,6 +1,4 @@
 import { ReminderViewData } from '@mexit/core'
-import { useEffect } from 'react'
-
 import { matchPath, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 export const ROUTE_PATHS = {

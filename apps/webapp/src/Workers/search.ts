@@ -1,24 +1,21 @@
+import {
+  GenericSearchResult,
+  idxKey,
+  mog,
+  parseNode,
+  PersistentData,
+  SearchIndex,
+  SearchRepExtra,
+  SearchWorker} from '@mexit/core'
 import { expose } from 'threads/worker'
 
 import {
-  SearchIndex,
-  SearchWorker,
-  PersistentData,
-  idxKey,
-  parseNode,
-  GenericSearchResult,
-  mog,
-  SearchRepExtra
-} from '@mexit/core'
-
-import {
-  createSearchIndex,
   createIndexCompositeKey,
+  createSearchIndex,
   getNodeAndBlockIdFromCompositeKey,
   indexedFields,
-  TITLE_RANK_BUMP,
-  SEARCH_RESULTS_LIMIT
-} from '../Utils/flexsearch'
+  SEARCH_RESULTS_LIMIT,
+  TITLE_RANK_BUMP} from '../Utils/flexsearch'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null

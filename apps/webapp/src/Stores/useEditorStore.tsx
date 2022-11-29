@@ -1,9 +1,7 @@
+import { defaultContent, getInitialNode,NodeContent, NodeProperties } from '@mexit/core'
 import React from 'react'
-
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { NodeContent, NodeProperties, defaultContent, getInitialNode } from '@mexit/core'
 
 import { ComboTriggerType } from './useComboboxStore'
 import { useContentStore } from './useContentStore'

@@ -1,8 +1,6 @@
-import { spawn, Thread } from 'threads'
-
+import { idxKey, mog, NodeEditorContent, PersistentData, SearchRepExtra } from '@mexit/core'
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
-
-import { NodeEditorContent, PersistentData, idxKey, mog, SearchRepExtra } from '@mexit/core'
+import { spawn, Thread } from 'threads'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'

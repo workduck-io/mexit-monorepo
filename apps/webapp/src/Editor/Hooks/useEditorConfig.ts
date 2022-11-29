@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -11,6 +9,7 @@ import {
   mog,
   SEPARATOR
 } from '@mexit/core'
+import { useMemo } from 'react'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -26,11 +25,11 @@ import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
 import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
+import { CategoryType, QuickLinkType } from '../constants'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
 import { ComboboxConfig, ComboboxType, ComboConfigData } from '../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../Utils/helper'
-import { CategoryType, QuickLinkType } from '../constants'
 
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {
   const tags = useDataStore((store) => store.tags)

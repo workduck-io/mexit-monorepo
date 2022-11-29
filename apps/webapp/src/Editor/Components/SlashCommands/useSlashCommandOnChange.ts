@@ -1,3 +1,4 @@
+import { isElder } from '@mexit/core'
 import {
   deleteText,
   getPluginType,
@@ -8,9 +9,6 @@ import {
   select,
   TElement
 } from '@udecode/plate'
-import { Transforms } from 'slate'
-
-import { isElder } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'

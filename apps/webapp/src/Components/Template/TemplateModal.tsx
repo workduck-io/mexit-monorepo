@@ -1,23 +1,20 @@
+import type { Snippet } from '@mexit/core'
+import { ButtonFields,TemplateContainer } from '@mexit/shared'
+import { LoadingButton,Title } from '@workduck-io/mex-components'
 import React, { useEffect, useState } from 'react'
-
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
-import { Title, LoadingButton } from '@workduck-io/mex-components'
-
-import type { Snippet } from '@mexit/core'
-import { TemplateContainer, ButtonFields } from '@mexit/shared'
-
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useApi } from '../../Hooks/API/useNodeAPI'
-import { useLinks, getTitleFromPath } from '../../Hooks/useLinks'
+import { getTitleFromPath,useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { PrimaryText } from '../EditorInfobar/BlockInfobar'
-import { InviteWrapper, InviteFormWrapper } from '../Mentions/styles'
+import { InviteFormWrapper,InviteWrapper } from '../Mentions/styles'
 import SidebarList from '../Sidebar/SidebarList'
 import { RemovalButton } from './TemplateModal.styles'
 

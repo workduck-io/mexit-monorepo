@@ -1,8 +1,7 @@
+import { AccessLevel, IDBStorage, InvitedUser, Mentionable, mog,ShareContext, UserAccessTable } from '@mexit/core'
+import { mergeAccess } from '@mexit/shared'
 import create from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-
-import { IDBStorage, InvitedUser, Mentionable, UserAccessTable, AccessLevel, ShareContext, mog } from '@mexit/core'
-import { mergeAccess } from '@mexit/shared'
 
 interface MentionStore {
   invitedUsers: InvitedUser[]

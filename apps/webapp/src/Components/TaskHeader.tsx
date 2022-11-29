@@ -1,5 +1,3 @@
-import { useMemo, useState } from 'react'
-
 import trashIcon from '@iconify/icons-codicon/trash'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
@@ -9,17 +7,6 @@ import edit2Line from '@iconify/icons-ri/edit-2-line'
 import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
-import { useSingleton } from '@tippyjs/react'
-
-import {
-  Button,
-  DisplayShortcut,
-  IconButton,
-  Infobox,
-  LoadingButton,
-  ToolbarTooltip
-} from '@workduck-io/mex-components'
-
 import { Filter, GlobalFilterJoin } from '@mexit/core'
 import {
   ShortcutToken,
@@ -33,6 +20,16 @@ import {
   TaskViewTitle,
   Title
 } from '@mexit/shared'
+import { useSingleton } from '@tippyjs/react'
+import {
+  Button,
+  DisplayShortcut,
+  IconButton,
+  Infobox,
+  LoadingButton,
+  ToolbarTooltip
+} from '@workduck-io/mex-components'
+import { useMemo, useState } from 'react'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'

@@ -1,4 +1,5 @@
 import { WORKSPACE_HEADER } from '@mexit/core'
+
 import { useAuthStore } from '../../Stores/useAuth'
 
 export const useAPIHeaders = () => {

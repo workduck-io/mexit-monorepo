@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { mog } from '@mexit/core'
-
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { getCreateableOnSelect } from '../../Hooks/useComboboxOnKeyDown'

@@ -1,13 +1,8 @@
-import React from 'react'
-
-import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
-import user3Line from '@iconify-icons/ri/user-3-line'
 import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
 import informationLine from '@iconify/icons-ri/information-line'
 import { Icon } from '@iconify/react'
-import { NavLink, Outlet } from 'react-router-dom'
-import styled from 'styled-components'
-
+import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
+import user3Line from '@iconify-icons/ri/user-3-line'
 import {
   Button,
   IntegrationContainer,
@@ -18,6 +13,9 @@ import {
   SettingsOptions,
   SettingTitle
 } from '@mexit/shared'
+import React from 'react'
+import { Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAuthentication } from '../../Stores/useAuth'

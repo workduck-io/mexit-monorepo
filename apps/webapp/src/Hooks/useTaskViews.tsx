@@ -1,7 +1,6 @@
+import { Filter, GlobalFilterJoin, IDBStorage, mog } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { Filter, GlobalFilterJoin, IDBStorage, mog } from '@mexit/core'
 
 import { useViewAPI } from './API/useViewsAPI'
 
