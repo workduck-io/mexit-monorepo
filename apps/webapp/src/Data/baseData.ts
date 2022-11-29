@@ -11,7 +11,6 @@ import {
 import { PersistentData } from './../Types/Data'
 import { draftContent } from './initData/draftDoc'
 import { onboardingContent } from './initData/onboardingDoc'
-import { initialSnippets } from './initData/snippets'
 
 export const generateTempLinks = (path: string): { path: string; nodeid: string } => ({
   path,

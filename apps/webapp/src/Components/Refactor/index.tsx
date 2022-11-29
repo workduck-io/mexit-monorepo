@@ -7,10 +7,8 @@ import Modal from 'react-modal'
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { isMatch, isReserved, mog, NodeLink } from '@mexit/core'
+import { isMatch, isReserved } from '@mexit/core'
 
-import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
-import { useInternalLinks } from '../../Hooks/useInternalLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { useDataStore } from '../../Stores/useDataStore'
@@ -29,11 +27,9 @@ const Refactor = () => {
   const to = useRefactorStore((store) => store.to)
   const fromNS = useRefactorStore((store) => store.fromNS)
   const toNS = useRefactorStore((store) => store.toNS)
-  const openModal = useRefactorStore((store) => store.openModal)
   const closeModal = useRefactorStore((store) => store.closeModal)
   const setTo = useRefactorStore((store) => store.setTo)
   const setFrom = useRefactorStore((store) => store.setFrom)
-  const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
 
   const mockRefactored = useRefactorStore((store) => store.mockRefactored)
   const setMockRefactored = useRefactorStore((store) => store.setMockRefactored)
@@ -43,21 +39,6 @@ const Refactor = () => {
   const { push } = useNavigation()
 
   const shortcuts = useHelpStore((store) => store.shortcuts)
-  const { shortcutDisabled, shortcutHandler } = useKeyListener()
-
-  useEffect(() => {
-    const unsubscribe = tinykeys(window, {
-      [shortcuts.showRefactor.keystrokes]: (event) => {
-        event.preventDefault()
-        shortcutHandler(shortcuts.showRefactor, () => {
-          openModal()
-        })
-      }
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [shortcuts, shortcutDisabled])
 
   const handleFromChange = (quickLink: QuickLink) => {
     const newValue = quickLink.value
@@ -119,7 +100,7 @@ const Refactor = () => {
         unsubscribe()
       }
     }
-  }, [shortcuts, shortcutDisabled, open, handleRefactor])
+  }, [shortcuts, open, handleRefactor])
 
   const disallowRefactor = useMemo(() => {
     // If fields are not filled

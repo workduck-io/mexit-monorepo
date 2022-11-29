@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import CloseIcon from '@iconify/icons-ri/close-line'
 import externalLinkLine from '@iconify/icons-ri/external-link-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import { animated, useSpring } from 'react-spring'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
@@ -161,6 +160,7 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
         <Icon icon={QuestionMarkIcon} />
       </FloatingButton>
 
+      {/* eslint-disable-next-line*/}
       {/* @ts-ignore */}
       <FloatingMenu style={menuProps}>
         Connect with us

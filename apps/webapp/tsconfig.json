@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "allowJs": true,
@@ -11,7 +10,11 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@mexit/core": ["../../libs/core/src/index.ts"],
+      "@mexit/shared": ["../../libs/shared/src/index.ts"],
+    }
   },
   "files": [],
   "include": [],
