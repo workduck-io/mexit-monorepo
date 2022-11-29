@@ -48,7 +48,7 @@ function sendPendingUpdateMessage(ws: WebSocket, path: string) {
 
 /** CHECK:: build was completed **/
 chokidar.watch(['../../dist/extension/content.js']).on('all', () => {
-  debounce(sendUpdateMessageToAllSockets, 600)()
+  debounce(sendUpdateMessageToAllSockets, 200)()
 })
 
 function sendUpdateMessageToAllSockets() {

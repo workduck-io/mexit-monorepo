@@ -2,50 +2,50 @@ import { build } from 'esbuild'
 
 const promises = [
   build({
-    entryPoints: ['build/reload/initReloadServer.ts'],
+    entryPoints: ['build/hmr/initReloadServer.ts'],
     bundle: true,
     platform: 'node',
     format: 'esm',
-    outfile: 'build/reload/initReloadServer.js',
+    outfile: 'build/hmr/initReloadServer.js',
     external: ['*.node', 'ws', 'chokidar', 'timers']
   })
     .then(() => {
-      console.log('\x1b[34m', 'build/reload/initReloadServer.ts -> build/reload/initReloadServer.js', '\x1b[0m')
+      console.log('\x1b[34m', 'build/hmr/initReloadServer.ts -> build/hmr/initReloadServer.js', '\x1b[0m')
     })
     .catch(() => {
-      console.log('\x1b[31m', 'Error occurred when building build/reload/initReloadServer.ts', '\x1b[0m')
+      console.log('\x1b[31m', 'Error occurred when building build/hmr/initReloadServer.ts', '\x1b[0m')
     }),
   build({
-    entryPoints: ['build/reload/injections/script.ts'],
+    entryPoints: ['build/hmr/injections/script.ts'],
     bundle: true,
     platform: 'browser',
     format: 'esm',
-    outfile: 'build/reload/injections/script.js'
+    outfile: 'build/hmr/injections/script.js'
   })
     .then(() => {
-      console.log('\x1b[34m', 'build/reload/injections/script.ts -> build/reload/injections/script.js', '\x1b[0m')
+      console.log('\x1b[34m', 'build/hmr/injections/script.ts -> build/hmr/injections/script.js', '\x1b[0m')
     })
     .catch(() => {
-      console.log('\x1b[31m', 'Error occurred when building build/reload/injections/script.ts', '\x1b[0m')
+      console.log('\x1b[31m', 'Error occurred when building build/hmr/injections/script.ts', '\x1b[0m')
     }),
   build({
-    entryPoints: ['build/reload/injections/view.ts'],
+    entryPoints: ['build/hmr/injections/view.ts'],
     bundle: true,
     platform: 'browser',
     format: 'esm',
-    outfile: 'build/reload/injections/view.js'
+    outfile: 'build/hmr/injections/view.js'
   })
     .then(() => {
-      console.log('\x1b[34m', 'build/reload/injections/view.ts -> build/reload/injections/view.js', '\x1b[0m')
+      console.log('\x1b[34m', 'build/hmr/injections/view.ts -> build/hmr/injections/view.js', '\x1b[0m')
     })
     .catch(() => {
-      console.log('\x1b[31m', 'Error occurred when building build/reload/injections/view.ts', '\x1b[0m')
+      console.log('\x1b[31m', 'Error occurred when building build/hmr/injections/view.ts', '\x1b[0m')
     })
 ]
 
 Promise.all(promises)
   .then(() => {
-    console.log('\x1b[32m', 'Reload Dependencies built successfully!', '\x1b[0m')
+    console.log('\x1b[32m', 'HMR Dependencies built successfully!', '\x1b[0m')
   })
   .catch(() => {
     console.log('\x1b[31m', 'An Error Occurred trying to build dependencies for reload')

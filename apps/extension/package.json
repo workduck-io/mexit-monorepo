@@ -8,7 +8,7 @@
     "build:release": "tsc --noEmit && NO_SOURCE_MAP=true vite build",
     "build": "tsc --noEmit && vite build",
     "build:hmr": "node build/wss-build.js",
-    "wss": "node build/reload/initReloadServer.js",
+    "wss": "node build/hmr/initReloadServer.js",
     "dev": "yarn build:hmr && (yarn wss & nodemon)"
   },
   "dependencies": {
