@@ -6,10 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit && vite build",
-    "build:hmr": "rollup --config build/rollup.config.ts",
+    "build:hmr": "node build/wss-build.js",
     "wss": "node build/reload/initReloadServer.js",
-    "dev": "yarn build:hmr && (yarn wss & nodemon)",
-    "test": "jest"
+    "dev": "yarn build:hmr && (yarn wss & nodemon)"
   },
   "dependencies": {
     "@iconify/react": "^3.1.3",
