@@ -2,13 +2,6 @@
   "root": "apps/extension",
   "sourceRoot": "apps/extension/src",
   "projectType": "application",
-  "targets": {
-    "release": {
-      "executor": "@nrwl/workspace:run-commands",
-      "options": {
-        "command": "NO_SOURCE_MAP=true nx build extension"
-      }
-    }
-  },
+  "targets": {},
   "tags": []
 }

@@ -16,10 +16,6 @@ const manifest: chrome.runtime.ManifestV3 = {
   omnibox: { keyword: '[[' },
   background: { service_worker: 'background.js', type: 'module' },
   content_scripts: [{ matches: ['http://*/*', 'https://*/*'], js: ['content.js'], css: ['global.css'] }],
-  externally_connectable: {
-    ids: ['*'],
-    matches: ['http://localhost:3000/*', 'https://mexit.workduck.io/*']
-  },
   permissions: ['contextMenus', 'storage', 'tabs', 'activeTab', 'search', 'notifications', 'downloads'],
   web_accessible_resources: [{ resources: ['assets/*'], matches: ['http://*/*', 'https://*/*'] }]
 }
