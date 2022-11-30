@@ -37,7 +37,7 @@ export const BASE_URLS = {
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
-  smartcapture: `${MEXIT_BACKEND_URL_BASE}/snippet`,
+  smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
   comment: `https://http-staging.workduck.io/comment`,
   reaction: `https://http-staging.workduck.io/reaction`,
   highlight: `https://http-test.workduck.io/highlight`,

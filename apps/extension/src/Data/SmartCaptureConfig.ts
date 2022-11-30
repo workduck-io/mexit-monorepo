@@ -9,7 +9,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Name',
       path: '//h1[@class="text-heading-xlarge inline t-24 v-align-middle break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -18,7 +18,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Headline',
       path: '//div[@class="text-body-medium break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -27,7 +27,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Location',
       path: '//span[@class="text-body-small inline t-black--light break-words"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -36,7 +36,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Current Company',
       path: '//div[@aria-label="Current company"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -45,7 +45,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Education',
       path: '//div[@aria-label="Education"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -54,7 +54,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'About',
       path: '//div[@class="display-flex ph5 pv3"]/div/div[@class="pv-shared-text-with-see-more t-14 t-normal t-black display-flex align-items-center"]/div/span[@aria-hidden="true"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -63,7 +63,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Conections',
       path: '//li[@class="text-body-small"]/span',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     },
@@ -72,7 +72,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Mutual Connections',
       path: '//span[@class="t-normal t-black--light t-14 hoverable-link-text"]',
       properties: {
-        type: ELEMENT_PARAGRAPH,
+        type: 'p',
         row: 0
       }
     }
@@ -83,7 +83,7 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
       label: 'Name',
       path: '//h2[@class="_aacl _aacs _aact _aacx _aada"]',
       properties: {
-        type: ELEMENT_PARAGRAPH
+        type: 'p'
       }
     },
     {
@@ -533,24 +533,30 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
     }
   ]
 }
-const smartcaptureconfig = [{
-  "entityId": "CONFIG_123asdafds",
-  "regex": "Some regex",
-  "base": "LinkedIn",
-  "config": [{
-    "id":"LABEL_1234",
-    "name": "something",
-    "path": "something"
-  },{
-    "id":"LABEL_1234afsdfasdf",
-    "name": "something asdf,lsa et safpk[sa f",
-    "path": "something"
-  },{
-    "id":"LABEL_12342143",
-    "name": "something asd fa sf89d6 324sdahjkfhhasd",
-    "path": "something"
-  }]
-}]
+const smartcaptureconfig = [
+  {
+    entityId: 'CONFIG_123asdafds',
+    regex: 'Some regex',
+    base: 'LinkedIn',
+    config: [
+      {
+        id: 'LABEL_1234',
+        name: 'something',
+        path: 'something'
+      },
+      {
+        id: 'LABEL_1234afsdfasdf',
+        name: 'something asdf,lsa et safpk[sa f',
+        path: 'something'
+      },
+      {
+        id: 'LABEL_12342143',
+        name: 'something asd fa sf89d6 324sdahjkfhhasd',
+        path: 'something'
+      }
+    ]
+  }
+]
 
 export const SmartCapturePageSource: Record<string, string> = {
   LinkedIN: 'http://linkedin.com',

@@ -15,13 +15,13 @@ import {
 import { copyTextToClipboard } from '@mexit/shared'
 import toast from 'react-hot-toast'
 
-import { SmartCapturePageSource } from '../Data/SmartCaptureConfig'
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { evaluateConfig } from '../Utils/evalSmartCapture'
 import { generateAvatar } from '../Utils/generateAvatar'
-import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
 import { useNamespaces } from './useNamespaces'
@@ -29,7 +29,7 @@ import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
 import { useSnippets } from './useSnippets'
 import { useSputlitContext, VisualState } from './useSputlitContext'
-import { useLinkURLs, useURLsAPI } from './useURLs'
+import { useLinkURLs } from './useURLs'
 
 export function useActionExecutor() {
   const { setVisualState, setActiveIndex } = useSputlitContext()
@@ -37,6 +37,7 @@ export function useActionExecutor() {
   const setResults = useSputlitStore((store) => store.setResults)
   const setScreenshot = useSputlitStore((store) => store.setScreenshot)
   const setAvatarSeed = useSputlitStore((store) => store.setAvatarSeed)
+  const getMatchingConfig = useSmartCaptureStore((store) => store.getMatchingURLConfig)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
   const { getSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
@@ -189,28 +190,22 @@ export function useActionExecutor() {
             break
           }
           case ActionType.MAGICAL: {
-            const webpage = checkURL(window.location.href)
-
-            if (!webpage) {
-              toast.error('No data available for extracting')
-            } else {
-              getProfileData(webpage)
-                .then((data) => {
-                  setSmartCaptureFormData({
-                    page: webpage,
-                    source: SmartCapturePageSource[webpage],
-                    data
-                  })
-                  setActiveItem(item)
-                })
-                .catch((err) => {
-                  console.log('err:', err)
-                })
-              setActiveIndex(0)
-              setInput('')
-              setSearch({ value: '', type: CategoryType.action })
+            const strippedURL = window.location.origin + window.location.pathname
+            const captureConfig = getMatchingConfig(strippedURL)
+            if (!captureConfig) toast.error('No data available for extracting')
+            else {
+              try {
+                const formData = evaluateConfig(captureConfig)
+                setSmartCaptureFormData(formData)
+                setActiveItem(item)
+              } catch (err) {
+                console.error('err:', err)
+              } finally {
+                setActiveIndex(0)
+                setInput('')
+                setSearch({ value: '', type: CategoryType.action })
+              }
             }
-
             break
           }
           case ActionType.AVATAR_GENERATOR: {

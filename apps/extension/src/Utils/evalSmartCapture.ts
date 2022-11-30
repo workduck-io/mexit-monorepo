@@ -1,18 +1,9 @@
-import { ELEMENT_PARAGRAPH, mog } from '@mexit/core'
 import { ELEMENT_H2 } from '@udecode/plate'
 
-import { SmartCaptureConfig, SmartCaptureURLRegex } from '../Data/SmartCaptureConfig'
+import { ELEMENT_PARAGRAPH, SmartCaptureConfig as SmartCaptureConfigType, SmartCaptureLabel } from '@mexit/core'
+
 import { FormBuilder } from '../Types/Form'
 import { convert2DArrayToTable } from './tableUtils'
-
-export const checkURL = (url: string) => {
-  for (const URLRegex of SmartCaptureURLRegex) {
-    if (url.match(URLRegex.regex)) {
-      return URLRegex.WebPage
-    }
-  }
-  return null
-}
 
 export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
   if (convertToTable) {
@@ -51,7 +42,20 @@ export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
     })
 }
 
-export const getProfileData = async (webPage: string) => {
+const extractData = (rule: SmartCaptureLabel) => {
+  const ele = document.evaluate(rule.path, document, null, XPathResult.ANY_TYPE, null).iterateNext()
+
+  if (ele !== null) {
+    return {
+      id: rule.id,
+      label: rule.name,
+      value: ele.textContent.trim(),
+      properties: rule.properties
+    }
+  }
+}
+
+export const evaluateConfig = async (config: SmartCaptureConfigType) => {
   const formData: FormBuilder = []
   formData.push({
     id: 'LABEL_1001',
@@ -61,22 +65,11 @@ export const getProfileData = async (webPage: string) => {
       type: ELEMENT_PARAGRAPH
     }
   })
-  const captureRules = SmartCaptureConfig[webPage]
-  for (const rule of captureRules) {
-    const ele = document.evaluate(rule.path, document, null, XPathResult.ANY_TYPE, null).iterateNext()
-
-    if (ele !== null) {
-      formData.push({
-        id: rule.id,
-        label: rule.label,
-        value: ele.textContent.trim(),
-        properties: rule.properties
-      })
-    } else {
-      mog('value is null')
+  for (const rule of config.labels) {
+    const data = extractData(rule)
+    if (data) {
+      formData.push(data)
     }
   }
-
-  mog('FormData', { formData, serialized: formToBlocks(formData) })
   return formData
 }
