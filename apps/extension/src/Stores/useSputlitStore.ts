@@ -2,7 +2,7 @@ import { CategoryType, createNodeWithUid, getNewDraftKey, ListItemType, MexitAct
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 
-import { TooltipState,VisualState } from '../Hooks/useSputlitContext'
+import { TooltipState, VisualState } from '../Hooks/useSputlitContext'
 
 export type SearchType = {
   value: string

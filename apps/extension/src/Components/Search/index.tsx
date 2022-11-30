@@ -9,7 +9,8 @@ import {
   isParent,
   ListItemType,
   MAX_RECENT_ITEMS,
-  withoutContinuousDelimiter} from '@mexit/core'
+  withoutContinuousDelimiter
+} from '@mexit/core'
 import { Loading, WDLogo } from '@mexit/shared'
 import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useEffect, useRef } from 'react'
@@ -182,7 +183,7 @@ const Search = () => {
   return (
     <StyledSearch>
       {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
-      <CenterIcon id="wd-mex-search-left-icon" cursor={!previewMode} onClick={onBackClick}>
+      <CenterIcon id="wd-mex-search-left-icon" $cursor={!previewMode} onClick={onBackClick}>
         <Icon color={theme.colors.primary} height={24} width={24} icon={icon} />
       </CenterIcon>
       <StyledInput

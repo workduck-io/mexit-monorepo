@@ -1,20 +1,25 @@
 import { Icon } from '@iconify/react'
 import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
-import {   ActionTitle,
-ComboboxItemTitle, ComboboxRoot,   ComboboxShortcuts,
+import {
+  ActionTitle,
+  ComboboxItemTitle,
+  ComboboxRoot,
+  ComboboxShortcuts,
   ComboSeperator,
   DisplayShortcut,
-ItemCenterWrapper, ItemDesc, ItemRightIcons ,
+  ItemCenterWrapper,
+  ItemDesc,
+  ItemRightIcons,
   MexIcon,
   PreviewMeta,
+  PrimaryText,
   ShortcutText
 } from '@mexit/shared'
 import useMergedRef from '@react-hook/merged-ref'
-import { insertText,PortalBody, select, useEditorState } from '@udecode/plate'
+import { insertText, PortalBody, select, useEditorState } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 
-import { PrimaryText } from '../../../Components/Action/styled'
 import { ComboboxItem } from '../../../Components/Dibba/styled'
 import EditorPreviewRenderer from '../../../Components/EditorPreviewRenderer'
 import { useSnippets } from '../../../Hooks/useSnippets'

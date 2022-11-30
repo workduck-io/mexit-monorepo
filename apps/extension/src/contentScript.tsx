@@ -1,7 +1,6 @@
 // eslint-disable-next-line
 import refreshOnUpdate from 'virtual:reload-on-update-in-view'
 
-// Any kind of DOM manipulation is done here.
 import '@webcomponents/custom-elements'
 
 import React from 'react'

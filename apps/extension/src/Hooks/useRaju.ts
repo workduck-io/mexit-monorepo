@@ -16,7 +16,8 @@ import {
   SingleNamespace,
   Snippet,
   UserDetails,
-  WorkspaceDetails} from '@mexit/core'
+  WorkspaceDetails
+} from '@mexit/core'
 import { addMinutes } from 'date-fns'
 import { connectToChild, Methods } from 'penpal'
 import { useEffect } from 'react'

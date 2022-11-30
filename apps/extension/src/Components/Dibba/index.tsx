@@ -14,7 +14,7 @@ import {
   Snippet
 } from '@mexit/core'
 import { ActionTitle, ComboboxItemTitle, ComboboxShortcuts, ComboSeperator, ShortcutText } from '@mexit/shared'
-import { createPlateEditor, createPlateUI,serializeHtml } from '@udecode/plate'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import fuzzysort from 'fuzzysort'
 import React, { useEffect, useRef, useState } from 'react'
@@ -30,7 +30,7 @@ import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
-import { copySnippetToClipboard, getUpcomingData,simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
+import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from './styled'
 
