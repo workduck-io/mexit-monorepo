@@ -3,8 +3,7 @@ import { ComponentPropsWithRef } from 'react'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
-
-import { ShowOnHoverIconStyles } from '@mexit/shared'
+import { ShowOnHoverIconStyles } from './Helpers'
 
 export const ShortenButton = styled(Button)<ComponentPropsWithRef<typeof Button> & { isShortend: boolean }>`
   color: ${({ isShortend, theme }) => (isShortend ? theme.colors.secondary : theme.colors.text.fade)};

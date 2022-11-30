@@ -2,15 +2,9 @@ import { PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode
 import { ReactElement } from 'react'
 import type { EditableProps } from 'slate-react/dist/components/editable'
 
-import { ComboboxConfig } from '../components/ComboBox/types'
+import { ComboboxConfig, CustomElements } from '../components/ComboBox/types'
 
 export type MexEditorValue = Array<any>
-
-export enum CustomElements {
-  ILINK = 'ilink',
-  TAG = 'tag',
-  SLASH_COMMAND = 'slash_command'
-}
 
 export type PluginOptions = Record<CustomElements, PlatePlugin>
 

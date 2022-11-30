@@ -2,8 +2,7 @@ import React, { forwardRef } from 'react'
 
 import { isUrl } from '@udecode/plate'
 import { useTheme } from 'styled-components'
-
-import { MexIcon } from '@mexit/shared'
+import { MexIcon } from '../Style/Layouts'
 
 export const getIconType = (icon: string): { mexIcon: boolean; isIconfiy: boolean } => {
   const mexIcon = !isUrl(icon)

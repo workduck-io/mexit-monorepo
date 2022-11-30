@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { AccessLevel } from '@mexit/core'
-import { AccessNames } from '@mexit/core'
-import { SAccessTag } from '@mexit/shared'
+import { AccessLevel, AccessNames } from '@mexit/core'
 
 import { AccessIcon } from './Access'
+import { SAccessTag } from '../Style/Mentions'
 
 interface AccessTagProps {
   access: AccessLevel

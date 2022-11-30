@@ -1,4 +1,4 @@
-import { generateTempId } from '@mexit/core'
+import { generateTempId } from './idGenerator'
 
 export type getValuefn = (obj?: any) => string
 export type getDatafn = (data?: any) => any
