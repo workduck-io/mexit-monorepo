@@ -10,7 +10,8 @@ import {
   ReminderActions,
   ReminderControls,
   ReminderGroup,
-  ReminderState,  SnoozeControl,
+  ReminderState,
+  SnoozeControl,
   upcoming
 } from '@mexit/core'
 import { add, sub } from 'date-fns'

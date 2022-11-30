@@ -11,6 +11,7 @@ import { NodeAPI } from './Node'
 import { ReactionAPI } from './Reaction'
 import { ReminderAPI } from './Reminder'
 import { ShareAPI } from './Share'
+import { SmartCaptureAPI } from './SmartCapture'
 import { SnippetAPI } from './Snippet'
 import { UserAPI } from './User'
 import { ViewAPI } from './View.ts'
@@ -31,6 +32,7 @@ class APIClass {
   public reminder: ReminderAPI
   public user: UserAPI
   public highlight: HighlightAPI
+  public smartconfig: SmartCaptureAPI
   constructor() {
     if (instance) {
       throw new Error('New instance cannot be created!!')
@@ -53,6 +55,7 @@ class APIClass {
     this.reminder = new ReminderAPI(this.client)
     this.user = new UserAPI(this.client)
     this.highlight = new HighlightAPI(this.client)
+    this.smartconfig = new SmartCaptureAPI(this.client)
   }
 
   setWorkspaceHeader(workspaceId: string) {

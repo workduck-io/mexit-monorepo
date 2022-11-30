@@ -533,6 +533,24 @@ export const SmartCaptureConfig: SmartCaptureConfigType = {
     }
   ]
 }
+const smartcaptureconfig = [{
+  "entityId": "CONFIG_123asdafds",
+  "regex": "Some regex",
+  "base": "LinkedIn",
+  "config": [{
+    "id":"LABEL_1234",
+    "name": "something",
+    "path": "something"
+  },{
+    "id":"LABEL_1234afsdfasdf",
+    "name": "something asdf,lsa et safpk[sa f",
+    "path": "something"
+  },{
+    "id":"LABEL_12342143",
+    "name": "something asd fa sf89d6 324sdahjkfhhasd",
+    "path": "something"
+  }]
+}]
 
 export const SmartCapturePageSource: Record<string, string> = {
   LinkedIN: 'http://linkedin.com',
