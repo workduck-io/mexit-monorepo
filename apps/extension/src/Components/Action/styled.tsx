@@ -1,6 +1,7 @@
+import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
-export const StyledAction = styled.div<{ active?: boolean }>`
+export const StyledAction = styled.div<{ $active?: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -12,19 +13,11 @@ export const StyledAction = styled.div<{ active?: boolean }>`
 
   min-height: 53.61px;
 
-  ${(props) =>
-    props.active &&
+  ${({ $active }) =>
+    $active &&
     css`
-       {
-        /* TODO: don't know why but background.highlight is white coloured */
-        background-color: ${({ theme }) => theme.colors.background.modal};
-        /* border-left: 2px solid rgb(28, 28, 29); */
-      }
+      background: ${({ theme }) => theme.colors.background.modal};
     `}
-`
-
-export const PrimaryText = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
 `
 
 export const Container = styled.div`
@@ -32,12 +25,12 @@ export const Container = styled.div`
   flex-direction: row;
 `
 
-export const ItemIcon = styled.div`
+export const ActionIcon = styled(Icon)`
   margin-right: 0.75em;
   align-self: center;
 `
 
-export const Content = styled.div`
+export const ActionContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
