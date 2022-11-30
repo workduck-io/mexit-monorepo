@@ -1,6 +1,5 @@
-import create from 'zustand'
-
 import { defaultContent, NodeEditorContent } from '@mexit/core'
+import create from 'zustand'
 
 type EditorStoreType = {
   nodeContent: NodeEditorContent

@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
-
+import { defaultContent, ELEMENT_TAG, mog, NodeEditorContent, QuickLinkType } from '@mexit/core'
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
-
-import { ActionType, defaultContent, ELEMENT_TAG, mog, QuickLinkStatus, QuickLinkType } from '@mexit/core'
-import { NodeEditorContent } from '@mexit/core'
+import React, { useEffect, useState } from 'react'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -41,7 +38,7 @@ export default function Content() {
       })
       const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
 
-      mog('deserializedContent', { content })
+      // mog('deserializedContent', { content })
 
       if (content) setDeserializedContent(content)
     }

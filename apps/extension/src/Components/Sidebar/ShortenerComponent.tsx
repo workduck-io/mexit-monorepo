@@ -1,25 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react'
-
-import styled from 'styled-components'
-
-import { getFavicon, Link, Tag } from '@mexit/core'
+import { getFavicon, Tag } from '@mexit/core'
 import {
   AddTagMenu,
   CopyButton,
   GenericFlex,
-  LinkShortenAndHighlightSection,
   LinkShortenAndTagsWrapper,
-  LinkTagSection,
   LinkTitleWrapper,
   LinkWrapper,
   ShortenURL,
   TagsLabel
 } from '@mexit/shared'
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs, useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 
 const ShortenerWrapper = styled(LinkWrapper)`
   padding: 0;

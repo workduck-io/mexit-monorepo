@@ -1,11 +1,8 @@
-import React, { useMemo } from 'react'
-
 import { ActionType } from '@mexit/core'
+import React from 'react'
 
-import { useEditorStore } from '../../Hooks/useEditorStore'
-import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
-import { IFrameActionRenderer, SmartCapture, ScreenshotRenderer, AvatarRenderer } from '../Renderers'
+import { AvatarRenderer, IFrameActionRenderer, ScreenshotRenderer, SmartCaptureRenderer } from '../Renderers'
 import ResultList from './ResultList'
 import { StyledResults } from './styled'
 
@@ -18,7 +15,7 @@ function Results() {
       {{
         [ActionType.RENDER]: <IFrameActionRenderer />,
         [ActionType.SCREENSHOT]: <ScreenshotRenderer />,
-        [ActionType.MAGICAL]: <SmartCapture />,
+        [ActionType.MAGICAL]: <SmartCaptureRenderer />,
         [ActionType.AVATAR_GENERATOR]: <AvatarRenderer />
       }[activeItem?.type] || <ResultList results={results} />}
     </StyledResults>

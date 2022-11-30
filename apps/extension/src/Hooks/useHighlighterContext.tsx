@@ -1,12 +1,11 @@
 import React, { createContext, PropsWithChildren, useContext, useEffect, useRef } from 'react'
-
 import Highlighter from 'web-highlighter'
 
 type HighlighterContextType = {
   highlighter: Highlighter
 }
 
-const HighlighterContext = createContext<HighlighterContextType>(undefined!)
+const HighlighterContext = createContext<HighlighterContextType>(undefined)
 export const useHighlighterContext = () => useContext(HighlighterContext)
 
 export const HighlighterProvider: React.FC<PropsWithChildren> = ({ children }) => {

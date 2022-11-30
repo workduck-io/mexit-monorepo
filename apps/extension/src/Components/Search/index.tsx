@@ -1,25 +1,21 @@
-import React, { useEffect, useRef } from 'react'
-
 import { Icon } from '@iconify/react'
-import { useTheme } from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
 import {
-  initActions,
-  withoutContinuousDelimiter,
+  ActionType,
+  BASE_TASKS_PATH,
   CategoryType,
   CREATE_NEW_ITEM,
+  initActions,
   insertItemInArray,
-  BASE_TASKS_PATH,
   isParent,
   ListItemType,
   MAX_RECENT_ITEMS,
-  mog,
-  ActionType
+  withoutContinuousDelimiter
 } from '@mexit/core'
 import { Loading, WDLogo } from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect, useRef } from 'react'
+import { useTheme } from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -187,7 +183,7 @@ const Search = () => {
   return (
     <StyledSearch>
       {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
-      <CenterIcon id="wd-mex-search-left-icon" cursor={!previewMode} onClick={onBackClick}>
+      <CenterIcon id="wd-mex-search-left-icon" $cursor={!previewMode} onClick={onBackClick}>
         <Icon color={theme.colors.primary} height={24} width={24} icon={icon} />
       </CenterIcon>
       <StyledInput

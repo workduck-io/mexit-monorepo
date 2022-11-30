@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo } from 'react'
-
+import { EditorStyles, FadeContainer, TodoContainer , useEditorChange } from '@mexit/shared'
 import { Plate, PlatePlugin } from '@udecode/plate'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
-import { useEditorChange } from '@mexit/shared'
-
 import { useMemoizedPlugins } from '../Editor/plugins'
-import components from './Editor/Components'
+import { editorPreviewComponents } from './Editor/EditorPreviewComponents'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -62,7 +59,7 @@ const EditorPreviewRenderer = ({
   )
 
   // We get memoized plugins
-  const plugins = useMemoizedPlugins(components, { exclude: { dnd: true } })
+  const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
   // const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
   // const { focusBlock } = useFocusBlock()
 

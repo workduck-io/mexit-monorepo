@@ -1,8 +1,5 @@
-import React, { cloneElement, useEffect, useMemo, useState } from 'react'
-
 import {
   FloatingFocusManager,
-  FloatingOverlay,
   FloatingPortal,
   useClick,
   useFloating,
@@ -10,8 +7,9 @@ import {
   useInteractions,
   useRole
 } from '@floating-ui/react-dom-interactions'
-
+import React, { cloneElement, useEffect, useMemo, useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
+
 import { DialogOverlay } from './Dialog.style'
 
 interface Props {

@@ -1,10 +1,8 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-
-import { findIndex, groupBy } from 'lodash'
-import { useVirtual } from 'react-virtual'
-
 import { ActionType, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
+import { findIndex, groupBy } from 'lodash'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { useVirtual } from 'react-virtual'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -103,11 +101,11 @@ const ResultList = ({ results }: { results: Array<any> }) => {
 
     if (previewMode) {
       // Not adding event listener to window as the event never reaches there
-      document.getElementById('mexit')!.addEventListener('keydown', handler)
+      document.getElementById('mexit')?.addEventListener('keydown', handler)
     }
 
     return () => {
-      document.getElementById('mexit')!.removeEventListener('keydown', handler)
+      document.getElementById('mexit')?.removeEventListener('keydown', handler)
     }
   }, [results, previewMode, activeIndex, activeItem, input])
 

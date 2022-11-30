@@ -1,24 +1,14 @@
-import React, { useState } from 'react'
-
-import archivedIcon from '@iconify/icons-ri/archive-line'
-import { Icon } from '@iconify/react'
-import { moveSelection, useEditorRef } from '@udecode/plate'
-import { useFocused, useSelected, useReadOnly } from 'slate-react'
-import styled from 'styled-components'
-
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { SILink, SILinkRoot, ILinkElementProps } from '@mexit/shared'
+import { ILinkElementProps,SILink, SILinkRoot } from '@mexit/shared'
+import { moveSelection, useEditorRef } from '@udecode/plate'
+import React, { useState } from 'react'
+import { useFocused, useReadOnly,useSelected } from 'slate-react'
 
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
 import { useLinks } from '../../../../Hooks/useLinks'
-import { useNodes } from '../../../../Hooks/useNodes'
 import { getBlock } from '../../../../Utils/parseData'
 import { useHotkeys } from '../../../hooks/useHotKeys'
 import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
-
-const StyledIcon = styled(Icon)`
-  margin-right: 4px;
-`
 
 export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()
@@ -27,7 +17,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const [preview, setPreview] = useState(false)
   // const { push } = useNavigation()
   const { getPathFromNodeid } = useLinks()
-  const { getArchiveNode } = useNodes()
   // mog('We reached here', { selected, focused })
 
   // const nodeid = getNodeidFromPath(element.value)
@@ -106,32 +95,23 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       data-slate-value={element.value}
       contentEditable={false}
     >
-      {false ? (
-        <SILink $selected={selected} $archived={true}>
-          <StyledIcon icon={archivedIcon} color="#df7777" />
+      <EditorPreview
+        placement="auto"
+        allowClosePreview={readOnly}
+        preview={preview}
+        nodeid={element.value}
+        content={content}
+        closePreview={() => setPreview(false)}
+      >
+        <SILink $selected={selected} {...onClickProps}>
           <span className="ILink_decoration ILink_decoration_left">[[</span>
-          {/* <span className="ILink_decoration ILink_decoration_value"> {archivedNode?.path}</span> */}
+          <span className="ILink_decoration ILink_decoration_value">
+            {' '}
+            {!content ? path : `${path} : ${element.blockValue}`}{' '}
+          </span>
           <span className="ILink_decoration ILink_decoration_right">]]</span>
         </SILink>
-      ) : (
-        <EditorPreview
-          placement="auto"
-          allowClosePreview={readOnly}
-          preview={preview}
-          nodeid={element.value}
-          content={content}
-          closePreview={() => setPreview(false)}
-        >
-          <SILink $selected={selected} {...onClickProps}>
-            <span className="ILink_decoration ILink_decoration_left">[[</span>
-            <span className="ILink_decoration ILink_decoration_value">
-              {' '}
-              {!content ? path : `${path} : ${element.blockValue}`}{' '}
-            </span>
-            <span className="ILink_decoration ILink_decoration_right">]]</span>
-          </SILink>
-        </EditorPreview>
-      )}
+      </EditorPreview>
       {children}
     </SILinkRoot>
   )

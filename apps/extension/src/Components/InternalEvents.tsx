@@ -1,18 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { getScrollbarWidth } from '@mexit/shared'
 import { CaptureConsole } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
-import { forEach } from 'lodash'
 import mixpanel from 'mixpanel-browser'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 import Highlighter from 'web-highlighter'
 
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { getScrollbarWidth } from '@mexit/shared'
-
 import { useEditorStore } from '../Hooks/useEditorStore'
-import { useHighlighter } from '../Hooks/useHighlighter'
-import { useSaveChanges } from '../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
@@ -155,7 +150,8 @@ function dibbaToggle() {
 }
 
 function initAnalytics() {
-  if (process.env.NX_MIXPANEL_TOKEN_EXTENSION) mixpanel.init(process.env.NX_MIXPANEL_TOKEN_EXTENSION, { debug: true })
+  if (import.meta.env.NX_MIXPANEL_TOKEN_EXTENSION)
+    mixpanel.init(import.meta.env.NX_MIXPANEL_TOKEN_EXTENSION, { debug: true })
 
   Sentry.init({
     dsn: 'https://0c6a334e733d44da96cfd64cc23b1c85@o1127358.ingest.sentry.io/6169172',

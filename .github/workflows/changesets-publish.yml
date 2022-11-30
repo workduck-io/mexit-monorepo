@@ -31,11 +31,11 @@ jobs:
 
       - uses: actions/cache@v1
         with:
-            path: ${{ steps.yarn-cache.outputs.dir }}
-            key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-            restore-keys: |
-              ${{ runner.os }}-yarn-
-      
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Setup Node.js 16.x
         uses: actions/setup-node@v2
         with:
@@ -98,9 +98,8 @@ jobs:
 
       - name: Upload Zip to Chrome Store
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: node apps/extension/build/upload-extension.mjs
+        run: node apps/extension/build/actions/upload-extension.mjs
 
       - name: Send Message to Slack with Zip
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: node apps/extension/build/slack-message.mjs
- 
+        run: node apps/extension/build/actions/slack-message.mjs

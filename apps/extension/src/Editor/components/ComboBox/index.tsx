@@ -1,32 +1,43 @@
 import { Icon } from '@iconify/react'
-import useMergedRef from '@react-hook/merged-ref'
-import { getPreventDefaultHandler, PortalBody, useEditorState } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
-import { useTheme } from 'styled-components'
-
-import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut, mog } from '@mexit/core'
-import { ComboboxItemTitle, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons, ItemTitle } from '@mexit/shared'
+import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
 import {
   ActionTitle,
+  ComboboxItemTitle,
+  ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
   DisplayShortcut,
+  ItemCenterWrapper,
+  ItemDesc,
+  ItemRightIcons,
   MexIcon,
   PreviewMeta,
+  PrimaryText,
   ShortcutText
 } from '@mexit/shared'
+import useMergedRef from '@react-hook/merged-ref'
+import { insertText, PortalBody, select, useEditorState } from '@udecode/plate'
+import React, { useEffect, useState } from 'react'
+import { useTheme } from 'styled-components'
 
-import { PrimaryText } from '../../../Components/Action/styled'
 import { ComboboxItem } from '../../../Components/Dibba/styled'
 import EditorPreviewRenderer from '../../../Components/EditorPreviewRenderer'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { useComboboxControls } from '../../hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../hooks/useComboboxIsOpen'
-import { replaceFragment } from '../../hooks/useComboboxOnKeyDown'
 import { useComboboxStore } from '../../store/combobox'
 import { setElementPositionByRange } from '../../utils/setElementPositionByRange'
 import { ComboboxProps } from './types'
+
+export const replaceFragment = (editor: any, range: any, text: string) => {
+  const sel = editor.selection
+
+  if (sel) {
+    select(editor, range)
+    insertText(editor, text)
+  }
+}
 
 export const spotlightShortcuts = {
   save: {

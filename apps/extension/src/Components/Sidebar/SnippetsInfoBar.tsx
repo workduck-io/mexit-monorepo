@@ -1,12 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
-
 import searchLine from '@iconify/icons-ri/search-line'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import { debounce } from 'lodash'
-import toast from 'react-hot-toast'
-
-import { Infobox } from '@workduck-io/mex-components'
-
 import {
   convertToCopySnippet,
   defaultCopyConverter,
@@ -17,22 +9,26 @@ import {
   Snippet
 } from '@mexit/core'
 import {
-  SnippetCards,
   Input,
+  List,
+  MexIcon,
   SidebarListFilter,
   SidebarListFilterWrapper,
-  SnippetSidebarHelp,
-  MexIcon,
-  List
-} from '@mexit/shared'
+  SnippetCards,
+  SnippetSidebarHelp} from '@mexit/shared'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { Infobox } from '@workduck-io/mex-components'
+import { debounce } from 'lodash'
+import React, { useEffect,useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
-import { getElementById } from '../../contentScript'
 import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {

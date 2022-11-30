@@ -1,6 +1,5 @@
-import { ELEMENT_H2 } from '@udecode/plate'
-
 import { ELEMENT_PARAGRAPH, mog } from '@mexit/core'
+import { ELEMENT_H2 } from '@udecode/plate'
 
 import { SmartCaptureConfig, SmartCaptureURLRegex } from '../Data/SmartCaptureConfig'
 import { FormBuilder } from '../Types/Form'

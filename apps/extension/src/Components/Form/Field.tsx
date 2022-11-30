@@ -1,8 +1,6 @@
-import React from 'react'
-
-import { ELEMENT_PARAGRAPH, ELEMENT_H2 } from '@udecode/plate'
-
 import { TextFieldHeight } from '@mexit/shared'
+import { ELEMENT_H2,ELEMENT_PARAGRAPH } from '@udecode/plate'
+import React from 'react'
 
 import { StyledTextAreaBlock } from './styled'
 

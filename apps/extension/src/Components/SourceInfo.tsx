@@ -1,8 +1,6 @@
-import React from 'react'
-
+import { getIconType, ProjectIconContainer, ProjectIconMex, SourceInfoWrapper, StyledSource } from '@mexit/shared'
 import Tippy from '@tippyjs/react'
-
-import { ProjectIconMex, getIconType, ProjectIconContainer, SourceInfoWrapper, StyledSource } from '@mexit/shared'
+import React from 'react'
 
 // * Get Favicon url
 const getFavicon = (source: string) => {

@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { styleSlot } from '../../contentScript'
+
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
+import { styleSlot } from '../../Utils/cs-utils'
 
 interface Props {
   children: React.ReactNode

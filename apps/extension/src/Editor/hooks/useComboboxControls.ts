@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
 import { useCombobox } from 'downshift';
+import { useMemo } from 'react';
+
 import { useComboboxStore } from '../store/combobox';
 import { useComboboxIsOpen } from './useComboboxIsOpen';
 

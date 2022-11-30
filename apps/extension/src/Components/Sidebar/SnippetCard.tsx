@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react'
-
-import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-
-import { tinykeys } from '@workduck-io/tinykeys'
-
+import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 import { Snippet } from '@mexit/core'
 import {
-  SnippetCardWrapper,
-  SnippetContentPreview,
-  SnippetCardFooter,
-  RelativeTime,
-  MexIcon,
+  GenericFlex,
   IconButton,
-  GenericFlex
-} from '@mexit/shared'
+  MexIcon,
+  RelativeTime,
+  SnippetCardFooter,
+  SnippetCardWrapper,
+  SnippetContentPreview} from '@mexit/shared'
+import { tinykeys } from '@workduck-io/tinykeys'
+import React, { useEffect } from 'react'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'

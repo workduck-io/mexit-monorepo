@@ -1,8 +1,11 @@
+import { QuickLinkType } from '@mexit/core'
 import { PlateEditor, RenderFunction } from '@udecode/plate'
 
-import { QuickLinkType } from '@mexit/core'
-
-import { CustomElements } from '../../types/editor'
+export enum CustomElements {
+  ILINK = 'ilink',
+  TAG = 'tag',
+  SLASH_COMMAND = 'slash_command'
+}
 
 export interface ComboboxKeyDownConfig {
   keys: Record<CustomElements, ComboboxItemType>

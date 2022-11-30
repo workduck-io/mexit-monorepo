@@ -1,27 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react'
-
 import searchLine from '@iconify/icons-ri/search-line'
-import { debounce } from 'lodash'
-import { useTheme } from 'styled-components'
-
-import { Infobox } from '@workduck-io/mex-components'
-
 import { BASE_TASKS_PATH, isParent, mog } from '@mexit/core'
 import {
-  SidebarListFilterWrapper,
-  SidebarListFilter,
+  CenteredColumn,
   Input,
-  SnippetCards,
+  List,
   MexIcon,
   NotesInfoBarHelp,
-  List,
-  CenteredColumn
-} from '@mexit/shared'
+  SidebarListFilter,
+  SidebarListFilterWrapper,
+  SnippetCards} from '@mexit/shared'
+import { Infobox } from '@workduck-io/mex-components'
+import { debounce } from 'lodash'
+import React, { useEffect, useRef, useState } from 'react'
+import { useTheme } from 'styled-components'
 
 import { useLinks } from '../../Hooks/useLinks'
 import useRaju from '../../Hooks/useRaju'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import { NodeCard } from './NodeCard'
 
 export const NotesInfoBar = () => {

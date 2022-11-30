@@ -1,7 +1,6 @@
+import { preferenceStoreConstructor, UserPreferenceStore } from '@mexit/shared'
 import create from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-
-import { preferenceStoreConstructor, UserPreferenceStore } from '@mexit/shared'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

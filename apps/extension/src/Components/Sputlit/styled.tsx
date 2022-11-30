@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { normalize } from '@mexit/shared'
+import styled from 'styled-components'
 
 export const SputlitContainer = styled.div`
   ${normalize}

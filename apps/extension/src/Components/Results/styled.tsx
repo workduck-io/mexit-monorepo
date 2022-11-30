@@ -1,7 +1,5 @@
-import { animated } from 'react-spring'
-import styled, { css } from 'styled-components'
-
 import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'
+import styled, { css } from 'styled-components'
 
 export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
   overflow: hidden auto;

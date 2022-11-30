@@ -1,23 +1,19 @@
-import React from 'react'
-
-import { Icon } from '@iconify/react'
-import styled, { css, useTheme } from 'styled-components'
-
+import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import { PrimaryText } from '@mexit/shared'
 import { DisplayShortcut } from '@workduck-io/mex-components'
-
-import { CategoryType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import React from 'react'
+import { useTheme } from 'styled-components'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import {
-  StyledAction,
+  ActionContent,
+  ActionIcon,
   Container,
-  Content,
-  Title,
   Description,
   ShortcutContainer,
   ShortcutText,
-  ItemIcon,
-  PrimaryText
+  StyledAction,
+  Title
 } from './styled'
 
 interface ActionProps {
@@ -27,16 +23,17 @@ interface ActionProps {
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
+
   const search = useSputlitStore((s) => s.search)
   const selection = useSputlitStore((s) => s.selection)
 
   const newNodeName = cleanString(search.value)
 
   return (
-    <StyledAction active={active}>
+    <StyledAction $active={active}>
       <Container>
-        <ItemIcon as={Icon} color={theme.colors.primary} height={20} width={20} icon={action?.icon} />
-        <Content>
+        <ActionIcon color={theme.colors.primary} height={20} width={20} icon={action?.icon} />
+        <ActionContent>
           <Title>
             {action?.extras?.new ? (
               <>
@@ -47,7 +44,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
             )}
           </Title>
           {action.description && <Description>{action.description}</Description>}
-        </Content>
+        </ActionContent>
       </Container>
       {active && action.shortcut && (
         <ShortcutContainer>

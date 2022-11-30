@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-import { mog } from '@mexit/core'
 import sanitize from 'sanitize-html'
 
 const options = {

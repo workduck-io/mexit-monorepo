@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus } from '@mexit/core'
+import { getNextStatus,PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
+import React, { useEffect, useMemo, useState } from 'react'
+
 import { useTodoStore } from '../../../Stores/useTodoStore'
 import PrioritySelect from './PrioritySelect'
 
@@ -72,7 +73,6 @@ export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, contro
       </CheckBoxWrapper>
 
       <TodoText contentEditable={!readOnly} suppressContentEditableWarning>
-        {/* @ts-ignore */}
         {children}
       </TodoText>
       <TodoOptions id={`TodoOptionsFor_${oid}_${todoid}`} contentEditable={false}>

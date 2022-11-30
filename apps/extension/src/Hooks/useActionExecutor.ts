@@ -1,12 +1,8 @@
 /* eslint-disable no-case-declarations */
-import toast from 'react-hot-toast'
-
 import {
   ActionType,
   CategoryType,
   createNodeWithUid,
-  ELEMENT_PARAGRAPH,
-  getBlockMetadata,
   getNewDraftKey,
   ILink,
   loremIpsum,
@@ -17,6 +13,7 @@ import {
   SingleNamespace
 } from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
+import toast from 'react-hot-toast'
 
 import { SmartCapturePageSource } from '../Data/SmartCaptureConfig'
 import useDataStore from '../Stores/useDataStore'
@@ -24,7 +21,7 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { generateAvatar } from '../Utils/generateAvatar'
-import { checkURL, formToBlocks, getProfileData } from '../Utils/getProfileData'
+import { checkURL, getProfileData } from '../Utils/getProfileData'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 import { useAuthStore } from './useAuth'
 import { useNamespaces } from './useNamespaces'

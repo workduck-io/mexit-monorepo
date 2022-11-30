@@ -1,6 +1,5 @@
 import BackIcon from '@iconify/icons-ph/caret-circle-left-light'
 import LensIcon from '@iconify/icons-ph/magnifying-glass-bold'
-
 import { cleanString } from '@mexit/core'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'

@@ -58,3 +58,7 @@ yarn-debug.log*
 yarn-error.log*
 dist/
 .vscode/
+#generated manifest
+apps/extension/public/manifest.json
+apps/extension/build/reload/*.js
+apps/extension/build/reload/injections/*.js

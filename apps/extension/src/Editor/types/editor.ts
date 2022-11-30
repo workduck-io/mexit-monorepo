@@ -1,17 +1,10 @@
-import React, { ReactElement } from 'react'
+import { PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
+import { ReactElement } from 'react'
+import type { EditableProps } from 'slate-react/dist/components/editable'
 
-import { PlaceholderProps, PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
-import { EditableProps } from 'slate-react/dist/components/editable'
-
-import { ComboboxConfig } from '.'
+import { ComboboxConfig, CustomElements } from '../components/ComboBox/types'
 
 export type MexEditorValue = Array<any>
-
-export enum CustomElements {
-  ILINK = 'ilink',
-  TAG = 'tag',
-  SLASH_COMMAND = 'slash_command'
-}
 
 export type PluginOptions = Record<CustomElements, PlatePlugin>
 
@@ -44,4 +37,24 @@ export interface MexEditorProps {
   exlude?: Array<string> // * Array of elements from MEX_EDITOR_ELEMENTS
   BalloonMarkToolbarButtons?: ReactElement
   portalElement?: Element
+}
+
+export enum ComboboxKey {
+  TAG = 'tag',
+  ILINK = 'ilink',
+  INLINE_BLOCK = 'inline_block',
+  SLASH_COMMAND = 'slash_command'
+}
+
+export interface ComboboxItem {
+  text: string
+  value: string
+  icon?: string
+}
+
+export interface ComboboxType {
+  cbKey: ComboboxKey
+  icon?: string
+  trigger: string
+  data: ComboboxItem[]
 }

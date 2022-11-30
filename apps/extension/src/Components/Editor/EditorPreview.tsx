@@ -1,29 +1,25 @@
 // different import path!
-import React, { forwardRef, useState } from 'react'
-
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless'
-
-import { NodeEditorContent, generateTempId, mog, MEXIT_FRONTEND_URL_BASE, getNameFromPath } from '@mexit/core'
+import { generateTempId, getNameFromPath, MEXIT_FRONTEND_URL_BASE, mog, NodeEditorContent } from '@mexit/core'
 import {
+  Button,
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper
 } from '@mexit/shared'
-import { Button } from '@mexit/shared'
+import Tippy from '@tippyjs/react/headless'
+import React, { forwardRef, useState } from 'react'
 
-import { generateEditorPluginsWithComponents } from '../../Editor/plugins'
 // import useLoad from '../../../Hooks/useLoad'
 // import { useRouting, ROUTE_PATHS, NavigationType } from '../../../Hooks/useRouting'
 // import { useTags } from '../../Hooks/useTags'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
-import { getElementById } from '../../contentScript'
+import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import components from './Components'
 
 export interface EditorPreviewProps {
   nodeid: string
@@ -95,8 +91,6 @@ const EditorPreview = ({
     // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
-  const plugins = generateEditorPluginsWithComponents(components, { exclude: { dnd: true } })
-
   if (cc) {
     return (
       <LazyTippy
@@ -131,7 +125,7 @@ const EditorPreview = ({
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>
-              <EditorPreviewRenderer content={cc} editorId={editorId} plugins={plugins} />
+              <EditorPreviewRenderer content={cc} editorId={editorId} />
             </EditorPreviewEditorWrapper>
           </EditorPreviewWrapper>
         )}

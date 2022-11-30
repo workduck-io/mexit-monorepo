@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import md5 from 'md5'
-import Avatar from 'boring-avatars'
-import Tippy from '@tippyjs/react/headless' // different import path!
+// different import path!
 import { Icon } from '@iconify/react'
 import user3Line from '@iconify-icons/ri/user-3-line'
+import { CardShadow,Centered } from '@mexit/shared'
+import Tippy from '@tippyjs/react/headless'
+import Avatar from 'boring-avatars'
+import md5 from 'md5'
+import React, { useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
-import { Centered, CardShadow } from '@mexit/shared'
 import { useCacheStore } from '../Stores/useRequestCache'
 
 interface ProfileImageProps {
@@ -89,7 +90,7 @@ interface ProfileImageWithToolTipProps {
 }
 
 export const ProfileImageWithToolTip = ({ props, placement }: ProfileImageWithToolTipProps) => {
-  const { email } = props // eslint-disable-line react/prop-types
+  const { email } = props
   return (
     <Tippy
       delay={100}

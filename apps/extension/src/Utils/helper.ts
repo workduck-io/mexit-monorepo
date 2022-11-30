@@ -4,8 +4,8 @@ import {
   defaultContent,
   ILink,
   ListItemType,
-  MexitAction,
   MEXIT_FRONTEND_URL_BASE,
+  MexitAction,
   NodeContent,
   QuickLinkType,
   Snippet

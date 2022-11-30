@@ -58,9 +58,9 @@ export const Center = styled.div`
   justify-content: center;
 `
 
-export const CenterIcon = styled(Center)<{ cursor?: boolean }>`
-  ${({ cursor }) =>
-    cursor &&
+export const CenterIcon = styled(Center)<{ $cursor?: boolean }>`
+  ${({ $cursor }) =>
+    $cursor &&
     css`
       cursor: pointer;
     `}

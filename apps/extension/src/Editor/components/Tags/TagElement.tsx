@@ -1,9 +1,7 @@
-import * as React from 'react'
-
+import { STag,STagRoot, TagElementProps } from '@mexit/shared'
 import { moveSelection, useEditorRef } from '@udecode/plate'
+import * as React from 'react'
 import { useFocused, useSelected } from 'slate-react'
-
-import { TagElementProps, STagRoot, STag } from '@mexit/shared'
 
 import { useHotkeys } from '../../hooks/useHotKeys'
 import { useOnMouseClick } from '../../hooks/useOnMouseClick'

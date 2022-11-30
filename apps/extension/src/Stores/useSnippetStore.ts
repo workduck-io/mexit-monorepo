@@ -1,7 +1,6 @@
+import { snippetStoreConstructor, SnippetStoreState } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { snippetStoreConstructor, SnippetStoreState } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

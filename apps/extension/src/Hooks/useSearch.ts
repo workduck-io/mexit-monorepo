@@ -1,19 +1,16 @@
 /* eslint-disable no-case-declarations */
-import fuzzysort from 'fuzzysort'
-
 import {
+  ActionType,
   CategoryType,
-  isReservedOrClash,
   CREATE_NEW_ITEM,
-  initActions,
-  ListItemType,
-  sortByCreated,
   fuzzySearchLinks,
   getListItemFromLink,
-  mog,
-  ActionType,
-  QuickLinkType
-} from '@mexit/core'
+  initActions,
+  isReservedOrClash,
+  ListItemType,
+  QuickLinkType,
+  sortByCreated} from '@mexit/core'
+import fuzzysort from 'fuzzysort'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'

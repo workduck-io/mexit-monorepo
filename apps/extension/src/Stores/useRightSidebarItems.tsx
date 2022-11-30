@@ -1,9 +1,7 @@
-import React from 'react'
-
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { MexIcon,TabType } from '@mexit/shared'
 import { getNextWrappingIndex } from '@udecode/plate'
-
-import { TabType, MexIcon } from '@mexit/shared'
+import React from 'react'
 
 import { ContextInfoBar } from '../Components/Sidebar/ContextInfoBar'
 import { NotesInfoBar } from '../Components/Sidebar/NotesInfoBar'

@@ -1,7 +1,11 @@
 {
   "root": true,
-  "ignorePatterns": ["!**/*"],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": ["!**/*", "src/Assets/**/*"],
+  "plugins": ["@nrwl/nx", "unused-imports", "simple-import-sort", "import"],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "env": { "es6": true },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -18,13 +22,22 @@
               }
             ]
           }
-        ]
+        ],
+        "unused-imports/no-unused-imports": "warn",
+        "simple-import-sort/imports": "warn",
+        "simple-import-sort/exports": "warn",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error"
       }
     },
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
