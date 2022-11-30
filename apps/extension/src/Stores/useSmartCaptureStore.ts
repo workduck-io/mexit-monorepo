@@ -1,12 +1,12 @@
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 import { SmartCaptureStore, smartCaptureStoreConstructor } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 export const useSmartCaptureStore = create<SmartCaptureStore>(
-  persist(smartCaptureStoreConstructor, {
+  persist(devtools(smartCaptureStoreConstructor, { name: 'EXT-SMART-CAPTURE' }), {
     name: 'mexit-smart-capture-store',
     getStorage: () => asyncLocalStorage
   })

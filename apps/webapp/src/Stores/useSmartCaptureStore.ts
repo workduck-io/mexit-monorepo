@@ -1,10 +1,10 @@
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 import { IDBStorage, SmartCaptureStore, smartCaptureStoreConstructor } from '@mexit/core'
 
 export const useSmartCaptureStore = create<SmartCaptureStore>(
-  persist(smartCaptureStoreConstructor, {
+  persist(devtools(smartCaptureStoreConstructor, { name: 'WEBAPP_SMART_CAPTURE' }), {
     name: 'mexit-smart-capture-store',
     getStorage: () => IDBStorage
   })
