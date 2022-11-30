@@ -2863,6 +2863,13 @@
   dependencies:
     "@iconify/types" "^1.0.12"
 
+"@iconify/icons-logos@^1.2.20":
+  version "1.2.20"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-logos/-/icons-logos-1.2.20.tgz#603517e6a53e80e2c3e25415d7a365bdaea009b8"
+  integrity sha512-ZzBQejtujcYKpsNw9AQLJWDmIwV3Elj3CFLPYJlvzEyF9WUpDtCTXxp9ZK3WQNpbhGboemqp0HVC7m8LBuXBjw==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/icons-ph@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@iconify/icons-ph/-/icons-ph-1.2.1.tgz#292155d05e660d24a65c1510ccb61cd1ad15676a"

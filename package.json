@@ -17,6 +17,7 @@
   "dependencies": {
     "@dicebear/avatars": "^4.10.5",
     "@dicebear/avatars-male-sprites": "^4.10.5",
+    "@iconify/icons-logos": "^1.2.20",
     "@udecode/plate": "~16.4.1",
     "@uifabric/styling": "^7.20.0",
     "axios": "^0.23.0",

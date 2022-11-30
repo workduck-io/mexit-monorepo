@@ -1,4 +1,4 @@
-import { defaultContent, ELEMENT_TAG, NodeEditorContent,QuickLinkType  } from '@mexit/core'
+import { defaultContent, ELEMENT_TAG, mog, NodeEditorContent,QuickLinkType  } from '@mexit/core'
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
 
