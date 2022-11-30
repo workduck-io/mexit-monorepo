@@ -39,8 +39,6 @@
     "@nrwl/cli": "13.8.2",
     "@nrwl/eslint-plugin-nx": "13.8.2",
     "@nrwl/nx-cloud": "latest",
-    "@nrwl/react": "13.8.2",
-    "@nrwl/web": "13.8.2",
     "@swc/cli": "~0.1.52",
     "@swc/core": "^1.2.146",
     "@swc/helpers": "~0.2.14",
