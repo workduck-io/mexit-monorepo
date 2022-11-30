@@ -1,13 +1,13 @@
 import { API } from '../../../../libs/core/src'
-import { useSmartConfigStore } from '../Stores/useSmartConfigStore'
+import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 
 export const useSmartCapture = () => {
-  const setConfig = useSmartConfigStore((s) => s.setSmartConfigList)
+  const setConfig = useSmartCaptureStore((s) => s.setSmartCaptureList)
 
-  const getAllSmartConfigs = async () => {
-    const res = await API.smartconfig.getPublic()
+  const getAllSmartCaptures = async () => {
+    const res = await API.smartcapture.getPublic()
     setConfig(res)
   }
 
-  return { getAllSmartConfigs }
+  return { getAllSmartCaptures }
 }

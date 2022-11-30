@@ -32,7 +32,7 @@ class APIClass {
   public reminder: ReminderAPI
   public user: UserAPI
   public highlight: HighlightAPI
-  public smartconfig: SmartCaptureAPI
+  public smartcapture: SmartCaptureAPI
   constructor() {
     if (instance) {
       throw new Error('New instance cannot be created!!')
@@ -55,7 +55,7 @@ class APIClass {
     this.reminder = new ReminderAPI(this.client)
     this.user = new UserAPI(this.client)
     this.highlight = new HighlightAPI(this.client)
-    this.smartconfig = new SmartCaptureAPI(this.client)
+    this.smartcapture = new SmartCaptureAPI(this.client)
   }
 
   setWorkspaceHeader(workspaceId: string) {

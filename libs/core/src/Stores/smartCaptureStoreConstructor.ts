@@ -1,15 +1,15 @@
 export type SmartCaptureStore = {
   config: any[]
-  setSmartConfigList: (nodes: Array<string>) => void
+  setSmartCaptureList: (nodes: Array<string>) => void
   clear: () => void
   getById: (configId: string) => any[]
   getRegexList: () => any[]
-  initSmartConfigList: (recentList: Array<string>) => void
+  initSmartCaptureList: (recentList: Array<string>) => void
 }
 
 export const smartCaptureStoreConstructor = (set, get) => ({
   config: [],
-  setSmartConfigList: (config: Array<any>) => {
+  setSmartCaptureList: (config: Array<any>) => {
     set({ config })
   },
   getById: (configId: string) => {
@@ -24,5 +24,5 @@ export const smartCaptureStoreConstructor = (set, get) => ({
   clear: () => {
     set({ config: [] })
   },
-  initSmartConfigList: (recentList) => set({ config: recentList })
+  initSmartCaptureList: (recentList) => set({ config: recentList })
 })

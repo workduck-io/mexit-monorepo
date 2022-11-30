@@ -36,7 +36,7 @@ export const useInitLoader = () => {
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
-  const { getAllSmartConfigs } = useSmartCapture()
+  const { getAllSmartCaptures } = useSmartCapture()
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
@@ -49,7 +49,7 @@ export const useInitLoader = () => {
         getAllSnippetsByWorkspace(),
         getAllViews(),
         getAllLinks(),
-        getAllSmartConfigs(),
+        getAllSmartCaptures(),
         fetchAllHighlights()
       ])
     } catch (err) {
