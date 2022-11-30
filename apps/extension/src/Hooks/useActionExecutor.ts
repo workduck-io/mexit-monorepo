@@ -195,8 +195,9 @@ export function useActionExecutor() {
             if (!captureConfig) toast.error('No data available for extracting')
             else {
               try {
-                const formData = evaluateConfig(captureConfig)
-                setSmartCaptureFormData(formData)
+                const data = evaluateConfig(captureConfig)
+
+                setSmartCaptureFormData({ source: strippedURL, page: captureConfig.base, data: data })
                 setActiveItem(item)
               } catch (err) {
                 console.error('err:', err)

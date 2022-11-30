@@ -14,6 +14,7 @@ import {
   ReminderActions,
   SharedNode,
   SingleNamespace,
+  SmartCaptureConfig,
   Snippet,
   UserDetails,
   WorkspaceDetails
@@ -30,6 +31,7 @@ import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
 import { useAuthStore } from './useAuth'
@@ -44,6 +46,7 @@ export interface ParentMethods {
   ADD_MULTIPLE_ILINKS: (linksToBeCreated: ILink[]) => void
   ADD_RECENT_NODE: (nodeId: string) => void
   ACT_ON_REMINDER: (action: ReminderActions, reminder: Reminder) => void
+
   /**
    * Sends hightlight and blockhighlight map to be added to highlight store
    */
@@ -74,6 +77,7 @@ export default function useRaju() {
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const setRecents = useRecentsStore((s) => s.initRecents)
   const { updateSnippets } = useSnippets()
+  const setSmartCapture = useSmartCaptureStore((store) => store.setSmartCaptureList)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
   const setLinks = useLinkStore((store) => store.setLinks)
@@ -143,6 +147,10 @@ export default function useRaju() {
     },
     bootSnippets(snippets: Snippet[]) {
       updateSnippets(snippets)
+    },
+    bootSmartCapture(captures: SmartCaptureConfig[]) {
+      mog('CAPTURES', { captures })
+      setSmartCapture(captures)
     },
     bootPublicNodes(publicNodes: any[]) {
       setPublicNodes(publicNodes)

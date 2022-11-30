@@ -93,12 +93,12 @@ const Form: React.FC<FormProps> = ({ page, config }) => {
       <StyledForm id="wd-mex-smart-capture-form" onSubmit={handleSubmit(onSubmit)}>
         <UserPreferedFields
           page={page}
-          fields={config.filter((i) => !exludedFields?.find((f) => f == i.id))}
+          fields={config?.filter((i) => !exludedFields?.find((f) => f == i.id))}
           register={register}
         />
         <ExludedFormFields
           page={page}
-          fields={config.filter((i) => exludedFields?.find((f) => f === i.id))}
+          fields={config?.filter((i) => exludedFields?.find((f) => f === i.id))}
           register={register}
         />
       </StyledForm>

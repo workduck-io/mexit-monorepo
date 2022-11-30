@@ -55,7 +55,7 @@ const extractData = (rule: SmartCaptureLabel) => {
   }
 }
 
-export const evaluateConfig = async (config: SmartCaptureConfigType) => {
+export const evaluateConfig = (config: SmartCaptureConfigType) => {
   const formData: FormBuilder = []
   formData.push({
     id: 'LABEL_1001',
