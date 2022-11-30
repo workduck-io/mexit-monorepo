@@ -1,8 +1,9 @@
 {
   "env": {
-    "__DEV__": "true"
+    "__DEV__": "true",
+    "VITE_FORCE_DEV": true
   },
   "watch": ["src", "build", "vite.config.ts", "../../libs/core", "../../libs/shared"],
   "ext": "tsx,ts",
-  "exec": "node_modules/.bin/vite build --mode development"
+  "exec": "node_modules/.bin/vite build"
 }
