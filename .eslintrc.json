@@ -1,12 +1,53 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "unused-imports"],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": [
+    "@nrwl/nx",
+    "unused-imports",
+    "simple-import-sort",
+    "import",
+    "react",
+    "react-hooks",
+    "@typescript-eslint"
+  ],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "parser": "@typescript-eslint/parser",
+  "env": { "es6": true },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-key": "off",
+        "react/prop-types": "off",
         "unused-imports/no-unused-imports": "warn",
+        "simple-import-sort/exports": "warn",
+        "import/first": "error",
+        "import/newline-after-import": "error",
+        "import/no-duplicates": "error",
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              // Side effect imports.
+              ["^\\u0000"],
+              // Packages. `react` related packages come first.
+              ["^react"],
+              // Internal packages.
+              ["^(@workduck-io)(/.*|$)"],
+              // Internal packages.
+              ["^(@mexit)(/.*|$)"]
+            ]
+          }
+        ],
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
@@ -25,7 +66,12 @@
     {
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "react-hooks/exhaustive-deps": "off",
+        "react/jsx-no-useless-fragment": "off"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

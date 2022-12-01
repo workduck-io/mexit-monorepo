@@ -101,6 +101,8 @@ const RenderTask = React.memo<RenderTaskProps>(
   }
 )
 
+RenderTask.displayName = 'RenderTask'
+
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
   const nodesTodo = useTodoStore((store) => store.todos)

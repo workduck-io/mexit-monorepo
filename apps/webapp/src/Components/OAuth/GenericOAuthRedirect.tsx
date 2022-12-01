@@ -128,7 +128,7 @@ const GenericOAuthRedirect = () => {
         <Title>OAuth Complete for {serviceName}!</Title>
         {showWebappOpener() && <Button onClick={handleWebappOpen}>Continue to Web App</Button>}
         <Button onClick={(e) => handleDesktopAppOpen(e)}>Continue to Desktop App</Button>
-        {!hasDesktopApp && <Description>You Don't Have the Desktop App. Please Install to Continue</Description>}
+        {!hasDesktopApp && <Description>You Don&apos;t Have the Desktop App. Please Install to Continue</Description>}
       </BackCard>
     </CenteredColumn>
   )

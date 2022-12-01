@@ -283,6 +283,7 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
     return <>{childrenRender}</>
   }
 )
+RenderPlateless.displayName = 'RenderPlateless'
 
 /**
  * A barebones renderer for plate content in html
