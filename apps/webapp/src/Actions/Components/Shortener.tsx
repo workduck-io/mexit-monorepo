@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getValidTitle, Link, metadataParser, mog,Tag } from '@mexit/core'
-import { AddTagMenu,copyTextToClipboard, Input, Label, LinkTagSection, resize, TagsLabel } from '@mexit/shared'
+import { getValidTitle, Link, metadataParser, mog, Tag } from '@mexit/core'
+import { AddTagMenu, copyTextToClipboard, Input, Label, LinkTagSection, resize, TagsLabel } from '@mexit/shared'
 
 import { useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
@@ -17,6 +17,7 @@ const Form = styled.form`
   flex-direction: column;
 
   padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large} ${theme.spacing.large}`};
+  background: ${({ theme }) => theme.colors.background.app};
 `
 
 const InputRow = styled.div<{ noTopMargin?: boolean }>`
