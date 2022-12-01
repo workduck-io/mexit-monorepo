@@ -8,7 +8,8 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/core/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/core/**/*.{ts,tsx,js,jsx}"],
+        "eslintConfig": "libs/core/.eslintrc.json"
       }
     }
   }

@@ -1,17 +1,16 @@
-import { indexNames, diskIndex } from '../Data/search'
+import { diskIndex,indexNames } from '../Data/search'
 import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
 import {
   ELEMENT_CODE_BLOCK,
-  ELEMENT_TODO_LI,
   ELEMENT_EXCALIDRAW,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
-  ELEMENT_TABLE
-} from './editorElements'
+  ELEMENT_TABLE,
+  ELEMENT_TODO_LI} from './editorElements'
 import { getSlug } from './strings'
 
 const ELEMENT_ILINK = 'ilink'

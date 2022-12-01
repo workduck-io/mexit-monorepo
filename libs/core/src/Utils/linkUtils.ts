@@ -3,7 +3,6 @@ import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { fuzzySearch } from './fuzzysearch'
-import { mog } from './mog'
 import { LINK_SHORTENER_URL_BASE } from './routes'
 
 export const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {

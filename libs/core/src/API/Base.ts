@@ -1,5 +1,3 @@
-import { AxiosInstance } from 'axios'
-
 import { AxiosX } from './AxiosX'
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
@@ -15,6 +13,7 @@ import { SmartCaptureAPI } from './SmartCapture'
 import { SnippetAPI } from './Snippet'
 import { UserAPI } from './User'
 import { ViewAPI } from './View.ts'
+import { AxiosInstance } from 'axios'
 
 let instance
 class APIClass {

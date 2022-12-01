@@ -1,8 +1,7 @@
-import { uniq } from 'lodash'
-
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { ELEMENT_MENTION } from './editorElements'
 import { generateTempId } from './idGenerator'
+import { uniq } from 'lodash'
 
 const ELEMENT_TODO_LI = 'action_item'
 const ELEMENT_PARAGRAPH = 'p'

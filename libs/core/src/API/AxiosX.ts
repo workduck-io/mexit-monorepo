@@ -1,8 +1,7 @@
-import { AxiosInstance } from 'axios'
-import md5 from 'md5'
-
 import { WORKSPACE_HEADER } from '../Data/constants'
 import { getData } from './utils'
+import { AxiosInstance } from 'axios'
+import md5 from 'md5'
 
 export class AxiosX {
   private client: AxiosInstance

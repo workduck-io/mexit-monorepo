@@ -1,7 +1,6 @@
-import { startOfTomorrow, sub } from 'date-fns'
-
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../Types/Kanban'
 import { Reminder } from '../Types/Reminders'
+import { startOfTomorrow, sub } from 'date-fns'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'

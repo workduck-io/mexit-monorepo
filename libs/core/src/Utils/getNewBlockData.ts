@@ -1,4 +1,4 @@
-import { DRAFT_PREFIX, SEPARATOR, DRAFT_NODE } from './idGenerator'
+import { DRAFT_NODE,DRAFT_PREFIX, SEPARATOR } from './idGenerator'
 import { getCurrentTimeString } from './time'
 
 export const getNewDraftKey = (): string => {

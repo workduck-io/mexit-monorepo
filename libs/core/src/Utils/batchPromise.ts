@@ -1,6 +1,5 @@
 import { ILink } from '../Types/Editor'
 import { SingleNamespace } from '../Types/Store'
-import { mog } from './mog'
 
 const BATCH_SIZE = 6
 
