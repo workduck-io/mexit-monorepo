@@ -1,14 +1,13 @@
 import { useState } from 'react'
 
-import { client,useAuth } from '@workduck-io/dwindle'
+import { client, useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { apiURLs, authStoreConstructor,AuthStoreState, mog , RegisterFormData  } from '@mexit/core'
+import { apiURLs, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
 import { terminateRequestWorker } from '../Workers/controller'
-import { useApiStore } from './useApiStore'
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
@@ -40,7 +39,6 @@ export const useAuthentication = () => {
 
   const initContents = useContentStore((store) => store.initContents)
   const clearSnippets = useSnippetStore((s) => s.clear)
-  const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
@@ -98,7 +96,6 @@ export const useAuthentication = () => {
     // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
     // This is because zustand maintains it's state post logout as we don't go through a reload
     // Which results in zustand recreating everything post logout
-    clearRequests()
     initContents({})
     clearReactions()
     clearComments()
