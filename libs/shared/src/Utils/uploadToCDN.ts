@@ -24,7 +24,10 @@ export const useUploadToCDN = (uploader: (base64string: string, options?: any) =
 
         toast('Uploading image')
         // mog('uploadImageToWDCDN', { compressedImg })
-        const resp = await uploader(`${compressedImg.prefix}${compressedImg.data}`, { giveCloudFrontURL: true })
+        const resp = await uploader(`${compressedImg.prefix}${compressedImg.data}`, {
+          giveCloudFrontURL: true,
+          parseBase64String: true
+        })
         const path = resp as string
         toast('Image Uploaded')
 
