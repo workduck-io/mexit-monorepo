@@ -34,7 +34,7 @@ export const GlobalStyle = createGlobalStyle`
     src: url(${chrome.runtime.getURL('/Assets/Inter-Bold.ttf')});
   }
 
-  #something-nothing {
+  #mexit-extension-iframe {
     display: none;
   }
 

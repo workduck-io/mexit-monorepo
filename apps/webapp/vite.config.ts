@@ -22,6 +22,7 @@ export default defineConfig({
   build: {
     sourcemap: sourceMap,
     outDir: '../../dist/webapp',
+    minify: false,
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, 'index.html'),

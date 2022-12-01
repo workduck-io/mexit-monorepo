@@ -91,7 +91,11 @@ export const useAuthentication = () => {
 
   const logout = async () => {
     await signOut()
-    await terminateRequestWorker()
+    try {
+      await terminateRequestWorker()
+    } catch (err) {
+      mog('Worker Termination failed!', { err })
+    }
 
     setUnAuthenticated()
 

@@ -26,7 +26,8 @@ export const ROUTE_PATHS = {
   share: '/share',
   namespaceShare: '/share/namespace',
   forgotpassword: '/auth/forgotpassword',
-  integrations: '/integrations'
+  integrations: '/integrations',
+  connector: '/connector'
 }
 
 export enum NavigationType {

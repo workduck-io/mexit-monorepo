@@ -76,7 +76,6 @@
     "react-select": "^4.3.1",
     "react-spring": "^9.4.3",
     "react-use-websocket": "^4.2.0",
-    "shared-zustand": "^1.0.4",
     "styled-components": "^5.3.3",
     "threads": "^1.7.0",
     "universal-cookie": "^4.0.4",

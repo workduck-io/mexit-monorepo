@@ -40,15 +40,7 @@ export default function Chotu() {
   const reminders = useReminderStore((store) => store.reminders)
   const descriptions = useDescriptionStore((store) => store.descriptions)
 
-  const {
-    ilinks,
-    archive,
-    sharedNodes,
-    tags,
-    publicNodes,
-    namespaces,
-    _hasHydrated: _areIlinksHydrated
-  } = useDataStore()
+  const { ilinks, archive, sharedNodes, namespaces, _hasHydrated: _areIlinksHydrated } = useDataStore()
   const allMetadata = useMetadataStore((s) => s.metadata)
   const { contents, setContent, _hasHydrated: _isContentHydrated } = useContentStore()
   const recents = useRecentsStore((s) => s.lastOpened)

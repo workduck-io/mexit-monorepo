@@ -177,36 +177,36 @@ export default function useRaju() {
     }
   }
 
-  useEffect(() => {
-    const iframe = document.createElement('iframe')
-    iframe.src = `${MEXIT_FRONTEND_URL_BASE}/chotu`
-    iframe.id = IFRAME_ID
+  // useEffect(() => {
+  //   const iframe = document.createElement('iframe')
+  //   iframe.src = `${MEXIT_FRONTEND_URL_BASE}/chotu`
+  //   iframe.id = IFRAME_ID
 
-    if (!getElementById(IFRAME_ID)) {
-      styleSlot.appendChild(iframe)
-    }
+  //   if (!getElementById(IFRAME_ID)) {
+  //     styleSlot.appendChild(iframe)
+  //   }
 
-    const connection = connectToChild({
-      iframe,
-      methods
-      // debug: true
-    })
+  //   const connection = connectToChild({
+  //     iframe,
+  //     methods
+  //     // debug: true
+  //   })
 
-    const handleIframeLoad = () => {
-      connection.promise
-        .then((child: any) => {
-          mog('setting content')
-          setChild(child)
-        })
-        .catch((error) => {
-          mog('ErrorConnectingToChild', error)
-        })
-    }
+  //   const handleIframeLoad = () => {
+  //     connection.promise
+  //       .then((child: any) => {
+  //         mog('setting content')
+  //         setChild(child)
+  //       })
+  //       .catch((error) => {
+  //         mog('ErrorConnectingToChild', error)
+  //       })
+  //   }
 
-    iframe.addEventListener('load', handleIframeLoad)
+  //   iframe.addEventListener('load', handleIframeLoad)
 
-    return () => iframe.removeEventListener('load', handleIframeLoad)
-  }, [])
+  //   return () => iframe.removeEventListener('load', handleIframeLoad)
+  // }, [])
 
   const dispatch = <K extends keyof ParentMethods>(
     type: K,

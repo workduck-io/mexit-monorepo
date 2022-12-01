@@ -8,7 +8,8 @@ import styled from 'styled-components'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'
-import Chotu from './Components/Chotu'
+// import Chotu from './Components/Chotu'
+import Connector from './Components/Connector'
 import ContentEditor from './Components/Editor/ContentEditor'
 import SnippetEditor from './Components/Editor/SnippetEditor'
 import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
@@ -269,7 +270,8 @@ export const Switch = () => {
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
-        <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
+        {/* <Route path={ROUTE_PATHS.chotu} element={<Iframe />} /> */}
+        {/* <Route path={ROUTE_PATHS.connector} element={<Connector />} /> */}
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
         <Route path={`${ROUTE_PATHS.namespaceShare}/:namespaceID`} element={<PublicNamespaceView />}>
@@ -312,7 +314,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.editor}/:nodeId`} element={<ContentEditor />} />
         </Route>
         <Route path={ROUTE_PATHS.archive} element={<Archive />} />
-        <Route path="*" element={<RouteNotFound />} />
+        {/* <Route path="*" element={<RouteNotFound />} /> */}
       </Routes>
     </SwitchWrapper>
   )

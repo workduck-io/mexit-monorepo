@@ -8,6 +8,7 @@ import { addIconsToIconify } from '@mexit/shared'
 import config from '../config'
 import { useInitLoader } from '../Hooks/useInitLoader'
 import { useAutoSyncUserPreference } from '../Hooks/useSyncUserPreferences'
+import syncStores from '../Sync'
 
 const Init = () => {
   const { initCognito } = useAuth()
@@ -29,6 +30,7 @@ const Init = () => {
     }
 
     initUserAndApp()
+    syncStores()
   }, [])
 
   useInitLoader()

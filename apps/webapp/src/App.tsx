@@ -1,5 +1,3 @@
-import './Stores'
-
 import React, { useMemo } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 

@@ -56,22 +56,30 @@ chrome.runtime.onInstalled.addListener((details) => {
   // }
 })
 
+const handleResponseCallback = (tabId: number, response: any) => {
+  if (!response) {
+    // * Don't reload the webpage if there's no response
+    // chrome.tabs.reload(tabs[0].id)
+    return
+  }
+}
+
 chrome.commands.onCommand.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
-      if (!response) {
-        chrome.tabs.reload(tabs[0].id)
-      }
+    const tabId = tabs[0].id
+
+    chrome.tabs.sendMessage(tabId, { type: 'sputlit' }, (response) => {
+      handleResponseCallback(tabId, response)
     })
   })
 })
 
 chrome.action.onClicked.addListener((command) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
-      if (!response) {
-        chrome.tabs.reload(tabs[0].id)
-      }
+    const tabId = tabs[0].id
+
+    chrome.tabs.sendMessage(tabId, { type: 'sputlit' }, (response) => {
+      handleResponseCallback(tabId, response)
     })
   })
 })
@@ -84,10 +92,10 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener((onClickData) => {
   chrome.tabs?.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'sputlit' }, (response) => {
-      if (!response) {
-        chrome.tabs.reload(tabs[0].id)
-      }
+    const tabId = tabs[0].id
+
+    chrome.tabs.sendMessage(tabId, { type: 'sputlit' }, (response) => {
+      handleResponseCallback(tabId, response)
     })
   })
 })

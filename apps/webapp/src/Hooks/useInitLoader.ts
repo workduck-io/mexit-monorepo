@@ -80,6 +80,7 @@ export const useInitLoader = () => {
   useEffect(() => {
     if (isAuthenticated && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       API.setWorkspaceHeader(getWorkspaceId())
+
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
