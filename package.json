@@ -28,6 +28,7 @@
     "ramda": "^0.28.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "react-image-crop": "^10.0.9",
     "slate": "^0.78.0",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",
