@@ -60,5 +60,5 @@ dist/
 .vscode/
 #generated manifest
 apps/extension/public/manifest.json
-apps/extension/build/reload/*.js
-apps/extension/build/reload/injections/*.js
+apps/extension/build/hmr/*.js
+apps/extension/build/hmr/injections/*.js

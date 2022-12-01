@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true,
     "baseUrl": ".",
     "allowJs": false,
     "target": "esnext",
@@ -11,7 +10,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "types": ["vite/client", "node", "vite-plugin-svgr/client",],
+    "types": ["vite/client", "node", "vite-plugin-svgr/client"],
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -25,5 +24,5 @@
       "virtual:reload-on-update-in-view": ["./src/global.d.ts"]
     }
   },
-  "include": ["src", "build", "vite.config.ts", "node_modules/@types", "../../node_modules/@types"],
+  "include": ["src", "build", "vite.config.ts", "node_modules/@types", "../../node_modules/@types"]
 }
