@@ -1,4 +1,10 @@
-import Board from '@asseinfo/react-kanban'
+import React, { useEffect, useMemo, useRef } from 'react'
+import toast from 'react-hot-toast'
+import { useMediaQuery } from 'react-responsive'
+import { useMatch } from 'react-router-dom'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
 import { getNextStatus, getPrevStatus, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
 import {
   Heading,
@@ -8,11 +14,6 @@ import {
   TaskCard,
   TaskColumnHeader
 } from '@mexit/shared'
-import { tinykeys } from '@workduck-io/tinykeys'
-import React, { useEffect, useMemo, useRef } from 'react'
-import toast from 'react-hot-toast'
-import { useMediaQuery } from 'react-responsive'
-import { useMatch } from 'react-router-dom'
 
 import Plateless from '../Components/Editor/Plateless'
 import TaskHeader from '../Components/TaskHeader'
@@ -28,6 +29,7 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import SearchFilters from './SearchFilters'
+import Board from '@asseinfo/react-kanban'
 
 interface RenderTaskProps {
   id: string

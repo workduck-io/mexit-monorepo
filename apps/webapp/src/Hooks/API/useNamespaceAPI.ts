@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 import {
   AccessLevel,
   API,
@@ -8,7 +10,6 @@ import {
   MIcon,
   mog
 } from '@mexit/core'
-import toast from 'react-hot-toast'
 
 import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'

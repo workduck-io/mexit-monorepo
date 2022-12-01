@@ -1,6 +1,6 @@
-import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
-import { useSpringRef,useTransition } from '@react-spring/web'
 import React, { useEffect, useMemo, useRef,useState } from 'react'
+
+import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
@@ -15,6 +15,7 @@ import { SpaceContentWrapper, SpaceWrapper } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
 import { SidebarSpaceComponent } from './Space'
 import StarredNotes from './StarredNotes'
+import { useSpringRef,useTransition } from '@react-spring/web'
 
 export const NoteSidebar = () => {
   const ilinks = useDataStore((store) => store.ilinks)

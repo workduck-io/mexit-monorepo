@@ -1,3 +1,7 @@
+import React from 'react'
+
+import { Button } from '@workduck-io/mex-components'
+
 import {
   ActionGroupIcon,
   DEFAULT_LIST_ITEM_ICON,
@@ -7,8 +11,6 @@ import {
   ProjectIconMex,
   ServiceDescription,
   Title} from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
-import React from 'react'
 
 type ServiceHeaderProps = {
   icon: string

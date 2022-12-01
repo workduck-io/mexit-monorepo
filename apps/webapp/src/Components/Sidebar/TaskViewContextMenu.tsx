@@ -1,6 +1,3 @@
-import trashIcon from '@iconify/icons-codicon/trash'
-import fileCopyLine from '@iconify/icons-ri/file-copy-line'
-import { Icon } from '@iconify/react'
 import React from 'react'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -8,6 +5,9 @@ import { useTaskViews,useViewStore, View } from '../../Hooks/useTaskViews'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 import { useTaskViewModalStore } from '../TaskViewModal'
 import { SidebarListItem } from './SidebarList'
+import trashIcon from '@iconify/icons-codicon/trash'
+import fileCopyLine from '@iconify/icons-ri/file-copy-line'
+import { Icon } from '@iconify/react'
 
 interface TaskViewContextMenuProps {
   item: SidebarListItem<View>

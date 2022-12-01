@@ -1,6 +1,8 @@
+import React from 'react'
+
 import { RESERVED_NAMESPACES,SingleNamespace } from '@mexit/core'
 import { IconDisplay,NamespaceText, StyledNamespaceTag } from '@mexit/shared'
-import React from 'react'
+
 import { useTheme } from 'styled-components'
 
 type NamespaceTag = {

@@ -1,5 +1,13 @@
 import 'react-datepicker/dist/react-datepicker.css'
 
+import React, { useEffect } from 'react'
+import ReactDatePicker from 'react-datepicker'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import Modal from 'react-modal'
+
+import { Button,LoadingButton } from '@workduck-io/mex-components'
+
 import {
   generateReminderId,
   getNameFromPath,
@@ -12,14 +20,6 @@ import {
   ReminderAssociatedType
 } from '@mexit/core'
 import { DatePickerStyles, Input,Label, SelectedDate, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
-import { Button,LoadingButton } from '@workduck-io/mex-components'
-import { startOfToday } from 'date-fns'
-import React, { useEffect } from 'react'
-import ReactDatePicker from 'react-datepicker'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import Modal from 'react-modal'
-import create from 'zustand'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
@@ -29,6 +29,8 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { ModalControls,ModalHeader } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
+import { startOfToday } from 'date-fns'
+import create from 'zustand'
 
 interface ModalValue {
   associated?: ReminderAssociatedType

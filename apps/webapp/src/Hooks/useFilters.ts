@@ -7,12 +7,12 @@ import {
   GlobalFilterJoin,
   idxKey,
   SearchFilterFunctions} from '@mexit/core'
-import create from 'zustand'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useGenericFilterFunctions } from './useFilterFunctions'
 import { getTitleFromPath, useLinks } from './useLinks'
 import { useTags } from './useTags'
+import create from 'zustand'
 
 export interface FilterStore {
   filters: Filters

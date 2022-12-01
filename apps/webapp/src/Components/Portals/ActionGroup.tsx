@@ -1,4 +1,5 @@
-import Check from '@iconify-icons/ri/check-line'
+import React from 'react'
+
 import { camelCase } from '@mexit/core'
 import {
   ActiveStatus,
@@ -10,9 +11,9 @@ import {
   RightCut,
   ServiceCard,
   ServiceName} from '@mexit/shared'
-import React from 'react'
 
 import { ActionGroupType } from '../../Types/Actions'
+import Check from '@iconify-icons/ri/check-line'
 
 type ActionGroupProps = {
   group: Partial<ActionGroupType>

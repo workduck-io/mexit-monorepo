@@ -24,11 +24,25 @@
           }
         ],
         "unused-imports/no-unused-imports": "warn",
-        "simple-import-sort/imports": "warn",
         "simple-import-sort/exports": "warn",
         "import/first": "error",
         "import/newline-after-import": "error",
-        "import/no-duplicates": "error"
+        "import/no-duplicates": "error",
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              // Side effect imports.
+              ["^\\u0000"],
+              // Packages. `react` related packages come first.
+              ["^react"],
+              // Internal packages.
+              ["^(@workduck-io)(/.*|$)"],
+              // Internal packages.
+              ["^(@mexit)(/.*|$)"]
+            ]
+          }
+        ]
       }
  
     },

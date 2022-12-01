@@ -1,8 +1,7 @@
-import { Icon } from '@iconify/react'
+import { useCallback, useMemo, useState } from 'react'
+
 import { MIcon, Reaction as ReactionType, UserReaction } from '@mexit/core'
 import { IconDisplay, Tooltip } from '@mexit/shared'
-import { debounce } from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { reactionsWithCount } from '../../Hooks/useReactions'
@@ -17,6 +16,8 @@ import {
   ReactionDetailsWrapper,
   ReactionsWrapper
 } from './Reactions.style'
+import { Icon } from '@iconify/react'
+import { debounce } from 'lodash'
 
 interface UserReactionRowProps {
   userReaction: UserReaction

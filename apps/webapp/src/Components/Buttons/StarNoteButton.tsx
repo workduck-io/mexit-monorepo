@@ -1,5 +1,3 @@
-import starLine from '@iconify/icons-ri/star-line'
-import { Icon } from '@iconify/react'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
@@ -7,6 +5,8 @@ import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { SStarNoteButton } from '../Sidebar/Sidebar.style'
+import starLine from '@iconify/icons-ri/star-line'
+import { Icon } from '@iconify/react'
 
 const StarNoteButton = () => {
   const node = useEditorStore((s) => s.node)

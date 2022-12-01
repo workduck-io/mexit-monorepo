@@ -1,10 +1,13 @@
+import React, { useMemo } from 'react'
+import { useSpring } from 'react-spring'
+
+import { Infobox, InfoboxProps } from '@workduck-io/mex-components'
+
+import { CollapsableHeaderTitle, CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '@mexit/shared'
+
 import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import { Icon, IconifyIcon } from '@iconify/react'
-import { CollapsableHeaderTitle, CollapseContent, CollapseHeader, CollapseToggle, CollapseWrapper } from '@mexit/shared'
-import { Infobox, InfoboxProps } from '@workduck-io/mex-components'
-import React, { useMemo } from 'react'
-import { useSpring } from 'react-spring'
 
 interface CollapseProps {
   oid?: string

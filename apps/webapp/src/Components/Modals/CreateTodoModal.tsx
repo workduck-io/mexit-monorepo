@@ -1,10 +1,11 @@
-import { mog } from '@mexit/core'
-import { getPlateEditorRef, PlateProvider } from '@udecode/plate'
-import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
+
+import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { mog } from '@mexit/core'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useApi } from '../../Hooks/API/useNodeAPI'
@@ -12,6 +13,7 @@ import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { ModalControls, ModalHeader } from '../../Style/Refactor'
 import TaskEditor from '../CreateTodoModal/TaskEditor'
 import { ScrollableModalSection, TaskEditorWrapper } from '../CreateTodoModal/TaskEditor/styled'
+import { getPlateEditorRef, PlateProvider } from '@udecode/plate'
 
 const CreateTodoModal = () => {
   const isOpen = useModalStore((store) => store.open === ModalsType.todo)

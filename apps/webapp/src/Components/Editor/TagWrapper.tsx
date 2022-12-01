@@ -1,6 +1,7 @@
+import React from 'react'
+
 import { mog } from '@mexit/core'
 import { TagElementProps } from '@mexit/shared'
-import React from 'react'
 
 import TagElement from '../../Editor/Components/Tags/TagElement'
 

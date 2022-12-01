@@ -1,8 +1,9 @@
-import { Icon } from '@iconify/react'
+import React, { useMemo } from 'react'
+
+import { Breadcrumbs } from '@workduck-io/mex-components'
+
 import { NAMESPACE_ID_PREFIX } from '@mexit/core'
 import { AccessTag, EditorBreadcrumbs, IconDisplay } from '@mexit/shared'
-import { Breadcrumbs } from '@workduck-io/mex-components'
-import React, { useMemo } from 'react'
 
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNavigation } from '../../Hooks/useNavigation'
@@ -12,6 +13,7 @@ import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { StyledTopNavigation } from './styled'
+import { Icon } from '@iconify/react'
 
 type NavBreadCrumbsType = {
   nodeId: string

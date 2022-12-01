@@ -1,7 +1,8 @@
-import Board from '@asseinfo/react-kanban'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import { Icon } from '@iconify/react'
+import { useEffect, useMemo } from 'react'
+import { useMediaQuery } from 'react-responsive'
+
+import { Button } from '@workduck-io/mex-components'
+
 import {
   Filter,
   Filters,
@@ -28,10 +29,6 @@ import {
   TaskViewHeaderWrapper,
   TaskViewTitle
 } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
-import { useEffect, useMemo } from 'react'
-import { useMediaQuery } from 'react-responsive'
-import create from 'zustand'
 
 import { useCreateReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useReminderAPI } from '../../Hooks/API/useReminderAPI'
@@ -44,6 +41,11 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useReminderStore } from '../../Stores/useReminderStore'
 import SearchFilters from '../SearchFilters'
 import { AllRemindersWrapper, ReminderBoardStyled, ReminderColumnHeader } from './RemindersAll.style'
+import Board from '@asseinfo/react-kanban'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
+import { Icon } from '@iconify/react'
+import create from 'zustand'
 
 interface AllReminderFilterStore extends FilterStore {
   board: ReminderBoard

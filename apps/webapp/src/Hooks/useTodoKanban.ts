@@ -12,8 +12,6 @@ import {
   TodoStatus,
   TodoStatusRanks,
   TodoType} from '@mexit/core'
-import { ELEMENT_TODO_LI } from '@udecode/plate'
-import create from 'zustand'
 
 import { defaultContent } from '../Data/baseData'
 import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
@@ -26,6 +24,8 @@ import { useLinks } from './useLinks'
 import { useMentions } from './useMentions'
 import { useNodes } from './useNodes'
 import { useSearchExtra } from './useSearch'
+import { ELEMENT_TODO_LI } from '@udecode/plate'
+import create from 'zustand'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType

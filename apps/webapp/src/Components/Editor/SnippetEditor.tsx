@@ -1,14 +1,13 @@
-import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
-import { EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { IconButton } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
-import { debounce } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
+
+import { IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
+import { EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -16,6 +15,9 @@ import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import Banner from './Banner'
 import Editor from './Editor'
+import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { debounce } from 'lodash'
 
 type Inputs = {
   title: string

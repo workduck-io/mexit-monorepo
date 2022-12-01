@@ -1,6 +1,7 @@
-import { mog } from '@mexit/core'
 import { useEffect, useState } from 'react'
 import { Outlet,useNavigate, useParams } from 'react-router-dom'
+
+import { mog } from '@mexit/core'
 
 import SplashScreen from '../Components/SplashScreen'
 import { useNamespaceApi } from '../Hooks/API/useNamespaceAPI'

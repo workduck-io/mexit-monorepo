@@ -1,6 +1,7 @@
+import React, { useEffect, useMemo } from 'react'
+
 import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title, View } from '@mexit/shared'
-import React, { useEffect, useMemo } from 'react'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'

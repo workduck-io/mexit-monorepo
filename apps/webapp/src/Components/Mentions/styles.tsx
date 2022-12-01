@@ -1,5 +1,7 @@
-import { SelectWrapper } from '@mexit/shared'
 import { Button } from '@workduck-io/mex-components'
+
+import { SelectWrapper } from '@mexit/shared'
+
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 

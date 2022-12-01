@@ -1,5 +1,6 @@
-import { BlockType } from '@mexit/core'
 import React, { ReactNode } from 'react'
+
+import { BlockType } from '@mexit/core'
 
 import useBlockStore from '../../../Stores/useBlockStore'
 import { BlockElement, BlockSelectorInput } from '../../Styles/Block'

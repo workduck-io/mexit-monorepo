@@ -1,8 +1,8 @@
 import { Filter, GlobalFilterJoin, IDBStorage, mog } from '@mexit/core'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 import { useViewAPI } from './API/useViewsAPI'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface View {
   title: string

@@ -1,6 +1,7 @@
-import shareLine from '@iconify/icons-ri/share-line'
-import { Icon } from '@iconify/react'
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
+import React, { useMemo } from 'react'
+
+import { Infobox } from '@workduck-io/mex-components'
+
 import {
   convertContentToRawText,
   defaultContent,
@@ -21,8 +22,6 @@ ResultCardFooter,   ResultDesc,
   SplitSearchPreviewWrapper,
 Title,TitleText ,
   View} from '@mexit/shared'
-import { Infobox } from '@workduck-io/mex-components'
-import React, { useMemo } from 'react'
 
 import Backlinks from '../Components/Editor/Backlinks'
 import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
@@ -41,6 +40,9 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { SplitType } from './SplitView'
+import shareLine from '@iconify/icons-ri/share-line'
+import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 
 const Search = () => {
   const { loadNode } = useLoad()

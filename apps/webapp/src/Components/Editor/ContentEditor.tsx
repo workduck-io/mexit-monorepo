@@ -1,10 +1,11 @@
-import { defaultContent, NodeEditorContent } from '@mexit/core'
-import { EditorHeader, EditorWrapper, isOnEditableElement,StyledEditor } from '@mexit/shared'
-import { focusEditor, getPlateEditorRef } from '@udecode/plate'
-import { tinykeys } from '@workduck-io/tinykeys'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { defaultContent, NodeEditorContent } from '@mexit/core'
+import { EditorHeader, EditorWrapper, isOnEditableElement,StyledEditor } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -34,6 +35,7 @@ import NavBreadCrumbs from '../NavBreadcrumbs'
 import Banner from './Banner'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 
 const ContentEditor = () => {
   const { toggleFocusMode } = useLayout()

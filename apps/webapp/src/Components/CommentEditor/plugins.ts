@@ -1,3 +1,4 @@
+import { optionsCreateNodeIdPlugin } from '../../Editor/Plugins/options'
 import {
   createBoldPlugin,
   createItalicPlugin,
@@ -14,8 +15,6 @@ import {
   StyledElement,
   withProps
 } from '@udecode/plate'
-
-import { optionsCreateNodeIdPlugin } from '../../Editor/Plugins/options'
 
 const generateCommentPlugins = () => {
   return [

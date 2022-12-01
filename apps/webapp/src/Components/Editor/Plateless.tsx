@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
@@ -18,7 +20,6 @@ import {
   ELEMENT_UL,
   mog
 } from '@mexit/core'
-import React from 'react'
 
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useMentions } from '../../Hooks/useMentions'

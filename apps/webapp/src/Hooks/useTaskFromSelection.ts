@@ -1,9 +1,9 @@
 import { BASE_TASKS_PATH, NodeEditorContent, SEPARATOR } from '@mexit/core'
-import { format } from 'date-fns'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
+import { format } from 'date-fns'
 
 export const getTodayTaskNodePath = () => {
   return `${BASE_TASKS_PATH}${SEPARATOR}${format(Date.now(), 'do MMM yyyy')}`

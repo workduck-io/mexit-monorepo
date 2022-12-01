@@ -1,9 +1,9 @@
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import repeatLine from '@iconify/icons-ri/repeat-line'
+import React, { useMemo } from 'react'
+
+import { Button,IconButton } from '@workduck-io/mex-components'
+
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
-import { Button,IconButton } from '@workduck-io/mex-components'
-import React, { useMemo } from 'react'
 
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
@@ -24,6 +24,8 @@ import {
   ShareRowAction,
   ShareRowActionsWrapper,
   ShareRowHeading} from './styles'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import repeatLine from '@iconify/icons-ri/repeat-line'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {

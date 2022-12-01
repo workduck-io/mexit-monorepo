@@ -1,4 +1,5 @@
 import { ELEMENT_TODO_LI } from '@mexit/core'
+
 import {
   createPluginFactory,
   HotkeyPlugin,

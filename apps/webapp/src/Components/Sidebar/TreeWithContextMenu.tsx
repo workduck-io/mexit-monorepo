@@ -1,17 +1,9 @@
 import 'react-contexify/dist/ReactContexify.css'
 
-import { TreeItem } from '@atlaskit/tree'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import archiveLine from '@iconify/icons-ri/archive-line'
-import magicLine from '@iconify/icons-ri/magic-line'
-import shareLine from '@iconify/icons-ri/share-line'
-import volumeDownLine from '@iconify/icons-ri/volume-down-line'
-import volumeMuteLine from '@iconify/icons-ri/volume-mute-line'
-import { Icon } from '@iconify/react'
-import { LastOpenedState } from '@mexit/shared'
-import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
+
+import { LastOpenedState } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useLastOpened } from '../../Hooks/useLastOpened'
@@ -28,6 +20,15 @@ import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../..
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { doesLinkRemain } from '../Refactor/doesLinkRemain'
 import ContextMenuListWithFilter from './ContextMenuListWithFilter'
+import { TreeItem } from '@atlaskit/tree'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import archiveLine from '@iconify/icons-ri/archive-line'
+import magicLine from '@iconify/icons-ri/magic-line'
+import shareLine from '@iconify/icons-ri/share-line'
+import volumeDownLine from '@iconify/icons-ri/volume-down-line'
+import volumeMuteLine from '@iconify/icons-ri/volume-mute-line'
+import { Icon } from '@iconify/react'
+import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 
 interface MuteMenuItemProps {
   nodeid: string

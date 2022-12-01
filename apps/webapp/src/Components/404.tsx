@@ -1,6 +1,8 @@
-import { CenteredColumn, Link, Title } from '@mexit/shared'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { CenteredColumn, Link, Title } from '@mexit/shared'
+
 import styled from 'styled-components'
 
 export const ImageWrapper = styled.div`

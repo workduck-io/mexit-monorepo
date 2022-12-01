@@ -1,9 +1,7 @@
-import { IconifyIcon } from '@iconify/react'
+import toast from 'react-hot-toast'
+
 import { defaultContent, generateSnippetId } from '@mexit/core'
 import { InteractiveToast } from '@mexit/shared'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
-import generateName from 'project-name-generator'
-import toast from 'react-hot-toast'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -13,6 +11,9 @@ import { useNamespaces } from './useNamespaces'
 import { NavigationType,ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 import { useUpdater } from './useUpdater'
+import { IconifyIcon } from '@iconify/react'
+import { ELEMENT_PARAGRAPH } from '@udecode/plate'
+import generateName from 'project-name-generator'
 
 interface CreateNewMenuItem {
   id: string

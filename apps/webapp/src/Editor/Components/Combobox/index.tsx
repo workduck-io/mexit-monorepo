@@ -1,5 +1,7 @@
-import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
-import { Icon } from '@iconify/react'
+import React, { useCallback, useEffect, useState } from 'react'
+
+import { DisplayShortcut } from '@workduck-io/mex-components'
+
 import { NodeEditorContent } from '@mexit/core'
 import {   ActionTitle,
 ComboboxItem, ComboboxItemTitle,   ComboboxRoot,
@@ -11,15 +13,6 @@ ComboboxItem, ComboboxItemTitle,   ComboboxRoot,
 MexIcon, PreviewMeta ,
   ShortcutText
 } from '@mexit/shared'
-import {
-  getRangeBoundingClientRect,
-  PortalBody,
-  usePlateEditorRef,
-  useVirtualFloating
-} from '@udecode/plate'
-import { DisplayShortcut } from '@workduck-io/mex-components'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useTheme } from 'styled-components'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { useSnippets } from '../../../Hooks/useSnippets'
@@ -33,6 +26,15 @@ import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
 import BlockCombo from './BlockCombo'
+import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
+import { Icon } from '@iconify/react'
+import {
+  getRangeBoundingClientRect,
+  PortalBody,
+  usePlateEditorRef,
+  useVirtualFloating
+} from '@udecode/plate'
+import { useTheme } from 'styled-components'
 
 export const spotlightShortcuts = {
   save: {

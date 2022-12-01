@@ -1,6 +1,7 @@
+import React from 'react'
+
 import { capitalize } from '@mexit/core'
 import { BacklinksHelp, ForwardlinksHelp,InfoWidgetWrapper, Note } from '@mexit/shared'
-import React from 'react'
 
 import { useLinks } from '../../Hooks/useLinks'
 import Collapse from '../../Layout/Collapse'

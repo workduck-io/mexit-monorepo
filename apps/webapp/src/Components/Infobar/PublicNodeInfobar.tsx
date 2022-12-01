@@ -1,10 +1,11 @@
-import { mog,NodeEditorContent } from '@mexit/core'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+
+import { mog,NodeEditorContent } from '@mexit/core'
 
 import { analyseContent } from '../../Workers/controller'
 import { PublicTagsView } from '../Editor/TagsRelated'
 import Outline from './Outline'
+import styled from 'styled-components'
 
 export const DataInfobarWrapper = styled.div`
   display: none;

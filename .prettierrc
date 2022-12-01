@@ -4,13 +4,5 @@
   "semi": false,
   "singleQuote": true,
   "printWidth": 120,
-  "arrowParens": "always",
-  "importOrder": [
-    "^react$",
-    "<THIRD_PARTY_MODULES>",
-    "@workduck-io/(.*)$",
-    "^@mexit/(.*)$",
-    "^[./]"
-  ],
-  "importOrderSeparation": true
+  "arrowParens": "always"
 }

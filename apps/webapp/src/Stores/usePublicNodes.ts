@@ -7,6 +7,7 @@ import {
   NodeProperties,
   SingleNamespace
 } from '@mexit/core'
+
 import create from 'zustand'
 
 export interface PublicNodeStoreType {

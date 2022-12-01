@@ -1,6 +1,8 @@
-import { Title } from '@mexit/shared'
-import { transparentize } from 'polished'
 import React from 'react'
+
+import { Title } from '@mexit/shared'
+
+import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 const HintColumn = styled.div`

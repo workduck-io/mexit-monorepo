@@ -1,5 +1,6 @@
-import { DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
 import toast from 'react-hot-toast'
+
+import { DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'

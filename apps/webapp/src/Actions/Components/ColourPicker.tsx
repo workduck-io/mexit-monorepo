@@ -1,6 +1,8 @@
-import { copyTextToClipboard , resize } from '@mexit/shared'
 import React, { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
+
+import { copyTextToClipboard , resize } from '@mexit/shared'
+
 import styled from 'styled-components'
 
 const Container = styled.div`

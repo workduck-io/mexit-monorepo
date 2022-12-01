@@ -1,15 +1,17 @@
+import React, { useMemo } from 'react'
+
+import { useAuth } from '@workduck-io/dwindle'
+
 import { NodeEditorContent } from '@mexit/core'
 import { useEditorChange, useUploadToCDN } from '@mexit/shared'
-import { Plate } from '@udecode/plate'
-import { useAuth } from '@workduck-io/dwindle'
-import { debounce } from 'lodash'
-import React, { useMemo } from 'react'
 
 import { MultiComboboxContainer } from '../../../Editor/Components/MultiCombobox/multiComboboxContainer'
 import useMultiComboboxOnChange from '../../../Editor/Components/MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from '../../../Editor/Hooks/useEditorConfig'
 import { getTodoPlugins } from './plugins'
+import { Plate } from '@udecode/plate'
+import { debounce } from 'lodash'
 
 type TaskEditorType = {
   editorId: string

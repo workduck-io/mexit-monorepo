@@ -1,6 +1,8 @@
-import trashIcon from '@iconify/icons-codicon/trash'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
+import React, { useEffect, useState } from 'react'
+import Modal from 'react-modal'
+
+import { Button, Infobox } from '@workduck-io/mex-components'
+
 import { convertContentToRawText, GenericSearchResult, mog } from '@mexit/core'
 import { ArchiveHelp,MainHeader ,   Result,
   ResultDesc,
@@ -12,10 +14,6 @@ import { ArchiveHelp,MainHeader ,   Result,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper, Title ,
 View } from '@mexit/shared'
-import { Button, Infobox } from '@workduck-io/mex-components'
-import React, { useEffect, useState } from 'react'
-import Modal from 'react-modal'
-import styled, { useTheme } from 'styled-components'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
@@ -31,6 +29,10 @@ import { useDataStore } from '../Stores/useDataStore'
 import { getContent } from '../Stores/useEditorStore'
 import { ModalControls,ModalHeader, MRMHead } from '../Style/Refactor'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
+import trashIcon from '@iconify/icons-codicon/trash'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import styled, { useTheme } from 'styled-components'
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;

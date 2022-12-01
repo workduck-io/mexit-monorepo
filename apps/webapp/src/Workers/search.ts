@@ -7,7 +7,6 @@ import {
   SearchIndex,
   SearchRepExtra,
   SearchWorker} from '@mexit/core'
-import { expose } from 'threads/worker'
 
 import {
   createIndexCompositeKey,
@@ -16,6 +15,7 @@ import {
   indexedFields,
   SEARCH_RESULTS_LIMIT,
   TITLE_RANK_BUMP} from '../Utils/flexsearch'
+import { expose } from 'threads/worker'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null

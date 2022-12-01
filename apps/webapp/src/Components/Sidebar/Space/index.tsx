@@ -1,10 +1,10 @@
-import { AnimatedProps } from '@react-spring/web'
 import React, { CSSProperties } from 'react'
 
 import { SingleSpace } from '../Sidebar.style'
 import { MexTree } from '../Sidebar.tree'
 import { SidebarSpace } from '../Sidebar.types'
 import Header from './header'
+import { AnimatedProps } from '@react-spring/web'
 
 interface SidebarSpaceProps {
   space: SidebarSpace

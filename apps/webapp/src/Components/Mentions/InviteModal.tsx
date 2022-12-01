@@ -1,10 +1,11 @@
-import { AccessLevel, DefaultPermission, DefaultPermissionValue, mog, permissionOptions } from '@mexit/core'
-import { ButtonFields,Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
-import { getPlateEditorRef } from '@udecode/plate'
-import { LoadingButton } from '@workduck-io/mex-components'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Controller,useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
+import { LoadingButton } from '@workduck-io/mex-components'
+
+import { AccessLevel, DefaultPermission, DefaultPermissionValue, mog, permissionOptions } from '@mexit/core'
+import { ButtonFields,Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -18,6 +19,7 @@ import { ModalHeader } from '../../Style/Refactor'
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 import { InviteFormFieldset,InviteFormWrapper, InviteWrapper } from './styles'
+import { getPlateEditorRef } from '@udecode/plate'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)

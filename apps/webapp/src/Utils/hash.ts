@@ -1,4 +1,5 @@
 import { NodeEditorContent } from '@mexit/core'
+
 import { isEqual } from 'lodash'
 
 export const areEqual = (val1: NodeEditorContent, val2: NodeEditorContent): boolean => {

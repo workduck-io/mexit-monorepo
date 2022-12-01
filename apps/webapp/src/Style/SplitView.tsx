@@ -1,4 +1,5 @@
 import { animated } from 'react-spring'
+
 import styled from 'styled-components'
 
 export const SplitWrapper = styled.div`

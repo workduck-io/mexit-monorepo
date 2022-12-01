@@ -1,6 +1,7 @@
-import { InteractiveToast } from '@mexit/shared'
 import React from 'react'
 import toast from 'react-hot-toast'
+
+import { InteractiveToast } from '@mexit/shared'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'

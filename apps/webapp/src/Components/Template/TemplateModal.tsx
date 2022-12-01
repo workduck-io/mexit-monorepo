@@ -1,10 +1,12 @@
-import type { Snippet } from '@mexit/core'
-import { ButtonFields,TemplateContainer } from '@mexit/shared'
-import { LoadingButton,Title } from '@workduck-io/mex-components'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
+
+import { LoadingButton,Title } from '@workduck-io/mex-components'
+
+import type { Snippet } from '@mexit/core'
+import { ButtonFields,TemplateContainer } from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'

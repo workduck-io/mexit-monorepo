@@ -1,6 +1,7 @@
-import { Icon } from '@iconify/react'
-import filter2Line from '@iconify-icons/ri/filter-2-line'
-import filterOffLine from '@iconify-icons/ri/filter-off-line'
+import React, { useMemo } from 'react'
+
+import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
+
 import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
 import {
   SearchFilterCancel,
@@ -8,13 +9,14 @@ import {
   SearchFiltersHelp,
   SearchFiltersWrapper,
   SearchFilterWrapper} from '@mexit/shared'
-import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
-import { nanoid } from 'nanoid'
-import React, { useMemo } from 'react'
 
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
+import { Icon } from '@iconify/react'
+import filter2Line from '@iconify-icons/ri/filter-2-line'
+import filterOffLine from '@iconify-icons/ri/filter-off-line'
+import { nanoid } from 'nanoid'
 
 interface SearchFiltersProps {
   result?: any

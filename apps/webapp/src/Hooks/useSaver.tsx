@@ -1,10 +1,11 @@
-import { NodeProperties } from '@mexit/core'
-import { getPlateEditorRef, platesStore } from '@udecode/plate'
 import toast from 'react-hot-toast'
+
+import { NodeProperties } from '@mexit/core'
 
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useNodes } from './useNodes'
 import { useDataSaverFromContent } from './useSave'
+import { getPlateEditorRef, platesStore } from '@udecode/plate'
 
 export const useSaver = () => {
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()

@@ -1,12 +1,7 @@
-import fileDocument from '@iconify/icons-gg/file-document'
-import appsLine from '@iconify/icons-ri/apps-line'
-import checkboxLine from '@iconify/icons-ri/checkbox-line'
-import linkM from '@iconify/icons-ri/link-m'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { Icon } from '@iconify/react'
-import { InitialNode } from '@mexit/core'
 import React, { useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
+
+import { InitialNode } from '@mexit/core'
 
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useViewStore } from '../Hooks/useTaskViews'
@@ -14,6 +9,12 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
+import fileDocument from '@iconify/icons-gg/file-document'
+import appsLine from '@iconify/icons-ri/apps-line'
+import checkboxLine from '@iconify/icons-ri/checkbox-line'
+import linkM from '@iconify/icons-ri/link-m'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { Icon } from '@iconify/react'
 
 /*
 Sidebar links are defined here

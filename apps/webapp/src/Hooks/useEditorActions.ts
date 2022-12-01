@@ -1,5 +1,3 @@
-import create from 'zustand'
-
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useEditorBuffer } from './useEditorBuffer'
@@ -7,6 +5,7 @@ import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 import { useRouting } from './useRouting'
+import create from 'zustand'
 
 interface ErrorState {
   prevNode: string

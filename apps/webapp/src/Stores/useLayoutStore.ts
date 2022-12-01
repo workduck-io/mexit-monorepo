@@ -1,4 +1,5 @@
 import { InfobarMode } from '@mexit/shared'
+
 import create from 'zustand'
 
 export interface FocusMode {

@@ -1,7 +1,6 @@
+import { CustomElements } from '../constants'
 import { PlatePlugin, SelectEditorOptions } from '@udecode/plate'
 import { EditableProps } from 'slate-react/dist/components/editable'
-
-import { CustomElements } from '../constants'
 
 export type MexEditorValue = Array<any>
 

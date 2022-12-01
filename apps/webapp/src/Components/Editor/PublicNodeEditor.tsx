@@ -1,12 +1,13 @@
+import { Link } from 'react-router-dom'
+
 import { defaultContent } from '@mexit/core'
 import { EditorWrapper, StyledEditor, Title } from '@mexit/shared'
-import { selectEditor,usePlateEditorRef } from '@udecode/plate'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
 
 import Metadata from '../EditorInfobar/Metadata'
 import PublicNoteFooter from '../PublicNoteFooter'
 import Editor from './Editor'
+import { selectEditor,usePlateEditorRef } from '@udecode/plate'
+import styled from 'styled-components'
 
 const PublicStyledEditor = styled(StyledEditor)`
   display: flex;

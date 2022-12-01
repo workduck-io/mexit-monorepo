@@ -1,8 +1,7 @@
+import { useBufferStore } from '../Hooks/useEditorBuffer'
 import { enableMapSet,produce } from 'immer'
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
-
-import { useBufferStore } from '../Hooks/useEditorBuffer'
 
 enableMapSet()
 

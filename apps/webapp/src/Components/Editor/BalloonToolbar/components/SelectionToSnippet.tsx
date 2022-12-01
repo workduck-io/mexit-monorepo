@@ -1,11 +1,12 @@
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { Icon } from '@iconify/react'
-import { BalloonToolbarInputWrapper, Input, useBalloonToolbarStore } from '@mexit/shared'
-import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate'
-import { getPreventDefaultHandler, usePlateEditorState } from '@udecode/plate-core'
 import React, { useEffect } from 'react'
 
+import { BalloonToolbarInputWrapper, Input, useBalloonToolbarStore } from '@mexit/shared'
+
 import { useTransform } from './useTransform'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { Icon } from '@iconify/react'
+import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate'
+import { getPreventDefaultHandler, usePlateEditorState } from '@udecode/plate-core'
 
 /**
  * Toolbar button to Create new note from editor selection

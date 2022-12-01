@@ -1,6 +1,5 @@
 
 import { mog, NodeEditorContent } from '@mexit/core'
-import create from 'zustand'
 
 import { getContent } from '../Stores/useEditorStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
@@ -10,6 +9,7 @@ import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useDataSaverFromContent } from './useSave'
 import { useSnippets } from './useSnippets'
+import create from 'zustand'
 
 interface BufferStore {
   buffer: Record<string, NodeEditorContent>

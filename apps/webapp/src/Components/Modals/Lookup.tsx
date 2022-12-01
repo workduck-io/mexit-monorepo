@@ -1,9 +1,10 @@
-import { QuickLinkType } from '@mexit/core'
-import { blurEditableElement, Input, StyledCombobox,StyledInputWrapper  } from '@mexit/shared'
-import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
-import styled from 'styled-components'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { QuickLinkType } from '@mexit/core'
+import { blurEditableElement, Input, StyledCombobox,StyledInputWrapper  } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -12,6 +13,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
+import styled from 'styled-components'
 
 const StyledModal = styled(Modal)`
   z-index: 10010000;

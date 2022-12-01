@@ -1,4 +1,5 @@
 import { EditorStyles } from '@mexit/shared'
+
 import styled from 'styled-components'
 
 export const PreviewNoteContainer = styled.section`

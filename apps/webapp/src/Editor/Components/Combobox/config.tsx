@@ -1,4 +1,3 @@
-import { PlatePluginComponent } from '@udecode/plate'
 import { useContextMenu } from 'react-contexify'
 
 import { PluginOptionType,useEditorPlugins } from '../../Plugins/index'
@@ -6,6 +5,7 @@ import { ComboboxConfig } from '../../Types/MultiCombobox'
 import { MENU_ID } from '../BlockContextMenu'
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDown'
+import { PlatePluginComponent } from '@udecode/plate'
 
 export const useComboboxConfig = (
   editorId: string,

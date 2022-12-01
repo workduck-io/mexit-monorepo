@@ -1,10 +1,10 @@
-import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
-import { Icon } from '@iconify/react'
-import { isMatch, isReserved } from '@mexit/core'
-import { Button, DisplayShortcut } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useCallback, useEffect,useMemo } from 'react'
 import Modal from 'react-modal'
+
+import { Button, DisplayShortcut } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { isMatch, isReserved } from '@mexit/core'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
@@ -16,6 +16,8 @@ import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import { doesLinkRemain } from './doesLinkRemain'
+import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
+import { Icon } from '@iconify/react'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)

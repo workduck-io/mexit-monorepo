@@ -11,8 +11,6 @@ import {
   Settify,
   URL_DOMAIN_REG
 } from '@mexit/core'
-import md5 from 'md5'
-import create from 'zustand'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
@@ -20,6 +18,8 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'
+import md5 from 'md5'
+import create from 'zustand'
 
 export const useLinkURLs = () => {
   const links = useLinkStore((store) => store.links)

@@ -1,11 +1,12 @@
-import { BlockType } from '@mexit/core'
-import { findNodePath, usePlateEditorRef } from '@udecode/plate'
-import { createNodesHOC } from '@udecode/plate-core'
 import { useMemo } from 'react'
+
+import { BlockType } from '@mexit/core'
 
 import useBlockStore from '../../../Stores/useBlockStore'
 import { BlockOptionProps } from '../../Types/Block'
 import Block from './Block'
+import { findNodePath, usePlateEditorRef } from '@udecode/plate'
+import { createNodesHOC } from '@udecode/plate-core'
 
 const BlockOptions = (props: BlockOptionProps) => {
   const { children, element } = props

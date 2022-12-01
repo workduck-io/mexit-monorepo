@@ -1,6 +1,8 @@
-import { getSplitDisplayShortcut } from '@mexit/shared'
-import { shade } from 'polished'
 import React from 'react'
+
+import { getSplitDisplayShortcut } from '@mexit/shared'
+
+import { shade } from 'polished'
 import styled from 'styled-components'
 
 const ShortcutWrapper = styled.div`

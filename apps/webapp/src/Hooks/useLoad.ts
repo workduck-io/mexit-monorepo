@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast'
+
 import {
 checkIfUntitledDraftNode,  DRAFT_PREFIX,
   ELEMENT_PARAGRAPH,
@@ -9,7 +11,6 @@ checkIfUntitledDraftNode,  DRAFT_PREFIX,
   NodeProperties,
   SEPARATOR,
   updateEmptyBlockTypes } from '@mexit/core'
-import { toast } from 'react-hot-toast'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useAuthStore } from '../Stores/useAuth'

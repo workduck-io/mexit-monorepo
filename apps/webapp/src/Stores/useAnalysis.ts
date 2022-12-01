@@ -1,6 +1,6 @@
-import { checkIfUntitledDraftNode, getParentNodePath, HighlightAnalysis, TodoType } from '@mexit/core'
 import { useEffect } from 'react'
-import create from 'zustand'
+
+import { checkIfUntitledDraftNode, getParentNodePath, HighlightAnalysis, TodoType } from '@mexit/core'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { useLinks } from '../Hooks/useLinks'
@@ -9,6 +9,7 @@ import { areEqual } from '../Utils/hash'
 import { analyseContent, AnalysisOptions } from '../Workers/controller'
 import { getContent,useEditorStore } from './useEditorStore'
 import { useTodoStore } from './useTodoStore'
+import create from 'zustand'
 
 export interface OutlineItem {
   id: string

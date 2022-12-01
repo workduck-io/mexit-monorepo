@@ -1,10 +1,10 @@
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
-import { PlateProvider } from '@udecode/plate'
+import React, { useCallback, useEffect, useMemo } from 'react'
+
 import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
-import React, { useCallback, useEffect, useMemo } from 'react'
+
+import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
+import { RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -23,6 +23,8 @@ import {
   CommentWrapper,
   NewCommentWrapper
 } from './Comments.style'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import { PlateProvider } from '@udecode/plate'
 
 type OnAddComment = (content: NodeEditorContent) => Promise<void>
 type OnDeleteComment = (nodeid: string, commentId: string) => Promise<void>

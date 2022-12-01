@@ -1,5 +1,30 @@
+import { useAuth } from '@workduck-io/dwindle'
+
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
 import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
+
+import { withStyledDraggables } from '../Actions/withDraggables'
+import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
+import { withBlockOptions } from '../Components/Blocks'
+import { PlateFloatingLink } from '../Components/FloatingLink'
+import { createBlockModifierPlugin } from './createBlockModifierPlugin'
+import { createBlurSelectionPlugin } from './createBlurSelection'
+import { createHighlightTextPlugin } from './createHighlightTextPlugin'
+import { createILinkPlugin } from './createILinkPlugin'
+import { createInlineBlockPlugin } from './createInlineBlockPlugin'
+import { createMentionPlugin } from './createMentionsPlugin'
+import { createTagPlugin } from './createTagPlugin'
+import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
+import { createTodoPlugin } from './createTodoPlugin'
+import {
+  optionsAutoFormatRule,
+  optionsCreateNodeIdPlugin,
+  optionsExitBreakPlugin,
+  optionsResetBlockTypePlugin,
+  optionsSelectOnBackspacePlugin,
+  optionsSoftBreakPlugin
+} from './options'
+import { parseTwitterUrl } from './parseTwitterUrl'
 import {
   autoformatArrow,
   autoformatLegal,
@@ -47,30 +72,6 @@ import {
   parseVideoUrl,
   PlatePlugin,
   setNodes} from '@udecode/plate'
-import { useAuth } from '@workduck-io/dwindle'
-
-import { withStyledDraggables } from '../Actions/withDraggables'
-import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
-import { withBlockOptions } from '../Components/Blocks'
-import { PlateFloatingLink } from '../Components/FloatingLink'
-import { createBlockModifierPlugin } from './createBlockModifierPlugin'
-import { createBlurSelectionPlugin } from './createBlurSelection'
-import { createHighlightTextPlugin } from './createHighlightTextPlugin'
-import { createILinkPlugin } from './createILinkPlugin'
-import { createInlineBlockPlugin } from './createInlineBlockPlugin'
-import { createMentionPlugin } from './createMentionsPlugin'
-import { createTagPlugin } from './createTagPlugin'
-import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
-import { createTodoPlugin } from './createTodoPlugin'
-import {
-  optionsAutoFormatRule,
-  optionsCreateNodeIdPlugin,
-  optionsExitBreakPlugin,
-  optionsResetBlockTypePlugin,
-  optionsSelectOnBackspacePlugin,
-  optionsSoftBreakPlugin
-} from './options'
-import { parseTwitterUrl } from './parseTwitterUrl'
 
 export type PluginOptionType = {
   exclude?: {

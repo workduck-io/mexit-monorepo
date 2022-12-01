@@ -10,6 +10,7 @@ import {
   NodeEditorContent,
   SearchRepExtra,
   TodoType } from '@mexit/core'
+
 import { expose } from 'threads/worker'
 
 export interface OutlineItem {

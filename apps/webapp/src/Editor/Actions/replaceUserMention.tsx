@@ -1,4 +1,5 @@
 import { ELEMENT_MENTION, generateTempId } from '@mexit/core'
+
 import { insertNodes } from '@udecode/plate'
 import { Editor, Transforms } from 'slate'
 

@@ -1,9 +1,8 @@
-import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { ActionTitle, ComboboxItemTitle,ComboboxShortcuts, ComboSeperator, MexIcon , ShortcutText,StyledComboHeader } from '@mexit/shared'
-import { getPlateEditorRef } from '@udecode/plate'
-import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import React, { useEffect, useState } from 'react'
-import { useTheme } from 'styled-components'
+
+import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
+
+import { ActionTitle, ComboboxItemTitle,ComboboxShortcuts, ComboSeperator, MexIcon , ShortcutText,StyledComboHeader } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
@@ -13,6 +12,9 @@ import { KEYBOARD_KEYS } from '../../constants'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxItem, ItemCenterWrapper,ItemDesc } from '../../Styles/TagCombobox.styles'
 import { BlockIcons } from '../Blocks/BlockIcons'
+import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
+import { getPlateEditorRef } from '@udecode/plate'
+import { useTheme } from 'styled-components'
 
 type BlockComboProps = {
   onSelect

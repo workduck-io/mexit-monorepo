@@ -1,5 +1,6 @@
-import { CenterSpace, Description, Heading , InputBlock } from '@mexit/shared'
 import React, { useEffect, useState } from 'react'
+
+import { CenterSpace, Description, Heading , InputBlock } from '@mexit/shared'
 
 import useChangeShortcutListener from '../Hooks/useChangeShortcutListener'
 import { useShortcutStore } from '../Hooks/useShortcutStore'

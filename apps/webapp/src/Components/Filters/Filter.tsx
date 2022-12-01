@@ -1,5 +1,5 @@
-import closeLine from '@iconify/icons-ri/close-line'
-import { Icon } from '@iconify/react'
+import React, { useMemo } from 'react'
+
 import { Filter, FilterJoin, FilterType, FilterValue, mog } from '@mexit/core'
 import {
   FilterJoinDiv,
@@ -13,10 +13,11 @@ import {
   ItemLabel,
   Menu,
   MenuItem} from '@mexit/shared'
-import { capitalize } from 'lodash'
-import React, { useMemo } from 'react'
 
 import { getFilterJoinIcon,useFilterIcons } from '../../Hooks/useFilterValueIcons'
+import closeLine from '@iconify/icons-ri/close-line'
+import { Icon } from '@iconify/react'
+import { capitalize } from 'lodash'
 
 interface FilterProps {
   filter: Filter

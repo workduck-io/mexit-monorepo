@@ -9,11 +9,11 @@ import {
   TodoStatus,
   TodosType,
   TodoType} from '@mexit/core'
-import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
 
 import { getTodoMetadata } from '../Editor/Plugins/todoUtils'
 import { useReminderStore } from './useReminderStore'
+import create from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 export const createTodo = (
   nodeid: string,

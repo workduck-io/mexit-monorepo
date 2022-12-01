@@ -1,11 +1,11 @@
 import { ELEMENT_ILINK, mog } from '@mexit/core'
-import { getPreviousNode, insertText } from '@udecode/plate'
-import { PlatePlugin, WithOverride } from '@udecode/plate-core'
-import { Range } from 'slate'
 
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { ComboboxKey } from '../Types/Combobox'
+import { getPreviousNode, insertText } from '@udecode/plate'
+import { PlatePlugin, WithOverride } from '@udecode/plate-core'
+import { Range } from 'slate'
 
 /**
  * Enables support for Internal links.

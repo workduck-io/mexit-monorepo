@@ -1,4 +1,5 @@
 import { ReminderStyled, StyledBoard } from '@mexit/shared'
+
 import styled from 'styled-components'
 
 export const AllRemindersWrapper = styled.div`

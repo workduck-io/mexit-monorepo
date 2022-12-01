@@ -1,8 +1,8 @@
 import { QuickLinkType } from '@mexit/core'
-import { PlateEditor, TElement,Value } from '@udecode/plate'
 
 import { CustomElements } from '../constants'
 import { ComboboxItem } from './MultiCombobox'
+import { PlateEditor, TElement,Value } from '@udecode/plate'
 
 export interface ComboboxKeyDownConfig {
   keys: Record<CustomElements, ComboboxItemType>

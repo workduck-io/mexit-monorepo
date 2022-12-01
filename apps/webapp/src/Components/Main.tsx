@@ -1,10 +1,8 @@
-import { IS_DEV } from '@mexit/core'
-import { GridWrapper , linkTooltip , navTooltip } from '@mexit/shared'
-import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 import React, { useEffect } from 'react'
 import useRoutingInstrumentation from 'react-router-v6-instrumentation'
-import styled from 'styled-components'
+
+import { IS_DEV } from '@mexit/core'
+import { GridWrapper , linkTooltip , navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'
 import { useAuthStore } from '../Stores/useAuth'
@@ -12,6 +10,9 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import RHSidebar from './Infobar/RHSidebar'
 import Nav from './Sidebar/Nav'
 import { useSidebarTransition } from './Sidebar/Transition'
+import * as Sentry from '@sentry/react'
+import { BrowserTracing } from '@sentry/tracing'
+import styled from 'styled-components'
 
 const AppWrapper = styled.div`
   min-height: 100%;

@@ -1,9 +1,9 @@
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
+import React, { useEffect } from 'react'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
 import { NodeType } from '@mexit/core'
 import { SharedNodeIcon } from '@mexit/shared'
-import { tinykeys } from '@workduck-io/tinykeys'
-import React, { useEffect } from 'react'
 
 import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 // import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
@@ -14,6 +14,8 @@ import { useNodes } from '../../Hooks/useNodes'
 import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import useMultipleEditors from '../../Stores/useEditorsStore';
 import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
 
 interface NodeLinkProps {
   keyStr: string

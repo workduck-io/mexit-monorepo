@@ -1,8 +1,10 @@
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-import { BackCard, CenteredColumn, Description, Title } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+
+import { Button } from '@workduck-io/mex-components'
+
+import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { BackCard, CenteredColumn, Description, Title } from '@mexit/shared'
 
 import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'

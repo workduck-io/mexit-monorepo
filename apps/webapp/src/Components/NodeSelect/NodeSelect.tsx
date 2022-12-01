@@ -1,9 +1,6 @@
-import { Icon } from '@iconify/react'
-import addCircleLine from '@iconify-icons/ri/add-circle-line'
-import checkboxCircleLine from '@iconify-icons/ri/checkbox-circle-line'
-import errorWarningLine from '@iconify-icons/ri/error-warning-line'
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
-import lock2Line from '@iconify-icons/ri/lock-2-line'
+import React, { useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
+
 import {
   convertContentToRawText,
 fuzzySearch,  ILink,
@@ -24,10 +21,6 @@ StyledCreatatbleSelect,   StyledInputWrapper,
   SuggestionError,
   SuggestionText,
 SuggestionTextWrapper } from '@mexit/shared'
-import { useCombobox } from 'downshift'
-import React, { useEffect, useMemo, useState } from 'react'
-import toast from 'react-hot-toast'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
@@ -39,6 +32,14 @@ import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { StyledNamespaceSelectComponents } from '../../Style/Select'
 import NamespaceTag from '../NamespaceTag'
+import { Icon } from '@iconify/react'
+import addCircleLine from '@iconify-icons/ri/add-circle-line'
+import checkboxCircleLine from '@iconify-icons/ri/checkbox-circle-line'
+import errorWarningLine from '@iconify-icons/ri/error-warning-line'
+import fileList2Line from '@iconify-icons/ri/file-list-2-line'
+import lock2Line from '@iconify-icons/ri/lock-2-line'
+import { useCombobox } from 'downshift'
+import { useDebouncedCallback } from 'use-debounce'
 
 export type QuickLink = {
   // Text to be shown in the combobox list

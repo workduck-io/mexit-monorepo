@@ -1,4 +1,5 @@
 import { mog } from '@mexit/core'
+
 import { MediaPlugin } from '@udecode/plate'
 import { getPluginOptions, PlateEditor, RenderFunction, Value } from '@udecode/plate-core'
 

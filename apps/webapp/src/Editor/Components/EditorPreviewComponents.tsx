@@ -12,8 +12,6 @@ import {
   ELEMENT_TODO_LI
 } from '@mexit/core'
 import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
-import { createPlateUI, withProps } from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
 
 import TagWrapper from '../../Components/Editor/TagWrapper'
 import Todo from '../../Components/Todo'
@@ -21,6 +19,8 @@ import InlineBlock from './InlineBlock'
 import { MentionElement } from './Mentions/MentionElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import TaskViewLink from './TaskViewLink'
+import { createPlateUI, withProps } from '@udecode/plate'
+import { StyledElement } from '@udecode/plate-styled-components'
 
 export const editorPreviewComponents = createPlateUI({
   [ELEMENT_LINK]: withProps(LinkElement, {

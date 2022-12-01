@@ -1,3 +1,6 @@
+import React from 'react'
+import toast from 'react-hot-toast'
+
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TODO_LI,
@@ -6,9 +9,6 @@ import {
   getDefaultContent
 } from '@mexit/core'
 import { InteractiveToast } from '@mexit/shared'
-import generateName from 'project-name-generator'
-import React from 'react'
-import toast from 'react-hot-toast'
 
 import { createDefaultTodo } from '../../Editor/Plugins/todoUtils'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -21,6 +21,7 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import generateName from 'project-name-generator'
 
 export const useOnNewItem = () => {
   const ICONS = {

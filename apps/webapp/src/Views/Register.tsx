@@ -1,3 +1,11 @@
+import React, { useState } from 'react'
+import { Controller,useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom'
+
+import { useAuth } from '@workduck-io/dwindle'
+import { Button, LoadingButton } from '@workduck-io/mex-components'
+
 import { RegisterFormData, UserRoleValues,VerifyFormData } from '@mexit/core'
 import {
   AuthForm,
@@ -9,12 +17,6 @@ import {
   StyledCreatatbleSelect,
   Title
 } from '@mexit/shared'
-import { useAuth } from '@workduck-io/dwindle'
-import { Button, LoadingButton } from '@workduck-io/mex-components'
-import React, { useState } from 'react'
-import { Controller,useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { Link } from 'react-router-dom'
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'

@@ -10,6 +10,14 @@ import {
   NodeEditorContent,
   SEPARATOR} from '@mexit/core'
 import { ILinkNode } from '@mexit/shared'
+
+import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
+import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
+import { useSnippets } from '../../../../Hooks/useSnippets'
+import { useUpdater } from '../../../../Hooks/useUpdater'
+import { useDataStore } from '../../../../Stores/useDataStore'
+import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
+import { useOpenToast } from '../../../Toast/useOpenToast'
 import {
   deleteText,
   getNodeEntries,
@@ -22,14 +30,6 @@ import {
   withoutNormalizing
 } from '@udecode/plate'
 import genereateName from 'project-name-generator'
-
-import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
-import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
-import { useSnippets } from '../../../../Hooks/useSnippets'
-import { useUpdater } from '../../../../Hooks/useUpdater'
-import { useDataStore } from '../../../../Stores/useDataStore'
-import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
-import { useOpenToast } from '../../../Toast/useOpenToast'
 
 export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()

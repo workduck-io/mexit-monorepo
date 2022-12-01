@@ -1,13 +1,14 @@
-import magicLine from '@iconify/icons-ri/magic-line'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { mog } from '@mexit/core'
 import React from 'react'
+
+import { mog } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
+import magicLine from '@iconify/icons-ri/magic-line'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 
 const SnippetList = () => {
   const snippets = useSnippetStore((store) => store.snippets)

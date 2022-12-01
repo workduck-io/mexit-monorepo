@@ -1,7 +1,7 @@
-import magicLine from '@iconify/icons-ri/magic-line'
-import { Icon } from '@iconify/react'
-import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
-import quillPenLine from '@iconify-icons/ri/quill-pen-line'
+import React, { useEffect, useMemo } from 'react'
+
+import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
+
 import {
   apiURLs,
   batchArray,
@@ -28,11 +28,6 @@ import {
   Title,
   View
 } from '@mexit/shared'
-import { ELEMENT_PARAGRAPH } from '@udecode/plate'
-import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
-import { nanoid } from 'nanoid'
-import genereateName from 'project-name-generator'
-import React, { useEffect, useMemo } from 'react'
 
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
@@ -47,6 +42,13 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
+import magicLine from '@iconify/icons-ri/magic-line'
+import { Icon } from '@iconify/react'
+import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
+import quillPenLine from '@iconify-icons/ri/quill-pen-line'
+import { ELEMENT_PARAGRAPH } from '@udecode/plate'
+import { nanoid } from 'nanoid'
+import genereateName from 'project-name-generator'
 
 export type SnippetsProps = {
   title?: string

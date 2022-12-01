@@ -1,9 +1,7 @@
 // import { Tooltip } from '@components/FloatingElements/Tooltip'
-import { Icon } from '@iconify/react'
-import { EditorIcons, Tooltip } from '@mexit/shared'
-import { useFloatingLinkSelectors } from '@udecode/plate-link'
-import { FloatingIconWrapper } from '@udecode/plate-ui-toolbar'
 import React from 'react'
+
+import { EditorIcons, Tooltip } from '@mexit/shared'
 
 import {
   EditButton,
@@ -17,6 +15,9 @@ import {
   UnlinkButton,
   UrlInput
 } from './FloatingLink.style'
+import { Icon } from '@iconify/react'
+import { useFloatingLinkSelectors } from '@udecode/plate-link'
+import { FloatingIconWrapper } from '@udecode/plate-ui-toolbar'
 
 export const PlateFloatingLink = () => {
   const isEditing = useFloatingLinkSelectors().isEditing()

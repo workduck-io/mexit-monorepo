@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from 'react'
+
+import { useAuth } from '@workduck-io/dwindle'
+
 import {
   AddHighlightFn,
   idxKey,
@@ -8,9 +12,6 @@ import {
   Reminder,
   ReminderActions
 } from '@mexit/core'
-import { useAuth } from '@workduck-io/dwindle'
-import { connectToParent } from 'penpal'
-import React, { useEffect, useState } from 'react'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useReminders } from '../Hooks/useReminders'
@@ -27,6 +28,7 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
+import { connectToParent } from 'penpal'
 
 export default function Chotu() {
   const [parent, setParent] = useState<any>(null)

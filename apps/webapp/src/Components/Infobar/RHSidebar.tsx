@@ -1,6 +1,7 @@
-import { RHSideNav } from '@mexit/shared'
 import React from 'react'
 import { useMatch } from 'react-router-dom'
+
+import { RHSideNav } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'

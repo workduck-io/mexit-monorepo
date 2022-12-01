@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -9,7 +11,6 @@ import {
   mog,
   SEPARATOR
 } from '@mexit/core'
-import { useMemo } from 'react'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'

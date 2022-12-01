@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable react-hooks/exhaustive-deps */
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import { useEffect, useMemo, useState } from 'react'
+
+import { Button, IconButton } from '@workduck-io/mex-components'
+
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
-import { Button, IconButton } from '@workduck-io/mex-components'
-import { useEffect, useMemo, useState } from 'react'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -35,6 +36,7 @@ import {
   ShareRowActionsWrapper,
   ShareRowHeading
 } from './styles'
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)

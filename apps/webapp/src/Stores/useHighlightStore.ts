@@ -1,4 +1,5 @@
 import { HighlightStore, highlightStoreConstructor } from '@mexit/core'
+
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 

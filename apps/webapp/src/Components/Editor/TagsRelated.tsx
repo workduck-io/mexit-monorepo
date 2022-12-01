@@ -1,10 +1,9 @@
-import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
-import hashtagIcon from '@iconify/icons-ri/hashtag'
+import { useEffect, useState } from 'react'
+
+import { IconButton } from '@workduck-io/mex-components'
+
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, generateTempId, NodeEditorContent } from '@mexit/core'
 import { InfoWidgetWrapper, Note, SuggestionIconsGroup, TagFlex, TagsFlex, TagsHelp, TagsLabel } from '@mexit/shared'
-import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
-import { IconButton } from '@workduck-io/mex-components'
-import { useEffect, useState } from 'react'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -14,6 +13,9 @@ import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useDataStore } from '../../Stores/useDataStore'
 import { getContent } from '../../Stores/useEditorStore'
 import NodeLink from './NodeLink'
+import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
+import hashtagIcon from '@iconify/icons-ri/hashtag'
+import { getPlateEditorRef, insertNodes, TElement } from '@udecode/plate'
 
 interface TagsRelated {
   nodeid: string
