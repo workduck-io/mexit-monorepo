@@ -60,8 +60,6 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
-        with:
-          version: yarn bump-version
 
       - uses: aws-actions/configure-aws-credentials@v1
         if: steps.changesets.outputs.hasChangesets == 'false'
@@ -79,12 +77,12 @@ jobs:
 
       - name: Build Extension for release
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: yarn nx release extension
+        run: yarn nx build:release extension
 
       - name: Zip Extension Bundle
         if: steps.changesets.outputs.hasChangesets == 'false'
-        working-directory: ./dist/apps/extension
-        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip Assets background.js content.js index.html manifest.json
+        working-directory: ./dist/extension
+        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip * 
 
       - name: Create Release and Upload Extension ZIP Bundle
         id: upload-release-asset
