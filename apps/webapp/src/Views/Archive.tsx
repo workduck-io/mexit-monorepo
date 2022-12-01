@@ -1,28 +1,19 @@
 import React, { useEffect, useState } from 'react'
-
-import trashIcon from '@iconify/icons-codicon/trash'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-import styled, { useTheme } from 'styled-components'
 
 import { Button, Infobox } from '@workduck-io/mex-components'
 
-import { GenericSearchResult, convertContentToRawText, ILink, NodeProperties, mog, SEPARATOR } from '@mexit/core'
-import { MainHeader } from '@mexit/shared'
-import { Title } from '@mexit/shared'
-import {
-  Result,
-  ResultHeader,
-  ResultTitle,
-  SearchPreviewWrapper,
-  ResultRow,
-  ResultMain,
+import { convertContentToRawText, GenericSearchResult, mog } from '@mexit/core'
+import { ArchiveHelp,MainHeader ,   Result,
   ResultDesc,
-  SplitSearchPreviewWrapper,
-  SearchContainer
-} from '@mexit/shared'
-import { View, ArchiveHelp } from '@mexit/shared'
+  ResultHeader,
+  ResultMain,
+  ResultRow,
+  ResultTitle,
+  SearchContainer,
+  SearchPreviewWrapper,
+  SplitSearchPreviewWrapper, Title ,
+View } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
@@ -31,13 +22,17 @@ import { useApi } from '../Hooks/API/useNodeAPI'
 import useArchive from '../Hooks/useArchive'
 import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
-import { NavigationType, useRouting } from '../Hooks/useRouting'
+import { useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { getContent } from '../Stores/useEditorStore'
-import { ModalHeader, MRMHead, ModalControls } from '../Style/Refactor'
+import { ModalControls,ModalHeader, MRMHead } from '../Style/Refactor'
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
+import trashIcon from '@iconify/icons-codicon/trash'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import styled, { useTheme } from 'styled-components'
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;

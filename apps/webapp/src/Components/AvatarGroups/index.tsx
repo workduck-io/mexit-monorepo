@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { AccessLevel, mog } from '@mexit/core'
+import { AccessLevel } from '@mexit/core'
 
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 import { AvatarGroupContainer, ProfileAvatarContainer } from './styled'
@@ -20,7 +20,7 @@ type AvatarGroupsPropsType = {
 const AvatarGroups: React.FC<AvatarGroupsPropsType> = ({ users, margin, limit = 5 }) => {
   const list = users.slice(0, limit)
 
-  if (!list?.length) return <></>
+  if (!list?.length) return
 
   return (
     <AvatarGroupContainer margin={margin}>
@@ -37,7 +37,7 @@ const AvatarGroups: React.FC<AvatarGroupsPropsType> = ({ users, margin, limit = 
           )
         }
 
-        return <></>
+        return null
       })}
     </AvatarGroupContainer>
   )

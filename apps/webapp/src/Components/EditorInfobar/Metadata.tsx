@@ -1,15 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
-
-import timeLine from '@iconify-icons/ri/time-line'
 import { useLocation } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { MexIcon } from '@workduck-io/mex-components'
 
 import { mog, NodeMetadata } from '@mexit/core'
-import { FlexBetween, Menu, MenuItem, ProfileIcon } from '@mexit/shared'
-import { DataGroup, DataWrapper, MetadataWrapper } from '@mexit/shared'
-import { RelativeTime } from '@mexit/shared'
+import { DataGroup, DataWrapper, FlexBetween, Menu, MenuItem, MetadataWrapper , ProfileIcon , RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -20,6 +15,8 @@ import useRouteStore from '../../Stores/useRouteStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import AvatarGroups from '../AvatarGroups'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
+import timeLine from '@iconify-icons/ri/time-line'
+import styled from 'styled-components'
 
 export const Data = styled.div`
   display: flex;

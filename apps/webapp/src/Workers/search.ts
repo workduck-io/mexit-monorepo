@@ -1,24 +1,21 @@
-import { expose } from 'threads/worker'
-
 import {
-  SearchIndex,
-  SearchWorker,
-  PersistentData,
-  idxKey,
-  parseNode,
   GenericSearchResult,
+  idxKey,
   mog,
-  SearchRepExtra
-} from '@mexit/core'
+  parseNode,
+  PersistentData,
+  SearchIndex,
+  SearchRepExtra,
+  SearchWorker} from '@mexit/core'
 
 import {
-  createSearchIndex,
   createIndexCompositeKey,
+  createSearchIndex,
   getNodeAndBlockIdFromCompositeKey,
   indexedFields,
-  TITLE_RANK_BUMP,
-  SEARCH_RESULTS_LIMIT
-} from '../Utils/flexsearch'
+  SEARCH_RESULTS_LIMIT,
+  TITLE_RANK_BUMP} from '../Utils/flexsearch'
+import { expose } from 'threads/worker'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
@@ -172,7 +169,7 @@ const searchWorker: SearchWorker = {
       const combinedResults = new Array<GenericSearchResult>()
       results.forEach(function (item) {
         const existing = combinedResults.filter(function (v, i) {
-          return v.blockId == item.blockId
+          return v.blockId === item.blockId
         })
         if (existing.length) {
           const existingIndex = combinedResults.indexOf(existing[0])

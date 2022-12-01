@@ -1,8 +1,8 @@
-import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
-
 import { IDBStorage } from '@mexit/core'
 import { preferenceStoreConstructor, UserPreferenceStore } from '@mexit/shared'
+
+import create from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 export const USER_PREF_STORE_KEY = 'mex-user-preference-store'
 

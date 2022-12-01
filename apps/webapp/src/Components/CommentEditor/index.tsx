@@ -1,8 +1,5 @@
 import { useMemo } from 'react'
 
-import { Plate } from '@udecode/plate'
-import { debounce } from 'lodash'
-
 import { NodeEditorContent } from '@mexit/core'
 import { useEditorChange } from '@mexit/shared'
 
@@ -11,6 +8,8 @@ import { MultiComboboxContainer } from '../../Editor/Components/MultiCombobox/mu
 // import useMultiComboboxOnKeyDown from '../../Editor/Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'
 import { getCommentPlugins } from './plugins'
+import { Plate } from '@udecode/plate'
+import { debounce } from 'lodash'
 
 type CommentEditorType = {
   editorId: string

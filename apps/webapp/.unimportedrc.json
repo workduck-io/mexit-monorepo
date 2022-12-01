@@ -1,0 +1,46 @@
+{
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts",
+    "**/Assets/**/*"
+  ],
+  "ignoreUnimported": [
+    "src/Components/Refactor/index.tsx",
+    "src/Hooks/useAnalytics/events.ts",
+    "src/Hooks/useAnalytics/index.tsx",
+    "src/Hooks/useAnalytics/types.ts",
+    "src/Stores/useRefactorStore.ts",
+    "src/Utils/analytics.ts",
+    "src/Utils/flexsearch.ts",
+    "src/Workers/analysis.ts",
+    "src/Workers/controller.ts",
+    "src/Workers/requests.ts",
+    "src/Workers/search.ts"
+  ],
+  "ignoreUnused": [
+    "mixpanel-browser"
+  ],
+  "ignoreUnresolved": [
+    "./analysis?worker",
+    "./requests?worker",
+    "./search?worker",
+    "@mexit/core",
+    "@mexit/shared",
+    "slate-react/dist/components/editable",
+    "web-highlighter/dist/model/source"
+  ],
+  "extensions": [
+    ".js",
+    ".ts",
+    ".jsx",
+    ".tsx"
+  ],
+  "entry": [
+    "src/index.tsx"
+  ]
+}

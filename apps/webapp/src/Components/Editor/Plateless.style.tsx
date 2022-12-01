@@ -1,4 +1,5 @@
 import { EditorStyles } from '@mexit/shared'
+
 import styled, { css } from 'styled-components'
 
 interface PlatelessStyledProps {

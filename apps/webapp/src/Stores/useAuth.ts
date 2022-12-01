@@ -1,20 +1,13 @@
 import { useState } from 'react'
 
-import { nanoid } from 'nanoid'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-
-import { useAuth, client } from '@workduck-io/dwindle'
+import { client, useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { apiURLs, AuthStoreState, mog } from '@mexit/core'
-import { RegisterFormData } from '@mexit/core'
-import { authStoreConstructor } from '@mexit/core'
+import { apiURLs, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
 import { terminateRequestWorker } from '../Workers/controller'
-import { useApiStore } from './useApiStore'
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
@@ -29,6 +22,9 @@ import useRouteStore from './useRouteStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
+import { nanoid } from 'nanoid'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
@@ -43,7 +39,6 @@ export const useAuthentication = () => {
 
   const initContents = useContentStore((store) => store.initContents)
   const clearSnippets = useSnippetStore((s) => s.clear)
-  const clearRequests = useApiStore().clearRequests
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
   const clearRecents = useRecentsStore().clear
@@ -101,7 +96,6 @@ export const useAuthentication = () => {
     // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
     // This is because zustand maintains it's state post logout as we don't go through a reload
     // Which results in zustand recreating everything post logout
-    clearRequests()
     initContents({})
     clearReactions()
     clearComments()

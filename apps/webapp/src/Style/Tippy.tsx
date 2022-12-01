@@ -1,6 +1,7 @@
+import { CardShadow } from '@mexit/shared'
+
 import { transparentize } from 'polished'
 import styled from 'styled-components'
-import { CardShadow } from '@mexit/shared'
 
 export const TooltipBase = styled.div`
   padding: ${({ theme }) => theme.spacing.small};

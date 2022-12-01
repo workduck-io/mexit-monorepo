@@ -1,9 +1,5 @@
 import React, { useEffect } from 'react'
 
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
-import styled, { css, useTheme } from 'styled-components'
-
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -16,6 +12,9 @@ import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSidebarTransition } from './Sidebar/Transition'
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
+import styled, { css, useTheme } from 'styled-components'
 
 const LogoWrapper = styled.div<{ expanded: boolean }>`
   ${({ expanded }) => (expanded ? 'width: 100%;' : 'width: 40px;')}

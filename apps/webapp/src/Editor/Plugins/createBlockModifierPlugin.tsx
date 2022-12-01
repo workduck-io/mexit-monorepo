@@ -1,5 +1,5 @@
-import { PlateEditor, PlatePlugin, queryNode, TNode, Value } from '@udecode/plate'
 import { BlockInfo } from '../../Components/Editor/BlockInfo/BlockInfo.index'
+import { PlateEditor, PlatePlugin, queryNode, TNode, Value } from '@udecode/plate'
 
 export const BLOCK_MODIFIER_PLUGIN = 'BLOCK_MODIFIER_PLUGIN'
 

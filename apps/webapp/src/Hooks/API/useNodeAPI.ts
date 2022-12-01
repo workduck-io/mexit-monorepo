@@ -1,11 +1,11 @@
 import {
   API,
   batchArray,
-  defaultContent,
   DEFAULT_NAMESPACE,
+  defaultContent,
   extractMetadata,
-  getTagsFromContent,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
+  getTagsFromContent,
   mog,
   NodeEditorContent,
   removeNulls

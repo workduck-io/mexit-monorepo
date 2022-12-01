@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
-
 import { useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import Cookies from 'universal-cookie'
 
 import { mog } from '@mexit/core'
 
@@ -14,6 +11,8 @@ import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { getTitleFromPath } from '../Hooks/useLinks'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
+import styled from 'styled-components'
+import Cookies from 'universal-cookie'
 
 const PublicEditorWrapper = styled.div`
   display: flex;

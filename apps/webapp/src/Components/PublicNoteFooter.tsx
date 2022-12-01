@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
-
 import { useMatch } from 'react-router-dom'
-import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
@@ -10,6 +8,7 @@ import { MexIcon, PrimaryText } from '@mexit/shared'
 import { getTitleFromPath } from '../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
+import styled from 'styled-components'
 
 const PublicNoteFooterContainer = styled.section`
   display: flex;

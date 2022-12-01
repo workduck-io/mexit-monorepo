@@ -1,12 +1,5 @@
 import React from 'react'
-
-import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
-import user3Line from '@iconify-icons/ri/user-3-line'
-import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
-import informationLine from '@iconify/icons-ri/information-line'
-import { Icon } from '@iconify/react'
-import { NavLink, Outlet } from 'react-router-dom'
-import styled from 'styled-components'
+import { Outlet } from 'react-router-dom'
 
 import {
   Button,
@@ -21,6 +14,12 @@ import {
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAuthentication } from '../../Stores/useAuth'
+import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
+import informationLine from '@iconify/icons-ri/information-line'
+import { Icon } from '@iconify/react'
+import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
+import user3Line from '@iconify-icons/ri/user-3-line'
+import styled from 'styled-components'
 
 const Margin = styled.div`
   margin: 1rem 1rem 0.5rem 0;

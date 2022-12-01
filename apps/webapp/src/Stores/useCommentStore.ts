@@ -1,7 +1,7 @@
+import { CommentStore, IDBStorage } from '@mexit/core'
+
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
-
-import { CommentStore, IDBStorage } from '@mexit/core'
 
 export const useCommentStore = create<CommentStore>(
   persist(

@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
 
-import listCheck2 from '@iconify-icons/ri/list-check-2'
-import layoutGridFill from '@iconify-icons/ri/layout-grid-fill'
-import { Icon } from '@iconify/react'
 import { View, ViewSelectorButton, ViewSelectorWrapper } from '@mexit/shared'
+
+import { Icon } from '@iconify/react'
+import layoutGridFill from '@iconify-icons/ri/layout-grid-fill'
+import listCheck2 from '@iconify-icons/ri/list-check-2'
 
 const ViewSelector = ({ onChangeView, currentView }: { onChangeView: (view: View) => void; currentView: View }) => {
   // mog('ViewSelector', { currentView, entries: Object.entries(View) })

@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { nanoid } from 'nanoid'
-
 import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title, View } from '@mexit/shared'
 

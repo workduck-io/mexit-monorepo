@@ -5,9 +5,9 @@ import { client, useAuth } from '@workduck-io/dwindle'
 import { API } from '@mexit/core'
 import { addIconsToIconify } from '@mexit/shared'
 
+import config from '../config'
 import { useInitLoader } from '../Hooks/useInitLoader'
 import { useAutoSyncUserPreference } from '../Hooks/useSyncUserPreferences'
-import config from '../config'
 
 const Init = () => {
   const { initCognito } = useAuth()

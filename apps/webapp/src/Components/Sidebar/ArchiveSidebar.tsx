@@ -1,23 +1,22 @@
 import React, { useEffect } from 'react'
-
-import Tree, { RenderItemParams, ItemId, mutateTree, TreeItem, TreeData } from '@atlaskit/tree'
-import archiveLine from '@iconify/icons-ri/archive-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
-import Tippy, { useSingleton } from '@tippyjs/react'
 import { useMatch } from 'react-router-dom'
-import styled, { useTheme } from 'styled-components'
 
 import { mog } from '@mexit/core'
 import { ItemContent, ItemCount, ItemTitle, MexIcon, StyledTreeItem } from '@mexit/shared'
 
-import { useRouting, ROUTE_PATHS, NavigationType } from '../../Hooks/useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useDataStore } from '../../Stores/useDataStore'
 import { Centered } from './Bookmarks'
 import { SidebarWrapper } from './Sidebar.style'
 import { GetIcon, TooltipContent } from './Tree'
+import Tree, { ItemId, mutateTree, RenderItemParams, TreeData,TreeItem } from '@atlaskit/tree'
+import archiveLine from '@iconify/icons-ri/archive-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import * as ContextMenu from '@radix-ui/react-context-menu'
+import Tippy, { useSingleton } from '@tippyjs/react'
+import styled, { useTheme } from 'styled-components'
 
 export const Margin = styled.div<{ margin: string }>`
   margin: ${(props) => props.margin};

@@ -1,21 +1,19 @@
-import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
-
 import {
-  NodeEditorContent,
-  defaultContent,
-  TodoStatus,
-  PriorityType,
-  TodosType,
-  TodoType,
   convertContentToRawText,
-  getTagsFromContent,
+  defaultContent,
   getMentionsFromContent,
-  mog
-} from '@mexit/core'
+  getTagsFromContent,
+  mog,
+  NodeEditorContent,
+  PriorityType,
+  TodoStatus,
+  TodosType,
+  TodoType} from '@mexit/core'
 
 import { getTodoMetadata } from '../Editor/Plugins/todoUtils'
 import { useReminderStore } from './useReminderStore'
+import create from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 export const createTodo = (
   nodeid: string,

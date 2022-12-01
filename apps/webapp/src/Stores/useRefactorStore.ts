@@ -1,8 +1,7 @@
-import create from 'zustand'
-
 import { NodeLink } from '@mexit/core'
 
 import { RefactorPath } from './useRenameStore'
+import create from 'zustand'
 
 interface RefactorState {
   open: boolean

@@ -1,7 +1,6 @@
-import pipe from 'ramda/es/pipe'
-import create from 'zustand'
 import produce, { setAutoFreeze } from 'immer'
-import { State, StateCreator } from 'zustand'
+import pipe from 'ramda/es/pipe'
+import create, { State, StateCreator } from 'zustand'
 import { combine } from 'zustand/middleware'
 
 export const immer =

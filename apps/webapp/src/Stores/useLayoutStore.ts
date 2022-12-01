@@ -1,6 +1,6 @@
-import create from 'zustand'
-
 import { InfobarMode } from '@mexit/shared'
+
+import create from 'zustand'
 
 export interface FocusMode {
   on: boolean

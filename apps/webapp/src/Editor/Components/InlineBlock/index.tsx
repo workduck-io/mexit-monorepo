@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { useSelected } from 'slate-react'
-import styled from 'styled-components'
-
-import { mog, NodeType } from '@mexit/core'
+import { NodeType } from '@mexit/core'
 import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
 import useArchive from '../../../Hooks/useArchive'
@@ -23,6 +20,8 @@ import {
   StyledInlineBlock,
   StyledInlineBlockPreview
 } from '../../Styles/InlineBlock'
+import { useSelected } from 'slate-react'
+import styled from 'styled-components'
 
 const StyledArchiveText = styled.text`
   border-radius: ${({ theme }) => theme.borderRadius.small};

@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createPlateUI, withProps } from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
-
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -22,6 +19,8 @@ import InlineBlock from './InlineBlock'
 import { MentionElement } from './Mentions/MentionElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import TaskViewLink from './TaskViewLink'
+import { createPlateUI, withProps } from '@udecode/plate'
+import { StyledElement } from '@udecode/plate-styled-components'
 
 export const editorPreviewComponents = createPlateUI({
   [ELEMENT_LINK]: withProps(LinkElement, {

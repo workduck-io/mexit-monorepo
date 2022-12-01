@@ -1,3 +1,16 @@
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK,ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX  } from '@mexit/core'
+
+import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { QuickLinkType } from '../../constants'
+import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
+import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
+import {
+  ComboConfigData,
+  ComboSearchType,
+  ConfigDataSlashCommands,
+  SingleComboboxConfig
+} from '../../Types/MultiCombobox'
+import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 import {
   deleteText,
   getBlockAbove,
@@ -12,22 +25,6 @@ import {
   TElement,
   Value
 } from '@udecode/plate'
-
-import { ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK } from '@mexit/core'
-
-import { useLinks } from '../../../Hooks/useLinks'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
-import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
-import {
-  ComboConfigData,
-  ComboSearchType,
-  ConfigDataSlashCommands,
-  SingleComboboxConfig
-} from '../../Types/MultiCombobox'
-import { QuickLinkType } from '../../constants'
-import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 
 export interface ComboTypeHandlers {
   slateElementType: string

@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
@@ -7,10 +6,7 @@ import { Link } from 'react-router-dom'
 import { LoadingButton } from '@workduck-io/mex-components'
 
 import { LoginFormData, mog } from '@mexit/core'
-import { CenteredColumn } from '@mexit/shared'
-import { BackCard, FooterCard } from '@mexit/shared'
-import { Title } from '@mexit/shared'
-import { ButtonFields, AuthForm } from '@mexit/shared'
+import { AuthForm,BackCard, ButtonFields,CenteredColumn , FooterCard , Title  } from '@mexit/shared'
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import { InputFormError } from '../Components/Input'

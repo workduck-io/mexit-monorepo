@@ -1,25 +1,25 @@
-import { generateCommentId, MIcon, mog, UserReaction } from '@mexit/core'
-import { Source } from '../../SourceInfo'
-
 import { useMemo, useState } from 'react'
 
-import message2Line from '@iconify/icons-ri/message-2-line'
-import { Icon } from '@iconify/react'
-import { getIconType, Popover, StringToMIcon } from '@mexit/shared'
-import { findNodePath, isSelectionExpanded } from '@udecode/plate'
-import { nanoid } from 'nanoid'
-import { useFocused, useSelected } from 'slate-react'
+import { generateCommentId, MIcon, UserReaction } from '@mexit/core'
+import { getIconType, Popover } from '@mexit/shared'
+
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
+import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { useComments } from '../../../Hooks/useComments'
+import { useHighlights } from '../../../Hooks/useHighlights'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
+import { useAnalysisStore } from '../../../Stores/useAnalysis'
 import { useAuthStore } from '../../../Stores/useAuth'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
-import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
+import { Source } from '../../SourceInfo'
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
-import { useAnalysisStore } from '../../../Stores/useAnalysis'
-import { useHighlights } from '../../../Hooks/useHighlights'
+import message2Line from '@iconify/icons-ri/message-2-line'
+import { Icon } from '@iconify/react'
+import { findNodePath, isSelectionExpanded } from '@udecode/plate'
+import { nanoid } from 'nanoid'
+import { useFocused, useSelected } from 'slate-react'
 
 /**
  *
@@ -181,7 +181,7 @@ export const BlockInfo = (props: any) => {
 
   // Do not wrap the blockinfo around the inline / nested elements
   return isInline || isNested ? (
-    <>{children}</>
+    children
   ) : (
     <BlockInfoBlockWrapper {...attributes}>
       {children}

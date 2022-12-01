@@ -1,3 +1,8 @@
+import { isElder } from '@mexit/core'
+
+import { useSnippets } from '../../../Hooks/useSnippets'
+import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
 import {
   deleteText,
   getPluginType,
@@ -8,13 +13,6 @@ import {
   select,
   TElement
 } from '@udecode/plate'
-import { Transforms } from 'slate'
-
-import { isElder } from '@mexit/core'
-
-import { useSnippets } from '../../../Hooks/useSnippets'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
 
 export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConfig }) => {
   const closeMenu = useComboboxStore((state) => state.closeMenu)

@@ -1,7 +1,7 @@
 // import { Services, Title } from '@style/Integration'
 import React from 'react'
 
-import { Services, IntegrationTitle } from '@mexit/shared'
+import { IntegrationTitle,Services } from '@mexit/shared'
 
 import ActionGroup from './ActionGroup'
 

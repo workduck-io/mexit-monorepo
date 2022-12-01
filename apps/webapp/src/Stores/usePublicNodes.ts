@@ -1,5 +1,3 @@
-import create from 'zustand'
-
 import {
   Contents,
   ILink,
@@ -9,6 +7,8 @@ import {
   NodeProperties,
   SingleNamespace
 } from '@mexit/core'
+
+import create from 'zustand'
 
 export interface PublicNodeStoreType {
   // This is the hierarchy of a public namespace

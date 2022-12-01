@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { GlobalFilterJoin } from '@mexit/core'
-import { Menu, MenuItem, IconDisplay, FilterGlobalJoinWrapper, GenericSection } from '@mexit/shared'
+import { FilterGlobalJoinWrapper, GenericSection,IconDisplay, Menu, MenuItem } from '@mexit/shared'
 
 import { getFilterJoinIcon } from '../../Hooks/useFilterValueIcons'
 

@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
-import CloseIcon from '@iconify/icons-ri/close-line'
-import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
 import { useLocation } from 'react-router-dom'
 
 import {
@@ -11,16 +6,18 @@ import {
   FlexBetween,
   Float,
   FloatButton,
-  FocusModeProp,
-  StyledMenuItem,
+  FloatingMenu,
   MexIcon,
-  FloatingMenu
-} from '@mexit/shared'
+  StyledMenuItem} from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import AutoformatHelp from './Autoformathelp'
+import CloseIcon from '@iconify/icons-ri/close-line'
+import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
 
 const FloatingButton = () => {
   const location = useLocation()

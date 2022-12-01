@@ -1,20 +1,18 @@
 import { useCallback } from 'react'
 
-import { OnChange, usePlateEditorRef } from '@udecode/plate'
-
-import { getTimeInText, isReservedOrClash, mog, toLocaleString, withoutContinuousDelimiter } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
+import { fuzzySearch,getTimeInText, isReservedOrClash, toLocaleString, withoutContinuousDelimiter  } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useRouting } from '../../../Hooks/useRouting'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
+import { QuickLinkType } from '../../constants'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
+import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { ComboboxKey } from '../../Types/Combobox'
 import { ComboboxType } from '../../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../../Utils/helper'
-import { QuickLinkType } from '../../constants'
-import { useNamespaces } from '../../../Hooks/useNamespaces'
+import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 export const CreateNewPrefix = `Create `
 
@@ -58,13 +56,15 @@ export const getCommandExtended = (search: string, keys: Record<string, Combobox
         const text = parsed ? toLocaleString(parsed.time) : undefined
         if (searchTerm !== '')
           return { ...ct, text: text ?? `Set Reminder: ${searchTerm}`, search, desc: parsed?.textWithoutTime }
+
+        return {}
       } else {
         throw new Error('Not implemented')
       }
     })
 
   const isExtended = extendedKeys.some((ct) => {
-    return search.startsWith(ct.value)
+    return search.startsWith(ct?.value)
   })
 
   return { isExtended, extendedCommands }

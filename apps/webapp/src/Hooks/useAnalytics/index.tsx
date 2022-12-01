@@ -1,4 +1,4 @@
-import { Heap, EventProperties, UserProperties } from './types'
+import { EventProperties, UserProperties } from './types'
 
 const useAnalytics = () => {
   /** Not heap's userId */

@@ -1,21 +1,19 @@
 import React from 'react'
 
-import Check from '@iconify-icons/ri/check-line'
-
 import { camelCase } from '@mexit/core'
 import {
-  MexIcon,
   ActiveStatus,
   CenteredFlex,
-  RightCut,
-  ServiceCard,
-  ServiceName,
   DEFAULT_LIST_ITEM_ICON,
   getIconType,
-  ProjectIconMex
-} from '@mexit/shared'
+  MexIcon,
+  ProjectIconMex,
+  RightCut,
+  ServiceCard,
+  ServiceName} from '@mexit/shared'
 
 import { ActionGroupType } from '../../Types/Actions'
+import Check from '@iconify-icons/ri/check-line'
 
 type ActionGroupProps = {
   group: Partial<ActionGroupType>

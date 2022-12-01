@@ -1,8 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-
-import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { debounce } from 'lodash'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
@@ -19,6 +15,9 @@ import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import Banner from './Banner'
 import Editor from './Editor'
+import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { debounce } from 'lodash'
 
 type Inputs = {
   title: string

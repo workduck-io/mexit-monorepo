@@ -1,9 +1,10 @@
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig, PluginOption } from 'vite'
 import svgr from 'vite-plugin-svgr'
 
 const sourceMap = process.env.NO_SOURCE_MAP ? false : true
+const isDev = process.env.MODE === 'development' ? true : false
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,7 +16,17 @@ export default defineConfig({
   },
   build: {
     sourcemap: sourceMap,
-    outDir: '../../dist/apps/webapp'
+    outDir: '../../dist/webapp',
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, 'index.html'),
+        iframe: path.resolve(__dirname, 'iframe.html')
+      },
+      output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: isDev ? 'assets/js/[name].js' : 'assets/js/[name].[hash].js',
+      }
+    }
   },
   define: {
     'process.env': {}
@@ -42,7 +53,7 @@ export default defineConfig({
           ]
         ]
       }
-    }),
+    }) as PluginOption,
     svgr()
   ],
   worker: { format: 'es' }

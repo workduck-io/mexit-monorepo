@@ -1,13 +1,12 @@
 import React from 'react'
-
 import { useTransition } from 'react-spring'
-import { ThemeProvider } from 'styled-components'
 
 import { defaultThemes } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
+import { ThemeProvider } from 'styled-components'
 
 const Themes = () => {
   const themes = defaultThemes

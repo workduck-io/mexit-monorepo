@@ -1,56 +1,7 @@
-import {
-  createAutoformatPlugin,
-  createBlockquotePlugin,
-  createBoldPlugin,
-  createCodeBlockPlugin,
-  createCodePlugin,
-  createExitBreakPlugin,
-  createHeadingPlugin,
-  createDndPlugin,
-  createHighlightPlugin,
-  createImagePlugin,
-  createItalicPlugin,
-  createLinkPlugin,
-  createListPlugin,
-  createMediaEmbedPlugin,
-  createNodeIdPlugin,
-  createParagraphPlugin,
-  createResetNodePlugin,
-  createSelectOnBackspacePlugin,
-  createSoftBreakPlugin,
-  createStrikethroughPlugin,
-  createUnderlinePlugin,
-  PlatePlugin,
-  autoformatArrow,
-  autoformatLegal,
-  autoformatLegalHtml,
-  autoformatMath,
-  autoformatSmartQuotes,
-  ELEMENT_HR,
-  createHorizontalRulePlugin,
-  setNodes,
-  createAlignPlugin,
-  ELEMENT_DEFAULT,
-  insertNodes,
-  createPlugins,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_H4,
-  ELEMENT_H5,
-  ELEMENT_H6,
-  ELEMENT_PARAGRAPH,
-  createTablePlugin,
-  parseIframeUrl,
-  parseVideoUrl,
-  MediaEmbedTweet,
-  MediaEmbedVideo
-} from '@udecode/plate'
-
 import { useAuth } from '@workduck-io/dwindle'
 
 import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, parseRestMediaUrls, MediaIFrame, useUploadToCDN } from '@mexit/shared'
+import { MediaIFrame, parseRestMediaUrls, TableWrapper, useUploadToCDN } from '@mexit/shared'
 
 import { withStyledDraggables } from '../Actions/withDraggables'
 import { withStyledPlaceHolders } from '../Actions/withPlaceholder'
@@ -74,6 +25,53 @@ import {
   optionsSoftBreakPlugin
 } from './options'
 import { parseTwitterUrl } from './parseTwitterUrl'
+import {
+  autoformatArrow,
+  autoformatLegal,
+  autoformatLegalHtml,
+  autoformatMath,
+  autoformatSmartQuotes,
+  createAlignPlugin,
+  createAutoformatPlugin,
+  createBlockquotePlugin,
+  createBoldPlugin,
+  createCodeBlockPlugin,
+  createCodePlugin,
+  createDndPlugin,
+  createExitBreakPlugin,
+  createHeadingPlugin,
+  createHighlightPlugin,
+  createHorizontalRulePlugin,
+  createImagePlugin,
+  createItalicPlugin,
+  createLinkPlugin,
+  createListPlugin,
+  createMediaEmbedPlugin,
+  createNodeIdPlugin,
+  createParagraphPlugin,
+  createPlugins,
+  createResetNodePlugin,
+  createSelectOnBackspacePlugin,
+  createSoftBreakPlugin,
+  createStrikethroughPlugin,
+  createTablePlugin,
+  createUnderlinePlugin,
+  ELEMENT_DEFAULT,
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+  ELEMENT_H5,
+  ELEMENT_H6,
+  ELEMENT_HR,
+  ELEMENT_PARAGRAPH,
+  insertNodes,
+  MediaEmbedTweet,
+  MediaEmbedVideo,
+  parseIframeUrl,
+  parseVideoUrl,
+  PlatePlugin,
+  setNodes} from '@udecode/plate'
 
 export type PluginOptionType = {
   exclude?: {

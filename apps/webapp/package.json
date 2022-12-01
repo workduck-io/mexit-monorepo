@@ -14,7 +14,6 @@
     "@floating-ui/react-dom-interactions": "^0.9.3",
     "@iconify-icons/ri": "^1.1.1",
     "@iconify/icons-bx": "^1.1.0",
-    "@iconify/icons-clarity": "^1.1.2",
     "@iconify/icons-codicon": "^1.1.15",
     "@iconify/icons-fluent": "^1.1.33",
     "@iconify/icons-gg": "^1.1.0",
@@ -32,7 +31,6 @@
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
     "compress.js": "^1.2.2",
-    "core-js": "^3.21.1",
     "dayjs": "^1.10.8",
     "fast-deep-equal": "^3.1.3",
     "fast-fuzzy": "^1.10.10",
@@ -56,7 +54,6 @@
     "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.25.1",
     "react-hot-toast": "^2.2.0",
-    "react-image-crop": "^10.0.8",
     "react-merge-refs": "^2.0.1",
     "react-modal": "^3.14.4",
     "react-oembed-container": "^1.0.0",
@@ -85,10 +82,11 @@
     "@types/react-select": "^4.0.17",
     "@types/styled-components": "^5.1.20",
     "@vitejs/plugin-react": "^1.0.7",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "simple-zustand-devtools": "^1.0.1",
-    "typescript": "^4.4.4",
-    "vite": "^2.7.2",
-    "vite-plugin-svgr": "^2.2.2"
+    "typescript": "^4.5.4",
+    "vite": "^3.2.4",
+    "vite-plugin-svgr": "^2.2.0"
   },
   "eslintConfig": {
     "extends": [

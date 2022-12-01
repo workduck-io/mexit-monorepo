@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react'
 
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import { Icon } from '@iconify/react'
-
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Tooltip, IconDisplay, isOnEditableElement } from '@mexit/shared'
+import { IconDisplay, isOnEditableElement,Tooltip } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { CreateNewMenu } from './Sidebar.createNew'
 import { CreateNewButton, SpaceItem, SpaceSwitcher, SwitcherSpaceItems } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import { Icon } from '@iconify/react'
 
 interface SidebarSpaceSwitcherProps {
   currentSpace: string

@@ -1,20 +1,19 @@
-import {
-  ELEMENT_PARAGRAPH,
-  TNode,
-  insertNodes,
-  deleteText,
-  getNodeEntries,
-  getPlateEditorRef,
-  removeNodes,
-  TNodeEntry
-} from '@udecode/plate'
-
-import { mog, updateIds, NodeEditorContent, generateTempId, BlockType, getBlockMetadata } from '@mexit/core'
+import { BlockType, generateTempId, getBlockMetadata,mog, NodeEditorContent, updateIds } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import {
+  deleteText,
+  ELEMENT_PARAGRAPH,
+  getNodeEntries,
+  getPlateEditorRef,
+  insertNodes,
+  removeNodes,
+  TNode,
+  TNodeEntry
+} from '@udecode/plate'
 
 export const useEditorBlockSelection = () => {
   const blocksFromStore = useBlockStore((store) => store.blocks)

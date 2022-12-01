@@ -1,9 +1,10 @@
 import { useCallback } from 'react'
-import { PlateEditor } from '@udecode/plate'
+
 import { useComboboxStore } from '../../Stores/useComboboxStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { ComboboxType, ComboTriggerDataType } from '../Types/MultiCombobox'
 import getTextFromTriggers from '../Components/MultiCombobox/getMultiTextFromTrigger'
+import { ComboboxType, ComboTriggerDataType } from '../Types/MultiCombobox'
+import { PlateEditor } from '@udecode/plate'
 
 /**
  * If the cursor is after the trigger and at the end of the word:

@@ -1,34 +1,27 @@
 import React, { useMemo } from 'react'
 
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
-import shareLine from '@iconify/icons-ri/share-line'
-import { Icon } from '@iconify/react'
-
 import { Infobox } from '@workduck-io/mex-components'
 
 import {
-  GenericSearchResult,
-  defaultContent,
-  mog,
-  NodeType,
   convertContentToRawText,
-  getInitialNode
-} from '@mexit/core'
-import { MainHeader, TitleText, ResultCardFooter, Title } from '@mexit/shared'
-import {
-  Result,
-  ResultDesc,
+  defaultContent,
+  GenericSearchResult,
+  getInitialNode,
+  mog,
+  NodeType} from '@mexit/core'
+import { MainHeader,   Result,
+ResultCardFooter,   ResultDesc,
   ResultHeader,
   ResultMain,
   ResultMetaData,
   ResultRow,
   ResultTitle,
   SearchContainer,
+  SearchHelp,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  View,
-  SearchHelp
-} from '@mexit/shared'
+Title,TitleText ,
+  View} from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
 import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
@@ -47,6 +40,9 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { SplitType } from './SplitView'
+import shareLine from '@iconify/icons-ri/share-line'
+import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 
 const Search = () => {
   const { loadNode } = useLoad()

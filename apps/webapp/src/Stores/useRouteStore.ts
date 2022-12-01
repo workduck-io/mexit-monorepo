@@ -2,8 +2,6 @@ import { produce } from 'immer'
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 
-import { mog } from '@mexit/core'
-
 type Route = string
 
 type RouteInformation = {

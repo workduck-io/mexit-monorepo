@@ -3,8 +3,8 @@ import { UserPreferences } from '@mexit/shared'
 
 import { version } from '../../../package.json'
 import { useAuthStore } from '../../Stores/useAuth'
-import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { USER_ID_REGEX } from '../../Utils/constants'
 import { useAPIHeaders } from './useAPIHeaders'
 

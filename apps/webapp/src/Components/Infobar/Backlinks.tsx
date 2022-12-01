@@ -1,9 +1,7 @@
 import React from 'react'
 
-import arrowGoBackLine from '@iconify/icons-ri/arrow-go-back-line'
-
 import { capitalize } from '@mexit/core'
-import { Note, InfoWidgetWrapper, BacklinksHelp, ForwardlinksHelp } from '@mexit/shared'
+import { BacklinksHelp, ForwardlinksHelp,InfoWidgetWrapper, Note } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import Collapse from '../../Layout/Collapse'

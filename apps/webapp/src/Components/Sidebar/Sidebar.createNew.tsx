@@ -1,25 +1,23 @@
 import React, { cloneElement, useMemo, useState } from 'react'
-
-import {
-  Placement,
-  offset,
-  flip,
-  shift,
-  autoUpdate,
-  useFloating,
-  useInteractions,
-  useRole,
-  useDismiss,
-  useId,
-  useClick,
-  FloatingFocusManager
-} from '@floating-ui/react-dom-interactions'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import { Icon } from '@iconify/react'
 import { mergeRefs } from 'react-merge-refs'
 
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 import { CreateNewMenuItemWrapper, CreateNewMenuWrapper } from './Sidebar.style'
+import {
+  autoUpdate,
+  flip,
+  FloatingFocusManager,
+  offset,
+  Placement,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useId,
+  useInteractions,
+  useRole} from '@floating-ui/react-dom-interactions'
+import addCircleLine from '@iconify/icons-ri/add-circle-line'
+import { Icon } from '@iconify/react'
 
 interface Props {
   placement?: Placement

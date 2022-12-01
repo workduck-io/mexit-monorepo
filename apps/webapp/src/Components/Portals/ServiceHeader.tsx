@@ -3,15 +3,14 @@ import React from 'react'
 import { Button } from '@workduck-io/mex-components'
 
 import {
-  Title,
-  DEFAULT_LIST_ITEM_ICON,
-  getIconType,
-  ProjectIconMex,
   ActionGroupIcon,
+  DEFAULT_LIST_ITEM_ICON,
   FlexBetween,
+  getIconType,
   GroupHeader,
-  ServiceDescription
-} from '@mexit/shared'
+  ProjectIconMex,
+  ServiceDescription,
+  Title} from '@mexit/shared'
 
 type ServiceHeaderProps = {
   icon: string

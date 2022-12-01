@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { TodoStatus, PriorityType, TodoType, PriorityDataType, getNextStatus, mog } from '@mexit/core'
+import { getNextStatus,PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'

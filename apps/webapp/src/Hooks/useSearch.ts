@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ELEMENT_MENTION } from '@udecode/plate'
-
 import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, idxKey, SearchRepExtra } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
@@ -8,13 +6,13 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
 import {
   addDoc,
-  updateDoc,
   removeDoc,
   searchIndex,
+  searchIndexByNodeId,
   searchIndexWithRanking,
-  searchIndexByNodeId
-} from '../Workers/controller'
+  updateDoc} from '../Workers/controller'
 import { useLinks } from './useLinks'
+import { ELEMENT_MENTION } from '@udecode/plate'
 
 export const useSearchExtra = () => {
   const ilinks = useDataStore((s) => s.ilinks)

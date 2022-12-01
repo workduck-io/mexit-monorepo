@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { MexIconType } from './mex'
 
 const Asana: React.FC<MexIconType> = ({ height, width }) => {

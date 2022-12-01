@@ -1,12 +1,11 @@
-import { mog } from '@mexit/core'
-import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
-import { getRootProps } from '@udecode/plate-styled-components'
 import toast from 'react-hot-toast'
-import { useReadOnly } from 'slate-react'
 
 import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { TodoBase } from './Todo'
+import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
+import { getRootProps } from '@udecode/plate-styled-components'
+import { useReadOnly } from 'slate-react'
 
 const Todo = (props: any) => {
   const { attributes, children, element } = props

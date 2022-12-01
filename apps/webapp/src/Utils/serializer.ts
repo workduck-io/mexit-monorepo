@@ -5,8 +5,7 @@ import {
   ElementHighlightMetadata,
   extractMetadata,
   generateTempId,
-  mappedKeys,
-  PartialBy
+  mappedKeys
 } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'

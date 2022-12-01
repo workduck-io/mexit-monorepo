@@ -1,9 +1,8 @@
-import { Icon } from '@iconify/react'
-
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { GoogleAuthButton } from '@mexit/shared'
 
 import config from '../../config'
+import { Icon } from '@iconify/react'
 
 export interface GoogleLoginButtonProps {
   text: string

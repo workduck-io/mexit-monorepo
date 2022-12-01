@@ -1,11 +1,6 @@
-import { useState, useEffect, ReactElement } from 'react'
-
-import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
+import { ReactElement,useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { EditableProps } from 'slate-react/dist/components/editable'
-
-import { mog } from '@mexit/core'
 
 import { useGlobalListener } from '../Hooks/useGlobalListener'
 import useMultipleEditors from '../Stores/useEditorsStore'
@@ -16,6 +11,8 @@ import { useMexEditorStore } from './Hooks/useMexEditorStore'
 import { PluginOptionType } from './Plugins'
 import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
+import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
+import { EditableProps } from 'slate-react/dist/components/editable'
 
 export interface MexEditorOptions {
   editableProps?: EditableProps

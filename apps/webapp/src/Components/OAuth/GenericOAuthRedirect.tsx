@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Button } from '@workduck-io/mex-components'
@@ -7,9 +6,9 @@ import { Button } from '@workduck-io/mex-components'
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
 import { BackCard, CenteredColumn, Description, Title } from '@mexit/shared'
 
+import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'
 import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
-import config from '../../config'
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 
 const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear', 'whatsapp']

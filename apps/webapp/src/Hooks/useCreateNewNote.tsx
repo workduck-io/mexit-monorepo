@@ -11,7 +11,7 @@ import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
-import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
+import { NavigationType,ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 
 export type NewNoteOptions = {

@@ -1,4 +1,24 @@
 import {
+  convertContentToRawText,
+  ELEMENT_ILINK,
+  ELEMENT_QA_BLOCK,
+  ELEMENT_SYNC_BLOCK,
+  generateSnippetId,
+  generateTempId,
+  getSlug,
+  NODE_PATH_SPACER,
+  NodeEditorContent,
+  SEPARATOR} from '@mexit/core'
+import { ILinkNode } from '@mexit/shared'
+
+import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
+import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
+import { useSnippets } from '../../../../Hooks/useSnippets'
+import { useUpdater } from '../../../../Hooks/useUpdater'
+import { useDataStore } from '../../../../Stores/useDataStore'
+import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
+import { useOpenToast } from '../../../Toast/useOpenToast'
+import {
   deleteText,
   getNodeEntries,
   getNodeFragment,
@@ -10,32 +30,6 @@ import {
   withoutNormalizing
 } from '@udecode/plate'
 import genereateName from 'project-name-generator'
-import toast from 'react-hot-toast'
-
-import {
-  NodeEditorContent,
-  mog,
-  generateSnippetId,
-  getSlug,
-  NODE_PATH_SPACER,
-  SEPARATOR,
-  ELEMENT_ILINK,
-  convertContentToRawText,
-  ELEMENT_SYNC_BLOCK,
-  defaultContent,
-  generateTempId,
-  NODE_PATH_CHAR_LENGTH,
-  ELEMENT_QA_BLOCK
-} from '@mexit/core'
-import { ILinkNode } from '@mexit/shared'
-
-import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
-import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
-import { useSnippets } from '../../../../Hooks/useSnippets'
-import { useUpdater } from '../../../../Hooks/useUpdater'
-import { useDataStore } from '../../../../Stores/useDataStore'
-import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
-import { useOpenToast } from '../../../Toast/useOpenToast'
 
 export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()

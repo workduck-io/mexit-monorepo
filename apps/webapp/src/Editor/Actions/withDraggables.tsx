@@ -1,5 +1,11 @@
 import React from 'react'
 
+import { IS_DEV } from '@mexit/core'
+import { RelativeTime } from '@mexit/shared'
+
+import { ProfileImage } from '../../Components/User/ProfileImage'
+import useBlockStore from '../../Stores/useBlockStore'
+import { useEditorStore } from '../../Stores/useEditorStore'
 import checkboxBlankCircleLine from '@iconify/icons-radix-icons/drag-handle-dots-2'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import refreshLine from '@iconify/icons-ri/refresh-line'
@@ -27,13 +33,6 @@ import {
   withDraggables
 } from '@udecode/plate'
 import styled, { css } from 'styled-components'
-
-import { IS_DEV } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
-
-import { ProfileImage } from '../../Components/User/ProfileImage'
-import useBlockStore from '../../Stores/useBlockStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 
 const StyledTip = styled.div`
   display: flex;

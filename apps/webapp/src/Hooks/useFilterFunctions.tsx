@@ -1,4 +1,4 @@
-import { isElder, getReminderState, Link, Filter, FilterJoin, FilterValue, SearchFilterFunctions } from '@mexit/core'
+import { Filter, FilterJoin, FilterValue, getReminderState, isElder, Link, SearchFilterFunctions } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'

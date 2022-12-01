@@ -1,4 +1,15 @@
+import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
+
 import {
+  autoformatComparison,
+  autoformatEquality,
+  autoformatFraction,
+  AutoformatQueryOptions,
+  AutoformatRule,
+  autoformatSubscriptNumbers,
+  autoformatSubscriptSymbols,
+  autoformatSuperscriptNumbers,
+  autoformatSuperscriptSymbols,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -17,6 +28,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TODO_LI,
   ELEMENT_UL,
+  getParentNode,
   getPluginType,
   insertEmptyCodeBlock,
   isBlockAboveEmpty,
@@ -31,21 +43,8 @@ import {
   PlateEditor,
   toggleList,
   unwrapList,
-  AutoformatRule,
-  autoformatComparison,
-  autoformatEquality,
-  autoformatFraction,
-  AutoformatQueryOptions,
-  autoformatSubscriptNumbers,
-  autoformatSubscriptSymbols,
-  autoformatSuperscriptNumbers,
-  autoformatSuperscriptSymbols,
-  getParentNode,
   Value
 } from '@udecode/plate'
-
-import { useAuth } from '@workduck-io/dwindle'
-import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
 
 const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 

@@ -1,35 +1,31 @@
-import { ELEMENT_TODO_LI } from '@udecode/plate'
-import create from 'zustand'
-
 import {
-  TodoType,
-  TodoStatus,
-  PriorityType,
   convertContentToRawText,
-  TodoRanks,
-  TodoStatusRanks,
-  SNIPPET_PREFIX,
-  SearchFilter,
-  getAllParentIds,
-  mog,
   Filter,
   Filters,
   FilterTypeWithOptions,
-  GlobalFilterJoin
-} from '@mexit/core'
+  getAllParentIds,
+  GlobalFilterJoin,
+  mog,
+  PriorityType,
+  SNIPPET_PREFIX,
+  TodoRanks,
+  TodoStatus,
+  TodoStatusRanks,
+  TodoType} from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
+import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../Stores/useDataStore'
 import { useTodoStore } from '../Stores/useTodoStore'
-import { KanbanCard, KanbanColumn, KanbanBoard } from '../Types/Kanban'
+import { KanbanBoard,KanbanCard, KanbanColumn } from '../Types/Kanban'
 import { useTaskFilterFunctions } from './useFilterFunctions'
 import { FilterStore } from './useFilters'
 import { useLinks } from './useLinks'
 import { useMentions } from './useMentions'
 import { useNodes } from './useNodes'
 import { useSearchExtra } from './useSearch'
-import { useTags } from './useTags'
-import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
+import { ELEMENT_TODO_LI } from '@udecode/plate'
+import create from 'zustand'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType

@@ -1,21 +1,19 @@
 import React, { useMemo } from 'react'
-
-import { Icon } from '@iconify/react'
 import { useForm } from 'react-hook-form'
 import Modal from 'react-modal'
-import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { SearchFilter, getPathNum, mog, generateTaskViewId, Filter, GlobalFilterJoin } from '@mexit/core'
-import { TextAreaBlock, SearchFilterListCurrent, SearchFilterStyled, SearchFilterCount, Label } from '@mexit/shared'
+import { Filter, generateTaskViewId, getPathNum, GlobalFilterJoin } from '@mexit/core'
+import { Label, SearchFilterListCurrent, TextAreaBlock } from '@mexit/shared'
 
-import { useRouting, ROUTE_PATHS, NavigationType } from '../Hooks/useRouting'
-import { useViewStore, useTaskViews } from '../Hooks/useTaskViews'
-import { ModalHeader, ModalControls } from '../Style/Refactor'
+import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useTaskViews,useViewStore } from '../Hooks/useTaskViews'
+import { ModalControls,ModalHeader } from '../Style/Refactor'
 import { DisplayFilter } from './Filters/Filter'
 import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
+import create from 'zustand'
 
 // Prefill modal has been added to the Tree via withRefactor from useRefactor
 

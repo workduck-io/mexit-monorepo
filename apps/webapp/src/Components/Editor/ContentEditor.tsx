@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
-import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, NodeEditorContent } from '@mexit/core'
-import { StyledEditor, EditorHeader, EditorWrapper, isOnEditableElement } from '@mexit/shared'
+import { EditorHeader, EditorWrapper, isOnEditableElement,StyledEditor } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -19,7 +17,7 @@ import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { usePermissions, isReadonly, compareAccessLevel } from '../../Hooks/usePermissions'
+import { compareAccessLevel,isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useReactions } from '../../Hooks/useReactions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
@@ -37,6 +35,7 @@ import NavBreadCrumbs from '../NavBreadcrumbs'
 import Banner from './Banner'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 
 const ContentEditor = () => {
   const { toggleFocusMode } = useLayout()

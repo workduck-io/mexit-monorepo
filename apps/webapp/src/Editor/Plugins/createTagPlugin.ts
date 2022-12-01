@@ -1,6 +1,6 @@
-import { PlatePlugin, WithOverride, getPreviousNode, insertText } from '@udecode/plate'
-
 import { ELEMENT_TAG } from '@mexit/core'
+
+import { getPreviousNode, insertText,PlatePlugin, WithOverride } from '@udecode/plate'
 
 /**
  * Enables support for hypertags.

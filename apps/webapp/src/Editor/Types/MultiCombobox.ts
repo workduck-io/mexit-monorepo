@@ -1,6 +1,6 @@
-import { BaseRange } from 'slate'
 import { CategoryType, QuickLinkType } from '../constants'
 import { ComboboxItemProps, ComboboxKey, RenderFunction, SlashCommandConfig } from './Combobox'
+import { BaseRange } from 'slate'
 
 export interface ComboboxItem {
   text: string

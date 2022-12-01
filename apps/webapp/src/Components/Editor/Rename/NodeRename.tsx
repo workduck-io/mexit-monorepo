@@ -1,17 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-
-import Tippy from '@tippyjs/react'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { SEPARATOR, isClash, isMatch, isReserved, getNameFromPath, getParentFromPath, mog } from '@mexit/core'
+import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog,SEPARATOR } from '@mexit/core'
 import { Input, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
-import { useLinks } from '../../../Hooks/useLinks'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
@@ -23,7 +19,9 @@ import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
-import { Wrapper, TitleStatic } from './NodeRename.style'
+import { TitleStatic,Wrapper } from './NodeRename.style'
+import Tippy from '@tippyjs/react'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()

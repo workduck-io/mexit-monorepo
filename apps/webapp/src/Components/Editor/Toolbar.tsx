@@ -1,14 +1,6 @@
 import React from 'react'
 
-import focusLine from '@iconify/icons-ri/focus-line'
-import shareLine from '@iconify/icons-ri/share-line'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
-import { useSingleton } from '@tippyjs/react'
-
-import { ToolbarTooltip, IconButton } from '@workduck-io/mex-components'
-
-import { Loading } from '@mexit/shared'
-import { InfoTools, NodeInfo } from '@mexit/shared'
+import { Loading , NodeInfo } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
 import useToggleElements from '../../Hooks/useToggleElements'
@@ -16,8 +8,8 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
-import BookmarkButton from '../Buttons/BookmarkButton'
 import NodeRenameOnlyTitle from './Rename/NodeRename'
+import { useSingleton } from '@tippyjs/react'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)

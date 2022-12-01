@@ -1,4 +1,4 @@
-import { SEPARATOR, HASH_SEPARATOR, NodeEditorContent, mog } from '@mexit/core'
+import { HASH_SEPARATOR, mog,NodeEditorContent, SEPARATOR } from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
 import { useDataStore } from '../Stores/useDataStore'

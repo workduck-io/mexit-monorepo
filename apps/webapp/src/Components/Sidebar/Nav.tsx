@@ -1,9 +1,4 @@
 import React from 'react'
-
-import archiveLine from '@iconify/icons-ri/archive-line'
-import searchLine from '@iconify/icons-ri/search-line'
-import settings4Line from '@iconify/icons-ri/settings-4-line'
-import { useSingleton } from '@tippyjs/react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
@@ -35,6 +30,10 @@ import { showNav } from '../../Utils/nav'
 import { SidebarToggles } from '../logo'
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
+import archiveLine from '@iconify/icons-ri/archive-line'
+import searchLine from '@iconify/icons-ri/search-line'
+import settings4Line from '@iconify/icons-ri/settings-4-line'
+import { useSingleton } from '@tippyjs/react'
 
 // const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
 //   const { goTo } = useRouting()

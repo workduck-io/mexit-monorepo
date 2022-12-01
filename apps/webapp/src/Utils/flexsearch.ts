@@ -1,6 +1,6 @@
-import { GenericSearchData, PersistentData, mog, diskIndex, indexNames } from '@mexit/core'
-import { convertDataToIndexable } from '@mexit/core'
 import { Document } from '@workduck-io/flexsearch'
+
+import { convertDataToIndexable,diskIndex, GenericSearchData, indexNames, PersistentData  } from '@mexit/core'
 
 export interface CreateSearchIndexData {
   node: GenericSearchData[] | null

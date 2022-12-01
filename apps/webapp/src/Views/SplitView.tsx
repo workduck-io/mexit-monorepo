@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSpring } from 'react-spring'
 
-import { mog } from '@mexit/core'
-
 import { SplitPreviewWrapper, SplitWrapper } from '../Style/SplitView'
 
 export enum SplitType {

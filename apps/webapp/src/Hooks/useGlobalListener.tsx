@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 
-import { useFocused } from 'slate-react'
-
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useFocused } from 'slate-react'
 
 export const useGlobalListener = () => {
   const setIsUserTyping = useEditorStore((store) => store.setIsEditing)

@@ -14,7 +14,7 @@ export const useInternalLinks = () => {
   const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const getILinks = async () => {
-    return await API.namespace.getHeirarchy().catch(console.error)
+    return await (API.namespace.getHeirarchy() as any).catch(console.error)
   }
 
   const refreshILinks = async () => {
@@ -50,7 +50,7 @@ export const useInternalLinks = () => {
   const updateILinksFromAddedRemovedPaths = (addedPaths: ILink[], removedPaths: ILink[]) => {
     let currILinks = useDataStore.getState().ilinks
 
-    const intersection = removedPaths.filter((l) => addedPaths.find((rem) => l.nodeid == rem.nodeid))
+    const intersection = removedPaths.filter((l) => addedPaths.find((rem) => l.nodeid === rem.nodeid))
     intersection.forEach((path) => {
       currILinks.splice(
         currILinks.findIndex((item) => item.nodeid === path.nodeid),

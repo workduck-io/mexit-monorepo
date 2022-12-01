@@ -1,12 +1,11 @@
-import { TreeItem, TreeData } from '@atlaskit/tree'
-import { ItemId } from '@atlaskit/tree/dist/types/types'
-
-import { Contents, mog, NodeMetadata, isElder, isParent, getNameFromPath, getParentNodePath } from '@mexit/core'
+import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, NodeMetadata } from '@mexit/core'
 import { LastOpenedState, TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { filterIncompleteTodos } from './filter'
+import { TreeData, TreeItem } from '@atlaskit/tree'
+import { ItemId } from '@atlaskit/tree/dist/types/types'
 
 // * at: numner (Lower -> asc)
 export type PriorityNode = { path: string; at: number }
@@ -32,7 +31,7 @@ export const sortTree = (tree: TreeNode[], contents: Contents): TreeNode[] => {
 
   const sortedTree = tree.sort((a, b) => sorting(a, b))
 
-  tree.map((node) => {
+  tree.forEach((node) => {
     if (node.children) {
       node.children = sortTree(node.children, contents)
     }

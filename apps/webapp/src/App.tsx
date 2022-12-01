@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
+import './Stores'
 
+import React, { useMemo } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
 
 import { defaultThemes, Notification } from '@mexit/shared'
 
@@ -9,10 +9,10 @@ import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
-import './Stores'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
+import { ThemeProvider } from 'styled-components'
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useUserPreferenceStore((state) => state.theme)

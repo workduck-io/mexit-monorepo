@@ -1,12 +1,7 @@
 import { getTodosFromContent, mog } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { getContent } from '../Stores/useEditorStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
-import { PersistentData } from '../Types/Data'
 import { useApi } from './API/useNodeAPI'
 import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'

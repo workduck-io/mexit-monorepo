@@ -1,10 +1,9 @@
-import produce from 'immer'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-
 import { IDBStorage } from '@mexit/core'
 
 import { defaultShortcuts } from '../Data/defaultShortcuts'
+import produce from 'immer'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export const mergeShortcuts = (oldShortcuts, newShortcuts) => {
   const currentShortcuts = newShortcuts

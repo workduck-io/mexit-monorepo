@@ -1,25 +1,18 @@
-import React, { useMemo, useEffect } from 'react'
-
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless'
-import { moveSelection, useEditorRef } from '@udecode/plate'
+import React, { useEffect,useMemo } from 'react'
 import toast from 'react-hot-toast'
-// different import path!
-import { useFocused, useSelected } from 'slate-react'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { mog, Mentionable, InvitedUser, AccessLevel, SelfMention } from '@mexit/core'
+import { AccessLevel, InvitedUser, Mentionable, mog, SelfMention } from '@mexit/core'
 import {
+  AccessTag,
   MentionTooltip,
-  TooltipMail,
-  SMentionRoot,
-  SMention,
-  Username,
   MentionTooltipContent,
+  SMention,
+  SMentionRoot,
   TooltipAlias,
-  AccessTag
-} from '@mexit/shared'
+  TooltipMail,
+  Username} from '@mexit/shared'
 
 import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useUserService } from '../../../Hooks/API/useUserAPI'
@@ -31,6 +24,11 @@ import { useMentionStore } from '../../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../../Stores/useShareModalStore'
 import { useUserCacheStore } from '../../../Stores/useUserCacheStore'
 import { MentionElementProps } from './MentionElement.types'
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+import { moveSelection, useEditorRef } from '@udecode/plate'
+// different import path!
+import { useFocused, useSelected } from 'slate-react'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'
 

@@ -1,17 +1,11 @@
-import React, { useEffect } from 'react'
-
-import { usePlateEditorRef } from '@udecode/plate-core'
-import create from 'zustand'
-
-import { NodeEditorContent } from '@mexit/core'
-
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
-import { useRouting, ROUTE_PATHS, NavigationType } from './useRouting'
+import { useRouting } from './useRouting'
+import create from 'zustand'
 
 interface ErrorState {
   prevNode: string
