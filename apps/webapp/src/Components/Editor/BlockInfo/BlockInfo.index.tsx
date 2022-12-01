@@ -10,15 +10,15 @@ import { useFocused, useSelected } from 'slate-react'
 import { getNodeIdFromEditor } from '../../../Editor/Utils/helper'
 import { useReactionAPI } from '../../../Hooks/API/useCommentAndReactionAPI'
 import { useComments } from '../../../Hooks/useComments'
+import { useHighlights } from '../../../Hooks/useHighlights'
 import { reactionsWithCount, useReactions } from '../../../Hooks/useReactions'
+import { useAnalysisStore } from '../../../Stores/useAnalysis'
 import { useAuthStore } from '../../../Stores/useAuth'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { Source } from '../../SourceInfo'
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
-import { useAnalysisStore } from '../../../Stores/useAnalysis'
-import { useHighlights } from '../../../Hooks/useHighlights'
 
 /**
  *
@@ -180,7 +180,7 @@ export const BlockInfo = (props: any) => {
 
   // Do not wrap the blockinfo around the inline / nested elements
   return isInline || isNested ? (
-    <>{children}</>
+    children
   ) : (
     <BlockInfoBlockWrapper {...attributes}>
       {children}

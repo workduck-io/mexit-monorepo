@@ -2,7 +2,7 @@
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import { getNameFromPath,NodeEditorContent } from '@mexit/core'
+import { getNameFromPath, NodeEditorContent } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -25,7 +25,7 @@ import { useBufferStore, useEditorBuffer } from '../../../Hooks/useEditorBuffer'
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'
@@ -236,6 +236,7 @@ const EditablePreview = ({ content, editable, editorId, id: nodeId, blockId, onC
     addToBuffer(nodeId, val)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const handleBannerButtonClick = () => {}
 
   return (

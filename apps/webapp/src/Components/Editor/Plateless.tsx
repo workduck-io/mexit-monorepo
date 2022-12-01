@@ -1,4 +1,5 @@
-import {   ELEMENT_BLOCKQUOTE,
+import {
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -14,7 +15,9 @@ import {   ELEMENT_BLOCKQUOTE,
   ELEMENT_PARAGRAPH,
   ELEMENT_TAG,
   ELEMENT_TODO_LI,
-  ELEMENT_UL,mog } from '@mexit/core'
+  ELEMENT_UL,
+  mog
+} from '@mexit/core'
 import React from 'react'
 
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'

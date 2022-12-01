@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 import { ClassName, RootStyled, StyledElementProps, Value } from '@udecode/plate'
 import { IStyle } from '@uifabric/styling'

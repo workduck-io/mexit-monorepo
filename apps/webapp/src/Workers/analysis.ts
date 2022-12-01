@@ -1,10 +1,10 @@
 import { 
-  getTitleFromContent,
-  HighlightAnalysis,
-  ELEMENTS_IN_OUTLINE,
   convertContentToRawText,
+  ELEMENTS_IN_OUTLINE,
   getTagsFromContent,
+  getTitleFromContent,
   getTodosFromContent,
+  HighlightAnalysis,
   HIGHLIGHTED_ELEMENTS,
   LIST_ELEMENTS,
   NodeEditorContent,

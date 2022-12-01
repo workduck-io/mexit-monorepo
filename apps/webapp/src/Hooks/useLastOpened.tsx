@@ -1,8 +1,8 @@
+import { getInitialNode, NodeType } from '@mexit/core'
 import { LastOpenedData, LastOpenedState } from '@mexit/shared'
 import { debounce } from 'lodash'
 import { useCallback } from 'react'
 
-import { getInitialNode, NodeType } from '../../../../libs/core/src'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useLinks } from './useLinks'
 import { useNodes } from './useNodes'

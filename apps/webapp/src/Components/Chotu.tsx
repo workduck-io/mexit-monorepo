@@ -10,7 +10,7 @@ import {
 } from '@mexit/core'
 import { useAuth } from '@workduck-io/dwindle'
 import { connectToParent } from 'penpal'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useInternalLinks } from '../Hooks/useInternalLinks'
 import { useReminders } from '../Hooks/useReminders'

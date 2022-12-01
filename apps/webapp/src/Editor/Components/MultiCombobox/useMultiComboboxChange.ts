@@ -55,13 +55,15 @@ export const getCommandExtended = (search: string, keys: Record<string, Combobox
         const text = parsed ? toLocaleString(parsed.time) : undefined
         if (searchTerm !== '')
           return { ...ct, text: text ?? `Set Reminder: ${searchTerm}`, search, desc: parsed?.textWithoutTime }
+
+        return {}
       } else {
         throw new Error('Not implemented')
       }
     })
 
   const isExtended = extendedKeys.some((ct) => {
-    return search.startsWith(ct.value)
+    return search.startsWith(ct?.value)
   })
 
   return { isExtended, extendedCommands }

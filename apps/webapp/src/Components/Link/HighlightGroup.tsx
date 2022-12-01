@@ -4,7 +4,6 @@ import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import markPenLine from '@iconify/icons-ri/mark-pen-line'
 import { Icon } from '@iconify/react'
-
 import { Highlight, Highlights, Link } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
@@ -15,7 +14,6 @@ import {
   HighlightText,
   SingleHighlightWrapper
 } from '@mexit/shared'
-import { groupBy } from 'lodash'
 import React from 'react'
 
 import { useHighlights } from '../../Hooks/useHighlights'

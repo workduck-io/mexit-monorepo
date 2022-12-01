@@ -1,7 +1,6 @@
+import { checkIfUntitledDraftNode, getParentNodePath, HighlightAnalysis, TodoType } from '@mexit/core'
 import { useEffect } from 'react'
 import create from 'zustand'
-
-import { TodoType, checkIfUntitledDraftNode, getParentNodePath, mog, HighlightAnalysis } from '@mexit/core'
 
 import { useBufferStore, useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { useLinks } from '../Hooks/useLinks'

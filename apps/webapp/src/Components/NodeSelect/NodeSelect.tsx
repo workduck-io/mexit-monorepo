@@ -641,7 +641,7 @@ export function isNew(input: string, items: Array<QuickLink>): boolean {
 }
 
 export const isNewILink = (input: string, items: Array<ILink>): boolean => {
-  return items.filter((item) => item.path == input).length === 0
+  return items.filter((item) => item.path === input).length === 0
 }
 
 export default NodeSelect

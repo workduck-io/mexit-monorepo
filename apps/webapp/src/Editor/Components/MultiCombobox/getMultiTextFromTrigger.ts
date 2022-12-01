@@ -68,7 +68,7 @@ const getTextFromTriggers = (
 
     // Check within keys
     if (!isTrigger) {
-      Object.values(keys).map((comboType) => {
+      Object.values(keys).forEach((comboType) => {
         const data = getTriggeredData(editor, comboType, setIsTrigger, false)
         if (data) {
           triggerSelection = data

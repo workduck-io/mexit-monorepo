@@ -169,7 +169,7 @@ const searchWorker: SearchWorker = {
       const combinedResults = new Array<GenericSearchResult>()
       results.forEach(function (item) {
         const existing = combinedResults.filter(function (v, i) {
-          return v.blockId == item.blockId
+          return v.blockId === item.blockId
         })
         if (existing.length) {
           const existingIndex = combinedResults.indexOf(existing[0])

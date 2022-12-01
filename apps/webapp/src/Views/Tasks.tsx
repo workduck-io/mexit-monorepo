@@ -247,6 +247,7 @@ const Tasks = () => {
         let prevCard = undefined
         while (!prevCard) {
           const prevColumn = board.columns.find(
+            // eslint-disable-next-line no-loop-func
             (column) => column.id === getPrevStatus(selectedColumnStatus)
           ) as KanbanBoardColumn
           if (!prevColumn || prevColumn.id === selectedColumn.id) break
@@ -265,6 +266,7 @@ const Tasks = () => {
         let nextCard = undefined
         while (!nextCard) {
           const nextColumn = board.columns.find(
+            // eslint-disable-next-line no-loop-func
             (column) => column.id === getNextStatus(selectedColumnStatus)
           ) as KanbanBoardColumn
           if (!nextColumn || nextColumn.id === selectedColumn.id) break

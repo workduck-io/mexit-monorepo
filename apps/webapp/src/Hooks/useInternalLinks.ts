@@ -14,7 +14,7 @@ export const useInternalLinks = () => {
   const checkValidILink = useDataStore((store) => store.checkValidILink)
 
   const getILinks = async () => {
-    return await API.namespace.getHeirarchy().catch(console.error)
+    return await (API.namespace.getHeirarchy() as any).catch(console.error)
   }
 
   const refreshILinks = async () => {

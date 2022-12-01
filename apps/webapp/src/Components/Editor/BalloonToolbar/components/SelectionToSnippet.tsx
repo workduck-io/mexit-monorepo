@@ -1,6 +1,6 @@
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { Icon } from '@iconify/react'
-import { BalloonToolbarInputWrapper, Input,useBalloonToolbarStore } from '@mexit/shared'
+import { BalloonToolbarInputWrapper, Input, useBalloonToolbarStore } from '@mexit/shared'
 import { ToolbarButton, ToolbarButtonProps } from '@udecode/plate'
 import { getPreventDefaultHandler, usePlateEditorState } from '@udecode/plate-core'
 import React, { useEffect } from 'react'
@@ -11,7 +11,7 @@ import { useTransform } from './useTransform'
  * Toolbar button to Create new note from editor selection
  */
 export const SelectionToSnippet = ({ ...props }: ToolbarButtonProps) => {
-  const editor = usePlateEditorState()!
+  const editor = usePlateEditorState()
   const { isConvertable } = useTransform()
   const setToolbarState = useBalloonToolbarStore((s) => s.setToolbarState)
 
@@ -31,7 +31,7 @@ export const SelectionToSnippet = ({ ...props }: ToolbarButtonProps) => {
 }
 
 export const SelectionToSnippetInput = () => {
-  const editor = usePlateEditorState()!
+  const editor = usePlateEditorState()
   const setOpen = useBalloonToolbarStore((s) => s.setOpen)
   const { selectionToSnippet, isConvertable } = useTransform()
 
@@ -72,4 +72,3 @@ export const SelectionToSnippetInput = () => {
     </BalloonToolbarInputWrapper>
   )
 }
-
