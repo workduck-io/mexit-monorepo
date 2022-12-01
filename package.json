@@ -5,8 +5,7 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test",
-    "bump-version": "node version.js"
+    "test": "nx test"
   },
   "private": true,
   "workspaces": {
