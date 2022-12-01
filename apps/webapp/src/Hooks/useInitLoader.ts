@@ -15,10 +15,11 @@ import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
+import { useHighlightSync } from './useHighlights'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
+import { useSmartCapture } from './useSmartCapture'
 import { useURLsAPI } from './useURLs'
-import { useHighlightSync } from './useHighlights'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
@@ -35,7 +36,7 @@ export const useInitLoader = () => {
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
-
+  const { getAllSmartCaptures } = useSmartCapture()
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
@@ -48,6 +49,7 @@ export const useInitLoader = () => {
         getAllSnippetsByWorkspace(),
         getAllViews(),
         getAllLinks(),
+        getAllSmartCaptures(),
         fetchAllHighlights()
       ])
     } catch (err) {

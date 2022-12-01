@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { connectToParent } from 'penpal'
 
@@ -26,8 +26,9 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
 
 export default function Chotu() {
@@ -56,6 +57,7 @@ export default function Chotu() {
   const [first, setFirst] = useState(true)
   const { updateSingleILink, updateMultipleILinks } = useInternalLinks()
   const links = useLinkStore((state) => state.links)
+  const smartCapture = useSmartCaptureStore((store) => store.config)
   const { queryIndex } = useSearch()
   const { uploadImageToS3 } = useAuth()
 
@@ -173,6 +175,11 @@ export default function Chotu() {
 
     parent.bootLinks(links)
   }, [parent, links])
+
+  useEffect(() => {
+    if (!parent) return
+    parent.bootSmartCapture(smartCapture)
+  }, [parent, smartCapture])
 
   useEffect(() => {
     if (!parent) return

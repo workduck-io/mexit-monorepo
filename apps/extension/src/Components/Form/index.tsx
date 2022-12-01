@@ -10,7 +10,7 @@ import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { FormBuilder } from '../../Types/Form'
-import { formToBlocks } from '../../Utils/getProfileData'
+import { formToBlocks } from '../../Utils/evalSmartCapture'
 import { Title } from '../Action/styled'
 import { Dialog } from '../Floating/Dialog'
 import NoteSelector from '../Floating/NoteSelector'
@@ -93,12 +93,12 @@ const Form: React.FC<FormProps> = ({ page, config }) => {
       <StyledForm id="wd-mex-smart-capture-form" onSubmit={handleSubmit(onSubmit)}>
         <UserPreferedFields
           page={page}
-          fields={config.filter((i) => !exludedFields?.find((f) => f == i.id))}
+          fields={config?.filter((i) => !exludedFields?.find((f) => f == i.id))}
           register={register}
         />
         <ExludedFormFields
           page={page}
-          fields={config.filter((i) => exludedFields?.find((f) => f === i.id))}
+          fields={config?.filter((i) => exludedFields?.find((f) => f === i.id))}
           register={register}
         />
       </StyledForm>

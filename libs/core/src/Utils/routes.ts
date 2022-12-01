@@ -37,6 +37,7 @@ export const BASE_URLS = {
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
+  smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
   comment: `https://http-staging.workduck.io/comment`,
   reaction: `https://http-staging.workduck.io/reaction`,
   highlight: `https://http-test.workduck.io/highlight`,
@@ -98,14 +99,15 @@ export const apiURLs = {
     deleteSpecificVersionOfSnippet: (uid: string, version?: number) =>
       `${BASE_URLS.snippet}/${uid}${version ? `?version=${version}` : ''}`
   },
-
+  smartcapture: {
+    public: `${BASE_URLS.smartcapture}/all/public`
+  },
   loch: {
     getAllServices: `${BASE_URLS.loch}/all`,
     getConnectedServices: `${BASE_URLS.loch}`,
     connectToService: `${BASE_URLS.loch}`,
     updateParentNoteOfService: `${BASE_URLS.loch}`
   },
-
   share: {
     sharedNode: `${BASE_URLS.share}`,
     allSharedNodes: `${BASE_URLS.share}/all`,
