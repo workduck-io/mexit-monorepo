@@ -1,6 +1,8 @@
-import { Icon } from '@iconify/react'
-import { SnippetCardHeader, SnippetCardWrapper } from '@mexit/shared'
 import React from 'react'
+
+import { SnippetCardHeader, SnippetCardWrapper } from '@mexit/shared'
+
+import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
 const GenericContent = styled.div`

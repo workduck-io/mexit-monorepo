@@ -1,4 +1,5 @@
 import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
+
 import {
   autoformatComparison,
   autoformatEquality,

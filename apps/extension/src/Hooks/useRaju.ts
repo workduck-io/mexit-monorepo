@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import {
   AddHighlightFn,
   Contents,
@@ -19,9 +21,6 @@ import {
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
-import { addMinutes } from 'date-fns'
-import { connectToChild, Methods } from 'penpal'
-import { useEffect } from 'react'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -38,6 +37,8 @@ import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import { useSnippets } from './useSnippets'
+import { addMinutes } from 'date-fns'
+import { connectToChild, Methods } from 'penpal'
 
 export interface ParentMethods {
   SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>

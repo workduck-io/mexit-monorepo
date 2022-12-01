@@ -1,4 +1,5 @@
 import { QuickLinkType } from '@mexit/core'
+
 import { PlateEditor, RenderFunction } from '@udecode/plate'
 
 export enum CustomElements {

@@ -10,7 +10,6 @@ import {
   ListItemType,
   QuickLinkType,
   sortByCreated} from '@mexit/core'
-import fuzzysort from 'fuzzysort'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
@@ -20,6 +19,7 @@ import { useAuthStore } from './useAuth'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
+import fuzzysort from 'fuzzysort'
 
 export const useSearch = () => {
   const { dispatch } = useRaju()

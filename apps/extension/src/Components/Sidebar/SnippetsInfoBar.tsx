@@ -1,4 +1,8 @@
-import searchLine from '@iconify/icons-ri/search-line'
+import React, { useEffect,useRef, useState } from 'react'
+import toast from 'react-hot-toast'
+
+import { Infobox } from '@workduck-io/mex-components'
+
 import {
   convertToCopySnippet,
   defaultCopyConverter,
@@ -16,11 +20,6 @@ import {
   SidebarListFilterWrapper,
   SnippetCards,
   SnippetSidebarHelp} from '@mexit/shared'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import { Infobox } from '@workduck-io/mex-components'
-import { debounce } from 'lodash'
-import React, { useEffect,useRef, useState } from 'react'
-import toast from 'react-hot-toast'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -30,6 +29,9 @@ import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import SnippetCard from './SnippetCard'
+import searchLine from '@iconify/icons-ri/search-line'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { debounce } from 'lodash'
 
 export const SnippetsInfoBar = () => {
   const [search, setSearch] = useState('')

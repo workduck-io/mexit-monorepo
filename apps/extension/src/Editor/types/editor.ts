@@ -1,8 +1,8 @@
-import { PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
 import { ReactElement } from 'react'
-import type { EditableProps } from 'slate-react/dist/components/editable'
 
 import { ComboboxConfig, CustomElements } from '../components/ComboBox/types'
+import { PlatePlugin, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
+import type { EditableProps } from 'slate-react/dist/components/editable'
 
 export type MexEditorValue = Array<any>
 

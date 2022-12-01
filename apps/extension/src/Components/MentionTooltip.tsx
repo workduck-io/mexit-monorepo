@@ -1,6 +1,7 @@
+import React from 'react'
+
 import { AccessLevel,InvitedUser, Mentionable, SelfMention } from '@mexit/core'
 import { AccessTag,MentionTooltip, MentionTooltipContent, TooltipAlias, TooltipMail } from '@mexit/shared'
-import React from 'react'
 
 import { ProfileImage } from './ProfileImage'
 

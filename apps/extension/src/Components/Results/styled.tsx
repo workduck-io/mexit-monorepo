@@ -1,4 +1,5 @@
 import { PrimaryText, Scroll, ScrollStyles } from '@mexit/shared'
+
 import styled, { css } from 'styled-components'
 
 export const StyledResults = styled.div<{ isScreenshot?: boolean }>`

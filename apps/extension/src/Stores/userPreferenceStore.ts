@@ -1,8 +1,8 @@
 import { preferenceStoreConstructor, UserPreferenceStore } from '@mexit/shared'
-import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
+import create from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 export const USER_PREF_STORE_KEY = 'mex-user-preference-store'
 

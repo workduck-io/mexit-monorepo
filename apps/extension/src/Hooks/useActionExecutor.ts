@@ -1,4 +1,6 @@
 /* eslint-disable no-case-declarations */
+import toast from 'react-hot-toast'
+
 import {
   ActionType,
   CategoryType,
@@ -13,7 +15,6 @@ import {
   SingleNamespace
 } from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
-import toast from 'react-hot-toast'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'

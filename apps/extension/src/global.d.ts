@@ -1,5 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 import { ThemeType } from '@mexit/shared'
+
 import Chrome from 'chrome'
 
 declare module 'styled-components' {

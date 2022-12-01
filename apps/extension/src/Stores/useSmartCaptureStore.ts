@@ -1,4 +1,5 @@
 import { SmartCaptureStore, smartCaptureStoreConstructor } from '@mexit/core'
+
 import create from 'zustand'
 import { devtools } from 'zustand/middleware'
 

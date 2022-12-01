@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 import {
   defaultContent,
   extractMetadata,
@@ -9,7 +11,6 @@ import {
   SEPARATOR,
   SingleNamespace
 } from '@mexit/core'
-import toast from 'react-hot-toast'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'

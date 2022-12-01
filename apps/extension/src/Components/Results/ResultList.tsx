@@ -1,8 +1,8 @@
-import { ActionType, QuickLinkType } from '@mexit/core'
-import { PrimaryText } from '@mexit/shared'
-import { findIndex, groupBy } from 'lodash'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useVirtual } from 'react-virtual'
+
+import { ActionType, QuickLinkType } from '@mexit/core'
+import { PrimaryText } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -11,6 +11,7 @@ import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Action from '../Action'
 import { List, ListItem, Subtitle } from './styled'
+import { findIndex, groupBy } from 'lodash'
 
 const ResultList = ({ results }: { results: Array<any> }) => {
   const parentRef = useRef(null)
@@ -148,9 +149,9 @@ const ResultList = ({ results }: { results: Array<any> }) => {
                   <span>{item.category}</span>
                   {item.category === QuickLinkType.search && (
                     <>
-                      <span>&emsp;"</span>
+                      <span>&emsp;&quot;</span>
                       <PrimaryText className="query">{input}</PrimaryText>
-                      <span>"&emsp;with</span>
+                      <span>&quot;&emsp;with</span>
                     </>
                   )}
                 </Subtitle>

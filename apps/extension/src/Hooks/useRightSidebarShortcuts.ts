@@ -1,5 +1,6 @@
-import { ExtInfobarMode } from '@mexit/shared'
 import { useCallback, useEffect } from 'react'
+
+import { ExtInfobarMode } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useRightSidebarItems } from '../Stores/useRightSidebarItems'

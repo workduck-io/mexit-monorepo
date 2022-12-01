@@ -1,4 +1,5 @@
 import { ScrollStyles } from '@mexit/shared'
+
 import styled, { css } from 'styled-components'
 
 export const NoteItem = styled.div<{ selected?: boolean }>`

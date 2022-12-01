@@ -1,5 +1,6 @@
-import { ExtInfobarMode, InfoBarWrapper, Tabs } from '@mexit/shared'
 import React, { useMemo } from 'react'
+
+import { ExtInfobarMode, InfoBarWrapper, Tabs } from '@mexit/shared'
 
 import useRaju from '../../Hooks/useRaju'
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'

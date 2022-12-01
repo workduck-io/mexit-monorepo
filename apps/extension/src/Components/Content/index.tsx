@@ -1,6 +1,6 @@
-import { defaultContent, ELEMENT_TAG, mog, NodeEditorContent, QuickLinkType } from '@mexit/core'
-import { createPlateEditor, createPlateUI } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
+
+import { defaultContent, ELEMENT_TAG, NodeEditorContent, QuickLinkType } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -12,6 +12,7 @@ import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { getDeserializeSelectionToNodes } from '../../Utils/deserialize'
 import Results from '../Results'
 import { StyledContent } from './styled'
+import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
 export default function Content() {
   const { activeIndex } = useSputlitContext()

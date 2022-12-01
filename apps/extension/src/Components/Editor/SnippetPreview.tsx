@@ -1,8 +1,7 @@
-import { Placement } from '@floating-ui/react-dom-interactions'
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import magicLine from '@iconify/icons-ri/magic-line'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { Icon } from '@iconify/react'
+import React, { useMemo } from 'react'
+
+import { Button, MexIcon } from '@workduck-io/mex-components'
+
 import {
   EditorPreviewControls,
   EditorPreviewNoteName,
@@ -11,14 +10,17 @@ import {
   PreviewActionHeader,
   Tooltip
 } from '@mexit/shared'
-import { Button, MexIcon } from '@workduck-io/mex-components'
-import React, { useMemo } from 'react'
-import { useTheme } from 'styled-components'
 
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
+import { Placement } from '@floating-ui/react-dom-interactions'
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import magicLine from '@iconify/icons-ri/magic-line'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
 
 export interface SnippetPreviewProps {
   snippetId: string

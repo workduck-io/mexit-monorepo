@@ -1,5 +1,7 @@
 // build/hmr/initReloadServer.ts
 import chokidar from "chokidar";
+// build/hmr/utils.ts
+import { clearTimeout } from "timers";
 import { WebSocketServer } from "ws";
 
 // build/log.ts
@@ -65,9 +67,6 @@ function send(message) {
 function receive(message) {
   return JSON.parse(message);
 }
-
-// build/hmr/utils.ts
-import { clearTimeout } from "timers";
 function debounce(callback, delay) {
   let timer;
   return function(...args) {

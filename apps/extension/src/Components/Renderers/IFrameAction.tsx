@@ -1,10 +1,11 @@
+import React, { useEffect,useRef  } from 'react'
+
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
-import React, { useEffect,useRef  } from 'react'
-import styled from 'styled-components'
 
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+import styled from 'styled-components'
 
 const Iframe = styled.iframe`
   border: none;

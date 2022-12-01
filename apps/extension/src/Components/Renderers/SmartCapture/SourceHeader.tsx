@@ -1,7 +1,9 @@
+import React from 'react'
+
+import { Button } from '@workduck-io/mex-components'
+
 import { getFavicon } from '@mexit/core'
 import { Label, ProjectIconMex, ToggleButton } from '@mexit/shared'
-import { Button } from '@workduck-io/mex-components'
-import React from 'react'
 
 import { useSputlitStore } from '../../../Stores/useSputlitStore'
 import { Title } from '../../Action/styled'

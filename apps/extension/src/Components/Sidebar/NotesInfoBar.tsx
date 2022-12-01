@@ -1,4 +1,7 @@
-import searchLine from '@iconify/icons-ri/search-line'
+import React, { useEffect, useRef, useState } from 'react'
+
+import { Infobox } from '@workduck-io/mex-components'
+
 import { BASE_TASKS_PATH, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
@@ -9,16 +12,15 @@ import {
   SidebarListFilter,
   SidebarListFilterWrapper,
   SnippetCards} from '@mexit/shared'
-import { Infobox } from '@workduck-io/mex-components'
-import { debounce } from 'lodash'
-import React, { useEffect, useRef, useState } from 'react'
-import { useTheme } from 'styled-components'
 
 import { useLinks } from '../../Hooks/useLinks'
 import useRaju from '../../Hooks/useRaju'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { getElementById } from '../../Utils/cs-utils'
 import { NodeCard } from './NodeCard'
+import searchLine from '@iconify/icons-ri/search-line'
+import { debounce } from 'lodash'
+import { useTheme } from 'styled-components'
 
 export const NotesInfoBar = () => {
   const [search, setSearch] = useState('')

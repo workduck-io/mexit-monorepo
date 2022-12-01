@@ -1,10 +1,11 @@
-import { EditorStyles, FadeContainer, TodoContainer , useEditorChange } from '@mexit/shared'
-import { Plate, PlatePlugin } from '@udecode/plate'
 import React, { useEffect, useMemo } from 'react'
-import styled from 'styled-components'
+
+import { EditorStyles, FadeContainer, TodoContainer , useEditorChange } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 import { editorPreviewComponents } from './Editor/EditorPreviewComponents'
+import { Plate, PlatePlugin } from '@udecode/plate'
+import styled from 'styled-components'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any

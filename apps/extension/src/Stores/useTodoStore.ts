@@ -8,11 +8,11 @@ import {
   TodoStatus,
   TodosType,
   TodoType} from '@mexit/core'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 import { useReminderStore } from './useReminderStore'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 const createTodo = (
   nodeid: string,

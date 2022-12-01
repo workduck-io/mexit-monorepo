@@ -14,12 +14,12 @@ import {
   SnoozeControl,
   upcoming
 } from '@mexit/core'
-import { add, sub } from 'date-fns'
-import { uniqBy } from 'lodash'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useLinks } from './useLinks'
+import { add, sub } from 'date-fns'
+import { uniqBy } from 'lodash'
 
 export const useReminders = () => {
   const reminders = useReminderStore((state) => state.reminders)

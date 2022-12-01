@@ -1,10 +1,10 @@
-import { nanoid } from 'nanoid'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import { useTabCaptureStore } from '../Hooks/useTabCaptures'
 import { Tab, TabGroup } from '../Types/Tabs'
+import { nanoid } from 'nanoid'
 
 interface TabCaptureFormDetails {
   name: string

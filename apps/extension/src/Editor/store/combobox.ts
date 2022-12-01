@@ -1,9 +1,8 @@
-import { UseComboboxReturnValue } from 'downshift'
-import { BaseRange, Point, Range } from 'slate'
-
 import { ComboboxKey, IComboboxItem } from '../components/ComboBox/types'
 import { ComboboxType } from '../types/editor'
 import { createStore, setStoreValue } from '../utils/store.utils'
+import { UseComboboxReturnValue } from 'downshift'
+import { BaseRange, Point, Range } from 'slate'
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 

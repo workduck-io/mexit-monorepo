@@ -1,9 +1,9 @@
 import { AccessLevel, InvitedUser, Mentionable, mog,ShareContext, UserAccessTable } from '@mexit/core'
 import { mergeAccess } from '@mexit/shared'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface MentionStore {
   invitedUsers: InvitedUser[]

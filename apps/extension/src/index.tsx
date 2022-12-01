@@ -1,6 +1,6 @@
-import { defaultThemes, Notification } from '@mexit/shared'
 import React, { useMemo } from 'react'
-import { ThemeProvider } from 'styled-components'
+
+import { defaultThemes, Notification } from '@mexit/shared'
 
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
@@ -15,6 +15,7 @@ import { HighlighterProvider } from './Hooks/useHighlighterContext'
 import { SputlitProvider } from './Hooks/useSputlitContext'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import { GlobalStyle } from './Styles/GlobalStyle'
+import { ThemeProvider } from 'styled-components'
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useUserPreferenceStore((state) => state.theme)

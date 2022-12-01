@@ -1,8 +1,8 @@
 import { UserCacheState, userCacheStoreConstructor } from '@mexit/core'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export const useUserCacheStore = create<UserCacheState>(
   persist(userCacheStoreConstructor, {

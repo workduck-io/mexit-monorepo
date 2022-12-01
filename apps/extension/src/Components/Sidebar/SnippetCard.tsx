@@ -1,6 +1,7 @@
-import magicLine from '@iconify/icons-ri/magic-line'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import fileCopyLine from '@iconify-icons/ri/file-copy-line'
+import React, { useEffect } from 'react'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
 import { Snippet } from '@mexit/core'
 import {
   GenericFlex,
@@ -10,13 +11,14 @@ import {
   SnippetCardFooter,
   SnippetCardWrapper,
   SnippetContentPreview} from '@mexit/shared'
-import { tinykeys } from '@workduck-io/tinykeys'
-import React, { useEffect } from 'react'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import SnippetPreview from '../Editor/SnippetPreview'
 import { NodeCardHeader } from './NodeCard'
+import magicLine from '@iconify/icons-ri/magic-line'
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 
 interface SnippetCardProps {
   snippet: Snippet

@@ -1,14 +1,15 @@
+import React, { useState } from 'react'
+
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { ILinkElementProps,SILink, SILinkRoot } from '@mexit/shared'
-import { moveSelection, useEditorRef } from '@udecode/plate'
-import React, { useState } from 'react'
-import { useFocused, useReadOnly,useSelected } from 'slate-react'
 
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
 import { useLinks } from '../../../../Hooks/useLinks'
 import { getBlock } from '../../../../Utils/parseData'
 import { useHotkeys } from '../../../hooks/useHotKeys'
 import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
+import { moveSelection, useEditorRef } from '@udecode/plate'
+import { useFocused, useReadOnly,useSelected } from 'slate-react'
 
 export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()
