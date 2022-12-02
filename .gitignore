@@ -63,5 +63,4 @@ apps/extension/public/manifest.json
 apps/extension/build/hmr/*.js
 apps/extension/build/hmr/injections/*.js
 
-**/.eslintcache/
-.eslintcache/
+**/.eslintcache
