@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Controller,useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { getPlateEditorRef } from '@udecode/plate'
@@ -7,7 +7,7 @@ import { getPlateEditorRef } from '@udecode/plate'
 import { LoadingButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermission, DefaultPermissionValue, mog, permissionOptions } from '@mexit/core'
-import { ButtonFields,Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
+import { ButtonFields, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -16,12 +16,12 @@ import { useMentions } from '../../Hooks/useMentions'
 import { usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { InviteModalData,useShareModalStore } from '../../Stores/useShareModalStore'
+import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalHeader } from '../../Style/Refactor'
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 
-import { InviteFormFieldset,InviteFormWrapper, InviteWrapper } from './styles'
+import { InviteFormFieldset, InviteFormWrapper, InviteWrapper } from './styles'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
@@ -74,27 +74,27 @@ export const InviteModalContent = () => {
       const details = await getUserDetails(data.email)
       mog('data', { data, details, node })
 
-      if (details.userID !== undefined) {
+      if (details.userId !== undefined) {
         // Give permission here
-        if (details.userID === currentUserDetails.userID) {
+        if (details.userId === currentUserDetails.userID) {
           toast("Can't Invite Yourself")
           closeModal()
           return
         }
         if (data?.access?.value !== 'NONE') {
-          const resp = await grantUsersPermission(node.nodeid, [details.userID], access)
+          const resp = await grantUsersPermission(node.nodeid, [details.userId], access)
           mog('UserPermission given', { details, resp })
-          addMentionable(details.alias, data.email, details.userID, details.name, {
+          addMentionable(details.alias, data.email, details.userId, details.name, {
             context,
             id: node.nodeid,
             access
           })
         } else {
           // Case for inserting mention without sharing
-          addMentionable(details.alias, data.email, details.userID, details.name)
+          addMentionable(details.alias, data.email, details.userId, details.name)
         }
         if (!sModalData.userid) {
-          replaceUserMention(editor, data.alias, details.userID)
+          replaceUserMention(editor, data.alias, details.userId)
         }
         if (data?.access?.value !== 'NONE') {
           toast(`Shared with: ${data.email}`)

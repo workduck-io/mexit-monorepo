@@ -3,19 +3,19 @@ import React, { useMemo } from 'react'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import repeatLine from '@iconify/icons-ri/repeat-line'
 
-import { Button,IconButton } from '@workduck-io/mex-components'
+import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { getAccessValue,useMentions } from '../../Hooks/useMentions'
+import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalControls,ModalHeader } from '../../Style/Refactor'
+import { ModalControls, ModalHeader } from '../../Style/Refactor'
 
 import {
   ShareAlias,
@@ -27,7 +27,8 @@ import {
   ShareRow,
   ShareRowAction,
   ShareRowActionsWrapper,
-  ShareRowHeading} from './styles'
+  ShareRowHeading
+} from './styles'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
@@ -148,7 +149,7 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
     const dataUser = sharedIUsers.find((u) => u.email === user.email)
     const access = changedUser ? changedUser.access[node.nodeid] : dataUser.access[node.nodeid] ?? undefined
     if (uDetails && access) {
-      const res = await grantUsersPermission(node.nodeid, [uDetails.userID], access)
+      const res = await grantUsersPermission(node.nodeid, [uDetails.userId], access)
       mog('ReinviteUser', { res })
     }
   }
