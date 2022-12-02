@@ -43,10 +43,17 @@
               ["^\\u0000"],
               // Packages. `react` related packages come first.
               ["^react"],
+
+              // Third party @ packages first
+              ["^@?\\w"],
               // Internal packages.
               ["^(@workduck-io)(/.*|$)"],
               // Internal packages.
-              ["^(@mexit)(/.*|$)"]
+              ["^(@mexit)(/.*|$)"],
+              // Parent imports. Put `..` last.
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Other relative imports. Put same-folder imports and `.` last.
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
             ]
           }
         ],
