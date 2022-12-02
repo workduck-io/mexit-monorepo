@@ -1,7 +1,7 @@
 {
   "name": "mexit",
   "description": "Mexit - Augment your thoughts, Automate your tasks",
-  "version": "0.18.11",
+  "version": "0.18.12",
   "private": true,
   "type": "module",
   "scripts": {
