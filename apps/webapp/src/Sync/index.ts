@@ -53,6 +53,11 @@ const syncStores = () => {
       sync: [{ field: 'authenticated' }, { field: 'userDetails' }, { field: 'workspaceDetails' }]
     })
 
+    syncStoreState(useDescriptionStore, {
+      name: BroadcastSyncedChannel.DESCRIPTIONS,
+      sync: [{ field: 'descriptions' }]
+    })
+
     syncStoreState(useSnippetStore, {
       name: BroadcastSyncedChannel.SNIPPETS,
       sync: [{ field: 'snippets' }, {}]

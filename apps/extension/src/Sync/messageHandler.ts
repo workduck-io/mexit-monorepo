@@ -48,8 +48,8 @@ export const messageHandler = (event: MessageType) => {
   const store: StoreApi<any> = getStore(event.msgId)
 
   if (store) {
-    mog('Store', { store, event })
     Object.entries(event.state)?.map(([key, value]: [key: string, value: any]) => {
+      mog(key, { value })
       store.setState((prev) => ({
         ...prev,
         [key]: value.state
