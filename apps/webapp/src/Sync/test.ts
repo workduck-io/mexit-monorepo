@@ -1,6 +1,8 @@
-import { BroadcastSyncedChannel } from '../Types/Sync'
-import { isSupported, syncStoreState } from './synced'
 import create from 'zustand'
+
+import { BroadcastSyncedChannel } from '@mexit/core'
+
+import { syncStoreState } from './synced'
 
 export const testStoreSync = () => {
   type ExtensionStore = {
@@ -17,7 +19,10 @@ export const testStoreSync = () => {
   // case a tab and a iframe don't know about their state updates, we
   // create a channel for each other to inform of their changes
   // progressive enhancement check.
-  if (isSupported()) {
-    syncStoreState('updates', useExtensionStore, { key: BroadcastSyncedChannel.TEST_BROADCASTING })
+  if ('BroadcastChannel' in globalThis) {
+    syncStoreState(useExtensionStore, {
+      name: BroadcastSyncedChannel.TEST_BROADCASTING,
+      sync: [{ field: 'updates' }]
+    })
   }
 }

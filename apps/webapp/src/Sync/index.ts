@@ -9,6 +9,7 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+
 import { syncStoreState } from './synced'
 
 // This is required for event driven messaging, as the tabs or in our
@@ -60,7 +61,7 @@ const syncStores = () => {
 
     syncStoreState(useSnippetStore, {
       name: BroadcastSyncedChannel.SNIPPETS,
-      sync: [{ field: 'snippets' }, {}]
+      sync: [{ field: 'snippets' }]
     })
 
     syncStoreState(useReminderStore, {

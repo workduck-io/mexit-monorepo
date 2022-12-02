@@ -1,5 +1,6 @@
-import { BroadcastSyncedChannel, mog } from '@mexit/core'
 import { State, StoreApi } from 'zustand'
+
+import { BroadcastSyncedChannel, mog } from '@mexit/core'
 
 import { childIframe } from './iframeBroadcast'
 import getStore from './storeChannel'
@@ -44,7 +45,6 @@ const onStateChange = (message: MessageType) => {
 
 export const messageHandler = (event: MessageType) => {
   UnhandledRequestsByExtension?.add(event.msgId)
-  console.log('[Extension]: ', { event })
   const store: StoreApi<any> = getStore(event.msgId)
 
   if (store) {

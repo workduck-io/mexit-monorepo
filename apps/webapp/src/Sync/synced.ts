@@ -1,6 +1,7 @@
-import { BroadcastSyncedChannel, PartialSyncStateType, SyncField, SyncMessageType } from '../Types/Sync'
 import { isEmpty, isEqual } from 'lodash'
 import type { State, StoreApi } from 'zustand'
+
+import { BroadcastSyncedChannel, PartialSyncStateType, SyncField, SyncMessageType } from '@mexit/core'
 
 if (!globalThis.__MEX_SYNCED_CHANNELS_) globalThis.__MEX_SYNCED_CHANNELS_ = new Set()
 
