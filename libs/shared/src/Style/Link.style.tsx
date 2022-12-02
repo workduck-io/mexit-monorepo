@@ -147,7 +147,7 @@ export const HighlightGroupHeader = styled.div`
 export const HighlightGroupsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.large};
+  gap: ${({ theme }) => theme.spacing.medium};
   padding: ${({ theme }) => theme.spacing.small} 0;
   padding-bottom: ${({ theme }) => theme.spacing.large};
 `

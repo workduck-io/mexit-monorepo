@@ -1,4 +1,4 @@
-import React, { useEffect,useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import searchLine from '@iconify/icons-ri/search-line'
@@ -23,7 +23,8 @@ import {
   SidebarListFilter,
   SidebarListFilterWrapper,
   SnippetCards,
-  SnippetSidebarHelp} from '@mexit/shared'
+  SnippetSidebarHelp
+} from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
