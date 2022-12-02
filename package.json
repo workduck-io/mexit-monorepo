@@ -5,13 +5,17 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "prepare": "husky install"
   },
   "private": true,
   "workspaces": {
     "packages": [
       "apps/*"
     ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
     "react-dnd": "^16.0.1",
@@ -26,16 +30,18 @@
     "@typescript-eslint/parser": "^5.10.0",
     "eslint": "~8.7.0",
     "eslint-config-prettier": "8.1.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "2.25.2",
     "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.4",
     "prettier": "^2.5.1"
   }
 }
