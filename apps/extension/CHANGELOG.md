@@ -1,5 +1,16 @@
 # mexit
 
+## 0.18.12
+
+### Patch Changes
+
+- 4373205e: Moved extension over to Vite; Remove some dead code
+- cfa94de1: Updated changeset publish action post extension with vite #286
+- dd088cbd: Highlights as a spearate entity
+- 58d65222: Api layer added
+- 9adc4068: Common ESLint config; Code Improvements
+- 2b53eb1b: Smart capture config moved to DB
+
 ## 0.18.11
 
 ### Patch Changes
