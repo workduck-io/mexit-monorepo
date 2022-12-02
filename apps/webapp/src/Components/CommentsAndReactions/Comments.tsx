@@ -3,11 +3,11 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import { PlateProvider } from '@udecode/plate'
 
-import { IconButton } from '@workduck-io/mex-components'
+import { CenteredColumn, DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
-import { RelativeTime } from '@mexit/shared'
+import { ComboboxShortcuts, RelativeTime, ShortcutText } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -118,17 +118,25 @@ export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
   }, [onSubmit])
 
   return (
-    <NewCommentWrapper>
-      <CommentAuthor>
-        <ProfileImage size={32} email={byUser} />
-      </CommentAuthor>
-      <CommentEditorWrapper>
-        <PlateProvider id={commentEditorId}>
-          <CommentEditor content={defaultContent.content} editorId={commentEditorId} onChange={onChange} />
-        </PlateProvider>
-      </CommentEditorWrapper>
-      <IconButton size={16} icon="bi:reply" title="Add Comment" onClick={onSubmit} transparent={false} />
-    </NewCommentWrapper>
+    <CenteredColumn>
+      <NewCommentWrapper>
+        <CommentAuthor>
+          <ProfileImage size={32} email={byUser} />
+        </CommentAuthor>
+        <CommentEditorWrapper>
+          <PlateProvider id={commentEditorId}>
+            <CommentEditor content={defaultContent.content} editorId={commentEditorId} onChange={onChange} />
+          </PlateProvider>
+        </CommentEditorWrapper>
+        <IconButton size={16} icon="bi:reply" title="Add Comment" onClick={onSubmit} transparent={false} />
+      </NewCommentWrapper>
+      <ComboboxShortcuts>
+        <ShortcutText>
+          <DisplayShortcut shortcut="$mod+Enter" />
+          <div className="text">Add Comment</div>
+        </ShortcutText>
+      </ComboboxShortcuts>
+    </CenteredColumn>
   )
 }
 

@@ -25,7 +25,7 @@ export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
   justify-content: space-between;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  font-size: 1.15rem;
+  font-size: 1.1em;
   cursor: pointer;
   user-select: none;
 `
@@ -105,14 +105,14 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         </GenericFlex>
         <GenericFlex>
           {isNodePublic ? (
+            <IconButton title="Make Note Public" size="16px" icon="material-symbols:public" onClick={onNotePublic} />
+          ) : (
             <IconButton
-              title="Make Note Public"
+              title="Make Note Private"
               size="16px"
               icon="material-symbols:public-off-rounded"
               onClick={onNotePublic}
             />
-          ) : (
-            <IconButton title="Make Note Private" size="16px" icon="material-symbols:public" onClick={onNotePublic} />
           )}
           {isNodePublic && (
             <CopyButton

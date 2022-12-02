@@ -1,10 +1,7 @@
 import { useMemo } from 'react'
-import { useMediaQuery } from 'react-responsive'
 import { useSpring } from 'react-spring'
 
 import { useTheme } from 'styled-components'
-
-import { OverlaySidebarWindowWidth, size } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 
@@ -12,46 +9,29 @@ export const useSidebarTransition = () => {
   const rhSidebar = useLayoutStore((state) => state.rhSidebar)
   const theme = useTheme()
 
-  const isDesktop = useMediaQuery({ minWidth: size.wide })
-  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
-
   const rhSidebarStyle = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '415px'}`
+    const visibleEndColumnWidth = '415px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
-    if (!overlaySidebar) {
-      const style = {
-        width: endColumnWidth
-      }
-      return style
-    } else {
-      const style = {
-        width: endColumnWidth
-      }
-      return style
+    const style = {
+      width: endColumnWidth
     }
-  }, [rhSidebar, overlaySidebar, isDesktop])
+
+    return style
+  }, [rhSidebar])
+
   const rhSidebarSpringProps = useSpring(rhSidebarStyle)
 
   const { style: gridStyle, endColumnWidth } = useMemo(() => {
     const showRHSidebar = rhSidebar.show && rhSidebar.expanded
-    const visibleEndColumnWidth = `${isDesktop ? '600px' : '415px'}`
+    const visibleEndColumnWidth = '415px'
     const endColumnWidth = `${showRHSidebar ? visibleEndColumnWidth : '0px'}`
-    const themeGap = `${theme.additional.hasBlocks ? '4rem' : '0rem'}`
     // mog('Overlay', { overlaySidebar, showSidebar, showRHSidebar })
-    if (!overlaySidebar) {
-      const style = {
-        gridTemplateColumns: `calc(100vw - ${endColumnWidth} - ${themeGap}) ${endColumnWidth}`
-      }
-      // if (!sidebar.expanded || !sidebar.show) style.gridTemplateColumns = `${sidebarCollapsedWidth} 2fr auto`
-      return { style, endColumnWidth }
-    } else {
-      const style = {
-        gridTemplateColumns: ` calc(100vw - 0px - ${themeGap}) 0px`
-      }
-      return { style, endColumnWidth }
+    const style = {
+      gridTemplateColumns: `90vw`
     }
-  }, [isDesktop, rhSidebar, overlaySidebar, theme])
+    return { style, endColumnWidth }
+  }, [rhSidebar, theme])
 
   const gridSpringProps = useSpring({ to: gridStyle, immediate: !rhSidebar.show })
 
@@ -59,7 +39,6 @@ export const useSidebarTransition = () => {
     rhSidebarSpringProps,
     gridStyle,
     gridSpringProps,
-    endColumnWidth,
-    overlaySidebar
+    endColumnWidth
   }
 }

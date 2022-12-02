@@ -27,7 +27,7 @@ function Tooltip() {
   const { getILinkFromNodeid } = useLinks()
   const { removeHighlight } = useHighlighter()
 
-  mog('tooltipState', { tooltipState })
+  // mog('tooltipState', { tooltipState })
 
   const editableMap = getEditableMap(tooltipState?.id)
 
@@ -57,25 +57,6 @@ function Tooltip() {
       setTooltipState({ visualState: VisualState.hidden })
     })
   }
-
-  // used to open the note in the sputlit editor
-  //const handleEdit = () => {
-  //   mog('edit, UNIMPLEMENTED')
-  //   return
-  //   const content = getContent(nodeId)
-  //   const node = getILinkFromNodeid(nodeId)
-  //   setVisualState(VisualState.animatingIn)
-
-  //   // TODO: the timeout is because the nodeContent setting in the content/index.ts according to the active item works as well
-  //   // will optimize later
-  //   setTimeout(() => {
-  //     setNode({ ...node, title: node.path.split(SEPARATOR).slice(-1)[0], id: node.nodeid })
-  //     setNodeContent(content.content)
-  //     setPreviewMode(false)
-  //   }, 500)
-
-  //   setTooltipState({ visualState: VisualState.hidden })
-  // }
 
   const handleCopyClipboard = async (text: string) => {
     await copyTextToClipboard(text)

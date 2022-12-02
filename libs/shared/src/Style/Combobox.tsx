@@ -121,6 +121,7 @@ export const ComboboxShortcuts = styled.div`
   align-items: center;
   /* margin-top: 1rem; */
   padding: 0.5rem 0;
+  width: 100%;
   border-top: 1px solid ${({ theme }) => theme.colors.gray[8]};
 `
 

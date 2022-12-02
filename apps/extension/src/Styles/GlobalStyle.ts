@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 
+import { ThinScrollbar } from '@workduck-io/mex-components'
+
 import { customStyles, EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
@@ -43,6 +45,9 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1.5;
     font-size: 14px;
 
+    * {
+      ${ThinScrollbar}
+    }
 
     /* Tippy Balloon styles */
     ${TippyBalloonStyles}

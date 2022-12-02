@@ -82,7 +82,7 @@ export function useSaveChanges() {
         id: node.nodeid,
         title: node.title,
         content: editorState,
-        referenceID: isSingle ? undefined : parentILink?.nodeid,
+        referenceID: isSingle ? parentILink?.nodeid : undefined,
         workspaceID: workspaceDetails.id,
         namespaceID: namespace.id,
         highlightId: undefined

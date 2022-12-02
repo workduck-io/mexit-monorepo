@@ -50,5 +50,6 @@ export const SnippetCardFooter = styled.div`
 
 export const SnippetContentPreview = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};
+  font-size: 1em;
   ${Ellipsis}
 `

@@ -7,7 +7,7 @@ import { SharedNode } from '@mexit/core'
 import { Centered, SharedNodeIcon, SharedNodeIconify } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import SidebarList, { SidebarListItem } from '../SidebarList'
@@ -70,7 +70,7 @@ const SharedNotes = () => {
   ) : (
     <Centered>
       <SharedNodeIcon height={64} width={64} fill={theme.colors.text.default} margin="0 0 1rem 0" />
-      <span>No one has shared Notes with you yet HAHAHAHA!</span>
+      <span>No shared notes</span>
     </Centered>
   )
 }
