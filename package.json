@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "prepare": "husky install"
   },
   "private": true,
   "workspaces": {
@@ -13,49 +14,34 @@
       "apps/*"
     ]
   },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix"
+  },
   "dependencies": {
-    "@dicebear/avatars": "^4.10.5",
-    "@dicebear/avatars-male-sprites": "^4.10.5",
-    "@iconify/icons-logos": "^1.2.20",
-    "@udecode/plate": "~16.4.1",
-    "@uifabric/styling": "^7.20.0",
-    "axios": "^0.23.0",
-    "chrono-node": "^2.3.8",
-    "color-scheme": "^1.0.1",
-    "date-fns": "^2.28.0",
-    "fast-equals": "^2.0.4",
-    "fuse.js": "^6.5.3",
-    "ramda": "^0.28.0",
     "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-image-crop": "^10.0.9",
-    "slate": "^0.78.0",
-    "slate-history": "^0.66.0",
-    "slate-hyperscript": "^0.77.0",
-    "slate-react": "^0.79.0"
+    "react-dnd-html5-backend": "^16.0.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.1",
-    "@nrwl/cli": "13.8.2",
-    "@nrwl/eslint-plugin-nx": "13.8.2",
-    "@nrwl/nx-cloud": "latest",
-    "@swc/cli": "~0.1.52",
-    "@swc/core": "^1.2.146",
-    "@swc/helpers": "~0.2.14",
-    "@types/chrome": "^0.0.176",
-    "@typescript-eslint/eslint-plugin": "~5.10.0",
-    "@typescript-eslint/parser": "~5.10.0",
+    "@nrwl/cli": "^15.2.4",
+    "@nrwl/eslint-plugin-nx": "^15.2.4",
+    "@nrwl/nx-cloud": "^15.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
     "eslint": "~8.7.0",
     "eslint-config-prettier": "8.1.0",
-    "eslint-config-react-app": "^7.0.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "2.25.2",
     "eslint-plugin-jsx-a11y": "6.5.1",
-    "eslint-plugin-react": "7.27.0",
-    "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "prettier": "^2.5.1",
-    "spawndamnit": "^2.0.0",
-    "swc-loader": "^0.1.15",
-    "ts-node": "^10.7.0"
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.5.1"
   }
 }

@@ -1,6 +1,6 @@
-import { EditorStyles } from '@mexit/shared'
-
 import styled from 'styled-components'
+
+import { EditorStyles } from '@mexit/shared'
 
 export const PreviewNoteContainer = styled.section`
   width: 50vw;

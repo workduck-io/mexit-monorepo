@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet } from 'react-router-dom'
 
+import styled from 'styled-components'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
@@ -13,7 +15,6 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex } from '../Workers/controller'
-import styled from 'styled-components'
 
 export const EditorViewWrapper = styled.div`
   display: flex;

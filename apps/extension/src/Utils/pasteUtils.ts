@@ -1,4 +1,8 @@
 // TODO: add more domains and their supported types
+import toast from 'react-hot-toast'
+
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+
 import {
   convertContentToRawText,
   convertToCopySnippet,
@@ -7,8 +11,6 @@ import {
   ELEMENT_TAG,
   mog,
   Snippet} from '@mexit/core'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import toast from 'react-hot-toast'
 
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../Editor/plugins/index'

@@ -2,6 +2,7 @@ import { DataInfobarHeader, DataInfobarWrapper, MexIcon, Title } from '@mexit/sh
 
 import { useEditorStore } from '../../Stores/useEditorStore'
 import TagsRelated, { TagsRelatedSuggestions } from '../Editor/TagsRelated'
+
 import Backlinks from './Backlinks'
 import Outline from './Outline'
 

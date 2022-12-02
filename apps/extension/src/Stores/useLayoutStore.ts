@@ -1,6 +1,7 @@
-import { ExtInfobarMode } from '@mexit/shared'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { ExtInfobarMode } from '@mexit/shared'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

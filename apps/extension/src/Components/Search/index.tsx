@@ -1,4 +1,11 @@
+import React, { useEffect, useRef } from 'react'
+
 import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
+
+import { tinykeys } from '@workduck-io/tinykeys'
+
 import {
   ActionType,
   BASE_TASKS_PATH,
@@ -12,10 +19,6 @@ import {
   withoutContinuousDelimiter
 } from '@mexit/core'
 import { Loading, WDLogo } from '@mexit/shared'
-import { tinykeys } from '@workduck-io/tinykeys'
-import React, { useEffect, useRef } from 'react'
-import { useTheme } from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -29,6 +32,7 @@ import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { type SearchType, useSputlitStore } from '../../Stores/useSputlitStore'
 import { getListItemFromNode } from '../../Utils/helper'
+
 import { CenterIcon, StyledInput, StyledSearch } from './styled'
 
 const Search = () => {

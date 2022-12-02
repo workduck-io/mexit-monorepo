@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { NodeType } from '@mexit/core'
@@ -14,8 +17,6 @@ import { useNodes } from '../../Hooks/useNodes'
 import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import useMultipleEditors from '../../Stores/useEditorsStore';
 import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
 
 interface NodeLinkProps {
   keyStr: string

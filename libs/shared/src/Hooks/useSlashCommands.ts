@@ -1,6 +1,6 @@
 import { uniq } from 'lodash'
 
-import { SlashCommand, Snippet, getSnippetCommand, QuickLinkType, defaultCommands } from '@mexit/core'
+import { defaultCommands,getSnippetCommand, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
 
 export const addIconToSlashCommand = (items: SlashCommand[], icon: string) =>
   items.map((i: SlashCommand): SlashCommand => ({ ...i, icon }))

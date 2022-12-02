@@ -25,6 +25,7 @@ import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalS
 import { ModalControls,ModalHeader } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { InputFormError } from '../Input'
+
 import { InviteFormFieldset,InviteFormWrapper, MultipleInviteWrapper } from './styles'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {

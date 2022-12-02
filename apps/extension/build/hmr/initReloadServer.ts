@@ -2,6 +2,7 @@ import chokidar from 'chokidar'
 import { WebSocket, WebSocketServer } from 'ws'
 
 import colorLog from '../log'
+
 import {
   LOCAL_RELOAD_SOCKET_PORT,
   UPDATE_COMPLETE_MESSAGE,

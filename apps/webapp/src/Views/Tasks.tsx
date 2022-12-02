@@ -3,6 +3,8 @@ import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
 import { useMatch } from 'react-router-dom'
 
+import Board from '@asseinfo/react-kanban'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNextStatus, getPrevStatus, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
@@ -28,8 +30,8 @@ import useMultipleEditors from '../Stores/useEditorsStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+
 import SearchFilters from './SearchFilters'
-import Board from '@asseinfo/react-kanban'
 
 interface RenderTaskProps {
   id: string
@@ -100,6 +102,8 @@ const RenderTask = React.memo<RenderTaskProps>(
     )
   }
 )
+
+RenderTask.displayName = 'RenderTask'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)

@@ -1,6 +1,7 @@
 import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
+
 import client from './fetchClient'
 import { serializeContent } from './serializer'
 

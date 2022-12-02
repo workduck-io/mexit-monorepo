@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import { PollActions } from '../../Stores/useApiStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
+
 import { SidebarWrapper, SpaceContentWrapper } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
 import { SidebarSpaceComponent } from './Space'

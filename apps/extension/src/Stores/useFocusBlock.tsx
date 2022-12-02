@@ -1,7 +1,8 @@
 
-import { mog } from '@mexit/core'
 import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
 import create from 'zustand'
+
+import { mog } from '@mexit/core'
 
 interface Highlighted {
   preview: string[]

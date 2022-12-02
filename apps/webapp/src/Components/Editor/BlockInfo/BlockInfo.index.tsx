@@ -1,5 +1,11 @@
 import { useMemo, useState } from 'react'
 
+import message2Line from '@iconify/icons-ri/message-2-line'
+import { Icon } from '@iconify/react'
+import { findNodePath, isSelectionExpanded } from '@udecode/plate'
+import { nanoid } from 'nanoid'
+import { useFocused, useSelected } from 'slate-react'
+
 import { generateCommentId, MIcon, UserReaction } from '@mexit/core'
 import { getIconType, Popover } from '@mexit/shared'
 
@@ -14,12 +20,8 @@ import { useEditorStore } from '../../../Stores/useEditorStore'
 import { CommentsComponent } from '../../CommentsAndReactions/Comments'
 import { BlockReaction, Reactions } from '../../CommentsAndReactions/Reactions'
 import { Source } from '../../SourceInfo'
+
 import { BlockInfoBlockWrapper, BlockInfoButton, BlockInfoWrapper } from './BlockInfo.style'
-import message2Line from '@iconify/icons-ri/message-2-line'
-import { Icon } from '@iconify/react'
-import { findNodePath, isSelectionExpanded } from '@udecode/plate'
-import { nanoid } from 'nanoid'
-import { useFocused, useSelected } from 'slate-react'
 
 /**
  *

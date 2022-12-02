@@ -1,9 +1,10 @@
-import { apiURLs, mog, runBatch } from '@mexit/core'
-
-import { WorkerRequestType } from '../Utils/worker'
 import axios from 'axios'
 import { customAlphabet } from 'nanoid'
 import { expose } from 'threads/worker'
+
+import { apiURLs, mog, runBatch } from '@mexit/core'
+
+import { WorkerRequestType } from '../Utils/worker'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
@@ -31,7 +32,7 @@ const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   }
 
   const url = apiURLs.node.getMultipleNode(namespaceID)
-  return client.post(url, { ids: nodeids }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d: any) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }
@@ -48,7 +49,7 @@ const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
   }
 
   const url = apiURLs.share.getBulk
-  return client.post(url, { ids: nodeids }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d: any) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }

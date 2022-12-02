@@ -1,8 +1,10 @@
-import { OverlaySidebarWindowWidth, size } from '@mexit/shared'
 import { useMemo } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useSpring } from 'react-spring'
+
 import { useTheme } from 'styled-components'
+
+import { OverlaySidebarWindowWidth, size } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 

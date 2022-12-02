@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useLocation, useParams } from 'react-router-dom'
 
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, NodeEditorContent } from '@mexit/core'
@@ -32,10 +34,10 @@ import { areEqual } from '../../Utils/hash'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
+
 import Banner from './Banner'
 import Editor from './Editor'
 import Toolbar from './Toolbar'
-import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 
 const ContentEditor = () => {
   const { toggleFocusMode } = useLayout()

@@ -1,9 +1,11 @@
-import { Icon } from '@iconify/react'
-import { Priority,PriorityDataType } from '@mexit/core'
-import { StyledContexifyMenu } from '@mexit/shared'
 import React from 'react'
 import { Item } from 'react-contexify'
+
+import { Icon } from '@iconify/react'
 import styled from 'styled-components'
+
+import { Priority,PriorityDataType } from '@mexit/core'
+import { StyledContexifyMenu } from '@mexit/shared'
 
 type PriorityMenuType = {
   id: string

@@ -1,6 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
+import deleteBack2Line from '@iconify/icons-ri/delete-back-2-line'
+import edit2Line from '@iconify/icons-ri/edit-2-line'
+
 import { IconButton, LoadingButton } from '@workduck-io/mex-components'
 
 import { IS_DEV } from '@mexit/core'
@@ -20,9 +23,8 @@ import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
 import { ALIAS_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
+
 import { ProfileImage } from './ProfileImage'
-import deleteBack2Line from '@iconify/icons-ri/delete-back-2-line'
-import edit2Line from '@iconify/icons-ri/edit-2-line'
 
 export interface UpdateUserFormData {
   name: string

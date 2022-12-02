@@ -1,11 +1,15 @@
+import React from 'react'
+
+import styled, { useTheme } from 'styled-components'
+
+import { Button, MexIcon } from '@workduck-io/mex-components'
+
 import { mog } from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
-import { Button, MexIcon } from '@workduck-io/mex-components'
-import React from 'react'
-import styled, { useTheme } from 'styled-components'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { generateAvatar } from '../../Utils/generateAvatar'
+
 import { Controls } from './Screenshot/Screenshot.style'
 
 const Container = styled.div`

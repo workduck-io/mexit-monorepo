@@ -1,5 +1,5 @@
 import * as chrono from 'chrono-node'
-import { formatDistanceToNow, formatRelative, format, add, sub, startOfToday } from 'date-fns'
+import { add, format, formatDistanceToNow, formatRelative, startOfToday,sub } from 'date-fns'
 
 import { capitalize } from './strings'
 

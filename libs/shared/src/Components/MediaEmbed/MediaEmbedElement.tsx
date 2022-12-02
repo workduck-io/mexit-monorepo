@@ -1,15 +1,15 @@
 import * as React from 'react'
 import { useEffect } from 'react'
-
-import { findNodePath, Media } from '@udecode/plate'
-import { useEditorRef, setNodes } from '@udecode/plate-core'
-import { debounce } from 'lodash'
 import EmbedContainer from 'react-oembed-container'
 
+import { findNodePath, Media } from '@udecode/plate'
+import { setNodes,useEditorRef } from '@udecode/plate-core'
+import { debounce } from 'lodash'
+
+import { getEmbedData } from './getEmbedUrl'
 import { IFrameWrapper, MediaHtml, RootElement, StyledMediaEmbed } from './MediaEmbedElement.styles'
 import { MediaEmbedElementProps } from './MediaEmbedElement.types'
 import { MediaEmbedUrlInput } from './MediaEmbedUrlInput'
-import { getEmbedData } from './getEmbedUrl'
 
 export const MediaEmbedElement = (props: MediaEmbedElementProps) => {
   const { attributes, children, element, nodeProps } = props

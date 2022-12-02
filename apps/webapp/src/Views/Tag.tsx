@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTransition } from 'react-spring'
 
+import { debounce } from 'lodash'
+import styled, { css } from 'styled-components'
+
 import { fuzzySearch } from '@mexit/core'
 import { HoverSubtleGlow , Input, Result, ResultHeader, Results, ResultTitle, SearchPreviewWrapper, View } from '@mexit/shared'
 
@@ -14,8 +17,6 @@ import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
-import { debounce } from 'lodash'
-import styled, { css } from 'styled-components'
 
 const TagsWrapper = styled.div`
   display: flex;

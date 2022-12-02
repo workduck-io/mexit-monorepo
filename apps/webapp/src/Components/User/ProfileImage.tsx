@@ -1,6 +1,13 @@
 // different import path!
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { Icon } from '@iconify/react'
+import user3Line from '@iconify-icons/ri/user-3-line'
+import Tippy from '@tippyjs/react/headless'
+import Avatar from 'boring-avatars'
+import md5 from 'md5'
+import styled, { useTheme } from 'styled-components'
+
 import { AccessLevel, mog } from '@mexit/core'
 import { CardShadow,Centered } from '@mexit/shared'
 
@@ -8,12 +15,6 @@ import { MentionTooltipComponent } from '../../Editor/Components/Mentions/Mentio
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions } from '../../Hooks/useMentions'
 import { useCacheStore } from '../../Stores/useRequestCache'
-import { Icon } from '@iconify/react'
-import user3Line from '@iconify-icons/ri/user-3-line'
-import Tippy from '@tippyjs/react/headless'
-import Avatar from 'boring-avatars'
-import md5 from 'md5'
-import styled, { useTheme } from 'styled-components'
 
 interface ProfileImageProps {
   email: string

@@ -3,9 +3,10 @@ import { useMediaQuery } from 'react-responsive'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { animated } from 'react-spring'
 
+import styled from 'styled-components'
+
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
-import * as Actions from './Actions'
 import RouteNotFound from './Components/404'
 import Chotu from './Components/Chotu'
 import ContentEditor from './Components/Editor/ContentEditor'
@@ -43,7 +44,7 @@ import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
 import Tasks from './Views/Tasks'
-import styled from 'styled-components'
+import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
   height: 100%;

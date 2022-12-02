@@ -1,7 +1,9 @@
-import { useCombobox } from 'downshift';
 import { useMemo } from 'react';
 
+import { useCombobox } from 'downshift';
+
 import { useComboboxStore } from '../store/combobox';
+
 import { useComboboxIsOpen } from './useComboboxIsOpen';
 
 export const useComboboxControls = (withNew: boolean) => {

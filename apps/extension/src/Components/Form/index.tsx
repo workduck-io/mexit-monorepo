@@ -1,10 +1,13 @@
-import { mog, NodeEditorContent } from '@mexit/core'
-import { FlexBetween } from '@mexit/shared'
-import { MexIcon } from '@workduck-io/mex-components'
-import { tinykeys } from '@workduck-io/tinykeys'
 import React, { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+
 import { useTheme } from 'styled-components'
+
+import { MexIcon } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { mog, NodeEditorContent } from '@mexit/core'
+import { FlexBetween } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
@@ -15,6 +18,7 @@ import { Title } from '../Action/styled'
 import { Dialog } from '../Floating/Dialog'
 import NoteSelector from '../Floating/NoteSelector'
 import { Controls } from '../Renderers/Screenshot/Screenshot.style'
+
 import Field from './Field'
 import { ExcludeFormFieldsContainer, StyledForm, StyledRowItem, UserPreferedFieldsContainer } from './styled'
 

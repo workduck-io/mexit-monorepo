@@ -1,3 +1,8 @@
+import { useEffect } from 'react'
+
+import { addMinutes } from 'date-fns'
+import { connectToChild, Methods } from 'penpal'
+
 import {
   AddHighlightFn,
   Contents,
@@ -19,9 +24,6 @@ import {
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
-import { addMinutes } from 'date-fns'
-import { connectToChild, Methods } from 'penpal'
-import { useEffect } from 'react'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -34,6 +36,7 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
+
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'

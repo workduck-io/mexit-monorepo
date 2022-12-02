@@ -1,6 +1,9 @@
 // Icons for sidebar and UI
 import React from 'react'
 
+import editLine from '@iconify/icons-ri/edit-line'
+import linkUnlinkM from '@iconify/icons-ri/link-unlink-m'
+import { addIcon } from '@iconify/react'
 import arrowDownCircleLine from '@iconify-icons/ri/arrow-down-circle-line'
 import checkboxBlankCircleFill from '@iconify-icons/ri/checkbox-blank-circle-fill'
 import checkboxBlankCircleLine from '@iconify-icons/ri/checkbox-blank-circle-line'
@@ -12,9 +15,6 @@ import starFill from '@iconify-icons/ri/star-fill'
 import starLine from '@iconify-icons/ri/star-line'
 import taskFill from '@iconify-icons/ri/task-fill'
 import taskLine from '@iconify-icons/ri/task-line'
-import editLine from '@iconify/icons-ri/edit-line'
-import linkUnlinkM from '@iconify/icons-ri/link-unlink-m'
-import { addIcon } from '@iconify/react'
 import { useTheme } from 'styled-components'
 
 // `any` is used in type signature as `IconifyIcon` type doesn't work

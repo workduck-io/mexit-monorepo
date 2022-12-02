@@ -1,6 +1,7 @@
-import { dataStoreConstructor,DataStoreState } from '@mexit/core'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { dataStoreConstructor,DataStoreState } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

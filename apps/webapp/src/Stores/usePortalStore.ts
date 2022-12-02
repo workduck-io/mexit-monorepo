@@ -1,6 +1,7 @@
-import { ActionGroupType, PortalType } from '../Types/Actions'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { ActionGroupType, PortalType } from '../Types/Actions'
 
 type PortalStoreType = {
   apps: Record<string, ActionGroupType>

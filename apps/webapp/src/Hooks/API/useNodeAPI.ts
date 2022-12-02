@@ -206,6 +206,7 @@ export const useApi = () => {
       })
       .catch((e) => {
         console.error(`MexError: Fetching nodeid ${nodeid} failed with: `, e)
+        return undefined
       })
 
     return res

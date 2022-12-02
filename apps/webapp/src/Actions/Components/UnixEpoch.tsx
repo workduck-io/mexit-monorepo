@@ -1,8 +1,8 @@
 import React, { useEffect, useRef,useState } from 'react'
 
-import { copyTextToClipboard , Input , resize } from '@mexit/shared'
-
 import styled from 'styled-components'
+
+import { copyTextToClipboard , Input , resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

@@ -1,16 +1,14 @@
 import {
   AddILinkProps,
-  CheckValidILinkProps,
   CachedILink,
+  CheckValidILinkProps,
   ILink,
-  InitData,
   InitDataStoreType,
   LinkCache,
+  SharedNode,
   SlashCommands,
   Tag,
-  TagsCache,
-  SharedNode
-} from './Editor'
+  TagsCache} from './Editor'
 import { AccessLevel } from './Mentions'
 
 export const iconTypes = ['URL', 'ICON', 'EMOJI'] as const

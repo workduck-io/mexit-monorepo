@@ -9,50 +9,48 @@ import React, {
   useRef,
   useState
 } from 'react'
+import { mergeRefs } from 'react-merge-refs'
 
 import {
-  useFloating,
-  offset,
+  autoUpdate,
   flip,
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingPortal,
+  FloatingTree,
+  offset,
+  safePolygon,
   shift,
-  useListNavigation,
-  useHover, // useTypeahead,
-  useInteractions,
-  useRole,
   useClick,
   useDismiss,
-  autoUpdate,
-  safePolygon,
-  FloatingPortal,
-  useFloatingTree,
+  useFloating,
   useFloatingNodeId,
   useFloatingParentNodeId,
-  FloatingNode,
-  FloatingTree,
-  FloatingFocusManager
-} from '@floating-ui/react-dom-interactions'
+  useFloatingTree,
+  useHover, // useTypeahead,
+  useInteractions,
+  useListNavigation,
+  useRole} from '@floating-ui/react-dom-interactions'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import cx from 'classnames'
 import { debounce } from 'lodash'
-import { mergeRefs } from 'react-merge-refs'
 
-import { MIcon } from '@mexit/core'
-import { fuzzySearch } from '@mexit/core'
+import { fuzzySearch,MIcon  } from '@mexit/core'
 
 import { GenericFlex } from '../../Style/Filter.style'
 import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
+
 import { Input } from './../../Style/Form'
 import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
 import {
-  MenuItemWrapper,
-  MultiSelectIcon,
   ItemLabel,
   MenuItemCount,
-  RootMenuWrapper,
-  MenuWrapper
-} from './Dropdown.style'
+  MenuItemWrapper,
+  MenuWrapper,
+  MultiSelectIcon,
+  RootMenuWrapper} from './Dropdown.style'
 
 export const MenuItem = forwardRef<
   HTMLButtonElement,

@@ -1,8 +1,10 @@
-import { transparentize } from 'polished'
 import { animated } from 'react-spring'
+
+import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { View } from '../Style/ViewSelector'
+
 import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'

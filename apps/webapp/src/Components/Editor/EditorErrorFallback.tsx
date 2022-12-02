@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import { FallbackProps } from 'react-error-boundary'
 
+import { transparentize } from 'polished'
+import styled from 'styled-components'
+
 import { Button } from '@workduck-io/mex-components'
 
 import { IS_DEV, mog } from '@mexit/core'
 import { CardShadow, Title } from '@mexit/shared'
 
 import { useEditorErrorStore } from '../../Hooks/useEditorActions'
-import { transparentize } from 'polished'
-import styled from 'styled-components'
 
 const ErrorWrapper = styled.div`
   display: flex;

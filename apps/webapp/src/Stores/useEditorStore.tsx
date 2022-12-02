@@ -1,11 +1,12 @@
 import React from 'react'
 
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
 import { defaultContent, getInitialNode,NodeContent, NodeProperties } from '@mexit/core'
 
 import { ComboTriggerType } from './useComboboxStore'
 import { useContentStore } from './useContentStore'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content

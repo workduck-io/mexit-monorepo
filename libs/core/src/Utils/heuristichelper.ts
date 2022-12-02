@@ -1,6 +1,6 @@
-import { nanoid } from 'nanoid'
 
 import { Tag } from '../Types/Editor'
+
 import { getValidTitle } from './strings'
 
 interface SitesMetadata {

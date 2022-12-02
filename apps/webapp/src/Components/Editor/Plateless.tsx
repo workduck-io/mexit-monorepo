@@ -23,6 +23,7 @@ import {
 
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useMentions } from '../../Hooks/useMentions'
+
 import { PlatelessStyled } from './Plateless.style'
 
 const InlineElementsArray = [
@@ -283,6 +284,7 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
     return <>{childrenRender}</>
   }
 )
+RenderPlateless.displayName = 'RenderPlateless'
 
 /**
  * A barebones renderer for plate content in html

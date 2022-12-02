@@ -1,5 +1,3 @@
-import { ELEMENT_EXCALIDRAW } from '@mexit/core'
-import { TableWrapper, useUploadToCDN } from '@mexit/shared'
 import {
   autoformatArrow,
   autoformatLegal,
@@ -43,7 +41,11 @@ import {
   insertNodes,
   PlatePlugin,
   setNodes} from '@udecode/plate'
+
 import { useAuth } from '@workduck-io/dwindle'
+
+import { ELEMENT_EXCALIDRAW } from '@mexit/core'
+import { TableWrapper, useUploadToCDN } from '@mexit/shared'
 
 import { createBlockModifierPlugin } from './createBlockModifierPlugin'
 import { createHighlightTextPlugin } from './createHighlightTextPlugin'

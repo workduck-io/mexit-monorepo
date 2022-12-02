@@ -1,16 +1,3 @@
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK,ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX  } from '@mexit/core'
-
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { QuickLinkType } from '../../constants'
-import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
-import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
-import {
-  ComboConfigData,
-  ComboSearchType,
-  ConfigDataSlashCommands,
-  SingleComboboxConfig
-} from '../../Types/MultiCombobox'
-import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 import {
   deleteText,
   getBlockAbove,
@@ -25,6 +12,20 @@ import {
   TElement,
   Value
 } from '@udecode/plate'
+
+import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
+
+import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { QuickLinkType } from '../../constants'
+import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
+import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
+import {
+  ComboConfigData,
+  ComboSearchType,
+  ConfigDataSlashCommands,
+  SingleComboboxConfig
+} from '../../Types/MultiCombobox'
+import { useSlashCommandOnChange } from '../SlashCommands/useSlashCommandOnChange'
 
 export interface ComboTypeHandlers {
   slateElementType: string
@@ -90,11 +91,8 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           children: [{ text: '' }],
           value: itemValue ?? item.key
         }
-        if (
-          (item.type === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) &&
-          isBlockTriggered &&
-          activeBlock
-        ) {
+        const itemType = item.type as unknown as QuickLinkType
+        if ((itemType === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) && isBlockTriggered && activeBlock) {
           const blockValue = activeBlock?.text ? getSlug(activeBlock.text) : ''
           InsertedElement = {
             ...InsertedElement,
@@ -104,20 +102,20 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             blockValue,
             blockId: activeBlock?.blockId
           }
-        } else if (item.type === QuickLinkType.mentions) {
+        } else if (itemType === QuickLinkType.mentions) {
           InsertedElement = {
             ...InsertedElement,
             value: item.key
           }
           if (comboType.onItemInsert && tab !== true) comboType.onItemInsert(item.text)
-        } else if (item.type === QuickLinkType.taskView) {
+        } else if (itemType === QuickLinkType.taskView) {
           InsertedElement = {
             ...InsertedElement,
             type: ELEMENT_TASK_VIEW_LINK,
             value: item.key
           }
         } else {
-          if (item.type === QuickLinkType.snippet) {
+          if (itemType === QuickLinkType.snippet) {
             itemValue = item.key
           }
 

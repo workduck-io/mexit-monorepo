@@ -1,3 +1,5 @@
+import { expose } from 'threads/worker'
+
 import { 
   convertContentToRawText,
   ELEMENTS_IN_OUTLINE,
@@ -10,8 +12,6 @@ import {
   NodeEditorContent,
   SearchRepExtra,
   TodoType } from '@mexit/core'
-
-import { expose } from 'threads/worker'
 
 export interface OutlineItem {
   id: string

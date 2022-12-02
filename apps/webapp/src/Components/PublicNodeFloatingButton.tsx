@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 
-import { Button } from '@workduck-io/mex-components'
-
-import { Float } from '@mexit/shared'
-
-import { useLayoutStore } from '../Stores/useLayoutStore'
 import externalLinkLine from '@iconify/icons-ri/external-link-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import styled from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
+
+import { Float } from '@mexit/shared'
+
+import { useLayoutStore } from '../Stores/useLayoutStore'
 
 interface PublicNodeFloatingButtonProps {
   firstVisit: boolean

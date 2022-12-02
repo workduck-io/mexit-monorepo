@@ -1,16 +1,18 @@
 import React from 'react'
 import { useMatch } from 'react-router-dom'
 
+import bookmarkLine from '@iconify/icons-ri/bookmark-line'
+import { Icon } from '@iconify/react'
+import styled from 'styled-components'
+
 import { HoverSubtleGlow } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
+
 import SidebarList from './SidebarList'
-import bookmarkLine from '@iconify/icons-ri/bookmark-line'
-import { Icon } from '@iconify/react'
-import styled from 'styled-components'
 
 export const BaseLink = styled.div`
   cursor: pointer;
@@ -57,6 +59,7 @@ const Bookmarks = () => {
 
   return bookmarkItems.length > 0 ? (
     <SidebarList
+      // @ts-ignore
       items={bookmarkItems}
       onClick={onOpenNode}
       selectedItemId={match?.params?.nodeid}

@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { transparentize, mix } from 'polished'
+import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const SILinkRoot = styled.div`

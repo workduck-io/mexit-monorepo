@@ -1,18 +1,20 @@
 import React, { useMemo } from 'react'
 
+import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
+import { Icon } from '@iconify/react'
+import * as ContextMenu from '@radix-ui/react-context-menu'
+import Tippy from '@tippyjs/react'
+import { Entity } from 'rc-tree/lib/interface'
+
 import { ItemContent, ItemCount,ItemTitle } from '@workduck-io/mex-components'
 
 import { ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+
 import { SidebarListItem } from './SidebarList'
 import { TooltipContent } from './Tree'
-import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
-import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
-import Tippy from '@tippyjs/react'
-import { Entity } from 'rc-tree/lib/interface'
 
 interface SidebarListItemProps<T> {
   tippyTarget: any

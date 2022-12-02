@@ -2,8 +2,9 @@ import React from 'react'
 
 import { AccessLevel, AccessNames } from '@mexit/core'
 
-import { AccessIcon } from './Access'
 import { SAccessTag } from '../Style/Mentions'
+
+import { AccessIcon } from './Access'
 
 interface AccessTagProps {
   access: AccessLevel

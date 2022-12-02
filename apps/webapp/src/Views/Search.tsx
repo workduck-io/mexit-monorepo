@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react'
 
+import shareLine from '@iconify/icons-ri/share-line'
+import { Icon } from '@iconify/react'
+import fileList2Line from '@iconify-icons/ri/file-list-2-line'
+
 import { Infobox } from '@workduck-io/mex-components'
 
 import {
@@ -37,12 +41,10 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
 import { SplitType } from './SplitView'
-import shareLine from '@iconify/icons-ri/share-line'
-import { Icon } from '@iconify/react'
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 
 const Search = () => {
   const { loadNode } = useLoad()

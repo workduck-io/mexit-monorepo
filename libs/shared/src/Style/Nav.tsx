@@ -1,6 +1,7 @@
-import { transparentize } from 'polished'
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
+
+import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { CollapseWrapper } from './Collapse'

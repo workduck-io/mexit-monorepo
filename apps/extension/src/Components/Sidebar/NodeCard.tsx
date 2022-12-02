@@ -1,3 +1,7 @@
+import React, { useMemo } from 'react'
+
+import styled from 'styled-components'
+
 import { convertContentToRawText, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
   CopyButton,
@@ -8,8 +12,6 @@ import {
   SnippetCardWrapper,
   SnippetContentPreview
 } from '@mexit/shared'
-import React, { useMemo } from 'react'
-import styled from 'styled-components'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { getTitleFromPath } from '../../Hooks/useLinks'

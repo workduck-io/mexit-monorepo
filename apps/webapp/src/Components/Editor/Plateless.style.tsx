@@ -1,6 +1,6 @@
-import { EditorStyles } from '@mexit/shared'
-
 import styled, { css } from 'styled-components'
+
+import { EditorStyles } from '@mexit/shared'
 
 interface PlatelessStyledProps {
   readOnly?: boolean

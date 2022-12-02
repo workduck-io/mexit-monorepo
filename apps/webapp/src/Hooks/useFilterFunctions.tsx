@@ -2,6 +2,7 @@ import { Filter, FilterJoin, FilterValue, getReminderState, isElder, Link, Searc
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+
 import { useLinks } from './useLinks'
 
 const joinNewRes = (acc: boolean, curRes: boolean, join: FilterJoin) => {

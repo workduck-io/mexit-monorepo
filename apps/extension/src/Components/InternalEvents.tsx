@@ -1,11 +1,13 @@
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { getScrollbarWidth } from '@mexit/shared'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { createRoot } from 'react-dom/client'
+
 import { CaptureConsole } from '@sentry/integrations'
 import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { createRoot } from 'react-dom/client'
 import Highlighter from 'web-highlighter'
+
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { getScrollbarWidth } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
@@ -14,6 +16,7 @@ import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
+
 import LinkedInBadge from './LinkedInBadge'
 
 export function InternalEvents() {

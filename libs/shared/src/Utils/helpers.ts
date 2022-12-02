@@ -1,8 +1,5 @@
 import React from 'react'
-
 import toast from 'react-hot-toast'
-
-import { NodeContent } from '@mexit/core'
 
 export async function copyTextToClipboard(text: any) {
   await navigator.clipboard
@@ -24,7 +21,7 @@ export function getScrollbarWidth() {
   const inner = document.createElement('div')
   outer.appendChild(inner)
   const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
-  outer.parentNode!.removeChild(outer)
+  outer.parentNode?.removeChild(outer)
   return scrollbarWidth
 }
 

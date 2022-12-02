@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
 import { MainNav, SideNav } from '../Style/Nav'

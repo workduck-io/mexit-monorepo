@@ -1,5 +1,4 @@
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { HoverSubtleGlow, ShowOnHoverIconStyles, SubtleGlow } from './Helpers'
 

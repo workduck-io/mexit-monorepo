@@ -6,6 +6,7 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { ToolbarTooltip } from '../Components/Tooltips'
+
 import { centeredCss } from './Layouts'
 import { LoadingWrapper } from './Loading'
 import { TooltipTitleWithShortcut } from './Tooltip'

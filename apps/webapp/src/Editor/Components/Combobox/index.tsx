@@ -1,5 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
+import { Icon } from '@iconify/react'
+import {
+  getRangeBoundingClientRect,
+  PortalBody,
+  usePlateEditorRef,
+  useVirtualFloating
+} from '@udecode/plate'
+import { useTheme } from 'styled-components'
+
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import { NodeEditorContent } from '@mexit/core'
@@ -25,16 +35,8 @@ import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
+
 import BlockCombo from './BlockCombo'
-import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
-import { Icon } from '@iconify/react'
-import {
-  getRangeBoundingClientRect,
-  PortalBody,
-  usePlateEditorRef,
-  useVirtualFloating
-} from '@udecode/plate'
-import { useTheme } from 'styled-components'
 
 export const spotlightShortcuts = {
   save: {

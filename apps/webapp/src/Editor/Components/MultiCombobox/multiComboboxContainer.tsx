@@ -5,6 +5,7 @@ import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { getCreateableOnSelect } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboConfigData } from '../../Types/MultiCombobox'
 import { Combobox } from '../Combobox'
+
 import { useOnSelectItem } from './useMultiComboboxOnKeyDown'
 
 export const ElementComboboxComponent = ({ keys, slashCommands, internal }: ComboConfigData) => {

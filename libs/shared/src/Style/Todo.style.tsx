@@ -1,4 +1,4 @@
-import { transparentize, mix } from 'polished'
+import { mix,transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { TodoStatus } from '@mexit/core'

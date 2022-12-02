@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { BalloonToolbarBase, BalloonToolbarProps, getBalloonToolbarStyles, useFloatingToolbar } from '@mexit/shared'
-
 import { withPlateEventProvider } from '@udecode/plate-core'
 import { PortalBody } from '@udecode/plate-styled-components'
+
+import { BalloonToolbarBase, BalloonToolbarProps, getBalloonToolbarStyles, useFloatingToolbar } from '@mexit/shared'
 
 export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
   const { children, theme = 'dark', arrow = false, portalElement, floatingOptions } = props

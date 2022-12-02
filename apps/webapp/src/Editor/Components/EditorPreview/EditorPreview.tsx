@@ -2,6 +2,12 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useMatch } from 'react-router-dom'
 
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { useTheme } from 'styled-components'
+
 import { Button, MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -31,11 +37,6 @@ import useMultipleEditors from '../../../Stores/useEditorsStore'
 import useRouteStore, { BannerType } from '../../../Stores/useRouteStore'
 import { SocketActionType } from '../../../Types/Socket'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { useTheme } from 'styled-components'
 
 export interface EditorPreviewProps {
   nodeid: string

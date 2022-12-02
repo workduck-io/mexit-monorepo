@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { createPlateUI, withProps } from '@udecode/plate'
+import { StyledElement } from '@udecode/plate-styled-components'
+
 import {
   ELEMENT_ILINK,
   ELEMENT_LINK,
@@ -9,11 +12,10 @@ import {
   ELEMENT_TODO_LI
 } from '@mexit/core'
 import { LinkElement,MediaEmbedElement, TableWrapper } from '@mexit/shared'
-import { createPlateUI, withProps } from '@udecode/plate'
-import { StyledElement } from '@udecode/plate-styled-components'
 
 import TagElement from '../../Editor/components/Tags/TagElement'
 import { QuickLinkElement } from '../../Editor/plugins/QuickLink/components/QuickLinkElement'
+
 import Todo from './Todo'
 
 export const editorPreviewComponents = {

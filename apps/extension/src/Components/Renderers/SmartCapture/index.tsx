@@ -1,8 +1,10 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useSputlitStore } from '../../../Stores/useSputlitStore'
 import Form from '../../Form'
+
 import SourceHeader from './SourceHeader'
 
 const SmartCaptureContainer = styled.section`

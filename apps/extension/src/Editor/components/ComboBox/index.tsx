@@ -1,4 +1,10 @@
+import React, { useEffect, useState } from 'react'
+
 import { Icon } from '@iconify/react'
+import useMergedRef from '@react-hook/merged-ref'
+import { insertText, PortalBody, select, useEditorState } from '@udecode/plate'
+import { useTheme } from 'styled-components'
+
 import { CategoryType, NodeEditorContent, QuickLinkType, Shortcut } from '@mexit/core'
 import {
   ActionTitle,
@@ -15,10 +21,6 @@ import {
   PrimaryText,
   ShortcutText
 } from '@mexit/shared'
-import useMergedRef from '@react-hook/merged-ref'
-import { insertText, PortalBody, select, useEditorState } from '@udecode/plate'
-import React, { useEffect, useState } from 'react'
-import { useTheme } from 'styled-components'
 
 import { ComboboxItem } from '../../../Components/Dibba/styled'
 import EditorPreviewRenderer from '../../../Components/EditorPreviewRenderer'
@@ -28,6 +30,7 @@ import { useComboboxControls } from '../../hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../hooks/useComboboxIsOpen'
 import { useComboboxStore } from '../../store/combobox'
 import { setElementPositionByRange } from '../../utils/setElementPositionByRange'
+
 import { ComboboxProps } from './types'
 
 export const replaceFragment = (editor: any, range: any, text: string) => {

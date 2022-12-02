@@ -1,5 +1,6 @@
-import { TextAreaBlock } from '@mexit/shared'
 import styled from 'styled-components'
+
+import { TextAreaBlock } from '@mexit/shared'
 
 import { Controls } from '../Renderers/Screenshot/Screenshot.style'
 

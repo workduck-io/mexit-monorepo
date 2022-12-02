@@ -1,6 +1,7 @@
 import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace } from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
+
 import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {

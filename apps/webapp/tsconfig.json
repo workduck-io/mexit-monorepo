@@ -1,26 +1,38 @@
 {
   "compilerOptions": {
+    "noEmit": true,
     "jsx": "react-jsx",
     "allowJs": true,
+    "target": "ES2022",
+    "module": "ES2022",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
     "paths": {
       "@mexit/core": ["../../libs/core/src/index.ts"],
-      "@mexit/shared": ["../../libs/shared/src/index.ts"],
-    }
+      "@mexit/shared": ["../../libs/shared/src/index.ts"]
+    },
+    "typeRoots": ["./src/styled.d.ts", "./src/env.d.ts", "node_modules/@types", "../../node_modules/@types"],
+    "types": ["vite/client", "node", "vite-plugin-svgr/client", "chrome"]
   },
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ]
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx",
+    "**/*.spec.js",
+    "**/*.test.js",
+    "**/*.spec.jsx",
+    "**/*.test.jsx",
+    "**/node_modules"
+  ],
+  "include": ["src", "vite.config.ts"]
 }

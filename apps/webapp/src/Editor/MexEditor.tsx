@@ -2,17 +2,19 @@ import { ReactElement,useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
+import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
+import { EditableProps } from 'slate-react/dist/components/editable'
+
 import { useGlobalListener } from '../Hooks/useGlobalListener'
 import useMultipleEditors from '../Stores/useEditorsStore'
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import { useMexEditorStore } from './Hooks/useMexEditorStore'
-import { PluginOptionType } from './Plugins'
 import { MexEditorValue } from './Types/Editor'
 import { ComboboxConfig } from './Types/MultiCombobox'
-import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
-import { EditableProps } from 'slate-react/dist/components/editable'
+import { PluginOptionType } from './Plugins'
 
 export interface MexEditorOptions {
   editableProps?: EditableProps

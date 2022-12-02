@@ -1,10 +1,13 @@
-import { Icon } from '@iconify/react'
-import { WDLogo } from '@mexit/shared'
-import Tippy from '@tippyjs/react'
-import { TitleWithShortcut } from '@workduck-io/mex-components'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHoverIntent } from 'react-use-hoverintent'
+
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
 import styled, { css } from 'styled-components'
+
+import { TitleWithShortcut } from '@workduck-io/mex-components'
+
+import { WDLogo } from '@mexit/shared'
 
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'

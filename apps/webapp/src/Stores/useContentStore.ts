@@ -1,7 +1,7 @@
-import { contentStoreConstructor, ContentStoreState, IDBStorage } from '@mexit/core'
-
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { contentStoreConstructor, ContentStoreState, IDBStorage } from '@mexit/core'
 
 const useContentStore = create<ContentStoreState>(
   persist(contentStoreConstructor, {

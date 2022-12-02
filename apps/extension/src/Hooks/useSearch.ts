@@ -1,4 +1,6 @@
 /* eslint-disable no-case-declarations */
+import fuzzysort from 'fuzzysort'
+
 import {
   ActionType,
   CategoryType,
@@ -10,12 +12,12 @@ import {
   ListItemType,
   QuickLinkType,
   sortByCreated} from '@mexit/core'
-import fuzzysort from 'fuzzysort'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
+
 import { useAuthStore } from './useAuth'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'

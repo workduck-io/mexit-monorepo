@@ -3,6 +3,7 @@ import { StringToMIcon } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useReactionStore } from '../Stores/useReactionStore'
+
 import { useReactionAPI } from './API/useCommentAndReactionAPI'
 
 export const defaultReactions: MIcon[] = [
@@ -138,7 +139,7 @@ export const useReactions = () => {
       .getReactionsOfNote(nodeId)
       .then((res) => {
         if (!res) return
-        const reactions = Object.entries(res)
+        const reactions = Object.entries<any>(res)
           .map(([blockId, reactions]) => {
             return reactions.map((reaction: any) => ({
               blockId,

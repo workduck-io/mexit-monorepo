@@ -1,12 +1,12 @@
 import { animated } from 'react-spring'
 
-import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
-
-import { IconWrapper, Input, SidebarListWrapper,TagsFlex } from '@mexit/shared'
-
 import { clamp } from 'lodash'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
+
+import { IconWrapper, Input, SidebarListWrapper,TagsFlex } from '@mexit/shared'
 
 export const SidebarWrapper = styled.div`
   display: flex;

@@ -1,6 +1,7 @@
 import { FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+
 import { useNamespaces } from './useNamespaces'
 
 export const getFilterJoinIcon = (join: FilterJoin): MIcon => {

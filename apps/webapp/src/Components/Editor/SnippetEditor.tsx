@@ -3,6 +3,10 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
 
+import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { debounce } from 'lodash'
+
 import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -13,11 +17,9 @@ import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBu
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+
 import Banner from './Banner'
 import Editor from './Editor'
-import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
-import { debounce } from 'lodash'
 
 type Inputs = {
   title: string

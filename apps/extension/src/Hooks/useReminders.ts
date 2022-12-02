@@ -1,3 +1,6 @@
+import { add, sub } from 'date-fns'
+import { uniqBy } from 'lodash'
+
 import {
   DisplayReminder,
   DisplayReminderGroup,
@@ -14,11 +17,10 @@ import {
   SnoozeControl,
   upcoming
 } from '@mexit/core'
-import { add, sub } from 'date-fns'
-import { uniqBy } from 'lodash'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+
 import { useLinks } from './useLinks'
 
 export const useReminders = () => {

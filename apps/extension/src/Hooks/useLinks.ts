@@ -18,6 +18,7 @@ import useDataStore from '../Stores/useDataStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+
 import { useNodes } from './useNodes'
 
 export const getTitleFromPath = (path: string, withNoteId = false) => {

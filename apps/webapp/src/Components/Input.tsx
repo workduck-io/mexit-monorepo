@@ -1,13 +1,14 @@
 // different import path!
 import React from 'react'
 
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+
 import { Infobox } from '@workduck-io/mex-components'
 
 import { InputBlock, InputWrapper,Label } from '@mexit/shared'
 
 import { ErrorTooltip } from '../Style/Tippy'
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless'
 
 export const errorMessages = {
   required: (field: string) => `${field} is required`,

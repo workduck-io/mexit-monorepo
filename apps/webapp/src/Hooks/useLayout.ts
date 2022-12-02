@@ -3,28 +3,30 @@ import { FocusMode, useLayoutStore } from '../Stores/useLayoutStore'
 const useLayout = () => {
   const toggleFocusModeBool = useLayoutStore((store) => store.toggleFocusMode)
   const setFocusMode = useLayoutStore((store) => store.setFocusMode)
-  const showInfobar = useLayoutStore((store) => store.showInfobar)
-  const hideInfobar = useLayoutStore((store) => store.hideInfobar)
-  const showShareOptions = useLayoutStore((store) => store.showShareOptions)
-  const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
+  const showRHSidebar = useLayoutStore((store) => store.showRHSidebar)
+  const hideRHSidebar = useLayoutStore((store) => store.hideRHSidebar)
+  // const showShareOptions = useLayoutStore((store) => store.showShareOptions)
+  // const toggleShareOptions = useLayoutStore((store) => store.toggleShareOptions)
+
+  const showSidebar = useLayoutStore((store) => store.showSidebar)
 
   const toggleFocusMode = () => {
     if (useLayoutStore.getState().focusMode) {
       toggleFocusModeBool()
-      showInfobar()
-      if (showShareOptions) toggleShareOptions()
+      showRHSidebar()
+      // if (showShareOptions) toggleShareOptions()
     } else {
       toggleFocusModeBool()
-      hideInfobar()
+      hideRHSidebar()
     }
   }
 
   const setFocusHover = (focusMode: FocusMode) => {
     setFocusMode(focusMode)
     if (focusMode.on) {
-      showInfobar()
+      showRHSidebar()
     } else {
-      hideInfobar()
+      hideRHSidebar()
     }
   }
 

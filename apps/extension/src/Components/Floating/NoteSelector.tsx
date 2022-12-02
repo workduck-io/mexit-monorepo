@@ -1,16 +1,20 @@
+import React, { useEffect, useMemo, useState } from 'react'
+
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
-import { fuzzySearch } from '@mexit/core'
-import { Input, SidebarListFilter } from '@mexit/shared'
+import { debounce } from 'lodash'
+
 import { Button } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
-import { debounce } from 'lodash'
-import React, { useEffect, useMemo, useState } from 'react'
+
+import { fuzzySearch } from '@mexit/core'
+import { Input, SidebarListFilter } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import useDataStore from '../../Stores/useDataStore'
+
 import { Dialog } from './Dialog'
 import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'
 

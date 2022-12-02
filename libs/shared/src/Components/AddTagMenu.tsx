@@ -6,6 +6,7 @@ import { Icon } from '@iconify/react'
 import { Tag } from '@mexit/core'
 
 import { FilterMenuDiv } from '../Style/Filter.style'
+
 import { Menu, MenuItem } from './FloatingElements/Dropdown'
 
 interface AddTagMenuProps {

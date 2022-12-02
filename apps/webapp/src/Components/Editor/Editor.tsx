@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 
+import styled from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
+
 import { NodeEditorContent } from '@mexit/core'
 import { EditorStyles,useEditorChange } from '@mexit/shared'
 
@@ -8,9 +11,8 @@ import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'
 import MexEditor, { MexEditorOptions } from '../../Editor/MexEditor'
 import { ComboboxConfig } from '../../Editor/Types/MultiCombobox'
 import { useFocusBlock } from '../../Stores/useFocusBlock'
+
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
-import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;

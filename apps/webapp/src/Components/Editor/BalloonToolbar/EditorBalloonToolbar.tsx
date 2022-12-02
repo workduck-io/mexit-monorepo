@@ -1,11 +1,5 @@
 import React from 'react'
 
-import { ButtonSeparator, useBalloonToolbarStore } from '@mexit/shared'
-
-import { BalloonToolbar } from './BalloonToolbar'
-import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
-import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
-import { SelectionToTask } from './components/SelectionToTask'
 import AlignLeftIcon from '@iconify/icons-bx/bx-align-left'
 import AlignCenterIcon from '@iconify/icons-bx/bx-align-middle'
 import AlignRightIcon from '@iconify/icons-bx/bx-align-right'
@@ -42,6 +36,13 @@ import {
   ToolbarButtonProps,
   usePlateEditorRef
 } from '@udecode/plate'
+
+import { ButtonSeparator, useBalloonToolbarStore } from '@mexit/shared'
+
+import { SelectionToNode, SelectionToNodeInput } from './components/SelectionToNode'
+import { SelectionToSnippet, SelectionToSnippetInput } from './components/SelectionToSnippet'
+import { SelectionToTask } from './components/SelectionToTask'
+import { BalloonToolbar } from './BalloonToolbar'
 
 const BallonMarkToolbarButtons = () => {
   const toolbarState = useBalloonToolbarStore((s) => s.toolbarState)

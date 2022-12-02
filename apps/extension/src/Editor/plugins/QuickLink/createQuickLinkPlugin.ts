@@ -1,5 +1,6 @@
-import { ELEMENT_ILINK } from '@mexit/core'
 import { createPluginFactory, getSlateClass } from '@udecode/plate'
+
+import { ELEMENT_ILINK } from '@mexit/core'
 
 import { QuickLinkElement } from './components/QuickLinkElement'
 

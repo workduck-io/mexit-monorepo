@@ -1,14 +1,13 @@
 import { produce } from 'immer'
 
 import { defaultCommands } from '../Data/defaultCommands'
-import { Tag, CachedILink, ILink } from '../Types/Editor'
-import { DataStoreState } from '../Types/Store'
-import { Settify, withoutContinuousDelimiter, typeInvert } from '../Utils/helpers'
+import { CachedILink, ILink,Tag } from '../Types/Editor'
+import { Settify, typeInvert,withoutContinuousDelimiter } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
 import { mog } from '../Utils/mog'
 import { getAllParentIds, getUniquePath } from '../Utils/path'
-import { getAllParentPaths, getNodeIcon } from '../Utils/treeUtils'
+import { getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
   value: item

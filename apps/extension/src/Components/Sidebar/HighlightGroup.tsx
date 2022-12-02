@@ -1,7 +1,10 @@
+import React, { useMemo } from 'react'
+
 import arrowRightSLine from '@iconify/icons-ri/arrow-right-s-line'
 import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
+
 import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE} from '@mexit/core'
 import {
   HighlightCollapsedToggle,
@@ -11,7 +14,6 @@ import {
   HighlightText,
   SingleHighlightWrapper
 } from '@mexit/shared'
-import React, { useMemo } from 'react'
 
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'

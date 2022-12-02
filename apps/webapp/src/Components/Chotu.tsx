@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { connectToParent } from 'penpal'
+
 import { useAuth } from '@workduck-io/dwindle'
 
 import {
@@ -28,7 +30,6 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, searchWorker } from '../Workers/controller'
-import { connectToParent } from 'penpal'
 
 export default function Chotu() {
   const [parent, setParent] = useState<any>(null)

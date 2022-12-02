@@ -1,6 +1,11 @@
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
+import archiveLine from '@iconify/icons-ri/archive-line'
+import searchLine from '@iconify/icons-ri/search-line'
+import settings4Line from '@iconify/icons-ri/settings-4-line'
+import { useSingleton } from '@tippyjs/react'
+
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
 import {
@@ -28,12 +33,9 @@ import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { showNav } from '../../Utils/nav'
 import { SidebarToggles } from '../logo'
+
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
-import archiveLine from '@iconify/icons-ri/archive-line'
-import searchLine from '@iconify/icons-ri/search-line'
-import settings4Line from '@iconify/icons-ri/settings-4-line'
-import { useSingleton } from '@tippyjs/react'
 
 // const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
 //   const { goTo } = useRouting()

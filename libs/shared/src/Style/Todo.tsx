@@ -1,4 +1,4 @@
-import { mix, transparentize } from 'polished'
+import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { MainHeader } from './Layouts'

@@ -1,5 +1,5 @@
 import { Key, KeyBinding } from '../Types/Shortcut'
-import { EXCLUDED_KEYS_MODIFIERS, KEY_MODIFIERS, getKeyFromKeycode } from '../Utils/keyMap'
+import { EXCLUDED_KEYS_MODIFIERS, getKeyFromKeycode,KEY_MODIFIERS } from '../Utils/keyMap'
 
 export type ShortcutStoreType = {
   modifiers: Set<string>

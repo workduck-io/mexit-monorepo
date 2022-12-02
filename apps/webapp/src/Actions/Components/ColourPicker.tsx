@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 
-import { copyTextToClipboard , resize } from '@mexit/shared'
-
 import styled from 'styled-components'
+
+import { copyTextToClipboard , resize } from '@mexit/shared'
 
 const Container = styled.div`
   display: flex;

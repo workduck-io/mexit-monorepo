@@ -5,6 +5,7 @@ import { SlashCommandConfig } from '../Editor/Types/Combobox'
 import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+
 import { useSearch } from './useSearch'
 
 export const useSnippets = () => {

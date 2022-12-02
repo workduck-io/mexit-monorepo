@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 import {
   defaultContent,
   extractMetadata,
@@ -9,7 +11,6 @@ import {
   SEPARATOR,
   SingleNamespace
 } from '@mexit/core'
-import toast from 'react-hot-toast'
 
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
@@ -17,6 +18,7 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent } from '../Utils/serializer'
+
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'

@@ -1,4 +1,3 @@
-import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
 import {
   autoformatComparison,
   autoformatEquality,
@@ -44,6 +43,8 @@ import {
   unwrapList,
   Value
 } from '@udecode/plate'
+
+import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
 
 const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 

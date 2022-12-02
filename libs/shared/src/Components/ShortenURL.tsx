@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
-import toast from 'react-hot-toast'
 
-import { apiURLs, mog, Link } from '@mexit/core'
+import { apiURLs, Link,mog } from '@mexit/core'
 
 import { Input } from '../Style/Form'
-import { ShortenSectionWrapper, ShortenButton } from '../Style/ShortenURL.style'
+import { ShortenButton,ShortenSectionWrapper } from '../Style/ShortenURL.style'
+
 import { Tooltip } from './FloatingElements'
 
 interface ShortenURLProps {

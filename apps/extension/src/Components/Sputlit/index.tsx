@@ -1,5 +1,6 @@
-import { ActionType, QuickLinkType } from '@mexit/core'
 import React, { useEffect, useRef } from 'react'
+
+import { ActionType, QuickLinkType } from '@mexit/core'
 
 import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
@@ -9,6 +10,7 @@ import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import Search from '../Search'
+
 import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
 
 const appearanceAnimationKeyframes = [

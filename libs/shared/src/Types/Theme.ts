@@ -1,4 +1,5 @@
 import { ThemeConfig } from 'react-select/src/theme'
+
 import { DefaultTheme } from 'styled-components'
 
 export interface ShadePalette {

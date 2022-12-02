@@ -1,7 +1,8 @@
+import styled from 'styled-components'
+
 import { CheckBoxWrapper, EditorStyles } from '@mexit/shared'
 
 import { ModalSection } from '../../../Style/Refactor'
-import styled from 'styled-components'
 
 export const TaskEditorWrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.small};

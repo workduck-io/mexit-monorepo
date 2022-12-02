@@ -1,6 +1,7 @@
 import { uniq } from 'lodash'
 
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
+
 import { ELEMENT_MENTION } from './editorElements'
 import { generateTempId } from './idGenerator'
 

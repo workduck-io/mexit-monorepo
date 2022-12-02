@@ -1,6 +1,3 @@
-import { ComboTriggerType } from '../../../Stores/useComboboxStore'
-import { ComboboxType, ComboTriggerDataType } from '../../Types/MultiCombobox'
-import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_CODE_LINE,
@@ -10,6 +7,10 @@ import {
   PlateEditor
 } from '@udecode/plate'
 import { Range } from 'slate'
+
+import { ComboTriggerType } from '../../../Stores/useComboboxStore'
+import { ComboboxType, ComboTriggerDataType } from '../../Types/MultiCombobox'
+import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
 
 export const getTriggeredData = (
   editor: PlateEditor,

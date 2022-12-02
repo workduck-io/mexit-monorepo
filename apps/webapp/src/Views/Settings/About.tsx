@@ -1,13 +1,14 @@
 import React from 'react'
 
-import { BackCard,CenteredColumn, Title  } from '@mexit/shared'
-
-import { version } from '../../../package.json'
 import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
 import twitterIcon from '@iconify/icons-logos/twitter'
 import globeIcon from '@iconify/icons-ph/globe'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
+
+import { BackCard,CenteredColumn, Title  } from '@mexit/shared'
+
+import { version } from '../../../package.json'
 // import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'
 
 const Margin = styled.div`

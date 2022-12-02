@@ -1,6 +1,7 @@
-import { initActions,MexitAction } from '@mexit/core'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { initActions,MexitAction } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 

@@ -1,7 +1,9 @@
-import { CenteredFlex, List,SnippetCards } from '@mexit/shared'
 import React, { useMemo } from 'react'
 
+import { CenteredFlex, List, SnippetCards } from '@mexit/shared'
+
 import { useHighlightStore } from '../../Stores/useHighlightStore'
+
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'
@@ -89,7 +91,7 @@ export function ContextInfoBar() {
         <div>
           <CenteredFlex>
             <h2>Hi there</h2>
-            <p>Let's get you started</p>
+            <p>Let&apos;s get you started</p>
           </CenteredFlex>
           <SnippetCards fullHeight={false}>
             {basicOnboarding.map((item) => (

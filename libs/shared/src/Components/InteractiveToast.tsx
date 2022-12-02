@@ -1,6 +1,6 @@
 import React from 'react'
+import toast from 'react-hot-toast'
 
-import toast, { Toast } from 'react-hot-toast'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'

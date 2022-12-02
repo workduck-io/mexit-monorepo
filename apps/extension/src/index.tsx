@@ -1,6 +1,8 @@
-import { defaultThemes, Notification } from '@mexit/shared'
 import React, { useMemo } from 'react'
+
 import { ThemeProvider } from 'styled-components'
+
+import { defaultThemes, Notification } from '@mexit/shared'
 
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'

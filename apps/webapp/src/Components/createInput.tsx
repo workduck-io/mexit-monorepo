@@ -1,9 +1,10 @@
 import React from 'react'
 
+import styled from 'styled-components'
+
 import { Input, StyledMenu } from '@mexit/shared'
 
 import NodeSelect from './NodeSelect/NodeSelect'
-import styled from 'styled-components'
 
 export const StyledCreateInputWrapper = styled.div`
   width: 100%;

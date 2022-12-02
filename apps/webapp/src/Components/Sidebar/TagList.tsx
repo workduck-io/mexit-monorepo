@@ -1,13 +1,15 @@
 import { useMatch } from 'react-router-dom'
 
+import hashtag from '@iconify/icons-ri/hashtag'
+
 import { mog } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
+
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
-import hashtag from '@iconify/icons-ri/hashtag'
 
 const TagList = () => {
   const { getAllTags } = useTags()

@@ -1,7 +1,9 @@
+import React, { useEffect,useRef  } from 'react'
+
+import styled from 'styled-components'
+
 import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
-import React, { useEffect,useRef  } from 'react'
-import styled from 'styled-components'
 
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'

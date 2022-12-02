@@ -1,5 +1,6 @@
-import { transparentize } from 'polished'
 import { Menu } from 'react-contexify'
+
+import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 export const StyledContexifyMenu = styled(Menu)`

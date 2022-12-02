@@ -8,7 +8,7 @@ import magicLine from '@iconify/icons-ri/magic-line'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import { InputPrompt, MediaInputWrapper, MediaInput } from './MediaEmbedElement.styles'
+import { InputPrompt, MediaInput,MediaInputWrapper } from './MediaEmbedElement.styles'
 
 export const MediaEmbedUrlInput = ({
   url,

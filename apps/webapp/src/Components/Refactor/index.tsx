@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect,useMemo } from 'react'
 import Modal from 'react-modal'
 
+import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
+import { Icon } from '@iconify/react'
+
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -15,9 +18,8 @@ import { useRefactorStore } from '../../Stores/useRefactorStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { ArrowIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
+
 import { doesLinkRemain } from './doesLinkRemain'
-import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
-import { Icon } from '@iconify/react'
 
 const Refactor = () => {
   const open = useRefactorStore((store) => store.open)

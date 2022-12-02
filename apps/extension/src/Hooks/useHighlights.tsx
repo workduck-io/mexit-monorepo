@@ -1,14 +1,16 @@
-import { extractMetadata, Highlight, mog, NodeEditorContent, SEPARATOR, WORKSPACE_HEADER } from '@mexit/core'
-import toast from 'react-hot-toast'
-import { useAuthStore } from './useAuth'
-import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useCallback } from 'react'
-import { isReadonly, usePermissions } from './usePermissions'
-import { useContentStore } from '../Stores/useContentStore'
+import toast from 'react-hot-toast'
+
+import { Highlight, mog, NodeEditorContent, SEPARATOR, WORKSPACE_HEADER } from '@mexit/core'
+
 import { useLinkURLs } from '../Hooks/useURLs'
-import { useLinks } from './useLinks'
+import { useContentStore } from '../Stores/useContentStore'
+import { useHighlightStore } from '../Stores/useHighlightStore'
+
+import { useAuthStore } from './useAuth'
 import { useInternalLinks } from './useInternalLinks'
-import { deserializeContent } from '../Utils/serializer'
+import { useLinks } from './useLinks'
+import { isReadonly, usePermissions } from './usePermissions'
 import useRaju from './useRaju'
 
 export const useHighlights = () => {

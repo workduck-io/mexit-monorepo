@@ -1,7 +1,8 @@
+import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
+
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
 import { useContentStore } from '../../Stores/useContentStore'
-import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
 type BlockDataType = Record<string, any>
 

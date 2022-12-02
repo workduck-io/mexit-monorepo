@@ -1,19 +1,18 @@
 import React, { cloneElement, useMemo, useState } from 'react'
+import { mergeRefs } from 'react-merge-refs'
 
 import {
-  Placement,
-  offset,
-  flip,
-  shift,
   autoUpdate,
-  useFloating,
-  useInteractions,
-  useHover,
-  useRole,
+  flip,
+  FloatingPortal,
+  offset,
+  Placement,
+  shift,
   useDismiss,
-  FloatingPortal
-} from '@floating-ui/react-dom-interactions'
-import { mergeRefs } from 'react-merge-refs'
+  useFloating,
+  useHover,
+  useInteractions,
+  useRole} from '@floating-ui/react-dom-interactions'
 
 import { TooltipWrapper } from './Tooltip.style'
 

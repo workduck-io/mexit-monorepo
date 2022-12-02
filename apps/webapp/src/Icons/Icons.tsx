@@ -1,15 +1,6 @@
 // Icons for sidebar and UI
 import React from 'react'
 
-import Asana from './Asana'
-import { ReactComponent as Figma } from './Figma.svg'
-import Github from './github'
-import { ReactComponent as Google } from './Google.svg'
-import { ReactComponent as Jira } from './Jira.svg'
-import Linear from './linear'
-import Slack from './slack'
-import Telegram from './Telgram'
-import Whatsapp from './whatsapp'
 import bxChevronDownCircle from '@iconify/icons-bx/bx-chevron-down-circle'
 import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
 import checkboxBlankCircleLine from '@iconify/icons-ri/checkbox-blank-circle-line'
@@ -21,6 +12,16 @@ import starFill from '@iconify/icons-ri/star-fill'
 import starLine from '@iconify/icons-ri/star-line'
 import taskFill from '@iconify/icons-ri/task-fill'
 import taskLine from '@iconify/icons-ri/task-line'
+
+import Asana from './Asana'
+import { ReactComponent as Figma } from './Figma.svg'
+import Github from './github'
+import { ReactComponent as Google } from './Google.svg'
+import { ReactComponent as Jira } from './Jira.svg'
+import Linear from './linear'
+import Slack from './slack'
+import Telegram from './Telgram'
+import Whatsapp from './whatsapp'
 
 // `any` is used in type signature as `IconifyIcon` type doesn't work
 

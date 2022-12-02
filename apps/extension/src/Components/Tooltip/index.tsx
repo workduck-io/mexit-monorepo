@@ -1,9 +1,11 @@
+import React, { useMemo, useRef } from 'react'
+import toast from 'react-hot-toast'
+
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon as Iconify } from '@iconify/react'
-import { MEXIT_FRONTEND_URL_BASE, mog  } from '@mexit/core'
-import { copyTextToClipboard, HighlightNote, Popover  } from '@mexit/shared'
-import React, { useMemo, useRef  } from 'react'
-import toast from 'react-hot-toast'
+
+import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
 
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useHighlights } from '../../Hooks/useHighlights'
@@ -11,6 +13,7 @@ import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { VisualState } from '../../Hooks/useSputlitContext'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'
 
 function Tooltip() {
@@ -115,9 +118,9 @@ function Tooltip() {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
                   <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                 </svg>
@@ -134,9 +137,9 @@ function Tooltip() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
               <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
             </svg>
@@ -151,9 +154,9 @@ function Tooltip() {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -171,9 +174,9 @@ function Tooltip() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
           <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>

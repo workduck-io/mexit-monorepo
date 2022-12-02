@@ -1,19 +1,19 @@
 import React from 'react'
 
-import { Loading , NodeInfo } from '@mexit/shared'
+import { useSingleton } from '@tippyjs/react'
 
-import useLayout from '../../Hooks/useLayout'
+import { Loading, NodeInfo } from '@mexit/shared'
+
 import useToggleElements from '../../Hooks/useToggleElements'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+
 import NodeRenameOnlyTitle from './Rename/NodeRename'
-import { useSingleton } from '@tippyjs/react'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
-  const { toggleFocusMode, getFocusProps } = useLayout()
   const focusMode = useLayoutStore((store) => store.focusMode)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const [source, target] = useSingleton()

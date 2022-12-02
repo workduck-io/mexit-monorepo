@@ -7,6 +7,7 @@ import { StyledElementProps } from '@udecode/plate-styled-components'
 import styled, { css } from 'styled-components'
 
 import { ILinkNode } from '../Types/QuickLink.types'
+
 import { EditorIcons } from './Icons'
 
 const Link = styled.a`

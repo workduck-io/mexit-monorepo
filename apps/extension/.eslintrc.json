@@ -1,48 +1,12 @@
 {
-  "root": true,
-  "ignorePatterns": ["!**/*", "src/Assets/**/*"],
-  "plugins": ["@nrwl/nx", "unused-imports", "simple-import-sort", "import"],
-  "parserOptions": {
-    "sourceType": "module"
-  },
-  "env": { "es6": true },
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*", "src/Assets/**/*", "build/**/*.js"],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
-          "error",
-          {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              }
-            ]
-          }
-        ],
-        "unused-imports/no-unused-imports": "warn",
-        "simple-import-sort/imports": "warn",
-        "simple-import-sort/exports": "warn",
-        "import/first": "error",
-        "import/newline-after-import": "error",
-        "import/no-duplicates": "error"
-      }
-    },
-    {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": "off"
+        "@typescript-eslint/no-extra-semi": "off"
       }
-    },
-    {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
-      "rules": {}
     }
   ]
 }

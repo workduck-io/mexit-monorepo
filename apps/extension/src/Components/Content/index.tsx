@@ -1,6 +1,8 @@
-import { defaultContent, ELEMENT_TAG, mog, NodeEditorContent, QuickLinkType } from '@mexit/core'
-import { createPlateEditor, createPlateUI } from '@udecode/plate'
 import React, { useEffect, useState } from 'react'
+
+import { createPlateEditor, createPlateUI } from '@udecode/plate'
+
+import { defaultContent, ELEMENT_TAG, NodeEditorContent, QuickLinkType } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -11,6 +13,7 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { getDeserializeSelectionToNodes } from '../../Utils/deserialize'
 import Results from '../Results'
+
 import { StyledContent } from './styled'
 
 export default function Content() {

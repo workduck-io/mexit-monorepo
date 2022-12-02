@@ -1,5 +1,4 @@
-import { Reminder, ReminderState } from '../Types/Reminders'
-import { mog } from '../Utils/mog'
+import { Reminder } from '../Types/Reminders'
 
 interface ArmedReminder {
   reminderId: string
