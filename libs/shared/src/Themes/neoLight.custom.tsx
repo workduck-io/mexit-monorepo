@@ -1,14 +1,11 @@
-import { transparentize } from 'polished'
-import { css } from 'styled-components'
-
 import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { BackCard } from '../Style/Card'
-import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
+import { ComboboxItem,ComboboxRoot } from '../Style/Combobox'
 import { DataInfobarWrapper } from '../Style/DataInfobar'
-import { MenuTrigger, EditorStyles, Widget } from '../Style/Editor'
+import { EditorStyles, MenuTrigger, Widget } from '../Style/Editor'
 import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
-import { NavWrapper, NavButton } from '../Style/Nav'
+import { NavButton,NavWrapper } from '../Style/Nav'
 import { StyledMenu } from '../Style/NodeSelect.style'
 import { SILink } from '../Style/QuickLinkElement.styles'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
@@ -18,6 +15,8 @@ import { CreateSnippet } from '../Style/Snippets'
 import { TodoContainer } from '../Style/Todo.style'
 import { Title } from '../Style/Typography'
 import { SpaceBlocksCss } from './spaceBlocks'
+import { transparentize } from 'polished'
+import { css } from 'styled-components'
 
 const palette = { body: '#C4CCE0', background: '#D2D9EC', shadow: '#576BA4', primDark: '#4263B6' }
 

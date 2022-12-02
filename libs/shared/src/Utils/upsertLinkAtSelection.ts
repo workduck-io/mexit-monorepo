@@ -1,16 +1,15 @@
 import { ELEMENT_LINK, wrapLink } from '@udecode/plate'
 import {
+  collapseSelection,
+  getLeafNode,
   getPluginType,
   insertNodes,
   isCollapsed,
-  Value,
-  TElement,
-  collapseSelection,
   PlateEditor,
+  select,
+  TElement,
   unwrapNodes,
-  getLeafNode,
-  select
-} from '@udecode/plate-core'
+  Value} from '@udecode/plate-core'
 import { BaseRange } from 'slate'
 
 // import { ELEMENT_LINK } from '../createLinkPlugin'

@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components'
-
 import { IconWrapper } from './IconPicker.style'
+import styled, { css } from 'styled-components'
 
 // import { Ellipsis } from './NodeSelect.style'
 

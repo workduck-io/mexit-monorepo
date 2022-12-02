@@ -1,27 +1,25 @@
 import React, { cloneElement } from 'react'
-
-import {
-  offset,
-  shift,
-  useFloating,
-  useInteractions,
-  useRole,
-  useDismiss,
-  useId,
-  useClick,
-  FloatingFocusManager,
-  FloatingPortal,
-  useFloatingNodeId,
-  FloatingNode,
-  autoPlacement,
-  useDelayGroupContext,
-  useHover,
-  useDelayGroup,
-  safePolygon
-} from '@floating-ui/react-dom-interactions'
 import { RemoveScroll } from 'react-remove-scroll'
 
 import { Props } from './types'
+import {
+  autoPlacement,
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingPortal,
+  offset,
+  safePolygon,
+  shift,
+  useClick,
+  useDelayGroup,
+  useDelayGroupContext,
+  useDismiss,
+  useFloating,
+  useFloatingNodeId,
+  useHover,
+  useId,
+  useInteractions,
+  useRole} from '@floating-ui/react-dom-interactions'
 
 export const Floating = ({
   children,

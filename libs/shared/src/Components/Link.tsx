@@ -1,13 +1,12 @@
 import React from 'react'
 
+import { ILinkNode } from '../Types/QuickLink.types'
+import { EditorIcons } from './Icons'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 import { Value } from '@udecode/plate'
 import { StyledElementProps } from '@udecode/plate-styled-components'
 import styled, { css } from 'styled-components'
-
-import { ILinkNode } from '../Types/QuickLink.types'
-import { EditorIcons } from './Icons'
 
 const Link = styled.a`
   position: relative;

@@ -1,12 +1,9 @@
-import { transparentize } from 'polished'
-import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
-
 import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { BackCard } from '../Style/Card'
-import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
+import { ComboboxItem,ComboboxRoot } from '../Style/Combobox'
 import { DataInfobarWrapper } from '../Style/DataInfobar'
-import { StyledEditor, EditorStyles } from '../Style/Editor'
+import { EditorStyles,StyledEditor } from '../Style/Editor'
 import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
 import { GridWrapper } from '../Style/Grid'
 import { InfobarTools, InfoBarWrapper } from '../Style/Infobar'
@@ -16,9 +13,11 @@ import { ReminderStyled } from '../Style/Reminders.style'
 import { Result, SearchFilterListWrap } from '../Style/Search'
 import { SettingsOptions } from '../Style/Settings'
 import { SidebarDiv } from '../Style/Sidebar'
-import { SSnippet, CreateSnippet } from '../Style/Snippets'
+import { CreateSnippet,SSnippet } from '../Style/Snippets'
 import { StyledBoard } from '../Style/Todo'
 import { TodoContainer } from '../Style/Todo.style'
+import { transparentize } from 'polished'
+import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
 interface SpaceProps {
   containerStyle?: FlattenInterpolation<ThemeProps<DefaultTheme>>

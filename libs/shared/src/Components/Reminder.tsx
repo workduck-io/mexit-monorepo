@@ -1,10 +1,5 @@
 import React from 'react'
 
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
-import { add } from 'date-fns/fp'
-
 import { Button } from '@workduck-io/mex-components'
 
 import {
@@ -28,6 +23,10 @@ import {
   ReminderTime,
   SnoozeControls
 } from '../Style/Reminders.style'
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import { add } from 'date-fns/fp'
 
 export interface ReminderControl {
   type: 'dismiss' | 'open' | 'delete' | 'unarchive'

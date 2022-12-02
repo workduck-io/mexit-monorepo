@@ -1,7 +1,6 @@
+import { ItemContent, StyledTreeItemSwitcher } from './Sidebar'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-
-import { ItemContent, StyledTreeItemSwitcher } from './Sidebar'
 
 export const BList = styled.div`
   /* max-height: 15rem;

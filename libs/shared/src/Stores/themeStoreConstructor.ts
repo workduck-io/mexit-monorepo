@@ -1,6 +1,5 @@
-import { DefaultTheme } from 'styled-components'
-
 import { defaultThemes, xemTheme } from '../Themes'
+import { DefaultTheme } from 'styled-components'
 
 export interface Theme {
   id: string

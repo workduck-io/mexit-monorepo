@@ -1,6 +1,5 @@
-import axios from 'axios'
-
 import { oembedProviders } from './embedProviders'
+import axios from 'axios'
 
 const fetchOembed = async (url: string, endpoint: string): Promise<string | undefined> => {
   // Create URL for Oembed request

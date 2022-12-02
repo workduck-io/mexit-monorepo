@@ -1,5 +1,4 @@
 export * from './defaultThemes'
-
 export * from './devTheme'
 export * from './gruvboxTheme'
 export * from './hackerTheme'
@@ -14,5 +13,5 @@ export * from './renarTheme'
 export * from './spotlightTheme'
 export * from './vertigoTheme'
 export * from './vvkTheme'
-export * from './yellowyTheme'
 export * from './xemTheme'
+export * from './yellowyTheme'

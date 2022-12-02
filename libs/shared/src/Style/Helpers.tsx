@@ -1,7 +1,6 @@
+import { MexIcons, MexNodeIcons } from '../Components/Icons'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
-
-import { MexIcons, MexNodeIcons } from '../Components/Icons'
 
 type Pixels = number // Pixels in integer
 

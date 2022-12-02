@@ -1,7 +1,6 @@
-import styled, { css } from 'styled-components'
-
 import { Button } from './Buttons'
 import { BodyFont } from './Search'
+import styled, { css } from 'styled-components'
 
 export const ComboboxItem = styled.div`
   display: flex;

@@ -1,7 +1,6 @@
-import styled from 'styled-components'
-
 import { CollapsableHeaderTitle } from './Collapse'
 import { Title } from './Typography'
+import styled from 'styled-components'
 
 export const DataInfobarWrapper = styled.div`
   display: flex;

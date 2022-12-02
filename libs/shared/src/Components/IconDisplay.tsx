@@ -1,10 +1,9 @@
 import React from 'react'
 
-import { Icon } from '@iconify/react'
-
 import { MIcon } from '@mexit/core'
 
 import { IconWrapper } from '../Style/IconPicker.style'
+import { Icon } from '@iconify/react'
 
 interface IconDisplayProps {
   icon: MIcon

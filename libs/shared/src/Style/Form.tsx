@@ -1,8 +1,8 @@
 import React from 'react'
-
-import { transparentize } from 'polished'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
+
+import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
 
 export enum TextFieldHeight {

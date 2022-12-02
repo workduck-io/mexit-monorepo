@@ -1,5 +1,3 @@
-import styled, { css } from 'styled-components'
-
 import { Button } from '@workduck-io/mex-components'
 
 import { CenteredMainContent } from './Editor'
@@ -7,6 +5,7 @@ import { FlexBetween } from './FloatingButton.style'
 import { CardShadow } from './Helpers'
 import { CenteredFlex, IntegrationTitle } from './Integrations'
 import { BodyFont } from './Search'
+import styled, { css } from 'styled-components'
 
 export const ServiceContainer = styled(CenteredMainContent)``
 

@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { Input } from './Form'
+import styled from 'styled-components'
 
 interface SidebarListWrapperProps {
   noMargin?: boolean

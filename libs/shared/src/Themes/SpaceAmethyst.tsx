@@ -1,7 +1,6 @@
+import { SpaceBlocksCss } from './spaceBlocks'
 import { transparentize } from 'polished'
 import { css } from 'styled-components'
-
-import { SpaceBlocksCss } from './spaceBlocks'
 
 const blockCss = SpaceBlocksCss({
   containerStyle: css`

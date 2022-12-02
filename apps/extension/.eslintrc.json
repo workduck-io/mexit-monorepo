@@ -1,4 +1,12 @@
 {
   "extends": ["../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "src/Assets/**/*", "build/**/*.js"]
+  "ignorePatterns": ["!**/*", "src/Assets/**/*", "build/**/*.js"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-extra-semi": "off"
+      }
+    }
+  ]
 }

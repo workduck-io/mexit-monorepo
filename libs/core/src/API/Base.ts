@@ -36,7 +36,7 @@ class APIClass {
     if (instance) {
       throw new Error('New instance cannot be created!!')
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     instance = this
   }
   init(client: AxiosInstance) {

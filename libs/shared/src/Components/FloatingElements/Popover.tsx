@@ -1,21 +1,21 @@
 import React, { cloneElement, useMemo, useState } from 'react'
-import {
-  Placement,
-  offset,
-  flip,
-  shift,
-  autoUpdate,
-  useFloating,
-  useInteractions,
-  useRole,
-  useDismiss,
-  useId,
-  useClick,
-  FloatingFocusManager,
-  FloatingPortal
-} from '@floating-ui/react-dom-interactions'
 import { mergeRefs } from 'react-merge-refs'
+
 import { PopoverWrapper } from './Popover.style'
+import {
+  autoUpdate,
+  flip,
+  FloatingFocusManager,
+  FloatingPortal,
+  offset,
+  Placement,
+  shift,
+  useClick,
+  useDismiss,
+  useFloating,
+  useId,
+  useInteractions,
+  useRole} from '@floating-ui/react-dom-interactions'
 
 interface Props {
   render: (data: { close: () => void; labelId: string; descriptionId: string }) => React.ReactNode

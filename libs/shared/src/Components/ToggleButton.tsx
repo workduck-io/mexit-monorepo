@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Slider, Input, Label } from '../Style/ToggleButton'
+import { Input, Label,Slider } from '../Style/ToggleButton'
 
 export type ToggleButtonProps = {
   value?: any

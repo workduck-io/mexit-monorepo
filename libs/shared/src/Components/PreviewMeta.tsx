@@ -1,8 +1,7 @@
 import React from 'react'
 
-import styled from 'styled-components'
-
 import { RelativeTime } from './RelativeTime'
+import styled from 'styled-components'
 
 export const Data = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};

@@ -1,13 +1,10 @@
-import { transparentize } from 'polished'
-import { css } from 'styled-components'
-
 import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { BackCard } from '../Style/Card'
-import { ComboboxRoot, ComboboxItem } from '../Style/Combobox'
-import { MenuTrigger, EditorStyles, Widget } from '../Style/Editor'
+import { ComboboxItem,ComboboxRoot } from '../Style/Combobox'
+import { EditorStyles, MenuTrigger, Widget } from '../Style/Editor'
 import { EditorPreviewWrapper } from '../Style/EditorPreview.styles'
-import { NavWrapper, NavButton, SideNav, MainNav } from '../Style/Nav'
+import { MainNav,NavButton, NavWrapper } from '../Style/Nav'
 import { StyledMenu } from '../Style/NodeSelect.style'
 import { SILink } from '../Style/QuickLinkElement.styles'
 import { Result, ResultHeader, SearchContainer, SplitSearchPreviewWrapper } from '../Style/Search'
@@ -16,6 +13,8 @@ import { CreateSnippet } from '../Style/Snippets'
 import { TodoContainer } from '../Style/Todo.style'
 import { Title } from '../Style/Typography'
 import { SpaceBlocksCss } from './spaceBlocks'
+import { transparentize } from 'polished'
+import { css } from 'styled-components'
 
 const textStyleColors = css`
   b,

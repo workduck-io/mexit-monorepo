@@ -1,6 +1,5 @@
-import styled, { keyframes } from 'styled-components'
-
 import { StyledKey } from './Shortcut'
+import styled, { keyframes } from 'styled-components'
 
 export const WelcomeHeader = styled.section`
   display: flex;

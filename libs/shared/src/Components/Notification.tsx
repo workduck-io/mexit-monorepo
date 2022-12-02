@@ -1,6 +1,6 @@
 import React from 'react'
-
 import { resolveValue, Toaster } from 'react-hot-toast'
+
 import styled from 'styled-components'
 
 const Notif = styled.div`

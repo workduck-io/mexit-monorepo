@@ -1,13 +1,13 @@
-import { transparentize } from 'polished'
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
-import styled, { css } from 'styled-components'
 
 import { CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
 import { ScrollStyles } from './Helpers'
 import { Ellipsis } from './NodeSelect.style'
 import { TabBody } from './Tab.Styles'
+import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
 
 export const Scroll = css`
   overflow-y: auto;

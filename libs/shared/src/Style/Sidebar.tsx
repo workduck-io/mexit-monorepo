@@ -1,11 +1,10 @@
 import React from 'react'
 
+import { FocusModeProp, focusStyles } from './Editor'
+import { ThinScrollbar } from './Helpers'
 import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
-
-import { FocusModeProp, focusStyles } from './Editor'
-import { PixelToCSS, ThinScrollbar } from './Helpers'
 
 export const Sicon = styled(Icon)`
   height: 26px;

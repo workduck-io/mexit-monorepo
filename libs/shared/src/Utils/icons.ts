@@ -1,5 +1,5 @@
 // import { MexNodeIcons } from 'src/components/icons/Icons'
-import { isElder, BASE_DRAFT_PATH, BASE_TASKS_PATH, MIcon, iconTypes } from '@mexit/core'
+import { BASE_DRAFT_PATH, BASE_TASKS_PATH, iconTypes,isElder, MIcon } from '@mexit/core'
 
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH) || path === BASE_DRAFT_PATH) {

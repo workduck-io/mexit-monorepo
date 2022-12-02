@@ -1,7 +1,5 @@
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
-
 import { HoverSubtleGlow, ShowOnHoverIconStyles, SubtleGlow } from './Helpers'
+import styled from 'styled-components'
 
 export const TagFlex = styled.div`
   cursor: pointer;

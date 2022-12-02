@@ -1,8 +1,7 @@
-import { transparentize } from 'polished'
-import { css } from 'styled-components'
-
 import { NeoDarkStylesPlain } from './neoDark.custom'
 import { SpaceBlocksCss } from './spaceBlocks'
+import { transparentize } from 'polished'
+import { css } from 'styled-components'
 
 const palette = { body: '#1B1F3D' }
 

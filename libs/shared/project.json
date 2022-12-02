@@ -2,15 +2,5 @@
   "root": "libs/shared",
   "sourceRoot": "libs/shared/src",
   "projectType": "library",
-  "tags": [],
-  "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/core/**/*.{ts,tsx,js,jsx}"],
-        "eslintConfig": "libs/shared/.eslintrc.json"
-      }
-    }
-  }
+  "tags": []
 }

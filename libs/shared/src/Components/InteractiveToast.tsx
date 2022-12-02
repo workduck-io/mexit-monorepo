@@ -1,9 +1,9 @@
 import React from 'react'
-
-import toast, { Toast } from 'react-hot-toast'
-import styled from 'styled-components'
+import toast from 'react-hot-toast'
 
 import { Button } from '@workduck-io/mex-components'
+
+import styled from 'styled-components'
 
 interface InteractiveToastProps {
   tid: string

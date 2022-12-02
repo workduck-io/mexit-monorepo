@@ -1,7 +1,7 @@
 import { animated } from 'react-spring'
-import styled, { css } from 'styled-components'
 
 import { size } from './Responsive'
+import styled, { css } from 'styled-components'
 
 export const GridCss = (smCol = 2, lgCol = 3, spacing?: string) => css`
   display: grid;

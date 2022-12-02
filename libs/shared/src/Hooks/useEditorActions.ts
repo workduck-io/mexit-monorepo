@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
-import { usePlateEditorRef } from '@udecode/plate'
-
 import { NodeEditorContent } from '@mexit/core'
+
+import { usePlateEditorRef } from '@udecode/plate'
 
 export const useEditorChange = (editorId: string, content: NodeEditorContent, onChange?: any) => {
   const editor = usePlateEditorRef(editorId)

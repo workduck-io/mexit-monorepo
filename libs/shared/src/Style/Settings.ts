@@ -1,5 +1,6 @@
-import { transparentize } from 'polished'
 import { NavLink } from 'react-router-dom'
+
+import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 export const SettingsContainer = styled.section`

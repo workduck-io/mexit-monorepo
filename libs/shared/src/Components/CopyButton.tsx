@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
+import { IconButton } from '@workduck-io/mex-components'
+
 import checkboxLine from '@iconify-icons/ri/checkbox-line'
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
-
-import { IconButton } from '@workduck-io/mex-components'
 
 interface CopyButtonProps {
   text: string

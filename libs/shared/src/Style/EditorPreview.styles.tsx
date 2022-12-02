@@ -1,9 +1,8 @@
-import { transparentize } from 'polished'
-import styled, { css, keyframes } from 'styled-components'
-
 import { Button } from './Buttons'
 import { CardShadow, ScrollStyles } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
+import { transparentize } from 'polished'
+import styled, { css, keyframes } from 'styled-components'
 
 export const EditorPreviewWrapper = styled.div`
   background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])} !important;
