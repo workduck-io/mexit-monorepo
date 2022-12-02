@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react'
-
-import dayjs, { ConfigType, OpUnitType } from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import { useEffect, useRef, useState } from 'react'
 
 import { getRelativeTime } from '@mexit/core'
+
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
