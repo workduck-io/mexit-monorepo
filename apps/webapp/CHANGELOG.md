@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.20.9
+
+### Patch Changes
+
+- 35fdcc34: Fixed publish action
+
 ## 0.20.8
 
 ### Patch Changes
