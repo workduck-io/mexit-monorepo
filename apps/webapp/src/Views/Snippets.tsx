@@ -3,7 +3,6 @@ import React, { useEffect, useMemo } from 'react'
 import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
 
 import {
-  apiURLs,
   batchArray,
   convertContentToRawText,
   DRAFT_NODE,
@@ -36,7 +35,6 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useUpdater } from '../Hooks/useUpdater'
-import { useApiStore } from '../Stores/useApiStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
@@ -63,8 +61,6 @@ const Snippets = () => {
   const { queryIndex } = useSearch()
   const { goTo } = useRouting()
   const { deleteAllVersionOfSnippet } = useApi()
-
-  const setRequest = useApiStore.getState().setRequest
 
   const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
     () => ({
@@ -277,10 +273,6 @@ const Snippets = () => {
         res.fulfilled.forEach((snippets) => {
           if (snippets) {
             snippets.forEach((snippet) => {
-              setRequest(apiURLs.snippet.getById(snippet.id), {
-                ...requestData,
-                url: apiURLs.snippet.getById(snippet.id)
-              })
               updateSnippet(snippet)
             })
           }

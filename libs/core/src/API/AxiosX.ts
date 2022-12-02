@@ -15,7 +15,7 @@ export class AxiosX {
     if (config?.cache && key in this.urlHash && Date.now() - this.urlHash[key] < (config.cache.expiry ?? 120000)) {
       return
     } else {
-      const item = await this.client.get(url, config)
+      const item = await this.client.get<any>(url, config)
       if (config?.cache) {
         this.urlHash[key] = Date.now()
       }
@@ -23,19 +23,19 @@ export class AxiosX {
     }
   }
   async post(url: string, data, config?) {
-    const item = await this.client.post(url, data, config)
+    const item = await this.client.post<any>(url, data, config)
     return getData(item)
   }
   async patch(url: string, data?, config?) {
-    const item = await this.client.patch(url, data, config)
+    const item = await this.client.patch<any>(url, data, config)
     return getData(item)
   }
   async delete(url: string, config?) {
-    const item = await this.client.delete(url, config)
+    const item = await this.client.delete<any>(url, config)
     return getData(item)
   }
   async put(url: string, data, config?) {
-    const item = await this.client.put(url, data, config)
+    const item = await this.client.put<any>(url, data, config)
     return getData(item)
   }
 

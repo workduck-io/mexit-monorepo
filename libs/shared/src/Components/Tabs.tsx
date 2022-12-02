@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-
-import Tippy from '@tippyjs/react'
 import { useSpring } from 'react-spring'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
-import { TabsContainer, TabHeaderContainer, TabsWrapper, StyledTab, TabPanel, TabBody } from '../Style/Tab.Styles'
+import { StyledTab, TabBody, TabHeaderContainer, TabPanel, TabsContainer, TabsWrapper } from '../Style/Tab.Styles'
+import Tippy from '@tippyjs/react'
 
 export type ExtInfobarMode = 'context' | 'snippets' | 'notes' | 'reminders'
 export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'
@@ -46,6 +45,7 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, 
   const index = tabs.findIndex((tab) => tab.type === openedTab)
 
   return (
+    // @ts-ignore
     <TabsContainer style={animationProps} visible={visible}>
       <TabHeaderContainer>
         <TabsWrapper index={index} total={tabs.length}>

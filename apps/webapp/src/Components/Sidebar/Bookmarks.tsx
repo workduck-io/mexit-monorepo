@@ -57,6 +57,7 @@ const Bookmarks = () => {
 
   return bookmarkItems.length > 0 ? (
     <SidebarList
+      // @ts-ignore
       items={bookmarkItems}
       onClick={onOpenNode}
       selectedItemId={match?.params?.nodeid}

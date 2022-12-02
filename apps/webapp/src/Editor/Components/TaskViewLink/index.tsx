@@ -1,8 +1,7 @@
 // import { mog } from '@mexit/core'
-import { SILinkRoot,TaskSLink } from '@mexit/shared'
+import { SILinkRoot, TaskSLink } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useSaver } from '../../../Hooks/useSaver'
 import { useTaskViews, useViewStore } from '../../../Hooks/useTaskViews'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
@@ -10,7 +9,6 @@ import { useSelected } from 'slate-react'
 
 const TaskViewLink = (props: any) => {
   const { getView } = useTaskViews()
-  const { onSave } = useSaver()
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { goTo } = useRouting()
 
@@ -22,7 +20,6 @@ const TaskViewLink = (props: any) => {
     ev.preventDefault()
     // mog('openTaskView', { viewid, props })
     if (view) {
-      onSave()
       setCurrentView(view)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
     }

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
-import { getTitleFromPath,useLinks } from '../../Hooks/useLinks'
+import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import StarNoteButton from '../Buttons/StarNoteButton'
@@ -70,6 +70,7 @@ const StarredNotes = () => {
         {bookmarkItems.map((b, i) => (
           <SidebarListItemComponent
             key={`bookmark_${b.id}`}
+            // @ts-ignore
             item={b}
             contextMenu={{
               setContextOpenViewId: () => undefined,

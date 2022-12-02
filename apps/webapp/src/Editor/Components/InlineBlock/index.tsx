@@ -5,9 +5,8 @@ import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
 import useArchive from '../../../Hooks/useArchive'
 import { useLinks } from '../../../Hooks/useLinks'
-import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
-import { useSaver } from '../../../Hooks/useSaver'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
@@ -30,7 +29,7 @@ const StyledArchiveText = styled.text`
 `
 
 const InlineBlock = (props: any) => {
-  const { push } = useNavigation()
+  const { goTo } = useRouting()
   const { getPathFromNodeid } = useLinks()
   const { getNodeType } = useNodes()
   const getContent = useContentStore((store) => store.getContent)
@@ -49,13 +48,11 @@ const InlineBlock = (props: any) => {
     return data
   }, [nodeid, blockId])
 
-  const { onSave } = useSaver()
   const { archived } = useArchive()
 
   const openNode = (ev: any) => {
     ev.preventDefault()
-    onSave()
-    push(nodeid)
+    goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
   const selected = useSelected()

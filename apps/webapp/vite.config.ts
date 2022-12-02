@@ -9,7 +9,7 @@ const isDev = process.env.MODE === 'development' ? true : false
 // https://vitejs.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: ['react/jsx-runtime']
+    include: ['react/jsx-runtime', '@workduck-io/flexsearch', 'threads/worker']
   },
   server: {
     port: 3333
@@ -24,7 +24,7 @@ export default defineConfig({
       },
       output: {
         entryFileNames: '[name].js',
-        chunkFileNames: isDev ? 'assets/js/[name].js' : 'assets/js/[name].[hash].js',
+        chunkFileNames: isDev ? 'assets/js/[name].js' : 'assets/js/[name].[hash].js'
       }
     }
   },

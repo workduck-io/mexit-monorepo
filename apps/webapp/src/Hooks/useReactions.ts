@@ -138,7 +138,7 @@ export const useReactions = () => {
       .getReactionsOfNote(nodeId)
       .then((res) => {
         if (!res) return
-        const reactions = Object.entries(res)
+        const reactions = Object.entries<any>(res)
           .map(([blockId, reactions]) => {
             return reactions.map((reaction: any) => ({
               blockId,

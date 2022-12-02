@@ -31,7 +31,7 @@ const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   }
 
   const url = apiURLs.node.getMultipleNode(namespaceID)
-  return client.post(url, { ids: nodeids }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d: any) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }
@@ -48,7 +48,7 @@ const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
   }
 
   const url = apiURLs.share.getBulk
-  return client.post(url, { ids: nodeids }).then((d) => {
+  return client.post(url, { ids: nodeids }).then((d: any) => {
     if (d) {
       if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
       return { rawResponse: d.data.successful, nodeids }
