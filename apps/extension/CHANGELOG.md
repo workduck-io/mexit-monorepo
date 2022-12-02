@@ -1,5 +1,11 @@
 # mexit
 
+## 0.18.14
+
+### Patch Changes
+
+- 35fdcc34: Fixed publish action
+
 ## 0.18.13
 
 ### Patch Changes
