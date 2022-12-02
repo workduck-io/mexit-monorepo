@@ -6,6 +6,7 @@ import {
   extractMetadata,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
   getTagsFromContent,
+  getTodosFromContent,
   mog,
   NodeEditorContent,
   removeNulls
@@ -15,6 +16,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { useTodoStore } from '../../Stores/useTodoStore'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
@@ -30,6 +32,7 @@ export const useApi = () => {
   const setMetadata = useContentStore((store) => store.setMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
+  const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore()
   const { updateFromContent } = useUpdater()
@@ -246,7 +249,7 @@ export const useApi = () => {
         updatedAt: d.updatedAt
       }
 
-      // console.log(metadata, d.data)
+      // console.log(metadata, d.data, todos)
       return {
         title: d.title,
         data: d.data,
@@ -255,11 +258,15 @@ export const useApi = () => {
       }
     })
 
+    const content = deserializeContent(res.data)
+    const todos = getTodosFromContent(content)
+    updateNodeTodos(nodeId, todos)
+
     if (res) {
       return {
         id: nodeId,
         title: res.title ?? '',
-        content: deserializeContent(res.data),
+        content: content,
         metadata: res.metadata ?? undefined,
         version: res.version
       }

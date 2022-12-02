@@ -18,11 +18,13 @@ export const getTodoMetadata = (content: NodeEditorContent) => {
   const block = content[0]
 
   if (block && block.type === ELEMENT_TODO_LI) {
-    const { priority, status, ...rest } = block
+    const { priority, status, metadata, ...rest } = block
 
     return {
       priority,
-      status
+      status,
+      createdAt: metadata?.createdAt,
+      updatedAt: metadata?.updatedAt
     }
   }
 }

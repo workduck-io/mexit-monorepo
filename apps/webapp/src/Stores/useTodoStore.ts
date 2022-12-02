@@ -11,7 +11,8 @@ import {
   PriorityType,
   TodoStatus,
   TodosType,
-  TodoType} from '@mexit/core'
+  TodoType
+} from '@mexit/core'
 
 import { getTodoMetadata } from '../Editor/Plugins/todoUtils'
 
@@ -36,8 +37,8 @@ export const createTodo = (
     },
     mentions,
     tags,
-    createdAt: Date.now(),
-    updatedAt: Date.now()
+    createdAt: metaData?.createdAt ?? Date.now(),
+    updatedAt: metaData?.updatedAt ?? Date.now()
   }
 }
 
@@ -158,9 +159,9 @@ const useTodoStore = create<TodoStoreType>(
             const tags = getTagsFromContent([content])
             const mentions = getMentionsFromContent([content])
             // mog('replaceContent', { nodeid, tags, mentions, todosContent, nodeTodos, todo, content })
-            return todo
-              ? { ...todo, mentions, tags, content: [content] }
-              : createTodo(nodeid, content.id, [content], mentions, tags)
+
+            // Currently nothing as todo id, it is same as block id for now
+            return createTodo(nodeid, content.id, [content], mentions, tags)
           })
 
           const leftOutTodos = nTodo.filter((todo) => !nodeTodos.find((t) => t.id === todo.id && nodeid === t.nodeid))
