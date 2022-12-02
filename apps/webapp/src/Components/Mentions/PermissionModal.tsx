@@ -3,6 +3,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react'
 
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+
 import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
@@ -22,6 +24,7 @@ import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalControls, ModalHeader, ModalSection } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'
+
 import { InvitedUsersContent } from './InvitedUsersContent'
 import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {
@@ -36,7 +39,6 @@ import {
   ShareRowActionsWrapper,
   ShareRowHeading
 } from './styles'
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
 export const PermissionModalContent = () => {
   const closeModal = useShareModalStore((s) => s.closeModal)

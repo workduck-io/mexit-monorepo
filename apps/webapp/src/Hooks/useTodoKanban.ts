@@ -1,3 +1,6 @@
+import { ELEMENT_TODO_LI } from '@udecode/plate'
+import create from 'zustand'
+
 import {
   convertContentToRawText,
   Filter,
@@ -18,14 +21,13 @@ import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../Stores/useDataStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { KanbanBoard,KanbanCard, KanbanColumn } from '../Types/Kanban'
+
 import { useTaskFilterFunctions } from './useFilterFunctions'
 import { FilterStore } from './useFilters'
 import { useLinks } from './useLinks'
 import { useMentions } from './useMentions'
 import { useNodes } from './useNodes'
 import { useSearchExtra } from './useSearch'
-import { ELEMENT_TODO_LI } from '@udecode/plate'
-import create from 'zustand'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType

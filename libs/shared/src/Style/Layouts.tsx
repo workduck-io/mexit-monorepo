@@ -1,6 +1,7 @@
-import { Title } from './Typography'
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
+
+import { Title } from './Typography'
 
 export const Wrapper = styled.div`
   margin: 0 ${({ theme }) => theme.spacing.large};

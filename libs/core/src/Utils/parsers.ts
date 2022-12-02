@@ -1,6 +1,7 @@
 import { Snippet } from '../Stores/snippetStoreConstructor'
 import { ILink } from '../Types/Editor'
 import { GenericSearchData, SearchRepExtra } from '../Types/Search'
+
 import { ELEMENT_EXCALIDRAW } from './editorElements'
 import { convertContentToRawText } from './parseData'
 

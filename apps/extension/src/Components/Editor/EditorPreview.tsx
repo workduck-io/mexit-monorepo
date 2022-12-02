@@ -1,6 +1,11 @@
 // different import path!
 import React, { forwardRef, useState } from 'react'
 
+import closeCircleLine from '@iconify/icons-ri/close-circle-line'
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react/headless'
+
 import { generateTempId, getNameFromPath, MEXIT_FRONTEND_URL_BASE, mog, NodeEditorContent } from '@mexit/core'
 import {
   Button,
@@ -17,10 +22,6 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
 import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
-import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react/headless'
 
 export interface EditorPreviewProps {
   nodeid: string

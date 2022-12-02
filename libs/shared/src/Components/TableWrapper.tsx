@@ -1,8 +1,6 @@
 import React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { MexIcon } from '../Style/Layouts'
-import { ButtonSeparator } from '../Style/Toolbar'
 import DeleteTableIcon from '@iconify/icons-fluent/delete-20-filled'
 import DeleteColumnIcon from '@iconify/icons-fluent/table-delete-column-20-filled'
 import DeleteRowIcon from '@iconify/icons-fluent/table-delete-row-20-filled'
@@ -21,6 +19,9 @@ import {
   Value
 } from '@udecode/plate'
 import styled, { useTheme } from 'styled-components'
+
+import { MexIcon } from '../Style/Layouts'
+import { ButtonSeparator } from '../Style/Toolbar'
 
 const JustifyCenter = styled.div<{ width: string; height: string }>`
   display: flex;

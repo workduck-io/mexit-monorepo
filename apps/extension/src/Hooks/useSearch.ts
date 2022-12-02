@@ -1,4 +1,6 @@
 /* eslint-disable no-case-declarations */
+import fuzzysort from 'fuzzysort'
+
 import {
   ActionType,
   CategoryType,
@@ -15,11 +17,11 @@ import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
+
 import { useAuthStore } from './useAuth'
 import { useQuickLinks } from './useQuickLinks'
 import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
-import fuzzysort from 'fuzzysort'
 
 export const useSearch = () => {
   const { dispatch } = useRaju()

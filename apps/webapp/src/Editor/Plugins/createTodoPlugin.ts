@@ -1,5 +1,3 @@
-import { ELEMENT_TODO_LI } from '@mexit/core'
-
 import {
   createPluginFactory,
   HotkeyPlugin,
@@ -7,6 +5,8 @@ import {
   // PlateEditor,
   // WithOverride
 } from '@udecode/plate-core'
+
+import { ELEMENT_TODO_LI } from '@mexit/core'
 
 export const createTodoPlugin = createPluginFactory<HotkeyPlugin>({
   key: ELEMENT_TODO_LI,

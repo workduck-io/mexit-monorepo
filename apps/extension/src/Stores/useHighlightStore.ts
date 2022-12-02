@@ -1,8 +1,9 @@
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
 import { HighlightStore, highlightStoreConstructor } from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 export const useHighlightStore = create<HighlightStore>(
   persist(highlightStoreConstructor, {

@@ -1,4 +1,5 @@
 import { NodeProperties } from '../Types/Editor'
+
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
 import { SEPARATOR } from './idGenerator'
 

@@ -1,4 +1,17 @@
 import {
+  deleteText,
+  getNodeEntries,
+  getNodeFragment,
+  getPath,
+  getSelectionText,
+  insertNodes,
+  removeNodes,
+  TEditor,
+  withoutNormalizing
+} from '@udecode/plate'
+import genereateName from 'project-name-generator'
+
+import {
   convertContentToRawText,
   ELEMENT_ILINK,
   ELEMENT_QA_BLOCK,
@@ -18,18 +31,6 @@ import { useUpdater } from '../../../../Hooks/useUpdater'
 import { useDataStore } from '../../../../Stores/useDataStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 import { useOpenToast } from '../../../Toast/useOpenToast'
-import {
-  deleteText,
-  getNodeEntries,
-  getNodeFragment,
-  getPath,
-  getSelectionText,
-  insertNodes,
-  removeNodes,
-  TEditor,
-  withoutNormalizing
-} from '@udecode/plate'
-import genereateName from 'project-name-generator'
 
 export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()

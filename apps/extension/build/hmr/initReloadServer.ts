@@ -1,4 +1,8 @@
+import chokidar from 'chokidar'
+import { WebSocket, WebSocketServer } from 'ws'
+
 import colorLog from '../log'
+
 import {
   LOCAL_RELOAD_SOCKET_PORT,
   UPDATE_COMPLETE_MESSAGE,
@@ -7,8 +11,6 @@ import {
 } from './constant'
 import { Interpreter } from './interpreter'
 import { debounce } from './utils'
-import chokidar from 'chokidar'
-import { WebSocket, WebSocketServer } from 'ws'
 
 const clientsThatNeedToUpdate: Set<WebSocket> = new Set()
 

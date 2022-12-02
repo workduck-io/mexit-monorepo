@@ -2,10 +2,16 @@ import React, { useEffect, useMemo } from 'react'
 import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 
+import { Plate, PlatePlugin } from '@udecode/plate'
+import { debounce } from 'lodash'
+import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
+
 import { NodeEditorContent } from '@mexit/core'
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+
 import { MENU_ID } from './Components/BlockContextMenu'
 import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
@@ -13,10 +19,6 @@ import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiCombobo
 import useMultiComboboxOnKeyDown from './Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useEditorPluginConfig } from './Hooks/useEditorConfig'
 import { generateEditorPluginsWithComponents } from './Plugins'
-import { Plate, PlatePlugin } from '@udecode/plate'
-import { debounce } from 'lodash'
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
 
 interface EditorPreviewRendererProps {
   content: any[] // eslint-disable-line @typescript-eslint/no-explicit-any

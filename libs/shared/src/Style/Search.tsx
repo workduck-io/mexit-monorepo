@@ -1,6 +1,10 @@
 import { animated } from 'react-spring'
 
+import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
+
 import { View } from '../Style/ViewSelector'
+
 import { EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
@@ -11,8 +15,6 @@ import { size } from './Responsive'
 import { TagFlex } from './TagsRelated.styles'
 import { Title, TitleText } from './Typography'
 import { ProfileIcon } from './UserPage'
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
 
 interface ResultProps {
   selected?: boolean

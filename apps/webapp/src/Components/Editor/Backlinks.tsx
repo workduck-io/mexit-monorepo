@@ -1,12 +1,13 @@
 import React from 'react'
 
+import { Icon } from '@iconify/react'
+import arrowGoBackLine from '@iconify-icons/ri/arrow-go-back-line'
+
 import { InfoWidgetScroll, InfoWidgetWrapper , Note } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { DataInfoHeader } from '../../Style/Backlinks'
 import NodeLink from '../Editor/NodeLink'
-import { Icon } from '@iconify/react'
-import arrowGoBackLine from '@iconify-icons/ri/arrow-go-back-line'
 
 interface BackLinkProps {
   nodeid: string

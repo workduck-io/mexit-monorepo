@@ -1,4 +1,5 @@
 import { NodeContent, NodeProperties } from '../Types/Editor'
+
 import { ELEMENT_PARAGRAPH } from './editorElements'
 import { generateNodeUID, generateTempId, SEPARATOR } from './idGenerator'
 

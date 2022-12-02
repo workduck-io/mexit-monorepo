@@ -1,8 +1,9 @@
+import create from 'zustand'
+import { devtools } from 'zustand/middleware'
+
 import { CategoryType, createNodeWithUid, getNewDraftKey, ListItemType, MexitAction, NodeProperties } from '@mexit/core'
 
 import { TooltipState, VisualState } from '../Hooks/useSputlitContext'
-import create from 'zustand'
-import { devtools } from 'zustand/middleware'
 
 export type SearchType = {
   value: string

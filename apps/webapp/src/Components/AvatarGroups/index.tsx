@@ -3,6 +3,7 @@ import React from 'react'
 import { AccessLevel } from '@mexit/core'
 
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
+
 import { AvatarGroupContainer, ProfileAvatarContainer } from './styled'
 
 type UserAvatarType = {

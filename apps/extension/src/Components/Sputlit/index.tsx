@@ -10,6 +10,7 @@ import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import Search from '../Search'
+
 import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
 
 const appearanceAnimationKeyframes = [

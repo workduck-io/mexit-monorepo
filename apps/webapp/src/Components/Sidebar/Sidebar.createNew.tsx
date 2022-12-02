@@ -1,8 +1,6 @@
 import React, { cloneElement, useMemo, useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
-import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
-import { CreateNewMenuItemWrapper, CreateNewMenuWrapper } from './Sidebar.style'
 import {
   autoUpdate,
   flip,
@@ -18,6 +16,10 @@ import {
   useRole} from '@floating-ui/react-dom-interactions'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
+
+import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
+
+import { CreateNewMenuItemWrapper, CreateNewMenuWrapper } from './Sidebar.style'
 
 interface Props {
   placement?: Placement

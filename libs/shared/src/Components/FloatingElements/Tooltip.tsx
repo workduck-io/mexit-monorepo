@@ -1,7 +1,6 @@
 import React, { cloneElement, useMemo, useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
-import { TooltipWrapper } from './Tooltip.style'
 import {
   autoUpdate,
   flip,
@@ -14,6 +13,8 @@ import {
   useHover,
   useInteractions,
   useRole} from '@floating-ui/react-dom-interactions'
+
+import { TooltipWrapper } from './Tooltip.style'
 
 interface Props {
   // Pass null to hide the tooltip

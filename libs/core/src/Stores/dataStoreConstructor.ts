@@ -1,3 +1,5 @@
+import { produce } from 'immer'
+
 import { defaultCommands } from '../Data/defaultCommands'
 import { CachedILink, ILink,Tag } from '../Types/Editor'
 import { Settify, typeInvert,withoutContinuousDelimiter } from '../Utils/helpers'
@@ -6,7 +8,6 @@ import { removeLink } from '../Utils/links'
 import { mog } from '../Utils/mog'
 import { getAllParentIds, getUniquePath } from '../Utils/path'
 import { getNodeIcon } from '../Utils/treeUtils'
-import { produce } from 'immer'
 
 export const generateTag = (item: string): Tag => ({
   value: item

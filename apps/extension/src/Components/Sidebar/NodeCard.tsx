@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 
+import styled from 'styled-components'
+
 import { convertContentToRawText, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
   CopyButton,
@@ -17,7 +19,6 @@ import { useNodes } from '../../Hooks/useNodes'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import styled from 'styled-components'
 
 export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
   display: flex;

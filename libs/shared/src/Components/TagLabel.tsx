@@ -1,9 +1,10 @@
 import React from 'react'
 
+import { Icon } from '@iconify/react'
+
 import { Tag } from '@mexit/core'
 
 import { TagFlex, TagFlexText, TagsFlex } from '../Style/TagsRelated.styles'
-import { Icon } from '@iconify/react'
 
 interface TagLabelProps {
   tag: Tag

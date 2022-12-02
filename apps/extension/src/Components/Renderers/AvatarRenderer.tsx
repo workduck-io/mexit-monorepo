@@ -1,5 +1,7 @@
 import React from 'react'
 
+import styled, { useTheme } from 'styled-components'
+
 import { Button, MexIcon } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
@@ -7,8 +9,8 @@ import { copyTextToClipboard } from '@mexit/shared'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { generateAvatar } from '../../Utils/generateAvatar'
+
 import { Controls } from './Screenshot/Screenshot.style'
-import styled, { useTheme } from 'styled-components'
 
 const Container = styled.div`
   display: flex;

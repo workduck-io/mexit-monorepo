@@ -1,6 +1,7 @@
+import styled, { css } from 'styled-components'
+
 import { FocusModeProp, focusStyles } from './Editor'
 import { FadeInOut } from './Layouts'
-import styled, { css } from 'styled-components'
 
 interface SidebarToggleWrappperProps extends FocusModeProp {
   expanded: boolean

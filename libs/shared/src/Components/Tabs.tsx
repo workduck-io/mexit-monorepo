@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useSpring } from 'react-spring'
 
+import Tippy from '@tippyjs/react'
+
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
 import { StyledTab, TabBody, TabHeaderContainer, TabPanel, TabsContainer, TabsWrapper } from '../Style/Tab.Styles'
-import Tippy from '@tippyjs/react'
 
 export type ExtInfobarMode = 'context' | 'snippets' | 'notes' | 'reminders'
 export type InfobarMode = 'default' | 'flow' | 'graph' | 'reminders' | 'suggestions'

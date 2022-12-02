@@ -7,6 +7,7 @@ import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 import { useLinkStore } from '../Stores/useLinkStore'
+
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
 

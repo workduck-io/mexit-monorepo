@@ -1,5 +1,8 @@
 import React, { useMemo } from 'react'
 
+import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
+import repeatLine from '@iconify/icons-ri/repeat-line'
+
 import { Button,IconButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
@@ -13,6 +16,7 @@ import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalControls,ModalHeader } from '../../Style/Refactor'
+
 import {
   ShareAlias,
   ShareAliasInput,
@@ -24,8 +28,6 @@ import {
   ShareRowAction,
   ShareRowActionsWrapper,
   ShareRowHeading} from './styles'
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-import repeatLine from '@iconify/icons-ri/repeat-line'
 
 // Here since we don't have a specific userid we take email to be a unique key.
 export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {

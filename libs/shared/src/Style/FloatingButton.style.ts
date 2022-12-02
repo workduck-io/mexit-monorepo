@@ -1,9 +1,10 @@
+import { Icon } from '@iconify/react'
+import styled, { css } from 'styled-components'
+
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
 import { Button } from './Buttons'
 import { FocusModeProp } from './Editor'
-import { Icon } from '@iconify/react'
-import styled, { css } from 'styled-components'
 
 export const Float = styled.div<FocusModeProp>`
   position: fixed;

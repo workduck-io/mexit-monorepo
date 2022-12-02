@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
+import Tippy from '@tippyjs/react'
+import { getPlateEditorRef, selectEditor } from '@udecode/plate'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog,SEPARATOR } from '@mexit/core'
@@ -19,9 +22,8 @@ import { useEditorStore } from '../../../Stores/useEditorStore'
 import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
+
 import { TitleStatic,Wrapper } from './NodeRename.style'
-import Tippy from '@tippyjs/react'
-import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()

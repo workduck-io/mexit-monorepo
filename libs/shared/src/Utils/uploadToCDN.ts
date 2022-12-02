@@ -1,8 +1,8 @@
 import toast from 'react-hot-toast'
 
-import { mog } from '@mexit/core'
-
 import Compress from 'compress.js'
+
+import { mog } from '@mexit/core'
 
 export type UploadImageFn = (data: string | ArrayBuffer) => Promise<string | ArrayBuffer>
 

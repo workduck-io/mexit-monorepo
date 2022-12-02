@@ -1,7 +1,7 @@
-import { mog } from '@mexit/core'
-
 import { MediaPlugin } from '@udecode/plate'
 import { getPluginOptions, PlateEditor, RenderFunction, Value } from '@udecode/plate-core'
+
+import { mog } from '@mexit/core'
 
 const twitterRegex = /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(?<id>\d+)/
 

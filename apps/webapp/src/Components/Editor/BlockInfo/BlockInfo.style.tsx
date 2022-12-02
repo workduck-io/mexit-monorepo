@@ -1,6 +1,6 @@
-import { Button } from '@workduck-io/mex-components'
-
 import styled, { css, keyframes } from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
 
 const scale = keyframes`
   from {

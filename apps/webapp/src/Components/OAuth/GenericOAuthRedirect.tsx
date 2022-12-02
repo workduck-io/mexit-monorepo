@@ -9,6 +9,7 @@ import { BackCard, CenteredColumn, Description, Title } from '@mexit/shared'
 import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'
 import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
+
 import { checkCustomProtocolHandler } from './checkCustomProtocol'
 
 const allowedServices = ['google', 'telegram', 'slack', 'asana', 'figma', 'github', 'jira', 'linear', 'whatsapp']

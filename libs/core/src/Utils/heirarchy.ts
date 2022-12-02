@@ -1,5 +1,6 @@
-import { ILink } from '../Types/Editor'
 import { differenceWith } from 'lodash'
+
+import { ILink } from '../Types/Editor'
 
 const compareIlinks = (a: ILink, b: ILink) => a.nodeid === b.nodeid && a.namespace === b.namespace
 

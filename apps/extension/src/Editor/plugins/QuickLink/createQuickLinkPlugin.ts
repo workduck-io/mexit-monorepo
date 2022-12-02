@@ -1,7 +1,8 @@
+import { createPluginFactory, getSlateClass } from '@udecode/plate'
+
 import { ELEMENT_ILINK } from '@mexit/core'
 
 import { QuickLinkElement } from './components/QuickLinkElement'
-import { createPluginFactory, getSlateClass } from '@udecode/plate'
 
 // TODO: because of editor store not being here, not adding the' backspace delete only the closing brackets' things
 export const createQuickLinkPlugin = createPluginFactory({

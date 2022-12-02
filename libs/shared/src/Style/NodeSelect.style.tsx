@@ -1,7 +1,8 @@
-import { StyledNamespaceTag } from './NamespaceTag.style'
-import { Input } from './ToggleButton'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { StyledNamespaceTag } from './NamespaceTag.style'
+import { Input } from './ToggleButton'
 
 export const Ellipsis = css`
   overflow: hidden;

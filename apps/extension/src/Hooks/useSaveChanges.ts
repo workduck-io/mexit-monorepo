@@ -18,6 +18,7 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { deserializeContent } from '../Utils/serializer'
+
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'

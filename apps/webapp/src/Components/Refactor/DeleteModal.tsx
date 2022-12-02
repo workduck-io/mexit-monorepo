@@ -2,6 +2,10 @@ import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import { useLocation } from 'react-router-dom'
 
+import archiveLine from '@iconify/icons-ri/archive-line'
+import { Icon } from '@iconify/react'
+import create from 'zustand'
+
 import { Button, DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -17,9 +21,6 @@ import { useHelpStore } from '../../Stores/useHelpStore'
 import { RefactorPath } from '../../Stores/useRenameStore'
 import { DeleteIcon, MockRefactorMap, ModalControls,ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
-import archiveLine from '@iconify/icons-ri/archive-line'
-import { Icon } from '@iconify/react'
-import create from 'zustand'
 
 interface DeleteStoreState {
   open: boolean

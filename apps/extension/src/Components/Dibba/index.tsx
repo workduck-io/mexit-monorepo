@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import { Icon } from '@iconify/react'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import fuzzysort from 'fuzzysort'
+
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import {
@@ -31,10 +35,8 @@ import useDataStore from '../../Stores/useDataStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
+
 import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from './styled'
-import { Icon } from '@iconify/react'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import fuzzysort from 'fuzzysort'
 
 interface PublicNode {
   type: 'Public Nodes'

@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useVirtual } from 'react-virtual'
 
+import { findIndex, groupBy } from 'lodash'
+
 import { ActionType, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
@@ -10,8 +12,8 @@ import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Action from '../Action'
+
 import { List, ListItem, Subtitle } from './styled'
-import { findIndex, groupBy } from 'lodash'
 
 const ResultList = ({ results }: { results: Array<any> }) => {
   const parentRef = useRef(null)

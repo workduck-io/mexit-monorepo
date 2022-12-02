@@ -1,7 +1,8 @@
+import { createGlobalStyle, css } from 'styled-components'
+
 import { customStyles,EditorBalloonStyles, GridWrapper,normalize, ThinScrollbar, TippyBalloonStyles  } from '@mexit/shared'
 
 import { ModalStyles } from './Refactor'
-import { createGlobalStyle, css } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization

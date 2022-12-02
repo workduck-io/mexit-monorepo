@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 
+import filter2Line from '@iconify/icons-ri/filter-2-line'
+import { Icon } from '@iconify/react'
+
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -8,8 +11,6 @@ import { FilterMenuDiv,FilterTypeIcons, GenericFlex, Menu, MenuItem } from '@mex
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useFilterIcons } from '../../Hooks/useFilterValueIcons'
-import filter2Line from '@iconify/icons-ri/filter-2-line'
-import { Icon } from '@iconify/react'
 
 interface NewFilterMenuProps {
   filters: Filters

@@ -1,6 +1,6 @@
-import { NodeLink } from '@mexit/core'
-
 import create from 'zustand'
+
+import { NodeLink } from '@mexit/core'
 
 export interface RefactorPath {
   path: string

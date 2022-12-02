@@ -1,7 +1,6 @@
 import React, { cloneElement } from 'react'
 import { RemoveScroll } from 'react-remove-scroll'
 
-import { Props } from './types'
 import {
   autoPlacement,
   FloatingFocusManager,
@@ -20,6 +19,8 @@ import {
   useId,
   useInteractions,
   useRole} from '@floating-ui/react-dom-interactions'
+
+import { Props } from './types'
 
 export const Floating = ({
   children,

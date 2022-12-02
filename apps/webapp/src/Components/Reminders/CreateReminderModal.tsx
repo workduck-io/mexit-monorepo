@@ -6,6 +6,9 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
+import { startOfToday } from 'date-fns'
+import create from 'zustand'
+
 import { Button,LoadingButton } from '@workduck-io/mex-components'
 
 import {
@@ -29,8 +32,6 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { ModalControls,ModalHeader } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
-import { startOfToday } from 'date-fns'
-import create from 'zustand'
 
 interface ModalValue {
   associated?: ReminderAssociatedType

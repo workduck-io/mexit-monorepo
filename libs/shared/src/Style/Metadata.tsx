@@ -1,9 +1,10 @@
+import styled, { css } from 'styled-components'
+
 import { FocusModeProp, focusStyles } from './Editor'
 import { Label } from './Form'
 import { HoverFade } from './Helpers'
 import { FadeInOut } from './Layouts'
 import { ProfileIcon } from './UserPage'
-import styled, { css } from 'styled-components'
 
 interface DataWrapperProps {
   interactive?: boolean

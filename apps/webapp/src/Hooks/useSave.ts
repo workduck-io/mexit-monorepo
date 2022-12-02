@@ -2,6 +2,7 @@ import { getTodosFromContent, mog } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+
 import { useApi } from './API/useNodeAPI'
 import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { SnippetCardHeader, SnippetCardWrapper } from '@mexit/shared'
-
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
+
+import { SnippetCardHeader, SnippetCardWrapper } from '@mexit/shared'
 
 const GenericContent = styled.div`
   color: ${({ theme }) => theme.colors.text.fade};

@@ -1,5 +1,6 @@
 
 import { Tag } from '../Types/Editor'
+
 import { getValidTitle } from './strings'
 
 interface SitesMetadata {

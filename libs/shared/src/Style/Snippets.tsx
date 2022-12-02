@@ -1,8 +1,9 @@
+import styled from 'styled-components'
+
 import { Card } from './Card'
 import { GridCss } from './Grid'
 import { size } from './Responsive'
 import { ResultDesc, SearchContainer } from './Search'
-import styled from 'styled-components'
 
 export const SSnippets = styled.div`
   /* ${GridCss(2, 3)} */

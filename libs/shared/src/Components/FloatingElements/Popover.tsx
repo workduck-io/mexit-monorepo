@@ -1,7 +1,6 @@
 import React, { cloneElement, useMemo, useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
-import { PopoverWrapper } from './Popover.style'
 import {
   autoUpdate,
   flip,
@@ -16,6 +15,8 @@ import {
   useId,
   useInteractions,
   useRole} from '@floating-ui/react-dom-interactions'
+
+import { PopoverWrapper } from './Popover.style'
 
 interface Props {
   render: (data: { close: () => void; labelId: string; descriptionId: string }) => React.ReactNode

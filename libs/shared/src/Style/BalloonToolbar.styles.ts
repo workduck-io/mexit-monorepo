@@ -1,8 +1,9 @@
-import { BalloonToolbarStyleProps } from '../Types/BalloonToolbar.types'
 import { BalloonToolbarProps, getToolbarStyles, ToolbarBase } from '@udecode/plate'
 import { createStyles } from '@udecode/plate-styled-components'
 import { transparentize } from 'polished'
 import styled, { css, CSSProp } from 'styled-components'
+
+import { BalloonToolbarStyleProps } from '../Types/BalloonToolbar.types'
 
 export const getBalloonToolbarStyles = (props: BalloonToolbarStyleProps) => {
   let color = 'rgb(157, 170, 182)'

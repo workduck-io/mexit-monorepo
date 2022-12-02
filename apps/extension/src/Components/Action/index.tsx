@@ -1,11 +1,14 @@
 import React from 'react'
 
+import { useTheme } from 'styled-components'
+
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+
 import {
   ActionContent,
   ActionIcon,
@@ -16,7 +19,6 @@ import {
   StyledAction,
   Title
 } from './styled'
-import { useTheme } from 'styled-components'
 
 interface ActionProps {
   action: MexitAction

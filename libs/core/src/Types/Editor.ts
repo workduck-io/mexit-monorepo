@@ -1,6 +1,7 @@
+import HighlightSource from 'web-highlighter/dist/model/source'
+
 import { ElementHighlightMetadata } from './Highlight'
 import { AccessLevel } from './Mentions'
-import HighlightSource from 'web-highlighter/dist/model/source'
 
 export interface Content {
   id: string

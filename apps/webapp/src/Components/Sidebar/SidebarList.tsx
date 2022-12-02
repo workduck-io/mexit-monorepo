@@ -1,5 +1,10 @@
 import { ChangeEventHandler,useEffect, useRef, useState } from 'react'
 
+import searchLine from '@iconify/icons-ri/search-line'
+import { Icon, IconifyIcon } from '@iconify/react'
+import Tippy, { useSingleton } from '@tippyjs/react'
+import { debounce } from 'lodash'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { fuzzySearch, mog } from '@mexit/core'
@@ -17,12 +22,9 @@ import {
 } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
+
 import { ItemContent } from './SharedNotes'
 import SidebarListItemComponent from './SidebarListItem'
-import searchLine from '@iconify/icons-ri/search-line'
-import { Icon, IconifyIcon } from '@iconify/react'
-import Tippy, { useSingleton } from '@tippyjs/react'
-import { debounce } from 'lodash'
 
 export interface SidebarListItem<T> extends DesignItem {
   // Used to calculate the last opened state once in the list item component

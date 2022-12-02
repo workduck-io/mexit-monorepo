@@ -1,7 +1,7 @@
-import { Title } from '@workduck-io/mex-components'
-
 import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { Title } from '@workduck-io/mex-components'
 
 export const CommentsWrapper = styled.div`
   display: flex;

@@ -1,5 +1,8 @@
 import { useEffect } from 'react'
 
+import { addMinutes } from 'date-fns'
+import { connectToChild, Methods } from 'penpal'
+
 import {
   AddHighlightFn,
   Contents,
@@ -33,12 +36,11 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
+
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
 import { useSnippets } from './useSnippets'
-import { addMinutes } from 'date-fns'
-import { connectToChild, Methods } from 'penpal'
 
 export interface ParentMethods {
   SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>

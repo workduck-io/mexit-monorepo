@@ -1,11 +1,12 @@
 import * as React from 'react'
 
+import { moveSelection, useEditorRef } from '@udecode/plate'
+import { useFocused, useSelected } from 'slate-react'
+
 import { STag,STagRoot, TagElementProps } from '@mexit/shared'
 
 import { useHotkeys } from '../../hooks/useHotKeys'
 import { useOnMouseClick } from '../../hooks/useOnMouseClick'
-import { moveSelection, useEditorRef } from '@udecode/plate'
-import { useFocused, useSelected } from 'slate-react'
 
 /**
  * TagElement with no default styles.

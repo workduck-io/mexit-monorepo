@@ -6,6 +6,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
 import { USER_ID_REGEX } from '../../Utils/constants'
+
 import { useAPIHeaders } from './useAPIHeaders'
 
 export interface TempUser {

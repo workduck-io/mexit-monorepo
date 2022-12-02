@@ -1,7 +1,8 @@
-import { Button } from './Buttons'
-import { BaseCard } from './Card'
 import { transparentize } from 'polished'
 import styled from 'styled-components'
+
+import { Button } from './Buttons'
+import { BaseCard } from './Card'
 
 export const SettingsCard = styled(BaseCard)`
   display: flex;

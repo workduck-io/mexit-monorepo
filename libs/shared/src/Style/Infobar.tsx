@@ -1,8 +1,9 @@
+import styled, { css } from 'styled-components'
+
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
 import { FocusModeProp } from './Editor'
 import { size } from './Responsive'
-import styled, { css } from 'styled-components'
 
 interface InfoBarWrapperProps extends FocusModeProp {
   mode: string

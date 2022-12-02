@@ -5,6 +5,7 @@ import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions,
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useTodoStore } from '../../Stores/useTodoStore'
+
 import PrioritySelect from './PrioritySelect'
 
 export interface TodoControls {

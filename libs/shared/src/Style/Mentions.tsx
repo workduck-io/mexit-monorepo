@@ -1,6 +1,7 @@
-import { CardShadow } from './Helpers'
 import { mix,transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { CardShadow } from './Helpers'
 
 export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`
   display: inline-block;

@@ -1,6 +1,6 @@
-import { Label, TextAreaBlock } from '@mexit/shared'
-
 import styled from 'styled-components'
+
+import { Label, TextAreaBlock } from '@mexit/shared'
 
 export const SourceHeaderStyled = styled.div`
   display: flex;

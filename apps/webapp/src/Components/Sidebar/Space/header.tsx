@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import { Icon } from '@iconify/react'
+import Tippy from '@tippyjs/react'
+
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -25,8 +28,6 @@ import {
   VisibleFade
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
-import { Icon } from '@iconify/react'
-import Tippy from '@tippyjs/react'
 
 const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)

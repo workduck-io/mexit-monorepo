@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useMatch } from 'react-router-dom'
 
+import archivedIcon from '@iconify/icons-ri/archive-line'
+import eyeOffLine from '@iconify/icons-ri/eye-off-line'
+import shareLine from '@iconify/icons-ri/share-line'
+import { moveSelection, useEditorRef } from '@udecode/plate'
+import { useFocused, useSelected } from 'slate-react'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { ILink, NodeType, SharedNode } from '@mexit/core'
@@ -14,11 +20,6 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouti
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreview from '../EditorPreview/EditorPreview'
-import archivedIcon from '@iconify/icons-ri/archive-line'
-import eyeOffLine from '@iconify/icons-ri/eye-off-line'
-import shareLine from '@iconify/icons-ri/share-line'
-import { moveSelection, useEditorRef } from '@udecode/plate'
-import { useFocused, useSelected } from 'slate-react'
 
 /**
  * ILinkElement with no default styles. [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling) */

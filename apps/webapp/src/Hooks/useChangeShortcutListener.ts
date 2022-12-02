@@ -12,6 +12,7 @@ import useMultipleEditors from '../Stores/useEditorsStore'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore from '../Stores/useModalStore'
+
 import { useShortcutStore } from './useShortcutStore'
 
 export const usePlatformInfo = () =>

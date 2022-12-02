@@ -1,14 +1,16 @@
 import React from 'react'
 
+import { IconifyIcon } from '@iconify/react'
+import { useTheme } from 'styled-components'
+
 import { MexIcon, TitleText } from '@workduck-io/mex-components'
 
 import { Settify } from '@mexit/core'
 
 import { useAuthStore } from '../../../Stores/useAuth'
 import useRouteStore from '../../../Stores/useRouteStore'
+
 import { BannerContainer, Group } from './styled'
-import { IconifyIcon } from '@iconify/react'
-import { useTheme } from 'styled-components'
 
 type BannerType = {
   icon?: IconifyIcon | string

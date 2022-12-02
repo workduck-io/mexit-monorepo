@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import styled from 'styled-components'
+
 import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -9,7 +11,6 @@ import { AddTagMenu,copyTextToClipboard, Input, Label, LinkTagSection, resize, T
 
 import { useURLsAPI } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
-import styled from 'styled-components'
 
 const Form = styled.form`
   display: flex;

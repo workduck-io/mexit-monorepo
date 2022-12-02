@@ -1,9 +1,11 @@
+import { orderBy } from 'lodash'
+
 import { API, mog } from '@mexit/core'
 
 import usePortalStore from '../Stores/usePortalStore'
 import { ActionGroupType, PortalType } from '../Types/Actions'
+
 import { useAuthStore } from './../Stores/useAuth'
-import { orderBy } from 'lodash'
 
 export const usePortals = () => {
   const setApps = usePortalStore((store) => store.setApps)

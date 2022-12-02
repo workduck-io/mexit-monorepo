@@ -1,6 +1,7 @@
-import { loader } from '../Data/loader'
 import Lottie from 'lottie-react'
 import styled from 'styled-components'
+
+import { loader } from '../Data/loader'
 
 const OverlayLoader = styled.div`
   position: absolute;

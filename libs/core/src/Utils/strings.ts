@@ -1,6 +1,7 @@
+import { trim } from 'lodash'
+
 import { CustomEvents } from './events'
 import { DRAFT_NODE,DRAFT_PREFIX, SEPARATOR } from './idGenerator'
-import { trim } from 'lodash'
 
 export const capitalize = (str: string) => {
   if (!str) return ''

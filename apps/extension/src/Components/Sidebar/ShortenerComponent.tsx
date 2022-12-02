@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 
+import styled from 'styled-components'
+
 import { getFavicon, Tag } from '@mexit/core'
 import {
   AddTagMenu,
@@ -16,7 +18,6 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
 import { getElementById } from '../../Utils/cs-utils'
-import styled from 'styled-components'
 
 const ShortenerWrapper = styled(LinkWrapper)`
   padding: 0;

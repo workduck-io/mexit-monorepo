@@ -1,5 +1,9 @@
 import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 
+import { Icon } from '@iconify/react'
+import searchLine from '@iconify-icons/ri/search-line'
+import { debounce } from 'lodash'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Filter, Filters, GlobalFilterJoin, idxKey, mog } from '@mexit/core'
@@ -17,11 +21,9 @@ import {
 import SearchIndexInput from '../Components/Search/IndexInput'
 import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
 import { useFilterStore } from '../Hooks/useFilters'
+
 import SplitView, { RenderSplitProps, SplitOptions, SplitType } from './SplitView'
 import ViewSelector from './ViewSelector'
-import { Icon } from '@iconify/react'
-import searchLine from '@iconify-icons/ri/search-line'
-import { debounce } from 'lodash'
 
 interface SearchViewState<Item> {
   selected: number

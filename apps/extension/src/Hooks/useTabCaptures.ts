@@ -1,7 +1,8 @@
-import { TabGroup } from '../Types/Tabs'
-import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 import create, { State } from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { TabGroup } from '../Types/Tabs'
+import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 
 interface TabCaptureStore extends State {
   TabCaptures: TabGroup[]

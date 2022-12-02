@@ -1,12 +1,5 @@
 import React from 'react'
 
-import { ELEMENT_TODO_LI,ELEMENTS_IN_OUTLINE } from '@mexit/core'
-import { InfoWidgetWrapper, Note , OutlineHelp } from '@mexit/shared'
-
-import Collapse from '../../Layout/Collapse'
-import { OutlineItem, useAnalysisStore } from '../../Stores/useAnalysis'
-import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
-import { OutlineIconWrapper, OutlineItemRender, OutlineItemText, OutlineWrapper } from '../../Style/Outline'
 import fileList3Line from '@iconify/icons-ri/file-list-3-line'
 import headingIcon from '@iconify/icons-ri/heading'
 import listOrdered from '@iconify/icons-ri/list-ordered'
@@ -14,6 +7,14 @@ import listUnordered from '@iconify/icons-ri/list-unordered'
 import taskLine from '@iconify/icons-ri/task-line'
 import { Icon } from '@iconify/react'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate'
+
+import { ELEMENT_TODO_LI,ELEMENTS_IN_OUTLINE } from '@mexit/core'
+import { InfoWidgetWrapper, Note , OutlineHelp } from '@mexit/shared'
+
+import Collapse from '../../Layout/Collapse'
+import { OutlineItem, useAnalysisStore } from '../../Stores/useAnalysis'
+import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
+import { OutlineIconWrapper, OutlineItemRender, OutlineItemText, OutlineWrapper } from '../../Style/Outline'
 
 interface OutlineProps {
   staticOutline?: OutlineItem[]

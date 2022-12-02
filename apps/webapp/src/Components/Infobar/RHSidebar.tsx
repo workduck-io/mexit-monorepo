@@ -7,6 +7,7 @@ import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useSidebarTransition } from '../Sidebar/Transition'
+
 import InfoBar from '.'
 
 const RHSidebarContent = () => {

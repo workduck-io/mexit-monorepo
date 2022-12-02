@@ -1,6 +1,6 @@
-import { CategoryType, ComboboxKey, QuickLinkType } from '@mexit/core'
-
 import { BaseRange, Point } from 'slate'
+
+import { CategoryType, ComboboxKey, QuickLinkType } from '@mexit/core'
 
 export interface ComboboxItem {
   text: string

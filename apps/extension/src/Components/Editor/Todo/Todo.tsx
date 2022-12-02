@@ -4,6 +4,7 @@ import { getNextStatus,PriorityDataType, PriorityType, TodoStatus, TodoType } fr
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 
 import { useTodoStore } from '../../../Stores/useTodoStore'
+
 import PrioritySelect from './PrioritySelect'
 
 export interface TodoControls {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 
+import Tippy, { TippyProps } from '@tippyjs/react'
+import styled from 'styled-components'
+
 import { toLocaleString } from '@mexit/core'
 
 import { useRelativeTime } from '../Hooks/useRelativeTime'
-import Tippy, { TippyProps } from '@tippyjs/react'
-import styled from 'styled-components'
 
 interface RelativeTimeProps {
   dateNum: number

@@ -1,3 +1,6 @@
+import { transparentize } from 'polished'
+import { css } from 'styled-components'
+
 import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { BackCard } from '../Style/Card'
@@ -14,9 +17,8 @@ import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet } from '../Style/Snippets'
 import { TodoContainer } from '../Style/Todo.style'
 import { Title } from '../Style/Typography'
+
 import { SpaceBlocksCss } from './spaceBlocks'
-import { transparentize } from 'polished'
-import { css } from 'styled-components'
 
 const palette = { body: '#1B1F3D' }
 

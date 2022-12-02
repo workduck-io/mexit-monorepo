@@ -1,6 +1,6 @@
-import { ELEMENT_MEDIA_EMBED, ELEMENT_TODO_LI,generateTempId, NodeEditorContent } from '@mexit/core'
-
 import { ELEMENT_LI, ELEMENT_LIC, ELEMENT_OL, ELEMENT_PARAGRAPH, ELEMENT_UL } from '@udecode/plate'
+
+import { ELEMENT_MEDIA_EMBED, ELEMENT_TODO_LI,generateTempId, NodeEditorContent } from '@mexit/core'
 
 /**
  * Converts the content to a list of tasks

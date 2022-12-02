@@ -1,8 +1,9 @@
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
 import { ExtInfobarMode } from '@mexit/shared'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 interface LayoutState {
   rhSidebar: {

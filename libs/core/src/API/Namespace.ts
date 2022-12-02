@@ -1,5 +1,6 @@
 import { AccessLevel } from '../Types/Mentions'
 import { apiURLs } from '../Utils/routes'
+
 import { AxiosX } from './AxiosX'
 
 export class NamespaceAPI {

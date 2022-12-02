@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useSingleton } from '@tippyjs/react'
+
 import { Loading, NodeInfo } from '@mexit/shared'
 
 import useToggleElements from '../../Hooks/useToggleElements'
@@ -7,8 +9,8 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
+
 import NodeRenameOnlyTitle from './Rename/NodeRename'
-import { useSingleton } from '@tippyjs/react'
 
 const Toolbar = () => {
   const fetchingContent = useEditorStore((state) => state.fetchingContent)

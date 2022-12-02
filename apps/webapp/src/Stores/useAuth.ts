@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+import { nanoid } from 'nanoid'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
 import { client, useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
@@ -8,6 +12,7 @@ import { apiURLs, authStoreConstructor, AuthStoreState, mog, RegisterFormData } 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
 import { terminateRequestWorker } from '../Workers/controller'
+
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
@@ -22,9 +27,6 @@ import useRouteStore from './useRouteStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
-import { nanoid } from 'nanoid'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 

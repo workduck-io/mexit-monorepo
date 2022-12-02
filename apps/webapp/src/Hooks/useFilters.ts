@@ -1,3 +1,5 @@
+import create from 'zustand'
+
 import {
   Filter,
   Filters,
@@ -9,10 +11,10 @@ import {
   SearchFilterFunctions} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+
 import { useGenericFilterFunctions } from './useFilterFunctions'
 import { getTitleFromPath, useLinks } from './useLinks'
 import { useTags } from './useTags'
-import create from 'zustand'
 
 export interface FilterStore {
   filters: Filters

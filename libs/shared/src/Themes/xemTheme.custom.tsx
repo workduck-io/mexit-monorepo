@@ -1,5 +1,6 @@
-import { MainNav, SideNav } from '../Style/Nav'
 import { css } from 'styled-components'
+
+import { MainNav, SideNav } from '../Style/Nav'
 
 export const xemThemeStyles = css`
   body {

@@ -11,20 +11,6 @@ import React, {
 } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
-import { fuzzySearch,MIcon  } from '@mexit/core'
-
-import { GenericFlex } from '../../Style/Filter.style'
-import { SidebarListFilter } from '../../Style/SidebarList.style'
-import { IconDisplay } from '../IconDisplay'
-import { Input } from './../../Style/Form'
-import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
-import {
-  ItemLabel,
-  MenuItemCount,
-  MenuItemWrapper,
-  MenuWrapper,
-  MultiSelectIcon,
-  RootMenuWrapper} from './Dropdown.style'
 import {
   autoUpdate,
   flip,
@@ -49,6 +35,22 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import cx from 'classnames'
 import { debounce } from 'lodash'
+
+import { fuzzySearch,MIcon  } from '@mexit/core'
+
+import { GenericFlex } from '../../Style/Filter.style'
+import { SidebarListFilter } from '../../Style/SidebarList.style'
+import { IconDisplay } from '../IconDisplay'
+
+import { Input } from './../../Style/Form'
+import { MenuClassName, MenuFilterInputClassName, MenuItemClassName, RootMenuClassName } from './Dropdown.classes'
+import {
+  ItemLabel,
+  MenuItemCount,
+  MenuItemWrapper,
+  MenuWrapper,
+  MultiSelectIcon,
+  RootMenuWrapper} from './Dropdown.style'
 
 export const MenuItem = forwardRef<
   HTMLButtonElement,

@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import timeLine from '@iconify-icons/ri/time-line'
+import styled from 'styled-components'
+
 import { MexIcon } from '@workduck-io/mex-components'
 
 import { mog, NodeMetadata } from '@mexit/core'
@@ -15,8 +18,6 @@ import useRouteStore from '../../Stores/useRouteStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import AvatarGroups from '../AvatarGroups'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
-import timeLine from '@iconify-icons/ri/time-line'
-import styled from 'styled-components'
 
 export const Data = styled.div`
   display: flex;

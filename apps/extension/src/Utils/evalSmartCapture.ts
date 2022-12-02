@@ -1,8 +1,10 @@
+import { ELEMENT_H2 } from '@udecode/plate'
+
 import { ELEMENT_PARAGRAPH, SmartCaptureConfig as SmartCaptureConfigType, SmartCaptureLabel } from '@mexit/core'
 
 import { FormBuilder } from '../Types/Form'
+
 import { convert2DArrayToTable } from './tableUtils'
-import { ELEMENT_H2 } from '@udecode/plate'
 
 export const formToBlocks = (formData: FormBuilder, convertToTable = false) => {
   if (convertToTable) {

@@ -1,11 +1,12 @@
 import 'regenerator-runtime/runtime'
 
-import { wrapErr } from '@mexit/core'
-
-import useAuthStore from '../Hooks/useAuthStore'
 import fetchAdapter from '@vespaiach/axios-fetch-adapter'
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js'
 import axios from 'axios'
+
+import { wrapErr } from '@mexit/core'
+
+import useAuthStore from '../Hooks/useAuthStore'
 
 const client = axios.create({
   adapter: fetchAdapter

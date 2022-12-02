@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef,useState } from 'react'
 
+import { useSpringRef,useTransition } from '@react-spring/web'
+
 import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
@@ -9,13 +11,13 @@ import { useTags } from '../../Hooks/useTags'
 import { PollActions,useApiStore } from '../../Stores/useApiStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
+
 import SharedNotes from './SharedNotes'
 import { SidebarSpaceSwitcher } from './Sidebar.spaceSwitcher'
 import { SpaceContentWrapper, SpaceWrapper } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
 import { SidebarSpaceComponent } from './Space'
 import StarredNotes from './StarredNotes'
-import { useSpringRef,useTransition } from '@react-spring/web'
 
 export const NoteSidebar = () => {
   const ilinks = useDataStore((store) => store.ilinks)

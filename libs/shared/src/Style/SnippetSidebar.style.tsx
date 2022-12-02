@@ -1,5 +1,6 @@
-import { Ellipsis } from './NodeSelect.style'
 import styled, { css } from 'styled-components'
+
+import { Ellipsis } from './NodeSelect.style'
 
 export const SnippetCards = styled.div<{ fullHeight?: boolean }>`
   padding: ${({ theme }) => theme.spacing.medium};

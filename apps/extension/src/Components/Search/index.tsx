@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 
+import { Icon } from '@iconify/react'
+import { useTheme } from 'styled-components'
+import { useDebouncedCallback } from 'use-debounce'
+
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
@@ -28,10 +32,8 @@ import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { type SearchType, useSputlitStore } from '../../Stores/useSputlitStore'
 import { getListItemFromNode } from '../../Utils/helper'
+
 import { CenterIcon, StyledInput, StyledSearch } from './styled'
-import { Icon } from '@iconify/react'
-import { useTheme } from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
 
 const Search = () => {
   const { isLoading } = useSputlitContext()

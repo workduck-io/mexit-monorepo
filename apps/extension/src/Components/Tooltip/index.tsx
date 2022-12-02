@@ -1,6 +1,9 @@
 import React, { useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 
+import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import { Icon as Iconify } from '@iconify/react'
+
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
 
@@ -10,9 +13,8 @@ import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { VisualState } from '../../Hooks/useSputlitContext'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
+
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon as Iconify } from '@iconify/react'
 
 function Tooltip() {
   //

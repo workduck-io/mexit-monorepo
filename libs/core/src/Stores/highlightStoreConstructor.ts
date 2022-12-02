@@ -1,7 +1,8 @@
+import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
+
 import { Contents, ILink, SharedNode } from '../Types/Editor'
 import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { mog } from '../Utils/mog'
-import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
 
 interface AddHighlightBlockToMap {
   highlightId: string

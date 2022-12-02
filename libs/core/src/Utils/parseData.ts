@@ -2,6 +2,7 @@ import { diskIndex,indexNames } from '../Data/search'
 import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
+
 import {
   ELEMENT_CODE_BLOCK,
   ELEMENT_EXCALIDRAW,

@@ -1,13 +1,15 @@
 import React from 'react'
 
+import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import { getNextWrappingIndex } from '@udecode/plate'
+
 import { MexIcon,TabType } from '@mexit/shared'
 
 import { ContextInfoBar } from '../Components/Sidebar/ContextInfoBar'
 import { NotesInfoBar } from '../Components/Sidebar/NotesInfoBar'
 import { SnippetsInfoBar } from '../Components/Sidebar/SnippetsInfoBar'
+
 import { useLayoutStore } from './useLayoutStore'
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-import { getNextWrappingIndex } from '@udecode/plate'
 
 export const useRightSidebarItems = () => {
   // Ensure the tabs have InfobarType in type

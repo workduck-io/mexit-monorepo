@@ -18,6 +18,7 @@ import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { PrimaryText } from '../EditorInfobar/BlockInfobar'
 import { InviteFormWrapper,InviteWrapper } from '../Mentions/styles'
 import SidebarList from '../Sidebar/SidebarList'
+
 import { RemovalButton } from './TemplateModal.styles'
 
 const TemplateModal = () => {

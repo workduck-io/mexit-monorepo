@@ -1,11 +1,13 @@
+import { TreeData, TreeItem } from '@atlaskit/tree'
+import { ItemId } from '@atlaskit/tree/dist/types/types'
+
 import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, NodeMetadata } from '@mexit/core'
 import { LastOpenedState, TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
+
 import { filterIncompleteTodos } from './filter'
-import { TreeData, TreeItem } from '@atlaskit/tree'
-import { ItemId } from '@atlaskit/tree/dist/types/types'
 
 // * at: numner (Lower -> asc)
 export type PriorityNode = { path: string; at: number }

@@ -1,6 +1,8 @@
 // TODO: add more domains and their supported types
 import toast from 'react-hot-toast'
 
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+
 import {
   convertContentToRawText,
   convertToCopySnippet,
@@ -12,7 +14,6 @@ import {
 
 import { CopyTag } from '../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../Editor/plugins/index'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 
 // Also a better matching for the domains
 export const supportedDomains: Record<string, 'plain' | 'html'> = {

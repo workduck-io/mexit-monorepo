@@ -1,8 +1,9 @@
+import { transparentize } from 'polished'
+import styled from 'styled-components'
+
 import { Button } from '@workduck-io/mex-components'
 
 import { Relative } from '../Components/RelativeTime'
-import { transparentize } from 'polished'
-import styled from 'styled-components'
 
 export const LinkWrapper = styled.div`
   display: flex;

@@ -1,6 +1,10 @@
 import React, { useEffect,useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
+import searchLine from '@iconify/icons-ri/search-line'
+import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
+import { debounce } from 'lodash'
+
 import { Infobox } from '@workduck-io/mex-components'
 
 import {
@@ -28,10 +32,8 @@ import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
+
 import SnippetCard from './SnippetCard'
-import searchLine from '@iconify/icons-ri/search-line'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import { debounce } from 'lodash'
 
 export const SnippetsInfoBar = () => {
   const [search, setSearch] = useState('')

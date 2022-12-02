@@ -10,6 +10,7 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex } from '../Workers/controller'
+
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
 import { useViewAPI } from './API/useViewsAPI'

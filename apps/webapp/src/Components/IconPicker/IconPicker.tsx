@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
 import { mergeRefs } from 'react-merge-refs'
 
-import { Emoji, EmojiPicker } from '@workduck-io/mex-components'
-
-import { MIcon } from '@mexit/core'
-import { IconDisplay,IconSelector, TooltipWrapper } from '@mexit/shared'
-
 import {
   flip,
   FloatingPortal,
@@ -17,6 +12,11 @@ import {
   useHover,
   useInteractions
 } from '@floating-ui/react-dom-interactions'
+
+import { Emoji, EmojiPicker } from '@workduck-io/mex-components'
+
+import { MIcon } from '@mexit/core'
+import { IconDisplay,IconSelector, TooltipWrapper } from '@mexit/shared'
 
 interface IconPickerProps {
   value: MIcon

@@ -1,8 +1,9 @@
+import { getNodesRange } from '@udecode/plate'
+import { createPluginFactory, Decorate } from '@udecode/plate-core'
+
 import { mog } from '@mexit/core'
 
 import { useBlockHighlightStore } from '../../Stores/useFocusBlock'
-import { getNodesRange } from '@udecode/plate'
-import { createPluginFactory, Decorate } from '@udecode/plate-core'
 
 interface HighlightPlugin {} // eslint-disable-line @typescript-eslint/no-empty-interface
 

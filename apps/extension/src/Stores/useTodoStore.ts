@@ -1,3 +1,6 @@
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
+
 import {
   convertContentToRawText,
   defaultContent,
@@ -10,9 +13,8 @@ import {
   TodoType} from '@mexit/core'
 
 import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
+
 import { useReminderStore } from './useReminderStore'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 const createTodo = (
   nodeid: string,

@@ -5,6 +5,7 @@ import { mergeUserPreferences } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+
 import { useUserService } from './API/useUserAPI'
 
 const USER_PREF_AUTO_SAVE_MS = 30 * 60 * 1000 // 30 minutes

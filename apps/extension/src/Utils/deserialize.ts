@@ -1,8 +1,8 @@
-import { BlockType, generateTempId, mog, NodeEditorContent, updateIds } from '@mexit/core'
-
 import { ELEMENT_DEFAULT } from '@udecode/plate'
 import { deserializeHtml, htmlBodyToFragment, htmlStringToDOMNode } from '@udecode/plate-core'
 import { Descendant, Editor, Text } from 'slate'
+
+import { BlockType, generateTempId, mog, NodeEditorContent, updateIds } from '@mexit/core'
 
 const isInlineNode = (editor: Pick<Editor, 'isInline'>) => (node: Descendant) =>
   Text.isText(node) || editor.isInline(node)

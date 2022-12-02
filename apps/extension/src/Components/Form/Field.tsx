@@ -1,9 +1,10 @@
 import React from 'react'
 
+import { ELEMENT_H2,ELEMENT_PARAGRAPH } from '@udecode/plate'
+
 import { TextFieldHeight } from '@mexit/shared'
 
 import { StyledTextAreaBlock } from './styled'
-import { ELEMENT_H2,ELEMENT_PARAGRAPH } from '@udecode/plate'
 
 const Field = ({ item, register }: { item: any; register: any }) => {
   switch (item.properties.type) {

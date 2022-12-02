@@ -1,11 +1,12 @@
 // import { mog } from '@mexit/core'
+import stackLine from '@iconify/icons-ri/stack-line'
+import { Icon } from '@iconify/react'
+import { useSelected } from 'slate-react'
+
 import { SILinkRoot, TaskSLink } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useTaskViews, useViewStore } from '../../../Hooks/useTaskViews'
-import stackLine from '@iconify/icons-ri/stack-line'
-import { Icon } from '@iconify/react'
-import { useSelected } from 'slate-react'
 
 const TaskViewLink = (props: any) => {
   const { getView } = useTaskViews()

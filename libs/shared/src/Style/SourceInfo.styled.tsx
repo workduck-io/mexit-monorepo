@@ -1,6 +1,7 @@
-import { FadeInOut } from '..'
 import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
+
+import { FadeInOut } from '..'
 
 export const TemplateCss = css`
   margin: 0 0.25rem;

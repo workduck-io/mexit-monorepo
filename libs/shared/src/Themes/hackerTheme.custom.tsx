@@ -1,3 +1,6 @@
+import { transparentize } from 'polished'
+import { css } from 'styled-components'
+
 import { ArchivedNode } from '../Style/Archive'
 import { AsyncButton, Button } from '../Style/Buttons'
 import { BackCard } from '../Style/Card'
@@ -11,8 +14,6 @@ import { Result, ResultHeader, SearchContainer } from '../Style/Search'
 import { SettingsOptions, SettingTitle } from '../Style/Settings'
 import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet,SSnippet } from '../Style/Snippets'
-import { transparentize } from 'polished'
-import { css } from 'styled-components'
 
 const grayMixerTrans = (n: number) => css`
   ${({ theme }) => transparentize(0.33, theme.colors.gray[n])}

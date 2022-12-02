@@ -1,8 +1,9 @@
+import { transparentize } from 'polished'
+import styled, { css } from 'styled-components'
+
 import { MainHeader } from './Layouts'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
-import { transparentize } from 'polished'
-import styled, { css } from 'styled-components'
 
 /*
  * Todos

@@ -1,6 +1,6 @@
-import { QuickLinkType } from '@mexit/core'
-
 import { PlateEditor, RenderFunction } from '@udecode/plate'
+
+import { QuickLinkType } from '@mexit/core'
 
 export enum CustomElements {
   ILINK = 'ilink',

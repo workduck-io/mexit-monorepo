@@ -1,6 +1,6 @@
-import { ScrollStyles } from '@mexit/shared'
-
 import styled, { css } from 'styled-components'
+
+import { ScrollStyles } from '@mexit/shared'
 
 export const NoteItem = styled.div<{ selected?: boolean }>`
   display: flex;

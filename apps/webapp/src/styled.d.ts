@@ -1,6 +1,6 @@
-import { ThemeType } from '@mexit/shared'
-
 import { CSSProp } from 'styled-components'
+
+import { ThemeType } from '@mexit/shared'
 
 declare module 'react' {
   interface Attributes {

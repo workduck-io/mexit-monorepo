@@ -1,3 +1,6 @@
+import { transparentize } from 'polished'
+import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
+
 import { ArchivedNode } from '../Style/Archive'
 import { BalloonToolbarBase } from '../Style/BalloonToolbar.styles'
 import { BackCard } from '../Style/Card'
@@ -16,8 +19,6 @@ import { SidebarDiv } from '../Style/Sidebar'
 import { CreateSnippet,SSnippet } from '../Style/Snippets'
 import { StyledBoard } from '../Style/Todo'
 import { TodoContainer } from '../Style/Todo.style'
-import { transparentize } from 'polished'
-import { css, DefaultTheme, FlattenInterpolation, ThemeProps } from 'styled-components'
 
 interface SpaceProps {
   containerStyle?: FlattenInterpolation<ThemeProps<DefaultTheme>>

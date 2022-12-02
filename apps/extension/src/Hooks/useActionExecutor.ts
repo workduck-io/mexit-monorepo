@@ -24,6 +24,7 @@ import { useSputlitStore } from '../Stores/useSputlitStore'
 import { evaluateConfig } from '../Utils/evalSmartCapture'
 import { generateAvatar } from '../Utils/generateAvatar'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
+
 import { useAuthStore } from './useAuth'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
