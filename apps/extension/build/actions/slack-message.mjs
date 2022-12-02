@@ -6,8 +6,8 @@ const client = new WebClient(process.env.SLACK_BOT_TOKEN, {
   logLevel: LogLevel.DEBUG
 })
 
-const fileName = fs.readdirSync('./dist/apps/extension').filter((file) => file.endsWith('.zip'))[0]
-const filePath = `./dist/apps/extension/${fileName}`
+const fileName = fs.readdirSync('./dist/extension').filter((file) => file.endsWith('.zip'))[0]
+const filePath = `./dist/extension/${fileName}`
 const channelId = process.env.SLACK_CHANNEL_ID
 
 axios
