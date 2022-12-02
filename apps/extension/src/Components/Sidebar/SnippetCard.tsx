@@ -14,7 +14,8 @@ import {
   RelativeTime,
   SnippetCardFooter,
   SnippetCardWrapper,
-  SnippetContentPreview} from '@mexit/shared'
+  SnippetContentPreview
+} from '@mexit/shared'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'

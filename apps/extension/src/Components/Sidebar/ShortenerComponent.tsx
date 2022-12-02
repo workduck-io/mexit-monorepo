@@ -30,7 +30,7 @@ const UrlTitleWrapper = styled(LinkTitleWrapper)`
 
   background-color: ${({ theme }) => theme.colors.gray[9]};
   color: ${({ theme }) => theme.colors.text.fade};
-  font-size: 1rem;
+  font-size: 1em;
   width: 100%;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: 0.25rem 0;

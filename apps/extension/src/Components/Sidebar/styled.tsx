@@ -17,5 +17,6 @@ export const SidebarContainer = styled.div`
   position: fixed;
   z-index: 9999999999;
 
+  font-size: 1em;
   color: ${({ theme }) => theme.colors.text.heading};
 `

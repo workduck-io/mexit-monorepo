@@ -26,29 +26,11 @@ export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
   @media (max-width: ${size.wide}) {
     min-width: ${infoWidths.small.normal};
     max-width: ${infoWidths.small.normal};
-    ${
-      /*({ mode }) => {
-      const mainWidth = getMainWidth(mode, false)
-      return css`
-        min-width: calc(${mainWidth});
-        max-width: calc(${mainWidth});
-      `
-    }*/ false
-    };
   }
-  @media (min-width: ${size.wide}) {
+  /* @media (min-width: ${size.wide}) {
     min-width: ${infoWidths.small.wide};
     max-width: ${infoWidths.small.wide};
-    ${
-      /*({ mode }) => {
-      const mainWidth = getMainWidth(mode, true)
-      return css`
-        min-width: calc(${mainWidth});
-        max-width: calc(${mainWidth});
-      `
-    }*/ false
-    };
-  }
+  } */
   transition: opacity 0.3s ease-in-out;
   ${({ $focusMode, $focusHover, mode, hasPinnedSuggestions }) => {
     if ($focusMode) {
