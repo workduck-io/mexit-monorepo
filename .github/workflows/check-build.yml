@@ -9,6 +9,7 @@ jobs:
     name: Test extension and webapp build
     env:
       GITHUB_TOKEN: ${{ github.token }}
+      YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
 
     runs-on: ubuntu-latest
     steps:
