@@ -1,13 +1,12 @@
+import addHmr from './build/add-hmr'
+import customDynamicImport from './build/custom-dynamic-import'
+import makeManifest from './build/make-manifest'
+import manifest from './manifest'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path, { resolve } from 'path'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
-
-import addHmr from './build/add-hmr'
-import customDynamicImport from './build/custom-dynamic-import'
-import makeManifest from './build/make-manifest'
-import manifest from './manifest'
 
 const outDir = resolve(__dirname, '../..', 'dist', 'extension')
 const coreLibDir = resolve(__dirname, '../..', 'libs/core', 'src')
