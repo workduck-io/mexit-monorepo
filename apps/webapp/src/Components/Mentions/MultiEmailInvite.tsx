@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Controller,useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 
 import { LoadingButton } from '@workduck-io/mex-components'
 
@@ -9,7 +9,8 @@ import {
   DefaultPermissionValue,
   emptyAccessTable,
   mog,
-  permissionOptions} from '@mexit/core'
+  permissionOptions
+} from '@mexit/core'
 import { Label, mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
@@ -22,11 +23,11 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalControls,ModalHeader } from '../../Style/Refactor'
+import { ModalControls, ModalHeader } from '../../Style/Refactor'
 import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 
-import { InviteFormFieldset,InviteFormWrapper, MultipleInviteWrapper } from './styles'
+import { InviteFormFieldset, InviteFormWrapper, MultipleInviteWrapper } from './styles'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
@@ -82,12 +83,12 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
 
       // Typescript has some weird thing going on with promises.
       // Try to improve the type (if you can that is)
-      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userID !== undefined) as any[]
-      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userID === undefined) as any[]
+      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId !== undefined) as any[]
+      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId === undefined) as any[]
 
       const givePermToExisting = existing
         .reduce((p, c) => {
-          return [...p, c.value.userID]
+          return [...p, c.value.userId]
         }, [])
         .filter((u) => u !== localuserDetails.userID)
 

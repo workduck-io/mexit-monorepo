@@ -11,7 +11,7 @@ import { useAPIHeaders } from './useAPIHeaders'
 
 export interface TempUser {
   email: string
-  userID?: string
+  userId?: string
   alias?: string
   name?: string
 }
@@ -46,7 +46,7 @@ export const useUserService = () => {
     if (user) return user
 
     try {
-      return await API.user.getByMail(email)
+      return (await API.user.getByMail(email)) as TempUser
     } catch (e) {
       mog('Error Fetching User Details', { error: e, email })
       return { email }
@@ -63,7 +63,7 @@ export const useUserService = () => {
     if (!match) return { userID }
 
     try {
-      return await API.user.getByID(userID).then((resp) => {
+      return await API.user.getByID(userID).then((resp: TempUserUserID) => {
         mog('Response', { data: resp })
         if (resp?.email && resp?.name) {
           addUser({
@@ -89,7 +89,7 @@ export const useUserService = () => {
   const updateUserInfo = async (userID: string, name?: string, alias?: string): Promise<boolean> => {
     try {
       if (name === undefined && alias === undefined) return false
-      return await API.user.updateInfo({ id: userID, name, alias }).then((resp) => {
+      return await API.user.updateInfo({ id: userID, name, alias }).then((resp: any) => {
         mog('Response', { data: resp })
         updateUserDetails({ name: resp?.name, alias: resp?.alias })
         return true
