@@ -13,7 +13,6 @@ import { SputlitProvider } from './Hooks/useSputlitContext'
 
 const Extension = () => {
   const authenticated = useAuthStore((a) => a.authenticated)
-
   return (
     <>
       {authenticated && <ReminderArmer />}
