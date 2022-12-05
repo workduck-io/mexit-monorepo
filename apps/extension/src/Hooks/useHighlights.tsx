@@ -22,6 +22,7 @@ export const useHighlights = () => {
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
   const { dispatch } = useRaju()
+  const setContent = useContentStore((s) => s.setContent)
   const {
     deleteHighlight: deleteHighlightAPI,
     saveHighlight: saveHighlightAPI,
@@ -113,7 +114,8 @@ export const useHighlights = () => {
 
       const nodeid = node.nodeid
 
-      dispatch('SET_CONTENT', nodeid, request.data.content)
+      setContent(nodeid, request.data.content)
+      // dispatch('SET_CONTENT', nodeid, request.data.content)
 
       resolve()
     })

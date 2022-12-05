@@ -55,6 +55,7 @@ export function useSaveChanges() {
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
+  const addRecentNote = useRecentsStore((s) => s.addRecent)
 
   /**
    * Save
@@ -161,12 +162,13 @@ export function useSaveChanges() {
       if (!isSharedNode(node.nodeid)) {
         updateSingleILink(node.nodeid, node.path, namespace.id)
       }
-      dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
+
+      // dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
     } else {
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       // Why is shared check not used here?
       updateMultipleILinks(linksToBeCreated)
-      dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)
+      // dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)
     }
   }
 
@@ -186,9 +188,10 @@ export function useSaveChanges() {
     saveAndExit = false,
     notification = false
   ) => {
-    dispatch('ADD_RECENT_NODE', nodeid)
-    dispatch('SET_CONTENT', nodeid, content, metadata)
-    if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
+    addRecentNote(nodeid)
+    setContent(nodeid, content, metadata)
+    if (highlight) addHighlight(highlight, blockHighlightMap)
+    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')
@@ -251,9 +254,8 @@ export function useSaveChanges() {
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
-        dispatch('ADD_RECENT_NODE', nodeid)
-
-        dispatch('SET_CONTENT', nodeid, content, metadata)
+        setContent(nodeid, content, metadata)
+        // dispatch('SET_CONTENT', nodeid, content, metadata)
 
         if (notification) {
           toast.success('Saved to Cloud')

@@ -10,6 +10,7 @@ import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
+import { useReminderActionHandler } from '../Hooks/useReminderActionHandler'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
@@ -25,6 +26,7 @@ export function InternalEvents() {
   handleHighlighter()
   dibbaToggle()
   badgeRenderer()
+  useReminderActionHandler()
   // useDocumentLock()
   // useFocusHandler()
   return null
