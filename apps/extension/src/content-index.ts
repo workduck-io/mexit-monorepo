@@ -1,5 +1,3 @@
-import { messageHandler } from './Sync/messageHandler'
-
 console.log('content script loaded')
 
 /**

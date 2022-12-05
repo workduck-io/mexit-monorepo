@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react'
 
-import { ExtInfobarMode, InfoBarWrapper, Tabs } from '@mexit/shared'
+import { ExtInfobarMode, InfoBarWrapper, LoginInfoBar, Tabs } from '@mexit/shared'
 
+import { useAuthStore } from '../../Hooks/useAuth'
 import useRaju from '../../Hooks/useRaju'
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useRightSidebarItems } from '../../Stores/useRightSidebarItems'
 import { getElementById } from '../../Utils/cs-utils'
+import { RHSLogin } from '../Login'
 
 import { DraggableToggle } from './DraggableToggle'
 import { ExtSideNav, SidebarContainer } from './styled'
@@ -41,6 +43,7 @@ export const ExtInfoBar = () => {
   // and not when the command bar is rendered
   const { dispatch } = useRaju()
 
+  const authenticated = useAuthStore((a) => a.authenticated)
   const infobar = useLayoutStore((s) => s.infobar)
 
   return (
@@ -53,12 +56,15 @@ export const ExtInfoBar = () => {
         $side="right"
         $publicNamespace={false}
       >
-        <InfoBarWrapper
-          mode={infobar.mode}
-          // {...getFocusProps(focusMode)}
-        >
-          <ExtInfoBarItems />
-        </InfoBarWrapper>
+        {authenticated ? (
+          <InfoBarWrapper mode={infobar.mode}>
+            <ExtInfoBarItems />
+          </InfoBarWrapper>
+        ) : (
+          <LoginInfoBar mode={infobar.mode}>
+            <RHSLogin />
+          </LoginInfoBar>
+        )}
       </ExtSideNav>
       <DraggableToggle />
     </SidebarContainer>

@@ -1,6 +1,7 @@
 import { connectToChild, Methods } from 'penpal'
 
 import { styleSlot } from '../Utils/cs-utils'
+
 import { messageHandler, MessageType } from './messageHandler'
 
 export let childIframe = undefined

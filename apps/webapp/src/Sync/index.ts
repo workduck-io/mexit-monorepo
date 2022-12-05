@@ -27,6 +27,7 @@ const syncStores = () => {
       sync: [
         { field: 'ilinks' },
         { field: 'archive' },
+        { field: 'bookmarks' },
         { field: 'namespaces' },
         { field: 'sharedNodes' },
         { field: 'tags' },

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { addMinutes } from 'date-fns'
-import { connectToChild, Methods } from 'penpal'
+import { Methods } from 'penpal'
 
 import {
   AddHighlightFn,
@@ -11,7 +11,6 @@ import {
   idxKey,
   ILink,
   Link,
-  MEXIT_FRONTEND_URL_BASE,
   mog,
   NodeEditorContent,
   NodeMetadata,
@@ -37,7 +36,6 @@ import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { getElementById, styleSlot } from '../Utils/cs-utils'
 
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
