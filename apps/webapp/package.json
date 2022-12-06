@@ -35,7 +35,6 @@
     "@iconify/icons-logos": "^1.2.20",
     "@udecode/plate": "~16.4.1",
     "@uifabric/styling": "^7.20.0",
-    "axios": "^0.23.0",
     "ramda": "^0.28.0",
     "downshift": "^6.1.7",
     "chrono-node": "^2.3.8",

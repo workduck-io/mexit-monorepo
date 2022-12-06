@@ -4,10 +4,10 @@ import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { client, useAuth } from '@workduck-io/dwindle'
+import { useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { apiURLs, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
+import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
@@ -153,28 +153,18 @@ export const useAuthentication = () => {
     const { email, userId } = loginResult
     const name = getEmailStart(email)
     const newWorkspaceName = `WD_${nanoid()}`
-    const result = await client
-      .post(
-        apiURLs.user.registerUser,
-        {
-          type: 'RegisterUserRequest',
-          user: {
-            id: userId,
-            email: email,
-            name: name,
-            alias: name
-          },
-          workspaceName: newWorkspaceName
+    const result = await API.user
+      .registerUser({
+        type: 'RegisterUserRequest',
+        user: {
+          id: userId,
+          email: email,
+          name: name,
+          alias: name
         },
-        {
-          headers: {
-            'mex-workspace-id': ''
-          }
-        }
-      )
-      .then((d: any) => {
-        return d.data
+        workspaceName: newWorkspaceName
       })
+      .then((res) => res)
 
     const userDetails = {
       email: email,
@@ -208,27 +198,30 @@ export const useInitializeAfterAuth = () => {
       const { email } = loginData
       const { userDetails, workspaceDetails } = registerUser
         ? await registerNewUser(loginData)
-        : await client
-            .get(apiURLs.user.getUserRecords, {
-              validateStatus: (status: number) => {
-                return (status >= 200 && status < 300) || status === 404
+        : await API.user
+            .getCurrent()
+            .then(async (res) => {
+              if (res) {
+                if (isGoogle && res.group === undefined) {
+                  forceRefreshToken = true
+                  return await registerNewUser(loginData)
+                } else if (res.group) {
+                  const userDetails = {
+                    email: email,
+                    alias: res.alias ?? res.properties?.alias ?? res.name,
+                    userID: res.id,
+                    name: res.name
+                  }
+                  const workspaceDetails = { id: res.group, name: 'WORKSPACE_NAME' }
+                  return { workspaceDetails, userDetails }
+                } else {
+                  throw new Error('Could Not Fetch User Records')
+                }
               }
             })
-            .then(async (d: { status: number; data: any }) => {
-              if (isGoogle && (d.data.group === undefined || d.status === 404)) {
-                forceRefreshToken = true
-                return await registerNewUser(loginData)
-              } else if (d.data.group) {
-                const userDetails = {
-                  email: email,
-                  alias: d.data.alias ?? d.data.properties?.alias ?? d.data.name,
-                  userID: d.data.id,
-                  name: d.data.name
-                }
-                const workspaceDetails = { id: d.data.group, name: 'WORKSPACE_NAME' }
-                return { workspaceDetails, userDetails }
-              } else {
-                throw new Error('Could Not Fetch User Records')
+            .catch((error) => {
+              if (error.status === 404) {
+                return registerNewUser(loginData)
               }
             })
 
