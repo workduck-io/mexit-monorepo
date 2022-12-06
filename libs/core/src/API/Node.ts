@@ -1,36 +1,38 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class NodeAPI {
-  private client: AxiosX
+  private client: KYClient
 
-  constructor(client: AxiosX) {
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async getById(id: string, config?) {
-    return await this.client.get(apiURLs.node.get(id), config)
+  async getById(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.node.get(id), cacheConfig, options)
   }
 
-  async save(data, config?) {
-    return await this.client.post(apiURLs.node.create, data, config)
+  async save(data, options?: Options) {
+    return await this.client.post(apiURLs.node.create, data, options)
   }
 
-  async append(id: string, data, config?) {
-    return await this.client.patch(apiURLs.node.append(id), data, config)
+  async append(id: string, data, options?: Options) {
+    return await this.client.patch(apiURLs.node.append(id), data, options)
   }
 
-  async refactor(data, config?) {
-    return await this.client.post(apiURLs.node.refactor, data, config)
+  async refactor(data, options?: Options) {
+    return await this.client.post(apiURLs.node.refactor, data, options)
   }
 
-  async getPublic(id: string, config?) {
-    return await this.client.get(apiURLs.public.getPublicNode(id), config)
+  async getPublic(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.public.getPublicNode(id), cacheConfig, options)
   }
 
-  async makePublic(id: string, config?) {
-    return await this.client.patch(apiURLs.node.makePublic(id), config)
+  async makePublic(id: string, options?: Options) {
+    return await this.client.patch(apiURLs.node.makePublic(id), options)
   }
 
   async makePrivate(id: string) {
@@ -41,37 +43,37 @@ export class NodeAPI {
     return await this.client.post(apiURLs.node.bulkCreate, data)
   }
 
-  async archive(namespaceId: string, nodeIds: string[], config?) {
+  async archive(namespaceId: string, nodeIds: string[], options?: Options) {
     return await this.client.put(
       apiURLs.archive.archiveInNamespace(namespaceId),
       {
         ids: nodeIds
       },
-      config
+      options
     )
   }
 
-  async unarchive(nodeIds: string[], config?) {
+  async unarchive(nodeIds: string[], options?: Options) {
     return await this.client.put(
       apiURLs.archive.unArchiveNodes,
       {
         ids: nodeIds
       },
-      config
+      options
     )
   }
 
-  async allArchived(config?) {
-    return await this.client.get(apiURLs.archive.getArchivedNodes, config)
+  async allArchived(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.archive.getArchivedNodes, cacheConfig, options)
   }
 
-  async deleteArchived(nodeIds: string[], config?) {
+  async deleteArchived(nodeIds: string[], options?: Options) {
     return await this.client.put(
       apiURLs.archive.deleteArchivedNodes,
       {
         ids: nodeIds
       },
-      config
+      options
     )
   }
 }

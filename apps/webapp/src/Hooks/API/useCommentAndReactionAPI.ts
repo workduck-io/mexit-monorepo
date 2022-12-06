@@ -53,7 +53,7 @@ export const useReactionAPI = () => {
       */
   const getReactionsOfNote = async (nodeId: string, force = false) => {
     const res = await API.reaction.getAllOfNode(nodeId, {
-      cache: true,
+      enabled: true,
       expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
     return res
@@ -106,7 +106,7 @@ export const useCommentAPI = () => {
 
   const getCommentsByNodeId = async (nodeId: string, force = false) => {
     const res = await API.comment.getAllOfNode(nodeId, {
-      cache: true,
+      enabled: true,
       expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
     return res

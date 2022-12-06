@@ -1,28 +1,30 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class UserAPI {
-  private client: AxiosX
-  constructor(client: AxiosX) {
+  private client: KYClient
+  constructor(client: KYClient) {
     this.client = client
   }
-  async getCurrent(config?) {
-    return await this.client.get(apiURLs.user.getUserRecords, config)
+  async getCurrent(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.user.getUserRecords, cacheConfig, options)
   }
 
-  async getByMail(mail: string, config?) {
-    return await this.client.get(apiURLs.user.getFromEmail(mail), config)
+  async getByMail(mail: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.user.getFromEmail(mail), cacheConfig, options)
   }
 
-  async getByID(id: string, config?) {
-    return await this.client.get(apiURLs.user.getFromUserId(id), config)
+  async getByID(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.user.getFromUserId(id), cacheConfig, options)
   }
-  async updateInfo(data, config?) {
-    return await this.client.put(apiURLs.user.updateInfo, data, config)
+  async updateInfo(data, options?: Options) {
+    return await this.client.put(apiURLs.user.updateInfo, data, options)
   }
 
-  async updatePreference(userID: string, userPreferences, config?) {
-    return await this.client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }, config)
+  async updatePreference(userID: string, userPreferences, options?: Options) {
+    return await this.client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }, options)
   }
 }

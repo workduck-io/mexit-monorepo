@@ -27,7 +27,7 @@ export const useViewAPI = () => {
    * Returns undefined when request is not made
    */
   const getAllViews = async (): Promise<View[] | undefined> => {
-    const resp = await API.view.getAll({ cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((resp: any) => {
+    const resp = await API.view.getAll({ enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((resp: any) => {
       if (!resp) return
       // mog('We fetched them view', { resp })
       const views = resp

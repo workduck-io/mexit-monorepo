@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { client, useAuth } from '@workduck-io/dwindle'
+import { useAuth } from '@workduck-io/dwindle'
 
 import { API } from '@mexit/core'
 import { addIconsToIconify } from '@mexit/shared'
@@ -12,7 +12,7 @@ import { useAutoSyncUserPreference } from '../Hooks/useSyncUserPreferences'
 const Init = () => {
   const { initCognito } = useAuth()
   useEffect(() => {
-    API.init(client as any)
+    API.init()
     const initUserAndApp = () => {
       initCognito(
         {

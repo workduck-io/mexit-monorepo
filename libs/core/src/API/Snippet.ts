@@ -1,27 +1,29 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class SnippetAPI {
-  private client: AxiosX
+  private client: KYClient
 
-  constructor(client: AxiosX) {
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async getById(id: string, config?) {
-    return await this.client.get(apiURLs.snippet.getById(id), config)
+  async getById(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.snippet.getById(id), cacheConfig, options)
   }
 
-  async create(data, config?) {
-    return await this.client.post(apiURLs.snippet.create, data, config)
+  async create(data, options?: Options) {
+    return await this.client.post(apiURLs.snippet.create, data, options)
   }
 
-  async deleteAllVersions(id: string, config?) {
-    return await this.client.delete(apiURLs.snippet.deleteAllVersionsOfSnippet(id), config)
+  async deleteAllVersions(id: string, options?: Options) {
+    return await this.client.delete(apiURLs.snippet.deleteAllVersionsOfSnippet(id), options)
   }
 
-  async allOfWorkspace(config?) {
-    return await this.client.get(apiURLs.snippet.getAllSnippetsByWorkspace, config)
+  async allOfWorkspace(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.snippet.getAllSnippetsByWorkspace, cacheConfig, options)
   }
 }

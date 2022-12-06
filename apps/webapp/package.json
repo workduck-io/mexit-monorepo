@@ -53,6 +53,7 @@
     "lottie-react": "^2.2.1",
     "match-sorter": "^6.3.1",
     "md5": "2.3.0",
+    "ky": "^0.32.2",
     "mixpanel-browser": "^2.43.0",
     "nanoid": "^3.2.0",
     "penpal": "^6.2.2",

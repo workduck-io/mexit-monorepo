@@ -1,28 +1,30 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class ViewAPI {
-  private client: AxiosX
+  private client: KYClient
   private versionHeaders = {
     'mex-api-ver': 'v2'
   }
-  constructor(client: AxiosX) {
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async create(data, config?) {
-    return await this.client.post(apiURLs.view.saveView, data, { ...config, headers: this.versionHeaders })
+  async create(data, options?: Options) {
+    return await this.client.post(apiURLs.view.saveView, data, { ...options, headers: this.versionHeaders })
   }
 
-  async getAll(config?) {
-    return this.client.get(apiURLs.view.getAllViews, {
-      ...config,
+  async getAll(cacheConfig?: CacheConfig, options?: Options) {
+    return this.client.get(apiURLs.view.getAllViews, cacheConfig, {
+      ...options,
       headers: this.versionHeaders
     })
   }
 
-  async delete(id: string, config?) {
-    return await this.client.get(apiURLs.view.deleteView(id), { ...config, headers: this.versionHeaders })
+  async delete(id: string, options?: Options) {
+    return await this.client.delete(apiURLs.view.deleteView(id), { ...options, headers: this.versionHeaders })
   }
 }
