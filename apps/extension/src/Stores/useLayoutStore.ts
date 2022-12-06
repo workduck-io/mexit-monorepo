@@ -50,6 +50,6 @@ export const useLayoutStore = create<LayoutState>(
         set({ infobar: { ...get().infobar, mode } })
       }
     }),
-    { name: 'ext-layout-store', getStorage: () => asyncLocalStorage }
+    { name: 'ext-layout-store', partialize: (s) => ({ toggleTop: s.toggleTop }), getStorage: () => asyncLocalStorage }
   )
 )
