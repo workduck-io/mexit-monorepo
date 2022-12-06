@@ -5,7 +5,7 @@ import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 
-import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightGroupsWrapper,
@@ -17,6 +17,7 @@ import {
 
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import useDataStore from '../../Stores/useDataStore'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 
@@ -37,6 +38,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   }, [editableMap])
 
   const isEditable = useMemo(() => Object.keys(editableMap ?? {}).length > 0, [editableMap])
+  mog('IS EDITABLE', { isEditable, editNodes, i: useDataStore.getState().ilinks })
   const nodeId = editNodes[0]?.nodeid
 
   const willCollapse = highlightText.length > HIGHLIGHT_TEXT_MAX_LENGTH

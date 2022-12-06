@@ -1,18 +1,18 @@
 import { BroadcastSyncedChannel } from '@mexit/core'
 
-import { storeConnector } from './channels'
+import { listenChannel } from './channels'
 
 // * Stores to sync <Web - Extension>
 export const syncStoresWithExtension = (extension) => {
-  storeConnector(BroadcastSyncedChannel.USER_PREFERENCES, extension)
-  storeConnector(BroadcastSyncedChannel.CONTENTS, extension)
-  storeConnector(BroadcastSyncedChannel.AUTH, extension)
-  storeConnector(BroadcastSyncedChannel.DATA, extension)
-  storeConnector(BroadcastSyncedChannel.HIGHLIGHTS, extension)
-  storeConnector(BroadcastSyncedChannel.RECENTS, extension)
-  storeConnector(BroadcastSyncedChannel.LINKS, extension)
-  storeConnector(BroadcastSyncedChannel.DWINDLE, extension)
-  storeConnector(BroadcastSyncedChannel.SNIPPETS, extension)
-  storeConnector(BroadcastSyncedChannel.DESCRIPTIONS, extension)
-  storeConnector(BroadcastSyncedChannel.SMART_CAPTURE, extension)
+  listenChannel(BroadcastSyncedChannel.USER_PREFERENCES, extension)
+  listenChannel(BroadcastSyncedChannel.CONTENTS, extension)
+  listenChannel(BroadcastSyncedChannel.AUTH, extension)
+  listenChannel(BroadcastSyncedChannel.DATA, extension)
+  listenChannel(BroadcastSyncedChannel.HIGHLIGHTS, extension)
+  listenChannel(BroadcastSyncedChannel.RECENTS, extension)
+  listenChannel(BroadcastSyncedChannel.LINKS, extension)
+  listenChannel(BroadcastSyncedChannel.DWINDLE, extension)
+  listenChannel(BroadcastSyncedChannel.SNIPPETS, extension)
+  listenChannel(BroadcastSyncedChannel.DESCRIPTIONS, extension)
+  listenChannel(BroadcastSyncedChannel.SMART_CAPTURE, extension)
 }

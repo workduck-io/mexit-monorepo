@@ -6,12 +6,12 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 
-import { childIframe } from './iframeBroadcast'
+import { childIframe } from './iframeConnector'
 import { MessageType, UnhandledRequestsByExtension } from './messageHandler'
 import { storeChangeHandler } from './storeChangeHandler'
 
 const onStateChange = (message: MessageType) => {
-  mog('[Extension]:', { UnhandledRequestsByExtension })
+  mog('[Extension]: State changed', { message })
   if (childIframe && !UnhandledRequestsByExtension?.has(message.msgId)) {
     childIframe.broadCastMessage(message.msgId, message)
   }

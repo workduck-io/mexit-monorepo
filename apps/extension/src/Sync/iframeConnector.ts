@@ -27,6 +27,7 @@ const messageBroadcaster = () => {
   const exposedMethods: Methods = {
     sendToExtension: (message: MessageType) => {
       messageHandler(message)
+      return 100
     }
   }
 
@@ -35,9 +36,8 @@ const messageBroadcaster = () => {
     methods: exposedMethods
   })
 
-  const handleIframeLoad = () => {
+  const handleIframeLoad = async () => {
     connection.promise.then((child) => {
-      console.log('[Extension]: Connected with IFrame!')
       childIframe = child
     })
   }

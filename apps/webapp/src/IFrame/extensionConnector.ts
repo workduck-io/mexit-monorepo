@@ -1,8 +1,10 @@
-import { broadCastMessage } from './channels'
-import { syncStoresWithExtension } from './syncedStores'
 import { connectToParent as connectToExtension } from 'penpal'
 
-export const webExtensionConnector = () => {
+import { broadCastMessage } from './channels'
+import { initializeExtension } from './initializeExtension'
+import { syncStoresWithExtension } from './syncedStores'
+
+export const webExtensionConnector = async () => {
   /*
    * Functions for extension
    */
@@ -18,10 +20,11 @@ export const webExtensionConnector = () => {
 
   host.promise
     .then((extension) => {
-      console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
+      // console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
       syncStoresWithExtension(extension)
+      initializeExtension(extension)
     })
     .catch((err) => {
-      console.log('[IFRAME -- X -- EXTENSION]', { err })
+      console.error('[IFRAME -- X -- EXTENSION]', { err })
     })
 }

@@ -104,7 +104,7 @@ export const highlightStoreConstructor: StateCreator<
       })
     })
 
-    mog('addHighlighted', { newHighlighted, newHighlightBlockMap })
+    mog('addHighlighted', { highlight, nodeId, blockIds, newHighlighted, newHighlightBlockMap })
     set({ highlights: newHighlighted, highlightBlockMap: newHighlightBlockMap })
   },
 

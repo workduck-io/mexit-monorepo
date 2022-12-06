@@ -9,7 +9,7 @@ import { StyleSheetManager } from 'styled-components'
 
 import Index from './index'
 import { styleSlot } from './Utils/cs-utils'
-import messageBroadcaster from './Sync/iframeBroadcast'
+import messageBroadcaster from './Sync/iframeConnector'
 
 refreshOnUpdate('src')
 

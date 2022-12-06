@@ -27,7 +27,6 @@ import { useInternalLinks } from './useInternalLinks'
 import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
-import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export interface AppendAndSaveProps {
@@ -47,11 +46,14 @@ export function useSaveChanges() {
   const setSelection = useSputlitStore((s) => s.setSelection)
 
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
-  const { ilinks, sharedNodes } = useDataStore()
-  const { getContent, setContent } = useContentStore()
-  const { dispatch } = useRaju()
+  const ilinks = useDataStore((s) => s.ilinks)
+  const sharedNodes = useDataStore((s) => s.sharedNodes)
+
+  const setContent = useContentStore((s) => s.setContent)
+  const getContent = useContentStore((s) => s.getContent)
+
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const { addHighlight } = useHighlightStore()
+  const addHighlight = useHighlightStore((s) => s.addHighlight)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
@@ -93,7 +95,7 @@ export function useSaveChanges() {
 
     mog('request', { request })
 
-    setContent(node.nodeid, editorState)
+    // setContent(node.nodeid, editorState)
 
     setSelection(undefined)
     addRecent(node.nodeid)
@@ -190,7 +192,7 @@ export function useSaveChanges() {
   ) => {
     addRecentNote(nodeid)
     setContent(nodeid, content, metadata)
-    if (highlight) addHighlight(highlight, blockHighlightMap)
+    // if (highlight) addHighlight(highlight, blockHighlightMap)
     // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {

@@ -11,7 +11,6 @@ import { useAuthStore } from './useAuth'
 import { useInternalLinks } from './useInternalLinks'
 import { useLinks } from './useLinks'
 import { isReadonly, usePermissions } from './usePermissions'
-import useRaju from './useRaju'
 
 export const useHighlights = () => {
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
@@ -21,7 +20,6 @@ export const useHighlights = () => {
   const { getILinkFromNodeid } = useLinks()
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
-  const { dispatch } = useRaju()
   const setContent = useContentStore((s) => s.setContent)
   const {
     deleteHighlight: deleteHighlightAPI,
@@ -44,6 +42,7 @@ export const useHighlights = () => {
   const getEditableMap = useCallback(
     (highlighId: string) => {
       const highlightMap = highlightBlockMap[highlighId]
+      mog('HIGHLIGHTMAP', { highlighId, highlightBlockMap, highlightMap })
       const editableMap = Object.keys(highlightMap ?? {}).reduce((acc, nodeId) => {
         const access = accessWhenShared(nodeId)
         // mog('Access', { access, node })
