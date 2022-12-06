@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 
-import { DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
+import { defaultContent, DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
@@ -12,7 +12,7 @@ import { useLinks } from './useLinks'
 import useLoad from './useLoad'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
-import { NavigationType,ROUTE_PATHS, useRouting } from './useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 
 export type NewNoteOptions = {
@@ -63,8 +63,9 @@ export const useCreateNewNote = () => {
     const nodeMetadata = getMetadata(parentNoteId)
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent =
-      options?.noteContent ||
-      (nodeMetadata?.templateID && parentNote?.path !== 'Drafts' && getSnippet(nodeMetadata.templateID)?.content)
+      options?.noteContent ?? (nodeMetadata?.templateID && parentNote?.path !== 'Drafts')
+        ? getSnippet(nodeMetadata.templateID).content
+        : defaultContent.content
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 
