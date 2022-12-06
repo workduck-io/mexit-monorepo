@@ -11,6 +11,7 @@ export const syncStoresWithExtension = (extension) => {
   listenChannel(BroadcastSyncedChannel.HIGHLIGHTS, extension)
   listenChannel(BroadcastSyncedChannel.RECENTS, extension)
   listenChannel(BroadcastSyncedChannel.LINKS, extension)
+  listenChannel(BroadcastSyncedChannel.LAYOUT, extension)
   listenChannel(BroadcastSyncedChannel.DWINDLE, extension)
   listenChannel(BroadcastSyncedChannel.SNIPPETS, extension)
   listenChannel(BroadcastSyncedChannel.DESCRIPTIONS, extension)

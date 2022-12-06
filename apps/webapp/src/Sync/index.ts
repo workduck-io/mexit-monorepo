@@ -10,9 +10,10 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
-import { syncStoreState } from './synced'
+import { syncStoreState } from './syncStore'
 
 // This is required for event driven messaging, as the tabs or in our
 // case a tab and a iframe don't know about their state updates, we
@@ -65,6 +66,11 @@ const syncStores = () => {
     syncStoreState(useSnippetStore, {
       name: BroadcastSyncedChannel.SNIPPETS,
       sync: [{ field: 'snippets' }]
+    })
+
+    syncStoreState(useSmartCaptureStore, {
+      name: BroadcastSyncedChannel.SMART_CAPTURE,
+      sync: [{ field: 'config' }]
     })
 
     syncStoreState(useReminderStore, {

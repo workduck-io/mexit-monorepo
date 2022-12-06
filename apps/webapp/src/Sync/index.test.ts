@@ -2,7 +2,7 @@ import create from 'zustand'
 
 import { BroadcastSyncedChannel } from '@mexit/core'
 
-import { syncStoreState } from './synced'
+import { syncStoreState } from './syncStore'
 
 export const testStoreSync = () => {
   type ExtensionStore = {

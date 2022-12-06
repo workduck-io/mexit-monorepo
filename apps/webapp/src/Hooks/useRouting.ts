@@ -19,15 +19,13 @@ export const ROUTE_PATHS = {
   snippets: '/snippets',
   snippet: '/snippets/node', // * /snippets/node/:snippetid
   links: '/links',
-  chotu: '/chotu',
   actions: '/actions',
   oauth: '/oauth',
   oauthdesktop: '/oauth/desktop',
   share: '/share',
   namespaceShare: '/share/namespace',
   forgotpassword: '/auth/forgotpassword',
-  integrations: '/integrations',
-  connector: '/connector'
+  integrations: '/integrations'
 }
 
 export enum NavigationType {

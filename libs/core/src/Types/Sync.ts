@@ -21,6 +21,7 @@ export enum BroadcastSyncedChannel {
   USER_PREFERENCES = 'user-preferences',
   ROUTES_INFO = 'routes-information',
   HIGHLIGHTS = 'highlights',
+  LAYOUT = 'layout',
   TEST_BROADCASTING = 'test-broadcasting'
 }
 

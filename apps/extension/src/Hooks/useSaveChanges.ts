@@ -95,8 +95,6 @@ export function useSaveChanges() {
 
     mog('request', { request })
 
-    // setContent(node.nodeid, editorState)
-
     setSelection(undefined)
     addRecent(node.nodeid)
     setActiveItem()
@@ -152,6 +150,7 @@ export function useSaveChanges() {
       await saveHighlight(highlight, sourceTitle)
       // Extract the blockids for which we have captured highlights
       const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+      mog('BLOCKHIGHLIGHT MAP', { blockHighlightMap })
       // Add highlight in local store and nodeblockmap
       addHighlight(highlight, blockHighlightMap)
       return { highlight, blockHighlightMap }
@@ -164,13 +163,10 @@ export function useSaveChanges() {
       if (!isSharedNode(node.nodeid)) {
         updateSingleILink(node.nodeid, node.path, namespace.id)
       }
-
-      // dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
     } else {
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       // Why is shared check not used here?
       updateMultipleILinks(linksToBeCreated)
-      // dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)
     }
   }
 
@@ -192,8 +188,6 @@ export function useSaveChanges() {
   ) => {
     addRecentNote(nodeid)
     setContent(nodeid, content, metadata)
-    // if (highlight) addHighlight(highlight, blockHighlightMap)
-    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')
@@ -223,7 +217,6 @@ export function useSaveChanges() {
     const storeContent = getContent(node?.nodeid)?.content ?? defaultContent.content
     mog('We be setting persistedContent', { toAppendContent, storeContent })
     const content = [...storeContent, ...toAppendContent]
-    // setNodeContent([...storeContent, ...content])
     const request = {
       type: 'CAPTURE_HANDLER',
       subType: 'SAVE_NODE',
@@ -257,7 +250,6 @@ export function useSaveChanges() {
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         setContent(nodeid, content, metadata)
-        // dispatch('SET_CONTENT', nodeid, content, metadata)
 
         if (notification) {
           toast.success('Saved to Cloud')

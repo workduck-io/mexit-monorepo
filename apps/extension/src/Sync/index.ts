@@ -3,6 +3,7 @@ import { BroadcastSyncedChannel, mog } from '@mexit/core'
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 
@@ -11,8 +12,8 @@ import { MessageType, UnhandledRequestsByExtension } from './messageHandler'
 import { storeChangeHandler } from './storeChangeHandler'
 
 const onStateChange = (message: MessageType) => {
-  mog('[Extension]: State changed', { message })
   if (childIframe && !UnhandledRequestsByExtension?.has(message.msgId)) {
+    mog(`${message.msgId} from extension`, { message })
     childIframe.broadCastMessage(message.msgId, message)
   }
 
@@ -25,6 +26,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.DATA,
       sync: [{ field: 'ilinks' }, { field: 'tags' }, { field: 'publicNodes' }]
+    },
+    onStateChange
+  )
+
+  storeChangeHandler(
+    useLayoutStore,
+    {
+      name: BroadcastSyncedChannel.LAYOUT,
+      sync: [{ field: 'toggleTop' }]
     },
     onStateChange
   )

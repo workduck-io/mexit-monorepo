@@ -6,6 +6,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -22,6 +23,8 @@ const getStore = (channel: BroadcastSyncedChannel) => {
       return useContentStore
     case BroadcastSyncedChannel.HIGHLIGHTS:
       return useHighlightStore
+    case BroadcastSyncedChannel.LAYOUT:
+      return useLayoutStore
     case BroadcastSyncedChannel.DWINDLE:
       return useInternalAuthStore
     case BroadcastSyncedChannel.RECENTS:
