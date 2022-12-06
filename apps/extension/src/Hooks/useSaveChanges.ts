@@ -188,6 +188,8 @@ export function useSaveChanges() {
   ) => {
     addRecentNote(nodeid)
     setContent(nodeid, content, metadata)
+    if (highlight) addHighlight(highlight, blockHighlightMap)
+    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')
