@@ -4482,10 +4482,10 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
   integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
 
-"@workduck-io/dwindle@^0.0.24":
-  version "0.0.24"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.0.24/81337aad4265efff359d74fa1bb76a703143997b#81337aad4265efff359d74fa1bb76a703143997b"
-  integrity sha512-3RigfTnSetrYapFcGyyJQmb3VOF1UcuSh+il6qNB44gVCpKhqkOzGvwS3RxEasJI6w0wtQ/95DahgfH/7V2wjQ==
+"@workduck-io/dwindle@^0.1.0":
+  version "0.1.0"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.0/22172b93fad1dddb088e700b097b209c105ad63c#22172b93fad1dddb088e700b097b209c105ad63c"
+  integrity sha512-GG6SNXNweZ7oSMz8J+6wuiCE47dDACCwlJUv5H4m/IURCavcMHigbrM/+67XF0WRTJO/KUjP/8whTbRHnfnTXw==
   dependencies:
     "@aws-sdk/client-cognito-identity" "^3.17.0"
     "@aws-sdk/client-s3" "^3.17.0"
@@ -4494,7 +4494,6 @@
     "@aws-sdk/util-endpoints" "^3.192.0"
     "@types/jsonwebtoken" "^8.5.5"
     amazon-cognito-identity-js "^5.2.0"
-    axios "^0.23.0"
     buffer "^6.0.3"
     cross-fetch "^3.1.4"
     jsonwebtoken "^8.5.1"
