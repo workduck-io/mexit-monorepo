@@ -1,4 +1,5 @@
-import axios from 'axios'
+import ky from 'ky'
+import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
 import { expose } from 'threads/worker'
 
@@ -10,68 +11,91 @@ const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
 const generateRequestID = () => `REQUEST_${nanoid()}`
 
-const client = axios.create()
+let client: KyInstance
 
 const initializeClient = (authToken: string, workspaceID: string) => {
-  client.interceptors.request.use((request) => {
-    if (authToken && workspaceID) {
-      request.headers['Authorization'] = `Bearer ${authToken}`
-      request.headers['wd-request-id'] = request.headers['wd-request-id'] ?? generateRequestID()
-      request.headers['mex-workspace-id'] = workspaceID
+  client = ky.extend({
+    hooks: {
+      beforeRequest: [
+        (request) => {
+          if (request && request.headers && authToken && workspaceID) {
+            request.headers.set('Authorization', `Bearer ${authToken}`)
+            request.headers.set('mex-workspace-id', workspaceID)
+            request.headers.set('wd-request-id', request.headers['wd-request-id'] ?? generateRequestID())
+          }
+        }
+      ]
     }
-    return request
   })
 }
 
 const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   if (nodeids.length === 0) return
   if (nodeids.length === 1) {
-    return client.get(apiURLs.node.get(nodeids[0])).then((d) => {
-      if (d) return { rawResponse: [d.data], nodeids }
-    })
+    return client
+      .get(apiURLs.node.get(nodeids[0]))
+      .then((d) => d.json())
+      .then((res) => {
+        if (res) return { rawResponse: [res], nodeids }
+      })
   }
 
   const url = apiURLs.node.getMultipleNode(namespaceID)
-  return client.post(url, { ids: nodeids }).then((d: any) => {
-    if (d) {
-      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
-      return { rawResponse: d.data.successful, nodeids }
-    }
-  })
+  return client
+    .post(url, { json: { ids: nodeids } })
+    .then((d) => d.json())
+    .then((res: any) => {
+      if (res) {
+        if (res.failed.length > 0) mog('Failed API Requests: ', { url, ids: res.failed })
+        return { rawResponse: res.successful, nodeids }
+      }
+    })
 }
 
 const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
   if (nodeids.length === 0) return
   if (nodeids.length === 1) {
-    return client.get(apiURLs.share.getSharedNode(nodeids[0])).then((d) => {
-      if (d) return { rawResponse: [d.data], nodeids }
-    })
+    return client
+      .get(apiURLs.share.getSharedNode(nodeids[0]))
+      .then((d) => d.json())
+      .then((res) => {
+        if (res) return { rawResponse: [res], nodeids }
+      })
   }
 
   const url = apiURLs.share.getBulk
-  return client.post(url, { ids: nodeids }).then((d: any) => {
-    if (d) {
-      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
-      return { rawResponse: d.data.successful, nodeids }
-    }
-  })
+  return client
+    .post(url, { json: { ids: nodeids } })
+    .then((d) => d.json())
+    .then((res: any) => {
+      if (res) {
+        if (res.failed.length > 0) mog('Failed API Requests: ', { url, ids: res.failed })
+        return { rawResponse: res.successful, nodeids }
+      }
+    })
 }
 
 const getMultipleSnippetAPI = async (ids: string[]) => {
   if (ids.length === 0) return
   if (ids.length === 1) {
-    return client.get(apiURLs.snippet.getById(ids[0])).then((d) => {
-      if (d) return [d.data]
-    })
+    return client
+      .get(apiURLs.snippet.getById(ids[0]))
+      .then((d) => d.json())
+      .then((res) => {
+        if (res) return [res]
+      })
   }
 
   const url = apiURLs.snippet.bulkGet
-  return client.post(url, { ids: ids }).then((d: any) => {
-    if (d) {
-      if (d.data.failed.length > 0) mog('Failed API Requests: ', { url, ids: d.data.failed })
-      return d.data.successful
-    }
-  })
+  return client
+    .post(url, { json: { ids: ids } })
+    .then((d) => d.json())
+    .then((res: any) => {
+      if (res) {
+        if (res.failed.length > 0) mog('Failed API Requests: ', { url, ids: res.failed })
+        return res.successful
+      }
+    })
 }
 
 const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, args: any) => {
