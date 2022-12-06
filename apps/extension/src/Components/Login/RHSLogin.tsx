@@ -8,7 +8,7 @@ export const RHSLogin = () => {
   const onLoginClick = () => {
     // TODO: Add redirect from new window on login if `extension` flag is present
     // using window.opener in web app
-    window.open(`${BASE_URLS.frontend}/auth/login?extension=true`)
+    window.open(`${BASE_URLS.frontend}/auth/login?extension=true`, 'mexit-page')
   }
 
   return (

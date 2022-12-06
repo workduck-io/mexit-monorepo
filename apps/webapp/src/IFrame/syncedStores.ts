@@ -11,6 +11,7 @@ export const syncStoresWithExtension = (extension) => {
   storeConnector(BroadcastSyncedChannel.HIGHLIGHTS, extension)
   storeConnector(BroadcastSyncedChannel.RECENTS, extension)
   storeConnector(BroadcastSyncedChannel.LINKS, extension)
+  storeConnector(BroadcastSyncedChannel.DWINDLE, extension)
   storeConnector(BroadcastSyncedChannel.SNIPPETS, extension)
   storeConnector(BroadcastSyncedChannel.DESCRIPTIONS, extension)
   storeConnector(BroadcastSyncedChannel.SMART_CAPTURE, extension)

@@ -1,4 +1,4 @@
-import type { StoreApi, State } from 'zustand'
+import type { State, StoreApi } from 'zustand'
 
 export function syncWithStore<T extends State, K extends keyof T>(
   fieldKey: K,

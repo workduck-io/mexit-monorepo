@@ -1,6 +1,4 @@
-import { mog } from '@mexit/core'
-
-import { BroadcastSyncedChannel, SyncMessageType } from '../Types/Sync'
+import { BroadcastSyncedChannel, mog, SyncMessageType } from '@mexit/core'
 
 const BroadCastChannels: Record<string, BroadcastChannel> = {}
 

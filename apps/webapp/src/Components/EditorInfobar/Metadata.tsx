@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { MexIcon } from '@workduck-io/mex-components'
 
-import { mog, NodeMetadata } from '@mexit/core'
+import { NodeMetadata } from '@mexit/core'
 import {
   DataGroup,
   DataWrapper,
@@ -75,7 +75,7 @@ const Metadata = ({
   const sharedUsers = useMemo(() => {
     const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
     const currentUser = useAuthStore.getState().userDetails
-    mog('ACTIVE USERS', { activeUsers, mentionable })
+    // mog('ACTIVE USERS', { activeUsers, mentionable })
 
     const usersWithStatus = sharedUsersOfNode
       .map((user) => {

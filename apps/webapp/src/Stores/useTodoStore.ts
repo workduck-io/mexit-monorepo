@@ -26,7 +26,7 @@ export const createTodo = (
   tags: string[] = []
 ) => {
   const metaData = getTodoMetadata(content)
-  mog('CONTENT OF CREATE', { content })
+  // mog('CONTENT OF CREATE', { content })
   return {
     id: todoId,
     nodeid,
@@ -88,7 +88,7 @@ const useTodoStore = create<TodoStoreType>(
 
         getTodoOfNode: (nodeid, todoId) => {
           const todo = get().todos?.[nodeid]?.find((todo) => todo.id === todoId && nodeid === todo.nodeid)
-          mog('getTodoOfNode', { nodeid, todoId, todo, todos: get().todos })
+          // mog('getTodoOfNode', { nodeid, todoId, todo, todos: get().todos })
           if (!todo) {
             const newTodo = createTodo(nodeid, todoId)
             if (!nodeid) return newTodo

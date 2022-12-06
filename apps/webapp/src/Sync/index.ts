@@ -1,3 +1,5 @@
+import { useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
+
 import { BroadcastSyncedChannel } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
@@ -73,6 +75,11 @@ const syncStores = () => {
     syncStoreState(useHighlightStore, {
       name: BroadcastSyncedChannel.HIGHLIGHTS,
       sync: [{ field: 'highlights' }, { field: 'highlightBlockMap' }]
+    })
+
+    syncStoreState(useDwindleAuthStore, {
+      name: BroadcastSyncedChannel.DWINDLE,
+      sync: [{ field: 'userCred' }, { field: 'userPool' }]
     })
 
     syncStoreState(useUserPreferenceStore, {

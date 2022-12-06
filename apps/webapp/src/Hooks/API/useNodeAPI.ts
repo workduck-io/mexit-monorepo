@@ -198,7 +198,6 @@ export const useApi = () => {
       .then((d) => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
-          // mog('[API]: Get Note data', { content })
           const metadata = extractMetadata(d, { icon: isShared ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE })
           if (isUpdate) updateFromContent(nodeid, content, metadata)
 

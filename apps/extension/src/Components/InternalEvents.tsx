@@ -14,6 +14,7 @@ import { useReminderActionHandler } from '../Hooks/useReminderActionHandler'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import messagePassing from '../Sync'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
@@ -21,6 +22,10 @@ import { sanitizeHTML } from '../Utils/sanitizeHTML'
 import LinkedInBadge from './LinkedInBadge'
 
 export function InternalEvents() {
+  useEffect(() => {
+    messagePassing()
+  }, [])
+
   useToggleHandler()
   initAnalytics()
   handleHighlighter()

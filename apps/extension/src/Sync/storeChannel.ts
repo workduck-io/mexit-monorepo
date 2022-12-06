@@ -1,6 +1,7 @@
-import { BroadcastSyncedChannel } from '@mexit/core'
+import { BroadcastSyncedChannel, mog } from '@mexit/core'
 
 import { useAuthStore } from '../Hooks/useAuth'
+import useInternalAuthStore from '../Hooks/useAuthStore'
 import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
@@ -21,6 +22,9 @@ const getStore = (channel: BroadcastSyncedChannel) => {
       return useContentStore
     case BroadcastSyncedChannel.HIGHLIGHTS:
       return useHighlightStore
+    case BroadcastSyncedChannel.DWINDLE:
+      mog('Hey Im dwindle')
+      return useInternalAuthStore
     case BroadcastSyncedChannel.RECENTS:
       return useRecentsStore
     case BroadcastSyncedChannel.DESCRIPTIONS:
