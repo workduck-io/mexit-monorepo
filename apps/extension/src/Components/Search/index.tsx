@@ -128,9 +128,9 @@ const Search = () => {
       }
     })
 
-    if (recentList.length > limit) {
-      return recentList.reverse().slice(0, limit)
-    }
+    // if (recentList.length > limit) {
+    //   return recentList.reverse().slice(0, limit)
+    // }
 
     return recentList?.reverse()
   }
