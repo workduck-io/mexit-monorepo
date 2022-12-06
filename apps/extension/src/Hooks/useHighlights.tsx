@@ -42,7 +42,6 @@ export const useHighlights = () => {
   const getEditableMap = useCallback(
     (highlighId: string) => {
       const highlightMap = highlightBlockMap[highlighId]
-      mog('HIGHLIGHTMAP', { highlighId, highlightBlockMap, highlightMap })
       const editableMap = Object.keys(highlightMap ?? {}).reduce((acc, nodeId) => {
         const access = accessWhenShared(nodeId)
         // mog('Access', { access, node })
