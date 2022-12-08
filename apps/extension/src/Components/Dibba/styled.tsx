@@ -29,7 +29,7 @@ export const ComboboxRoot = styled.ul<{
 
       > div {
         background: ${theme.colors.background.modal};
-        height: fit-content;
+        /* height: fit-content; */
         /* max-height: 400px; */
         box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
         border-radius: ${theme.borderRadius.small};
@@ -49,6 +49,7 @@ export const ComboboxItem = styled.div<{ highlighted: boolean }>`
   display: flex;
   align-items: center;
   font-size: 14px;
+  color: ${(props) => props.theme.colors.text.default};
   gap: ${({ theme }) => theme.spacing.tiny};
 
   font-weight: 400;

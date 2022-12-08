@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import { Plate, PlatePlugin } from '@udecode/plate'
 import styled from 'styled-components'
 
-import { EditorStyles, FadeContainer, TodoContainer , useEditorChange } from '@mexit/shared'
+import { EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 
@@ -27,7 +27,6 @@ const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
   ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
   /* user-select: none; */
   font-size: 0.9rem;
-
   ${TodoContainer}, button,
   input,
   textarea,

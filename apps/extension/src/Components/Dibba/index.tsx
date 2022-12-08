@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import fuzzysort from 'fuzzysort'
+import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
@@ -73,6 +74,7 @@ export default function Dibba() {
 
   const ilinks = useDataStore((state) => state.ilinks)
   const linkCaptures = []
+  const theme = useTheme()
   const publicNodes: PublicNode[] = []
   const getContent = useContentStore((store) => store.getContent)
 
@@ -322,8 +324,8 @@ export default function Dibba() {
                   }}
                   onPointerMove={() => pointerMoved && setActiveIndex(index)}
                 >
-                  <CenteredIcon>
-                    <Icon height={18} key={item.id} icon={item.icon} />
+                  <CenteredIcon center padding>
+                    <Icon height={18} key={item.id} icon={item.icon} color={theme.colors.text.default} />
                   </CenteredIcon>
                   <ItemCenterWrapper>
                     <ComboboxItemTitle>{item.title}</ComboboxItemTitle>

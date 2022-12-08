@@ -6,7 +6,18 @@ import { useTheme } from 'styled-components'
 
 import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 
-import { ActionTitle, ComboboxItemTitle,ComboboxShortcuts, ComboSeperator, MexIcon , ShortcutText,StyledComboHeader } from '@mexit/shared'
+import {
+  ActionTitle,
+  ComboboxItem,
+  ComboboxItemTitle,
+  ComboboxShortcuts,
+  ComboSeperator,
+  ItemDesc,
+  ItemsContainer,
+  MexIcon,
+  ShortcutText,
+  StyledComboHeader
+} from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
@@ -14,7 +25,7 @@ import { useSearch } from '../../../Hooks/useSearch'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { KEYBOARD_KEYS } from '../../constants'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
-import { ComboboxItem, ItemCenterWrapper,ItemDesc } from '../../Styles/TagCombobox.styles'
+import { ItemCenterWrapper } from '../../Styles/TagCombobox.styles'
 import { BlockIcons } from '../Blocks/BlockIcons'
 
 type BlockComboProps = {
@@ -136,8 +147,8 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
   if (!isBlockTriggered) return null
 
   return (
-    <ComboSeperator>
-      <StyledComboHeader className="" key="random">
+    <ComboSeperator id="List">
+      <StyledComboHeader key="random">
         <IconButton
           size={16}
           shortcut={`Esc`}
@@ -147,16 +158,19 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
         />
         <ComboboxItemTitle>{textAfterTrigger ? `In ${textAfterTrigger}` : `Search`}</ComboboxItemTitle>
       </StyledComboHeader>
+      {/* <SectionSeparator /> */}
+
       {blocks?.length === 0 && (
-        <ComboboxItem key={`search-text`} className="highlight">
-          <MexIcon fontSize={16} icon="ri:add-circle-line" color={theme.colors.primary} />
-          <ItemCenterWrapper>
-            <ComboboxItemTitle>
-              No results:&nbsp;
-              <PrimaryText>{textAfterBlockTrigger}</PrimaryText>
-            </ComboboxItemTitle>
-          </ItemCenterWrapper>
-        </ComboboxItem>
+        <ItemsContainer>
+          <ComboboxItem key={`search-text`} className="highlight" center>
+            <ItemCenterWrapper>
+              <ItemDesc>
+                No results:&nbsp;
+                <PrimaryText>{textAfterBlockTrigger}</PrimaryText>
+              </ItemDesc>
+            </ItemCenterWrapper>
+          </ComboboxItem>
+        </ItemsContainer>
       )}
 
       {blocks?.map((block, i) => {
@@ -176,8 +190,8 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
                 // }
               }}
             >
-              <MexIcon fontSize={16} icon={BlockIcons[block?.data?.type]} color={theme.colors.primary} />
-              <ItemCenterWrapper>{block.text && <ItemDesc>{block.text}</ItemDesc>}</ItemCenterWrapper>
+              <MexIcon fontSize={20} icon={BlockIcons[block?.data?.type]} color={theme.colors.primary} />
+              {block.text && <ComboboxItemTitle>{block.text}</ComboboxItemTitle>}
             </ComboboxItem>
           </span>
         )

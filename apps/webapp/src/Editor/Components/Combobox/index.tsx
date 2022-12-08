@@ -10,7 +10,6 @@ import { DisplayShortcut } from '@workduck-io/mex-components'
 import { NodeEditorContent } from '@mexit/core'
 import {
   ActionTitle,
-  CenteredIcon,
   ComboboxItem,
   ComboboxItemTitle,
   ComboboxRoot,
@@ -228,19 +227,20 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                           onMouseEnter={() => {
                             setItemIndex(index)
                           }}
+                          center={!namespace}
                           onMouseDown={() => {
                             editor && onSelectItem(editor, item)
                           }}
                         >
                           {item.icon && (
-                            <CenteredIcon>
-                              <MexIcon
-                                fontSize={namespace ? 24 : 18}
-                                key={`${item.key}_${item.icon}`}
-                                icon={item.icon}
-                                color={theme.colors.primary}
-                              />
-                            </CenteredIcon>
+                            // <CenteredIcon>
+                            <MexIcon
+                              fontSize={namespace ? 20 : 18}
+                              key={`${item.key}_${item.icon}`}
+                              icon={item.icon}
+                              color={theme.colors.primary}
+                            />
+                            // </CenteredIcon>
                           )}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
@@ -291,7 +291,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
             />
             {((preview && listItem?.type && !isBlockTriggered) ||
               (isBlockTriggered && textAfterBlockTrigger && preview)) && (
-              <ComboSeperator>
+              <ComboSeperator fixedWidth>
                 <section>
                   <EditorPreviewRenderer
                     noMouseEvents

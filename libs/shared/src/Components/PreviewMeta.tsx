@@ -15,8 +15,7 @@ type PreviewMetaProps = {
 const PreviewMetaContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 1rem;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-top: 1px solid ${({ theme }) => theme.colors.gray[8]};
   align-items: center;
   justify-content: flex-end;
