@@ -59,7 +59,8 @@ export const apiURLs = {
     deleteArchivedNodes: `${BASE_URLS.archive}/delete`,
     getArchivedNodes: `${BASE_URLS.archive}`,
     unArchiveNodes: `${BASE_URLS.unarchive}`,
-    archiveInNamespace: (namespaceId: string) => `${BASE_URLS.archive}/${namespaceId}`
+    unArchiveInNamespace: (namespaceID: string) => `${BASE_URLS.unarchive}?namespaceID=${namespaceID}`,
+    archiveInNamespace: (namespaceID: string) => `${BASE_URLS.archive}?namespaceID=${namespaceID}`
   },
 
   // Namespaces

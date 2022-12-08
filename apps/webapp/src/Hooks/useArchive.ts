@@ -2,7 +2,6 @@ import { useAuth } from '@workduck-io/dwindle'
 
 import { API, ILink, mog, USE_API } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 
 import { getTitleFromPath } from './useLinks'
@@ -13,8 +12,6 @@ const useArchive = () => {
   const unArchive = useDataStore((state) => state.unArchive)
   const addInArchive = useDataStore((state) => state.addInArchive)
   const removeArchive = useDataStore((state) => state.removeFromArchive)
-
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
