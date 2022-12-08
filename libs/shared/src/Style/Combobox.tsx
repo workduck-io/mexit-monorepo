@@ -5,23 +5,17 @@ import { BodyFont } from './Search'
 
 export const ComboboxItem = styled.div`
   display: flex;
-  align-items: center;
-  font-size: 14px;
-  gap: ${({ theme }) => theme.spacing.tiny};
-
-  :first-child {
-    border-radius: 6px 6px 0 0;
-  }
-
-  :last-child {
-    border-radius: 0 0 6px 6px;
-  }
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.small};
 
   font-weight: 400;
-  padding: 0 8px;
+  font-size: 14px;
+  padding: ${({ theme }) => theme.spacing.small} ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   min-height: 36px;
   user-select: none;
-  width: 300px;
+  margin: 0 ${({ theme }) => theme.spacing.small};
+  width: 260px;
   color: ${({ theme }) => theme.colors.text.default};
   &.highlight {
     background: ${({ theme }) => theme.colors.background.highlight};
@@ -37,6 +31,25 @@ export const ComboboxItem = styled.div`
   }
 `
 
+export const CenteredIcon = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+`
+
+export const ItemsContainer = styled.section`
+  /* padding: ${({ theme }) => theme.spacing.small}; */
+`
+
+export const SectionSeparator = styled.div`
+  width: 100%;
+  height: 2px;
+  background-color: ${({ theme }) => theme.colors.background.highlight};
+  margin: ${({ theme }) => theme.spacing.medium} 0;
+`
+
 export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
   :hover {
     ${ComboboxItem} {
@@ -46,12 +59,6 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       }
     }
   }
-  /* &.reversed {
-    transform: rotate(180deg);
-    ${ComboboxItem} {
-      transform: rotate(-180deg);
-    }
-  } */
 
   ${({ isOpen, theme }) =>
     isOpen &&
@@ -60,7 +67,7 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       left: -9999px;
       position: absolute;
       padding: 0;
-      background: none !important;
+      /* background: none !important; */
       display: flex;
       margin: 0;
       z-index: 9999999998;
@@ -69,7 +76,6 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       > div {
         background: ${theme.colors.background.modal};
         height: fit-content;
-        /* max-height: 400px; */
         box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
         border-radius: ${theme.borderRadius.small};
 
@@ -85,19 +91,20 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
 export const ComboboxItemTitle = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 22ch;
   overflow: hidden;
-  /* width: 200px; */
 `
 
 export const ItemRightIcons = styled.div`
   display: flex;
-  flex-gap: ${({ theme }) => theme.spacing.tiny};
+  gap: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const ItemDesc = styled.div`
-  margin: ${({ theme }) => theme.spacing.tiny} 0;
-  color: ${({ theme }) => theme.colors.text.fade};
-  font-size: 0.8rem;
+  /* margin: ${({ theme }) => theme.spacing.tiny} 0; */
+  color: ${({ theme }) => theme.colors.text.disabled};
+  font-size: 12px;
+  max-width: 28ch;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -105,14 +112,20 @@ export const ItemDesc = styled.div`
 
 export const ItemCenterWrapper = styled.div`
   width: 90%;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  height: 100%;
 `
 
 export const ActionTitle = styled.div`
-  ${BodyFont};
+  font-size: 11px;
   user-select: none;
-  margin: 8px;
+  margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.medium}`};
   white-space: nowrap;
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.colors.text.disabled};
+  text-transform: uppercase;
 `
 
 export const ComboboxShortcuts = styled.div`
@@ -138,6 +151,7 @@ export const ShortcutText = styled.div`
     color: ${({ theme }) => theme.colors.text.fade};
   }
 `
+
 export const ComboSeperator = styled.div`
   margin-left: 0.5rem;
 

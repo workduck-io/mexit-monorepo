@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
-import { AsyncButton,Button } from './Buttons'
+import { AsyncButton, Button } from './Buttons'
 import { ScrollStyles } from './Helpers'
 import { FadeInOut } from './Layouts'
 
@@ -138,7 +138,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   /*   white-space: prewrap; */
   /* } */
 
-  font-family: 'Inter', sans-serif;
+  /* font-family: 'Inter', sans-serif; */
   /* font-weight: 400; */
   line-height: 1.75;
   width: 100%;
