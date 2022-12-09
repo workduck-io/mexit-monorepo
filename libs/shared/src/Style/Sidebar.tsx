@@ -110,13 +110,7 @@ export const ItemTitle = styled.div`
   max-width: 220px;
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.tiny};
-
-  svg {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-  }
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const ItemCount = styled.div`

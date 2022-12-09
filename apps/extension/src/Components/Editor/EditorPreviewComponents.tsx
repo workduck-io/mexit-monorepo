@@ -11,7 +11,7 @@ import {
   ELEMENT_TAG,
   ELEMENT_TODO_LI
 } from '@mexit/core'
-import { LinkElement,MediaEmbedElement, TableWrapper } from '@mexit/shared'
+import { LinkElement, MediaEmbedElement, TableWrapper } from '@mexit/shared'
 
 import TagElement from '../../Editor/components/Tags/TagElement'
 import { QuickLinkElement } from '../../Editor/plugins/QuickLink/components/QuickLinkElement'

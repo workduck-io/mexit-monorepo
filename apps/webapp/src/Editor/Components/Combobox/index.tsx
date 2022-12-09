@@ -1,30 +1,32 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { flip,offset, shift } from '@floating-ui/react-dom-interactions'
+import { flip, offset, shift } from '@floating-ui/react-dom-interactions'
 import { Icon } from '@iconify/react'
-import {
-  getRangeBoundingClientRect,
-  PortalBody,
-  usePlateEditorRef,
-  useVirtualFloating
-} from '@udecode/plate'
+import { getRangeBoundingClientRect, PortalBody, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import { NodeEditorContent } from '@mexit/core'
-import {   ActionTitle,
-ComboboxItem, ComboboxItemTitle,   ComboboxRoot,
+import {
+  ActionTitle,
+  ComboboxItem,
+  ComboboxItemTitle,
+  ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
-MexIcon, PreviewMeta ,
+  ItemsContainer,
+  MexIcon,
+  PreviewMeta,
+  SectionSeparator,
   ShortcutText
 } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useContentStore } from '../../../Stores/useContentStore'
@@ -89,7 +91,6 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
 export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }: ComboboxProps) => {
   // TODO clear the error-esque warnings for 'type inference'
 
-  const at = useComboboxStore((state) => state.targetRange)
   const items = useComboboxStore((state) => state.items)
   const closeMenu = useComboboxStore((state) => state.closeMenu)
   const itemIndex = useComboboxStore((state) => state.itemIndex)
@@ -102,6 +103,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const search = useComboboxStore((store) => store.search)
   const combobox = useComboboxControls(true)
   const isOpen = useComboboxIsOpen()
+  const { getNamespace } = useNamespaces()
 
   const { textAfterTrigger, textAfterBlockTrigger } = useComboboxStore((store) => store.search)
   const getContent = useContentStore((store) => store.getContent)
@@ -205,31 +207,40 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
           <>
             {!isBlockTriggered && (
               <div id="List" style={{ flex: 1 }}>
-                <section id="items-container">
+                <ItemsContainer id="items-container">
                   {items.map((item, index) => {
                     const Item = onRenderItem ? onRenderItem({ item }) : item.text
                     const lastItem = index > 0 ? items[index - 1] : undefined
+                    const namespace = getNamespace(item.namespace)?.name
 
                     return (
                       <span key={`${item.key}-${String(index)}`}>
-                        {item.type !== lastItem?.type && <ActionTitle>{item.type}</ActionTitle>}
+                        {item.type !== lastItem?.type && (
+                          <>
+                            {index !== 0 && <SectionSeparator />}
+                            <ActionTitle>{item.type}</ActionTitle>
+                          </>
+                        )}
                         <ComboboxItem
                           className={index === itemIndex ? 'highlight' : ''}
                           {...comboProps(item, index)}
                           onMouseEnter={() => {
                             setItemIndex(index)
                           }}
+                          center={!namespace}
                           onMouseDown={() => {
                             editor && onSelectItem(editor, item)
                           }}
                         >
                           {item.icon && (
+                            // <CenteredIcon>
                             <MexIcon
-                              fontSize={16}
+                              fontSize={namespace ? 20 : 18}
                               key={`${item.key}_${item.icon}`}
                               icon={item.icon}
                               color={theme.colors.primary}
                             />
+                            // </CenteredIcon>
                           )}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
@@ -239,7 +250,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                                 {item.prefix} <PrimaryText>{Item}</PrimaryText>
                               </ComboboxItemTitle>
                             )}
-                            {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
+                            {namespace && <ItemDesc>{namespace}</ItemDesc>}
                           </ItemCenterWrapper>
                           {item.rightIcons && (
                             <ItemRightIcons>
@@ -252,7 +263,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                       </span>
                     )
                   })}
-                </section>
+                </ItemsContainer>
                 {itemShortcut && (
                   <ComboboxShortcuts>
                     {Object.entries(itemShortcut).map(([key, shortcut]) => {
@@ -280,7 +291,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
             />
             {((preview && listItem?.type && !isBlockTriggered) ||
               (isBlockTriggered && textAfterBlockTrigger && preview)) && (
-              <ComboSeperator>
+              <ComboSeperator fixedWidth>
                 <section>
                   <EditorPreviewRenderer
                     noMouseEvents

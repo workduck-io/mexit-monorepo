@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import fuzzysort from 'fuzzysort'
+import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
@@ -21,7 +22,18 @@ import {
   SEPARATOR,
   Snippet
 } from '@mexit/core'
-import { ActionTitle, ComboboxItemTitle, ComboboxShortcuts, ComboSeperator, ShortcutText } from '@mexit/shared'
+import {
+  ActionTitle,
+  CenteredIcon,
+  ComboboxItemTitle,
+  ComboboxShortcuts,
+  ComboSeperator,
+  ItemCenterWrapper,
+  ItemDesc,
+  ItemRightIcons,
+  ItemsContainer,
+  ShortcutText
+} from '@mexit/shared'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
@@ -36,7 +48,7 @@ import { getDibbaText } from '../../Utils/getDibbaText'
 import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 
-import { ComboboxItem, ComboboxRoot, ItemCenterWrapper, ItemDesc, ItemRightIcons } from './styled'
+import { ComboboxItem, ComboboxRoot } from './styled'
 
 interface PublicNode {
   type: 'Public Nodes'
@@ -62,6 +74,7 @@ export default function Dibba() {
 
   const ilinks = useDataStore((state) => state.ilinks)
   const linkCaptures = []
+  const theme = useTheme()
   const publicNodes: PublicNode[] = []
   const getContent = useContentStore((store) => store.getContent)
 
@@ -297,35 +310,39 @@ export default function Dibba() {
       isOpen={dibbaState.visualState === VisualState.showing}
     >
       <div style={{ flex: 1 }}>
-        {results.map((item, index) => {
-          const lastItem = index > 0 ? results[index - 1] : undefined
-          return (
-            <span key={`${item.key}-${String(index)}`}>
-              {item.type !== lastItem?.type && <ActionTitle>{item.type}</ActionTitle>}
-              <ComboboxItem
-                key={index}
-                highlighted={index === activeIndex}
-                onMouseDown={() => {
-                  handleClick(item)
-                }}
-                onPointerMove={() => pointerMoved && setActiveIndex(index)}
-              >
-                <Icon height={18} key={item.id} icon={item.icon} />
-                <ItemCenterWrapper>
-                  <ComboboxItemTitle>{item.title}</ComboboxItemTitle>
-                  {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
-                </ItemCenterWrapper>
-                {item.rightIcons && (
-                  <ItemRightIcons>
-                    {item.rightIcons.map((i: string) => (
-                      <Icon key={item.key + i} icon={i} />
-                    ))}
-                  </ItemRightIcons>
-                )}
-              </ComboboxItem>
-            </span>
-          )
-        })}
+        <ItemsContainer id="items-container">
+          {results.map((item, index) => {
+            const lastItem = index > 0 ? results[index - 1] : undefined
+            return (
+              <span key={`${item.key}-${String(index)}`}>
+                {item.type !== lastItem?.type && <ActionTitle>{item.type}</ActionTitle>}
+                <ComboboxItem
+                  key={index}
+                  highlighted={index === activeIndex}
+                  onMouseDown={() => {
+                    handleClick(item)
+                  }}
+                  onPointerMove={() => pointerMoved && setActiveIndex(index)}
+                >
+                  <CenteredIcon center padding>
+                    <Icon height={18} key={item.id} icon={item.icon} color={theme.colors.text.default} />
+                  </CenteredIcon>
+                  <ItemCenterWrapper>
+                    <ComboboxItemTitle>{item.title}</ComboboxItemTitle>
+                    {item.desc && <ItemDesc>{item.desc}</ItemDesc>}
+                  </ItemCenterWrapper>
+                  {item.rightIcons && (
+                    <ItemRightIcons>
+                      {item.rightIcons.map((i: string) => (
+                        <Icon key={item.key + i} icon={i} />
+                      ))}
+                    </ItemRightIcons>
+                  )}
+                </ComboboxItem>
+              </span>
+            )
+          })}
+        </ItemsContainer>
         {itemShortcut && (
           <ComboboxShortcuts>
             {Object.entries(itemShortcut).map(([key, shortcut]) => {

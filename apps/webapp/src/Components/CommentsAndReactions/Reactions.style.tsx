@@ -84,7 +84,7 @@ export const CompressedReactionGroup = styled.div`
         }
       `
     )
-  }}}
+  }}
 
   &:hover {
     gap: ${({ theme }) => theme.spacing.tiny};
