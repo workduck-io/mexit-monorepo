@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 import { moveSelection, useEditorRef } from '@udecode/plate'
-import { useFocused, useReadOnly,useSelected } from 'slate-react'
+import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { ILinkElementProps,SILink, SILinkRoot } from '@mexit/shared'
+import { ILinkElementProps, SILink, SILinkRoot } from '@mexit/shared'
 
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
 import { useLinks } from '../../../../Hooks/useLinks'
