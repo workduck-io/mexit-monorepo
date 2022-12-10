@@ -26,8 +26,8 @@ export class HighlightAPI {
     return await this.client.get(apiURLs.highlights.all, cacheConfig, options)
   }
 
-  async getAllOfUrl(urlHash: string, options?: Options) {
-    return await this.client.delete(apiURLs.highlights.allOfUrl(urlHash), options)
+  async getAllOfUrl(urlHash: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.highlights.allOfUrl(urlHash), cacheConfig, options)
   }
 
   async deleteAllOfUrl(urlHash: string, options?: Options) {
