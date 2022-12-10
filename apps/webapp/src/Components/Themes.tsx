@@ -1,9 +1,8 @@
 import React from 'react'
 import { useTransition } from 'react-spring'
 
-import { ThemeProvider } from 'styled-components'
-
-import { defaultThemes } from '@mexit/shared'
+import { Button } from '@workduck-io/mex-components'
+import { defaultThemes, ManagedProvider, useThemeContext } from '@workduck-io/mex-themes'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -11,6 +10,7 @@ import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from 
 
 const Themes = () => {
   const themes = defaultThemes
+  const { changeTheme, toggleMode } = useThemeContext()
   const theme = useUserPreferenceStore((state) => state.theme)
   const setTheme = useUserPreferenceStore((state) => state.setTheme)
 
@@ -38,37 +38,41 @@ const Themes = () => {
   const onThemeSelect = (i: number) => {
     if (themes[i]) {
       setTheme(themes[i].id)
+      changeTheme(themes[i].id)
     }
 
     updateUserPreferences()
   }
 
   return (
-    <ThemePreviews>
-      {transition((styles, t, _t, i) => {
-        return (
-          <ThemeProvider key={`mex_theme_key_${t.id}`} theme={t.themeData}>
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            <Theme selected={t.id === theme} onClick={() => onThemeSelect(i)} style={styles}>
-              <ThemePreview back={t.themeData.backgroundImages ? t.themeData.backgroundImages.app : undefined}>
-                <ThemeColorDots>
-                  <div className="primary"></div>
-                  <div className="secondary"></div>
-                  <div className="text"></div>
-                  <div className="text_fade"></div>
-                  <div className="background"></div>
-                </ThemeColorDots>
-                <br />
-              </ThemePreview>
-              <ThemeHeader>
-                <h4>{t.id}</h4>
-              </ThemeHeader>
-            </Theme>
-          </ThemeProvider>
-        )
-      })}
-    </ThemePreviews>
+    <>
+      <Button onClick={toggleMode}>Toggle Mode</Button>
+      <ThemePreviews>
+        {transition((styles, t, _t, i) => {
+          return (
+            <ManagedProvider key={`mex_theme_key_${t.id}`} tokens={t.data['dark']}>
+              {/* eslint-disable-next-line */}
+              {/* @ts-ignore */}
+              <Theme selected={t.id === theme} onClick={() => onThemeSelect(i)} style={styles}>
+                <ThemePreview back={undefined}>
+                  <ThemeColorDots>
+                    <div className="primary"></div>
+                    <div className="secondary"></div>
+                    <div className="text"></div>
+                    <div className="text_fade"></div>
+                    <div className="background"></div>
+                  </ThemeColorDots>
+                  <br />
+                </ThemePreview>
+                <ThemeHeader>
+                  <h4>{t.id}</h4>
+                </ThemeHeader>
+              </Theme>
+            </ManagedProvider>
+          )
+        })}
+      </ThemePreviews>
+    </>
   )
 }
 

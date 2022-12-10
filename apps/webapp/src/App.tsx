@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useEffect } from 'react'
+import './Stores'
+
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import { ThemeProvider } from 'styled-components'
+import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import { defaultThemes, Notification } from '@mexit/shared'
+import { Notification } from '@mexit/shared'
 
 import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
@@ -13,15 +15,28 @@ import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
-const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
+  const { themes, preferences, changeTheme } = useThemeContext()
 
-  const themeData = useMemo(() => {
-    const ctheme = defaultThemes.find((t) => t.id === theme)
-    return ctheme ? ctheme.themeData : defaultThemes[0].themeData
+  useEffect(() => {
+    if (theme) {
+      if (theme !== preferences.themeId) {
+        changeTheme(theme)
+      }
+    }
   }, [theme])
 
-  return <ThemeProvider theme={themeData}>{children}</ThemeProvider>
+  return null
+}
+
+const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <Provider legacySupport>
+      <AutoThemeSwitch />
+      {children}
+    </Provider>
+  )
 }
 
 const App = () => {

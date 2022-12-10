@@ -3828,6 +3828,17 @@
     is-observable "^2.1.0"
     observable-fns "^0.6.1"
 
+"@workduck-io/mex-themes@^0.0.4":
+  version "0.0.4"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.4/33dede34bbcd54a73be3c8397dec0446732aca57#33dede34bbcd54a73be3c8397dec0446732aca57"
+  integrity sha512-05c6uBzzyy3lT7nfpZ41A7oRFSccZA40fA+zs9uiVUS6lZ+vQqPSNM1Hfn1IddPMdyhSqhvFE4NSIQuin5wF7g==
+  dependencies:
+    color-scheme "^1.0.1"
+    core-js "^3.21.0"
+    deepmerge "^4.2.2"
+    lodash "^4.17.21"
+    polished "^4.1.4"
+
 "@workduck-io/tinykeys@^1.5.0":
   version "1.5.0"
   resolved "https://npm.pkg.github.com/download/@workduck-io/tinykeys/1.5.0/612c3fcc3301ccd3b89f33cf0330c887ac92758e#612c3fcc3301ccd3b89f33cf0330c887ac92758e"

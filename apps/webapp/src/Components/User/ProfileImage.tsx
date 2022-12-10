@@ -9,7 +9,7 @@ import md5 from 'md5'
 import styled, { useTheme } from 'styled-components'
 
 import { AccessLevel, mog } from '@mexit/core'
-import { CardShadow,Centered } from '@mexit/shared'
+import { CardShadow, Centered } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
 import { useUserService } from '../../Hooks/API/useUserAPI'
@@ -48,7 +48,19 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
   const [gravState, setGravState] = useState(0)
 
   const theme = useTheme()
-  const colors = theme.additional.profilePalette
+  const colors = [
+    '#ff008c',
+    '#d309e1',
+    '#9c1aff',
+    '#7700ff',
+    '#4400ff',
+    '#0055ff',
+    '#00aaff',
+    '#00ffea',
+    '#1ce6b9',
+    '#00e096',
+    '#29ffc6'
+  ]
   const addGravatarAbsent = useCacheStore((store) => store.addGravatarAbsent)
 
   const params = {
