@@ -1,4 +1,4 @@
-import axios from 'axios'
+import ky from 'ky'
 
 import { oembedProviders } from './embedProviders'
 
@@ -6,10 +6,11 @@ const fetchOembed = async (url: string, endpoint: string): Promise<string | unde
   // Create URL for Oembed request
   const requestUrl = `${endpoint}?type=json&theme=dark&url=${encodeURIComponent(url)}`
 
-  const resp = await axios
+  const resp = await ky
     .get(requestUrl)
+    .then((d) => d.json())
     .then((r: any) => {
-      return r.data.html
+      return r.html
     })
     .catch((e) => console.error(e)) // eslint-disable-line no-console
 

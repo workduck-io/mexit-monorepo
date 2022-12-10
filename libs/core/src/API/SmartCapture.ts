@@ -1,15 +1,17 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class SmartCaptureAPI {
-  private client: AxiosX
+  private client: KYClient
 
-  constructor(client: AxiosX) {
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async getPublic(config?) {
-    return await this.client.get(apiURLs.smartcapture.public, config)
+  async getPublic(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.smartcapture.public, cacheConfig, options)
   }
 }

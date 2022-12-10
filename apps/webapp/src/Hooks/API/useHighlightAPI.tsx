@@ -7,9 +7,7 @@ export const useHighlightAPI = () => {
       properties: h.properties,
       entityId: h.entityId
     }
-    const res = await API.highlight.save(reqData, {
-      cache: false
-    })
+    const res = await API.highlight.save(reqData)
     mog('We saved that highlight', { res })
     return res?.data
   }
@@ -19,7 +17,7 @@ export const useHighlightAPI = () => {
    */
   const getAllHighlights = async (): Promise<Highlight[] | undefined> => {
     const res = await API.highlight.getAll({
-      cache: true,
+      enabled: true,
       expiry: GET_REQUEST_MINIMUM_GAP_IN_MS
     })
     try {
@@ -37,9 +35,7 @@ export const useHighlightAPI = () => {
   }
 
   const deleteHighlight = async (highlightId: string) => {
-    const res = await API.highlight.delete(highlightId, {
-      cache: false
-    })
+    const res = await API.highlight.delete(highlightId)
     return res?.data
   }
 

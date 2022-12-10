@@ -1,39 +1,41 @@
+import { type Options } from 'ky'
+
+import { type KYClient, CacheConfig } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class ShareAPI {
-  private client: AxiosX
+  private client: KYClient
 
-  constructor(client: AxiosX) {
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async getSharedNodes(config?) {
-    return await this.client.get(apiURLs.share.allSharedNodes, config)
+  async getSharedNodes(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.share.allSharedNodes, cacheConfig, options)
   }
 
-  async grantNodePermission(data, config?) {
-    return await this.client.post(apiURLs.share.sharedNode, data, config)
+  async grantNodePermission(data, options?: Options) {
+    return await this.client.post(apiURLs.share.sharedNode, data, options)
   }
 
-  async updateNode(data, config?) {
-    return await this.client.post(apiURLs.share.updateNode, data, config)
+  async updateNode(data, options?: Options) {
+    return await this.client.post(apiURLs.share.updateNode, data, options)
   }
 
-  async updateNodePermission(data, config?) {
-    return await this.client.put(apiURLs.share.sharedNode, data, config)
+  async updateNodePermission(data, options?: Options) {
+    return await this.client.put(apiURLs.share.sharedNode, data, options)
   }
 
-  async revokeNodeAccess(data, config?) {
-    return await this.client.delete(apiURLs.share.sharedNode, { ...config, data })
+  async revokeNodeAccess(data, options?: Options) {
+    return await this.client.delete(apiURLs.share.sharedNode, data, options)
   }
 
-  async getNodePermissions(id: string, config?) {
-    return await this.client.get(apiURLs.share.getUsersOfSharedNode(id), config)
+  async getNodePermissions(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.share.getUsersOfSharedNode(id), cacheConfig, options)
   }
 
-  async getNamespacePermissions(id: string, config?) {
-    return await this.client.get(apiURLs.namespaces.getUsersOfShared(id), config)
+  async getNamespacePermissions(id: string, cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.namespaces.getUsersOfShared(id), cacheConfig, options)
   }
 }

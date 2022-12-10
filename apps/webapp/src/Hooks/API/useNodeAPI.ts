@@ -197,7 +197,7 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const res = await API.node
-      .getById(nodeid, { cache: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
+      .getById(nodeid, { enabled: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
       .then((d) => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
@@ -240,7 +240,7 @@ export const useApi = () => {
   }
 
   const getPublicNodeAPI = async (nodeId: string) => {
-    const res = await API.node.getPublic(nodeId, { cache: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
+    const res = await API.node.getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
       if (!d) return
       const metadata = {
         createdBy: d.createdBy,

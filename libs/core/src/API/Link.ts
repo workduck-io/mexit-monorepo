@@ -1,22 +1,24 @@
+import { type Options } from 'ky'
+
+import { type CacheConfig, type KYClient } from '@workduck-io/dwindle'
+
 import { apiURLs } from '../Utils/routes'
 
-import { AxiosX } from './AxiosX'
-
 export class LinkAPI {
-  private client: AxiosX
-  constructor(client: AxiosX) {
+  private client: KYClient
+  constructor(client: KYClient) {
     this.client = client
   }
 
-  async save(data, config?) {
-    return await this.client.post(apiURLs.links.saveLink, data, config)
+  async save(data, options?: Options) {
+    return await this.client.post(apiURLs.links.saveLink, data, options)
   }
 
-  async getAll(config?) {
-    return this.client.get(apiURLs.links.getLinks, config)
+  async getAll(cacheConfig?: CacheConfig, options?: Options) {
+    return this.client.get(apiURLs.links.getLinks, cacheConfig, options)
   }
 
-  async delete(hashURL: string, config?) {
-    return await this.client.delete(apiURLs.links.deleteLink(hashURL), config)
+  async delete(hashURL: string, options?: Options) {
+    return await this.client.delete(apiURLs.links.deleteLink(hashURL), options)
   }
 }

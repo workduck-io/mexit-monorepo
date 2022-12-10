@@ -165,9 +165,6 @@ export const RenderTreeItem = ({
               isBeingDroppedAt={isTrue}
               // isUnread={isUnread}
               isHighlighted={isHighlighted}
-              onContextMenu={(e) => {
-                console.log('ContextySe', e, item)
-              }}
               {...provided.draggableProps}
               {...provided.dragHandleProps}
             >

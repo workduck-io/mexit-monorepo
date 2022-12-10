@@ -1,6 +1,7 @@
-import { AxiosInstance } from 'axios'
+import { type KyInstance } from 'ky/distribution/types/ky'
 
-import { AxiosX } from './AxiosX'
+import { KYClient } from '@workduck-io/dwindle'
+
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
 import { HighlightAPI } from './Highlight'
@@ -16,9 +17,9 @@ import { SnippetAPI } from './Snippet'
 import { UserAPI } from './User'
 import { ViewAPI } from './View.ts'
 
-let instance
+let instance: APIClass
 class APIClass {
-  private client: AxiosX
+  private client: KYClient
   public node: NodeAPI
   public share: ShareAPI
   public snippet: SnippetAPI
@@ -40,8 +41,8 @@ class APIClass {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     instance = this
   }
-  init(client: AxiosInstance) {
-    this.client = new AxiosX(client)
+  init(client?: KyInstance) {
+    this.client = new KYClient(undefined, client)
     this.node = new NodeAPI(this.client)
     this.share = new ShareAPI(this.client)
     this.snippet = new SnippetAPI(this.client)
@@ -59,7 +60,7 @@ class APIClass {
   }
 
   setWorkspaceHeader(workspaceId: string) {
-    this.client.setHeader(workspaceId)
+    this.client.setWorkspaceHeader(workspaceId)
   }
 }
 
