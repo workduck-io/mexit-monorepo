@@ -3828,6 +3828,21 @@
     is-observable "^2.1.0"
     observable-fns "^0.6.1"
 
+"@workduck-io/mex-components@^0.0.19":
+  version "0.0.19"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.19/fa40d17f396ecb8676dec8de955166a1c190258b#fa40d17f396ecb8676dec8de955166a1c190258b"
+  integrity sha512-99R6sXSBqS3MK4rLR82Nftwx13Rzhe3Gtr5Ted24jA8TaOl4V0XfhrukbmtysVtvzuFXbRAfnCRPhxk4S6gSAQ==
+  dependencies:
+    "@emoji-mart/data" "^1.0.6"
+    "@emoji-mart/react" "^1.0.1"
+    "@tippyjs/react" "^4.2.6"
+    "@workduck-io/mex-themes" "^0.0.4"
+    core-js "^3.21.0"
+    deepmerge "^4.2.2"
+    emoji-mart "^5.2.2"
+    polished "^4.1.4"
+    react-spring "^9.5.2"
+
 "@workduck-io/mex-themes@^0.0.4":
   version "0.0.4"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.4/33dede34bbcd54a73be3c8397dec0446732aca57#33dede34bbcd54a73be3c8397dec0446732aca57"

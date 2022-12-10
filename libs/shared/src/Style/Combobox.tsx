@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { Button } from './Buttons'
+import { Button } from '@workduck-io/mex-components'
+
 import { BodyFont } from './Search'
 
 export const ComboboxItem = styled.div<{ center?: boolean }>`

@@ -1,6 +1,13 @@
 import { createGlobalStyle, css } from 'styled-components'
 
-import { customStyles,EditorBalloonStyles, GridWrapper,normalize, ThinScrollbar, TippyBalloonStyles  } from '@mexit/shared'
+import {
+  customStyles,
+  EditorBalloonStyles,
+  GridWrapper,
+  normalize,
+  ThinScrollbar,
+  TippyBalloonStyles
+} from '@mexit/shared'
 
 import { ModalStyles } from './Refactor'
 
@@ -11,11 +18,11 @@ const GlobalStyle = createGlobalStyle`
   ${ModalStyles}
 
   input:focus-visible {
-    outline: ${({ theme }) => theme.colors.primary} solid 1px;
+    outline: ${({ theme }) => theme.tokens.colors.primary.default} solid 1px;
   }
 
   *::placeholder {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     opacity: 0.5;
   }
 
@@ -33,18 +40,18 @@ const GlobalStyle = createGlobalStyle`
     width: 100vw;
     display: flex;
     font-family: Inter, sans-serif;
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.heading};
     ${({ theme }) => {
       if (theme.backgroundImages) {
         return css`
-          background-color: ${({ theme }) => theme.colors.background.app};
+          background-color: ${({ theme }) => theme.app.surface};
           background-image: url(${theme.backgroundImages.app});
           background-size: cover;
         `
       }
 
       return css`
-        background: ${({ theme }) => theme.colors.background.app};
+        background: ${({ theme }) => theme.app.surface};
       `
     }}
 
@@ -55,11 +62,11 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
 
     &:hover {
       text-decoration: underline;
-      text-decoration-color: ${({ theme }) => theme.colors.primary};
+      text-decoration-color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 

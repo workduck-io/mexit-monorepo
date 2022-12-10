@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
-import { Button } from './Buttons'
 import { FocusModeProp } from './Editor'
 
 export const Float = styled.div<FocusModeProp>`

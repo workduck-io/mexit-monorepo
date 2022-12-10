@@ -1,7 +1,8 @@
 import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
 
-import { Button } from './Buttons'
+import { Button } from '@workduck-io/mex-components'
+
 import { CardShadow, ScrollStyles } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 

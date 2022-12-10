@@ -5,8 +5,9 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
+import { generateStyle } from '@workduck-io/mex-themes'
 
-import { IconWrapper, Input, SidebarListWrapper,TagsFlex } from '@mexit/shared'
+import { IconWrapper, Input, SidebarListWrapper, TagsFlex } from '@mexit/shared'
 
 export const SidebarWrapper = styled.div`
   display: flex;
@@ -67,7 +68,7 @@ export const SpaceTitleWrapper = styled.div`
 export const SpaceTitleFakeInput = styled.div`
   display: inline-block;
 
-  color: ${({ theme }) => theme.colors.form.input.fg};
+  color: ${({ theme }) => theme.generic.form.input.textColor};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
   border: none;
@@ -77,7 +78,7 @@ export const SpaceTitleFakeInput = styled.div`
   ${Ellipsis};
 
   :hover {
-    background-color: ${({ theme }) => theme.colors.form.input.bg};
+    background-color: ${({ theme }) => theme.generic.form.input.surface};
   }
 `
 
@@ -110,12 +111,13 @@ export const SidebarToggle = styled.div<{ isVisible?: boolean }>`
   display: flex;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   border-radius: 50%;
 
   :hover {
-    color: ${({ theme }) => theme.colors.text.heading};
-    background-color: ${({ theme }) => theme.colors.gray[8]};
+    color: ${({ theme }) => theme.sidebar.toggle.iconColor};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   }
 
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
@@ -151,7 +153,7 @@ export const SpaceSeparator = styled.div`
   width: 100%;
   margin: auto;
 
-  background: ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.separator};
 `
 export const SpaceSwitcher = styled.div`
   flex-shrink: 0;
@@ -198,27 +200,47 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
     const size = clamp(calcSize, 8, 28)
 
     // We show size greater than 16px as icons
+    // background-color: ${active ? theme.colors.gray[8] : 'transparent'};
+    // color: ${active ? theme.colors.primary : theme.tokens.text.fade};
+    // :hover {
+    //   background-color: ${theme.colors.gray[8]};
+    // }
+
     if (calcSize > 20) {
       return css`
-        background-color: ${active ? theme.colors.gray[8] : 'transparent'};
-        color: ${active ? theme.colors.primary : theme.colors.text.fade};
+        ${({ theme }) =>
+          active
+            ? generateStyle(theme.sidebar.spaces.item.wrapper.selected)
+            : generateStyle(theme.sidebar.spaces.item.wrapper)}
 
         ${IconWrapper} {
           height: ${size}px;
           width: ${size}px;
           font-size: ${size}px;
-        }
-        :hover {
-          background-color: ${theme.colors.gray[8]};
+          ${({ theme }) =>
+            generateStyle(active ? theme.sidebar.spaces.item.icon.selected : theme.sidebar.spaces.item.icon)}
         }
       `
     }
 
     // Otherwise hide svg and show a dot
+    // :hover {
+    //   background-color: ${theme.colors.gray[8]};
+    //   height: ${28}px;
+    //   width: ${28}px;
+    //   border: 3px solid ${theme.colors.gray[8]};
+
+    //   ${IconWrapper} {
+    //     height: ${24}px;
+    //     width: ${24}px;
+    //     font-size: ${24}px;
+    //   }
+    // }
     return css`
-      background-color: ${theme.colors.gray[7]};
-      border: 3px solid ${theme.colors.background.sidebar};
+      ${({ theme }) => generateStyle(theme.sidebar.spaces.item.wrapper)}
+      border: 3px solid ${({ theme }) => theme.sidebar.wrapper.surface};
       ${IconWrapper} {
+        ${({ theme }) => generateStyle(theme.sidebar.spaces.item.icon)}
         height: 0%;
         width: 0%;
         font-size: 0px;
@@ -226,10 +248,8 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
       height: 8px;
       width: 8px;
       :hover {
-        background-color: ${theme.colors.gray[8]};
         height: ${28}px;
         width: ${28}px;
-        border: 3px solid ${theme.colors.gray[8]};
 
         ${IconWrapper} {
           height: ${24}px;
@@ -241,7 +261,7 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
   }}
 
   :hover {
-    background-color: ${({ theme }) => theme.colors.gray[8]};
+    background-color: ${({ theme }) => theme.sidebar.spaces.item.wrapper.selected.surface};
   }
 
   svg {

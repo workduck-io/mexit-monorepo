@@ -32,7 +32,7 @@ const AutoThemeSwitch = () => {
 
 const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <Provider legacySupport>
+    <Provider legacySupport={false}>
       <AutoThemeSwitch />
       {children}
     </Provider>

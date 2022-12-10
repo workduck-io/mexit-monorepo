@@ -1,9 +1,10 @@
 import { mix, transparentize } from 'polished'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
 
-import { Button } from './Buttons'
 import { IntegrationTitle } from './Integrations'
 import { Description } from './Typography'
 

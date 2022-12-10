@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/react'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-import { GoogleAuthButton } from '@mexit/shared'
 
 import config from '../../config'
 
@@ -31,7 +32,7 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   }
 
   return (
-    <GoogleAuthButton
+    <Button
       large={true}
       onClick={() => {
         openUrl(authURL)
@@ -41,6 +42,6 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
         <Icon fontSize={23} icon="flat-color-icons:google" />
       </div>
       <div>{text}</div>
-    </GoogleAuthButton>
+    </Button>
   )
 }

@@ -4,11 +4,11 @@ import toast from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import { TitleWithShortcut } from '@workduck-io/mex-components'
+import { IconButton,TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
-import { IconButton, Input, TagsLabel, Tooltip } from '@mexit/shared'
+import { Input, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -144,7 +144,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
           {!isNamespaceReserved && (
             <VisibleFade visible={!isUserEditing}>
               <IconButton
-                highlight={isShared && !isReadonly && !isWriteOnly}
+                // highlight={isShared && !isReadonly && !isWriteOnly}
                 title={shareSpaceTooltip()}
                 icon={isReadonly ? 'ri:eye-line' : 'ri:share-line'}
                 disabled={isWriteOnly}

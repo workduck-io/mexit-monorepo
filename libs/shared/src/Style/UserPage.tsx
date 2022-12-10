@@ -1,7 +1,8 @@
 import { transparentize } from 'polished'
 import styled from 'styled-components'
 
-import { Button } from './Buttons'
+import { Button } from '@workduck-io/mex-components'
+
 import { BaseCard } from './Card'
 
 export const SettingsCard = styled(BaseCard)`

@@ -1,6 +1,6 @@
 import { CSSProp } from 'styled-components'
 
-import { ThemeType } from '@mexit/shared'
+import { MexTheme } from '@workduck-io/mex-themes'
 
 declare module 'react' {
   interface Attributes {
@@ -10,5 +10,5 @@ declare module 'react' {
 
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends ThemeType {}
+  interface DefaultTheme extends MexTheme {}
 }
