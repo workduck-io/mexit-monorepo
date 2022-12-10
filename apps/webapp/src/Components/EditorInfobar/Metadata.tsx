@@ -7,13 +7,23 @@ import styled from 'styled-components'
 import { MexIcon } from '@workduck-io/mex-components'
 
 import { mog, NodeMetadata } from '@mexit/core'
-import { DataGroup, DataWrapper, FlexBetween, Menu, MenuItem, MetadataWrapper , ProfileIcon , RelativeTime } from '@mexit/shared'
+import {
+  DataGroup,
+  DataWrapper,
+  FlexBetween,
+  getMIcon,
+  Menu,
+  MenuItem,
+  MetadataWrapper,
+  ProfileIcon,
+  RelativeTime
+} from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
-import { useContentStore } from '../../Stores/useContentStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import useRouteStore from '../../Stores/useRouteStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import AvatarGroups from '../AvatarGroups'
@@ -41,10 +51,8 @@ const Metadata = ({
   fadeOnHover = true,
   publicMetadata
 }: MetadataProps) => {
-  // const node = useEditorStore((state) => state.node)
-  const getContent = useContentStore((state) => state.getContent)
+  const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
   const location = useLocation()
-  const content = getContent(nodeId)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
@@ -60,10 +68,9 @@ const Metadata = ({
     metadata.lastEditedBy === undefined
 
   useEffect(() => {
-    if (content === undefined || content.metadata === undefined) return
-    const { metadata: contentMetadata } = content
-    setMetadata(contentMetadata)
-  }, [nodeId, content, content?.metadata])
+    if (noteMetadata === undefined) return
+    setMetadata(noteMetadata)
+  }, [nodeId, noteMetadata])
 
   const sharedUsers = useMemo(() => {
     const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
@@ -84,8 +91,7 @@ const Metadata = ({
     openShareModal('permission', 'note', nodeId)
   }
 
-  if (!publicMetadata && (content === undefined || content.metadata === undefined || metadata === undefined || isEmpty))
-    return null
+  if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
 
   return (
     <MetadataWrapper $isVisible={!isUserEditing}>
@@ -119,7 +125,7 @@ const Metadata = ({
             >
               <MenuItem
                 key="share-menu"
-                icon={{ type: 'ICON', value: 'ri:share-line' }}
+                icon={getMIcon('ICON', 'ri:share-line')}
                 onClick={onNoteShareClick}
                 label="Share"
               />

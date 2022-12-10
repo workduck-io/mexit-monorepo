@@ -15,11 +15,11 @@ import {
   ComboboxRoot,
   ComboboxShortcuts,
   ComboSeperator,
+  IconDisplay,
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
   ItemsContainer,
-  MexIcon,
   PreviewMeta,
   SectionSeparator,
   ShortcutText
@@ -31,6 +31,7 @@ import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { Shortcut } from '../../../Stores/useHelpStore'
+import { useMetadataStore } from '../../../Stores/useMetadataStore'
 import { CategoryType, QuickLinkType } from '../../constants'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
@@ -104,7 +105,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const combobox = useComboboxControls(true)
   const isOpen = useComboboxIsOpen()
   const { getNamespace } = useNamespaces()
-
+  const allMetadata = useMetadataStore((s) => s.metadata)
   const { textAfterTrigger, textAfterBlockTrigger } = useComboboxStore((store) => store.search)
   const getContent = useContentStore((store) => store.getContent)
   const { getSnippetContent } = useSnippets()
@@ -158,8 +159,8 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
       if (type === QuickLinkType.backlink) {
         const nodeContent = getContent(key)
         content = nodeContent?.content
-
-        setMetaData(nodeContent?.metadata)
+        const metadata = useMetadataStore.getState().metadata.notes[key]
+        setMetaData(metadata)
       } else if (type === QuickLinkType.snippet) {
         content = getSnippetContent(key)
       }
@@ -212,6 +213,8 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                     const Item = onRenderItem ? onRenderItem({ item }) : item.text
                     const lastItem = index > 0 ? items[index - 1] : undefined
                     const namespace = getNamespace(item.namespace)?.name
+                    const metadata =
+                      allMetadata[item.type === QuickLinkType.snippet ? 'snipppets' : 'notes']?.[item.key]
 
                     return (
                       <span key={`${item.key}-${String(index)}`}>
@@ -232,16 +235,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                             editor && onSelectItem(editor, item)
                           }}
                         >
-                          {item.icon && (
-                            // <CenteredIcon>
-                            <MexIcon
-                              fontSize={namespace ? 20 : 18}
-                              key={`${item.key}_${item.icon}`}
-                              icon={item.icon}
-                              color={theme.colors.primary}
-                            />
-                            // </CenteredIcon>
-                          )}
+                          {metadata?.icon && <IconDisplay icon={metadata.icon} size={namespace ? 20 : 18} />}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
                               <ComboboxItemTitle>{Item}</ComboboxItemTitle>

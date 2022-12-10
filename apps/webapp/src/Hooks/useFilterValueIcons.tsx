@@ -1,4 +1,5 @@
 import { FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
+import { getMIcon } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -42,9 +43,9 @@ export const useFilterIcons = () => {
       case 'note': {
         const ilink = ilinks.find((ilink) => ilink.nodeid === value)
         if (ilink) {
-          return { type: 'ICON', value: ilink.icon }
+          return ilink.icon
         }
-        return { type: 'ICON', value: 'ri:file-list-2-line' }
+        return getMIcon('ICON', 'ri:file-list-2-line')
       }
 
       case 'mention':

@@ -12,24 +12,31 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import {
   convertContentToRawText,
-fuzzySearch,  ILink,
+  fuzzySearch,
+  ILink,
   isClash,
   isReserved,
+  MIcon,
   QuickLinkStatus,
   QuickLinkType,
   SEPARATOR,
   SHARED_NAMESPACE,
   SingleNamespace,
-  withoutContinuousDelimiter } from '@mexit/core'
-import { Input,   StyledCombobox,
-StyledCreatatbleSelect,   StyledInputWrapper,
+  withoutContinuousDelimiter
+} from '@mexit/core'
+import {
+  Input,
+  StyledCombobox,
+  StyledCreatatbleSelect,
+  StyledInputWrapper,
   StyledMenu,
   Suggestion,
   SuggestionContentWrapper,
   SuggestionDesc,
   SuggestionError,
   SuggestionText,
-SuggestionTextWrapper } from '@mexit/shared'
+  SuggestionTextWrapper
+} from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
@@ -59,12 +66,12 @@ export type QuickLink = {
   nodeid?: string
   namespace?: string
 
-  icon?: string
+  icon?: MIcon
 }
 
 export const makeQuickLink = (
   title: string,
-  options: { namespace?: string; nodeid: string; type?: QuickLinkType; icon?: string }
+  options: { namespace?: string; nodeid: string; type?: QuickLinkType; icon?: MIcon }
 ): QuickLink => ({
   text: title,
   value: title,

@@ -164,7 +164,7 @@ export const StyledTreeItem = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding-right: 8px;
 

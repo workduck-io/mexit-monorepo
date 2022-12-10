@@ -1,56 +1,45 @@
 import React from 'react'
 
-import { useSingleton } from '@tippyjs/react'
-
+import { API, MIcon } from '@mexit/core'
 import { Loading, NodeInfo } from '@mexit/shared'
 
-import useToggleElements from '../../Hooks/useToggleElements'
+import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
+import IconPicker from '../IconPicker/IconPicker'
 
 import NodeRenameOnlyTitle from './Rename/NodeRename'
 
-const Toolbar = () => {
-  const fetchingContent = useEditorStore((state) => state.fetchingContent)
-  const focusMode = useLayoutStore((store) => store.focusMode)
-  const nodeid = useEditorStore((state) => state.node.nodeid)
-  const [source, target] = useSingleton()
-  const shortcuts = useHelpStore((store) => store.shortcuts)
-  const infobar = useLayoutStore((store) => store.infobar)
-  const openShareModal = useShareModalStore((store) => store.openModal)
-  const shareModalState = useShareModalStore((store) => store.open)
-  const shareModalContext = useShareModalStore((store) => store.context)
+const NoteIcon = ({ icon, onChange }) => {
+  return <IconPicker size={32} allowPicker={true} onChange={onChange} value={icon} />
+}
 
-  const { toggleReminder } = useToggleElements()
+const Toolbar: React.FC<{ nodeId: string }> = ({ nodeId }) => {
+  const ilinks = useDataStore((s) => s.ilinks)
+  const fetchingContent = useEditorStore((state) => state.fetchingContent)
+  const updateIconInMetadata = useMetadataStore((s) => s.addMetadata)
+
+  const metadata = useMetadataStore((s) => s.metadata.notes[nodeId])
+
+  const onChangeIcon = async (icon: MIcon) => {
+    updateIconInMetadata('notes', { [nodeId]: { ...metadata, icon } })
+
+    return await API.node
+      .updateMetadata(nodeId, {
+        metadata: {
+          icon
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
 
   return (
     <NodeInfo>
+      <NoteIcon key={nodeId} icon={metadata?.icon} onChange={onChangeIcon} />
       <NodeRenameOnlyTitle />
       {fetchingContent && <Loading transparent dots={3} />}
-      {/* <InfoTools {...getFocusProps(focusMode)}>
-        <ToolbarTooltip singleton={source} />
-        <IconButton
-          size={24}
-          singleton={target}
-          transparent={false}
-          icon={shareLine}
-          title="Share"
-          highlight={shareModalState && shareModalContext === 'note'}
-          onClick={() => openShareModal('permission', 'note', nodeid)}
-        />
-        <IconButton
-          singleton={target}
-          size={24}
-          transparent={false}
-          icon={focusLine}
-          title="Focus Mode"
-          shortcut={shortcuts.toggleFocusMode.keystrokes}
-          highlight={focusMode.on}
-          onClick={toggleFocusMode}
-        />
-      </InfoTools> */}
     </NodeInfo>
   )
 }

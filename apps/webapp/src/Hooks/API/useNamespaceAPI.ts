@@ -10,6 +10,7 @@ import {
   MIcon,
   mog
 } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'
@@ -39,7 +40,11 @@ export const useNamespaceApi = () => {
               granterID: item.granterID ?? undefined,
               publicAccess: item.publicAccess
             },
-            nodeHierarchy: item.nodeHierarchy.map((i) => ({ ...i, namespace: item.id })),
+            nodeHierarchy: item.nodeHierarchy.map((i) => ({
+              ...i,
+              namespace: item.id,
+              icon: i.icon ?? DefaultMIcons.NOTE
+            })),
             archiveNodeHierarchy: item.archiveNodeHierarchy.map((i) => ({ ...i, namespace: item.id }))
           }
         })

@@ -1,14 +1,15 @@
-import React, { useEffect, useMemo, useRef,useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
-import { useSpringRef,useTransition } from '@react-spring/web'
+import { useSpringRef, useTransition } from '@react-spring/web'
 
 import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
+import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
-import { PollActions,useApiStore } from '../../Stores/useApiStore'
+import { PollActions, useApiStore } from '../../Stores/useApiStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
@@ -49,10 +50,9 @@ export const NoteSidebar = () => {
         return {
           id: ns.id,
           label: ns.name,
-          icon: ns.icon ?? {
-            type: 'ICON',
-            value: ns.name === RESERVED_NAMESPACES.default ? 'ri:user-line' : 'heroicons-outline:view-grid'
-          },
+          icon:
+            ns.icon ??
+            getMIcon('ICON', ns.name === RESERVED_NAMESPACES.default ? 'ri:user-line' : 'heroicons-outline:view-grid'),
           data: ns,
           tooltip: ns.name,
           list: {
@@ -71,7 +71,7 @@ export const NoteSidebar = () => {
       id: 'NAMESPACE_shared',
       label: RESERVED_NAMESPACES.shared,
       tooltip: 'Shared Notes',
-      icon: { type: 'ICON', value: 'mex:shared-note' },
+      icon: getMIcon('ICON', 'mex:shared-note'),
       data: SHARED_NAMESPACE,
       list: {
         type: 'flat',

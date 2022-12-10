@@ -1,8 +1,8 @@
 import { uniq } from 'lodash'
 
-import { defaultCommands,getSnippetCommand, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
+import { defaultCommands, getSnippetCommand, MIcon, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
 
-export const addIconToSlashCommand = (items: SlashCommand[], icon: string) =>
+export const addIconToSlashCommand = (items: SlashCommand[], icon: MIcon) =>
   items.map((i: SlashCommand): SlashCommand => ({ ...i, icon }))
 
 /*
@@ -35,7 +35,7 @@ export const useSlashCommands = () => {
             text: command.replace('snip.', ''),
             type: QuickLinkType.snippet
           })),
-          'ri:quill-pen-line'
+          { type: 'ICON', value: 'ri:quill-pen-line' }
         )
       ])
     )

@@ -3,6 +3,7 @@ import { useSlashCommands } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 
@@ -14,7 +15,7 @@ export const useUpdater = () => {
   const { updateLinksFromContent } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const setContent = useContentStore((store) => store.setContent)
-  const setMetadata = useContentStore((store) => store.setMetadata)
+  const addMetadata = useMetadataStore((store) => store.addMetadata)
   const { updateTagsFromContent } = useTags()
   const { updateDocument } = useSearch()
   const { generateSlashCommands } = useSlashCommands()
@@ -29,7 +30,7 @@ export const useUpdater = () => {
   const updateFromContent = async (noteId: string, content: NodeEditorContent, metadata?: any) => {
     if (content) {
       setContent(noteId, content)
-      if (metadata) setMetadata(noteId, metadata)
+      if (metadata) addMetadata('notes', { [noteId]: metadata })
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)

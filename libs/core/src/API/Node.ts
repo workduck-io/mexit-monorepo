@@ -67,6 +67,10 @@ export class NodeAPI {
     return await this.client.get(apiURLs.archive.getArchivedNodes, cacheConfig, options)
   }
 
+  async updateMetadata(nodeid: string, metadata: any, options?: Options) {
+    return await this.client.patch(apiURLs.node.updateMetadata(nodeid), metadata, options)
+  }
+
   async deleteArchived(nodeIds: string[], options?: Options) {
     return await this.client.post(
       apiURLs.archive.deleteArchivedNodes,

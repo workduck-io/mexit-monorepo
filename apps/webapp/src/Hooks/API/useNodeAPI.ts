@@ -202,9 +202,10 @@ export const useApi = () => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
           // mog('[API]: Get Note data', { content })
-          if (isUpdate) updateFromContent(nodeid, content)
+          const metadata = extractMetadata(d)
+          if (isUpdate) updateFromContent(nodeid, content, metadata)
 
-          return { data: content, metadata: extractMetadata(d), version: d.version ?? undefined }
+          return { data: content, metadata, version: d.version ?? undefined }
         }
       })
       .catch((e) => {
@@ -324,7 +325,7 @@ export const useApi = () => {
         initSnippets([
           ...snippets,
           ...newSnippets.map((item) => ({
-            icon: 'ri:quill-pen-line',
+            icon: { type: 'ICON', value: 'ri:quill-pen-line' },
             id: item.snippetID,
             template: item.template,
             title: item.title,

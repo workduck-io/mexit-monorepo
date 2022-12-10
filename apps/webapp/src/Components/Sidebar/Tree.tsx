@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useMatch } from 'react-router-dom'
 
 import {
-    default as AtlaskitTree,
-    ItemId,
-    mutateTree,
-    RenderItemParams,
-    TreeData,
-    TreeDestinationPosition,
-    TreeItem,
-    TreeSourcePosition
+  default as AtlaskitTree,
+  ItemId,
+  mutateTree,
+  RenderItemParams,
+  TreeData,
+  TreeDestinationPosition,
+  TreeItem,
+  TreeSourcePosition
 } from '@atlaskit/tree'
 import { Icon } from '@iconify/react'
 import Tippy, { useSingleton } from '@tippyjs/react'
@@ -18,8 +18,11 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNameFromPath, mog, SEPARATOR } from '@mexit/core'
 import {
-    isOnEditableElement, StyledTreeItemSwitcher, StyledTreeSwitcher, TooltipContentWrapper,
-    TooltipCount
+  isOnEditableElement,
+  StyledTreeItemSwitcher,
+  StyledTreeSwitcher,
+  TooltipContentWrapper,
+  TooltipCount
 } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'

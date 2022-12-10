@@ -59,6 +59,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 dist/
+vite.config.ts.timestamp-*.mjs
+
 #generated manifest
 apps/extension/public/manifest.json
 apps/extension/build/hmr/*.js
