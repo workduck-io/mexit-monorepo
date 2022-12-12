@@ -2,7 +2,6 @@ import { useAuth } from '@workduck-io/dwindle'
 
 import { API, ILink, mog, USE_API } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
 
 import { getTitleFromPath } from './useLinks'
@@ -13,8 +12,6 @@ const useArchive = () => {
   const unArchive = useDataStore((state) => state.unArchive)
   const addInArchive = useDataStore((state) => state.addInArchive)
   const removeArchive = useDataStore((state) => state.removeFromArchive)
-
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
   const updateTagsCache = useDataStore((state) => state.updateTagsCache)
   const updateInternalLinks = useDataStore((state) => state.updateInternalLinks)
@@ -64,25 +61,6 @@ const useArchive = () => {
               .map((n) => ({ ...n, path: getTitleFromPath(n.path) }))
             addInArchive(archivedNodes)
           }
-          // TODO: Once middleware is setup, use returned hierarchy to update the archived notes
-          // const { archivedHierarchy } = d.data
-          // mog('archivedHierarchy', { archivedHierarchy })
-
-          // if (archivedHierarchy) {
-          //   const addedArchivedLinks = hierarchyParser(archivedHierarchy, namespaceID, {
-          //     withParentNodeId: true,
-          //     allowDuplicates: true
-          //   })
-
-          //   if (addedArchivedLinks) {
-          //     // * set the new hierarchy in the tree
-
-          //     mog('addedArchivedLinks', { addedArchivedLinks })
-          //     setArchive(addedArchivedLinks)
-          //   }
-          // }
-        })
-        .then(() => {
           return true
         })
         .catch((e) => {
@@ -98,7 +76,10 @@ const useArchive = () => {
       return unArchive(nodes[0])
     }
     await API.node
-      .unarchive(nodes.map((node) => node.nodeid))
+      .unarchive(
+        nodes[0].namespace,
+        nodes.map((node) => node.nodeid)
+      )
       .then((d) => {
         mog('Unarchive Data', d)
         if (d) unArchive(nodes[0])

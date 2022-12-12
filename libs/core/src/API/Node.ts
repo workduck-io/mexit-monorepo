@@ -53,9 +53,9 @@ export class NodeAPI {
     )
   }
 
-  async unarchive(nodeIds: string[], options?: Options) {
+  async unarchive(namespaceID: string, nodeIds: string[], options?: Options) {
     return await this.client.put(
-      apiURLs.archive.unArchiveNodes,
+      apiURLs.archive.unArchiveInNamespace(namespaceID),
       {
         ids: nodeIds
       },
@@ -68,7 +68,7 @@ export class NodeAPI {
   }
 
   async deleteArchived(nodeIds: string[], options?: Options) {
-    return await this.client.put(
+    return await this.client.post(
       apiURLs.archive.deleteArchivedNodes,
       {
         ids: nodeIds

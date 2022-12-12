@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 
-import trashIcon from '@iconify/icons-codicon/trash'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
-import { Button, Infobox } from '@workduck-io/mex-components'
+import { Infobox } from '@workduck-io/mex-components'
 
-import { convertContentToRawText, GenericSearchResult, mog } from '@mexit/core'
+import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog } from '@mexit/core'
 import {
   ArchiveHelp,
   MainHeader,
@@ -29,26 +28,17 @@ import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
-import useArchive from '../Hooks/useArchive'
-import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
-import { useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { getContent } from '../Stores/useEditorStore'
-import { ModalControls, ModalHeader, MRMHead } from '../Style/Refactor'
+import { ModalHeader } from '../Style/Refactor'
+import { deserializeContent } from '../Utils/serializer'
+import { WorkerRequestType } from '../Utils/worker'
+import { runBatchWorker } from '../Workers/controller'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
-
-const StyledIcon = styled(Icon)`
-  cursor: pointer;
-  padding: 0.4rem;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  :hover {
-    background-color: ${({ theme }) => theme.colors.background.card};
-  }
-`
 
 const ActionContainer = styled.div`
   display: flex;
@@ -57,18 +47,14 @@ const ActionContainer = styled.div`
 
 const Archive = () => {
   const archive = useDataStore((store) => store.archive)
+  const contents = useContentStore((store) => store.contents)
+  const setContent = useContentStore((store) => store.setContent)
+  const setMetadata = useContentStore((store) => store.setMetadata)
 
   const { getNamespace } = useNamespaces()
-  const { unArchiveData, removeArchiveData } = useArchive()
-  const [delNode, setDelNode] = useState(undefined)
   const [showModal, setShowModal] = useState(false)
-  const { loadNode } = useLoad()
-  const { contents, setContent } = useContentStore()
-  const theme = useTheme()
   const getDataAPI = useApi().getDataAPI
-  const { queryIndex } = useSearch()
-
-  const { updateDocument, removeDocument } = useSearch()
+  const { queryIndex, updateDocument } = useSearch()
 
   const getArchiveResult = (nodeid: string): GenericSearchResult => {
     const node = archive.find((node) => node.nodeid === nodeid)
@@ -80,6 +66,7 @@ const Archive = () => {
       text: convertContentToRawText(content.content)
     }
   }
+
   const onSearch = async (newSearchTerm: string) => {
     const res = await queryIndex('archive', newSearchTerm)
     if (newSearchTerm === '' && res?.length === 0) {
@@ -89,69 +76,37 @@ const Archive = () => {
   }
 
   const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
-  const { goTo } = useRouting()
-  // const onUnarchiveClick = async (node: ILink) => {
-  //   // const present = ilinks.find((link) => link.key === node.key)
-
-  //   // if (present) {
-  //   //   setShowModal(true)
-  //   // }
-
-  //   await unArchiveData([node])
-  //   await addNodeOrNodes(node.path, false, undefined, undefined, false)
-
-  //   const content = getContent(node.nodeid)
-  //   await removeDocument('archive', node.nodeid)
-
-  //   await updateDocument('node', node.nodeid, content.content, node.path)
-
-  //   const archiveNode: NodeProperties = {
-  //     id: node.path,
-  //     path: node.path,
-  //     title: node.path.split(SEPARATOR).pop(),
-  //     nodeid: node.nodeid,
-  //     namespace: node?.namespace
-  //   }
-
-  //   loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
-  //   goTo(node.path, NavigationType.replace)
-  // }
-
-  const onDeleteClick = async () => {
-    const nodesToDelete = archive.filter((i) => {
-      const match = i.path.startsWith(delNode.title)
-      return match
-    })
-
-    await removeArchiveData(nodesToDelete)
-
-    nodesToDelete.forEach(async (node) => {
-      await removeDocument('archive', node.nodeid)
-    })
-
-    // onSave()
-
-    setShowModal(false)
-  }
-
-  const handleCancel = () => {
-    setShowModal(false)
-    setDelNode(undefined)
-  }
 
   useEffect(() => {
-    try {
-      Promise.allSettled(
-        archive.map(
-          async (item) =>
-            await getDataAPI(item.nodeid).then((response) =>
-              setContent(item.nodeid, response?.content, response?.metadata)
-            )
-        )
-      )
-    } catch (err) {
-      mog('Failed to fetch archives', { err })
+    const fetchArchiveContents = async () => {
+      const unfetchedArchives = archive
+        .filter((i) => contents[i.nodeid]?.content.length === 0 || contents[i.nodeid] === undefined)
+        .map((i) => i.nodeid)
+
+      const ids = batchArray(unfetchedArchives, 10)
+      mog('UnfetchedArchiveFetch', { ids, unfetchedArchives })
+      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_ARCHIVED_NODES, 6, ids)
+
+      fulfilled.forEach((nodes) => {
+        if (nodes) {
+          const { rawResponse } = nodes
+
+          if (rawResponse) {
+            rawResponse.forEach((nodeResponse) => {
+              const metadata = extractMetadata(nodeResponse)
+              const content = deserializeContent(nodeResponse.data)
+
+              const nodeID = nodeResponse.id
+              setContent(nodeID, content)
+
+              if (metadata) setMetadata(nodeID, metadata)
+              updateDocument('archive', nodeID, content)
+            })
+          }
+        }
+      })
     }
+    fetchArchiveContents()
   }, [])
 
   // Forwarding ref to focus on the selected result
@@ -174,29 +129,7 @@ const Archive = () => {
         <Result {...props} key={id} ref={ref}>
           <ResultHeader>
             <ResultTitle>{node.path}</ResultTitle>
-            <ActionContainer>
-              {namespace && <NamespaceTag namespace={namespace} />}
-              {/* <StyledIcon
-                fontSize={32}
-                color={theme.colors.primary}
-                onClick={(ev) => {
-                  ev.preventDefault()
-                  onUnarchiveClick(node)
-                }}
-                icon={unarchiveLine}
-              /> */}
-
-              <StyledIcon
-                fontSize={32}
-                color="#df7777"
-                onClick={(ev) => {
-                  ev.preventDefault()
-                  setDelNode(item)
-                  setShowModal(true)
-                }}
-                icon={trashIcon}
-              />
-            </ActionContainer>
+            <ActionContainer>{namespace && <NamespaceTag namespace={namespace} />}</ActionContainer>
           </ResultHeader>
           <SearchPreviewWrapper>
             <EditorPreviewRenderer content={content} editorId={`editor_archive_preview_${item.id}`} />
@@ -232,33 +165,13 @@ const Archive = () => {
     const content = con ? con.content : defaultContent.content
     const icon = fileList2Line
     const namespace = getNamespace(node?.namespace)
+
     if (item) {
       return (
         <SplitSearchPreviewWrapper id={`splitArchiveSearchPreview_for_${item.id}`}>
           <Title>
             {node.path}
             {namespace && <NamespaceTag namespace={namespace} />}
-            <ActionContainer>
-              {/* <StyledIcon
-                fontSize={32}
-                color={theme.colors.primary}
-                onClick={(ev) => {
-                  ev.preventDefault()
-                  onUnarchiveClick(node)
-                }}
-                icon={unarchiveLine}
-              /> */}
-              <StyledIcon
-                fontSize={32}
-                color="#df7777"
-                onClick={(ev) => {
-                  ev.preventDefault()
-                  setDelNode(item)
-                  setShowModal(true)
-                }}
-                icon={trashIcon}
-              />
-            </ActionContainer>
           </Title>
           <EditorPreviewRenderer content={content} editorId={`SnippetSearchPreview_editor_${item.id}`} />
         </SplitSearchPreviewWrapper>
@@ -290,7 +203,6 @@ const Archive = () => {
         }}
         onEscapeExit={() => {
           setShowModal(false)
-          setDelNode(undefined)
         }}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
@@ -302,18 +214,6 @@ const Archive = () => {
         isOpen={showModal}
       >
         <ModalHeader>Archive</ModalHeader>
-        <MRMHead>
-          {!delNode && <h1>Node with same name is present in the workspace.</h1>}
-          <p>Are you sure you want to {delNode ? 'delete' : 'replace'}?</p>
-        </MRMHead>
-        <ModalControls>
-          <Button large onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button large primary onClick={onDeleteClick}>
-            {delNode ? 'Delete' : 'Replace'}
-          </Button>
-        </ModalControls>
       </Modal>
     </SearchContainer>
   )

@@ -18,7 +18,7 @@ import { runBatchWorker } from '../../Workers/controller'
 import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
-  const { setNamespaces, setIlinks } = useDataStore()
+  const { setNamespaces, setIlinks, addInArchive } = useDataStore()
   const { updateFromContent } = useUpdater()
 
   const getAllNamespaces = async () => {
@@ -40,7 +40,7 @@ export const useNamespaceApi = () => {
               publicAccess: item.publicAccess
             },
             nodeHierarchy: item.nodeHierarchy.map((i) => ({ ...i, namespace: item.id })),
-            archiveHierarchy: item?.archivedNodeHierarchyInformation
+            archiveNodeHierarchy: item.archiveNodeHierarchy.map((i) => ({ ...i, namespace: item.id }))
           }
         })
       })
@@ -53,14 +53,22 @@ export const useNamespaceApi = () => {
       const newILinks = namespaces.reduce((arr, { nodeHierarchy }) => {
         return [...arr, ...nodeHierarchy]
       }, [])
+
+      namespaces.forEach((i) => console.log(i))
+
+      const archivedILinks = namespaces.reduce((arr, { archiveNodeHierarchy }) => {
+        return [...arr, ...archiveNodeHierarchy]
+      }, [])
       const localILinks = useDataStore.getState().ilinks
 
-      mog('update namespaces and ILinks', { namespaces, newILinks })
+      mog('update namespaces and ILinks', { namespaces, newILinks, archivedILinks })
       // SetILinks once middleware is integrated
       const ns = namespaces.map((n) => n.ns)
       setNamespaces(ns)
       // TODO: Also set archive links
       setIlinks(newILinks)
+
+      addInArchive(archivedILinks)
 
       const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
 

@@ -110,6 +110,11 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
       break
     }
 
+    case WorkerRequestType.GET_ARCHIVED_NODES: {
+      args.forEach((i) => requestsToMake.push(getMultipleNodeAPI(i)))
+      break
+    }
+
     case WorkerRequestType.GET_SHARED_NODES: {
       args.forEach((i) => requestsToMake.push(getMultipleSharedNodeAPI(i)))
       break
