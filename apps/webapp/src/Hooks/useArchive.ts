@@ -61,25 +61,6 @@ const useArchive = () => {
               .map((n) => ({ ...n, path: getTitleFromPath(n.path) }))
             addInArchive(archivedNodes)
           }
-          // TODO: Once middleware is setup, use returned hierarchy to update the archived notes
-          // const { archivedHierarchy } = d.data
-          // mog('archivedHierarchy', { archivedHierarchy })
-
-          // if (archivedHierarchy) {
-          //   const addedArchivedLinks = hierarchyParser(archivedHierarchy, namespaceID, {
-          //     withParentNodeId: true,
-          //     allowDuplicates: true
-          //   })
-
-          //   if (addedArchivedLinks) {
-          //     // * set the new hierarchy in the tree
-
-          //     mog('addedArchivedLinks', { addedArchivedLinks })
-          //     setArchive(addedArchivedLinks)
-          //   }
-          // }
-        })
-        .then(() => {
           return true
         })
         .catch((e) => {

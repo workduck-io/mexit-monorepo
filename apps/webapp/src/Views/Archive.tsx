@@ -40,15 +40,6 @@ import { runBatchWorker } from '../Workers/controller'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
-const StyledIcon = styled(Icon)`
-  cursor: pointer;
-  padding: 0.4rem;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  :hover {
-    background-color: ${({ theme }) => theme.colors.background.card};
-  }
-`
-
 const ActionContainer = styled.div`
   display: flex;
   justify-content: space-between;
