@@ -3,8 +3,8 @@ import React from 'react'
 import { ContextMenuContent } from '@radix-ui/react-context-menu'
 import styled, { useTheme } from 'styled-components'
 
-import { SharedNode } from '@mexit/core'
-import { Centered, SharedNodeIcon, SharedNodeIconify } from '@mexit/shared'
+import { DefaultMIcons, SharedNode } from '@mexit/core'
+import { Centered, SharedNodeIcon } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
@@ -56,7 +56,7 @@ const SharedNotes = () => {
       items={sharedNodes.map((node) => ({
         id: node.nodeid,
         label: node.path,
-        icon: SharedNodeIconify,
+        icon: DefaultMIcons.SHARED_NOTE,
         lastOpenedId: node.nodeid,
         data: node
       }))}

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 
 import { mog } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
@@ -30,7 +30,7 @@ const SnippetList = () => {
       .map((snippet) => ({
         id: snippet.id,
         label: snippet.title,
-        icon: snippet.template ? magicLine : quillPenLine,
+        icon: snippet.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
         data: snippet
       }))
   }, [snippets])

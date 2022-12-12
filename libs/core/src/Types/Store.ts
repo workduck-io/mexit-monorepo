@@ -30,7 +30,8 @@ export const DefaultMIcons = {
   NOTE: getMIcon('ICON', 'gg:file-document'),
   SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
   SHARED_NOTE: getMIcon('ICON', 'ri:share-line'),
-  VIEW: getMIcon('ICON', 'ri:stack-line')
+  VIEW: getMIcon('ICON', 'ri:stack-line'),
+  TAG: getMIcon('ICON', 'ri:hashtag')
 }
 
 export interface SingleNamespace {

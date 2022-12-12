@@ -8,7 +8,7 @@ import { Entity } from 'rc-tree/lib/interface'
 
 import { ItemContent, ItemCount, ItemTitle } from '@workduck-io/mex-components'
 
-import { ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
+import { IconDisplay, ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
@@ -94,7 +94,7 @@ const SidebarListItemComponent = <T extends Entity>({
                       icon={item.hoverIcon}
                     />
                   )}
-                  <Icon className="defaultIcon" icon={item.icon} />
+                  <IconDisplay className="defaultIcon" icon={item.icon} />
                   <ItemTitleText>{item.label}</ItemTitleText>
                 </ItemTitle>
               </ItemContent>

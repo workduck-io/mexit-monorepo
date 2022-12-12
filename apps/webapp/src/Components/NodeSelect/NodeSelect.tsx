@@ -222,7 +222,7 @@ function NodeSelect({
     const mLinks = fLinks.map((l) => makeQuickLink(l.path, { namespace: l.namespace, nodeid: l.nodeid, icon: l.icon }))
 
     const sLinks = sharedNodes.map((l) =>
-      makeQuickLink(l.path, { namespace: SHARED_NAMESPACE.id, nodeid: l.nodeid, icon: 'mex:shared-note' })
+      makeQuickLink(l.path, { namespace: SHARED_NAMESPACE.id, nodeid: l.nodeid, icon: DefaultMIcons.SHARED_NOTE })
     )
 
     if (!showAll) return mLinks
