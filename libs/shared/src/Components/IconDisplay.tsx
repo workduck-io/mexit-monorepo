@@ -12,6 +12,12 @@ interface IconDisplayProps {
   className?: string
 }
 
+const resolveIconURL = (value: string) => {
+  if (chrome && chrome.runtime) return chrome.runtime.getURL(value)
+
+  return `/value`
+}
+
 export const IconDisplay = ({ icon, size, className }: IconDisplayProps) => {
   if (!icon) return null
 
@@ -21,7 +27,7 @@ export const IconDisplay = ({ icon, size, className }: IconDisplayProps) => {
         {
           EMOJI: <span>{icon.value}</span>,
           ICON: <Icon icon={icon.value} />,
-          URL: <img alt="Icon" src={chrome.runtime.getURL(icon.value)} />
+          URL: <img alt="Icon" src={resolveIconURL(icon.value)} />
         }[icon.type]
       }
     </IconWrapper>
