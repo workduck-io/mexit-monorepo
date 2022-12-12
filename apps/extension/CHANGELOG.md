@@ -1,5 +1,13 @@
 # mexit
 
+## 0.18.15
+
+### Patch Changes
+
+- 4b9346d9: Upgrade Dwindle to 0.1.0 with Ky Client
+- e7107af9: Icon picker for Notes, useMetadata store
+- b1512c35: Combobox UI changes
+
 ## 0.18.14
 
 ### Patch Changes
