@@ -66,7 +66,7 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
   ['Public Nodes']: {
     link: {
       ...spotlightShortcuts.open,
-      title: 'to Insert'
+      title: 'to Insert Link'
     }
   }
 }
