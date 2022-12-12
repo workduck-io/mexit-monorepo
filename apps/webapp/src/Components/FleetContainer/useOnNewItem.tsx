@@ -3,19 +3,13 @@ import toast from 'react-hot-toast'
 
 import generateName from 'project-name-generator'
 
-import {
-  ELEMENT_PARAGRAPH,
-  ELEMENT_TODO_LI,
-  generateSnippetId,
-  generateTempId,
-  getDefaultContent
-} from '@mexit/core'
-import { InteractiveToast } from '@mexit/shared'
+import { ELEMENT_PARAGRAPH, ELEMENT_TODO_LI, generateSnippetId, generateTempId, getDefaultContent } from '@mexit/core'
+import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
 import { createDefaultTodo } from '../../Editor/Plugins/todoUtils'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useTaskFromSelection } from '../../Hooks/useTaskFromSelection'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -70,7 +64,7 @@ export const useOnNewItem = () => {
     addSnippet({
       id: snippetId,
       title: snippetName,
-      icon: ICONS.snippet,
+      icon: DefaultMIcons.SNIPPET,
       content: [getDefaultContent()]
     })
 

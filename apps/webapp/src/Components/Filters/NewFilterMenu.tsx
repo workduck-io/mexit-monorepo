@@ -6,8 +6,8 @@ import { Icon } from '@iconify/react'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
-import { FilterMenuDiv,FilterTypeIcons, GenericFlex, Menu, MenuItem } from '@mexit/shared'
+import { Filter, Filters, FilterType, FilterValue, generateFilterId, mog } from '@mexit/core'
+import { FilterMenuDiv, FilterTypeIcons, GenericFlex, Menu, MenuItem } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useFilterIcons } from '../../Hooks/useFilterValueIcons'
@@ -102,15 +102,18 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
         >
           {option.options
             .sort((a, b) => (a.count !== undefined && b.count !== undefined ? b.count - a.count : 0))
-            .map((op) => (
-              <MenuItem
-                key={op.id}
-                icon={getFilterValueIcon(option.type, op.value)}
-                onClick={() => onAddNewFilter(option.type, op)}
-                label={op.label}
-                count={op.count}
-              />
-            ))}
+            .map((op) => {
+              mog('FILTER SAVE OPTION', { op, option })
+              return (
+                <MenuItem
+                  key={op.id}
+                  icon={getFilterValueIcon(option.type, op.id)}
+                  onClick={() => onAddNewFilter(option.type, op)}
+                  label={op.label}
+                  count={op.count}
+                />
+              )
+            })}
         </Menu>
       ))}
     </Menu>

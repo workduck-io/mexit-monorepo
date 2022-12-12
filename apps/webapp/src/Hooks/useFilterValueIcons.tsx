@@ -1,7 +1,7 @@
-import { FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
-import { getMIcon } from '@mexit/shared'
+import { DefaultMIcons, FilterJoin, FilterType, MIcon, mog, SHARED_NAMESPACE } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 
 import { useNamespaces } from './useNamespaces'
 
@@ -41,11 +41,10 @@ export const useFilterIcons = () => {
       }
 
       case 'note': {
-        const ilink = ilinks.find((ilink) => ilink.nodeid === value)
-        if (ilink) {
-          return ilink.icon
-        }
-        return getMIcon('ICON', 'ri:file-list-2-line')
+        const icon = useMetadataStore.getState().metadata.notes[value]?.icon
+        mog('ICON IS', { icon, value })
+
+        return icon ?? DefaultMIcons.NOTE
       }
 
       case 'mention':

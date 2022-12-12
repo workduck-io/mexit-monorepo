@@ -15,7 +15,8 @@ import {
   NotesInfoBarHelp,
   SidebarListFilter,
   SidebarListFilterWrapper,
-  SnippetCards} from '@mexit/shared'
+  SnippetCards
+} from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import useRaju from '../../Hooks/useRaju'

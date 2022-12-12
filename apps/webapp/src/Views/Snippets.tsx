@@ -19,6 +19,7 @@ import {
   mog
 } from '@mexit/core'
 import {
+  DefaultMIcons,
   ItemTag,
   MainHeader,
   Result,
@@ -94,7 +95,7 @@ const Snippets = () => {
     addSnippet({
       id: snippetId,
       title: snippetName,
-      icon: 'ri:quill-pen-line',
+      icon: DefaultMIcons.SNIPPET,
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
 
@@ -112,7 +113,7 @@ const Snippets = () => {
       id: snippetId,
       title: snippetName,
       template: true,
-      icon: 'ri:quill-pen-line',
+      icon: DefaultMIcons.TEMPLATE,
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
 

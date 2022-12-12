@@ -36,7 +36,7 @@ const Toolbar: React.FC<{ nodeId: string }> = ({ nodeId }) => {
 
   return (
     <NodeInfo>
-      <NoteIcon key={nodeId} icon={metadata?.icon} onChange={onChangeIcon} />
+      <NoteIcon key={`${nodeId}_${metadata?.icon?.value}`} icon={metadata?.icon} onChange={onChangeIcon} />
       <NodeRenameOnlyTitle />
       {fetchingContent && <Loading transparent dots={3} />}
     </NodeInfo>

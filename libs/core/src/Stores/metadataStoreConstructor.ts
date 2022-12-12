@@ -8,6 +8,7 @@ const getInitialMetadata = () => ({
 
 export const metadataStoreConstructor = (set, get): MetaDataStoreType => ({
   metadata: getInitialMetadata(),
+  initMetadata: (metadata) => set({ metadata }),
   addMetadata: (field, record) => {
     const existingMetadata = get().metadata
     set({ metadata: { ...existingMetadata, [field]: { ...existingMetadata[field], ...record } } })

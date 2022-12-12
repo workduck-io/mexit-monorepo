@@ -217,7 +217,7 @@ const Search = () => {
       return (
         <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
           <Title onMouseUp={(e) => onDoubleClick(e, item)}>
-            <IconDisplay icon={icon} />
+            <IconDisplay icon={icon} size={24} />
             <TitleText>{node.path}</TitleText>
             <Metadata namespaceId={node.namespace} fadeOnHover={false} nodeId={edNode.nodeid} />
           </Title>

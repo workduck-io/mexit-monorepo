@@ -5,7 +5,7 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
 import { defaultContent, generateSnippetId } from '@mexit/core'
-import { InteractiveToast } from '@mexit/shared'
+import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -13,7 +13,7 @@ import { useSnippetStore } from '../Stores/useSnippetStore'
 
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
-import { NavigationType,ROUTE_PATHS, useRouting } from './useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 import { useUpdater } from './useUpdater'
 
@@ -72,7 +72,7 @@ export const useCreateNewMenu = () => {
     addSnippet({
       id: snippetId,
       title: snippetName,
-      icon: 'ri:quill-pen-line',
+      icon: DefaultMIcons.SNIPPET,
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
 

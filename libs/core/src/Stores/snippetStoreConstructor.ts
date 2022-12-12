@@ -1,9 +1,10 @@
 import { NodeEditorContent } from '../Types/Editor'
+import { MIcon } from '../Types/Store'
 
 export interface Snippet {
   id: string
   title: string
-  icon?: string
+  icon?: MIcon
   content?: NodeEditorContent
   template?: boolean
 }

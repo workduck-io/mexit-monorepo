@@ -14,5 +14,6 @@ export interface MetaDataStoreType {
   metadata: MetaDataMapType
   addMetadata: <T extends SupportedFields>(field: T, record: MetaDataMapType[T]) => void
   deleteMetadata: <T extends SupportedFields>(field: T, key: string) => void
+  initMetadata: (metadata: MetaDataMapType) => void
   reset: () => void
 }

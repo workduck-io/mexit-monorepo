@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent } from '@mexit/core'
 import {
   ActionTitle,
   ComboboxItem,
@@ -213,8 +213,10 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                     const Item = onRenderItem ? onRenderItem({ item }) : item.text
                     const lastItem = index > 0 ? items[index - 1] : undefined
                     const namespace = getNamespace(item.namespace)?.name
-                    const metadata =
-                      allMetadata[item.type === QuickLinkType.snippet ? 'snipppets' : 'notes']?.[item.key]
+                    const isSnippet = item.type === QuickLinkType.snippet
+                    const metadata = allMetadata[isSnippet ? 'snippets' : 'notes']?.[item.key]
+                    const icon = metadata?.icon ?? item?.icon
+                    mog('COMBOBOX', { item, metadata, icon })
 
                     return (
                       <span key={`${item.key}-${String(index)}`}>
@@ -235,7 +237,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                             editor && onSelectItem(editor, item)
                           }}
                         >
-                          {metadata?.icon && <IconDisplay icon={metadata.icon} size={namespace ? 16 : 18} />}
+                          {icon && <IconDisplay icon={icon} size={namespace ? 16 : 18} />}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
                               <ComboboxItemTitle>{Item}</ComboboxItemTitle>

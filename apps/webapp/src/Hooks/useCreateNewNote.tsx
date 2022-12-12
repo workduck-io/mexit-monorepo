@@ -1,6 +1,14 @@
 import toast from 'react-hot-toast'
 
-import { defaultContent, DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
+import {
+  defaultContent,
+  DefaultMIcons,
+  DRAFT_NODE,
+  getUntitledDraftKey,
+  getUntitledKey,
+  mog,
+  NodeEditorContent
+} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
@@ -64,7 +72,7 @@ export const useCreateNewNote = () => {
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent =
       options?.noteContent ?? (nodeMetadata?.templateID && parentNote?.path !== 'Drafts')
-        ? getSnippet(nodeMetadata.templateID).content
+        ? getSnippet(nodeMetadata.templateID)?.content
         : defaultContent.content
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
@@ -82,6 +90,7 @@ export const useCreateNewNote = () => {
     }
 
     mog('AddInHierarchy', { namespace, parentNoteId, parentNote, uniquePath, newNotePath, node })
+    useMetadataStore.getState().addMetadata('notes', { [node.nodeid]: { icon: DefaultMIcons.NOTE } })
 
     addInHierarchy({
       noteId: node.nodeid,

@@ -3,7 +3,6 @@ import {
   batchArray,
   DEFAULT_NAMESPACE,
   defaultContent,
-  DefaultMIcons,
   extractMetadata,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
   getTagsFromContent,
@@ -12,6 +11,7 @@ import {
   NodeEditorContent,
   removeNulls
 } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
@@ -322,7 +322,7 @@ export const useApi = () => {
         initSnippets([
           ...snippets,
           ...newSnippets.map((item) => ({
-            icon: { type: 'ICON', value: 'ri:quill-pen-line' },
+            icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
             id: item.snippetID,
             template: item.template,
             title: item.title,

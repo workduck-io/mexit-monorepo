@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useMatch } from 'react-router-dom'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { useTheme } from 'styled-components'
@@ -17,6 +16,7 @@ import {
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
   EditorPreviewWrapper,
+  IconDisplay,
   NestedFloating,
   PreviewActionHeader,
   Tooltip
@@ -34,6 +34,7 @@ import { useTags } from '../../../Hooks/useTags'
 import { useContentStore } from '../../../Stores/useContentStore'
 import { useDataStore } from '../../../Stores/useDataStore'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
+import { useMetadataStore } from '../../../Stores/useMetadataStore'
 import useRouteStore, { BannerType } from '../../../Stores/useRouteStore'
 import { SocketActionType } from '../../../Types/Socket'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
@@ -79,6 +80,7 @@ const EditorPreview = ({
   const { goTo } = useRouting()
   const { accessWhenShared } = usePermissions()
   const _hasHydrated = useDataStore((state) => state._hasHydrated)
+  const noteMetadata = useMetadataStore((s) => s.metadata.notes[nodeid])
 
   const cc = useMemo(() => {
     const nodeContent = getNoteContent(nodeid)
@@ -130,7 +132,7 @@ const EditorPreview = ({
                   {ilink?.path && (
                     <PreviewActionHeader>
                       <EditorPreviewNoteName onClick={onClickNavigate}>
-                        <Icon icon={ilink?.icon ?? fileList2Line} />
+                        <IconDisplay icon={noteMetadata?.icon} />
                         {getNameFromPath(ilink.path)}
                       </EditorPreviewNoteName>
                       {icon && iconTooltip && (

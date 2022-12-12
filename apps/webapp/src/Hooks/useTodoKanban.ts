@@ -14,13 +14,14 @@ import {
   TodoRanks,
   TodoStatus,
   TodoStatusRanks,
-  TodoType} from '@mexit/core'
+  TodoType
+} from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
 import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../Stores/useDataStore'
 import { useTodoStore } from '../Stores/useTodoStore'
-import { KanbanBoard,KanbanCard, KanbanColumn } from '../Types/Kanban'
+import { KanbanBoard, KanbanCard, KanbanColumn } from '../Types/Kanban'
 
 import { useTaskFilterFunctions } from './useFilterFunctions'
 import { FilterStore } from './useFilters'
@@ -140,7 +141,7 @@ export const useTodoKanban = () => {
         // const [path, rank] = ilink
         if (rank >= 0) {
           acc.options.push({
-            id: `filter_node_${ilink.nodeid}`,
+            id: ilink.nodeid,
             label: path,
             value: path,
             count: rank

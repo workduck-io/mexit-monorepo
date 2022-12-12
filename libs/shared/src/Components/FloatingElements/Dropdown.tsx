@@ -30,15 +30,16 @@ import {
   useHover, // useTypeahead,
   useInteractions,
   useListNavigation,
-  useRole} from '@floating-ui/react-dom-interactions'
+  useRole
+} from '@floating-ui/react-dom-interactions'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import cx from 'classnames'
 import { debounce } from 'lodash'
 
-import { fuzzySearch,MIcon  } from '@mexit/core'
+import { fuzzySearch, MIcon } from '@mexit/core'
 
-import { GenericFlex } from '../../Style/Filter.style'
+import { FilterMenuDiv } from '../../Style/Filter'
 import { SidebarListFilter } from '../../Style/SidebarList.style'
 import { IconDisplay } from '../IconDisplay'
 
@@ -50,7 +51,8 @@ import {
   MenuItemWrapper,
   MenuWrapper,
   MultiSelectIcon,
-  RootMenuWrapper} from './Dropdown.style'
+  RootMenuWrapper
+} from './Dropdown.style'
 
 export const MenuItem = forwardRef<
   HTMLButtonElement,
@@ -67,7 +69,7 @@ export const MenuItem = forwardRef<
   // mog('MenuItem', { label, disabled, count, icon, multiSelect, selected, props })
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
-      <GenericFlex>
+      <FilterMenuDiv>
         {multiSelect && (
           <MultiSelectIcon selected={selected}>
             {selected ? <Icon icon="ri:checkbox-fill" /> : <Icon icon="ri:checkbox-blank-line" />}
@@ -75,7 +77,7 @@ export const MenuItem = forwardRef<
         )}
         <IconDisplay icon={icon} />
         <ItemLabel>{label}</ItemLabel>
-      </GenericFlex>
+      </FilterMenuDiv>
       {count && <MenuItemCount>{count}</MenuItemCount>}
     </MenuItemWrapper>
   )

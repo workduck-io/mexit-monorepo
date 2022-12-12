@@ -2,12 +2,12 @@ import React, { useMemo } from 'react'
 
 import styled from 'styled-components'
 
-import { convertContentToRawText, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
+import { convertContentToRawText, DefaultMIcons, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
   CopyButton,
   GenericFlex,
   IconButton,
-  MexIcon,
+  IconDisplay,
   SnippetCardFooter,
   SnippetCardWrapper,
   SnippetContentPreview
@@ -18,6 +18,7 @@ import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNodes } from '../../Hooks/useNodes'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 
 export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
@@ -30,11 +31,16 @@ export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`
   user-select: none;
 `
 
+export const HeadingFlex = styled(GenericFlex)`
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
 export const NodeCard = ({ nodeId }: { nodeId: string }) => {
   const { publicNodes, setNodePrivate, setNodePublic, checkNodePublic } = useDataStore()
   const { getNode } = useNodes()
   const getContent = useContentStore((store) => store.getContent)
   const addInRecents = useRecentsStore((s) => s.addRecent)
+  const notesMetadata = useMetadataStore((s) => s.metadata.notes[nodeId])
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
   const isNodePublic = useMemo(() => {
@@ -96,13 +102,15 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     flipPublicAccess()
   }
 
+  mog('NODES META', { notesMetadata })
+
   return (
     <SnippetCardWrapper>
       <NodeCardHeader $noHover>
-        <GenericFlex>
-          <MexIcon $noHover icon="gg:file-document" />
-          {getTitleFromPath(node?.path)}
-        </GenericFlex>
+        <HeadingFlex>
+          <IconDisplay icon={notesMetadata?.icon ?? DefaultMIcons.NOTE} />
+          <span>{getTitleFromPath(node?.path)}</span>
+        </HeadingFlex>
         <GenericFlex>
           {isNodePublic ? (
             <IconButton title="Make Note Public" size="16px" icon="material-symbols:public" onClick={onNotePublic} />

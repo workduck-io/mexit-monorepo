@@ -1,6 +1,8 @@
 import { uniq } from 'lodash'
 
-import { defaultCommands, getSnippetCommand, MIcon, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
+import { defaultCommands, getSnippetCommand, MIcon, mog, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
+
+import { DefaultMIcons } from '../Components/Icons'
 
 export const addIconToSlashCommand = (items: SlashCommand[], icon: MIcon) =>
   items.map((i: SlashCommand): SlashCommand => ({ ...i, icon }))
@@ -25,19 +27,19 @@ export const extractSnippetCommands = (snippets: Snippet[]): string[] => {
 
 export const useSlashCommands = () => {
   const generateInternalSlashCommands = (snippets: Snippet[]) => {
-    const snippetCommands = extractSnippetCommands(snippets)
-
     const commands: SlashCommand[] = generatorCombo(
-      uniq([
-        ...addIconToSlashCommand(
-          snippetCommands.map((command) => ({
+      uniq(
+        snippets.map((s) => {
+          const command = getSnippetCommand(s.title)
+          mog('SNIPPET COMMAND', { s })
+          return {
             command,
+            icon: s.icon ?? DefaultMIcons.SNIPPET,
             text: command.replace('snip.', ''),
             type: QuickLinkType.snippet
-          })),
-          { type: 'ICON', value: 'ri:quill-pen-line' }
-        )
-      ])
+          }
+        })
+      )
     )
 
     return Array.from(commands)

@@ -24,6 +24,7 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -48,6 +49,7 @@ export default function Chotu() {
     namespaces,
     _hasHydrated: _areIlinksHydrated
   } = useDataStore()
+  const allMetadata = useMetadataStore((s) => s.metadata)
   const { contents, setContent, _hasHydrated: _isContentHydrated } = useContentStore()
   const recents = useRecentsStore((s) => s.lastOpened)
   const addNodeInRecents = useRecentsStore((s) => s.addRecent)
@@ -151,6 +153,14 @@ export default function Chotu() {
 
     // stringifying reminders because useEffect runs twice even though no change
   }, [parent, JSON.stringify(reminders)])
+
+  useEffect(() => {
+    if (!parent) return
+
+    parent.bootMetadata(allMetadata)
+
+    // stringifying reminders because useEffect runs twice even though no change
+  }, [parent, JSON.stringify(allMetadata)])
 
   useEffect(() => {
     if (!parent) return
