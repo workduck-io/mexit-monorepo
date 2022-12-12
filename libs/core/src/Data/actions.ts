@@ -563,7 +563,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Get to know more about Workduck.io',
     type: ActionType.OPEN,
-    icon: getMIcon('URL', 'workduck.svg'),
+    icon: getMIcon('MEX'),
     extras: { base_url: 'https://workduck.io' },
     shortcut: {
       open: {

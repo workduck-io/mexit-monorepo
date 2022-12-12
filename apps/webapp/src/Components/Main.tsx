@@ -6,7 +6,7 @@ import { BrowserTracing } from '@sentry/tracing'
 import styled from 'styled-components'
 
 import { IS_DEV } from '@mexit/core'
-import { GridWrapper , linkTooltip , navTooltip } from '@mexit/shared'
+import { GridWrapper, linkTooltip, navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'
 import { useAuthStore } from '../Stores/useAuth'
@@ -77,6 +77,7 @@ const Main = ({ children }: MainProps) => {
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
+      {/* @ts-ignore */}
       <GridWrapper style={gridSpringProps}>
         {!isGettingIntialized && <Nav />}
         <Content id="wd-mex-content-view">{children}</Content>

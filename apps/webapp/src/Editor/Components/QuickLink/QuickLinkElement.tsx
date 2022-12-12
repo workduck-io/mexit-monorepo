@@ -10,7 +10,7 @@ import { useFocused, useSelected } from 'slate-react'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { ILink, NodeType, SharedNode } from '@mexit/core'
-import { ILinkElementProps, sharedAccessIcon,SILink, SILinkRoot, StyledIcon } from '@mexit/shared'
+import { ILinkElementProps, sharedAccessIcon, SILink, SILinkRoot, StyledIcon } from '@mexit/shared'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import useLoad from '../../../Hooks/useLoad'
@@ -202,6 +202,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       contentEditable={false}
     >
       {
+        // TODO: Don't use this conditional rendering method
         // The key to the temporary object defines what to render
         {
           [NodeType.SHARED]: (
