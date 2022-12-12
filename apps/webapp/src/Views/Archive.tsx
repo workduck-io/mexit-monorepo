@@ -77,25 +77,6 @@ const Archive = () => {
 
   const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
 
-  // const onDeleteClick = async () => {
-  //   const nodesToDelete = archive.filter((i) => {
-  //     const match = i.path.startsWith(delNode.title)
-  //     return match
-  //   })
-
-  //   console.log('Nodes to Delete: ', nodesToDelete)
-
-  //   await removeArchiveData(nodesToDelete)
-
-  //   nodesToDelete.forEach(async (node) => {
-  //     await removeDocument('archive', node.nodeid)
-  //   })
-
-  //   // onSave()
-
-  //   setShowModal(false)
-  // }
-
   useEffect(() => {
     const fetchArchiveContents = async () => {
       const unfetchedArchives = archive

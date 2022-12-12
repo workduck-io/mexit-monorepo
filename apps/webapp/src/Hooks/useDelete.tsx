@@ -1,7 +1,7 @@
 import { getAllParentIds, ILink, isMatch, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { getContent,useEditorStore } from '../Stores/useEditorStore'
+import { getContent, useEditorStore } from '../Stores/useEditorStore'
 import { useHistoryStore } from '../Stores/useHistoryStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { RefactorPath } from '../Stores/useRenameStore'
@@ -15,6 +15,7 @@ export const useDelete = () => {
 
   const setILinks = useDataStore((state) => state.setIlinks)
   const setBaseNodeId = useDataStore((state) => state.setBaseNodeId)
+  const addInArchive = useDataStore((store) => store.addInArchive)
 
   const historyStack = useHistoryStore((state) => state.stack)
   const currentIndex = useHistoryStore((state) => state.currentNodeIndex)
@@ -94,6 +95,7 @@ export const useDelete = () => {
 
       mog('Delete', { archivedNodes, newIlinks, newHistory, newRecents })
       setILinks(newIlinks)
+      addInArchive(archivedNodes)
 
       const allParents = getAllParentIds(currentNode.path)
       const isCurrent = newIlinks.map((i) => i.path).indexOf(currentNode.path) !== -1
