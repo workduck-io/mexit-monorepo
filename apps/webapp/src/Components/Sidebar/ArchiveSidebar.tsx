@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react'
 
 import archiveLine from '@iconify/icons-ri/archive-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useDataStore } from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
@@ -11,6 +13,7 @@ import SidebarList from './SidebarList'
 
 const ArchiveSidebar = () => {
   const archiveNotes = useDataStore((store) => store.archive)
+  const metadata = useMetadataStore((s) => s.metadata.notes)
 
   const sortedArchivedNotes = useMemo(() => {
     return archiveNotes
@@ -18,7 +21,7 @@ const ArchiveSidebar = () => {
       .map((note) => ({
         id: note.nodeid,
         label: note.path,
-        icon: note.icon ?? fileList2Line,
+        icon: metadata[note.nodeid]?.icon ?? DefaultMIcons.NOTE,
         data: note
       }))
   }, [archiveNotes])

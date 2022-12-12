@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
@@ -10,6 +9,8 @@ import { Infobox } from '@workduck-io/mex-components'
 import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog } from '@mexit/core'
 import {
   ArchiveHelp,
+  DefaultMIcons,
+  IconDisplay,
   MainHeader,
   Result,
   ResultDesc,
@@ -33,6 +34,7 @@ import { useSearch } from '../Hooks/useSearch'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { getContent } from '../Stores/useEditorStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { ModalHeader } from '../Style/Refactor'
 import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'
@@ -49,7 +51,7 @@ const Archive = () => {
   const archive = useDataStore((store) => store.archive)
   const contents = useContentStore((store) => store.contents)
   const setContent = useContentStore((store) => store.setContent)
-  const setMetadata = useContentStore((store) => store.setMetadata)
+  const addMetadata = useMetadataStore((s) => s.addMetadata)
 
   const { getNamespace } = useNamespaces()
   const [showModal, setShowModal] = useState(false)
@@ -99,7 +101,7 @@ const Archive = () => {
               const nodeID = nodeResponse.id
               setContent(nodeID, content)
 
-              if (metadata) setMetadata(nodeID, metadata)
+              if (metadata) addMetadata('notes', { [nodeID]: metadata })
               updateDocument('archive', nodeID, content)
             })
           }
@@ -118,7 +120,7 @@ const Archive = () => {
     const content = con ? con.content : defaultContent.content
     const node = archive.find((node) => node.nodeid === item.id)
     const id = `${item.id}_ResultFor_ArchiveSearch`
-    const icon = fileList2Line
+    const icon = useMetadataStore.getState().metadata.notes[node.nodeid]?.icon ?? DefaultMIcons.NOTE
     const namespace = getNamespace(node?.namespace)
     if (!item || !node) return null
 
@@ -140,7 +142,7 @@ const Archive = () => {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
-            <Icon icon={icon} />
+            <IconDisplay icon={icon} />
             <ResultMain>
               <ResultTitle>
                 {node.path}
