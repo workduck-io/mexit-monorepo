@@ -1,4 +1,4 @@
-import { ChangeEventHandler,useEffect, useRef, useState } from 'react'
+import { ChangeEventHandler, useEffect, useRef, useState } from 'react'
 
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon, IconifyIcon } from '@iconify/react'
@@ -12,6 +12,7 @@ import {
   DesignItem,
   EmptyMessage,
   FilteredItemsWrapper,
+  IconDisplay,
   Input,
   isOnEditableElement,
   ItemTitle,
@@ -179,7 +180,7 @@ const SidebarList = ({
           <StyledTreeItem noSwitcher selected={selectedItemId === defaultItem.id}>
             <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
               <ItemTitle>
-                <Icon icon={defaultItem.icon} />
+                <IconDisplay icon={defaultItem.icon} />
                 <span>{defaultItem.label}</span>
               </ItemTitle>
             </ItemContent>

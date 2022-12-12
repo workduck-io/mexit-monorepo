@@ -21,8 +21,9 @@ import {
   getSlug,
   NODE_PATH_SPACER,
   NodeEditorContent,
-  SEPARATOR} from '@mexit/core'
-import { ILinkNode } from '@mexit/shared'
+  SEPARATOR
+} from '@mexit/core'
+import { DefaultMIcons, ILinkNode } from '@mexit/shared'
 
 import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
 import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
@@ -295,7 +296,7 @@ export const useTransform = () => {
         id: snippetId,
         title: snippetTitle,
         content: value,
-        icon: 'ri:quill-pen-line'
+        icon: DefaultMIcons.SNIPPET
       }
       updateSnippet(newSnippet)
       updater()

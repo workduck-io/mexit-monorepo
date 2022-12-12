@@ -1,6 +1,7 @@
 import { getTodosFromContent, mog } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 
 import { useApi } from './API/useNodeAPI'
@@ -21,6 +22,7 @@ export const useDataSaverFromContent = () => {
   const getContent = useContentStore((state) => state.getContent)
 
   const { updateLinksFromContent } = useLinks()
+  const updateIcon = useMetadataStore((s) => s.addMetadata)
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
 
   const { updateTagsFromContent } = useTags()

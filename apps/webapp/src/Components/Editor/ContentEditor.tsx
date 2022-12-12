@@ -202,7 +202,7 @@ const ContentEditor = () => {
             />
           )}
           <NavBreadCrumbs nodeId={nodeid} />
-          <Toolbar />
+          <Toolbar nodeId={nodeid} />
           {isBlockMode ? (
             <BlockInfoBar />
           ) : (

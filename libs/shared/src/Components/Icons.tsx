@@ -17,6 +17,8 @@ import taskFill from '@iconify-icons/ri/task-fill'
 import taskLine from '@iconify-icons/ri/task-line'
 import { useTheme } from 'styled-components'
 
+import { MIcon } from '@mexit/core'
+
 // `any` is used in type signature as `IconifyIcon` type doesn't work
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -88,6 +90,21 @@ export const BacklinkIcon = {
   body: `
     <path fill-rule="evenodd" clip-rule="evenodd" d="M4 20.86a2 2 0 0 1-1.388-.56 1 1 0 0 1 1.128-.474c.082.022.169.034.26.034h1a1 1 0 0 1 1 1H4zm8 0a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1h4zm5.388-.56a1 1 0 0 0-1.128-.474 1.005 1.005 0 0 1-.26.034h-1a1 1 0 0 0-1 1h2a2 2 0 0 0 1.388-.56zM18 16.86a1 1 0 0 0-1 1v1a1 1 0 0 1-.034.26 1 1 0 0 0 .474 1.129A2.005 2.005 0 0 0 18 18.86v-2zm0-6a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v-4zm-.56-5.388a1 1 0 0 0-.474 1.129 1 1 0 0 1 .034.26v1a1 1 0 0 0 1 1v-2a2 2 0 0 0-.56-1.39zM14 4.86a1 1 0 0 0 1 1h1c.091 0 .178.012.26.034a1 1 0 0 0 1.128-.473A2.004 2.004 0 0 0 16 4.86h-2zm-6 0a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1H8zm-2 0a1 1 0 0 1-1 1H4c-.091 0-.178.012-.26.034a1 1 0 0 1-1.128-.473A2.007 2.007 0 0 1 4 4.86h2zm-4 4a1 1 0 0 0 1-1v-1c0-.09.012-.178.034-.26a1 1 0 0 0-.474-1.128A2.007 2.007 0 0 0 2 6.86v2zm0 6a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1v4zm.56 5.389a1 1 0 0 0 .474-1.13A1.003 1.003 0 0 1 3 18.86v-1a1 1 0 0 0-1-1v2a2.003 2.003 0 0 0 .56 1.389z" fill="currentColor"/>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M22.675 1.754a1 1 0 0 1 1 1c0 2.574-.38 4.594-1.58 6.168-1.194 1.568-3.07 2.52-5.632 3.29l-.013.004-5.8 1.57 3.368 2.081a1 1 0 0 1-1.052 1.701l-6.12-3.782 3.224-6.18a1 1 0 1 1 1.773.924l-1.738 3.332 5.796-1.57c2.43-.73 3.8-1.527 4.604-2.582.8-1.05 1.17-2.53 1.17-4.956a1 1 0 0 1 1-1z" fill="currentColor"/>`
+}
+
+export const getMIcon = (type: MIcon['type'], value: MIcon['value']) => {
+  return {
+    type,
+    value
+  }
+}
+
+export const DefaultMIcons = {
+  NOTE: getMIcon('ICON', 'gg:file-document'),
+  SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
+  SHARED_NOTE: getMIcon('ICON', 'mex:shared-note'),
+  VIEW: getMIcon('ICON', 'ri:stack-line'),
+  TEMPLATE: getMIcon('ICON', 'ri:magic-line')
 }
 
 export const ForwardlinkIcon = {

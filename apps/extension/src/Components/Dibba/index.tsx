@@ -15,6 +15,7 @@ import {
   defaultCopyConverter,
   defaultCopyFilter,
   ELEMENT_TAG,
+  getMIcon,
   NodeEditorContent,
   parseBlock,
   parseSnippet,
@@ -28,6 +29,8 @@ import {
   ComboboxItemTitle,
   ComboboxShortcuts,
   ComboSeperator,
+  DefaultMIcons,
+  IconDisplay,
   ItemCenterWrapper,
   ItemDesc,
   ItemRightIcons,
@@ -44,6 +47,7 @@ import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
@@ -73,6 +77,7 @@ export default function Dibba() {
   const [offsetTop, setOffsetTop] = useState(window.innerHeight < top + dibbaRef.current?.clientHeight)
 
   const ilinks = useDataStore((state) => state.ilinks)
+  const metadata = useMetadataStore((s) => s.metadata)
   const linkCaptures = []
   const theme = useTheme()
   const publicNodes: PublicNode[] = []
@@ -90,7 +95,7 @@ export default function Dibba() {
     const publicNode: PublicNode = {
       type: 'Public Nodes',
       id: nodeID,
-      icon: 'ri:external-link-line',
+      icon: metadata.notes[nodeID]?.icon,
       url: apiURLs.frontend.getPublicNodePath(nodeID),
       title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop(),
       content: _content?.content || defaultContent.content
@@ -104,7 +109,7 @@ export default function Dibba() {
     linkCaptures.push({
       id: item.nodeid,
       title: item.path.split(SEPARATOR).slice(-1)[0],
-      icon: 'ri:link',
+      icon: getMIcon('ICON', 'ri:link'),
       content: _content?.content || defaultContent.content,
       type: 'Links'
     })
@@ -118,7 +123,7 @@ export default function Dibba() {
     ...publicNodes,
     ...snippets.map((item) => ({
       type: QuickLinkType.snippet,
-      icon: item?.icon || 'ri:quill-pen-line',
+      icon: metadata.snippets[item.id]?.icon || DefaultMIcons.SNIPPET,
       ...item
     }))
   ]
@@ -229,7 +234,7 @@ export default function Dibba() {
       res.push({
         id: 'no-results',
         title: 'No Results Found',
-        icon: 'ri:alert-line'
+        icon: getMIcon('ICON', 'ri:alert-line')
       })
     }
 
@@ -309,7 +314,7 @@ export default function Dibba() {
       offsetRight={window.innerWidth < left + 550}
       isOpen={dibbaState.visualState === VisualState.showing}
     >
-      <div style={{ flex: 1 }}>
+      <div id="List" style={{ flex: 1 }}>
         <ItemsContainer id="items-container">
           {results.map((item, index) => {
             const lastItem = index > 0 ? results[index - 1] : undefined
@@ -325,7 +330,11 @@ export default function Dibba() {
                   onPointerMove={() => pointerMoved && setActiveIndex(index)}
                 >
                   <CenteredIcon center padding>
-                    <Icon height={18} key={item.id} icon={item.icon} color={theme.colors.text.default} />
+                    <IconDisplay
+                      key={item.id}
+                      icon={item.icon}
+                      size={item.type !== QuickLinkType.snippet ? 14 : undefined}
+                    />
                   </CenteredIcon>
                   <ItemCenterWrapper>
                     <ComboboxItemTitle>{item.title}</ComboboxItemTitle>
@@ -357,7 +366,7 @@ export default function Dibba() {
       </div>
 
       {listItem?.content && (
-        <ComboSeperator>
+        <ComboSeperator fixedWidth>
           <section>
             <EditorPreviewRenderer noMouseEvents content={listItem.content} editorId={listItem.id} readOnly={true} />
           </section>

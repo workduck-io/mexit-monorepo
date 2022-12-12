@@ -2,7 +2,7 @@ import { useMatch } from 'react-router-dom'
 
 import hashtag from '@iconify/icons-ri/hashtag'
 
-import { mog } from '@mexit/core'
+import { DefaultMIcons, mog } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
@@ -19,7 +19,7 @@ const TagList = () => {
   const tags = getAllTags().map((t) => ({
     id: t,
     label: t,
-    icon: hashtag,
+    icon: DefaultMIcons.TAG,
     data: t
   }))
 

@@ -36,7 +36,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
   return (
     <StyledAction $active={active}>
       <Container>
-        <ActionIcon color={theme.colors.primary} height={20} width={20} icon={action?.icon} />
+        <ActionIcon size={20} icon={action?.icon} />
         <ActionContent>
           <Title>
             {action?.extras?.new ? (

@@ -13,14 +13,14 @@ import volumeMuteLine from '@iconify/icons-ri/volume-mute-line'
 import { Icon } from '@iconify/react'
 import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 
-import { LastOpenedState } from '@mexit/shared'
+import { getMIcon, LastOpenedState } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
@@ -183,7 +183,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           item={{
             id: 'menu_for_namespace',
             label: 'Move to Space',
-            icon: { type: 'ICON', value: 'ri:file-transfer-line' }
+            icon: getMIcon('ICON', 'ri:file-transfer-line')
           }}
           items={namespaces
             // Don't move in same namespace

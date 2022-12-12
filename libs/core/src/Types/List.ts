@@ -1,10 +1,11 @@
 import { ActionType } from './Actions'
 import { QuickLinkType } from './Editor'
 import { Shortcut } from './Help'
+import { MIcon } from './Store'
 
 export interface ListItemType {
   id: string
-  icon: string
+  icon: MIcon
   title: string
   description?: string
   type?: ActionType

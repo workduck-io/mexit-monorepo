@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import { PathMatch } from 'react-router-dom'
 
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 // import { complexTree } from '../mockdata/complexTree'
 import { Icon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
@@ -10,6 +9,7 @@ import Tippy from '@tippyjs/react'
 
 import { IS_DEV } from '@mexit/core'
 import {
+  IconDisplay,
   ItemContent,
   ItemCount,
   ItemTitle,
@@ -22,6 +22,7 @@ import {
 } from '@mexit/shared'
 
 import { useAnalysisStore } from '../../Stores/useAnalysis'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 import { TreeContextMenu } from './TreeWithContextMenu'
 
@@ -59,6 +60,7 @@ export const TooltipContent = ({ item }: { item: TreeItem }) => {
 
 const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
   const anal = useAnalysisStore((state) => state.analysis)
+  const icon = useMetadataStore((s) => s.metadata.notes[item.data.nodeid]?.icon)
   const title =
     anal?.nodeid && anal?.nodeid === item.data.nodeid && anal?.title !== undefined && anal?.title !== ''
       ? anal?.title
@@ -68,7 +70,8 @@ const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
 
   return (
     <ItemTitle>
-      <Icon icon={item.data.mex_icon ?? fileList2Line} />
+      <IconDisplay icon={icon} />
+      {/* <Icon icon={item.data.mex_icon ?? fileList2Line} /> */}
       <ItemTitleText>{title}</ItemTitleText>
     </ItemTitle>
   )

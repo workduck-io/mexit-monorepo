@@ -1,4 +1,5 @@
 import { NodeProperties } from '../Types/Editor'
+import { getMIcon } from '../Types/Store'
 
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
 import { SEPARATOR } from './idGenerator'
@@ -29,10 +30,10 @@ export const getInitialNode = (): NodeProperties => InitialNode
 
 export const getNodeIcon = (path: string) => {
   if (isElder(path, BASE_DRAFT_PATH)) {
-    return 'ri:draft-line'
+    return getMIcon('ICON', 'ri:draft-line')
   }
   if (isElder(path, BASE_TASKS_PATH)) {
-    return 'ri:task-line'
+    return getMIcon('ICON', 'ri:task-line')
   }
 }
 

@@ -11,10 +11,12 @@ import {
   NodeEditorContent,
   removeNulls
 } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
@@ -28,8 +30,7 @@ import { useSnippets } from '../useSnippets'
 import { useUpdater } from '../useUpdater'
 
 export const useApi = () => {
-  const getMetadata = useContentStore((store) => store.getMetadata)
-  const setMetadata = useContentStore((store) => store.setMetadata)
+  const addMetadata = useMetadataStore((store) => store.addMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
@@ -118,7 +119,7 @@ export const useApi = () => {
       })
 
       updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-      setMetadata(noteID, extractMetadata(node))
+      addMetadata('notes', { [noteID]: extractMetadata(node) })
       addLastOpened(noteID)
     })
 
@@ -157,11 +158,7 @@ export const useApi = () => {
       title: title || getTitleFromNoteId(noteID),
       namespaceID: namespaceID,
       tags: getTagsFromContent(content),
-      data: serializeContent(content ?? defaultContent.content, noteID),
-      // Because we have to send templateID with every node save call so that it doesn't get unset
-      // We are checking if the id is __null__ for the case when the user wants to remove the template
-      // If not, we send what was passed as prop, if nothing then from metadata
-      metadata: { templateID: templateID === '__null__' ? null : templateID ?? getMetadata(noteID)?.templateID }
+      data: serializeContent(content ?? defaultContent.content, noteID)
     }
 
     if (isShared) {
@@ -202,9 +199,10 @@ export const useApi = () => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
           // mog('[API]: Get Note data', { content })
-          if (isUpdate) updateFromContent(nodeid, content)
+          const metadata = extractMetadata(d, { icon: isShared ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE })
+          if (isUpdate) updateFromContent(nodeid, content, metadata)
 
-          return { data: content, metadata: extractMetadata(d), version: d.version ?? undefined }
+          return { data: content, metadata, version: d.version ?? undefined }
         }
       })
       .catch((e) => {
@@ -301,7 +299,7 @@ export const useApi = () => {
       .create(reqData)
       .then((d) => {
         mog('savedData', { d })
-        setMetadata(snippetId, extractMetadata(d))
+        addMetadata('snippets', { [snippetId]: extractMetadata(d, { icon: DefaultMIcons.SNIPPET }) })
         return d
       })
       .catch((e) => {
@@ -324,7 +322,7 @@ export const useApi = () => {
         initSnippets([
           ...snippets,
           ...newSnippets.map((item) => ({
-            icon: 'ri:quill-pen-line',
+            icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
             id: item.snippetID,
             template: item.template,
             title: item.title,

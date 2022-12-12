@@ -16,9 +16,10 @@ import {
   IconDisplay,
   ItemLabel,
   Menu,
-  MenuItem} from '@mexit/shared'
+  MenuItem
+} from '@mexit/shared'
 
-import { getFilterJoinIcon,useFilterIcons } from '../../Hooks/useFilterValueIcons'
+import { getFilterJoinIcon, useFilterIcons } from '../../Hooks/useFilterValueIcons'
 
 interface FilterProps {
   filter: Filter
@@ -115,7 +116,6 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
           />
         ))}
       </Menu>
-
       <Menu
         allowSearch
         searchPlaceholder="Search Notes"
@@ -148,17 +148,19 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
           .sort((a, b) => (a.count && b.count ? b.count - a.count : 0))
           // Sort whether the value is selected
           .sort((a, b) => (isValueSelected(a) ? -1 : 1))
-          .map((option) => (
-            <MenuItem
-              key={option.id}
-              icon={getFilterValueIcon(filter.type, option.value)}
-              onClick={() => onChangeValues(option)}
-              label={option.label}
-              selected={isValueSelected(option)}
-              count={option.count}
-              multiSelect
-            />
-          ))}
+          .map((option) => {
+            return (
+              <MenuItem
+                key={option.id}
+                icon={getFilterValueIcon(filter.type, option.value)}
+                onClick={() => onChangeValues(option)}
+                label={option.label}
+                selected={isValueSelected(option)}
+                count={option.count}
+                multiSelect
+              />
+            )
+          })}
       </Menu>
 
       <FilterRemoveButton onClick={() => onRemoveFilter(filter)}>

@@ -2,6 +2,7 @@ import HighlightSource from 'web-highlighter/dist/model/source'
 
 import { ElementHighlightMetadata } from './Highlight'
 import { AccessLevel } from './Mentions'
+import { MIcon } from './Store'
 
 export interface Content {
   id: string
@@ -31,6 +32,7 @@ export interface NodeMetadata {
   createdAt: number
   lastEditedBy: string
   updatedAt: number
+  icon: MIcon | undefined
 
   elementMetadata: ElementHighlightMetadata
   publicAccess?: boolean
@@ -98,7 +100,7 @@ export interface ILink {
   namespace: string
 
   /** Iconify Icon string */
-  icon?: string
+  icon?: MIcon
 
   createdAt?: number
   updatedAt?: number
@@ -221,7 +223,7 @@ export enum CategoryType {
 export interface SlashCommand {
   command: string
   text?: string
-  icon?: string
+  icon?: MIcon
   type?: QuickLinkType | CategoryType
   /** Extended command -> Text after the command is part of it and used as arguments */
   extended?: boolean

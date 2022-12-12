@@ -8,7 +8,8 @@ import {
   SharedNode,
   SlashCommands,
   Tag,
-  TagsCache} from './Editor'
+  TagsCache
+} from './Editor'
 import { AccessLevel } from './Mentions'
 
 export const iconTypes = ['URL', 'ICON', 'EMOJI'] as const
@@ -16,6 +17,21 @@ export const iconTypes = ['URL', 'ICON', 'EMOJI'] as const
 export interface MIcon {
   type: typeof iconTypes[number]
   value: string
+}
+
+export const getMIcon = (type: MIcon['type'], value: MIcon['value']) => {
+  return {
+    type,
+    value
+  }
+}
+
+export const DefaultMIcons = {
+  NOTE: getMIcon('ICON', 'gg:file-document'),
+  SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
+  SHARED_NOTE: getMIcon('ICON', 'ri:share-line'),
+  VIEW: getMIcon('ICON', 'ri:stack-line'),
+  TAG: getMIcon('ICON', 'ri:hashtag')
 }
 
 export interface SingleNamespace {
@@ -63,6 +79,7 @@ export interface DataStoreState {
   setTags: (tags: Tag[]) => void
 
   setIlinks: (ilinks: ILink[]) => void
+  updateILinkIcon: (nodeId: string, icon: MIcon) => void
   setBaseNodeId: (baseNodeId: string) => void
 
   setSlashCommands: (slashCommands: SlashCommands) => void

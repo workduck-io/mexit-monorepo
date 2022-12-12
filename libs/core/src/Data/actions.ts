@@ -1,12 +1,13 @@
 import { ActionType, MexitAction } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
+import { getMIcon } from '../Types/Store'
 import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 
 export const CREATE_NEW_ITEM = {
   title: 'Create new ',
   id: 'create-new-node',
-  icon: 'bi:plus-circle',
+  icon: getMIcon('ICON', 'bi:plus-circle'),
   category: QuickLinkType.backlink,
   description: 'Quick note',
   shortcut: {
@@ -28,7 +29,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Share this URL as an alias',
     type: ActionType.RENDER,
-    icon: 'ri:link',
+    icon: getMIcon('ICON', 'ri:link'),
     shortcut: {
       shorten: {
         title: 'to shorten',
@@ -43,7 +44,7 @@ export const initActions: Array<ListItemType> = [
     id: 'ACTION_9x34kgj23j4234ojin',
     title: 'Smart Capture',
     category: QuickLinkType.action,
-    icon: 'fluent:screen-search-24-filled',
+    icon: getMIcon('ICON', 'fluent:screen-search-24-filled'),
     description: 'Smartly captures any useful data from the current page',
     type: ActionType.MAGICAL,
     shortcut: {
@@ -60,7 +61,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Takes screenshot of current tab',
     type: ActionType.SCREENSHOT,
-    icon: 'bx:screenshot',
+    icon: getMIcon('ICON', 'bx:screenshot'),
     shortcut: {
       capture: {
         category: 'action',
@@ -73,7 +74,7 @@ export const initActions: Array<ListItemType> = [
     id: 'ACTION_9aoweruw2321bub',
     title: 'Lorem Ipsum',
     category: QuickLinkType.action,
-    icon: 'bi:text-paragraph',
+    icon: getMIcon('ICON', 'bi:text-paragraph'),
     description: 'Generate placeholder content',
     type: ActionType.LOREM_IPSUM,
     shortcut: {
@@ -90,7 +91,7 @@ export const initActions: Array<ListItemType> = [
     title: 'Open Gmail',
     category: QuickLinkType.action,
     description: 'Open your Gmail account',
-    icon: 'simple-icons:gmail',
+    icon: getMIcon('ICON', 'simple-icons:gmail'),
     shortcut: {
       open: {
         title: 'to open',
@@ -106,7 +107,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new empty Figma File',
     type: ActionType.OPEN,
-    icon: 'ph:figma-logo-fill',
+    icon: getMIcon('ICON', 'ph:figma-logo-fill'),
     shortcut: {
       open: {
         title: 'to open',
@@ -123,7 +124,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create a new Linear issue',
     type: ActionType.OPEN,
-    icon: 'gg:linear',
+    icon: getMIcon('ICON', 'gg:linear'),
     shortcut: {
       open: {
         title: 'to open',
@@ -136,7 +137,7 @@ export const initActions: Array<ListItemType> = [
   {
     title: 'Search in Mex',
     id: 'ACTION_A6VLKiPZeHGw0EFq_1mex',
-    icon: 'ph:magnifying-glass',
+    icon: getMIcon('ICON', 'ph:magnifying-glass'),
     category: QuickLinkType.action,
     type: ActionType.SEARCH,
     description: 'Searchs query in Mex',
@@ -157,7 +158,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     title: 'Search Twitter',
     description: 'Search on Twitter',
-    icon: 'bi:twitter',
+    icon: getMIcon('ICON', 'bi:twitter'),
     shortcut: {
       search: {
         category: 'action',
@@ -173,7 +174,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Open sidebar',
     type: ActionType.RIGHT_SIDEBAR,
-    icon: 'codicon:layout-sidebar-right',
+    icon: getMIcon('ICON', 'codicon:layout-sidebar-right'),
     shortcut: {
       toggle: {
         category: 'action',
@@ -186,7 +187,7 @@ export const initActions: Array<ListItemType> = [
     id: 'ACTION_9234nueb23uXoerIHF',
     title: 'Avatar Generator',
     category: QuickLinkType.action,
-    icon: 'material-symbols:account-box',
+    icon: getMIcon('ICON', 'material-symbols:account-box'),
     description: 'Generate random avatar image',
     type: ActionType.AVATAR_GENERATOR,
     shortcut: {
@@ -203,7 +204,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Reload current tab',
     type: ActionType.BROWSER_EVENT,
-    icon: 'eva:refresh-outline',
+    icon: getMIcon('ICON', 'eva:refresh-outline'),
     shortcut: {
       reload: {
         title: 'to reload',
@@ -219,7 +220,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new Google Doc',
     type: ActionType.OPEN,
-    icon: 'material-symbols:docs',
+    icon: getMIcon('ICON', 'material-symbols:docs'),
     shortcut: {
       open: {
         title: 'to open',
@@ -235,7 +236,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new Google Sheet',
     type: ActionType.OPEN,
-    icon: 'simple-icons:googlesheets',
+    icon: getMIcon('ICON', 'simple-icons:googlesheets'),
     shortcut: {
       open: {
         title: 'to open',
@@ -251,7 +252,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new Google Slides',
     type: ActionType.OPEN,
-    icon: 'material-symbols:slides',
+    icon: getMIcon('ICON', 'material-symbols:slides'),
     shortcut: {
       open: {
         title: 'to open',
@@ -267,7 +268,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new GitHub Gist',
     type: ActionType.OPEN,
-    icon: 'bi:github',
+    icon: getMIcon('ICON', 'bi:github'),
     shortcut: {
       open: {
         title: 'to open',
@@ -283,7 +284,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create new GitHub Repository',
     type: ActionType.OPEN,
-    icon: 'bi:github',
+    icon: getMIcon('ICON', 'bi:github'),
     shortcut: {
       open: {
         title: 'to open',
@@ -300,7 +301,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create a new Notion page',
     type: ActionType.OPEN,
-    icon: 'simple-icons:notion',
+    icon: getMIcon('ICON', 'simple-icons:notion'),
     shortcut: {
       open: {
         title: 'to open',
@@ -316,7 +317,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Create a new Google form',
     type: ActionType.OPEN,
-    icon: 'ri:drive-fill',
+    icon: getMIcon('ICON', 'ri:drive-fill'),
     shortcut: {
       open: {
         title: 'to open',
@@ -332,7 +333,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Make a new Tweet',
     type: ActionType.OPEN,
-    icon: 'bi:twitter',
+    icon: getMIcon('ICON', 'bi:twitter'),
     extras: {
       base_url: 'https://twitter.com/intent/tweet'
     },
@@ -350,7 +351,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Browse through your downloads',
     type: ActionType.BROWSER_EVENT,
-    icon: 'bx:download',
+    icon: getMIcon('ICON', 'bx:download'),
     extras: {
       event_name: 'chrome-url',
       base_url: 'chrome://downloads'
@@ -369,7 +370,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Manage your chrome extensions',
     type: ActionType.BROWSER_EVENT,
-    icon: 'bx:extension',
+    icon: getMIcon('ICON', 'bx:extension'),
     extras: {
       event_name: 'chrome-url',
       base_url: 'chrome://extensions'
@@ -388,7 +389,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Search on Gmail',
     type: ActionType.SEARCH,
-    icon: 'simple-icons:gmail',
+    icon: getMIcon('ICON', 'simple-icons:gmail'),
     shortcut: {
       search: {
         category: 'action',
@@ -406,7 +407,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Search on Wikipedia',
     type: ActionType.SEARCH,
-    icon: 'simple-icons:wikipedia',
+    icon: getMIcon('ICON', 'simple-icons:wikipedia'),
     shortcut: {
       search: {
         category: 'action',
@@ -424,7 +425,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Search on YouTube',
     type: ActionType.SEARCH,
-    icon: 'bi:youtube',
+    icon: getMIcon('ICON', 'bi:youtube'),
     shortcut: {
       search: {
         category: 'action',
@@ -443,7 +444,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Search on Google Drive',
     type: ActionType.SEARCH,
-    icon: 'ri:drive-fill',
+    icon: getMIcon('ICON', 'ri:drive-fill'),
     shortcut: {
       search: {
         category: 'action',
@@ -461,7 +462,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Search on GitHub',
     type: ActionType.SEARCH,
-    icon: 'bi:github',
+    icon: getMIcon('ICON', 'bi:github'),
     shortcut: {
       search: {
         category: 'action',
@@ -477,7 +478,7 @@ export const initActions: Array<ListItemType> = [
   // {
   //   id: 'ACTION_t4Gbp9x7f6jmkKBALbYQ4',
   //   title: 'Capture Multiple Tabs',
-  //   icon: 'bi:collection-fill',
+  //   icon: getMIcon('ICON', 'bi:collection-fill'),
   //   category: QuickLinkType.action,
   //   description: 'Save a group of tabs',
   //   type: ActionType.RENDER,
@@ -506,7 +507,7 @@ export const initActions: Array<ListItemType> = [
   //   id: 'ACTION_9x7f6jmkKB3LbYQ5t4Gbp',
   //   title: 'Colour Picker',
   //   category: QuickLinkType.action,
-  //   icon: 'eva:color-picker-fill',
+  //   icon: getMIcon('ICON', 'eva:color-picker-fill'),
   //   description: "Pretend you're a designer and steal some colours",
   //   type: ActionType.RENDER,
   //   extras: {
@@ -525,7 +526,7 @@ export const initActions: Array<ListItemType> = [
   //   title: 'Unix Epoch Converter',
   //   category: QuickLinkType.action,
   //   description: 'Convert Epoch Timestamp to Datetime and vice versa',
-  //   icon: 'material-symbols:date-range',
+  //   icon: getMIcon('ICON', 'material-symbols:date-range'),
   //   type: ActionType.RENDER,
   //   extras: {
   //     base_url: `${MEXIT_ACTIONS_URL_BASE}/epoch`
@@ -543,7 +544,7 @@ export const initActions: Array<ListItemType> = [
     title: 'Corporate Buzzwords',
     category: QuickLinkType.action,
     description: 'Gimme some Corporate BS Buzzwords',
-    icon: 'material-symbols:corporate-fare-rounded',
+    icon: getMIcon('ICON', 'material-symbols:corporate-fare-rounded'),
     type: ActionType.RENDER,
     extras: {
       base_url: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
@@ -562,7 +563,7 @@ export const initActions: Array<ListItemType> = [
     category: QuickLinkType.action,
     description: 'Get to know more about Workduck.io',
     type: ActionType.OPEN,
-    icon: 'workduck.svg',
+    icon: getMIcon('URL', 'workduck.svg'),
     extras: { base_url: 'https://workduck.io' },
     shortcut: {
       open: {
@@ -584,7 +585,7 @@ export const searchBrowserAction = (query: string, activeItem?: MexitAction) => 
     category: QuickLinkType.action,
     description: `Search for ${query}`,
     type: ActionType.SEARCH,
-    icon: activeItem?.icon || 'ph:magnifying-glass',
+    icon: activeItem?.icon || getMIcon('ICON', 'ph:magnifying-glass'),
     extras: {
       base_url: activeItem?.data?.base_url || 'https://google.com/search?q='
     },

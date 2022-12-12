@@ -1,8 +1,9 @@
 import { produce } from 'immer'
 
 import { defaultCommands } from '../Data/defaultCommands'
-import { CachedILink, ILink,Tag } from '../Types/Editor'
-import { Settify, typeInvert,withoutContinuousDelimiter } from '../Utils/helpers'
+import { CachedILink, ILink, Tag } from '../Types/Editor'
+import { MIcon } from '../Types/Store'
+import { Settify, typeInvert, withoutContinuousDelimiter } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
 import { mog } from '../Utils/mog'
@@ -119,6 +120,16 @@ export const dataStoreConstructor = (set, get) => ({
     if (newLink) return newLink
 
     return
+  },
+
+  updateILinkIcon: (nodeId, icon) => {
+    const ilinks = get().ilinks
+    set({
+      ilinks: ilinks.map((iLink) => {
+        if (iLink.nodeid === nodeId) return { ...iLink, icon }
+        return iLink
+      })
+    })
   },
 
   checkValidILink: ({ notePath, openedNotePath, showAlert, namespace }) => {
@@ -317,7 +328,7 @@ export const getLevel = (path: string) => path.split(SEPARATOR).length
  * Guarantees parent is before child -> Condition required for correct tree
  */
 
-type treeMap = { id: string; nodeid: string; icon?: string }[]
+type treeMap = { id: string; nodeid: string; icon?: MIcon }[]
 
 export interface FlatItem {
   id: string
@@ -326,7 +337,7 @@ export interface FlatItem {
   tasks?: number
   reminders?: number
   // lastOpenedState?: LastOpenedState
-  icon?: string
+  icon?: MIcon
   stub?: boolean
   namespace: string
 }

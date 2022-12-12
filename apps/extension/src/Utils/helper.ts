@@ -2,6 +2,8 @@ import {
   ActionType,
   convertContentToRawText,
   defaultContent,
+  DefaultMIcons,
+  getMIcon,
   ILink,
   ListItemType,
   MEXIT_FRONTEND_URL_BASE,
@@ -12,6 +14,7 @@ import {
 } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content
@@ -31,9 +34,10 @@ export function getContent(nodeid: string): NodeContent {
 
 export const getListItemFromNode = (node: ILink, description?: string, blockid?: string, actionType?: ActionType) => {
   const rawText = description ?? convertContentToRawText(getContent(node?.nodeid)?.content ?? [], ' ')
+  const icon = useMetadataStore.getState().metadata.notes[node.nodeid]?.icon
 
   const listItem: ListItemType = {
-    icon: node?.icon ?? 'gg:file-document',
+    icon: icon ?? DefaultMIcons.NOTE,
     title: node?.path,
     id: node?.nodeid,
     description: rawText,
@@ -60,7 +64,7 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
 
 export const getListItemFromAction = (action: MexitAction) => {
   const actionItem: ListItemType = {
-    icon: action?.icon ?? 'fluent:arrow-routing-24-filled',
+    icon: action?.icon ?? getMIcon('ICON', 'fluent:arrow-routing-24-filled'),
     category: QuickLinkType.action,
     id: action.id,
     type: action.type,
@@ -83,9 +87,10 @@ export const getListItemFromAction = (action: MexitAction) => {
 
 export const getListItemFromSnippet = (snippet: Snippet, actionType?: ActionType) => {
   const rawText = convertContentToRawText(snippet?.content ?? [], ' ') // Replace this with useDescriptionStore
+  const icon = useMetadataStore.getState().metadata.snippets[snippet.id]?.icon
 
   const listItem: ListItemType = {
-    icon: snippet.icon ?? 'ri:quill-pen-line',
+    icon: icon ?? DefaultMIcons.SNIPPET,
     title: snippet.title,
     id: snippet.id,
     description: rawText,

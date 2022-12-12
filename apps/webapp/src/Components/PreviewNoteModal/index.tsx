@@ -11,6 +11,7 @@ import { defaultContent, mog, NodeEditorContent, NodeType } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewNoteName,
+  IconDisplay,
   PreviewActionHeader,
   sharedAccessIcon,
   Tooltip
@@ -23,6 +24,7 @@ import { useNodes } from '../../Hooks/useNodes'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useTags } from '../../Hooks/useTags'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import Editor from '../Editor/Editor'
 import { TagsRelatedTiny } from '../Editor/TagsRelated'
@@ -36,6 +38,7 @@ const PreviewNoteModal = () => {
   const toggleModal = useModalStore((store) => store.toggleOpen)
   const addValueInBuffer = useBufferStore((store) => store.add)
   const getContent = useContentStore((store) => store.getContent)
+  const noteMetadata = useMetadataStore((s) => s.metadata.notes[modalData?.noteId])
 
   const theme = useTheme()
   const { getNodeType, getSharedNode } = useNodes()
@@ -95,7 +98,7 @@ const PreviewNoteModal = () => {
             {
               <PreviewActionHeader>
                 <EditorPreviewNoteName onClick={onClickNoteTitle}>
-                  <MexIcon height={20} width={20} noHover icon={noteLink?.icon || 'ri:file-list-2-line'} />
+                  <IconDisplay icon={noteMetadata?.icon} />
                   {noteTitle}
                   {namespace && <NamespaceTag namespace={namespace} />}
                 </EditorPreviewNoteName>

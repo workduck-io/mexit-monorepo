@@ -1,5 +1,6 @@
-import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
+
+import { IconDisplay } from '@mexit/shared'
 
 export const StyledAction = styled.div<{ $active?: boolean }>`
   display: flex;
@@ -25,7 +26,7 @@ export const Container = styled.div`
   flex-direction: row;
 `
 
-export const ActionIcon = styled(Icon)`
+export const ActionIcon = styled(IconDisplay)`
   margin-right: 0.75em;
   align-self: center;
 `

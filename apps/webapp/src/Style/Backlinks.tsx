@@ -18,7 +18,7 @@ export const NodeLinkWrapper = styled.div`
 export const NodeLinkTitleWrapper = styled.div<{ selected?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  gap: ${({ theme }) => theme.spacing.small};
 
   svg {
     flex-shrink: 0;

@@ -1,7 +1,4 @@
-import BackIcon from '@iconify/icons-ph/caret-circle-left-light'
-import LensIcon from '@iconify/icons-ph/magnifying-glass-bold'
-
-import { cleanString } from '@mexit/core'
+import { cleanString, getMIcon } from '@mexit/core'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'
 
@@ -12,7 +9,9 @@ export const useSearchProps = () => {
   const previewMode = useEditorStore((s) => s.previewMode)
   const node = useSputlitStore((s) => s.node)
 
-  const icon = !previewMode ? BackIcon : LensIcon
+  const icon = !previewMode
+    ? getMIcon('ICON', 'ph:caret-circle-left-light')
+    : getMIcon('ICON', 'ph:magnifying-glass-bold')
 
   const path = node.path
   const placeholder = !previewMode ? cleanString(path) : 'Type something...'

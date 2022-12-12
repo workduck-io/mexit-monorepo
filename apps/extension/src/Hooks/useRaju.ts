@@ -30,6 +30,7 @@ import useDataStore from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -87,6 +88,7 @@ export default function useRaju() {
   const initDescriptions = useDescriptionStore((state) => state.initDescriptions)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
   const setHighlights = useHighlightStore((store) => store.setHighlights)
+  const initMetadata = useMetadataStore((s) => s.initMetadata)
 
   useEffect(() => {
     const handleMessage = (message) => {
@@ -166,6 +168,9 @@ export default function useRaju() {
     },
     bootLinks(links: Link[]) {
       setLinks(links)
+    },
+    bootMetadata(metadata: any) {
+      initMetadata(metadata)
     },
     bootDescriptions(descriptions: Description) {
       initDescriptions(descriptions)

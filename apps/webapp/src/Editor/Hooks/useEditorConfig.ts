@@ -8,9 +8,11 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
+  getMIcon,
   mog,
   SEPARATOR
 } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -75,55 +77,54 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       ...l,
       value: l.nodeid,
       text: l.path,
-      icon: l.icon ?? 'ri:file-list-2-line',
+      icon: l.icon ?? DefaultMIcons,
       type: QuickLinkType.backlink
     })),
     ...sharedNodes.map((l) => ({
       ...l,
       value: l.nodeid,
       text: l.path,
-      icon: l.icon ?? 'ri:share-line',
+      icon: l.icon ?? DefaultMIcons.SHARED_NOTE,
       type: QuickLinkType.backlink
     })),
     ...views.map((l) => ({
       value: l.id,
       text: l.title,
-      icon: 'ri:stack-line',
+      icon: { type: 'ICON', value: 'ri:share-line' },
       type: QuickLinkType.taskView
     })),
     ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
   ]
 
-  const mentions = useMemo(
-    () =>
-      userDetails
-        ? [
-            {
-              value: userDetails.userID,
-              text: `${userDetails.alias} (you)`,
-              icon: 'ri:user-line',
-              type: QuickLinkType.mentions
-            },
-            ...mentionable
-              .filter((m) => m.alias !== undefined)
-              .filter((m) => m.userID !== userDetails.userID)
-              .map((m) => ({
-                value: m.userID,
-                text: m.alias,
-                icon: 'ri:user-line',
-                type: QuickLinkType.mentions
-              })),
-            ...invitedUsers.map((m) => ({
-              value: m.alias,
+  const mentions = useMemo(() => {
+    const icon = getMIcon('ICON', 'ri:user-line')
+    return userDetails
+      ? [
+          {
+            value: userDetails.userID,
+            text: `${userDetails.alias} (you)`,
+            icon,
+            type: QuickLinkType.mentions
+          },
+          ...mentionable
+            .filter((m) => m.alias !== undefined)
+            .filter((m) => m.userID !== userDetails.userID)
+            .map((m) => ({
+              value: m.userID,
               text: m.alias,
-              icon: 'ri:user-line',
-              type: QuickLinkType.mentions,
-              additional: { email: m.email }
-            }))
-          ]
-        : [],
-    [mentionable, invitedUsers, userDetails]
-  )
+              icon,
+              type: QuickLinkType.mentions
+            })),
+          ...invitedUsers.map((m) => ({
+            value: m.alias,
+            text: m.alias,
+            icon,
+            type: QuickLinkType.mentions,
+            additional: { email: m.email }
+          }))
+        ]
+      : []
+  }, [mentionable, invitedUsers, userDetails])
 
   const onKeyDownConfig: ComboConfigData = {
     keys: {
@@ -239,18 +240,18 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       trigger: '[[',
       blockTrigger: ':',
       data: internals,
-      icon: 'ri:file-list-2-line'
+      icon: DefaultMIcons.NOTE
     },
     tag: {
       cbKey: ComboboxKey.TAG,
       trigger: '#',
       data: tags.map((t) => ({ ...t, text: t.value })),
-      icon: 'ri:hashtag'
+      icon: getMIcon('ICON', 'ri:hashtag')
     },
     slash_command: {
       cbKey: ComboboxKey.SLASH_COMMAND,
       trigger: '/',
-      icon: 'ri:flask-line',
+      icon: getMIcon('ICON', 'ri:flask-line'),
       data: slashCommands.default
         .map((l) => ({ ...l, value: l.command, type: CategoryType.action, text: l.text }))
         .filter((item) => {
@@ -270,7 +271,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
           cbKey: ComboboxKey.MENTION,
           trigger: '@',
           data: mentions,
-          icon: 'ri:at-line'
+          icon: getMIcon('ICON', 'ri:at-line')
         }
       }
 

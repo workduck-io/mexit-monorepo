@@ -2,7 +2,6 @@
 import React, { forwardRef, useState } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
 
@@ -12,7 +11,8 @@ import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
-  EditorPreviewWrapper
+  EditorPreviewWrapper,
+  IconDisplay
 } from '@mexit/shared'
 
 // import useLoad from '../../../Hooks/useLoad'
@@ -20,6 +20,7 @@ import {
 // import { useTags } from '../../Hooks/useTags'
 import { useLinks } from '../../Hooks/useLinks'
 import { useContentStore } from '../../Stores/useContentStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 
@@ -77,6 +78,7 @@ const EditorPreview = ({
   const getContent = useContentStore((store) => store.getContent)
   const nodeContent = getContent(nodeid)
   const cc = content ?? (nodeContent && nodeContent.content)
+  const icon = useMetadataStore((s) => s.metadata.notes[nodeid]?.icon)
   // const { hasTags } = useTags()
   // const { loadNode } = useLoad()
   // const { goTo } = useRouting()
@@ -116,7 +118,7 @@ const EditorPreview = ({
               >
                 {ilink?.path && (
                   <EditorPreviewNoteName onClick={onClickNavigate}>
-                    <Icon icon={ilink?.icon ?? fileList2Line} />
+                    <IconDisplay icon={icon} size={18} />
                     {getNameFromPath(ilink.path)}
                   </EditorPreviewNoteName>
                 )}

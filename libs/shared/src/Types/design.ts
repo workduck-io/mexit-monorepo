@@ -1,4 +1,4 @@
-import { IconifyIcon } from '@iconify/react'
+import { MIcon } from '@mexit/core'
 
 /**
  * A single entity,
@@ -7,5 +7,5 @@ import { IconifyIcon } from '@iconify/react'
 export interface DesignItem {
   id: string
   label: string
-  icon?: string | IconifyIcon
+  icon?: MIcon
 }

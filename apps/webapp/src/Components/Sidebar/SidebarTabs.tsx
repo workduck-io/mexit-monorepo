@@ -1,11 +1,8 @@
 import { useMatch } from 'react-router-dom'
 
-import { mog } from '@mexit/core'
-
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 
-import ArchiveSidebar from './ArchiveSidebar'
 import { PublicNoteSidebar } from './PublicSidebar.notes'
 import { NoteSidebar } from './Sidebar.notes'
 import SnippetList from './SnippetList'
@@ -15,8 +12,8 @@ import TaskViewList from './TaskViewList'
 const SidebarTabs = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
-  const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
-  const isArchive = useMatch(ROUTE_PATHS.archive)
+  // const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
+  // const isArchive = useMatch(ROUTE_PATHS.archive)
   const isSnippetNote = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
   const isSnippet = useMatch(ROUTE_PATHS.snippets)
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
@@ -25,7 +22,7 @@ const SidebarTabs = () => {
   const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
-  mog('IS SIDEBAR', { show: sidebar.show })
+  // mog('IS SIDEBAR', { show: sidebar.show })
 
   if (!sidebar.show) return <></>
 
@@ -35,7 +32,7 @@ const SidebarTabs = () => {
 
   if (isSnippet || isSnippetNote) return <SnippetList />
 
-  if (isArchive || isArchiveEditor) return <ArchiveSidebar />
+  // if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 
   if (isTasks || isTasksView || isReminder) return <TaskViewList />
 

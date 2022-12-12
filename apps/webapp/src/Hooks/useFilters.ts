@@ -8,7 +8,8 @@ import {
   getAllParentIds,
   GlobalFilterJoin,
   idxKey,
-  SearchFilterFunctions} from '@mexit/core'
+  SearchFilterFunctions
+} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -145,7 +146,7 @@ export const useFilters = <Item>() => {
         const rank = rankedPaths[ilink?.path] || 0
         if (rank >= 0) {
           acc.options.push({
-            id: `node_${ilink.path}`,
+            id: ilink.nodeid,
             value: ilink.path,
             label: getTitleFromPath(ilink.path),
             count: rank as number

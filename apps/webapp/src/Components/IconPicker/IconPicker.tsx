@@ -16,7 +16,7 @@ import {
 import { Emoji, EmojiPicker } from '@workduck-io/mex-components'
 
 import { MIcon } from '@mexit/core'
-import { IconDisplay,IconSelector, TooltipWrapper } from '@mexit/shared'
+import { IconDisplay, IconSelector, TooltipWrapper } from '@mexit/shared'
 
 interface IconPickerProps {
   value: MIcon
@@ -82,9 +82,9 @@ const IconPicker = ({ value, size, tooltipText, onChange, allowPicker = false }:
     const newEmojiVal = { type: 'EMOJI' as const, value: emoji.native }
     setEmoji(newEmojiVal)
     onChange(newEmojiVal).then((success) => {
-      if (success === undefined) {
-        setEmoji(value)
-      }
+      // if (success === undefined) {
+      //   setEmoji(value)
+      // }
     })
   }
 

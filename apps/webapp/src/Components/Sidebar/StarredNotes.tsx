@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 
 import closeCircleLine from '@iconify/icons-ri/close-circle-line'
-import starFill from '@iconify/icons-ri/star-fill'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import styled from 'styled-components'
+
+import { getMIcon } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
@@ -50,7 +51,7 @@ const StarredNotes = () => {
     .map((nodeid) => ({
       id: nodeid,
       label: getTitleFromPath(getPathFromNodeid(nodeid)),
-      icon: starFill,
+      icon: getMIcon('ICON', 'ri:star-fill'),
       hoverIcon: closeCircleLine,
 
       onIconClick: (nodeid: string) => {

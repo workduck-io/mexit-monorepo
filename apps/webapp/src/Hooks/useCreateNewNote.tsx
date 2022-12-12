@@ -1,10 +1,18 @@
 import toast from 'react-hot-toast'
 
-import { defaultContent, DRAFT_NODE, getUntitledDraftKey, getUntitledKey, mog, NodeEditorContent } from '@mexit/core'
+import {
+  defaultContent,
+  DefaultMIcons,
+  DRAFT_NODE,
+  getUntitledDraftKey,
+  getUntitledKey,
+  mog,
+  NodeEditorContent
+} from '@mexit/core'
 
-import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 
 import { useHierarchy } from './useHierarchy'
 import { useLastOpened } from './useLastOpened'
@@ -40,7 +48,7 @@ export const useCreateNewNote = () => {
   const { addLastOpened } = useLastOpened()
   const { getDefaultNamespace } = useNamespaces()
 
-  const getMetadata = useContentStore((s) => s.getMetadata)
+  const notesMetadata = useMetadataStore((s) => s.metadata.notes)
   const { getSnippet } = useSnippets()
 
   const createNewNote = (options?: NewNoteOptions) => {
@@ -60,11 +68,11 @@ export const useCreateNewNote = () => {
     const parentNote = getParentILink(uniquePath, options?.parent?.namespace ?? options?.namespace)
     const parentNoteId = parentNote?.nodeid
 
-    const nodeMetadata = getMetadata(parentNoteId)
+    const nodeMetadata = notesMetadata?.[parentNoteId]
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent =
       options?.noteContent ?? (nodeMetadata?.templateID && parentNote?.path !== 'Drafts')
-        ? getSnippet(nodeMetadata.templateID).content
+        ? getSnippet(nodeMetadata.templateID)?.content
         : defaultContent.content
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
@@ -82,6 +90,7 @@ export const useCreateNewNote = () => {
     }
 
     mog('AddInHierarchy', { namespace, parentNoteId, parentNote, uniquePath, newNotePath, node })
+    useMetadataStore.getState().addMetadata('notes', { [node.nodeid]: { icon: DefaultMIcons.NOTE } })
 
     addInHierarchy({
       noteId: node.nodeid,

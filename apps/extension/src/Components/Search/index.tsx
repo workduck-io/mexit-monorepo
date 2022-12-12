@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 
-import { Icon } from '@iconify/react'
 import { useTheme } from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -18,7 +17,7 @@ import {
   MAX_RECENT_ITEMS,
   withoutContinuousDelimiter
 } from '@mexit/core'
-import { Loading, WDLogo } from '@mexit/shared'
+import { IconDisplay, Loading, WDLogo } from '@mexit/shared'
 
 import { useActionExecutor } from '../../Hooks/useActionExecutor'
 import { useEditorStore } from '../../Hooks/useEditorStore'
@@ -188,7 +187,7 @@ const Search = () => {
     <StyledSearch>
       {/* {activeItem?.type === ActionType.SEARCH && <QuerySearch>{activeItem.title} | </QuerySearch>} */}
       <CenterIcon id="wd-mex-search-left-icon" $cursor={!previewMode} onClick={onBackClick}>
-        <Icon color={theme.colors.primary} height={24} width={24} icon={icon} />
+        <IconDisplay icon={icon} />
       </CenterIcon>
       <StyledInput
         ref={ref}

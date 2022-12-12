@@ -82,6 +82,7 @@ export const apiURLs = {
     get: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
     create: `${BASE_URLS.node}`,
     append: (uid: string) => `${BASE_URLS.node}/${uid}`,
+    updateMetadata: (uid: string) => `${BASE_URLS.node}/metadata/${uid}`,
     bulkCreate: `${BASE_URLS.node}/bulk`,
     refactor: `${BASE_URLS.node}/refactor`,
     deleteBlock: `${BASE_URLS.node}/delete`,
@@ -96,6 +97,7 @@ export const apiURLs = {
     getAllSnippetsByWorkspace: `${BASE_URLS.snippet}/all`,
     getById: (uid: string) => `${BASE_URLS.snippet}/${uid}`,
     bulkGet: `${BASE_URLS.snippet}/ids`,
+    updateMetadata: (uid: string) => `${BASE_URLS.snippet}/metadata/${uid}`,
     deleteAllVersionsOfSnippet: (uid: string) => `${BASE_URLS.snippet}/${uid}/all`,
     deleteSpecificVersionOfSnippet: (uid: string, version?: number) =>
       `${BASE_URLS.snippet}/${uid}${version ? `?version=${version}` : ''}`

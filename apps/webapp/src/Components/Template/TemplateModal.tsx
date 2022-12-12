@@ -3,20 +3,19 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
-import { LoadingButton,Title } from '@workduck-io/mex-components'
+import { LoadingButton, Title } from '@workduck-io/mex-components'
 
-import type { Snippet } from '@mexit/core'
-import { ButtonFields,TemplateContainer } from '@mexit/shared'
+import { API, mog, Snippet } from '@mexit/core'
+import { ButtonFields, TemplateContainer } from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
-import { useApi } from '../../Hooks/API/useNodeAPI'
-import { getTitleFromPath,useLinks } from '../../Hooks/useLinks'
-import { useContentStore } from '../../Stores/useContentStore'
+import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { PrimaryText } from '../EditorInfobar/BlockInfobar'
-import { InviteFormWrapper,InviteWrapper } from '../Mentions/styles'
+import { InviteFormWrapper, InviteWrapper } from '../Mentions/styles'
 import SidebarList from '../Sidebar/SidebarList'
 
 import { RemovalButton } from './TemplateModal.styles'
@@ -25,7 +24,7 @@ const TemplateModal = () => {
   const { getILinkFromNodeid } = useLinks()
   const { toggleOpen, open, data } = useModalStore()
 
-  const { nodeid, namespace } = data ?? {}
+  const { nodeid } = data ?? {}
 
   const node = getILinkFromNodeid(nodeid)
   const templates = useSnippetStore((state) => state.snippets).filter((item) => item?.template)
@@ -33,13 +32,8 @@ const TemplateModal = () => {
   const [currentTemplate, setCurrentTemplate] = useState<Snippet>()
   const [selectedTemplate, setSelectedTemplate] = useState<Snippet>()
 
-  const getMetadata = useContentStore((store) => store.getMetadata)
-  const getContent = useContentStore((store) => store.getContent)
-  const { saveDataAPI } = useApi()
-
   useEffect(() => {
-    const contents = useContentStore.getState().contents
-    const metadata = contents[nodeid]?.metadata
+    const metadata = useMetadataStore.getState().metadata.notes[nodeid]
     if (metadata?.templateID) {
       const template = templates.find((item) => item.id === metadata.templateID)
       setCurrentTemplate(template)
@@ -64,23 +58,32 @@ const TemplateModal = () => {
   }
 
   const onSubmit = async () => {
-    const content = getContent(nodeid)
-
     if (nodeid) {
-      saveDataAPI(nodeid, namespace, content.content, undefined, undefined, selectedTemplate?.id)
-      toast('Template Set!')
+      const existingMetadata = useMetadataStore.getState().metadata.notes[nodeid]
+      const newMeta = { icon: existingMetadata.icon, templateID: selectedTemplate?.id }
+      mog('META', { newMeta })
+      API.node
+        .updateMetadata(nodeid, { metadata: newMeta })
+        .then((r) => toast('Template Set!'))
+        .catch((err) => {
+          console.error('Unable to set Template', { err })
+        })
     }
 
     toggleOpen(ModalsType.template)
   }
 
   const onRemove = async () => {
-    const content = getContent(nodeid)
-
     if (nodeid) {
       // For why '__null__' see useSaveApi.tsx line 151
-      saveDataAPI(nodeid, namespace, content.content, undefined, undefined, '__null__')
-      toast('Template Removed!')
+      const existingMetadata = useMetadataStore.getState().metadata.notes[nodeid].icon
+
+      API.node
+        .updateMetadata(nodeid, { metadata: { icon: existingMetadata.icon, templateID: null } })
+        .then((r) => toast('Template Removed!'))
+        .catch((err) => {
+          console.error('Unable to set Template', { err })
+        })
     }
 
     toggleOpen(ModalsType.template)

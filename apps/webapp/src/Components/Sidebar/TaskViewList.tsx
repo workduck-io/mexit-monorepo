@@ -1,10 +1,8 @@
 import React from 'react'
 
-import home7Line from '@iconify/icons-ri/home-7-line'
 import stackLine from '@iconify/icons-ri/stack-line'
-import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 
-import { ReminderViewData } from '@mexit/core'
+import { DefaultMIcons, getMIcon, ReminderViewData } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -68,7 +66,7 @@ const TaskViewList = () => {
         ...t,
         label: title,
         data: t,
-        icon: stackLine
+        icon: DefaultMIcons.VIEW
       }))
   }, [views])
 
@@ -86,13 +84,13 @@ const TaskViewList = () => {
           {
             label: 'Default',
             id: 'default',
-            icon: home7Line,
+            icon: getMIcon('ICON', 'ri:home-7-line'),
             data: {}
           },
           {
             label: 'Reminder',
             id: ReminderViewData.id,
-            icon: timerFlashLine,
+            icon: getMIcon('ICON', 'ri:timer-flash-line'),
             data: {}
           }
         ]}

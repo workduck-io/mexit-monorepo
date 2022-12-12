@@ -2,40 +2,49 @@ import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Icon } from '@iconify/react'
-import addCircleLine from '@iconify-icons/ri/add-circle-line'
 import checkboxCircleLine from '@iconify-icons/ri/checkbox-circle-line'
 import errorWarningLine from '@iconify-icons/ri/error-warning-line'
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
 import lock2Line from '@iconify-icons/ri/lock-2-line'
 import { useCombobox } from 'downshift'
 import { useDebouncedCallback } from 'use-debounce'
 
 import {
   convertContentToRawText,
-fuzzySearch,  ILink,
+  fuzzySearch,
+  getMIcon,
+  ILink,
   isClash,
   isReserved,
+  MIcon,
   QuickLinkStatus,
   QuickLinkType,
   SEPARATOR,
   SHARED_NAMESPACE,
   SingleNamespace,
-  withoutContinuousDelimiter } from '@mexit/core'
-import { Input,   StyledCombobox,
-StyledCreatatbleSelect,   StyledInputWrapper,
+  withoutContinuousDelimiter
+} from '@mexit/core'
+import {
+  DefaultMIcons,
+  IconDisplay,
+  Input,
+  StyledCombobox,
+  StyledCreatatbleSelect,
+  StyledInputWrapper,
   StyledMenu,
   Suggestion,
   SuggestionContentWrapper,
   SuggestionDesc,
   SuggestionError,
   SuggestionText,
-SuggestionTextWrapper } from '@mexit/shared'
+  SuggestionTextWrapper
+} from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSearchExtra } from '../../Hooks/useSearch'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
@@ -59,12 +68,12 @@ export type QuickLink = {
   nodeid?: string
   namespace?: string
 
-  icon?: string
+  icon?: MIcon
 }
 
 export const makeQuickLink = (
   title: string,
-  options: { namespace?: string; nodeid: string; type?: QuickLinkType; icon?: string }
+  options: { namespace?: string; nodeid: string; type?: QuickLinkType; icon?: MIcon }
 ): QuickLink => ({
   text: title,
   value: title,
@@ -213,7 +222,7 @@ function NodeSelect({
     const mLinks = fLinks.map((l) => makeQuickLink(l.path, { namespace: l.namespace, nodeid: l.nodeid, icon: l.icon }))
 
     const sLinks = sharedNodes.map((l) =>
-      makeQuickLink(l.path, { namespace: SHARED_NAMESPACE.id, nodeid: l.nodeid, icon: 'mex:shared-note' })
+      makeQuickLink(l.path, { namespace: SHARED_NAMESPACE.id, nodeid: l.nodeid, icon: DefaultMIcons.SHARED_NOTE })
     )
 
     if (!showAll) return mLinks
@@ -253,6 +262,7 @@ function NodeSelect({
   const { inputItems, selectedItem } = nodeSelectState
   const searchExtra = useMemo(() => getSearchExtra(), [])
   const contents = useContentStore((store) => store.contents)
+  const notesMetadata = useMetadataStore((s) => s.metadata.notes)
 
   const getNewItems = (inputValue: string) => {
     if (inputValue !== '' && inputValue !== undefined) {
@@ -579,7 +589,7 @@ function NodeSelect({
       <StyledMenu {...getMenuProps()} isOverlay={menuOverlay} isOpen={isOpen}>
         {disallowReserved && nodeSelectState.reserved ? (
           <SuggestionError>
-            <Icon width={24} icon={lock2Line} />
+            <Icon width={18} icon={lock2Line} />
             {nodeSelectState.reserved && (
               <SuggestionContentWrapper>
                 <SuggestionText>Warning: Reserved Note</SuggestionText>
@@ -599,7 +609,7 @@ function NodeSelect({
                   if (desc === '') desc = undefined
                 }
 
-                const icon = item.icon ? item.icon : fileList2Line
+                const icon = notesMetadata[item.nodeid]?.icon ?? DefaultMIcons.NOTE
                 const namespace = namespaces?.find((n) => n.id === item?.namespace)
                 if (nodeSelectState.clash && disallowClash && item.status === QuickLinkStatus.new) return null
 
@@ -607,15 +617,20 @@ function NodeSelect({
                   <Suggestion
                     highlight={highlightedIndex === index}
                     key={`${item.value}${index}`}
+                    center={!desc}
                     {...getItemProps({ item, index })}
                   >
-                    <Icon width={24} icon={item.status === QuickLinkStatus.new ? addCircleLine : icon} />
+                    <IconDisplay
+                      className="mexit-list-item"
+                      size={18}
+                      icon={item.status === QuickLinkStatus.new ? getMIcon('ICON', 'ri:add-circle-line') : icon}
+                    />
                     <SuggestionContentWrapper>
                       <SuggestionTextWrapper>
                         <SuggestionText>{item.text}</SuggestionText>
                         <NamespaceTag namespace={namespace} />
                       </SuggestionTextWrapper>
-                      <SuggestionDesc>{desc !== undefined && desc}</SuggestionDesc>
+                      {desc && <SuggestionDesc>{desc}</SuggestionDesc>}
                     </SuggestionContentWrapper>
                   </Suggestion>
                 )

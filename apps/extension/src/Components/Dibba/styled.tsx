@@ -21,6 +21,7 @@ export const ComboboxRoot = styled.ul<{
       /* width: 225px; */
       overflow: hidden;
       height: fit-content;
+      gap: ${({ theme }) => theme.spacing.small};
 
       border-radius: 8px;
       /* box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0; */
@@ -39,6 +40,10 @@ export const ComboboxRoot = styled.ul<{
           overflow-y: auto;
           overflow-x: hidden;
         }
+      }
+
+      #List {
+        height: fit-content;
       }
     `}
 `

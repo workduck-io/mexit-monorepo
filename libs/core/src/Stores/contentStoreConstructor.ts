@@ -9,10 +9,6 @@ export interface ContentStoreState {
   removeContent: (nodeid: string) => void
   getContent: (nodeid: string) => NodeContent
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
-  getAllMetadata: () => Record<string, NodeMetadata>
-  getMetadata: (nodeid: string) => NodeMetadata
-  setMetadata: (nodeid: string, metadata: NodeMetadata) => void
-  updateMetadata: (nodeid: string, metadata: Partial<NodeMetadata>) => void
   initContents: (contents: Contents) => void
 
   _hasHydrated: boolean

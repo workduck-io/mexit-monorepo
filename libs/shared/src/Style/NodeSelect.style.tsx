@@ -96,18 +96,19 @@ export const SuggestionDesc = styled.div`
 
 interface SuggestionProps {
   highlight: boolean
+  center?: boolean
 }
 
 export const Suggestion = styled.li<SuggestionProps>`
   display: flex;
-  align-items: center;
-  padding: 6px 10px 6px 4px;
+  align-items: ${({ center }) => (center ? 'center' : 'flex-start')};
+  padding: ${({ theme }) => `${theme.spacing.small}`};
   margin: ${({ theme }) => `${theme.spacing.tiny} 0`};
 
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
 
-  & > svg {
-    margin-right: 6px;
+  & > .mexit-list-item {
+    margin: ${({ theme }) => `0 ${theme.spacing.small} 0 ${theme.spacing.tiny}`};
     color: ${({ theme }) => theme.colors.gray[5]};
     flex-shrink: 0;
   }
@@ -117,7 +118,7 @@ export const Suggestion = styled.li<SuggestionProps>`
     css`
       background-color: ${theme.colors.primary};
       color: ${theme.colors.text.oppositePrimary};
-      & > svg {
+      .mexit-list-item {
         color: ${({ theme }) => theme.colors.text.oppositePrimary};
       }
       ${SuggestionDesc} {

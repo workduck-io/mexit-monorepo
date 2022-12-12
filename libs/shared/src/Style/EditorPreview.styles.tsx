@@ -30,7 +30,7 @@ export const EditorPreviewWrapper = styled.div`
 export const EditorPreviewNoteName = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  gap: ${({ theme }) => theme.spacing.small};
 
   cursor: pointer;
 

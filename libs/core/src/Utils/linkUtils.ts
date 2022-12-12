@@ -2,6 +2,7 @@ import { Link } from '../Stores/linkStoreConstructor'
 import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
+import { getMIcon } from '../Types/Store'
 
 import { fuzzySearch } from './fuzzysearch'
 import { LINK_SHORTENER_URL_BASE } from './routes'
@@ -31,7 +32,7 @@ export const sortByCreated = (a: Link, b: Link) => {
 
 export const getListItemFromLink = (link: Link, workspaceID: string) => {
   const actionItem: ListItemType = {
-    icon: 'ri:link-m',
+    icon: getMIcon('ICON', 'ri:link-m'),
     title: link?.title,
     id: link?.url,
     description: link?.alias,

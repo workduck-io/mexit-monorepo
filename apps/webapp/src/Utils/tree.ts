@@ -1,7 +1,7 @@
 import { TreeData, TreeItem } from '@atlaskit/tree'
 import { ItemId } from '@atlaskit/tree/dist/types/types'
 
-import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, NodeMetadata } from '@mexit/core'
+import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, MIcon, NodeMetadata } from '@mexit/core'
 import { LastOpenedState, TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -73,7 +73,7 @@ export const sortTreeWithPriority = (
   return [...priorityNodesFromTree.sort((a, b) => priorityNodes[a.path].at - priorityNodes[b.path].at), ...restBaseTree]
 }
 
-const createChildLess = (path: string, nodeid: string, id: string, icon?: string, data?: any): TreeItem => ({
+const createChildLess = (path: string, nodeid: string, id: string, icon?: MIcon, data?: any): TreeItem => ({
   id,
   hasChildren: false,
   isExpanded: false,
@@ -118,7 +118,7 @@ export interface FlatItem {
   tasks?: number
   reminders?: number
   lastOpenedState?: LastOpenedState
-  icon?: string
+  icon?: MIcon
   stub?: boolean
 }
 

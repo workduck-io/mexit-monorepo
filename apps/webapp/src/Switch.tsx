@@ -235,8 +235,8 @@ export const Switch = () => {
         // mog('Showing Sidebar', { location })
         showAllSidebars()
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
-        showSidebar()
-        hideRHSidebar()
+        hideAllSidebars()
+        // hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
         fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
         showSidebar()
