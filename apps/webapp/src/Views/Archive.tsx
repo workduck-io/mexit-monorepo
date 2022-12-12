@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { convertContentToRawText, GenericSearchResult, mog } from '@mexit/core'
+import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog } from '@mexit/core'
 import {
   ArchiveHelp,
   MainHeader,
@@ -34,6 +34,9 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { getContent } from '../Stores/useEditorStore'
 import { ModalHeader } from '../Style/Refactor'
+import { deserializeContent } from '../Utils/serializer'
+import { WorkerRequestType } from '../Utils/worker'
+import { runBatchWorker } from '../Workers/controller'
 
 import SearchView, { RenderItemProps, RenderPreviewProps } from './SearchView'
 
@@ -53,12 +56,14 @@ const ActionContainer = styled.div`
 
 const Archive = () => {
   const archive = useDataStore((store) => store.archive)
+  const contents = useContentStore((store) => store.contents)
+  const setContent = useContentStore((store) => store.setContent)
+  const setMetadata = useContentStore((store) => store.setMetadata)
 
   const { getNamespace } = useNamespaces()
   const [showModal, setShowModal] = useState(false)
-  const { contents, setContent } = useContentStore()
   const getDataAPI = useApi().getDataAPI
-  const { queryIndex } = useSearch()
+  const { queryIndex, updateDocument } = useSearch()
 
   const getArchiveResult = (nodeid: string): GenericSearchResult => {
     const node = archive.find((node) => node.nodeid === nodeid)
@@ -101,18 +106,35 @@ const Archive = () => {
   // }
 
   useEffect(() => {
-    try {
-      Promise.allSettled(
-        archive.map(
-          async (item) =>
-            await getDataAPI(item.nodeid).then((response) =>
-              setContent(item.nodeid, response?.content, response?.metadata)
-            )
-        )
-      )
-    } catch (err) {
-      mog('Failed to fetch archives', { err })
+    const fetchArchiveContents = async () => {
+      const unfetchedArchives = archive
+        .filter((i) => contents[i.nodeid]?.content.length === 0 || contents[i.nodeid] === undefined)
+        .map((i) => i.nodeid)
+
+      const ids = batchArray(unfetchedArchives, 10)
+      mog('UnfetchedArchiveFetch', { ids, unfetchedArchives })
+      const { fulfilled } = await runBatchWorker(WorkerRequestType.GET_ARCHIVED_NODES, 6, ids)
+
+      fulfilled.forEach((nodes) => {
+        if (nodes) {
+          const { rawResponse } = nodes
+
+          if (rawResponse) {
+            rawResponse.forEach((nodeResponse) => {
+              const metadata = extractMetadata(nodeResponse)
+              const content = deserializeContent(nodeResponse.data)
+
+              const nodeID = nodeResponse.id
+              setContent(nodeID, content)
+
+              if (metadata) setMetadata(nodeID, metadata)
+              updateDocument('archive', nodeID, content)
+            })
+          }
+        }
+      })
     }
+    fetchArchiveContents()
   }, [])
 
   // Forwarding ref to focus on the selected result
