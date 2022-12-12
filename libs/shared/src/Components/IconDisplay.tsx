@@ -21,7 +21,7 @@ export const IconDisplay = ({ icon, size, className }: IconDisplayProps) => {
         {
           EMOJI: <span>{icon.value}</span>,
           ICON: <Icon icon={icon.value} />,
-          URL: <img alt="Icon" src={icon.value} />
+          URL: <img alt="Icon" src={chrome.runtime.getURL(icon.value)} />
         }[icon.type]
       }
     </IconWrapper>
