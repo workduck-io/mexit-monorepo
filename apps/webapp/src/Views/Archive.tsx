@@ -3,12 +3,13 @@ import Modal from 'react-modal'
 
 import trashIcon from '@iconify/icons-codicon/trash'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
+import unarchiveLine from '@iconify/icons-ri/inbox-unarchive-line'
 import { Icon } from '@iconify/react'
 import styled, { useTheme } from 'styled-components'
 
 import { Button, Infobox } from '@workduck-io/mex-components'
 
-import { convertContentToRawText, GenericSearchResult, mog } from '@mexit/core'
+import { convertContentToRawText, GenericSearchResult, ILink, mog } from '@mexit/core'
 import {
   ArchiveHelp,
   MainHeader,
@@ -90,32 +91,33 @@ const Archive = () => {
 
   const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
   const { goTo } = useRouting()
-  // const onUnarchiveClick = async (node: ILink) => {
-  //   // const present = ilinks.find((link) => link.key === node.key)
+  const onUnarchiveClick = async (node: ILink) => {
+    // const present = ilinks.find((link) => link.key === node.key)
 
-  //   // if (present) {
-  //   //   setShowModal(true)
-  //   // }
+    // if (present) {
+    //   setShowModal(true)
+    // }
 
-  //   await unArchiveData([node])
-  //   await addNodeOrNodes(node.path, false, undefined, undefined, false)
+    // await unArchiveData([node])
+    // await addNodeOrNodes(node.path, false, undefined, undefined, false)
 
-  //   const content = getContent(node.nodeid)
-  //   await removeDocument('archive', node.nodeid)
+    // const content = getContent(node.nodeid)
+    // await removeDocument('archive', node.nodeid)
 
-  //   await updateDocument('node', node.nodeid, content.content, node.path)
+    // await updateDocument('node', node.nodeid, content.content, node.path)
 
-  //   const archiveNode: NodeProperties = {
-  //     id: node.path,
-  //     path: node.path,
-  //     title: node.path.split(SEPARATOR).pop(),
-  //     nodeid: node.nodeid,
-  //     namespace: node?.namespace
-  //   }
+    // const archiveNode: NodeProperties = {
+    //   id: node.path,
+    //   path: node.path,
+    //   title: node.path.split(SEPARATOR).pop(),
+    //   nodeid: node.nodeid,
+    //   namespace: node?.namespace
+    // }
 
-  //   loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
-  //   goTo(node.path, NavigationType.replace)
-  // }
+    // loadNode(node.nodeid, { savePrev: false, fetch: false, node: archiveNode })
+    // goTo(node.path, NavigationType.replace)
+    console.log('Clicked Unarchive for the following link: ', node)
+  }
 
   const onDeleteClick = async () => {
     const nodesToDelete = archive.filter((i) => {
@@ -176,7 +178,7 @@ const Archive = () => {
             <ResultTitle>{node.path}</ResultTitle>
             <ActionContainer>
               {namespace && <NamespaceTag namespace={namespace} />}
-              {/* <StyledIcon
+              <StyledIcon
                 fontSize={32}
                 color={theme.colors.primary}
                 onClick={(ev) => {
@@ -184,7 +186,7 @@ const Archive = () => {
                   onUnarchiveClick(node)
                 }}
                 icon={unarchiveLine}
-              /> */}
+              />
 
               <StyledIcon
                 fontSize={32}
