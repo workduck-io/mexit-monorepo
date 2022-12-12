@@ -7,6 +7,7 @@ import {
   createNodeWithUid,
   getNewDraftKey,
   ILink,
+  ListItemType,
   loremIpsum,
   MexitAction,
   mog,
@@ -58,7 +59,7 @@ export function useActionExecutor() {
   const links = useLinkStore((s) => s.links)
   const { saveLink } = useLinkURLs()
 
-  function execute(item: MexitAction, metaKeyPressed?: boolean) {
+  function execute(item: MexitAction | ListItemType, metaKeyPressed?: boolean) {
     const search = useSputlitStore.getState().search
     const activeItem = useSputlitStore.getState().activeItem
 

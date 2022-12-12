@@ -1,5 +1,6 @@
 import { QuickLinkType } from './Editor'
 import { Shortcut } from './Help'
+import { MIcon } from './Store'
 
 export enum ActionType {
   SEARCH = 'Search Action',
@@ -20,7 +21,7 @@ export interface MexitAction {
   description?: string
   type?: ActionType
   category: QuickLinkType
-  icon?: string
+  icon?: MIcon
   shortcut?: Record<string, Shortcut>
   data?: any
   extras?: any

@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { cleanString, getMIcon, MexitAction, QuickLinkType } from '@mexit/core'
+import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { useSputlitStore } from '../../Stores/useSputlitStore'
@@ -36,7 +36,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
   return (
     <StyledAction $active={active}>
       <Container>
-        <ActionIcon size={20} icon={getMIcon('ICON', action?.icon)} />
+        <ActionIcon size={20} icon={action?.icon} />
         <ActionContent>
           <Title>
             {action?.extras?.new ? (
