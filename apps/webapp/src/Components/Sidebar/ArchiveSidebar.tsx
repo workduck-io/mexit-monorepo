@@ -28,7 +28,8 @@ const ArchiveSidebar = () => {
       <SidebarHeaderLite title={`Archived Notes (${archiveNotes.length})`} icon={archiveLine} />
       <SidebarList
         items={sortedArchivedNotes}
-        onClick={(e) => console.log('OnClick: ', e)}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onClick={() => {}}
         showSearch
         searchPlaceholder="Filter Archived Notes..."
         emptyMessage="No Archived Notes Found"

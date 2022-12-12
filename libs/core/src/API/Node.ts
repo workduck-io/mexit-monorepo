@@ -68,7 +68,7 @@ export class NodeAPI {
   }
 
   async deleteArchived(nodeIds: string[], options?: Options) {
-    return await this.client.put(
+    return await this.client.post(
       apiURLs.archive.deleteArchivedNodes,
       {
         ids: nodeIds

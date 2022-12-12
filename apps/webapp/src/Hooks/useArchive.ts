@@ -95,7 +95,10 @@ const useArchive = () => {
       return unArchive(nodes[0])
     }
     await API.node
-      .unarchive(nodes.map((node) => node.nodeid))
+      .unarchive(
+        nodes[0].namespace,
+        nodes.map((node) => node.nodeid)
+      )
       .then((d) => {
         mog('Unarchive Data', d)
         if (d) unArchive(nodes[0])
