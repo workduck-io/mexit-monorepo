@@ -1,4 +1,5 @@
 import { ListItemType } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
@@ -12,7 +13,7 @@ export const useQuickLinks = () => {
   const getQuickLinks = (): Array<ListItemType> => {
     const mILinks = ilinks.map((ilink) => getListItemFromNode(ilink))
     const mSnippets = snippets.map((snippet) => getListItemFromSnippet(snippet))
-    const sLinks = sNodes.map((node) => ({ ...getListItemFromNode(node), icon: 'ri:share-line' }))
+    const sLinks = sNodes.map((node) => ({ ...getListItemFromNode(node), icon: DefaultMIcons.SHARED_NOTE }))
 
     return [...mILinks, ...mSnippets, ...sLinks]
   }

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
@@ -9,7 +8,7 @@ import { Button } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { fuzzySearch } from '@mexit/core'
-import { Input, SidebarListFilter } from '@mexit/shared'
+import { DefaultMIcons, IconDisplay, Input, SidebarListFilter } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
@@ -167,7 +166,7 @@ const NoteSelector = ({
                       selected={selected === index}
                       key={note.nodeid}
                     >
-                      <Icon icon={note.icon ?? fileList2Line} />
+                      <IconDisplay icon={note.icon ?? DefaultMIcons.NOTE} />
                       {getTitleFromPath(note.path)}
                     </NoteItem>
                   ))
