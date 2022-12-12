@@ -1,5 +1,14 @@
 # mexit-webapp
 
+## 0.20.10
+
+### Patch Changes
+
+- 4b9346d9: Upgrade Dwindle to 0.1.0 with Ky Client
+- 284e1b2a: Update Archive Page and Endpoints
+- e7107af9: Icon picker for Notes, useMetadata store
+- b1512c35: Combobox UI changes
+
 ## 0.20.9
 
 ### Patch Changes
