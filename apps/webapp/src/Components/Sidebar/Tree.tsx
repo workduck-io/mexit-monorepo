@@ -123,6 +123,7 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
     return tree
   }
 
+  // Recursively expand to keep the new active item visible in tree
   const onTreeNavigatePress = useCallback(
     (reverse = false) =>
       (e) => {
@@ -270,6 +271,8 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
 
     execRefactorAsync({ path: from, namespaceID: nsID }, { path: to, namespaceID: nsID })
   }
+
+  // console.log('tree', { initTree })
 
   return (
     <>

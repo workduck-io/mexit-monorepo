@@ -23,8 +23,6 @@ import {
 
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 
-import { TreeContextMenu } from './TreeWithContextMenu'
-
 const defaultSnap = {
   isDragging: false,
   isDropAnimating: false,
@@ -176,7 +174,7 @@ export const RenderTreeItem = ({
               />
             </StyledTreeItem>
           </ContextMenu.Trigger>
-          <TreeContextMenu
+          {/* <TreeContextMenu
             item={{
               ...item,
               data: {
@@ -184,7 +182,7 @@ export const RenderTreeItem = ({
                 // lastOpenedState
               }
             }}
-          />
+          /> */}
         </ContextMenu.Root>
       </span>
     </Tippy>

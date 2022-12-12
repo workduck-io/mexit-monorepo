@@ -3,7 +3,6 @@ import 'react-contexify/dist/ReactContexify.css'
 import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 
-import { TreeItem } from '@atlaskit/tree'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import archiveLine from '@iconify/icons-ri/archive-line'
 import magicLine from '@iconify/icons-ri/magic-line'
@@ -30,6 +29,7 @@ import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../..
 import { useDeleteStore } from '../Refactor/DeleteModal'
 import { doesLinkRemain } from '../Refactor/doesLinkRemain'
 
+import { TreeItem } from './Tree/types'
 import ContextMenuListWithFilter from './ContextMenuListWithFilter'
 
 interface MuteMenuItemProps {
@@ -66,7 +66,7 @@ export const MuteMenuItem = ({ nodeid, lastOpenedState }: MuteMenuItemProps) => 
 }
 
 interface TreeContextMenuProps {
-  item: TreeItem
+  item: Pick<TreeItem, 'data'>
 }
 
 export const MENU_ID = 'Tree-Menu'
@@ -85,7 +85,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   const { execRefactorAsync } = useRefactor()
   const { push } = useNavigation()
 
-  const itemNamespace = namespaces.find((ns) => ns.id === item.data?.namespace)
+  const itemNamespace = namespaces.find((ns) => ns.id === item.data.namespace)
 
   // const handleRefactor = (item: TreeItem) => {
   //   prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
@@ -93,29 +93,29 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   // }
   const noteMetadata = useMetadataStore((store) => store.metadata.notes)
   const hasTemplate = useMemo(() => {
-    const metadata = noteMetadata[item.data.nodeid]
+    const metadata = noteMetadata[item.data.nodeId]
 
     const snippets = useSnippetStore.getState().snippets ?? {}
     const templates = Object.values(snippets).filter((item) => item?.template && item.id === metadata?.templateID)
 
     return templates.length !== 0
-  }, [item.data.nodeid, noteMetadata])
+  }, [item.data.nodeId, noteMetadata])
 
   const isInSharedNamespace = itemNamespace?.granterID !== undefined
   const isReadonly = itemNamespace?.access === 'READ'
 
-  const handleArchive = (item: TreeItem) => {
-    openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })
+  const handleArchive = (item: Pick<TreeItem, 'data'>) => {
+    openDeleteModal({ path: item.data.path, namespaceID: item.data?.namespace })
   }
 
-  const handleCreateChild = (item: TreeItem) => {
+  const handleCreateChild = (item: Pick<TreeItem, 'data'>) => {
     // mog('handleCreateChild', { item })
     const node = createNewNote({ parent: { path: item.data.path, namespace: item.data.namespace } })
     goTo(ROUTE_PATHS.node, NavigationType.push, node?.nodeid)
   }
 
-  const handleShare = (item: TreeItem) => {
-    openShareModal('permission', 'note', item.data.nodeid)
+  const handleShare = (item: Pick<TreeItem, 'data'>) => {
+    openShareModal('permission', 'note', item.data.nodeId)
   }
 
   // BUG: The backend doesn't return the new added path in the selected namespace
@@ -126,12 +126,12 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
       { path: item.data?.path, namespaceID: newNamespaceID }
     )
 
-    if (doesLinkRemain(item.data?.nodeid, refactored)) {
-      push(item.data?.nodeid, { savePrev: false })
+    if (doesLinkRemain(item.data?.nodeId, refactored)) {
+      push(item.data?.nodeId, { savePrev: false })
     }
   }
 
-  const handleTemplate = (item: TreeItem) => {
+  const handleTemplate = (item: Pick<TreeItem, 'data'>) => {
     if (item.data.path !== 'Drafts') {
       toggleModal(ModalsType.template, item.data)
     } else {
@@ -201,7 +201,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           filter={false}
         />
         <ContextMenuSeparator />
-        <MuteMenuItem nodeid={item.data.nodeid} lastOpenedState={item.data.lastOpenedState} />
+        {/* <MuteMenuItem nodeid={item.data.nodeId} lastOpenedState={item.data.lastOpenedState} /> */}
         <ContextMenuItem
           color="#df7777"
           disabled={isInSharedNamespace && itemNamespace?.access === 'READ'}

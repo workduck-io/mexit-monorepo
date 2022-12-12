@@ -21,8 +21,8 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
 
+import { SortableTree } from './Tree/SortableTree'
 import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
-import Tree from './Tree'
 
 interface SpaceTreeProps {
   spaceId: string
@@ -186,11 +186,12 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
             <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.tokens.text.fade} />
           </SidebarListFilter>
           <SpaceList>
-            <Tree
+            {/* <Tree
               initTree={filteredTree ? filteredTree : initTree}
               readOnly={readOnly}
               selectedItemId={selectedItem?.data?.nodeid}
-            />
+            /> */}
+            <SortableTree collapsible />
           </SpaceList>
         </>
       ) : (
