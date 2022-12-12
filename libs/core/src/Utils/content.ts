@@ -1,7 +1,7 @@
 import { uniq } from 'lodash'
 
 import { NodeEditorContent, NodeMetadata } from '../Types/Editor'
-import { DefaultMIcons } from '../Types/Store'
+import { DefaultMIcons, MIcon } from '../Types/Store'
 
 import { ELEMENT_MENTION } from './editorElements'
 import { generateTempId } from './idGenerator'
@@ -91,7 +91,7 @@ export const removeNulls = (obj: any): any => {
   return obj
 }
 
-export const extractMetadata = (data: any): NodeMetadata => {
+export const extractMetadata = (data: any, defaults?: { icon: MIcon }): NodeMetadata => {
   if (data) {
     const metadata: NodeMetadata = {
       lastEditedBy: data.lastEditedBy,
@@ -102,7 +102,7 @@ export const extractMetadata = (data: any): NodeMetadata => {
       publicAccess: data?.publicAccess,
       iconUrl: data?.metadata?.iconUrl,
       templateID: data?.metadata?.templateID,
-      icon: data?.metadata?.icon ?? DefaultMIcons.NOTE
+      icon: data?.metadata?.icon ?? defaults?.icon ?? DefaultMIcons.NOTE
     }
 
     return removeNulls(metadata)

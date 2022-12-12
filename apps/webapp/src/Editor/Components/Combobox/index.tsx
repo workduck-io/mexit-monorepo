@@ -235,7 +235,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
                             editor && onSelectItem(editor, item)
                           }}
                         >
-                          {metadata?.icon && <IconDisplay icon={metadata.icon} size={namespace ? 20 : 18} />}
+                          {metadata?.icon && <IconDisplay icon={metadata.icon} size={namespace ? 16 : 18} />}
                           <ItemCenterWrapper>
                             {!item.prefix ? (
                               <ComboboxItemTitle>{Item}</ComboboxItemTitle>

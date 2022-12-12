@@ -1,20 +1,22 @@
 import React, { useMemo } from 'react'
 
-import shareLine from '@iconify/icons-ri/share-line'
-import { Icon } from '@iconify/react'
-import fileList2Line from '@iconify-icons/ri/file-list-2-line'
-
 import { Infobox } from '@workduck-io/mex-components'
 
 import {
   convertContentToRawText,
   defaultContent,
+  DefaultMIcons,
   GenericSearchResult,
   getInitialNode,
   mog,
-  NodeType} from '@mexit/core'
-import { MainHeader,   Result,
-ResultCardFooter,   ResultDesc,
+  NodeType
+} from '@mexit/core'
+import {
+  IconDisplay,
+  MainHeader,
+  Result,
+  ResultCardFooter,
+  ResultDesc,
   ResultHeader,
   ResultMain,
   ResultMetaData,
@@ -24,8 +26,10 @@ ResultCardFooter,   ResultDesc,
   SearchHelp,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-Title,TitleText ,
-  View} from '@mexit/shared'
+  Title,
+  TitleText,
+  View
+} from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
 import TagsRelated, { TagsRelatedTiny } from '../Components/Editor/TagsRelated'
@@ -40,6 +44,7 @@ import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 import SearchFilters from './SearchFilters'
@@ -129,7 +134,9 @@ const Search = () => {
     }
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
-    const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
+    const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.id]?.icon)
+    const icon = storedNoteIcon ?? (nodeType === NodeType.SHARED ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE)
+    mog('STORED', { storedNoteIcon })
     const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
     const isTagged = hasTags(edNode.nodeid)
     const id = `${item.id}_ResultFor_Search`
@@ -138,7 +145,7 @@ const Search = () => {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultHeader active={item.matchField?.includes('title')}>
-            <Icon icon={icon} />
+            <IconDisplay icon={icon} />
             <ResultTitle>{node.path}</ResultTitle>
           </ResultHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')}>
@@ -155,7 +162,7 @@ const Search = () => {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
-            <Icon icon={icon} />
+            <IconDisplay icon={icon} />
             <ResultMain>
               <ResultTitle>{node.path}</ResultTitle>
               <ResultDesc>{item.text ?? convertContentToRawText(content, ' ')}</ResultDesc>
@@ -202,14 +209,15 @@ const Search = () => {
       const con = contents[item.id]
       const content = con ? con.content : defaultContent.content
       const node = getNode(item.id, true)
-      const nodeType = getNodeType(node.nodeid)
-      const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
+      const icon = useMetadataStore.getState().metadata.notes[item.id]?.icon
+      // const nodeType = getNodeType(node.nodeid)
+      // const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
       const edNode = { ...node, title: node.path, id: node.nodeid }
       // mog('RenderPreview', { item, content, node })
       return (
         <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
           <Title onMouseUp={(e) => onDoubleClick(e, item)}>
-            <Icon icon={icon} />
+            <IconDisplay icon={icon} />
             <TitleText>{node.path}</TitleText>
             <Metadata namespaceId={node.namespace} fadeOnHover={false} nodeId={edNode.nodeid} />
           </Title>

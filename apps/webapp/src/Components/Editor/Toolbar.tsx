@@ -3,7 +3,6 @@ import React from 'react'
 import { API, MIcon } from '@mexit/core'
 import { Loading, NodeInfo } from '@mexit/shared'
 
-import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 import IconPicker from '../IconPicker/IconPicker'
@@ -15,7 +14,6 @@ const NoteIcon = ({ icon, onChange }) => {
 }
 
 const Toolbar: React.FC<{ nodeId: string }> = ({ nodeId }) => {
-  const ilinks = useDataStore((s) => s.ilinks)
   const fetchingContent = useEditorStore((state) => state.fetchingContent)
   const updateIconInMetadata = useMetadataStore((s) => s.addMetadata)
 
@@ -27,7 +25,8 @@ const Toolbar: React.FC<{ nodeId: string }> = ({ nodeId }) => {
     return await API.node
       .updateMetadata(nodeId, {
         metadata: {
-          icon
+          icon,
+          templateID: metadata.templateID
         }
       })
       .catch((err) => {

@@ -1,7 +1,5 @@
 import { useMatch } from 'react-router-dom'
 
-import { mog } from '@mexit/core'
-
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 
@@ -25,7 +23,7 @@ const SidebarTabs = () => {
   const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
   const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
-  mog('IS SIDEBAR', { show: sidebar.show })
+  // mog('IS SIDEBAR', { show: sidebar.show })
 
   if (!sidebar.show) return <></>
 

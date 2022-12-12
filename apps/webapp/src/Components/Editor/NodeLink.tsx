@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react'
 
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
-import { Icon } from '@iconify/react'
-
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { NodeType } from '@mexit/core'
-import { SharedNodeIcon } from '@mexit/shared'
+import { DefaultMIcons, NodeType } from '@mexit/core'
+import { IconDisplay, SharedNodeIcon } from '@mexit/shared'
 
 import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
 // import EditorPreview from '../../Editor/Components/EditorPreview/EditorPreview'
@@ -14,8 +11,9 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useNodes } from '../../Hooks/useNodes'
 // import { useOnMouseClick } from '../../Hooks/useOnMouseClick'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import useMultipleEditors from '../../Stores/useEditorsStore';
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import useMultipleEditors from '../../Stores/useEditorsStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { NodeLinkStyled, NodeLinkTitleWrapper, NodeLinkWrapper } from '../../Style/Backlinks'
 
 interface NodeLinkProps {
@@ -49,7 +47,7 @@ const NodeLink = ({ nodeid, blockId, preview = true, icon, keyStr, onClick, Rend
 
   const addPreviewInEditors = useMultipleEditors((store) => store.addEditor)
   const nodeType = getNodeType(nodeid)
-  const node = getILinkFromNodeid(nodeid)
+  const noteIcon = useMetadataStore((s) => s.metadata.notes[nodeid]?.icon)
   // const node = getNodeFrom
 
   const onClickProps = (ev) => {
@@ -105,12 +103,12 @@ const NodeLink = ({ nodeid, blockId, preview = true, icon, keyStr, onClick, Rend
       <NodeLinkWrapper onClick={onClickProps}>
         <NodeLinkStyled selected={!!isEditorPresent} key={`NodeLink_${keyStr}`}>
           <NodeLinkTitleWrapper>
-            {node?.icon ? (
-              <Icon icon={node.icon} />
+            {noteIcon ? (
+              <IconDisplay icon={noteIcon} />
             ) : nodeType === NodeType.SHARED ? (
               <SharedNodeIcon />
             ) : (
-              <Icon icon={fileList2Line} />
+              <IconDisplay icon={DefaultMIcons.NOTE} />
             )}
             {getPathFromNodeid(nodeid, true)}
           </NodeLinkTitleWrapper>
@@ -122,4 +120,3 @@ const NodeLink = ({ nodeid, blockId, preview = true, icon, keyStr, onClick, Rend
 }
 
 export default NodeLink
-

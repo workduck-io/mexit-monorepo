@@ -6,7 +6,7 @@ import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'
 import { Entity } from 'rc-tree/lib/interface'
 
-import { ItemContent, ItemCount,ItemTitle } from '@workduck-io/mex-components'
+import { ItemContent, ItemCount, ItemTitle } from '@workduck-io/mex-components'
 
 import { ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
