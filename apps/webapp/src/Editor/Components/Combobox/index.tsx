@@ -1,32 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { flip, offset, shift } from '@floating-ui/react-dom-interactions'
-import { Icon } from '@iconify/react'
 import { getRangeBoundingClientRect, PortalBody, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { DisplayShortcut } from '@workduck-io/mex-components'
+import { NodeEditorContent } from '@mexit/core'
+import { ComboboxRoot, ComboSeperator, PreviewMeta } from '@mexit/shared'
 
-import { mog, NodeEditorContent } from '@mexit/core'
-import {
-  ActionTitle,
-  ComboboxItem,
-  ComboboxItemTitle,
-  ComboboxRoot,
-  ComboboxShortcuts,
-  ComboSeperator,
-  IconDisplay,
-  ItemCenterWrapper,
-  ItemDesc,
-  ItemRightIcons,
-  ItemsContainer,
-  PreviewMeta,
-  SectionSeparator,
-  ShortcutText
-} from '@mexit/shared'
-
-import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
-import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useContentStore } from '../../../Stores/useContentStore'
@@ -40,6 +20,8 @@ import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
 
 import BlockCombo from './BlockCombo'
+import ItemsContainer from './ItemsContainer'
+import ItemShortcuts from './ItemShortcuts'
 
 export const spotlightShortcuts = {
   save: {
@@ -56,6 +38,11 @@ export const spotlightShortcuts = {
     title: 'Save and Escape',
     keystrokes: 'Escape',
     category: 'Navigation'
+  },
+  ShiftTab: {
+    title: 'Previous',
+    keystrokes: 'Shift+Tab',
+    category: 'Action'
   },
   Tab: {
     title: 'Create new quick note',
@@ -91,6 +78,13 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
       title: 'to Insert'
     }
   },
+  [QuickLinkType.prompts]: {
+    previous: spotlightShortcuts.ShiftTab,
+    generate: {
+      ...spotlightShortcuts.Tab,
+      title: 'Generate'
+    }
+  },
   [CategoryType.action]: {
     action: {
       ...spotlightShortcuts.open,
@@ -114,8 +108,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const search = useComboboxStore((store) => store.search)
   const combobox = useComboboxControls(true)
   const isOpen = useComboboxIsOpen()
-  const { getNamespace } = useNamespaces()
-  const allMetadata = useMetadataStore((s) => s.metadata)
+
   const { textAfterTrigger, textAfterBlockTrigger } = useComboboxStore((store) => store.search)
   const getContent = useContentStore((store) => store.getContent)
   const { getSnippetContent } = useSnippets()
@@ -174,20 +167,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
       } else if (type === QuickLinkType.snippet) {
         content = getSnippetContent(key)
       }
-      /*
-         * else if (key === 'remind') {
-        // mog('reminderItem', { comboItem, search })
-        const searchTerm = search.textAfterTrigger.slice(key.length)
-        const parsed = getTimeInText(searchTerm)
-        if (parsed) {
-          const time = toLocaleString(parsed.time)
-          const text = parsed.textWithoutTime
-          const newContent = getReminderPreview(time, text)
-          mog('getCommandExtendedInRenderItem', { parsed, search, newContent })
-          content = newContent
-        }
-        }
-        */
+
       if (!activeBlock) setPreview(content)
       if (isBlockTriggered && !textAfterBlockTrigger) {
         setPreview(undefined)
@@ -218,70 +198,13 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
           <>
             {!isBlockTriggered && (
               <div id="List" style={{ flex: 1 }}>
-                <ItemsContainer id="items-container">
-                  {items.map((item, index) => {
-                    const Item = onRenderItem ? onRenderItem({ item }) : item.text
-                    const lastItem = index > 0 ? items[index - 1] : undefined
-                    const namespace = getNamespace(item.namespace)?.name
-                    const isSnippet = item.type === QuickLinkType.snippet
-                    const metadata = allMetadata[isSnippet ? 'snippets' : 'notes']?.[item.key]
-                    const icon = metadata?.icon ?? item?.icon
-                    mog('COMBOBOX', { item, metadata, icon })
-
-                    return (
-                      <span key={`${item.key}-${String(index)}`}>
-                        {item.type !== lastItem?.type && (
-                          <>
-                            {index !== 0 && <SectionSeparator />}
-                            <ActionTitle>{item.type}</ActionTitle>
-                          </>
-                        )}
-                        <ComboboxItem
-                          className={index === itemIndex ? 'highlight' : ''}
-                          {...comboProps(item, index)}
-                          onMouseEnter={() => {
-                            setItemIndex(index)
-                          }}
-                          center={!namespace}
-                          onMouseDown={() => {
-                            editor && onSelectItem(editor, item)
-                          }}
-                        >
-                          {icon && <IconDisplay icon={icon} size={namespace ? 16 : 18} />}
-                          <ItemCenterWrapper>
-                            {!item.prefix ? (
-                              <ComboboxItemTitle>{Item}</ComboboxItemTitle>
-                            ) : (
-                              <ComboboxItemTitle>
-                                {item.prefix} <PrimaryText>{Item}</PrimaryText>
-                              </ComboboxItemTitle>
-                            )}
-                            {namespace && <ItemDesc>{namespace}</ItemDesc>}
-                          </ItemCenterWrapper>
-                          {item.rightIcons && (
-                            <ItemRightIcons>
-                              {item.rightIcons.map((i: string) => (
-                                <Icon key={item.key + i} icon={i} />
-                              ))}
-                            </ItemRightIcons>
-                          )}
-                        </ComboboxItem>
-                      </span>
-                    )
-                  })}
-                </ItemsContainer>
-                {itemShortcut && (
-                  <ComboboxShortcuts>
-                    {Object.entries(itemShortcut).map(([key, shortcut]) => {
-                      return (
-                        <ShortcutText key={key}>
-                          <DisplayShortcut shortcut={shortcut.keystrokes} />{' '}
-                          <div className="text">{shortcut.title}</div>
-                        </ShortcutText>
-                      )
-                    })}
-                  </ComboboxShortcuts>
-                )}
+                <ItemsContainer
+                  items={items}
+                  comboProps={comboProps}
+                  onRenderItem={onRenderItem}
+                  onSelectItem={(item) => editor && onSelectItem(editor, item)}
+                />
+                <ItemShortcuts shortcuts={itemShortcut} />
               </div>
             )}
             <BlockCombo

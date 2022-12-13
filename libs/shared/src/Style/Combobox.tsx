@@ -102,7 +102,7 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
 export const ComboboxItemTitle = styled.div<{ margin?: boolean }>`
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 22ch;
+  max-width: 24ch;
   overflow: hidden;
 `
 

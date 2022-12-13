@@ -24,6 +24,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
+import { usePromptStore } from '../../Stores/usePromptStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
@@ -54,6 +55,8 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
+  const downloadedPrompts = usePromptStore((s) => s.downloaded)
+  const createdPrompts = usePromptStore((s) => s.created)
 
   const { createNewNote } = useCreateNewNote()
 
@@ -79,6 +82,18 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       text: l.path,
       icon: l.icon ?? DefaultMIcons,
       type: QuickLinkType.backlink
+    })),
+    ...downloadedPrompts.map((l) => ({
+      value: l.entityId,
+      text: l.title,
+      icon: DefaultMIcons.PROMPT,
+      type: QuickLinkType.prompts
+    })),
+    ...createdPrompts.map((l) => ({
+      value: l.entityId,
+      text: l.title,
+      icon: DefaultMIcons.PROMPT,
+      type: QuickLinkType.prompts
     })),
     ...sharedNodes.map((l) => ({
       ...l,

@@ -8,6 +8,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { usePromptStore } from '../Stores/usePromptStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
@@ -25,21 +26,22 @@ export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
-  const { updateBaseNode } = useNodes()
+  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
+  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
+  const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
+  const setPrompts = usePromptStore((s) => s.setAllPrompts)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
+  const { updateBaseNode } = useNodes()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
   const { getAllSmartCaptures } = useSmartCapture()
-  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
-  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
-  const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -49,7 +51,8 @@ export const useInitLoader = () => {
         getAllViews(),
         getAllLinks(),
         getAllSmartCaptures(),
-        fetchAllHighlights()
+        fetchAllHighlights(),
+        API.prompt.getAllPrompts().then((res) => setPrompts(res))
       ])
     } catch (err) {
       mog('Background fetch failed')

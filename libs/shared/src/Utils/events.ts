@@ -7,7 +7,7 @@ export const isOnEditableElement = (event: Event): boolean => {
 
   if (!target) return false
 
-  mog('Is Element editable', { name: target.tagName })
+  // mog('Is Element editable', { name: target.tagName })
   return INPUT_TAGS.includes(target.tagName) || target.isContentEditable
 }
 
