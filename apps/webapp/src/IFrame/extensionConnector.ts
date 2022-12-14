@@ -3,7 +3,7 @@ import { connectToParent as connectToExtension } from 'penpal'
 
 import { StorePersistentKeys } from '@mexit/core'
 
-import { initSearchIndex, searchIndex, startSearchWorker } from '../Workers/controller'
+import { getSearchIndexInitState, initSearchIndex, searchIndex, startSearchWorker } from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
@@ -40,8 +40,8 @@ export const webExtensionConnector = async () => {
     })
     .then(async () => {
       await startSearchWorker()
-      // eslint-disable-next-line no-constant-condition
-      if (true) {
+      const initState = await getSearchIndexInitState()
+      if (!initState) {
         const storeValues = {
           DATA: await getStoreValueFromIDB(StorePersistentKeys.DATA),
           SNIPPETS: await getStoreValueFromIDB(StorePersistentKeys.SNIPPETS, 'snippets'),
