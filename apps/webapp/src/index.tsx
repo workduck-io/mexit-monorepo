@@ -1,4 +1,4 @@
-import 'threads/register'
+import '@workduck-io/mex-threads.js/register'
 
 import React from 'react'
 import { createRoot } from 'react-dom/client'

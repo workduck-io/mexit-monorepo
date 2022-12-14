@@ -1,7 +1,8 @@
 import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
-import { expose } from 'threads/worker'
+
+import { expose } from '@workduck-io/mex-threads.js/worker'
 
 import { apiURLs, mog, runBatch } from '@mexit/core'
 

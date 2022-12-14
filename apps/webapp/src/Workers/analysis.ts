@@ -1,6 +1,6 @@
-import { expose } from 'threads/worker'
+import { exposeShared } from '@workduck-io/mex-threads.js/worker'
 
-import { 
+import {
   convertContentToRawText,
   ELEMENTS_IN_OUTLINE,
   getTagsFromContent,
@@ -11,7 +11,8 @@ import {
   LIST_ELEMENTS,
   NodeEditorContent,
   SearchRepExtra,
-  TodoType } from '@mexit/core'
+  TodoType
+} from '@mexit/core'
 
 export interface OutlineItem {
   id: string
@@ -159,4 +160,4 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
   return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
 
-expose({ analyseContent })
+exposeShared({ analyseContent })

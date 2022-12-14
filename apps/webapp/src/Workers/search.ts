@@ -1,4 +1,4 @@
-import { expose } from 'threads/worker'
+import { exposeShared } from '@workduck-io/mex-threads.js/worker'
 
 import {
   GenericSearchResult,
@@ -272,4 +272,4 @@ const searchWorker: SearchWorker = {
   }
 }
 
-expose(searchWorker as any)
+exposeShared(searchWorker as any)

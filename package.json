@@ -18,6 +18,7 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
+    "@workduck-io/mex-threads.js": "^0.1.2",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1"
   },
