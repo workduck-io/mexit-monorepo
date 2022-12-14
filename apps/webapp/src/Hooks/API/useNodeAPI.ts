@@ -177,9 +177,10 @@ export const useApi = () => {
               updatedAt: Date.now(),
               lastEditedBy: currentUser.userID
             }
-          : extractMetadata(d)
+          : origMetadata
 
-        setContent(noteID, contentToSet, metadata)
+        setContent(noteID, contentToSet)
+        addMetadata('notes', { [noteID]: metadata })
 
         addLastOpened(noteID)
         return d
