@@ -7,24 +7,33 @@ import {
   CREATE_NEW_ITEM,
   fuzzySearchLinks,
   getListItemFromLink,
+  idxKey,
   initActions,
   isReservedOrClash,
   ListItemType,
+  mog,
   QuickLinkType,
-  sortByCreated} from '@mexit/core'
+  sortByCreated
+} from '@mexit/core'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { childIframe } from '../Sync/iframeConnector'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 import { useAuthStore } from './useAuth'
 import { useQuickLinks } from './useQuickLinks'
-import useRaju from './useRaju'
 import { useSnippets } from './useSnippets'
 
+const searchViaWorker = async (key: idxKey | idxKey[], query: string) => {
+  if (childIframe) {
+    mog('Trying to search in extension via worker: ', { key, query })
+    return childIframe.searchIndex(key, query)
+  }
+}
+
 export const useSearch = () => {
-  const { dispatch } = useRaju()
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
   const ilinks = useDataStore((state) => state.ilinks)
@@ -40,8 +49,8 @@ export const useSearch = () => {
 
     switch (search?.type) {
       case CategoryType.backlink:
-        const nodeItems = await dispatch('SEARCH', ['node'], search.value)
-        const snippetItems = await dispatch('SEARCH', ['snippet', 'template'], search.value)
+        const nodeItems = await searchViaWorker(['node'], search.value)
+        const snippetItems = await searchViaWorker(['snippet', 'template'], search.value)
 
         const sortedLinks = links.sort(sortByCreated)
 

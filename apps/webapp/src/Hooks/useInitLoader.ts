@@ -66,7 +66,6 @@ export const useInitLoader = () => {
       initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       updateBaseNode()
-
       // We only set showLoader to false here because when needed the loader would be made visible by another component
       setShowLoader(false)
     } catch (err) {
