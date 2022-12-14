@@ -5,6 +5,8 @@ import Creatable from 'react-select/creatable'
 import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 export enum TextFieldHeight {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
@@ -22,12 +24,10 @@ interface InputProps {
 }
 
 export const Input = styled.input<InputProps>`
-  background-color: ${({ theme }) => theme.colors.form.input.bg};
-  color: ${({ theme }) => theme.colors.form.input.fg};
-  border: 1px solid ${({ theme }) => theme.colors.form.input.border};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
-  border: none;
+  transition: all 0.2s ease-in-out;
+  ${({ theme }) => generateStyle(theme.generic.form.input)};
 
   &:focus-visible {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -41,13 +41,11 @@ export const Input = styled.input<InputProps>`
       border: 1px solid transparent;
       &:hover,
       &:focus {
-        background-color: ${theme.colors.form.input.bg};
-        border: 1px solid ${theme.colors.form.input.border};
+        ${({ theme }) => generateStyle(theme.generic.form.input.hover)};
       }
       ${isDirty &&
       css`
-        background-color: ${theme.colors.form.input.bg};
-        border: 1px solid ${theme.colors.form.input.border};
+        ${({ theme }) => generateStyle(theme.generic.form.input.hover)};
       `}
     `}
 
@@ -99,21 +97,18 @@ export const NotFoundText = styled.div`
 `
 
 export const TextArea = styled.textarea`
-  background-color: ${({ theme }) => theme.colors.form.input.bg};
-  color: ${({ theme }) => theme.colors.form.input.fg};
-  border: 1px solid ${({ theme }) => theme.colors.form.input.border};
+  ${({ theme }) => generateStyle(theme.generic.form.input)};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
 
   &:focus {
     outline: 0;
-
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 
   &:hover,
   &:active {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -146,7 +141,7 @@ export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?
         opacity: 0.8;
         font-size: 0.96rem;
       }
-    `} 
+    `}
 
    ${({ height }) => {
     switch (height) {
@@ -179,7 +174,7 @@ interface LabelProps {
 }
 
 export const Label = styled.label<LabelProps>`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   margin: ${({ theme: { spacing }, noTopMargin }) => `${noTopMargin ? 0 : spacing.medium} 0 3px`};
   display: flex;
   align-items: center;
@@ -212,26 +207,26 @@ export const ReactSelectStyles = (theme: DefaultTheme) => ({
     ...provided,
     // width: state.selectProps.width,
     color: state.selectProps.menuColor,
-    backgroundColor: theme.colors.background.modal,
+    backgroundColor: theme.generic.form.input.surface,
     padding: `${theme.spacing.small} ${theme.spacing.small}`,
     zIndex: 1020
   }),
 
   control: (provided) => ({
     ...provided,
-    backgroundColor: theme.colors.form.input.bg,
-    borderColor: theme.colors.form.input.border,
+    backgroundColor: theme.generic.form.input.surface,
+    borderColor: theme.tokens.surfaces.s[3],
     margin: `${theme.spacing.small} 0`
   }),
 
   option: (provided, state) => {
-    let background = state.isSelected ? theme.colors.primary : 'transparent'
-    background = state.isFocused ? transparentize(0.33, theme.colors.primary) : background
+    let background = state.isSelected ? theme.tokens.colors.primary.default : 'transparent'
+    background = state.isFocused ? `rgba(${theme.rgbTokens.colors.primary.default}, 0.2)` : background
     return {
       ...provided,
       borderRadius: theme.borderRadius.tiny,
       backgroundColor: background,
-      color: state.isSelected || state.isFocused ? theme.colors.text.oppositePrimary : 'inherit',
+      color: state.isSelected || state.isFocused ? theme.tokens.colors.primary.default : 'inherit',
       padding: '6px 10px',
       margin: `${theme.spacing.tiny} 0px`
     }

@@ -43,7 +43,7 @@ const iconStyle = (primary?: boolean) => css`
   & > svg {
     height: 1.5rem;
     width: 1.5rem;
-    color: ${({ theme }) => (primary ? theme.colors.primary : theme.colors.gray[9])};
+    color: ${({ theme }) => (primary ? theme.tokens.colors.primary.default : theme.tokens.text.fade)};
   }
 `
 export const InputWrapper = styled.div<{ transparent?: boolean }>`
@@ -51,7 +51,7 @@ export const InputWrapper = styled.div<{ transparent?: boolean }>`
   ${({ transparent }) =>
     transparent &&
     css`
-      background-color: ${({ theme }) => theme.colors.gray[8]};
+      background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
       padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
       border-radius: ${({ theme }) => theme.borderRadius.small};
       margin-bottom: ${({ theme }) => theme.spacing.medium};
@@ -69,7 +69,7 @@ export const SearchHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
@@ -88,7 +88,7 @@ export const SearchFiltersWrapper = styled.div`
 `
 
 export const SearchFilterCategoryLabel = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   padding: ${({ theme }) => `${theme.spacing.small} 0`};
 `
 
@@ -99,7 +99,7 @@ export const SearchFilterLabel = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   ${iconStyle(true)};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const SearchFilterListWrap = styled.div`
@@ -125,7 +125,7 @@ export const SearchFilterList = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+  border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
