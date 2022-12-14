@@ -87,8 +87,8 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
   z-index: 11;
   padding: 8px;
   border-radius: 100%;
-  background: ${({ theme }) => theme.colors.background.sidebar};
-  color: ${({ theme }) => theme.colors.text.fade};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   svg {
     height: 16px;
@@ -103,15 +103,15 @@ export const SidebarToggleWrapper = styled.div<SidebarToggleWrappperProps>`
 
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-    background: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    background: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 
   &:active {
     transition: background 0.1s ease;
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.active};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 `
 

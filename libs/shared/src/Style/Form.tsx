@@ -27,7 +27,7 @@ export const Input = styled.input<InputProps>`
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
   transition: all 0.2s ease-in-out;
-  ${({ theme }) => generateStyle(theme.generic.form.input)};
+  ${({ theme, transparent }) => !transparent && generateStyle(theme.generic.form.input)};
 
   &:focus-visible {
     border-color: ${({ theme }) => theme.colors.primary};

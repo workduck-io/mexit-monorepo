@@ -279,8 +279,7 @@ export const CreateNewButton = styled.button<CreateNewButtonProps>`
   align-items: center;
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.colors.text.default};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  ${({ theme }) => generateStyle(theme.sidebar.createNew.button)}
   transition: 0.15s transform ease-out, 0.5s color ease-in;
 
   :hover {
@@ -308,7 +307,8 @@ export const CreateNewMenuWrapper = styled.div`
   flex-direction: column;
   min-width: 200px;
   border-radius: ${({ theme }) => theme.spacing.small};
-  background: ${({ theme }) => theme.colors.gray[8]};
+  ${({ theme }) => generateStyle(theme.sidebar.createNew.menu)}
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `
 
 export const CreateNewMenuItemWrapper = styled.div`
@@ -318,11 +318,7 @@ export const CreateNewMenuItemWrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.spacing.tiny};
   gap: ${({ theme }) => theme.spacing.tiny};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
-  }
+  ${({ theme }) => generateStyle(theme.sidebar.createNew.item)}
 `
 
 const SpecialNoteStyle = css`

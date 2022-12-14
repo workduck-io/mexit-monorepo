@@ -1,10 +1,14 @@
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+const rgba = (cssVar: string, alpha: number) => {
+  return `rgba(${cssVar}, ${alpha})`
+}
 
 export const getTippyStyles = (name: string, textColor: string, background: string, border?: string) => css`
   .tippy-box[data-theme~='${name}'] {
     background: ${background};
     color: ${textColor};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 
     &[data-placement^='top'] > .tippy-arrow::before {
       border-top-color: ${border || background};
@@ -65,73 +69,28 @@ export const TippyBalloonStyles = css`
     }
   }
 
-  ${({ theme }) => getTippyStyles('mex', theme.colors.text.fade, theme.colors.gray[8])}
-  ${({ theme }) => getTippyStyles('mex-error', theme.colors.text.fade, theme.colors.palette.red)}
-  ${({ theme }) => getTippyStyles('mex-bright', theme.colors.text.oppositePrimary, theme.colors.primary)}
+  ${({ theme }) => getTippyStyles('mex', theme.tokens.text.fade, theme.tokens.surfaces.tooltip.default)}
+  ${({ theme }) => getTippyStyles('mex-error', theme.tokens.text.fade, theme.tokens.colors.red)}
+  ${({ theme }) => getTippyStyles('mex-bright', theme.tokens.colors.primary.text, theme.tokens.colors.primary.default)}
 
+  ${({ theme }) =>
+    getTippyStyles('markdown-help', theme.tokens.text.default, rgba(theme.rgbTokens.surfaces.tooltip.info, 0.6))}
   .tippy-box[data-theme~='markdown-help'] {
-    background: ${({ theme }) => transparentize(0.4, theme.colors.gray[8])};
-    color: ${({ theme }) => theme.colors.text.default};
-    box-shadow: 0 0 8px 2px ${({ theme }) => theme.colors.gray[10]};
+    background: ${({ theme }) => rgba(theme.rgbTokens.surfaces.tooltip.info, 0.6)};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
     backdrop-filter: blur(10px);
     border-radius: ${({ theme }) => theme.borderRadius.small};
     max-width: 600px !important;
-
-    &[data-placement^='top'] > .tippy-arrow::before {
-      border-top-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='bottom'] > .tippy-arrow::before {
-      border-bottom-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='left'] > .tippy-arrow::before {
-      border-left-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='right'] > .tippy-arrow::before {
-      border-right-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    & > .tippy-backdrop {
-      background: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    & > .tippy-svg-arrow {
-      fill: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
   }
 
+  ${({ theme }) =>
+    getTippyStyles('help-text', theme.tokens.text.default, rgba(theme.rgbTokens.surfaces.tooltip.info, 0.6))}
   .tippy-box[data-theme~='help-text'] {
-    background: ${({ theme }) => transparentize(0.4, theme.colors.gray[8])};
-    color: ${({ theme }) => theme.colors.text.default};
-    box-shadow: 0 0 8px 2px ${({ theme }) => theme.colors.gray[10]};
+    background: ${({ theme }) => rgba(theme.rgbTokens.surfaces.tooltip.info, 0.6)};
+    color: ${({ theme }) => theme.tokens.text.accent};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
     backdrop-filter: blur(10px);
     border-radius: ${({ theme }) => theme.borderRadius.small};
-
-    &[data-placement^='top'] > .tippy-arrow::before {
-      border-top-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='bottom'] > .tippy-arrow::before {
-      border-bottom-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='left'] > .tippy-arrow::before {
-      border-left-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    &[data-placement^='right'] > .tippy-arrow::before {
-      border-right-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    & > .tippy-backdrop {
-      background: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
-
-    & > .tippy-svg-arrow {
-      fill: ${({ theme }) => transparentize(0.9, theme.colors.gray[8])};
-    }
   }
 
   .tippy-box[data-animation='fade'][data-state='hidden'] {

@@ -40,9 +40,9 @@ export const ShowOnHoverIconStyles = css`
 `
 
 export const SubtleGlow = css`
-  background-color: ${({ theme }) => theme.colors.primary};
-  box-shadow: 0px 2px 6px ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+  box-shadow: 0px 2px 6px ${({ theme }) => theme.tokens.colors.primary.default};
+  color: ${({ theme }) => theme.tokens.colors.primary.text};
 `
 
 export const HoverSubtleGlow = css`

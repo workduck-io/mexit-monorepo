@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 import { FocusModeProp, focusStyles } from './Editor'
 import { ThinScrollbar } from './Helpers'
 
@@ -87,13 +89,13 @@ export const StyledTreeSwitcher = styled.button`
   margin-left: ${({ theme }) => theme.spacing.tiny};
 `
 export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
-  color: ${({ theme }) => transparentize(0.3, theme.colors.text.fade)};
+  color: rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.3);
   border-radius: 3px;
   transition: 0.1s ease;
   &:hover {
     transition: 0s ease;
-    color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.gray[8]};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 
@@ -116,7 +118,7 @@ export const ItemTitle = styled.div`
 export const ItemCount = styled.div`
   flex-shrink: 0;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const TooltipContentWrapper = styled.div`
@@ -167,6 +169,11 @@ export const StyledTreeItem = styled.div<{
   gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding-right: 8px;
+  ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper)};
+
+  &:hover {
+    transition: 0s ease;
+  }
 
   transition: 0.25s ease;
 
@@ -185,22 +192,17 @@ export const StyledTreeItem = styled.div<{
   ${({ hasMenuOpen, isHighlighted, theme }) =>
     (hasMenuOpen || isHighlighted) &&
     css`
-      background: ${transparentize(0.5, theme.colors.gray[7])};
-      color: ${theme.colors.text.fade};
+      background: ${theme.sidebar.tree.item.wrapper.selected.surface};
+      color: ${theme.sidebar.tree.item.wrapper.selected.textColor};
     `}
 
-  &:hover {
-    transition: 0s ease;
-    background: ${({ theme }) => theme.colors.gray[7]};
-  }
 
   ${({ selected, hasMenuOpen, theme }) =>
     selected &&
     css`
-      background: ${theme.colors.primary};
-      color: ${theme.colors.text.oppositePrimary};
+      ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper.selected)};
       ${ItemCount}, svg {
-        color: ${theme.colors.text.oppositePrimary};
+        ${({ theme }) => generateStyle(theme.sidebar.tree.item.count)};
       }
       :hover {
         background: ${transparentize(0.3, theme.colors.primary)};

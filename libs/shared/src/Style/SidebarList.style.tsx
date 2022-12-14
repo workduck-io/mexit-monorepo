@@ -43,7 +43,7 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   padding: 0 ${({ theme }) => theme.spacing.small};
   margin: ${({ theme }) => `0 0`};
   margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
-  background: ${({ theme }) => theme.colors.form.input.bg};
+  background: ${({ theme }) => theme.generic.form.input.surface};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
   ${Input} {
