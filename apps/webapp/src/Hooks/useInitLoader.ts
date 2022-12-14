@@ -9,7 +9,7 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import { initSearchIndex } from '../Workers/controller'
+import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
@@ -89,7 +89,8 @@ export const useInitLoader = () => {
         contents: useContentStore.getState().contents
       }
 
-      initSearchIndex(initData).then(() => {
+      initSearchIndex(initData).then(async () => {
+        await startRequestsWorkerService()
         backgroundFetch()
         fetchAll()
       })

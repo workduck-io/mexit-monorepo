@@ -2,7 +2,7 @@ import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
 
-import { expose } from '@workduck-io/mex-threads.js/worker'
+import { exposeShared } from '@workduck-io/mex-threads.js/worker'
 
 import { apiURLs, mog, runBatch } from '@mexit/core'
 
@@ -131,4 +131,4 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
   return res
 }
 
-expose({ initializeClient, runBatchWorker })
+exposeShared({ initializeClient, runBatchWorker })

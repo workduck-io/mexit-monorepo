@@ -7,7 +7,6 @@ import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
 
 // import analysisWorkerConstructor from './analysis?worker'
-import requestsWorkerConstructor from './requests?worker'
 // import searchWorkerConstructor from './search?worker'
 
 export type AnalysisModifier = SearchRepExtra
@@ -48,10 +47,19 @@ export const startRequestsWorkerService = async () => {
   if (requestsWorker.status === WORKER_STATUS.CRASHED || requestsWorker.status === WORKER_STATUS.NOT_STARTED) {
     requestsWorker.status = WORKER_STATUS.INITIALIZING
     try {
-      requestsWorker.instance = await spawn(new requestsWorkerConstructor())
+      requestsWorker.instance = await spawn(
+        new SharedWorker(new URL('requests.ts', import.meta.url), {
+          type: 'module',
+          name: 'Requests Worker'
+        })
+      )
+      const token = useInternalAuthStore.getState().userCred.token
+      const workspaceID = useAuthStore.getState().getWorkspaceId()
+
+      initRequestClient(token, workspaceID)
       requestsWorker.status = WORKER_STATUS.RUNNING
     } catch (err) {
-      console.error(err)
+      console.error('REQUEST WORKER CRASHED', err)
       requestsWorker.instance = null
       requestsWorker.status = WORKER_STATUS.CRASHED
     }
@@ -66,10 +74,10 @@ export const runBatchWorker = async (
   const token = useInternalAuthStore.getState().userCred.token
   const workspaceID = useAuthStore.getState().getWorkspaceId()
 
-  if (requestsWorker.status !== WORKER_STATUS.RUNNING || !requestsWorker.instance) {
-    await startRequestsWorkerService()
-    initRequestClient(token, workspaceID)
-  }
+  // if (requestsWorker.status !== WORKER_STATUS.RUNNING || !requestsWorker.instance) {
+  //   await startRequestsWorkerService()
+  //   initRequestClient(token, workspaceID)
+  // }
 
   const res = await requestsWorker.instance.runBatchWorker(requestType, batchSize, args)
   return res
