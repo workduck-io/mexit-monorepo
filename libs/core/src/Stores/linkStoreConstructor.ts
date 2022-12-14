@@ -1,6 +1,10 @@
 export interface Link {
   url: string
+
+  // Useful for having preview image and other metatags for the shortened link
   title: string
+  description?: string
+  imgSrc?: string
 
   /**
    * If the link is shortend it has an alias

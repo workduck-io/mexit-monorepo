@@ -5,10 +5,10 @@ import edit2Line from '@iconify/icons-ri/edit-2-line'
 import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
 
-import { apiURLs, Link,mog } from '@mexit/core'
+import { apiURLs, Link, mog } from '@mexit/core'
 
 import { Input } from '../Style/Form'
-import { ShortenButton,ShortenSectionWrapper } from '../Style/ShortenURL.style'
+import { ShortenButton, ShortenSectionWrapper } from '../Style/ShortenURL.style'
 
 import { Tooltip } from './FloatingElements'
 
@@ -20,6 +20,22 @@ interface ShortenURLProps {
 }
 
 const validLink = /^[a-z0-9_-]+$/i
+
+// Cannot use this function in the shortener component as it exists in the iframe
+// export const getBetterLink = (href: string) => {
+//   const url = new URL(href)
+
+//   // checking if the url is of a youtube video
+//   if (url.pathname.startsWith('/watch')) {
+//     const yt = document.getElementById('movie_player')
+//     // @ts-ignore
+//     const currentTimestamp = Math.floor(yt?.getCurrentTime() ?? 0)
+
+//     url.searchParams.append('t', String(currentTimestamp))
+//   }
+
+//   return url.href
+// }
 
 // TODO: Add a input to enter shorten url
 export const ShortenURL = ({ link, workspaceId, updateAlias, isDuplicateAlias }: ShortenURLProps) => {

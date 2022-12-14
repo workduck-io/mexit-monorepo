@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { MetaHTMLAttributes, useMemo } from 'react'
 
 import styled from 'styled-components'
 
@@ -49,6 +49,14 @@ const FaviconImage = ({ source }: { source: string }) => {
   return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 
+const getGoodMeta = (document: Document) => {
+  return {
+    title: document.title,
+    description: (document.querySelector('meta[name="description"]') as MetaHTMLAttributes<HTMLElement>)?.content,
+    imgSrc: (document.querySelector('meta[property="og:image"]') as MetaHTMLAttributes<HTMLElement>)?.content
+  }
+}
+
 export const ShortenerComponent = () => {
   const { links } = useLinkStore()
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -57,7 +65,12 @@ export const ShortenerComponent = () => {
 
   const link = useMemo(() => {
     const l = links.find((l) => l.url === window.location.href)
-    return l ?? { url: window.location.href, title: document.title }
+    return (
+      l ?? {
+        url: window.location.href,
+        ...getGoodMeta(document)
+      }
+    )
   }, [links, window.location])
 
   const tags = useMemo(() => {
@@ -72,8 +85,8 @@ export const ShortenerComponent = () => {
     if (links.find((l) => l.url === linkurl)) {
       updateAlias(linkurl, alias)
     } else {
-      const link = { url: linkurl, title: document.title, alias: alias }
-      saveLink(link)
+      const newLink = { ...link, url: linkurl, alias: alias }
+      saveLink(newLink)
     }
   }
 
