@@ -101,7 +101,7 @@ export const getTitleFromContent = (content: NodeEditorContent) => {
   return title
 }
 
-export const convertDataToIndexable = (data: PersistentData) => {
+export const convertDataToIndexable = (data: Partial<PersistentData>) => {
   const nodeBlockMap: { [key: string]: string[] } = {}
   const result: Record<indexNames, GenericSearchData[]> = Object.entries(indexNames).reduce((p, c) => {
     const idxResult = []

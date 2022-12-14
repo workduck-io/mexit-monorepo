@@ -11,7 +11,7 @@ import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
-import { terminateRequestWorker } from '../Workers/controller'
+import { terminateAllWorkers } from '../Workers/controller'
 
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
@@ -92,7 +92,7 @@ export const useAuthentication = () => {
   const logout = async () => {
     await signOut()
     try {
-      await terminateRequestWorker()
+      await terminateAllWorkers()
     } catch (err) {
       mog('Worker Termination failed!', { err })
     }

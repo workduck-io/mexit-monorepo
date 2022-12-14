@@ -131,4 +131,7 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
   return res
 }
 
-exposeShared({ initializeClient, runBatchWorker })
+const functions = { initializeClient, runBatchWorker }
+
+export type RequestsWorkerInterface = typeof functions
+exposeShared(functions)

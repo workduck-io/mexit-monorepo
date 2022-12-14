@@ -1,10 +1,21 @@
+import { get } from 'idb-keyval'
 import { connectToParent as connectToExtension } from 'penpal'
 
-import { searchIndex, startSearchWorker } from '../Workers/controller'
+import { StorePersistentKeys } from '@mexit/core'
+
+import { initSearchIndex, searchIndex, startSearchWorker } from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
 import { syncStoresWithExtension } from './syncedStores'
+
+const getStoreValueFromIDB = async (key: StorePersistentKeys, field?: string) => {
+  const idbValue = await get(key)
+  if (idbValue) {
+    const jsonStoreValue = JSON.parse(idbValue).state
+    return field ? jsonStoreValue[field] : jsonStoreValue
+  }
+}
 
 export const webExtensionConnector = async () => {
   /*
@@ -26,7 +37,26 @@ export const webExtensionConnector = async () => {
       // console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
       syncStoresWithExtension(extension)
       initializeExtension(extension)
-      startSearchWorker()
+    })
+    .then(async () => {
+      await startSearchWorker()
+      // eslint-disable-next-line no-constant-condition
+      if (true) {
+        const storeValues = {
+          DATA: await getStoreValueFromIDB(StorePersistentKeys.DATA),
+          SNIPPETS: await getStoreValueFromIDB(StorePersistentKeys.SNIPPETS, 'snippets'),
+          CONTENTS: await getStoreValueFromIDB(StorePersistentKeys.CONTENTS, 'contents')
+        }
+
+        const initData = {
+          ilinks: storeValues.DATA.ilinks,
+          archive: storeValues.DATA.archive,
+          sharedNodes: storeValues.DATA.sharedNodes,
+          snippets: storeValues.SNIPPETS,
+          contents: storeValues.CONTENTS
+        }
+        await initSearchIndex(initData)
+      }
     })
     .catch((err) => {
       console.error('[IFRAME -- X -- EXTENSION]', { err })

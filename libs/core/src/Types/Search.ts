@@ -92,4 +92,5 @@ export interface SearchWorker {
   searchIndexByNodeId: (key: idxKey | idxKey[], nodeId: string, query: string) => GenericSearchResult[]
   // dumpIndexDisk: (location: string) => Promise<void>
   searchIndexWithRanking: (key: idxKey | idxKey[], query: string, tags?: Array<string>) => GenericSearchResult[]
+  getInitState: () => boolean
 }

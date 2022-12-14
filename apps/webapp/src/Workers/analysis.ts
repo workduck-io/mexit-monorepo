@@ -159,5 +159,7 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
 
   return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
+const functions = { analyseContent }
 
-exposeShared({ analyseContent })
+export type AnalysisWorkerInterface = typeof functions
+exposeShared(functions)

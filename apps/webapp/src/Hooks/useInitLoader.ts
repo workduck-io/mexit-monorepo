@@ -88,11 +88,15 @@ export const useInitLoader = () => {
         contents: useContentStore.getState().contents
       }
 
-      initSearchIndex(initData).then(async () => {
-        await startRequestsWorkerService()
-        backgroundFetch()
-        fetchAll()
-      })
+      initSearchIndex(initData)
+        .then(async () => {
+          await startRequestsWorkerService()
+          backgroundFetch()
+          fetchAll()
+        })
+        .catch((error) => {
+          console.log('InitSearchIndexError', { error })
+        })
     }
   }, [isAuthenticated, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
 }
