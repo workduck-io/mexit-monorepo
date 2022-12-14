@@ -6,9 +6,6 @@ import { idxKey, mog, NodeEditorContent, PersistentData, SearchRepExtra } from '
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
 
-// import analysisWorkerConstructor from './analysis?worker'
-// import searchWorkerConstructor from './search?worker'
-
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
   title?: boolean
@@ -73,11 +70,6 @@ export const runBatchWorker = async (
 ) => {
   const token = useInternalAuthStore.getState().userCred.token
   const workspaceID = useAuthStore.getState().getWorkspaceId()
-
-  // if (requestsWorker.status !== WORKER_STATUS.RUNNING || !requestsWorker.instance) {
-  //   await startRequestsWorkerService()
-  //   initRequestClient(token, workspaceID)
-  // }
 
   const res = await requestsWorker.instance.runBatchWorker(requestType, batchSize, args)
   return res
