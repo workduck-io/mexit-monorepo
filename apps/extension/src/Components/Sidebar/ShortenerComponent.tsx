@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 
 import styled from 'styled-components'
 
-import { getFavicon, Tag } from '@mexit/core'
+import { getFavicon, Link, Tag } from '@mexit/core'
 import {
   AddTagMenu,
   CopyButton,
@@ -78,12 +78,23 @@ export const ShortenerComponent = () => {
   }
 
   const onAddNewTag = (tag: Tag) => {
-    // mog('onAddNewTag', { tag })
-    addTag(link.url, tag.value)
+    // If link doesn't exist yet just save it with the tag provided
+    if (links.find((l) => l.url === link.url)) {
+      addTag(link.url, tag.value)
+    } else {
+      const newLink: Link = { ...link, tags: [tag.value] }
+      saveLink(newLink)
+    }
   }
 
   const onAddCreateTag = (tagStr: string) => {
-    addTag(link.url, tagStr)
+    // If link doesn't exist yet just save it with the tag provided
+    if (links.find((l) => l.url === link.url)) {
+      addTag(link.url, tagStr)
+    } else {
+      const newLink: Link = { ...link, tags: [tagStr] }
+      saveLink(newLink)
+    }
   }
 
   const onRemoveTag = (tagStr: string) => {
