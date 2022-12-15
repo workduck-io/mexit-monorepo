@@ -1,5 +1,6 @@
 import { connectToChild, Methods } from 'penpal'
 
+import { useInitStore } from '../Stores/useInitStore'
 import { styleSlot } from '../Utils/cs-utils'
 
 import { messageHandler, MessageType } from './messageHandler'
@@ -27,7 +28,6 @@ const messageBroadcaster = () => {
   const exposedMethods: Methods = {
     sendToExtension: (message: MessageType) => {
       messageHandler(message)
-      return 100
     }
   }
 
@@ -39,6 +39,7 @@ const messageBroadcaster = () => {
   const handleIframeLoad = async () => {
     connection.promise.then((child) => {
       childIframe = child
+      useInitStore.getState().setIframeAdded(true)
     })
   }
 

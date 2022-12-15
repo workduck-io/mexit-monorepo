@@ -4,12 +4,22 @@ import { connectToParent as connectToExtension } from 'penpal'
 import { StorePersistentKeys } from '@mexit/core'
 
 import {
+  addDoc,
   getSearchIndexInitState,
+  initHighlightsExtension,
+  initLinksExtension,
+  initNamespacesExtension,
+  initRequestClient,
   initSearchIndex,
+  initSmartCapturesExtension,
+  initSnippetsExtension,
+  removeDoc,
   searchIndex,
   searchIndexByNodeId,
   searchIndexWithRanking,
-  startSearchWorker
+  startRequestsWorkerService,
+  startSearchWorker,
+  updateDoc
 } from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
@@ -34,7 +44,20 @@ export const webExtensionConnector = async () => {
     searchIndex,
     searchIndexByNodeId,
     searchIndexWithRanking,
-    uploadImageToCDN
+    uploadImageToCDN,
+    startSearchWorker,
+    initSearchIndex,
+    getSearchIndexInitState,
+    initNamespacesExtension,
+    initSnippetsExtension,
+    initRequestClient,
+    startRequestsWorkerService,
+    addDoc,
+    updateDoc,
+    removeDoc,
+    initHighlightsExtension,
+    initLinksExtension,
+    initSmartCapturesExtension
   }
 
   // * Connect and expose Web app methods
@@ -48,26 +71,6 @@ export const webExtensionConnector = async () => {
       // console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
       syncStoresWithExtension(extension)
       initializeExtension(extension)
-    })
-    .then(async () => {
-      await startSearchWorker()
-      const initState = await getSearchIndexInitState()
-      if (!initState) {
-        const storeValues = {
-          DATA: await getStoreValueFromIDB(StorePersistentKeys.DATA),
-          SNIPPETS: await getStoreValueFromIDB(StorePersistentKeys.SNIPPETS, 'snippets'),
-          CONTENTS: await getStoreValueFromIDB(StorePersistentKeys.CONTENTS, 'contents')
-        }
-
-        const initData = {
-          ilinks: storeValues.DATA.ilinks,
-          archive: storeValues.DATA.archive,
-          sharedNodes: storeValues.DATA.sharedNodes,
-          snippets: storeValues.SNIPPETS,
-          contents: storeValues.CONTENTS
-        }
-        await initSearchIndex(initData)
-      }
     })
     .catch((err) => {
       console.error('[IFRAME -- X -- EXTENSION]', { err })

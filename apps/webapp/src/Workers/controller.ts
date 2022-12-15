@@ -3,7 +3,7 @@ import { SharedWorker, spawn, Thread } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 import { type WorkerFunction, type WorkerModule } from '@workduck-io/mex-threads.js/types/worker'
 
-import { idxKey, mog, NodeEditorContent, PersistentData, SearchRepExtra } from '@mexit/core'
+import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippet } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
@@ -267,4 +267,58 @@ export const terminateAllWorkers = async () => {
   await Thread.terminate(searchWorker.instance)
   searchWorker.status = WORKER_STATUS.NOT_STARTED
   searchWorker.instance = null
+}
+
+export const initNamespacesExtension = async (localILinks: ILink[]) => {
+  try {
+    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+    const results = await requestsWorker.instance.initializeNamespacesExtension(localILinks)
+    return results
+  } catch (error) {
+    mog('InitNamespacesExtension', { error })
+  }
+}
+
+export const initSnippetsExtension = async (localSnippets: Snippet[]) => {
+  try {
+    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.instance.initializeSnippetsExtension(localSnippets)
+    return results
+  } catch (error) {
+    mog('InitSnippetsError', { error })
+  }
+}
+
+export const initLinksExtension = async () => {
+  try {
+    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.instance.initializeLinksExtension()
+    return results
+  } catch (error) {
+    return undefined
+  }
+}
+
+export const initHighlightsExtension = async () => {
+  try {
+    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.instance.initializeHighlightsExtension()
+    return results
+  } catch (error) {
+    return undefined
+  }
+}
+
+export const initSmartCapturesExtension = async () => {
+  try {
+    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.instance.initializeSmartCapturesExtension()
+    return results
+  } catch (error) {
+    return undefined
+  }
 }

@@ -4,7 +4,17 @@ import { customAlphabet } from 'nanoid'
 
 import { exposeShared } from '@workduck-io/mex-threads.js/worker'
 
-import { apiURLs, mog, runBatch } from '@mexit/core'
+import {
+  apiURLs,
+  batchArray,
+  batchArrayWithNamespaces,
+  DefaultMIcons,
+  ILink,
+  iLinksToUpdate,
+  mog,
+  runBatch,
+  Snippet
+} from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
 
@@ -131,7 +141,127 @@ const runBatchWorker = async (requestType: WorkerRequestType, batchSize = 6, arg
   return res
 }
 
-const functions = { initializeClient, runBatchWorker }
+const initializeNamespacesExtension = async (localILinks: ILink[]) => {
+  const namespaces = await client
+    .get(apiURLs.namespaces.getAll())
+    .then((d) => d.json())
+    .then((d: any) => {
+      return d.map((item: any) => {
+        return {
+          ns: {
+            id: item.id,
+            name: item.name,
+            icon: item.metadata?.icon ?? undefined,
+            access: item.accessType,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            granterID: item.granterID ?? undefined,
+            publicAccess: item.publicAccess
+          },
+          nodeHierarchy: item.nodeHierarchy.map((i) => ({
+            ...i,
+            namespace: item.id,
+            icon: i.icon ?? DefaultMIcons.NOTE
+          })),
+          archiveNodeHierarchy: item.archiveNodeHierarchy.map((i) => ({ ...i, namespace: item.id }))
+        }
+      })
+    })
+    .catch((e) => {
+      mog('Error fetching all namespaces', { e })
+      return undefined
+    })
+
+  if (namespaces) {
+    const newILinks = namespaces.reduce((arr, { nodeHierarchy }) => {
+      return [...arr, ...nodeHierarchy]
+    }, [])
+
+    namespaces.forEach((i) => console.log(i))
+
+    const archivedILinks = namespaces.reduce((arr, { archiveNodeHierarchy }) => {
+      return [...arr, ...archiveNodeHierarchy]
+    }, [])
+
+    mog('update namespaces and ILinks From Extension', { namespaces, newILinks, archivedILinks })
+    // SetILinks once middleware is integrated
+    const ns = namespaces.map((n) => n.ns)
+
+    const { toUpdateLocal } = iLinksToUpdate(localILinks, newILinks)
+
+    const ids = batchArrayWithNamespaces(toUpdateLocal, ns, 10)
+
+    const response = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
+    return { response, ns, newILinks, archivedILinks }
+  }
+}
+
+const initializeSnippetsExtension = async (localSnippets: Snippet[]) => {
+  const data = await client
+    .get(apiURLs.snippet.getAllSnippetsByWorkspace)
+    .then((d) => d.json())
+    .then((d: any) => {
+      const newSnippets = d.filter((snippet) => {
+        const existSnippet = localSnippets.find((s) => s.id === snippet.snippetID)
+        return existSnippet === undefined
+      })
+
+      return newSnippets
+    })
+    .then(async (newSnippets: any[]) => {
+      const ids = newSnippets.map((item) => item.snippetID)
+      if (ids.length > 0) {
+        const batches = batchArray(ids, 10)
+        return { newSnippets: newSnippets, response: await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, batches) }
+      }
+    })
+    .catch((error) => {
+      mog('Error fetching all Snippets', { error })
+      return undefined
+    })
+
+  return data
+}
+
+const initializeLinksExtension = async () => {
+  return await client
+    .get(apiURLs.links.getLinks)
+    .then((d) => d.json())
+    .catch((error) => {
+      mog('InitLinksError', { error })
+      return undefined
+    })
+}
+
+const initializeHighlightsExtension = async () => {
+  return await client
+    .get(apiURLs.highlights.all)
+    .then((d) => d.json())
+    .catch((error) => {
+      mog('InitHighlightsError', { error })
+      return undefined
+    })
+}
+
+const initializeSmartCapturesExtension = async () => {
+  return await client
+    .get(apiURLs.smartcapture.public)
+    .then((d) => d.json())
+    .catch((error) => {
+      mog('InitSmartCaptureError', { error })
+      return undefined
+    })
+}
+
+const functions = {
+  initializeClient,
+  runBatchWorker,
+  initializeNamespacesExtension,
+  initializeSnippetsExtension,
+  initializeHighlightsExtension,
+  initializeLinksExtension,
+  initializeSmartCapturesExtension
+}
 
 export type RequestsWorkerInterface = typeof functions
 exposeShared(functions)
