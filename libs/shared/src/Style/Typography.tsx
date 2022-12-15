@@ -4,7 +4,7 @@ export const Title = styled.h1<{ colored?: boolean }>`
   ${({ theme, colored }) =>
     colored &&
     css`
-      color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.default};
     `}
 `
 
@@ -16,7 +16,7 @@ export const TitleText = styled.div`
 
 export const Description = styled.div`
   font-size: 1rem;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 // export const Para = styled.p`
@@ -33,5 +33,5 @@ export const Heading = styled.div`
   font-size: 1.1rem;
   margin: 5px 0 5px;
   font-weight: lighter;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `

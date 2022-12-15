@@ -140,13 +140,11 @@ export const TagsRelatedSuggestions = ({ nodeid, fromAnalysis }: TagsRelated) =>
           title="Insert Link"
           icon={arrowGoBackLine}
           onClick={(ev) => onSuggestionClick(ev.nativeEvent, nodeid, content.content, false)}
-          transparent
         />
         <IconButton
           title="Embed Note"
           icon="lucide:file-input"
           onClick={(ev) => onSuggestionClick(ev.nativeEvent, nodeid, content.content, true)}
-          transparent
         />
       </SuggestionIconsGroup>
     )

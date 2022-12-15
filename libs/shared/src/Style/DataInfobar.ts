@@ -28,7 +28,7 @@ export const DataInfobarHeader = styled.div`
     margin: ${({ theme }) => theme.spacing.small} 0;
 
     svg {
-      color: ${({ theme }) => theme.colors.text.fade};
+      color: ${({ theme }) => theme.tokens.text.fade};
     }
   }
 `
