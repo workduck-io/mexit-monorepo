@@ -21,6 +21,11 @@ const GlobalStyle = createGlobalStyle`
     outline: ${({ theme }) => theme.tokens.colors.primary.default} solid 1px;
   }
 
+  *::selection {
+    color: ${({ theme }) => theme.tokens.text.heading};
+    background: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.25);
+  }
+
   *::placeholder {
     color: ${({ theme }) => theme.tokens.text.fade};
     opacity: 0.5;
