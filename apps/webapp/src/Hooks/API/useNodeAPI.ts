@@ -256,11 +256,11 @@ export const useApi = () => {
       }
     })
 
-    const content = deserializeContent(res.data)
-    const todos = getTodosFromContent(content)
-    updateNodeTodos(nodeId, todos)
-
     if (res) {
+      const content = deserializeContent(res.data)
+      const todos = getTodosFromContent(content)
+      updateNodeTodos(nodeId, todos)
+
       return {
         id: nodeId,
         title: res.title ?? '',
