@@ -96,7 +96,7 @@ const Archive = () => {
 
           if (rawResponse) {
             rawResponse.forEach((nodeResponse) => {
-              const metadata = extractMetadata(nodeResponse)
+              const metadata = extractMetadata(nodeResponse, { icon: DefaultMIcons.NOTE })
               const content = deserializeContent(nodeResponse.data)
 
               const nodeID = nodeResponse.id

@@ -32,7 +32,7 @@ export interface NodeMetadata {
   createdAt: number
   lastEditedBy: string
   updatedAt: number
-  icon: MIcon | undefined
+  icon?: MIcon | undefined
 
   elementMetadata: ElementHighlightMetadata
   publicAccess?: boolean
@@ -236,6 +236,7 @@ export interface SlashCommands {
 
 export enum NodeType {
   DEFAULT,
+  PUBLIC,
   SHARED,
   ARCHIVED,
   MISSING

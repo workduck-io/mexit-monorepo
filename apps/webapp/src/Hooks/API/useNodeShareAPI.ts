@@ -2,11 +2,13 @@ import {
   AccessLevel,
   API,
   batchArray,
+  DefaultMIcons,
   extractMetadata,
   iLinksToUpdate,
   mog,
   SHARED_NAMESPACE,
-  SharedNode} from '@mexit/core'
+  SharedNode
+} from '@mexit/core'
 
 import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'
@@ -103,7 +105,7 @@ export const useNodeShareAPI = () => {
 
             rawResponse.forEach((node) => {
               const content = deserializeContent(node.data)
-              const metadata = extractMetadata(node)
+              const metadata = extractMetadata(node, { icon: DefaultMIcons.SHARED_NOTE })
               updateFromContent(node.id, content, metadata)
             })
           })

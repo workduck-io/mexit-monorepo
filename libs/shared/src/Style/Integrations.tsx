@@ -13,7 +13,6 @@ export const TemplateContainer = styled.div`
   margin: 1rem -0.5rem;
 
   & > section {
-    height: 30vh !important;
     width: 300px;
     overflow-y: auto;
     overflow-x: hidden;

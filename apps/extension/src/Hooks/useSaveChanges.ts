@@ -2,6 +2,7 @@ import toast from 'react-hot-toast'
 
 import {
   defaultContent,
+  DefaultMIcons,
   extractMetadata,
   generateHighlightId,
   getHighlightBlockMap,
@@ -118,7 +119,7 @@ export function useSaveChanges() {
 
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
-        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
+        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
         dispatchAfterSave({ nodeid, content, metadata, highlight, blockHighlightMap }, saveAndExit, notification)
@@ -248,7 +249,7 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
-        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node)
+        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         dispatch('ADD_RECENT_NODE', nodeid)
 

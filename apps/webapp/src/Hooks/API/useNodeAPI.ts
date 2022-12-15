@@ -30,11 +30,12 @@ import { useUpdater } from '../useUpdater'
 
 export const useApi = () => {
   const addMetadata = useMetadataStore((store) => store.addMetadata)
+  const updateMetadata = useMetadataStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
-  const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore()
+  const { setNodePublic, setNodePrivate } = useDataStore()
   const { updateFromContent } = useUpdater()
   const { getSharedNode } = useNodes()
   const { updateSnippets, getSnippet } = useSnippets()
@@ -177,9 +178,10 @@ export const useApi = () => {
               updatedAt: Date.now(),
               lastEditedBy: currentUser.userID
             }
-          : extractMetadata(d)
+          : origMetadata
 
-        setContent(noteID, contentToSet, metadata)
+        setContent(noteID, contentToSet)
+        addMetadata('notes', { [noteID]: metadata })
 
         addLastOpened(noteID)
         return d
@@ -254,11 +256,11 @@ export const useApi = () => {
       }
     })
 
-    const content = deserializeContent(res.data)
-    const todos = getTodosFromContent(content)
-    updateNodeTodos(nodeId, todos)
-
     if (res) {
+      const content = deserializeContent(res.data)
+      const todos = getTodosFromContent(content)
+      updateNodeTodos(nodeId, todos)
+
       return {
         id: nodeId,
         title: res.title ?? '',
@@ -267,10 +269,6 @@ export const useApi = () => {
         version: res.version
       }
     }
-  }
-
-  const isPublic = (nodeid: string) => {
-    return checkNodePublic(nodeid)
   }
 
   const saveSnippetAPI = async ({
@@ -297,7 +295,7 @@ export const useApi = () => {
       .create(reqData)
       .then((d) => {
         mog('savedData', { d })
-        addMetadata('snippets', { [snippetId]: extractMetadata(d, { icon: DefaultMIcons.SNIPPET }) })
+        updateMetadata('snippets', snippetId, extractMetadata(d, { icon: DefaultMIcons.SNIPPET }))
         return d
       })
       .catch((e) => {
@@ -390,7 +388,6 @@ export const useApi = () => {
     saveSingleNewNode,
     makeNotePublic,
     makeNotePrivate,
-    isPublic,
     getPublicNodeAPI,
     appendToNode,
     saveSnippetAPI,

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import styled from 'styled-components'
@@ -29,35 +29,28 @@ const InputRow = styled.div<{ noTopMargin?: boolean }>`
 
 export const Shortener = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [tabUrl, setTabUrl] = useState('')
-  const [tabTitle, setTabTitle] = useState('')
-  const [tags, setTags] = useState<Tag[]>([])
-  const [short, setShort] = useState<string>()
-
-  const elementRef = useRef(null)
+  const [link, setLink] = useState<Link>(null)
   const { saveLink } = useURLsAPI()
   const addLink = useLinkStore((store) => store.addLink)
+
+  const elementRef = useRef(null)
+
+  const tags = useMemo(() => {
+    if (!link) return []
+
+    return link.tags?.map((t) => ({ value: t })) ?? []
+  }, [link])
 
   const onShortenLinkSubmit = useCallback(
     async (e?: any) => {
       e.preventDefault()
-      mog('shortening', { short, tags, tabUrl, tabTitle })
+      mog('shortening', { link })
 
       try {
         setIsLoading(true)
 
-        const reqBody: Link = {
-          url: tabUrl,
-          title: tabTitle,
-          tags: tags.map((item) => item.value),
-
-          alias: getValidTitle(short),
-          createdAt: Date.now()
-        }
-
-        const shortenedLink = await saveLink(reqBody)
-
-        addLink(reqBody)
+        const shortenedLink = await saveLink(link)
+        addLink(link)
         copyTextToClipboard(shortenedLink?.message)
       } catch (err) {
         toast('Unable to save the shortened URL!')
@@ -66,12 +59,12 @@ export const Shortener = () => {
         setIsLoading(false)
       }
     },
-    [tags, short, tabTitle, tabUrl]
+    [link]
   )
 
   const removeUserTag = (tag: string) => {
-    const updatedUserTags = tags.filter((userTag) => tag !== userTag.value)
-    setTags(updatedUserTags)
+    const updatedUserTags = link.tags.filter((userTag) => tag !== userTag)
+    setLink({ ...link, tags: updatedUserTags })
   }
 
   useEffect(() => {
@@ -79,12 +72,17 @@ export const Shortener = () => {
       switch (event.data.type) {
         case 'tab-info-response': {
           const { url, pageTags } = event.data.data
-          setTabUrl(url)
-          setTabTitle(pageTags.find((item) => item.name === 'title').value)
-
           const { resultUserTags, resultShortAlias } = metadataParser(url, pageTags)
-          setTags(resultUserTags)
-          setShort(resultShortAlias)
+
+          setLink({
+            url: url,
+            title: pageTags.find((item) => item.name === 'title')?.value,
+            imgSrc: pageTags.find((i) => i.name === 'og:image')?.value,
+            description: pageTags.find((i) => i.name === 'description')?.value,
+            tags: resultUserTags.map((tag) => tag.value),
+            alias: getValidTitle(resultShortAlias),
+            createdAt: Date.now()
+          })
         }
       }
     }
@@ -104,11 +102,11 @@ export const Shortener = () => {
   }, [])
 
   const onAddTag = (tag: Tag) => {
-    setTags([...tags.filter((t) => t.value !== tag.value), tag])
+    setLink({ ...link, tags: [...link.tags, tag.value] })
   }
 
   const onCreateNewTag = (tag: string) => {
-    setTags([...tags.filter((t) => t.value !== tag), { value: tag }])
+    setLink({ ...link, tags: [...link.tags, tag] })
   }
 
   useEffect(() => {
@@ -126,15 +124,19 @@ export const Shortener = () => {
       resize(elementRef)
     }
     // Tags result in height change
-  }, [elementRef, tags])
+  }, [elementRef, link?.tags])
 
   return (
     <Form ref={elementRef} onSubmit={onShortenLinkSubmit}>
       <InputRow noTopMargin>
         <Label noTopMargin>Destination URL</Label>
-        <Input placeholder="URL to shorten" defaultValue={tabUrl} onChange={(e) => setTabUrl(e.target.value)} />
+        <Input
+          placeholder="URL to shorten"
+          defaultValue={link?.url}
+          onChange={(e) => setLink({ ...link, url: e.target.value })}
+        />
       </InputRow>
-      {/* TODO: temporarily removing ability to enter your own tags  */}
+
       <LinkTagSection>
         <TagsLabel tags={tags} onDelete={(t) => removeUserTag(t)} />
         <AddTagMenu createTag={onCreateNewTag} tags={tags} addTag={onAddTag} />
@@ -142,7 +144,11 @@ export const Shortener = () => {
 
       <InputRow>
         <Label>Add an Alias</Label>
-        <Input placeholder="Shorcut" value={short} onChange={(event) => setShort(getValidTitle(event.target.value))} />
+        <Input
+          placeholder="Shorcut"
+          value={link?.alias}
+          onChange={(event) => setLink({ ...link, alias: getValidTitle(event.target.value) })}
+        />
       </InputRow>
       <LoadingButton id="mex-save-shortened-url" loading={isLoading} type="submit">
         Save

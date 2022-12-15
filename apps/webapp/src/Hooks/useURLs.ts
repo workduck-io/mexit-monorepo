@@ -366,7 +366,7 @@ export const useURLsAPI = () => {
     const req = {
       url: link.url,
       alias: link.alias,
-      properties: { title: link.title },
+      properties: { title: link.title, description: link?.description, image: link?.imgSrc },
       tags: link.tags
     }
 

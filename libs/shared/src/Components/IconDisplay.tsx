@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react'
 import { MIcon } from '@mexit/core'
 
 import { IconWrapper } from '../Style/IconPicker.style'
+import { WDLogo } from '../Utils/Logo'
 
 interface IconDisplayProps {
   icon: MIcon
@@ -13,23 +14,32 @@ interface IconDisplayProps {
 }
 
 const resolveIconURL = (value: string) => {
+  console.log('VALUE', { value })
   if (chrome && chrome.runtime) return chrome.runtime.getURL(value)
 
-  return `/value`
+  return `/${value}`
+}
+
+const IconItem = ({ type, value }) => {
+  switch (type) {
+    case 'EMOJI':
+      return <span>{value}</span>
+    case 'ICON':
+      return <Icon icon={value} />
+    case 'URL':
+      return <img alt="Icon" src={resolveIconURL(value)} />
+    case 'MEX':
+      return <WDLogo />
+    default:
+      break
+  }
 }
 
 export const IconDisplay = ({ icon, size, className }: IconDisplayProps) => {
   if (!icon) return null
-
   return (
     <IconWrapper size={size} className={className}>
-      {
-        {
-          EMOJI: <span>{icon.value}</span>,
-          ICON: <Icon icon={icon.value} />,
-          URL: <img alt="Icon" src={resolveIconURL(icon.value)} />
-        }[icon.type]
-      }
+      <IconItem {...icon} />
     </IconWrapper>
   )
 }

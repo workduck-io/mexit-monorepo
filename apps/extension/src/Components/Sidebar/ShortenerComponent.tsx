@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { MetaHTMLAttributes, useMemo } from 'react'
 
 import styled from 'styled-components'
 
-import { getFavicon, Tag } from '@mexit/core'
+import { getFavicon, Link, Tag } from '@mexit/core'
 import {
   AddTagMenu,
   CopyButton,
@@ -49,6 +49,14 @@ const FaviconImage = ({ source }: { source: string }) => {
   return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 
+const getGoodMeta = (document: Document) => {
+  return {
+    title: document.title,
+    description: (document.querySelector('meta[name="description"]') as MetaHTMLAttributes<HTMLElement>)?.content,
+    imgSrc: (document.querySelector('meta[property="og:image"]') as MetaHTMLAttributes<HTMLElement>)?.content
+  }
+}
+
 export const ShortenerComponent = () => {
   const { links } = useLinkStore()
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
@@ -57,7 +65,12 @@ export const ShortenerComponent = () => {
 
   const link = useMemo(() => {
     const l = links.find((l) => l.url === window.location.href)
-    return l ?? { url: window.location.href, title: document.title }
+    return (
+      l ?? {
+        url: window.location.href,
+        ...getGoodMeta(document)
+      }
+    )
   }, [links, window.location])
 
   const tags = useMemo(() => {
@@ -72,18 +85,29 @@ export const ShortenerComponent = () => {
     if (links.find((l) => l.url === linkurl)) {
       updateAlias(linkurl, alias)
     } else {
-      const link = { url: linkurl, title: document.title, alias: alias }
-      saveLink(link)
+      const newLink = { ...link, url: linkurl, alias: alias }
+      saveLink(newLink)
     }
   }
 
   const onAddNewTag = (tag: Tag) => {
-    // mog('onAddNewTag', { tag })
-    addTag(link.url, tag.value)
+    // If link doesn't exist yet just save it with the tag provided
+    if (links.find((l) => l.url === link.url)) {
+      addTag(link.url, tag.value)
+    } else {
+      const newLink: Link = { ...link, tags: [tag.value] }
+      saveLink(newLink)
+    }
   }
 
   const onAddCreateTag = (tagStr: string) => {
-    addTag(link.url, tagStr)
+    // If link doesn't exist yet just save it with the tag provided
+    if (links.find((l) => l.url === link.url)) {
+      addTag(link.url, tagStr)
+    } else {
+      const newLink: Link = { ...link, tags: [tagStr] }
+      saveLink(newLink)
+    }
   }
 
   const onRemoveTag = (tagStr: string) => {

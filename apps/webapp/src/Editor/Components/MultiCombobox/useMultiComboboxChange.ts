@@ -2,7 +2,14 @@ import { useCallback } from 'react'
 
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
-import { fuzzySearch,getTimeInText, isReservedOrClash, toLocaleString, withoutContinuousDelimiter  } from '@mexit/core'
+import {
+  fuzzySearch,
+  getMIcon,
+  getTimeInText,
+  isReservedOrClash,
+  toLocaleString,
+  withoutContinuousDelimiter
+} from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -35,7 +42,7 @@ export const getNewItem = (ct: ComboboxType, searchTerm: string) => {
 
   return {
     key: '__create_new',
-    icon: 'ri:add-circle-line',
+    icon: getMIcon('ICON', 'ri:add-circle-line'),
     type,
     data: true,
     prefix: createNewPrefix,

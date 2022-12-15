@@ -87,7 +87,7 @@ export const useNamespaceApi = () => {
           const metadatas = {}
 
           nodes.rawResponse?.map((note) => {
-            metadatas[note.id] = extractMetadata(note)
+            metadatas[note.id] = extractMetadata(note, { icon: DefaultMIcons.NOTE })
             notes[note.id] = deserializeContent(note.data)
           })
 
