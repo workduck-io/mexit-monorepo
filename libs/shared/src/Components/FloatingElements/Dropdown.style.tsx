@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 import { GenericFlex } from '../../Style/Filter.style'
 import { ScrollStyles } from '../../Style/Helpers'
 import { Ellipsis } from '../../Style/NodeSelect.style'
@@ -7,7 +9,7 @@ import { Ellipsis } from '../../Style/NodeSelect.style'
 import { MenuItemClassName } from './Dropdown.classes'
 
 export const MenuItemCount = styled(GenericFlex)`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const MultiSelectIcon = styled.div<{ selected?: boolean }>`
@@ -17,7 +19,7 @@ export const MultiSelectIcon = styled.div<{ selected?: boolean }>`
   margin-right: ${({ theme }) => theme.spacing.small};
   ${({ theme, selected }) =>
     css`
-      color: ${selected ? theme.colors.primary : theme.colors.text.fade};
+      color: ${selected ? theme.tokens.colors.primary.default : theme.tokens.text.fade};
     `}
 `
 
@@ -34,27 +36,25 @@ const MenuItemStyles = css`
   min-width: 110px;
   margin: 0;
   outline: 0;
-  color: ${({ theme }) => theme.colors.text.default};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  ${({ theme }) => generateStyle(theme.generic.contextMenu.item)}
 
   &.open {
-    background: ${({ theme }) => theme.colors.gray[7]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 
   &:focus,
   &:not([disabled]):active {
-    background: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
     ${MenuItemCount} {
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
     }
     ${MultiSelectIcon} {
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
     }
   }
 
   &:disabled {
-    color: ${({ theme }) => theme.colors.text.disabled};
+    color: ${({ theme }) => theme.tokens.text.disabled};
   }
 `
 
@@ -71,7 +71,7 @@ export const RootMenuWrapper = styled.button`
   border: none;
   background: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 
   &.${MenuItemClassName} {
     ${MenuItemStyles}
@@ -79,21 +79,22 @@ export const RootMenuWrapper = styled.button`
 
   &.open,
   &:hover {
-    background: ${({ theme }) => theme.colors.gray[7]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 `
 
 export const MenuWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.gray[8]};
+  ${({ theme }) => generateStyle(theme.generic.contextMenu.menu)}
   padding: 4px;
-  border: 1px solid ${({ theme }) => theme.colors.gray[7]};
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   outline: 0;
   max-height: 300px;
   overflow-y: auto;
   z-index: 11;
-  ${({ theme }) => ScrollStyles(theme.colors.gray[10])}
+  ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 `
 
 export const MenuItemWrapper = styled.button`

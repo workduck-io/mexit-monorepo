@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
@@ -7,12 +6,12 @@ import { CardShadow, ScrollStyles } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`
-  background: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])} !important;
+  background: rgba(${({ theme }) => theme.rgbTokens.surfaces.modal}, 0.5) !important;
 
   backdrop-filter: blur(10px);
   overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.colors.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   height: 32vh;
   max-height: 32vh;
   width: 36vw;
@@ -36,20 +35,20 @@ export const EditorPreviewNoteName = styled.div`
   cursor: pointer;
 
   svg {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
     svg {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 `
 
 const PrimaryBorderKeyFrames = (theme: any) => keyframes`
   0% { border-color: transparent; }
-  50% { border-color: ${theme.colors.primary}; }
+  50% { border-color: ${theme.tokens.colors.primary.default}; }
   100% { border-color: transparent; }
 `
 
@@ -79,7 +78,7 @@ export const EditorPreviewEditorWrapper = styled.div<{ editable?: boolean; blink
     editable
       ? css`
           transition: border-color 0.15s ease-in-out 0s;
-          border-color: ${theme.colors.primary};
+          border-color: ${theme.tokens.colors.primary.default};
         `
       : css`
           transition: border-color 0.15s ease-in-out 0s;
@@ -93,30 +92,30 @@ export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
   align-items: center;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   width: 100%;
-  background: ${({ theme }) => transparentize(0.2, theme.colors.gray[9])} !important;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[3]} !important;
+  border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};
   justify-content: space-between;
   padding: ${({ theme }) => theme.spacing.small};
 
   ${Button} {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     background: transparent;
     padding: ${({ theme }) => theme.spacing.tiny};
-    border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.text.fade)};
+    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};
 
     :hover {
       svg {
-        color: ${({ theme }) => theme.colors.palette.red};
+        color: ${({ theme }) => theme.tokens.colors.red};
       }
-      border: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.palette.red)};
+      border: 1px solid rgba(${({ theme }) => theme.rgbTokens.colors.red}, 0.5);
     }
   }
 
   ${TagFlex} {
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]} !important;
     flex-grow: 1;
     :hover {
-      background: ${({ theme }) => theme.colors.primary};
+      background: ${({ theme }) => theme.tokens.colors.primary.default} !important;
     }
   }
 `

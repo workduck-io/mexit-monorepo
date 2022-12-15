@@ -41,7 +41,7 @@ const StyledTip = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} 0;
-  color: ${({ theme }) => theme.colors.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   background-color: transparent;
   cursor: pointer;
   border-radius: 0.25rem;
@@ -50,7 +50,7 @@ const StyledTip = styled.div`
 export const StyledDraggable = styled(StyledTip)<{ show?: boolean }>`
   display: none;
   padding: ${({ theme }) => theme.spacing.tiny};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[4]};
 
   ${({ show }) =>
     show &&
@@ -63,13 +63,13 @@ export const ActionDraggableIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.tiny};
   svg {
     height: 1.2rem;
     width: 1.2rem;
-    color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.tokens.colors.secondary};
   }
 `
 
@@ -77,7 +77,7 @@ const MetadataWrap = styled.div`
   display: flex;
   flex-direction: column;
   width: max-content;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   gap: ${({ theme }) => theme.spacing.small};
@@ -88,7 +88,7 @@ const MetadataRow = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
   svg {
-    color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.tokens.colors.secondary};
   }
   svg:nth-child(2) {
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
@@ -96,7 +96,7 @@ const MetadataRow = styled.div`
 `
 
 const MetadataText = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   flex-grow: 1;
 `
 

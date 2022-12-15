@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { StyledNamespaceTag } from './NamespaceTag.style'
@@ -42,12 +41,12 @@ export const StyledCombobox = styled.div`
   flex-shrink: 1;
   svg {
     margin-left: ${({ theme }) => theme.spacing.tiny};
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     &.errorIcon {
-      color: ${({ theme }) => theme.colors.palette.red};
+      color: ${({ theme }) => theme.tokens.colors.red};
     }
     &.okayIcon {
-      color: ${({ theme }) => theme.colors.palette.green};
+      color: ${({ theme }) => theme.tokens.colors.green};
     }
   }
 `
@@ -58,12 +57,12 @@ export const FilterComboboxToggle = styled.div`
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.small};
   padding: 0 ${({ theme }) => theme.spacing.small};
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
 
   svg {
     width: 1.25rem;
     height: 1.25rem;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
@@ -87,7 +86,7 @@ export const SuggestionDesc = styled.div`
   display: flex;
   align-items: center;
   margin-top: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
@@ -109,25 +108,25 @@ export const Suggestion = styled.li<SuggestionProps>`
 
   & > .mexit-list-item {
     margin: ${({ theme }) => `0 ${theme.spacing.small} 0 ${theme.spacing.tiny}`};
-    color: ${({ theme }) => theme.colors.gray[5]};
+    color: ${({ theme }) => theme.tokens.text.fade};
     flex-shrink: 0;
   }
 
   ${({ theme, highlight }) =>
     highlight &&
     css`
-      background-color: ${theme.colors.primary};
-      color: ${theme.colors.text.oppositePrimary};
+      background-color: ${theme.tokens.colors.primary.default};
+      color: ${theme.tokens.colors.primary.text};
       .mexit-list-item {
-        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        color: ${({ theme }) => theme.tokens.colors.primary.text};
       }
       ${SuggestionDesc} {
-        color: ${({ theme }) => transparentize(0.25, theme.colors.text.oppositePrimary)};
+        color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.text}, 0.5);
       }
       ${StyledNamespaceTag} {
-        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        color: ${({ theme }) => theme.tokens.colors.primary.text};
         svg {
-          color: ${({ theme }) => theme.colors.text.oppositePrimary};
+          color: ${({ theme }) => theme.tokens.colors.primary.text};
         }
       }
     `}
@@ -141,10 +140,10 @@ export const SuggestionError = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
 
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  border: 1px dashed ${({ theme }) => theme.colors.palette.red};
-  background-color: ${({ theme }) => transparentize(0.9, theme.colors.palette.red)};
+  border: 1px dashed ${({ theme }) => theme.tokens.colors.red};
+  background-color: rgba(${({ theme }) => theme.colors.palette.red}, 0.1);
   svg {
-    color: ${({ theme }) => theme.colors.palette.red};
+    color: ${({ theme }) => theme.tokens.colors.red};
   }
   ${SuggestionDesc} {
     white-space: initial;
@@ -162,7 +161,7 @@ export const StyledMenu = styled.ul<MenuProps>`
   padding: ${({ theme }) => theme.spacing.small};
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.generic.contextMenu.menu.surface};
   width: 100%;
   max-height: 16.2rem;
   overflow-y: auto;
@@ -174,7 +173,7 @@ export const StyledMenu = styled.ul<MenuProps>`
   box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 11px hsla(0, 0%, 0%, 0.1);
 
   &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[7]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   ${({ isOverlay }) =>
@@ -205,7 +204,7 @@ export const StyledSpotlightInputWrapper = styled.div`
     margin-top: ${({ theme }) => theme.spacing.medium};
   }
   ${Input} {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     width: 100%;
     border: none;
   }

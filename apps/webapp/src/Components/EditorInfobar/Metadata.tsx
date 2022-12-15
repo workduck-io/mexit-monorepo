@@ -33,7 +33,7 @@ export const Data = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.tiny};
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 interface MetadataProps {
@@ -92,6 +92,7 @@ const Metadata = ({
   }
 
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
+  // mog('METADATA', { metadata, isEmpty, isUserEditing, sharedUsers })
 
   return (
     <MetadataWrapper $isVisible={!isUserEditing}>

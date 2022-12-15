@@ -172,7 +172,7 @@ export const TippyBalloonStyles = css`
 export const ButtonSeparator = styled.div`
   height: 10px;
   margin: 0 ${({ theme }) => theme.spacing.small};
-  border: 1px solid ${({ theme }) => theme.colors.gray[7]};
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
 `
 
 export const EditorBalloonStyles = css`

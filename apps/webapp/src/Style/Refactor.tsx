@@ -1,4 +1,3 @@
-import { rgba, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 const ModalContent = (multi = false) => css`
@@ -13,14 +12,15 @@ const ModalContent = (multi = false) => css`
     !multi
       ? css`
           padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
-          background: ${theme.colors.background.card};
-          box-shadow: 0px 20px 100px ${transparentize(0.75, theme.colors.primary)};
-          border: 1px solid ${theme.colors.gray[8]};
+          background: ${theme.tokens.surfaces.modal};
+          box-shadow: ${theme.tokens.shadow.large};
+          border: 1px solid ${theme.tokens.surfaces.s[3]};
         `
       : css`
           padding: ${({ theme }) => theme.spacing.large};
-          background: ${transparentize(0.5, theme.colors.background.card)};
-          border: 1px solid ${({ theme }) => theme.colors.gray[8]};
+          background: rgba(${theme.rgbTokens.surfaces.modal}, 0.5);
+
+          border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
           display: flex;
           flex-direction: column;
           gap: ${({ theme }) => theme.spacing.large};
@@ -35,7 +35,7 @@ const ModalOverlay = css`
   display: flex;
   z-index: 100;
   backdrop-filter: blur(8px);
-  background-color: ${({ theme }) => rgba(theme.colors.palette.black, 0.5)};
+  background-color: rgba(${({ theme }) => theme.rgbTokens.colors.black}, 0.2);
 `
 
 export const ModalStyles = css`
@@ -58,21 +58,21 @@ export const ModalSectionScroll = styled.div`
 
 export const ModalSection = styled.div`
   padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
-  background: ${({ theme }) => theme.colors.background.card};
+  background: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  border: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 `
 
 export const ModalHeader = styled.h1`
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.tokens.text.heading};
   margin: ${({ theme: { spacing } }) => `${spacing.medium} 0`};
 `
 
 export const MockRefactorMap = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => transparentize(0.5, theme.colors.gray[10])};
+  background: ${({ theme }) => theme.tokens.surfaces.s[1]};
   padding: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   margin: ${({ theme: { spacing } }) => `${spacing.large} 0`};
@@ -87,7 +87,7 @@ export const MRMHead = styled.div`
   justify-content: space-between;
   h1 {
     font-size: 0.9rem;
-    color: ${({ theme }) => theme.colors.gray[4]};
+    color: ${({ theme }) => theme.tokens.text.fade};
     font-weight: 700;
     margin: 0;
     /* flex: 1; */
@@ -104,14 +104,14 @@ export const MRMRow = styled.div`
   justify-content: flex-start;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   &:nth-child(2n) {
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+    background: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
   }
   p {
     margin: 0;
     /* flex: 1; */
 
     &:first-child {
-      color: ${({ theme }) => theme.colors.text.fade};
+      color: ${({ theme }) => theme.tokens.text.fade};
     }
   }
 `
@@ -123,11 +123,11 @@ export const TableIcon = styled.div`
 `
 
 export const ArrowIcon = styled(TableIcon)`
-  color: ${({ theme }) => theme.colors.text.accent};
+  color: ${({ theme }) => theme.tokens.text.accent};
 `
 
 export const DeleteIcon = styled(TableIcon)`
-  color: ${({ theme }) => theme.colors.palette.red};
+  color: ${({ theme }) => theme.tokens.colors.red};
 `
 export const ModalControls = styled.div`
   margin: ${({ theme: { spacing } }) => `${spacing.large} 0 ${spacing.medium}`};

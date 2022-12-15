@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 
-import { Button, IconButton } from '@workduck-io/mex-components'
+import { IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
@@ -305,15 +305,13 @@ export const PermissionModalContent = () => {
             {/* <Button disabled={readOnly} large onClick={onCopyLink}>
               Copy Link
             </Button> */}
-            <Button
-              primary
+            <PrimaryButton
               autoFocus={!window.focus}
-              large
               onClick={onSave}
               disabled={readOnly || (changedUsers && changedUsers?.length === 0)}
             >
               Save
-            </Button>
+            </PrimaryButton>
           </ModalControls>
         </ModalSection>
       )}

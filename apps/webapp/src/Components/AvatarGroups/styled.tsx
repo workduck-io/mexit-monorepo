@@ -22,7 +22,7 @@ export const ProfileAvatarContainer = styled.span<{ offline?: boolean }>`
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border: 2px solid ${({ theme }) => theme.colors.background.highlight};
+  border: 2px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   transition: transform 0.3s ease;
   cursor: pointer;
 

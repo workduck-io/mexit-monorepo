@@ -14,7 +14,7 @@ interface InteractiveToastProps {
 
 const Wrapper = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip};
   display: flex;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};

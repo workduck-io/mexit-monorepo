@@ -45,10 +45,21 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   margin-top: ${({ noMargin, theme }) => (noMargin ? '0' : theme.spacing.medium)};
   background: ${({ theme }) => theme.generic.form.input.surface};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+  border: 1px solid transparent;
 
   ${Input} {
     flex-grow: 1;
     background: transparent;
+    border: none !important;
+    color: ${({ theme }) => theme.tokens.text.default};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.generic.form.input.hover.surface};
+  }
+
+  &:focus-within {
+    border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
   }
 
   svg {

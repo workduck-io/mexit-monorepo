@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Icon } from '@iconify/react'
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
@@ -118,7 +117,7 @@ export const ItemTitle = styled.div`
 export const ItemCount = styled.div`
   flex-shrink: 0;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.tokens.text.fade};
+  ${({ theme }) => generateStyle(theme.sidebar.tree.item.count)};
 `
 
 export const TooltipContentWrapper = styled.div`
@@ -132,7 +131,7 @@ export const TooltipCount = styled.div`
   align-items: center;
   font-size: 0.9rem;
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 export const ItemContent = styled.div`
   cursor: pointer;
@@ -146,7 +145,7 @@ export const ItemContent = styled.div`
 `
 
 export const UnreadIndicator = styled.div`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   svg {
     height: 0.75rem;
     width: 0.75rem;
@@ -192,8 +191,8 @@ export const StyledTreeItem = styled.div<{
   ${({ hasMenuOpen, isHighlighted, theme }) =>
     (hasMenuOpen || isHighlighted) &&
     css`
-      background: ${theme.sidebar.tree.item.wrapper.selected.surface};
-      color: ${theme.sidebar.tree.item.wrapper.selected.textColor};
+      background: ${theme.sidebar.tree.item.wrapper.active.surface};
+      color: ${theme.sidebar.tree.item.wrapper.active.textColor};
     `}
 
 
@@ -202,18 +201,19 @@ export const StyledTreeItem = styled.div<{
     css`
       ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper.selected)};
       ${ItemCount}, svg {
-        ${({ theme }) => generateStyle(theme.sidebar.tree.item.count)};
+        color: ${theme.tokens.colors.primary.text};
       }
       :hover {
-        background: ${transparentize(0.3, theme.colors.primary)};
+        color: ${theme.tokens.colors.primary.text};
+        background: ${theme.tokens.colors.primary.hover};
       }
       ${hasMenuOpen &&
       css`
-        color: ${transparentize(0.5, theme.colors.text.oppositePrimary)};
+        color: ${theme.tokens.colors.primary.text};
       `}
       ${StyledTreeItemSwitcher} {
         &:hover svg {
-          color: ${theme.colors.primary};
+          color: ${theme.tokens.colors.primary.default};
         }
       }
     `}
@@ -233,10 +233,11 @@ export const StyledTreeItem = styled.div<{
     css`
       ${isDragging &&
       css`
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       `}
-      background: ${theme.colors.gray[7]};
-      box-shadow: inset 0 0 0 1px ${isDragging ? theme.colors.secondary : theme.colors.secondary};
+      background: ${theme.sidebar.tree.item.wrapper.active.surface};
+      box-shadow: inset 0 0 0 1px ${isDragging ? theme.tokens.colors.secondary : theme.tokens.colors.secondary},
+        ${({ theme }) => theme.tokens.shadow.medium};
     `}
 
 

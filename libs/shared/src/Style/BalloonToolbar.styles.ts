@@ -1,7 +1,8 @@
 import { BalloonToolbarProps, getToolbarStyles, ToolbarBase } from '@udecode/plate'
 import { createStyles } from '@udecode/plate-styled-components'
-import { transparentize } from 'polished'
 import styled, { css, CSSProp } from 'styled-components'
+
+import { generateStyle } from '@workduck-io/mex-themes'
 
 import { BalloonToolbarStyleProps } from '../Types/BalloonToolbar.types'
 
@@ -120,19 +121,29 @@ export const BalloonToolbarBase = styled(ToolbarBase)<BalloonToolbarProps>`
   white-space: nowrap;
   opacity: 100;
   transition: opacity 0.2s ease-in-out;
-  color: ${({ theme }) => theme.colors.text.default};
-  background: ${({ theme }) => theme.colors.gray[8]};
+  color: ${({ theme }) => theme.tokens.text.default};
+  ${({ theme }) => generateStyle(theme.editor.toolbar.balloonToolbar.wrapper)}
   z-index: 500;
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  padding: 0 ${({ theme }) => theme.spacing.tiny};
+  padding: ${({ theme }) => theme.spacing.tiny};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 
+  .slate-ToolbarButton,
   .slate-ToolbarButton-active,
   .slate-ToolbarButton:hover {
-    padding: ${({ theme: { spacing } }) => `${spacing.tiny}`};
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
+    ${({ theme }) => generateStyle(theme.editor.toolbar.balloonToolbar.button)}
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
+    padding: ${({ theme: { spacing } }) => `${spacing.tiny}`};
+  }
+
+  .slate-ToolbarButton:hover {
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+  }
+
+  .slate-ToolbarButton-active {
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
   }
 `
 

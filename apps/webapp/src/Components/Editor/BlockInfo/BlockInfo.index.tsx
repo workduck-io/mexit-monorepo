@@ -209,7 +209,7 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!userHasReacted}>
+              <BlockInfoButton onClick={() => setInteractive(true)}>
                 <BlockReaction previewReactions={previewReactions} />
               </BlockInfoButton>
             </Popover>
@@ -223,7 +223,7 @@ export const BlockInfo = (props: any) => {
               placement="bottom-end"
               transparent
             >
-              <BlockInfoButton onClick={() => setInteractive(true)} transparent={!userHasComments}>
+              <BlockInfoButton onClick={() => setInteractive(true)}>
                 <Icon icon={message2Line} />
                 {hasComments && comments.length}
               </BlockInfoButton>

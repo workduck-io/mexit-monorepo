@@ -15,14 +15,14 @@ const Link = styled.a`
   .LinkIcon {
     position: relative;
     cursor: pointer;
-    background: ${({ theme }) => theme.colors.background.card};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
     vertical-align: middle;
     padding: 2px 4px 0px;
     margin-right: ${({ theme }) => theme.spacing.tiny};
     border-radius: ${({ theme }) => theme.borderRadius.small};
     border: none;
     svg {
-      color: ${({ theme }) => theme.colors.text.subheading};
+      color: ${({ theme }) => theme.tokens.text.subheading};
     }
   }
 

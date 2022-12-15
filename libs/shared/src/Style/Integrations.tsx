@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
 
 export const IntegrationContainer = styled.section`
   margin: 0 4rem;
@@ -9,8 +9,11 @@ export const IntegrationContainer = styled.section`
 
 export const TemplateContainer = styled.div`
   display: flex;
-  max-height: 350px;
+  max-height: 375px;
   margin: 1rem -0.5rem;
+  background: ${({ theme }) => theme.tokens.surfaces.s[1]};
+  padding: ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.large};
 
   & > section {
     width: 300px;
@@ -18,7 +21,7 @@ export const TemplateContainer = styled.div`
     overflow-x: hidden;
     margin: 0 1rem;
 
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
     border-radius: ${({ theme }) => theme.borderRadius.large};
   }
 `
@@ -43,12 +46,12 @@ export const PlusIcon = styled.div`
   width: 10rem;
   height: 10rem;
   display: flex;
-  color: white;
+  color: ${({ theme }) => theme.tokens.colors.white};
   justify-content: center;
   align-items: center;
   cursor: pointer;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const IntegrationTitle = styled.h1`
@@ -68,7 +71,7 @@ export const TemplateTitle = styled.h1`
 `
 
 export const PrimaryText = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const TemplateSubtitle = styled(TemplateTitle)`

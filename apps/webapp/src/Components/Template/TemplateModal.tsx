@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
@@ -162,8 +162,6 @@ const TemplateModal = () => {
                 currentTemplate?.id === selectedTemplate?.id
               }
               type="submit"
-              primary
-              large
             >
               Set Template
             </LoadingButton>

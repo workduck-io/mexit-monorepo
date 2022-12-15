@@ -1,13 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 import Chrome from 'chrome'
 
-import { ThemeType } from '@mexit/shared'
-
-declare module 'styled-components' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends ThemeType {}
-}
-
 declare namespace chrome {
   export default Chrome
 }

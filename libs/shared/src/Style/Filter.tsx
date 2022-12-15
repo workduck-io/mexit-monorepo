@@ -8,7 +8,7 @@ export const FilterWrapper = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.small};
   border: 1px solid ${({ theme }) => theme.colors.form.input.border};
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
 `
 
 export const GenericFlex = styled.div`

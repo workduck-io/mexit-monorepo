@@ -1,4 +1,3 @@
-import { mix,transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { CardShadow } from './Helpers'
@@ -6,15 +5,15 @@ import { CardShadow } from './Helpers'
 export const SMentionRoot = styled.div<{ type?: 'mentionable' | 'invite' | 'self' }>`
   display: inline-block;
   line-height: 1.2;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   ${({ type, theme }) =>
     type &&
     type === 'self' &&
     css`
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
-      border: 1px solid ${transparentize(0.5, theme.colors.secondary)};
-      box-shadow: 0 0 4px ${transparentize(0.75, theme.colors.secondary)};
+      border: 1px solid rgba(${theme.colors.secondary}, 0.5);
+      box-shadow: 0 0 4px rgba(${theme.colors.secondary}, 0.25);
     `}
 `
 
@@ -24,7 +23,7 @@ export const SAccessTag = styled.div`
   display: flex;
   align-items: center;
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   gap: ${({ theme }) => theme.spacing.tiny};
   font-size: 0.9rem;
@@ -48,15 +47,15 @@ export const MentionTooltip = styled.div<{ spotlight?: boolean }>`
   max-width: 700px;
   overflow-y: auto;
   ${CardShadow}
-  background: ${({ theme }) => theme.colors.gray[8]} !important;
-  color: ${({ theme }) => theme.colors.text.default};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]} !important;
+  color: ${({ theme }) => theme.editor.elements.mention.default} !important;
   & > img,
   & > svg {
     width: 100%;
     height: 100%;
   }
   &::after {
-    border-right-color: ${({ theme }) => theme.colors.primary} !important;
+    border-right-color: ${({ theme }) => theme.tokens.colors.primary.default} !important;
   }
 
   ${({ spotlight }) =>
@@ -67,12 +66,12 @@ export const MentionTooltip = styled.div<{ spotlight?: boolean }>`
 `
 
 export const TooltipMail = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.9rem;
 `
 
 export const TooltipAlias = styled.div`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'invite' | 'self' }>`
@@ -87,11 +86,11 @@ export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'i
     border-radius: ${({ theme }) => theme.borderRadius.large};
   }
 
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.tokens.colors.secondary};
   ${({ selected, theme }) =>
     selected &&
     css`
-      background-color: ${transparentize(0.75, theme.colors.secondary)};
+      background-color: rgba(${theme.rgbTokens.colors.secondary}, 0.25);
       border-radius: ${theme.borderRadius.tiny};
     `}
   ${({ type, selected, theme }) =>
@@ -99,11 +98,7 @@ export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'i
     type === 'self' &&
     !selected &&
     css`
-      background: -webkit-linear-gradient(
-        60deg,
-        ${theme.colors.secondary},
-        ${mix(0.25, theme.colors.secondary, theme.colors.primary)}
-      );
+      background: -webkit-linear-gradient(60deg, ${theme.tokens.colors.secondary}, rgba(${theme.colors.primary}, 0.5));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     `}

@@ -1,7 +1,6 @@
 import { animated } from 'react-spring'
 
 import { clamp } from 'lodash'
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { Button, Ellipsis, LoadingButton } from '@workduck-io/mex-components'
@@ -279,19 +278,19 @@ export const CreateNewButton = styled.button<CreateNewButtonProps>`
   align-items: center;
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  ${({ theme }) => generateStyle(theme.sidebar.createNew.button)}
+  ${({ theme }) => generateStyle(theme.sidebar.createNew)}
   transition: 0.15s transform ease-out, 0.5s color ease-in;
 
   :hover {
     transform: translateX(-10%) scale(1.25);
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 
   ${({ menuOpen }) =>
     menuOpen &&
     css`
       transform: translateX(-10%) scale(1.25);
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     `}
 
   svg {
@@ -303,48 +302,65 @@ export const CreateNewButton = styled.button<CreateNewButtonProps>`
 export const CreateNewMenuWrapper = styled.div`
   display: flex;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing.small};
   flex-direction: column;
+  ${({ theme }) => generateStyle(theme.generic.contextMenu.menu)}
   min-width: 200px;
-  border-radius: ${({ theme }) => theme.spacing.small};
-  ${({ theme }) => generateStyle(theme.sidebar.createNew.menu)}
+  padding: 5px;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 `
 
 export const CreateNewMenuItemWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.spacing.tiny};
-  gap: ${({ theme }) => theme.spacing.tiny};
-  ${({ theme }) => generateStyle(theme.sidebar.createNew.item)}
+  font-size: 14px;
+  line-height: 1;
+  gap: 5px;
+  height: 25px;
+  padding: 0px 5px;
+  position: relative;
+  padding-left: 5px;
+  user-select: none;
+  svg {
+    transition: color 0.2s ease-in-out;
+  }
+  ${({ theme }) => generateStyle(theme.generic.contextMenu.item)}
+  &:hover, &:active {
+    svg {
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
+    }
+  }
 `
 
 const SpecialNoteStyle = css`
-  background: ${({ theme }) => transparentize(0.75, theme.colors.gray[9])};
-  border: 1px dashed ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.sidebar.tree.item.wrapper.surface};
+  border: 1px dashed ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: 0.5rem;
   justify-content: flex-start;
   box-shadow: none;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   width: 100%;
   span {
     ${Ellipsis}
   }
 
   .noteTitle {
-    color: ${({ theme }) => transparentize(0.25, theme.colors.primary)};
+    color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default});
   }
 
   &:hover,
   &:focus,
   &:active {
-    color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => transparentize(0.75, theme.colors.gray[9])};
-    border: 1px dashed ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background: rgba(${({ theme }) => theme.tokens.surfaces.modal}, 0.5);
+    border: 1px dashed ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+
     .noteTitle {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 

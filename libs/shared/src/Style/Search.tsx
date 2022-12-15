@@ -1,6 +1,5 @@
 import { animated } from 'react-spring'
 
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { View } from '../Style/ViewSelector'
@@ -69,12 +68,13 @@ export const SearchHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
 
 export const SearchFilterWrapper = styled(SearchHeader)`
+  background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
   flex-grow: 1;
   justify-content: flex-start;
 `
@@ -139,9 +139,9 @@ export const SearchFilterCancel = styled.div`
 
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
 
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   transition: all 0.25s ease-in-out;
-  color: ${({ theme }) => theme.colors.palette.red};
+  color: ${({ theme }) => theme.tokens.colors.red};
 
   svg {
     height: 1.5rem;
@@ -150,8 +150,8 @@ export const SearchFilterCancel = styled.div`
   }
 
   &:hover {
-    color: ${({ theme }) => theme.colors.palette.black};
-    background-color: ${({ theme }) => theme.colors.palette.red};
+    color: ${({ theme }) => theme.tokens.colors.black};
+    background-color: ${({ theme }) => theme.tokens.colors.red};
     svg {
       opacity: 1;
     }
@@ -167,7 +167,7 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
 
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   transition: all 0.25s ease-in-out;
 
   width: max-content;
@@ -179,7 +179,7 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.gray[7]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
     svg {
       opacity: 1;
     }
@@ -187,18 +187,18 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      background-color: ${({ theme }) => theme.colors.primary};
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
 
       svg {
-        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        color: ${({ theme }) => theme.tokens.colors.primary.text};
       }
 
       &:hover {
-        background-color: ${({ theme }) => transparentize(0.4, theme.colors.primary)};
-        color: ${({ theme }) => theme.colors.text.oppositePrimary};
+        background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.6);
+        color: ${({ theme }) => theme.tokens.colors.primary.text};
         svg {
-          color: ${({ theme }) => theme.colors.text.oppositePrimary};
+          color: ${({ theme }) => theme.tokens.colors.primary.text};
           opacity: 1;
         }
       }
@@ -206,10 +206,10 @@ export const SearchFilterStyled = styled.div<{ selected?: boolean }>`
 `
 
 export const SearchFilterCount = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   font-size: 0.75rem;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.tiny}`};
   border-radius: 2rem;
   min-width: 1.35rem;
@@ -235,7 +235,7 @@ export const NoSearchResults = styled.div`
   height: 3rem;
   font-size: 1.2rem;
   padding: ${({ theme }) => theme.spacing.medium};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   position: absolute;
   top: 0;
 `
@@ -245,20 +245,20 @@ export const ResultCardFooter = styled.div<{ active?: boolean }>`
   align-items: center;
   justify-content: space-between;
   font-size: 1rem;
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   ${TagFlex} {
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     :hover {
-      background: ${({ theme }) => theme.colors.primary};
+      background: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
   ${({ theme, active }) =>
     active &&
     css`
-      color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.default};
     `}
 `
 export const ResultRow = styled.div<{ active?: boolean; selected?: boolean }>`
@@ -267,7 +267,7 @@ export const ResultRow = styled.div<{ active?: boolean; selected?: boolean }>`
   justify-content: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
   padding: ${({ theme }) => `0.5rem ${theme.spacing.medium}`};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   width: 100%;
   ${SearchTransition}
 
@@ -275,13 +275,13 @@ export const ResultRow = styled.div<{ active?: boolean; selected?: boolean }>`
     ${SearchTransition}
     height: 1.35rem;
     width: 1.35rem;
-    color: ${({ theme }) => theme.colors.gray[5]};
+    color: ${({ theme }) => theme.tokens.colors.fade};
   }
   ${({ theme, selected }) =>
     selected &&
     css`
       & > svg {
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       }
     `}
 `
@@ -300,7 +300,7 @@ export const ResultTitle = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.tiny};
 
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 `
 
 export const ResultHeader = styled.div<{ active?: boolean }>`
@@ -308,9 +308,9 @@ export const ResultHeader = styled.div<{ active?: boolean }>`
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme }) => theme.spacing.medium};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   gap: ${({ theme }) => theme.spacing.small};
   ${ResultTitle} {
     flex-grow: 1;
@@ -318,17 +318,17 @@ export const ResultHeader = styled.div<{ active?: boolean }>`
   ${({ theme, active }) =>
     active &&
     css`
-      color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.default};
 
       ${ResultTitle} {
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       }
     `}
 `
 
 export const ResultDesc = styled.div`
   flex-shrink: 1;
-  color: ${({ theme }) => theme.colors.gray[5]};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: ${BodyFont};
   max-width: 20rem;
 
@@ -357,7 +357,7 @@ export const ResultMetaData = styled.div`
 `
 
 export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   :hover {
     cursor: pointer;
   }
@@ -369,6 +369,7 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         border: 1px solid transparent !important;
         display: flex;
         flex-direction: column;
+        box-shadow: ${theme.tokens.shadow.small};
 
         ${SearchPreviewWrapper} {
           max-height: 300px;
@@ -379,16 +380,16 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         ${selected &&
         css`
           ${CardShadow}
-          border: 1px solid ${theme.colors.primary} !important;
+          border: 1px solid ${theme.tokens.colors.primary.default} !important;
           ${ResultTitle} {
             font-weight: bold;
-            color: ${theme.colors.primary};
+            color: ${theme.tokens.colors.primary.default};
           }
         `}
         :hover {
           cursor: pointer;
           ${CardShadow}
-          border: 1px solid ${theme.colors.primary} !important;
+          border: 1px solid ${theme.tokens.colors.primary.default} !important;
         }
       `
     } else if (view === View.List) {
@@ -403,23 +404,23 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
         overflow: visible;
         :hover {
           transition: 0s ease;
-          background-color: ${theme.colors.gray[8]};
-          border: 1px solid ${theme.colors.primary} !important;
+          background-color: ${theme.tokens.surfaces.s[2]};
+          border: 1px solid ${theme.tokens.colors.primary.default} !important;
 
           ${ResultTitle} {
             font-weight: bold;
-            color: ${theme.colors.primary};
+            color: ${theme.tokens.colors.primary.default};
           }
         }
         ${selected &&
         css`
           transition: 0s ease;
-          background-color: ${theme.colors.gray[8]};
-          border: 1px solid ${theme.colors.primary} !important;
+          background-color: ${theme.tokens.surfaces.s[2]};
+          border: 1px solid ${theme.tokens.colors.primary.default} !important;
 
           ${ResultTitle} {
             font-weight: bold;
-            color: ${theme.colors.primary};
+            color: ${theme.tokens.colors.primary.default};
           }
         `}
       `
@@ -472,15 +473,15 @@ export const ItemTag = styled.div<{ large?: boolean }>`
   height: 100%;
   padding: 0.2rem ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
-  color: ${({ theme }) => theme.colors.text.fade};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.9rem;
   font-weight: normal;
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   svg {
-    color: ${({ theme }) => theme.colors.text.default};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
   ${({ large }) =>
     large &&
@@ -510,23 +511,24 @@ export const SearchIndexValue = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
 
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
 
   svg:first-child {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 export const SplitSearchPreviewWrapper = styled.div`
   ${SearchHeight}
   overflow-y: auto;
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[9])};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   padding: 0 ${({ theme }) => theme.spacing.medium};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.large};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 
   ${EditorStyles} {
     font-size: 1rem;
@@ -536,7 +538,7 @@ export const SplitSearchPreviewWrapper = styled.div`
     overflow-y: auto;
     min-height: 30vh;
 
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 
   ${MetadataWrapper} {
@@ -568,7 +570,7 @@ export const SplitSearchPreviewWrapper = styled.div`
       }
     }
     & > svg {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 `
@@ -593,18 +595,18 @@ export const TitleHighlightWrapper = styled.div`
 export const Highlight = styled.span`
   padding: ${({ theme: { spacing } }) => `${spacing.tiny} ${spacing.small}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+  color: ${({ theme }) => theme.tokens.colors.primary.text};
 `
 
 export const MatchCounterWrapper = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.9rem;
 `
 export const MatchCounter = styled.div`
   margin-left: ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   font-size: 1.2rem;
 `

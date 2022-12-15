@@ -13,11 +13,17 @@ export const SSnippets = styled.div`
 `
 
 export const SSnippet = styled(Card)`
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   overflow: auto;
   margin: 1rem;
   padding: 1rem;
   aspect-ratio: 1/1;
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+  }
 
   ::-webkit-scrollbar {
     width: 0;
@@ -33,25 +39,25 @@ export const SnippetHeader = styled.div`
 `
 
 export const StyledSnippetPreview = styled.div`
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   min-height: 80%;
 `
 
 export const SnippetCommandPrefix = styled.div`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 export const SnippetCommand = styled.div`
   display: flex;
   font-size: 1.5rem;
   margin: ${({ theme }) => theme.spacing.small} 0;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const CreateSnippet = styled(Card)`
-  color: ${({ theme }) => theme.colors.text.fade};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  color: ${({ theme }) => theme.tokens.text.fade};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,8 +67,8 @@ export const CreateSnippet = styled(Card)`
   flex-direction: column;
 
   svg {
-    color: ${({ theme }) => theme.colors.primary};
-    filter: drop-shadow(0px 4px 10px ${({ theme }) => theme.colors.primary});
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    filter: drop-shadow(0px 4px 10px ${({ theme }) => theme.tokens.colors.primary.default});
   }
 `
 

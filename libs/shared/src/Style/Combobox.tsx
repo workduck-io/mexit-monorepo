@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
+import { generateStyle } from '@workduck-io/mex-themes'
 
 import { BodyFont } from './Search'
 
@@ -8,6 +9,7 @@ export const ComboboxItem = styled.div<{ center?: boolean }>`
   display: flex;
   align-items: ${({ center }) => (center ? 'center' : 'flex-start')};
   gap: ${({ theme }) => theme.spacing.small};
+  ${({ theme }) => generateStyle(theme.editor.combobox.item)}
 
   font-weight: 400;
   font-size: 14px;
@@ -17,18 +19,18 @@ export const ComboboxItem = styled.div<{ center?: boolean }>`
   user-select: none;
   margin: 0 ${({ theme }) => theme.spacing.small};
   width: 260px;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   &.highlight {
-    background: ${({ theme }) => theme.colors.background.highlight};
+    ${({ theme }) => generateStyle(theme.editor.combobox.item.selected)}
   }
   cursor: pointer;
 
   :hover {
-    background-color: ${({ theme }) => theme.colors.background.highlight};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   & > svg {
-    color: ${({ theme }) => theme.colors.gray[4]};
+    color: ${({ theme }) => theme.tokens.colors.fade};
   }
 `
 
@@ -53,7 +55,7 @@ export const ItemsContainer = styled.section`
 export const SectionSeparator = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.colors.background.highlight};
+  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
   margin: ${({ theme }) => theme.spacing.medium} 0;
 `
 
@@ -81,8 +83,8 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       height: fit-content;
 
       > div {
-        background: ${theme.colors.background.modal};
-        box-shadow: rgba(0, 0, 0, 0.133) 0 3.2px 7.2px 0, rgba(0, 0, 0, 0.11) 0 0.6px 1.8px 0;
+        background: ${theme.tokens.surfaces.modal};
+        box-shadow: ${theme.tokens.shadow.medium};
         border-radius: ${theme.borderRadius.small};
 
         > section {
@@ -112,7 +114,7 @@ export const ItemRightIcons = styled.div`
 
 export const ItemDesc = styled.div`
   /* margin: ${({ theme }) => theme.spacing.tiny} 0; */
-  color: ${({ theme }) => theme.colors.text.disabled};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 12px;
   max-width: 28ch;
   white-space: nowrap;
@@ -134,7 +136,7 @@ export const ActionTitle = styled.div`
   user-select: none;
   margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.medium}`};
   white-space: nowrap;
-  color: ${({ theme }) => theme.colors.text.disabled};
+  color: ${({ theme }) => theme.tokens.text.fade};
   text-transform: uppercase;
 `
 
@@ -144,7 +146,7 @@ export const ComboboxShortcuts = styled.div`
   align-items: center;
   padding: 0.5rem 0;
   width: 100%;
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
 `
 
 export const ShortcutText = styled.div`
@@ -157,7 +159,7 @@ export const ShortcutText = styled.div`
     display: flex;
     align-items: center;
     margin-left: 4px;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
@@ -181,7 +183,7 @@ export const StyledComboHeader = styled(ComboboxItem)`
   padding: 0;
   margin-top: 0.25rem;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.background.highlight};
+  border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
 
   :hover {
     background: transparent;

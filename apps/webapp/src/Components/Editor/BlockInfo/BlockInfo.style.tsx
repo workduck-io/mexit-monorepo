@@ -15,9 +15,9 @@ const scale = keyframes`
 `
 
 export const BlockInfoWrapper = styled.div<{ animate?: boolean }>`
-  background: ${({ theme }) => theme.colors.gray[9]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   z-index: 5;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   font-size: 14px;

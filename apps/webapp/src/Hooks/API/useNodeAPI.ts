@@ -64,7 +64,7 @@ export const useApi = () => {
       referenceID: options?.parentNoteId,
       namespaceID: namespaceID,
       data: serializeContent(options.content ?? defaultContent.content, noteID),
-      tags: getTagsFromContent(options.content)
+      tags: getTagsFromContent(options.content ?? defaultContent.content)
     }
 
     const data = await API.node

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { FallbackProps } from 'react-error-boundary'
 
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
@@ -21,10 +20,10 @@ const ErrorWrapper = styled.div`
 const ErrorCard = styled.div`
   ${CardShadow}
   padding: ${({ theme: { spacing } }) => spacing.large};
-  background-color: ${({ theme }) => theme.colors.background.card};
+  background-color: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
-  border: 1px solid ${({ theme }) => transparentize(0.75, theme.colors.palette.red)};
+  border: 1px solid rgba(${({ theme }) => theme.tokens.colors.red}, 0.5);
 `
 
 const EditorErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {

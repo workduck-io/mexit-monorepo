@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
@@ -35,37 +34,38 @@ export const NodeLinkStyled = styled.div<{ selected?: boolean }>`
   cursor: pointer;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   margin-bottom: ${({ theme }) => theme.spacing.small};
-  background: ${({ theme }) => transparentize(0.75, theme.colors.gray[8])};
+  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
   svg {
-    fill: ${({ theme }) => theme.colors.text.fade};
+    fill: ${({ theme }) => theme.tokens.text.fade};
     width: 16px;
     height: 16px;
   }
   ${Button} {
     padding: ${({ theme }) => theme.spacing.tiny};
+    box-shadow: none;
   }
   &:hover {
     ${Button} {
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
       &:hover {
-        color: ${({ theme }) => theme.colors.primary};
+        color: ${({ theme }) => theme.tokens.colors.primary.default};
       }
     }
   }
   ${({ selected, theme }) =>
     selected
       ? css`
-          background: ${theme.colors.primary};
-          color: ${theme.colors.text.oppositePrimary};
+          background: ${theme.tokens.colors.primary.default};
+          color: ${theme.tokens.colors.primary.text};
           ${SubtleGlow}
           svg {
-            fill: ${theme.colors.text.oppositePrimary};
+            fill: ${theme.tokens.colors.primary.text};
           }
         `
       : css`
           &:nth-child(2n + 1) {
-            background: ${transparentize(0.5, theme.colors.gray[8])};
+            background: rgba(${theme.rgbTokens.surfaces.s[2]}, 0.5);
           }
           ${HoverSubtleGlow}
         `}
@@ -74,13 +74,13 @@ export const NodeLinkStyled = styled.div<{ selected?: boolean }>`
 export const DataInfoHeader = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.subheading};
+  color: ${({ theme }) => theme.tokens.text.subheading};
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: ${({ theme }) => theme.spacing.medium};
 
   svg {
     margin-right: ${({ theme }) => theme.spacing.small};
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `

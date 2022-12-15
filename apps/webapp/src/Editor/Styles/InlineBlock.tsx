@@ -8,9 +8,9 @@ export const StyledMessage = styled.div`
   border: none;
   border-radius: 0.7rem;
   margin-left: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.background.highlight};
-  box-shadow: 0 2px 2px ${({ theme }) => theme.colors.background.app};
-  color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   padding: 0.5rem 1rem;
 `
 
@@ -39,50 +39,49 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
   margin: ${({ theme }) => theme.spacing.small} 0;
   padding: 1px;
   transition: transform 0.2s ease-in;
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   ${({ selected }) =>
     selected
       ? css`
-          border: 1px solid ${({ theme }) => theme.colors.primary};
-          background: none;
+          border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
           padding: 0px;
-          /* transform: translateY(-5px); */
         `
       : css`
           :hover {
             transform: translateY(-5px);
           }
         `}
-  box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray[8]};
-  /* background: ${({ theme }) => theme.colors.background.card}; */
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+
   border-radius: ${({ theme: { borderRadius } }) => `${borderRadius.small}`};
   ${InlineFlex} svg {
     width: 16px;
     height: 16px;
     margin-left: ${({ theme }) => theme.spacing.small};
-    fill: ${({ theme }) => theme.colors.gray[4]};
+    fill: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
 export const InlineBlockHeading = styled.div`
-  color: ${({ theme }) => theme.colors.text.disabled};
+  color: ${({ theme }) => theme.tokens.text.disabled};
   font-size: large;
 `
 
 export const InlineBlockText = styled.div`
   margin-left: ${({ theme }) => theme.spacing.small};
   font-size: large;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.text.heading};
 `
 
 
 export const Chip = styled(StyledMessage)`
   cursor: pointer;
   background: transparent;
-  box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray[8]};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   padding: 0.25rem 0.75rem;
   font-size: 0.95rem;
   &:hover {
-    background: ${({ theme }) => theme.colors.background.modal};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 

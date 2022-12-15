@@ -34,7 +34,7 @@ export const Icon = styled.div`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background.modal};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 

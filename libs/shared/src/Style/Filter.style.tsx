@@ -1,4 +1,3 @@
-import { mix } from 'polished'
 import styled from 'styled-components'
 
 export const FilterWrapper = styled.div`
@@ -6,9 +5,9 @@ export const FilterWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  border: 1px solid ${({ theme }) => theme.colors.form.input.border};
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 `
 
 export const GenericFlex = styled.div`
@@ -28,12 +27,13 @@ export const FilterMenuDiv = styled(GenericFlex)`
 export const FilterTypeDiv = styled(GenericSection)``
 
 export const FilterJoinDiv = styled(GenericFlex)`
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.tokens.colors.secondary};
 `
 
 export const FilterValueDiv = styled(GenericSection)`
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => mix(0.5, theme.colors.gray[7], theme.colors.gray[8])};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 `
 
 export const FilterRemoveButton = styled(GenericSection)`
@@ -41,7 +41,7 @@ export const FilterRemoveButton = styled(GenericSection)`
   align-items: center;
 
   :hover {
-    color: ${({ theme }) => theme.colors.palette.red};
+    color: ${({ theme }) => theme.tokens.colors.red};
   }
 `
 

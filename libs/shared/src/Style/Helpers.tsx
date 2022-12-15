@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
 import { MexIcons, MexNodeIcons } from '../Components/Icons'
@@ -85,7 +84,7 @@ export const ScrollStyles = (color = undefined, width = 10) => css`
 export const ThinScrollbar = ScrollStyles()
 
 export const CardShadow = css`
-  box-shadow: 0px 3px 9px ${({ theme }) => transparentize(0.5, theme.colors.palette.black)};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `
 
 export const getLineIcons = (icon: string) => {
