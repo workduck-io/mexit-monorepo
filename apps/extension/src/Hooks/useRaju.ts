@@ -20,7 +20,7 @@ import {
   SharedNode,
   SingleNamespace,
   SmartCaptureConfig,
-  Snippet,
+  Snippets,
   UserDetails,
   WorkspaceDetails
 } from '@mexit/core'
@@ -35,13 +35,13 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
 
 import { useAuthStore } from './useAuth'
 import useInternalAuthStore from './useAuthStore'
 import { useReminders } from './useReminders'
-import { useSnippets } from './useSnippets'
 
 export interface ParentMethods {
   SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>
@@ -80,7 +80,7 @@ export default function useRaju() {
   const setPublicNodes = useDataStore((store) => store.setPublicNodes)
   const setSharedNodes = useDataStore((store) => store.setSharedNodes)
   const setRecents = useRecentsStore((s) => s.initRecents)
-  const { updateSnippets } = useSnippets()
+  const initSnippets = useSnippetStore((s) => s.initSnippets)
   const setSmartCapture = useSmartCaptureStore((store) => store.setSmartCaptureList)
   const { setReminders, reminders } = useReminderStore()
   const { actOnReminder } = useReminders()
@@ -150,8 +150,8 @@ export default function useRaju() {
 
       initHighlightBlockMap(ilinks, contents)
     },
-    bootSnippets(snippets: Snippet[]) {
-      updateSnippets(snippets)
+    bootSnippets(snippets: Snippets) {
+      initSnippets(snippets)
     },
     bootSmartCapture(captures: SmartCaptureConfig[]) {
       mog('CAPTURES', { captures })

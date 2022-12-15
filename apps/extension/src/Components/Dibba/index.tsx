@@ -43,11 +43,11 @@ import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
-import { useSnippets } from '../../Hooks/useSnippets'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
+import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
@@ -115,7 +115,7 @@ export default function Dibba() {
     })
   })
 
-  const snippets = useSnippets().getSnippets()
+  const snippets = Object.values(useSnippetStore.getState().snippets ?? {})
   const pointerMoved = usePointerMovedSinceMount()
 
   const data = [

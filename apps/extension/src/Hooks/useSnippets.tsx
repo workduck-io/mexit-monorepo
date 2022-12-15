@@ -1,11 +1,12 @@
-import { getSnippetCommand, Snippet } from '@mexit/core'
+import { getSnippetCommand, Snippet, SnippetID } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
 export const useSnippets = () => {
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
+  const updateSnippetsInStore = useSnippetStore((state) => state.initSnippets)
+
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
   const { generateSlashCommands } = useSlashCommands()
@@ -16,27 +17,30 @@ export const useSnippets = () => {
 
   const getSnippet = (id: string) => {
     const snippets = useSnippetStore.getState().snippets
-    const snippet = snippets.filter((c) => c.id === id)
+    return snippets?.[id]
+  }
 
-    if (snippet.length > 0) return snippet[0]
-    return undefined
+  const updateSlashCommands = (snippets: Snippet[]) => {
+    const slashCommands = generateSlashCommands(snippets)
+    setSlashCommands(slashCommands)
   }
 
   // Replacer that will provide new fresh and different content each time
   const getSnippetContent = (command: string) => {
-    const snippets = useSnippetStore.getState().snippets
-    const snippet = snippets.filter((c) => getSnippetCommand(c.title) === command)
+    const snippets = useSnippetStore.getState().snippets ?? {}
+    const snippet = Object.values(snippets).filter((c) => getSnippetCommand(c.title) === command)
 
     if (snippet.length > 0) return snippet[0].content
     return undefined
   }
 
-  // * Updates snippets in store and adds them in combobox
-  const updateSnippets = (snippets: Snippet[]) => {
-    initSnippets(snippets)
-    const slashCommands = generateSlashCommands(snippets)
-    // console.log('snippets', snippets, slashCommands)
-    setSlashCommands(slashCommands)
+  const updateSnippets = async (snippets: Record<SnippetID, Snippet>) => {
+    const existingSnippets = useSnippetStore.getState().snippets
+
+    const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
+
+    updateSnippetsInStore(newSnippets)
+    updateSlashCommands(Object.values(newSnippets))
   }
 
   return { getSnippets, getSnippet, getSnippetContent, updateSnippets }

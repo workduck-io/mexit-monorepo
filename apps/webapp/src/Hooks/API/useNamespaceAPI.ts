@@ -20,7 +20,7 @@ import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
   const { setNamespaces, setIlinks, addInArchive } = useDataStore()
-  const { updateFromContent } = useUpdater()
+  const { updateFromNotes } = useUpdater()
 
   const getAllNamespaces = async () => {
     const namespaces = await API.namespace
@@ -83,16 +83,15 @@ export const useNamespaceApi = () => {
 
       fulfilled.forEach((nodes) => {
         if (nodes) {
-          const { rawResponse } = nodes
-          // setRequest(apiURLs.node.getMultipleNode(), { ...requestData, url: apiURLs.node.getMultipleNode() })
+          const notes = {}
+          const metadatas = {}
 
-          if (rawResponse) {
-            rawResponse.forEach((nodeResponse) => {
-              const metadata = extractMetadata(nodeResponse) // added by Varshitha
-              const content = deserializeContent(nodeResponse.data)
-              updateFromContent(nodeResponse.id, content, metadata)
-            })
-          }
+          nodes.rawResponse?.map((note) => {
+            metadatas[note.id] = extractMetadata(note)
+            notes[note.id] = deserializeContent(note.data)
+          })
+
+          updateFromNotes(notes, metadatas)
         }
       })
     }

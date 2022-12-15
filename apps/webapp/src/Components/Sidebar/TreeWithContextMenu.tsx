@@ -21,8 +21,8 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
@@ -91,16 +91,15 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
   //   prefillRefactorModal({ path: item?.data?.path, namespaceID: item.data?.namespace })
   //   // openRefactorModal()
   // }
-  const contents = useContentStore((store) => store.contents)
+  const noteMetadata = useMetadataStore((store) => store.metadata.notes)
   const hasTemplate = useMemo(() => {
-    const metadata = contents[item.data.nodeid]?.metadata
+    const metadata = noteMetadata[item.data.nodeid]
 
-    const templates = useSnippetStore
-      .getState()
-      .snippets.filter((item) => item?.template && item.id === metadata?.templateID)
+    const snippets = useSnippetStore.getState().snippets ?? {}
+    const templates = Object.values(snippets).filter((item) => item?.template && item.id === metadata?.templateID)
 
     return templates.length !== 0
-  }, [item.data.nodeid, contents])
+  }, [item.data.nodeid, noteMetadata])
 
   const isInSharedNamespace = itemNamespace?.granterID !== undefined
   const isReadonly = itemNamespace?.access === 'READ'

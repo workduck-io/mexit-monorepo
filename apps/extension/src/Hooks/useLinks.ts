@@ -65,7 +65,7 @@ export const useLinks = () => {
     const links = useDataStore.getState().ilinks
     const archive = useDataStore.getState().archive
     const remindersAll = useReminderStore.getState().reminders
-    const snippets = useSnippetStore.getState().snippets
+    const snippets = useSnippetStore.getState().snippets ?? {}
     const ntasks = useTodoStore.getState().todos
 
     const reminders = remindersAll.filter((r) => r.state.done === false)
@@ -93,7 +93,7 @@ export const useLinks = () => {
       notes: links.length,
       archive: archive.length,
       reminders: reminders.length,
-      snippets: snippets.length,
+      snippets: Object.values(snippets).length,
       tasks: tasksC
     }
   }

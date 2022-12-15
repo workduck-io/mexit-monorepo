@@ -17,7 +17,6 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
@@ -38,8 +37,7 @@ export const useApi = () => {
   const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore()
   const { updateFromContent } = useUpdater()
   const { getSharedNode } = useNodes()
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-  const { updateSnippet } = useSnippets()
+  const { updateSnippets, getSnippet } = useSnippets()
 
   const currentUser = useAuthStore((store) => store.userDetails)
 
@@ -312,39 +310,38 @@ export const useApi = () => {
     const data = await API.snippet
       .allOfWorkspace()
       .then((d) => {
-        const snippets = useSnippetStore.getState().snippets
-
         const newSnippets = d.filter((snippet) => {
-          const existSnippet = snippets.find((s) => s.id === snippet.snippetID)
+          const existSnippet = getSnippet(snippet.snippetID)
+          mog('SnippetInitLoader', { existSnippet })
           return existSnippet === undefined
         })
 
-        initSnippets([
-          ...snippets,
-          ...newSnippets.map((item) => ({
-            icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
-            id: item.snippetID,
-            template: item.template,
-            title: item.title,
-            content: defaultContent.content
-          }))
-        ])
+        // initSnippets([
+        //   ...snippets,
+        //   ...newSnippets.map((item) => ({
+        //     icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
+        //     id: item.snippetID,
+        //     template: item.template,
+        //     title: item.title,
+        //     content: defaultContent.content
+        //   }))
+        // ])
 
         return newSnippets
       })
       .then(async (newSnippets) => {
         const toUpdateSnippets = newSnippets?.map((item) => item.snippetID)
-        mog('NewSnippets', { newSnippets, toUpdateSnippets })
+        // mog('NewSnippets', { newSnippets, toUpdateSnippets })
+
         if (toUpdateSnippets && toUpdateSnippets.length > 0) {
           const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
             const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
             res.fulfilled.forEach(async (snippets) => {
-              if (snippets) {
-                snippets.forEach((snippet) => updateSnippet(snippet))
-              }
+              const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
+              updateSnippets(snippetsRecord)
             })
-            mog('RunBatchWorkerSnippetsRes', { res, ids })
+            mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
           }
         }
       })

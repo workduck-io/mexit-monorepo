@@ -102,7 +102,7 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       <SnippetCardWrapper>
         <NodeCardHeader>
           <GenericFlex>
-            <MexIcon icon={snippet.template ? magicLine : quillPenLine} />
+            <MexIcon icon={snippet?.template ? magicLine : quillPenLine} />
             {snippet.title}
           </GenericFlex>
           <GenericFlex>

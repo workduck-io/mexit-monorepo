@@ -8,7 +8,8 @@ export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
   search = 'Search Results',
-  task = 'Task'
+  task = 'Task',
+  tag = 'Tags'
 }
 
 export enum QuickLinkType {
