@@ -20,17 +20,17 @@ const SnippetList = () => {
 
   const onOpenSnippet = (id: string) => {
     loadSnippet(id)
-    const snippet = snippets.find((snippet) => snippet.id === id)
+    const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
   }
 
   const sortedSnippets = React.useMemo(() => {
-    return snippets
+    return Object.values(snippets ?? {})
       .sort((a, b) => (a.title < b.title ? 1 : -1))
       .map((snippet) => ({
         id: snippet.id,
         label: snippet.title,
-        icon: snippet.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
+        icon: snippet?.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
         data: snippet
       }))
   }, [snippets])
@@ -39,7 +39,7 @@ const SnippetList = () => {
 
   return (
     <SidebarWrapper>
-      <SidebarHeaderLite title={`Snippets (${snippets.length})`} icon={quillPenLine} />
+      <SidebarHeaderLite title={`Snippets (${sortedSnippets.length})`} icon={quillPenLine} />
       <SidebarList
         items={sortedSnippets}
         onClick={onOpenSnippet}

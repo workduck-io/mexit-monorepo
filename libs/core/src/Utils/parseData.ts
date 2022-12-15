@@ -1,4 +1,4 @@
-import { diskIndex,indexNames } from '../Data/search'
+import { diskIndex, indexNames } from '../Data/search'
 import { BlockType } from '../Stores/blockStoreConstructor'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
@@ -11,7 +11,8 @@ import {
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_TABLE,
-  ELEMENT_TODO_LI} from './editorElements'
+  ELEMENT_TODO_LI
+} from './editorElements'
 import { getSlug } from './strings'
 
 const ELEMENT_ILINK = 'ilink'
@@ -125,7 +126,8 @@ export const convertDataToIndexable = (data: PersistentData) => {
 
       case indexNames.template:
       case indexNames.snippet: {
-        data.snippets.forEach((snippet) => {
+        const snippets = Array.isArray(data.snippets) ? data.snippets : Object.values(data.snippets)
+        snippets.forEach((snippet) => {
           titleNodeMap.set(snippet.id, snippet.title)
         })
         break
@@ -165,28 +167,19 @@ export const convertDataToIndexable = (data: PersistentData) => {
           })
         }
       })
-    } else if (idxName === indexNames.snippet) {
-      data.snippets
-        .filter((snip) => !snip.template)
+    } else if (idxName === indexNames.snippet || idxName === indexNames.template) {
+      const isTemplate = idxName === indexNames.template
+      const snippets = Array.isArray(data.snippets) ? data.snippets : Object.values(data.snippets)
+
+      snippets
+        .filter((snip) => (isTemplate ? snip.template : !snip.template))
         .map((snip) => {
           const title = titleNodeMap.get(snip.id)
           const temp: GenericSearchData = {
             ...convertEntryToRawText(snip.id, snip.content, title),
-            tag: ['snippet']
+            tag: [idxName]
           }
           nodeBlockMap[snip.id] = [snip.id] // Redundant right now, not doing block level indexing for snippets
-          idxResult.push(temp)
-        })
-    } else if (idxName === indexNames.template) {
-      data.snippets
-        .filter((snip) => snip.template)
-        .map((template) => {
-          const title = titleNodeMap.get(template.id)
-          const temp: GenericSearchData = {
-            ...convertEntryToRawText(template.id, template.content, title),
-            tag: ['template']
-          }
-          nodeBlockMap[template.id] = [template.id] // Redundant right now, not doing block level indexing for snippets
           idxResult.push(temp)
         })
     } else {

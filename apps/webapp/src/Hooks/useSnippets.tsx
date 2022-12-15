@@ -1,4 +1,4 @@
-import { convertContentToRawText, getSnippetCommand, mog, Snippet } from '@mexit/core'
+import { convertContentToRawText, getSnippetCommand, mog, Snippet, SnippetID } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
@@ -11,8 +11,9 @@ import { useSearch } from './useSearch'
 export const useSnippets = () => {
   const addSnippetZus = useSnippetStore((state) => state.addSnippet)
   const updateSnippetZus = useSnippetStore((state) => state.updateSnippet)
+  const updateSnippetsInStore = useSnippetStore((state) => state.initSnippets)
+
   const deleteSnippetZus = useSnippetStore((state) => state.deleteSnippet)
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
   const updateDescription = useDescriptionStore((store) => store.updateDescription)
 
@@ -20,12 +21,13 @@ export const useSnippets = () => {
   const { updateDocument, addDocument, removeDocument } = useSearch()
 
   const getSnippets = () => {
-    return useSnippetStore.getState().snippets
+    return useSnippetStore.getState().snippets ?? {}
   }
 
   const getSnippetConfigs = (): { [key: string]: SlashCommandConfig } => {
-    const snippets = useSnippetStore.getState().snippets
-    return snippets.reduce((prev, cur) => {
+    const snippets = useSnippetStore.getState().snippets ?? {}
+
+    return Object.values(snippets).reduce((prev, cur) => {
       const snipCommand = getSnippetCommand(cur.title)
       return {
         ...prev,
@@ -37,28 +39,39 @@ export const useSnippets = () => {
     }, {})
   }
 
+  const updateSlashCommands = (snippets: Snippet[]) => {
+    const slashCommands = generateSlashCommands(snippets)
+    setSlashCommands(slashCommands)
+  }
+
   const getSnippet = (id: string) => {
     const snippets = useSnippetStore.getState().snippets
-    const snippet = snippets.filter((c) => c.id === id)
 
-    if (snippet.length > 0) return snippet[0]
-    return undefined
+    return snippets?.[id]
   }
 
   // Replacer that will provide new fresh and different content each time
   const getSnippetContent = (command: string) => {
-    const snippets = useSnippetStore.getState().snippets
-    const snippet = snippets.filter((c) => getSnippetCommand(c.title) === command)
+    const snippets = useSnippetStore.getState().snippets ?? {}
+    const snippet = Object.values(snippets).filter((c) => getSnippetCommand(c.title) === command)
 
     if (snippet.length > 0) return snippet[0].content
     return undefined
+  }
+
+  const updateSnippets = async (snippets: Record<SnippetID, Snippet>) => {
+    const existingSnippets = useSnippetStore.getState().snippets
+
+    const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
+
+    updateSnippetsInStore(newSnippets)
+    updateSlashCommands(Object.values(newSnippets))
   }
 
   const updateSnippet = async (snippet: Snippet) => {
     updateSnippetZus(snippet.id, snippet)
     const tags = snippet?.template ? ['template'] : ['snippet']
     const idxName = snippet?.template ? 'template' : 'snippet'
-    mog('Update snippet', { snippet, tags })
     if (snippet?.template) {
       await removeDocument('snippet', snippet.id)
     } else {
@@ -66,8 +79,7 @@ export const useSnippets = () => {
     }
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
 
-    const slashCommands = generateSlashCommands(getSnippets())
-    setSlashCommands(slashCommands)
+    updateSlashCommands(Object.values(getSnippets()))
 
     updateDescription(snippet.id, {
       rawText: convertContentToRawText(snippet.content, '\n'),
@@ -79,8 +91,7 @@ export const useSnippets = () => {
     deleteSnippetZus(id)
     await removeDocument('snippet', id)
 
-    const slashCommands = generateSlashCommands(getSnippets())
-    setSlashCommands(slashCommands)
+    updateSlashCommands(Object.values(getSnippets()))
   }
 
   const addSnippet = async (snippet: Snippet) => {
@@ -91,20 +102,12 @@ export const useSnippets = () => {
 
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
 
-    const slashCommands = generateSlashCommands(getSnippets())
-    setSlashCommands(slashCommands)
+    updateSlashCommands(Object.values(getSnippets()))
 
     updateDescription(snippet.id, {
       rawText: convertContentToRawText(snippet.content, '\n'),
       truncatedContent: snippet.content.slice(0, 8)
     })
-  }
-
-  // * Updates snippets in store and adds them in combobox
-  const updateSnippets = (snippets: Snippet[]) => {
-    initSnippets(snippets)
-    const slashCommands = generateSlashCommands(snippets)
-    setSlashCommands(slashCommands)
   }
 
   return {

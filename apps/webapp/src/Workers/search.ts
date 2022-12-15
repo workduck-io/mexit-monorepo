@@ -8,7 +8,8 @@ import {
   PersistentData,
   SearchIndex,
   SearchRepExtra,
-  SearchWorker} from '@mexit/core'
+  SearchWorker
+} from '@mexit/core'
 
 import {
   createIndexCompositeKey,
@@ -16,7 +17,8 @@ import {
   getNodeAndBlockIdFromCompositeKey,
   indexedFields,
   SEARCH_RESULTS_LIMIT,
-  TITLE_RANK_BUMP} from '../Utils/flexsearch'
+  TITLE_RANK_BUMP
+} from '../Utils/flexsearch'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null

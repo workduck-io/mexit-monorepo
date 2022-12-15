@@ -71,9 +71,10 @@ export const useCreateNewNote = () => {
     const nodeMetadata = notesMetadata?.[parentNoteId]
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent =
-      options?.noteContent ?? (nodeMetadata?.templateID && parentNote?.path !== 'Drafts')
+      options?.noteContent ??
+      (nodeMetadata?.templateID && parentNote?.path !== 'Drafts'
         ? getSnippet(nodeMetadata.templateID)?.content
-        : defaultContent.content
+        : defaultContent.content)
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 

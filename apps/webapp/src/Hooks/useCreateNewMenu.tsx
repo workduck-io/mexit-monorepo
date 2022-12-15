@@ -15,7 +15,6 @@ import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
-import { useUpdater } from './useUpdater'
 
 interface CreateNewMenuItem {
   id: string
@@ -29,7 +28,6 @@ export const useCreateNewMenu = () => {
   const { createNewNote } = useCreateNewNote()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { addSnippet } = useSnippets()
-  const { updater } = useUpdater()
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
   const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
@@ -77,7 +75,6 @@ export const useCreateNewMenu = () => {
     })
 
     loadSnippet(snippetId)
-    updater()
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }

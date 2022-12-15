@@ -13,10 +13,13 @@ export interface SnippetEditorStore {
   snippet?: Snippet
 }
 
-export interface SnippetStoreState {
-  snippets: Snippet[]
+export type SnippetID = string
+export type Snippets = Record<SnippetID, Snippet>
 
-  initSnippets: (snippets: Snippet[]) => void
+export interface SnippetStoreState {
+  snippets: Snippets
+
+  initSnippets: (snippets: Snippets) => void
   addSnippet: (snippets: Snippet) => void
   updateSnippet: (id: string, snippets: Snippet) => void
   updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => void
@@ -28,73 +31,58 @@ export interface SnippetStoreState {
   loadSnippet: (id: string) => void
 
   _hasHydrated: boolean
-  setHasHydrated: (state) => void
 }
 
 export const snippetStoreConstructor = (set, get) => ({
-  snippets: [],
+  snippets: {},
 
-  initSnippets: (snippets: Snippet[]) =>
+  initSnippets: (snippets) =>
     set({
       snippets
     }),
 
-  addSnippet: (snippet: Snippet) => set((state) => ({ snippets: [...state.snippets, snippet] })),
+  addSnippet: (snippet: Snippet) => {
+    const existingSnippets = get().snippets
+    set({ snippets: { ...existingSnippets, [snippet.id]: snippet } })
+  },
 
-  updateSnippet: (id: string, snippet: Snippet) =>
-    // Updates the snippet at the ID with a new snippet,
-    // replaces the entire value including ID
-    set((state) => {
-      const snippets = state.snippets.filter((s) => s.id !== id)
-      return { snippets: [...snippets, snippet] }
-    }),
+  updateSnippet: (id: string, snippet: Snippet) => {
+    const existingSnippets = get().snippets
+    set({ snippets: { ...existingSnippets, [snippet.id]: snippet } })
+  },
+
   updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => {
-    const snippets = get().snippets.map((s) => {
-      if (s.id === id) {
-        if (isTemplate !== undefined) {
-          return { ...s, content, isTemplate }
-        }
-        return { ...s, content }
-      }
-      return s
-    })
-    set({ snippets })
+    const snippets = get().snippets
+    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, isTemplate } } })
   },
 
   updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => {
-    const snippets = get().snippets.map((s) => {
-      if (s.id === id) {
-        if (isTemplate !== undefined) {
-          return { ...s, content, isTemplate, title }
-        }
-        return { ...s, content, title }
-      }
-      return s
-    })
-    set({ snippets })
+    const snippets = get().snippets
+    set({ snippets: { ...snippets, [id]: { ...(snippets[id] ?? {}), content, title, isTemplate } } })
   },
 
   clear: () => {
-    set({ snippets: [], editor: { snippet: undefined } })
+    set({ snippets: {}, editor: { snippet: undefined } })
   },
 
-  deleteSnippet: (id: string) =>
+  deleteSnippet: (id: string) => {
     // Updates the snippet at the ID with a new snippet,
     // replaces the entire value including ID
-    set((state) => {
-      const snippets = state.snippets.filter((s) => s.id !== id)
-      return { snippets }
-    }),
-
+    const snippets = get().snippets
+    if (snippets[id]) {
+      const { [id]: snippetData, ...restSnippets } = snippets
+      set(restSnippets)
+    }
+  },
   editor: { snippet: undefined },
 
-  loadSnippet: (id: string) =>
-    set((state) => {
-      const snippet = state.snippets.filter((s) => s.id === id)
-      if (snippet.length > 0) {
-        return { editor: { snippet: snippet[0] } }
-      }
-    }),
+  loadSnippet: (id: string) => {
+    const snippetToLoad = get().snippets[id]
+
+    if (snippetToLoad) {
+      set({ editor: { snippet: snippetToLoad } })
+    }
+  },
   _hasHydrated: false,
   setHasHydrated: (state) => {
     set({

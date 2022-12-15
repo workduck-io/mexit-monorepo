@@ -28,7 +28,6 @@ import { DefaultMIcons, ILinkNode } from '@mexit/shared'
 import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
 import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
 import { useSnippets } from '../../../../Hooks/useSnippets'
-import { useUpdater } from '../../../../Hooks/useUpdater'
 import { useDataStore } from '../../../../Stores/useDataStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 import { useOpenToast } from '../../../Toast/useOpenToast'
@@ -37,7 +36,6 @@ export const useTransform = () => {
   const { openNoteToast, openSnippetToast } = useOpenToast()
   const { updateSnippet } = useSnippets()
   const { createNewNote } = useCreateNewNote()
-  const { updater } = useUpdater()
 
   // Checks whether a node is a flowblock
   const isFlowBlock = (node: any): boolean => {
@@ -68,13 +66,8 @@ export const useTransform = () => {
       const val = selectionToValue(editor)
       const valText = convertContentToRawText(val)
 
-      // mog('replaceSelectionWithLink  selPath', { selectionPath })
-
       removeNodes(editor, { at: editor.selection, hanging: false })
-      // Transforms.liftNodes(editor, { at: editor.selection, mode: 'lowest' })
 
-      // mog('replaceSelectionWithQA  ', { selectionPath, val, valText })
-      //
       addQABlock(editor, { question: valText, questionId: generateSnippetId() })
     } catch (e) {
       console.error(e)
@@ -298,17 +291,10 @@ export const useTransform = () => {
         content: value,
         icon: DefaultMIcons.SNIPPET
       }
+
       updateSnippet(newSnippet)
-      updater()
-      // addSnippet()
 
-      // mog('We are here', { esl: editor.selection, selectionPath, nodes, value })
-      // TODO: Show toast with open
       openSnippetToast(snippetId, snippetTitle)
-
-      // setContent(nodeid, value)
-      // saveData()
-      // mog('We are here', { esl: editor.selection, selectionPath, nodes, value, text, path })
     })
   }
 

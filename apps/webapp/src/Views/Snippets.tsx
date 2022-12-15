@@ -43,7 +43,6 @@ import { useApi } from '../Hooks/API/useNodeAPI'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
-import { useUpdater } from '../Hooks/useUpdater'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
@@ -56,9 +55,8 @@ export type SnippetsProps = {
 }
 
 const Snippets = () => {
-  const snippets = useSnippetStore((store) => store.snippets)
+  const snippets = useSnippetStore((store) => Object.values(store.snippets ?? {}))
   const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
-  const { updater } = useUpdater()
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const { queryIndex } = useSearch()
@@ -67,7 +65,7 @@ const Snippets = () => {
 
   const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
     () => ({
-      initialSnippets: snippets.map((snippet) => ({
+      initialSnippets: Object.values(snippets)?.map((snippet) => ({
         id: snippet.id,
         title: snippet.title,
         text: convertContentToRawText(snippet.content)
@@ -76,7 +74,7 @@ const Snippets = () => {
     [snippets]
   )
 
-  const randId = useMemo(() => nanoid(), [initialSnippets])
+  const randId = useMemo(() => nanoid(), [])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
     const res = await queryIndex(['template', 'snippet'], newSearchTerm)
@@ -100,7 +98,6 @@ const Snippets = () => {
     })
 
     loadSnippet(snippetId)
-    updater()
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
@@ -118,7 +115,6 @@ const Snippets = () => {
     })
 
     loadSnippet(snippetId)
-    updater()
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
@@ -139,7 +135,7 @@ const Snippets = () => {
 
   const onOpenSnippet = (id: string) => {
     loadSnippet(id)
-    const snippet = snippets.find((snippet) => snippet.id === id)
+    const snippet = snippets[id]
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
   }
 
@@ -240,7 +236,7 @@ const Snippets = () => {
           <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
             <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
               <span className="title">{snip.title}</span>
-              {snip.template && (
+              {snip?.template && (
                 <ItemTag large>
                   <Icon icon={magicLine} />
                   Template
@@ -264,7 +260,7 @@ const Snippets = () => {
     async function getInitialSnippets() {
       // language
       const snippets = getSnippets()
-      const unfetchedSnippets = snippets.filter((snippet) => snippet.content.length === 0)
+      const unfetchedSnippets = Object.values(snippets).filter((snippet) => snippet.content.length === 0)
       const ids = batchArray(unfetchedSnippets, 10)
 
       mog('SnippetsUseEffect', { snippets, unfetchedSnippets })
@@ -286,6 +282,8 @@ const Snippets = () => {
     }
     getInitialSnippets()
   }, [])
+
+  mog('[Snippets]: Inital List', { initialSnippets })
 
   return (
     <SnippetsSearchContainer>

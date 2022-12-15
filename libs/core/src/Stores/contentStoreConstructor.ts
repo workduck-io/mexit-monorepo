@@ -8,6 +8,7 @@ export interface ContentStoreState {
   setSaved: (saved: boolean) => void
   removeContent: (nodeid: string) => void
   getContent: (nodeid: string) => NodeContent
+  setContents: (contents: Record<string, NodeEditorContent>) => void
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
   initContents: (contents: Contents) => void
 
@@ -23,6 +24,10 @@ export const contentStoreConstructor = (set, get) => ({
   contents: {},
   saved: false,
   setSaved: (saved) => set(() => ({ saved })),
+  setContents: (contents) => {
+    const existingContents = get().contents
+    set({ contents: { ...existingContents, ...contents } })
+  },
   setContent: (nodeid, content, metadata, internalUpdate) => {
     const oldContent = get().contents
 

@@ -70,7 +70,6 @@ const ContentEditor = () => {
   const { goTo } = useRouting()
 
   const { shortcutHandler } = useKeyListener()
-  // const { getSuggestions } = useSuggestions()
   const shortcuts = useHelpStore((store) => store.shortcuts)
   const isUserEditing = useEditorStore((store) => store.isEditing)
 
@@ -175,7 +174,6 @@ const ContentEditor = () => {
 
   const viewOnly = useMemo(() => {
     const access = accessWhenShared(nodeid)
-    // mog('Access', { access, node })
     return isReadonly(access)
   }, [nodeid, _hasHydrated])
 
@@ -221,10 +219,8 @@ const ContentEditor = () => {
           onClick={onFocusClick}
         >
           <Editor
-            // showBalloonToolbar
             onAutoSave={onAutoSave}
             includeBlockInfo={true}
-            // getSuggestions={getSuggestions}
             onChange={onChangeSave}
             content={nodeContent}
             nodeUID={nodeid}
@@ -234,7 +230,6 @@ const ContentEditor = () => {
         </EditorWrapper>
       </StyledEditor>
       <BlockOptionsMenu blockId="one" />
-      {/* <NodeIntentsModal nodeid={nodeid} /> */}
     </>
   )
 }

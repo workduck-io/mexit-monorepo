@@ -1,6 +1,6 @@
 import { uniq } from 'lodash'
 
-import { defaultCommands, getSnippetCommand, MIcon, mog, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
+import { defaultCommands, getSnippetCommand, MIcon, QuickLinkType, SlashCommand, Snippet } from '@mexit/core'
 
 import { DefaultMIcons } from '../Components/Icons'
 
@@ -31,7 +31,6 @@ export const useSlashCommands = () => {
       uniq(
         snippets.map((s) => {
           const command = getSnippetCommand(s.title)
-          mog('SNIPPET COMMAND', { s })
           return {
             command,
             icon: s.icon ?? DefaultMIcons.SNIPPET,

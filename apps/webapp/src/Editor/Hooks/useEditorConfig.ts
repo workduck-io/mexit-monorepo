@@ -245,7 +245,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     tag: {
       cbKey: ComboboxKey.TAG,
       trigger: '#',
-      data: tags.map((t) => ({ ...t, text: t.value })),
+      data: tags.map((t) => ({ ...t, text: t.value, type: CategoryType.tag })),
       icon: getMIcon('ICON', 'ri:hashtag')
     },
     slash_command: {

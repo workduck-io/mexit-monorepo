@@ -1,4 +1,3 @@
-
 import create from 'zustand'
 
 import { mog, NodeEditorContent } from '@mexit/core'
@@ -61,7 +60,7 @@ export const useEditorBuffer = () => {
         const namespace = getNamespaceOfNodeid(nodeid)
 
         if (!res) {
-          saveEditorValueAndUpdateStores(nodeid, namespace.id, val, { saveApi: true, isShared })
+          saveEditorValueAndUpdateStores(nodeid, namespace?.id, val, { saveApi: true, isShared })
         }
         return !res
       })

@@ -10,6 +10,7 @@ import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResu
 import {
   ArchiveHelp,
   DefaultMIcons,
+  FlexBetween,
   IconDisplay,
   MainHeader,
   Result,
@@ -82,7 +83,7 @@ const Archive = () => {
   useEffect(() => {
     const fetchArchiveContents = async () => {
       const unfetchedArchives = archive
-        .filter((i) => contents[i.nodeid]?.content.length === 0 || contents[i.nodeid] === undefined)
+        .filter((i) => contents[i.nodeid]?.content?.length === 0 || contents[i.nodeid] === undefined)
         .map((i) => i.nodeid)
 
       const ids = batchArray(unfetchedArchives, 10)
@@ -145,8 +146,10 @@ const Archive = () => {
             <IconDisplay icon={icon} />
             <ResultMain>
               <ResultTitle>
-                {node.path}
-                {namespace && <NamespaceTag namespace={namespace} />}
+                <FlexBetween>
+                  {node.path}
+                  {namespace && <NamespaceTag namespace={namespace} />}
+                </FlexBetween>
               </ResultTitle>
               <ResultDesc>{convertContentToRawText(content, ' ')}</ResultDesc>
             </ResultMain>
