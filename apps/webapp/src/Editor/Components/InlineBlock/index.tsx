@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useMatch } from 'react-router-dom'
 
 import { useSelected } from 'slate-react'
 import styled from 'styled-components'
@@ -33,6 +34,7 @@ const InlineBlock = (props: any) => {
   const { goTo } = useRouting()
   const { getPathFromNodeid } = useLinks()
   const { getNodeType } = useNodes()
+  const publicNamespaceMatch = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/node/:nodeid`)
   const getContent = useContentStore((store) => store.getContent)
   const path = useMemo(() => getPathFromNodeid(props.element.value, true), [props.element.value])
   const nodeid = props.element.value
@@ -56,6 +58,15 @@ const InlineBlock = (props: any) => {
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
+  const openPublicNode = (ev: any) => {
+    ev.preventDefault()
+    if (publicNamespaceMatch) {
+      goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeid)
+    } else {
+      goTo(ROUTE_PATHS.share, NavigationType.push, nodeid)
+    }
+  }
+
   const selected = useSelected()
   // mog('InlineBlock', { nodeid, selected, content, nodeType, path })
 
@@ -76,7 +87,8 @@ const InlineBlock = (props: any) => {
                 [NodeType.ARCHIVED]: <StyledArchiveText>Archived</StyledArchiveText>,
                 [NodeType.MISSING]: <StyledArchiveText>Private/Missing</StyledArchiveText>,
                 [NodeType.SHARED]: <Chip onClick={openNode}>Open</Chip>,
-                [NodeType.DEFAULT]: <Chip onClick={openNode}>Open</Chip>
+                [NodeType.DEFAULT]: <Chip onClick={openNode}>Open</Chip>,
+                [NodeType.PUBLIC]: <Chip onClick={openPublicNode}>Open</Chip>
               }[nodeType]
             }
           </FlexBetween>

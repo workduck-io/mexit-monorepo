@@ -34,7 +34,7 @@ export const useApi = () => {
   const { getTitleFromNoteId } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
-  const { setNodePublic, setNodePrivate, checkNodePublic } = useDataStore()
+  const { setNodePublic, setNodePrivate } = useDataStore()
   const { updateFromContent } = useUpdater()
   const { getSharedNode } = useNodes()
   const { updateSnippets, getSnippet } = useSnippets()
@@ -270,10 +270,6 @@ export const useApi = () => {
     }
   }
 
-  const isPublic = (nodeid: string) => {
-    return checkNodePublic(nodeid)
-  }
-
   const saveSnippetAPI = async ({
     snippetId,
     snippetTitle,
@@ -391,7 +387,6 @@ export const useApi = () => {
     saveSingleNewNode,
     makeNotePublic,
     makeNotePrivate,
-    isPublic,
     getPublicNodeAPI,
     appendToNode,
     saveSnippetAPI,

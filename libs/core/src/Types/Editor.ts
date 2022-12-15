@@ -236,6 +236,7 @@ export interface SlashCommands {
 
 export enum NodeType {
   DEFAULT,
+  PUBLIC,
   SHARED,
   ARCHIVED,
   MISSING

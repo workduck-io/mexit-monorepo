@@ -3,6 +3,7 @@ import { BreadcrumbItem } from '@workduck-io/mex-components'
 import { getParentBreadcrumbs, ILink, mog, NodeType, SharedNode } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { usePublicNodeStore } from '../Stores/usePublicNodes'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 // Used to ensure no path clashes while adding ILink.
@@ -33,26 +34,42 @@ export const useNodes = () => {
       if (sNode) return sNode
     }
   }
+
   const getArchiveNode = (nodeid: string): ILink => {
     const nodes = useDataStore.getState().archive
     const node = nodes.find((l) => l.nodeid === nodeid)
     if (node) return node
   }
+
   const getSharedNode = (nodeid: string): SharedNode => {
     const nodes = useDataStore.getState().sharedNodes
     const node = nodes.find((l) => l.nodeid === nodeid)
     if (node) return node
   }
+
   const isSharedNode = (nodeid: string): boolean => {
     const sharedNodes = useDataStore.getState().sharedNodes
     const res = sharedNodes.map((l) => l.nodeid).includes(nodeid)
     return res
   }
 
+  const isPublicNode = (nodeid: string) => {
+    const checkNodePublic = useDataStore.getState().checkNodePublic
+    if (checkNodePublic(nodeid)) {
+      return true
+    }
+
+    const publicNodes = usePublicNodeStore.getState().iLinks
+    const nodePublic = publicNodes.find((item) => item.nodeid === nodeid) ? true : false
+
+    return nodePublic
+  }
+
   const getNodeType = (nodeid: string) => {
     if (getNode(nodeid)) return NodeType.DEFAULT
     if (isInArchive(nodeid)) return NodeType.ARCHIVED
     if (isSharedNode(nodeid)) return NodeType.SHARED
+    if (isPublicNode(nodeid)) return NodeType.PUBLIC
     return NodeType.MISSING
   }
 
@@ -126,6 +143,7 @@ export const useNodes = () => {
 
   return {
     isInArchive,
+    isPublicNode,
     getIcon,
     getNode,
     getArchiveNode,

@@ -5,10 +5,11 @@ import { transparentize } from 'polished'
 import styled, { css, useTheme } from 'styled-components'
 
 import { apiURLs, mog, ShareContext } from '@mexit/core'
-import { CardTitle,CopyButton,Loading, MexIcon,ToggleButton  } from '@mexit/shared'
+import { CardTitle, CopyButton, Loading, MexIcon, ToggleButton } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../../Hooks/useNamespaces'
+import { useNodes } from '../../Hooks/useNodes'
 
 const Flex = css`
   display: flex;
@@ -41,7 +42,8 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
   const theme = useTheme()
 
   const [isLoading, setIsLoading] = useState(false)
-  const { makeNotePrivate, makeNotePublic, isPublic } = useApi()
+  const { makeNotePrivate, makeNotePublic } = useApi()
+  const isPublic = useNodes().isPublicNode
   // const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
   const { getNamespaceOfNodeid, isNamespacePublic, makeNamespacePublic } = useNamespaces()
 
