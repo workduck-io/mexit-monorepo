@@ -3,11 +3,19 @@ import { connectToParent as connectToExtension } from 'penpal'
 
 import { StorePersistentKeys } from '@mexit/core'
 
-import { getSearchIndexInitState, initSearchIndex, searchIndex, startSearchWorker } from '../Workers/controller'
+import {
+  getSearchIndexInitState,
+  initSearchIndex,
+  searchIndex,
+  searchIndexByNodeId,
+  searchIndexWithRanking,
+  startSearchWorker
+} from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
 import { initializeExtension } from './initializeExtension'
 import { syncStoresWithExtension } from './syncedStores'
+import { uploadImageToCDN } from './uploadImageToCDN'
 
 const getStoreValueFromIDB = async (key: StorePersistentKeys, field?: string) => {
   const idbValue = await get(key)
@@ -23,7 +31,10 @@ export const webExtensionConnector = async () => {
    */
   const exposedMethods = {
     broadCastMessage,
-    searchIndex
+    searchIndex,
+    searchIndexByNodeId,
+    searchIndexWithRanking,
+    uploadImageToCDN
   }
 
   // * Connect and expose Web app methods

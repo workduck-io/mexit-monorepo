@@ -17,7 +17,7 @@ import {
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { wSearchIndex } from '../Sync/searchViaWorker'
+import { wSearchIndex } from '../Sync/invokeOnWorker'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 import { useAuthStore } from './useAuth'

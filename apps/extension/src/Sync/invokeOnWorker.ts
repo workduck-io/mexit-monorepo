@@ -19,3 +19,7 @@ export const wSearchIndexWithRanking = async (key: idxKey | idxKey[], query: str
     return childIframe.searchIndexWithRanking(key, query)
   }
 }
+
+export const uploadImageToCDN = async (base64: string): Promise<string> => {
+  if (childIframe) return childIframe.uploadImageToCDN(base64)
+}

@@ -19,9 +19,8 @@ import {
 } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
-import useRaju from '../../Hooks/useRaju'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { wSearchIndex } from '../../Sync/searchViaWorker'
+import { wSearchIndex } from '../../Sync/invokeOnWorker'
 import { getElementById } from '../../Utils/cs-utils'
 
 import { NodeCard } from './NodeCard'
@@ -29,7 +28,6 @@ import { NodeCard } from './NodeCard'
 export const NotesInfoBar = () => {
   const [search, setSearch] = useState('')
   const [searchedNodes, setSearchedNodes] = useState<string[]>()
-  const { dispatch } = useRaju()
   const recentNotes = useRecentsStore((s) => s.lastOpened)
 
   const theme = useTheme()

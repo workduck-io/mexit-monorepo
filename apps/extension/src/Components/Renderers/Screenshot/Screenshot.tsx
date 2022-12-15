@@ -13,9 +13,9 @@ import { mog } from '@mexit/core'
 import { IconButton, useDebounceEffect } from '@mexit/shared'
 
 import { useAuthStore } from '../../../Hooks/useAuth'
-import useRaju from '../../../Hooks/useRaju'
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
 import { useSputlitStore } from '../../../Stores/useSputlitStore'
+import { uploadImageToCDN } from '../../../Sync/invokeOnWorker'
 import { Dialog } from '../../Floating/Dialog'
 import NoteSelector from '../../Floating/NoteSelector'
 
@@ -310,9 +310,6 @@ const Screenshot = () => {
   const floatingPortalRef = useRef<HTMLDivElement>(null)
   const loadingFloating = useRef<HTMLDivElement>(null)
   const { appendAndSave } = useSaveChanges()
-  const { dispatch } = useRaju()
-
-  // mog('screenshot', { screenshot })
 
   const onSubmit = async (blob: Blob) => {
     const base64base = await blobToBase64(blob)
@@ -327,7 +324,7 @@ const Screenshot = () => {
     // Append screenshot to the note
     try {
       if (base64) {
-        const imageURL = await dispatch('UPLOAD_IMAGE_TO_S3', base64)
+        const imageURL = await uploadImageToCDN(base64)
         const appendContent = [
           { type: 'p', children: [{ text: 'Screenshot' }] },
           { children: [{ text: '' }], type: 'img', url: imageURL },

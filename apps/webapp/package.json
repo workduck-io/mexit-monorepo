@@ -11,6 +11,7 @@
   "dependencies": {
     "@asseinfo/react-kanban": "^2.2.0",
     "@atlaskit/tree": "^8.6.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@floating-ui/react-dom-interactions": "^0.9.3",
     "@iconify-icons/ri": "^1.1.1",
     "@iconify/icons-bx": "^1.1.0",
