@@ -31,6 +31,7 @@ import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import useRaju from '../../Hooks/useRaju'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
+import { wSearchIndex } from '../../Sync/searchViaWorker'
 import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 
@@ -110,7 +111,7 @@ export const SnippetsInfoBar = () => {
   }
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await dispatch('SEARCH', ['template', 'snippet'], newSearchTerm)
+    const res = await wSearchIndex(['template', 'snippet'], newSearchTerm)
 
     if (newSearchTerm === '' && res.length === 0) {
       setSearchedSnippets(snippets)

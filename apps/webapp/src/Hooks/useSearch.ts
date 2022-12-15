@@ -12,7 +12,8 @@ import {
   searchIndex,
   searchIndexByNodeId,
   searchIndexWithRanking,
-  updateDoc} from '../Workers/controller'
+  updateDoc
+} from '../Workers/controller'
 
 import { useLinks } from './useLinks'
 

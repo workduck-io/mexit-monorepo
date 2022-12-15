@@ -1,9 +1,8 @@
-import { idxKey, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import { useSputlitStore } from '../Stores/useSputlitStore'
 
 export interface ParentMethods {
-  SEARCH: (key: idxKey | idxKey[], query: string) => Promise<any>
   UPLOAD_IMAGE_TO_S3: (base64string: string) => Promise<string>
 }
 
@@ -23,15 +22,6 @@ export default function useRaju() {
     const child = useSputlitStore.getState().child
 
     switch (type) {
-      case 'SEARCH':
-        return child
-          .search(...params)
-          .then((result) => {
-            return result
-          })
-          .catch((err) => {
-            mog('[SEARCH]: Unable to search with', { err })
-          })
       case 'UPLOAD_IMAGE_TO_S3': {
         return child
           .uploadImageToS3Dwindle(...params)
