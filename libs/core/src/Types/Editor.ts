@@ -32,7 +32,7 @@ export interface NodeMetadata {
   createdAt: number
   lastEditedBy: string
   updatedAt: number
-  icon: MIcon | undefined
+  icon?: MIcon | undefined
 
   elementMetadata: ElementHighlightMetadata
   publicAccess?: boolean

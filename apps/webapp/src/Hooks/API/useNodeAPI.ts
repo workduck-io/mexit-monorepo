@@ -30,6 +30,7 @@ import { useUpdater } from '../useUpdater'
 
 export const useApi = () => {
   const addMetadata = useMetadataStore((store) => store.addMetadata)
+  const updateMetadata = useMetadataStore((store) => store.updateMetadata)
   const setContent = useContentStore((store) => store.setContent)
   const { getTitleFromNoteId } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
@@ -180,7 +181,8 @@ export const useApi = () => {
           : origMetadata
 
         setContent(noteID, contentToSet)
-        addMetadata('notes', { [noteID]: metadata })
+        mog('SAVEMETADATA', { metadata })
+        updateMetadata('notes', noteID, metadata)
 
         addLastOpened(noteID)
         return d
@@ -294,7 +296,7 @@ export const useApi = () => {
       .create(reqData)
       .then((d) => {
         mog('savedData', { d })
-        addMetadata('snippets', { [snippetId]: extractMetadata(d, { icon: DefaultMIcons.SNIPPET }) })
+        updateMetadata('snippets', snippetId, extractMetadata(d, { icon: DefaultMIcons.SNIPPET }))
         return d
       })
       .catch((e) => {
