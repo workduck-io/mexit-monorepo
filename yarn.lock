@@ -3781,11 +3781,7 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
   integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
 
-<<<<<<< HEAD
 "@workduck-io/dwindle@^0.1.1":
-=======
-"@workduck-io/dwindle@^0.1.0":
->>>>>>> 2c807978 (Add uploadImageToCDN method on child IFrame)
   version "0.1.1"
   resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.1/eae8b25b1fb9c8fc054cc9fb3e878aaba34ce611#eae8b25b1fb9c8fc054cc9fb3e878aaba34ce611"
   integrity sha512-QQmcvXubKvJQ8enXmHpYiFZPDdMO9lC/o6YXgXPFUmzd3mQLXMqsw8Ozyb8v5ZoMwhYAdYaC0Bz3lKkaLUqs1A==
@@ -3824,23 +3820,10 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> bd5e4971 (Replace all instances of search in webapp with SharedWorker)
 "@workduck-io/mex-threads.js@^0.1.4":
   version "0.1.4"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.4/9441f4c3b9915a3c298949696430928767ade494#9441f4c3b9915a3c298949696430928767ade494"
   integrity sha512-+h6yOOEqoX9ea8qrapj+pZecFr4CJm3jZyA/uYP2JpSFY5sxC4XOhykto0dS1Qmkrclzsb/ZNjMoOfvE0lzYhg==
-<<<<<<< HEAD
-=======
-"@workduck-io/mex-threads.js@^0.1.3":
-  version "0.1.3"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.3/bffff3492e2c9f81b2a33ee2c52e82ec7b6cb493#bffff3492e2c9f81b2a33ee2c52e82ec7b6cb493"
-  integrity sha512-vFJBU6dHdIpnOlPQ1j6U6+HAUlZ+v9w4WUxB/dX2poraGZ847+POFLA7fTZsfVJaaNnTtyMvfCGw1x3TM2MCBQ==
->>>>>>> 19524893 ([WIP] Add search to exposedMethods in webapp; Extension is able to call search)
-=======
->>>>>>> bd5e4971 (Replace all instances of search in webapp with SharedWorker)
   dependencies:
     is-observable "^2.1.0"
     observable-fns "^0.6.1"
@@ -9045,9 +9028,9 @@ run-parallel@^1.1.9:
     queue-microtask "^1.2.2"
 
 rxjs@^7.5.7:
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.6.0.tgz#361da5362b6ddaa691a2de0b4f2d32028f1eb5a2"
-  integrity sha512-DDa7d8TFNUalGC9VqXvQ1euWNN7sc63TrUCuM9J998+ViviahMIjKSOU7rfcgFOF+FCD71BhDRv4hrFz+ImDLQ==
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.0.tgz#90a938862a82888ff4c7359811a595e14e1e09a4"
+  integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
   dependencies:
     tslib "^2.1.0"
 
