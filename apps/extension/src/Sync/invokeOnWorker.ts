@@ -1,4 +1,4 @@
-import { idxKey, ILink, mog, PersistentData, SearchRepExtra, Snippet } from '@mexit/core'
+import { idxKey, ILink, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 
@@ -41,11 +41,10 @@ export const initRequestClient = async (token: string, workspaceID: string) => {
 }
 
 export const wInitNamespaces = async (localILinks: ILink[]) => {
-  mog('ChildIFrame: ', { localILinks, childIframe })
   if (childIframe) return childIframe.initNamespacesExtension(localILinks)
 }
 
-export const wInitSnippets = async (localSnippets: Snippet[]) => {
+export const wInitSnippets = async (localSnippets: Snippets) => {
   if (childIframe) return childIframe.initSnippetsExtension(localSnippets)
 }
 

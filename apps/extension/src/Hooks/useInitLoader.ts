@@ -1,6 +1,14 @@
 import { useEffect } from 'react'
 
-import { convertContentToRawText, extractLinksFromData, extractMetadata, mog, runBatch, Snippet } from '@mexit/core'
+import {
+  convertContentToRawText,
+  DefaultMIcons,
+  extractLinksFromData,
+  extractMetadata,
+  mog,
+  runBatch,
+  Snippet
+} from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { useContentStore } from '../Stores/useContentStore'
@@ -36,21 +44,20 @@ export const useInitLoader = () => {
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
 
-  const initSnippets = useSnippetStore((store) => store.initSnippets)
-
   const { setNamespaces, setIlinks, addInArchive } = useDataStore()
 
-  const { updateFromContent } = useUpdater()
-  const updateSnippetZus = useSnippetStore((store) => store.updateSnippet)
+  const { updateFromNotes } = useUpdater()
   const updateDescription = useDescriptionStore((store) => store.updateDescription)
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
-  const { generateSlashCommands } = useSlashCommands()
+  const updateSnippetsInStore = useSnippetStore((state) => state.initSnippets)
   const { removeDocument, updateDocument } = useSearch()
 
   const setLinks = useLinkStore((store) => store.setLinks)
   const setHighlights = useHighlightStore((store) => store.setHighlights)
   const setConfig = useSmartCaptureStore((s) => s.setSmartCaptureList)
+
+  const { generateSlashCommands } = useSlashCommands()
 
   const getAllNamespaces = async () => {
     const localILinks = useDataStore.getState().ilinks
@@ -63,28 +70,22 @@ export const useInitLoader = () => {
     setIlinks(newILinks)
     addInArchive(archivedILinks)
 
-    const promises = []
-
     response.fulfilled.forEach((nodes) => {
       if (nodes) {
-        const { rawResponse } = nodes
+        const notes = {}
+        const metadatas = {}
 
-        if (rawResponse) {
-          rawResponse.forEach((nodeResponse) => {
-            const metadata = extractMetadata(nodeResponse) // added by Varshitha
-            const content = deserializeContent(nodeResponse.data)
+        nodes.rawResponse?.map((note) => {
+          metadatas[note.id] = extractMetadata(note, { icon: DefaultMIcons.NOTE })
+          notes[note.id] = { type: 'editor', content: deserializeContent(note.data) }
+        })
 
-            promises.push(updateFromContent(nodeResponse.id, content, metadata))
-          })
-        }
+        updateFromNotes(notes, metadatas)
       }
     })
-
-    await Promise.allSettled(promises)
   }
 
-  const updateSnippet = async (snippet: Snippet) => {
-    updateSnippetZus(snippet.id, snippet)
+  const updateSnippetIndex = async (snippet) => {
     const tags = snippet?.template ? ['template'] : ['snippet']
     const idxName = snippet?.template ? 'template' : 'snippet'
 
@@ -94,13 +95,28 @@ export const useInitLoader = () => {
       await removeDocument('template', snippet.id)
     }
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+  }
 
-    const slashCommands = generateSlashCommands(useSnippetStore.getState().snippets)
+  const updateSlashCommands = (snippets: Snippet[]) => {
+    const slashCommands = generateSlashCommands(snippets)
     setSlashCommands(slashCommands)
+  }
 
-    updateDescription(snippet.id, {
-      rawText: convertContentToRawText(snippet.content, '\n'),
-      truncatedContent: snippet.content.slice(0, 8)
+  const updateSnippets = async (snippets: Record<string, Snippet>) => {
+    const existingSnippets = useSnippetStore.getState().snippets
+
+    const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
+
+    updateSnippetsInStore(newSnippets)
+    const snippetsArr = Object.values(newSnippets)
+    updateSlashCommands(snippetsArr)
+
+    snippetsArr.forEach(async (snippet) => {
+      updateDescription(snippet.id, {
+        rawText: convertContentToRawText(snippet.content, '\n'),
+        truncatedContent: snippet.content.slice(0, 8)
+      })
+      await updateSnippetIndex(snippet)
     })
   }
 
@@ -108,14 +124,9 @@ export const useInitLoader = () => {
     const localSnippets = useSnippetStore.getState().snippets
     const { newSnippets, response } = await wInitSnippets(localSnippets)
 
-    initSnippets([...localSnippets, ...newSnippets])
     response.fulfilled.forEach(async (snippets) => {
-      if (snippets) {
-        mog('UpdatingSnippetsInExtension', { snippets })
-        snippets.forEach((snippet) => {
-          updateSnippet(snippet)
-        })
-      }
+      const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
+      updateSnippets(snippetsRecord)
     })
   }
 
@@ -132,6 +143,7 @@ export const useInitLoader = () => {
 
   const getAllSmartCaptures = async () => {
     const d = await wInitSmartCaptures()
+    setConfig(d)
   }
 
   const fetchAll = async () => {

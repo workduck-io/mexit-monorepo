@@ -181,7 +181,7 @@ export const useApi = () => {
           : origMetadata
 
         setContent(noteID, contentToSet)
-        addMetadata('notes', { [noteID]: metadata })
+        updateMetadata('notes', noteID, metadata)
 
         addLastOpened(noteID)
         return d

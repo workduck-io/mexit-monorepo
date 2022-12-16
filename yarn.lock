@@ -1730,9 +1730,9 @@
     "@floating-ui/core" "^0.7.3"
 
 "@floating-ui/dom@^1.0.5":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.10.tgz#a2299e942a06ca35cfdaeb4d4709805c9bb9c032"
-  integrity sha512-ZRe5ZmtGYCd82zrjWnnMW8hN5H1otedLh0Ur6rRo6f0exbEe6IlkVvo1RO7tgiMvbF0Df8hkhdm50VcVYqwP6g==
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.11.tgz#c05b9f2337ac340113daed378c873776287abba7"
+  integrity sha512-p60iaN02zByTo9i+IyOMoVyBVn5gCag/cdFCdpUlTIiP2G7BKKeCu36+LlsTZl+yBKoGo5+VSQ/UgZZmN+UGjA==
   dependencies:
     "@floating-ui/core" "^1.0.4"
 

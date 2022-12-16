@@ -1,9 +1,8 @@
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 import { SharedWorker, spawn, Thread } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
-import { type WorkerFunction, type WorkerModule } from '@workduck-io/mex-threads.js/types/worker'
 
-import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippet } from '@mexit/core'
+import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
@@ -24,38 +23,14 @@ export interface AnalyseContentProps {
   options?: AnalysisOptions
 }
 
-enum WORKER_STATUS {
-  NOT_STARTED = 'NOT_STARTED',
-  INITIALIZING = 'INITIALIZING',
-  CRASHED = 'CRASHED',
-  RUNNING = 'RUNNING'
-}
-
-interface MWorker<T extends WorkerModule<any> | WorkerFunction = any> {
-  status: WORKER_STATUS
-  instance: null | ExposedToThreadType<T>
-}
-
-export const analysisWorker: MWorker<AnalysisWorkerInterface> = {
-  status: WORKER_STATUS.NOT_STARTED,
-  instance: null
-}
-
-export const requestsWorker: MWorker<RequestsWorkerInterface> = {
-  status: WORKER_STATUS.NOT_STARTED,
-  instance: null
-}
-
-export const searchWorker: MWorker<SearchWorkerInterface> = {
-  status: WORKER_STATUS.NOT_STARTED,
-  instance: null
-}
+export let analysisWorker: null | ExposedToThreadType<AnalysisWorkerInterface> = null
+export let requestsWorker: null | ExposedToThreadType<RequestsWorkerInterface> = null
+export let searchWorker: null | ExposedToThreadType<SearchWorkerInterface> = null
 
 export const startRequestsWorkerService = async () => {
-  if (requestsWorker.status === WORKER_STATUS.CRASHED || requestsWorker.status === WORKER_STATUS.NOT_STARTED) {
-    requestsWorker.status = WORKER_STATUS.INITIALIZING
+  if (!requestsWorker) {
     try {
-      requestsWorker.instance = await spawn<RequestsWorkerInterface>(
+      requestsWorker = await spawn<RequestsWorkerInterface>(
         new SharedWorker(new URL('requests.ts', import.meta.url), {
           type: 'module',
           name: 'Requests Worker'
@@ -65,11 +40,9 @@ export const startRequestsWorkerService = async () => {
       const workspaceID = useAuthStore.getState().getWorkspaceId()
 
       initRequestClient(token, workspaceID)
-      requestsWorker.status = WORKER_STATUS.RUNNING
     } catch (err) {
       console.error('REQUEST WORKER CRASHED', err)
-      requestsWorker.instance = null
-      requestsWorker.status = WORKER_STATUS.CRASHED
+      requestsWorker = null
     }
   }
 }
@@ -79,13 +52,13 @@ export const runBatchWorker = async (
   batchSize = 6,
   args: any[] | Record<any, any[]>
 ) => {
-  const res = await requestsWorker.instance.runBatchWorker(requestType, batchSize, args)
+  const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
   return res
 }
 
 export const initRequestClient = (token: string, workspaceId: string) => {
-  if (requestsWorker.instance) {
-    requestsWorker.instance.initializeClient(token, workspaceId)
+  if (requestsWorker) {
+    requestsWorker.initializeClient(token, workspaceId)
   }
 }
 
@@ -94,32 +67,29 @@ export const terminateRequestWorker = async () => {
 }
 
 export const startAnalysisWorkerService = async () => {
-  if (analysisWorker.status === WORKER_STATUS.CRASHED || analysisWorker.status === WORKER_STATUS.NOT_STARTED) {
-    analysisWorker.status = WORKER_STATUS.INITIALIZING
+  if (!analysisWorker) {
     try {
-      analysisWorker.instance = await spawn<AnalysisWorkerInterface>(
+      analysisWorker = await spawn<AnalysisWorkerInterface>(
         new SharedWorker(new URL('analysis.ts', import.meta.url), {
           type: 'module',
           name: 'Analysis Worker'
         })
       )
-      analysisWorker.status = WORKER_STATUS.RUNNING
     } catch (err) {
-      analysisWorker.instance = null
-      analysisWorker.status = WORKER_STATUS.CRASHED
+      analysisWorker = null
     }
   }
 }
 
 export const analyseContent = async (props: AnalyseContentProps) => {
   try {
-    if (analysisWorker.status !== WORKER_STATUS.RUNNING || !analysisWorker.instance) {
+    if (!analysisWorker) {
       await startAnalysisWorkerService()
       // console.log('Creating new analysis worker')
     } else {
       // console.log('Reusing analysis worker')
     }
-    const analysis = await analysisWorker.instance.analyseContent(props)
+    const analysis = await analysisWorker.analyseContent(props)
     return analysis
   } catch (error) {
     console.log(error)
@@ -128,30 +98,27 @@ export const analyseContent = async (props: AnalyseContentProps) => {
 }
 export const startSearchWorker = async () => {
   // console.log('MILLAAAA KYAAAAA', { w: requestsWorker, r: !!requestsWorker })
-  if (searchWorker.status === WORKER_STATUS.CRASHED || searchWorker.status === WORKER_STATUS.NOT_STARTED) {
-    searchWorker.status = WORKER_STATUS.INITIALIZING
+  if (!searchWorker) {
     try {
-      searchWorker.instance = await spawn<SearchWorkerInterface>(
+      searchWorker = await spawn<SearchWorkerInterface>(
         new SharedWorker(new URL('search.ts', import.meta.url), {
           type: 'module',
           name: 'Search Worker'
         })
       )
-      searchWorker.status = WORKER_STATUS.RUNNING
     } catch (err) {
-      searchWorker.instance = null
-      searchWorker.status = WORKER_STATUS.CRASHED
+      searchWorker = null
     }
   }
 }
 
 export const getSearchIndexInitState = async () => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING || !searchWorker.instance) {
+    if (!searchWorker) {
       await startSearchWorker()
     }
 
-    return await searchWorker.instance.getInitState()
+    return await searchWorker.getInitState()
   } catch (error) {
     mog('InitSearchWorkerError', { error })
   }
@@ -159,11 +126,11 @@ export const getSearchIndexInitState = async () => {
 
 export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING || !searchWorker.instance) {
+    if (!searchWorker) {
       await startSearchWorker()
     }
 
-    await searchWorker.instance.init(fileData)
+    await searchWorker.init(fileData)
   } catch (error) {
     mog('InitSearchWorkerError', { error })
   }
@@ -178,8 +145,8 @@ export const addDoc = async (
   extra?: SearchRepExtra
 ) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
-    await searchWorker.instance.addDoc(key, nodeId, contents, title, tags, extra)
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    await searchWorker.addDoc(key, nodeId, contents, title, tags, extra)
   } catch (error) {
     mog('AddDocIndexError', { error })
   }
@@ -194,8 +161,8 @@ export const updateDoc = async (
   extra?: SearchRepExtra
 ) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
-    await searchWorker.instance.updateDoc(key, nodeId, contents, title, tags, extra)
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    await searchWorker.updateDoc(key, nodeId, contents, title, tags, extra)
   } catch (error) {
     mog('UpdateDocIndexError', { error })
   }
@@ -203,8 +170,8 @@ export const updateDoc = async (
 
 export const removeDoc = async (key: idxKey, id: string) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
-    await searchWorker.instance.removeDoc(key, id)
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    await searchWorker.removeDoc(key, id)
   } catch (error) {
     mog('RemoveDocIndexError', { error })
   }
@@ -212,9 +179,9 @@ export const removeDoc = async (key: idxKey, id: string) => {
 
 export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.instance.searchIndex(key, query, tags)
+    const results = await searchWorker.searchIndex(key, query, tags)
     return results
   } catch (error) {
     mog('SearchIndexError', { error })
@@ -223,9 +190,9 @@ export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: 
 
 export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.instance.searchIndexByNodeId(key, nodeId, query)
+    const results = await searchWorker.searchIndexByNodeId(key, nodeId, query)
     return results
   } catch (error) {
     mog('SearchIndexByNodeIdError', { error, nodeId })
@@ -234,9 +201,9 @@ export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string
 
 export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
   try {
-    if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.instance.searchIndexWithRanking(key, query)
+    const results = await searchWorker.searchIndexWithRanking(key, query)
     return results
   } catch (error) {
     mog('SearchIndexError', { error })
@@ -244,34 +211,31 @@ export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: stri
 }
 
 export const terminateAllWorkers = async () => {
-  await Thread.terminate(analysisWorker.instance)
-  analysisWorker.status = WORKER_STATUS.NOT_STARTED
-  analysisWorker.instance = null
+  await Thread.terminate(analysisWorker)
+  analysisWorker = null
 
-  await Thread.terminate(requestsWorker.instance)
-  requestsWorker.status = WORKER_STATUS.NOT_STARTED
-  requestsWorker.instance = null
+  await Thread.terminate(requestsWorker)
+  requestsWorker = null
 
-  await Thread.terminate(searchWorker.instance)
-  searchWorker.status = WORKER_STATUS.NOT_STARTED
-  searchWorker.instance = null
+  await Thread.terminate(searchWorker)
+  searchWorker = null
 }
 
 export const initNamespacesExtension = async (localILinks: ILink[]) => {
   try {
-    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
-    const results = await requestsWorker.instance.initializeNamespacesExtension(localILinks)
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+    const results = await requestsWorker.initializeNamespacesExtension(localILinks)
     return results
   } catch (error) {
     mog('InitNamespacesExtension', { error })
   }
 }
 
-export const initSnippetsExtension = async (localSnippets: Snippet[]) => {
+export const initSnippetsExtension = async (localSnippets: Snippets) => {
   try {
-    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
 
-    const results = await requestsWorker.instance.initializeSnippetsExtension(localSnippets)
+    const results = await requestsWorker.initializeSnippetsExtension(localSnippets)
     return results
   } catch (error) {
     mog('InitSnippetsError', { error })
@@ -280,9 +244,9 @@ export const initSnippetsExtension = async (localSnippets: Snippet[]) => {
 
 export const initLinksExtension = async () => {
   try {
-    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
 
-    const results = await requestsWorker.instance.initializeLinksExtension()
+    const results = await requestsWorker.initializeLinksExtension()
     return results
   } catch (error) {
     return undefined
@@ -291,9 +255,9 @@ export const initLinksExtension = async () => {
 
 export const initHighlightsExtension = async () => {
   try {
-    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
 
-    const results = await requestsWorker.instance.initializeHighlightsExtension()
+    const results = await requestsWorker.initializeHighlightsExtension()
     return results
   } catch (error) {
     return undefined
@@ -302,9 +266,9 @@ export const initHighlightsExtension = async () => {
 
 export const initSmartCapturesExtension = async () => {
   try {
-    if (requestsWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Requests worker not initialized')
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
 
-    const results = await requestsWorker.instance.initializeSmartCapturesExtension()
+    const results = await requestsWorker.initializeSmartCapturesExtension()
     return results
   } catch (error) {
     return undefined

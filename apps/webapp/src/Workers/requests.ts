@@ -13,7 +13,7 @@ import {
   iLinksToUpdate,
   mog,
   runBatch,
-  Snippet
+  Snippets
 } from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
@@ -196,23 +196,36 @@ const initializeNamespacesExtension = async (localILinks: ILink[]) => {
   }
 }
 
-const initializeSnippetsExtension = async (localSnippets: Snippet[]) => {
+const getSnippet = (id: string, snippets: Snippets) => {
+  return snippets?.[id]
+}
+
+const initializeSnippetsExtension = async (localSnippets: Snippets) => {
   const data = await client
     .get(apiURLs.snippet.getAllSnippetsByWorkspace)
     .then((d) => d.json())
     .then((d: any) => {
       const newSnippets = d.filter((snippet) => {
-        const existSnippet = localSnippets.find((s) => s.id === snippet.snippetID)
+        const existSnippet = getSnippet(snippet.snippetID, localSnippets)
         return existSnippet === undefined
       })
 
       return newSnippets
     })
-    .then(async (newSnippets: any[]) => {
-      const ids = newSnippets.map((item) => item.snippetID)
-      if (ids.length > 0) {
-        const batches = batchArray(ids, 10)
-        return { newSnippets: newSnippets, response: await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, batches) }
+    .then(async (newSnippets: any) => {
+      const toUpdateSnippets = newSnippets?.map((item) => item.snippetID)
+      // mog('NewSnippets', { newSnippets, toUpdateSnippets })
+
+      if (toUpdateSnippets && toUpdateSnippets.length > 0) {
+        const ids = batchArray(toUpdateSnippets, 10)
+        if (ids && ids.length > 0) {
+          try {
+            const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+            return { newSnippets, response: res }
+          } catch (error) {
+            mog('SnippetsWorkerError', { error })
+          }
+        }
       }
     })
     .catch((error) => {
