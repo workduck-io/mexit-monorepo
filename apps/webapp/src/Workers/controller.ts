@@ -107,6 +107,7 @@ export const startSearchWorker = async () => {
         })
       )
     } catch (err) {
+      mog('UnabletoStartSearchWorker', { err })
       searchWorker = null
     }
   }

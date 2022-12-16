@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Filter, Filters, FilterType, FilterValue, generateFilterId, mog } from '@mexit/core'
+import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
 import { FilterMenuDiv, FilterTypeIcons, GenericFlex, Menu, MenuItem } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
@@ -103,7 +103,7 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
           {option.options
             .sort((a, b) => (a.count !== undefined && b.count !== undefined ? b.count - a.count : 0))
             .map((op) => {
-              mog('FILTER SAVE OPTION', { op, option })
+              // mog('FILTER SAVE OPTION', { op, option })
               return (
                 <MenuItem
                   key={op.id}

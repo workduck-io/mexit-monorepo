@@ -70,7 +70,7 @@ export const useApi = () => {
     const data = await API.node
       .save(reqData)
       .then((d) => {
-        const metadata = extractMetadata(d)
+        const metadata = extractMetadata(d, { icon: DefaultMIcons.NOTE })
         const content = d.data ? deserializeContent(d.data) : options.content
         updateFromContent(noteID, content, metadata)
         addLastOpened(noteID)
@@ -118,7 +118,7 @@ export const useApi = () => {
       })
 
       updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-      addMetadata('notes', { [noteID]: extractMetadata(node) })
+      addMetadata('notes', { [noteID]: extractMetadata(node, { icon: DefaultMIcons.NOTE }) })
       addLastOpened(noteID)
     })
 

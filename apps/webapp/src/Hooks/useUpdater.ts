@@ -21,12 +21,19 @@ export const useUpdater = () => {
     setContents(notes)
     addMetadata('notes', metadatas)
 
-    Object.entries(async ([noteId, content]) => {
-      updateLinksFromContent(noteId, content)
-      updateTagsFromContent(noteId, content)
-      const todos = getTodosFromContent(content)
-      updateNodeTodos(noteId, todos)
-      await updateDocument('node', noteId, content)
+    Object.entries(notes).forEach(async ([noteId, note]) => {
+      if (note?.content) {
+        // * Update Tags And Links from note's content
+        updateLinksFromContent(noteId, note.content)
+        updateTagsFromContent(noteId, note.content)
+
+        // * Update Todos status and content
+        const todos = getTodosFromContent(note.content)
+        updateNodeTodos(noteId, todos)
+
+        // * Update Search index
+        await updateDocument('node', noteId, note.content)
+      }
     })
   }
 
@@ -34,6 +41,7 @@ export const useUpdater = () => {
     if (content) {
       setContent(noteId, content)
       if (metadata) addMetadata('notes', { [noteId]: metadata })
+
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
