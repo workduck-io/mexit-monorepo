@@ -27,6 +27,7 @@ import { useSearch } from '../../Hooks/useSearch'
 import { useSearchProps } from '../../Hooks/useSearchProps'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
 import useDataStore from '../../Stores/useDataStore'
+import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 // import events from "events"
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { type SearchType, useSputlitStore } from '../../Stores/useSputlitStore'
@@ -127,9 +128,9 @@ const Search = () => {
       }
     })
 
-    if (recentList.length > limit) {
-      return recentList.reverse().slice(0, limit)
-    }
+    // if (recentList.length > limit) {
+    //   return recentList.reverse().slice(0, limit)
+    // }
 
     return recentList?.reverse()
   }
@@ -159,7 +160,7 @@ const Search = () => {
     }
 
     getSearchItems()
-  }, [search, selection, previewMode, ilinks, lastOpenedNodes])
+  }, [search, selection, previewMode, ilinks, useDescriptionStore, lastOpenedNodes])
 
   const onBackClick = () => {
     if (!previewMode) {

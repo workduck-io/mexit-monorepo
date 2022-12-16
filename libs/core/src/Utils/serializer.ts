@@ -66,7 +66,7 @@ export const getHighlightBlockMap = (nodeId: string, content: any[]) => {
     nodeId,
     blockIds: []
   }
-  content.forEach((item) => {
+  content?.forEach((item) => {
     if (item?.metadata?.elementMetadata) {
       nodeBlockMap.blockIds.push(item.id)
     }

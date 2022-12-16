@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react'
 
 import { ActionType, QuickLinkType } from '@mexit/core'
 
-import { useEditorStore } from '../../Hooks/useEditorStore'
+import { useAuthStore } from '../../Hooks/useAuth'
 import { useHighlighter } from '../../Hooks/useHighlighter'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
+import { SputlitLogin } from '../Login'
 import Search from '../Search'
 
 import { Main, Overlay, SputlitContainer, Wrapper } from './styled'
@@ -23,11 +23,10 @@ const appearanceAnimationKeyframes = [
 ]
 
 const Sputlit = () => {
+  const authenticated = useAuthStore((s) => s.authenticated)
   const { visualState, setVisualState } = useSputlitContext()
   const activeItem = useSputlitStore((s) => s.activeItem)
   const resetSputlit = useSputlitStore((s) => s.reset)
-  const { previewMode } = useEditorStore()
-  const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
   const getHighlightsOfUrl = useHighlightStore((s) => s.getHighlightsOfUrl)
 
@@ -123,20 +122,27 @@ const Sputlit = () => {
     }
   }, [visualState])
 
-  // mog('Sputlit', { visualState, activeItem, isExternalSearchAction })
-
   return (
     <SputlitContainer id="sputlit-container">
       <Wrapper ref={outerRef}>
         <Main id="sputlit-main" ref={innerRef}>
-          <Search />
-          {!isExternalSearchAction && <Content />}
+          {!authenticated ? (
+            <SputlitLogin />
+          ) : (
+            <>
+              <Search />
+              {!isExternalSearchAction && <Content />}
+            </>
+          )}
         </Main>
       </Wrapper>
       <Overlay
         id="sputlit-overlay"
         onClick={() => {
-          if (!previewMode) saveIt(true, true)
+          // * No Editor mode, on blur don't call save note
+          // if (!previewMode) {
+          //   saveIt(true, true)
+          // }
           setVisualState(VisualState.animatingOut)
         }}
       />

@@ -18,7 +18,6 @@ import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { deserializeContent } from '../Utils/serializer'
 
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
@@ -27,7 +26,6 @@ import { useInternalLinks } from './useInternalLinks'
 import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
-import useRaju from './useRaju'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export interface AppendAndSaveProps {
@@ -47,14 +45,18 @@ export function useSaveChanges() {
   const setSelection = useSputlitStore((s) => s.setSelection)
 
   const setActiveItem = useSputlitStore((s) => s.setActiveItem)
-  const { ilinks, sharedNodes } = useDataStore()
-  const { getContent, setContent } = useContentStore()
-  const { dispatch } = useRaju()
+  const ilinks = useDataStore((s) => s.ilinks)
+  const sharedNodes = useDataStore((s) => s.sharedNodes)
+
+  const setContent = useContentStore((s) => s.setContent)
+  const getContent = useContentStore((s) => s.getContent)
+
   const addRecent = useRecentsStore((store) => store.addRecent)
-  const { addHighlight } = useHighlightStore()
+  const addHighlight = useHighlightStore((s) => s.addHighlight)
   const { isSharedNode } = useNodes()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const { saveHighlight } = useHighlights()
+  const addRecentNote = useRecentsStore((s) => s.addRecent)
 
   /**
    * Save
@@ -118,7 +120,7 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
 
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        const content = request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
@@ -149,6 +151,7 @@ export function useSaveChanges() {
       await saveHighlight(highlight, sourceTitle)
       // Extract the blockids for which we have captured highlights
       const blockHighlightMap = getHighlightBlockMap(nodeid, content)
+      mog('BLOCKHIGHLIGHT MAP', { blockHighlightMap })
       // Add highlight in local store and nodeblockmap
       addHighlight(highlight, blockHighlightMap)
       return { highlight, blockHighlightMap }
@@ -161,12 +164,10 @@ export function useSaveChanges() {
       if (!isSharedNode(node.nodeid)) {
         updateSingleILink(node.nodeid, node.path, namespace.id)
       }
-      dispatch('ADD_SINGLE_ILINK', node.nodeid, node.path, namespace.id)
     } else {
       const linksToBeCreated = getEntirePathILinks(node.path, node.nodeid, namespace.id)
       // Why is shared check not used here?
       updateMultipleILinks(linksToBeCreated)
-      dispatch('ADD_MULTIPLE_ILINKS', linksToBeCreated)
     }
   }
 
@@ -186,9 +187,10 @@ export function useSaveChanges() {
     saveAndExit = false,
     notification = false
   ) => {
-    dispatch('ADD_RECENT_NODE', nodeid)
-    dispatch('SET_CONTENT', nodeid, content, metadata)
-    if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
+    addRecentNote(nodeid)
+    setContent(nodeid, content, metadata)
+    // if (highlight) addHighlight(highlight, blockHighlightMap)
+    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')
@@ -215,10 +217,9 @@ export function useSaveChanges() {
       nodeid: node.nodeid,
       namespace: namespace.id
     })
-    const storeContent = getContent(node?.nodeid)?.content ?? defaultContent.content
+    const storeContent = useContentStore.getState().contents?.[node?.nodeid]?.content ?? defaultContent.content
     mog('We be setting persistedContent', { toAppendContent, storeContent })
     const content = [...storeContent, ...toAppendContent]
-    // setNodeContent([...storeContent, ...content])
     const request = {
       type: 'CAPTURE_HANDLER',
       subType: 'SAVE_NODE',
@@ -248,12 +249,10 @@ export function useSaveChanges() {
         // mog('Response and things', { response })
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        const content = request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
-        dispatch('ADD_RECENT_NODE', nodeid)
-
-        dispatch('SET_CONTENT', nodeid, content, metadata)
+        setContent(nodeid, content, metadata)
 
         if (notification) {
           toast.success('Saved to Cloud')

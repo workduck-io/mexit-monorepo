@@ -70,7 +70,7 @@ export const useApi = () => {
     const data = await API.node
       .save(reqData)
       .then((d) => {
-        const metadata = extractMetadata(d)
+        const metadata = extractMetadata(d, { icon: DefaultMIcons.NOTE })
         const content = d.data ? deserializeContent(d.data) : options.content
         updateFromContent(noteID, content, metadata)
         addLastOpened(noteID)
@@ -118,7 +118,7 @@ export const useApi = () => {
       })
 
       updateILinksFromAddedRemovedPaths(addedILinks, removedILinks)
-      addMetadata('notes', { [noteID]: extractMetadata(node) })
+      addMetadata('notes', { [noteID]: extractMetadata(node, { icon: DefaultMIcons.NOTE }) })
       addLastOpened(noteID)
     })
 
@@ -181,7 +181,7 @@ export const useApi = () => {
           : origMetadata
 
         setContent(noteID, contentToSet)
-        addMetadata('notes', { [noteID]: metadata })
+        updateMetadata('notes', noteID, metadata)
 
         addLastOpened(noteID)
         return d
@@ -198,7 +198,6 @@ export const useApi = () => {
       .then((d) => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content
-          // mog('[API]: Get Note data', { content })
           const metadata = extractMetadata(d, { icon: isShared ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE })
           if (isUpdate) updateFromContent(nodeid, content, metadata)
 
@@ -310,20 +309,8 @@ export const useApi = () => {
       .then((d) => {
         const newSnippets = d.filter((snippet) => {
           const existSnippet = getSnippet(snippet.snippetID)
-          mog('SnippetInitLoader', { existSnippet })
           return existSnippet === undefined
         })
-
-        // initSnippets([
-        //   ...snippets,
-        //   ...newSnippets.map((item) => ({
-        //     icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
-        //     id: item.snippetID,
-        //     template: item.template,
-        //     title: item.title,
-        //     content: defaultContent.content
-        //   }))
-        // ])
 
         return newSnippets
       })
@@ -334,12 +321,16 @@ export const useApi = () => {
         if (toUpdateSnippets && toUpdateSnippets.length > 0) {
           const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
-            const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-            res.fulfilled.forEach(async (snippets) => {
-              const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
-              updateSnippets(snippetsRecord)
-            })
-            mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
+            try {
+              const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+              res.fulfilled.forEach(async (snippets) => {
+                const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
+                await updateSnippets(snippetsRecord)
+              })
+              mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
+            } catch (error) {
+              mog('SnippetsWorkerError', { error })
+            }
           }
         }
       })

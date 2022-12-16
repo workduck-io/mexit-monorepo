@@ -11,7 +11,6 @@ import { useAuthStore } from './useAuth'
 import { useInternalLinks } from './useInternalLinks'
 import { useLinks } from './useLinks'
 import { isReadonly, usePermissions } from './usePermissions'
-import useRaju from './useRaju'
 
 export const useHighlights = () => {
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
@@ -21,7 +20,7 @@ export const useHighlights = () => {
   const { getILinkFromNodeid } = useLinks()
   const { getParentILink } = useInternalLinks()
   const workspaceDetails = useAuthStore((state) => state.workspaceDetails)
-  const { dispatch } = useRaju()
+  const setContent = useContentStore((s) => s.setContent)
   const {
     deleteHighlight: deleteHighlightAPI,
     saveHighlight: saveHighlightAPI,
@@ -113,8 +112,7 @@ export const useHighlights = () => {
 
       const nodeid = node.nodeid
 
-      dispatch('SET_CONTENT', nodeid, request.data.content)
-
+      setContent(nodeid, request.data.content)
       resolve()
     })
   }

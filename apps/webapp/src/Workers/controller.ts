@@ -1,15 +1,15 @@
-import { spawn, Thread } from 'threads'
-
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
+import { SharedWorker, spawn, Thread } from '@workduck-io/mex-threads.js'
+import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
-import { idxKey, mog, NodeEditorContent, PersistentData, SearchRepExtra } from '@mexit/core'
+import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
 
-import analysisWorkerConstructor from './analysis?worker'
-import requestsWorkerConstructor from './requests?worker'
-import searchWorkerConstructor from './search?worker'
+import { type AnalysisWorkerInterface } from './analysis'
+import { type RequestsWorkerInterface } from './requests'
+import { type SearchWorkerInterface } from './search'
 
 export type AnalysisModifier = SearchRepExtra
 export interface AnalysisOptions {
@@ -23,12 +23,28 @@ export interface AnalyseContentProps {
   options?: AnalysisOptions
 }
 
-export let analysisWorker = null
-export let searchWorker = null
-export let requestsWorker = null
+export let analysisWorker: null | ExposedToThreadType<AnalysisWorkerInterface> = null
+export let requestsWorker: null | ExposedToThreadType<RequestsWorkerInterface> = null
+export let searchWorker: null | ExposedToThreadType<SearchWorkerInterface> = null
 
 export const startRequestsWorkerService = async () => {
-  if (!requestsWorker) requestsWorker = await spawn(new requestsWorkerConstructor())
+  if (!requestsWorker) {
+    try {
+      requestsWorker = await spawn<RequestsWorkerInterface>(
+        new SharedWorker(new URL('requests.ts', import.meta.url), {
+          type: 'module',
+          name: 'Requests Worker'
+        })
+      )
+      const token = useInternalAuthStore.getState().userCred.token
+      const workspaceID = useAuthStore.getState().getWorkspaceId()
+
+      initRequestClient(token, workspaceID)
+    } catch (err) {
+      console.error('REQUEST WORKER CRASHED', err)
+      requestsWorker = null
+    }
+  }
 }
 
 export const runBatchWorker = async (
@@ -36,14 +52,6 @@ export const runBatchWorker = async (
   batchSize = 6,
   args: any[] | Record<any, any[]>
 ) => {
-  const token = useInternalAuthStore.getState().userCred.token
-  const workspaceID = useAuthStore.getState().getWorkspaceId()
-
-  if (!requestsWorker) {
-    await startRequestsWorkerService()
-    initRequestClient(token, workspaceID)
-  }
-
   const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
   return res
 }
@@ -55,12 +63,22 @@ export const initRequestClient = (token: string, workspaceId: string) => {
 }
 
 export const terminateRequestWorker = async () => {
-  if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
+  // if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
 }
 
 export const startAnalysisWorkerService = async () => {
-  // console.log('startWorkerService')
-  if (!analysisWorker) analysisWorker = await spawn(new analysisWorkerConstructor())
+  if (!analysisWorker) {
+    try {
+      analysisWorker = await spawn<AnalysisWorkerInterface>(
+        new SharedWorker(new URL('analysis.ts', import.meta.url), {
+          type: 'module',
+          name: 'Analysis Worker'
+        })
+      )
+    } catch (err) {
+      analysisWorker = null
+    }
+  }
 }
 
 export const analyseContent = async (props: AnalyseContentProps) => {
@@ -79,15 +97,41 @@ export const analyseContent = async (props: AnalyseContentProps) => {
   }
 }
 export const startSearchWorker = async () => {
-  if (!searchWorker) searchWorker = await spawn(new searchWorkerConstructor())
+  // console.log('MILLAAAA KYAAAAA', { w: requestsWorker, r: !!requestsWorker })
+  if (!searchWorker) {
+    try {
+      searchWorker = await spawn<SearchWorkerInterface>(
+        new SharedWorker(new URL('search.ts', import.meta.url), {
+          type: 'module',
+          name: 'Search Worker'
+        })
+      )
+    } catch (err) {
+      mog('UnabletoStartSearchWorker', { err })
+      searchWorker = null
+    }
+  }
+}
+
+export const getSearchIndexInitState = async () => {
+  try {
+    if (!searchWorker) {
+      await startSearchWorker()
+    }
+
+    return await searchWorker.getInitState()
+  } catch (error) {
+    mog('InitSearchWorkerError', { error })
+  }
 }
 
 export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   try {
     if (!searchWorker) {
       await startSearchWorker()
-      await searchWorker.init(fileData)
     }
+
+    await searchWorker.init(fileData)
   } catch (error) {
     mog('InitSearchWorkerError', { error })
   }
@@ -145,15 +189,6 @@ export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: 
   }
 }
 
-export const dumpIndexDisk = async (location: string) => {
-  try {
-    if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.dumpIndexDisk(location)
-  } catch (error) {
-    mog('ErrorDumpingIndexToDisk', { error })
-  }
-}
-
 export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
@@ -173,5 +208,70 @@ export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: stri
     return results
   } catch (error) {
     mog('SearchIndexError', { error })
+  }
+}
+
+export const terminateAllWorkers = async () => {
+  await Thread.terminate(analysisWorker)
+  analysisWorker = null
+
+  await Thread.terminate(requestsWorker)
+  requestsWorker = null
+
+  await Thread.terminate(searchWorker)
+  searchWorker = null
+}
+
+export const initNamespacesExtension = async (localILinks: ILink[]) => {
+  try {
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+    const results = await requestsWorker.initializeNamespacesExtension(localILinks)
+    return results
+  } catch (error) {
+    mog('InitNamespacesExtension', { error })
+  }
+}
+
+export const initSnippetsExtension = async (localSnippets: Snippets) => {
+  try {
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.initializeSnippetsExtension(localSnippets)
+    return results
+  } catch (error) {
+    mog('InitSnippetsError', { error })
+  }
+}
+
+export const initLinksExtension = async () => {
+  try {
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.initializeLinksExtension()
+    return results
+  } catch (error) {
+    return undefined
+  }
+}
+
+export const initHighlightsExtension = async () => {
+  try {
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.initializeHighlightsExtension()
+    return results
+  } catch (error) {
+    return undefined
+  }
+}
+
+export const initSmartCapturesExtension = async () => {
+  try {
+    if (!requestsWorker) throw new Error('Requests worker not initialized')
+
+    const results = await requestsWorker.initializeSmartCapturesExtension()
+    return results
+  } catch (error) {
+    return undefined
   }
 }

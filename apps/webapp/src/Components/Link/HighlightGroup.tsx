@@ -53,7 +53,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   const { getPathFromNodeid } = useLinks()
 
   const [open, setOpen] = React.useState(false)
-  const highlightMap = getHighlightMap(highlight.entityId)
+  const highlightMap = getHighlightMap(highlight.entityId) ?? {}
   const highlightText = highlight?.properties?.saveableRange?.text ?? ''
 
   const willCollapse = highlightText.length > 300

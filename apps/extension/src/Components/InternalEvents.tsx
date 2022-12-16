@@ -10,9 +10,12 @@ import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
 import { getScrollbarWidth } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
+import { useInitLoader } from '../Hooks/useInitLoader'
+import { useReminderActionHandler } from '../Hooks/useReminderActionHandler'
 import { useSputlitContext, VisualState } from '../Hooks/useSputlitContext'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import messagePassing from '../Sync'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
@@ -20,11 +23,17 @@ import { sanitizeHTML } from '../Utils/sanitizeHTML'
 import LinkedInBadge from './LinkedInBadge'
 
 export function InternalEvents() {
+  useEffect(() => {
+    messagePassing()
+  }, [])
+
   useToggleHandler()
   initAnalytics()
   handleHighlighter()
   dibbaToggle()
   badgeRenderer()
+  useReminderActionHandler()
+  useInitLoader()
   // useDocumentLock()
   // useFocusHandler()
   return null

@@ -9,6 +9,7 @@ import { StyleSheetManager } from 'styled-components'
 
 import Index from './index'
 import { styleSlot } from './Utils/cs-utils'
+import messageBroadcaster from './Sync/iframeConnector'
 
 refreshOnUpdate('src')
 
@@ -39,6 +40,7 @@ container.id = 'mexit-container'
 styleSlot.appendChild(container)
 
 const root = createRoot(container)
+messageBroadcaster()
 
 root.render(
   <StyleSheetManager target={styleSlot}>

@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'
-import Chotu from './Components/Chotu'
 import ContentEditor from './Components/Editor/ContentEditor'
 import SnippetEditor from './Components/Editor/SnippetEditor'
 import GenericOAuthRedirect from './Components/OAuth/GenericOAuthRedirect'
@@ -206,14 +205,6 @@ export const Switch = () => {
 
   const fromSocket = useSocket()
 
-  // const connectionStatus = {
-  //   [ReadyState.CONNECTING]: 'Connecting',
-  //   [ReadyState.OPEN]: 'Open',
-  //   [ReadyState.CLOSING]: 'Closing',
-  //   [ReadyState.CLOSED]: 'Closed',
-  //   [ReadyState.UNINSTANTIATED]: 'Uninstantiated'
-  // }[readyState]
-
   useEffect(() => {
     const editorNode = useEditorStore.getState().node
     // ? Do we need to save data locally on every route change?
@@ -269,7 +260,6 @@ export const Switch = () => {
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
-        <Route path={ROUTE_PATHS.chotu} element={<Chotu />} />
         <Route path={`${ROUTE_PATHS.actions}/*`} element={<ActionsRoutes />} />
         <Route path={`${ROUTE_PATHS.share}/:nodeId`} element={<PublicNodeView />} />
         <Route path={`${ROUTE_PATHS.namespaceShare}/:namespaceID`} element={<PublicNamespaceView />}>

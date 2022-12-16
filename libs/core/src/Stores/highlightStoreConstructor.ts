@@ -104,7 +104,7 @@ export const highlightStoreConstructor: StateCreator<
       })
     })
 
-    mog('addHighlighted', { newHighlighted, newHighlightBlockMap })
+    mog('addHighlighted', { highlight, nodeId, blockIds, newHighlighted, newHighlightBlockMap })
     set({ highlights: newHighlighted, highlightBlockMap: newHighlightBlockMap })
   },
 
@@ -118,8 +118,8 @@ export const highlightStoreConstructor: StateCreator<
   },
 
   getHighlightsOfUrl: (url) => {
-    const { highlights } = get()
-    return highlights.filter((h) => h.properties.sourceUrl === url)
+    const highlights = get().highlights ?? []
+    return highlights.filter((h) => h?.properties?.sourceUrl === url)
   },
 
   clearAllHighlightedBlocks: () => {

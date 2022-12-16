@@ -1,15 +1,6 @@
-import { expose } from 'threads/worker'
+import { exposeShared } from '@workduck-io/mex-threads.js/worker'
 
-import {
-  GenericSearchResult,
-  idxKey,
-  mog,
-  parseNode,
-  PersistentData,
-  SearchIndex,
-  SearchRepExtra,
-  SearchWorker
-} from '@mexit/core'
+import { GenericSearchResult, idxKey, mog, parseNode, PersistentData, SearchIndex, SearchRepExtra } from '@mexit/core'
 
 import {
   createIndexCompositeKey,
@@ -23,12 +14,22 @@ import {
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
 
-const searchWorker: SearchWorker = {
-  init: (fileData: PersistentData) => {
+let hasInitialized = false
+
+const searchWorker = {
+  getInitState: () => {
+    return hasInitialized
+  },
+  setInitState: (value: boolean) => {
+    hasInitialized = value
+  },
+  init: (fileData: Partial<PersistentData>) => {
+    if (hasInitialized) return
     const { idx, nbMap } = createSearchIndex(fileData)
 
     globalSearchIndex = idx
     nodeBlockMapping = nbMap
+    hasInitialized = true
   },
 
   addDoc: (
@@ -272,4 +273,5 @@ const searchWorker: SearchWorker = {
   }
 }
 
-expose(searchWorker as any)
+export type SearchWorkerInterface = typeof searchWorker
+exposeShared(searchWorker)

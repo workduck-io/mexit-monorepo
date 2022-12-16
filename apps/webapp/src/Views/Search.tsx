@@ -136,7 +136,7 @@ const Search = () => {
     const content = con ? con.content : defaultContent.content
     const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.id]?.icon)
     const icon = storedNoteIcon ?? (nodeType === NodeType.SHARED ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE)
-    mog('STORED', { storedNoteIcon })
+    // mog('STORED', { storedNoteIcon })
     const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
     const isTagged = hasTags(edNode.nodeid)
     const id = `${item.id}_ResultFor_Search`

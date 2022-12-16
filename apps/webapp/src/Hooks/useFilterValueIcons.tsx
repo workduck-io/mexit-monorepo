@@ -1,4 +1,4 @@
-import { DefaultMIcons, FilterJoin, FilterType, MIcon, mog, SHARED_NAMESPACE } from '@mexit/core'
+import { DefaultMIcons, FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
@@ -42,7 +42,7 @@ export const useFilterIcons = () => {
 
       case 'note': {
         const icon = useMetadataStore.getState().metadata.notes[value]?.icon
-        mog('ICON IS', { icon, value })
+        // mog('ICON IS', { icon, value })
 
         return icon ?? DefaultMIcons.NOTE
       }

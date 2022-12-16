@@ -13,7 +13,7 @@ export const useSnippetStore = create<SnippetStoreState>(
       }
     }),
     {
-      name: 'Snippets'
+      name: 'mex-snippets-store-webapp'
     }
   )
 )

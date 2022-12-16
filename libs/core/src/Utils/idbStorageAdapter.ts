@@ -16,9 +16,11 @@ const IDBStorage = {
     if (typeof indexedDB === 'undefined') {
       return null
     }
+
     if (name === '_hasHydrated') {
       return null
     }
+
     set(name, value)
   },
   removeItem: async (name: string): Promise<void> => {

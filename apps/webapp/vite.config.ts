@@ -1,3 +1,4 @@
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, PluginOption } from 'vite'
@@ -9,11 +10,16 @@ const isDev = process.env.MODE === 'development' ? true : false
 // https://vitejs.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: ['react/jsx-runtime', '@workduck-io/flexsearch', 'threads/worker'],
+    include: ['react/jsx-runtime', '@workduck-io/flexsearch', '@workduck-io/mex-threads.js/worker'],
     esbuildOptions: {
       define: {
         global: 'globalThis'
-      }
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true
+        })
+      ]
     }
   },
   server: {
@@ -22,6 +28,7 @@ export default defineConfig({
   build: {
     sourcemap: sourceMap,
     outDir: '../../dist/webapp',
+    minify: false,
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, 'index.html'),

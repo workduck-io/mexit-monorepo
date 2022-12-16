@@ -11,7 +11,7 @@ export const useHighlights = () => {
   const highlightBlockMap = useHighlightStore((store) => store.highlightBlockMap)
   const getHighlightMap = useCallback(
     (highlighId: string) => {
-      const highlightMap = highlightBlockMap[highlighId]
+      const highlightMap = highlightBlockMap?.[highlighId]
       return highlightMap
     },
     [highlightBlockMap]

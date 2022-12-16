@@ -18,6 +18,7 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1"
   },
@@ -42,6 +43,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.4",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "unimported": "^1.23.0"
   }
 }

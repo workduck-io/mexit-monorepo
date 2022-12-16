@@ -25,6 +25,12 @@ interface ActionProps {
   active?: boolean
 }
 
+const ActionDescription: React.FC<{ description: string }> = ({ description }) => {
+  // const descriptions = useDescriptionStore((s) => s.descriptions)
+
+  if (description) return <Description>{description}</Description>
+}
+
 const Action: React.FC<ActionProps> = ({ action, active }) => {
   const theme = useTheme()
 
@@ -47,7 +53,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
               <>{action?.category === QuickLinkType.backlink ? cleanString(action?.title) : action?.title}</>
             )}
           </Title>
-          {action.description && <Description>{action.description}</Description>}
+          <ActionDescription description={action.description} />
         </ActionContent>
       </Container>
       {active && action.shortcut && (

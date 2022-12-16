@@ -1,6 +1,6 @@
 import { Document } from '@workduck-io/flexsearch'
 
-import { convertDataToIndexable,diskIndex, GenericSearchData, indexNames, PersistentData  } from '@mexit/core'
+import { convertDataToIndexable, diskIndex, GenericSearchData, indexNames, PersistentData } from '@mexit/core'
 
 export interface CreateSearchIndexData {
   node: GenericSearchData[] | null
@@ -24,7 +24,7 @@ export const getNodeAndBlockIdFromCompositeKey = (compositeKey: string) => {
 export const indexedFields = ['title', 'text']
 export const storedFields = ['text', 'data']
 
-export const createSearchIndex = (fileData: PersistentData) => {
+export const createSearchIndex = (fileData: Partial<PersistentData>) => {
   const { result: initList, nodeBlockMap: nbMap } = convertDataToIndexable(fileData)
 
   const idx = Object.entries(indexNames).reduce((p, c) => {

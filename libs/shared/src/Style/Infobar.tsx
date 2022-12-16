@@ -66,6 +66,12 @@ export const TemplateInfoBar = styled(InfoBarWrapper)`
   /* overflow-y: scroll; */
   height: 100%;
 `
+export const LoginInfoBar = styled(TemplateInfoBar)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
 
 export const InfoWidgetWrapper = styled.div`
   width: 100%;
