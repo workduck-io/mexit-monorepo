@@ -325,7 +325,7 @@ export const useApi = () => {
               const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
               res.fulfilled.forEach(async (snippets) => {
                 const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
-                updateSnippets(snippetsRecord)
+                await updateSnippets(snippetsRecord)
               })
               mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
             } catch (error) {
