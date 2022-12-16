@@ -16,6 +16,12 @@ export const PageContainer = styled.div`
 export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean }>`
   padding: 1px;
   margin: ${({ margin }) => margin};
+  &.delete {
+    color: ${({ theme }) => theme.tokens.text.fade};
+    &:hover {
+      color: ${({ theme }) => theme.tokens.colors.red};
+    }
+  }
   ${({ $noHover }) =>
     !$noHover &&
     css`

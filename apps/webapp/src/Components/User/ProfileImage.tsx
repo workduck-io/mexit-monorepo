@@ -34,10 +34,10 @@ const ProfileTooptip = styled.div`
   max-width: 700px;
   overflow-y: auto;
   ${CardShadow}
-  background: ${({ theme }) => theme.colors.gray[8]} !important;
-  color: ${({ theme }) => theme.colors.text.default};
+  background: ${({ theme }) => theme.tokens.surfaces.s[4]} !important;
+  color: ${({ theme }) => theme.tokens.text.default};
   &::after {
-    border-right-color: ${({ theme }) => theme.colors.primary} !important;
+    border-right-color: ${({ theme }) => theme.tokens.colors.primary.default} !important;
   }
 `
 

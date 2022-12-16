@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const TableWrapperScrollable = styled.div`
@@ -11,25 +10,25 @@ export const StyledTable = styled.table`
 
   border-collapse: collapse;
   min-width: 600px;
-  border: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 
   border-radius: ${({ theme }) => theme.borderRadius.small};
   overflow: hidden;
 `
 
 export const StyledTHead = styled.thead`
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
 `
 
 export const StyledRow = styled.tr<{ highlight?: boolean }>`
   &:nth-child(odd) {
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 
   ${({ theme, highlight }) =>
     highlight &&
     css`
-      border: 1px solid ${theme.colors.primary};
+      border: 1px solid ${theme.tokens.colors.primary.default};
       border-radius: ${theme.borderRadius.small};
     `}
 `
@@ -44,7 +43,7 @@ export const StyledTBody = styled.tbody``
 export const StyledTD = styled.td`
   padding: ${({ theme }) => theme.spacing.small};
   &:nth-child(2) {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 

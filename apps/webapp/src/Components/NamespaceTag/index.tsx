@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { useTheme } from 'styled-components'
-
 import { RESERVED_NAMESPACES,SingleNamespace } from '@mexit/core'
 import { IconDisplay,NamespaceText, StyledNamespaceTag } from '@mexit/shared'
 
@@ -11,8 +9,6 @@ type NamespaceTag = {
 }
 
 const NamespaceTag = ({ namespace, separator = false }: NamespaceTag) => {
-  const theme = useTheme()
-
   if (!namespace) return <></>
 
   const icon = namespace.icon ?? {

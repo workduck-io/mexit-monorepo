@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { getNextStatus,PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
+import { getNextStatus, PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
@@ -112,6 +112,7 @@ export const TodoBase = ({
             }}
             icon="codicon:trash"
             cursor="pointer"
+            className="delete"
             margin="0"
             fontSize={20}
           />

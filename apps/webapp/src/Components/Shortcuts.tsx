@@ -3,6 +3,8 @@ import React from 'react'
 import { shade } from 'polished'
 import styled from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 import { getSplitDisplayShortcut } from '@mexit/shared'
 
 const ShortcutWrapper = styled.div`
@@ -17,8 +19,7 @@ const ShortcutBox = styled.div`
   font-size: 0.7rem;
   padding: 4px ${({ theme }) => theme.spacing.tiny};
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
-  color: ${({ theme }) => theme.colors.primary};
+  ${({ theme }) => generateStyle(theme.generic.shortcut)}
 `
 
 export interface DisplayShortcutProps {

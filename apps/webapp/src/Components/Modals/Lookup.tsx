@@ -116,7 +116,12 @@ const Lookup = () => {
   }
 
   return (
-    <StyledModal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={closeModal} isOpen={open}>
+    <StyledModal
+      className="ModalContentSplit"
+      overlayClassName="ModalOverlay"
+      onRequestClose={closeModal}
+      isOpen={open}
+    >
       <InputWrapper>
         <Brackets>[[</Brackets>
         <NodeSelect

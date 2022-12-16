@@ -161,7 +161,6 @@ export const StyledMenu = styled.ul<MenuProps>`
   padding: ${({ theme }) => theme.spacing.small};
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: ${({ theme }) => theme.generic.contextMenu.menu.surface};
   width: 100%;
   max-height: 16.2rem;
   overflow-y: auto;
@@ -170,23 +169,20 @@ export const StyledMenu = styled.ul<MenuProps>`
   transition: opacity 0.1s ease;
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   z-index: 1000;
-  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1), 0 4px 11px hsla(0, 0%, 0%, 0.1);
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  }
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 
   ${({ isOverlay }) =>
     isOverlay
       ? css`
           position: absolute;
+          background-color: ${({ theme }) => theme.generic.contextMenu.menu.surface};
         `
       : css`
           position: relative;
           width: 100%;
           height: 18rem;
-          box-shadow: none;
           z-index: inherit;
+          background-color: ${({ theme }) => theme.generic.noteSelect.menu.surface};
         `}
 
   ${({ isOpen }) =>

@@ -523,8 +523,8 @@ export const SplitSearchPreviewWrapper = styled.div`
   ${SearchHeight}
   overflow-y: auto;
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
-  padding: 0 ${({ theme }) => theme.spacing.medium};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
+  padding: ${({ theme }) => theme.spacing.medium};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.large};
@@ -539,6 +539,7 @@ export const SplitSearchPreviewWrapper = styled.div`
     min-height: 30vh;
 
     background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 
   ${MetadataWrapper} {
@@ -553,6 +554,7 @@ export const SplitSearchPreviewWrapper = styled.div`
     gap: ${({ theme }) => theme.spacing.small};
     flex-wrap: wrap;
     cursor: pointer;
+    margin: 0;
     .title,
     ${TitleText} {
       display: flex;

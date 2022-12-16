@@ -19,11 +19,11 @@ export const ShowOnHoverIconStyles = css`
     position: absolute;
     right: 0;
     transition: right 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    background-color: ${({ theme }) => theme.colors.gray[7]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
     width: 0rem;
     overflow: hidden;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     padding: 0.25rem;
     height: 1.5rem;
     opacity: 0;
@@ -56,25 +56,21 @@ export const PixelToCSS = (x: Pixels): string => {
   return `${String(x)}px`
 }
 
-export const ScrollStyles = (color = undefined, width = 10) => css`
-  scrollbar-color: auto;
-  scrollbar-width: thin;
-
-  /* &::-webkit-scrollbar {
+export const ScrollStyles = (color = undefined, width = 8) => css`
+  &::-webkit-scrollbar {
     width: ${width}px;
-  } */
+  }
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background: ${color ? color : ({ theme }) => theme.colors.gray[8]};
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0);
+    background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumb}, 0.25)`};
+    border-radius: 0px;
+    border: 2px solid transparent;
     background-clip: content-box;
-    min-height: 32px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.tokens.surfaces.scrollbar.thumbHover};
   }
   &::-webkit-scrollbar-track {
     background: none;

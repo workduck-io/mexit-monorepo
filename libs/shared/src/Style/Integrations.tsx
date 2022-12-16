@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
 
 export const IntegrationContainer = styled.section`
   margin: 0 4rem;
@@ -91,7 +92,7 @@ export const Services = styled.div`
 export const ServiceCard = styled.div<{ hover?: boolean; disabled?: boolean }>`
   position: relative;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background: ${({ theme }) => theme.colors.background.card};
+  ${({ theme }) => generateStyle(theme.integrations.card.wrapper)};
   margin-left: ${({ theme }) => theme.spacing.medium};
   display: flex;
   width: 10rem;
@@ -101,17 +102,20 @@ export const ServiceCard = styled.div<{ hover?: boolean; disabled?: boolean }>`
   align-items: center;
   font-size: 1rem;
   font-weight: bold;
-  padding: 0.2rem 0;
+  box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+  transition: all 0.2s ease-in-out;
+  border: 0.2rem solid transparent;
 
   :hover {
-    background: ${({ theme }) => theme.colors.background.card};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   }
 
-  ${({ theme, disabled }) =>
+  ${({ disabled }) =>
     disabled &&
     css`
       pointer-events: none;
-      background: ${theme.colors.background.highlight};
+      background: transparent;
+      box-shadow: none;
       opacity: 0.4;
     `}
 
@@ -119,13 +123,12 @@ export const ServiceCard = styled.div<{ hover?: boolean; disabled?: boolean }>`
     hover
       ? css`
           :hover {
-            padding: 0;
-            border: 0.2rem solid ${theme.colors.text.heading};
+            border: 0.2rem solid ${theme.tokens.colors.primary.hover};
           }
         `
       : css`
            {
-            border: 0.2rem solid ${theme.colors.primary};
+            border: 0.2rem solid ${theme.tokens.colors.primary.default};
           }
         `}
 `
@@ -144,7 +147,7 @@ export const RightCut = styled.span`
   top: -1px;
   padding: 0 px;
   right: -1px;
-  border-color: ${({ theme }) => theme.colors.background.highlight} ${({ theme }) => theme.colors.background.highlight}
+  border-color: ${({ theme }) => theme.tokens.colors.secondary} ${({ theme }) => theme.tokens.colors.secondary}
     transparent transparent;
   border-image: initial;
   border-top-right-radius: ${({ theme }) => theme.borderRadius.small};
@@ -167,11 +170,11 @@ export const TemplateInfoList = styled.div`
   margin: 2rem 1rem 0 0;
   cursor: pointer;
   padding: 1rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  transition: all 0.2s ease-in-out;
+  border: 0.2rem solid transparent;
   :hover {
-    padding: 0.8rem;
-    border: 0.2rem solid ${({ theme }) => theme.colors.background.highlight};
-    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border: 0.2rem solid ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -192,7 +195,7 @@ export const IntegrationScroll = styled.div`
 
 export const Text = styled.div`
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.tokens.text.heading};
 `
 
 export const FullHeight = styled.div`
@@ -231,7 +234,7 @@ interface MenuTriggerProps {
 export const IntentMapItem = styled.div`
   padding: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.tiny}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   position: relative;
 `
 
@@ -242,7 +245,7 @@ export const IntegrationMenuTrigger = styled.div<MenuTriggerProps>`
   width: max-content;
   padding: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.medium}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  border: 1px dashed ${({ theme }) => theme.colors.form.input.border};
+  border: 1px dashed ${({ theme }) => theme.tokens.surfaces.s[3]};
   svg {
     margin-right: ${({ theme }) => theme.spacing.small};
   }
@@ -252,7 +255,7 @@ export const IntegrationMenuTrigger = styled.div<MenuTriggerProps>`
     css`
       cursor: pointer;
       &:hover {
-        border-color: ${theme.colors.primary};
+        border-color: ${theme.tokens.colors.primary.default};
       }
     `}
 
@@ -260,9 +263,9 @@ export const IntegrationMenuTrigger = styled.div<MenuTriggerProps>`
     selected &&
     css`
       border: 1px solid transparent;
-      background-color: ${theme.colors.gray[8]};
+      background-color: ${theme.tokens.surfaces.s[3]};
       svg {
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       }
     `}
 `

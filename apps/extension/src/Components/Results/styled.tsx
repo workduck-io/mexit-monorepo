@@ -13,7 +13,7 @@ export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
     css`
       min-height: 300px;
     `};
-  ${({ theme }) => ScrollStyles(theme.colors.gray[7])}
+  ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[4])}
 `
 
 export const List = styled.div`

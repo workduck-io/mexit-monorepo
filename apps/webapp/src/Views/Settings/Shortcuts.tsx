@@ -2,7 +2,6 @@ import React from 'react'
 import Modal from 'react-modal'
 
 import lodash from 'lodash'
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
@@ -17,15 +16,18 @@ const Shortcut = styled.div<{ highlight: boolean }>`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
   ${({ highlight, theme }) =>
     highlight &&
     css`
       border-radius: ${({ theme }) => theme.borderRadius.small};
-      border: 0.1rem solid ${theme.colors.primary};
+      border: 0.1rem solid ${theme.tokens.colors.primary.default};
     `}
   :hover {
-    background-color: ${({ theme }) => theme.colors.background.card};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
     border-radius: ${({ theme }) => theme.borderRadius.small};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 `
 
@@ -33,10 +35,11 @@ const ShortcutItem = styled.div<{ highlight?: boolean }>`
   ${({ theme, highlight }) =>
     highlight
       ? css`
-          background-color: ${transparentize(0.6, theme.colors.background.highlight)};
-          border-radius: ${theme.borderRadius.small};
           padding: 0.5rem;
           margin-right: 0.5rem;
+          div {
+            font-size: 1rem !important;
+          }
         `
       : css`
           padding: 1rem;
@@ -44,11 +47,12 @@ const ShortcutItem = styled.div<{ highlight?: boolean }>`
 `
 
 export const Header = styled.div<{ colored?: boolean }>`
+  color: ${({ theme }) => theme.tokens.text.default};
   padding: 1rem;
   ${({ theme, colored }) =>
     colored &&
     css`
-      color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.default};
     `}
   font-size: x-large;
   font-weight: bold;
@@ -56,13 +60,21 @@ export const Header = styled.div<{ colored?: boolean }>`
 
 const ShortcutListContainer = styled.section`
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.background.card};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   margin: 0rem 4rem 2rem;
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `
 
 const ShortcutContent = styled.div`
   padding: 0;
-  background-color: ${({ theme }) => theme.colors.background.app};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
+  & > ${Shortcut}:nth-child(even) {
+    background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.75);
+    border-top: 1px solid ${({ theme }) => theme.rgbTokens.surfaces.s[3]};
+    :hover {
+      background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    }
+  }
 `
 
 const Shortcuts = () => {

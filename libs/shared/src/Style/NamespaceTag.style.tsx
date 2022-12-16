@@ -17,7 +17,7 @@ export const NamespaceText = styled.span`
 `
 
 export const StyledNamespaceTag = styled.div<{ separator?: boolean }>`
-  color: ${({ theme }) => theme.colors.text.disabled};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.8rem;
   display: flex;
   align-items: center;
@@ -33,6 +33,6 @@ export const StyledNamespaceTag = styled.div<{ separator?: boolean }>`
   ${({ theme, separator }) =>
     separator &&
     css`
-      border-left: 1px solid ${theme.colors.gray[7]};
+      border-left: 1px solid ${theme.tokens.surfaces.separator};
     `}
 `

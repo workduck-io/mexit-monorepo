@@ -41,9 +41,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    height: 100%;
+    height: 100vh;
     width: 100vw;
     display: flex;
+    overflow: hidden;
     font-family: Inter, sans-serif;
     color: ${({ theme }) => theme.tokens.text.heading};
     ${({ theme }) => {

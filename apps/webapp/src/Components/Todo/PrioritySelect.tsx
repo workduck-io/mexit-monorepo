@@ -3,7 +3,7 @@ import { useContextMenu } from 'react-contexify'
 
 import Tippy from '@tippyjs/react'
 
-import {Priority, PriorityDataType, PriorityType } from '@mexit/core'
+import { Priority, PriorityDataType, PriorityType } from '@mexit/core'
 import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
 
 import PriorityMenu from './PriorityMenu'
@@ -45,6 +45,7 @@ const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = fal
         >
           <TodoActionButton>
             <MexIcon
+              $noHover
               onClick={
                 readOnly
                   ? () => {
