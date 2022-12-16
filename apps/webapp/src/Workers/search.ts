@@ -24,14 +24,12 @@ const searchWorker = {
     hasInitialized = value
   },
   init: (fileData: Partial<PersistentData>) => {
-    mog('HasInitializedCurrently Upar', { hasInitialized, fileData })
     if (hasInitialized) return
     const { idx, nbMap } = createSearchIndex(fileData)
 
     globalSearchIndex = idx
     nodeBlockMapping = nbMap
     hasInitialized = true
-    mog('HasInitializedCurrently Neeche', { hasInitialized, fileData })
   },
 
   addDoc: (

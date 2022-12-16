@@ -79,9 +79,6 @@ export const runBatchWorker = async (
   batchSize = 6,
   args: any[] | Record<any, any[]>
 ) => {
-  const token = useInternalAuthStore.getState().userCred.token
-  const workspaceID = useAuthStore.getState().getWorkspaceId()
-
   const res = await requestsWorker.instance.runBatchWorker(requestType, batchSize, args)
   return res
 }
@@ -223,15 +220,6 @@ export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: 
     mog('SearchIndexError', { error })
   }
 }
-
-// export const dumpIndexDisk = async (location: string) => {
-//   try {
-//     if (searchWorker.status !== WORKER_STATUS.RUNNING) throw new Error('Search Worker Not Initialized')
-//     await searchWorker.instance.dumpIndexDisk(location)
-//   } catch (error) {
-//     mog('ErrorDumpingIndexToDisk', { error })
-//   }
-// }
 
 export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
   try {

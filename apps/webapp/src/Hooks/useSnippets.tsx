@@ -59,13 +59,34 @@ export const useSnippets = () => {
     return undefined
   }
 
+  const updateSnippetIndex = async (snippet) => {
+    const tags = snippet?.template ? ['template'] : ['snippet']
+    const idxName = snippet?.template ? 'template' : 'snippet'
+
+    if (snippet?.template) {
+      await removeDocument('snippet', snippet.id)
+    } else {
+      await removeDocument('template', snippet.id)
+    }
+    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+  }
+
   const updateSnippets = async (snippets: Record<SnippetID, Snippet>) => {
     const existingSnippets = useSnippetStore.getState().snippets
 
     const newSnippets = { ...(Array.isArray(existingSnippets) ? {} : existingSnippets), ...snippets }
 
     updateSnippetsInStore(newSnippets)
-    updateSlashCommands(Object.values(newSnippets))
+    const snippetsArr = Object.values(newSnippets)
+    updateSlashCommands(snippetsArr)
+
+    snippetsArr.forEach(async (snippet) => {
+      updateDescription(snippet.id, {
+        rawText: convertContentToRawText(snippet.content, '\n'),
+        truncatedContent: snippet.content.slice(0, 8)
+      })
+      await updateSnippetIndex(snippet)
+    })
   }
 
   const updateSnippet = async (snippet: Snippet) => {

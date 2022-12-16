@@ -1,16 +1,19 @@
 import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { devtools, persist } from 'zustand/middleware'
 
 import { contentStoreConstructor, ContentStoreState, IDBStorage, StorePersistentKeys } from '@mexit/core'
 
 const useContentStore = create<ContentStoreState>(
-  persist(contentStoreConstructor, {
-    name: StorePersistentKeys.CONTENTS,
-    getStorage: () => IDBStorage,
-    onRehydrateStorage: () => (state) => {
-      state.setHasHydrated(true)
-    }
-  })
+  devtools(
+    persist(contentStoreConstructor, {
+      name: StorePersistentKeys.CONTENTS,
+      getStorage: () => IDBStorage,
+      onRehydrateStorage: () => (state) => {
+        state.setHasHydrated(true)
+      }
+    }),
+    { name: 'contents-webapp' }
+  )
 )
 
 export { useContentStore }

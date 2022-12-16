@@ -46,7 +46,6 @@ export const useInitLoader = () => {
       runBatch<any>([
         fetchShareData(),
         initPortals(),
-        getAllSnippetsByWorkspace(),
         getAllViews(),
         getAllLinks(),
         getAllSmartCaptures(),
@@ -60,6 +59,7 @@ export const useInitLoader = () => {
   const fetchAll = async () => {
     try {
       await getAllNamespaces()
+      await getAllSnippetsByWorkspace()
       // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker

@@ -21,12 +21,12 @@ export const useUpdater = () => {
     setContents(notes)
     addMetadata('notes', metadatas)
 
-    Object.entries(([noteId, content]) => {
+    Object.entries(async ([noteId, content]) => {
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
-      updateDocument('node', noteId, content)
+      await updateDocument('node', noteId, content)
     })
   }
 
