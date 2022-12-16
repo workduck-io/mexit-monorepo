@@ -3,9 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import { ActionType, QuickLinkType } from '@mexit/core'
 
 import { useAuthStore } from '../../Hooks/useAuth'
-import { useEditorStore } from '../../Hooks/useEditorStore'
 import { useHighlighter } from '../../Hooks/useHighlighter'
-import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
@@ -29,8 +27,6 @@ const Sputlit = () => {
   const { visualState, setVisualState } = useSputlitContext()
   const activeItem = useSputlitStore((s) => s.activeItem)
   const resetSputlit = useSputlitStore((s) => s.reset)
-  const { previewMode } = useEditorStore()
-  const { saveIt } = useSaveChanges()
   const { removeHighlight } = useHighlighter()
   const getHighlightsOfUrl = useHighlightStore((s) => s.getHighlightsOfUrl)
 

@@ -46,7 +46,6 @@ export const useInitLoader = () => {
       runBatch<any>([
         fetchShareData(),
         initPortals(),
-        getAllSnippetsByWorkspace(),
         getAllViews(),
         getAllLinks(),
         getAllSmartCaptures(),
@@ -60,13 +59,13 @@ export const useInitLoader = () => {
   const fetchAll = async () => {
     try {
       await getAllNamespaces()
+      await getAllSnippetsByWorkspace()
       // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
       initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       updateBaseNode()
-
       // We only set showLoader to false here because when needed the loader would be made visible by another component
       setShowLoader(false)
     } catch (err) {
@@ -89,11 +88,15 @@ export const useInitLoader = () => {
         contents: useContentStore.getState().contents
       }
 
-      initSearchIndex(initData).then(async () => {
-        await startRequestsWorkerService()
-        backgroundFetch()
-        fetchAll()
-      })
+      initSearchIndex(initData)
+        .then(async () => {
+          await startRequestsWorkerService()
+          backgroundFetch()
+          fetchAll()
+        })
+        .catch((error) => {
+          console.log('InitSearchIndexError', { error })
+        })
     }
   }, [isAuthenticated, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
 }

@@ -61,7 +61,7 @@ const ContentEditor = () => {
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const nodeid = useParams()?.nodeId
   const location = useLocation()
-  const fsContent = useContentStore((state) => state.contents[nodeid])
+  const fsContent = useContentStore((state) => state.contents)[nodeid]
 
   const isBannerVisible = useRouteStore((s) =>
     s.routes?.[`${ROUTE_PATHS.node}/${nodeid}`]?.banners?.includes(BannerType.editor)

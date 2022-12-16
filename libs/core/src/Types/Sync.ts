@@ -1,3 +1,9 @@
+export enum StorePersistentKeys {
+  CONTENTS = 'mexit-content-store',
+  DATA = 'mexit-data-store',
+  SNIPPETS = 'mexit-snippet-store'
+}
+
 export enum BroadcastSyncedChannel {
   CONTENTS = 'contents',
   RECENTS = 'recents',

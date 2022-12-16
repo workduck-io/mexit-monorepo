@@ -1,11 +1,11 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { dataStoreConstructor, DataStoreState, IDBStorage } from '@mexit/core'
+import { dataStoreConstructor, DataStoreState, IDBStorage, StorePersistentKeys } from '@mexit/core'
 
 const useDataStore = create<DataStoreState>(
   persist(dataStoreConstructor, {
-    name: 'mexit-data-store',
+    name: StorePersistentKeys.DATA,
     version: 2,
     getStorage: () => IDBStorage,
     onRehydrateStorage: () => (state) => {

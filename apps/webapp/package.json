@@ -11,6 +11,7 @@
   "dependencies": {
     "@asseinfo/react-kanban": "^2.2.0",
     "@atlaskit/tree": "^8.6.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@floating-ui/react-dom-interactions": "^0.9.3",
     "@iconify-icons/ri": "^1.1.1",
     "@iconify/icons-bx": "^1.1.0",
@@ -31,6 +32,7 @@
     "@workduck-io/dwindle": "^0.1.1",
     "@workduck-io/flexsearch": "^0.7.22",
     "@workduck-io/mex-components": "^0.0.17",
+    "@workduck-io/mex-threads.js": "^0.1.4",
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",
     "chrono-node": "^2.3.8",

@@ -18,7 +18,6 @@ import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { deserializeContent } from '../Utils/serializer'
 
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
@@ -95,6 +94,8 @@ export function useSaveChanges() {
 
     mog('request', { request })
 
+    setContent(node.nodeid, editorState)
+
     setSelection(undefined)
     addRecent(node.nodeid)
     setActiveItem()
@@ -119,7 +120,7 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
 
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        const content = request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
@@ -188,6 +189,8 @@ export function useSaveChanges() {
   ) => {
     addRecentNote(nodeid)
     setContent(nodeid, content, metadata)
+    // if (highlight) addHighlight(highlight, blockHighlightMap)
+    // if (highlight) dispatch('ADD_HIGHLIGHTED_BLOCK', highlight, blockHighlightMap)
 
     if (notification) {
       toast.success('Saved to Cloud')
@@ -214,7 +217,7 @@ export function useSaveChanges() {
       nodeid: node.nodeid,
       namespace: namespace.id
     })
-    const storeContent = getContent(node?.nodeid)?.content ?? defaultContent.content
+    const storeContent = useContentStore.getState().contents?.[node?.nodeid]?.content ?? defaultContent.content
     mog('We be setting persistedContent', { toAppendContent, storeContent })
     const content = [...storeContent, ...toAppendContent]
     const request = {
@@ -246,7 +249,7 @@ export function useSaveChanges() {
         // mog('Response and things', { response })
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = deserializeContent(!bulkCreateRequest ? message.data : message.node.data)
+        const content = request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         setContent(nodeid, content, metadata)

@@ -8,6 +8,9 @@ import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
 export const useContentStore = create<ContentStoreState>(
   persist(contentStoreConstructor, {
     name: 'mexit-content-store',
-    getStorage: () => asyncLocalStorage
+    getStorage: () => asyncLocalStorage,
+    onRehydrateStorage: () => (state) => {
+      state.setHasHydrated(true)
+    }
   })
 )

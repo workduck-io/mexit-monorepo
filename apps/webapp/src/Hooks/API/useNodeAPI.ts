@@ -181,7 +181,7 @@ export const useApi = () => {
           : origMetadata
 
         setContent(noteID, contentToSet)
-        addMetadata('notes', { [noteID]: metadata })
+        updateMetadata('notes', noteID, metadata)
 
         addLastOpened(noteID)
         return d
@@ -309,20 +309,8 @@ export const useApi = () => {
       .then((d) => {
         const newSnippets = d.filter((snippet) => {
           const existSnippet = getSnippet(snippet.snippetID)
-          mog('SnippetInitLoader', { existSnippet })
           return existSnippet === undefined
         })
-
-        // initSnippets([
-        //   ...snippets,
-        //   ...newSnippets.map((item) => ({
-        //     icon: item.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET,
-        //     id: item.snippetID,
-        //     template: item.template,
-        //     title: item.title,
-        //     content: defaultContent.content
-        //   }))
-        // ])
 
         return newSnippets
       })
@@ -333,12 +321,16 @@ export const useApi = () => {
         if (toUpdateSnippets && toUpdateSnippets.length > 0) {
           const ids = batchArray(toUpdateSnippets, 10)
           if (ids && ids.length > 0) {
-            const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
-            res.fulfilled.forEach(async (snippets) => {
-              const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
-              updateSnippets(snippetsRecord)
-            })
-            mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
+            try {
+              const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
+              res.fulfilled.forEach(async (snippets) => {
+                const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
+                updateSnippets(snippetsRecord)
+              })
+              mog('RunBatchWorkerSnippetsRes, updateSnippets', { res, ids })
+            } catch (error) {
+              mog('SnippetsWorkerError', { error })
+            }
           }
         }
       })
