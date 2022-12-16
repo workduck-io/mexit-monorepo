@@ -71,6 +71,7 @@ export const wUpdateDoc = async (
   tags?: Array<string>,
   extra?: SearchRepExtra
 ) => {
+  // mog('UpdateDocChildIFrame: ', { childIframe })
   if (childIframe) return childIframe.updateDoc(key, nodeID, contents, title, tags, extra)
 }
 

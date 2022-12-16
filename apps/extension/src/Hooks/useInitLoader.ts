@@ -122,11 +122,11 @@ export const useInitLoader = () => {
 
   const getAllSnippets = async () => {
     const localSnippets = useSnippetStore.getState().snippets
-    const { newSnippets, response } = await wInitSnippets(localSnippets)
+    const { response } = await wInitSnippets(localSnippets)
 
     response.fulfilled.forEach(async (snippets) => {
       const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
-      updateSnippets(snippetsRecord)
+      await updateSnippets(snippetsRecord)
     })
   }
 

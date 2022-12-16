@@ -1730,9 +1730,9 @@
     "@floating-ui/core" "^0.7.3"
 
 "@floating-ui/dom@^1.0.5":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.11.tgz#c05b9f2337ac340113daed378c873776287abba7"
-  integrity sha512-p60iaN02zByTo9i+IyOMoVyBVn5gCag/cdFCdpUlTIiP2G7BKKeCu36+LlsTZl+yBKoGo5+VSQ/UgZZmN+UGjA==
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.0.12.tgz#07c870a05d9b825a6d7657524f48fe6761722800"
+  integrity sha512-HeG/wHoa2laUHlDX3xkzqlUqliAfa+zqV04LaKIwNCmCNaW2p0fQi4/Kd0LB4GdFoJ2UllLFq5gWnXAd67lg7w==
   dependencies:
     "@floating-ui/core" "^1.0.4"
 
@@ -1824,9 +1824,9 @@
     "@iconify/types" "*"
 
 "@iconify/icons-codicon@^1.1.15":
-  version "1.2.20"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-codicon/-/icons-codicon-1.2.20.tgz#e273d010364e0ad5e2c6d625678ece8ac8a682c6"
-  integrity sha512-AQUG249DzmPHmKkJfqPu9fnXcXaYsb1YVkO+dqcq2sdlx1VleyuJ1lMIi1bn6AJPPmwiv+UsS39NZV0KVzkm2g==
+  version "1.2.21"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-codicon/-/icons-codicon-1.2.21.tgz#70f5fcca5911b5d9e165472b464a6478503e58df"
+  integrity sha512-kA6os+GDaR3nltyHhXuz5BHzb3XD+mXfjIQjA3h4lVTsGTD6iGI4WjXLllu7YpKoFbdl+0C5PJAJQnPzB2jZHQ==
   dependencies:
     "@iconify/types" "*"
 
@@ -7057,9 +7057,9 @@ json5@^1.0.1:
     minimist "^1.2.0"
 
 json5@^2.1.2, json5@^2.2.0, json5@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
-  integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.2.tgz#64471c5bdcc564c18f7c1d4df2e2297f2457c5ab"
+  integrity sha512-46Tk9JiOL2z7ytNQWFLpj99RZkVgeHf87yGQKsIkaPz1qSH9UczKH1rO7K3wgRselo0tYMUNfecYpm/p1vC7tQ==
 
 jsonc-parser@3.2.0:
   version "3.2.0"
