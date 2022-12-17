@@ -46,10 +46,10 @@ const MenuItemStyles = css`
   &:focus,
   &:not([disabled]):active {
     ${MenuItemCount} {
-      color: ${({ theme }) => theme.tokens.colors.primary.text};
+      color: ${({ theme }) => theme.generic.contextMenu.item.iconColor};
     }
     ${MultiSelectIcon} {
-      color: ${({ theme }) => theme.tokens.colors.primary.text};
+      color: ${({ theme }) => theme.generic.contextMenu.item.iconColor};
     }
   }
 
@@ -75,12 +75,17 @@ export const RootMenuWrapper = styled.button`
 
   &.${MenuItemClassName} {
     ${MenuItemStyles}
+    &.open,
+    &:hover {
+      box-shadow: none;
+      background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    }
   }
 
   &.open,
   &:hover {
-    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
     box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 

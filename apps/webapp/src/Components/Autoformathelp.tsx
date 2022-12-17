@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 import { Title } from '@mexit/shared'
@@ -31,11 +30,11 @@ const AutoFormatWrapper = styled.div`
     gap: ${({ theme }) => theme.spacing.small};
     border-radius: ${({ theme }) => theme.borderRadius.small};
     padding: ${({ theme }) => theme.spacing.small};
-    background-color: ${({ theme }) => theme.colors.gray[8]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.modal};
     min-width: 220px;
     ${Title} {
       font-size: 1rem;
-      color: ${({ theme }) => theme.colors.text.fade};
+      color: ${({ theme }) => theme.tokens.colors.secondary};
       margin: 0;
     }
     p {
@@ -49,7 +48,8 @@ const AutoFormatWrapper = styled.div`
       padding: ${({ theme }) => theme.spacing.tiny};
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
       font-size: 0.9rem;
-      background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
+      background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     }
   }
 `

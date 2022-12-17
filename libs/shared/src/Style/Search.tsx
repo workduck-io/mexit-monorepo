@@ -71,6 +71,45 @@ export const SearchHeader = styled.div`
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+  ${InputWrapper} {
+    display: flex;
+    align-items: center;
+    padding: 0 ${({ theme }) => theme.spacing.small};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border: 1px solid transparent;
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    transition: all 0.2s ease-in-out;
+    width: max-content;
+
+    ${Input} {
+      flex-grow: 1;
+      background: transparent;
+      border: none !important;
+      color: ${({ theme }) => theme.tokens.text.default};
+
+      width: 20rem;
+      transition: all 0.2s ease-in-out;
+      &:active,
+      &:focus {
+        width: 30rem;
+      }
+    }
+
+    &:hover {
+      background: ${({ theme }) => theme.generic.form.input.hover.surface};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    &:focus-within {
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
 `
 
 export const SearchFilterWrapper = styled(SearchHeader)`

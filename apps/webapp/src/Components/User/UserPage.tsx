@@ -13,11 +13,13 @@ import {
   CopyButton,
   Info,
   InfoData,
+  InfoDataText,
   InfoLabel,
   ProfileContainer,
   ProfileIcon,
-  SettingsCard,
-  Title} from '@mexit/shared'
+  Title,
+  UserCard
+} from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -49,84 +51,81 @@ const UserPage = () => {
   // mog('userForms', { currentUserDetails, fS: updateUserForm.formState, dfs: updateUserForm.formState.dirtyFields })
 
   return (
-    <SettingsCard>
-      <ProfileContainer>
-        <ProfileIcon>
-          <ProfileImage email={currentUserDetails?.email} size={128} />
-        </ProfileIcon>
+    <ProfileContainer>
+      <UserCard>
+        <Title>User</Title>
+        <AuthForm onSubmit={updateUserForm.handleSubmit(onUpdateSave)}>
+          <InputFormError
+            name="name"
+            label="Name"
+            labelIcon={edit2Line}
+            inputProps={{
+              placeholder: 'Ex: Cool Guy',
+              defaultValue: currentUserDetails?.name,
+              isDirty: updateUserForm.formState.dirtyFields?.name,
+              ...updateUserForm.register('name')
+            }}
+            errors={updErrors}
+          ></InputFormError>
 
-        <div>
-          <Title>User</Title>
-          <AuthForm onSubmit={updateUserForm.handleSubmit(onUpdateSave)}>
-            <InputFormError
-              name="name"
-              label="Name"
-              labelIcon={edit2Line}
-              transparent
-              inputProps={{
-                placeholder: 'Ex: Cool Guy',
-                defaultValue: currentUserDetails?.name,
-                isDirty: updateUserForm.formState.dirtyFields?.name,
-                ...updateUserForm.register('name')
-              }}
-              errors={updErrors}
-            ></InputFormError>
+          <InputFormError
+            name="alias"
+            label="Alias"
+            labelIcon={edit2Line}
+            inputProps={{
+              placeholder: 'Ex: CoolGal',
+              defaultValue: currentUserDetails?.alias,
+              isDirty: updateUserForm.formState.dirtyFields?.alias,
+              ...updateUserForm.register('alias', {
+                pattern: ALIAS_REG
+              })
+            }}
+            errors={updErrors}
+          ></InputFormError>
+          <Info>
+            <InfoLabel>Email</InfoLabel>
+            <InfoData>
+              <InfoDataText>{currentUserDetails?.email}</InfoDataText>
+            </InfoData>
+          </Info>
+          <Info>
+            <InfoLabel>Workspace</InfoLabel>
+            <InfoData>
+              <InfoDataText>{getWorkspaceId()}</InfoDataText>
+              <CopyButton text={getWorkspaceId()}></CopyButton>
+            </InfoData>
+          </Info>
 
-            <InputFormError
-              name="alias"
-              label="Alias"
-              transparent
-              labelIcon={edit2Line}
-              inputProps={{
-                placeholder: 'Ex: CoolGal',
-                defaultValue: currentUserDetails?.alias,
-                isDirty: updateUserForm.formState.dirtyFields?.alias,
-                ...updateUserForm.register('alias', {
-                  pattern: ALIAS_REG
-                })
-              }}
-              errors={updErrors}
-            ></InputFormError>
+          {IS_DEV && (
             <Info>
-              <InfoLabel>Email</InfoLabel>
-              <InfoData>{currentUserDetails?.email}</InfoData>
-            </Info>
-            <Info>
-              <InfoLabel>Workspace</InfoLabel>
+              <InfoLabel>User ID</InfoLabel>
               <InfoData>
-                {getWorkspaceId()}
-                <CopyButton text={getWorkspaceId()}></CopyButton>
+                <InfoDataText>{currentUserDetails?.userID}</InfoDataText>
+                <CopyButton text={currentUserDetails?.userID}></CopyButton>
               </InfoData>
             </Info>
+          )}
 
-            {IS_DEV && (
-              <Info>
-                <InfoLabel>User ID</InfoLabel>
-                <InfoData>
-                  {currentUserDetails?.userID}
-                  <CopyButton text={currentUserDetails?.userID}></CopyButton>
-                </InfoData>
-              </Info>
-            )}
-
-            {updateUserForm.formState.isDirty && Object.keys(updateUserForm.formState.dirtyFields).length > 0 && (
-              <ButtonFields>
-                <LoadingButton loading={updateUserForm.formState.isSubmitting} type="submit" primary large>
-                  Save Changes
-                </LoadingButton>
-                <IconButton
-                  title="Cancel"
-                  icon={deleteBack2Line}
-                  onClick={() => {
-                    updateUserForm.reset()
-                  }}
-                />
-              </ButtonFields>
-            )}
-          </AuthForm>
-        </div>
-      </ProfileContainer>
-    </SettingsCard>
+          {updateUserForm.formState.isDirty && Object.keys(updateUserForm.formState.dirtyFields).length > 0 && (
+            <ButtonFields>
+              <LoadingButton loading={updateUserForm.formState.isSubmitting} type="submit" primary large>
+                Save Changes
+              </LoadingButton>
+              <IconButton
+                title="Cancel"
+                icon={deleteBack2Line}
+                onClick={() => {
+                  updateUserForm.reset()
+                }}
+              />
+            </ButtonFields>
+          )}
+        </AuthForm>
+      </UserCard>
+      <ProfileIcon>
+        <ProfileImage email={currentUserDetails?.email} size={128} />
+      </ProfileIcon>
+    </ProfileContainer>
   )
 }
 

@@ -4,7 +4,7 @@ import { animated } from 'react-spring'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { generateStyle,MexTheme } from '@workduck-io/mex-themes'
+import { generateStyle, MexTheme } from '@workduck-io/mex-themes'
 
 import { CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
@@ -69,16 +69,18 @@ const ButtonOrLinkStyles = css`
 
 export const SearchLink = styled(NavLink)`
   ${ButtonOrLinkStyles}
-  background-color: ${({ theme }) => transparentize(1, theme.colors.primary)};
+  background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   color: ${({ theme }) => theme.colors.primary};
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   svg {
     color: ${({ theme }) => theme.colors.primary};
   }
 
   &.active {
-    background-color: ${({ theme }) => transparentize(0.88, theme.colors.primary)};
-    color: ${({ theme }) => theme.colors.primary};
+    background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.22);
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
       color: ${({ theme }) => theme.colors.primary};
     }
@@ -87,9 +89,11 @@ export const SearchLink = styled(NavLink)`
 
 export const Link = styled(NavLink)`
   ${ButtonOrLinkStyles}
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
   &.active {
     ${({ theme }) => generateStyle(theme.sidebar.nav.link.main.selected)}
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
       color: ${({ theme }) => theme.colors.primary};
     }

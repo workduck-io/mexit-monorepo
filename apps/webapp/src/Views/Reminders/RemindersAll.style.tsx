@@ -26,6 +26,6 @@ export const ReminderBoardStyled = styled(StyledBoard)`
 export const ReminderColumnHeader = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   margin: ${({ theme }) => theme.spacing.small} 0;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 1.5rem;
 `

@@ -2,7 +2,6 @@ import React from 'react'
 import Select from 'react-select'
 import Creatable from 'react-select/creatable'
 
-import { transparentize } from 'polished'
 import styled, { css, DefaultTheme, useTheme } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
@@ -30,7 +29,7 @@ export const Input = styled.input<InputProps>`
   ${({ theme, transparent }) => !transparent && generateStyle(theme.generic.form.input)};
 
   &:focus-visible {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
     outline: none;
   }
 
@@ -53,7 +52,7 @@ export const Input = styled.input<InputProps>`
     center &&
     css`
       text-align: center;
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     `}
 
   ${({ fontSize }) =>
@@ -65,7 +64,7 @@ export const Input = styled.input<InputProps>`
   ${({ theme, error }) =>
     error &&
     css`
-      border-color: ${theme.colors.palette.red} !important;
+      border-color: ${theme.tokens.colors.red} !important;
     `}
 `
 
@@ -128,7 +127,7 @@ export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?
       :active {
         border-color: none;
       }
-      border: 1px solid ${({ theme }) => theme.colors.palette.red};
+      border: 1px solid ${({ theme }) => theme.tokens.colors.red};
     `}
 
   ${({ height }) =>
@@ -137,7 +136,7 @@ export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?
       resize: none;
       box-sizing: border-box;
       ::placeholder {
-        color: ${(props) => props.theme.colors.gray[4]};
+        color: ${(props) => props.theme.tokens.text.fade};
         opacity: 0.8;
         font-size: 0.96rem;
       }
@@ -178,11 +177,7 @@ export const Label = styled.label<LabelProps>`
   margin: ${({ theme: { spacing }, noTopMargin }) => `${noTopMargin ? 0 : spacing.medium} 0 3px`};
   display: flex;
   align-items: center;
-  /*${({ theme, error }) =>
-    error &&
-    css`
-      color: ${theme.colors.palette.red};
-    `} */
+  gap: ${({ theme }) => theme.spacing.tiny};
   max-width: max-content;
 `
 
@@ -198,6 +193,8 @@ export const ButtonFields = styled.div<{ position?: string }>`
         return css`
           justify-content: end;
         `
+      default:
+        return ''
     }
   }}
 `
@@ -262,7 +259,7 @@ export const SelectWrapper = styled.div`
  * Date and Time Picker Wrapper for combined styles
  */
 export const DatePickerStyles = styled.div`
-  background: ${({ theme }) => theme.colors.form.input.bg};
+  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.small};
   margin: ${({ theme }) => theme.spacing.small} 0;
@@ -270,8 +267,9 @@ export const DatePickerStyles = styled.div`
   .react-datepicker {
     font-family: 'Inter', sans-serif;
     width: 100%;
-    color: ${({ theme }) => theme.colors.text.default};
-    background: ${({ theme }) => theme.colors.form.input.bg};
+    color: ${({ theme }) => theme.tokens.text.default};
+    background: ${({ theme }) => theme.generic.form.input.surface};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     border: none;
     font-size: 0.9rem;
   }
@@ -281,7 +279,7 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__current-month,
   .react-datepicker-time__header,
   .react-datepicker-year-header {
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.heading};
     font-weight: bold;
     margin-bottom: ${({ theme }) => theme.spacing.small};
   }
@@ -290,21 +288,21 @@ export const DatePickerStyles = styled.div`
     border-radius: 50%;
   }
   .react-datepicker__day-name {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
   .react-datepicker__day-name:first-child {
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
   .react-datepicker__day,
   .react-datepicker__time-name {
-    color: ${({ theme }) => theme.colors.text.default};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
   .react-datepicker__day--outside-month {
-    color: ${({ theme }) => transparentize(0.3, theme.colors.text.fade)};
+    color: rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.7);
   }
   .react-datepicker__header {
-    background-color: ${({ theme }) => theme.colors.form.input.bg};
-    border-bottom: 1px solid ${({ theme }) => theme.colors.form.input.border};
+    background-color: ${({ theme }) => theme.generic.form.input.surface};
+    border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
     border-top-left-radius: ${({ theme }) => theme.borderRadius.small};
     padding: 8px 0;
   }
@@ -312,9 +310,9 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__month-read-view--down-arrow,
   .react-datepicker__month-year-read-view--down-arrow,
   .react-datepicker__navigation-icon::before {
-    border-color: ${({ theme }) => theme.colors.text.fade};
+    border-color: ${({ theme }) => theme.tokens.text.fade};
     &:hover {
-      border-color: ${({ theme }) => theme.colors.primary};
+      border-color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 
@@ -322,8 +320,8 @@ export const DatePickerStyles = styled.div`
     border-radius: 50%;
     background: linear-gradient(
       45deg,
-      ${({ theme }) => transparentize(0.4, theme.colors.secondary)} 0%,
-      ${({ theme }) => transparentize(0.8, theme.colors.primary)} 100%
+      rgba(${({ theme }) => theme.rgbTokens.colors.secondary}, 0.6) 0%,
+      rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.2) 100%
     );
   }
 
@@ -332,8 +330,8 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__quarter-text:hover,
   .react-datepicker__year-text:hover {
     border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors.gray[7]};
-    color: ${({ theme }) => theme.colors.text.heading};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
 
   .react-datepicker__day--selected,
@@ -349,8 +347,8 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__year-text--in-selecting-range,
   .react-datepicker__year-text--in-range {
     border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 
   .react-datepicker__day--keyboard-selected,
@@ -358,8 +356,8 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__quarter-text--keyboard-selected,
   .react-datepicker__year-text--keyboard-selected {
     border-radius: 50%;
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 
   .react-datepicker__day--keyboard-selected:hover,
@@ -378,7 +376,7 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__year-text--selected:hover,
   .react-datepicker__year-text--in-selecting-range:hover,
   .react-datepicker__year-text--in-range:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 
   /* Time */
@@ -392,10 +390,10 @@ export const DatePickerStyles = styled.div`
     margin-left: 0;
     margin-right: 0;
     padding: ${({ theme }) => theme.spacing.tiny};
-    border: 1px solid ${({ theme }) => theme.colors.form.input.border};
+    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
-    color: ${({ theme }) => theme.colors.text.default};
+    background: ${({ theme }) => theme.tokens.surfaces.s[1]};
+    color: ${({ theme }) => theme.tokens.text.default};
     font-size: 1.2rem;
   }
   input[type='time']::-webkit-calendar-picker-indicator {
@@ -406,7 +404,7 @@ export const DatePickerStyles = styled.div`
     font-size: 0.8rem;
   }
   .react-datepicker__time-container {
-    border-color: ${({ theme }) => theme.colors.form.input.border};
+    border-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
   .react-datepicker__time-container
     .react-datepicker__time
@@ -429,27 +427,27 @@ export const DatePickerStyles = styled.div`
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => theme.colors.gray[7]};
-    color: ${({ theme }) => theme.colors.text.heading};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
   .react-datepicker__time-container
     .react-datepicker__time
     .react-datepicker__time-box
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item--selected:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
   .react-datepicker__time-container
     .react-datepicker__time
     .react-datepicker__time-box
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item--selected {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     color: white;
     font-weight: bold;
     cursor: pointer;
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
   .react-datepicker__time-container
     .react-datepicker__time
@@ -460,7 +458,7 @@ export const DatePickerStyles = styled.div`
   .react-datepicker__month-text--disabled,
   .react-datepicker__quarter-text--disabled,
   .react-datepicker__year-text--disabled {
-    color: ${({ theme }) => transparentize(0.4, theme.colors.text.fade)};
+    color: ${({ theme }) => theme.tokens.text.disabled};
   }
   .react-datepicker__day--disabled:hover,
   .react-datepicker__month-text--disabled:hover,
@@ -472,6 +470,6 @@ export const DatePickerStyles = styled.div`
     ul.react-datepicker__time-list
     li.react-datepicker__time-list-item--disabled:hover {
     background-color: transparent;
-    color: ${({ theme }) => transparentize(0.5, theme.colors.text.fade)};
+    color: ${({ theme }) => theme.tokens.text.disabled};
   }
 `

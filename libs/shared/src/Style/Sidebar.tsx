@@ -88,13 +88,11 @@ export const StyledTreeSwitcher = styled.button`
   margin-left: ${({ theme }) => theme.spacing.tiny};
 `
 export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
-  color: rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.3);
-  border-radius: 3px;
+  color: rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.7);
   transition: 0.1s ease;
   &:hover {
     transition: 0s ease;
     color: ${({ theme }) => theme.tokens.colors.primary.default};
-    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 

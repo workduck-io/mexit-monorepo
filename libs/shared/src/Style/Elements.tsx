@@ -10,5 +10,5 @@ export const Para = styled.p`
 
 export const Note = styled.p`
   margin: ${({ theme }) => theme.spacing.small} 0;
-  color: ${({ theme }) => theme.tokens.text.fade};
+  color: ${({ theme }) => theme.tokens.text.default};
 `

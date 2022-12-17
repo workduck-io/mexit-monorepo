@@ -134,4 +134,5 @@ export const ModalControls = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: ${({ theme }) => theme.spacing.medium};
 `
