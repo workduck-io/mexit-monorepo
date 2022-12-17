@@ -3806,19 +3806,6 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/968178df34cab6b6df5489f73ed86ff0b9e97123#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-"@workduck-io/mex-components@^0.0.17":
-  version "0.0.17"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.17/a11017552e6c41b49591ddc813aa9f7574ec1c1b#a11017552e6c41b49591ddc813aa9f7574ec1c1b"
-  integrity sha512-ju+wDV8ZvMHmraHpQHvF80Xw5etY1iDcIafbTwONpS8JR+YwhYCoj1yL+letV/nKLZx01GEcJ5XVJbPK+6OPmQ==
-  dependencies:
-    "@emoji-mart/data" "^1.0.6"
-    "@emoji-mart/react" "^1.0.1"
-    "@tippyjs/react" "^4.2.6"
-    core-js "^3.21.0"
-    deepmerge "^4.2.2"
-    emoji-mart "^5.2.2"
-    polished "^4.1.4"
-    react-spring "^9.5.2"
 
 "@workduck-io/mex-threads.js@^0.1.4":
   version "0.1.4"

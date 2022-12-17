@@ -1,8 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { ThinScrollbar } from '@workduck-io/mex-components'
-
-import { customStyles, EditorBalloonStyles, normalize, TippyBalloonStyles } from '@mexit/shared'
+import { customStyles, EditorBalloonStyles, normalize, ThinScrollbar,TippyBalloonStyles } from '@mexit/shared'
 
 export const GlobalStyle = createGlobalStyle`
 

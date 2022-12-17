@@ -5,9 +5,10 @@ import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react/headless'
 
+import { SecondaryButton } from '@workduck-io/mex-components'
+
 import { generateTempId, getNameFromPath, MEXIT_FRONTEND_URL_BASE, mog, NodeEditorContent } from '@mexit/core'
 import {
-  Button,
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
   EditorPreviewNoteName,
@@ -123,9 +124,9 @@ const EditorPreview = ({
                   </EditorPreviewNoteName>
                 )}
                 {/* <TagsRelatedTiny nodeid={nodeid} /> */}
-                <Button transparent onClick={() => closePreview && closePreview()}>
+                <SecondaryButton onClick={() => closePreview && closePreview()}>
                   <Icon icon={closeCircleLine} />
-                </Button>
+                </SecondaryButton>
               </EditorPreviewControls>
             )}
             <EditorPreviewEditorWrapper>

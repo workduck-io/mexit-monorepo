@@ -4,12 +4,12 @@ import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 
+import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Snippet } from '@mexit/core'
 import {
   GenericFlex,
-  IconButton,
   MexIcon,
   RelativeTime,
   SnippetCardFooter,

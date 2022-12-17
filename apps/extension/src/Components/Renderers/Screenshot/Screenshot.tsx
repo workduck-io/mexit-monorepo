@@ -7,10 +7,10 @@ import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from 'react-im
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
 import { Icon } from '@iconify/react'
 
-import { Button } from '@workduck-io/mex-components'
+import { Button, IconButton } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
-import { IconButton, useDebounceEffect } from '@mexit/shared'
+import { useDebounceEffect } from '@mexit/shared'
 
 import { useAuthStore } from '../../../Hooks/useAuth'
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
