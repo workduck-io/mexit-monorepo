@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react'
-import './Stores'
-
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
