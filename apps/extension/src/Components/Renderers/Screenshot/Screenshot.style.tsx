@@ -34,7 +34,7 @@ export const ViewToggle = styled.div`
 
   gap: ${({ theme }) => theme.spacing.small};
 
-  background: ${({ theme }) => theme.colors.gray[9]};
+  background: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.tiny};
 
@@ -44,8 +44,8 @@ export const ViewToggle = styled.div`
     gap: ${({ theme }) => theme.spacing.tiny};
 
     &.active {
-      background: ${({ theme }) => theme.colors.primary};
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      background: ${({ theme }) => theme.tokens.colors.primary.default};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
     }
   }
 `
@@ -56,7 +56,7 @@ export const RangeControlWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
   user-select: none;
 
-  background: ${({ theme }) => theme.colors.gray[9]};
+  background: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
 
@@ -64,7 +64,7 @@ export const RangeControlWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: ${({ theme }) => theme.spacing.tiny};
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
 
     svg {
       width: 1.25rem;
@@ -74,12 +74,12 @@ export const RangeControlWrapper = styled.div`
   input[type='range'] {
     width: 5rem;
     -webkit-appearance: none !important;
-    background: ${({ theme }) => theme.colors.gray[6]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     height: 4px;
     border-radius: 2px;
     &::-webkit-slider-thumb {
       -webkit-appearance: none !important;
-      background: ${({ theme }) => theme.colors.primary};
+      background: ${({ theme }) => theme.tokens.colors.primary.default};
       border-radius: 5px;
       height: 10px;
       width: 10px;
@@ -88,7 +88,7 @@ export const RangeControlWrapper = styled.div`
 `
 
 export const RangeValue = styled.div`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   width: 2rem;
 `
 

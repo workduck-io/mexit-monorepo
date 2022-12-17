@@ -5,10 +5,10 @@ export const StyledTooltip = styled.div<{ top: number; left: number; showTooltip
   display: ${(props) => (props.showTooltip ? 'flex' : 'none')};
   margin: -3em 0 0 0;
 
-  background: ${({ theme }) => theme.colors.background.app};
-  box-shadow: 0 2px 2px 0 rgb(39 43 49 / 10%);
+  background: ${({ theme }) => theme.tokens.surfaces.tooltip.default};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   padding: 0.25em;
-  border: solid 1px ${({ theme }) => theme.colors.background.app};
+  border: solid 1px ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: 5px;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
@@ -30,7 +30,7 @@ export const Icon = styled.div`
   padding: 0.3em;
 
   svg {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 
   &:hover {
@@ -51,7 +51,7 @@ export const NoteListWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.small};
 
-  background: ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
   max-height: 50vh;

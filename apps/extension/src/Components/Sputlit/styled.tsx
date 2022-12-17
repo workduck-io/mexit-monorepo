@@ -31,7 +31,7 @@ export const Wrapper = styled.div`
   width: 700px;
 
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background.app};
+  background: ${({ theme }) => theme.tokens.surfaces.app};
   box-shadow: 0px 6px 20px rgb(0 0 0 / 20%);
   border-radius: 10px;
 `

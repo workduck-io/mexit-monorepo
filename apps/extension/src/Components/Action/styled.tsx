@@ -8,7 +8,7 @@ export const StyledAction = styled.div<{ $active?: boolean }>`
   justify-content: space-between;
 
   padding: 0.5em 0.75em;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   border-left: 2px solid transparent;
   border-radius: 10px;
 
@@ -17,7 +17,7 @@ export const StyledAction = styled.div<{ $active?: boolean }>`
   ${({ $active }) =>
     $active &&
     css`
-      background: ${({ theme }) => theme.colors.background.modal};
+      background: ${({ theme }) => theme.tokens.surfaces.modal};
     `}
 `
 
@@ -72,6 +72,6 @@ export const ShortcutText = styled.div`
     align-items: center;
     margin-left: 4px;
     white-space: nowrap;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `

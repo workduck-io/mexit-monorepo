@@ -122,7 +122,7 @@ const ExludedFormFields = ({ page, register, fields }) => {
     return (
       <ExcludeFormFieldsContainer>
         <Controls>
-          <MexIcon icon="ph:textbox-fill" height={20} width={20} color={theme.colors.primary} />
+          <MexIcon icon="ph:textbox-fill" height={20} width={20} color={theme.tokens.colors.primary.default} />
           <Title>Additional Fields</Title>
         </Controls>
         {fields.map((field) => {

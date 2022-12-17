@@ -93,7 +93,13 @@ export const NotesInfoBar = () => {
       </SidebarListFilterWrapper>
       {!search && !searchedNodes?.length ? (
         <CenteredColumn>
-          <MexIcon color={theme.colors.primary} $noHover width="32" height="32" icon="gg:file-document" />
+          <MexIcon
+            color={theme.tokens.colors.primary.default}
+            $noHover
+            width="32"
+            height="32"
+            icon="gg:file-document"
+          />
           <p>All your recents will shown here!</p>
         </CenteredColumn>
       ) : (

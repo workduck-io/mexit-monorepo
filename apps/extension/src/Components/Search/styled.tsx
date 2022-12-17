@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 export const StyledBackground = css`
-  background-color: ${({ theme }) => theme.colors.background.modal};
+  background-color: ${({ theme }) => theme.tokens.surfaces.modal};
 `
 
 export const Draggable = css`
@@ -26,13 +26,13 @@ export const StyledInput = styled.input<{ disabled?: boolean }>`
 
   flex: 1;
   border: none;
-  color: ${({ theme, disabled }) => (disabled ? theme.colors.text.disabled : theme.colors.text.fade)};
+  color: ${({ theme, disabled }) => (disabled ? theme.tokens.text.disabled : theme.tokens.text.fade)};
   ${({ disabled }) =>
     disabled &&
     css`
       font-weight: bolder;
       ::placeholder {
-        color: ${({ theme }) => theme.colors.primary};
+        color: ${({ theme }) => theme.tokens.colors.primary.default};
       }
     `}
   :focus {

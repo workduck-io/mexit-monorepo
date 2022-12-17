@@ -47,8 +47,8 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
   z-index: 9999999999;
   padding: 8px;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background: ${({ theme }) => theme.colors.background.sidebar};
-  color: ${({ theme }) => theme.colors.text.fade};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+  color: ${({ theme }) => theme.tokens.text.fade};
   transition: right 0.2s ease-in-out, background 0.2s ease-in-out, width 0.2s ease-in-out;
 
   svg {
@@ -59,12 +59,12 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
   &:hover {
     cursor: pointer;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.25);
-    background: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
 
     svg {
       path {
-        fill: ${({ theme }) => theme.colors.background.sidebar};
+        fill: ${({ theme }) => theme.tokens.surfaces.sidebar};
       }
     }
   }
@@ -75,8 +75,8 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
 
   &:active {
     transition: background 0.1s ease;
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 `
 

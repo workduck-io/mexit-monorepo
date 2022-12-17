@@ -29,7 +29,7 @@ export const UserPreferedFieldsContainer = styled.section`
 `
 
 export const ExcludeFormFieldsContainer = styled.section`
-  border-top: 2px solid ${({ theme }) => theme.colors.gray[8]};
+  border-top: 2px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 
   ${Controls} {
     margin: ${({ theme }) => theme.spacing.medium} 0;

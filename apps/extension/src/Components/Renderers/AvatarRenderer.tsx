@@ -23,12 +23,12 @@ const Container = styled.div`
 
 const AvatarImage = styled.img`
   border-radius: ${({ theme }) => theme.borderRadius.large};
-  box-shadow: inset 1rem 1.25rem 1.25rem 1.25rem ${({ theme }) => theme.colors.form.button.bg};
+  box-shadow: inset 1rem 1.25rem 1.25rem 1.25rem ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 const AvatarRenderer = () => {
   const theme = useTheme()
-  const { screenshot, setScreenshot , avatarSeed , setAvatarSeed} = useSputlitStore()
+  const { screenshot, setScreenshot, avatarSeed, setAvatarSeed } = useSputlitStore()
 
   const randomizeAvatar = () => {
     const imgData = generateAvatar()
@@ -53,7 +53,7 @@ const AvatarRenderer = () => {
       }
     )
   }
-  
+
   const copyAvatarURL = () => {
     copyTextToClipboard(`https://avatars.dicebear.com/api/male/${avatarSeed}.svg`)
   }
@@ -63,15 +63,15 @@ const AvatarRenderer = () => {
       <AvatarImage src={screenshot} />
       <Controls>
         <Button onClick={randomizeAvatar}>
-          <MexIcon noHover icon="pepicons:reload" color={theme.colors.primary} />
+          <MexIcon noHover icon="pepicons:reload" color={theme.tokens.colors.primary.default} />
           Randomize
         </Button>
         <Button onClick={copyAvatarURL}>
-          <MexIcon noHover icon="pepicons:clipboard" color={theme.colors.primary} />
+          <MexIcon noHover icon="pepicons:clipboard" color={theme.tokens.colors.primary.default} />
           Copy URL
         </Button>
         <Button onClick={downloadAvatar}>
-          <MexIcon noHover icon="pepicons:arrow-down" color={theme.colors.primary} />
+          <MexIcon noHover icon="pepicons:arrow-down" color={theme.tokens.colors.primary.default} />
           Download
         </Button>
       </Controls>

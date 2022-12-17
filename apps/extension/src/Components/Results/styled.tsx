@@ -7,7 +7,7 @@ export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
   max-height: ${({ isScreenshot }) => (isScreenshot ? '75vh' : '300px')};
   width: 100%;
 
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   ${({ isScreenshot }) =>
     isScreenshot &&
     css`

@@ -201,7 +201,9 @@ const Search = () => {
         onChange={onChange}
       />
 
-      <CenterIcon>{isLoading ? <Loading color={theme.colors.primary} dots={3} transparent /> : <WDLogo />}</CenterIcon>
+      <CenterIcon>
+        {isLoading ? <Loading color={theme.tokens.colors.primary.default} dots={3} transparent /> : <WDLogo />}
+      </CenterIcon>
     </StyledSearch>
   )
 }

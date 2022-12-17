@@ -105,14 +105,13 @@ const SnippetPreview = ({
                 </EditorPreviewNoteName>
                 {icon && iconTooltip && (
                   <Tooltip key={labelId} content={iconTooltip}>
-                    <MexIcon color={theme.colors.gray[5]} noHover icon={icon} height="14" width="14" />
+                    <MexIcon color={theme.tokens.text.fade} noHover icon={icon} height="14" width="14" />
                   </Tooltip>
                 )}
               </PreviewActionHeader>
               <PreviewActionHeader>
                 {/* <TagsRelatedTiny nodeid={snippetId} /> */}
                 <Button
-                  transparent
                   onClick={(ev) => {
                     ev.preventDefault()
                     ev.stopPropagation()

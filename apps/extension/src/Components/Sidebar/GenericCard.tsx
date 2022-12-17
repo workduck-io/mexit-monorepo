@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { SnippetCardHeader, SnippetCardWrapper } from '@mexit/shared'
 
 const GenericContent = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const GenericCard = ({ icon, title, description }: { icon: string; title: string; description: string }) => {
