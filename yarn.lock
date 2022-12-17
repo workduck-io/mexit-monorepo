@@ -9142,6 +9142,11 @@ shallowequal@^1.1.0:
   resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
   integrity sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==
 
+shared-zustand@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/shared-zustand/-/shared-zustand-1.0.4.tgz#e3b1cb7014aa22138d4addeb08828e0358964cb2"
+  integrity sha512-vsZTp7bVv0t3dbojHvnI/gcArMYZw3Gt/I7P/YodVxOqIWzsvNJXBKEApt0LKm89laLMetTnWdthfvU5q1OZJw==
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
