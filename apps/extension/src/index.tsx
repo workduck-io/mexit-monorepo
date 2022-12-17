@@ -14,8 +14,8 @@ const AutoThemeSwitch = () => {
 
   useEffect(() => {
     if (theme) {
-      if (theme !== preferences.themeId) {
-        changeTheme(theme)
+      if (theme !== preferences) {
+        changeTheme(theme.themeId, theme.mode)
       }
     }
   }, [theme])

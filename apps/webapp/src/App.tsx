@@ -15,14 +15,13 @@ import Switch from './Switch'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
-  const { themes, preferences, changeTheme } = useThemeContext()
+  const setTheme = useUserPreferenceStore((store) => store.setTheme)
+  const { preferences, changeTheme } = useThemeContext()
 
-  // TODO: userPreference theme still a string hence no change in preference store on mode change
-  // Which means mode isn't synced between extension and webapp
   useEffect(() => {
     if (theme) {
-      if (theme !== preferences.themeId) {
-        changeTheme(theme)
+      if (theme !== preferences) {
+        changeTheme(theme.themeId, theme.mode)
       }
     }
   }, [theme])

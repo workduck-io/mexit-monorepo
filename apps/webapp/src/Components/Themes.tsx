@@ -44,16 +44,21 @@ const Themes = () => {
     updateUserPreferences()
   }
 
+  const onToggleMode = () => {
+    toggleMode()
+    setTheme(theme.themeId, theme.mode === 'light' ? 'dark' : 'light')
+  }
+
   return (
     <>
-      <Button onClick={toggleMode}>Toggle Mode</Button>
+      <Button onClick={onToggleMode}>Toggle Mode</Button>
       <ThemePreviews>
         {transition((styles, t, _t, i) => {
           return (
             <ManagedProvider key={`mex_theme_key_${t.id}`} tokens={t.data['dark']}>
               {/* eslint-disable-next-line */}
               {/* @ts-ignore */}
-              <Theme selected={t.id === theme} onClick={() => onThemeSelect(i)} style={styles}>
+              <Theme selected={t.id === theme.themeId} onClick={() => onThemeSelect(i)} style={styles}>
                 <ThemePreview back={undefined}>
                   <ThemeColorDots>
                     <div className="primary"></div>
