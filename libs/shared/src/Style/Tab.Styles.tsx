@@ -27,7 +27,7 @@ export const StyledTab = styled.div.attrs({
     !selected &&
     css`
       :hover {
-        background: ${({ theme }) => theme.colors.gray[8]};
+        background: ${({ theme }) => theme.tokens.surfaces.s[3]};
       }
     `}
 
@@ -35,9 +35,9 @@ export const StyledTab = styled.div.attrs({
     selected &&
     css`
       svg {
-        fill: ${({ theme }) => theme.colors.primary};
+        fill: ${({ theme }) => theme.tokens.colors.primary.default};
       }
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     `}
   &:focus {
     outline: none;
@@ -85,7 +85,7 @@ export const TabsWrapper = styled.div<{ index: number; total: number }>`
         border-radius: ${({ theme }) => theme.borderRadius.small};
         top: 46px;
         left: 0;
-        background: ${({ theme }) => theme.colors.primary};
+        background: ${({ theme }) => theme.tokens.colors.primary.default};
         transform: translateX(${index * 100}%);
         transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
       }

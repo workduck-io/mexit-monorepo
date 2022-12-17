@@ -21,7 +21,7 @@ export const SnippetCardWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme }) => theme.spacing.small};
   margin-bottom: ${({ theme }) => theme.spacing.medium};
 `
@@ -45,11 +45,11 @@ export const SnippetCardFooter = styled.div`
   justify-content: space-between;
   gap: ${({ theme }) => theme.spacing.tiny};
 
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 export const SnippetContentPreview = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 1em;
   ${Ellipsis}
 `
