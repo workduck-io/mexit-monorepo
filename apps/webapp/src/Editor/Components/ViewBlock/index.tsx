@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 
 import Board from '@asseinfo/react-kanban'
+import stackLine from '@iconify/icons-ri/stack-line'
+import { Icon } from '@iconify/react'
 import { useSelected } from 'slate-react'
 
 import { TodoType } from '@mexit/core'
@@ -21,7 +23,6 @@ import { RenderBoardTask } from '../../../Views/Tasks'
 import {
   Chip,
   FlexBetween,
-  InlineBlockHeading,
   InlineBlockText,
   InlineFlex,
   StyledInlineBlock
@@ -57,7 +58,7 @@ const ViewBlock = (props: any) => {
   const selected = useSelected()
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
-    return <RenderBoardTask id={id} todo={todo} overlaySidebar={false} dragging={dragging} />
+    return <RenderBoardTask staticBoard id={id} todo={todo} overlaySidebar={false} dragging={dragging} />
   }
 
   // mog('Rendering View Block', { selected, curView, viewid, board })
@@ -68,31 +69,33 @@ const ViewBlock = (props: any) => {
         <StyledInlineBlock selected={selected} data-tour="mex-onboarding-inline-block">
           <FlexBetween>
             <InlineFlex>
-              <InlineBlockHeading>View</InlineBlockHeading>
-              <InlineBlockText>{curView?.title}</InlineBlockText>
+              <Icon icon={stackLine} />
+              <InlineBlockText>{curView?.title ?? 'Embeded View'}</InlineBlockText>
             </InlineFlex>
             <Chip onClick={openView}>Open</Chip>
           </FlexBetween>
-          <StyledViewBlockPreview>
-            <StyledTasksKanbanBlock>
-              {curView?.filters.length > 0 && (
-                <SearchFilterListCurrent>
-                  {curView?.filters.map((f) => (
-                    <DisplayFilter key={f.id} filter={f} />
-                  ))}
-                  <RenderGlobalJoin globalJoin={curView?.globalJoin} />
-                </SearchFilterListCurrent>
-              )}
-              <Board
-                renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
-                disableColumnDrag
-                disableCardDrag
-                renderCard={RenderCard}
-              >
-                {board}
-              </Board>
-            </StyledTasksKanbanBlock>
-          </StyledViewBlockPreview>
+          {board && (
+            <StyledViewBlockPreview>
+              <StyledTasksKanbanBlock>
+                {curView?.filters.length > 0 && (
+                  <SearchFilterListCurrent>
+                    {curView?.filters.map((f) => (
+                      <DisplayFilter key={f.id} filter={f} />
+                    ))}
+                    <RenderGlobalJoin globalJoin={curView?.globalJoin} />
+                  </SearchFilterListCurrent>
+                )}
+                <Board
+                  renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
+                  disableColumnDrag
+                  disableCardDrag
+                  renderCard={RenderCard}
+                >
+                  {board}
+                </Board>
+              </StyledTasksKanbanBlock>
+            </StyledViewBlockPreview>
+          )}
         </StyledInlineBlock>
       </div>
       {props.children}
