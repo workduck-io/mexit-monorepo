@@ -3,7 +3,6 @@ import { MexThemeStyles } from './mexTheme.custom'
 import { NeoDarkStyles } from './neoDark.custom'
 import { NeoLightStyles } from './neoLight.custom'
 import { ImperialStyles, RenarStyles } from './renarTheme.custom'
-import { SpaceAmethyst } from './SpaceAmethyst'
 import { VertigoStyles } from './vertigoTheme.custom'
 import { xemThemeStyles } from './xemTheme.custom'
 
@@ -15,6 +14,5 @@ export const customStyles = {
   RenarStyles,
   HackerStyles,
   NeoLightStyles,
-  NeoDarkStyles,
-  SpaceAmethyst
+  NeoDarkStyles
 }

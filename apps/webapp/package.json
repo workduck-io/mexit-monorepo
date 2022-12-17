@@ -32,7 +32,7 @@
     "@workduck-io/dwindle": "^0.1.1",
     "@workduck-io/flexsearch": "^0.7.22",
     "@workduck-io/mex-components": "^0.0.19",
-    "@workduck-io/mex-themes": "^0.0.4",
+    "@workduck-io/mex-themes": "^0.0.5",
     "@workduck-io/mex-threads.js": "^0.1.4",
     "@workduck-io/tinykeys": "^1.5.0",
     "boring-avatars": "^1.6.3",

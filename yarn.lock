@@ -3806,15 +3806,6 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/968178df34cab6b6df5489f73ed86ff0b9e97123#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-
-"@workduck-io/mex-threads.js@^0.1.4":
-  version "0.1.4"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.4/9441f4c3b9915a3c298949696430928767ade494#9441f4c3b9915a3c298949696430928767ade494"
-  integrity sha512-+h6yOOEqoX9ea8qrapj+pZecFr4CJm3jZyA/uYP2JpSFY5sxC4XOhykto0dS1Qmkrclzsb/ZNjMoOfvE0lzYhg==
-  dependencies:
-    is-observable "^2.1.0"
-    observable-fns "^0.6.1"
-
 "@workduck-io/mex-components@^0.0.19":
   version "0.0.19"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.19/fa40d17f396ecb8676dec8de955166a1c190258b#fa40d17f396ecb8676dec8de955166a1c190258b"
@@ -3840,6 +3831,25 @@
     deepmerge "^4.2.2"
     lodash "^4.17.21"
     polished "^4.1.4"
+
+"@workduck-io/mex-themes@^0.0.5":
+  version "0.0.5"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.5/460b2f946bec96ca5b7718cbfe4f52042ea6b491#460b2f946bec96ca5b7718cbfe4f52042ea6b491"
+  integrity sha512-uFmHdMWhhIOdCjTAZdYEP+soF39XpW7S398FW1Rz6bs5GnvRWA7K30KUbjnejNdMt5KVdUk5wRqHhtuPK+FOPg==
+  dependencies:
+    color-scheme "^1.0.1"
+    core-js "^3.21.0"
+    deepmerge "^4.2.2"
+    lodash "^4.17.21"
+    polished "^4.1.4"
+
+"@workduck-io/mex-threads.js@^0.1.4":
+  version "0.1.4"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.4/9441f4c3b9915a3c298949696430928767ade494#9441f4c3b9915a3c298949696430928767ade494"
+  integrity sha512-+h6yOOEqoX9ea8qrapj+pZecFr4CJm3jZyA/uYP2JpSFY5sxC4XOhykto0dS1Qmkrclzsb/ZNjMoOfvE0lzYhg==
+  dependencies:
+    is-observable "^2.1.0"
+    observable-fns "^0.6.1"
 
 "@workduck-io/tinykeys@^1.5.0":
   version "1.5.0"

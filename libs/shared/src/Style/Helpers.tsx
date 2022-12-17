@@ -56,6 +56,8 @@ export const PixelToCSS = (x: Pixels): string => {
   return `${String(x)}px`
 }
 
+// TODO: cannot comment lines inside styled-components, also surfaces.scrollbar not found
+/* background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumb}, 0.25)`}; */
 export const ScrollStyles = (color = undefined, width = 8) => css`
   &::-webkit-scrollbar {
     width: ${width}px;
@@ -64,13 +66,11 @@ export const ScrollStyles = (color = undefined, width = 8) => css`
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumb}, 0.25)`};
     border-radius: 0px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background-color: ${({ theme }) => theme.tokens.surfaces.scrollbar.thumbHover};
   }
   &::-webkit-scrollbar-track {
     background: none;
