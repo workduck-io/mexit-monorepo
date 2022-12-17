@@ -36,13 +36,13 @@ import SearchFilters from './SearchFilters'
 interface RenderTaskProps {
   id: string
   todo: TodoType
-  selectedRef: React.RefObject<HTMLDivElement>
-  selectedCard: TodoKanbanCard | null
+  selectedRef?: React.RefObject<HTMLDivElement>
+  selectedCard?: TodoKanbanCard | null
   overlaySidebar: boolean
   dragging: boolean
 }
 
-const RenderTask = React.memo<RenderTaskProps>(
+export const RenderBoardTask = React.memo<RenderTaskProps>(
   ({ id, overlaySidebar, todo, selectedCard, selectedRef, dragging }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
 
@@ -68,8 +68,8 @@ const RenderTask = React.memo<RenderTaskProps>(
 
     return (
       <TaskCard
-        ref={selectedCard && id === selectedCard.id ? selectedRef : null}
-        selected={selectedCard && selectedCard.id === id}
+        ref={selectedCard && !!selectedRef && id === selectedCard.id ? selectedRef : null}
+        selected={selectedCard && selectedCard?.id === id}
         dragging={dragging}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         priorityShown={priorityShown}
@@ -103,7 +103,7 @@ const RenderTask = React.memo<RenderTaskProps>(
   }
 )
 
-RenderTask.displayName = 'RenderTask'
+RenderBoardTask.displayName = 'RenderTask'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
@@ -422,7 +422,7 @@ const Tasks = () => {
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     return (
-      <RenderTask
+      <RenderBoardTask
         id={id}
         todo={todo}
         selectedRef={selectedRef}

@@ -44,7 +44,8 @@ import {
   parseIframeUrl,
   parseVideoUrl,
   PlatePlugin,
-  setNodes} from '@udecode/plate'
+  setNodes
+} from '@udecode/plate'
 
 import { useAuth } from '@workduck-io/dwindle'
 
@@ -65,6 +66,7 @@ import { createMentionPlugin } from './createMentionsPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
+import { createViewBlockPlugin } from './createViewBlockPlugin'
 import {
   optionsAutoFormatRule,
   optionsCreateNodeIdPlugin,
@@ -210,7 +212,8 @@ export const generatePlugins = (options: PluginOptionType) => {
 
     createMentionPlugin(), // Mentions
 
-    createTaskViewLinkPlugin() // Task View Links
+    createTaskViewLinkPlugin(), // Task View Links
+    createViewBlockPlugin() // Task View Blocks
   ].filter((p) => p !== undefined)
 
   const withPlugins = !options?.exclude?.dnd ? [...Plugins, createDndPlugin()] : Plugins

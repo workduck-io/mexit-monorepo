@@ -116,7 +116,7 @@ export const SearchFilterListCurrent = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: ${({ theme }) => theme.spacing.small};
+  gap: ${({ theme }) => theme.spacing.medium};
 `
 
 export const SearchFilterListSuggested = styled(SearchFilterListCurrent)``

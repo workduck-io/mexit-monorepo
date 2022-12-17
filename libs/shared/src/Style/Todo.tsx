@@ -2,6 +2,7 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { MainHeader } from './Layouts'
+import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
 
@@ -55,6 +56,22 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
 `
 
 export const StyledTasksKanban = styled(StyledBoard)``
+
+export const StyledTasksKanbanBlock = styled(StyledBoard)`
+  ${SearchFilterListCurrent} {
+    padding: ${({ theme }) => theme.spacing.small};
+  }
+  .react-kanban-column {
+    width: calc(100% / 4);
+  }
+`
+
+export const StyledViewBlockPreview = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  ${MainFont};
+`
 
 export const TaskHeaderTitleSection = styled.div`
   display: flex;

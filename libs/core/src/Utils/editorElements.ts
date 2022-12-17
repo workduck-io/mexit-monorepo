@@ -5,6 +5,7 @@ export const ELEMENT_INLINE_BLOCK = 'inline_block'
 export const ELEMENT_BLOCKQUOTE = 'blockquote'
 
 export const ELEMENT_TASK_VIEW_LINK = 'task_view_link'
+export const ELEMENT_TASK_VIEW_BLOCK = 'task_view_block'
 
 export const ELEMENT_CODE_BLOCK = 'code_block'
 export const ELEMENT_CODE_LINE = 'code_line'

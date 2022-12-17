@@ -256,6 +256,76 @@ export const useTodoKanban = () => {
     return allFilters
   }
 
+  const getFilteredTodoBoard = (appliedFilters: Filter[]) => {
+    const nodetodos = useTodoStore.getState().todos
+    const extra = getSearchExtra()
+    const todoBoard: TodoKanbanBoard = {
+      columns: [
+        {
+          id: TodoStatus.todo,
+          title: 'Todo',
+          cards: []
+        },
+        {
+          id: TodoStatus.pending,
+          title: 'In Progress',
+          cards: []
+        },
+        {
+          id: TodoStatus.completed,
+          title: 'Completed',
+          cards: []
+        }
+      ]
+    }
+    Object.entries(nodetodos).forEach(([nodeid, todos]) => {
+      if (nodeid.startsWith(SNIPPET_PREFIX)) return
+      if (isInArchive(nodeid)) return
+      todos
+        .filter((todo) =>
+          appliedFilters.length > 0
+            ? globalJoin === 'all'
+              ? appliedFilters.every((filter) => taskFilterFunctions[filter.type](todo, filter))
+              : appliedFilters.some((filter) => taskFilterFunctions[filter.type](todo, filter))
+            : true
+        )
+        .filter((todo) => {
+          // TODO: Find a faster way to check for empty content // May not need to convert content to raw text
+          const text = convertContentToRawText(todo.content, ' ', { extra }).trim()
+          // mog('empty todo check', { text, nodeid, todo })
+          if (text === '') {
+            return false
+          }
+          if (todo.content === defaultContent.content) return false
+          return true
+        })
+        .forEach((todo) => {
+          todoBoard.columns
+            .find((column) => column.id === todo?.metadata?.status)
+            ?.cards.push({
+              id: `KANBAN_ID_${todo.nodeid}_${todo.id}`,
+              todo: todo
+            })
+        })
+    })
+
+    // mog('getTodoBoard', { nodetodos, todoBoard })
+
+    todoBoard.columns.forEach((column) => {
+      column.cards.sort((a, b) => {
+        if (TodoRanks[a.todo?.metadata?.priority] < TodoRanks[b.todo?.metadata?.priority]) return 1
+        else return -1
+      })
+    })
+
+    todoBoard.columns.sort((a, b) => {
+      if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
+      else return -1
+    })
+
+    return todoBoard
+  }
+
   const getTodoBoard = () => {
     const nodetodos = useTodoStore.getState().todos
     const extra = getSearchExtra()
@@ -361,6 +431,7 @@ export const useTodoKanban = () => {
     resetCurrentFilters,
     resetFilters,
     filters,
+    getFilteredTodoBoard,
     currentFilters,
     setCurrentFilters,
     globalJoin,
