@@ -11,6 +11,8 @@ import {
   ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_TABLE,
+  ELEMENT_TASK_VIEW_BLOCK,
+  ELEMENT_TASK_VIEW_LINK,
   ELEMENT_TODO_LI
 } from './editorElements'
 import { getSlug } from './strings'
@@ -253,6 +255,8 @@ export const defaultCopyFilter = ({ type }) => {
     // ELEMENT_ILINK,
     ELEMENT_TABLE,
     ELEMENT_INLINE_BLOCK,
+    ELEMENT_TASK_VIEW_BLOCK,
+    ELEMENT_TASK_VIEW_LINK,
     ELEMENT_CODE_BLOCK
   ]
   return !exclude.includes(type)

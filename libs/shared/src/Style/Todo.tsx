@@ -1,7 +1,9 @@
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
+import { EditorStyles } from './Editor'
 import { MainHeader } from './Layouts'
+import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
 
@@ -55,6 +57,25 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
 `
 
 export const StyledTasksKanban = styled(StyledBoard)``
+
+export const StyledTasksKanbanBlock = styled(StyledBoard)`
+  ${SearchFilterListCurrent} {
+    padding: ${({ theme }) => theme.spacing.small};
+  }
+  .react-kanban-column {
+    width: calc(100% / 3.2);
+  }
+  .react-kanban-board > div {
+    width: 100%;
+  }
+`
+
+export const StyledViewBlockPreview = styled.div`
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  ${MainFont};
+`
 
 export const TaskHeaderTitleSection = styled.div`
   display: flex;
@@ -148,6 +169,7 @@ export const TaskColumnHeader = styled.div`
 export const TaskCard = styled.div<{
   dragging: boolean
   selected: boolean
+  staticBoard?: boolean
   sidebarExpanded?: boolean
   priorityShown?: boolean
 }>`
@@ -156,12 +178,12 @@ export const TaskCard = styled.div<{
       css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
     padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
   }
+  width: ${({ sidebarExpanded, theme }) =>
+    css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
   ${TodoText} {
     max-width: calc(100% - ${({ priorityShown }) => (priorityShown ? '5rem' : '0px')});
     overflow: hidden;
   }
-  width: ${({ sidebarExpanded, theme }) =>
-    css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
   margin: ${({ theme }) => theme.spacing.tiny} 0;
   background: ${({ theme }) => transparentize(0.5, theme.colors.gray[8])};
   border: 1px solid transparent;
@@ -182,4 +204,14 @@ export const TaskCard = styled.div<{
     css`
       border: 1px solid ${theme.colors.primary};
     `};
+
+  ${({ staticBoard, priorityShown }) =>
+    staticBoard &&
+    css`
+      width: calc(100% - 2rem);
+      ${EditorStyles} {
+        max-width: calc(100% - ${priorityShown ? '5rem' : '2rem'});
+        overflow: hidden;
+      }
+    `}
 `

@@ -36,14 +36,15 @@ import SearchFilters from './SearchFilters'
 interface RenderTaskProps {
   id: string
   todo: TodoType
-  selectedRef: React.RefObject<HTMLDivElement>
-  selectedCard: TodoKanbanCard | null
+  selectedRef?: React.RefObject<HTMLDivElement>
+  selectedCard?: TodoKanbanCard | null
+  staticBoard?: boolean
   overlaySidebar: boolean
   dragging: boolean
 }
 
-const RenderTask = React.memo<RenderTaskProps>(
-  ({ id, overlaySidebar, todo, selectedCard, selectedRef, dragging }: RenderTaskProps) => {
+export const RenderBoardTask = React.memo<RenderTaskProps>(
+  ({ id, overlaySidebar, staticBoard, todo, selectedCard, selectedRef, dragging }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
 
     const sidebar = useLayoutStore((store) => store.sidebar)
@@ -68,12 +69,14 @@ const RenderTask = React.memo<RenderTaskProps>(
 
     return (
       <TaskCard
-        ref={selectedCard && id === selectedCard.id ? selectedRef : null}
-        selected={selectedCard && selectedCard.id === id}
+        ref={selectedCard && !!selectedRef && id === selectedCard.id ? selectedRef : null}
+        selected={selectedCard && selectedCard?.id === id}
         dragging={dragging}
+        staticBoard={staticBoard}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
+          if (staticBoard) return
           event.preventDefault()
           if (event.detail === 2) {
             toggleModal(ModalsType.previewNote, { noteId: todo.nodeid, blockId: todo.id })
@@ -84,7 +87,7 @@ const RenderTask = React.memo<RenderTaskProps>(
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly={readOnly}
+          readOnly={readOnly || staticBoard}
           readOnlyContent
           showPriority
           controls={controls}
@@ -103,7 +106,7 @@ const RenderTask = React.memo<RenderTaskProps>(
   }
 )
 
-RenderTask.displayName = 'RenderTask'
+RenderBoardTask.displayName = 'RenderTask'
 
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
@@ -422,7 +425,7 @@ const Tasks = () => {
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
     return (
-      <RenderTask
+      <RenderBoardTask
         id={id}
         todo={todo}
         selectedRef={selectedRef}

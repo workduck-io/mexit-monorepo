@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ELEMENT_MENTION } from '@udecode/plate'
 
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, idxKey, SearchRepExtra } from '@mexit/core'
+import {
+  ELEMENT_ILINK,
+  ELEMENT_INLINE_BLOCK,
+  ELEMENT_TASK_VIEW_BLOCK,
+  ELEMENT_TASK_VIEW_LINK,
+  idxKey,
+  SearchRepExtra
+} from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
@@ -37,6 +44,15 @@ export const useSearchExtra = () => {
         replacements: ilink_rep
       },
       [ELEMENT_INLINE_BLOCK]: {
+        keyToIndex: 'value',
+        replacements: ilink_rep
+      },
+      // TODO: Fix replacements for viewBlock and taskViewLink
+      [ELEMENT_TASK_VIEW_LINK]: {
+        keyToIndex: 'value',
+        replacements: ilink_rep
+      },
+      [ELEMENT_TASK_VIEW_BLOCK]: {
         keyToIndex: 'value',
         replacements: ilink_rep
       },

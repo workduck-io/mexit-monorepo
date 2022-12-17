@@ -25,6 +25,12 @@ export const StyledInlineBlockPreview = styled.div`
   ${MainFont};
 `
 
+export const InlineFlex = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export const StyledInlineBlock = styled.section<InlineBlockType>`
   height: fit-content;
   display: flex;
@@ -49,7 +55,7 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
   box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray[8]};
   /* background: ${({ theme }) => theme.colors.background.card}; */
   border-radius: ${({ theme: { borderRadius } }) => `${borderRadius.small}`};
-  svg {
+  ${InlineFlex} svg {
     width: 16px;
     height: 16px;
     margin-left: ${({ theme }) => theme.spacing.small};
@@ -68,11 +74,6 @@ export const InlineBlockText = styled.div`
   color: ${({ theme }) => theme.colors.primary};
 `
 
-export const InlineFlex = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
 
 export const Chip = styled(StyledMessage)`
   cursor: pointer;

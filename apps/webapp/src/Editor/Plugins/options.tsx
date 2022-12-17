@@ -44,7 +44,7 @@ import {
   Value
 } from '@udecode/plate'
 
-import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, generateTempId } from '@mexit/core'
+import { ELEMENT_INLINE_BLOCK, ELEMENT_SYNC_BLOCK, ELEMENT_TASK_VIEW_BLOCK, generateTempId } from '@mexit/core'
 
 const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
 
@@ -298,7 +298,7 @@ export const optionsResetBlockTypePlugin = {
 }
 
 export const optionsSelectOnBackspacePlugin = {
-  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_INLINE_BLOCK] } }
+  options: { query: { allow: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED, ELEMENT_INLINE_BLOCK, ELEMENT_TASK_VIEW_BLOCK] } }
 }
 
 export const optionsCreateNodeIdPlugin = {

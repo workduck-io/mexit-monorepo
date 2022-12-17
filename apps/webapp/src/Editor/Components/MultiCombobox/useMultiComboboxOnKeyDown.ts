@@ -13,7 +13,15 @@ import {
   Value
 } from '@udecode/plate'
 
-import { ELEMENT_ILINK, ELEMENT_INLINE_BLOCK, ELEMENT_TASK_VIEW_LINK, getSlug, mog, NODE_ID_PREFIX } from '@mexit/core'
+import {
+  ELEMENT_ILINK,
+  ELEMENT_INLINE_BLOCK,
+  ELEMENT_TASK_VIEW_BLOCK,
+  ELEMENT_TASK_VIEW_LINK,
+  getSlug,
+  mog,
+  NODE_ID_PREFIX
+} from '@mexit/core'
 
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { QuickLinkType } from '../../constants'
@@ -54,7 +62,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
       if (tab) {
         // console.log('TAB', { comboType, type })
-        type = type === ELEMENT_ILINK ? ELEMENT_INLINE_BLOCK : type
+        type = type === ELEMENT_ILINK ? ELEMENT_INLINE_BLOCK : ELEMENT_TASK_VIEW_LINK ? ELEMENT_TASK_VIEW_BLOCK : type
         mog('TYPE OF ELEMENT CHANGED TO INLINEEEE BLOCKKKK')
         // if (type)
       }
@@ -113,6 +121,14 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             ...InsertedElement,
             type: ELEMENT_TASK_VIEW_LINK,
             value: item.key
+          }
+          if (tab === true) {
+            // mog('TAB', { comboType, type, item })
+            InsertedElement = {
+              ...InsertedElement,
+              type: ELEMENT_TASK_VIEW_BLOCK,
+              value: item.key
+            }
           }
         } else {
           if (itemType === QuickLinkType.snippet) {
