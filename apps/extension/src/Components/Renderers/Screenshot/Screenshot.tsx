@@ -7,10 +7,10 @@ import ReactCrop, { centerCrop, Crop, makeAspectCrop, PixelCrop } from 'react-im
 import aspectRatioLine from '@iconify/icons-ri/aspect-ratio-line'
 import { Icon } from '@iconify/react'
 
-import { Button } from '@workduck-io/mex-components'
+import { Button, IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
 import { mog } from '@mexit/core'
-import { IconButton, useDebounceEffect } from '@mexit/shared'
+import { useDebounceEffect } from '@mexit/shared'
 
 import { useAuthStore } from '../../../Hooks/useAuth'
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
@@ -192,14 +192,14 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
       <ImageEditorToolbar>
         <Controls>
           <ViewToggle>
-            <Button primary={isEditing} transparent={!isEditing} onClick={() => setIsEditing(true)}>
+            <PrimaryButton onClick={() => setIsEditing(true)}>
               <Icon icon="ri:crop-line" />
               Crop
-            </Button>
-            <Button primary={!isEditing} transparent={isEditing} onClick={() => setIsEditing(false)}>
+            </PrimaryButton>
+            <PrimaryButton onClick={() => setIsEditing(false)}>
               <Icon icon="ri:image-line" />
               Preview
-            </Button>
+            </PrimaryButton>
           </ViewToggle>
           <>
             {!src && <input type="file" accept="image/*" onChange={onSelectFile} />}
@@ -238,7 +238,7 @@ const ImageEditor = ({ src, onSubmit, openAsEditing }: ImageEditorProps) => {
               onClick={handleToggleAspectClick}
               title={aspect === undefined ? "Image's Aspect Ratio" : 'Free Aspect Ratio'}
               icon={aspectRatioLine}
-              highlight={aspect !== undefined}
+              // highlight={aspect !== undefined}
             />
           </>
         </Controls>

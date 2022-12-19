@@ -1,5 +1,6 @@
-import { mix, transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
+
+import { generateStyle } from '@workduck-io/mex-themes'
 
 //
 
@@ -19,7 +20,7 @@ export const ReactionsWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny};
 
-  background: ${({ theme }) => transparentize(0.6, theme.colors.gray[7])};
+  background: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
   border-radius: ${({ theme }) => theme.borderRadius.small};
   backdrop-filter: blur(10px);
 
@@ -35,13 +36,14 @@ export const ReactionButton = styled.button<{ userReacted?: boolean }>`
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small} ${({ theme }) => theme.spacing.medium};
   border-radius: ${({ theme }) => theme.borderRadius.small};
+  ${({ theme }) => generateStyle(theme.generic.button.secondary)}
+  transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.gray[7]};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 
   &:active {
-    background: ${({ theme }) => theme.colors.gray[7]};
     animation: ${expandOnClick} 0.2s ease-in-out;
   }
 
@@ -50,14 +52,14 @@ export const ReactionButton = styled.button<{ userReacted?: boolean }>`
     css`
       background: linear-gradient(
         120deg,
-        ${mix(0.0, theme.colors.primary, theme.colors.gray[7])} 0%,
-        ${mix(0.3, theme.colors.primary, theme.colors.gray[8])} 100%
+        rgba(${theme.rgbTokens.colors.primary.default}, 0.15) 0%,
+        rgba(${theme.rgbTokens.surfaces.s[0]}, 0.15) 100%
       );
     `}
 `
 
 export const ReactionCount = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   font-size: 1rem;
 `
 

@@ -1,12 +1,13 @@
 import { Menu } from 'react-contexify'
 
-import { transparentize } from 'polished'
 import styled from 'styled-components'
+
+import { generateStyle } from '@workduck-io/mex-themes'
 
 export const StyledContexifyMenu = styled(Menu)`
   &.react-contexify {
-    background-color: ${({ theme }) => theme.colors.background.card};
-    box-shadow: 0px 5px 20px ${({ theme }) => transparentize(0.5, theme.colors.palette.black)};
+    background-color: ${({ theme }) => theme.generic.contextMenu.menu.surface};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   }
 
   .react-contexify__submenu--is-open,
@@ -23,7 +24,7 @@ export const StyledContexifyMenu = styled(Menu)`
   }
 
   .react-contexify__separator {
-    background-color: ${({ theme }) => theme.colors.gray[7]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.separator};
   }
 
   .react-contexify__will-leave--disabled {
@@ -36,14 +37,12 @@ export const StyledContexifyMenu = styled(Menu)`
   }
 
   .react-contexify__item:not(.react-contexify__item--disabled):focus {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    ${({ theme }) => generateStyle(theme.generic.contextMenu.item.hover)}
   }
 
   .react-contexify__item:not(.react-contexify__item--disabled):hover > .react-contexify__item__content,
   .react-contexify__item:not(.react-contexify__item--disabled):focus > .react-contexify__item__content {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    ${({ theme }) => generateStyle(theme.generic.contextMenu.item.hover)}
   }
 
   .react-contexify__item:not(.react-contexify__item--disabled):hover > .react-contexify__submenu {
@@ -53,6 +52,6 @@ export const StyledContexifyMenu = styled(Menu)`
   }
 
   .react-contexify__item__content {
-    color: ${({ theme }) => theme.colors.text.default};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
 `

@@ -3,7 +3,7 @@ import { useMatch } from 'react-router-dom'
 
 import styled from 'styled-components'
 
-import { Button } from '@workduck-io/mex-components'
+import { SecondaryButton } from '@workduck-io/mex-components'
 
 import { MexIcon, PrimaryText } from '@mexit/shared'
 
@@ -24,7 +24,7 @@ const PublicNoteFooterContainer = styled.section`
     align-items: center;
   }
 
-  ${Button} {
+  ${SecondaryButton} {
     border: 1px solid ${({ theme }) => theme.colors.primary};
   }
 
@@ -63,20 +63,20 @@ const PublicNoteFooter = ({ nodeId }: { nodeId: string }) => {
   return (
     <PublicNoteFooterContainer>
       {prevNode && (
-        <Button id="previous-public-note" onClick={() => handleClick(prevNode?.nodeid)} transparent>
+        <SecondaryButton id="previous-public-note" onClick={() => handleClick(prevNode?.nodeid)}>
           <PrimaryText>
             <MexIcon margin="0 0.25rem 0 0" width={20} icon="ri:file-list-2-line" />
             {getTitleFromPath(prevNode.path)}
           </PrimaryText>
-        </Button>
+        </SecondaryButton>
       )}
       {nextNode && (
-        <Button id="next-public-note" onClick={() => handleClick(nextNode?.nodeid)} transparent>
+        <SecondaryButton id="next-public-note" onClick={() => handleClick(nextNode?.nodeid)}>
           <PrimaryText>
             <MexIcon margin="0 0.25rem 0 0" height={20} icon="ri:file-list-2-line" />
             {getTitleFromPath(nextNode.path)}
           </PrimaryText>
-        </Button>
+        </SecondaryButton>
       )}
     </PublicNoteFooterContainer>
   )

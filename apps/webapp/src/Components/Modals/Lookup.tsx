@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { QuickLinkType } from '@mexit/core'
-import { blurEditableElement, Input, StyledCombobox,StyledInputWrapper  } from '@mexit/shared'
+import { blurEditableElement, Input, StyledCombobox, StyledInputWrapper } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -24,8 +24,7 @@ const StyledModal = styled(Modal)`
 export const Brackets = styled.span`
   padding: 0.6rem;
   font-size: 1.6rem;
-  background-color: ${(props) => props.theme.colors.form.input.bg};
-  color: ${(props) => props.theme.colors.text.disabled};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-weight: 500;
   opacity: 0.4;
 `
@@ -42,7 +41,7 @@ const InputWrapper = styled.div`
       width: auto;
       flex-shrink: 1;
       flex-grow: 1;
-      border: 1px solid ${({ theme }) => theme.colors.form.input.bg};
+      border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
     }
     ${Input} {
       border-radius: 0;
@@ -117,7 +116,12 @@ const Lookup = () => {
   }
 
   return (
-    <StyledModal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={closeModal} isOpen={open}>
+    <StyledModal
+      className="ModalContentSplit"
+      overlayClassName="ModalOverlay"
+      onRequestClose={closeModal}
+      isOpen={open}
+    >
       <InputWrapper>
         <Brackets>[[</Brackets>
         <NodeSelect

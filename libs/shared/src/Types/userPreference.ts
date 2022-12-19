@@ -1,3 +1,5 @@
+import { UserThemePreferences } from '@workduck-io/mex-themes'
+
 export enum LastOpenedState {
   UNREAD = 'unread',
   OPENED = 'opened',
@@ -34,7 +36,7 @@ export interface UserPreferences {
   lastOpenedNotes: LastOpenedNotes
   lastUsedSnippets: LastUsedSnippets
   /** Current mex Theme */
-  theme?: string
+  theme?: UserThemePreferences
   activeNamespace?: string // * Namespace Id
   smartCaptureExcludedFields?: any
 }

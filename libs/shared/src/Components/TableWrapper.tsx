@@ -37,8 +37,9 @@ const StyledTableToolbar = styled.div`
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing.tiny};
-  background: ${({ theme }) => theme.colors.background.card};
+  background: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `
 
 const TableToolbarButtons = () => {
@@ -78,7 +79,7 @@ const TableToolbarButtons = () => {
         <ButtonSeparator />
       </JustifyCenter>
       <TableToolbarButton
-        icon={<MexIcon color={theme.colors.primary} icon={DeleteTableIcon} />}
+        icon={<MexIcon color={theme.tokens.colors.primary.default} icon={DeleteTableIcon} />}
         transform={deleteTable}
         tooltip={{ content: 'Delete Table', ...tooltip }}
       />

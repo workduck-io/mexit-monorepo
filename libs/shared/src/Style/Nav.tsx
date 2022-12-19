@@ -4,6 +4,8 @@ import { animated } from 'react-spring'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
+import { generateStyle, MexTheme } from '@workduck-io/mex-themes'
+
 import { CollapseWrapper } from './Collapse'
 import { FocusModeProp, focusStyles } from './Editor'
 import { ScrollStyles } from './Helpers'
@@ -47,7 +49,7 @@ const ButtonOrLinkStyles = css`
   align-items: center;
   flex-direction: column;
   gap: 8px;
-  color: ${({ theme }) => theme.colors.text.fade};
+  ${({ theme }) => generateStyle(theme.sidebar.nav.link.main)}
   padding: 6px 12px;
   text-decoration: none !important;
   cursor: pointer;
@@ -59,12 +61,7 @@ const ButtonOrLinkStyles = css`
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    color: ${({ theme }) => theme.colors.text.default};
-  }
-
-  &:hover {
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
 
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -72,16 +69,18 @@ const ButtonOrLinkStyles = css`
 
 export const SearchLink = styled(NavLink)`
   ${ButtonOrLinkStyles}
-  background-color: ${({ theme }) => transparentize(1, theme.colors.primary)};
+  background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   color: ${({ theme }) => theme.colors.primary};
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   svg {
     color: ${({ theme }) => theme.colors.primary};
   }
 
   &.active {
-    background-color: ${({ theme }) => transparentize(0.88, theme.colors.primary)};
-    color: ${({ theme }) => theme.colors.primary};
+    background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.22);
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
       color: ${({ theme }) => theme.colors.primary};
     }
@@ -90,10 +89,11 @@ export const SearchLink = styled(NavLink)`
 
 export const Link = styled(NavLink)`
   ${ButtonOrLinkStyles}
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
   &.active {
-    background-color: ${({ theme }) => transparentize(0.88, theme.colors.primary)};
-    color: ${({ theme }) => theme.colors.primary};
+    ${({ theme }) => generateStyle(theme.sidebar.nav.link.main.selected)}
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
       color: ${({ theme }) => theme.colors.primary};
     }
@@ -119,7 +119,7 @@ export const MainLinkContainer = styled.div`
 `
 
 export const EndLinkContainer = styled.div`
-  border-top: 1px solid ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
   padding: ${({ theme }) => theme.spacing.small};
   width: 100%;
   margin: 1rem 0 1rem;
@@ -245,14 +245,21 @@ export interface SideNavProps extends NavWrapperProps {
   $isUserEditing?: boolean
 }
 
-const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace }) =>
+interface SidebarPosProps {
+  $overlaySidebar: any
+  theme: MexTheme
+  $side: 'left' | 'right'
+  $publicNamespace: any
+}
+
+const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace }: SidebarPosProps) =>
   $side === 'left'
     ? $overlaySidebar
       ? css`
           position: fixed;
           top: ${theme.additional.hasBlocks ? '2rem' : '0'};
           left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : $publicNamespace ? '0px' : '86px'};
-          background: ${transparentize(0.5, theme.colors.background.sidebar)};
+          background: rgba(${theme.rgbTokens.surfaces.sidebar}, 0.5);
           backdrop-filter: blur(10px);
         `
       : css`
@@ -264,7 +271,7 @@ const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace }) =>
         position: fixed;
         top: ${theme.additional.hasBlocks ? '2rem' : '0'};
         right: ${theme.additional.hasBlocks ? '1rem' : '0'};
-        background: ${transparentize(0.5, theme.colors.background.sidebar)};
+        background: rgba(${theme.rgbTokens.surfaces.sidebar}, 0.5);
         backdrop-filter: blur(10px);
       `
     : css`
@@ -300,7 +307,7 @@ export const SideNav = styled(animated.div)<SideNavProps>`
 `
 
 export const RHSideNav = styled(SideNav)`
-  background: ${({ theme }) => theme.colors.background.sidebar};
+  background: ${({ theme }) => theme.sidebar.wrapper.surface};
 `
 
 export const NavWrapper = styled(animated.div)<NavWrapperProps>`
@@ -312,7 +319,7 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
   padding: 0 0;
   user-select: none;
 
-  background: ${({ theme }) => theme.colors.background.sidebar};
+  background: ${({ theme }) => theme.sidebar.wrapper.surface};
 
   ${(props) => focusStyles(props)}
 

@@ -96,7 +96,7 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
                   })
                 }
                 disabled={currentFilters.length === 0}
-                primary={isCurrentViewChanged && currentFilters.length > 0}
+                // primary={isCurrentViewChanged && currentFilters.length > 0}
               >
                 <Icon icon={edit2Line} />
                 Update View
@@ -113,14 +113,14 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
                 disabled={currentFilters.length === 0}
                 singleton={target}
                 icon={fileCopyLine}
-                transparent={false}
+                // transparent={false}
               />
               <LoadingButton
                 title="Delete View"
                 loading={deleting}
                 onClick={() => onDeleteView()}
                 singleton={target}
-                transparent={false}
+                // transparent={false}
               >
                 <Icon icon={trashIcon} />
               </LoadingButton>
@@ -129,7 +129,7 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
                 onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })}
                 disabled={currentFilters.length === 0}
                 singleton={target}
-                transparent={false}
+                // transparent={false}
                 icon={addCircleLine}
               />
             </TaskViewControls>

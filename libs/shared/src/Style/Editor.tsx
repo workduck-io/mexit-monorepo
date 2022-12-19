@@ -1,9 +1,10 @@
-import { lighten, mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
+import { generateStyle } from '@workduck-io/mex-themes'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
-import { AsyncButton, Button } from './Buttons'
 import { ScrollStyles } from './Helpers'
 import { FadeInOut } from './Layouts'
 
@@ -38,7 +39,7 @@ export const NodeInfo = styled.div`
   transition: opacity 0.3s ease-in-out;
 
   ${NoteTitle} {
-    color: ${({ theme }) => theme.colors.text.subheading};
+    color: ${({ theme }) => theme.tokens.text.subheading};
     font-size: 1.25rem;
     font-weight: normal;
     margin: 0 0 0 ${({ theme }) => theme.spacing.small};
@@ -50,7 +51,7 @@ export const InfoTools = styled.div<FocusModeProp>`
   justify-content: space-between;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
-  ${Button}, ${AsyncButton} {
+  ${Button} {
     margin: 0;
   }
   ${(props) => focusStyles(props)}
@@ -150,27 +151,27 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   div[class^='PlateFloatingMedia'] {
-    background: ${({ theme }) => theme.colors.background.card};
+    background: ${({ theme }) => theme.tokens.surfaces.modal};
     border-radius: ${({ theme }) => theme.borderRadius.small};
     > button,
     input {
-      background: ${({ theme }) => theme.colors.background.modal};
+      background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     }
     > button:hover {
-      background: ${({ theme }) => lighten(0.1, theme.colors.background.highlight)};
+      background: ${({ theme }) => theme.tokens.surfaces.s[4]};
     }
   }
 
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 
   b,
   strong {
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
 
   mark {
-    background-color: ${(props) => transparentize(0.75, props.theme.colors.primary)};
-    color: ${(props) => props.theme.colors.text.default};
+    background-color: rgba(${(props) => props.theme.rgbTokens.colors.primary.default}, 0.25);
+    color: ${(props) => props.theme.tokens.text.default};
     transition: all 0.3s ease-in-out;
   }
 
@@ -197,17 +198,19 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   table {
+    ${({ theme }) => generateStyle(theme.editor.elements.table.wrapper)}
     p {
       margin: 0.25rem 0;
     }
     th {
-      border: 1px solid ${({ theme }) => theme.colors.gray[7]};
-      background-color: ${({ theme }) => theme.colors.gray[9]};
-      border-bottom: 1px solid ${({ theme }) => theme.colors.primary};
+      ${({ theme }) => generateStyle(theme.editor.elements.table.th)}
+      border-bottom: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
     }
     td {
-      background-color: ${({ theme }) => theme.colors.gray[9]};
-      border: 1px solid ${({ theme }) => theme.colors.gray[7]};
+      ${({ theme }) => generateStyle(theme.editor.elements.table.td)}
+    }
+    tr {
+      ${({ theme }) => generateStyle(theme.editor.elements.table.tr)}
     }
   }
 
@@ -219,7 +222,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     margin: 2rem 0 1.3rem;
     line-height: 1.3;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.text.heading};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
 
   h1 {
@@ -246,7 +249,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   a * {
     cursor: pointer;
-    color: ${({ theme }) => theme.colors.primary} !important;
+    color: ${({ theme }) => theme.tokens.colors.primary.default} !important;
     text-decoration: inherit;
   }
 
@@ -256,13 +259,13 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   blockquote {
-    border-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.default};
-    background: ${({ theme }) => theme.colors.gray[8]};
+    ${({ theme }) => generateStyle(theme.editor.elements.blockquote)}
+    border-left: 2px solid ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
   blockquote {
     :before {
-      background: ${({ theme }) => theme.colors.gray[3]} !important;
+      background: ${({ theme }) => theme.tokens.colors.primary.default};
     }
     p {
       margin: 0.25rem 0;
@@ -276,11 +279,10 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   pre,
   pre code {
     font-family: 'JetBrains Mono', monospace;
-    color: ${({ theme }) => mix(0.2, theme.colors.primary, theme.colors.gray[3])};
-    font-size: 1rem;
+    ${({ theme }) => generateStyle(theme.editor.elements.marks.code)}
   }
   pre {
-    background-color: ${({ theme }) => theme.colors.gray[9]};
+    ${({ theme }) => generateStyle(theme.editor.elements.codeblock)}
   }
 
   pre,
@@ -291,7 +293,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   hr {
-    background-color: ${({ theme }) => theme.colors.gray[8]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.separator};
   }
 
   /* Todo */
@@ -315,6 +317,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     }
   }
 
+  // TODO: Checkbox styling
   input[data-testid='TodoListElementCheckbox'],
   input[type='checkbox'] {
     /* Add if not using autoprefixer */
@@ -322,7 +325,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     /* Remove most all native input styles */
     appearance: none;
     /* For iOS < 15 */
-    background-color: ${({ theme }) => theme.colors.gray[9]};
+    ${({ theme }) => generateStyle(theme.editor.elements.todo.checkbox)}
     /* Not removed via appearance */
     margin: 2px 0 0;
 
@@ -331,7 +334,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     width: 0.6em;
     height: 0.6em;
     padding: 0.5em;
-    border: 1px solid ${({ theme }) => theme.colors.gray[6]};
+    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
     transform: translateY(-0.075em);
@@ -380,10 +383,9 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   .slate-code_block {
     select {
-      background-color: ${({ theme }) => theme.colors.gray[8]};
       font-size: 0.8rem;
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
-      color: ${({ theme }) => theme.colors.secondary};
+      ${({ theme }) => generateStyle(theme.generic.form.input)}
     }
   }
 
@@ -420,7 +422,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   .slate-Popover .slate-Button {
     padding: inherit;
-    background: ${({ theme }) => theme.colors.background.highlight};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     svg {
       margin: -7px;
       color: ${({ theme }) => theme.colors.primary};
@@ -430,8 +432,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   input,
   textarea {
-    color: ${({ theme }) => theme.colors.form.input.fg};
-    background-color: ${({ theme }) => theme.colors.form.input.bg};
+    ${({ theme }) => generateStyle(theme.generic.form.input)}
   }
 
   input[type='color'] {
@@ -483,6 +484,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     height: 140px;
   }
 
+  // TODO: Add Select styles
   select {
     background: ${({ theme }) => theme.colors.form.input.bg} ${({ theme }) => theme.colors.primary} calc(100% - 12px)
       50% / 12px no-repeat;
@@ -518,11 +520,11 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   ::placeholder {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 
   fieldset {
-    border: 1px ${({ theme }) => theme.colors.primary} solid;
+    border: 1px ${({ theme }) => theme.tokens.colors.primary.default} solid;
     border-radius: 6px;
     margin: 0;
     margin-bottom: 12px;
@@ -536,11 +538,11 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   input[type='text'],
   textarea {
-    border: 1px solid ${({ theme }) => theme.colors.form.input.border};
+    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   .LinkIcon > * {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -584,8 +586,8 @@ export const Widget = styled.div`
   display: flex;
   align-items: center;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.text.subheading};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  color: ${({ theme }) => theme.tokens.text.subheading};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   padding: ${({ theme: { spacing } }) => `${spacing.tiny} ${spacing.medium}`};
   width: max-content;
   border-radius: ${({ theme }) => theme.borderRadius.small};

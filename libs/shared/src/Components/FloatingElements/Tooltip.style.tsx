@@ -1,5 +1,7 @@
 import styled, { keyframes } from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 const scale = keyframes`
   from {
     transform: scale(0.5);
@@ -13,12 +15,12 @@ const scale = keyframes`
 `
 
 export const TooltipWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.gray[7]};
+  ${({ theme }) => generateStyle(theme.generic.tooltip.default)};
   z-index: 20;
-  color: ${({ theme }) => theme.colors.text.default};
   pointer-events: none;
   border-radius: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
   font-size: 14px;
   animation: ${scale} 0.2s;
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `

@@ -40,7 +40,7 @@ export const RootElement = styled.div<MaximizeProp>`
           height: 90vh;
           top: 5vh;
           left: 5vw;
-          background-color: ${({ theme }) => theme.colors.gray[8]};
+          background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
           border-radius: ${({ theme }) => theme.borderRadius.small};
         `
       : css`
@@ -71,12 +71,12 @@ export const MediaInputWrapper = styled.div`
 
   margin-top: ${({ theme }) => theme.borderRadius.small};
 
-  background: ${({ theme }) => theme.colors.background.modal};
+  background: ${({ theme }) => theme.tokens.surfaces.modal};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.colors.text.subheading};
+  color: ${({ theme }) => theme.tokens.text.subheading};
 
   :focus-within {
-    background: ${({ theme }) => theme.colors.background.card};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 
@@ -84,7 +84,7 @@ export const InputPrompt = styled.div`
   display: flex;
   align-items: center;
   max-width: 4rem;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
@@ -95,7 +95,7 @@ export const MediaInput = styled.input`
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
   padding-left: 0;
   border: none;
-  color: ${({ theme }) => theme.colors.text.subheading};
+  color: ${({ theme }) => theme.tokens.text.subheading};
   background: none;
   margin: 0;
 
@@ -103,7 +103,7 @@ export const MediaInput = styled.input`
   border-bottom-right-radius: ${({ theme }) => theme.borderRadius.small};
 
   :focus {
-    background-color: ${({ theme }) => theme.colors.background.card};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
     outline: none;
   }
 `
@@ -112,7 +112,7 @@ export const MediaHtml = styled.div`
   > div {
     display: flex;
   }
-  background: ${({ theme }) => theme.colors.background.card};
+  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme: { borderRadius } }) => `${borderRadius.small}`};
   overflow: hidden;
   blockquote {

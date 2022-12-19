@@ -9,7 +9,7 @@ import Modal from 'react-modal'
 import { startOfToday } from 'date-fns'
 import create from 'zustand'
 
-import { Button,LoadingButton } from '@workduck-io/mex-components'
+import { Button, LoadingButton } from '@workduck-io/mex-components'
 
 import {
   generateReminderId,
@@ -22,14 +22,14 @@ import {
   Reminder,
   ReminderAssociatedType
 } from '@mexit/core'
-import { DatePickerStyles, Input,Label, SelectedDate, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
+import { DatePickerStyles, Input, Label, SelectedDate, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { ModalControls,ModalHeader } from '../../Style/Refactor'
+import { ModalControls, ModalHeader } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'
 
@@ -329,15 +329,11 @@ const CreateReminderModal = () => {
         </DatePickerStyles>
 
         <ModalControls>
-          <Button large onClick={handleCancel}>
-            Cancel
-          </Button>
+          <Button onClick={handleCancel}>Cancel</Button>
           <LoadingButton
             loading={isSubmitting}
             alsoDisabled={!modalValue.time || modalValue.time < Date.now()}
             type="submit"
-            primary
-            large
           >
             Save Reminder
           </LoadingButton>

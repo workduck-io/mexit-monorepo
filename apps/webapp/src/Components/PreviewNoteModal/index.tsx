@@ -112,7 +112,6 @@ const PreviewNoteModal = () => {
             <PreviewActionHeader>
               <TagsRelatedTiny nodeid={modalData?.noteId} />
               <Button
-                transparent
                 onClick={(ev) => {
                   ev.preventDefault()
                   ev.stopPropagation()

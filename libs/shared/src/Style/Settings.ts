@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom'
 
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 export const SettingsContainer = styled.section`
@@ -21,21 +20,21 @@ export const SettingTitle = styled(NavLink)`
   align-items: center;
   padding: 1rem;
   margin-bottom: 1rem;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   gap: ${({ theme }) => theme.spacing.small};
   text-decoration: none;
 
   &:hover {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => transparentize(0.5, theme.colors.background.card)};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 
   &.active {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     svg {
-      color: ${({ theme }) => theme.colors.text.oppositePrimary};
+      color: ${({ theme }) => theme.tokens.colors.primary.text};
     }
   }
 
@@ -44,7 +43,7 @@ export const SettingTitle = styled(NavLink)`
   svg {
     height: 1.5rem;
     width: 1.5rem;
-    color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.tokens.colors.secondary};
   }
 `
 

@@ -7,7 +7,7 @@ import { resize } from '@mexit/shared'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: ${({ theme }) => theme.colors.background.app};
+  background: ${({ theme }) => theme.tokens.surfaces.app};
 
   padding: 2rem;
 

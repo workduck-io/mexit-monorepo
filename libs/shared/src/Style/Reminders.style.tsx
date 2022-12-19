@@ -1,9 +1,9 @@
-import { mix, transparentize } from 'polished'
 import styled, { createGlobalStyle, css } from 'styled-components'
+
+import { Button } from '@workduck-io/mex-components'
 
 import { REMINDERS_DIMENSIONS, ReminderStatus } from '@mexit/core'
 
-import { Button } from './Buttons'
 import { IntegrationTitle } from './Integrations'
 import { Description } from './Typography'
 
@@ -28,7 +28,7 @@ export const ReminderGroupWrapper = styled.div`
   & > ${IntegrationTitle} {
     font-size: 1.5rem;
     font-weight: normal;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
     margin: 0;
   }
 `
@@ -70,7 +70,7 @@ export const SnoozeControls = styled.div<{ showControls?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => transparentize(0.5, theme.colors.gray[10])};
+  background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
   width: max-content;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: opacity 0.25s ease-in-out, height 0.25s ease-in-out, padding 0.25s ease-in-out, gap 0.25s ease-in-out,
@@ -107,12 +107,11 @@ export const ReminderStyled = styled.div<{ isNotification?: boolean; showControl
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
   transition: opacity 0.25s ease-in-out, height 0.25s ease-in-out;
 
-  background: ${({ theme }) => theme.colors.gray[9]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   background: linear-gradient(
     35deg,
-    ${({ theme }) => theme.colors.gray[9]} 0%,
-    ${({ theme }) => mix(0.3, theme.colors.gray[8], theme.colors.gray[9])} 64%,
-    ${({ theme }) => mix(0.2, theme.colors.primary, theme.colors.gray[9])} 100%
+    ${({ theme }) => theme.tokens.surfaces.s[2]} 0%,
+    ${({ theme }) => theme.tokens.surfaces.s[3]} 100%
   );
 
   ${IntegrationTitle} {
@@ -187,7 +186,7 @@ export const ReminderTime = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   gap: ${({ theme }) => theme.spacing.small};
   flex-wrap: wrap;
 `
@@ -203,28 +202,28 @@ export const ReminderStateTag = styled.div<{ state?: ReminderStatus }>`
   letter-spacing: 0.1rem;
 
   ${({ theme, state }) => {
-    let color = theme.colors.primary
+    let color = theme.tokens.colors.primary.default
     switch (state) {
       case 'seen':
-        color = theme.colors.palette.green
+        color = theme.tokens.colors.green
         break
 
       case 'active':
-        color = theme.colors.palette.blue
+        color = theme.tokens.colors.blue
         break
 
       case 'snooze':
-        color = theme.colors.palette.yellow
+        color = theme.tokens.colors.yellow
         break
 
       case 'missed':
-        color = theme.colors.palette.red
+        color = theme.tokens.colors.red
         break
     }
 
     return css`
-      color: ${theme.colors.text.default};
-      background-color: ${transparentize(0.5, mix(0.5, color, theme.colors.gray[8]))};
+      color: ${theme.tokens.text.default};
+      background-color: ${theme.tokens.surfaces.s[3]};
     `
   }}
 `
@@ -259,7 +258,7 @@ export const ReminderInfobar = styled.div`
 export const SelectedDate = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   margin-top: ${({ theme }) => theme.spacing.small};
   display: flex;
   flex-direction: column;
@@ -270,12 +269,12 @@ export const SelectedDate = styled.div`
 
   i {
     font-size: 0.9rem;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
 export const ReminderGroupsWrapper = styled.div`
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;
@@ -294,7 +293,7 @@ export const ReminderGroupTitle = styled.div`
   display: block;
   text-align: center;
   width: 100%;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const ReminderUIGlobal = createGlobalStyle`
@@ -302,6 +301,6 @@ export const ReminderUIGlobal = createGlobalStyle`
     overflow-x: hidden;
   }
   body, html, #root {
-    background-color: ${({ theme }) => theme.colors.gray[10]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
   }
 `

@@ -128,7 +128,7 @@ export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
             <CommentEditor content={defaultContent.content} editorId={commentEditorId} onChange={onChange} />
           </PlateProvider>
         </CommentEditorWrapper>
-        <IconButton size={16} icon="bi:reply" title="Add Comment" onClick={onSubmit} transparent={false} />
+        <IconButton size={16} icon="bi:reply" title="Add Comment" onClick={onSubmit} />
       </NewCommentWrapper>
       <ComboboxShortcuts>
         <ShortcutText>

@@ -2,11 +2,12 @@ import React, { useMemo } from 'react'
 
 import styled from 'styled-components'
 
+import { IconButton } from '@workduck-io/mex-components'
+
 import { convertContentToRawText, DefaultMIcons, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
   CopyButton,
   GenericFlex,
-  IconButton,
   IconDisplay,
   SnippetCardFooter,
   SnippetCardWrapper,

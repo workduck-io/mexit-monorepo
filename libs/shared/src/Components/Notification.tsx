@@ -6,9 +6,9 @@ import styled from 'styled-components'
 const Notif = styled.div`
   visibility: visible;
   padding: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.medium} `};
-  background: ${({ theme }) => theme.colors.background.highlight};
-  color: ${({ theme }) => theme.colors.text.default};
-  box-shadow: 0px 5px 15px ${({ theme }) => theme.colors.gray[9]};
+  background: ${({ theme }) => theme.tokens.surfaces.tooltip.default};
+  color: ${({ theme }) => theme.tokens.text.default};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   font: inherit;
 `

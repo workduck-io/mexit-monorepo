@@ -1,7 +1,7 @@
 import React from 'react'
 import { components } from 'react-select'
 
-import styled, {css} from 'styled-components'
+import styled, { css } from 'styled-components'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -37,10 +37,10 @@ const StyledLabel = styled.div`
   justify-content: space-around;
   align-items: center;
   padding: ${({ theme: { spacing } }) => `${spacing.tiny} 8px`};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
 
   svg {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -99,8 +99,8 @@ const Placeholder = (props: any) => {
 
 const StyledInput = styled.div`
   width: 100%;
-  color: ${({ theme }) => theme.colors.form.input.fg};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  color: ${({ theme }) => theme.generic.form.input.textColor};
+  background-color: ${({ theme }) => theme.generic.form.input.surface};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   padding: ${({ theme: { spacing } }) => `${spacing.tiny} 8px`};
   margin: ${({ theme: { spacing } }) => spacing.tiny} 0;

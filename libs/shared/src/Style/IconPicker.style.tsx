@@ -6,10 +6,10 @@ export const IconSelector = styled.button`
   background: transparent;
   padding: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 
   :hover {
-    background: ${({ theme }) => theme.colors.gray[8]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 

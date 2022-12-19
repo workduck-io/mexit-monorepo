@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
@@ -24,7 +23,7 @@ export const LinkHeader = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
 
   ${Relative} {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
@@ -50,7 +49,7 @@ export const LinkMetadataAndDelete = styled.div`
 
   ${Button} {
     opacity: 0.5;
-    color: ${({ theme }) => theme.colors.palette.red};
+    color: ${({ theme }) => theme.tokens.colors.red};
   }
 
   &:hover {
@@ -90,29 +89,33 @@ export const LinkTagSection = styled.div`
   align-items: center;
 `
 
-export const HighlightGroupToggleButton = styled.div`
+export const HighlightGroupToggleButton = styled(Button)`
   display: flex;
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.tiny};
   align-items: center;
-  cursor: pointer;
-  background: ${({ theme }) => transparentize(0.5, theme.colors.gray[7])};
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  gap: ${({ theme }) => theme.spacing.tiny};
+  color: ${({ theme }) => theme.tokens.text.fade};
+  font-size: 1rem;
+  box-shadow: none;
+  svg {
+    flex-shrink: 0;
+  }
 `
 
 export const HighlightCount = styled.div`
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.tokens.text.heading};
   font-weight: 600;
 `
 
-export const HighlightCollapsedToggle = styled.div`
+export const HighlightCollapsedToggle = styled(Button)`
   display: flex;
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.tiny};
   align-items: center;
   width: max-content;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
+  font-size: 1rem;
+  box-shadow: none;
 `
 
 export const HighlightNoteLink = styled.div`
@@ -120,12 +123,12 @@ export const HighlightNoteLink = styled.div`
   flex-direction: row;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   cursor: pointer;
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.text.heading};
   }
 `
 
@@ -135,12 +138,12 @@ export const HighlightGroupHeader = styled.div`
   align-items: center;
 
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   cursor: pointer;
   user-select: none;
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -165,7 +168,7 @@ export const SingleHighlightWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
-  background-color: ${({ theme }) => transparentize(0.9, theme.colors.gray[5])};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   user-select: none;
 `
@@ -184,9 +187,9 @@ export const HighlightNote = styled.div`
   gap: ${({ theme }) => theme.spacing.tiny};
   cursor: pointer;
 
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `

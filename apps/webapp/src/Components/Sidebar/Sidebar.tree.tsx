@@ -15,8 +15,8 @@ import { Input, isOnEditableElement, SidebarListFilter } from '@mexit/shared'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { getPartialTreeFromLinks,getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { getPartialTreeFromLinks, getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { usePublicNodeStore } from '../../Stores/usePublicNodes'
@@ -178,11 +178,12 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
           <SidebarListFilter>
             <Icon icon={searchLine} />
             <Input
+              transparent
               placeholder={filterText ?? 'Filter items'}
               onChange={debounce((e) => onSearchChange(e), 250)}
               ref={inputRef}
             />
-            <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.colors.text.disabled} />
+            <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.tokens.text.fade} />
           </SidebarListFilter>
           <SpaceList>
             <Tree
@@ -193,10 +194,12 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
           </SpaceList>
         </>
       ) : (
-        <CreateNewNoteSidebarButton onClick={createNewNoteInNamespace}>
-          <Icon width={24} icon={addCircleLine} />
-          Create a new note
-        </CreateNewNoteSidebarButton>
+        <>
+          <CreateNewNoteSidebarButton onClick={createNewNoteInNamespace}>
+            <Icon width={24} icon={addCircleLine} />
+            Create a new note
+          </CreateNewNoteSidebarButton>
+        </>
       )}
     </MexTreeWrapper>
   )

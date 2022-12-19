@@ -1,4 +1,3 @@
-import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 import keyboardBoxLine from '@iconify/icons-fluent/keyboard-24-regular'
@@ -8,8 +7,9 @@ import paintBrushFill from '@iconify-icons/ri/paint-brush-fill'
 import user3Line from '@iconify-icons/ri/user-3-line'
 import styled from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 import {
-  Button,
   IntegrationContainer,
   IntegrationTitle,
   MainHeader,

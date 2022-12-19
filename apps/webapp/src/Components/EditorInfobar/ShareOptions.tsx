@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react'
 
 import globalLine from '@iconify-icons/ri/global-line'
-import { transparentize } from 'polished'
 import styled, { css, useTheme } from 'styled-components'
 
 import { apiURLs, mog, ShareContext } from '@mexit/core'
@@ -14,7 +13,7 @@ import { useNodes } from '../../Hooks/useNodes'
 const Flex = css`
   display: flex;
   align-items: center;
-  background: ${({ theme }) => transparentize(0.5, theme.colors.background.card)};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.large};
 `
 
@@ -25,7 +24,7 @@ const Container = styled.div`
 
 const ItemDesc = styled.div`
   margin-top: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
@@ -113,7 +112,7 @@ const ShareOptions = ({ context, id }: ShareOptionsProps) => {
   return (
     <Container>
       <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
-        <MexIcon color={theme.colors.primary} icon={globalLine} fontSize={24} margin="0 1rem 0 0" />
+        <MexIcon color={theme.tokens.colors.primary.default} icon={globalLine} fontSize={24} margin="0 1rem 0 0" />
         <div style={{ gap: '1', userSelect: 'none' }}>
           {context === 'note' && noteNamespacePublicLink ? (
             <>

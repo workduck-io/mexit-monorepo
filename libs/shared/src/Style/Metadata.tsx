@@ -19,7 +19,7 @@ export const DataWrapper = styled.div<DataWrapperProps>`
   }
 
   svg {
-    color: ${({ theme }) => theme.colors.gray[7]};
+    color: ${({ theme }) => theme.tokens.text.fade};
     margin-right: ${({ theme }) => theme.spacing.small};
   }
 
@@ -32,9 +32,9 @@ export const DataWrapper = styled.div<DataWrapperProps>`
     interactive &&
     css`
       &:hover {
-        color: ${theme.colors.text.heading};
+        color: ${theme.tokens.text.heading};
         svg {
-          color: ${theme.colors.primary};
+          color: ${theme.tokens.colors.primary.default};
         }
       }
     `}
@@ -72,7 +72,7 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   ${(props) => focusStyles(props)}
 
   ${Label} {
-    color: ${({ theme }) => theme.colors.gray[5]};
+    color: ${({ theme }) => theme.tokens.text.fade};
     font-size: 0.9rem;
     margin: 0 0 0.2rem;
   }

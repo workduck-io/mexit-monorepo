@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { Icon } from '@iconify/react'
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { generateStyle } from '@workduck-io/mex-themes'
 
 import { FocusModeProp, focusStyles } from './Editor'
 import { ThinScrollbar } from './Helpers'
@@ -87,13 +88,11 @@ export const StyledTreeSwitcher = styled.button`
   margin-left: ${({ theme }) => theme.spacing.tiny};
 `
 export const StyledTreeItemSwitcher = styled(StyledTreeSwitcher)`
-  color: ${({ theme }) => transparentize(0.3, theme.colors.text.fade)};
-  border-radius: 3px;
+  color: rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.7);
   transition: 0.1s ease;
   &:hover {
     transition: 0s ease;
-    color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.gray[8]};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -116,7 +115,7 @@ export const ItemTitle = styled.div`
 export const ItemCount = styled.div`
   flex-shrink: 0;
   font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.text.fade};
+  ${({ theme }) => generateStyle(theme.sidebar.tree.item.count)};
 `
 
 export const TooltipContentWrapper = styled.div`
@@ -130,7 +129,7 @@ export const TooltipCount = styled.div`
   align-items: center;
   font-size: 0.9rem;
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 export const ItemContent = styled.div`
   cursor: pointer;
@@ -144,7 +143,7 @@ export const ItemContent = styled.div`
 `
 
 export const UnreadIndicator = styled.div`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   svg {
     height: 0.75rem;
     width: 0.75rem;
@@ -167,6 +166,11 @@ export const StyledTreeItem = styled.div<{
   gap: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   padding-right: 8px;
+  ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper)};
+
+  &:hover {
+    transition: 0s ease;
+  }
 
   transition: 0.25s ease;
 
@@ -185,33 +189,29 @@ export const StyledTreeItem = styled.div<{
   ${({ hasMenuOpen, isHighlighted, theme }) =>
     (hasMenuOpen || isHighlighted) &&
     css`
-      background: ${transparentize(0.5, theme.colors.gray[7])};
-      color: ${theme.colors.text.fade};
+      background: ${theme.sidebar.tree.item.wrapper.active.surface};
+      color: ${theme.sidebar.tree.item.wrapper.active.textColor};
     `}
 
-  &:hover {
-    transition: 0s ease;
-    background: ${({ theme }) => theme.colors.gray[7]};
-  }
 
   ${({ selected, hasMenuOpen, theme }) =>
     selected &&
     css`
-      background: ${theme.colors.primary};
-      color: ${theme.colors.text.oppositePrimary};
+      ${({ theme }) => generateStyle(theme.sidebar.tree.item.wrapper.selected)};
       ${ItemCount}, svg {
-        color: ${theme.colors.text.oppositePrimary};
+        color: ${theme.tokens.colors.primary.text};
       }
       :hover {
-        background: ${transparentize(0.3, theme.colors.primary)};
+        color: ${theme.tokens.colors.primary.text};
+        background: ${theme.tokens.colors.primary.hover};
       }
       ${hasMenuOpen &&
       css`
-        color: ${transparentize(0.5, theme.colors.text.oppositePrimary)};
+        color: ${theme.tokens.colors.primary.text};
       `}
       ${StyledTreeItemSwitcher} {
         &:hover svg {
-          color: ${theme.colors.primary};
+          color: ${theme.tokens.colors.primary.default};
         }
       }
     `}
@@ -231,10 +231,11 @@ export const StyledTreeItem = styled.div<{
     css`
       ${isDragging &&
       css`
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       `}
-      background: ${theme.colors.gray[7]};
-      box-shadow: inset 0 0 0 1px ${isDragging ? theme.colors.secondary : theme.colors.secondary};
+      background: ${theme.sidebar.tree.item.wrapper.active.surface};
+      box-shadow: inset 0 0 0 1px ${isDragging ? theme.tokens.colors.secondary : theme.tokens.colors.secondary},
+        ${({ theme }) => theme.tokens.shadow.medium};
     `}
 
 

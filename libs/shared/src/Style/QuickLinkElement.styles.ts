@@ -1,5 +1,4 @@
 import { Icon } from '@iconify/react'
-import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 export const SILinkRoot = styled.div`
@@ -24,28 +23,28 @@ export const SILink = styled.div<SILinkProps>`
 
   cursor: pointer;
   ${StyledIcon} {
-    color: ${({ theme }) => transparentize(0.3, theme.colors.primary)};
+    color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.7);
   }
   .ILink_decoration {
-    color: ${({ theme }) => theme.colors.gray[6]};
+    color: ${({ theme }) => theme.tokens.colors.secondary};
     &_left {
     }
     &_right {
       margin-left: ${({ theme }) => theme.spacing.tiny};
     }
     &_value {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 
   ${({ theme, $selected }) =>
     $selected
       ? css`
-          color: ${theme.colors.primary};
-          background-color: ${theme.colors.gray[8]};
+          color: ${theme.tokens.colors.primary.default};
+          background-color: ${theme.tokens.surfaces.s[2]};
           border-radius: ${({ theme }) => theme.borderRadius.tiny};
           .ILink_decoration {
-            color: ${({ theme }) => theme.colors.gray[4]};
+            color: ${({ theme }) => theme.tokens.colors.primary.default};
           }
         `
       : ''}
@@ -53,27 +52,27 @@ export const SILink = styled.div<SILinkProps>`
   ${({ theme, $archived }) =>
     $archived
       ? css`
-          color: ${theme.colors.palette.red};
+          color: ${theme.tokens.colors.red};
         `
       : ''}
 `
 
 export const TaskSLink = styled(SILink)`
   svg {
-    color: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.tokens.colors.secondary};
   }
   .ILink_decoration {
     &_value {
       ${({ theme, $archived }) =>
         $archived
           ? css`
-              color: ${theme.colors.gray[6]};
+              color: ${theme.tokens.colors.red};
             `
           : css`
               background: -webkit-linear-gradient(
                 60deg,
                 ${theme.colors.secondary},
-                ${mix(0.25, theme.colors.secondary, theme.colors.primary)}
+                ${theme.tokens.colors.primary.default}
               );
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;

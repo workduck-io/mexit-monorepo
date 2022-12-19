@@ -5,7 +5,7 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import { add } from 'date-fns/fp'
 
-import { Button } from '@workduck-io/mex-components'
+import { Button, PrimaryButton, SecondaryButton } from '@workduck-io/mex-components'
 
 import {
   DisplayReminder,
@@ -119,22 +119,21 @@ const ReminderControlsUI = ({
         {controls.map((control) => {
           if (control.type === 'snooze') {
             return (
-              <Button
+              <PrimaryButton
                 key={control.type}
-                transparent
-                primary={snoozeControls}
+                // TODO: check if disabled needs to be used instead of a boolean primary prop
+                // primary={snoozeControls}
                 onClick={() => {
                   setSnoozeControls((prevState: boolean) => !prevState)
                 }}
               >
                 Snooze
-              </Button>
+              </PrimaryButton>
             )
           }
           return (
-            <Button
+            <SecondaryButton
               key={control.type}
-              transparent={control.type !== 'open'}
               onClick={() => {
                 control.action(reminder)
               }}
@@ -145,7 +144,7 @@ const ReminderControlsUI = ({
                   <Icon height={14} icon={fileList2Line} /> {getNameFromPath(reminder.path)}
                 </>
               )}
-            </Button>
+            </SecondaryButton>
           )
         })}
       </ReminderButtonControlsWrapper>

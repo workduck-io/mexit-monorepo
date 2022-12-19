@@ -17,15 +17,15 @@ interface PopoverWrapperProps {
 }
 export const PopoverWrapper = styled.div<PopoverWrapperProps>`
   z-index: 10;
-  background: ${({ theme, transparent }) => (transparent ? 'transparent' : theme.colors.gray[9])};
-  color: ${({ theme }) => theme.colors.text.default};
+  background: ${({ theme, transparent }) => (transparent ? 'transparent' : theme.tokens.surfaces.s[2])};
+  color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   text-align: left;
   width: max-content;
   max-width: 600px;
   transform-origin: center right;
   animation: ${scale} 0.3s;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   outline: none;
   border: none;
 `

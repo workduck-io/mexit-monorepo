@@ -1,16 +1,23 @@
 import React from 'react'
 import { useTransition } from 'react-spring'
 
-import { ThemeProvider } from 'styled-components'
+import moonClearFill from '@iconify/icons-ri/moon-clear-fill'
+import sunFill from '@iconify/icons-ri/sun-fill'
+import { Icon } from '@iconify/react'
 
-import { defaultThemes } from '@mexit/shared'
+import { defaultThemes, ManagedProvider, useThemeContext } from '@workduck-io/mex-themes'
+
+import { ToggleButton } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
+import { Theme, ThemeHeader, ThemeModeDiv, ThemePreviews, ThemeSwitch } from '../Style/Settings'
+
+import ThemeDemo from './ThemeDemo'
 
 const Themes = () => {
   const themes = defaultThemes
+  const { changeTheme, toggleMode } = useThemeContext()
   const theme = useUserPreferenceStore((state) => state.theme)
   const setTheme = useUserPreferenceStore((state) => state.setTheme)
 
@@ -38,37 +45,45 @@ const Themes = () => {
   const onThemeSelect = (i: number) => {
     if (themes[i]) {
       setTheme(themes[i].id)
+      changeTheme(themes[i].id)
     }
 
     updateUserPreferences()
   }
 
+  const onToggleMode = () => {
+    toggleMode()
+    setTheme(theme.themeId, theme.mode === 'light' ? 'dark' : 'light')
+  }
+
   return (
-    <ThemePreviews>
-      {transition((styles, t, _t, i) => {
-        return (
-          <ThemeProvider key={`mex_theme_key_${t.id}`} theme={t.themeData}>
-            {/* eslint-disable-next-line */}
-            {/* @ts-ignore */}
-            <Theme selected={t.id === theme} onClick={() => onThemeSelect(i)} style={styles}>
-              <ThemePreview back={t.themeData.backgroundImages ? t.themeData.backgroundImages.app : undefined}>
-                <ThemeColorDots>
-                  <div className="primary"></div>
-                  <div className="secondary"></div>
-                  <div className="text"></div>
-                  <div className="text_fade"></div>
-                  <div className="background"></div>
-                </ThemeColorDots>
-                <br />
-              </ThemePreview>
-              <ThemeHeader>
-                <h4>{t.id}</h4>
-              </ThemeHeader>
-            </Theme>
-          </ThemeProvider>
-        )
-      })}
-    </ThemePreviews>
+    <>
+      <ThemeSwitch>
+        <ThemeModeDiv>
+          <Icon icon={sunFill} /> Light
+        </ThemeModeDiv>
+        <ToggleButton checked={theme.mode === 'dark'} onChange={onToggleMode} />
+        <ThemeModeDiv>
+          <Icon icon={moonClearFill} /> Dark
+        </ThemeModeDiv>
+      </ThemeSwitch>
+      <ThemePreviews>
+        {transition((styles, t, _t, i) => {
+          return (
+            <ManagedProvider key={`mex_theme_key_${t.id}`} tokens={t.data['dark']}>
+              {/* eslint-disable-next-line */}
+              {/* @ts-ignore */}
+              <Theme selected={t.id === theme.themeId} onClick={() => onThemeSelect(i)} style={styles}>
+                <ThemeDemo theme={t} />
+                <ThemeHeader>
+                  <h4>{t.name}</h4>
+                </ThemeHeader>
+              </Theme>
+            </ManagedProvider>
+          )
+        })}
+      </ThemePreviews>
+    </>
   )
 }
 

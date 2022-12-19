@@ -17,7 +17,7 @@ const Form = styled.form`
   flex-direction: column;
 
   padding: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large} ${theme.spacing.large}`};
-  background: ${({ theme }) => theme.colors.background.app};
+  background: ${({ theme }) => theme.tokens.surfaces.app};
 `
 
 const InputRow = styled.div<{ noTopMargin?: boolean }>`

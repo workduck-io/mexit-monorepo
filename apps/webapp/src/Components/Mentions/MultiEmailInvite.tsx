@@ -180,7 +180,6 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
               loading={isSubmitting}
               type="submit"
               primary
-              large
               alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
             >
               Invite

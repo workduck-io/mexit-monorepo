@@ -12,7 +12,7 @@ export const CollapsableHeaderTitle = styled.h2`
   svg.SidebarCollapseSectionIcon {
     height: 1.5rem;
     width: 1.5rem;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -27,7 +27,7 @@ export const CollapseToggle = styled.div`
   svg {
     padding: ${({ theme }) => theme.spacing.tiny};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
     height: 28px;
     width: 28px;
   }
@@ -50,7 +50,7 @@ export const CollapseHeader = styled.div<{ collapsed?: boolean; canClick?: boole
   :hover {
     ${CollapseToggle} {
       svg {
-        background-color: ${({ theme }) => theme.colors.gray[8]};
+        background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
       }
     }
   }
@@ -58,7 +58,7 @@ export const CollapseHeader = styled.div<{ collapsed?: boolean; canClick?: boole
     flex-grow: 1;
     font-size: 14px;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     margin: 0;
   }
 
@@ -67,7 +67,7 @@ export const CollapseHeader = styled.div<{ collapsed?: boolean; canClick?: boole
     css`
       ${CollapseToggle} {
         svg {
-          color: ${({ theme }) => theme.colors.text.fade};
+          color: ${({ theme }) => theme.tokens.text.fade};
         }
       }
     `}

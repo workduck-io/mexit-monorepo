@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { Input,StyledInputWrapper } from '@mexit/shared'
+import { Input, StyledInputWrapper } from '@mexit/shared'
 
 export const Wrapper = styled.div`
   position: relative;
@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
   }
 
   .smallTooltip {
-    background: ${({ theme }) => theme.colors.gray[7]};
+    background: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
   }
 
   ${Input} {
@@ -21,11 +21,13 @@ export const Wrapper = styled.div`
     margin-right: ${({ theme }) => theme.spacing.small};
     font-size: 2.488rem;
     font-weight: bold;
+    border: 1px solid transparent;
+    color: ${({ theme }) => theme.tokens.text.heading};
     &:hover,
     &:focus,
     &:active {
-      border: 1px solid ${({ theme }) => theme.colors.primary};
-      background: ${({ theme }) => theme.colors.gray[8]};
+      color: ${({ theme }) => theme.tokens.text.heading};
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 `
@@ -49,9 +51,15 @@ export const TitleStatic = styled.div`
   font-size: 2.488rem;
   font-weight: bold;
 
+  width: 100%;
+  margin-right: ${({ theme }) => theme.spacing.small};
+  font-size: 2.488rem;
+  font-weight: bold;
+  border: 1px solid transparent;
   &:hover,
   &:focus,
   &:active {
-    background: ${({ theme }) => theme.colors.gray[8]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `

@@ -5,11 +5,12 @@ import { Icon } from '@iconify/react'
 import user3Line from '@iconify-icons/ri/user-3-line'
 import Tippy from '@tippyjs/react/headless'
 import Avatar from 'boring-avatars'
+import ColorScheme from 'color-scheme'
 import md5 from 'md5'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { AccessLevel, mog } from '@mexit/core'
-import { CardShadow,Centered } from '@mexit/shared'
+import { CardShadow, Centered } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
 import { useUserService } from '../../Hooks/API/useUserAPI'
@@ -34,10 +35,10 @@ const ProfileTooptip = styled.div`
   max-width: 700px;
   overflow-y: auto;
   ${CardShadow}
-  background: ${({ theme }) => theme.colors.gray[8]} !important;
-  color: ${({ theme }) => theme.colors.text.default};
+  background: ${({ theme }) => theme.tokens.surfaces.s[4]} !important;
+  color: ${({ theme }) => theme.tokens.text.default};
   &::after {
-    border-right-color: ${({ theme }) => theme.colors.primary} !important;
+    border-right-color: ${({ theme }) => theme.tokens.colors.primary.default} !important;
   }
 `
 
@@ -47,8 +48,18 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
   // -1 => not found
   const [gravState, setGravState] = useState(0)
 
-  const theme = useTheme()
-  const colors = theme.additional.profilePalette
+  const root = getComputedStyle(document.body)
+  const primaryColor = root.getPropertyValue('--theme-tokens-colors-primary-default').trim()
+
+  const colors = new ColorScheme()
+    .from_hex(primaryColor.slice(1))
+    .scheme('analogic')
+    .distance(0.25)
+    .variation('light')
+    .add_complement(true)
+    .colors()
+    .map((s) => `#${s}`)
+
   const addGravatarAbsent = useCacheStore((store) => store.addGravatarAbsent)
 
   const params = {

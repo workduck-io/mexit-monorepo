@@ -7,13 +7,13 @@ export const StyledResults = styled.div<{ isScreenshot?: boolean }>`
   max-height: ${({ isScreenshot }) => (isScreenshot ? '75vh' : '300px')};
   width: 100%;
 
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   ${({ isScreenshot }) =>
     isScreenshot &&
     css`
       min-height: 300px;
     `};
-  ${({ theme }) => ScrollStyles(theme.colors.gray[7])}
+  ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[4])}
 `
 
 export const List = styled.div`

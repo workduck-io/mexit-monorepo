@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react'
 import styled, { css } from 'styled-components'
 
+import { Button } from '@workduck-io/mex-components'
+
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
-import { Button } from './Buttons'
 import { FocusModeProp } from './Editor'
 
 export const Float = styled.div<FocusModeProp>`
@@ -35,7 +36,7 @@ export const FloatButton = styled(Button)`
   width: 3.2rem;
   padding: 0.8rem;
   :hover {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -46,7 +47,7 @@ export const FloatingMenu = styled.div`
 
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.default};
 `
 
 export const StyledMenuItem = styled.button`
@@ -55,14 +56,14 @@ export const StyledMenuItem = styled.button`
   align-items: center;
   padding: 10px;
   text-align: left;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   margin-bottom: 0.5rem;
-  background-color: ${({ theme }) => theme.colors.background.card};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.default};
   :hover {
     cursor: pointer;
     border-radius: 0.5rem;
-    color: ${({ theme }) => theme.colors.primary};
-    background-color: ${({ theme }) => theme.colors.background.highlight};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 
@@ -70,6 +71,6 @@ export const ClickableIcon = styled(Icon)`
   cursor: pointer;
   border-radius: 50%;
   :hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `

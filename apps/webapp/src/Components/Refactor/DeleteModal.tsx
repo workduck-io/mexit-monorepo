@@ -6,7 +6,7 @@ import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
 import create from 'zustand'
 
-import { Button, DisplayShortcut } from '@workduck-io/mex-components'
+import { Button, DisplayShortcut,PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved } from '@mexit/core'
@@ -15,11 +15,11 @@ import { isOnEditableElement } from '@mexit/shared'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useDelete } from '../../Hooks/useDelete'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
 import { RefactorPath } from '../../Stores/useRenameStore'
-import { DeleteIcon, MockRefactorMap, ModalControls,ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
+import { DeleteIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 
 interface DeleteStoreState {
@@ -179,10 +179,10 @@ const Delete = () => {
           Cancel
           <DisplayShortcut shortcut={'Esc'} />
         </Button>
-        <Button large primary disabled={mockRefactored.length < 1} onClick={handleDelete}>
+        <PrimaryButton large disabled={mockRefactored.length < 1} onClick={handleDelete}>
           Archive
           <DisplayShortcut shortcut={'$mod+Enter'} />
-        </Button>
+        </PrimaryButton>
       </ModalControls>
     </Modal>
   )

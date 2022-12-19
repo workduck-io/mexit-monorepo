@@ -1,4 +1,3 @@
-import { mix, transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { Title } from '@workduck-io/mex-components'
@@ -8,7 +7,7 @@ export const CommentsWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
   padding: ${({ theme }) => theme.spacing.small};
-  background: ${({ theme }) => transparentize(0.6, theme.colors.gray[7])};
+  background: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
   border-radius: ${({ theme }) => theme.borderRadius.small};
   backdrop-filter: blur(10px);
 
@@ -19,7 +18,7 @@ export const CommentsWrapper = styled.div`
     font-size: 1.2rem;
     width: 100%;
     text-align: center;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     margin: 0;
   }
 `
@@ -38,7 +37,7 @@ export const NewCommentWrapper = styled.div<NewCommentWrapperProps>`
 `
 
 export const CommentContentWrapper = styled.div`
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
   max-width: 400px;
   padding-left: ${({ theme }) => theme.spacing.tiny};
 `
@@ -48,7 +47,7 @@ export const CommentWrapper = styled.div<{ userCommented?: boolean }>`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.small};
-  background: ${({ theme }) => transparentize(0.1, theme.colors.gray[7])};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
   ${({ userCommented, theme }) =>
@@ -56,8 +55,8 @@ export const CommentWrapper = styled.div<{ userCommented?: boolean }>`
     css`
       background: linear-gradient(
         120deg,
-        ${mix(0.2, theme.colors.primary, theme.colors.gray[8])} 0%,
-        ${mix(0.0, theme.colors.primary, theme.colors.gray[7])} 100%
+        rgba(${theme.rgbTokens.surfaces.s[3]}, 0.25) 0%,
+        rgba(${theme.rgbTokens.colors.primary.default}, 0.15) 100%
       );
     `}
 `
@@ -73,7 +72,7 @@ export const CommentAuthor = styled.div<{ userCommented?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.colors.text.heading};
+  color: ${({ theme }) => theme.tokens.text.heading};
   font-weight: 500;
   svg,
   img {
@@ -83,7 +82,7 @@ export const CommentAuthor = styled.div<{ userCommented?: boolean }>`
   ${({ userCommented, theme }) =>
     userCommented &&
     css`
-      color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.default};
     `}
 `
 
@@ -96,7 +95,7 @@ export const CommentActions = styled.div`
 export const CommentTime = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   gap: ${({ theme }) => theme.spacing.tiny};
   opacity: 0.6;
   transition: opacity 0.2s ease-in-out;

@@ -1,5 +1,6 @@
-import { mix,transparentize } from 'polished'
 import styled, { css } from 'styled-components'
+
+import { generateStyle } from '@workduck-io/mex-themes'
 
 import { TodoStatus } from '@mexit/core'
 
@@ -14,8 +15,11 @@ export const TodoContainer = styled.div<{ checked?: boolean }>`
   ${({ theme, checked }) =>
     checked &&
     css`
-      color: ${theme.colors.gray[5]};
+      color: ${theme.tokens.text.heading};
       text-decoration: line-through;
+      p {
+        color: ${theme.tokens.text.fade};
+      }
     `}
 `
 
@@ -24,8 +28,7 @@ export const TodoActionWrapper = styled.span`
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 400;
-  background-color: ${({ theme }) => transparentize(0.8, theme.colors.secondary)};
-  color: ${({ theme }) => theme.colors.secondary};
+  ${({ theme }) => generateStyle(theme.editor.elements.todo.controls)};
   margin-right: 0.5rem;
 `
 
@@ -34,11 +37,11 @@ export const TodoActionButton = styled.button`
   display: flex;
   align-items: center;
   border-radius: 1rem;
+  background: none;
   border: none;
-  background-color: ${({ theme }) => mix(0.8, theme.colors.gray[8], theme.colors.secondary)};
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.editor.elements.todo.controls.iconColor};
   :hover {
-    background-color: ${({ theme }) => theme.colors.background.card};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
   }
 `
 
@@ -52,16 +55,16 @@ export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStat
   width: 1rem;
   cursor: ${(props) => (props.disabled ? 'default' : 'cursor')};
   margin-right: 0.5rem;
-  border: 1px solid ${({ theme }) => theme.colors.text.fade};
+  border: 1px solid ${({ theme }) => theme.tokens.colors.fade};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background-color: ${(props) => props.theme.colors.background.highlight};
+  background-color: ${(props) => props.theme.editor.elements.todo.checkbox.surface};
   overflow: hidden;
 
   ::before {
     content: '';
     position: absolute;
     border-radius: 40%;
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
 
     ${(props) => {
       switch (props.status) {

@@ -24,12 +24,14 @@ export const ViewSelectorButton = styled.div<{ selected: boolean }>`
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  color: ${({ theme, selected }) => (selected ? theme.colors.text.oppositePrimary : theme.colors.gray[3])};
-  background-color: ${({ selected, theme }) => (selected ? theme.colors.primary : theme.colors.gray[8])};
+  color: ${({ theme, selected }) => (selected ? theme.tokens.colors.primary.text : theme.tokens.text.fade)};
+  background-color: ${({ selected, theme }) =>
+    selected ? theme.tokens.colors.primary.default : theme.tokens.surfaces.s[2]};
 
   svg {
     width: 1rem;
     height: 1rem;
-    color: ${({ theme, selected }) => (selected ? theme.colors.text.oppositePrimary : theme.colors.primary)};
+    color: ${({ theme, selected }) =>
+      selected ? theme.tokens.colors.primary.text : theme.tokens.colors.primary.default};
   }
 `

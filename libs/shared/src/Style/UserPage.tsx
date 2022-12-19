@@ -1,8 +1,9 @@
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
-import { Button } from './Buttons'
+import { Button } from '@workduck-io/mex-components'
+
 import { BaseCard } from './Card'
+import { AuthForm } from './Form'
 
 export const SettingsCard = styled(BaseCard)`
   display: flex;
@@ -15,11 +16,25 @@ export const SettingsCard = styled(BaseCard)`
   border: none;
   margin: 0;
 `
+
 export const ProfileContainer = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
   margin-bottom: ${({ theme }) => theme.spacing.small};
+`
+
+export const UserCard = styled(BaseCard)`
+  margin-top: ${({ theme }) => theme.spacing.large};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+  padding: calc(2 * ${({ theme }) => theme.spacing.large});
+
+  ${AuthForm} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ${({ theme }) => theme.spacing.medium};
+  }
 `
 
 export const ProfileIcon = styled.div`
@@ -29,28 +44,26 @@ export const ProfileIcon = styled.div`
 
   .defaultProfileIcon {
     padding: 1rem;
-    background-color: ${({ theme }) => theme.colors.gray[8]};
-    color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0px 12px 24px ${({ theme }) => transparentize(0.5, theme.colors.primary)};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: 0px 12px 24px rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.5);
   }
   svg,
   img {
     border-radius: ${({ theme }) => theme.borderRadius.small};
-    box-shadow: 0px 12px 24px ${({ theme }) => transparentize(0.5, theme.colors.primary)};
+    box-shadow: 0px 12px 24px rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.5);
   }
-  margin-right: ${({ theme }) => theme.spacing.large};
-  margin-top: 5rem;
+  margin-left: -10rem;
+  margin-top: 0rem;
 `
 
 export const Info = styled.div`
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  margin-bottom: ${({ theme }) => theme.spacing.medium};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
-  padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+  background-color: transparent;
+  width: 100%;
 `
 
 export const InfoLabel = styled.div`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   margin: ${({ theme: { spacing } }) => `${spacing.medium} 0 3px`};
   display: flex;
   align-items: center;
@@ -66,25 +79,28 @@ interface InfoDataProps {
 export const InfoData = styled.div<InfoDataProps>`
   word-break: break-all;
   font-size: 1rem;
-  background-color: ${({ theme }) => theme.colors.form.input.bg};
-  color: ${({ theme }) => theme.colors.form.input.fg};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   margin: ${({ theme: { spacing } }) => `${spacing.tiny} 0`};
 
   &:focus-visible {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
     outline: none;
   }
 
-  background-color: transparent;
   border: 1px solid transparent;
 
   ${Button} {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
     float: left;
-    margin: 0 ${({ theme }) => theme.spacing.small} 0 0;
   }
+`
+
+export const InfoDataText = styled.div`
+  padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
 `

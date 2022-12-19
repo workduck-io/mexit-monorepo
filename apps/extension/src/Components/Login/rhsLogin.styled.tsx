@@ -8,7 +8,7 @@ export const LoginContainer = styled.section`
   justify-content: center;
   font-size: 1.4em;
   font-weight: bolder;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 
   ${PrimaryText} {
     cursor: pointer;

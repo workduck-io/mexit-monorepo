@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { generateStyle } from '@workduck-io/mex-themes'
+
 import { HoverSubtleGlow, ShowOnHoverIconStyles, SubtleGlow } from './Helpers'
 
 export const TagFlex = styled.div`
@@ -10,14 +12,13 @@ export const TagFlex = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
-  color: ${({ theme }) => theme.colors.text.fade};
+  ${({ theme }) => generateStyle(theme.generic.tags.tag)}
 
   ${HoverSubtleGlow}
   ${ShowOnHoverIconStyles}
   .showOnHoverIcon {
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
-    background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     ${SubtleGlow}
   }
 `
@@ -34,5 +35,5 @@ export const InfoSubHeading = styled.h2`
   margin: ${({ theme }) => theme.spacing.large};
   font-size: 1.2rem;
   font-weight: normal;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `

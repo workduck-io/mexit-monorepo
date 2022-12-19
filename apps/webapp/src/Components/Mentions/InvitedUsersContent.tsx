@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import repeatLine from '@iconify/icons-ri/repeat-line'
 
-import { Button, IconButton } from '@workduck-io/mex-components'
+import { IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermissionValue, InvitedUser, mog, permissionOptions } from '@mexit/core'
 import { StyledCreatatbleSelect } from '@mexit/shared'
@@ -242,12 +242,7 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
               </SharePermission>
               <ShareRowAction>
                 <ShareRowActionsWrapper>
-                  <IconButton
-                    transparent={false}
-                    onClick={() => onReinviteUser(user)}
-                    icon={repeatLine}
-                    title="Reinvite User"
-                  />
+                  <IconButton onClick={() => onReinviteUser(user)} icon={repeatLine} title="Reinvite User" />
                   <IconButton onClick={() => onRevokeAccess(user.email)} icon={deleteBin6Line} title="Remove" />
                 </ShareRowActionsWrapper>
               </ShareRowAction>
@@ -257,15 +252,13 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
       </SharedPermissionsTable>
 
       <ModalControls>
-        <Button
-          primary
+        <PrimaryButton
           autoFocus={!window.focus}
-          large
           onClick={onSave}
           disabled={changedIUsers && changedIUsers.length === 0}
         >
           Save
-        </Button>
+        </PrimaryButton>
       </ModalControls>
     </SharedPermissionsWrapper>
   )

@@ -4,7 +4,7 @@ export interface UserPreferenceStore extends UserPreferences {
   _hasHydrated: boolean
   smartCaptureExcludedFields?: any
   setHasHydrated: (state) => void
-  setTheme: (theme: string) => void
+  setTheme: (themeId: string, mode?: 'light' | 'dark') => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
   setLastUsedSnippets: (lastUsedSnippets: LastUsedSnippets) => void
   getUserPreferences: () => UserPreferences
@@ -14,10 +14,10 @@ export interface UserPreferenceStore extends UserPreferences {
   removeExcludedSmartCaptureField: (page: string, fieldId: string) => void
 }
 
-export const preferenceStoreConstructor = (set, get) => ({
+export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
   _hasHydrated: false,
   version: 'unset',
-  theme: 'xeM',
+  theme: { themeId: 'xeM', mode: 'dark' },
   lastOpenedNotes: {},
   lastUsedSnippets: {},
   smartCaptureExcludedFields: {},
@@ -53,8 +53,9 @@ export const preferenceStoreConstructor = (set, get) => ({
   setUserPreferences: (userPreferences: UserPreferences) => {
     set(userPreferences)
   },
-  setTheme: (theme) => {
-    set({ theme })
+  setTheme: (themeId, mode) => {
+    const newPref = { themeId, mode: mode ?? get().theme.mode }
+    set({ theme: newPref })
   },
   setActiveNamespace: (namespace: string) => {
     set({ activeNamespace: namespace })

@@ -8,7 +8,7 @@ import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
 import genereateName from 'project-name-generator'
 
-import { Button, IconButton, Infobox } from '@workduck-io/mex-components'
+import { Button, IconButton, Infobox, PrimaryButton } from '@workduck-io/mex-components'
 
 import {
   batchArray,
@@ -289,11 +289,11 @@ const Snippets = () => {
     <SnippetsSearchContainer>
       <MainHeader>
         <Title>Snippets</Title>
-        <Button primary onClick={() => onCreateNew()}>
+        <PrimaryButton onClick={() => onCreateNew()}>
           <Icon icon={quillPenLine} height={24} />
           Create New Snippet
-        </Button>
-        <Button primary onClick={() => onCreateSpecialSnippet()}>
+        </PrimaryButton>
+        <Button onClick={() => onCreateSpecialSnippet()}>
           <Icon icon={magicLine} height={24} />
           Create New Template Snippet
         </Button>

@@ -17,7 +17,7 @@ export const SourceHeaderStyled = styled.div`
   img {
     border-radius: 50%;
     padding: 1px;
-    background-color: ${({ theme }) => theme.colors.background.highlight};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 

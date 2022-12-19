@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import { css } from 'styled-components'
 
 import { MexIcons, MexNodeIcons } from '../Components/Icons'
@@ -20,11 +19,11 @@ export const ShowOnHoverIconStyles = css`
     position: absolute;
     right: 0;
     transition: right 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    background-color: ${({ theme }) => theme.colors.gray[7]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
     border-radius: ${({ theme }) => theme.borderRadius.tiny};
     width: 0rem;
     overflow: hidden;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     padding: 0.25rem;
     height: 1.5rem;
     opacity: 0;
@@ -40,9 +39,9 @@ export const ShowOnHoverIconStyles = css`
 `
 
 export const SubtleGlow = css`
-  background-color: ${({ theme }) => theme.colors.primary};
-  box-shadow: 0px 2px 6px ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+  box-shadow: 0px 2px 6px ${({ theme }) => theme.tokens.colors.primary.default};
+  color: ${({ theme }) => theme.tokens.colors.primary.text};
 `
 
 export const HoverSubtleGlow = css`
@@ -57,25 +56,21 @@ export const PixelToCSS = (x: Pixels): string => {
   return `${String(x)}px`
 }
 
-export const ScrollStyles = (color = undefined, width = 10) => css`
-  scrollbar-color: auto;
-  scrollbar-width: thin;
-
-  /* &::-webkit-scrollbar {
+// TODO: cannot comment lines inside styled-components, also surfaces.scrollbar not found
+/* background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumb}, 0.25)`}; */
+export const ScrollStyles = (color = undefined, width = 8) => css`
+  &::-webkit-scrollbar {
     width: ${width}px;
-  } */
+  }
   &::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-thumb {
-    background: ${color ? color : ({ theme }) => theme.colors.gray[8]};
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 0px;
+    border: 2px solid transparent;
     background-clip: content-box;
-    min-height: 32px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
   }
   &::-webkit-scrollbar-track {
     background: none;
@@ -85,7 +80,7 @@ export const ScrollStyles = (color = undefined, width = 10) => css`
 export const ThinScrollbar = ScrollStyles()
 
 export const CardShadow = css`
-  box-shadow: 0px 3px 9px ${({ theme }) => transparentize(0.5, theme.colors.palette.black)};
+  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 `
 
 export const getLineIcons = (icon: string) => {

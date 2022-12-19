@@ -13,7 +13,7 @@ export const ServiceContainer = styled(CenteredMainContent)``
 export const CardStyles = css`
   padding: ${({ theme }) => theme.spacing.medium};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
 `
 
 export const PortalDescription = styled.p`
@@ -22,7 +22,7 @@ export const PortalDescription = styled.p`
   font-weight: 400;
   white-space: nowrap;
   overflow-x: hidden;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   opacity: 0.7;
   text-overflow: ellipsis;
 `
@@ -50,7 +50,7 @@ export const ServiceDescription = styled.p`
   margin: 0 1rem 0 0;
   font-size: 1rem;
   font-weight: normal;
-  color: ${({ theme }) => theme.colors.text.default};
+  color: ${({ theme }) => theme.tokens.text.default};
 `
 
 export const ActionGroupIcon = styled(CenteredFlex)`
@@ -82,8 +82,8 @@ export const GroupHeader = styled.div<{ connected?: boolean }>`
     ${({ connected, theme }) =>
       connected &&
       css`
-        background: transparentize(0.6, theme.colors.background.app);
-        color: theme.colors.text.heading;
+        background: ${theme.tokens.colors.primary.default};
+        color: ${theme.tokens.colors.primary.text};
         cursor: default;
         :hover {
           box-shadow: none;
@@ -100,14 +100,14 @@ export const FloatingIcon = styled.span`
 
 export const ActionsContainer = styled.section`
   padding: ${({ theme }) => theme.spacing.large};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[7]};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.s[1]};
   width: 100%;
   overflow: hidden auto;
   max-height: 60vh;
 
   & > header {
     font-size: 0.95rem;
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
     font-weight: 700;
     padding: 1rem 0.5rem 1.5rem;
   }
@@ -120,7 +120,7 @@ export const ActionContainer = styled.div`
   padding: 0.75rem ${({ theme }) => theme.spacing.small};
 
   /* border-radius: ${({ theme }) => theme.borderRadius.small}; */
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[7]};
+  border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[1]};
 
   ${ActionGroupIcon} {
     flex: none;
@@ -135,7 +135,7 @@ export const ActionContainer = styled.div`
     margin: 0;
     font-size: medium;
     font-weight: bold;
-    color: ${({ theme }) => theme.colors.text.default};
+    color: ${({ theme }) => theme.tokens.text.default};
   }
 
   ${PortalDescription} {
