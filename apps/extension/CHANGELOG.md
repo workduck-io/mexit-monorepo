@@ -1,5 +1,17 @@
 # mexit
 
+## 0.19.0
+
+### Minor Changes
+
+- da8d83bc: <Extension-Webapp> message passing changed to store based updates
+
+### Patch Changes
+
+- 45808f81: Links and Meta sync in extension, Note error boundary
+- 442f1252: New theming
+- c8b667d8: Snippet init index in Extension
+
 ## 0.18.16
 
 ### Patch Changes
