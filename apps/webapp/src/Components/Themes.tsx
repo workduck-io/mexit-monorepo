@@ -11,13 +11,7 @@ import { ToggleButton } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import {
-  Theme,
-  ThemeHeader,
-  ThemeModeDiv,
-  ThemePreviews,
-  ThemeSwitch
-} from '../Style/Settings'
+import { Theme, ThemeHeader, ThemeModeDiv, ThemePreviews, ThemeSwitch } from '../Style/Settings'
 
 import ThemeDemo from './ThemeDemo'
 
@@ -82,7 +76,7 @@ const Themes = () => {
               <Theme selected={t.id === theme.themeId} onClick={() => onThemeSelect(i)} style={styles}>
                 <ThemeDemo theme={t} />
                 <ThemeHeader>
-                  <h4>{t.id}</h4>
+                  <h4>{t.name}</h4>
                 </ThemeHeader>
               </Theme>
             </ManagedProvider>
