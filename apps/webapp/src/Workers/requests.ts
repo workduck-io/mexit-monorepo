@@ -170,6 +170,8 @@ const initializeNamespacesExtension = async (localILinks: ILink[]) => {
     const response = await runBatchWorker(WorkerRequestType.GET_NODES, 6, ids)
     return { response, ns, newILinks, archivedILinks }
   }
+
+  return { response: [], ns: [], newILinks: [], archivedILinks: [] }
 }
 
 const getSnippet = (id: string, snippets: Snippets) => {
@@ -203,6 +205,7 @@ const initializeSnippetsExtension = async (localSnippets: Snippets) => {
           }
         }
       }
+      return { response: [] }
     })
     .catch((error) => {
       mog('Error fetching all Snippets', { error })

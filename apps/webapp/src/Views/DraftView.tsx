@@ -4,12 +4,23 @@ import { uniq } from 'lodash'
 import shallow from 'zustand/shallow'
 
 import { defaultContent, ILink } from '@mexit/core'
-import { SnippetCommand, SnippetHeader, SSnippet, SSnippets, StyledSnippetPreview,Title , Wrapper  } from '@mexit/shared'
+import {
+  Group,
+  IconDisplay,
+  SnippetCommand,
+  SnippetHeader,
+  SSnippet,
+  SSnippets,
+  StyledSnippetPreview,
+  Title,
+  Wrapper
+} from '@mexit/shared'
 
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 function DraftView() {
@@ -46,25 +57,32 @@ function DraftView() {
           ''
         )}
         {allLinks &&
-          allLinks.map((s) => (
-            <SSnippet key={`NODE_${s.nodeid}`}>
-              <SnippetHeader>
-                <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
-              </SnippetHeader>
+          allLinks.map((s) => {
+            const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
 
-              <StyledSnippetPreview
-                onClick={() => {
-                  onOpen(s.nodeid)
-                }}
-              >
-                <EditorPreviewRenderer
-                  content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                  editorId={`Editor_Embed_${s.nodeid}`}
-                  draftView
-                />
-              </StyledSnippetPreview>
-            </SSnippet>
-          ))}
+            return (
+              <SSnippet key={`NODE_${s.nodeid}`}>
+                <SnippetHeader>
+                  <Group>
+                    <IconDisplay size={20} icon={icon} />
+                    <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
+                  </Group>
+                </SnippetHeader>
+
+                <StyledSnippetPreview
+                  onClick={() => {
+                    onOpen(s.nodeid)
+                  }}
+                >
+                  <EditorPreviewRenderer
+                    content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
+                    editorId={`Editor_Embed_${s.nodeid}`}
+                    draftView
+                  />
+                </StyledSnippetPreview>
+              </SSnippet>
+            )
+          })}
       </SSnippets>
     </Wrapper>
   )

@@ -6,7 +6,7 @@ export const BannerContainer = styled.section`
   justify-content: space-between;
   width: 100%;
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
-  background: ${({ theme }) => theme.colors.background.card};
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
