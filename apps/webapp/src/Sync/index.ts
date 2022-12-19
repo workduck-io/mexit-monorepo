@@ -7,6 +7,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
@@ -37,6 +38,8 @@ const syncStores = () => {
         { field: 'publicNodes' }
       ]
     })
+
+    syncStoreState(useMetadataStore, { name: BroadcastSyncedChannel.METADATA, sync: [{ field: 'metadata' }] })
 
     syncStoreState(useContentStore, {
       name: BroadcastSyncedChannel.CONTENTS,

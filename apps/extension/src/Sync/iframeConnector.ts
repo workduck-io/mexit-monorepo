@@ -1,5 +1,7 @@
 import { connectToChild, Methods } from 'penpal'
 
+import { mog } from '@mexit/core'
+
 import { useInitStore } from '../Stores/useInitStore'
 import { styleSlot } from '../Utils/cs-utils'
 
@@ -37,10 +39,16 @@ const messageBroadcaster = () => {
   })
 
   const handleIframeLoad = async () => {
-    connection.promise.then((child) => {
-      childIframe = child
-      useInitStore.getState().setIframeAdded(true)
-    })
+    console.log({ hello: connection })
+    connection.promise
+      .then((child) => {
+        mog('SETTING IFRAME ADDED')
+        childIframe = child
+        useInitStore.getState().setIframeAdded(true)
+      })
+      .catch((err) => {
+        console.error('Unable to connect to IFrame')
+      })
   }
 
   iframe.addEventListener('load', handleIframeLoad)

@@ -11,7 +11,7 @@ if (!globalThis.__MEX_SYNCED_CHANNELS_) globalThis.__MEX_SYNCED_CHANNELS_ = new 
 const getExistingSyncedChannels = (): Set<string> | undefined => {
   const syncedChannels = globalThis.__MEX_SYNCED_CHANNELS_
 
-  console.log('Synced Channels', { syncedChannels })
+  // console.log('Synced Channels', { syncedChannels })
 
   return syncedChannels
 }

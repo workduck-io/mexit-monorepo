@@ -1,43 +1,33 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent } from '@mexit/core'
-import { EditorHeader, EditorWrapper, isOnEditableElement, StyledEditor } from '@mexit/shared'
+import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useComments } from '../../Hooks/useComments'
-import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
+import { useBufferStore, useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import useLayout from '../../Hooks/useLayout'
 import useLoad from '../../Hooks/useLoad'
-import { useNamespaces } from '../../Hooks/useNamespaces'
-import { compareAccessLevel, isReadonly, usePermissions } from '../../Hooks/usePermissions'
+import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useReactions } from '../../Hooks/useReactions'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
 import useBlockStore from '../../Stores/useBlockStore'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import { areEqual } from '../../Utils/hash'
-import BlockInfoBar from '../EditorInfobar/BlockInfobar'
-import Metadata from '../EditorInfobar/Metadata'
-import NavBreadCrumbs from '../NavBreadcrumbs'
 
-import Banner from './Banner'
 import Editor from './Editor'
-import Toolbar from './Toolbar'
 
 const ContentEditor = () => {
   const { toggleFocusMode } = useLayout()
@@ -48,26 +38,15 @@ const ContentEditor = () => {
   const { getAllReactionsOfNode } = useReactions()
 
   const { getDataAPI } = useApi()
-  const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const isComboOpen = useComboboxOpen()
   const _hasHydrated = useDataStore((state) => state._hasHydrated)
 
-  const infobar = useLayoutStore((store) => store.infobar)
-
   const editorWrapperRef = useRef<HTMLDivElement>(null)
   const { debouncedAddLastOpened } = useLastOpened()
-  const { getNamespaceOfNodeid } = useNamespaces()
 
   const { addOrUpdateValBuffer, getBufferVal, saveAndClearBuffer } = useEditorBuffer()
   const nodeid = useParams()?.nodeId
-  const location = useLocation()
   const fsContent = useContentStore((state) => state.contents)[nodeid]
-
-  const isBannerVisible = useRouteStore((s) =>
-    s.routes?.[`${ROUTE_PATHS.node}/${nodeid}`]?.banners?.includes(BannerType.editor)
-  )
-
-  const { goTo } = useRouting()
 
   const { shortcutHandler } = useKeyListener()
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -75,13 +54,19 @@ const ContentEditor = () => {
 
   const setInternalUpdate = useContentStore((store) => store.setInternalUpdate)
 
+  const returnLastUpdatedContentOnError = (noteId: string, content: any) => {
+    if (Array.isArray(content) && content.length !== 0) return content
+    return useBufferStore.getState().buffer?.[noteId]
+  }
+
   const nodeContent = useMemo(() => {
     const internalUpdate = useContentStore.getState().internalUpdate
 
-    if (!internalUpdate) return fsContent?.content ?? defaultContent.content
+    if (!internalUpdate) return returnLastUpdatedContentOnError(nodeid, fsContent?.content)
     else {
       setInternalUpdate(false)
-      return useContentStore.getState().contents[nodeid].content
+      const fromContent = useContentStore.getState().contents[nodeid].content
+      return returnLastUpdatedContentOnError(nodeid, fromContent)
     }
   }, [nodeid, fsContent])
 
@@ -177,58 +162,24 @@ const ContentEditor = () => {
     return isReadonly(access)
   }, [nodeid, _hasHydrated])
 
-  const handleBannerButtonClick = (e) => {
-    goTo(ROUTE_PATHS.namespaceShare, NavigationType.replace, 'NODE_ID_OF_SHARED_NODE')
-  }
-
-  const hideShareDetails = () => {
-    const access = accessWhenShared(nodeid)
-    const accessPriority = compareAccessLevel(access?.note, access?.space)
-
-    return accessPriority !== 'MANAGE' && accessPriority !== 'OWNER'
-  }
-
   return (
     <>
-      <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
-        <EditorHeader>
-          {isBannerVisible && (
-            <Banner
-              route={location.pathname}
-              onClick={handleBannerButtonClick}
-              title="Same Note is being accessed by multiple users. Data may get lost!"
-            />
-          )}
-          <NavBreadCrumbs nodeId={nodeid} />
-          <Toolbar nodeId={nodeid} />
-          {isBlockMode ? (
-            <BlockInfoBar />
-          ) : (
-            <Metadata
-              hideShareDetails={hideShareDetails()}
-              namespaceId={getNamespaceOfNodeid(nodeid)?.id}
-              nodeId={nodeid}
-            />
-          )}
-        </EditorHeader>
-
-        <EditorWrapper
-          comboboxOpen={isComboOpen}
-          isUserEditing={isUserEditing}
-          ref={editorWrapperRef}
-          onClick={onFocusClick}
-        >
-          <Editor
-            onAutoSave={onAutoSave}
-            includeBlockInfo={true}
-            onChange={onChangeSave}
-            content={nodeContent}
-            nodeUID={nodeid}
-            readOnly={viewOnly}
-            autoFocus={false}
-          />
-        </EditorWrapper>
-      </StyledEditor>
+      <EditorWrapper
+        comboboxOpen={isComboOpen}
+        isUserEditing={isUserEditing}
+        ref={editorWrapperRef}
+        onClick={onFocusClick}
+      >
+        <Editor
+          onAutoSave={onAutoSave}
+          includeBlockInfo={true}
+          onChange={onChangeSave}
+          content={nodeContent}
+          nodeUID={nodeid}
+          readOnly={viewOnly}
+          autoFocus={false}
+        />
+      </EditorWrapper>
       <BlockOptionsMenu blockId="one" />
     </>
   )

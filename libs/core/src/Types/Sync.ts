@@ -10,6 +10,7 @@ export enum BroadcastSyncedChannel {
   SNIPPETS = 'snippets',
   ACTIONS = 'actions',
   TASKS = 'tasks',
+  METADATA = 'metadata',
   DATA = 'data',
   AUTH = 'auth',
   LINKS = 'links',

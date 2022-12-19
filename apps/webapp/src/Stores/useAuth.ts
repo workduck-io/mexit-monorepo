@@ -18,6 +18,7 @@ import { useDataStore } from './useDataStore'
 import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
 import { useMentionStore } from './useMentionsStore'
+import { useMetadataStore } from './useMetadataStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
@@ -48,6 +49,7 @@ export const useAuthentication = () => {
   const clearReactions = useReactionStore((s) => s.clear)
   const clearViews = useViewStore((s) => s.clear)
   const clearRoutesInformation = useRouteStore((s) => s.clear)
+  const clearMetadataStore = useMetadataStore((s) => s.reset)
 
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
@@ -90,18 +92,10 @@ export const useAuthentication = () => {
 
   const logout = async () => {
     await signOut()
-    try {
-      // await terminateAllWorkers()
-    } catch (err) {
-      mog('Worker Termination failed!', { err })
-    }
 
     setUnAuthenticated()
-
-    // Reseting all persisted stores explicitly because just clearing out local storage and indexed db doesn't work
-    // This is because zustand maintains it's state post logout as we don't go through a reload
-    // Which results in zustand recreating everything post logout
     initContents({})
+    clearMetadataStore()
     clearReactions()
     clearComments()
     resetDataStore()

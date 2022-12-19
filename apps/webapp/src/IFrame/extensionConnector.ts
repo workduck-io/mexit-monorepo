@@ -1,7 +1,7 @@
 import { get } from 'idb-keyval'
 import { connectToParent as connectToExtension } from 'penpal'
 
-import { StorePersistentKeys } from '@mexit/core'
+import { mog, StorePersistentKeys } from '@mexit/core'
 
 import {
   addDoc,
@@ -39,6 +39,9 @@ export const webExtensionConnector = async () => {
   /*
    * Functions for extension
    */
+
+  mog('CONNECTION', { o: true })
+
   const exposedMethods = {
     broadCastMessage,
     searchIndex,
@@ -66,9 +69,10 @@ export const webExtensionConnector = async () => {
     methods: exposedMethods
   })
 
+  mog('CONNECTION TO EXTENSION', { host })
   host.promise
     .then((extension) => {
-      // console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
+      console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
       syncStoresWithExtension(extension)
       initializeExtension(extension)
     })

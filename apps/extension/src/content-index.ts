@@ -4,4 +4,7 @@
  * @description
  * Chrome extensions don't support modules in content scripts.
  */
-import('./contentScript')
+const currentLocation = window.location.href
+
+if (!currentLocation.startsWith('http://localhost') && !currentLocation.startsWith('https://mext.workduck.io'))
+  import('./contentScript')

@@ -7,7 +7,8 @@ import {
   extractMetadata,
   mog,
   runBatch,
-  Snippet
+  Snippet,
+  withTimeout
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
@@ -147,7 +148,11 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    runBatch<any>([getAllNamespaces(), getAllSnippets(), getAllLinks(), getAllHighlights(), getAllSmartCaptures()])
+    withTimeout(
+      runBatch<any>([getAllNamespaces(), getAllSnippets(), getAllLinks(), getAllHighlights(), getAllSmartCaptures()]),
+      30000,
+      'Init Extension Timed out!'
+    )
   }
 
   const startWorkers = async () => {
