@@ -1,12 +1,25 @@
 import React from 'react'
 import { useTransition } from 'react-spring'
 
-import { Button } from '@workduck-io/mex-components'
+import moonClearFill from '@iconify/icons-ri/moon-clear-fill'
+import sunFill from '@iconify/icons-ri/sun-fill'
+import { Icon } from '@iconify/react'
+
 import { defaultThemes, ManagedProvider, useThemeContext } from '@workduck-io/mex-themes'
+
+import { ToggleButton } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { Theme, ThemeColorDots, ThemeHeader, ThemePreview, ThemePreviews } from '../Style/Settings'
+import {
+  Theme,
+  ThemeHeader,
+  ThemeModeDiv,
+  ThemePreviews,
+  ThemeSwitch
+} from '../Style/Settings'
+
+import ThemeDemo from './ThemeDemo'
 
 const Themes = () => {
   const themes = defaultThemes
@@ -51,7 +64,15 @@ const Themes = () => {
 
   return (
     <>
-      <Button onClick={onToggleMode}>Toggle Mode</Button>
+      <ThemeSwitch>
+        <ThemeModeDiv>
+          <Icon icon={sunFill} /> Light
+        </ThemeModeDiv>
+        <ToggleButton checked={theme.mode === 'dark'} onChange={onToggleMode} />
+        <ThemeModeDiv>
+          <Icon icon={moonClearFill} /> Dark
+        </ThemeModeDiv>
+      </ThemeSwitch>
       <ThemePreviews>
         {transition((styles, t, _t, i) => {
           return (
@@ -59,16 +80,7 @@ const Themes = () => {
               {/* eslint-disable-next-line */}
               {/* @ts-ignore */}
               <Theme selected={t.id === theme.themeId} onClick={() => onThemeSelect(i)} style={styles}>
-                <ThemePreview back={undefined}>
-                  <ThemeColorDots>
-                    <div className="primary"></div>
-                    <div className="secondary"></div>
-                    <div className="text"></div>
-                    <div className="text_fade"></div>
-                    <div className="background"></div>
-                  </ThemeColorDots>
-                  <br />
-                </ThemePreview>
+                <ThemeDemo theme={t} />
                 <ThemeHeader>
                   <h4>{t.id}</h4>
                 </ThemeHeader>

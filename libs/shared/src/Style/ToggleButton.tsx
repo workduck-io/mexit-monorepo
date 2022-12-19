@@ -34,8 +34,10 @@ export const Slider = styled.span`
   bottom: 0;
 
   cursor: pointer;
-  background-color: ${({ theme }) => theme.tokens.surfaces.app};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: 3.4em;
+
+  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 
   transition: all 0.4s ease-in-out;
 
@@ -50,7 +52,8 @@ export const Slider = styled.span`
     width: 2.6em;
     left: 0.4em;
     bottom: 0.4em;
-    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    background-color: ${({ theme }) => theme.tokens.text.fade};
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     -webkit-transition: 0.4s;
     transition: 0.4s;
     border-radius: 50%;
@@ -64,6 +67,7 @@ export const Slider = styled.span`
     -webkit-transform: translateX(2.6em);
     -ms-transform: translateX(2.6em);
     transform: translateX(2.6em);
+    background-color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 
   ${Input}:focus + & {

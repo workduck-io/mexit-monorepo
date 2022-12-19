@@ -8,7 +8,21 @@ import { Button } from '@workduck-io/mex-components'
 import { GridCss } from '@mexit/shared'
 
 export const ThemePreviews = styled.div`
-  ${GridCss(3, 5)}
+  ${GridCss(2, 3)}
+`
+
+export const ThemeSwitch = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.small};
+`
+
+export const ThemeModeDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.tiny};
+  font-size: 1.2rem;
 `
 
 export const Theme = styled(animated.div)<{ selected: boolean }>`
@@ -19,6 +33,10 @@ export const Theme = styled(animated.div)<{ selected: boolean }>`
   height: inherit;
   overflow: auto;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
   ${({ theme, selected }) =>
     selected
