@@ -13,6 +13,12 @@ export const PageContainer = styled.div`
   position: relative;
 `
 
+export const Group = styled.span`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
 export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean }>`
   padding: 1px;
   margin: ${({ margin }) => margin};
