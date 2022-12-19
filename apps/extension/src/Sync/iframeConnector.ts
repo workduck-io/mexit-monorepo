@@ -1,7 +1,5 @@
 import { connectToChild, Methods } from 'penpal'
 
-import { mog } from '@mexit/core'
-
 import { useInitStore } from '../Stores/useInitStore'
 import { styleSlot } from '../Utils/cs-utils'
 
@@ -13,7 +11,6 @@ const appendChild = (child) => {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     styleSlot.appendChild(child)
   } else {
-    console.log('[DOCUMENT]: Loading Content...')
     document.addEventListener('DOMContentLoaded', () => {
       styleSlot.appendChild(child)
     })
@@ -42,7 +39,6 @@ const messageBroadcaster = () => {
     console.log({ hello: connection })
     connection.promise
       .then((child) => {
-        mog('SETTING IFRAME ADDED')
         childIframe = child
         useInitStore.getState().setIframeAdded(true)
       })

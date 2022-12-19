@@ -40,8 +40,6 @@ export const webExtensionConnector = async () => {
    * Functions for extension
    */
 
-  mog('CONNECTION', { o: true })
-
   const exposedMethods = {
     broadCastMessage,
     searchIndex,
