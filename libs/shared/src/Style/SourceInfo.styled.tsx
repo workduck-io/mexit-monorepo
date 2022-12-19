@@ -87,7 +87,7 @@ export const StyledSource = styled.div<{ $isVisible?: boolean }>`
     width: calc(16px + ${({ theme }) => theme.spacing.tiny});
     border-radius: 50%;
     padding: ${({ theme }) => theme.spacing.tiny};
-    background-color: ${({ theme }) => theme.colors.background.card};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 
