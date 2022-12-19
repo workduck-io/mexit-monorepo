@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect,useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import Modal from 'react-modal'
 
 import arrowRightLine from '@iconify/icons-ri/arrow-right-line'
 import { Icon } from '@iconify/react'
 
-import { Button, DisplayShortcut } from '@workduck-io/mex-components'
+import { DisplayShortcut,PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isMatch, isReserved } from '@mexit/core'
@@ -194,10 +194,10 @@ const Refactor = () => {
         </MockRefactorMap>
       )}
       <ModalControls>
-        <Button primary autoFocus={!focus} large disabled={disallowRefactor} onClick={handleRefactor}>
+        <PrimaryButton autoFocus={!focus} large disabled={disallowRefactor} onClick={handleRefactor}>
           Apply
           <DisplayShortcut shortcut={'$mod+Enter'} />
-        </Button>
+        </PrimaryButton>
       </ModalControls>
     </Modal>
   )

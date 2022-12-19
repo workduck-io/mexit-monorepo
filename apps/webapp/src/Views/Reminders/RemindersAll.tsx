@@ -7,7 +7,7 @@ import timerFlashLine from '@iconify/icons-ri/timer-flash-line'
 import { Icon } from '@iconify/react'
 import create from 'zustand'
 
-import { Button } from '@workduck-io/mex-components'
+import { PrimaryButton } from '@workduck-io/mex-components'
 
 import {
   Filter,
@@ -325,14 +325,13 @@ const RemindersAll = () => {
                 <Icon icon={timerFlashLine} />
               </TaskHeaderIcon>
               <TaskViewTitle>Reminders</TaskViewTitle>
-              <Button
+              <PrimaryButton
                 // large
-                primary
                 onClick={() => openModal()}
               >
                 <Icon icon={addCircleLine} />
                 Create Reminder
-              </Button>
+              </PrimaryButton>
             </TaskViewHeaderWrapper>
           </TaskHeaderTitleSection>
         </StyledTaskHeader>

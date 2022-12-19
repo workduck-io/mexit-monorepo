@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { Button, MexIcon } from '@workduck-io/mex-components'
+import { MexIcon,SecondaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNameFromPath, NodeEditorContent } from '@mexit/core'
@@ -144,8 +144,7 @@ const EditorPreview = ({
                   )}
                   <PreviewActionHeader>
                     <TagsRelatedTiny nodeid={nodeid} />
-                    <Button
-                      transparent
+                    <SecondaryButton
                       onClick={(ev) => {
                         ev.preventDefault()
                         ev.stopPropagation()
@@ -153,7 +152,7 @@ const EditorPreview = ({
                       }}
                     >
                       <Icon icon={closeCircleLine} />
-                    </Button>
+                    </SecondaryButton>
                   </PreviewActionHeader>
                 </EditorPreviewControls>
               )}
