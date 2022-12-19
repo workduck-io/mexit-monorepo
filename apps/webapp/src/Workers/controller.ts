@@ -36,15 +36,15 @@ export const startRequestsWorkerService = async () => {
           name: 'Requests Worker'
         })
       )
-      const token = useInternalAuthStore.getState().userCred.token
-      const workspaceID = useAuthStore.getState().getWorkspaceId()
-
-      initRequestClient(token, workspaceID)
     } catch (err) {
       console.error('REQUEST WORKER CRASHED', err)
       requestsWorker = null
     }
   }
+  const token = useInternalAuthStore.getState().userCred.token
+  const workspaceID = useAuthStore.getState().getWorkspaceId()
+
+  initRequestClient(token, workspaceID)
 }
 
 export const runBatchWorker = async (

@@ -6,9 +6,7 @@ import {
   extractLinksFromData,
   extractMetadata,
   mog,
-  runBatch,
-  Snippet,
-  withTimeout
+  Snippet
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
@@ -148,11 +146,10 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    withTimeout(
-      runBatch<any>([getAllNamespaces(), getAllSnippets(), getAllLinks(), getAllHighlights(), getAllSmartCaptures()]),
-      30000,
-      'Init Extension Timed out!'
-    )
+    const promises = [getAllNamespaces(), getAllSnippets(), getAllLinks(), getAllHighlights(), getAllSmartCaptures()]
+
+    await Promise.allSettled(promises)
+    mog('Fetch All Resolved completely')
   }
 
   const startWorkers = async () => {
