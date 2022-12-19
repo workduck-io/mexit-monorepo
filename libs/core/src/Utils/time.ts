@@ -1,5 +1,5 @@
 import * as chrono from 'chrono-node'
-import { add, format, formatDistanceToNow, formatRelative, startOfToday,sub } from 'date-fns'
+import { add, format, formatDistanceToNow, formatRelative, startOfToday, sub } from 'date-fns'
 
 import { capitalize } from './strings'
 
@@ -12,6 +12,18 @@ export const toLocaleString = (date: Date) => {
     hour: 'numeric',
     minute: 'numeric'
   })
+}
+
+export async function withTimeout<T>(promise: Promise<T>, timeoutInMs: number, errorMessage: string): Promise<T> {
+  let timeoutHandle: any
+
+  const timeout = new Promise<never>((resolve, reject) => {
+    timeoutHandle = setTimeout(() => reject(Error(errorMessage)), timeoutInMs)
+  })
+  const result = await Promise.race([promise, timeout])
+
+  clearTimeout(timeoutHandle)
+  return result
 }
 
 export const getCurrentTimeString = (fmt: string): string => {

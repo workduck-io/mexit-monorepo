@@ -11,7 +11,6 @@ const appendChild = (child) => {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     styleSlot.appendChild(child)
   } else {
-    console.log('[DOCUMENT]: Loading Content...')
     document.addEventListener('DOMContentLoaded', () => {
       styleSlot.appendChild(child)
     })
@@ -37,10 +36,15 @@ const messageBroadcaster = () => {
   })
 
   const handleIframeLoad = async () => {
-    connection.promise.then((child) => {
-      childIframe = child
-      useInitStore.getState().setIframeAdded(true)
-    })
+    console.log({ hello: connection })
+    connection.promise
+      .then((child) => {
+        childIframe = child
+        useInitStore.getState().setIframeAdded(true)
+      })
+      .catch((err) => {
+        console.error('Unable to connect to IFrame')
+      })
   }
 
   iframe.addEventListener('load', handleIframeLoad)

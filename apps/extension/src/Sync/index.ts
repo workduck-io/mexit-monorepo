@@ -4,6 +4,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
 
@@ -20,6 +21,10 @@ const onStateChange = (message: MessageType) => {
   UnhandledRequestsByExtension?.delete(message.msgId)
 }
 
+/**
+ * Listeners of Extension stores.
+ * Changes from these stores would be broadcasted on their respective channels.
+ */
 const messagePassing = () => {
   storeChangeHandler(
     useDataStore,
@@ -62,6 +67,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.REMINDERS,
       sync: [{ field: 'reminders' }]
+    },
+    onStateChange
+  )
+
+  storeChangeHandler(
+    useLinkStore,
+    {
+      name: BroadcastSyncedChannel.LINKS,
+      sync: [{ field: 'links' }]
     },
     onStateChange
   )

@@ -42,14 +42,6 @@ const initializeClient = (authToken: string, workspaceID: string) => {
 
 const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   if (nodeids.length === 0) return
-  if (nodeids.length === 1) {
-    return client
-      .get(apiURLs.node.get(nodeids[0]))
-      .then((d) => d.json())
-      .then((res) => {
-        if (res) return { rawResponse: [res], nodeids }
-      })
-  }
 
   const url = apiURLs.node.getMultipleNode(namespaceID)
   return client
@@ -65,14 +57,6 @@ const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
 
 const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
   if (nodeids.length === 0) return
-  if (nodeids.length === 1) {
-    return client
-      .get(apiURLs.share.getSharedNode(nodeids[0]))
-      .then((d) => d.json())
-      .then((res) => {
-        if (res) return { rawResponse: [res], nodeids }
-      })
-  }
 
   const url = apiURLs.share.getBulk
   return client
@@ -88,14 +72,6 @@ const getMultipleSharedNodeAPI = async (nodeids: string[]) => {
 
 const getMultipleSnippetAPI = async (ids: string[]) => {
   if (ids.length === 0) return
-  if (ids.length === 1) {
-    return client
-      .get(apiURLs.snippet.getById(ids[0]))
-      .then((d) => d.json())
-      .then((res) => {
-        if (res) return [res]
-      })
-  }
 
   const url = apiURLs.snippet.bulkGet
   return client

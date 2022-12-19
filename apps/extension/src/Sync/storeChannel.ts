@@ -8,6 +8,7 @@ import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
@@ -33,6 +34,8 @@ const getStore = (channel: BroadcastSyncedChannel) => {
       return useDescriptionStore
     case BroadcastSyncedChannel.SNIPPETS:
       return useSnippetStore
+    case BroadcastSyncedChannel.METADATA:
+      return useMetadataStore
     case BroadcastSyncedChannel.LINKS:
       return useLinkStore
     case BroadcastSyncedChannel.SMART_CAPTURE:

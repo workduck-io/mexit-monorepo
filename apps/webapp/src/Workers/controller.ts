@@ -53,6 +53,7 @@ export const runBatchWorker = async (
   args: any[] | Record<any, any[]>
 ) => {
   const res = await requestsWorker.runBatchWorker(requestType, batchSize, args)
+  mog('RUN_BATCH_WORKER', { res })
   return res
 }
 

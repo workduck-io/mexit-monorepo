@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 
 import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { StyledEditor } from '@mexit/shared'
+
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
+import EditorHeader from '../Components/Editor/EditorHeader'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useAnalysis } from '../Stores/useAnalysis'
 import useBlockStore from '../Stores/useBlockStore'
@@ -29,24 +32,19 @@ export const EditorViewWrapper = styled.div`
 `
 
 const EditorView = () => {
+  const [first, setFirst] = useState(true)
+  useAnalysis()
+  const noteId = useParams()?.nodeId
   const { resetEditor } = useEditorActions()
   const { ilinks, archive, sharedNodes } = useDataStore()
+
+  const infobar = useLayoutStore((store) => store.infobar)
   const contents = useContentStore((state) => state.contents)
   const snippets = useSnippetStore((state) => state.snippets)
-  const [first, setFirst] = useState(true)
-
-  useAnalysis()
-
-  // * Why do we need this?
-  // useEffect(() => {
-  //   async function fetchSharedAndPortals() {
-  //     const fetchSharedDataPromise = fetchShareData()
-  //     const initPortalsPromise = initPortals()
-
-  //     await Promise.allSettled([fetchSharedDataPromise, initPortalsPromise])
-  //   }
-  //   fetchSharedAndPortals()
-  // }, [workspaceDetails]) // eslint-disable-line
+  const focusMode = useLayoutStore((s) => s.focusMode)
+  const isBlockMode = useBlockStore((store) => store.isBlockMode)
+  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
+  const toggleFocusMode = useLayoutStore((s) => s.toggleFocusMode)
 
   useEffect(() => {
     if (!first) {
@@ -55,21 +53,6 @@ const EditorView = () => {
       setFirst(false)
     }
   }, [ilinks, archive, contents, snippets]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // const location = useLocation()
-  // const showInfoBar = () => {
-  //   if (location.pathname.startsWith('/editor')) return true
-  // }
-
-  // const shortcuts = useHelpStore((store) => store.shortcuts)
-  // const node = useEditorStore((store) => store.node)
-  // const { shortcutDisabled, shortcutHandler } = useKeyListener()
-
-  // const { goTo } = useRouting()
-  // const { loadNode } = useLoad()
-
-  const focusMode = useLayoutStore((s) => s.focusMode)
-  const toggleFocusMode = useLayoutStore((s) => s.toggleFocusMode)
 
   useEffect(() => {
     if (focusMode.on) {
@@ -85,9 +68,6 @@ const EditorView = () => {
       }
     }
   }, [focusMode]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const isBlockMode = useBlockStore((store) => store.isBlockMode)
-  const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
 
   useEffect(() => {
     if (isBlockMode) {
@@ -105,9 +85,12 @@ const EditorView = () => {
 
   return (
     <EditorViewWrapper>
-      <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
-        <Outlet />
-      </ErrorBoundary>
+      <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
+        <EditorHeader noteId={noteId} />
+        <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
+          <Outlet />
+        </ErrorBoundary>
+      </StyledEditor>
     </EditorViewWrapper>
   )
 }

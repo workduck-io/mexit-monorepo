@@ -106,6 +106,8 @@ export const DraggableToggle = () => {
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
+      event.stopPropagation()
+
       if (tracking) {
         const newHeight = event.clientY
         setToggleTop(newHeight)
