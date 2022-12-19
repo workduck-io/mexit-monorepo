@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script'
 
-import { ActionType, LINK_SHORTENER_URL_BASE, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
+import { ActionType, LINK_SHORTENER_URL_BASE, SEPARATOR } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 import fuzzysort from 'fuzzysort'
@@ -25,36 +25,36 @@ Sentry.init({
   integrations: [new CaptureConsole({ levels: ['error'] })]
 })
 
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'install') {
-    const url = MEXIT_FRONTEND_URL_BASE
-    chrome.tabs.create(
-      {
-        url: url,
-        pinned: true
-      },
-      (tab) => {
-        tab.highlighted = true
-        tab.active = true
-      }
-    )
-  }
+// chrome.runtime.onInstalled.addListener((details) => {
+//   if (details.reason === 'install') {
+//     const url = MEXIT_FRONTEND_URL_BASE
+//     chrome.tabs.create(
+//       {
+//         url: url,
+//         pinned: true
+//       },
+//       (tab) => {
+//         tab.highlighted = true
+//         tab.active = true
+//       }
+//     )
+//   }
 
-  // * On update, show release notes
-  // else if (details.reason === 'update') {
-  //   // * TODO: Use release notes url
-  //   const url = 'http://localhost:3333/share/namespace/id'
-  //   chrome.tabs.create(
-  //     {
-  //       url,
-  //       pinned: false
-  //     },
-  //     (tab) => {
-  //       tab.active = true
-  //     }
-  //   )
-  // }
-})
+//   // * On update, show release notes
+//   // else if (details.reason === 'update') {
+//   //   // * TODO: Use release notes url
+//   //   const url = 'http://localhost:3333/share/namespace/id'
+//   //   chrome.tabs.create(
+//   //     {
+//   //       url,
+//   //       pinned: false
+//   //     },
+//   //     (tab) => {
+//   //       tab.active = true
+//   //     }
+//   //   )
+//   // }
+// })
 
 const handleResponseCallback = (tabId: number, response: any) => {
   if (!response) {

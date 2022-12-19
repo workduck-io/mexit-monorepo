@@ -64,12 +64,16 @@ export const useInitLoader = () => {
 
     mog('NamespacesInitResponse: ', { response, ns, newILinks, archivedILinks })
 
+    if (ns.length === 0) {
+      return
+    }
+
     setNamespaces(ns)
 
     setIlinks(newILinks)
     addInArchive(archivedILinks)
 
-    response.fulfilled.forEach((nodes) => {
+    response?.fulfilled?.forEach(async (nodes) => {
       if (nodes) {
         const notes = {}
         const metadatas = {}
@@ -79,7 +83,7 @@ export const useInitLoader = () => {
           notes[note.id] = { type: 'editor', content: deserializeContent(note.data) }
         })
 
-        updateFromNotes(notes, metadatas)
+        await updateFromNotes(notes, metadatas)
       }
     })
   }
@@ -110,20 +114,24 @@ export const useInitLoader = () => {
     const snippetsArr = Object.values(newSnippets)
     updateSlashCommands(snippetsArr)
 
-    snippetsArr.forEach(async (snippet) => {
+    for await (const snippet of snippetsArr) {
       updateDescription(snippet.id, {
         rawText: convertContentToRawText(snippet.content, '\n'),
         truncatedContent: snippet.content.slice(0, 8)
       })
-      await updateSnippetIndex(snippet)
-    })
+      try {
+        await updateSnippetIndex(snippet)
+      } catch (error) {
+        mog('ErrorUpdatingSnippetIdx', { error })
+      }
+    }
   }
 
   const getAllSnippets = async () => {
     const localSnippets = useSnippetStore.getState().snippets
     const { response } = await wInitSnippets(localSnippets)
 
-    response.fulfilled.forEach(async (snippets) => {
+    response?.fulfilled?.forEach(async (snippets) => {
       const snippetsRecord = snippets.reduce((prev, snippet) => ({ ...prev, [snippet.id]: snippet }), {})
       await updateSnippets(snippetsRecord)
     })
@@ -146,7 +154,9 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    const promises = [getAllNamespaces(), getAllSnippets(), getAllLinks(), getAllHighlights(), getAllSmartCaptures()]
+    await getAllNamespaces()
+    await getAllSnippets()
+    const promises = [getAllLinks(), getAllHighlights(), getAllSmartCaptures()]
 
     await Promise.allSettled(promises)
     mog('Fetch All Resolved completely')
