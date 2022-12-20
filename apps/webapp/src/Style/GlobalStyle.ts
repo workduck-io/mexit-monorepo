@@ -97,7 +97,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    border: none;
+    border: 1px solid transparent;
+    &:focus {
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+    }
   }
 
   #floating-picker-root {
