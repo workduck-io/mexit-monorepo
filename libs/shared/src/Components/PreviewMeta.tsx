@@ -16,13 +16,13 @@ const PreviewMetaContainer = styled.div`
   display: flex;
   width: 100%;
   padding: 0.75rem;
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[8]};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
   align-items: center;
   justify-content: flex-end;
 
   ${Data} {
     font-size: 0.8em;
-    color: ${({ theme }) => theme.colors.gray[6]};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 

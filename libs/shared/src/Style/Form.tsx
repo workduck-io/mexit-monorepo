@@ -113,6 +113,10 @@ export const TextArea = styled.textarea`
 
 export const AuthForm = styled.form`
   width: 100%;
+
+  button {
+    font-size: 1.2rem;
+  }
 `
 
 export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?: any }>`
@@ -187,6 +191,10 @@ export const ButtonFields = styled.div<{ position?: string }>`
   margin: ${({ theme }) => theme.spacing.large} 0 ${({ theme }) => theme.spacing.medium};
   gap: ${({ theme }) => theme.spacing.medium};
 
+  button {
+    font-size: 1.2rem;
+  }
+
   ${({ position }) => {
     switch (position) {
       case 'end':
@@ -199,36 +207,74 @@ export const ButtonFields = styled.div<{ position?: string }>`
   }}
 `
 
-export const ReactSelectStyles = (theme: DefaultTheme) => ({
-  menu: (provided, state) => ({
+export const ReactSelectStyles = (theme: DefaultTheme) => {
+  const separators = (provided, state) => ({
     ...provided,
-    // width: state.selectProps.width,
-    color: state.selectProps.menuColor,
-    backgroundColor: theme.generic.form.input.surface,
-    padding: `${theme.spacing.small} ${theme.spacing.small}`,
-    zIndex: 1020
-  }),
+    backgroundColor: theme.tokens.surfaces.separator
+  })
 
-  control: (provided) => ({
+  const indicators = (provided, state) => ({
     ...provided,
-    backgroundColor: theme.generic.form.input.surface,
-    borderColor: theme.tokens.surfaces.s[3],
-    margin: `${theme.spacing.small} 0`
-  }),
-
-  option: (provided, state) => {
-    let background = state.isSelected ? theme.tokens.colors.primary.default : 'transparent'
-    background = state.isFocused ? `rgba(${theme.rgbTokens.colors.primary.default}, 0.2)` : background
-    return {
-      ...provided,
-      borderRadius: theme.borderRadius.tiny,
-      backgroundColor: background,
-      color: state.isSelected || state.isFocused ? theme.tokens.colors.primary.default : 'inherit',
-      padding: '6px 10px',
-      margin: `${theme.spacing.tiny} 0px`
+    color: theme.tokens.text.fade,
+    ':hover': {
+      color: theme.tokens.text.default
     }
+  })
+
+  return {
+    menu: (provided, state) => ({
+      ...provided,
+      // width: state.selectProps.width,
+      color: state.selectProps.menuColor,
+      backgroundColor: theme.generic.form.input.surface,
+      padding: `${theme.spacing.small} ${theme.spacing.small}`,
+      zIndex: 1020
+    }),
+
+    indicatorSeparator: separators,
+    indicatorsContainer: indicators,
+    loadingIndicator: indicators,
+    dropdownIndicator: indicators,
+    placeholder: (provided, state) => ({
+      ...provided,
+      color: theme.tokens.text.fade
+    }),
+    clearIndicator: indicators,
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: theme.generic.form.input.surface,
+      border: theme.generic.form.input.border,
+      margin: `${theme.spacing.small} 0`,
+      ':hover': {
+        border: theme.generic.form.input.border
+      }
+    }),
+
+    option: (provided, state) => {
+      let background = state.isSelected ? theme.tokens.colors.primary.default : 'transparent'
+      background = state.isFocused ? `rgba(${theme.rgbTokens.colors.primary.default}, 0.25)` : background
+      let color = state.isSelected ? theme.tokens.colors.primary.text : theme.tokens.text.default
+      color = state.isFocused ? theme.tokens.colors.primary.default : color
+      return {
+        ...provided,
+        borderRadius: theme.borderRadius.tiny,
+        backgroundColor: background,
+        color,
+        padding: '6px 10px',
+        margin: `${theme.spacing.tiny} 0px`
+      }
+    },
+    multiValue: (provided, state) => ({
+      ...provided,
+      backgroundColor: theme.tokens.surfaces.s[3],
+      boxShadow: theme.tokens.shadow.small,
+      borderRadius: theme.borderRadius.tiny
+    }),
+    multiValueRemove: (provided, state) => ({
+      ...provided
+    })
   }
-})
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StyledSelect = (props: any) => {
@@ -248,7 +294,34 @@ export const StyledSelect = (props: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StyledCreatatbleSelect = (props: any) => {
   const theme = useTheme()
-  return <Creatable {...props} theme={theme.additional.reactSelect} styles={ReactSelectStyles(theme)}></Creatable>
+  const reactSelectTheme = {
+    borderRadius: 4,
+    colors: {
+      primary: theme.tokens.colors.primary.default,
+      primary75: theme.tokens.colors.primary.active,
+      primary50: theme.tokens.colors.primary.hover,
+      primary25: theme.tokens.colors.primary.disabled,
+      danger: theme.tokens.colors.red,
+      dangerLight: '#FFBDAD',
+      neutral0: theme.tokens.surfaces.s[0],
+      neutral5: theme.tokens.surfaces.s[1],
+      neutral10: theme.tokens.surfaces.s[2],
+      neutral20: theme.tokens.surfaces.s[3],
+      neutral30: theme.tokens.surfaces.s[4],
+      neutral40: theme.tokens.surfaces.s[5],
+      neutral50: theme.tokens.surfaces.s[6],
+      neutral60: theme.tokens.text.disabled,
+      neutral70: theme.tokens.text.fade,
+      neutral80: theme.tokens.text.default,
+      neutral90: theme.tokens.text.heading
+    },
+    spacing: {
+      baseUnit: 4,
+      controlHeight: 38,
+      menuGutter: 8
+    }
+  }
+  return <Creatable {...props} theme={reactSelectTheme} styles={ReactSelectStyles(theme)}></Creatable>
 }
 
 export const SelectWrapper = styled.div`

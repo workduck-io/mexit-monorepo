@@ -197,7 +197,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
         <>
           <CreateNewNoteSidebarButton onClick={createNewNoteInNamespace}>
             <Icon width={24} icon={addCircleLine} />
-            Create a new note
+            New Note
           </CreateNewNoteSidebarButton>
         </>
       )}

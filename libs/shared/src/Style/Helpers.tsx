@@ -68,9 +68,12 @@ export const ScrollStyles = (color = undefined, width = 8) => css`
   &::-webkit-scrollbar-thumb {
     border-radius: 0px;
     border: 2px solid transparent;
+    background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumb}, 0.25)`};
+    border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
   }
   &::-webkit-scrollbar-thumb:hover {
+    background: ${color ? color : ({ theme }) => `rgba(${theme.rgbTokens.surfaces.scrollbar.thumbHover}, 0.5)`};
   }
   &::-webkit-scrollbar-track {
     background: none;

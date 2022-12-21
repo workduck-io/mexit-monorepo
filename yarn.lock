@@ -3795,10 +3795,10 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
   integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
 
-"@workduck-io/dwindle@^0.1.1":
-  version "0.1.1"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.1/eae8b25b1fb9c8fc054cc9fb3e878aaba34ce611#eae8b25b1fb9c8fc054cc9fb3e878aaba34ce611"
-  integrity sha512-QQmcvXubKvJQ8enXmHpYiFZPDdMO9lC/o6YXgXPFUmzd3mQLXMqsw8Ozyb8v5ZoMwhYAdYaC0Bz3lKkaLUqs1A==
+"@workduck-io/dwindle@^0.1.2":
+  version "0.1.2"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.2/01b13f00ab6f0f4b29b5c1d6ce675c45687a758c#01b13f00ab6f0f4b29b5c1d6ce675c45687a758c"
+  integrity sha512-K+c46B1Se489SHg98ExwviDgoPp0CfIykhuKbpMJLHUpA3zK58UR1SInUAhyvtoADpdKCck52JKQspbcNq0ySw==
   dependencies:
     "@aws-sdk/client-cognito-identity" "^3.17.0"
     "@aws-sdk/client-s3" "^3.17.0"
@@ -3820,25 +3820,25 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/968178df34cab6b6df5489f73ed86ff0b9e97123#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-"@workduck-io/mex-components@^0.0.22":
-  version "0.0.22"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.22/12375476bc890d53c1d99db49966eb9af0730153#12375476bc890d53c1d99db49966eb9af0730153"
-  integrity sha512-nJicwOU3+ZK+Il3qivR/86OJjG93DMTgN0ssfr0ZH94SjaQIo/87lrPmdEqA+f7ZWUMYm08XhwlTJY7UHTJBmQ==
+"@workduck-io/mex-components@^0.0.25":
+  version "0.0.25"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.25/25276f57ef7b3d82aaa78195303fd87a48c39fa9#25276f57ef7b3d82aaa78195303fd87a48c39fa9"
+  integrity sha512-CMOFHK8SlNxVcvrtY1/Z9y5QtHp84Hm3IcUjUQ+tiY47jrP08UED4nSYwE8mab5jtnaA1HkHI2TITbjddmpM7g==
   dependencies:
     "@emoji-mart/data" "^1.0.6"
     "@emoji-mart/react" "^1.0.1"
     "@tippyjs/react" "^4.2.6"
-    "@workduck-io/mex-themes" "^0.0.7"
+    "@workduck-io/mex-themes" "^0.0.9"
     core-js "^3.21.0"
     deepmerge "^4.2.2"
     emoji-mart "^5.2.2"
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-themes@^0.0.7":
-  version "0.0.7"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.7/efc59313fb3174c0c5ee4bfb3f3e311b8c7765fa#efc59313fb3174c0c5ee4bfb3f3e311b8c7765fa"
-  integrity sha512-HiNfeu1Q8yjUrdGFiLzIdm6PArQRX8jTQTnUjSN+4zf8SExEhtAeeagDcE/4ImQEVLw+1L0UzazUXQZtcErohA==
+"@workduck-io/mex-themes@^0.0.9":
+  version "0.0.9"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.9/8467a5a6c2a508a3a8085e088e7f5d6de33d85b8#8467a5a6c2a508a3a8085e088e7f5d6de33d85b8"
+  integrity sha512-Gl7m1H4nlBkkFzlNU39MAsiasVwy1cMrK/txVUx+/ELJs+ipcpLQWK6aPvf2aiDP5OFMEzJY17zyJMq2qgYX7w==
   dependencies:
     color-scheme "^1.0.1"
     core-js "^3.21.0"

@@ -7,7 +7,6 @@ import { SelectWrapper } from '@mexit/shared'
 export const InviteWrapper = styled.div``
 export const MultipleInviteWrapper = styled.div`
   form > input {
-    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
   form > fieldset {
     display: flex;
@@ -26,7 +25,6 @@ export const InviteFormFieldset = styled.fieldset`
   border: none;
   padding: 0;
   input {
-    border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 export const SharedPermissionsWrapper = styled.div``
@@ -36,14 +34,14 @@ export const ShareOwnerTag = styled.div`
   color: ${({ theme }) => theme.tokens.text.default};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   background: ${({ theme }) => theme.tokens.surfaces.s[2]};
-  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
+  border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
 `
 
 export const SharedPermissionsTable = styled.table`
   margin-top: ${({ theme }) => theme.spacing.large};
   min-width: 600px;
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
+  border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
   caption {
@@ -65,7 +63,7 @@ export const ShareRowHeading = styled.thead`
   tr {
     td {
       padding: ${({ theme }) => theme.spacing.small};
-      border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
+      border-bottom: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
       &:first-child {
         padding-left: ${({ theme }) => theme.spacing.medium};
       }

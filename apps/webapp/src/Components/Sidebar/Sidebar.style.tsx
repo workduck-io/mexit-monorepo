@@ -197,7 +197,6 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
     const calcSize = active ? 28 : (sidebarWidth - 150) / totalItems
     // Limit it
     const size = clamp(calcSize, 8, 28)
-
     // We show size greater than 16px as icons
     // background-color: ${active ? theme.colors.gray[8] : 'transparent'};
     // color: ${active ? theme.colors.primary : theme.tokens.text.fade};
@@ -211,6 +210,7 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
           active
             ? generateStyle(theme.sidebar.spaces.item.wrapper.selected)
             : generateStyle(theme.sidebar.spaces.item.wrapper)}
+        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 
         ${IconWrapper} {
           height: ${size}px;

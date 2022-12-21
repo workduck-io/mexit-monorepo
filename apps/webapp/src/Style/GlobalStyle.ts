@@ -40,6 +40,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  button {
+    border: none;
+  }
+
   body {
     height: 100vh;
     width: 100vw;
@@ -97,7 +101,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    border: none;
+    &:focus-visible {
+      outline: ${({ theme }) => theme.tokens.colors.primary.default} solid 1px;
+    }
   }
 
   #floating-picker-root {

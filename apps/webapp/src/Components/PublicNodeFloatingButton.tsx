@@ -4,7 +4,6 @@ import { animated, useSpring } from 'react-spring'
 import externalLinkLine from '@iconify/icons-ri/external-link-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
-import { transparentize } from 'polished'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
@@ -26,7 +25,7 @@ const FloatButton = styled(Button)`
   bottom: 1rem;
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 `
 
@@ -35,9 +34,9 @@ const FloatingMenuHeader = styled(animated.div)<{ visible: boolean }>`
   flex-direction: row;
   justify-content: space-between;
   white-space: nowrap;
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
 
-  color: ${({ theme }) => transparentize(0.22, theme.colors.text.heading)};
+  color: ${({ theme }) => theme.tokens.text.default};
   position: absolute;
 
   padding: 1rem 4rem;
@@ -50,7 +49,7 @@ const FloatingMenu = styled(animated.div)`
   flex-direction: column;
   text-align: center;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.colors.background.modal};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
 
   min-width: 250px;
 
@@ -67,7 +66,7 @@ const FloatingMenu = styled(animated.div)`
 const HorizontalRule = styled.div`
   margin: 1rem -1rem;
 
-  background-color: #d9d9d9;
+  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
   opacity: 0.1;
   content: ' ';
   height: 1px;
@@ -92,16 +91,16 @@ const FloatingButton = styled(FloatButton)<{ visible: boolean }>`
 `
 
 const ConnectButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
+  color: ${({ theme }) => theme.tokens.colors.primary.text};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
 `
 
 const Link = styled.a`
-  color: #fff;
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   opacity: 0.5;
   display: flex;
   justify-content: center;
@@ -109,7 +108,7 @@ const Link = styled.a`
 
   &:hover {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.hover};
     opacity: 1;
   }
 `

@@ -89,7 +89,8 @@ export type PluginOptionType = {
 }
 
 export const linkPlugin = {
-  renderAfterEditable: PlateFloatingLink
+  renderAfterEditable: PlateFloatingLink,
+  triggerFloatingLinkHotkeys: 'ctrl+k'
 }
 
 /**

@@ -26,7 +26,7 @@ export const SILink = styled.div<SILinkProps>`
     color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.7);
   }
   .ILink_decoration {
-    color: ${({ theme }) => theme.tokens.colors.secondary};
+    color: ${({ theme }) => theme.tokens.text.fade};
     &_left {
     }
     &_right {
@@ -71,7 +71,7 @@ export const TaskSLink = styled(SILink)`
           : css`
               background: -webkit-linear-gradient(
                 60deg,
-                ${theme.colors.secondary},
+                ${theme.tokens.colors.secondary},
                 ${theme.tokens.colors.primary.default}
               );
               -webkit-background-clip: text;

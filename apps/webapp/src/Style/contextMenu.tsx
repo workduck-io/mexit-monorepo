@@ -102,7 +102,7 @@ export const ContextMenuSubTrigger = styled(ContextMenuPrimitive.SubTrigger)<{ c
   ${itemStyles}
 
   &[data-state="open"] {
-    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.2);
     color: ${({ theme }) => theme.tokens.text.heading};
     svg {
       color: ${({ theme }) => theme.tokens.colors.primary.default};
