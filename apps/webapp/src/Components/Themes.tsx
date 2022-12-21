@@ -70,7 +70,7 @@ const Themes = () => {
       <ThemePreviews>
         {transition((styles, t, _t, i) => {
           return (
-            <ManagedProvider key={`mex_theme_key_${t.id}`} tokens={t.data['dark']}>
+            <ManagedProvider mode="dark" key={`mex_theme_key_${t.id}`} tokens={t.data['dark']}>
               {/* eslint-disable-next-line */}
               {/* @ts-ignore */}
               <Theme selected={t.id === theme.themeId} onClick={() => onThemeSelect(i)} style={styles}>
