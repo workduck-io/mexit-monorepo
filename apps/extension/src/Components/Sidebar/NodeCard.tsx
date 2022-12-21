@@ -48,7 +48,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     return checkNodePublic(nodeId)
   }, [publicNodes])
 
-  const node = getNode(nodeId)
+  const node = getNode(nodeId, true)
   const contents = getContent(nodeId)
 
   const flipPublicAccess = async () => {

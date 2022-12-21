@@ -27,7 +27,7 @@
     "@sentry/react": "^6.17.4",
     "@sentry/tracing": "^6.17.4",
     "@tippyjs/react": "^4.2.6",
-    "@udecode/plate": "~16.4.1",
+    "@udecode/plate": "^16.4.1",
     "@uifabric/styling": "^7.20.0",
     "@workduck-io/dwindle": "^0.1.1",
     "@workduck-io/flexsearch": "^0.7.22",

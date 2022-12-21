@@ -18,6 +18,7 @@ import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
+import { wUpdateDoc } from '../Sync/invokeOnWorker'
 
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
@@ -122,6 +123,9 @@ export function useSaveChanges() {
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
+
+        const title = !bulkCreateRequest ? message.title : message.node.title
+        wUpdateDoc('node', nodeid, content, title)
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
         dispatchAfterSave({ nodeid, content, metadata, highlight, blockHighlightMap }, saveAndExit, notification)
@@ -253,6 +257,8 @@ export function useSaveChanges() {
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
 
         setContent(nodeid, content, metadata)
+        const title = !bulkCreateRequest ? message.title : message.node.title
+        wUpdateDoc('node', nodeid, content, title)
 
         if (notification) {
           toast.success('Saved to Cloud')
