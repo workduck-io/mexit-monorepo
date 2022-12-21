@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.21.1
+
+### Patch Changes
+
+- f454e6bf: Fix themes and colors
+- cd236ec6: Update Search Index On Highlight
+
 ## 0.21.0
 
 ### Minor Changes
