@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Controller,useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 
 import { useAuth } from '@workduck-io/dwindle'
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { RegisterFormData, UserRoleValues,VerifyFormData } from '@mexit/core'
+import { RegisterFormData, UserRoleValues, VerifyFormData } from '@mexit/core'
 import {
   AuthForm,
   BackCard,
@@ -23,7 +23,7 @@ import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '.
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
-import { ALIAS_REG,EMAIL_REG, PASSWORD } from '../Utils/constants'
+import { ALIAS_REG, EMAIL_REG, PASSWORD } from '../Utils/constants'
 
 export const Register = () => {
   const [reqCode, setReqCode] = useState(false)
@@ -193,7 +193,9 @@ export const Register = () => {
                 </LoadingButton>
               </ButtonFields>
             </AuthForm>
-            <GoogleLoginButton text={'Register via Google'} />
+            <ButtonFields>
+              <GoogleLoginButton text={'Register via Google'} />
+            </ButtonFields>
           </>
         ) : (
           <AuthForm onSubmit={verifyForm.handleSubmit(onVerifySubmit)}>

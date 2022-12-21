@@ -113,6 +113,10 @@ export const TextArea = styled.textarea`
 
 export const AuthForm = styled.form`
   width: 100%;
+
+  button {
+    font-size: 1.2rem;
+  }
 `
 
 export const TextAreaBlock = styled(TextArea)<{ height?: TextFieldHeight; error?: any }>`
@@ -186,6 +190,10 @@ export const ButtonFields = styled.div<{ position?: string }>`
   align-items: center;
   margin: ${({ theme }) => theme.spacing.large} 0 ${({ theme }) => theme.spacing.medium};
   gap: ${({ theme }) => theme.spacing.medium};
+
+  button {
+    font-size: 1.2rem;
+  }
 
   ${({ position }) => {
     switch (position) {
