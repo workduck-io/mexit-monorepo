@@ -199,14 +199,25 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   table {
     ${({ theme }) => generateStyle(theme.editor.elements.table.wrapper)}
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    border-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    overflow: hidden;
+    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+    * {
+      border-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    }
     p {
       margin: 0.25rem 0;
     }
     th {
       ${({ theme }) => generateStyle(theme.editor.elements.table.th)}
+      background: ${({ theme }) => theme.tokens.surfaces.s[3]};
       border-bottom: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
     }
     td {
+      background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+      border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
       ${({ theme }) => generateStyle(theme.editor.elements.table.td)}
     }
     tr {
