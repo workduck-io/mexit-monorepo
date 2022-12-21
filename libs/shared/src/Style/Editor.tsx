@@ -200,12 +200,12 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   table {
     ${({ theme }) => generateStyle(theme.editor.elements.table.wrapper)}
     background: ${({ theme }) => theme.tokens.surfaces.s[2]};
-    border-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border: none;
     border-radius: ${({ theme }) => theme.borderRadius.small};
     overflow: hidden;
     box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     * {
-      border-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+      border-color: ${({ theme }) => theme.tokens.surfaces.separator};
     }
     p {
       margin: 0.25rem 0;
@@ -213,12 +213,21 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     th {
       ${({ theme }) => generateStyle(theme.editor.elements.table.th)}
       background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+      border: none;
       border-bottom: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+      border-right: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+    }
+    th:last-child {
+      border-right: none;
     }
     td {
       background: ${({ theme }) => theme.tokens.surfaces.s[2]};
-      border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
+      border-left: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+      border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
       ${({ theme }) => generateStyle(theme.editor.elements.table.td)}
+    }
+    td:first-child {
+      border-left: none;
     }
     tr {
       ${({ theme }) => generateStyle(theme.editor.elements.table.tr)}

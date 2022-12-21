@@ -40,6 +40,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  button {
+    border: none;
+  }
+
   body {
     height: 100vh;
     width: 100vw;
@@ -97,9 +101,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    border: 1px solid transparent;
-    &:focus {
-      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+    &:focus-visible {
+      outline: ${({ theme }) => theme.tokens.colors.primary.default} solid 1px;
     }
   }
 

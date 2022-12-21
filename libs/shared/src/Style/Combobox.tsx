@@ -21,12 +21,11 @@ export const ComboboxItem = styled.div<{ center?: boolean }>`
   width: 260px;
   color: ${({ theme }) => theme.tokens.text.default};
   &.highlight {
-    ${({ theme }) => generateStyle(theme.editor.combobox.item.selected)}
+    ${({ theme }) => generateStyle(theme.editor.combobox.item.hover)}
   }
   cursor: pointer;
 
   :hover {
-    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   & > svg {
@@ -83,7 +82,7 @@ export const ComboboxRoot = styled.div<{ isOpen: boolean }>`
       height: fit-content;
 
       > div {
-        background: ${theme.tokens.surfaces.modal};
+        ${({ theme }) => generateStyle(theme.editor.combobox.menu)}
         box-shadow: ${theme.tokens.shadow.medium};
         border-radius: ${theme.borderRadius.small};
 

@@ -90,7 +90,7 @@ export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'i
   ${({ selected, theme }) =>
     selected &&
     css`
-      background-color: rgba(${theme.rgbTokens.colors.secondary}, 0.25);
+      background-color: rgba(${theme.rgbTokens.colors.secondary}, 0.15);
       border-radius: ${theme.borderRadius.tiny};
     `}
   ${({ type, selected, theme }) =>
@@ -98,7 +98,11 @@ export const SMention = styled.div<{ selected: boolean; type: 'mentionable' | 'i
     type === 'self' &&
     !selected &&
     css`
-      background: -webkit-linear-gradient(60deg, ${theme.tokens.colors.secondary}, rgba(${theme.colors.primary}, 0.5));
+      background: -webkit-linear-gradient(
+        60deg,
+        ${theme.tokens.colors.secondary},
+        rgba(${theme.rgbTokens.colors.primary.default}, 0.75)
+      );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     `}

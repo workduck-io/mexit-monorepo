@@ -3820,10 +3820,10 @@
   resolved "https://npm.pkg.github.com/download/@workduck-io/flexsearch/0.7.22/968178df34cab6b6df5489f73ed86ff0b9e97123#968178df34cab6b6df5489f73ed86ff0b9e97123"
   integrity sha512-NADE1e1euqohnuCt7ymtwzGBC+5rPbtmKjp0VE0BF2w8cjvO1E9o2KNrPkMtHYRR+snr0iqO6lcBLM+J51m9QA==
 
-"@workduck-io/mex-components@^0.0.22":
-  version "0.0.22"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.22/12375476bc890d53c1d99db49966eb9af0730153#12375476bc890d53c1d99db49966eb9af0730153"
-  integrity sha512-nJicwOU3+ZK+Il3qivR/86OJjG93DMTgN0ssfr0ZH94SjaQIo/87lrPmdEqA+f7ZWUMYm08XhwlTJY7UHTJBmQ==
+"@workduck-io/mex-components@^0.0.23":
+  version "0.0.23"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-components/0.0.23/f6c926d5c6c39eb9dfb2966607d85abe9e160283#f6c926d5c6c39eb9dfb2966607d85abe9e160283"
+  integrity sha512-sHQ4vaNtsIpnCiCjwSJwqkzej5JeCCkwaXvo9tJQh0u9GFdpveLki0ARXhRxFmx8R3uy2nodbfQozpc/kSj/Mw==
   dependencies:
     "@emoji-mart/data" "^1.0.6"
     "@emoji-mart/react" "^1.0.1"
