@@ -75,6 +75,16 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
       title: 'to Embed'
     }
   },
+  [QuickLinkType.taskView]: {
+    link: {
+      ...spotlightShortcuts.open,
+      title: 'to Link'
+    },
+    inlineBlock: {
+      ...spotlightShortcuts.Tab,
+      title: 'to Embed'
+    }
+  },
   [QuickLinkType.snippet]: {
     snippet: {
       ...spotlightShortcuts.open,
