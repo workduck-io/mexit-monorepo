@@ -3835,17 +3835,6 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-themes@^0.0.7":
-  version "0.0.7"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.7/efc59313fb3174c0c5ee4bfb3f3e311b8c7765fa#efc59313fb3174c0c5ee4bfb3f3e311b8c7765fa"
-  integrity sha512-HiNfeu1Q8yjUrdGFiLzIdm6PArQRX8jTQTnUjSN+4zf8SExEhtAeeagDcE/4ImQEVLw+1L0UzazUXQZtcErohA==
-  dependencies:
-    color-scheme "^1.0.1"
-    core-js "^3.21.0"
-    deepmerge "^4.2.2"
-    lodash "^4.17.21"
-    polished "^4.1.4"
-
 "@workduck-io/mex-themes@^0.0.9":
   version "0.0.9"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.9/8467a5a6c2a508a3a8085e088e7f5d6de33d85b8#8467a5a6c2a508a3a8085e088e7f5d6de33d85b8"
