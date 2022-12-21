@@ -6,6 +6,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 
 export const StyledContexifyMenu = styled(Menu)`
   &.react-contexify {
+    width: max-content !important;
     background-color: ${({ theme }) => theme.generic.contextMenu.menu.surface};
     box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
   }
