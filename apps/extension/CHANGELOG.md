@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.2
+
+### Patch Changes
+
+- f46b44b8: Shared spaces fixes
+
 ## 0.19.1
 
 ### Patch Changes
