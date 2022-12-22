@@ -33,8 +33,8 @@ export const useMentionStore = create<MentionStore>(
               mentionable: [...get().mentionable, mentionable]
             })
           } else {
-            exists.access = mergeAccess(exists.access, mentionable.access)
-            set({ mentionable: [...get().mentionable.filter((iu) => iu.userID !== mentionable.userID), exists] })
+            mentionable.access = mergeAccess(exists.access, mentionable.access)
+            set({ mentionable: [...get().mentionable.filter((iu) => iu.userID !== mentionable.userID), mentionable] })
           }
         },
         addInvitedUser: (invitedUser: InvitedUser) => {

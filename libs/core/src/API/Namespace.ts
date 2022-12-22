@@ -41,13 +41,14 @@ export class NamespaceAPI {
   }
 
   async revokeAccess(namespaceID: string, userIDs: string[], config?) {
-    return await this.client.delete(apiURLs.namespaces.delete, {
-      ...config,
-      data: {
+    return await this.client.delete(
+      apiURLs.namespaces.delete,
+      {
         namespaceID,
         userIDs
-      }
-    })
+      },
+      config
+    )
   }
 
   async updateAccess(namespaceID: string, userIDToAccessTypeMap: { [userid: string]: AccessLevel }, config?) {

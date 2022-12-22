@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
 import repeatLine from '@iconify/icons-ri/repeat-line'
@@ -80,7 +80,7 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
     // mog('onPermissionChange', { userid, email })
 
     // Change the user and add to changedUsers
-    const changedUser = changedIUsers.find((u) => u.email === email)
+    const changedUser = changedIUsers?.find((u) => u.email === email)
     const dataUser = sharedIUsers.find((u) => u.email === email)
 
     if (changedUser) {
@@ -94,7 +94,7 @@ export const InvitedUsersContent = (/*{}: PermissionModalContentProps*/) => {
       }
     } else if (dataUser) {
       const changeUser = { ...dataUser, change: ['revoke' as const] }
-      setChangedIUsers([...changedIUsers, changeUser])
+      setChangedIUsers([...(changedIUsers ?? []), changeUser])
     }
   }
 
