@@ -6,12 +6,13 @@ import {
   Mentionable,
   mog,
   SelfMention,
-  ShareContext} from '@mexit/core'
+  ShareContext
+} from '@mexit/core'
 import { mergeAccess } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-import { addAccessToUser,useMentionStore } from '../Stores/useMentionsStore'
+import { addAccessToUser, useMentionStore } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 
 import { useNodeShareAPI } from './API/useNodeShareAPI'
@@ -104,7 +105,7 @@ export const useMentions = () => {
     }
   ) => {
     const mentionable = useMentionStore.getState().mentionable
-    const mentionExists = mentionable.find((user) => user.userID === userID)
+    const mentionExists = userID ? mentionable.find((user) => user.userID === userID) : undefined
 
     mog('adding mentionable user ', { userID, mentionExists, mentionable, accessDetails })
     if (mentionExists) {

@@ -43,7 +43,7 @@ export const useUserService = () => {
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
-    if (user) return user
+    if (user) return {...user,userId: user.userID}
 
     try {
       return (await API.user.getByMail(email)) as TempUser

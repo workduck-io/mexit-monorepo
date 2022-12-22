@@ -76,7 +76,6 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
         .map((email) => {
           return getUserDetails(email)
         })
-
       const userDetails = await Promise.allSettled(userDetailPromises)
 
       mog('userDetails', { userDetails })
