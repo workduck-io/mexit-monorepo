@@ -212,6 +212,14 @@ export const SpaceItem = styled.div<{ active: boolean; totalItems: number; sideb
             : generateStyle(theme.sidebar.spaces.item.wrapper)}
         box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 
+        ${({ theme }) =>
+          active
+            ? css`
+                border: 1px solid ${theme.tokens.colors.primary.default};
+                box-shadow: 0px 2px 4px rgba(${theme.rgbTokens.colors.primary.default}, 0.1);
+              `
+            : ''}
+
         ${IconWrapper} {
           height: ${size}px;
           width: ${size}px;
