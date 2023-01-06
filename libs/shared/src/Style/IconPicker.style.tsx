@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 export const IconSelector = styled.button`
   display: flex;
@@ -13,7 +13,12 @@ export const IconSelector = styled.button`
   }
 `
 
-export const IconWrapper = styled.div<{ size?: number }>`
+export const IconLoading = (theme: any) => keyframes`
+  0% { color: ${theme.tokens.colors.primary.default};; }
+  100% { color: ${theme.tokens.colors.yellow}; }
+`
+
+export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +34,12 @@ export const IconWrapper = styled.div<{ size?: number }>`
       height: ${calcSize};
     `
   }}
+
+  ${({ isLoading, theme }) =>
+    isLoading &&
+    css`
+      animation: ${IconLoading(theme)} 1s infinite alternate;
+    `}
 
   svg {
     width: 100%;

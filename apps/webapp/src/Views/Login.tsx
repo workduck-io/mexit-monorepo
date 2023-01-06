@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { LoadingButton } from '@workduck-io/mex-components'
 
 import { LoginFormData, mog } from '@mexit/core'
-import { AuthForm,BackCard, ButtonFields,CenteredColumn , FooterCard , Title  } from '@mexit/shared'
+import { AuthForm, BackCard, ButtonFields, CenteredColumn, FooterCard, Title } from '@mexit/shared'
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import { InputFormError } from '../Components/Input'

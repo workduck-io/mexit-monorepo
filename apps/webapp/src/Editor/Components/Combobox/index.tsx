@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import { flip, offset, shift } from '@floating-ui/react-dom-interactions'
 import { getRangeBoundingClientRect, PortalBody, usePlateEditorRef, useVirtualFloating } from '@udecode/plate'
-import { useTheme } from 'styled-components'
 
 import { NodeEditorContent } from '@mexit/core'
-import { ComboboxRoot, ComboSeperator, PreviewMeta } from '@mexit/shared'
+import { ComboboxRoot } from '@mexit/shared'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -13,13 +12,13 @@ import { useContentStore } from '../../../Stores/useContentStore'
 import { Shortcut } from '../../../Stores/useHelpStore'
 import { useMetadataStore } from '../../../Stores/useMetadataStore'
 import { CategoryType, QuickLinkType } from '../../constants'
-import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { useComboboxIsOpen } from '../../Hooks/useComboboxIsOpen'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxProps } from '../../Types/Combobox'
 
 import BlockCombo from './BlockCombo'
+import ItemPreview from './ItemPreview'
 import ItemsContainer from './ItemsContainer'
 import ItemShortcuts from './ItemShortcuts'
 
@@ -55,40 +54,44 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
   [QuickLinkType.backlink]: {
     link: {
       ...spotlightShortcuts.open,
-      title: 'to Link'
+      title: 'Link'
     },
     inlineBlock: {
       ...spotlightShortcuts.Tab,
-      title: 'to Embed'
+      title: 'Embed'
     }
   },
   [QuickLinkType.taskView]: {
     link: {
       ...spotlightShortcuts.open,
-      title: 'to Link'
+      title: 'Link'
     },
     inlineBlock: {
       ...spotlightShortcuts.Tab,
-      title: 'to Embed'
+      title: 'Embed'
     }
   },
   [QuickLinkType.snippet]: {
     snippet: {
       ...spotlightShortcuts.open,
-      title: 'to Insert'
+      title: 'Insert'
     }
   },
   [QuickLinkType.prompts]: {
     previous: spotlightShortcuts.ShiftTab,
+    snippet: {
+      ...spotlightShortcuts.open,
+      title: 'Insert'
+    },
     generate: {
       ...spotlightShortcuts.Tab,
-      title: 'Generate'
+      title: 'Next'
     }
   },
   [CategoryType.action]: {
     action: {
       ...spotlightShortcuts.open,
-      title: 'to Insert'
+      title: 'Insert'
     }
   }
 }
@@ -103,7 +106,6 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const setItemIndex = useComboboxStore((state) => state.setItemIndex)
   const isBlockTriggered = useComboboxStore((store) => store.isBlockTriggered)
   const activeBlock = useComboboxStore((store) => store.activeBlock)
-  const preview = useComboboxStore((store) => store.preview)
   const setPreview = useComboboxStore((store) => store.setPreview)
   const search = useComboboxStore((store) => store.search)
   const combobox = useComboboxControls(true)
@@ -115,7 +117,6 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
   const setIsSlash = useComboboxStore((store) => store.setIsSlash)
   const [metaData, setMetaData] = useState(undefined)
   const editor = usePlateEditorRef()
-  const theme = useTheme()
 
   const menuProps = combobox ? combobox.getMenuProps({}, { suppressRefError: true }) : { ref: null }
 
@@ -218,23 +219,7 @@ export const Combobox = ({ onSelectItem, onRenderItem, isSlash, portalElement }:
               nodeId={items[itemIndex]?.key}
               isNew={items[itemIndex]?.data}
             />
-            {((preview && listItem?.type && !isBlockTriggered) ||
-              (isBlockTriggered && textAfterBlockTrigger && preview)) && (
-              <ComboSeperator fixedWidth>
-                <section>
-                  <EditorPreviewRenderer
-                    noMouseEvents
-                    content={preview?.content || preview}
-                    readOnly
-                    draftView
-                    editorId={
-                      isBlockTriggered && activeBlock ? activeBlock?.blockId : `${items[itemIndex]?.key}_Preview_Block`
-                    }
-                  />
-                </section>
-                {preview && <PreviewMeta meta={metaData} />}
-              </ComboSeperator>
-            )}
+            <ItemPreview item={items[itemIndex]} metadata={metaData} />
           </>
         </ComboboxRoot>
       )}

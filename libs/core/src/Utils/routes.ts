@@ -42,7 +42,7 @@ export const BASE_URLS = {
   reaction: `https://http-staging.workduck.io/reaction`,
   highlight: `https://http-test.workduck.io/highlight`,
   frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io',
-  prompt: IS_DEV ? 'https://prompt.loca.lt' : 'https://http-staging.workduck.io/prompt'
+  prompt: IS_DEV ? 'http://localhost:4000' : 'https://http-staging.workduck.io/prompt'
 }
 
 export const MEXIT_FRONTEND_URL_BASE = BASE_URLS.frontend

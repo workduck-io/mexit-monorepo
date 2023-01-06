@@ -12,6 +12,7 @@ const ShortcutWrapper = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
 `
+
 export const ShortcutMid = styled.div`
   opacity: 0.66;
 `
@@ -33,7 +34,6 @@ export const DisplayShortcut = ({ shortcut }: DisplayShortcutProps) => {
       {keys.map((k, i) => (
         <ShortcutWrapper key={k}>
           <ShortcutBox>{k}</ShortcutBox>
-          {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>}
         </ShortcutWrapper>
       ))}
     </ShortcutWrapper>

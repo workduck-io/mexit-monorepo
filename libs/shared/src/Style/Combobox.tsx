@@ -20,13 +20,11 @@ export const ComboboxItem = styled.div<{ center?: boolean }>`
   margin: 0 ${({ theme }) => theme.spacing.small};
   width: 260px;
   color: ${({ theme }) => theme.tokens.text.default};
+  transition: background-color 100ms ease-out;
   &.highlight {
     ${({ theme }) => generateStyle(theme.editor.combobox.item.hover)}
   }
   cursor: pointer;
-
-  :hover {
-  }
 
   & > svg {
     color: ${({ theme }) => theme.tokens.colors.fade};
@@ -54,7 +52,7 @@ export const ItemsContainer = styled.section`
 export const SectionSeparator = styled.div`
   width: 100%;
   height: 1px;
-  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   margin: ${({ theme }) => theme.spacing.medium} 0;
 `
 
@@ -145,7 +143,7 @@ export const ComboboxShortcuts = styled.div`
   align-items: center;
   padding: 0.5rem 0;
   width: 100%;
-  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};
 `
 
 export const ShortcutText = styled.div`

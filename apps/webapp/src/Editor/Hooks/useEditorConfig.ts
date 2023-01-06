@@ -10,6 +10,7 @@ import {
   ELEMENT_TAG,
   getMIcon,
   mog,
+  PromptRenderType,
   SEPARATOR
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
@@ -75,6 +76,23 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     return slashCommands.internal
   }, [slashCommands.internal])
 
+  const prompts = useMemo(() => {
+    return [
+      ...downloadedPrompts.map((l) => ({
+        value: l.entityId,
+        text: l.title,
+        icon: DefaultMIcons.PROMPT,
+        type: QuickLinkType.prompts
+      })),
+      ...createdPrompts.map((l) => ({
+        value: l.entityId,
+        text: l.title,
+        icon: DefaultMIcons.PROMPT,
+        type: QuickLinkType.prompts
+      }))
+    ]
+  }, [downloadedPrompts, createdPrompts])
+
   const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
       ...l,
@@ -83,18 +101,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       icon: l.icon ?? DefaultMIcons,
       type: QuickLinkType.backlink
     })),
-    ...downloadedPrompts.map((l) => ({
-      value: l.entityId,
-      text: l.title,
-      icon: DefaultMIcons.PROMPT,
-      type: QuickLinkType.prompts
-    })),
-    ...createdPrompts.map((l) => ({
-      value: l.entityId,
-      text: l.title,
-      icon: DefaultMIcons.PROMPT,
-      type: QuickLinkType.prompts
-    })),
+    ...prompts,
     ...sharedNodes.map((l) => ({
       ...l,
       value: l.nodeid,
@@ -151,6 +158,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem
+      },
+      prompts: {
+        slateElementType: PromptRenderType,
+        newItemHandler: () => undefined,
+        renderElement: SlashComboboxItem
       },
       tag: {
         slateElementType: ELEMENT_TAG,

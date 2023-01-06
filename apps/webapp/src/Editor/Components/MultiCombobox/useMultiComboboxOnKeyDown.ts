@@ -1,5 +1,6 @@
 import {
   deleteText,
+  deserializeMd,
   getBlockAbove,
   getPluginType,
   insertNodes,
@@ -14,16 +15,19 @@ import {
 } from '@udecode/plate'
 
 import {
+  API,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
   getSlug,
   mog,
-  NODE_ID_PREFIX
+  NODE_ID_PREFIX,
+  PromptRenderType
 } from '@mexit/core'
 
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { usePromptStore } from '../../../Stores/usePromptStore'
 import { QuickLinkType } from '../../constants'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'
@@ -40,6 +44,52 @@ export interface ComboTypeHandlers {
   newItemHandler: (newItem: string, parentId?) => any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
+const handleOnTab = (item, type): boolean => {
+  switch (type) {
+    case ELEMENT_ILINK:
+      type = ELEMENT_INLINE_BLOCK
+      return
+    case ELEMENT_TASK_VIEW_LINK:
+      type = ELEMENT_TASK_VIEW_BLOCK
+      return
+    case PromptRenderType:
+      // eslint-disable-next-line no-case-declarations
+      const isLoading = useComboboxStore.getState().itemLoading?.item === item.key
+      mog('GENERATING RESULTS', { item })
+
+      if (!isLoading) {
+        useComboboxStore.getState().setItemLoading({ item: item.key, message: 'Generating...' })
+
+        try {
+          API.prompt.generateResult(item.key, {}).then((res) => {
+            if (res) {
+              mog('PROMPT RESULTS', { res })
+              usePromptStore.getState().addPromptResult(item.key, res)
+              useComboboxStore.getState().setItemLoading()
+            }
+          })
+        } catch (err) {
+          useComboboxStore.getState().setItemLoading()
+        }
+      }
+
+      return true
+    default:
+      return false
+  }
+}
+
+const getInternalItemType = (item, triggerType) => {
+  if (triggerType !== 'internal') return triggerType
+
+  switch (item.type) {
+    case QuickLinkType.prompts:
+      return PromptRenderType
+    default:
+      return ELEMENT_ILINK
+  }
+}
+
 export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?: any) => {
   const closeMenu = useComboboxStore((state) => state.closeMenu)
 
@@ -52,24 +102,12 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
       }
 
       const targetRange = useComboboxStore.getState().targetRange
-      // mog('Target Range', { targetRange })
 
-      // mog('ELEMENT', { elementType, comboType })
-
-      let type =
-        elementType ??
-        getPluginType(editor, comboType.slateElementType === 'internal' ? 'ilink' : comboType.slateElementType)
+      const type = elementType ?? getPluginType(editor, getInternalItemType(item, comboType.slateElementType))
 
       if (tab) {
-        // console.log('TAB', { comboType, type })
-        type =
-          type === ELEMENT_ILINK
-            ? ELEMENT_INLINE_BLOCK
-            : type === ELEMENT_TASK_VIEW_LINK
-            ? ELEMENT_TASK_VIEW_BLOCK
-            : type
-        mog('TYPE OF ELEMENT CHANGED TO', { type })
-        // if (type)
+        const response = handleOnTab(item, type)
+        if (response) return
       }
 
       if (targetRange) {
@@ -96,15 +134,14 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
         const isBlockTriggered = useComboboxStore.getState().isBlockTriggered
         const activeBlock = useComboboxStore.getState().activeBlock
-        const textAfterBlockTrigger = useComboboxStore.getState().search.textAfterBlockTrigger
 
-        // mog('Inserting from here', { item, isBlockTriggered })
         let InsertedElement: InsertableElement = {
           type,
           children: [{ text: '' }],
           value: itemValue ?? item.key
         }
         const itemType = item.type as unknown as QuickLinkType
+
         if ((itemType === QuickLinkType.backlink || type === ELEMENT_INLINE_BLOCK) && isBlockTriggered && activeBlock) {
           const blockValue = activeBlock?.text ? getSlug(activeBlock.text) : ''
           InsertedElement = {
@@ -115,6 +152,11 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             blockValue,
             blockId: activeBlock?.blockId
           }
+        } else if (itemType === QuickLinkType.prompts) {
+          const promptResult = usePromptStore.getState().results[item.key]?.at(-1)?.at(0)
+          const data = deserializeMd(editor, promptResult)
+          select(editor, targetRange)
+          InsertedElement = data
         } else if (itemType === QuickLinkType.mentions) {
           InsertedElement = {
             ...InsertedElement,
@@ -128,7 +170,6 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             value: item.key
           }
           if (tab === true) {
-            // mog('TAB', { comboType, type, item })
             InsertedElement = {
               ...InsertedElement,
               type: ELEMENT_TASK_VIEW_BLOCK,
@@ -145,6 +186,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             value: itemValue
           }
         }
+
         if (item.additional) {
           InsertedElement = { ...InsertedElement, ...item.additional }
         }

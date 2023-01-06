@@ -28,6 +28,7 @@ const Item: React.FC<{
   onClick?: any
 }> = ({ item, showCategory, comboProps, description, index, title, onClick, onHover, icon }) => {
   const itemIndex = useComboboxStore((s) => s.itemIndex)
+  const itemLoading = useComboboxStore((s) => s.itemLoading)
 
   return (
     <span key={`mexit-suggestion-item$-${item.key}`}>
@@ -44,7 +45,7 @@ const Item: React.FC<{
         center={!description}
         onMouseDown={() => onClick(item)}
       >
-        {icon && <IconDisplay icon={icon} size={description ? 16 : 18} />}
+        {icon && <IconDisplay isLoading={itemLoading?.item === item.key} icon={icon} size={description ? 16 : 18} />}
         <ItemCenterWrapper>
           {!item.prefix ? (
             <ComboboxItemTitle>{title}</ComboboxItemTitle>

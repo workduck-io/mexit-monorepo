@@ -23,6 +23,9 @@ export type ComboboxState = {
   search: string
   setSearch: (value: string) => void
 
+  itemLoading?: string | undefined
+  setItemLoading: (itemKey?: string | undefined) => void
+
   // Fetched tags
   items: IComboboxItem[]
   setItems: (value: IComboboxItem[]) => void
@@ -70,6 +73,8 @@ export const useComboboxStore = createStore()<ComboboxState>((set) => ({
 
   maxSuggestions: 10,
   setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),
+
+  setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
   setActiveBlock: setStoreValue(set, 'activeBlock', 'setActiveBlock'),
   setPreview: setStoreValue(set, 'preview', 'setPreview'),

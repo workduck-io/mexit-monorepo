@@ -11,7 +11,17 @@ export class PromptAPI {
   }
 
   async generateResult(promptId: string, data, options?: Options) {
-    return await this.client.post(apiURLs.prompt.generateResult(promptId), data, options)
+    return await this.client.post(
+      apiURLs.prompt.generateResult(promptId),
+      {
+        options: {
+          max_tokens: 1000,
+          iterations: 1
+        },
+        ...data
+      },
+      options
+    )
   }
 
   async getAllPrompts(cacheConfig?: CacheConfig, options?: Options) {

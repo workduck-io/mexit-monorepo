@@ -17,7 +17,7 @@ const ShortcutBox = styled.div`
   font-size: 0.7rem;
   padding: 4px ${({ theme }) => theme.spacing.tiny};
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.gray[8]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.modal};
   color: ${({ theme }) => theme.colors.primary};
 `
 
@@ -32,7 +32,7 @@ export const DisplayShortcut = ({ shortcut }: DisplayShortcutProps) => {
       {keys.map((k, i) => (
         <ShortcutWrapper key={k}>
           <ShortcutBox>{k}</ShortcutBox>
-          {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>}
+          {/* {i !== keys.length - 1 && <ShortcutMid>+</ShortcutMid>} */}
         </ShortcutWrapper>
       ))}
     </ShortcutWrapper>

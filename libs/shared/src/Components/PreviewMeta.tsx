@@ -2,6 +2,8 @@ import React from 'react'
 
 import styled from 'styled-components'
 
+import { mog } from '@mexit/core'
+
 import { RelativeTime } from './RelativeTime'
 
 export const Data = styled.div`
@@ -16,7 +18,7 @@ const PreviewMetaContainer = styled.div`
   display: flex;
   width: 100%;
   padding: 0.75rem;
-  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};
   align-items: center;
   justify-content: flex-end;
 
@@ -27,8 +29,8 @@ const PreviewMetaContainer = styled.div`
 `
 
 const PreviewMeta: React.FC<PreviewMetaProps> = ({ meta }) => {
+  mog('METADATA RECIEVED', { meta })
   if (!meta) return <></>
-
   return (
     <PreviewMetaContainer>
       {meta.updatedAt !== undefined && (
