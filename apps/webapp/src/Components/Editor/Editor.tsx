@@ -42,7 +42,7 @@ interface EditorProps {
   nodeUID: string
   readOnly?: boolean
   includeBlockInfo?: boolean
-  focusBlockId?: string // * Block to focus
+  focusBlockId?: string // * Block to focus, This uses a timeout as immediately the children are not rendered yet
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
   options?: any
@@ -66,7 +66,10 @@ const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     if (focusBlockId) {
-      focusBlock(focusBlockId, nodeUID)
+      const timoutId = setTimeout(() => {
+        focusBlock(focusBlockId, nodeUID)
+      }, 1000)
+      return () => clearTimeout(timoutId)
     }
   }, [focusBlockId, nodeUID])
 
