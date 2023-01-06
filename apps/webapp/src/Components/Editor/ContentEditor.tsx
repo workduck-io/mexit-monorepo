@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { focusEditor, getPlateEditorRef, isEditorFocused, selectEditor } from '@udecode/plate'
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -93,21 +93,21 @@ const ContentEditor = () => {
   }, [])
 
   const onFocusClick = (ev) => {
-    ev.preventDefault()
-    ev.stopPropagation()
+    // ev.preventDefault()
+    // ev.stopPropagation()
 
-    // mog('focus beeches')
-    const editorRef = getPlateEditorRef()
-    const isfocused = isEditorFocused(editorRef)
-    if (editorRef) {
-      if (editorWrapperRef.current && !isfocused) {
-        const el = editorWrapperRef.current
-        const hasScrolled = el.scrollTop > 0
-        if (!hasScrolled) {
-          selectEditor(editorRef, { focus: true, edge: 'end' })
-        }
-      }
-    }
+    // // mog('focus beeches')
+    // const editorRef = getPlateEditorRef()
+    // const isfocused = isEditorFocused(editorRef)
+    // if (editorRef) {
+    //   if (editorWrapperRef.current && !isfocused) {
+    //     const el = editorWrapperRef.current
+    //     const hasScrolled = el.scrollTop > 0
+    //     if (!hasScrolled) {
+    //       selectEditor(editorRef, { focus: true, edge: 'end' })
+    //     }
+    //   }
+    // }
   }
 
   useAnalysisTodoAutoUpdate()
