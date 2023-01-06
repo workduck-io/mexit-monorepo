@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import styled from 'styled-components'
 
-import { mog,NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent } from '@mexit/core'
 
+import { useWindowDimensions } from '../../Hooks/useWindowDimensions'
 import { analyseContent } from '../../Workers/controller'
 import { PublicTagsView } from '../Editor/TagsRelated'
 
@@ -32,14 +33,21 @@ interface PublicDataInfobarProps {
 
 const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
   const [analysis, setAnalysis] = useState<any>()
+
+  const windowDimensions = useWindowDimensions()
+
+  const useWorker = useMemo(() => {
+    return windowDimensions.width > 800
+  }, [windowDimensions])
+
   useEffect(() => {
     const getAnalysis = async () => {
       const analysis = await analyseContent({ nodeid: nodeId, content: content })
       mog('RecvAnalysis', { analysis, nodeId, content })
       setAnalysis(analysis)
     }
-    getAnalysis()
-  }, [nodeId, content]) // eslint-disable-line
+    if (nodeId && content.length > 1 && useWorker) getAnalysis()
+  }, [nodeId, content])
 
   return analysis ? (
     <DataInfobarWrapper>

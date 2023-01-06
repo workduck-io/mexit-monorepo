@@ -1,5 +1,3 @@
-import { exposeShared } from '@workduck-io/mex-threads.js/worker'
-
 import { GenericSearchResult, idxKey, mog, parseNode, PersistentData, SearchIndex, SearchRepExtra } from '@mexit/core'
 
 import {
@@ -10,6 +8,8 @@ import {
   SEARCH_RESULTS_LIMIT,
   TITLE_RANK_BUMP
 } from '../Utils/flexsearch'
+
+import { exposeX } from './worker-utils'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
@@ -274,4 +274,4 @@ const searchWorker = {
 }
 
 export type SearchWorkerInterface = typeof searchWorker
-exposeShared(searchWorker)
+exposeX(searchWorker)

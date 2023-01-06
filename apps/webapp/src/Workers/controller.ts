@@ -67,28 +67,20 @@ export const terminateRequestWorker = async () => {
   // if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
 }
 
-export const startAnalysisWorkerService = async () => {
-  if (!analysisWorker) {
-    try {
-      analysisWorker = await spawn<AnalysisWorkerInterface>(
-        new SharedWorker(new URL('analysis.ts', import.meta.url), {
-          type: 'module',
-          name: 'Analysis Worker'
-        })
-      )
-    } catch (err) {
-      analysisWorker = null
-    }
-  }
-}
-
 export const analyseContent = async (props: AnalyseContentProps) => {
   try {
     if (!analysisWorker) {
-      await startAnalysisWorkerService()
-      // console.log('Creating new analysis worker')
-    } else {
-      // console.log('Reusing analysis worker')
+      try {
+        analysisWorker = await spawn<AnalysisWorkerInterface>(
+          new SharedWorker(new URL('analysis.ts', import.meta.url), {
+            type: 'module',
+            name: 'Analysis Worker'
+          })
+        )
+      } catch (err) {
+        console.log('Could not start analysis worker: ', err)
+        analysisWorker = null
+      }
     }
     const analysis = await analysisWorker.analyseContent(props)
     return analysis
@@ -98,14 +90,10 @@ export const analyseContent = async (props: AnalyseContentProps) => {
   }
 }
 export const startSearchWorker = async () => {
-  // console.log('MILLAAAA KYAAAAA', { w: requestsWorker, r: !!requestsWorker })
   if (!searchWorker) {
     try {
       searchWorker = await spawn<SearchWorkerInterface>(
-        new SharedWorker(new URL('search.ts', import.meta.url), {
-          type: 'module',
-          name: 'Search Worker'
-        })
+        new SharedWorker(new URL('search.ts', import.meta.url), { type: 'module', name: 'Search Worker' })
       )
     } catch (err) {
       mog('UnabletoStartSearchWorker', { err })
