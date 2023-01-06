@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { focusEditor, getPlateEditorRef, selectEditor } from '@udecode/plate'
+import { focusEditor, getPlateEditorRef, isEditorFocused, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog } from '@mexit/core'
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -96,10 +95,12 @@ const ContentEditor = () => {
   const onFocusClick = (ev) => {
     ev.preventDefault()
     ev.stopPropagation()
-    mog('focus beeches')
+
+    // mog('focus beeches')
     const editorRef = getPlateEditorRef()
+    const isfocused = isEditorFocused(editorRef)
     if (editorRef) {
-      if (editorWrapperRef.current) {
+      if (editorWrapperRef.current && !isfocused) {
         const el = editorWrapperRef.current
         const hasScrolled = el.scrollTop > 0
         if (!hasScrolled) {
