@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 export const FloatingDivider = styled.div`
   width: 1px;
   height: 100%;
-  background: ${({ theme }) => theme.colors.gray[7]};
+  background: ${({ theme }) => theme.tokens.surfaces.separator};
 `
 
 export const PlateFloatingCssDiv = styled.div`
@@ -49,7 +49,7 @@ export const InputWrapper = styled.div`
   align-items: center;
   width: 100%;
   svg {
-    color: ${({ theme }) => theme.colors.text.fade};
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 `
 
@@ -57,15 +57,15 @@ const ToolbarButtonStyles = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
   background: transparent;
   padding: ${({ theme }) => theme.spacing.small};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
   gap: ${({ theme }) => theme.spacing.tiny};
 
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.gray[7]};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
 
@@ -81,7 +81,7 @@ export const UnlinkButton = styled(FloatingLink.UnlinkButton)`
 
 const RootCss = css`
   display: flex;
-  background: ${({ theme }) => theme.colors.gray[8]};
+  background: ${({ theme }) => theme.tokens.surfaces.s[1]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   box-shadow: rgb(15 15 15 / 5%) 0 0 0 1px, rgb(15 15 15 / 10%) 0 3px 6px, rgb(15 15 15 / 20%) 0 9px 24px;
   z-index: 20;
