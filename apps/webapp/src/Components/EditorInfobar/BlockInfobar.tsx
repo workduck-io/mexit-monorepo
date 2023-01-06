@@ -14,7 +14,7 @@ import useBlockStore from '../../Stores/useBlockStore'
 import { ButtonWrapper } from '../../Style/Settings'
 
 export const PrimaryText = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 const BlockMenu = styled.div`
@@ -27,7 +27,7 @@ const BlockMenu = styled.div`
 
   p {
     margin: 0;
-    color: ${(props) => props.theme.colors.text.fade};
+    color: ${(props) => props.theme.tokens.text.fade};
   }
 `
 
@@ -53,7 +53,7 @@ const BlockInfoBar = () => {
   return (
     <BlockMenu>
       <Button onClick={() => setIsBlockMode(!isBlockMode)}>
-        <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={xBold} /> Cancel
+        <MexIcon fontSize={20} $noHover color={theme.tokens.colors.primary.default} icon={xBold} /> Cancel
       </Button>
       <p>
         {blockHeading}
@@ -61,14 +61,14 @@ const BlockInfoBar = () => {
       </p>
       <ButtonWrapper>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.move)}>
-          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={moveToIcon} />
+          <MexIcon fontSize={20} $noHover color={theme.tokens.colors.primary.default} icon={moveToIcon} />
           Move
         </Button>
         <Button onClick={() => setIsModalOpen(ContextMenuActionType.send)}>
-          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={sendToIcon} /> Send
+          <MexIcon fontSize={20} $noHover color={theme.tokens.colors.primary.default} icon={sendToIcon} /> Send
         </Button>
         <Button onClick={() => handleDelete()}>
-          <MexIcon fontSize={20} $noHover color={theme.colors.primary} icon={deleteBin6Line} />
+          <MexIcon fontSize={20} $noHover color={theme.tokens.colors.primary.default} icon={deleteBin6Line} />
           Delete
         </Button>
       </ButtonWrapper>
