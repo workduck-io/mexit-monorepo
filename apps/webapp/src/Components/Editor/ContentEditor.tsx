@@ -2,10 +2,11 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { focusEditor, getPlateEditorRef } from '@udecode/plate'
+import { focusEditor, getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { mog } from '@mexit/core'
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
@@ -93,19 +94,19 @@ const ContentEditor = () => {
   }, [])
 
   const onFocusClick = (ev) => {
-    // ev.preventDefault()
-    // ev.stopPropagation()
-    // mog('focus beeches')
-    // const editorRef = getPlateEditorRef()
-    // if (editorRef) {
-    //   if (editorWrapperRef.current) {
-    //     const el = editorWrapperRef.current
-    //     const hasScrolled = el.scrollTop > 0
-    //     if (!hasScrolled) {
-    //       selectEditor(editorRef, { focus: true })
-    //     }
-    //   }
-    // }
+    ev.preventDefault()
+    ev.stopPropagation()
+    mog('focus beeches')
+    const editorRef = getPlateEditorRef()
+    if (editorRef) {
+      if (editorWrapperRef.current) {
+        const el = editorWrapperRef.current
+        const hasScrolled = el.scrollTop > 0
+        if (!hasScrolled) {
+          selectEditor(editorRef, { focus: true, edge: 'end' })
+        }
+      }
+    }
   }
 
   useAnalysisTodoAutoUpdate()

@@ -108,6 +108,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   max-width: 860px;
   min-width: 400px;
   flex: 1;
+  height: calc(100vh - 3rem);
 
   && > div {
     width: 100%;
