@@ -1,4 +1,4 @@
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import NodeModulesPolyfills from '@esbuild-plugins/node-modules-polyfill'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, PluginOption } from 'vite'
@@ -16,9 +16,13 @@ export default defineConfig({
         global: 'globalThis'
       },
       plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true
-        })
+        NodeModulesPolyfills(),
+        {
+          name: 'fix-node-globals-polyfill',
+          setup(build) {
+            build.onResolve({ filter: /_virtual-process-polyfill_\.js/ }, ({ path }) => ({ path }))
+          }
+        }
       ]
     }
   },
