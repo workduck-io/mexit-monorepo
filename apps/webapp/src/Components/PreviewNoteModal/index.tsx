@@ -22,6 +22,7 @@ import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
 import { useContentStore } from '../../Stores/useContentStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
@@ -46,6 +47,7 @@ const PreviewNoteModal = () => {
   const { getNamespace } = useNamespaces()
   const { hasTags } = useTags()
   const { getTitleFromNoteId, getILinkFromNodeid } = useLinks()
+  const { goTo } = useRouting()
 
   const content = useMemo(() => {
     const data = getContent(modalData?.noteId)
@@ -76,6 +78,8 @@ const PreviewNoteModal = () => {
 
   const onClickNoteTitle = (ev) => {
     ev.preventDefault()
+    goTo(ROUTE_PATHS.node, NavigationType.push, modalData?.noteId)
+    toggleModal(undefined)
   }
 
   const nodeType = getNodeType(modalData?.noteId)
