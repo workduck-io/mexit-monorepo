@@ -1,12 +1,13 @@
-import addHmr from './build/add-hmr'
-import customDynamicImport from './build/custom-dynamic-import'
-import makeManifest from './build/make-manifest'
-import manifest from './manifest'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import fs from 'fs'
 import path, { resolve } from 'path'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
+
+import addHmr from './build/add-hmr'
+import customDynamicImport from './build/custom-dynamic-import'
+import makeManifest from './build/make-manifest'
+import manifest from './manifest'
 
 const outDir = resolve(__dirname, '../..', 'dist', 'extension')
 const coreLibDir = resolve(__dirname, '../..', 'libs/core', 'src')
@@ -34,7 +35,7 @@ const firstUpperCase = (str: string) => {
 
 export default defineConfig({
   optimizeDeps: {
-    include: ['reac/jsx-runtime']
+    include: ['reac/jsx-runtime', 'buffer']
   },
   resolve: {
     alias: {
@@ -46,20 +47,7 @@ export default defineConfig({
     port: 6666
   },
   plugins: [
-    react({
-      babel: {
-        compact: true,
-        plugins: [
-          [
-            'babel-plugin-styled-components',
-            {
-              displayName: true,
-              fileName: false
-            }
-          ]
-        ]
-      }
-    }),
+    react(),
     makeManifest(manifest),
     customDynamicImport(),
     addHmr({ background: enableHmrInBackgroundScript, view: true }),
