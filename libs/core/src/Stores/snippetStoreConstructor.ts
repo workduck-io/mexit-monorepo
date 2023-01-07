@@ -71,7 +71,7 @@ export const snippetStoreConstructor = (set, get) => ({
     const snippets = get().snippets
     if (snippets[id]) {
       const { [id]: snippetData, ...restSnippets } = snippets
-      set(restSnippets)
+      set({ snippets: restSnippets })
     }
   },
   editor: { snippet: undefined },

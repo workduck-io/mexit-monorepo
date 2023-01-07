@@ -12,8 +12,6 @@ import TaskViewList from './TaskViewList'
 const SidebarTabs = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
-  // const isArchiveEditor = useMatch(`${ROUTE_PATHS.archive}/:nodeid`)
-  // const isArchive = useMatch(ROUTE_PATHS.archive)
   const isSnippetNote = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
   const isSnippet = useMatch(ROUTE_PATHS.snippets)
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)

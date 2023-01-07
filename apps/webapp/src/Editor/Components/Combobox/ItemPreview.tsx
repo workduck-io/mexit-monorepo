@@ -3,7 +3,6 @@ import React from 'react'
 
 import { deserializeMd, usePlateEditorRef } from '@udecode/plate'
 
-import { mog } from '@mexit/core'
 import { ComboSeperator, PreviewMeta } from '@mexit/shared'
 
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -23,7 +22,7 @@ const ItemPreview: React.FC<ItemPreviewProps> = ({ item, metadata }) => {
   const activeBlock = useComboboxStore((store) => store.activeBlock)
   const { textAfterBlockTrigger } = useComboboxStore((store) => store.search)
   const getPrompt = usePromptStore((s) => s.getPrompt)
-  const result = usePromptStore((s) => s.results[item.key])
+  const result = usePromptStore((s) => s.results[item?.key])
     ?.at(-1)
     ?.at(0)
   const editor = usePlateEditorRef(item?.key)
@@ -31,8 +30,7 @@ const ItemPreview: React.FC<ItemPreviewProps> = ({ item, metadata }) => {
   switch (type) {
     case QuickLinkType.prompts:
       const content = deserializeMd(editor, result)
-      const prompt = getPrompt(item.key)
-      mog('PROMPT IS', { prompt })
+      const prompt = getPrompt(item?.key)
       const metadata = {
         updatedAt: prompt.updatedAt
       }

@@ -20,6 +20,7 @@ import { useHelpStore } from './useHelpStore'
 import { useLayoutStore } from './useLayoutStore'
 import { useMentionStore } from './useMentionsStore'
 import { useMetadataStore } from './useMetadataStore'
+import { usePromptStore } from './usePromptStore'
 import { usePublicNodeStore } from './usePublicNodes'
 import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
@@ -51,6 +52,7 @@ export const useAuthentication = () => {
   const clearViews = useViewStore((s) => s.clear)
   const clearRoutesInformation = useRouteStore((s) => s.clear)
   const clearMetadataStore = useMetadataStore((s) => s.reset)
+  const clearPromptStore = usePromptStore((s) => s.reset)
 
   const clearReminders = useReminderStore().clearReminders
   const clearTodos = useTodoStore().clearTodos
@@ -101,6 +103,7 @@ export const useAuthentication = () => {
 
     setUnAuthenticated()
     initContents({})
+    clearPromptStore()
     clearMetadataStore()
     clearReactions()
     clearComments()

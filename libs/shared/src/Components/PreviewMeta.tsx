@@ -2,8 +2,6 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import { mog } from '@mexit/core'
-
 import { RelativeTime } from './RelativeTime'
 
 export const Data = styled.div`
@@ -29,7 +27,6 @@ const PreviewMetaContainer = styled.div`
 `
 
 const PreviewMeta: React.FC<PreviewMetaProps> = ({ meta }) => {
-  mog('METADATA RECIEVED', { meta })
   if (!meta) return <></>
   return (
     <PreviewMetaContainer>

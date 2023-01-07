@@ -113,7 +113,8 @@ export const apiURLs = {
     updateParentNoteOfService: `${BASE_URLS.loch}`
   },
   prompt: {
-    getAllPrompts: `${BASE_URLS.prompt}/allUserPrompts`, // Returns `downloaded` and `created` prompts
+    getAllPrompts: `${BASE_URLS.prompt}/allUser`, // Returns `downloaded` and `created` prompts
+    promptUserAuthInfo: `${BASE_URLS.prompt}/userAuth`,
     generateResult: (promptId: string) => `${BASE_URLS.prompt}/result/${promptId}`
   },
   share: {

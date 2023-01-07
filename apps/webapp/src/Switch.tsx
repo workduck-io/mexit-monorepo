@@ -32,6 +32,7 @@ import { ForgotPassword } from './Views/ForgotPassword'
 import LinkView from './Views/LinkView'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
+import PromptProvidersPage from './Views/Prompts/PromptProvidersPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
@@ -186,6 +187,7 @@ const IntegrationRoutes = () => {
         }
       />
       <Route path="portal/:actionGroupId" element={<Portals />} />
+      <Route path="prompts/:actionGroupId" element={<PromptProvidersPage />} />
     </Routes>
   )
 }

@@ -78,7 +78,7 @@ const syncStores = () => {
 
     syncStoreState(useReminderStore, {
       name: BroadcastSyncedChannel.REMINDERS,
-      sync: [{ field: 'reminders' }]
+      sync: [{ field: 'reminders' }, { field: 'armedReminders' }]
     })
 
     syncStoreState(useHighlightStore, {

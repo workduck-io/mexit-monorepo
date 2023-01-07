@@ -36,6 +36,13 @@ const PortalsPage = () => {
               goTo(`${ROUTE_PATHS.integrations}/portal`, NavigationType.push, item.actionGroupId)
             }
           />
+          <Section
+            items={portals}
+            title="Prompts"
+            onClick={(item: ActionGroupType) =>
+              goTo(`${ROUTE_PATHS.integrations}/prompts`, NavigationType.push, item.actionGroupId)
+            }
+          />
         </IntegrationContainer>
       </FullHeight>
     </Flex>

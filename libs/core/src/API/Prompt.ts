@@ -24,6 +24,14 @@ export class PromptAPI {
     )
   }
 
+  async getUserPromptsAuth(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.prompt.promptUserAuthInfo, cacheConfig, options)
+  }
+
+  async updateUserPromptsAuth(data, options?: Options) {
+    return await this.client.post(apiURLs.prompt.promptUserAuthInfo, data, options)
+  }
+
   async getAllPrompts(cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.prompt.getAllPrompts, cacheConfig, options)
   }

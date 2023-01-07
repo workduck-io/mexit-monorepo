@@ -4,6 +4,9 @@ export const promptStoreConstructor = (set, get): PromptStoreType => ({
   downloaded: [],
   created: [],
   results: {},
+  setUserPromptAuthInfo(userPromptAuthInfo) {
+    set({ userPromptAuthInfo })
+  },
   getPrompt: (promptId) => {
     const downloadedPrompt = get().downloaded.find((prompt) => prompt.entityId === promptId)
     if (downloadedPrompt) return downloadedPrompt

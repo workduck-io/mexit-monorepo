@@ -2,7 +2,6 @@ import React from 'react'
 
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 
-import { mog } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -34,8 +33,6 @@ const SnippetList = () => {
         data: snippet
       }))
   }, [snippets])
-
-  mog('Snippets', { sortedSnippets, snippets })
 
   return (
     <SidebarWrapper>

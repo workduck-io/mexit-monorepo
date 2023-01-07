@@ -129,7 +129,7 @@ const Snippets = () => {
   const onDeleteSnippet = (id: string) => {
     deleteAllVersionOfSnippet(id).then(() => {
       deleteSnippet(id)
-      goTo(ROUTE_PATHS.snippets, NavigationType.replace)
+      // goTo(ROUTE_PATHS.snippets, NavigationType.replace)
     })
   }
 

@@ -78,14 +78,13 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
     }
   },
   [QuickLinkType.prompts]: {
-    previous: spotlightShortcuts.ShiftTab,
     snippet: {
       ...spotlightShortcuts.open,
       title: 'Insert'
     },
     generate: {
       ...spotlightShortcuts.Tab,
-      title: 'Next'
+      title: 'Generate'
     }
   },
   [CategoryType.action]: {
