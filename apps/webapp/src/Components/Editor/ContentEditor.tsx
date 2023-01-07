@@ -95,14 +95,16 @@ const ContentEditor = () => {
   const onFocusClick = (ev) => {
     // ev.preventDefault()
     // ev.stopPropagation()
-    // mog('focus beeches')
+
+    // // mog('focus beeches')
     // const editorRef = getPlateEditorRef()
+    // const isfocused = isEditorFocused(editorRef)
     // if (editorRef) {
-    //   if (editorWrapperRef.current) {
+    //   if (editorWrapperRef.current && !isfocused) {
     //     const el = editorWrapperRef.current
     //     const hasScrolled = el.scrollTop > 0
     //     if (!hasScrolled) {
-    //       selectEditor(editorRef, { focus: true })
+    //       selectEditor(editorRef, { focus: true, edge: 'end' })
     //     }
     //   }
     // }

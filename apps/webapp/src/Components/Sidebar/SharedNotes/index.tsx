@@ -68,9 +68,10 @@ const SharedNotes = () => {
       emptyMessage="No shared notes found"
     />
   ) : (
-    <Centered>
-      <SharedNodeIcon height={64} width={64} fill={theme.colors.text.default} margin="0 0 1rem 0" />
-      <span>No shared notes</span>
+    <Centered style={{ flexDirection: 'column' }}>
+      <SharedNodeIcon height={64} width={64} fill={theme.tokens.text.fade} margin="0 0 1rem 0" />
+      <br />
+      <p>No shared notes</p>
     </Centered>
   )
 }

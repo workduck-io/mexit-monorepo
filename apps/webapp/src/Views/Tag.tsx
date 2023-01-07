@@ -46,28 +46,28 @@ export const BaseLink = styled.div`
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0px 2px 6px ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.oppositePrimary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+    box-shadow: 0px 2px 6px ${({ theme }) => theme.tokens.colors.primary.default};
+    color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
   ${HoverSubtleGlow}
 `
 
 const TagLink = styled(BaseLink)<{ active?: boolean; selected?: boolean }>`
-  color: ${({ theme }) => theme.colors.text.fade};
-  background-color: ${({ theme }) => theme.colors.gray[9]};
+  color: ${({ theme }) => theme.tokens.text.fade};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   ${({ theme, active }) =>
     active &&
     css`
-      background-color: ${theme.colors.gray[8]};
-      color: ${theme.colors.primary};
+      background-color: ${theme.tokens.surfaces.s[2]};
+      color: ${theme.tokens.colors.primary.default};
     `}
   ${({ theme, selected }) =>
     selected &&
     css`
-      background-color: ${theme.colors.gray[8]};
-      box-shadow: 0 0 0px 1px ${({ theme }) => theme.colors.primary};
-      color: ${theme.colors.primary};
+      background-color: ${theme.tokens.surfaces.s[2]};
+      box-shadow: 0 0 0px 1px ${({ theme }) => theme.tokens.colors.primary.default};
+      color: ${theme.tokens.colors.primary.default};
     `}
 `
 

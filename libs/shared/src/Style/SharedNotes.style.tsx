@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { ItemContent, StyledTreeItemSwitcher } from './Sidebar'
@@ -28,23 +27,23 @@ export const SItem = styled.div<{ selected: boolean }>`
   transition: 0.3s ease;
   &:hover {
     transition: 0s ease;
-    background: ${({ theme }) => theme.colors.gray[7]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   ${({ selected, theme }) =>
     selected &&
     css`
-      background: ${theme.colors.primary};
-      color: ${theme.colors.text.oppositePrimary};
+      background: ${theme.tokens.colors.primary.default};
+      color: ${theme.tokens.colors.primary.text};
       svg {
-        color: ${theme.colors.text.oppositePrimary};
+        color: ${theme.tokens.colors.primary.text};
       }
       :hover {
-        background: ${transparentize(0.3, theme.colors.primary)};
+        background: rgba(${theme.rgbTokens.colors.primary.default}, 0.8);
       }
       ${StyledTreeItemSwitcher} {
         &:hover svg {
-          color: ${theme.colors.primary};
+          color: ${theme.tokens.colors.primary.text};
         }
       }
     `}
@@ -54,7 +53,7 @@ export const SharedBreak = styled.div`
   margin: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.medium};
   width: 100%;
   height: 4px;
-  background-color: ${({ theme }) => theme.colors.gray[7]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
 `
 
@@ -62,6 +61,6 @@ export const SItemContent = styled(ItemContent)`
   svg {
     width: 16px;
     height: 16px;
-    fill: ${({ theme }) => theme.colors.text.heading};
+    fill: ${({ theme }) => theme.tokens.text.heading};
   }
 `

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { NodeEditorContent } from '@mexit/core'
-import { EditorStyles,useEditorChange } from '@mexit/shared'
+import { EditorStyles, useEditorChange } from '@mexit/shared'
 
 import components from '../../Editor/Components/EditorPreviewComponents'
 import { useEditorPluginConfig } from '../../Editor/Hooks/useEditorConfig'
@@ -17,8 +17,23 @@ import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 const EditorWrapper = styled(EditorStyles)`
   flex: 1;
   max-width: 800px;
-  margin: 1rem;
   padding: 1rem;
+  padding-left: 2rem;
+  height: 100%;
+
+  transition: background 0.5s ease-in-out;
+
+  &:hover {
+    background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
+  }
+
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+
+  &:focus-within {
+    &:hover {
+      background-color: transparent;
+    }
+  }
 `
 
 interface EditorProps {
@@ -27,7 +42,7 @@ interface EditorProps {
   nodeUID: string
   readOnly?: boolean
   includeBlockInfo?: boolean
-  focusBlockId?: string // * Block to focus
+  focusBlockId?: string // * Block to focus, This uses a timeout as immediately the children are not rendered yet
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
   options?: any
@@ -51,7 +66,10 @@ const Editor: React.FC<EditorProps> = ({
 
   useEffect(() => {
     if (focusBlockId) {
-      focusBlock(focusBlockId, nodeUID)
+      const timoutId = setTimeout(() => {
+        focusBlock(focusBlockId, nodeUID)
+      }, 1000)
+      return () => clearTimeout(timoutId)
     }
   }, [focusBlockId, nodeUID])
 

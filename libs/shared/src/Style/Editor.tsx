@@ -108,6 +108,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   max-width: 860px;
   min-width: 400px;
   flex: 1;
+  height: calc(100vh - 3rem);
 
   && > div {
     width: 100%;
@@ -363,8 +364,8 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     place-content: center;
 
     &:hover {
-      background-color: ${({ theme }) => theme.colors.gray[8]};
-      border: 1px solid ${({ theme }) => theme.colors.gray[5]};
+      background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
+      border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[4]};
     }
 
     &::before {
@@ -375,26 +376,26 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
       transform: scale(0);
       transform-origin: bottom left;
       transition: 120ms transform ease-in-out;
-      box-shadow: inset 1em 1em ${({ theme }) => theme.colors.primary};
+      box-shadow: inset 1em 1em ${({ theme }) => theme.tokens.colors.primary.default};
       /* Windows High Contrast Mode */
       background-color: CanvasText;
     }
     &:checked {
-      border: 1px solid ${({ theme }) => theme.colors.primary};
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
     }
     &:checked::before {
       transform: scale(1);
     }
 
     &:focus {
-      outline: max(1px, 0.1em) solid ${({ theme }) => theme.colors.primary};
+      outline: max(1px, 0.1em) solid ${({ theme }) => theme.tokens.colors.primary.default};
       outline-offset: max(1px, 0.1em);
     }
 
     &:disabled {
-      --form-control-color: ${({ theme }) => theme.colors.text.disabled};
+      --form-control-color: ${({ theme }) => theme.tokens.text.disabled};
 
-      color: ${({ theme }) => theme.colors.text.disabled};
+      color: ${({ theme }) => theme.tokens.text.disabled};
       cursor: not-allowed;
     }
   }
@@ -437,7 +438,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
   }
 
   .slate-Popover {
-    background: ${({ theme }) => theme.colors.background.highlight};
+    background: ${({ theme }) => theme.tokens.surfaces.s[1]};
   }
 
   .slate-Popover .slate-Button {
@@ -445,7 +446,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
     background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     svg {
       margin: -7px;
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
       height: inherit;
     }
   }
@@ -506,7 +507,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean }>`
 
   // TODO: Add Select styles
   select {
-    background: ${({ theme }) => theme.colors.form.input.bg} ${({ theme }) => theme.colors.primary} calc(100% - 12px)
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]} ${({ theme }) => theme.colors.primary} calc(100% - 12px)
       50% / 12px no-repeat;
     padding-right: 35px;
   }
@@ -577,7 +578,7 @@ export const MenuTrigger = styled.div<MenuTriggerProps>`
   width: max-content;
   padding: ${({ theme: { spacing } }) => `${spacing.small} ${spacing.medium}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  border: 1px dashed ${({ theme }) => theme.colors.form.input.border};
+  border: 1px dashed ${({ theme }) => theme.tokens.surfaces.s[3]};
   svg {
     margin-right: ${({ theme }) => theme.spacing.small};
   }
@@ -587,7 +588,7 @@ export const MenuTrigger = styled.div<MenuTriggerProps>`
     css`
       cursor: pointer;
       &:hover {
-        border-color: ${theme.colors.primary};
+        border-color: ${theme.tokens.colors.primary.default};
       }
     `}
 
@@ -595,9 +596,9 @@ export const MenuTrigger = styled.div<MenuTriggerProps>`
     selected &&
     css`
       border: 1px solid transparent;
-      background-color: ${theme.colors.gray[8]};
+      background-color: ${theme.tokens.surfaces.s[3]};
       svg {
-        color: ${theme.colors.primary};
+        color: ${theme.tokens.colors.primary.default};
       }
     `}
 `
