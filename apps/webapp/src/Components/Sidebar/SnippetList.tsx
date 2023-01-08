@@ -1,17 +1,18 @@
 import React from 'react'
 
-import quillPenLine from '@iconify/icons-ri/quill-pen-line'
-
 import { DefaultMIcons } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
-import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
-const SnippetList = () => {
+type SnippetListProps = {
+  type: 'snippet' | 'template'
+}
+
+const SnippetList: React.FC<SnippetListProps> = ({ type = 'snippet' }) => {
   const snippets = useSnippetStore((store) => store.snippets)
   const currentSnippet = useSnippetStore((store) => store.editor.snippet)
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
@@ -23,8 +24,11 @@ const SnippetList = () => {
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
   }
 
+  const heading = type === 'snippet' ? 'Snippets' : 'Templates'
+
   const sortedSnippets = React.useMemo(() => {
     return Object.values(snippets ?? {})
+      .filter((s) => (type === 'template' ? s.template : !s.template))
       .sort((a, b) => (a.title < b.title ? 1 : -1))
       .map((snippet) => ({
         id: snippet.id,
@@ -36,14 +40,14 @@ const SnippetList = () => {
 
   return (
     <SidebarWrapper>
-      <SidebarHeaderLite title={`Snippets (${sortedSnippets.length})`} icon={quillPenLine} />
+      {/* <SidebarHeaderLite title={`Snippets (${sortedSnippets.length})`} icon={quillPenLine} /> */}
       <SidebarList
         items={sortedSnippets}
         onClick={onOpenSnippet}
         selectedItemId={currentSnippet?.id}
         showSearch
-        searchPlaceholder="Filter Snippets..."
-        emptyMessage="No Snippets Found"
+        searchPlaceholder={`Filter ${heading}...`}
+        emptyMessage={`No ${heading} Found`}
       />
     </SidebarWrapper>
   )

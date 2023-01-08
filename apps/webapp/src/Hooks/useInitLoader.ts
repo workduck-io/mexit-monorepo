@@ -32,6 +32,7 @@ export const useInitLoader = () => {
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
   const setPrompts = usePromptStore((s) => s.setAllPrompts)
   const setUserPromptAuthInfo = usePromptStore((s) => s.setUserPromptAuthInfo)
+  const setPromptProviders = usePromptStore((s) => s.setPromptProviders)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -53,6 +54,7 @@ export const useInitLoader = () => {
         getAllLinks(),
         getAllSmartCaptures(),
         fetchAllHighlights(),
+        API.prompt.getAllPromptProviders().then((res) => setPromptProviders(res)),
         API.prompt.getUserPromptsAuth().then((res) => {
           if (res) setUserPromptAuthInfo(res)
         }),

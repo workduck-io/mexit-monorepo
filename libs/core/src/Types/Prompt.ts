@@ -33,10 +33,23 @@ export interface UserPromptAuthInfo {
   }
 }
 
+export type PromptProviderType = {
+  actionGroupId: string
+  authConfig: {
+    authURL: string
+  }
+  icon: string
+  name: string
+  description: string
+}
+
 export type PromptStoreType = {
   downloaded: Array<PromptDataType>
   created: Array<PromptDataType>
+  defaults: Array<PromptDataType>
   results: Record<EntityIdType, PromptResults>
+  promptProviders: Array<PromptProviderType>
+  setPromptProviders: (promptProviders: Array<PromptProviderType>) => void
   userPromptAuthInfo?: UserPromptAuthInfo
   setUserPromptAuthInfo: (userPromptAuthInfo: UserPromptAuthInfo) => void
   addPromptResult: (promptId: string, result: PromptResult) => void

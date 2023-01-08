@@ -7,6 +7,7 @@ import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { usePolling } from '../../Hooks/API/usePolling'
+import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
 import { PollActions, useApiStore } from '../../Stores/useApiStore'
@@ -35,6 +36,10 @@ export const NoteSidebar = () => {
     const topUsedTags = getMostUsedTags()
     return topUsedTags
   }, [tags])
+
+  const { getCreateNewMenuItems } = useCreateNewMenu()
+
+  const menuItems = getCreateNewMenuItems('randomPath')
 
   const spaces: Array<SidebarSpace> = useMemo(() => {
     const nodesByNamespaces = getNodesByNamespaces()
@@ -182,6 +187,7 @@ export const NoteSidebar = () => {
       </SpaceContentWrapper>
       {/* currentSpace && <SidebarSpaceComponent style={} space={currentSpace} />*/}
       <SidebarSpaceSwitcher
+        createNewMenuItems={menuItems}
         currentSpace={currentSpace?.id}
         spaces={spaces}
         setCurrentIndex={changeIndex}

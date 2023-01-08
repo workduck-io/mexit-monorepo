@@ -115,7 +115,8 @@ export const apiURLs = {
   prompt: {
     getAllPrompts: `${BASE_URLS.prompt}/allUser`, // Returns `downloaded` and `created` prompts
     promptUserAuthInfo: `${BASE_URLS.prompt}/userAuth`,
-    generateResult: (promptId: string) => `${BASE_URLS.prompt}/result/${promptId}`
+    generateResult: (promptId: string) => `${BASE_URLS.prompt}/result/${promptId}`,
+    getAllPromptsProvider: `${BASE_URLS.prompt}/providers`
   },
   share: {
     sharedNode: `${BASE_URLS.share}`,

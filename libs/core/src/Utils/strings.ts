@@ -1,7 +1,7 @@
 import { trim } from 'lodash'
 
 import { CustomEvents } from './events'
-import { DRAFT_NODE,DRAFT_PREFIX, SEPARATOR } from './idGenerator'
+import { DRAFT_NODE, DRAFT_PREFIX, SEPARATOR } from './idGenerator'
 
 export const capitalize = (str: string) => {
   if (!str) return ''
@@ -9,7 +9,8 @@ export const capitalize = (str: string) => {
 }
 
 export const camelCase = (str: string) => {
-  return str[0].toUpperCase() + str.slice(1).toLowerCase()
+  if (!str) return ''
+  return str.at(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
 /**

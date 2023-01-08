@@ -3,7 +3,12 @@ import { PromptStoreType } from '../Types/Prompt'
 export const promptStoreConstructor = (set, get): PromptStoreType => ({
   downloaded: [],
   created: [],
+  defaults: [],
   results: {},
+  promptProviders: [],
+  setPromptProviders: (promptProviders) => {
+    set({ promptProviders })
+  },
   setUserPromptAuthInfo(userPromptAuthInfo) {
     set({ userPromptAuthInfo })
   },

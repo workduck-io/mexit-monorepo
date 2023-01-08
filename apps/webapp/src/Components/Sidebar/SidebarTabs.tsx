@@ -5,7 +5,7 @@ import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { PublicNoteSidebar } from './PublicSidebar.notes'
 import { NoteSidebar } from './Sidebar.notes'
-import SnippetList from './SnippetList'
+import { SnippetSidebar } from './Sidebar.snippets'
 import TagList from './TagList'
 import TaskViewList from './TaskViewList'
 
@@ -28,7 +28,7 @@ const SidebarTabs = () => {
 
   if (isEditor) return <NoteSidebar />
 
-  if (isSnippet || isSnippetNote) return <SnippetList />
+  if (isSnippet || isSnippetNote) return <SnippetSidebar />
 
   // if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 

@@ -60,17 +60,18 @@ const handleOnTab = (item, type): boolean => {
       if (!isLoading) {
         useComboboxStore.getState().setItemLoading({ item: item.key, message: 'Generating...' })
 
-        try {
-          API.prompt.generateResult(item.key, {}).then((res) => {
+        API.prompt
+          .generateResult(item.key, {})
+          .then((res) => {
             if (res) {
               mog('PROMPT RESULTS', { res })
               usePromptStore.getState().addPromptResult(item.key, res)
               useComboboxStore.getState().setItemLoading()
             }
           })
-        } catch (err) {
-          useComboboxStore.getState().setItemLoading()
-        }
+          .catch((err) => {
+            useComboboxStore.getState().setItemLoading()
+          })
       }
 
       return true

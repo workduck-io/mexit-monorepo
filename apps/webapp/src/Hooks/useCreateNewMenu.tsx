@@ -62,7 +62,7 @@ export const useCreateNewMenu = () => {
     }
   }
 
-  const onCreateNewSnippet = () => {
+  const onCreateNewSnippet = (template = false) => {
     // Create a better way.
     const snippetId = generateSnippetId()
     const snippetName = generateName().dashed
@@ -71,12 +71,32 @@ export const useCreateNewMenu = () => {
       id: snippetId,
       title: snippetName,
       icon: DefaultMIcons.SNIPPET,
+      template,
       content: [{ children: [{ text: '' }], type: ELEMENT_PARAGRAPH }]
     })
 
     loadSnippet(snippetId)
 
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
+  }
+
+  const getSnippetsMenuItems = (): CreateNewMenuItem[] => {
+    return [
+      {
+        id: 'new-snippet',
+        label: 'New Snippet',
+        onSelect: () => {
+          onCreateNewSnippet()
+        }
+      },
+      {
+        id: 'new-template',
+        label: 'New Template',
+        onSelect: () => {
+          onCreateNewSnippet(true)
+        }
+      }
+    ]
   }
 
   const getCreateNewMenuItems = (_path: string): CreateNewMenuItem[] => {
@@ -105,5 +125,5 @@ export const useCreateNewMenu = () => {
     ]
   }
 
-  return { getCreateNewMenuItems }
+  return { getCreateNewMenuItems, getSnippetsMenuItems }
 }

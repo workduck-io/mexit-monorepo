@@ -171,6 +171,7 @@ const SnippetRoutes = () => {
     <Routes>
       <Route index element={<Snippets />} />
       <Route path="node/:snippetid" element={<SnippetEditor />} />
+      <Route path="prompt/:promptId" element={<div />} />
     </Routes>
   )
 }
@@ -216,7 +217,6 @@ export const Switch = () => {
       if (editorNode) saveNodeName(editorNode.nodeid)
       // saveEditorBuffer()
     }
-
     if (location.pathname) {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         // mog('Showing Sidebar', { location })

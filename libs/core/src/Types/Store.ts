@@ -29,9 +29,11 @@ export const getMIcon = (type: MIcon['type'], value?: MIcon['value']) => {
 export const DefaultMIcons = {
   NOTE: getMIcon('ICON', 'gg:file-document'),
   SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
-  SHARED_NOTE: getMIcon('ICON', 'ri:share-line'),
+  SHARED_NOTE: getMIcon('ICON', 'mex:shared-note'),
   VIEW: getMIcon('ICON', 'ri:stack-line'),
-  TAG: getMIcon('ICON', 'ri:hashtag')
+  TAG: getMIcon('ICON', 'ri:hashtag'),
+  TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
+  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline')
 }
 
 export interface SingleNamespace {

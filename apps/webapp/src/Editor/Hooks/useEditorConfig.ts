@@ -58,6 +58,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const views = useViewStore((state) => state.views)
   const downloadedPrompts = usePromptStore((s) => s.downloaded)
   const createdPrompts = usePromptStore((s) => s.created)
+  const defaultPrompts = usePromptStore((s) => s.defaults)
 
   const { createNewNote } = useCreateNewNote()
 
@@ -84,6 +85,12 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         icon: DefaultMIcons.PROMPT,
         type: QuickLinkType.prompts
       })),
+      ...defaultPrompts.map((l) => ({
+        value: l.entityId,
+        text: l.title,
+        icon: DefaultMIcons.PROMPT,
+        type: QuickLinkType.prompts
+      })),
       ...createdPrompts.map((l) => ({
         value: l.entityId,
         text: l.title,
@@ -91,7 +98,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         type: QuickLinkType.prompts
       }))
     ]
-  }, [downloadedPrompts, createdPrompts])
+  }, [downloadedPrompts, defaultPrompts, createdPrompts])
 
   const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
