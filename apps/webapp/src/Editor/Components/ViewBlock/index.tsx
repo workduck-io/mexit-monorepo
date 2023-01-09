@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import Board from '@asseinfo/react-kanban'
 import stackLine from '@iconify/icons-ri/stack-line'
@@ -17,16 +17,10 @@ import {
 import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useTaskViews, useViewStore } from '../../../Hooks/useTaskViews'
+import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
 import { useTodoKanban } from '../../../Hooks/useTodoKanban'
 import { RenderBoardTask } from '../../../Views/Tasks'
-import {
-  Chip,
-  FlexBetween,
-  InlineBlockText,
-  InlineFlex,
-  StyledInlineBlock
-} from '../../Styles/InlineBlock'
+import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
 
 const ViewBlock = (props: any) => {
   const { goTo } = useRouting()
@@ -34,15 +28,29 @@ const ViewBlock = (props: any) => {
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { getView } = useTaskViews()
   const { getFilteredTodoBoard } = useTodoKanban()
+  const [view, setView] = useState<View | undefined>(undefined)
+  const [board, setBoard] = useState<any>(undefined)
 
-  const curView = useMemo(() => {
-    return getView(viewid)
+  useEffect(() => {
+    const filters = view?.filters
+    if (filters) {
+      setBoard(getFilteredTodoBoard(filters))
+    }
+  }, [viewid, view])
+
+  useEffect(() => {
+    setView(getView(viewid))
   }, [viewid])
 
-  const board = useMemo(() => {
-    const filters = curView?.filters
-    return filters ? getFilteredTodoBoard(filters) : undefined
-  }, [viewid])
+  const refreshView = () => {
+    const newView = getView(viewid)
+    setView(newView)
+    const filters = view?.filters
+    if (filters) {
+      const board = getFilteredTodoBoard(filters)
+      setBoard(board)
+    }
+  }
 
   const openView = (ev: any) => {
     ev.preventDefault()
@@ -58,7 +66,16 @@ const ViewBlock = (props: any) => {
   const selected = useSelected()
 
   const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
-    return <RenderBoardTask staticBoard id={id} todo={todo} overlaySidebar={false} dragging={dragging} />
+    return (
+      <RenderBoardTask
+        staticBoard
+        refreshCallback={refreshView}
+        id={id}
+        todo={todo}
+        overlaySidebar={false}
+        dragging={dragging}
+      />
+    )
   }
 
   // mog('Rendering View Block', { selected, curView, viewid, board })
@@ -70,19 +87,22 @@ const ViewBlock = (props: any) => {
           <FlexBetween>
             <InlineFlex>
               <Icon icon={stackLine} />
-              <InlineBlockText>{curView?.title ?? 'Embeded View'}</InlineBlockText>
+              <InlineBlockText>{view?.title ?? 'Embeded View'}</InlineBlockText>
             </InlineFlex>
+            {/*
+              <Button onClick={refreshView}>Refresh View</Button>
+            */}
             <Chip onClick={openView}>Open</Chip>
           </FlexBetween>
           {board && (
             <StyledViewBlockPreview>
               <StyledTasksKanbanBlock>
-                {curView?.filters.length > 0 && (
+                {view?.filters.length > 0 && (
                   <SearchFilterListCurrent>
-                    {curView?.filters.map((f) => (
+                    {view?.filters.map((f) => (
                       <DisplayFilter key={f.id} filter={f} />
                     ))}
-                    <RenderGlobalJoin globalJoin={curView?.globalJoin} />
+                    <RenderGlobalJoin globalJoin={view?.globalJoin} />
                   </SearchFilterListCurrent>
                 )}
                 <Board

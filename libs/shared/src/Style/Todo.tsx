@@ -214,5 +214,9 @@ export const TaskCard = styled.div<{
         max-width: calc(100% - ${priorityShown ? '5rem' : '2rem'});
         overflow: hidden;
       }
+      ${TodoContainer} {
+        width: max-content;
+        max-width: 250px;
+      }
     `}
 `

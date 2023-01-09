@@ -39,12 +39,22 @@ interface RenderTaskProps {
   selectedRef?: React.RefObject<HTMLDivElement>
   selectedCard?: TodoKanbanCard | null
   staticBoard?: boolean
+  refreshCallback?: () => void
   overlaySidebar: boolean
   dragging: boolean
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({ id, overlaySidebar, staticBoard, todo, selectedCard, selectedRef, dragging }: RenderTaskProps) => {
+  ({
+    id,
+    overlaySidebar,
+    staticBoard,
+    refreshCallback,
+    todo,
+    selectedCard,
+    selectedRef,
+    dragging
+  }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
 
     const sidebar = useLayoutStore((store) => store.sidebar)
@@ -56,9 +66,11 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       () => ({
         onChangePriority: (todoId: string, priority) => {
           changePriority(todo, priority)
+          if (refreshCallback) refreshCallback()
         },
         onChangeStatus: (todoId: string, status) => {
           changeStatus(todo, status)
+          if (refreshCallback) refreshCallback()
         }
       }),
       []
@@ -66,6 +78,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
     const toggleModal = useModalStore((store) => store.toggleOpen)
     const priorityShown = todo.metadata.priority !== PriorityType.noPriority
+
+    // mog('staticBoard', { staticBoard })
 
     return (
       <TaskCard
@@ -87,7 +101,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           showDelete={false}
           key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
-          readOnly={readOnly || staticBoard}
+          readOnly={readOnly}
           readOnlyContent
           showPriority
           controls={controls}
