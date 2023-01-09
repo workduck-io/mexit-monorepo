@@ -14,10 +14,9 @@ import {
 } from '@mexit/shared'
 
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { IComboboxItem } from '../../Types/Combobox'
 
 const Item: React.FC<{
-  item: IComboboxItem
+  item: any
   icon: MIcon
   index: number
   description?: string

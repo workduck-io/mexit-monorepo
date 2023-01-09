@@ -14,6 +14,7 @@ import { initSearchIndex, startRequestsWorkerService } from '../Workers/controll
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
+import { usePromptAPI } from './API/usePromptAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
@@ -30,9 +31,6 @@ export const useInitLoader = () => {
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
-  const setPrompts = usePromptStore((s) => s.setAllPrompts)
-  const setUserPromptAuthInfo = usePromptStore((s) => s.setUserPromptAuthInfo)
-  const setPromptProviders = usePromptStore((s) => s.setPromptProviders)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -43,6 +41,7 @@ export const useInitLoader = () => {
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
+  const { getAllPrompts, getPromptProviders, getUserPromptAuth } = usePromptAPI()
   const { getAllSmartCaptures } = useSmartCapture()
 
   const backgroundFetch = async () => {
@@ -54,11 +53,9 @@ export const useInitLoader = () => {
         getAllLinks(),
         getAllSmartCaptures(),
         fetchAllHighlights(),
-        API.prompt.getAllPromptProviders().then((res) => setPromptProviders(res)),
-        API.prompt.getUserPromptsAuth().then((res) => {
-          if (res) setUserPromptAuthInfo(res)
-        }),
-        API.prompt.getAllPrompts().then((res) => setPrompts(res))
+        getAllPrompts(),
+        getPromptProviders(),
+        getUserPromptAuth()
       ])
     } catch (err) {
       mog('Background fetch failed')
@@ -94,7 +91,8 @@ export const useInitLoader = () => {
         archive: useDataStore.getState().archive,
         sharedNodes: useDataStore.getState().sharedNodes,
         snippets: useSnippetStore.getState().snippets,
-        contents: useContentStore.getState().contents
+        contents: useContentStore.getState().contents,
+        prompts: usePromptStore.getState().getAllPrompts()
       }
 
       initSearchIndex(initData)

@@ -9,7 +9,7 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { isElder } from '@mexit/core'
+import { isElder, mog } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -28,7 +28,7 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
       try {
         if (isElder(commandKey, 'snip')) {
           const content = getSnippetContent(commandConfig.command)
-
+          mog('CONTENT IS', { content })
           if (content) {
             select(editor, targetRange)
             insertNodes<TElement>(editor, content)

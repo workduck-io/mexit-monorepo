@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import { IconButton,TitleWithShortcut } from '@workduck-io/mex-components'
+import { IconButton, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
@@ -29,7 +29,15 @@ import {
 } from '../Sidebar.style'
 import { SidebarSpace } from '../Sidebar.types'
 
-const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }) => {
+const Header = ({
+  space,
+  readOnly,
+  hideShareSpace
+}: {
+  space: SidebarSpace
+  readOnly?: boolean
+  hideShareSpace?: boolean
+}) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
   // const node = useEditorStore((store) => store.node)
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
@@ -141,7 +149,7 @@ const Header = ({ space, readOnly }: { space: SidebarSpace; readOnly?: boolean }
               </Tooltip>
             )}
           </SpaceTitle>
-          {!isNamespaceReserved && (
+          {!isNamespaceReserved && !hideShareSpace && (
             <VisibleFade visible={!isUserEditing}>
               <IconButton
                 // highlight={isShared && !isReadonly && !isWriteOnly}

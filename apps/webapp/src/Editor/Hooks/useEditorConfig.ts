@@ -18,6 +18,7 @@ import { DefaultMIcons } from '@mexit/shared'
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useMentions } from '../../Hooks/useMentions'
+import usePrompts from '../../Hooks/usePrompts'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -25,7 +26,6 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
-import { usePromptStore } from '../../Stores/usePromptStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
@@ -56,9 +56,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
-  const downloadedPrompts = usePromptStore((s) => s.downloaded)
-  const createdPrompts = usePromptStore((s) => s.created)
-  const defaultPrompts = usePromptStore((s) => s.defaults)
+  const { allPrompts } = usePrompts()
 
   const { createNewNote } = useCreateNewNote()
 
@@ -77,29 +75,6 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     return slashCommands.internal
   }, [slashCommands.internal])
 
-  const prompts = useMemo(() => {
-    return [
-      ...downloadedPrompts.map((l) => ({
-        value: l.entityId,
-        text: l.title,
-        icon: DefaultMIcons.PROMPT,
-        type: QuickLinkType.prompts
-      })),
-      ...defaultPrompts.map((l) => ({
-        value: l.entityId,
-        text: l.title,
-        icon: DefaultMIcons.PROMPT,
-        type: QuickLinkType.prompts
-      })),
-      ...createdPrompts.map((l) => ({
-        value: l.entityId,
-        text: l.title,
-        icon: DefaultMIcons.PROMPT,
-        type: QuickLinkType.prompts
-      }))
-    ]
-  }, [downloadedPrompts, defaultPrompts, createdPrompts])
-
   const internals: any[] = [
     ...ilinksForCurrentNode.map((l) => ({
       ...l,
@@ -108,7 +83,12 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       icon: l.icon ?? DefaultMIcons,
       type: QuickLinkType.backlink
     })),
-    ...prompts,
+    ...allPrompts.map((prompt) => ({
+      value: prompt.entityId,
+      text: prompt.title,
+      icon: DefaultMIcons.PROMPT,
+      type: QuickLinkType.prompts
+    })),
     ...sharedNodes.map((l) => ({
       ...l,
       value: l.nodeid,

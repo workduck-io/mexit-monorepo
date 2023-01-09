@@ -108,7 +108,7 @@ export const SnippetSidebar = () => {
     <SpaceWrapper>
       <SpaceContentWrapper>
         {transitions((style, i) => {
-          return <SidebarSpaceComponent space={spaces[i.current]} style={style} />
+          return <SidebarSpaceComponent space={spaces[i.current]} style={style} readOnly hideShare />
         })}
       </SpaceContentWrapper>
       <SidebarSpaceSwitcher

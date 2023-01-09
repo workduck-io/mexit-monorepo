@@ -126,6 +126,13 @@ export const convertDataToIndexable = (data: Partial<PersistentData>) => {
         break
       }
 
+      case indexNames.prompt: {
+        data.prompts.forEach((entry) => {
+          titleNodeMap.set(entry.entityId, entry.title)
+        })
+        break
+      }
+
       case indexNames.template:
       case indexNames.snippet: {
         const snippets = Array.isArray(data.snippets) ? data.snippets : Object.values(data.snippets)
@@ -184,6 +191,16 @@ export const convertDataToIndexable = (data: Partial<PersistentData>) => {
           nodeBlockMap[snip.id] = [snip.id] // Redundant right now, not doing block level indexing for snippets
           idxResult.push(temp)
         })
+    } else if (idxName === indexNames.prompt) {
+      data?.prompts?.forEach((prompt) => {
+        const temp: GenericSearchData = {
+          id: prompt.entityId,
+          text: prompt.description,
+          blockId: 'PROMPT',
+          title: prompt.title
+        }
+        idxResult.push(temp)
+      })
     } else {
       throw new Error('No corresponding index name found')
     }

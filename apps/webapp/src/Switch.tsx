@@ -32,6 +32,7 @@ import { ForgotPassword } from './Views/ForgotPassword'
 import LinkView from './Views/LinkView'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
+import PromptPage from './Views/Prompts/PromptPage'
 import PromptProvidersPage from './Views/Prompts/PromptProvidersPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
@@ -171,7 +172,7 @@ const SnippetRoutes = () => {
     <Routes>
       <Route index element={<Snippets />} />
       <Route path="node/:snippetid" element={<SnippetEditor />} />
-      <Route path="prompt/:promptId" element={<div />} />
+      <Route path="prompt/:promptId" element={<PromptPage />} />
     </Routes>
   )
 }

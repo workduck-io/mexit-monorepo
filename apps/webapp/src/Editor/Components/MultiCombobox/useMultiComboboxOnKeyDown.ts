@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast'
+
 import {
   deleteText,
   deserializeMd,
@@ -44,14 +46,14 @@ export interface ComboTypeHandlers {
   newItemHandler: (newItem: string, parentId?) => any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-const handleOnTab = (item, type): boolean => {
-  switch (type) {
+const handleOnTab = (item, itemType): boolean => {
+  switch (itemType.type) {
     case ELEMENT_ILINK:
-      type = ELEMENT_INLINE_BLOCK
-      return
+      itemType.type = ELEMENT_INLINE_BLOCK
+      return false
     case ELEMENT_TASK_VIEW_LINK:
-      type = ELEMENT_TASK_VIEW_BLOCK
-      return
+      itemType.type = ELEMENT_TASK_VIEW_BLOCK
+      return false
     case PromptRenderType:
       // eslint-disable-next-line no-case-declarations
       const isLoading = useComboboxStore.getState().itemLoading?.item === item.key
@@ -70,7 +72,9 @@ const handleOnTab = (item, type): boolean => {
             }
           })
           .catch((err) => {
+            console.error('Unable to generate result', { err })
             useComboboxStore.getState().setItemLoading()
+            toast('Unable to generate result')
           })
       }
 
@@ -104,12 +108,16 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
       const targetRange = useComboboxStore.getState().targetRange
 
-      const type = elementType ?? getPluginType(editor, getInternalItemType(item, comboType.slateElementType))
+      const internalItemType = {
+        type: elementType ?? getPluginType(editor, getInternalItemType(item, comboType.slateElementType))
+      }
 
       if (tab) {
-        const response = handleOnTab(item, type)
+        const response = handleOnTab(item, internalItemType)
         if (response) return
       }
+
+      const type = internalItemType.type
 
       if (targetRange) {
         const pathAbove = getBlockAbove(editor)?.[1]

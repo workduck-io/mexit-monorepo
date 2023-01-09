@@ -1,33 +1,38 @@
-import { PromptStoreType } from '../Types/Prompt'
+import { PromptDataType, PromptStoreType } from '../Types/Prompt'
 
 export const promptStoreConstructor = (set, get): PromptStoreType => ({
-  downloaded: [],
-  created: [],
-  defaults: [],
+  prompts: {},
   results: {},
-  promptProviders: [],
-  setPromptProviders: (promptProviders) => {
-    set({ promptProviders })
+  providers: [],
+  setPromptProviders: (providers) => {
+    set({ providers })
   },
   setUserPromptAuthInfo(userPromptAuthInfo) {
     set({ userPromptAuthInfo })
   },
   getPrompt: (promptId) => {
-    const downloadedPrompt = get().downloaded.find((prompt) => prompt.entityId === promptId)
-    if (downloadedPrompt) return downloadedPrompt
+    const promptsArray = get().prompts
 
-    const createdPrompt = get().created.find((prompt) => prompt.entityId === promptId)
-    if (createdPrompt) return createdPrompt
+    for (const key in promptsArray) {
+      const isPresent = promptsArray[key]?.find((prompt) => prompt.entityId === promptId)
+      if (isPresent) return isPresent
+    }
+  },
+  getAllPrompts: () => {
+    const promptsData = get().prompts
+    return Object.values(promptsData).reduce((prev: Array<PromptDataType>, current: Array<PromptDataType>) => {
+      return [...prev, ...current]
+    }, []) as Array<PromptDataType>
   },
   addPromptResult: (promptId, result) => {
     const results = get().results
     const existingPromptResults = results[promptId] ?? []
     set({ results: { ...results, [promptId]: [...existingPromptResults, result] } })
   },
-  setAllPrompts: (data) => {
-    set({ downloaded: data.downloaded, created: data.created })
+  setAllPrompts: (prompts) => {
+    set({ prompts })
   },
   reset: () => {
-    set({ downloaded: [], created: [] })
+    set({ prompts: {}, providers: [], results: {} })
   }
 })

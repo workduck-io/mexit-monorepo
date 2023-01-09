@@ -44,7 +44,7 @@ class APIClass {
     instance = this
   }
   init(client?: KyInstance) {
-    this.client = new KYClient(undefined, client)
+    this.client = new KYClient({ timeout: 20000 }, client)
     this.node = new NodeAPI(this.client)
     this.share = new ShareAPI(this.client)
     this.snippet = new SnippetAPI(this.client)

@@ -12,6 +12,7 @@ export type PromptDataType = {
   userId: string
   updatedAt: string
   createdBy: string
+  category: string
 }
 
 export interface UserPromptAuthInfo {
@@ -44,16 +45,15 @@ export type PromptProviderType = {
 }
 
 export type PromptStoreType = {
-  downloaded: Array<PromptDataType>
-  created: Array<PromptDataType>
-  defaults: Array<PromptDataType>
+  prompts: Record<string, Array<PromptDataType>>
   results: Record<EntityIdType, PromptResults>
-  promptProviders: Array<PromptProviderType>
-  setPromptProviders: (promptProviders: Array<PromptProviderType>) => void
+  providers: Array<PromptProviderType>
+  setPromptProviders: (providers: Array<PromptProviderType>) => void
   userPromptAuthInfo?: UserPromptAuthInfo
   setUserPromptAuthInfo: (userPromptAuthInfo: UserPromptAuthInfo) => void
   addPromptResult: (promptId: string, result: PromptResult) => void
   getPrompt: (promptId: string) => PromptDataType | undefined
   setAllPrompts: (data: any) => void
+  getAllPrompts: () => Array<PromptDataType>
   reset: () => void
 }

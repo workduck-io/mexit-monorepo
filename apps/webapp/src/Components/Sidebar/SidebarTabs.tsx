@@ -13,6 +13,7 @@ const SidebarTabs = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const isEditor = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
   const isSnippetNote = useMatch(`${ROUTE_PATHS.snippet}/:snippetid`)
+  const isPromptRoute = useMatch(`${ROUTE_PATHS.prompt}/:promptId`)
   const isSnippet = useMatch(ROUTE_PATHS.snippets)
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
   const isTasks = useMatch(ROUTE_PATHS.tasks)
@@ -28,7 +29,7 @@ const SidebarTabs = () => {
 
   if (isEditor) return <NoteSidebar />
 
-  if (isSnippet || isSnippetNote) return <SnippetSidebar />
+  if (isSnippet || isSnippetNote || isPromptRoute) return <SnippetSidebar />
 
   // if (isArchive || isArchiveEditor) return <ArchiveSidebar />
 

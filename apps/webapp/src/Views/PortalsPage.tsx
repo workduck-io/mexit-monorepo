@@ -14,7 +14,7 @@ const PortalsPage = () => {
   const { goTo } = useRouting()
   const apps = usePortalStore((store) => store.apps)
   const connectedPortals = usePortalStore((store) => store.connectedPortals)
-  const promptsProviders = usePromptStore((store) => store.promptProviders)
+  const promptsProviders = usePromptStore((store) => store.providers)
   const getIsPortalConnected = usePortalStore((store) => store.getIsPortalConnected)
 
   const { getConnectedPortals, sortPortals } = usePortals()

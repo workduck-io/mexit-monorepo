@@ -32,7 +32,7 @@ const PromptProvidersPage = () => {
   const theme = useTheme()
   const actionGroupId = params.actionGroupId
 
-  const provider = usePromptStore((s) => s.promptProviders.find((i) => i.actionGroupId === actionGroupId))
+  const provider = usePromptStore((s) => s.providers.find((i) => i.actionGroupId === actionGroupId))
   const userPromptAuth = usePromptStore((s) => s.userPromptAuthInfo.auth)
   const setUserPromptAuth = usePromptStore((s) => s.setUserPromptAuthInfo)
 

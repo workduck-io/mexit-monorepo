@@ -12,12 +12,13 @@ interface SidebarSpaceProps {
   space: SidebarSpace
   style: CSSProperties
   readOnly?: boolean
+  hideShare?: boolean
 }
 
-export const SidebarSpaceComponent = ({ space, style, readOnly }: AnimatedProps<SidebarSpaceProps>) => {
+export const SidebarSpaceComponent = ({ space, style, readOnly, hideShare }: AnimatedProps<SidebarSpaceProps>) => {
   return (
     <SingleSpace style={style}>
-      <Header space={space} readOnly={readOnly as boolean} />
+      <Header space={space} readOnly={readOnly as boolean} hideShareSpace={hideShare} />
       {
         {
           hierarchy: space?.list?.type === 'hierarchy' && (

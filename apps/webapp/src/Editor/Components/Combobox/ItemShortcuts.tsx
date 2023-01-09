@@ -1,6 +1,6 @@
 import { ComboboxShortcuts, DisplayShortcut, ShortcutText } from '@mexit/shared'
 
-const ItemShortcuts: React.FC<{ shortcuts?: any }> = ({ shortcuts }) => {
+const ItemShortcuts: React.FC<{ shortcuts?: Record<string, any> }> = ({ shortcuts }) => {
   if (!shortcuts) return
 
   return (

@@ -62,6 +62,7 @@ export const EditorPreviewStyles = styled.div`
 `
 interface StyledEditorProps {
   showGraph?: boolean
+  flexDirection?: 'row' | 'column'
 }
 
 export const EditorWrapper = styled.div<{ comboboxOpen?: boolean; isUserEditing?: boolean }>`
@@ -99,7 +100,7 @@ export const EditorHeader = styled.section`
 
 export const StyledEditor = styled.div<StyledEditorProps>`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ flexDirection }) => flexDirection ?? 'column'};
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
   padding: 0 ${({ theme }) => theme.spacing.medium};

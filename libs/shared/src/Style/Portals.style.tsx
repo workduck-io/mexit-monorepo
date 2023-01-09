@@ -34,13 +34,14 @@ export const GroupHeaderContainer = styled.section`
 
   margin-top: 1rem;
   user-select: none;
+  width: 100%;
 
   & > div {
     display: flex;
     padding: ${({ theme }) => theme.spacing.large} ${({ theme }) => theme.spacing.medium};
     gap: ${({ theme }) => theme.spacing.medium};
     margin-bottom: ${({ theme }) => theme.spacing.medium};
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
   }
 
   height: fit-content;
@@ -49,6 +50,7 @@ export const GroupHeaderContainer = styled.section`
 export const ServiceDescription = styled.p`
   margin: 0 1rem 0 0;
   font-size: 1rem;
+  line-height: 1.75;
   font-weight: normal;
   color: ${({ theme }) => theme.tokens.text.default};
 `
