@@ -2,8 +2,6 @@ import ky from 'ky'
 import { type KyInstance } from 'ky/distribution/types/ky'
 import { customAlphabet } from 'nanoid'
 
-import { exposeShared } from '@workduck-io/mex-threads.js/worker'
-
 import {
   apiURLs,
   batchArray,
@@ -17,6 +15,8 @@ import {
 } from '@mexit/core'
 
 import { WorkerRequestType } from '../Utils/worker'
+
+import { exposeX } from './worker-utils'
 
 const nolookalikes = '346789ABCDEFGHJKLMNPQRTUVWXYabcdefghijkmnpqrtwxyz'
 const nanoid = customAlphabet(nolookalikes, 21)
@@ -256,4 +256,4 @@ const functions = {
 }
 
 export type RequestsWorkerInterface = typeof functions
-exposeShared(functions)
+exposeX(functions)

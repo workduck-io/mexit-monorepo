@@ -1,5 +1,3 @@
-import { exposeShared } from '@workduck-io/mex-threads.js/worker'
-
 import {
   convertContentToRawText,
   ELEMENTS_IN_OUTLINE,
@@ -13,6 +11,8 @@ import {
   SearchRepExtra,
   TodoType
 } from '@mexit/core'
+
+import { exposeX } from './worker-utils'
 
 export interface OutlineItem {
   id: string
@@ -162,4 +162,4 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
 const functions = { analyseContent }
 
 export type AnalysisWorkerInterface = typeof functions
-exposeShared(functions)
+exposeX(functions)
