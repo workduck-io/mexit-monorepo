@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useParams } from 'react-router-dom'
 
-import { focusEditor, getPlateEditorRef, isEditorFocused, selectEditor } from '@udecode/plate'
+import { focusEditor, getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
@@ -93,11 +93,9 @@ const ContentEditor = () => {
   }, [])
 
   const onFocusClick = () => {
-    // // mog('focus beeches')
     const editorRef = getPlateEditorRef()
-    const isfocused = isEditorFocused(editorRef)
     if (editorRef) {
-      if (editorWrapperRef.current && !isfocused) {
+      if (editorWrapperRef.current) {
         selectEditor(editorRef, { focus: true, edge: 'end' })
       }
     }
