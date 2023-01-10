@@ -196,6 +196,7 @@ const SnippetEditor = () => {
           <EditorWrapper onClick={onFocusClick}>
             {
               <Editor
+                withShadow
                 autoFocus={false}
                 // focusAtBeginning={false}
                 onChange={onChangeSave}
