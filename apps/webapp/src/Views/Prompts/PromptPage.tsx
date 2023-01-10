@@ -9,6 +9,7 @@ import { DefaultMIcons, FlexBetween, GroupHeader, IconDisplay, ServiceDescriptio
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { usePromptStore } from '../../Stores/usePromptStore'
 
+import RecentPromptResults from './RecentPromptResults'
 import { IconContainer, PromptContainer } from './styled'
 
 const PromptPage = () => {
@@ -60,6 +61,7 @@ const PromptPage = () => {
           </ServiceDescription>
         </GroupHeader>
       </div>
+      <RecentPromptResults promptId={promptId} />
     </PromptContainer>
   )
 }

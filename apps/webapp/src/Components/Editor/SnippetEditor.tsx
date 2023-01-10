@@ -27,7 +27,7 @@ type Inputs = {
 
 const SnippetEditor = () => {
   const snippet = useSnippetStore((store) => store.editor.snippet)
-  const { goTo } = useRouting()
+  const { goTo, goBack } = useRouting()
 
   const {
     register,
@@ -125,7 +125,7 @@ const SnippetEditor = () => {
     saveAndClearBuffer()
   }
 
-  const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
+  const returnToSnippets = () => goBack()
   const defaultValue = useMemo(() => (snippet?.title !== DRAFT_NODE ? snippet?.title : ''), [snippet])
 
   const onDelay = debounce((value) => onChangeTitle(value), 250)

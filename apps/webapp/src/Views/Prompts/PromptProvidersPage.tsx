@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { useTheme } from 'styled-components'
 
-import { LoadingButton } from '@workduck-io/mex-components'
+import { Infobox, LoadingButton } from '@workduck-io/mex-components'
 
 import { API, mog } from '@mexit/core'
 import {
@@ -95,7 +95,7 @@ const PromptProvidersPage = () => {
         </GroupHeader>
       </div>
       <GlobalSectionContainer>
-        <div>You&apos;ve {userPromptAuth.authMetadata.limit} free credits. </div>
+        <div>You&apos;ve {userPromptAuth.authMetadata.limit} free credits.</div>
         <GlobalSectionHeader>
           <Input
             defaultValue={userPromptAuth.authData.accessToken}
@@ -104,6 +104,7 @@ const PromptProvidersPage = () => {
             placeholder="API KEY"
             onChange={onInputChange}
           />
+          <Infobox text={`You can get API KEY from ${provider.authConfig.authURL}`} />
         </GlobalSectionHeader>
         <LoadingButton dots={2} loading={isLoading} onClick={onSaveChanges} transparent>
           <Icon

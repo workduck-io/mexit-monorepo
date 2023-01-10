@@ -6,7 +6,7 @@ import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
-import genereateName from 'project-name-generator'
+import generateName from 'project-name-generator'
 
 import { Button, IconButton, Infobox, PrimaryButton } from '@workduck-io/mex-components'
 
@@ -102,7 +102,8 @@ const Snippets = () => {
   const onCreateNew = (generateTitle = false) => {
     // Create a better way.
     const snippetId = generateSnippetId()
-    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+    const snippetName = generateTitle ? generateName().dashed : DRAFT_NODE
+
     addSnippet({
       id: snippetId,
       title: snippetName,
@@ -117,7 +118,7 @@ const Snippets = () => {
 
   const onCreateSpecialSnippet = (generateTitle = false) => {
     const snippetId = generateSnippetId()
-    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+    const snippetName = generateTitle ? generateName().dashed : DRAFT_NODE
 
     addSnippet({
       id: snippetId,
@@ -180,9 +181,9 @@ const Snippets = () => {
 
     const snippet = getSnippet(item.id)
     const prompt = getPrompt(item.id)
-    const title = isSnippet ? snippet.title : prompt?.title
+    const title = isSnippet ? snippet?.title : prompt?.title
 
-    const icon = isSnippet ? (snippet.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
+    const icon = isSnippet ? (snippet?.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
     const id = `${item.id}_ResultFor_SearchSnippet_${randId}`
 
     if (isSnippet && !snippet) return null
