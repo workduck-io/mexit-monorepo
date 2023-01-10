@@ -1,5 +1,17 @@
 # mexit-webapp
 
+## 0.22.0
+
+### Minor Changes
+
+- de222f81: Prompts in Mexit
+
+### Patch Changes
+
+- e14cbe04: UI fixes
+- d446964b: Mobile Public View Fixes
+- af31efa6: Add editable views, fix styles
+
 ## 0.21.2
 
 ### Patch Changes

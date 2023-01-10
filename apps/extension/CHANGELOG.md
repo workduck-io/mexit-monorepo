@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.3
+
+### Patch Changes
+
+- de222f81: Prompts in Mexit
+
 ## 0.19.2
 
 ### Patch Changes
