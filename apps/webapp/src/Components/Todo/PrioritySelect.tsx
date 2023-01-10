@@ -4,7 +4,7 @@ import { useContextMenu } from 'react-contexify'
 import Tippy from '@tippyjs/react'
 
 import { Priority, PriorityDataType, PriorityType } from '@mexit/core'
-import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
+import { MexIcon, Portal, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
 
 import PriorityMenu from './PriorityMenu'
 
@@ -18,21 +18,24 @@ interface PriorityMenuSelect {
 
 const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
   const menuId = `${id}-priority-menu`
+
   const { show, hideAll } = useContextMenu({ id: menuId })
+  // ref for span element
 
   const onPriorityChangeHide = (priority: PriorityDataType) => {
     onPriorityChange(priority)
     hideAll()
   }
+
   return (
     <>
       <TodoActionWrapper
-        onClick={
+        onClick={(e) =>
           readOnly
             ? () => {
                 /*empty*/
               }
-            : show
+            : show(e, { position: { x: e.pageX, y: e.pageY } })
         }
       >
         <Tippy
@@ -46,12 +49,12 @@ const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = fal
           <TodoActionButton>
             <MexIcon
               $noHover
-              onClick={
+              onClick={(e) =>
                 readOnly
                   ? () => {
                       /*empty*/
                     }
-                  : show
+                  : show(e, { position: { x: e.pageX, y: e.pageY } })
               }
               icon={Priority[value]?.icon}
               fontSize={20}
@@ -61,7 +64,9 @@ const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = fal
           </TodoActionButton>
         </Tippy>
       </TodoActionWrapper>
-      <PriorityMenu id={menuId} onClick={onPriorityChangeHide} />
+      <Portal id="priority-select">
+        <PriorityMenu id={menuId} onClick={onPriorityChangeHide} />
+      </Portal>
     </>
   )
 }

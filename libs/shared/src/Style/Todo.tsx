@@ -66,6 +66,10 @@ export const StyledTasksKanbanBlock = styled(StyledBoard)`
   .react-kanban-column {
     width: calc(100% / 3.2);
   }
+  .react-kanban-column > div > div,
+  .react-kanban-column > div > div > div {
+    width: 100%;
+  }
   .react-kanban-board > div {
     width: 100%;
   }
@@ -206,13 +210,17 @@ export const TaskCard = styled.div<{
       border: 1px solid ${theme.tokens.colors.primary.default};
     `};
 
-  ${({ staticBoard, priorityShown }) =>
+  ${({ staticBoard }) =>
     staticBoard &&
     css`
-      width: calc(100% - 2rem);
+      width: 100%;
       ${EditorStyles} {
-        max-width: calc(100% - ${priorityShown ? '5rem' : '2rem'});
+        max-width: 100%;
         overflow: hidden;
+      }
+      ${TodoContainer} {
+        width: 100%;
+        max-width: 230px;
       }
     `}
 `
