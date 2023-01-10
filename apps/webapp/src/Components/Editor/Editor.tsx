@@ -31,7 +31,7 @@ const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
     withShadow
       ? css`
           box-shadow: ${theme.tokens.shadow.medium};
-          background-color: ${theme.tokens.surfaces.s[1]};
+          background-color: rgba(${theme.rgbTokens.surfaces.s[2]}, 0.5);
         `
       : css`
           &:hover {
