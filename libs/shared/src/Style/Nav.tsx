@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
 
-import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { generateStyle, MexTheme } from '@workduck-io/mex-themes'
@@ -32,16 +31,16 @@ export const NavTitle = styled.span`
 
 export const navTooltip = css`
   .nav-tooltip {
-    color: ${({ theme }) => theme.colors.text.oppositePrimary} !important;
-    background: ${({ theme }) => theme.colors.primary} !important;
+    color: ${({ theme }) => theme.tokens.colors.primary.text} !important;
+    background: ${({ theme }) => theme.tokens.colors.primary.default} !important;
     &::after {
-      border-right-color: ${({ theme }) => theme.colors.primary} !important;
+      border-right-color: ${({ theme }) => theme.tokens.colors.primary.default} !important;
     }
   }
 `
 
 export const Count = styled.span`
-  color: ${({ theme }) => theme.colors.text.fade};
+  color: ${({ theme }) => theme.tokens.text.fade};
 `
 
 const ButtonOrLinkStyles = css`
@@ -71,10 +70,10 @@ export const SearchLink = styled(NavLink)`
   ${ButtonOrLinkStyles}
   background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
   margin-bottom: ${({ theme }) => theme.spacing.medium};
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   svg {
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.tokens.colors.primary.default};
   }
 
   &.active {
@@ -82,7 +81,7 @@ export const SearchLink = styled(NavLink)`
     color: ${({ theme }) => theme.tokens.colors.primary.default};
     box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 `
@@ -95,7 +94,7 @@ export const Link = styled(NavLink)`
     ${({ theme }) => generateStyle(theme.sidebar.nav.link.main.selected)}
     box-shadow: ${({ theme }) => theme.tokens.shadow.small};
     svg {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
     }
   }
 `
@@ -105,7 +104,7 @@ export const NavSpacer = styled.div`
 `
 export const NavDivider = styled.div`
   height: 1px;
-  background-color: ${({ theme }) => theme.colors.gray[6]};
+  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
   margin: ${({ theme }) => theme.spacing.small} 0;
 `
 
@@ -133,7 +132,7 @@ export const ComingSoon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.gray[5]};
+  color: ${({ theme }) => theme.tokens.text.fade};
   padding: ${({ theme }) => theme.spacing.small};
 
   margin-top: ${({ theme }) => theme.spacing.medium};
@@ -144,7 +143,7 @@ export const ComingSoon = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.background.card};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 
@@ -163,8 +162,8 @@ export const NavLogoWrapper = styled.div`
 
 export const CreateNewButton = styled.div`
   ${ButtonOrLinkStyles}
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.text.oppositePrimary};
+  background-color: ${({ theme }) => theme.tokens.colors.primary.default};
+  color: ${({ theme }) => theme.tokens.colors.primary.text};
   margin-bottom: ${({ theme }) => theme.spacing.medium};
   svg {
     height: 32px;
@@ -172,9 +171,9 @@ export const CreateNewButton = styled.div`
     color: ${({ theme }) => theme.colors.text.oppositePrimary};
   }
   :hover {
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     svg {
-      color: ${({ theme }) => transparentize(0.5, theme.colors.text.oppositePrimary)};
+      color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.text}, 0.5);
     }
   }
 `
@@ -185,26 +184,26 @@ export const NavButton = styled.div<{ primary?: boolean }>`
   ${({ theme, primary }) =>
     primary &&
     css`
-      color: ${theme.colors.text.oppositePrimary};
-      background-color: ${theme.colors.primary};
+      color: ${theme.tokens.colors.primary.text};
+      background-color: ${theme.tokens.colors.primary.default};
       transition: all 0.25s ease-in-out;
 
       svg {
-        color: ${theme.colors.text.oppositePrimary};
+        color: ${theme.tokens.colors.primary.text};
       }
 
       &:hover {
-        background-color: ${theme.colors.text.oppositePrimary};
-        color: ${theme.colors.primary};
+        background-color: ${theme.tokens.colors.primary.text};
+        color: ${theme.tokens.colors.primary.default};
 
         svg {
-          color: ${theme.colors.primary};
+          color: ${theme.tokens.colors.primary.default};
         }
       }
     `}
 
     &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray[6]};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
@@ -351,7 +350,7 @@ export const NavWrapper = styled(animated.div)<NavWrapperProps>`
 
   &::-webkit-scrollbar-thumb,
   *::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => transparentize(0.5, theme.colors.gray[6])};
+    background: rgba(${({ theme }) => theme.tokens.surfaces.s[3]}, 0.5);
     border-radius: 6px;
     border: 2px solid rgba(0, 0, 0, 0);
     background-clip: content-box;
