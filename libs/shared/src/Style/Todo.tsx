@@ -206,12 +206,12 @@ export const TaskCard = styled.div<{
       border: 1px solid ${theme.tokens.colors.primary.default};
     `};
 
-  ${({ staticBoard, priorityShown }) =>
+  ${({ staticBoard }) =>
     staticBoard &&
     css`
       width: calc(100%);
       ${EditorStyles} {
-        max-width: calc(100% - ${priorityShown ? '2rem' : '0rem'});
+        max-width: 100%;
         overflow: hidden;
       }
       ${TodoContainer} {
