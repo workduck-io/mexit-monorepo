@@ -36,7 +36,7 @@ const Header = ({
 }: {
   space: SidebarSpace
   readOnly?: boolean
-  hideShareSpace?: boolean
+  hideShareSpace?: any
 }) => {
   const sidebar = useLayoutStore((state) => state.sidebar)
   // const node = useEditorStore((store) => store.node)
