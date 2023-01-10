@@ -15,6 +15,8 @@ import { useFocusBlock } from '../../Stores/useFocusBlock'
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
 const EditorWrapper = styled(EditorStyles)`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   max-width: 800px;
   padding: 1rem;
@@ -45,6 +47,7 @@ interface EditorProps {
   focusBlockId?: string // * Block to focus, This uses a timeout as immediately the children are not rendered yet
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
+  onFocusClick?: () => void
   options?: any
   onAutoSave?: (content: NodeEditorContent) => void
 }
@@ -59,6 +62,7 @@ const Editor: React.FC<EditorProps> = ({
   autoFocus = true,
   includeBlockInfo = false,
   onAutoSave,
+  onFocusClick,
   options
 }) => {
   useEditorChange(nodeUID, content)
@@ -128,6 +132,7 @@ const Editor: React.FC<EditorProps> = ({
           }
         }}
       />
+      {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />}
     </EditorWrapper>
   )
 }
