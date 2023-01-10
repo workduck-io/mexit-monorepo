@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const GlobalSectionContainer = styled.section`
   padding: ${({ theme }) => theme.spacing.medium};
-  border-top: 1px solid ${({ theme }) => theme.colors.gray[7]};
+  border-top: 1px solid ${({ theme }) => theme.tokens.surfaces.s[1]};
   display: flex;
   align-items: center;
   box-sizing: border-box;

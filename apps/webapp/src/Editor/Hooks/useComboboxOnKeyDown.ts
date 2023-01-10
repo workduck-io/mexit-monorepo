@@ -2,10 +2,9 @@ import { getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/pla
 import { KeyboardHandler } from '@udecode/plate-core'
 import { findIndex, groupBy } from 'lodash'
 
-import { isElder,mog } from '@mexit/core'
+import { isElder, mog } from '@mexit/core'
 
 import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { useDataStore } from '../../Stores/useDataStore'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'
@@ -43,16 +42,17 @@ export const getCreateableOnSelect = (onSelectItem: OnSelectItem, onNewItem: OnN
     tab?: boolean
   ) => {
     const items = useComboboxStore.getState().items
+
+    // * Editor on which combobox is opened
     const editorId = getPlateEditorRef().id
     const noteId = getNodeIdFromEditor(editorId)
 
-    const currentNodeKey = useDataStore.getState().ilinks.find((i) => i.nodeid === noteId)?.path
+    // * Item position
     const itemIndex = useComboboxStore.getState().itemIndex
-
+    const item = items[itemIndex]
     mog('getCreatableInSelect', { items, selectVal, creatable, itemIndex })
 
-    if (items[itemIndex]) {
-      const item = items[itemIndex]
+    if (item) {
       mog('getCreatableInSelect', { item, selectVal, creatable })
       if (item.key === '__create_new' && selectVal) {
         const val = pure(typeof selectVal === 'string' ? selectVal : selectVal.text)

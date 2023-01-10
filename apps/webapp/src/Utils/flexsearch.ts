@@ -7,6 +7,7 @@ export interface CreateSearchIndexData {
   snippet: GenericSearchData[] | null
   archive: GenericSearchData[] | null
   template: GenericSearchData[] | null
+  prompt: GenericSearchData[] | null
 }
 
 export const SEARCH_RESULTS_LIMIT = 10

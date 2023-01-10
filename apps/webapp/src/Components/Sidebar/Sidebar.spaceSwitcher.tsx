@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { IconDisplay, isOnEditableElement,Tooltip } from '@mexit/shared'
+import { IconDisplay, isOnEditableElement, Tooltip } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 
@@ -18,13 +18,15 @@ interface SidebarSpaceSwitcherProps {
   spaces: SidebarSpace[]
   setCurrentIndex: (index: number) => void
   setNextSpaceIndex: (reverse?: boolean) => void
+  createNewMenuItems: Array<any>
 }
 
 export const SidebarSpaceSwitcher = ({
   currentSpace,
   setNextSpaceIndex,
   spaces,
-  setCurrentIndex
+  setCurrentIndex,
+  createNewMenuItems
 }: SidebarSpaceSwitcherProps) => {
   const sidebarWidth = useLayoutStore((s) => s.sidebar.width)
   const currentItemRef = React.useRef<HTMLDivElement>(null)
@@ -74,7 +76,7 @@ export const SidebarSpaceSwitcher = ({
         ))}
       </SwitcherSpaceItems>
 
-      <CreateNewMenu>
+      <CreateNewMenu menuItems={createNewMenuItems}>
         <CreateNewButton>
           <Icon icon={addCircleLine} />
         </CreateNewButton>

@@ -6,22 +6,26 @@ import deleteBin6Line from '@iconify-icons/ri/delete-bin-6-line'
 import quillPenLine from '@iconify-icons/ri/quill-pen-line'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import { nanoid } from 'nanoid'
-import genereateName from 'project-name-generator'
+import generateName from 'project-name-generator'
 
 import { Button, IconButton, Infobox, PrimaryButton } from '@workduck-io/mex-components'
 
 import {
   batchArray,
+  capitalize,
   convertContentToRawText,
   DRAFT_NODE,
   generateSnippetId,
   GenericSearchResult,
-  mog
+  mog,
+  SNIPPET_PREFIX
 } from '@mexit/core'
 import {
   DefaultMIcons,
+  IconDisplay,
   ItemTag,
   MainHeader,
+  PreviewDescription,
   Result,
   ResultDesc,
   ResultMain,
@@ -40,10 +44,12 @@ import {
 import Plateless from '../Components/Editor/Plateless'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
+import usePrompts from '../Hooks/usePrompts'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
+import { usePromptStore } from '../Stores/usePromptStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
@@ -59,28 +65,35 @@ const Snippets = () => {
   const { addSnippet, deleteSnippet, getSnippet, getSnippets, updateSnippet } = useSnippets()
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
+  const getPrompt = usePromptStore((s) => s.getPrompt)
   const { queryIndex } = useSearch()
   const { goTo } = useRouting()
   const { deleteAllVersionOfSnippet } = useApi()
+  const { allPrompts } = usePrompts()
 
-  const { initialSnippets }: { initialSnippets: GenericSearchResult[] } = useMemo(
-    () => ({
-      initialSnippets: Object.values(snippets)?.map((snippet) => ({
+  const initialItems: GenericSearchResult[] = useMemo(
+    () => [
+      ...Object.values(snippets).map((snippet) => ({
         id: snippet.id,
         title: snippet.title,
         text: convertContentToRawText(snippet.content)
+      })),
+      ...allPrompts.map((prompt) => ({
+        id: prompt.entityId,
+        title: prompt.title,
+        text: prompt.description
       }))
-    }),
-    [snippets]
+    ],
+    [snippets, allPrompts]
   )
 
   const randId = useMemo(() => nanoid(), [])
 
   const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
-    const res = await queryIndex(['template', 'snippet'], newSearchTerm)
+    const res = await queryIndex(['template', 'snippet', 'prompt'], newSearchTerm)
 
     if (!newSearchTerm && res?.length === 0) {
-      return initialSnippets
+      return initialItems
     }
 
     return res
@@ -89,7 +102,8 @@ const Snippets = () => {
   const onCreateNew = (generateTitle = false) => {
     // Create a better way.
     const snippetId = generateSnippetId()
-    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+    const snippetName = generateTitle ? generateName().dashed : DRAFT_NODE
+
     addSnippet({
       id: snippetId,
       title: snippetName,
@@ -104,7 +118,7 @@ const Snippets = () => {
 
   const onCreateSpecialSnippet = (generateTitle = false) => {
     const snippetId = generateSnippetId()
-    const snippetName = generateTitle ? genereateName().dashed : DRAFT_NODE
+    const snippetName = generateTitle ? generateName().dashed : DRAFT_NODE
 
     addSnippet({
       id: snippetId,
@@ -129,7 +143,6 @@ const Snippets = () => {
   const onDeleteSnippet = (id: string) => {
     deleteAllVersionOfSnippet(id).then(() => {
       deleteSnippet(id)
-      goTo(ROUTE_PATHS.snippets, NavigationType.replace)
     })
   }
 
@@ -139,15 +152,22 @@ const Snippets = () => {
     goTo(ROUTE_PATHS.snippet, NavigationType.push, id, { title: snippet?.title })
   }
 
+  const handleOpenPrompt = (id: string) => {
+    goTo(ROUTE_PATHS.prompt, NavigationType.push, id)
+  }
+
   // console.log({ result })
   const onSelect = (item: GenericSearchResult, e?: React.MouseEvent) => {
     if (e) {
       return
     }
-    const snippetId = item.id
-    const snippetName = item.title
-    onOpenSnippet(snippetId)
-    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
+    const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
+    handleClick(item.id, isSnippet)
+  }
+
+  const handleClick = (id: string, isSnippet = true) => {
+    if (isSnippet) onOpenSnippet(id)
+    else handleOpenPrompt(id)
   }
 
   const onEscapeExit = () => {
@@ -157,42 +177,47 @@ const Snippets = () => {
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
     const descriptions = useDescriptionStore((store) => store.descriptions)
-    const snip = getSnippet(item.id)
+    const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
 
-    if (!snip) {
-      return null
-    }
-    const icon = quillPenLine
+    const snippet = getSnippet(item.id)
+    const prompt = getPrompt(item.id)
+    const title = isSnippet ? snippet?.title : prompt?.title
+
+    const icon = isSnippet ? (snippet?.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
     const id = `${item.id}_ResultFor_SearchSnippet_${randId}`
 
-    // mog('item', { item, descriptions })
+    if (isSnippet && !snippet) return null
 
     if (props.view === View.Card) {
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        <Result {...props} key={id} ref={ref} onClick={() => onOpenSnippet(snip.id)}>
+        <Result {...props} key={id} ref={ref} onClick={() => handleClick(item.id, isSnippet)}>
           <SnippetHeader>
             <SnippetCommand>
-              <Icon icon={icon} />
-              {snip.title}
+              <IconDisplay icon={icon} size={20} />
+              {title}
             </SnippetCommand>
 
-            <IconButton
-              size={20}
-              icon={deleteBin6Line}
-              title="delete"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                onDeleteSnippet(snip.id)
-              }}
-            />
+            {isSnippet && (
+              <IconButton
+                size={20}
+                icon={deleteBin6Line}
+                title="delete"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  if (isSnippet) onDeleteSnippet(item.id)
+                }}
+              />
+            )}
           </SnippetHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')} padding>
-            {/* descriptions?.[snip.id]?.rawText */}
-            <Plateless content={descriptions?.[snip.id]?.truncatedContent} multiline />
-            {/* <PreviewEditor content={snip.content} editorId={`editor_${item.id}`} /> */}
+            {isSnippet ? (
+              <Plateless content={descriptions?.[item.id]?.truncatedContent} multiline />
+            ) : (
+              <PreviewDescription>{capitalize(item.text)}</PreviewDescription>
+            )}
           </SearchPreviewWrapper>
         </Result>
       )
@@ -200,18 +225,19 @@ const Snippets = () => {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
-            <Icon icon={icon} />
-            <ResultMain onClick={() => onSelect({ id: snip.id, title: snip.title })}>
-              <ResultTitle>{snip.title}</ResultTitle>
-              <ResultDesc> {descriptions?.[snip.id]?.rawText}</ResultDesc>
+            <IconDisplay icon={icon} size={20} />
+            <ResultMain onClick={() => onSelect({ id: item.id, title: title }, isSnippet)}>
+              <ResultTitle>{title}</ResultTitle>
+              <ResultDesc> {isSnippet ? descriptions?.[item.id]?.rawText : capitalize(item.text)}</ResultDesc>
             </ResultMain>
             <IconButton
               size={20}
               icon={deleteBin6Line}
               title="Delete"
+              disabled={!isSnippet}
               onClick={(ev) => {
                 ev.stopPropagation()
-                onDeleteSnippet(snip.id)
+                if (isSnippet) onDeleteSnippet(item.id)
               }}
             />
           </ResultRow>
@@ -225,16 +251,18 @@ const Snippets = () => {
   const RenderItem = React.forwardRef(BaseItem)
 
   const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
-    // mog('RenderPreview', { item })
     if (item) {
-      const icon = quillPenLine
-      const snip = getSnippet(item.id)
+      const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
 
-      // const edNode = { ...node, title: node.path, id: node.nodeid }
-      if (snip)
+      const snip = getSnippet(item.id)
+      const prompt = getPrompt(item.id)
+      const icon = isSnippet ? (snip.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
+
+      if (snip && isSnippet)
         return (
           <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
             <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
+              <IconDisplay icon={icon} size={24} />
               <span className="title">{snip.title}</span>
               {snip?.template && (
                 <ItemTag large>
@@ -242,7 +270,6 @@ const Snippets = () => {
                   Template
                 </ItemTag>
               )}
-              <Icon icon={icon} />
             </Title>
             <EditorPreviewRenderer
               readOnly
@@ -252,6 +279,17 @@ const Snippets = () => {
             />
           </SplitSearchPreviewWrapper>
         )
+
+      if (!isSnippet && prompt) {
+        return (
+          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
+            <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
+              <IconDisplay icon={icon} size={24} />
+              <span className="title">{item.title}</span>
+            </Title>
+          </SplitSearchPreviewWrapper>
+        )
+      }
     }
     return null
   }
@@ -283,25 +321,23 @@ const Snippets = () => {
     getInitialSnippets()
   }, [])
 
-  mog('[Snippets]: Inital List', { initialSnippets })
-
   return (
     <SnippetsSearchContainer>
       <MainHeader>
         <Title>Snippets</Title>
         <PrimaryButton onClick={() => onCreateNew()}>
           <Icon icon={quillPenLine} height={24} />
-          Create New Snippet
+          New Snippet
         </PrimaryButton>
         <Button onClick={() => onCreateSpecialSnippet()}>
           <Icon icon={magicLine} height={24} />
-          Create New Template Snippet
+          New Template
         </Button>
         <Infobox text={SnippetHelp} />
       </MainHeader>
       <SearchView
         id={`searchSnippet_${randId}`}
-        initialItems={initialSnippets}
+        initialItems={initialItems}
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onDelete={(i) => onDeleteSnippet(i.id)}

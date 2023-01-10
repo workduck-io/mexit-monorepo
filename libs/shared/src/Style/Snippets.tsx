@@ -49,10 +49,16 @@ export const SnippetCommandPrefix = styled.div`
 `
 export const SnippetCommand = styled.div`
   display: flex;
+  align-items: center;
   font-size: 1.5rem;
   margin: ${({ theme }) => theme.spacing.small} 0;
   color: ${({ theme }) => theme.tokens.colors.primary.default};
   gap: ${({ theme }) => theme.spacing.small};
+`
+
+export const PreviewDescription = styled.div`
+  line-height: 1.75;
+  color: ${({ theme }) => theme.tokens.text.default};
 `
 
 export const CreateSnippet = styled(Card)`

@@ -3,6 +3,7 @@ import { Document } from '@workduck-io/flexsearch'
 import { Snippets } from '../Stores/snippetStoreConstructor'
 
 import { ILink, LinkCache, NodeContent, SharedNode, Tag, TagsCache } from './Editor'
+import { PromptDataType } from './Prompt'
 import { Reminder } from './Reminders'
 import { TodosType } from './Todo'
 
@@ -19,6 +20,8 @@ export interface PersistentData {
 
   archive: ILink[]
   bookmarks: string[]
+
+  prompts: Array<PromptDataType>
 
   todos: TodosType
   reminders: Reminder[]
@@ -40,6 +43,7 @@ export interface SearchIndex {
   archive: Document<GenericSearchData> | null
   template: Document<GenericSearchData> | null
   shared: Document<GenericSearchData> | null
+  prompt: Document<GenericSearchData> | null
 }
 
 export interface GenericSearchResult {

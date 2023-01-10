@@ -8,11 +8,13 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { usePromptStore } from '../Stores/usePromptStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
+import { usePromptAPI } from './API/usePromptAPI'
 import { useViewAPI } from './API/useViewsAPI'
 import { useFetchShareData } from './useFetchShareData'
 import { useHighlightSync } from './useHighlights'
@@ -25,21 +27,22 @@ export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setShowLoader = useLayoutStore((store) => store.setShowLoader)
-  const { updateBaseNode } = useNodes()
+  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
+  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
+  const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
   const { getAllViews } = useViewAPI()
   const { getAllLinks } = useURLsAPI()
+  const { updateBaseNode } = useNodes()
   const { fetchAllHighlights } = useHighlightSync()
   const { logout } = useAuthentication()
   const { fetchShareData } = useFetchShareData()
   const { initPortals } = usePortals()
+  const { getAllPrompts, getPromptProviders, getUserPromptAuth } = usePromptAPI()
   const { getAllSmartCaptures } = useSmartCapture()
-  const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
-  const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
-  const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
 
   const backgroundFetch = async () => {
     try {
@@ -49,7 +52,10 @@ export const useInitLoader = () => {
         getAllViews(),
         getAllLinks(),
         getAllSmartCaptures(),
-        fetchAllHighlights()
+        fetchAllHighlights(),
+        getAllPrompts(),
+        getPromptProviders(),
+        getUserPromptAuth()
       ])
     } catch (err) {
       mog('Background fetch failed')
@@ -85,7 +91,8 @@ export const useInitLoader = () => {
         archive: useDataStore.getState().archive,
         sharedNodes: useDataStore.getState().sharedNodes,
         snippets: useSnippetStore.getState().snippets,
-        contents: useContentStore.getState().contents
+        contents: useContentStore.getState().contents,
+        prompts: usePromptStore.getState().getAllPrompts()
       }
 
       initSearchIndex(initData)

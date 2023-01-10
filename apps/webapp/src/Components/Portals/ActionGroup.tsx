@@ -2,7 +2,6 @@ import React from 'react'
 
 import Check from '@iconify-icons/ri/check-line'
 
-import { camelCase } from '@mexit/core'
 import {
   ActiveStatus,
   CenteredFlex,
@@ -12,7 +11,8 @@ import {
   ProjectIconMex,
   RightCut,
   ServiceCard,
-  ServiceName} from '@mexit/shared'
+  ServiceName
+} from '@mexit/shared'
 
 import { ActionGroupType } from '../../Types/Actions'
 
@@ -37,7 +37,7 @@ const ActionGroup: React.FC<ActionGroupProps> = ({ group, onClick }) => {
       <CenteredFlex>
         <ProjectIconMex isMex={mexIcon} icon={group.icon} size={56} />
       </CenteredFlex>
-      <ServiceName>{camelCase(group.actionGroupId)}</ServiceName>
+      <ServiceName>{group?.name ?? ''}</ServiceName>
     </ServiceCard>
   )
 }

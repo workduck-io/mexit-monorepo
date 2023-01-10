@@ -10,6 +10,7 @@ import {
   ELEMENT_TAG,
   getMIcon,
   mog,
+  PromptRenderType,
   SEPARATOR
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
@@ -17,6 +18,7 @@ import { DefaultMIcons } from '@mexit/shared'
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useMentions } from '../../Hooks/useMentions'
+import usePrompts from '../../Hooks/usePrompts'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useViewStore } from '../../Hooks/useTaskViews'
@@ -54,6 +56,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
+  const { allPrompts } = usePrompts()
 
   const { createNewNote } = useCreateNewNote()
 
@@ -79,6 +82,12 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       text: l.path,
       icon: l.icon ?? DefaultMIcons,
       type: QuickLinkType.backlink
+    })),
+    ...allPrompts.map((prompt) => ({
+      value: prompt.entityId,
+      text: prompt.title,
+      icon: DefaultMIcons.PROMPT,
+      type: QuickLinkType.prompts
     })),
     ...sharedNodes.map((l) => ({
       ...l,
@@ -136,6 +145,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem
+      },
+      prompts: {
+        slateElementType: PromptRenderType,
+        newItemHandler: () => undefined,
+        renderElement: SlashComboboxItem
       },
       tag: {
         slateElementType: ELEMENT_TAG,

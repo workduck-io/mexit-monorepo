@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast'
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
 import { ILink } from '../Types/Editor'
-import { SingleNamespace } from '../Types/Store'
+import { DefaultMIcons, SingleNamespace } from '../Types/Store'
 
 import { BASE_DRAFT_PATH, BASE_TASKS_PATH } from './defaults'
 import { SEPARATOR, SnippetCommandPrefix } from './idGenerator'
@@ -26,6 +26,36 @@ export const SHARED_NAMESPACE: SingleNamespace = {
   access: 'OWNER',
   icon: { type: 'ICON', value: 'mex:shared-note' }
 }
+
+export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
+  {
+    id: 'NAMESPACE_SNIPPETS',
+    name: 'Snippets',
+    createdAt: 0,
+    updatedAt: 0,
+    // THIS SHOULD NOT BE USED
+    access: 'OWNER',
+    icon: DefaultMIcons.SNIPPET
+  },
+  {
+    id: 'NAMESPACE_TEMPLATES',
+    name: 'Templates',
+    createdAt: 0,
+    updatedAt: 0,
+    // THIS SHOULD NOT BE USED
+    access: 'OWNER',
+    icon: DefaultMIcons.TEMPLATE
+  },
+  {
+    id: 'NAMESPACE_PROMPT',
+    name: 'Prompts',
+    createdAt: 0,
+    updatedAt: 0,
+    // THIS SHOULD NOT BE USED
+    access: 'OWNER',
+    icon: DefaultMIcons.PROMPT
+  }
+]
 
 export const getNewNamespaceName = (num: number): string => {
   return `Space ${num}`

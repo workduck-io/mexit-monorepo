@@ -92,7 +92,6 @@ const Metadata = ({
   }
 
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
-  // mog('METADATA', { metadata, isEmpty, isUserEditing, sharedUsers })
 
   return (
     <MetadataWrapper $isVisible={!isUserEditing}>

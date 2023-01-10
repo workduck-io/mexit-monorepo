@@ -9,6 +9,7 @@ import { LinkAPI } from './Link'
 import { LochAPI } from './Loch'
 import { NamespaceAPI } from './Namespace'
 import { NodeAPI } from './Node'
+import { PromptAPI } from './Prompt'
 import { ReactionAPI } from './Reaction'
 import { ReminderAPI } from './Reminder'
 import { ShareAPI } from './Share'
@@ -30,6 +31,7 @@ class APIClass {
   public view: ViewAPI
   public loch: LochAPI
   public link: LinkAPI
+  public prompt: PromptAPI
   public reminder: ReminderAPI
   public user: UserAPI
   public highlight: HighlightAPI
@@ -42,7 +44,7 @@ class APIClass {
     instance = this
   }
   init(client?: KyInstance) {
-    this.client = new KYClient(undefined, client)
+    this.client = new KYClient({ timeout: 20000 }, client)
     this.node = new NodeAPI(this.client)
     this.share = new ShareAPI(this.client)
     this.snippet = new SnippetAPI(this.client)
@@ -51,6 +53,7 @@ class APIClass {
     this.comment = new CommentAPI(this.client)
     this.namespace = new NamespaceAPI(this.client)
     this.loch = new LochAPI(this.client)
+    this.prompt = new PromptAPI(this.client)
     this.view = new ViewAPI(this.client)
     this.link = new LinkAPI(this.client)
     this.reminder = new ReminderAPI(this.client)

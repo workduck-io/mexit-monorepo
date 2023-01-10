@@ -270,7 +270,7 @@ const SearchView = <Item,>({
     } else {
       const res = await onSearch(newSearchTerm, idxKeys)
       const filtered = filterResults ? filterResults(res) : res
-      // mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
+      mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
       setResult(filtered, newSearchTerm)
     }
   }

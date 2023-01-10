@@ -1,13 +1,18 @@
 import { UseComboboxReturnValue } from 'downshift'
 import { BaseRange, Point, Range } from 'slate'
 
-import { ComboboxKey,IComboboxItem } from '../Editor/Types/Combobox'
+import { ComboboxKey, IComboboxItem } from '../Editor/Types/Combobox'
 import { ComboboxType, ComboSearchType } from '../Editor/Types/MultiCombobox'
 import { createStore, setStoreValue } from '../Editor/Utils/store'
 
 import { useEditorStore } from './useEditorStore'
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
+
+type ItemLoading = {
+  item: string
+  message?: string
+}
 
 export type ComboboxState = {
   // Combobox key
@@ -17,6 +22,9 @@ export type ComboboxState = {
   // Maximum number of suggestions
   maxSuggestions: number
   setMaxSuggestions: (value: number) => void
+
+  itemLoading?: string | undefined
+  setItemLoading: (itemKey?: string | undefined) => void
 
   activeBlock: any
   setActiveBlock: (block: any) => void
@@ -69,6 +77,8 @@ export const useComboboxStore = createStore()<ComboboxState>((set) => ({
 
   isBlockTriggered: false,
   setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
+
+  setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
   maxSuggestions: 10,
   setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),

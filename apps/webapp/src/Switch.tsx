@@ -32,6 +32,8 @@ import { ForgotPassword } from './Views/ForgotPassword'
 import LinkView from './Views/LinkView'
 import { Login } from './Views/Login'
 import PortalsPage from './Views/PortalsPage'
+import PromptPage from './Views/Prompts/PromptPage'
+import PromptProvidersPage from './Views/Prompts/PromptProvidersPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
@@ -170,6 +172,7 @@ const SnippetRoutes = () => {
     <Routes>
       <Route index element={<Snippets />} />
       <Route path="node/:snippetid" element={<SnippetEditor />} />
+      <Route path="prompt/:promptId" element={<PromptPage />} />
     </Routes>
   )
 }
@@ -186,6 +189,7 @@ const IntegrationRoutes = () => {
         }
       />
       <Route path="portal/:actionGroupId" element={<Portals />} />
+      <Route path="prompts/:actionGroupId" element={<PromptProvidersPage />} />
     </Routes>
   )
 }
@@ -214,7 +218,6 @@ export const Switch = () => {
       if (editorNode) saveNodeName(editorNode.nodeid)
       // saveEditorBuffer()
     }
-
     if (location.pathname) {
       if (location.pathname.startsWith(ROUTE_PATHS.snippets)) {
         // mog('Showing Sidebar', { location })

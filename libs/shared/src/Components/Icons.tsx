@@ -104,7 +104,8 @@ export const DefaultMIcons = {
   SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),
   SHARED_NOTE: getMIcon('ICON', 'mex:shared-note'),
   VIEW: getMIcon('ICON', 'ri:stack-line'),
-  TEMPLATE: getMIcon('ICON', 'ri:magic-line')
+  TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
+  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline')
 }
 
 export const ForwardlinkIcon = {

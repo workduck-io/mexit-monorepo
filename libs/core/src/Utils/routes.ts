@@ -41,7 +41,8 @@ export const BASE_URLS = {
   comment: `https://http-staging.workduck.io/comment`,
   reaction: `https://http-staging.workduck.io/reaction`,
   highlight: `https://http-test.workduck.io/highlight`,
-  frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
+  frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io',
+  prompt: IS_DEV ? 'http://localhost:4000' : 'https://http-staging.workduck.io/prompt'
 }
 
 export const MEXIT_FRONTEND_URL_BASE = BASE_URLS.frontend
@@ -110,6 +111,12 @@ export const apiURLs = {
     getConnectedServices: `${BASE_URLS.loch}`,
     connectToService: `${BASE_URLS.loch}`,
     updateParentNoteOfService: `${BASE_URLS.loch}`
+  },
+  prompt: {
+    getAllPrompts: `${BASE_URLS.prompt}/allUser`, // Returns `downloaded` and `created` prompts
+    promptUserAuthInfo: `${BASE_URLS.prompt}/userAuth`,
+    generateResult: (promptId: string) => `${BASE_URLS.prompt}/result/${promptId}`,
+    getAllPromptsProvider: `${BASE_URLS.prompt}/providers`
   },
   share: {
     sharedNode: `${BASE_URLS.share}`,

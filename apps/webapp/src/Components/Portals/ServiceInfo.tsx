@@ -14,13 +14,14 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 
 type ServiceInfoProps = {
   children: React.ReactElement | React.ReactElement[]
+  onBackRoute?: string
 }
 
-const ServiceInfo: React.FC<ServiceInfoProps> = ({ children }) => {
+const ServiceInfo: React.FC<ServiceInfoProps> = ({ children, onBackRoute = ROUTE_PATHS.integrations }) => {
   const { goTo } = useRouting()
   const { shortcutDisabled } = useKeyListener()
 
-  const goBackToIntegrations = () => goTo(ROUTE_PATHS.integrations, NavigationType.replace)
+  const goBackToIntegrations = () => goTo(onBackRoute, NavigationType.replace)
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {

@@ -12,8 +12,8 @@ export const EditorPreviewWrapper = styled.div`
   overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.fade};
-  height: 32vh;
-  max-height: 32vh;
+  height: 40vh;
+  max-height: 40vh;
   width: 36vw;
   max-width: 36vw;
 

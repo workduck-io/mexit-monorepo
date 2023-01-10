@@ -13,17 +13,17 @@ import {
   useFloating,
   useId,
   useInteractions,
-  useRole} from '@floating-ui/react-dom-interactions'
+  useRole
+} from '@floating-ui/react-dom-interactions'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import { Icon } from '@iconify/react'
-
-import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 
 import { CreateNewMenuItemWrapper, CreateNewMenuWrapper } from './Sidebar.style'
 
 interface Props {
   placement?: Placement
   children: JSX.Element
+  menuItems: Array<any>
 }
 
 /*
@@ -35,13 +35,9 @@ interface Props {
 /**
  * Create New Menu, uses CreateNewMenu hook to get the create new menu
  */
-export const CreateNewMenu = ({ children, placement }: Props) => {
+export const CreateNewMenu = ({ children, placement, menuItems }: Props) => {
   // Ref: https://codesandbox.io/s/quizzical-water-b3dedw?file=/src/Popover.tsx
   const [open, setOpen] = useState(false)
-
-  const { getCreateNewMenuItems } = useCreateNewMenu()
-
-  const menuItems = getCreateNewMenuItems('randomPath')
 
   const { x, y, reference, floating, strategy, context } = useFloating({
     open,

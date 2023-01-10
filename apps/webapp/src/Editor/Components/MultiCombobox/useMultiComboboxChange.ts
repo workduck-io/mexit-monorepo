@@ -154,7 +154,7 @@ const useMultiComboboxOnChange = (editorId: string, keys: Record<string, Combobo
     const items = Object.values(groups).flat()
     const dataKeys =
       key === ComboboxKey.INTERNAL
-        ? items.filter((i: any) => i?.namespace === namespace.id).map((i: any) => i.text)
+        ? items.filter((i: any) => i?.namespace === namespace?.id).map((i: any) => i.text)
         : items.map((i: any) => i.text)
 
     // Create for new item

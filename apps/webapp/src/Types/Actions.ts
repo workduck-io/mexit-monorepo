@@ -5,10 +5,10 @@ export interface ActionGroup {
   name: string
   description: string
   icon: string
-  permissions: string
+  permissions?: string
   globalActionId?: string
   authConfig: any
-  tag: string
+  tag?: string
 }
 
 export type ActionGroupType = ActionGroup & { connected?: boolean }

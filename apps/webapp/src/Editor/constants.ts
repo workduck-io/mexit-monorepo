@@ -17,7 +17,8 @@ export enum QuickLinkType {
   snippet = 'Snippets',
   tags = 'Tags',
   mentions = 'Mentions',
-  taskView = 'Task View'
+  taskView = 'Task View',
+  prompts = 'Prompts'
 }
 
 export enum SlashType {
