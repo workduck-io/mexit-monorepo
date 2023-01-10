@@ -54,7 +54,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
       const targetRange = useComboboxStore.getState().targetRange
       // mog('Target Range', { targetRange })
 
-      mog('ELEMENT', { elementType, comboType })
+      // mog('ELEMENT', { elementType, comboType })
 
       let type =
         elementType ??
@@ -62,8 +62,13 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
       if (tab) {
         // console.log('TAB', { comboType, type })
-        type = type === ELEMENT_ILINK ? ELEMENT_INLINE_BLOCK : ELEMENT_TASK_VIEW_LINK ? ELEMENT_TASK_VIEW_BLOCK : type
-        mog('TYPE OF ELEMENT CHANGED TO INLINEEEE BLOCKKKK')
+        type =
+          type === ELEMENT_ILINK
+            ? ELEMENT_INLINE_BLOCK
+            : type === ELEMENT_TASK_VIEW_LINK
+            ? ELEMENT_TASK_VIEW_BLOCK
+            : type
+        mog('TYPE OF ELEMENT CHANGED TO', { type })
         // if (type)
       }
 
