@@ -64,9 +64,9 @@ const PrioritySelect = ({ id, readOnly, value, onPriorityChange, withLabel = fal
           </TodoActionButton>
         </Tippy>
       </TodoActionWrapper>
-    <Portal id="priority-select">
-      <PriorityMenu id={menuId} onClick={onPriorityChangeHide} />
-    </Portal>
+      <Portal id="priority-select">
+        <PriorityMenu id={menuId} onClick={onPriorityChangeHide} />
+      </Portal>
     </>
   )
 }

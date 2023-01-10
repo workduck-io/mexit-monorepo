@@ -209,14 +209,14 @@ export const TaskCard = styled.div<{
   ${({ staticBoard, priorityShown }) =>
     staticBoard &&
     css`
-      width: calc(100% - 2rem);
+      width: calc(100%);
       ${EditorStyles} {
-        max-width: calc(100% - ${priorityShown ? '5rem' : '2rem'});
+        max-width: calc(100% - ${priorityShown ? '2rem' : '0rem'});
         overflow: hidden;
       }
       ${TodoContainer} {
         width: max-content;
-        max-width: 250px;
+        max-width: 230px;
       }
     `}
 `
