@@ -67,7 +67,7 @@ const AutoformatHelp = () => {
     <AutoFormatWrapper>
       <Title>Markdown Hints</Title>
       <p>
-        When you insert a <SpecialSyntax>Special Charaters</SpecialSyntax> we expand and transform the content as below:
+        When you insert <SpecialSyntax>Special Charaters</SpecialSyntax> the content is expanded and transformed as:
       </p>
       <HintsContainer>
         <HintColumn>
