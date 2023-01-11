@@ -24,6 +24,10 @@ const AutoFormatWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
 
+  ${Title} {
+    margin: 0;
+    margin-top: ${({ theme }) => theme.spacing.medium};
+  }
   section {
     display: flex;
     flex-direction: column;
@@ -34,7 +38,7 @@ const AutoFormatWrapper = styled.div`
     min-width: 220px;
     ${Title} {
       font-size: 1rem;
-      color: ${({ theme }) => theme.tokens.colors.secondary};
+      color: ${({ theme }) => theme.tokens.text.fade};
       margin: 0;
     }
     p {
@@ -54,34 +58,55 @@ const AutoFormatWrapper = styled.div`
   }
 `
 
+const SpecialSyntax = styled.span`
+  color: ${({ theme }) => theme.tokens.colors.secondary};
+`
+
 const AutoformatHelp = () => {
   return (
     <AutoFormatWrapper>
       <Title>Markdown Hints</Title>
+      <p>
+        When you insert a <SpecialSyntax>Special Charaters</SpecialSyntax> we expand and transform the content as below:
+      </p>
       <HintsContainer>
         <HintColumn>
           <section>
             <Title>Formatting</Title>
             <p>
               <b>Bold</b>
-              <code>**bold**</code>
+              <code>
+                <SpecialSyntax>**</SpecialSyntax>bold<SpecialSyntax>**</SpecialSyntax>
+              </code>
             </p>
             <p>
               <i>Italic</i>
-              <code>*italic*</code>
+              <code>
+                <SpecialSyntax>*</SpecialSyntax>italic<SpecialSyntax>*</SpecialSyntax>
+              </code>
             </p>
             <p>
               <b>Strikethrough</b>
-              <code>~~Striked Text~~</code>
+              <code>
+                <SpecialSyntax>~~</SpecialSyntax>strikethrough<SpecialSyntax>~~</SpecialSyntax>
+              </code>
             </p>
           </section>
           <section>
             <Title>Headers</Title>
             <p>
-              <code>h1 Header 1</code>
-              <code>h2 Header 2</code>
-              <code>h3 Header 3</code>
-              <code>h4 Header 4</code>
+              <code>
+                <SpecialSyntax>h1</SpecialSyntax> Header 1
+              </code>
+              <code>
+                <SpecialSyntax>h2</SpecialSyntax> Header 2
+              </code>
+              <code>
+                <SpecialSyntax>h3</SpecialSyntax> Header 3
+              </code>
+              <code>
+                <SpecialSyntax>h4</SpecialSyntax> Header 4
+              </code>
             </p>
           </section>
         </HintColumn>
@@ -91,28 +116,38 @@ const AutoformatHelp = () => {
             <Title>Lists</Title>
             <p>
               <b>Unordered Lists</b>
-              <code>- list item</code>
+              <code>
+                <SpecialSyntax>*</SpecialSyntax> Item 1
+              </code>
             </p>
             <p>
               <b>Ordered Lists</b>
-              <code>1. list item</code>
+              <code>
+                <SpecialSyntax>1.</SpecialSyntax> Item 1
+              </code>
             </p>
           </section>
           <section>
             <Title>Tasks</Title>
             <p>
-              <code>[] Task Item</code>
+              <code>
+                <SpecialSyntax>[]</SpecialSyntax> Task 1
+              </code>
             </p>
           </section>
           <section>
             <Title>Code</Title>
             <p>
               <b>Code Text</b>
-              <code>`Code text`</code>
+              <code>
+                <SpecialSyntax>`</SpecialSyntax>code<SpecialSyntax>`</SpecialSyntax>
+              </code>
             </p>
             <p>
               <b>Code Block</b>
-              <code>``` Code Block ```</code>
+              <code>
+                <SpecialSyntax>```</SpecialSyntax>code block<SpecialSyntax>```</SpecialSyntax>
+              </code>
             </p>
           </section>
         </HintColumn>
