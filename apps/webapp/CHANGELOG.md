@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.22.1
+
+### Patch Changes
+
+- a406ec65: Recently Generated Prompt Results in Combobx
+- b8d18e24: Fix editor title and code block highlights
+- d3f7fa7f: Fix editor empty ux issues
+
 ## 0.22.0
 
 ### Minor Changes
