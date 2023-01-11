@@ -416,6 +416,11 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
       padding: ${({ theme }) => theme.spacing.tiny};
       ${({ theme }) => generateStyle(theme.generic.form.input)}
+      color: ${({ theme }) => theme.tokens.colors.secondary};
+      font-weight: bold;
+      &:hover {
+        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+      }
     }
   }
 
