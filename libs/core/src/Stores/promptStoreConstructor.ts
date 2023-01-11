@@ -3,6 +3,7 @@ import { PromptDataType, PromptStoreType } from '../Types/Prompt'
 export const promptStoreConstructor = (set, get): PromptStoreType => ({
   prompts: {},
   results: {},
+  resultIndexes: {},
   providers: [],
   setPromptProviders: (providers) => {
     set({ providers })
@@ -27,12 +28,20 @@ export const promptStoreConstructor = (set, get): PromptStoreType => ({
   addPromptResult: (promptId, result) => {
     const results = get().results
     const existingPromptResults = results[promptId] ?? []
-    set({ results: { ...results, [promptId]: [...existingPromptResults, result] } })
+    const resultIndexes = get().resultIndexes
+
+    set({
+      results: { ...results, [promptId]: [...existingPromptResults, result] },
+      resultIndexes: { ...resultIndexes, [promptId]: existingPromptResults.length }
+    })
   },
   setAllPrompts: (prompts) => {
     set({ prompts })
   },
+  setResultIndex: (promptId, index) => {
+    set({ resultIndexes: { ...get().resultIndexes, [promptId]: index } })
+  },
   reset: () => {
-    set({ prompts: {}, providers: [], results: {} })
+    set({ prompts: {}, providers: [], results: {}, resultIndexes: {}, userPromptAuthInfo: undefined })
   }
 })

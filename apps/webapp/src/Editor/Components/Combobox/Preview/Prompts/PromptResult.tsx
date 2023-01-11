@@ -1,4 +1,6 @@
-import { deserializeMd, usePlateEditorRef } from '@udecode/plate'
+import { useMemo } from 'react'
+
+import { deserializeMd, getPlateEditorRef } from '@udecode/plate'
 
 import { usePromptStore } from '../../../../../Stores/usePromptStore'
 import EditorPreviewRenderer from '../../../../EditorPreviewRenderer'
@@ -7,19 +9,30 @@ type PromptResultProps = {
   promptId: string
 }
 
-const PromptResult = ({ promptId }) => {
-  const result = usePromptStore((s) => s.results[promptId])
-    ?.at(-1)
-    ?.at(0)
-
-  const editor = usePlateEditorRef(promptId)
+const PromptResult: React.FC<PromptResultProps> = ({ promptId }) => {
+  const index = usePromptStore((s) => s.resultIndexes[promptId])
 
   if (!promptId) return
 
-  const content = deserializeMd(editor, result)
+  const { content, result } = useMemo(() => {
+    const editor = getPlateEditorRef(promptId)
+    const result = usePromptStore.getState().results[promptId]?.at(index)?.at(0)
+    const content = deserializeMd(editor, result)
+
+    return {
+      content,
+      result
+    }
+  }, [promptId, index])
 
   return (
-    <EditorPreviewRenderer noMouseEvents content={content} readOnly draftView editorId={`${result}_Preview_Block`} />
+    <EditorPreviewRenderer
+      noMouseEvents
+      content={content}
+      readOnly
+      draftView
+      editorId={`${promptId}_${result}_Preview_Block`}
+    />
   )
 }
 

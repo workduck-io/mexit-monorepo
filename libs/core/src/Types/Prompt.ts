@@ -48,12 +48,15 @@ export type PromptStoreType = {
   prompts: Record<string, Array<PromptDataType>>
   results: Record<EntityIdType, PromptResults>
   providers: Array<PromptProviderType>
-  setPromptProviders: (providers: Array<PromptProviderType>) => void
   userPromptAuthInfo?: UserPromptAuthInfo
+  resultIndexes?: Record<string, number>
+  setPromptProviders: (providers: Array<PromptProviderType>) => void
   setUserPromptAuthInfo: (userPromptAuthInfo: UserPromptAuthInfo) => void
   addPromptResult: (promptId: string, result: PromptResult) => void
   getPrompt: (promptId: string) => PromptDataType | undefined
+  deleteResults?: (index: number) => void
   setAllPrompts: (data: any) => void
   getAllPrompts: () => Array<PromptDataType>
+  setResultIndex: (promptId: string, index: number) => void
   reset: () => void
 }
