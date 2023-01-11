@@ -1,10 +1,64 @@
-import { ComboSeperator, PreviewMeta } from '@mexit/shared'
+import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
+
+import { focusEditor, getPlateEditorRef } from '@udecode/plate'
+
+import { IconButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
+
+import { API } from '@mexit/core'
+import { ComboSeperator, Data } from '@mexit/shared'
 
 import usePrompts from '../../../../../Hooks/usePrompts'
+import { useComboboxStore } from '../../../../../Stores/useComboboxStore'
 import { usePromptStore } from '../../../../../Stores/usePromptStore'
+import { getNextWrappingIndex } from '../../../../Utils/getNextWrappingIndex'
 
 import Prompt from './Prompt'
 import PromptResult from './PromptResult'
+import { PromptMetadata } from './styled'
+
+const PromptMeta = ({ promptId, size, onNext, onPrevious }) => {
+  const resultIndex = usePromptStore((s) => s.resultIndexes[promptId])
+
+  const showLeftIcon = resultIndex > 0
+  const showRightIcon = resultIndex < size - 1
+
+  const onNextClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onNext()
+  }
+
+  const onPreviousClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onPrevious()
+  }
+
+  return (
+    <PromptMetadata>
+      <Data>{showLeftIcon && <IconButton
+        onClick={onPreviousClick}
+        title="Previous"
+        shortcut="Shift+Tab"
+        icon="uil:arrow-left"
+        size={16}
+      />}
+        </Data>
+      <Data>{
+  showRightIcon &&
+    <IconButton
+        onClick={onNextClick}
+        title="Next"
+        shortcut="Tab"
+        icon="uil:arrow-right"
+        size={16}
+      />
+    }</Data>
+    </PromptMetadata>
+  )
+}
 
 type PromptPreviewProps = {
   promptId: string
@@ -13,17 +67,93 @@ type PromptPreviewProps = {
 const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
   const { allPrompts } = usePrompts()
 
-  const results = usePromptStore((s) => s.results[promptId]?.at(-1))
+  const resultIndex = usePromptStore((s) => s.resultIndexes[promptId])
+  const results = usePromptStore((s) => s.results[promptId])
+  const setPromptIndex = usePromptStore((s) => s.setResultIndex)
+
   const prompt = allPrompts.find((prompt) => prompt.entityId === promptId)
 
-  const metadata = {
-    updatedAt: prompt?.updatedAt
+  const setNextSpaceIndex = (reverse = false) => {
+    const at = usePromptStore.getState().resultIndexes[promptId]
+    const results = usePromptStore.getState().results[promptId]
+
+    if (results) {
+      const nextIndex = getNextWrappingIndex(reverse ? -1 : 1, at, results.length, () => undefined, false)
+      setPromptIndex(promptId, nextIndex)
+      
+      try {
+        focusEditor(getPlateEditorRef())
+      } catch(err){
+        console.log("Unable to focus editor")
+      }
+    }
   }
+
+  useEffect(() => {
+    const unsubscribePagination = tinykeys(
+      window,
+      {
+        Tab: (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+
+          setNextSpaceIndex()
+        },
+        'Shift+Tab': (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+
+          setNextSpaceIndex(true)
+        }
+      },
+      { allowRepeat: true }
+    )
+
+    const unsubscribe = tinykeys(window, {
+      'Alt+Enter': (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+
+        const isLoading = useComboboxStore.getState().itemLoading?.item === promptId
+
+        if (!isLoading) {
+          useComboboxStore.getState().setItemLoading({ item: promptId, message: 'Generating...' })
+
+          API.prompt
+            .generateResult(promptId, {})
+            .then((res) => {
+              if (res) {
+                usePromptStore.getState().addPromptResult(promptId, res)
+                useComboboxStore.getState().setItemLoading()
+              }
+            })
+            .catch((err) => {
+              console.error('Unable to generate result', { err })
+              useComboboxStore.getState().setItemLoading()
+              toast('Unable to generate result')
+            })
+        }
+      }
+    })
+
+    return () => {
+      unsubscribe()
+      unsubscribePagination()
+    }
+  }, [promptId])
 
   return (
     <ComboSeperator fixedWidth>
-      <section>{!results ? <Prompt prompt={prompt} /> : <PromptResult promptId={promptId} />}</section>
-      {metadata && <PreviewMeta meta={metadata} />}
+      <section>{!results?.at(resultIndex) ? <Prompt prompt={prompt} /> : <PromptResult promptId={promptId} />}</section>
+
+      {results?.at(resultIndex) && (
+        <PromptMeta
+          promptId={promptId}
+          onPrevious={() => setNextSpaceIndex(true)}
+          onNext={() => setNextSpaceIndex()}
+          size={results.length}
+        />
+      )}
     </ComboSeperator>
   )
 }

@@ -1,5 +1,3 @@
-import { toast } from 'react-hot-toast'
-
 import {
   deleteText,
   deserializeMd,
@@ -17,13 +15,11 @@ import {
 } from '@udecode/plate'
 
 import {
-  API,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
   getSlug,
-  mog,
   NODE_ID_PREFIX,
   PromptRenderType
 } from '@mexit/core'
@@ -55,29 +51,6 @@ const handleOnTab = (item, itemType): boolean => {
       itemType.type = ELEMENT_TASK_VIEW_BLOCK
       return false
     case PromptRenderType:
-      // eslint-disable-next-line no-case-declarations
-      const isLoading = useComboboxStore.getState().itemLoading?.item === item.key
-      mog('GENERATING RESULTS', { item })
-
-      if (!isLoading) {
-        useComboboxStore.getState().setItemLoading({ item: item.key, message: 'Generating...' })
-
-        API.prompt
-          .generateResult(item.key, {})
-          .then((res) => {
-            if (res) {
-              mog('PROMPT RESULTS', { res })
-              usePromptStore.getState().addPromptResult(item.key, res)
-              useComboboxStore.getState().setItemLoading()
-            }
-          })
-          .catch((err) => {
-            console.error('Unable to generate result', { err })
-            useComboboxStore.getState().setItemLoading()
-            toast('Unable to generate result')
-          })
-      }
-
       return true
     default:
       return false
@@ -162,7 +135,8 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
             blockId: activeBlock?.blockId
           }
         } else if (itemType === QuickLinkType.prompts) {
-          const promptResult = usePromptStore.getState().results[item.key]?.at(-1)?.at(0)
+          const resultIndex = usePromptStore.getState().resultIndexes[item.key]
+          const promptResult = usePromptStore.getState().results[item.key]?.at(resultIndex)?.at(0)
           const data = deserializeMd(editor, promptResult)
           select(editor, targetRange)
           InsertedElement = data

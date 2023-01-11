@@ -1,8 +1,10 @@
 import { ItemsContainer as StyledItemsContainer } from '@mexit/shared'
 
 import { useNamespaces } from '../../../Hooks/useNamespaces'
+import { useTaskViews } from '../../../Hooks/useTaskViews'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useMetadataStore } from '../../../Stores/useMetadataStore'
+import { usePromptStore } from '../../../Stores/usePromptStore'
 import { QuickLinkType } from '../../constants'
 
 import Item from './Item'
@@ -15,14 +17,29 @@ const ItemsContainer: React.FC<{ items?: any; onRenderItem?: any; comboProps?: a
 }) => {
   const { getNamespace } = useNamespaces()
   const allMetadata = useMetadataStore((s) => s.metadata)
+  const getPrompt = usePromptStore((s) => s.getPrompt)
   const setItemIndex = useComboboxStore((state) => state.setItemIndex)
+  const { getView } = useTaskViews()
+
+  const getDescripton = (item: any) => {
+    switch (item?.type) {
+      case QuickLinkType.backlink:
+        return getNamespace(item.namespace)?.name
+      case QuickLinkType.prompts:
+        return getPrompt(item.key)?.category
+      case QuickLinkType.taskView:
+        return getView(item.key)?.description
+      default:
+        return ''
+    }
+  }
 
   return (
     <StyledItemsContainer id="items-container">
       {items.map((item, index) => {
         const renderItem = onRenderItem ? onRenderItem({ item }) : item.text
         const lastItem = index > 0 ? items[index - 1] : undefined
-        const description = getNamespace(item.namespace)?.name
+        const description = getDescripton(item)
         const isSnippet = item.type === QuickLinkType.snippet
         const metadata = allMetadata[isSnippet ? 'snippets' : 'notes']?.[item.key]
         const icon = metadata?.icon ?? item?.icon

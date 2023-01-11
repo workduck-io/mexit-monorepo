@@ -47,6 +47,11 @@ export const spotlightShortcuts = {
     title: 'Create new quick note',
     keystrokes: 'Tab',
     category: 'Action'
+  },
+  AltEnter: {
+    title: 'Generate',
+    keystrokes: 'Alt+Enter',
+    category: 'Action'
   }
 }
 
@@ -82,10 +87,7 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
       ...spotlightShortcuts.open,
       title: 'Insert'
     },
-    generate: {
-      ...spotlightShortcuts.Tab,
-      title: 'Generate'
-    }
+    generate: spotlightShortcuts.AltEnter
   },
   [CategoryType.action]: {
     action: {

@@ -182,15 +182,14 @@ export const useComboboxOnKeyDown = (config: ComboConfigData): KeyboardHandler =
         }
       }
 
-      if (e.key === 'Tab') {
+      if (e.key === 'Tab' && !e.metaKey && !e.shiftKey) {
         // * On Tab insert the selected item as Inline Block
         e.preventDefault()
         creatabaleOnSelect(editor, search, undefined, true)
         return false
       }
-      // }
 
-      if (['Enter', ']'].includes(e.key)) {
+      if (['Enter', ']'].includes(e.key) && !e.altKey) {
         e.preventDefault()
         creatabaleOnSelect(editor, search)
         return false
