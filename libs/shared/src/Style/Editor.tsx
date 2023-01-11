@@ -5,6 +5,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
+import { prismTheme } from './CodeBlockSyntax'
 import { ScrollStyles } from './Helpers'
 import { FadeInOut } from './Layouts'
 
@@ -143,6 +144,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   /* font-family: 'Inter', sans-serif; */
   /* font-weight: 400; */
+
   line-height: 1.75;
   width: 100%;
 
@@ -300,12 +302,16 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   pre,
   pre code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Anonymous Pro', monospace;
     ${({ theme }) => generateStyle(theme.editor.elements.marks.code)}
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
   pre {
     ${({ theme }) => generateStyle(theme.editor.elements.codeblock)}
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
+
+  ${prismTheme}
 
   pre,
   pre code,
@@ -406,8 +412,15 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
   .slate-code_block {
     select {
       font-size: 0.8rem;
+      font-family: 'Anonymous Pro', monospace;
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
+      padding: ${({ theme }) => theme.spacing.tiny};
       ${({ theme }) => generateStyle(theme.generic.form.input)}
+      color: ${({ theme }) => theme.tokens.colors.secondary};
+      font-weight: bold;
+      &:hover {
+        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+      }
     }
   }
 

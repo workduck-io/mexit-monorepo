@@ -25,8 +25,10 @@ export const directPropertyKeys = [
   'actionContext',
   'blockMeta',
   'status',
-  'priority'
+  'priority',
+  'lang'
 ]
+
 export const PropKeysArray = [...directPropertyKeys] as const
 export type PropKeys = typeof PropKeysArray[number]
 export type DirectProperties = Record<PropKeys, boolean | string>
