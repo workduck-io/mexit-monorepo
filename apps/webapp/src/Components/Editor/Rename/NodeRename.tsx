@@ -135,7 +135,7 @@ const NodeRenameOnlyTitle = () => {
     // console.log('renaming', {})
     if (newTitle === getNameFromPath(nodeFrom) || isClashed || newTitle.indexOf(SEPARATOR) !== -1) {
       reset()
-      if (isClashed) toast.error('Note with same title already exists')
+      if (isClashed && newTitle !== getNameFromPath(nodeFrom)) toast.error('Note with same title already exists')
       if (newTitle.indexOf(SEPARATOR) !== -1) toast.error('Title cannot contain "."')
       return
     }
