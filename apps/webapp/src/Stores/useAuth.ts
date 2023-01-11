@@ -159,6 +159,12 @@ export const useAuthentication = () => {
     const { email, userId } = loginResult
     const name = getEmailStart(email)
     const newWorkspaceName = `WD_${nanoid()}`
+
+    for (let i = 0; i < 5; i++) {
+      const result = await API.user.getCurrent(undefined, { throwHttpErrors: false })
+      mog('HittingUserEndpoint', { result })
+    }
+
     const result = await API.user
       .registerUser({
         type: 'RegisterUserRequest',
