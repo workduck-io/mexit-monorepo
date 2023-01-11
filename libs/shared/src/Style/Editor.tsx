@@ -130,7 +130,7 @@ export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
   ${({ isVisible }) => FadeInOut(isVisible, '0.5', '0.5')}
 `
 
-export const EditorStyles = styled.div<{ readOnly?: boolean }>`
+export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolean }>`
   ${({ readOnly }) =>
     readOnly &&
     css`

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { NodeEditorContent } from '@mexit/core'
@@ -14,26 +14,35 @@ import { useFocusBlock } from '../../Stores/useFocusBlock'
 
 import BallonMarkToolbarButtons from './BalloonToolbar/EditorBalloonToolbar'
 
-const EditorWrapper = styled(EditorStyles)`
+const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   max-width: 800px;
   padding: 1rem;
   padding-left: 2rem;
-  height: 100%;
+  min-height: 100%;
 
   transition: background 0.5s ease-in-out;
 
-  &:hover {
-    background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
-  }
-
   border-radius: ${({ theme }) => theme.borderRadius.small};
 
-  &:focus-within {
-    &:hover {
-      background-color: transparent;
-    }
-  }
+  ${({ withShadow, theme }) =>
+    withShadow
+      ? css`
+          box-shadow: ${theme.tokens.shadow.medium};
+          background-color: rgba(${theme.rgbTokens.surfaces.s[2]}, 0.5);
+        `
+      : css`
+          &:hover {
+            background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[0]}, 0.5);
+          }
+          &:focus-within {
+            &:hover {
+              background-color: transparent;
+            }
+          }
+        `}
 `
 
 interface EditorProps {
@@ -45,6 +54,8 @@ interface EditorProps {
   focusBlockId?: string // * Block to focus, This uses a timeout as immediately the children are not rendered yet
   onChange?: any // eslint-disable-line @typescript-eslint/no-explicit-any
   autoFocus?: boolean
+  onFocusClick?: () => void
+  withShadow?: boolean
   options?: any
   onAutoSave?: (content: NodeEditorContent) => void
 }
@@ -59,6 +70,8 @@ const Editor: React.FC<EditorProps> = ({
   autoFocus = true,
   includeBlockInfo = false,
   onAutoSave,
+  onFocusClick,
+  withShadow = false,
   options
 }) => {
   useEditorChange(nodeUID, content)
@@ -110,7 +123,7 @@ const Editor: React.FC<EditorProps> = ({
   const comboboxConfig: ComboboxConfig = useEditorPluginConfig(nodeUID)
 
   return (
-    <EditorWrapper>
+    <EditorWrapper withShadow={withShadow}>
       <MexEditor
         comboboxConfig={comboboxConfig}
         components={components}
@@ -128,6 +141,7 @@ const Editor: React.FC<EditorProps> = ({
           }
         }}
       />
+      {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />}
     </EditorWrapper>
   )
 }

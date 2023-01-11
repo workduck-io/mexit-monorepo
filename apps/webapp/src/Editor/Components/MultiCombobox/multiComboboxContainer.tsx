@@ -18,7 +18,7 @@ export const ElementComboboxComponent = ({ keys, slashCommands, internal }: Comb
     comboRenderType,
     internal.commands
   )
-  // mog('ElementComboboxComponent ', { slashCommands, comboRenderType, comboboxKey, keys, internal })
+
   const onNewItem = (newItem, parentId?) => {
     return comboRenderType.newItemHandler(newItem, parentId)
   }
