@@ -5,6 +5,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 
 import { FOCUS_MODE_OPACITY } from '@mexit/core'
 
+import { prismTheme } from './CodeBlockSyntax'
 import { ScrollStyles } from './Helpers'
 import { FadeInOut } from './Layouts'
 
@@ -303,15 +304,14 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
   pre code {
     font-family: 'Anonymous Pro', monospace;
     ${({ theme }) => generateStyle(theme.editor.elements.marks.code)}
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
   pre {
     ${({ theme }) => generateStyle(theme.editor.elements.codeblock)}
+    color: ${({ theme }) => theme.tokens.text.fade};
   }
 
-  code[class*='language-'],
-  pre[class*='language-'] {
-    text-shadow: none;
-  }
+  ${prismTheme}
 
   pre,
   pre code,
