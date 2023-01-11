@@ -10,7 +10,7 @@ import { useSearchExtra } from '../Hooks/useSearch'
 import { areEqual } from '../Utils/hash'
 import { analyseContent, AnalysisOptions } from '../Workers/controller'
 
-import { getContent,useEditorStore } from './useEditorStore'
+import { getContent, useEditorStore } from './useEditorStore'
 import { useTodoStore } from './useTodoStore'
 
 export interface OutlineItem {

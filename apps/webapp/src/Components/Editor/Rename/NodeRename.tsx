@@ -7,7 +7,7 @@ import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog,SEPARATOR } from '@mexit/core'
+import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog, SEPARATOR } from '@mexit/core'
 import { Input, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
@@ -23,7 +23,7 @@ import { useHelpStore } from '../../../Stores/useHelpStore'
 import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 
-import { TitleStatic,Wrapper } from './NodeRename.style'
+import { TitleStatic, Wrapper } from './NodeRename.style'
 
 const NodeRenameOnlyTitle = () => {
   const { execRefactorAsync, getMockRefactor } = useRefactor()
@@ -103,7 +103,7 @@ const NodeRenameOnlyTitle = () => {
       const to = getTo(newTitle)
 
       if (isMatch(to, nodeFrom)) {
-        toast('Note itself cannot be used')
+        // toast('Note itself cannot be used')
         return
       }
 
@@ -135,6 +135,8 @@ const NodeRenameOnlyTitle = () => {
     // console.log('renaming', {})
     if (newTitle === getNameFromPath(nodeFrom) || isClashed || newTitle.indexOf(SEPARATOR) !== -1) {
       reset()
+      if (isClashed) toast.error('Note with same title already exists')
+      if (newTitle.indexOf(SEPARATOR) !== -1) toast.error('Title cannot contain "."')
       return
     }
 
@@ -219,7 +221,7 @@ const NodeRenameOnlyTitle = () => {
           name="NodeRenameTitleSelect"
           onKeyDown={handleSubmit}
           onChange={(e) => handleTitleChange(e)}
-          onBlur={() => reset()}
+          onBlur={() => onRename()}
           error={(getNameFromPath(nodeFrom) !== newTitle && isClashed) || newTitle.indexOf(SEPARATOR) !== -1}
           autoFocus
           defaultValue={newTitle}
