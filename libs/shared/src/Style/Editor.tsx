@@ -143,6 +143,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   /* font-family: 'Inter', sans-serif; */
   /* font-weight: 400; */
+
   line-height: 1.75;
   width: 100%;
 
@@ -300,11 +301,16 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   pre,
   pre code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Anonymous Pro', monospace;
     ${({ theme }) => generateStyle(theme.editor.elements.marks.code)}
   }
   pre {
     ${({ theme }) => generateStyle(theme.editor.elements.codeblock)}
+  }
+
+  code[class*='language-'],
+  pre[class*='language-'] {
+    text-shadow: none;
   }
 
   pre,
@@ -406,7 +412,9 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
   .slate-code_block {
     select {
       font-size: 0.8rem;
+      font-family: 'Anonymous Pro', monospace;
       border-radius: ${({ theme }) => theme.borderRadius.tiny};
+      padding: ${({ theme }) => theme.spacing.tiny};
       ${({ theme }) => generateStyle(theme.generic.form.input)}
     }
   }
