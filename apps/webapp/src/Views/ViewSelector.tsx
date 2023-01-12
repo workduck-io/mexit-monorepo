@@ -6,17 +6,31 @@ import listCheck2 from '@iconify-icons/ri/list-check-2'
 
 import { View, ViewSelectorButton, ViewSelectorWrapper } from '@mexit/shared'
 
-const ViewSelector = ({ onChangeView, currentView }: { onChangeView: (view: View) => void; currentView: View }) => {
-  // mog('ViewSelector', { currentView, entries: Object.entries(View) })
+interface ViewSelectorProps {
+  onChangeView: (view: View) => void
+  availableViews?: View[]
+  currentView: View
+}
+
+const defaultEntries = [View.List, View.Card]
+
+const ViewSelector = ({ onChangeView, availableViews = defaultEntries, currentView }: ViewSelectorProps) => {
+  // mog('ViewSelector', {
+  //   currentView,
+  //   entries: Object.entries(View),
+  //   availableViews,
+  //   entriesAvailable: Object.entries(availableViews)
+  // })
+
   return (
     <ViewSelectorWrapper>
-      {Object.entries(View).map(([view, val]) => (
+      {availableViews.map((view) => (
         <ViewSelectorButton
-          selected={currentView === val}
+          selected={currentView === view}
           key={`ViewSelectButton_${view}`}
-          onClick={() => onChangeView(View[view])}
+          onClick={() => onChangeView(view)}
         >
-          <Icon width={24} height={24} icon={val === View.List ? listCheck2 : layoutGridFill} />
+          <Icon width={24} height={24} icon={view === View.List ? listCheck2 : layoutGridFill} />
         </ViewSelectorButton>
       ))}
     </ViewSelectorWrapper>
