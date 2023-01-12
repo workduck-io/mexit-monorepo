@@ -33,6 +33,7 @@ const PromptList = () => {
     <SidebarWrapper>
       {/* <SidebarHeaderLite title={`Snippets (${sortedPrompts.length})`} icon={quillPenLine} /> */}
       <SidebarList
+        noMargin
         items={sortedPrompts}
         onClick={onOpenPrompt}
         selectedItemId={promptId ?? ''}

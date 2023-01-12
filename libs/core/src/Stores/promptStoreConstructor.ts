@@ -31,8 +31,8 @@ export const promptStoreConstructor = (set, get): PromptStoreType => ({
     const resultIndexes = get().resultIndexes
 
     set({
-      results: { ...results, [promptId]: [...existingPromptResults, result] },
-      resultIndexes: { ...resultIndexes, [promptId]: existingPromptResults.length }
+      results: { ...results, [promptId]: [result, ...existingPromptResults] },
+      resultIndexes: { ...resultIndexes, [promptId]: 0 }
     })
   },
   setAllPrompts: (prompts) => {

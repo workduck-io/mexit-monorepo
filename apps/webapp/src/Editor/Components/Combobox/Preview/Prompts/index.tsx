@@ -21,7 +21,7 @@ import { PromptMetadata } from './styled'
 const PromptMeta = ({ promptId, size, onNext, onPrevious }) => {
   const resultIndex = usePromptStore((s) => s.resultIndexes[promptId])
 
-  const showLeftIcon = resultIndex > 0
+  const showLeftIcon = resultIndex >= 0
   const showRightIcon = resultIndex < size - 1
 
   const onNextClick = (e) => {
@@ -38,24 +38,16 @@ const PromptMeta = ({ promptId, size, onNext, onPrevious }) => {
 
   return (
     <PromptMetadata>
-      <Data>{showLeftIcon && <IconButton
-        onClick={onPreviousClick}
-        title="Previous"
-        shortcut="Shift+Tab"
-        icon="uil:arrow-left"
-        size={16}
-      />}
-        </Data>
-      <Data>{
-  showRightIcon &&
-    <IconButton
-        onClick={onNextClick}
-        title="Next"
-        shortcut="Tab"
-        icon="uil:arrow-right"
-        size={16}
-      />
-    }</Data>
+      <Data>
+        {showLeftIcon && (
+          <IconButton onClick={onPreviousClick} title="Previous" shortcut="Shift+Tab" icon="uil:arrow-left" size={16} />
+        )}
+      </Data>
+      <Data>
+        {showRightIcon && (
+          <IconButton onClick={onNextClick} title="Next" shortcut="Tab" icon="uil:arrow-right" size={16} />
+        )}
+      </Data>
     </PromptMetadata>
   )
 }
@@ -79,12 +71,13 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
 
     if (results) {
       const nextIndex = getNextWrappingIndex(reverse ? -1 : 1, at, results.length, () => undefined, false)
-      setPromptIndex(promptId, nextIndex)
-      
+
+      setPromptIndex(promptId, reverse && at === 0 ? -1 : nextIndex)
+
       try {
         focusEditor(getPlateEditorRef())
-      } catch(err){
-        console.log("Unable to focus editor")
+      } catch (err) {
+        console.log('Unable to focus editor')
       }
     }
   }
@@ -142,11 +135,13 @@ const PromptPreview: React.FC<PromptPreviewProps> = ({ promptId }) => {
     }
   }, [promptId])
 
+  const showResult = results?.[resultIndex] && resultIndex !== -1
+
   return (
     <ComboSeperator fixedWidth>
-      <section>{!results?.at(resultIndex) ? <Prompt prompt={prompt} /> : <PromptResult promptId={promptId} />}</section>
+      <section>{!showResult ? <Prompt prompt={prompt} /> : <PromptResult promptId={promptId} />}</section>
 
-      {results?.at(resultIndex) && (
+      {results && (
         <PromptMeta
           promptId={promptId}
           onPrevious={() => setNextSpaceIndex(true)}

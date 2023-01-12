@@ -5,7 +5,6 @@ import { DefaultMIcons } from '@mexit/shared'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 
-import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
 type SnippetListProps = {
@@ -39,17 +38,15 @@ const SnippetList: React.FC<SnippetListProps> = ({ type = 'snippet' }) => {
   }, [snippets])
 
   return (
-    <SidebarWrapper>
-      {/* <SidebarHeaderLite title={`Snippets (${sortedSnippets.length})`} icon={quillPenLine} /> */}
-      <SidebarList
-        items={sortedSnippets}
-        onClick={onOpenSnippet}
-        selectedItemId={currentSnippet?.id}
-        showSearch
-        searchPlaceholder={`Filter ${heading}...`}
-        emptyMessage={`No ${heading} Found`}
-      />
-    </SidebarWrapper>
+    <SidebarList
+      items={sortedSnippets}
+      onClick={onOpenSnippet}
+      selectedItemId={currentSnippet?.id}
+      showSearch
+      noMargin
+      searchPlaceholder={`Filter ${heading}...`}
+      emptyMessage={`No ${heading} Found`}
+    />
   )
 }
 
