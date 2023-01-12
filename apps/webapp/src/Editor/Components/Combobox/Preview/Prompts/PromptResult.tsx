@@ -11,6 +11,7 @@ type PromptResultProps = {
 
 const PromptResult: React.FC<PromptResultProps> = ({ promptId }) => {
   const index = usePromptStore((s) => s.resultIndexes[promptId])
+  const results = usePromptStore((s) => s.results)
 
   if (!promptId) return
 
@@ -23,7 +24,7 @@ const PromptResult: React.FC<PromptResultProps> = ({ promptId }) => {
       content,
       result
     }
-  }, [promptId, index])
+  }, [promptId, index, results])
 
   return (
     <EditorPreviewRenderer
