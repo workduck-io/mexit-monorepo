@@ -5,7 +5,7 @@ import { useMatch } from 'react-router-dom'
 
 import Board from '@asseinfo/react-kanban'
 
-import { tinykeys } from '@workduck-io/tinykeys'
+import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
 import { getNextStatus, getPrevStatus, PriorityType, ReminderViewData, TodoType } from '@mexit/core'
 import {
@@ -323,92 +323,46 @@ const Tasks = () => {
     }
   }, [selectedCard])
 
+  const eventWrapper = (fn: (event) => void): ((event) => void) => {
+    return (e) => {
+      console.log('event', { e })
+      enableShortcutHandler(() => {
+        e.preventDefault()
+        fn(e)
+      })
+    }
+  }
+
+  const wrapEvents = (map: KeyBindingMap) =>
+    Object.entries(map).reduce((acc, [key, value]) => {
+      acc[key] = eventWrapper(value)
+      return acc
+    }, {})
+
   useEffect(() => {
-    const shorcutConfig = () => {
+    const shorcutConfig = (): KeyBindingMap => {
       if (isModalOpen !== undefined) return {}
 
-      return {
-        Escape: (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            if (selectedCard) {
-              setSelectedCard(null)
-            }
-            // else {
-            // mog('LOAD NODE')
-            // // const nodeid = nodeUID ?? lastOpened[0] ?? baseNodeId
-            // // loadNode(nodeid)
-            // // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
-            // }
-          })
+      return wrapEvents({
+        Escape: () => {
+          if (selectedCard) setSelectedCard(null)
         },
 
-        'Shift+ArrowRight': (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            handleCardMoveNext()
-          })
-        },
+        'Shift+ArrowRight': () => handleCardMoveNext(),
+        'Shift+ArrowLeft': () => handleCardMovePrev(),
 
-        'Shift+ArrowLeft': (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            handleCardMovePrev()
-          })
-        },
+        ArrowRight: () => selectNewCard('right'),
+        ArrowLeft: () => selectNewCard('left'),
+        ArrowDown: () => selectNewCard('down'),
+        ArrowUp: () => selectNewCard('up'),
 
-        ArrowRight: (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            selectNewCard('right')
-          })
-        },
+        '$mod+1': () => changeSelectedPriority(PriorityType.low),
+        '$mod+2': () => changeSelectedPriority(PriorityType.medium),
+        '$mod+3': () => changeSelectedPriority(PriorityType.high),
+        '$mod+0': () => changeSelectedPriority(PriorityType.noPriority),
 
-        ArrowLeft: (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            selectNewCard('left')
-          })
-        },
-        ArrowDown: (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            selectNewCard('down')
-          })
-        },
-
-        ArrowUp: (event) => {
-          enableShortcutHandler(() => {
-            event.preventDefault()
-            selectNewCard('up')
-          })
-        },
-
-        '$mod+1': (event) => {
-          event.preventDefault()
-          changeSelectedPriority(PriorityType.low)
-        },
-
-        '$mod+2': (event) => {
-          event.preventDefault()
-          changeSelectedPriority(PriorityType.medium)
-        },
-
-        '$mod+3': (event) => {
-          event.preventDefault()
-          changeSelectedPriority(PriorityType.high)
-        },
-
-        '$mod+0': (event) => {
-          event.preventDefault()
-          changeSelectedPriority(PriorityType.noPriority)
-        },
-
-        '$mod+Enter': (event) => {
-          event.preventDefault()
-          onNavigateToNode()
-        }
-      }
+        '$mod+Enter': () => onNavigateToNode()
+      })
     }
 
     if (!isPreviewEditors || (isPreviewEditors && !Object.entries(isPreviewEditors).length)) {
