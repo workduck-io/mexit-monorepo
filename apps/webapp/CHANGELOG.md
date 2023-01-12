@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.2
+
+### Patch Changes
+
+- 9e51a40a: Prompt Info with Results in Combobox Preview
+
 ## 0.22.1
 
 ### Patch Changes
