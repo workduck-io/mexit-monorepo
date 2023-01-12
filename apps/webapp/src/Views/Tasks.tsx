@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
 import { useMatch } from 'react-router-dom'
@@ -14,7 +14,8 @@ import {
   PageContainer,
   StyledTasksKanban,
   TaskCard,
-  TaskColumnHeader
+  TaskColumnHeader,
+  ViewType
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
@@ -32,6 +33,7 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 
 import SearchFilters from './SearchFilters'
+import ViewSelector from './ViewSelector'
 
 interface RenderTaskProps {
   id: string
@@ -131,6 +133,7 @@ const Tasks = () => {
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const _hasHydrated = useViewStore((store) => store._hasHydrated)
+  const [currentViewType, setCurrentViewType] = useState<ViewType>(ViewType.Kanban)
   const { accessWhenShared } = usePermissions()
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
@@ -424,14 +427,27 @@ const Tasks = () => {
           globalJoin={globalJoin}
           setGlobalJoin={setGlobalJoin}
         />
-        <Board
-          renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
-          disableColumnDrag
-          onCardDragEnd={handleCardMove}
-          renderCard={RenderCard}
-        >
-          {board}
-        </Board>
+        {/* Make the selector a part of search filters */}
+        <ViewSelector
+          currentView={currentViewType}
+          onChangeView={(viewType) => setCurrentViewType(viewType)}
+          availableViews={[ViewType.Kanban, ViewType.List]}
+        />
+        {
+          {
+            [ViewType.Kanban]: (
+              <Board
+                renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
+                disableColumnDrag
+                onCardDragEnd={handleCardMove}
+                renderCard={RenderCard}
+              >
+                {board}
+              </Board>
+            ),
+            [ViewType.List]: <p>Unimplemented</p>
+          }[currentViewType]
+        }
       </StyledTasksKanban>
       {todos.length < 1 && (
         <div>
