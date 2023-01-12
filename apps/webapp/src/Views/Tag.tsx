@@ -6,7 +6,16 @@ import { debounce } from 'lodash'
 import styled, { css } from 'styled-components'
 
 import { fuzzySearch } from '@mexit/core'
-import { HoverSubtleGlow , Input, Result, ResultHeader, Results, ResultTitle, SearchPreviewWrapper, View } from '@mexit/shared'
+import {
+  HoverSubtleGlow,
+  Input,
+  Result,
+  ResultHeader,
+  Results,
+  ResultTitle,
+  SearchPreviewWrapper,
+  ViewType
+} from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
@@ -14,7 +23,7 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useLinks } from '../Hooks/useLinks'
 import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
-import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
 
@@ -180,7 +189,7 @@ const Tag = () => {
       <TagMain>
         <h1>#{tag}</h1>
         <p>Notes with tag</p>
-        <Results view={View.Card}>
+        <Results view={ViewType.Card}>
           {transition((styles, nodeid, _t, _i) => {
             const con = contents[nodeid]
             const node = getILinkFromNodeid(nodeid, true)
@@ -196,7 +205,7 @@ const Tag = () => {
                   goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
                 }}
                 style={styles}
-                view={View.Card}
+                view={ViewType.Card}
                 key={`tag_res_prev_${tag}_${nodeid}${_i}`}
               >
                 <ResultHeader>

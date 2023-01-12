@@ -4,15 +4,21 @@ import { Icon } from '@iconify/react'
 import layoutGridFill from '@iconify-icons/ri/layout-grid-fill'
 import listCheck2 from '@iconify-icons/ri/list-check-2'
 
-import { View, ViewSelectorButton, ViewSelectorWrapper } from '@mexit/shared'
+import { ViewSelectorButton, ViewSelectorWrapper,ViewType } from '@mexit/shared'
 
 interface ViewSelectorProps {
-  onChangeView: (view: View) => void
-  availableViews?: View[]
-  currentView: View
+  onChangeView: (view: ViewType) => void
+  availableViews?: ViewType[]
+  currentView: ViewType
 }
 
-const defaultEntries = [View.List, View.Card]
+const defaultEntries = [ViewType.List, ViewType.Card]
+
+const viewIcons = {
+  [ViewType.List]: listCheck2,
+  [ViewType.Card]: layoutGridFill,
+  [ViewType.Kanban]: 'ph:kanban'
+}
 
 const ViewSelector = ({ onChangeView, availableViews = defaultEntries, currentView }: ViewSelectorProps) => {
   // mog('ViewSelector', {
@@ -30,7 +36,7 @@ const ViewSelector = ({ onChangeView, availableViews = defaultEntries, currentVi
           key={`ViewSelectButton_${view}`}
           onClick={() => onChangeView(view)}
         >
-          <Icon width={24} height={24} icon={view === View.List ? listCheck2 : layoutGridFill} />
+          <Icon width={24} height={24} icon={viewIcons[view]} />
         </ViewSelectorButton>
       ))}
     </ViewSelectorWrapper>

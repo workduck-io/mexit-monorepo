@@ -23,7 +23,7 @@ import {
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
   Title,
-  View
+  ViewType
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
@@ -125,7 +125,7 @@ const Archive = () => {
     const namespace = getNamespace(node?.namespace)
     if (!item || !node) return null
 
-    if (props.view === View.Card) {
+    if (props.view === ViewType.Card) {
       return (
         // eslint-disable-next-line
         // @ts-ignore
@@ -139,7 +139,7 @@ const Archive = () => {
           </SearchPreviewWrapper>
         </Result>
       )
-    } else if (props.view === View.List) {
+    } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
