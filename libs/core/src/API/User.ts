@@ -28,7 +28,7 @@ export class UserAPI {
     return await this.client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }, options)
   }
 
-  async registerUser(data, options?: Options) {
-    return await this.client.post(apiURLs.user.registerUser, data, options)
+  async registerStatus(cacheConfig?: CacheConfig, options?: Options) {
+    return await this.client.get(apiURLs.user.registerStatus, cacheConfig, options)
   }
 }
