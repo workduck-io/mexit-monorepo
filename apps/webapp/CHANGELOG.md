@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.3
+
+### Patch Changes
+
+- 41213c73: Updated Cognito Trigger Register Flow
+
 ## 0.22.2
 
 ### Patch Changes
