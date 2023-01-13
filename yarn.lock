@@ -1818,9 +1818,9 @@
     "@iconify/types" "*"
 
 "@iconify/icons-logos@^1.2.20":
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/@iconify/icons-logos/-/icons-logos-1.2.22.tgz#172486b060465109c2c6daf7182d0d27c07b41fa"
-  integrity sha512-GR29DTMGIzBcnzxXubxTL3tNF3CJ9oWlIsKZGGdyETPQ2Ay/uFcqwIQ62HagplB41yMPYnbYpOemAeZGfN0Lgg==
+  version "1.2.23"
+  resolved "https://registry.yarnpkg.com/@iconify/icons-logos/-/icons-logos-1.2.23.tgz#ee07383da155f79591054990bcc9c956ea080046"
+  integrity sha512-XQZyfF4AiXgQjZYN12LPymGhd9UMG0666hIzTYecM+d+jNqdLcs2zJLxNmBnTtPi+3t5JsHW+TSus7k9YydQzw==
   dependencies:
     "@iconify/types" "*"
 
@@ -3843,9 +3843,9 @@
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
 "@yarnpkg/parsers@^3.0.0-rc.18":
-  version "3.0.0-rc.34"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.0-rc.34.tgz#db1d16e082e167db6dbc67f1c264639e0b4c5e1a"
-  integrity sha512-NhEA0BusInyk7EiJ7i7qF1Mkrb6gGjZcQQ/W1xxGazxapubEmGO7v5WSll6hWxFXE2ngtLj8lflq1Ff5VtqEww==
+  version "3.0.0-rc.35"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.0-rc.35.tgz#5a22f2c4e9341ca991e4331de0f0c286a0fcefab"
+  integrity sha512-J6ySgEdQUqAmlttvZOoXOEsrDTAnHyR/MtEvuAG5a+gwKY/2Cc7xn4CWcpgfuwkp+0a4vXmt2BDwzacDoGDN1g==
   dependencies:
     js-yaml "^3.10.0"
     tslib "^2.4.0"
@@ -6948,9 +6948,9 @@ joycon@^3.0.1:
   integrity sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==
 
 js-base64@^3.6.0:
-  version "3.7.3"
-  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.3.tgz#2e784bb0851636bf1e99ef12e4f3a8a8c9b7639f"
-  integrity sha512-PAr6Xg2jvd7MCR6Ld9Jg3BmTcjYsHEBx1VlwEwULb/qowPf5VD9kEMagj23Gm7JRnSvE/Da/57nChZjnvL8v6A==
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.4.tgz#af95b20f23efc8034afd2d1cc5b9d0adf7419037"
+  integrity sha512-wpM/wi20Tl+3ifTyi0RdDckS4YTD4Lf953mBRrpG8547T7hInHNPEj8+ck4gB8VDcGyeAWFK++Wb/fU1BeavKQ==
 
 js-cookie@^2.2.1:
   version "2.2.1"
@@ -8351,9 +8351,9 @@ randomfill@^1.0.3:
     safe-buffer "^5.1.0"
 
 rc-motion@^2.0.1:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/rc-motion/-/rc-motion-2.6.2.tgz#3d31f97e41fb8e4f91a4a4189b6a98ac63342869"
-  integrity sha512-4w1FaX3dtV749P8GwfS4fYnFG4Rb9pxvCYPc/b2fw1cmlHJWNNgOFIz7ysiD+eOrzJSvnLJWlNQQncpNMXwwpg==
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/rc-motion/-/rc-motion-2.6.3.tgz#e6d8ca06591c2c1bcd3391a8e7a822ebc4d94e9c"
+  integrity sha512-xFLkes3/7VL/J+ah9jJruEW/Akbx5F6jVa2wG5o/ApGKQKSOd5FR3rseHLL9+xtJg4PmCwo6/1tqhDO/T+jFHA==
   dependencies:
     "@babel/runtime" "^7.11.1"
     classnames "^2.2.1"

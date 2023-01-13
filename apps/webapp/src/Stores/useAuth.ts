@@ -1,6 +1,6 @@
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 
-import { nanoid } from 'nanoid'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -158,19 +158,24 @@ export const useAuthentication = () => {
   const registerNewUser = async (loginResult: UserCred) => {
     const { email, userId } = loginResult
     const name = getEmailStart(email)
-    const newWorkspaceName = `WD_${nanoid()}`
-    const result = await API.user
-      .registerUser({
-        type: 'RegisterUserRequest',
-        user: {
-          id: userId,
-          email: email,
-          name: name,
-          alias: name
-        },
-        workspaceName: newWorkspaceName
-      })
-      .then((res) => res)
+
+    let workspaceID = null
+    for (let i = 0; i < 7; i++) {
+      try {
+        const result = await API.user.registerStatus(undefined, { throwHttpErrors: false })
+        if (result.status === 'SUCCESS') {
+          workspaceID = result.workspaceID
+          break
+        }
+      } catch (error) {
+        await new Promise((resolve) => setTimeout(resolve, 2 * 1000))
+      }
+    }
+
+    if (!workspaceID) {
+      toast('Could not sign-up new user')
+      throw new Error('Did not receive status SUCCESS from backend; Could not signup')
+    }
 
     const userDetails = {
       email: email,
@@ -178,7 +183,7 @@ export const useAuthentication = () => {
       userID: userId,
       name: name
     }
-    const workspaceDetails = { id: result.id, name: 'WORKSPACE_NAME' }
+    const workspaceDetails = { id: workspaceID, name: 'WORKSPACE_NAME' }
 
     return { userDetails, workspaceDetails }
   }

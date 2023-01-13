@@ -129,11 +129,11 @@ export const apiURLs = {
 
   user: {
     getUserRecords: `${BASE_URLS.user}/`,
-    registerUser: `${BASE_URLS.user}/register`,
     getFromEmail: (email: string) => `${BASE_URLS.user}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${BASE_URLS.user}/${encodeURIComponent(userId)}`,
     updateInfo: `${BASE_URLS.user}/update`,
-    getUserByLinkedin: `${BASE_URLS.user}/linkedin`
+    getUserByLinkedin: `${BASE_URLS.user}/linkedin`,
+    registerStatus: `${BASE_URLS.user}/status`
   },
 
   view: {
