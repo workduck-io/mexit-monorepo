@@ -201,6 +201,10 @@ export const ButtonFields = styled.div<{ position?: string }>`
         return css`
           justify-content: end;
         `
+      case 'center':
+        return css`
+          justify-content: center;
+        `
       default:
         return ''
     }
