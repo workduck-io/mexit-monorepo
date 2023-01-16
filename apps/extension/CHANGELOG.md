@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.5
+
+### Patch Changes
+
+- 68870f05: Update Memoized Snippets on change, Move selection after inserting element in combobox
+
 ## 0.19.4
 
 ### Patch Changes
