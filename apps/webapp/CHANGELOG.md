@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.22.4
+
+### Patch Changes
+
+- b958095b: Web Link Aliases In Combobox, New Snippet from Spotlight
+- b1101f79: Style fixes for smaller screens
+
 ## 0.22.3
 
 ### Patch Changes
