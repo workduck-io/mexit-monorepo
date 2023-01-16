@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 
 import {
+  apiURLs,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
+  ELEMENT_LINK,
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
   ELEMENT_PARAGRAPH,
@@ -25,6 +27,7 @@ import { useViewStore } from '../../Hooks/useTaskViews'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
+import { useLinkStore } from '../../Stores/useLinkStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
@@ -56,6 +59,9 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
   const userDetails = useAuthStore((state) => state.userDetails)
   const nodeid = useEditorStore((state) => state.node.nodeid)
   const views = useViewStore((state) => state.views)
+  const webLinks = useLinkStore((s) => s.links?.filter((i) => i.alias) ?? [])
+  const getWorkspaceId = useAuthStore((s) => s.getWorkspaceId)
+
   const { allPrompts } = usePrompts()
 
   const { createNewNote } = useCreateNewNote()
@@ -80,7 +86,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       ...l,
       value: l.nodeid,
       text: l.path,
-      icon: l.icon ?? DefaultMIcons,
+      icon: l.icon ?? DefaultMIcons.NOTE,
       type: QuickLinkType.backlink
     })),
     ...allPrompts.map((prompt) => ({
@@ -102,7 +108,13 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
       icon: { type: 'ICON', value: 'ri:share-line' },
       type: QuickLinkType.taskView
     })),
-    ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type }))
+    ...slashInternals.map((l) => ({ ...l, value: l.command, text: l.text, type: l.type })),
+    ...webLinks.map((l) => ({
+      value: apiURLs.links.shortendLink(l?.alias, getWorkspaceId()),
+      text: l.alias,
+      icon: DefaultMIcons.WEB_LINK,
+      type: QuickLinkType.webLinks
+    }))
   ]
 
   const mentions = useMemo(() => {
@@ -145,6 +157,11 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem
+      },
+      web_link: {
+        slateElementType: ELEMENT_LINK,
+        newItemHandler: () => undefined,
+        renderElement: SlashComboboxItem
       },
       prompts: {
         slateElementType: PromptRenderType,

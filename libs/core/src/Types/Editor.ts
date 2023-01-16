@@ -193,11 +193,13 @@ export interface NodeProperties {
 
 export enum QuickLinkType {
   backlink = 'Backlinks',
+  publicNotes = 'Public Notes',
   snippet = 'Snippets',
   tags = 'Tags',
   action = 'Actions',
   search = 'Search',
-  mentions = 'Mentions'
+  mentions = 'Mentions',
+  webLinks = 'Links'
 }
 
 export enum QuickLinkStatus {

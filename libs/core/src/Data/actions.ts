@@ -1,10 +1,10 @@
 import { ActionType, MexitAction } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
-import { getMIcon } from '../Types/Store'
+import { DefaultMIcons, getMIcon } from '../Types/Store'
 import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
 
-export const CREATE_NEW_ITEM = {
+export const CREATE_NEW_ITEM: ListItemType = {
   title: 'Create new ',
   id: 'create-new-node',
   icon: getMIcon('ICON', 'bi:plus-circle'),
@@ -14,11 +14,31 @@ export const CREATE_NEW_ITEM = {
     edit: {
       category: 'action',
       keystrokes: 'Enter',
-      title: 'to create'
+      title: 'to Create'
     }
   },
   extras: {
-    new: true
+    new: true,
+    newItemType: 'note'
+  }
+}
+
+export const CREATE_NEW_SNIPPET: ListItemType = {
+  title: 'Create new ',
+  id: 'create-new-snippet',
+  icon: DefaultMIcons.SNIPPET,
+  category: QuickLinkType.backlink,
+  description: 'Quick Snippet',
+  shortcut: {
+    edit: {
+      category: 'action',
+      keystrokes: 'Enter',
+      title: 'to Create'
+    }
+  },
+  extras: {
+    new: true,
+    newItemType: 'snippet'
   }
 }
 

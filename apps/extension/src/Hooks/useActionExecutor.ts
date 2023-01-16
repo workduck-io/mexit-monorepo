@@ -5,7 +5,10 @@ import {
   ActionType,
   CategoryType,
   createNodeWithUid,
+  DRAFT_NODE,
+  generateSnippetId,
   getNewDraftKey,
+  getSlug,
   ILink,
   ListItemType,
   loremIpsum,
@@ -27,6 +30,7 @@ import { generateAvatar } from '../Utils/generateAvatar'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 
 import { useAuthStore } from './useAuth'
+import { useEditorStore } from './useEditorStore'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSaveChanges } from './useSaveChanges'
@@ -42,7 +46,7 @@ export function useActionExecutor() {
   const setAvatarSeed = useSputlitStore((store) => store.setAvatarSeed)
   const getMatchingConfig = useSmartCaptureStore((store) => store.getMatchingURLConfig)
   const workspaceDetails = useAuthStore((store) => store.workspaceDetails)
-  const { getSnippet } = useSnippets()
+  const { getSnippet, addSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
   const { saveIt } = useSaveChanges()
@@ -80,6 +84,20 @@ export function useActionExecutor() {
             break
 
           default:
+            if (item.extras.new && item.extras.newItemType === 'snippet') {
+              const content = useEditorStore.getState().nodeContent
+              const title = getSlug(search.value !== '' ? search.value : DRAFT_NODE)
+
+              addSnippet({
+                id: generateSnippetId(),
+                title,
+                content,
+                template: false
+              })
+
+              break
+            }
+
             let node: ILink
             let namespace: SingleNamespace
             const val = search.value

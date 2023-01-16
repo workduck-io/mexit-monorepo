@@ -7,6 +7,7 @@ import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
+import { useSnippetStore } from '../Stores/useSnippetStore'
 
 import { childIframe } from './iframeConnector'
 import { MessageType, UnhandledRequestsByExtension } from './messageHandler'
@@ -40,6 +41,15 @@ const messagePassing = () => {
     {
       name: BroadcastSyncedChannel.LAYOUT,
       sync: [{ field: 'toggleTop' }]
+    },
+    onStateChange
+  )
+
+  storeChangeHandler(
+    useSnippetStore,
+    {
+      name: BroadcastSyncedChannel.SNIPPETS,
+      sync: [{ field: 'snippets' }]
     },
     onStateChange
   )

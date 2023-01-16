@@ -71,7 +71,6 @@ const getSanatizedLink = (raw: string) => {
  */
 export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<Value, ILinkNode>) => {
   const isExternal = element['url']?.startsWith('#')
-
   const openLink = (e: React.MouseEvent, meta: boolean) => {
     e.preventDefault()
     if (isExternal) {

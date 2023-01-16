@@ -125,7 +125,7 @@ const SnippetEditor = () => {
     saveAndClearBuffer()
   }
 
-  const returnToSnippets = () => goBack()
+  const returnToSnippets = () => goTo(ROUTE_PATHS.snippets, NavigationType.push)
   const defaultValue = useMemo(() => (snippet?.title !== DRAFT_NODE ? snippet?.title : ''), [snippet])
 
   const onDelay = debounce((value) => onChangeTitle(value), 250)

@@ -1,10 +1,9 @@
 // eslint-disable-next-line
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script'
 
-import { ActionType, LINK_SHORTENER_URL_BASE, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
+import { ActionType, fuzzySearch, LINK_SHORTENER_URL_BASE, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
-import fuzzysort from 'fuzzysort'
 
 import { useAuthStore } from './Hooks/useAuth'
 import useDataStore from './Stores/useDataStore'
@@ -15,7 +14,8 @@ import {
   handleHighlightRequest,
   handleNodeContentRequest,
   handleSharingRequest,
-  handleShortenerRequest
+  handleShortenerRequest,
+  handleSnippetRequest
 } from './Utils/requestHandler'
 
 reloadOnUpdate('src')
@@ -121,6 +121,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       ;(async () => {
         const res = await handleNodeContentRequest(request)
         console.log('Got response: ', res)
+        sendResponse(res)
+      })()
+      return true
+    }
+
+    case 'NEW_SNIPPET': {
+      ;(async () => {
+        const res = await handleSnippetRequest(request)
         sendResponse(res)
       })()
       return true
@@ -242,8 +250,8 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     .getState()
     .ilinks.filter((item) => item.path.startsWith('Links') && item.path.split(SEPARATOR).length > 1)
 
-  const suggestions = fuzzysort.go(text, linkCaptures, { key: 'path', allowTypo: true, all: true }).map((item) => {
-    const title = item.obj.path.split(SEPARATOR).slice(-1)[0]
+  const suggestions = fuzzySearch(linkCaptures, text, (item) => item.path).map((item) => {
+    const title = item.path.split(SEPARATOR).slice(-1)[0]
 
     return {
       content: `${LINK_SHORTENER_URL_BASE}/${workspaceDetails.id}/${title}`,

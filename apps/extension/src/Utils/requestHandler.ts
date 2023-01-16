@@ -1,4 +1,4 @@
-import { apiURLs, defaultContent, ListItemType } from '@mexit/core'
+import { apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 
@@ -63,6 +63,30 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
     }
   }
+}
+
+export const handleSnippetRequest = ({ data }) => {
+  const reqData = {
+    id: data.id,
+    type: 'SnippetRequest',
+    title: data.title,
+    namespaceIdentifier: DEFAULT_NAMESPACE,
+    data: serializeContent(data.content ?? defaultContent.content, data.snippetId),
+    template: data.template
+  }
+
+  return client
+    .post(apiURLs.snippet.create, reqData, {
+      headers: {
+        'mex-workspace-id': data.workspaceId
+      }
+    })
+    .then((response: any) => {
+      return { message: response.data, error: null }
+    })
+    .catch((err) => {
+      return { message: null, error: err }
+    })
 }
 
 export const handleNodeContentRequest = ({ subType, body, headers }) => {

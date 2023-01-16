@@ -19,6 +19,7 @@ export interface ItemExtraType {
   blockid: string
   path: string
   withinMex?: boolean
+  newItemType?: 'snippet' | 'task' | 'note'
   // New Note
   new: boolean
   // New Task
