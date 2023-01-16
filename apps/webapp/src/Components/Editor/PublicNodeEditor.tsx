@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { selectEditor,usePlateEditorRef } from '@udecode/plate'
+import { selectEditor, usePlateEditorRef } from '@udecode/plate'
 import styled from 'styled-components'
 
 import { defaultContent } from '@mexit/core'
@@ -18,9 +18,8 @@ const PublicStyledEditor = styled(StyledEditor)`
   flex: 1;
 
   max-width: 950px;
-  min-width: 400px;
 
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
   margin: 1rem;
   padding-bottom: ${({ theme }) => theme.spacing.large};
 

@@ -20,7 +20,6 @@ const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
   flex: 1;
   max-width: min(calc(100vw - 4rem), 800px);
   padding: 1rem;
-  padding-left: 2rem;
   min-height: 100%;
 
   transition: background 0.5s ease-in-out;

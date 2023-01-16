@@ -108,9 +108,9 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
   width: 100%;
   max-width: 860px;
-  min-width: 400px;
+  /* min-width: 400px; */
   flex: 1;
-  height: calc(100vh - 3rem);
+  /* height: calc(100vh - 3rem); */
 
   && > div {
     width: 100%;
