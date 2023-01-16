@@ -12,8 +12,8 @@ export const EditorPreviewWrapper = styled.div`
   overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.fade};
-  height: 40vh;
-  max-height: 40vh;
+  height: 50vh;
+  max-height: 50vh;
   width: 36vw;
   max-width: 36vw;
 
@@ -90,7 +90,7 @@ export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
   display: flex;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  border-radius: ${({ theme }) => `${theme.borderRadius.small} ${theme.borderRadius.small} 0 0`};
   width: 100%;
   background: ${({ theme }) => theme.tokens.surfaces.s[3]} !important;
   border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};

@@ -242,6 +242,7 @@ export interface SideNavProps extends NavWrapperProps {
   $side: 'left' | 'right'
   $publicNamespace: boolean
   $isUserEditing?: boolean
+  $isMobile?: boolean
 }
 
 interface SidebarPosProps {
@@ -249,15 +250,22 @@ interface SidebarPosProps {
   theme: MexTheme
   $side: 'left' | 'right'
   $publicNamespace: any
+  $isMobile?: boolean
 }
 
-const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace }: SidebarPosProps) =>
+const sidebarPos = ({ $overlaySidebar, theme, $side, $publicNamespace, $isMobile }: SidebarPosProps) =>
   $side === 'left'
     ? $overlaySidebar
       ? css`
           position: fixed;
           top: ${theme.additional.hasBlocks ? '2rem' : '0'};
-          left: ${theme.additional.hasBlocks ? 'calc(86px + 1rem)' : $publicNamespace ? '0px' : '86px'};
+          left: ${$isMobile
+            ? '0px'
+            : theme.additional.hasBlocks
+            ? 'calc(86px + 1rem)'
+            : $publicNamespace
+            ? '0px'
+            : '86px'};
           background: rgba(${theme.rgbTokens.surfaces.sidebar}, 0.5);
           backdrop-filter: blur(10px);
         `
