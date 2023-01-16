@@ -1,13 +1,10 @@
 import { ELEMENT_TODO_LI } from '@udecode/plate'
-import create from 'zustand'
 
 import {
   convertContentToRawText,
   Filter,
-  Filters,
   FilterTypeWithOptions,
   getAllParentIds,
-  GlobalFilterJoin,
   mog,
   PriorityType,
   SNIPPET_PREFIX,
@@ -17,18 +14,18 @@ import {
   TodoType
 } from '@mexit/core'
 
-import { defaultContent } from '../Data/baseData'
-import useUpdateBlock from '../Editor/Hooks/useUpdateBlock'
-import { useDataStore } from '../Stores/useDataStore'
-import { useTodoStore } from '../Stores/useTodoStore'
-import { KanbanBoard, KanbanCard, KanbanColumn } from '../Types/Kanban'
+import { defaultContent } from '../../Data/baseData'
+import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
+import { useDataStore } from '../../Stores/useDataStore'
+import { useTodoStore } from '../../Stores/useTodoStore'
+import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
+import { useTaskFilterFunctions } from '../useFilterFunctions'
+import { useLinks } from '../useLinks'
+import { useMentions } from '../useMentions'
+import { useNodes } from '../useNodes'
+import { useSearchExtra } from '../useSearch'
 
-import { useTaskFilterFunctions } from './useFilterFunctions'
-import { FilterStore } from './useFilters'
-import { useLinks } from './useLinks'
-import { useMentions } from './useMentions'
-import { useNodes } from './useNodes'
-import { useSearchExtra } from './useSearch'
+import { useTodoFilterStore } from './useTodoFilters'
 
 export interface TodoKanbanCard extends KanbanCard {
   todo: TodoType
@@ -54,24 +51,13 @@ export const getPureContent = (todo: TodoType) => {
   return defaultContent
 }
 
-export const useKanbanFilterStore = create<FilterStore>((set) => ({
-  currentFilters: [],
-  setCurrentFilters: (filters: Filter[]) => set({ currentFilters: filters }),
-  globalJoin: 'all',
-  setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
-  indexes: [],
-  setIndexes: () => undefined,
-  filters: [],
-  setFilters: (filters: Filters) => set({ filters })
-}))
-
 export const useTodoKanban = () => {
-  const filters = useKanbanFilterStore((state) => state.filters)
-  const currentFilters = useKanbanFilterStore((state) => state.currentFilters)
-  const setCurrentFilters = useKanbanFilterStore((state) => state.setCurrentFilters)
-  const setFilters = useKanbanFilterStore((s) => s.setFilters)
-  const globalJoin = useKanbanFilterStore((state) => state.globalJoin)
-  const setGlobalJoin = useKanbanFilterStore((state) => state.setGlobalJoin)
+  const filters = useTodoFilterStore((state) => state.filters)
+  const currentFilters = useTodoFilterStore((state) => state.currentFilters)
+  const setCurrentFilters = useTodoFilterStore((state) => state.setCurrentFilters)
+  const setFilters = useTodoFilterStore((s) => s.setFilters)
+  const globalJoin = useTodoFilterStore((state) => state.globalJoin)
+  const setGlobalJoin = useTodoFilterStore((state) => state.setGlobalJoin)
 
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
   const tags = useDataStore((state) => state.tags)
@@ -348,7 +334,7 @@ export const useTodoKanban = () => {
         }
       ]
     }
-    const currentFilters = useKanbanFilterStore.getState().currentFilters
+    const currentFilters = useTodoFilterStore.getState().currentFilters
     Object.entries(nodetodos).forEach(([nodeid, todos]) => {
       if (nodeid.startsWith(SNIPPET_PREFIX)) return
       if (isInArchive(nodeid)) return

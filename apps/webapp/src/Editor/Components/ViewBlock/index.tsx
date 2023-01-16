@@ -16,9 +16,9 @@ import {
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
+import { useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
-import { useTodoKanban } from '../../../Hooks/useTodoKanban'
 import { RenderBoardTask } from '../../../Views/Tasks'
 import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
 

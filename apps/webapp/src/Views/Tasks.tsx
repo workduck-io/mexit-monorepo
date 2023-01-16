@@ -21,19 +21,19 @@ import {
 import Plateless from '../Components/Editor/Plateless'
 import TaskHeader from '../Components/TaskHeader'
 import { TodoBase as Todo } from '../Components/Todo/Todo'
+import TodoList from '../Components/Todo/TodoList'
+import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore } from '../Hooks/useTaskViews'
-import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../Hooks/useTodoKanban'
 import useMultipleEditors from '../Stores/useEditorsStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 
 import SearchFilters from './SearchFilters'
-import ViewSelector from './ViewSelector'
 
 interface RenderTaskProps {
   id: string
@@ -124,6 +124,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
 RenderBoardTask.displayName = 'RenderTask'
 
+// TODO: Move Board outside with it's shortcuts etc
 const Tasks = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
   const nodesTodo = useTodoStore((store) => store.todos)
@@ -426,12 +427,13 @@ const Tasks = () => {
           currentFilters={currentFilters}
           globalJoin={globalJoin}
           setGlobalJoin={setGlobalJoin}
-        />
-        {/* Make the selector a part of search filters */}
-        <ViewSelector
-          currentView={currentViewType}
-          onChangeView={(viewType) => setCurrentViewType(viewType)}
-          availableViews={[ViewType.Kanban, ViewType.List]}
+          viewSelectorProps={{
+            currentView: currentViewType,
+            onChangeView: (viewType) => {
+              setCurrentViewType(viewType)
+            },
+            availableViews: [ViewType.Kanban, ViewType.List]
+          }}
         />
         {
           {
@@ -445,7 +447,7 @@ const Tasks = () => {
                 {board}
               </Board>
             ),
-            [ViewType.List]: <p>Unimplemented</p>
+            [ViewType.List]: <TodoList todos={nodesTodo} />
           }[currentViewType]
         }
       </StyledTasksKanban>

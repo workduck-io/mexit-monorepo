@@ -6,7 +6,7 @@ import listCheck2 from '@iconify-icons/ri/list-check-2'
 
 import { ViewSelectorButton, ViewSelectorWrapper,ViewType } from '@mexit/shared'
 
-interface ViewSelectorProps {
+export interface ViewSelectorProps {
   onChangeView: (view: ViewType) => void
   availableViews?: ViewType[]
   currentView: ViewType

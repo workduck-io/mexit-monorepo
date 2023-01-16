@@ -224,3 +224,22 @@ export const TaskCard = styled.div<{
       }
     `}
 `
+
+export const TaskListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0px;
+
+  ${TodoContainer} {
+    width: 100%;
+    padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+  }
+  ${TodoText} {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  ${TaskCard} {
+    width: 100%;
+  }
+`

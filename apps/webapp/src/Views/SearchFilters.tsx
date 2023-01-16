@@ -13,11 +13,14 @@ import {
   SearchFilterLabel,
   SearchFiltersHelp,
   SearchFiltersWrapper,
-  SearchFilterWrapper} from '@mexit/shared'
+  SearchFilterWrapper
+} from '@mexit/shared'
 
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
+
+import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 
 interface SearchFiltersProps {
   result?: any
@@ -29,6 +32,8 @@ interface SearchFiltersProps {
   removeCurrentFilter: (filter: Filter) => void
   changeCurrentFilter: (filter: Filter) => void
   resetCurrentFilters: () => void
+  // If present, a view Selector is added at the end with the given properties
+  viewSelectorProps?: ViewSelectorProps
 }
 
 const SearchFilters = ({
@@ -40,7 +45,8 @@ const SearchFilters = ({
   removeCurrentFilter,
   resetCurrentFilters,
   globalJoin,
-  setGlobalJoin
+  setGlobalJoin,
+  viewSelectorProps
 }: SearchFiltersProps) => {
   const randomId = useMemo(() => nanoid(), [filters, currentFilters])
 
@@ -79,6 +85,7 @@ const SearchFilters = ({
         ))}
       </SearchFiltersWrapper>
       <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} />
+      <ViewSelector {...viewSelectorProps} />
     </SearchFilterWrapper>
   )
 }
