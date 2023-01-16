@@ -88,8 +88,6 @@ export function useActionExecutor() {
               const content = useEditorStore.getState().nodeContent
               const title = getSlug(search.value !== '' ? search.value : DRAFT_NODE)
 
-              console.log('TITLE', { title })
-
               addSnippet({
                 id: generateSnippetId(),
                 title,

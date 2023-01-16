@@ -20,7 +20,6 @@ import {
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
   getSlug,
-  mog,
   NODE_ID_PREFIX,
   PromptRenderType
 } from '@mexit/core'
@@ -181,7 +180,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
           InsertedElement = { ...InsertedElement, ...item.additional }
         }
 
-        mog('Inserting', { InsertedElement })
+        // mog('Inserting', { InsertedElement })
 
         insertNodes<TElement>(editor, InsertedElement)
 

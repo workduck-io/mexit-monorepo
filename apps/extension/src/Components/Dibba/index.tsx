@@ -15,7 +15,6 @@ import {
   ELEMENT_TAG,
   fuzzySearch,
   getMIcon,
-  mog,
   NodeEditorContent,
   parseSnippet,
   QuickLinkType,
@@ -246,7 +245,6 @@ export default function Dibba() {
         })
       }
 
-      mog('RESULTS ARE', { res, items })
       setResults(items)
     } else setResults(data)
   }, [query])
