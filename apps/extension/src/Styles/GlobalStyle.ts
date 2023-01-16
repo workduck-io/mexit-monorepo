@@ -41,7 +41,7 @@ export const GlobalStyle = createGlobalStyle`
     letter-spacing: normal;
     font-family: "Inter", sans-serif;
     line-height: 1.5;
-    font-size: 14px;
+    font-size: 16px;
 
     * {
       ${ThinScrollbar}

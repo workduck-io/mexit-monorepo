@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
@@ -12,6 +12,7 @@ import { FadeInOut, FocusModeProp, focusStyles } from '@mexit/shared'
 
 import { useKeyListener } from '../Hooks/useChangeShortcutListener'
 import useLayout from '../Hooks/useLayout'
+import { useWindowDimensions } from '../Hooks/useWindowDimensions'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
@@ -131,6 +132,8 @@ export const SidebarToggles = () => {
   const sidebar = useLayoutStore((state) => state.sidebar)
   const rhSidebar = useLayoutStore((state) => state.rhSidebar)
 
+  const { isMobile } = useWindowDimensions()
+
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const toggleRHSidebar = useLayoutStore((store) => store.toggleRHSidebar)
   const toggleAllSidebars = useLayoutStore((store) => store.toggleAllSidebars)
@@ -196,19 +199,21 @@ export const SidebarToggles = () => {
           />
         }
       >
-        <SidebarToggleWrapper
-          side="right"
-          $isVisible={!isUserEditing}
-          onClick={toggleRHSidebar}
-          expanded={rhSidebar.expanded}
-          show={rhSidebar.show}
-          endColumnWidth={endColumnWidth}
-          {...getFocusProps(focusMode)}
-        >
-          <Icon
-            icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
-          />
-        </SidebarToggleWrapper>
+        {!isMobile && (
+          <SidebarToggleWrapper
+            side="right"
+            $isVisible={!isUserEditing}
+            onClick={toggleRHSidebar}
+            expanded={rhSidebar.expanded}
+            show={rhSidebar.show}
+            endColumnWidth={endColumnWidth}
+            {...getFocusProps(focusMode)}
+          >
+            <Icon
+              icon={rhSidebar.expanded ? 'heroicons-solid:chevron-double-right' : 'heroicons-solid:chevron-double-left'}
+            />
+          </SidebarToggleWrapper>
+        )}
       </Tippy>
     </>
   )

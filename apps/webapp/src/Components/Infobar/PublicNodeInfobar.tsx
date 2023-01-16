@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -34,11 +34,7 @@ interface PublicDataInfobarProps {
 const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
   const [analysis, setAnalysis] = useState<any>()
 
-  const windowDimensions = useWindowDimensions()
-
-  const useWorker = useMemo(() => {
-    return windowDimensions.width > 800
-  }, [windowDimensions])
+  const { isMobile } = useWindowDimensions()
 
   useEffect(() => {
     const getAnalysis = async () => {
@@ -46,7 +42,7 @@ const PublicDataInfobar = ({ nodeId, content }: PublicDataInfobarProps) => {
       mog('RecvAnalysis', { analysis, nodeId, content })
       setAnalysis(analysis)
     }
-    if (nodeId && content.length > 1 && useWorker) getAnalysis()
+    if (nodeId && content.length > 1 && !isMobile) getAnalysis()
   }, [nodeId, content])
 
   return analysis ? (
