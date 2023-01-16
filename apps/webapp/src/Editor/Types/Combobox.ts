@@ -128,8 +128,9 @@ export interface ComboboxProps {
 export interface InsertableElement extends TElement {
   type: string
   children: any[]
-  value: string
+  value?: string
   blockValue?: string
   blockId?: string
+  url?: string
   // Also additional properties are added
 }

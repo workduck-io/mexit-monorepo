@@ -117,8 +117,8 @@ export const updateEmptyBlockTypes = (content: NodeEditorContent, type: string =
   })
 }
 
-export const insertItemInArray = <T>(array: T[], item: T, index: number): Array<T> => [
+export const insertItemInArray = <T>(array: T[], items: Array<T>, index: number): Array<T> => [
   ...array.slice(0, index),
-  item,
+  ...items,
   ...array.slice(index)
 ]

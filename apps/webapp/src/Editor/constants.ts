@@ -18,7 +18,8 @@ export enum QuickLinkType {
   tags = 'Tags',
   mentions = 'Mentions',
   taskView = 'Task View',
-  prompts = 'Prompts'
+  prompts = 'Prompts',
+  webLinks = 'Links'
 }
 
 export enum SlashType {

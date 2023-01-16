@@ -120,14 +120,14 @@ export const convertDataToIndexable = (data: Partial<PersistentData>) => {
       }
 
       case indexNames.archive: {
-        data.archive.forEach((entry) => {
+        data.archive?.forEach((entry) => {
           titleNodeMap.set(entry.nodeid, entry.path)
         })
         break
       }
 
       case indexNames.prompt: {
-        data.prompts.forEach((entry) => {
+        data.prompts?.forEach((entry) => {
           titleNodeMap.set(entry.entityId, entry.title)
         })
         break

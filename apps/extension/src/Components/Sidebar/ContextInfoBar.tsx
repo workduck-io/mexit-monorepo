@@ -56,7 +56,7 @@ export function ContextInfoBar() {
 
   // TODO: add highlight search
   // const onSearch = async (newSearchTerm: string) => {
-  //   const res = fuzzysort.go(newSearchTerm, searchableHighlights, { all: true, key: 'text' }).map((item) => item.obj.nodeId)
+  //   const res = fuzzySearch(searchableHighlights, newSearchTerm, (item) => item.text)
 
   //   mog('res', { res, searchableHighlights })
   // }

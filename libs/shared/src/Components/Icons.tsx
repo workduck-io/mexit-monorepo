@@ -105,7 +105,8 @@ export const DefaultMIcons = {
   SHARED_NOTE: getMIcon('ICON', 'mex:shared-note'),
   VIEW: getMIcon('ICON', 'ri:stack-line'),
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
-  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline')
+  PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
+  WEB_LINK: getMIcon('ICON', 'ri:link')
 }
 
 export const ForwardlinkIcon = {

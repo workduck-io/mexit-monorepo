@@ -7,6 +7,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useDescriptionStore } from '../Stores/useDescriptionStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
+import { useLinkStore } from '../Stores/useLinkStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useReminderStore } from '../Stores/useReminderStore'
@@ -89,6 +90,11 @@ const syncStores = () => {
     syncStoreState(useDwindleAuthStore, {
       name: BroadcastSyncedChannel.DWINDLE,
       sync: [{ field: 'userCred' }, { field: 'userPool' }]
+    })
+
+    syncStoreState(useLinkStore, {
+      name: BroadcastSyncedChannel.LINKS,
+      sync: [{ field: 'links' }]
     })
 
     syncStoreState(useUserPreferenceStore, {

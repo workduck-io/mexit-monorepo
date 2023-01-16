@@ -10,6 +10,7 @@ import {
   BASE_TASKS_PATH,
   CategoryType,
   CREATE_NEW_ITEM,
+  CREATE_NEW_SNIPPET,
   initActions,
   insertItemInArray,
   isParent,
@@ -147,7 +148,7 @@ const Search = () => {
           const notesOpened = lastOpenedNodes
 
           const recents = getRecentList(notesOpened, actionType)
-          const listWithNew = insertItemInArray(recents, CREATE_NEW_ITEM, 1)
+          const listWithNew = insertItemInArray(recents, [CREATE_NEW_ITEM, CREATE_NEW_SNIPPET], 1)
 
           setResults(isSearchWithinMex ? recents : listWithNew)
         } else if (search.value) {

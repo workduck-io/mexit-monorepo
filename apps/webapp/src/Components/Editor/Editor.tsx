@@ -129,6 +129,7 @@ const Editor: React.FC<EditorProps> = ({
         meta={{
           path: nodePath
         }}
+        debug
         BalloonMarkToolbarButtons={<BallonMarkToolbarButtons />}
         onChange={onChangeContent}
         options={editorOptions}

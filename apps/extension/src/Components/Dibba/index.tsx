@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Icon } from '@iconify/react'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
-import fuzzysort from 'fuzzysort'
-import { useTheme } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
@@ -15,9 +13,10 @@ import {
   defaultCopyConverter,
   defaultCopyFilter,
   ELEMENT_TAG,
+  fuzzySearch,
   getMIcon,
+  mog,
   NodeEditorContent,
-  parseBlock,
   parseSnippet,
   QuickLinkType,
   SEPARATOR,
@@ -41,11 +40,13 @@ import {
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
+import { useAuthStore } from '../../Hooks/useAuth'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
 import useDataStore from '../../Stores/useDataStore'
+import { useLinkStore } from '../../Stores/useLinkStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
@@ -70,63 +71,51 @@ export default function Dibba() {
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState<number>(0)
   const [results, setResults] = useState([])
+  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
+
   const dibbaRef = useRef(null)
 
   const top = window.scrollY + dibbaState.coordinates.top
   const left = window.scrollX + dibbaState.coordinates.left
   const [offsetTop, setOffsetTop] = useState(window.innerHeight < top + dibbaRef.current?.clientHeight)
 
-  const ilinks = useDataStore((state) => state.ilinks)
   const metadata = useMetadataStore((s) => s.metadata)
-  const linkCaptures = []
-  const theme = useTheme()
-  const publicNodes: PublicNode[] = []
+  const linkCaptures = useLinkStore((store) => store.links.filter((i) => i.alias))
   const getContent = useContentStore((store) => store.getContent)
-
-  const linkCaptureILinks = ilinks.filter(
-    (item) => item.path.split(SEPARATOR).length > 1 && item.path.split(SEPARATOR)[0] === 'Links'
-  )
+  const snippets = useSnippetStore((s) => Object.values(s.snippets ?? {}))
 
   const publicNodeIDs = useDataStore((store) => store.publicNodes)
 
-  publicNodeIDs.forEach((nodeID) => {
-    const _content = getContent(nodeID)
-
-    const publicNode: PublicNode = {
-      type: 'Public Nodes',
-      id: nodeID,
-      icon: metadata.notes[nodeID]?.icon,
-      url: apiURLs.frontend.getPublicNodePath(nodeID),
-      title: getPathFromNodeIdHookless(nodeID).split(SEPARATOR).pop(),
-      content: _content?.content || defaultContent.content
-    }
-    publicNodes.push(publicNode)
-  })
-
-  linkCaptureILinks.forEach((item) => {
-    const _content = getContent(item.nodeid)
-
-    linkCaptures.push({
-      id: item.nodeid,
-      title: item.path.split(SEPARATOR).slice(-1)[0],
-      icon: getMIcon('ICON', 'ri:link'),
-      content: _content?.content || defaultContent.content,
-      type: 'Links'
-    })
-  })
-
-  const snippets = Object.values(useSnippetStore.getState().snippets ?? {})
   const pointerMoved = usePointerMovedSinceMount()
 
-  const data = [
-    ...linkCaptures,
-    ...publicNodes,
-    ...snippets.map((item) => ({
-      type: QuickLinkType.snippet,
-      icon: metadata.snippets[item.id]?.icon || DefaultMIcons.SNIPPET,
-      ...item
-    }))
-  ]
+  const data = useMemo(
+    () => [
+      ...publicNodeIDs.map((noteId) => {
+        const _content = getContent(noteId)
+
+        return {
+          type: QuickLinkType.publicNotes,
+          id: noteId,
+          icon: metadata.notes[noteId]?.icon,
+          url: apiURLs.frontend.getPublicNodePath(noteId),
+          title: getPathFromNodeIdHookless(noteId)?.split(SEPARATOR)?.pop(),
+          content: _content?.content || defaultContent.content
+        }
+      }),
+      ...snippets.map((item) => ({
+        type: QuickLinkType.snippet,
+        icon: metadata.snippets[item.id]?.icon || DefaultMIcons.SNIPPET,
+        ...item
+      })),
+      ...linkCaptures.map((link) => ({
+        icon: getMIcon('ICON', 'ri:link'),
+        type: QuickLinkType.webLinks,
+        title: link.alias,
+        url: apiURLs.links.shortendLink(link?.alias, getWorkspaceId())
+      }))
+    ],
+    [publicNodeIDs, snippets, linkCaptures]
+  )
 
   const insertPublicNode = (item: PublicNode) => {
     const linkEle = document.createElement('a')
@@ -142,13 +131,20 @@ export default function Dibba() {
     // const link = document.createElement('a')
     // link.appendChild(document.createTextNode(item.title))
     // link.href = item.content
+    if (!item) return
 
-    // dibbaState.extra.range.insertNode(link)
-    dibbaState.extra.range.insertNode(document.createTextNode(parseBlock(item.content)))
-    dibbaState.extra.range.collapse(false)
+    const linkEle = document.createElement('a')
+    linkEle.appendChild(document.createTextNode(item.title))
+    linkEle.href = item.url
 
-    // Combining the inserted text node into one
-    document.activeElement.normalize()
+    dibbaState.extra.range.insertNode(linkEle)
+
+    // // dibbaState.extra.range.insertNode(link)
+    // dibbaState.extra.range.insertNode(document.createTextNode(`[[${item.url}]]`))
+    // dibbaState.extra.range.collapse(false)
+
+    // // Combining the inserted text node into one
+    // document.activeElement.normalize()
 
     toast.success('Inserted Shortened URL!')
   }
@@ -213,11 +209,11 @@ export default function Dibba() {
         }
         break
       }
-      case 'Links': {
+      case QuickLinkType.webLinks: {
         insertLink(item)
         break
       }
-      case 'Public Nodes': {
+      case QuickLinkType.publicNotes: {
         insertPublicNode(item as PublicNode)
       }
     }
@@ -226,19 +222,33 @@ export default function Dibba() {
   }
 
   useEffect(() => {
-    const res = fuzzysort
-      .go(query, data, { key: 'title', allowTypo: true, limit: 7, all: true })
-      .map((item) => item.obj)
+    if (query) {
+      const res = fuzzySearch(data, query, (item) => item.title)
 
-    if (res.length === 0) {
-      res.push({
-        id: 'no-results',
-        title: 'No Results Found',
-        icon: getMIcon('ICON', 'ri:alert-line')
-      })
-    }
+      const groups = res.reduce((acc, item) => {
+        const type = item?.type
+        if (!acc[type]) {
+          acc[type] = []
+        }
 
-    setResults(res)
+        if (!(acc[type].length === 5)) acc[type].push(item)
+
+        return acc
+      }, {} as any)
+
+      const items = Object.values(groups).flat()
+
+      if (items.length === 0) {
+        items.push({
+          id: 'no-results',
+          title: 'No Results Found',
+          icon: getMIcon('ICON', 'ri:alert-line')
+        })
+      }
+
+      mog('RESULTS ARE', { res, items })
+      setResults(items)
+    } else setResults(data)
   }, [query])
 
   useEffect(() => {

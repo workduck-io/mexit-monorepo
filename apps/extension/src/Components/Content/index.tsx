@@ -39,7 +39,7 @@ export default function Content() {
           }
         )
       })
-      const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, true)
+      const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
 
       // mog('deserializedContent', { content })
 

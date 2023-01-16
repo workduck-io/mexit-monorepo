@@ -6,6 +6,7 @@ import {
   extractLinksFromData,
   extractMetadata,
   mog,
+  nicePromise,
   Snippet
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
@@ -154,11 +155,14 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    await getAllNamespaces()
-    await getAllSnippets()
-    const promises = [getAllLinks(), getAllHighlights(), getAllSmartCaptures()]
+    await nicePromise(getAllNamespaces())
+    await nicePromise(getAllSnippets())
+    await nicePromise(getAllHighlights())
+    await nicePromise(getAllLinks())
+    await nicePromise(getAllSmartCaptures())
+    // const promises = []
 
-    await Promise.allSettled(promises)
+    // await Promise.allSettled(promises)
     mog('Fetch All Resolved completely')
   }
 

@@ -6,6 +6,8 @@ import { Value } from '@udecode/plate'
 import { StyledElementProps } from '@udecode/plate-styled-components'
 import styled, { css } from 'styled-components'
 
+import { mog } from '@mexit/core'
+
 import { ILinkNode } from '../Types/QuickLink.types'
 
 import { EditorIcons } from './Icons'
@@ -71,7 +73,7 @@ const getSanatizedLink = (raw: string) => {
  */
 export const LinkElement = ({ attributes, children, element, nodeProps }: StyledElementProps<Value, ILinkNode>) => {
   const isExternal = element['url']?.startsWith('#')
-
+  mog('ELEMETN', { element })
   const openLink = (e: React.MouseEvent, meta: boolean) => {
     e.preventDefault()
     if (isExternal) {

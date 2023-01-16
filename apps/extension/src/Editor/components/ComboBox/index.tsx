@@ -63,7 +63,7 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
       title: 'to Insert'
     }
   },
-  ['Public Nodes']: {
+  [QuickLinkType.publicNotes]: {
     link: {
       ...spotlightShortcuts.open,
       title: 'to Insert Link'

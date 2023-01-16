@@ -1,13 +1,14 @@
 /* eslint-disable no-case-declarations */
-import fuzzysort from 'fuzzysort'
 
 import {
   ActionType,
   CategoryType,
   CREATE_NEW_ITEM,
+  CREATE_NEW_SNIPPET,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_MENTION,
+  fuzzySearch,
   fuzzySearchLinks,
   getListItemFromLink,
   idxKey,
@@ -96,15 +97,19 @@ export const useSearch = () => {
         nodeItems?.forEach((item) => {
           // const localNode = isLocalNode(item.id)
           const node = ilinks.find((i) => i.nodeid === item.id)
-          const listItem = getListItemFromNode(node, item.text, item.blockId, actionType)
-          localNodes.push(listItem)
+          if (node) {
+            const listItem = getListItemFromNode(node, item.text, item.blockId, actionType)
+            localNodes.push(listItem)
+          }
         })
 
         if (!selection) {
           snippetItems?.forEach((snippet) => {
             const snip = getSnippet(snippet.id)
-            const item = getListItemFromSnippet(snip, actionType)
-            localNodes.push(item)
+            if (snip) {
+              const item = getListItemFromSnippet(snip, actionType)
+              localNodes.push(item)
+            }
           })
 
           resultLinks?.forEach((link) => {
@@ -121,11 +126,11 @@ export const useSearch = () => {
             quickLinks.map((i) => i.title)
           ) && actionType !== ActionType.OPEN
 
-        searchList = isNew ? [CREATE_NEW_ITEM, ...localNodes] : localNodes
+        searchList = isNew ? [CREATE_NEW_ITEM, CREATE_NEW_SNIPPET, ...localNodes] : localNodes
         break
 
       case CategoryType.action:
-        const actionItems = fuzzysort.go(search.value, initActions, { key: 'title' }).map((item) => item.obj)
+        const actionItems = fuzzySearch(initActions, search.value, (item) => item.title)
 
         const useQueryActions = initActions
           .filter((a) => a.type === ActionType.SEARCH)

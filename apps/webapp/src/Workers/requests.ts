@@ -229,6 +229,7 @@ const initializeHighlightsExtension = async () => {
   return await client
     .get(apiURLs.highlights.all)
     .then((d) => d.json())
+    .then((d: any) => d.Items)
     .catch((error) => {
       mog('InitHighlightsError', { error })
       return undefined
