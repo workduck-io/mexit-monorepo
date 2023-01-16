@@ -7,6 +7,7 @@ import {
   insertText,
   isBlock,
   isEndPoint,
+  moveSelection,
   PlateEditor,
   select,
   TElement,
@@ -185,7 +186,7 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
         insertNodes<TElement>(editor, InsertedElement)
 
         // move the selection after the ilink element
-        // moveSelection(editor)
+        moveSelection(editor)
 
         const isBlockComponent = isBlock(editor, InsertedElement)
 

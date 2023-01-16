@@ -10,7 +10,6 @@ import EditorPreview from '../../../../Components/Editor/EditorPreview'
 import { useLinks } from '../../../../Hooks/useLinks'
 import { getBlock } from '../../../../Utils/parseData'
 import { useHotkeys } from '../../../hooks/useHotKeys'
-import { useOnMouseClick } from '../../../hooks/useOnMouseClick'
 
 export const QuickLinkElement = ({ attributes, children, element }: ILinkElementProps) => {
   const editor = useEditorRef()
@@ -27,7 +26,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   // const { archived } = useArchive()
   // const { goTo } = useRouting()
 
-  const onClickProps = useOnMouseClick(() => {
+  const onClickProps = () => {
     // Show preview on click, if preview is shown, navigate to link
     if (!preview) {
       setPreview(true)
@@ -37,7 +36,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
       window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
     }
-  })
+  }
 
   // useEffect(() => {
   //   // If the preview is shown and the element losses focus --> Editor focus is moved
@@ -87,8 +86,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const content = block ? [block] : undefined
   // const archivedNode = isArchived ? getArchiveNode(element.value) : undefined
 
-  console.log({ path, element })
-
   return (
     <SILinkRoot
       {...attributes}
@@ -105,7 +102,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
         content={content}
         closePreview={() => setPreview(false)}
       >
-        <SILink $selected={selected} {...onClickProps}>
+        <SILink $selected={selected} onClick={onClickProps}>
           <span className="ILink_decoration ILink_decoration_left">[[</span>
           <span className="ILink_decoration ILink_decoration_value">
             {' '}
