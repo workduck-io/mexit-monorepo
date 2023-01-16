@@ -134,7 +134,7 @@ export const SnippetsInfoBar = () => {
     if (search === '') {
       setSearchedSnippets(snippets)
     }
-  }, [search])
+  }, [search, snippets])
 
   return (
     <SnippetCards>

@@ -13,7 +13,6 @@ import { ILink, NodeType, SharedNode } from '@mexit/core'
 import { ILinkElementProps, sharedAccessIcon, SILink, SILinkRoot, StyledIcon } from '@mexit/shared'
 
 import { useLinks } from '../../../Hooks/useLinks'
-import useLoad from '../../../Hooks/useLoad'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
@@ -74,7 +73,6 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
   const { getArchiveNode, getSharedNode, getNodeType } = useNodes()
   // const spotlightCtx = useSpotlightContext()
   // const noteCtx = useNoteContext()
-  const { getNode } = useLoad()
   const timer = React.useRef(undefined)
 
   const path = getPathFromNodeid(element.value)
