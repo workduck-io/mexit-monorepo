@@ -48,6 +48,11 @@ const TodoKanban = () => {
   const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
+  const todosArray = useMemo(() => Object.values(nodesTodo).flat(), [nodesTodo])
+  const getTodoFromCard = (card: TodoKanbanCard): TodoType => {
+    return todosArray.find((todo) => todo.nodeid === card.nodeid && todo.id === card.todoid)
+  }
+
   const handleCardMove = (card, source, destination) => {
     const readOnly = card?.todo?.nodeid && isReadonly(accessWhenShared(card?.todo?.nodeid))
     // mog('card moved', { card, source, destination, readOnly })
@@ -62,7 +67,7 @@ const TodoKanban = () => {
     if (!selectedCard) {
       return
     }
-    const nodeid = selectedCard.todo.nodeid
+    const nodeid = selectedCard.nodeid
     push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
@@ -79,32 +84,23 @@ const TodoKanban = () => {
 
   const handleCardMoveNext = () => {
     if (!selectedCard) return
-    const newStatus = getNextStatus(selectedCard.todo.metadata.status)
-    changeStatus(selectedCard.todo, newStatus)
-    setSelectedCard({
-      ...selectedCard,
-      todo: { ...selectedCard.todo, metadata: { ...selectedCard.todo.metadata, status: newStatus } }
-    })
+    const todoFromCard = getTodoFromCard(selectedCard)
+    const newStatus = getNextStatus(todoFromCard.metadata.status)
+    changeStatus(todoFromCard, newStatus)
   }
 
   const handleCardMovePrev = () => {
     if (!selectedCard) return
-    const newStatus = getPrevStatus(selectedCard.todo.metadata.status)
+    const todoFromCard = getTodoFromCard(selectedCard)
+    const newStatus = getPrevStatus(todoFromCard.metadata.status)
     // mog('new status', { newStatus, selectedCard })
-    changeStatus(selectedCard.todo, newStatus)
-    setSelectedCard({
-      ...selectedCard,
-      todo: { ...selectedCard.todo, metadata: { ...selectedCard.todo.metadata, status: newStatus } }
-    })
+    changeStatus(todoFromCard, newStatus)
   }
 
   const changeSelectedPriority = (priority: PriorityType) => {
     if (!selectedCard) return
-    changePriority(selectedCard.todo, priority)
-    setSelectedCard({
-      ...selectedCard,
-      todo: { ...selectedCard.todo, metadata: { ...selectedCard.todo.metadata, priority } }
-    })
+    const todoFromCard = getTodoFromCard(selectedCard)
+    changePriority(todoFromCard, priority)
   }
 
   const selectNewCard = (direction: 'up' | 'down' | 'left' | 'right') => {
@@ -113,11 +109,11 @@ const TodoKanban = () => {
       return
     }
 
-    const selectedColumn = board.columns.find(
-      (column) => column.id === selectedCard.todo.metadata.status
-    ) as KanbanBoardColumn
+    const selectedColumn = board.columns.find((column) => column.id === selectedCard.status) as KanbanBoardColumn
     const selectedColumnLength = selectedColumn.cards.length
-    const selectedIndex = selectedColumn.cards.findIndex((card) => card.id === selectedCard.id)
+    const selectedIndex = selectedColumn.cards.findIndex(
+      (card) => card.todoid === selectedCard.todoid && card.nodeid === selectedCard.nodeid
+    )
 
     // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
 
@@ -251,11 +247,16 @@ const TodoKanban = () => {
       }
     }
   }, [board, selectedCard, isModalOpen, isPreviewEditors])
-  const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
+
+  const RenderCard = (
+    { id, todoid, nodeid }: { id: string; todoid: string; nodeid: string },
+    { dragging }: { dragging: boolean }
+  ) => {
     return (
       <RenderBoardTask
         id={id}
-        todo={todo}
+        todoid={todoid}
+        nodeid={nodeid}
         selectedRef={selectedRef}
         selectedCard={selectedCard}
         overlaySidebar={overlaySidebar}

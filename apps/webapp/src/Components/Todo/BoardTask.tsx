@@ -1,39 +1,58 @@
 import React, { useMemo } from 'react'
 
-import { PriorityType, TodoType } from '@mexit/core'
+import { PriorityType } from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
 
 import { TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
+import { useTodoStore } from '../../Stores/useTodoStore'
 import Plateless from '../Editor/Plateless'
 import { TodoBase as Todo } from '../Todo/Todo'
 
 interface RenderTaskProps {
   id: string
-  todo: TodoType
+
+  // TODO: Remove dependency on complete todo object
+  // Fetch the data from the store instead and refresh the state when the store changes
+  todoid: string
+  nodeid: string
+
+  /** reference to the selected card, this is set to the task card if the id match */
   selectedRef?: React.RefObject<HTMLDivElement>
+
   selectedCard?: TodoKanbanCard | null
+
+  /** whether the task is in a static kanban board, for example in read only view embeds */
   staticBoard?: boolean
+
+  /** Function to call to refresh the data in the task, after a change */
   refreshCallback?: () => void
+
+  /** Whether the sidebar is currently overlaying the content, needed for width in kanban */
   overlaySidebar?: boolean
+
+  /** Whether the card is being dragged, styling */
   dragging?: boolean
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
   ({
     id,
+    todoid,
+    nodeid,
     overlaySidebar,
     staticBoard,
     refreshCallback,
-    todo,
     selectedCard,
     selectedRef,
     dragging
   }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
+    const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
 
+    const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
     const sidebar = useLayoutStore((store) => store.sidebar)
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()

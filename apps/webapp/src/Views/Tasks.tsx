@@ -84,7 +84,7 @@ const Tasks = () => {
         {
           {
             [ViewType.Kanban]: <TodoKanban />,
-            [ViewType.List]: <TodoList todos={nodesTodo} />
+            [ViewType.List]: <TodoList />
           }[currentViewType]
         }
       </TaskViewSection>

@@ -158,6 +158,11 @@ export const useTaskFilterFunctions = (): SearchFilterFunctions => {
       return res
     },
 
+    status: (item, f) => {
+      const res = filterAndJoin(f, (v) => item.metadata?.status === v.value)
+      return res
+    },
+
     mention: (item, f) => {
       const res = filterAndJoin(f, (v) => item.mentions?.includes(v.value))
       return res

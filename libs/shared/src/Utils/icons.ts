@@ -20,6 +20,7 @@ export const FilterTypeIcons = {
   date: 'ri:calendar-2-line',
   state: 'ri:checkbox-circle-line',
   has: 'ri:shape-line',
+  status: 'ri:checkbox-circle-line',
   domain: 'ri:earth-line'
 }
 

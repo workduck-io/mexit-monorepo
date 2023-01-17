@@ -23,7 +23,6 @@ export const getFilterJoinIcon = (join: FilterJoin): MIcon => {
 }
 
 export const useFilterIcons = () => {
-  const ilinks = useDataStore((state) => state.ilinks)
   const namespaces = useDataStore((state) => state.namespaces)
   const { getNamespaceIcon } = useNamespaces()
 
@@ -58,6 +57,18 @@ export const useFilterIcons = () => {
 
       case 'state':
         return { type: 'ICON', value: 'ri:checkbox-circle-line' }
+
+      case 'status':
+        switch (value) {
+          case 'todo':
+            return { type: 'ICON', value: 'mex:task-todo' }
+          case 'pending':
+            return { type: 'ICON', value: 'mex:task-progress' }
+          case 'completed':
+            return { type: 'ICON', value: 'mex:task-complete' }
+          default:
+            return { type: 'ICON', value: 'mex:task-progress' }
+        }
 
       case 'has':
         switch (value) {

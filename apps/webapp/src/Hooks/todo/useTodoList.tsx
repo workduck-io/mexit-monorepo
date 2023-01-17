@@ -40,6 +40,7 @@ export const useTodoList = () => {
       })
       .flat()
       .filter((todo) => todo !== undefined)
+      .map((todo) => ({ id: `TASK_LIST_${todo.id}_${todo.nodeid}`, todoid: todo.id, nodeid: todo.nodeid }))
   }
 
   return { getList }
