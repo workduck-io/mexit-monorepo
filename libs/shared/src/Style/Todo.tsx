@@ -59,6 +59,13 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
 
 export const StyledTasksKanban = styled(StyledBoard)``
 
+export const TaskViewSection = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: ${({ theme }) => theme.spacing.medium};
+`
+
 export const StyledTasksKanbanBlock = styled(StyledBoard)`
   ${SearchFilterListCurrent} {
     padding: ${({ theme }) => theme.spacing.small};
@@ -172,7 +179,7 @@ export const TaskColumnHeader = styled.div`
 `
 
 export const TaskCard = styled.div<{
-  dragging: boolean
+  dragging?: boolean
   selected: boolean
   staticBoard?: boolean
   sidebarExpanded?: boolean

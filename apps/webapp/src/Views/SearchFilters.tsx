@@ -23,7 +23,6 @@ import NewFilterMenu from '../Components/Filters/NewFilterMenu'
 import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 
 interface SearchFiltersProps {
-  result?: any
   filters: Filters
   currentFilters: Filter[]
   globalJoin: GlobalFilterJoin
@@ -41,7 +40,6 @@ const SearchFilters = ({
   currentFilters,
   addCurrentFilter,
   changeCurrentFilter,
-  result,
   removeCurrentFilter,
   resetCurrentFilters,
   globalJoin,

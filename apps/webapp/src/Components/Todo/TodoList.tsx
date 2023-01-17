@@ -1,16 +1,18 @@
-import React from 'react'
-
 import { TodosType } from '@mexit/core'
 import { TaskListWrapper } from '@mexit/shared'
 
 import { useTodoList } from '../../Hooks/todo/useTodoList'
-import { RenderBoardTask } from '../../Views/Tasks'
 
+import { RenderBoardTask } from './BoardTask'
 
 interface TodoListProps {
   todos: TodosType
 }
 
+/**
+ * Todo list
+ * The list view for tasks
+ */
 const TodoList = ({ todos }: TodoListProps) => {
   const { getList } = useTodoList()
 
@@ -21,7 +23,7 @@ const TodoList = ({ todos }: TodoListProps) => {
     <TaskListWrapper>
       {list.map((todo) => (
         <div key={todo.id}>
-          <RenderBoardTask id={todo.id} todo={todo} overlaySidebar={false} dragging={false} />
+          <RenderBoardTask id={todo.id} todo={todo} />
         </div>
       ))}
     </TaskListWrapper>

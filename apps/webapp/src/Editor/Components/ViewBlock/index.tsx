@@ -7,19 +7,19 @@ import { useSelected } from 'slate-react'
 
 import { TodoType } from '@mexit/core'
 import {
-  RootElement,
-  SearchFilterListCurrent,
-  StyledTasksKanbanBlock,
-  StyledViewBlockPreview,
-  TaskColumnHeader
+    RootElement,
+    SearchFilterListCurrent,
+    StyledTasksKanbanBlock,
+    StyledViewBlockPreview,
+    TaskColumnHeader
 } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
+import { RenderBoardTask } from '../../../Components/Todo/BoardTask'
 import { useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
-import { RenderBoardTask } from '../../../Views/Tasks'
 import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
 
 const ViewBlock = (props: any) => {
