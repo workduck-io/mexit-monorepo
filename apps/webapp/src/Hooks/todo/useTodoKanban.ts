@@ -1,6 +1,7 @@
 import { ELEMENT_TODO_LI } from '@udecode/plate'
 
 import {
+  capitalize,
   convertContentToRawText,
   Filter,
   FilterTypeWithOptions,
@@ -94,6 +95,7 @@ export const useTodoKanban = () => {
     const todoTags: string[] = []
     const todoMentions: string[] = []
     const todoStatuses: TodoStatus[] = []
+    const todoPriorities: PriorityType[] = []
 
     Object.values(nodeTodos)
       .flat()
@@ -104,6 +106,7 @@ export const useTodoKanban = () => {
         todoTags.push(...(tags ?? []))
         todoMentions.push(...(todo.mentions ?? []))
         todoStatuses.push(todo.metadata?.status)
+        todoPriorities.push(todo.metadata?.priority)
       })
 
     // All paths in which the todos occur
@@ -245,7 +248,7 @@ export const useTodoKanban = () => {
         acc[status] += 1
       }
       return acc
-    }, {} as { [tag: string]: number })
+    }, {} as { [status: string]: number })
 
     const statusFilters = (Object.keys(TodoStatus) as Array<keyof typeof TodoStatus>).reduce(
       (acc, c) => {
@@ -269,7 +272,37 @@ export const useTodoKanban = () => {
       } as FilterTypeWithOptions
     )
 
-    const allFilters = [nodeFilters, tagFilters, mentionFilters, namespaceFilters, statusFilters]
+    const rankedPriorities = todoPriorities.reduce((acc, priority) => {
+      if (!acc[priority]) {
+        acc[priority] = 1
+      } else {
+        acc[priority] += 1
+      }
+      return acc
+    }, {} as { [priority: string]: number })
+
+    const priorityFilter = (Object.keys(PriorityType) as Array<keyof typeof PriorityType>).reduce(
+      (acc, c) => {
+        const rank = rankedPriorities[c] ?? 0
+        const priority = c
+        // const [tag, rank] = c
+        if (rank >= 0) {
+          acc.options.push({
+            id: `filter_status_${priority}`,
+            label: capitalize(priority),
+            value: priority,
+            count: rank
+          })
+        }
+        return acc
+      },
+      {
+        type: 'priority',
+        label: 'Priority',
+        options: []
+      } as FilterTypeWithOptions
+    )
+    const allFilters = [nodeFilters, tagFilters, mentionFilters, namespaceFilters, statusFilters, priorityFilter]
     mog('allFilters for tasks', { todoTags, rankedTags, rankedPaths, nodeFilters, rankedStatuses, statusFilters })
     return allFilters
   }

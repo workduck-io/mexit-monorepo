@@ -58,6 +58,18 @@ export const useFilterIcons = () => {
       case 'state':
         return { type: 'ICON', value: 'ri:checkbox-circle-line' }
 
+      case 'priority':
+        switch (value) {
+          case 'low':
+            return { type: 'ICON', value: 'ph:cell-signal-low-fill' }
+          case 'medium':
+            return { type: 'ICON', value: 'ph:cell-signal-medium-fill' }
+          case 'high':
+            return { type: 'ICON', value: 'ph:cell-signal-full-fill' }
+          default:
+            return { type: 'ICON', value: 'ph:cell-signal-none-fill' }
+        }
+
       case 'status':
         switch (value) {
           case 'todo':

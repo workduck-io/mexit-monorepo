@@ -27,7 +27,9 @@ export const FilterTypeArray = [
   'tag', // Does item have tag
   'date', // Does item have date TODO: Use updated and created will need before after and range
   'state', // Does item have a specific
+
   'status', // Does item have a specific status (Task specific)
+  'priority', // Does item have a specific priority (Task specific)
 
   // TODO: Determine whether it will be a single select or not
   'has', // Does item have a specific data property

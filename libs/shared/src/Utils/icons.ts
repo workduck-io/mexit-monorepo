@@ -21,7 +21,8 @@ export const FilterTypeIcons = {
   state: 'ri:checkbox-circle-line',
   has: 'ri:shape-line',
   status: 'ri:checkbox-circle-line',
-  domain: 'ri:earth-line'
+  domain: 'ri:earth-line',
+  priority: 'ph:cell-signal-medium-fill'
 }
 
 export const StringToMIcon = (iconString: string): MIcon | undefined => {

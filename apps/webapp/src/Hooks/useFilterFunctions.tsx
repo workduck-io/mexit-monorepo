@@ -180,6 +180,11 @@ export const useTaskFilterFunctions = (): SearchFilterFunctions => {
       return res
     },
 
+    priority: (item, f) => {
+      const res = filterAndJoin(f, (v) => item.metadata?.priority === v.value)
+      return res
+    },
+
     space: (item, f) => {
       const iLink = getILinkFromNodeid(item.nodeid)
       const res = filterAndJoin(f, (v) => iLink?.namespace === v.value)
