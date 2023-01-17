@@ -9,6 +9,7 @@ import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
 import { OverlaySidebarWindowWidth, StyledTasksKanban, TaskColumnHeader } from '@mexit/shared'
 
+import { useTodoFilters } from '../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../../Hooks/useNavigation'
@@ -35,7 +36,8 @@ const TodoKanban = () => {
   const isModalOpen = useModalStore((store) => store.open)
   const sidebar = useLayoutStore((store) => store.sidebar)
 
-  const { getTodoBoard, changeStatus, changePriority, currentFilters, globalJoin } = useTodoKanban()
+  const { getTodoBoard, changeStatus, changePriority } = useTodoKanban()
+  const { globalJoin, currentFilters, sortOrder, sortType } = useTodoFilters()
 
   const { push } = useNavigation()
   const { goTo } = useRouting()
@@ -43,7 +45,7 @@ const TodoKanban = () => {
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
   const { accessWhenShared } = usePermissions()
 
-  const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters])
+  const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters, sortOrder, sortType])
 
   const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)

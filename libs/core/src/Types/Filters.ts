@@ -52,6 +52,12 @@ export const FilterJoinArray = [
 // How to join the values of a single filter
 export type FilterJoin = typeof FilterJoinArray[number]
 
+export const SortOrderArray = ['ascending', 'descending'] as const
+export type SortOrder = typeof SortOrderArray[number]
+
+export const SortTypeArray = ['updated', 'created', 'status', 'priority'] as const
+export type SortType = typeof SortTypeArray[number]
+
 /** Filter join example
  *
  * For items A, B, C, D

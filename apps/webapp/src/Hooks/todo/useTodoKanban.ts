@@ -18,7 +18,7 @@ import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
-import { useTaskFilterFunctions } from '../useFilterFunctions'
+import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
 import { useLinks } from '../useLinks'
 import { useMentions } from '../useMentions'
 import { useNodes } from '../useNodes'
@@ -30,6 +30,7 @@ export interface TodoKanbanCard extends KanbanCard {
   todoid: string
   nodeid: string
   status: TodoStatus
+  priority: PriorityType
 }
 
 export interface KanbanBoardColumn extends KanbanColumn {
@@ -53,12 +54,10 @@ export const getPureContent = (todo: TodoType) => {
 }
 
 export const useTodoKanban = () => {
-  const filters = useTodoFilterStore((state) => state.filters)
-  const currentFilters = useTodoFilterStore((state) => state.currentFilters)
-  const setCurrentFilters = useTodoFilterStore((state) => state.setCurrentFilters)
   const setFilters = useTodoFilterStore((s) => s.setFilters)
   const globalJoin = useTodoFilterStore((state) => state.globalJoin)
-  const setGlobalJoin = useTodoFilterStore((state) => state.setGlobalJoin)
+  const sortOrder = useTodoFilterStore((state) => state.sortOrder)
+  const sortType = useTodoFilterStore((state) => state.sortType)
 
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
   const tags = useDataStore((state) => state.tags)
@@ -325,25 +324,22 @@ export const useTodoKanban = () => {
               id: `KANBAN_ID_${todo.nodeid}_${todo.id}`,
               todoid: todo.id,
               nodeid: todo.nodeid,
-              status: todo?.metadata?.status
+              status: todo?.metadata?.status,
+              priority: todo?.metadata?.priority
             })
         })
     })
 
     // mog('getTodoBoard', { nodetodos, todoBoard })
 
-    // TODO: Implement a better sorting based on filterStore state
-    // todoBoard.columns.forEach((column) => {
-    //   column.cards.sort((a, b) => {
-    //     if (TodoRanks[a.todo?.metadata?.priority] < TodoRanks[b.todo?.metadata?.priority]) return 1
-    //     else return -1
-    //   })
-    // })
-
-    // todoBoard.columns.sort((a, b) => {
-    //   if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
-    //   else return -1
-    // })
+    if (sortOrder && sortType) {
+      todoBoard.columns.forEach((column) => {
+        column.cards.sort(taskSortFunctions[sortType])
+        if (sortOrder === 'descending') {
+          column.cards.reverse()
+        }
+      })
+    }
 
     return todoBoard
   }
@@ -399,7 +395,8 @@ export const useTodoKanban = () => {
               id: `KANBAN_ID_${todo.nodeid}_${todo.id}`,
               todoid: todo.id,
               nodeid: todo.nodeid,
-              status: todo?.metadata?.status
+              status: todo?.metadata?.status,
+              priority: todo?.metadata?.priority
             })
         })
     })
@@ -410,12 +407,14 @@ export const useTodoKanban = () => {
     setFilters(todoFilters)
 
     // Reimplement sorting
-    //todoBoard.columns.forEach((column) => {
-    //   column.cards.sort((a, b) => {
-    //     if (TodoRanks[a.todo?.metadata?.priority] < TodoRanks[b.todo?.metadata?.priority]) return 1
-    //     else return -1
-    //   })
-    // })
+    if (sortOrder && sortType) {
+      todoBoard.columns.forEach((column) => {
+        column.cards.sort(taskSortFunctions[sortType])
+        if (sortOrder === 'descending') {
+          column.cards.reverse()
+        }
+      })
+    }
 
     // todoBoard.columns.sort((a, b) => {
     //   if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
@@ -425,41 +424,11 @@ export const useTodoKanban = () => {
     return todoBoard
   }
 
-  const resetFilters = () => {
-    setFilters([])
-  }
-
-  const addCurrentFilter = (filter: Filter) => {
-    setCurrentFilters([...currentFilters, filter])
-  }
-
-  const removeCurrentFilter = (filter: Filter) => {
-    setCurrentFilters(currentFilters.filter((f) => f.id !== filter.id))
-  }
-
-  const changeCurrentFilter = (filter: Filter) => {
-    setCurrentFilters(currentFilters.map((f) => (f.id === filter.id ? filter : f)))
-  }
-
-  const resetCurrentFilters = () => {
-    setCurrentFilters([])
-  }
-
   return {
     getPureContent,
     getTodoBoard,
     changePriority,
     changeStatus,
-    addCurrentFilter,
-    removeCurrentFilter,
-    changeCurrentFilter,
-    resetCurrentFilters,
-    resetFilters,
-    filters,
-    getFilteredTodoBoard,
-    currentFilters,
-    setCurrentFilters,
-    globalJoin,
-    setGlobalJoin
+    getFilteredTodoBoard
   }
 }

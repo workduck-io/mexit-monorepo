@@ -19,6 +19,7 @@ import {
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
+import SortMenu, { SortMenuProps } from '../Components/Filters/SortMenu'
 
 import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 
@@ -33,6 +34,8 @@ interface SearchFiltersProps {
   resetCurrentFilters: () => void
   // If present, a view Selector is added at the end with the given properties
   viewSelectorProps?: ViewSelectorProps
+
+  sortMenuProps?: SortMenuProps
 }
 
 const SearchFilters = ({
@@ -44,7 +47,8 @@ const SearchFilters = ({
   resetCurrentFilters,
   globalJoin,
   setGlobalJoin,
-  viewSelectorProps
+  viewSelectorProps,
+  sortMenuProps
 }: SearchFiltersProps) => {
   const randomId = useMemo(() => nanoid(), [filters, currentFilters])
 
@@ -83,7 +87,8 @@ const SearchFilters = ({
         ))}
       </SearchFiltersWrapper>
       <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} />
-      <ViewSelector {...viewSelectorProps} />
+      {sortMenuProps && <SortMenu {...sortMenuProps} />}
+      {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
     </SearchFilterWrapper>
   )
 }

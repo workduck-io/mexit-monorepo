@@ -1,4 +1,15 @@
-import { Filter, FilterJoin, FilterValue, getReminderState, isElder, Link, SearchFilterFunctions } from '@mexit/core'
+import {
+  Filter,
+  FilterJoin,
+  FilterValue,
+  getReminderState,
+  isElder,
+  Link,
+  SearchFilterFunctions,
+  SortType,
+  TodoRanks,
+  TodoStatusRanks
+} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
@@ -141,6 +152,7 @@ export const useLinkFilterFunctions = () => {
 
   return filterFunctions
 }
+
 export const useTaskFilterFunctions = (): SearchFilterFunctions => {
   const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
 
@@ -173,5 +185,24 @@ export const useTaskFilterFunctions = (): SearchFilterFunctions => {
       const res = filterAndJoin(f, (v) => iLink?.namespace === v.value)
       return res
     }
+  }
+}
+
+export const taskSortFunctions: Record<SortType, (a: any, b: any) => number> = {
+  created: (a, b) => {
+    throw new Error('Not implemented')
+  },
+  updated: (a, b) => {
+    throw new Error('Not implemented')
+  },
+  status: (a, b) => {
+    // console.log('status', a, b)
+    if (TodoStatusRanks[a.status] < TodoStatusRanks[b.status]) return 1
+    else return -1
+  },
+  priority: (a, b) => {
+    // console.log('priority', a, b)
+    if (TodoRanks[a.priority] < TodoRanks[b.priority]) return 1
+    else return -1
   }
 }

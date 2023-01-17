@@ -7,7 +7,7 @@ import { Heading, PageContainer, TaskViewSection, ViewType } from '@mexit/shared
 import TaskHeader from '../Components/TaskHeader'
 import TodoKanban from '../Components/Todo/TodoKanban'
 import TodoList from '../Components/Todo/TodoList'
-import { useTodoKanban } from '../Hooks/todo/useTodoKanban'
+import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore } from '../Hooks/useTaskViews'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -35,8 +35,12 @@ const Tasks = () => {
     filters,
     currentFilters,
     globalJoin,
-    setGlobalJoin
-  } = useTodoKanban()
+    setGlobalJoin,
+    sortOrder,
+    sortType,
+    onSortTypeChange,
+    onSortOrderChange
+  } = useTodoFilters()
 
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
@@ -79,6 +83,13 @@ const Tasks = () => {
               setCurrentViewType(viewType)
             },
             availableViews: [ViewType.Kanban, ViewType.List]
+          }}
+          sortMenuProps={{
+            sortOrder,
+            sortType,
+            onSortTypeChange,
+            onSortOrderChange,
+            availableSortTypes: ['status', 'priority']
           }}
         />
         {

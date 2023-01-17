@@ -1,6 +1,6 @@
 import { convertContentToRawText, defaultContent, SNIPPET_PREFIX, TodosType } from '@mexit/core'
 
-import { useTaskFilterFunctions } from '../useFilterFunctions'
+import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
 import { useNodes } from '../useNodes'
 import { useSearchExtra } from '../useSearch'
 
@@ -13,6 +13,9 @@ export const useTodoList = () => {
   const extra = getSearchExtra()
 
   const globalJoin = useTodoFilterStore((state) => state.globalJoin)
+  const sortOrder = useTodoFilterStore((state) => state.sortOrder)
+  const sortType = useTodoFilterStore((state) => state.sortType)
+
   const getList = (todos: TodosType) => {
     const currentFilters = useTodoFilterStore.getState().currentFilters
     return Object.entries(todos)
@@ -40,7 +43,22 @@ export const useTodoList = () => {
       })
       .flat()
       .filter((todo) => todo !== undefined)
-      .map((todo) => ({ id: `TASK_LIST_${todo.id}_${todo.nodeid}`, todoid: todo.id, nodeid: todo.nodeid }))
+      .map((todo) => ({
+        id: `TASK_LIST_${todo.id}_${todo.nodeid}`,
+        todoid: todo.id,
+        nodeid: todo.nodeid,
+        status: todo.metadata?.status,
+        priority: todo.metadata?.priority
+      }))
+      .sort((a, b) => {
+        if (sortOrder && sortType) {
+          if (sortOrder === 'ascending') {
+            return taskSortFunctions[sortType](a, b)
+          } else {
+            return taskSortFunctions[sortType](b, a)
+          }
+        } else return 0
+      })
   }
 
   return { getList }
