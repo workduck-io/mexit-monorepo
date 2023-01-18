@@ -1,10 +1,17 @@
-import { convertContentToRawText, defaultContent, SNIPPET_PREFIX, TodosType } from '@mexit/core'
+import {
+  convertContentToRawText,
+  defaultContent,
+  Filter,
+  GlobalFilterJoin,
+  SNIPPET_PREFIX,
+  SortOrder,
+  SortType,
+  TodosType
+} from '@mexit/core'
 
 import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
 import { useNodes } from '../useNodes'
 import { useSearchExtra } from '../useSearch'
-
-import { useTodoFilterStore } from './useTodoFilters'
 
 export const useTodoList = () => {
   const { isInArchive } = useNodes()
@@ -12,12 +19,13 @@ export const useTodoList = () => {
   const { getSearchExtra } = useSearchExtra()
   const extra = getSearchExtra()
 
-  const globalJoin = useTodoFilterStore((state) => state.globalJoin)
-  const sortOrder = useTodoFilterStore((state) => state.sortOrder)
-  const sortType = useTodoFilterStore((state) => state.sortType)
-
-  const getList = (todos: TodosType) => {
-    const currentFilters = useTodoFilterStore.getState().currentFilters
+  const getList = (
+    todos: TodosType,
+    currentFilters: Filter[],
+    globalJoin: GlobalFilterJoin,
+    sortOrder: SortOrder,
+    sortType: SortType
+  ) => {
     return Object.entries(todos)
       .map(([nodeid, todos]) => {
         if (nodeid.startsWith(SNIPPET_PREFIX)) return

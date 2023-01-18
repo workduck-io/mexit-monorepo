@@ -5,13 +5,12 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSelected } from 'slate-react'
 
-import { TodoType } from '@mexit/core'
 import {
-    RootElement,
-    SearchFilterListCurrent,
-    StyledTasksKanbanBlock,
-    StyledViewBlockPreview,
-    TaskColumnHeader
+  RootElement,
+  SearchFilterListCurrent,
+  StyledTasksKanbanBlock,
+  StyledViewBlockPreview,
+  TaskColumnHeader
 } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
@@ -65,13 +64,17 @@ const ViewBlock = (props: any) => {
 
   const selected = useSelected()
 
-  const RenderCard = ({ id, todo }: { id: string; todo: TodoType }, { dragging }: { dragging: boolean }) => {
+  const RenderCard = (
+    { id, todoid, nodeid }: { id: string; todoid: string; nodeid: string },
+    { dragging }: { dragging: boolean }
+  ) => {
     return (
       <RenderBoardTask
         staticBoard
         refreshCallback={refreshView}
         id={id}
-        todo={todo}
+        todoid={todoid}
+        nodeid={nodeid}
         overlaySidebar={false}
         dragging={dragging}
       />
