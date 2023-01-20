@@ -35,8 +35,7 @@ const syncStores = () => {
         { field: 'bookmarks' },
         { field: 'namespaces' },
         { field: 'sharedNodes' },
-        { field: 'tags' },
-        { field: 'publicNodes' }
+        { field: 'tags' }
       ]
     })
 
