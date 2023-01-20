@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { PriorityType, TodoType } from '@mexit/core'
+import { mog, PriorityType, TodoType } from '@mexit/core'
 import { TaskListWrapper } from '@mexit/shared'
 
 import { useTodoFilterStore } from '../../Hooks/todo/useTodoFilters'
@@ -41,7 +41,7 @@ const TodoList = () => {
 
   const { changeStatus, changePriority } = useTodoKanban()
 
-  const selectedRef = useRef<HTMLDivElement>(null)
+  // const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
@@ -53,6 +53,7 @@ const TodoList = () => {
   const selectFirst = () => {
     const firstCard = list.length > 0 && list[0]
     if (firstCard) {
+      console.log('select first', { firstCard })
       setSelectedCardId(firstCard.id)
     }
   }
@@ -64,59 +65,44 @@ const TodoList = () => {
     changePriority(todoFromCard, priority)
   }
 
-  const selectedIndex = useMemo(() => list.findIndex((card) => card.id === selectedCardId), [selectedCardId, list])
+  const selectNewCard = useCallback(
+    (direction: 'up' | 'down') => {
+      const selectedIndex = list.findIndex((card) => card.id === selectedCardId)
+      console.log('selectNewCard', { direction, selectedCardId, selectedIndex })
+      if (!selectedCardId) {
+        selectFirst()
+        return
+      }
+      // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
+      switch (direction) {
+        case 'up': {
+          const prevCard = list[(selectedIndex - 1 + list.length) % list.length]
+          // mog('prevCard', { prevCard })
 
-  const selectNewCard = (direction: 'up' | 'down') => {
-    if (!selectedCardId) {
-      selectFirst()
-      return
-    }
-    // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
-    switch (direction) {
-      case 'up': {
-        const prevCard = list[(selectedIndex - 1 + list.length) % list.length]
-        // mog('prevCard', { prevCard })
-
-        if (prevCard) {
-          // mog('selected card', { selectedCard, prevCard })
-          setSelectedCardId(prevCard.id)
+          if (prevCard) {
+            mog('selected card', { selectedCardId, prevCard, selectedIndex })
+            setSelectedCardId(prevCard.id)
+          }
+          break
         }
-        break
-      }
 
-      case 'down': {
-        const nextCard = list[(selectedIndex + 1) % list.length]
-        // mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
-        if (nextCard) {
-          // mog('selected card', { selectedCard, nextCard })
-          setSelectedCardId(nextCard.id)
+        case 'down': {
+          const nextCard = list[(selectedIndex + 1) % list.length]
+          // mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
+          if (nextCard) {
+            mog('selected card', { selectedCardId, nextCard })
+            setSelectedCardId(nextCard.id)
+          }
+          break
         }
-        break
       }
-    }
-  }
-
-  useEffect(() => {
-    if (selectedRef.current) {
-      const el = selectedRef.current
-      // is element in viewport
-      const rect = el.getBoundingClientRect()
-      const isInViewport =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-
-      // mog('scroll to selected', { selected, top, isInViewport, rect })
-      if (!isInViewport) {
-        selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
-    }
-  }, [selectedCardId])
+    },
+    [selectedCardId]
+  )
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
-      console.log('event', { e })
+      // console.log('event', { e })
       enableShortcutHandler(() => {
         e.preventDefault()
         fn(e)
@@ -136,7 +122,7 @@ const TodoList = () => {
 
       return wrapEvents({
         Escape: () => {
-          if (selectedCardId) setSelectedCardId(null)
+          setSelectedCardId(null)
         },
 
         ArrowDown: () => selectNewCard('down'),
@@ -158,7 +144,7 @@ const TodoList = () => {
         unsubscribe()
       }
     }
-  }, [list, selectedCardId, isModalOpen, isPreviewEditors])
+  }, [isModalOpen, isPreviewEditors, selectNewCard])
 
   return (
     <TaskListWrapper>
@@ -166,7 +152,6 @@ const TodoList = () => {
         <div key={todoCard.id}>
           <RenderBoardTask
             selectedCardId={selectedCardId}
-            selectedRef={selectedRef}
             id={todoCard.id}
             todoid={todoCard.todoid}
             nodeid={todoCard.nodeid}

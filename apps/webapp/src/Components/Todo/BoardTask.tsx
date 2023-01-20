@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { PriorityType } from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
@@ -19,9 +19,6 @@ interface RenderTaskProps {
   todoid: string
   nodeid: string
 
-  /** reference to the selected card, this is set to the task card if the id match */
-  selectedRef?: React.RefObject<HTMLDivElement>
-
   selectedCardId?: string | null
 
   /** whether the task is in a static kanban board, for example in read only view embeds */
@@ -38,25 +35,37 @@ interface RenderTaskProps {
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({
-    id,
-    todoid,
-    nodeid,
-    overlaySidebar,
-    staticBoard,
-    refreshCallback,
-    selectedCardId,
-    selectedRef,
-    dragging
-  }: RenderTaskProps) => {
+  ({ id, todoid, nodeid, overlaySidebar, staticBoard, refreshCallback, selectedCardId, dragging }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
+    const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
     const sidebar = useLayoutStore((store) => store.sidebar)
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
+
+    useEffect(() => {
+      if (ref.current) {
+        if (selectedCardId === id) {
+          ref.current.focus()
+        } else return
+        const el = ref.current
+        // is element in viewport
+        const rect = el.getBoundingClientRect()
+        const isInViewport =
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+        // mog('scroll to selected', { selected, top, isInViewport, rect })
+        if (!isInViewport) {
+          ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }
+    }, [selectedCardId])
 
     const controls = useMemo(
       () => ({
@@ -79,8 +88,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
     return (
       <TaskCard
-        ref={selectedCardId && !!selectedRef && id === selectedCardId ? selectedRef : null}
         selected={selectedCardId && selectedCardId === id}
+        ref={ref}
         dragging={dragging}
         staticBoard={staticBoard}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}

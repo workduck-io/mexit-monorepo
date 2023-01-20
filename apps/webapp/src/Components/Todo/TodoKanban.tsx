@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
 
@@ -47,7 +47,6 @@ const TodoKanban = () => {
 
   const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters, sortOrder, sortType])
 
-  const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const todosArray = useMemo(() => Object.values(nodesTodo).flat(), [nodesTodo])
@@ -184,24 +183,6 @@ const TodoKanban = () => {
     }
   }
 
-  useEffect(() => {
-    if (selectedRef.current) {
-      const el = selectedRef.current
-      // is element in viewport
-      const rect = el.getBoundingClientRect()
-      const isInViewport =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-
-      // mog('scroll to selected', { selected, top, isInViewport, rect })
-      if (!isInViewport) {
-        selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
-    }
-  }, [selectedCard])
-
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
       console.log('event', { e })
@@ -262,7 +243,6 @@ const TodoKanban = () => {
         id={id}
         todoid={todoid}
         nodeid={nodeid}
-        selectedRef={selectedRef}
         selectedCardId={selectedCard ? selectedCard?.id : null}
         overlaySidebar={overlaySidebar}
         dragging={dragging}
