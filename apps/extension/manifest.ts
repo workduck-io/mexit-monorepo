@@ -16,7 +16,17 @@ const manifest: chrome.runtime.ManifestV3 = {
   omnibox: { keyword: '[[' },
   background: { service_worker: 'background.js', type: 'module' },
   content_scripts: [{ matches: ['http://*/*', 'https://*/*'], js: ['content.js'], css: ['global.css'] }],
-  permissions: ['contextMenus', 'storage', 'tabs', 'activeTab', 'search', 'notifications', 'downloads'],
+  permissions: [
+    'contextMenus',
+    'storage',
+    'tabs',
+    'activeTab',
+    'search',
+    'notifications',
+    'downloads',
+    'clipboardRead',
+    'clipboardWrite'
+  ],
   web_accessible_resources: [{ resources: ['assets/*', '*.svg'], matches: ['http://*/*', 'https://*/*'] }]
 }
 

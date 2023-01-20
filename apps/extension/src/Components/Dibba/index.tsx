@@ -2,24 +2,17 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Icon } from '@iconify/react'
-import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
 import {
   apiURLs,
-  convertToCopySnippet,
   defaultContent,
-  defaultCopyConverter,
-  defaultCopyFilter,
-  ELEMENT_TAG,
   fuzzySearch,
   getMIcon,
   NodeEditorContent,
-  parseSnippet,
   QuickLinkType,
-  SEPARATOR,
-  Snippet
+  SEPARATOR
 } from '@mexit/core'
 import {
   ActionTitle,
@@ -37,19 +30,16 @@ import {
 } from '@mexit/shared'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
-import { CopyTag } from '../../Editor/components/Tags/CopyTag'
-import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useAuthStore } from '../../Hooks/useAuth'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
 import { useContentStore } from '../../Stores/useContentStore'
-import useDataStore from '../../Stores/useDataStore'
 import { useLinkStore } from '../../Stores/useLinkStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
-import { copySnippetToClipboard, getUpcomingData, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
+import { copySnippetToClipboard, copyToClipboard, getUpcomingData, simulatePaste } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 
 import { ComboboxItem, ComboboxRoot } from './styled'
@@ -83,24 +73,28 @@ export default function Dibba() {
   const getContent = useContentStore((store) => store.getContent)
   const snippets = useSnippetStore((s) => Object.values(s.snippets ?? {}))
 
-  const publicNodeIDs = useDataStore((store) => store.publicNodes)
-
   const pointerMoved = usePointerMovedSinceMount()
+
+  const publicNotes = useMemo(() => {
+    const publicN = Object.entries(metadata.notes).filter(([noteId, note]) => note.publicAccess)
+    return publicN.map(([noteId, note]) => {
+      const _content = getContent(noteId)
+
+      const title = getPathFromNodeIdHookless(noteId)?.split(SEPARATOR)?.pop()
+
+      return {
+        type: QuickLinkType.publicNotes,
+        id: noteId,
+        icon: metadata.notes[noteId]?.icon,
+        url: apiURLs.frontend.getPublicNodePath(noteId),
+        title,
+        content: _content?.content || defaultContent.content
+      }
+    })
+  }, [metadata.notes])
 
   const data = useMemo(
     () => [
-      ...publicNodeIDs.map((noteId) => {
-        const _content = getContent(noteId)
-
-        return {
-          type: QuickLinkType.publicNotes,
-          id: noteId,
-          icon: metadata.notes[noteId]?.icon,
-          url: apiURLs.frontend.getPublicNodePath(noteId),
-          title: getPathFromNodeIdHookless(noteId)?.split(SEPARATOR)?.pop(),
-          content: _content?.content || defaultContent.content
-        }
-      }),
       ...snippets.map((item) => ({
         type: QuickLinkType.snippet,
         icon: metadata.snippets[item.id]?.icon || DefaultMIcons.SNIPPET,
@@ -111,118 +105,66 @@ export default function Dibba() {
         type: QuickLinkType.webLinks,
         title: link.alias,
         url: apiURLs.links.shortendLink(link?.alias, getWorkspaceId())
-      }))
+      })),
+      ...publicNotes
     ],
-    [publicNodeIDs, snippets, linkCaptures]
+    [publicNotes, snippets, linkCaptures]
   )
 
-  const insertPublicNode = (item: PublicNode) => {
-    const linkEle = document.createElement('a')
-    linkEle.appendChild(document.createTextNode(item.title))
-    linkEle.href = item.url
+  const selectRange = () => {
+    const state = dibbaState.extra
 
-    dibbaState.extra.range.insertNode(linkEle)
-
-    toast.success('Inserted Public Link!')
+    try {
+      if (state.isInputType) {
+        state.node.select(state.range.startOffset, state.range.endOffset)
+      } else {
+        window.getSelection().getRangeAt(0).setStart(state.node, state.range.startOffset)
+        window.getSelection().getRangeAt(0).setEnd(state.node, state.range.endOffset)
+      }
+    } catch (err) {
+      console.error('Unable to select')
+    }
   }
 
   const insertLink = (item: any) => {
-    // const link = document.createElement('a')
-    // link.appendChild(document.createTextNode(item.title))
-    // link.href = item.content
     if (!item) return
 
-    const linkEle = document.createElement('a')
-    linkEle.appendChild(document.createTextNode(item.title))
-    linkEle.href = item.url
-
-    dibbaState.extra.range.insertNode(linkEle)
-
-    // // dibbaState.extra.range.insertNode(link)
-    // dibbaState.extra.range.insertNode(document.createTextNode(`[[${item.url}]]`))
-    // dibbaState.extra.range.collapse(false)
-
-    // // Combining the inserted text node into one
-    // document.activeElement.normalize()
-
-    toast.success('Inserted Shortened URL!')
+    copyToClipboard(item.url, `<a href=${item.url}>${item.title}</a>`).then((s) => {
+      simulatePaste()
+      toast.success('Inserted Link!')
+    })
   }
 
   const handleClick = async (item: any) => {
-    // TODO: this fails in keep
     try {
-      // Extendering the range by 2 + text after trigger length i.e. search query
-      const triggerRange = dibbaState.extra.range.cloneRange()
-      triggerRange.setStart(
-        triggerRange.startContainer,
-        triggerRange.startOffset - dibbaState.extra.textAfterTrigger.length - 2
-      )
-      triggerRange.deleteContents()
-    } catch (error) {
-      console.log(error)
-    }
-
-    const originMatch = supportedDomains[window.location.origin]
-
-    switch (item.type) {
-      case QuickLinkType.snippet: {
-        if (originMatch === 'html') {
-          const filterdContent = convertToCopySnippet(item.content)
-          const convertedContent = convertToCopySnippet(filterdContent, {
-            filter: defaultCopyFilter,
-            converter: defaultCopyConverter
-          })
-
-          const tempEditor = createPlateEditor({
-            plugins: generateEditorPluginsWithComponents(
-              createPlateUI({
-                [ELEMENT_TAG]: CopyTag as any
-              }),
-              {
-                exclude: { dnd: true }
-              }
-            )
-          })
-
-          const html = serializeHtml(tempEditor, {
-            nodes: convertedContent
-          })
-
-          const node = new DOMParser().parseFromString(html, 'text/html').body
-          dibbaState.extra.range.insertNode(node)
-          dibbaState.extra.range.collapse(false)
-
-          // Combining the inserted text node into one
-          document.activeElement.normalize()
-          simulateOnChange()
-        } else if (originMatch === 'plain') {
-          dibbaState.extra.range.insertNode(document.createTextNode(parseSnippet(item).text))
-          dibbaState.extra.range.collapse(false)
-
-          // Combining the inserted text node into one
-          document.activeElement.normalize()
-          simulateOnChange()
-        } else {
-          simulateOnChange()
-          await copySnippetToClipboard(item as Snippet)
+      selectRange()
+      switch (item.type) {
+        case QuickLinkType.snippet: {
+          await copySnippetToClipboard(item, false)
+          simulatePaste()
+          break
         }
-        break
+        case QuickLinkType.webLinks:
+        case QuickLinkType.publicNotes: {
+          insertLink(item)
+          break
+        }
       }
-      case QuickLinkType.webLinks: {
-        insertLink(item)
-        break
-      }
-      case QuickLinkType.publicNotes: {
-        insertPublicNode(item as PublicNode)
-      }
+    } catch (err) {
+      console.error('Handle Click Error', { err })
+    } finally {
+      setDibbaState({ visualState: VisualState.hidden })
     }
-
-    setDibbaState({ visualState: VisualState.hidden })
   }
 
   useEffect(() => {
     if (query) {
-      const res = fuzzySearch(data, query, (item) => item.title)
+      let res = data
+      try {
+        res = fuzzySearch(data, query, (item) => item.title)
+      } catch (err) {
+        console.log('Fuzzy Search Error: ', { err })
+      }
 
       const groups = res.reduce((acc, item) => {
         const type = item?.type
@@ -318,6 +260,7 @@ export default function Dibba() {
       ref={dibbaRef}
       top={top}
       left={left}
+      onBlur={() => setDibbaState({ visualState: VisualState.hidden })}
       offsetTop={offsetTop}
       offsetRight={window.innerWidth < left + 550}
       isOpen={dibbaState.visualState === VisualState.showing}
@@ -332,7 +275,9 @@ export default function Dibba() {
                 <ComboboxItem
                   key={index}
                   highlighted={index === activeIndex}
-                  onMouseDown={() => {
+                  onMouseDown={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     handleClick(item)
                   }}
                   onPointerMove={() => pointerMoved && setActiveIndex(index)}

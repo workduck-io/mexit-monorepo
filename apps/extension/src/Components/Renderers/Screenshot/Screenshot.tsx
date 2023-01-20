@@ -351,7 +351,6 @@ const Screenshot = () => {
         src={screenshot}
         openAsEditing
         onSubmit={(blob) => {
-          console.log('Cropped image blob here', { blob })
           onSubmit(blob)
         }}
       />

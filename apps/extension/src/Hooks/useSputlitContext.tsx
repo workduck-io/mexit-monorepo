@@ -7,13 +7,17 @@ export enum VisualState {
   hidden = 'hidden'
 }
 
+export type RangeType = { startOffset: number; endOffset: number }
+
 export type TooltipState = {
   visualState: VisualState
   id?: string
   coordinates?: DOMRect
   extra?: {
-    range: Range
+    range: RangeType
     textAfterTrigger: string
+    node?: any
+    isInputType?: boolean
   }
 }
 

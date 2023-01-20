@@ -1,14 +1,21 @@
 import { mog } from '@mexit/core'
 
-const INPUT_TAGS = ['INPUT', 'TEXTAREA']
+const INPUT_FIELDS = ['input', 'textarea']
+const INPUT_TAGS = [...INPUT_FIELDS, '#text']
 
 export const isOnEditableElement = (event: Event): boolean => {
   const target = event.target as HTMLElement
+  return isInputElement(target) || target.isContentEditable
+}
 
-  if (!target) return false
+export const isInputElement = (element: any) => {
+  if (!element) return false
+  return INPUT_TAGS.includes(element.nodeName.toLowerCase())
+}
 
-  // mog('Is Element editable', { name: target.tagName })
-  return INPUT_TAGS.includes(target.tagName) || target.isContentEditable
+export const isInputField = (element): boolean => {
+  if (!element) return false
+  return INPUT_FIELDS.includes(element.nodeName.toLowerCase())
 }
 
 export const focusEditableElement = (target: HTMLElement): void => {

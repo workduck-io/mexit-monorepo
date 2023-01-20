@@ -31,7 +31,7 @@ const messagePassing = () => {
     useDataStore,
     {
       name: BroadcastSyncedChannel.DATA,
-      sync: [{ field: 'ilinks' }, { field: 'tags' }, { field: 'publicNodes' }, { field: 'sharedNodes' }]
+      sync: [{ field: 'ilinks' }, { field: 'tags' }, { field: 'sharedNodes' }]
     },
     onStateChange
   )

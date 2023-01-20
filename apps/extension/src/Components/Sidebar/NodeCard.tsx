@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import styled from 'styled-components'
 
@@ -18,7 +18,6 @@ import { useAuthStore } from '../../Hooks/useAuth'
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNodes } from '../../Hooks/useNodes'
 import { useContentStore } from '../../Stores/useContentStore'
-import useDataStore from '../../Stores/useDataStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 
@@ -37,16 +36,14 @@ export const HeadingFlex = styled(GenericFlex)`
 `
 
 export const NodeCard = ({ nodeId }: { nodeId: string }) => {
-  const { publicNodes, setNodePrivate, setNodePublic, checkNodePublic } = useDataStore()
   const { getNode } = useNodes()
   const getContent = useContentStore((store) => store.getContent)
   const addInRecents = useRecentsStore((s) => s.addRecent)
   const notesMetadata = useMetadataStore((s) => s.metadata.notes[nodeId])
+  const updateMetadata = useMetadataStore((s) => s.updateMetadata)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
 
-  const isNodePublic = useMemo(() => {
-    return checkNodePublic(nodeId)
-  }, [publicNodes])
+  const isNodePublic = notesMetadata.publicAccess
 
   const node = getNode(nodeId, true)
   const contents = getContent(nodeId)
@@ -73,7 +70,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
           mog('ErrorMakingNodePrivate', error)
         } else {
           addInRecents(nodeId)
-          setNodePrivate(nodeId)
+          updateMetadata('notes', nodeId, { publicAccess: false })
         }
       })
     } else {
@@ -92,7 +89,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
           mog('ErrorMakingNodePublic', error)
         } else {
           addInRecents(nodeId)
-          setNodePublic(nodeId)
+          updateMetadata('notes', nodeId, { publicAccess: true })
         }
       })
     }

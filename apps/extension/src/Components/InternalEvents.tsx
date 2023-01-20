@@ -7,7 +7,7 @@ import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
 import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
-import { getScrollbarWidth } from '@mexit/shared'
+import { getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
 import { useInitLoader } from '../Hooks/useInitLoader'
@@ -18,6 +18,7 @@ import { useSputlitStore } from '../Stores/useSputlitStore'
 import messagePassing from '../Sync'
 import { getDibbaText } from '../Utils/getDibbaText'
 import { getSelectionHTML } from '../Utils/getSelectionHTML'
+import { getElement } from '../Utils/pasteUtils'
 import { sanitizeHTML } from '../Utils/sanitizeHTML'
 
 import LinkedInBadge from './LinkedInBadge'
@@ -134,21 +135,49 @@ function dibbaToggle() {
 
   useEffect(() => {
     function handleRender() {
-      // eslint-disable-next-line
-      // @ts-ignore
-      if (document.activeElement.isContentEditable && !disabledWebsites.includes(window.location.origin)) {
-        const text = window.getSelection().anchorNode.textContent
-        const range = window.getSelection().getRangeAt(0)
-        const textAfterTrigger = getDibbaText(range, text)
+      if (document.activeElement && !disabledWebsites.includes(window.location.href)) {
+        /**
+         *
+         * wholeText, textContent, data, nodeValue
+         *
+         * input/textarea
+         * - innerHTML
+         */
 
-        if (textAfterTrigger) {
-          setDibbaState({
-            visualState: VisualState.showing,
-            coordinates: range.getClientRects()[0],
-            extra: textAfterTrigger
-          })
-        } else {
-          setDibbaState({ visualState: VisualState.hidden })
+        const selectionNode = getElement(window.getSelection().anchorNode)
+        if (selectionNode) {
+          const isInputType = isInputField(selectionNode)
+
+          const nodeSelection = window.getSelection().getRangeAt(0)
+
+          const range = {
+            startOffset: nodeSelection.startOffset,
+            endOffset: nodeSelection.endOffset
+          }
+
+          mog('RANGE', { range, nodeSelection, isInputType })
+
+          if (isInputType) {
+            range.startOffset = selectionNode.selectionStart
+            range.endOffset = selectionNode.selectionEnd
+          }
+
+          const text = selectionNode.textContent ? selectionNode.textContent : selectionNode.value
+
+          const textAfterTrigger = getDibbaText(range, text)
+          if (textAfterTrigger) {
+            setDibbaState({
+              visualState: VisualState.showing,
+              coordinates: (isInputType ? selectionNode : nodeSelection).getClientRects()[0],
+              extra: {
+                ...textAfterTrigger,
+                isInputType,
+                node: selectionNode
+              }
+            })
+          } else {
+            setDibbaState({ visualState: VisualState.hidden })
+          }
         }
       }
     }
