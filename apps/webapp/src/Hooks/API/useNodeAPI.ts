@@ -15,7 +15,6 @@ import { DefaultMIcons } from '@mexit/shared'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useContentStore } from '../../Stores/useContentStore'
-import { useDataStore } from '../../Stores/useDataStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
@@ -35,7 +34,6 @@ export const useApi = () => {
   const { getTitleFromNoteId } = useLinks()
   const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
   const { updateILinksFromAddedRemovedPaths } = useInternalLinks()
-  const { setNodePublic, setNodePrivate } = useDataStore()
   const { updateFromContent } = useUpdater()
   const { getSharedNode } = useNodes()
   const { updateSnippets, getSnippet } = useSnippets()
@@ -212,11 +210,15 @@ export const useApi = () => {
     return res
   }
 
+  const setPublic = (noteId: string, isPublic: boolean) => {
+    updateMetadata('notes', noteId, { publicAccess: isPublic })
+  }
+
   const makeNotePublic = async (nodeId: string) => {
     return await API.node
       .makePublic(nodeId)
       .then((resp) => {
-        setNodePublic(nodeId)
+        setPublic(nodeId, true)
         return nodeId
       })
       .catch((error) => {
@@ -228,7 +230,7 @@ export const useApi = () => {
     return await API.node
       .makePrivate(nodeId)
       .then((resp) => {
-        setNodePrivate(nodeId)
+        setPublic(nodeId, false)
         return nodeId
       })
       .catch((error) => {

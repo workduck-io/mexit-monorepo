@@ -15,7 +15,7 @@ import { AccessLevel } from './Mentions'
 export const iconTypes = ['URL', 'ICON', 'EMOJI', 'MEX'] as const
 // M stands for Multi/Mex/Many (yet to decide)
 export interface MIcon {
-  type: typeof iconTypes[number]
+  type: (typeof iconTypes)[number]
   value: string
 }
 
@@ -58,7 +58,6 @@ export interface DataStoreState {
   baseNodeId: string
   bookmarks: string[]
   archive: ILink[]
-  publicNodes: any[]
   sharedNodes: SharedNode[]
   slashCommands: SlashCommands
   namespaces: SingleNamespace[]
@@ -108,17 +107,11 @@ export interface DataStoreState {
   removeFromArchive: (archive: ILink[]) => void
   setArchive: (archive: ILink[]) => void
 
-  setNodePublic: (nodeId: string) => void
-  setNodePrivate: (nodeId: string) => void
-  checkNodePublic: (nodeId: string) => boolean
-
   checkValidILink: (props: CheckValidILinkProps) => string
 
   // Shared Nodes
   setSharedNodes: (sharedNodes: SharedNode[]) => void
   getSharedNodes: () => SharedNode[]
-
-  setPublicNodes: (publicNodes: any[]) => void
 
   _hasHydrated: boolean
   setHasHydrated: (state) => void

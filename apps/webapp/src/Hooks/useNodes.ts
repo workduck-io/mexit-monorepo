@@ -3,6 +3,7 @@ import { BreadcrumbItem } from '@workduck-io/mex-components'
 import { getParentBreadcrumbs, ILink, mog, NodeType, SharedNode } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import { usePublicNodeStore } from '../Stores/usePublicNodes'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
@@ -54,8 +55,8 @@ export const useNodes = () => {
   }
 
   const isPublicNode = (nodeid: string) => {
-    const checkNodePublic = useDataStore.getState().checkNodePublic
-    if (checkNodePublic(nodeid)) {
+    const noteMetadata = useMetadataStore.getState().metadata.notes[nodeid]
+    if (noteMetadata?.publicAccess) {
       return true
     }
 

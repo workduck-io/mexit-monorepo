@@ -22,7 +22,6 @@ export const dataStoreConstructor = (set, get) => ({
   baseNodeId: '__loading__',
   bookmarks: [],
   archive: [],
-  publicNodes: [],
   sharedNodes: [],
   namespaces: [],
   slashCommands: { default: defaultCommands, internal: [] },
@@ -290,28 +289,12 @@ export const dataStoreConstructor = (set, get) => ({
     set({ archive: userArchive })
   },
 
-  setNodePublic: (nodeId) => {
-    if (get().publicNodes.find((i) => i === nodeId)) return
-    set({ publicNodes: [...get().publicNodes, nodeId] })
-  },
-  setNodePrivate: (nodeId) => {
-    const filtered = get().publicNodes.filter((i) => i !== nodeId)
-    set({ publicNodes: filtered })
-  },
-  checkNodePublic: (nodeId) => {
-    return get().publicNodes.find((i) => i === nodeId) ? true : false
-  },
-
   setSharedNodes: (sharedNodes) => {
     set({ sharedNodes })
   },
 
   getSharedNodes: () => get().sharedNodes,
-  setPublicNodes: (publicNodes) => {
-    set({
-      publicNodes: publicNodes
-    })
-  },
+
   _hasHydrated: false,
   setHasHydrated: (state) => {
     set({
