@@ -153,7 +153,6 @@ export default function Dibba() {
     } catch (err) {
       console.error('Handle Click Error', { err })
     } finally {
-      console.log('OKAY!!')
       setDibbaState({ visualState: VisualState.hidden })
     }
   }
@@ -279,7 +278,6 @@ export default function Dibba() {
                   onMouseDown={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
-                    console.log('ITEM', { item })
                     handleClick(item)
                   }}
                   onPointerMove={() => pointerMoved && setActiveIndex(index)}

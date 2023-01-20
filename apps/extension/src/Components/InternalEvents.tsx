@@ -165,7 +165,6 @@ function dibbaToggle() {
           const text = selectionNode.textContent ? selectionNode.textContent : selectionNode.value
 
           const textAfterTrigger = getDibbaText(range, text)
-          console.log('TEXT AFTER', { textAfterTrigger })
           if (textAfterTrigger) {
             setDibbaState({
               visualState: VisualState.showing,
