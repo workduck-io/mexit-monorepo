@@ -33,118 +33,66 @@ const TodoList = () => {
     () => getList(nodeTodos, currentFilters, globalJoin, sortOrder, sortType),
     [nodeTodos, currentFilters, globalJoin, sortType, sortOrder]
   )
-  const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
+  const [selectedCardId, setSelectedCardId] = React.useState<string | null>(null)
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
   // const sidebar = useLayoutStore((store) => store.sidebar)
 
   const { changeStatus, changePriority } = useTodoKanban()
-  // const { push } = useNavigation()
-  // const { goTo } = useRouting()
-
-  // const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
-  // const { accessWhenShared } = usePermissions()
-
-  // const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters, sortOrder, sortType])
 
   const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
+
   const getTodoFromCard = (card: TodoKanbanCard): TodoType => {
     return todosArray.find((todo) => todo.nodeid === card.nodeid && todo.id === card.todoid)
   }
 
   const selectFirst = () => {
-    // const firstCardColumn = board.columns.find((column) => column.cards.length > 0)
-    // if (firstCardColumn) {
-    //   if (firstCardColumn.cards) {
-    //     const firstCard = firstCardColumn.cards[0]
-    //     setSelectedCard(firstCard)
-    //   }
-    // }
+    const firstCard = list.length > 0 && list[0]
+    if (firstCard) {
+      setSelectedCardId(firstCard.id)
+    }
   }
 
   const changeSelectedPriority = (priority: PriorityType) => {
-    if (!selectedCard) return
+    if (!selectedCardId) return
+    const selectedCard = list.find((card) => card.id === selectedCardId)
     const todoFromCard = getTodoFromCard(selectedCard)
     changePriority(todoFromCard, priority)
   }
 
-  const selectNewCard = (direction: 'up' | 'down' | 'left' | 'right') => {
-    if (!selectedCard) {
+  const selectedIndex = useMemo(() => list.findIndex((card) => card.id === selectedCardId), [selectedCardId, list])
+
+  const selectNewCard = (direction: 'up' | 'down') => {
+    if (!selectedCardId) {
       selectFirst()
       return
     }
-
-    const selectedColumn = null // board.columns.find((column) => column.id === selectedCard.status) as KanbanBoardColumn
-    const selectedColumnLength = selectedColumn.cards.length
-    const selectedIndex = selectedColumn.cards.findIndex(
-      (card) => card.todoid === selectedCard.todoid && card.nodeid === selectedCard.nodeid
-    )
-
     // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
-
     switch (direction) {
       case 'up': {
-        const prevCard = selectedColumn.cards[(selectedIndex - 1 + selectedColumnLength) % selectedColumnLength]
+        const prevCard = list[(selectedIndex - 1 + list.length) % list.length]
         // mog('prevCard', { prevCard })
 
         if (prevCard) {
           // mog('selected card', { selectedCard, prevCard })
-          setSelectedCard(prevCard)
+          setSelectedCardId(prevCard.id)
         }
         break
       }
 
       case 'down': {
-        const nextCard = selectedColumn.cards[(selectedIndex + 1) % selectedColumnLength]
+        const nextCard = list[(selectedIndex + 1) % list.length]
         // mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
         if (nextCard) {
           // mog('selected card', { selectedCard, nextCard })
-          setSelectedCard(nextCard)
+          setSelectedCardId(nextCard.id)
         }
         break
       }
-
-      //       case 'left': {
-      //         let selectedColumnStatus = selectedColumn.id
-      //         let prevCard = undefined
-      //         while (!prevCard) {
-      //           const prevColumn = board.columns.find(
-      //             // eslint-disable-next-line no-loop-func
-      //             (column) => column.id === getPrevStatus(selectedColumnStatus)
-      //           ) as KanbanBoardColumn
-      //           if (!prevColumn || prevColumn.id === selectedColumn.id) break
-      //           prevCard = prevColumn.cards[selectedIndex % prevColumn.cards.length]
-      //           selectedColumnStatus = prevColumn.id
-      //         }
-      //         if (prevCard) {
-      //           // mog('selected card', { selectedCard, prevCard })
-      //           setSelectedCard(prevCard)
-      //         }
-      //         break
-      //       }
-
-      //       case 'right': {
-      //         let selectedColumnStatus = selectedColumn.id
-      //         let nextCard = undefined
-      //         while (!nextCard) {
-      //           const nextColumn = board.columns.find(
-      //             // eslint-disable-next-line no-loop-func
-      //             (column) => column.id === getNextStatus(selectedColumnStatus)
-      //           ) as KanbanBoardColumn
-      //           if (!nextColumn || nextColumn.id === selectedColumn.id) break
-      //           nextCard = nextColumn.cards[selectedIndex % nextColumn.cards.length]
-      //           selectedColumnStatus = nextColumn.id
-      //         }
-      //         if (nextCard) {
-      //           // mog('selected card', { selectedCard, nextCard })
-      //           setSelectedCard(nextCard)
-      //         }
-      //         break
-      //       }
     }
   }
 
@@ -164,7 +112,7 @@ const TodoList = () => {
         selectedRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
     }
-  }, [selectedCard])
+  }, [selectedCardId])
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
@@ -188,14 +136,9 @@ const TodoList = () => {
 
       return wrapEvents({
         Escape: () => {
-          if (selectedCard) setSelectedCard(null)
+          if (selectedCardId) setSelectedCardId(null)
         },
 
-        // 'Shift+ArrowRight': () => handleCardMoveNext(),
-        // 'Shift+ArrowLeft': () => handleCardMovePrev(),
-
-        // ArrowRight: () => selectNewCard('right'),
-        // ArrowLeft: () => selectNewCard('left'),
         ArrowDown: () => selectNewCard('down'),
         ArrowUp: () => selectNewCard('up'),
 
@@ -215,13 +158,19 @@ const TodoList = () => {
         unsubscribe()
       }
     }
-  }, [list, selectedCard, isModalOpen, isPreviewEditors])
+  }, [list, selectedCardId, isModalOpen, isPreviewEditors])
 
   return (
     <TaskListWrapper>
       {list.map((todoCard) => (
         <div key={todoCard.id}>
-          <RenderBoardTask id={todoCard.id} todoid={todoCard.todoid} nodeid={todoCard.nodeid} />
+          <RenderBoardTask
+            selectedCardId={selectedCardId}
+            selectedRef={selectedRef}
+            id={todoCard.id}
+            todoid={todoCard.todoid}
+            nodeid={todoCard.nodeid}
+          />
         </div>
       ))}
     </TaskListWrapper>

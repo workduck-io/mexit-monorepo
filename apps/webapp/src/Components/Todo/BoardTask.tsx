@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { PriorityType } from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
 
-import { TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
+import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
@@ -22,7 +22,7 @@ interface RenderTaskProps {
   /** reference to the selected card, this is set to the task card if the id match */
   selectedRef?: React.RefObject<HTMLDivElement>
 
-  selectedCard?: TodoKanbanCard | null
+  selectedCardId?: string | null
 
   /** whether the task is in a static kanban board, for example in read only view embeds */
   staticBoard?: boolean
@@ -45,7 +45,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     overlaySidebar,
     staticBoard,
     refreshCallback,
-    selectedCard,
+    selectedCardId,
     selectedRef,
     dragging
   }: RenderTaskProps) => {
@@ -79,8 +79,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
     return (
       <TaskCard
-        ref={selectedCard && !!selectedRef && id === selectedCard.id ? selectedRef : null}
-        selected={selectedCard && selectedCard?.id === id}
+        ref={selectedCardId && !!selectedRef && id === selectedCardId ? selectedRef : null}
+        selected={selectedCardId && selectedCardId === id}
         dragging={dragging}
         staticBoard={staticBoard}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}

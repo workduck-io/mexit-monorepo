@@ -56,10 +56,12 @@ const TodoKanban = () => {
   }
 
   const handleCardMove = (card, source, destination) => {
-    const readOnly = card?.todo?.nodeid && isReadonly(accessWhenShared(card?.todo?.nodeid))
+    const todoFromCard = getTodoFromCard(card)
+    const readOnly = todoFromCard?.nodeid && isReadonly(accessWhenShared(todoFromCard?.nodeid))
     // mog('card moved', { card, source, destination, readOnly })
     if (!readOnly) {
-      changeStatus(card.todo, destination.toColumnId)
+      // mog('new status', { newStatus, todoFromCard, selectedCard })
+      changeStatus(todoFromCard, destination.toColumnId)
     } else {
       toast('Cannot move task in a note with Read only permission')
     }
@@ -88,6 +90,7 @@ const TodoKanban = () => {
     if (!selectedCard) return
     const todoFromCard = getTodoFromCard(selectedCard)
     const newStatus = getNextStatus(todoFromCard.metadata.status)
+    // mog('new status', { newStatus, todoFromCard, selectedCard })
     changeStatus(todoFromCard, newStatus)
   }
 
@@ -95,7 +98,7 @@ const TodoKanban = () => {
     if (!selectedCard) return
     const todoFromCard = getTodoFromCard(selectedCard)
     const newStatus = getPrevStatus(todoFromCard.metadata.status)
-    // mog('new status', { newStatus, selectedCard })
+    // mog('new status', { newStatus, todoFromCard, selectedCard })
     changeStatus(todoFromCard, newStatus)
   }
 
@@ -260,7 +263,7 @@ const TodoKanban = () => {
         todoid={todoid}
         nodeid={nodeid}
         selectedRef={selectedRef}
-        selectedCard={selectedCard}
+        selectedCardId={selectedCard ? selectedCard?.id : null}
         overlaySidebar={overlaySidebar}
         dragging={dragging}
       />
