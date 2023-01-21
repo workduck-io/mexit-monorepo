@@ -7,6 +7,21 @@ export interface FocusMode {
   hover: boolean
 }
 
+export enum ContextMenuType {
+  NOTES_TREE,
+  NOTE_PLUS_BUTTON,
+  ARCHIVE_TREE,
+  SNIPPETS_LIST,
+  PROMPTS_LIST,
+  NOTE_NAMESPACE
+}
+
+export type ContextMenu = {
+  item: any
+  type: ContextMenuType
+  coords: { x: number; y: number }
+}
+
 interface LayoutState {
   sidebar: {
     expanded: boolean
@@ -24,6 +39,9 @@ interface LayoutState {
   toggleSidebar: () => void
   showSidebar: () => void
   hideSidebar: () => void
+
+  contextMenu?: ContextMenu
+  setContextMenu: (contextMenu: ContextMenu) => void
 
   toggleRHSidebar: () => void
   setRHSidebarExpanded: (expanded: boolean) => void
@@ -59,6 +77,8 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
 
   showLoader: false,
   setShowLoader: (showLoader) => set({ showLoader }),
+
+  setContextMenu: (contextMenu) => set({ contextMenu }),
 
   // Sidebar
   sidebar: {

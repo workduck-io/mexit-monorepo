@@ -4,6 +4,7 @@ import HelpModal from '../Views/HelpModal'
 
 import ShareModal from './Mentions/ShareModal'
 import CreateTodoModal from './Modals/CreateTodoModal'
+import DeleteSpaceModal from './Modals/DeleteSpaceModal'
 import Lookup from './Modals/Lookup'
 // import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
@@ -20,7 +21,6 @@ const Modals = () => {
   return (
     <>
       <Lookup />
-      {/* <Refactor /> */}
       <Delete />
       <HelpModal />
       <BlockModal />
@@ -31,6 +31,7 @@ const Modals = () => {
       <PreviewNoteModal />
       <FleetContainer />
       <TemplateModal />
+      <DeleteSpaceModal />
     </>
   )
 }

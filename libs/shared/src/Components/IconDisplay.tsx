@@ -12,6 +12,7 @@ interface IconDisplayProps {
   size?: number
   className?: string
   isLoading?: boolean
+  color?: string
 }
 
 const resolveIconURL = (value: string) => {
@@ -36,10 +37,10 @@ const IconItem = ({ type, value }) => {
   }
 }
 
-export const IconDisplay = ({ icon, size, isLoading, className }: IconDisplayProps) => {
+export const IconDisplay = ({ icon, size, isLoading, className, color }: IconDisplayProps) => {
   if (!icon) return null
   return (
-    <IconWrapper isLoading={isLoading} size={size} className={className}>
+    <IconWrapper isLoading={isLoading} size={size} className={className} color={color}>
       <IconItem {...icon} />
     </IconWrapper>
   )

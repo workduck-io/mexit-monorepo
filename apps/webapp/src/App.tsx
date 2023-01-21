@@ -5,6 +5,7 @@ import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
 import { Notification } from '@mexit/shared'
 
+import ContextMenu from './Components/ContextMenu'
 import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
@@ -49,6 +50,7 @@ const App = () => {
           <GlobalStyle />
           <FloatingButton />
           <Notification />
+          <ContextMenu />
         </Main>
       </Providers>
     </Router>

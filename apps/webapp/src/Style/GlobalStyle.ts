@@ -26,6 +26,10 @@ const GlobalStyle = createGlobalStyle`
     background: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.25);
   }
 
+  #floating-ui-root {
+    z-index: 1000;
+  }
+
   *::placeholder {
     color: ${({ theme }) => theme.tokens.text.fade};
     opacity: 0.5;

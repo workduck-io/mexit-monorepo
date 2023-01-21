@@ -33,6 +33,7 @@ export const DefaultMIcons = {
   VIEW: getMIcon('ICON', 'ri:stack-line'),
   TAG: getMIcon('ICON', 'ri:hashtag'),
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
+  DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline')
 }
 
@@ -71,6 +72,7 @@ export interface DataStoreState {
   setNamespaces: (namespaces: SingleNamespace[]) => void
   addNamespace: (namespace: SingleNamespace) => void
   updateNamespace: (namespace: SingleNamespace) => void
+  deleteNamespace: (namespceId: string) => void
 
   // adds the node
   addILink: (props: AddILinkProps) => ILink | undefined

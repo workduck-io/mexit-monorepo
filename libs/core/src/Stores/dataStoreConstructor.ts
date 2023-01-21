@@ -56,6 +56,11 @@ export const dataStoreConstructor = (set, get) => ({
 
   setNamespaces: (namespaces) => set({ namespaces }),
 
+  deleteNamespace: (namespaceId: string) => {
+    const spaces = get().namespaces
+    set({ namespaces: spaces.filter((space) => space.id === namespaceId) })
+  },
+
   updateNamespace: (namespace) => {
     set(() => {
       const namespaces = get().namespaces.map((ns) => {

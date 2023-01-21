@@ -18,7 +18,7 @@ export const IconLoading = (theme: any) => keyframes`
   100% { color: ${theme.tokens.colors.yellow}; }
 `
 
-export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean }>`
+export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean; color?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,6 +34,12 @@ export const IconWrapper = styled.div<{ size?: number; isLoading?: boolean }>`
       height: ${calcSize};
     `
   }}
+
+  ${({ color }) =>
+    color &&
+    css`
+      color: ${color};
+    `}
 
   ${({ isLoading, theme }) =>
     isLoading &&

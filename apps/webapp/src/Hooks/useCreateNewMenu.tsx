@@ -1,10 +1,9 @@
 import toast from 'react-hot-toast'
 
-import { IconifyIcon } from '@iconify/react'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
-import { defaultContent, generateSnippetId } from '@mexit/core'
+import { defaultContent, generateSnippetId, MIcon } from '@mexit/core'
 import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
@@ -19,7 +18,7 @@ import { useSnippets } from './useSnippets'
 interface CreateNewMenuItem {
   id: string
   label: string
-  icon?: string | IconifyIcon
+  icon?: MIcon
   onSelect: () => void
 }
 
@@ -99,7 +98,7 @@ export const useCreateNewMenu = () => {
     ]
   }
 
-  const getCreateNewMenuItems = (_path: string): CreateNewMenuItem[] => {
+  const getCreateNewMenuItems = (_path?: string): CreateNewMenuItem[] => {
     return [
       {
         id: 'new-note',
