@@ -1,9 +1,9 @@
-import { apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType } from '@mexit/core'
+import { apiURLs, DEFAULT_NAMESPACE, defaultContent, ListItemType, mog } from '@mexit/core'
 
 import { Tab } from '../Types/Tabs'
 
 import client from './fetchClient'
-import { serializeContent } from './serializer'
+import { deserializeContent, serializeContent } from './serializer'
 
 export const handleCaptureRequest = ({ subType, data }) => {
   const elementMetadata = data?.highlightId
@@ -30,12 +30,13 @@ export const handleCaptureRequest = ({ subType, data }) => {
           }
         })
         .then((response: any) => {
-          return { message: response.data, error: null }
+          return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
         })
     }
+
     case 'BULK_CREATE_NODES': {
       const reqData = {
         id: data.id,
@@ -49,14 +50,15 @@ export const handleCaptureRequest = ({ subType, data }) => {
         namespaceID: data.namespaceID,
         tags: []
       }
+
       return client
         .post(apiURLs.node.bulkCreate, reqData, {
           headers: {
             'mex-workspace-id': data.workspaceID
           }
         })
-        .then((response) => {
-          return { message: response.data, error: null }
+        .then((response: any) => {
+          return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }
@@ -92,7 +94,6 @@ export const handleSnippetRequest = ({ data }) => {
 export const handleNodeContentRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'DELETE_BLOCKS': {
-      console.log('Delete blocks', { body })
       const blockMap = body?.blockMap
       const reqData = {
         type: 'DeleteBlocksRequest',
@@ -117,13 +118,20 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
         : undefined
       const reqData = {
         type: 'ElementRequest',
+        workspaceID: body.workspaceID,
         elements: serializeContent(body.content ?? defaultContent.content, body.id, elementMetadata)
       }
 
+      mog('SAVE REQUEST', { reqData, elementMetadata })
+
       return client
-        .post(apiURLs.node.append(body.id), reqData, { headers })
+        .patch(apiURLs.node.append(body.id), reqData, {
+          headers: {
+            'mex-workspace-id': body.workspaceID
+          }
+        })
         .then((response: any) => {
-          return { message: response.data, error: null }
+          return { message: { content: deserializeContent(reqData.elements) }, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }

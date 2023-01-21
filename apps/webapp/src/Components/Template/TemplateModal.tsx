@@ -29,6 +29,7 @@ const TemplateModal = () => {
   const node = getILinkFromNodeid(nodeid)
   const snippets = useSnippetStore((state) => state.snippets) ?? {}
   const templates = Object.values(snippets).filter((item) => item?.template)
+  const updateMetadataInStore = useMetadataStore((s) => s.updateMetadata)
 
   const [currentTemplate, setCurrentTemplate] = useState<Snippet>()
   const [selectedTemplate, setSelectedTemplate] = useState<Snippet>()
@@ -65,7 +66,10 @@ const TemplateModal = () => {
       mog('META', { newMeta })
       API.node
         .updateMetadata(nodeid, { metadata: newMeta })
-        .then((r) => toast('Template Set!'))
+        .then((r) => {
+          updateMetadataInStore('notes', nodeid, newMeta)
+          toast('Tempate set!')
+        })
         .catch((err) => {
           console.error('Unable to set Template', { err })
         })
@@ -77,11 +81,13 @@ const TemplateModal = () => {
   const onRemove = async () => {
     if (nodeid) {
       // For why '__null__' see useSaveApi.tsx line 151
-      const existingMetadata = useMetadataStore.getState().metadata.notes[nodeid].icon
-
+      const existingMetadata = useMetadataStore.getState().metadata.notes[nodeid]
+      const newMetadata = { icon: existingMetadata.icon, templateID: undefined }
       API.node
-        .updateMetadata(nodeid, { metadata: { icon: existingMetadata.icon, templateID: null } })
-        .then((r) => toast('Template Removed!'))
+        .updateMetadata(nodeid, { metadata: newMetadata })
+        .then((r) => {
+          updateMetadataInStore('notes', nodeid, newMetadata)
+        })
         .catch((err) => {
           console.error('Unable to set Template', { err })
         })

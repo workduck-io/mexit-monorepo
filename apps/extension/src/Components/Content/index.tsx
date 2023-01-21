@@ -54,7 +54,7 @@ export default function Content() {
       const content = getContent(item.id)?.content ?? defaultContent.content
 
       if (selection?.range && deserializedContent) {
-        setNodeContent([...content, ...deserializedContent])
+        setNodeContent(deserializedContent)
       } else {
         setNodeContent(content)
       }

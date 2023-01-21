@@ -161,6 +161,7 @@ export const TreeContextMenu = ({ item }: TreeContextMenuProps) => {
           New Note
         </ContextMenuItem>
         <ContextMenuItem
+          disabled={isInSharedNamespace && isReadonly}
           onSelect={(args) => {
             handleTemplate(item)
           }}

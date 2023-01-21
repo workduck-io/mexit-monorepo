@@ -30,8 +30,9 @@ export const serializeContent = (
       nl.id = generateTempId()
     }
 
-    if (elementMetadata && el?.highlight) {
+    if (elementMetadata) {
       nl.elementMetadata = elementMetadata
+      if (el?.highlight) delete el['highlight']
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]

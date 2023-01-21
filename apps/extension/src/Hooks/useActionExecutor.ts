@@ -49,7 +49,7 @@ export function useActionExecutor() {
   const { getSnippet, addSnippet } = useSnippets()
   const { ilinks, sharedNodes } = useDataStore()
   const { isSharedNode } = useNodes()
-  const { saveIt } = useSaveChanges()
+  const { saveIt, appendAndSave } = useSaveChanges()
   const { getDefaultNamespace, getNamespaceOfNodeid } = useNamespaces()
   const setSearch = useSputlitStore((store) => store.setSearch)
   const changeSearchType = useSputlitStore((s) => s.changeSearchType)
@@ -84,8 +84,8 @@ export function useActionExecutor() {
             break
 
           default:
+            const content = useEditorStore.getState().nodeContent
             if (item.extras.new && item.extras.newItemType === 'snippet') {
-              const content = useEditorStore.getState().nodeContent
               const title = getSlug(search.value !== '' ? search.value : DRAFT_NODE)
 
               addSnippet({
@@ -122,7 +122,8 @@ export function useActionExecutor() {
               namespace: namespace.id
             })
 
-            saveIt(false, true)
+            if (item?.extras?.new) saveIt(false, true)
+            else appendAndSave({ nodeid: node.nodeid, content, highlight: true })
 
             if (!links.find((l) => l.url === window.location.href)) {
               const link = { url: window.location.href, title: document.title }
