@@ -9,6 +9,7 @@ export interface ContentStoreState {
   removeContent: (nodeid: string) => void
   getContent: (nodeid: string) => NodeContent
   setContents: (contents: Record<string, NodeEditorContent>) => void
+  appendContent: (nodeId: string, blocksToAppend: NodeEditorContent, internalUpdate?: boolean) => void
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
   initContents: (contents: Contents) => void
 
@@ -31,13 +32,16 @@ export const contentStoreConstructor = (set, get) => ({
   setContent: (nodeid, content, metadata, internalUpdate) => {
     const oldContent = get().contents
 
-    const oldMetadata = oldContent[nodeid]?.metadata ?? {}
-    delete oldContent[nodeid]
-    const nmetadata = metadata ? { ...oldMetadata, ...metadata } : oldMetadata
     set({
-      contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
+      contents: { ...oldContent, [nodeid]: { type: 'editor', content } }
     })
 
+    if (internalUpdate) get().setInternalUpdate(true)
+  },
+  appendContent: (nodeid, blocksToAppend, internalUpdate) => {
+    const contents = get().contents
+    const newNoteContent = [...(contents?.[nodeid]?.content ?? []), ...blocksToAppend]
+    set({ contents: { ...contents, [nodeid]: { type: 'editor', content: newNoteContent } } })
     if (internalUpdate) get().setInternalUpdate(true)
   },
   getAllMetadata: () => {

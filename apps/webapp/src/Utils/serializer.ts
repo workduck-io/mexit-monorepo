@@ -25,9 +25,9 @@ export const serializeContent = (content: any[], nodeid: string, elementMetadata
       nl.id = generateTempId()
     }
 
-    if (elementMetadata && el?.highlight) {
+    if (elementMetadata) {
       nl.elementMetadata = elementMetadata
-      delete el['highlight']
+      if (el?.highlight) delete el['highlight']
     } else if (el?.metadata) {
       Object.keys(el.metadata).forEach((k) => {
         nl[k] = el.metadata[k]

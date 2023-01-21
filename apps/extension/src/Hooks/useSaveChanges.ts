@@ -1,7 +1,6 @@
 import toast from 'react-hot-toast'
 
 import {
-  defaultContent,
   DefaultMIcons,
   extractMetadata,
   generateHighlightId,
@@ -24,7 +23,6 @@ import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
 import { useInternalLinks } from './useInternalLinks'
-import { getTitleFromPath } from './useLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
 import { useSputlitContext, VisualState } from './useSputlitContext'
@@ -32,6 +30,7 @@ import { useSputlitContext, VisualState } from './useSputlitContext'
 export interface AppendAndSaveProps {
   nodeid: string
   content: any[]
+  highlight?: boolean
   saveAndExit?: boolean
   notification?: boolean
 }
@@ -50,7 +49,7 @@ export function useSaveChanges() {
   const sharedNodes = useDataStore((s) => s.sharedNodes)
 
   const setContent = useContentStore((s) => s.setContent)
-  const getContent = useContentStore((s) => s.getContent)
+  const appendContent = useContentStore((s) => s.appendContent)
 
   const addRecent = useRecentsStore((store) => store.addRecent)
   const addHighlight = useHighlightStore((s) => s.addHighlight)
@@ -106,6 +105,7 @@ export function useSaveChanges() {
       node.nodeid,
       editorState
     )
+
     if (highlight) {
       request.data.highlightId = highlight.entityId
     }
@@ -121,8 +121,10 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
 
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = request.data.content
+        const content = message.content ?? request.data.content
         const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
+
+        setContent(nodeid, content)
 
         const title = !bulkCreateRequest ? message.title : message.node.title
         wUpdateDoc('node', nodeid, content, title)
@@ -207,7 +209,13 @@ export function useSaveChanges() {
     }
   }
 
-  const appendAndSave = ({ nodeid, content: toAppendContent, saveAndExit, notification }: AppendAndSaveProps) => {
+  const appendAndSave = async ({
+    nodeid,
+    content: toAppendContent,
+    highlight,
+    saveAndExit = true,
+    notification = true
+  }: AppendAndSaveProps) => {
     const node = isSharedNode(nodeid)
       ? sharedNodes.find((i) => i.nodeid === nodeid)
       : ilinks.find((i) => i.nodeid === nodeid)
@@ -221,23 +229,32 @@ export function useSaveChanges() {
       nodeid: node.nodeid,
       namespace: namespace.id
     })
-    const storeContent = useContentStore.getState().contents?.[node?.nodeid]?.content ?? defaultContent.content
-    mog('We be setting persistedContent', { toAppendContent, storeContent })
-    const content = [...storeContent, ...toAppendContent]
+
     const request = {
-      type: 'CAPTURE_HANDLER',
-      subType: 'SAVE_NODE',
-      data: {
+      type: 'NODE_CONTENT',
+      subType: 'APPEND_NODE',
+      body: {
         id: node.nodeid,
-        title: getTitleFromPath(node.path),
-        content,
+        content: toAppendContent,
         workspaceID: workspaceDetails.id,
         namespaceID: namespace.id,
+        highlightId: undefined,
         metadata: {}
       }
     }
 
-    setContent(node.nodeid, content)
+    if (highlight) {
+      const selection = useSputlitStore.getState().selection
+      const { highlight, blockHighlightMap } = await createHighlightEntityFromSelection(
+        selection,
+        node.nodeid,
+        toAppendContent
+      )
+
+      if (highlight) {
+        request.body.highlightId = highlight.entityId
+      }
+    }
 
     setSelection(undefined)
     addRecent(node.nodeid)
@@ -253,10 +270,9 @@ export function useSaveChanges() {
         // mog('Response and things', { response })
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
-        const content = request.data.content
-        const metadata = extractMetadata(!bulkCreateRequest ? message : message.node, { icon: DefaultMIcons.NOTE })
+        const content = message.content ?? request.body.content
 
-        setContent(nodeid, content, metadata)
+        appendContent(node.nodeid, content)
         const title = !bulkCreateRequest ? message.title : message.node.title
         wUpdateDoc('node', nodeid, content, title)
 
@@ -265,7 +281,6 @@ export function useSaveChanges() {
         }
 
         if (saveAndExit) {
-          mog('Save and exit NOW')
           setVisualState(VisualState.animatingOut)
           // So that sputlit opens with preview true when it opens the next time
           setPreviewMode(true)
