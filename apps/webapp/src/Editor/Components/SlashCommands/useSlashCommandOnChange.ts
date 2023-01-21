@@ -9,7 +9,7 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { isElder, mog } from '@mexit/core'
+import { isElder } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
@@ -28,22 +28,18 @@ export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConf
       try {
         if (isElder(commandKey, 'snip')) {
           const content = getSnippetContent(commandConfig.command)
-          mog('CONTENT IS', { content })
           if (content) {
             select(editor, targetRange)
             insertNodes<TElement>(editor, content)
           }
         } else if (item.key === 'table') {
           select(editor, targetRange)
-          insertTable(editor, { header: true, rowCount: 3 })
+          insertTable(editor, { rowCount: 3 })
         } else if (item.extended) {
           select(editor, targetRange)
           deleteText(editor)
           const search = useComboboxStore.getState().search
-          // mog('extended', {
-          //   item,
-          //   commandKey
-          // })
+
           commandConfig.onExtendedCommand(search.textAfterTrigger, editor)
         } else {
           // console.log('useElementOnChange 2', { type, pathAbove, isBlockEnd });
