@@ -94,7 +94,6 @@ export const handleSnippetRequest = ({ data }) => {
 export const handleNodeContentRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'DELETE_BLOCKS': {
-      console.log('Delete blocks', { body })
       const blockMap = body?.blockMap
       const reqData = {
         type: 'DeleteBlocksRequest',
@@ -132,7 +131,6 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
           }
         })
         .then((response: any) => {
-          console.log('MESSAGE', { response })
           return { message: { content: deserializeContent(reqData.elements) }, error: null }
         })
         .catch((err) => {
@@ -191,7 +189,6 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
       return client
         .post(apiURLs.highlights.saveHighlight, body, { headers: headers })
         .then((d: any) => {
-          console.log('ADD', { d })
           return { message: d.data, error: null }
         })
         .catch((error) => {
