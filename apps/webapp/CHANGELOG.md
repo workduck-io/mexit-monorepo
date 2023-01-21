@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.22.6
+
+### Patch Changes
+
+- 85d87e1c: Use Append Content API, ElementMetadata in blocks on Highlight
+- 2e137eac: Note public access from metadata, Dibba Universal
+
 ## 0.22.5
 
 ### Patch Changes
