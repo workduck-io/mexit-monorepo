@@ -40,7 +40,7 @@ export const BASE_URLS = {
   smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
   comment: `https://http-staging.workduck.io/comment`,
   reaction: `https://http-staging.workduck.io/reaction`,
-  highlight: `https://http-test.workduck.io/highlight`,
+  highlight: `${MEXIT_BACKEND_URL_BASE}/highlight`,
   frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io',
   prompt: IS_DEV ? 'http://localhost:4000' : 'https://http-staging.workduck.io/prompt'
 }
@@ -194,13 +194,13 @@ export const apiURLs = {
 
   highlights: {
     /** POST */
-    saveHighlight: `${BASE_URLS.highlight}/`,
+    saveHighlight: `${BASE_URLS.highlight}`,
 
     /** GET, DELETE */
     byId: (entityId: string) => `${BASE_URLS.highlight}/${entityId}`,
 
     /** GET */
-    all: `${BASE_URLS.highlight}/all`,
+    all: `${BASE_URLS.highlight}`,
 
     /** GET, DELETE */
     allOfUrl: (urlHash: string) => `${BASE_URLS.highlight}/all/${urlHash}`
