@@ -72,13 +72,13 @@ export const PermissionModalContent = () => {
       const access = accessWhenShared(id)
       // mog('no access', { access })
       if (access) {
-        if (access.note) return access.note !== 'MANAGE'
-        if (access.space) return access.space !== 'MANAGE'
+        if (access.note) return access.note !== 'OWNER' && access.note !== 'MANAGE'
+        if (access.space) return access.note !== 'OWNER' && access.note !== 'MANAGE'
       }
       return false
     } else if (context === 'space') {
       const ns = getNamespace(id)
-      if (ns?.access) return ns.access !== 'MANAGE'
+      if (ns?.access) return ns.access !== 'OWNER' && ns.access !== 'MANAGE'
       return false
     }
     return false
