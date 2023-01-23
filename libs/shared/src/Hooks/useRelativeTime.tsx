@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
-import { getRelativeTime } from '@mexit/core'
-
 dayjs.extend(relativeTime)
 
-export function DateFormat(d: Date) {
+// Gives better relative time output compared to date-fns
+// Checkout - https://day.js.org/docs/en/display/from-now#list-of-breakdown-range
+export function dateFormat(d: Date) {
   return dayjs(d).fromNow()
 }
 
@@ -15,13 +15,13 @@ export function useRelativeTime(d: Date | number, refresh_ms?: number) {
   // Returns auto-refreshed human relative time
   // Ex. a few seconds ago, 3 minutes ago
   const date = typeof d === 'number' ? new Date(d) : d
-  const [humanTime, sethumanTime] = useState(getRelativeTime(date))
+  const [humanTime, sethumanTime] = useState(dateFormat(date))
 
   const refreshRelativeTime = 60 * 1000 // 1 minute in ms
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const newRelTime = getRelativeTime(date)
+      const newRelTime = dateFormat(date)
       sethumanTime(newRelTime)
       // console.log('Relative time updated to: ', newRelTime)
     }, refresh_ms ?? refreshRelativeTime)
@@ -30,7 +30,7 @@ export function useRelativeTime(d: Date | number, refresh_ms?: number) {
   })
 
   useEffect(() => {
-    const newRelTime = getRelativeTime(date)
+    const newRelTime = dateFormat(date)
     sethumanTime(newRelTime)
   }, [d])
 
