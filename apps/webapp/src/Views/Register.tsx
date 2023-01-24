@@ -46,6 +46,7 @@ export const Register = () => {
 
   const onResendRequest = async (e) => {
     e.preventDefault()
+
     setReqCode(true)
     await resendCode()
       .then((r) => {
@@ -181,7 +182,7 @@ export const Register = () => {
 
               {!arePasswordEqual ? <PasswordNotMatch /> : undefined}
 
-              <ButtonFields>
+              <ButtonFields position="center">
                 <LoadingButton
                   loading={regSubmitting}
                   alsoDisabled={regErrors.email !== undefined || regErrors.password !== undefined || !arePasswordEqual}
@@ -203,6 +204,7 @@ export const Register = () => {
               name="code"
               label="Code"
               inputProps={{
+                autoFocus: true,
                 ...verifyForm.register('code', {
                   required: true
                 })
@@ -210,11 +212,11 @@ export const Register = () => {
               error={verErrors.code?.type === 'required' ? 'Code is required' : undefined}
             ></Input>
 
-            <LoadingButton loading={reqCode} onClick={onResendRequest} id="resendCodeButton">
+            <LoadingButton type="button" loading={reqCode} onClick={onResendRequest}>
               Resend Code
             </LoadingButton>
             <ButtonFields>
-              <Button large onClick={onCancelVerification}>
+              <Button type="button" large onClick={onCancelVerification}>
                 Cancel
               </Button>
               <LoadingButton
