@@ -46,12 +46,20 @@ export const useCreateNewNote = () => {
   const { getParentILink } = useLinks()
   const { addInHierarchy } = useHierarchy()
   const { addLastOpened } = useLastOpened()
-  const { getDefaultNamespace } = useNamespaces()
+  const { getDefaultNamespace, getNamespace } = useNamespaces()
 
   const notesMetadata = useMetadataStore((s) => s.metadata.notes)
   const { getSnippet } = useSnippets()
 
   const createNewNote = (options?: NewNoteOptions) => {
+    const nsID = options?.parent?.namespace ?? options?.namespace
+
+    const ns = getNamespace(nsID)
+    if (ns?.access === 'READ') {
+      toast('You do not have permission to create a note in this namespace!')
+      return
+    }
+
     const childNodepath = options?.parent !== undefined ? getUntitledKey(options?.parent.path) : getUntitledDraftKey()
     const defaultNamespace = getDefaultNamespace()
     const namespacePath = options?.namespace && options?.namespace !== defaultNamespace?.id ? DRAFT_NODE : childNodepath
@@ -61,11 +69,11 @@ export const useCreateNewNote = () => {
     const uniquePath = checkValidILink({
       notePath: newNotePath,
       showAlert: false,
-      namespace: options?.parent?.namespace ?? options?.namespace
+      namespace: nsID
     })
 
     // Use namespace of parent if namespace not provided
-    const parentNote = getParentILink(uniquePath, options?.parent?.namespace ?? options?.namespace)
+    const parentNote = getParentILink(uniquePath, nsID)
     const parentNoteId = parentNote?.nodeid
 
     const nodeMetadata = notesMetadata?.[parentNoteId]
