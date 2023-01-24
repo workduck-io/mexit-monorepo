@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.7
+
+### Patch Changes
+
+- 5f170fdb: Delete namespace added
+
 ## 0.19.6
 
 ### Patch Changes
