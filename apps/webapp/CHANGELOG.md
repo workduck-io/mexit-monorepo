@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.22.7
+
+### Patch Changes
+
+- 44d7a601: Update Highlight Endpoints; Update Sharing Access Level Checks
+- 3a332b91: Minor UI fixes
+- 5f170fdb: Delete namespace added
+
 ## 0.22.6
 
 ### Patch Changes
