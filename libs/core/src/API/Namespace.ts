@@ -25,8 +25,8 @@ export class NamespaceAPI {
     return await this.client.patch(apiURLs.namespaces.update, data, config)
   }
 
-  async delete(data, config?) {
-    return await this.client.post(apiURLs.namespaces.deleteNamespace, data, config)
+  async delete(namespaceId: string, data, config?) {
+    return await this.client.post(apiURLs.namespaces.deleteNamespace(namespaceId), data, config)
   }
 
   async share(id: string, userIDs: string[], accessType: AccessLevel, config?) {

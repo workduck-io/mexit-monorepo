@@ -72,7 +72,7 @@ export const apiURLs = {
     getAll: (opt?: AllNamespaceOption) => `${BASE_URLS.namespace}/all${opt ? `?${opt}=true` : ''}`,
     create: `${BASE_URLS.namespace}`,
     update: `${BASE_URLS.namespace}`,
-    deleteNamespace: `${BASE_URLS.namespace}/delete`,
+    deleteNamespace: (namespaceId: string) => `${BASE_URLS.namespace}/delete/${namespaceId}`,
     delete: `${BASE_URLS.namespace}/share`,
     makePublic: (id: string) => `${BASE_URLS.namespace}/makePublic/${id}`,
     makePrivate: (id: string) => `${BASE_URLS.namespace}/makePrivate/${id}`,

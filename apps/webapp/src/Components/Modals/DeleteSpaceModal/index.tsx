@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 import Modal from 'react-modal'
 
 import { useTheme } from 'styled-components'
@@ -33,15 +34,17 @@ const DeleteSpaceModal = () => {
     setIsLoading(true)
     try {
       if (space?.id) {
-        await API.namespace.delete({
-          namespaceID: space.id,
+        await API.namespace.delete(space.id, {
           ...(successorSpace ? { successorNamespaceID: successorSpace.id } : {})
         })
         deleteSpaceFromStore(space.id)
         setIsLoading(false)
+        onRequestClose()
       }
     } catch (err) {
       setIsLoading(false)
+      onRequestClose()
+      toast('Unable to Delete')
       console.error('Unable To Delete Space', { namespaceID: space.id, successorNamespaceID: successorSpace?.id })
     }
   }
@@ -78,7 +81,9 @@ const DeleteSpaceModal = () => {
           All (<PrimaryText>{notesSize}</PrimaryText>) Note(s) created within this Space will be permanently deleted.{' '}
           {!!notesSize && <>You can also move Notes to another Space before deleting this Space.</>}
         </DeletionWarning>
-        {!!notesSize && <MoveToSpace selected={successorSpace} onChange={onSuccessorSpaceSelection} />}
+        {!!notesSize && (
+          <MoveToSpace selected={successorSpace} onChange={onSuccessorSpaceSelection} currentSpaceId={space.id} />
+        )}
         <ModalControls>
           <Button large onClick={onRequestClose}>
             Cancel

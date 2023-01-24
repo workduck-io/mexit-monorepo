@@ -32,7 +32,7 @@ const useContextMenu = (): Array<ContextMenuListItemType> => {
     case ContextMenuType.NOTE_NAMESPACE:
       // eslint-disable-next-line no-case-declarations
       const spaceData = contextMenu?.item?.data,
-        disabled = spaceData?.access !== 'MANAGE' || isReservedNamespace(spaceData?.name)
+        disabled = spaceData?.access !== 'OWNER' || isReservedNamespace(spaceData?.name)
 
       return [
         {

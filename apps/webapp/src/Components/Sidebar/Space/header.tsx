@@ -7,7 +7,7 @@ import Tippy from '@tippyjs/react'
 import { IconButton, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
+import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
 import { Input, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
@@ -51,6 +51,8 @@ const Header = ({
   const [title, setTitle] = useState(space?.label)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const { goTo } = useRouting()
+
+  mog('SPACE IS', { space })
 
   const onTagClick = (tag: string) => {
     goTo(ROUTE_PATHS.tag, NavigationType.push, tag)

@@ -11,16 +11,19 @@ export type SelectedOption = { id: string; label: string; icon: MIcon }
 
 type MoveToSpaceProps = {
   selected?: SelectedOption
+  currentSpaceId?: string
   onChange: (option: SelectedOption) => void
 }
 
-const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange }) => {
+const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange, currentSpaceId }) => {
   const [isSelectorVisible, setIsSelectorVisible] = useState(false)
 
   /**
    * Namspaces where user can move Notes before deleting Space.
    */
-  const namespaces = useDataStore((store) => store.namespaces.filter((space) => space.access === 'OWNER'))
+  const namespaces = useDataStore((store) =>
+    store.namespaces.filter((space) => space.access === 'OWNER' && currentSpaceId !== space.id)
+  )
 
   const namespaceOptions = useMemo(
     () =>
