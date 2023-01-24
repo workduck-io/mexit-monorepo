@@ -52,11 +52,15 @@ const Header = ({
   const openShareModal = useShareModalStore((store) => store.openModal)
   const { goTo } = useRouting()
 
-  mog('SPACE IS', { space })
+  mog('HEADER IS', { space, inp: inpRef.current, ttle: titleRef.current, title })
 
   const onTagClick = (tag: string) => {
     goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
   }
+
+  useEffect(() => {
+    setTitle(space?.label)
+  }, [space])
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
@@ -135,7 +139,13 @@ const Header = ({
       <SpaceHeader>
         <SpaceTitleWrapper>
           <SpaceTitle>
-            <IconPicker size={20} allowPicker={!isNamespaceIconDisabled} onChange={onChangeIcon} value={space?.icon} />
+            <IconPicker
+              key={space?.id}
+              size={20}
+              allowPicker={!isNamespaceIconDisabled}
+              onChange={onChangeIcon}
+              value={space?.icon}
+            />
             {showInput && !isNamespaceInputDisabled ? (
               <Input defaultValue={space?.label} onBlur={(e) => onChangeName(e.target.value)} ref={inpRef} />
             ) : (

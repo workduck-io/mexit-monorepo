@@ -158,7 +158,7 @@ export const useNamespaceApi = () => {
         id: req.id,
         name: name,
         iconUrl: req.metadata.icon,
-        access: 'MANAGE' as const,
+        access: 'OWNER' as const,
         createdAt: Date.now(),
         updatedAt: Date.now()
       }))

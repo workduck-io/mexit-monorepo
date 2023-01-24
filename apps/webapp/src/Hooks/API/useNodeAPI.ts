@@ -192,7 +192,7 @@ export const useApi = () => {
 
   const getDataAPI = async (nodeid: string, isShared = false, isRefresh = false, isUpdate = true) => {
     const res = await API.node
-      .getById(nodeid, { enabled: !isRefresh || !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
+      .getById(nodeid, { enabled: !isRefresh && !isShared, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS })
       .then((d) => {
         if (d) {
           const content = d?.data?.length ? deserializeContent(d.data) : defaultContent.content

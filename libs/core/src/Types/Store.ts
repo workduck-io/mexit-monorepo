@@ -82,6 +82,7 @@ export interface DataStoreState {
   setTags: (tags: Tag[]) => void
 
   setIlinks: (ilinks: ILink[]) => void
+  updateNamespaceOfILinks: (namespace: string, nodeLinks: ILink[]) => void
   updateILinkIcon: (nodeId: string, icon: MIcon) => void
   setBaseNodeId: (baseNodeId: string) => void
 

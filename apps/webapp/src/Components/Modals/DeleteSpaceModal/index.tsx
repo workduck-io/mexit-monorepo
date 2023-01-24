@@ -9,6 +9,7 @@ import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-compone
 import { API, DefaultMIcons } from '@mexit/core'
 import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
 
+import { useNamespaceApi } from '../../../Hooks/API/useNamespaceAPI'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../../Stores/useModalStore'
@@ -25,6 +26,8 @@ const DeleteSpaceModal = () => {
   const setOpen = useModalStore((store) => store.toggleOpen)
   const space = useLayoutStore((store) => store.contextMenu?.item)
   const deleteSpaceFromStore = useDataStore((s) => s.deleteNamespace)
+  const { getNamespace } = useNamespaceApi()
+  const updateNamespaceOfILinks = useDataStore((s) => s.updateNamespaceOfILinks)
 
   const onRequestClose = () => {
     setOpen(undefined)
@@ -38,6 +41,12 @@ const DeleteSpaceModal = () => {
           ...(successorSpace ? { successorNamespaceID: successorSpace.id } : {})
         })
         deleteSpaceFromStore(space.id)
+        if (successorSpace) {
+          const res = await getNamespace(successorSpace.id)
+          if (res) {
+            updateNamespaceOfILinks(successorSpace.id, res.nodeHierarchy)
+          }
+        }
         setIsLoading(false)
         onRequestClose()
       }

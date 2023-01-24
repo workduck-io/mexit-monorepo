@@ -16,6 +16,7 @@ interface SidebarSpaceProps {
 }
 
 export const SidebarSpaceComponent = ({ space, style, readOnly, hideShare }: AnimatedProps<SidebarSpaceProps>) => {
+  console.log('SPACE IS', { space })
   return (
     <SingleSpace style={style}>
       <Header space={space} readOnly={readOnly as boolean} hideShareSpace={hideShare} />

@@ -126,6 +126,23 @@ export const dataStoreConstructor = (set, get) => ({
     return
   },
 
+  updateNamespaceOfILinks: (namespace, nodeLinks) => {
+    const ilinks = get().ilinks.map((link) => {
+      const updatedLink = nodeLinks.find((l) => link.nodeid === l.nodeid)
+
+      if (updatedLink) {
+        return {
+          ...link,
+          namespace,
+          ...updatedLink
+        }
+      }
+
+      return link
+    })
+    set({ ilinks })
+  },
+
   updateILinkIcon: (nodeId, icon) => {
     const ilinks = get().ilinks
     set({

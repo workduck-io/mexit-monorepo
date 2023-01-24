@@ -120,6 +120,7 @@ const ContentEditor = () => {
       },
       [shortcuts.refreshNode.keystrokes]: (event) => {
         event.preventDefault()
+
         shortcutHandler(shortcuts.refreshNode, () => {
           const node = useEditorStore.getState().node
           const val = getBufferVal(node.nodeid)

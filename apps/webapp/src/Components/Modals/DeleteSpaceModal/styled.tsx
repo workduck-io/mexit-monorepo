@@ -10,7 +10,7 @@ export const ModalSectionContainer = styled(ModalSection)`
   gap: ${({ theme }) => theme.spacing.small};
   display: flex;
   flex-direction: column;
-  max-width: 30vw;
+  max-width: 40vw;
 `
 
 export const Header = styled.div`
