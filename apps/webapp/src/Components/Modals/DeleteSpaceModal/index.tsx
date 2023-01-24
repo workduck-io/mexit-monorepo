@@ -42,10 +42,15 @@ const DeleteSpaceModal = () => {
         })
         deleteSpaceFromStore(space.id)
         if (successorSpace) {
-          const res = await getNamespace(successorSpace.id)
-          if (res) {
-            updateNamespaceOfILinks(successorSpace.id, res.nodeHierarchy)
-          }
+          getNamespace(successorSpace.id)
+            .then((res) => {
+              if (res) {
+                updateNamespaceOfILinks(successorSpace.id, res.nodeHierarchy)
+              }
+            })
+            .catch((err) => {
+              console.error('Unable To Update ILinks Namespace', { err })
+            })
         }
         setIsLoading(false)
         onRequestClose()
