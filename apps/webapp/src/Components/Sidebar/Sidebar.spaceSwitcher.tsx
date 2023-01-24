@@ -7,7 +7,7 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { IconDisplay, isOnEditableElement, Tooltip } from '@mexit/shared'
 
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { CreateNewMenu } from './Sidebar.createNew'
 import { CreateNewButton, SpaceItem, SpaceSwitcher, SwitcherSpaceItems } from './Sidebar.style'
@@ -31,6 +31,7 @@ export const SidebarSpaceSwitcher = ({
   const sidebarWidth = useLayoutStore((s) => s.sidebar.width)
   const currentItemRef = React.useRef<HTMLDivElement>(null)
   const parentRef = React.useRef<HTMLDivElement>(null)
+  const setContextMenu = useLayoutStore((s) => s.setContextMenu)
 
   const changeSpaceIndex = (index: number) => {
     setCurrentIndex(index)
@@ -67,6 +68,17 @@ export const SidebarSpaceSwitcher = ({
               sidebarWidth={sidebarWidth}
               totalItems={spaces.length}
               active={s.id === currentSpace}
+              onContextMenu={(e) => {
+                e.preventDefault()
+                setContextMenu({
+                  type: ContextMenuType.NOTE_NAMESPACE,
+                  item: s,
+                  coords: {
+                    x: e.clientX,
+                    y: e.clientY
+                  }
+                })
+              }}
               onClick={() => changeSpaceIndex(index)}
               ref={s.id === currentSpace ? currentItemRef : null}
             >
@@ -75,7 +87,6 @@ export const SidebarSpaceSwitcher = ({
           </Tooltip>
         ))}
       </SwitcherSpaceItems>
-
       <CreateNewMenu menuItems={createNewMenuItems}>
         <CreateNewButton>
           <Icon icon={addCircleLine} />

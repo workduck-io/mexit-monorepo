@@ -57,6 +57,12 @@ export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
   }
 ]
 
+export const isReservedNamespace = (name: string) => {
+  if (!name) return false
+
+  return name === RESERVED_NAMESPACES.default || name === RESERVED_NAMESPACES.shared
+}
+
 export const getNewNamespaceName = (num: number): string => {
   return `Space ${num}`
 }

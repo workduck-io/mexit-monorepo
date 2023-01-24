@@ -63,12 +63,12 @@ export const ItemLabel = styled.div`
   max-width: 12rem;
 `
 
-export const RootMenuWrapper = styled.button`
+export const RootMenuWrapper = styled.button<{ border?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-  border: none;
+  border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
   background: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.default};

@@ -3,6 +3,7 @@ import create from 'zustand'
 export enum ModalsType {
   blocks,
   delete,
+  deleteSpace,
   refactor,
   lookup,
   rename,

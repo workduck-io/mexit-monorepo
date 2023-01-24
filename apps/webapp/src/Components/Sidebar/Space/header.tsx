@@ -7,7 +7,7 @@ import Tippy from '@tippyjs/react'
 import { IconButton, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
+import { MIcon, mog, RESERVED_NAMESPACES } from '@mexit/core'
 import { Input, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
@@ -52,9 +52,15 @@ const Header = ({
   const openShareModal = useShareModalStore((store) => store.openModal)
   const { goTo } = useRouting()
 
+  mog('HEADER IS', { space, inp: inpRef.current, ttle: titleRef.current, title })
+
   const onTagClick = (tag: string) => {
     goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
   }
+
+  useEffect(() => {
+    setTitle(space?.label)
+  }, [space])
 
   const onChangeName = (name: string) => {
     // mog('onChangeName', { name })
@@ -133,7 +139,13 @@ const Header = ({
       <SpaceHeader>
         <SpaceTitleWrapper>
           <SpaceTitle>
-            <IconPicker size={20} allowPicker={!isNamespaceIconDisabled} onChange={onChangeIcon} value={space?.icon} />
+            <IconPicker
+              key={space?.id}
+              size={20}
+              allowPicker={!isNamespaceIconDisabled}
+              onChange={onChangeIcon}
+              value={space?.icon}
+            />
             {showInput && !isNamespaceInputDisabled ? (
               <Input defaultValue={space?.label} onBlur={(e) => onChangeName(e.target.value)} ref={inpRef} />
             ) : (

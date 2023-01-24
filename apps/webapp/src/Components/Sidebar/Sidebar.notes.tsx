@@ -85,7 +85,7 @@ export const NoteSidebar = () => {
       pollAction: PollActions.shared
     })
 
-    // mog('Spaces', { spaces: nspaces, nodesByNamespaces })
+    mog('Spaces', { spaces: nspaces })
     return nspaces
   }, [ilinks, namespaces])
 
@@ -162,7 +162,7 @@ export const NoteSidebar = () => {
       }
       useUserPreferenceStore.getState().setActiveNamespace(selectedSpace)
     }
-  }, [])
+  }, [spaces, spaceId])
 
   usePolling()
 

@@ -127,5 +127,5 @@ export const RightSlot = styled.div`
 export const ContextMenuSeparator = styled(ContextMenuPrimitive.Separator)`
   height: 1px;
   background-color: ${({ theme }) => theme.tokens.surfaces.separator};
-  margin: 5px;
+  margin: 4px;
 `

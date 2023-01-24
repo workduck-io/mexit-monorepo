@@ -97,6 +97,10 @@ export const useNamespaceApi = () => {
     }
   }
 
+  const deleteNamespace = async (namespaceId: string, successorNamespaceId?: string) => {
+    await API.namespace.delete(namespaceId, successorNamespaceId)
+  }
+
   const getNamespace = async (id: string) => {
     const namespace = await API.namespace
       .get(id)
@@ -154,7 +158,7 @@ export const useNamespaceApi = () => {
         id: req.id,
         name: name,
         iconUrl: req.metadata.icon,
-        access: 'MANAGE' as const,
+        access: 'OWNER' as const,
         createdAt: Date.now(),
         updatedAt: Date.now()
       }))
@@ -247,6 +251,7 @@ export const useNamespaceApi = () => {
     updateNamespaceShare,
     getPublicNamespaceAPI,
     makeNamespacePublic,
-    makeNamespacePrivate
+    makeNamespacePrivate,
+    deleteNamespace
   }
 }

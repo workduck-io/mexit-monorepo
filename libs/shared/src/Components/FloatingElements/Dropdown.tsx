@@ -114,6 +114,11 @@ interface Props {
   multiSelect?: boolean
 
   /**
+   * Show Button with Border
+   */
+  border?: boolean
+
+  /**
    * Creatable?
    */
   onCreate?: (value: string) => void
@@ -126,7 +131,19 @@ interface Props {
 
 export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
   (
-    { children, label, values, multiSelect, allowSearch, onCreate, searchPlaceholder, className, root, ...props },
+    {
+      children,
+      label,
+      values,
+      border = false,
+      multiSelect,
+      allowSearch,
+      onCreate,
+      searchPlaceholder,
+      className,
+      root,
+      ...props
+    },
     ref
   ) => {
     const [open, setOpen] = useState(false)
@@ -249,7 +266,12 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         setAllowHover(true)
       }
 
-      function onKeyDown() {
+      function onKeyDown(e) {
+        if (e.key === 'Enter') {
+          // e.preventDefault()
+          e.stopPropagation()
+        }
+
         setAllowHover(false)
       }
 
@@ -295,6 +317,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       <FloatingNode id={nodeId}>
         <RootMenuWrapper
           type="button"
+          border={border}
           {...getReferenceProps({
             ...props,
             ref: mergedReferenceRef,
