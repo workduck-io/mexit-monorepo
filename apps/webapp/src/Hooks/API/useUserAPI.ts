@@ -43,7 +43,7 @@ export const useUserService = () => {
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
-    if (user) return {...user,userId: user.userID}
+    if (user) return { ...user, userId: user.userID }
 
     try {
       return (await API.user.getByMail(email)) as TempUser
@@ -116,7 +116,7 @@ export const useUserService = () => {
     }
 
     try {
-      return await API.user.updatePreference(userID, userPreferences).then((resp) => {
+      return await API.user.updatePreference(userPreferences).then((resp) => {
         return true
       })
     } catch (e) {
