@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
@@ -20,7 +20,7 @@ import {
 
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
-import { ROUTE_PATHS } from '../Hooks/useRouting'
+import { ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useAuthentication, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { ALIAS_REG, EMAIL_REG, PASSWORD } from '../Utils/constants'
@@ -37,6 +37,7 @@ export const Register = () => {
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const { resendCode } = useAuth()
   const { initializeAfterAuth } = useInitializeAfterAuth()
+  const { useQuery } = useRouting()
 
   const regErrors = registerForm.formState.errors
   const verErrors = verifyForm.formState.errors
@@ -66,7 +67,7 @@ export const Register = () => {
   }
 
   const onVerifySubmit = async (data: VerifyFormData) => {
-    const metadata = { tag: 'MEXIT_WEBAPP' }
+    const metadata = { invite: useQuery().get('invite') }
     try {
       const loginData = await verifySignup(data.code, metadata)
       await initializeAfterAuth(loginData, true, false, true)

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { matchPath, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ReminderViewData } from '@mexit/core'
@@ -40,10 +41,15 @@ export const useRouting = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const params = useParams()
+  const { pathname, search } = location
+
+  const useQuery = () => {
+    return useMemo(() => new URLSearchParams(search), [search])
+  }
 
   const goTo = (basePath: string, type: NavigationType, id?: string, query?: Record<string, any>) => {
     const path = id ? `${basePath}/${id}` : basePath
-    const state = { from: location.pathname, ...query }
+    const state = { from: pathname, ...query }
 
     if (type === NavigationType.push) navigate(path, { state })
 
@@ -59,5 +65,5 @@ export const useRouting = () => {
     navigate(-1)
   }
 
-  return { goTo, location, params, getParams, goBack }
+  return { goTo, location, params, getParams, useQuery, goBack }
 }
