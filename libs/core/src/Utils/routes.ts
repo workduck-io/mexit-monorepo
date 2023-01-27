@@ -130,10 +130,12 @@ export const apiURLs = {
 
   user: {
     getUserRecords: `${BASE_URLS.user}/`,
+    getAllUserRecordsOfWorkspace: `${BASE_URLS.user}/all`,
     getFromEmail: (email: string) => `${BASE_URLS.user}/email/${encodeURIComponent(email)}`,
     getFromUserId: (userId: string) => `${BASE_URLS.user}/${encodeURIComponent(userId)}`,
-    updateInfo: `${BASE_URLS.user}/update`,
-    getUserByLinkedin: `${BASE_URLS.user}/linkedin`,
+    updateInfo: `${BASE_URLS.user}/info`,
+    updatePreference: `${BASE_URLS.user}/preference`,
+    getUserByLinkedin: (url: string) => `${BASE_URLS.user}/linkedin/${url}`,
     registerStatus: `${BASE_URLS.user}/status`
   },
 

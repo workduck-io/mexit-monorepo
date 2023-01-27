@@ -213,17 +213,17 @@ export const useInitializeAfterAuth = () => {
             .getCurrent()
             .then(async (res) => {
               if (res) {
-                if (isGoogle && res.group === undefined) {
+                if (isGoogle && res.activeWorkspace === undefined) {
                   forceRefreshToken = true
                   return await registerNewUser(loginData)
-                } else if (res.group) {
+                } else if (res.activeWorkspace) {
                   const userDetails = {
                     email: email,
                     alias: res.alias ?? res.properties?.alias ?? res.name,
                     userID: res.id,
                     name: res.name
                   }
-                  const workspaceDetails = { id: res.group, name: 'WORKSPACE_NAME' }
+                  const workspaceDetails = { id: res.activeWorkspace, name: 'WORKSPACE_NAME' }
                   return { workspaceDetails, userDetails }
                 } else {
                   throw new Error('Could Not Fetch User Records')

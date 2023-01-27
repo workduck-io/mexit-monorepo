@@ -20,12 +20,13 @@ export class UserAPI {
   async getByID(id: string, cacheConfig?: CacheConfig, options?: Options) {
     return await this.client.get(apiURLs.user.getFromUserId(id), cacheConfig, options)
   }
+
   async updateInfo(data, options?: Options) {
     return await this.client.put(apiURLs.user.updateInfo, data, options)
   }
 
-  async updatePreference(userID: string, userPreferences, options?: Options) {
-    return await this.client.put(apiURLs.user.updateInfo, { id: userID, preference: userPreferences }, options)
+  async updatePreference(userPreferences, options?: Options) {
+    return await this.client.put(apiURLs.user.updatePreference, { preference: userPreferences }, options)
   }
 
   async registerStatus(cacheConfig?: CacheConfig, options?: Options) {

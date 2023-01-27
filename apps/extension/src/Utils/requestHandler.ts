@@ -292,7 +292,7 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
 
     // TODO: complete this
     case 'MEX_USER': {
-      const URL = apiURLs.user.getUserByLinkedin
+      const URL = apiURLs.user.getUserByLinkedin(data.body)
 
       return client
         .post(URL, data.body)
