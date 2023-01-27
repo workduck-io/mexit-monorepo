@@ -57,6 +57,10 @@ const Settings = () => {
             <Icon icon={keyboardBoxLine} />
             Shortcuts
           </SettingTitle>
+          <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="invite">
+            <Icon icon={informationLine} />
+            Invite
+          </SettingTitle>
           <SettingTitle tabIndex={-1} className={(s) => (s.isActive ? 'active' : '')} to="about">
             <Icon icon={informationLine} />
             About

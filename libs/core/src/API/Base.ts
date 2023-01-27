@@ -6,6 +6,7 @@ import { AiAPI } from './AI'
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
 import { HighlightAPI } from './Highlight'
+import { InviteAPI } from './Invite'
 import { LinkAPI } from './Link'
 import { LochAPI } from './Loch'
 import { NamespaceAPI } from './Namespace'
@@ -36,6 +37,7 @@ class APIClass {
   public prompt: PromptAPI
   public reminder: ReminderAPI
   public user: UserAPI
+  public invite: InviteAPI
   public highlight: HighlightAPI
   public smartcapture: SmartCaptureAPI
   constructor() {
@@ -61,6 +63,7 @@ class APIClass {
     this.ai = new AiAPI(this.client)
     this.reminder = new ReminderAPI(this.client)
     this.user = new UserAPI(this.client)
+    this.invite = new InviteAPI(this.client)
     this.highlight = new HighlightAPI(this.client)
     this.smartcapture = new SmartCaptureAPI(this.client)
   }

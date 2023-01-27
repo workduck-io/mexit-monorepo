@@ -17,6 +17,7 @@ export const API_BASE_URLS = {
   user: `${MEXIT_BACKEND_URL_BASE}/user`,
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
+  invite: `${MEXIT_BACKEND_URL_BASE}/user/invite`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
   smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
   comment: `${MEXIT_BACKEND_URL_BASE}/comment`,
@@ -139,6 +140,12 @@ export const apiURLs = {
     saveLink: `${API_BASE_URLS.link}/shorten`,
     deleteLink: (linkId: string) => `${API_BASE_URLS.link}/${linkId}`,
     shortendLink: (shortId: string, workspaceId: string) => `${API_BASE_URLS.url}/${workspaceId}/${shortId}`
+  },
+
+  invite: {
+    getById: (inviteId: string) => `${BASE_URLS.invite}/${inviteId}`,
+    getAll: `${BASE_URLS.invite}`,
+    create: `${BASE_URLS.invite}`
   },
 
   reminders: {

@@ -35,6 +35,7 @@ import { Register } from './Views/Register'
 import Search from './Views/Search'
 import Settings from './Views/Settings'
 import About from './Views/Settings/About'
+import Invite from './Views/Settings/Invite'
 import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
@@ -154,6 +155,7 @@ const SettingsRoutes = () => {
       >
         <Route index element={<UserPage />} />
         <Route path="about" element={<About />} />
+        <Route path="invite" element={<Invite />} />
         <Route path="themes" element={<Themes />} />
         <Route path="user" element={<UserPage />} />
         <Route path="shortcuts" element={<Shortcuts />} />
