@@ -29,9 +29,6 @@ import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import { useTreeStore } from '../../Stores/useTreeStore'
 import { flattenNestedTreeFromIds } from '../../Utils/tree'
 
@@ -290,15 +287,6 @@ const Tree = ({ initTree, selectedItemId, readOnly }: TreeProps) => {
       />
     </>
   )
-}
-
-export const TreeContainer = () => {
-  const node = useEditorStore((store) => store.node)
-  const ilinks = useDataStore((store) => store.ilinks)
-
-  const initTree = useMemo(() => getTreeFromLinks(ilinks), [node, ilinks])
-
-  return <Tree initTree={initTree} />
 }
 
 export default Tree

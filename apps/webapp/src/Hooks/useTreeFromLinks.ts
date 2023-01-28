@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash'
 
-import { getAllParentIds, ILink,sanatizeLinks } from '@mexit/core'
+import { getAllParentIds, ILink, mog, sanatizeLinks } from '@mexit/core'
 
 import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
@@ -10,7 +10,9 @@ export const getTreeFromLinks = (links: ILink[]) => {
   // mog('Expanded', { expanded })
 
   const sanatizedLinks = sanatizeLinks(links)
-  const tree = generateTree(sanatizedLinks, expanded)
+  const tree = generateTree(sanatizedLinks)
+
+  mog('new tree', { sanatizedLinks, tree })
 
   return tree
 }
@@ -41,18 +43,17 @@ export const getPartialTreeFromLinks = (matchedLinks: ILink[], allLinks: ILink[]
   const allExpanded = treeFlatItems.map((l) => l.id)
 
   const tree = generateTree(
-    treeFlatItems,
-    allExpanded,
-    // No need to sort as already ordered by search
-    (a, b) => {
-      return 0
-    }
+    treeFlatItems
+    // allExpanded,
+    // // No need to sort as already ordered by search
+    // (a, b) => {
+    //   return 0
+    // }
   )
 
-  const matchedFlatItems = Object.keys(tree.items)
-    .sort()
-    .filter((i) => tree.items[i].data.stub === false)
-    .map((i) => tree.items[i])
+  const matchedFlatItems = Object.keys(tree).sort()
+  // .filter((i) => tree.items[i].data.stub === false)
+  // .map((i) => tree.items[i])
 
   // mog('Made the partialTree From Links', { matchedLinks, allLinks, tree, treeFlatItems })
 

@@ -2,7 +2,6 @@ import React, { forwardRef, HTMLAttributes } from 'react'
 
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'
 
 import {
@@ -15,12 +14,11 @@ import {
   TooltipContentWrapper
 } from '@workduck-io/mex-components'
 
-import { MIcon, mog } from '@mexit/core'
+import { MIcon } from '@mexit/core'
 import { ItemTitleText } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../../Hooks/useLinks'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
-import { TreeContextMenu } from '../TreeWithContextMenu'
 
 import { TreeItem } from './types'
 
@@ -130,8 +128,8 @@ export const RenderTreeItem = forwardRef<HTMLDivElement, Props>(
         singleton={target}
         content={<TooltipContent path={data.path} nodeId={data.nodeId} />}
       >
-        {/* <span> */}
-        <ContextMenu.Root
+        <span>
+          {/* <ContextMenu.Root
           onOpenChange={(open) => {
             if (open) {
               mog('Context Menu open')
@@ -139,22 +137,22 @@ export const RenderTreeItem = forwardRef<HTMLDivElement, Props>(
               mog('Context menu close')
             }
           }}
-        >
-          <ContextMenu.Trigger asChild>
-            <div ref={wrapperRef}>
-              <StyledTreeItem ref={ref}>
-                <GetIcon id={data.nodeId} childCount={childCount} onCollapse={onCollapse} />
-                <ItemContent {...handleProps}>
-                  <ItemTitleWithAnalysis nodeId={data.nodeId} path={data.path} icon={data?.icon} />
-                </ItemContent>
+        > */}
+          {/* <ContextMenu.Trigger asChild> */}
+          <div ref={wrapperRef}>
+            <StyledTreeItem ref={ref}>
+              <GetIcon id={data.nodeId} childCount={childCount} onCollapse={onCollapse} />
+              <ItemContent {...handleProps}>
+                <ItemTitleWithAnalysis nodeId={data.nodeId} path={data.path} icon={data?.icon} />
+              </ItemContent>
 
-                <TreeItemMetaInfo childCount={childCount} />
-              </StyledTreeItem>
-            </div>
-          </ContextMenu.Trigger>
-          <TreeContextMenu item={{ data: { ...data } }} />
-        </ContextMenu.Root>
-        {/* </span> */}
+              <TreeItemMetaInfo childCount={childCount} />
+            </StyledTreeItem>
+          </div>
+          {/* </ContextMenu.Trigger> */}
+          {/* <TreeContextMenu item={{ data: { ...data } }} /> */}
+          {/* </ContextMenu.Root> */}
+        </span>
       </Tippy>
     )
   }

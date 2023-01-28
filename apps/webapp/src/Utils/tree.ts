@@ -4,6 +4,7 @@ import { ItemId } from '@atlaskit/tree/dist/types/types'
 import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, MIcon, NodeMetadata } from '@mexit/core'
 import { LastOpenedState, TreeNode } from '@mexit/shared'
 
+import { TreeItems } from '../Components/Sidebar/Tree/types'
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
 
@@ -238,99 +239,43 @@ export const getBaseNestedTree = (flatTree: FlatItem[]): BaseTreeNode[] => {
   return baseNestedTree
 }
 
-// Generate nested node tree from a list of ordered id strings
-// Expanded - path of the nodes that are expanded in tree
-// Note that id of FlatItem is the path
-// And id of TreeItem is the index+1 in nested tree like `1-2-3`
-export const generateTree = (
-  treeFlat: FlatItem[],
-  expanded: string[],
-  sort?: (a: BaseTreeNode, b: BaseTreeNode) => number
-): TreeData => {
-  // tree should be sorted
-  // mog('GenerateTree ', { treeFlat })
-  const unsortedBaseNestedTree = getBaseNestedTree(treeFlat)
-  const baseNestedTree = sort ? unsortedBaseNestedTree.sort(sort) : sortTreeWithPriority(unsortedBaseNestedTree)
-  const nestedTree: TreeData = {
-    rootId: '1',
-    items: {}
-  }
+export const generateTree = (flatItems: FlatItem[]): TreeItems => {
+  const store = new Map() // stores data indexed by it's path
+  const rels = new Map() // stores array of children associated with path
+  const roots = [] // stores root nodes
 
-  const rootItem = {
-    id: '1',
-    data: { title: 'root', path: 'root' },
-    children: [],
-    isExpanded: baseNestedTree.length > 0,
-    isChildrenLoading: false,
-    hasChildren: baseNestedTree.length > 0
-  }
+  flatItems.forEach((n) => {
+    store.set(n.id, n)
+    !rels.get(n.id) ? rels.set(n.id, []) : undefined
 
-  for (let i = 0; i < treeFlat.length; i++) {
-    const n = treeFlat[i]
     const parentPath = getParentNodePath(n.id)
-    const nestedItem = getItemFromBaseNestedTree(baseNestedTree, n.id, n.nodeid)
-
-    if (!nestedItem) {
-      continue
+    if (!parentPath) {
+      roots.push(n.id)
+      return
     }
-
-    if (parentPath === null) {
-      // add to tree first level
-      const newId = `1${TREE_SEPARATOR}${getIdFromBaseNestedTree(baseNestedTree, n.id, n.nodeid)}`
-      // mog('does not Parent Internal', { parentPath, n, newId, i })
-      nestedTree.items[newId] = {
-        ...createChildLess(n.id, n.nodeid, newId, n.icon, {
-          title: getNameFromPath(n.id),
-          nodeid: n.nodeid,
-          path: n.id,
-          mex_icon: n.icon,
-          namespace: n.namespace,
-          stub: n.stub,
-          tasks: nestedItem.tasks,
-          reminders: nestedItem.reminders,
-          lastOpenedState: nestedItem.lastOpenedState
-        }),
-        isExpanded: expanded.includes(n.id)
-      }
-    } else {
-      // Will have a parent
-      const parent = treeFlat.find((l) => l.id === parentPath)
-      const parentNodeId = parent && parent.nodeid
-      const parentId = `1${TREE_SEPARATOR}${getIdFromBaseNestedTree(baseNestedTree, parentPath, parentNodeId)}`
-      const parentItem = nestedTree.items[parentId]
-      // mog('hasParent Internal', { parentId, nestedItem, parentNodeId, parentItem, parentPath, n, i })
-      if (parentItem) {
-        // add to tree and update parent
-        const newId = `1${TREE_SEPARATOR}${getIdFromBaseNestedTree(baseNestedTree, n.id, n.nodeid)}`
-        // Order is important for rendering children
-        parentItem.children.push(newId)
-        parentItem.hasChildren = true
-        nestedTree.items[parentId] = parentItem
-        nestedTree.items[newId] = {
-          ...createChildLess(n.id, n.nodeid, newId, n.icon, {
-            title: getNameFromPath(n.id),
-            nodeid: n.nodeid,
-            path: n.id,
-            mex_icon: n.icon,
-            namespace: n.namespace,
-            stub: n.stub,
-            tasks: nestedItem.tasks,
-            reminders: nestedItem.reminders,
-            lastOpenedState: nestedItem.lastOpenedState
-          }),
-          isExpanded: expanded.includes(n.id)
-        }
-      }
-    }
-  }
-
-  baseNestedTree.forEach((n, i) => {
-    rootItem.children.push(`1${TREE_SEPARATOR}${i + 1}`)
+    const parent = rels.get(parentPath) || []
+    parent.push(n.id)
+    rels.set(parentPath, parent)
   })
 
-  nestedTree.items['1'] = rootItem
+  function build(id) {
+    const data = store.get(id)
+    const children = rels.get(id)
 
-  return nestedTree
+    return {
+      id: data.id,
+      data: {
+        title: getNameFromPath(data.nodeid),
+        nodeId: data.nodeid,
+        path: data.id,
+        namespace: data.namespace,
+        icon: data.icon
+      },
+      children: children.length !== 0 ? children.map((c) => build(c)) : []
+    }
+  }
+
+  return roots.map((r) => build(r))
 }
 
 const getFlatTree = (nestedTree: TreeNode[]) => {

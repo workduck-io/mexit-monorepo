@@ -191,7 +191,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
               readOnly={readOnly}
               selectedItemId={selectedItem?.data?.nodeid}
             /> */}
-            <SortableTree collapsible />
+            <SortableTree defaultItems={initTree} collapsible />
           </SpaceList>
         </>
       ) : (

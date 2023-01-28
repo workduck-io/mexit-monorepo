@@ -17,9 +17,9 @@ export interface TreeItem {
 export type TreeItems = TreeItem[]
 
 export interface FlattenedItem extends TreeItem {
-  parentId: string
-  depth: number
-  index: number
+  parentId?: string
+  depth?: number
+  index?: number
 }
 
 export type SensorContext = MutableRefObject<{
