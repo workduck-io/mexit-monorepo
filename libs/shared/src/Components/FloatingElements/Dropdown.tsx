@@ -118,6 +118,8 @@ interface Props {
    */
   border?: boolean
 
+  handleKeyDown?: (e: KeyboardEvent) => void
+
   /**
    * Creatable?
    */
@@ -139,6 +141,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       multiSelect,
       allowSearch,
       onCreate,
+      handleKeyDown,
       searchPlaceholder,
       className,
       root,
@@ -267,10 +270,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       }
 
       function onKeyDown(e) {
-        if (e.key === 'Enter') {
-          // e.preventDefault()
-          e.stopPropagation()
-        }
+        handleKeyDown(e)
 
         setAllowHover(false)
       }

@@ -41,6 +41,10 @@ const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange, currentSp
     onChange(undefined)
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') e.stopPropagation()
+  }
+
   return (
     <MoveSpaceSection>
       <Group>
@@ -51,6 +55,7 @@ const MoveToSpace: React.FC<MoveToSpaceProps> = ({ selected, onChange, currentSp
         <Menu
           key="wd-mexit-space-selector"
           border
+          handleKeyDown={handleKeyDown}
           values={
             <GenericFlex>
               <IconDisplay icon={selected?.icon ?? DefaultMIcons.SPACE} />
