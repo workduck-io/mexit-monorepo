@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.22.8
+
+### Patch Changes
+
+- 4e55e7f8: Keydown event propgation fixed
+- 197194f3: Updated user register and status flow
+
 ## 0.22.7
 
 ### Patch Changes
