@@ -1,5 +1,12 @@
 # mexit-webapp
 
+## 0.22.9
+
+### Patch Changes
+
+- ff3efc20: App Init Intermediate state, User Details Fixes
+- a4eab3b1: Public note title and icon fixes
+
 ## 0.22.8
 
 ### Patch Changes
