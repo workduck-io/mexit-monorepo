@@ -8,8 +8,6 @@ import {
 } from '@udecode/plate'
 import { Range } from 'slate'
 
-import { mog } from '@mexit/core'
-
 import { ComboTriggerType } from '../../../Stores/useComboboxStore'
 import { ComboboxType, ComboTriggerDataType } from '../../Types/MultiCombobox'
 import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
@@ -35,8 +33,6 @@ export const getTriggeredData = (
       isCursorAfterTrigger
 
     if (!blockSearch || blockStart === undefined) setTrigger({ ...comboboxItem, at: range.anchor, blockAt: blockStart })
-
-    mog('TRIGGER IS', { comboboxItem })
 
     return {
       range,

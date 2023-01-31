@@ -28,3 +28,4 @@ export function getScrollbarWidth() {
 export const resize = (ref: React.RefObject<HTMLElement>) => {
   window.parent.postMessage({ type: 'height-init', height: ref.current.clientHeight }, '*')
 }
+export const randomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)

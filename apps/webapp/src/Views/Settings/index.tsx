@@ -10,13 +10,13 @@ import styled from 'styled-components'
 import { Button } from '@workduck-io/mex-components'
 
 import {
-  IntegrationContainer,
-  IntegrationTitle,
   MainHeader,
+  PageContainer,
   SettingsContainer,
   SettingsContent,
   SettingsOptions,
-  SettingTitle
+  SettingTitle,
+  Title
 } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -39,9 +39,9 @@ const Settings = () => {
   }
 
   return (
-    <IntegrationContainer>
+    <PageContainer>
       <MainHeader>
-        <IntegrationTitle>Settings</IntegrationTitle>
+        <Title>Settings</Title>
       </MainHeader>
       <SettingsContainer>
         <SettingsOptions>
@@ -68,7 +68,7 @@ const Settings = () => {
           <Outlet />
         </SettingsContent>
       </SettingsContainer>
-    </IntegrationContainer>
+    </PageContainer>
   )
 }
 

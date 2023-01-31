@@ -89,6 +89,12 @@ export const ElementTypeBasedShortcut: Record<string, Record<string, Shortcut>> 
     },
     generate: spotlightShortcuts.AltEnter
   },
+  [QuickLinkType.webLinks]: {
+    link: {
+      ...spotlightShortcuts.open,
+      title: 'to Insert'
+    }
+  },
   [CategoryType.action]: {
     action: {
       ...spotlightShortcuts.open,

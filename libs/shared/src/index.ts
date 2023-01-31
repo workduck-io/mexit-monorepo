@@ -3,6 +3,7 @@ export * from './Components/AccessTag'
 export * from './Components/AddTagMenu'
 export * from './Components/CopyButton'
 export * from './Components/FloatingElements'
+export * from './Components/Hints'
 export * from './Components/IconDisplay'
 export * from './Components/Icons'
 export * from './Components/InteractiveToast'
@@ -105,5 +106,3 @@ export * from './Utils/tabInfo'
 // export * from './Utils/themeGenerator'
 export * from './Utils/uploadToCDN'
 export * from './Utils/upsertLinkAtSelection'
-
-

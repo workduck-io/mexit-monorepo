@@ -66,7 +66,7 @@ export const useNamespaceApi = () => {
       }, [])
       const localILinks = useDataStore.getState().ilinks
 
-      mog('update namespaces and ILinks', { namespaces, newILinks, archivedILinks })
+      // mog('update namespaces and ILinks', { namespaces, newILinks, archivedILinks })
       // SetILinks once middleware is integrated
       const ns = namespaces.map((n) => n.ns)
       setNamespaces(ns)

@@ -60,12 +60,22 @@ export interface UpdatableUserDetails {
   alias?: string
 }
 
+export enum AppInitStatus {
+  START,
+  RUNNING,
+  COMPLETE,
+  ERROR
+}
+
 export interface AuthStoreState extends State {
   isForgottenPassword: boolean
   authenticated: boolean
   registered: boolean
   userDetails: undefined | UserDetails
   workspaceDetails: undefined | WorkspaceDetails
+  appInitStatus?: AppInitStatus
+  setAppInitStatus: (appInitStatus: AppInitStatus) => void
+  setIsUserAuthenticated: () => void
   setAuthenticated: (userDetails: UserDetails, workspaceDetails: WorkspaceDetails) => void
   setUnAuthenticated: () => void
   setRegistered: (val: boolean) => void

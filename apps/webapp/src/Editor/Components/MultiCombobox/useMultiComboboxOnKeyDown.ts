@@ -192,7 +192,6 @@ export const useElementOnChange = (elementComboType: SingleComboboxConfig, keys?
 
         if (isBlockEnd && !isBlockComponent && itemType !== QuickLinkType.webLinks) {
           // delete the inserted space
-          console.log('DELETING...')
           deleteText(editor, { unit: 'character', reverse: true })
         }
 

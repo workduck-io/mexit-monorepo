@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 
 import { Button, MexIcon } from '@workduck-io/mex-components'
 
-import { defaultContent, mog, NodeEditorContent, NodeType } from '@mexit/core'
+import { defaultContent, NodeEditorContent, NodeType } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewNoteName,
@@ -51,7 +51,6 @@ const PreviewNoteModal = () => {
 
   const content = useMemo(() => {
     const data = getContent(modalData?.noteId)
-    mog('CONTENT HERE', { modalData, data })
     return data?.content || defaultContent.content
   }, [modalData])
 

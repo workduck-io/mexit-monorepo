@@ -5,6 +5,7 @@ import { animated } from 'react-spring'
 
 import styled from 'styled-components'
 
+import { AppInitStatus } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'
@@ -15,13 +16,11 @@ import Portals from './Components/Portals'
 import SplashScreen from './Components/SplashScreen'
 import Themes from './Components/Themes'
 import UserPage from './Components/User/UserPage'
-import useLoad from './Hooks/useLoad'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import useSocket from './Hooks/useSocket'
 import { useAuthStore } from './Stores/useAuth'
 import useBlockStore from './Stores/useBlockStore'
-import { useDataStore } from './Stores/useDataStore'
 import { useEditorStore } from './Stores/useEditorStore'
 import { useLayoutStore } from './Stores/useLayoutStore'
 import { SocketActionType } from './Types/Socket'
@@ -56,29 +55,30 @@ export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
 
 const ProtectedRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
+  const isAppInit = useAuthStore((store) => store.appInitStatus === AppInitStatus.RUNNING)
+
   const location = useLocation()
 
-  const showLoader = useLayoutStore((store) => store.showLoader)
-  if (showLoader) return <SplashScreen />
-
-  return authenticated ? children : <Navigate to={ROUTE_PATHS.login} state={{ from: location }} replace />
+  return authenticated || isAppInit ? (
+    <>
+      {isAppInit && <SplashScreen showHints />}
+      {children}
+    </>
+  ) : (
+    <Navigate to={ROUTE_PATHS.login} state={{ from: location }} replace />
+  )
 }
 
 const AuthRoute = ({ children }) => {
   const authenticated = useAuthStore((store) => store.authenticated)
-  const { loadNode } = useLoad()
+  const isAppInit = useAuthStore((store) => store.appInitStatus === AppInitStatus.RUNNING)
 
-  const showLoader = useLayoutStore((store) => store.showLoader)
-  if (showLoader) return <SplashScreen />
-
-  if (!authenticated) {
+  if (!authenticated && !isAppInit) {
     return children
   } else {
-    const baseNodeId = useDataStore.getState().baseNodeId
     const { from } = {
-      from: { pathname: `${ROUTE_PATHS.node}/${baseNodeId}` }
+      from: { pathname: ROUTE_PATHS.home }
     }
-    loadNode(baseNodeId, { savePrev: false, fetch: false })
 
     return <Navigate to={from} />
   }

@@ -77,12 +77,21 @@ export const SpaceBetweenHorizontalFlex = styled.div`
   justify-content: space-between;
 `
 
+export const ContentSpacing = css`
+  gap: ${({ theme }) => theme.spacing.medium};
+  margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
+`
+
+export const Content = styled.section`
+  ${ContentSpacing};
+`
+
 export const MainHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.medium};
-  margin: ${({ theme }) => `${theme.spacing.medium} ${theme.spacing.large}`};
+
+  ${ContentSpacing}
 
   ${Title} {
     font-size: 2rem;

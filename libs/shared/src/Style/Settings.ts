@@ -5,6 +5,7 @@ import styled from 'styled-components'
 export const SettingsContainer = styled.section`
   display: flex;
   width: 100%;
+  margin: ${({ theme }) => `${theme.spacing.large}`};
   user-select: none;
 `
 

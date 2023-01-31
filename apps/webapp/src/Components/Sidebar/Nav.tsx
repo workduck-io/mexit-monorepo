@@ -199,7 +199,7 @@ const Nav = () => {
         $show={sidebar.show}
         {...getFocusProps(focusMode)}
       >
-        {authenticated && showNav(location.pathname) && (
+        {showNav(location.pathname) && (
           <MainNav {...getFocusProps(focusMode)}>
             <NavTooltip singleton={source} />
 

@@ -102,6 +102,7 @@ export const useUserService = () => {
   const updateUserPreferences = async (): Promise<boolean> => {
     const lastOpenedNotes = useUserPreferenceStore.getState().lastOpenedNotes
     const lastUsedSnippets = useUserPreferenceStore.getState().lastUsedSnippets
+    const activeNamespace = useUserPreferenceStore.getState().activeNamespace
     const theme = useUserPreferenceStore.getState().theme
     const smartCaptureExcludedFields = useUserPreferenceStore.getState().smartCaptureExcludedFields
     const userID = useAuthStore.getState().userDetails.userID
@@ -111,7 +112,8 @@ export const useUserService = () => {
       lastOpenedNotes,
       lastUsedSnippets,
       smartCaptureExcludedFields,
-      theme
+      theme,
+      activeNamespace
     }
 
     try {

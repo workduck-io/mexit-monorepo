@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
+import { RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
 import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
@@ -85,7 +85,6 @@ export const NoteSidebar = () => {
       pollAction: PollActions.shared
     })
 
-    mog('Spaces', { spaces: nspaces })
     return nspaces
   }, [ilinks, namespaces])
 
@@ -98,7 +97,7 @@ export const NoteSidebar = () => {
   const changeIndex = (newIndex: number, updateStores = true) => {
     if (newIndex === index.current) return
     const nextSpaceId = spaces[newIndex]?.id
-    mog('Changing index', { newIndex, index })
+    // mog('Changing index', { newIndex, index })
     if (nextSpaceId) {
       if (updateStores) {
         changeSidebarSpace(nextSpaceId)
@@ -157,7 +156,7 @@ export const NoteSidebar = () => {
     const selectedSpace = spaces?.[index.current]?.id
 
     if (!currentNamespace) {
-      if (selectedSpace !== spaceId) {
+      if (selectedSpace && selectedSpace !== spaceId) {
         changeSidebarSpace(selectedSpace)
       }
       useUserPreferenceStore.getState().setActiveNamespace(selectedSpace)
