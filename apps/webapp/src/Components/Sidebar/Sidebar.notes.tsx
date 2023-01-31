@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { mog, RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
+import { RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
 import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
@@ -24,12 +24,14 @@ import StarredNotes from './StarredNotes'
 export const NoteSidebar = () => {
   const ilinks = useDataStore((store) => store.ilinks)
   const namespaces = useDataStore((store) => store.namespaces)
+  const baseNodeId = useDataStore((store) => store.baseNodeId)
+
   const spaceId = useUserPreferenceStore((store) => store.activeNamespace)
   const changeSidebarSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const { getMostUsedTags } = useTags()
   const tags = useDataStore((s) => s.tags)
   const replaceAndAddActionToPoll = useApiStore((store) => store.replaceAndAddActionToPoll)
-  const { getNodesByNamespaces } = useNamespaces()
+  const { getNodesByNamespaces, getNamespaceOfNodeid } = useNamespaces()
   const isAnimate = useRef(false)
 
   const mostUsedTags = useMemo(() => {
@@ -85,20 +87,27 @@ export const NoteSidebar = () => {
       pollAction: PollActions.shared
     })
 
-    mog('Spaces', { spaces: nspaces })
     return nspaces
   }, [ilinks, namespaces])
 
+  const getIndex = () => {
+    const index = spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id)
+
+    return index < 0 ? 0 : index
+  }
+
   const [index, setIndex] = useState({
-    current: spaces.findIndex((space) => space.id === spaceId),
+    current: getIndex(),
     // Required to find direction of the animation
     prev: -1
   })
 
+  console.log('SIDEBAR', { index })
+
   const changeIndex = (newIndex: number, updateStores = true) => {
     if (newIndex === index.current) return
     const nextSpaceId = spaces[newIndex]?.id
-    mog('Changing index', { newIndex, index })
+    // mog('Changing index', { newIndex, index })
     if (nextSpaceId) {
       if (updateStores) {
         changeSidebarSpace(nextSpaceId)
@@ -157,7 +166,7 @@ export const NoteSidebar = () => {
     const selectedSpace = spaces?.[index.current]?.id
 
     if (!currentNamespace) {
-      if (selectedSpace !== spaceId) {
+      if (selectedSpace && selectedSpace !== spaceId) {
         changeSidebarSpace(selectedSpace)
       }
       useUserPreferenceStore.getState().setActiveNamespace(selectedSpace)

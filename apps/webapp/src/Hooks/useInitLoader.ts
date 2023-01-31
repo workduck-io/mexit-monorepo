@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { API, mog, runBatch } from '@mexit/core'
+import { API, AppInitStatus, mog, runBatch } from '@mexit/core'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
 import { usePromptStore } from '../Stores/usePromptStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
@@ -25,8 +24,11 @@ import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
+  const initalizeApp = useAuthStore((store) => store.appInitStatus)
+
+  const setIsUserAuthenticated = useAuthStore((store) => store.setIsUserAuthenticated)
+
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const snippetHydrated = useSnippetStore((store) => store._hasHydrated)
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
@@ -72,18 +74,17 @@ export const useInitLoader = () => {
       initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
 
       updateBaseNode()
-      // We only set showLoader to false here because when needed the loader would be made visible by another component
-      setShowLoader(false)
+
+      if (useAuthStore.getState().appInitStatus === AppInitStatus.RUNNING) setIsUserAuthenticated()
     } catch (err) {
       console.error('Error in Init Loader: ', err)
-      setShowLoader(false)
       logout()
       toast('Something went wrong while initializing')
     }
   }
 
   useEffect(() => {
-    if (isAuthenticated && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
+    if (initalizeApp === AppInitStatus.RUNNING && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       API.setWorkspaceHeader(getWorkspaceId())
 
       const initData = {
@@ -99,11 +100,11 @@ export const useInitLoader = () => {
         .then(async () => {
           await startRequestsWorkerService()
           backgroundFetch()
-          fetchAll()
+          await fetchAll()
         })
         .catch((error) => {
           console.log('InitSearchIndexError', { error })
         })
     }
-  }, [isAuthenticated, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
+  }, [initalizeApp, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
 }

@@ -42,7 +42,6 @@ export const withILink: WithOverride = (editor, { type, options }) => {
     const prev = getPreviousNode(editor)
     if (prev && prev[0]) {
       const node = prev[0] as any
-      mog('NODE TYPE', { node })
       if (node.type && node.type === ELEMENT_ILINK && node.value) {
         deleteBackward('block')
         const val = getPathFromNodeIdHookless(node.value)

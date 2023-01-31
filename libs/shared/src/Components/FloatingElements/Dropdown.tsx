@@ -270,7 +270,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       }
 
       function onKeyDown(e) {
-        handleKeyDown(e)
+        if (handleKeyDown) handleKeyDown(e)
 
         setAllowHover(false)
       }

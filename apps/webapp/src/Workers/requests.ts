@@ -159,7 +159,7 @@ const initializeNamespacesExtension = async (localILinks: ILink[]) => {
       return [...arr, ...archiveNodeHierarchy]
     }, [])
 
-    mog('update namespaces and ILinks From Extension', { namespaces, newILinks, archivedILinks })
+    // mog('update namespaces and ILinks From Extension', { namespaces, newILinks, archivedILinks })
     // SetILinks once middleware is integrated
     const ns = namespaces.map((n) => n.ns)
 

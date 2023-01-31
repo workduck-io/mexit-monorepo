@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { mog, SNIPPET_VIEW_NAMESPACES } from '@mexit/core'
+import { SNIPPET_VIEW_NAMESPACES } from '@mexit/core'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
@@ -57,7 +57,7 @@ export const SnippetSidebar = () => {
   const changeIndex = (newIndex: number, updateStores = true) => {
     if (newIndex === index.current) return
     const nextSpaceId = spaces[newIndex]?.id
-    mog('Changing index', { newIndex, index })
+    // mog('Changing index', { newIndex, index })
     if (nextSpaceId) {
       if (updateStores) {
         isAnimate.current = true

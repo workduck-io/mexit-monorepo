@@ -154,7 +154,7 @@ export const useReactions = () => {
             }))
           })
           .flat()
-        mog('Got reactions', { res, reactions })
+        // mog('Got reactions', { res, reactions })
         addReactions(reactions, nodeId)
       })
       .catch((err) => {

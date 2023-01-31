@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import styled from 'styled-components'
 
-import { IS_DEV } from '@mexit/core'
+import { AppInitStatus, IS_DEV } from '@mexit/core'
 import { GridWrapper, linkTooltip, navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'
@@ -67,22 +67,26 @@ const Main = ({ children }: MainProps) => {
     }
   }, [routingInstrumentation])
 
-  const isGettingIntialized = useLayoutStore((store) => store.showLoader)
-  const authenticated = useAuthStore((state) => state.authenticated)
+  const appInitialized = useAuthStore(
+    (state) => state.appInitStatus === AppInitStatus.COMPLETE || state.appInitStatus === AppInitStatus.RUNNING
+  )
+
   const focusMode = useLayoutStore((s) => s.focusMode)
 
   const { gridSpringProps } = useSidebarTransition()
-
-  const initialized = !isGettingIntialized && authenticated
 
   return (
     <AppWrapper className={focusMode.on ? 'focus_mode' : ''}>
       {/* @ts-ignore */}
       <GridWrapper style={gridSpringProps}>
-        {!isGettingIntialized && <Nav />}
+        <Nav />
         <Content id="wd-mex-content-view">{children}</Content>
-        <Shortcut />
-        {initialized && <RHSidebar />}
+        {appInitialized && (
+          <>
+            <Shortcut />
+            <RHSidebar />
+          </>
+        )}
       </GridWrapper>
     </AppWrapper>
   )

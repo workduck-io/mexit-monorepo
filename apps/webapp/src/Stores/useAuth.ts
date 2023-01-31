@@ -17,7 +17,6 @@ import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
 import { useHelpStore } from './useHelpStore'
-import { useLayoutStore } from './useLayoutStore'
 import { useMentionStore } from './useMentionsStore'
 import { useMetadataStore } from './useMetadataStore'
 import { usePromptStore } from './usePromptStore'
@@ -183,6 +182,7 @@ export const useAuthentication = () => {
       userID: userId,
       name: name
     }
+
     const workspaceDetails = { id: workspaceID, name: 'WORKSPACE_NAME' }
 
     return { userDetails, workspaceDetails }
@@ -192,7 +192,6 @@ export const useAuthentication = () => {
 }
 
 export const useInitializeAfterAuth = () => {
-  const setShowLoader = useLayoutStore((store) => store.setShowLoader)
   const setAuthenticated = useAuthStore((store) => store.setAuthenticated)
   const addUser = useUserCacheStore((s) => s.addUser)
 
@@ -217,11 +216,12 @@ export const useInitializeAfterAuth = () => {
                   forceRefreshToken = true
                   return await registerNewUser(loginData)
                 } else if (res.activeWorkspace) {
+                  const name = res.name ?? res.metadata?.name ?? res.properties?.name
                   const userDetails = {
                     email: email,
-                    alias: res.alias ?? res.properties?.alias ?? res.name,
+                    alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
                     userID: res.id,
-                    name: res.name
+                    name
                   }
                   const workspaceDetails = { id: res.activeWorkspace, name: 'WORKSPACE_NAME' }
                   return { workspaceDetails, userDetails }
@@ -245,12 +245,8 @@ export const useInitializeAfterAuth = () => {
 
       if (forceRefreshToken) await refreshToken()
       setAuthenticated(userDetails, workspaceDetails)
-      setShowLoader(true)
     } catch (error) {
       mog('InitializeAfterAuthError', { error })
-    } finally {
-      // Loader would be stopped inside useInitLoader
-      // setShowLoader(false)
     }
   }
 

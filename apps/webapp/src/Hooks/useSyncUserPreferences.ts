@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 
-import { mog } from '@mexit/core'
 import { mergeUserPreferences } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
@@ -21,7 +20,7 @@ export const useAutoSyncUserPreference = () => {
     const user = await getCurrentUser()
     if (user) {
       const userPreferences = user.preference
-      mog('User Preferences Fetched: ', { userPreferences })
+      // mog('User Preferences Fetched: ', { userPreferences })
       if (userPreferences) {
         const localUserPreferences = getUserPreferences()
         const mergedUserPreferences = mergeUserPreferences(localUserPreferences, userPreferences)
