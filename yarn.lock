@@ -3835,10 +3835,10 @@
     lodash "^4.17.21"
     polished "^4.1.4"
 
-"@workduck-io/mex-threads.js@^0.1.5":
-  version "0.1.5"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.5/8fb7e0ba30a1552113f9d2a9a1eae19d5877c9c8#8fb7e0ba30a1552113f9d2a9a1eae19d5877c9c8"
-  integrity sha512-3IhnVcoPJ5EuNZdnOrMBJ0RKxaSrWwHXMvHV7WxEibaHohB6SZznSe/ilQbcP07OPoOQjFAIr6NCt7Xzb20B9w==
+"@workduck-io/mex-threads.js@^0.1.6":
+  version "0.1.6"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-threads.js/0.1.6/ca1eb3f92d1656d781eb8dab65eae934c425991a#ca1eb3f92d1656d781eb8dab65eae934c425991a"
+  integrity sha512-/iqwRt+EEc00SpyhANbeZinD3UlDMRPxG5MSDycyeGh6bw9544FGHB/1a7PjK82LRtfCOPjYMURhzPoCkq2Fqg==
   dependencies:
     is-observable "^2.1.0"
     observable-fns "^0.6.1"
