@@ -27,7 +27,7 @@ interface IconPickerProps {
    * Call API or data store and if the call succeeds return the icon
    * Otherwise if null the previous value is restored
    */
-  onChange: (icon: MIcon) => Promise<undefined | boolean>
+  onChange?: (icon: MIcon) => Promise<undefined | boolean>
 }
 
 const IconPicker = ({ value, size, tooltipText, onChange, allowPicker = false }: IconPickerProps) => {
@@ -97,7 +97,7 @@ const IconPicker = ({ value, size, tooltipText, onChange, allowPicker = false }:
         <IconDisplay icon={emoji} size={size} />
       </IconSelector>
       <FloatingPortal>
-        {tooltipOpen && !menuOpen && (
+        {tooltipOpen && !menuOpen && allowPicker && (
           <TooltipWrapper
             ref={tooltipFloating}
             style={{

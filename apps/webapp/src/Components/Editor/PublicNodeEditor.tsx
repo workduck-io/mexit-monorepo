@@ -1,15 +1,21 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
 import { selectEditor, usePlateEditorRef } from '@udecode/plate'
 import styled from 'styled-components'
 
-import { defaultContent } from '@mexit/core'
-import { EditorWrapper, StyledEditor, Title } from '@mexit/shared'
+import { defaultContent, DefaultMIcons } from '@mexit/core'
+import { EditorWrapper, Group, StyledEditor, Title } from '@mexit/shared'
 
 import Metadata from '../EditorInfobar/Metadata'
+import IconPicker from '../IconPicker/IconPicker'
 import PublicNoteFooter from '../PublicNoteFooter'
 
 import Editor from './Editor'
+
+const NoteIcon = ({ icon }) => {
+  return <IconPicker size={32} allowPicker={false} value={icon} />
+}
 
 const PublicStyledEditor = styled(StyledEditor)`
   display: flex;
@@ -37,11 +43,21 @@ const PublicNodeEditor = ({ nodeId, node, namespaceId }) => {
     }
   }
 
+  const noteIcon = useMemo(() => {
+    if (node?.metadata?.icon) return node?.metadata?.icon
+
+    return DefaultMIcons.NOTE
+  }, [node])
+
   return (
     <PublicStyledEditor className="mex_editor">
-      <Title>
-        <Link to={'/'}>{node?.title}</Link>
-      </Title>
+      <Group>
+        <NoteIcon key={`${nodeId}_${noteIcon.value}`} icon={noteIcon} />
+
+        <Title>
+          <Link to={'/'}>{node?.title}</Link>
+        </Title>
+      </Group>
 
       {node && <Metadata namespaceId={namespaceId} nodeId={nodeId} publicMetadata={node?.metadata} />}
 

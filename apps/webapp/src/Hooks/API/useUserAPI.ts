@@ -61,21 +61,20 @@ export const useUserService = () => {
     // Check if the userid is of valid format
     const match = userID.match(USER_ID_REGEX)
     if (!match) return { userID }
-
     try {
-      return await API.user.getByID(userID).then((resp: TempUserUserID) => {
+      return await API.user.getByID(userID).then((resp: any) => {
         mog('Response', { data: resp })
-        if (resp?.email && resp?.name) {
+        if (resp?.metadata?.email && resp?.name) {
           addUser({
             userID,
-            email: resp?.email,
+            email: resp?.metadata?.email,
             alias: resp?.alias ?? resp?.name,
             name: resp?.name
           })
         }
         return {
           userID,
-          email: resp?.email ?? undefined,
+          email: resp?.metadata?.email ?? undefined,
           alias: resp?.alias ?? resp?.name,
           name: resp?.name
         }

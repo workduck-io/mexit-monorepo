@@ -245,7 +245,8 @@ export const useApi = () => {
         createdBy: d.createdBy,
         createdAt: d.createdAt,
         lastEditedBy: d.lastEditedBy,
-        updatedAt: d.updatedAt
+        updatedAt: d.updatedAt,
+        icon: d?.metadata?.icon
       }
 
       // console.log(metadata, d.data, todos)

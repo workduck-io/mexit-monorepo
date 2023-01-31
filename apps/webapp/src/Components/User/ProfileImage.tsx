@@ -137,12 +137,17 @@ export const ProfileImageWithToolTip = ({ props, placement, interactive }: Profi
   const { getUserFromUserid } = useMentions()
   const { getUserDetailsUserId } = useUserService()
 
-  const user = useMemo(() => {
+  const [user, setUser] = useState<any>()
+
+  useEffect(() => {
     const u = getUserFromUserid(userid)
-    if (u) return u
+    if (u) setUser(u)
     else {
       getUserDetailsUserId(userid)
-        .then((d) => mog('GOT USERID', { d }))
+        .then((d) => {
+          mog('GOT USERID', { d })
+          setUser(d)
+        })
         .catch((err) => mog('GOT ERROR', { err }))
     }
   }, [userid])
