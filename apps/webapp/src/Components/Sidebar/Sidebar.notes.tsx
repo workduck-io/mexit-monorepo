@@ -90,11 +90,19 @@ export const NoteSidebar = () => {
     return nspaces
   }, [ilinks, namespaces])
 
+  const getIndex = () => {
+    const index = spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id)
+
+    return index < 0 ? 0 : index
+  }
+
   const [index, setIndex] = useState({
-    current: spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id) ?? 0,
+    current: getIndex(),
     // Required to find direction of the animation
     prev: -1
   })
+
+  console.log('SIDEBAR', { index })
 
   const changeIndex = (newIndex: number, updateStores = true) => {
     if (newIndex === index.current) return

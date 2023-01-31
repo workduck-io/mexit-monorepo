@@ -111,6 +111,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     version: local.version,
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
+    activeNamespace: remote.activeNamespace ?? local.activeNamespace,
     lastOpenedNotes: { ...local.lastOpenedNotes, ...mergedLastOpenedNotes },
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
     theme: remote.theme ?? local.theme,
