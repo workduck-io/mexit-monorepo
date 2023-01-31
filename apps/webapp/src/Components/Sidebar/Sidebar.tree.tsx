@@ -121,7 +121,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
             // Select the item
             // const item = listItems[selected]
             if (selectedItem) {
-              onOpenItem(selectedItem.data.nodeid)
+              onOpenItem(selectedItem)
             }
           }
         },

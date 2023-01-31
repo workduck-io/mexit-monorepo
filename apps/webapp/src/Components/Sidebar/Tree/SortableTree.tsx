@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useMatch } from 'react-router-dom'
 
 import {
   Announcements,
@@ -23,6 +24,9 @@ import {
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Tippy, { useSingleton } from '@tippyjs/react'
+
+import { useNavigation } from '../../../Hooks/useNavigation'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 
 import { sortableTreeKeyboardCoordinates } from './keyboardCoordinates'
 import { SortableTreeItem } from './SortableTreeItem'
@@ -91,6 +95,12 @@ export function SortableTree({
     overId: UniqueIdentifier
   } | null>(null)
 
+  const { push } = useNavigation()
+  const { goTo } = useRouting()
+
+  const match = useMatch(`${ROUTE_PATHS.node}/:nodeid`)
+  const publicNamespaceMatch = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/node/:nodeid`)
+
   const flattenedItems = useMemo(() => {
     const flattenedTree = flattenTree(items)
     const collapsedItems = flattenedTree.reduce<string[]>(
@@ -123,6 +133,27 @@ export function SortableTree({
       offset: offsetLeft
     }
   }, [flattenedItems, offsetLeft])
+
+  const goToNodeId = (nodeId: string) => {
+    if (publicNamespaceMatch) {
+      goTo(`${ROUTE_PATHS.namespaceShare}/${publicNamespaceMatch.params.namespaceid}/node`, NavigationType.push, nodeId)
+    } else {
+      push(nodeId)
+      goTo(ROUTE_PATHS.node, NavigationType.push, nodeId)
+    }
+  }
+
+  const onOpenItem = (nodeid: string) => {
+    goToNodeId(nodeid)
+    // changeTree(mutateTree(tree, itemId, { isExpanded: true }))
+  }
+
+  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, nodeId: string) => {
+    if (e.button === 0) {
+      // expandNode(item.data.path)
+      onOpenItem(nodeId)
+    }
+  }
 
   const announcements: Announcements = {
     onDragStart({ active }) {
@@ -168,6 +199,7 @@ export function SortableTree({
             indicator={indicator}
             collapsed={Boolean(collapsed && children.length)}
             onCollapse={collapsible && children.length ? () => handleCollapse(id) : undefined}
+            onClick={onClick}
             onRemove={removable ? () => handleRemove(id) : undefined}
             indentationWidth={indentationWidth}
           />
@@ -181,6 +213,7 @@ export function SortableTree({
                 data={activeItem.data}
                 clone
                 target={target}
+                onClick={onClick}
                 childCount={getChildCount(items, activeId)}
                 value={activeId.toString()}
                 indentationWidth={indentationWidth}

@@ -1,6 +1,5 @@
-import React, { forwardRef, HTMLAttributes } from 'react'
+import React, { forwardRef } from 'react'
 
-import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
@@ -15,7 +14,7 @@ import {
 } from '@workduck-io/mex-components'
 
 import { MIcon } from '@mexit/core'
-import { ItemTitleText } from '@mexit/shared'
+import { IconDisplay, ItemTitleText } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../../Hooks/useLinks'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
@@ -34,8 +33,8 @@ export const TooltipContent = ({ nodeId, path }: { nodeId: string; path: string 
           <Icon icon="ri:task-line" />
           {item?.data?.tasks}
         </TooltipCount>
-      )} */}
-      {/* {item?.data?.reminders !== undefined && item.data.reminders > 0 && (
+      )}
+      {item?.data?.reminders !== undefined && item.data.reminders > 0 && (
         <TooltipCount>
           <Icon icon="ri:timer-flash-line" />
           {item?.data?.reminders}
@@ -54,7 +53,7 @@ const ItemTitleWithAnalysis = ({ nodeId, icon, path }: { nodeId: string; icon?: 
 
   return (
     <ItemTitle>
-      <Icon icon={icon?.value ?? fileList2Line} />
+      <IconDisplay icon={icon} />
       <ItemTitleText>{title}</ItemTitleText>
     </ItemTitle>
   )
@@ -77,7 +76,7 @@ export const GetIcon = ({ id, childCount, onCollapse }: GetIconProps) => {
   return <StyledTreeSwitcher></StyledTreeSwitcher>
 }
 
-export interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'id'> {
+export interface TreeItemProps {
   data: TreeItem['data']
   target: any
   childCount?: number
@@ -93,11 +92,12 @@ export interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'id'> {
   value: string
   onCollapse?(): void
   onRemove?(): void
+  onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, nodeId: string) => void
   wrapperRef?(node: HTMLDivElement): void
 }
 
 // eslint-disable-next-line react/display-name
-export const RenderTreeItem = forwardRef<HTMLDivElement, Props>(
+export const RenderTreeItem = forwardRef<HTMLDivElement, TreeItemProps>(
   (
     {
       data,
@@ -114,9 +114,10 @@ export const RenderTreeItem = forwardRef<HTMLDivElement, Props>(
       collapsed,
       onCollapse,
       onRemove,
-      style,
+      // style,
       value,
       wrapperRef,
+      onClick,
       ...props
     },
     ref
@@ -142,7 +143,7 @@ export const RenderTreeItem = forwardRef<HTMLDivElement, Props>(
           <div ref={wrapperRef}>
             <StyledTreeItem ref={ref}>
               <GetIcon id={data.nodeId} childCount={childCount} onCollapse={onCollapse} />
-              <ItemContent {...handleProps}>
+              <ItemContent {...handleProps} onMouseDown={(e) => onClick(e, data.nodeId)}>
                 <ItemTitleWithAnalysis nodeId={data.nodeId} path={data.path} icon={data?.icon} />
               </ItemContent>
 
