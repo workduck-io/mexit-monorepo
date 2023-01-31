@@ -51,14 +51,16 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
   const root = getComputedStyle(document.body)
   const primaryColor = root.getPropertyValue('--theme-tokens-colors-primary-default').trim()
 
-  const colors = new ColorScheme()
-    .from_hex(primaryColor.slice(1))
-    .scheme('analogic')
-    .distance(0.25)
-    .variation('light')
-    .add_complement(true)
-    .colors()
-    .map((s) => `#${s}`)
+  const colors = primaryColor
+    ? new ColorScheme()
+        .from_hex(primaryColor.slice(1))
+        .scheme('analogic')
+        .distance(0.25)
+        .variation('light')
+        .add_complement(true)
+        .colors()
+        .map((s) => `#${s}`)
+    : undefined
 
   const addGravatarAbsent = useCacheStore((store) => store.addGravatarAbsent)
 
@@ -95,7 +97,7 @@ export const ProfileImage = ({ email, size, DefaultFallback }: ProfileImageProps
 
   if (gravState === 1) return <img src={src} alt={email ? `Gravatar for ${formattedEmail}` : 'Gravatar'} />
   if (DefaultFallback !== undefined) return <DefaultFallback />
-  if (gravState === -1) return <Avatar size={size} square name={email} colors={colors} variant="beam" />
+  if (gravState === -1 && colors) return <Avatar size={size} square name={email} colors={colors} variant="beam" />
 
   // Rendered if both fail
   return <Icon className="defaultProfileIcon" icon={user3Line} height={size} />

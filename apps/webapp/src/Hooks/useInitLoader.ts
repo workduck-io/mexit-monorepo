@@ -24,7 +24,7 @@ import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
   const isAuthenticated = useAuthStore((store) => store.authenticated)
-  const initalizeApp = useAuthStore((store) => store.appInitStatus === AppInitStatus.RUNNING)
+  const initalizeApp = useAuthStore((store) => store.appInitStatus)
 
   const setIsUserAuthenticated = useAuthStore((store) => store.setIsUserAuthenticated)
 
@@ -84,7 +84,7 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if ((initalizeApp || isAuthenticated) && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
+    if (initalizeApp === AppInitStatus.RUNNING && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       API.setWorkspaceHeader(getWorkspaceId())
 
       const initData = {
@@ -106,5 +106,5 @@ export const useInitLoader = () => {
           console.log('InitSearchIndexError', { error })
         })
     }
-  }, [isAuthenticated, initalizeApp, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
+  }, [initalizeApp, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
 }

@@ -24,12 +24,14 @@ import StarredNotes from './StarredNotes'
 export const NoteSidebar = () => {
   const ilinks = useDataStore((store) => store.ilinks)
   const namespaces = useDataStore((store) => store.namespaces)
+  const baseNodeId = useDataStore((store) => store.baseNodeId)
+
   const spaceId = useUserPreferenceStore((store) => store.activeNamespace)
   const changeSidebarSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const { getMostUsedTags } = useTags()
   const tags = useDataStore((s) => s.tags)
   const replaceAndAddActionToPoll = useApiStore((store) => store.replaceAndAddActionToPoll)
-  const { getNodesByNamespaces } = useNamespaces()
+  const { getNodesByNamespaces, getNamespaceOfNodeid } = useNamespaces()
   const isAnimate = useRef(false)
 
   const mostUsedTags = useMemo(() => {
@@ -89,7 +91,7 @@ export const NoteSidebar = () => {
   }, [ilinks, namespaces])
 
   const [index, setIndex] = useState({
-    current: spaces.findIndex((space) => space.id === spaceId),
+    current: spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id) ?? 0,
     // Required to find direction of the animation
     prev: -1
   })

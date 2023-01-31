@@ -71,7 +71,6 @@ export const useNamespaceApi = () => {
       const ns = namespaces.map((n) => n.ns)
       setNamespaces(ns)
       // TODO: Also set archive links
-      setIlinks(newILinks)
 
       addInArchive(archivedILinks)
 
@@ -94,6 +93,8 @@ export const useNamespaceApi = () => {
           updateFromNotes(notes, metadatas)
         }
       })
+
+      setIlinks(newILinks)
     }
   }
 
