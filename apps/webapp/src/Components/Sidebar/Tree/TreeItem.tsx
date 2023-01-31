@@ -3,21 +3,22 @@ import React, { forwardRef } from 'react'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
+import { MIcon } from '@mexit/core'
 import {
+  IconDisplay,
   ItemContent,
   ItemCount,
   ItemTitle,
+  ItemTitleText,
   StyledTreeItem,
   StyledTreeItemSwitcher,
   StyledTreeSwitcher,
   TooltipContentWrapper
-} from '@workduck-io/mex-components'
-
-import { MIcon } from '@mexit/core'
-import { IconDisplay, ItemTitleText } from '@mexit/shared'
+} from '@mexit/shared'
 
 import { getTitleFromPath } from '../../../Hooks/useLinks'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
+import { useMetadataStore } from '../../../Stores/useMetadataStore'
 
 import { TreeItem } from './types'
 
@@ -44,8 +45,9 @@ export const TooltipContent = ({ nodeId, path }: { nodeId: string; path: string 
   )
 }
 
-const ItemTitleWithAnalysis = ({ nodeId, icon, path }: { nodeId: string; icon?: MIcon; path: string }) => {
+const ItemTitleWithAnalysis = ({ nodeId, path }: { nodeId: string; icon?: MIcon; path: string }) => {
   const anal = useAnalysisStore((state) => state.analysis)
+  const icon = useMetadataStore((state) => state.metadata.notes[nodeId]?.icon)
   const title =
     anal?.nodeid && anal?.nodeid === nodeId && anal?.title !== undefined && anal?.title !== ''
       ? anal?.title
@@ -144,7 +146,7 @@ export const RenderTreeItem = forwardRef<HTMLDivElement, TreeItemProps>(
             <StyledTreeItem ref={ref}>
               <GetIcon id={data.nodeId} childCount={childCount} onCollapse={onCollapse} />
               <ItemContent {...handleProps} onMouseDown={(e) => onClick(e, data.nodeId)}>
-                <ItemTitleWithAnalysis nodeId={data.nodeId} path={data.path} icon={data?.icon} />
+                <ItemTitleWithAnalysis nodeId={data.nodeId} path={data.path} />
               </ItemContent>
 
               <TreeItemMetaInfo childCount={childCount} />
