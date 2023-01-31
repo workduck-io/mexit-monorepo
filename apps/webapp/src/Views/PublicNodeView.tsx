@@ -71,7 +71,11 @@ const PublicNodeView = () => {
   }, [nodeId])
 
   useEffect(() => {
-    document.title = namespace && node?.title ? `Mexit - ${namespace.name} | ${node.title}` : document.title
+    document.title = node?.title
+      ? namespace
+        ? `Mexit - ${namespace.name} | ${node.title}`
+        : `Mexit - ${node.title}`
+      : document.title
   }, [node?.title, namespace])
 
   return (
