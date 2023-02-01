@@ -6,24 +6,13 @@ import globeIcon from '@iconify/icons-ph/globe'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
-import { BackCard, CenteredColumn, Title } from '@mexit/shared'
+import { BackCard, CenteredColumn, Links, Title } from '@mexit/shared'
 
 import { version } from '../../../package.json'
 // import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'
 
 const Margin = styled.div`
   margin: 0.5rem 1rem;
-`
-
-const Links = styled.a`
-  text-decoration: none;
-  color: ${({ theme }) => theme.tokens.text.default};
-  margin-right: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0;
-  background: none;
 `
 
 const StyledIcon = styled(Icon)`

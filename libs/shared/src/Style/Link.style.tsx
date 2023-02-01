@@ -4,6 +4,16 @@ import { Button } from '@workduck-io/mex-components'
 
 import { Relative } from '../Components/RelativeTime'
 
+export const Links = styled.a`
+  text-decoration: none;
+  color: ${({ theme }) => theme.tokens.text.default};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  background: none;
+`
+
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
