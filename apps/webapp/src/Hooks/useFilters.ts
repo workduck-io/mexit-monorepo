@@ -12,6 +12,7 @@ import {
   SortOrder,
   SortType
 } from '@mexit/core'
+import type { ViewType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -41,6 +42,9 @@ export interface FilterStore {
   sortOrder?: SortOrder
   setSortType?: (sortType: SortType) => void
   setSortOrder?: (sortOrder: SortOrder) => void
+
+  viewType?: ViewType
+  setViewType: (viewType: ViewType) => void
 }
 
 export const useFilterStoreBase = create<FilterStore>((set) => ({
@@ -53,7 +57,8 @@ export const useFilterStoreBase = create<FilterStore>((set) => ({
   setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters })),
   setIndexes: (indexes) => set((state) => ({ ...state, indexes })),
   setSortType: (sortType) => set((state) => ({ ...state, sortType })),
-  setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder }))
+  setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder })),
+  setViewType: (viewType) => set((state) => ({ ...state, viewType }))
 }))
 
 export const useFilterStore = <Slice>(selector: (state: FilterStore) => Slice) => useFilterStoreBase(selector)

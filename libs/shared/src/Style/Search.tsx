@@ -158,7 +158,9 @@ export const SearchFilterListCurrent = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-export const SearchFilterListSuggested = styled(SearchFilterListCurrent)``
+export const SearchFilterListSuggested = styled(SearchFilterListCurrent)`
+  justify-content: space-between;
+`
 
 export const SearchFilterList = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { PriorityType } from '@mexit/core'
-import { TaskCard } from '@mexit/shared'
+import { TaskCard, ViewType } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
@@ -30,12 +30,24 @@ interface RenderTaskProps {
   /** Whether the sidebar is currently overlaying the content, needed for width in kanban */
   overlaySidebar?: boolean
 
+  viewType?: ViewType
+
   /** Whether the card is being dragged, styling */
   dragging?: boolean
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({ id, todoid, nodeid, overlaySidebar, staticBoard, refreshCallback, selectedCardId, dragging }: RenderTaskProps) => {
+  ({
+    id,
+    todoid,
+    nodeid,
+    overlaySidebar,
+    staticBoard,
+    refreshCallback,
+    selectedCardId,
+    dragging,
+    viewType
+  }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
@@ -91,6 +103,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
         selected={selectedCardId && selectedCardId === id}
         ref={ref}
         dragging={dragging}
+        viewType={viewType}
         staticBoard={staticBoard}
         sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         priorityShown={priorityShown}

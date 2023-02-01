@@ -6,16 +6,23 @@ import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { Filter, generateTaskViewId, getPathNum, GlobalFilterJoin } from '@mexit/core'
-import { Label, SearchFilterListCurrent, TextAreaBlock } from '@mexit/shared'
+import { Filter, generateTaskViewId, getPathNum, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
+import { Label, SearchFilterListCurrent, TextAreaBlock, ViewType } from '@mexit/shared'
 
-import { NavigationType,ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useTaskViews,useViewStore } from '../Hooks/useTaskViews'
-import { ModalControls,ModalHeader } from '../Style/Refactor'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
+import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { ModalControls, ModalHeader } from '../Style/Refactor'
 
 import { DisplayFilter } from './Filters/Filter'
 import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
+
+interface ViewProperties {
+  globalJoin: GlobalFilterJoin
+  viewType?: ViewType
+  sortOrder?: SortOrder
+  sortType?: SortType
+}
 
 // Prefill modal has been added to the Tree via withRefactor from useRefactor
 
@@ -26,40 +33,40 @@ interface TaskViewModalState {
   // If present, title, description will be cloned from the view with viewid
   cloneViewId?: string
   filters: Filter[]
-  globalJoin: GlobalFilterJoin
+  properties?: ViewProperties
+
   openModal: (args: {
     filters: Filter[]
     updateViewId?: string
     cloneViewId?: string
-    globalJoin: GlobalFilterJoin
+    properties: ViewProperties
   }) => void
+
   closeModal: () => void
 }
 
-export const useTaskViewModalStore = create<TaskViewModalState>((set) => ({
+const getInitialState = () => ({
   open: false,
   filters: [],
   updateViewId: undefined,
   cloneViewId: undefined,
-  globalJoin: 'all',
-  openModal: ({ filters, updateViewId, cloneViewId, globalJoin }) =>
-    set({
-      open: true,
-      filters,
-      updateViewId,
-      cloneViewId,
-      globalJoin
-    }),
-  closeModal: () => {
-    set({
-      open: false,
-      filters: [],
-      updateViewId: undefined,
-      cloneViewId: undefined,
-      globalJoin: 'all'
-    })
+  properties: {
+    globalJoin: 'all' as GlobalFilterJoin,
+    viewType: ViewType.Kanban,
+    sortOrder: 'ascending' as SortOrder,
+    sortType: 'status' as SortType
   }
-}))
+})
+
+export const useTaskViewModalStore = create<TaskViewModalState>((set) => {
+  return {
+    ...getInitialState(),
+    openModal: (args) => set({ ...args, open: true }),
+    closeModal: () => {
+      set({ ...getInitialState() })
+    }
+  }
+})
 
 interface TaskViewModalFormData {
   title: string
@@ -71,7 +78,7 @@ const TaskViewModal = () => {
   const updateViewId = useTaskViewModalStore((store) => store.updateViewId)
   const cloneViewId = useTaskViewModalStore((store) => store.cloneViewId)
   const filters = useTaskViewModalStore((store) => store.filters)
-  const globalJoin = useTaskViewModalStore((store) => store.globalJoin)
+  const properties = useTaskViewModalStore((store) => store.properties)
 
   // const openModal = useTaskViewModalStore((store) => store.openModal)
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
@@ -130,13 +137,17 @@ const TaskViewModal = () => {
 
   const onSubmit = async (data: TaskViewModalFormData) => {
     // mog('onSubmit', { data, filters, cloneViewId })
+    const properties = useTaskViewModalStore.getState().properties
+
     if (updateViewId) {
-      const oldview = { ...getView(updateViewId) }
+      const oldview = getView(updateViewId)
+      console.log('VIEW UPdated', { properties })
+
       const newView = {
         ...oldview,
+        ...properties,
         title: data.title ?? oldview.title,
         description: data.description ?? oldview.description,
-        globalJoin,
         filters
       }
       await updateView(newView)
@@ -144,12 +155,13 @@ const TaskViewModal = () => {
       setCurrentView(newView)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, newView.id)
     } else {
-      const view = {
+      console.log('VIEW IS', { properties })
+      const view: View = {
         title: data.title,
         description: data.description,
         filters: filters,
         id: generateTaskViewId(),
-        globalJoin
+        ...properties
       }
       await addView(view)
       // saveData()
@@ -197,7 +209,7 @@ const TaskViewModal = () => {
             {filters.map((f) => (
               <DisplayFilter key={f.id} filter={f} />
             ))}
-            <RenderGlobalJoin globalJoin={globalJoin} />
+            <RenderGlobalJoin globalJoin={properties.globalJoin} />
           </SearchFilterListCurrent>
         )}
 

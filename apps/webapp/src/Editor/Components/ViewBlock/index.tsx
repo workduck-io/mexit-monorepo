@@ -1,55 +1,37 @@
 import { useEffect, useState } from 'react'
 
-import Board from '@asseinfo/react-kanban'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSelected } from 'slate-react'
 
 import {
+  Group,
   RootElement,
-  SearchFilterListCurrent,
+  SearchFilterListSuggested,
   StyledTasksKanbanBlock,
-  StyledViewBlockPreview,
-  TaskColumnHeader
+  StyledViewBlockPreview
 } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
-import { RenderBoardTask } from '../../../Components/Todo/BoardTask'
-import { useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
+import { RenderSort } from '../../../Components/Filters/SortMenu'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
 import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
+
+import ViewRenderer from './ViewRenderer'
 
 const ViewBlock = (props: any) => {
   const { goTo } = useRouting()
   const viewid = props.element.value
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { getView } = useTaskViews()
-  const { getFilteredTodoBoard } = useTodoKanban()
-  const [view, setView] = useState<View | undefined>(undefined)
-  const [board, setBoard] = useState<any>(undefined)
 
-  useEffect(() => {
-    const filters = view?.filters
-    if (filters) {
-      setBoard(getFilteredTodoBoard(filters))
-    }
-  }, [viewid, view])
+  const [view, setView] = useState<View | undefined>(undefined)
 
   useEffect(() => {
     setView(getView(viewid))
   }, [viewid])
-
-  const refreshView = () => {
-    const newView = getView(viewid)
-    setView(newView)
-    const filters = view?.filters
-    if (filters) {
-      const board = getFilteredTodoBoard(filters)
-      setBoard(board)
-    }
-  }
 
   const openView = (ev: any) => {
     ev.preventDefault()
@@ -63,25 +45,6 @@ const ViewBlock = (props: any) => {
   }
 
   const selected = useSelected()
-
-  const RenderCard = (
-    { id, todoid, nodeid }: { id: string; todoid: string; nodeid: string },
-    { dragging }: { dragging: boolean }
-  ) => {
-    return (
-      <RenderBoardTask
-        staticBoard
-        refreshCallback={refreshView}
-        id={id}
-        todoid={todoid}
-        nodeid={nodeid}
-        overlaySidebar={false}
-        dragging={dragging}
-      />
-    )
-  }
-
-  // mog('Rendering View Block', { selected, curView, viewid, board })
 
   return (
     <RootElement {...props.attributes}>
@@ -97,28 +60,23 @@ const ViewBlock = (props: any) => {
             */}
             <Chip onClick={openView}>Open</Chip>
           </FlexBetween>
-          {board && (
-            <StyledViewBlockPreview>
-              <StyledTasksKanbanBlock>
-                {view?.filters.length > 0 && (
-                  <SearchFilterListCurrent>
+
+          <StyledViewBlockPreview>
+            <StyledTasksKanbanBlock>
+              {view?.filters.length > 0 && (
+                <SearchFilterListSuggested>
+                  <Group>
                     {view?.filters.map((f) => (
                       <DisplayFilter key={f.id} filter={f} />
                     ))}
                     <RenderGlobalJoin globalJoin={view?.globalJoin} />
-                  </SearchFilterListCurrent>
-                )}
-                <Board
-                  renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
-                  disableColumnDrag
-                  disableCardDrag
-                  renderCard={RenderCard}
-                >
-                  {board}
-                </Board>
-              </StyledTasksKanbanBlock>
-            </StyledViewBlockPreview>
-          )}
+                  </Group>
+                  <RenderSort sortOrder={view.sortOrder} sortType={view.sortType} />
+                </SearchFilterListSuggested>
+              )}
+              <ViewRenderer view={view} viewId={viewid} setView={setView} />
+            </StyledTasksKanbanBlock>
+          </StyledViewBlockPreview>
         </StyledInlineBlock>
       </div>
       {props.children}

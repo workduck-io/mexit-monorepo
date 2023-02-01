@@ -37,7 +37,6 @@ const TodoList = () => {
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
-  // const sidebar = useLayoutStore((store) => store.sidebar)
 
   const { changeStatus, changePriority } = useTodoKanban()
 

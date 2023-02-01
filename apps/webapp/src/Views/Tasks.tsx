@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
 
 import { ReminderViewData } from '@mexit/core'
@@ -9,10 +9,19 @@ import TodoKanban from '../Components/Todo/TodoKanban'
 import TodoList from '../Components/Todo/TodoList'
 import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore } from '../Hooks/useTaskViews'
+import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
 import { useTodoStore } from '../Stores/useTodoStore'
 
 import SearchFilters from './SearchFilters'
+
+const TaskViewRenderer: React.FC<{ viewType: ViewType }> = ({ viewType }) => {
+  switch (viewType) {
+    case ViewType.Kanban:
+      return <TodoKanban />
+    case ViewType.List:
+      return <TodoList />
+  }
+}
 
 const Tasks = () => {
   const nodesTodo = useTodoStore((store) => store.todos)
@@ -20,7 +29,6 @@ const Tasks = () => {
   const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const _hasHydrated = useViewStore((store) => store._hasHydrated)
-  const [currentViewType, setCurrentViewType] = useState<ViewType>(ViewType.Kanban)
 
   const { getView } = useTaskViews()
 
@@ -38,9 +46,19 @@ const Tasks = () => {
     setGlobalJoin,
     sortOrder,
     sortType,
+    viewType,
+    onViewTypeChange,
     onSortTypeChange,
     onSortOrderChange
   } = useTodoFilters()
+
+  const setCurrentViewOptions = (view: View) => {
+    onViewTypeChange(view.viewType ?? ViewType.Kanban)
+    onSortTypeChange(view.sortType ?? 'status')
+    onSortOrderChange(view.sortOrder ?? 'ascending')
+    setCurrentFilters(view.filters ?? [])
+    setGlobalJoin(view.globalJoin)
+  }
 
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
@@ -50,11 +68,12 @@ const Tasks = () => {
         setCurrentView(ReminderViewData)
       } else if (activeView) {
         setCurrentView(activeView)
-        setCurrentFilters(activeView.filters)
-        setGlobalJoin(activeView.globalJoin)
+        setCurrentViewOptions(activeView)
       }
     } else {
       setCurrentView(undefined)
+      onSortTypeChange('status')
+      onSortOrderChange('ascending')
       setCurrentFilters([])
     }
   }, [match, _hasHydrated])
@@ -63,6 +82,9 @@ const Tasks = () => {
     <PageContainer>
       <TaskViewSection>
         <TaskHeader
+          sortOrder={sortOrder}
+          sortType={sortType}
+          currentViewType={viewType}
           currentFilters={currentFilters}
           cardSelected={false}
           currentView={currentView}
@@ -78,9 +100,9 @@ const Tasks = () => {
           globalJoin={globalJoin}
           setGlobalJoin={setGlobalJoin}
           viewSelectorProps={{
-            currentView: currentViewType,
+            currentView: viewType,
             onChangeView: (viewType) => {
-              setCurrentViewType(viewType)
+              onViewTypeChange(viewType)
             },
             availableViews: [ViewType.Kanban, ViewType.List]
           }}
@@ -92,12 +114,7 @@ const Tasks = () => {
             availableSortTypes: ['status', 'priority']
           }}
         />
-        {
-          {
-            [ViewType.Kanban]: <TodoKanban />,
-            [ViewType.List]: <TodoList />
-          }[currentViewType]
-        }
+        <TaskViewRenderer viewType={viewType} />
       </TaskViewSection>
       {todos.length < 1 && (
         <div>

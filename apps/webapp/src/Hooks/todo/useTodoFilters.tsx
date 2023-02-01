@@ -1,6 +1,7 @@
 import create from 'zustand'
 
 import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
+import { ViewType } from '@mexit/shared'
 
 import { FilterStore } from '../useFilters'
 
@@ -14,6 +15,8 @@ export const useTodoFilterStore = create<FilterStore>((set) => ({
   indexes: [],
   setIndexes: () => undefined,
   filters: [],
+  viewType: ViewType.Kanban,
+  setViewType: (viewType: ViewType) => set({ viewType }),
   setFilters: (filters: Filters) => set({ filters }),
   setSortType: (sortType) => set((state) => ({ ...state, sortType })),
   setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder }))
@@ -30,6 +33,8 @@ export const useTodoFilters = () => {
   const sortType = useTodoFilterStore((state) => state.sortType)
   const onSortTypeChange = useTodoFilterStore((state) => state.setSortType)
   const onSortOrderChange = useTodoFilterStore((state) => state.setSortOrder)
+  const viewType = useTodoFilterStore((state) => state.viewType)
+  const onViewTypeChange = useTodoFilterStore((state) => state.setViewType)
 
   const resetFilters = () => {
     setFilters([])
@@ -65,6 +70,8 @@ export const useTodoFilters = () => {
     resetCurrentFilters,
     sortOrder,
     sortType,
+    viewType,
+    onViewTypeChange,
     onSortTypeChange,
     onSortOrderChange
   }

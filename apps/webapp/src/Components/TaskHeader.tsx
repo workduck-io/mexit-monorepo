@@ -20,7 +20,7 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { Filter, GlobalFilterJoin } from '@mexit/core'
+import { Filter, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
 import {
   ShortcutToken,
   ShortcutTokens,
@@ -31,7 +31,8 @@ import {
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle,
-  Title
+  Title,
+  ViewType
 } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -44,9 +45,20 @@ interface TaskHeaderProps {
   currentFilters: Filter[]
   cardSelected: boolean
   globalJoin: GlobalFilterJoin
+  currentViewType: ViewType
+  sortOrder: SortOrder
+  sortType: SortType
 }
 
-const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: TaskHeaderProps) => {
+const TaskHeader = ({
+  currentView,
+  currentViewType,
+  sortOrder,
+  sortType,
+  currentFilters,
+  cardSelected,
+  globalJoin
+}: TaskHeaderProps) => {
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { deleteView } = useTaskViews()
@@ -58,7 +70,9 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
 
   const isCurrentViewChanged = useMemo(() => {
     return !(
-      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) && globalJoin === currentView?.globalJoin
+      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) &&
+      globalJoin === currentView?.globalJoin &&
+      currentViewType === currentView?.viewType
     )
   }, [currentFilters, currentView, globalJoin])
 
@@ -92,7 +106,12 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
                   openTaskViewModal({
                     filters: currentFilters,
                     updateViewId: currentView?.id,
-                    globalJoin
+                    properties: {
+                      viewType: currentViewType,
+                      globalJoin,
+                      sortOrder,
+                      sortType
+                    }
                   })
                 }
                 disabled={currentFilters.length === 0}
@@ -107,7 +126,12 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
                   openTaskViewModal({
                     filters: currentView?.filters,
                     cloneViewId: currentView?.id,
-                    globalJoin: currentView?.globalJoin
+                    properties: {
+                      globalJoin: currentView?.globalJoin,
+                      viewType: currentView?.viewType,
+                      sortType: currentView?.sortType,
+                      sortOrder: currentView?.sortOrder
+                    }
                   })
                 }
                 disabled={currentFilters.length === 0}
@@ -126,7 +150,18 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
               </LoadingButton>
               <IconButton
                 title="Create New View"
-                onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })}
+                onClick={() =>
+                  openTaskViewModal({
+                    filters: currentFilters,
+                    cloneViewId: currentView?.id,
+                    properties: {
+                      viewType: ViewType.Kanban,
+                      sortOrder: 'ascending',
+                      sortType: 'status',
+                      globalJoin: 'all'
+                    }
+                  })
+                }
                 disabled={currentFilters.length === 0}
                 singleton={target}
                 // transparent={false}
@@ -138,7 +173,15 @@ const TaskHeader = ({ currentView, currentFilters, cardSelected, globalJoin }: T
           <>
             <Title>Tasks</Title>
             <Button
-              onClick={() => openTaskViewModal({ filters: currentFilters, cloneViewId: currentView?.id, globalJoin })}
+              onClick={() =>
+                openTaskViewModal({
+                  filters: currentFilters,
+                  cloneViewId: currentView?.id,
+                  properties: {
+                    globalJoin
+                  }
+                })
+              }
               disabled={currentFilters.length === 0}
             >
               <Icon icon={addCircleLine} />

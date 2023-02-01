@@ -73,12 +73,12 @@ export const RenderSort = ({ sortType, sortOrder }: Pick<SortMenuProps, 'sortTyp
   return (
     <FilterGlobalJoinWrapper>
       <GenericSection>
-        <IconDisplay icon={{ type: 'ICON', value: 'ri:sort-asc-line' }} />
+        <IconDisplay icon={getSortOrderIcon(sortOrder)} />
         {sortOrder === 'ascending' ? 'Asc' : 'Desc'}
       </GenericSection>
 
       <GenericSection>
-        <IconDisplay icon={{ type: 'ICON', value: 'ri:sort-asc-line' }} />
+        <IconDisplay icon={getSortTypeIcon(sortType)} size={14} />
         {capitalize(sortType)}
       </GenericSection>
     </FilterGlobalJoinWrapper>

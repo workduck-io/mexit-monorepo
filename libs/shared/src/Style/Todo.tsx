@@ -7,6 +7,7 @@ import { MainHeader } from './Layouts'
 import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
+import { ViewType } from './ViewSelector'
 
 /*
  * Todos
@@ -184,6 +185,7 @@ export const TaskCard = styled.div<{
   staticBoard?: boolean
   sidebarExpanded?: boolean
   priorityShown?: boolean
+  viewType?: ViewType
 }>`
   ${TodoContainer} {
     width: ${({ sidebarExpanded, theme }) =>
@@ -217,7 +219,7 @@ export const TaskCard = styled.div<{
       border: 1px solid ${theme.tokens.colors.primary.default};
     `};
 
-  ${({ staticBoard }) =>
+  ${({ staticBoard, viewType }) =>
     staticBoard &&
     css`
       width: 100%;
@@ -227,16 +229,22 @@ export const TaskCard = styled.div<{
       }
       ${TodoContainer} {
         width: 100%;
-        max-width: 230px;
+        ${viewType === ViewType.Kanban && `max-width: 230px;`}
       }
     `}
 `
 
-export const TaskListWrapper = styled.div`
+export const TaskListWrapper = styled.div<{ margin?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 0px;
+
+  ${({ margin, theme }) =>
+    margin &&
+    css`
+      margin: 0 ${theme.spacing.tiny};
+    `}
 
   ${TodoContainer} {
     width: 100%;
