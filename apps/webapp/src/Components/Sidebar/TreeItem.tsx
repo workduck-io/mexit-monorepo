@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react'
 import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'
 
-import { IS_DEV } from '@mexit/core'
+import { DRAFT_NODE, IS_DEV } from '@mexit/core'
 import {
   IconDisplay,
   ItemContent,
@@ -21,7 +21,6 @@ import {
   TooltipCount
 } from '@mexit/shared'
 
-import { useAnalysisStore } from '../../Stores/useAnalysis'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 import { TreeContextMenu } from './TreeWithContextMenu'
@@ -59,14 +58,9 @@ export const TooltipContent = ({ item }: { item: TreeItem }) => {
 }
 
 const ItemTitleWithAnalysis = ({ item }: { item: TreeItem }) => {
-  const anal = useAnalysisStore((state) => state.analysis)
-  const icon = useMetadataStore((s) => s.metadata.notes[item.data.nodeid]?.icon)
-  const title =
-    anal?.nodeid && anal?.nodeid === item.data.nodeid && anal?.title !== undefined && anal?.title !== ''
-      ? anal?.title
-      : item.data
-      ? item.data.title
-      : 'NoTitle'
+  // const anal = useAnalysisStore((state) => state.analysis)
+  const icon = useMetadataStore((s) => s.metadata.notes[item.data?.nodeid]?.icon)
+  const title = item.data?.title ?? DRAFT_NODE
 
   return (
     <ItemTitle>

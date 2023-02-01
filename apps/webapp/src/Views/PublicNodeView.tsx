@@ -53,7 +53,7 @@ const PublicNodeView = () => {
         if (!node && window.location.pathname.startsWith('/share/namespace')) {
           const nodeContent = getContent(nodeId)
           const nodeProperties = iLinks.find((item) => item.nodeid === nodeId)
-          setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId, metadata: node.metadata })
+          setNode({ ...nodeContent, title: getTitleFromPath(nodeProperties.path), id: nodeId })
           // mog('check', { nodeContent, nodeProperties })
         } else {
           setShowLoader(true)
