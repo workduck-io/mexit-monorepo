@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.12
+
+### Patch Changes
+
+- f4235dbf: Card View Changes, Default Kanban Renderer
+
 ## 0.22.11
 
 ### Patch Changes
