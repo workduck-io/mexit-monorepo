@@ -141,7 +141,6 @@ const TaskViewModal = () => {
 
     if (updateViewId) {
       const oldview = getView(updateViewId)
-      console.log('VIEW UPdated', { properties })
 
       const newView = {
         ...oldview,
@@ -155,7 +154,6 @@ const TaskViewModal = () => {
       setCurrentView(newView)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, newView.id)
     } else {
-      console.log('VIEW IS', { properties })
       const view: View = {
         title: data.title,
         description: data.description,

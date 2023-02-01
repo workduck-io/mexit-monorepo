@@ -22,18 +22,18 @@ import {
 } from '@mexit/core'
 import {
   DefaultMIcons,
+  Group,
   IconDisplay,
   ItemTag,
   MainHeader,
   PreviewDescription,
   Result,
   ResultDesc,
+  ResultHeader,
   ResultMain,
   ResultRow,
   ResultTitle,
   SearchPreviewWrapper,
-  SnippetCommand,
-  SnippetHeader,
   SnippetHelp,
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
@@ -193,15 +193,15 @@ const Snippets = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         <Result {...props} key={id} ref={ref} onClick={() => handleClick(item.id, isSnippet)}>
-          <SnippetHeader>
-            <SnippetCommand>
+          <ResultHeader $paddingSize="small">
+            <Group>
               <IconDisplay icon={icon} size={20} />
-              {title}
-            </SnippetCommand>
+              <ResultTitle>{title}</ResultTitle>
+            </Group>
 
             {isSnippet && (
               <IconButton
-                size={20}
+                size={16}
                 icon={deleteBin6Line}
                 title="delete"
                 onClick={(e) => {
@@ -211,7 +211,7 @@ const Snippets = () => {
                 }}
               />
             )}
-          </SnippetHeader>
+          </ResultHeader>
           <SearchPreviewWrapper active={item.matchField?.includes('text')} padding>
             {isSnippet ? (
               <Plateless content={descriptions?.[item.id]?.truncatedContent} multiline />

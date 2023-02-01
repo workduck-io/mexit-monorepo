@@ -77,7 +77,9 @@ export const TodoBase = ({
     setAnimate(true)
   }
 
-  const changeStatus = () => {
+  const changeStatus = (e) => {
+    e.stopPropagation()
+
     if (readOnly) return
     const nextStatus = getNextStatus(todo.metadata.status)
 
@@ -98,7 +100,12 @@ export const TodoBase = ({
       onMouseLeave={() => !readOnly && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
-        <StyledTodoStatus animate={animate} status={todo.metadata.status} onClick={changeStatus} />
+        <StyledTodoStatus
+          animate={animate}
+          status={todo.metadata.status}
+          onMouseDown={(e) => e.stopPropagation()}
+          onClick={changeStatus}
+        />
       </CheckBoxWrapper>
 
       <TodoText contentEditable={!readOnlyContent} suppressContentEditableWarning>

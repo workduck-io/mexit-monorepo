@@ -20,11 +20,11 @@ interface ResultProps {
 }
 
 export const MainFont = css`
-  font-size: 14px;
+  font-size: 16px;
 `
 
 export const BodyFont = css`
-  font-size: 12px;
+  font-size: 14px;
 `
 
 const SearchTransition = css`
@@ -32,7 +32,7 @@ const SearchTransition = css`
 `
 
 const SearchHeight = css`
-  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 22rem);
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 20rem);
 `
 
 const iconStyle = (primary?: boolean) => css`
@@ -344,13 +344,13 @@ export const ResultTitle = styled.div`
   color: ${({ theme }) => theme.tokens.text.default};
 `
 
-export const ResultHeader = styled.div<{ active?: boolean }>`
+export const ResultHeader = styled.div<{ active?: boolean; $paddingSize?: 'small' | 'default' }>`
   display: flex;
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  padding: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme, $paddingSize }) => ($paddingSize === 'small' ? theme.spacing.small : theme.spacing.medium)};
   color: ${({ theme }) => theme.tokens.text.fade};
   gap: ${({ theme }) => theme.spacing.small};
   ${ResultTitle} {
@@ -422,10 +422,10 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType
         css`
           ${CardShadow}
           border: 1px solid ${theme.tokens.colors.primary.default} !important;
-          ${ResultTitle} {
+          /* ${ResultTitle} {
             font-weight: bold;
             color: ${theme.tokens.colors.primary.default};
-          }
+          } */
         `}
         :hover {
           cursor: pointer;

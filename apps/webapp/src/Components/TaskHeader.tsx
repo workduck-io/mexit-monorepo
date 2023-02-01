@@ -178,7 +178,8 @@ const TaskHeader = ({
                   filters: currentFilters,
                   cloneViewId: currentView?.id,
                   properties: {
-                    globalJoin
+                    globalJoin,
+                    viewType: currentViewType ?? ViewType.Kanban
                   }
                 })
               }

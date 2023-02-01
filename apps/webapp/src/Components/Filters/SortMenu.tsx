@@ -69,7 +69,10 @@ const SortMenu = ({ sortOrder, sortType, availableSortTypes, onSortOrderChange, 
 
 export default SortMenu
 
-export const RenderSort = ({ sortType, sortOrder }: Pick<SortMenuProps, 'sortType' | 'sortOrder'>) => {
+export const RenderSort = ({
+  sortType = 'status',
+  sortOrder = 'ascending'
+}: Pick<SortMenuProps, 'sortType' | 'sortOrder'>) => {
   return (
     <FilterGlobalJoinWrapper>
       <GenericSection>
