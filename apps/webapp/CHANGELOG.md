@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.11
+
+### Patch Changes
+
+- 0a65a868: List Type In View Added
+
 ## 0.22.10
 
 ### Patch Changes
