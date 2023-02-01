@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.10
+
+### Patch Changes
+
+- de30e4b6: Add Socials, setWorkspaceHeader on Init
+
 ## 0.22.9
 
 ### Patch Changes
