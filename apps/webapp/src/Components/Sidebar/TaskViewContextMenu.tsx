@@ -5,7 +5,7 @@ import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import { Icon } from '@iconify/react'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useTaskViews,useViewStore, View } from '../../Hooks/useTaskViews'
+import { useTaskViews, useViewStore, View } from '../../Hooks/useTaskViews'
 import { ContextMenuContent, ContextMenuItem, ContextMenuSeparator } from '../../Style/contextMenu'
 import { useTaskViewModalStore } from '../TaskViewModal'
 
@@ -32,7 +32,16 @@ const TaskViewContextMenu = ({ item }: TaskViewContextMenuProps) => {
   }
 
   const handleClone = (view: View) => {
-    openModal({ filters: view.filters, cloneViewId: view.id, globalJoin: view.globalJoin })
+    openModal({
+      filters: view.filters,
+      cloneViewId: view.id,
+      properties: {
+        viewType: view.viewType,
+        sortOrder: view.sortOrder,
+        sortType: view.sortType,
+        globalJoin: view.globalJoin
+      }
+    })
   }
 
   return (

@@ -48,3 +48,21 @@ export const FilterRemoveButton = styled(GenericSection)`
 export const FilterGlobalJoinWrapper = styled(GenericFlex)`
   flex-shrink: 0;
 `
+
+export const SortSectionWrapper = styled.div`
+  display: flex
+  align-items: center;
+  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+`
+
+export const SortOrderWrapper = styled(GenericFlex)`
+  padding: ${({ theme }) => theme.spacing.tiny}
+  padding-right: 0;
+  color: ${({ theme }) => theme.tokens.colors.secondary};
+`
+
+export const SortTypeWrapper = styled(GenericFlex)`
+  padding: ${({ theme }) => theme.spacing.tiny}
+  padding-left: 0;
+`

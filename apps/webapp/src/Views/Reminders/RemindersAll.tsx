@@ -337,7 +337,6 @@ const RemindersAll = () => {
         </StyledTaskHeader>
         <AllRemindersWrapper>
           <SearchFilters
-            result={board}
             addCurrentFilter={addCurrentFilter}
             removeCurrentFilter={removeCurrentFilter}
             resetCurrentFilters={resetCurrentFilters}

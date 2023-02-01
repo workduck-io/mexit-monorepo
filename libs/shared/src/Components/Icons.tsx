@@ -117,8 +117,33 @@ export const ForwardlinkIcon = {
     <g clip-path="url(#a)" fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"><path d="M4 20.86a2 2 0 0 1-1.388-.56 1 1 0 0 1 1.128-.474c.082.022.169.034.26.034h1a1 1 0 0 1 1 1H4zm8 0a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1h4zm5.388-.56a1 1 0 0 0-1.128-.474 1.005 1.005 0 0 1-.26.034h-1a1 1 0 0 0-1 1h2a2 2 0 0 0 1.388-.56zM18 16.86a1 1 0 0 0-1 1v1a1 1 0 0 1-.034.26 1 1 0 0 0 .474 1.129A2.005 2.005 0 0 0 18 18.86v-2zm0-6a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v-4zm-.56-5.388a1 1 0 0 0-.474 1.129 1 1 0 0 1 .034.26v1a1 1 0 0 0 1 1v-2a2 2 0 0 0-.56-1.39zM14 4.86a1 1 0 0 0 1 1h1c.091 0 .178.012.26.034a1 1 0 0 0 1.128-.473A2.004 2.004 0 0 0 16 4.86h-2zm-6 0a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1H8zm-2 0a1 1 0 0 1-1 1H4c-.091 0-.178.012-.26.034a1 1 0 0 1-1.128-.473A2.007 2.007 0 0 1 4 4.86h2zm-4 4a1 1 0 0 0 1-1v-1c0-.09.012-.178.034-.26a1 1 0 0 0-.474-1.128A2.007 2.007 0 0 0 2 6.86v2zm0 6a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1v4zm.56 5.389a1 1 0 0 0 .474-1.13A1.003 1.003 0 0 1 3 18.86v-1a1 1 0 0 0-1-1v2a2.003 2.003 0 0 0 .56 1.389z"/><path d="M8.032 16.421a1 1 0 0 1-1-1c0-2.574.38-4.594 1.58-6.168 1.194-1.568 3.07-2.52 5.633-3.29l.013-.003 5.799-1.571-3.367-2.08A1 1 0 0 1 17.74.606l6.12 3.782-3.224 6.181a1 1 0 0 1-1.773-.925l1.738-3.332-5.795 1.57c-2.43.73-3.8 1.527-4.604 2.582-.8 1.05-1.17 2.53-1.17 4.956a1 1 0 0 1-1 1z"/></g><defs><clipPath id="a"><path fill="currentColor" d="M0 0h24v24H0z"/></clipPath></defs>`
 }
 
+export const TaskTodoIcon = {
+  height: 24,
+  width: 24,
+  body: `<rect x="0.857143" y="0.857143" width="22.2857" height="22.2857" rx="5.14286" stroke="currentColor" fill="none" stroke-width="1.71429"/>`
+}
+
+export const TaskProgressIcon = {
+  height: 24,
+  width: 24,
+  body: `
+  <rect x="3.42857" y="12" width="17.1429" height="8.57143" rx="4" fill="currentColor"/>
+  <rect x="0.857143" y="0.857143" width="22.2857" height="22.2857" rx="5.14286" stroke="currentColor" fill="none" stroke-width="1.71429"/>`
+}
+
+export const TaskCompleteIcon = {
+  height: 24,
+  width: 24,
+  body: `
+    <rect x="3.42857" y="3.42859" width="17.1429" height="17.1429" rx="4" fill="currentColor"/>
+    <rect x="0.857143" y="0.857143" width="22.2857" height="22.2857" rx="5.14286" stroke="currentColor" fill="none" stroke-width="1.71429"/>`
+}
+
 export const addIconsToIconify = () => {
   addIcon('mex:shared-note', SharedNodeIconify)
   addIcon('mex:backlink', BacklinkIcon)
   addIcon('mex:forwardlink', ForwardlinkIcon)
+  addIcon('mex:task-todo', TaskTodoIcon)
+  addIcon('mex:task-progress', TaskProgressIcon)
+  addIcon('mex:task-complete', TaskCompleteIcon)
 }

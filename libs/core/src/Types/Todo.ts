@@ -29,9 +29,9 @@ export const TodoRanks: Record<PriorityType, number> = {
 }
 
 export const TodoStatusRanks: Record<TodoStatus, number> = {
-  todo: 0,
+  todo: 2,
   pending: 1,
-  completed: 2
+  completed: 0
 }
 
 export type TodosType = Record<string, Array<TodoType>> // * nodeid, todos

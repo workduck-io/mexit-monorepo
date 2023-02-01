@@ -13,14 +13,17 @@ import {
   SearchFilterLabel,
   SearchFiltersHelp,
   SearchFiltersWrapper,
-  SearchFilterWrapper} from '@mexit/shared'
+  SearchFilterWrapper
+} from '@mexit/shared'
 
 import FilterRender from '../Components/Filters/Filter'
 import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
+import SortMenu, { SortMenuProps } from '../Components/Filters/SortMenu'
+
+import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 
 interface SearchFiltersProps {
-  result?: any
   filters: Filters
   currentFilters: Filter[]
   globalJoin: GlobalFilterJoin
@@ -29,6 +32,10 @@ interface SearchFiltersProps {
   removeCurrentFilter: (filter: Filter) => void
   changeCurrentFilter: (filter: Filter) => void
   resetCurrentFilters: () => void
+  // If present, a view Selector is added at the end with the given properties
+  viewSelectorProps?: ViewSelectorProps
+
+  sortMenuProps?: SortMenuProps
 }
 
 const SearchFilters = ({
@@ -36,11 +43,12 @@ const SearchFilters = ({
   currentFilters,
   addCurrentFilter,
   changeCurrentFilter,
-  result,
   removeCurrentFilter,
   resetCurrentFilters,
   globalJoin,
-  setGlobalJoin
+  setGlobalJoin,
+  viewSelectorProps,
+  sortMenuProps
 }: SearchFiltersProps) => {
   const randomId = useMemo(() => nanoid(), [filters, currentFilters])
 
@@ -79,6 +87,8 @@ const SearchFilters = ({
         ))}
       </SearchFiltersWrapper>
       <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} />
+      {sortMenuProps && <SortMenu {...sortMenuProps} />}
+      {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
     </SearchFilterWrapper>
   )
 }

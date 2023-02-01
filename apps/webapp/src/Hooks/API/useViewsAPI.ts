@@ -13,7 +13,10 @@ export const useViewAPI = () => {
       properties: {
         title: view.title,
         description: view.description,
-        globalJoin: view.globalJoin
+        globalJoin: view.globalJoin,
+        sortOrder: view.sortOrder,
+        sortType: view.sortType,
+        viewType: view.viewType
       },
       entityId: view.id,
       filters: view.filters

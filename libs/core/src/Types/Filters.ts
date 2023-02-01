@@ -28,6 +28,9 @@ export const FilterTypeArray = [
   'date', // Does item have date TODO: Use updated and created will need before after and range
   'state', // Does item have a specific
 
+  'status', // Does item have a specific status (Task specific)
+  'priority', // Does item have a specific priority (Task specific)
+
   // TODO: Determine whether it will be a single select or not
   'has', // Does item have a specific data property
   // For reminders, has is used to determine if the reminder has a todo attached
@@ -50,6 +53,12 @@ export const FilterJoinArray = [
 
 // How to join the values of a single filter
 export type FilterJoin = typeof FilterJoinArray[number]
+
+export const SortOrderArray = ['ascending', 'descending'] as const
+export type SortOrder = typeof SortOrderArray[number]
+
+export const SortTypeArray = ['updated', 'created', 'status', 'priority'] as const
+export type SortType = typeof SortTypeArray[number]
 
 /** Filter join example
  *

@@ -31,6 +31,10 @@ export const InlineFlex = styled.div`
   justify-content: center;
 `
 
+export const SpaceBetween = styled(InlineFlex)`
+  justify-content: space-between;
+`
+
 export const StyledInlineBlock = styled.section<InlineBlockType>`
   height: fit-content;
   display: flex;
@@ -72,7 +76,6 @@ export const InlineBlockText = styled.div`
   font-size: large;
   color: ${({ theme }) => theme.tokens.text.heading};
 `
-
 
 export const Chip = styled(StyledMessage)`
   cursor: pointer;

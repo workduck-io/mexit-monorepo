@@ -1,7 +1,8 @@
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { Filter, GlobalFilterJoin, IDBStorage, mog } from '@mexit/core'
+import { Filter, GlobalFilterJoin, IDBStorage, mog, SortOrder, SortType } from '@mexit/core'
+import { ViewType } from '@mexit/shared'
 
 import { useViewAPI } from './API/useViewsAPI'
 
@@ -12,6 +13,10 @@ export interface View {
 
   // FIXME: This should use new Filter type
   filters: Filter[]
+
+  viewType?: ViewType
+  sortOrder?: SortOrder
+  sortType?: SortType
 
   globalJoin: GlobalFilterJoin
 }

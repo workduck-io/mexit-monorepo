@@ -8,8 +8,11 @@ import {
   getAllParentIds,
   GlobalFilterJoin,
   idxKey,
-  SearchFilterFunctions
+  SearchFilterFunctions,
+  SortOrder,
+  SortType
 } from '@mexit/core'
+import type { ViewType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -18,14 +21,30 @@ import { getTitleFromPath, useLinks } from './useLinks'
 import { useTags } from './useTags'
 
 export interface FilterStore {
+  /** Filters that are available for application in the current context */
   filters: Filters
+
+  /** Filters that are applied in the current context */
   currentFilters: Filter[]
+
+  /** Join strategy for filters */
   globalJoin: GlobalFilterJoin
-  indexes?: idxKey[]
-  setIndexes?: (indexes: idxKey[]) => void
+
   setFilters: (filters: Filters) => void
   setGlobalJoin: (join: GlobalFilterJoin) => void
   setCurrentFilters: (currentFilters: Filter[]) => void
+
+  /** Fetch results from specific indexes */
+  indexes?: idxKey[]
+  setIndexes?: (indexes: idxKey[]) => void
+
+  sortType?: SortType
+  sortOrder?: SortOrder
+  setSortType?: (sortType: SortType) => void
+  setSortOrder?: (sortOrder: SortOrder) => void
+
+  viewType?: ViewType
+  setViewType?: (viewType: ViewType) => void
 }
 
 export const useFilterStoreBase = create<FilterStore>((set) => ({
@@ -36,7 +55,10 @@ export const useFilterStoreBase = create<FilterStore>((set) => ({
   setFilters: (filters) => set((state) => ({ ...state, filters })),
   setGlobalJoin: (join) => set((state) => ({ ...state, globalJoin: join })),
   setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters })),
-  setIndexes: (indexes) => set((state) => ({ ...state, indexes }))
+  setIndexes: (indexes) => set((state) => ({ ...state, indexes })),
+  setSortType: (sortType) => set((state) => ({ ...state, sortType })),
+  setSortOrder: (sortOrder) => set((state) => ({ ...state, sortOrder })),
+  setViewType: (viewType) => set((state) => ({ ...state, viewType }))
 }))
 
 export const useFilterStore = <Slice>(selector: (state: FilterStore) => Slice) => useFilterStoreBase(selector)

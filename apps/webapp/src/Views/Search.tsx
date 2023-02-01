@@ -28,7 +28,7 @@ import {
   SplitSearchPreviewWrapper,
   Title,
   TitleText,
-  View
+  ViewType
 } from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
@@ -141,7 +141,7 @@ const Search = () => {
     const isTagged = hasTags(edNode.nodeid)
     const id = `${item.id}_ResultFor_Search`
     // mog('Baseitem', { item, node, icon, nodeType })
-    if (props.view === View.Card) {
+    if (props.view === ViewType.Card) {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultHeader active={item.matchField?.includes('title')}>
@@ -158,7 +158,7 @@ const Search = () => {
           )}
         </Result>
       )
-    } else if (props.view === View.List) {
+    } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>

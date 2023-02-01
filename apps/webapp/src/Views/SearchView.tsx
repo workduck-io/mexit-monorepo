@@ -15,7 +15,7 @@ import {
   SearchHeader,
   SearchInput,
   SearchViewContainer,
-  View
+  ViewType
 } from '@mexit/shared'
 
 import SearchIndexInput from '../Components/Search/IndexInput'
@@ -48,7 +48,7 @@ export interface RenderItemProps<Item> extends Partial<RenderSplitProps> {
   key: string
   id: string
 
-  view?: View
+  view?: ViewType
   onClick?: React.MouseEventHandler
   onMouseEnter?: React.MouseEventHandler
 }
@@ -77,7 +77,7 @@ interface SearchOptions {
 
   /** View to show in search */
   /** If none specified all are used */
-  view: View
+  view: ViewType
 }
 
 interface SearchViewProps<Item> {
@@ -196,7 +196,7 @@ const SearchView = <Item,>({
   RenderPreview,
   RenderNotFound,
   RenderFilters,
-  options = { view: View.List },
+  options = { view: ViewType.List },
   filterActions
 }: SearchViewProps<Item>) => {
   const [searchState, setSS] = useState<SearchViewState<Item>>({
@@ -220,7 +220,7 @@ const SearchView = <Item,>({
 
   // For filters
   const idxKeys = useFilterStore((store) => store.indexes) as idxKey[]
-  const [view, setView] = useState<View>(options?.view)
+  const [view, setView] = useState<ViewType>(options?.view)
   const setIndexes = useFilterStore((store) => store.setIndexes)
   const setSelected = (selected: number) => setSS((s) => ({ ...s, selected }))
   const { enableShortcutHandler } = useEnableShortcutHandler()
@@ -480,6 +480,7 @@ const SearchView = <Item,>({
 
         <ViewSelector
           currentView={view}
+          availableViews={[ViewType.List, ViewType.Card]}
           onChangeView={(view) => {
             mog('onChangeView', { view })
             setView(view)
@@ -491,7 +492,7 @@ const SearchView = <Item,>({
 
       <ResultsWrapper>
         {result?.length > 0 ? (
-          view === View.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
+          view === ViewType.List && RenderPreview && options?.splitOptions?.type !== SplitType.NONE ? (
             <SplitView
               id={`SplitViewForSearch_${id}`}
               RenderSplitPreview={(props) => (

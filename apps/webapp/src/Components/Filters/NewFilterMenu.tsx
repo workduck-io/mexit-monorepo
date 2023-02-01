@@ -107,7 +107,7 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
               return (
                 <MenuItem
                   key={op.id}
-                  icon={getFilterValueIcon(option.type, op.id)}
+                  icon={getFilterValueIcon(option.type, op.value)}
                   onClick={() => onAddNewFilter(option.type, op)}
                   label={op.label}
                   count={op.count}

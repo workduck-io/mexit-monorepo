@@ -2,7 +2,7 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
-import { View } from '../Style/ViewSelector'
+import { ViewType } from '../Style/ViewSelector'
 
 import { EditorStyles } from './Editor'
 import { Input } from './Form'
@@ -158,7 +158,9 @@ export const SearchFilterListCurrent = styled.div`
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-export const SearchFilterListSuggested = styled(SearchFilterListCurrent)``
+export const SearchFilterListSuggested = styled(SearchFilterListCurrent)`
+  justify-content: space-between;
+`
 
 export const SearchFilterList = styled.div`
   display: flex;
@@ -395,13 +397,13 @@ export const ResultMetaData = styled.div`
   }
 `
 
-export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
+export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType }>`
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
   :hover {
     cursor: pointer;
   }
   ${({ theme, selected, view }) => {
-    if (view === View.Card) {
+    if (view === ViewType.Card) {
       return css`
         max-height: 400px;
         overflow-y: auto;
@@ -431,7 +433,7 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
           border: 1px solid ${theme.tokens.colors.primary.default} !important;
         }
       `
-    } else if (view === View.List) {
+    } else if (view === ViewType.List) {
       return css`
         display: flex;
         flex-direction: row;
@@ -469,11 +471,11 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: View }>`
   ${SearchTransition}
 `
 
-export const Results = styled.div<{ view: View }>`
+export const Results = styled.div<{ view: ViewType }>`
   ${SearchHeight}
   overflow-y: auto;
   ${({ theme, view }) => {
-    if (view === View.Card) {
+    if (view === ViewType.Card) {
       return css`
         display: grid;
         grid-gap: ${theme.spacing.large};
@@ -492,7 +494,7 @@ export const Results = styled.div<{ view: View }>`
           grid-template-columns: repeat(1, 1fr);
         }
       `
-    } else if (view === View.List) {
+    } else if (view === ViewType.List) {
       return css`
         display: flex;
         flex-direction: column;

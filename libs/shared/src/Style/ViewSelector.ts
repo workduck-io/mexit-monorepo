@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
-export enum View {
+export enum ViewType {
   List = 'list',
-  Card = 'card'
+  Card = 'card',
+  Kanban = 'kanban'
   // NotFound = 'notFound'
 }
 

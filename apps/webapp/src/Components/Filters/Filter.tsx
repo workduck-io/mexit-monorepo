@@ -47,9 +47,11 @@ const getJoinOptionsForType = (type: FilterType) => {
     case 'tag':
       return JoinOptions
     case 'space':
-      return JoinOptions.filter((join) => join.value !== 'all' && join.value !== 'notAny')
+      return JoinOptions.filter((join) => join.value !== 'all' && join.value !== 'none')
     case 'mention':
       return JoinOptions
+    case 'status':
+      return JoinOptions.filter((join) => join.value !== 'all' && join.value !== 'none')
     default:
       return JoinOptions
   }

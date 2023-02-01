@@ -20,7 +20,9 @@ export const FilterTypeIcons = {
   date: 'ri:calendar-2-line',
   state: 'ri:checkbox-circle-line',
   has: 'ri:shape-line',
-  domain: 'ri:earth-line'
+  status: 'ri:checkbox-circle-line',
+  domain: 'ri:earth-line',
+  priority: 'ph:cell-signal-medium-fill'
 }
 
 export const StringToMIcon = (iconString: string): MIcon | undefined => {

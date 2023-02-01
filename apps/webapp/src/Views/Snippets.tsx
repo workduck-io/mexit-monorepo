@@ -38,7 +38,7 @@ import {
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
   Title,
-  View
+  ViewType
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
@@ -188,7 +188,7 @@ const Snippets = () => {
 
     if (isSnippet && !snippet) return null
 
-    if (props.view === View.Card) {
+    if (props.view === ViewType.Card) {
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -221,7 +221,7 @@ const Snippets = () => {
           </SearchPreviewWrapper>
         </Result>
       )
-    } else if (props.view === View.List) {
+    } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
           <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
@@ -343,7 +343,7 @@ const Snippets = () => {
         onDelete={(i) => onDeleteSnippet(i.id)}
         onEscapeExit={onEscapeExit}
         onSearch={onSearch}
-        options={{ view: View.Card }}
+        options={{ view: ViewType.Card }}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}
       />

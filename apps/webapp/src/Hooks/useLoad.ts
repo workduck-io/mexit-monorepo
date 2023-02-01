@@ -1,7 +1,8 @@
 import { toast } from 'react-hot-toast'
 
 import {
-checkIfUntitledDraftNode,  DRAFT_PREFIX,
+  checkIfUntitledDraftNode,
+  DRAFT_PREFIX,
   ELEMENT_PARAGRAPH,
   getAllParentIds,
   getParentNodePath,
@@ -10,13 +11,14 @@ checkIfUntitledDraftNode,  DRAFT_PREFIX,
   NodeEditorContent,
   NodeProperties,
   SEPARATOR,
-  updateEmptyBlockTypes } from '@mexit/core'
+  updateEmptyBlockTypes
+} from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { getContent,useEditorStore } from '../Stores/useEditorStore'
+import { getContent, useEditorStore } from '../Stores/useEditorStore'
 import { useBlockHighlightStore } from '../Stores/useFocusBlock'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
