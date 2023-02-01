@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 
-import externalLinkLine from '@iconify/icons-ri/external-link-line'
+import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
+import twitterIcon from '@iconify/icons-logos/twitter'
+import globeIcon from '@iconify/icons-ph/globe'
+import calendarEventLine from '@iconify/icons-ri/calendar-event-line'
 import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { Float } from '@mexit/shared'
+import { Float, Group, Links, StyledIcon } from '@mexit/shared'
 
 import { useLayoutStore } from '../Stores/useLayoutStore'
 
@@ -48,28 +51,37 @@ const FloatingMenu = styled(animated.div)`
   display: flex;
   flex-direction: column;
   text-align: center;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
+  gap: ${({ theme }) => theme.spacing.medium};
 
   min-width: 250px;
 
   overflow: hidden;
 
   position: relative;
-  top: -1rem;
+  bottom: 2rem;
   right: 6rem;
 
   border-radius: 5px;
   white-space: nowrap;
-`
 
-const HorizontalRule = styled.div`
-  margin: 1rem -1rem;
+  ${Group} {
+    gap: ${({ theme }) => theme.spacing.medium};
+  }
 
-  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
-  opacity: 0.1;
-  content: ' ';
-  height: 1px;
+  ${Links} {
+    padding: ${({ theme }) => theme.spacing.small};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+
+    svg {
+      margin: inherit;
+    }
+    :hover {
+      background-color: ${({ theme }) => theme.tokens.surfaces.highlight};
+    }
+  }
 `
 
 const FloatingButton = styled(FloatButton)<{ visible: boolean }>`
@@ -90,44 +102,17 @@ const FloatingButton = styled(FloatButton)<{ visible: boolean }>`
   }
 `
 
-const ConnectButton = styled(Button)`
-  background-color: ${({ theme }) => theme.tokens.surfaces.tooltip.info};
-  color: ${({ theme }) => theme.tokens.colors.primary.text};
-
-  &:hover {
-    color: ${({ theme }) => theme.tokens.colors.primary.text};
-  }
-`
-
-const Link = styled.a`
-  color: ${({ theme }) => theme.tokens.colors.primary.default};
-  opacity: 0.5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    text-decoration: none;
-    color: ${({ theme }) => theme.tokens.colors.primary.hover};
-    opacity: 1;
-  }
-`
-
 const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
 
   const focusMode = useLayoutStore((store) => store.focusMode)
-
-  const openCalendlyLink = () => {
-    window.open('https://calendly.com/mihir-workduck/catch-up?month=2022-07', '_blank')
-  }
 
   useEffect(() => {
     let clearFirstVisit: NodeJS.Timeout
     if (firstVisit) {
       clearFirstVisit = setTimeout(() => {
         if (!showMenu) setShowMenu(true)
-      }, 1000)
+      }, 60000)
     }
 
     return () => {
@@ -162,13 +147,21 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
       {/* eslint-disable-next-line*/}
       {/* @ts-ignore */}
       <FloatingMenu style={menuProps}>
-        Connect with us
-        <ConnectButton onClick={openCalendlyLink}>Calendly Link</ConnectButton>
-        <HorizontalRule> </HorizontalRule>
-        <Link href="https://workduck.io" target="__blank">
-          <Icon icon={externalLinkLine} />
-          Visit workduck.io{' '}
-        </Link>
+        Where to find us
+        <Group>
+          <Links href="https://workduck.io" target="_blank" rel="noopener norefer">
+            <StyledIcon icon={globeIcon} />
+          </Links>
+          <Links href="https://www.linkedin.com/company/workduck-official" target="_blank" rel="noopener norefer">
+            <StyledIcon icon={linkedinIcon} />
+          </Links>
+          <Links href="https://twitter.com/workduckio" target="_blank" rel="noopener norefer">
+            <StyledIcon icon={twitterIcon} />
+          </Links>
+          <Links href="https://calendly.com/mihir-workduck/catch-up" target="_blank" rel="noopener norefer">
+            <StyledIcon icon={calendarEventLine} />
+          </Links>
+        </Group>
       </FloatingMenu>
     </Float>
   )

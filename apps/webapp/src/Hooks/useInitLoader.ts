@@ -84,9 +84,9 @@ export const useInitLoader = () => {
   }
 
   useEffect(() => {
-    if (initalizeApp === AppInitStatus.RUNNING && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
-      API.setWorkspaceHeader(getWorkspaceId())
+    API.setWorkspaceHeader(getWorkspaceId())
 
+    if (initalizeApp === AppInitStatus.RUNNING && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
