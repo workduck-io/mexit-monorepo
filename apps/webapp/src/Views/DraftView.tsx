@@ -7,27 +7,28 @@ import shallow from 'zustand/shallow'
 import { defaultContent, ILink } from '@mexit/core'
 import {
   Content,
-  Group,
-  IconDisplay,
   MainHeader,
   PageContainer,
-  SnippetCommand,
-  SnippetHeader,
-  SSnippet,
-  SSnippets,
-  StyledSnippetPreview,
-  Title
+  Result,
+  ResultHeader,
+  Results,
+  ResultTitle,
+  SearchPreviewWrapper,
+  Title,
+  ViewType
 } from '@mexit/shared'
 
+import NamespaceTag from '../Components/NamespaceTag'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
+import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
-const CardsContainer = styled(SSnippets)`
-  gap: ${({ theme }) => theme.spacing.large};
+const CardsContainer = styled(Results)`
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 8rem);
 `
 
 const Info = styled.span`
@@ -37,15 +38,12 @@ const Info = styled.span`
   line-height: 1.2;
 `
 
-const Card = styled(SSnippet)`
-  margin: inherit;
-`
-
 function DraftView() {
-  const { contents } = useContentStore()
+  const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
   const { goTo } = useRouting()
+  const { getNamespaceOfNodeid } = useNamespaces()
 
   const [allLinks, setAllLinks] = useState<ILink[]>()
 
@@ -73,32 +71,52 @@ function DraftView() {
 
       <Content>
         {(!allLinks || allLinks.length === 0) && <Info>No Activity Found</Info>}
-        <CardsContainer>
+        <CardsContainer view={ViewType.Card}>
           {allLinks &&
             allLinks.map((s) => {
               const icon = useMetadataStore.getState().metadata.notes?.[s.nodeid]?.icon
+              const namespace = getNamespaceOfNodeid(s.nodeid)
 
               return (
-                <Card key={`NODE_${s.nodeid}`}>
-                  <SnippetHeader>
-                    <Group>
-                      <IconDisplay size={20} icon={icon} />
-                      <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
-                    </Group>
-                  </SnippetHeader>
-
-                  <StyledSnippetPreview
-                    onClick={() => {
-                      onOpen(s.nodeid)
-                    }}
-                  >
+                <Result
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  onClick={() => onOpen(s.nodeid)}
+                  view={ViewType.Card}
+                  key={`tag_res_prev_${s.nodeid}`}
+                >
+                  <ResultHeader>
+                    <ResultTitle>{s?.path}</ResultTitle>
+                    <NamespaceTag namespace={namespace} />
+                  </ResultHeader>
+                  <SearchPreviewWrapper>
                     <EditorPreviewRenderer
                       content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                      editorId={`Editor_Embed_${s.nodeid}`}
-                      draftView
+                      editorId={`editor_preview_${s.nodeid}`}
                     />
-                  </StyledSnippetPreview>
-                </Card>
+                  </SearchPreviewWrapper>
+                </Result>
+
+                // <Card key={`NODE_${s.nodeid}`}>
+                //   <SnippetHeader>
+                //     <Group>
+                //       <IconDisplay size={20} icon={icon} />
+                //       <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
+                //     </Group>
+                //   </SnippetHeader>
+
+                //   <StyledSnippetPreview
+                //     onClick={() => {
+                //       onOpen(s.nodeid)
+                //     }}
+                //   >
+                //     <EditorPreviewRenderer
+                //       content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
+                //       editorId={`Editor_Embed_${s.nodeid}`}
+                //       draftView
+                //     />
+                //   </StyledSnippetPreview>
+                // </Card>
               )
             })}
         </CardsContainer>

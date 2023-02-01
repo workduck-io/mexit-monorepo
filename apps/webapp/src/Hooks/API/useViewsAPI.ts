@@ -41,7 +41,7 @@ export const useViewAPI = () => {
                 description: item.properties.description,
                 filters: item.filters,
                 id: item.entityId,
-                globalJoin: item.properties.globalJoin ?? 'all'
+                ...item.properties
               } as View)
             : undefined
         })
