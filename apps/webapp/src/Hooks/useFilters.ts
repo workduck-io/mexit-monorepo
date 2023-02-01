@@ -44,7 +44,7 @@ export interface FilterStore {
   setSortOrder?: (sortOrder: SortOrder) => void
 
   viewType?: ViewType
-  setViewType: (viewType: ViewType) => void
+  setViewType?: (viewType: ViewType) => void
 }
 
 export const useFilterStoreBase = create<FilterStore>((set) => ({
