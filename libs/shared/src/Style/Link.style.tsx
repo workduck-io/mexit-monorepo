@@ -17,8 +17,10 @@ export const Links = styled.a`
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
-  gap: ${({ theme }) => theme.spacing.small};
+  height: 100%;
+  gap: ${({ theme }) => theme.spacing.medium};
   padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
 `
 
@@ -42,7 +44,17 @@ export const LinkTitleWrapper = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
-  width: max-content;
+  align-items: center;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 
   font-size: 1.2rem;
 
@@ -56,6 +68,7 @@ export const LinkMetadataAndDelete = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
+  white-space: nowrap;
 
   ${Button} {
     opacity: 0.5;

@@ -7,6 +7,8 @@ import shallow from 'zustand/shallow'
 import { defaultContent, ILink } from '@mexit/core'
 import {
   Content,
+  Group,
+  IconDisplay,
   MainHeader,
   PageContainer,
   Result,
@@ -28,7 +30,8 @@ import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 const CardsContainer = styled(Results)`
-  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 8rem);
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 12rem);
+  margin: ${({ theme }) => theme.spacing.large} 0 0;
 `
 
 const Info = styled.span`
@@ -86,7 +89,10 @@ function DraftView() {
                   key={`tag_res_prev_${s.nodeid}`}
                 >
                   <ResultHeader>
-                    <ResultTitle>{s?.path}</ResultTitle>
+                    <Group>
+                      <IconDisplay icon={icon} size={20} />
+                      <ResultTitle>{s?.path}</ResultTitle>
+                    </Group>
                     <NamespaceTag namespace={namespace} />
                   </ResultHeader>
                   <SearchPreviewWrapper>

@@ -17,7 +17,7 @@ export type SnippetsProps = {
 
 const LinkView = () => {
   const links = useLinkStore((store) => store.links)
-  const { getAllLinks, saveLink } = useURLsAPI()
+  const { getAllLinks } = useURLsAPI()
   //   const { getNode } = useNodes()
   const { goTo } = useRouting()
 

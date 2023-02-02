@@ -7,7 +7,9 @@ import styled, { css } from 'styled-components'
 
 import { fuzzySearch } from '@mexit/core'
 import {
+  Group,
   HoverSubtleGlow,
+  IconDisplay,
   Input,
   Result,
   ResultHeader,
@@ -26,10 +28,12 @@ import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
 import { useContentStore } from '../Stores/useContentStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 
 const TagsWrapper = styled.div`
   display: flex;
   padding: ${({ theme }) => theme.spacing.large} ${({ theme }) => theme.spacing.medium};
+  margin: 0 ${({ theme }) => theme.spacing.large};
 
   ${Input} {
     margin-bottom: ${({ theme }) => theme.spacing.medium};
@@ -60,6 +64,10 @@ export const BaseLink = styled.div`
     color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
   ${HoverSubtleGlow}
+`
+
+export const ResultContainer = styled(Results)`
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 12rem);
 `
 
 const TagLink = styled(BaseLink)<{ active?: boolean; selected?: boolean }>`
@@ -189,9 +197,10 @@ const Tag = () => {
       <TagMain>
         <h1>#{tag}</h1>
         <p>Notes with tag</p>
-        <Results view={ViewType.Card}>
+        <ResultContainer view={ViewType.Card}>
           {transition((styles, nodeid, _t, _i) => {
             const con = contents[nodeid]
+            const icon = useMetadataStore.getState().metadata.notes[nodeid]?.icon
             const node = getILinkFromNodeid(nodeid, true)
             const content = con ? con.content : defaultContent.content
             const namespace = getNamespace(node?.namespace)
@@ -209,7 +218,10 @@ const Tag = () => {
                 key={`tag_res_prev_${tag}_${nodeid}${_i}`}
               >
                 <ResultHeader>
-                  <ResultTitle>{node?.path}</ResultTitle>
+                  <Group>
+                    <IconDisplay icon={icon} size={20} />
+                    <ResultTitle>{node?.path}</ResultTitle>
+                  </Group>
                   <NamespaceTag namespace={namespace} />
                 </ResultHeader>
                 <SearchPreviewWrapper>
@@ -218,7 +230,7 @@ const Tag = () => {
               </Result>
             )
           })}
-        </Results>
+        </ResultContainer>
       </TagMain>
     </TagsWrapper>
   )

@@ -32,7 +32,7 @@ const SearchTransition = css`
 `
 
 const SearchHeight = css`
-  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 20rem);
+  height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 16rem);
 `
 
 const iconStyle = (primary?: boolean) => css`
@@ -482,12 +482,12 @@ export const Results = styled.div<{ view: ViewType }>`
         grid-auto-rows: min-content;
         grid-auto-flow: row;
 
-        @media (max-width: ${size.wide}) {
-          grid-template-columns: repeat(2, 1fr);
+        @media (min-width: ${size.medium}) {
+          grid-template-columns: repeat(3, 1fr);
         }
 
-        @media (min-width: ${size.wide}) {
-          grid-template-columns: repeat(3, 1fr);
+        @media (max-width: ${size.medium}) {
+          grid-template-columns: repeat(2, 1fr);
         }
 
         @media (max-width: ${size.small}) {
