@@ -18,11 +18,9 @@ export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
 
 export const MEXIT_BACKEND_URL_BASE = IS_DEV
   ? 'http://localhost:5002/api/v1'
-  : 'https://mexit-backend-staging.workduck.io/api/v1'
+  : 'https://mexit-backend-test.workduck.io/api/v1'
 
 export const CDN_BASE = 'https://cdn.workduck.io'
-
-export const MEX_LOCH_BASE_URL = 'https://http-staging.workduck.io/loch'
 
 export const BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
@@ -31,15 +29,15 @@ export const BASE_URLS = {
   namespace: `${MEXIT_BACKEND_URL_BASE}/namespace`,
   node: `${MEXIT_BACKEND_URL_BASE}/node`,
   snippet: `${MEXIT_BACKEND_URL_BASE}/snippet`,
-  loch: `${MEX_LOCH_BASE_URL}/connect`,
+  loch: `${MEXIT_BACKEND_URL_BASE}/loch`,
   share: `${MEXIT_BACKEND_URL_BASE}/shared`,
   user: `${MEXIT_BACKEND_URL_BASE}/user`,
   view: `${MEXIT_BACKEND_URL_BASE}/view`,
   link: `${MEXIT_BACKEND_URL_BASE}/link`,
   reminder: `${MEXIT_BACKEND_URL_BASE}/reminder`,
   smartcapture: `${MEXIT_BACKEND_URL_BASE}/capture`,
-  comment: `https://http-staging.workduck.io/comment`,
-  reaction: `https://http-staging.workduck.io/reaction`,
+  comment: `${MEXIT_BACKEND_URL_BASE}/comment`,
+  reaction: `${MEXIT_BACKEND_URL_BASE}/reaction`,
   highlight: `${MEXIT_BACKEND_URL_BASE}/highlight`,
   frontend: IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io',
   prompt: IS_DEV ? 'http://localhost:4000' : 'https://http-staging.workduck.io/prompt'
