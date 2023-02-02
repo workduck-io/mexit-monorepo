@@ -10,6 +10,7 @@ import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
   ELEMENT_TAG,
+  ELEMENT_TODO_LI,
   getMIcon,
   mog,
   PromptRenderType,
@@ -248,6 +249,10 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         options: {
           url: 'https://example.com/'
         }
+      },
+      task: {
+        slateElementType: ELEMENT_TODO_LI,
+        command: 'task'
       },
       table: {
         slateElementType: ELEMENT_TABLE,

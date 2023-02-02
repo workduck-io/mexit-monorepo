@@ -2,7 +2,7 @@ import React from 'react'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { getFavicon,Link, mog, Tag } from '@mexit/core'
+import { getFavicon, Link, mog, Tag } from '@mexit/core'
 import {
   AddTagMenu,
   LinkHeader,
@@ -15,7 +15,8 @@ import {
   RelativeTime,
   ShortenURL,
   TagsLabel,
-  Tooltip} from '@mexit/shared'
+  Tooltip
+} from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -75,7 +76,7 @@ const LinkComponent = ({ link, addTagFilter }: LinkProps) => {
         <Tooltip content={link.url}>
           <LinkTitleWrapper onClick={() => onOpenLink(link.url)}>
             <FaviconImage source={link.url} />
-            {link.title}
+            <span>{link.title}</span>
           </LinkTitleWrapper>
         </Tooltip>
         <LinkMetadataAndDelete>

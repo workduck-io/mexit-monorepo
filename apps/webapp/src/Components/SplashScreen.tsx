@@ -37,7 +37,7 @@ const VerticallyCenter = styled.div`
 `
 
 const HintsContainer = styled.div`
-  margin: ${({ theme }) => theme.spacing.medium} 0;
+  margin: ${({ theme }) => theme.spacing.large} 0;
   opacity: 0;
 
   animation: ${fadeIn} 2s;

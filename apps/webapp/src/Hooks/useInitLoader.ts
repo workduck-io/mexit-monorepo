@@ -23,7 +23,6 @@ import { useSmartCapture } from './useSmartCapture'
 import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
-  const isAuthenticated = useAuthStore((store) => store.authenticated)
   const initalizeApp = useAuthStore((store) => store.appInitStatus)
 
   const setIsUserAuthenticated = useAuthStore((store) => store.setIsUserAuthenticated)
@@ -86,7 +85,7 @@ export const useInitLoader = () => {
   useEffect(() => {
     API.setWorkspaceHeader(getWorkspaceId())
 
-    if (initalizeApp === AppInitStatus.RUNNING && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
+    if (initalizeApp !== AppInitStatus.START && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
@@ -99,8 +98,11 @@ export const useInitLoader = () => {
       initSearchIndex(initData)
         .then(async () => {
           await startRequestsWorkerService()
-          backgroundFetch()
-          await fetchAll()
+
+          if (initalizeApp === AppInitStatus.RUNNING) {
+            backgroundFetch()
+            await fetchAll()
+          }
         })
         .catch((error) => {
           console.log('InitSearchIndexError', { error })
