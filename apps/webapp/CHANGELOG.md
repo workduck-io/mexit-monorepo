@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.13
+
+### Patch Changes
+
+- 0d4c7587: Create Task using Slash command, DraftView and Tags Layout changes'
+
 ## 0.22.12
 
 ### Patch Changes
