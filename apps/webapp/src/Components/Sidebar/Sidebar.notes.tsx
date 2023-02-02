@@ -102,8 +102,6 @@ export const NoteSidebar = () => {
     prev: -1
   })
 
-  console.log('SIDEBAR', { index })
-
   const changeIndex = (newIndex: number, updateStores = true) => {
     if (newIndex === index.current) return
     const nextSpaceId = spaces[newIndex]?.id
