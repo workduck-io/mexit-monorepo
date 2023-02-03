@@ -6,12 +6,12 @@ import { TaskColumnHeader } from '@mexit/shared'
 
 import { RenderBoardTask } from '../../../Components/Todo/BoardTask'
 import { useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
-import { useTaskViews } from '../../../Hooks/useTaskViews'
+import { useViews } from '../../../Hooks/useViews'
 
 const KanbanElement = ({ viewId, view, setView }) => {
   const [board, setBoard] = useState<any>(undefined)
   const { getFilteredTodoBoard } = useTodoKanban()
-  const { getView } = useTaskViews()
+  const { getView } = useViews()
 
   useEffect(() => {
     const filters = view?.filters

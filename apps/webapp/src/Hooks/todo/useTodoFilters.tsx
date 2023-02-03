@@ -1,7 +1,6 @@
 import create from 'zustand'
 
-import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
-import { ViewType } from '@mexit/shared'
+import { Filter, Filters, GlobalFilterJoin, ViewType } from '@mexit/core'
 
 import { FilterStore } from '../useFilters'
 

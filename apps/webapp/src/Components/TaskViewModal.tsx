@@ -6,11 +6,21 @@ import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { Filter, generateTaskViewId, getPathNum, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
-import { Label, SearchFilterListCurrent, TextAreaBlock, ViewType } from '@mexit/shared'
+import {
+  Filter,
+  generateTaskViewId,
+  getPathNum,
+  GlobalFilterJoin,
+  SortOrder,
+  SortType,
+  View,
+  ViewType
+} from '@mexit/core'
+import { Label, SearchFilterListCurrent, TextAreaBlock } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { useViews } from '../Hooks/useViews'
+import { useViewStore } from '../Stores/useViewStore'
 import { ModalControls, ModalHeader } from '../Style/Refactor'
 
 import { DisplayFilter } from './Filters/Filter'
@@ -88,7 +98,7 @@ const TaskViewModal = () => {
 
   // const { saveData } = useSaveData()
 
-  const { getView, addView, updateView } = useTaskViews()
+  const { getView, addView, updateView } = useViews()
 
   const { goTo } = useRouting()
 

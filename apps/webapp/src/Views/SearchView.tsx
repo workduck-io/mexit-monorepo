@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Filter, Filters, GlobalFilterJoin, idxKey, mog } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin, idxKey, mog, ViewType } from '@mexit/core'
 import {
   InputWrapper,
   NoSearchResults,
@@ -14,8 +14,7 @@ import {
   ResultsWrapper,
   SearchHeader,
   SearchInput,
-  SearchViewContainer,
-  ViewType
+  SearchViewContainer
 } from '@mexit/shared'
 
 import SearchIndexInput from '../Components/Search/IndexInput'

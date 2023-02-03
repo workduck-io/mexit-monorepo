@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
 
-import { ReminderViewData } from '@mexit/core'
-import { Heading, PageContainer, TaskViewSection, ViewType } from '@mexit/shared'
+import { ReminderViewData, View, ViewType } from '@mexit/core'
+import { Heading, PageContainer, TaskViewSection } from '@mexit/shared'
 
 import TaskHeader from '../Components/TaskHeader'
 import TodoKanban from '../Components/Todo/TodoKanban'
@@ -10,12 +10,13 @@ import TodoList from '../Components/Todo/TodoList'
 import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
 import { useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { useViews } from '../Hooks/useViews'
 import { useTodoStore } from '../Stores/useTodoStore'
+import { useViewStore } from '../Stores/useViewStore'
 
 import SearchFilters from './SearchFilters'
 
-const TaskViewRenderer: React.FC<{ viewType: ViewType }> = ({ viewType }) => {
+const ViewTypeRenderer: React.FC<{ viewType: ViewType }> = ({ viewType }) => {
   switch (viewType) {
     case ViewType.Kanban:
       return <TodoKanban />
@@ -31,7 +32,7 @@ const Tasks = () => {
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const _hasHydrated = useViewStore((store) => store._hasHydrated)
 
-  const { getView } = useTaskViews()
+  const { getView } = useViews()
 
   const todos = useMemo(() => Object.entries(nodesTodo), [nodesTodo])
   const { saveAndClearBuffer } = useEditorBuffer()
@@ -123,7 +124,7 @@ const Tasks = () => {
             availableSortTypes: ['status', 'priority']
           }}
         />
-        <TaskViewRenderer viewType={viewType} />
+        <ViewTypeRenderer viewType={viewType} />
       </TaskViewSection>
       {todos.length < 1 && (
         <div>
@@ -133,7 +134,6 @@ const Tasks = () => {
             You can add todos with
             <kbd>[]</kbd>
           </p>
-          {/* HTML element for keyboard shortcut */}
         </div>
       )}
     </PageContainer>

@@ -4,7 +4,8 @@ import { Icon } from '@iconify/react'
 import layoutGridFill from '@iconify-icons/ri/layout-grid-fill'
 import listCheck2 from '@iconify-icons/ri/list-check-2'
 
-import { ViewSelectorButton, ViewSelectorWrapper,ViewType } from '@mexit/shared'
+import { ViewType } from '@mexit/core'
+import { ViewSelectorButton, ViewSelectorWrapper } from '@mexit/shared'
 
 export interface ViewSelectorProps {
   onChangeView: (view: ViewType) => void

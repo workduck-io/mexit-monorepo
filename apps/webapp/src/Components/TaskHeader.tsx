@@ -20,7 +20,7 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { Filter, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
+import { Filter, GlobalFilterJoin, SortOrder, SortType, View, ViewType } from '@mexit/core'
 import {
   ShortcutToken,
   ShortcutTokens,
@@ -31,12 +31,12 @@ import {
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle,
-  Title,
-  ViewType
+  Title
 } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { useViews } from '../Hooks/useViews'
+import { useViewStore } from '../Stores/useViewStore'
 
 import { useTaskViewModalStore } from './TaskViewModal'
 
@@ -61,7 +61,7 @@ const TaskHeader = ({
 }: TaskHeaderProps) => {
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const { deleteView } = useTaskViews()
+  const { deleteView } = useViews()
 
   const { goTo } = useRouting()
 

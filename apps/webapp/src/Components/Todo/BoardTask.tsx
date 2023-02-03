@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { PriorityType } from '@mexit/core'
-import { TaskCard, ViewType } from '@mexit/shared'
+import { PriorityType, ViewType } from '@mexit/core'
+import { TaskCard } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'

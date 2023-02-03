@@ -6,10 +6,11 @@ import { useSelected } from 'slate-react'
 import { SILinkRoot, TaskSLink } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useTaskViews, useViewStore } from '../../../Hooks/useTaskViews'
+import { useViews } from '../../../Hooks/useViews'
+import { useViewStore } from '../../../Stores/useViewStore'
 
 const TaskViewLink = (props: any) => {
-  const { getView } = useTaskViews()
+  const { getView } = useViews()
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { goTo } = useRouting()
 

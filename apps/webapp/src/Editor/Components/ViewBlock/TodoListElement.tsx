@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import { TaskListWrapper, ViewType } from '@mexit/shared'
+import { View, ViewType } from '@mexit/core'
+import { TaskListWrapper } from '@mexit/shared'
 
 import { RenderBoardTask } from '../../../Components/Todo/BoardTask'
 import { useTodoList } from '../../../Hooks/todo/useTodoList'
-import { View } from '../../../Hooks/useTaskViews'
 import { useTodoStore } from '../../../Stores/useTodoStore'
 
 export type ListViewProps = {

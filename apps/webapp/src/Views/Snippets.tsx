@@ -18,7 +18,8 @@ import {
   generateSnippetId,
   GenericSearchResult,
   mog,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
+  ViewType
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -37,8 +38,7 @@ import {
   SnippetHelp,
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
-  Title,
-  ViewType
+  Title
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'

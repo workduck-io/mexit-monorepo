@@ -1,12 +1,5 @@
 import styled from 'styled-components'
 
-export enum ViewType {
-  List = 'list',
-  Card = 'card',
-  Kanban = 'kanban'
-  // NotFound = 'notFound'
-}
-
 export const ViewSelectorWrapper = styled.div`
   display: flex;
   flex-direction: row;

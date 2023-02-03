@@ -11,10 +11,10 @@ import { Icon } from '@iconify/react'
 import { InitialNode } from '@mexit/core'
 
 import { ROUTE_PATHS } from '../Hooks/useRouting'
-import { useViewStore } from '../Hooks/useTaskViews'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useHelpStore } from '../Stores/useHelpStore'
+import { useViewStore } from '../Stores/useViewStore'
 import { NavLinkData } from '../Types/Nav'
 
 /*

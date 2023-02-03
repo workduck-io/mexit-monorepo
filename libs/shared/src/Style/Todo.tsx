@@ -2,12 +2,13 @@ import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
 
+import { ViewType } from '@mexit/core'
+
 import { EditorStyles } from './Editor'
 import { MainHeader } from './Layouts'
 import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
-import { ViewType } from './ViewSelector'
 
 /*
  * Todos

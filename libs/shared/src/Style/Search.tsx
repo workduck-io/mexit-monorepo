@@ -2,7 +2,7 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
-import { ViewType } from '../Style/ViewSelector'
+import { ViewType } from '@mexit/core'
 
 import { EditorHeader, EditorStyles } from './Editor'
 import { Input } from './Form'

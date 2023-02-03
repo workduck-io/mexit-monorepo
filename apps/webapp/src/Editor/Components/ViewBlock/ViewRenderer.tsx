@@ -1,6 +1,4 @@
-import { ViewType } from '@mexit/shared'
-
-import { View } from '../../../Hooks/useTaskViews'
+import { View, ViewType } from '@mexit/core'
 
 import KanbanElement from './KanbanElement'
 import TodoListElement from './TodoListElement'

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated } from '@mexit/core'
-import { MainHeader, Result, SearchContainer, Title, ViewType } from '@mexit/shared'
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, ViewType } from '@mexit/core'
+import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'

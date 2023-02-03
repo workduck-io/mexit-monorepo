@@ -1,7 +1,7 @@
-import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog } from '@mexit/core'
+import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, View } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
-import { useViewStore, View } from '../useTaskViews'
+import { useViewStore } from '../../Stores/useViewStore'
 
 export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)

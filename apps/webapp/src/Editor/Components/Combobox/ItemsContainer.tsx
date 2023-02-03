@@ -1,7 +1,7 @@
 import { ItemsContainer as StyledItemsContainer } from '@mexit/shared'
 
 import { useNamespaces } from '../../../Hooks/useNamespaces'
-import { useTaskViews } from '../../../Hooks/useTaskViews'
+import { useViews } from '../../../Hooks/useViews'
 import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { useMetadataStore } from '../../../Stores/useMetadataStore'
 import { usePromptStore } from '../../../Stores/usePromptStore'
@@ -19,7 +19,7 @@ const ItemsContainer: React.FC<{ items?: any; onRenderItem?: any; comboProps?: a
   const allMetadata = useMetadataStore((s) => s.metadata)
   const getPrompt = usePromptStore((s) => s.getPrompt)
   const setItemIndex = useComboboxStore((state) => state.setItemIndex)
-  const { getView } = useTaskViews()
+  const { getView } = useViews()
 
   const getDescripton = (item: any) => {
     switch (item?.type) {

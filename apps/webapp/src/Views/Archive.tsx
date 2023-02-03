@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog } from '@mexit/core'
+import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog, ViewType } from '@mexit/core'
 import {
   ArchiveHelp,
   DefaultMIcons,
@@ -22,8 +22,7 @@ import {
   SearchContainer,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  Title,
-  ViewType
+  Title
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'

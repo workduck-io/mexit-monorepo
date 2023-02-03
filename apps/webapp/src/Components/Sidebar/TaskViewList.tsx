@@ -5,8 +5,8 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { DefaultMIcons, getMIcon, ReminderViewData } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useViewStore } from '../../Hooks/useTaskViews'
 import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
+import { useViewStore } from '../../Stores/useViewStore'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
@@ -84,17 +84,17 @@ const TaskViewList = () => {
 
   return (
     <SidebarWrapper>
-      <SidebarHeaderLite title="Task Views" icon={stackLine} />
+      <SidebarHeaderLite title="Views" icon={stackLine} />
       <SidebarList
         items={sortedViews}
         onContextMenu={handleContextMenu}
         onClick={(item) => onOpenView(item)}
         selectedItemId={currentView?.id || 'default'}
         showSearch
-        searchPlaceholder="Filter Task Views..."
+        searchPlaceholder="Filter Views..."
         defaultItems={[
           {
-            label: 'Default',
+            label: 'Tasks',
             id: 'default',
             icon: getMIcon('ICON', 'ri:home-7-line'),
             data: {}

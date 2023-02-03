@@ -4,6 +4,7 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSelected } from 'slate-react'
 
+import { View } from '@mexit/core'
 import {
   Group,
   RootElement,
@@ -16,7 +17,8 @@ import { DisplayFilter } from '../../../Components/Filters/Filter'
 import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
 import { RenderSort } from '../../../Components/Filters/SortMenu'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
+import { useViews } from '../../../Hooks/useViews'
+import { useViewStore } from '../../../Stores/useViewStore'
 import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
 
 import ViewRenderer from './ViewRenderer'
@@ -25,7 +27,7 @@ const ViewBlock = (props: any) => {
   const { goTo } = useRouting()
   const viewid = props.element.value
   const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const { getView } = useTaskViews()
+  const { getView } = useViews()
 
   const [view, setView] = useState<View | undefined>(undefined)
 

@@ -9,7 +9,8 @@ import {
   GenericSearchResult,
   getInitialNode,
   mog,
-  NodeType
+  NodeType,
+  ViewType
 } from '@mexit/core'
 import {
   EditorHeader,
@@ -28,8 +29,7 @@ import {
   SearchHelp,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  Title,
-  ViewType
+  Title
 } from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
