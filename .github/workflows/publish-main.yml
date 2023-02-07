@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - deployment-stages-frontend
 
 jobs:
   release-main:
