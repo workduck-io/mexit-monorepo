@@ -1,0 +1,60 @@
+name: Publish to test-mexit.workduck.io on push to main
+
+on:
+  push:
+    branches:
+      - main
+      - deployment-stages-frontend
+
+jobs:
+  release-main:
+    name: Build and release extension on push to main
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      YARN_TOKEN: ${{ secrets.YARN_TOKEN }}
+      MEXIT_TEST_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.MEXIT_TEST_CLOUDFRONT_DISTRIBUTION_ID }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Get yarn cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install Yarn Globally
+        run: npm install -g yarn
+
+      - name: Install Dependencies
+        run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
+
+      - name: Build Webapp for stage test
+        run: yarn nx build:test webapp
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Publish to test and invalidate CloudFront cache
+        run: |
+          yarn nx build:test webapp
+          aws s3 sync ./dist/webapp s3://mexit-monorepo-webapp-test
+          aws cloudfront create-invalidation --distribution-id $MEXIT_TEST_CLOUDFRONT_DISTRIBUTION_ID --paths '/*'

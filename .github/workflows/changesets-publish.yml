@@ -71,7 +71,7 @@ jobs:
       - name: Publish Webapp
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
-          yarn nx release webapp
+          yarn nx build:staging webapp
           aws s3 sync ./dist/webapp s3://mexit-monorepo-webapp
           aws cloudfront create-invalidation --distribution-id $MEXIT_CLOUDFRONT_DISTRIBUTION_ID --paths '/*'
 
@@ -82,7 +82,7 @@ jobs:
       - name: Zip Extension Bundle
         if: steps.changesets.outputs.hasChangesets == 'false'
         working-directory: ./dist/extension
-        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip * 
+        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip *
 
       - name: Create Release and Upload Extension ZIP Bundle
         id: upload-release-asset

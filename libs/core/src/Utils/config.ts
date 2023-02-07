@@ -82,7 +82,7 @@ const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
   },
   [STAGE.test]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
-    MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
+    MEXIT_FRONTEND_URL_BASE: 'https://test-mexit.workduck.io',
     MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-test.workduck.io/api/v1',
     MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
     MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io'
