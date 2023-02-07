@@ -107,7 +107,8 @@ export const DefaultMIcons = {
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
   WEB_LINK: getMIcon('ICON', 'ri:link'),
-  SPACE: getMIcon('ICON', 'heroicons-outline:view-grid')
+  SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
+  ARCHIVE: getMIcon('ICON', 'ri:archive-line')
 }
 
 export const ForwardlinkIcon = {

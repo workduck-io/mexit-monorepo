@@ -25,6 +25,8 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import useModalStore from '../../Stores/useModalStore'
 import { areEqual } from '../../Utils/hash'
 
 import Editor from './Editor'
@@ -112,7 +114,7 @@ const ContentEditor = () => {
         })
       },
       Enter: (event) => {
-        if (!isOnEditableElement(event)) {
+        if (!isOnEditableElement(event) && !useModalStore.getState().open && !useLayoutStore.getState().contextMenu) {
           event.preventDefault()
           const editorRef = getPlateEditorRef(nodeid) ?? getPlateEditorRef()
           focusEditor(editorRef)

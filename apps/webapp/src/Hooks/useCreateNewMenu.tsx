@@ -1,36 +1,66 @@
 import toast from 'react-hot-toast'
 
+import { TreeItem } from '@atlaskit/tree'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
 import { defaultContent, generateSnippetId, MIcon } from '@mexit/core'
 import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
+import { useDeleteStore } from '../Components/Refactor/DeleteModal'
+import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
+import { useDataStore } from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { useShareModalStore } from '../Stores/useShareModalStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
+import { useNavigation } from './useNavigation'
+import { useRefactor } from './useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
 
-interface CreateNewMenuItem {
+interface MenuListItemType {
   id: string
   label: string
+  disabled?: boolean
   icon?: MIcon
-  onSelect: () => void
+  onSelect: any
+  options?: Array<MenuListItemType>
 }
 
+const getMenuItem = (
+  label: string,
+  onSelect: any,
+  disabled?: boolean,
+  icon?: MIcon,
+  options?: Array<MenuListItemType>
+) => ({
+  id: label,
+  label,
+  onSelect,
+  icon,
+  disabled,
+  options
+})
+
 export const useCreateNewMenu = () => {
-  const { goTo } = useRouting()
-  const { createNewNote } = useCreateNewNote()
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  const { addSnippet } = useSnippets()
+  const toggleModal = useModalStore((store) => store.toggleOpen)
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
-  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
+  const openShareModal = useShareModalStore((store) => store.openModal)
+  const openDeleteModal = useDeleteStore((store) => store.openModal)
+
+  const { goTo } = useRouting()
+  const { push } = useNavigation()
+  const { addSnippet } = useSnippets()
+  const { execRefactorAsync } = useRefactor()
+  const { createNewNote } = useCreateNewNote()
 
   const createNewNamespace = () => {
     addDefaultNewNamespace()
@@ -79,50 +109,86 @@ export const useCreateNewMenu = () => {
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
 
-  const getSnippetsMenuItems = (): CreateNewMenuItem[] => {
+  const handleTemplate = (item: TreeItem) => {
+    if (item.data.path !== 'Drafts') {
+      toggleModal(ModalsType.template, item.data)
+    } else {
+      toast.error('Template cannot be set for Drafts hierarchy')
+    }
+  }
+
+  const handleCreateChild = (item: TreeItem) => {
+    const node = createNewNote({ parent: { path: item.data.path, namespace: item.data.namespace } })
+    goTo(ROUTE_PATHS.node, NavigationType.push, node?.nodeid)
+  }
+
+  const handleShare = (item: TreeItem) => {
+    openShareModal('permission', 'note', item.data.nodeid)
+  }
+
+  const getMoveToNamespaceItems = () => {
+    const item = useLayoutStore.getState().contextMenu?.item
+    const namespace = useDataStore.getState().namespaces?.filter((i) => !i.granterID && i.id !== item.data?.namespace)
+
+    return namespace.map((ns) => getMenuItem(ns.name, () => handleMoveNamespaces(item, ns.id), false, ns.icon))
+  }
+
+  const handleArchive = (item: TreeItem) => {
+    openDeleteModal({ path: item.data.path, namespaceID: item.data.namespace })
+  }
+
+  const handleMoveNamespaces = async (item: TreeItem, newNamespaceID: string) => {
+    console.log(`Item: ${JSON.stringify(item)}`)
+    const refactored = await execRefactorAsync(
+      { path: item.data?.path, namespaceID: item.data?.namespace },
+      { path: item.data?.path, namespaceID: newNamespaceID }
+    )
+
+    if (doesLinkRemain(item.data?.nodeid, refactored)) {
+      push(item.data?.nodeid, { savePrev: false })
+    }
+  }
+
+  /**
+   * Menu Items Getter Functions
+   * @returns Array<MenuListItemType>
+   */
+
+  const getTreeMenuItems = (): Array<MenuListItemType> => {
+    const item = useLayoutStore.getState().contextMenu?.item
+    const namespace = useDataStore.getState().namespaces?.find((i) => i.id === item.data?.namespace)
+    const disabled = namespace?.granterID !== undefined && namespace.access === 'READ'
+
     return [
-      {
-        id: 'new-snippet',
-        label: 'New Snippet',
-        onSelect: () => {
-          onCreateNewSnippet()
-        }
-      },
-      {
-        id: 'new-template',
-        label: 'New Template',
-        onSelect: () => {
-          onCreateNewSnippet(true)
-        }
-      }
+      getMenuItem('New Note', () => handleCreateChild(item), disabled, DefaultMIcons.NOTE),
+      getMenuItem('Set Template', () => handleTemplate(item), disabled, DefaultMIcons.TEMPLATE),
+      getMenuItem(
+        'Move To Space',
+        () => {
+          // * Can use to open modal
+        },
+        disabled,
+        DefaultMIcons.TEMPLATE,
+        getMoveToNamespaceItems()
+      ),
+      getMenuItem('Share', () => handleShare(item), disabled, DefaultMIcons.SHARED_NOTE),
+      getMenuItem('Archive', () => handleArchive(item), disabled, DefaultMIcons.ARCHIVE)
     ]
   }
 
-  const getCreateNewMenuItems = (_path?: string): CreateNewMenuItem[] => {
+  const getSnippetsMenuItems = (): MenuListItemType[] => {
+    return [getMenuItem('New Snippet', onCreateNewSnippet), getMenuItem('New Template', () => onCreateNewSnippet(true))]
+  }
+
+  const getCreateNewMenuItems = (_path?: string): MenuListItemType[] => {
+    const currentSpace = useUserPreferenceStore.getState().activeNamespace
+
     return [
-      {
-        id: 'new-note',
-        label: 'New Note',
-        onSelect: () => {
-          createNewNoteInNamespace(currentSpace || getDefaultNamespaceId())
-        }
-      },
-      {
-        id: 'new-space',
-        label: 'New Space',
-        onSelect: () => {
-          createNewNamespace()
-        }
-      },
-      {
-        id: 'new-snippet',
-        label: 'New Snippet',
-        onSelect: () => {
-          onCreateNewSnippet()
-        }
-      }
+      getMenuItem('New Note', () => createNewNoteInNamespace(currentSpace || getDefaultNamespaceId())),
+      getMenuItem('New Space', createNewNamespace),
+      getMenuItem('New Snippet', onCreateNewSnippet)
     ]
   }
 
-  return { getCreateNewMenuItems, getSnippetsMenuItems }
+  return { getCreateNewMenuItems, getSnippetsMenuItems, getTreeMenuItems }
 }

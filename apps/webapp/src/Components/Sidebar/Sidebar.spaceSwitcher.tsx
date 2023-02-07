@@ -19,6 +19,7 @@ interface SidebarSpaceSwitcherProps {
   setCurrentIndex: (index: number) => void
   setNextSpaceIndex: (reverse?: boolean) => void
   createNewMenuItems: Array<any>
+  contextMenuType?: ContextMenuType
 }
 
 export const SidebarSpaceSwitcher = ({
@@ -26,7 +27,8 @@ export const SidebarSpaceSwitcher = ({
   setNextSpaceIndex,
   spaces,
   setCurrentIndex,
-  createNewMenuItems
+  createNewMenuItems,
+  contextMenuType
 }: SidebarSpaceSwitcherProps) => {
   const sidebarWidth = useLayoutStore((s) => s.sidebar.width)
   const currentItemRef = React.useRef<HTMLDivElement>(null)
@@ -70,14 +72,16 @@ export const SidebarSpaceSwitcher = ({
               active={s.id === currentSpace}
               onContextMenu={(e) => {
                 e.preventDefault()
-                setContextMenu({
-                  type: ContextMenuType.NOTE_NAMESPACE,
-                  item: s,
-                  coords: {
-                    x: e.clientX,
-                    y: e.clientY
-                  }
-                })
+                if (contextMenuType) {
+                  setContextMenu({
+                    type: contextMenuType,
+                    item: s,
+                    coords: {
+                      x: e.clientX,
+                      y: e.clientY
+                    }
+                  })
+                }
               }}
               onClick={() => changeSpaceIndex(index)}
               ref={s.id === currentSpace ? currentItemRef : null}

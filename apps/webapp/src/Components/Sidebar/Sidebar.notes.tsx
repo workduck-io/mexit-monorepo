@@ -12,6 +12,7 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
 import { PollActions, useApiStore } from '../../Stores/useApiStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { ContextMenuType } from '../../Stores/useLayoutStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
 import SharedNotes from './SharedNotes'
@@ -194,6 +195,7 @@ export const NoteSidebar = () => {
       </SpaceContentWrapper>
       {/* currentSpace && <SidebarSpaceComponent style={} space={currentSpace} />*/}
       <SidebarSpaceSwitcher
+        contextMenuType={ContextMenuType.NOTE_NAMESPACE}
         createNewMenuItems={menuItems}
         currentSpace={currentSpace?.id}
         spaces={spaces}
