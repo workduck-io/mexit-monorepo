@@ -68,5 +68,6 @@ export default defineConfig({
     }) as PluginOption,
     svgr()
   ],
-  worker: { format: 'es' }
+  worker: { format: 'es' },
+  envPrefix: 'MEXIT_'
 })

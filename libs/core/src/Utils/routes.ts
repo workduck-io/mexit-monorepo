@@ -1,5 +1,5 @@
 export const IS_DEV = (() => {
-  if (import.meta.env && import.meta.env.VITE_FORCE_DEV) return true
+  if (import.meta.env && import.meta.env.MEXIT_FORCE_DEV) return true
   else if (import.meta.env && import.meta.env.MODE) return import.meta.env.MODE === 'development' ? true : false
   else if (process.env['NX_BUILD_MODE'] === 'development') return true
   return false

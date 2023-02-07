@@ -50,7 +50,7 @@ const useSocket = () => {
   }
 
   const utilFunctions = useWebSocket(
-    config.websocket.URL,
+    config.baseURLs.MEXIT_WEBSOCKET_URL,
     {
       onOpen: () => mog('CONNECTION OPENED'),
       retryOnError: true,
