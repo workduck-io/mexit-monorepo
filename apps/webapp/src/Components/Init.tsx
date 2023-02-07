@@ -2,10 +2,9 @@ import { useEffect } from 'react'
 
 import { useAuth } from '@workduck-io/dwindle'
 
-import { API } from '@mexit/core'
+import { API, API_BASE_URLS, config } from '@mexit/core'
 import { addIconsToIconify } from '@mexit/shared'
 
-import config from '../config'
 import { useInitLoader } from '../Hooks/useInitLoader'
 import { useOnUnload } from '../Hooks/useOnUnload'
 import { useAutoSyncUserPreference } from '../Hooks/useSyncUserPreferences'
@@ -23,7 +22,7 @@ const Init = () => {
         },
         {
           identityPoolID: config.cognito.IDENTITY_POOL_ID,
-          CDN_BASE_URL: 'https://cdn.workduck.io'
+          CDN_BASE_URL: API_BASE_URLS.cdn
         }
       )
 

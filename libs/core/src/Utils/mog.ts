@@ -1,4 +1,4 @@
-import { IS_DEV } from './routes'
+import { IS_DEV } from './config'
 
 type MogOptions = {
   pretty: boolean

@@ -1,4 +1,4 @@
-import { PartialBy } from '@mexit/core'
+import { PartialBy } from './serializer'
 
 export enum STAGE {
   prod = 'prod',
@@ -63,31 +63,36 @@ type BaseURLs =
   | 'MEX_API_GATEWAY_URL_BASE'
   | 'MEXIT_FRONTEND_URL_BASE'
   | 'MEXIT_WEBSOCKET_URL'
+  | 'MEXIT_LINK_SHORTENER_URL_BASE'
 
 const baseURLs: Record<STAGE, Record<BaseURLs, string>> = {
   [STAGE.prod]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io/route',
     MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
-    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io',
-    MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io'
+    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
+    MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
+    MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io'
   },
   [STAGE.staging]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws.workduck.io/route',
     MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
-    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io',
-    MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io'
+    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-staging.workduck.io/api/v1',
+    MEX_API_GATEWAY_URL_BASE: 'https://http-staging.workduck.io',
+    MEXIT_LINK_SHORTENER_URL_BASE: 'https://url.workduck.io'
   },
   [STAGE.test]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
     MEXIT_FRONTEND_URL_BASE: 'https://mexit.workduck.io',
-    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-test.workduck.io',
-    MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io'
+    MEXIT_BACKEND_URL_BASE: 'https://mexit-backend-test.workduck.io/api/v1',
+    MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
+    MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io'
   },
   [STAGE.local]: {
     MEXIT_WEBSOCKET_URL: 'wss://ws-test.workduck.io/route',
     MEXIT_FRONTEND_URL_BASE: 'http://localhost:3333',
-    MEXIT_BACKEND_URL_BASE: 'http://localhost:5002',
-    MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io'
+    MEXIT_BACKEND_URL_BASE: 'http://localhost:5002/api/v1',
+    MEX_API_GATEWAY_URL_BASE: 'https://http-test.workduck.io',
+    MEXIT_LINK_SHORTENER_URL_BASE: 'https://url-test.workduck.io'
   }
 }
 
@@ -96,12 +101,10 @@ export interface MexitConfig {
   baseURLs: Record<BaseURLs, string>
 }
 
-const config: MexitConfig = {
+export const config: MexitConfig = {
   cognito: {
     ...cognitoCreds[DEPLOYMENT_STAGE],
     SCOPES: 'email openid profile'
   },
   baseURLs: baseURLs[DEPLOYMENT_STAGE]
 }
-
-export default config

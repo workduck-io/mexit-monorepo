@@ -5,7 +5,7 @@ import { ListItemType } from '../Types/List'
 import { getMIcon } from '../Types/Store'
 
 import { fuzzySearch } from './fuzzysearch'
-import { LINK_SHORTENER_URL_BASE } from './routes'
+import { API_BASE_URLS } from './routes'
 
 export const fuzzySearchLinks = (searchTerm: string, links: Link[]): Link[] => {
   const getKeys = (link: Link) => {
@@ -39,7 +39,7 @@ export const getListItemFromLink = (link: Link, workspaceID: string) => {
     category: QuickLinkType.action,
     type: ActionType.OPEN,
     extras: {
-      base_url: `${LINK_SHORTENER_URL_BASE}/${workspaceID}/${link?.alias}`
+      base_url: `${API_BASE_URLS.url}/${workspaceID}/${link?.alias}`
     },
     shortcut: {
       open: {

@@ -2,7 +2,7 @@ import { ActionType, MexitAction } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
 import { DefaultMIcons, getMIcon } from '../Types/Store'
-import { MEXIT_ACTIONS_URL_BASE } from '../Utils/routes'
+import { API_BASE_URLS } from '../Utils/routes'
 
 export const CREATE_NEW_ITEM: ListItemType = {
   title: 'Create new ',
@@ -57,7 +57,7 @@ export const initActions: Array<ListItemType> = [
         keystrokes: 'Enter'
       }
     },
-    extras: { base_url: `${MEXIT_ACTIONS_URL_BASE}/shortener` }
+    extras: { base_url: `${API_BASE_URLS.actions}/shortener` }
   },
 
   {
@@ -567,7 +567,7 @@ export const initActions: Array<ListItemType> = [
     icon: getMIcon('ICON', 'material-symbols:corporate-fare-rounded'),
     type: ActionType.RENDER,
     extras: {
-      base_url: `${MEXIT_ACTIONS_URL_BASE}/corpbs`
+      base_url: `${API_BASE_URLS.actions}/corpbs`
     },
     shortcut: {
       get: {

@@ -1,6 +1,6 @@
 import { useAuth } from '@workduck-io/dwindle'
 
-import { API, ILink, mog, USE_API } from '@mexit/core'
+import { API, ILink, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -40,11 +40,6 @@ const useArchive = () => {
   }
 
   const addArchiveData = async (nodes: ILink[], namespaceID: string): Promise<boolean> => {
-    if (!USE_API) {
-      addInArchive(nodes)
-      return true
-    }
-
     if (userCred) {
       return await API.node
         .archive(
@@ -72,9 +67,6 @@ const useArchive = () => {
   }
 
   const unArchiveData = async (nodes: ILink[]) => {
-    if (!USE_API) {
-      return unArchive(nodes[0])
-    }
     await API.node
       .unarchive(
         nodes[0].namespace,
@@ -136,11 +128,6 @@ const useArchive = () => {
   }
 
   const removeArchiveData = async (nodeids: ILink[]): Promise<boolean> => {
-    if (!USE_API) {
-      removeArchive(nodeids)
-      return true
-    }
-
     if (userCred) {
       const res = await API.node
         .deleteArchived(nodeids.map((i) => i.nodeid))

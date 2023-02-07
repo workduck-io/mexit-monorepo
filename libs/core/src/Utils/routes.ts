@@ -1,30 +1,11 @@
-export const IS_DEV = (() => {
-  if (import.meta.env && import.meta.env.MEXIT_FORCE_DEV) return true
-  else if (import.meta.env && import.meta.env.MODE) return import.meta.env.MODE === 'development' ? true : false
-  else if (process.env['NX_BUILD_MODE'] === 'development') return true
-  return false
-})()
+import { config } from './config'
 
 type AllNamespaceOption = 'onlyShared' | 'onlyWorkspace'
 
-export const USE_API = () => {
-  /** Useful for tracking stopped API calls */
-  // if (IS_DEV) console.info('API is set to false')
-  // return true
-  return !IS_DEV
-}
+const { MEXIT_BACKEND_URL_BASE, MEX_API_GATEWAY_URL_BASE, MEXIT_FRONTEND_URL_BASE, MEXIT_LINK_SHORTENER_URL_BASE } =
+  config.baseURLs
 
-export const LINK_SHORTENER_URL_BASE = 'https://url.workduck.io/link'
-
-export const MEXIT_BACKEND_URL_BASE = IS_DEV
-  ? 'http://localhost:5002/api/v1'
-  : 'https://mexit-backend-staging.workduck.io/api/v1'
-
-export const MEX_API_GATEWAY_URL_BASE = 'https://http-staging.workduck.io'
-export const MEXIT_FRONTEND_URL_BASE = IS_DEV ? 'http://localhost:3333' : 'https://mexit.workduck.io'
-export const CDN_BASE = 'https://cdn.workduck.io'
-
-export const BASE_URLS = {
+export const API_BASE_URLS = {
   bookmarks: `${MEXIT_BACKEND_URL_BASE}/userStar`,
   archive: `${MEXIT_BACKEND_URL_BASE}/node/archive`,
   unarchive: `${MEXIT_BACKEND_URL_BASE}/node/unarchive`,
@@ -41,186 +22,187 @@ export const BASE_URLS = {
   comment: `${MEXIT_BACKEND_URL_BASE}/comment`,
   reaction: `${MEXIT_BACKEND_URL_BASE}/reaction`,
   highlight: `${MEXIT_BACKEND_URL_BASE}/highlight`,
-  frontend: MEXIT_FRONTEND_URL_BASE,
-  prompt: IS_DEV ? 'http://localhost:4000' : `${MEX_API_GATEWAY_URL_BASE}/prompt`
+  prompt: `${MEXIT_BACKEND_URL_BASE}/prompt`,
+  actions: `${MEXIT_FRONTEND_URL_BASE}/actions`,
+  oauth: `${MEXIT_FRONTEND_URL_BASE}/oauth`,
+  apiGateway: MEX_API_GATEWAY_URL_BASE,
+  url: `${MEXIT_LINK_SHORTENER_URL_BASE}/link`,
+  cdn: 'https://cdn.workduck.io',
+  public: `${MEXIT_BACKEND_URL_BASE}/public`,
+  shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`
 }
-
-export const MEXIT_FRONTEND_AUTH_BASE = `${MEXIT_FRONTEND_URL_BASE}/oauth/google`
-export const MEXIT_ACTIONS_URL_BASE = `${MEXIT_FRONTEND_URL_BASE}/actions`
 
 export const apiURLs = {
   bookmarks: {
-    create: (nodeID: string) => `${BASE_URLS.bookmarks}/${nodeID}`,
-    getAll: `${BASE_URLS.bookmarks}`
+    create: (nodeID: string) => `${API_BASE_URLS.bookmarks}/${nodeID}`,
+    getAll: `${API_BASE_URLS.bookmarks}`
   },
 
   archive: {
-    archiveNodes: `${BASE_URLS.archive}`,
-    deleteArchivedNodes: `${BASE_URLS.archive}/delete`,
-    getArchivedNodes: `${BASE_URLS.archive}`,
-    unArchiveNodes: `${BASE_URLS.unarchive}`,
-    unArchiveInNamespace: (namespaceID: string) => `${BASE_URLS.unarchive}?namespaceID=${namespaceID}`,
-    archiveInNamespace: (namespaceID: string) => `${BASE_URLS.archive}?namespaceID=${namespaceID}`
+    archiveNodes: `${API_BASE_URLS.archive}`,
+    deleteArchivedNodes: `${API_BASE_URLS.archive}/delete`,
+    getArchivedNodes: `${API_BASE_URLS.archive}`,
+    unArchiveNodes: `${API_BASE_URLS.unarchive}`,
+    unArchiveInNamespace: (namespaceID: string) => `${API_BASE_URLS.unarchive}?namespaceID=${namespaceID}`,
+    archiveInNamespace: (namespaceID: string) => `${API_BASE_URLS.archive}?namespaceID=${namespaceID}`
   },
 
   // Namespaces
   namespaces: {
-    getHierarchy: `${BASE_URLS.namespace}/all/hierarchy?getMetadata=true`,
-    get: (id: string) => `${BASE_URLS.namespace}/${id}`,
-    // https://localhost:4000/v1/namespace/all?onlyShared=&onlyWorkspace=
-    getAll: (opt?: AllNamespaceOption) => `${BASE_URLS.namespace}/all${opt ? `?${opt}=true` : ''}`,
-    create: `${BASE_URLS.namespace}`,
-    update: `${BASE_URLS.namespace}`,
-    deleteNamespace: (namespaceId: string) => `${BASE_URLS.namespace}/delete/${namespaceId}`,
-    delete: `${BASE_URLS.namespace}/share`,
-    makePublic: (id: string) => `${BASE_URLS.namespace}/makePublic/${id}`,
-    makePrivate: (id: string) => `${BASE_URLS.namespace}/makePrivate/${id}`,
-    share: `${BASE_URLS.namespace}/share`,
-    getUsersOfShared: (id: string) => `${BASE_URLS.namespace}/shared/${id}/users`
+    getHierarchy: `${API_BASE_URLS.namespace}/all/hierarchy?getMetadata=true`,
+    get: (id: string) => `${API_BASE_URLS.namespace}/${id}`,
+    getAll: (opt?: AllNamespaceOption) => `${API_BASE_URLS.namespace}/all${opt ? `?${opt}=true` : ''}`,
+    create: `${API_BASE_URLS.namespace}`,
+    update: `${API_BASE_URLS.namespace}`,
+    deleteNamespace: (namespaceId: string) => `${API_BASE_URLS.namespace}/delete/${namespaceId}`,
+    delete: `${API_BASE_URLS.namespace}/share`,
+    makePublic: (id: string) => `${API_BASE_URLS.namespace}/makePublic/${id}`,
+    makePrivate: (id: string) => `${API_BASE_URLS.namespace}/makePrivate/${id}`,
+    share: `${API_BASE_URLS.namespace}/share`,
+    getUsersOfShared: (id: string) => `${API_BASE_URLS.namespace}/shared/${id}/users`
   },
 
   node: {
-    get: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/node/${uid}`,
-    create: `${BASE_URLS.node}`,
-    append: (uid: string) => `${BASE_URLS.node}/${uid}`,
-    updateMetadata: (uid: string) => `${BASE_URLS.node}/metadata/${uid}`,
-    bulkCreate: `${BASE_URLS.node}/bulk`,
-    refactor: `${BASE_URLS.node}/refactor`,
-    deleteBlock: `${BASE_URLS.node}/delete`,
-    makePublic: (uid: string) => `${BASE_URLS.node}/${uid}/makePublic`,
-    makePrivate: (uid: string) => `${BASE_URLS.node}/${uid}/makePrivate`,
+    get: (uid: string) => `${API_BASE_URLS.node}/${uid}`,
+    create: `${API_BASE_URLS.node}`,
+    append: (uid: string) => `${API_BASE_URLS.node}/${uid}`,
+    updateMetadata: (uid: string) => `${API_BASE_URLS.node}/metadata/${uid}`,
+    bulkCreate: `${API_BASE_URLS.node}/bulk`,
+    refactor: `${API_BASE_URLS.node}/refactor`,
+    deleteBlock: `${API_BASE_URLS.node}/delete`,
+    makePublic: (uid: string) => `${API_BASE_URLS.node}/${uid}/makePublic`,
+    makePrivate: (uid: string) => `${API_BASE_URLS.node}/${uid}/makePrivate`,
     getMultipleNode: (namespaceID?: string) =>
-      `${BASE_URLS.node}/ids${namespaceID ? `?namespaceID=${namespaceID}` : ''}`
+      `${API_BASE_URLS.node}/ids${namespaceID ? `?namespaceID=${namespaceID}` : ''}`
   },
 
   snippet: {
-    create: BASE_URLS.snippet,
-    getAllSnippetsByWorkspace: `${BASE_URLS.snippet}/all`,
-    getById: (uid: string) => `${BASE_URLS.snippet}/${uid}`,
-    bulkGet: `${BASE_URLS.snippet}/ids`,
-    updateMetadata: (uid: string) => `${BASE_URLS.snippet}/metadata/${uid}`,
-    deleteAllVersionsOfSnippet: (uid: string) => `${BASE_URLS.snippet}/${uid}/all`,
+    create: API_BASE_URLS.snippet,
+    getAllSnippetsByWorkspace: `${API_BASE_URLS.snippet}/all`,
+    getById: (uid: string) => `${API_BASE_URLS.snippet}/${uid}`,
+    bulkGet: `${API_BASE_URLS.snippet}/ids`,
+    updateMetadata: (uid: string) => `${API_BASE_URLS.snippet}/metadata/${uid}`,
+    deleteAllVersionsOfSnippet: (uid: string) => `${API_BASE_URLS.snippet}/${uid}/all`,
     deleteSpecificVersionOfSnippet: (uid: string, version?: number) =>
-      `${BASE_URLS.snippet}/${uid}${version ? `?version=${version}` : ''}`
+      `${API_BASE_URLS.snippet}/${uid}${version ? `?version=${version}` : ''}`
   },
   smartcapture: {
-    public: `${BASE_URLS.smartcapture}/all/public`
+    public: `${API_BASE_URLS.smartcapture}/all/public`
   },
   loch: {
-    getAllServices: `${BASE_URLS.loch}/all`,
-    getConnectedServices: `${BASE_URLS.loch}`,
-    connectToService: `${BASE_URLS.loch}`,
-    updateParentNoteOfService: `${BASE_URLS.loch}`
+    getAllServices: `${API_BASE_URLS.loch}/all`,
+    getConnectedServices: `${API_BASE_URLS.loch}`,
+    connectToService: `${API_BASE_URLS.loch}`,
+    updateParentNoteOfService: `${API_BASE_URLS.loch}`
   },
   prompt: {
-    getAllPrompts: `${BASE_URLS.prompt}/allUser`, // Returns `downloaded` and `created` prompts
-    promptUserAuthInfo: `${BASE_URLS.prompt}/userAuth`,
-    generateResult: (promptId: string) => `${BASE_URLS.prompt}/result/${promptId}`,
-    getAllPromptsProvider: `${BASE_URLS.prompt}/providers`
+    getAllPrompts: `${API_BASE_URLS.prompt}/all`, // Returns `downloaded` and `created` prompts
+    promptUserAuthInfo: `${API_BASE_URLS.prompt}/userAuth`,
+    generateResult: (promptId: string) => `${API_BASE_URLS.prompt}/result/${promptId}`,
+    getAllPromptsProvider: `${API_BASE_URLS.prompt}/providers`
   },
   share: {
-    sharedNode: `${BASE_URLS.share}`,
-    allSharedNodes: `${BASE_URLS.share}/all`,
-    getSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}`,
-    updateNode: `${BASE_URLS.share}/update`,
-    getUsersOfSharedNode: (nodeid: string) => `${BASE_URLS.share}/${nodeid}/users`,
-    getBulk: `${BASE_URLS.share}/ids`
+    sharedNode: `${API_BASE_URLS.share}`,
+    allSharedNodes: `${API_BASE_URLS.share}/all`,
+    getSharedNode: (nodeid: string) => `${API_BASE_URLS.share}/${nodeid}`,
+    updateNode: `${API_BASE_URLS.share}/update`,
+    getUsersOfSharedNode: (nodeid: string) => `${API_BASE_URLS.share}/${nodeid}/users`,
+    getBulk: `${API_BASE_URLS.share}/ids`
   },
 
   user: {
-    getUserRecords: `${BASE_URLS.user}/`,
-    getAllUserRecordsOfWorkspace: `${BASE_URLS.user}/all`,
-    getFromEmail: (email: string) => `${BASE_URLS.user}/email/${encodeURIComponent(email)}`,
-    getFromUserId: (userId: string) => `${BASE_URLS.user}/${encodeURIComponent(userId)}`,
-    updateInfo: `${BASE_URLS.user}/info`,
-    updatePreference: `${BASE_URLS.user}/preference`,
-    getUserByLinkedin: (url: string) => `${BASE_URLS.user}/linkedin/${url}`,
-    registerStatus: `${BASE_URLS.user}/status`
+    getUserRecords: `${API_BASE_URLS.user}/`,
+    getAllUserRecordsOfWorkspace: `${API_BASE_URLS.user}/all`,
+    getFromEmail: (email: string) => `${API_BASE_URLS.user}/email/${encodeURIComponent(email)}`,
+    getFromUserId: (userId: string) => `${API_BASE_URLS.user}/${encodeURIComponent(userId)}`,
+    updateInfo: `${API_BASE_URLS.user}/info`,
+    updatePreference: `${API_BASE_URLS.user}/preference`,
+    getUserByLinkedin: (url: string) => `${API_BASE_URLS.user}/linkedin/${url}`,
+    registerStatus: `${API_BASE_URLS.user}/status`
   },
 
   view: {
-    saveView: `${BASE_URLS.view}`,
-    deleteView: (id: string) => `${BASE_URLS.view}/${id}`,
-    getAllViews: `${BASE_URLS.view}/all/workspace`,
-    getView: (id: string) => `${BASE_URLS.view}/${id}`
+    saveView: `${API_BASE_URLS.view}`,
+    deleteView: (id: string) => `${API_BASE_URLS.view}/${id}`,
+    getAllViews: `${API_BASE_URLS.view}/all/workspace`,
+    getView: (id: string) => `${API_BASE_URLS.view}/${id}`
   },
 
   links: {
-    getLinks: `${BASE_URLS.link}`,
-    saveLink: `${BASE_URLS.link}/shorten`,
-    deleteLink: (linkId: string) => `${BASE_URLS.link}/${linkId}`,
-    shortendLink: (shortId: string, workspaceId: string) =>
-      `https://url-staging.workduck.io/link/${workspaceId}/${shortId}`
+    getLinks: `${API_BASE_URLS.link}`,
+    saveLink: `${API_BASE_URLS.link}/shorten`,
+    deleteLink: (linkId: string) => `${API_BASE_URLS.link}/${linkId}`,
+    shortendLink: (shortId: string, workspaceId: string) => `${API_BASE_URLS.url}/${workspaceId}/${shortId}`
   },
 
   reminders: {
-    saveReminder: BASE_URLS.reminder,
-    reminderByID: (id: string) => `${BASE_URLS.reminder}/${id}`,
-    remindersOfNode: (nodeID: string) => `${BASE_URLS.reminder}/node/${nodeID}`,
-    remindersOfWorkspace: `${BASE_URLS.reminder}/workspace`
+    saveReminder: API_BASE_URLS.reminder,
+    reminderByID: (id: string) => `${API_BASE_URLS.reminder}/${id}`,
+    remindersOfNode: (nodeID: string) => `${API_BASE_URLS.reminder}/node/${nodeID}`,
+    remindersOfWorkspace: `${API_BASE_URLS.reminder}/workspace`
   },
 
   comments: {
     /** POST */
-    saveComment: `${BASE_URLS.comment}/`,
+    saveComment: `${API_BASE_URLS.comment}/`,
 
     /** GET, DELETE */
-    comment: (nodeid: string, commentId: string) => `${BASE_URLS.comment}/${nodeid}/${commentId}`,
+    comment: (nodeid: string, commentId: string) => `${API_BASE_URLS.comment}/${nodeid}/${commentId}`,
 
     /** GET, DELETE */
-    allNote: (nodeId: string) => `${BASE_URLS.comment}/all/${nodeId}`,
+    allNote: (nodeId: string) => `${API_BASE_URLS.comment}/all/${nodeId}`,
 
     /** GET, DELETE */
-    allBlock: (nodeId: string, blockId: string) => `${BASE_URLS.comment}/all/${nodeId}/block/${blockId}`,
+    allBlock: (nodeId: string, blockId: string) => `${API_BASE_URLS.comment}/all/${nodeId}/block/${blockId}`,
 
     /** GET, DELETE */
     allThread: (nodeId: string, blockId: string, threadId: string) =>
-      `${BASE_URLS.comment}/all/${nodeId}/block/${blockId}/thread/${threadId}`
+      `${API_BASE_URLS.comment}/all/${nodeId}/block/${blockId}/thread/${threadId}`
   },
 
   reactions: {
     /** POST */
-    react: `${BASE_URLS.reaction}/`,
+    react: `${API_BASE_URLS.reaction}/`,
 
     /** GET */
-    allNote: (nodeId: string) => `${BASE_URLS.reaction}/node/${nodeId}`,
+    allNote: (nodeId: string) => `${API_BASE_URLS.reaction}/node/${nodeId}`,
 
     /** GET */
-    allBlock: (nodeId: string, blockId: string) => `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}`,
+    allBlock: (nodeId: string, blockId: string) => `${API_BASE_URLS.reaction}/node/${nodeId}/block/${blockId}`,
 
     /** GET */
     blockReactionDetails: (nodeId: string, blockId: string) =>
-      `${BASE_URLS.reaction}/node/${nodeId}/block/${blockId}/details`
+      `${API_BASE_URLS.reaction}/node/${nodeId}/block/${blockId}/details`
   },
 
   highlights: {
     /** POST */
-    saveHighlight: `${BASE_URLS.highlight}`,
+    saveHighlight: `${API_BASE_URLS.highlight}`,
 
     /** GET, DELETE */
-    byId: (entityId: string) => `${BASE_URLS.highlight}/${entityId}`,
+    byId: (entityId: string) => `${API_BASE_URLS.highlight}/${entityId}`,
 
     /** GET */
-    all: `${BASE_URLS.highlight}`,
+    all: `${API_BASE_URLS.highlight}`,
 
     /** GET, DELETE */
-    allOfUrl: (urlHash: string) => `${BASE_URLS.highlight}/all/${urlHash}`
+    allOfUrl: (urlHash: string) => `${API_BASE_URLS.highlight}/all/${urlHash}`
   },
 
   public: {
-    getPublicNS: (id: string) => `${MEXIT_BACKEND_URL_BASE}/public/namespace/${id}`,
-    getPublicNode: (uid: string) => `${MEXIT_BACKEND_URL_BASE}/public/${uid}`
+    getPublicNS: (id: string) => `${API_BASE_URLS.public}/namespace/${id}`,
+    getPublicNode: (uid: string) => `${API_BASE_URLS.public}/${uid}`
   },
 
   frontend: {
-    getPublicNodePath: (uid: string) => `${MEXIT_FRONTEND_URL_BASE}/share/${uid}`,
-    getPublicNSURL: (id: string) => `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${id}`,
+    getPublicNodePath: (uid: string) => `${API_BASE_URLS.shareFrontend}/${uid}`,
+    getPublicNSURL: (id: string) => `${API_BASE_URLS.shareFrontend}/namespace/${id}`,
     getPublicURLofNoteInNS: (namespaceid: string, noteid: string) =>
-      `${MEXIT_FRONTEND_URL_BASE}/share/namespace/${namespaceid}/node/${noteid}`
+      `${API_BASE_URLS.shareFrontend}/namespace/${namespaceid}/node/${noteid}`
   },
 
   misc: {
-    createImageLink: `https://http.workduck.io/testing/upload/s3`,
-    getImagePublicLink: (path: string) => `${CDN_BASE}/${path}`
+    createImageLink: `${API_BASE_URLS.apiGateway}/testing/upload/s3`,
+    getImagePublicLink: (path: string) => `${API_BASE_URLS.cdn}/${path}`
   }
 }
