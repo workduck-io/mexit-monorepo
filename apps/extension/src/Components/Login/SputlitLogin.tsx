@@ -1,4 +1,4 @@
-import { BASE_URLS } from '@mexit/core'
+import { API_BASE_URLS } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
 import { MexLogin, StyledLoginContainer } from './styled'
@@ -7,7 +7,7 @@ export const SputlitLogin = () => {
   const onLoginClick = () => {
     // TODO: Add redirect from new window on login if `extension` flag is present
     // using window.opener in web app
-    window.open(`${BASE_URLS.frontend}/auth/login?extension=true`)
+    window.open(`${API_BASE_URLS.frontend}/auth/login?extension=true`)
   }
 
   return (
