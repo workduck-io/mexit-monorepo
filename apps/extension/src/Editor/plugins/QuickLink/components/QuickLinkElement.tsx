@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { moveSelection, useEditorRef } from '@udecode/plate'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { API_BASE_URLS, mog } from '@mexit/core'
 import { ILinkElementProps, SILink, SILinkRoot } from '@mexit/shared'
 
 import EditorPreview from '../../../../Components/Editor/EditorPreview'
@@ -34,7 +34,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
       mog('pushing', { id: element.value })
       // push(element.value)
       // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
-      window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
+      window.open(`${API_BASE_URLS.frontend}/editor/${element.value}`)
     }
   }
 
@@ -67,7 +67,7 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
         mog('working', { element })
         // push(element.value)
         // goTo(ROUTE_PATHS.node, NavigationType.push, element.value)
-        window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${element.value}`)
+        window.open(`${API_BASE_URLS.frontend}/editor/${element.value}`)
       }
     },
     [selected, preview]

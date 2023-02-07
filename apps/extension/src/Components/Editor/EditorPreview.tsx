@@ -7,7 +7,7 @@ import Tippy from '@tippyjs/react/headless'
 
 import { SecondaryButton } from '@workduck-io/mex-components'
 
-import { generateTempId, getNameFromPath, MEXIT_FRONTEND_URL_BASE, mog, NodeEditorContent } from '@mexit/core'
+import { API_BASE_URLS, generateTempId, getNameFromPath, mog, NodeEditorContent } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -92,7 +92,7 @@ const EditorPreview = ({
     e.preventDefault()
     mog('OnClickNavigate', { e })
     // loadNode(nodeid)
-    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`)
+    window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`)
     // goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
