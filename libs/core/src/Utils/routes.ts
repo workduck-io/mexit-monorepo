@@ -29,7 +29,8 @@ export const API_BASE_URLS = {
   url: `${MEXIT_LINK_SHORTENER_URL_BASE}/link`,
   cdn: 'https://cdn.workduck.io',
   public: `${MEXIT_BACKEND_URL_BASE}/public`,
-  shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`
+  shareFrontend: `${MEXIT_FRONTEND_URL_BASE}/share`,
+  frontend: MEXIT_FRONTEND_URL_BASE
 }
 
 export const apiURLs = {

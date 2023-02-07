@@ -44,6 +44,17 @@ jobs:
       - name: Install Yarn Globally
         run: npm install -g yarn
 
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Install Dependencies
         run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
@@ -56,17 +67,6 @@ jobs:
           content="${content//$'\r'/'%0D'}"
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
-
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-
-      - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Publish Webapp
         if: steps.changesets.outputs.hasChangesets == 'false'

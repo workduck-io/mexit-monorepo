@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/react'
 import mixpanel from 'mixpanel-browser'
 import Highlighter from 'web-highlighter'
 
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { API_BASE_URLS, mog } from '@mexit/core'
 import { getScrollbarWidth, isInputField } from '@mexit/shared'
 
 import { useEditorStore } from '../Hooks/useEditorStore'
@@ -131,7 +131,7 @@ function dibbaToggle() {
   const { dibbaState, setDibbaState } = useSputlitContext()
 
   // TODO: store this in preferences, whenever that is made
-  const disabledWebsites = [MEXIT_FRONTEND_URL_BASE]
+  const disabledWebsites = [API_BASE_URLS.frontend]
 
   useEffect(() => {
     function handleRender() {
