@@ -43,11 +43,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
-      - name: Build Webapp for stage test
-        run: yarn nx build:test webapp
-
       - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.hasChangesets == 'false'
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
