@@ -18,7 +18,7 @@ const useContextMenu = (): Array<ContextMenuListItemType> => {
   const contextMenu = useLayoutStore((store) => store.contextMenu)
   const openModal = useModalStore((store) => store.toggleOpen)
 
-  const { getCreateNewMenuItems, getTreeMenuItems } = useCreateNewMenu()
+  const { getCreateNewMenuItems, getBlockMenuItems, getTreeMenuItems, getViewMenuItems } = useCreateNewMenu()
 
   if (!contextMenu?.type) return
 
@@ -32,6 +32,10 @@ const useContextMenu = (): Array<ContextMenuListItemType> => {
       return getTreeMenuItems()
     case ContextMenuType.NOTE_PLUS_BUTTON:
       return getCreateNewMenuItems()
+    case ContextMenuType.EDITOR:
+      return getBlockMenuItems()
+    case ContextMenuType.VIEW_LIST:
+      return getViewMenuItems()
     case ContextMenuType.NOTE_NAMESPACE:
       // eslint-disable-next-line no-case-declarations
       const spaceData = contextMenu?.item?.data,

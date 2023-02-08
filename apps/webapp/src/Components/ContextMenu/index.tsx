@@ -11,7 +11,7 @@ const ContextMenu = () => {
   if (!contextMenuType || !menuItems) return
 
   return (
-    <ContextMenuContainer>
+    <ContextMenuContainer handleClose>
       {menuItems.map((item) => {
         if (item.options) {
           return (

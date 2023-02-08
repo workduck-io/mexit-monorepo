@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react'
-import { useContextMenu } from 'react-contexify'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
@@ -11,8 +10,8 @@ import { NodeEditorContent } from '@mexit/core'
 import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+import { ContextMenuType, useLayoutStore } from '../Stores/useLayoutStore'
 
-import { MENU_ID } from './Components/BlockContextMenu'
 import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'
 import useMultiComboboxOnChange from './Components/MultiCombobox/useMultiComboboxChange'
@@ -74,6 +73,8 @@ const EditorPreviewRenderer = ({
   draftView = true,
   placeholder
 }: EditorPreviewRendererProps) => {
+  const setContextMenu = useLayoutStore((store) => store.setContextMenu)
+
   const editableProps = useMemo(
     () => ({
       placeholder: placeholder ?? 'Murmuring the mex hype... ',
@@ -104,14 +105,21 @@ const EditorPreviewRenderer = ({
     }
   }
 
-  const { show } = useContextMenu({ id: MENU_ID })
   const plugins = [
     ...oldPlugins,
     {
       key: 'MULTI_COMBOBOX',
       handlers: {
         onContextMenu: () => (ev) => {
-          show(ev)
+          ev.preventDefault()
+          setContextMenu({
+            type: ContextMenuType.NOTES_TREE,
+            item: undefined,
+            coords: {
+              x: ev.clientX,
+              y: ev.clientY
+            }
+          })
         },
         onChange: pluginConfigs.combobox.onChange,
         onKeyDown: pluginConfigs.combobox.onKeyDown

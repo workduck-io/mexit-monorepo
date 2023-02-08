@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 
 import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
 import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'
 import { Entity } from 'rc-tree/lib/interface'
 
@@ -27,6 +26,8 @@ interface SidebarListItemProps<T> {
     onSelect: (itemId: string) => void
   }
 
+  onContextMenu: (item: SidebarListItem<T>, event: any) => void
+
   // To render the context menu if the item is right-clicked
   contextMenu: {
     ItemContextMenu?: (props: { item: SidebarListItem<T> }) => JSX.Element
@@ -40,9 +41,10 @@ const SidebarListItemComponent = <T extends Entity>({
   select,
   index,
   item,
+  onContextMenu,
   contextMenu
 }: SidebarListItemProps<T>) => {
-  const { ItemContextMenu, setContextOpenViewId, contextOpenViewId } = contextMenu
+  const { contextOpenViewId } = contextMenu
   const { selectedItemId, selectIndex, onSelect } = select
 
   const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.lastOpenedId])
@@ -66,56 +68,42 @@ const SidebarListItemComponent = <T extends Entity>({
       content={<TooltipContent item={{ id: item.id, children: [], data: { title: item.label } }} />}
     >
       <span>
-        <ContextMenu.Root
-          onOpenChange={(open) => {
-            if (open && ItemContextMenu) {
-              setContextOpenViewId(item.id)
-            } else setContextOpenViewId(null)
+        <StyledTreeItem
+          onContextMenu={(e) => {
+            e.preventDefault()
+            if (onContextMenu) onContextMenu(item, e)
           }}
+          hasMenuOpen={contextOpenViewId === item.id || selectIndex === index}
+          noSwitcher
+          // isUnread={isUnread}
+          selected={item?.id === selectedItemId}
+          hasIconHover={!!item.hoverIcon}
         >
-          <ContextMenu.Trigger asChild>
-            <StyledTreeItem
-              hasMenuOpen={contextOpenViewId === item.id || selectIndex === index}
-              noSwitcher
-              // isUnread={isUnread}
-              selected={item?.id === selectedItemId}
-              hasIconHover={!!item.hoverIcon}
-            >
-              <ItemContent onClick={() => onSelect(item?.id)}>
-                <ItemTitle>
-                  {item.hoverIcon && (
-                    <Icon
-                      className="iconOnHover"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        item.onIconClick && item.onIconClick(item.id)
-                      }}
-                      icon={item.hoverIcon}
-                    />
-                  )}
-                  <IconDisplay className="defaultIcon" icon={item.icon} />
-                  <ItemTitleText>{item.label}</ItemTitleText>
-                </ItemTitle>
-              </ItemContent>
-              {isUnread && (
-                <ItemCount>
-                  <UnreadIndicator>
-                    <Icon icon={checkboxBlankCircleFill} />
-                  </UnreadIndicator>
-                </ItemCount>
+          <ItemContent onClick={() => onSelect(item?.id)}>
+            <ItemTitle>
+              {item.hoverIcon && (
+                <Icon
+                  className="iconOnHover"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    item.onIconClick && item.onIconClick(item.id)
+                  }}
+                  icon={item.hoverIcon}
+                />
               )}
-            </StyledTreeItem>
-          </ContextMenu.Trigger>
-          {ItemContextMenu && (
-            <ItemContextMenu
-              item={{
-                ...item
-                // lastOpenedState
-              }}
-            />
+              <IconDisplay className="defaultIcon" icon={item.icon} />
+              <ItemTitleText>{item.label}</ItemTitleText>
+            </ItemTitle>
+          </ItemContent>
+          {isUnread && (
+            <ItemCount>
+              <UnreadIndicator>
+                <Icon icon={checkboxBlankCircleFill} />
+              </UnreadIndicator>
+            </ItemCount>
           )}
-        </ContextMenu.Root>
+        </StyledTreeItem>
       </span>
     </Tippy>
   )

@@ -19,10 +19,6 @@ const ContextMenuContentStyles = css`
   border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
 `
 
-export const ContextMenuSubContent = styled(ContextMenuPrimitive.SubContent)`
-  ${ContextMenuContentStyles}
-`
-
 export const ContextMenuContent = styled(ContextMenuPrimitive.Content)`
   ${ContextMenuContentStyles}
 `

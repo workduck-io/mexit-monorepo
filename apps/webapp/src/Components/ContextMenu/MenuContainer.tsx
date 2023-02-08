@@ -55,13 +55,15 @@ interface Props {
   label?: string
   icon?: MIcon
   disabled?: boolean
+  handleClose?: boolean
 }
 
 const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonElement>>(
-  ({ children, label, icon, disabled, ...props }, forwardedRef) => {
+  ({ children, label, icon, disabled, handleClose, ...props }, forwardedRef) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
     const [open, setOpen] = useState(false)
     const [allowHover, setAllowHover] = useState(false)
+    const setContextMenu = useLayoutStore((store) => store.setContextMenu)
 
     const tree = useFloatingTree()
     const nodeId = useFloatingNodeId()
@@ -77,7 +79,10 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
     const { x, y, refs, strategy, context } = useFloating({
       open,
       nodeId,
-      onOpenChange: setOpen,
+      onOpenChange: (isOpen) => {
+        setOpen(isOpen)
+        if (!isOpen && handleClose) setContextMenu(undefined)
+      },
       middleware: [offset({ mainAxis: 5, alignmentAxis: nested ? -5 : 0 }), flip(), shift()],
       placement: nested ? 'right-start' : 'bottom-start',
       whileElementsMounted: autoUpdate

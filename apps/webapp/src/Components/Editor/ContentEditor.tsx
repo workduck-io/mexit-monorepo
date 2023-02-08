@@ -8,7 +8,6 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
-import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
@@ -172,7 +171,6 @@ const ContentEditor = () => {
           autoFocus={false}
         />
       </EditorWrapper>
-      <BlockOptionsMenu blockId="one" />
     </>
   )
 }

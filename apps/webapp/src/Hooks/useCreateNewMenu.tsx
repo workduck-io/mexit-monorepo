@@ -9,6 +9,8 @@ import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
+import { useTaskViewModalStore } from '../Components/TaskViewModal'
+import { useBlockMenu } from '../Editor/Components/useBlockMenu'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
@@ -23,6 +25,7 @@ import { useNavigation } from './useNavigation'
 import { useRefactor } from './useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
+import { useTaskViews, useViewStore, View } from './useTaskViews'
 
 interface MenuListItemType {
   id: string
@@ -52,16 +55,20 @@ export const useCreateNewMenu = () => {
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const toggleModal = useModalStore((store) => store.toggleOpen)
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
+  const setCurrentView = useViewStore((store) => store.setCurrentView)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
+  const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
+  const { deleteView } = useTaskViews()
   const { addSnippet } = useSnippets()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
+  const blockMenuItems = useBlockMenu()
 
   const createNewNamespace = () => {
     addDefaultNewNamespace()
@@ -149,6 +156,28 @@ export const useCreateNewMenu = () => {
     }
   }
 
+  const handleViewDelete = async (view: View) => {
+    const currentView = useViewStore.getState().currentView
+    await deleteView(view.id)
+    if (currentView?.id === view.id) {
+      setCurrentView(undefined)
+      goTo(ROUTE_PATHS.tasks, NavigationType.push)
+    }
+  }
+
+  const handleViewClone = (view: View) => {
+    openTaskViewModal({
+      filters: view.filters,
+      cloneViewId: view.id,
+      properties: {
+        viewType: view.viewType,
+        sortOrder: view.sortOrder,
+        sortType: view.sortType,
+        globalJoin: view.globalJoin
+      }
+    })
+  }
+
   /**
    * Menu Items Getter Functions
    * @returns Array<MenuListItemType>
@@ -191,6 +220,23 @@ export const useCreateNewMenu = () => {
     return [getMenuItem('New Snippet', onCreateNewSnippet), getMenuItem('New Template', () => onCreateNewSnippet(true))]
   }
 
+  const getViewMenuItems = (): MenuListItemType[] => {
+    const item = useLayoutStore.getState().contextMenu?.item
+
+    return [
+      getMenuItem('Clone', () => handleViewClone(item?.data), false, DefaultMIcons.COPY),
+      getMenuItem('Delete', () => handleViewDelete(item?.data), false, DefaultMIcons.DELETE)
+    ]
+  }
+
+  const getBlockMenuItems = (): MenuListItemType[] => {
+    return [
+      getMenuItem('Send', blockMenuItems.onSendToClick, false, DefaultMIcons.SEND),
+      getMenuItem('Move', blockMenuItems.onMoveToClick, false, DefaultMIcons.MOVE),
+      getMenuItem('Delete', blockMenuItems.onDeleteClick, false, DefaultMIcons.DELETE)
+    ]
+  }
+
   const getCreateNewMenuItems = (_path?: string): MenuListItemType[] => {
     const currentSpace = useUserPreferenceStore.getState().activeNamespace
 
@@ -201,5 +247,5 @@ export const useCreateNewMenu = () => {
     ]
   }
 
-  return { getCreateNewMenuItems, getSnippetsMenuItems, getTreeMenuItems }
+  return { getCreateNewMenuItems, getSnippetsMenuItems, getBlockMenuItems, getTreeMenuItems, getViewMenuItems }
 }

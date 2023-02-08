@@ -108,7 +108,11 @@ export const DefaultMIcons = {
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
   WEB_LINK: getMIcon('ICON', 'ri:link'),
   SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
-  ARCHIVE: getMIcon('ICON', 'ri:archive-line')
+  ARCHIVE: getMIcon('ICON', 'ri:archive-line'),
+  COPY: getMIcon('ICON', 'ri:file-copy-line'),
+  DELETE: getMIcon('ICON', 'codicon:trash'),
+  MOVE: getMIcon('ICON', 'ri:anticlockwise-2-fill'),
+  SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold')
 }
 
 export const ForwardlinkIcon = {
