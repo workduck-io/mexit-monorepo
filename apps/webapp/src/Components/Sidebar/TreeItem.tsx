@@ -4,7 +4,6 @@ import { PathMatch } from 'react-router-dom'
 import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
 // import { complexTree } from '../mockdata/complexTree'
 import { Icon } from '@iconify/react'
-import * as ContextMenu from '@radix-ui/react-context-menu'
 import Tippy from '@tippyjs/react'
 
 import { DRAFT_NODE, IS_DEV } from '@mexit/core'
@@ -21,9 +20,8 @@ import {
   TooltipCount
 } from '@mexit/shared'
 
+import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 import { useMetadataStore } from '../../Stores/useMetadataStore'
-
-import { TreeContextMenu } from './TreeWithContextMenu'
 
 const defaultSnap = {
   isDragging: false,
@@ -119,6 +117,9 @@ export const RenderTreeItem = ({
   onClick
 }: TreeItemProps) => {
   const isTrue = !readOnly && JSON.stringify(snapshot) !== JSON.stringify(defaultSnap)
+  const itemData = useLayoutStore((s) => s.contextMenu)?.item?.data
+  const setContextMenu = useLayoutStore((s) => s.setContextMenu)
+
   const ref = useRef<HTMLElement>()
   // const highlightedAt = useTreeStore((s) => s.highlightedAt)
 
@@ -128,64 +129,37 @@ export const RenderTreeItem = ({
     }
   }, [ref?.current])
 
-  // const lastOpenedNote = useUserPreferenceStore((state) => state.lastOpenedNotes[item?.data?.nodeid])
-  // const { getLastOpened } = useLastOpened()
-
-  // const lastOpenedState = useMemo(() => {
-  //   const loState = getLastOpened(item.data.nodeid, lastOpenedNote)
-  //   return loState
-  // }, [lastOpenedNote, item?.data?.nodeid])
-
-  // const isUnread = useMemo(() => {
-  //   return lastOpenedState === LastOpenedState.UNREAD
-  // }, [lastOpenedState])
-
-  // console.log('Highlighted at', { highlightedAt, item })
-
   return (
     <Tippy theme="mex" placement="right" singleton={target} content={<TooltipContent item={item} />}>
       <span>
-        <ContextMenu.Root
-          onOpenChange={(open) => {
-            if (open) {
-              setContextOpenNodeId(item.data.nodeid)
-            } else setContextOpenNodeId(null)
-          }}
-        >
-          <ContextMenu.Trigger asChild>
-            <StyledTreeItem
-              ref={provided.innerRef}
-              selected={isInEditor && item.data && match?.params?.nodeid === item.data.nodeid}
-              isDragging={snapshot.isDragging}
-              hasMenuOpen={contextOpenNodeId === item.data.nodeid}
-              isStub={item?.data?.stub}
-              isBeingDroppedAt={isTrue}
-              // isUnread={isUnread}
-              isHighlighted={isHighlighted}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-            >
-              <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
-              <ItemContent onMouseDown={(e) => onClick(e, item)}>
-                <ItemTitleWithAnalysis item={item} />
-              </ItemContent>
-
-              <TreeItemMetaInfo
-                item={item}
-                // unRead={isUnread}
-              />
-            </StyledTreeItem>
-          </ContextMenu.Trigger>
-          <TreeContextMenu
-            item={{
-              ...item,
-              data: {
-                ...item.data
-                // lastOpenedState
+        <StyledTreeItem
+          ref={provided.innerRef}
+          selected={isInEditor && item.data && match?.params?.nodeid === item.data.nodeid}
+          isDragging={snapshot.isDragging}
+          hasMenuOpen={item?.data?.nodeid === itemData?.nodeid}
+          isStub={item?.data?.stub}
+          isBeingDroppedAt={isTrue}
+          onContextMenu={(e) => {
+            e.preventDefault()
+            setContextMenu({
+              type: ContextMenuType.NOTES_TREE,
+              item,
+              coords: {
+                x: e.clientX,
+                y: e.clientY
               }
-            }}
-          />
-        </ContextMenu.Root>
+            })
+          }}
+          isHighlighted={isHighlighted}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <GetIcon item={item} onExpand={onExpand} onCollapse={onCollapse} />
+          <ItemContent onMouseDown={(e) => onClick(e, item)}>
+            <ItemTitleWithAnalysis item={item} />
+          </ItemContent>
+          <TreeItemMetaInfo item={item} />
+        </StyledTreeItem>
       </span>
     </Tippy>
   )

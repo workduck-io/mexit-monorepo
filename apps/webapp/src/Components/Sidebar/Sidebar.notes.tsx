@@ -12,6 +12,7 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
 import { PollActions, useApiStore } from '../../Stores/useApiStore'
 import { useDataStore } from '../../Stores/useDataStore'
+import { ContextMenuType } from '../../Stores/useLayoutStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
 import SharedNotes from './SharedNotes'
@@ -30,6 +31,7 @@ export const NoteSidebar = () => {
   const changeSidebarSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
   const { getMostUsedTags } = useTags()
   const tags = useDataStore((s) => s.tags)
+  const _hasHydrated = useDataStore((s) => s._hasHydrated)
   const replaceAndAddActionToPoll = useApiStore((store) => store.replaceAndAddActionToPoll)
   const { getNodesByNamespaces, getNamespaceOfNodeid } = useNamespaces()
   const isAnimate = useRef(false)
@@ -90,14 +92,8 @@ export const NoteSidebar = () => {
     return nspaces
   }, [ilinks, namespaces])
 
-  const getIndex = () => {
-    const index = spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id)
-
-    return index < 0 ? 0 : index
-  }
-
   const [index, setIndex] = useState({
-    current: getIndex(),
+    current: -1,
     // Required to find direction of the animation
     prev: -1
   })
@@ -124,13 +120,22 @@ export const NoteSidebar = () => {
   }
 
   useEffect(() => {
-    const newIndex = spaces.findIndex((s) => s.id === spaceId)
-    if (newIndex === -1) return
-    // if (newIndex === index.current) return
-    changeIndex(newIndex, false)
-  }, [spaceId, spaces])
+    if (_hasHydrated) {
+      const getIndex = () => {
+        const index = spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id)
+        return index < 0 ? 0 : index
+      }
+      console.log('SPACES', { spaces })
+      const newIndex = getIndex()
 
-  const currentSpace = spaces[index.current]
+      changeIndex(newIndex, false)
+    }
+  }, [_hasHydrated, spaceId])
+
+  const currentSpace = useMemo(() => {
+    if (_hasHydrated && index.current > -1) return spaces[index.current]
+  }, [_hasHydrated, index.current])
+
   const transRef = useSpringRef()
   const defaultStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
   const fadeStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
@@ -192,19 +197,14 @@ export const NoteSidebar = () => {
           return <SidebarSpaceComponent space={spaces[i.current]} style={style} />
         })}
       </SpaceContentWrapper>
-      {/* currentSpace && <SidebarSpaceComponent style={} space={currentSpace} />*/}
       <SidebarSpaceSwitcher
+        contextMenuType={ContextMenuType.NOTE_NAMESPACE}
         createNewMenuItems={menuItems}
         currentSpace={currentSpace?.id}
         spaces={spaces}
         setCurrentIndex={changeIndex}
         setNextSpaceIndex={setNextSpaceIndex}
       />
-      {/* For testing purposes
-        <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces.slice(0, 4)} setCurrentIndex={changeIndex} />
-        <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces.slice(0, 6)} setCurrentIndex={changeIndex} />
-        <SidebarSpaceSwitcher currentSpace={currentSpace?.id} spaces={spaces.slice(0, 8)} setCurrentIndex={changeIndex} />
-      */}
     </SpaceWrapper>
   )
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { ContextMenuContent } from '@radix-ui/react-context-menu'
 import styled, { useTheme } from 'styled-components'
 
 import { DefaultMIcons, SharedNode } from '@mexit/core'
@@ -11,7 +10,6 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouti
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useEditorStore } from '../../../Stores/useEditorStore'
 import SidebarList, { SidebarListItem } from '../SidebarList'
-import { MuteMenuItem } from '../TreeWithContextMenu'
 
 export const ItemContent = styled.div`
   cursor: pointer;
@@ -29,11 +27,13 @@ interface SharedNoteContextMenuProps {
 }
 
 const SharedNoteContextMenu = ({ item }: SharedNoteContextMenuProps) => {
-  return (
-    <ContextMenuContent>
-      <MuteMenuItem lastOpenedState={item?.lastOpenedState} nodeid={item.id} />
-    </ContextMenuContent>
-  )
+  // * Mute a Shared Note
+  return <></>
+  // return (
+  //   <ContextMenuContent>
+  //     <MuteMenuItem lastOpenedState={item?.lastOpenedState} nodeid={item.id} />
+  //   </ContextMenuContent>
+  // )
 }
 
 const SharedNotes = () => {

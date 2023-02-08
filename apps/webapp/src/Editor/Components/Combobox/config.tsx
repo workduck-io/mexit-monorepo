@@ -1,10 +1,8 @@
-import { useContextMenu } from 'react-contexify'
-
 import { PlatePluginComponent } from '@udecode/plate'
 
-import { PluginOptionType,useEditorPlugins } from '../../Plugins/index'
+import { ContextMenuType, useLayoutStore } from '../../../Stores/useLayoutStore'
+import { PluginOptionType, useEditorPlugins } from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
-import { MENU_ID } from '../BlockContextMenu'
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'
 import useMultiComboboxOnKeyDown from '../MultiCombobox/useMultiComboboxOnKeyDown'
 
@@ -14,6 +12,8 @@ export const useComboboxConfig = (
   components: Record<string, PlatePluginComponent<any | undefined>> = {},
   pluginOptions: PluginOptionType = { exclude: { dnd: false } }
 ) => {
+  const setContextMenu = useLayoutStore((store) => store.setContextMenu)
+
   const pluginConfigs = {
     combobox: {
       onChange: useMultiComboboxOnChange(editorId, config.onChangeConfig),
@@ -22,16 +22,22 @@ export const useComboboxConfig = (
     }
   }
 
-  const { show } = useContextMenu({ id: MENU_ID })
-
   const prePlugins = useEditorPlugins(components, pluginOptions)
   const plugins = [
     ...prePlugins,
     {
       key: 'MULTI_COMBOBOX',
       handlers: {
-        onContextMenu: () => (ev) => {
-          show(ev)
+        onContextMenu: () => (e) => {
+          e.preventDefault()
+          setContextMenu({
+            type: ContextMenuType.EDITOR,
+            item: undefined,
+            coords: {
+              x: e.clientX,
+              y: e.clientY
+            }
+          })
         },
         onChange: pluginConfigs.combobox.onChange,
         onKeyDown: pluginConfigs.combobox.onKeyDown

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import Modal from 'react-modal'
 
 import { useTheme } from 'styled-components'
 
 import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { API, DefaultMIcons } from '@mexit/core'
 import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
@@ -67,9 +68,23 @@ const DeleteSpaceModal = () => {
     setSuccessorSpace(space)
   }
 
-  if (!isOpen) return
+  useEffect(() => {
+    if (open) {
+      const unsubscribe = tinykeys(window, {
+        '$mod+Enter': (event) => {
+          event.preventDefault()
+          onDelete()
+        }
+      })
+      return () => {
+        unsubscribe()
+      }
+    }
+  }, [open])
 
-  const notesSize = space.list?.items?.length
+  if (!isOpen && !space) return
+
+  const notesSize = space?.list?.items?.length
 
   return (
     <Modal

@@ -1,31 +1,6 @@
-import * as ContextMenuPrimitive from '@radix-ui/react-context-menu'
 import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
-
-/*
- * See https://www.radix-ui.com/docs/primitives/components/context-menu
- * for styling
- * */
-
-const ContextMenuContentStyles = css`
-  z-index: 1000;
-  min-width: 140px;
-  ${({ theme }) => generateStyle(theme.generic.contextMenu.menu)}
-  overflow: hidden;
-  padding: 5px;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
-  border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
-`
-
-export const ContextMenuSubContent = styled(ContextMenuPrimitive.SubContent)`
-  ${ContextMenuContentStyles}
-`
-
-export const ContextMenuContent = styled(ContextMenuPrimitive.Content)`
-  ${ContextMenuContentStyles}
-`
 
 const itemStyles = css`
   font-size: 14px;
@@ -58,7 +33,7 @@ const itemStyles = css`
   }
 `
 
-export const ContextMenuItem = styled(ContextMenuPrimitive.Item)<{ color?: string; selected?: boolean }>`
+export const ContextMenuItem = styled.div<{ color?: string; selected?: boolean }>`
   ${itemStyles}
 
   &:focus,
@@ -96,36 +71,4 @@ export const ContextMenuItem = styled(ContextMenuPrimitive.Item)<{ color?: strin
         color: ${theme.tokens.colors.primary.default};
       }
     `}
-`
-
-export const ContextMenuSubTrigger = styled(ContextMenuPrimitive.SubTrigger)<{ color?: string }>`
-  ${itemStyles}
-
-  &[data-state="open"] {
-    background-color: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.2);
-    color: ${({ theme }) => theme.tokens.text.heading};
-    svg {
-      color: ${({ theme }) => theme.tokens.colors.primary.default};
-    }
-  }
-`
-
-export const RightSlot = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-  padding-left: 20px;
-  color: ${({ theme }) => theme.tokens.text.fade};
-  [data-highlighted] > & {
-    color: 'white';
-  }
-  [data-disabled] & {
-    color: ${({ theme }) => theme.tokens.text.disabled};
-  }
-`
-
-export const ContextMenuSeparator = styled(ContextMenuPrimitive.Separator)`
-  height: 1px;
-  background-color: ${({ theme }) => theme.tokens.surfaces.separator};
-  margin: 4px;
 `

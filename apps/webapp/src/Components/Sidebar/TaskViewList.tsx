@@ -6,15 +6,16 @@ import { DefaultMIcons, getMIcon, ReminderViewData } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
+import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'
 import SidebarList from './SidebarList'
-import TaskViewContextMenu from './TaskViewContextMenu'
 
 const TaskViewList = () => {
   const views = useViewStore((store) => store.views)
   const currentView = useViewStore((store) => store.currentView)
+  const setContextMenu = useLayoutStore((store) => store.setContextMenu)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const { goTo } = useRouting()
 
@@ -70,12 +71,23 @@ const TaskViewList = () => {
       }))
   }, [views])
 
+  const handleContextMenu = (item, event) => {
+    setContextMenu({
+      type: ContextMenuType.VIEW_LIST,
+      item,
+      coords: {
+        x: event.clientX,
+        y: event.clientY
+      }
+    })
+  }
+
   return (
     <SidebarWrapper>
       <SidebarHeaderLite title="Task Views" icon={stackLine} />
       <SidebarList
-        ItemContextMenu={TaskViewContextMenu}
         items={sortedViews}
+        onContextMenu={handleContextMenu}
         onClick={(item) => onOpenView(item)}
         selectedItemId={currentView?.id || 'default'}
         showSearch

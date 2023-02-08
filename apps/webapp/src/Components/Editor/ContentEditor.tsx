@@ -8,7 +8,6 @@ import { tinykeys } from '@workduck-io/tinykeys'
 
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
-import { BlockOptionsMenu } from '../../Editor/Components/BlockContextMenu'
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
@@ -25,6 +24,8 @@ import { useContentStore } from '../../Stores/useContentStore'
 import { useDataStore } from '../../Stores/useDataStore'
 import { getContent, useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
+import { useLayoutStore } from '../../Stores/useLayoutStore'
+import useModalStore from '../../Stores/useModalStore'
 import { areEqual } from '../../Utils/hash'
 
 import Editor from './Editor'
@@ -112,7 +113,7 @@ const ContentEditor = () => {
         })
       },
       Enter: (event) => {
-        if (!isOnEditableElement(event)) {
+        if (!isOnEditableElement(event) && !useModalStore.getState().open && !useLayoutStore.getState().contextMenu) {
           event.preventDefault()
           const editorRef = getPlateEditorRef(nodeid) ?? getPlateEditorRef()
           focusEditor(editorRef)
@@ -170,7 +171,6 @@ const ContentEditor = () => {
           autoFocus={false}
         />
       </EditorWrapper>
-      <BlockOptionsMenu blockId="one" />
     </>
   )
 }

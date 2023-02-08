@@ -11,13 +11,14 @@ type ContextMenuListItemType = {
   disabled?: boolean
   icon?: MIcon
   onSelect: any
+  options?: Array<ContextMenuListItemType>
 }
 
 const useContextMenu = (): Array<ContextMenuListItemType> => {
   const contextMenu = useLayoutStore((store) => store.contextMenu)
   const openModal = useModalStore((store) => store.toggleOpen)
 
-  const { getCreateNewMenuItems } = useCreateNewMenu()
+  const { getCreateNewMenuItems, getBlockMenuItems, getTreeMenuItems, getViewMenuItems } = useCreateNewMenu()
 
   if (!contextMenu?.type) return
 
@@ -27,8 +28,14 @@ const useContextMenu = (): Array<ContextMenuListItemType> => {
   }
 
   switch (contextMenu.type) {
+    case ContextMenuType.NOTES_TREE:
+      return getTreeMenuItems()
     case ContextMenuType.NOTE_PLUS_BUTTON:
       return getCreateNewMenuItems()
+    case ContextMenuType.EDITOR:
+      return getBlockMenuItems()
+    case ContextMenuType.VIEW_LIST:
+      return getViewMenuItems()
     case ContextMenuType.NOTE_NAMESPACE:
       // eslint-disable-next-line no-case-declarations
       const spaceData = contextMenu?.item?.data,

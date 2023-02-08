@@ -296,7 +296,6 @@ const useLoad = () => {
 
     debouncedAddLastOpened(nodeid)
 
-    mog('Loading that here', { node })
     changeSpace(node.namespace)
     loadNodeEditor(node)
   }

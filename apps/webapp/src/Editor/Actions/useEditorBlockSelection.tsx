@@ -9,7 +9,7 @@ import {
   TNodeEntry
 } from '@udecode/plate'
 
-import { BlockType, generateTempId, getBlockMetadata,mog, NodeEditorContent, updateIds } from '@mexit/core'
+import { BlockType, generateTempId, getBlockMetadata, mog, NodeEditorContent, updateIds } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useBlockStore from '../../Stores/useBlockStore'

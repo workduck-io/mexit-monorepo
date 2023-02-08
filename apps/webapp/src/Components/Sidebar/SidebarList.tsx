@@ -49,6 +49,8 @@ export interface SidebarListProps<T> {
   // If present selected item will be active
   selectedItemId?: string
 
+  onContextMenu?: (item: SidebarListItem<T>, event: any) => void
+
   // If true, the list will be preceded by the default item
   defaultItems?: SidebarListItem<T>[]
 
@@ -69,6 +71,7 @@ const SidebarList = ({
   items,
   defaultItems,
   showSearch,
+  onContextMenu,
   searchPlaceholder,
   emptyMessage,
   noMargin
@@ -206,6 +209,7 @@ const SidebarList = ({
             tippyTarget={target}
             item={item}
             index={index}
+            onContextMenu={onContextMenu}
             select={{
               selectedItemId: selectedItemId,
               selectIndex: selected,
