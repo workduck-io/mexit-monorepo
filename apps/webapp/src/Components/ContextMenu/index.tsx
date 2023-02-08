@@ -15,7 +15,7 @@ const ContextMenu = () => {
       {menuItems.map((item) => {
         if (item.options) {
           return (
-            <ContextMenuContainer label={item.label} icon={item.icon}>
+            <ContextMenuContainer label={item.label} icon={item.icon} disabled={item.disabled}>
               {item.options.map((option) => (
                 <ContextMenuItem
                   key={option.id}

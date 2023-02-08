@@ -25,6 +25,7 @@ import { useReactionStore } from './useReactionStore'
 import { useRecentsStore } from './useRecentsStore'
 import { useReminderStore } from './useReminderStore'
 import useRouteStore from './useRouteStore'
+import { useUserPreferenceStore } from './userPreferenceStore'
 import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
@@ -41,6 +42,7 @@ export const useAuthentication = () => {
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
   const initContents = useContentStore((store) => store.initContents)
+  const clearUserPreferences = useUserPreferenceStore((store) => store.clear)
   const clearSnippets = useSnippetStore((s) => s.clear)
   const resetDataStore = useDataStore().resetDataStore
   const resetPublicNodes = usePublicNodeStore().reset
@@ -103,6 +105,7 @@ export const useAuthentication = () => {
     setUnAuthenticated()
     initContents({})
     clearPromptStore()
+    clearUserPreferences()
     clearMetadataStore()
     clearReactions()
     clearComments()

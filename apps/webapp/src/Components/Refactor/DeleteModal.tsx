@@ -6,7 +6,7 @@ import archiveLine from '@iconify/icons-ri/archive-line'
 import { Icon } from '@iconify/react'
 import create from 'zustand'
 
-import { Button, DisplayShortcut,PrimaryButton } from '@workduck-io/mex-components'
+import { Button, DisplayShortcut, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { isReserved } from '@mexit/core'

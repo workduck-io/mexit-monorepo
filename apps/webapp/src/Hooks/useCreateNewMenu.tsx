@@ -11,6 +11,7 @@ import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
 import { useDataStore } from '../Stores/useDataStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useMetadataStore } from '../Stores/useMetadataStore'
 import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useShareModalStore } from '../Stores/useShareModalStore'
@@ -138,7 +139,6 @@ export const useCreateNewMenu = () => {
   }
 
   const handleMoveNamespaces = async (item: TreeItem, newNamespaceID: string) => {
-    console.log(`Item: ${JSON.stringify(item)}`)
     const refactored = await execRefactorAsync(
       { path: item.data?.path, namespaceID: item.data?.namespace },
       { path: item.data?.path, namespaceID: newNamespaceID }
@@ -158,17 +158,28 @@ export const useCreateNewMenu = () => {
     const item = useLayoutStore.getState().contextMenu?.item
     const namespace = useDataStore.getState().namespaces?.find((i) => i.id === item.data?.namespace)
     const disabled = namespace?.granterID !== undefined && namespace.access === 'READ'
+    const noteMetadata = useMetadataStore.getState().metadata.notes?.[item?.data?.nodeid]
+
+    const snippets = useSnippetStore.getState().snippets ?? {}
+    const templates = Object.values(snippets).filter((item) => item?.template && item.id === noteMetadata?.templateID)
+
+    const hasTemplate = templates.length !== 0
 
     return [
       getMenuItem('New Note', () => handleCreateChild(item), disabled, DefaultMIcons.NOTE),
-      getMenuItem('Set Template', () => handleTemplate(item), disabled, DefaultMIcons.TEMPLATE),
+      getMenuItem(
+        `${hasTemplate ? 'Change' : 'Set'} Template`,
+        () => handleTemplate(item),
+        disabled,
+        DefaultMIcons.TEMPLATE
+      ),
       getMenuItem(
         'Move To Space',
         () => {
           // * Can use to open modal
         },
         disabled,
-        DefaultMIcons.TEMPLATE,
+        DefaultMIcons.SPACE,
         getMoveToNamespaceItems()
       ),
       getMenuItem('Share', () => handleShare(item), disabled, DefaultMIcons.SHARED_NOTE),

@@ -24,7 +24,7 @@ import {
   useTypeahead
 } from '@floating-ui/react'
 
-import { MIcon, mog } from '@mexit/core'
+import { MIcon } from '@mexit/core'
 import {
   FilterMenuDiv,
   getMIcon,
@@ -68,7 +68,6 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
     const parentId = useFloatingParentNodeId()
     const nested = parentId != null
     const contextMenu = useLayoutStore((s) => s.contextMenu)
-    const setContextMenu = useLayoutStore((s) => s.setContextMenu)
 
     const listItemsRef = useRef<Array<HTMLButtonElement | null>>([])
     const listContentRef = useRef(
@@ -202,7 +201,7 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
 
     return (
       <FloatingNode id={nodeId}>
-        {label && nested && (
+        {label && nested && !disabled && (
           <MenuItemWrapper
             ref={referenceRef}
             data-open={open ? '' : undefined}
@@ -249,7 +248,6 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
                   onKeyDown(event) {
                     if (event.key === 'Tab') {
                       setOpen(false)
-                      setContextMenu(undefined)
 
                       if (event.shiftKey) {
                         event.preventDefault()
@@ -271,7 +269,7 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
                         onClick(e) {
                           child.props.onClick?.(e)
                           tree?.events.emit('click')
-                          setContextMenu(undefined)
+                          // setContextMenu(undefined)
                         },
                         ref(node: HTMLButtonElement) {
                           listItemsRef.current[index] = node
@@ -298,7 +296,6 @@ ContextMenuItem.displayName = 'ContextMenuItem'
 
 export const ContextMenuContainer: React.FC<any> = forwardRef((props, ref) => {
   const parentId = useFloatingParentNodeId()
-  mog(`PARENT: ${parentId}`)
 
   if (parentId == null) {
     return (

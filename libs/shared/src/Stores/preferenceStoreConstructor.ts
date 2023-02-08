@@ -4,6 +4,7 @@ export interface UserPreferenceStore extends UserPreferences {
   _hasHydrated: boolean
   smartCaptureExcludedFields?: any
   setHasHydrated: (state) => void
+  clear: () => void
   setTheme: (themeId: string, mode?: 'light' | 'dark') => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
   setLastUsedSnippets: (lastUsedSnippets: LastUsedSnippets) => void
@@ -21,6 +22,17 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
   lastOpenedNotes: {},
   lastUsedSnippets: {},
   smartCaptureExcludedFields: {},
+
+  clear: () => {
+    set({
+      version: 'unset',
+      activeNamespace: undefined,
+      theme: { themeId: 'xeM', mode: 'dark' },
+      lastOpenedNotes: {},
+      lastUsedSnippets: {},
+      smartCaptureExcludedFields: {}
+    })
+  },
 
   excludeSmartCaptureField: (page: string, fieldId: string) => {
     const webPageConfigs = get().smartCaptureExcludedFields
@@ -46,6 +58,7 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
       lastOpenedNotes: get().lastOpenedNotes,
       smartCaptureExcludedFields: get().smartCaptureExcludedFields,
       version: get().version,
+      activeNamespace: get().activeNamespace,
       lastUsedSnippets: get().lastUsedSnippets,
       theme: get().theme
     }
@@ -95,6 +108,17 @@ export const mergeLastOpenedData = (
   return merged
 }
 
+export const getLimitedEntries = <T extends object>(entries: Record<string, T>, limit = 20) => {
+  return Object.entries(entries)
+    .slice(-Math.abs(limit))
+    .reduce((prev: Record<string, T>, [key, value]: [string, T]) => {
+      return {
+        ...prev,
+        [key]: value
+      }
+    }, {})
+}
+
 /**
  * Merging user preferences from the remote server with the local preferences
  *
@@ -112,7 +136,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     // Overwrite all notes with the remote notes which exist
     // The local notes which do not exist in the remote notes will be left alone
     activeNamespace: remote.activeNamespace ?? local.activeNamespace,
-    lastOpenedNotes: { ...local.lastOpenedNotes, ...mergedLastOpenedNotes },
+    lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
     theme: remote.theme ?? local.theme,
     smartCaptureExcludedFields: local.smartCaptureExcludedFields

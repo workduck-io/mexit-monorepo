@@ -27,6 +27,7 @@ export const Title = styled.h1<{ colored?: boolean }>`
     `}
   display: flex;
   align-items: center;
+  white-space: nowrap;
   gap: ${({ theme }) => theme.spacing.small};
 `
 
