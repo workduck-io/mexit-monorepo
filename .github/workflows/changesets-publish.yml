@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - vite-v4-upgrade
   workflow_dispatch:
 
 jobs:
@@ -43,6 +44,9 @@ jobs:
 
       - name: Install Yarn Globally
         run: npm install -g yarn
+
+      - name: Install changesets CLI
+        run: yarn install --dev @changesets/cli
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
