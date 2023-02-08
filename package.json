@@ -20,7 +20,8 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1"
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-remove-scroll": "^2.5.5"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.1",
