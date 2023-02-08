@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.8
+
+### Patch Changes
+
+- e6047020: Deploy on stage test on push to main; Use middleware endpoints for loch,reaction,comments,prompt
+
 ## 0.19.7
 
 ### Patch Changes

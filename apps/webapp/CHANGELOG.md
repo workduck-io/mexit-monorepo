@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.14
+
+### Patch Changes
+
+- e6047020: Deploy on stage test on push to main; Use middleware endpoints for loch,reaction,comments,prompt
+
 ## 0.22.13
 
 ### Patch Changes
