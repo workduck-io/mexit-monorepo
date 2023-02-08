@@ -1,7 +1,7 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import path from 'path'
-import { defineConfig, PluginOption } from 'vite'
+import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 
 const sourceMap = process.env.NO_SOURCE_MAP ? false : true
@@ -10,7 +10,7 @@ const isDev = process.env.MODE === 'development' ? true : false
 // https://vitejs.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: ['react/jsx-runtime', '@workduck-io/flexsearch', '@workduck-io/mex-threads.js/worker'],
+    include: ['react/jsx-runtime', '@workduck-io/flexsearch', '@workduck-io/mex-threads.js/worker', 'buffer'],
     esbuildOptions: {
       define: {
         global: 'globalThis'
@@ -51,23 +51,7 @@ export default defineConfig({
     dedupe: ['styled-components', 'react', 'react-dom', '@udecode/plate']
   },
   publicDir: './src/Assets/',
-  plugins: [
-    react({
-      babel: {
-        compact: true,
-        plugins: [
-          [
-            'babel-plugin-styled-components',
-            {
-              displayName: true,
-              fileName: false
-            }
-          ]
-        ]
-      }
-    }) as PluginOption,
-    svgr()
-  ],
   worker: { format: 'es' },
-  envPrefix: 'MEXIT_'
+  envPrefix: 'MEXIT_',
+  plugins: [react(), svgr()]
 })

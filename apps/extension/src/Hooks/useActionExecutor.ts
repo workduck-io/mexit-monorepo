@@ -105,6 +105,7 @@ export function useActionExecutor() {
             const defaultNamespace = getDefaultNamespace()
 
             if (item?.extras?.new) {
+              console.log("Default Namespace: ", defaultNamespace)
               node = createNodeWithUid(nodeValue, defaultNamespace.id)
               namespace = defaultNamespace
             } else {

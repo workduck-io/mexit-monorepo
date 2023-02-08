@@ -10,6 +10,7 @@ export const mog = (
   propertiesToLog?: Record<string, any>,
   options: Partial<MogOptions> = { pretty: false, collapsed: false }
 ) => {
+  // eslint-disable-next-line
   if (IS_DEV) {
     options.collapsed ? console.groupCollapsed(title) : console.group(title)
     if (propertiesToLog)
