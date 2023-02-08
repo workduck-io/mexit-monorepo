@@ -28,7 +28,7 @@ export default defineConfig({
   build: {
     sourcemap: sourceMap,
     outDir: '../../dist/webapp',
-    minify: false,
+    minify: !sourceMap,
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, 'index.html'),
@@ -68,5 +68,6 @@ export default defineConfig({
     }) as PluginOption,
     svgr()
   ],
-  worker: { format: 'es' }
+  worker: { format: 'es' },
+  envPrefix: 'MEXIT_'
 })

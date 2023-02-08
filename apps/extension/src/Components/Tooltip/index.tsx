@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon as Iconify } from '@iconify/react'
 
-import { MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { API_BASE_URLS, mog } from '@mexit/core'
 import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
 
 import { useHighlighter } from '../../Hooks/useHighlighter'
@@ -64,7 +64,7 @@ function Tooltip() {
   }
 
   const openNodeInMexit = (nodeid: string) => {
-    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
+    window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
   return (

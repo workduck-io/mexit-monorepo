@@ -44,6 +44,17 @@ jobs:
       - name: Install Yarn Globally
         run: npm install -g yarn
 
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+
+      - uses: aws-actions/configure-aws-credentials@v1
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Install Dependencies
         run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
@@ -57,21 +68,10 @@ jobs:
           # end of optional handling for multi line json
           echo "::set-output name=packageJson::$content"
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-
-      - uses: aws-actions/configure-aws-credentials@v1
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Publish Webapp
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
-          yarn nx release webapp
+          yarn nx build:staging webapp
           aws s3 sync ./dist/webapp s3://mexit-monorepo-webapp
           aws cloudfront create-invalidation --distribution-id $MEXIT_CLOUDFRONT_DISTRIBUTION_ID --paths '/*'
 
@@ -82,7 +82,7 @@ jobs:
       - name: Zip Extension Bundle
         if: steps.changesets.outputs.hasChangesets == 'false'
         working-directory: ./dist/extension
-        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip * 
+        run: zip -r mexit-${{ fromJson(steps.get_package_version.outputs.packageJson).version }}.zip *
 
       - name: Create Release and Upload Extension ZIP Bundle
         id: upload-release-asset

@@ -3,10 +3,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
+import { API_BASE_URLS, config } from '@mexit/core'
 import { BackCard, CenteredColumn, Description, Title } from '@mexit/shared'
 
-import config from '../../config'
 import { ServiceIcon } from '../../Icons/Icons'
 import { useAuthentication, useInitializeAfterAuth } from '../../Stores/useAuth'
 
@@ -54,7 +53,7 @@ const GenericOAuthRedirect = () => {
         const { loginStatus, loginData } = await loginViaGoogle(
           code,
           config.cognito.APP_CLIENT_ID,
-          MEXIT_FRONTEND_AUTH_BASE
+          `${API_BASE_URLS.oauth}/google`
         )
         await initializeAfterAuth(loginData, true, true, false)
         navigate('/')

@@ -4,9 +4,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "NX_BUILD_MODE=development vite",
-    "build": "tsc --noEmit && vite build --emptyOutDir",
-    "preview": "vite preview",
-    "release": "tsc --noEmit  && NO_SOURCE_MAP=true vite build --emptyOutDir"
+    "build": "tsc --noEmit && MEXIT_FORCE_DEV=true vite build --emptyOutDir",
+    "build:test": "tsc --noEmit && NO_SOURCE_MAP=true vite build --emptyOutDir --mode test",
+    "build:staging": "tsc --noEmit && NO_SOURCE_MAP=true vite build --emptyOutDir --mode staging"
   },
   "dependencies": {
     "@asseinfo/react-kanban": "^2.2.0",

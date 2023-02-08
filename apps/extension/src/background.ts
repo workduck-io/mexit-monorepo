@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script'
 
-import { ActionType, fuzzySearch, LINK_SHORTENER_URL_BASE, MEXIT_FRONTEND_URL_BASE, SEPARATOR } from '@mexit/core'
+import { ActionType, API_BASE_URLS, fuzzySearch, SEPARATOR } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 
@@ -27,10 +27,9 @@ Sentry.init({
 
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    const url = MEXIT_FRONTEND_URL_BASE
     chrome.tabs.create(
       {
-        url: url,
+        url: API_BASE_URLS.frontend,
         pinned: true
       },
       (tab) => {
@@ -254,7 +253,7 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
     const title = item.path.split(SEPARATOR).slice(-1)[0]
 
     return {
-      content: `${LINK_SHORTENER_URL_BASE}/${workspaceDetails.id}/${title}`,
+      content: `${API_BASE_URLS.url}/${workspaceDetails.id}/${title}`,
       description: title
     }
   })

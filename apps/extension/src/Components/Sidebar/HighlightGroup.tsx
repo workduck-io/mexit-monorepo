@@ -5,7 +5,7 @@ import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 
-import { Highlight, Highlights, MEXIT_FRONTEND_URL_BASE, mog } from '@mexit/core'
+import { API_BASE_URLS, Highlight, Highlights, mog } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightGroupsWrapper,
@@ -54,7 +54,7 @@ export const SingleHighlightWithToggle = ({ highlight }: { highlight: Highlight 
   }
 
   const openNodeInMexit = (nodeid: string) => {
-    window.open(`${MEXIT_FRONTEND_URL_BASE}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
+    window.open(`${API_BASE_URLS.frontend}/editor/${nodeid}`, '_blank', 'noopener, noreferrer')
   }
 
   return (

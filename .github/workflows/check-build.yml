@@ -1,6 +1,6 @@
 name: Check builds before PR merge
 
-on: 
+on:
   pull_request:
     branches: [main]
 
@@ -18,7 +18,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      
       - name: Setup Node.js 16.x
         uses: actions/setup-node@v2
         with:
@@ -31,7 +30,7 @@ jobs:
         run: yarn install --network-timeout 1000000 --frozen-lockfile --prefer-offline
 
       - name: Build Webapp
-        run: yarn nx release webapp
+        run: yarn nx build:test webapp
 
       - name: Build Extension
         run: yarn nx build:release extension

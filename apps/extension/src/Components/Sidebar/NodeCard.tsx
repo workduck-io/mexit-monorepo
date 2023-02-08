@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { convertContentToRawText, DefaultMIcons, MEXIT_FRONTEND_URL_BASE, mog, WORKSPACE_HEADER } from '@mexit/core'
+import { API_BASE_URLS, convertContentToRawText, DefaultMIcons, mog, WORKSPACE_HEADER } from '@mexit/core'
 import {
   CopyButton,
   GenericFlex,
@@ -122,7 +122,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
           )}
           {isNodePublic && (
             <CopyButton
-              text={`${MEXIT_FRONTEND_URL_BASE}/share/${nodeId}`}
+              text={`${API_BASE_URLS.shareFrontend}/${nodeId}`}
               size="16px"
               beforeCopyTooltip="Copy link"
               afterCopyTooltip="Link copied!"

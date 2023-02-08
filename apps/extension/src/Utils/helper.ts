@@ -1,12 +1,12 @@
 import {
   ActionType,
+  API_BASE_URLS,
   convertContentToRawText,
   defaultContent,
   DefaultMIcons,
   getMIcon,
   ILink,
   ListItemType,
-  MEXIT_FRONTEND_URL_BASE,
   MexitAction,
   NodeContent,
   QuickLinkType,
@@ -48,7 +48,7 @@ export const getListItemFromNode = (node: ILink, description?: string, blockid?:
       blockid,
       path: node?.path,
       new: false,
-      base_url: `${MEXIT_FRONTEND_URL_BASE}/editor/${node?.nodeid}`
+      base_url: `${API_BASE_URLS.frontend}/editor/${node?.nodeid}`
     },
     shortcut: {
       save: {
@@ -98,7 +98,7 @@ export const getListItemFromSnippet = (snippet: Snippet, actionType?: ActionType
     extras: {
       nodeid: snippet.id,
       path: snippet.title,
-      base_url: `${MEXIT_FRONTEND_URL_BASE}/snippets/${snippet.id}`
+      base_url: `${API_BASE_URLS.frontend}/snippets/${snippet.id}`
     },
     shortcut: {
       copy: {

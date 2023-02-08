@@ -1,8 +1,8 @@
-import React, { useEffect,useRef  } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import styled from 'styled-components'
 
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { API_BASE_URLS } from '@mexit/core'
 import { parsePageMetaTags } from '@mexit/shared'
 
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
@@ -23,7 +23,8 @@ const IFrameActionRenderer = () => {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
   const handleEvent = (event) => {
-    if (event.origin === MEXIT_FRONTEND_URL_BASE) {
+    const url = API_BASE_URLS.frontend
+    if (event.origin === url) {
       switch (event.data.type) {
         case 'height-init':
           setIsLoading(false)
@@ -39,7 +40,7 @@ const IFrameActionRenderer = () => {
                 pageTags
               }
             },
-            MEXIT_FRONTEND_URL_BASE
+            url
           )
           break
         }

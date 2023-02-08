@@ -2,9 +2,7 @@ import { Icon } from '@iconify/react'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { MEXIT_FRONTEND_AUTH_BASE } from '@mexit/core'
-
-import config from '../../config'
+import { API_BASE_URLS, config } from '@mexit/core'
 
 export interface GoogleLoginButtonProps {
   text: string
@@ -16,7 +14,7 @@ export const GoogleLoginButton = ({ text }: GoogleLoginButtonProps) => {
   const searchParams = new URLSearchParams({
     identity_provider: 'Google',
     response_type: 'code',
-    redirect_uri: MEXIT_FRONTEND_AUTH_BASE,
+    redirect_uri: `${API_BASE_URLS.oauth}/google`,
     client_id: config.cognito.APP_CLIENT_ID,
     scope: config.cognito.SCOPES
   })

@@ -2,9 +2,8 @@ import useWebSocket from 'react-use-websocket'
 
 import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
 
-import { mog } from '@mexit/core'
+import { config, mog } from '@mexit/core'
 
-import config from '../config'
 import { useAuthStore } from '../Stores/useAuth'
 import useRouteStore, { BannerType } from '../Stores/useRouteStore'
 import { SocketActionType } from '../Types/Socket'
@@ -50,7 +49,7 @@ const useSocket = () => {
   }
 
   const utilFunctions = useWebSocket(
-    config.websocket.URL,
+    config.baseURLs.MEXIT_WEBSOCKET_URL,
     {
       onOpen: () => mog('CONNECTION OPENED'),
       retryOnError: true,

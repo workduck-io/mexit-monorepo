@@ -1,6 +1,6 @@
 import { connectToChild, Methods } from 'penpal'
 
-import { MEXIT_FRONTEND_URL_BASE } from '@mexit/core'
+import { API_BASE_URLS } from '@mexit/core'
 
 import { useInitStore } from '../Stores/useInitStore'
 import { styleSlot } from '../Utils/cs-utils'
@@ -21,7 +21,7 @@ const appendChild = (child) => {
 
 const messageBroadcaster = () => {
   const iframe = document.createElement('iframe')
-  iframe.src = `${MEXIT_FRONTEND_URL_BASE}/iframe.html`
+  iframe.src = `${API_BASE_URLS.frontend}/iframe.html`
   iframe.id = 'mexit-extension-iframe'
 
   appendChild(iframe)
