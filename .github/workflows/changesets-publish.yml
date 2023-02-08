@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - vite-v4-upgrade
   workflow_dispatch:
 
 jobs:
