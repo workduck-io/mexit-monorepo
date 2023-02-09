@@ -74,5 +74,6 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
+  envPrefix: 'MEXIT_'
 })

@@ -5,9 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:release": "tsc --noEmit && NO_SOURCE_MAP=true vite build",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build --mode test",
     "build:hmr": "node build/wss-build.js",
+    "build:staging": "tsc --noEmit && NO_SOURCE_MAP=true vite build --mode staging",
     "wss": "node build/hmr/initReloadServer.js",
     "dev": "yarn build:hmr && (yarn wss & nodemon)"
   },

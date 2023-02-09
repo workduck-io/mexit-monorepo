@@ -80,7 +80,7 @@ jobs:
 
       - name: Build Extension for release
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: yarn nx build:release extension
+        run: yarn nx build:staging extension
 
       - name: Zip Extension Bundle
         if: steps.changesets.outputs.hasChangesets == 'false'

@@ -8,7 +8,8 @@ export enum STAGE {
 }
 
 export const DEPLOYMENT_STAGE: STAGE = (() => {
-  const { MEXIT_STAGE, MEXIT_FORCE_DEV, MODE } = import.meta.env ?? process.env
+  const env = import.meta.env ?? process.env
+  const { MEXIT_STAGE, MEXIT_FORCE_DEV, MODE } = env
 
   if (MEXIT_FORCE_DEV) {
     return STAGE.local

@@ -33,4 +33,4 @@ jobs:
         run: yarn nx build:test webapp
 
       - name: Build Extension
-        run: yarn nx build:release extension
+        run: yarn nx build extension
