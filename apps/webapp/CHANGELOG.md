@@ -1,5 +1,13 @@
 # mexit-webapp
 
+## 0.22.14
+
+### Patch Changes
+
+- 3de714f4: Custom Context Menu
+- b8f6972a: Upgrade to vite v4
+- e6047020: Deploy on stage test on push to main; Use middleware endpoints for loch,reaction,comments,prompt
+
 ## 0.22.13
 
 ### Patch Changes

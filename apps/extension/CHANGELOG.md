@@ -1,5 +1,13 @@
 # mexit
 
+## 0.19.8
+
+### Patch Changes
+
+- 0a2eedb6: Set stage correctly in extension config
+- b8f6972a: Upgrade to vite v4
+- e6047020: Deploy on stage test on push to main; Use middleware endpoints for loch,reaction,comments,prompt
+
 ## 0.19.7
 
 ### Patch Changes
