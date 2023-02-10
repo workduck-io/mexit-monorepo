@@ -67,7 +67,7 @@ export const AddTags = () => {
         if (node) setRoot(node)
       }}
     >
-      <TagsLabel tags={tags} onDelete={(val: string) => onRemoveTag(val)} />
+      <TagsLabel flex={false} tags={tags} onDelete={(val: string) => onRemoveTag(val)} />
       <AddTagMenu root={root} createTag={onAddCreateTag} tags={toAddTags} addTag={onAddNewTag} />
     </LinkShortenAndTagsWrapper>
   )

@@ -7,7 +7,6 @@ import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`
   background: ${({ theme }) => theme.tokens.surfaces.app} !important;
-  position: relative;
   overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.fade};

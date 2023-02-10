@@ -10,7 +10,6 @@ import {
   EditorPreviewControls,
   EditorPreviewNoteName,
   EditorPreviewWrapper,
-  Hidden,
   MexIcon,
   NestedFloating,
   PreviewActionHeader,
@@ -125,7 +124,7 @@ const SnippetPreview = ({
               </PreviewActionHeader>
             </EditorPreviewControls>
             <EditorPreviewRenderer content={snippet.content} readOnly={true} editorId={editorId} />
-            <Hidden />
+            {/* <Hidden /> */}
           </EditorPreviewWrapper>
         )}
       >
