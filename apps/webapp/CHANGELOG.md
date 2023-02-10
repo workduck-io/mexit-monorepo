@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.15
+
+### Patch Changes
+
+- b2a11af1: Extension UI changes
+
 ## 0.22.14
 
 ### Patch Changes
