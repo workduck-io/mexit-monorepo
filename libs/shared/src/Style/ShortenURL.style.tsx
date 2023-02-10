@@ -5,11 +5,14 @@ import styled from 'styled-components'
 import { Button } from '@workduck-io/mex-components'
 
 import { ShowOnHoverIconStyles } from './Helpers'
+import { BodyFont } from './Search'
 
 export const ShortenButton = styled(Button)<ComponentPropsWithRef<typeof Button> & { isShortend: boolean }>`
-  color: ${({ isShortend, theme }) => (isShortend ? theme.tokens.colors.secondary : theme.tokens.text.fade)};
-  font-size: 1rem;
+  color: ${({ isShortend, theme }) => (isShortend ? theme.tokens.colors.secondary : theme.tokens.text.default)};
   box-shadow: none;
+  ${BodyFont};
+  background-color: ${({ theme }) => theme.tokens.surfaces.app};
+
   svg {
     flex-shrink: 0;
   }

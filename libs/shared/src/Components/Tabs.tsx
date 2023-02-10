@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import { useSpring } from 'react-spring'
 
-import Tippy from '@tippyjs/react'
-
-import { TitleWithShortcut } from '@workduck-io/mex-components'
-
 import { StyledTab, TabBody, TabHeaderContainer, TabPanel, TabsContainer, TabsWrapper } from '../Style/Tab.Styles'
 
 export type ExtInfobarMode = 'context' | 'snippets' | 'notes' | 'reminders'
@@ -51,17 +47,9 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, openedTab, onChange, visible, 
       <TabHeaderContainer>
         <TabsWrapper index={index} total={tabs.length}>
           {tabs.map((tab) => (
-            <Tippy
-              delay={200}
-              key={tab.type}
-              theme="mex-bright"
-              appendTo={root}
-              content={<TitleWithShortcut shortcut={tab.shortcut} title={tab.tooltip} />}
-            >
-              <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
-                {tab.label}
-              </StyledTab>
-            </Tippy>
+            <StyledTab key={tab.type} onClick={() => onChange(tab.type)} selected={tab.type === openedTab}>
+              {tab.label}
+            </StyledTab>
           ))}
         </TabsWrapper>
       </TabHeaderContainer>

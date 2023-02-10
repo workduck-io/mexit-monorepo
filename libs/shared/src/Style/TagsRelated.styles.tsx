@@ -8,22 +8,29 @@ export const TagFlex = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: row;
+  font-size: 14px;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  ${({ theme }) => generateStyle(theme.generic.tags.tag)}
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  border: 1px solid rgba(${({ theme }) => theme.rgbTokens.text.fade}, 0.8);
 
-  ${HoverSubtleGlow}
-  ${ShowOnHoverIconStyles}
-  .showOnHoverIcon {
+  color: ${({ theme }) => theme.tokens.text.default};
+
+  /* ${({ theme }) => generateStyle(theme.generic.tags.tag)} */
+
+  ${HoverSubtleGlow} ${ShowOnHoverIconStyles}
+    .showOnHoverIcon {
     color: ${({ theme }) => theme.tokens.colors.primary.text};
     background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     ${SubtleGlow}
   }
 `
 
-export const TagFlexText = styled.div``
+export const TagFlexText = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 export const TagsFlex = styled.div`
   display: flex;

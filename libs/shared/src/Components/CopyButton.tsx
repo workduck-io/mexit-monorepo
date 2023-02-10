@@ -5,14 +5,17 @@ import fileCopyLine from '@iconify-icons/ri/file-copy-line'
 
 import { IconButton } from '@workduck-io/mex-components'
 
+import { MexIcon } from '../Style/Layouts'
+
 interface CopyButtonProps {
   text: string
   size?: string
+  isIcon?: boolean
   beforeCopyTooltip?: string
   afterCopyTooltip?: string
 }
 
-export const CopyButton = ({ text, size, beforeCopyTooltip, afterCopyTooltip }: CopyButtonProps) => {
+export const CopyButton = ({ text, isIcon, size, beforeCopyTooltip, afterCopyTooltip }: CopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false)
 
   // This is the function we wrote earlier
@@ -37,6 +40,18 @@ export const CopyButton = ({ text, size, beforeCopyTooltip, afterCopyTooltip }: 
   }
 
   const copyText = isCopied ? afterCopyTooltip ?? 'Copied to Clipboard' : beforeCopyTooltip ?? 'Copy'
+
+  if (isIcon) {
+    return (
+      <MexIcon
+        $cursor
+        onClick={handleCopyClick}
+        icon={isCopied ? checkboxLine : fileCopyLine}
+        height={size}
+        width={size}
+      />
+    )
+  }
 
   return (
     <IconButton onClick={handleCopyClick} icon={isCopied ? checkboxLine : fileCopyLine} size={size} title={copyText} />

@@ -3,7 +3,7 @@ import React from 'react'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { getNextWrappingIndex } from '@udecode/plate'
 
-import { MexIcon,TabType } from '@mexit/shared'
+import { Group, MexIcon, TabHeading, TabType } from '@mexit/shared'
 
 import { ContextInfoBar } from '../Components/Sidebar/ContextInfoBar'
 import { NotesInfoBar } from '../Components/Sidebar/NotesInfoBar'
@@ -15,32 +15,35 @@ export const useRightSidebarItems = () => {
   // Ensure the tabs have InfobarType in type
   const getRHSTabs = (): Array<TabType> => [
     {
-      label: <MexIcon $noHover icon="mdi:web-plus" width={24} height={24} />,
+      label: (
+        <Group>
+          <MexIcon $noHover icon="mdi:web-plus" width={24} height={24} />
+          <TabHeading>Context</TabHeading>
+        </Group>
+      ),
       type: 'context',
-      component: <ContextInfoBar />,
-      tooltip: 'Context'
+      component: <ContextInfoBar />
     },
     {
-      label: <MexIcon $noHover icon={quillPenLine} width={24} height={24} />,
+      label: (
+        <Group>
+          <MexIcon $noHover icon={quillPenLine} width={24} height={24} />
+          <TabHeading>Snippets</TabHeading>
+        </Group>
+      ),
       type: 'snippets',
-      component: <SnippetsInfoBar />,
-      tooltip: 'Snippets'
+      component: <SnippetsInfoBar />
     },
     {
-      label: <MexIcon $noHover icon="gg:file-document" width={24} height={24} />,
+      label: (
+        <Group>
+          <MexIcon $noHover icon="gg:file-document" width={24} height={24} />
+          <TabHeading>Notes</TabHeading>
+        </Group>
+      ),
       type: 'notes',
-      component: <NotesInfoBar />,
-      tooltip: 'Notes'
+      component: <NotesInfoBar />
     }
-
-    // TODO: add this back when we have url based reminders
-    // The reminderUI components already moved to @mexit/shared
-    // {
-    //   label: <MexIcon $noHover icon={timerFlashLine} width={24} height={24} />,
-    //   type: 'reminders',
-    //   component: <ReminderInfobar />,
-    //   tooltip: 'Reminders'
-    // }
   ]
 
   const getNextTab = () => {

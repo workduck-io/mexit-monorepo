@@ -17,7 +17,7 @@ export const Links = styled.a`
 export const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   width: 100%;
   height: 100%;
   gap: ${({ theme }) => theme.spacing.medium};
@@ -85,17 +85,9 @@ export const LinkMetadataAndDelete = styled.div`
 export const LinkShortenAndTagsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-
-  width: 100%;
-
+  flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.small};
-
-  ${Button} {
-    padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-    gap: ${({ theme }) => theme.spacing.tiny};
-  }
 `
 
 export const LinkShortenAndHighlightSection = styled.div`
@@ -174,8 +166,6 @@ export const HighlightGroupsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
-  padding: ${({ theme }) => theme.spacing.small} 0;
-  padding-bottom: ${({ theme }) => theme.spacing.large};
 `
 
 export const HighlightText = styled.div``
@@ -192,7 +182,7 @@ export const SingleHighlightWrapper = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   padding: ${({ theme }) => theme.spacing.small};
   background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   user-select: none;
 `
 

@@ -41,7 +41,7 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
         `
       : css`
           top: ${$top}px;
-          right: 8px;
+          right: 0;
         `}
 
   z-index: 9999999999;
@@ -78,6 +78,24 @@ const ToggleWrapper = styled.div<{ $endColumnWidth?: string; $expanded?: boolean
     background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     color: ${({ theme }) => theme.tokens.colors.primary.text};
   }
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* ::before {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    height: 20px;
+    width: 20px;
+    border-bottom-right-radius: ${({ theme }) => theme.borderRadius.large};
+    background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+    color: ${({ theme }) => theme.tokens.text.fade};
+  } */
 `
 
 export const DraggableToggle = () => {
@@ -146,8 +164,10 @@ export const DraggableToggle = () => {
         $expanded={rhSidebar.expanded}
         onClick={toggleRHSidebar}
       >
-        <WDLogo />
-        <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
+        <Wrapper>
+          <WDLogo />
+          <DragIcon ref={handleRef} $show={isHovering} icon="ic:outline-drag-indicator" />
+        </Wrapper>
       </ToggleWrapper>
     </Tippy>
   )

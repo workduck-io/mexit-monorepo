@@ -32,18 +32,20 @@ const TagLabel = ({ tag, onClick, onDelete }: TagLabelProps) => {
         }}
       >
         #{tag.value}
+        {onDelete && (
+          <Icon
+            icon="ri:close-line"
+            height={12}
+            width={12}
+            className="showOnHoverIcon"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onDelete(tag.value)
+            }}
+          />
+        )}
       </TagFlexText>
-      {onDelete && (
-        <Icon
-          icon="ri:close-line"
-          className="showOnHoverIcon"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            onDelete(tag.value)
-          }}
-        />
-      )}
     </TagFlex>
   )
 }
@@ -52,13 +54,22 @@ interface TagsLabelProps {
   tags: Tag[]
   onClick?: (tag: string) => void
   onDelete?: (tag: string) => void
+  flex?: boolean
 }
 
-export const TagsLabel = ({ tags, onClick, onDelete }: TagsLabelProps) => {
-  //TODO: Add a default onclick function which will open the tags view
+export const TagsLabel = ({ tags, onClick, onDelete, flex = true }: TagsLabelProps) => {
+  if (!flex)
+    return (
+      <>
+        {tags.slice(0, 8).map((tag) => (
+          <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} onDelete={onDelete} tag={tag} />
+        ))}
+      </>
+    )
+
   return (
     <TagsFlex>
-      {tags.map((tag) => (
+      {tags.slice(0, 8).map((tag) => (
         <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} onDelete={onDelete} tag={tag} />
       ))}
     </TagsFlex>

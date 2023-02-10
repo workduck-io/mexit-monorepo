@@ -6,9 +6,7 @@ import { CardShadow, ScrollStyles } from './Helpers'
 import { TagFlex } from './TagsRelated.styles'
 
 export const EditorPreviewWrapper = styled.div`
-  background: rgba(${({ theme }) => theme.rgbTokens.surfaces.modal}, 0.5) !important;
-
-  backdrop-filter: blur(10px);
+  background: ${({ theme }) => theme.tokens.surfaces.app} !important;
   overscroll-behavior: contain;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.fade};
@@ -17,14 +15,22 @@ export const EditorPreviewWrapper = styled.div`
   width: 36vw;
   max-width: 36vw;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
 
   ${CardShadow}
   ${ScrollStyles}
+`
+
+export const Hidden = styled.div`
+  height: 24px;
+  bottom: 2px;
+  position: absolute;
+  width: 100%;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: linear-gradient(180deg, rgba(43, 47, 58, 0) 0%, ${({ theme }) => theme.tokens.surfaces.sidebar} 100%);
 `
 
 export const EditorPreviewNoteName = styled.div`
@@ -92,10 +98,11 @@ export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
   align-items: center;
   border-radius: ${({ theme }) => `${theme.borderRadius.small} ${theme.borderRadius.small} 0 0`};
   width: 100%;
-  background: ${({ theme }) => theme.tokens.surfaces.s[3]} !important;
-  border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.s[2]};
+  box-sizing: border-box;
+  border-bottom: 1px solid ${({ theme }) => theme.tokens.surfaces.separator};
   justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.small};
+  margin: 0 ${({ theme }) => theme.spacing.small} 0 0;
 
   ${Button} {
     color: ${({ theme }) => theme.tokens.text.fade};

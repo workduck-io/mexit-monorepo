@@ -8,12 +8,22 @@ import { wrapErr } from '@mexit/core'
 
 import useAuthStore from '../Hooks/useAuthStore'
 
+// * TODO: Move to KYClient
+
 const client = axios.create({
   adapter: fetchAdapter
 })
 
-client.interceptors.request.use((request) => {
-  const userCred = useAuthStore.getState().userCred
+const AWS_AUTH_KEY = 'aws-auth-mexit'
+
+const getUserCredFromChrome = async () => {
+  const authState = (await chrome.storage.local.get(AWS_AUTH_KEY))?.[AWS_AUTH_KEY]
+  return JSON.parse(authState ?? '{}')?.state?.userCred
+}
+
+client.interceptors.request.use(async (request) => {
+  const userCred = await getUserCredFromChrome()
+
   if (request && request.headers && userCred && userCred.token) {
     request.headers['Authorization'] = `Bearer ${userCred.token}`
   }
@@ -22,11 +32,14 @@ client.interceptors.request.use((request) => {
 })
 
 const refreshToken = () => {
-  const { userCred, userPool: uPool } = useAuthStore.getState()
+  const userCred = useAuthStore.getState().userCred
+  const uPool = useAuthStore.getState().userPool
+
   if (userCred) {
     if (uPool) {
       const userPool = new CognitoUserPool(uPool)
       const nuser = new CognitoUser({ Username: userCred.email, Pool: userPool })
+
       nuser.getSession(
         wrapErr((sess: CognitoUserSession) => {
           if (sess) {

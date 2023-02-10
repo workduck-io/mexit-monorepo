@@ -106,13 +106,18 @@ export const DefaultMIcons = {
   VIEW: getMIcon('ICON', 'ri:stack-line'),
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
+  HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line'),
   WEB_LINK: getMIcon('ICON', 'ri:link'),
+  TAG: getMIcon('ICON', 'ri:hashtag'),
   SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
   ARCHIVE: getMIcon('ICON', 'ri:archive-line'),
   COPY: getMIcon('ICON', 'ri:file-copy-line'),
-  DELETE: getMIcon('ICON', 'codicon:trash'),
+  DELETE: getMIcon('ICON', 'ri:delete-bin-5-line'),
   MOVE: getMIcon('ICON', 'ri:anticlockwise-2-fill'),
-  SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold')
+  SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold'),
+  EDIT: getMIcon('ICON', 'ri:pencil-fill'),
+  ADD: getMIcon('ICON', 'ic:round-plus'),
+  CLEAR: getMIcon('ICON', 'ic:round-clear')
 }
 
 export const ForwardlinkIcon = {

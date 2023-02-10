@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react'
 
-import { CenteredFlex, List, SnippetCards } from '@mexit/shared'
+import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards } from '@mexit/shared'
 
 import { useHighlightStore } from '../../Stores/useHighlightStore'
 
+import { AddTags } from './AddTags'
 import { GenericCard } from './GenericCard'
 import { HighlightGroups } from './HighlightGroup'
 import { ShortenerComponent } from './ShortenerComponent'
+import SidebarSection from './SidebarSection'
 
 // TODO: add links to onboarding tutorials later
 // and maybe a check if the user doesn't want to see a card again
@@ -30,65 +32,29 @@ const basicOnboarding = [
 ]
 
 export function ContextInfoBar() {
-  // const [search, setSearch] = useState('')
-  // const inputRef = useRef<HTMLInputElement>(null)
   const highlights = useHighlightStore((state) => state.highlights)
   const getHighlightsOfUrl = useHighlightStore((state) => state.getHighlightsOfUrl)
-  // const [searchedHighlights, setSearchedHighlights] = useState<SourceHighlights>()
 
   const pageHighlights = useMemo(() => {
     return getHighlightsOfUrl(window.location.href)
   }, [window.location, highlights])
 
-  // TODO: add highlight search later
-  // const searchableHighlights = useMemo(() => {
-  //   if (!pageHighlights) return
-
-  //   return Object.values(pageHighlights).map((item) => ({
-  //     nodeId: item.nodeId,
-  //     ...item.elementMetadata.saveableRange
-  //   }))
-  // }, [pageHighlights])
-
-  // const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-  //   setSearch(e.target.value)
-  // }
-
-  // TODO: add highlight search
-  // const onSearch = async (newSearchTerm: string) => {
-  //   const res = fuzzySearch(searchableHighlights, newSearchTerm, (item) => item.text)
-
-  //   mog('res', { res, searchableHighlights })
-  // }
-
-  // useEffect(() => {
-  //   if (search && search !== '') {
-  //     onSearch(search)
-  //   }
-
-  // }, [search])
-
   return (
     <SnippetCards fullHeight>
-      <ShortenerComponent />
-      {/* <SidebarListFilterWrapper>
-        <SidebarListFilter>
-          <Icon icon={searchLine} />
-          <Input
-            autoFocus
-            placeholder={'Search highlights'}
-            onChange={debounce((e) => onSearchChange(e), 250)}
-            ref={inputRef}
-          />
-        </SidebarListFilter>
-        <Infobox root={getElementById('ext-side-nav')} text={HighlightSidebarHelp} />
-      </SidebarListFilterWrapper> */}
-      {pageHighlights ? (
-        <List scrollable>
-          <HighlightGroups highlights={pageHighlights} />
-        </List>
+      <SidebarSection label="Shorten URL" icon={getMIcon('ICON', 'ri:link-m')}>
+        <ShortenerComponent />
+      </SidebarSection>
+      <SidebarSection label="Tags" icon={DefaultMIcons.TAG}>
+        <AddTags />
+      </SidebarSection>
+      {pageHighlights?.length > 0 ? (
+        <SidebarSection label="Highlights" icon={DefaultMIcons.HIGHLIGHT}>
+          <List $noMargin scrollable>
+            <HighlightGroups highlights={pageHighlights} />
+          </List>
+        </SidebarSection>
       ) : (
-        <div>
+        <>
           <CenteredFlex>
             <h2>Hi there</h2>
             <p>Let&apos;s get you started</p>
@@ -98,7 +64,7 @@ export function ContextInfoBar() {
               <GenericCard icon={item.icon} title={item.title} description={item.description} />
             ))}
           </SnippetCards>
-        </div>
+        </>
       )}
     </SnippetCards>
   )

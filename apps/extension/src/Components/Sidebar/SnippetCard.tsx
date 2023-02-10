@@ -3,14 +3,15 @@ import React, { useEffect } from 'react'
 import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import fileCopyLine from '@iconify-icons/ri/file-copy-line'
+import { useTheme } from 'styled-components'
 
-import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { Snippet } from '@mexit/core'
 import {
   GenericFlex,
   MexIcon,
+  PrimaryText,
   RelativeTime,
   SnippetCardFooter,
   SnippetCardWrapper,
@@ -18,7 +19,6 @@ import {
 } from '@mexit/shared'
 
 import { useDescriptionStore } from '../../Stores/useDescriptionStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import SnippetPreview from '../Editor/SnippetPreview'
 
 import { NodeCardHeader } from './NodeCard'
@@ -34,28 +34,18 @@ interface SnippetCardProps {
   /**
    * Replace the default onclick action on node link
    */
-  onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onClick?: (ev: any) => void
 }
 
 const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: SnippetCardProps) => {
   const [visible, setVisible] = React.useState(false)
   const descriptions = useDescriptionStore((store) => store.descriptions)
-  const loadSnippet = useSnippetStore((store) => store.loadSnippet)
-  // TODO: make and sync a last used snippet store
-  // const { getLastUsed } = useLastUsedSnippets()
-  // const { push } = useNavigation()
+
+  const theme = useTheme()
 
   const onClickProps = (ev: any) => {
     ev.preventDefault()
     ev.stopPropagation()
-
-    // TODO: commenting this our for a while, need to have better click and hover interaction
-    // if (onClick) {
-    //   onClick(ev)
-    // }
-    // else {
-    //   window.open(`${MEXIT_FRONTEND_URL_BASE}/snippets/node/${snippet.id}`)
-    // }
 
     if (!visible) {
       setVisible(true)
@@ -63,11 +53,6 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       setVisible(false)
     }
   }
-
-  // const snippetTags = useMemo(() => {
-  //   if(!snippet?.content) return
-  //   return getTagsFromContent(snippet?.content).map((tag) => ({ value: tag }))
-  // }, [snippet])
 
   const lastUsed = undefined // getLastUsed(snippet.id)
 
@@ -102,12 +87,10 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       <SnippetCardWrapper>
         <NodeCardHeader>
           <GenericFlex>
-            <MexIcon icon={snippet?.template ? magicLine : quillPenLine} />
-            {snippet.title}
+            <MexIcon color={theme.tokens.colors.primary.default} icon={snippet?.template ? magicLine : quillPenLine} />
+            <PrimaryText>{snippet.title}</PrimaryText>
           </GenericFlex>
-          <GenericFlex>
-            <IconButton onClick={onClick} icon={fileCopyLine} size="16px" title="Copied to Clipboard" />
-          </GenericFlex>
+          <MexIcon onClick={onClick} icon={fileCopyLine} height={16} width={16} />
         </NodeCardHeader>
 
         <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>

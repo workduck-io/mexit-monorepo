@@ -29,8 +29,7 @@ import {
   useFloatingTree,
   useHover, // useTypeahead,
   useInteractions,
-  useListNavigation,
-  useRole
+  useListNavigation
 } from '@floating-ui/react-dom-interactions'
 import searchLine from '@iconify/icons-ri/search-line'
 import { Icon } from '@iconify/react'
@@ -113,6 +112,8 @@ interface Props {
    */
   multiSelect?: boolean
 
+  noHover?: boolean
+
   /**
    * Show Button with Border
    */
@@ -138,6 +139,7 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       label,
       values,
       border = false,
+      noHover,
       multiSelect,
       allowSearch,
       onCreate,
@@ -194,7 +196,6 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         pointerDown: true,
         ignoreMouse: nested
       }),
-      useRole(context, { role: 'menu' }),
       useDismiss(context, {
         escapeKey: true
       }),
@@ -312,11 +313,10 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
     }, [search, allowSearch, children])
 
     const mergedReferenceRef = useMemo(() => mergeRefs([ref, reference]), [reference, ref])
-
     return (
       <FloatingNode id={nodeId}>
         <RootMenuWrapper
-          type="button"
+          noHover={noHover}
           border={border}
           {...getReferenceProps({
             ...props,
