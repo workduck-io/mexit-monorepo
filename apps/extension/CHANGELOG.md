@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.9
+
+### Patch Changes
+
+- b2a11af1: Extension UI changes
+
 ## 0.19.8
 
 ### Patch Changes
