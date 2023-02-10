@@ -75,6 +75,7 @@ export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean }
     `}
 
   overflow: hidden auto;
+  max-height: 90vh;
   overscroll-behavior: contain;
 `
 
