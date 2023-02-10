@@ -17,6 +17,7 @@ export const messageHandler = (event: MessageType) => {
   UnhandledRequestsByExtension?.add(event.msgId)
   const store: StoreApi<any> = getStore(event.msgId)
 
+  mog(`IFRAME: ${event.msgId}`, { store, event })
   if (store) {
     if (event.fromLocal) {
       store.setState(event.state)

@@ -99,7 +99,7 @@ export const ShortenURL = ({ link, workspaceId, updateAlias, isDuplicateAlias }:
       <Tooltip content={isShortend ? (isCopied ? 'Copied to clipboard!' : 'Click to copy') : 'Shorten URL'}>
         <ShortenButton isShortend={isShortend} transparent onClick={onShortenClick}>
           <Icon icon={linkM} />
-          {isShortend ? link?.alias : 'Shorten URL'}
+          {isShortend ? link?.alias : 'Shorten'}
         </ShortenButton>
       </Tooltip>
       {isShortend && (

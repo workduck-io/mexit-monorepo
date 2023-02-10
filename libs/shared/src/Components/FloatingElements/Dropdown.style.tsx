@@ -63,30 +63,39 @@ export const ItemLabel = styled.div`
   max-width: 12rem;
 `
 
-export const RootMenuWrapper = styled.button<{ border?: boolean }>`
+export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
-  border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
   background: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  color: ${({ theme }) => theme.tokens.text.default};
+  border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
+
+  :hover {
+    cursor: pointer;
+  }
 
   &.${MenuItemClassName} {
     ${MenuItemStyles}
     &.open,
-    &:hover {
+      &:hover {
       box-shadow: none;
       background: ${({ theme }) => theme.tokens.surfaces.s[3]};
     }
   }
 
-  &.open,
-  &:hover {
-    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  }
+  ${({ noHover }) =>
+    !noHover &&
+    css`
+      color: ${({ theme }) => theme.tokens.text.default};
+      padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+
+      &.open,
+      &:hover {
+        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
+        background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+      }
+    `}
 `
 
 export const MenuWrapper = styled.div`

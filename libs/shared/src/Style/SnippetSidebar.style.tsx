@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { Ellipsis } from './NodeSelect.style'
+import { BodyFont } from './Search'
 
 export const SnippetCards = styled.div<{ fullHeight?: boolean }>`
   padding: ${({ theme }) => theme.spacing.medium};
@@ -49,7 +49,16 @@ export const SnippetCardFooter = styled.div`
 `
 
 export const SnippetContentPreview = styled.div`
-  color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 1em;
-  ${Ellipsis}
+  color: ${({ theme }) => theme.tokens.text.default};
+  opacity: 0.9;
+  ${BodyFont}
+  margin-top: ${({ theme }) => theme.spacing.small};
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 `

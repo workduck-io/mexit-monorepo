@@ -3,11 +3,12 @@ import { connectToChild, Methods } from 'penpal'
 import { API_BASE_URLS } from '@mexit/core'
 
 import { useInitStore } from '../Stores/useInitStore'
-import { styleSlot } from '../Utils/cs-utils'
+import { getElementById, styleSlot } from '../Utils/cs-utils'
 
 import { messageHandler, MessageType } from './messageHandler'
 
 export let childIframe = undefined
+export let root = undefined
 
 const appendChild = (child) => {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -15,6 +16,7 @@ const appendChild = (child) => {
   } else {
     document.addEventListener('DOMContentLoaded', () => {
       styleSlot.appendChild(child)
+      root = getElementById('ext-side-nav')
     })
   }
 }

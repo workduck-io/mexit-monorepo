@@ -8,7 +8,7 @@ import { IconButton, TitleWithShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { MIcon, RESERVED_NAMESPACES } from '@mexit/core'
-import { Input, TagsLabel, Tooltip } from '@mexit/shared'
+import { Input, LinkShortenAndTagsWrapper, TagsLabel, Tooltip } from '@mexit/shared'
 
 import useLayout from '../../../Hooks/useLayout'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
@@ -184,8 +184,9 @@ const Header = ({
             </SidebarToggle>
           </Tippy>
         </SpaceTitleWrapper>
-        {/*space.pinnedItems && <space.pinnedItems />*/}
-        {showTags && <TagsLabel tags={space?.popularTags} onClick={onTagClick} />}
+        <LinkShortenAndTagsWrapper>
+          {showTags && <TagsLabel tags={space?.popularTags} onClick={onTagClick} />}
+        </LinkShortenAndTagsWrapper>
       </SpaceHeader>
       {showSeparator && <SpaceSeparator />}
     </>

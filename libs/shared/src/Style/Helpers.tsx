@@ -16,23 +16,20 @@ export const ShowOnHoverIconStyles = css`
   position: relative;
   .showOnHoverIcon {
     z-index: 2;
-    position: absolute;
-    right: 0;
     transition: right 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease-in-out;
     background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
-    border-radius: ${({ theme }) => theme.borderRadius.tiny};
     width: 0rem;
     overflow: hidden;
     color: ${({ theme }) => theme.tokens.text.fade};
-    padding: 0.25rem;
-    height: 1.5rem;
     opacity: 0;
   }
 
   &:hover {
     .showOnHoverIcon {
       right: -1.45em;
-      width: 1.5rem;
+      width: 16px;
+      height: 16px;
+      color: ${({ theme }) => theme.tokens.text.default};
       opacity: 1;
     }
   }

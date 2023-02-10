@@ -1,51 +1,51 @@
-import React, { MetaHTMLAttributes, useMemo } from 'react'
+import React, { MetaHTMLAttributes, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
+import linkM from '@iconify/icons-ri/link-m'
+import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
-import { getFavicon, Link, Tag } from '@mexit/core'
+import { apiURLs, getFavicon } from '@mexit/core'
 import {
-  AddTagMenu,
   CopyButton,
+  DefaultMIcons,
+  DisplayShortcut,
   GenericFlex,
-  LinkShortenAndTagsWrapper,
+  Input,
   LinkTitleWrapper,
-  LinkWrapper,
-  ShortenURL,
-  TagsLabel
+  MexIcon,
+  ShortenButton
 } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs } from '../../Hooks/useURLs'
 import { useLinkStore } from '../../Stores/useLinkStore'
-import { getElementById } from '../../Utils/cs-utils'
 
-const ShortenerWrapper = styled(LinkWrapper)`
-  padding: 0;
+const ShortenerWrapper = styled(ShortenButton)`
+  padding: ${({ theme }) => theme.spacing.small};
+  font-size: 14px !important;
 `
 
 const UrlTitleWrapper = styled(LinkTitleWrapper)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 
   background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   color: ${({ theme }) => theme.tokens.text.fade};
   font-size: 1em;
   width: 100%;
   border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding: 0.25rem 0;
+  /* padding: 0.25rem 0; */
+  padding: ${({ theme }) => theme.spacing.small};
 
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-
-  img {
-    margin: 0.25rem 0.5rem;
-  }
 `
 
 const FaviconImage = ({ source }: { source: string }) => {
-  // mog('rendering favicon', { source })
   return <img height="20px" width="20px" src={getFavicon(source)} />
 }
 
@@ -57,11 +57,133 @@ const getGoodMeta = (document: Document) => {
   }
 }
 
+const Text = styled.div`
+  line-height: 2.1;
+`
+
+const StyledInput = styled(Input)`
+  &:focus-visible,
+  :hover,
+  :focus {
+    border: none;
+  }
+  background: none;
+  width: 100%;
+  border: none;
+`
+
+const FadedShortcut = styled.span`
+  font-size: 12px;
+  color: ${({ theme }) => theme.tokens.text.fade};
+  opacity: 0.9;
+`
+
+const validLink = /^[a-z0-9_-]+$/i
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.small};
+`
+
+const StyledShortener = styled.div`
+  display: flex;
+  color: ${({ theme }) => theme.tokens.text.default};
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`
+
+export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlias, setEditable }) => {
+  const [short, setShort] = useState<string>(alias)
+  const workspaceId = useAuthStore((s) => s.getWorkspaceId)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setShort(e.target.value)
+  }
+
+  const reset = () => {
+    setEditable(false)
+    setShort(alias)
+  }
+
+  const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (short && !validLink.test(short)) {
+        toast.error('Invalid alias! Only alphanumeric characters are allowed.')
+        return
+      }
+      if (!isDuplicateAlias(short)) {
+        updateAlias(url, short)
+      } else {
+        toast.error('Alias already exists')
+      }
+
+      reset()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      e.stopPropagation()
+      reset()
+    }
+  }
+
+  const text = useMemo(() => apiURLs.links.shortendLink(alias, workspaceId()) ?? window.location.href, [alias])
+
+  return !editable ? (
+    alias ? (
+      <StyledShortener>
+        <InputContainer>
+          <Icon width={20} height={20} icon={linkM} />
+          <Text>{alias}</Text>
+        </InputContainer>
+        <InputContainer>
+          <MexIcon width={20} height={20} icon={DefaultMIcons.EDIT.value} onClick={() => setEditable(true)} />
+          <CopyButton size="20" text={text} isIcon />
+        </InputContainer>
+      </StyledShortener>
+    ) : (
+      <InputContainer>
+        <ShortenerWrapper isShortend={!!alias} transparent onClick={() => setEditable(true)}>
+          <Icon width={20} height={20} icon={linkM} />
+          Shorten
+        </ShortenerWrapper>
+        <CopyButton size="20" text={text} isIcon />
+      </InputContainer>
+    )
+  ) : (
+    <StyledShortener>
+      <InputContainer>
+        <Icon width={20} height={20} icon={linkM} />
+        <StyledInput
+          id={`shorten-url`}
+          name="ShortenUrlInput"
+          onKeyDown={handleSubmit}
+          onChange={(e) => handleChange(e)}
+          autoFocus
+          placeholder="Enter shorten URL"
+          defaultValue={short}
+        />
+      </InputContainer>
+
+      <GenericFlex>
+        <GenericFlex>
+          <DisplayShortcut shortcut="Enter" />
+          <FadedShortcut>&nbsp;to save</FadedShortcut>
+        </GenericFlex>
+        <MexIcon width={20} height={20} icon={DefaultMIcons.CLEAR.value} onClick={reset} />
+      </GenericFlex>
+    </StyledShortener>
+  )
+}
+
 export const ShortenerComponent = () => {
   const { links } = useLinkStore()
-  const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
-  const { updateAlias, saveLink, isDuplicateAlias, getTags, addTag, removeTag } = useLinkURLs()
-  // const { saveLink: saveLinkAPI } = useURLsAPI()
+  const [editable, setEditable] = useState(false)
+  const { updateAlias, saveLink, isDuplicateAlias } = useLinkURLs()
 
   const link = useMemo(() => {
     const l = links.find((l) => l.url === window.location.href)
@@ -73,14 +195,6 @@ export const ShortenerComponent = () => {
     )
   }, [links, window.location])
 
-  const tags = useMemo(() => {
-    if (!link) return []
-
-    return link.tags?.map((t) => ({ value: t })) ?? []
-  }, [link])
-
-  const toAddTags = getTags(link?.tags)
-
   const onUpdateAlias = (linkurl: string, alias: string) => {
     if (links.find((l) => l.url === linkurl)) {
       updateAlias(linkurl, alias)
@@ -90,59 +204,23 @@ export const ShortenerComponent = () => {
     }
   }
 
-  const onAddNewTag = (tag: Tag) => {
-    // If link doesn't exist yet just save it with the tag provided
-    if (links.find((l) => l.url === link.url)) {
-      addTag(link.url, tag.value)
-    } else {
-      const newLink: Link = { ...link, tags: [tag.value] }
-      saveLink(newLink)
-    }
-  }
-
-  const onAddCreateTag = (tagStr: string) => {
-    // If link doesn't exist yet just save it with the tag provided
-    if (links.find((l) => l.url === link.url)) {
-      addTag(link.url, tagStr)
-    } else {
-      const newLink: Link = { ...link, tags: [tagStr] }
-      saveLink(newLink)
-    }
-  }
-
-  const onRemoveTag = (tagStr: string) => {
-    removeTag(link.url, tagStr)
-  }
-
   return (
-    <ShortenerWrapper>
-      <UrlTitleWrapper>
-        <GenericFlex>
+    <UrlTitleWrapper>
+      {!editable && !link?.alias && (
+        <InputContainer>
           <FaviconImage source={window.location.href} />
           {window.location.hostname}
-        </GenericFlex>
+        </InputContainer>
+      )}
 
-        <CopyButton text={window.location.href} />
-      </UrlTitleWrapper>
-      <LinkShortenAndTagsWrapper>
-        <ShortenURL
-          link={link}
-          workspaceId={getWorkspaceId()}
-          updateAlias={onUpdateAlias}
-          isDuplicateAlias={isDuplicateAlias}
-        />
-        <AddTagMenu
-          root={getElementById('ext-side-nav')}
-          createTag={onAddCreateTag}
-          tags={toAddTags}
-          addTag={onAddNewTag}
-        />
-      </LinkShortenAndTagsWrapper>
-      <TagsLabel
-        tags={tags}
-        onClick={() => console.log('clicked on tags')}
-        onDelete={(val: string) => onRemoveTag(val)}
+      <URLShortner
+        editable={editable}
+        setEditable={setEditable}
+        updateAlias={onUpdateAlias}
+        url={link?.url}
+        alias={link?.alias}
+        isDuplicateAlias={isDuplicateAlias}
       />
-    </ShortenerWrapper>
+    </UrlTitleWrapper>
   )
 }

@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import { Plate, PlatePlugin } from '@udecode/plate'
 import styled from 'styled-components'
 
-import { EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
+import { BodyFont, EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 
@@ -25,8 +25,8 @@ interface EditorPreviewRendererProps {
 
 const PreviewStyles = styled(EditorStyles)<{ noMouseEvents: boolean }>`
   ${({ noMouseEvents }) => noMouseEvents && 'pointer-events: none;'};
-  /* user-select: none; */
-  font-size: 0.9rem;
+  ${BodyFont}
+  overflow-y: auto;
   ${TodoContainer}, button,
   input,
   textarea,
@@ -62,22 +62,6 @@ const EditorPreviewRenderer = ({
 
   // We get memoized plugins
   const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
-  // const setHighlights = useBlockHighlightStore((s) => s.setHighlightedBlockIds)
-  // const { focusBlock } = useFocusBlock()
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (blockId) {
-        // mog('editorPreviewRenderer', { blockId, editorId })
-        // focusBlock(blockId, editorId)
-        // setHighlights([blockId], 'preview')
-      }
-    }, 300)
-
-    return () => {
-      clearTimeout(timeoutId)
-    }
-  }, [blockId, editorId, content])
 
   useEditorChange(editorId, content)
 

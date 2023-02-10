@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { BodyFont } from './Search'
+
 export const FilterWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -21,7 +23,11 @@ export const GenericSection = styled(GenericFlex)`
 `
 
 export const FilterMenuDiv = styled(GenericFlex)`
-  gap: ${({ theme }) => theme.spacing.small};
+  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  ${BodyFont}
+  border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+  border-radius: ${({ theme }) => theme.borderRadius.large};
+  color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const FilterTypeDiv = styled(GenericSection)``
@@ -50,19 +56,19 @@ export const FilterGlobalJoinWrapper = styled(GenericFlex)`
 `
 
 export const SortSectionWrapper = styled.div`
-  display: flex
+  display: flex;
   align-items: center;
   background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 export const SortOrderWrapper = styled(GenericFlex)`
-  padding: ${({ theme }) => theme.spacing.tiny}
+  padding: ${({ theme }) => theme.spacing.tiny};
   padding-right: 0;
   color: ${({ theme }) => theme.tokens.colors.secondary};
 `
 
 export const SortTypeWrapper = styled(GenericFlex)`
-  padding: ${({ theme }) => theme.spacing.tiny}
+  padding: ${({ theme }) => theme.spacing.tiny};
   padding-left: 0;
 `

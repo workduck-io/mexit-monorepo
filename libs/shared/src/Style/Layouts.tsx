@@ -19,7 +19,7 @@ export const Group = styled.span`
   gap: ${({ theme }) => theme.spacing.small};
 `
 
-export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean }>`
+export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean; $cursor?: boolean }>`
   padding: 1px;
   margin: ${({ margin }) => margin};
   &.delete {
@@ -28,11 +28,18 @@ export const MexIcon = styled(Icon)<{ margin?: string; $noHover?: boolean }>`
       color: ${({ theme }) => theme.tokens.colors.red};
     }
   }
+
+  ${({ $cursor }) =>
+    $cursor &&
+    css`
+      cursor: pointer;
+    `}
+
   ${({ $noHover }) =>
     !$noHover &&
     css`
       :hover {
-        background-color: ${(props) => props.theme.tokens.surfaces.s[3]};
+        background-color: ${(props) => props.theme.tokens.surfaces.highlight};
         border-radius: 5px;
       }
     `}

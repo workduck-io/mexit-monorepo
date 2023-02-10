@@ -28,6 +28,7 @@ import { MIcon } from '@mexit/core'
 import {
   FilterMenuDiv,
   getMIcon,
+  Group,
   IconDisplay,
   ItemLabel,
   MenuItemClassName,
@@ -43,10 +44,10 @@ export const ContextMenuItem = forwardRef<
 >(({ label, disabled, icon, ...props }, ref) => {
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
-      <FilterMenuDiv>
+      <Group>
         {icon && <IconDisplay icon={icon} />}
         <ItemLabel>{label}</ItemLabel>
-      </FilterMenuDiv>
+      </Group>
     </MenuItemWrapper>
   )
 })

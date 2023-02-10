@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { ExtInfobarMode, InfoBarWrapper, LoginInfoBar, Tabs } from '@mexit/shared'
+import { ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
@@ -11,7 +11,7 @@ import { getElementById } from '../../Utils/cs-utils'
 import { RHSLogin } from '../Login'
 
 import { DraggableToggle } from './DraggableToggle'
-import { ExtSideNav, SidebarContainer } from './styled'
+import { ExtensionHeaderStyled, ExtSideNav, SidebarContainer, SubHeading } from './styled'
 
 const ExtInfoBarItems = () => {
   const { getRHSTabs } = useRightSidebarItems()
@@ -35,6 +35,17 @@ const ExtInfoBarItems = () => {
   )
 }
 
+const ExtensionHeader = () => {
+  return (
+    <ExtensionHeaderStyled>
+      <Group>
+        <WDLogo height={'28'} width={'28'} />
+        <SubHeading>Mex</SubHeading>
+      </Group>
+    </ExtensionHeaderStyled>
+  )
+}
+
 export const ExtInfoBar = () => {
   const { rhSidebar } = useLayoutStore()
   const { rhSidebarSpringProps } = useSidebarTransition()
@@ -53,6 +64,7 @@ export const ExtInfoBar = () => {
       >
         {authenticated ? (
           <InfoBarWrapper mode={infobar.mode}>
+            <ExtensionHeader />
             <ExtInfoBarItems />
           </InfoBarWrapper>
         ) : (

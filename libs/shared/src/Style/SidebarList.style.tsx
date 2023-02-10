@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Input } from './Form'
 
@@ -67,8 +67,13 @@ export const SidebarListFilter = styled.div<SidebarListWrapperProps>`
   }
 `
 
-export const List = styled.section<{ scrollable?: boolean }>`
-  margin-top: ${({ theme }) => theme.spacing.medium};
+export const List = styled.section<{ scrollable?: boolean; $noMargin?: boolean }>`
+  ${({ $noMargin }) =>
+    !$noMargin &&
+    css`
+      margin-top: ${({ theme }) => theme.spacing.medium};
+    `}
+
   overflow: hidden auto;
   overscroll-behavior: contain;
 `

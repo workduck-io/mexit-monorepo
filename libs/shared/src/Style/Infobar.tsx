@@ -25,7 +25,7 @@ const infoWidths = {
 export const InfoBarWrapper = styled.div<InfoBarWrapperProps>`
   @media (max-width: ${size.wide}) {
     min-width: ${infoWidths.small.normal};
-    max-width: ${infoWidths.small.normal};
+    /* max-width: ${infoWidths.small.normal}; */
   }
   /* @media (min-width: ${size.wide}) {
     min-width: ${infoWidths.small.wide};

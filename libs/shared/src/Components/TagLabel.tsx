@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Icon } from '@iconify/react'
 
 import { Tag } from '@mexit/core'
 
-import { TagFlex, TagFlexText, TagsFlex } from '../Style/TagsRelated.styles'
+import { TagFlex, TagFlexText } from '../Style/TagsRelated.styles'
 
 interface TagLabelProps {
   tag: Tag
@@ -32,18 +32,20 @@ const TagLabel = ({ tag, onClick, onDelete }: TagLabelProps) => {
         }}
       >
         #{tag.value}
+        {onDelete && (
+          <Icon
+            icon="ri:close-line"
+            height={12}
+            width={12}
+            className="showOnHoverIcon"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onDelete(tag.value)
+            }}
+          />
+        )}
       </TagFlexText>
-      {onDelete && (
-        <Icon
-          icon="ri:close-line"
-          className="showOnHoverIcon"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            onDelete(tag.value)
-          }}
-        />
-      )}
     </TagFlex>
   )
 }
@@ -55,13 +57,14 @@ interface TagsLabelProps {
 }
 
 export const TagsLabel = ({ tags, onClick, onDelete }: TagsLabelProps) => {
-  //TODO: Add a default onclick function which will open the tags view
+  const [expand, setExpand] = useState(false)
+
   return (
-    <TagsFlex>
-      {tags.map((tag) => (
+    <>
+      {tags.slice(0, 8).map((tag) => (
         <TagLabel key={`Tags_Label_${tag.value}`} onClick={onClick} onDelete={onDelete} tag={tag} />
       ))}
-    </TagsFlex>
+    </>
   )
 }
 

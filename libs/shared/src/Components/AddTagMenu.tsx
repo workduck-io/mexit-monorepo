@@ -1,13 +1,12 @@
 import React from 'react'
 
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
-import { Icon } from '@iconify/react'
-
 import { Tag } from '@mexit/core'
 
 import { FilterMenuDiv } from '../Style/Filter.style'
 
 import { Menu, MenuItem } from './FloatingElements/Dropdown'
+import { IconDisplay } from './IconDisplay'
+import { DefaultMIcons } from './Icons'
 
 interface AddTagMenuProps {
   tags: Tag[]
@@ -19,13 +18,11 @@ interface AddTagMenuProps {
 export const AddTagClassName = 'new-tag-menu'
 
 export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) => {
-  // mog('AddTagMenu', { tags })
   const onAddNewTag = (tag: Tag) => {
     addTag(tag)
   }
 
   const onCreateNewTag = (tagStr: string) => {
-    // mog('onCreateNewTag', { tagStr })
     createTag(tagStr)
   }
 
@@ -34,10 +31,11 @@ export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) =
       className={AddTagClassName}
       values={
         <FilterMenuDiv>
-          <Icon icon={addCircleLine} />
-          Add Tag
+          <IconDisplay icon={DefaultMIcons.ADD} />
+          Add
         </FilterMenuDiv>
       }
+      noHover
       allowSearch
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}

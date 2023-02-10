@@ -12,7 +12,6 @@ import {
   defaultCopyConverter,
   defaultCopyFilter,
   ELEMENT_TAG,
-  mog,
   parseSnippet,
   Snippet
 } from '@mexit/core'
@@ -60,7 +59,6 @@ export const SnippetsInfoBar = () => {
           const element = event.target
           const range = window.getSelection().getRangeAt(0)
 
-          mog('check', { element, range })
           if (originMatch === 'html') {
             const filterdContent = convertToCopySnippet(snippet.content)
             const convertedContent = convertToCopySnippet(filterdContent, {

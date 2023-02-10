@@ -2,12 +2,21 @@ import { animated } from 'react-spring'
 
 import styled, { css } from 'styled-components'
 
+import { BodyFont } from './Search'
+
 export const TabPanel = styled(animated.div)`
   width: 100%;
   height: 100%;
-
   overflow: hidden;
   border-radius: ${({ theme }) => theme.borderRadius.small};
+`
+
+export const TabHeading = styled.span`
+  ${BodyFont}
+  color: ${({ theme }) => theme.tokens.text.fade};
+  font-weight: 500;
+  opacity: 0.9;
+  line-height: 1.5rem;
 `
 
 export const StyledTab = styled.div.attrs({
@@ -18,8 +27,8 @@ export const StyledTab = styled.div.attrs({
 }>`
   display: inline-flex;
   justify-content: center;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  padding: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.tiny};
+  /* border-radius: ${({ theme }) => theme.borderRadius.small}; */
+  padding: ${({ theme }) => theme.spacing.small} ${({ theme }) => theme.spacing.tiny};
   z-index: 1;
   flex: 1;
 
@@ -27,8 +36,10 @@ export const StyledTab = styled.div.attrs({
     !selected &&
     css`
       :hover {
-        background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+        background: ${({ theme }) => theme.tokens.surfaces.s[2]};
       }
+
+      opacity: 0.9;
     `}
 
   ${({ selected }) =>
@@ -37,8 +48,14 @@ export const StyledTab = styled.div.attrs({
       svg {
         fill: ${({ theme }) => theme.tokens.colors.primary.default};
       }
+
       color: ${({ theme }) => theme.tokens.colors.primary.default};
+
+      ${TabHeading} {
+        color: ${({ theme }) => theme.tokens.text.default};
+      }
     `}
+
   &:focus {
     outline: none;
   }
@@ -53,7 +70,6 @@ export const TabBody = styled(animated.div)<{ selected?: boolean }>`
 `
 
 export const TabsContainer = styled(animated.section)<{ visible?: boolean }>`
-  padding: 0 ${({ theme }) => theme.spacing.small};
   flex: 1;
 
   * {
@@ -73,6 +89,7 @@ export const TabsWrapper = styled.div<{ index: number; total: number }>`
   width: 100%;
   align-items: center;
   gap: 0 ${({ theme }) => theme.spacing.small};
+  border-bottom: 2px solid ${({ theme }) => theme.tokens.surfaces.separator};
 
   ${({ index, total }) =>
     css`
@@ -81,10 +98,10 @@ export const TabsWrapper = styled.div<{ index: number; total: number }>`
         display: block;
         position: absolute;
         width: calc(100% / ${total});
-        height: 4px;
+        height: 2px;
         border-radius: ${({ theme }) => theme.borderRadius.small};
-        top: 46px;
         left: 0;
+        bottom: 0;
         background: ${({ theme }) => theme.tokens.colors.primary.default};
         transform: translateX(${index * 100}%);
         transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1) 0s, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) 0s;
@@ -93,6 +110,8 @@ export const TabsWrapper = styled.div<{ index: number; total: number }>`
 `
 
 export const TabHeaderContainer = styled.div`
-  padding: ${({ theme }) => theme.spacing.small};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
+  background: ${({ theme }) => theme.tokens.surfaces.sidebar};
+
+  /* padding: ${({ theme }) => theme.spacing.small}; */
+  /* border-radius: ${({ theme }) => theme.borderRadius.small}; */
 `
