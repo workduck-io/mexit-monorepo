@@ -81,7 +81,7 @@ export const useCreateNewNote = () => {
     // Filling note content by template if nothing in options and notepath is not Drafts (it may cause problems with capture otherwise)
     const noteContent =
       options?.noteContent ??
-      (nodeMetadata?.templateID && parentNote?.path !== 'Drafts'
+      (nodeMetadata?.templateID && parentNote?.path !== DRAFT_NODE
         ? getSnippet(nodeMetadata.templateID)?.content
         : defaultContent.content)
 

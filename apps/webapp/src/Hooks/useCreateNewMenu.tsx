@@ -4,7 +4,7 @@ import { TreeItem } from '@atlaskit/tree'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
-import { defaultContent, generateSnippetId, isReservedNamespace, MIcon } from '@mexit/core'
+import { defaultContent, DRAFT_NODE, generateSnippetId, isReservedNamespace, MIcon, View } from '@mexit/core'
 import { DefaultMIcons, getMIcon, InteractiveToast } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
@@ -18,6 +18,7 @@ import useModalStore, { ModalsType } from '../Stores/useModalStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useShareModalStore } from '../Stores/useShareModalStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useViewStore } from '../Stores/useViewStore'
 
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
@@ -25,7 +26,7 @@ import { useNavigation } from './useNavigation'
 import { useRefactor } from './useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from './useRouting'
 import { useSnippets } from './useSnippets'
-import { useTaskViews, useViewStore, View } from './useTaskViews'
+import { useViews } from './useViews'
 
 interface MenuListItemType {
   id: string
@@ -66,7 +67,7 @@ export const useCreateNewMenu = () => {
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
-  const { deleteView } = useTaskViews()
+  const { deleteView } = useViews()
   const { addSnippet } = useSnippets()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
@@ -124,7 +125,7 @@ export const useCreateNewMenu = () => {
   }
 
   const handleApplyTemplateOnNote = (item: TreeItem) => {
-    if (item.data.path !== 'Drafts') {
+    if (item.data.path !== DRAFT_NODE) {
       toggleModal(ModalsType.template, item.data)
     } else {
       toast.error('Template cannot be set for Drafts hierarchy')

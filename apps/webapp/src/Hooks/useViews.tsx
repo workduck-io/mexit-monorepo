@@ -1,4 +1,4 @@
-import { mog, View } from '@mexit/core'
+import { View } from '@mexit/core'
 
 import { useViewStore } from '../Stores/useViewStore'
 
@@ -17,19 +17,19 @@ export const useViews = () => {
 
   const addView = async (view: View) => {
     const resp = await saveView(view)
-    mog('After Saving that view', { resp })
+    // mog('After Saving that view', { resp })
     addViewStore(view)
   }
 
   const updateView = async (view: View) => {
     const resp = await saveView(view)
-    mog('After update via saving that view', { resp })
+    // mog('After update via saving that view', { resp })
     updateViewStore(view)
   }
 
   const deleteView = async (viewid: string) => {
     const resp = await deleteViewApi(viewid)
-    mog('After deleting that view', { resp })
+    // mog('After deleting that view', { resp })
     removeViewStore(viewid)
   }
 
