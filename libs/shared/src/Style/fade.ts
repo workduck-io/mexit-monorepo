@@ -18,7 +18,7 @@ export const fadeOut = keyframes`
   }
 `
 
-export const FadeContainer = styled.div<{ fade: boolean }>`
+export const FadeContainer = styled.section<{ fade: boolean }>`
   display: flex;
   flex: 1;
   animation: ${({ fade }) =>

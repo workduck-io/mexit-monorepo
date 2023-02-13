@@ -7,7 +7,7 @@ import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
 import { NodeEditorContent } from '@mexit/core'
-import { EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
+import { EditorStyles, TodoContainer } from '@mexit/shared'
 
 import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
 import { ContextMenuType, useLayoutStore } from '../Stores/useLayoutStore'
@@ -43,6 +43,7 @@ const PreviewStyles = styled(EditorStyles)<{ draftView?: boolean; readOnly?: boo
       * {
         font-size: 0.9rem !important;
       }
+      width: 100%;
     `}
 
   ${({ readOnly }) =>
@@ -163,17 +164,15 @@ const EditorPreviewRenderer = ({
           }
         }}
       >
-        <FadeContainer fade={blockId !== undefined}>
-          <Plate
-            id={editorId}
-            editableProps={editableProps}
-            onChange={onContentChange}
-            initialValue={content}
-            plugins={plugins}
-          >
-            {!readOnly && <MultiComboboxContainer config={comboboxConfig.onKeyDownConfig} />}
-          </Plate>
-        </FadeContainer>
+        <Plate
+          id={editorId}
+          editableProps={editableProps}
+          onChange={onContentChange}
+          initialValue={content}
+          plugins={plugins}
+        >
+          {!readOnly && <MultiComboboxContainer config={comboboxConfig.onKeyDownConfig} />}
+        </Plate>
       </PreviewStyles>
     </ErrorBoundary>
   )

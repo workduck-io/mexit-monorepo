@@ -131,7 +131,7 @@ export const URLShortner = ({ alias, url, editable, isDuplicateAlias, updateAlia
     }
   }
 
-  const text = useMemo(() => apiURLs.links.shortendLink(alias, workspaceId()) ?? window.location.href, [alias])
+  const text = useMemo(() => (alias ? apiURLs.links.shortendLink(alias, workspaceId()) : window.location.href), [alias])
 
   return !editable ? (
     alias ? (

@@ -29,6 +29,8 @@ interface TodoProps {
   /** Is the content of the task being rendered readonly in contentEditable */
   readOnlyContent?: boolean
 
+  showOptions?: boolean
+
   showDelete?: boolean
 
   // If not set, assumed to be false or if the priority doesn't exist
@@ -43,12 +45,12 @@ export const TodoBase = ({
   readOnly,
   readOnlyContent = false,
   oid,
+  showOptions = true,
   controls,
   showDelete = true,
   showPriority = false
 }: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
-  const [showOptions, setShowOptions] = useState(false)
 
   const [animate, setAnimate] = useState(false)
   const { insertInEditor } = useUpdateBlock()
@@ -96,8 +98,6 @@ export const TodoBase = ({
       key={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       id={`BasicTodo_${todo.nodeid}_${todo.id}_${oid}`}
       checked={todo?.metadata.status === TodoStatus.completed}
-      onMouseEnter={() => !readOnly && setShowOptions(true)}
-      onMouseLeave={() => !readOnly && setShowOptions(false)}
     >
       <CheckBoxWrapper id={`TodoStatusFor_${todo.id}_${oid}`} contentEditable={false}>
         <StyledTodoStatus
@@ -119,25 +119,21 @@ export const TodoBase = ({
             }}
             icon="codicon:trash"
             cursor="pointer"
+            $noHover
             className="delete"
             margin="0"
             fontSize={20}
           />
         )}
-        {/*
-          (showOptions || (reminder && !reminder.state.done)) && (<TodoReminder oid={oid} todoid={todo.id} nodeid={parentNodeId} content={getPureContent(todo)} />)
-        */}
+
         {(showOptions || (todo.metadata.priority !== PriorityType.noPriority && showPriority)) && (
           <PrioritySelect
             readOnly={readOnly}
+            isVisible={element || (todo.metadata.priority !== PriorityType.noPriority && showPriority)}
             value={todo.metadata.priority}
             onPriorityChange={onPriorityChange}
-            id={todo.id}
           />
         )}
-        {/* <TaskPriority background="#114a9e" transparent={0.25}>
-            assignee
-          </TaskPriority> */}
       </TodoOptions>
     </TodoContainer>
   )
