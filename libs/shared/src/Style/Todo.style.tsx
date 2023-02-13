@@ -33,15 +33,14 @@ export const TodoActionWrapper = styled.span`
 `
 
 export const TodoActionButton = styled(Group)<{ selected?: boolean }>`
+  color: ${({ theme }) => theme.editor.elements.todo.controls.iconColor};
   ${({ selected }) =>
     selected
       ? css`
-          color: ${({ theme }) => theme.editor.elements.todo.controls.iconColor};
           opacity: 1;
         `
       : css`
           opacity: 0;
-          color: ${({ theme }) => theme.editor.elements.todo.controls.iconColor};
         `}
 `
 
@@ -100,7 +99,7 @@ export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStat
 export const TodoOptions = styled.span`
   position: absolute;
   right: 0;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
