@@ -4,6 +4,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 
 import { TodoStatus } from '@mexit/core'
 
+import { Group } from './Layouts'
 import { CompleteWave, WaterWave } from './Welcome'
 
 export const TodoContainer = styled.div<{ checked?: boolean }>`
@@ -24,25 +25,23 @@ export const TodoContainer = styled.div<{ checked?: boolean }>`
 `
 
 export const TodoActionWrapper = styled.span`
-  padding: 2px;
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 400;
-  ${({ theme }) => generateStyle(theme.editor.elements.todo.controls)};
-  margin-right: 0.5rem;
+  /* ${({ theme }) => generateStyle(theme.editor.elements.todo.controls)}; */
+  margin-right: ${({ theme }) => theme.spacing.small};
 `
 
-export const TodoActionButton = styled.button`
-  padding: 1px 0.4rem;
-  display: flex;
-  align-items: center;
-  border-radius: 1rem;
-  background: none;
-  border: none;
+export const TodoActionButton = styled(Group)<{ selected?: boolean }>`
   color: ${({ theme }) => theme.editor.elements.todo.controls.iconColor};
-  :hover {
-    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-  }
+  ${({ selected }) =>
+    selected
+      ? css`
+          opacity: 1;
+        `
+      : css`
+          opacity: 0;
+        `}
 `
 
 export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStatus; disabled?: boolean }>`
@@ -100,7 +99,7 @@ export const StyledTodoStatus = styled.div<{ animate?: boolean; status: TodoStat
 export const TodoOptions = styled.span`
   position: absolute;
   right: 0;
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

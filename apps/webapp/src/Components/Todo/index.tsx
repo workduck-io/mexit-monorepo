@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 
 import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udecode/plate'
 import { getRootProps } from '@udecode/plate-styled-components'
-import { useReadOnly } from 'slate-react'
+import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
 import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
@@ -15,14 +15,15 @@ const Todo = (props: any) => {
   const rootProps = getRootProps(props)
   const hideDelete = useModalStore((m) => m.open === ModalsType.todo)
 
+  const selected = useSelected()
+  const focused = useFocused()
+
   const readOnly = useReadOnly()
   const editorId = usePlateId()
   // const nodeid = useEditorStore((store) => store.node.nodeid)
   const nodeid = getNodeIdFromEditor(editorId)
 
   const showDelete = !hideDelete && !readOnly
-
-  // mog('Todo', { nodeid, editorId, readOnly, hideDelete, showDelete })
 
   const onDeleteClick = () => {
     const editor = getPlateEditorRef()
@@ -48,6 +49,7 @@ const Todo = (props: any) => {
       readOnlyContent={readOnly}
       oid={'EditorTodo'}
       element={element}
+      showOptions={selected && focused}
       todoid={element?.id}
       showDelete={showDelete}
       showPriority

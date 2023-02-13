@@ -62,7 +62,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     setVisible(false)
   }
 
-  const isNodePublic = notesMetadata.publicAccess
+  const isNodePublic = notesMetadata?.publicAccess
 
   const node = getNode(nodeId, true)
   const contents = getContent(nodeId)

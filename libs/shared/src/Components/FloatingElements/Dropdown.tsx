@@ -62,9 +62,10 @@ export const MenuItem = forwardRef<
     multiSelect?: boolean
     selected?: boolean
     disabled?: boolean
+    color?: string
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
->(({ label, disabled, count, icon, multiSelect, selected, ...props }, ref) => {
+>(({ label, disabled, count, color, icon, multiSelect, selected, ...props }, ref) => {
   // mog('MenuItem', { label, disabled, count, icon, multiSelect, selected, props })
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
@@ -74,7 +75,7 @@ export const MenuItem = forwardRef<
             {selected ? <Icon icon="ri:checkbox-fill" /> : <Icon icon="ri:checkbox-blank-line" />}
           </MultiSelectIcon>
         )}
-        <IconDisplay icon={icon} />
+        <IconDisplay icon={icon} color={color} />
         <ItemLabel>{label}</ItemLabel>
       </FilterMenuDiv>
       {count && <MenuItemCount>{count}</MenuItemCount>}
@@ -114,6 +115,9 @@ interface Props {
 
   noHover?: boolean
 
+  onMouseEnter?: (e: any) => void
+  onMouseLeave?: (e: any) => void
+
   /**
    * Show Button with Border
    */
@@ -143,6 +147,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
       multiSelect,
       allowSearch,
       onCreate,
+      onMouseEnter,
+      onMouseLeave,
       handleKeyDown,
       searchPlaceholder,
       className,
@@ -318,6 +324,8 @@ export const MenuComponent = forwardRef<any, Props & React.HTMLProps<HTMLButtonE
         <RootMenuWrapper
           noHover={noHover}
           border={border}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           {...getReferenceProps({
             ...props,
             ref: mergedReferenceRef,

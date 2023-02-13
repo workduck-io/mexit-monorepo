@@ -4,6 +4,8 @@ import { Button } from '@workduck-io/mex-components'
 
 import { Relative } from '../Components/RelativeTime'
 
+import { BodyFont } from './Search'
+
 export const Links = styled.a`
   text-decoration: none;
   color: ${({ theme }) => theme.tokens.text.default};
@@ -109,8 +111,7 @@ export const HighlightGroupToggleButton = styled(Button)`
   flex-direction: row;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 1rem;
+  ${BodyFont}
   box-shadow: none;
   svg {
     flex-shrink: 0;
@@ -118,6 +119,7 @@ export const HighlightGroupToggleButton = styled(Button)`
 `
 
 export const HighlightCount = styled.div`
+  ${BodyFont};
   color: ${({ theme }) => theme.tokens.text.heading};
   font-weight: 600;
 `

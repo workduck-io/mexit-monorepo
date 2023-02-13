@@ -1,44 +1,62 @@
-import React from 'react'
-import { useContextMenu } from 'react-contexify'
+import React, { useState } from 'react'
 
-import Tippy from '@tippyjs/react'
+import { useTheme } from 'styled-components'
 
-import { Priority,PriorityDataType, PriorityType } from '@mexit/core'
-import { MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
-
-import { getElementById } from '../../../Utils/cs-utils'
-
-import PriorityMenu from './PriorityMenu'
+import { Priority, PriorityDataType, PriorityType } from '@mexit/core'
+import { getMIcon, Menu, MenuItem, MexIcon, TodoActionButton, TodoActionWrapper } from '@mexit/shared'
 
 interface PriorityMenuSelect {
-  id: string
   value: PriorityType
   onPriorityChange: (priority: PriorityDataType) => void
   withLabel?: boolean
+  readOnly?: boolean
+  isVisible?: boolean
 }
 
-const PrioritySelect = ({ id, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
-  const menuId = `${id}-priority-menu`
-  const { show } = useContextMenu({ id: menuId })
+const PriorityMenuButton = ({ color, value, selected, withLabel }) => {
   return (
-    <>
-      <TodoActionWrapper onClick={show}>
-        <Tippy
-          delay={100}
-          interactiveDebounce={100}
-          placement="bottom"
-          appendTo={() => getElementById('sputlit-main')}
-          theme="mex"
-          content={Priority[value]?.title}
-        >
-          <TodoActionButton>
-            <MexIcon onClick={show} icon={Priority[value]?.icon} fontSize={20} cursor="pointer" />
-            {withLabel && <span>{Priority[value]?.title}</span>}
-          </TodoActionButton>
-        </Tippy>
-      </TodoActionWrapper>
-      <PriorityMenu id={menuId} onClick={onPriorityChange} />
-    </>
+    <TodoActionButton selected={selected}>
+      <MexIcon color={color} $noHover icon={Priority[value]?.icon} fontSize={20} cursor="pointer" />
+      {withLabel && <span>{Priority[value]?.title}</span>}
+    </TodoActionButton>
+  )
+}
+
+const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabel = false }: PriorityMenuSelect) => {
+  const [selected, setSelected] = useState(false)
+
+  const onPriorityChangeHide = (priority: PriorityDataType) => {
+    onPriorityChange(priority)
+  }
+
+  const theme = useTheme()
+  const iconColor = theme.editor.elements.todo.controls.iconColor
+
+  if (readOnly) {
+    return <PriorityMenuButton selected={selected || isVisible} color={iconColor} value={value} withLabel={withLabel} />
+  }
+
+  return (
+    <TodoActionWrapper>
+      <Menu
+        onMouseEnter={() => setSelected(true)}
+        onMouseLeave={() => setSelected(false)}
+        values={
+          <PriorityMenuButton selected={isVisible || selected} color={iconColor} value={value} withLabel={withLabel} />
+        }
+      >
+        {Object.values(Priority).map((priority) => {
+          return (
+            <MenuItem
+              icon={getMIcon('ICON', priority.icon)}
+              color={iconColor}
+              onClick={() => onPriorityChangeHide(priority)}
+              label={priority.title}
+            />
+          )
+        })}
+      </Menu>
+    </TodoActionWrapper>
   )
 }
 

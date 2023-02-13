@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { getNextStatus,PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
+import { getNextStatus, PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
 
 import { useTodoStore } from '../../../Stores/useTodoStore'
@@ -19,12 +19,22 @@ interface TodoProps {
   todoid: string
   oid?: string
   controls?: TodoControls
+  element?: any
   children?: React.ReactNode
   readOnly?: boolean
   showDelete?: boolean
 }
 
-export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, controls, showDelete = true }: TodoProps) => {
+export const TodoBase = ({
+  parentNodeId,
+  element,
+  todoid,
+  children,
+  readOnly,
+  oid,
+  controls,
+  showDelete = true
+}: TodoProps) => {
   // mog('Todo', { parentNodeId, todoid, readOnly })
   const [showOptions, setShowOptions] = useState(false)
 
@@ -89,15 +99,15 @@ export const TodoBase = ({ parentNodeId, todoid, children, readOnly, oid, contro
             fontSize={20}
           />
         )}
-        {/*
-          (showOptions || (reminder && !reminder.state.done)) && (<TodoReminder oid={oid} todoid={todo.id} nodeid={parentNodeId} content={getPureContent(todo)} />)
-        */}
+
         {(showOptions || todo.metadata.priority !== PriorityType.noPriority) && (
-          <PrioritySelect value={todo.metadata.priority} onPriorityChange={onPriorityChange} id={todo.id} />
+          <PrioritySelect
+            readOnly={readOnly}
+            isVisible={element || todo.metadata.priority !== PriorityType.noPriority}
+            value={todo.metadata.priority}
+            onPriorityChange={onPriorityChange}
+          />
         )}
-        {/* <TaskPriority background="#114a9e" transparent={0.25}>
-            assignee
-          </TaskPriority> */}
       </TodoOptions>
     </TodoContainer>
   )
