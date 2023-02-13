@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.10
+
+### Patch Changes
+
+- 6e19e9a0: React Contexify Dependency removed, Editor Preview Rendering Inline Components Fixes
+
 ## 0.19.9
 
 ### Patch Changes

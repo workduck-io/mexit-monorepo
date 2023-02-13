@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.16
+
+### Patch Changes
+
+- 6e19e9a0: React Contexify Dependency removed, Editor Preview Rendering Inline Components Fixes
+
 ## 0.22.15
 
 ### Patch Changes
