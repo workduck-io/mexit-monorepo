@@ -34,7 +34,7 @@ export const useMentionStore = create<MentionStore>(
             })
           } else {
             mentionable.access = mergeAccess(exists.access, mentionable.access)
-            set({ mentionable: [...get().mentionable.filter((iu) => iu.userID !== mentionable.userID), mentionable] })
+            set({ mentionable: [...get().mentionable.filter((iu) => iu.id !== mentionable.id), mentionable] })
           }
         },
         addInvitedUser: (invitedUser: InvitedUser) => {
@@ -96,7 +96,7 @@ export const addAccessToUser = (user: any, id: string, context: ShareContext, ac
 export const getUserFromUseridHookless = (userid: string) => {
   const mentionable = useMentionStore.getState().mentionable
 
-  const user = mentionable.find((user) => user.userID === userid)
+  const user = mentionable.find((user) => user.id === userid)
 
   if (user) return user
 }

@@ -2,7 +2,7 @@ import { InvitedUser, Mentionable } from '../Types/Mentions'
 
 const randomUser = (s: string) => ({
   type: 'mentionable' as const,
-  userID: `USER_${s}`,
+  id: `USER_${s}`,
   alias: s,
   email: `${s}@gmail.com`,
   name: s.toUpperCase(),
