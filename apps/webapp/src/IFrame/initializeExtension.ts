@@ -9,8 +9,6 @@ const updateDwindleAuth = (extension) => {
     updatedAt: +new Date(),
     fromLocal: true
   })
-
-  console.log('AUTH', { authAWS })
 }
 
 const updateUserInfo = (extension) => {
