@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm } from 'react-hook-form'
 
 import deleteBack2Line from '@iconify/icons-ri/delete-back-2-line'
@@ -42,7 +41,7 @@ const UserPage = () => {
 
   const onUpdateSave = async (data: UpdateUserFormData) => {
     // mog('onUpdateSave', { data })
-    await updateUserInfo(currentUserDetails.userID, data.name, data.alias)
+    await updateUserInfo(currentUserDetails.id, data.name, data.alias)
     updateUserForm.reset()
   }
 
@@ -100,8 +99,8 @@ const UserPage = () => {
             <Info>
               <InfoLabel>User ID</InfoLabel>
               <InfoData>
-                <InfoDataText>{currentUserDetails?.userID}</InfoDataText>
-                <CopyButton text={currentUserDetails?.userID}></CopyButton>
+                <InfoDataText>{currentUserDetails?.id}</InfoDataText>
+                <CopyButton text={currentUserDetails?.id}></CopyButton>
               </InfoData>
             </Info>
           )}

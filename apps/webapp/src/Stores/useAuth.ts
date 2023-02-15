@@ -182,7 +182,7 @@ export const useAuthentication = () => {
     const userDetails = {
       email: email,
       alias: name,
-      userID: userId,
+      id: userId,
       name: name
     }
 
@@ -223,7 +223,7 @@ export const useInitializeAfterAuth = () => {
                   const userDetails = {
                     email: email,
                     alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
-                    userID: res.id,
+                    id: res.id,
                     name
                   }
                   const workspaceDetails = { id: res.activeWorkspace, name: 'WORKSPACE_NAME' }
@@ -240,7 +240,7 @@ export const useInitializeAfterAuth = () => {
             })
 
       addUser({
-        userID: userDetails.userID,
+        id: userDetails.id,
         email: userDetails.email,
         name: userDetails.name,
         alias: userDetails.alias

@@ -1,4 +1,4 @@
-import React, { useEffect,useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import toast from 'react-hot-toast'
 
 import { Icon } from '@iconify/react'
@@ -18,7 +18,8 @@ import {
   SMentionRoot,
   TooltipAlias,
   TooltipMail,
-  Username} from '@mexit/shared'
+  Username
+} from '@mexit/shared'
 
 import { ProfileImage } from '../../../Components/User/ProfileImage'
 import { useUserService } from '../../../Hooks/API/useUserAPI'
@@ -51,7 +52,7 @@ export const MentionTooltipComponent = ({ user, access, hideAccess }: MentionToo
     }
     if (user?.type === 'mentionable') {
       prefillShareModal('invite', 'note', {
-        userid: user?.userID
+        userid: user?.id
       })
     }
   }

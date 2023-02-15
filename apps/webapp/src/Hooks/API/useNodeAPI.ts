@@ -174,7 +174,7 @@ export const useApi = () => {
           ? {
               ...origMetadata,
               updatedAt: Date.now(),
-              lastEditedBy: currentUser.userID
+              lastEditedBy: currentUser.id
             }
           : origMetadata
 

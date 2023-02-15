@@ -79,8 +79,8 @@ const Metadata = ({
 
     const usersWithStatus = sharedUsersOfNode
       .map((user) => {
-        const isUserActive = currentUser?.userID === user.userID || activeUsers?.includes(user.userID)
-        return { userId: user.userID, active: isUserActive }
+        const isUserActive = currentUser?.id === user.id || activeUsers?.includes(user.id)
+        return { userId: user.id, active: isUserActive }
       })
       .sort((a, b) => Number(a.active) - Number(b.active))
 

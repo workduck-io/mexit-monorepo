@@ -34,7 +34,7 @@ const Banner: React.FC<BannerType> = ({
   const currentUser = useAuthStore((s) => s.userDetails)
   const activeUsers = useRouteStore((s) => Settify(s.routes[route]?.users))
 
-  const isUserOnly = activeUsers.includes(currentUser?.userID)
+  const isUserOnly = activeUsers.includes(currentUser?.id)
 
   return (
     <BannerContainer>

@@ -21,7 +21,7 @@ export const useComments = () => {
           ...comments,
           {
             ...comment,
-            userId: currentUserDetails.userID,
+            userId: currentUserDetails.id,
             metadata: {
               createdAt: res ? new Date((res as any)?.created).getTime() : new Date().getTime()
             }

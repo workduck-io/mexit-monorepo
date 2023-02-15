@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-import { AccessLevel, IDBStorage, InvitedUser, Mentionable, mog,ShareContext, UserAccessTable } from '@mexit/core'
+import { AccessLevel, IDBStorage, InvitedUser, Mentionable, mog, ShareContext, UserAccessTable } from '@mexit/core'
 import { mergeAccess } from '@mexit/shared'
 
 interface MentionStore {
@@ -32,7 +32,7 @@ export const useMentionStore = create<MentionStore>(
             })
           } else {
             exists.access = mergeAccess(exists.access, mentionable.access)
-            set({ mentionable: [...get().mentionable.filter((iu) => iu.userID !== mentionable.userID), exists] })
+            set({ mentionable: [...get().mentionable.filter((iu) => iu.id !== mentionable.id), exists] })
           }
         },
         addInvitedUser: (invitedUser: InvitedUser) => {
@@ -91,10 +91,10 @@ export const addAccessToUser = (user: any, id: string, context: ShareContext, ac
   return user
 }
 
-export const getUserFromUseridHookless = (userid: string) => {
+export const getUserFromUseridHookless = (userId: string) => {
   const mentionable = useMentionStore.getState().mentionable
 
-  const user = mentionable.find((user) => user.userID === userid)
+  const user = mentionable.find((user) => user.id === userId)
 
   if (user) return user
 }
