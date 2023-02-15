@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.11
+
+### Patch Changes
+
+- 0c5e7b85: Share namespace fixes
+
 ## 0.19.10
 
 ### Patch Changes
