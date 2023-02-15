@@ -63,7 +63,6 @@ export const useUserService = () => {
     if (!match) return { id }
     try {
       return await API.user.getByID(id).then((resp: any) => {
-        mog('Response', { data: resp })
         if (resp?.metadata?.email && resp?.name) {
           addUser({
             id,

@@ -19,9 +19,7 @@ export const userCacheStoreConstructor = (set, get) => ({
     set({ cache: users })
   },
   addUser: (user: CacheUser) => {
-    const cache = get().cache
-    const isUserAbsent = cache.find((u) => u.id === user.id) === undefined
-    if (isUserAbsent) set({ cache: [...get().cache, user] })
+    set({ cache: [...get().cache, user] })
   },
   getUser: (find: { email?: string; id?: string }): CacheUser | undefined => {
     const cache = get().cache
