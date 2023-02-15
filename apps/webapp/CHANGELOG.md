@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.17
+
+### Patch Changes
+
+- 0c5e7b85: Share namespace fixes
+
 ## 0.22.16
 
 ### Patch Changes
