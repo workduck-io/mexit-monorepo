@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -45,7 +45,8 @@ export const InviteModalContent = () => {
 
   const readOnly = useMemo(() => {
     const access = accessWhenShared(node.nodeid)
-    if (access) return access.note !== 'MANAGE' && access.space !== 'MANAGE'
+    if (access?.note) return access.note !== 'OWNER' && access.note !== 'MANAGE'
+    if (access?.space) return access.space !== 'OWNER' && access.space !== 'MANAGE'
 
     // By default, if no access -> user is the owner
     return false
@@ -74,27 +75,27 @@ export const InviteModalContent = () => {
       const details = await getUserDetails(data.email)
       mog('data', { data, details, node })
 
-      if (details.userId !== undefined) {
+      if (details.id !== undefined) {
         // Give permission here
-        if (details.userId === currentUserDetails.userID) {
+        if (details.id === currentUserDetails.id) {
           toast("Can't Invite Yourself")
           closeModal()
           return
         }
         if (data?.access?.value !== 'NONE') {
-          const resp = await grantUsersPermission(node.nodeid, [details.userId], access)
+          const resp = await grantUsersPermission(node.nodeid, [details.id], access)
           mog('UserPermission given', { details, resp })
-          addMentionable(details.alias, data.email, details.userId, details.name, {
+          addMentionable(details.alias, data.email, details.id, details.name, {
             context,
             id: node.nodeid,
             access
           })
         } else {
           // Case for inserting mention without sharing
-          addMentionable(details.alias, data.email, details.userId, details.name)
+          addMentionable(details.alias, data.email, details.id, details.name)
         }
         if (!sModalData.userid) {
-          replaceUserMention(editor, data.alias, details.userId)
+          replaceUserMention(editor, data.alias, details.id)
         }
         if (data?.access?.value !== 'NONE') {
           toast(`Shared with: ${data.email}`)

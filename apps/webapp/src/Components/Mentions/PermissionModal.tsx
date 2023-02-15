@@ -111,17 +111,17 @@ export const PermissionModalContent = () => {
     mog('onrevokeAccess', { userid })
 
     // Change the user and add to changedUsers
-    const changedUser = changedUsers?.find((u) => u.userID === userid)
-    const dataUser = sharedUsers?.find((u) => u.userID === userid)
+    const changedUser = changedUsers?.find((u) => u.id === userid)
+    const dataUser = sharedUsers?.find((u) => u.id === userid)
 
     if (changedUser) {
       const hasBeenRevoked = changedUser.change.includes('revoke')
       if (hasBeenRevoked) {
         changedUser.change = changedUser.change.filter((p) => p !== 'revoke')
-        setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
+        setChangedUsers([...changedUsers.filter((u) => u.id !== userid), changedUser])
       } else {
         changedUser.change.push('revoke')
-        setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
+        setChangedUsers([...changedUsers.filter((u) => u.id !== userid), changedUser])
       }
     } else if (dataUser) {
       const changeUser = { ...dataUser, change: ['revoke' as const] }
@@ -132,8 +132,8 @@ export const PermissionModalContent = () => {
   const onPermissionChange = (userid: string, access: AccessLevel) => {
     mog('onPermissionChange', { userid, access })
     // Change the user and add to changedUsers
-    const changedUser = changedUsers?.find((u) => u.userID === userid)
-    const dataUser = sharedUsers?.find((u) => u.userID === userid)
+    const changedUser = changedUsers?.find((u) => u.id === userid)
+    const dataUser = sharedUsers?.find((u) => u.id === userid)
 
     // TODO: Filter for the case when user permission is reverted to the og one
     if (changedUser) {
@@ -144,22 +144,22 @@ export const PermissionModalContent = () => {
         if (changedUser.change.includes('permission')) {
           changedUser.change = changedUser.change.filter((c) => c !== 'permission')
           if (changedUser.change.length !== 0) {
-            setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
+            setChangedUsers([...changedUsers.filter((u) => u.id !== userid), changedUser])
           } else {
-            setChangedUsers([...changedUsers.filter((u) => u.userID !== userid)])
+            setChangedUsers([...changedUsers.filter((u) => u.id !== userid)])
           }
         }
       } else if (prevAccess !== access) {
         changedUser.access[context][id] = access
         changedUser.change.push('permission')
-        setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
+        setChangedUsers([...changedUsers.filter((u) => u.id !== userid), changedUser])
       } else {
         if (changedUser.change.includes('permission')) {
           changedUser.change = changedUser.change.filter((c) => c !== 'permission')
           if (changedUser.change.length !== 0) {
-            setChangedUsers([...changedUsers.filter((u) => u.userID !== userid), changedUser])
+            setChangedUsers([...changedUsers.filter((u) => u.id !== userid), changedUser])
           } else {
-            setChangedUsers([...changedUsers.filter((u) => u.userID !== userid)])
+            setChangedUsers([...changedUsers.filter((u) => u.id !== userid)])
           }
         }
       }
@@ -187,13 +187,13 @@ export const PermissionModalContent = () => {
     const newPermissions: { [userid: string]: AccessLevel } = withoutRevokeChanges
       .filter((u) => u.change.includes('permission'))
       .reduce((acc, user) => {
-        return { ...acc, [user.userID]: user.access[context][id] }
+        return { ...acc, [user.id]: user.access[context][id] }
       }, {})
 
     const revokedUsers = changedUsers
       .filter((u) => u.change.includes('revoke'))
       .reduce((acc, user) => {
-        acc.push(user.userID)
+        acc.push(user.id)
         return acc
       }, [])
 
@@ -254,13 +254,13 @@ export const PermissionModalContent = () => {
 
             <tbody>
               {sharedUsers.map((user) => {
-                const hasChanged = changedUsers?.find((u) => u.userID === user.userID)
+                const hasChanged = changedUsers?.find((u) => u.id === user.id)
                 const access = getUserAccess(hasChanged ?? user, context, id, namespaceid)
                 const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
-                const isCurrent = user.userID === currentUserDetails.userID
+                const isCurrent = user.id === currentUserDetails.id
 
                 return (
-                  <ShareRow hasChanged={!!hasChanged} key={`${user.userID}`} isRevoked={isRevoked}>
+                  <ShareRow hasChanged={!!hasChanged} key={`${user.id}`} isRevoked={isRevoked}>
                     <ShareAlias hasChanged={!!hasChanged}>
                       <ShareAliasWithImage>
                         <ProfileImage email={user.email} size={24} />
@@ -274,7 +274,7 @@ export const PermissionModalContent = () => {
                         <ShareOwnerTag>Owner</ShareOwnerTag>
                       ) : (
                         <StyledCreatatbleSelect
-                          onChange={(access) => onPermissionChange(user.userID, access.value)}
+                          onChange={(access) => onPermissionChange(user.id, access.value)}
                           defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
                           options={permissionOptions}
                           closeMenuOnSelect={true}
@@ -287,7 +287,7 @@ export const PermissionModalContent = () => {
                         {!isCurrent && access !== 'OWNER' && (
                           <IconButton
                             disabled={readOnly}
-                            onClick={() => onRevokeAccess(user.userID)}
+                            onClick={() => onRevokeAccess(user.id)}
                             icon={deleteBin6Line}
                             title="Remove"
                           />

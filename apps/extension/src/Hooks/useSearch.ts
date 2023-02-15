@@ -41,9 +41,9 @@ export const useSearchExtra = () => {
   const getSearchExtra = (): SearchRepExtra => {
     const ilink_rep = ilinks.reduce((p, ilink) => ({ ...p, [ilink.nodeid]: ilink.path }), {})
 
-    const mention_rep = mentionable.reduce((p, mention) => ({ ...p, [mention.userID]: mention.alias }), {})
+    const mention_rep = mentionable.reduce((p, mention) => ({ ...p, [mention.id]: mention.alias }), {})
     const invited_rep = invited.reduce((p, invited) => ({ ...p, [invited.alias]: invited.alias }), {})
-    const self_rep = { ...invited_rep, ...mention_rep, [currentUserDetails?.userID]: currentUserDetails?.alias }
+    const self_rep = { ...invited_rep, ...mention_rep, [currentUserDetails?.id]: currentUserDetails?.alias }
 
     return {
       [ELEMENT_ILINK]: {

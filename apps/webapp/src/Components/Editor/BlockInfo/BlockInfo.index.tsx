@@ -104,7 +104,7 @@ export const BlockInfo = (props: any) => {
     // get whether the block has comment
     // And return true
     // mog('getting comments', { comments, instanceId })
-    const userHasComments = !!comments.some((c) => c.userId === currentUserDetail?.userID)
+    const userHasComments = !!comments.some((c) => c.userId === currentUserDetail?.id)
     return { comments, userHasComments }
   }, [element?.id, interactive, hover, instanceId])
 
@@ -119,7 +119,7 @@ export const BlockInfo = (props: any) => {
       .filter((r) => r.count > 0)
       .slice(0, 3)
     // mog('previewReactions', { previewReactions, reactions })
-    const userHasReacted = !!reactions.find((r) => r.userId?.includes(useAuthStore.getState().userDetails?.userID))
+    const userHasReacted = !!reactions.find((r) => r.userId?.includes(useAuthStore.getState().userDetails?.id))
     return { reactions, previewReactions, userHasReacted }
   }, [element?.id, interactive, hover, instanceId])
   const hasReactions = useMemo(() => reactions.length > 0, [reactions])
@@ -135,7 +135,7 @@ export const BlockInfo = (props: any) => {
     const blockId = element?.id
     const currentUserDetail = useAuthStore.getState().userDetails
     const existingUserReaction = reactions.find(
-      (r) => r.userId?.includes(currentUserDetail.userID) && r.reaction.value === reactionVal.value
+      (r) => r.userId?.includes(currentUserDetail.id) && r.reaction.value === reactionVal.value
     )
     if (existingUserReaction) {
       await deleteReaction(existingUserReaction)

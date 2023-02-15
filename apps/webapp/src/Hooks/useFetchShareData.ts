@@ -39,7 +39,7 @@ export const useFetchShareData = () => {
 
     // mog('getUserAccess', { usersWithAccess })
     const UserAccessDetails = usersWithAccess.reduce((p, n) => {
-      const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ id, userid: uid, access }))
+      const rawUsers = Object.entries(n.users).map(([uid, access]) => ({ id, userId: uid, access }))
       return [...p, ...rawUsers]
     }, [])
 
@@ -49,7 +49,7 @@ export const useFetchShareData = () => {
     const mentionableU = (
       await runBatch([
         ...UserAccessDetails.map(async (u) => {
-          const uDetails = await getUserDetailsUserId(u.userid)
+          const uDetails = await getUserDetailsUserId(u.userId)
           return { ...u, email: uDetails.email, alias: uDetails.alias }
         }),
 
@@ -57,7 +57,6 @@ export const useFetchShareData = () => {
           const uDetails = await getUserDetailsUserId(node.owner)
           return {
             access: 'OWNER',
-            userid: uDetails.userID,
             id,
             email: uDetails.email,
             name: uDetails.name,
@@ -65,17 +64,14 @@ export const useFetchShareData = () => {
           }
         })
       ])
-    ).fulfilled
-      // .filter((p) => p.status === 'fulfilled')
-      .reduce((arr, p: any) => {
-        // mog('p2', { p })
-        return [...arr, p as MUsersRaw]
-      }, [])
-    // .filter((u) => u.userid !== userDetails?.userID)
+    ).fulfilled.reduce((arr, p: any) => {
+      return [...arr, p as MUsersRaw]
+    }, [])
+    // .filter((u) => u.userid !== userDetails?.id)
 
     mog('Fetched users for the shared item', { id, context, mentionableU })
     mentionableU.forEach((u) =>
-      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userid, u.name, {
+      addMentionable(u.alias ?? getEmailStart(u.email), u.email, u.userId, u.name, {
         context,
         id: id,
         access: u.access

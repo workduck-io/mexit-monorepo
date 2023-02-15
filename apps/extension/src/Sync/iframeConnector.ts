@@ -40,7 +40,6 @@ const messageBroadcaster = () => {
   })
 
   const handleIframeLoad = async () => {
-    console.log({ hello: connection })
     connection.promise
       .then((child) => {
         childIframe = child

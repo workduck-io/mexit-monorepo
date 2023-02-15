@@ -9,7 +9,7 @@ import useRouteStore, { BannerType } from '../Stores/useRouteStore'
 import { SocketActionType } from '../Types/Socket'
 
 const useSocket = () => {
-  const userId = useAuthStore((s) => s.userDetails?.userID)
+  const userId = useAuthStore((s) => s.userDetails?.id)
   const idToken = useDwindleStore((s) => s.userCred?.token)
 
   const addUser = useRouteStore((s) => s.addUserInRoute)

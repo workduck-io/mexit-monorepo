@@ -42,11 +42,12 @@ export const useAuthentication = () => {
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
 
   const initContents = useContentStore((store) => store.initContents)
+  const clearUsersCache = useUserCacheStore((s) => s.clearCache)
   const clearUserPreferences = useUserPreferenceStore((store) => store.clear)
   const clearSnippets = useSnippetStore((s) => s.clear)
-  const resetDataStore = useDataStore().resetDataStore
-  const resetPublicNodes = usePublicNodeStore().reset
-  const clearRecents = useRecentsStore().clear
+  const resetDataStore = useDataStore((s) => s.resetDataStore)
+  const resetPublicNodes = usePublicNodeStore((s) => s.reset)
+  const clearRecents = useRecentsStore((s) => s.clear)
   const clearMentions = useMentionStore((m) => m.reset)
   const clearComments = useCommentStore((s) => s.clear)
   const clearReactions = useReactionStore((s) => s.clear)
@@ -55,8 +56,8 @@ export const useAuthentication = () => {
   const clearMetadataStore = useMetadataStore((s) => s.reset)
   const clearPromptStore = usePromptStore((s) => s.reset)
 
-  const clearReminders = useReminderStore().clearReminders
-  const clearTodos = useTodoStore().clearTodos
+  const clearReminders = useReminderStore((r) => r.clearReminders)
+  const clearTodos = useTodoStore((s) => s.clearTodos)
   const resetShortcuts = useHelpStore((s) => s.reset)
 
   const login = async (email: string, password: string): Promise<LoginResult> => {
@@ -119,6 +120,7 @@ export const useAuthentication = () => {
     resetShortcuts()
     clearTodos()
     clearViews()
+    clearUsersCache()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {
@@ -182,7 +184,7 @@ export const useAuthentication = () => {
     const userDetails = {
       email: email,
       alias: name,
-      userID: userId,
+      id: userId,
       name: name
     }
 
@@ -223,7 +225,7 @@ export const useInitializeAfterAuth = () => {
                   const userDetails = {
                     email: email,
                     alias: res.alias ?? res.metadata?.alias ?? res.properties?.alias ?? name,
-                    userID: res.id,
+                    id: res.id,
                     name
                   }
                   const workspaceDetails = { id: res.activeWorkspace, name: 'WORKSPACE_NAME' }
@@ -240,7 +242,7 @@ export const useInitializeAfterAuth = () => {
             })
 
       addUser({
-        userID: userDetails.userID,
+        id: userDetails.id,
         email: userDetails.email,
         name: userDetails.name,
         alias: userDetails.alias

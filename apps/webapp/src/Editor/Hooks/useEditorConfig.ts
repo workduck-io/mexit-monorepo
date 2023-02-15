@@ -123,16 +123,16 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
     return userDetails
       ? [
           {
-            value: userDetails.userID,
+            value: userDetails.id,
             text: `${userDetails.alias} (you)`,
             icon,
             type: QuickLinkType.mentions
           },
           ...mentionable
             .filter((m) => m.alias !== undefined)
-            .filter((m) => m.userID !== userDetails.userID)
+            .filter((m) => m.id !== userDetails.id)
             .map((m) => ({
-              value: m.userID,
+              value: m.id,
               text: m.alias,
               icon,
               type: QuickLinkType.mentions

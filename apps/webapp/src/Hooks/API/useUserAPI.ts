@@ -11,13 +11,13 @@ import { useAPIHeaders } from './useAPIHeaders'
 
 export interface TempUser {
   email: string
-  userId?: string
+  id?: string
   alias?: string
   name?: string
 }
 
 export interface TempUserUserID {
-  userID: string
+  id: string
   email?: string
   alias?: string
   name?: string
@@ -43,7 +43,7 @@ export const useUserService = () => {
 
   const getUserDetails = async (email: string): Promise<TempUser> => {
     const user = getUser({ email })
-    if (user) return { ...user, userId: user.userID }
+    if (user) return user
 
     try {
       return (await API.user.getByMail(email)) as TempUser
@@ -53,48 +53,47 @@ export const useUserService = () => {
     }
   }
 
-  const getUserDetailsUserId = async (userID: string): Promise<TempUserUserID> => {
+  const getUserDetailsUserId = async (id: string): Promise<TempUserUserID> => {
     // Get from cache
-    const user = getUser({ userID })
+    const user = getUser({ id })
     if (user) return user
 
     // Check if the userid is of valid format
-    const match = userID.match(USER_ID_REGEX)
-    if (!match) return { userID }
+    const match = id.match(USER_ID_REGEX)
+    if (!match) return { id }
     try {
-      return await API.user.getByID(userID).then((resp: any) => {
-        mog('Response', { data: resp })
+      return await API.user.getByID(id).then((resp: any) => {
         if (resp?.metadata?.email && resp?.name) {
           addUser({
-            userID,
+            id,
             email: resp?.metadata?.email,
             alias: resp?.alias ?? resp?.name,
             name: resp?.name
           })
         }
         return {
-          userID,
+          id,
           email: resp?.metadata?.email ?? undefined,
           alias: resp?.alias ?? resp?.name,
           name: resp?.name
         }
       })
     } catch (e) {
-      mog('Error Fetching User Details', { error: e, userID })
-      return { userID }
+      mog('Error Fetching User Details', { error: e, id })
+      return { id }
     }
   }
 
-  const updateUserInfo = async (userID: string, name?: string, alias?: string): Promise<boolean> => {
+  const updateUserInfo = async (id: string, name?: string, alias?: string): Promise<boolean> => {
     try {
       if (name === undefined && alias === undefined) return false
-      return await API.user.updateInfo({ id: userID, name, alias }).then((resp: any) => {
+      return await API.user.updateInfo({ id, name, alias }).then((resp: any) => {
         mog('Response', { data: resp })
         updateUserDetails({ name: resp?.name, alias: resp?.alias })
         return true
       })
     } catch (e) {
-      mog('Error Updating User Info', { error: e, userID })
+      mog('Error Updating User Info', { error: e, id })
       return false
     }
   }
@@ -105,7 +104,7 @@ export const useUserService = () => {
     const activeNamespace = useUserPreferenceStore.getState().activeNamespace
     const theme = useUserPreferenceStore.getState().theme
     const smartCaptureExcludedFields = useUserPreferenceStore.getState().smartCaptureExcludedFields
-    const userID = useAuthStore.getState().userDetails.userID
+    const id = useAuthStore.getState().userDetails.id
 
     const userPreferences: UserPreferences = {
       version,
@@ -121,7 +120,7 @@ export const useUserService = () => {
         return true
       })
     } catch (e) {
-      mog('Error Updating User Info', { error: e, userID })
+      mog('Error Updating User Info', { error: e, userId: id })
       return false
     }
   }

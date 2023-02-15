@@ -25,16 +25,7 @@ import {
 } from '@floating-ui/react'
 
 import { MIcon } from '@mexit/core'
-import {
-  FilterMenuDiv,
-  getMIcon,
-  Group,
-  IconDisplay,
-  ItemLabel,
-  MenuItemClassName,
-  MenuItemWrapper,
-  MenuWrapper
-} from '@mexit/shared'
+import { getMIcon, Group, IconDisplay, ItemLabel, MenuItemClassName, MenuItemWrapper, MenuWrapper } from '@mexit/shared'
 
 import { useLayoutStore } from '../../Stores/useLayoutStore'
 
@@ -223,11 +214,11 @@ const ContextMenuWrapper = forwardRef<any, Props & React.HTMLProps<HTMLButtonEle
               })
             })}
           >
-            <FilterMenuDiv>
+            <Group>
               {icon && <IconDisplay icon={icon} />}
               <ItemLabel>{label}</ItemLabel>
               <IconDisplay icon={getMIcon('ICON', 'ri:arrow-right-s-line')} />
-            </FilterMenuDiv>
+            </Group>
           </MenuItemWrapper>
         )}
         <FloatingPortal>

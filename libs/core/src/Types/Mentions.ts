@@ -45,7 +45,7 @@ export interface AccessMap {
 
 export interface Mentionable extends IUser {
   type: 'mentionable'
-  userID: string
+  id: string
   name: string
 }
 

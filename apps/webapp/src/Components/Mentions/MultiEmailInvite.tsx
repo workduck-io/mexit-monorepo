@@ -82,14 +82,14 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
 
       // Typescript has some weird thing going on with promises.
       // Try to improve the type (if you can that is)
-      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId !== undefined) as any[]
-      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.userId === undefined) as any[]
+      const existing = userDetails.filter((p) => p.status === 'fulfilled' && p.value.id !== undefined) as any[]
+      const absent = userDetails.filter((p) => p.status === 'fulfilled' && p.value.id === undefined) as any[]
 
       const givePermToExisting = existing
         .reduce((p, c) => {
-          return [...p, c.value.userId]
+          return [...p, c.value.id]
         }, [])
-        .filter((u) => u !== localuserDetails.userID)
+        .filter((u) => u !== localuserDetails.id)
 
       // Only share with users registered,
       if (givePermToExisting.length > 0) {
@@ -106,7 +106,7 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
           type: 'mentionable',
           alias: u?.value?.alias ?? '',
           email: u?.value?.email,
-          userID: u?.value?.userID,
+          id: u?.value?.id,
           name: u?.value?.name,
           access: mergeAccess(emptyAccessTable, {
             [context]: {

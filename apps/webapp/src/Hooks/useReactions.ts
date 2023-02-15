@@ -44,7 +44,7 @@ export const reactionsWithCount = (reactions: Reaction[]) => {
 
     const userReacted = reactions
       .find((r) => r.reaction.value === reaction.value)
-      ?.userId?.includes(useAuthStore.getState().userDetails?.userID ?? '')
+      ?.userId?.includes(useAuthStore.getState().userDetails?.id ?? '')
     // const userReacted = reactions.find((r) => r.reaction.value === reaction.value)
     return { reaction: reaction, count: count, userReacted }
   })
@@ -80,7 +80,7 @@ export const useReactions = () => {
               return {
                 ...r,
                 count: r.count + 1,
-                userId: [...(r.userId ?? []), currentUserDetails.userID]
+                userId: [...(r.userId ?? []), currentUserDetails.id]
               }
             }
             return r
@@ -88,7 +88,7 @@ export const useReactions = () => {
           setReactions(newReactions)
         } else {
           // Otherwise just append the new reaction
-          setReactions([...reactions, { ...reaction, userId: [currentUserDetails.userID], count: 1 }])
+          setReactions([...reactions, { ...reaction, userId: [currentUserDetails.id], count: 1 }])
         }
       })
       .catch((err) => {
@@ -108,7 +108,7 @@ export const useReactions = () => {
             (r) =>
               !(
                 r.blockId === reaction.blockId &&
-                r.userId?.includes(currentUserDetails.userID) &&
+                r.userId?.includes(currentUserDetails.id) &&
                 r.reaction.value === reaction.reaction.value &&
                 r.count === 1
               )
@@ -117,11 +117,11 @@ export const useReactions = () => {
           .map((r) => {
             if (
               r.blockId === reaction.blockId &&
-              r.userId?.includes(currentUserDetails.userID) &&
+              r.userId?.includes(currentUserDetails.id) &&
               r.reaction.value === reaction.reaction.value &&
               r.count > 1
             ) {
-              return { ...r, userId: r.userId?.filter((id) => id !== currentUserDetails.userID), count: r.count - 1 }
+              return { ...r, userId: r.userId?.filter((id) => id !== currentUserDetails.id), count: r.count - 1 }
             }
             return r
           })
@@ -145,7 +145,7 @@ export const useReactions = () => {
               blockId,
               nodeId,
               // If the user is true, current user added the reaction
-              userId: reaction.user ? [useAuthStore.getState().userDetails.userID] : undefined,
+              userId: reaction.user ? [useAuthStore.getState().userDetails.id] : undefined,
               reaction: {
                 type: reaction?.reaction?.split('_')[0],
                 value: reaction?.reaction?.split('_')[1]

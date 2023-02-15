@@ -51,7 +51,7 @@ export const Comment = ({ comment, onDeleteComment }: CommentProps) => {
     const u = getUserFromUserid(comment.userId)
     if (u) return u
   }, [comment.userId])
-  const currentUserComment = comment.userId === currentUserDetails?.userID
+  const currentUserComment = comment.userId === currentUserDetails?.id
 
   return (
     <CommentWrapper userCommented={currentUserComment}>
