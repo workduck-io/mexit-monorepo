@@ -155,8 +155,6 @@ function dibbaToggle() {
             endOffset: nodeSelection.endOffset
           }
 
-          mog('RANGE', { range, nodeSelection, isInputType })
-
           if (isInputType) {
             range.startOffset = selectionNode.selectionStart
             range.endOffset = selectionNode.selectionEnd

@@ -12,6 +12,7 @@ export interface UserCred {
   token: string
   expiry: number
   url: string
+  refresh_token: string
 }
 
 export interface InternalAuthStoreState {

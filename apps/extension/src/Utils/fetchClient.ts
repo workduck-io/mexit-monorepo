@@ -1,18 +1,11 @@
 import 'regenerator-runtime/runtime'
 
-import fetchAdapter from '@vespaiach/axios-fetch-adapter'
-import { CognitoUser, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js'
-import axios from 'axios'
+import ky, { AfterResponseHook, BeforeRequestHook } from 'ky'
+import { nanoid } from 'nanoid'
 
-import { wrapErr } from '@mexit/core'
+import { config } from '@mexit/core'
 
-import useAuthStore from '../Hooks/useAuthStore'
-
-// * TODO: Move to KYClient
-
-const client = axios.create({
-  adapter: fetchAdapter
-})
+import useInternalAuthStore from '../Hooks/useAuthStore'
 
 const AWS_AUTH_KEY = 'aws-auth-mexit'
 
@@ -21,73 +14,66 @@ const getUserCredFromChrome = async () => {
   return JSON.parse(authState ?? '{}')?.state?.userCred
 }
 
-client.interceptors.request.use(async (request) => {
+const setUserCredChrome = async (data) => {
+  const sData = JSON.stringify(data)
+  return await chrome.storage.local.set({
+    AWS_AUTH_KEY: sData
+  })
+}
+
+const generateRequestID = () => {
+  return `REQUEST_${nanoid(21)}`
+}
+
+const attachTokenToRequest: BeforeRequestHook = async (request) => {
   const userCred = await getUserCredFromChrome()
-
   if (request && request.headers && userCred && userCred.token) {
-    request.headers['Authorization'] = `Bearer ${userCred.token}`
+    request.headers.set('Authorization', `Bearer ${userCred.token}`)
+    request.headers.set('wd-request-id', request.headers['wd-request-id'] ?? generateRequestID())
   }
+}
 
-  return request
-})
+const refreshTokenHook: AfterResponseHook = async (request, _, response) => {
+  if (response && response.status === 401) {
+    try {
+      const URL = `${config.baseURLs.MEXIT_AUTH_URL_BASE}/oauth2/token`
+      const userCred = await getUserCredFromChrome()
+      const formData = new URLSearchParams()
 
-const refreshToken = () => {
-  const userCred = useAuthStore.getState().userCred
-  const uPool = useAuthStore.getState().userPool
+      formData.append('grant_type', 'refresh_token')
+      formData.append('client_id', config.cognito.APP_CLIENT_ID)
+      formData.append('refresh_token', userCred.refresh_token)
 
-  if (userCred) {
-    if (uPool) {
-      const userPool = new CognitoUserPool(uPool)
-      const nuser = new CognitoUser({ Username: userCred.email, Pool: userPool })
-
-      nuser.getSession(
-        wrapErr((sess: CognitoUserSession) => {
-          if (sess) {
-            const refreshToken = sess.getRefreshToken()
-            nuser.refreshSession(refreshToken, (err, session) => {
-              if (err) {
-                console.log(err)
-              } else {
-                const token = session.getAccessToken().getJwtToken()
-                const payload = session.getAccessToken().payload
-                const expiry = session.getAccessToken().getExpiration()
-                useAuthStore.setState({
-                  userCred: {
-                    email: userCred.email,
-                    url: userCred.url,
-                    token,
-                    expiry,
-                    userId: payload.sub
-                  }
-                })
-              }
-            })
-          }
+      const response = (await ky
+        .post(URL, {
+          body: formData
         })
-      )
+        .json()) as any
+
+      useInternalAuthStore.setState({
+        userCred: {
+          ...useInternalAuthStore.getState().userCred,
+          token: response.id_token,
+          expiry: Date.now() + response.expires_in * 1000
+        }
+      })
+
+      await setUserCredChrome(useInternalAuthStore.getState())
+
+      return client(request)
+    } catch (error) {
+      console.error('Error refresh token: ', error)
+      throw new Error(error)
     }
   }
 }
 
-client.interceptors.response.use(undefined, async (error) => {
-  const response = error.response
-
-  if (response) {
-    if (response.status === 401 && error.config && !error.config.__isRetryRequest) {
-      try {
-        refreshToken()
-      } catch (authError) {
-        // refreshing has failed, but report the original error, i.e. 401
-        return Promise.reject(error)
-      }
-
-      // retry the original request
-      error.config.__isRetryRequest = true
-      return client(error.config)
-    }
-  }
-
-  return Promise.reject(error)
+const client = ky.create({
+  hooks: {
+    beforeRequest: [attachTokenToRequest],
+    afterResponse: [refreshTokenHook]
+  },
+  retry: 0
 })
 
 export default client
