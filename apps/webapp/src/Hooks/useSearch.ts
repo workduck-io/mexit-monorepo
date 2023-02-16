@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ELEMENT_MENTION } from '@udecode/plate'
 
+import { SearchX } from '@workduck-io/mex-search'
+
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -23,6 +25,8 @@ import {
 } from '../Workers/controller'
 
 import { useLinks } from './useLinks'
+
+export const searchX = new SearchX()
 
 export const useSearchExtra = () => {
   const ilinks = useDataStore((s) => s.ilinks)
@@ -67,7 +71,7 @@ export const useSearchExtra = () => {
 }
 
 export const useSearch = () => {
-  const { getPathFromNodeid } = useLinks()
+  const { getTitleFromNoteId } = useLinks()
   const { getSearchExtra } = useSearchExtra()
 
   const addDocument = async (
@@ -79,7 +83,14 @@ export const useSearch = () => {
   ) => {
     const extra = getSearchExtra()
 
-    await addDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await addDoc(
+      key,
+      nodeId,
+      contents,
+      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
+      tags,
+      extra
+    )
   }
 
   const updateDocument = async (
@@ -91,15 +102,22 @@ export const useSearch = () => {
   ) => {
     const extra = getSearchExtra()
 
-    await updateDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await updateDoc(
+      key,
+      nodeId,
+      contents,
+      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
+      tags,
+      extra
+    )
   }
 
   const removeDocument = async (key: idxKey, id: string) => {
     await removeDoc(key, id)
   }
 
-  const queryIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
-    const results = await searchIndex(key, query, tags)
+  const queryIndex = async (key: idxKey | idxKey[], query?: string, tags?: Array<string>) => {
+    const results = await searchIndex({ text: query })
     return results
   }
 

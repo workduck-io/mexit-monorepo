@@ -5,7 +5,7 @@ export const showNav = (pathname: string): boolean => {
     '/search',
     '/snippets',
     '/archive',
-    '/tasks',
+    '/view',
     '/settings',
     '/tag',
     '/integrations',

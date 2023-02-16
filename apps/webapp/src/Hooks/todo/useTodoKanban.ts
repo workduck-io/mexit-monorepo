@@ -20,12 +20,11 @@ import { useDataStore } from '../../Stores/useDataStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
 import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
+import { useFilterStoreBase as useFilterStore } from '../useFilters'
 import { useLinks } from '../useLinks'
 import { useMentions } from '../useMentions'
 import { useNodes } from '../useNodes'
 import { useSearchExtra } from '../useSearch'
-
-import { useTodoFilterStore } from './useTodoFilters'
 
 export interface TodoKanbanCard extends KanbanCard {
   todoid: string
@@ -55,10 +54,10 @@ export const getPureContent = (todo: TodoType) => {
 }
 
 export const useTodoKanban = () => {
-  const setFilters = useTodoFilterStore((s) => s.setFilters)
-  const globalJoin = useTodoFilterStore((state) => state.globalJoin)
-  const sortOrder = useTodoFilterStore((state) => state.sortOrder)
-  const sortType = useTodoFilterStore((state) => state.sortType)
+  const setFilters = useFilterStore((s) => s.setFilters)
+  const globalJoin = useFilterStore((state) => state.globalJoin)
+  const sortOrder = useFilterStore((state) => state.sortOrder)
+  const sortType = useFilterStore((state) => state.sortType)
 
   const updateTodo = useTodoStore((s) => s.updateTodoOfNode)
   const tags = useDataStore((state) => state.tags)
@@ -399,7 +398,7 @@ export const useTodoKanban = () => {
         }
       ]
     }
-    const currentFilters = useTodoFilterStore.getState().currentFilters
+    const currentFilters = useFilterStore.getState().currentFilters
     Object.entries(nodetodos).forEach(([nodeid, todos]) => {
       if (nodeid.startsWith(SNIPPET_PREFIX)) return
       if (isInArchive(nodeid)) return

@@ -10,9 +10,9 @@ import {
   idxKey,
   SearchFilterFunctions,
   SortOrder,
-  SortType
+  SortType,
+  ViewType
 } from '@mexit/core'
-import type { ViewType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -29,6 +29,7 @@ export interface FilterStore {
 
   /** Join strategy for filters */
   globalJoin: GlobalFilterJoin
+  groupBy?: string
 
   setFilters: (filters: Filters) => void
   setGlobalJoin: (join: GlobalFilterJoin) => void
@@ -84,7 +85,6 @@ export const useFilters = <Item>() => {
   }
 
   const addCurrentFilter = (filter: Filter) => {
-    // mog('addCurrentFilter', { filter })
     setCurrentFilters([...currentFilters, filter])
   }
 

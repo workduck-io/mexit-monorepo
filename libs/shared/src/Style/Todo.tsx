@@ -2,9 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
 
-import { ViewType } from '@mexit/core'
-
-import { EditorStyles } from './Editor'
 import { MainHeader } from './Layouts'
 import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
@@ -181,58 +178,12 @@ export const TaskColumnHeader = styled.div`
 `
 
 export const TaskCard = styled.div<{
-  dragging?: boolean
-  selected: boolean
-  staticBoard?: boolean
-  sidebarExpanded?: boolean
   priorityShown?: boolean
-  viewType?: ViewType
 }>`
-  ${TodoContainer} {
-    width: ${({ sidebarExpanded, theme }) =>
-      css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
-    padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
-  }
-  width: ${({ sidebarExpanded, theme }) =>
-    css`calc(${KANBAN_CARD_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
   ${TodoText} {
     max-width: calc(100% - ${({ priorityShown }) => (priorityShown ? '5rem' : '0px')});
     overflow: hidden;
   }
-  margin: ${({ theme }) => theme.spacing.tiny} 0;
-  background: ${({ theme }) => theme.tokens.surfaces.s[3]};
-  border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.borderRadius.small};
-  transition: width 0.5s ease-in-out;
-  ${({ dragging, theme }) =>
-    dragging &&
-    css`
-      background: ${theme.tokens.surfaces.s[4]};
-      box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
-    `};
-  :hover {
-    background: ${({ theme }) => theme.tokens.surfaces.s[4]};
-    box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-  }
-  ${({ selected, theme }) =>
-    selected &&
-    css`
-      border: 1px solid ${theme.tokens.colors.primary.default};
-    `};
-
-  ${({ staticBoard, viewType }) =>
-    staticBoard &&
-    css`
-      width: 100%;
-      ${EditorStyles} {
-        max-width: 100%;
-        overflow: hidden;
-      }
-      ${TodoContainer} {
-        width: 100%;
-        ${viewType === ViewType.Kanban && `max-width: 230px;`}
-      }
-    `}
 `
 
 export const TaskListWrapper = styled.div<{ margin?: boolean }>`
@@ -249,7 +200,7 @@ export const TaskListWrapper = styled.div<{ margin?: boolean }>`
 
   ${TodoContainer} {
     width: 100%;
-    padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+    /* padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`}; */
   }
   ${TodoText} {
     max-width: 100%;

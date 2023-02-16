@@ -2,7 +2,7 @@ import create from 'zustand'
 
 import { Filter, Filters, GlobalFilterJoin, ViewType } from '@mexit/core'
 
-import { FilterStore } from '../useFilters'
+import { FilterStore, useFilterStore } from '../useFilters'
 
 export const useTodoFilterStore = create<FilterStore>((set) => ({
   currentFilters: [],
@@ -14,7 +14,7 @@ export const useTodoFilterStore = create<FilterStore>((set) => ({
   indexes: [],
   setIndexes: () => undefined,
   filters: [],
-  viewType: ViewType.Kanban,
+  viewType: ViewType.List,
   setViewType: (viewType: ViewType) => set({ viewType }),
   setFilters: (filters: Filters) => set({ filters }),
   setSortType: (sortType) => set((state) => ({ ...state, sortType })),
@@ -22,18 +22,18 @@ export const useTodoFilterStore = create<FilterStore>((set) => ({
 }))
 
 export const useTodoFilters = () => {
-  const filters = useTodoFilterStore((state) => state.filters)
-  const currentFilters = useTodoFilterStore((state) => state.currentFilters)
-  const setCurrentFilters = useTodoFilterStore((state) => state.setCurrentFilters)
-  const setFilters = useTodoFilterStore((s) => s.setFilters)
-  const globalJoin = useTodoFilterStore((state) => state.globalJoin)
-  const setGlobalJoin = useTodoFilterStore((state) => state.setGlobalJoin)
-  const sortOrder = useTodoFilterStore((state) => state.sortOrder)
-  const sortType = useTodoFilterStore((state) => state.sortType)
-  const onSortTypeChange = useTodoFilterStore((state) => state.setSortType)
-  const onSortOrderChange = useTodoFilterStore((state) => state.setSortOrder)
-  const viewType = useTodoFilterStore((state) => state.viewType)
-  const onViewTypeChange = useTodoFilterStore((state) => state.setViewType)
+  const filters = useFilterStore((state) => state.filters)
+  const currentFilters = useFilterStore((state) => state.currentFilters)
+  const setCurrentFilters = useFilterStore((state) => state.setCurrentFilters)
+  const setFilters = useFilterStore((s) => s.setFilters)
+  const globalJoin = useFilterStore((state) => state.globalJoin)
+  const setGlobalJoin = useFilterStore((state) => state.setGlobalJoin)
+  const sortOrder = useFilterStore((state) => state.sortOrder)
+  const sortType = useFilterStore((state) => state.sortType)
+  const onSortTypeChange = useFilterStore((state) => state.setSortType)
+  const onSortOrderChange = useFilterStore((state) => state.setSortOrder)
+  const viewType = useFilterStore((state) => state.viewType)
+  const onViewTypeChange = useFilterStore((state) => state.setViewType)
 
   const resetFilters = () => {
     setFilters([])

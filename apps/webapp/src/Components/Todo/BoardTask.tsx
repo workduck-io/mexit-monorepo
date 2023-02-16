@@ -37,23 +37,14 @@ interface RenderTaskProps {
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({
-    id,
-    todoid,
-    nodeid,
-    overlaySidebar,
-    staticBoard,
-    refreshCallback,
-    selectedCardId,
-    dragging,
-    viewType
-  }: RenderTaskProps) => {
+  ({ id, todoid, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
     const sidebar = useLayoutStore((store) => store.sidebar)
+    console.log('TDO', { id, todo })
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
@@ -96,16 +87,8 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     const toggleModal = useModalStore((store) => store.toggleOpen)
     const priorityShown = todo.metadata.priority !== PriorityType.noPriority
 
-    // mog('staticBoard', { staticBoard })
-
     return (
       <TaskCard
-        selected={selectedCardId && selectedCardId === id}
-        ref={ref}
-        dragging={dragging}
-        viewType={viewType}
-        staticBoard={staticBoard}
-        sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return
@@ -125,12 +108,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           controls={controls}
           parentNodeId={todo.nodeid}
         >
-          {/*
-          <EditorPreviewRenderer
-            noStyle
-            content={pC}
-            editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-          /> */}
           <Plateless content={pC} />
         </Todo>
       </TaskCard>

@@ -9,25 +9,24 @@ import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
 import { OverlaySidebarWindowWidth, StyledTasksKanban, TaskColumnHeader } from '@mexit/shared'
 
-import { useTodoFilters } from '../../Hooks/todo/useTodoFilters'
-import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
-import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
-import { useNavigation } from '../../Hooks/useNavigation'
-import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import useMultipleEditors from '../../Stores/useEditorsStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useModalStore from '../../Stores/useModalStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
-
-import { RenderBoardTask } from './BoardTask'
+import { useTodoFilters } from '../../../Hooks/todo/useTodoFilters'
+import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
+import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
+import { useNavigation } from '../../../Hooks/useNavigation'
+import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import useMultipleEditors from '../../../Stores/useEditorsStore'
+import { useLayoutStore } from '../../../Stores/useLayoutStore'
+import useModalStore from '../../../Stores/useModalStore'
+import { useTodoStore } from '../../../Stores/useTodoStore'
+import { RenderBoardTask } from '../../Todo/BoardTask'
 
 /**
  * TodoKanban
  * Kanban view for todo
  * With shortcuts and navigation
  */
-const TodoKanban = () => {
+const KanbanView = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
 
   const nodesTodo = useTodoStore((store) => store.todos)
@@ -89,7 +88,6 @@ const TodoKanban = () => {
     if (!selectedCard) return
     const todoFromCard = getTodoFromCard(selectedCard)
     const newStatus = getNextStatus(todoFromCard.metadata.status)
-    // mog('new status', { newStatus, todoFromCard, selectedCard })
     changeStatus(todoFromCard, newStatus)
   }
 
@@ -124,10 +122,8 @@ const TodoKanban = () => {
     switch (direction) {
       case 'up': {
         const prevCard = selectedColumn.cards[(selectedIndex - 1 + selectedColumnLength) % selectedColumnLength]
-        // mog('prevCard', { prevCard })
 
         if (prevCard) {
-          // mog('selected card', { selectedCard, prevCard })
           setSelectedCard(prevCard)
         }
         break
@@ -263,4 +259,4 @@ const TodoKanban = () => {
   )
 }
 
-export default TodoKanban
+export default KanbanView

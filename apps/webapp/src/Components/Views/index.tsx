@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 
 import { useViews } from '../../Hooks/useViews'
 
+import ViewRenderer from './ViewRenderer'
+
 const View = () => {
   const viewId = useParams().viewId
   const { getView } = useViews()
@@ -11,9 +13,7 @@ const View = () => {
     return getView(viewId)
   }, [viewId])
 
-  if (!view) return
-
-  return <></>
+  return <ViewRenderer viewType={view?.viewType} />
 }
 
 export default View

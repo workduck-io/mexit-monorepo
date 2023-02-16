@@ -1,13 +1,17 @@
-export const viewStoreConstructor = (set) => ({
+const getDefaultViewStoreState = () => ({
   views: [],
-  currentView: undefined,
+  currentView: undefined
+})
+
+export const viewStoreConstructor = (set) => ({
+  ...getDefaultViewStoreState(),
   _hasHydrated: false,
   setHasHydrated: (state) => {
     set({
       _hasHydrated: state
     })
   },
-  clear: () => set({ views: [], currentView: undefined }),
+  clear: () => set(getDefaultViewStoreState()),
   setCurrentView: (view) =>
     set((state) => ({
       ...state,

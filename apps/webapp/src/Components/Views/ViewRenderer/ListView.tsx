@@ -1,53 +1,48 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, PriorityType, TodoType } from '@mexit/core'
+import { mog } from '@mexit/core'
 import { TaskListWrapper } from '@mexit/shared'
 
-import { useTodoFilterStore } from '../../Hooks/todo/useTodoFilters'
-import { TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
-import { useTodoList } from '../../Hooks/todo/useTodoList'
-import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
-import useMultipleEditors from '../../Stores/useEditorsStore'
-import useModalStore from '../../Stores/useModalStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
-
-import { RenderBoardTask } from './BoardTask'
+import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
+import { useFilterStore } from '../../../Hooks/useFilters'
+import { useSearch } from '../../../Hooks/useSearch'
+import useMultipleEditors from '../../../Stores/useEditorsStore'
+import useModalStore from '../../../Stores/useModalStore'
+import ViewBlockRenderer from '../ViewBlockRenderer'
 
 /**
  * Todo list
  * The list view for tasks
  */
-const TodoList = () => {
-  const nodeTodos = useTodoStore((store) => store.todos)
-  const currentFilters = useTodoFilterStore((store) => store.currentFilters)
-  const globalJoin = useTodoFilterStore((store) => store.globalJoin)
-  const sortType = useTodoFilterStore((store) => store.sortType)
-  const sortOrder = useTodoFilterStore((store) => store.sortOrder)
+const ListView = () => {
+  // const nodeTodos = useTodoStore((store) => store.todos)
+  const currentFilters = useFilterStore((store) => store.currentFilters)
+  const globalJoin = useFilterStore((store) => store.globalJoin)
+  const sortType = useFilterStore((store) => store.sortType)
+  const sortOrder = useFilterStore((store) => store.sortOrder)
+  const [list, setList] = useState([])
 
-  const { getList } = useTodoList()
+  const { queryIndex } = useSearch()
 
-  // Recalculate the list when filters change
-  const list = useMemo(
-    () => getList(nodeTodos, currentFilters, globalJoin, sortOrder, sortType),
-    [nodeTodos, currentFilters, globalJoin, sortType, sortOrder]
-  )
+  useEffect(() => {
+    queryIndex('node').then((r) => {
+      console.log({ RESULT: r })
+      setList(r)
+    })
+  }, [])
+
   const [selectedCardId, setSelectedCardId] = React.useState<string | null>(null)
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
 
-  const { changeStatus, changePriority } = useTodoKanban()
+  // const { changeStatus, changePriority } = useTodoKanban()
 
-  // const selectedRef = useRef<HTMLDivElement>(null)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
-  const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
-
-  const getTodoFromCard = (card: TodoKanbanCard): TodoType => {
-    return todosArray.find((todo) => todo.nodeid === card.nodeid && todo.id === card.todoid)
-  }
+  // const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
 
   const selectFirst = () => {
     const firstCard = list.length > 0 && list[0]
@@ -57,12 +52,19 @@ const TodoList = () => {
     }
   }
 
-  const changeSelectedPriority = (priority: PriorityType) => {
-    if (!selectedCardId) return
-    const selectedCard = list.find((card) => card.id === selectedCardId)
-    const todoFromCard = getTodoFromCard(selectedCard)
-    changePriority(todoFromCard, priority)
-  }
+  // const getTodoFromCard = (card: TodoKanbanCard): TodoType => {
+  //   return todosArray.find((todo) => todo.nodeid === card.nodeid && todo.id === card.todoid)
+  // }
+
+  /**
+   * TODO: Based on Type
+   */
+  // const changeSelectedPriority = (priority: PriorityType) => {
+  //   if (!selectedCardId) return
+  //   const selectedCard = list.find((card) => card.id === selectedCardId)
+  //   const todoFromCard = getTodoFromCard(selectedCard)
+  //   changePriority(todoFromCard, priority)
+  // }
 
   const selectNewCard = useCallback(
     (direction: 'up' | 'down') => {
@@ -125,14 +127,18 @@ const TodoList = () => {
         },
 
         ArrowDown: () => selectNewCard('down'),
-        ArrowUp: () => selectNewCard('up'),
+        ArrowUp: () => selectNewCard('up')
 
-        '$mod+1': () => changeSelectedPriority(PriorityType.low),
-        '$mod+2': () => changeSelectedPriority(PriorityType.medium),
-        '$mod+3': () => changeSelectedPriority(PriorityType.high),
-        '$mod+0': () => changeSelectedPriority(PriorityType.noPriority)
-
-        // '$mod+Enter': () => onNavigateToNode()
+        /**
+         * TODO:
+         *
+         * Show Shortcuts based on render Type
+         *
+         */
+        // '$mod+1': () => changeSelectedPriority(PriorityType.low),
+        // '$mod+2': () => changeSelectedPriority(PriorityType.medium),
+        // '$mod+3': () => changeSelectedPriority(PriorityType.high),
+        // '$mod+0': () => changeSelectedPriority(PriorityType.noPriority)
       })
     }
 
@@ -147,18 +153,13 @@ const TodoList = () => {
 
   return (
     <TaskListWrapper>
-      {list.map((todoCard) => (
-        <div key={todoCard.id}>
-          <RenderBoardTask
-            selectedCardId={selectedCardId}
-            id={todoCard.id}
-            todoid={todoCard.todoid}
-            nodeid={todoCard.nodeid}
-          />
+      {list?.map((block) => (
+        <div key={block.id}>
+          <ViewBlockRenderer selectedBlockId={selectedCardId} block={block} />
         </div>
       ))}
     </TaskListWrapper>
   )
 }
 
-export default TodoList
+export default ListView

@@ -3,9 +3,9 @@ import { useMatch } from 'react-router-dom'
 
 import fileDocument from '@iconify/icons-gg/file-document'
 import appsLine from '@iconify/icons-ri/apps-line'
-import checkboxLine from '@iconify/icons-ri/checkbox-line'
 import linkM from '@iconify/icons-ri/link-m'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
+import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 
 import { InitialNode } from '@mexit/core'
@@ -45,7 +45,7 @@ const useNavlinks = () => {
   // const count = useMemo(() => getLinkCount(), [reminders, ilinks, archive, tasks])
 
   /* Find current view if available */
-  const matchViewPath = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
+  const matchViewPath = useMatch(`${ROUTE_PATHS.view}/:viewid`)
   const viewid = matchViewPath?.params?.viewid || useViewStore.getState().currentView?.id
 
   const getLinks = () => {
@@ -66,9 +66,9 @@ const useNavlinks = () => {
         // count: count.snippets
       },
       {
-        title: 'Tasks',
-        path: viewid ? `${ROUTE_PATHS.tasks}/${viewid}` : ROUTE_PATHS.tasks,
-        icon: GetIcon(checkboxLine),
+        title: 'Views',
+        path: viewid ? `${ROUTE_PATHS.view}/${viewid}` : ROUTE_PATHS.tasks,
+        icon: GetIcon(stackLine),
         shortcut: shortcuts.showTasks.keystrokes
         // count: count.tasks
         // isComingSoon: true

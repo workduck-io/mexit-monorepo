@@ -16,6 +16,7 @@ import Portals from './Components/Portals'
 import SplashScreen from './Components/SplashScreen'
 import Themes from './Components/Themes'
 import UserPage from './Components/User/UserPage'
+import View from './Components/Views'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import useSocket from './Hooks/useSocket'
@@ -230,11 +231,8 @@ export const Switch = () => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         hideAllSidebars()
         // hideRHSidebar()
-      } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
+      } else if (location.pathname.startsWith(ROUTE_PATHS.view)) {
         fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
-        showSidebar()
-        hideRHSidebar()
-      } else if (location.pathname.startsWith(ROUTE_PATHS.reminders)) {
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {
@@ -290,7 +288,7 @@ export const Switch = () => {
           {/* <Route path={ROUTE_PATHS.present} element={<Presenter />} /> */}
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
-          <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
+          <Route path={`${ROUTE_PATHS.view}/:viewid`} element={<View />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
