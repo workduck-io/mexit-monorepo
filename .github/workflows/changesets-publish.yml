@@ -99,8 +99,8 @@ jobs:
 
       - name: Upload Zip to Chrome Store
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: node apps/extension/build/actions/upload-extension.mjs
+        run: tsx apps/extension/build/actions/upload-extension.ts
 
       - name: Send Message to Slack with Zip
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: node apps/extension/build/actions/slack-message.mjs
+        run: tsx apps/extension/build/actions/slack-message.ts

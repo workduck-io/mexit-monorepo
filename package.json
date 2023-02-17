@@ -30,6 +30,7 @@
     "@nrwl/nx-cloud": "^15.0.2",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
+    "changelog-parser": "^3.0.1",
     "eslint": "~8.7.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -42,9 +43,11 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^8.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "got": "^12.5.3",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.4",
     "prettier": "^2.5.1",
+    "tsx": "^3.12.3",
     "unimported": "^1.23.0"
   }
 }
