@@ -1,5 +1,6 @@
 import {
   AccessLevel,
+  addAccessToUser,
   DefaultPermission,
   emptyAccessTable,
   InvitedUser,
@@ -12,7 +13,7 @@ import { mergeAccess } from '@mexit/shared'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { useDataStore } from '../Stores/useDataStore'
-import { addAccessToUser, useMentionStore } from '../Stores/useMentionsStore'
+import { useMentionStore } from '../Stores/useMentionsStore'
 import { useUserCacheStore } from '../Stores/useUserCacheStore'
 
 import { useNodeShareAPI } from './API/useNodeShareAPI'
