@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash'
 
-import { getAllParentIds, ILink,sanatizeLinks } from '@mexit/core'
+import { getAllParentIds, ILink, sanatizeLinks } from '@mexit/core'
 
 import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
@@ -33,8 +33,6 @@ export const getPartialTreeFromLinks = (matchedLinks: ILink[], allLinks: ILink[]
       }))
     return [...p, ...parents]
   }, [])
-
-  console.log('dirty trr', dirtyTreeFlatItems)
 
   const treeFlatItems = uniqBy(dirtyTreeFlatItems, 'id')
 

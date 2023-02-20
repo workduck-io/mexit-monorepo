@@ -24,11 +24,13 @@ export const handleCaptureRequest = ({ subType, data }) => {
       }
 
       return client
-        .post(apiURLs.node.create, reqData, {
+        .post(apiURLs.node.create, {
           headers: {
             'mex-workspace-id': data.workspaceID
-          }
+          },
+          json: reqData
         })
+        .json()
         .then((response: any) => {
           return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
         })
@@ -52,11 +54,13 @@ export const handleCaptureRequest = ({ subType, data }) => {
       }
 
       return client
-        .post(apiURLs.node.bulkCreate, reqData, {
+        .post(apiURLs.node.bulkCreate, {
+          json: reqData,
           headers: {
             'mex-workspace-id': data.workspaceID
           }
         })
+        .json()
         .then((response: any) => {
           return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
         })
@@ -78,11 +82,13 @@ export const handleSnippetRequest = ({ data }) => {
   }
 
   return client
-    .post(apiURLs.snippet.create, reqData, {
+    .post(apiURLs.snippet.create, {
+      json: reqData,
       headers: {
         'mex-workspace-id': data.workspaceId
       }
     })
+    .json()
     .then((response: any) => {
       return { message: response.data, error: null }
     })
@@ -101,7 +107,11 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
       }
 
       return client
-        .patch(apiURLs.node.deleteBlock, blockMap, { headers })
+        .patch(apiURLs.node.deleteBlock, {
+          json: blockMap,
+          headers: headers
+        })
+        .json()
         .then((response: any) => {
           return { message: response.data, error: null }
         })
@@ -125,11 +135,13 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
       mog('SAVE REQUEST', { reqData, elementMetadata })
 
       return client
-        .patch(apiURLs.node.append(body.id), reqData, {
+        .patch(apiURLs.node.append(body.id), {
+          json: reqData,
           headers: {
             'mex-workspace-id': body.workspaceID
           }
         })
+        .json()
         .then((response: any) => {
           return { message: { content: deserializeContent(reqData.elements) }, error: null }
         })
@@ -156,10 +168,8 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'MAKE_PUBLIC': {
       return client
-        .patch(apiURLs.node.makePublic(body?.nodeId), null, {
-          withCredentials: false,
-          headers: headers
-        })
+        .patch(apiURLs.node.makePublic(body?.nodeId), { headers: headers })
+        .json()
         .then((response) => {
           return { message: body?.nodeId, error: null }
         })
@@ -169,10 +179,10 @@ export const handleSharingRequest = ({ subType, body, headers }) => {
     }
     case 'MAKE_PRIVATE': {
       return client
-        .patch(apiURLs.node.makePrivate(body?.nodeId), null, {
-          withCredentials: false,
+        .patch(apiURLs.node.makePrivate(body?.nodeId), {
           headers: headers
         })
+        .json()
         .then((response) => {
           return { message: body?.nodeId, error: null }
         })
@@ -187,7 +197,8 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
   switch (subType) {
     case 'ADD_HIGHLIGHT': {
       return client
-        .post(apiURLs.highlights.saveHighlight, body, { headers: headers })
+        .post(apiURLs.highlights.saveHighlight, { json: body, headers: headers })
+        .json()
         .then((d: any) => {
           return { message: d.data, error: null }
         })
@@ -198,6 +209,7 @@ export const handleHighlightRequest = ({ subType, body, headers }) => {
     case 'DELETE_HIGHLIGHT': {
       return client
         .delete(apiURLs.highlights.byId(body?.highlightId), { headers: headers })
+        .json()
         .then((d: any) => {
           return { message: d.data, error: null }
         })
@@ -215,6 +227,7 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
         .get(apiURLs.links.getLinks, {
           headers: headers
         })
+        .json()
         .then((d: any) => {
           return { message: d.data, error: null }
         })
@@ -224,9 +237,11 @@ export const handleShortenerRequest = ({ subType, body, headers }) => {
     }
     case 'SAVE_LINK': {
       return client
-        .post(apiURLs.links.saveLink, body, {
-          headers: headers
+        .post(apiURLs.links.saveLink, {
+          headers: headers,
+          json: body
         })
+        .json()
         .then((d: any) => {
           return { message: d.data, error: null }
         })
@@ -326,14 +341,11 @@ export const handleAsyncActionRequest = ({ subType, data }) => {
      */
     case 'UPLOAD_IMAGE': {
       return client
-        .post(
-          apiURLs.misc.createImageLink,
-          { encodedString: data.base64 },
-          {
-            headers: { 'workspace-id': data.workspaceId }
-          }
-        )
-        .then((resp) => resp.data)
+        .post(apiURLs.misc.createImageLink, {
+          json: { encodedString: data.base64 },
+          headers: { 'mex-workspace-id': data.workspaceId }
+        })
+        .json()
         .then((path: string) => {
           return { message: apiURLs.misc.getImagePublicLink(path), error: null }
         })

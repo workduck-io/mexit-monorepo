@@ -151,14 +151,14 @@ export const apiURLs = {
     comment: (nodeid: string, commentId: string) => `${API_BASE_URLS.comment}/${nodeid}/${commentId}`,
 
     /** GET, DELETE */
-    allNote: (nodeId: string) => `${API_BASE_URLS.comment}/all/${nodeId}`,
+    allNote: (nodeId: string) => `${API_BASE_URLS.comment}/node/${nodeId}`,
 
     /** GET, DELETE */
-    allBlock: (nodeId: string, blockId: string) => `${API_BASE_URLS.comment}/all/${nodeId}/block/${blockId}`,
+    allBlock: (nodeId: string, blockId: string) => `${API_BASE_URLS.comment}/node/${nodeId}/block/${blockId}`,
 
     /** GET, DELETE */
     allThread: (nodeId: string, blockId: string, threadId: string) =>
-      `${API_BASE_URLS.comment}/all/${nodeId}/block/${blockId}/thread/${threadId}`
+      `${API_BASE_URLS.comment}/node/${nodeId}/block/${blockId}/thread/${threadId}`
   },
 
   reactions: {

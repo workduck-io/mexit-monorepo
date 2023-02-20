@@ -125,10 +125,10 @@ export const useHighlights = () => {
    *   That will need the block map.
    */
   const saveHighlight = async (highlight: Highlight, sourceTitle: string) => {
-    const link = getLink(highlight.properties.sourceUrl)
-    if (!link) {
-      await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })
-    }
+    // const link = getLink(highlight.properties.sourceUrl)
+    // if (!link) {
+    //   await saveLink({ url: highlight.properties.sourceUrl, title: sourceTitle })
+    // }
     await saveHighlightAPI(highlight)
   }
 

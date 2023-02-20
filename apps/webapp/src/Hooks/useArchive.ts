@@ -59,7 +59,7 @@ const useArchive = () => {
           return true
         })
         .catch((e) => {
-          console.log(e)
+          console.error(e)
           return false
         })
     }
@@ -141,7 +141,7 @@ const useArchive = () => {
           return true
         })
         .catch((e) => {
-          console.log(e)
+          console.error(e)
           return false
         })
       return res

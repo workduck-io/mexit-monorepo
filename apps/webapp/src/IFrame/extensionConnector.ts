@@ -70,7 +70,7 @@ export const webExtensionConnector = async () => {
   mog('CONNECTION TO EXTENSION', { host })
   host.promise
     .then((extension) => {
-      console.log('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
+      mog('[IFRAME ---- EXTENSION]', { extension, location: window.location.href })
       syncStoresWithExtension(extension)
       initializeExtension(extension)
     })

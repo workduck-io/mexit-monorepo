@@ -16,6 +16,7 @@ import { terminateAllWorkers } from '../Workers/controller'
 import { useCommentStore } from './useCommentStore'
 import { useContentStore } from './useContentStore'
 import { useDataStore } from './useDataStore'
+import { useEditorStore } from './useEditorStore'
 import { useHelpStore } from './useHelpStore'
 import { useMentionStore } from './useMentionsStore'
 import { useMetadataStore } from './useMetadataStore'
@@ -55,6 +56,7 @@ export const useAuthentication = () => {
   const clearRoutesInformation = useRouteStore((s) => s.clear)
   const clearMetadataStore = useMetadataStore((s) => s.reset)
   const clearPromptStore = usePromptStore((s) => s.reset)
+  const resetEditorStore = useEditorStore((s) => s.reset)
 
   const clearReminders = useReminderStore((r) => r.clearReminders)
   const clearTodos = useTodoStore((s) => s.clearTodos)
@@ -121,6 +123,7 @@ export const useAuthentication = () => {
     clearTodos()
     clearViews()
     clearUsersCache()
+    resetEditorStore()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {

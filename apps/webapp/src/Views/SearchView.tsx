@@ -261,7 +261,6 @@ const SearchView = <Item,>({
       // const res = onSearch(newSearchTerm)
       const curIndexGroup = findCurrentIndex()
       const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
-      console.log('INITAL', { initItems })
       const filtered = filterResults ? filterResults(initItems) : initItems
       // mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered, initialItems, curIndexGroup })
       if (filtered?.length > 0 || currentFilters.length > 0) {

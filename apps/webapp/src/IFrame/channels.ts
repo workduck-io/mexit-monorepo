@@ -14,7 +14,7 @@ export const listenChannel = (channel: BroadcastSyncedChannel, extension) => {
 
   // * For Messages recieved from Webapps
   BroadCastChannels[channel].onmessage = (ev: MessageEvent<SyncMessageType>) => {
-    console.log('[IFRAME]: Sending events to Extension', { data: ev.data, origin: ev.origin })
+    mog('[IFRAME]: Sending events to Extension', { data: ev.data, origin: ev.origin })
 
     try {
       extension?.sendToExtension(ev.data)

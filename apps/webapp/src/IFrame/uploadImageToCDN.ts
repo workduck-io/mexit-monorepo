@@ -28,7 +28,7 @@ export const uploadImageToCDN = async (data: string | ArrayBuffer, showAlert = t
         fileType: compressedImg.ext,
         parseBase64String: false
       })
-      console.log('Resp from upload: ', resp)
+      // console.log('Resp from upload: ', resp)
       return resp
     } catch (error) {
       mog('UploadImageFailed', { error })

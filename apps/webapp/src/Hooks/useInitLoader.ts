@@ -105,7 +105,7 @@ export const useInitLoader = () => {
           }
         })
         .catch((error) => {
-          console.log('InitSearchIndexError', { error })
+          console.error('InitSearchIndexError', { error })
         })
     }
   }, [initalizeApp, snippetHydrated, dataStoreHydrated, contentStoreHydrated])
