@@ -78,14 +78,14 @@ export const analyseContent = async (props: AnalyseContentProps) => {
           })
         )
       } catch (err) {
-        console.log('Could not start analysis worker: ', err)
+        console.error('Could not start analysis worker: ', err)
         analysisWorker = null
       }
     }
     const analysis = await analysisWorker.analyseContent(props)
     return analysis
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return
   }
 }

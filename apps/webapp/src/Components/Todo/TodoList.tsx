@@ -52,7 +52,7 @@ const TodoList = () => {
   const selectFirst = () => {
     const firstCard = list.length > 0 && list[0]
     if (firstCard) {
-      console.log('select first', { firstCard })
+      // console.log('select first', { firstCard })
       setSelectedCardId(firstCard.id)
     }
   }
@@ -67,7 +67,7 @@ const TodoList = () => {
   const selectNewCard = useCallback(
     (direction: 'up' | 'down') => {
       const selectedIndex = list.findIndex((card) => card.id === selectedCardId)
-      console.log('selectNewCard', { direction, selectedCardId, selectedIndex })
+      // console.log('selectNewCard', { direction, selectedCardId, selectedIndex })
       if (!selectedCardId) {
         selectFirst()
         return

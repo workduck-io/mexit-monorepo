@@ -2,15 +2,22 @@ import { add, sub } from 'date-fns'
 import { uniqBy } from 'lodash'
 import md5 from 'md5'
 
-import {   DisplayReminder,
+import {
+  DisplayReminder,
   DisplayReminderGroup,
-getReminderState,   isInSameMinute,
-mog,   NodeReminderGroup,
-past,   Reminder,
+  getReminderState,
+  isInSameMinute,
+  mog,
+  NodeReminderGroup,
+  past,
+  Reminder,
   ReminderActions,
-ReminderControls,   ReminderGroup,
+  ReminderControls,
+  ReminderGroup,
   ReminderState,
-SnoozeControl, upcoming } from '@mexit/core'
+  SnoozeControl,
+  upcoming
+} from '@mexit/core'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -481,7 +488,7 @@ export const useReminders = () => {
   const addReminder = async (reminder: Reminder) => {
     addReminderStore(reminder)
     const res = await saveReminder(reminder)
-    console.log('addReminder', { res })
+    // console.log('addReminder', { res })
   }
 
   // const updateRemider

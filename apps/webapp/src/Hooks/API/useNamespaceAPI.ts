@@ -168,7 +168,7 @@ export const useNamespaceApi = () => {
 
       return res
     } catch (err) {
-      console.log('Error in namespace creation: ', err)
+      console.error('Error in namespace creation: ', err)
       toast('Unable to Create New Namespace')
     }
   }

@@ -7,7 +7,8 @@ import {
   NodeType,
   RESERVED_NAMESPACES,
   SHARED_NAMESPACE,
-  SingleNamespace} from '@mexit/core'
+  SingleNamespace
+} from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useMentionStore } from '../Stores/useMentionsStore'
@@ -164,7 +165,7 @@ export const useNamespaces = () => {
         }
       })
       .catch((err) => {
-        console.log('Error changing namespace name', err)
+        console.error('Error changing namespace name', err)
         return undefined
       })
   }
@@ -188,7 +189,7 @@ export const useNamespaces = () => {
     const res = await changeNamespaceIconApi(id, name, icon)
       .then((res) => true)
       .catch((err) => {
-        console.log('Error changing namespace icon', err)
+        mog('Error changing namespace icon', { err })
         // We revert the icon
         const namespaces = useDataStore.getState().namespaces
         const newNamespaces = namespaces.map((n) =>

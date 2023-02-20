@@ -153,8 +153,6 @@ const initializeNamespacesExtension = async (localILinks: ILink[]) => {
       return [...arr, ...nodeHierarchy]
     }, [])
 
-    namespaces.forEach((i) => console.log(i))
-
     const archivedILinks = namespaces.reduce((arr, { archiveNodeHierarchy }) => {
       return [...arr, ...archiveNodeHierarchy]
     }, [])
