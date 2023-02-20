@@ -241,26 +241,24 @@ export const useApi = () => {
   const getPublicNodeAPI = async (nodeId: string) => {
     if (!nodeId) return
 
-    const res = await API.node
-      .getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }, { throwHttpErrors: false })
-      .then((d) => {
-        if (!d) return
+    const res = await API.node.getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
+      if (!d) return
 
-        const metadata = {
-          createdBy: d.createdBy,
-          createdAt: d.createdAt,
-          lastEditedBy: d.lastEditedBy,
-          updatedAt: d.updatedAt,
-          icon: d?.metadata?.icon
-        }
+      const metadata = {
+        createdBy: d.createdBy,
+        createdAt: d.createdAt,
+        lastEditedBy: d.lastEditedBy,
+        updatedAt: d.updatedAt,
+        icon: d?.metadata?.icon
+      }
 
-        return {
-          title: d.title,
-          data: d.data,
-          metadata: removeNulls(metadata),
-          version: d.version ?? undefined
-        }
-      })
+      return {
+        title: d.title,
+        data: d.data,
+        metadata: removeNulls(metadata),
+        version: d.version ?? undefined
+      }
+    })
 
     if (res) {
       const content = deserializeContent(res.data)
