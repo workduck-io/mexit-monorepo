@@ -33,7 +33,7 @@ const fileName = fs.readdirSync('./dist/extension').filter((file) => file.endsWi
 const filePath = `./dist/extension/${fileName}`
 const channelId = process.env.SLACK_CHANNEL_ID
 
-const changeLogPath = (appName: string) => `apps/${appName}/CHANGELOG.md`.toLowerCase()
+const changeLogPath = (appName: string) => `apps/${appName.toLowerCase()}/CHANGELOG.md`
 
 const generateChangelog = async (appName: string) => {
   const path = changeLogPath(appName)
