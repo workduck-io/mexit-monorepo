@@ -5,16 +5,14 @@ import { nanoid } from 'nanoid'
 
 import { config } from '@mexit/core'
 
-import useInternalAuthStore from '../Hooks/useAuthStore'
-
 const AWS_AUTH_KEY = 'aws-auth-mexit'
 
-const getUserCredFromChrome = async () => {
+const getAuthStateFromChrome = async () => {
   const authState = (await chrome.storage.local.get(AWS_AUTH_KEY))?.[AWS_AUTH_KEY]
-  return JSON.parse(authState ?? '{}')?.state?.userCred
+  return JSON.parse(authState ?? '{}')?.state
 }
 
-const setUserCredChrome = async (data) => {
+const setAuthStateChrome = async (data) => {
   const sData = JSON.stringify(data)
   return await chrome.storage.local.set({
     AWS_AUTH_KEY: sData
@@ -26,7 +24,7 @@ const generateRequestID = () => {
 }
 
 const attachTokenToRequest: BeforeRequestHook = async (request) => {
-  const userCred = await getUserCredFromChrome()
+  const userCred = await getAuthStateFromChrome()
   if (request && request.headers && userCred && userCred.token) {
     request.headers.set('Authorization', `Bearer ${userCred.token}`)
     request.headers.set('wd-request-id', request.headers['wd-request-id'] ?? generateRequestID())
@@ -37,12 +35,16 @@ const refreshTokenHook: AfterResponseHook = async (request, _, response) => {
   if (response && response.status === 401) {
     try {
       const URL = `${config.baseURLs.MEXIT_AUTH_URL_BASE}/oauth2/token`
-      const userCred = await getUserCredFromChrome()
+      const authState = await getAuthStateFromChrome()
       const formData = new URLSearchParams()
+
+      if (!authState?.userCred) {
+        throw new Error("Refresh token doesn't exist in store")
+      }
 
       formData.append('grant_type', 'refresh_token')
       formData.append('client_id', config.cognito.APP_CLIENT_ID)
-      formData.append('refresh_token', userCred.refresh_token)
+      formData.append('refresh_token', authState?.userCred.refresh_token)
 
       const response = (await ky
         .post(URL, {
@@ -50,16 +52,15 @@ const refreshTokenHook: AfterResponseHook = async (request, _, response) => {
         })
         .json()) as any
 
-      useInternalAuthStore.setState({
+      const updatedAuthState = {
+        ...authState,
         userCred: {
-          ...useInternalAuthStore.getState().userCred,
+          ...authState.userCred,
           token: response.id_token,
           expiry: Date.now() + response.expires_in * 1000
         }
-      })
-
-      await setUserCredChrome(useInternalAuthStore.getState())
-
+      }
+      await setAuthStateChrome(updatedAuthState)
       return client(request)
     } catch (error) {
       console.error('Error refresh token: ', error)
