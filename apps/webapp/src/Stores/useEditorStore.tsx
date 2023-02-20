@@ -3,7 +3,7 @@ import React from 'react'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { defaultContent, getInitialNode,NodeContent, NodeProperties } from '@mexit/core'
+import { defaultContent, getInitialNode, NodeContent, NodeProperties } from '@mexit/core'
 
 import { ComboTriggerType } from './useComboboxStore'
 import { useContentStore } from './useContentStore'
@@ -65,6 +65,7 @@ export type EditorContextType = {
   notifyWithBanner: (showBanner: boolean) => void
 
   setReadOnly: (isReadOnly: boolean) => void
+  reset: () => void
 }
 
 export const useEditorStore = create<EditorContextType>(
@@ -73,14 +74,14 @@ export const useEditorStore = create<EditorContextType>(
       node: getInitialNode(),
       content: defaultContent,
       readOnly: false,
-
       isBannerVisible: false,
-      notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
-
       fetchingContent: false,
-      setTrigger: (trigger) => set({ trigger }),
-
       activeUsers: [],
+      isEditing: false,
+      loadingNodeid: null,
+
+      notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
+      setTrigger: (trigger) => set({ trigger }),
       setActiveUsers: (users) => {
         set({ activeUsers: users, isBannerVisible: users.length !== 0 })
       },
@@ -109,7 +110,6 @@ export const useEditorStore = create<EditorContextType>(
         set({ node })
       },
 
-      isEditing: false,
       setIsEditing: (isEditing: boolean) => {
         if (get().isEditing === isEditing) return
         set({ isEditing })
@@ -122,7 +122,6 @@ export const useEditorStore = create<EditorContextType>(
           fetchingContent: value
         }),
 
-      loadingNodeid: null,
       setLoadingNodeid: (nodeid) =>
         set({
           loadingNodeid: nodeid
@@ -142,6 +141,18 @@ export const useEditorStore = create<EditorContextType>(
 
       loadNodeAndReplaceContent: (node, content) => {
         set({ node, content })
+      },
+      reset: () => {
+        set({
+          node: getInitialNode(),
+          content: defaultContent,
+          readOnly: false,
+          isBannerVisible: false,
+          fetchingContent: false,
+          activeUsers: [],
+          isEditing: false,
+          loadingNodeid: null
+        })
       }
     }),
     { name: 'mex-editor', partialize: (s) => ({ node: s.node }) }
