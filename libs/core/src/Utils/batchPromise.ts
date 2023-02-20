@@ -21,7 +21,7 @@ export const batchArrayWithNamespaces = (ilinks: ILink[], namespaces: SingleName
       if (nsMap[namespace]) nsMap[namespace].push(nodeid)
       else nsMap[namespace] = [nodeid]
     } else {
-      nsMap['NOT_SHARED'].push(nodeid)
+      if (namespaces.find((n) => n.id === ilink.namespace)) nsMap['NOT_SHARED'].push(nodeid)
     }
   })
 

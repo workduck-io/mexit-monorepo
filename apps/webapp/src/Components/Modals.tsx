@@ -6,6 +6,7 @@ import ShareModal from './Mentions/ShareModal'
 import CreateTodoModal from './Modals/CreateTodoModal'
 import DeleteSpaceModal from './Modals/DeleteSpaceModal'
 import Lookup from './Modals/Lookup'
+import MangeSpacesModal from './Modals/ManageSpacesModal'
 // import Refactor from './Refactor'
 import Delete from './Refactor/DeleteModal'
 import CreateReminderModal from './Reminders/CreateReminderModal'
@@ -29,6 +30,7 @@ const Modals = () => {
       <CreateTodoModal />
       <TaskViewModal />
       <PreviewNoteModal />
+      <MangeSpacesModal />
       <FleetContainer />
       <TemplateModal />
       <DeleteSpaceModal />

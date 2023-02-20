@@ -168,18 +168,18 @@ export const useApi = () => {
 
     const data = await dataPromise
       .then((d) => {
-        const contentToSet = d.data ? deserializeContent(d.data) : content
+        const contentToSet = d?.data ? deserializeContent(d.data) : content
         const origMetadata = extractMetadata(d)
+
         const metadata = isShared
           ? {
-              ...origMetadata,
+              ...(origMetadata ?? {}),
               updatedAt: Date.now(),
               lastEditedBy: currentUser.id
             }
           : origMetadata
 
-        setContent(noteID, contentToSet)
-        updateMetadata('notes', noteID, metadata)
+        updateFromContent(noteID, contentToSet, metadata)
 
         addLastOpened(noteID)
         return d
@@ -239,8 +239,11 @@ export const useApi = () => {
   }
 
   const getPublicNodeAPI = async (nodeId: string) => {
+    if (!nodeId) return
+
     const res = await API.node.getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
       if (!d) return
+
       const metadata = {
         createdBy: d.createdBy,
         createdAt: d.createdAt,
@@ -249,7 +252,6 @@ export const useApi = () => {
         icon: d?.metadata?.icon
       }
 
-      // console.log(metadata, d.data, todos)
       return {
         title: d.title,
         data: d.data,

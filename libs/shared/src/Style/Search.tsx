@@ -51,7 +51,7 @@ export const InputWrapper = styled.div<{ transparent?: boolean }>`
     transparent &&
     css`
       background-color: ${({ theme }) => theme.tokens.surfaces.s[1]};
-      padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`};
+      /* padding: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.small}`}; */
       border-radius: ${({ theme }) => theme.borderRadius.small};
       margin-bottom: ${({ theme }) => theme.spacing.medium};
     `}

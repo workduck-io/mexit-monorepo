@@ -8,6 +8,7 @@ import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { usePromptStore } from '../Stores/usePromptStore'
+import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
@@ -20,6 +21,7 @@ import { useHighlightSync } from './useHighlights'
 import { useNodes } from './useNodes'
 import { usePortals } from './usePortals'
 import { useSmartCapture } from './useSmartCapture'
+import { useUserPreferences } from './useSyncUserPreferences'
 import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
@@ -32,6 +34,7 @@ export const useInitLoader = () => {
   const dataStoreHydrated = useDataStore((store) => store._hasHydrated)
   const contentStoreHydrated = useContentStore((store) => store._hasHydrated)
   const initHighlightBlockMap = useHighlightStore((store) => store.initHighlightBlockMap)
+  const userPrefHydrated = useUserPreferenceStore((s) => s._hasHydrated)
 
   const { getAllSnippetsByWorkspace } = useApi()
   const { getAllNamespaces } = useNamespaceApi()
@@ -44,6 +47,7 @@ export const useInitLoader = () => {
   const { initPortals } = usePortals()
   const { getAllPrompts, getPromptProviders, getUserPromptAuth } = usePromptAPI()
   const { getAllSmartCaptures } = useSmartCapture()
+  const { updateCurrentUserPreferences } = useUserPreferences()
 
   const backgroundFetch = async () => {
     try {
@@ -85,7 +89,13 @@ export const useInitLoader = () => {
   useEffect(() => {
     API.setWorkspaceHeader(getWorkspaceId())
 
-    if (initalizeApp !== AppInitStatus.START && snippetHydrated && dataStoreHydrated && contentStoreHydrated) {
+    if (
+      initalizeApp !== AppInitStatus.START &&
+      userPrefHydrated &&
+      snippetHydrated &&
+      dataStoreHydrated &&
+      contentStoreHydrated
+    ) {
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
@@ -98,6 +108,7 @@ export const useInitLoader = () => {
       initSearchIndex(initData)
         .then(async () => {
           await startRequestsWorkerService()
+          await updateCurrentUserPreferences()
 
           if (initalizeApp === AppInitStatus.RUNNING) {
             backgroundFetch()

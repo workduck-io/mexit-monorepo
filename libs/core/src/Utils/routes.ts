@@ -196,6 +196,7 @@ export const apiURLs = {
   },
 
   frontend: {
+    getNoteUrl: (uid: string) => `${API_BASE_URLS.frontend}/editor/${uid}`,
     getPublicNodePath: (uid: string) => `${API_BASE_URLS.shareFrontend}/${uid}`,
     getPublicNSURL: (id: string) => `${API_BASE_URLS.shareFrontend}/namespace/${id}`,
     getPublicURLofNoteInNS: (namespaceid: string, noteid: string) =>

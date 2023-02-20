@@ -4,8 +4,8 @@ import { TreeItem } from '@atlaskit/tree'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
-import { defaultContent, generateSnippetId, MIcon } from '@mexit/core'
-import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
+import { defaultContent, generateSnippetId, isReservedNamespace, MIcon } from '@mexit/core'
+import { DefaultMIcons, getMIcon, InteractiveToast } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
@@ -36,7 +36,7 @@ interface MenuListItemType {
   options?: Array<MenuListItemType>
 }
 
-const getMenuItem = (
+export const getMenuItem = (
   label: string,
   onSelect: any,
   disabled?: boolean,
@@ -61,6 +61,8 @@ export const useCreateNewMenu = () => {
   const openShareModal = useShareModalStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
+  const addSpacePreference = useUserPreferenceStore((store) => store.addSpacePreference)
+  const deleteNamespace = useDataStore((store) => store.deleteNamespace)
 
   const { goTo } = useRouting()
   const { push } = useNavigation()
@@ -88,6 +90,10 @@ export const useCreateNewMenu = () => {
             }}
           />
         ))
+      })
+      .catch((err) => {
+        toast('Unable to create Space')
+        console.error('Unable to create Space', { err })
       })
   }
 
@@ -132,6 +138,18 @@ export const useCreateNewMenu = () => {
 
   const handleShare = (item: TreeItem) => {
     openShareModal('permission', 'note', item.data.nodeid)
+  }
+
+  const handleHideSpace = () => {
+    const item = useLayoutStore.getState().contextMenu?.item
+    addSpacePreference(item.id, { hidden: true })
+    deleteNamespace(item.id)
+    changeSpace(getDefaultNamespaceId())
+  }
+
+  const onDeleteNamespace = () => {
+    const item = useLayoutStore.getState().contextMenu?.item
+    toggleModal(ModalsType.deleteSpace, item)
   }
 
   const getMoveToNamespaceItems = () => {
@@ -237,6 +255,34 @@ export const useCreateNewMenu = () => {
     ]
   }
 
+  const getSpaceMenuItems = (): MenuListItemType[] => {
+    const spaceData = useLayoutStore.getState().contextMenu?.item?.data
+    const disabled = spaceData?.access !== 'OWNER' || isReservedNamespace(spaceData?.name)
+
+    return [
+      getMenuItem(
+        'Delete Space',
+        () => {
+          if (!disabled) onDeleteNamespace()
+        },
+        disabled,
+        DefaultMIcons.DELETE
+      ),
+      getMenuItem(
+        'Hide Space',
+        handleHideSpace,
+        isReservedNamespace(spaceData?.name),
+        getMIcon('ICON', 'ri:eye-off-line')
+      ),
+      getMenuItem(
+        'Manage',
+        () => toggleModal(ModalsType.manageSpaces),
+        false,
+        getMIcon('ICON', 'ri:checkbox-multiple-blank-line')
+      )
+    ]
+  }
+
   const getCreateNewMenuItems = (_path?: string): MenuListItemType[] => {
     const currentSpace = useUserPreferenceStore.getState().activeNamespace
 
@@ -247,5 +293,12 @@ export const useCreateNewMenu = () => {
     ]
   }
 
-  return { getCreateNewMenuItems, getSnippetsMenuItems, getBlockMenuItems, getTreeMenuItems, getViewMenuItems }
+  return {
+    getCreateNewMenuItems,
+    getSnippetsMenuItems,
+    getSpaceMenuItems,
+    getBlockMenuItems,
+    getTreeMenuItems,
+    getViewMenuItems
+  }
 }

@@ -279,12 +279,12 @@ export const getAccessValue = (access: AccessLevel): { value: AccessLevel; label
   // mog('getAccessValue', { access })
   switch (access) {
     case 'READ':
-      return { value: 'READ', label: 'View' }
+      return { value: 'READ', label: 'Can view' }
     case 'WRITE':
-      return { value: 'WRITE', label: 'Edit' }
+      return { value: 'WRITE', label: 'Can edit' }
     case 'MANAGE':
-      return { value: 'MANAGE', label: 'Manage' }
+      return { value: 'MANAGE', label: 'Can manage' }
     default:
-      return { value: 'MANAGE', label: 'Manage' }
+      return { value: 'MANAGE', label: 'Can manage' }
   }
 }

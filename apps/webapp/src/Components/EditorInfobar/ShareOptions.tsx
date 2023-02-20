@@ -1,35 +1,13 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import globalLine from '@iconify-icons/ri/global-line'
-import styled, { css, useTheme } from 'styled-components'
-
-import { apiURLs, mog, ShareContext } from '@mexit/core'
-import { CardTitle, CopyButton, Loading, MexIcon, ToggleButton } from '@mexit/shared'
+import { nicePromise, ShareContext } from '@mexit/core'
+import { copyTextToClipboard, ShareToggle } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
-
-const Flex = css`
-  display: flex;
-  align-items: center;
-  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-`
-
-const Container = styled.div`
-  ${Flex}
-  padding: ${({ theme }) => theme.spacing.medium} 0;
-`
-
-const ItemDesc = styled.div`
-  margin-top: ${({ theme }) => theme.spacing.tiny};
-  color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
+import { useDataStore } from '../../Stores/useDataStore'
+import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 interface ShareOptionsProps {
   context: ShareContext
@@ -37,126 +15,84 @@ interface ShareOptionsProps {
 }
 
 const ShareOptions = ({ context, id }: ShareOptionsProps) => {
-  // const node = useEditorStore((store) => store.node)
-  const theme = useTheme()
+  const isNotePublic = useMetadataStore((s) => s.metadata.notes[id]?.publicAccess)
+  const isSpacePublic = useDataStore((s) => s.namespaces.find((i) => i.id === id)?.publicAccess)
 
-  const [isLoading, setIsLoading] = useState(false)
+  const isPublic = useMemo(() => {
+    return isNotePublic || isSpacePublic
+  }, [isNotePublic, isSpacePublic])
+
+  const [isLoading, setIsLoading] = useState(isPublic)
+  const [mounted, setMounted] = useState(false)
+
+  const { makeNamespacePublic, getSpaceCopyUrl } = useNamespaces()
+  const { getNoteCopyUrl } = useNodes()
   const { makeNotePrivate, makeNotePublic } = useApi()
-  const isPublic = useNodes().isPublicNode
-  // const { makeNamespacePublic, makeNamespacePrivate } = useNamespaceApi()
-  const { getNamespaceOfNodeid, isNamespacePublic, makeNamespacePublic } = useNamespaces()
 
-  const publicUrl = useMemo(() => {
-    if (context === 'note') {
-      return isPublic(id) ? apiURLs.frontend.getPublicNodePath(id) : undefined
-    } else if (context === 'space') {
-      return isNamespacePublic(id) ? apiURLs.frontend.getPublicNSURL(id) : undefined
-    }
-  }, [id, isPublic, context, isNamespacePublic])
+  const getPublicUrl = useCallback(
+    (context: 'note' | 'space', id: string) => {
+      if (context === 'note') return getNoteCopyUrl(id)
+      return getSpaceCopyUrl(id)
+    },
+    [isPublic]
+  )
 
-  const noteNamespacePublicLink = useMemo(() => {
-    if (context === 'note') {
-      const namespace = getNamespaceOfNodeid(id)
-      return namespace && isNamespacePublic(namespace.id)
-        ? apiURLs.frontend.getPublicURLofNoteInNS(namespace.id, id)
-        : undefined
-    }
-    return undefined
-  }, [id, context])
+  const publicUrl = isPublic ? getPublicUrl(context, id) : ''
 
-  // Helper function to set loading
-  const tryError = async (fn: () => Promise<void>) => {
-    try {
-      const resp = await fn()
-      mog('Try', { resp })
-    } catch (error) {
-      mog('Error', error)
-    } finally {
-      setIsLoading(false)
-    }
+  const handleError = () => {
+    // * Revert the action
+    setIsLoading((s) => !s)
   }
 
-  const flipPublicAccess = async () => {
-    setIsLoading(true)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (isPublic && mounted) {
+      copyTextToClipboard(publicUrl, 'Public link copied!')
+    }
+  }, [isPublic, publicUrl])
+
+  const flipPublicAccess = async (publicUrl: string) => {
+    setIsLoading((s) => !s)
+
     if (context === 'note') {
       // Go from public -> private
       if (publicUrl) {
-        await tryError(async () => {
-          const resp = await makeNotePrivate(id)
-          mog('MakingNodePrivateResp', { resp })
-        })
+        nicePromise(async () => {
+          makeNotePrivate(id)
+        }, handleError)
       } else {
         // Private to Public
-        await tryError(async () => {
-          const resp = await makeNotePublic(id)
-          mog('MakingNodePulicResp', { resp })
-        })
+        nicePromise(async () => {
+          makeNotePublic(id)
+        }, handleError)
       }
     } else if (context === 'space') {
       if (publicUrl) {
-        await tryError(async () => {
-          const resp = await makeNamespacePublic(id, false)
-          mog('MakingNamespacePrivateResp', { resp })
-        })
+        nicePromise(async () => {
+          makeNamespacePublic(id, false)
+        }, handleError)
       } else {
         // Private to Public
-        await tryError(async () => {
-          const resp = await makeNamespacePublic(id, true)
-          mog('MakingNamespacePulicResp', { resp })
-        })
+        nicePromise(async () => {
+          makeNamespacePublic(id, true)
+        }, handleError)
       }
     }
   }
-  // mog('PublicURL', { publicUrl, context, id })
 
   return (
-    <Container>
-      <div style={{ display: 'flex', flex: 1, alignItems: 'center' }}>
-        <MexIcon color={theme.tokens.colors.primary.default} icon={globalLine} fontSize={24} margin="0 1rem 0 0" />
-        <div style={{ gap: '1', userSelect: 'none' }}>
-          {context === 'note' && noteNamespacePublicLink ? (
-            <>
-              <CardTitle>This note is in a public space.</CardTitle>
-              <ItemDesc>Share the public space link</ItemDesc>
-            </>
-          ) : (
-            <>
-              <CardTitle>Make this {context} public?</CardTitle>
-              <ItemDesc>Publish and share the link with everyone!</ItemDesc>
-            </>
-          )}
-        </div>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ marginRight: '.5rem' }}>
-          {noteNamespacePublicLink ? (
-            <CopyButton
-              text={noteNamespacePublicLink}
-              size="20px"
-              beforeCopyTooltip="Copy link"
-              afterCopyTooltip="Link copied!"
-            />
-          ) : (
-            publicUrl && (
-              <CopyButton text={publicUrl} size="20px" beforeCopyTooltip="Copy link" afterCopyTooltip="Link copied!" />
-            )
-          )}
-        </span>
-        {isLoading ? (
-          <Loading dots={3} transparent />
-        ) : (
-          noteNamespacePublicLink === undefined && (
-            <ToggleButton
-              id="toggle-public"
-              value={!!publicUrl}
-              size="sm"
-              onChange={flipPublicAccess}
-              checked={!!publicUrl}
-            />
-          )
-        )}
-      </div>
-    </Container>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <ShareToggle
+        id="toggle-public"
+        value={!!isLoading}
+        size="sm"
+        onChange={() => flipPublicAccess(publicUrl)}
+        checked={!!isLoading}
+      />
+    </div>
   )
 }
 

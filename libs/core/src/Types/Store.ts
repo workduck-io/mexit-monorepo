@@ -61,6 +61,7 @@ export interface DataStoreState {
   archive: ILink[]
   sharedNodes: SharedNode[]
   slashCommands: SlashCommands
+  spaces: SingleNamespace[]
   namespaces: SingleNamespace[]
 
   initializeDataStore: (initData: InitDataStoreType) => void
@@ -76,6 +77,9 @@ export interface DataStoreState {
 
   // adds the node
   addILink: (props: AddILinkProps) => ILink | undefined
+
+  addSpace: (space: SingleNamespace) => void
+  setAllSpaces: (spaces: SingleNamespace[]) => void
 
   // adds tag for combobox
   addTag: (tag: string) => void

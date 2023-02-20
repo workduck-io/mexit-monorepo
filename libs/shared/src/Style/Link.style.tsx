@@ -46,7 +46,6 @@ export const LinkTitleWrapper = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spacing.small};
   align-items: center;
-  align-items: center;
 
   span {
     overflow: hidden;

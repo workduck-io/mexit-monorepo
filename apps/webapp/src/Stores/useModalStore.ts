@@ -13,6 +13,7 @@ export enum ModalsType {
   help,
   todo,
   template,
+  manageSpaces,
   quickNew,
   previewNote
 }

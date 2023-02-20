@@ -20,6 +20,8 @@ import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreview from '../EditorPreview/EditorPreview'
 
+import PublicQuickLinkElement from './PublicQuickLinkElement'
+
 /**
  * ILinkElement with no default styles. [Use the `styles` API to add your own styles.](https://github.com/OfficeDev/office-ui-fabric-react/wiki/Component-Styling) */
 const SharedNodeLink = ({
@@ -226,6 +228,15 @@ export const QuickLinkElement = ({ attributes, children, element }: ILinkElement
             </EditorPreview>
           ),
           [NodeType.ARCHIVED]: <ArchivedNode selected={selected} archivedNode={archivedNode} />,
+          [NodeType.PUBLIC]: (
+            <PublicQuickLinkElement
+              nodeId={element.value}
+              preview={preview}
+              setPreview={setPreview}
+              onClickProps={onClickProps}
+              selected={selected}
+            />
+          ),
           [NodeType.DEFAULT]: (
             <EditorPreview
               placement="auto"

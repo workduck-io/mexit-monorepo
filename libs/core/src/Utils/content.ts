@@ -44,7 +44,7 @@ export const getMentionsFromContent = (content: any[]): string[] => {
 export const getTodosFromContent = (content: NodeEditorContent): NodeEditorContent => {
   const todos: NodeEditorContent = []
 
-  content.forEach((n) => {
+  content?.forEach((n) => {
     if (n.type === ELEMENT_TODO_LI) {
       todos.push(n)
     }

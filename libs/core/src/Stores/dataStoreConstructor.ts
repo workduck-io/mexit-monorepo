@@ -23,6 +23,12 @@ export const dataStoreConstructor = (set, get) => ({
   bookmarks: [],
   archive: [],
   sharedNodes: [],
+  spaces: [],
+  setAllSpaces: (spaces) => {
+    set({ spaces })
+  },
+  addSpace: (space) => set({ spaces: [...get().spaces, space] }),
+
   namespaces: [],
   slashCommands: { default: defaultCommands, internal: [] },
 
@@ -41,6 +47,7 @@ export const dataStoreConstructor = (set, get) => ({
       tagsCache: {},
       namespaces: [],
       bookmarks: [],
+      spaces: [],
       archive: [],
       baseNodeId: '__loading__',
       slashCommands: {
@@ -57,8 +64,13 @@ export const dataStoreConstructor = (set, get) => ({
   setNamespaces: (namespaces) => set({ namespaces }),
 
   deleteNamespace: (namespaceId: string) => {
-    const spaces = get().namespaces
-    set({ namespaces: spaces.filter((space) => space.id !== namespaceId) })
+    const namespaces = get().namespaces
+    const allSpaces = get().spaces
+
+    set({
+      namespaces: namespaces.filter((space) => space.id !== namespaceId),
+      spaces: allSpaces.filter((space) => space.id !== namespaceId)
+    })
   },
 
   updateNamespace: (namespace) => {

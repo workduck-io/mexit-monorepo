@@ -9,6 +9,13 @@ export const Ellipsis = css`
   text-overflow: ellipsis;
 `
 
+export const ShortenerTitle = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 20ch;
+`
+
 export const StyledInputWrapper = styled.div<{ isOverlay: boolean }>`
   width: 100%;
   position: relative;

@@ -14,7 +14,8 @@ import {
   Input,
   LinkTitleWrapper,
   MexIcon,
-  ShortenButton
+  ShortenButton,
+  ShortenerTitle
 } from '@mexit/shared'
 
 import { useAuthStore } from '../../Hooks/useAuth'
@@ -209,7 +210,7 @@ export const ShortenerComponent = () => {
       {!editable && !link?.alias && (
         <InputContainer>
           <FaviconImage source={window.location.href} />
-          {window.location.hostname}
+          <ShortenerTitle>{window.location.hostname}</ShortenerTitle>
         </InputContainer>
       )}
 

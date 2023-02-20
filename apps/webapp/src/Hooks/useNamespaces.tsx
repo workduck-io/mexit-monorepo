@@ -1,4 +1,5 @@
 import {
+  apiURLs,
   getNewNamespaceName,
   ILink,
   Mentionable,
@@ -17,10 +18,10 @@ import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {
-  const namespaces = useDataStore((state) => state.namespaces)
   const { createNewNamespace } = useNamespaceApi()
   const { getNode, getNodeType } = useNodes()
   const addNamespace = useDataStore((s) => s.addNamespace)
+  const addSpace = useDataStore((s) => s.addSpace)
   const updateNamespace = useDataStore((s) => s.updateNamespace)
   const {
     changeNamespaceName: chageNamespaceNameApi,
@@ -58,8 +59,10 @@ export const useNamespaces = () => {
 
   const getNamespaceOfNode = (nodeId: string): SingleNamespace | undefined => {
     const node = getNode(nodeId, true)
-    const namespace = namespaces.find((ns) => ns.id === node?.namespace)
+    const namespace = useDataStore.getState().namespaces?.find((ns) => ns.id === node?.namespace)
+
     if (namespace) return namespace
+
     const nodeType = getNodeType(nodeId)
     if (nodeType === NodeType.SHARED) {
       return SHARED_NAMESPACE
@@ -82,7 +85,8 @@ export const useNamespaces = () => {
 
   const getNamespaceIconForNode = (nodeId: string): MIcon | undefined => {
     const node = getNode(nodeId)
-    const namespace = namespaces.find((ns) => ns.id === node?.namespace)
+    const namespace = useDataStore.getState().namespaces?.find((ns) => ns.id === node?.namespace)
+
     if (namespace) return getNamespaceIcon(namespace)
 
     const nodeType = getNodeType(nodeId)
@@ -111,14 +115,17 @@ export const useNamespaces = () => {
   }
 
   const addDefaultNewNamespace = async () => {
-    const namespaces = useDataStore.getState().namespaces
-    const newNamespaceName = getNewNamespaceName(namespaces.length)
+    const spaces = useDataStore.getState().spaces
+    const newNamespaceName = getNewNamespaceName(spaces.length)
     return await addNewNamespace(newNamespaceName)
   }
 
   const addNewNamespace = async (name: string) => {
     const ns = await createNewNamespace(name)
-    if (ns) addNamespace(ns)
+    if (ns) {
+      addNamespace(ns)
+      addSpace(ns)
+    }
 
     mog('New namespace created', { ns })
     return ns
@@ -132,13 +139,16 @@ export const useNamespaces = () => {
   }
 
   const getNamespaceOfNodeid = (nodeid: string): SingleNamespace | undefined => {
-    const namespaces = useDataStore.getState().namespaces
+    const namespaces = useDataStore.getState().spaces
+
     const ilinks = useDataStore.getState().ilinks
     const namespace = ilinks.find((l) => l.nodeid === nodeid)?.namespace
+
     if (namespace) {
       const ns = namespaces.find((ns) => ns.id === namespace)
       return ns
     }
+
     const nodeType = getNodeType(nodeid)
 
     if (nodeType === NodeType.SHARED) {
@@ -224,6 +234,10 @@ export const useNamespaces = () => {
     return users
   }
 
+  const getSpaceCopyUrl = (spaceId: string) => {
+    return apiURLs.frontend.getPublicNSURL(spaceId)
+  }
+
   const isNamespacePublic = (namespaceId: string): boolean => {
     const namespace = getNamespace(namespaceId)
     return namespace?.publicAccess ?? false
@@ -257,6 +271,7 @@ export const useNamespaces = () => {
     getNamespaceIconForNode,
     addDefaultNewNamespace,
     getNamespaceOfNode,
+    getSpaceCopyUrl,
     getNamespaceOptions,
     // Sharing
     getSharedUsersForNamespace,

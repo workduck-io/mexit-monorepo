@@ -11,9 +11,11 @@ import { API, DefaultMIcons } from '@mexit/core'
 import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../../Hooks/API/useNamespaceAPI'
+import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useDataStore } from '../../../Stores/useDataStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../../Stores/useModalStore'
+import { useUserPreferenceStore } from '../../../Stores/userPreferenceStore'
 import { ModalControls } from '../../../Style/Refactor'
 
 import MoveToSpace, { SelectedOption } from './MoveToSpace'
@@ -28,6 +30,8 @@ const DeleteSpaceModal = () => {
   const space = useLayoutStore((store) => store.contextMenu?.item)
   const deleteSpaceFromStore = useDataStore((s) => s.deleteNamespace)
   const { getNamespace } = useNamespaceApi()
+  const { getDefaultNamespaceId } = useNamespaces()
+  const updateActiveNamespace = useUserPreferenceStore((s) => s.setActiveNamespace)
   const updateNamespaceOfILinks = useDataStore((s) => s.updateNamespaceOfILinks)
 
   const onRequestClose = () => {
@@ -42,6 +46,9 @@ const DeleteSpaceModal = () => {
           ...(successorSpace ? { successorNamespaceID: successorSpace.id } : {})
         })
         deleteSpaceFromStore(space.id)
+
+        updateActiveNamespace(getDefaultNamespaceId())
+
         if (successorSpace) {
           getNamespace(successorSpace.id)
             .then((res) => {
@@ -60,7 +67,7 @@ const DeleteSpaceModal = () => {
       setIsLoading(false)
       onRequestClose()
       toast('Unable to Delete')
-      console.error('Unable To Delete Space', { namespaceID: space.id, successorNamespaceID: successorSpace?.id })
+      console.error('Unable To Delete Space', { namespaceID: space.id, successorNamespaceID: successorSpace?.id, err })
     }
   }
 

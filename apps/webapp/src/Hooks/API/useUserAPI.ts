@@ -1,7 +1,6 @@
 import { API, mog } from '@mexit/core'
 import { UserPreferences } from '@mexit/shared'
 
-import { version } from '../../../package.json'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useUserCacheStore } from '../../Stores/useUserCacheStore'
@@ -99,21 +98,10 @@ export const useUserService = () => {
   }
 
   const updateUserPreferences = async (): Promise<boolean> => {
-    const lastOpenedNotes = useUserPreferenceStore.getState().lastOpenedNotes
-    const lastUsedSnippets = useUserPreferenceStore.getState().lastUsedSnippets
-    const activeNamespace = useUserPreferenceStore.getState().activeNamespace
-    const theme = useUserPreferenceStore.getState().theme
-    const smartCaptureExcludedFields = useUserPreferenceStore.getState().smartCaptureExcludedFields
     const id = useAuthStore.getState().userDetails.id
+    const getUserPreferences = useUserPreferenceStore.getState().getUserPreferences
 
-    const userPreferences: UserPreferences = {
-      version,
-      lastOpenedNotes,
-      lastUsedSnippets,
-      smartCaptureExcludedFields,
-      theme,
-      activeNamespace
-    }
+    const userPreferences: UserPreferences = getUserPreferences()
 
     try {
       return await API.user.updatePreference(userPreferences).then((resp) => {

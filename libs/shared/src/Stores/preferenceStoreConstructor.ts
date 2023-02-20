@@ -1,9 +1,20 @@
-import { LastOpenedData, LastOpenedNotes, LastUsedSnippets, UserPreferences } from '../Types/userPreference'
+import merge from 'deepmerge'
+
+import {
+  LastOpenedData,
+  LastOpenedNotes,
+  LastUsedSnippets,
+  SpacePreference,
+  SpacePreferenceData,
+  UserPreferences
+} from '../Types/userPreference'
 
 export interface UserPreferenceStore extends UserPreferences {
   _hasHydrated: boolean
   smartCaptureExcludedFields?: any
   setHasHydrated: (state) => void
+  space: SpacePreference
+  addSpacePreference: (spaceId: string, spacePreferenceData: Partial<SpacePreferenceData>) => void
   clear: () => void
   setTheme: (themeId: string, mode?: 'light' | 'dark') => void
   setLastOpenedNotes: (lastOpenedNotes: LastOpenedNotes) => void
@@ -21,12 +32,26 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
   theme: { themeId: 'xeM', mode: 'dark' },
   lastOpenedNotes: {},
   lastUsedSnippets: {},
+  space: {},
+  addSpacePreference: (spaceId: string, spacePreferenceData: Partial<SpacePreferenceData>) => {
+    const existingSpacePreferences = get().space
+    set({
+      space: {
+        ...existingSpacePreferences,
+        [spaceId]: {
+          ...(existingSpacePreferences[spaceId] ?? {}),
+          ...spacePreferenceData
+        }
+      }
+    })
+  },
   smartCaptureExcludedFields: {},
 
   clear: () => {
     set({
       version: 'unset',
       activeNamespace: undefined,
+      space: {},
       theme: { themeId: 'xeM', mode: 'dark' },
       lastOpenedNotes: {},
       lastUsedSnippets: {},
@@ -58,6 +83,7 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
       lastOpenedNotes: get().lastOpenedNotes,
       smartCaptureExcludedFields: get().smartCaptureExcludedFields,
       version: get().version,
+      space: get().space,
       activeNamespace: get().activeNamespace,
       lastUsedSnippets: get().lastUsedSnippets,
       theme: get().theme
@@ -129,6 +155,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
   // For all lastOpened of remote
   const mergedLastOpenedNotes = mergeLastOpenedData(remote.lastOpenedNotes, local.lastOpenedNotes)
   const mergedLastUsedSnippets = mergeLastOpenedData(remote.lastUsedSnippets, local.lastUsedSnippets)
+  const mergedSpacePreferences = merge(local.space, remote.space ?? {})
 
   // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
   return {
@@ -138,6 +165,7 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     activeNamespace: remote.activeNamespace ?? local.activeNamespace,
     lastOpenedNotes: getLimitedEntries({ ...local.lastOpenedNotes, ...mergedLastOpenedNotes }),
     lastUsedSnippets: { ...local.lastUsedSnippets, ...mergedLastUsedSnippets },
+    space: mergedSpacePreferences,
     theme: remote.theme ?? local.theme,
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }

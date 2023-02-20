@@ -8,11 +8,13 @@ import {
   generateNamespaceId,
   iLinksToUpdate,
   MIcon,
-  mog
+  mog,
+  SingleNamespace
 } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { useDataStore } from '../../Stores/useDataStore'
+import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'
@@ -20,13 +22,13 @@ import { useUpdater } from '../useUpdater'
 
 export const useNamespaceApi = () => {
   const { setNamespaces, setIlinks, addInArchive } = useDataStore()
+  const setAllSpaces = useDataStore((store) => store.setAllSpaces)
   const { updateFromNotes } = useUpdater()
 
   const getAllNamespaces = async () => {
     const namespaces = await API.namespace
       .getAll()
       .then((d: any) => {
-        // mog('namespaces all', d.data)
         return d.map((item: any) => {
           // metadata is json string parse to object
           return {
@@ -55,20 +57,25 @@ export const useNamespaceApi = () => {
       })
 
     if (namespaces) {
-      const newILinks = namespaces.reduce((arr, { nodeHierarchy }) => {
-        return [...arr, ...nodeHierarchy]
-      }, [])
+      const { newILinks, archivedILinks } = namespaces.reduce(
+        (arr, { nodeHierarchy, archiveNodeHierarchy }) => {
+          return {
+            newILinks: [...arr.newILinks, ...nodeHierarchy],
+            archivedILinks: [...arr.archivedILinks, ...archiveNodeHierarchy]
+          }
+        },
+        { newILinks: [], archivedILinks: [] }
+      )
 
-      namespaces.forEach((i) => console.log(i))
-
-      const archivedILinks = namespaces.reduce((arr, { archiveNodeHierarchy }) => {
-        return [...arr, ...archiveNodeHierarchy]
-      }, [])
       const localILinks = useDataStore.getState().ilinks
 
-      // mog('update namespaces and ILinks', { namespaces, newILinks, archivedILinks })
-      // SetILinks once middleware is integrated
-      const ns = namespaces.map((n) => n.ns)
+      const allSpaces = namespaces.map((n) => n.ns)
+      const spacePreferences = useUserPreferenceStore.getState().space
+      const ns = allSpaces.filter((s) => !spacePreferences[s?.id]?.hidden)
+      console.log('HERE ARE THEY', { ns, spacePreferences })
+
+      setAllSpaces(allSpaces)
+
       setNamespaces(ns)
       // TODO: Also set archive links
 
@@ -142,7 +149,7 @@ export const useNamespaceApi = () => {
     return res
   }
 
-  const createNewNamespace = async (name: string) => {
+  const createNewNamespace = async (name: string): Promise<SingleNamespace> => {
     try {
       const req = {
         type: 'NamespaceRequest',
@@ -152,21 +159,21 @@ export const useNamespaceApi = () => {
           icon: {
             type: 'ICON',
             value: 'heroicons-outline:view-grid'
-          }
+          } as MIcon
         }
       }
-      const res = await API.namespace.create(req).then((d: any) => ({
+
+      await API.namespace.create(req)
+
+      return {
         id: req.id,
         name: name,
-        iconUrl: req.metadata.icon,
+        icon: req.metadata.icon,
         access: 'OWNER' as const,
         createdAt: Date.now(),
-        updatedAt: Date.now()
-      }))
-
-      mog('We created a namespace', { res })
-
-      return res
+        updatedAt: Date.now(),
+        publicAccess: false
+      }
     } catch (err) {
       console.error('Error in namespace creation: ', err)
       toast('Unable to Create New Namespace')
