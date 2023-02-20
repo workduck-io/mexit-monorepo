@@ -42,7 +42,7 @@ jobs:
           node-version: 16.x
 
       - name: Install Yarn Globally
-        run: npm install -g yarn
+        run: npm install -g yarn tsx
 
       - name: Install changesets CLI
         run: yarn install --dev @changesets/cli
