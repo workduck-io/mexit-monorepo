@@ -4,20 +4,10 @@ import { useLocation } from 'react-router-dom'
 import timeLine from '@iconify-icons/ri/time-line'
 import styled from 'styled-components'
 
-import { MexIcon } from '@workduck-io/mex-components'
+import { IconButton, MexIcon } from '@workduck-io/mex-components'
 
 import { NodeMetadata } from '@mexit/core'
-import {
-  DataGroup,
-  DataWrapper,
-  FlexBetween,
-  getMIcon,
-  Menu,
-  MenuItem,
-  MetadataWrapper,
-  ProfileIcon,
-  RelativeTime
-} from '@mexit/shared'
+import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { useAuthStore } from '../../Stores/useAuth'
@@ -75,7 +65,6 @@ const Metadata = ({
   const sharedUsers = useMemo(() => {
     const sharedUsersOfNode = getSharedUsersOfNodeOfSpace(nodeId, namespaceId)
     const currentUser = useAuthStore.getState().userDetails
-    // mog('ACTIVE USERS', { activeUsers, mentionable })
 
     const usersWithStatus = sharedUsersOfNode
       .map((user) => {
@@ -119,17 +108,7 @@ const Metadata = ({
         {!publicMetadata && !hideShareDetails && (
           <Data>
             <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
-            <Menu
-              key={`Share-modal-menu-${nodeId}`}
-              values={<MexIcon noHover icon="bi:three-dots-vertical" width={20} height={20} />}
-            >
-              <MenuItem
-                key="share-menu"
-                icon={getMIcon('ICON', 'ri:share-line')}
-                onClick={onNoteShareClick}
-                label="Share"
-              />
-            </Menu>
+            <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
           </Data>
         )}
       </FlexBetween>

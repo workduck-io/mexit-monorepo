@@ -7,7 +7,7 @@ import { getPlateEditorRef } from '@udecode/plate'
 import { LoadingButton } from '@workduck-io/mex-components'
 
 import { AccessLevel, DefaultPermission, DefaultPermissionValue, mog, permissionOptions } from '@mexit/core'
-import { ButtonFields, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
+import { ButtonFields, Group, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -17,7 +17,7 @@ import { usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalHeader } from '../../Style/Refactor'
+import { ModalActions, ModalFooter, ModalHeader } from '../../Style/Refactor'
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 
@@ -25,7 +25,6 @@ import { InviteFormFieldset, InviteFormWrapper, InviteWrapper } from './styles'
 
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
-  // const data = useShareModalStore((state) => state.data)
   const closeModal = useShareModalStore((state) => state.closeModal)
   const context = useShareModalStore((state) => state.context)
   const { getUserDetails, getUserDetailsUserId } = useUserService()
@@ -122,61 +121,68 @@ export const InviteModalContent = () => {
       <p>Invite your friends to your Note.</p>
       <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <InviteFormFieldset disabled={readOnly}>
-          <InputFormError
-            name="alias"
-            label="Alias"
-            inputProps={{
-              defaultValue: sModalData.alias ?? existUserDetails?.alias ?? '',
-              readOnly: existUserDetails?.alias !== undefined,
-              ...register('alias', {
-                required: true
-              })
-            }}
-            errors={errors}
-          ></InputFormError>
-          <InputFormError
-            name="email"
-            label="Email"
-            inputProps={{
-              autoFocus: true,
-              defaultValue: existUserDetails?.email ?? '',
-              readOnly: existUserDetails?.email !== undefined,
-              ...register('email', {
-                required: true,
-                pattern: EMAIL_REG
-              })
-            }}
-            errors={errors}
-          ></InputFormError>
-
-          <SelectWrapper>
-            <Label htmlFor="access">Permission</Label>
-            <Controller
-              control={control}
-              render={({ field }) => (
-                <StyledCreatatbleSelect
-                  {...field}
-                  defaultValue={DefaultPermissionValue}
-                  options={[...permissionOptions, { value: 'NONE', label: 'None' }]}
-                  closeMenuOnSelect={true}
-                  closeMenuOnBlur={true}
-                />
-              )}
-              name="access"
+          <Group>
+            <InputFormError
+              name="alias"
+              label="Alias"
+              inputProps={{
+                defaultValue: sModalData.alias ?? existUserDetails?.alias ?? '',
+                readOnly: existUserDetails?.alias !== undefined,
+                ...register('alias', {
+                  required: true
+                })
+              }}
+              errors={errors}
             />
-          </SelectWrapper>
+            <InputFormError
+              name="email"
+              label="Email"
+              inputProps={{
+                autoFocus: true,
+                defaultValue: existUserDetails?.email ?? '',
+                readOnly: existUserDetails?.email !== undefined,
+                ...register('email', {
+                  required: true,
+                  pattern: EMAIL_REG
+                })
+              }}
+              errors={errors}
+            />
 
-          <ButtonFields>
-            <LoadingButton
-              loading={isSubmitting}
-              alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-              type="submit"
-              primary
-              large
-            >
-              Invite
-            </LoadingButton>
-          </ButtonFields>
+            <SelectWrapper>
+              <Label htmlFor="access">Permission</Label>
+              <SelectWrapper>
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <StyledCreatatbleSelect
+                      {...field}
+                      defaultValue={DefaultPermissionValue}
+                      options={[...permissionOptions, { value: 'NONE', label: 'None' }]}
+                      closeMenuOnSelect={true}
+                      closeMenuOnBlur={true}
+                    />
+                  )}
+                  name="access"
+                />
+              </SelectWrapper>
+            </SelectWrapper>
+          </Group>
+          <ModalFooter>
+            <ModalActions content="flex-end">
+              <ButtonFields>
+                <LoadingButton
+                  loading={isSubmitting}
+                  alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
+                  type="submit"
+                  primary
+                  large
+                >
+                  Invite
+                </LoadingButton>
+              </ButtonFields>
+            </ModalActions>
+          </ModalFooter>
         </InviteFormFieldset>
       </InviteFormWrapper>
     </InviteWrapper>

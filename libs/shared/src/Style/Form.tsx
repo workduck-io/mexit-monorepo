@@ -24,7 +24,7 @@ interface InputProps {
 
 export const Input = styled.input<InputProps>`
   border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  padding: ${({ theme: { spacing } }) => `${spacing.small} 8px`};
+  padding: ${({ theme: { spacing } }) => `${spacing.small}`};
   transition: all 0.2s ease-in-out;
   ${({ theme, transparent }) => !transparent && generateStyle(theme.generic.form.input)};
 
@@ -38,13 +38,19 @@ export const Input = styled.input<InputProps>`
     css`
       background-color: transparent;
       border: 1px solid transparent;
+      color: ${({ theme }) => theme.tokens.text.default};
+
+      &:focus-visible {
+        border-color: transparent;
+      }
+
       &:hover,
       &:focus {
-        ${({ theme }) => generateStyle(theme.generic.form.input.hover)};
+        /* ${({ theme }) => generateStyle(theme.generic.form.input.hover)}; */
       }
       ${isDirty &&
       css`
-        ${({ theme }) => generateStyle(theme.generic.form.input.hover)};
+        /* ${({ theme }) => generateStyle(theme.generic.form.input.hover)}; */
       `}
     `}
 
@@ -211,10 +217,10 @@ export const ButtonFields = styled.div<{ position?: string }>`
   }}
 `
 
-export const ReactSelectStyles = (theme: DefaultTheme) => {
+export const ReactSelectStyles = (theme: DefaultTheme, options?: { transparent?: boolean }) => {
   const separators = (provided, state) => ({
     ...provided,
-    backgroundColor: theme.tokens.surfaces.separator
+    backgroundColor: options?.transparent ? 'none' : theme.tokens.surfaces.separator
   })
 
   const indicators = (provided, state) => ({
@@ -231,6 +237,7 @@ export const ReactSelectStyles = (theme: DefaultTheme) => {
       // width: state.selectProps.width,
       color: state.selectProps.menuColor,
       backgroundColor: theme.generic.form.input.surface,
+      border: theme.generic.form.input.border,
       padding: `${theme.spacing.small} ${theme.spacing.small}`,
       zIndex: 1020
     }),
@@ -246,8 +253,8 @@ export const ReactSelectStyles = (theme: DefaultTheme) => {
     clearIndicator: indicators,
     control: (provided) => ({
       ...provided,
-      backgroundColor: theme.generic.form.input.surface,
-      border: theme.generic.form.input.border,
+      backgroundColor: options?.transparent ? 'transparent' : theme.generic.form.input.surface,
+      border: options?.transparent ? '1px solid transparent' : theme.generic.form.input.border,
       margin: `${theme.spacing.small} 0`,
       ':hover': {
         border: theme.generic.form.input.border
@@ -261,13 +268,18 @@ export const ReactSelectStyles = (theme: DefaultTheme) => {
       color = state.isFocused ? theme.tokens.colors.primary.default : color
       return {
         ...provided,
-        borderRadius: theme.borderRadius.tiny,
+        borderRadius: theme.borderRadius.small,
         backgroundColor: background,
+        whiteSpace: 'nowrap',
         color,
         padding: '6px 10px',
         margin: `${theme.spacing.tiny} 0px`
       }
     },
+    singleValue: (provided) => ({
+      ...provided,
+      margin: 0
+    }),
     multiValue: (provided, state) => ({
       ...provided,
       backgroundColor: theme.tokens.surfaces.s[3],
@@ -299,7 +311,7 @@ export const StyledSelect = (props: any) => {
 export const StyledCreatatbleSelect = (props: any) => {
   const theme = useTheme()
   const reactSelectTheme = {
-    borderRadius: 4,
+    borderRadius: theme.spacing.small,
     colors: {
       primary: theme.tokens.colors.primary.default,
       primary75: theme.tokens.colors.primary.active,
@@ -325,11 +337,11 @@ export const StyledCreatatbleSelect = (props: any) => {
       menuGutter: 8
     }
   }
-  return <Creatable {...props} theme={reactSelectTheme} styles={ReactSelectStyles(theme)}></Creatable>
+  return <Creatable {...props} theme={reactSelectTheme} styles={ReactSelectStyles(theme, props.style)}></Creatable>
 }
 
-export const SelectWrapper = styled.div`
-  width: 100%;
+export const SelectWrapper = styled.span`
+  width: 22ch;
 `
 
 /*

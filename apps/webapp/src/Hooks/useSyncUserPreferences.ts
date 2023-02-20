@@ -9,15 +9,14 @@ import { useUserService } from './API/useUserAPI'
 
 const USER_PREF_AUTO_SAVE_MS = 30 * 60 * 1000 // 30 minutes
 
-export const useAutoSyncUserPreference = () => {
-  const isAuthenticated = useAuthStore((store) => store.authenticated)
+export const useUserPreferences = () => {
+  const { getCurrentUser } = useUserService()
   const getUserPreferences = useUserPreferenceStore((s) => s.getUserPreferences)
   const setUserPreferences = useUserPreferenceStore((store) => store.setUserPreferences)
-  const hasHydrated = useUserPreferenceStore((s) => s._hasHydrated)
-  const { updateUserPreferences, getCurrentUser } = useUserService()
 
   const updateCurrentUserPreferences = async () => {
     const user = await getCurrentUser()
+
     if (user) {
       const userPreferences = user.preference
       // mog('User Preferences Fetched: ', { userPreferences })
@@ -29,16 +28,12 @@ export const useAutoSyncUserPreference = () => {
     }
   }
 
-  /**
-   * Fetches the user preference once
-   */
-  useEffect(() => {
-    // mog(`Fetching User Preferences`)
-    if (hasHydrated) {
-      // mog('Hydration finished')
-      if (isAuthenticated) updateCurrentUserPreferences()
-    }
-  }, [hasHydrated, isAuthenticated])
+  return { updateCurrentUserPreferences }
+}
+
+export const useAutoSyncUserPreference = () => {
+  const isAuthenticated = useAuthStore((store) => store.authenticated)
+  const { updateUserPreferences } = useUserService()
 
   /**
    * Saves the user preference at every interval

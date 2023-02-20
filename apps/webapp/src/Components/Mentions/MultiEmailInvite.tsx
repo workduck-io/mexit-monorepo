@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { LoadingButton } from '@workduck-io/mex-components'
-
 import {
   AccessLevel,
   DefaultPermission,
@@ -11,7 +9,7 @@ import {
   mog,
   permissionOptions
 } from '@mexit/core'
-import { Label, mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
+import { mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
@@ -23,11 +21,10 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalControls, ModalHeader } from '../../Style/Refactor'
-import { getEmailStart, MultiEmailValidate } from '../../Utils/constants'
-import { InputFormError } from '../Input'
+import { getEmailStart } from '../../Utils/constants'
+import InputBox from '../InputBox'
 
-import { InviteFormFieldset, InviteFormWrapper, MultipleInviteWrapper } from './styles'
+import { InviteFormFieldset, InviteFormWrapper, StyledLoadingButton } from './styles'
 
 export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean }) => {
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
@@ -47,6 +44,8 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     handleSubmit,
     register,
     control,
+    setValue,
+    setError,
     formState: { errors, isSubmitting }
   } = useForm<InviteModalData>()
 
@@ -132,60 +131,64 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     }
   }
 
+  // useEffect(() => {
+  //   register('email', {
+  //     required: true,
+  //     validate: MultiEmailValidate
+  //   })
+  // }, [])
+
   return (
-    <MultipleInviteWrapper>
-      <ModalHeader>Invite Users</ModalHeader>
-      <p>
-        Invite your friends to your {context} <strong>{title}</strong>
-      </p>
-      <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <InviteFormFieldset disabled={disabled}>
-          <InputFormError
-            name="email"
-            label="Emails"
-            inputProps={{
-              autoFocus: true,
-              placeholder: 'alice@email.com, bob@email.com',
-              type: 'email',
-              // Accepts multiple emails
-              multiple: true,
-              ...register('email', {
-                required: true,
-                validate: MultiEmailValidate
-              })
-            }}
-            errors={errors}
-          ></InputFormError>
+    <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
+      <InviteFormFieldset inline>
+        <InputBox
+          inputProps={{
+            transparent: true,
+            autoFocus: true,
+            name: 'email',
+            placeholder: "Enter user's emails...",
+            type: 'email',
+            // Accepts multiple emails
+            errors,
+            multiple: true,
+            register
+            // onChange: (e) => {
+            //   const val = e.target.value
+            //   if (MultiEmailValidate(val)) setValue('email', e.target.value)
+            //   else setError('email', { message: 'Email is required', type: 'required' })
+            // }
+          }}
+          rightChild={
+            <SelectWrapper>
+              <Controller
+                control={control}
+                render={({ field }) => (
+                  <StyledCreatatbleSelect
+                    {...field}
+                    isSearchable={false}
+                    menuPortalTarget={document.getElementById('table')}
+                    style={{ transparent: true }}
+                    defaultValue={DefaultPermissionValue}
+                    options={permissionOptions}
+                    closeMenuOnSelect={true}
+                    closeMenuOnBlur={true}
+                  />
+                )}
+                name="access"
+              />
+            </SelectWrapper>
+          }
+        />
 
-          <SelectWrapper>
-            <Label htmlFor="access">Permission</Label>
-            <Controller
-              control={control}
-              render={({ field }) => (
-                <StyledCreatatbleSelect
-                  {...field}
-                  defaultValue={DefaultPermissionValue}
-                  options={permissionOptions}
-                  closeMenuOnSelect={true}
-                  closeMenuOnBlur={true}
-                />
-              )}
-              name="access"
-            />
-          </SelectWrapper>
-
-          <ModalControls>
-            <LoadingButton
-              loading={isSubmitting}
-              type="submit"
-              primary
-              alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
-            >
-              Invite
-            </LoadingButton>
-          </ModalControls>
-        </InviteFormFieldset>
-      </InviteFormWrapper>
-    </MultipleInviteWrapper>
+        <StyledLoadingButton
+          loading={isSubmitting}
+          type="submit"
+          primary
+          alsoDisabled={errors.email !== undefined || errors.alias !== undefined}
+        >
+          Invite
+        </StyledLoadingButton>
+      </InviteFormFieldset>
+    </InviteFormWrapper>
   )
 }

@@ -31,13 +31,13 @@ export const permissionOptions: {
   value: AccessLevel
   label: string
 }[] = [
-  { value: 'MANAGE', label: 'Manage' },
-  { value: 'WRITE', label: 'Edit' },
-  { value: 'READ', label: 'View' }
+  { value: 'MANAGE', label: 'Can manage' },
+  { value: 'WRITE', label: 'Can edit' },
+  { value: 'READ', label: 'Can view' }
 ]
 
 export const DefaultPermission = 'MANAGE'
-export const DefaultPermissionValue = { value: 'MANAGE', label: 'Manage' }
+export const DefaultPermissionValue = { value: 'MANAGE', label: 'Can manage' }
 
 export interface AccessMap {
   [nodeid: string]: AccessLevel

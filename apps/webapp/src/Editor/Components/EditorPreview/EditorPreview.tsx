@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
-import { MexIcon,SecondaryButton } from '@workduck-io/mex-components'
+import { MexIcon, SecondaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { getNameFromPath, NodeEditorContent } from '@mexit/core'
@@ -53,6 +53,7 @@ export interface EditorPreviewProps {
   content?: NodeEditorContent
   allowClosePreview?: boolean
   icon?: string
+  title?: string
   iconTooltip?: string
   setPreview?: (open: boolean) => void
 }
@@ -64,6 +65,7 @@ const EditorPreview = ({
   content,
   hover,
   blockId,
+  title,
   label,
   editable = true,
   setPreview,
@@ -129,11 +131,11 @@ const EditorPreview = ({
             <EditorPreviewWrapper id={labelId} className="__editor__preview" tabIndex={-1}>
               {(allowClosePreview || hasTags(nodeid) || ilink?.path) && (
                 <EditorPreviewControls hasTags={hasTags(nodeid)}>
-                  {ilink?.path && (
+                  {(title ?? ilink?.path) && (
                     <PreviewActionHeader>
                       <EditorPreviewNoteName onClick={onClickNavigate}>
                         <IconDisplay icon={noteMetadata?.icon} />
-                        {getNameFromPath(ilink.path)}
+                        {title ?? getNameFromPath(ilink.path)}
                       </EditorPreviewNoteName>
                       {icon && iconTooltip && (
                         <Tooltip key={labelId} content={iconTooltip}>

@@ -11,6 +11,8 @@ const ShareModal = () => {
   const closeModal = useShareModalStore((store) => store.closeModal)
   const mode = useShareModalStore((store) => store.mode)
 
+  if (!open) return
+
   return (
     <Modal
       className={mode === 'invite' ? 'ModalContent' : 'ModalContentSplit'}

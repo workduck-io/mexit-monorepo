@@ -168,18 +168,18 @@ export const useApi = () => {
 
     const data = await dataPromise
       .then((d) => {
-        const contentToSet = d.data ? deserializeContent(d.data) : content
+        const contentToSet = d?.data ? deserializeContent(d.data) : content
         const origMetadata = extractMetadata(d)
+
         const metadata = isShared
           ? {
-              ...origMetadata,
+              ...(origMetadata ?? {}),
               updatedAt: Date.now(),
               lastEditedBy: currentUser.id
             }
           : origMetadata
 
-        setContent(noteID, contentToSet)
-        updateMetadata('notes', noteID, metadata)
+        updateFromContent(noteID, contentToSet, metadata)
 
         addLastOpened(noteID)
         return d
@@ -239,24 +239,28 @@ export const useApi = () => {
   }
 
   const getPublicNodeAPI = async (nodeId: string) => {
-    const res = await API.node.getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }).then((d) => {
-      if (!d) return
-      const metadata = {
-        createdBy: d.createdBy,
-        createdAt: d.createdAt,
-        lastEditedBy: d.lastEditedBy,
-        updatedAt: d.updatedAt,
-        icon: d?.metadata?.icon
-      }
+    if (!nodeId) return
 
-      // console.log(metadata, d.data, todos)
-      return {
-        title: d.title,
-        data: d.data,
-        metadata: removeNulls(metadata),
-        version: d.version ?? undefined
-      }
-    })
+    const res = await API.node
+      .getPublic(nodeId, { enabled: true, expiry: GET_REQUEST_MINIMUM_GAP_IN_MS }, { throwHttpErrors: false })
+      .then((d) => {
+        if (!d) return
+
+        const metadata = {
+          createdBy: d.createdBy,
+          createdAt: d.createdAt,
+          lastEditedBy: d.lastEditedBy,
+          updatedAt: d.updatedAt,
+          icon: d?.metadata?.icon
+        }
+
+        return {
+          title: d.title,
+          data: d.data,
+          metadata: removeNulls(metadata),
+          version: d.version ?? undefined
+        }
+      })
 
     if (res) {
       const content = deserializeContent(res.data)

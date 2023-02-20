@@ -1,48 +1,70 @@
 import styled, { css } from 'styled-components'
 
-import { Button } from '@workduck-io/mex-components'
-
-import { SelectWrapper } from '@mexit/shared'
+import { Button, LoadingButton } from '@workduck-io/mex-components'
 
 export const InviteWrapper = styled.div``
-export const MultipleInviteWrapper = styled.div`
-  form > input {
-  }
-  form > fieldset {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: ${({ theme }) => theme.spacing.small};
-    flex-wrap: wrap;
-    ${SelectWrapper} {
-      width: 60%;
-    }
+
+export const InviteFormWrapper = styled.form``
+
+export const StyledSaveButton = styled(Button)<{ primary?: boolean }>`
+  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
+
+  ${({ theme, primary }) =>
+    primary &&
+    css`
+      background: ${theme.tokens.colors.primary.default};
+    `}
+
+  &:disabled {
+    opacity: 0.6;
+    color: ${({ theme }) => theme.tokens.text.fade};
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 `
 
-export const InviteFormWrapper = styled.form``
-export const InviteFormFieldset = styled.fieldset`
+export const InviteFormFieldset = styled.fieldset<{ inline?: boolean }>`
   border: none;
   padding: 0;
-  input {
+  ${({ inline }) =>
+    inline &&
+    css`
+      display: flex;
+      align-items: center;
+    `}
+  gap: ${({ theme }) => theme.spacing.medium};
+`
+
+export const StyledLoadingButton = styled(LoadingButton)`
+  padding: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.large};
+  border: 1px solid transparent;
+
+  &:disabled {
+    opacity: 0.8;
+    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   }
 `
+
 export const SharedPermissionsWrapper = styled.div``
 
 export const ShareOwnerTag = styled.div`
-  padding: ${({ theme }) => `0.75rem ${theme.spacing.small}`};
+  padding: ${({ theme }) => `${theme.spacing.small}`};
   color: ${({ theme }) => theme.tokens.text.default};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
-  background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+`
+
+export const TableBody = styled.tbody``
+
+export const TableContainer = styled.section`
+  display: block;
+  max-height: 16rem;
+  overflow: hidden auto;
   border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
+  border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 export const SharedPermissionsTable = styled.table`
-  margin-top: ${({ theme }) => theme.spacing.large};
-  min-width: 600px;
+  min-width: 40vw;
   width: 100%;
-  border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
-  border-radius: ${({ theme }) => theme.borderRadius.small};
 
   caption {
     text-align: left;
@@ -69,6 +91,7 @@ export const ShareRowHeading = styled.thead`
       }
     }
   }
+
   font-weight: bold;
   color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
@@ -118,8 +141,8 @@ export const ShareEmail = styled.td`
 `
 
 export const SharePermission = styled.td<{ disabled?: boolean }>`
-  width: 120px;
-
+  padding: ${({ theme }) => theme.spacing.small};
+  width: 156px;
   ${({ disabled }) =>
     disabled &&
     css`

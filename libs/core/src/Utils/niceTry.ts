@@ -17,10 +17,11 @@ export const nice = function (fn) {
  * @param {Function} fn - Asynchronous function that might or might not throw an error.
  * @returns {?*} Promise which resolves with the return-value of the asynchronous function when no error occurred.
  */
-export const nicePromise = async function (fn) {
+export const nicePromise = async function (fn, errCallBack?: (e) => void) {
   try {
     return await fn()
   } catch (e) {
-    // * do nothing
+    if (errCallBack) errCallBack(e)
+    else console.error('Something went wrong', e)
   }
 }

@@ -1,6 +1,6 @@
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
-import { getParentBreadcrumbs, ILink, mog, NodeType, SharedNode } from '@mexit/core'
+import { apiURLs, getParentBreadcrumbs, ILink, mog, NodeType, SharedNode } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
@@ -56,6 +56,7 @@ export const useNodes = () => {
 
   const isPublicNode = (nodeid: string) => {
     const noteMetadata = useMetadataStore.getState().metadata.notes[nodeid]
+
     if (noteMetadata?.publicAccess) {
       return true
     }
@@ -72,6 +73,18 @@ export const useNodes = () => {
     if (isSharedNode(nodeid)) return NodeType.SHARED
     if (isPublicNode(nodeid)) return NodeType.PUBLIC
     return NodeType.MISSING
+  }
+
+  const getNoteCopyUrl = (noteId: string): string => {
+    const note = getNode(noteId)
+
+    if (!note) return ''
+
+    const space = useDataStore.getState().namespaces.find((space) => space.id === note.namespace)
+
+    if (space?.publicAccess) return apiURLs.frontend.getPublicURLofNoteInNS(note.namespace, noteId)
+
+    return apiURLs.frontend.getPublicNodePath(noteId)
   }
 
   const updateBaseNode = (): ILink => {
@@ -150,6 +163,7 @@ export const useNodes = () => {
     getArchiveNode,
     getSharedNode,
     isSharedNode,
+    getNoteCopyUrl,
     getNodeType,
     updateBaseNode,
     getNodeBreadcrumbs

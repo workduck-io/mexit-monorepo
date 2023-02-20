@@ -6,7 +6,7 @@ import Tippy from '@tippyjs/react/headless'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { InputBlock, InputWrapper,Label } from '@mexit/shared'
+import { InputBlock, InputWrapper, Label } from '@mexit/shared'
 
 import { ErrorTooltip } from '../Style/Tippy'
 
@@ -32,7 +32,7 @@ export const PasswordNotMatch = () => <p>Passwords does not match</p>
 
 export interface LabeledInputProps {
   name: string
-  label: string
+  label?: string
   inputProps?: any
   labelProps?: any
   labelIcon?: any
@@ -53,25 +53,25 @@ const Input = ({
   additionalInfo,
   transparent
 }: LabeledInputProps) => {
-  // console.log({ name, label, inputProps, labelProps, error })
-
   return (
     <InputWrapper transparent={transparent} key={`FormInput_${name}_${label}`}>
-      <Tippy
-        render={(attrs) => (
-          <ErrorTooltip tabIndex={-1} {...attrs}>
-            {error}
-          </ErrorTooltip>
-        )}
-        placement="right"
-        duration={5000}
-        appendTo={() => document.body}
-        visible={error !== undefined}
-      >
-        <Label transparent={transparent} error={error !== undefined} htmlFor={name} {...labelProps}>
-          {label} {labelIcon && <Icon icon={labelIcon} />} {additionalInfo && <Infobox text={additionalInfo} />}
-        </Label>
-      </Tippy>
+      {label && (
+        <Tippy
+          render={(attrs) => (
+            <ErrorTooltip tabIndex={-1} {...attrs}>
+              {error}
+            </ErrorTooltip>
+          )}
+          placement="right"
+          duration={5000}
+          appendTo={() => document.body}
+          visible={error !== undefined}
+        >
+          <Label transparent={transparent} error={error !== undefined} htmlFor={name} {...labelProps}>
+            {label} {labelIcon && <Icon icon={labelIcon} />} {additionalInfo && <Infobox text={additionalInfo} />}
+          </Label>
+        </Tippy>
+      )}
       <InputBlock error={error !== undefined} transparent={transparent} key={`form-input-${name} `} {...inputProps} />
     </InputWrapper>
   )
@@ -79,7 +79,7 @@ const Input = ({
 
 export interface ErroredInputProps extends LabeledInputProps {
   name: string
-  label: string
+  label?: string
   inputProps?: any
   labelProps?: any
   errors?: any

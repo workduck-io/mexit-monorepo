@@ -41,6 +41,7 @@ export const usePermissions = () => {
     if (hasAccess) {
       return access
     }
+
     return undefined
   }
 

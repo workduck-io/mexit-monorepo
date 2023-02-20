@@ -20,6 +20,12 @@ export interface LastOpenedData {
   muted: boolean
 }
 
+export type SpacePreference = Record<string, SpacePreferenceData>
+
+export type SpacePreferenceData = {
+  hidden?: boolean
+}
+
 /**
  * Last opened note mapped to their nodeid
  */
@@ -34,6 +40,7 @@ export interface LastUsedSnippets {
 export interface UserPreferences {
   version: string
   lastOpenedNotes: LastOpenedNotes
+  space: SpacePreference
   lastUsedSnippets: LastUsedSnippets
   /** Current mex Theme */
   theme?: UserThemePreferences

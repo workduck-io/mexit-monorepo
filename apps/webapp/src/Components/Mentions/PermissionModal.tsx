@@ -3,29 +3,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react'
 
-import deleteBin6Line from '@iconify/icons-ri/delete-bin-6-line'
-
-import { IconButton, PrimaryButton } from '@workduck-io/mex-components'
-
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
-import { mergeAccess, StyledCreatatbleSelect } from '@mexit/shared'
+import {
+  Center,
+  copyTextToClipboard,
+  DefaultMIcons,
+  GenericFlex,
+  IconDisplay,
+  mergeAccess,
+  StyledCreatatbleSelect
+} from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
 import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useFetchShareData } from '../../Hooks/useFetchShareData'
 import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
+import { useNodes } from '../../Hooks/useNodes'
 import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useShareModalStore } from '../../Stores/useShareModalStore'
-import { ModalControls, ModalHeader, ModalSection } from '../../Style/Refactor'
+import { ModalActions, ModalFooter } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'
 
-import { InvitedUsersContent } from './InvitedUsersContent'
 import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {
   ShareAlias,
@@ -35,31 +39,38 @@ import {
   ShareOwnerTag,
   SharePermission,
   ShareRow,
-  ShareRowAction,
-  ShareRowActionsWrapper,
-  ShareRowHeading
+  StyledSaveButton,
+  TableBody,
+  TableContainer
 } from './styles'
 
 export const PermissionModalContent = () => {
-  const closeModal = useShareModalStore((s) => s.closeModal)
   const open = useShareModalStore((s) => s.open)
-  const context = useShareModalStore((s) => s.context)
-  const { getSharedUsersOfNodeOfSpace, getInvitedUsers, applyChangesMentionable } = useMentions()
-  const { getSharedUsersForNamespace, getNamespace } = useNamespaces()
-  const mentionable = useMentionStore((s) => s.mentionable)
   const node = useEditorStore((state) => state.node)
+  const context = useShareModalStore((s) => s.context)
+  const mentionable = useMentionStore((s) => s.mentionable)
+  const closeModal = useShareModalStore((s) => s.closeModal)
+  const modalData = useShareModalStore((state) => state.data)
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const changedUsers = useShareModalStore((state) => state.data.changedUsers)
+  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
   const setChangedUsers = useShareModalStore((state) => state.setChangedUsers)
-  const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
-  const { revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
+
+  const { getNoteCopyUrl } = useNodes()
   const { accessWhenShared } = usePermissions()
   const { fetchSharedUsers } = useFetchShareData()
-  const currentSpace = useUserPreferenceStore((store) => store.activeNamespace)
+  const { changeUserPermission, revokeUserAccess } = useNodeShareAPI()
+  const { revokeNamespaceShare, updateNamespaceShare } = useNamespaceApi()
+  const { getSharedUsersForNamespace, getNamespace, getSpaceCopyUrl, getNamespaceOfNodeid } = useNamespaces()
+  const { getSharedUsersOfNodeOfSpace, getInvitedUsers, applyChangesMentionable } = useMentions()
 
-  const modalData = useShareModalStore((state) => state.data)
   const nodeid = useMemo(() => modalData?.nodeid ?? node?.nodeid, [modalData.nodeid, node])
-  const namespaceid = useMemo(() => modalData?.namespaceid ?? currentSpace, [modalData.namespaceid, node, currentSpace])
+
+  const namespaceid = useMemo(() => {
+    if (modalData.nodeid) return getNamespaceOfNodeid(modalData.nodeid)?.id
+
+    return modalData?.namespaceid ?? currentSpace
+  }, [modalData.namespaceid, node, currentSpace])
 
   const id = useMemo(() => {
     if (context === 'note') return modalData?.nodeid ?? node?.nodeid
@@ -100,16 +111,7 @@ export const PermissionModalContent = () => {
     }
   }, [nodeid, namespaceid, context, mentionable, open])
 
-  const invitedUsers = useMemo(() => {
-    if (id) {
-      return getInvitedUsers(id, context)
-    }
-    return []
-  }, [id, context])
-
   const onRevokeAccess = (userid: string) => {
-    mog('onrevokeAccess', { userid })
-
     // Change the user and add to changedUsers
     const changedUser = changedUsers?.find((u) => u.id === userid)
     const dataUser = sharedUsers?.find((u) => u.id === userid)
@@ -129,16 +131,22 @@ export const PermissionModalContent = () => {
     }
   }
 
-  const onPermissionChange = (userid: string, access: AccessLevel) => {
+  const onPermissionChange = (userid: string, access: AccessLevel | 'Revoke') => {
     mog('onPermissionChange', { userid, access })
     // Change the user and add to changedUsers
     const changedUser = changedUsers?.find((u) => u.id === userid)
     const dataUser = sharedUsers?.find((u) => u.id === userid)
 
+    if (access === 'Revoke') {
+      onRevokeAccess(userid)
+      return
+    }
+
     // TODO: Filter for the case when user permission is reverted to the og one
     if (changedUser) {
       const prevAccess = changedUser?.access[context][id]
       const ogAccess = dataUser?.access[context][id]
+
       if (ogAccess && access === ogAccess) {
         // mog('removing user from changedUsers', { changedUser, access, ogAccess })
         if (changedUser.change.includes('permission')) {
@@ -165,8 +173,6 @@ export const PermissionModalContent = () => {
       }
     } else if (dataUser) {
       const prevAccess = dataUser?.access[context][id]
-      // mog('onPermissionChange only DataUser', { userid, access, dataUser, prevAccess, node })
-      // return
       if (prevAccess !== access) {
         const changeUser = {
           ...dataUser,
@@ -197,8 +203,6 @@ export const PermissionModalContent = () => {
         return acc
       }, [])
 
-    // mog('Updating after the table changes ', { revokedUsers, newPermissions })
-
     const applyPermissions = async () => {
       if (Object.keys(newPermissions).length > 0) {
         if (context === 'note') {
@@ -228,36 +232,41 @@ export const PermissionModalContent = () => {
     mog('onSave', { changedUsers, newPermissions, revokedUsers })
   }
 
-  // mog('render', { context, id, changedUsers, sharedUsers, invitedUsers })
+  const handleCopyLink = () => {
+    const url = context === 'note' ? getNoteCopyUrl(id) : getSpaceCopyUrl(id)
+    copyTextToClipboard(url, 'Public Link Copied!')
+  }
+
+  /**
+   * Toggle Share/Public Button
+   * Invite Input Box - inline elements
+   * Users List with Access
+   */
 
   return (
     <>
       {!readOnly && (
-        <ModalSection>
-          <MultiEmailInviteModalContent />
-        </ModalSection>
+        <Center>
+          <ShareOptions context={context} id={id} />
+        </Center>
       )}
 
-      {sharedUsers.length > 0 && (
-        <ModalSection>
-          <ModalHeader>Manage Sharing</ModalHeader>
-          <SharedPermissionsTable>
-            <caption>Users with access to this {context}</caption>
-            <ShareRowHeading>
-              <tr>
-                <td>Alias</td>
-                <td>Email</td>
-                <td>Permission</td>
-                <td></td>
-              </tr>
-            </ShareRowHeading>
+      {!readOnly && <MultiEmailInviteModalContent />}
 
-            <tbody>
+      {sharedUsers.length > 0 ? (
+        <TableContainer id="table">
+          <SharedPermissionsTable>
+            <TableBody>
               {sharedUsers.map((user) => {
                 const hasChanged = changedUsers?.find((u) => u.id === user.id)
                 const access = getUserAccess(hasChanged ?? user, context, id, namespaceid)
                 const isRevoked = !!hasChanged && hasChanged.change.includes('revoke')
                 const isCurrent = user.id === currentUserDetails.id
+
+                const options = [
+                  ...permissionOptions,
+                  ...(!isCurrent && access !== 'OWNER' ? [{ value: 'Revoke', label: 'Revoke' }] : [])
+                ]
 
                 return (
                   <ShareRow hasChanged={!!hasChanged} key={`${user.id}`} isRevoked={isRevoked}>
@@ -274,54 +283,41 @@ export const PermissionModalContent = () => {
                         <ShareOwnerTag>Owner</ShareOwnerTag>
                       ) : (
                         <StyledCreatatbleSelect
+                          isSearchable={false}
+                          menuPortalTarget={document.getElementById('table')}
                           onChange={(access) => onPermissionChange(user.id, access.value)}
                           defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
-                          options={permissionOptions}
+                          options={options}
+                          style={{ transparent: true }}
+                          isDisabled={readOnly || isCurrent}
                           closeMenuOnSelect={true}
                           closeMenuOnBlur={true}
                         />
                       )}
                     </SharePermission>
-                    <ShareRowAction>
-                      <ShareRowActionsWrapper>
-                        {!isCurrent && access !== 'OWNER' && (
-                          <IconButton
-                            disabled={readOnly}
-                            onClick={() => onRevokeAccess(user.id)}
-                            icon={deleteBin6Line}
-                            title="Remove"
-                          />
-                        )}
-                      </ShareRowActionsWrapper>
-                    </ShareRowAction>
                   </ShareRow>
                 )
               })}
-            </tbody>
+            </TableBody>
           </SharedPermissionsTable>
+        </TableContainer>
+      ) : (
+        <></>
+      )}
 
-          <ModalControls>
-            {/* <Button disabled={readOnly} large onClick={onCopyLink}>
+      <ModalFooter>
+        <ModalActions>
+          <StyledSaveButton onClick={handleCopyLink}>
+            <GenericFlex>
+              <IconDisplay icon={DefaultMIcons.WEB_LINK} />
               Copy Link
-            </Button> */}
-            <PrimaryButton
-              autoFocus={!window.focus}
-              onClick={onSave}
-              disabled={readOnly || (changedUsers && changedUsers?.length === 0)}
-            >
-              Save
-            </PrimaryButton>
-          </ModalControls>
-        </ModalSection>
-      )}
-
-      {!readOnly && invitedUsers.length > 0 && <InvitedUsersContent />}
-
-      {!readOnly && (
-        <ModalSection>
-          <ShareOptions context={context} id={id} />
-        </ModalSection>
-      )}
+            </GenericFlex>
+          </StyledSaveButton>
+          <StyledSaveButton autoFocus={!window.focus} disabled={readOnly || !changedUsers?.length} onClick={onSave}>
+            Save
+          </StyledSaveButton>
+        </ModalActions>
+      </ModalFooter>
     </>
   )
 }

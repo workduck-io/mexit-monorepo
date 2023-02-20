@@ -17,16 +17,26 @@ const ModalContent = (multi = false) => css`
           border: 1px solid ${theme.tokens.surfaces.s[3]};
         `
       : css`
-          padding: ${({ theme }) => theme.spacing.large};
+          padding: ${({ theme }) => theme.spacing.medium};
           background: rgba(${theme.rgbTokens.surfaces.modal}, 0.5);
-
           border: 1px solid ${({ theme }) => theme.tokens.surfaces.s[3]};
           display: flex;
           flex-direction: column;
-          gap: ${({ theme }) => theme.spacing.large};
+          gap: ${({ theme }) => theme.spacing.medium};
           max-height: 90vh;
-          overflow-y: auto;
+          /* overflow-y: auto; */
         `}
+`
+
+export const ModalFooter = styled.div`
+  /* padding-top: ${({ theme }) => theme.spacing.medium}; */
+  /* border-top: 1px solid ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.separator}, 0.4)`}; */
+`
+
+export const ModalActions = styled.div<{ content?: 'space-between' | 'flex-end' }>`
+  display: flex;
+  align-items: center;
+  justify-content: ${({ content }) => content ?? 'space-between'};
 `
 
 const ModalOverlay = css`
@@ -129,6 +139,7 @@ export const ArrowIcon = styled(TableIcon)`
 export const DeleteIcon = styled(TableIcon)`
   color: ${({ theme }) => theme.tokens.colors.red};
 `
+
 export const ModalControls = styled.div`
   margin: ${({ theme: { spacing } }) => `${spacing.large} 0 ${spacing.medium}`};
   display: flex;

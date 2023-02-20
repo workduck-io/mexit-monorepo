@@ -121,6 +121,8 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
 
   const noteTitle = getTitleFromPath(node?.path)
 
+  if (!node) return
+
   return (
     <SnippetPreview
       key={node?.nodeid}
@@ -129,7 +131,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
       preview={visible}
       setPreview={setVisible}
       allowClosePreview
-      nodeId={node.nodeid}
+      nodeId={node?.nodeid}
       placement="left"
     >
       <SnippetCardWrapper>

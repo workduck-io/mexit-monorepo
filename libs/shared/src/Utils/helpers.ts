@@ -1,11 +1,12 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
-export async function copyTextToClipboard(text: any) {
+export async function copyTextToClipboard(text: any, toastMessage?: string) {
+  console.log('COPY TO CLIP', { text, s: String(text) })
   await navigator.clipboard
     .writeText(String(text))
     .then(() => {
-      toast.success('Copied to Clipboard!')
+      toast.success(toastMessage ?? 'Copied to Clipboard!')
     })
     .catch((err) => {
       toast.error('An error occurred. Please try again later')
