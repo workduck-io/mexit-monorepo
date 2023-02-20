@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - hotfix-changelog-appname-case-fix
   workflow_dispatch:
 
 jobs:
