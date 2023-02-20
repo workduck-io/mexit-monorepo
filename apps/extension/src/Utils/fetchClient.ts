@@ -15,7 +15,7 @@ const getAuthStateFromChrome = async () => {
 const setAuthStateChrome = async (data) => {
   const sData = JSON.stringify(data)
   return await chrome.storage.local.set({
-    AWS_AUTH_KEY: sData
+    [AWS_AUTH_KEY]: sData
   })
 }
 
@@ -24,9 +24,9 @@ const generateRequestID = () => {
 }
 
 const attachTokenToRequest: BeforeRequestHook = async (request) => {
-  const userCred = await getAuthStateFromChrome()
-  if (request && request.headers && userCred && userCred.token) {
-    request.headers.set('Authorization', `Bearer ${userCred.token}`)
+  const authState = await getAuthStateFromChrome()
+  if (request && request.headers && authState?.userCred && authState?.userCred?.token) {
+    request.headers.set('Authorization', `Bearer ${authState?.userCred.token}`)
     request.headers.set('wd-request-id', request.headers['wd-request-id'] ?? generateRequestID())
   }
 }
@@ -60,8 +60,9 @@ const refreshTokenHook: AfterResponseHook = async (request, _, response) => {
           expiry: Date.now() + response.expires_in * 1000
         }
       }
-      await setAuthStateChrome(updatedAuthState)
-      return client(request)
+
+      await setAuthStateChrome({ state: updatedAuthState })
+      return await client(request)
     } catch (error) {
       console.error('Error refresh token: ', error)
       throw new Error(error)
