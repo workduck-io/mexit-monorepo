@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.12
+
+### Patch Changes
+
+- cb08b047: Manage Spaces and Share UX Improvements
+- accf416d: Added refresh token logic to extension
+
 ## 0.19.11
 
 ### Patch Changes
