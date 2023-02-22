@@ -3,4 +3,4 @@
 'mexit-webapp': patch
 ---
 
-URL based routing in Snippets, navigate from extension to webapp fixes
+URL based routing in Snippets, navigate from extension to webapp fixes; Fallback search in notes sidebar
