@@ -2,7 +2,16 @@ import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
 import { SharedWorker, spawn, Thread } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
-import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
+import {
+  idxKey,
+  ILink,
+  mog,
+  NodeEditorContent,
+  PersistentData,
+  SearchRepExtra,
+  Snippets,
+  withTimeout
+} from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
@@ -171,7 +180,7 @@ export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: 
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.searchIndex(key, query, tags)
+    const results = await withTimeout(searchWorker.searchIndex(key, query, tags), 1 * 500, 'Could not search')
     return results
   } catch (error) {
     mog('SearchIndexError', { error })

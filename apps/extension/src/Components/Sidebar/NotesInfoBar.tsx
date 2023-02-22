@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { BASE_TASKS_PATH, isParent, mog } from '@mexit/core'
+import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
   Input,
@@ -19,6 +19,7 @@ import {
 } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
+import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
 import { getElementById } from '../../Utils/cs-utils'
@@ -42,8 +43,15 @@ export const NotesInfoBar = () => {
   const onSearch = async (newSearchTerm: string) => {
     try {
       const res = await wSearchIndex(['node'], newSearchTerm)
-      const results = res?.map((item) => item.id) ?? []
-      setSearchedNodes(results)
+      if (!res) {
+        const ilinks = useDataStore.getState().ilinks
+        const res = fuzzySearch<ILink>(ilinks, newSearchTerm, (ilink) => ilink.path)
+        const results = res?.map((item) => item.nodeid)
+        setSearchedNodes(results)
+      } else {
+        const results = res?.map((item) => item.id) ?? []
+        setSearchedNodes(results)
+      }
     } catch (err) {
       mog('[NOTE SEARCH]: Unable to search', { err })
     }
