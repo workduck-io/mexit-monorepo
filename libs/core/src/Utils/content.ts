@@ -98,7 +98,8 @@ export const extractMetadata = (data: any, defaults?: { icon: MIcon }): NodeMeta
       publicAccess: data?.publicAccess,
       iconUrl: data?.metadata?.iconUrl,
       templateID: data?.metadata?.templateID,
-      icon: data?.metadata?.icon ?? defaults?.icon
+      icon: data?.metadata?.icon ?? defaults?.icon,
+      title: data?.title
     }
 
     return removeNulls(metadata)
