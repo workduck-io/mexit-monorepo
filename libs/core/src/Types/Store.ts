@@ -26,6 +26,14 @@ export const getMIcon = (type: MIcon['type'], value?: MIcon['value']) => {
   }
 }
 
+export enum StoreIdentifier {
+  CONTENTS = 'contents',
+  RECENTS = 'recents',
+  SNIPPETS = 'snippets',
+  ACTIONS = 'actions',
+  TASKS = 'tasks'
+}
+
 export const DefaultMIcons = {
   NOTE: getMIcon('ICON', 'gg:file-document'),
   SNIPPET: getMIcon('ICON', 'ri:quill-pen-line'),

@@ -14,7 +14,7 @@ export const generateTag = (item: string): Tag => ({
   value: item
 })
 
-export const dataStoreConstructor = (set, get) => ({
+const getInitData = () => ({
   tags: [],
   ilinks: [],
   linkCache: {},
@@ -24,13 +24,18 @@ export const dataStoreConstructor = (set, get) => ({
   archive: [],
   sharedNodes: [],
   spaces: [],
+
+  namespaces: [],
+  slashCommands: { default: defaultCommands, internal: [] }
+})
+
+export const dataStoreConstructor = (set, get) => ({
+  ...getInitData(),
+
   setAllSpaces: (spaces) => {
     set({ spaces })
   },
   addSpace: (space) => set({ spaces: [...get().spaces, space] }),
-
-  namespaces: [],
-  slashCommands: { default: defaultCommands, internal: [] },
 
   initializeDataStore: (initData) => {
     // mog('Initializing Data store', { initData })
@@ -40,21 +45,7 @@ export const dataStoreConstructor = (set, get) => ({
   },
 
   resetDataStore: () => {
-    set({
-      tags: [],
-      ilinks: [],
-      linkCache: {},
-      tagsCache: {},
-      namespaces: [],
-      bookmarks: [],
-      spaces: [],
-      archive: [],
-      baseNodeId: '__loading__',
-      slashCommands: {
-        default: defaultCommands,
-        internal: []
-      }
-    })
+    set(getInitData())
   },
 
   addNamespace: (namespace) => {
@@ -74,10 +65,9 @@ export const dataStoreConstructor = (set, get) => ({
       })
     } else {
       set({
-        namespaces: namespaces.filter(space => space.id !== namespaceId)
+        namespaces: namespaces.filter((space) => space.id !== namespaceId)
       })
     }
-
   },
 
   updateNamespace: (namespace) => {

@@ -4,11 +4,12 @@
  * @returns {?*} Return-value of the function when no error occurred.
  */
 
-export const nice = function (fn) {
+export const nice = function (fn, errCallBack?: (e) => void) {
   try {
     return fn()
   } catch (e) {
-    // * do nothing
+    if (errCallBack) errCallBack(e)
+    else console.error('Something went wrong', e)
   }
 }
 
