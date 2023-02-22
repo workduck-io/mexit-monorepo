@@ -8,6 +8,7 @@ import TaskHeader from '../Components/TaskHeader'
 import TodoKanban from '../Components/Todo/TodoKanban'
 import TodoList from '../Components/Todo/TodoList'
 import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
+import { useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
 import { useTodoStore } from '../Stores/useTodoStore'
@@ -33,6 +34,7 @@ const Tasks = () => {
   const { getView } = useTaskViews()
 
   const todos = useMemo(() => Object.entries(nodesTodo), [nodesTodo])
+  const { saveAndClearBuffer } = useEditorBuffer()
 
   const {
     addCurrentFilter,
@@ -77,6 +79,13 @@ const Tasks = () => {
       setCurrentFilters([])
     }
   }, [match, _hasHydrated])
+
+  useEffect(() => {
+    return () => {
+      // * On Unmount, Save the buffer
+      saveAndClearBuffer()
+    }
+  }, [])
 
   return (
     <PageContainer>
