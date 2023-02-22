@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.21
+
+### Patch Changes
+
+- 6843aaa9: Unify content store; Revert terminate worker function;
+
 ## 0.22.20
 
 ### Patch Changes

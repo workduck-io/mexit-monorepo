@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.15
+
+### Patch Changes
+
+- 6843aaa9: Unify content store; Revert terminate worker function;
+
 ## 0.19.14
 
 ### Patch Changes
