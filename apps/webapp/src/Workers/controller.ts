@@ -210,14 +210,17 @@ export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: stri
 }
 
 export const terminateAllWorkers = async () => {
-  await Thread.terminate(analysisWorker)
-  analysisWorker = null
+  const terminateWorker = async (worker) => {
+    try {
+      await Thread.terminate(worker)
+      worker = null
+    } catch (error) {
+      console.log('Termination error Analysis: ', error)
+    }
+  }
 
-  await Thread.terminate(requestsWorker)
-  requestsWorker = null
-
-  await Thread.terminate(searchWorker)
-  searchWorker = null
+  const promises = [terminateWorker(analysisWorker), terminateWorker(searchWorker), terminateWorker(requestsWorker)]
+  await Promise.allSettled(promises)
 }
 
 export const initNamespacesExtension = async (localILinks: ILink[]) => {
