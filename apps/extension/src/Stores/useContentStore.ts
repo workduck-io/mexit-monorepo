@@ -1,16 +1,5 @@
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
+import { useContentStore as ucStore } from '@mexit/core'
 
-import { contentStoreConstructor, ContentStoreState } from '@mexit/core'
+const useContentStore = ucStore
 
-import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
-
-export const useContentStore = create<ContentStoreState>(
-  persist(contentStoreConstructor, {
-    name: 'mexit-content-store',
-    getStorage: () => asyncLocalStorage,
-    onRehydrateStorage: () => (state) => {
-      state.setHasHydrated(true)
-    }
-  })
-)
+export { useContentStore }

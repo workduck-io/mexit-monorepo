@@ -1,6 +1,7 @@
 import { Contents, NodeContent, NodeEditorContent, NodeMetadata } from '../Types/Editor'
+import { createX } from '../Utils/storeCreator'
 
-export interface ContentStoreState {
+export type ContentStoreState = {
   internalUpdate: boolean
   setInternalUpdate: (value: boolean) => void
   contents: Contents
@@ -12,12 +13,13 @@ export interface ContentStoreState {
   appendContent: (nodeId: string, blocksToAppend: NodeEditorContent, internalUpdate?: boolean) => void
   setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
   initContents: (contents: Contents) => void
-
-  _hasHydrated: boolean
-  setHasHydrated: (state) => void
+  getAllMetadata: () => any
+  getMetadata: (nodeId: string) => NodeMetadata
+  updateMetadata: (nodeId: string, metadata: Partial<NodeMetadata>) => void
+  setMetadata: (nodeid: string, metadata: NodeMetadata) => void
 }
 
-export const contentStoreConstructor = (set, get) => ({
+export const contentStoreConstructor = (set, get): ContentStoreState => ({
   internalUpdate: false,
   setInternalUpdate: (value: boolean) => {
     set({ internalUpdate: value })
@@ -87,11 +89,9 @@ export const contentStoreConstructor = (set, get) => ({
     set({
       contents
     })
-  },
-  _hasHydrated: false,
-  setHasHydrated: (state) => {
-    set({
-      _hasHydrated: state
-    })
   }
 })
+
+const useContentStore = createX(contentStoreConstructor, 'contents', 'true')
+
+export { useContentStore }
