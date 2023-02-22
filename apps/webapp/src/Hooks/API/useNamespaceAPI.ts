@@ -72,7 +72,7 @@ export const useNamespaceApi = () => {
       const allSpaces = namespaces.map((n) => n.ns)
       const spacePreferences = useUserPreferenceStore.getState().space
       const ns = allSpaces.filter((s) => !spacePreferences[s?.id]?.hidden)
-      console.log('HERE ARE THEY', { ns, spacePreferences })
+      // console.log('HERE ARE THEY', { ns, spacePreferences })
 
       setAllSpaces(allSpaces)
 

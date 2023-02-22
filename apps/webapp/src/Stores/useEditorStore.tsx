@@ -14,7 +14,6 @@ export function getContent(nodeid: string): NodeContent {
 
   const { contents } = useContentStore.getState()
 
-  // mog('getContent', { nodeid, contents, nodeidCon: contents[nodeid] })
   if (contents[nodeid]) {
     return contents[nodeid]
   }

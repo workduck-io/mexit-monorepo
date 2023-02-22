@@ -39,6 +39,7 @@ export interface NodeMetadata {
   iconUrl?: string
   // The snippet ID with which all the children nodes should be populated
   templateID?: string
+  title?: string
 }
 
 export interface Block {

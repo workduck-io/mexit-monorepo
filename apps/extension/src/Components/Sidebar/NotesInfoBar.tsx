@@ -27,7 +27,7 @@ import { getElementById } from '../../Utils/cs-utils'
 import { NodeCard } from './NodeCard'
 
 export const NotesInfoBar = () => {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState<string>('')
   const [searchedNodes, setSearchedNodes] = useState<string[]>()
   const recentNotes = useRecentsStore((s) => s.lastOpened)
 
@@ -99,7 +99,7 @@ export const NotesInfoBar = () => {
         </SidebarListFilter>
         <Infobox text={NotesInfoBarHelp} root={getElementById('ext-side-nav')} />
       </SidebarListFilterWrapper>
-      {!search && !searchedNodes?.length ? (
+      {!searchedNodes?.length ? (
         <CenteredColumn>
           <MexIcon
             color={theme.tokens.colors.primary.default}
@@ -108,7 +108,7 @@ export const NotesInfoBar = () => {
             height="32"
             icon="gg:file-document"
           />
-          <p>All your recents will shown here!</p>
+          <p>{!search ? 'All your recents will shown here!' : 'No Results Found!'}</p>
         </CenteredColumn>
       ) : (
         <List scrollable>

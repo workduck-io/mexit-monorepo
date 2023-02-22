@@ -1,12 +1,11 @@
 // eslint-disable-next-line
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script'
 
-import { ActionType, API_BASE_URLS, fuzzySearch, SEPARATOR } from '@mexit/core'
+import { ActionType, API_BASE_URLS, fuzzySearch } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 
 import { useAuthStore } from './Hooks/useAuth'
-import useDataStore from './Stores/useDataStore'
 import {
   handleActionRequest,
   handleAsyncActionRequest,
@@ -17,6 +16,7 @@ import {
   handleShortenerRequest,
   handleSnippetRequest
 } from './Utils/requestHandler'
+import { useLinkStore } from './Stores/useLinkStore'
 
 reloadOnUpdate('src')
 
@@ -245,16 +245,12 @@ chrome.notifications.onClosed.addListener((notificationId, byUser) => {
 
 chrome.omnibox.onInputChanged.addListener((text, suggest) => {
   const workspaceDetails = useAuthStore.getState().workspaceDetails
-  const linkCaptures = useDataStore
-    .getState()
-    .ilinks.filter((item) => item.path.startsWith('Links') && item.path.split(SEPARATOR).length > 1)
+  const linkCaptures = useLinkStore.getState().links?.filter((item) => item.alias) ?? []
 
-  const suggestions = fuzzySearch(linkCaptures, text, (item) => item.path).map((item) => {
-    const title = item.path.split(SEPARATOR).slice(-1)[0]
-
+  const suggestions = fuzzySearch(linkCaptures, text, (item) => item.alias).map((item) => {
     return {
-      content: `${API_BASE_URLS.url}/${workspaceDetails.id}/${title}`,
-      description: title
+      content: `${API_BASE_URLS.url}/${workspaceDetails.id}/${item.alias}`,
+      description: `${item.alias}${item.title ? ` - ${item.title}` : ''}`
     }
   })
 
