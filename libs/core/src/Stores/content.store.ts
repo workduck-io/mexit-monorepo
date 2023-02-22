@@ -14,7 +14,7 @@ const contentStoreConfig = (set, get) => ({
     const existingContents = get().contents
     set({ contents: { ...existingContents, ...contents } })
   },
-  setContent: (nodeid: string, content, metadata, internalUpdate: boolean) => {
+  setContent: (nodeid: string, content, metadata?, internalUpdate?: boolean) => {
     const oldContent = get().contents
 
     set({
@@ -23,7 +23,7 @@ const contentStoreConfig = (set, get) => ({
 
     if (internalUpdate) get().setInternalUpdate(true)
   },
-  appendContent: (nodeid: string, blocksToAppend, internalUpdate) => {
+  appendContent: (nodeid: string, blocksToAppend?, internalUpdate?: boolean) => {
     const contents = get().contents
     const newNoteContent = [...(contents?.[nodeid]?.content ?? []), ...blocksToAppend]
     set({ contents: { ...contents, [nodeid]: { type: 'editor', content: newNoteContent } } })
