@@ -125,7 +125,6 @@ export const NoteSidebar = () => {
         const index = spaces?.findIndex((space) => space.id === spaceId ?? getNamespaceOfNodeid(baseNodeId)?.id)
         return index < 0 ? 0 : index
       }
-      console.log('SPACES', { spaces })
       const newIndex = getIndex()
 
       changeIndex(newIndex, false)

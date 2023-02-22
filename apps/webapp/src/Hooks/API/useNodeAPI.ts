@@ -168,17 +168,20 @@ export const useApi = () => {
 
     const data = await dataPromise
       .then((d) => {
-        const existingMetadata = useMetadataStore.getState().metadata.notes[noteID]
+        let metadata = useMetadataStore.getState().metadata.notes[noteID] ?? {}
         const contentToSet = d?.data ? deserializeContent(d.data) : content
-        const origMetadata = d ? extractMetadata(d) : existingMetadata
 
-        const metadata = isShared
-          ? {
-              ...(origMetadata ?? {}),
-              updatedAt: Date.now(),
-              lastEditedBy: currentUser.id
-            }
-          : origMetadata
+        if (isShared) {
+          metadata = {
+            ...metadata,
+            updatedAt: Date.now(),
+            lastEditedBy: currentUser.id
+          }
+        }
+
+        if (d) {
+          metadata = { ...metadata, ...(extractMetadata(d) ?? {}) }
+        }
 
         updateFromContent(noteID, contentToSet, metadata)
 

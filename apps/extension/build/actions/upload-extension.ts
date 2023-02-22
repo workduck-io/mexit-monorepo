@@ -21,3 +21,8 @@ store
   .catch((error) => {
     console.error('Could Not Upload Extension with Error: ', error)
   })
+
+store
+  .publish()
+  .then((res) => console.log('Published latest version to chrome store: ', res))
+  .catch((error) => console.error('COuld not publish extension with error: ', error))

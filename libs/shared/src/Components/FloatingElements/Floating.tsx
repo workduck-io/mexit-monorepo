@@ -10,7 +10,6 @@ import {
   safePolygon,
   shift,
   useClick,
-  useDelayGroup,
   useDelayGroupContext,
   useDismiss,
   useFloating,
@@ -18,7 +17,9 @@ import {
   useHover,
   useId,
   useInteractions,
-  useRole} from '@floating-ui/react-dom-interactions'
+  useRole,
+  useTransitionStyles
+} from '@floating-ui/react'
 
 import { Props } from './types'
 
@@ -47,10 +48,12 @@ export const Floating = ({
 
       if (label && open) setCurrentId(label)
     },
-    middleware: [offset(15), autoPlacement(), shift()],
+    middleware: [offset(30), autoPlacement(), shift({ padding: 5 })],
     placement,
     nodeId
   })
+
+  const { styles } = useTransitionStyles(context)
 
   const id = useId()
   const labelId = `${id}-label`
@@ -59,17 +62,16 @@ export const Floating = ({
   const { getReferenceProps, getFloatingProps } = useInteractions([
     useHover(context, {
       enabled: hover ?? false,
-      delay: label ? delay : 1000,
+      delay: label ? delay : 500,
       move: false,
       handleClose: safePolygon({
         restMs: 50,
         blockPointerEvents: true
       })
     }),
-    useClick(context, { enabled: !disableClick}),
+    useClick(context, { enabled: !disableClick }),
     useRole(context),
-    useDismiss(context),
-    label && useDelayGroup(context, { id: label })
+    useDismiss(context)
   ])
 
   return (
@@ -87,7 +89,8 @@ export const Floating = ({
                     position: strategy,
                     zIndex: 120,
                     top: y ?? 0,
-                    left: x ?? 0
+                    left: x ?? 0,
+                    ...styles
                   },
                   'aria-labelledby': labelId,
                   'aria-describedby': descriptionId

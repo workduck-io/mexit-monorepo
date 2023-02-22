@@ -9,7 +9,6 @@ import {
   IconDisplay,
   MexIcon,
   PrimaryText,
-  SnippetCardFooter,
   SnippetCardWrapper,
   SnippetContentPreview
 } from '@mexit/shared'
@@ -165,9 +164,9 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
         </NodeCardHeader>
 
         {/* TODO: saving raw content for nodes as well would be grand */}
-        <SnippetContentPreview>{contents && convertContentToRawText(contents.content, ' ')}</SnippetContentPreview>
-
-        <SnippetCardFooter>{/* <TagsLabel tags={}/> */}</SnippetCardFooter>
+        {contents?.content && (
+          <SnippetContentPreview>{convertContentToRawText(contents.content, ' ')}</SnippetContentPreview>
+        )}
       </SnippetCardWrapper>
     </SnippetPreview>
   )

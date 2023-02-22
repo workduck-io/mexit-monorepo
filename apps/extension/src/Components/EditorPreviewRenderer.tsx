@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Plate, PlatePlugin } from '@udecode/plate'
 import styled from 'styled-components'
 
-import { BodyFont, EditorStyles, FadeContainer, TodoContainer, useEditorChange } from '@mexit/shared'
+import { BodyFont, EditorStyles, FadeContainer, TodoContainer } from '@mexit/shared'
 
 import { useMemoizedPlugins } from '../Editor/plugins'
 
@@ -63,7 +63,7 @@ const EditorPreviewRenderer = ({
   // We get memoized plugins
   const plugins = useMemoizedPlugins(editorPreviewComponents, { exclude: { dnd: true } })
 
-  useEditorChange(editorId, content)
+  // useEditorChange(editorId, content)
 
   return (
     <PreviewStyles
