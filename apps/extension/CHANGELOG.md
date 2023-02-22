@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.13
+
+### Patch Changes
+
+- 3631b016: URL based routing in Snippets, navigate from extension to webapp fixes; Fallback search in notes sidebar
+- 3bf23f3a: View buffer save; Omnibox fixes; Search infobar fixes
+
 ## 0.19.12
 
 ### Patch Changes
