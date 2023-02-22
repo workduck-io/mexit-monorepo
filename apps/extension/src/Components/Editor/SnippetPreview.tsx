@@ -55,7 +55,6 @@ const SnippetPreview = ({
   placement,
   onClick,
   disableClick,
-  // editable = true,
   setPreview,
   icon,
   iconTooltip,
@@ -69,11 +68,11 @@ const SnippetPreview = ({
   const snippet: any = useMemo(() => {
     if (snippetId) return getSnippet(snippetId)
     if (nodeId) return getContent(nodeId)
-  }, [snippetId, snippets, contentStore])
+  }, [snippetId, nodeId, snippets, contentStore])
 
   const noteIcon = useMetadataStore((s) => s.metadata.notes?.[nodeId]?.icon)
 
-  const editorId = `${snippetId}_Preview`
+  const editorId = `${snippetId ?? nodeId ?? 'Content'}_Preview`
 
   const onClickNavigate = (e: any) => {
     e.preventDefault()
@@ -124,7 +123,6 @@ const SnippetPreview = ({
               </PreviewActionHeader>
             </EditorPreviewControls>
             <EditorPreviewRenderer content={snippet.content} readOnly={true} editorId={editorId} />
-            {/* <Hidden /> */}
           </EditorPreviewWrapper>
         )}
       >

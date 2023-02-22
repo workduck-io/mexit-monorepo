@@ -127,6 +127,8 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
 
   if (!node) return
 
+  console.log('NODE IS', { node })
+
   return (
     <SnippetPreview
       key={node?.nodeid}
