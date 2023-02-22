@@ -65,8 +65,6 @@ const EditorPreviewRenderer = ({
 
   // useEditorChange(editorId, content)
 
-  console.log('EDITORPREVIEW CONTENT', { editorId, content })
-
   return (
     <PreviewStyles
       noMouseEvents={noMouseEvents}
