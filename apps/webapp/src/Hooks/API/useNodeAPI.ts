@@ -168,8 +168,9 @@ export const useApi = () => {
 
     const data = await dataPromise
       .then((d) => {
+        const existingMetadata = useMetadataStore.getState().metadata.notes[noteID]
         const contentToSet = d?.data ? deserializeContent(d.data) : content
-        const origMetadata = extractMetadata(d)
+        const origMetadata = d ? extractMetadata(d) : existingMetadata
 
         const metadata = isShared
           ? {

@@ -62,10 +62,11 @@ export const Floating = ({
       delay: label ? delay : 1000,
       move: false,
       handleClose: safePolygon({
-        buffer: 1
+        restMs: 50,
+        blockPointerEvents: true
       })
     }),
-    !disableClick && useClick(context),
+    useClick(context, { enabled: !disableClick}),
     useRole(context),
     useDismiss(context),
     label && useDelayGroup(context, { id: label })

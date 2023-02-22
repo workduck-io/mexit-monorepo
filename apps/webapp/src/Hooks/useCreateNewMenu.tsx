@@ -143,7 +143,7 @@ export const useCreateNewMenu = () => {
   const handleHideSpace = () => {
     const item = useLayoutStore.getState().contextMenu?.item
     addSpacePreference(item.id, { hidden: true })
-    deleteNamespace(item.id)
+    deleteNamespace(item.id, false)
     changeSpace(getDefaultNamespaceId())
   }
 

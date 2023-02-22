@@ -41,7 +41,7 @@ const generateChangelog = async (appName: string) => {
 
   const commits = await getAllCommits()
 
-  const latestRelease = changelog.versions[1]
+  const latestRelease = changelog.versions[0]
   let result = `## ${appName} - ${latestRelease.version}\n`
   latestRelease.parsed['_'].forEach((v) => {
     const [commitID, clText] = v.split(':')

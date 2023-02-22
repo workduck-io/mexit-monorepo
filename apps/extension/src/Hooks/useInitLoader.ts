@@ -155,14 +155,19 @@ export const useInitLoader = () => {
   }
 
   const fetchAll = async () => {
-    await nicePromise(getAllNamespaces())
-    await nicePromise(getAllSnippets())
-    await nicePromise(getAllHighlights())
-    await nicePromise(getAllLinks())
-    await nicePromise(getAllSmartCaptures())
-    // const promises = []
+    await nicePromise(getAllNamespaces)
+    await nicePromise(getAllSnippets)
+    await nicePromise(getAllHighlights)
+    await nicePromise(getAllLinks)
+    await nicePromise(getAllSmartCaptures)
 
-    // await Promise.allSettled(promises)
+    // await Promise.allSettled([
+    //   getAllNamespaces(),
+    //   getAllSnippets(),
+    //   getAllHighlights(),
+    //   getAllLinks(),
+    //   getAllSmartCaptures()
+    // ])
     mog('Fetch All Resolved completely')
   }
 
@@ -197,5 +202,5 @@ export const useInitLoader = () => {
           mog('Error while initializing: ', { error })
         })
     }
-  }, [isAuthenticated, snippetHydrated, dataStoreHydrated, contentStoreHydrated, iframeAdded])
+  }, [snippetHydrated, dataStoreHydrated, contentStoreHydrated, iframeAdded])
 }

@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Snippet } from '@mexit/core'
+import { API_BASE_URLS, Snippet } from '@mexit/core'
 import {
   GenericFlex,
   MexIcon,
@@ -38,21 +38,10 @@ interface SnippetCardProps {
 }
 
 const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: SnippetCardProps) => {
-  const [visible, setVisible] = React.useState(false)
-  const descriptions = useDescriptionStore((store) => store.descriptions)
-
   const theme = useTheme()
 
-  const onClickProps = (ev: any) => {
-    ev.preventDefault()
-    ev.stopPropagation()
-
-    if (!visible) {
-      setVisible(true)
-    } else {
-      setVisible(false)
-    }
-  }
+  const [visible, setVisible] = React.useState(false)
+  const descriptions = useDescriptionStore((store) => store.descriptions)
 
   const lastUsed = undefined // getLastUsed(snippet.id)
 
@@ -69,6 +58,12 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
     }
   }, [])
 
+  if (!snippet) return <></>
+
+  const onTitleClick = () => {
+    window.open(`${API_BASE_URLS.frontend}/snippets/node/${snippet.id}`, '_blank')
+  }
+
   const closePreview = () => {
     setVisible(false)
   }
@@ -79,6 +74,8 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
       key={keyStr}
       hover
       preview={visible}
+      disableClick
+      onClick={onTitleClick}
       setPreview={setVisible}
       allowClosePreview
       snippetId={snippet.id}
@@ -86,7 +83,7 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
     >
       <SnippetCardWrapper>
         <NodeCardHeader>
-          <GenericFlex>
+          <GenericFlex onClick={onTitleClick}>
             <MexIcon color={theme.tokens.colors.primary.default} icon={snippet?.template ? magicLine : quillPenLine} />
             <PrimaryText>{snippet.title}</PrimaryText>
           </GenericFlex>

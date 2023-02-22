@@ -62,6 +62,10 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     setVisible(false)
   }
 
+  const onTitleClick = (e) => {
+    window.open(`${API_BASE_URLS.frontend}/editor/${nodeId}`, '_blank')
+  }
+
   const isNodePublic = notesMetadata?.publicAccess
 
   const node = getNode(nodeId, true)
@@ -127,8 +131,10 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     <SnippetPreview
       key={node?.nodeid}
       hover
+      disableClick
       title={noteTitle}
       preview={visible}
+      onClick={onTitleClick}
       setPreview={setVisible}
       allowClosePreview
       nodeId={node?.nodeid}
@@ -136,7 +142,7 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
     >
       <SnippetCardWrapper>
         <NodeCardHeader $noHover>
-          <HeadingFlex>
+          <HeadingFlex onClick={onTitleClick}>
             <IconDisplay color={theme.tokens.colors.primary.default} icon={notesMetadata?.icon ?? DefaultMIcons.NOTE} />
             <PrimaryText>{noteTitle}</PrimaryText>
           </HeadingFlex>
