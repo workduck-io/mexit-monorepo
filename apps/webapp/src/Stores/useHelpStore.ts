@@ -1,3 +1,4 @@
+import merge from 'deepmerge'
 import produce from 'immer'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -5,15 +6,6 @@ import { persist } from 'zustand/middleware'
 import { IDBStorage } from '@mexit/core'
 
 import { defaultShortcuts } from '../Data/defaultShortcuts'
-
-export const mergeShortcuts = (oldShortcuts, newShortcuts) => {
-  const currentShortcuts = newShortcuts
-
-  Object.entries(oldShortcuts).forEach(([key, value]) => {
-    if (currentShortcuts[key]) currentShortcuts[key] = oldShortcuts[key]
-  })
-  return currentShortcuts
-}
 
 export interface Shortcut {
   title: string
@@ -68,7 +60,7 @@ export const useHelpStore = create<HelpState>(
       getStorage: () => IDBStorage,
       version: 2,
       migrate: (persistedState: any, version: number) => {
-        persistedState.shortcuts = mergeShortcuts(persistedState.shortcuts, defaultShortcuts)
+        persistedState.shortcuts = merge(persistedState.shortcuts, defaultShortcuts)
         return persistedState
       }
     }

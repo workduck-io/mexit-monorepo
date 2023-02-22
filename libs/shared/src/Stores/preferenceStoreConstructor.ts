@@ -1,7 +1,6 @@
 import merge from 'deepmerge'
 
 import {
-  LastOpenedData,
   LastOpenedNotes,
   LastUsedSnippets,
   SpacePreference,
@@ -109,29 +108,12 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
   }
 })
 
-export const mergeLastOpenedData = (
-  remote: Record<string, LastOpenedData>,
-  local: Record<string, LastOpenedData>
-): Record<string, LastOpenedData> => {
-  const merged = Object.keys(remote).reduce((acc, key) => {
-    const localLastOpenedNote = local[key]
-    const remoteLastOpenedNote = remote[key]
-    // If a local lastOpenedNote exists
-    if (localLastOpenedNote) {
-      // Get the latest of the two which has the latest lastOpened
-      const latestLastOpened =
-        Math.max(localLastOpenedNote.ts, remoteLastOpenedNote.ts) === localLastOpenedNote.ts
-          ? localLastOpenedNote
-          : remoteLastOpenedNote
-      acc[key] = latestLastOpened
-    } else {
-      // If no local lastOpenedNote exists
-      acc[key] = remoteLastOpenedNote
-    }
-    return acc
-  }, {})
+const customMergeLastOpened = (key: string) => {
+  if (key === 'ts') return mergeLastOpened
+}
 
-  return merged
+export const mergeLastOpened = (remote, local) => {
+  return Math.max(remote.ts, local.ts) === remote.ts ? remote : local
 }
 
 export const getLimitedEntries = <T extends object>(entries: Record<string, T>, limit = 20) => {
@@ -153,8 +135,14 @@ export const getLimitedEntries = <T extends object>(entries: Record<string, T>, 
  */
 export const mergeUserPreferences = (local: UserPreferences, remote: UserPreferences): UserPreferences => {
   // For all lastOpened of remote
-  const mergedLastOpenedNotes = mergeLastOpenedData(remote.lastOpenedNotes, local.lastOpenedNotes)
-  const mergedLastUsedSnippets = mergeLastOpenedData(remote.lastUsedSnippets, local.lastUsedSnippets)
+  const mergedLastOpenedNotes = merge(remote.lastOpenedNotes, local.lastOpenedNotes ?? {}, {
+    customMerge: customMergeLastOpened
+  })
+
+  const mergedLastUsedSnippets = merge(remote.lastUsedSnippets, local.lastUsedSnippets, {
+    customMerge: customMergeLastOpened
+  })
+
   const mergedSpacePreferences = merge(local.space, remote.space ?? {})
 
   // mog('mergedLastOpenedNotes', { localLastOpenedNotes, mergedLastOpenedNotes, local, remote })
