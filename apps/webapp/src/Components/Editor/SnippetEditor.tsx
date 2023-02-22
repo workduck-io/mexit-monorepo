@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
 import { getPlateEditorRef, selectEditor } from '@udecode/plate'
@@ -21,22 +20,13 @@ import { useSnippetStore } from '../../Stores/useSnippetStore'
 import Banner from './Banner'
 import Editor from './Editor'
 
-type Inputs = {
-  title: string
-}
-
 const SnippetEditor = () => {
-  const snippet = useSnippetStore((store) => store.editor.snippet)
-  const { goTo, goBack } = useRouting()
-
-  const {
-    register,
-    formState: { errors }
-  } = useForm<Inputs>()
+  const snippetId = useParams().snippetid
+  const snippet = useSnippetStore((store) => store.snippets[snippetId])
+  const { goTo } = useRouting()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [content, setContent] = useState<any[] | undefined>(undefined)
-  // const [value, setValue] = useState('')
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const location = useLocation()
@@ -54,7 +44,6 @@ const SnippetEditor = () => {
       setContent(snippet.content)
     } else {
       if (_hasHydrated) {
-        mog('Snippy', { snippet })
         returnToSnippets()
       }
     }
@@ -76,9 +65,6 @@ const SnippetEditor = () => {
     const snippetTitle = title ? getSlug(title) : DRAFT_NODE
     addTitle(snippet.id, snippetTitle)
   }
-
-  const { params } = useRouting()
-  const snippetid = snippet?.id ?? params.snippetid
 
   const onFocusClick = () => {
     const editorRef = getPlateEditorRef()
@@ -112,14 +98,7 @@ const SnippetEditor = () => {
       saveSnippet()
       unsubscribe()
     }
-  }, [snippetid])
-
-  const callbackAfterSave = () => {
-    const { title } = getSnippetExtras()
-    loadSnippet(snippet.id)
-    goTo(ROUTE_PATHS.snippet, NavigationType.push, snippet.id, { title })
-    // const snippet = useSnippetStore.getState().sn
-  }
+  }, [snippetId])
 
   const saveSnippet = () => {
     saveAndClearBuffer()
@@ -169,45 +148,29 @@ const SnippetEditor = () => {
             </>
           </NoteTitle>
 
-          {snippet && (
-            <InfoTools>
-              {/* {isSnippetTemplate && (
-                <ItemTag tag={'Template'} icon={'ri-magic-line'} tooltip={'This snippet is a Template'} />
-              )} */}
-              {/* <IconButton
+          <InfoTools>
+            {/* <IconButton
                 size={24}
                 icon={magicLine}
                 onClick={onToggleTemplate}
                 highlight={isSnippetTemplate}
                 title={isSnippetTemplate ? 'Convert to Snippet' : 'Convert to Template'}
               /> */}
-              {/* <SnippetSaverButton
-                getSnippetExtras={getSnippetExtras}
-                noButton
-                callbackAfterSave={callbackAfterSave}
-                title="Save Snippet"
-              /> */}
-              {/* {IS_DEV && <SnippetCopierButton />} */}
-            </InfoTools>
-          )}
+          </InfoTools>
         </NodeInfo>
 
-        {snippet && (
-          <EditorWrapper onClick={onFocusClick}>
-            {
-              <Editor
-                withShadow
-                autoFocus={false}
-                // focusAtBeginning={false}
-                onChange={onChangeSave}
-                content={content}
-                nodeUID={snippetid}
-              />
-            }
-          </EditorWrapper>
-        )}
+        <EditorWrapper onClick={onFocusClick}>
+          {snippet && (
+            <Editor
+              withShadow
+              autoFocus={false}
+              onChange={onChangeSave}
+              content={content}
+              nodeUID={snippet?.id ?? snippetId}
+            />
+          )}
+        </EditorWrapper>
       </StyledEditor>
-      {/* <CustomDevOnly editorId={snippetid} snippet={snippet} /> */}
     </>
   )
 }

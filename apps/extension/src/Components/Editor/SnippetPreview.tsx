@@ -34,6 +34,7 @@ export interface SnippetPreviewProps {
   hover?: boolean
   // editable?: boolean
   label?: string
+  onClick?: (e: any) => void
   disableClick?: boolean
   allowClosePreview?: boolean
   icon?: string
@@ -52,6 +53,7 @@ const SnippetPreview = ({
   title,
   nodeId,
   placement,
+  onClick,
   disableClick,
   // editable = true,
   setPreview,
@@ -62,7 +64,6 @@ const SnippetPreview = ({
   const { getSnippet } = useSnippets()
   const getContent = useContentStore((s) => s.getContent)
   const contentStore = useContentStore((s) => s.contents)
-  const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const snippets = useSnippetStore((store) => store.snippets)
 
   const snippet: any = useMemo(() => {
@@ -77,9 +78,8 @@ const SnippetPreview = ({
   const onClickNavigate = (e: any) => {
     e.preventDefault()
     e.stopPropagation()
-    loadSnippet(snippetId)
-    // goTo(ROUTE_PATHS.node, NavigationType.push, snippetId)
-    // goTo(ROUTE_PATHS.snippet, NavigationType.push, snippet?.id, { title: snippet?.title })
+
+    if (onClick) onClick(e)
   }
 
   const theme = useTheme()

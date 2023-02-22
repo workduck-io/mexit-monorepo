@@ -13,7 +13,10 @@ import { Group } from '../../Editor/Banner/styled'
 
 import { MangeSpacesContainer, SpaceHeader, SpaceItem, SpacesListContainer, StyledIconDisplay, Text } from './styled'
 
-const SpaceListItem: React.FC<{ space: any; onHideSpace: any }> = ({ space, onHideSpace }) => {
+const SpaceListItem: React.FC<{ space: any; onHideSpace: (spaceId: string, hide?: boolean) => void }> = ({
+  space,
+  onHideSpace
+}) => {
   const spacePreferences = useUserPreferenceStore((store) => store.space[space.id])
 
   return (
@@ -44,9 +47,9 @@ const SpacesList = () => {
 
   const { updateUserPreferences } = useUserService()
 
-  const handleHideSpace = (spaceId: string, hidden?: boolean) => {
-    addSpacePreference(spaceId, { hidden })
-    if (hidden) deleteSpace(spaceId)
+  const handleHideSpace = (spaceId: string, hide?: boolean) => {
+    addSpacePreference(spaceId, { hidden: hide })
+    if (hide) deleteSpace(spaceId, false)
     else {
       const space = useDataStore.getState().spaces.find((s) => s.id === spaceId)
       addSpace(space)
