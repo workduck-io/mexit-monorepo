@@ -1,25 +1,8 @@
-import { Contents, NodeContent, NodeEditorContent, NodeMetadata } from '../Types/Editor'
-import { createX } from '../Utils/storeCreator'
+import { NodeMetadata } from '../Types/Editor'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
-export type ContentStoreState = {
-  internalUpdate: boolean
-  setInternalUpdate: (value: boolean) => void
-  contents: Contents
-  saved: boolean
-  setSaved: (saved: boolean) => void
-  removeContent: (nodeid: string) => void
-  getContent: (nodeid: string) => NodeContent
-  setContents: (contents: Record<string, NodeEditorContent>) => void
-  appendContent: (nodeId: string, blocksToAppend: NodeEditorContent, internalUpdate?: boolean) => void
-  setContent: (nodeid: string, content: NodeEditorContent, metadata?: NodeMetadata, internalUpdate?: boolean) => void
-  initContents: (contents: Contents) => void
-  getAllMetadata: () => any
-  getMetadata: (nodeId: string) => NodeMetadata
-  updateMetadata: (nodeId: string, metadata: Partial<NodeMetadata>) => void
-  setMetadata: (nodeid: string, metadata: NodeMetadata) => void
-}
-
-export const contentStoreConstructor = (set, get): ContentStoreState => ({
+const contentStoreConfig = (set, get) => ({
   internalUpdate: false,
   setInternalUpdate: (value: boolean) => {
     set({ internalUpdate: value })
@@ -31,7 +14,7 @@ export const contentStoreConstructor = (set, get): ContentStoreState => ({
     const existingContents = get().contents
     set({ contents: { ...existingContents, ...contents } })
   },
-  setContent: (nodeid, content, metadata, internalUpdate) => {
+  setContent: (nodeid: string, content, metadata, internalUpdate: boolean) => {
     const oldContent = get().contents
 
     set({
@@ -40,7 +23,7 @@ export const contentStoreConstructor = (set, get): ContentStoreState => ({
 
     if (internalUpdate) get().setInternalUpdate(true)
   },
-  appendContent: (nodeid, blocksToAppend, internalUpdate) => {
+  appendContent: (nodeid: string, blocksToAppend, internalUpdate) => {
     const contents = get().contents
     const newNoteContent = [...(contents?.[nodeid]?.content ?? []), ...blocksToAppend]
     set({ contents: { ...contents, [nodeid]: { type: 'editor', content: newNoteContent } } })
@@ -56,7 +39,7 @@ export const contentStoreConstructor = (set, get): ContentStoreState => ({
     })
     return metadata
   },
-  getMetadata: (nodeid) => {
+  getMetadata: (nodeid: string) => {
     const contents = get().contents
     return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : {}
   },
@@ -78,10 +61,10 @@ export const contentStoreConstructor = (set, get): ContentStoreState => ({
       contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
     })
   },
-  getContent: (nodeid) => {
+  getContent: (nodeid: string) => {
     return get().contents[nodeid]
   },
-  removeContent: (nodeid) => {
+  removeContent: (nodeid: string) => {
     const oldContent = get().contents
     delete oldContent[nodeid]
   },
@@ -92,6 +75,6 @@ export const contentStoreConstructor = (set, get): ContentStoreState => ({
   }
 })
 
-const useContentStore = createX(contentStoreConstructor, 'contents', 'true')
+const useContentStore = createStore(contentStoreConfig, StoreIdentifier.CONTENTS, 'true')
 
 export { useContentStore }

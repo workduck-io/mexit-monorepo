@@ -1,6 +1,8 @@
 import create, { StoreApi, UseBoundStore } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
+import { StoreIdentifier } from '../Types/Store'
+
 import { asyncLocalStorage } from './chromeStorageAdapter'
 import { IDBStorage } from './idbStorageAdapter'
 import { isExtension } from './isExtension'
@@ -15,9 +17,9 @@ export interface TypeMap<T> {
 
 export type SetterFunction<T> = (set: any, get: any) => T
 
-export const createX = <T extends object, R extends keyof TypeMap<T>>(
+export const createStore = <T extends object, R extends keyof TypeMap<T>>(
   config: SetterFunction<T>,
-  name: string,
+  name: StoreIdentifier,
   isPersist: R
 ): UseBoundStore<TypeMap<T>[R], StoreApi<TypeMap<T>[R]>> => {
   if (isPersist === 'true') {
