@@ -1,6 +1,6 @@
 {
   "name": "mexit-webapp",
-  "version": "0.22.19",
+  "version": "0.22.20",
   "license": "MIT",
   "scripts": {
     "dev": "NX_BUILD_MODE=development vite",
