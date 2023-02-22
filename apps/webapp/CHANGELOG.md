@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.20
+
+### Patch Changes
+
+- 1d0d4f80: Use Deepmerge, floating-ui transitions for Previews
+
 ## 0.22.19
 
 ### Patch Changes
