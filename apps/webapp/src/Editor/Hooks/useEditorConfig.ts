@@ -154,7 +154,7 @@ export const useEditorPluginConfig = (editorId: string, options?: PluginOptionTy
         slateElementType: ELEMENT_INLINE_BLOCK,
         newItemHandler: (newItem, openedNoteId?) => {
           const openedNode = useDataStore.getState().ilinks.find((l) => l.nodeid === openedNoteId)
-          const link = addILink({ ilink: newItem, openedNodePath: openedNode?.path, namespace: openedNode?.namespace })
+          const link = addILink({ ilink: newItem, openedNotePath: openedNode?.path, namespace: openedNode?.namespace })
           return link.nodeid
         },
         renderElement: QuickLinkComboboxItem

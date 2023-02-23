@@ -1,5 +1,6 @@
 import { NodeEditorContent } from '../Types/Editor'
-import { MIcon } from '../Types/Store'
+import { MIcon, StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
 export interface Snippet {
   id: string
@@ -16,27 +17,10 @@ export interface SnippetEditorStore {
 export type SnippetID = string
 export type Snippets = Record<SnippetID, Snippet>
 
-export interface SnippetStoreState {
-  snippets: Snippets
+export const snippetStoreConfig = (set, get) => ({
+  snippets: {} as Snippets,
 
-  initSnippets: (snippets: Snippets) => void
-  addSnippet: (snippets: Snippet) => void
-  updateSnippet: (id: string, snippets: Snippet) => void
-  updateSnippetContent: (id: string, content: any[], isTemplate?: boolean) => void
-  updateSnippetContentAndTitle: (id: string, content: any[], title: string, isTemplate?: boolean) => void
-  deleteSnippet: (id: string) => void
-
-  editor: SnippetEditorStore
-  clear: () => void
-  loadSnippet: (id: string) => void
-
-  _hasHydrated: boolean
-}
-
-export const snippetStoreConstructor = (set, get) => ({
-  snippets: {},
-
-  initSnippets: (snippets) =>
+  initSnippets: (snippets: Snippets) =>
     set({
       snippets
     }),
@@ -82,11 +66,7 @@ export const snippetStoreConstructor = (set, get) => ({
     if (snippetToLoad) {
       set({ editor: { snippet: snippetToLoad } })
     }
-  },
-  _hasHydrated: false,
-  setHasHydrated: (state) => {
-    set({
-      _hasHydrated: state
-    })
   }
 })
+
+export const useSnippetStore = createStore(snippetStoreConfig, StoreIdentifier.SNIPPETS, 'true')

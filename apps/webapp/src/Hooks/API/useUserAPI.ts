@@ -1,5 +1,4 @@
-import { API, mog } from '@mexit/core'
-import { UserPreferences } from '@mexit/shared'
+import { API, mog, UserPreferences } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'

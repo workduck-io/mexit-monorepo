@@ -75,6 +75,4 @@ export const reminderStoreConfig = (set, get) => ({
   setModalOpen: (modalOpen: boolean) => set({ modalOpen })
 })
 
-const useReminderStore = createStore(reminderStoreConfig, StoreIdentifier.REMINDERS, 'true')
-
-export { useReminderStore }
+export const useReminderStore = createStore(reminderStoreConfig, StoreIdentifier.REMINDERS, 'true')

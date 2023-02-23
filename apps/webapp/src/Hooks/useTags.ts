@@ -1,4 +1,4 @@
-import { generateTag,getTagsFromContent, TagsCache } from '@mexit/core'
+import { generateTag, getTagsFromContent, TagsCache } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
 import { useDataStore } from '../Stores/useDataStore'
@@ -48,7 +48,7 @@ export const useTags = () => {
 
   const getNodesAndCleanCacheForTag = (tag: string): { nodes: string[]; cleanCache: TagsCache } => {
     const tagsCache = useDataStore.getState().tagsCache
-    const cleanCache = Object.entries(tagsCache).reduce((p, [k, v]) => {
+    const cleanCache = Object.entries(tagsCache).reduce((p, [k, v]: [k: string, v: any]) => {
       return { ...p, [k]: { nodes: v.nodes.filter((n) => !isInArchive(n)) } }
     }, {})
     if (cleanCache[tag]) return { nodes: cleanCache[tag].nodes, cleanCache }
@@ -170,7 +170,7 @@ export const useTags = () => {
 
     // Calculate frequency of a tag in notes belonging to namespace
     const tagsWithNSFreq: Array<{ tag: string; freq: Record<string, number> }> = Object.entries(tagsCache).reduce(
-      (p, [k, v]) => {
+      (p, [k, v]: [k: string, v: any]) => {
         const tagFreq = v.nodes.reduce((p, c) => {
           const ilink = ilinks.find((i) => i.nodeid === c)
           const ns = ilink?.namespace

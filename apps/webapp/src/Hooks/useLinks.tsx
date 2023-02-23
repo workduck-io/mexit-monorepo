@@ -150,7 +150,7 @@ export const useLinks = () => {
   }
 
   const getForwardlinks = (nodeid: string): CachedILink[] => {
-    const links = Object.entries(linkCache).reduce((p, [linknodeid, l]) => {
+    const links = Object.entries(linkCache).reduce((p, [linknodeid, l]: [linknodeid: string, l: any]) => {
       const matchedLinks = l.filter((l) => l.type === 'from' && l.nodeid === nodeid)
 
       return matchedLinks.length > 0 ? [...p, { nodeid: linknodeid, type: 'to' as const }] : p

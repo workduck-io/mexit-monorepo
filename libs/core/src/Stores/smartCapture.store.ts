@@ -1,6 +1,8 @@
 import { SmartCaptureConfig } from '../Types/SmartCapture'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
-export const smartCaptureStoreConstructor = (set, get) => ({
+export const smartCaptureStoreConfig = (set, get) => ({
   config: [],
   setSmartCaptureList: (config: SmartCaptureConfig[]) => {
     set({ config })
@@ -15,3 +17,5 @@ export const smartCaptureStoreConstructor = (set, get) => ({
     set({ config: [] })
   }
 })
+
+export const useSmartCaptureStore = createStore(smartCaptureStoreConfig, StoreIdentifier.CONTENTS, 'true')

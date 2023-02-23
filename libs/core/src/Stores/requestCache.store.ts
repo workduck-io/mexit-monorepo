@@ -1,10 +1,13 @@
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
+
 export interface CacheStore {
   // Store urls for gravatar which are not found
   gravatarAbsent: string[]
   addGravatarAbsent: (value: string) => void
 }
 
-export const requestCacheConstructor = (set, get) => ({
+export const requestCacheConfig = (set, get) => ({
   gravatarAbsent: [],
   addGravatarAbsent: (value: string) => {
     if (!get().gravatarAbsent.includes(value)) {
@@ -14,3 +17,5 @@ export const requestCacheConstructor = (set, get) => ({
     }
   }
 })
+
+export const useRequestCacheStore = createStore(requestCacheConfig, StoreIdentifier.CONTENTS, 'false')

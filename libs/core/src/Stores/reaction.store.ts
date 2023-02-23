@@ -25,6 +25,4 @@ export const reactionStoreConfig = (set, get): ReactionStore => ({
   }
 })
 
-const useReactionStore = createStore(reactionStoreConfig, StoreIdentifier.REACTIONS, 'false')
-
-export { useReactionStore }
+export const useReactionStore = createStore(reactionStoreConfig, StoreIdentifier.REACTIONS, 'false')

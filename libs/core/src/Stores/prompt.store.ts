@@ -48,6 +48,4 @@ export const promptStoreConfig = (set, get): PromptStoreType => ({
   }
 })
 
-const usePromptStore = createStore(promptStoreConfig, StoreIdentifier.PROMPRTS, 'true')
-
-export { usePromptStore }
+export const usePromptStore = createStore(promptStoreConfig, StoreIdentifier.PROMPRTS, 'true')
