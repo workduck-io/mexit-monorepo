@@ -40,7 +40,7 @@ import { useViewStore } from '../Stores/useViewStore'
 
 import { useTaskViewModalStore } from './TaskViewModal'
 
-interface TaskHeaderProps {
+interface ViewHeaderProps {
   currentView?: View
   currentFilters: Filter[]
   cardSelected: boolean
@@ -50,7 +50,7 @@ interface TaskHeaderProps {
   sortType: SortType
 }
 
-const TaskHeader = ({
+const ViewHeader = ({
   currentView,
   currentViewType,
   sortOrder,
@@ -58,13 +58,12 @@ const TaskHeader = ({
   currentFilters,
   cardSelected,
   globalJoin
-}: TaskHeaderProps) => {
+}: ViewHeaderProps) => {
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const { deleteView } = useViews()
 
   const { goTo } = useRouting()
-
+  const { deleteView } = useViews()
   const [source, target] = useSingleton()
   const [deleting, setDeleting] = useState(false)
 
@@ -225,4 +224,4 @@ const TaskHeader = ({
   )
 }
 
-export default TaskHeader
+export default ViewHeader

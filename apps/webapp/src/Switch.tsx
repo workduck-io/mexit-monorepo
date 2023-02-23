@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 
 import styled from 'styled-components'
 
-import { AppInitStatus } from '@mexit/core'
+import { AppInitStatus, mog } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'
@@ -37,14 +37,12 @@ import PromptProvidersPage from './Views/Prompts/PromptProvidersPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
-import RemindersAll from './Views/Reminders/RemindersAll'
 import Search from './Views/Search'
 import Settings from './Views/Settings'
 import About from './Views/Settings/About'
 import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
-import Tasks from './Views/Tasks'
 import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
@@ -197,6 +195,23 @@ const IntegrationRoutes = () => {
 
 const Home = () => <Outlet />
 
+/**
+ * 1. Header containing:
+ *    - View Title
+ *    -
+ *
+ */
+const ViewRoutes = () => {
+  mog('ROUTE')
+  return (
+    <Routes>
+      {/* <Route path="tasks" element={<Tasks />} /> */}
+      {/* <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} /> */}
+      <Route path={':viewid'} element={<View />} />
+    </Routes>
+  )
+}
+
 export const Switch = () => {
   const location = useLocation()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
@@ -276,6 +291,7 @@ export const Switch = () => {
           <Route index element={<DraftView />} />
           <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
+          <Route path={`${ROUTE_PATHS.view}/*`} element={<ViewRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
           <Route
             path={ROUTE_PATHS.links}
@@ -285,10 +301,6 @@ export const Switch = () => {
               </ProtectedRoute>
             }
           />
-          {/* <Route path={ROUTE_PATHS.present} element={<Presenter />} /> */}
-          <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
-          <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
-          <Route path={`${ROUTE_PATHS.view}/:viewid`} element={<View />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>

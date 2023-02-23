@@ -58,7 +58,7 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
 
 export const StyledTasksKanban = styled(StyledBoard)``
 
-export const TaskViewSection = styled.div`
+export const ViewSection = styled.div`
   display: flex;
   flex-direction: column;
 

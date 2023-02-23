@@ -12,11 +12,13 @@ import useMultipleEditors from '../../../Stores/useEditorsStore'
 import useModalStore from '../../../Stores/useModalStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 
+import { ViewRendererProps } from '.'
+
 /**
  * Todo list
  * The list view for tasks
  */
-const ListView = () => {
+const ListView: React.FC<ViewRendererProps> = (props) => {
   // const nodeTodos = useTodoStore((store) => store.todos)
   const currentFilters = useFilterStore((store) => store.currentFilters)
   const globalJoin = useFilterStore((store) => store.globalJoin)
@@ -28,7 +30,6 @@ const ListView = () => {
 
   useEffect(() => {
     queryIndex('node').then((r) => {
-      console.log({ RESULT: r })
       setList(r)
     })
   }, [])
@@ -103,7 +104,6 @@ const ListView = () => {
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
     return (e) => {
-      // console.log('event', { e })
       enableShortcutHandler(() => {
         e.preventDefault()
         fn(e)
@@ -150,6 +150,8 @@ const ListView = () => {
       }
     }
   }, [isModalOpen, isPreviewEditors, selectNewCard])
+
+  if (!list?.length) return <TaskListWrapper>No Results Found {props.viewId}</TaskListWrapper>
 
   return (
     <TaskListWrapper>

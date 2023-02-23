@@ -1,8 +1,9 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { getMIcon, ReminderViewData } from '@mexit/core'
+import { getMIcon, mog, ReminderViewData } from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -15,6 +16,9 @@ import { CreateNewNoteSidebarButton, SidebarWrapper, VerticalSpace } from './Sid
 import SidebarList from './SidebarList'
 
 const ViewList = () => {
+  const viewID = useParams()
+
+  mog('VIEW ID', { viewID })
   const views = useViewStore((store) => store.views)
   const currentView = useViewStore((store) => store.currentView)
   const setContextMenu = useLayoutStore((store) => store.setContextMenu)

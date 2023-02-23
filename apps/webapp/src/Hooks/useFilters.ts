@@ -76,7 +76,6 @@ export const useFilters = <Item>() => {
   const globalJoin = useFilterStore((state) => state.globalJoin)
 
   const { getTags } = useTags()
-
   const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
   const filterFunctions = useGenericFilterFunctions()
 

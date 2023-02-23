@@ -9,7 +9,7 @@ import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
 import { OverlaySidebarWindowWidth, StyledTasksKanban, TaskColumnHeader } from '@mexit/shared'
 
-import { useTodoFilters } from '../../../Hooks/todo/useTodoFilters'
+import { useViewFilters } from '../../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../../../Hooks/useNavigation'
@@ -26,6 +26,7 @@ import { RenderBoardTask } from '../../Todo/BoardTask'
  * Kanban view for todo
  * With shortcuts and navigation
  */
+
 const KanbanView = () => {
   const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
 
@@ -36,7 +37,7 @@ const KanbanView = () => {
   const sidebar = useLayoutStore((store) => store.sidebar)
 
   const { getTodoBoard, changeStatus, changePriority } = useTodoKanban()
-  const { globalJoin, currentFilters, sortOrder, sortType } = useTodoFilters()
+  const { globalJoin, currentFilters, sortOrder, sortType } = useViewFilters()
 
   const { push } = useNavigation()
   const { goTo } = useRouting()

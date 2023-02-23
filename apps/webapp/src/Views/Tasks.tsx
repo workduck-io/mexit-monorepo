@@ -2,11 +2,11 @@ import React, { useEffect, useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
 
 import { ReminderViewData, View, ViewType } from '@mexit/core'
-import { PageContainer, TaskViewSection } from '@mexit/shared'
+import { PageContainer, ViewSection } from '@mexit/shared'
 
-import TaskHeader from '../Components/TaskHeader'
+import ViewHeader from '../Components/TaskHeader'
 import ViewRenderer from '../Components/Views/ViewRenderer'
-import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
+import { useViewFilters } from '../Hooks/todo/useTodoFilters'
 import { useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
@@ -44,7 +44,9 @@ const Tasks = () => {
     onViewTypeChange,
     onSortTypeChange,
     onSortOrderChange
-  } = useTodoFilters()
+  } = useViewFilters()
+
+  console.log('FILTERS', { filters, sortOrder, sortType, globalJoin })
 
   const setCurrentViewOptions = (view: View) => {
     onViewTypeChange(view.viewType ?? ViewType.List)
@@ -82,8 +84,8 @@ const Tasks = () => {
 
   return (
     <PageContainer>
-      <TaskViewSection>
-        <TaskHeader
+      <ViewSection>
+        <ViewHeader
           sortOrder={sortOrder}
           sortType={sortType}
           currentViewType={viewType}
@@ -116,8 +118,8 @@ const Tasks = () => {
             availableSortTypes: ['status', 'priority']
           }}
         />
-        <ViewRenderer viewType={viewType} />
-      </TaskViewSection>
+        <ViewRenderer viewId={match?.params?.viewid} viewType={viewType} />
+      </ViewSection>
       <NoResult items={todos} />
     </PageContainer>
   )
