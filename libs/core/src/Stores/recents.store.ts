@@ -55,4 +55,4 @@ export const recentsStoreConfig = (set, get): RecentsType => ({
   initRecents: (recentList) => set({ lastOpened: recentList })
 })
 
-export const useRecentsStore = createStore(recentsStoreConfig, StoreIdentifier.RECENTS, 'true')
+export const useRecentsStore = createStore(recentsStoreConfig, StoreIdentifier.RECENTS, true)

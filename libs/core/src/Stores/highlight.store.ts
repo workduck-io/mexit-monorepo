@@ -105,6 +105,6 @@ export const highlightStoreConfig = (set, get) => ({
   }
 })
 
-const useHighlightStore = createStore(highlightStoreConfig, StoreIdentifier.HIGHLIGHTS, 'true')
+const useHighlightStore = createStore(highlightStoreConfig, StoreIdentifier.HIGHLIGHTS, true)
 
 export { useHighlightStore }

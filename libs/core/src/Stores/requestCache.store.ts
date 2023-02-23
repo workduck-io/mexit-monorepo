@@ -18,4 +18,4 @@ export const requestCacheConfig = (set, get) => ({
   }
 })
 
-export const useRequestCacheStore = createStore(requestCacheConfig, StoreIdentifier.CONTENTS, 'false')
+export const useRequestCacheStore = createStore(requestCacheConfig, StoreIdentifier.REQUESTCACHE, false)

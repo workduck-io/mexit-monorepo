@@ -102,8 +102,6 @@ export const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   }
 })
 
-export const userPreferenceStore = createStore(preferenceStoreConfig, StoreIdentifier.PREFERENCES, 'true')
-
 const customMergeLastOpened = (key: string) => {
   if (key === 'ts') return mergeLastOpened
 }
@@ -154,3 +152,5 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }
 }
+
+export const userPreferenceStore = createStore(preferenceStoreConfig, StoreIdentifier.PREFERENCES, true)

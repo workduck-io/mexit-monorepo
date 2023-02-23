@@ -79,4 +79,4 @@ export const shortcutStoreConfig = (set, get) => ({
   }
 })
 
-export const useShortcutStore = createStore(shortcutStoreConfig, StoreIdentifier.SHORTCUTS, 'true')
+export const useShortcutStore = createStore(shortcutStoreConfig, StoreIdentifier.SHORTCUTS, true)

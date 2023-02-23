@@ -18,4 +18,4 @@ export const smartCaptureStoreConfig = (set, get) => ({
   }
 })
 
-export const useSmartCaptureStore = createStore(smartCaptureStoreConfig, StoreIdentifier.CONTENTS, 'true')
+export const useSmartCaptureStore = createStore(smartCaptureStoreConfig, StoreIdentifier.SMARTCAPTURE, true)

@@ -34,6 +34,4 @@ export const metadataStoreConfig = (set, get): MetaDataStoreType => ({
   }
 })
 
-const useMetadataStore = createStore(metadataStoreConfig, StoreIdentifier.METADATA, 'true')
-
-export { useMetadataStore }
+export const useMetadataStore = createStore(metadataStoreConfig, StoreIdentifier.METADATA, true)

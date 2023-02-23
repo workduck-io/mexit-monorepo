@@ -43,7 +43,8 @@ export enum StoreIdentifier {
   REACTIONS = 'reaction',
   REMINDERS = 'reminder',
   REQUESTCACHE = 'request-cache',
-  SHORTCUTS = 'shortcut'
+  SHORTCUTS = 'shortcut',
+  SMARTCAPTURE = 'smart-capture'
 }
 
 export const DefaultMIcons = {

@@ -69,4 +69,4 @@ export const snippetStoreConfig = (set, get) => ({
   }
 })
 
-export const useSnippetStore = createStore(snippetStoreConfig, StoreIdentifier.SNIPPETS, 'true')
+export const useSnippetStore = createStore(snippetStoreConfig, StoreIdentifier.SNIPPETS, true)

@@ -29,6 +29,6 @@ export const linkStoreConstructor = (set, get) => ({
   }
 })
 
-const useLinkStore = createStore(linkStoreConstructor, StoreIdentifier.LINKS, 'true')
+const useLinkStore = createStore(linkStoreConstructor, StoreIdentifier.LINKS, true)
 
 export { useLinkStore }

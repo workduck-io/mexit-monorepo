@@ -352,10 +352,6 @@ export const dataStoreConfig = (set, get) => ({
   getSharedNodes: () => get().sharedNodes
 })
 
-const useDataStore = createStore(dataStoreConfig, StoreIdentifier.DATA, 'true')
-
-export { useDataStore }
-
 export const getLevel = (path: string) => path.split(SEPARATOR).length
 
 /** Link sanatization
@@ -401,3 +397,5 @@ export const sanatizeLinks = (links: ILink[]): FlatItem[] => {
 
   return newLinks
 }
+
+export const useDataStore = createStore(dataStoreConfig, StoreIdentifier.DATA, true)

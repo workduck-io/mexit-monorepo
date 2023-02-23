@@ -7,23 +7,22 @@ import { asyncLocalStorage } from './chromeStorageAdapter'
 import { IDBStorage } from './idbStorageAdapter'
 import { isExtension } from './isExtension'
 
-export interface TypeMap<T> {
-  true: T & {
-    _hasHydrated: boolean
-    setHasHydrated: (state) => void
-  }
-  false: T
-}
+export type TypeMap<T, R extends boolean> = R extends true
+  ? T & {
+      _hasHydrated: boolean
+      setHasHydrated: (state) => void
+    }
+  : T
 
 export type SetterFunction<T> = (set: any, get: any) => T
 
-export const createStore = <T extends object, R extends keyof TypeMap<T>>(
+export const createStore = <T extends object, R extends boolean>(
   config: SetterFunction<T>,
   name: StoreIdentifier,
   isPersist: R
-): UseBoundStore<TypeMap<T>[R], StoreApi<TypeMap<T>[R]>> => {
-  if (isPersist === 'true') {
-    const configX = (set, get): TypeMap<T>['true'] => {
+): UseBoundStore<TypeMap<T, R>, StoreApi<TypeMap<T, R>>> => {
+  if (isPersist) {
+    const configX = (set, get): TypeMap<T, true> => {
       return {
         _hasHydrated: false,
         setHasHydrated: (state) => {
@@ -35,7 +34,7 @@ export const createStore = <T extends object, R extends keyof TypeMap<T>>(
       }
     }
 
-    return create<TypeMap<T>[R]>(
+    return create<TypeMap<T, R>>(
       devtools(
         persist(configX, {
           name: `mexit-${name}-${isExtension() ? 'extension' : 'webapp'}`,
@@ -53,7 +52,7 @@ export const createStore = <T extends object, R extends keyof TypeMap<T>>(
     )
   } else {
     //@ts-ignore
-    return create<TypeMap<T>['false']>(
+    return create<TypeMap<T, false>>(
       devtools(config, {
         name
       })

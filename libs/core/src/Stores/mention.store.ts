@@ -62,9 +62,7 @@ export const mentionStoreConfig = (set, get) => ({
     })
 })
 
-const useMentionStore = createStore(mentionStoreConfig, StoreIdentifier.MENTIONS, 'true')
-
-export { useMentionStore }
+export const useMentionStore = createStore(mentionStoreConfig, StoreIdentifier.MENTIONS, true)
 
 export const addAccessToUser = (user: any, id: string, context: ShareContext, accessLevel: AccessLevel) => {
   const access: UserAccessTable = user.access || {
