@@ -1,4 +1,6 @@
 import { Reminder } from '../Types/Reminders'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
 interface ArmedReminder {
   reminderId: string
@@ -26,7 +28,7 @@ export interface ReminderStoreState {
   setModalOpen: (modalOpen: boolean) => void
 }
 
-export const reminderStoreConstructor = (set, get) => ({
+export const reminderStoreConfig = (set, get) => ({
   reminders: [],
   setReminders: (reminders: Reminder[]) => set({ reminders }),
   addReminder: (reminder: Reminder) => set((state) => ({ reminders: [...state.reminders, reminder] })),
@@ -72,3 +74,7 @@ export const reminderStoreConstructor = (set, get) => ({
   modalOpen: false,
   setModalOpen: (modalOpen: boolean) => set({ modalOpen })
 })
+
+const useReminderStore = createStore(reminderStoreConfig, StoreIdentifier.REMINDERS, 'true')
+
+export { useReminderStore }
