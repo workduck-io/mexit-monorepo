@@ -1,25 +1,11 @@
 import merge from 'deepmerge'
-import create from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
 
 import { AccessLevel, InvitedUser, Mentionable, ShareContext, UserAccessTable } from '../Types/Mentions'
-import { asyncLocalStorage } from '../Utils/chromeStorageAdapter'
-import { IDBStorage } from '../Utils/idbStorageAdapter'
+import { StoreIdentifier } from '../Types/Store'
 import { mog } from '../Utils/mog'
+import { createStore } from '../Utils/storeCreator'
 
-interface MentionStore {
-  invitedUsers: InvitedUser[]
-  mentionable: Mentionable[]
-  addInvitedUser: (invitedUser: InvitedUser) => void
-  addAccess: (email: string, id: string, context: ShareContext, accessLevel: AccessLevel) => void
-  addMentionable: (mentionable: Mentionable) => void
-  initMentionData: (mentionable: Mentionable[], invitedUser: InvitedUser[]) => void
-  setInvited: (invitedUsers: InvitedUser[]) => void
-  setMentionable: (mentionable: Mentionable[]) => void
-  reset: () => void
-}
-
-export const mentionStoreConstructor = (set, get): MentionStore => ({
+export const mentionStoreConfig = (set, get) => ({
   invitedUsers: [],
   mentionable: [],
   reset: () => set({ invitedUsers: [], mentionable: [] }),
@@ -76,18 +62,9 @@ export const mentionStoreConstructor = (set, get): MentionStore => ({
     })
 })
 
-export const useMentionStore = create<MentionStore>(
-  devtools(
-    persist(mentionStoreConstructor, {
-      name: 'mexit-mentions-store',
-      //@ts-ignore
-      getStorage: () => (chrome.storage ? asyncLocalStorage : IDBStorage)
-    }),
-    {
-      name: 'Mention Store'
-    }
-  )
-)
+const useMentionStore = createStore(mentionStoreConfig, StoreIdentifier.MENTIONS, 'true')
+
+export { useMentionStore }
 
 export const addAccessToUser = (user: any, id: string, context: ShareContext, accessLevel: AccessLevel) => {
   const access: UserAccessTable = user.access || {

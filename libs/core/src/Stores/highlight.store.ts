@@ -1,8 +1,7 @@
-import { GetState, SetState, StateCreator, StoreApi } from 'zustand'
-
-import { Contents, ILink, SharedNode } from '../Types/Editor'
 import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
+import { StoreIdentifier } from '../Types/Store'
 import { mog } from '../Utils/mog'
+import { createStore } from '../Utils/storeCreator'
 
 interface AddHighlightBlockToMap {
   highlightId: string
@@ -16,24 +15,6 @@ interface AddHighlightBlocksToMap {
 }
 
 export type AddHighlightFn = (highlight: Highlight, mapOptions?: AddHighlightBlocksToMap) => void
-
-export interface HighlightStore {
-  highlights: Highlights
-  highlightBlockMap: HighlightBlockMap
-
-  initHighlightBlockMap: (ilinks: (ILink | SharedNode)[], contents: Contents) => void
-
-  setHighlights: (highlights: Highlights) => void
-  setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => void
-
-  addHighlight: AddHighlightFn
-  removeHighlight: (highlightId: string) => void
-
-  getHighlightsOfUrl: (url: string) => Highlights
-
-  clearAllHighlightedBlocks: () => void
-}
-
 /**
  * Helper function that adds a { highlight, note, block } to the highlightBlockMap in place
  */
@@ -57,12 +38,7 @@ const addToHighlightBlockMap = (
 }
 
 // LOOK Typed constructor
-export const highlightStoreConstructor: StateCreator<
-  HighlightStore,
-  SetState<HighlightStore>,
-  GetState<HighlightStore>,
-  StoreApi<HighlightStore>
-> = (set, get) => ({
+export const highlightStoreConfig = (set, get) => ({
   highlights: [],
   highlightBlockMap: {},
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
@@ -96,7 +72,7 @@ export const highlightStoreConstructor: StateCreator<
     const newHighlighted: Highlights = [...highlights, highlight]
     const newHighlightBlockMap = { ...highlightBlockMap }
 
-    blockIds.forEach((blockId) => {
+    blockIds.forEach((blockId: string) => {
       addToHighlightBlockMap(newHighlightBlockMap, {
         highlightId: highlight.entityId,
         nodeId,
@@ -108,7 +84,7 @@ export const highlightStoreConstructor: StateCreator<
     set({ highlights: newHighlighted, highlightBlockMap: newHighlightBlockMap })
   },
 
-  removeHighlight: (highlightId) => {
+  removeHighlight: (highlightId: string) => {
     const { highlights, highlightBlockMap } = get()
     const newHighlights = [...highlights.filter((h) => h.entityId !== highlightId)]
     const newHighlightBlockMap = { ...highlightBlockMap }
@@ -117,7 +93,7 @@ export const highlightStoreConstructor: StateCreator<
     set({ highlights: newHighlights, highlightBlockMap: newHighlightBlockMap })
   },
 
-  getHighlightsOfUrl: (url) => {
+  getHighlightsOfUrl: (url: string) => {
     const highlights = get().highlights ?? []
     return highlights.filter((h) => h?.properties?.sourceUrl === url)
   },
@@ -128,3 +104,7 @@ export const highlightStoreConstructor: StateCreator<
     set({ highlights: [], highlightBlockMap: {} })
   }
 })
+
+const useHighlightStore = createStore(highlightStoreConfig, StoreIdentifier.HIGHLIGHTS, 'true')
+
+export { useHighlightStore }

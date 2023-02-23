@@ -31,7 +31,11 @@ export enum StoreIdentifier {
   RECENTS = 'recents',
   SNIPPETS = 'snippets',
   ACTIONS = 'actions',
-  TASKS = 'tasks'
+  TASKS = 'tasks',
+  DESCRIPTIONS = 'description',
+  HIGHLIGHTS = 'highlight',
+  LINKS = 'link',
+  MENTIONS = 'mention'
 }
 
 export const DefaultMIcons = {

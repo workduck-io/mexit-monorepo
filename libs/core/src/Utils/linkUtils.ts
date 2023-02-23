@@ -1,4 +1,4 @@
-import { Link } from '../Stores/linkStoreConstructor'
+import { Link } from '../Stores/link.store'
 import { ActionType } from '../Types/Actions'
 import { QuickLinkType } from '../Types/Editor'
 import { ListItemType } from '../Types/List'
