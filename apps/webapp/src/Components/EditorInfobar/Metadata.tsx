@@ -10,6 +10,7 @@ import { NodeMetadata } from '@mexit/core'
 import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, RelativeTime } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
+import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -34,13 +35,7 @@ interface MetadataProps {
   hideShareDetails?: boolean
 }
 
-const Metadata = ({
-  nodeId,
-  namespaceId,
-  hideShareDetails = false,
-  fadeOnHover = true,
-  publicMetadata
-}: MetadataProps) => {
+const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
   const location = useLocation()
   const openShareModal = useShareModalStore((store) => store.openModal)
@@ -49,6 +44,16 @@ const Metadata = ({
   const mentionable = useMentionStore((s) => s.mentionable)
   const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
   const { getSharedUsersOfNodeOfSpace } = useMentions()
+  const { accessWhenShared } = usePermissions()
+
+  const getIsSharedDisabled = () => {
+    const access = accessWhenShared(nodeId)
+    const accessPriority = compareAccessLevel(access?.note, access?.space)
+
+    return accessPriority !== 'MANAGE' && accessPriority !== 'OWNER'
+  }
+
+  const hideShareDetails = getIsSharedDisabled()
 
   const isEmpty =
     metadata &&

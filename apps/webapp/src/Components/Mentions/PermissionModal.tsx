@@ -101,9 +101,9 @@ export const PermissionModalContent = () => {
   useEffect(() => {
     if (open) {
       // Fetch all user details for the space
-      fetchSharedUsers(context === 'space' ? id : node.namespace, 'space')
+      fetchSharedUsers(context === 'space' ? id : namespaceid, 'space')
     }
-  }, [open, context, id])
+  }, [open, context, id, namespaceid])
 
   const [sharedUsers, setSharedUsers] = useState<Mentionable[]>([])
 
@@ -246,6 +246,8 @@ export const PermissionModalContent = () => {
    * Invite Input Box - inline elements
    * Users List with Access
    */
+
+  if (!open) return null
 
   return (
     <Container ref={ref}>
