@@ -18,7 +18,8 @@ const EditorWrapper = styled(EditorStyles)<{ withShadow?: boolean }>`
   display: flex;
   flex-direction: column;
   flex: 1;
-  max-width: min(calc(100vw - 4rem), 800px);
+  max-width: min(calc(100vw - 4rem), 820px);
+  margin: 0 auto;
   padding: 1rem;
   min-height: 100%;
 

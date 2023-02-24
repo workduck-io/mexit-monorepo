@@ -4,35 +4,27 @@ import toast from 'react-hot-toast'
 import searchLine from '@iconify/icons-ri/search-line'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
-
-import { Infobox } from '@workduck-io/mex-components'
+import { useTheme } from 'styled-components'
 
 import {
   convertToCopySnippet,
   defaultCopyConverter,
   defaultCopyFilter,
+  DefaultMIcons,
   ELEMENT_TAG,
   parseSnippet,
   Snippet
 } from '@mexit/core'
-import {
-  Input,
-  List,
-  MexIcon,
-  SidebarListFilter,
-  SidebarListFilterWrapper,
-  SnippetCards,
-  SnippetSidebarHelp
-} from '@mexit/shared'
+import { CenteredColumn, getMIcon, Input, List, MexIcon, SidebarListFilter, SnippetCards } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
-import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 
+import SidebarSection from './SidebarSection'
 import SnippetCard from './SnippetCard'
 
 export const SnippetsInfoBar = () => {
@@ -134,34 +126,50 @@ export const SnippetsInfoBar = () => {
     }
   }, [search, snippets])
 
+  const theme = useTheme()
+
   return (
     <SnippetCards>
-      <SidebarListFilterWrapper>
+      <SidebarSection label="Search Snippets" icon={getMIcon('ICON', 'ri:link-m')}>
         <SidebarListFilter noMargin>
           <MexIcon height={20} width={20} icon={searchLine} margin="0.6rem 0" />
           <Input
             autoFocus
             fontSize="1rem"
-            placeholder={'Search snippets'}
+            placeholder={'Type to search...'}
             onChange={debounce((e) => onSearchChange(e), 250)}
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} />
-      </SidebarListFilterWrapper>
-      <List scrollable>
-        {searchedSnippets?.map((snippet) => (
-          <SnippetCard
-            key={snippet?.id}
-            keyStr={snippet?.id}
-            snippet={snippet}
-            onClick={(event) => {
-              event.stopPropagation()
-              onInsertSnippet(snippet.id)
-            }}
+      </SidebarSection>
+      {!searchedSnippets?.length ? (
+        <CenteredColumn>
+          <MexIcon
+            color={theme.tokens.colors.primary.default}
+            $noHover
+            width="32"
+            height="32"
+            icon="gg:file-document"
           />
-        ))}
-      </List>
+          <p>{!search ? 'All your Snippets will shown here!' : 'No Results Found!'}</p>
+        </CenteredColumn>
+      ) : (
+        <SidebarSection label="Popular" icon={DefaultMIcons.SNIPPET}>
+          <List $noMargin scrollable>
+            {searchedSnippets?.map((snippet) => (
+              <SnippetCard
+                key={snippet?.id}
+                keyStr={snippet?.id}
+                snippet={snippet}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  onInsertSnippet(snippet.id)
+                }}
+              />
+            ))}
+          </List>
+        </SidebarSection>
+      )}
     </SnippetCards>
   )
 }

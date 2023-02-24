@@ -21,7 +21,7 @@ export const DataWrapper = styled.div<DataWrapperProps>`
   svg,
   img {
     color: ${({ theme }) => theme.tokens.text.fade};
-    margin-right: ${({ theme }) => theme.spacing.small};
+    /* margin-right: ${({ theme }) => theme.spacing.small}; */
   }
 
   svg,
@@ -52,7 +52,7 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 ${({ theme }) => theme.spacing.large};
+  padding: 0 ${({ theme }) => theme.spacing.medium};
 
   ${({ theme, $fadeOnHover }) =>
     $fadeOnHover &&

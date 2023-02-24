@@ -5,7 +5,7 @@ import { selectEditor, usePlateEditorRef } from '@udecode/plate'
 import styled from 'styled-components'
 
 import { defaultContent, DefaultMIcons } from '@mexit/core'
-import { EditorWrapper, Group, StyledEditor, Title } from '@mexit/shared'
+import { EditorHeader, EditorWrapper, Group, NodeInfo, StyledEditor, Title } from '@mexit/shared'
 
 import Metadata from '../EditorInfobar/Metadata'
 import IconPicker from '../IconPicker/IconPicker'
@@ -17,21 +17,15 @@ const NoteIcon = ({ icon }) => {
   return <IconPicker size={32} allowPicker={false} value={icon} />
 }
 
+const PublicNoteWrapper = styled.article`
+  max-width: 860px;
+  margin: 0 1rem;
+  width: 100%;
+`
+
 const PublicStyledEditor = styled(StyledEditor)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-
-  max-width: 950px;
-
-  /* padding: 0 2rem; */
-  margin: 1rem;
-  padding-bottom: ${({ theme }) => theme.spacing.large};
-
-  && > div {
-    width: 100%;
-  }
+  height: 100vh;
+  overflow: auto;
 `
 
 const PublicNodeEditor = ({ nodeId, node, namespaceId }) => {
@@ -50,28 +44,32 @@ const PublicNodeEditor = ({ nodeId, node, namespaceId }) => {
   }, [node])
 
   return (
-    <PublicStyledEditor className="mex_editor">
-      <Group>
-        <NoteIcon key={`${nodeId}_${noteIcon.value}`} icon={noteIcon} />
+    <PublicNoteWrapper>
+      <EditorHeader>
+        <NodeInfo>
+          <Group>
+            <NoteIcon key={`${nodeId}_${noteIcon.value}`} icon={noteIcon} />
 
-        <Title>
-          <Link to={'/'}>{node?.title}</Link>
-        </Title>
-      </Group>
-
-      {node && <Metadata namespaceId={namespaceId} nodeId={nodeId} publicMetadata={node?.metadata} />}
-
-      <EditorWrapper onClick={onFocusClick}>
-        <Editor
-          readOnly={true}
-          nodeUID={nodeId}
-          nodePath={node?.title ?? ''}
-          content={node?.content ?? defaultContent.content}
-          onChange={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
-        />
-        {node && <PublicNoteFooter nodeId={nodeId} />}
-      </EditorWrapper>
-    </PublicStyledEditor>
+            <Title>
+              <Link to={'/'}>{node?.title}</Link>
+            </Title>
+          </Group>
+        </NodeInfo>
+        {node && <Metadata namespaceId={namespaceId} nodeId={nodeId} publicMetadata={node?.metadata} />}
+      </EditorHeader>
+      <PublicStyledEditor className="mex_editor">
+        <EditorWrapper onClick={onFocusClick}>
+          <Editor
+            readOnly={true}
+            nodeUID={nodeId}
+            nodePath={node?.title ?? ''}
+            content={node?.content ?? defaultContent.content}
+            onChange={() => {}} // eslint-disable-line @typescript-eslint/no-empty-function
+          />
+        </EditorWrapper>
+      </PublicStyledEditor>
+      {node && <PublicNoteFooter nodeId={nodeId} />}
+    </PublicNoteWrapper>
   )
 }
 

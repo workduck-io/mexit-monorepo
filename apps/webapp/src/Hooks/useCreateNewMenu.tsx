@@ -72,7 +72,7 @@ export const useCreateNewMenu = () => {
   const { createNewNote } = useCreateNewNote()
   const blockMenuItems = useBlockMenu()
 
-  const createNewNamespace = () => {
+  const handleCreateSpace = () => {
     addDefaultNewNamespace()
       .then((ns) => {
         if (ns) changeSpace(ns.id)
@@ -97,7 +97,7 @@ export const useCreateNewMenu = () => {
       })
   }
 
-  const createNewNoteInNamespace = (namespaceId: string) => {
+  const handleCreateNote = (namespaceId: string) => {
     const note = createNewNote({ namespace: namespaceId, noteContent: defaultContent.content })
 
     if (note) {
@@ -105,7 +105,7 @@ export const useCreateNewMenu = () => {
     }
   }
 
-  const onCreateNewSnippet = (template = false) => {
+  const handleCreateSnippet = (template = false) => {
     // Create a better way.
     const snippetId = generateSnippetId()
     const snippetName = generateName().dashed
@@ -123,7 +123,7 @@ export const useCreateNewMenu = () => {
     goTo(ROUTE_PATHS.snippet, NavigationType.push, snippetId, { title: snippetName })
   }
 
-  const handleTemplate = (item: TreeItem) => {
+  const handleApplyTemplateOnNote = (item: TreeItem) => {
     if (item.data.path !== 'Drafts') {
       toggleModal(ModalsType.template, item.data)
     } else {
@@ -147,7 +147,7 @@ export const useCreateNewMenu = () => {
     changeSpace(getDefaultNamespaceId())
   }
 
-  const onDeleteNamespace = () => {
+  const handleDeleteSpace = () => {
     const item = useLayoutStore.getState().contextMenu?.item
     toggleModal(ModalsType.deleteSpace, item)
   }
@@ -216,7 +216,7 @@ export const useCreateNewMenu = () => {
       getMenuItem('New Note', () => handleCreateChild(item), disabled, DefaultMIcons.NOTE),
       getMenuItem(
         `${hasTemplate ? 'Change' : 'Set'} Template`,
-        () => handleTemplate(item),
+        () => handleApplyTemplateOnNote(item),
         disabled,
         DefaultMIcons.TEMPLATE
       ),
@@ -235,7 +235,10 @@ export const useCreateNewMenu = () => {
   }
 
   const getSnippetsMenuItems = (): MenuListItemType[] => {
-    return [getMenuItem('New Snippet', onCreateNewSnippet), getMenuItem('New Template', () => onCreateNewSnippet(true))]
+    return [
+      getMenuItem('New Snippet', handleCreateSnippet),
+      getMenuItem('New Template', () => handleCreateSnippet(true))
+    ]
   }
 
   const getViewMenuItems = (): MenuListItemType[] => {
@@ -260,13 +263,12 @@ export const useCreateNewMenu = () => {
     const disabled = spaceData?.access !== 'OWNER' || isReservedNamespace(spaceData?.name)
 
     return [
+      getMenuItem('New Space', handleCreateSpace, false, DefaultMIcons.ADD),
       getMenuItem(
-        'Delete Space',
-        () => {
-          if (!disabled) onDeleteNamespace()
-        },
-        disabled,
-        DefaultMIcons.DELETE
+        'Manage',
+        () => toggleModal(ModalsType.manageSpaces),
+        false,
+        getMIcon('ICON', 'ri:checkbox-multiple-blank-line')
       ),
       getMenuItem(
         'Hide Space',
@@ -275,10 +277,12 @@ export const useCreateNewMenu = () => {
         getMIcon('ICON', 'ri:eye-off-line')
       ),
       getMenuItem(
-        'Manage',
-        () => toggleModal(ModalsType.manageSpaces),
-        false,
-        getMIcon('ICON', 'ri:checkbox-multiple-blank-line')
+        'Delete Space',
+        () => {
+          if (!disabled) handleDeleteSpace()
+        },
+        disabled,
+        DefaultMIcons.DELETE
       )
     ]
   }
@@ -287,9 +291,9 @@ export const useCreateNewMenu = () => {
     const currentSpace = useUserPreferenceStore.getState().activeNamespace
 
     return [
-      getMenuItem('New Note', () => createNewNoteInNamespace(currentSpace || getDefaultNamespaceId())),
-      getMenuItem('New Space', createNewNamespace),
-      getMenuItem('New Snippet', onCreateNewSnippet)
+      getMenuItem('New Note', () => handleCreateNote(currentSpace || getDefaultNamespaceId())),
+      getMenuItem('New Space', handleCreateSpace),
+      getMenuItem('New Snippet', handleCreateSnippet)
     ]
   }
 
@@ -299,6 +303,11 @@ export const useCreateNewMenu = () => {
     getSpaceMenuItems,
     getBlockMenuItems,
     getTreeMenuItems,
-    getViewMenuItems
+    getViewMenuItems,
+
+    // * Handlers
+    handleCreateSnippet,
+    handleCreateNote,
+    handleCreateSpace
   }
 }

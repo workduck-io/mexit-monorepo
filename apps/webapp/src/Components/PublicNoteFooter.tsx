@@ -15,8 +15,11 @@ const PublicNoteFooterContainer = styled.section`
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  position: sticky;
+  bottom: 0;
+  background: ${({ theme }) => theme.tokens.surfaces.app};
   width: 100%;
-  /* padding: ${({ theme }) => theme.spacing.medium} ${({ theme }) => theme.spacing.large}; */
+  padding: ${({ theme }) => theme.spacing.large} ${({ theme }) => theme.spacing.medium};
 
   ${PrimaryText} {
     padding: 0.25rem 0.5rem;

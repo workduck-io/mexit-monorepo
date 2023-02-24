@@ -12,14 +12,16 @@ import {
   NodeType
 } from '@mexit/core'
 import {
+  EditorHeader,
+  Group,
   IconDisplay,
   MainHeader,
+  NodeInfo,
   Result,
   ResultCardFooter,
   ResultDesc,
   ResultHeader,
   ResultMain,
-  ResultMetaData,
   ResultRow,
   ResultTitle,
   SearchContainer,
@@ -27,7 +29,6 @@ import {
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
   Title,
-  TitleText,
   ViewType
 } from '@mexit/shared'
 
@@ -49,7 +50,6 @@ import { useRecentsStore } from '../Stores/useRecentsStore'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
-import { SplitType } from './SplitView'
 
 const Search = () => {
   const { loadNode } = useLoad()
@@ -167,11 +167,6 @@ const Search = () => {
               <ResultTitle>{node.path}</ResultTitle>
               <ResultDesc>{item.text ?? convertContentToRawText(content, ' ')}</ResultDesc>
             </ResultMain>
-            {(!splitOptions || splitOptions.type === SplitType.NONE) && (
-              <ResultMetaData>
-                <Metadata fadeOnHover={false} namespaceId={edNode?.namespace} nodeId={edNode?.nodeid} />
-              </ResultMetaData>
-            )}
           </ResultRow>
         </Result>
       )
@@ -216,11 +211,15 @@ const Search = () => {
       // mog('RenderPreview', { item, content, node })
       return (
         <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
-          <Title onMouseUp={(e) => onDoubleClick(e, item)}>
-            <IconDisplay icon={icon} size={24} />
-            <TitleText>{node.path}</TitleText>
+          <EditorHeader>
+            <NodeInfo>
+              <Group>
+                <IconDisplay icon={icon} size={24} />
+                <Title onMouseUp={(e) => onDoubleClick(e, item)}>{node.path}</Title>
+              </Group>
+            </NodeInfo>
             <Metadata namespaceId={node.namespace} fadeOnHover={false} nodeId={edNode.nodeid} />
-          </Title>
+          </EditorHeader>
           <EditorPreviewRenderer
             content={content}
             blockId={item.blockId}

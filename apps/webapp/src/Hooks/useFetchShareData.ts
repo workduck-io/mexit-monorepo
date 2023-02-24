@@ -50,7 +50,7 @@ export const useFetchShareData = () => {
       await runBatch([
         ...UserAccessDetails.map(async (u) => {
           const uDetails = await getUserDetailsUserId(u.userId)
-          return { ...u, email: uDetails.email, alias: uDetails.alias }
+          return { ...u, email: uDetails.email, name: uDetails.name, alias: uDetails.alias }
         }),
 
         ...(context === 'note' && node ? [node] : []).map(async (node) => {

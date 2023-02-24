@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import styled, { useTheme } from 'styled-components'
 
@@ -127,47 +128,52 @@ export const NodeCard = ({ nodeId }: { nodeId: string }) => {
   if (!node) return
 
   return (
-    <SnippetPreview
-      key={node?.nodeid}
-      hover
-      disableClick
-      title={noteTitle}
-      preview={visible}
-      onClick={onTitleClick}
-      setPreview={setVisible}
-      allowClosePreview
-      nodeId={node?.nodeid}
-      placement="left"
-    >
-      <SnippetCardWrapper>
-        <NodeCardHeader $noHover>
-          <HeadingFlex onClick={onTitleClick}>
-            <IconDisplay color={theme.tokens.colors.primary.default} icon={notesMetadata?.icon ?? DefaultMIcons.NOTE} />
-            <PrimaryText>{noteTitle}</PrimaryText>
-          </HeadingFlex>
-          <GenericFlex>
-            {isNodePublic ? (
-              <MexIcon height={16} width={16} icon="material-symbols:public" onClick={onNotePublic} />
-            ) : (
-              <MexIcon height={16} width={16} icon="material-symbols:public-off-rounded" onClick={onNotePublic} />
-            )}
-            {isNodePublic && (
-              <CopyButton
-                isIcon
-                text={`${API_BASE_URLS.shareFrontend}/${nodeId}`}
-                size="16px"
-                beforeCopyTooltip="Copy link"
-                afterCopyTooltip="Link copied!"
+    <ErrorBoundary fallbackRender={() => <></>}>
+      <SnippetPreview
+        key={node?.nodeid}
+        hover
+        disableClick
+        title={noteTitle}
+        preview={visible}
+        onClick={onTitleClick}
+        setPreview={setVisible}
+        allowClosePreview
+        nodeId={node?.nodeid}
+        placement="left"
+      >
+        <SnippetCardWrapper>
+          <NodeCardHeader $noHover>
+            <HeadingFlex onClick={onTitleClick}>
+              <IconDisplay
+                color={theme.tokens.colors.primary.default}
+                icon={notesMetadata?.icon ?? DefaultMIcons.NOTE}
               />
-            )}
-          </GenericFlex>
-        </NodeCardHeader>
+              <PrimaryText>{noteTitle}</PrimaryText>
+            </HeadingFlex>
+            <GenericFlex>
+              {isNodePublic ? (
+                <MexIcon height={16} width={16} icon="material-symbols:public" onClick={onNotePublic} />
+              ) : (
+                <MexIcon height={16} width={16} icon="material-symbols:public-off-rounded" onClick={onNotePublic} />
+              )}
+              {isNodePublic && (
+                <CopyButton
+                  isIcon
+                  text={`${API_BASE_URLS.shareFrontend}/${nodeId}`}
+                  size="16px"
+                  beforeCopyTooltip="Copy link"
+                  afterCopyTooltip="Link copied!"
+                />
+              )}
+            </GenericFlex>
+          </NodeCardHeader>
 
-        {/* TODO: saving raw content for nodes as well would be grand */}
-        {contents?.content && (
-          <SnippetContentPreview>{convertContentToRawText(contents.content, ' ')}</SnippetContentPreview>
-        )}
-      </SnippetCardWrapper>
-    </SnippetPreview>
+          {/* TODO: saving raw content for nodes as well would be grand */}
+          {contents?.content && (
+            <SnippetContentPreview>{convertContentToRawText(contents.content, ' ')}</SnippetContentPreview>
+          )}
+        </SnippetCardWrapper>
+      </SnippetPreview>
+    </ErrorBoundary>
   )
 }

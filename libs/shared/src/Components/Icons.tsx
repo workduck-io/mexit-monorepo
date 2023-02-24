@@ -108,6 +108,7 @@ export const DefaultMIcons = {
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
   HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line'),
   WEB_LINK: getMIcon('ICON', 'ri:link'),
+  SHARE: getMIcon('ICON', 'ri:share-line'),
   TAG: getMIcon('ICON', 'ri:hashtag'),
   SPACE: getMIcon('ICON', 'heroicons-outline:view-grid'),
   ARCHIVE: getMIcon('ICON', 'ri:archive-line'),

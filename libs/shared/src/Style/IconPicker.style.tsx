@@ -4,7 +4,7 @@ export const IconSelector = styled.button`
   display: flex;
   border: none;
   background: transparent;
-  padding: ${({ theme }) => theme.spacing.tiny};
+  padding: 0;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme }) => theme.tokens.text.default};
 

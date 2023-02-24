@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
 import {
@@ -11,7 +11,8 @@ import {
   GenericFlex,
   IconDisplay,
   mergeAccess,
-  StyledCreatatbleSelect
+  StyledCreatatbleSelect,
+  Text
 } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
@@ -32,6 +33,8 @@ import { ProfileImage } from '../User/ProfileImage'
 
 import { MultiEmailInviteModalContent } from './MultiEmailInvite'
 import {
+  Container,
+  InviteMessage,
   ShareAlias,
   ShareAliasWithImage,
   SharedPermissionsTable,
@@ -45,6 +48,7 @@ import {
 } from './styles'
 
 export const PermissionModalContent = () => {
+  const ref = useRef<HTMLDivElement>(null)
   const open = useShareModalStore((s) => s.open)
   const node = useEditorStore((state) => state.node)
   const context = useShareModalStore((s) => s.context)
@@ -97,9 +101,9 @@ export const PermissionModalContent = () => {
   useEffect(() => {
     if (open) {
       // Fetch all user details for the space
-      fetchSharedUsers(context === 'space' ? id : node.namespace, 'space')
+      fetchSharedUsers(context === 'space' ? id : namespaceid, 'space')
     }
-  }, [open, context, id])
+  }, [open, context, id, namespaceid])
 
   const [sharedUsers, setSharedUsers] = useState<Mentionable[]>([])
 
@@ -243,8 +247,10 @@ export const PermissionModalContent = () => {
    * Users List with Access
    */
 
+  if (!open) return null
+
   return (
-    <>
+    <Container ref={ref}>
       {!readOnly && (
         <Center>
           <ShareOptions context={context} id={id} />
@@ -253,8 +259,8 @@ export const PermissionModalContent = () => {
 
       {!readOnly && <MultiEmailInviteModalContent />}
 
-      {sharedUsers.length > 0 ? (
-        <TableContainer id="table">
+      <TableContainer id="mexit-table-container">
+        {sharedUsers?.length > 0 ? (
           <SharedPermissionsTable>
             <TableBody>
               {sharedUsers.map((user) => {
@@ -282,17 +288,19 @@ export const PermissionModalContent = () => {
                       {access === 'OWNER' ? (
                         <ShareOwnerTag>Owner</ShareOwnerTag>
                       ) : (
-                        <StyledCreatatbleSelect
-                          isSearchable={false}
-                          menuPortalTarget={document.getElementById('table')}
-                          onChange={(access) => onPermissionChange(user.id, access.value)}
-                          defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
-                          options={options}
-                          style={{ transparent: true }}
-                          isDisabled={readOnly || isCurrent}
-                          closeMenuOnSelect={true}
-                          closeMenuOnBlur={true}
-                        />
+                        ref && (
+                          <StyledCreatatbleSelect
+                            isSearchable={false}
+                            menuPortalTarget={ref.current}
+                            onChange={(access) => onPermissionChange(user.id, access.value)}
+                            defaultValue={getAccessValue(access) ?? DefaultPermissionValue}
+                            options={options}
+                            style={{ transparent: true }}
+                            isDisabled={readOnly || isCurrent}
+                            closeMenuOnSelect={true}
+                            closeMenuOnBlur={true}
+                          />
+                        )
                       )}
                     </SharePermission>
                   </ShareRow>
@@ -300,10 +308,13 @@ export const PermissionModalContent = () => {
               })}
             </TableBody>
           </SharedPermissionsTable>
-        </TableContainer>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <InviteMessage>
+            <IconDisplay icon={DefaultMIcons.SHARE} size={32} />
+            <Text>{`You've not shared this ${context === 'note' ? 'Note' : 'Space'} with anyone`}</Text>
+          </InviteMessage>
+        )}
+      </TableContainer>
 
       <ModalFooter>
         <ModalActions>
@@ -318,6 +329,8 @@ export const PermissionModalContent = () => {
           </StyledSaveButton>
         </ModalActions>
       </ModalFooter>
-    </>
+    </Container>
   )
 }
+
+// * Show message you've not shared this note with anyone

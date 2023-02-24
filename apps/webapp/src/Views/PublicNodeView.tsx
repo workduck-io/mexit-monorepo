@@ -19,7 +19,6 @@ const PublicEditorWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  height: 100vh;
 `
 
 const PublicNodeView = () => {

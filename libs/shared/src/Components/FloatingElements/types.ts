@@ -10,6 +10,7 @@ export interface Props {
   open: boolean
   persist?: boolean
   label?: string
+  initialFocus?: number
   disableClick?: boolean
   setOpen: (open: boolean) => void
 }

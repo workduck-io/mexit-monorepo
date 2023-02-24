@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
@@ -70,40 +71,46 @@ const SnippetCard = ({ snippet, preview = true, icon, keyStr, onClick }: Snippet
 
   return (
     // TODO: Not able to scroll these previews using mouse
-    <SnippetPreview
-      key={keyStr}
-      hover
-      preview={visible}
-      disableClick
-      onClick={onTitleClick}
-      setPreview={setVisible}
-      allowClosePreview
-      snippetId={snippet.id}
-      placement="left"
-    >
-      <SnippetCardWrapper>
-        <NodeCardHeader>
-          <GenericFlex onClick={onTitleClick}>
-            <MexIcon color={theme.tokens.colors.primary.default} icon={snippet?.template ? magicLine : quillPenLine} />
-            <PrimaryText>{snippet.title}</PrimaryText>
-          </GenericFlex>
-          <MexIcon onClick={onClick} icon={fileCopyLine} height={16} width={16} />
-        </NodeCardHeader>
+    <ErrorBoundary fallbackRender={() => <></>}>
+      <SnippetPreview
+        key={keyStr}
+        hover
+        preview={visible}
+        disableClick
+        onClick={onTitleClick}
+        handleCopy={onClick}
+        setPreview={setVisible}
+        allowClosePreview
+        snippetId={snippet.id}
+        placement="left"
+      >
+        <SnippetCardWrapper>
+          <NodeCardHeader>
+            <GenericFlex onClick={onTitleClick}>
+              <MexIcon
+                color={theme.tokens.colors.primary.default}
+                icon={snippet?.template ? magicLine : quillPenLine}
+              />
+              <PrimaryText>{snippet.title}</PrimaryText>
+            </GenericFlex>
+            <MexIcon onClick={onClick} icon={fileCopyLine} height={16} width={16} />
+          </NodeCardHeader>
 
-        <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>
-        <SnippetCardFooter>
-          {lastUsed && (
-            <RelativeTime
-              tippy
-              dateNum={lastUsed}
-              prefix="Last used"
-              refreshMs={1000 * 30}
-              tippyProps={{ placement: 'left', theme: 'mex-bright' }}
-            />
-          )}
-        </SnippetCardFooter>
-      </SnippetCardWrapper>
-    </SnippetPreview>
+          <SnippetContentPreview>{descriptions[snippet?.id]?.rawText}</SnippetContentPreview>
+          <SnippetCardFooter>
+            {lastUsed && (
+              <RelativeTime
+                tippy
+                dateNum={lastUsed}
+                prefix="Last used"
+                refreshMs={1000 * 30}
+                tippyProps={{ placement: 'left', theme: 'mex-bright' }}
+              />
+            )}
+          </SnippetCardFooter>
+        </SnippetCardWrapper>
+      </SnippetPreview>
+    </ErrorBoundary>
   )
 }
 

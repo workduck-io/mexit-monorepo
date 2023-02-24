@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 
 import { ViewType } from '../Style/ViewSelector'
 
-import { EditorStyles } from './Editor'
+import { EditorHeader, EditorStyles } from './Editor'
 import { Input } from './Form'
 import { CardShadow } from './Helpers'
 import { DataGroup, MetadataWrapper } from './Metadata'
@@ -414,6 +414,7 @@ export const Result = styled(animated.div)<{ selected?: boolean; view?: ViewType
 
         ${SearchPreviewWrapper} {
           max-height: 300px;
+          height: 300px;
           overflow: hidden;
           flex-grow: 1;
         }
@@ -533,8 +534,6 @@ export const ItemTag = styled.div<{ large?: boolean }>`
 `
 
 export const SearchPreviewWrapper = styled.div<{ active?: boolean; padding?: boolean }>`
-  ${({ theme, active }) => active && css``}
-
   ${({ padding }) =>
     padding &&
     css`
@@ -570,6 +569,11 @@ export const SplitSearchPreviewWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.large};
   box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
+
+  ${EditorHeader} {
+    background: none;
+    padding: 0;
+  }
 
   ${EditorStyles} {
     font-size: 1rem;

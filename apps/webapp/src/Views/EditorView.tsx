@@ -26,7 +26,7 @@ export const EditorViewWrapper = styled.div`
   width: 100%;
   height: 100%;
   overflow: inherit hidden;
-  max-width: 860px;
+  max-width: 852px;
   min-width: 400px;
   margin: 0 auto;
 `
@@ -84,8 +84,8 @@ const EditorView = () => {
   }, [isBlockMode]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <EditorViewWrapper>
-      <StyledEditor showGraph={infobar.mode === 'graph'} className="mex_editor">
+    <EditorViewWrapper id="mexit-editor-view-wrapper">
+      <StyledEditor id="mexit-editor-container" showGraph={infobar.mode === 'graph'} className="mex_editor">
         <EditorHeader noteId={noteId} />
         <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
           <Outlet />

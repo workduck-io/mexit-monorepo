@@ -31,7 +31,6 @@ const useContextMenu = (): Array<ContextMenuListItemType> => {
     case ContextMenuType.VIEW_LIST:
       return getViewMenuItems()
     case ContextMenuType.NOTE_NAMESPACE:
-      // eslint-disable-next-line no-case-declarations
       return getSpaceMenuItems()
     default:
       break

@@ -4,17 +4,15 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { Infobox } from '@workduck-io/mex-components'
-
 import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
+  DefaultMIcons,
+  getMIcon,
   Input,
   List,
   MexIcon,
-  NotesInfoBarHelp,
   SidebarListFilter,
-  SidebarListFilterWrapper,
   SnippetCards
 } from '@mexit/shared'
 
@@ -22,9 +20,9 @@ import { useLinks } from '../../Hooks/useLinks'
 import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
-import { getElementById } from '../../Utils/cs-utils'
 
 import { NodeCard } from './NodeCard'
+import SidebarSection from './SidebarSection'
 
 export const NotesInfoBar = () => {
   const [search, setSearch] = useState<string>('')
@@ -86,19 +84,19 @@ export const NotesInfoBar = () => {
 
   return (
     <SnippetCards>
-      <SidebarListFilterWrapper>
+      <SidebarSection label="Search Notes" icon={getMIcon('ICON', 'ri:link-m')}>
         <SidebarListFilter noMargin>
           <MexIcon $noHover height={20} width={20} icon={searchLine} margin="0.6rem 0" />
           <Input
             autoFocus
             fontSize="1rem"
-            placeholder={'Search notes'}
+            placeholder={'Type to search...'}
             onChange={debounce((e) => onSearchChange(e), 250)}
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox text={NotesInfoBarHelp} root={getElementById('ext-side-nav')} />
-      </SidebarListFilterWrapper>
+        {/* <Infobox text={NotesInfoBarHelp} root={getElementById('ext-side-nav')} /> */}
+      </SidebarSection>
       {!searchedNodes?.length ? (
         <CenteredColumn>
           <MexIcon
@@ -111,11 +109,13 @@ export const NotesInfoBar = () => {
           <p>{!search ? 'All your recents will shown here!' : 'No Results Found!'}</p>
         </CenteredColumn>
       ) : (
-        <List scrollable>
-          {searchedNodes?.map((nodeId) => (
-            <NodeCard key={nodeId} nodeId={nodeId} />
-          ))}
-        </List>
+        <SidebarSection label="Recents" icon={DefaultMIcons.NOTE}>
+          <List $noMargin scrollable>
+            {searchedNodes?.map((nodeId) => (
+              <NodeCard key={nodeId} nodeId={nodeId} />
+            ))}
+          </List>
+        </SidebarSection>
       )}
     </SnippetCards>
   )

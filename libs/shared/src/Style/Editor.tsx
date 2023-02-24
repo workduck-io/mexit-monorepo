@@ -35,7 +35,7 @@ export const NodeInfo = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 2rem 0.5rem 1.25rem;
+  padding: ${({ theme }) => `${theme.spacing.small} ${theme.spacing.medium}`};
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: opacity 0.3s ease-in-out;
 
@@ -82,7 +82,7 @@ export const CenteredMainContent = styled.div`
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
   padding: 0 ${({ theme }) => theme.spacing.medium};
-  margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
+  margin: 0 auto;
   width: 100%;
   max-width: 860px;
   min-width: 400px;
@@ -97,6 +97,12 @@ export const CenteredMainContent = styled.div`
 
 export const EditorHeader = styled.section`
   width: 100%;
+  top: 0;
+  padding: ${({ theme }) => `${theme.spacing.large} ${theme.spacing.medium} ${theme.spacing.medium}`};
+  z-index: 11;
+  position: sticky;
+  background: ${({ theme }) => theme.tokens.surfaces.app};
+  backdrop-filter: blur(20px);
 `
 
 export const StyledEditor = styled.div<StyledEditorProps>`
@@ -104,13 +110,9 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   flex-direction: ${({ flexDirection }) => flexDirection ?? 'column'};
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
-  padding: 0 ${({ theme }) => theme.spacing.medium};
-  margin: calc(${({ theme }) => theme.spacing.large}) auto 0;
-  width: 100%;
-  max-width: 860px;
-  /* min-width: 400px; */
+  /* width: 100%;
+  max-width: 860px; */
   flex: 1;
-  /* height: calc(100vh - 3rem); */
 
   && > div {
     width: 100%;
@@ -120,10 +122,11 @@ export const StyledEditor = styled.div<StyledEditorProps>`
 export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
   display: flex;
   align-items: center;
-  padding: 0 1.5rem;
+  padding: 0 ${({ theme }) => theme.spacing.medium};
   overflow: hidden;
 
   opacity: 0.5;
+
   &:hover {
     opacity: 1;
   }
@@ -147,6 +150,7 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
 
   line-height: 1.75;
   width: 100%;
+  padding: 0 ${({ theme }) => theme.spacing.medium};
 
   .slate-Draggable {
     > div {

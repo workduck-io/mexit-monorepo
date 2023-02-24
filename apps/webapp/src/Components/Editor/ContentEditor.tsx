@@ -158,20 +158,18 @@ const ContentEditor = () => {
   }, [nodeid, _hasHydrated])
 
   return (
-    <>
-      <EditorWrapper comboboxOpen={isComboOpen} isUserEditing={isUserEditing} ref={editorWrapperRef}>
-        <Editor
-          onAutoSave={onAutoSave}
-          onFocusClick={onFocusClick}
-          includeBlockInfo={true}
-          onChange={onChangeSave}
-          content={nodeContent}
-          nodeUID={nodeid}
-          readOnly={viewOnly}
-          autoFocus={false}
-        />
-      </EditorWrapper>
-    </>
+    <EditorWrapper comboboxOpen={isComboOpen} isUserEditing={isUserEditing} ref={editorWrapperRef}>
+      <Editor
+        onAutoSave={onAutoSave}
+        onFocusClick={onFocusClick}
+        includeBlockInfo={true}
+        onChange={onChangeSave}
+        content={nodeContent}
+        nodeUID={nodeid}
+        readOnly={viewOnly}
+        autoFocus={false}
+      />
+    </EditorWrapper>
   )
 }
 

@@ -27,9 +27,15 @@ export const SHARED_NAMESPACE: SingleNamespace = {
   icon: { type: 'ICON', value: 'mex:shared-note' }
 }
 
+export enum RESERVED_SNIPPET_SPACES {
+  snippets = 'snippets',
+  templates = 'templates',
+  prompts = 'prompts'
+}
+
 export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
   {
-    id: 'NAMESPACE_SNIPPETS',
+    id: RESERVED_SNIPPET_SPACES.snippets,
     name: 'Snippets',
     createdAt: 0,
     updatedAt: 0,
@@ -38,7 +44,7 @@ export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
     icon: DefaultMIcons.SNIPPET
   },
   {
-    id: 'NAMESPACE_TEMPLATES',
+    id: RESERVED_SNIPPET_SPACES.templates,
     name: 'Templates',
     createdAt: 0,
     updatedAt: 0,
@@ -47,7 +53,7 @@ export const SNIPPET_VIEW_NAMESPACES: Array<SingleNamespace> = [
     icon: DefaultMIcons.TEMPLATE
   },
   {
-    id: 'NAMESPACE_PROMPT',
+    id: RESERVED_SNIPPET_SPACES.prompts,
     name: 'Prompts',
     createdAt: 0,
     updatedAt: 0,

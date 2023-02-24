@@ -7,6 +7,7 @@ import { Input, StyledInputWrapper } from '@mexit/shared'
 export const Wrapper = styled.div`
   position: relative;
   width: 100%;
+  margin-left: ${({ theme }) => theme.spacing.small};
 
   ${StyledInputWrapper} {
     margin: 0;

@@ -154,16 +154,16 @@ const EditorPreviewRenderer = ({
   }
 
   return (
-    <ErrorBoundary fallbackRender={() => <></>}>
-      <PreviewStyles
-        readOnly={noMouseEvents && readOnly}
-        draftView={draftView}
-        onClick={(ev) => {
-          if (onDoubleClick && ev.detail === 2) {
-            onDoubleClick(ev)
-          }
-        }}
-      >
+    <PreviewStyles
+      readOnly={noMouseEvents && readOnly}
+      draftView={draftView}
+      onClick={(ev) => {
+        if (onDoubleClick && ev.detail === 2) {
+          onDoubleClick(ev)
+        }
+      }}
+    >
+      <ErrorBoundary fallbackRender={() => <></>}>
         <Plate
           id={editorId}
           editableProps={editableProps}
@@ -173,8 +173,8 @@ const EditorPreviewRenderer = ({
         >
           {!readOnly && <MultiComboboxContainer config={comboboxConfig.onKeyDownConfig} />}
         </Plate>
-      </PreviewStyles>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </PreviewStyles>
   )
 }
 

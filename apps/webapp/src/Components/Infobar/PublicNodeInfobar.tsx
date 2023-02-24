@@ -24,6 +24,9 @@ export const DataInfobarWrapper = styled.div`
   @media (min-width: 800px) {
     display: flex;
   }
+
+  position: sticky;
+  top: 10rem;
 `
 
 interface PublicDataInfobarProps {

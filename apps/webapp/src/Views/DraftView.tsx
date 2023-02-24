@@ -81,13 +81,7 @@ function DraftView() {
               const namespace = getNamespaceOfNodeid(s.nodeid)
 
               return (
-                <Result
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  onClick={() => onOpen(s.nodeid)}
-                  view={ViewType.Card}
-                  key={`tag_res_prev_${s.nodeid}`}
-                >
+                <Result onClick={() => onOpen(s.nodeid)} view={ViewType.Card} key={`tag_res_prev_${s.nodeid}`}>
                   <ResultHeader>
                     <Group>
                       <IconDisplay icon={icon} size={20} />
@@ -102,27 +96,6 @@ function DraftView() {
                     />
                   </SearchPreviewWrapper>
                 </Result>
-
-                // <Card key={`NODE_${s.nodeid}`}>
-                //   <SnippetHeader>
-                //     <Group>
-                //       <IconDisplay size={20} icon={icon} />
-                //       <SnippetCommand onClick={() => onOpen(s.nodeid)}>{s.path}</SnippetCommand>
-                //     </Group>
-                //   </SnippetHeader>
-
-                //   <StyledSnippetPreview
-                //     onClick={() => {
-                //       onOpen(s.nodeid)
-                //     }}
-                //   >
-                //     <EditorPreviewRenderer
-                //       content={contents[s.nodeid] ? contents[s.nodeid].content : defaultContent.content}
-                //       editorId={`Editor_Embed_${s.nodeid}`}
-                //       draftView
-                //     />
-                //   </StyledSnippetPreview>
-                // </Card>
               )
             })}
         </CardsContainer>
