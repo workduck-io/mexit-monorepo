@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.16
+
+### Patch Changes
+
+- dfb9c433: Create Snippets, Note based on Space context, Public Note UI changes
+- 9fa5a163: Unified more stores to improve code brevity; Fixed termination of workers; Add force logout for this version
+
 ## 0.19.15
 
 ### Patch Changes
