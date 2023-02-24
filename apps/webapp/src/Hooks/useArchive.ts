@@ -115,10 +115,10 @@ const useArchive = () => {
     const linkCache = useDataStore.getState().linkCache
     const tagsCache = useDataStore.getState().tagsCache
     const removedPaths = nodes.map((n) => n.nodeid)
-    const cleanTagCache = Object.entries(tagsCache).reduce((p, [k, v]) => {
+    const cleanTagCache = Object.entries(tagsCache).reduce((p, [k, v]: [k: string, v: any]) => {
       return { ...p, [k]: { nodes: v.nodes.filter((n) => !removedPaths.includes(n)) } }
     }, {})
-    const cleanLinkCache = Object.entries(linkCache).reduce((p, [k, v]) => {
+    const cleanLinkCache = Object.entries(linkCache).reduce((p, [k, v]: [k: string, v: any]) => {
       if (removedPaths.includes(k)) return p
       return { ...p, [k]: v.filter((n) => !removedPaths.includes(n.nodeid)) }
     }, {})

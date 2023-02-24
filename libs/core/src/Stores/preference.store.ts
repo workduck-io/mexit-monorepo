@@ -1,17 +1,17 @@
 import merge from 'deepmerge'
 
+import { StoreIdentifier } from '../Types/Store'
 import {
   LastOpenedNotes,
   LastUsedSnippets,
   SpacePreference,
   SpacePreferenceData,
   UserPreferences
-} from '../Types/userPreference'
+} from '../Types/UserPreference'
+import { createStore } from '../Utils/storeCreator'
 
 export interface UserPreferenceStore extends UserPreferences {
-  _hasHydrated: boolean
   smartCaptureExcludedFields?: any
-  setHasHydrated: (state) => void
   space: SpacePreference
   addSpacePreference: (spaceId: string, spacePreferenceData: Partial<SpacePreferenceData>) => void
   clear: () => void
@@ -25,8 +25,7 @@ export interface UserPreferenceStore extends UserPreferences {
   removeExcludedSmartCaptureField: (page: string, fieldId: string) => void
 }
 
-export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
-  _hasHydrated: false,
+export const preferenceStoreConfig = (set, get): UserPreferenceStore => ({
   version: 'unset',
   theme: { themeId: 'xeM', mode: 'dark' },
   lastOpenedNotes: {},
@@ -71,11 +70,6 @@ export const preferenceStoreConstructor = (set, get): UserPreferenceStore => ({
       const newConfig = webPageConfigs[page].filter((i) => i !== fieldId)
       set({ smartCaptureExcludedFields: { ...webPageConfigs, [page]: newConfig } })
     }
-  },
-  setHasHydrated: (state) => {
-    set({
-      _hasHydrated: state
-    })
   },
   getUserPreferences: () => {
     return {
@@ -158,3 +152,5 @@ export const mergeUserPreferences = (local: UserPreferences, remote: UserPrefere
     smartCaptureExcludedFields: local.smartCaptureExcludedFields
   }
 }
+
+export const userPreferenceStore = createStore(preferenceStoreConfig, StoreIdentifier.PREFERENCES, true)

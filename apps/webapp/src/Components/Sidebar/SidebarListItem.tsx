@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import checkboxBlankCircleFill from '@iconify/icons-ri/checkbox-blank-circle-fill'
 import { Icon } from '@iconify/react'
@@ -7,7 +7,8 @@ import { Entity } from 'rc-tree/lib/interface'
 
 import { ItemContent, ItemCount, ItemTitle } from '@workduck-io/mex-components'
 
-import { IconDisplay, ItemTitleText, LastOpenedState, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
+import { LastOpenedState } from '@mexit/core'
+import { IconDisplay, ItemTitleText, StyledTreeItem, UnreadIndicator } from '@mexit/shared'
 
 import { useLastOpened } from '../../Hooks/useLastOpened'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'

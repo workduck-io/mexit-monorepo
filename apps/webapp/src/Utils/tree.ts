@@ -1,8 +1,17 @@
 import { TreeData, TreeItem } from '@atlaskit/tree'
 import { ItemId } from '@atlaskit/tree/dist/types/types'
 
-import { Contents, getNameFromPath, getParentNodePath, isElder, isParent, MIcon, NodeMetadata } from '@mexit/core'
-import { LastOpenedState, TreeNode } from '@mexit/shared'
+import {
+  Contents,
+  getNameFromPath,
+  getParentNodePath,
+  isElder,
+  isParent,
+  LastOpenedState,
+  MIcon,
+  NodeMetadata
+} from '@mexit/core'
+import { TreeNode } from '@mexit/shared'
 
 import { useReminderStore } from '../Stores/useReminderStore'
 import { useTodoStore } from '../Stores/useTodoStore'

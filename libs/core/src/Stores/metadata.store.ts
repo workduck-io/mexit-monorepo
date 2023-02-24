@@ -1,4 +1,6 @@
 import { MetaDataStoreType } from '../Types/Metadata'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
 const getInitialMetadata = () => ({
   notes: {},
@@ -6,7 +8,7 @@ const getInitialMetadata = () => ({
   namespaces: {}
 })
 
-export const metadataStoreConstructor = (set, get): MetaDataStoreType => ({
+export const metadataStoreConfig = (set, get): MetaDataStoreType => ({
   metadata: getInitialMetadata(),
   initMetadata: (metadata) => set({ metadata }),
   addMetadata: (field, record) => {
@@ -31,3 +33,5 @@ export const metadataStoreConstructor = (set, get): MetaDataStoreType => ({
     set({ metadata: getInitialMetadata() })
   }
 })
+
+export const useMetadataStore = createStore(metadataStoreConfig, StoreIdentifier.METADATA, true)

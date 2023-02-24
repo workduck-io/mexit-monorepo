@@ -31,7 +31,20 @@ export enum StoreIdentifier {
   RECENTS = 'recents',
   SNIPPETS = 'snippets',
   ACTIONS = 'actions',
-  TASKS = 'tasks'
+  TASKS = 'tasks',
+  DATA = 'data',
+  DESCRIPTIONS = 'description',
+  HIGHLIGHTS = 'highlight',
+  LINKS = 'link',
+  MENTIONS = 'mention',
+  METADATA = 'metadata',
+  PREFERENCES = 'preference',
+  PROMPRTS = 'prompt',
+  REACTIONS = 'reaction',
+  REMINDERS = 'reminder',
+  REQUESTCACHE = 'request-cache',
+  SHORTCUTS = 'shortcut',
+  SMARTCAPTURE = 'smart-capture'
 }
 
 export const DefaultMIcons = {
@@ -127,7 +140,4 @@ export interface DataStoreState {
   // Shared Nodes
   setSharedNodes: (sharedNodes: SharedNode[]) => void
   getSharedNodes: () => SharedNode[]
-
-  _hasHydrated: boolean
-  setHasHydrated: (state) => void
 }

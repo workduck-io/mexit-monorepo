@@ -1,8 +1,17 @@
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
-import { SharedWorker, spawn, Thread } from '@workduck-io/mex-threads.js'
+import { SharedWorker, spawn } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
-import { idxKey, ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
+import {
+  idxKey,
+  ILink,
+  mog,
+  NodeEditorContent,
+  PersistentData,
+  SearchRepExtra,
+  Snippets,
+  withTimeout
+} from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
@@ -171,7 +180,7 @@ export const searchIndex = async (key: idxKey | idxKey[], query: string, tags?: 
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.searchIndex(key, query, tags)
+    const results = await withTimeout(searchWorker.searchIndex(key, query, tags), 1 * 500, 'Could not search')
     return results
   } catch (error) {
     mog('SearchIndexError', { error })
@@ -201,14 +210,17 @@ export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: stri
 }
 
 export const terminateAllWorkers = async () => {
-  await Thread.terminate(analysisWorker)
-  analysisWorker = null
+  const terminateWorker = async (worker) => {
+    try {
+      await worker?.reset()
+      worker = null
+    } catch (error) {
+      console.log('Termination error: ', error)
+    }
+  }
 
-  await Thread.terminate(requestsWorker)
-  requestsWorker = null
-
-  await Thread.terminate(searchWorker)
-  searchWorker = null
+  const promises = [terminateWorker(analysisWorker), terminateWorker(searchWorker), terminateWorker(requestsWorker)]
+  await Promise.allSettled(promises)
 }
 
 export const initNamespacesExtension = async (localILinks: ILink[]) => {

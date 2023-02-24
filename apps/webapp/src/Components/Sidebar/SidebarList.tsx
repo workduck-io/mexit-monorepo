@@ -7,7 +7,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { fuzzySearch, mog } from '@mexit/core'
+import { fuzzySearch, LastOpenedState, mog } from '@mexit/core'
 import {
   DesignItem,
   EmptyMessage,
@@ -16,7 +16,6 @@ import {
   Input,
   isOnEditableElement,
   ItemTitle,
-  LastOpenedState,
   SidebarListFilter,
   SidebarListWrapper,
   StyledTreeItem

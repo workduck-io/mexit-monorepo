@@ -1,3 +1,6 @@
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
+
 export interface Link {
   url: string
 
@@ -16,18 +19,16 @@ export interface Link {
   updatedAt?: number
 }
 
-export interface LinkStore {
-  links: Link[]
-  setLinks: (links: Link[]) => void
-  addLink: (link: Link) => void
-}
-
 export const linkStoreConstructor = (set, get) => ({
   links: [],
-  setLinks: (links) => set({ links }),
-  addLink: (link) => {
+  setLinks: (links: Link[]) => set({ links }),
+  addLink: (link: Link) => {
     const oldLinks = get().links
 
     set({ links: [...oldLinks, link] })
   }
 })
+
+const useLinkStore = createStore(linkStoreConstructor, StoreIdentifier.LINKS, true)
+
+export { useLinkStore }

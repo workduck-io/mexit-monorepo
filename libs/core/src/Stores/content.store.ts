@@ -75,6 +75,6 @@ const contentStoreConfig = (set, get) => ({
   }
 })
 
-const useContentStore = createStore(contentStoreConfig, StoreIdentifier.CONTENTS, 'true')
+const useContentStore = createStore(contentStoreConfig, StoreIdentifier.CONTENTS, true)
 
 export { useContentStore }

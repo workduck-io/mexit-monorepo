@@ -1,6 +1,8 @@
 import { PromptDataType, PromptStoreType } from '../Types/Prompt'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
-export const promptStoreConstructor = (set, get): PromptStoreType => ({
+export const promptStoreConfig = (set, get): PromptStoreType => ({
   prompts: {},
   results: {},
   resultIndexes: {},
@@ -45,3 +47,5 @@ export const promptStoreConstructor = (set, get): PromptStoreType => ({
     set({ prompts: {}, providers: [], results: {}, resultIndexes: {}, userPromptAuthInfo: undefined })
   }
 })
+
+export const usePromptStore = createStore(promptStoreConfig, StoreIdentifier.PROMPRTS, true)

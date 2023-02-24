@@ -1,39 +1,18 @@
 import { Key, KeyBinding } from '../Types/Shortcut'
-import { EXCLUDED_KEYS_MODIFIERS, getKeyFromKeycode,KEY_MODIFIERS } from '../Utils/keyMap'
+import { StoreIdentifier } from '../Types/Store'
+import { EXCLUDED_KEYS_MODIFIERS, getKeyFromKeycode, KEY_MODIFIERS } from '../Utils/keyMap'
+import { createStore } from '../Utils/storeCreator'
 
-export type ShortcutStoreType = {
-  modifiers: Set<string>
-  excludedKeys: Set<string>
-
-  editMode: boolean
-  setEditMode: (editMode: boolean) => void
-
-  resetIndex: number
-
-  currentShortcut?: any
-  setCurrentShortcut: (shortcut: any) => void
-
-  keybinding: KeyBinding
-  setKeyBinding: (keybinding: KeyBinding) => void
-
-  withModifier: boolean
-  setWithModifier: (withModifier: boolean) => void
-
-  keystrokes: Array<Array<Key>>
-  addInKeystrokes: (key: Key) => void
-
-  resetStore: () => void
-}
-
-export const shortcutStoreConstructor = (set, get) => ({
+export const shortcutStoreConfig = (set, get) => ({
   excludedKeys: new Set(EXCLUDED_KEYS_MODIFIERS),
   modifiers: new Set(KEY_MODIFIERS),
+  currentShortcut: {} as any,
 
   keybinding: {
     key: '',
     alias: ''
   },
-  setKeyBinding: (keybinding) => set({ keybinding }),
+  setKeyBinding: (keybinding: KeyBinding) => set({ keybinding }),
 
   editMode: false,
   setEditMode: (editMode: boolean) => {
@@ -45,11 +24,11 @@ export const shortcutStoreConstructor = (set, get) => ({
   setCurrentShortcut: (shortcut) => set({ currentShortcut: shortcut }),
 
   withModifier: false,
-  setWithModifier: (withModifier) => set({ withModifier }),
+  setWithModifier: (withModifier: boolean) => set({ withModifier }),
 
-  keystrokes: [[], []],
+  keystrokes: [[], []] as Array<Array<Key>>,
 
-  addInKeystrokes: (key) => {
+  addInKeystrokes: (key: Key) => {
     const modifiers = key.modifiers
     let resetIndex = get().resetIndex
 
@@ -99,3 +78,5 @@ export const shortcutStoreConstructor = (set, get) => ({
     })
   }
 })
+
+export const useShortcutStore = createStore(shortcutStoreConfig, StoreIdentifier.SHORTCUTS, true)

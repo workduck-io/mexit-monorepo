@@ -1,4 +1,4 @@
-import { Snippet } from '../Stores/snippetStoreConstructor'
+import { Snippet } from '../Stores/snippet.store'
 import { ILink } from '../Types/Editor'
 import { GenericSearchData, SearchRepExtra } from '../Types/Search'
 

@@ -2,12 +2,13 @@ import { produce } from 'immer'
 
 import { defaultCommands } from '../Data/defaultCommands'
 import { CachedILink, ILink, Tag } from '../Types/Editor'
-import { MIcon } from '../Types/Store'
+import { MIcon, StoreIdentifier } from '../Types/Store'
 import { Settify, typeInvert, withoutContinuousDelimiter } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
 import { mog } from '../Utils/mog'
 import { getAllParentIds, getUniquePath } from '../Utils/path'
+import { createStore } from '../Utils/storeCreator'
 import { getNodeIcon } from '../Utils/treeUtils'
 
 export const generateTag = (item: string): Tag => ({
@@ -17,8 +18,8 @@ export const generateTag = (item: string): Tag => ({
 const getInitData = () => ({
   tags: [],
   ilinks: [],
-  linkCache: {},
-  tagsCache: {},
+  linkCache: {} as any,
+  tagsCache: {} as any,
   baseNodeId: '__loading__',
   bookmarks: [],
   archive: [],
@@ -29,7 +30,7 @@ const getInitData = () => ({
   slashCommands: { default: defaultCommands, internal: [] }
 })
 
-export const dataStoreConstructor = (set, get) => ({
+export const dataStoreConfig = (set, get) => ({
   ...getInitData(),
 
   setAllSpaces: (spaces) => {
@@ -104,7 +105,21 @@ export const dataStoreConstructor = (set, get) => ({
         - with existing add numeric suffix
         - not allowed with reserved keywords
    */
-  addILink: ({ ilink, namespace, nodeid, openedNotePath, archived, showAlert }) => {
+  addILink: ({
+    ilink,
+    namespace,
+    nodeid,
+    openedNotePath,
+    archived,
+    showAlert
+  }: {
+    ilink
+    namespace
+    nodeid?
+    openedNotePath?
+    archived?
+    showAlert?
+  }) => {
     const uniquePath = get().checkValidILink({ notePath: ilink, openedNotePath, namespace, showAlert })
     // mog('Unique Path', { uniquePath })
 
@@ -162,7 +177,17 @@ export const dataStoreConstructor = (set, get) => ({
     })
   },
 
-  checkValidILink: ({ notePath, openedNotePath, showAlert, namespace }) => {
+  checkValidILink: ({
+    notePath,
+    openedNotePath,
+    showAlert,
+    namespace
+  }: {
+    notePath
+    openedNotePath?
+    showAlert?
+    namespace?
+  }) => {
     const { key, isChild } = withoutContinuousDelimiter(notePath)
 
     // * If `notePath` starts with '.', than create note under 'opened note'.
@@ -324,14 +349,7 @@ export const dataStoreConstructor = (set, get) => ({
     set({ sharedNodes })
   },
 
-  getSharedNodes: () => get().sharedNodes,
-
-  _hasHydrated: false,
-  setHasHydrated: (state) => {
-    set({
-      _hasHydrated: state
-    })
-  }
+  getSharedNodes: () => get().sharedNodes
 })
 
 export const getLevel = (path: string) => path.split(SEPARATOR).length
@@ -379,3 +397,5 @@ export const sanatizeLinks = (links: ILink[]): FlatItem[] => {
 
   return newLinks
 }
+
+export const useDataStore = createStore(dataStoreConfig, StoreIdentifier.DATA, true)

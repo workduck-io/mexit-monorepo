@@ -31,7 +31,11 @@ const searchWorker = {
     nodeBlockMapping = nbMap
     hasInitialized = true
   },
-
+  reset: () => {
+    globalSearchIndex = null
+    nodeBlockMapping = null
+    hasInitialized = false
+  },
   addDoc: (
     key: idxKey,
     nodeId: string,

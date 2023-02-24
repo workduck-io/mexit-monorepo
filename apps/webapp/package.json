@@ -74,6 +74,7 @@
     "react-select": "^4.3.1",
     "react-spring": "^9.4.3",
     "react-use-websocket": "^4.2.0",
+    "semver": "^7.3.8",
     "slate": "^0.78.0",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.77.0",

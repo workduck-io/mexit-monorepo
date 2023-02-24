@@ -1,6 +1,6 @@
 import { Document } from '@workduck-io/flexsearch'
 
-import { Snippets } from '../Stores/snippetStoreConstructor'
+import { Snippets } from '../Stores/snippet.store'
 
 import { ILink, LinkCache, NodeContent, SharedNode, Tag, TagsCache } from './Editor'
 import { PromptDataType } from './Prompt'

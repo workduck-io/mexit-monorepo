@@ -40,6 +40,10 @@ const initializeClient = (authToken: string, workspaceID: string) => {
   })
 }
 
+const reset = () => {
+  client = null
+}
+
 const getMultipleNodeAPI = async (nodeids: string[], namespaceID?: string) => {
   if (nodeids.length === 0) return
 
@@ -246,6 +250,7 @@ const initializeSmartCapturesExtension = async () => {
 
 const functions = {
   initializeClient,
+  reset,
   runBatchWorker,
   initializeNamespacesExtension,
   initializeSnippetsExtension,
