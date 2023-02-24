@@ -4,15 +4,12 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { Infobox } from '@workduck-io/mex-components'
-
 import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
   Input,
   List,
   MexIcon,
-  NotesInfoBarHelp,
   SidebarListFilter,
   SidebarListFilterWrapper,
   SnippetCards
@@ -22,7 +19,6 @@ import { useLinks } from '../../Hooks/useLinks'
 import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
-import { getElementById } from '../../Utils/cs-utils'
 
 import { NodeCard } from './NodeCard'
 
@@ -97,7 +93,7 @@ export const NotesInfoBar = () => {
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox text={NotesInfoBarHelp} root={getElementById('ext-side-nav')} />
+        {/* <Infobox text={NotesInfoBarHelp} root={getElementById('ext-side-nav')} /> */}
       </SidebarListFilterWrapper>
       {!searchedNodes?.length ? (
         <CenteredColumn>

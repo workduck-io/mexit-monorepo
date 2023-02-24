@@ -41,9 +41,7 @@ export const NoteSidebar = () => {
     return topUsedTags
   }, [tags])
 
-  const { getCreateNewMenuItems } = useCreateNewMenu()
-
-  const menuItems = getCreateNewMenuItems('randomPath')
+  const { handleCreateNote } = useCreateNewMenu()
 
   const spaces: Array<SidebarSpace> = useMemo(() => {
     const nodesByNamespaces = getNodesByNamespaces()
@@ -133,7 +131,7 @@ export const NoteSidebar = () => {
 
   const currentSpace = useMemo(() => {
     if (_hasHydrated && index.current > -1) return spaces[index.current]
-  }, [_hasHydrated, index.current])
+  }, [_hasHydrated, index.current, spaces])
 
   const transRef = useSpringRef()
   const defaultStyles = { opacity: 1, transform: 'translate3d(0%,0,0)' }
@@ -187,7 +185,10 @@ export const NoteSidebar = () => {
     }
   }, [currentSpace])
 
-  // mog('Space', { ilinks, spaces, currentSpace, index, spaceId })
+  const isReadOnly = currentSpace?.data?.access === 'READ'
+  const isSharedSpace = currentSpace?.data?.name === RESERVED_NAMESPACES.shared
+
+  const tooltipMessage = isReadOnly ? 'You have read only access' : 'New Note'
 
   return (
     <SpaceWrapper>
@@ -198,7 +199,9 @@ export const NoteSidebar = () => {
       </SpaceContentWrapper>
       <SidebarSpaceSwitcher
         contextMenuType={ContextMenuType.NOTE_NAMESPACE}
-        createNewMenuItems={menuItems}
+        isCreateDisabled={isReadOnly || isSharedSpace}
+        toolTip={isSharedSpace ? 'Cannot create notes in shared Space' : tooltipMessage}
+        onCreateNew={() => handleCreateNote(currentSpace?.id)}
         currentSpace={currentSpace?.id}
         spaces={spaces}
         setCurrentIndex={changeIndex}

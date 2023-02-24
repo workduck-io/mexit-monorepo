@@ -9,7 +9,6 @@ import { IconDisplay, isOnEditableElement, Tooltip } from '@mexit/shared'
 
 import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 
-import { CreateNewMenu } from './Sidebar.createNew'
 import { CreateNewButton, SpaceItem, SpaceSwitcher, SwitcherSpaceItems } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'
 
@@ -18,7 +17,9 @@ interface SidebarSpaceSwitcherProps {
   spaces: SidebarSpace[]
   setCurrentIndex: (index: number) => void
   setNextSpaceIndex: (reverse?: boolean) => void
-  createNewMenuItems: Array<any>
+  isCreateDisabled?: boolean
+  toolTip?: string
+  onCreateNew?: () => void
   contextMenuType?: ContextMenuType
 }
 
@@ -27,7 +28,9 @@ export const SidebarSpaceSwitcher = ({
   setNextSpaceIndex,
   spaces,
   setCurrentIndex,
-  createNewMenuItems,
+  onCreateNew,
+  toolTip,
+  isCreateDisabled = true,
   contextMenuType
 }: SidebarSpaceSwitcherProps) => {
   const sidebarWidth = useLayoutStore((s) => s.sidebar.width)
@@ -91,11 +94,14 @@ export const SidebarSpaceSwitcher = ({
           </Tooltip>
         ))}
       </SwitcherSpaceItems>
-      <CreateNewMenu menuItems={createNewMenuItems}>
-        <CreateNewButton>
-          <Icon icon={addCircleLine} />
-        </CreateNewButton>
-      </CreateNewMenu>
+
+      <Tooltip content={toolTip}>
+        <span>
+          <CreateNewButton disabled={isCreateDisabled} onClick={onCreateNew}>
+            <Icon icon={addCircleLine} />
+          </CreateNewButton>
+        </span>
+      </Tooltip>
     </SpaceSwitcher>
   )
 }

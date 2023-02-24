@@ -289,9 +289,18 @@ export const CreateNewButton = styled.button<CreateNewButtonProps>`
   ${({ theme }) => generateStyle(theme.sidebar.createNew)}
   transition: 0.15s transform ease-out, 0.5s color ease-in;
 
-  :hover {
-    transform: translateX(-10%) scale(1.25);
-    color: ${({ theme }) => theme.tokens.colors.primary.default};
+  ${({ disabled }) =>
+    !disabled &&
+    css`
+      :hover {
+        transform: translateX(-10%) scale(1.25);
+        color: ${({ theme }) => theme.tokens.colors.primary.default};
+      }
+    `}
+
+  :disabled {
+    opacity: 0.8;
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   ${({ menuOpen }) =>

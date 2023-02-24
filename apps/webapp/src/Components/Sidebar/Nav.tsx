@@ -26,7 +26,6 @@ import {
 import useNavlinks, { GetIcon } from '../../Data/links'
 import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
-import { useAuthStore } from '../../Stores/useAuth'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
@@ -36,52 +35,6 @@ import { SidebarToggles } from '../logo'
 
 import SidebarTabs from './SidebarTabs'
 import { useSidebarTransition } from './Transition'
-
-// const CreateNewNote: React.FC<{ target: any }> = ({ target }) => {
-//   const { goTo } = useRouting()
-//   const { createNewNote } = useCreateNewNote()
-//   const shortcuts = useHelpStore((store) => store.shortcuts)
-
-//   const onNewNote: React.MouseEventHandler<HTMLDivElement> = (e) => {
-//     e.preventDefault()
-//     createNoteWithQABlock()
-//   }
-
-//   const createNoteWithQABlock = () => {
-//     // const qaContent = getRandomQAContent()
-//     const nodeId = createNewNote()
-
-//     goTo(ROUTE_PATHS.node, NavigationType.push, nodeId?.nodeid)
-//   }
-
-//   const { shortcutHandler } = useKeyListener()
-
-//   useEffect(() => {
-//     const unsubscribe = tinykeys(window, {
-//       [shortcuts.newNode.keystrokes]: (event) => {
-//         event.preventDefault()
-//         shortcutHandler(shortcuts.newNode, () => {
-//           createNoteWithQABlock()
-//         })
-//       }
-//     })
-//     return () => {
-//       unsubscribe()
-//     }
-//   }, [shortcuts])
-
-//   return (
-//     <NavTooltip
-//       key={shortcuts.newNode.title}
-//       singleton={target}
-//       content={<TitleWithShortcut title="New Note" shortcut={shortcuts.newNode.keystrokes} />}
-//     >
-//       <CreateNewButton onClick={onNewNote}>
-//         <Icon icon={addCircleLine} />
-//       </CreateNewButton>
-//     </NavTooltip>
-//   )
-// }
 
 const NavHeader: React.FC<{ target: any }> = ({ target }) => {
   const { getLinks } = useNavlinks()
@@ -172,7 +125,6 @@ const Nav = () => {
   const toggleSidebar = useLayoutStore((store) => store.toggleSidebar)
   const isUserEditing = useEditorStore((state) => state.isEditing)
   const { getFocusProps } = useLayout()
-  const authenticated = useAuthStore((state) => state.authenticated)
 
   const [source, target] = useSingleton()
   const shortcuts = useHelpStore((store) => store.shortcuts)
@@ -225,7 +177,6 @@ const Nav = () => {
           $side="left"
           {...getFocusProps(focusMode)}
         >
-          {/* Notes, Shared, Bookmarks */}
           <SidebarTabs />
         </SideNav>
       </NavWrapper>

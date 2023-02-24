@@ -10,7 +10,7 @@ import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
-import { EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
+import { EditorHeader, EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -120,45 +120,46 @@ const SnippetEditor = () => {
   return (
     <>
       <StyledEditor className="snippets_editor">
-        {isBannerVisible && (
-          <Banner
-            onClick={handleBannerButtonClick}
-            title="Same Snippet is being accessed by multiple users. Data may get lost!"
-          />
-        )}
-        <NodeInfo>
-          <IconButton
-            size={24}
-            shortcut={`Esc`}
-            icon={arrowLeftLine}
-            onClick={returnToSnippets}
-            title={'Return To Snippets'}
-          />
-          <NoteTitle>
-            <>
-              [[{' '}
-              <Input
-                autoFocus
-                key={defaultValue}
-                placeholder={DRAFT_NODE}
-                defaultValue={defaultValue}
-                onChange={onChange}
-              />{' '}
-              ]]
-            </>
-          </NoteTitle>
+        <EditorHeader>
+          {isBannerVisible && (
+            <Banner
+              onClick={handleBannerButtonClick}
+              title="Same Snippet is being accessed by multiple users. Data may get lost!"
+            />
+          )}
+          <NodeInfo>
+            <IconButton
+              size={24}
+              shortcut={`Esc`}
+              icon={arrowLeftLine}
+              onClick={returnToSnippets}
+              title={'Return To Snippets'}
+            />
+            <NoteTitle>
+              <>
+                [[{' '}
+                <Input
+                  autoFocus
+                  key={defaultValue}
+                  placeholder={DRAFT_NODE}
+                  defaultValue={defaultValue}
+                  onChange={onChange}
+                />{' '}
+                ]]
+              </>
+            </NoteTitle>
 
-          <InfoTools>
-            {/* <IconButton
+            <InfoTools>
+              {/* <IconButton
                 size={24}
                 icon={magicLine}
                 onClick={onToggleTemplate}
                 highlight={isSnippetTemplate}
                 title={isSnippetTemplate ? 'Convert to Snippet' : 'Convert to Template'}
               /> */}
-          </InfoTools>
-        </NodeInfo>
-
+            </InfoTools>
+          </NodeInfo>
+        </EditorHeader>
         <EditorWrapper onClick={onFocusClick}>
           {snippet && (
             <Editor

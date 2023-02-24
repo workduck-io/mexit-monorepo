@@ -34,6 +34,7 @@ export const Floating = ({
   render,
   disableClick,
   placement,
+  initialFocus = 0,
   root
 }: Props) => {
   const { delay, setCurrentId } = useDelayGroupContext()
@@ -79,7 +80,7 @@ export const Floating = ({
       {cloneElement(children, getReferenceProps({ ref: reference, ...children.props }))}
       <FloatingPortal root={root}>
         {open && (
-          <FloatingFocusManager context={context}>
+          <FloatingFocusManager context={context} initialFocus={initialFocus}>
             <RemoveScroll enabled={scrollLock}>
               <div
                 {...getFloatingProps({

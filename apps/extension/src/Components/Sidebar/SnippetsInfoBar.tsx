@@ -5,8 +5,6 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
 
-import { Infobox } from '@workduck-io/mex-components'
-
 import {
   convertToCopySnippet,
   defaultCopyConverter,
@@ -15,22 +13,13 @@ import {
   parseSnippet,
   Snippet
 } from '@mexit/core'
-import {
-  Input,
-  List,
-  MexIcon,
-  SidebarListFilter,
-  SidebarListFilterWrapper,
-  SnippetCards,
-  SnippetSidebarHelp
-} from '@mexit/shared'
+import { Input, List, MexIcon, SidebarListFilter, SidebarListFilterWrapper, SnippetCards } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
-import { getElementById } from '../../Utils/cs-utils'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 
 import SnippetCard from './SnippetCard'
@@ -147,7 +136,7 @@ export const SnippetsInfoBar = () => {
             ref={inputRef}
           />
         </SidebarListFilter>
-        <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} />
+        {/* <Infobox text={SnippetSidebarHelp} root={getElementById('ext-side-nav')} /> */}
       </SidebarListFilterWrapper>
       <List scrollable>
         {searchedSnippets?.map((snippet) => (

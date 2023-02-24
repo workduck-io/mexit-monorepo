@@ -10,6 +10,7 @@ import {
   EditorPreviewControls,
   EditorPreviewNoteName,
   EditorPreviewWrapper,
+  Group,
   MexIcon,
   NestedFloating,
   PreviewActionHeader,
@@ -41,6 +42,7 @@ export interface SnippetPreviewProps {
   nodeId?: string
   title?: string
   iconTooltip?: string
+  handleCopy?: (ev?: any) => void
   setPreview?: (open: boolean) => void
 }
 
@@ -51,6 +53,7 @@ const SnippetPreview = ({
   hover,
   label,
   title,
+  handleCopy,
   nodeId,
   placement,
   onClick,
@@ -91,6 +94,7 @@ const SnippetPreview = ({
         root={getElementById('ext-side-nav')}
         label={label}
         scrollLock={false}
+        initialFocus={-1}
         placement={placement}
         persist={!allowClosePreview}
         open={preview}
@@ -110,16 +114,28 @@ const SnippetPreview = ({
                 )}
               </PreviewActionHeader>
               <PreviewActionHeader>
-                <MexIcon
-                  icon={DefaultMIcons.CLEAR.value}
-                  height={20}
-                  width={20}
-                  onClick={(ev) => {
-                    ev.preventDefault()
-                    ev.stopPropagation()
-                    close()
-                  }}
-                />
+                <Group>
+                  {handleCopy && (
+                    <MexIcon
+                      cursor="pointer"
+                      icon={DefaultMIcons.COPY.value}
+                      height={20}
+                      width={20}
+                      onClick={handleCopy}
+                    />
+                  )}
+                  <MexIcon
+                    cursor="pointer"
+                    icon={DefaultMIcons.CLEAR.value}
+                    height={20}
+                    width={20}
+                    onClick={(ev) => {
+                      ev.preventDefault()
+                      ev.stopPropagation()
+                      close()
+                    }}
+                  />
+                </Group>
               </PreviewActionHeader>
             </EditorPreviewControls>
             <EditorPreviewRenderer content={snippet.content} readOnly={true} editorId={editorId} />

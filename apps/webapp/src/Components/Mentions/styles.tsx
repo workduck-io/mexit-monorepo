@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
+import { Text } from '@mexit/shared'
+
 export const InviteWrapper = styled.div``
 
 export const InviteFormWrapper = styled.form``
@@ -20,6 +22,22 @@ export const StyledSaveButton = styled(Button)<{ primary?: boolean }>`
     color: ${({ theme }) => theme.tokens.text.fade};
     background: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
+`
+
+export const InviteMessage = styled.section`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+  user-select: none;
+
+  ${Text} {
+    color: ${({ theme }) => theme.tokens.text.fade};
+  }
+  gap: ${({ theme }) => theme.spacing.medium};
 `
 
 export const InviteFormFieldset = styled.fieldset<{ inline?: boolean }>`
@@ -44,6 +62,12 @@ export const StyledLoadingButton = styled(LoadingButton)`
   }
 `
 
+export const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
+`
+
 export const SharedPermissionsWrapper = styled.div``
 
 export const ShareOwnerTag = styled.div`
@@ -57,13 +81,16 @@ export const TableBody = styled.tbody``
 export const TableContainer = styled.section`
   display: block;
   max-height: 16rem;
+  height: 16rem;
+  width: 40vw;
+  max-width: 660px;
   overflow: hidden auto;
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(${({ theme }) => theme.rgbTokens.surfaces.separator}, 0.25);
   border-radius: ${({ theme }) => theme.borderRadius.small};
 `
 
 export const SharedPermissionsTable = styled.table`
-  min-width: 40vw;
   width: 100%;
 
   caption {

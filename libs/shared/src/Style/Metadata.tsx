@@ -52,7 +52,7 @@ export const MetadataWrapper = styled.div<MetaDataWrapperProps>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 ${({ theme }) => theme.spacing.large};
+  padding: 0 ${({ theme }) => theme.spacing.medium};
 
   ${({ theme, $fadeOnHover }) =>
     $fadeOnHover &&

@@ -7,7 +7,8 @@ import {
   getUntitledDraftKey,
   getUntitledKey,
   mog,
-  NodeEditorContent
+  NodeEditorContent,
+  RESERVED_NAMESPACES
 } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
@@ -55,7 +56,7 @@ export const useCreateNewNote = () => {
     const nsID = options?.parent?.namespace ?? options?.namespace
 
     const ns = getNamespace(nsID)
-    if (ns?.access === 'READ') {
+    if (ns?.access === 'READ' || ns?.name === RESERVED_NAMESPACES.shared) {
       toast('You do not have permission to create a note in this namespace!')
       return
     }

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { SNIPPET_VIEW_NAMESPACES } from '@mexit/core'
+import { RESERVED_SNIPPET_SPACES, SNIPPET_VIEW_NAMESPACES } from '@mexit/core'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
@@ -29,8 +29,7 @@ const getRenderItem = (itemName: string) => {
 export const SnippetSidebar = () => {
   const isAnimate = useRef(false)
 
-  const { getSnippetsMenuItems } = useCreateNewMenu()
-  const menuItems = getSnippetsMenuItems()
+  const { handleCreateSnippet } = useCreateNewMenu()
 
   const spaces: Array<SidebarSpace> = useMemo(() => {
     return SNIPPET_VIEW_NAMESPACES.map((ns) => {
@@ -104,6 +103,10 @@ export const SnippetSidebar = () => {
     transRef.start()
   }, [index])
 
+  const isCreateDisabled = currentSpace?.id === RESERVED_SNIPPET_SPACES.prompts
+
+  const toolTipMessage = isCreateDisabled ? 'Create Prompts (Coming Soon)' : 'Create Snippet'
+
   return (
     <SpaceWrapper>
       <SpaceContentWrapper>
@@ -112,7 +115,9 @@ export const SnippetSidebar = () => {
         })}
       </SpaceContentWrapper>
       <SidebarSpaceSwitcher
-        createNewMenuItems={menuItems}
+        isCreateDisabled={isCreateDisabled}
+        toolTip={currentSpace?.id === RESERVED_SNIPPET_SPACES.templates ? 'Create Template' : toolTipMessage}
+        onCreateNew={() => handleCreateSnippet(currentSpace?.id === RESERVED_SNIPPET_SPACES.templates)}
         currentSpace={currentSpace?.id}
         spaces={spaces}
         setCurrentIndex={changeIndex}

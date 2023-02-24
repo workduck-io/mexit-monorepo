@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 
 import linkedinIcon from '@iconify/icons-logos/linkedin-icon'
@@ -107,19 +107,6 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
 
   const focusMode = useLayoutStore((store) => store.focusMode)
 
-  useEffect(() => {
-    let clearFirstVisit: NodeJS.Timeout
-    if (firstVisit) {
-      clearFirstVisit = setTimeout(() => {
-        if (!showMenu) setShowMenu(true)
-      }, 60000)
-    }
-
-    return () => {
-      if (clearFirstVisit) clearTimeout(clearFirstVisit)
-    }
-  }, [firstVisit])
-
   const menuProps = useSpring(
     useMemo(() => {
       const style = { height: '0', padding: '0' }
@@ -143,9 +130,6 @@ const PublicNodeFloatingButton = ({ firstVisit }: PublicNodeFloatingButtonProps)
       >
         <Icon icon={QuestionMarkIcon} />
       </FloatingButton>
-
-      {/* eslint-disable-next-line*/}
-      {/* @ts-ignore */}
       <FloatingMenu style={menuProps}>
         Where to find us
         <Group>

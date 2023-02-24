@@ -20,6 +20,12 @@ export const EditorPreviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
+  &:focus {
+    outline: none;
+  }
+
+  outline: none;
+
   ${CardShadow}
   ${ScrollStyles}
 `

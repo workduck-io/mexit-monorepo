@@ -30,7 +30,6 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
   const addInvitedUser = useMentionStore((state) => state.addInvitedUser)
   const addMentionable = useMentionStore((state) => state.addMentionable)
   const context = useShareModalStore((state) => state.context)
-  // const closeModal = useShareModalStore((state) => state.closeModal)
   const { getPathFromNodeid } = useLinks()
   const { getUserDetails } = useUserService()
   const { grantUsersPermission: grantUsersPermissionNode } = useNodeShareAPI()
@@ -131,13 +130,6 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
     }
   }
 
-  // useEffect(() => {
-  //   register('email', {
-  //     required: true,
-  //     validate: MultiEmailValidate
-  //   })
-  // }, [])
-
   return (
     <InviteFormWrapper onSubmit={handleSubmit(onSubmit)}>
       <InviteFormFieldset inline>
@@ -152,11 +144,6 @@ export const MultiEmailInviteModalContent = ({ disabled }: { disabled?: boolean 
             errors,
             multiple: true,
             register
-            // onChange: (e) => {
-            //   const val = e.target.value
-            //   if (MultiEmailValidate(val)) setValue('email', e.target.value)
-            //   else setError('email', { message: 'Email is required', type: 'required' })
-            // }
           }}
           rightChild={
             <SelectWrapper>
