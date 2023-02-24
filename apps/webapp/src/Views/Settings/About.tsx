@@ -8,8 +8,7 @@ import styled from 'styled-components'
 
 import { BackCard, CenteredColumn, Links, Title } from '@mexit/shared'
 
-import { version } from '../../../package.json'
-// import { APIScratchpad, useAPIScratchpad } from '../../Hooks/API/scratchpad'
+import { useVersionStore } from '../../Stores/useVersionStore'
 
 const Margin = styled.div`
   margin: 0.5rem 1rem;
@@ -25,7 +24,7 @@ const Flex = styled.div`
 `
 
 const About = () => {
-  // Comment PRODUCTION
+  const version = useVersionStore((store) => store.version)
 
   return (
     <CenteredColumn>
