@@ -160,7 +160,11 @@ function analyseContent({ content, nodeid, options }: AnalyseContentProps): Node
   return options?.title ? { ...analysisResult, title: getTitleFromContent(content) } : analysisResult
 }
 
-const functions = { analyseContent }
+function reset() {
+  // Empty function because no state is maintained
+}
+
+const functions = { analyseContent, reset }
 
 export type AnalysisWorkerInterface = typeof functions
 exposeX(functions)
