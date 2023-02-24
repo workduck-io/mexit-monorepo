@@ -260,3 +260,20 @@ export const useInitializeAfterAuth = () => {
 
   return { initializeAfterAuth }
 }
+
+export const useForceLogout = () => {
+  const { logout } = useAuthentication()
+
+  const forceLogout = async () => {
+    await logout()
+
+    // Delete the keyval-store instance of IndexedDB
+    const idbStoreName = 'keyval-store'
+    window.indexedDB.deleteDatabase(idbStoreName)
+
+    // Clear localStorage
+    localStorage.clear()
+  }
+
+  return { forceLogout }
+}

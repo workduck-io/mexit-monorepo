@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
+import { mog } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -12,7 +13,7 @@ import FloatingButton from './Components/FloatingButton'
 import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
-import { useAuthentication } from './Stores/useAuth'
+import { useForceLogout } from './Stores/useAuth'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import { compareVersions, useVersionStore } from './Stores/useVersionStore'
 import GlobalStyle from './Style/GlobalStyle'
@@ -22,7 +23,6 @@ const FORCE_LOGOUT_VERSION = '0.22.22'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
-  const setTheme = useUserPreferenceStore((store) => store.setTheme)
   const { preferences, changeTheme } = useThemeContext()
 
   useEffect(() => {
@@ -47,14 +47,15 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const App = () => {
   const setVersion = useVersionStore((store) => store.setVersion)
-  const { logout } = useAuthentication()
+  const { forceLogout } = useForceLogout()
 
   useEffect(() => {
     async function forceLogoutAndSetVersion() {
       const persistedVersion = useVersionStore.getState().version
+      mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })
       setVersion(packageJsonVersion)
       if (!(persistedVersion && compareVersions(persistedVersion, FORCE_LOGOUT_VERSION) >= 0)) {
-        await logout()
+        await forceLogout()
       }
     }
 
