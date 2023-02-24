@@ -19,7 +19,11 @@ export type SetterFunction<T> = (set: any, get: any) => T
 export const createStore = <T extends object, R extends boolean>(
   config: SetterFunction<T>,
   name: StoreIdentifier,
-  isPersist: R
+  isPersist: R,
+  persistOptions?: {
+    version: number
+    migrate?: (persistedState: any, version: number) => any
+  }
 ): UseBoundStore<TypeMap<T, R>, StoreApi<TypeMap<T, R>>> => {
   if (isPersist) {
     const configX = (set, get): TypeMap<T, true> => {
@@ -38,6 +42,7 @@ export const createStore = <T extends object, R extends boolean>(
       devtools(
         persist(configX, {
           name: `mexit-${name}-${isExtension() ? 'extension' : 'webapp'}`,
+          ...(persistOptions ? persistOptions : {}),
           getStorage: () => {
             return isExtension() ? asyncLocalStorage : IDBStorage
           },
