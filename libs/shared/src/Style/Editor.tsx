@@ -110,9 +110,8 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   flex-direction: ${({ flexDirection }) => flexDirection ?? 'column'};
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
-  margin: 0 auto;
-  width: 100%;
-  max-width: 860px;
+  /* width: 100%;
+  max-width: 860px; */
   flex: 1;
 
   && > div {
@@ -127,6 +126,7 @@ export const EditorBreadcrumbs = styled.div<{ isVisible?: boolean }>`
   overflow: hidden;
 
   opacity: 0.5;
+
   &:hover {
     opacity: 1;
   }

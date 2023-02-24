@@ -6,6 +6,7 @@ import Tippy from '@tippyjs/react/headless'
 import { moveSelection, useEditorRef } from '@udecode/plate'
 // different import path!
 import { useFocused, useSelected } from 'slate-react'
+import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
@@ -35,6 +36,19 @@ import { MentionElementProps } from './MentionElement.types'
 
 // import { MentionTooltip, SMention, SMentionRoot, TooltipMail, Username } from './MentionElement.styles'
 
+const Contain = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  height: fit-content;
+
+  & > svg {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+  }
+`
+
 interface MentionTooltipProps {
   user?: Mentionable | InvitedUser | SelfMention
   access?: AccessLevel
@@ -59,13 +73,15 @@ export const MentionTooltipComponent = ({ user, access, hideAccess }: MentionToo
 
   return (
     <MentionTooltip>
-      <ProfileImage email={user && user.email} size={128} />
+      <Contain>
+        <ProfileImage email={user && user.email} size={96} />
+      </Contain>
       <MentionTooltipContent>
-        {user && user.type !== 'invite' && (
-          <div>
+        {user && user.type !== 'invite' && user.name && (
+          <Username>
             {user.name}
-            {user.type === 'self' && '(you)'}
-          </div>
+            {user.type === 'self' && ' (you)'}
+          </Username>
         )}
         {user && user.alias && <TooltipAlias>@{user.alias}</TooltipAlias>}
         <TooltipMail>{user && user.email}</TooltipMail>

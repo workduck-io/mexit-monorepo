@@ -43,16 +43,19 @@ export const ProfileIcon = styled.div`
   justify-content: center;
 
   .defaultProfileIcon {
-    padding: 1rem;
+    padding: 0.5rem;
     background-color: ${({ theme }) => theme.tokens.colors.primary.default};
     color: ${({ theme }) => theme.tokens.colors.primary.default};
     box-shadow: 0px 12px 24px rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.5);
   }
+
   svg,
   img {
+    margin-right: ${({ theme }) => theme.spacing.tiny};
     border-radius: ${({ theme }) => theme.borderRadius.small};
     box-shadow: 0px 12px 24px rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.5);
   }
+
   margin-left: -10rem;
   margin-top: 0rem;
 `

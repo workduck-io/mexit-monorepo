@@ -21,7 +21,7 @@ export const DataWrapper = styled.div<DataWrapperProps>`
   svg,
   img {
     color: ${({ theme }) => theme.tokens.text.fade};
-    margin-right: ${({ theme }) => theme.spacing.small};
+    /* margin-right: ${({ theme }) => theme.spacing.small}; */
   }
 
   svg,
