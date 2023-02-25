@@ -1,32 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import 'reveal.js/dist/reveal.css'
+import 'reveal.js/dist/theme/beige.css'
+
+import { useEffect, useState } from 'react'
 
 import { uniq } from 'lodash'
+import Markdown from 'markdown-to-jsx'
+import Reveal from 'reveal.js'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
-import { defaultContent, ILink } from '@mexit/core'
-import {
-  Content,
-  Group,
-  IconDisplay,
-  MainHeader,
-  PageContainer,
-  Result,
-  ResultHeader,
-  Results,
-  ResultTitle,
-  SearchPreviewWrapper,
-  Title,
-  ViewType
-} from '@mexit/shared'
+import { ILink } from '@mexit/core'
+import { MainHeader, PageContainer, Results, Title } from '@mexit/shared'
 
-import NamespaceTag from '../Components/NamespaceTag'
-import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 const CardsContainer = styled(Results)`
@@ -42,6 +31,9 @@ const Info = styled.span`
 `
 
 function DraftView() {
+  useEffect(() => {
+    Reveal.initialize()
+  }, [])
   const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
   const lastOpened = useRecentsStore((store) => store.lastOpened)
@@ -71,8 +63,20 @@ function DraftView() {
       <MainHeader>
         <Title>Mex Activity!</Title>
       </MainHeader>
-
-      <Content>
+      <div>
+        <div className="main">
+          <div className="reveal" style={{ height: '100vh' }}>
+            <div className="slides">
+              <section>Slide 1</section>
+              <section>Slide 2</section>
+              <section>
+                <Markdown># Hello world!</Markdown>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <Content>
         {(!allLinks || allLinks.length === 0) && <Info>No Activity Found</Info>}
         <CardsContainer view={ViewType.Card}>
           {allLinks &&
@@ -99,7 +103,7 @@ function DraftView() {
               )
             })}
         </CardsContainer>
-      </Content>
+      </Content> */}
     </PageContainer>
   )
 }
