@@ -1,7 +1,3 @@
-import create from 'zustand'
-
-import { BlockMode, blockStoreConstructor } from '@mexit/core'
-
-const useBlockStore = create<BlockMode>(blockStoreConstructor)
+import { useBlockStore } from "@mexit/core";
 
 export default useBlockStore
