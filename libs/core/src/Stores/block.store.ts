@@ -1,3 +1,6 @@
+import { StoreIdentifier } from "../Types/Store"
+import { createStore } from "../Utils/storeCreator"
+
 export type BlockMetaDataType = {
   source?: string // * NodeId or Website URL
   origin?: string
@@ -18,19 +21,7 @@ export enum ContextMenuActionType {
 
 export type ModalOpenType = ContextMenuActionType | undefined
 
-export type BlockMode = {
-  blocks: Record<string, BlockType>
-  setBlocks: (blocks: Record<string, BlockType>) => void
-  addBlock: (blockId: string, block: BlockType) => void
-  deleteBlock: (blockId: string) => void
-  getBlocks: () => Array<BlockType>
-  isModalOpen: ModalOpenType
-  setIsModalOpen: (isModalOpen: ModalOpenType) => void
-  isBlockMode: boolean
-  setIsBlockMode: (isBlockMode: boolean) => void
-}
-
-export const blockStoreConstructor = (set, get) => ({
+export const blockStoreConfig = (set, get) => ({
   blocks: {},
   setBlocks: (blocks: Record<string, BlockType>) => set({ blocks }),
   addBlock: (blockId: string, block: BlockType) => {
@@ -55,3 +46,8 @@ export const blockStoreConstructor = (set, get) => ({
     else set({ isBlockMode })
   }
 })
+
+
+const useBlockStore = createStore(blockStoreConfig, StoreIdentifier.CONTENTS, true)
+
+export { useBlockStore }

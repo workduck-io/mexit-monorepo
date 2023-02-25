@@ -44,7 +44,11 @@ export enum StoreIdentifier {
   REMINDERS = 'reminder',
   REQUESTCACHE = 'request-cache',
   SHORTCUTS = 'shortcut',
-  SMARTCAPTURE = 'smart-capture'
+  SMARTCAPTURE = 'smart-capture',
+  API = 'api',
+  AUTH = 'auth',
+  BLOCK = 'block',
+  COMMENTS = 'comments'
 }
 
 export const DefaultMIcons = {
