@@ -48,7 +48,17 @@ export enum StoreIdentifier {
   API = 'api',
   AUTH = 'auth',
   BLOCK = 'block',
-  COMMENTS = 'comments'
+  COMMENTS = 'comments',
+  HELP = 'help',
+  HISTORY = 'history',
+  LAYOUT = 'layout',
+  MODAL= 'modal',
+  PORTAL = 'portal',
+  PUBLICNODES = 'public-nodes',
+  REFACTOR = 'refactor',
+  RENAME = 'rename',
+  ROUTE = 'Route Store ',
+  SHAREMODAL = 'share-modal'
 }
 
 export const DefaultMIcons = {
