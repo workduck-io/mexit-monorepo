@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { PromptProviderType } from '@mexit/core'
+import { mog, PromptProviderType } from '@mexit/core'
 import { Flex, FullHeight, IntegrationContainer } from '@mexit/shared'
 
 import Section from '../Components/Portals/Section'
@@ -22,6 +22,7 @@ const PortalsPage = () => {
   useEffect(() => {
     getConnectedPortals()
   }, []) // eslint-disable-line
+  mog("apps", {apps, connectedPortals})
 
   const portals = useMemo(
     () => sortPortals(apps, (item: any) => !!getIsPortalConnected(item.actionGroupId)),
