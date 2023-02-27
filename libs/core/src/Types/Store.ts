@@ -58,7 +58,15 @@ export enum StoreIdentifier {
   REFACTOR = 'refactor',
   RENAME = 'rename',
   ROUTE = 'Route Store ',
-  SHAREMODAL = 'share-modal'
+  SHAREMODAL = 'share-modal',
+  TREE = 'tree',
+  USERCACHE = 'user-cache',
+  VERSION = 'version',
+  AUTHSTORE = 'authstore',
+  EDITORS = 'Multiple Editors Store',
+  EDITOR = 'editor',
+  BUFFER = 'buffer',
+  BLOCKHIGHLIGHT = 'block-highlight'
 }
 
 export const DefaultMIcons = {

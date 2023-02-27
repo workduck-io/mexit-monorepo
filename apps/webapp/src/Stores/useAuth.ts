@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-
 import { useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData, useAppStore } from '@mexit/core'
+import { API, mog, RegisterFormData, useAppStore, useAuthStore } from '@mexit/core'
 
 import { getEmailStart } from '../Utils/constants'
 import { terminateAllWorkers } from '../Workers/controller'
@@ -31,7 +28,7 @@ import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
 import { useViewStore } from './useViewStore'
 
-export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
+export { useAuthStore }
 
 type LoginResult = { loginData: UserCred; loginStatus: string }
 
