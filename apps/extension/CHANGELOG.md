@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.17
+
+### Patch Changes
+
+- 023a94d1: Clear Request Cache, On Blur Clear Buffer
+
 ## 0.19.16
 
 ### Patch Changes
