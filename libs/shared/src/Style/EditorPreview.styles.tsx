@@ -98,6 +98,12 @@ export const EditorPreviewEditorWrapper = styled.div<{ editable?: boolean; blink
         `}
 `
 
+export const EditorContainer = styled.div`
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+`
+
 export const EditorPreviewControls = styled.div<{ hasTags?: boolean }>`
   display: flex;
   gap: ${({ theme }) => theme.spacing.small};

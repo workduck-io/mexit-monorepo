@@ -9,6 +9,7 @@ import { Button, MexIcon } from '@workduck-io/mex-components'
 
 import { defaultContent, NodeEditorContent, NodeType } from '@mexit/core'
 import {
+  EditorContainer,
   EditorPreviewControls,
   EditorPreviewNoteName,
   IconDisplay,
@@ -75,6 +76,11 @@ const PreviewNoteModal = () => {
     addValueInBuffer(modalData?.noteId, val)
   }
 
+  const onTagClick = (tag: string) => {
+    toggleModal(undefined)
+    goTo(ROUTE_PATHS.tag, NavigationType.push, tag)
+  }
+
   const onClickNoteTitle = (ev) => {
     ev.preventDefault()
     goTo(ROUTE_PATHS.node, NavigationType.push, modalData?.noteId)
@@ -113,7 +119,7 @@ const PreviewNoteModal = () => {
               </PreviewActionHeader>
             }
             <PreviewActionHeader>
-              <TagsRelatedTiny nodeid={modalData?.noteId} />
+              <TagsRelatedTiny onClick={onTagClick} nodeid={modalData?.noteId} />
               <Button
                 onClick={(ev) => {
                   ev.preventDefault()
@@ -126,15 +132,17 @@ const PreviewNoteModal = () => {
               </Button>
             </PreviewActionHeader>
           </EditorPreviewControls>
-          <Editor
-            focusBlockId={modalData?.blockId}
-            content={content}
-            onChange={onChange}
-            options={{ focusOptions: false }}
-            readOnly={readOnly}
-            autoFocus
-            nodeUID={modalData?.noteId}
-          />
+          <EditorContainer>
+            <Editor
+              focusBlockId={modalData?.blockId}
+              content={content}
+              onChange={onChange}
+              options={{ focusOptions: false }}
+              readOnly={readOnly}
+              autoFocus
+              nodeUID={modalData?.noteId}
+            />
+          </EditorContainer>
         </PreviewNoteContainer>
       </PlateProvider>
     </Modal>

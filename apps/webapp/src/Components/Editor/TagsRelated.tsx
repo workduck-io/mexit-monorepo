@@ -22,6 +22,7 @@ import NodeLink from './NodeLink'
 interface TagsRelated {
   nodeid: string
   fromAnalysis?: boolean
+  onClick?: any
 }
 
 export const PublicTagsView = ({ nodeid, tags }) => {
@@ -73,7 +74,7 @@ const TagsRelated = ({ nodeid, fromAnalysis }: TagsRelated) => {
   return <TagsLabel tags={tags.map((t) => ({ value: t }))} onClick={onTagClick} />
 }
 
-export const TagsRelatedTiny = ({ nodeid }: TagsRelated) => {
+export const TagsRelatedTiny = ({ nodeid, onClick }: TagsRelated) => {
   const { getTags } = useTags()
   const tagsCache = useDataStore((state) => state.tagsCache)
   const [tags, setTags] = useState<string[]>([])
@@ -83,7 +84,7 @@ export const TagsRelatedTiny = ({ nodeid }: TagsRelated) => {
     setTags(getTags(nodeid))
   }, [nodeid, tagsCache])
 
-  return tags.length > 0 ? <TagsLabel tags={tags.map((tag) => ({ value: tag }))} /> : null
+  return tags.length > 0 ? <TagsLabel onClick={onClick} tags={tags.map((tag) => ({ value: tag }))} /> : null
 }
 
 /**

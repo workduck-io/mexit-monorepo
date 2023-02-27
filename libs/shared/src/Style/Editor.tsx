@@ -99,7 +99,7 @@ export const EditorHeader = styled.section`
   width: 100%;
   top: 0;
   padding: ${({ theme }) => `${theme.spacing.large} ${theme.spacing.medium} ${theme.spacing.medium}`};
-  z-index: 11;
+  z-index: 9;
   position: sticky;
   background: ${({ theme }) => theme.tokens.surfaces.app};
   backdrop-filter: blur(20px);
@@ -110,8 +110,7 @@ export const StyledEditor = styled.div<StyledEditorProps>`
   flex-direction: ${({ flexDirection }) => flexDirection ?? 'column'};
   align-items: flex-start;
   gap: ${({ theme }) => theme.spacing.medium};
-  /* width: 100%;
-  max-width: 860px; */
+
   flex: 1;
 
   && > div {
