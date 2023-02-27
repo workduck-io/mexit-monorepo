@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { useAuth } from '@workduck-io/dwindle'
+import { useAuth, useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
 import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
@@ -38,6 +38,7 @@ type LoginResult = { loginData: UserCred; loginStatus: string }
 export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
+  const clearRequestsCacheFromDwindle = useDwindleAuthStore((s) => s.clearStore)
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
@@ -105,6 +106,7 @@ export const useAuthentication = () => {
       mog('Worker Termination failed!', { err })
     }
 
+    clearRequestsCacheFromDwindle
     setUnAuthenticated()
     initContents({})
     clearPromptStore()
