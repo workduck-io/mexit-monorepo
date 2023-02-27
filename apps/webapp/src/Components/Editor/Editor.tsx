@@ -140,6 +140,7 @@ const Editor: React.FC<EditorProps> = ({
             blockModifier: includeBlockInfo
           }
         }}
+        md
       />
       {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />}
     </EditorWrapper>
