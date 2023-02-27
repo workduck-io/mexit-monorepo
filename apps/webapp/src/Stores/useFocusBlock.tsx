@@ -1,72 +1,9 @@
 
 import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
-import create from 'zustand'
 
-import { mog } from '@mexit/core'
+import { mog, useBlockHighlightStore } from '@mexit/core'
 
-interface Highlighted {
-  preview: string[]
-  editor: string[]
-}
-interface BlockHighlightStore {
-  /*
-   * The current ids for specific editors to highlight
-   */
-  hightlighted: Highlighted
-  addHighlightedBlockId: (id: string, key: keyof Highlighted) => void
-  setHighlightedBlockIds: (ids: string[], key: keyof Highlighted) => void
-  clearHighlightedBlockIds: (key: keyof Highlighted) => void
-  clearAllHighlightedBlockIds: () => void
-  isBlockHighlighted: (id: string) => boolean
-}
-
-/**
- * Used to store the state related to the highlighted blocks in the editor
- * NOTE: This is not affiliated with highlights captured from web
- */
-export const useBlockHighlightStore = create<BlockHighlightStore>((set, get) => ({
-  hightlighted: {
-    preview: [],
-    editor: []
-  },
-  addHighlightedBlockId: (id, key) => {
-    const { hightlighted } = get()
-    const newHighlighted = { ...hightlighted }
-    newHighlighted[key].push(id)
-    // mog('addHighlighted', { newHighlighted, id, key })
-    set({ hightlighted: newHighlighted })
-  },
-  setHighlightedBlockIds: (ids, key) => {
-    const { hightlighted } = get()
-    const newHighlighted = { ...hightlighted }
-    newHighlighted[key] = ids
-    // mog('setHighlighted', { newHighlighted, ids, key })
-    set({ hightlighted: newHighlighted })
-  },
-  clearHighlightedBlockIds: () => {
-    const oldHighlighted = get().hightlighted
-    const newHighlighted = {
-      preview: [],
-      editor: []
-    }
-    mog('clearHighlighted', { oldHighlighted })
-    set({ hightlighted: newHighlighted })
-  },
-  clearAllHighlightedBlockIds: () => {
-    const oldHighlighted = get().hightlighted
-    const newHighlighted = {
-      preview: [],
-      editor: []
-    }
-    mog('clearAllHighlighted', { oldHighlighted })
-    set({ hightlighted: newHighlighted })
-  },
-  isBlockHighlighted: (id) => {
-    const { hightlighted } = get()
-    // mog('isBlockHighlighted', { hightlighted, id })
-    return hightlighted.editor.includes(id) || hightlighted.preview.includes(id)
-  }
-}))
+export { useBlockHighlightStore }
 
 export const useFocusBlock = () => {
   const selectBlock = (blockid: string, editorId?: string) => {

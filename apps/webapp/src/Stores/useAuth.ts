@@ -7,7 +7,7 @@ import { persist } from 'zustand/middleware'
 import { useAuth, useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
+import { API, mog, RegisterFormData, useAuthStore } from '@mexit/core'
 
 import { useViewStore } from '../Hooks/useTaskViews'
 import { getEmailStart } from '../Utils/constants'
@@ -31,7 +31,7 @@ import { useSnippetStore } from './useSnippetStore'
 import { useTodoStore } from './useTodoStore'
 import { useUserCacheStore } from './useUserCacheStore'
 
-export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
+export { useAuthStore }
 
 type LoginResult = { loginData: UserCred; loginStatus: string }
 

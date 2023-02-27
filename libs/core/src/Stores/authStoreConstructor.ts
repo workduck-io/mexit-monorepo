@@ -1,6 +1,8 @@
 import { AppInitStatus } from '../Types/Auth'
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
-export const authStoreConstructor = (set, get) => ({
+export const authStoreConfig = (set, get) => ({
   isForgottenPassword: false,
   authenticated: false,
   registered: false,
@@ -32,3 +34,5 @@ export const authStoreConstructor = (set, get) => ({
     set({ userDetails: { ...get().userDetails, ...userDetails } })
   }
 })
+
+export const useAuthStore = createStore(authStoreConfig, StoreIdentifier.AUTHSTORE, true)

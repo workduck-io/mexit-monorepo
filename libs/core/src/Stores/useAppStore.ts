@@ -39,7 +39,7 @@ export const useAppStore = create<AppStoreType>(
     }
   )
 )
-
+// export { useVersionStore } from '@mexit/core'
 /**
  * Compares version strings using semver
  * @param {string} persistedVersion - The current version persisted in the store
