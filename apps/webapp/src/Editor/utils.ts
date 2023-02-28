@@ -57,8 +57,6 @@ type BlockType = {
 }
 
 export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = false, listDepth = 0) {
-  console.log({ chunk })
-
   const text = chunk.text || ''
   let type = chunk.type || ''
 
@@ -110,7 +108,6 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
     children = `~~${children}~~`
   }
 
-  console.log({ type })
   switch (type) {
     case 'h1':
       return `# ${children}\n`

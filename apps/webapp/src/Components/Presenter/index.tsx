@@ -1,14 +1,15 @@
 import 'reveal.js/dist/reveal.css'
 
 import { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import { getPlateEditorRef } from '@udecode/plate'
+import { usePlateEditorRef } from '@udecode/plate'
 import Markdown from 'markdown-to-jsx'
 import Reveal from 'reveal.js'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ELEMENT_PARAGRAPH } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
 
 import parseToMarkdown from '../../Editor/utils'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -16,10 +17,12 @@ import { useEditorStore } from '../../Stores/useEditorStore'
 import { PresenterContainer } from './styled'
 
 const Presenter = () => {
-  const [markdown, setMarkdown] = useState('')
+  const [markdown, setMarkdown] = useState('#Loading...')
   const presenterRef = useRef<HTMLDivElement>(null)
 
-  const isPresenting = true
+  const noteId = useParams().nodeId
+  const editor = usePlateEditorRef(noteId)
+  const isPresenting = useEditorStore((store) => store.isPresenting)
   const setIsPresenting = useEditorStore((store) => store.setIsPresenting)
 
   const goFullScreen = (element: any) => {
@@ -33,40 +36,47 @@ const Presenter = () => {
   }
 
   const setMarkdownFromEditor = () => {
-    const editor = getPlateEditorRef()
-    if (editor?.children) {
-      const markdownContent = parseToMarkdown({ children: editor.children, type: ELEMENT_PARAGRAPH })
-      setMarkdown(markdownContent)
-      // goFullScreen(presenterRef.current)
-    }
+    const content = editor?.children ?? useContentStore.getState().getContent(noteId)?.content
+    const markdownContent = parseToMarkdown({ children: content, type: ELEMENT_PARAGRAPH })
+    setMarkdown(markdownContent)
   }
 
   useEffect(() => {
     if (isPresenting) {
-      Reveal.initialize({ controlsLayout: 'edges' })
-      setMarkdownFromEditor()
+      Reveal.initialize().then(() => {
+        setMarkdownFromEditor()
+      })
 
       const unsubscribe = tinykeys(window, {
-        Escape: () => {
+        Escape: (e) => {
           setIsPresenting(false)
+
+          // * If overview is open, close it
+          if (Reveal.isOverview()) {
+            Reveal.toggleOverview()
+          }
         }
       })
 
-      return () => unsubscribe()
-    }
-  }, [isPresenting])
+      return () => {
+        unsubscribe()
 
-  if (!isPresenting) return
+        // * Destroy reveal instance, as it creates multiple elements in the DOM
+        Reveal.destroy()
+      }
+    }
+  }, [isPresenting, noteId])
+
+  if (!markdown?.length) return
 
   return (
-    <PresenterContainer ref={presenterRef} className="reveal">
+    <PresenterContainer $isPresenting={isPresenting} className="reveal" ref={presenterRef}>
       <div className="slides">
-        <section>
-          {markdown?.split('---').map((s) => (
+        {markdown?.split('---')?.map((s, idx) => (
+          <section key={idx}>
             <Markdown>{s}</Markdown>
-          ))}
-        </section>
-        <section>Hello</section>
+          </section>
+        ))}
       </div>
     </PresenterContainer>
   )

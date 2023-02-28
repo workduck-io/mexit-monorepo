@@ -11,6 +11,7 @@ import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, Rela
 
 import { useMentions } from '../../Hooks/useMentions'
 import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
+import { useRouting } from '../../Hooks/useRouting'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -46,6 +47,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
   const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
   const { getSharedUsersOfNodeOfSpace } = useMentions()
   const { accessWhenShared } = usePermissions()
+  const { goTo } = useRouting()
 
   const getIsSharedDisabled = () => {
     const access = accessWhenShared(nodeId)
@@ -89,6 +91,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
   const onPresentNoteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // * Show element in full screen mode
     setIsPresenting(true)
+    // goTo(ROUTE_PATHS.present, NavigationType.push)
   }
 
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null

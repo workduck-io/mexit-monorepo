@@ -1,10 +1,6 @@
-import 'reveal.js/dist/reveal.css'
-import 'reveal.js/dist/theme/beige.css'
-
 import { useEffect, useState } from 'react'
 
 import { uniq } from 'lodash'
-import Reveal from 'reveal.js'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
@@ -45,9 +41,6 @@ const Info = styled.span`
 `
 
 function DraftView() {
-  useEffect(() => {
-    Reveal.initialize()
-  }, [])
   const contents = useContentStore((s) => s.contents)
   const [ilinks, bookmarks] = useDataStore((store) => [store.ilinks, store.bookmarks], shallow)
   const lastOpened = useRecentsStore((store) => store.lastOpened)

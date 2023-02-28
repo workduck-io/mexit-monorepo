@@ -287,6 +287,7 @@ export const Switch = () => {
               </ProtectedRoute>
             }
           />
+          {/* <Route path={ROUTE_PATHS.present} element={<Presenter />} /> */}
           <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
           <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
           <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
