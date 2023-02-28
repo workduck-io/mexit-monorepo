@@ -47,6 +47,7 @@ import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
+import { searchIndex } from '../Workers/controller'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'
@@ -86,13 +87,13 @@ const Search = () => {
   } = useFilters<GenericSearchResult>()
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await queryIndexWithRanking(['shared', 'node'], newSearchTerm)
-    const filRes = res.filter((r) => {
-      const nodeType = getNodeType(r.id)
-      return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
-    })
-    mog('search', { res, filRes })
-    return filRes
+    const res = await searchIndex({ text: newSearchTerm })
+    // const filRes = res.filter((r) => {
+    //   const nodeType = getNodeType(r.id)
+    //   return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
+    // })
+    mog('search', { res })
+    return res
   }
 
   const lastOpened = useRecentsStore((store) => store.lastOpened)
@@ -125,13 +126,16 @@ const Search = () => {
     { item, splitOptions, ...props }: RenderItemProps<GenericSearchResult>,
     ref: React.Ref<HTMLDivElement>
   ) => {
+    // eslint-disable-next-line
+    // @ts-ignore
+    return (
+      <Result {...props} ref={ref}>
+        {`${item?.doc?.entity} - ${item?.id} -  ${item?.doc?.text}`}
+      </Result>
+    )
+
     const node = getNode(item.id, true)
     const nodeType = getNodeType(node.nodeid)
-    if (!item || !node) {
-      // eslint-disable-next-line
-      // @ts-ignore
-      return <Result {...props} ref={ref}></Result>
-    }
     const con = contents[item.id]
     const content = con ? con.content : defaultContent.content
     const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.id]?.icon)
@@ -250,7 +254,7 @@ const Search = () => {
       <SearchView
         id="searchStandard"
         key="searchStandard"
-        initialItems={initialResults}
+        initialItems={[]}
         getItemKey={(i) => i.id}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
@@ -258,7 +262,7 @@ const Search = () => {
         filterResults={filterResults}
         RenderFilters={RenderFilters}
         RenderItem={RenderItem}
-        RenderPreview={RenderPreview}
+        // RenderPreview={RenderPreview}
         filterActions={{
           filters,
           currentFilters,

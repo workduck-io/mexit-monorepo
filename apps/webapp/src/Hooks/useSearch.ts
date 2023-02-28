@@ -67,7 +67,7 @@ export const useSearchExtra = () => {
 }
 
 export const useSearch = () => {
-  const { getPathFromNodeid } = useLinks()
+  const { getTitleFromNoteId } = useLinks()
   const { getSearchExtra } = useSearchExtra()
 
   const addDocument = async (
@@ -79,7 +79,14 @@ export const useSearch = () => {
   ) => {
     const extra = getSearchExtra()
 
-    await addDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await addDoc(
+      key,
+      nodeId,
+      contents,
+      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
+      tags,
+      extra
+    )
   }
 
   const updateDocument = async (
@@ -91,15 +98,22 @@ export const useSearch = () => {
   ) => {
     const extra = getSearchExtra()
 
-    await updateDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await updateDoc(
+      key,
+      nodeId,
+      contents,
+      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
+      tags,
+      extra
+    )
   }
 
   const removeDocument = async (key: idxKey, id: string) => {
     await removeDoc(key, id)
   }
 
-  const queryIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
-    const results = await searchIndex(key, query, tags)
+  const queryIndex = async (key: idxKey | idxKey[], query?: string, tags?: Array<string>) => {
+    const results = await searchIndex({ text: query })
     return results
   }
 

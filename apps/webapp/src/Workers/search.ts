@@ -1,3 +1,6 @@
+import { SearchX } from '@workduck-io/mex-search'
+import { FilterQuery, SearchQuery } from '@workduck-io/mex-search/src/searchX/types'
+
 import { GenericSearchResult, idxKey, mog, parseNode, PersistentData, SearchIndex, SearchRepExtra } from '@mexit/core'
 
 import {
@@ -13,6 +16,8 @@ import { exposeX } from './worker-utils'
 
 let globalSearchIndex: SearchIndex = null
 let nodeBlockMapping: { [key: string]: string[] } = null
+
+const searchX = new SearchX()
 
 let hasInitialized = false
 
@@ -57,35 +62,8 @@ const searchWorker = {
     }
   },
 
-  updateDoc: (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title = '',
-    tags: Array<string> = [],
-    extra?: SearchRepExtra
-  ) => {
-    if (globalSearchIndex[key]) {
-      const parsedBlocks = parseNode(nodeId, contents, title, extra)
-
-      const existingNodeBlocks = nodeBlockMapping[nodeId] ?? []
-      const newBlockIds = parsedBlocks.map((block) => block.blockId)
-
-      const blockIdsToBeDeleted = existingNodeBlocks.filter((id) => !newBlockIds.includes(id))
-
-      nodeBlockMapping[nodeId] = newBlockIds
-
-      blockIdsToBeDeleted.forEach((blockId) => {
-        const compositeKey = createIndexCompositeKey(nodeId, blockId)
-        globalSearchIndex[key].remove(compositeKey)
-      })
-
-      parsedBlocks.forEach((block) => {
-        block.blockId = createIndexCompositeKey(nodeId, block.blockId)
-        // mog(`${block.title} updating block`, { block })
-        globalSearchIndex[key].update({ ...block, tag: [...tags, nodeId] })
-      })
-    }
+  updateDoc: (nodeId: string, contents: any[], title = '', tags: Array<string> = [], extra?: SearchRepExtra) => {
+    searchX.addOrUpdateDocument(nodeId, contents, title, { extra })
   },
 
   removeDoc: (key: idxKey, id: string) => {
@@ -101,57 +79,15 @@ const searchWorker = {
     }
   },
 
-  searchIndex: (key: idxKey | idxKey[], query: string, tags: Array<string> = []) => {
+  searchIndex: (searchOptions?: SearchQuery, filterOptions?: FilterQuery) => {
     try {
-      let response: any[] = []
-
-      if (typeof key === 'string') {
-        response = globalSearchIndex[key].search(query, { enrich: true, tag: tags })
-      } else {
-        key.forEach((k) => {
-          response = [...response, ...globalSearchIndex[k].search(query, { enrich: true, tag: tags })]
-        })
-      }
-
-      const results = new Array<any>()
-      response.forEach((entry) => {
-        const matchField = entry.field
-        entry.result.forEach((i) => {
-          const { nodeId, blockId } = getNodeAndBlockIdFromCompositeKey(i.id)
-          results.push({ id: nodeId, data: i.doc?.data, blockId, text: i.doc?.text?.slice(0, 100), matchField })
-        })
-      })
-
-      const combinedResults = new Array<GenericSearchResult>()
-      results.forEach(function (item) {
-        const existing = combinedResults.filter(function (v, i) {
-          return v.id === item.id
-        })
-        if (existing.length) {
-          const existingIndex = combinedResults.indexOf(existing[0])
-          if (!combinedResults[existingIndex].matchField.includes(item.matchField))
-            combinedResults[existingIndex].matchField = combinedResults[existingIndex].matchField.concat(
-              item.matchField
-            )
-        } else {
-          if (typeof item.matchField == 'string') item.matchField = [item.matchField]
-          combinedResults.push(item)
-        }
-      })
-
-      return combinedResults
+      const res = searchX.search(searchOptions, filterOptions)
+      return res
     } catch (e) {
       mog('Searching Broke:', { e })
       return []
     }
   },
-
-  // dumpIndexDisk: async (location: string) => {
-  //   const indexEntries = Object.entries(globalSearchIndex)
-  //   const indexDump = await exportIndex(indexEntries)
-
-  //   setSearchIndexData(indexDump, location)
-  // },
 
   searchIndexByNodeId: (key, nodeId, query) => {
     try {
