@@ -38,6 +38,7 @@ interface MetadataProps {
 const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
   const location = useLocation()
+  const setIsPresenting = useEditorStore((store) => store.setIsPresenting)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
@@ -85,6 +86,11 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
     openShareModal('permission', 'note', nodeId)
   }
 
+  const onPresentNoteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // * Show element in full screen mode
+    setIsPresenting(true)
+  }
+
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
 
   return (
@@ -114,6 +120,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
           <Data>
             <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
             <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
+            <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />
           </Data>
         )}
       </FlexBetween>
