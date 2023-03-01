@@ -1,4 +1,5 @@
 import {
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -9,8 +10,10 @@ import {
   //   ELEMENT_INDENT,
   ELEMENT_LI,
   ELEMENT_LINK,
+  ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_TAG,
   //   ELEMENT_TABLE_CELL,
   //   ELEMENT_TABLE_PRE,
   //   ELEMENT_TABLE_ROW,
@@ -60,6 +63,7 @@ type BlockType = {
 export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = false, listDepth = 0) {
   const text = chunk.text || ''
   let type = chunk.type || ''
+  console.log(type === 'tag' ? { type, chunk } : {})
 
   let children =
     type && chunk.children
@@ -67,6 +71,9 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
         // $FlowFixMe
         chunk.children
           ?.map((c) => {
+            if (type === ELEMENT_MEDIA_EMBED) return chunk.url
+            const isTag = type === ELEMENT_TAG
+            if (isTag) return chunk.value
             const isList = LIST_TYPES.includes(c.type || '')
             const selfIsList = LIST_TYPES.includes(chunk.type || '')
             const childrenHasLink =
@@ -116,15 +123,27 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
       return `## ${children}\n`
     case ELEMENT_H3:
       return `### ${children}\n`
+    case ELEMENT_H4:
+      return `#### ${children}\n`
+    case ELEMENT_H5:
+      return `##### ${children}\n`
+    case ELEMENT_H6:
+      return `###### ${children}\n`
     case ELEMENT_HR:
       return `\n---\n`
-    case 'block_quote':
+    case ELEMENT_MEDIA_EMBED:
+      return `[${children}](${chunk.link || ''})`
+    case ELEMENT_BLOCKQUOTE:
       // For some reason, marked is parsing blockquotes w/ one new line
       // as contiued blockquotes, so adding two new lines ensures that doesn't
       // happen
       return `> ${children}\n\n`
     case 'link':
       return `[${children}](${chunk.link || ''})`
+    case 'webLink':
+      return `[${children}](${chunk.link || ''})`
+    case ELEMENT_TAG:
+      return `\`#${children}\``
     case ELEMENT_UL:
     case ELEMENT_OL:
       return `${children}`
