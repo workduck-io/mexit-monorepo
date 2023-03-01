@@ -63,6 +63,7 @@ import { createHighlightTextPlugin } from './createHighlightTextPlugin'
 import { createILinkPlugin } from './createILinkPlugin'
 import { createInlineBlockPlugin } from './createInlineBlockPlugin'
 import { createMentionPlugin } from './createMentionsPlugin'
+import { createSectionSeparatorPlugin } from './createSectionSeparatorPlugin'
 import { createTagPlugin } from './createTagPlugin'
 import { createTaskViewLinkPlugin } from './createTaskViewLinkPlugin'
 import { createTodoPlugin } from './createTodoPlugin'
@@ -108,6 +109,7 @@ export const generatePlugins = (options: PluginOptionType) => {
     createBlockquotePlugin(), // blockquote element
     createCodeBlockPlugin(), // code block element
     createHeadingPlugin(), // heading elements
+    createSectionSeparatorPlugin(),
 
     // Marks
     createBoldPlugin(), // bold mark

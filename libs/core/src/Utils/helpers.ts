@@ -20,7 +20,11 @@ export const defaultContent: NodeContent = {
 
 export const URL_DOMAIN_REG = /:\/\/(.[^/]+)/
 
-export const getDefaultContent = () => ({ ...defaultContent.content[0], id: generateTempId() })
+export const getDefaultContent = (type: string = ELEMENT_PARAGRAPH) => ({
+  ...defaultContent.content[0],
+  type,
+  id: generateTempId()
+})
 
 export const typeInvert = (type: string) => (type === 'from' ? 'to' : 'from')
 

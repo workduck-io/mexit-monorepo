@@ -9,7 +9,7 @@ import Reveal from 'reveal.js'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ELEMENT_PARAGRAPH, useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, SECTION_SEPARATOR, SLIDE_SEPARATOR, useContentStore } from '@mexit/core'
 
 import parseToMarkdown from '../../Editor/utils'
 import { useEditorStore } from '../../Stores/useEditorStore'
@@ -72,9 +72,9 @@ const Presenter = () => {
   return (
     <PresenterContainer $isPresenting={isPresenting} className="reveal" ref={presenterRef}>
       <div className="slides">
-        {markdown?.split('---')?.map((slideContent, idx) => (
+        {markdown?.split(SLIDE_SEPARATOR)?.map((slideContent, idx) => (
           <section key={idx}>
-            {slideContent?.split('+++')?.map((sectionContent, idxN) => (
+            {slideContent?.split(SECTION_SEPARATOR)?.map((sectionContent, idxN) => (
               <section key={`${idx}_${idxN}`}>
                 <Markdown>{sectionContent}</Markdown>
               </section>

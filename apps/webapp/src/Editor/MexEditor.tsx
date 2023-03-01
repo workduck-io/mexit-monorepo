@@ -41,7 +41,6 @@ export interface MexEditorProps {
   meta?: InternalMetadata // * MetaData of current editor
   pluginOptions?: PluginOptionType // * Plugins to power the editor
   debug?: boolean // * Debug mode for content
-  md?: boolean //Markdown converter
   exclude?: Array<string> // * Array of elements from MEX_EDITOR_ELEMENTS
   BalloonMarkToolbarButtons?: ReactElement
   portalElement?: Element

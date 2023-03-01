@@ -135,12 +135,12 @@ const Editor: React.FC<EditorProps> = ({
         options={editorOptions}
         editorId={nodeUID}
         value={content}
+        debug
         pluginOptions={{
           include: {
             blockModifier: includeBlockInfo
           }
         }}
-        md
       />
       {!readOnly && onFocusClick && <div onClick={onFocusClick} style={{ flexShrink: 1, flexGrow: 1 }} />}
     </EditorWrapper>

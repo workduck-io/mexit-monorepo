@@ -9,6 +9,7 @@ import {
   ELEMENT_MEDIA_EMBED,
   ELEMENT_MENTION,
   ELEMENT_PARAGRAPH,
+  ELEMENT_SECTION_SEPARATOR,
   ELEMENT_TABLE,
   ELEMENT_TAG,
   ELEMENT_TASK_VIEW_BLOCK,
@@ -23,6 +24,7 @@ import Todo from '../../Components/Todo'
 import { MentionElement } from './Mentions/MentionElement'
 import { QuickLinkElement } from './QuickLink/QuickLinkElement'
 import InlineBlock from './InlineBlock'
+import SectionSeparator from './SectionSeparator'
 import TaskViewLink from './TaskViewLink'
 import ViewBlock from './ViewBlock'
 
@@ -43,7 +45,8 @@ export const editorPreviewComponents = createPlateUI({
   [ELEMENT_MEDIA_EMBED]: MediaEmbedElement as any,
   [ELEMENT_TABLE]: TableWrapper,
   [ELEMENT_MENTION]: MentionElement as any,
-  [ELEMENT_TASK_VIEW_LINK]: TaskViewLink as any
+  [ELEMENT_TASK_VIEW_LINK]: TaskViewLink as any,
+  [ELEMENT_SECTION_SEPARATOR]: SectionSeparator
 })
 
 const components = createPlateUI({

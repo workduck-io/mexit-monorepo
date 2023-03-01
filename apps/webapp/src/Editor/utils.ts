@@ -13,6 +13,7 @@ import {
   ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_SECTION_SEPARATOR,
   ELEMENT_TAG,
   //   ELEMENT_TABLE_CELL,
   //   ELEMENT_TABLE_PRE,
@@ -21,7 +22,9 @@ import {
   //   ELEMENT_TABLE_WRAP,
   //   ELEMENT_TASK_LIST,
   ELEMENT_TODO_LI,
-  ELEMENT_UL
+  ELEMENT_UL,
+  SECTION_SEPARATOR,
+  SLIDE_SEPARATOR
 } from '@mexit/core'
 
 const LIST_TYPES = [
@@ -34,6 +37,7 @@ const LIST_TYPES = [
   ELEMENT_HR,
   //   ELEMENT_INDENT,
   ELEMENT_LI,
+  ELEMENT_SECTION_SEPARATOR,
   ELEMENT_LINK,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
@@ -63,7 +67,6 @@ type BlockType = {
 export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = false, listDepth = 0) {
   const text = chunk.text || ''
   let type = chunk.type || ''
-  console.log(type === 'tag' ? { type, chunk } : {})
 
   let children =
     type && chunk.children
@@ -102,7 +105,7 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
     children = '<br>'
   }
 
-  if (children === '' && type != ELEMENT_HR) return
+  if (children === '' && type !== ELEMENT_HR && type !== ELEMENT_SECTION_SEPARATOR) return
 
   if (chunk.bold) {
     children = retainWhitespaceAndFormat(children, '**')
@@ -130,7 +133,9 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
     case ELEMENT_H6:
       return `###### ${children}\n`
     case ELEMENT_HR:
-      return `\n---\n`
+      return `\n${SLIDE_SEPARATOR}\n`
+    case ELEMENT_SECTION_SEPARATOR:
+      return `\n${SECTION_SEPARATOR}\n`
     case ELEMENT_MEDIA_EMBED:
       return `[${children}](${chunk.link || ''})`
     case ELEMENT_BLOCKQUOTE:

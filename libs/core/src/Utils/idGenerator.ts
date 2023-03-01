@@ -5,6 +5,8 @@ const nanoid = customAlphabet(nolookalikes, 21)
 const shortId = customAlphabet(nolookalikes, 5)
 
 export const SEPARATOR = '.'
+export const SLIDE_SEPARATOR = '---'
+export const SECTION_SEPARATOR = '***'
 export const ID_SEPARATOR = '_'
 export const NODE_ID_PREFIX = 'NODE'
 export const WORKSPACE_ID_PREFIX = 'WORKSPACE'

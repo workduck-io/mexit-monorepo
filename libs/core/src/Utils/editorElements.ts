@@ -42,3 +42,4 @@ export const ELEMENT_H5 = 'h5'
 export const ELEMENT_H6 = 'h6'
 
 export const ELEMENT_HR = 'hr'
+export const ELEMENT_SECTION_SEPARATOR = 'section_separator'
