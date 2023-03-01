@@ -17,6 +17,7 @@ import {
   //   ELEMENT_TABLE_SUF,
   //   ELEMENT_TABLE_WRAP,
   //   ELEMENT_TASK_LIST,
+  ELEMENT_TODO_LI,
   ELEMENT_UL
 } from '@mexit/core'
 
@@ -109,10 +110,12 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
   }
 
   switch (type) {
-    case 'h1':
+    case ELEMENT_H1:
       return `# ${children}\n`
-    case 'h2':
+    case ELEMENT_H2:
       return `## ${children}\n`
+    case ELEMENT_H3:
+      return `### ${children}\n`
     case ELEMENT_HR:
       return `\n---\n`
     case 'block_quote':
@@ -125,6 +128,8 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
     case ELEMENT_UL:
     case ELEMENT_OL:
       return `${children}`
+    case ELEMENT_TODO_LI:
+      return `\n[ ] ${children}`
     case ELEMENT_LI: {
       // $FlowFixMe // We're not a LeafType here and flow doesn't get that
       const isOL = chunk && chunk.parentType === ELEMENT_OL

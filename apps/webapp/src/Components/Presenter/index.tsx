@@ -72,9 +72,13 @@ const Presenter = () => {
   return (
     <PresenterContainer $isPresenting={isPresenting} className="reveal" ref={presenterRef}>
       <div className="slides">
-        {markdown?.split('---')?.map((s, idx) => (
+        {markdown?.split('---')?.map((slideContent, idx) => (
           <section key={idx}>
-            <Markdown>{s}</Markdown>
+            {slideContent?.split('+++')?.map((sectionContent, idxN) => (
+              <section key={`${idx}_${idxN}`}>
+                <Markdown>{sectionContent}</Markdown>
+              </section>
+            ))}
           </section>
         ))}
       </div>
