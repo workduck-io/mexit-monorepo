@@ -1,3 +1,1 @@
-import { useRequestCacheStore } from '@mexit/core'
-
-export const useCacheStore = useRequestCacheStore
+export { useRequestCacheStore as useCacheStore} from '@mexit/core'

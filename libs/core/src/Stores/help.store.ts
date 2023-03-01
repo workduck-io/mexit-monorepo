@@ -43,6 +43,4 @@ export const helpStoreConfig = (set, get) => ({
   reset: () => set({ shortcuts: defaultShortcuts })
 })
 
-const useHelpStore = createStore(helpStoreConfig, StoreIdentifier.HELP, true);
-
-export { useHelpStore }
+export const useHelpStore = createStore(helpStoreConfig, StoreIdentifier.HELP, true);

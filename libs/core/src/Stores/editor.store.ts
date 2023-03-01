@@ -1,9 +1,10 @@
 import { NodeContent, NodeProperties } from '../Types/Editor';
 import { StoreIdentifier } from '../Types/Store';
+import { defaultContent } from '../Utils/helpers';
 import { createStore } from '../Utils/storeCreator'
+import { getInitialNode } from '../Utils/treeUtils';
 
 import { useContentStore } from './content.store';
-import { defaultContent, getInitialNode } from './editor.store';
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content

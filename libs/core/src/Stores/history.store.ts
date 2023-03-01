@@ -68,6 +68,4 @@ export const historyStoreConfig = (set, get) => ({
   }
 })
 
-const useHistoryStore = createStore(historyStoreConfig, StoreIdentifier.HISTORY, false)
-
-export { useHistoryStore }
+export const useHistoryStore = createStore(historyStoreConfig, StoreIdentifier.HISTORY, false)

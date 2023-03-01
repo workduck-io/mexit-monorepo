@@ -1,3 +1,1 @@
-import { useDataStore } from '@mexit/core'
-
-export default useDataStore
+export { useDataStore as default } from '@mexit/core'

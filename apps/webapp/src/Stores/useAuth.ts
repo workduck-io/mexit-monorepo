@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-
 import { useAuth, useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 

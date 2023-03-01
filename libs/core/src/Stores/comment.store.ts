@@ -28,6 +28,4 @@ export const commentStoreConfig = (set, get) => ({
     }))
 })
 
-const useCommentStore = createStore(commentStoreConfig, StoreIdentifier.COMMENTS, true);
-
-export { useCommentStore }
+export const useCommentStore = createStore(commentStoreConfig, StoreIdentifier.COMMENTS, true);

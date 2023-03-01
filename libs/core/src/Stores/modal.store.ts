@@ -37,6 +37,4 @@ const modalStoreConfig = (set, get) => ({
   }
 })
 
-const useModalStore = createStore(modalStoreConfig, StoreIdentifier.MODAL, false)
-
-export { useModalStore }
+export const useModalStore = createStore(modalStoreConfig, StoreIdentifier.MODAL, false)

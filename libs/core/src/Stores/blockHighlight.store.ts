@@ -1,7 +1,6 @@
 import { StoreIdentifier } from '../Types/Store';
+import { mog } from '../Utils/mog';
 import { createStore } from '../Utils/storeCreator'
-
-import { mog } from './blockHighlight.store';
 
 
 /**

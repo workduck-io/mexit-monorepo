@@ -2,110 +2,63 @@
 // import { ComboboxKey, IComboboxItem } from '../Editor/Types/Combobox'
 // import { ComboboxType, ComboSearchType } from '../Editor/Types/MultiCombobox'
 // import { createStore, setStoreValue } from '../Editor/Utils/store'
+import { Point } from 'slate'
+
+import { ComboboxKey } from "../Types/Editor";
+import { ComboboxType } from '../Types/MultiCombobox';
+import { setStoreValue, StoreIdentifier } from '../Types/Store';
+import { createStore } from '../Utils/storeCreator';
+
+import { useEditorStore } from "./editor.store";
 
 // import { useEditorStore } from './useEditorStore'
 
-// export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
+export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 
-// type ItemLoading = {
-//   item: string
-//   message?: string
-// }
+export const comboboxStoreConfig = (set) => ({
+  key: ComboboxKey.TAG,
+  setKey: setStoreValue(set, 'key', 'setKey'),
 
-// export type ComboboxState = {
-//   // Combobox key
-//   key: string
-//   setKey: (value: string) => void
+  setBlockRange: setStoreValue(set, 'blockRange', 'setBlockRange'),
 
-//   // Maximum number of suggestions
-//   maxSuggestions: number
-//   setMaxSuggestions: (value: number) => void
+  isSlash: false,
+  setIsSlash: setStoreValue(set, 'isSlash', 'setIsSlash'),
 
-//   itemLoading?: string | undefined
-//   setItemLoading: (itemKey?: string | undefined) => void
+  isBlockTriggered: false,
+  setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
 
-//   activeBlock: any
-//   setActiveBlock: (block: any) => void
+  setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
-//   // Tag search value
-//   search: ComboSearchType
-//   setSearch: (value: ComboSearchType) => void
+  maxSuggestions: 10,
+  setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),
 
-//   // Fetched tags
-//   items: IComboboxItem[]
-//   setItems: (value: IComboboxItem[]) => void
+  setActiveBlock: setStoreValue(set, 'activeBlock', 'setActiveBlock'),
+  setPreview: setStoreValue(set, 'preview', 'setPreview'),
 
-//   isBlockTriggered: boolean
-//   setIsBlockTriggered: (value: boolean) => void
+  search: { textAfterTrigger: '' },
+  setSearch: setStoreValue(set, 'search', 'setSearch'),
 
-//   blockRange: BaseRange | null
-//   setBlockRange: (value: BaseRange) => void
+  items: [],
+  setItems: setStoreValue(set, 'items', 'setItems'),
 
-//   // Range from the tag trigger to the cursor
-//   targetRange: Range | null
-//   setTargetRange: (value: Range | null) => void
+  targetRange: null,
+  setTargetRange: setStoreValue(set, 'targetRange', 'setTargetRange'),
 
-//   // Highlighted index
-//   itemIndex: number
-//   setItemIndex: (value: number) => void
+  itemIndex: 0,
+  setItemIndex: setStoreValue(set, 'itemIndex', 'setItemIndex'),
 
-//   isSlash: boolean
-//   setIsSlash: (value: boolean) => void
+  combobox: null,
+  setCombobox: setStoreValue(set, 'combobox', 'setCombobox'),
 
-//   preview?: any
-//   setPreview: (value: any) => void
+  closeMenu: () => {
+    useEditorStore.getState().setTrigger(undefined)
+    set((state) => {
+      state.targetRange = null
+      state.items = []
+      state.search = ''
+      state.itemIndex = 0
+    })
+  }
+})
 
-//   showPreview: boolean
-//   setShowPreview: (value: boolean) => void
-
-//   combobox: UseComboboxReturnValue<IComboboxItem> | null
-//   setCombobox: (value: UseComboboxReturnValue<IComboboxItem>) => void
-
-//   closeMenu: () => void
-// }
-
-// export const useComboboxStore = (set) => ({
-//   key: ComboboxKey.TAG,
-//   setKey: setStoreValue(set, 'key', 'setKey'),
-
-//   setBlockRange: setStoreValue(set, 'blockRange', 'setBlockRange'),
-
-//   isSlash: false,
-//   setIsSlash: setStoreValue(set, 'isSlash', 'setIsSlash'),
-
-//   isBlockTriggered: false,
-//   setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
-
-//   setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
-
-//   maxSuggestions: 10,
-//   setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),
-
-//   setActiveBlock: setStoreValue(set, 'activeBlock', 'setActiveBlock'),
-//   setPreview: setStoreValue(set, 'preview', 'setPreview'),
-
-//   search: { textAfterTrigger: '' },
-//   setSearch: setStoreValue(set, 'search', 'setSearch'),
-
-//   items: [],
-//   setItems: setStoreValue(set, 'items', 'setItems'),
-
-//   targetRange: null,
-//   setTargetRange: setStoreValue(set, 'targetRange', 'setTargetRange'),
-
-//   itemIndex: 0,
-//   setItemIndex: setStoreValue(set, 'itemIndex', 'setItemIndex'),
-
-//   combobox: null,
-//   setCombobox: setStoreValue(set, 'combobox', 'setCombobox'),
-
-//   closeMenu: () => {
-//     useEditorStore.getState().setTrigger(undefined)
-//     set((state) => {
-//       state.targetRange = null
-//       state.items = []
-//       state.search = ''
-//       state.itemIndex = 0
-//     })
-//   }
-// })
+export const useComboboxStore = createStore(comboboxStoreConfig, StoreIdentifier.COMBOBOX , false)

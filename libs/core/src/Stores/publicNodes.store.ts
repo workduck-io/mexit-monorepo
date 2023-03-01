@@ -39,6 +39,4 @@ export const publicNodeStoreConfig = (set, get) => ({
   }
 })
 
-const usePublicNodeStore = createStore(publicNodeStoreConfig, StoreIdentifier.PUBLICNODES , false)
-
-export { usePublicNodeStore }
+export const usePublicNodeStore = createStore(publicNodeStoreConfig, StoreIdentifier.PUBLICNODES , false)

@@ -1,7 +1,8 @@
+
+import { ExtInfobarMode } from '@mexit/shared'
+
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
-
-const SidebarWidth = 276
 
 export interface FocusMode {
   on: boolean
@@ -25,9 +26,33 @@ export type ContextMenu = {
   coords: { x: number; y: number }
 }
 
+interface LayoutState {
+  rhSidebar: {
+    expanded: boolean
+    show: boolean
+  }
+  toggleTop: number
+  setToggleTop: (height: number) => void
+
+  infobar: { mode: ExtInfobarMode }
+
+  toggleRHSidebar: () => void
+  setRHSidebarExpanded: (expanded: boolean) => void
+  showRHSidebar: () => void
+  hideRHSidebar: () => void
+
+  setInfobarMode: (mode: ExtInfobarMode) => void
+}
+
+
+const SidebarWidth = 276
+const DEFAULT:ExtInfobarMode = 'context'
+
 export const layoutStoreConfig = (set, get) => ({
   // Focus mode
   focusMode: { on: false, hover: false },
+  toggleTop: 44,
+  setToggleTop: (height: number) => set({ toggleTop: height }),
   toggleFocusMode: () => set((state) => ({ focusMode: { ...state.focusMode, on: !state.focusMode.on } })),
   setFocusMode: (focusMode) => set({ focusMode }),
   hoverFocusMode: () => set((state) => ({ focusMode: { ...state.focusMode, hover: true } })),
@@ -53,13 +78,13 @@ export const layoutStoreConfig = (set, get) => ({
 
   // RHSidebar
   rhSidebar: {
-    expanded: true,
-    show: false
+    expanded: false,
+    show: true
   },
-  toggleRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),
-  setRHSidebarExpanded: (expanded) => set((state) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
-  showRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
-  hideRHSidebar: () => set((state) => ({ rhSidebar: { ...state.rhSidebar, show: false } })),
+  toggleRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),
+  setRHSidebarExpanded: (expanded: boolean) => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
+  showRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
+  hideRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, show: false } })),
 
   expandSidebar: () => set((state) => ({ sidebar: { ...state.sidebar, expanded: true, width: SidebarWidth } })),
 
@@ -90,15 +115,13 @@ export const layoutStoreConfig = (set, get) => ({
   // Infobar
   infobar: {
     visible: true,
-    mode: 'default'
+    mode: DEFAULT
   },
-  setInfobarMode: (mode) => {
-    const curMode = get().infobar.mode
+  setInfobarMode: (mode: ExtInfobarMode) => {
+    const curMode: ExtInfobarMode = get().infobar.mode
     if (curMode === mode) return
     set({ infobar: { ...get().infobar, mode } })
   }
 })
 
-const useLayoutStore = createStore(layoutStoreConfig, StoreIdentifier.LAYOUT, false)
-
-export { useLayoutStore }
+export const useLayoutStore = createStore(layoutStoreConfig, StoreIdentifier.LAYOUT, false)
