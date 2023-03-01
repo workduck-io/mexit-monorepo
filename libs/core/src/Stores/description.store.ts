@@ -26,6 +26,4 @@ export const descriptionStoreConfig = (set, get) => ({
   }
 })
 
-const useDescriptionStore = createStore(descriptionStoreConfig, StoreIdentifier.DESCRIPTIONS, true)
-
-export { useDescriptionStore }
+export const useDescriptionStore = createStore(descriptionStoreConfig, StoreIdentifier.DESCRIPTIONS, true)

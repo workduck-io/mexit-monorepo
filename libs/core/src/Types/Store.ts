@@ -66,7 +66,11 @@ export enum StoreIdentifier {
   EDITORS = 'Multiple Editors Store',
   EDITOR = 'editor',
   BUFFER = 'buffer',
-  BLOCKHIGHLIGHT = 'block-highlight'
+  BLOCKHIGHLIGHT = 'block-highlight',
+  SPUTLIT = 'sputlit',
+  COMBOBOX = 'combobox',
+  TODO = 'todo',
+  INIT = 'init'
 }
 
 export const DefaultMIcons = {
@@ -163,3 +167,25 @@ export interface DataStoreState {
   setSharedNodes: (sharedNodes: SharedNode[]) => void
   getSharedNodes: () => SharedNode[]
 }
+
+export const setStoreValue =
+  <T>(
+    set: (fn: (draft: T & { actionType?: string; noDiff?: boolean }) => void) => void,
+    storeKey: keyof T,
+    actionType: string,
+    merge?: boolean
+  ) =>
+  (value: any) => {
+    set((state) => {
+      state.noDiff = true
+      if (state[storeKey] !== value) {
+        state.noDiff = false
+        state.actionType = actionType
+        if (!merge) {
+          state[storeKey] = value
+        } else {
+          state[storeKey] = { ...state[storeKey], ...value }
+        }
+      }
+    })
+  }

@@ -1,3 +1,1 @@
-import { useBlockStore } from "@mexit/core";
-
-export default useBlockStore
+export { useBlockStore as default } from "@mexit/core"

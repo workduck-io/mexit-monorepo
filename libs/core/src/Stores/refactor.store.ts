@@ -41,6 +41,4 @@ export const refactorStoreConfig = (set) => ({
     })
 })
 
-const useRefactorStore = createStore(refactorStoreConfig, StoreIdentifier.REFACTOR , false)
-
-export { useRefactorStore }
+export const useRefactorStore = createStore(refactorStoreConfig, StoreIdentifier.REFACTOR , false)

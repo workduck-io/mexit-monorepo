@@ -20,6 +20,4 @@ export const apiStoreConfig = (set, get) => ({
   }
 })
 
-const useApiStore = createStore(apiStoreConfig, StoreIdentifier.API, false)
-
-export { useApiStore }
+export const useApiStore = createStore(apiStoreConfig, StoreIdentifier.API, false)

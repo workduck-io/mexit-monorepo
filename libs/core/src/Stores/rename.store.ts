@@ -47,6 +47,4 @@ export const renameStoreConfig = (set) => ({
     })
 })
 
-const useRenameStore = createStore(renameStoreConfig, StoreIdentifier.RENAME , false)
-
-export { useRenameStore }
+export const useRenameStore = createStore(renameStoreConfig, StoreIdentifier.RENAME , false)

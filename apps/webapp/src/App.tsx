@@ -60,7 +60,10 @@ const App = () => {
       }
     }
 
-    forceLogoutAndSetVersion()
+    const persistedHasHydrated = useVersionStore.getState()._hasHydrated
+    if(persistedHasHydrated){
+      forceLogoutAndSetVersion()
+    }
   }, [])
 
   return (

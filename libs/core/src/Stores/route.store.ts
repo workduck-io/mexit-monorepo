@@ -117,6 +117,4 @@ const routeStoreConfig = (set, get) => ({
   }
 })
 
-const useRouteStore = createStore(routeStoreConfig, StoreIdentifier.ROUTE, false)
-
-export { useRouteStore }
+export const useRouteStore = createStore(routeStoreConfig, StoreIdentifier.ROUTE, false)

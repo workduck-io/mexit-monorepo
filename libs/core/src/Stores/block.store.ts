@@ -48,6 +48,4 @@ export const blockStoreConfig = (set, get) => ({
 })
 
 
-const useBlockStore = createStore(blockStoreConfig, StoreIdentifier.CONTENTS, true)
-
-export { useBlockStore }
+export const useBlockStore = createStore(blockStoreConfig, StoreIdentifier.CONTENTS, true)

@@ -1,5 +1,1 @@
-import { useRouteStore } from "@mexit/core";
-
-export { BannerType } from "@mexit/core";
-
-export default useRouteStore
+export { BannerType,useRouteStore as default } from "@mexit/core";
