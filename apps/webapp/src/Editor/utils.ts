@@ -1,5 +1,6 @@
 import {
   ELEMENT_BLOCKQUOTE,
+  ELEMENT_CODE_BLOCK,
   ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -74,7 +75,6 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
         // $FlowFixMe
         chunk.children
           ?.map((c) => {
-            if (type === ELEMENT_MEDIA_EMBED) return chunk.url
             const isTag = type === ELEMENT_TAG
             if (isTag) return chunk.value
             const isList = LIST_TYPES.includes(c.type || '')
@@ -143,9 +143,15 @@ export default function parseToMarkdown(chunk: any, ignoreParagraphNewline = fal
       // as contiued blockquotes, so adding two new lines ensures that doesn't
       // happen
       return `> ${children}\n\n`
+    case ELEMENT_CODE_BLOCK:
+      return `
+<div>
+\`\`\`
+${children}\`\`\`
+</div>
+      `
     case 'link':
-      return `[${children}](${chunk.link || ''})`
-    case 'webLink':
+    case 'a':
       return `[${children}](${chunk.link || ''})`
     case ELEMENT_TAG:
       return `\`#${children}\``
