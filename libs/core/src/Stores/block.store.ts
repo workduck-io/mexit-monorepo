@@ -21,8 +21,9 @@ export enum ContextMenuActionType {
 
 export type ModalOpenType = ContextMenuActionType | undefined
 
+const BLOCKS: Record<string, BlockType> = {}
 export const blockStoreConfig = (set, get) => ({
-  blocks: {},
+  blocks: BLOCKS,
   setBlocks: (blocks: Record<string, BlockType>) => set({ blocks }),
   addBlock: (blockId: string, block: BlockType) => {
     const blocks = get().blocks

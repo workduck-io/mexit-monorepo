@@ -25,7 +25,7 @@ const modalStoreConfig = (set, get) => ({
   init: undefined,
   data: undefined,
   setData: (modalData) => set({ data: modalData }),
-  toggleOpen: (modalType, modalData, initialize) => {
+  toggleOpen: (modalType: ModalsType, modalData?, initialize?: boolean) => {
     const open = get().open
 
     const changeModalState = open === modalType ? undefined : modalType

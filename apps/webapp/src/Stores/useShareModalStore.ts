@@ -1,1 +1,1 @@
-export { useShareModalStore } from "@mexit/core";
+export { InviteModalData,useShareModalStore } from "@mexit/core";

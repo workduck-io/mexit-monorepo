@@ -1,5 +1,5 @@
 
-import { ExtInfobarMode } from '@mexit/shared'
+import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
@@ -46,7 +46,7 @@ interface LayoutState {
 
 
 const SidebarWidth = 276
-const DEFAULT:ExtInfobarMode = 'context'
+const DEFAULT: ExtInfobarMode | InfobarMode = undefined
 
 export const layoutStoreConfig = (set, get) => ({
   // Focus mode
@@ -60,8 +60,8 @@ export const layoutStoreConfig = (set, get) => ({
 
   showLoader: false,
   setShowLoader: (showLoader) => set({ showLoader }),
-
-  setContextMenu: (contextMenu) => set({ contextMenu }),
+  contextMenu: undefined,
+  setContextMenu: (contextMenu: ContextMenu) => set({ contextMenu }),
 
   // Sidebar
   sidebar: {
@@ -117,7 +117,7 @@ export const layoutStoreConfig = (set, get) => ({
     visible: true,
     mode: DEFAULT
   },
-  setInfobarMode: (mode: ExtInfobarMode) => {
+  setInfobarMode: (mode: ExtInfobarMode | InfobarMode) => {
     const curMode: ExtInfobarMode = get().infobar.mode
     if (curMode === mode) return
     set({ infobar: { ...get().infobar, mode } })

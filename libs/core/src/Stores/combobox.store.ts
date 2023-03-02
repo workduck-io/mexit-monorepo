@@ -2,10 +2,10 @@
 // import { ComboboxKey, IComboboxItem } from '../Editor/Types/Combobox'
 // import { ComboboxType, ComboSearchType } from '../Editor/Types/MultiCombobox'
 // import { createStore, setStoreValue } from '../Editor/Utils/store'
-import { Point } from 'slate'
+import { BaseRange,Point } from 'slate'
 
 import { ComboboxKey } from "../Types/Editor";
-import { ComboboxType } from '../Types/MultiCombobox';
+import { ComboboxType, ComboSearchType } from '../Types/MultiCombobox';
 import { setStoreValue, StoreIdentifier } from '../Types/Store';
 import { createStore } from '../Utils/storeCreator';
 
@@ -15,10 +15,14 @@ import { useEditorStore } from "./editor.store";
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 
+const BLOCKRANGE: BaseRange | null = undefined
+const SEARCH: ComboSearchType = { textAfterTrigger: '' }
+
 export const comboboxStoreConfig = (set) => ({
   key: ComboboxKey.TAG,
   setKey: setStoreValue(set, 'key', 'setKey'),
 
+  blockRange: BLOCKRANGE,
   setBlockRange: setStoreValue(set, 'blockRange', 'setBlockRange'),
 
   isSlash: false,
@@ -27,15 +31,19 @@ export const comboboxStoreConfig = (set) => ({
   isBlockTriggered: false,
   setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
 
+  itemLoading: undefined,
   setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
   maxSuggestions: 10,
   setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),
 
+  activeBlock: undefined,
   setActiveBlock: setStoreValue(set, 'activeBlock', 'setActiveBlock'),
+
+  preview: undefined,
   setPreview: setStoreValue(set, 'preview', 'setPreview'),
 
-  search: { textAfterTrigger: '' },
+  search: SEARCH,
   setSearch: setStoreValue(set, 'search', 'setSearch'),
 
   items: [],

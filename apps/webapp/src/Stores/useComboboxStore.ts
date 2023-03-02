@@ -1,1 +1,1 @@
-export { useComboboxStore } from "@mexit/core";
+export { ComboTriggerType,useComboboxStore } from "@mexit/core";

@@ -52,7 +52,7 @@ export enum StoreIdentifier {
   HELP = 'help',
   HISTORY = 'history',
   LAYOUT = 'layout',
-  MODAL= 'modal',
+  MODAL = 'modal',
   PORTAL = 'portal',
   PUBLICNODES = 'public-nodes',
   REFACTOR = 'refactor',
@@ -175,7 +175,7 @@ export const setStoreValue =
     actionType: string,
     merge?: boolean
   ) =>
-  (value: any) => {
+  (value?: any) => {
     set((state) => {
       state.noDiff = true
       if (state[storeKey] !== value) {

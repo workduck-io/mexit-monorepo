@@ -1,6 +1,6 @@
-import { BaseRange, Point } from 'slate'
+import { BaseRange } from 'slate'
 
-import { CategoryType, ComboboxKey, QuickLinkType } from '@mexit/core'
+import { CategoryType, QuickLinkType } from '@mexit/core'
 
 export interface ComboboxItem {
   text: string
@@ -10,14 +10,6 @@ export interface ComboboxItem {
 
   /** Extended command -> Text after the command is part of it and used as arguments */
   extended?: boolean
-}
-
-export interface ComboboxType {
-  cbKey: ComboboxKey
-  icon?: string
-  trigger: string
-  data?: ComboboxItem[]
-  blockTrigger?: string
 }
 
 export interface ComboTriggerDataType {
@@ -32,5 +24,3 @@ export interface ComboSearchType {
   textAfterTrigger: string
   textAfterBlockTrigger?: string
 }
-
-export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
