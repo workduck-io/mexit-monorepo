@@ -1,1 +1,1 @@
-export { useHelpStore } from "@mexit/core";
+export { Shortcut,useHelpStore } from "@mexit/core";

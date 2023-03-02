@@ -1,6 +1,6 @@
 import { NodeEditorContent } from '../Types/Editor';
 import { StoreIdentifier } from '../Types/Store';
-import { PriorityType, TodoStatus, TodoType } from '../Types/Todo';
+import { PriorityType, TodoStatus, TodosType, TodoType } from '../Types/Todo';
 import { getMentionsFromContent, getTagsFromContent } from '../Utils/content';
 import { ELEMENT_TODO_LI } from '../Utils/editorElements';
 import { defaultContent } from '../Utils/helpers';
@@ -50,9 +50,9 @@ export const createTodo = (
     updatedAt: metaData?.updatedAt ?? Date.now()
   }
 }
-
+const TODOS : TodosType = {}
 const todoStoreConfig = (set, get) => ({
-  todos: {},
+  todos: TODOS,
   initTodos: (todos) => {
     if (todos) {
       set({ todos })

@@ -8,8 +8,9 @@ import {
 } from '@udecode/plate'
 import { Range } from 'slate'
 
-import { ComboTriggerType } from '../../../Stores/useComboboxStore'
-import { ComboboxType, ComboTriggerDataType } from '../../Types/MultiCombobox'
+import { ComboboxType, ComboTriggerType } from '@mexit/core'
+
+import { ComboTriggerDataType } from '../../Types/MultiCombobox'
 import { getTextFromTrigger } from '../../Utils/getTextFromTrigger'
 
 export const getTriggeredData = (

@@ -1,1 +1,1 @@
-export { useRenameStore } from "@mexit/core";
+export { RefactorPath,useRenameStore } from "@mexit/core";

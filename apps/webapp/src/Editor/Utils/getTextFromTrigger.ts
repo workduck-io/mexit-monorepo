@@ -2,7 +2,8 @@ import { getRange } from '@udecode/plate'
 import { escapeRegExp, getEditorString, getPointBefore,PlateEditor, Value } from '@udecode/plate-core'
 import { BaseRange, Point } from 'slate'
 
-import { ComboTriggerType } from '../../Stores/useComboboxStore'
+import { ComboTriggerType } from '@mexit/core'
+
 
 /*
  * Get text and range from trigger to cursor.

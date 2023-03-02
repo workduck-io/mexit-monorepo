@@ -1,5 +1,5 @@
-import { AccessLevel, InvitedUser, Mentionable } from '../Types/Mentions';
-import { StoreIdentifier } from '../Types/Store';
+import { AccessLevel, InvitedUser, Mentionable, ShareContext } from '../Types/Mentions'
+import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 // The invite mode is only when the editor is open and used to open on new combobox invite
@@ -26,16 +26,28 @@ export interface InviteModalData {
   }
 }
 
+const NOTE: ShareContext = 'note'
+
 export const shareModalConfig = (set, get) => ({
   open: false,
   focus: true,
-  context: 'note',
+  context: NOTE,
   mode: 'permission',
   data: {
     changedUsers: [],
-    changedInvitedUsers: []
+    changedInvitedUsers: [],
+    //  Used only for share permissions mode
+    nodeid: undefined,
+    alias: undefined,
+
+    // Used only for share permissions of namespace
+    namespaceid: undefined,
+
+    fromEditor: undefined,
+    // When sharing to a preexisting user from a mention
+    userid: undefined
   },
-  openModal: (mode: ShareModalMode, context, id) =>
+  openModal: (mode: ShareModalMode, context: ShareContext, id) =>
     set({
       mode,
       context,
@@ -59,7 +71,7 @@ export const shareModalConfig = (set, get) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, context, data) =>
+  prefillModal: (mode: ShareModalMode, context: ShareContext, data) =>
     set({
       mode,
       open: true,
