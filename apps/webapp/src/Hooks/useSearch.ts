@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ELEMENT_MENTION } from '@udecode/plate'
 
+import { ISearchQuery } from '@workduck-io/mex-search'
+
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
@@ -112,8 +114,8 @@ export const useSearch = () => {
     await removeDoc(key, id)
   }
 
-  const queryIndex = async (key: idxKey | idxKey[], query?: string, tags?: Array<string>) => {
-    const results = await searchIndex({ text: query })
+  const queryIndex = async (key: idxKey | idxKey[], query?: ISearchQuery, tags?: Array<string>) => {
+    const results = await searchIndex(key, query)
     return results
   }
 

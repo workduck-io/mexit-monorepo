@@ -87,7 +87,7 @@ const Search = () => {
   } = useFilters<GenericSearchResult>()
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await searchIndex({ text: newSearchTerm })
+    const res = await searchIndex('node', [{ type: 'text', value: newSearchTerm }])
     // const filRes = res.filter((r) => {
     //   const nodeType = getNodeType(r.id)
     //   return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
