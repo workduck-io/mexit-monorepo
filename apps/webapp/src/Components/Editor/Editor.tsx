@@ -135,7 +135,6 @@ const Editor: React.FC<EditorProps> = ({
         options={editorOptions}
         editorId={nodeUID}
         value={content}
-        debug
         pluginOptions={{
           include: {
             blockModifier: includeBlockInfo

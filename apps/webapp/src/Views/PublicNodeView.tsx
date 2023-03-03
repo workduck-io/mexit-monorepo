@@ -8,6 +8,7 @@ import { mog } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
+import Presenter from '../Components/Presenter'
 import PublicNodeFloatingButton from '../Components/PublicNodeFloatingButton'
 import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
@@ -85,6 +86,7 @@ const PublicNodeView = () => {
           <PublicNodeEditor nodeId={nodeId} node={node} namespaceId={namespace} />
           <PublicDataInfobar nodeId={nodeId} content={node?.content ?? defaultContent.content} />
           <PublicNodeFloatingButton firstVisit={firstVisit} />
+          <Presenter />
         </>
       )}
     </PublicEditorWrapper>

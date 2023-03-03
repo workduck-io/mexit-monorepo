@@ -63,9 +63,6 @@ export type EditorContextType = {
   isBannerVisible?: boolean
   notifyWithBanner: (showBanner: boolean) => void
 
-  isPresenting?: boolean
-  setIsPresenting: (isPresenting: boolean) => void
-
   setReadOnly: (isReadOnly: boolean) => void
   reset: () => void
 }
@@ -81,7 +78,6 @@ export const useEditorStore = create<EditorContextType>(
       activeUsers: [],
       isEditing: false,
       loadingNodeid: null,
-      isPresenting: false,
 
       notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
       setTrigger: (trigger) => set({ trigger }),
@@ -106,8 +102,6 @@ export const useEditorStore = create<EditorContextType>(
       setReadOnly: (isReadOnly: boolean) => {
         set({ readOnly: isReadOnly })
       },
-
-      setIsPresenting: (isPresenting: boolean) => set({ isPresenting }),
 
       setUid: (nodeid) => {
         const node = get().node

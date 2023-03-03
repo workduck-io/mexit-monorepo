@@ -1,7 +1,7 @@
 import 'reveal.js/dist/reveal.css'
 
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import { usePlateEditorRef } from '@udecode/plate'
 import Markdown from 'markdown-to-jsx'
@@ -12,7 +12,6 @@ import { tinykeys } from '@workduck-io/tinykeys'
 import { ELEMENT_PARAGRAPH, SECTION_SEPARATOR, SLIDE_SEPARATOR, useContentStore } from '@mexit/core'
 
 import parseToMarkdown from '../../Editor/utils'
-import { useEditorStore } from '../../Stores/useEditorStore'
 
 import { PresenterContainer } from './styled'
 
@@ -21,9 +20,11 @@ const Presenter = () => {
   const presenterRef = useRef<HTMLDivElement>(null)
 
   const noteId = useParams().nodeId
+  // * Get query parameter present from url using react-router-dom v6
+  const [searchParams, setSearchParams] = useSearchParams()
+  const isPresenting = searchParams.get('present') === 'true'
+
   const editor = usePlateEditorRef(noteId)
-  const isPresenting = useEditorStore((store) => store.isPresenting)
-  const setIsPresenting = useEditorStore((store) => store.setIsPresenting)
 
   const goFullScreen = (element: any) => {
     if (element.requestFullscreen) {
@@ -49,7 +50,7 @@ const Presenter = () => {
 
       const unsubscribe = tinykeys(window, {
         Escape: (e) => {
-          setIsPresenting(false)
+          setSearchParams()
 
           // * If overview is open, close it
           if (Reveal.isOverview()) {
@@ -60,6 +61,7 @@ const Presenter = () => {
 
       return () => {
         unsubscribe()
+        setSearchParams()
 
         // * Destroy reveal instance, as it creates multiple elements in the DOM
         Reveal.destroy()

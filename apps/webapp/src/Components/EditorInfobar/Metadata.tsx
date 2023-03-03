@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import timeLine from '@iconify-icons/ri/time-line'
 import styled from 'styled-components'
@@ -11,7 +11,6 @@ import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, Rela
 
 import { useMentions } from '../../Hooks/useMentions'
 import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
-import { useRouting } from '../../Hooks/useRouting'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
@@ -39,7 +38,6 @@ interface MetadataProps {
 const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
   const location = useLocation()
-  const setIsPresenting = useEditorStore((store) => store.setIsPresenting)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
   const isUserEditing = useEditorStore((state) => state.isEditing)
@@ -47,7 +45,6 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
   const activeUsers = useRouteStore((s) => s.routes[location.pathname]?.users ?? [])
   const { getSharedUsersOfNodeOfSpace } = useMentions()
   const { accessWhenShared } = usePermissions()
-  const { goTo } = useRouting()
 
   const getIsSharedDisabled = () => {
     const access = accessWhenShared(nodeId)
@@ -55,6 +52,8 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
 
     return accessPriority !== 'MANAGE' && accessPriority !== 'OWNER'
   }
+
+  const navigate = useNavigate()
 
   const hideShareDetails = getIsSharedDisabled()
 
@@ -90,8 +89,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
 
   const onPresentNoteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // * Show element in full screen mode
-    setIsPresenting(true)
-    // goTo(ROUTE_PATHS.present, NavigationType.push)
+    navigate({ search: '?present=true' }, { replace: true })
   }
 
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
@@ -119,13 +117,15 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
             </DataWrapper>
           )}
         </DataGroup>
-        {!publicMetadata && !hideShareDetails && (
-          <Data>
-            <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
-            <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
-            <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />
-          </Data>
-        )}
+        <Data>
+          {!publicMetadata && !hideShareDetails && (
+            <>
+              <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
+              <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
+            </>
+          )}
+          <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />
+        </Data>
       </FlexBetween>
     </MetadataWrapper>
   )
