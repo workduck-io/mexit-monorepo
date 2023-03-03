@@ -1,5 +1,11 @@
 # mexit
 
+## 0.19.18
+
+### Patch Changes
+
+- 5e614919: Version Store Logout, API reset
+
 ## 0.19.17
 
 ### Patch Changes
