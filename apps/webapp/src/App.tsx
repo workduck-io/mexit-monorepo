@@ -3,7 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import { mog } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -51,11 +50,12 @@ const App = () => {
 
   useEffect(() => {
     async function forceLogoutAndSetVersion() {
-      const persistedVersion = useVersionStore.getState().version
-      mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })
+      const persistedVersion = useVersionStore.getState()?.version
       setVersion(packageJsonVersion)
       if (!(persistedVersion && compareVersions(persistedVersion, FORCE_LOGOUT_VERSION) >= 0)) {
         await forceLogout()
+        // Needed because nothing sets version store after force logout; DO NOT REMOVE
+        setVersion(packageJsonVersion)
       }
     }
 
