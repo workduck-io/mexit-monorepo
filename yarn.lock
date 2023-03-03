@@ -3904,10 +3904,10 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.5.0.tgz#7d07ff4979312dda167cc0a2b7586e76dc1cf6ab"
   integrity sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==
 
-"@workduck-io/dwindle@^0.1.6":
-  version "0.1.6"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.6/c04025f781c33efb008f8d33242912f736de1fad#c04025f781c33efb008f8d33242912f736de1fad"
-  integrity sha512-H8WP7veZ1jSKHMed3vsZt1HFT6FDMGx31vbpDyToQ3Iw3n6bAO+7613KcjnoFVzH0+gkUj77dJEWceqitPO30Q==
+"@workduck-io/dwindle@^0.1.7":
+  version "0.1.7"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/dwindle/0.1.7/e741d46c2ffa79d4f44749b60457ef2e728e1e8b#e741d46c2ffa79d4f44749b60457ef2e728e1e8b"
+  integrity sha512-v4guN3vBo/u063WDeiiR/lDhoeohz7VLhd5i54DXtkDvakTGhPKEzejC0YAeXdUPBvGWifssKb7FXr/tN1zzrA==
   dependencies:
     "@aws-sdk/client-cognito-identity" "^3.17.0"
     "@aws-sdk/client-s3" "^3.17.0"
