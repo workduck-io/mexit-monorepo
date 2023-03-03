@@ -198,8 +198,10 @@ export enum QuickLinkType {
   snippet = 'Snippets',
   tags = 'Tags',
   action = 'Actions',
-  search = 'Search',
   mentions = 'Mentions',
+  taskView = 'Task View',
+  search = 'Search',
+  prompts = 'Prompts',
   webLinks = 'Links'
 }
 
@@ -221,7 +223,8 @@ export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
   search = 'Search Results',
-  task = 'Task'
+  task = 'Task',
+  tag = 'Tags'
 }
 
 export interface SlashCommand {

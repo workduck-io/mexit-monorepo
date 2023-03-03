@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import {
   apiURLs,
+  ComboboxType,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -37,7 +38,7 @@ import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
 import { CategoryType, QuickLinkType } from '../constants'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
-import { ComboboxConfig, ComboboxType, ComboConfigData } from '../Types/MultiCombobox'
+import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../Utils/helper'
 
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {

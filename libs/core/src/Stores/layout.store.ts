@@ -46,7 +46,6 @@ interface LayoutState {
 
 
 const SidebarWidth = 276
-const DEFAULT: ExtInfobarMode | InfobarMode = undefined
 
 export const layoutStoreConfig = (set, get) => ({
   // Focus mode
@@ -115,7 +114,7 @@ export const layoutStoreConfig = (set, get) => ({
   // Infobar
   infobar: {
     visible: true,
-    mode: DEFAULT
+    mode: undefined as ExtInfobarMode | InfobarMode
   },
   setInfobarMode: (mode: ExtInfobarMode | InfobarMode) => {
     const curMode: ExtInfobarMode = get().infobar.mode
