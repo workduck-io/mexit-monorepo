@@ -62,6 +62,10 @@ class APIClass {
     this.smartcapture = new SmartCaptureAPI(this.client)
   }
 
+  reset() {
+    this.client.reset()
+  }
+
   setWorkspaceHeader(workspaceId: string) {
     this.client.setWorkspaceHeader(workspaceId)
   }

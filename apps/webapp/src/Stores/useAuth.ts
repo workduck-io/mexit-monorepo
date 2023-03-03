@@ -106,7 +106,6 @@ export const useAuthentication = () => {
       mog('Worker Termination failed!', { err })
     }
 
-    clearRequestsCacheFromDwindle
     setUnAuthenticated()
     initContents({})
     clearPromptStore()
@@ -126,6 +125,7 @@ export const useAuthentication = () => {
     clearViews()
     clearUsersCache()
     resetEditorStore()
+    API.reset()
   }
 
   const registerDetails = (data: RegisterFormData): Promise<string> => {
