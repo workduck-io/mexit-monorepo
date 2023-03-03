@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.24
+
+### Patch Changes
+
+- 5e614919: Version Store Logout, API reset
+
 ## 0.22.23
 
 ### Patch Changes
