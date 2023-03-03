@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import {
+  ComboboxType,
   fuzzySearch,
   getMIcon,
   getTimeInText,
@@ -19,7 +20,6 @@ import { QuickLinkType } from '../../constants'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
 import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { ComboboxKey } from '../../Types/Combobox'
-import { ComboboxType } from '../../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../../Utils/helper'
 
 export const CreateNewPrefix = `Create `

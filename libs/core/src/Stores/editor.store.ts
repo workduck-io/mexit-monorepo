@@ -19,7 +19,6 @@ export function getContent(nodeid: string): NodeContent {
   return defaultContent
 }
 
-const TRIGGER: ComboTriggerType | undefined = undefined
 export const editorStoreConfig = (set, get) => ({
       node: getInitialNode(),
       content: defaultContent,
@@ -31,7 +30,7 @@ export const editorStoreConfig = (set, get) => ({
       loadingNodeid: null,
 
       notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
-      trigger: TRIGGER,
+      trigger: undefined as ComboTriggerType | undefined,
       setTrigger: (trigger) => set({ trigger }),
       setActiveUsers: (users) => {
         set({ activeUsers: users, isBannerVisible: users.length !== 0 })

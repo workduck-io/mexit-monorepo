@@ -26,12 +26,11 @@ export interface InviteModalData {
   }
 }
 
-const NOTE: ShareContext = 'note'
 
 export const shareModalConfig = (set, get) => ({
   open: false,
   focus: true,
-  context: NOTE,
+  context: 'note' as ShareContext,
   mode: 'permission',
   data: {
     changedUsers: [],

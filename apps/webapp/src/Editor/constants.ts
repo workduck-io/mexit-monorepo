@@ -14,10 +14,13 @@ export enum CategoryType {
 
 export enum QuickLinkType {
   backlink = 'Backlinks',
+  publicNotes = 'Public Notes',
   snippet = 'Snippets',
   tags = 'Tags',
+  action = 'Actions',
   mentions = 'Mentions',
   taskView = 'Task View',
+  search = 'Search',
   prompts = 'Prompts',
   webLinks = 'Links'
 }

@@ -15,14 +15,12 @@ import { useEditorStore } from "./editor.store";
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 
-const BLOCKRANGE: BaseRange | null = undefined
-const SEARCH: ComboSearchType = { textAfterTrigger: '' }
 
 export const comboboxStoreConfig = (set) => ({
   key: ComboboxKey.TAG,
   setKey: setStoreValue(set, 'key', 'setKey'),
 
-  blockRange: BLOCKRANGE,
+  blockRange: undefined as BaseRange | null,
   setBlockRange: setStoreValue(set, 'blockRange', 'setBlockRange'),
 
   isSlash: false,
@@ -43,7 +41,7 @@ export const comboboxStoreConfig = (set) => ({
   preview: undefined,
   setPreview: setStoreValue(set, 'preview', 'setPreview'),
 
-  search: SEARCH,
+  search: { textAfterTrigger: '' } as ComboSearchType,
   setSearch: setStoreValue(set, 'search', 'setSearch'),
 
   items: [],

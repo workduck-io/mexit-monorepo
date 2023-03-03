@@ -65,7 +65,7 @@ const multipleEditorsConfig = (set, get) => ({
       return {
         nodeId: mapOfEditors.at(-1)[0],
         editorState: mapOfEditors.at(-1)[1]
-      }
+      } as any;
   },
   removeEditor: (noteId) => {
     const currentState = useBufferStore.getState().buffer?.[noteId]

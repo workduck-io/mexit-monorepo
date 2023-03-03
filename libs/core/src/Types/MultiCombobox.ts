@@ -5,7 +5,7 @@ export interface ComboboxItem {
   text: string
   value: string
   icon?: MIcon
-  type?: QuickLinkType | CategoryType 
+  type?: CategoryType | QuickLinkType
 
   /** Extended command -> Text after the command is part of it and used as arguments */
   extended?: boolean
