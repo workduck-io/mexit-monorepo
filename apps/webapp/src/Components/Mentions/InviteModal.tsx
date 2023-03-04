@@ -6,7 +6,7 @@ import { getPlateEditorRef } from '@udecode/plate'
 
 import { LoadingButton } from '@workduck-io/mex-components'
 
-import { AccessLevel, DefaultPermission, DefaultPermissionValue, mog, permissionOptions, ShareContext } from '@mexit/core'
+import { AccessLevel, DefaultPermission, DefaultPermissionValue, InviteModalData, mog, permissionOptions, ShareContext } from '@mexit/core'
 import { ButtonFields, Group, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
@@ -16,7 +16,7 @@ import { useMentions } from '../../Hooks/useMentions'
 import { usePermissions } from '../../Hooks/usePermissions'
 import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
-import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalActions, ModalFooter, ModalHeader } from '../../Style/Refactor'
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'

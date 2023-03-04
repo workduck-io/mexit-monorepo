@@ -1,7 +1,6 @@
-import { getUniquePath, ILink,isMatch, mog, NodeLink } from '@mexit/core'
+import { getUniquePath, ILink,isMatch, mog, NodeLink, RefactorPath } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-import { RefactorPath } from '../Stores/useRenameStore'
 
 import { useApi } from './API/useNodeAPI'
 import { useEditorBuffer } from './useEditorBuffer'

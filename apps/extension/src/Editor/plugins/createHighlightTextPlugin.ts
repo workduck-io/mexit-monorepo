@@ -12,7 +12,7 @@ export const decorateHighlightElement: Decorate =
     const ranges = []
 
     const isBlockHighlighted = useBlockHighlightStore.getState().isBlockHighlighted
-    const highlightedBlocks = useBlockHighlightStore.getState().hightlighted.editor
+    const highlightedBlocks = useBlockHighlightStore.getState().highlighted.editor
 
     try {
       const { text } = node

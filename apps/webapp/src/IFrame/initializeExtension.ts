@@ -3,7 +3,7 @@ import { get } from 'idb-keyval'
 import { BroadcastSyncedChannel } from '@mexit/core'
 
 const updateDwindleAuth = (extension) => {
-  const authAWS = JSON.parse(localStorage.getItem('auth-aws'))
+  const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
   extension.sendToExtension({
     msgId: BroadcastSyncedChannel.DWINDLE,
     state: authAWS,

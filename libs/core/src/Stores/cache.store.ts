@@ -8,16 +8,8 @@ export interface CacheUser {
   name: string
 }
 
-// export interface UserCacheState {
-//   cache: CacheUser[]
-//   setCache: (users: CacheUser[]) => void
-//   addUser: (user: CacheUser) => void
-//   getUser: (find: { email: string } | { id: string }) => CacheUser | undefined
-//   clearCache: () => void
-// }
-
 const userCacheStoreConfig = (set, get) => ({
-  cache: [],
+  cache: [] as CacheUser[],
   setCache: (users: CacheUser[]) => {
     set({ cache: users })
   },

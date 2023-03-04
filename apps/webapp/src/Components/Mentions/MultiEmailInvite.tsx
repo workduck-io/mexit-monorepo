@@ -6,6 +6,7 @@ import {
   DefaultPermission,
   DefaultPermissionValue,
   emptyAccessTable,
+  InviteModalData,
   mog,
   permissionOptions
 } from '@mexit/core'
@@ -20,7 +21,7 @@ import { useAuthStore } from '../../Stores/useAuth'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useMentionStore } from '../../Stores/useMentionsStore'
 import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { InviteModalData, useShareModalStore } from '../../Stores/useShareModalStore'
+import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { getEmailStart } from '../../Utils/constants'
 import InputBox from '../InputBox'
 

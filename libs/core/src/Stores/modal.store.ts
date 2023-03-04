@@ -21,9 +21,9 @@ export enum ModalsType {
 // * Create Unified Store for all Modals
 // * This would make sure only one modal is present in DOM at a time.
 const modalStoreConfig = (set, get) => ({
-  open: undefined,
-  init: undefined,
-  data: undefined,
+  open: undefined as ModalsType | undefined,
+  init: undefined as ModalsType | undefined,
+  data: undefined as any,
   setData: (modalData) => set({ data: modalData }),
   toggleOpen: (modalType: ModalsType, modalData?, initialize?: boolean) => {
     const open = get().open

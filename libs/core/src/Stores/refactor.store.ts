@@ -2,7 +2,8 @@ import { NodeLink } from '../Types/Editor';
 import { StoreIdentifier } from '../Types/Store';
 import { createStore } from '../Utils/storeCreator'
 
-import { RefactorPath } from './rename.store'
+import { RefactorPath } from './rename.store';
+
 
 export const refactorStoreConfig = (set) => ({
   open: false,
