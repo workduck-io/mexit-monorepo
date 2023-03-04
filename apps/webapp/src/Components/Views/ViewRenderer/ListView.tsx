@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { get } from 'lodash'
+
+import { SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
 import { mog } from '@mexit/core'
@@ -11,8 +14,105 @@ import { useSearch } from '../../../Hooks/useSearch'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import useModalStore from '../../../Stores/useModalStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
+import ResultGroup from '../ViewBlockRenderer/BlockContainer'
 
 import { ViewRendererProps } from '.'
+
+/**
+ *  [
+    {
+        "id": "TEMP_KGkVJ",
+        "text": "First is ehre",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1677511345771,
+            "createdBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "createdAt": 1677511345771
+        },
+        "entity": "TASK",
+        "parent": "NODE_VGwVtY8n6n7LEDGt9iCq8",
+        "tags": [
+            "TASK",
+            "NODE_VGwVtY8n6n7LEDGt9iCq8"
+        ]
+    },
+    {
+        "id": "TEMP_VMiw3",
+        "text": "Notes of Untitled",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1677511269545,
+            "createdBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "createdAt": 1677511261500
+        },
+        "entity": "TASK",
+        "parent": "NODE_VGwVtY8n6n7LEDGt9iCq8",
+        "tags": [
+            "TASK",
+            "NODE_VGwVtY8n6n7LEDGt9iCq8"
+        ]
+    },
+    {
+        "id": "TEMP_TKkqb",
+        "text": "Task of Note is here",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1677248466095,
+            "createdBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "createdAt": 1677248216323
+        },
+        "entity": "TASK",
+        "parent": "NODE_ANX9K9aV8ggpGBg9xDmYP",
+        "tags": [
+            "TASK",
+            "NODE_ANX9K9aV8ggpGBg9xDmYP"
+        ]
+    },
+    {
+        "id": "TEMP_4QM8h",
+        "text": "Quick Capture",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1676290970773
+        },
+        "entity": "TASK",
+        "parent": "NODE_UQ9irg3DmXkyhfmpzfaEn",
+        "tags": [
+            "TASK",
+            "NODE_UQ9irg3DmXkyhfmpzfaEn"
+        ]
+    },
+    {
+        "id": "TEMP_zAy3j",
+        "text": "Actions",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1676889207800
+        },
+        "entity": "TASK",
+        "parent": "NODE_UQ9irg3DmXkyhfmpzfaEn",
+        "tags": [
+            "TASK",
+            "NODE_UQ9irg3DmXkyhfmpzfaEn"
+        ]
+    },
+    {
+        "id": "TEMP_3BBNp",
+        "text": "Snippets and Backlinks nice",
+        "data": {
+            "lastEditedBy": "7b73e65a-3745-45fc-8cb0-fce6b54197bd",
+            "updatedAt": 1677063721693
+        },
+        "entity": "TASK",
+        "parent": "NODE_UQ9irg3DmXkyhfmpzfaEn",
+        "tags": [
+            "TASK",
+            "NODE_UQ9irg3DmXkyhfmpzfaEn"
+        ]
+    }
+]
+ *
+ */
 
 /**
  * Todo list
@@ -23,16 +123,33 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
   const currentFilters = useFilterStore((store) => store.currentFilters)
   const globalJoin = useFilterStore((store) => store.globalJoin)
   const sortType = useFilterStore((store) => store.sortType)
+  const groupBy = useFilterStore((store) => store.groupBy)
   const sortOrder = useFilterStore((store) => store.sortOrder)
-  const [list, setList] = useState([])
-
+  const [results, setResults] = useState({})
   const { queryIndex } = useSearch()
 
-  useEffect(() => {
-    queryIndex('node').then((r) => {
-      setList(r)
+  const groupByKey = (items: any[], key: string) => {
+    const groupedValues = {}
+
+    items.forEach((item) => {
+      const value = get(item, key) ?? 'Ungrouped'
+
+      if (!groupedValues[value]) {
+        groupedValues[value] = []
+      }
+
+      groupedValues[value].push(item)
     })
-  }, [])
+
+    return groupedValues
+  }
+
+  useEffect(() => {
+    queryIndex('node', [{ query: [{ type: 'text', value: '' }], type: 'query' }]).then((res) => {
+      console.log('RES', groupByKey(res, 'entity'))
+      setResults(groupByKey(res, groupBy))
+    })
+  }, [props.viewId])
 
   const [selectedCardId, setSelectedCardId] = React.useState<string | null>(null)
 
@@ -46,7 +163,7 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
   // const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
 
   const selectFirst = () => {
-    const firstCard = list.length > 0 && list[0]
+    const firstCard = results.length > 0 && results[0]
     if (firstCard) {
       // console.log('select first', { firstCard })
       setSelectedCardId(firstCard.id)
@@ -69,6 +186,8 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
 
   const selectNewCard = useCallback(
     (direction: 'up' | 'down') => {
+      const list = Object.values(results).flat(1) as SearchResult[]
+
       const selectedIndex = list.findIndex((card) => card.id === selectedCardId)
       // console.log('selectNewCard', { direction, selectedCardId, selectedIndex })
       if (!selectedCardId) {
@@ -90,7 +209,7 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
 
         case 'down': {
           const nextCard = list[(selectedIndex + 1) % list.length]
-          // mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
+
           if (nextCard) {
             mog('selected card', { selectedCardId, nextCard })
             setSelectedCardId(nextCard.id)
@@ -151,14 +270,17 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
     }
   }, [isModalOpen, isPreviewEditors, selectNewCard])
 
-  if (!list?.length) return <TaskListWrapper>No Results Found {props.viewId}</TaskListWrapper>
+  if (!Object.values(results)?.flat(1)?.length)
+    return <TaskListWrapper>No Results Found {props.viewId}</TaskListWrapper>
 
   return (
     <TaskListWrapper>
-      {list?.map((block) => (
-        <div key={block.id}>
-          <ViewBlockRenderer selectedBlockId={selectedCardId} block={block} />
-        </div>
+      {Object.entries(results)?.map(([group, items]: [string, Array<SearchResult>]) => (
+        <ResultGroup label={group} count={items.length}>
+          {items.map((block) => (
+            <ViewBlockRenderer key={block?.id} selectedBlockId={selectedCardId} block={block} />
+          ))}
+        </ResultGroup>
       ))}
     </TaskListWrapper>
   )

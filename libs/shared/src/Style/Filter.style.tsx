@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BodyFont } from './Search'
 
@@ -6,8 +6,13 @@ export const FilterWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  border-radius: ${({ theme }) => theme.borderRadius.small};
   overflow: hidden;
+`
+
+export const FilterItemWrapper = styled.div`
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  display: flex;
+  align-items: center;
   background: ${({ theme }) => theme.tokens.surfaces.s[2]};
   box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 `
@@ -22,12 +27,16 @@ export const GenericSection = styled(GenericFlex)`
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
 `
 
-export const FilterMenuDiv = styled(GenericFlex)`
+export const FilterMenuDiv = styled(GenericFlex)<{ noBorder?: boolean }>`
   padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
   ${BodyFont}
-  border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
-  border-radius: ${({ theme }) => theme.borderRadius.large};
-  color: ${({ theme }) => theme.tokens.colors.primary.default};
+  ${({ noBorder }) =>
+    !noBorder &&
+    css`
+      border: 1px solid ${({ theme }) => theme.tokens.colors.primary.default};
+      border-radius: ${({ theme }) => theme.borderRadius.large};
+    `}
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
 `
 
 export const FilterTypeDiv = styled(GenericSection)``

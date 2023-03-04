@@ -75,7 +75,6 @@ const SearchFilters = ({
         <Infobox text={SearchFiltersHelp} />
       </SearchFilterLabel>
       <SearchFiltersWrapper key={`Filters_${randomId}`}>
-        <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
         {currentFilters.map((filter) => (
           <FilterRender
             key={`${filter.id}_${filter.type}`}
@@ -85,6 +84,7 @@ const SearchFilters = ({
             onRemoveFilter={(f) => removeCurrentFilter(f)}
           />
         ))}
+        <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
       <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} />
       {sortMenuProps && <SortMenu {...sortMenuProps} />}

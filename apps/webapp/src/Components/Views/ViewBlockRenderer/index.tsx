@@ -37,17 +37,16 @@ const ViewBlockRenderer: React.FC<ViewBlockRendererProps> = ({
   const sidebar = useLayoutStore((store) => store.sidebar)
 
   const ref = useRef<HTMLDivElement>(null)
-
   return (
     <ViewBlockContainer
-      selected={selectedBlockId && selectedBlockId === block.id}
+      selected={selectedBlockId && selectedBlockId === block?.id}
       ref={ref}
       dragging={dragging}
       viewType={viewType}
       staticBoard={staticBoard}
       sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
     >
-      <BlockRenderer block={block} type={block?.doc?.entity} selectedBlockId={selectedBlockId} />
+      <BlockRenderer block={block} type={block?.entity} selectedBlockId={selectedBlockId} />
     </ViewBlockContainer>
   )
 }

@@ -1,5 +1,7 @@
 import { ELEMENT_TODO_LI } from '@udecode/plate'
 
+import { SearchResult } from '@workduck-io/mex-search'
+
 import {
   capitalize,
   convertContentToRawText,
@@ -10,7 +12,6 @@ import {
   PriorityType,
   SNIPPET_PREFIX,
   TodoStatus,
-  TodosType,
   TodoType
 } from '@mexit/core'
 
@@ -19,7 +20,7 @@ import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
-import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
+import { sortFunctions, useFilterFunctions } from '../useFilterFunctions'
 import { useFilterStoreBase as useFilterStore } from '../useFilters'
 import { useLinks } from '../useLinks'
 import { useMentions } from '../useMentions'
@@ -69,7 +70,7 @@ export const useTodoKanban = () => {
   const { isInArchive } = useNodes()
   const { getSearchExtra } = useSearchExtra()
   const { getUserFromUserid } = useMentions()
-  const taskFilterFunctions = useTaskFilterFunctions()
+  const taskFilterFunctions = useFilterFunctions()
 
   const updateTodoLocally = (todo: TodoType, blockData: any) => {
     updateTodo(todo.nodeid, { ...todo, metadata: { ...todo.metadata, ...blockData } })
@@ -88,7 +89,7 @@ export const useTodoKanban = () => {
     updateTodoLocally(todo, { priority: newPriority })
   }
 
-  const generateTodoFilters = (nodeTodos: TodosType) => {
+  const generateFilters = (blocks: SearchResult[]) => {
     // Nodes and tags
     const todoNodes: string[] = []
     const todoTags: string[] = []
@@ -96,16 +97,16 @@ export const useTodoKanban = () => {
     const todoStatuses: TodoStatus[] = []
     const todoPriorities: PriorityType[] = []
 
-    Object.values(nodeTodos)
+    Object.values(blocks)
       .flat()
-      .forEach((todo) => {
+      .forEach((block) => {
         // Use tags of the tag
-        const tags = todo.tags
-        todoNodes.push(todo.nodeid)
-        todoTags.push(...(tags ?? []))
-        todoMentions.push(...(todo.mentions ?? []))
-        todoStatuses.push(todo.metadata?.status)
-        todoPriorities.push(todo.metadata?.priority)
+        const tags = block.tags
+        todoNodes.push(block.parent)
+        // todoTags.push(...(tags ?? []))
+        // todoMentions.push(...(todo.mentions ?? []))
+        // todoStatuses.push(todo.metadata?.status)
+        // todoPriorities.push(todo.metadata?.priority)
       })
 
     // All paths in which the todos occur
@@ -366,7 +367,7 @@ export const useTodoKanban = () => {
 
     if (sortOrder && sortType) {
       todoBoard.columns.forEach((column) => {
-        column.cards.sort(taskSortFunctions[sortType])
+        column.cards.sort(sortFunctions[sortType])
         if (sortOrder === 'descending') {
           column.cards.reverse()
         }
@@ -435,13 +436,13 @@ export const useTodoKanban = () => {
 
     // mog('getTodoBoard', { nodetodos, todoBoard })
 
-    const todoFilters = generateTodoFilters(nodetodos)
+    const todoFilters = generateFilters(nodetodos as any)
     setFilters(todoFilters)
 
     // Reimplement sorting
     if (sortOrder && sortType) {
       todoBoard.columns.forEach((column) => {
-        column.cards.sort(taskSortFunctions[sortType])
+        column.cards.sort(sortFunctions[sortType])
         if (sortOrder === 'descending') {
           column.cards.reverse()
         }

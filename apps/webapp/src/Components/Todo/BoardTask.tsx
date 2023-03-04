@@ -44,7 +44,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
     const sidebar = useLayoutStore((store) => store.sidebar)
-    console.log('TDO', { id, todo })
+
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
@@ -55,6 +55,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           ref.current.focus()
         } else return
         const el = ref.current
+
         // is element in viewport
         const rect = el.getBoundingClientRect()
         const isInViewport =
@@ -63,7 +64,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
           rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
-        // mog('scroll to selected', { selected, top, isInViewport, rect })
         if (!isInViewport) {
           ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }

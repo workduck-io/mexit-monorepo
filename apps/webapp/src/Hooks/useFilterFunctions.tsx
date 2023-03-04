@@ -11,6 +11,10 @@ import {
   TodoStatusRanks
 } from '@mexit/core'
 
+/**
+ *
+ * These Filter functions are not required, as we are using the search filters directly
+ */
 import { useDataStore } from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 
@@ -153,7 +157,7 @@ export const useLinkFilterFunctions = () => {
   return filterFunctions
 }
 
-export const useTaskFilterFunctions = (): SearchFilterFunctions => {
+export const useFilterFunctions = (): SearchFilterFunctions => {
   const { getPathFromNodeid, getILinkFromNodeid } = useLinks()
 
   return {
@@ -193,7 +197,7 @@ export const useTaskFilterFunctions = (): SearchFilterFunctions => {
   }
 }
 
-export const taskSortFunctions: Record<SortType, (a: any, b: any) => number> = {
+export const sortFunctions: Record<SortType, (a: any, b: any) => number> = {
   created: (a, b) => {
     throw new Error('Not implemented')
   },

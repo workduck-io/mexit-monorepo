@@ -207,7 +207,7 @@ const ViewRoutes = () => {
     <Routes>
       {/* <Route path="tasks" element={<Tasks />} /> */}
       {/* <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} /> */}
-      <Route path={':viewid'} element={<View />} />
+      <Route path=":viewid" element={<View />} />
     </Routes>
   )
 }

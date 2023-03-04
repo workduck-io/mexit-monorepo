@@ -1,9 +1,8 @@
 import { RenderBoardTask } from '../../Todo/BoardTask'
 
 const TodoRenderer = ({ selectedBlockId, block }) => {
-  return (
-    <RenderBoardTask selectedCardId={selectedBlockId} id={block?.id} todoid={block?.id} nodeid={block?.doc?.parent} />
-  )
+  if (!block?.id) return
+  return <RenderBoardTask selectedCardId={selectedBlockId} id={block?.id} todoid={block?.id} nodeid={block?.parent} />
 }
 
 export default TodoRenderer

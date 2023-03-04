@@ -1,6 +1,6 @@
 import create from 'zustand'
 
-import { Filter, Filters, GlobalFilterJoin, ViewType } from '@mexit/core'
+import { Filter, Filters, GlobalFilterJoin, mog, ViewType } from '@mexit/core'
 
 import { FilterStore } from '../useFilters'
 
@@ -44,6 +44,7 @@ export const useViewFilters = () => {
   }
 
   const addCurrentFilter = (filter: Filter) => {
+    mog('Change Current Filter: ', { s: currentFilters, f: filter })
     setCurrentFilters([...currentFilters, filter])
   }
 
@@ -52,6 +53,10 @@ export const useViewFilters = () => {
   }
 
   const changeCurrentFilter = (filter: Filter) => {
+    mog(
+      'Current Filter: ',
+      currentFilters.map((f) => (f.id === filter.id ? filter : f))
+    )
     setCurrentFilters(currentFilters.map((f) => (f.id === filter.id ? filter : f)))
   }
 

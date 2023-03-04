@@ -10,13 +10,10 @@ type BlockRendererProps = {
 }
 
 const BlockRenderer: React.FC<BlockRendererProps> = ({ type, ...rest }) => {
-  console.log('CONTENT', { type, ...rest })
-
   switch (type) {
-    case Entities.CONTENT_BLOCK:
-      return <ContentBlock {...rest} />
     case Entities.TASK:
       return <TodoRenderer {...rest} />
+    case Entities.CONTENT_BLOCK:
     default:
       return <ContentBlock {...rest} />
   }

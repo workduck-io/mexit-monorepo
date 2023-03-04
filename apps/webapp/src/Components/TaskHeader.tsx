@@ -3,13 +3,13 @@ import { useMemo, useState } from 'react'
 import trashIcon from '@iconify/icons-codicon/trash'
 import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
-import checkboxLine from '@iconify/icons-ri/checkbox-line'
 import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
+import { useTheme } from 'styled-components'
 
 import {
   Button,
@@ -20,8 +20,10 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { Filter, GlobalFilterJoin, SortOrder, SortType, View, ViewType } from '@mexit/core'
+import { Filter, GlobalFilterJoin, SortOrder, SortType, ViewType } from '@mexit/core'
 import {
+  DefaultMIcons,
+  IconDisplay,
   ShortcutToken,
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
@@ -41,7 +43,6 @@ import { useViewStore } from '../Stores/useViewStore'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface ViewHeaderProps {
-  currentView?: View
   currentFilters: Filter[]
   cardSelected: boolean
   globalJoin: GlobalFilterJoin
@@ -51,7 +52,6 @@ interface ViewHeaderProps {
 }
 
 const ViewHeader = ({
-  currentView,
   currentViewType,
   sortOrder,
   sortType,
@@ -61,9 +61,11 @@ const ViewHeader = ({
 }: ViewHeaderProps) => {
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const currentView = useViewStore((store) => store.currentView)
 
   const { goTo } = useRouting()
   const { deleteView } = useViews()
+  const theme = useTheme()
   const [source, target] = useSingleton()
   const [deleting, setDeleting] = useState(false)
 
@@ -89,9 +91,11 @@ const ViewHeader = ({
     <StyledTaskHeader>
       <TaskHeaderTitleSection>
         <ToolbarTooltip singleton={source} />
-        <TaskHeaderIcon>
-          <Icon icon={checkboxLine} />
-        </TaskHeaderIcon>
+        {!currentView && (
+          <TaskHeaderIcon>
+            <IconDisplay color={theme.tokens.colors.primary.default} size={28} icon={DefaultMIcons.TASK} />
+          </TaskHeaderIcon>
+        )}
         {currentView ? (
           <TaskViewHeaderWrapper>
             <TaskViewTitle>

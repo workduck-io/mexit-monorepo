@@ -9,13 +9,13 @@ import {
   TodosType
 } from '@mexit/core'
 
-import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
+import { sortFunctions, useFilterFunctions } from '../useFilterFunctions'
 import { useNodes } from '../useNodes'
 import { useSearchExtra } from '../useSearch'
 
 export const useTodoList = () => {
   const { isInArchive } = useNodes()
-  const taskFilterFunctions = useTaskFilterFunctions()
+  const taskFilterFunctions = useFilterFunctions()
   const { getSearchExtra } = useSearchExtra()
   const extra = getSearchExtra()
 
@@ -61,9 +61,9 @@ export const useTodoList = () => {
       .sort((a, b) => {
         if (sortOrder && sortType) {
           if (sortOrder === 'ascending') {
-            return taskSortFunctions[sortType](a, b)
+            return sortFunctions[sortType](a, b)
           } else {
-            return taskSortFunctions[sortType](b, a)
+            return sortFunctions[sortType](b, a)
           }
         } else return 0
       })

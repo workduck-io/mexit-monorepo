@@ -6,6 +6,7 @@ import { capitalize } from 'lodash'
 
 import { Filter, FilterJoin, FilterType, FilterValue, mog } from '@mexit/core'
 import {
+  FilterItemWrapper,
   FilterJoinDiv,
   FilterRemoveButton,
   FilterTypeDiv,
@@ -29,13 +30,15 @@ interface FilterProps {
 }
 
 const JoinLabels = {
-  any: 'Any of',
-  all: 'All of',
-  none: 'None of',
-  notAny: 'Not Any of'
+  and: 'and',
+  or: 'or'
+  // any: 'Any of',
+  // all: 'All of',
+  // none: 'None of',
+  // notAny: 'Not Any of'
 }
 
-const JoinOptions = ['all', 'any', 'notAny', 'none'].map((join) => ({
+const JoinOptions = ['and', 'or'].map((join) => ({
   label: JoinLabels[join],
   value: join as FilterJoin
 }))
@@ -47,11 +50,11 @@ const getJoinOptionsForType = (type: FilterType) => {
     case 'tag':
       return JoinOptions
     case 'space':
-      return JoinOptions.filter((join) => join.value !== 'all' && join.value !== 'none')
+      return JoinOptions
     case 'mention':
       return JoinOptions
     case 'status':
-      return JoinOptions.filter((join) => join.value !== 'all' && join.value !== 'none')
+      return JoinOptions
     default:
       return JoinOptions
   }
@@ -61,22 +64,26 @@ const getJoinOptionsForType = (type: FilterType) => {
  * Renders a filter
  */
 const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: FilterProps) => {
+  const multiSelect = false
   const { getFilterValueIcon } = useFilterIcons()
 
   const onChangeJoin = (join: FilterJoin) => {
     onChangeFilter({ ...filter, join })
   }
 
-  const onChangeValues = (value: FilterValue) => {
-    // const isSelected
-    const isSelected = isValueSelected(value)
-    if (!isSelected) {
-      const newValues = Array.isArray(filter.values) ? [...filter.values, value] : [value]
-      onChangeFilter({ ...filter, values: newValues })
+  const onChangeValue = (value: FilterValue) => {
+    if (multiSelect) {
+      const isSelected = isValueSelected(value)
+      if (!isSelected) {
+        const newValues = Array.isArray(filter.values) ? [...filter.values, value] : [value]
+        onChangeFilter({ ...filter, values: newValues })
+      } else {
+        // If it is single select, then remove all values and use []
+        const newValues = Array.isArray(filter.values) ? filter.values.filter((v) => v.id !== value.id) : []
+        onChangeFilter({ ...filter, values: newValues })
+      }
     } else {
-      // If it is single select, then remove all values and use []
-      const newValues = Array.isArray(filter.values) ? filter.values.filter((v) => v.id !== value.id) : []
-      onChangeFilter({ ...filter, values: newValues })
+      onChangeFilter({ ...filter, values: [value] })
     }
   }
 
@@ -91,16 +98,70 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
 
   return (
     <FilterWrapper>
-      {/* Cannot change filter type */}
-      <FilterTypeDiv>
+      <FilterItemWrapper>
+        {/* Cannot change filter type */}
+        {/* <FilterTypeDiv>
         <Icon icon={FilterTypeIcons[filter.type]} />
         {capitalize(filter.type)}
-      </FilterTypeDiv>
+      </FilterTypeDiv> */}
 
-      {/*
+        {/*
         Can change the filter join
         Join options are always all, any, notAny, none
       */}
+
+        <Menu
+          allowSearch
+          searchPlaceholder="Search Notes"
+          multiSelect
+          values={
+            <>
+              {/* Conditionally render values if value is an array otherwise simple */}
+              {Array.isArray(filter.values) ? (
+                filter.values.length > 0 ? (
+                  filter.values.map((value) => (
+                    <FilterValueDiv key={value.id}>
+                      <IconDisplay icon={getFilterValueIcon(filter.type, value.value)} />
+                      <ItemLabel>{value.label}</ItemLabel>
+                    </FilterValueDiv>
+                  ))
+                ) : (
+                  <FilterValueDiv>0 selected</FilterValueDiv>
+                )
+              ) : (
+                <FilterValueDiv>
+                  <IconDisplay icon={getFilterValueIcon(filter.type, filter.values.value)} />
+                  {filter.values.label}
+                </FilterValueDiv>
+              )}
+            </>
+          }
+        >
+          {options
+            // Sort by the number of matches
+            .sort((a, b) => (a.count && b.count ? b.count - a.count : 0))
+            // Sort whether the value is selected
+            .sort((a, b) => (isValueSelected(a) ? -1 : 1))
+            .map((option) => {
+              return (
+                <MenuItem
+                  key={option.id}
+                  icon={getFilterValueIcon(filter.type, option.value)}
+                  onClick={() => onChangeValue(option)}
+                  label={option.label}
+                  selected={isValueSelected(option)}
+                  count={option.count}
+                  multiSelect={multiSelect}
+                />
+              )
+            })}
+        </Menu>
+
+        <FilterRemoveButton onClick={() => onRemoveFilter(filter)}>
+          <Icon height={16} icon={closeLine} />
+        </FilterRemoveButton>
+      </FilterItemWrapper>
+
       <Menu
         values={
           <FilterJoinDiv>
@@ -118,56 +179,6 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
           />
         ))}
       </Menu>
-      <Menu
-        allowSearch
-        searchPlaceholder="Search Notes"
-        multiSelect
-        values={
-          <>
-            {/* Conditionally render values if value is an array otherwise simple */}
-            {Array.isArray(filter.values) ? (
-              filter.values.length > 0 ? (
-                filter.values.map((value) => (
-                  <FilterValueDiv key={value.id}>
-                    <IconDisplay icon={getFilterValueIcon(filter.type, value.value)} />
-                    <ItemLabel>{value.label}</ItemLabel>
-                  </FilterValueDiv>
-                ))
-              ) : (
-                <FilterValueDiv>0 selected</FilterValueDiv>
-              )
-            ) : (
-              <FilterValueDiv>
-                <IconDisplay icon={getFilterValueIcon(filter.type, filter.values.value)} />
-                {filter.values.label}
-              </FilterValueDiv>
-            )}
-          </>
-        }
-      >
-        {options
-          // Sort by the number of matches
-          .sort((a, b) => (a.count && b.count ? b.count - a.count : 0))
-          // Sort whether the value is selected
-          .sort((a, b) => (isValueSelected(a) ? -1 : 1))
-          .map((option) => {
-            return (
-              <MenuItem
-                key={option.id}
-                icon={getFilterValueIcon(filter.type, option.value)}
-                onClick={() => onChangeValues(option)}
-                label={option.label}
-                selected={isValueSelected(option)}
-                count={option.count}
-                multiSelect
-              />
-            )
-          })}
-      </Menu>
-
-      <FilterRemoveButton onClick={() => onRemoveFilter(filter)}>
-        <Icon height={16} icon={closeLine} />
-      </FilterRemoveButton>
     </FilterWrapper>
   )
 }

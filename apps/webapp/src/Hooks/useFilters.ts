@@ -53,6 +53,7 @@ export const useFilterStoreBase = create<FilterStore>((set) => ({
   currentFilters: [],
   indexes: ['node', 'shared'],
   globalJoin: 'all',
+  groupBy: 'entity',
   setFilters: (filters) => set((state) => ({ ...state, filters })),
   setGlobalJoin: (join) => set((state) => ({ ...state, globalJoin: join })),
   setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters })),

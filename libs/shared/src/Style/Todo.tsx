@@ -190,7 +190,9 @@ export const TaskListWrapper = styled.div<{ margin?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 0px;
+  gap: ${({ theme }) => theme.spacing.medium};
+
+  margin: ${({ theme }) => theme.spacing.medium} 0;
 
   ${({ margin, theme }) =>
     margin &&

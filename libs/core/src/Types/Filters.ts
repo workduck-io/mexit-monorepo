@@ -42,23 +42,23 @@ export const FilterTypeArray = [
 ] as const
 
 // Produces a union type of the values of FilterTypeArray
-export type FilterType = typeof FilterTypeArray[number]
+export type FilterType = (typeof FilterTypeArray)[number]
 
 export const FilterJoinArray = [
-  'all', // All values should match
-  'any', // Any value should match
-  'notAny', // Any value should not match (if any one matches, item dropped)
-  'none' // None of the values should match (if some match, item passed, if all match item dropped)
+  'and', // All values should match
+  'or' // Any value should match
+  // 'notAny', // Any value should not match (if any one matches, item dropped)
+  // 'none' // None of the values should match (if some match, item passed, if all match item dropped)
 ] as const
 
 // How to join the values of a single filter
-export type FilterJoin = typeof FilterJoinArray[number]
+export type FilterJoin = (typeof FilterJoinArray)[number]
 
 export const SortOrderArray = ['ascending', 'descending'] as const
-export type SortOrder = typeof SortOrderArray[number]
+export type SortOrder = (typeof SortOrderArray)[number]
 
 export const SortTypeArray = ['updated', 'created', 'status', 'priority'] as const
-export type SortType = typeof SortTypeArray[number]
+export type SortType = (typeof SortTypeArray)[number]
 
 /** Filter join example
  *

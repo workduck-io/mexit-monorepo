@@ -1,5 +1,5 @@
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
-import { FilterQuery, SearchQuery } from '@workduck-io/mex-search/src/searchX/types'
+import { ISearchQuery } from '@workduck-io/mex-search'
 import { SharedWorker, spawn } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
@@ -177,11 +177,11 @@ export const removeDoc = async (key: idxKey, id: string) => {
   }
 }
 
-export const searchIndex = async (searchOptions?: SearchQuery, filterOptions?: FilterQuery) => {
+export const searchIndex = async (key: idxKey | idxKey[], query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await withTimeout(searchWorker.searchIndex(searchOptions, filterOptions), 500, 'Could not search')
+    const results = await withTimeout(searchWorker.searchIndex(key, query), 500, 'Could not search')
     return results
   } catch (error) {
     mog('SearchIndexError', { error })

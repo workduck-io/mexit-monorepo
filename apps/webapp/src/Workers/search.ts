@@ -1,5 +1,4 @@
 import { SearchX } from '@workduck-io/mex-search'
-import { FilterQuery, SearchQuery } from '@workduck-io/mex-search/src/searchX/types'
 
 import { GenericSearchResult, idxKey, mog, parseNode, PersistentData, SearchIndex, SearchRepExtra } from '@mexit/core'
 
@@ -79,9 +78,10 @@ const searchWorker = {
     }
   },
 
-  searchIndex: (searchOptions?: SearchQuery, filterOptions?: FilterQuery) => {
+  searchIndex: (indexKey, query) => {
     try {
-      const res = searchX.search(searchOptions, filterOptions)
+      const res = searchX.search(query)
+      mog('SearchX Results:', { res, query })
       return res
     } catch (e) {
       mog('Searching Broke:', { e })

@@ -6,8 +6,8 @@ import { Icon } from '@iconify/react'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
-import { FilterMenuDiv, FilterTypeIcons, GenericFlex, Menu, MenuItem } from '@mexit/shared'
+import { Filter, Filters, FilterType, FilterValue, generateFilterId, mog } from '@mexit/core'
+import { FilterMenuDiv, FilterTypeIcons, GenericFlex, Group, Menu, MenuItem } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useFilterIcons } from '../../Hooks/useFilterValueIcons'
@@ -22,21 +22,23 @@ const NewFilterClassName = 'new-filter-menu'
 
 const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuProps) => {
   const { getFilterValueIcon } = useFilterIcons()
+
   const { enableShortcutHandler } = useEnableShortcutHandler()
+
   const onAddNewFilter = (type: FilterType, value: FilterValue) => {
     const newFilter: Filter = {
       id: generateFilterId(),
       type,
-      multiple: true,
+      multiple: false,
       // Be default the newly added filter has 'any' join
-      join: 'any',
+      join: 'and',
       values: [value]
     }
-    // mog('onAddNewFilter', { type, newFilter, value })
+    // mog('onAddNewFilter', { type, newFilter, value })z
     addFilter(newFilter)
   }
 
-  // mog('NewFilterMenu', { filters })
+  mog('FILTERS ', { filters })
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {
@@ -80,11 +82,16 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
   return (
     <Menu
       className={NewFilterClassName}
+      border
       values={
-        <FilterMenuDiv>
-          <Icon icon={filter2Line} />
-          Filter
-          <DisplayShortcut shortcut={'F'} />
+        <FilterMenuDiv noBorder>
+          <Group>
+            <Group>
+              <Icon icon={filter2Line} />
+              <span>Filter</span>
+            </Group>
+            <DisplayShortcut shortcut={'F'} />
+          </Group>
         </FilterMenuDiv>
       }
     >

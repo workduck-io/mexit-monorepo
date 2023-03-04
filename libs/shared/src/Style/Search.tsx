@@ -123,7 +123,7 @@ export const SearchFiltersWrapper = styled.div`
   flex-grow: 1;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: ${({ theme }) => `${theme.spacing.tiny} ${theme.spacing.large}`};
+  gap: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const SearchFilterCategoryLabel = styled.div`
