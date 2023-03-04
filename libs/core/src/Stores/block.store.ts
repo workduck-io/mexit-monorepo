@@ -38,9 +38,9 @@ export const blockStoreConfig = (set, get) => ({
     delete newBlocks[blockId]
     set({ blocks: newBlocks })
   },
-  isModalOpen: undefined,
+  isModalOpen: undefined as ModalOpenType,
   setIsModalOpen: (isModalOpen: ModalOpenType) => set({ isModalOpen }),
-  isBlockMode: false,
+  isBlockMode: false as boolean,
   setIsBlockMode: (isBlockMode: boolean) => {
     if (!isBlockMode) set({ blocks: {}, isBlockMode })
     else set({ isBlockMode })

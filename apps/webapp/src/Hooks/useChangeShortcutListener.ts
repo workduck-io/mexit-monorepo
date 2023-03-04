@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { Key, MiscKeys, mog,ShortcutListner } from '@mexit/core'
+import { Key, MiscKeys, mog,Shortcut,ShortcutListner } from '@mexit/core'
 import {
   AddTagClassName,
   MenuClassName,
@@ -9,7 +9,7 @@ import {
   RootMenuClassName} from '@mexit/shared'
 
 import useMultipleEditors from '../Stores/useEditorsStore'
-import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
+import { useHelpStore } from '../Stores/useHelpStore'
 import { useLayoutStore } from '../Stores/useLayoutStore'
 import useModalStore from '../Stores/useModalStore'
 

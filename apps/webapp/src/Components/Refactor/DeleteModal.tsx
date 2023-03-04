@@ -9,7 +9,7 @@ import create from 'zustand'
 import { Button, DisplayShortcut, PrimaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { isReserved } from '@mexit/core'
+import { isReserved, RefactorPath } from '@mexit/core'
 import { isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
@@ -18,7 +18,6 @@ import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useEditorStore } from '../../Stores/useEditorStore'
 import { useHelpStore } from '../../Stores/useHelpStore'
-import { RefactorPath } from '../../Stores/useRenameStore'
 import { DeleteIcon, MockRefactorMap, ModalControls, ModalHeader, MRMHead, MRMRow } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 

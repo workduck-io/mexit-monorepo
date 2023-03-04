@@ -29,16 +29,16 @@ export const comboboxStoreConfig = (set) => ({
   isBlockTriggered: false,
   setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
 
-  itemLoading: undefined,
+  itemLoading: undefined as string | undefined,
   setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
   maxSuggestions: 10,
   setMaxSuggestions: setStoreValue(set, 'maxSuggestions', 'setMaxSuggestions'),
 
-  activeBlock: undefined,
+  activeBlock: undefined as any,
   setActiveBlock: setStoreValue(set, 'activeBlock', 'setActiveBlock'),
 
-  preview: undefined,
+  preview: undefined as any,
   setPreview: setStoreValue(set, 'preview', 'setPreview'),
 
   search: { textAfterTrigger: '' } as ComboSearchType,
@@ -50,7 +50,7 @@ export const comboboxStoreConfig = (set) => ({
   targetRange: null,
   setTargetRange: setStoreValue(set, 'targetRange', 'setTargetRange'),
 
-  itemIndex: 0,
+  itemIndex: 0 as number,
   setItemIndex: setStoreValue(set, 'itemIndex', 'setItemIndex'),
 
   combobox: null,

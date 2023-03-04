@@ -50,9 +50,8 @@ export const createTodo = (
     updatedAt: metaData?.updatedAt ?? Date.now()
   }
 }
-const TODOS : TodosType = {}
 const todoStoreConfig = (set, get) => ({
-  todos: TODOS,
+  todos: {} as TodosType,
   initTodos: (todos) => {
     if (todos) {
       set({ todos })
