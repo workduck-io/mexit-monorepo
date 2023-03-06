@@ -15,6 +15,11 @@ import { useEditorStore } from "./editor.store";
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 
+type ItemLoading = {
+  item: string
+  message?: string
+}
+
 
 export const comboboxStoreConfig = (set) => ({
   key: ComboboxKey.TAG,
@@ -29,7 +34,7 @@ export const comboboxStoreConfig = (set) => ({
   isBlockTriggered: false,
   setIsBlockTriggered: setStoreValue(set, 'isBlockTriggered', 'setIsBlockTriggered'),
 
-  itemLoading: undefined as string | undefined,
+  itemLoading: undefined as ItemLoading | undefined,
   setItemLoading: setStoreValue(set, 'itemLoading', 'setItemLoading'),
 
   maxSuggestions: 10,
