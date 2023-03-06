@@ -1,3 +1,6 @@
+import 'reveal.js/dist/reveal.css'
+import 'reveal.js/dist/theme/league.css'
+
 import { createGlobalStyle, css } from 'styled-components'
 
 import {
@@ -13,6 +16,11 @@ import { ModalStyles } from './Refactor'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}; // NormalizeCSS normalization
+
+  .reveal-viewport {
+    background: ${({ theme }) => theme.tokens.surfaces.app};
+    color: ${({ theme }) => theme.tokens.text.heading};
+  }
 
   /* Styles for modals */
   ${ModalStyles}

@@ -10,6 +10,7 @@ import { StyledEditor } from '@mexit/shared'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
 import EditorHeader from '../Components/Editor/EditorHeader'
+import Presenter from '../Components/Presenter'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useAnalysis } from '../Stores/useAnalysis'
 import useBlockStore from '../Stores/useBlockStore'
@@ -90,6 +91,7 @@ const EditorView = () => {
         <ErrorBoundary onReset={resetEditor} FallbackComponent={EditorErrorFallback}>
           <Outlet />
         </ErrorBoundary>
+        <Presenter />
       </StyledEditor>
     </EditorViewWrapper>
   )

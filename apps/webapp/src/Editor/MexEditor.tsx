@@ -51,7 +51,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
   const setInternalMetadata = useMexEditorStore((store) => store.setInternalMetadata)
   const isEmpty = useMultipleEditors((store) => store.isEmpty)
 
-  const { focusBlock, selectBlock } = useFocusBlock()
+  const { selectBlock } = useFocusBlock()
   const clearHighlights = useBlockHighlightStore((store) => store.clearAllHighlightedBlockIds)
   const hightlightedBlockIds = useBlockHighlightStore((store) => store.hightlighted.editor)
 
@@ -94,6 +94,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
 
   const onChange = (value: MexEditorValue) => {
     if (props?.debug) setContent(value)
+
     if (props.onChange) {
       props.onChange(value)
     }

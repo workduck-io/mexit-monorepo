@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { uniq } from 'lodash'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
-import { defaultContent, ILink } from '@mexit/core'
+import { defaultContent, ILink, useMetadataStore } from '@mexit/core'
 import {
   Content,
   Group,
@@ -26,7 +26,6 @@ import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 
 const CardsContainer = styled(Results)`
@@ -71,7 +70,6 @@ function DraftView() {
       <MainHeader>
         <Title>Mex Activity!</Title>
       </MainHeader>
-
       <Content>
         {(!allLinks || allLinks.length === 0) && <Info>No Activity Found</Info>}
         <CardsContainer view={ViewType.Card}>

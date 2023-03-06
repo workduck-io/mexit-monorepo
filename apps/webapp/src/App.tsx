@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
+import { compareVersions, mog, useAppStore } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -14,7 +15,6 @@ import Main from './Components/Main'
 import Modals from './Components/Modals'
 import { useForceLogout } from './Stores/useAuth'
 import { useUserPreferenceStore } from './Stores/userPreferenceStore'
-import { compareVersions, useVersionStore } from './Stores/useVersionStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
@@ -45,12 +45,13 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 }
 
 const App = () => {
-  const setVersion = useVersionStore((store) => store.setVersion)
+  const setVersion = useAppStore((store) => store.setVersion)
   const { forceLogout } = useForceLogout()
 
   useEffect(() => {
     async function forceLogoutAndSetVersion() {
-      const persistedVersion = useVersionStore.getState()?.version
+      const persistedVersion = useAppStore.getState()?.version
+      mog('PersistedVersion | PackageJSONVersion', { persistedVersion, packageJsonVersion })
       setVersion(packageJsonVersion)
       if (!(persistedVersion && compareVersions(persistedVersion, FORCE_LOGOUT_VERSION) >= 0)) {
         await forceLogout()

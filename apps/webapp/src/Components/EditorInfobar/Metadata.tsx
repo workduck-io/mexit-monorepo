@@ -1,13 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import timeLine from '@iconify-icons/ri/time-line'
 import styled from 'styled-components'
 
 import { IconButton, MexIcon } from '@workduck-io/mex-components'
 
-import { NodeMetadata } from '@mexit/core'
-import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, RelativeTime } from '@mexit/shared'
+import { FeatureFlags, NodeMetadata } from '@mexit/core'
+import {
+  DataGroup,
+  DataWrapper,
+  FlexBetween,
+  MetadataWrapper,
+  ProfileIcon,
+  RelativeTime,
+  useFeatureFlag
+} from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
@@ -37,6 +45,8 @@ interface MetadataProps {
 
 const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
+  const { isEnabled } = useFeatureFlag(FeatureFlags.PRESENTATION)
+
   const location = useLocation()
   const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
@@ -52,6 +62,8 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
 
     return accessPriority !== 'MANAGE' && accessPriority !== 'OWNER'
   }
+
+  const navigate = useNavigate()
 
   const hideShareDetails = getIsSharedDisabled()
 
@@ -85,6 +97,11 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
     openShareModal('permission', 'note', nodeId)
   }
 
+  const onPresentNoteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // * Show element in full screen mode
+    navigate({ search: '?present=true' }, { replace: true })
+  }
+
   if (!publicMetadata && (noteMetadata === undefined || metadata === undefined || isEmpty)) return null
 
   return (
@@ -110,12 +127,15 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
             </DataWrapper>
           )}
         </DataGroup>
-        {!publicMetadata && !hideShareDetails && (
-          <Data>
-            <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
-            <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
-          </Data>
-        )}
+        <Data>
+          {!publicMetadata && !hideShareDetails && (
+            <>
+              <AvatarGroups users={sharedUsers} limit={5} margin="0 1.5rem 0" />
+              <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
+            </>
+          )}
+          {isEnabled && <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />}
+        </Data>
       </FlexBetween>
     </MetadataWrapper>
   )

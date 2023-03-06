@@ -1,21 +1,41 @@
-import semverCompare from 'semver/functions/compare'
+import { compare as semverCompare } from 'semver'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface VersionStoreState {
+import { FeatureFlags, FeatureFlagsType } from '../Types/FeatureFlags'
+import { IS_DEV } from '../Utils/config'
+
+interface AppStoreType {
+  featureFlags: FeatureFlagsType
+  setFeatureFlags: (featureFlags: FeatureFlagsType) => void
   version?: string
   setVersion: (version: string) => void
 }
 
-export const useVersionStore = create<VersionStoreState>(
+const defaultFeatureFlags: FeatureFlagsType = {
+  [FeatureFlags.PRESENTATION]: IS_DEV,
+  [FeatureFlags.ACTIONS]: false
+}
+
+export const useAppStore = create<AppStoreType>(
   persist(
     (set, get) => ({
+      featureFlags: defaultFeatureFlags,
+      setFeatureFlags: (featureFlags: FeatureFlagsType) => {
+        set({
+          featureFlags
+        })
+      },
+      version: undefined,
       setVersion: (version: string) => {
         set({ version: version })
       }
     }),
     {
-      name: 'mexit-version-webapp'
+      name: 'mexit-version-webapp',
+      partialize: (store) => ({
+        version: store.version
+      })
     }
   )
 )

@@ -40,7 +40,8 @@ import {
   ELEMENT_PARAGRAPH,
   insertNodes,
   PlatePlugin,
-  setNodes} from '@udecode/plate'
+  setNodes
+} from '@udecode/plate'
 
 import { useAuth } from '@workduck-io/dwindle'
 

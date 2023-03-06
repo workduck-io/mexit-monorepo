@@ -310,6 +310,9 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
     color: ${({ theme }) => theme.tokens.text.fade};
   }
   pre {
+    overflow-x: auto;
+    word-wrap: break-word;
+    white-space: pre-wrap;
     ${({ theme }) => generateStyle(theme.editor.elements.codeblock)}
     color: ${({ theme }) => theme.tokens.text.fade};
   }
