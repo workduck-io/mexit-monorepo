@@ -60,7 +60,7 @@ const App = () => {
       }
     }
 
-    const persistedHasHydrated = useVersionStore.getState()._hasHydrated
+    const persistedHasHydrated = useAppStore.getState()._hasHydrated
     if(persistedHasHydrated){
       forceLogoutAndSetVersion()
     }

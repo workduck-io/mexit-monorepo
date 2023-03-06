@@ -1,45 +1,28 @@
 import { compare as semverCompare } from 'semver'
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
 
 import { FeatureFlags, FeatureFlagsType } from '../Types/FeatureFlags'
+import { StoreIdentifier } from '../Types/Store'
 import { IS_DEV } from '../Utils/config'
-
-interface AppStoreType {
-  featureFlags: FeatureFlagsType
-  setFeatureFlags: (featureFlags: FeatureFlagsType) => void
-  version?: string
-  setVersion: (version: string) => void
-}
+import { createStore } from '../Utils/storeCreator'
 
 const defaultFeatureFlags: FeatureFlagsType = {
   [FeatureFlags.PRESENTATION]: IS_DEV,
   [FeatureFlags.ACTIONS]: false
 }
 
-export const useAppStore = create<AppStoreType>(
-  persist(
-    (set, get) => ({
-      featureFlags: defaultFeatureFlags,
-      setFeatureFlags: (featureFlags: FeatureFlagsType) => {
-        set({
-          featureFlags
-        })
-      },
-      version: undefined,
-      setVersion: (version: string) => {
-        set({ version: version })
-      }
-    }),
-    {
-      name: 'mexit-version-webapp',
-      partialize: (store) => ({
-        version: store.version
-      })
-    }
-  )
-)
-// export { useVersionStore } from '@mexit/core'
+export const appStoreConfig = (set, get) => ({
+  featureFlags: defaultFeatureFlags,
+  setFeatureFlags: (featureFlags: FeatureFlagsType) => {
+    set({
+      featureFlags
+    })
+  },
+  version: undefined as string,
+  setVersion: (version: string) => {
+    set({ version: version })
+  }
+})
+export const useAppStore = createStore(appStoreConfig, StoreIdentifier.VERSION, true)
 /**
  * Compares version strings using semver
  * @param {string} persistedVersion - The current version persisted in the store
