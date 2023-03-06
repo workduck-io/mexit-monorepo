@@ -6,9 +6,8 @@ import globeIcon from '@iconify/icons-ph/globe'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
+import { useAppStore } from '@mexit/core';
 import { BackCard, CenteredColumn, Links, Title } from '@mexit/shared'
-
-import { useVersionStore } from '../../Stores/useVersionStore'
 
 const Margin = styled.div`
   margin: 0.5rem 1rem;
@@ -24,7 +23,7 @@ const Flex = styled.div`
 `
 
 const About = () => {
-  const version = useVersionStore((store) => store.version)
+  const version = useAppStore((store) => store.version)
 
   return (
     <CenteredColumn>

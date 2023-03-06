@@ -9,7 +9,8 @@ import Reveal from 'reveal.js'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ELEMENT_PARAGRAPH, SECTION_SEPARATOR, SLIDE_SEPARATOR, useContentStore } from '@mexit/core'
+import { ELEMENT_PARAGRAPH, FeatureFlags, SECTION_SEPARATOR, SLIDE_SEPARATOR, useContentStore } from '@mexit/core'
+import { FeatureFlag } from '@mexit/shared'
 
 import parseToMarkdown from '../../Editor/utils'
 
@@ -88,4 +89,10 @@ const Presenter = () => {
   )
 }
 
-export default Presenter
+const PresentationFeature = () => (
+  <FeatureFlag name={FeatureFlags.PRESENTATION}>
+    <Presenter />
+  </FeatureFlag>
+)
+
+export default PresentationFeature

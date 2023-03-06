@@ -6,8 +6,16 @@ import styled from 'styled-components'
 
 import { IconButton, MexIcon } from '@workduck-io/mex-components'
 
-import { NodeMetadata } from '@mexit/core'
-import { DataGroup, DataWrapper, FlexBetween, MetadataWrapper, ProfileIcon, RelativeTime } from '@mexit/shared'
+import { FeatureFlags, NodeMetadata } from '@mexit/core'
+import {
+  DataGroup,
+  DataWrapper,
+  FlexBetween,
+  MetadataWrapper,
+  ProfileIcon,
+  RelativeTime,
+  useFeatureFlag
+} from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
 import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
@@ -37,6 +45,8 @@ interface MetadataProps {
 
 const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: MetadataProps) => {
   const noteMetadata = useMetadataStore((state) => state.metadata.notes[nodeId])
+  const { isEnabled } = useFeatureFlag(FeatureFlags.PRESENTATION)
+
   const location = useLocation()
   const openShareModal = useShareModalStore((store) => store.openModal)
   const [metadata, setMetadata] = useState<NodeMetadata | undefined>(publicMetadata)
@@ -124,7 +134,7 @@ const Metadata = ({ nodeId, namespaceId, fadeOnHover = true, publicMetadata }: M
               <IconButton title="Share Note" icon={'ri:share-line'} onClick={onNoteShareClick} />
             </>
           )}
-          <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />
+          {isEnabled && <IconButton title="Present Note" icon={'bx:slideshow'} onClick={onPresentNoteClick} />}
         </Data>
       </FlexBetween>
     </MetadataWrapper>
