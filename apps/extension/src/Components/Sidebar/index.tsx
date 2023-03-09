@@ -1,4 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
+
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import { ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
 
@@ -47,10 +49,26 @@ const ExtensionHeader = () => {
 }
 
 export const ExtInfoBar = () => {
-  const { rhSidebar } = useLayoutStore()
+  const rhSidebar = useLayoutStore((store) => store.rhSidebar)
+  const toggleExtensionSidebar = useLayoutStore((store) => store.toggleExtensionSidebar)
   const { rhSidebarSpringProps } = useSidebarTransition()
   const authenticated = useAuthStore((a) => a.authenticated)
   const infobar = useLayoutStore((s) => s.infobar)
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      '$mod+Backslash': (e) => {
+        e.stopPropagation()
+        toggleExtensionSidebar()
+      }
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  if (!rhSidebar?.show) return null
 
   return (
     <SidebarContainer id="ext-side-nav">

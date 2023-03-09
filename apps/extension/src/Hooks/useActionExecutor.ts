@@ -54,6 +54,7 @@ export function useActionExecutor() {
   const setSearch = useSputlitStore((store) => store.setSearch)
   const changeSearchType = useSputlitStore((s) => s.changeSearchType)
   const toggleRHSidebar = useLayoutStore((s) => s.toggleRHSidebar)
+  const toggleExtensionSidebar = useLayoutStore((s) => s.toggleExtensionSidebar)
 
   const setActiveItem = useSputlitStore((store) => store.setActiveItem)
   const setInput = useSputlitStore((s) => s.setInput)
@@ -105,7 +106,6 @@ export function useActionExecutor() {
             const defaultNamespace = getDefaultNamespace()
 
             if (item?.extras?.new) {
-              console.log("Default Namespace: ", defaultNamespace)
               node = createNodeWithUid(nodeValue, defaultNamespace.id)
               namespace = defaultNamespace
             } else {
@@ -160,6 +160,9 @@ export function useActionExecutor() {
 
       case QuickLinkType.action: {
         switch (item.type) {
+          case ActionType.TOGGLE:
+            toggleExtensionSidebar()
+            break
           case ActionType.BROWSER_EVENT:
             // mog('Perform this action', { item })
             chrome.runtime.sendMessage({ ...item })

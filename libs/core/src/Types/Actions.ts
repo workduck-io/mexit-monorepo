@@ -7,6 +7,7 @@ export enum ActionType {
   OPEN = 'Open Link',
   USE = 'Search using',
   RENDER = 'Render Action',
+  TOGGLE = 'Toggle Action',
   BROWSER_EVENT = 'Browser Action',
   SCREENSHOT = 'Screenshot Action',
   MAGICAL = 'Smart Capture',

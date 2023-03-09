@@ -59,7 +59,6 @@ export const initActions: Array<ListItemType> = [
     },
     extras: { base_url: `${API_BASE_URLS.actions}/shortener` }
   },
-
   {
     id: 'ACTION_9x34kgj23j4234ojin',
     title: 'Smart Capture',
@@ -190,9 +189,8 @@ export const initActions: Array<ListItemType> = [
   },
   {
     id: 'ACTION_4d32gtj23agex34ojin',
-    title: 'Toggle Mexit Right Sidebar',
+    title: 'Toggle Sidebar',
     category: QuickLinkType.action,
-    description: 'Open sidebar',
     type: ActionType.RIGHT_SIDEBAR,
     icon: getMIcon('ICON', 'codicon:layout-sidebar-right'),
     shortcut: {
@@ -233,6 +231,20 @@ export const initActions: Array<ListItemType> = [
       }
     },
     extras: { event_name: 'reload' }
+  },
+  {
+    id: 'ACTION_TOGGLE_SPOTLIGHT',
+    title: 'Toggle Extension',
+    category: QuickLinkType.action,
+    type: ActionType.TOGGLE,
+    icon: getMIcon('ICON', 'mdi:nintendo-switch'),
+    shortcut: {
+      shorten: {
+        title: 'to Toggle',
+        category: 'action',
+        keystrokes: '$mod+Backslash'
+      }
+    }
   },
   {
     id: 'ACTION_nlTaC5-ZcMXgaJrNg_NfL',

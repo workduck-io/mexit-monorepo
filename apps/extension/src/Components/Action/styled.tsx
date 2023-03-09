@@ -17,7 +17,7 @@ export const StyledAction = styled.div<{ $active?: boolean }>`
   ${({ $active }) =>
     $active &&
     css`
-      background: ${({ theme }) => theme.tokens.surfaces.modal};
+      background: ${({ theme }) => theme.tokens.surfaces.s[1]};
     `}
 `
 
