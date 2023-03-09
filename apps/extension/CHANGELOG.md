@@ -1,5 +1,12 @@
 # mexit
 
+## 0.19.19
+
+### Patch Changes
+
+- 9ce693a6: Presentation from Notes!
+- d6adee3c: Toggle Sidebar show state using Spotlight
+
 ## 0.19.18
 
 ### Patch Changes

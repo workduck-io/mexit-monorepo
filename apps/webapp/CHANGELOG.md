@@ -1,5 +1,11 @@
 # mexit-webapp
 
+## 0.22.25
+
+### Patch Changes
+
+- 9ce693a6: Presentation from Notes!
+
 ## 0.22.24
 
 ### Patch Changes
