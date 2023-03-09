@@ -65,11 +65,11 @@ export const ComboboxItem = styled.div<{ highlighted: boolean }>`
 
   margin: 0 ${({ theme }) => theme.spacing.small};
   color: ${({ theme }) => theme.tokens.text.subheading};
-  background: ${({ highlighted, theme }) => (!highlighted ? 'transparent' : theme.tokens.surfaces.s[2])};
+  background: ${({ highlighted, theme }) => (!highlighted ? 'transparent' : theme.tokens.surfaces.s[3])};
   cursor: pointer;
 
   :hover {
-    background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+    background-color: ${({ theme }) => theme.tokens.surfaces.s[3]};
   }
 
   & > svg {
