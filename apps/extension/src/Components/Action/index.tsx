@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { useTheme } from 'styled-components'
-
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import { ActionType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
+import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 
 import {
@@ -32,12 +31,26 @@ const ActionDescription: React.FC<{ description: string }> = ({ description }) =
 }
 
 const Action: React.FC<ActionProps> = ({ action, active }) => {
-  const theme = useTheme()
-
   const search = useSputlitStore((s) => s.search)
   const selection = useSputlitStore((s) => s.selection)
 
   const newNodeName = cleanString(search.value)
+
+  const getDescription = (action: MexitAction) => {
+    switch (action.type) {
+      case ActionType.TOGGLE:
+        // eslint-disable-next-line no-case-declarations
+        const show = useLayoutStore.getState().rhSidebar?.show
+        return `${show ? 'Hide' : 'Show'} Extension`
+        break
+      case ActionType.RIGHT_SIDEBAR:
+        // eslint-disable-next-line no-case-declarations
+        const expand = useLayoutStore.getState().rhSidebar?.expanded
+        return `${expand ? 'Collapse' : 'Expand'} Sidebar`
+      default:
+        return action.description
+    }
+  }
 
   return (
     <StyledAction $active={active}>
@@ -53,7 +66,7 @@ const Action: React.FC<ActionProps> = ({ action, active }) => {
               <>{action?.category === QuickLinkType.backlink ? cleanString(action?.title) : action?.title}</>
             )}
           </Title>
-          <ActionDescription description={action.description} />
+          <ActionDescription description={getDescription(action)} />
         </ActionContent>
       </Container>
       {active && action.shortcut && (
