@@ -23,14 +23,6 @@ export interface SortMenuProps {
 }
 
 const SortMenu = ({ sortOrder, sortType, availableSortTypes, onSortOrderChange, onSortTypeChange }: SortMenuProps) => {
-  console.log('SortMenu', {
-    sortOrder,
-    sortType,
-    availableSortTypes,
-    onSortOrderChange,
-    onSortTypeChange,
-    iconSort: getSortTypeIcon(sortType)
-  })
   return (
     <SortSectionWrapper>
       <Menu

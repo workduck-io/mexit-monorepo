@@ -1,6 +1,8 @@
 import create from 'zustand'
 
-import { Filter, Filters, GlobalFilterJoin, mog, ViewType } from '@mexit/core'
+import { Entities } from '@workduck-io/mex-search'
+
+import { Filter, Filters, GlobalFilterJoin, mog, View, ViewType } from '@mexit/core'
 
 import { FilterStore } from '../useFilters'
 
@@ -11,6 +13,17 @@ export const useViewFilterStore = create<FilterStore>((set) => ({
   globalJoin: 'all',
   sortType: 'status',
   sortOrder: 'ascending',
+  entities: [],
+  setEntities: (entities: Array<Entities>) => set({ entities }),
+  initializeState: (view: View) => {
+    set({
+      currentFilters: view.filters,
+      globalJoin: view.globalJoin,
+      viewType: view.viewType,
+      sortOrder: view.sortOrder ?? 'ascending',
+      entities: view.entities ?? []
+    })
+  },
   setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
   indexes: [],
   setIndexes: () => undefined,
@@ -23,6 +36,7 @@ export const useViewFilterStore = create<FilterStore>((set) => ({
 
 export const useViewFilters = () => {
   const filters = useViewFilterStore((state) => state.filters)
+  const onChangeEntities = useViewFilterStore((state) => state.setEntities)
   const currentFilters = useViewFilterStore((state) => state.currentFilters)
   const globalJoin = useViewFilterStore((state) => state.globalJoin)
   const sortOrder = useViewFilterStore((state) => state.sortOrder)
@@ -30,6 +44,7 @@ export const useViewFilters = () => {
   const viewType = useViewFilterStore((state) => state.viewType)
   const setCurrentFilters = useViewFilterStore((state) => state.setCurrentFilters)
   const setFilters = useViewFilterStore((s) => s.setFilters)
+  const initViewFilters = useViewFilterStore((store) => store.initializeState)
   const setGlobalJoin = useViewFilterStore((state) => state.setGlobalJoin)
   const onSortTypeChange = useViewFilterStore((state) => state.setSortType)
   const onSortOrderChange = useViewFilterStore((state) => state.setSortOrder)
@@ -67,6 +82,8 @@ export const useViewFilters = () => {
   return {
     filters,
     sortOrder,
+    onChangeEntities,
+    initViewFilters,
     sortType,
     viewType,
     globalJoin,

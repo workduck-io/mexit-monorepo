@@ -50,6 +50,7 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
             <MenuItem
               icon={getMIcon('ICON', priority.icon)}
               color={iconColor}
+              key={priority.title}
               onClick={() => onPriorityChangeHide(priority)}
               label={priority.title}
             />

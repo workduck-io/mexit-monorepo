@@ -158,7 +158,7 @@ const TaskViewModal = () => {
       await updateView(newView)
       // saveData()
       setCurrentView(newView)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, newView.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
       const view: View = {
         title: data.title,
@@ -170,7 +170,7 @@ const TaskViewModal = () => {
       await addView(view)
       // saveData()
       setCurrentView(view)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
     reset()
     closeModal()

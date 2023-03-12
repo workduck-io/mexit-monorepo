@@ -5,7 +5,6 @@ import { TaskCard } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import Plateless from '../Editor/Plateless'
@@ -43,7 +42,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
-    const sidebar = useLayoutStore((store) => store.sidebar)
 
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
@@ -89,6 +87,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
 
     return (
       <TaskCard
+        id={`${todo.nodeid}_${todo.id}`}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return

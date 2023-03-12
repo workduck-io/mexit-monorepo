@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { ViewType } from '@mexit/core'
+import { KanbanCard, ViewType } from '@mexit/core'
 
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 
@@ -17,6 +17,9 @@ export type ViewBlockRendererProps = {
   /** Function to call to refresh the data in the task, after a change */
   refreshCallback?: () => void
 
+  /** Function to call on block click */
+  onClick?: (block: KanbanCard) => void
+
   /** Whether the sidebar is currently overlaying the content, needed for width in kanban */
   overlaySidebar?: boolean
 
@@ -32,18 +35,22 @@ const ViewBlockRenderer: React.FC<ViewBlockRendererProps> = ({
   staticBoard,
   viewType,
   overlaySidebar,
+  onClick,
   selectedBlockId
 }) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
 
   const ref = useRef<HTMLDivElement>(null)
+
   return (
     <ViewBlockContainer
       selected={selectedBlockId && selectedBlockId === block?.id}
       ref={ref}
+      onClick={() => onClick(block)}
       dragging={dragging}
       viewType={viewType}
       staticBoard={staticBoard}
+      id={block?.id}
       sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
     >
       <BlockRenderer block={block} type={block?.entity} selectedBlockId={selectedBlockId} />

@@ -1,5 +1,7 @@
 import create from 'zustand'
 
+import { Entities } from '@workduck-io/mex-search'
+
 import {
   Filter,
   Filters,
@@ -11,6 +13,7 @@ import {
   SearchFilterFunctions,
   SortOrder,
   SortType,
+  View,
   ViewType
 } from '@mexit/core'
 
@@ -38,6 +41,12 @@ export interface FilterStore {
   /** Fetch results from specific indexes */
   indexes?: idxKey[]
   setIndexes?: (indexes: idxKey[]) => void
+
+  initializeState?: (view: View) => void
+
+  // Entity Types to show in the results
+  entities?: Array<Entities>
+  setEntities?: (entities: Array<Entities>) => void
 
   sortType?: SortType
   sortOrder?: SortOrder

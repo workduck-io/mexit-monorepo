@@ -53,4 +53,5 @@ export const ViewBlockContainer = styled.div<{
         ${viewType === ViewType.Kanban && `max-width: 230px;`}
       }
     `}
+  width: 100%;
 `

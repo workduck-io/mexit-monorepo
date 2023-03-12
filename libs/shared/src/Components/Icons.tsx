@@ -119,7 +119,9 @@ export const DefaultMIcons = {
   SEND: getMIcon('ICON', 'ph:arrow-bend-up-right-bold'),
   EDIT: getMIcon('ICON', 'ri:pencil-fill'),
   ADD: getMIcon('ICON', 'ic:round-plus'),
-  CLEAR: getMIcon('ICON', 'ic:round-clear')
+  CLEAR: getMIcon('ICON', 'ic:round-clear'),
+  BLOCK_TYPE: getMIcon('ICON', 'icon-park-solid:block-eight'),
+  REMINDER: getMIcon('ICON', 'ri:timer-flash-line')
 }
 
 export const ForwardlinkIcon = {

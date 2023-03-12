@@ -27,8 +27,7 @@ import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 interface SearchFiltersProps {
   filters: Filters
   currentFilters: Filter[]
-  entities?: Array<Entities>
-  onEntityFilterChange?: (entitiy: string) => void
+  onEntityFilterChange?: (entitiy: Entities) => void
   globalJoin: GlobalFilterJoin
   setGlobalJoin: (join: GlobalFilterJoin) => void
   addCurrentFilter: (filter: Filter) => void
@@ -47,7 +46,6 @@ const SearchFilters = ({
   changeCurrentFilter,
   removeCurrentFilter,
   resetCurrentFilters,
-  entities,
   onEntityFilterChange,
   viewSelectorProps,
   sortMenuProps
@@ -87,7 +85,7 @@ const SearchFilters = ({
         ))}
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
-      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} entities={entities} />}
+      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
       {/* <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} /> */}
       {sortMenuProps && <SortMenu {...sortMenuProps} />}
       {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}

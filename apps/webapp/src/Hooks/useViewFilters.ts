@@ -26,7 +26,7 @@ export const useViewFilters = () => {
     const tagFilter = tags.reduce(
       (prev, tag) => {
         prev.options.push({
-          id: `filter_tag_${tag}`,
+          id: `filter_tag_${tag.value}`,
           label: tag.value,
           value: tag.value
         })
@@ -113,7 +113,7 @@ export const useViewFilters = () => {
   /**
    * Get filtered result for the current view
    */
-  const generateQuery = (filters: Array<Filter>): ISearchQuery => {
+  const generateQuery = (filters: Array<Filter>, entities: Array<Entities>): ISearchQuery => {
     const query = filters.reduce((prev, filter) => {
       return [...prev, ...transformQuery(filter)]
     }, [])
@@ -121,7 +121,8 @@ export const useViewFilters = () => {
     return [
       {
         type: 'query',
-        query
+        query,
+        ...(entities?.length ? { entities } : {})
       }
     ]
   }

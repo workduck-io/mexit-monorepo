@@ -1,3 +1,7 @@
+import { useParams } from 'react-router-dom'
+
+import { Entities } from '@workduck-io/mex-search'
+
 import {
   DefaultMIcons,
   GenericSection,
@@ -8,30 +12,42 @@ import {
   SortSectionWrapper
 } from '@mexit/shared'
 
-const EntityFilterMenu = ({ entities = [], onChange }) => {
+import { useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
+
+const EntityFilterMenu = ({ onChange }) => {
+  const viewId = useParams().viewid
+  const entities = useViewFilterStore((store) => store.entities)
+
+  const isSelected = (entity: Entities) => {
+    return entities?.includes(entity)
+  }
+
   return (
     <SortSectionWrapper>
       <Menu
         multiSelect
+        key={`${viewId}-${entities.length}`}
         values={
           <GenericSection>
-            <IconDisplay icon={DefaultMIcons.TEMPLATE} />
+            <IconDisplay icon={DefaultMIcons.BLOCK_TYPE} />
             Type
           </GenericSection>
         }
       >
         {Object.entries(SearchEntities)
           .filter(([key, entity]) => entity.label !== 'Ungrouped')
-          .map(([key, entity]) => (
-            <MenuItem
-              selected={entities.includes(key)}
-              icon={entity.icon}
-              multiSelect
-              key={key}
-              onClick={() => onChange(key)}
-              label={entity.label}
-            />
-          ))}
+          .map(([key, entity]) => {
+            return (
+              <MenuItem
+                selected={isSelected(key as Entities)}
+                icon={entity.icon}
+                multiSelect
+                disabled={viewId === entity.id}
+                onClick={() => onChange(key)}
+                label={entity.label}
+              />
+            )
+          })}
       </Menu>
     </SortSectionWrapper>
   )

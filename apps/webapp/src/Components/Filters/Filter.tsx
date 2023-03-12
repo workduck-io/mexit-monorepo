@@ -129,6 +129,7 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
             // Sort whether the value is selected
             .sort((a, b) => (isValueSelected(a) ? -1 : 1))
             .map((option) => {
+              console.log('OPTION ARE', option)
               return (
                 <MenuItem
                   key={option.id}

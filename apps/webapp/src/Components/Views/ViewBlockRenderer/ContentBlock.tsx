@@ -25,19 +25,19 @@ const BlockHeader = styled.div`
 `
 
 const BlockContent = styled.div<{ isOpen?: boolean }>`
-  transition: all 0.3s ease-in-out;
-  animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-in-out;
-  display: -webkit-box;
-
   ${({ isOpen }) =>
     !isOpen &&
     css`
-      overflow: hidden;
       text-overflow: ellipsis;
       line-clamp: 1;
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     `}
+
+  transition: all 0.3s ease-in-out;
+  animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-out;
+  display: -webkit-box;
+  overflow: hidden;
 `
 
 type BlockProps = {
@@ -67,7 +67,9 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
           />
           <PrimaryText>{block?.entity}</PrimaryText>
         </Group>
-        {canOpen && <MexIcon onClick={handleToggleAccordion} icon={!isOpen ? arrowLeftSLine : arrowDownSLine} />}
+        {canOpen && (
+          <MexIcon cursor="pointer" onClick={handleToggleAccordion} icon={!isOpen ? arrowLeftSLine : arrowDownSLine} />
+        )}
       </BlockHeader>
       <BlockContent isOpen={isOpen}>{content}</BlockContent>
     </ContentBlockContainer>

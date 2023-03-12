@@ -1,6 +1,8 @@
+import { Entities } from '@workduck-io/mex-search'
+
 import { ViewType } from '@mexit/core'
 
-import { useViewFilters } from '../../Hooks/todo/useTodoFilters'
+import { useViewFilters, useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
 import SearchFilters from '../../Views/SearchFilters'
 
 const ViewSearchFilters = () => {
@@ -18,6 +20,7 @@ const ViewSearchFilters = () => {
     changeCurrentFilter,
     resetCurrentFilters,
     onSortOrderChange,
+    onChangeEntities,
     onSortTypeChange
   } = useViewFilters()
 
@@ -28,6 +31,14 @@ const ViewSearchFilters = () => {
       changeCurrentFilter={changeCurrentFilter}
       resetCurrentFilters={resetCurrentFilters}
       filters={filters}
+      onEntityFilterChange={(entity: Entities) => {
+        const entities = useViewFilterStore.getState().entities
+        if (entities.includes(entity)) {
+          onChangeEntities(entities.filter((e) => e !== entity))
+        } else {
+          onChangeEntities([...entities, entity])
+        }
+      }}
       currentFilters={currentFilters}
       globalJoin={globalJoin}
       setGlobalJoin={setGlobalJoin}

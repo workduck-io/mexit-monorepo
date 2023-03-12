@@ -1,43 +1,60 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
 
 import Board from '@asseinfo/react-kanban'
+import { useTheme } from 'styled-components'
 
+import { SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
-import { OverlaySidebarWindowWidth, StyledTasksKanban, TaskColumnHeader } from '@mexit/shared'
+import { getNextStatus, getPrevStatus, mog, PriorityType } from '@mexit/core'
+import {
+  Count,
+  Group,
+  groupByKey,
+  GroupHeader,
+  IconDisplay,
+  OverlaySidebarWindowWidth,
+  SearchEntities,
+  StyledTasksKanban,
+  TaskColumnHeader
+} from '@mexit/shared'
 
-import { useViewFilters } from '../../../Hooks/todo/useTodoFilters'
-import { KanbanBoardColumn, TodoKanbanCard, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
+import { useViewFilters as useFilters, useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
+import { KanbanBoardColumn, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
+import { useFilterStore } from '../../../Hooks/useFilters'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
+import { useSearch } from '../../../Hooks/useSearch'
+import { useViewFilters } from '../../../Hooks/useViewFilters'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import useModalStore from '../../../Stores/useModalStore'
-import { useTodoStore } from '../../../Stores/useTodoStore'
-import { RenderBoardTask } from '../../Todo/BoardTask'
+import ViewBlockRenderer from '../ViewBlockRenderer'
 
 /**
  * TodoKanban
- * Kanban view for todo
  * With shortcuts and navigation
  */
 
 const KanbanView = () => {
-  const [selectedCard, setSelectedCard] = React.useState<TodoKanbanCard | null>(null)
-
-  const nodesTodo = useTodoStore((store) => store.todos)
+  const [board, setBoard] = useState<any>({ columns: [] })
+  const [selectedCard, setSelectedCard] = React.useState<SearchResult | null>(null)
 
   const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
   const sidebar = useLayoutStore((store) => store.sidebar)
 
-  const { getTodoBoard, changeStatus, changePriority } = useTodoKanban()
-  const { globalJoin, currentFilters, sortOrder, sortType } = useViewFilters()
+  const { queryIndex } = useSearch()
+  const { generateQuery } = useViewFilters()
+  const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
+  const { globalJoin, currentFilters, sortOrder, sortType } = useFilters()
+
+  const entities = useViewFilterStore((store) => store.entities)
+  const groupBy = useFilterStore((store) => store.groupBy)
 
   const { push } = useNavigation()
   const { goTo } = useRouting()
@@ -45,14 +62,16 @@ const KanbanView = () => {
   const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
   const { accessWhenShared } = usePermissions()
 
-  const board = useMemo(() => getTodoBoard(), [nodesTodo, globalJoin, currentFilters, sortOrder, sortType])
+  useEffect(() => {
+    const query = generateQuery(currentFilters, entities)
+
+    queryIndex('node', query).then((res) => {
+      mog('RESULT IS', { res, query, currentFilters })
+      if (res) setBoard(getBlocksBoard(groupByKey(res, groupBy)))
+    })
+  }, [globalJoin, currentFilters, entities, sortOrder, sortType])
 
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
-
-  const todosArray = useMemo(() => Object.values(nodesTodo).flat(), [nodesTodo])
-  const getTodoFromCard = (card: TodoKanbanCard): TodoType => {
-    return todosArray.find((todo) => todo.nodeid === card.nodeid && todo.id === card.todoid)
-  }
 
   const handleCardMove = (card, source, destination) => {
     const todoFromCard = getTodoFromCard(card)
@@ -70,13 +89,15 @@ const KanbanView = () => {
     if (!selectedCard) {
       return
     }
-    const nodeid = selectedCard.nodeid
+
+    const nodeid = selectedCard?.parent
     push(nodeid)
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
   }
 
   const selectFirst = () => {
     const firstCardColumn = board.columns.find((column) => column.cards.length > 0)
+
     if (firstCardColumn) {
       if (firstCardColumn.cards) {
         const firstCard = firstCardColumn.cards[0]
@@ -112,10 +133,10 @@ const KanbanView = () => {
       return
     }
 
-    const selectedColumn = board.columns.find((column) => column.id === selectedCard.status) as KanbanBoardColumn
+    const selectedColumn = board.columns.find((column) => column.id === selectedCard.entity) as KanbanBoardColumn
     const selectedColumnLength = selectedColumn.cards.length
     const selectedIndex = selectedColumn.cards.findIndex(
-      (card) => card.todoid === selectedCard.todoid && card.nodeid === selectedCard.nodeid
+      (card) => card.id === selectedCard.id && card.parent === selectedCard.parent
     )
 
     // mog('selected card', { selectedCard, selectedColumn, selectedColumnLength, selectedIndex, direction })
@@ -132,7 +153,7 @@ const KanbanView = () => {
 
       case 'down': {
         const nextCard = selectedColumn.cards[(selectedIndex + 1) % selectedColumnLength]
-        // mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
+        mog('nextCard', { nextCard, selectedColumn, selectedColumnLength, selectedIndex })
         if (nextCard) {
           // mog('selected card', { selectedCard, nextCard })
           setSelectedCard(nextCard)
@@ -141,16 +162,17 @@ const KanbanView = () => {
       }
 
       case 'left': {
-        let selectedColumnStatus = selectedColumn.id
+        let selectedColumnId = selectedColumn.id
         let prevCard = undefined
         while (!prevCard) {
-          const prevColumn = board.columns.find(
-            // eslint-disable-next-line no-loop-func
-            (column) => column.id === getPrevStatus(selectedColumnStatus)
-          ) as KanbanBoardColumn
+          const prevColumnIndex =
+            (board.columns.findIndex((col) => col.id === selectedColumn.id) - 1 + board.columns.length) %
+            board.columns.length
+          const prevColumn = board.columns[prevColumnIndex]
+
           if (!prevColumn || prevColumn.id === selectedColumn.id) break
           prevCard = prevColumn.cards[selectedIndex % prevColumn.cards.length]
-          selectedColumnStatus = prevColumn.id
+          selectedColumnId = prevColumn.id
         }
         if (prevCard) {
           // mog('selected card', { selectedCard, prevCard })
@@ -160,16 +182,16 @@ const KanbanView = () => {
       }
 
       case 'right': {
-        let selectedColumnStatus = selectedColumn.id
+        let selectedColumnId = selectedColumn.id
         let nextCard = undefined
         while (!nextCard) {
-          const nextColumn = board.columns.find(
-            // eslint-disable-next-line no-loop-func
-            (column) => column.id === getNextStatus(selectedColumnStatus)
-          ) as KanbanBoardColumn
+          const nextColumnIndex =
+            (board.columns.findIndex((col) => selectedColumn.id === col.id) + 1) % board.columns.length
+          const nextColumn = board.columns[nextColumnIndex]
+
           if (!nextColumn || nextColumn.id === selectedColumn.id) break
           nextCard = nextColumn.cards[selectedIndex % nextColumn.cards.length]
-          selectedColumnStatus = nextColumn.id
+          selectedColumnId = nextColumn.id
         }
         if (nextCard) {
           // mog('selected card', { selectedCard, nextCard })
@@ -231,31 +253,47 @@ const KanbanView = () => {
     }
   }, [board, selectedCard, isModalOpen, isPreviewEditors])
 
-  const RenderCard = (
-    { id, todoid, nodeid }: { id: string; todoid: string; nodeid: string },
-    { dragging }: { dragging: boolean }
-  ) => {
+  const RenderCard = (block, { dragging }: { dragging: boolean }) => {
     return (
-      <RenderBoardTask
-        id={id}
-        todoid={todoid}
-        nodeid={nodeid}
-        selectedCardId={selectedCard ? selectedCard?.id : null}
-        overlaySidebar={overlaySidebar}
-        dragging={dragging}
+      <ViewBlockRenderer
+        onClick={(card: SearchResult) => setSelectedCard(card)}
+        key={`${block?.id}-${block?.parent}`}
+        selectedBlockId={selectedCard?.id}
+        block={block}
       />
     )
   }
+
+  const ColumnHeader = (props) => {
+    const theme = useTheme()
+    const group = SearchEntities[props.id]
+    const count = board.columns?.find((column) => column.id === props.id)?.cards?.length
+
+    return (
+      <TaskColumnHeader>
+        <GroupHeader>
+          <Group>
+            <IconDisplay icon={group.icon} color={theme.tokens.colors.primary.default} />
+            <span>{group.label}</span>
+            {count && <Count>{count}</Count>}
+          </Group>
+        </GroupHeader>
+      </TaskColumnHeader>
+    )
+  }
+
   return (
     <StyledTasksKanban sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}>
-      <Board
-        renderColumnHeader={({ title }) => <TaskColumnHeader>{title}</TaskColumnHeader>}
-        disableColumnDrag
-        onCardDragEnd={handleCardMove}
-        renderCard={RenderCard}
-      >
-        {board}
-      </Board>
+      {!!board && (
+        <Board
+          renderColumnHeader={ColumnHeader}
+          disableColumnDrag
+          onCardDragEnd={handleCardMove}
+          renderCard={RenderCard}
+        >
+          {board}
+        </Board>
+      )}
     </StyledTasksKanban>
   )
 }

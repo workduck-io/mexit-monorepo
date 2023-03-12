@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { generateStyle } from '@workduck-io/mex-themes'
 
+import { fadeIn } from './fade'
 import { MainHeader } from './Layouts'
 import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
@@ -29,34 +30,48 @@ react-kanban-column-adder-button
 
 export const KANBAN_WIDTH = (sidebarExpanded?: boolean) =>
   `calc(( 100vw - ${sidebarExpanded ? '468px' : '186px'} ) / 3)`
-export const KANBAN_HEIGHT = `calc( 100vh - 22rem )`
+export const KANBAN_HEIGHT = `calc(100vh - 16rem)`
 export const KANBAN_CARD_WIDTH = (sidebarExpanded?: boolean) =>
   `calc(( 100vw - ${sidebarExpanded ? '528px' : '248px'}) / 3)`
 
 export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
   display: flex;
   flex-direction: column;
-
   gap: ${({ theme }) => theme.spacing.medium};
 
   .react-kanban-board {
     overflow: hidden;
   }
+
+  .react-kanban-column:not(:first-of-type) {
+    margin-left: ${({ theme }) => theme.spacing.medium};
+  }
+
   .react-kanban-column {
     width: ${({ sidebarExpanded, theme }) =>
       css`calc(${KANBAN_WIDTH(sidebarExpanded)} - ${theme.additional.hasBlocks ? '1.33rem' : '0px'})`};
     max-height: ${KANBAN_HEIGHT};
     overflow-y: auto;
     overflow-x: hidden;
-    transition: width 0.5s ease-in-out;
-    background: ${({ theme }) => theme.tokens.surfaces.s[2]};
-    padding: ${({ theme }) => theme.spacing.small};
-    margin: ${({ theme }) => theme.spacing.small};
+    background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[3]}, 0.4)`};
+    transition: width 0.5s ease-in-out, background-color 2s ease-in-out;
+    padding: ${({ theme }) => theme.spacing.medium};
     border-radius: ${({ theme }) => theme.borderRadius.small};
+
+    opacity: 0;
+
+    animation: ${fadeIn} 0.25s;
+    animation-fill-mode: forwards;
   }
 `
 
-export const StyledTasksKanban = styled(StyledBoard)``
+export const StyledTasksKanban = styled(StyledBoard)`
+  margin: ${({ theme }) => theme.spacing.medium} 0;
+
+  [data-rbd-drag-handle-context-id] > div {
+    width: 100%;
+  }
+`
 
 export const ViewSection = styled.div`
   display: flex;
@@ -171,10 +186,7 @@ export const ShortcutToken = styled.div`
 `
 
 export const TaskColumnHeader = styled.div`
-  padding: ${({ theme }) => theme.spacing.small};
-  margin: ${({ theme }) => theme.spacing.medium} 0 ${({ theme }) => theme.spacing.small};
-  color: ${({ theme }) => theme.tokens.text.fade};
-  font-size: 1.5rem;
+  margin-bottom: ${({ theme }) => theme.spacing.medium};
 `
 
 export const TaskCard = styled.div<{

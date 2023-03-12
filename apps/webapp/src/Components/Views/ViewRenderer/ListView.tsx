@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { get } from 'lodash'
-
 import { SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { mog } from '@mexit/core'
-import { Description, TaskListWrapper } from '@mexit/shared'
+import { Description, groupByKey, TaskListWrapper } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
@@ -34,42 +31,26 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
   const isModalOpen = useModalStore((store) => store.open)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
-  const globalJoin = useFilterStore((store) => store.globalJoin)
+  const entites = useViewFilterStore((store) => store.entities)
   const currentFilters = useViewFilterStore((store) => store.currentFilters)
 
-  const groupByKey = (items: any[], key: string) => {
-    const groupedValues = {}
-
-    items.forEach((item) => {
-      const value = get(item, key) ?? 'Ungrouped'
-
-      if (!groupedValues[value]) {
-        groupedValues[value] = []
-      }
-
-      groupedValues[value].push(item)
-    })
-
-    return groupedValues
-  }
-
   useEffect(() => {
-    const query = generateQuery(currentFilters)
+    const query = generateQuery(currentFilters, entites)
+
     queryIndex('node', query).then((res) => {
-      mog('RESULT IS', { res, query, currentFilters })
-      setResults(groupByKey(res, groupBy))
+      if (res) setResults(groupByKey(res, groupBy))
     })
-  }, [props.viewId, currentFilters])
+  }, [props.viewId, currentFilters, entites])
 
   // const { changeStatus, changePriority } = useTodoKanban()
 
   // const todosArray = useMemo(() => Object.values(nodeTodos).flat(), [nodeTodos])
 
   const selectFirst = () => {
-    const firstCard = results.length > 0 && results[0]
-    if (firstCard) {
+    const list = Object.values(results).flat(1) as SearchResult[]
+    if (list.length) {
       // console.log('select first', { firstCard })
-      setSelectedCardId(firstCard.id)
+      setSelectedCardId(list[0].id)
     }
   }
 
@@ -92,7 +73,6 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
       const list = Object.values(results).flat(1) as SearchResult[]
 
       const selectedIndex = list.findIndex((card) => card.id === selectedCardId)
-      // console.log('selectNewCard', { direction, selectedCardId, selectedIndex })
       if (!selectedCardId) {
         selectFirst()
         return
@@ -104,7 +84,7 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
           // mog('prevCard', { prevCard })
 
           if (prevCard) {
-            mog('selected card', { selectedCardId, prevCard, selectedIndex })
+            // mog('selected card', { selectedCardId, prevCard, selectedIndex })
             setSelectedCardId(prevCard.id)
           }
           break
@@ -114,14 +94,14 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
           const nextCard = list[(selectedIndex + 1) % list.length]
 
           if (nextCard) {
-            mog('selected card', { selectedCardId, nextCard })
+            // mog('selected card', { selectedCardId, nextCard })
             setSelectedCardId(nextCard.id)
           }
           break
         }
       }
     },
-    [selectedCardId]
+    [selectedCardId, results]
   )
 
   const eventWrapper = (fn: (event) => void): ((event) => void) => {
@@ -191,9 +171,14 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
   return (
     <TaskListWrapper>
       {Object.entries(results)?.map(([group, items]: [string, Array<SearchResult>]) => (
-        <ResultGroup label={group} count={items.length}>
+        <ResultGroup key={group} label={group} count={items.length}>
           {items.map((block) => (
-            <ViewBlockRenderer key={block?.id} selectedBlockId={selectedCardId} block={block} />
+            <ViewBlockRenderer
+              key={`${block?.id}-${block?.parent}`}
+              selectedBlockId={selectedCardId}
+              block={block}
+              onClick={(card: SearchResult) => setSelectedCardId(card.id)}
+            />
           ))}
         </ResultGroup>
       ))}

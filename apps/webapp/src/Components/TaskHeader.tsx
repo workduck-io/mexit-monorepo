@@ -9,7 +9,6 @@ import fileCopyLine from '@iconify/icons-ri/file-copy-line'
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
-import { useTheme } from 'styled-components'
 
 import {
   Button,
@@ -22,18 +21,14 @@ import {
 
 import { ViewType } from '@mexit/core'
 import {
-  DefaultMIcons,
-  IconDisplay,
   ShortcutToken,
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
-  TaskHeaderIcon,
   TaskHeaderTitleSection,
   TasksHelp,
   TaskViewControls,
   TaskViewHeaderWrapper,
-  TaskViewTitle,
-  Title
+  TaskViewTitle
 } from '@mexit/shared'
 
 import { useViewFilters } from '../Hooks/todo/useTodoFilters'
@@ -44,7 +39,7 @@ import { useViewStore } from '../Stores/useViewStore'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface ViewHeaderProps {
-  cardSelected: boolean
+  cardSelected: boolean // * To show actions related to selected Item
 }
 
 const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
@@ -57,7 +52,6 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
   const onChangeView = useViewStore((store) => store.setCurrentView)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
-  const theme = useTheme()
   const { goTo } = useRouting()
   const { deleteView } = useViews()
   const [source, target] = useSingleton()
@@ -87,12 +81,7 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
     <StyledTaskHeader>
       <TaskHeaderTitleSection>
         <ToolbarTooltip singleton={source} />
-        {!view && (
-          <TaskHeaderIcon>
-            <IconDisplay color={theme.tokens.colors.primary.default} size={28} icon={DefaultMIcons.TASK} />
-          </TaskHeaderIcon>
-        )}
-        {view ? (
+        {view && (
           <TaskViewHeaderWrapper>
             <TaskViewTitle>
               <Icon icon={stackLine} />
@@ -168,26 +157,6 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
               />
             </TaskViewControls>
           </TaskViewHeaderWrapper>
-        ) : (
-          <>
-            <Title>Tasks</Title>
-            <Button
-              onClick={() =>
-                openTaskViewModal({
-                  filters: currentFilters,
-                  cloneViewId: view?.id,
-                  properties: {
-                    globalJoin,
-                    viewType: viewType ?? ViewType.Kanban
-                  }
-                })
-              }
-              disabled={currentFilters.length === 0}
-            >
-              <Icon icon={addCircleLine} />
-              Create View
-            </Button>
-          </>
         )}
       </TaskHeaderTitleSection>
       <ShortcutTokens>

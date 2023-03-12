@@ -19,7 +19,7 @@ import { defaultContent } from '../../Data/baseData'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
 import { useDataStore } from '../../Stores/useDataStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
-import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
+import { KanbanBoard, KanbanColumn } from '../../Types/Kanban'
 import { sortFunctions, useFilterFunctions } from '../useFilterFunctions'
 import { useFilterStoreBase as useFilterStore } from '../useFilters'
 import { useLinks } from '../useLinks'
@@ -27,19 +27,12 @@ import { useMentions } from '../useMentions'
 import { useNodes } from '../useNodes'
 import { useSearchExtra } from '../useSearch'
 
-export interface TodoKanbanCard extends KanbanCard {
-  todoid: string
-  nodeid: string
-  status: TodoStatus
-  priority: PriorityType
-}
-
 export interface KanbanBoardColumn extends KanbanColumn {
-  id: TodoStatus
-  cards: TodoKanbanCard[]
+  id: string
+  cards: SearchResult[]
 }
 
-export interface TodoKanbanBoard extends KanbanBoard {
+export interface BlockKanbanBoard extends KanbanBoard {
   columns: KanbanBoardColumn[]
 }
 
@@ -310,7 +303,7 @@ export const useTodoKanban = () => {
   const getFilteredTodoBoard = (appliedFilters: Filter[]) => {
     const nodetodos = useTodoStore.getState().todos
     const extra = getSearchExtra()
-    const todoBoard: TodoKanbanBoard = {
+    const todoBoard: BlockKanbanBoard = {
       columns: [
         {
           id: TodoStatus.todo,
@@ -377,71 +370,20 @@ export const useTodoKanban = () => {
     return todoBoard
   }
 
-  const getTodoBoard = () => {
-    const nodetodos = useTodoStore.getState().todos
-    const extra = getSearchExtra()
-    const todoBoard: TodoKanbanBoard = {
-      columns: [
-        {
-          id: TodoStatus.todo,
-          title: 'Todo',
-          cards: []
-        },
-        {
-          id: TodoStatus.pending,
-          title: 'In Progress',
-          cards: []
-        },
-        {
-          id: TodoStatus.completed,
-          title: 'Completed',
-          cards: []
+  const getBlocksBoard = (groupedItems: Record<string, Array<SearchResult>>) => {
+    const board: BlockKanbanBoard = {
+      columns: Object.entries(groupedItems).map(([key, items]) => {
+        return {
+          id: key,
+          title: key,
+          cards: items
         }
-      ]
+      })
     }
-    const currentFilters = useFilterStore.getState().currentFilters
-    Object.entries(nodetodos).forEach(([nodeid, todos]) => {
-      if (nodeid.startsWith(SNIPPET_PREFIX)) return
-      if (isInArchive(nodeid)) return
-      todos
-        .filter((todo) =>
-          currentFilters.length > 0
-            ? globalJoin === 'all'
-              ? currentFilters.every((filter) => taskFilterFunctions[filter.type](todo, filter))
-              : currentFilters.some((filter) => taskFilterFunctions[filter.type](todo, filter))
-            : true
-        )
-        .filter((todo) => {
-          // TODO: Find a faster way to check for empty content // May not need to convert content to raw text
-          const text = convertContentToRawText(todo.content, ' ', { extra }).trim()
-          // mog('empty todo check', { text, nodeid, todo })
-          if (text === '') {
-            return false
-          }
-          if (todo.content === defaultContent.content) return false
-          return true
-        })
-        .forEach((todo) => {
-          todoBoard.columns
-            .find((column) => column.id === todo?.metadata?.status)
-            ?.cards.push({
-              id: `KANBAN_ID_${todo.nodeid}_${todo.id}`,
-              todoid: todo.id,
-              nodeid: todo.nodeid,
-              status: todo?.metadata?.status,
-              priority: todo?.metadata?.priority
-            })
-        })
-    })
-
-    // mog('getTodoBoard', { nodetodos, todoBoard })
-
-    const todoFilters = generateFilters(nodetodos as any)
-    setFilters(todoFilters)
 
     // Reimplement sorting
     if (sortOrder && sortType) {
-      todoBoard.columns.forEach((column) => {
+      board.columns.forEach((column) => {
         column.cards.sort(sortFunctions[sortType])
         if (sortOrder === 'descending') {
           column.cards.reverse()
@@ -449,17 +391,14 @@ export const useTodoKanban = () => {
       })
     }
 
-    // todoBoard.columns.sort((a, b) => {
-    //   if (TodoStatusRanks[a.id] > TodoStatusRanks[b.id]) return 1
-    //   else return -1
-    // })
+    mog('BLOCK BOARD', { groupedItems, board })
 
-    return todoBoard
+    return board
   }
 
   return {
     getPureContent,
-    getTodoBoard,
+    getBlocksBoard,
     changePriority,
     changeStatus,
     getFilteredTodoBoard

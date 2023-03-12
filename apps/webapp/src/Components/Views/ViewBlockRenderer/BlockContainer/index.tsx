@@ -1,30 +1,51 @@
 import React, { useState } from 'react'
 
-import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
-import styled, { useTheme } from 'styled-components'
+import styled, {css, useTheme} from 'styled-components'
 
 import { Group, IconDisplay, MexIcon, SearchEntities } from '@mexit/shared'
 
 const StyledResultGroup = styled.div`
+
   border-radius: ${({ theme }) => theme.borderRadius.small};
   background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[3]}, 0.4)`};
+  transition: all 0.2s ease-in;
+
+  :hover {
+    background: ${({ theme }) => `rgba(${theme.rgbTokens.surfaces.s[4]}, 0.3)`};
+  }
   backdrop-filter: blur(10px);
   padding: ${({ theme }) => theme.spacing.small};
 `
 
-const GroupHeader = styled.div`
+const GroupHeader = styled.div<{ isOpen?: boolean}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   user-select: none;
   cursor: pointer;
+
+  ${MexIcon} {
+    transition: all .2s linear;
+
+    ${({ isOpen}) => isOpen ? css`
+      transform: rotateZ(-90deg);
+    `: css`
+      transform: rotateZ(0deg);
+    `
+  }
 `
 
 const AccordionContent = styled.div<{ isOpen?: boolean }>`
   padding: 10px;
-  display: ${(props) => (props.isOpen ? 'block' : 'none')};
+  ${(props) => (props.isOpen ? css`
+    display: block;
+    opacity: 1;
+  ` : css`
+    display: none;
+    opacity: 0;
+  `)};
 `
 
 const Count = styled.span`
@@ -32,9 +53,14 @@ const Count = styled.span`
   opacity: 0.5;
 `
 
-const ResultGroup: React.FC<{ label: string; children: any; count: number }> = ({ label, children, count }) => {
+const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpen?: boolean }> = ({
+  label,
+  children,
+  count,
+  isOpen: defaultOpenState = true
+}) => {
   const theme = useTheme()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(defaultOpenState)
 
   const handleToggleAccordion = () => {
     setIsOpen(!isOpen)
@@ -44,13 +70,13 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number }> = (
 
   return (
     <StyledResultGroup>
-      <GroupHeader onClick={handleToggleAccordion}>
+      <GroupHeader isOpen={!!isOpen} onClick={handleToggleAccordion}>
         <Group>
           <IconDisplay icon={group.icon} color={theme.tokens.colors.primary.default} />
           <span>{group.label}</span>
           <Count>{count}</Count>
         </Group>
-        <MexIcon onClick={handleToggleAccordion} icon={!isOpen ? arrowLeftSLine : arrowDownSLine} />
+        <MexIcon $noHover onClick={handleToggleAccordion}  height={24} width={24} icon={arrowLeftSLine} />
       </GroupHeader>
 
       <AccordionContent isOpen={isOpen}>{children}</AccordionContent>
