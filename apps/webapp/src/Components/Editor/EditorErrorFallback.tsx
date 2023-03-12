@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { IS_DEV, mog } from '@mexit/core'
+import { IS_DEV } from '@mexit/core'
 import { CardShadow, Title } from '@mexit/shared'
 
 import { useEditorErrorStore } from '../../Hooks/useEditorActions'
@@ -33,7 +33,6 @@ const EditorErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (!useEditorErrorStore.getState().alreadyErrored) {
-        // mog('Resetting the editor store', { alreadyErrored, prevNode })
         setErrorState('', false)
       }
     }, 1000)
@@ -41,7 +40,6 @@ const EditorErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     return () => clearTimeout(timeoutId)
   }, [])
 
-  mog('EditorErrorFallback', { error, alreadyErrored, prevNode })
   return (
     <ErrorWrapper role="alert">
       <ErrorCard>

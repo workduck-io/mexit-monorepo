@@ -98,6 +98,7 @@ export const useInitLoader = () => {
           sharedNodes: useDataStore.getState().sharedNodes,
           snippets: useSnippetStore.getState().snippets,
           contents: useContentStore.getState().contents,
+          // highlights: useHighlightStore.getState().highlights,
           prompts: usePromptStore.getState().getAllPrompts()
         }
 

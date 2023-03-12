@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "dev": "nx dev webapp --force",
+    "devX": "nx dev extension --skip-nx-cache",
     "build": "nx build",
     "test": "nx test",
     "prepare": "husky install"

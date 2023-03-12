@@ -27,8 +27,14 @@ const searchWorker = {
   setInitState: (value: boolean) => {
     hasInitialized = value
   },
+  initializeHighlights: (entities: any[], ilinks: any[]) => {
+    searchX.initializeHighlights(entities)
+    searchX.initializeHeirarchy(ilinks)
+  },
   init: (fileData: Partial<PersistentData>) => {
     if (hasInitialized) return
+    mog("Initializing Search Worker's Index", { highlights: fileData.highlights })
+    // searchX.initializeHighlights(fileData.highlights)
     const { idx, nbMap } = createSearchIndex(fileData)
 
     globalSearchIndex = idx

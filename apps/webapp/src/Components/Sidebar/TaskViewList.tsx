@@ -1,28 +1,27 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { getMIcon, mog, ReminderViewData } from '@mexit/core'
+import { generateTaskViewId, getMIcon, ReminderViewData, ViewType } from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getSortTypeIcon } from '../../Hooks/useSortIcons'
 import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 import { useViewStore } from '../../Stores/useViewStore'
+import { useTaskViewModalStore } from '../TaskViewModal'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { CreateNewNoteSidebarButton, SidebarWrapper, VerticalSpace } from './Sidebar.style'
 import SidebarList from './SidebarList'
 
 const ViewList = () => {
-  const viewID = useParams()
-
-  mog('VIEW ID', { viewID })
   const views = useViewStore((store) => store.views)
   const currentView = useViewStore((store) => store.currentView)
   const setContextMenu = useLayoutStore((store) => store.setContextMenu)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
+  const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
+
   const { goTo } = useRouting()
 
   const onOpenDefaultView = (path: string = ROUTE_PATHS.tasks) => {
@@ -44,7 +43,7 @@ const ViewList = () => {
       const view = views.find((view) => view.id === viewid)
       if (view) {
         setCurrentView(view)
-        goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
+        goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
       }
     }
   }
@@ -80,7 +79,15 @@ const ViewList = () => {
   }
 
   const handleCreateNewView = () => {
-    //
+    openTaskViewModal({
+      filters: [],
+      cloneViewId: generateTaskViewId(),
+      properties: {
+        globalJoin: 'all',
+        viewType: ViewType.List,
+        sortOrder: 'ascending'
+      }
+    })
   }
 
   return (

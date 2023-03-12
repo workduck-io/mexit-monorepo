@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 import { DisplayShortcut } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Filter, Filters, FilterType, FilterValue, generateFilterId, mog } from '@mexit/core'
+import { Filter, Filters, FilterType, FilterValue, generateFilterId } from '@mexit/core'
 import { FilterMenuDiv, FilterTypeIcons, GenericFlex, Group, Menu, MenuItem } from '@mexit/shared'
 
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
@@ -31,14 +31,12 @@ const NewFilterMenu = ({ addFilter, filters, removeLastFilter }: NewFilterMenuPr
       type,
       multiple: false,
       // Be default the newly added filter has 'any' join
-      join: 'and',
+      join: 'all',
       values: [value]
     }
     // mog('onAddNewFilter', { type, newFilter, value })z
     addFilter(newFilter)
   }
-
-  mog('FILTERS ', { filters })
 
   useEffect(() => {
     const unsubscribe = tinykeys(window, {

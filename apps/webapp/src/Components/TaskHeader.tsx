@@ -20,7 +20,7 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { Filter, GlobalFilterJoin, SortOrder, SortType, ViewType } from '@mexit/core'
+import { ViewType } from '@mexit/core'
 import {
   DefaultMIcons,
   IconDisplay,
@@ -36,6 +36,7 @@ import {
   Title
 } from '@mexit/shared'
 
+import { useViewFilters } from '../Hooks/todo/useTodoFilters'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
 import { useViewStore } from '../Stores/useViewStore'
@@ -43,47 +44,42 @@ import { useViewStore } from '../Stores/useViewStore'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface ViewHeaderProps {
-  currentFilters: Filter[]
   cardSelected: boolean
-  globalJoin: GlobalFilterJoin
-  currentViewType: ViewType
-  sortOrder: SortOrder
-  sortType: SortType
 }
 
-const ViewHeader = ({
-  currentViewType,
-  sortOrder,
-  sortType,
-  currentFilters,
-  cardSelected,
-  globalJoin
-}: ViewHeaderProps) => {
-  const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const currentView = useViewStore((store) => store.currentView)
+const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
+  const [deleting, setDeleting] = useState(false)
+  /**
+   * sortOrder, sortType, viewType, currentFilters, globalJoin
+   */
 
+  const view = useViewStore((store) => store.currentView)
+  const onChangeView = useViewStore((store) => store.setCurrentView)
+  const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
+
+  const theme = useTheme()
   const { goTo } = useRouting()
   const { deleteView } = useViews()
-  const theme = useTheme()
   const [source, target] = useSingleton()
-  const [deleting, setDeleting] = useState(false)
+  const { viewType, sortOrder, globalJoin, sortType, currentFilters } = useViewFilters()
 
   const isCurrentViewChanged = useMemo(() => {
-    return !(
-      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) &&
-      globalJoin === currentView?.globalJoin &&
-      currentViewType === currentView?.viewType
-    )
-  }, [currentFilters, currentView, globalJoin])
+    return !(JSON.stringify(currentFilters) === JSON.stringify(view?.filters) && viewType === view?.viewType)
+  }, [currentFilters, viewType, view])
 
   const onDeleteView = async () => {
-    if (currentView) {
-      setDeleting(true)
-      await deleteView(currentView.id)
-      setDeleting(false)
-      setCurrentView(undefined)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push)
+    if (view) {
+      try {
+        setDeleting(true)
+        await deleteView(view.id)
+        setDeleting(false)
+        onChangeView(undefined)
+
+        goTo(ROUTE_PATHS.tasks, NavigationType.replace)
+      } catch (error) {
+        setDeleting(false)
+        console.error('Unable To Delete View', error)
+      }
     }
   }
 
@@ -91,16 +87,16 @@ const ViewHeader = ({
     <StyledTaskHeader>
       <TaskHeaderTitleSection>
         <ToolbarTooltip singleton={source} />
-        {!currentView && (
+        {!view && (
           <TaskHeaderIcon>
             <IconDisplay color={theme.tokens.colors.primary.default} size={28} icon={DefaultMIcons.TASK} />
           </TaskHeaderIcon>
         )}
-        {currentView ? (
+        {view ? (
           <TaskViewHeaderWrapper>
             <TaskViewTitle>
               <Icon icon={stackLine} />
-              {currentView?.title}
+              {view?.title}
               {isCurrentViewChanged && '*'}
             </TaskViewTitle>
             <TaskViewControls>
@@ -108,9 +104,9 @@ const ViewHeader = ({
                 onClick={() =>
                   openTaskViewModal({
                     filters: currentFilters,
-                    updateViewId: currentView?.id,
+                    updateViewId: view?.id,
                     properties: {
-                      viewType: currentViewType,
+                      viewType: viewType,
                       globalJoin,
                       sortOrder,
                       sortType
@@ -127,13 +123,13 @@ const ViewHeader = ({
                 title="Clone View"
                 onClick={() =>
                   openTaskViewModal({
-                    filters: currentView?.filters,
-                    cloneViewId: currentView?.id,
+                    filters: view?.filters,
+                    cloneViewId: view?.id,
                     properties: {
-                      globalJoin: currentView?.globalJoin,
-                      viewType: currentView?.viewType,
-                      sortType: currentView?.sortType,
-                      sortOrder: currentView?.sortOrder
+                      globalJoin: view?.globalJoin,
+                      viewType: view?.viewType,
+                      sortType: view?.sortType,
+                      sortOrder: view?.sortOrder
                     }
                   })
                 }
@@ -156,7 +152,7 @@ const ViewHeader = ({
                 onClick={() =>
                   openTaskViewModal({
                     filters: currentFilters,
-                    cloneViewId: currentView?.id,
+                    cloneViewId: view?.id,
                     properties: {
                       viewType: ViewType.Kanban,
                       sortOrder: 'ascending',
@@ -179,10 +175,10 @@ const ViewHeader = ({
               onClick={() =>
                 openTaskViewModal({
                   filters: currentFilters,
-                  cloneViewId: currentView?.id,
+                  cloneViewId: view?.id,
                   properties: {
                     globalJoin,
-                    viewType: currentViewType ?? ViewType.Kanban
+                    viewType: viewType ?? ViewType.Kanban
                   }
                 })
               }

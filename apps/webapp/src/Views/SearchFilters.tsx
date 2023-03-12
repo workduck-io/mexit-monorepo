@@ -6,6 +6,7 @@ import filterOffLine from '@iconify-icons/ri/filter-off-line'
 import { nanoid } from 'nanoid'
 
 import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
+import { Entities } from '@workduck-io/mex-search'
 
 import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
 import {
@@ -16,8 +17,8 @@ import {
   SearchFilterWrapper
 } from '@mexit/shared'
 
+import EntityFilterMenu from '../Components/Filters/EntityFilterMenu'
 import FilterRender from '../Components/Filters/Filter'
-import GlobalJoinFilterMenu from '../Components/Filters/GlobalJoinFilterMenu'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
 import SortMenu, { SortMenuProps } from '../Components/Filters/SortMenu'
 
@@ -26,13 +27,14 @@ import ViewSelector, { ViewSelectorProps } from './ViewSelector'
 interface SearchFiltersProps {
   filters: Filters
   currentFilters: Filter[]
+  entities?: Array<Entities>
+  onEntityFilterChange?: (entitiy: string) => void
   globalJoin: GlobalFilterJoin
   setGlobalJoin: (join: GlobalFilterJoin) => void
   addCurrentFilter: (filter: Filter) => void
   removeCurrentFilter: (filter: Filter) => void
   changeCurrentFilter: (filter: Filter) => void
   resetCurrentFilters: () => void
-  // If present, a view Selector is added at the end with the given properties
   viewSelectorProps?: ViewSelectorProps
 
   sortMenuProps?: SortMenuProps
@@ -45,14 +47,13 @@ const SearchFilters = ({
   changeCurrentFilter,
   removeCurrentFilter,
   resetCurrentFilters,
-  globalJoin,
-  setGlobalJoin,
+  entities,
+  onEntityFilterChange,
   viewSelectorProps,
   sortMenuProps
 }: SearchFiltersProps) => {
   const randomId = useMemo(() => nanoid(), [filters, currentFilters])
 
-  // mog('SearchFilters', { filters, currentFilters, filtersByKey })
   const removeLastFilter = () => {
     if (currentFilters.length > 0) {
       const lastFilter = currentFilters[currentFilters.length - 1]
@@ -86,7 +87,8 @@ const SearchFilters = ({
         ))}
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
-      <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} />
+      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} entities={entities} />}
+      {/* <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} /> */}
       {sortMenuProps && <SortMenu {...sortMenuProps} />}
       {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
     </SearchFilterWrapper>

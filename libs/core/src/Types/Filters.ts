@@ -45,10 +45,10 @@ export const FilterTypeArray = [
 export type FilterType = (typeof FilterTypeArray)[number]
 
 export const FilterJoinArray = [
-  'and', // All values should match
-  'or' // Any value should match
-  // 'notAny', // Any value should not match (if any one matches, item dropped)
-  // 'none' // None of the values should match (if some match, item passed, if all match item dropped)
+  'all', // All values should match
+  'any', // Any value should match
+  'notAny', // Any value should not match (if any one matches, item dropped)
+  'none' // None of the values should match (if some match, item passed, if all match item dropped)
 ] as const
 
 // How to join the values of a single filter
@@ -112,7 +112,7 @@ export interface Filter {
    * The values of the filter
    * No values in both multi and single are represented by empty array
    */
-  values: FilterValue[] | FilterValue
+  values: FilterValue[]
 }
 
 export interface FilterTypeWithOptions {

@@ -7,9 +7,9 @@ export enum ViewType {
 }
 
 export interface View {
+  id: string
   title: string
   description?: string
-  id: string
 
   // FIXME: This should use new Filter type
   filters: Filter[]
@@ -17,6 +17,7 @@ export interface View {
   viewType?: ViewType
   sortOrder?: SortOrder
   sortType?: SortType
+  entities?: Array<string>
 
   globalJoin: GlobalFilterJoin
 }

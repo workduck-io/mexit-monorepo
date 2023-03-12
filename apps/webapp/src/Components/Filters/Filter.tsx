@@ -30,31 +30,17 @@ interface FilterProps {
 }
 
 const JoinLabels = {
-  and: 'and',
-  or: 'or'
-  // any: 'Any of',
-  // all: 'All of',
-  // none: 'None of',
-  // notAny: 'Not Any of'
+  any: 'or',
+  all: 'and'
 }
 
-const JoinOptions = ['and', 'or'].map((join) => ({
+const JoinOptions = ['any', 'all'].map((join) => ({
   label: JoinLabels[join],
   value: join as FilterJoin
 }))
 
 const getJoinOptionsForType = (type: FilterType) => {
   switch (type) {
-    case 'note':
-      return JoinOptions
-    case 'tag':
-      return JoinOptions
-    case 'space':
-      return JoinOptions
-    case 'mention':
-      return JoinOptions
-    case 'status':
-      return JoinOptions
     default:
       return JoinOptions
   }
@@ -113,7 +99,7 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter }: Filte
         <Menu
           allowSearch
           searchPlaceholder="Search Notes"
-          multiSelect
+          multiSelect={multiSelect}
           values={
             <>
               {/* Conditionally render values if value is an array otherwise simple */}

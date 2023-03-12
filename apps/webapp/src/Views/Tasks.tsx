@@ -13,7 +13,7 @@ import { useViews } from '../Hooks/useViews'
 import { useTodoStore } from '../Stores/useTodoStore'
 import { useViewStore } from '../Stores/useViewStore'
 
-import NoResult from './View/NoResult'
+import NoResult from './ViewPage/NoResult'
 import SearchFilters from './SearchFilters'
 
 const Tasks = () => {
@@ -59,7 +59,6 @@ const Tasks = () => {
   useEffect(() => {
     if (match && match.params && match.params.viewid) {
       const activeView = currentView ?? getView(match.params.viewid)
-      // mog('activeView', { activeView, match, currentView })
       if (match.params.viewid === ReminderViewData.id) {
         setCurrentView(ReminderViewData)
       } else if (activeView) {
@@ -91,7 +90,6 @@ const Tasks = () => {
           currentViewType={viewType}
           currentFilters={currentFilters}
           cardSelected={false}
-          currentView={currentView}
           globalJoin={globalJoin}
         />
         <SearchFilters

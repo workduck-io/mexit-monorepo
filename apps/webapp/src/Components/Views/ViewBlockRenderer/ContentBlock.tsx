@@ -52,8 +52,8 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
     setIsOpen(!isOpen)
   }
 
-  const canOpen = block?.text.length > 100
-  const content = isOpen ? block?.text : block?.text.slice(0, 100)
+  const canOpen = block?.text?.length > 100
+  const content = isOpen ? block?.text : block?.text?.slice(0, 100)
 
   return (
     <ContentBlockContainer>

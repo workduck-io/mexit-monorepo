@@ -8,7 +8,6 @@ import {
   DefaultMIcons,
   GenericSearchResult,
   getInitialNode,
-  mog,
   NodeType,
   ViewType
 } from '@mexit/core'
@@ -91,7 +90,7 @@ const Search = () => {
       const nodeType = getNodeType(r.id)
       return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
     })
-    mog('search', { res, filRes })
+
     return filRes
   }
 
@@ -99,7 +98,6 @@ const Search = () => {
   const nodeUID = useEditorStore((store) => store.node.nodeid)
   const baseNodeId = useDataStore((store) => store.baseNodeId)
 
-  // console.log({ result })
   const onSelect = (item: GenericSearchResult) => {
     const nodeid = item.id
     loadNode(nodeid, { highlightBlockId: item.blockId })
@@ -178,7 +176,6 @@ const Search = () => {
     const nFilters = generateNodeSearchFilters(results)
     setFilters(nFilters)
     const filtered = applyCurrentFilters(results)
-    // mog('filtered', { filtered, nFilters, currentFilters, results })
     return filtered
   }
 
@@ -205,10 +202,8 @@ const Search = () => {
       const content = con ? con.content : defaultContent.content
       const node = getNode(item.id, true)
       const icon = useMetadataStore.getState().metadata.notes[item.id]?.icon
-      // const nodeType = getNodeType(node.nodeid)
-      // const icon = node?.icon ?? (nodeType === NodeType.SHARED ? shareLine : fileList2Line)
+
       const edNode = { ...node, title: node.path, id: node.nodeid }
-      // mog('RenderPreview', { item, content, node })
       return (
         <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
           <EditorHeader>
@@ -238,8 +233,6 @@ const Search = () => {
         </SplitSearchPreviewWrapper>
       )
   }
-
-  // mog('RenderSearchResults', { filters, currentFilters, globalJoin })
 
   return (
     <SearchContainer>

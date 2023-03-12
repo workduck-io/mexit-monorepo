@@ -90,13 +90,9 @@ const TaskViewModal = () => {
   const filters = useTaskViewModalStore((store) => store.filters)
   const properties = useTaskViewModalStore((store) => store.properties)
 
-  // const openModal = useTaskViewModalStore((store) => store.openModal)
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
 
-  // const currentView = useViewStore((store) => store.currentView)
   const setCurrentView = useViewStore((store) => store.setCurrentView)
-
-  // const { saveData } = useSaveData()
 
   const { getView, addView, updateView } = useViews()
 

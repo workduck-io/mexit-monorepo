@@ -136,6 +136,18 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   }
 }
 
+export const initializeHighlights = async (highlights: any[], ilinks: any[]) => {
+  try {
+    if (!searchWorker) {
+      await startSearchWorker()
+    }
+
+    await searchWorker.initializeHighlights(highlights, ilinks)
+  } catch (error) {
+    mog('InitSearchWorkerError', { error })
+  }
+}
+
 export const addDoc = async (
   key: idxKey,
   nodeId: string,

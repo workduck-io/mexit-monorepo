@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 
 import styled from 'styled-components'
 
-import { AppInitStatus, mog } from '@mexit/core'
+import { AppInitStatus } from '@mexit/core'
 import { OverlaySidebarWindowWidth } from '@mexit/shared'
 
 import RouteNotFound from './Components/404'
@@ -16,7 +16,6 @@ import Portals from './Components/Portals'
 import SplashScreen from './Components/SplashScreen'
 import Themes from './Components/Themes'
 import UserPage from './Components/User/UserPage'
-import View from './Components/Views'
 import { ROUTE_PATHS } from './Hooks/useRouting'
 import { useSaveNodeName } from './Hooks/useSaveNodeName'
 import useSocket from './Hooks/useSocket'
@@ -43,6 +42,7 @@ import About from './Views/Settings/About'
 import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
+import ViewPage from './Views/ViewPage'
 import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
@@ -195,19 +195,11 @@ const IntegrationRoutes = () => {
 
 const Home = () => <Outlet />
 
-/**
- * 1. Header containing:
- *    - View Title
- *    -
- *
- */
 const ViewRoutes = () => {
-  mog('ROUTE')
   return (
     <Routes>
-      {/* <Route path="tasks" element={<Tasks />} /> */}
-      {/* <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} /> */}
-      <Route path=":viewid" element={<View />} />
+      <Route index element={<ViewPage />} />
+      <Route path=":viewid" element={<ViewPage />} />
     </Routes>
   )
 }

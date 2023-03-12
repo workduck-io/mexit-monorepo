@@ -1,10 +1,8 @@
-import { SearchResult } from '@workduck-io/mex-search'
+import { ISearchQuery, SimpleQueryType } from '@workduck-io/mex-search'
 
-import { FilterTypeWithOptions, useMentionStore } from '@mexit/core'
+import { Filter, FilterJoin, FilterType, FilterTypeWithOptions, useMentionStore } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
-
-import { useViewFilterStore } from './todo/useTodoFilters'
 
 export const useViewFilters = () => {
   /**
@@ -79,15 +77,54 @@ export const useViewFilters = () => {
     return [noteFilter, tagFilter, mentionFilter, spaceFilter]
   }
 
+  const getJoinType = (joinType: FilterJoin) => {
+    switch (joinType) {
+      case 'all':
+        return 'and'
+      case 'any':
+        return 'or'
+      default:
+        throw new Error('Invalid Filter Join Type')
+    }
+  }
+
+  const getQueryType = (type: FilterType): SimpleQueryType => {
+    switch (type) {
+      case 'note':
+      case 'space':
+        return 'heirarchy'
+      case 'tag':
+        return 'tag'
+      case 'mention':
+        return 'mention'
+      default:
+        throw new Error('Invalid Filter Type')
+    }
+  }
+
+  const transformQuery = (filter: Filter) => {
+    return filter.values.map((value) => ({
+      type: getQueryType(filter.type),
+      value: value.id,
+      nextOperator: getJoinType(filter.join)
+    }))
+  }
+
   /**
    * Get filtered result for the current view
    */
-  const getFilteredResults = (items: SearchResult[]) => {
-    const appliedFilters = useViewFilterStore.getState().currentFilters
+  const generateQuery = (filters: Array<Filter>): ISearchQuery => {
+    const query = filters.reduce((prev, filter) => {
+      return [...prev, ...transformQuery(filter)]
+    }, [])
 
-    // * TODO: Return filtered Result
-    return items
+    return [
+      {
+        type: 'query',
+        query
+      }
+    ]
   }
 
-  return { getFilters }
+  return { getFilters, generateQuery }
 }

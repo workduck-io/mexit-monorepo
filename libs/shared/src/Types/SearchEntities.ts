@@ -22,6 +22,6 @@ export const SearchEntities: Partial<Record<SearchGroupType, SearchEntityType>> 
   },
   Ungrouped: {
     label: 'Ungrouped',
-    icon: getMIcon('ICON', 'ri:folder')
+    icon: getMIcon('ICON', 'bi:view-stacked')
   }
 }

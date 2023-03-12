@@ -1,12 +1,22 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, ViewType } from '@mexit/core'
+import {
+  fuzzySearchLinks,
+  GenericSearchResult,
+  Link,
+  mog,
+  sortByCreated,
+  useDataStore,
+  useHighlightStore,
+  ViewType
+} from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 import { useLinkStore } from '../Stores/useLinkStore'
+import { initializeHighlights } from '../Workers/controller'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
@@ -26,6 +36,10 @@ const LinkView = () => {
    */
   useEffect(() => {
     getAllLinks()
+    const h = useHighlightStore.getState().highlights
+    const ilinks = useDataStore.getState().ilinks
+    console.log('HIGHLIGHTS', { ilinks, h })
+    initializeHighlights(h, ilinks).then(() => console.log('Initialized highlights worker'))
   }, [])
 
   const {
@@ -47,16 +61,11 @@ const LinkView = () => {
     return links.sort(sortByCreated)
   }, [links])
 
-  // mog('Initial links', { initialLinks, links })
-
   const onSearch = async (newSearchTerm: string): Promise<Link[]> => {
     const res = fuzzySearchLinks(newSearchTerm, initialLinks)
-    // mog('new search is here', { newSearchTerm, res })
     if (!newSearchTerm && res?.length === 0) {
-      // mog('Inside', {})
       return initialLinks
     }
-    // mog('Got search results: ', { res })
     return res
   }
 
