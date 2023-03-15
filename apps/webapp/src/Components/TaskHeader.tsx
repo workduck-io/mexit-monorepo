@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 
 import trashIcon from '@iconify/icons-codicon/trash'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
 import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
@@ -19,7 +18,6 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { ViewType } from '@mexit/core'
 import {
   ShortcutToken,
   ShortcutTokens,
@@ -136,25 +134,6 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
               >
                 <Icon icon={trashIcon} />
               </LoadingButton>
-              <IconButton
-                title="Create New View"
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: currentFilters,
-                    cloneViewId: view?.id,
-                    properties: {
-                      viewType: ViewType.Kanban,
-                      sortOrder: 'ascending',
-                      sortType: 'status',
-                      globalJoin: 'all'
-                    }
-                  })
-                }
-                disabled={currentFilters.length === 0}
-                singleton={target}
-                // transparent={false}
-                icon={addCircleLine}
-              />
             </TaskViewControls>
           </TaskViewHeaderWrapper>
         )}

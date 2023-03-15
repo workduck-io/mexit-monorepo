@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { API, AppInitStatus, mog, runBatch } from '@mexit/core'
+import { API, AppInitStatus, mog, runBatch, useLinkStore } from '@mexit/core'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
@@ -97,8 +97,9 @@ export const useInitLoader = () => {
           archive: useDataStore.getState().archive,
           sharedNodes: useDataStore.getState().sharedNodes,
           snippets: useSnippetStore.getState().snippets,
+          links: useLinkStore.getState().links,
           contents: useContentStore.getState().contents,
-          // highlights: useHighlightStore.getState().highlights,
+          highlights: useHighlightStore.getState().highlights,
           prompts: usePromptStore.getState().getAllPrompts()
         }
 

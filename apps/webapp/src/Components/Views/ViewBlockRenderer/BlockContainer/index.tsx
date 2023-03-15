@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import styled, { css, useTheme } from 'styled-components'
 
-import { SEPARATOR } from '@mexit/core'
-import { Group, IconDisplay, MexIcon, SearchEntities } from '@mexit/shared'
+import { Group, IconDisplay, MexIcon } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../../../Hooks/todo/useTodoFilters'
-import { useFilterIcons } from '../../../../Hooks/useFilterValueIcons'
+import useGroupHelper from '../../../../Hooks/useGroupHelper'
 
 const StyledResultGroup = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.small};
@@ -21,7 +20,7 @@ const StyledResultGroup = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
 `
 
-const GroupHeader = styled.div<{ isOpen?: boolean }>`
+export const GroupHeader = styled.div<{ isOpen?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,58 +42,49 @@ const GroupHeader = styled.div<{ isOpen?: boolean }>`
   }
 `
 
-const AccordionContent = styled.div<{ isOpen?: boolean }>`
-  padding: 10px;
-  ${(props) =>
-    props.isOpen
+const AccordionContent = styled.div<{ isOpen?: boolean; height?: any }>`
+  overflow: hidden;
+
+  ${({ isOpen }) =>
+    isOpen
       ? css`
-          display: block;
+          max-height: 40rem;
+          overflow-y: auto;
           opacity: 1;
+          padding: 10px;
         `
       : css`
-          display: none;
+          max-height: 0;
           opacity: 0;
-        `};
+          padding: 0 10px;
+        `}
+  transition-property: max-height, opacity, padding;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
 `
 
 const Count = styled.span`
   color: ${({ theme }) => theme.tokens.text.fade};
   opacity: 0.5;
 `
-
-const getResultGroup = (label: string, groupBy: string, getIcon) => {
-  const group = groupBy.split(SEPARATOR).at(-1)
-
-  if (label === 'Ungrouped') return SearchEntities[label]
-
-  switch (group) {
-    case 'status':
-      return {
-        id: 'status',
-        label,
-        icon: getIcon('status', label)
-      }
-    case 'entity':
-      return SearchEntities[label]
-  }
-}
-
 const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpen?: boolean }> = ({
   label,
   children,
   count,
   isOpen: defaultOpenState = true
 }) => {
+  const ref = useRef(null)
   const theme = useTheme()
-  const { getFilterValueIcon } = useFilterIcons()
+  const { getResultGroup } = useGroupHelper()
   const [isOpen, setIsOpen] = useState(defaultOpenState)
+
   const groupBy = useViewFilterStore((store) => store.groupBy)
 
   const handleToggleAccordion = () => {
     setIsOpen(!isOpen)
   }
 
-  const group = getResultGroup(label, groupBy, getFilterValueIcon)
+  const group = getResultGroup(label, groupBy)
 
   if (!group) return
 
@@ -102,14 +92,23 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpe
     <StyledResultGroup>
       <GroupHeader isOpen={!!isOpen} onClick={handleToggleAccordion}>
         <Group>
-          <IconDisplay icon={group.icon} color={theme.tokens.colors.primary.default} />
+          <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
           <span>{group.label}</span>
           <Count>{count}</Count>
         </Group>
-        <MexIcon $noHover onClick={handleToggleAccordion} height={24} width={24} icon={arrowLeftSLine} />
+        <MexIcon
+          $noHover
+          onClick={handleToggleAccordion}
+          cursor="pointer"
+          height={24}
+          width={24}
+          icon={arrowLeftSLine}
+        />
       </GroupHeader>
 
-      <AccordionContent isOpen={isOpen}>{children}</AccordionContent>
+      <AccordionContent isOpen={isOpen} height={ref?.current?.scrollHeight} ref={ref}>
+        {children}
+      </AccordionContent>
     </StyledResultGroup>
   )
 }

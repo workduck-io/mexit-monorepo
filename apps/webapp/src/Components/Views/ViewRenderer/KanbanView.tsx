@@ -12,11 +12,9 @@ import { getNextStatus, getPrevStatus, mog, PriorityType } from '@mexit/core'
 import {
   Count,
   Group,
-  groupByKey,
   GroupHeader,
   IconDisplay,
   OverlaySidebarWindowWidth,
-  SearchEntities,
   StyledTasksKanban,
   TaskColumnHeader
 } from '@mexit/shared'
@@ -24,12 +22,10 @@ import {
 import { useViewFilters as useFilters, useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
-import { useFilterStore } from '../../../Hooks/useFilters'
+import useGroupHelper from '../../../Hooks/useGroupHelper'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useSearch } from '../../../Hooks/useSearch'
-import { useViewFilters } from '../../../Hooks/useViewFilters'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import useModalStore from '../../../Stores/useModalStore'
@@ -40,7 +36,7 @@ import ViewBlockRenderer from '../ViewBlockRenderer'
  * With shortcuts and navigation
  */
 
-const KanbanView = () => {
+const KanbanView: React.FC<any> = (props) => {
   const [board, setBoard] = useState<any>({ columns: [] })
   const [selectedCard, setSelectedCard] = React.useState<SearchResult | null>(null)
 
@@ -48,13 +44,10 @@ const KanbanView = () => {
   const isModalOpen = useModalStore((store) => store.open)
   const sidebar = useLayoutStore((store) => store.sidebar)
 
-  const { queryIndex } = useSearch()
-  const { generateQuery } = useViewFilters()
   const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
   const { globalJoin, currentFilters, sortOrder, sortType } = useFilters()
 
   const entities = useViewFilterStore((store) => store.entities)
-  const groupBy = useFilterStore((store) => store.groupBy)
 
   const { push } = useNavigation()
   const { goTo } = useRouting()
@@ -63,12 +56,7 @@ const KanbanView = () => {
   const { accessWhenShared } = usePermissions()
 
   useEffect(() => {
-    const query = generateQuery(currentFilters, entities)
-
-    queryIndex('node', query).then((res) => {
-      mog('RESULT IS', { res, query, currentFilters })
-      if (res) setBoard(getBlocksBoard(groupByKey(res, groupBy)))
-    })
+    setBoard(getBlocksBoard(props.results))
   }, [globalJoin, currentFilters, entities, sortOrder, sortType])
 
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
@@ -266,8 +254,13 @@ const KanbanView = () => {
 
   const ColumnHeader = (props) => {
     const theme = useTheme()
-    const group = SearchEntities[props.id]
+    const { getResultGroup } = useGroupHelper()
+    const groupBy = useViewFilterStore((store) => store.groupBy)
+
+    const group = getResultGroup(props.id, groupBy)
     const count = board.columns?.find((column) => column.id === props.id)?.cards?.length
+
+    if (!group) return
 
     return (
       <TaskColumnHeader>

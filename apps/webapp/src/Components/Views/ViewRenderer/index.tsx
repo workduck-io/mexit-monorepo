@@ -1,13 +1,15 @@
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { MIcon, ViewType } from '@mexit/core'
+import { MIcon, View, ViewType } from '@mexit/core'
+
+import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
+import useViewResults from '../../../Hooks/useViewResults'
 
 import KanbanView from './KanbanView'
 import ListView from './ListView'
 
 export interface ViewRendererProps {
-  viewId: string
-  viewType?: ViewType
+  view: View
 }
 
 export type GroupedResult = {
@@ -18,12 +20,16 @@ export type GroupedResult = {
 }
 
 const ViewRenderer: React.FC<ViewRendererProps> = (props) => {
-  switch (props.viewType) {
+  const viewType = useViewFilterStore((s) => s.viewType)
+
+  const results = useViewResults()
+
+  switch (viewType) {
     case ViewType.Kanban:
-      return <KanbanView />
+      return <KanbanView results={results} {...props} />
     case ViewType.List:
     default:
-      return <ListView {...props} />
+      return <ListView results={results} {...props} />
   }
 }
 

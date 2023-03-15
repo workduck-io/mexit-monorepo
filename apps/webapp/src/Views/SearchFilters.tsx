@@ -76,20 +76,21 @@ const SearchFilters = ({
         <Infobox text={SearchFiltersHelp} />
       </SearchFilterLabel>
       <SearchFiltersWrapper key={`Filters_${randomId}`}>
-        {currentFilters.map((filter) => (
-          <FilterRender
-            key={`${filter.id}_${filter.type}`}
-            filter={filter}
-            options={filters.find((f) => f.type === filter.type)?.options}
-            onChangeFilter={(f) => changeCurrentFilter(f)}
-            onRemoveFilter={(f) => removeCurrentFilter(f)}
-          />
-        ))}
+        {currentFilters.map((filter) => {
+          return (
+            <FilterRender
+              key={`${filter.id}_${filter.type}`}
+              filter={filter}
+              options={filters.find((f) => f.type === filter.type)?.options}
+              onChangeFilter={(f) => changeCurrentFilter(f)}
+              onRemoveFilter={(f) => removeCurrentFilter(f)}
+            />
+          )
+        })}
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
       {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
       {onGroupByChange && <GroupByMenu onChange={onGroupByChange} />}
-      {/* <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} /> */}
       {sortMenuProps && <SortMenu {...sortMenuProps} />}
       {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
     </SearchFilterWrapper>

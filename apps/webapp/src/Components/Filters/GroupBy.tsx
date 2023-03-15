@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { SEPARATOR } from '@mexit/core'
+import { capitalize, SEPARATOR } from '@mexit/core'
 import { DefaultMIcons, GenericSection, IconDisplay, Menu, MenuItem, SortSectionWrapper } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
@@ -10,6 +10,8 @@ const GroupByMenu = ({ onChange }) => {
   const groupBy = useViewFilterStore((store) => store.groupBy)
   const groupingOptions = useViewFilterStore((store) => store.groupingOptions)
 
+  if (!groupingOptions?.length) return null
+
   return (
     <SortSectionWrapper>
       <Menu
@@ -17,12 +19,12 @@ const GroupByMenu = ({ onChange }) => {
         values={
           <GenericSection>
             <IconDisplay icon={DefaultMIcons.GROUPBY} />
-            {groupBy?.split(SEPARATOR)?.at(-1) ?? 'Group By'}
+            {groupBy ? capitalize(groupBy?.split(SEPARATOR)?.at(-1)) : 'Group By'}
           </GenericSection>
         }
       >
-        {groupingOptions?.map((option) => {
-          return <MenuItem icon={option.icon} onClick={() => onChange(option.id)} label={option.label} />
+        {groupingOptions.map((option) => {
+          return <MenuItem icon={option.icon} onClick={() => onChange(option.id)} label={capitalize(option.label)} />
         })}
       </Menu>
     </SortSectionWrapper>

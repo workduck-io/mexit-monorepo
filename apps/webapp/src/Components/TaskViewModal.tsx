@@ -5,6 +5,7 @@ import Modal from 'react-modal'
 import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
+import { Entities } from '@workduck-io/mex-search'
 
 import {
   Filter,
@@ -24,17 +25,18 @@ import { useViewStore } from '../Stores/useViewStore'
 import { ModalControls, ModalHeader } from '../Style/Refactor'
 
 import { DisplayFilter } from './Filters/Filter'
-import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
 
 interface ViewProperties {
   globalJoin: GlobalFilterJoin
   viewType?: ViewType
   sortOrder?: SortOrder
-  sortType?: SortType
-}
 
-// Prefill modal has been added to the Tree via withRefactor from useRefactor
+  // * View v2 properties
+  sortType?: SortType
+  entities?: Array<Entities>
+  groupBy?: string
+}
 
 interface TaskViewModalState {
   open: boolean
@@ -62,9 +64,8 @@ const getInitialState = () => ({
   cloneViewId: undefined,
   properties: {
     globalJoin: 'all' as GlobalFilterJoin,
-    viewType: ViewType.Kanban,
-    sortOrder: 'ascending' as SortOrder,
-    sortType: 'status' as SortType
+    viewType: ViewType.List,
+    sortOrder: 'ascending' as SortOrder
   }
 })
 
@@ -142,7 +143,6 @@ const TaskViewModal = () => {
   }, [cloneViewId, updateViewId])
 
   const onSubmit = async (data: TaskViewModalFormData) => {
-    // mog('onSubmit', { data, filters, cloneViewId })
     const properties = useTaskViewModalStore.getState().properties
 
     if (updateViewId) {
@@ -172,11 +172,10 @@ const TaskViewModal = () => {
       setCurrentView(view)
       goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
-    reset()
-    closeModal()
+    handleClose()
   }
 
-  const handleCancel = () => {
+  const handleClose = () => {
     reset()
     closeModal()
   }
@@ -198,7 +197,7 @@ const TaskViewModal = () => {
             })
           }}
           transparent={false}
-        ></Input>
+        />
 
         <Label htmlFor="description">Description </Label>
         <TextAreaBlock
@@ -207,21 +206,23 @@ const TaskViewModal = () => {
           {...register('description')}
         />
 
-        <Label htmlFor="description">Filters </Label>
         {filters?.length > 0 && (
-          <SearchFilterListCurrent>
-            {filters.map((f) => (
-              <DisplayFilter key={f.id} filter={f} />
-            ))}
-            <RenderGlobalJoin globalJoin={properties.globalJoin} />
-          </SearchFilterListCurrent>
+          <>
+            <Label htmlFor="description">Filters </Label>
+            <SearchFilterListCurrent>
+              {filters.map((f) => (
+                <DisplayFilter key={f.id} filter={f} />
+              ))}
+              {/* <RenderGlobalJoin globalJoin={properties.globalJoin} /> */}
+            </SearchFilterListCurrent>
+          </>
         )}
 
         <ModalControls>
-          <Button large onClick={handleCancel}>
+          <Button large onClick={handleClose}>
             Cancel
           </Button>
-          <LoadingButton loading={isSubmitting} alsoDisabled={filters?.length === 0} type="submit" primary large>
+          <LoadingButton loading={isSubmitting} type="submit" primary large>
             {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'} View
           </LoadingButton>
         </ModalControls>

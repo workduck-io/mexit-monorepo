@@ -34,6 +34,7 @@ const ViewSearchFilters = () => {
       filters={filters}
       onEntityFilterChange={(entity: Entities) => {
         const entities = useViewFilterStore.getState().entities
+
         if (entities.includes(entity)) {
           onChangeEntities(entities.filter((e) => e !== entity))
         } else {
@@ -55,8 +56,7 @@ const ViewSearchFilters = () => {
         sortOrder,
         sortType,
         onSortTypeChange,
-        onSortOrderChange,
-        availableSortTypes: ['status', 'priority']
+        onSortOrderChange
       }}
     />
   )

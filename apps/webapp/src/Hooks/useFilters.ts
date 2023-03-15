@@ -39,6 +39,9 @@ export interface FilterStore {
   groupingOptions?: Array<SearchEntityType>
   setGroupingOptions?: (groupingOptions: Array<SearchEntityType>) => void
 
+  sortOptions?: Array<SearchEntityType>
+  setSortOptions?: (sortOptions: Array<SearchEntityType>) => void
+
   setFilters: (filters: Filters) => void
   setGlobalJoin: (join: GlobalFilterJoin) => void
   setCurrentFilters: (currentFilters: Filter[]) => void
@@ -67,7 +70,7 @@ export const useFilterStoreBase = create<FilterStore>((set) => ({
   currentFilters: [],
   indexes: ['node', 'shared'],
   globalJoin: 'all',
-  groupBy: 'entity',
+  groupBy: undefined,
   setFilters: (filters) => set((state) => ({ ...state, filters })),
   setGlobalJoin: (join) => set((state) => ({ ...state, globalJoin: join })),
   setCurrentFilters: (currentFilters) => set((state) => ({ ...state, currentFilters })),

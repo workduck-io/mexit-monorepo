@@ -2,7 +2,7 @@ import React from 'react'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { generateTaskViewId, getMIcon, ReminderViewData, ViewType } from '@mexit/core'
+import { getMIcon, ReminderViewData, ViewType } from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
@@ -19,33 +19,12 @@ const ViewList = () => {
   const views = useViewStore((store) => store.views)
   const currentView = useViewStore((store) => store.currentView)
   const setContextMenu = useLayoutStore((store) => store.setContextMenu)
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
 
   const { goTo } = useRouting()
 
-  const onOpenDefaultView = (path: string = ROUTE_PATHS.tasks) => {
-    setCurrentView(undefined)
-    goTo(path, NavigationType.push)
-  }
-
-  const onOpenReminderView = () => {
-    setCurrentView(ReminderViewData)
-    goTo(`${ROUTE_PATHS.reminders}`, NavigationType.push)
-  }
-
   const onOpenView = (viewid: string) => {
-    if (viewid === 'tasks') {
-      onOpenDefaultView()
-    } else if (viewid === 'reminders') {
-      onOpenReminderView()
-    } else {
-      const view = views.find((view) => view.id === viewid)
-      if (view) {
-        setCurrentView(view)
-        goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
-      }
-    }
+    goTo(ROUTE_PATHS.view, NavigationType.push, viewid)
   }
 
   const sortedViews = React.useMemo(() => {
@@ -81,7 +60,6 @@ const ViewList = () => {
   const handleCreateNewView = () => {
     openTaskViewModal({
       filters: [],
-      cloneViewId: generateTaskViewId(),
       properties: {
         globalJoin: 'all',
         viewType: ViewType.List,

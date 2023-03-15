@@ -1,5 +1,6 @@
 import { Document } from '@workduck-io/flexsearch'
 
+import { Link } from '../Stores/link.store'
 import { Snippets } from '../Stores/snippet.store'
 
 import { ILink, LinkCache, NodeContent, SharedNode, Tag, TagsCache } from './Editor'
@@ -15,6 +16,8 @@ export interface PersistentData {
   contents: {
     [key: string]: NodeContent
   }
+
+  links?: Link[]
 
   linkCache: LinkCache
   tagsCache: TagsCache

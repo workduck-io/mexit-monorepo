@@ -26,7 +26,7 @@ const EntityFilterMenu = ({ onChange }) => {
     <SortSectionWrapper>
       <Menu
         multiSelect
-        key={`${viewId}-${entities?.length}`}
+        key={`${JSON.stringify(entities)}-${viewId}`}
         values={
           <GenericSection>
             <IconDisplay icon={DefaultMIcons.TEXT} />
@@ -42,6 +42,7 @@ const EntityFilterMenu = ({ onChange }) => {
                 selected={isSelected(key as Entities)}
                 icon={entity.icon}
                 multiSelect
+                key={`${viewId}-${entity.id}`}
                 disabled={viewId === entity.id}
                 onClick={() => onChange(key)}
                 label={entity.label}

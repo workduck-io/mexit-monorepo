@@ -3,6 +3,7 @@ import create from 'zustand'
 import { Entities } from '@workduck-io/mex-search'
 
 import { Filter, Filters, GlobalFilterJoin, mog, View, ViewType } from '@mexit/core'
+import { SearchEntityType } from '@mexit/shared'
 
 import { FilterStore } from '../useFilters'
 
@@ -17,15 +18,16 @@ export const useViewFilterStore = create<FilterStore>((set) => ({
   setEntities: (entities: Array<Entities>) => set({ entities }),
   initializeState: (view: View) => {
     set({
+      entities: view.entities ?? [],
       currentFilters: view.filters,
       globalJoin: view.globalJoin,
       viewType: view.viewType,
-      sortOrder: view.sortOrder ?? 'ascending',
-      entities: view.entities ?? []
+      sortOrder: view.sortOrder ?? 'ascending'
     })
   },
   setGroupBy: (groupBy: string) => set({ groupBy }),
-  setGroupingOptions: (groupingOptions: string[]) => set({ groupingOptions }),
+  setGroupingOptions: (groupingOptions: SearchEntityType[]) => set({ groupingOptions }),
+  setSortOptions: (sortOptions: SearchEntityType[]) => set({ sortOptions }),
   setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
   indexes: [],
   setIndexes: () => undefined,
@@ -40,9 +42,11 @@ export const useViewFilters = () => {
   const filters = useViewFilterStore((state) => state.filters)
   const onChangeEntities = useViewFilterStore((state) => state.setEntities)
   const currentFilters = useViewFilterStore((state) => state.currentFilters)
+  const entities = useViewFilterStore((store) => store.entities)
   const globalJoin = useViewFilterStore((state) => state.globalJoin)
   const sortOrder = useViewFilterStore((state) => state.sortOrder)
   const sortType = useViewFilterStore((state) => state.sortType)
+  const groupBy = useViewFilterStore((state) => state.groupBy)
   const viewType = useViewFilterStore((state) => state.viewType)
   const setCurrentFilters = useViewFilterStore((state) => state.setCurrentFilters)
   const setFilters = useViewFilterStore((s) => s.setFilters)
@@ -52,6 +56,7 @@ export const useViewFilters = () => {
   const onSortTypeChange = useViewFilterStore((state) => state.setSortType)
   const onSortOrderChange = useViewFilterStore((state) => state.setSortOrder)
   const onViewTypeChange = useViewFilterStore((state) => state.setViewType)
+  const setGroupingOptions = useViewFilterStore((state) => state.setGroupingOptions)
 
   const resetFilters = () => {
     setFilters([])
@@ -95,10 +100,13 @@ export const useViewFilters = () => {
     setFilters,
     setGlobalJoin,
     resetFilters,
+    entities,
     addCurrentFilter,
     removeCurrentFilter,
     changeCurrentFilter,
+    groupBy,
     onGroupByChange,
+    setGroupingOptions,
     resetCurrentFilters,
     onViewTypeChange,
     onSortTypeChange,

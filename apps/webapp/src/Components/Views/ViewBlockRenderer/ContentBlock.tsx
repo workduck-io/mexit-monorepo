@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import arrowDownSLine from '@iconify/icons-ri/arrow-down-s-line'
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import styled, { css, useTheme } from 'styled-components'
 
@@ -11,17 +10,12 @@ import { Group, MexIcon, PrimaryText } from '@mexit/shared'
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
 
 import { SlideDownKeyFrames, SlideUpKeyFrames } from './BlockContainer/styled'
+import { GroupHeader } from './BlockContainer'
 
 const ContentBlockContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
-`
-
-const BlockHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `
 
 const BlockContent = styled.div<{ isOpen?: boolean }>`
@@ -57,7 +51,7 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
 
   return (
     <ContentBlockContainer>
-      <BlockHeader>
+      <GroupHeader>
         <Group>
           <MexIcon
             color={theme.tokens.colors.primary.default}
@@ -68,9 +62,16 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
           <PrimaryText>{block?.entity}</PrimaryText>
         </Group>
         {canOpen && (
-          <MexIcon cursor="pointer" onClick={handleToggleAccordion} icon={!isOpen ? arrowLeftSLine : arrowDownSLine} />
+          <MexIcon
+            $noHover
+            height={24}
+            width={24}
+            cursor="pointer"
+            onClick={handleToggleAccordion}
+            icon={arrowLeftSLine}
+          />
         )}
-      </BlockHeader>
+      </GroupHeader>
       <BlockContent isOpen={isOpen}>{content}</BlockContent>
     </ContentBlockContainer>
   )

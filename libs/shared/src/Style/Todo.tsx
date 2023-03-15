@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import { generateStyle } from '@workduck-io/mex-themes'
 
 import { fadeIn } from './fade'
+import { ThinScrollbar } from './Helpers'
 import { MainHeader } from './Layouts'
 import { MainFont, SearchFilterListCurrent } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
@@ -38,9 +39,13 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
+  ${ThinScrollbar}
 
   .react-kanban-board {
-    overflow: hidden;
+    max-width: ${({ sidebarExpanded }) => `calc(100vw - ${sidebarExpanded ? '420px' : '140px'})`};
+    height: 80vh;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .react-kanban-column:not(:first-of-type) {

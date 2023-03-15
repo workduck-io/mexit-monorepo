@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
+import { useDataStore, View } from '@mexit/core'
 import { PageContainer, ViewSection } from '@mexit/shared'
 
-import { useViewFilters, useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
+import { useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
 import { useViewFilters as useFilters } from '../../Hooks/useViewFilters'
 import { useViews } from '../../Hooks/useViews'
 import { useViewStore } from '../../Stores/useViewStore'
@@ -16,17 +17,21 @@ type ViewProps = {
 }
 
 export const ViewContainer: React.FC<ViewProps> = ({ viewId }) => {
-  const viewType = useViewFilterStore((store) => store.viewType)
+  const _hasHydrated = useDataStore((s) => s._hasHydrated)
   const setCurrentView = useViewStore((s) => s.setCurrentView)
+  const setFilters = useViewFilterStore((s) => s.setFilters)
+  const initViewFilters = useViewFilterStore((s) => s.initializeState)
 
   const { getView } = useViews()
   const { getFilters } = useFilters()
-  const { setFilters, initViewFilters } = useViewFilters()
 
-  const handleViewInit = (viewId: string) => {
-    const activeView = getView(viewId)
-    setCurrentView(activeView)
-    initViewFilters(activeView)
+  const activeView = useMemo(() => {
+    return getView(viewId)
+  }, [viewId, _hasHydrated])
+
+  const handleViewInit = (view: View) => {
+    setCurrentView(view)
+    initViewFilters(view)
   }
 
   useEffect(() => {
@@ -34,19 +39,23 @@ export const ViewContainer: React.FC<ViewProps> = ({ viewId }) => {
   }, [])
 
   useEffect(() => {
-    handleViewInit(viewId)
-  }, [viewId])
+    if (activeView) {
+      handleViewInit(activeView)
+    }
+  }, [activeView])
+
+  if (!_hasHydrated) return
 
   return (
     <View>
-      <ViewRenderer viewId={viewId} viewType={viewType} />
+      <ViewRenderer view={activeView} />
     </View>
   )
 }
 
 const View = ({ children }) => {
   return (
-    <PageContainer>
+    <PageContainer fade>
       <ViewHeader cardSelected={false} />
       <ViewSearchFilters />
       <ViewSection>{children}</ViewSection>

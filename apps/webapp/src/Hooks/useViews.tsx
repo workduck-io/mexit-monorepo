@@ -35,9 +35,11 @@ export const useViews = () => {
   const getView = (id: string): View | undefined => {
     switch (id) {
       case 'tasks':
+        // eslint-disable-next-line no-case-declarations
+        const filters = getDefaultNote()
         return {
           id: 'tasks',
-          filters: [getDefaultNote()],
+          filters: filters ? [filters] : [],
           title: 'Tasks',
           description: 'The Tasks view is a powerful tool for managing and tracking tasks.',
           viewType: ViewType.List,

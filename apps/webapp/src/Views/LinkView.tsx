@@ -16,7 +16,6 @@ import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
 import { useLinkStore } from '../Stores/useLinkStore'
-import { initializeHighlights } from '../Workers/controller'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'
@@ -38,8 +37,6 @@ const LinkView = () => {
     getAllLinks()
     const h = useHighlightStore.getState().highlights
     const ilinks = useDataStore.getState().ilinks
-    console.log('HIGHLIGHTS', { ilinks, h })
-    initializeHighlights(h, ilinks).then(() => console.log('Initialized highlights worker'))
   }, [])
 
   const {
@@ -134,8 +131,6 @@ const LinkView = () => {
       />
     )
   }
-
-  // mog('Rendering LinkView', { links, initialLinks })
 
   return (
     <SearchContainer>

@@ -1,13 +1,7 @@
 import { Entities, ISearchQuery, SearchResult, SimpleQueryType } from '@workduck-io/mex-search'
 
 import { Filter, FilterJoin, FilterType, FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
-import {
-  DefaultMIcons,
-  findGroupingKey,
-  getKeyFrequencyMap,
-  keysToExcludeInGrouping,
-  SearchEntityType
-} from '@mexit/shared'
+import { DefaultMIcons, findGroupingKey, getKeyFrequencyMap, SearchEntityType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -117,15 +111,12 @@ export const useViewFilters = () => {
     }))
   }
 
-  const getGroupingOptions = (
-    items: Array<SearchResult>,
-    excludeFields = keysToExcludeInGrouping
-  ): { options: Array<SearchEntityType>; groupBy: string } => {
+  const getGroupingOptions = (items: Array<SearchResult>): { options: Array<SearchEntityType>; groupBy: string } => {
     const keyFrequencyMap = getKeyFrequencyMap(items)
     const groupBy = findGroupingKey(keyFrequencyMap)
 
     if (!groupBy) {
-      return { options: [], groupBy: 'entity' }
+      return { options: [], groupBy: undefined }
     }
 
     const options = Object.keys(keyFrequencyMap).map((key) => ({
@@ -135,7 +126,7 @@ export const useViewFilters = () => {
     }))
 
     return {
-      options: options.filter((option) => !excludeFields.includes(option.id)),
+      options,
       groupBy
     }
   }

@@ -129,20 +129,7 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
     if (!searchWorker) {
       await startSearchWorker()
     }
-
     await searchWorker.init(fileData)
-  } catch (error) {
-    mog('InitSearchWorkerError', { error })
-  }
-}
-
-export const initializeHighlights = async (highlights: any[], ilinks: any[]) => {
-  try {
-    if (!searchWorker) {
-      await startSearchWorker()
-    }
-
-    await searchWorker.initializeHighlights(highlights, ilinks)
   } catch (error) {
     mog('InitSearchWorkerError', { error })
   }

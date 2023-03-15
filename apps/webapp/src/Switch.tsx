@@ -204,7 +204,7 @@ const ViewRoutes = () => {
   )
 }
 
-export const Switch = () => {
+export const Switch = ({ children }) => {
   const location = useLocation()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
@@ -261,9 +261,14 @@ export const Switch = () => {
   // mog('Rendering Switch', { location  })
 
   return (
-    // eslint-disable-next-line
     // @ts-ignore
-    <SwitchWrapper $isAuth={authenticated}>
+    <SwitchWrapper $isAuth={authenticated}>{children}</SwitchWrapper>
+  )
+}
+
+const PageRoutes = () => {
+  return (
+    <Switch>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
@@ -285,14 +290,7 @@ export const Switch = () => {
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
           <Route path={`${ROUTE_PATHS.view}/*`} element={<ViewRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
-          <Route
-            path={ROUTE_PATHS.links}
-            element={
-              <ProtectedRoute>
-                <LinkView />
-              </ProtectedRoute>
-            }
-          />
+          <Route path={ROUTE_PATHS.links} element={<LinkView />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
@@ -309,8 +307,8 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.archive} element={<Archive />} />
         <Route path="*" element={<RouteNotFound />} />
       </Routes>
-    </SwitchWrapper>
+    </Switch>
   )
 }
 
-export default Switch
+export default PageRoutes
