@@ -1,6 +1,6 @@
 import { Entities } from '@workduck-io/mex-search'
 
-import { View, ViewType } from '@mexit/core'
+import { Filter, useDataStore, View, ViewType } from '@mexit/core'
 
 import { useViewStore } from '../Stores/useViewStore'
 
@@ -12,12 +12,32 @@ export const useViews = () => {
   const removeViewStore = useViewStore((store) => store.removeView)
   const { saveView, deleteView: deleteViewApi } = useViewAPI()
 
+  const getDefaultNote = (): Filter => {
+    const note = useDataStore.getState().ilinks.find((ilink) => ilink.path === 'Daily Tasks')
+
+    if (note) {
+      return {
+        multiple: false,
+        id: 'FILTER_NOTE',
+        join: 'all',
+        type: 'note',
+        values: [
+          {
+            value: note.nodeid,
+            id: note.nodeid,
+            label: note.path
+          }
+        ]
+      }
+    }
+  }
+
   const getView = (id: string): View | undefined => {
     switch (id) {
       case 'tasks':
         return {
           id: 'tasks',
-          filters: [],
+          filters: [getDefaultNote()],
           title: 'Tasks',
           description: 'The Tasks view is a powerful tool for managing and tracking tasks.',
           viewType: ViewType.List,

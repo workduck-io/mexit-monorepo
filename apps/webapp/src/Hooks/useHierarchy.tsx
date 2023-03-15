@@ -1,4 +1,4 @@
-import { HASH_SEPARATOR, mog,NodeEditorContent, SEPARATOR } from '@mexit/core'
+import { HASH_SEPARATOR, mog, NodeEditorContent, SEPARATOR } from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
 import { useDataStore } from '../Stores/useDataStore'
@@ -42,7 +42,6 @@ export const useHierarchy = () => {
   }) => {
     try {
       const { notePath, noteId, parentNoteId, noteContent } = options
-      mog('OPTIONS ARE', { options })
 
       const content = noteContent ?? defaultContent.content
       const bulkNotePath = !parentNoteId ? createNoteHierarchyString(notePath, options.namespace) : notePath

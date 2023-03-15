@@ -19,6 +19,7 @@ import {
 
 import EntityFilterMenu from '../Components/Filters/EntityFilterMenu'
 import FilterRender from '../Components/Filters/Filter'
+import GroupByMenu from '../Components/Filters/GroupBy'
 import NewFilterMenu from '../Components/Filters/NewFilterMenu'
 import SortMenu, { SortMenuProps } from '../Components/Filters/SortMenu'
 
@@ -35,7 +36,7 @@ interface SearchFiltersProps {
   changeCurrentFilter: (filter: Filter) => void
   resetCurrentFilters: () => void
   viewSelectorProps?: ViewSelectorProps
-
+  onGroupByChange?: (groupBy: string) => void
   sortMenuProps?: SortMenuProps
 }
 
@@ -47,6 +48,7 @@ const SearchFilters = ({
   removeCurrentFilter,
   resetCurrentFilters,
   onEntityFilterChange,
+  onGroupByChange,
   viewSelectorProps,
   sortMenuProps
 }: SearchFiltersProps) => {
@@ -86,6 +88,7 @@ const SearchFilters = ({
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
       {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
+      {onGroupByChange && <GroupByMenu onChange={onGroupByChange} />}
       {/* <GlobalJoinFilterMenu globalJoin={globalJoin} setGlobalJoin={setGlobalJoin} /> */}
       {sortMenuProps && <SortMenu {...sortMenuProps} />}
       {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}

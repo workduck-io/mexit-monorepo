@@ -16,6 +16,7 @@ import {
   View,
   ViewType
 } from '@mexit/core'
+import { SearchEntityType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -33,6 +34,10 @@ export interface FilterStore {
   /** Join strategy for filters */
   globalJoin: GlobalFilterJoin
   groupBy?: string
+  setGroupBy?: (groupBy: string) => void
+
+  groupingOptions?: Array<SearchEntityType>
+  setGroupingOptions?: (groupingOptions: Array<SearchEntityType>) => void
 
   setFilters: (filters: Filters) => void
   setGlobalJoin: (join: GlobalFilterJoin) => void

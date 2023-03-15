@@ -24,6 +24,8 @@ export const useViewFilterStore = create<FilterStore>((set) => ({
       entities: view.entities ?? []
     })
   },
+  setGroupBy: (groupBy: string) => set({ groupBy }),
+  setGroupingOptions: (groupingOptions: string[]) => set({ groupingOptions }),
   setGlobalJoin: (join: GlobalFilterJoin) => set({ globalJoin: join }),
   indexes: [],
   setIndexes: () => undefined,
@@ -44,6 +46,7 @@ export const useViewFilters = () => {
   const viewType = useViewFilterStore((state) => state.viewType)
   const setCurrentFilters = useViewFilterStore((state) => state.setCurrentFilters)
   const setFilters = useViewFilterStore((s) => s.setFilters)
+  const onGroupByChange = useViewFilterStore((s) => s.setGroupBy)
   const initViewFilters = useViewFilterStore((store) => store.initializeState)
   const setGlobalJoin = useViewFilterStore((state) => state.setGlobalJoin)
   const onSortTypeChange = useViewFilterStore((state) => state.setSortType)
@@ -95,6 +98,7 @@ export const useViewFilters = () => {
     addCurrentFilter,
     removeCurrentFilter,
     changeCurrentFilter,
+    onGroupByChange,
     resetCurrentFilters,
     onViewTypeChange,
     onSortTypeChange,

@@ -26,10 +26,10 @@ const EntityFilterMenu = ({ onChange }) => {
     <SortSectionWrapper>
       <Menu
         multiSelect
-        key={`${viewId}-${entities.length}`}
+        key={`${viewId}-${entities?.length}`}
         values={
           <GenericSection>
-            <IconDisplay icon={DefaultMIcons.BLOCK_TYPE} />
+            <IconDisplay icon={DefaultMIcons.TEXT} />
             Type
           </GenericSection>
         }

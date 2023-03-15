@@ -1,6 +1,13 @@
-import { ISearchQuery, SimpleQueryType } from '@workduck-io/mex-search'
+import { Entities, ISearchQuery, SearchResult, SimpleQueryType } from '@workduck-io/mex-search'
 
-import { Filter, FilterJoin, FilterType, FilterTypeWithOptions, useMentionStore } from '@mexit/core'
+import { Filter, FilterJoin, FilterType, FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
+import {
+  DefaultMIcons,
+  findGroupingKey,
+  getKeyFrequencyMap,
+  keysToExcludeInGrouping,
+  SearchEntityType
+} from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 
@@ -17,7 +24,7 @@ export const useViewFilters = () => {
 
     const noteFilter = notes.reduce(
       (prev, noteLink) => {
-        prev.options.push({ id: noteLink.nodeid, label: noteLink.path, value: noteLink.path })
+        prev.options.push({ id: noteLink.nodeid, label: noteLink.path, value: noteLink.nodeid })
         return prev
       },
       { type: 'note', label: 'Notes', options: [] } as FilterTypeWithOptions
@@ -103,11 +110,41 @@ export const useViewFilters = () => {
   }
 
   const transformQuery = (filter: Filter) => {
-    return filter.values.map((value) => ({
+    return filter.values.map((filterValue) => ({
       type: getQueryType(filter.type),
-      value: value.id,
+      value: filterValue.value,
       nextOperator: getJoinType(filter.join)
     }))
+  }
+
+  const getGroupingOptions = (
+    items: Array<SearchResult>,
+    excludeFields = keysToExcludeInGrouping
+  ): { options: Array<SearchEntityType>; groupBy: string } => {
+    const keyFrequencyMap = getKeyFrequencyMap(items)
+    const groupBy = findGroupingKey(keyFrequencyMap)
+
+    if (!groupBy) {
+      return { options: [], groupBy: 'entity' }
+    }
+
+    const options = Object.keys(keyFrequencyMap).map((key) => ({
+      id: key,
+      label: key.split(SEPARATOR).at(-1),
+      icon: DefaultMIcons.ADD
+    }))
+
+    return {
+      options: options.filter((option) => !excludeFields.includes(option.id)),
+      groupBy
+    }
+  }
+
+  const getGroupBy = (items: Array<SearchResult>) => {
+    const keyFrequencyMap = getKeyFrequencyMap(items)
+    const groupBy = findGroupingKey(keyFrequencyMap)
+
+    return groupBy
   }
 
   /**
@@ -127,5 +164,5 @@ export const useViewFilters = () => {
     ]
   }
 
-  return { getFilters, generateQuery }
+  return { getFilters, generateQuery, getGroupBy, getGroupingOptions }
 }

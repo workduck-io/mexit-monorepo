@@ -22,25 +22,36 @@ const ListView: React.FC<ViewRendererProps> = (props) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
 
   const { queryIndex } = useSearch()
-  const { generateQuery } = useViewFilters()
+  const { generateQuery, getGroupingOptions } = useViewFilters()
   const { enableShortcutHandler } = useEnableShortcutHandler()
 
   const sortType = useFilterStore((store) => store.sortType)
   const sortOrder = useFilterStore((store) => store.sortOrder)
-  const groupBy = useFilterStore((store) => store.groupBy)
+  // const groupBy = useFilterStore((store) => store.groupBy)
   const isModalOpen = useModalStore((store) => store.open)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
   const entites = useViewFilterStore((store) => store.entities)
+  const groupedBy = useViewFilterStore((store) => store.groupBy)
   const currentFilters = useViewFilterStore((store) => store.currentFilters)
+  const setGroupingOptions = useViewFilterStore((store) => store.setGroupingOptions)
+  const setGroupBy = useViewFilterStore((store) => store.setGroupBy)
 
   useEffect(() => {
     const query = generateQuery(currentFilters, entites)
 
-    queryIndex('node', query).then((res) => {
-      if (res) setResults(groupByKey(res, groupBy))
+    queryIndex('node', query).then((queryResult) => {
+      if (queryResult) {
+        const { options, groupBy: newGroupByKey } = getGroupingOptions(queryResult)
+        setGroupingOptions(options)
+
+        const groupBy = options.find((option) => option.id === groupedBy)?.id ?? newGroupByKey
+        setGroupBy(groupBy)
+
+        setResults(groupByKey(queryResult, groupBy))
+      }
     })
-  }, [props.viewId, currentFilters, entites])
+  }, [props.viewId, currentFilters, entites, groupedBy])
 
   // const { changeStatus, changePriority } = useTodoKanban()
 

@@ -4,28 +4,26 @@ import { MIcon } from '@mexit/core'
 
 import { DefaultMIcons, getMIcon } from '../Components/Icons'
 
-interface SearchEntityType {
+export interface SearchEntityType {
   id: string
   label: string
   icon: MIcon
 }
 
-type SearchGroupType = Entities | 'Ungrouped'
-
-export const SearchEntities: Partial<Record<SearchGroupType, SearchEntityType>> = {
+export const SearchEntities: Partial<Record<string, SearchEntityType>> = {
   [Entities.TASK]: {
     id: 'tasks',
-    label: 'Task',
+    label: 'Tasks',
     icon: DefaultMIcons.TASK
   },
   [Entities.REMINDER]: {
     id: 'reminders',
-    label: 'Reminder',
+    label: 'Reminders',
     icon: DefaultMIcons.REMINDER
   },
   [Entities.HIGHLIGHT]: {
     id: 'highlights',
-    label: 'Highlight',
+    label: 'Highlights',
     icon: DefaultMIcons.HIGHLIGHT
   },
   [Entities.CONTENT_BLOCK]: {

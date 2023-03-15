@@ -120,8 +120,9 @@ export const DefaultMIcons = {
   EDIT: getMIcon('ICON', 'ri:pencil-fill'),
   ADD: getMIcon('ICON', 'ic:round-plus'),
   CLEAR: getMIcon('ICON', 'ic:round-clear'),
-  BLOCK_TYPE: getMIcon('ICON', 'icon-park-solid:block-eight'),
-  REMINDER: getMIcon('ICON', 'ri:timer-flash-line')
+  REMINDER: getMIcon('ICON', 'ri:timer-flash-line'),
+  TEXT: getMIcon('ICON', 'ri:text'),
+  GROUPBY: getMIcon('ICON', 'bi:view-stacked')
 }
 
 export const ForwardlinkIcon = {

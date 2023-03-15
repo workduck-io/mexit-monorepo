@@ -18,6 +18,7 @@ const ViewSearchFilters = () => {
     addCurrentFilter,
     removeCurrentFilter,
     changeCurrentFilter,
+    onGroupByChange,
     resetCurrentFilters,
     onSortOrderChange,
     onChangeEntities,
@@ -42,6 +43,7 @@ const ViewSearchFilters = () => {
       currentFilters={currentFilters}
       globalJoin={globalJoin}
       setGlobalJoin={setGlobalJoin}
+      onGroupByChange={onGroupByChange}
       viewSelectorProps={{
         currentView: viewType,
         onChangeView: (viewType) => {
