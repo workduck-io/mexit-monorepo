@@ -1,4 +1,3 @@
-
 import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
 import { StoreIdentifier } from '../Types/Store'
@@ -40,10 +39,10 @@ interface LayoutState {
   setRHSidebarExpanded: (expanded: boolean) => void
   showRHSidebar: () => void
   hideRHSidebar: () => void
+  toggleExtensionSidebar: () => void
 
   setInfobarMode: (mode: ExtInfobarMode) => void
 }
-
 
 const SidebarWidth = 276
 
@@ -80,8 +79,11 @@ export const layoutStoreConfig = (set, get) => ({
     expanded: false,
     show: true
   },
-  toggleRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),
-  setRHSidebarExpanded: (expanded: boolean) => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
+  toggleExtensionSidebar: () => set({ rhSidebar: { expanded: false, show: !get().rhSidebar.show } }),
+  toggleRHSidebar: () =>
+    set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded: !state.rhSidebar.expanded } })),
+  setRHSidebarExpanded: (expanded: boolean) =>
+    set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, expanded } })),
   showRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, show: true } })),
   hideRHSidebar: () => set((state: LayoutState) => ({ rhSidebar: { ...state.rhSidebar, show: false } })),
 
