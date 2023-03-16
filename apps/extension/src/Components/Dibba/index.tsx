@@ -12,8 +12,12 @@ import {
   getMIcon,
   NodeEditorContent,
   QuickLinkType,
-  SEPARATOR
-} from '@mexit/core'
+  SEPARATOR,
+  useAuthStore,
+  useContentStore,
+  useLinkStore,
+useMetadataStore,  useSnippetStore
+ } from '@mexit/core'
 import {
   ActionTitle,
   CenteredIcon,
@@ -30,14 +34,9 @@ import {
 } from '@mexit/shared'
 
 import { ElementTypeBasedShortcut } from '../../Editor/components/ComboBox'
-import { useAuthStore } from '../../Hooks/useAuth'
 import { getPathFromNodeIdHookless } from '../../Hooks/useLinks'
 import usePointerMovedSinceMount from '../../Hooks/usePointerMovedSinceMount'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useLinkStore } from '../../Stores/useLinkStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getDibbaText } from '../../Utils/getDibbaText'
 import { copySnippetToClipboard, copyToClipboard, getUpcomingData, simulatePaste } from '../../Utils/pasteUtils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'

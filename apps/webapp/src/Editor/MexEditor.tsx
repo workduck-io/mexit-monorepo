@@ -5,9 +5,10 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Plate, PlatePluginComponent, SelectEditorOptions } from '@udecode/plate'
 import { EditableProps } from 'slate-react/dist/components/editable'
 
+import { useBlockHighlightStore, useMultipleEditors } from '@mexit/core'
+
 import { useGlobalListener } from '../Hooks/useGlobalListener'
-import useMultipleEditors from '../Stores/useEditorsStore'
-import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
+import { useFocusBlock } from '../Stores/useFocusBlock'
 
 import { useComboboxConfig } from './Components/Combobox/config'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'

@@ -10,11 +10,10 @@ import {
   idxKey,
   SearchFilterFunctions,
   SortOrder,
-  SortType
+  SortType,
+  useDataStore
 } from '@mexit/core'
 import type { ViewType } from '@mexit/shared'
-
-import { useDataStore } from '../Stores/useDataStore'
 
 import { useGenericFilterFunctions } from './useFilterFunctions'
 import { getTitleFromPath, useLinks } from './useLinks'

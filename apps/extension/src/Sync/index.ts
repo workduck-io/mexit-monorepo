@@ -1,13 +1,4 @@
-import { BroadcastSyncedChannel, mog } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useLinkStore } from '../Stores/useLinkStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import { BroadcastSyncedChannel, mog, useContentStore, useDataStore, useHighlightStore, useLayoutStore , useLinkStore,useRecentsStore, useReminderStore, useSnippetStore  } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 import { MessageType, UnhandledRequestsByExtension } from './messageHandler'

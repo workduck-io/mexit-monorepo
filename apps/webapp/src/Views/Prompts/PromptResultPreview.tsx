@@ -3,12 +3,11 @@ import generateName from 'project-name-generator'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { DefaultMIcons, DRAFT_NODE, generateSnippetId, NodeEditorContent } from '@mexit/core'
+import { DefaultMIcons, DRAFT_NODE, generateSnippetId, NodeEditorContent, useSnippetStore } from '@mexit/core'
 
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 import { ResultEditorWrapper, ResultPreviewContainer } from './styled'
 

@@ -20,7 +20,8 @@ import {
   mog,
   NodeEditorContent,
   Reminder,
-  ReminderAssociatedType
+  ReminderAssociatedType,
+  useEditorStore
 } from '@mexit/core'
 import { DatePickerStyles, Input, Label, SelectedDate, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
 
@@ -28,7 +29,6 @@ import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { useEditorBuffer } from '../../Hooks/useEditorBuffer'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import { ModalControls, ModalHeader } from '../../Style/Refactor'
 import { QuickLink, WrappedNodeSelect } from '../NodeSelect/NodeSelect'
 import Todo from '../Todo'

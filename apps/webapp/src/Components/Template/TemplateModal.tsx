@@ -5,15 +5,12 @@ import Modal from 'react-modal'
 
 import { LoadingButton, Title } from '@workduck-io/mex-components'
 
-import { API, mog, Snippet } from '@mexit/core'
+import { API, ModalsType, mog, Snippet, useMetadataStore, useModalStore, useSnippetStore } from '@mexit/core'
 import { ButtonFields, TemplateContainer } from '@mexit/shared'
 
 import { defaultContent } from '../../Data/baseData'
 import EditorPreviewRenderer from '../../Editor/EditorPreviewRenderer'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { PrimaryText } from '../EditorInfobar/BlockInfobar'
 import { InviteFormWrapper, InviteWrapper } from '../Mentions/styles'
 import SidebarList from '../Sidebar/SidebarList'

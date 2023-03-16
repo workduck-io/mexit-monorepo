@@ -6,6 +6,7 @@ import { focusEditor, getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { getContent, useBlockStore, useContentStore, useDataStore, useEditorStore, useHelpStore,useLayoutStore, useModalStore  } from '@mexit/core'
 import { EditorWrapper, isOnEditableElement } from '@mexit/shared'
 
 import { useComboboxOpen } from '../../Editor/Hooks/useComboboxOpen'
@@ -19,13 +20,6 @@ import useLoad from '../../Hooks/useLoad'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { useReactions } from '../../Hooks/useReactions'
 import { useAnalysisTodoAutoUpdate } from '../../Stores/useAnalysis'
-import useBlockStore from '../../Stores/useBlockStore'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useDataStore } from '../../Stores/useDataStore'
-import { getContent, useEditorStore } from '../../Stores/useEditorStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useModalStore from '../../Stores/useModalStore'
 import { areEqual } from '../../Utils/hash'
 
 import Editor from './Editor'

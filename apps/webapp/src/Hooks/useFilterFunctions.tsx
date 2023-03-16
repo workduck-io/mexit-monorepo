@@ -8,11 +8,10 @@ import {
   SearchFilterFunctions,
   SortType,
   TodoRanks,
-  TodoStatusRanks
+  TodoStatusRanks,
+  useDataStore,
+  useHighlightStore
 } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
 
 import { useLinks } from './useLinks'
 

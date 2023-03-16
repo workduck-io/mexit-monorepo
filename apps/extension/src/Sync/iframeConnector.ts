@@ -1,8 +1,7 @@
 import { connectToChild, Methods } from 'penpal'
 
-import { API_BASE_URLS } from '@mexit/core'
+import { API_BASE_URLS, useInitStore } from '@mexit/core'
 
-import { useInitStore } from '../Stores/useInitStore'
 import { getElementById, styleSlot } from '../Utils/cs-utils'
 
 import { messageHandler, MessageType } from './messageHandler'

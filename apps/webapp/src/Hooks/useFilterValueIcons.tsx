@@ -1,7 +1,4 @@
-import { DefaultMIcons, FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
+import { DefaultMIcons, FilterJoin, FilterType, MIcon, SHARED_NAMESPACE, useDataStore , useMetadataStore } from '@mexit/core'
 
 import { useNamespaces } from './useNamespaces'
 

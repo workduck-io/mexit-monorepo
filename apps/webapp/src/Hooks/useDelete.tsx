@@ -1,9 +1,4 @@
-import { getAllParentIds, ILink, isMatch, mog, RefactorPath } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { getContent, useEditorStore } from '../Stores/useEditorStore'
-import { useHistoryStore } from '../Stores/useHistoryStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
+import { getAllParentIds, getContent, ILink, isMatch, mog, RefactorPath, useDataStore, useEditorStore, useHistoryStore, useRecentsStore } from '@mexit/core'
 
 import useArchive from './useArchive'
 import { useLinks } from './useLinks'

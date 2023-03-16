@@ -1,7 +1,4 @@
-import { APIComment, Comment, mog } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useCommentStore } from '../Stores/useCommentStore'
+import { APIComment, Comment, mog, useAuthStore, useCommentStore } from '@mexit/core'
 
 import { useCommentAPI } from './API/useCommentAndReactionAPI'
 

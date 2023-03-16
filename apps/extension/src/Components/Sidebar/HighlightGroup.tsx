@@ -5,7 +5,7 @@ import arrowUpSLine from '@iconify/icons-ri/arrow-up-s-line'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon } from '@iconify/react'
 
-import { API_BASE_URLS, Highlight, Highlights, mog } from '@mexit/core'
+import { API_BASE_URLS, Highlight, Highlights, mog, useDataStore } from '@mexit/core'
 import {
   HighlightCollapsedToggle,
   HighlightGroupsWrapper,
@@ -17,7 +17,6 @@ import {
 
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
-import useDataStore from '../../Stores/useDataStore'
 
 const HIGHLIGHT_TEXT_MAX_LENGTH = 300
 

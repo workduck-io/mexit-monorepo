@@ -1,6 +1,5 @@
-import { convertContentToRawText,NodeEditorContent } from '@mexit/core'
+import { convertContentToRawText,NodeEditorContent, useContentStore } from '@mexit/core'
 
-import { useContentStore } from '../Stores/useContentStore'
 
 export const getBlocks = (content: NodeEditorContent): Record<string, any> | undefined => {
   if (content) {

@@ -5,11 +5,11 @@ import styled from 'styled-components'
 
 import { SecondaryButton } from '@workduck-io/mex-components'
 
+import { usePublicNodeStore } from '@mexit/core'
 import { MexIcon, PrimaryText } from '@mexit/shared'
 
 import { getTitleFromPath } from '../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicNoteFooterContainer = styled.section`
   display: flex;

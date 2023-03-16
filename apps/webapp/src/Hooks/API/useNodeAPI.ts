@@ -9,14 +9,13 @@ import {
   getTodosFromContent,
   mog,
   NodeEditorContent,
-  removeNulls
-} from '@mexit/core'
+  removeNulls,
+  useAuthStore,
+  useContentStore,
+useMetadataStore,  useTodoStore
+ } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { useAuthStore } from '../../Stores/useAuth'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
 import { deserializeContent, serializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'

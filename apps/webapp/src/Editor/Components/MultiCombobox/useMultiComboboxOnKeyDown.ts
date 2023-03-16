@@ -22,11 +22,11 @@ import {
   ELEMENT_TASK_VIEW_LINK,
   getSlug,
   NODE_ID_PREFIX,
-  PromptRenderType
+  PromptRenderType,
+  useComboboxStore,
+  usePromptStore
 } from '@mexit/core'
 
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { usePromptStore } from '../../../Stores/usePromptStore'
 import { QuickLinkType } from '../../constants'
 import { isInternalCommand, useComboboxOnKeyDown } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboboxKey, IComboboxItem, InsertableElement } from '../../Types/Combobox'

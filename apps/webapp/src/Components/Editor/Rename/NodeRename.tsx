@@ -7,7 +7,7 @@ import { getPlateEditorRef, selectEditor } from '@udecode/plate'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog, SEPARATOR } from '@mexit/core'
+import { getNameFromPath, getParentFromPath, isClash, isMatch, isReserved, mog, SEPARATOR, useDataStore, useEditorStore, useHelpStore, useRenameStore } from '@mexit/core'
 import { Input, isOnEditableElement } from '@mexit/shared'
 
 import { useKeyListener } from '../../../Hooks/useChangeShortcutListener'
@@ -17,10 +17,6 @@ import { useNodes } from '../../../Hooks/useNodes'
 import { usePermissions } from '../../../Hooks/usePermissions'
 import { useRefactor } from '../../../Hooks/useRefactor'
 import { useAnalysisStore } from '../../../Stores/useAnalysis'
-import { useDataStore } from '../../../Stores/useDataStore'
-import { useEditorStore } from '../../../Stores/useEditorStore'
-import { useHelpStore } from '../../../Stores/useHelpStore'
-import { useRenameStore } from '../../../Stores/useRenameStore'
 import { doesLinkRemain } from '../../Refactor/doesLinkRemain'
 
 import { TitleStatic, Wrapper } from './NodeRename.style'

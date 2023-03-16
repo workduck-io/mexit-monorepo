@@ -1,8 +1,7 @@
 import { uniqBy } from 'lodash'
 
-import { getAllParentIds, ILink, sanatizeLinks } from '@mexit/core'
+import { getAllParentIds, ILink, sanatizeLinks, useTreeStore } from '@mexit/core'
 
-import { useTreeStore } from '../Stores/useTreeStore'
 import { generateTree } from '../Utils/tree'
 
 export const getTreeFromLinks = (links: ILink[]) => {

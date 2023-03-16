@@ -8,6 +8,7 @@ import { useSingleton } from '@tippyjs/react'
 
 import { NavTooltip, TitleWithShortcut } from '@workduck-io/mex-components'
 
+import { useDataStore, useEditorStore, useHelpStore,useLayoutStore  } from '@mexit/core'
 import {
   ComingSoon,
   Count,
@@ -26,10 +27,6 @@ import {
 import useNavlinks, { GetIcon } from '../../Data/links'
 import useLayout from '../../Hooks/useLayout'
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { showNav } from '../../Utils/nav'
 import { SidebarToggles } from '../logo'
 

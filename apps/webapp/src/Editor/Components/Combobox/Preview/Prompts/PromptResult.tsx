@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 
 import { deserializeMd, getPlateEditorRef } from '@udecode/plate'
 
-import { usePromptStore } from '../../../../../Stores/usePromptStore'
+import { usePromptStore } from '@mexit/core'
+
 import EditorPreviewRenderer from '../../../../EditorPreviewRenderer'
 
 type PromptResultProps = {

@@ -6,18 +6,8 @@ import QuestionMarkIcon from '@iconify/icons-ri/question-mark'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import {
-  ClickableIcon,
-  FlexBetween,
-  Float,
-  FloatButton,
-  FloatingMenu,
-  MexIcon,
-  StyledMenuItem} from '@mexit/shared'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useHelpStore } from '../Stores/useHelpStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useAuthStore, useHelpStore, useLayoutStore } from '@mexit/core'
+import { ClickableIcon, FlexBetween, Float, FloatButton, FloatingMenu, MexIcon, StyledMenuItem } from '@mexit/shared'
 
 import AutoformatHelp from './Autoformathelp'
 

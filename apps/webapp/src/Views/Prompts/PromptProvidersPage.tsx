@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { Infobox, LoadingButton } from '@workduck-io/mex-components'
 
-import { API, mog } from '@mexit/core'
+import { API, mog, usePromptStore } from '@mexit/core'
 import {
   ActionGroupIcon,
   DEFAULT_LIST_ITEM_ICON,
@@ -20,7 +20,6 @@ import {
 } from '@mexit/shared'
 
 import ServiceInfo from '../../Components/Portals/ServiceInfo'
-import { usePromptStore } from '../../Stores/usePromptStore'
 import { GlobalSectionContainer, GlobalSectionHeader } from '../../Style/GlobalSection'
 
 const PromptProvidersPage = () => {

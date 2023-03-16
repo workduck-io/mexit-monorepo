@@ -4,7 +4,7 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
+import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog, useDataStore, useRecentsStore } from '@mexit/core'
 import {
   CenteredColumn,
   DefaultMIcons,
@@ -17,8 +17,6 @@ import {
 } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
-import useDataStore from '../../Stores/useDataStore'
-import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
 
 import { NodeCard } from './NodeCard'

@@ -1,8 +1,9 @@
 import { findNodePath, getPlateEditorRef, setNodes } from '@udecode/plate'
 
+import { useContentStore } from '@mexit/core'
+
 import { useBufferStore } from '../../Hooks/useEditorBuffer'
 import { useUpdater } from '../../Hooks/useUpdater'
-import { useContentStore } from '../../Stores/useContentStore'
 
 type BlockDataType = Record<string, any>
 

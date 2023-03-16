@@ -15,11 +15,10 @@ import {
   ReminderGroup,
   ReminderState,
   SnoozeControl,
-  upcoming
+  upcoming,
+  useReminderStore,
+  useTodoStore
 } from '@mexit/core'
-
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useTodoStore } from '../Stores/useTodoStore'
 
 import { useLinks } from './useLinks'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-import { useShareModalStore } from '../../Stores/useShareModalStore'
+import { useShareModalStore } from '@mexit/core'
 
 import { InviteModalContent } from './InviteModal'
 import { PermissionModalContent } from './PermissionModal'

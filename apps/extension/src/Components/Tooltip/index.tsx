@@ -4,14 +4,13 @@ import toast from 'react-hot-toast'
 import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import { Icon as Iconify } from '@iconify/react'
 
-import { API_BASE_URLS, mog } from '@mexit/core'
+import { API_BASE_URLS, mog, useHighlightStore } from '@mexit/core'
 import { copyTextToClipboard, HighlightNote, Popover } from '@mexit/shared'
 
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useHighlights } from '../../Hooks/useHighlights'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { VisualState } from '../../Hooks/useSputlitContext'
-import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 
 import { Icon, NoteListWrapper, StyledTooltip } from './styled'

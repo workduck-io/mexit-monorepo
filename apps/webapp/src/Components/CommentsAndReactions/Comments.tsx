@@ -6,11 +6,10 @@ import { PlateProvider } from '@udecode/plate'
 import { CenteredColumn, DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { Comment as CommentType, defaultContent, NodeEditorContent } from '@mexit/core'
+import { Comment as CommentType, defaultContent, NodeEditorContent, useAuthStore } from '@mexit/core'
 import { ComboboxShortcuts, RelativeTime, ShortcutText } from '@mexit/shared'
 
 import { useMentions } from '../../Hooks/useMentions'
-import { useAuthStore } from '../../Stores/useAuth'
 import { areEqual } from '../../Utils/hash'
 import { CommentEditor } from '../CommentEditor'
 import { CommentEditorWrapper } from '../CommentEditor/styled'

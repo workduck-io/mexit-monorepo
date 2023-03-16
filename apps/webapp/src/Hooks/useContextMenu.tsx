@@ -1,6 +1,4 @@
-import { MIcon } from '@mexit/core'
-
-import { ContextMenuType, useLayoutStore } from '../Stores/useLayoutStore'
+import { ContextMenuType, MIcon, useLayoutStore } from '@mexit/core'
 
 import { useCreateNewMenu } from './useCreateNewMenu'
 

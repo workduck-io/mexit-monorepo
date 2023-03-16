@@ -18,7 +18,10 @@ import {
   generateSnippetId,
   GenericSearchResult,
   mog,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
+  useDescriptionStore,
+  usePromptStore,
+  useSnippetStore
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -48,9 +51,6 @@ import usePrompts from '../Hooks/usePrompts'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useSnippets } from '../Hooks/useSnippets'
-import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { usePromptStore } from '../Stores/usePromptStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { WorkerRequestType } from '../Utils/worker'
 import { runBatchWorker } from '../Workers/controller'
 

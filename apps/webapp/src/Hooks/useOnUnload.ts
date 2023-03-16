@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 
-import { mog } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
+import { mog, useAuthStore } from '@mexit/core'
 
 import { useEditorBuffer, useSnippetBuffer } from './useEditorBuffer'
 

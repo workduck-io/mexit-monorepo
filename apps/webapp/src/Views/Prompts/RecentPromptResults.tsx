@@ -1,8 +1,7 @@
 import { deserializeMd, getPlateEditorRef } from '@udecode/plate'
 
+import { usePromptStore } from '@mexit/core'
 import { Heading } from '@mexit/shared'
-
-import { usePromptStore } from '../../Stores/usePromptStore'
 
 import PromptResultPreview from './PromptResultPreview'
 import { RecentPromptResultsContainer, ResultsContainer } from './styled'

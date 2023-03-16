@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react'
 
-import { MIcon } from '@mexit/core'
+import { MIcon, useComboboxStore } from '@mexit/core'
 import {
   ActionTitle,
   ComboboxItem,
@@ -13,7 +13,6 @@ import {
   SectionSeparator
 } from '@mexit/shared'
 
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
 
 const Item: React.FC<{
   item: any

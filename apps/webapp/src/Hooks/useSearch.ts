@@ -7,12 +7,11 @@ import {
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
   idxKey,
-  SearchRepExtra
-} from '@mexit/core'
+  SearchRepExtra,
+  useAuthStore,
+  useDataStore
+, useMentionStore } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
-import { useDataStore } from '../Stores/useDataStore'
-import { useMentionStore } from '../Stores/useMentionsStore'
 import {
   addDoc,
   removeDoc,

@@ -9,10 +9,9 @@ import {
   TElement
 } from '@udecode/plate'
 
-import { isElder } from '@mexit/core'
+import { isElder, useComboboxStore } from '@mexit/core'
 
 import { useSnippets } from '../../../Hooks/useSnippets'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { IComboboxItem, SlashCommandConfig } from '../../Types/Combobox'
 
 export const useSlashCommandOnChange = (keys: { [type: string]: SlashCommandConfig }) => {

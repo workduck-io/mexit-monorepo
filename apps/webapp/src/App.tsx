@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import { compareVersions, mog, useAppStore } from '@mexit/core'
+import { compareVersions, mog, useAppStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -14,7 +14,6 @@ import Init from './Components/Init'
 import Main from './Components/Main'
 import Modals from './Components/Modals'
 import { useForceLogout } from './Stores/useAuth'
-import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 

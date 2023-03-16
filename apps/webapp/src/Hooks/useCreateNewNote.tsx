@@ -8,12 +8,10 @@ import {
   getUntitledKey,
   mog,
   NodeEditorContent,
-  RESERVED_NAMESPACES
-} from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
+  RESERVED_NAMESPACES,
+  useDataStore,
+  useEditorStore
+, useMetadataStore } from '@mexit/core'
 
 import { useHierarchy } from './useHierarchy'
 import { useLastOpened } from './useLastOpened'

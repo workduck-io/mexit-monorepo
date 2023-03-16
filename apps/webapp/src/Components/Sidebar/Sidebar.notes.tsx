@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useSpringRef, useTransition } from '@react-spring/web'
 
-import { RESERVED_NAMESPACES, SHARED_NAMESPACE } from '@mexit/core'
+import { ContextMenuType, PollActions, RESERVED_NAMESPACES, SHARED_NAMESPACE, useApiStore, useDataStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { getMIcon } from '@mexit/shared'
 
 import { getNextWrappingIndex } from '../../Editor/Utils/getNextWrappingIndex'
@@ -10,10 +10,6 @@ import { usePolling } from '../../Hooks/API/usePolling'
 import { useCreateNewMenu } from '../../Hooks/useCreateNewMenu'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useTags } from '../../Hooks/useTags'
-import { PollActions, useApiStore } from '../../Stores/useApiStore'
-import { useDataStore } from '../../Stores/useDataStore'
-import { ContextMenuType } from '../../Stores/useLayoutStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 
 import SharedNotes from './SharedNotes'
 import { SidebarSpaceSwitcher } from './Sidebar.spaceSwitcher'

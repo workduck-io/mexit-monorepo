@@ -1,9 +1,8 @@
 
 import { findNode, focusEditor, getPlateEditorRef, getStartPoint, select } from '@udecode/plate'
 
-import { mog, useBlockHighlightStore } from '@mexit/core'
+import { mog } from '@mexit/core'
 
-export { useBlockHighlightStore }
 
 export const useFocusBlock = () => {
   const selectBlock = (blockid: string, editorId?: string) => {

@@ -1,8 +1,6 @@
 import { format } from 'date-fns'
 
-import { BASE_TASKS_PATH, NodeEditorContent, SEPARATOR } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
+import { BASE_TASKS_PATH, NodeEditorContent, SEPARATOR, useDataStore } from '@mexit/core'
 
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'

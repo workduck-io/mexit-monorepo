@@ -1,8 +1,6 @@
 import { useAuth } from '@workduck-io/dwindle'
 
-import { API, ILink, mog } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
+import { API, ILink, mog, useDataStore } from '@mexit/core'
 
 import { getTitleFromPath } from './useLinks'
 

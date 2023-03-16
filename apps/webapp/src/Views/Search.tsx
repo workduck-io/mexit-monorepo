@@ -9,8 +9,12 @@ import {
   GenericSearchResult,
   getInitialNode,
   mog,
-  NodeType
-} from '@mexit/core'
+  NodeType,
+  useContentStore,
+  useDataStore,
+  useEditorStore,
+useMetadataStore,  useRecentsStore
+ } from '@mexit/core'
 import {
   EditorHeader,
   Group,
@@ -42,11 +46,6 @@ import { useNodes } from '../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useTags } from '../Hooks/useTags'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } from './SearchView'

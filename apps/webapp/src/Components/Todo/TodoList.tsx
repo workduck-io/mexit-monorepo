@@ -2,16 +2,13 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, PriorityType, TodoType } from '@mexit/core'
+import { mog, PriorityType, TodoType, useModalStore, useMultipleEditors, useTodoStore } from '@mexit/core'
 import { TaskListWrapper } from '@mexit/shared'
 
 import { useTodoFilterStore } from '../../Hooks/todo/useTodoFilters'
 import { TodoKanbanCard, useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { useTodoList } from '../../Hooks/todo/useTodoList'
 import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
-import useMultipleEditors from '../../Stores/useEditorsStore'
-import useModalStore from '../../Stores/useModalStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
 
 import { RenderBoardTask } from './BoardTask'
 

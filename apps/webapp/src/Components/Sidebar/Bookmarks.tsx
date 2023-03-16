@@ -5,12 +5,12 @@ import bookmarkLine from '@iconify/icons-ri/bookmark-line'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
+import { useDataStore } from '@mexit/core'
 import { HoverSubtleGlow } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useDataStore } from '../../Stores/useDataStore'
 
 import SidebarList from './SidebarList'
 

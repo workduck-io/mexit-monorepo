@@ -16,20 +16,19 @@ import {
   mog,
   QuickLinkType,
   SEPARATOR,
-  SingleNamespace
-} from '@mexit/core'
+  SingleNamespace,
+  useAuthStore,
+  useDataStore,
+  useLayoutStore,
+  useLinkStore,
+  useSmartCaptureStore} from '@mexit/core'
 import { copyTextToClipboard } from '@mexit/shared'
 
-import useDataStore from '../Stores/useDataStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useLinkStore } from '../Stores/useLinkStore'
-import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 import { evaluateConfig } from '../Utils/evalSmartCapture'
 import { generateAvatar } from '../Utils/generateAvatar'
 import { copySnippetToClipboard } from '../Utils/pasteUtils'
 
-import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
@@ -105,7 +104,7 @@ export function useActionExecutor() {
             const defaultNamespace = getDefaultNamespace()
 
             if (item?.extras?.new) {
-              console.log("Default Namespace: ", defaultNamespace)
+              console.log('Default Namespace: ', defaultNamespace)
               node = createNodeWithUid(nodeValue, defaultNamespace.id)
               namespace = defaultNamespace
             } else {

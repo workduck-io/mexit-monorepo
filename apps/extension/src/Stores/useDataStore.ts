@@ -1,1 +1,0 @@
-export { useDataStore as default } from '@mexit/core'

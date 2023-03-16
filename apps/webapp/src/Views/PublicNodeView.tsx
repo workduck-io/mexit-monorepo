@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Cookies from 'universal-cookie'
 
-import { mog } from '@mexit/core'
+import { mog, usePublicNodeStore } from '@mexit/core'
 
 import PublicNodeEditor from '../Components/Editor/PublicNodeEditor'
 import PublicDataInfobar from '../Components/Infobar/PublicNodeInfobar'
@@ -14,7 +14,6 @@ import SplashScreen from '../Components/SplashScreen'
 import { defaultContent } from '../Data/baseData'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { getTitleFromPath } from '../Hooks/useLinks'
-import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 const PublicEditorWrapper = styled.div`
   display: flex;

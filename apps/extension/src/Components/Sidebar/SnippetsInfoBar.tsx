@@ -13,14 +13,14 @@ import {
   DefaultMIcons,
   ELEMENT_TAG,
   parseSnippet,
-  Snippet
+  Snippet,
+  useSnippetStore
 } from '@mexit/core'
 import { CenteredColumn, getMIcon, Input, List, MexIcon, SidebarListFilter, SnippetCards } from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { wSearchIndex } from '../../Sync/invokeOnWorker'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 

@@ -3,11 +3,10 @@ import { useParams } from 'react-router-dom'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { capitalize } from '@mexit/core'
+import { capitalize, usePromptStore } from '@mexit/core'
 import { DefaultMIcons, FlexBetween, GroupHeader, IconDisplay, ServiceDescription, Title } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { usePromptStore } from '../../Stores/usePromptStore'
 
 import RecentPromptResults from './RecentPromptResults'
 import { IconContainer, PromptContainer } from './styled'

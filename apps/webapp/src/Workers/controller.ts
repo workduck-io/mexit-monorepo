@@ -10,10 +10,10 @@ import {
   PersistentData,
   SearchRepExtra,
   Snippets,
+  useAuthStore,
   withTimeout
 } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { type AnalysisWorkerInterface } from './analysis'

@@ -8,13 +8,10 @@ import linkM from '@iconify/icons-ri/link-m'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { Icon } from '@iconify/react'
 
-import { InitialNode } from '@mexit/core'
+import { InitialNode, useDataStore, useEditorStore, useHelpStore } from '@mexit/core'
 
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useViewStore } from '../Hooks/useTaskViews'
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
-import { useHelpStore } from '../Stores/useHelpStore'
 import { NavLinkData } from '../Types/Nav'
 
 /*

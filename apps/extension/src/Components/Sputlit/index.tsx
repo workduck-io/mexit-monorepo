@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 
-import { ActionType, QuickLinkType } from '@mexit/core'
+import { ActionType, QuickLinkType, useAuthStore, useHighlightStore } from '@mexit/core'
 
-import { useAuthStore } from '../../Hooks/useAuth'
 import { useHighlighter } from '../../Hooks/useHighlighter'
 import { useSputlitContext, VisualState } from '../../Hooks/useSputlitContext'
-import { useHighlightStore } from '../../Stores/useHighlightStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import Content from '../Content'
 import { SputlitLogin } from '../Login'

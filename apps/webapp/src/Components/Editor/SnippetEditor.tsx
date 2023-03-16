@@ -9,13 +9,11 @@ import { debounce } from 'lodash'
 import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { DRAFT_NODE, getSlug, mog } from '@mexit/core'
+import { BannerType, DRAFT_NODE, getSlug, mog, useRouteStore, useSnippetStore } from '@mexit/core'
 import { EditorHeader, EditorWrapper, InfoTools, Input, NodeInfo, NoteTitle, StyledEditor } from '@mexit/shared'
 
 import { useSnippetBuffer, useSnippetBufferStore } from '../../Hooks/useEditorBuffer'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 import Banner from './Banner'
 import Editor from './Editor'

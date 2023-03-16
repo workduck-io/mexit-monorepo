@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Outlet,useNavigate, useParams } from 'react-router-dom'
 
-import { mog } from '@mexit/core'
+import { mog, usePublicNodeStore } from '@mexit/core'
 
 import SplashScreen from '../Components/SplashScreen'
 import { useNamespaceApi } from '../Hooks/API/useNamespaceAPI'
 // import { useApi } from '../Hooks/API/useNodeAPI'
-import { usePublicNodeStore } from '../Stores/usePublicNodes'
 
 function PublicNamespaceView() {
   const [showLoader, setShowLoader] = useState(true)

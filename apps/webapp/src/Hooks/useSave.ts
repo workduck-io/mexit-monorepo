@@ -1,8 +1,4 @@
-import { getTodosFromContent, mog } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useTodoStore } from '../Stores/useTodoStore'
+import { getTodosFromContent, mog, useContentStore, useMetadataStore, useTodoStore } from '@mexit/core'
 
 import { useApi } from './API/useNodeAPI'
 import { useLinks } from './useLinks'

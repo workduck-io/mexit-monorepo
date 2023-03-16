@@ -1,6 +1,4 @@
-import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace } from '@mexit/core'
-
-import useDataStore from '../Stores/useDataStore'
+import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace, useDataStore } from '@mexit/core'
 
 import { useNodes } from './useNodes'
 

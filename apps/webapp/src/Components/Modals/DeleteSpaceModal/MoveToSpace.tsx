@@ -1,9 +1,7 @@
 import { useMemo, useState } from 'react'
 
-import { MIcon } from '@mexit/core'
+import { MIcon, useDataStore } from '@mexit/core'
 import { DefaultMIcons, GenericFlex, Group, IconDisplay, Menu, MenuItem } from '@mexit/shared'
-
-import { useDataStore } from '../../../Stores/useDataStore'
 
 import { MoveSpaceSection } from './styled'
 

@@ -1,5 +1,6 @@
+import { useAuthStore } from '@mexit/core'
+
 import BlockModal from '../Editor/Components/Blocks/BlockModal'
-import { useAuthStore } from '../Stores/useAuth'
 import HelpModal from '../Views/HelpModal'
 
 import ShareModal from './Mentions/ShareModal'

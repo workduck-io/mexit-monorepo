@@ -1,10 +1,8 @@
+import { useComboboxStore, useMetadataStore,usePromptStore  } from '@mexit/core'
 import { ItemsContainer as StyledItemsContainer } from '@mexit/shared'
 
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useTaskViews } from '../../../Hooks/useTaskViews'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
-import { useMetadataStore } from '../../../Stores/useMetadataStore'
-import { usePromptStore } from '../../../Stores/usePromptStore'
 import { QuickLinkType } from '../../constants'
 
 import Item from './Item'

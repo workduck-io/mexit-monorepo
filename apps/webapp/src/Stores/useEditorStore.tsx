@@ -1,10 +1,5 @@
 import { useEditorStore } from '@mexit/core'
 
-export { getContent } from '@mexit/core'
-
-export { useEditorStore }
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Used to wrap a class component to provide hooks

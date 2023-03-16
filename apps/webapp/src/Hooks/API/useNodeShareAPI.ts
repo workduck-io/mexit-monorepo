@@ -7,10 +7,10 @@ import {
   iLinksToUpdate,
   mog,
   SHARED_NAMESPACE,
-  SharedNode
+  SharedNode,
+  useDataStore
 } from '@mexit/core'
 
-import { useDataStore } from '../../Stores/useDataStore'
 import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'

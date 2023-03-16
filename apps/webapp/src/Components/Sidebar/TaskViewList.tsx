@@ -2,11 +2,10 @@ import React from 'react'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { DefaultMIcons, getMIcon, ReminderViewData } from '@mexit/core'
+import { ContextMenuType, DefaultMIcons, getMIcon, ReminderViewData, useLayoutStore } from '@mexit/core'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useViewStore } from '../../Hooks/useTaskViews'
-import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'

@@ -7,15 +7,11 @@ import { useTheme } from 'styled-components'
 import { Button, DisplayShortcut, LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { API, DefaultMIcons } from '@mexit/core'
+import { API, DefaultMIcons, ModalsType, useDataStore, useLayoutStore , useModalStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { Group, IconDisplay, PrimaryText } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../../Hooks/API/useNamespaceAPI'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
-import { useDataStore } from '../../../Stores/useDataStore'
-import { useLayoutStore } from '../../../Stores/useLayoutStore'
-import useModalStore, { ModalsType } from '../../../Stores/useModalStore'
-import { useUserPreferenceStore } from '../../../Stores/userPreferenceStore'
 import { ModalControls } from '../../../Style/Refactor'
 
 import MoveToSpace, { SelectedOption } from './MoveToSpace'

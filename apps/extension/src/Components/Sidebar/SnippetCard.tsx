@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { API_BASE_URLS, Snippet } from '@mexit/core'
+import { API_BASE_URLS, Snippet, useDescriptionStore } from '@mexit/core'
 import {
   GenericFlex,
   MexIcon,
@@ -19,7 +19,6 @@ import {
   SnippetContentPreview
 } from '@mexit/shared'
 
-import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 import SnippetPreview from '../Editor/SnippetPreview'
 
 import { NodeCardHeader } from './NodeCard'

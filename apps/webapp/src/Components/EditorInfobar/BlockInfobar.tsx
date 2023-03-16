@@ -6,11 +6,10 @@ import styled, { useTheme } from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { ContextMenuActionType } from '@mexit/core'
+import { ContextMenuActionType, useBlockStore } from '@mexit/core'
 import { MexIcon } from '@mexit/shared'
 
 import { useEditorBlockSelection } from '../../Editor/Actions/useEditorBlockSelection'
-import useBlockStore from '../../Stores/useBlockStore'
 import { ButtonWrapper } from '../../Style/Settings'
 
 export const PrimaryText = styled.span`

@@ -6,7 +6,7 @@ import Board from '@asseinfo/react-kanban'
 
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, PriorityType, TodoType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, PriorityType, TodoType, useLayoutStore,useModalStore, useMultipleEditors, useTodoStore  } from '@mexit/core'
 import { OverlaySidebarWindowWidth, StyledTasksKanban, TaskColumnHeader } from '@mexit/shared'
 
 import { useTodoFilters } from '../../Hooks/todo/useTodoFilters'
@@ -15,10 +15,6 @@ import { useEnableShortcutHandler } from '../../Hooks/useChangeShortcutListener'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import useMultipleEditors from '../../Stores/useEditorsStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useModalStore from '../../Stores/useModalStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
 
 import { RenderBoardTask } from './BoardTask'
 

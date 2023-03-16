@@ -5,24 +5,23 @@ import {
   DRAFT_PREFIX,
   ELEMENT_PARAGRAPH,
   getAllParentIds,
+  getContent,
   getParentNodePath,
   ILink,
   mog,
   NodeEditorContent,
   NodeProperties,
   SEPARATOR,
-  updateEmptyBlockTypes
-} from '@mexit/core'
+  updateEmptyBlockTypes,
+  useAuthStore,
+  useBlockHighlightStore,
+  useContentStore,
+  useDataStore,
+  useEditorStore,
+  useLayoutStore,
+userPreferenceStore as useUserPreferenceStore,  useTreeStore } from '@mexit/core'
 
 import { useAnalysisStore } from '../Stores/useAnalysis'
-import { useAuthStore } from '../Stores/useAuth'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { getContent, useEditorStore } from '../Stores/useEditorStore'
-import { useBlockHighlightStore } from '../Stores/useFocusBlock'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { useTreeStore } from '../Stores/useTreeStore'
 
 import { useApi } from './API/useNodeAPI'
 import { useComments } from './useComments'

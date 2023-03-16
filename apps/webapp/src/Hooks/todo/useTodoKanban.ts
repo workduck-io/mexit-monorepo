@@ -11,13 +11,13 @@ import {
   SNIPPET_PREFIX,
   TodoStatus,
   TodosType,
-  TodoType
+  TodoType,
+  useDataStore,
+  useTodoStore
 } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
 import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
 import { taskSortFunctions, useTaskFilterFunctions } from '../useFilterFunctions'
 import { useLinks } from '../useLinks'

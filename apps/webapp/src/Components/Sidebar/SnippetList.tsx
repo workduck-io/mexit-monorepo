@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { useSnippetStore } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 import SidebarList from './SidebarList'
 

@@ -1,8 +1,6 @@
-import { mog } from '@mexit/core'
+import { mog, PollActions, useApiStore, useAuthStore } from '@mexit/core'
 import { useIntervalWithTimeout } from '@mexit/shared'
 
-import { PollActions, useApiStore } from '../../Stores/useApiStore'
-import { useAuthStore } from '../../Stores/useAuth'
 import { useBookmarks } from '../useBookmarks'
 import { useFetchShareData } from '../useFetchShareData'
 

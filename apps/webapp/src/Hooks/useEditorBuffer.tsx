@@ -1,9 +1,7 @@
 import create from 'zustand'
 
-import { mog, NodeEditorContent, useBufferStore } from '@mexit/core'
+import { getContent, mog, NodeEditorContent, useBufferStore, useSnippetStore } from '@mexit/core'
 
-import { getContent } from '../Stores/useEditorStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { areEqual } from '../Utils/hash'
 
 import { useApi } from './API/useNodeAPI'

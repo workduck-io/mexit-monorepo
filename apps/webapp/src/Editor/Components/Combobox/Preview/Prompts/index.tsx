@@ -6,12 +6,10 @@ import { focusEditor, getPlateEditorRef } from '@udecode/plate'
 import { IconButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { API } from '@mexit/core'
+import { API, useComboboxStore, usePromptStore } from '@mexit/core'
 import { ComboSeperator, Data } from '@mexit/shared'
 
 import usePrompts from '../../../../../Hooks/usePrompts'
-import { useComboboxStore } from '../../../../../Stores/useComboboxStore'
-import { usePromptStore } from '../../../../../Stores/usePromptStore'
 import { getNextWrappingIndex } from '../../../../Utils/getNextWrappingIndex'
 
 import Prompt from './Prompt'

@@ -8,8 +8,11 @@ import {
   emptyAccessTable,
   InviteModalData,
   mog,
-  permissionOptions
-} from '@mexit/core'
+  permissionOptions,
+  useAuthStore,
+  useEditorStore,
+useMentionStore , userPreferenceStore as useUserPreferenceStore,  useShareModalStore
+ } from '@mexit/core'
 import { mergeAccess, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { useNamespaceApi } from '../../Hooks/API/useNamespaceAPI'
@@ -17,11 +20,6 @@ import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { getEmailStart } from '../../Utils/constants'
 import InputBox from '../InputBox'
 

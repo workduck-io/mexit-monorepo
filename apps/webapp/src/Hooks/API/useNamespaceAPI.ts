@@ -9,12 +9,11 @@ import {
   iLinksToUpdate,
   MIcon,
   mog,
-  SingleNamespace
-} from '@mexit/core'
+  SingleNamespace,
+  useDataStore
+, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import { useDataStore } from '../../Stores/useDataStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { deserializeContent } from '../../Utils/serializer'
 import { WorkerRequestType } from '../../Utils/worker'
 import { runBatchWorker } from '../../Workers/controller'

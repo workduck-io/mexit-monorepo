@@ -1,7 +1,6 @@
-import { HASH_SEPARATOR, mog,NodeEditorContent, SEPARATOR } from '@mexit/core'
+import { HASH_SEPARATOR, mog,NodeEditorContent, SEPARATOR, useDataStore } from '@mexit/core'
 
 import { defaultContent } from '../Data/baseData'
-import { useDataStore } from '../Stores/useDataStore'
 
 import { useApi } from './API/useNodeAPI'
 import { getNodeidFromPathAndLinks } from './useLinks'

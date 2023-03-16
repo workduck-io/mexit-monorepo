@@ -1,1 +1,0 @@
-export { useBlockStore as default } from "@mexit/core"

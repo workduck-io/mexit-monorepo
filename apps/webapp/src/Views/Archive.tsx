@@ -6,7 +6,16 @@ import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
 
-import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog } from '@mexit/core'
+import {
+  batchArray,
+  convertContentToRawText,
+  extractMetadata,
+  GenericSearchResult,
+  getContent,
+  mog,
+  useContentStore,
+  useDataStore
+, useMetadataStore } from '@mexit/core'
 import {
   ArchiveHelp,
   DefaultMIcons,
@@ -32,10 +41,6 @@ import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useApi } from '../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { useSearch } from '../Hooks/useSearch'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { getContent } from '../Stores/useEditorStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
 import { ModalHeader } from '../Style/Refactor'
 import { deserializeContent } from '../Utils/serializer'
 import { WorkerRequestType } from '../Utils/worker'

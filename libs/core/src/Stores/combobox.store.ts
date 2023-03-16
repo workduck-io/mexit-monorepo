@@ -9,7 +9,8 @@ import { ComboboxType, ComboSearchType } from '../Types/MultiCombobox';
 import { setStoreValue, StoreIdentifier } from '../Types/Store';
 import { createStore } from '../Utils/storeCreator';
 
-import { useEditorStore } from "./editor.store";
+import { useEditorStore } from './editor.store';
+
 
 // import { useEditorStore } from './useEditorStore'
 
@@ -73,3 +74,5 @@ export const comboboxStoreConfig = (set) => ({
 })
 
 export const useComboboxStore = createStore(comboboxStoreConfig, StoreIdentifier.COMBOBOX , false)
+
+export const useComboboxIsOpen = () => useComboboxStore((state) => !!state.targetRange)

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
 
-import { ReminderViewData } from '@mexit/core'
+import { ReminderViewData, useTodoStore } from '@mexit/core'
 import { Heading, PageContainer, TaskViewSection, ViewType } from '@mexit/shared'
 
 import TaskHeader from '../Components/TaskHeader'
@@ -11,7 +11,6 @@ import { useTodoFilters } from '../Hooks/todo/useTodoFilters'
 import { useEditorBuffer } from '../Hooks/useEditorBuffer'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
 import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
-import { useTodoStore } from '../Stores/useTodoStore'
 
 import SearchFilters from './SearchFilters'
 

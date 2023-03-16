@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
-import { useComboboxStore } from '../../Stores/useComboboxStore'
+import { useComboboxStore } from '@mexit/core'
+
 
 export const useComboboxOpen = () => {
   const targetRange = useComboboxStore((state) => state.targetRange)

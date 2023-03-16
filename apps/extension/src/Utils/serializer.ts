@@ -5,10 +5,10 @@ import {
   ElementHighlightMetadata,
   extractMetadata,
   generateTempId,
-  mappedKeys
+  mappedKeys,
+  useAuthStore
 } from '@mexit/core'
 
-import { useAuthStore } from '../Hooks/useAuth'
 
 // From content to api
 export const serializeContent = (

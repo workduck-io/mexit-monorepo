@@ -1,1 +1,0 @@
-export { useModalStore as default, ModalsType } from "@mexit/core";

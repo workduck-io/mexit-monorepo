@@ -1,8 +1,4 @@
-import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useTodoStore } from '../Stores/useTodoStore'
+import { getTodosFromContent, NodeEditorContent, useContentStore, useMetadataStore,useTodoStore  } from '@mexit/core'
 
 import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'

@@ -1,6 +1,5 @@
-import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog } from '@mexit/core'
+import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, useAuthStore } from '@mexit/core'
 
-import { useAuthStore } from '../../Stores/useAuth'
 import { useViewStore, View } from '../useTaskViews'
 
 export const useViewAPI = () => {

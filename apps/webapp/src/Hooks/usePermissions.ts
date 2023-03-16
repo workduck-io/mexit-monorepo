@@ -1,6 +1,4 @@
-import { AccessLevel, AccessLevelPrority, ShareContext, SHARED_NAMESPACE } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
+import { AccessLevel, AccessLevelPrority, ShareContext, SHARED_NAMESPACE, useDataStore } from '@mexit/core'
 
 import { useNamespaces } from './useNamespaces'
 

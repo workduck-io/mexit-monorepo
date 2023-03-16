@@ -6,8 +6,9 @@ import styled, { css } from 'styled-components'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
+import { useShortcutStore } from '@mexit/core'
+
 import InputShortcut from '../../Components/InputShortcut'
-import { useShortcutStore } from '../../Hooks/useShortcutStore'
 import useShortcutTableData from '../../Hooks/useShortcutTableData'
 
 const Shortcut = styled.div<{ highlight: boolean }>`

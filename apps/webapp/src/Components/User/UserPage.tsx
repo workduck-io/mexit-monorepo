@@ -5,7 +5,7 @@ import edit2Line from '@iconify/icons-ri/edit-2-line'
 
 import { IconButton, LoadingButton } from '@workduck-io/mex-components'
 
-import { IS_DEV } from '@mexit/core'
+import { IS_DEV, useAuthStore } from '@mexit/core'
 import {
   AuthForm,
   ButtonFields,
@@ -21,7 +21,6 @@ import {
 } from '@mexit/shared'
 
 import { useUserService } from '../../Hooks/API/useUserAPI'
-import { useAuthStore } from '../../Stores/useAuth'
 import { ALIAS_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'
 
