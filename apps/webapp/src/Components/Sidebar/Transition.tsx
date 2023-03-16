@@ -4,9 +4,8 @@ import { useSpring } from 'react-spring'
 
 import { useTheme } from 'styled-components'
 
+import { useLayoutStore } from '@mexit/core'
 import { OverlaySidebarWindowWidth, size } from '@mexit/shared'
-
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 const sidebarCollapsedWidth = '86px'
 const sidebarExpandedWidth = '362px'

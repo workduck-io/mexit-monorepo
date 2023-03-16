@@ -4,13 +4,12 @@ import { useMatch } from 'react-router-dom'
 import { useSelected } from 'slate-react'
 import styled from 'styled-components'
 
-import { NodeType } from '@mexit/core'
+import { NodeType, useContentStore } from '@mexit/core'
 import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useContentStore } from '../../../Stores/useContentStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 import {

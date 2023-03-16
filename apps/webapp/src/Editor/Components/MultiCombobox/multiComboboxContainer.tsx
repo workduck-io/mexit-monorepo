@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
+import { useComboboxStore } from '@mexit/core'
+
 import { useComboboxControls } from '../../Hooks/useComboboxControls'
 import { getCreateableOnSelect } from '../../Hooks/useComboboxOnKeyDown'
 import { ComboConfigData } from '../../Types/MultiCombobox'

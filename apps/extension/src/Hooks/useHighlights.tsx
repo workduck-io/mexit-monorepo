@@ -1,13 +1,10 @@
 import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 
-import { Highlight, mog, NodeEditorContent, SEPARATOR, WORKSPACE_HEADER } from '@mexit/core'
+import { Highlight, mog, NodeEditorContent, SEPARATOR, useAuthStore, useContentStore, useHighlightStore, WORKSPACE_HEADER } from '@mexit/core'
 
 import { useLinkURLs } from '../Hooks/useURLs'
-import { useContentStore } from '../Stores/useContentStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
 
-import { useAuthStore } from './useAuth'
 import { useInternalLinks } from './useInternalLinks'
 import { useLinks } from './useLinks'
 import { isReadonly, usePermissions } from './usePermissions'

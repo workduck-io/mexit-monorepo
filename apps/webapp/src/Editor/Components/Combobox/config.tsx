@@ -1,6 +1,7 @@
 import { PlatePluginComponent } from '@udecode/plate'
 
-import { ContextMenuType, useLayoutStore } from '../../../Stores/useLayoutStore'
+import { ContextMenuType,useLayoutStore } from '@mexit/core'
+
 import { PluginOptionType, useEditorPlugins } from '../../Plugins/index'
 import { ComboboxConfig } from '../../Types/MultiCombobox'
 import useMultiComboboxOnChange from '../MultiCombobox/useMultiComboboxChange'

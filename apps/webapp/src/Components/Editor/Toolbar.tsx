@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { API, MIcon } from '@mexit/core'
+import { API, MIcon, useEditorStore , useMetadataStore } from '@mexit/core'
 import { Loading, NodeInfo } from '@mexit/shared'
 
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
 import IconPicker from '../IconPicker/IconPicker'
 
 import NodeRenameOnlyTitle from './Rename/NodeRename'

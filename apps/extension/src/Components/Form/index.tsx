@@ -6,11 +6,10 @@ import { useTheme } from 'styled-components'
 import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, NodeEditorContent } from '@mexit/core'
+import { mog, NodeEditorContent , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { FlexBetween } from '@mexit/shared'
 
 import { useSaveChanges } from '../../Hooks/useSaveChanges'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 import { FormBuilder } from '../../Types/Form'
 import { formToBlocks } from '../../Utils/evalSmartCapture'

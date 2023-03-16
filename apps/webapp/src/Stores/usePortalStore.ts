@@ -1,1 +1,0 @@
-export { usePortalStore as default } from "@mexit/core";

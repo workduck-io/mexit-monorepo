@@ -1,6 +1,5 @@
-import { generateTag, getTagsFromContent, TagsCache } from '@mexit/core'
+import { generateTag, getTagsFromContent, TagsCache, useDataStore } from '@mexit/core'
 
-import useDataStore from '../Stores/useDataStore'
 
 /**
   Tags req

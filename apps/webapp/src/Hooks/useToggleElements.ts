@@ -1,6 +1,5 @@
+import { useLayoutStore } from '@mexit/core'
 import { InfobarMode } from '@mexit/shared'
-
-import { useLayoutStore } from '../Stores/useLayoutStore'
 
 const useToggleElements = () => {
   const setInfobarMode = useLayoutStore((store) => store.setInfobarMode)

@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
 import { Indexes } from '@workduck-io/mex-search'
 
-import { generateTempId, mog } from '@mexit/core'
+import { generateTempId, mog, useComboboxStore } from '@mexit/core'
 import {
   ActionTitle,
   ComboboxItem,
@@ -25,7 +25,6 @@ import {
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
 import { getPathFromNodeIdHookless } from '../../../Hooks/useLinks'
 import { useSearch } from '../../../Hooks/useSearch'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { KEYBOARD_KEYS } from '../../constants'
 import { replaceFragment } from '../../Hooks/useComboboxOnKeyDown'
 import { ItemCenterWrapper } from '../../Styles/TagCombobox.styles'

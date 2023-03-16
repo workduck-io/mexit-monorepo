@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 import { Button,LoadingButton } from '@workduck-io/mex-components'
 
-import { ForgotPasswordFormData, VerifyFormData } from '@mexit/core'
+import { ForgotPasswordFormData, useAuthStore, VerifyFormData } from '@mexit/core'
 import { AuthForm, BackCard, ButtonFields,CenteredColumn , FooterCard , Title  } from '@mexit/shared'
 
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useAuthentication, useAuthStore } from '../Stores/useAuth'
+import { useAuthentication } from '../Stores/useAuth'
 import { EMAIL_REG, PASSWORD } from '../Utils/constants'
 
 export const ForgotPassword = () => {

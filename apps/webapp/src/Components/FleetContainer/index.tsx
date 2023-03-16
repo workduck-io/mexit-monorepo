@@ -3,8 +3,9 @@ import { useMatch } from 'react-router-dom'
 
 import { Fleet } from '@workduck-io/mex-components'
 
+import { ModalsType, useModalStore } from '@mexit/core'
+
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 
 import { useOnNewItem } from './useOnNewItem'
 

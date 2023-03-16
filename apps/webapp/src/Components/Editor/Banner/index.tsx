@@ -5,10 +5,7 @@ import { useTheme } from 'styled-components'
 
 import { MexIcon, TitleText } from '@workduck-io/mex-components'
 
-import { Settify } from '@mexit/core'
-
-import { useAuthStore } from '../../../Stores/useAuth'
-import useRouteStore from '../../../Stores/useRouteStore'
+import { Settify, useAuthStore, useRouteStore } from '@mexit/core'
 
 import { BannerContainer, Group } from './styled'
 

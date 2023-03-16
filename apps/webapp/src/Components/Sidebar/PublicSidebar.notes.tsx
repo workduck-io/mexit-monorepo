@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 
-import { PollActions } from '../../Stores/useApiStore'
-import { usePublicNodeStore } from '../../Stores/usePublicNodes'
+import { PollActions, usePublicNodeStore } from '@mexit/core'
 
 import { SidebarWrapper, SpaceContentWrapper } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'

@@ -2,13 +2,11 @@ import React from 'react'
 
 import styled, { useTheme } from 'styled-components'
 
-import { DefaultMIcons, SharedNode } from '@mexit/core'
+import { DefaultMIcons, SharedNode, useDataStore, useEditorStore } from '@mexit/core'
 import { Centered, SharedNodeIcon } from '@mexit/shared'
 
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useDataStore } from '../../../Stores/useDataStore'
-import { useEditorStore } from '../../../Stores/useEditorStore'
 import SidebarList, { SidebarListItem } from '../SidebarList'
 
 export const ItemContent = styled.div`

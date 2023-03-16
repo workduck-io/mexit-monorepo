@@ -8,7 +8,7 @@ import { useTheme } from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
+import { defaultContent, fuzzySearch, ILink, useEditorStore, useLayoutStore, usePublicNodeStore } from '@mexit/core'
 import { Input, isOnEditableElement, MexIcon, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
@@ -16,9 +16,6 @@ import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getPartialTreeFromLinks, getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { usePublicNodeStore } from '../../Stores/usePublicNodes'
 
 import { CreateNewNoteSidebarButton, MexTreeWrapper, SpaceList } from './Sidebar.style'
 import Tree from './Tree'

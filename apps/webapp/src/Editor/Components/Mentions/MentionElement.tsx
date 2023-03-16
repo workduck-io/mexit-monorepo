@@ -10,7 +10,16 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
-import { AccessLevel, InvitedUser, Mentionable, mog, SelfMention } from '@mexit/core'
+import {
+  AccessLevel,
+  InvitedUser,
+  Mentionable,
+  mog,
+  SelfMention,
+  useEditorStore,
+  useMentionStore, 
+  useShareModalStore,
+  useUserCacheStore} from '@mexit/core'
 import {
   AccessTag,
   MentionTooltip,
@@ -27,10 +36,6 @@ import { useUserService } from '../../../Hooks/API/useUserAPI'
 import { useHotkeys } from '../../../Hooks/useHotkeys'
 import { useMentions } from '../../../Hooks/useMentions'
 import { useOnMouseClick } from '../../../Hooks/useOnMouseClick'
-import { useEditorStore } from '../../../Stores/useEditorStore'
-import { useMentionStore } from '../../../Stores/useMentionsStore'
-import { useShareModalStore } from '../../../Stores/useShareModalStore'
-import { useUserCacheStore } from '../../../Stores/useUserCacheStore'
 
 import { MentionElementProps } from './MentionElement.types'
 

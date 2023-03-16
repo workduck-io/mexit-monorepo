@@ -1,1 +1,0 @@
-export { useMultipleEditors as default } from "@mexit/core";

@@ -2,10 +2,8 @@ import React, { useMemo } from 'react'
 
 import archiveLine from '@iconify/icons-ri/archive-line'
 
+import { useDataStore,useMetadataStore  } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
-
-import { useDataStore } from '../../Stores/useDataStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 import { SidebarHeaderLite } from './Sidebar.space.header'
 import { SidebarWrapper } from './Sidebar.style'

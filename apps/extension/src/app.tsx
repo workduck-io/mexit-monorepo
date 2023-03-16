@@ -1,3 +1,5 @@
+import { useAuthStore } from '@mexit/core'
+
 import Dibba from './Components/Dibba'
 import { DibbaPortal } from './Components/Dibba/DibbaPortal'
 import { InternalEvents } from './Components/InternalEvents'
@@ -7,7 +9,6 @@ import Sputlit from './Components/Sputlit'
 import { SputlitPortal } from './Components/Sputlit/SputlitPortal'
 import Tooltip from './Components/Tooltip'
 import { TooltipPortal } from './Components/Tooltip/TooltipPortal'
-import { useAuthStore } from './Hooks/useAuth'
 import { HighlighterProvider } from './Hooks/useHighlighterContext'
 import { SputlitProvider } from './Hooks/useSputlitContext'
 

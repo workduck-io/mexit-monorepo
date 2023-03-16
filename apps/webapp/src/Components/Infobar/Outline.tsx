@@ -8,12 +8,12 @@ import taskLine from '@iconify/icons-ri/task-line'
 import { Icon } from '@iconify/react'
 import { ELEMENT_OL, ELEMENT_UL } from '@udecode/plate'
 
-import { ELEMENT_TODO_LI,ELEMENTS_IN_OUTLINE } from '@mexit/core'
+import { ELEMENT_TODO_LI,ELEMENTS_IN_OUTLINE, useBlockHighlightStore } from '@mexit/core'
 import { InfoWidgetWrapper, Note , OutlineHelp } from '@mexit/shared'
 
 import Collapse from '../../Layout/Collapse'
 import { OutlineItem, useAnalysisStore } from '../../Stores/useAnalysis'
-import { useBlockHighlightStore, useFocusBlock } from '../../Stores/useFocusBlock'
+import { useFocusBlock } from '../../Stores/useFocusBlock'
 import { OutlineIconWrapper, OutlineItemRender, OutlineItemText, OutlineWrapper } from '../../Style/Outline'
 
 interface OutlineProps {

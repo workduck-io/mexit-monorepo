@@ -1,5 +1,6 @@
+import { useLayoutStore } from '@mexit/core'
+
 import useContextMenu from '../../Hooks/useContextMenu'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { ContextMenuContainer, ContextMenuItem } from './MenuContainer'
 

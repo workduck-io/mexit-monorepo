@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { useMatch } from 'react-router-dom'
 
+import { usePublicNodeStore } from '@mexit/core'
 import { SILink } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../../Hooks/useLinks'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { usePublicNodeStore } from '../../../Stores/usePublicNodes'
 import EditorPreview from '../EditorPreview/EditorPreview'
 
 const PublicQuickLinkElement = ({ nodeId, setPreview, preview, selected, onClickProps }) => {

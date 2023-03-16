@@ -1,12 +1,17 @@
 import { Indexes } from '@workduck-io/mex-search'
 
-import { convertContentToRawText, getSnippetCommand, Snippet, SnippetID } from '@mexit/core'
+import {
+  convertContentToRawText,
+  getSnippetCommand,
+  Snippet,
+  SnippetID,
+  useDataStore,
+  useDescriptionStore,
+  useSnippetStore
+} from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
-import { useDataStore } from '../Stores/useDataStore'
-import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 
 import { useSearch } from './useSearch'
 

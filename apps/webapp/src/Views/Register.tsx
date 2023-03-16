@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@workduck-io/dwindle'
 import { Button, LoadingButton } from '@workduck-io/mex-components'
 
-import { RegisterFormData, UserRoleValues, VerifyFormData } from '@mexit/core'
+import { RegisterFormData, useAuthStore, UserRoleValues, VerifyFormData } from '@mexit/core'
 import {
   AuthForm,
   BackCard,
@@ -21,7 +21,7 @@ import {
 import { GoogleLoginButton } from '../Components/Buttons/Buttons'
 import Input, { InputFormError, PasswordNotMatch, PasswordRequirements } from '../Components/Input'
 import { ROUTE_PATHS } from '../Hooks/useRouting'
-import { useAuthentication, useAuthStore, useInitializeAfterAuth } from '../Stores/useAuth'
+import { useAuthentication, useInitializeAfterAuth } from '../Stores/useAuth'
 import { StyledRolesSelectComponents } from '../Style/Select'
 import { ALIAS_REG, EMAIL_REG, PASSWORD } from '../Utils/constants'
 

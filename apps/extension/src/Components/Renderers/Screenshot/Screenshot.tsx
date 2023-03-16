@@ -9,10 +9,9 @@ import { Icon } from '@iconify/react'
 
 import { Button, IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
-import { mog } from '@mexit/core'
+import { mog, useAuthStore } from '@mexit/core'
 import { useDebounceEffect } from '@mexit/shared'
 
-import { useAuthStore } from '../../../Hooks/useAuth'
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
 import { useSputlitStore } from '../../../Stores/useSputlitStore'
 import { uploadImageToCDN } from '../../../Sync/invokeOnWorker'

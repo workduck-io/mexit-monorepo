@@ -5,6 +5,7 @@ import magicLine from '@iconify/icons-ri/magic-line'
 import quillPenLine from '@iconify/icons-ri/quill-pen-line'
 import { useTheme } from 'styled-components'
 
+import { useContentStore,useMetadataStore, useSnippetStore  } from '@mexit/core'
 import {
   DefaultMIcons,
   EditorPreviewControls,
@@ -19,9 +20,6 @@ import {
 } from '@mexit/shared'
 
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { getElementById } from '../../Utils/cs-utils'
 import EditorPreviewRenderer from '../EditorPreviewRenderer'
 

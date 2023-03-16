@@ -9,18 +9,18 @@ import {
   extractMetadata,
   mog,
   nicePromise,
-  Snippet
-} from '@mexit/core'
+  Snippet,
+  useAuthStore,
+  useContentStore,
+  useDataStore,
+  useDescriptionStore,
+  useHighlightStore,
+  useInitStore,
+  useLinkStore,
+  useSmartCaptureStore,
+  useSnippetStore} from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
-import { useContentStore } from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
-import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useInitStore } from '../Stores/useInitStore'
-import { useLinkStore } from '../Stores/useLinkStore'
-import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import {
   getSearchIndexInitState,
   initSearchIndex,
@@ -33,7 +33,6 @@ import {
 } from '../Sync/invokeOnWorker'
 import { deserializeContent } from '../Utils/serializer'
 
-import { useAuthStore } from './useAuth'
 import { useSearch } from './useSearch'
 import { useUpdater } from './useUpdater'
 

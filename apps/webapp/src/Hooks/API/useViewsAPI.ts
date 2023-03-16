@@ -1,6 +1,5 @@
-import { API, generateFilterId, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, View } from '@mexit/core'
+import { API, generateFilterId, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, useAuthStore, View } from '@mexit/core'
 
-import { useAuthStore } from '../../Stores/useAuth'
 import { useViewStore } from '../../Stores/useViewStore'
 
 export const useViewAPI = () => {

@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 import React from 'react'
 
+import { useComboboxStore } from '@mexit/core'
 import { ComboSeperator, PreviewMeta } from '@mexit/shared'
 
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { QuickLinkType } from '../../constants'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 

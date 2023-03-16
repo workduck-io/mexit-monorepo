@@ -1,8 +1,6 @@
-import { ListItemType } from '@mexit/core'
+import { ListItemType, useDataStore, useSnippetStore } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
-import useDataStore from '../Stores/useDataStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 export const useQuickLinks = () => {

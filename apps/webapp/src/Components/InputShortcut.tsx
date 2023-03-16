@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
+import { useShortcutStore } from '@mexit/core'
 import { CenterSpace, Description, Heading , InputBlock } from '@mexit/shared'
 
 import useChangeShortcutListener from '../Hooks/useChangeShortcutListener'
-import { useShortcutStore } from '../Hooks/useShortcutStore'
 
 const InputShortcut = () => {
   const keybinding = useShortcutStore((state) => state.keybinding)

@@ -2,10 +2,8 @@ import useWebSocket from 'react-use-websocket'
 
 import { useAuthStore as useDwindleStore } from '@workduck-io/dwindle'
 
-import { config, mog } from '@mexit/core'
+import { BannerType, config, mog, useAuthStore, useRouteStore } from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
-import useRouteStore, { BannerType } from '../Stores/useRouteStore'
 import { SocketActionType } from '../Types/Socket'
 
 const useSocket = () => {

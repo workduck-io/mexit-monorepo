@@ -1,12 +1,17 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { PriorityType, useContentStore, ViewType } from '@mexit/core'
+import {
+  ModalsType,
+  PriorityType,
+  useContentStore,
+  useModalStore,
+  useTodoStore,
+  ViewType
+} from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
-import { useTodoStore } from '../../Stores/useTodoStore'
 import Plateless from '../Editor/Plateless'
 import { TodoBase as Todo } from '../Todo/Todo'
 

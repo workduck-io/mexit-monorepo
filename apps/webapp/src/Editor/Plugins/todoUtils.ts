@@ -1,6 +1,5 @@
-import { ELEMENT_TODO_LI, getMentionsFromContent, getTagsFromContent, NodeEditorContent, TodoType } from '@mexit/core'
+import { createTodo,ELEMENT_TODO_LI, getMentionsFromContent, getTagsFromContent, NodeEditorContent, TodoType } from '@mexit/core'
 
-import { createTodo } from '../../Stores/useTodoStore'
 
 export const createDefaultTodo = (nodeid: string, content?: NodeEditorContent): TodoType => {
   const block = content?.[0]

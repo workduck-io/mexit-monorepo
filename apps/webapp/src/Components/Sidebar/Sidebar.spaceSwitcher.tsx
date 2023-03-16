@@ -5,9 +5,8 @@ import { Icon } from '@iconify/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { ContextMenuType, useLayoutStore } from '@mexit/core'
 import { IconDisplay, isOnEditableElement, Tooltip } from '@mexit/shared'
-
-import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { CreateNewButton, SpaceItem, SpaceSwitcher, SwitcherSpaceItems } from './Sidebar.style'
 import { SidebarSpace } from './Sidebar.types'

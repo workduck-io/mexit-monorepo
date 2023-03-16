@@ -10,11 +10,9 @@ import {
   MexitAction,
   NodeContent,
   QuickLinkType,
-  Snippet
-} from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
+  Snippet,
+  useContentStore
+, useMetadataStore } from '@mexit/core'
 
 export function getContent(nodeid: string): NodeContent {
   // create a hashmap with id vs content

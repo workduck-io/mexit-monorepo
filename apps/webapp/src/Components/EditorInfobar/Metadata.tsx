@@ -6,7 +6,16 @@ import styled from 'styled-components'
 
 import { IconButton, MexIcon } from '@workduck-io/mex-components'
 
-import { FeatureFlags, NodeMetadata } from '@mexit/core'
+import {
+  FeatureFlags,
+  NodeMetadata,
+  useAuthStore,
+  useEditorStore,
+  useMentionStore,
+  useMetadataStore,
+  useRouteStore,
+  useShareModalStore
+} from '@mexit/core'
 import {
   DataGroup,
   DataWrapper,
@@ -19,12 +28,6 @@ import {
 
 import { useMentions } from '../../Hooks/useMentions'
 import { compareAccessLevel, usePermissions } from '../../Hooks/usePermissions'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import useRouteStore from '../../Stores/useRouteStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import AvatarGroups from '../AvatarGroups'
 import { ProfileImageWithToolTip } from '../User/ProfileImage'
 

@@ -6,11 +6,10 @@ import styled from 'styled-components'
 import { LoadingButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getValidTitle, Link, metadataParser, mog, Tag } from '@mexit/core'
+import { getValidTitle, Link, metadataParser, mog, Tag , useLinkStore } from '@mexit/core'
 import { AddTagMenu, copyTextToClipboard, Input, Label, LinkTagSection, resize, TagsLabel } from '@mexit/shared'
 
 import { useURLsAPI } from '../../Hooks/useURLs'
-import { useLinkStore } from '../../Stores/useLinkStore'
 
 const Form = styled.form`
   display: flex;

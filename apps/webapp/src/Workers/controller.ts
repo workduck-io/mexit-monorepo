@@ -3,9 +3,17 @@ import { Indexes, ISearchQuery, IUpdateDoc } from '@workduck-io/mex-search'
 import { SharedWorker, spawn } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
-import { ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets, withTimeout } from '@mexit/core'
+import {
+  ILink,
+  mog,
+  NodeEditorContent,
+  PersistentData,
+  SearchRepExtra,
+  Snippets,
+  useAuthStore,
+  withTimeout
+} from '@mexit/core'
 
-import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
 
 import { type AnalysisWorkerInterface } from './analysis'

@@ -12,7 +12,10 @@ import {
   DefaultPermissionValue,
   InviteModalData,
   mog,
-  permissionOptions
+  permissionOptions,
+  useAuthStore,
+  useEditorStore,
+  useShareModalStore
 } from '@mexit/core'
 import { ButtonFields, Group, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
@@ -21,9 +24,6 @@ import { useNodeShareAPI } from '../../Hooks/API/useNodeShareAPI'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions } from '../../Hooks/useMentions'
 import { usePermissions } from '../../Hooks/usePermissions'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalActions, ModalFooter, ModalHeader } from '../../Style/Refactor'
 import { EMAIL_REG } from '../../Utils/constants'
 import { InputFormError } from '../Input'

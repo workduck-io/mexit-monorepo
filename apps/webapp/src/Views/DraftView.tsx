@@ -4,7 +4,15 @@ import { uniq } from 'lodash'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
-import { defaultContent, ILink, useMetadataStore, ViewType } from '@mexit/core'
+import {
+  defaultContent,
+  ILink,
+  useContentStore,
+  useDataStore,
+  useMetadataStore,
+  useRecentsStore,
+  ViewType
+} from '@mexit/core'
 import {
   Content,
   Group,
@@ -23,9 +31,6 @@ import NamespaceTag from '../Components/NamespaceTag'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 
 const CardsContainer = styled(Results)`
   height: calc(100vh - ${({ theme }) => (theme.additional.hasBlocks ? '2rem' : '0rem')} - 12rem);

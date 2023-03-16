@@ -1,19 +1,18 @@
 import { useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
 
-import { BroadcastSyncedChannel } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useLinkStore } from '../Stores/useLinkStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import {
+  BroadcastSyncedChannel,
+  useAuthStore,
+  useContentStore,
+  useDataStore,
+  useDescriptionStore,
+  useHighlightStore,
+  useLinkStore,
+  useMetadataStore,
+  useRecentsStore,
+  useReminderStore,
+userPreferenceStore as useUserPreferenceStore,  useSmartCaptureStore,
+  useSnippetStore } from '@mexit/core'
 
 import { syncStoreState } from './syncStore'
 

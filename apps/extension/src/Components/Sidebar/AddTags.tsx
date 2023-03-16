@@ -1,10 +1,9 @@
 import React, { MetaHTMLAttributes, useMemo, useState } from 'react'
 
-import { Link, Tag } from '@mexit/core'
+import { Link, Tag, useLinkStore } from '@mexit/core'
 import { AddTagMenu, LinkShortenAndTagsWrapper, TagsLabel } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { useLinkStore } from '../../Stores/useLinkStore'
 
 const getGoodMeta = (document: Document) => {
   return {

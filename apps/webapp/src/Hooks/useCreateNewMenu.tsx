@@ -4,20 +4,28 @@ import { TreeItem } from '@atlaskit/tree'
 import { ELEMENT_PARAGRAPH } from '@udecode/plate'
 import generateName from 'project-name-generator'
 
-import { defaultContent, DRAFT_NODE, generateSnippetId, isReservedNamespace, MIcon, View } from '@mexit/core'
+import {
+  defaultContent,
+  DRAFT_NODE,
+  generateSnippetId,
+  isReservedNamespace,
+  MIcon,
+  ModalsType,
+  useDataStore,
+  useLayoutStore,
+  useMetadataStore,
+  useModalStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useShareModalStore,
+  useSnippetStore,
+  View
+} from '@mexit/core'
 import { DefaultMIcons, getMIcon, InteractiveToast } from '@mexit/shared'
 
 import { useDeleteStore } from '../Components/Refactor/DeleteModal'
 import { doesLinkRemain } from '../Components/Refactor/doesLinkRemain'
 import { useTaskViewModalStore } from '../Components/TaskViewModal'
 import { useBlockMenu } from '../Editor/Components/useBlockMenu'
-import { useDataStore } from '../Stores/useDataStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import useModalStore, { ModalsType } from '../Stores/useModalStore'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { useShareModalStore } from '../Stores/useShareModalStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { useViewStore } from '../Stores/useViewStore'
 
 import { useCreateNewNote } from './useCreateNewNote'

@@ -2,10 +2,8 @@ import { useCallback } from 'react'
 
 import { PlateEditor } from '@udecode/plate'
 
-import { ComboboxType } from '@mexit/core'
+import { ComboboxType, useComboboxStore, useEditorStore } from '@mexit/core'
 
-import { useComboboxStore } from '../../Stores/useComboboxStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import getTextFromTriggers from '../Components/MultiCombobox/getMultiTextFromTrigger'
 import { ComboTriggerDataType } from '../Types/MultiCombobox'
 

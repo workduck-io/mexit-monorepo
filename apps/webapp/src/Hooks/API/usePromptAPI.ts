@@ -1,8 +1,7 @@
 import { Indexes } from '@workduck-io/mex-search'
 
-import { API, mog, PromptDataType } from '@mexit/core'
+import { API, mog, PromptDataType, usePromptStore } from '@mexit/core'
 
-import { usePromptStore } from '../../Stores/usePromptStore'
 import { updateDoc } from '../../Workers/controller'
 
 export const usePromptAPI = () => {

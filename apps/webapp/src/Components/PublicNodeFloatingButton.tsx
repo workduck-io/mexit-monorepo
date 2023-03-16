@@ -11,9 +11,8 @@ import styled from 'styled-components'
 
 import { Button } from '@workduck-io/mex-components'
 
+import { useLayoutStore } from '@mexit/core'
 import { Float, Group, Links, StyledIcon } from '@mexit/shared'
-
-import { useLayoutStore } from '../Stores/useLayoutStore'
 
 interface PublicNodeFloatingButtonProps {
   firstVisit: boolean

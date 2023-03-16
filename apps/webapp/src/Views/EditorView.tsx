@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { useBlockStore, useContentStore, useDataStore, useLayoutStore, useSnippetStore } from '@mexit/core'
 import { StyledEditor } from '@mexit/shared'
 
 import EditorErrorFallback from '../Components/Editor/EditorErrorFallback'
@@ -13,11 +14,6 @@ import EditorHeader from '../Components/Editor/EditorHeader'
 import Presenter from '../Components/Presenter'
 import useEditorActions from '../Hooks/useEditorActions'
 import { useAnalysis } from '../Stores/useAnalysis'
-import useBlockStore from '../Stores/useBlockStore'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useLayoutStore } from '../Stores/useLayoutStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { initSearchIndex } from '../Workers/controller'
 
 export const EditorViewWrapper = styled.div`

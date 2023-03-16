@@ -28,12 +28,10 @@ import {
 } from '@udecode/plate'
 import styled, { css } from 'styled-components'
 
-import { IS_DEV } from '@mexit/core'
+import { IS_DEV, useBlockStore, useEditorStore } from '@mexit/core'
 import { RelativeTime } from '@mexit/shared'
 
 import { ProfileImage } from '../../Components/User/ProfileImage'
-import useBlockStore from '../../Stores/useBlockStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 
 const StyledTip = styled.div`
   display: flex;

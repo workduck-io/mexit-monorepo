@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { mog, PromptProviderType } from '@mexit/core'
+import { mog, PromptProviderType, usePortalStore, usePromptStore } from '@mexit/core'
 import { Flex, FullHeight, IntegrationContainer } from '@mexit/shared'
 
 import Section from '../Components/Portals/Section'
 import { usePortals } from '../Hooks/usePortals'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import usePortalStore from '../Stores/usePortalStore'
-import { usePromptStore } from '../Stores/usePromptStore'
 import { ActionGroupType } from '../Types/Actions'
 
 const PortalsPage = () => {

@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { Indexes } from '@workduck-io/mex-search'
 
-import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
+import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog, useDataStore, useRecentsStore } from '@mexit/core'
 import {
   CenteredColumn,
   DefaultMIcons,
@@ -20,8 +20,6 @@ import {
 } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
-import useDataStore from '../../Stores/useDataStore'
-import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { wSearchIndexWithRanking } from '../../Sync/invokeOnWorker'
 
 import { NodeCard } from './NodeCard'

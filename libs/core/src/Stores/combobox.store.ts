@@ -66,3 +66,5 @@ export const comboboxStoreConfig = (set) => ({
 })
 
 export const useComboboxStore = createStore(comboboxStoreConfig, StoreIdentifier.COMBOBOX, false)
+
+export const useComboboxIsOpen = () => useComboboxStore((state) => !!state.targetRange)

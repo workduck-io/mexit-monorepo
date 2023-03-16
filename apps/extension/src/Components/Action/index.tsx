@@ -2,10 +2,9 @@ import React from 'react'
 
 import { DisplayShortcut } from '@workduck-io/mex-components'
 
-import { ActionType, cleanString, MexitAction, QuickLinkType } from '@mexit/core'
+import { ActionType, cleanString, MexitAction, QuickLinkType, useLayoutStore } from '@mexit/core'
 import { PrimaryText } from '@mexit/shared'
 
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useSputlitStore } from '../../Stores/useSputlitStore'
 
 import {

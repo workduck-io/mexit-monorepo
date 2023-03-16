@@ -1,11 +1,11 @@
 import React from 'react'
 import toast from 'react-hot-toast'
 
+import { useSnippetStore } from '@mexit/core'
 import { InteractiveToast } from '@mexit/shared'
 
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 export const useOpenToast = () => {
   const { push } = useNavigation()

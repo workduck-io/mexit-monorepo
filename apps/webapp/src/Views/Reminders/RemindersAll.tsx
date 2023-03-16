@@ -21,7 +21,9 @@ import {
   ReminderBoardCard,
   ReminderBoardColumn,
   ReminderViewData,
-  upcoming
+  upcoming,
+  useLayoutStore,
+  useReminderStore
 } from '@mexit/core'
 import {
   OverlaySidebarWindowWidth,
@@ -42,8 +44,6 @@ import { reminderFilterFunctions } from '../../Hooks/useFilterFunctions'
 import { FilterStore } from '../../Hooks/useFilters'
 import { useLinks } from '../../Hooks/useLinks'
 import { useReminders } from '../../Hooks/useReminders'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import { useReminderStore } from '../../Stores/useReminderStore'
 import { useViewStore } from '../../Stores/useViewStore'
 import SearchFilters from '../SearchFilters'
 

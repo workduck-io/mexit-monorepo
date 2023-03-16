@@ -2,9 +2,7 @@ import { useMemo } from 'react'
 
 import { useCombobox } from 'downshift'
 
-import { useComboboxStore } from '../../Stores/useComboboxStore'
-
-import { useComboboxIsOpen } from './useComboboxIsOpen'
+import { useComboboxIsOpen, useComboboxStore } from '@mexit/core'
 
 export const useComboboxControls = (withNew: boolean) => {
   const isOpen = useComboboxIsOpen()

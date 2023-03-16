@@ -9,16 +9,16 @@ import {
   mog,
   NodeProperties,
   SEPARATOR,
-  SingleNamespace
+  SingleNamespace,
+  useAuthStore,
+  useContentStore,
+  useDataStore,
+  useHighlightStore,
+  useRecentsStore
 } from '@mexit/core'
 
-import { useContentStore } from '../Stores/useContentStore'
-import useDataStore from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
 
-import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useHighlights } from './useHighlights'
 import { useInternalLinks } from './useInternalLinks'

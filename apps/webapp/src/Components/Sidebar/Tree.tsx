@@ -16,7 +16,7 @@ import Tippy, { useSingleton } from '@tippyjs/react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, mog, SEPARATOR } from '@mexit/core'
+import { getNameFromPath, mog, SEPARATOR, useDataStore, useEditorStore, useTreeStore } from '@mexit/core'
 import {
   isOnEditableElement,
   StyledTreeItemSwitcher,
@@ -30,9 +30,6 @@ import { useNavigation } from '../../Hooks/useNavigation'
 import { useRefactor } from '../../Hooks/useRefactor'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getTreeFromLinks } from '../../Hooks/useTreeFromLinks'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useTreeStore } from '../../Stores/useTreeStore'
 import { flattenNestedTreeFromIds } from '../../Utils/tree'
 
 import { RenderTreeItem } from './TreeItem'

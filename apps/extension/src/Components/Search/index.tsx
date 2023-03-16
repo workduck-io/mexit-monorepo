@@ -16,6 +16,9 @@ import {
   isParent,
   ListItemType,
   MAX_RECENT_ITEMS,
+  useDataStore,
+  useDescriptionStore,
+  useRecentsStore,
   withoutContinuousDelimiter
 } from '@mexit/core'
 import { IconDisplay, Loading, WDLogo } from '@mexit/shared'
@@ -27,10 +30,7 @@ import { useSaveChanges } from '../../Hooks/useSaveChanges'
 import { useSearch } from '../../Hooks/useSearch'
 import { useSearchProps } from '../../Hooks/useSearchProps'
 import { useSputlitContext } from '../../Hooks/useSputlitContext'
-import useDataStore from '../../Stores/useDataStore'
-import { useDescriptionStore } from '../../Stores/useDescriptionStore'
 // import events from "events"
-import { useRecentsStore } from '../../Stores/useRecentsStore'
 import { type SearchType, useSputlitStore } from '../../Stores/useSputlitStore'
 import { getListItemFromNode } from '../../Utils/helper'
 

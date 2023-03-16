@@ -12,13 +12,11 @@ import {
   Link,
   mog,
   Settify,
-  URL_DOMAIN_REG
-} from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { useLinkStore } from '../Stores/useLinkStore'
+  URL_DOMAIN_REG,
+  useAuthStore,
+  useDataStore,
+  useHighlightStore
+, useLinkStore } from '@mexit/core'
 
 import { useLinkFilterFunctions } from './useFilterFunctions'
 import { applyFilters, FilterStore } from './useFilters'

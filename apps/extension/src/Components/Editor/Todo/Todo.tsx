@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { getNextStatus, PriorityDataType, PriorityType, TodoStatus, TodoType } from '@mexit/core'
+import { getNextStatus, PriorityDataType, PriorityType, TodoStatus, TodoType, useTodoStore } from '@mexit/core'
 import { CheckBoxWrapper, MexIcon, StyledTodoStatus, TodoContainer, TodoOptions, TodoText } from '@mexit/shared'
-
-import { useTodoStore } from '../../../Stores/useTodoStore'
 
 import PrioritySelect from './PrioritySelect'
 
