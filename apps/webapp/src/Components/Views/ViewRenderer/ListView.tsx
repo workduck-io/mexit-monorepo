@@ -4,13 +4,12 @@ import { useMatch } from 'react-router-dom'
 import { SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
+import { useModalStore, useMultipleEditors } from '@mexit/core'
 import { Description, TaskListWrapper } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
 import { ROUTE_PATHS } from '../../../Hooks/useRouting'
-import useMultipleEditors from '../../../Stores/useEditorsStore'
-import useModalStore from '../../../Stores/useModalStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 import ResultGroup from '../ViewBlockRenderer/BlockContainer'
 

@@ -45,7 +45,7 @@ export const comboboxStoreConfig = (set) => ({
   items: [],
   setItems: setStoreValue(set, 'items', 'setItems'),
 
-  targetRange: null as Range | null,
+  targetRange: null as null,
   setTargetRange: setStoreValue(set, 'targetRange', 'setTargetRange'),
 
   itemIndex: 0,

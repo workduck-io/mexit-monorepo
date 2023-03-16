@@ -1,9 +1,7 @@
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
+import { FilterTypeWithOptions, SEPARATOR, useDataStore, useMentionStore } from '@mexit/core'
 import { findGroupingKey, getKeyFrequencyMap, keysToExcludeInGrouping, SearchEntityType } from '@mexit/shared'
-
-import { useDataStore } from '../Stores/useDataStore'
 
 import { getBlockFieldIcon } from './useSortIcons'
 

@@ -9,7 +9,7 @@ import { useTheme } from 'styled-components'
 import { Entities, SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { mog, PriorityType, SEPARATOR } from '@mexit/core'
+import { mog, PriorityType, SEPARATOR, useLayoutStore, useModalStore, useMultipleEditors, useTodoStore } from '@mexit/core'
 import {
   Count,
   Group,
@@ -27,10 +27,6 @@ import useGroupHelper from '../../../Hooks/useGroupHelper'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import useMultipleEditors from '../../../Stores/useEditorsStore'
-import { useLayoutStore } from '../../../Stores/useLayoutStore'
-import useModalStore from '../../../Stores/useModalStore'
-import { useTodoStore } from '../../../Stores/useTodoStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 
 /**

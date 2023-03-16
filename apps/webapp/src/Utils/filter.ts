@@ -27,7 +27,7 @@ export const useFilteredContent = (filter: FilterContentType) => {
 
   const elements = useMemo(() => {
     const data: NodeEditorContent = []
-    filterContent(content.content, data, filter)
+    filterContent(content[0].content, data, filter)
     return data
   }, [content])
 
