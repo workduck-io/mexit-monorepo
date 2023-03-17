@@ -16,12 +16,18 @@ export type TypeMap<T, R extends boolean> = R extends true
 
 export type SetterFunction<T> = (set: any, get: any) => T
 
+export type StorageType = {
+  web: Storage
+  extension: Storage
+}
+
 export const createStore = <T extends object, R extends boolean>(
   config: SetterFunction<T>,
   name: StoreIdentifier,
   isPersist: R,
   persistOptions?: {
-    version: number
+    version?: number
+    storage?: Partial<StorageType>
     migrate?: (persistedState: any, version: number) => any
   }
 ): UseBoundStore<TypeMap<T, R>, StoreApi<TypeMap<T, R>>> => {
@@ -38,13 +44,18 @@ export const createStore = <T extends object, R extends boolean>(
       }
     }
 
+    const { storage, ...storeOptions } = persistOptions || {}
+
     return create<TypeMap<T, R>>(
       devtools(
         persist(configX, {
           name: `mexit-${name}-${isExtension() ? 'extension' : 'webapp'}`,
-          ...(persistOptions ? persistOptions : {}),
+          ...storeOptions,
           getStorage: () => {
-            return isExtension() ? asyncLocalStorage : IDBStorage
+            const webStorage = storage?.web ?? IDBStorage
+            const extensionStorage = storage?.extension ?? asyncLocalStorage
+
+            return isExtension() ? extensionStorage : webStorage
           },
           onRehydrateStorage: () => (state) => {
             state.setHasHydrated(true)
