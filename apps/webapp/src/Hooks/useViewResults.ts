@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { groupItems, keysToExcludeInGrouping, keysToExcludeInSorting } from '@mexit/shared'
+import { mog, useContentStore } from '@mexit/core'
+import { groupItems, keysToExcludeInGrouping, keysToExcludeInSorting, useQuery } from '@mexit/shared'
 
 import { useViewFilterStore } from './todo/useTodoFilters'
 import { useSearch } from './useSearch'
@@ -12,8 +13,10 @@ const useViewResults = () => {
   const [results, setResults] = useState<SearchResult[]>([])
 
   const { queryIndex } = useSearch()
-  const { generateQuery, getGroupingOptions } = useViewFilters()
+  const { generateSearchQuery } = useQuery()
+  const { getGroupingOptions } = useViewFilters()
 
+  const docUpdated = useContentStore((store) => store.docUpdated)
   const entities = useViewFilterStore((store) => store.entities)
   const groupedBy = useViewFilterStore((store) => store.groupBy)
   const sortBy = useViewFilterStore((store) => store.sortType)
@@ -37,14 +40,15 @@ const useViewResults = () => {
   }, [groupedBy, sortBy, sortOrder, results])
 
   useEffect(() => {
-    const query = generateQuery(currentFilters, entities)
+    const query = generateSearchQuery(undefined, currentFilters, entities)
 
     queryIndex('node', query).then((queryResult) => {
+      mog('QUERY', { currentFilters, query, queryResult })
       if (queryResult) {
         setResults(queryResult)
       }
     })
-  }, [currentFilters, entities])
+  }, [currentFilters, entities, docUpdated])
 
   return groupedResults
 }

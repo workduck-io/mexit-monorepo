@@ -21,7 +21,6 @@ import { Label, SearchFilterListCurrent, TextAreaBlock } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
-import { useViewStore } from '../Stores/useViewStore'
 import { ModalControls, ModalHeader } from '../Style/Refactor'
 
 import { DisplayFilter } from './Filters/Filter'
@@ -89,11 +88,8 @@ const TaskViewModal = () => {
   const updateViewId = useTaskViewModalStore((store) => store.updateViewId)
   const cloneViewId = useTaskViewModalStore((store) => store.cloneViewId)
   const filters = useTaskViewModalStore((store) => store.filters)
-  const properties = useTaskViewModalStore((store) => store.properties)
 
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
-
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
 
   const { getView, addView, updateView } = useViews()
 
@@ -156,20 +152,17 @@ const TaskViewModal = () => {
         filters
       }
       await updateView(newView)
-      // saveData()
-      setCurrentView(newView)
       goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
       const view: View = {
         title: data.title,
         description: data.description,
-        filters: filters,
+        filters,
         id: generateTaskViewId(),
         ...properties
       }
       await addView(view)
       // saveData()
-      setCurrentView(view)
       goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
     handleClose()
@@ -210,10 +203,9 @@ const TaskViewModal = () => {
           <>
             <Label htmlFor="description">Filters </Label>
             <SearchFilterListCurrent>
-              {filters.map((f) => (
-                <DisplayFilter key={f.id} filter={f} />
-              ))}
-              {/* <RenderGlobalJoin globalJoin={properties.globalJoin} /> */}
+              {filters.map((f, i) => {
+                return <DisplayFilter key={f.id} filter={f} hideJoin={i === filters.length - 1} />
+              })}
             </SearchFilterListCurrent>
           </>
         )}

@@ -186,7 +186,7 @@ export const useFilters = <Item>() => {
         if (rank >= 0) {
           acc.options.push({
             id: ilink.nodeid,
-            value: ilink.path,
+            value: ilink.nodeid,
             label: getTitleFromPath(ilink.path),
             count: rank as number
           })
@@ -226,7 +226,7 @@ export const useFilters = <Item>() => {
         if (rank >= 0 && namespace) {
           // mog('path', { path, rank })
           acc.options.push({
-            id: `namespace_${namespace.id}`,
+            id: namespaceID,
             // Use Namespace icon
             value: namespaceID,
             label: namespace?.name,
@@ -277,22 +277,5 @@ export const applyFilters = <Item>(
   filterFunctions: SearchFilterFunctions,
   globalFilterJoin: GlobalFilterJoin = 'all'
 ): Item[] => {
-  // TODO: Insert the global any and all filters match condition here
-  if (filters.length === 0) return items
-
-  // For any
-  if (globalFilterJoin === 'any') {
-    return items.filter((item) => {
-      return filters.some((filter) => {
-        return filterFunctions[filter.type](item, filter)
-      })
-    })
-  }
-
-  // For all
-  const filtered = filters.reduce((acc, filter) => {
-    return acc.filter((i) => filterFunctions[filter.type](i, filter))
-  }, items)
-
-  return filtered
+  return []
 }

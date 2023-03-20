@@ -1,3 +1,4 @@
+import imageIcon from '@iconify/icons-bx/image'
 import globalLine from '@iconify/icons-ri/global-line'
 import headingIcon from '@iconify/icons-ri/heading'
 import listOrdered from '@iconify/icons-ri/list-ordered'
@@ -40,5 +41,6 @@ export const BlockIcons: Record<string, IconifyIcon> = {
 
 export const SearchBlockIcons: Partial<Record<Entities, IconifyIcon>> = {
   [Entities.CONTENT_BLOCK]: text,
-  [Entities.TASK]: taskLine
+  [Entities.TASK]: taskLine,
+  [Entities.IMAGE]: imageIcon
 }

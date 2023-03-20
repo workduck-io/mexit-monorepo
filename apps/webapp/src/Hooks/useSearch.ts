@@ -9,7 +9,8 @@ import {
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
   idxKey,
-  SearchRepExtra
+  SearchRepExtra,
+  useContentStore
 } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
@@ -21,7 +22,8 @@ import {
   searchIndex,
   searchIndexByNodeId,
   searchIndexWithRanking,
-  updateDoc
+  updateDoc,
+  updateOrAppendBlocks
 } from '../Workers/controller'
 
 import { useLinks } from './useLinks'
@@ -73,6 +75,7 @@ export const useSearchExtra = () => {
 export const useSearch = () => {
   const { getTitleFromNoteId } = useLinks()
   const { getSearchExtra } = useSearchExtra()
+  const documentUpdated = useContentStore((s) => s.setDocUpdated)
 
   const addDocument = async (
     key: idxKey,
@@ -91,6 +94,7 @@ export const useSearch = () => {
       tags,
       extra
     )
+    documentUpdated()
   }
 
   const updateDocument = async (
@@ -110,10 +114,34 @@ export const useSearch = () => {
       tags,
       extra
     )
+
+    documentUpdated()
+  }
+
+  const updateBlocks = async (
+    key: idxKey,
+    nodeId: string,
+    contents: any[],
+    title: string | undefined = undefined,
+    tags?: Array<string>
+  ) => {
+    const extra = getSearchExtra()
+
+    await updateOrAppendBlocks(
+      key,
+      nodeId,
+      contents,
+      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
+      tags,
+      extra
+    )
+
+    documentUpdated()
   }
 
   const removeDocument = async (key: idxKey, id: string) => {
     await removeDoc(key, id)
+    documentUpdated()
   }
 
   const queryIndex = async (key: idxKey | idxKey[], query?: ISearchQuery, tags?: Array<string>) => {
@@ -126,10 +154,18 @@ export const useSearch = () => {
     return results
   }
 
-  const queryIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
+  const queryIndexWithRanking = async (key: idxKey | idxKey[], query: ISearchQuery) => {
     const results = await searchIndexWithRanking(key, query)
     return results
   }
 
-  return { addDocument, updateDocument, removeDocument, queryIndex, queryIndexByNodeId, queryIndexWithRanking }
+  return {
+    addDocument,
+    updateBlocks,
+    updateDocument,
+    removeDocument,
+    queryIndex,
+    queryIndexByNodeId,
+    queryIndexWithRanking
+  }
 }

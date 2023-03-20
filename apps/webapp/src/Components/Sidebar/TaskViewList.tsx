@@ -6,7 +6,7 @@ import { getMIcon, ReminderViewData, ViewType } from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { getSortTypeIcon } from '../../Hooks/useSortIcons'
+import { getBlockFieldIcon } from '../../Hooks/useSortIcons'
 import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 import { useViewStore } from '../../Stores/useViewStore'
 import { useTaskViewModalStore } from '../TaskViewModal'
@@ -90,7 +90,7 @@ const ViewList = () => {
           {
             label: 'Tasks',
             id: 'tasks',
-            icon: getSortTypeIcon('status'),
+            icon: getBlockFieldIcon('status'),
             data: {}
           },
           {

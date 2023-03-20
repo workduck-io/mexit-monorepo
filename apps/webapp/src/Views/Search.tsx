@@ -1,13 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { Infobox } from '@workduck-io/mex-components'
+import { SearchResult } from '@workduck-io/mex-search'
 
 import {
   convertContentToRawText,
   defaultContent,
   DefaultMIcons,
-  GenericSearchResult,
   getInitialNode,
+  mog,
   NodeType,
   ViewType
 } from '@mexit/core'
@@ -28,7 +29,8 @@ import {
   SearchHelp,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  Title
+  Title,
+  useQuery
 } from '@mexit/shared'
 
 import Backlinks from '../Components/Editor/Backlinks'
@@ -41,6 +43,7 @@ import { useNodes } from '../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useSearch } from '../Hooks/useSearch'
 import { useTags } from '../Hooks/useTags'
+import { useViewFilters } from '../Hooks/useViewFilters'
 import { useContentStore } from '../Stores/useContentStore'
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
@@ -53,41 +56,49 @@ import SearchView, { RenderFilterProps, RenderItemProps, RenderPreviewProps } fr
 const Search = () => {
   const { loadNode } = useLoad()
   const { queryIndexWithRanking } = useSearch()
+  const { getFilters } = useViewFilters()
+  const { generateSearchQuery } = useQuery()
+
   const contents = useContentStore((store) => store.contents)
   const ilinks = useDataStore((store) => store.ilinks)
   const initialResults = useMemo(
     () =>
       ilinks
         .map(
-          (link): GenericSearchResult => ({
-            id: link.nodeid,
-            title: link.path
+          (link): Partial<SearchResult> => ({
+            parent: link.nodeid
           })
         )
         .slice(0, 12),
     [ilinks]
   )
+
   const { getNode, getNodeType } = useNodes()
   const { goTo } = useRouting()
   const { hasTags } = useTags()
   const {
-    applyCurrentFilters,
     addCurrentFilter,
-    setFilters,
-    generateNodeSearchFilters,
     removeCurrentFilter,
     filters,
     changeCurrentFilter,
-    setGlobalJoin,
     globalJoin,
+    setFilters,
     currentFilters,
     resetCurrentFilters
-  } = useFilters<GenericSearchResult>()
+  } = useFilters<SearchResult>()
+
+  useEffect(() => {
+    setFilters(getFilters())
+  }, [])
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await queryIndexWithRanking(['shared', 'node'], newSearchTerm)
+    const query = generateSearchQuery(newSearchTerm, currentFilters)
+    const res = await queryIndexWithRanking(['shared', 'node'], query)
+
+    mog('RES', { res, query })
+
     const filRes = res.filter((r) => {
-      const nodeType = getNodeType(r.id)
+      const nodeType = getNodeType(r.parent)
       return nodeType !== NodeType.MISSING && nodeType !== NodeType.ARCHIVED
     })
 
@@ -98,9 +109,9 @@ const Search = () => {
   const nodeUID = useEditorStore((store) => store.node.nodeid)
   const baseNodeId = useDataStore((store) => store.baseNodeId)
 
-  const onSelect = (item: GenericSearchResult) => {
-    const nodeid = item.id
-    loadNode(nodeid, { highlightBlockId: item.blockId })
+  const onSelect = (item: SearchResult) => {
+    const nodeid = item.parent
+    loadNode(nodeid, { highlightBlockId: item.id })
     goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
@@ -110,44 +121,42 @@ const Search = () => {
     goTo(ROUTE_PATHS.editor, NavigationType.push, nodeid)
   }
 
-  const onDoubleClick = (e: React.MouseEvent<HTMLElement>, item: GenericSearchResult) => {
+  const onDoubleClick = (e: React.MouseEvent<HTMLElement>, item: SearchResult) => {
     e.preventDefault()
-    const nodeid = item.id
+    const nodeid = item.parent
     if (e.detail === 2) {
-      loadNode(nodeid, { highlightBlockId: item.blockId })
+      loadNode(nodeid, { highlightBlockId: item.id })
       goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
     }
   }
 
   const BaseItem = (
-    { item, splitOptions, ...props }: RenderItemProps<GenericSearchResult>,
+    { item, splitOptions, ...props }: RenderItemProps<Partial<SearchResult>>,
     ref: React.Ref<HTMLDivElement>
   ) => {
-    const node = getNode(item.id, true)
+    const node = getNode(item.parent, true)
     const nodeType = getNodeType(node.nodeid)
     if (!item || !node) {
       // eslint-disable-next-line
       // @ts-ignore
       return <Result {...props} ref={ref}></Result>
     }
-    const con = contents[item.id]
+    const con = contents[item.parent]
     const content = con ? con.content : defaultContent.content
-    const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.id]?.icon)
+    const storedNoteIcon = useMetadataStore((s) => s.metadata.notes[item.parent]?.icon)
     const icon = storedNoteIcon ?? (nodeType === NodeType.SHARED ? DefaultMIcons.SHARED_NOTE : DefaultMIcons.NOTE)
-    // mog('STORED', { storedNoteIcon })
     const edNode = node ? { ...node, title: node.path, id: node.nodeid } : getInitialNode()
     const isTagged = hasTags(edNode.nodeid)
     const id = `${item.id}_ResultFor_Search`
-    // mog('Baseitem', { item, node, icon, nodeType })
     if (props.view === ViewType.Card) {
       return (
         <Result {...props} key={id} ref={ref}>
-          <ResultHeader active={item.matchField?.includes('title')}>
+          <ResultHeader active>
             <IconDisplay icon={icon} />
             <ResultTitle>{node.path}</ResultTitle>
           </ResultHeader>
-          <SearchPreviewWrapper active={item.matchField?.includes('text')}>
-            <EditorPreviewRenderer content={content} editorId={`editor_${item.id}`} />
+          <SearchPreviewWrapper>
+            <EditorPreviewRenderer content={content} editorId={`editor_${item.parent}`} />
           </SearchPreviewWrapper>
           {isTagged && (
             <ResultCardFooter>
@@ -159,7 +168,7 @@ const Search = () => {
     } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
-          <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
+          <ResultRow selected={props.selected}>
             <IconDisplay icon={icon} />
             <ResultMain>
               <ResultTitle>{node.path}</ResultTitle>
@@ -172,14 +181,7 @@ const Search = () => {
   }
   const RenderItem = React.forwardRef(BaseItem)
 
-  const filterResults = (results: GenericSearchResult[]): GenericSearchResult[] => {
-    const nFilters = generateNodeSearchFilters(results)
-    setFilters(nFilters)
-    const filtered = applyCurrentFilters(results)
-    return filtered
-  }
-
-  const RenderFilters = (props: RenderFilterProps<GenericSearchResult>) => {
+  const RenderFilters = (props: RenderFilterProps<SearchResult>) => {
     return (
       <SearchFilters
         {...props}
@@ -188,24 +190,21 @@ const Search = () => {
         resetCurrentFilters={resetCurrentFilters}
         changeCurrentFilter={changeCurrentFilter}
         filters={filters}
-        globalJoin={globalJoin}
-        setGlobalJoin={setGlobalJoin}
         currentFilters={currentFilters}
       />
     )
   }
 
-  const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
-    // mog('RenderPreview', { item })
+  const RenderPreview = ({ item }: RenderPreviewProps<SearchResult>) => {
     if (item) {
-      const con = contents[item.id]
+      const con = contents[item.parent]
       const content = con ? con.content : defaultContent.content
-      const node = getNode(item.id, true)
+      const node = getNode(item.parent, true)
       const icon = useMetadataStore.getState().metadata.notes[item.id]?.icon
 
       const edNode = { ...node, title: node.path, id: node.nodeid }
       return (
-        <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.id}`}>
+        <SplitSearchPreviewWrapper id={`splitSearchPreview_for_${item.parent}`}>
           <EditorHeader>
             <NodeInfo>
               <Group>
@@ -217,9 +216,9 @@ const Search = () => {
           </EditorHeader>
           <EditorPreviewRenderer
             content={content}
-            blockId={item.blockId}
+            blockId={item.id}
             onDoubleClick={(e) => onDoubleClick(e, item)}
-            editorId={`SearchPreview_editor_${item.id}`}
+            editorId={`SearchPreview_editor_${item.parent}`}
           />
           <Backlinks nodeid={node.nodeid} />
           <TagsRelated nodeid={node.nodeid} />
@@ -244,11 +243,10 @@ const Search = () => {
         id="searchStandard"
         key="searchStandard"
         initialItems={initialResults}
-        getItemKey={(i) => i.id}
+        getItemKey={(i) => i.parent}
         onSelect={onSelect}
         onEscapeExit={onEscapeExit}
         onSearch={onSearch}
-        filterResults={filterResults}
         RenderFilters={RenderFilters}
         RenderItem={RenderItem}
         RenderPreview={RenderPreview}

@@ -108,6 +108,7 @@ export const DefaultMIcons = {
   TEMPLATE: getMIcon('ICON', 'ri:magic-line'),
   PROMPT: getMIcon('ICON', 'material-symbols:charger-outline'),
   HIGHLIGHT: getMIcon('ICON', 'ri:mark-pen-line'),
+  MENTION: getMIcon('ICON', 'ri:at-line'),
   WEB_LINK: getMIcon('ICON', 'ri:link'),
   SHARE: getMIcon('ICON', 'ri:share-line'),
   TAG: getMIcon('ICON', 'ri:hashtag'),
@@ -122,7 +123,9 @@ export const DefaultMIcons = {
   CLEAR: getMIcon('ICON', 'ic:round-clear'),
   REMINDER: getMIcon('ICON', 'ri:timer-flash-line'),
   TEXT: getMIcon('ICON', 'ri:text'),
-  GROUPBY: getMIcon('ICON', 'bi:view-stacked')
+  GROUPBY: getMIcon('ICON', 'fluent:group-list-20-filled'),
+  SELECT: getMIcon('ICON', 'bxs:select-multiple'),
+  IMAGE: getMIcon('ICON', 'bx:image')
 }
 
 export const ForwardlinkIcon = {

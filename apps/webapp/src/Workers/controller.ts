@@ -198,7 +198,25 @@ export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string
   }
 }
 
-export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
+export const updateOrAppendBlocks = async (
+  key: idxKey,
+  nodeId: string,
+  contents: any[],
+  title: string,
+  tags?: Array<string>,
+  extra?: SearchRepExtra
+) => {
+  try {
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+
+    const results = await searchWorker.updateBlock(nodeId, contents, title, tags, extra)
+    return results
+  } catch (error) {
+    mog('UpdateOrAppendBlocksError', { error, nodeId, contents })
+  }
+}
+
+export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 

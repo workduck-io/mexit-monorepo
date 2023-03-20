@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
 
 import Board from '@asseinfo/react-kanban'
 import { useTheme } from 'styled-components'
 
-import { SearchResult } from '@workduck-io/mex-search'
+import { Entities, SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType } from '@mexit/core'
+import { getNextStatus, getPrevStatus, mog, PriorityType, SEPARATOR } from '@mexit/core'
 import {
   Count,
   Group,
@@ -19,7 +19,7 @@ import {
   TaskColumnHeader
 } from '@mexit/shared'
 
-import { useViewFilters as useFilters, useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
+import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { KanbanBoardColumn, useTodoKanban } from '../../../Hooks/todo/useTodoKanban'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
 import useGroupHelper from '../../../Hooks/useGroupHelper'
@@ -29,6 +29,7 @@ import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouti
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { useLayoutStore } from '../../../Stores/useLayoutStore'
 import useModalStore from '../../../Stores/useModalStore'
+import { useTodoStore } from '../../../Stores/useTodoStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
 
 /**
@@ -37,39 +38,54 @@ import ViewBlockRenderer from '../ViewBlockRenderer'
  */
 
 const KanbanView: React.FC<any> = (props) => {
-  const [board, setBoard] = useState<any>({ columns: [] })
   const [selectedCard, setSelectedCard] = React.useState<SearchResult | null>(null)
+  const groupBy = useViewFilterStore((s) => s.groupBy)
 
-  const { enableShortcutHandler } = useEnableShortcutHandler()
   const isModalOpen = useModalStore((store) => store.open)
   const sidebar = useLayoutStore((store) => store.sidebar)
-
-  const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
-  const { globalJoin, currentFilters, sortOrder, sortType } = useFilters()
-
-  const entities = useViewFilterStore((store) => store.entities)
-
-  const { push } = useNavigation()
-  const { goTo } = useRouting()
-
-  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
-  const { accessWhenShared } = usePermissions()
-
-  useEffect(() => {
-    setBoard(getBlocksBoard(props.results))
-  }, [globalJoin, currentFilters, entities, sortOrder, sortType])
-
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
-  const handleCardMove = (card, source, destination) => {
-    const todoFromCard = getTodoFromCard(card)
-    const readOnly = todoFromCard?.nodeid && isReadonly(accessWhenShared(todoFromCard?.nodeid))
-    // mog('card moved', { card, source, destination, readOnly })
-    if (!readOnly) {
-      // mog('new status', { newStatus, todoFromCard, selectedCard })
-      changeStatus(todoFromCard, destination.toColumnId)
+  const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
+
+  const { goTo } = useRouting()
+  const { push } = useNavigation()
+  const { accessWhenShared } = usePermissions()
+  const { enableShortcutHandler } = useEnableShortcutHandler()
+  const overlaySidebar = useMediaQuery({ maxWidth: OverlaySidebarWindowWidth })
+
+  const board = useMemo(() => {
+    return getBlocksBoard(props.results)
+  }, [props.results])
+
+  const handleTaskEvents = (block: SearchResult, field: string, newValue: any) => {
+    if (!block || !field || newValue === 'Ungrouped') return
+
+    const todoField = field?.split(SEPARATOR)?.at(-1)
+
+    const todo = useTodoStore.getState().getTodoOfNodeWithoutCreating(block.parent, block.id)
+    const readOnly = todo?.nodeid && isReadonly(accessWhenShared(todo?.nodeid))
+
+    if (todo && !readOnly) {
+      switch (todoField) {
+        case 'priority':
+          changePriority(todo, newValue)
+          break
+        case 'status':
+          changeStatus(todo, newValue)
+          break
+      }
     } else {
       toast('Cannot move task in a note with Read only permission')
+    }
+  }
+
+  const handleCardMove = (card, source, destination) => {
+    switch (card.entity) {
+      case Entities.TASK:
+        if (source !== destination) handleTaskEvents(card, groupBy, destination.toColumnId)
+        break
+      default:
+        mog('card move', { card, source, destination })
     }
   }
 
@@ -254,10 +270,16 @@ const KanbanView: React.FC<any> = (props) => {
 
   const ColumnHeader = (props) => {
     const theme = useTheme()
-    const { getResultGroup } = useGroupHelper()
-    const groupBy = useViewFilterStore((store) => store.groupBy)
+    const [group, setGroup] = useState(null)
 
-    const group = getResultGroup(props.id, groupBy)
+    const { getResultGroup } = useGroupHelper()
+
+    useEffect(() => {
+      getResultGroup(props.id, groupBy).then((res) => {
+        setGroup(res)
+      })
+    }, [])
+
     const count = board.columns?.find((column) => column.id === props.id)?.cards?.length
 
     if (!group) return

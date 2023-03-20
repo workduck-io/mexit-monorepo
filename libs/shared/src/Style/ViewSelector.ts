@@ -16,8 +16,8 @@ export const ViewSelectorButton = styled.div<{ selected: boolean }>`
   cursor: pointer;
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.tiny};
-  padding: ${({ theme }) => theme.spacing.tiny};
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  padding: ${({ theme }) => theme.spacing.small};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   color: ${({ theme, selected }) => (selected ? theme.tokens.colors.primary.text : theme.tokens.text.fade)};
   background-color: ${({ selected, theme }) =>
     selected ? theme.tokens.colors.primary.default : theme.tokens.surfaces.s[2]};

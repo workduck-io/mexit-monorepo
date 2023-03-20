@@ -70,6 +70,8 @@ export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolea
   background: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
+  transition: background 0.15s ease-in-out;
+  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
 
   :hover {
     cursor: pointer;
@@ -85,15 +87,16 @@ export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolea
   }
 
   ${({ noHover }) =>
-    !noHover &&
+    noHover &&
     css`
+      background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+
       color: ${({ theme }) => theme.tokens.text.default};
-      padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
 
       &.open,
       &:hover {
         box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-        background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+        background: ${({ theme }) => theme.tokens.surfaces.s[2]};
       }
     `}
 `

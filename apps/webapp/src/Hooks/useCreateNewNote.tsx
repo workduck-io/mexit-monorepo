@@ -1,9 +1,9 @@
 import toast from 'react-hot-toast'
 
 import {
-  defaultContent,
   DefaultMIcons,
   DRAFT_NODE,
+  getDefaultContent,
   getUntitledDraftKey,
   getUntitledKey,
   mog,
@@ -83,7 +83,7 @@ export const useCreateNewNote = () => {
       options?.noteContent ??
       (nodeMetadata?.templateID && parentNote?.path !== DRAFT_NODE
         ? getSnippet(nodeMetadata.templateID)?.content
-        : defaultContent.content)
+        : [getDefaultContent()])
 
     const namespace = options?.namespace ?? parentNote?.namespace ?? defaultNamespace?.id
 

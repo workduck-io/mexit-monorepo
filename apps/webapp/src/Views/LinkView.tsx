@@ -1,15 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import {
-  fuzzySearchLinks,
-  GenericSearchResult,
-  Link,
-  mog,
-  sortByCreated,
-  useDataStore,
-  useHighlightStore,
-  ViewType
-} from '@mexit/core'
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, ViewType } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
@@ -35,8 +26,6 @@ const LinkView = () => {
    */
   useEffect(() => {
     getAllLinks()
-    const h = useHighlightStore.getState().highlights
-    const ilinks = useDataStore.getState().ilinks
   }, [])
 
   const {
@@ -151,7 +140,6 @@ const LinkView = () => {
         onSearch={onSearch}
         // place="Search links"
         RenderItem={RenderItem}
-        filterResults={filterResults}
         filterActions={{
           filters,
           currentFilters,

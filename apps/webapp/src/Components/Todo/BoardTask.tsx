@@ -42,10 +42,10 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
-
     const pC = useMemo(() => getPureContent(todo), [id, todo])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
+    const toggleModal = useModalStore((store) => store.toggleOpen)
 
     useEffect(() => {
       if (ref.current) {
@@ -82,12 +82,14 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       []
     )
 
-    const toggleModal = useModalStore((store) => store.toggleOpen)
-    const priorityShown = todo.metadata.priority !== PriorityType.noPriority
+    if (!todo) return null
+
+    const priorityShown = todo?.metadata?.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
         id={`${todo.nodeid}_${todo.id}`}
+        key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return
@@ -99,7 +101,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       >
         <Todo
           showDelete={false}
-          key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
           readOnly={readOnly}
           readOnlyContent

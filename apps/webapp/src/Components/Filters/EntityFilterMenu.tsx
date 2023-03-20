@@ -4,11 +4,13 @@ import { Entities } from '@workduck-io/mex-search'
 
 import {
   DefaultMIcons,
-  GenericSection,
+  EntitiesInfo,
+  FilterDescription,
   IconDisplay,
   Menu,
   MenuItem,
-  SearchEntities,
+  SearchableEntities,
+  SmallGap,
   SortSectionWrapper
 } from '@mexit/shared'
 
@@ -25,30 +27,32 @@ const EntityFilterMenu = ({ onChange }) => {
   return (
     <SortSectionWrapper>
       <Menu
+        noHover
         multiSelect
         key={`${JSON.stringify(entities)}-${viewId}`}
         values={
-          <GenericSection>
-            <IconDisplay icon={DefaultMIcons.TEXT} />
-            Type
-          </GenericSection>
+          <SmallGap>
+            <IconDisplay icon={DefaultMIcons.SELECT} />
+            Types
+          </SmallGap>
         }
       >
-        {Object.entries(SearchEntities)
-          .filter(([key, entity]) => entity.label !== 'Ungrouped')
-          .map(([key, entity]) => {
-            return (
-              <MenuItem
-                selected={isSelected(key as Entities)}
-                icon={entity.icon}
-                multiSelect
-                key={`${viewId}-${entity.id}`}
-                disabled={viewId === entity.id}
-                onClick={() => onChange(key)}
-                label={entity.label}
-              />
-            )
-          })}
+        <FilterDescription>Types</FilterDescription>
+        {SearchableEntities.map((key) => {
+          const entity = EntitiesInfo[key]
+
+          return (
+            <MenuItem
+              selected={isSelected(key as Entities)}
+              icon={entity.icon}
+              multiSelect
+              key={`${viewId}-${entity.id}`}
+              disabled={viewId === entity.id}
+              onClick={() => onChange(key)}
+              label={entity.label}
+            />
+          )
+        })}
       </Menu>
     </SortSectionWrapper>
   )

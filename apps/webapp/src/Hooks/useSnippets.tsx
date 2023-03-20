@@ -63,11 +63,6 @@ export const useSnippets = () => {
     const tags = snippet?.template ? ['template'] : ['snippet']
     const idxName = snippet?.template ? 'template' : 'snippet'
 
-    if (snippet?.template) {
-      await removeDocument('snippet', snippet.id)
-    } else {
-      await removeDocument('template', snippet.id)
-    }
     await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
   }
 

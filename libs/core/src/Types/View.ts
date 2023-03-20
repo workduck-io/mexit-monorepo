@@ -18,6 +18,7 @@ export interface View {
   sortOrder?: SortOrder
   sortType?: SortType
   entities?: Array<any>
+  groupBy?: string
 
   globalJoin: GlobalFilterJoin
 }

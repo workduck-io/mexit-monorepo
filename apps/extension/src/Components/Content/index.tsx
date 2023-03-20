@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { createPlateEditor, createPlateUI } from '@udecode/plate'
 
-import { defaultContent, ELEMENT_TAG, NodeEditorContent, QuickLinkType } from '@mexit/core'
+import { ELEMENT_TAG, getDefaultContent, NodeEditorContent, QuickLinkType } from '@mexit/core'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
@@ -41,8 +41,6 @@ export default function Content() {
       })
       const content = getDeserializeSelectionToNodes({ text: selection?.html, metadata: null }, editor, false)
 
-      // mog('deserializedContent', { content })
-
       if (content) setDeserializedContent(content)
     }
   }, [selection])
@@ -51,7 +49,7 @@ export default function Content() {
     const item = results[activeIndex]
 
     if (item?.category === QuickLinkType.backlink) {
-      const content = getContent(item.id)?.content ?? defaultContent.content
+      const content = getContent(item.id)?.content ?? [getDefaultContent()]
 
       if (selection?.range && deserializedContent) {
         setNodeContent(deserializedContent)

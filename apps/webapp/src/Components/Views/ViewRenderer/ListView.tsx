@@ -121,7 +121,9 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
   if (!Object.values(results)?.flat(1)?.length)
     return (
       <TaskListWrapper>
-        <Description>No Results</Description>
+        <Description>
+          Could not find any results for your search, please try again with different search terms.
+        </Description>
       </TaskListWrapper>
     )
 

@@ -12,23 +12,20 @@ export const TitleText = styled.div`
   flex-grow: 1;
 `
 
-// export const Subtitle = styled.h2``
-
-export const Description = styled.div`
-  font-size: 1rem;
+export const Description = styled.div<{ size?: 'small' | 'medium' | 'large' }>`
+  font-size: ${({ size = 'medium' }) => {
+    switch (size) {
+      case 'small':
+        return '0.8rem'
+      case 'medium':
+        return '1rem'
+      case 'large':
+        return '1.2rem'
+    }
+  }};
   color: ${({ theme }) => theme.tokens.text.fade};
 `
 
-// export const Para = styled.p`
-//   margin-top: 1rem;
-//   font-size: 1.2rem;
-//   color: ${({ theme }) => theme.colors.text.fade};
-// `
-
-// export const Note = styled.p`
-//   margin: ${({ theme }) => theme.spacing.small} 0;
-//   color: ${({ theme }) => theme.colors.text.fade};
-// `
 export const Heading = styled.div`
   font-size: 1.1rem;
   margin: 5px 0 5px;

@@ -37,27 +37,72 @@ import { useViewStore } from '../Stores/useViewStore'
 import { useTaskViewModalStore } from './TaskViewModal'
 
 interface ViewHeaderProps {
-  cardSelected: boolean // * To show actions related to selected Item
+  cardSelected?: boolean // * To show actions related to selected Item
 }
 
-const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
+const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
-  /**
-   * sortOrder, sortType, viewType, currentFilters, globalJoin
-   */
 
   const view = useViewStore((store) => store.currentView)
-  const onChangeView = useViewStore((store) => store.setCurrentView)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
+
+  const isDefault = ['tasks', 'reminders'].includes(view?.id)
 
   const { goTo } = useRouting()
   const { deleteView } = useViews()
   const [source, target] = useSingleton()
-  const { viewType, sortOrder, globalJoin, sortType, currentFilters } = useViewFilters()
+  const { viewType, sortOrder, globalJoin, sortType, entities, currentFilters, groupBy } = useViewFilters()
 
   const isCurrentViewChanged = useMemo(() => {
-    return !(JSON.stringify(currentFilters) === JSON.stringify(view?.filters) && viewType === view?.viewType)
-  }, [currentFilters, viewType, view])
+    return !(
+      JSON.stringify(currentFilters) === JSON.stringify(view?.filters) &&
+      viewType === view?.viewType &&
+      groupBy === view?.groupBy &&
+      sortType === view?.sortType &&
+      sortOrder === view?.sortOrder &&
+      entities === view?.entities
+    )
+  }, [currentFilters, viewType, groupBy, sortType, sortOrder])
+
+  const handleUpdateView = () => {
+    openTaskViewModal({
+      filters: currentFilters,
+      updateViewId: view?.id,
+      properties: {
+        viewType,
+        globalJoin,
+        groupBy,
+        entities,
+        sortOrder,
+        sortType
+      }
+    })
+  }
+
+  const handleSaveAsView = () => {
+    openTaskViewModal({
+      cloneViewId: view?.id,
+      filters: currentFilters,
+      properties: {
+        viewType,
+        globalJoin,
+        groupBy,
+        entities,
+        sortOrder,
+        sortType
+      }
+    })
+  }
+
+  const handleCloneView = () => {
+    const { id, filters, ...properties } = view
+
+    openTaskViewModal({
+      cloneViewId: view?.id,
+      filters,
+      properties
+    })
+  }
 
   const onDeleteView = async () => {
     if (view) {
@@ -65,7 +110,6 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
         setDeleting(true)
         await deleteView(view.id)
         setDeleting(false)
-        onChangeView(undefined)
 
         goTo(ROUTE_PATHS.tasks, NavigationType.replace)
       } catch (error) {
@@ -84,56 +128,34 @@ const ViewHeader = ({ cardSelected }: ViewHeaderProps) => {
             <TaskViewTitle>
               <Icon icon={stackLine} />
               {view?.title}
-              {isCurrentViewChanged && '*'}
+              {isCurrentViewChanged && !isDefault && '*'}
             </TaskViewTitle>
             <TaskViewControls>
-              <Button
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: currentFilters,
-                    updateViewId: view?.id,
-                    properties: {
-                      viewType: viewType,
-                      globalJoin,
-                      sortOrder,
-                      sortType
-                    }
-                  })
-                }
-                disabled={currentFilters.length === 0}
-                // primary={isCurrentViewChanged && currentFilters.length > 0}
-              >
-                <Icon icon={edit2Line} />
-                Update View
-              </Button>
+              {!isDefault && (
+                <Button onClick={handleUpdateView} disabled={currentFilters.length === 0}>
+                  <Icon icon={edit2Line} />
+                  Update View
+                </Button>
+              )}
               <IconButton
                 title="Clone View"
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: view?.filters,
-                    cloneViewId: view?.id,
-                    properties: {
-                      globalJoin: view?.globalJoin,
-                      viewType: view?.viewType,
-                      sortType: view?.sortType,
-                      sortOrder: view?.sortOrder
-                    }
-                  })
-                }
+                onClick={handleCloneView}
                 disabled={currentFilters.length === 0}
                 singleton={target}
                 icon={fileCopyLine}
-                // transparent={false}
               />
-              <LoadingButton
-                title="Delete View"
-                loading={deleting}
-                onClick={() => onDeleteView()}
+              <IconButton
+                title="Save as"
+                onClick={handleSaveAsView}
+                disabled={currentFilters.length === 0}
                 singleton={target}
-                // transparent={false}
-              >
-                <Icon icon={trashIcon} />
-              </LoadingButton>
+                icon="fluent:save-copy-24-regular"
+              />
+              {!isDefault && (
+                <LoadingButton title="Delete View" loading={deleting} onClick={onDeleteView} singleton={target}>
+                  <Icon icon={trashIcon} />
+                </LoadingButton>
+              )}
             </TaskViewControls>
           </TaskViewHeaderWrapper>
         )}

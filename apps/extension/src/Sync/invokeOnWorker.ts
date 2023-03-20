@@ -1,8 +1,10 @@
+import { ISearchQuery } from '@workduck-io/mex-search'
+
 import { idxKey, ILink, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 
-export const wSearchIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
+export const wSearchIndex = async (key: idxKey | idxKey[], query: ISearchQuery, tags?: Array<string>) => {
   if (childIframe) {
     return childIframe.searchIndex(key, query, tags)
   }
@@ -14,7 +16,7 @@ export const wSearchIndexByNodeId = async (key: idxKey | idxKey[], nodeID: strin
   }
 }
 
-export const wSearchIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
+export const wSearchIndexWithRanking = async (key: idxKey | idxKey[], query: ISearchQuery) => {
   if (childIframe) {
     return childIframe.searchIndexWithRanking(key, query)
   }

@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components'
 import { generateStyle } from '@workduck-io/mex-themes'
 
 import { fadeIn } from './fade'
-import { ThinScrollbar } from './Helpers'
-import { MainHeader } from './Layouts'
-import { MainFont, SearchFilterListCurrent } from './Search'
+import { ScrollStyles } from './Helpers'
+import { Group, MainHeader } from './Layouts'
+import { MainFont } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
 
@@ -39,11 +39,11 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
-  ${ThinScrollbar}
+  ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 
   .react-kanban-board {
     max-width: ${({ sidebarExpanded }) => `calc(100vw - ${sidebarExpanded ? '420px' : '140px'})`};
-    height: 80vh;
+    max-height: 80vh;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -86,11 +86,11 @@ export const ViewSection = styled.div`
 `
 
 export const StyledTasksKanbanBlock = styled(StyledBoard)`
-  ${SearchFilterListCurrent} {
-    padding: ${({ theme }) => theme.spacing.small};
-  }
+  overflow: hidden;
+  max-height: 50vh;
+
   .react-kanban-column {
-    width: calc(100% / 3.2);
+    width: calc(100% / 3.2) !important;
   }
   .react-kanban-column > div > div,
   .react-kanban-column > div > div > div {
@@ -102,10 +102,11 @@ export const StyledTasksKanbanBlock = styled(StyledBoard)`
 `
 
 export const StyledViewBlockPreview = styled.div`
-  max-height: 50vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   ${MainFont};
+
+  ${Group} {
+    width: 100%;
+  }
 `
 
 export const TaskHeaderTitleSection = styled.div`

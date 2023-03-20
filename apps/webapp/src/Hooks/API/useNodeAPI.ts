@@ -5,6 +5,7 @@ import {
   defaultContent,
   extractMetadata,
   GET_REQUEST_MINIMUM_GAP_IN_MS,
+  getDefaultContent,
   getTagsFromContent,
   getTodosFromContent,
   mog,
@@ -56,13 +57,15 @@ export const useApi = () => {
       content: NodeEditorContent
     }
   ) => {
+    const content = options.content ?? [getDefaultContent()]
+    mog('saveSingleNewNode', { noteID, namespaceID, options, content })
     const reqData = {
       id: noteID,
       title: getTitleFromNoteId(noteID),
       referenceID: options?.parentNoteId,
       namespaceID: namespaceID,
-      data: serializeContent(options.content ?? defaultContent.content, noteID),
-      tags: getTagsFromContent(options.content ?? defaultContent.content)
+      data: serializeContent(content, noteID),
+      tags: getTagsFromContent(content)
     }
 
     const data = await API.node
@@ -89,7 +92,7 @@ export const useApi = () => {
       content: NodeEditorContent
     }
   ) => {
-    options.content = options.content ?? defaultContent.content
+    options.content = options.content ?? [getDefaultContent()]
 
     const reqData = {
       nodePath: {

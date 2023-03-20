@@ -1,4 +1,5 @@
-import { DefaultMIcons, FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
+import { FilterJoin, FilterType, MIcon, SHARED_NAMESPACE } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
@@ -30,7 +31,7 @@ export const getFilterTypeIcon = (type: FilterType, value: string) => {
     }
 
     case 'mention':
-      return { type: 'ICON', value: 'ri:at-line' }
+      return DefaultMIcons.MENTION
 
     case 'tag':
       return { type: 'ICON', value: 'ri:hashtag' }
@@ -102,7 +103,7 @@ export const useFilterIcons = () => {
         return { type: 'ICON', value: 'heroicons-outline:view-grid' }
       }
       default:
-        getFilterTypeIcon(type, value)
+        return getFilterTypeIcon(type, value)
     }
   }
 

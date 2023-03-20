@@ -5,20 +5,33 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { Group, MexIcon, PrimaryText } from '@mexit/shared'
+import { Group, MexIcon } from '@mexit/shared'
 
 import { SearchBlockIcons } from '../../../Editor/Components/Blocks/BlockIcons'
+import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 
 import { SlideDownKeyFrames, SlideUpKeyFrames } from './BlockContainer/styled'
-import { GroupHeader } from './BlockContainer'
+import { Chevron, GroupHeader } from './BlockContainer'
 
-const ContentBlockContainer = styled.div`
+export const ContentBlockContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
 `
 
-const BlockContent = styled.div<{ isOpen?: boolean }>`
+export const BlockHeader = styled(GroupHeader)<{ isOpen?: boolean }>`
+  transition: all 0.3s ease-in-out;
+  animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-out;
+  display: flex;
+  align-items: flex-start;
+
+  & svg {
+    height: 20px;
+    width: 20px;
+  }
+`
+
+export const BlockContent = styled.div<{ isOpen?: boolean }>`
   ${({ isOpen }) =>
     !isOpen &&
     css`
@@ -27,9 +40,7 @@ const BlockContent = styled.div<{ isOpen?: boolean }>`
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     `}
-
-  transition: all 0.3s ease-in-out;
-  animation: ${(props) => (props.isOpen ? SlideDownKeyFrames : SlideUpKeyFrames)} 0.3s ease-out;
+  color: ${({ theme }) => theme.tokens.text.default};
   display: -webkit-box;
   overflow: hidden;
 `
@@ -40,18 +51,25 @@ type BlockProps = {
 
 const ContentBlock: React.FC<BlockProps> = ({ block }) => {
   const theme = useTheme()
+  const { goTo } = useRouting()
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleToggleAccordion = () => {
+  const handleToggleAccordion = (ev) => {
     setIsOpen(!isOpen)
+
+    if (ev.detail === 2) {
+      goTo(ROUTE_PATHS.node, NavigationType.push, block.parent)
+    }
   }
+
+  // Write a function to check double click
 
   const canOpen = block?.text?.length > 100
   const content = isOpen ? block?.text : block?.text?.slice(0, 100)
 
   return (
     <ContentBlockContainer>
-      <GroupHeader>
+      <BlockHeader isOpen={isOpen} onClick={handleToggleAccordion}>
         <Group>
           <MexIcon
             color={theme.tokens.colors.primary.default}
@@ -59,20 +77,10 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
             height={20}
             icon={SearchBlockIcons[block?.entity]}
           />
-          <PrimaryText>{block?.entity}</PrimaryText>
+          <BlockContent isOpen={isOpen}>{content}</BlockContent>
         </Group>
-        {canOpen && (
-          <MexIcon
-            $noHover
-            height={24}
-            width={24}
-            cursor="pointer"
-            onClick={handleToggleAccordion}
-            icon={arrowLeftSLine}
-          />
-        )}
-      </GroupHeader>
-      <BlockContent isOpen={isOpen}>{content}</BlockContent>
+        {canOpen && <Chevron isOpen={isOpen} $noHover height={24} width={24} cursor="pointer" icon={arrowLeftSLine} />}
+      </BlockHeader>
     </ContentBlockContainer>
   )
 }

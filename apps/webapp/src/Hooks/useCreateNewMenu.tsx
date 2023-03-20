@@ -133,7 +133,9 @@ export const useCreateNewMenu = () => {
   }
 
   const handleCreateChild = (item: TreeItem) => {
-    const node = createNewNote({ parent: { path: item.data.path, namespace: item.data.namespace } })
+    const node = createNewNote({
+      parent: { path: item.data.path, namespace: item.data.namespace }
+    })
     goTo(ROUTE_PATHS.node, NavigationType.push, node?.nodeid)
   }
 

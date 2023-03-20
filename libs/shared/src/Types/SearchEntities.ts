@@ -10,7 +10,9 @@ export interface SearchEntityType {
   icon: MIcon
 }
 
-export const SearchEntities: Partial<Record<string, SearchEntityType>> = {
+export const SearchableEntities = [Entities.TASK, Entities.REMINDER, Entities.CONTENT_BLOCK]
+
+export const EntitiesInfo: Partial<Record<string, SearchEntityType>> = {
   [Entities.TASK]: {
     id: 'tasks',
     label: 'Tasks',
@@ -21,10 +23,10 @@ export const SearchEntities: Partial<Record<string, SearchEntityType>> = {
     label: 'Reminders',
     icon: DefaultMIcons.REMINDER
   },
-  [Entities.HIGHLIGHT]: {
-    id: 'highlights',
-    label: 'Highlights',
-    icon: DefaultMIcons.HIGHLIGHT
+  [Entities.IMAGE]: {
+    id: 'images',
+    label: 'Images',
+    icon: DefaultMIcons.IMAGE
   },
   [Entities.CONTENT_BLOCK]: {
     id: 'contents',

@@ -1,11 +1,9 @@
-import { HASH_SEPARATOR, mog, NodeEditorContent, SEPARATOR } from '@mexit/core'
+import { getDefaultContent, HASH_SEPARATOR, mog, NodeEditorContent, SEPARATOR } from '@mexit/core'
 
-import { defaultContent } from '../Data/baseData'
 import { useDataStore } from '../Stores/useDataStore'
 
 import { useApi } from './API/useNodeAPI'
 import { getNodeidFromPathAndLinks } from './useLinks'
-import { useDataSaverFromContent } from './useSave'
 
 const appendToText = (text: string, textToAppend: string, separator = SEPARATOR) => {
   if (!text) return textToAppend
@@ -14,7 +12,6 @@ const appendToText = (text: string, textToAppend: string, separator = SEPARATOR)
 
 export const useHierarchy = () => {
   const { saveSingleNewNode, bulkCreateNodes } = useApi()
-  const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
 
   const createNoteHierarchyString = (notePath: string, namespace: string) => {
     const ilinks = useDataStore.getState().ilinks
@@ -43,7 +40,7 @@ export const useHierarchy = () => {
     try {
       const { notePath, noteId, parentNoteId, noteContent } = options
 
-      const content = noteContent ?? defaultContent.content
+      const content = noteContent ?? getDefaultContent()
       const bulkNotePath = !parentNoteId ? createNoteHierarchyString(notePath, options.namespace) : notePath
 
       const node = parentNoteId
@@ -56,8 +53,6 @@ export const useHierarchy = () => {
             path: bulkNotePath,
             content
           })
-
-      saveEditorValueAndUpdateStores(noteId, node.namespace, content, { saveApi: false })
 
       return node
     } catch (error) {

@@ -114,16 +114,23 @@ export const SearchHeader = styled.div`
 
 export const SearchFilterWrapper = styled(SearchHeader)`
   background-color: rgba(${({ theme }) => theme.rgbTokens.surfaces.s[2]}, 0.5);
+  gap: ${({ theme }) => theme.spacing.small};
   flex-grow: 1;
   justify-content: flex-start;
 `
 
-export const SearchFiltersWrapper = styled.div`
+export const FilterValuesWrapper = styled.div`
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+`
+
+export const SearchFiltersWrapper = styled.div`
+  display: inline-flex;
   flex-grow: 1;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.tiny};
+  gap: ${({ theme }) => theme.spacing.small};
 `
 
 export const SearchFilterCategoryLabel = styled.div`
@@ -159,7 +166,7 @@ export const SearchFilterListCurrent = styled.div`
 `
 
 export const SearchFilterListSuggested = styled(SearchFilterListCurrent)`
-  justify-content: space-between;
+  flex-wrap: wrap;
 `
 
 export const SearchFilterList = styled.div`
@@ -533,7 +540,7 @@ export const ItemTag = styled.div<{ large?: boolean }>`
     `}
 `
 
-export const SearchPreviewWrapper = styled.div<{ active?: boolean; padding?: boolean }>`
+export const SearchPreviewWrapper = styled.div<{ padding?: boolean }>`
   ${({ padding }) =>
     padding &&
     css`

@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import { NodeType } from '@mexit/core'
 import { RootElement, SharedNodeIcon } from '@mexit/shared'
 
-import useArchive from '../../../Hooks/useArchive'
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNodes } from '../../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
@@ -51,8 +50,6 @@ const InlineBlock = (props: any) => {
     return data
   }, [nodeid, blockId])
 
-  const { archived } = useArchive()
-
   const openNode = (ev: any) => {
     ev.preventDefault()
     goTo(ROUTE_PATHS.node, NavigationType.push, nodeid)
@@ -68,7 +65,6 @@ const InlineBlock = (props: any) => {
   }
 
   const selected = useSelected()
-  // mog('InlineBlock', { nodeid, selected, content, nodeType, path })
 
   return (
     <RootElement {...props.attributes}>

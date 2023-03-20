@@ -2,6 +2,7 @@ import React from 'react'
 
 import { capitalize, SEPARATOR, SortOrder, SortType } from '@mexit/core'
 import {
+  FilterDescription,
   FilterGlobalJoinWrapper,
   GenericSection,
   IconDisplay,
@@ -13,7 +14,7 @@ import {
 } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
-import { getSortOrderIcon, getSortTypeIcon } from '../../Hooks/useSortIcons'
+import { getBlockFieldIcon, getSortOrderIcon } from '../../Hooks/useSortIcons'
 
 export interface SortMenuProps {
   sortOrder: SortOrder
@@ -28,6 +29,7 @@ const SortMenu = ({ sortOrder, sortType, onSortOrderChange, onSortTypeChange }: 
   return (
     <SortSectionWrapper>
       <Menu
+        noHover
         values={
           <SortOrderWrapper>
             <IconDisplay icon={getSortOrderIcon(sortOrder)} />
@@ -47,16 +49,23 @@ const SortMenu = ({ sortOrder, sortType, onSortOrderChange, onSortTypeChange }: 
       </Menu>
       {sortOptions?.length > 0 && (
         <Menu
+          noHover
           key={sortOptions.length}
           values={
             <SortTypeWrapper>
-              {/* <IconDisplay icon={getSortTypeIcon(sortType)} /> */}
+              <IconDisplay icon={getBlockFieldIcon(sortType.split(SEPARATOR).at(-1))} />
               {sortType ? capitalize(sortType.split(SEPARATOR).at(-1)) : 'Sort By'}
             </SortTypeWrapper>
           }
         >
+          <FilterDescription>Sort By</FilterDescription>
           {sortOptions.map((option) => (
-            <MenuItem icon={option.icon} onClick={() => onSortTypeChange(option.id)} label={capitalize(option.label)} />
+            <MenuItem
+              key={`sort-${option.label}`}
+              icon={option.icon}
+              onClick={() => onSortTypeChange(option.id)}
+              label={capitalize(option.label)}
+            />
           ))}
         </Menu>
       )}
@@ -78,7 +87,7 @@ export const RenderSort = ({
       </GenericSection>
 
       <GenericSection>
-        <IconDisplay icon={getSortTypeIcon(sortType)} size={14} />
+        <IconDisplay icon={getBlockFieldIcon(sortType)} size={14} />
         {capitalize(sortType)}
       </GenericSection>
     </FilterGlobalJoinWrapper>

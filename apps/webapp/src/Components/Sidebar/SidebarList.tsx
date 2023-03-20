@@ -179,7 +179,7 @@ const SidebarList = ({
 
       {defaultItems &&
         defaultItems.map((defaultItem) => (
-          <StyledTreeItem noSwitcher selected={selectedItemId === defaultItem.id}>
+          <StyledTreeItem key={defaultItem.id} noSwitcher selected={selectedItemId === defaultItem.id}>
             <ItemContent onClick={() => onSelectItem(defaultItem.id)}>
               <ItemTitle>
                 <IconDisplay icon={defaultItem.icon} />

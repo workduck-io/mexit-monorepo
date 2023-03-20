@@ -20,7 +20,6 @@ const TaskViewLink = (props: any) => {
 
   const openTaskView = (ev: any) => {
     ev.preventDefault()
-    // mog('openTaskView', { viewid, props })
     if (view) {
       setCurrentView(view)
       goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
@@ -28,7 +27,6 @@ const TaskViewLink = (props: any) => {
   }
 
   const selected = useSelected()
-  // mog('ViewLink', { selected, view, props })
 
   return (
     <SILinkRoot

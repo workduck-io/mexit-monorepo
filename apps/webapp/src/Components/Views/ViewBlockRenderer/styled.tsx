@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { ViewType } from '@mexit/core'
-import { EditorStyles, KANBAN_CARD_WIDTH, TodoContainer } from '@mexit/shared'
+import { EditorStyles, fadeIn, KANBAN_CARD_WIDTH, TodoContainer } from '@mexit/shared'
 
 export const ViewBlockContainer = styled.div<{
   dragging?: boolean
@@ -23,6 +23,7 @@ export const ViewBlockContainer = styled.div<{
   border: 1px solid transparent;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   transition: width 0.5s ease-in-out;
+  animation: ${fadeIn} 0.5s ease-in-out;
   ${({ dragging, theme }) =>
     dragging &&
     css`
@@ -54,4 +55,27 @@ export const ViewBlockContainer = styled.div<{
       }
     `}
   width: 100%;
+`
+
+export const ImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 100%;
+
+  img {
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    max-height: 300px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    image-rendering: optimizeQuality;
+  }
+`
+
+export const BlockContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.medium};
 `

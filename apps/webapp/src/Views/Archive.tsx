@@ -5,8 +5,9 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
+import { SearchResult } from '@workduck-io/mex-search'
 
-import { batchArray, convertContentToRawText, extractMetadata, GenericSearchResult, mog, ViewType } from '@mexit/core'
+import { batchArray, convertContentToRawText, extractMetadata, mog, ViewType } from '@mexit/core'
 import {
   ArchiveHelp,
   DefaultMIcons,
@@ -22,13 +23,13 @@ import {
   SearchContainer,
   SearchPreviewWrapper,
   SplitSearchPreviewWrapper,
-  Title
+  Title,
+  useQuery
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'
 import { defaultContent } from '../Data/baseData'
 import EditorPreviewRenderer from '../Editor/EditorPreviewRenderer'
-import { useApi } from '../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { useSearch } from '../Hooks/useSearch'
 import { useContentStore } from '../Stores/useContentStore'
@@ -55,29 +56,28 @@ const Archive = () => {
 
   const { getNamespace } = useNamespaces()
   const [showModal, setShowModal] = useState(false)
-  const getDataAPI = useApi().getDataAPI
-  const { queryIndex, updateDocument } = useSearch()
+  const { generateSearchQuery } = useQuery()
+  const { queryIndexWithRanking, updateDocument } = useSearch()
 
-  const getArchiveResult = (nodeid: string): GenericSearchResult => {
-    const node = archive.find((node) => node.nodeid === nodeid)
+  const getArchiveResult = (nodeid: string): Partial<SearchResult> => {
     const content = getContent(nodeid)
 
     return {
-      id: nodeid,
-      title: node.path,
+      parent: nodeid,
       text: convertContentToRawText(content.content)
     }
   }
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await queryIndex('archive', newSearchTerm)
+    const query = generateSearchQuery(newSearchTerm)
+    const res = await queryIndexWithRanking('archive', query)
     if (newSearchTerm === '' && res?.length === 0) {
       return initialArchive
     }
     return res
   }
 
-  const initialArchive: GenericSearchResult[] = archive.map((n) => getArchiveResult(n.nodeid))
+  const initialArchive: Partial<SearchResult>[] = archive.map((n) => getArchiveResult(n.nodeid))
 
   useEffect(() => {
     const fetchArchiveContents = async () => {
@@ -113,14 +113,14 @@ const Archive = () => {
 
   // Forwarding ref to focus on the selected result
   const BaseItem = (
-    { item, splitOptions, ...props }: RenderItemProps<GenericSearchResult>,
+    { item, splitOptions, ...props }: RenderItemProps<SearchResult>,
     ref: React.Ref<HTMLDivElement>
   ) => {
-    const con = contents[item.id]
+    const con = contents[item.parent]
     const content = con ? con.content : defaultContent.content
-    const node = archive.find((node) => node.nodeid === item.id)
-    const id = `${item.id}_ResultFor_ArchiveSearch`
-    const icon = useMetadataStore.getState().metadata.notes[node.nodeid]?.icon ?? DefaultMIcons.NOTE
+    const node = archive.find((node) => node.nodeid === item.parent)
+    const id = `${item.parent}_ResultFor_ArchiveSearch`
+    const icon = useMetadataStore.getState().metadata.notes[item.parent]?.icon ?? DefaultMIcons.NOTE
     const namespace = getNamespace(node?.namespace)
     if (!item || !node) return null
 
@@ -134,14 +134,14 @@ const Archive = () => {
             <ActionContainer>{namespace && <NamespaceTag namespace={namespace} />}</ActionContainer>
           </ResultHeader>
           <SearchPreviewWrapper>
-            <EditorPreviewRenderer content={content} editorId={`editor_archive_preview_${item.id}`} />
+            <EditorPreviewRenderer content={content} editorId={`editor_archive_preview_${item.parent}`} />
           </SearchPreviewWrapper>
         </Result>
       )
     } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
-          <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
+          <ResultRow selected={props.selected}>
             <IconDisplay icon={icon} />
             <ResultMain>
               <ResultTitle>
@@ -161,23 +161,23 @@ const Archive = () => {
   }
   const RenderItem = React.forwardRef(BaseItem)
 
-  const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
+  const RenderPreview = ({ item }: RenderPreviewProps<SearchResult>) => {
     if (!item) return null
-    const node = archive.find((node) => node.nodeid === item.id)
+    const node = archive.find((node) => node.nodeid === item.parent)
     if (!node) return null
-    const con = contents[item.id]
+    const con = contents[item.parent]
     const content = con ? con.content : defaultContent.content
     const icon = fileList2Line
     const namespace = getNamespace(node?.namespace)
 
     if (item) {
       return (
-        <SplitSearchPreviewWrapper id={`splitArchiveSearchPreview_for_${item.id}`}>
+        <SplitSearchPreviewWrapper id={`splitArchiveSearchPreview_for_${item.parent}`}>
           <Title>
             {node.path}
             {namespace && <NamespaceTag namespace={namespace} />}
           </Title>
-          <EditorPreviewRenderer content={content} editorId={`SnippetSearchPreview_editor_${item.id}`} />
+          <EditorPreviewRenderer content={content} editorId={`SnippetSearchPreview_editor_${item.parent}`} />
         </SplitSearchPreviewWrapper>
       )
     } else
@@ -201,7 +201,7 @@ const Archive = () => {
         key="ArchiveSearch"
         initialItems={initialArchive}
         onSearch={onSearch}
-        getItemKey={(item) => `archive_${item.id}`}
+        getItemKey={(item) => `archive_${item.parent}`}
         onSelect={(node) => {
           mog('onSelect: NodeSelected', { node })
         }}

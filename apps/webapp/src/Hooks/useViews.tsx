@@ -44,6 +44,7 @@ export const useViews = () => {
           description: 'The Tasks view is a powerful tool for managing and tracking tasks.',
           viewType: ViewType.List,
           entities: [Entities.TASK],
+          groupBy: 'data.status',
           globalJoin: 'all',
           sortOrder: 'ascending'
         }

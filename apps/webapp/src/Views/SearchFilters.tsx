@@ -5,14 +5,14 @@ import filter2Line from '@iconify-icons/ri/filter-2-line'
 import filterOffLine from '@iconify-icons/ri/filter-off-line'
 import { nanoid } from 'nanoid'
 
-import { Infobox, ToolbarTooltip } from '@workduck-io/mex-components'
+import { ToolbarTooltip } from '@workduck-io/mex-components'
 import { Entities } from '@workduck-io/mex-search'
 
 import { Filter, Filters, GlobalFilterJoin } from '@mexit/core'
 import {
+  FilterValuesWrapper,
   SearchFilterCancel,
   SearchFilterLabel,
-  SearchFiltersHelp,
   SearchFiltersWrapper,
   SearchFilterWrapper
 } from '@mexit/shared'
@@ -29,8 +29,8 @@ interface SearchFiltersProps {
   filters: Filters
   currentFilters: Filter[]
   onEntityFilterChange?: (entitiy: Entities) => void
-  globalJoin: GlobalFilterJoin
-  setGlobalJoin: (join: GlobalFilterJoin) => void
+  globalJoin?: GlobalFilterJoin
+  setGlobalJoin?: (join: GlobalFilterJoin) => void
   addCurrentFilter: (filter: Filter) => void
   removeCurrentFilter: (filter: Filter) => void
   changeCurrentFilter: (filter: Filter) => void
@@ -73,25 +73,27 @@ const SearchFilters = ({
         ) : (
           <Icon icon={filter2Line} />
         )}
-        <Infobox text={SearchFiltersHelp} />
       </SearchFilterLabel>
       <SearchFiltersWrapper key={`Filters_${randomId}`}>
-        {currentFilters.map((filter) => {
-          return (
-            <FilterRender
-              key={`${filter.id}_${filter.type}`}
-              filter={filter}
-              options={filters.find((f) => f.type === filter.type)?.options}
-              onChangeFilter={(f) => changeCurrentFilter(f)}
-              onRemoveFilter={(f) => removeCurrentFilter(f)}
-            />
-          )
-        })}
+        <FilterValuesWrapper>
+          {currentFilters.map((filter, i) => {
+            return (
+              <FilterRender
+                key={`${filter.id}_${filter.type}`}
+                filter={filter}
+                hideJoin={i === currentFilters.length - 1}
+                options={filters.find((f) => f.type === filter.type)?.options}
+                onChangeFilter={(f) => changeCurrentFilter(f)}
+                onRemoveFilter={(f) => removeCurrentFilter(f)}
+              />
+            )
+          })}
+        </FilterValuesWrapper>
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
-      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
       {onGroupByChange && <GroupByMenu onChange={onGroupByChange} />}
       {sortMenuProps && <SortMenu {...sortMenuProps} />}
+      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
       {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
     </SearchFilterWrapper>
   )

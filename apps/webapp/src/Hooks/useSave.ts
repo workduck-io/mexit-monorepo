@@ -1,13 +1,8 @@
-import { getTodosFromContent, mog } from '@mexit/core'
+import { mog } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useTodoStore } from '../Stores/useTodoStore'
 
 import { useApi } from './API/useNodeAPI'
-import { useLinks } from './useLinks'
-import { useSearch } from './useSearch'
-import { useTags } from './useTags'
 
 interface SaveEditorValueOptions {
   // If not set, defaults to true
@@ -21,14 +16,7 @@ export const useDataSaverFromContent = () => {
   const setInternalUpdate = useContentStore((state) => state.setInternalUpdate)
   const getContent = useContentStore((state) => state.getContent)
 
-  const { updateLinksFromContent } = useLinks()
-  const updateIcon = useMetadataStore((s) => s.addMetadata)
-  const updateNodeTodos = useTodoStore((store) => store.replaceContentOfTodos)
-
-  const { updateTagsFromContent } = useTags()
   const { saveDataAPI } = useApi()
-
-  const { updateDocument } = useSearch()
 
   // By default saves to API use false to not save
   const saveEditorValueAndUpdateStores = async (
@@ -42,15 +30,6 @@ export const useDataSaverFromContent = () => {
 
       setInternalUpdate(true)
       if (options?.saveApi !== false) await saveDataAPI(nodeId, namespace, editorValue, options?.isShared ?? false)
-
-      updateLinksFromContent(nodeId, editorValue)
-      updateTagsFromContent(nodeId, editorValue)
-
-      // Update operations for only notes owned by the user
-      if (options?.isShared !== true) {
-        updateNodeTodos(nodeId, getTodosFromContent(editorValue))
-        updateDocument('node', nodeId, editorValue)
-      }
     }
   }
 

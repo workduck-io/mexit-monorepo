@@ -1,9 +1,11 @@
-import { Entities, ISearchQuery, SearchResult, SimpleQueryType } from '@workduck-io/mex-search'
+import { SearchResult } from '@workduck-io/mex-search'
 
-import { Filter, FilterJoin, FilterType, FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
-import { DefaultMIcons, findGroupingKey, getKeyFrequencyMap, SearchEntityType } from '@mexit/shared'
+import { FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
+import { findGroupingKey, getKeyFrequencyMap, keysToExcludeInGrouping, SearchEntityType } from '@mexit/shared'
 
 import { useDataStore } from '../Stores/useDataStore'
+
+import { getBlockFieldIcon } from './useSortIcons'
 
 export const useViewFilters = () => {
   /**
@@ -78,53 +80,28 @@ export const useViewFilters = () => {
     return [noteFilter, tagFilter, mentionFilter, spaceFilter]
   }
 
-  const getJoinType = (joinType: FilterJoin) => {
-    switch (joinType) {
-      case 'all':
-        return 'and'
-      case 'any':
-        return 'or'
-      default:
-        throw new Error('Invalid Filter Join Type')
-    }
-  }
-
-  const getQueryType = (type: FilterType): SimpleQueryType => {
-    switch (type) {
-      case 'note':
-      case 'space':
-        return 'heirarchy'
-      case 'tag':
-        return 'tag'
-      case 'mention':
-        return 'mention'
-      default:
-        throw new Error('Invalid Filter Type')
-    }
-  }
-
-  const transformQuery = (filter: Filter) => {
-    return filter.values.map((filterValue) => ({
-      type: getQueryType(filter.type),
-      value: filterValue.value,
-      nextOperator: getJoinType(filter.join)
-    }))
-  }
-
-  const getGroupingOptions = (items: Array<SearchResult>): { options: Array<SearchEntityType>; groupBy: string } => {
+  const getGroupingOptions = (
+    items: Array<SearchResult>,
+    labelsToReplace: Record<string, string> = {}
+  ): { options: Array<SearchEntityType>; groupBy: string } => {
     const keyFrequencyMap = getKeyFrequencyMap(items)
-    const groupBy = findGroupingKey(keyFrequencyMap)
+    const groupBy = findGroupingKey(keyFrequencyMap, keysToExcludeInGrouping)
 
     if (!groupBy) {
       return { options: [], groupBy: undefined }
     }
 
-    const options = Object.keys(keyFrequencyMap).map((key) => ({
-      id: key,
-      label: key.split(SEPARATOR).at(-1),
-      icon: DefaultMIcons.ADD
-    }))
+    const options = Object.keys(keyFrequencyMap)
 
+      .map((key) => {
+        const keyToCheck = key.split(SEPARATOR).at(-1)
+        return {
+          id: key,
+          label: labelsToReplace[key] || keyToCheck,
+          icon: getBlockFieldIcon(keyToCheck)
+        }
+      })
+      .sort((a, b) => (a.label > b.label ? 1 : -1))
     return {
       options,
       groupBy
@@ -138,22 +115,5 @@ export const useViewFilters = () => {
     return groupBy
   }
 
-  /**
-   * Get filtered result for the current view
-   */
-  const generateQuery = (filters: Array<Filter>, entities: Array<Entities>): ISearchQuery => {
-    const query = filters.reduce((prev, filter) => {
-      return [...prev, ...transformQuery(filter)]
-    }, [])
-
-    return [
-      {
-        type: 'query',
-        query,
-        ...(entities?.length ? { entities } : {})
-      }
-    ]
-  }
-
-  return { getFilters, generateQuery, getGroupBy, getGroupingOptions }
+  return { getFilters, getGroupBy, getGroupingOptions }
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import arrowLeftSLine from '@iconify/icons-ri/arrow-left-s-line'
 import styled, { css, useTheme } from 'styled-components'
@@ -20,26 +20,31 @@ const StyledResultGroup = styled.div`
   padding: ${({ theme }) => theme.spacing.small};
 `
 
-export const GroupHeader = styled.div<{ isOpen?: boolean }>`
+export const Chevron = styled(MexIcon)<{ isOpen?: boolean }>`
+  transition: all 0.2s linear;
+
+  ${({ isOpen }) =>
+    isOpen
+      ? css`
+          transform: rotateZ(-90deg);
+        `
+      : css`
+          transform: rotateZ(0deg);
+        `}
+`
+
+export const GroupHeader = styled.div<{ isOpen?: boolean; padding?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  ${({ padding }) =>
+    padding &&
+    css`
+      padding: 10px;
+    `}
+
   user-select: none;
   cursor: pointer;
-
-  ${MexIcon} {
-    transition: all 0.2s linear;
-
-    ${({ isOpen }) =>
-      isOpen
-        ? css`
-            transform: rotateZ(-90deg);
-          `
-        : css`
-            transform: rotateZ(0deg);
-          `}
-  }
 `
 
 const AccordionContent = styled.div<{ isOpen?: boolean; height?: any }>`
@@ -77,26 +82,32 @@ const ResultGroup: React.FC<{ label: string; children: any; count: number; isOpe
   const theme = useTheme()
   const { getResultGroup } = useGroupHelper()
   const [isOpen, setIsOpen] = useState(defaultOpenState)
+  const [group, setGroup] = useState(null)
 
   const groupBy = useViewFilterStore((store) => store.groupBy)
+
+  useEffect(() => {
+    getResultGroup(label, groupBy).then((res) => {
+      setGroup(res)
+    })
+  }, [groupBy])
 
   const handleToggleAccordion = () => {
     setIsOpen(!isOpen)
   }
 
-  const group = getResultGroup(label, groupBy)
-
   if (!group) return
 
   return (
     <StyledResultGroup>
-      <GroupHeader isOpen={!!isOpen} onClick={handleToggleAccordion}>
+      <GroupHeader padding isOpen={!!isOpen} onClick={handleToggleAccordion}>
         <Group>
           <IconDisplay size={14} icon={group.icon} color={theme.tokens.colors.primary.default} />
           <span>{group.label}</span>
           <Count>{count}</Count>
         </Group>
-        <MexIcon
+        <Chevron
+          isOpen={isOpen}
           $noHover
           onClick={handleToggleAccordion}
           cursor="pointer"

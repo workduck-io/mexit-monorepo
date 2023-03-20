@@ -3,21 +3,42 @@ import { get } from 'lodash'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { UserAccessTable } from '@mexit/core'
+import { SEPARATOR, UserAccessTable } from '@mexit/core'
+
+import { getSortFunction, sortGroup } from './sort'
 
 export const mergeAccess = (access: UserAccessTable, access2: Partial<UserAccessTable>): UserAccessTable => {
   return merge(access, access2)
 }
 
-export const keysToExcludeInGrouping = ['id', 'createdAt', 'updatedAt', 'tags', 'text']
-export const keysToExcludeInSorting = ['id', 'createdBy', 'updatedBy', 'lastEditedBy', 'tags', 'parent']
+export const keysToExcludeInGrouping = [
+  'id',
+  'createdAt',
+  'caption',
+  'url',
+  'updatedAt',
+  'lastEditedBy',
+  'tags',
+  'text'
+]
+export const keysToExcludeInSorting = [
+  'id',
+  'createdBy',
+  'url',
+  'caption',
+  'updatedBy',
+  'lastEditedBy',
+  'tags',
+  'parent'
+]
 
-export const findGroupingKey = (keyFrequencyMap: Record<string, number>) => {
+export const findGroupingKey = (keyFrequencyMap: Record<string, number>, keysToExclude?: Array<string>) => {
   let max = 0
   let maxFrequenceKey = ''
 
   for (const key in keyFrequencyMap) {
-    if (keyFrequencyMap[key] > max && !keysToExcludeInGrouping.includes(key)) {
+    const keyToCheck = key.split(SEPARATOR).at(-1)
+    if (keyFrequencyMap[key] > max && !keysToExclude?.includes(keyToCheck)) {
       max = keyFrequencyMap[key]
       maxFrequenceKey = key
     }
@@ -81,37 +102,26 @@ export const groupItems = (
     groupedValues[value].push(item)
   })
 
-  if (options.sortBy) {
-    Object.keys(groupedValues).forEach((key) => {
-      groupedValues[key].sort((a, b) => {
-        const aValue = get(a, options.sortBy)
-        const bValue = get(b, options.sortBy)
+  const sortBy = options.sortBy ?? options.groupBy
 
-        if (aValue > bValue) {
-          return options.sortOrder === 'descending' ? -1 : 1
-        } else if (aValue < bValue) {
-          return options.sortOrder === 'descending' ? 1 : -1
-        } else {
-          return 0
-        }
-      })
-    })
-  } else {
+  if (sortBy) {
     Object.keys(groupedValues).forEach((key) => {
-      groupedValues[key].sort((a, b) => {
-        const aValue = a[options.groupBy]
-        const bValue = b[options.groupBy]
-
-        if (aValue > bValue) {
-          return options.sortOrder === 'descending' ? -1 : 1
-        } else if (aValue < bValue) {
-          return options.sortOrder === 'descending' ? 1 : -1
-        } else {
-          return 0
-        }
-      })
+      groupedValues[key].sort((a, b) => sortGroup(a, b, { sortBy, sortOrder: options.sortOrder }))
     })
   }
 
-  return groupedValues
+  return Object.keys(groupedValues)
+    .sort((a, b) => {
+      if (a === 'Ungrouped') return 1
+      if (b === 'Ungrouped') return -1
+
+      const sort = options.groupBy.split(SEPARATOR).at(-1)
+      const val = getSortFunction(sort)(a, b)
+
+      return options.sortOrder === 'descending' ? val * -1 : val
+    })
+    .reduce((acc, key) => {
+      acc[key] = groupedValues[key]
+      return acc
+    }, {})
 }

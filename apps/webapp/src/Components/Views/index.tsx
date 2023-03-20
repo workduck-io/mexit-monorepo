@@ -14,9 +14,10 @@ import ViewRenderer from './ViewRenderer'
 
 type ViewProps = {
   viewId: string
+  withFilters?: boolean
 }
 
-export const ViewContainer: React.FC<ViewProps> = ({ viewId }) => {
+export const ViewContainer: React.FC<ViewProps> = ({ viewId, withFilters = true }) => {
   const _hasHydrated = useDataStore((s) => s._hasHydrated)
   const setCurrentView = useViewStore((s) => s.setCurrentView)
   const setFilters = useViewFilterStore((s) => s.setFilters)
@@ -46,6 +47,14 @@ export const ViewContainer: React.FC<ViewProps> = ({ viewId }) => {
 
   if (!_hasHydrated) return
 
+  if (!withFilters) {
+    return (
+      <ViewSection>
+        <ViewRenderer view={activeView} />
+      </ViewSection>
+    )
+  }
+
   return (
     <View>
       <ViewRenderer view={activeView} />
@@ -56,7 +65,7 @@ export const ViewContainer: React.FC<ViewProps> = ({ viewId }) => {
 const View = ({ children }) => {
   return (
     <PageContainer fade>
-      <ViewHeader cardSelected={false} />
+      <ViewHeader />
       <ViewSearchFilters />
       <ViewSection>{children}</ViewSection>
     </PageContainer>

@@ -109,13 +109,6 @@ interface SearchViewProps<Item> {
    */
   onDelete?: (item: Item) => void
 
-  /**
-   * On search result update, the filterResults is called to get the filtered results
-   * Maintain your external state for the filters
-   * @param results Results to filter
-   */
-  filterResults?: (result: Item[]) => Item[]
-
   filterActions?: {
     filters: Filters
     resetCurrentFilters: () => void
@@ -190,7 +183,6 @@ const SearchView = <Item,>({
   onDelete,
   onEscapeExit,
   getItemKey,
-  filterResults,
   RenderItem,
   RenderPreview,
   RenderNotFound,
@@ -225,14 +217,14 @@ const SearchView = <Item,>({
   const { enableShortcutHandler } = useEnableShortcutHandler()
 
   const setResult = (result: Item[], searchTerm: string) => {
-    // mog('setresult', { result, searchTerm })
     setSS((s) => ({ ...s, result, searchTerm, selected: -1 }))
   }
+
   const onToggleIndexGroup = (indexGroup: string) => {
     const indexesOfGroup = indexes?.indexes[indexGroup]
-    // mog('onToggleIndex', { indexesOfGroup, idxKeys })
     setIndexes(indexesOfGroup)
   }
+
   const clearSearch = () => {
     setSS((s) => ({ ...s, result: [], searchTerm: '', selected: -1 }))
     const defaultIndexes = indexes?.indexes[indexes?.default]
@@ -244,7 +236,6 @@ const SearchView = <Item,>({
   const selectedRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // mog('clearing search on ID change', { searchTerm, id })
     clearSearch()
   }, [id])
 
@@ -256,37 +247,31 @@ const SearchView = <Item,>({
   }
 
   const executeSearch = async (newSearchTerm: string) => {
-    if (newSearchTerm === '') {
+    if (newSearchTerm === '' && currentFilters?.length === 0) {
       // const res = onSearch(newSearchTerm)
       const curIndexGroup = findCurrentIndex()
       const initItems = Array.isArray(initialItems) ? initialItems : initialItems[curIndexGroup]
-      const filtered = filterResults ? filterResults(initItems) : initItems
       // mog('ExecuteSearch - Initial', { newSearchTerm, currentFilters, filtered, initialItems, curIndexGroup })
-      if (filtered?.length > 0 || currentFilters.length > 0) {
-        setResult(filtered, newSearchTerm)
+      if (initItems?.length > 0 || currentFilters.length > 0) {
+        setResult(initItems, newSearchTerm)
       }
     } else {
       const res = await onSearch(newSearchTerm, idxKeys)
-      const filtered = filterResults ? filterResults(res) : res
-      mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, filtered, res })
-      setResult(filtered, newSearchTerm)
+      mog('ExecuteSearch - onNew', { newSearchTerm, currentFilters, res })
+      setResult(res, newSearchTerm)
     }
   }
 
   const updateResults = useMemo(
     () => () => {
-      // mog('SearchFiltersUpdate', { result, currentFilters })
-      // const results = applyCurrentFilters(result)
-      // mog('updating results', { result, currentFilters, initialItems })
-      // setOnlyResult(results)
       executeSearch(searchTerm)
     },
-    [currentFilters, globalJoin, result, initialItems, idxKeys]
+    [currentFilters, result, initialItems, idxKeys]
   )
 
   useEffect(() => {
     updateResults()
-  }, [currentFilters, idxKeys, globalJoin, initialItems])
+  }, [currentFilters, idxKeys, initialItems])
 
   useEffect(() => {
     executeSearch(searchTerm)

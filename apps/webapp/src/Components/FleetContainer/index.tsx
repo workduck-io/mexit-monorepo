@@ -15,7 +15,7 @@ const FleetContainer = () => {
   const open = useModalStore((store) => store.open) === ModalsType.quickNew
 
   const atSnippets = useMatch(`${ROUTE_PATHS.snippets}/*`)
-  const atTasks = useMatch(ROUTE_PATHS.tasks)
+  const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
 
   const handleOpen = () => {
     toggleOpen(ModalsType.quickNew)
@@ -42,10 +42,10 @@ const FleetContainer = () => {
   const sections = useMemo(() => {
     const sections = getQuickNewItems()
     if (atSnippets) return [sections.snippet, sections.note, sections.task, sections.space]
-    if (atTasks) return [sections.task, sections.note, sections.snippet, sections.space]
+    if (atViews) return [sections.task, sections.note, sections.snippet, sections.space]
 
     return [sections.note, sections.space, sections.task, sections.snippet]
-  }, [atSnippets, atTasks])
+  }, [atSnippets, atViews])
 
   return <Fleet sections={sections} isOpen={open} onClose={handleClose} onOpen={handleOpen} />
 }

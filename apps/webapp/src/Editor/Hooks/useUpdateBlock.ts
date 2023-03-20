@@ -41,16 +41,19 @@ const useUpdateBlock = () => {
     const existingContent = useContentStore.getState().getContent(noteId)?.content
 
     const content = bufferContent || existingContent
+    let updatedBlock
 
     const updateInBuffer = options.useBuffer !== false
 
     if (content?.length > 0) {
       const updatedContent = content.map((block) => {
         if (block.id === options.blockId) {
-          return {
+          updatedBlock = {
             ...block,
             ...options.blockData
           }
+
+          return updatedBlock
         }
 
         return block
@@ -58,9 +61,9 @@ const useUpdateBlock = () => {
 
       if (updateInBuffer) {
         addInBuffer(noteId, updatedContent)
-
-        return
       }
+
+      return updatedBlock
     }
   }
 
