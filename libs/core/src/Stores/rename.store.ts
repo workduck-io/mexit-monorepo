@@ -9,11 +9,11 @@ export interface RefactorPath {
 
 export const renameStoreConfig = (set) => ({
   open: false,
-  mockRefactored: [],
-  from: undefined,
-  fromNS: undefined,
-  to: undefined,
-  toNS: undefined,
+  mockRefactored: [] as NodeLink[],
+  from: undefined as string | undefined,
+  fromNS: undefined as string | undefined,
+  to: undefined as string | undefined,
+  toNS: undefined as string | undefined,
   focus: true,
   openModal: (id) => {
     if (id) {

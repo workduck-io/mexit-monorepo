@@ -7,11 +7,11 @@ import { RefactorPath } from './rename.store';
 
 export const refactorStoreConfig = (set) => ({
   open: false,
-  mockRefactored: [],
-  from: undefined,
-  to: undefined,
-  fromNS: undefined,
-  toNS: undefined,
+  mockRefactored: [] as NodeLink[],
+  from: undefined as string | undefined,
+  to: undefined as string | undefined,
+  fromNS: undefined as string | undefined,
+  toNS: undefined as string | undefined,
   focus: true,
   openModal: () =>
     set({

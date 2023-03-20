@@ -26,6 +26,20 @@ export interface InviteModalData {
   }
 }
 
+interface ShareModalData {
+  //  Used only for share permissions mode
+  nodeid?: string
+  alias?: string
+
+  // Used only for share permissions of namespace
+  namespaceid?: string
+
+  fromEditor?: boolean
+  // When sharing to a preexisting user from a mention
+  userid?: string
+  changedUsers?: ChangedUser[]
+  changedInvitedUsers?: ChangedInvitedUser[]
+}
 
 export const shareModalConfig = (set, get) => ({
   open: false,
@@ -45,7 +59,7 @@ export const shareModalConfig = (set, get) => ({
     fromEditor: undefined,
     // When sharing to a preexisting user from a mention
     userid: undefined
-  },
+  } as ShareModalData,
   openModal: (mode: ShareModalMode, context: ShareContext, id) =>
     set({
       mode,

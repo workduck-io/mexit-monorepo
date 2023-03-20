@@ -40,7 +40,7 @@ export const blockStoreConfig = (set, get) => ({
   },
   isModalOpen: undefined as ModalOpenType,
   setIsModalOpen: (isModalOpen: ModalOpenType) => set({ isModalOpen }),
-  isBlockMode: false as boolean,
+  isBlockMode: false,
   setIsBlockMode: (isBlockMode: boolean) => {
     if (!isBlockMode) set({ blocks: {}, isBlockMode })
     else set({ isBlockMode })

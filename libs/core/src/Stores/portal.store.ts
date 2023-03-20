@@ -1,3 +1,4 @@
+import { PortalType } from '../Types/Actions'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
@@ -5,9 +6,9 @@ const portalStoreConfig = (set, get) => ({
   apps: {},
   setApps: (apps) => set({ apps }),
 
-  connectedPortals: [],
-  setConnectedPortals: (connectedPortals) => set({ connectedPortals }),
-  connectPortal: (portal) => {
+  connectedPortals: [] as Array<PortalType>,
+  setConnectedPortals: (connectedPortals: []) => set({ connectedPortals }),
+  connectPortal: (portal: PortalType) => {
     const connectedPortals = get().connectedPortals
     const newConnectedPortals = [...connectedPortals, portal]
     set({ connectedPortals: newConnectedPortals })

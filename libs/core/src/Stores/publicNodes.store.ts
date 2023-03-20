@@ -1,12 +1,12 @@
-import { ILink, NodeMetadata, NodeProperties } from '../Types/Editor';
+import { Contents, ILink, NodeEditorContent, NodeMetadata, NodeProperties } from '../Types/Editor';
 import { SingleNamespace, StoreIdentifier } from '../Types/Store';
 import { createStore } from '../Utils/storeCreator'
 
 
 export const publicNodeStoreConfig = (set, get) => ({
-  iLinks: [],
-  contents: {},
-  currentNode: null,
+  iLinks: [] as ILink[],
+  contents: {} as Contents,
+  currentNode: null as NodeProperties,
   setCurrentNode: (node: NodeProperties) => {
     set({ currentNode: node })
   },
@@ -20,7 +20,7 @@ export const publicNodeStoreConfig = (set, get) => ({
   getContent: (nodeID: string) => {
     return get().contents[nodeID]
   },
-  setContent: (nodeid, content, metadata) => {
+  setContent: (nodeid: string, content: NodeEditorContent, metadata: NodeMetadata) => {
     const oldContent = get().contents
 
     const oldMetadata = oldContent[nodeid] && oldContent[nodeid].metadata ? oldContent[nodeid].metadata : undefined
@@ -30,7 +30,7 @@ export const publicNodeStoreConfig = (set, get) => ({
       contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
     })
   },
-  getMetadata: (nodeid) => {
+  getMetadata: (nodeid: string) => {
     const contents = get().contents
     return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : ({} as NodeMetadata)
   },

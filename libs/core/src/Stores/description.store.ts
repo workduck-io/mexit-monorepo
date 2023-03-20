@@ -3,7 +3,7 @@ import { createStore } from '../Utils/storeCreator'
 
 export const descriptionStoreConfig = (set, get) => ({
   descriptions: {},
-  updateDescription: (snippetID, state) => {
+  updateDescription: (snippetID: string, state) => {
     const oldDescriptions = get().descriptions
     delete oldDescriptions[snippetID]
 

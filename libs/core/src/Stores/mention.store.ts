@@ -6,8 +6,8 @@ import { mog } from '../Utils/mog'
 import { createStore } from '../Utils/storeCreator'
 
 export const mentionStoreConfig = (set, get) => ({
-  invitedUsers: [],
-  mentionable: [],
+  invitedUsers: [] as InvitedUser[],
+  mentionable: [] as Mentionable[],
   reset: () => set({ invitedUsers: [], mentionable: [] }),
   addMentionable: (mentionable: Mentionable) => {
     const exists = get().mentionable.find((user) => user.email === mentionable.email)
@@ -51,12 +51,12 @@ export const mentionStoreConfig = (set, get) => ({
       return 'absent'
     }
   },
-  initMentionData: (mentionable, invitedUsers) => set({ mentionable, invitedUsers }),
-  setInvited: (invitedUsers) =>
+  initMentionData: (mentionable: Mentionable[], invitedUsers: InvitedUser[]) => set({ mentionable, invitedUsers }),
+  setInvited: (invitedUsers: InvitedUser[]) =>
     set({
       invitedUsers
     }),
-  setMentionable: (mentionable) =>
+  setMentionable: (mentionable: Mentionable[]) =>
     set({
       mentionable
     })

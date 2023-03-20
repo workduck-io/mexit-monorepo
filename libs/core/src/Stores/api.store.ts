@@ -11,7 +11,7 @@ export enum PollActions {
 export const apiStoreConfig = (set, get) => ({
   polling: new Set([PollActions.hierarchy]),
   addActionToPoll: (action: PollActions) => {
-    const polling = get().polling
+    const polling = get().polling as Set<PollActions>
     const newActionsToPoll = polling.add(action)
     set({ polling: newActionsToPoll })
   },

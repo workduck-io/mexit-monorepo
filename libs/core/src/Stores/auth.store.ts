@@ -6,10 +6,10 @@ export const authStoreConfig = (set, get) => ({
   isForgottenPassword: false,
   authenticated: false,
   registered: false,
-  userDetails: undefined,
+  userDetails: undefined as any,
   appInitStatus: AppInitStatus.START,
-  setAppInitStatus: (appInitStatus) => set({ appInitStatus }),
-  workspaceDetails: undefined,
+  setAppInitStatus: (appInitStatus: AppInitStatus) => set({ appInitStatus }),
+  workspaceDetails: undefined as any,
   setIsUserAuthenticated: () => set({ authenticated: true, appInitStatus: AppInitStatus.COMPLETE }),
   setAuthenticated: (userDetails, workspaceDetails) =>
     set({ appInitStatus: AppInitStatus.RUNNING, userDetails, workspaceDetails, registered: false }),
@@ -17,12 +17,12 @@ export const authStoreConfig = (set, get) => ({
   setUnAuthenticated: () =>
     set({
       authenticated: false,
-      userDetails: undefined,
+      userDetails: undefined as any,
       appInitStatus: AppInitStatus.START,
-      workspaceDetails: undefined
+      workspaceDetails: undefined as any
     }),
-  setRegistered: (val) => set({ registered: val }),
-  setIsForgottenPassword: (val) => set({ isForgottenPassword: val }),
+  setRegistered: (val: boolean) => set({ registered: val }),
+  setIsForgottenPassword: (val: boolean) => set({ isForgottenPassword: val }),
   getWorkspaceId: () => {
     const workspaceDetails = get().workspaceDetails
     if (workspaceDetails) {

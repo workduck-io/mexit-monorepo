@@ -5,8 +5,8 @@ import { createStore } from '../Utils/storeCreator'
 export const commentStoreConfig = (set, get) => ({
   comments: [] as Comment[],
   clear: () => set({ comments: [] }),
-  setComments: (comments) => set({ comments }),
-  addNoteComments: (comments, nodeid) =>
+  setComments: (comments: Comment[]) => set({ comments }),
+  addNoteComments: (comments: Comment[], nodeid: string) =>
     set((state) => ({
       comments: [
         ...state.comments

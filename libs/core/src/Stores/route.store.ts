@@ -16,9 +16,9 @@ export enum BannerType {
 }
 
 const routeStoreConfig = (set, get) => ({
-  routes: {},
-  setRoute: (routes) => set({ routes }),
-  addRouteInfo: (route, info) => {
+  routes: {} as Record<Route, RouteInformation>,
+  setRoute: (routes: Record<Route, RouteInformation>) => set({ routes }),
+  addRouteInfo: (route: Route, info: RouteInformation) => {
     set(
       produce((draft) => {
         // eslint-disable-next-line
@@ -33,14 +33,14 @@ const routeStoreConfig = (set, get) => ({
     if (lastKey) delete routes[lastKey]
     set({ routes })
   },
-  getIsBannerVisible: (route, banner) => {
+  getIsBannerVisible: (route: Route, banner: BannerType) => {
     const routes = get().routes
     const banners = routes?.[route]?.banners
 
     return banners?.includes(banner)
   },
   clear: () => set({ routes: {} }),
-  addUserInRoute: (route, userId) => {
+  addUserInRoute: (route: Route, userId: string) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -71,7 +71,7 @@ const routeStoreConfig = (set, get) => ({
       )
     }
   },
-  removeUserFromRoute: (route, userId) => {
+  removeUserFromRoute: (route: Route, userId: string) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -96,7 +96,7 @@ const routeStoreConfig = (set, get) => ({
       }
     }
   },
-  showBannerInRoute: (route, banner) => {
+  showBannerInRoute: (route: Route, banner: string) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -107,7 +107,7 @@ const routeStoreConfig = (set, get) => ({
       set({ routes: { ...routes, [route]: routeInfo } })
     }
   },
-  removeRouteInfo: (route) => {
+  removeRouteInfo: (route: Route) => {
     const routes = get().routes
 
     if (routes[route]) {

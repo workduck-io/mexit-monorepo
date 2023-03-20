@@ -58,8 +58,8 @@ export const layoutStoreConfig = (set, get) => ({
   blurFocusMode: () => set((state) => ({ focusMode: { ...state.focusMode, hover: false } })),
 
   showLoader: false,
-  setShowLoader: (showLoader) => set({ showLoader }),
-  contextMenu: undefined,
+  setShowLoader: (showLoader: boolean) => set({ showLoader }),
+  contextMenu: undefined as ContextMenu | null,
   setContextMenu: (contextMenu: ContextMenu) => set({ contextMenu }),
 
   // Sidebar

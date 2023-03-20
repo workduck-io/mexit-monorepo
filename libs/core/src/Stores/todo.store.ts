@@ -52,14 +52,14 @@ export const createTodo = (
 }
 const todoStoreConfig = (set, get) => ({
   todos: {} as TodosType,
-  initTodos: (todos) => {
+  initTodos: (todos: TodosType) => {
     if (todos) {
       set({ todos })
     }
   },
   clearTodos: () => set({ todos: {} }),
 
-  addTodoInNode: (nodeid, todo) => {
+  addTodoInNode: (nodeid: string, todo: TodosType) => {
     if (!nodeid) {
       return
     }
@@ -68,12 +68,12 @@ const todoStoreConfig = (set, get) => ({
     const nodeTodos = todos?.[nodeid] ?? []
     set({ todos: { ...todos, [nodeid]: [todo, ...nodeTodos] } })
   },
-  getTodoOfNodeWithoutCreating: (nodeid, todoId) => {
+  getTodoOfNodeWithoutCreating: (nodeid: string, todoId: string) => {
     const todo = get().todos?.[nodeid]?.find((todo) => todo.id === todoId && nodeid === todo.nodeid)
     return todo
   },
 
-  getTodoOfNode: (nodeid, todoId) => {
+  getTodoOfNode: (nodeid: string, todoId: string) => {
     const todo = get().todos?.[nodeid]?.find((todo) => todo.id === todoId && nodeid === todo.nodeid)
     // mog('getTodoOfNode', { nodeid, todoId, todo, todos: get().todos })
     if (!todo) {
@@ -105,14 +105,14 @@ const todoStoreConfig = (set, get) => ({
     return allTodos
   },
 
-  setNodeTodos: (nodeid, todos) => {
+  setNodeTodos: (nodeid: string, todos: Array<TodoType>) => {
     // mog('setNodeTodos', { nodeid, todos })
     if (!nodeid) return
     const currentTodos = get().todos ?? {}
     const newTodos = { ...currentTodos, [nodeid]: todos }
     set({ todos: newTodos })
   },
-  updateTodoOfNode: (nodeid, todo) => {
+  updateTodoOfNode: (nodeid: string, todo: TodoType) => {
     // mog('updateNodeTodos', { nodeid, todo })
     if (!nodeid) return
     const currentTodos = get().todos ?? {}
@@ -124,7 +124,7 @@ const todoStoreConfig = (set, get) => ({
     // mog('TODO UPDATE', { newTodos, nodeid, todos })
     set({ todos: { ...currentTodos, [nodeid]: newTodos } })
   },
-  replaceContentOfTodos: (nodeid, todosContent) => {
+  replaceContentOfTodos: (nodeid: string, todosContent: NodeEditorContent) => {
     // mog('replaceContentOfTodos', { nodeid, todosContent })
     if (!nodeid) return
     const todos = get().todos ?? {}
@@ -160,7 +160,7 @@ const todoStoreConfig = (set, get) => ({
     // mog('NEW TODO', { newtodos })
     set({ todos: newtodos })
   },
-  updatePriorityOfTodo: (nodeid, todoId, priority) => {
+  updatePriorityOfTodo: (nodeid: string, todoId: string, priority: PriorityType) => {
     // mog('updatePro', { nodeid, todoId, priority })
     if (!nodeid) return
     const todo = get().getTodoOfNodeWithoutCreating(nodeid, todoId)
@@ -169,7 +169,7 @@ const todoStoreConfig = (set, get) => ({
     const newTodo = { ...todo, metadata: { ...todo.metadata, priority } }
     get().updateTodoOfNode(nodeid, newTodo)
   },
-  updateStatusOfTodo: (nodeid, todoId, status) => {
+  updateStatusOfTodo: (nodeid: string, todoId: string, status: TodoStatus) => {
     // mog('updateSta', { nodeid, todoId, status })
     if (!nodeid) return
     const todo = get().getTodoOfNodeWithoutCreating(nodeid, todoId)

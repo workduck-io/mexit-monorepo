@@ -4,13 +4,13 @@ import { createStore } from "../Utils/storeCreator"
 const MAX_HISTORY_SIZE = 25
 
 export const historyStoreConfig = (set, get) => ({
-  stack: [],
+  stack: [] as string[],
   currentNodeIndex: -1,
 
   /**
    * Push will remove all elements above the currentNodeIndex
    */
-  replace: (nodeid) => {
+  replace: (nodeid: string) => {
     set((state) => {
       const historyStack = state.stack.slice(0)
       const lastElement = historyStack[historyStack.length - 1]
@@ -23,7 +23,7 @@ export const historyStoreConfig = (set, get) => ({
       }
     })
   },
-  push: (nodeid) =>
+  push: (nodeid: string) =>
     set((state) => {
       let newIndex = state.currentNodeIndex + 1
       const remainingStack = state.stack.slice(0, newIndex)
@@ -42,7 +42,7 @@ export const historyStoreConfig = (set, get) => ({
       }
     }),
 
-  move: (distance) =>
+  move: (distance: number) =>
     set((state) => {
       const newIndex = state.currentNodeIndex + distance
 
@@ -53,7 +53,7 @@ export const historyStoreConfig = (set, get) => ({
       }
     }),
 
-  update: (stack, currentNodeIndex) =>
+  update: (stack: string[], currentNodeIndex: number) =>
     set({
       stack,
       currentNodeIndex

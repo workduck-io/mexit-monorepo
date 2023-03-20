@@ -29,7 +29,7 @@ export interface ReminderStoreState {
 }
 
 export const reminderStoreConfig = (set, get) => ({
-  reminders: [],
+  reminders: [] as Reminder[],
   setReminders: (reminders: Reminder[]) => set({ reminders }),
   addReminder: (reminder: Reminder) => set((state) => ({ reminders: [...state.reminders, reminder] })),
   deleteReminder: (id: string) =>
@@ -65,7 +65,7 @@ export const reminderStoreConfig = (set, get) => ({
     return groups
   },
 
-  armedReminders: [],
+  armedReminders: [] as Array<ArmedReminder>,
   setArmedReminders: (reminders: ArmedReminder[]) => set({ armedReminders: reminders }),
   addArmReminder: (reminder: ArmedReminder) =>
     set((state) => ({ armedReminders: [...state.armedReminders, reminder] })),

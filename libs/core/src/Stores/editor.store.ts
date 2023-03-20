@@ -31,15 +31,15 @@ export const editorStoreConfig = (set, get) => ({
 
   notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
   trigger: undefined as ComboTriggerType | undefined,
-  setTrigger: (trigger) => set({ trigger }),
-  setActiveUsers: (users) => {
+  setTrigger: (trigger: ComboTriggerType | undefined) => set({ trigger }),
+  setActiveUsers: (users: Array<string>) => {
     set({ activeUsers: users, isBannerVisible: users.length !== 0 })
   },
-  addUser: (userId) => {
+  addUser: (userId: string) => {
     const s = get().activeUsers
     set({ activeUsers: [...s, userId], isBannerVisible: true })
   },
-  removeUser: (userId) => {
+  removeUser: (userId: string) => {
     const userToRemoveAtIndex = get().activeUsers.findIndex((id) => id === userId)
 
     if (userToRemoveAtIndex >= 0) {
@@ -54,7 +54,7 @@ export const editorStoreConfig = (set, get) => ({
     set({ readOnly: isReadOnly })
   },
 
-  setUid: (nodeid) => {
+  setUid: (nodeid: string) => {
     const node = get().node
     node.nodeid = nodeid
     set({ node })

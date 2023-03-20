@@ -3,7 +3,7 @@ import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 const bufferStoreConfig = (set, get) => ({
-  buffer: {},
+  buffer: {} as any,
   add: (nodeid: string, val: NodeEditorContent) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
   getBuffer: (nodeId: string) => {
     const bufferVal: NodeEditorContent = get().buffer?.[nodeId]

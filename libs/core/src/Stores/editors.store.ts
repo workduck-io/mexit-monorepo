@@ -13,7 +13,7 @@ const multipleEditorsConfig = (set, get) => ({
   pinned: new Set(),
   isEmpty: true,
   setPinned: (pinned) => set({ pinned }),
-  unPinNote: (noteToUnpin) => {
+  unPinNote: (noteToUnpin: string) => {
     set(
       produce((draft) => {
         const isNotePinned = get().pinned.has(noteToUnpin)
@@ -23,8 +23,8 @@ const multipleEditorsConfig = (set, get) => ({
       })
     )
   },
-  setIsEmpty: (status) => set({ isEmpty: status }),
-  pinNote: (noteToPin) => {
+  setIsEmpty: (status: boolean) => set({ isEmpty: status }),
+  pinNote: (noteToPin: string) => {
     set(
       produce((draft) => {
         const isNotePinned = get().pinned.has(noteToPin)
@@ -35,7 +35,7 @@ const multipleEditorsConfig = (set, get) => ({
       })
     )
   },
-  addEditor: (noteId) => {
+  addEditor: (noteId: string) => {
     set(
       produce((draft) => {
         // eslint-disable-next-line
@@ -67,7 +67,7 @@ const multipleEditorsConfig = (set, get) => ({
         editorState: mapOfEditors.at(-1)[1]
       } as any;
   },
-  removeEditor: (noteId) => {
+  removeEditor: (noteId: string) => {
     const currentState = useBufferStore.getState().buffer?.[noteId]
     useBufferStore.getState().add(noteId, currentState)
 
@@ -89,7 +89,7 @@ const multipleEditorsConfig = (set, get) => ({
       })
     )
   },
-  changeEditorState: (noteId, editorState) => {
+  changeEditorState: (noteId: string, editorState) => {
     set(
       produce((draft) => {
         // eslint-disable-next-line

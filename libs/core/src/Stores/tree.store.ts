@@ -2,13 +2,13 @@ import { StoreIdentifier } from "../Types/Store"
 import { createStore } from "../Utils/storeCreator"
 
 const treeStoreConfig = (set, get) => ({
-  expanded: [],
+  expanded: [] as string[],
   expandNode: (path: string) => {
     set({
       expanded: [...get().expanded, path]
     })
   },
-  setHighlightedAt: (index, id) => set({ highlightedAt: { index, id } }),
+  setHighlightedAt: (index: number, id: string) => set({ highlightedAt: { index, id } }),
   expandNodes: (paths: string[]) => {
     set({
       expanded: [...get().expanded, ...paths]

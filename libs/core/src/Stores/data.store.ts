@@ -16,17 +16,17 @@ export const generateTag = (item: string): Tag => ({
 })
 
 const getInitData = () => ({
-  tags: [],
-  ilinks: [],
+  tags: [] as any,
+  ilinks: [] as any[],
   linkCache: {} as any,
   tagsCache: {} as any,
   baseNodeId: '__loading__',
-  bookmarks: [],
-  archive: [],
+  bookmarks: [] as any,
+  archive: [] as any[],
   sharedNodes: [],
   spaces: [],
 
-  namespaces: [],
+  namespaces: [] as any,
   slashCommands: { default: defaultCommands, internal: [] }
 })
 

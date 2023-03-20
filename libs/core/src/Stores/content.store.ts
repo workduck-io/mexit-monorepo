@@ -1,4 +1,4 @@
-import { NodeMetadata } from '../Types/Editor'
+import { Contents, NodeEditorContent, NodeMetadata } from '../Types/Editor'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
@@ -7,10 +7,10 @@ const contentStoreConfig = (set, get) => ({
   setInternalUpdate: (value: boolean) => {
     set({ internalUpdate: value })
   },
-  contents: {},
+  contents: {} as Contents,
   saved: false,
-  setSaved: (saved) => set(() => ({ saved })),
-  setContents: (contents) => {
+  setSaved: (saved: boolean) => set(() => ({ saved })),
+  setContents: (contents: Record<string, NodeEditorContent>) => {
     const existingContents = get().contents
     set({ contents: { ...existingContents, ...contents } })
   },
@@ -68,7 +68,7 @@ const contentStoreConfig = (set, get) => ({
     const oldContent = get().contents
     delete oldContent[nodeid]
   },
-  initContents: (contents) => {
+  initContents: (contents: Contents) => {
     set({
       contents
     })

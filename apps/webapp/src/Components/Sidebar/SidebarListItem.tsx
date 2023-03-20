@@ -26,7 +26,7 @@ interface SidebarListItemProps<T> {
     onSelect: (itemId: string) => void
   }
 
-  onContextMenu: (item: SidebarListItem<T>, event: any) => void
+  onContextMenu?: (item: SidebarListItem<T>, event: any) => void
 
   // To render the context menu if the item is right-clicked
   contextMenu: {

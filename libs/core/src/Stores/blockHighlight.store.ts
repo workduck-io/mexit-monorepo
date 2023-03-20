@@ -9,17 +9,17 @@ import { createStore } from '../Utils/storeCreator'
  */
 export const blockHighlightStoreConfig = (set, get) => ({
   highlighted: {
-    preview: [],
-    editor: []
+    preview: [] as any,
+    editor: [] as any
   },
-  addHighlightedBlockId: (id, key) => {
+  addHighlightedBlockId: (id: string, key) => {
     const { highlighted } = get()
     const newHighlighted = { ...highlighted }
     newHighlighted[key].push(id)
     // mog('addHighlighted', { newHighlighted, id, key })
     set({ highlighted: newHighlighted })
   },
-  setHighlightedBlockIds: (ids, key) => {
+  setHighlightedBlockIds: (ids: string[], key) => {
     const { highlighted } = get()
     const newHighlighted = { ...highlighted }
     newHighlighted[key] = ids
@@ -44,7 +44,7 @@ export const blockHighlightStoreConfig = (set, get) => ({
     mog('clearAllHighlighted', { oldHighlighted })
     set({ highlighted: newHighlighted })
   },
-  isBlockHighlighted: (id) => {
+  isBlockHighlighted: (id: string) => {
     const { highlighted } = get()
     // mog('isBlockHighlighted', { hightlighted, id })
     return highlighted.editor.includes(id) || highlighted.preview.includes(id)

@@ -1,3 +1,4 @@
+import { Contents } from '../Types/Editor'
 import { ElementHighlightMetadata, Highlight, HighlightBlockMap, Highlights } from '../Types/Highlight'
 import { StoreIdentifier } from '../Types/Store'
 import { mog } from '../Utils/mog'
@@ -39,11 +40,11 @@ const addToHighlightBlockMap = (
 
 // LOOK Typed constructor
 export const highlightStoreConfig = (set, get) => ({
-  highlights: [],
-  highlightBlockMap: {},
+  highlights: [] as Highlights,
+  highlightBlockMap: {} as HighlightBlockMap,
   setHighlightBlockMap: (highlightBlockMap: HighlightBlockMap) => set({ highlightBlockMap }),
 
-  initHighlightBlockMap: (ilinks, contents) => {
+  initHighlightBlockMap: (ilinks, contents: Contents) => {
     const highlightBlockMap = {}
 
     ilinks?.forEach((ilink) => {
