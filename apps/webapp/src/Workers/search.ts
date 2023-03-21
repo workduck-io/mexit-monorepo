@@ -24,10 +24,10 @@ const searchWorker = {
         highlights: fileData.highlights,
         links: fileData.links,
         reminders: fileData.reminders,
-        contents: { contents: fileData.contents },
+        contents: { contents: fileData.contents } as any,
         snippets: {
           contents: fileData.snippets
-        }
+        } as any
       })
       hasInitialized = true
     } catch (err) {
