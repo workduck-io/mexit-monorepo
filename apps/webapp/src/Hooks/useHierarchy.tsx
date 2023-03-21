@@ -40,7 +40,7 @@ export const useHierarchy = () => {
     try {
       const { notePath, noteId, parentNoteId, noteContent } = options
 
-      const content = noteContent ?? getDefaultContent()
+      const content = noteContent ?? [getDefaultContent()]
       const bulkNotePath = !parentNoteId ? createNoteHierarchyString(notePath, options.namespace) : notePath
 
       const node = parentNoteId

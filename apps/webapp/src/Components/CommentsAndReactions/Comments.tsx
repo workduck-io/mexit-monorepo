@@ -88,7 +88,7 @@ interface NewCommentProps {
 }
 
 export const NewComment = ({ onAddComment, byUser }: NewCommentProps) => {
-  const [content, setContent] = React.useState<NodeEditorContent>(getDefaultContent())
+  const [content, setContent] = React.useState<NodeEditorContent>([getDefaultContent()])
   const [commentEditorId = '', setCommentEditorId] = React.useState(() => Math.random().toString(36).substring(7))
 
   const onChange = (content: NodeEditorContent) => {

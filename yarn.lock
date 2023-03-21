@@ -3949,6 +3949,16 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
+"@workduck-io/mex-search@^0.0.3":
+  version "0.0.3"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.3/d8c60179e7eb14d09b08408e66b41b6e148373ed#d8c60179e7eb14d09b08408e66b41b6e148373ed"
+  integrity sha512-3jy8jq9kQTcL09fHHB+sJVmAQfaOcERRp4jmKmpN+p+8wChrF9gr453bp2tsBn4qch57I4F3899YSa2sFALc1A==
+  dependencies:
+    "@workduck-io/mex-utils" "^0.0.7"
+    flexsearch "^0.7.31"
+    ngraph.graph "^20.0.1"
+    ngraph.todot "^4.0.0"
+
 "@workduck-io/mex-themes@^0.0.9":
   version "0.0.9"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-themes/0.0.9/8467a5a6c2a508a3a8085e088e7f5d6de33d85b8#8467a5a6c2a508a3a8085e088e7f5d6de33d85b8"
@@ -3967,6 +3977,19 @@
   dependencies:
     is-observable "^2.1.0"
     observable-fns "^0.6.1"
+
+"@workduck-io/mex-utils@^0.0.7":
+  version "0.0.7"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-utils/0.0.7/0819e71123a4d86b6cab5eaf1a21065ff45c506e#0819e71123a4d86b6cab5eaf1a21065ff45c506e"
+  integrity sha512-8cR+rouwmkgwx794ciC7DuM0Du0ct1CsknPHapmNjLEv8QTRS43wm3n7TdzzKEhkwOu+oR3oeNqe4BYWAF5kBA==
+  dependencies:
+    "@workduck-io/flexsearch" "^0.7.22"
+    chrono-node "^2.3.9"
+    date-fns "^2.29.1"
+    fast-fuzzy "^1.11.2"
+    fuse.js "^6.5.3"
+    lodash "^4.17.21"
+    nanoid "^4.0.0"
 
 "@workduck-io/tinykeys@^1.5.0":
   version "1.5.0"
@@ -4660,6 +4683,13 @@ chrono-node@^2.3.8:
   dependencies:
     dayjs "^1.10.0"
 
+chrono-node@^2.3.9:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/chrono-node/-/chrono-node-2.6.1.tgz#1cba8c6bdadd416243c9c431d1e92ba8c0710bff"
+  integrity sha512-TxhueNcckNWTonc0ZPNjOJ8XfIAYQ7EzhlvDjXT1eauo/lhjvXW4oOn6XtInbam6MfL7Mo1hYO/FKI3KMzqBsw==
+  dependencies:
+    dayjs "^1.10.0"
+
 ci-info@^3.1.0, ci-info@^3.2.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.8.0.tgz#81408265a5380c929f0bc665d62256628ce9ef91"
@@ -5044,7 +5074,7 @@ damerau-levenshtein@^1.0.7:
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
 
-date-fns@^2.24.0, date-fns@^2.28.0:
+date-fns@^2.24.0, date-fns@^2.28.0, date-fns@^2.29.1:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
@@ -6072,7 +6102,7 @@ fast-equals@^2.0.4:
   resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-2.0.4.tgz#3add9410585e2d7364c2deeb6a707beadb24b927"
   integrity sha512-caj/ZmjHljPrZtbzJ3kfH5ia/k4mTJe/qSiXAGzxZWRZgsgDV0cvNaQULqUX8t0/JVlzzEdYOwCN5DmzTxoD4w==
 
-fast-fuzzy@^1.10.10:
+fast-fuzzy@^1.10.10, fast-fuzzy@^1.11.2:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/fast-fuzzy/-/fast-fuzzy-1.12.0.tgz#f900a8165bffbb7dd5c013a1bb96ee22179ba406"
   integrity sha512-sXxGgHS+ubYpsdLnvOvJ9w5GYYZrtL9mkosG3nfuD446ahvoWEsSKBP7ieGmWIKVLnaxRDgUJkZMdxRgA2Ni+Q==
@@ -6222,6 +6252,11 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.7.tgz#609f39207cb614b89d0765b477cb2d437fbf9787"
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
+flexsearch@^0.7.31:
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/flexsearch/-/flexsearch-0.7.31.tgz#065d4110b95083110b9b6c762a71a77cc52e4702"
+  integrity sha512-XGozTsMPYkm+6b5QL3Z9wQcJjNYxp0CYn3U1gO7dwD6PAqU1SVWZxI9CCg3z+ml3YfqdPnrBehaBrnH2AGKbNA==
+
 flow-parser@^0.156.0:
   version "0.156.0"
   resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.156.0.tgz#5b463ea4923fe8ca34e38eb367497060d9707d0b"
@@ -6353,6 +6388,11 @@ functions-have-names@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
+
+fuse.js@^6.5.3:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-6.6.2.tgz#fe463fed4b98c0226ac3da2856a415576dc9a111"
+  integrity sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -7936,6 +7976,23 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
+
+ngraph.events@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/ngraph.events/-/ngraph.events-1.2.2.tgz#3ceb92d676a04a4e7ce60a09fa8e17a4f0346d7f"
+  integrity sha512-JsUbEOzANskax+WSYiAPETemLWYXmixuPAlmZmhIbIj6FH/WDgEGCGnRwUQBK0GjOnVm8Ui+e5IJ+5VZ4e32eQ==
+
+ngraph.graph@^20.0.1:
+  version "20.0.1"
+  resolved "https://registry.yarnpkg.com/ngraph.graph/-/ngraph.graph-20.0.1.tgz#579470d1d805583239704dc913e2095540aaf371"
+  integrity sha512-VFsQ+EMkT+7lcJO1QP8Ik3w64WbHJl27Q53EO9hiFU9CRyxJ8HfcXtfWz/U8okuoYKDctbciL6pX3vG5dt1rYA==
+  dependencies:
+    ngraph.events "^1.2.1"
+
+ngraph.todot@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ngraph.todot/-/ngraph.todot-4.0.0.tgz#7c0c0d05ac13b0315fbdf6eb79172288e87ec5dd"
+  integrity sha512-AW7lqBYTqVUC7390mq6CPnL8J1oxM1v54Jss7eZiMLPKzrmGisMPfPMz6I8ZmqI6Nv705mCPmurCg9RicvQ8Hw==
 
 node-addon-api@^3.2.1:
   version "3.2.1"
