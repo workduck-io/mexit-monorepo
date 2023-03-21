@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ELEMENT_MENTION } from '@udecode/plate'
 
-import { ISearchQuery, SearchX } from '@workduck-io/mex-search'
+import { Indexes, ISearchQuery, IUpdateDoc, SearchX } from '@workduck-io/mex-search'
 
 import {
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_TASK_VIEW_BLOCK,
   ELEMENT_TASK_VIEW_LINK,
-  idxKey,
   SearchRepExtra,
   useContentStore
 } from '@mexit/core'
@@ -73,88 +72,70 @@ export const useSearchExtra = () => {
 }
 
 export const useSearch = () => {
-  const { getTitleFromNoteId } = useLinks()
+  const { getTitleFromNoteId, getParentILink } = useLinks()
   const { getSearchExtra } = useSearchExtra()
   const documentUpdated = useContentStore((s) => s.setDocUpdated)
 
-  const addDocument = async (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title: string | undefined = undefined,
-    tags?: Array<string>
-  ) => {
+  const addDocument = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
 
-    await addDoc(
-      key,
-      nodeId,
-      contents,
-      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
-      tags,
-      extra
-    )
+    await addDoc({
+      ...doc,
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
     documentUpdated()
   }
 
-  const updateDocument = async (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title: string | undefined = undefined,
-    tags?: Array<string>
-  ) => {
+  const updateDocument = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
 
-    await updateDoc(
-      key,
-      nodeId,
-      contents,
-      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
-      tags,
-      extra
-    )
+    await updateDoc({
+      ...doc,
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
 
     documentUpdated()
   }
 
-  const updateBlocks = async (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title: string | undefined = undefined,
-    tags?: Array<string>
-  ) => {
+  const updateBlocks = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
 
-    await updateOrAppendBlocks(
-      key,
-      nodeId,
-      contents,
-      title ?? getTitleFromNoteId(nodeId, { includeArchived: true, includeShared: true }),
-      tags,
-      extra
-    )
+    await updateOrAppendBlocks({
+      ...doc,
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
 
     documentUpdated()
   }
 
-  const removeDocument = async (key: idxKey, id: string) => {
+  const removeDocument = async (key: Indexes, id: string) => {
     await removeDoc(key, id)
     documentUpdated()
   }
 
-  const queryIndex = async (key: idxKey | idxKey[], query?: ISearchQuery, tags?: Array<string>) => {
+  const queryIndex = async (key: Indexes, query?: ISearchQuery, tags?: Array<string>) => {
     const results = await searchIndex(key, query)
     return results
   }
 
-  const queryIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
+  const queryIndexByNodeId = async (key: Indexes, nodeId: string, query: ISearchQuery) => {
     const results = await searchIndexByNodeId(key, nodeId, query)
     return results
   }
 
-  const queryIndexWithRanking = async (key: idxKey | idxKey[], query: ISearchQuery) => {
+  const queryIndexWithRanking = async (key: Indexes, query: ISearchQuery) => {
     const results = await searchIndexWithRanking(key, query)
     return results
   }

@@ -1,17 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { Infobox } from '@workduck-io/mex-components'
-import { SearchResult } from '@workduck-io/mex-search'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
-import {
-  convertContentToRawText,
-  defaultContent,
-  DefaultMIcons,
-  getInitialNode,
-  mog,
-  NodeType,
-  ViewType
-} from '@mexit/core'
+import { convertContentToRawText, defaultContent, DefaultMIcons, getInitialNode, NodeType, ViewType } from '@mexit/core'
 import {
   EditorHeader,
   Group,
@@ -93,9 +85,7 @@ const Search = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     const query = generateSearchQuery(newSearchTerm, currentFilters)
-    const res = await queryIndexWithRanking(['shared', 'node'], query)
-
-    mog('RES', { res, query })
+    const res = await queryIndexWithRanking(Indexes.MAIN, query)
 
     const filRes = res.filter((r) => {
       const nodeType = getNodeType(r.parent)

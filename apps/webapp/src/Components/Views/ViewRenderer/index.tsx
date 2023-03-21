@@ -1,3 +1,5 @@
+import { ErrorBoundary } from 'react-error-boundary'
+
 import { SearchResult } from '@workduck-io/mex-search'
 
 import { MIcon, View, ViewType } from '@mexit/core'
@@ -19,7 +21,7 @@ export type GroupedResult = {
   items: SearchResult[]
 }
 
-const ViewRenderer: React.FC<ViewRendererProps> = (props) => {
+const ViewTypeRenderer: React.FC<ViewRendererProps> = (props) => {
   const viewType = useViewFilterStore((s) => s.viewType)
 
   const results = useViewResults()
@@ -31,6 +33,14 @@ const ViewRenderer: React.FC<ViewRendererProps> = (props) => {
     default:
       return <ListView results={results} {...props} />
   }
+}
+
+const ViewRenderer: React.FC<ViewRendererProps> = (props) => {
+  return (
+    <ErrorBoundary fallbackRender={() => <></>}>
+      <ViewTypeRenderer {...props} />
+    </ErrorBoundary>
+  )
 }
 
 export default ViewRenderer

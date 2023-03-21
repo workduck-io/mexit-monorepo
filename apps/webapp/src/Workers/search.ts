@@ -1,6 +1,6 @@
-import { ISearchQuery, SearchResult, SearchX } from '@workduck-io/mex-search'
+import { Indexes, ISearchQuery, IUpdateDoc, SearchResult, SearchX } from '@workduck-io/mex-search'
 
-import { idxKey, mog, PersistentData, SearchRepExtra } from '@mexit/core'
+import { ILink, mog, PersistentData } from '@mexit/core'
 
 import { exposeX } from './worker-utils'
 
@@ -19,13 +19,16 @@ const searchWorker = {
     if (hasInitialized) return
 
     try {
-      searchX.initializeSearch(
-        fileData.ilinks,
-        fileData.highlights,
-        fileData.links,
-        { contents: fileData.contents },
-        fileData.reminders
-      )
+      searchX.initializeSearch({
+        ilinks: fileData.ilinks,
+        highlights: fileData.highlights,
+        links: fileData.links,
+        reminders: fileData.reminders,
+        contents: { contents: fileData.contents },
+        snippets: {
+          contents: fileData.snippets
+        }
+      })
       hasInitialized = true
     } catch (err) {
       console.log('Error initializing search', err)
@@ -41,32 +44,29 @@ const searchWorker = {
     hasInitialized = false
     searchX = new SearchX()
   },
-  addDoc: (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title = '',
-    tags: Array<string> = [],
-    extra?: SearchRepExtra
-  ) => {
-    mog('Add Doc', { nodeId, contents, title, tags, extra })
-    searchX.addOrUpdateDocument(nodeId, contents, title, { extra })
+  addDoc: (doc: IUpdateDoc) => {
+    if (doc.indexKey === Indexes.ARCHIVE) console.log('Adding Archive Doc', { id: doc.id, contents: doc.contents })
+
+    searchX.addOrUpdateDocument(doc)
   },
-  updateBlock: (nodeId: string, contents: any[], title = '', tags: Array<string> = [], extra?: SearchRepExtra) => {
-    searchX.appendToDoc(nodeId, contents, title, { extra })
+  updateBlock: (doc: IUpdateDoc) => {
+    searchX.appendToDoc(doc)
   },
-  updateDoc: (nodeId: string, contents: any[], title = '', tags: Array<string> = [], extra?: SearchRepExtra) => {
-    mog('Update Doc', { nodeId, contents, title, tags, extra })
-    searchX.addOrUpdateDocument(nodeId, contents, title, { extra })
+  updateDoc: (doc: IUpdateDoc) => {
+    if (doc.indexKey === Indexes.ARCHIVE) console.log('Updating Archive Doc', { id: doc.id, contents: doc.contents })
+    searchX.addOrUpdateDocument(doc)
+  },
+  updateILink: (ilink: ILink) => {
+    searchX.updateIlink(ilink)
   },
 
-  removeDoc: (key: idxKey, id: string) => {
-    searchX.deleteEntity(id)
+  removeDoc: (indexKey: Indexes, id: string) => {
+    searchX.deleteEntity(id, indexKey)
   },
 
-  searchIndex: (indexKey, query) => {
+  searchIndex: (indexKey: Indexes, query: ISearchQuery) => {
     try {
-      const res = searchX.search(query)
+      const res = searchX.search({ options: query, indexKey })
       mog('SearchX Results:', { res, query })
       return res
     } catch (e) {
@@ -75,17 +75,23 @@ const searchWorker = {
     }
   },
 
-  searchIndexByNodeId: (key, nodeId, query) => {
-    return searchX.search([
-      { type: 'heirarchy', value: nodeId },
-      { type: 'text', value: query }
-    ])
+  searchIndexByNodeId: (indexKey, nodeId, query) => {
+    return searchX.search({
+      indexKey,
+      options: [
+        {
+          type: 'query',
+          query: [{ type: 'heirarchy', value: nodeId }, ...query]
+        }
+      ]
+    })
   },
 
   // TODO: Figure out tags with this OR approach
-  searchIndexWithRanking: (key: idxKey | idxKey[], query: ISearchQuery, tags?: Array<string>) => {
+  searchIndexWithRanking: (indexKey: Indexes, query: ISearchQuery, tags?: Array<string>) => {
     try {
-      const searchResults = searchX.search(query)
+      const searchResults = searchX.search({ options: query, indexKey })
+      mog('SearchX Results:', { searchResults, query })
       const matchedNotes = new Set<string>()
 
       const groupedResults = searchResults.reduce((acc, result) => {

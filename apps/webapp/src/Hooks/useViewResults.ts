@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { SearchResult } from '@workduck-io/mex-search'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
-import { mog, useContentStore } from '@mexit/core'
+import { useContentStore } from '@mexit/core'
 import { groupItems, keysToExcludeInGrouping, keysToExcludeInSorting, useQuery } from '@mexit/shared'
 
 import { useViewFilterStore } from './todo/useTodoFilters'
@@ -33,7 +33,7 @@ const useViewResults = () => {
     const groupingOptions = options.filter((option) => !keysToExcludeInGrouping.includes(option.label))
     setGroupingOptions(groupingOptions)
 
-    const groupBy = groupingOptions.find((option) => option.id === groupedBy)?.id ?? newGroupByKey
+    const groupBy = groupedBy ?? newGroupByKey
     onGroupByChange(groupBy)
 
     return groupItems(results, { groupBy, sortBy, sortOrder })
@@ -42,8 +42,7 @@ const useViewResults = () => {
   useEffect(() => {
     const query = generateSearchQuery(undefined, currentFilters, entities)
 
-    queryIndex('node', query).then((queryResult) => {
-      mog('QUERY', { currentFilters, query, queryResult })
+    queryIndex(Indexes.MAIN, query).then((queryResult) => {
       if (queryResult) {
         setResults(queryResult)
       }

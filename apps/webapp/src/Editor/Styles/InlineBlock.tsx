@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { Ellipsis } from '@mexit/shared'
+
 export const MainFont = css`
   font-size: 14px;
 `
@@ -83,6 +85,11 @@ export const InlineBlockHeading = styled.div`
 export const InlineBlockText = styled.div`
   margin-left: ${({ theme }) => theme.spacing.tiny};
   font-size: large;
+  width: 100%;
+  span {
+    max-width: 30ch;
+    ${Ellipsis}
+  }
   color: ${({ theme }) => theme.tokens.text.heading};
 `
 

@@ -83,11 +83,6 @@ export const RenderSort = ({
     <FilterGlobalJoinWrapper>
       <GenericSection>
         <IconDisplay icon={getSortOrderIcon(sortOrder)} />
-        {sortOrder === 'ascending' ? 'Asc' : 'Desc'}
-      </GenericSection>
-
-      <GenericSection>
-        <IconDisplay icon={getBlockFieldIcon(sortType)} size={14} />
         {capitalize(sortType)}
       </GenericSection>
     </FilterGlobalJoinWrapper>

@@ -17,7 +17,7 @@ import {
   View,
   ViewType
 } from '@mexit/core'
-import { Label, SearchFilterListCurrent, TextAreaBlock } from '@mexit/shared'
+import { Label, SearchFilterListCurrent, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useViews } from '../Hooks/useViews'
@@ -194,6 +194,7 @@ const TaskViewModal = () => {
 
         <Label htmlFor="description">Description </Label>
         <TextAreaBlock
+          height={TextFieldHeight.MEDIUM}
           placeholder="Ex. Bugs of development"
           defaultValue={curView !== undefined ? curView.description : ''}
           {...register('description')}

@@ -67,6 +67,12 @@ export const FilterValueDiv = styled(SmallGap)`
   color: ${({ theme }) => theme.tokens.text.default};
 `
 
+export const FilterDivWrapper = styled(GenericFlex)`
+  border-radius: ${({ theme }) => theme.borderRadius.small};
+  padding: 0 ${({ theme }) => theme.spacing.tiny};
+  /* background: ${({ theme }) => theme.tokens.surfaces.s[3]}; */
+`
+
 export const FilterRemoveButton = styled(GenericSection)`
   display: flex;
   align-items: center;

@@ -1,18 +1,9 @@
 import { useAuthStore as useInternalAuthStore } from '@workduck-io/dwindle'
-import { ISearchQuery } from '@workduck-io/mex-search'
+import { Indexes, ISearchQuery, IUpdateDoc } from '@workduck-io/mex-search'
 import { SharedWorker, spawn } from '@workduck-io/mex-threads.js'
 import { type ExposedToThreadType } from '@workduck-io/mex-threads.js/types/master'
 
-import {
-  idxKey,
-  ILink,
-  mog,
-  NodeEditorContent,
-  PersistentData,
-  SearchRepExtra,
-  Snippets,
-  withTimeout
-} from '@mexit/core'
+import { ILink, mog, NodeEditorContent, PersistentData, SearchRepExtra, Snippets, withTimeout } from '@mexit/core'
 
 import { useAuthStore } from '../Stores/useAuth'
 import { WorkerRequestType } from '../Utils/worker'
@@ -77,6 +68,15 @@ export const terminateRequestWorker = async () => {
   // if (requestsWorker) requestsWorker = await Thread.terminate(requestsWorker)
 }
 
+export const updateILink = async (ilink: ILink) => {
+  try {
+    if (!searchWorker) throw new Error('Search Worker Not Initialized')
+    await searchWorker.updateILink(ilink)
+  } catch (error) {
+    mog('AddDocIndexError', { error })
+  }
+}
+
 export const analyseContent = async (props: AnalyseContentProps) => {
   try {
     if (!analysisWorker) {
@@ -135,48 +135,35 @@ export const initSearchIndex = async (fileData: Partial<PersistentData>) => {
   }
 }
 
-export const addDoc = async (
-  key: idxKey,
-  nodeId: string,
-  contents: any[],
-  title: string,
-  tags?: Array<string>,
-  extra?: SearchRepExtra
-) => {
+export const addDoc = async (doc: IUpdateDoc) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.addDoc(key, nodeId, contents, title, tags, extra)
+    await searchWorker.addDoc(doc)
   } catch (error) {
     mog('AddDocIndexError', { error })
   }
 }
 
-export const updateDoc = async (
-  key: idxKey,
-  nodeId: string,
-  contents: any[],
-  title: string,
-  tags?: Array<string>,
-  extra?: SearchRepExtra
-) => {
+export const updateDoc = async (doc: IUpdateDoc) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.updateDoc(nodeId, contents, title, tags, extra)
+
+    await searchWorker.updateDoc(doc)
   } catch (error) {
     mog('UpdateDocIndexError', { error })
   }
 }
 
-export const removeDoc = async (key: idxKey, id: string) => {
+export const removeDoc = async (indexKey: Indexes, id: string) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
-    await searchWorker.removeDoc(key, id)
+    await searchWorker.removeDoc(indexKey, id)
   } catch (error) {
     mog('RemoveDocIndexError', { error })
   }
 }
 
-export const searchIndex = async (key: idxKey | idxKey[], query: ISearchQuery) => {
+export const searchIndex = async (key: Indexes, query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
@@ -187,7 +174,7 @@ export const searchIndex = async (key: idxKey | idxKey[], query: ISearchQuery) =
   }
 }
 
-export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string, query: string) => {
+export const searchIndexByNodeId = async (key: Indexes, nodeId: string, query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
@@ -198,25 +185,18 @@ export const searchIndexByNodeId = async (key: idxKey | idxKey[], nodeId: string
   }
 }
 
-export const updateOrAppendBlocks = async (
-  key: idxKey,
-  nodeId: string,
-  contents: any[],
-  title: string,
-  tags?: Array<string>,
-  extra?: SearchRepExtra
-) => {
+export const updateOrAppendBlocks = async (doc: IUpdateDoc) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 
-    const results = await searchWorker.updateBlock(nodeId, contents, title, tags, extra)
+    const results = await searchWorker.updateBlock(doc)
     return results
   } catch (error) {
-    mog('UpdateOrAppendBlocksError', { error, nodeId, contents })
+    mog('UpdateOrAppendBlocksError', { error, nodeId: doc.id })
   }
 }
 
-export const searchIndexWithRanking = async (key: idxKey | idxKey[], query: ISearchQuery) => {
+export const searchIndexWithRanking = async (key: Indexes, query: ISearchQuery) => {
   try {
     if (!searchWorker) throw new Error('Search Worker Not Initialized')
 

@@ -42,12 +42,14 @@ const FleetContainer = () => {
   const sections = useMemo(() => {
     const sections = getQuickNewItems()
     if (atSnippets) return [sections.snippet, sections.note, sections.task, sections.space]
-    if (atViews) return [sections.task, sections.note, sections.snippet, sections.space]
+    if (atViews) {
+      return [sections.task, sections.note, sections.snippet, sections.space]
+    }
 
     return [sections.note, sections.space, sections.task, sections.snippet]
   }, [atSnippets, atViews])
 
-  return <Fleet sections={sections} isOpen={open} onClose={handleClose} onOpen={handleOpen} />
+  return <Fleet key={String(atViews)} sections={sections} isOpen={open} onClose={handleClose} onOpen={handleOpen} />
 }
 
 export default FleetContainer

@@ -71,8 +71,6 @@ const ContentEditor = () => {
     }
   }, [nodeid, fsContent])
 
-  console.log('FSCONTENT', { fsContent, nodeContent })
-
   const onChangeSave = useCallback(
     async (val: any[]) => {
       if (val && nodeid !== '__null__') {

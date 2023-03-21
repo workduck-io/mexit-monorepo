@@ -4,6 +4,7 @@ import closeLine from '@iconify/icons-ri/close-line'
 
 import { Filter, FilterJoin, FilterType, FilterValue } from '@mexit/core'
 import {
+  FilterDivWrapper,
   FilterJoinDiv,
   FilterValueDiv,
   FilterWithCrossWrapper,
@@ -136,6 +137,7 @@ const FilterRender = ({ filter, onChangeFilter, options, onRemoveFilter, hideJoi
 
       {!hideJoin && (
         <Menu
+          noBackground
           values={
             <FilterJoinDiv>
               <IconDisplay icon={getFilterJoinIcon(filter.join)} />
@@ -165,15 +167,15 @@ export const DisplayFilter = ({ filter, hideJoin }: { filter: Filter; hideJoin?:
         {Array.isArray(filter.values) &&
           (filter.values.length > 0 ? (
             filter.values.map((value) => (
-              <FilterValueDiv key={value.id}>
+              <FilterDivWrapper key={value.id}>
                 <Group>
                   <IconDisplay size={14} icon={getFilterValueIcon(filter.type, value.value)} />
                   <ItemLabel>{value.label}</ItemLabel>
                 </Group>
-              </FilterValueDiv>
+              </FilterDivWrapper>
             ))
           ) : (
-            <FilterValueDiv>0 selected</FilterValueDiv>
+            <FilterDivWrapper>0 selected</FilterDivWrapper>
           ))}
       </GenericFlex>
       {!hideJoin && (

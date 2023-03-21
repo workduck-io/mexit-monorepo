@@ -113,6 +113,7 @@ interface Props {
   multiSelect?: boolean
 
   noHover?: boolean
+  noBackground?: boolean
 
   onMouseEnter?: (e: any) => void
   onMouseLeave?: (e: any) => void

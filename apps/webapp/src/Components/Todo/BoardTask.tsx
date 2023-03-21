@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { PriorityType, ViewType } from '@mexit/core'
+import { PriorityType, useContentStore, ViewType } from '@mexit/core'
 import { TaskCard } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
@@ -38,11 +38,12 @@ interface RenderTaskProps {
 export const RenderBoardTask = React.memo<RenderTaskProps>(
   ({ id, todoid, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
+    const documentUpdated = useContentStore((s) => s.docUpdated)
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
-    const pC = useMemo(() => getPureContent(todo), [id, todo])
+    const pC = useMemo(() => getPureContent(todo), [id, todo, documentUpdated])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
     const toggleModal = useModalStore((store) => store.toggleOpen)

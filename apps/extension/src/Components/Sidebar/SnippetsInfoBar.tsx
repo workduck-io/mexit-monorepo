@@ -6,6 +6,8 @@ import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import {
   convertToCopySnippet,
   defaultCopyConverter,
@@ -111,7 +113,7 @@ export const SnippetsInfoBar = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     const query = generateSearchQuery(newSearchTerm)
-    const res = await wSearchIndexWithRanking(['template', 'snippet'], query)
+    const res = await wSearchIndexWithRanking(Indexes.SNIPPET, query)
 
     if (newSearchTerm === '' && res.length === 0) {
       setSearchedSnippets(snippets)
@@ -136,7 +138,7 @@ export const SnippetsInfoBar = () => {
     if (search === '') {
       setSearchedSnippets(snippets)
     }
-  }, [search, snippets])
+  }, [search])
 
   const theme = useTheme()
 

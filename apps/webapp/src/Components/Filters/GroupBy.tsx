@@ -4,6 +4,7 @@ import { capitalize, SEPARATOR } from '@mexit/core'
 import {
   DefaultMIcons,
   FilterDescription,
+  FilterGlobalJoinWrapper,
   IconDisplay,
   Menu,
   MenuItem,
@@ -45,6 +46,21 @@ const GroupByMenu = ({ onChange }) => {
         })}
       </Menu>
     </SortSectionWrapper>
+  )
+}
+
+export const DisplayGroupBy = () => {
+  const groupBy = useViewFilterStore((store) => store.groupBy)
+
+  if (!groupBy) return
+
+  return (
+    <FilterGlobalJoinWrapper>
+      <SmallGap>
+        <IconDisplay icon={DefaultMIcons.GROUPBY} />
+        {groupBy ? capitalize(groupBy?.split(SEPARATOR)?.at(-1)) : 'Group By'}
+      </SmallGap>
+    </FilterGlobalJoinWrapper>
   )
 }
 

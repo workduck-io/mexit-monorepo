@@ -31,6 +31,13 @@ export const BlockHeader = styled(GroupHeader)<{ isOpen?: boolean }>`
   }
 `
 
+export const VerticalStretch = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  align-self: flex-start;
+`
+
 export const BlockContent = styled.div<{ isOpen?: boolean }>`
   ${({ isOpen }) =>
     !isOpen &&
@@ -40,9 +47,12 @@ export const BlockContent = styled.div<{ isOpen?: boolean }>`
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
     `}
+
   color: ${({ theme }) => theme.tokens.text.default};
   display: -webkit-box;
   overflow: hidden;
+  max-width: 90%;
+  word-break: break-all;
 `
 
 type BlockProps = {
@@ -71,12 +81,14 @@ const ContentBlock: React.FC<BlockProps> = ({ block }) => {
     <ContentBlockContainer>
       <BlockHeader isOpen={isOpen} onClick={handleToggleAccordion}>
         <Group>
-          <MexIcon
-            color={theme.tokens.colors.primary.default}
-            width={20}
-            height={20}
-            icon={SearchBlockIcons[block?.entity]}
-          />
+          <VerticalStretch>
+            <MexIcon
+              color={theme.tokens.colors.primary.default}
+              width={20}
+              height={20}
+              icon={SearchBlockIcons[block?.entity]}
+            />
+          </VerticalStretch>
           <BlockContent isOpen={isOpen}>{content}</BlockContent>
         </Group>
         {canOpen && <Chevron isOpen={isOpen} $noHover height={24} width={24} cursor="pointer" icon={arrowLeftSLine} />}

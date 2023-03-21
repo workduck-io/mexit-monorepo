@@ -22,7 +22,8 @@ const StyledResultGroup = styled.div`
 
 export const Chevron = styled(MexIcon)<{ isOpen?: boolean }>`
   transition: all 0.2s linear;
-
+  min-width: 16px;
+  min-height: auto;
   ${({ isOpen }) =>
     isOpen
       ? css`
@@ -37,6 +38,7 @@ export const GroupHeader = styled.div<{ isOpen?: boolean; padding?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   ${({ padding }) =>
     padding &&
     css`

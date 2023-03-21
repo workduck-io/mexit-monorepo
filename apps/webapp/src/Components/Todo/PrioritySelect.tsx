@@ -16,7 +16,13 @@ interface PriorityMenuSelect {
 const PriorityMenuButton = ({ color, value, selected, withLabel }) => {
   return (
     <TodoActionButton selected={selected}>
-      <MexIcon color={color} $noHover icon={Priority[value]?.icon} fontSize={20} cursor="pointer" />
+      <MexIcon
+        color={color}
+        $noHover
+        icon={Priority[value]?.icon ?? Priority.noPriority.icon}
+        fontSize={20}
+        cursor="pointer"
+      />
       {withLabel && <span>{Priority[value]?.title}</span>}
     </TodoActionButton>
   )
@@ -39,6 +45,8 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
   return (
     <TodoActionWrapper>
       <Menu
+        noHover
+        noBackground
         onMouseEnter={() => setSelected(true)}
         onMouseLeave={() => setSelected(false)}
         values={

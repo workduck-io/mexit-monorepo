@@ -5,7 +5,7 @@ import fileList2Line from '@iconify/icons-ri/file-list-2-line'
 import styled from 'styled-components'
 
 import { Infobox } from '@workduck-io/mex-components'
-import { SearchResult } from '@workduck-io/mex-search'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
 import { batchArray, convertContentToRawText, extractMetadata, mog, ViewType } from '@mexit/core'
 import {
@@ -70,7 +70,8 @@ const Archive = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     const query = generateSearchQuery(newSearchTerm)
-    const res = await queryIndexWithRanking('archive', query)
+    const res = await queryIndexWithRanking(Indexes.ARCHIVE, query)
+    mog('ArchiveSearch', { query, newSearchTerm, res })
     if (newSearchTerm === '' && res?.length === 0) {
       return initialArchive
     }
@@ -102,7 +103,12 @@ const Archive = () => {
               setContent(nodeID, content)
 
               if (metadata) addMetadata('notes', { [nodeID]: metadata })
-              updateDocument('archive', nodeID, content)
+
+              updateDocument({
+                id: nodeID,
+                contents: content,
+                indexKey: Indexes.ARCHIVE
+              })
             })
           }
         }
@@ -113,7 +119,7 @@ const Archive = () => {
 
   // Forwarding ref to focus on the selected result
   const BaseItem = (
-    { item, splitOptions, ...props }: RenderItemProps<SearchResult>,
+    { item, splitOptions, ...props }: RenderItemProps<Partial<SearchResult>>,
     ref: React.Ref<HTMLDivElement>
   ) => {
     const con = contents[item.parent]

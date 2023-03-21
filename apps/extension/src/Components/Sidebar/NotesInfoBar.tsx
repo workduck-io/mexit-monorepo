@@ -4,6 +4,8 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
@@ -43,7 +45,7 @@ export const NotesInfoBar = () => {
   const onSearch = async (newSearchTerm: string) => {
     try {
       const query = generateSearchQuery(newSearchTerm)
-      const res = await wSearchIndexWithRanking(['node'], query)
+      const res = await wSearchIndexWithRanking(Indexes.MAIN, query)
       if (!res) {
         const ilinks = useDataStore.getState().ilinks
         const res = fuzzySearch<ILink>(ilinks, newSearchTerm, (ilink) => ilink.path)

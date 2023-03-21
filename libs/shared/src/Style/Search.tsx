@@ -167,6 +167,7 @@ export const SearchFilterListCurrent = styled.div`
 
 export const SearchFilterListSuggested = styled(SearchFilterListCurrent)`
   flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.tiny};
 `
 
 export const SearchFilterList = styled.div`

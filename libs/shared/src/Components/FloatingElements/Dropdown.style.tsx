@@ -63,7 +63,7 @@ export const ItemLabel = styled.div`
   max-width: 12rem;
 `
 
-export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean }>`
+export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean; noBackground?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
@@ -86,17 +86,24 @@ export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolea
     }
   }
 
-  ${({ noHover }) =>
+  ${({ theme, noBackground }) =>
+    noBackground
+      ? css`
+          background: none;
+        `
+      : css`
+          background: ${theme.tokens.surfaces.s[3]};
+        `}
+
+  ${({ noHover, theme }) =>
     noHover &&
     css`
-      background: ${({ theme }) => theme.tokens.surfaces.s[3]};
-
-      color: ${({ theme }) => theme.tokens.text.default};
+      color: ${theme.tokens.text.default};
 
       &.open,
       &:hover {
-        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-        background: ${({ theme }) => theme.tokens.surfaces.s[2]};
+        box-shadow: ${theme.tokens.shadow.small};
+        background: ${theme.tokens.surfaces.s[2]};
       }
     `}
 `

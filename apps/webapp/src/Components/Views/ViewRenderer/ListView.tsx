@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useMatch } from 'react-router-dom'
 
 import { SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
@@ -7,6 +8,7 @@ import { Description, TaskListWrapper } from '@mexit/shared'
 
 import { useViewFilterStore } from '../../../Hooks/todo/useTodoFilters'
 import { useEnableShortcutHandler } from '../../../Hooks/useChangeShortcutListener'
+import { ROUTE_PATHS } from '../../../Hooks/useRouting'
 import useMultipleEditors from '../../../Stores/useEditorsStore'
 import useModalStore from '../../../Stores/useModalStore'
 import ViewBlockRenderer from '../ViewBlockRenderer'
@@ -15,6 +17,7 @@ import ResultGroup from '../ViewBlockRenderer/BlockContainer'
 const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
 
+  const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
   const { enableShortcutHandler } = useEnableShortcutHandler()
 
   const isModalOpen = useModalStore((store) => store.open)
@@ -78,7 +81,7 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
 
   useEffect(() => {
     const shorcutConfig = (): KeyBindingMap => {
-      if (isModalOpen !== undefined) return {}
+      if (isModalOpen !== undefined || !atViews) return {}
 
       return wrapEvents({
         Escape: () => {
@@ -108,7 +111,7 @@ const ListView: React.FC<{ results: Record<string, any> }> = ({ results }) => {
         unsubscribe()
       }
     }
-  }, [isModalOpen, isPreviewEditors, selectNewCard])
+  }, [isModalOpen, atViews, isPreviewEditors, selectNewCard])
 
   if (!currentFilters.length)
     return (

@@ -7,6 +7,7 @@ import { useSelected } from 'slate-react'
 import { useTheme } from 'styled-components'
 
 import {
+  GenericFlex,
   Group,
   MexIcon,
   RootElement,
@@ -16,6 +17,7 @@ import {
 } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
+import { DisplayGroupBy } from '../../../Components/Filters/GroupBy'
 import { RenderSort } from '../../../Components/Filters/SortMenu'
 import { ViewContainer } from '../../../Components/Views'
 import { GroupHeader } from '../../../Components/Views/ViewBlockRenderer/BlockContainer'
@@ -60,17 +62,20 @@ const ViewBlock = (props: any) => {
 
           <StyledViewBlockPreview>
             {view?.filters.length > 0 && (
-              <Group>
+              <GenericFlex>
                 <MexIcon icon={filter2Line} color={theme.tokens.colors.primary.default} />
                 <GroupHeader>
                   <SearchFilterListSuggested>
                     {view?.filters?.map((f, i) => (
                       <DisplayFilter key={f.id} filter={f} hideJoin={i === view?.filters?.length - 1} />
                     ))}
-                    <RenderSort sortOrder={view.sortOrder} sortType={view.sortType} />
                   </SearchFilterListSuggested>
+                  <GenericFlex>
+                    <DisplayGroupBy />
+                    <RenderSort sortOrder={view.sortOrder} sortType={view.sortType} />
+                  </GenericFlex>
                 </GroupHeader>
-              </Group>
+              </GenericFlex>
             )}
             <StyledTasksKanbanBlock>
               {view && <ViewContainer viewId={viewid} withFilters={false} />}

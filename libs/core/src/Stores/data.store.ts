@@ -177,17 +177,10 @@ export const dataStoreConfig = (set, get) => ({
     })
   },
 
-  checkValidILink: ({
-    notePath,
-    openedNotePath,
-    showAlert,
-    namespace
-  }: {
-    notePath
-    openedNotePath?
-    showAlert?
-    namespace?
-  }) => {
+  checkValidILink: (ilink: { notePath: string; openedNotePath?: string; showAlert?: boolean; namespace?: string }) => {
+    let notePath = ilink.notePath
+    const { openedNotePath, showAlert, namespace } = ilink
+
     const { key, isChild } = withoutContinuousDelimiter(notePath)
 
     // * If `notePath` starts with '.', than create note under 'opened note'.
@@ -238,7 +231,6 @@ export const dataStoreConfig = (set, get) => ({
    * Should not add duplicate links
    */
   addInternalLink: (ilink, nodeid) => {
-    mog('Creating links', { ilink, nodeid })
     // No self links will be added
     if (nodeid === ilink.nodeid) return
 

@@ -6,14 +6,15 @@ import {
   getDefaultContent,
   getUntitledDraftKey,
   getUntitledKey,
-  mog,
   NodeEditorContent,
-  RESERVED_NAMESPACES
+  RESERVED_NAMESPACES,
+  useContentStore
 } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
 import { useEditorStore } from '../Stores/useEditorStore'
 import { useMetadataStore } from '../Stores/useMetadataStore'
+import { updateILink } from '../Workers/controller'
 
 import { useHierarchy } from './useHierarchy'
 import { useLastOpened } from './useLastOpened'
@@ -42,6 +43,8 @@ export const useCreateNewNote = () => {
   const { push } = useNavigation()
   const { goTo } = useRouting()
   const addILink = useDataStore((s) => s.addILink)
+  const addMetadata = useMetadataStore((s) => s.addMetadata)
+  const setDocUpdated = useContentStore((s) => s.setDocUpdated)
   const checkValidILink = useDataStore((s) => s.checkValidILink)
   const { saveNodeName } = useLoad()
   const { getParentILink } = useLinks()
@@ -99,8 +102,11 @@ export const useCreateNewNote = () => {
       return undefined
     }
 
-    mog('AddInHierarchy', { namespace, parentNoteId, parentNote, uniquePath, newNotePath, node })
-    useMetadataStore.getState().addMetadata('notes', { [node.nodeid]: { icon: DefaultMIcons.NOTE } })
+    addMetadata('notes', { [node.nodeid]: { icon: DefaultMIcons.NOTE } })
+
+    updateILink({ ...node, parentNodeId: parentNoteId }).then((r) => {
+      setDocUpdated()
+    })
 
     addInHierarchy({
       noteId: node.nodeid,

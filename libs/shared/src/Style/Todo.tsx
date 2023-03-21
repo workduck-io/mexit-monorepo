@@ -5,6 +5,7 @@ import { generateStyle } from '@workduck-io/mex-themes'
 import { fadeIn } from './fade'
 import { ScrollStyles } from './Helpers'
 import { Group, MainHeader } from './Layouts'
+import { Ellipsis } from './NodeSelect.style'
 import { MainFont } from './Search'
 import { TodoContainer, TodoText } from './Todo.style'
 import { Title } from './Typography'
@@ -39,11 +40,19 @@ export const StyledBoard = styled.div<{ sidebarExpanded?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.medium};
-  ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
 
   .react-kanban-board {
     max-width: ${({ sidebarExpanded }) => `calc(100vw - ${sidebarExpanded ? '420px' : '140px'})`};
     max-height: 80vh;
+    ${({ theme }) => ScrollStyles(theme.tokens.surfaces.s[0])}
+    
+    &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+    border-radius: ${({ theme }) => theme.borderRadius.small};
+    border: 2px solid rgba(0, 0, 0, 0);
+    background-clip: content-box;
+    min-width: 8px;
+    min-height: 8px;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -86,18 +95,20 @@ export const ViewSection = styled.div`
 `
 
 export const StyledTasksKanbanBlock = styled(StyledBoard)`
-  overflow: hidden;
-  max-height: 50vh;
+  overflow: hidden auto;
+  max-height: 40vh;
 
   .react-kanban-column {
-    width: calc(100% / 3.2) !important;
+    width: calc(100% / 3) !important;
   }
+
   .react-kanban-column > div > div,
   .react-kanban-column > div > div > div {
     width: 100%;
   }
   .react-kanban-board > div {
     width: 100%;
+    max-height: 35vh;
   }
 `
 
@@ -150,6 +161,12 @@ export const TaskViewTitle = styled.div`
   gap: ${({ theme }) => theme.spacing.small};
   font-size: 2rem;
   font-weight: bold;
+
+  width: 100%;
+  span {
+    max-width: 30ch;
+    ${Ellipsis}
+  }
 
   svg {
     color: ${({ theme }) => theme.tokens.colors.primary.default};

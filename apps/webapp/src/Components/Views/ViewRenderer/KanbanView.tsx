@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMediaQuery } from 'react-responsive'
+import { useMatch } from 'react-router-dom'
 
 import Board from '@asseinfo/react-kanban'
 import { useTheme } from 'styled-components'
@@ -8,7 +9,7 @@ import { useTheme } from 'styled-components'
 import { Entities, SearchResult } from '@workduck-io/mex-search'
 import { KeyBindingMap, tinykeys } from '@workduck-io/tinykeys'
 
-import { getNextStatus, getPrevStatus, mog, PriorityType, SEPARATOR } from '@mexit/core'
+import { mog, PriorityType, SEPARATOR } from '@mexit/core'
 import {
   Count,
   Group,
@@ -45,6 +46,7 @@ const KanbanView: React.FC<any> = (props) => {
   const sidebar = useLayoutStore((store) => store.sidebar)
   const isPreviewEditors = useMultipleEditors((store) => store.editors)
 
+  const atViews = useMatch(`${ROUTE_PATHS.view}/*`)
   const { getBlocksBoard, changeStatus, changePriority } = useTodoKanban()
 
   const { goTo } = useRouting()
@@ -110,25 +112,26 @@ const KanbanView: React.FC<any> = (props) => {
     }
   }
 
-  const handleCardMoveNext = () => {
-    if (!selectedCard) return
-    const todoFromCard = getTodoFromCard(selectedCard)
-    const newStatus = getNextStatus(todoFromCard.metadata.status)
-    changeStatus(todoFromCard, newStatus)
-  }
+  // const handleCardMoveNext = () => {
+  //   if (!selectedCard) return
 
-  const handleCardMovePrev = () => {
-    if (!selectedCard) return
-    const todoFromCard = getTodoFromCard(selectedCard)
-    const newStatus = getPrevStatus(todoFromCard.metadata.status)
-    // mog('new status', { newStatus, todoFromCard, selectedCard })
-    changeStatus(todoFromCard, newStatus)
-  }
+  //   const todoFromCard = getTodoFromCard(selectedCard)
+  //   const newStatus = getNextStatus(todoFromCard.metadata.status)
+  //   changeStatus(todoFromCard, newStatus)
+  // }
+
+  // const handleCardMovePrev = () => {
+  //   if (!selectedCard) return
+  //   const todoFromCard = getTodoFromCard(selectedCard)
+  //   const newStatus = getPrevStatus(todoFromCard.metadata.status)
+  //   // mog('new status', { newStatus, todoFromCard, selectedCard })
+  //   changeStatus(todoFromCard, newStatus)
+  // }
 
   const changeSelectedPriority = (priority: PriorityType) => {
     if (!selectedCard) return
-    const todoFromCard = getTodoFromCard(selectedCard)
-    changePriority(todoFromCard, priority)
+
+    handleCardMove(selectedCard, 'priority', priority)
   }
 
   const selectNewCard = (direction: 'up' | 'down' | 'left' | 'right') => {
@@ -231,8 +234,8 @@ const KanbanView: React.FC<any> = (props) => {
           if (selectedCard) setSelectedCard(null)
         },
 
-        'Shift+ArrowRight': () => handleCardMoveNext(),
-        'Shift+ArrowLeft': () => handleCardMovePrev(),
+        // 'Shift+ArrowRight': () => handleCardMoveNext(),
+        // 'Shift+ArrowLeft': () => handleCardMovePrev(),
 
         ArrowRight: () => selectNewCard('right'),
         ArrowLeft: () => selectNewCard('left'),
@@ -303,6 +306,7 @@ const KanbanView: React.FC<any> = (props) => {
         <Board
           renderColumnHeader={ColumnHeader}
           disableColumnDrag
+          disableCardDrag={!atViews}
           onCardDragEnd={handleCardMove}
           renderCard={RenderCard}
         >

@@ -9,7 +9,7 @@ import { nanoid } from 'nanoid'
 import generateName from 'project-name-generator'
 
 import { Button, IconButton, Infobox, PrimaryButton } from '@workduck-io/mex-components'
-import { SearchResult } from '@workduck-io/mex-search'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
 import {
   batchArray,
@@ -91,7 +91,7 @@ const Snippets = () => {
 
   const onSearch = async (newSearchTerm: string): Promise<Partial<SearchResult>[]> => {
     const query = generateSearchQuery(newSearchTerm)
-    const res = await queryIndexWithRanking(['template', 'snippet', 'prompt'], query)
+    const res = await queryIndexWithRanking(Indexes.SNIPPET, query)
 
     mog('SEARCH', { query, res })
 

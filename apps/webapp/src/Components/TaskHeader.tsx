@@ -96,7 +96,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const handleCloneView = () => {
     const { id, filters, ...properties } = view
-
+    console.log('cloning')
     openTaskViewModal({
       cloneViewId: view?.id,
       filters,
@@ -127,7 +127,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
           <TaskViewHeaderWrapper>
             <TaskViewTitle>
               <Icon icon={stackLine} />
-              {view?.title}
+              <span>{view?.title}</span>
               {isCurrentViewChanged && !isDefault && '*'}
             </TaskViewTitle>
             <TaskViewControls>
