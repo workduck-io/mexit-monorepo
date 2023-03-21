@@ -4,7 +4,7 @@ import { uniq } from 'lodash'
 import styled from 'styled-components'
 import shallow from 'zustand/shallow'
 
-import { defaultContent, ILink, useMetadataStore } from '@mexit/core'
+import { defaultContent, ILink, useMetadataStore, ViewType } from '@mexit/core'
 import {
   Content,
   Group,
@@ -16,8 +16,7 @@ import {
   Results,
   ResultTitle,
   SearchPreviewWrapper,
-  Title,
-  ViewType
+  Title
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'

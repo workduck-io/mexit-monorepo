@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
 import arrowLeftLine from '@iconify/icons-ri/arrow-left-line'
-import { getPlateEditorRef } from '@udecode/plate'
+import { ELEMENT_DEFAULT, ELEMENT_PARAGRAPH, getPlateEditorRef } from '@udecode/plate'
 import { useTheme } from 'styled-components'
 
 import { DisplayShortcut, IconButton } from '@workduck-io/mex-components'
+import { Indexes } from '@workduck-io/mex-search'
 
+import { generateTempId, mog } from '@mexit/core'
 import {
   ActionTitle,
   ComboboxItem,
@@ -16,7 +18,8 @@ import {
   ItemsContainer,
   MexIcon,
   ShortcutText,
-  StyledComboHeader
+  StyledComboHeader,
+  useQuery
 } from '@mexit/shared'
 
 import { PrimaryText } from '../../../Components/EditorInfobar/BlockInfobar'
@@ -38,6 +41,7 @@ type BlockComboProps = {
 const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => {
   const [index, setIndex] = useState<number>(0)
   const [blocks, setBlocks] = useState<Array<any>>(undefined)
+  const { generateSearchQuery } = useQuery()
 
   const blockRange = useComboboxStore((store) => store.blockRange)
   const setPreview = useComboboxStore((store) => store.setPreview)
@@ -60,28 +64,18 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
     const trimmedNodeText = textAfterTrigger?.trim()
 
     if (nodeId && trimmedNodeText) {
-      queryIndexByNodeId('node', nodeId, trimmedSearch).then((res) => {
-        const topFiveBlocks = res
-          ?.filter((block) => block.blockId !== 'undefined')
-          ?.map((block) => {
-            const { matchField, ...restBlock } = block
-            return restBlock
-          })
-          ?.slice(0, 5)
-
+      const query = generateSearchQuery(trimmedSearch)
+      queryIndexByNodeId(Indexes.MAIN, nodeId, query).then((res) => {
+        const topFiveBlocks = res?.slice(0, 5)
+        mog('BLOCKS', { topFiveBlocks, res })
         setBlocks(topFiveBlocks)
         setIndex(0)
-        // setBlocks(res)
       })
     } else {
-      queryIndex(['node'], trimmedSearch).then((res) => {
-        const topFiveBlocks = res
-          ?.filter((block) => block.blockId !== 'undefined')
-          ?.map((block) => {
-            const { matchField, ...restBlock } = block
-            return restBlock
-          })
-          ?.slice(0, 5)
+      const query = generateSearchQuery(trimmedSearch)
+
+      queryIndex(Indexes.MAIN, query).then((res) => {
+        const topFiveBlocks = res?.slice(0, 5)
 
         setBlocks(topFiveBlocks)
         setIndex(0)
@@ -132,7 +126,7 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
   const onClickSetActiveBlock = (blocks: Array<any>, index: number) => {
     if (blocks && index <= blocks.length - 1) {
       const block = blocks[index]
-      const content = block.data
+      const content = [{ children: [{ text: block.text }], id: generateTempId(), type: ELEMENT_PARAGRAPH }]
       setActiveBlock({
         ...block,
         content
@@ -176,9 +170,9 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
       {blocks?.map((block, i) => {
         const lastItem = i > 0 ? blocks[i - 1] : undefined
         return (
-          <span key={`${block.blockId}-${String(i)}`}>
-            {block.id !== lastItem?.id && !textAfterTrigger && (
-              <ActionTitle>{getPathFromNodeIdHookless(block.id)}</ActionTitle>
+          <span key={`${block.id}-${String(i)}`}>
+            {block.parent !== lastItem?.id && !textAfterTrigger && (
+              <ActionTitle>{getPathFromNodeIdHookless(block.parent)}</ActionTitle>
             )}
             <ComboboxItem
               onMouseEnter={() => setIndex(i)}
@@ -190,7 +184,7 @@ const BlockCombo = ({ nodeId, onSelect, isNew, shortcuts }: BlockComboProps) => 
                 // }
               }}
             >
-              <MexIcon fontSize={20} icon={BlockIcons[block?.data?.type]} color={theme.colors.primary} />
+              <MexIcon fontSize={20} icon={BlockIcons[ELEMENT_DEFAULT]} color={theme.colors.primary} />
               {block.text && <ComboboxItemTitle>{block.text}</ComboboxItemTitle>}
             </ComboboxItem>
           </span>

@@ -330,7 +330,7 @@ const Screenshot = () => {
           { children: [{ text: '' }], type: 'img', url: imageURL },
           { text: '\n' },
           { text: '[' },
-          { type: 'a', url: imageURL, children: [{ text: 'Ref' }] },
+          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] },
           { text: ' ]' }
         ]
         appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })

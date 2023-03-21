@@ -1,20 +1,22 @@
-import { idxKey, ILink, PersistentData, SearchRepExtra, Snippets } from '@mexit/core'
+import { Indexes, ISearchQuery, IUpdateDoc } from '@workduck-io/mex-search'
+
+import { ILink, PersistentData, Snippets } from '@mexit/core'
 
 import { childIframe } from './iframeConnector'
 
-export const wSearchIndex = async (key: idxKey | idxKey[], query: string, tags?: Array<string>) => {
+export const wSearchIndex = async (key: Indexes, query: ISearchQuery, tags?: Array<string>) => {
   if (childIframe) {
     return childIframe.searchIndex(key, query, tags)
   }
 }
 
-export const wSearchIndexByNodeId = async (key: idxKey | idxKey[], nodeID: string, query: string) => {
+export const wSearchIndexByNodeId = async (key: Indexes, nodeID: string, query: string) => {
   if (childIframe) {
     return childIframe.searchIndexByNodeId(key, nodeID, query)
   }
 }
 
-export const wSearchIndexWithRanking = async (key: idxKey | idxKey[], query: string) => {
+export const wSearchIndexWithRanking = async (key: Indexes, query: ISearchQuery) => {
   if (childIframe) {
     return childIframe.searchIndexWithRanking(key, query)
   }
@@ -52,30 +54,15 @@ export const startRequestsWorkerService = async () => {
   if (childIframe) return childIframe.startRequestsWorkerService()
 }
 
-export const wAddDoc = async (
-  key: idxKey,
-  nodeID: string,
-  contents: any[],
-  title: string,
-  tags?: Array<string>,
-  extra?: SearchRepExtra
-) => {
-  if (childIframe) return childIframe.addDoc(key, nodeID, contents, title, tags, extra)
+export const wAddDoc = async (doc: IUpdateDoc) => {
+  if (childIframe) return childIframe.addDoc(doc)
 }
 
-export const wUpdateDoc = async (
-  key: idxKey,
-  nodeID: string,
-  contents: any[],
-  title: string,
-  tags?: Array<string>,
-  extra?: SearchRepExtra
-) => {
-  // mog('UpdateDocChildIFrame: ', { childIframe })
-  if (childIframe) return childIframe.updateDoc(key, nodeID, contents, title, tags, extra)
+export const wUpdateDoc = async (doc: IUpdateDoc) => {
+  if (childIframe) return childIframe.updateDoc(doc)
 }
 
-export const wRemoveDoc = async (key: idxKey, id: string) => {
+export const wRemoveDoc = async (key: Indexes, id: string) => {
   if (childIframe) return childIframe.removeDoc(key, id)
 }
 

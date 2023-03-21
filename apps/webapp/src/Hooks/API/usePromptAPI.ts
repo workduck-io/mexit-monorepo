@@ -1,3 +1,5 @@
+import { Indexes } from '@workduck-io/mex-search'
+
 import { API, mog, PromptDataType } from '@mexit/core'
 
 import { usePromptStore } from '../../Stores/usePromptStore'
@@ -19,12 +21,12 @@ export const usePromptAPI = () => {
       setPrompts(promptsData)
       Object.values(promptsData).forEach((prompts) =>
         prompts.forEach((prompt) =>
-          updateDoc(
-            'prompt',
-            prompt.entityId,
-            [{ type: 'p', id: 'PROMPT', children: [{ text: prompt.description }] }],
-            prompt.title
-          ).then((s) => mog(`${prompt.title} doc updated!`))
+          updateDoc({
+            indexKey: Indexes.SNIPPET,
+            id: prompt.entityId,
+            contents: [{ type: 'p', id: 'PROMPT', children: [{ text: prompt.description }] }],
+            title: prompt.title
+          }).then((s) => mog(`${prompt.title} doc updated!`))
         )
       )
     }

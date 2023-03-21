@@ -32,7 +32,11 @@ export const useUpdater = () => {
         updateNodeTodos(noteId, todos)
 
         // * Update Search index
-        await updateDocument('node', noteId, note.content, metadatas[noteId]?.title)
+        await updateDocument({
+          id: noteId,
+          contents: note.content,
+          title: metadatas[noteId]?.title
+        })
       }
     })
   }
@@ -46,7 +50,11 @@ export const useUpdater = () => {
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
-      updateDocument('node', noteId, content, metadata?.title)
+      await updateDocument({
+        id: noteId,
+        contents: content,
+        title: metadata?.title
+      })
     }
   }
 

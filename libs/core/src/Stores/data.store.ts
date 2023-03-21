@@ -2,7 +2,7 @@ import { produce } from 'immer'
 
 import { defaultCommands } from '../Data/defaultCommands'
 import { CachedILink, ILink, Tag } from '../Types/Editor'
-import { MIcon, StoreIdentifier } from '../Types/Store'
+import { MIcon, SingleNamespace, StoreIdentifier } from '../Types/Store'
 import { Settify, typeInvert, withoutContinuousDelimiter } from '../Utils/helpers'
 import { generateNodeUID, SEPARATOR } from '../Utils/idGenerator'
 import { removeLink } from '../Utils/links'
@@ -16,17 +16,17 @@ export const generateTag = (item: string): Tag => ({
 })
 
 const getInitData = () => ({
-  tags: [],
-  ilinks: [],
+  tags: [] as Tag[],
+  ilinks: [] as ILink[],
   linkCache: {} as any,
   tagsCache: {} as any,
   baseNodeId: '__loading__',
   bookmarks: [],
   archive: [],
   sharedNodes: [],
-  spaces: [],
+  spaces: [] as SingleNamespace[],
 
-  namespaces: [],
+  namespaces: [] as SingleNamespace[],
   slashCommands: { default: defaultCommands, internal: [] }
 })
 
@@ -177,17 +177,10 @@ export const dataStoreConfig = (set, get) => ({
     })
   },
 
-  checkValidILink: ({
-    notePath,
-    openedNotePath,
-    showAlert,
-    namespace
-  }: {
-    notePath
-    openedNotePath?
-    showAlert?
-    namespace?
-  }) => {
+  checkValidILink: (ilink: { notePath: string; openedNotePath?: string; showAlert?: boolean; namespace?: string }) => {
+    let notePath = ilink.notePath
+    const { openedNotePath, showAlert, namespace } = ilink
+
     const { key, isChild } = withoutContinuousDelimiter(notePath)
 
     // * If `notePath` starts with '.', than create note under 'opened note'.
@@ -238,7 +231,6 @@ export const dataStoreConfig = (set, get) => ({
    * Should not add duplicate links
    */
   addInternalLink: (ilink, nodeid) => {
-    mog('Creating links', { ilink, nodeid })
     // No self links will be added
     if (nodeid === ilink.nodeid) return
 

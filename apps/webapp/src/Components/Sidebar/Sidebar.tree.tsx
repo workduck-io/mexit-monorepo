@@ -6,11 +6,10 @@ import { Icon } from '@iconify/react'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
-import { MexIcon } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import { defaultContent, fuzzySearch, ILink } from '@mexit/core'
-import { Input, isOnEditableElement, SidebarListFilter } from '@mexit/shared'
+import { Input, isOnEditableElement, MexIcon, SidebarListFilter } from '@mexit/shared'
 
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { getTitleFromPath } from '../../Hooks/useLinks'
@@ -183,7 +182,7 @@ export const MexTree = ({ items, filterText, spaceId, publicILink, readOnly }: S
               onChange={debounce((e) => onSearchChange(e), 250)}
               ref={inputRef}
             />
-            <MexIcon noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.tokens.text.fade} />
+            <MexIcon $noHover fontSize="1.2rem" icon="bi:slash-square-fill" color={theme.tokens.text.fade} />
           </SidebarListFilter>
           <SpaceList>
             <Tree

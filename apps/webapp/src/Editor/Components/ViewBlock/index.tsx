@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
+import filter2Line from '@iconify-icons/ri/filter-2-line'
 import { useSelected } from 'slate-react'
+import { useTheme } from 'styled-components'
 
 import {
+  GenericFlex,
   Group,
+  MexIcon,
   RootElement,
   SearchFilterListSuggested,
   StyledTasksKanbanBlock,
@@ -13,34 +17,32 @@ import {
 } from '@mexit/shared'
 
 import { DisplayFilter } from '../../../Components/Filters/Filter'
-import { RenderGlobalJoin } from '../../../Components/Filters/GlobalJoinFilterMenu'
+import { DisplayGroupBy } from '../../../Components/Filters/GroupBy'
 import { RenderSort } from '../../../Components/Filters/SortMenu'
+import { ViewContainer } from '../../../Components/Views'
+import { GroupHeader } from '../../../Components/Views/ViewBlockRenderer/BlockContainer'
+import { ContentBlockContainer } from '../../../Components/Views/ViewBlockRenderer/ContentBlock'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../../../Hooks/useTaskViews'
-import { Chip, FlexBetween, InlineBlockText, InlineFlex, StyledInlineBlock } from '../../Styles/InlineBlock'
-
-import ViewRenderer from './ViewRenderer'
+import { useViews } from '../../../Hooks/useViews'
+import { useViewStore } from '../../../Stores/useViewStore'
+import { Chip, InlineBlockText, StyledViewBlock } from '../../Styles/InlineBlock'
 
 const ViewBlock = (props: any) => {
-  const { goTo } = useRouting()
   const viewid = props.element.value
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const { getView } = useTaskViews()
 
-  const [view, setView] = useState<View | undefined>(undefined)
+  const { goTo } = useRouting()
+  const theme = useTheme()
+  const { getView } = useViews()
 
-  useEffect(() => {
-    setView(getView(viewid))
-  }, [viewid])
+  const view = useMemo(() => getView(viewid), [viewid])
 
   const openView = (ev: any) => {
     ev.preventDefault()
-    // loadSnippet(id)
     const views = useViewStore.getState().views
     const view = views.find((view) => view.id === viewid)
+
     if (view) {
-      setCurrentView(view)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
   }
 
@@ -48,37 +50,39 @@ const ViewBlock = (props: any) => {
 
   return (
     <RootElement {...props.attributes}>
-      <div contentEditable={false}>
-        <StyledInlineBlock selected={selected} data-tour="mex-onboarding-inline-block">
-          <FlexBetween>
-            <InlineFlex>
+      <StyledViewBlock contentEditable={false} selected={selected} data-tour="mex-onboarding-inline-block">
+        <ContentBlockContainer>
+          <GroupHeader>
+            <Group>
               <Icon icon={stackLine} />
               <InlineBlockText>{view?.title ?? 'Embeded View'}</InlineBlockText>
-            </InlineFlex>
-            {/*
-              <Button onClick={refreshView}>Refresh View</Button>
-            */}
+            </Group>
             <Chip onClick={openView}>Open</Chip>
-          </FlexBetween>
+          </GroupHeader>
 
           <StyledViewBlockPreview>
-            <StyledTasksKanbanBlock>
-              {view?.filters.length > 0 && (
-                <SearchFilterListSuggested>
-                  <Group>
-                    {view?.filters.map((f) => (
-                      <DisplayFilter key={f.id} filter={f} />
+            {view?.filters.length > 0 && (
+              <GenericFlex>
+                <MexIcon icon={filter2Line} color={theme.tokens.colors.primary.default} />
+                <GroupHeader>
+                  <SearchFilterListSuggested>
+                    {view?.filters?.map((f, i) => (
+                      <DisplayFilter key={f.id} filter={f} hideJoin={i === view?.filters?.length - 1} />
                     ))}
-                    <RenderGlobalJoin globalJoin={view?.globalJoin} />
-                  </Group>
-                  <RenderSort sortOrder={view.sortOrder} sortType={view.sortType} />
-                </SearchFilterListSuggested>
-              )}
-              <ViewRenderer view={view} viewId={viewid} setView={setView} />
+                  </SearchFilterListSuggested>
+                  <GenericFlex>
+                    <DisplayGroupBy />
+                    <RenderSort sortOrder={view.sortOrder} sortType={view.sortType} />
+                  </GenericFlex>
+                </GroupHeader>
+              </GenericFlex>
+            )}
+            <StyledTasksKanbanBlock>
+              {view && <ViewContainer viewId={viewid} withFilters={false} />}
             </StyledTasksKanbanBlock>
           </StyledViewBlockPreview>
-        </StyledInlineBlock>
-      </div>
+        </ContentBlockContainer>
+      </StyledViewBlock>
       {props.children}
     </RootElement>
   )

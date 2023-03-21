@@ -22,7 +22,8 @@ import {
   parseIframeUrl,
   parseVideoUrl,
   StyledElement,
-  withProps} from '@udecode/plate'
+  withProps
+} from '@udecode/plate'
 import { createHighlightPlugin } from '@udecode/plate-highlight'
 
 import { ELEMENT_ILINK, ELEMENT_TAG, ELEMENT_TODO_LI } from '@mexit/core'
@@ -37,7 +38,6 @@ import {
 import { MentionElement } from '../../../Editor/Components/Mentions/MentionElement'
 import { QuickLinkElement } from '../../../Editor/Components/QuickLink/QuickLinkElement'
 import TagElement from '../../../Editor/Components/Tags/TagElement'
-import { createBlockModifierPlugin } from '../../../Editor/Plugins/createBlockModifierPlugin'
 import { createILinkPlugin } from '../../../Editor/Plugins/createILinkPlugin'
 import { createInlineBlockPlugin } from '../../../Editor/Plugins/createInlineBlockPlugin'
 import { createMentionPlugin } from '../../../Editor/Plugins/createMentionsPlugin'
@@ -68,7 +68,6 @@ const generateTodoPlugins = (uploadImage?: UploadImageFn) => {
     createHighlightPlugin(), // highlight mark
     // createTodoListPlugin(),
     createNodeIdPlugin(optionsCreateNodeIdPlugin),
-    createBlockModifierPlugin(),
 
     // serialization / deseriailization
 

@@ -283,8 +283,6 @@ export const useURLFilters = () => {
 
     const filteredLinks = applyFilters(linksFromResults, currentFilters, linkFilterFunctions, globalJoin)
 
-    // mog('applyCurrentFilters', { results, linksFromResults, currentFilters, globalJoin, filteredLinks })
-
     return filteredLinks
   }
 

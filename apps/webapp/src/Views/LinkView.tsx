@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated } from '@mexit/core'
-import { MainHeader, Result, SearchContainer, Title, ViewType } from '@mexit/shared'
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, ViewType } from '@mexit/core'
+import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
@@ -47,16 +47,11 @@ const LinkView = () => {
     return links.sort(sortByCreated)
   }, [links])
 
-  // mog('Initial links', { initialLinks, links })
-
   const onSearch = async (newSearchTerm: string): Promise<Link[]> => {
     const res = fuzzySearchLinks(newSearchTerm, initialLinks)
-    // mog('new search is here', { newSearchTerm, res })
     if (!newSearchTerm && res?.length === 0) {
-      // mog('Inside', {})
       return initialLinks
     }
-    // mog('Got search results: ', { res })
     return res
   }
 
@@ -126,8 +121,6 @@ const LinkView = () => {
     )
   }
 
-  // mog('Rendering LinkView', { links, initialLinks })
-
   return (
     <SearchContainer>
       <MainHeader>
@@ -147,7 +140,6 @@ const LinkView = () => {
         onSearch={onSearch}
         // place="Search links"
         RenderItem={RenderItem}
-        filterResults={filterResults}
         filterActions={{
           filters,
           currentFilters,

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { API, AppInitStatus, mog, runBatch } from '@mexit/core'
+import { API, AppInitStatus, mog, runBatch, useLinkStore } from '@mexit/core'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
@@ -10,7 +10,7 @@ import { useHighlightStore } from '../Stores/useHighlightStore'
 import { usePromptStore } from '../Stores/usePromptStore'
 import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { useSnippetStore } from '../Stores/useSnippetStore'
-import { initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
+import { getSearchIndexInitState, initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'
 import { useApi } from './API/useNodeAPI'
@@ -71,7 +71,6 @@ export const useInitLoader = () => {
     try {
       await getAllNamespaces()
       await getAllSnippetsByWorkspace()
-      // await getNodesByWorkspace()
 
       // TODO: can and should be done by a worker
       initHighlightBlockMap(useDataStore.getState().ilinks, useContentStore.getState().contents)
@@ -89,6 +88,27 @@ export const useInitLoader = () => {
   useEffect(() => {
     API.setWorkspaceHeader(getWorkspaceId())
 
+    const startWorkers = async () => {
+      const searchIndexInitState = await getSearchIndexInitState()
+      const promises = [startRequestsWorkerService()]
+      if (!searchIndexInitState) {
+        const initData = {
+          ilinks: useDataStore.getState().ilinks,
+          archive: useDataStore.getState().archive,
+          sharedNodes: useDataStore.getState().sharedNodes,
+          snippets: useSnippetStore.getState().snippets,
+          links: useLinkStore.getState().links,
+          contents: useContentStore.getState().contents,
+          highlights: useHighlightStore.getState().highlights,
+          prompts: usePromptStore.getState().getAllPrompts()
+        }
+
+        promises.push(initSearchIndex(initData))
+      }
+
+      await Promise.allSettled(promises)
+    }
+
     if (
       initalizeApp !== AppInitStatus.START &&
       userPrefHydrated &&
@@ -96,18 +116,8 @@ export const useInitLoader = () => {
       dataStoreHydrated &&
       contentStoreHydrated
     ) {
-      const initData = {
-        ilinks: useDataStore.getState().ilinks,
-        archive: useDataStore.getState().archive,
-        sharedNodes: useDataStore.getState().sharedNodes,
-        snippets: useSnippetStore.getState().snippets,
-        contents: useContentStore.getState().contents,
-        prompts: usePromptStore.getState().getAllPrompts()
-      }
-
-      initSearchIndex(initData)
+      startWorkers()
         .then(async () => {
-          await startRequestsWorkerService()
           await updateCurrentUserPreferences()
 
           if (initalizeApp === AppInitStatus.RUNNING) {

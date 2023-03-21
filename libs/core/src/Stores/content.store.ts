@@ -10,6 +10,8 @@ const contentStoreConfig = (set, get) => ({
   contents: {},
   saved: false,
   setSaved: (saved) => set(() => ({ saved })),
+  docUpdated: false,
+  setDocUpdated: () => set(() => ({ docUpdated: !get().docUpdated })),
   setContents: (contents) => {
     const existingContents = get().contents
     set({ contents: { ...existingContents, ...contents } })

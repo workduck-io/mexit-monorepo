@@ -6,6 +6,8 @@ import { createPlateEditor, createPlateUI, serializeHtml } from '@udecode/plate'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import {
   convertToCopySnippet,
   defaultCopyConverter,
@@ -15,13 +17,22 @@ import {
   parseSnippet,
   Snippet
 } from '@mexit/core'
-import { CenteredColumn, getMIcon, Input, List, MexIcon, SidebarListFilter, SnippetCards } from '@mexit/shared'
+import {
+  CenteredColumn,
+  getMIcon,
+  Input,
+  List,
+  MexIcon,
+  SidebarListFilter,
+  SnippetCards,
+  useQuery
+} from '@mexit/shared'
 
 import { CopyTag } from '../../Editor/components/Tags/CopyTag'
 import { generateEditorPluginsWithComponents } from '../../Editor/plugins/index'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useSnippetStore } from '../../Stores/useSnippetStore'
-import { wSearchIndex } from '../../Sync/invokeOnWorker'
+import { wSearchIndexWithRanking } from '../../Sync/invokeOnWorker'
 import { copySnippetToClipboard, simulateOnChange, supportedDomains } from '../../Utils/pasteUtils'
 
 import SidebarSection from './SidebarSection'
@@ -37,6 +48,8 @@ export const SnippetsInfoBar = () => {
   const onSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearch(e.target.value)
   }
+
+  const { generateSearchQuery } = useQuery()
 
   const onInsertSnippet = async (snippetId: string) => {
     const snippet = getSnippet(snippetId)
@@ -99,14 +112,15 @@ export const SnippetsInfoBar = () => {
   }
 
   const onSearch = async (newSearchTerm: string) => {
-    const res = await wSearchIndex(['template', 'snippet'], newSearchTerm)
+    const query = generateSearchQuery(newSearchTerm)
+    const res = await wSearchIndexWithRanking(Indexes.SNIPPET, query)
 
     if (newSearchTerm === '' && res.length === 0) {
       setSearchedSnippets(snippets)
     } else {
       const searched = res
         .map((r) => {
-          const snippet = snippets.find((snippet) => snippet.id === r.id)
+          const snippet = snippets.find((snippet) => snippet.id === r.parent)
 
           return snippet
         })
@@ -124,7 +138,7 @@ export const SnippetsInfoBar = () => {
     if (search === '') {
       setSearchedSnippets(snippets)
     }
-  }, [search, snippets])
+  }, [search])
 
   const theme = useTheme()
 

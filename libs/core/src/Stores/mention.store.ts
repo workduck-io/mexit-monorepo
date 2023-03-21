@@ -6,8 +6,8 @@ import { mog } from '../Utils/mog'
 import { createStore } from '../Utils/storeCreator'
 
 export const mentionStoreConfig = (set, get) => ({
-  invitedUsers: [],
-  mentionable: [],
+  invitedUsers: [] as InvitedUser[],
+  mentionable: [] as Mentionable[],
   reset: () => set({ invitedUsers: [], mentionable: [] }),
   addMentionable: (mentionable: Mentionable) => {
     const exists = get().mentionable.find((user) => user.email === mentionable.email)

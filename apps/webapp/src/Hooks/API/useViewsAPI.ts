@@ -1,29 +1,57 @@
-import { API, GET_REQUEST_MINIMUM_GAP_IN_MS, mog } from '@mexit/core'
+import { API, generateFilterId, GET_REQUEST_MINIMUM_GAP_IN_MS, mog, View } from '@mexit/core'
 
 import { useAuthStore } from '../../Stores/useAuth'
-import { useViewStore, View } from '../useTaskViews'
+import { useViewStore } from '../../Stores/useViewStore'
 
 export const useViewAPI = () => {
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const setViews = useViewStore((store) => store.setViews)
 
   const saveView = async (view: View) => {
+    const { id: entityId, filters, ...properties } = view
+
     const reqData = {
       workspaceId: getWorkspaceId(),
-      properties: {
-        title: view.title,
-        description: view.description,
-        globalJoin: view.globalJoin,
-        sortOrder: view.sortOrder,
-        sortType: view.sortType,
-        viewType: view.viewType
-      },
-      entityId: view.id,
-      filters: view.filters
+      properties,
+      entityId,
+      filters
     }
 
-    const resp = await API.view.create(reqData)
-    return resp
+    const res = await API.view.create(reqData)
+    return res
+  }
+
+  const transformView = (view: any) => {
+    const newFilters = []
+
+    view.filters.forEach((filter) => {
+      filter.values.forEach((val) => {
+        let value = val.value
+
+        if (filter.type === 'note') {
+          value = val.id.startsWith('filter_node') ? val.id.slice(12) : val.id
+        }
+
+        newFilters.push({
+          ...filter,
+          id: generateFilterId(),
+          values: [
+            {
+              ...val,
+              value
+            }
+          ]
+        })
+      })
+    })
+
+    return {
+      title: view.properties.title,
+      description: view.properties.description,
+      filters: newFilters,
+      id: view.entityId,
+      ...view.properties
+    }
   }
 
   /**
@@ -35,15 +63,7 @@ export const useViewAPI = () => {
       // mog('We fetched them view', { resp })
       const views = resp
         .map((item: any) => {
-          return item.entity === 'view'
-            ? ({
-                title: item.properties.title,
-                description: item.properties.description,
-                filters: item.filters,
-                id: item.entityId,
-                ...item.properties
-              } as View)
-            : undefined
+          return item.entity === 'view' ? transformView(item) : undefined
         })
         .filter((v: undefined | View) => !!v)
       try {

@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import {
   convertContentToRawText,
   DefaultMIcons,
@@ -91,14 +93,16 @@ export const useInitLoader = () => {
 
   const updateSnippetIndex = async (snippet) => {
     const tags = snippet?.template ? ['template'] : ['snippet']
-    const idxName = snippet?.template ? 'template' : 'snippet'
 
-    if (snippet?.template) {
-      await removeDocument('snippet', snippet.id)
-    } else {
-      await removeDocument('template', snippet.id)
-    }
-    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+    await updateDocument({
+      indexKey: Indexes.SNIPPET,
+      id: snippet.id,
+      contents: snippet.content,
+      title: snippet.title,
+      options: {
+        tags
+      }
+    })
   }
 
   const updateSlashCommands = (snippets: Snippet[]) => {
@@ -179,6 +183,8 @@ export const useInitLoader = () => {
       const initData = {
         ilinks: useDataStore.getState().ilinks,
         archive: useDataStore.getState().archive,
+        links: useLinkStore.getState().links,
+        highlights: useHighlightStore.getState().highlights,
         sharedNodes: useDataStore.getState().sharedNodes,
         snippets: useSnippetStore.getState().snippets,
         contents: useContentStore.getState().contents

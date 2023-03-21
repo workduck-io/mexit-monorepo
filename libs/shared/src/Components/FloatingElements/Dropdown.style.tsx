@@ -63,13 +63,15 @@ export const ItemLabel = styled.div`
   max-width: 12rem;
 `
 
-export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean }>`
+export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolean; noBackground?: boolean }>`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.tiny};
   background: none;
   border-radius: ${({ theme }) => theme.borderRadius.small};
   border: ${({ border, theme }) => (border ? `1px solid ${theme.tokens.surfaces.separator}` : 'none')};
+  transition: background 0.15s ease-in-out;
+  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
 
   :hover {
     cursor: pointer;
@@ -84,16 +86,24 @@ export const RootMenuWrapper = styled.button<{ border: boolean; noHover?: boolea
     }
   }
 
-  ${({ noHover }) =>
-    !noHover &&
+  ${({ theme, noBackground }) =>
+    noBackground
+      ? css`
+          background: none;
+        `
+      : css`
+          background: ${theme.tokens.surfaces.s[3]};
+        `}
+
+  ${({ noHover, theme }) =>
+    noHover &&
     css`
-      color: ${({ theme }) => theme.tokens.text.default};
-      padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+      color: ${theme.tokens.text.default};
 
       &.open,
       &:hover {
-        box-shadow: ${({ theme }) => theme.tokens.shadow.small};
-        background: ${({ theme }) => theme.tokens.surfaces.s[3]};
+        box-shadow: ${theme.tokens.shadow.small};
+        background: ${theme.tokens.surfaces.s[2]};
       }
     `}
 `

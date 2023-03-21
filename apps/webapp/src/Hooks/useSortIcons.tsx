@@ -1,4 +1,5 @@
-import { MIcon, SortOrder, SortType } from '@mexit/core'
+import { MIcon, SortOrder } from '@mexit/core'
+import { DefaultMIcons } from '@mexit/shared'
 
 export const getSortOrderIcon = (order: SortOrder): MIcon => {
   // mog('getTagFilterValueIcon', { join })
@@ -13,18 +14,25 @@ export const getSortOrderIcon = (order: SortOrder): MIcon => {
   }
 }
 
-export const getSortTypeIcon = (type: SortType): MIcon => {
+export const getBlockFieldIcon = (type: string): MIcon => {
   switch (type) {
     case 'status':
-      return { type: 'ICON', value: 'mex:task-progress' }
+      return DefaultMIcons.TASK
     case 'priority':
       return { type: 'ICON', value: 'ph:cell-signal-medium-fill' }
-    case 'updated':
+    case 'updatedAt':
       return { type: 'ICON', value: 'ri:refresh-line' }
-    case 'created':
+    case 'createdBy':
+    case 'updatedBy':
+      return DefaultMIcons.MENTION
+    case 'parent':
+      return DefaultMIcons.NOTE
+    case 'text':
+      return DefaultMIcons.TEXT
+    case 'createdAt':
       return { type: 'ICON', value: 'ri:add-circle-line' }
 
     default:
-      return { type: 'ICON', value: 'ri:ri:functions' }
+      return DefaultMIcons.ADD
   }
 }

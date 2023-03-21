@@ -4,6 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "dev": "nx dev webapp --force",
+    "devX": "nx dev extension --skip-nx-cache",
     "build": "nx build",
     "test": "nx test",
     "prepare": "husky install"
@@ -18,6 +20,7 @@
     "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
+    "@workduck-io/mex-search": "^0.0.3",
     "buffer": "^6.0.3",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",

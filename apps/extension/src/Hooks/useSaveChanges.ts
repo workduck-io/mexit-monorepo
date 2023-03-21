@@ -127,7 +127,7 @@ export function useSaveChanges() {
         setContent(nodeid, content)
 
         const title = !bulkCreateRequest ? message.title : message.node.title
-        wUpdateDoc('node', nodeid, content, title)
+        wUpdateDoc({ id: nodeid, contents: content, title })
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
         dispatchAfterSave({ nodeid, content, metadata, highlight, blockHighlightMap }, saveAndExit, notification)
@@ -274,7 +274,11 @@ export function useSaveChanges() {
 
         appendContent(node.nodeid, content)
         const title = !bulkCreateRequest ? message.title : message.node.title
-        wUpdateDoc('node', nodeid, content, title)
+        wUpdateDoc({
+          id: node.nodeid,
+          contents: content,
+          title
+        })
 
         if (notification) {
           toast.success('Saved to Cloud')

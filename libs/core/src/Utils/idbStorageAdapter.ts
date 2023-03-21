@@ -1,4 +1,4 @@
-import { del,get, set } from 'idb-keyval'
+import { del, get, set } from 'idb-keyval'
 
 const IDBStorage = {
   getItem: async (name: string): Promise<string | null> => {

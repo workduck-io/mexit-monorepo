@@ -66,7 +66,6 @@ export const MenuItem = forwardRef<
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
 >(({ label, disabled, count, color, icon, multiSelect, selected, ...props }, ref) => {
-  // mog('MenuItem', { label, disabled, count, icon, multiSelect, selected, props })
   return (
     <MenuItemWrapper {...props} ref={ref} role="menuitem" disabled={disabled}>
       <FilterMenuDiv>
@@ -114,6 +113,7 @@ interface Props {
   multiSelect?: boolean
 
   noHover?: boolean
+  noBackground?: boolean
 
   onMouseEnter?: (e: any) => void
   onMouseLeave?: (e: any) => void

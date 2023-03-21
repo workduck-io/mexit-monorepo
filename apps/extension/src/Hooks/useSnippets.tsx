@@ -1,5 +1,7 @@
 import { toast } from 'react-hot-toast'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import {
   convertContentToRawText,
   DefaultMIcons,
@@ -66,7 +68,12 @@ export const useSnippets = () => {
         const metadata = extractMetadata(message.metadata, { icon: DefaultMIcons.SNIPPET })
 
         addMetadata('snippets', { [message.id]: metadata })
-        wUpdateDoc(idxName, message.id, request.data.content, message.title)
+        wUpdateDoc({
+          indexKey: Indexes.SNIPPET,
+          id: message.id,
+          contents: request.data.content,
+          title: message.title
+        })
 
         if (notify) {
           toast.success('Saved to Cloud')

@@ -1,3 +1,5 @@
+import { Indexes } from '@workduck-io/mex-search'
+
 import { getAllParentIds, ILink, isMatch, mog } from '@mexit/core'
 
 import { useDataStore } from '../Stores/useDataStore'
@@ -89,8 +91,8 @@ export const useDelete = () => {
         const { path, nodeid } = item
         const content = getContent(nodeid)
 
-        await removeDocument('node', nodeid)
-        await updateDocument('archive', nodeid, content.content, path)
+        await removeDocument(Indexes.MAIN, nodeid)
+        await updateDocument({ indexKey: Indexes.ARCHIVE, id: nodeid, contents: content.content, title: path })
       })
 
       mog('Delete', { archivedNodes, newIlinks, newHistory, newRecents })

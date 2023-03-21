@@ -39,6 +39,7 @@ const PrioritySelect = ({ readOnly, isVisible, value, onPriorityChange, withLabe
   return (
     <TodoActionWrapper>
       <Menu
+        noHover
         onMouseEnter={() => setSelected(true)}
         onMouseLeave={() => setSelected(false)}
         values={

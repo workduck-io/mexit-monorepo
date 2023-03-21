@@ -9,6 +9,7 @@ import { nanoid } from 'nanoid'
 import generateName from 'project-name-generator'
 
 import { Button, IconButton, Infobox, PrimaryButton } from '@workduck-io/mex-components'
+import { Indexes, SearchResult } from '@workduck-io/mex-search'
 
 import {
   batchArray,
@@ -16,9 +17,9 @@ import {
   convertContentToRawText,
   DRAFT_NODE,
   generateSnippetId,
-  GenericSearchResult,
   mog,
-  SNIPPET_PREFIX
+  SNIPPET_PREFIX,
+  ViewType
 } from '@mexit/core'
 import {
   DefaultMIcons,
@@ -38,7 +39,7 @@ import {
   SnippetsSearchContainer,
   SplitSearchPreviewWrapper,
   Title,
-  ViewType
+  useQuery
 } from '@mexit/shared'
 
 import Plateless from '../Components/Editor/Plateless'
@@ -66,21 +67,20 @@ const Snippets = () => {
 
   const loadSnippet = useSnippetStore((store) => store.loadSnippet)
   const getPrompt = usePromptStore((s) => s.getPrompt)
-  const { queryIndex } = useSearch()
+  const { queryIndexWithRanking } = useSearch()
+  const { generateSearchQuery } = useQuery()
   const { goTo } = useRouting()
   const { deleteAllVersionOfSnippet } = useApi()
   const { allPrompts } = usePrompts()
 
-  const initialItems: GenericSearchResult[] = useMemo(
+  const initialItems: Partial<SearchResult>[] = useMemo(
     () => [
       ...Object.values(snippets).map((snippet) => ({
-        id: snippet.id,
-        title: snippet.title,
+        parent: snippet.id,
         text: convertContentToRawText(snippet.content)
       })),
       ...allPrompts.map((prompt) => ({
-        id: prompt.entityId,
-        title: prompt.title,
+        parent: prompt.entityId,
         text: prompt.description
       }))
     ],
@@ -89,8 +89,11 @@ const Snippets = () => {
 
   const randId = useMemo(() => nanoid(), [])
 
-  const onSearch = async (newSearchTerm: string): Promise<GenericSearchResult[]> => {
-    const res = await queryIndex(['template', 'snippet', 'prompt'], newSearchTerm)
+  const onSearch = async (newSearchTerm: string): Promise<Partial<SearchResult>[]> => {
+    const query = generateSearchQuery(newSearchTerm)
+    const res = await queryIndexWithRanking(Indexes.SNIPPET, query)
+
+    mog('SEARCH', { query, res })
 
     if (!newSearchTerm && res?.length === 0) {
       return initialItems
@@ -157,12 +160,13 @@ const Snippets = () => {
   }
 
   // console.log({ result })
-  const onSelect = (item: GenericSearchResult, e?: React.MouseEvent) => {
+  const onSelect = (item: Partial<SearchResult>, e?: React.MouseEvent) => {
     if (e) {
       return
     }
-    const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
-    handleClick(item.id, isSnippet)
+    mog('SELECTED ITEM', { item })
+    const isSnippet = item.parent?.startsWith(SNIPPET_PREFIX)
+    handleClick(item.parent, isSnippet)
   }
 
   const handleClick = (id: string, isSnippet = true) => {
@@ -177,14 +181,14 @@ const Snippets = () => {
   // Forwarding ref to focus on the selected result
   const BaseItem = ({ item, splitOptions, ...props }: RenderItemProps<any>, ref: React.Ref<HTMLDivElement>) => {
     const descriptions = useDescriptionStore((store) => store.descriptions)
-    const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
+    const isSnippet = item.parent?.startsWith(SNIPPET_PREFIX)
 
-    const snippet = getSnippet(item.id)
-    const prompt = getPrompt(item.id)
+    const snippet = getSnippet(item.parent)
+    const prompt = getPrompt(item.parent)
     const title = isSnippet ? snippet?.title : prompt?.title
 
     const icon = isSnippet ? (snippet?.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
-    const id = `${item.id}_ResultFor_SearchSnippet_${randId}`
+    const id = `${item.parent}_ResultFor_SearchSnippet_${randId}`
 
     if (isSnippet && !snippet) return null
 
@@ -192,7 +196,7 @@ const Snippets = () => {
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        <Result {...props} key={id} ref={ref} onClick={() => handleClick(item.id, isSnippet)}>
+        <Result {...props} key={id} ref={ref} onClick={() => handleClick(item.parent, isSnippet)}>
           <ResultHeader $paddingSize="small">
             <Group>
               <IconDisplay icon={icon} size={20} />
@@ -207,14 +211,14 @@ const Snippets = () => {
                 onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  if (isSnippet) onDeleteSnippet(item.id)
+                  if (isSnippet) onDeleteSnippet(item.parent)
                 }}
               />
             )}
           </ResultHeader>
-          <SearchPreviewWrapper active={item.matchField?.includes('text')} padding>
+          <SearchPreviewWrapper padding>
             {isSnippet ? (
-              <Plateless content={descriptions?.[item.id]?.truncatedContent} multiline />
+              <Plateless content={descriptions?.[item.parent]?.truncatedContent} multiline />
             ) : (
               <PreviewDescription>{capitalize(item.text)}</PreviewDescription>
             )}
@@ -224,11 +228,11 @@ const Snippets = () => {
     } else if (props.view === ViewType.List) {
       return (
         <Result {...props} key={id} ref={ref}>
-          <ResultRow active={item.matchField?.includes('title')} selected={props.selected}>
+          <ResultRow selected={props.selected}>
             <IconDisplay icon={icon} size={20} />
-            <ResultMain onClick={() => onSelect({ id: item.id, title: title }, isSnippet)}>
+            <ResultMain onClick={() => onSelect({ parent: item.parent }, isSnippet)}>
               <ResultTitle>{title}</ResultTitle>
-              <ResultDesc> {isSnippet ? descriptions?.[item.id]?.rawText : capitalize(item.text)}</ResultDesc>
+              <ResultDesc> {isSnippet ? descriptions?.[item.parent]?.rawText : capitalize(item.text)}</ResultDesc>
             </ResultMain>
             <IconButton
               size={20}
@@ -237,7 +241,7 @@ const Snippets = () => {
               disabled={!isSnippet}
               onClick={(ev) => {
                 ev.stopPropagation()
-                if (isSnippet) onDeleteSnippet(item.id)
+                if (isSnippet) onDeleteSnippet(item.parent)
               }}
             />
           </ResultRow>
@@ -250,18 +254,18 @@ const Snippets = () => {
 
   const RenderItem = React.forwardRef(BaseItem)
 
-  const RenderPreview = ({ item }: RenderPreviewProps<GenericSearchResult>) => {
+  const RenderPreview = ({ item }: RenderPreviewProps<SearchResult>) => {
     if (item) {
-      const isSnippet = item.id?.startsWith(SNIPPET_PREFIX)
+      const isSnippet = item.parent?.startsWith(SNIPPET_PREFIX)
 
-      const snip = getSnippet(item.id)
-      const prompt = getPrompt(item.id)
+      const snip = getSnippet(item.parent)
+      const prompt = getPrompt(item.parent)
       const icon = isSnippet ? (snip.template ? DefaultMIcons.TEMPLATE : DefaultMIcons.SNIPPET) : DefaultMIcons.PROMPT
 
       if (snip && isSnippet)
         return (
-          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
-            <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
+          <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.parent}_${randId}`}>
+            <Title onMouseUp={(e) => onDoubleClick(e, item.parent, snip?.title)}>
               <IconDisplay icon={icon} size={24} />
               <span className="title">{snip.title}</span>
               {snip?.template && (
@@ -273,9 +277,9 @@ const Snippets = () => {
             </Title>
             <EditorPreviewRenderer
               readOnly
-              onDoubleClick={(e) => onDoubleClick(e, item.id, item.title)}
+              onDoubleClick={(e) => onDoubleClick(e, item.parent, snip.title)}
               content={snip.content}
-              editorId={`${item.id}_Snippet_Preview_Editor`}
+              editorId={`${item.parent}_Snippet_Preview_Editor`}
             />
           </SplitSearchPreviewWrapper>
         )
@@ -283,9 +287,9 @@ const Snippets = () => {
       if (!isSnippet && prompt) {
         return (
           <SplitSearchPreviewWrapper id={`splitSnippetSearchPreview_for_${item.id}_${randId}`}>
-            <Title onMouseUp={(e) => onDoubleClick(e, item.id, item.title)}>
+            <Title onMouseUp={(e) => onDoubleClick(e, item.parent, snip.title)}>
               <IconDisplay icon={icon} size={24} />
-              <span className="title">{item.title}</span>
+              <span className="title">{snip.title}</span>
             </Title>
           </SplitSearchPreviewWrapper>
         )
@@ -298,10 +302,8 @@ const Snippets = () => {
     async function getInitialSnippets() {
       // language
       const snippets = getSnippets()
-      const unfetchedSnippets = Object.values(snippets).filter((snippet) => snippet.content.length === 0)
+      const unfetchedSnippets = Object.values(snippets).filter((snippet) => snippet?.content?.length === 0)
       const ids = batchArray(unfetchedSnippets, 10)
-
-      mog('SnippetsUseEffect', { snippets, unfetchedSnippets })
 
       if (ids && ids.length > 0) {
         const res = await runBatchWorker(WorkerRequestType.GET_SNIPPETS, 6, ids)
@@ -338,9 +340,9 @@ const Snippets = () => {
       <SearchView
         id={`searchSnippet_${randId}`}
         initialItems={initialItems}
-        getItemKey={(i) => i.id}
+        getItemKey={(i) => i.parent}
         onSelect={onSelect}
-        onDelete={(i) => onDeleteSnippet(i.id)}
+        onDelete={(i) => onDeleteSnippet(i.parent)}
         onEscapeExit={onEscapeExit}
         onSearch={onSearch}
         options={{ view: ViewType.Card }}

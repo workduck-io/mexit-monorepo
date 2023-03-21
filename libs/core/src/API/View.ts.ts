@@ -9,6 +9,7 @@ export class ViewAPI {
   private versionHeaders = {
     'mex-api-ver': 'v2'
   }
+
   constructor(client: KYClient) {
     this.client = client
   }

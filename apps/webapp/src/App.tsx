@@ -55,7 +55,7 @@ const App = () => {
       setVersion(packageJsonVersion)
       if (!(persistedVersion && compareVersions(persistedVersion, FORCE_LOGOUT_VERSION) >= 0)) {
         await forceLogout()
-        // Needed because nothing sets version store after force logout; DO NOT REMOVE
+        // Needed because nothing sets version store after force logout; DO NOT REMOVE❗️
         setVersion(packageJsonVersion)
       }
     }

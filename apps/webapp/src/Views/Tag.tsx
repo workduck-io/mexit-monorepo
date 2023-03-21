@@ -5,7 +5,7 @@ import { useTransition } from 'react-spring'
 import { debounce } from 'lodash'
 import styled, { css } from 'styled-components'
 
-import { fuzzySearch } from '@mexit/core'
+import { fuzzySearch, ViewType } from '@mexit/core'
 import {
   Group,
   HoverSubtleGlow,
@@ -15,8 +15,7 @@ import {
   ResultHeader,
   Results,
   ResultTitle,
-  SearchPreviewWrapper,
-  ViewType
+  SearchPreviewWrapper
 } from '@mexit/shared'
 
 import NamespaceTag from '../Components/NamespaceTag'

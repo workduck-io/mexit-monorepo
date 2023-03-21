@@ -106,6 +106,7 @@ export const useNodeShareAPI = () => {
             rawResponse.forEach((node) => {
               const content = deserializeContent(node.data)
               const metadata = extractMetadata(node, { icon: DefaultMIcons.SHARED_NOTE })
+              mog('Updating Shared Node', { node, content, metadata })
               updateFromContent(node.id, content, metadata)
             })
           })

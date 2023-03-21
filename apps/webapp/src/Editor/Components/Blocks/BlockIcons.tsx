@@ -1,3 +1,4 @@
+import imageIcon from '@iconify/icons-bx/image'
 import globalLine from '@iconify/icons-ri/global-line'
 import headingIcon from '@iconify/icons-ri/heading'
 import listOrdered from '@iconify/icons-ri/list-ordered'
@@ -18,7 +19,10 @@ import {
   ELEMENT_OL,
   ELEMENT_TABLE,
   ELEMENT_TODO_LI,
-  ELEMENT_UL} from '@udecode/plate'
+  ELEMENT_UL
+} from '@udecode/plate'
+
+import { Entities } from '@workduck-io/mex-search/src/utils'
 
 export const BlockIcons: Record<string, IconifyIcon> = {
   [ELEMENT_TODO_LI]: taskLine,
@@ -33,4 +37,10 @@ export const BlockIcons: Record<string, IconifyIcon> = {
   [ELEMENT_OL]: listOrdered,
   [ELEMENT_DEFAULT]: text,
   [ELEMENT_TABLE]: table
+}
+
+export const SearchBlockIcons: Partial<Record<Entities, IconifyIcon>> = {
+  [Entities.CONTENT_BLOCK]: text,
+  [Entities.TASK]: taskLine,
+  [Entities.IMAGE]: imageIcon
 }

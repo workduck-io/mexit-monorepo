@@ -5,26 +5,37 @@ import Modal from 'react-modal'
 import create from 'zustand'
 
 import { Button, LoadingButton } from '@workduck-io/mex-components'
+import { Entities } from '@workduck-io/mex-search'
 
-import { Filter, generateTaskViewId, getPathNum, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
-import { Label, SearchFilterListCurrent, TextAreaBlock, ViewType } from '@mexit/shared'
+import {
+  Filter,
+  generateTaskViewId,
+  getPathNum,
+  GlobalFilterJoin,
+  SortOrder,
+  SortType,
+  View,
+  ViewType
+} from '@mexit/core'
+import { Label, SearchFilterListCurrent, TextAreaBlock, TextFieldHeight } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { useViews } from '../Hooks/useViews'
 import { ModalControls, ModalHeader } from '../Style/Refactor'
 
 import { DisplayFilter } from './Filters/Filter'
-import { RenderGlobalJoin } from './Filters/GlobalJoinFilterMenu'
 import Input from './Input'
 
 interface ViewProperties {
   globalJoin: GlobalFilterJoin
   viewType?: ViewType
   sortOrder?: SortOrder
-  sortType?: SortType
-}
 
-// Prefill modal has been added to the Tree via withRefactor from useRefactor
+  // * View v2 properties
+  sortType?: SortType
+  entities?: Array<Entities>
+  groupBy?: string
+}
 
 interface TaskViewModalState {
   open: boolean
@@ -52,9 +63,8 @@ const getInitialState = () => ({
   cloneViewId: undefined,
   properties: {
     globalJoin: 'all' as GlobalFilterJoin,
-    viewType: ViewType.Kanban,
-    sortOrder: 'ascending' as SortOrder,
-    sortType: 'status' as SortType
+    viewType: ViewType.List,
+    sortOrder: 'ascending' as SortOrder
   }
 })
 
@@ -78,17 +88,10 @@ const TaskViewModal = () => {
   const updateViewId = useTaskViewModalStore((store) => store.updateViewId)
   const cloneViewId = useTaskViewModalStore((store) => store.cloneViewId)
   const filters = useTaskViewModalStore((store) => store.filters)
-  const properties = useTaskViewModalStore((store) => store.properties)
 
-  // const openModal = useTaskViewModalStore((store) => store.openModal)
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
 
-  // const currentView = useViewStore((store) => store.currentView)
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
-
-  // const { saveData } = useSaveData()
-
-  const { getView, addView, updateView } = useTaskViews()
+  const { getView, addView, updateView } = useViews()
 
   const { goTo } = useRouting()
 
@@ -136,7 +139,6 @@ const TaskViewModal = () => {
   }, [cloneViewId, updateViewId])
 
   const onSubmit = async (data: TaskViewModalFormData) => {
-    // mog('onSubmit', { data, filters, cloneViewId })
     const properties = useTaskViewModalStore.getState().properties
 
     if (updateViewId) {
@@ -150,27 +152,23 @@ const TaskViewModal = () => {
         filters
       }
       await updateView(newView)
-      // saveData()
-      setCurrentView(newView)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, newView.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, newView.id)
     } else {
       const view: View = {
         title: data.title,
         description: data.description,
-        filters: filters,
+        filters,
         id: generateTaskViewId(),
         ...properties
       }
       await addView(view)
       // saveData()
-      setCurrentView(view)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push, view.id)
+      goTo(ROUTE_PATHS.view, NavigationType.push, view.id)
     }
-    reset()
-    closeModal()
+    handleClose()
   }
 
-  const handleCancel = () => {
+  const handleClose = () => {
     reset()
     closeModal()
   }
@@ -192,30 +190,32 @@ const TaskViewModal = () => {
             })
           }}
           transparent={false}
-        ></Input>
+        />
 
         <Label htmlFor="description">Description </Label>
         <TextAreaBlock
+          height={TextFieldHeight.MEDIUM}
           placeholder="Ex. Bugs of development"
           defaultValue={curView !== undefined ? curView.description : ''}
           {...register('description')}
         />
 
-        <Label htmlFor="description">Filters </Label>
         {filters?.length > 0 && (
-          <SearchFilterListCurrent>
-            {filters.map((f) => (
-              <DisplayFilter key={f.id} filter={f} />
-            ))}
-            <RenderGlobalJoin globalJoin={properties.globalJoin} />
-          </SearchFilterListCurrent>
+          <>
+            <Label htmlFor="description">Filters </Label>
+            <SearchFilterListCurrent>
+              {filters.map((f, i) => {
+                return <DisplayFilter key={f.id} filter={f} hideJoin={i === filters.length - 1} />
+              })}
+            </SearchFilterListCurrent>
+          </>
         )}
 
         <ModalControls>
-          <Button large onClick={handleCancel}>
+          <Button large onClick={handleClose}>
             Cancel
           </Button>
-          <LoadingButton loading={isSubmitting} alsoDisabled={filters?.length === 0} type="submit" primary large>
+          <LoadingButton loading={isSubmitting} type="submit" primary large>
             {updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'Create'} View
           </LoadingButton>
         </ModalControls>

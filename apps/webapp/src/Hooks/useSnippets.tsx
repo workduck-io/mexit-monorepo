@@ -1,4 +1,6 @@
-import { convertContentToRawText, getSnippetCommand, mog, Snippet, SnippetID } from '@mexit/core'
+import { Indexes } from '@workduck-io/mex-search'
+
+import { convertContentToRawText, getSnippetCommand, Snippet, SnippetID } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
 import { SlashCommandConfig } from '../Editor/Types/Combobox'
@@ -18,7 +20,7 @@ export const useSnippets = () => {
   const updateDescription = useDescriptionStore((store) => store.updateDescription)
 
   const { generateSlashCommands } = useSlashCommands()
-  const { updateDocument, addDocument, removeDocument } = useSearch()
+  const { updateDocument, removeDocument } = useSearch()
 
   const getSnippets = () => {
     return useSnippetStore.getState().snippets ?? {}
@@ -59,16 +61,19 @@ export const useSnippets = () => {
     return undefined
   }
 
-  const updateSnippetIndex = async (snippet) => {
+  const updateSnippetIndex = async (snippet: Snippet) => {
     const tags = snippet?.template ? ['template'] : ['snippet']
-    const idxName = snippet?.template ? 'template' : 'snippet'
 
-    if (snippet?.template) {
-      await removeDocument('snippet', snippet.id)
-    } else {
-      await removeDocument('template', snippet.id)
-    }
-    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+    if (snippet)
+      await updateDocument({
+        indexKey: Indexes.SNIPPET,
+        id: snippet.id,
+        contents: snippet.content,
+        title: snippet.title,
+        options: {
+          tags
+        }
+      })
   }
 
   const updateSnippets = async (snippets: Record<SnippetID, Snippet>) => {
@@ -91,14 +96,7 @@ export const useSnippets = () => {
 
   const updateSnippet = async (snippet: Snippet) => {
     updateSnippetZus(snippet.id, snippet)
-    const tags = snippet?.template ? ['template'] : ['snippet']
-    const idxName = snippet?.template ? 'template' : 'snippet'
-    if (snippet?.template) {
-      await removeDocument('snippet', snippet.id)
-    } else {
-      await removeDocument('template', snippet.id)
-    }
-    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+    await updateSnippetIndex(snippet)
 
     updateSlashCommands(Object.values(getSnippets()))
 
@@ -110,18 +108,14 @@ export const useSnippets = () => {
 
   const deleteSnippet = async (id: string) => {
     deleteSnippetZus(id)
-    await removeDocument('snippet', id)
+    await removeDocument(Indexes.SNIPPET, id)
 
     updateSlashCommands(Object.values(getSnippets()))
   }
 
   const addSnippet = async (snippet: Snippet) => {
     addSnippetZus(snippet)
-    const tags = snippet?.template ? ['template'] : ['snippet']
-    const idxName = snippet?.template ? 'template' : 'snippet'
-    mog('Add snippet', { snippet, tags })
-
-    await updateDocument(idxName, snippet.id, snippet.content, snippet.title, tags)
+    await updateSnippetIndex(snippet)
 
     updateSlashCommands(Object.values(getSnippets()))
 

@@ -1,8 +1,10 @@
 import { Document } from '@workduck-io/flexsearch'
 
+import { Link } from '../Stores/link.store'
 import { Snippets } from '../Stores/snippet.store'
 
 import { ILink, LinkCache, NodeContent, SharedNode, Tag, TagsCache } from './Editor'
+import { Highlights } from './Highlight'
 import { PromptDataType } from './Prompt'
 import { Reminder } from './Reminders'
 import { TodosType } from './Todo'
@@ -15,8 +17,12 @@ export interface PersistentData {
     [key: string]: NodeContent
   }
 
+  links?: Link[]
+
   linkCache: LinkCache
   tagsCache: TagsCache
+
+  highlights?: Highlights
 
   archive: ILink[]
   bookmarks: string[]

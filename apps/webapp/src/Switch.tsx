@@ -36,14 +36,13 @@ import PromptProvidersPage from './Views/Prompts/PromptProvidersPage'
 import PublicNamespaceView from './Views/PublicNamespaceView'
 import PublicNodeView from './Views/PublicNodeView'
 import { Register } from './Views/Register'
-import RemindersAll from './Views/Reminders/RemindersAll'
 import Search from './Views/Search'
 import Settings from './Views/Settings'
 import About from './Views/Settings/About'
 import Shortcuts from './Views/Settings/Shortcuts'
 import Snippets from './Views/Snippets'
 import Tag from './Views/Tag'
-import Tasks from './Views/Tasks'
+import ViewPage from './Views/ViewPage'
 import * as Actions from './Actions'
 
 export const SwitchWrapper = styled(animated.div)<{ $isAuth?: boolean }>`
@@ -196,7 +195,16 @@ const IntegrationRoutes = () => {
 
 const Home = () => <Outlet />
 
-export const Switch = () => {
+const ViewRoutes = () => {
+  return (
+    <Routes>
+      <Route index element={<ViewPage />} />
+      <Route path=":viewid" element={<ViewPage />} />
+    </Routes>
+  )
+}
+
+export const Switch = ({ children }) => {
   const location = useLocation()
   const isBlockMode = useBlockStore((store) => store.isBlockMode)
   const setIsBlockMode = useBlockStore((store) => store.setIsBlockMode)
@@ -230,11 +238,8 @@ export const Switch = () => {
       } else if (location.pathname.startsWith(ROUTE_PATHS.archive)) {
         hideAllSidebars()
         // hideRHSidebar()
-      } else if (location.pathname.startsWith(ROUTE_PATHS.tasks)) {
+      } else if (location.pathname.startsWith(ROUTE_PATHS.view)) {
         fromSocket.sendJsonMessage({ action: SocketActionType.ROUTE_CHANGE, data: { route: '' } })
-        showSidebar()
-        hideRHSidebar()
-      } else if (location.pathname.startsWith(ROUTE_PATHS.reminders)) {
         showSidebar()
         hideRHSidebar()
       } else if (location.pathname.startsWith(ROUTE_PATHS.namespaceShare)) {
@@ -256,9 +261,14 @@ export const Switch = () => {
   // mog('Rendering Switch', { location  })
 
   return (
-    // eslint-disable-next-line
     // @ts-ignore
-    <SwitchWrapper $isAuth={authenticated}>
+    <SwitchWrapper $isAuth={authenticated}>{children}</SwitchWrapper>
+  )
+}
+
+const PageRoutes = () => {
+  return (
+    <Switch>
       <Routes>
         <Route path={`${ROUTE_PATHS.auth}/*`} element={<AuthRoutes />} />
         <Route path={`${ROUTE_PATHS.oauth}/:serviceName`} element={<OAuthRoute />} />
@@ -278,19 +288,9 @@ export const Switch = () => {
           <Route index element={<DraftView />} />
           <Route path={`${ROUTE_PATHS.settings}/*`} element={<SettingsRoutes />} />
           <Route path={`${ROUTE_PATHS.snippets}/*`} element={<SnippetRoutes />} />
+          <Route path={`${ROUTE_PATHS.view}/*`} element={<ViewRoutes />} />
           <Route path={ROUTE_PATHS.search} element={<Search />} />
-          <Route
-            path={ROUTE_PATHS.links}
-            element={
-              <ProtectedRoute>
-                <LinkView />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route path={ROUTE_PATHS.present} element={<Presenter />} /> */}
-          <Route path={ROUTE_PATHS.tasks} element={<Tasks />} />
-          <Route path={`${ROUTE_PATHS.reminders}`} element={<RemindersAll />} />
-          <Route path={`${ROUTE_PATHS.tasks}/:viewid`} element={<Tasks />} />
+          <Route path={ROUTE_PATHS.links} element={<LinkView />} />
           <Route path={`${ROUTE_PATHS.tag}/:tag`} element={<Tag />} />
           <Route path={`${ROUTE_PATHS.integrations}/*`} element={<IntegrationRoutes />} />
         </Route>
@@ -307,8 +307,8 @@ export const Switch = () => {
         <Route path={ROUTE_PATHS.archive} element={<Archive />} />
         <Route path="*" element={<RouteNotFound />} />
       </Routes>
-    </SwitchWrapper>
+    </Switch>
   )
 }
 
-export default Switch
+export default PageRoutes

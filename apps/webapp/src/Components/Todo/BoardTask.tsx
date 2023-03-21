@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { PriorityType } from '@mexit/core'
-import { TaskCard, ViewType } from '@mexit/shared'
+import { PriorityType, useContentStore, ViewType } from '@mexit/core'
+import { TaskCard } from '@mexit/shared'
 
 import { useTodoKanban } from '../../Hooks/todo/useTodoKanban'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import { useTodoStore } from '../../Stores/useTodoStore'
 import Plateless from '../Editor/Plateless'
@@ -37,26 +36,17 @@ interface RenderTaskProps {
 }
 
 export const RenderBoardTask = React.memo<RenderTaskProps>(
-  ({
-    id,
-    todoid,
-    nodeid,
-    overlaySidebar,
-    staticBoard,
-    refreshCallback,
-    selectedCardId,
-    dragging,
-    viewType
-  }: RenderTaskProps) => {
+  ({ id, todoid, nodeid, staticBoard, refreshCallback, selectedCardId }: RenderTaskProps) => {
     const { changeStatus, changePriority, getPureContent } = useTodoKanban()
+    const documentUpdated = useContentStore((s) => s.docUpdated)
     const getTodoOfNode = useTodoStore((store) => store.getTodoOfNodeWithoutCreating)
     const ref = React.useRef<HTMLDivElement>(null)
 
     const todo = useMemo(() => getTodoOfNode(nodeid, todoid), [nodeid, todoid])
-    const sidebar = useLayoutStore((store) => store.sidebar)
-    const pC = useMemo(() => getPureContent(todo), [id, todo])
+    const pC = useMemo(() => getPureContent(todo), [id, todo, documentUpdated])
     const { accessWhenShared } = usePermissions()
     const readOnly = useMemo(() => isReadonly(accessWhenShared(todo?.nodeid)), [todo])
+    const toggleModal = useModalStore((store) => store.toggleOpen)
 
     useEffect(() => {
       if (ref.current) {
@@ -64,6 +54,7 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           ref.current.focus()
         } else return
         const el = ref.current
+
         // is element in viewport
         const rect = el.getBoundingClientRect()
         const isInViewport =
@@ -72,7 +63,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
           rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 
-        // mog('scroll to selected', { selected, top, isInViewport, rect })
         if (!isInViewport) {
           ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
@@ -93,19 +83,14 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       []
     )
 
-    const toggleModal = useModalStore((store) => store.toggleOpen)
-    const priorityShown = todo.metadata.priority !== PriorityType.noPriority
+    if (!todo) return null
 
-    // mog('staticBoard', { staticBoard })
+    const priorityShown = todo?.metadata?.priority !== PriorityType.noPriority
 
     return (
       <TaskCard
-        selected={selectedCardId && selectedCardId === id}
-        ref={ref}
-        dragging={dragging}
-        viewType={viewType}
-        staticBoard={staticBoard}
-        sidebarExpanded={sidebar.show && sidebar.expanded && !overlaySidebar}
+        id={`${todo.nodeid}_${todo.id}`}
+        key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
         priorityShown={priorityShown}
         onMouseDown={(event) => {
           if (staticBoard) return
@@ -117,7 +102,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
       >
         <Todo
           showDelete={false}
-          key={`TODO_PREVIEW_${todo.nodeid}_${todo.id}`}
           todoid={todo.id}
           readOnly={readOnly}
           readOnlyContent
@@ -125,12 +109,6 @@ export const RenderBoardTask = React.memo<RenderTaskProps>(
           controls={controls}
           parentNodeId={todo.nodeid}
         >
-          {/*
-          <EditorPreviewRenderer
-            noStyle
-            content={pC}
-            editorId={`NodeTodoPreview_${todo.nodeid}_${todo.id}_${todo.metadata.status}`}
-          /> */}
           <Plateless content={pC} />
         </Todo>
       </TaskCard>

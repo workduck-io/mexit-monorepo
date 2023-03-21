@@ -20,6 +20,10 @@ export const SidebarWrapper = styled.div`
   }
 `
 
+export const VerticalSpace = styled.div`
+  margin: ${({ theme }) => `${theme.spacing.medium} 0 ${theme.spacing.small} 0`};
+`
+
 export const SpaceWrapper = styled(SidebarWrapper)`
   gap: ${({ theme }) => theme.spacing.small};
 `

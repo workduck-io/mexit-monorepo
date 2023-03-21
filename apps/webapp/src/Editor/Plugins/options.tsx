@@ -52,7 +52,8 @@ import {
   ELEMENT_TASK_VIEW_BLOCK,
   generateTempId,
   getDefaultContent,
-  SECTION_SEPARATOR
+  SECTION_SEPARATOR,
+  TodoStatus
 } from '@mexit/core'
 
 const preFormat = (editor: PlateEditor<Value>) => unwrapList(editor)
@@ -174,6 +175,17 @@ export const optionsAutoFormatRule: Array<AutoformatRule> = [
     mode: 'block',
     type: ELEMENT_TODO_LI,
     match: '[]',
+    triggerAtBlockStart: true,
+    format: (editor: PlateEditor<Value>) => {
+      insertNodes(editor, [
+        {
+          type: ELEMENT_TODO_LI,
+          children: [{ text: '' }],
+          id: generateTempId(),
+          status: TodoStatus.todo
+        }
+      ])
+    },
     query: formatQuery
   },
   {

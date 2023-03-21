@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { Key, MiscKeys, mog,ShortcutListner } from '@mexit/core'
+import { Key, MiscKeys, mog, ShortcutListner } from '@mexit/core'
 import {
   AddTagClassName,
   MenuClassName,
   MenuFilterInputClassName,
   MenuItemClassName,
-  RootMenuClassName} from '@mexit/shared'
+  RootMenuClassName
+} from '@mexit/shared'
 
 import useMultipleEditors from '../Stores/useEditorsStore'
 import { Shortcut, useHelpStore } from '../Stores/useHelpStore'
@@ -155,14 +156,6 @@ export const useEnableShortcutHandler = () => {
         ? fElement.tagName === 'INPUT' || fElement.tagName === 'TEXTAREA'
         : false
 
-    // mog('fElement', {
-    //   ignoreClasses,
-    //   hasClass: classesToIgnore.some((c) => fElement.classList.contains(c)),
-    //   ignoredInputTags,
-    //   cl: fElement.classList,
-    //   tagName: fElement.tagName
-    // })
-
     return fElement && (ignoredInputTags || classesToIgnore.some((c) => fElement.classList.contains(c)))
   }
 
@@ -173,11 +166,7 @@ export const useEnableShortcutHandler = () => {
       ignoreModals: false
     }
     const isModalOpen = useModalStore.getState().open
-    // mog('enableShortcutHandler', {
-    //   allOp,
-    //   isModalOpen,
-    //   isOnSearchFilter: isOnElementClass(allOp.ignoreClasses)
-    // })
+
     if (isEditingPreview() || !useMultipleEditors.getState().editors) return
     if (isModalOpen !== undefined && !allOp.ignoreModals) return
 

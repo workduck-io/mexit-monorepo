@@ -1,3 +1,5 @@
+import { Indexes } from '@workduck-io/mex-search'
+
 import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
 
 import { useContentStore } from '../Stores/useContentStore'
@@ -26,7 +28,11 @@ export const useUpdater = () => {
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
-      await updateDocument('node', noteId, content)
+      await updateDocument({
+        id: noteId,
+        contents: content,
+        indexKey: Indexes.MAIN
+      })
     })
   }
 
@@ -38,7 +44,11 @@ export const useUpdater = () => {
       updateTagsFromContent(noteId, content)
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
-      await updateDocument('node', noteId, content)
+      await updateDocument({
+        id: noteId,
+        contents: content,
+        indexKey: Indexes.MAIN
+      })
     }
   }
 

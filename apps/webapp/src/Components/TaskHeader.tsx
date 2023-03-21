@@ -1,9 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import trashIcon from '@iconify/icons-codicon/trash'
-import addCircleLine from '@iconify/icons-ri/add-circle-line'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
-import checkboxLine from '@iconify/icons-ri/checkbox-line'
 import dragMove2Fill from '@iconify/icons-ri/drag-move-2-fill'
 import edit2Line from '@iconify/icons-ri/edit-2-line'
 import fileCopyLine from '@iconify/icons-ri/file-copy-line'
@@ -20,69 +18,104 @@ import {
   ToolbarTooltip
 } from '@workduck-io/mex-components'
 
-import { Filter, GlobalFilterJoin, SortOrder, SortType } from '@mexit/core'
 import {
   ShortcutToken,
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
-  TaskHeaderIcon,
   TaskHeaderTitleSection,
   TasksHelp,
   TaskViewControls,
   TaskViewHeaderWrapper,
-  TaskViewTitle,
-  Title,
-  ViewType
+  TaskViewTitle
 } from '@mexit/shared'
 
+import { useViewFilters } from '../Hooks/todo/useTodoFilters'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
-import { useTaskViews, useViewStore, View } from '../Hooks/useTaskViews'
+import { useViews } from '../Hooks/useViews'
+import { useViewStore } from '../Stores/useViewStore'
 
 import { useTaskViewModalStore } from './TaskViewModal'
 
-interface TaskHeaderProps {
-  currentView?: View
-  currentFilters: Filter[]
-  cardSelected: boolean
-  globalJoin: GlobalFilterJoin
-  currentViewType: ViewType
-  sortOrder: SortOrder
-  sortType: SortType
+interface ViewHeaderProps {
+  cardSelected?: boolean // * To show actions related to selected Item
 }
 
-const TaskHeader = ({
-  currentView,
-  currentViewType,
-  sortOrder,
-  sortType,
-  currentFilters,
-  cardSelected,
-  globalJoin
-}: TaskHeaderProps) => {
+const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
+  const [deleting, setDeleting] = useState(false)
+
+  const view = useViewStore((store) => store.currentView)
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
-  const setCurrentView = useViewStore((store) => store.setCurrentView)
-  const { deleteView } = useTaskViews()
+
+  const isDefault = ['tasks', 'reminders'].includes(view?.id)
 
   const { goTo } = useRouting()
-
+  const { deleteView } = useViews()
   const [source, target] = useSingleton()
-  const [deleting, setDeleting] = useState(false)
+  const { viewType, sortOrder, globalJoin, sortType, entities, currentFilters, groupBy } = useViewFilters()
 
   const isCurrentViewChanged = useMemo(() => {
     return !(
-      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) &&
-      globalJoin === currentView?.globalJoin &&
-      currentViewType === currentView?.viewType
+      JSON.stringify(currentFilters) === JSON.stringify(view?.filters) &&
+      viewType === view?.viewType &&
+      groupBy === view?.groupBy &&
+      sortType === view?.sortType &&
+      sortOrder === view?.sortOrder &&
+      entities === view?.entities
     )
-  }, [currentFilters, currentView, globalJoin])
+  }, [currentFilters, viewType, groupBy, sortType, sortOrder])
+
+  const handleUpdateView = () => {
+    openTaskViewModal({
+      filters: currentFilters,
+      updateViewId: view?.id,
+      properties: {
+        viewType,
+        globalJoin,
+        groupBy,
+        entities,
+        sortOrder,
+        sortType
+      }
+    })
+  }
+
+  const handleSaveAsView = () => {
+    openTaskViewModal({
+      cloneViewId: view?.id,
+      filters: currentFilters,
+      properties: {
+        viewType,
+        globalJoin,
+        groupBy,
+        entities,
+        sortOrder,
+        sortType
+      }
+    })
+  }
+
+  const handleCloneView = () => {
+    const { id, filters, ...properties } = view
+    console.log('cloning')
+    openTaskViewModal({
+      cloneViewId: view?.id,
+      filters,
+      properties
+    })
+  }
 
   const onDeleteView = async () => {
-    if (currentView) {
-      setDeleting(true)
-      await deleteView(currentView.id)
-      setDeleting(false)
-      setCurrentView(undefined)
-      goTo(ROUTE_PATHS.tasks, NavigationType.push)
+    if (view) {
+      try {
+        setDeleting(true)
+        await deleteView(view.id)
+        setDeleting(false)
+
+        goTo(ROUTE_PATHS.tasks, NavigationType.replace)
+      } catch (error) {
+        setDeleting(false)
+        console.error('Unable To Delete View', error)
+      }
     }
   }
 
@@ -90,105 +123,41 @@ const TaskHeader = ({
     <StyledTaskHeader>
       <TaskHeaderTitleSection>
         <ToolbarTooltip singleton={source} />
-        <TaskHeaderIcon>
-          <Icon icon={checkboxLine} />
-        </TaskHeaderIcon>
-        {currentView ? (
+        {view && (
           <TaskViewHeaderWrapper>
             <TaskViewTitle>
               <Icon icon={stackLine} />
-              {currentView?.title}
-              {isCurrentViewChanged && '*'}
+              <span>{view?.title}</span>
+              {isCurrentViewChanged && !isDefault && '*'}
             </TaskViewTitle>
             <TaskViewControls>
-              <Button
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: currentFilters,
-                    updateViewId: currentView?.id,
-                    properties: {
-                      viewType: currentViewType,
-                      globalJoin,
-                      sortOrder,
-                      sortType
-                    }
-                  })
-                }
-                disabled={currentFilters.length === 0}
-                // primary={isCurrentViewChanged && currentFilters.length > 0}
-              >
-                <Icon icon={edit2Line} />
-                Update View
-              </Button>
+              {!isDefault && (
+                <Button onClick={handleUpdateView} disabled={currentFilters.length === 0}>
+                  <Icon icon={edit2Line} />
+                  Update View
+                </Button>
+              )}
               <IconButton
                 title="Clone View"
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: currentView?.filters,
-                    cloneViewId: currentView?.id,
-                    properties: {
-                      globalJoin: currentView?.globalJoin,
-                      viewType: currentView?.viewType,
-                      sortType: currentView?.sortType,
-                      sortOrder: currentView?.sortOrder
-                    }
-                  })
-                }
+                onClick={handleCloneView}
                 disabled={currentFilters.length === 0}
                 singleton={target}
                 icon={fileCopyLine}
-                // transparent={false}
               />
-              <LoadingButton
-                title="Delete View"
-                loading={deleting}
-                onClick={() => onDeleteView()}
-                singleton={target}
-                // transparent={false}
-              >
-                <Icon icon={trashIcon} />
-              </LoadingButton>
               <IconButton
-                title="Create New View"
-                onClick={() =>
-                  openTaskViewModal({
-                    filters: currentFilters,
-                    cloneViewId: currentView?.id,
-                    properties: {
-                      viewType: ViewType.Kanban,
-                      sortOrder: 'ascending',
-                      sortType: 'status',
-                      globalJoin: 'all'
-                    }
-                  })
-                }
+                title="Save as"
+                onClick={handleSaveAsView}
                 disabled={currentFilters.length === 0}
                 singleton={target}
-                // transparent={false}
-                icon={addCircleLine}
+                icon="fluent:save-copy-24-regular"
               />
+              {!isDefault && (
+                <LoadingButton title="Delete View" loading={deleting} onClick={onDeleteView} singleton={target}>
+                  <Icon icon={trashIcon} />
+                </LoadingButton>
+              )}
             </TaskViewControls>
           </TaskViewHeaderWrapper>
-        ) : (
-          <>
-            <Title>Tasks</Title>
-            <Button
-              onClick={() =>
-                openTaskViewModal({
-                  filters: currentFilters,
-                  cloneViewId: currentView?.id,
-                  properties: {
-                    globalJoin,
-                    viewType: currentViewType ?? ViewType.Kanban
-                  }
-                })
-              }
-              disabled={currentFilters.length === 0}
-            >
-              <Icon icon={addCircleLine} />
-              Create View
-            </Button>
-          </>
         )}
       </TaskHeaderTitleSection>
       <ShortcutTokens>
@@ -225,4 +194,4 @@ const TaskHeader = ({
   )
 }
 
-export default TaskHeader
+export default ViewHeader

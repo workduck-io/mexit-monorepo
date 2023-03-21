@@ -4,6 +4,8 @@ import searchLine from '@iconify/icons-ri/search-line'
 import { debounce } from 'lodash'
 import { useTheme } from 'styled-components'
 
+import { Indexes } from '@workduck-io/mex-search'
+
 import { BASE_TASKS_PATH, fuzzySearch, ILink, isParent, mog } from '@mexit/core'
 import {
   CenteredColumn,
@@ -13,13 +15,14 @@ import {
   List,
   MexIcon,
   SidebarListFilter,
-  SnippetCards
+  SnippetCards,
+  useQuery
 } from '@mexit/shared'
 
 import { useLinks } from '../../Hooks/useLinks'
 import useDataStore from '../../Stores/useDataStore'
 import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { wSearchIndex } from '../../Sync/invokeOnWorker'
+import { wSearchIndexWithRanking } from '../../Sync/invokeOnWorker'
 
 import { NodeCard } from './NodeCard'
 import SidebarSection from './SidebarSection'
@@ -30,6 +33,7 @@ export const NotesInfoBar = () => {
   const recentNotes = useRecentsStore((s) => s.lastOpened)
 
   const theme = useTheme()
+  const { generateSearchQuery } = useQuery()
   const { getILinkFromNodeid } = useLinks()
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -40,14 +44,15 @@ export const NotesInfoBar = () => {
 
   const onSearch = async (newSearchTerm: string) => {
     try {
-      const res = await wSearchIndex(['node'], newSearchTerm)
+      const query = generateSearchQuery(newSearchTerm)
+      const res = await wSearchIndexWithRanking(Indexes.MAIN, query)
       if (!res) {
         const ilinks = useDataStore.getState().ilinks
         const res = fuzzySearch<ILink>(ilinks, newSearchTerm, (ilink) => ilink.path)
         const results = res?.map((item) => item.nodeid)
         setSearchedNodes(results)
       } else {
-        const results = res?.map((item) => item.id) ?? []
+        const results = res?.map((item) => item.parent) ?? []
         setSearchedNodes(results)
       }
     } catch (err) {

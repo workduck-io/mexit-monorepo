@@ -3,7 +3,14 @@ import toast from 'react-hot-toast'
 
 import generateName from 'project-name-generator'
 
-import { ELEMENT_PARAGRAPH, ELEMENT_TODO_LI, generateSnippetId, generateTempId, getDefaultContent } from '@mexit/core'
+import {
+  ELEMENT_PARAGRAPH,
+  ELEMENT_TODO_LI,
+  generateSnippetId,
+  generateTempId,
+  getDefaultContent,
+  TodoStatus
+} from '@mexit/core'
 import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
 import { createDefaultTodo } from '../../Editor/Plugins/todoUtils'
@@ -50,6 +57,7 @@ export const useOnNewItem = () => {
       {
         type: ELEMENT_TODO_LI,
         children: [{ text: '', type: ELEMENT_PARAGRAPH, id: generateTempId() }],
+        status: TodoStatus.todo,
         id: generateTempId()
       }
     ])

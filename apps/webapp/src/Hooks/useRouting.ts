@@ -8,8 +8,9 @@ export const ROUTE_PATHS = {
   login: '/auth/login',
   register: '/auth/register',
   archive: '/archive',
-  tasks: '/tasks',
-  reminders: `/tasks/${ReminderViewData.id}`,
+  tasks: '/view/tasks',
+  view: `/view`,
+  reminders: `/view/${ReminderViewData.id}`,
   tag: '/tag', // * /tag/:tag
   editor: '/editor',
   node: '/editor', // * /node/:nodeid

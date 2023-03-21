@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { capitalize, SortOrder, SortType } from '@mexit/core'
+import { capitalize, SEPARATOR, SortOrder, SortType } from '@mexit/core'
 import {
+  FilterDescription,
   FilterGlobalJoinWrapper,
   GenericSection,
   IconDisplay,
@@ -12,28 +13,23 @@ import {
   SortTypeWrapper
 } from '@mexit/shared'
 
-import { getSortOrderIcon, getSortTypeIcon } from '../../Hooks/useSortIcons'
+import { useViewFilterStore } from '../../Hooks/todo/useTodoFilters'
+import { getBlockFieldIcon, getSortOrderIcon } from '../../Hooks/useSortIcons'
 
 export interface SortMenuProps {
   sortOrder: SortOrder
   sortType: SortType
-  availableSortTypes: SortType[]
   onSortOrderChange: (sortOrder: SortOrder) => void
   onSortTypeChange: (sortType: SortType) => void
 }
 
-const SortMenu = ({ sortOrder, sortType, availableSortTypes, onSortOrderChange, onSortTypeChange }: SortMenuProps) => {
-  console.log('SortMenu', {
-    sortOrder,
-    sortType,
-    availableSortTypes,
-    onSortOrderChange,
-    onSortTypeChange,
-    iconSort: getSortTypeIcon(sortType)
-  })
+const SortMenu = ({ sortOrder, sortType, onSortOrderChange, onSortTypeChange }: SortMenuProps) => {
+  const sortOptions = useViewFilterStore((store) => store.sortOptions)
+
   return (
     <SortSectionWrapper>
       <Menu
+        noHover
         values={
           <SortOrderWrapper>
             <IconDisplay icon={getSortOrderIcon(sortOrder)} />
@@ -51,18 +47,28 @@ const SortMenu = ({ sortOrder, sortType, availableSortTypes, onSortOrderChange, 
           label={'Descending'}
         />
       </Menu>
-      <Menu
-        values={
-          <SortTypeWrapper>
-            <IconDisplay icon={getSortTypeIcon(sortType)} />
-            {capitalize(sortType)}
-          </SortTypeWrapper>
-        }
-      >
-        {availableSortTypes.map((type) => (
-          <MenuItem icon={getSortTypeIcon(type)} onClick={() => onSortTypeChange(type)} label={capitalize(type)} />
-        ))}
-      </Menu>
+      {sortOptions?.length > 0 && (
+        <Menu
+          noHover
+          key={sortOptions.length}
+          values={
+            <SortTypeWrapper>
+              <IconDisplay icon={getBlockFieldIcon(sortType.split(SEPARATOR).at(-1))} />
+              {sortType ? capitalize(sortType.split(SEPARATOR).at(-1)) : 'Sort By'}
+            </SortTypeWrapper>
+          }
+        >
+          <FilterDescription>Sort By</FilterDescription>
+          {sortOptions.map((option) => (
+            <MenuItem
+              key={`sort-${option.label}`}
+              icon={option.icon}
+              onClick={() => onSortTypeChange(option.id)}
+              label={capitalize(option.label)}
+            />
+          ))}
+        </Menu>
+      )}
     </SortSectionWrapper>
   )
 }
@@ -77,11 +83,6 @@ export const RenderSort = ({
     <FilterGlobalJoinWrapper>
       <GenericSection>
         <IconDisplay icon={getSortOrderIcon(sortOrder)} />
-        {sortOrder === 'ascending' ? 'Asc' : 'Desc'}
-      </GenericSection>
-
-      <GenericSection>
-        <IconDisplay icon={getSortTypeIcon(sortType)} size={14} />
         {capitalize(sortType)}
       </GenericSection>
     </FilterGlobalJoinWrapper>

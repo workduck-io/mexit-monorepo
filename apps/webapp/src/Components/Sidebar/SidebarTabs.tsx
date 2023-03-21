@@ -18,7 +18,7 @@ const SidebarTabs = () => {
   const isTagsView = useMatch(`${ROUTE_PATHS.tag}/:tag`)
   const isTasks = useMatch(ROUTE_PATHS.tasks)
   const isReminder = useMatch(ROUTE_PATHS.reminders)
-  const isTasksView = useMatch(`${ROUTE_PATHS.tasks}/:viewid`)
+  const isTasksView = useMatch(`${ROUTE_PATHS.view}/:viewid`)
   const isPublicNamespaceView = useMatch(`${ROUTE_PATHS.namespaceShare}/:namespaceid/*`)
 
   // mog('IS SIDEBAR', { show: sidebar.show })

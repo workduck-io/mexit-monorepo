@@ -1,5 +1,3 @@
-import { IS_DEV } from './config'
-
 type MogOptions = {
   pretty: boolean
   collapsed: boolean
@@ -11,7 +9,7 @@ export const mog = (
   options: Partial<MogOptions> = { pretty: false, collapsed: false }
 ) => {
   // eslint-disable-next-line
-  if (IS_DEV) {
+  if (true) {
     options.collapsed ? console.groupCollapsed(title) : console.group(title)
     if (propertiesToLog)
       Object.entries(propertiesToLog).forEach(([key, value]) => {

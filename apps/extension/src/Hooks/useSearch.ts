@@ -1,5 +1,7 @@
 /* eslint-disable no-case-declarations */
 
+import { Indexes, IUpdateDoc } from '@workduck-io/mex-search'
+
 import {
   ActionType,
   CategoryType,
@@ -11,7 +13,6 @@ import {
   fuzzySearch,
   fuzzySearchLinks,
   getListItemFromLink,
-  idxKey,
   initActions,
   isReservedOrClash,
   ListItemType,
@@ -19,12 +20,13 @@ import {
   SearchRepExtra,
   sortByCreated
 } from '@mexit/core'
+import { useQuery } from '@mexit/shared'
 
 import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useMentionStore } from '../Stores/useMentionStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { wAddDoc, wRemoveDoc, wSearchIndex, wUpdateDoc } from '../Sync/invokeOnWorker'
+import { wAddDoc, wRemoveDoc, wSearchIndexWithRanking, wUpdateDoc } from '../Sync/invokeOnWorker'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 import { useAuthStore } from './useAuth'
@@ -68,6 +70,7 @@ export const useSearchExtra = () => {
 export const useSearch = () => {
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
+  const { generateSearchQuery } = useQuery()
 
   const { getSearchExtra } = useSearchExtra()
 
@@ -86,8 +89,10 @@ export const useSearch = () => {
 
     switch (search?.type) {
       case CategoryType.backlink:
-        const nodeItems = await wSearchIndex(['node'], search.value)
-        const snippetItems = await wSearchIndex(['snippet', 'template'], search.value)
+        const query = generateSearchQuery(search.value)
+
+        const nodeItems = await wSearchIndexWithRanking(Indexes.MAIN, query)
+        const snippetItems = await wSearchIndexWithRanking(Indexes.SNIPPET, query)
 
         const sortedLinks = links.sort(sortByCreated)
 
@@ -96,16 +101,16 @@ export const useSearch = () => {
 
         nodeItems?.forEach((item) => {
           // const localNode = isLocalNode(item.id)
-          const node = ilinks.find((i) => i.nodeid === item.id)
+          const node = ilinks.find((i) => i.nodeid === item.parent)
           if (node) {
-            const listItem = getListItemFromNode(node, item.text, item.blockId, actionType)
+            const listItem = getListItemFromNode(node, item.text, item.id, actionType)
             localNodes.push(listItem)
           }
         })
 
         if (!selection) {
           snippetItems?.forEach((snippet) => {
-            const snip = getSnippet(snippet.id)
+            const snip = getSnippet(snippet.parent)
             if (snip) {
               const item = getListItemFromSnippet(snip, actionType)
               localNodes.push(item)
@@ -147,30 +152,32 @@ export const useSearch = () => {
     return searchList
   }
 
-  const addDocument = async (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title: string | undefined = undefined,
-    tags?: Array<string>
-  ) => {
+  const addDocument = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
-    await wAddDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await wAddDoc({
+      ...doc,
+      title: doc.title ?? getPathFromNodeid(doc.id),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
   }
 
-  const updateDocument = async (
-    key: idxKey,
-    nodeId: string,
-    contents: any[],
-    title: string | undefined = undefined,
-    tags?: Array<string>
-  ) => {
+  const updateDocument = async (doc: IUpdateDoc) => {
     const extra = getSearchExtra()
 
-    await wUpdateDoc(key, nodeId, contents, title ?? getPathFromNodeid(nodeId), tags, extra)
+    await wUpdateDoc({
+      ...doc,
+      title: doc.title ?? getPathFromNodeid(doc.id),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
   }
 
-  const removeDocument = async (key: idxKey, id: string) => {
+  const removeDocument = async (key: Indexes, id: string) => {
     await wRemoveDoc(key, id)
   }
 

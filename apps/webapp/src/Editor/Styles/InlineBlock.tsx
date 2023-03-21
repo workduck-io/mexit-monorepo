@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { Ellipsis } from '@mexit/shared'
+
 export const MainFont = css`
   font-size: 14px;
 `
@@ -42,8 +44,11 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
   justify-content: center;
   margin: ${({ theme }) => theme.spacing.small} 0;
   padding: 1px;
+
   transition: transform 0.2s ease-in;
+
   background-color: ${({ theme }) => theme.tokens.surfaces.s[2]};
+
   ${({ selected }) =>
     selected
       ? css`
@@ -55,6 +60,7 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
             transform: translateY(-5px);
           }
         `}
+
   box-shadow: ${({ theme }) => theme.tokens.shadow.small};
 
   border-radius: ${({ theme: { borderRadius } }) => `${borderRadius.small}`};
@@ -66,14 +72,24 @@ export const StyledInlineBlock = styled.section<InlineBlockType>`
   }
 `
 
+export const StyledViewBlock = styled(StyledInlineBlock)`
+  gap: ${({ theme }) => theme.spacing.medium};
+  padding: ${({ theme }) => theme.spacing.medium};
+`
+
 export const InlineBlockHeading = styled.div`
   color: ${({ theme }) => theme.tokens.text.disabled};
   font-size: large;
 `
 
 export const InlineBlockText = styled.div`
-  margin-left: ${({ theme }) => theme.spacing.small};
+  margin-left: ${({ theme }) => theme.spacing.tiny};
   font-size: large;
+  width: 100%;
+  span {
+    max-width: 30ch;
+    ${Ellipsis}
+  }
   color: ${({ theme }) => theme.tokens.text.heading};
 `
 
