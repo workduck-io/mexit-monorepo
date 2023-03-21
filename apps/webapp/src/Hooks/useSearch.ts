@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ELEMENT_MENTION } from '@udecode/plate'
 
-import { Indexes, ISearchQuery, IUpdateDoc, SearchX } from '@workduck-io/mex-search'
+import { Indexes, ISearchQuery, IUpdateDoc } from '@workduck-io/mex-search'
 
 import {
   ELEMENT_ILINK,
@@ -26,8 +26,6 @@ import {
 } from '../Workers/controller'
 
 import { useLinks } from './useLinks'
-
-export const searchX = new SearchX()
 
 export const useSearchExtra = () => {
   const ilinks = useDataStore((s) => s.ilinks)

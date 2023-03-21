@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { API, AppInitStatus, mog, runBatch, useLinkStore } from '@mexit/core'
+import { API, AppInitStatus, mog, runBatch, useAppStore, useLinkStore, withTimeout } from '@mexit/core'
 
 import { useAuthentication, useAuthStore } from '../Stores/useAuth'
 import { useContentStore } from '../Stores/useContentStore'
@@ -25,6 +25,7 @@ import { useUserPreferences } from './useSyncUserPreferences'
 import { useURLsAPI } from './useURLs'
 
 export const useInitLoader = () => {
+  const setManualReload = useAppStore((store) => store.setManualReload)
   const initalizeApp = useAuthStore((store) => store.appInitStatus)
 
   const setIsUserAuthenticated = useAuthStore((store) => store.setIsUserAuthenticated)
@@ -122,7 +123,11 @@ export const useInitLoader = () => {
 
           if (initalizeApp === AppInitStatus.RUNNING) {
             backgroundFetch()
-            await fetchAll()
+            try {
+              await withTimeout(fetchAll(), 60 * 1000, 'Oops, something went wrong while fetching workspace')
+            } catch (err) {
+              setManualReload(true)
+            }
           }
         })
         .catch((error) => {
