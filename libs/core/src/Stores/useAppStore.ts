@@ -10,6 +10,9 @@ interface AppStoreType {
   setFeatureFlags: (featureFlags: FeatureFlagsType) => void
   version?: string
   setVersion: (version: string) => void
+  manualReload: boolean
+  setManualReload: (manualReload: boolean) => void
+  clear: () => void
 }
 
 const defaultFeatureFlags: FeatureFlagsType = {
@@ -29,7 +32,13 @@ export const useAppStore = create<AppStoreType>(
       version: undefined,
       setVersion: (version: string) => {
         set({ version: version })
-      }
+      },
+      clear: () =>
+        set({
+          manualReload: false
+        }),
+      manualReload: false,
+      setManualReload: (manualReload: boolean) => set({ manualReload })
     }),
     {
       name: 'mexit-version-webapp',

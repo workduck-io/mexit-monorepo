@@ -4,10 +4,10 @@ import { toast } from 'react-hot-toast'
 import create from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { useAuth, useAuthStore as useDwindleAuthStore } from '@workduck-io/dwindle'
+import { useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData } from '@mexit/core'
+import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData, useAppStore } from '@mexit/core'
 
 import { getEmailStart } from '../Utils/constants'
 import { terminateAllWorkers } from '../Workers/controller'
@@ -38,7 +38,6 @@ type LoginResult = { loginData: UserCred; loginStatus: string }
 export const useAuthentication = () => {
   const setUnAuthenticated = useAuthStore((store) => store.setUnAuthenticated)
   const { signIn, signOut, signUp, verifySignUp, googleSignIn } = useAuth()
-  const clearRequestsCacheFromDwindle = useDwindleAuthStore((s) => s.clearStore)
 
   const setRegistered = useAuthStore((store) => store.setRegistered)
   const [sensitiveData, setSensitiveData] = useState<RegisterFormData | undefined>()
@@ -52,6 +51,7 @@ export const useAuthentication = () => {
   const clearRecents = useRecentsStore((s) => s.clear)
   const clearMentions = useMentionStore((m) => m.reset)
   const clearComments = useCommentStore((s) => s.clear)
+  const clearAppStore = useAppStore((s) => s.clear)
   const clearReactions = useReactionStore((s) => s.clear)
   const clearViews = useViewStore((s) => s.clear)
   const clearRoutesInformation = useRouteStore((s) => s.clear)
@@ -121,6 +121,7 @@ export const useAuthentication = () => {
     clearReminders()
     clearSnippets()
     resetShortcuts()
+    clearAppStore()
     clearTodos()
     clearViews()
     clearUsersCache()
