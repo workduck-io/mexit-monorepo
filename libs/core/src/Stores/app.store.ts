@@ -28,7 +28,13 @@ export const appStoreConfig = (set, get) => ({
   manualReload: false,
   setManualReload: (manualReload: boolean) => set({ manualReload })
 })
-export const useAppStore = createStore(appStoreConfig, StoreIdentifier.VERSION, true)
+
+export const useAppStore = createStore(appStoreConfig, StoreIdentifier.VERSION, true, {
+  storage: {
+    web: localStorage
+  }
+})
+
 /**
  * Compares version strings using semver
  * @param {string} persistedVersion - The current version persisted in the store

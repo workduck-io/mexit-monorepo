@@ -18,7 +18,7 @@ import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
-const FORCE_LOGOUT_VERSION = '0.22.22'
+const FORCE_LOGOUT_VERSION = '0.23.0'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)
@@ -60,10 +60,7 @@ const App = () => {
       }
     }
 
-    const persistedHasHydrated = useAppStore.getState()._hasHydrated
-    if(persistedHasHydrated){
-      forceLogoutAndSetVersion()
-    }
+    forceLogoutAndSetVersion()
   }, [])
 
   return (
