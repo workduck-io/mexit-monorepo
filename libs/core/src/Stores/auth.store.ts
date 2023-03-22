@@ -37,6 +37,6 @@ export const authStoreConfig = (set, get) => ({
 
 export const useAuthStore = createStore(authStoreConfig, StoreIdentifier.AUTHSTORE, true, {
   storage: {
-    web: localStorage
+    web: typeof window !== 'undefined' ? localStorage : undefined
   }
 })
