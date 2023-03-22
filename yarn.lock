@@ -3949,13 +3949,13 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-search@^0.0.3":
-  version "0.0.3"
-  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.3/d8c60179e7eb14d09b08408e66b41b6e148373ed#d8c60179e7eb14d09b08408e66b41b6e148373ed"
-  integrity sha512-3jy8jq9kQTcL09fHHB+sJVmAQfaOcERRp4jmKmpN+p+8wChrF9gr453bp2tsBn4qch57I4F3899YSa2sFALc1A==
+"@workduck-io/mex-search@0.0.6":
+  version "0.0.6"
+  resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.6/94fbb54845a1bc94dad20910a8b1f62ef227c31e#94fbb54845a1bc94dad20910a8b1f62ef227c31e"
+  integrity sha512-GocEViJBc2MClgP73HnMaCoRY05PZ3+M51mhQa/fQmljA6esB7XJgsH65RNKZV697oluDG2X/FVFqaxJ9lvbCA==
   dependencies:
+    "@workduck-io/flexsearch" "^0.7.22"
     "@workduck-io/mex-utils" "^0.0.7"
-    flexsearch "^0.7.31"
     ngraph.graph "^20.0.1"
     ngraph.todot "^4.0.0"
 
@@ -6251,11 +6251,6 @@ flatted@^3.1.0:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.7.tgz#609f39207cb614b89d0765b477cb2d437fbf9787"
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
-
-flexsearch@^0.7.31:
-  version "0.7.31"
-  resolved "https://registry.yarnpkg.com/flexsearch/-/flexsearch-0.7.31.tgz#065d4110b95083110b9b6c762a71a77cc52e4702"
-  integrity sha512-XGozTsMPYkm+6b5QL3Z9wQcJjNYxp0CYn3U1gO7dwD6PAqU1SVWZxI9CCg3z+ml3YfqdPnrBehaBrnH2AGKbNA==
 
 flow-parser@^0.156.0:
   version "0.156.0"
