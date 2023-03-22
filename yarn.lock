@@ -3949,7 +3949,7 @@
     polished "^4.1.4"
     react-spring "^9.5.2"
 
-"@workduck-io/mex-search@^0.0.6":
+"@workduck-io/mex-search@0.0.6":
   version "0.0.6"
   resolved "https://npm.pkg.github.com/download/@workduck-io/mex-search/0.0.6/94fbb54845a1bc94dad20910a8b1f62ef227c31e#94fbb54845a1bc94dad20910a8b1f62ef227c31e"
   integrity sha512-GocEViJBc2MClgP73HnMaCoRY05PZ3+M51mhQa/fQmljA6esB7XJgsH65RNKZV697oluDG2X/FVFqaxJ9lvbCA==
