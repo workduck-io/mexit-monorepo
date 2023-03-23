@@ -26,26 +26,30 @@ export interface InviteModalData {
   }
 }
 
+interface ShareModalData {
+  //  Used only for share permissions mode
+  nodeid?: string
+  alias?: string
+
+  // Used only for share permissions of namespace
+  namespaceid?: string
+
+  fromEditor?: boolean
+  // When sharing to a preexisting user from a mention
+  userid?: string
+  changedUsers?: ChangedUser[]
+  changedInvitedUsers?: ChangedInvitedUser[]
+}
 
 export const shareModalConfig = (set, get) => ({
   open: false,
   focus: true,
   context: 'note' as ShareContext,
-  mode: 'permission',
+  mode: 'permission' as ShareModalMode,
   data: {
-    changedUsers: [],
-    changedInvitedUsers: [],
-    //  Used only for share permissions mode
-    nodeid: undefined,
-    alias: undefined,
-
-    // Used only for share permissions of namespace
-    namespaceid: undefined,
-
-    fromEditor: undefined,
-    // When sharing to a preexisting user from a mention
-    userid: undefined
-  },
+    changedUsers: [] as ChangedUser[],
+    changedInvitedUsers: [] as ChangedInvitedUser[]
+  } as ShareModalData,
   openModal: (mode: ShareModalMode, context: ShareContext, id) =>
     set({
       mode,
@@ -70,7 +74,7 @@ export const shareModalConfig = (set, get) => ({
   setChangedUsers: (users: ChangedUser[]) => set({ data: { changedUsers: users.filter((u) => u.change.length > 0) } }),
   setChangedInvitedUsers: (users: ChangedInvitedUser[]) =>
     set({ data: { changedInvitedUsers: users.filter((u) => u.change.length > 0) } }),
-  prefillModal: (mode: ShareModalMode, context: ShareContext, data) =>
+  prefillModal: (mode: ShareModalMode, context: ShareContext, data: ShareModalData) =>
     set({
       mode,
       open: true,

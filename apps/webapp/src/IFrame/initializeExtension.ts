@@ -1,6 +1,6 @@
 import { get } from 'idb-keyval'
 
-import { BroadcastSyncedChannel } from '@mexit/core'
+import { BroadcastSyncedChannel, getStoreName, StoreIdentifier } from '@mexit/core'
 
 const updateDwindleAuth = (extension) => {
   const authAWS = JSON.parse(localStorage.getItem('auth-aws')).state
@@ -12,10 +12,9 @@ const updateDwindleAuth = (extension) => {
   })
 }
 
-
 const updateUserInfo = async (extension) => {
-  const storeName = 'mexit-authstore-webapp';
-  const data = await get(storeName);
+  const storeName = getStoreName(StoreIdentifier.AUTH, false)
+  const data = await get(storeName)
   extension.sendToExtension({
     msgId: BroadcastSyncedChannel.AUTH,
     state: JSON.parse(data).state,

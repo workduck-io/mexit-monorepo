@@ -1,17 +1,11 @@
+import { BaseRange, Point } from 'slate'
 
-// import { ComboboxKey, IComboboxItem } from '../Editor/Types/Combobox'
-// import { ComboboxType, ComboSearchType } from '../Editor/Types/MultiCombobox'
-// import { createStore, setStoreValue } from '../Editor/Utils/store'
-import { BaseRange,Point } from 'slate'
+import { ComboboxKey } from '../Types/Editor'
+import { ComboboxType, ComboSearchType } from '../Types/MultiCombobox'
+import { setStoreValue, StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
-import { ComboboxKey } from "../Types/Editor";
-import { ComboboxType, ComboSearchType } from '../Types/MultiCombobox';
-import { setStoreValue, StoreIdentifier } from '../Types/Store';
-import { createStore } from '../Utils/storeCreator';
-
-import { useEditorStore } from "./editor.store";
-
-// import { useEditorStore } from './useEditorStore'
+import { useEditorStore } from './editor.store'
 
 export type ComboTriggerType = ComboboxType & { at?: Point; blockAt?: Point }
 
@@ -19,7 +13,6 @@ type ItemLoading = {
   item: string
   message?: string
 }
-
 
 export const comboboxStoreConfig = (set) => ({
   key: ComboboxKey.TAG,
@@ -52,10 +45,10 @@ export const comboboxStoreConfig = (set) => ({
   items: [],
   setItems: setStoreValue(set, 'items', 'setItems'),
 
-  targetRange: null,
+  targetRange: null as Range | null,
   setTargetRange: setStoreValue(set, 'targetRange', 'setTargetRange'),
 
-  itemIndex: 0 as number,
+  itemIndex: 0,
   setItemIndex: setStoreValue(set, 'itemIndex', 'setItemIndex'),
 
   combobox: null,
@@ -72,4 +65,4 @@ export const comboboxStoreConfig = (set) => ({
   }
 })
 
-export const useComboboxStore = createStore(comboboxStoreConfig, StoreIdentifier.COMBOBOX , false)
+export const useComboboxStore = createStore(comboboxStoreConfig, StoreIdentifier.COMBOBOX, false)

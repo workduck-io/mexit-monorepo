@@ -1,31 +1,30 @@
-import { NodeEditorContent } from '../Types/Editor';
-import { StoreIdentifier } from '../Types/Store';
-import { PriorityType, TodoStatus, TodosType, TodoType } from '../Types/Todo';
-import { getMentionsFromContent, getTagsFromContent } from '../Utils/content';
-import { ELEMENT_TODO_LI } from '../Utils/editorElements';
-import { defaultContent } from '../Utils/helpers';
-import { convertContentToRawText } from '../Utils/parseData';
+import { NodeEditorContent } from '../Types/Editor'
+import { StoreIdentifier } from '../Types/Store'
+import { PriorityType, TodoStatus, TodosType, TodoType } from '../Types/Todo'
+import { getMentionsFromContent, getTagsFromContent } from '../Utils/content'
+import { ELEMENT_TODO_LI } from '../Utils/editorElements'
+import { defaultContent } from '../Utils/helpers'
+import { convertContentToRawText } from '../Utils/parseData'
 import { createStore } from '../Utils/storeCreator'
 
-import { useReminderStore } from './reminder.store';
+import { useReminderStore } from './reminder.store'
 
 const getTodoMetadata = (content: NodeEditorContent) => {
-    if (!content) return
-  
-    const block = content[0]
-  
-    if (block && block.type === ELEMENT_TODO_LI) {
-      const { priority, status, metadata, ...rest } = block
-  
-      return {
-        priority,
-        status,
-        createdAt: metadata?.createdAt,
-        updatedAt: metadata?.updatedAt
-      }
+  if (!content) return
+
+  const block = content[0]
+
+  if (block && block.type === ELEMENT_TODO_LI) {
+    const { priority, status, metadata, ...rest } = block
+
+    return {
+      priority,
+      status,
+      createdAt: metadata?.createdAt,
+      updatedAt: metadata?.updatedAt
     }
   }
-  
+}
 
 export const createTodo = (
   nodeid: string,
@@ -52,34 +51,34 @@ export const createTodo = (
 }
 const todoStoreConfig = (set, get) => ({
   todos: {} as TodosType,
-  initTodos: (todos) => {
+  initTodos: (todos: TodosType) => {
     if (todos) {
       set({ todos })
     }
   },
   clearTodos: () => set({ todos: {} }),
 
-  addTodoInNode: (nodeid, todo) => {
-    if (!nodeid) {
+  addTodoInNode: (nodeId: string, todo: TodoType) => {
+    if (!nodeId) {
       return
     }
     const todos = get().todos ?? {}
 
-    const nodeTodos = todos?.[nodeid] ?? []
-    set({ todos: { ...todos, [nodeid]: [todo, ...nodeTodos] } })
+    const nodeTodos = todos?.[nodeId] ?? []
+    set({ todos: { ...todos, [nodeId]: [todo, ...nodeTodos] } })
   },
-  getTodoOfNodeWithoutCreating: (nodeid, todoId) => {
-    const todo = get().todos?.[nodeid]?.find((todo) => todo.id === todoId && nodeid === todo.nodeid)
+  getTodoOfNodeWithoutCreating: (nodeId: string, todoId: string): TodoType | undefined => {
+    const todo = get().todos?.[nodeId]?.find((todo) => todo.id === todoId && nodeId === todo.nodeid)
     return todo
   },
 
-  getTodoOfNode: (nodeid, todoId) => {
-    const todo = get().todos?.[nodeid]?.find((todo) => todo.id === todoId && nodeid === todo.nodeid)
+  getTodoOfNode: (nodeId: string, todoId: string): TodoType => {
+    const todo = get().todos?.[nodeId]?.find((todo) => todo.id === todoId && nodeId === todo.nodeid)
     // mog('getTodoOfNode', { nodeid, todoId, todo, todos: get().todos })
     if (!todo) {
-      const newTodo = createTodo(nodeid, todoId)
-      if (!nodeid) return newTodo
-      get().addTodoInNode(nodeid, newTodo)
+      const newTodo = createTodo(nodeId, todoId)
+      if (!nodeId) return newTodo
+      get().addTodoInNode(nodeId, newTodo)
 
       return newTodo
     }
@@ -87,8 +86,8 @@ const todoStoreConfig = (set, get) => ({
     return todo
   },
 
-  getAllTodos: () => {
-    const allTodos = Object.entries(get().todos).reduce((acc, [nodeid, todos] : [string, TodoType[]]) => {
+  getAllTodos: (): TodosType => {
+    const allTodos = Object.entries(get().todos).reduce((acc, [nodeid, todos]: [string, TodoType[]]) => {
       const newTodos = todos.filter((todo) => {
         // TODO: Find a faster way to check for empty content
         const text = convertContentToRawText(todo.content).trim()
@@ -105,78 +104,78 @@ const todoStoreConfig = (set, get) => ({
     return allTodos
   },
 
-  setNodeTodos: (nodeid, todos) => {
+  setNodeTodos: (nodeId: string, todos: Array<TodoType>) => {
     // mog('setNodeTodos', { nodeid, todos })
-    if (!nodeid) return
+    if (!nodeId) return
     const currentTodos = get().todos ?? {}
-    const newTodos = { ...currentTodos, [nodeid]: todos }
+    const newTodos = { ...currentTodos, [nodeId]: todos }
     set({ todos: newTodos })
   },
-  updateTodoOfNode: (nodeid, todo) => {
+  updateTodoOfNode: (nodeId: string, todo: TodoType) => {
     // mog('updateNodeTodos', { nodeid, todo })
-    if (!nodeid) return
+    if (!nodeId) return
     const currentTodos = get().todos ?? {}
 
-    const todos = currentTodos?.[nodeid] ?? []
+    const todos = currentTodos?.[nodeId] ?? []
     const newTodos = todos.map((t) =>
-      t.id === todo.id && todo.nodeid === nodeid ? { ...todo, updatedAt: Date.now() } : t
+      t.id === todo.id && todo.nodeid === nodeId ? { ...todo, updatedAt: Date.now() } : t
     )
     // mog('TODO UPDATE', { newTodos, nodeid, todos })
-    set({ todos: { ...currentTodos, [nodeid]: newTodos } })
+    set({ todos: { ...currentTodos, [nodeId]: newTodos } })
   },
-  replaceContentOfTodos: (nodeid, todosContent) => {
+  replaceContentOfTodos: (nodeId: string, todosContent: NodeEditorContent) => {
     // mog('replaceContentOfTodos', { nodeid, todosContent })
-    if (!nodeid) return
+    if (!nodeId) return
     const todos = get().todos ?? {}
 
     if (todosContent.length === 0) {
-      if (!todos[nodeid]) return
+      if (!todos[nodeId]) return
 
-      delete todos[nodeid]
+      delete todos[nodeId]
       set({ todos })
 
       return
     }
 
-    const nTodo = todos[nodeid] ?? []
+    const nTodo = todos[nodeId] ?? []
     const nodeTodos = todosContent.map((content) => {
-      const todo = nTodo.find((todo) => todo.id === content.id && nodeid === todo.nodeid)
+      const todo = nTodo.find((todo) => todo.id === content.id && nodeId === todo.nodeid)
       const tags = getTagsFromContent([content])
       const mentions = getMentionsFromContent([content])
       // mog('replaceContent', { nodeid, tags, mentions, todosContent, nodeTodos, todo, content })
 
       // Currently nothing as todo id, it is same as block id for now
-      return createTodo(nodeid, content.id, [content], mentions, tags)
+      return createTodo(nodeId, content.id, [content], mentions, tags)
     })
 
-    const leftOutTodos = nTodo.filter((todo) => !nodeTodos.find((t) => t.id === todo.id && nodeid === t.nodeid))
+    const leftOutTodos = nTodo.filter((todo) => !nodeTodos.find((t) => t.id === todo.id && nodeId === t.nodeid))
 
     const reminders = useReminderStore.getState().reminders
     const setReminders = useReminderStore.getState().setReminders
     const newReminders = reminders.filter((reminder) => !leftOutTodos.find((todo) => todo.id === reminder.todoid))
 
     setReminders(newReminders)
-    const newtodos = { ...todos, [nodeid]: nodeTodos }
+    const newtodos = { ...todos, [nodeId]: nodeTodos }
     // mog('NEW TODO', { newtodos })
     set({ todos: newtodos })
   },
-  updatePriorityOfTodo: (nodeid, todoId, priority) => {
+  updatePriorityOfTodo: (nodeId: string, todoId: string, priority: PriorityType) => {
     // mog('updatePro', { nodeid, todoId, priority })
-    if (!nodeid) return
-    const todo = get().getTodoOfNodeWithoutCreating(nodeid, todoId)
+    if (!nodeId) return
+    const todo = get().getTodoOfNodeWithoutCreating(nodeId, todoId)
     if (!todo) return
 
     const newTodo = { ...todo, metadata: { ...todo.metadata, priority } }
-    get().updateTodoOfNode(nodeid, newTodo)
+    get().updateTodoOfNode(nodeId, newTodo)
   },
-  updateStatusOfTodo: (nodeid, todoId, status) => {
+  updateStatusOfTodo: (nodeId: string, todoId: string, status: TodoStatus) => {
     // mog('updateSta', { nodeid, todoId, status })
-    if (!nodeid) return
-    const todo = get().getTodoOfNodeWithoutCreating(nodeid, todoId)
+    if (!nodeId) return
+    const todo = get().getTodoOfNodeWithoutCreating(nodeId, todoId)
     if (!todo) return
 
     const newTodo = { ...todo, metadata: { ...todo.metadata, status } }
-    get().updateTodoOfNode(nodeid, newTodo)
+    get().updateTodoOfNode(nodeId, newTodo)
   }
 })
 

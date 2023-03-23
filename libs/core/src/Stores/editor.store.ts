@@ -1,36 +1,40 @@
 import { NodeContent, NodeProperties } from '../Types/Editor'
 import { StoreIdentifier } from '../Types/Store'
-import { defaultContent } from '../Utils/helpers'
+import { defaultContent, getDefaultContent } from '../Utils/helpers'
 import { createStore } from '../Utils/storeCreator'
 import { getInitialNode } from '../Utils/treeUtils'
 
 import { ComboTriggerType } from './combobox.store'
 import { useContentStore } from './content.store'
 
-export function getContent(nodeid: string): NodeContent {
-  // create a hashmap with id vs content
-  // load the content from hashmap
+export function getContent(nodeId: string): NodeContent {
+  const contents = useContentStore.getState().contents
 
-  const { contents } = useContentStore.getState()
-
-  if (contents[nodeid]) {
-    return contents[nodeid]
+  if (contents[nodeId]) {
+    return contents[nodeId]
   }
-  return defaultContent
+
+  return {
+    ...defaultContent,
+    content: [getDefaultContent()]
+  }
 }
 
-export const editorStoreConfig = (set, get) => ({
+const getInitialEditorStoreState = () => ({
   node: getInitialNode(),
-  content: defaultContent,
+  content: [getDefaultContent()],
   readOnly: false,
   isBannerVisible: false,
   fetchingContent: false,
   activeUsers: [] as Array<string>,
   isEditing: false,
   loadingNodeid: null as string | null,
+  trigger: undefined as ComboTriggerType | undefined
+})
 
+export const editorStoreConfig = (set, get) => ({
+  ...getInitialEditorStoreState(),
   notifyWithBanner: (showBanner: boolean) => set({ isBannerVisible: showBanner }),
-  trigger: undefined as ComboTriggerType | undefined,
   setTrigger: (trigger) => set({ trigger }),
   setActiveUsers: (users) => {
     set({ activeUsers: users, isBannerVisible: users.length !== 0 })
@@ -93,17 +97,13 @@ export const editorStoreConfig = (set, get) => ({
     set({ node, content })
   },
   reset: () => {
-    set({
-      node: getInitialNode(),
-      content: defaultContent,
-      readOnly: false,
-      isBannerVisible: false,
-      fetchingContent: false,
-      activeUsers: [],
-      isEditing: false,
-      loadingNodeid: null
-    })
+    const initialState = getInitialEditorStoreState()
+    set(initialState)
   }
 })
 
-export const useEditorStore = createStore(editorStoreConfig, StoreIdentifier.EDITOR, true)
+export const useEditorStore = createStore(editorStoreConfig, StoreIdentifier.EDITOR, true, {
+  storage: {
+    web: localStorage
+  }
+})

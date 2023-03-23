@@ -1,5 +1,5 @@
-import { StoreIdentifier } from "../Types/Store"
-import { createStore } from "../Utils/storeCreator"
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
 export enum PollActions {
   'hierarchy' = 'hierarchy',

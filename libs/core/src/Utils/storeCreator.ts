@@ -1,7 +1,7 @@
 import create, { StoreApi, UseBoundStore } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-import { StoreIdentifier } from '../Types/Store'
+import { getStoreName, StoreIdentifier } from '../Types/Store'
 
 import { asyncLocalStorage } from './chromeStorageAdapter'
 import { IDBStorage } from './idbStorageAdapter'
@@ -49,7 +49,7 @@ export const createStore = <T extends object, R extends boolean>(
     return create<TypeMap<T, R>>(
       devtools(
         persist(configX, {
-          name: `mexit-${name}-${isExtension() ? 'extension' : 'webapp'}`,
+          name: getStoreName(name, isExtension()),
           ...storeOptions,
           getStorage: () => {
             const webStorage = storage?.web ?? IDBStorage

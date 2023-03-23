@@ -44,6 +44,8 @@ export interface ActionGroup {
 
 export type ActionGroupType = ActionGroup & { connected?: boolean }
 
+export type AppsType = Record<string, ActionGroupType>
+
 export type PortalType = {
   serviceId: string
   serviceType: string
@@ -53,4 +55,3 @@ export type PortalType = {
   namespaceId?: string
   sessionStartTime?: number
 }
-

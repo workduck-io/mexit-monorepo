@@ -6,7 +6,14 @@ import { getPlateEditorRef } from '@udecode/plate'
 
 import { LoadingButton } from '@workduck-io/mex-components'
 
-import { AccessLevel, DefaultPermission, DefaultPermissionValue, InviteModalData, mog, permissionOptions, ShareContext } from '@mexit/core'
+import {
+  AccessLevel,
+  DefaultPermission,
+  DefaultPermissionValue,
+  InviteModalData,
+  mog,
+  permissionOptions
+} from '@mexit/core'
 import { ButtonFields, Group, Label, SelectWrapper, StyledCreatatbleSelect } from '@mexit/shared'
 
 import { replaceUserMention, replaceUserMentionEmail } from '../../Editor/Actions/replaceUserMention'
@@ -26,7 +33,7 @@ import { InviteFormFieldset, InviteFormWrapper, InviteWrapper } from './styles'
 export const InviteModalContent = () => {
   const sModalData = useShareModalStore((state) => state.data)
   const closeModal = useShareModalStore((state) => state.closeModal)
-  const context: ShareContext = useShareModalStore((state) => state.context)
+  const context = useShareModalStore((state) => state.context)
   const { getUserDetails, getUserDetailsUserId } = useUserService()
   const currentUserDetails = useAuthStore((s) => s.userDetails)
   const node = useEditorStore((state) => state.node)

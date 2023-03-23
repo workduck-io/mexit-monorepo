@@ -1,37 +1,31 @@
+import merge from 'deepmerge'
 import produce from 'immer'
 
+import { Shortcut } from '../Types/Help'
 import { StoreIdentifier } from '../Types/Store'
 import { defaultShortcuts } from '../Utils/defaultShortcutsData'
 import { createStore } from '../Utils/storeCreator'
 
 export const helpStoreConfig = (set, get) => ({
   open: false,
+  shortcuts: defaultShortcuts,
   toggleModal: () =>
-    set((state) => ({
-      open: !state.open
-    })),
+    set({
+      open: !get().open
+    }),
   closeModal: () =>
     set({
       open: false
     }),
-  changeShortcut: (keybinding) => {
+  changeShortcut: (keybinding: Shortcut) => {
     set(
-      produce((draft) => {
-        // eslint-disable-next-line
-        // @ts-ignore
+      produce((draft: any) => {
         Object.keys(draft.shortcuts).map((k) => {
-          // eslint-disable-next-line
-          // @ts-ignore
           if (draft.shortcuts[k].keystrokes === keybinding.keystrokes) {
-            // eslint-disable-next-line
-            // @ts-ignore
             draft.shortcuts[k].keystrokes = ''
           }
-          // eslint-disable-next-line
-          // @ts-ignore
+
           if (draft.shortcuts[k].title === keybinding.title) {
-            // eslint-disable-next-line
-            // @ts-ignore
             draft.shortcuts[k].keystrokes = keybinding.keystrokes
           }
           return k
@@ -39,8 +33,13 @@ export const helpStoreConfig = (set, get) => ({
       })
     )
   },
-  shortcuts: defaultShortcuts,
   reset: () => set({ shortcuts: defaultShortcuts })
 })
 
-export const useHelpStore = createStore(helpStoreConfig, StoreIdentifier.HELP, true);
+export const useHelpStore = createStore(helpStoreConfig, StoreIdentifier.HELP, true, {
+  version: 2,
+  migrate: (persistedState: any, version: number) => {
+    persistedState.shortcuts = merge(persistedState.shortcuts, defaultShortcuts)
+    return persistedState
+  }
+})

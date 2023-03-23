@@ -10,19 +10,19 @@ type RouteInformation = {
   banners?: Array<BannerType>
 }
 
+type RoutesRecord = Record<Route, RouteInformation>
+
 export enum BannerType {
   editor = 'editor-banner',
   release = 'release-banner'
 }
 
 const routeStoreConfig = (set, get) => ({
-  routes: {},
-  setRoute: (routes) => set({ routes }),
-  addRouteInfo: (route, info) => {
+  routes: {} as RoutesRecord,
+  setRoute: (routes: RoutesRecord) => set({ routes }),
+  addRouteInfo: (route: Route, info: RouteInformation) => {
     set(
-      produce((draft) => {
-        // eslint-disable-next-line
-        // @ts-ignore
+      produce((draft: any) => {
         draft.routes[route] = info
       })
     )
@@ -40,7 +40,7 @@ const routeStoreConfig = (set, get) => ({
     return banners?.includes(banner)
   },
   clear: () => set({ routes: {} }),
-  addUserInRoute: (route, userId) => {
+  addUserInRoute: (route: Route, userId: string) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -71,7 +71,7 @@ const routeStoreConfig = (set, get) => ({
       )
     }
   },
-  removeUserFromRoute: (route, userId) => {
+  removeUserFromRoute: (route: Route, userId: string) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -96,7 +96,7 @@ const routeStoreConfig = (set, get) => ({
       }
     }
   },
-  showBannerInRoute: (route, banner) => {
+  showBannerInRoute: (route: Route, banner: BannerType) => {
     const routes = get().routes
 
     if (routes[route]) {
@@ -107,7 +107,7 @@ const routeStoreConfig = (set, get) => ({
       set({ routes: { ...routes, [route]: routeInfo } })
     }
   },
-  removeRouteInfo: (route) => {
+  removeRouteInfo: (route: Route) => {
     const routes = get().routes
 
     if (routes[route]) {

@@ -1,16 +1,15 @@
-import { ILink, NodeMetadata, NodeProperties } from '../Types/Editor';
-import { SingleNamespace, StoreIdentifier } from '../Types/Store';
+import { Contents, ILink, NodeEditorContent, NodeMetadata, NodeProperties } from '../Types/Editor'
+import { SingleNamespace, StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-
 export const publicNodeStoreConfig = (set, get) => ({
-  iLinks: [],
-  contents: {},
-  currentNode: null,
+  iLinks: [] as ILink[],
+  contents: {} as Contents,
+  currentNode: null as NodeProperties | null,
   setCurrentNode: (node: NodeProperties) => {
     set({ currentNode: node })
   },
-  namespace: undefined,
+  namespace: undefined as SingleNamespace | undefined,
   setNamespace: (namespace: SingleNamespace) => {
     set({ namespace })
   },
@@ -20,23 +19,23 @@ export const publicNodeStoreConfig = (set, get) => ({
   getContent: (nodeID: string) => {
     return get().contents[nodeID]
   },
-  setContent: (nodeid, content, metadata) => {
+  setContent: (nodeId: string, content: NodeEditorContent, metadata: NodeMetadata) => {
     const oldContent = get().contents
 
-    const oldMetadata = oldContent[nodeid] && oldContent[nodeid].metadata ? oldContent[nodeid].metadata : undefined
-    delete oldContent[nodeid]
+    const oldMetadata = oldContent[nodeId] && oldContent[nodeId].metadata ? oldContent[nodeId].metadata : undefined
+    delete oldContent[nodeId]
     const nmetadata = { ...oldMetadata, ...metadata }
     set({
-      contents: { [nodeid]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
+      contents: { [nodeId]: { type: 'editor', content, metadata: nmetadata }, ...oldContent }
     })
   },
-  getMetadata: (nodeid) => {
+  getMetadata: (nodeId) => {
     const contents = get().contents
-    return contents[nodeid] && contents[nodeid].metadata ? contents[nodeid].metadata : ({} as NodeMetadata)
+    return contents[nodeId] && contents[nodeId].metadata ? contents[nodeId].metadata : ({} as NodeMetadata)
   },
   reset: () => {
     set({ contents: {}, currentNode: null, iLinks: [] })
   }
 })
 
-export const usePublicNodeStore = createStore(publicNodeStoreConfig, StoreIdentifier.PUBLICNODES , false)
+export const usePublicNodeStore = createStore(publicNodeStoreConfig, StoreIdentifier.PUBLICNODES, false)

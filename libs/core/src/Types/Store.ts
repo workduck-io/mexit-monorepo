@@ -57,13 +57,13 @@ export enum StoreIdentifier {
   PUBLICNODES = 'public-nodes',
   REFACTOR = 'refactor',
   RENAME = 'rename',
-  ROUTE = 'Route Store ',
+  ROUTE = 'route-store',
   SHAREMODAL = 'share-modal',
   TREE = 'tree',
   USERCACHE = 'user-cache',
-  VERSION = 'version',
+  APP = 'app',
   AUTHSTORE = 'authstore',
-  EDITORS = 'Multiple Editors Store',
+  EDITORS = 'editors',
   EDITOR = 'editor',
   BUFFER = 'buffer',
   BLOCKHIGHLIGHT = 'block-highlight',
@@ -71,6 +71,10 @@ export enum StoreIdentifier {
   COMBOBOX = 'combobox',
   TODO = 'todo',
   INIT = 'init'
+}
+
+export const getStoreName = (key: StoreIdentifier, isExtension?: boolean) => {
+  return `mexit-${key}-${isExtension ? 'extension' : 'webapp'}`
 }
 
 export const DefaultMIcons = {

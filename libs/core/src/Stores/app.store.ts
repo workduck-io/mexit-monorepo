@@ -29,7 +29,7 @@ export const appStoreConfig = (set, get) => ({
   setManualReload: (manualReload: boolean) => set({ manualReload })
 })
 
-export const useAppStore = createStore(appStoreConfig, StoreIdentifier.VERSION, true, {
+export const useAppStore = createStore(appStoreConfig, StoreIdentifier.APP, true, {
   storage: {
     web: localStorage
   }

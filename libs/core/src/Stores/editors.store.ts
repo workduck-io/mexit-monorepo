@@ -4,57 +4,57 @@ import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 import { useBufferStore } from './buffer.store'
-// import { useBufferStore } from '../Hooks/useEditorBuffer'
 
 enableMapSet()
 
+type EditorState = {
+  blink?: boolean
+  editing?: boolean
+}
+
+type NodeIdType = string
+
+const getInitialState = () => ({
+  editors: {} as Record<NodeIdType, EditorState>,
+  pinned: new Set<NodeIdType>(),
+  isEmpty: true
+})
+
 const multipleEditorsConfig = (set, get) => ({
-  editors: {},
-  pinned: new Set(),
-  isEmpty: true,
-  setPinned: (pinned) => set({ pinned }),
-  unPinNote: (noteToUnpin) => {
+  ...getInitialState(),
+  setPinned: (pinned: Set<NodeIdType>) => set({ pinned }),
+  unPinNote: (noteToUnpin: NodeIdType) => {
     set(
-      produce((draft) => {
+      produce((draft: any) => {
         const isNotePinned = get().pinned.has(noteToUnpin)
-        // eslint-disable-next-line
-        // @ts-ignore
         if (isNotePinned) draft.pinned.delete(noteToUnpin)
       })
     )
   },
-  setIsEmpty: (status) => set({ isEmpty: status }),
-  pinNote: (noteToPin) => {
+  setIsEmpty: (status: boolean) => set({ isEmpty: status }),
+  pinNote: (noteToPin: NodeIdType) => {
     set(
-      produce((draft) => {
+      produce((draft: any) => {
         const isNotePinned = get().pinned.has(noteToPin)
         if (isNotePinned) return
-        // eslint-disable-next-line
-        // @ts-ignore
         draft.pinned.add(noteToPin)
       })
     )
   },
-  addEditor: (noteId) => {
+  addEditor: (noteId: NodeIdType) => {
     set(
-      produce((draft) => {
-        // eslint-disable-next-line
-        // @ts-ignore
+      produce((draft: any) => {
         draft.editors[noteId] = {
           editing: false,
           blink: false
         }
-        // eslint-disable-next-line
-        // @ts-ignore
         draft.isEmpty = false
       })
     )
   },
   isEditingAnyPreview: () => {
     const currentState = get().editors || {}
-    // eslint-disable-next-line
-    // @ts-ignore
-    const isEditing = Object.values(currentState)?.find((item) => item.editing)
+    const isEditing = Object.values(currentState)?.find((item: EditorState) => item.editing)
 
     return !!isEditing
   },
@@ -65,51 +65,35 @@ const multipleEditorsConfig = (set, get) => ({
       return {
         nodeId: mapOfEditors.at(-1)[0],
         editorState: mapOfEditors.at(-1)[1]
-      } as any;
+      } as any
   },
-  removeEditor: (noteId) => {
+  removeEditor: (noteId: NodeIdType) => {
     const currentState = useBufferStore.getState().buffer?.[noteId]
     useBufferStore.getState().add(noteId, currentState)
 
     set(
-      produce((draft) => {
-        // eslint-disable-next-line
-        // @ts-ignore
+      produce((draft: any) => {
         delete draft.editors[noteId]
-        // eslint-disable-next-line
-        // @ts-ignore
+
         if (!draft.editors || Object.entries(draft.editors).length === 0) {
-          // eslint-disable-next-line
-          // @ts-ignore
           draft.editors = {}
-          // eslint-disable-next-line
-          // @ts-ignore
           draft.isEmpty = true
         }
       })
     )
   },
-  changeEditorState: (noteId, editorState) => {
+  changeEditorState: (noteId: NodeIdType, editorState: EditorState) => {
     set(
-      produce((draft) => {
-        // eslint-disable-next-line
-        // @ts-ignore
+      produce((draft: any) => {
         const existingState = draft.editors[noteId]
-        // eslint-disable-next-line
-        // @ts-ignore
         draft.editors[noteId] = { ...(existingState || {}), ...editorState }
       })
     )
   },
   reset: () => {
-    set({
-      editors: {},
-      isEmpty: true,
-      pinned: new Set()
-    })
+    const initialState = getInitialState()
+    set(initialState)
   }
 })
 
-export const useMultipleEditors = createStore(multipleEditorsConfig, StoreIdentifier.EDITORS , false)
-
-
+export const useMultipleEditors = createStore(multipleEditorsConfig, StoreIdentifier.EDITORS, false)

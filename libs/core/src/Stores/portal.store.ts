@@ -1,13 +1,14 @@
+import { AppsType, PortalType } from '../Types/Actions'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 const portalStoreConfig = (set, get) => ({
-  apps: {},
-  setApps: (apps) => set({ apps }),
+  apps: {} as AppsType,
+  connectedPortals: [] as Array<PortalType>,
 
-  connectedPortals: [],
+  setApps: (apps: AppsType) => set({ apps }),
   setConnectedPortals: (connectedPortals) => set({ connectedPortals }),
-  connectPortal: (portal) => {
+  connectPortal: (portal: PortalType) => {
     const connectedPortals = get().connectedPortals
     const newConnectedPortals = [...connectedPortals, portal]
     set({ connectedPortals: newConnectedPortals })
@@ -15,7 +16,7 @@ const portalStoreConfig = (set, get) => ({
   getIsPortalConnected: (actionGroupId: string) => {
     const connectedPortals = get().connectedPortals
 
-    return connectedPortals.find((portal) => portal.serviceType === actionGroupId)
+    return connectedPortals.find((portal: PortalType) => portal.serviceType === actionGroupId)
   },
   updateConnectedPortals: (actionGroupId: string, serviceId: string, parentNodeId: string) => {
     const connectedPortals = get().connectedPortals
@@ -30,4 +31,8 @@ const portalStoreConfig = (set, get) => ({
   }
 })
 
-export const usePortalStore = createStore(portalStoreConfig, StoreIdentifier.PORTAL, true)
+export const usePortalStore = createStore(portalStoreConfig, StoreIdentifier.PORTAL, true, {
+  storage: {
+    web: localStorage
+  }
+})

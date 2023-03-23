@@ -1,4 +1,4 @@
-import { AppInitStatus } from '../Types/Auth'
+import { AppInitStatus, UserDetails } from '../Types/Auth'
 import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
@@ -6,12 +6,12 @@ export const authStoreConfig = (set, get) => ({
   isForgottenPassword: false,
   authenticated: false,
   registered: false,
-  userDetails: undefined,
+  userDetails: undefined as UserDetails | undefined,
   appInitStatus: AppInitStatus.START,
-  setAppInitStatus: (appInitStatus) => set({ appInitStatus }),
   workspaceDetails: undefined,
+  setAppInitStatus: (appInitStatus) => set({ appInitStatus }),
   setIsUserAuthenticated: () => set({ authenticated: true, appInitStatus: AppInitStatus.COMPLETE }),
-  setAuthenticated: (userDetails, workspaceDetails) =>
+  setAuthenticated: (userDetails: UserDetails, workspaceDetails) =>
     set({ appInitStatus: AppInitStatus.RUNNING, userDetails, workspaceDetails, registered: false }),
   // setAuthenticatedUserDetails: (userDetails: UserDetails) => set({ authenticated: true, userDetails }),
   setUnAuthenticated: () =>
@@ -21,16 +21,17 @@ export const authStoreConfig = (set, get) => ({
       appInitStatus: AppInitStatus.START,
       workspaceDetails: undefined
     }),
-  setRegistered: (val) => set({ registered: val }),
-  setIsForgottenPassword: (val) => set({ isForgottenPassword: val }),
-  getWorkspaceId: () => {
+  setRegistered: (registered: boolean) => set({ registered }),
+  setIsForgottenPassword: (isForgottenPassword: boolean) => set({ isForgottenPassword }),
+  getWorkspaceId: (): string | undefined => {
     const workspaceDetails = get().workspaceDetails
     if (workspaceDetails) {
       return workspaceDetails.id
     }
+
     return undefined
   },
-  updateUserDetails: (userDetails) => {
+  updateUserDetails: (userDetails: UserDetails) => {
     set({ userDetails: { ...get().userDetails, ...userDetails } })
   }
 })

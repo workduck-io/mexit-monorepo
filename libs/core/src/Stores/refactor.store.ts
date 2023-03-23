@@ -1,17 +1,16 @@
-import { NodeLink } from '../Types/Editor';
-import { StoreIdentifier } from '../Types/Store';
+import { NodeLink } from '../Types/Editor'
+import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
-import { RefactorPath } from './rename.store';
-
+import { RefactorPath } from './rename.store'
 
 export const refactorStoreConfig = (set) => ({
   open: false,
-  mockRefactored: [],
-  from: undefined,
-  to: undefined,
-  fromNS: undefined,
-  toNS: undefined,
+  mockRefactored: [] as NodeLink[],
+  from: undefined as string | undefined,
+  to: undefined as string | undefined,
+  fromNS: undefined as string | undefined,
+  toNS: undefined as string | undefined,
   focus: true,
   openModal: () =>
     set({
@@ -42,4 +41,4 @@ export const refactorStoreConfig = (set) => ({
     })
 })
 
-export const useRefactorStore = createStore(refactorStoreConfig, StoreIdentifier.REFACTOR , false)
+export const useRefactorStore = createStore(refactorStoreConfig, StoreIdentifier.REFACTOR, false)

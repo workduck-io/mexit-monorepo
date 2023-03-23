@@ -1,25 +1,28 @@
-import { StoreIdentifier } from '../Types/Store';
-import { mog } from '../Utils/mog';
+import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
-
 
 /**
  * Used to store the state related to the highlighted blocks in the editor
  * NOTE: This is not affiliated with highlights captured from web
  */
-export const blockHighlightStoreConfig = (set, get) => ({
+
+const getInitialStoreState = () => ({
   highlighted: {
-    preview: [],
-    editor: []
-  },
-  addHighlightedBlockId: (id, key) => {
+    preview: [] as string[],
+    editor: [] as string[]
+  }
+})
+
+export const blockHighlightStoreConfig = (set, get) => ({
+  ...getInitialStoreState(),
+  addHighlightedBlockId: (id: string, key: string) => {
     const { highlighted } = get()
     const newHighlighted = { ...highlighted }
     newHighlighted[key].push(id)
     // mog('addHighlighted', { newHighlighted, id, key })
     set({ highlighted: newHighlighted })
   },
-  setHighlightedBlockIds: (ids, key) => {
+  setHighlightedBlockIds: (ids: string[], key: string) => {
     const { highlighted } = get()
     const newHighlighted = { ...highlighted }
     newHighlighted[key] = ids
@@ -27,28 +30,21 @@ export const blockHighlightStoreConfig = (set, get) => ({
     set({ highlighted: newHighlighted })
   },
   clearHighlightedBlockIds: () => {
-    const oldHighlighted = get().highlighted
-    const newHighlighted = {
-      preview: [],
-      editor: []
-    }
-    mog('clearHighlighted', { oldHighlighted })
-    set({ highlighted: newHighlighted })
+    const initialState = getInitialStoreState()
+    set({
+      highlighted: initialState.highlighted
+    })
   },
   clearAllHighlightedBlockIds: () => {
-    const oldHighlighted = get().highlighted
-    const newHighlighted = {
-      preview: [],
-      editor: []
-    }
-    mog('clearAllHighlighted', { oldHighlighted })
-    set({ highlighted: newHighlighted })
+    const initialState = getInitialStoreState()
+    set({
+      highlighted: initialState.highlighted
+    })
   },
-  isBlockHighlighted: (id) => {
-    const { highlighted } = get()
-    // mog('isBlockHighlighted', { hightlighted, id })
-    return highlighted.editor.includes(id) || highlighted.preview.includes(id)
+  isBlockHighlighted: (id: string) => {
+    const highlighted = get().highlighted
+    return highlighted?.editor?.includes(id) || highlighted?.preview?.includes(id)
   }
 })
 
-export const useBlockHighlightStore = createStore(blockHighlightStoreConfig, StoreIdentifier.BLOCKHIGHLIGHT , false)
+export const useBlockHighlightStore = createStore(blockHighlightStoreConfig, StoreIdentifier.BLOCKHIGHLIGHT, false)

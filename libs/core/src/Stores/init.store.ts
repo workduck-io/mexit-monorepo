@@ -3,9 +3,9 @@ import { createStore } from '../Utils/storeCreator'
 
 export const initStoreConfig = (set, get) => ({
   iframeAdded: false,
-  setIframeAdded: (value: boolean) => {
-    set((state) => ({ ...state, iframeAdded: value }))
+  setIframeAdded: (iframeAdded: boolean) => {
+    set({ iframeAdded })
   }
 })
 
-export const useInitStore = createStore(initStoreConfig, StoreIdentifier.INIT , false)
+export const useInitStore = createStore(initStoreConfig, StoreIdentifier.INIT, false)

@@ -3,15 +3,15 @@ import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 const bufferStoreConfig = (set, get) => ({
-  buffer: {},
-  add: (nodeid: string, val: NodeEditorContent) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
-  getBuffer: (nodeId: string) => {
+  buffer: {} as Record<string, NodeEditorContent>,
+  add: (nodeId: string, val: NodeEditorContent) => set({ buffer: { ...get().buffer, [nodeId]: val } }),
+  getBuffer: (nodeId: string): NodeEditorContent | undefined => {
     const bufferVal: NodeEditorContent = get().buffer?.[nodeId]
     return bufferVal
   },
-  remove: (nodeid: string) => {
+  remove: (nodeId: string) => {
     const newBuffer = get().buffer
-    if (newBuffer[nodeid]) delete newBuffer[nodeid]
+    if (newBuffer[nodeId]) delete newBuffer[nodeId]
     set({ buffer: newBuffer })
   },
   clear: () => set({ buffer: {} })

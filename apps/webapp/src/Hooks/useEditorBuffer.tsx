@@ -30,7 +30,7 @@ export const useEditorBuffer = () => {
   const { saveEditorValueAndUpdateStores } = useDataSaverFromContent()
 
   const saveAndClearBuffer = (explicitSave?: boolean) => {
-    const buffer: Record<string, NodeEditorContent> = useBufferStore.getState().buffer
+    const buffer = useBufferStore.getState().buffer
     Object.entries(buffer)
       .map(([nodeid, val]) => {
         const content = getContent(nodeid)

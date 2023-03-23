@@ -1,5 +1,5 @@
-import { NodeLink } from '../Types/Editor';
-import { StoreIdentifier } from '../Types/Store';
+import { NodeLink } from '../Types/Editor'
+import { StoreIdentifier } from '../Types/Store'
 import { createStore } from '../Utils/storeCreator'
 
 export interface RefactorPath {
@@ -9,13 +9,13 @@ export interface RefactorPath {
 
 export const renameStoreConfig = (set) => ({
   open: false,
-  mockRefactored: [],
-  from: undefined,
-  fromNS: undefined,
-  to: undefined,
-  toNS: undefined,
+  mockRefactored: [] as NodeLink[],
+  from: undefined as string | undefined,
+  fromNS: undefined as string | undefined,
+  to: undefined as string | undefined,
+  toNS: undefined as string | undefined,
   focus: true,
-  openModal: (id) => {
+  openModal: (id: string) => {
     if (id) {
       set({ open: true, from: id })
     } else {
@@ -47,4 +47,4 @@ export const renameStoreConfig = (set) => ({
     })
 })
 
-export const useRenameStore = createStore(renameStoreConfig, StoreIdentifier.RENAME , false)
+export const useRenameStore = createStore(renameStoreConfig, StoreIdentifier.RENAME, false)

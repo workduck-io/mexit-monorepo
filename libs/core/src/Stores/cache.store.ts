@@ -1,5 +1,5 @@
-import { StoreIdentifier } from "../Types/Store"
-import { createStore } from "../Utils/storeCreator"
+import { StoreIdentifier } from '../Types/Store'
+import { createStore } from '../Utils/storeCreator'
 
 export interface CacheUser {
   id: string
@@ -8,8 +8,12 @@ export interface CacheUser {
   name: string
 }
 
+const getInitialState = () => ({
+  cache: [] as CacheUser[]
+})
+
 const userCacheStoreConfig = (set, get) => ({
-  cache: [] as CacheUser[],
+  ...getInitialState(),
   setCache: (users: CacheUser[]) => {
     set({ cache: users })
   },
@@ -27,8 +31,13 @@ const userCacheStoreConfig = (set, get) => ({
     return undefined
   },
   clearCache: () => {
-    set({ cache: [] })
+    const initialState = getInitialState()
+    set(initialState)
   }
 })
 
-export const useUserCacheStore = createStore(userCacheStoreConfig, StoreIdentifier.USERCACHE , true)
+export const useUserCacheStore = createStore(userCacheStoreConfig, StoreIdentifier.USERCACHE, true, {
+  storage: {
+    web: localStorage
+  }
+})
