@@ -62,6 +62,10 @@ export const wUpdateDoc = async (doc: IUpdateDoc) => {
   if (childIframe) return childIframe.updateDoc(doc)
 }
 
+export const wUpdateOrAppendBlocks = async (doc: IUpdateDoc) => {
+  if (childIframe) return childIframe.updateOrAppendBlocks(doc)
+}
+
 export const wRemoveDoc = async (key: Indexes, id: string) => {
   if (childIframe) return childIframe.removeDoc(key, id)
 }

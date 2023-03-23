@@ -8,7 +8,8 @@ import {
   extractMetadata,
   getSnippetCommand,
   Snippet,
-  SnippetID
+  SnippetID,
+  useContentStore
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
@@ -28,6 +29,7 @@ export const useSnippets = () => {
   const updateDescription = useDescriptionStore((store) => store.updateDescription)
   const getWorkspaceId = useAuthStore((store) => store.getWorkspaceId)
   const { setVisualState } = useSputlitContext()
+
   const setPreviewMode = useEditorStore((s) => s.setPreviewMode)
   const addMetadata = useMetadataStore((s) => s.addMetadata)
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
@@ -73,6 +75,8 @@ export const useSnippets = () => {
           id: message.id,
           contents: request.data.content,
           title: message.title
+        }).then(() => {
+          useContentStore.getState().setDocUpdated()
         })
 
         if (notify) {

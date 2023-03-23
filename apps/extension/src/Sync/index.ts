@@ -58,7 +58,7 @@ const messagePassing = () => {
     useContentStore,
     {
       name: BroadcastSyncedChannel.CONTENTS,
-      sync: [{ field: 'contents' }]
+      sync: [{ field: 'contents' }, { field: 'docUpdated' }]
     },
     onStateChange
   )

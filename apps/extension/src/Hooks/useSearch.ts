@@ -18,7 +18,8 @@ import {
   ListItemType,
   QuickLinkType,
   SearchRepExtra,
-  sortByCreated
+  sortByCreated,
+  useContentStore
 } from '@mexit/core'
 import { useQuery } from '@mexit/shared'
 
@@ -26,7 +27,7 @@ import useDataStore from '../Stores/useDataStore'
 import { useLinkStore } from '../Stores/useLinkStore'
 import { useMentionStore } from '../Stores/useMentionStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { wAddDoc, wRemoveDoc, wSearchIndexWithRanking, wUpdateDoc } from '../Sync/invokeOnWorker'
+import { wAddDoc, wRemoveDoc, wSearchIndexWithRanking, wUpdateDoc, wUpdateOrAppendBlocks } from '../Sync/invokeOnWorker'
 import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 import { useAuthStore } from './useAuth'
@@ -71,10 +72,11 @@ export const useSearch = () => {
   const { getQuickLinks } = useQuickLinks()
   const { getSnippet } = useSnippets()
   const { generateSearchQuery } = useQuery()
+  const setDocUpdated = useContentStore((store) => store.setDocUpdated)
 
   const { getSearchExtra } = useSearchExtra()
 
-  const { getPathFromNodeid } = useLinks()
+  const { getTitleFromNoteId } = useLinks()
 
   const searchInList = async (actionType?: ActionType) => {
     const ilinks = useDataStore.getState().ilinks
@@ -156,12 +158,29 @@ export const useSearch = () => {
     const extra = getSearchExtra()
     await wAddDoc({
       ...doc,
-      title: doc.title ?? getPathFromNodeid(doc.id),
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
       options: {
         ...(doc.options ?? {}),
         extra
       }
     })
+
+    setDocUpdated()
+  }
+
+  const updateBlocks = async (doc: IUpdateDoc) => {
+    const extra = getSearchExtra()
+
+    await wUpdateOrAppendBlocks({
+      ...doc,
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
+      options: {
+        ...(doc.options ?? {}),
+        extra
+      }
+    })
+
+    setDocUpdated()
   }
 
   const updateDocument = async (doc: IUpdateDoc) => {
@@ -169,21 +188,25 @@ export const useSearch = () => {
 
     await wUpdateDoc({
       ...doc,
-      title: doc.title ?? getPathFromNodeid(doc.id),
+      title: doc.title ?? getTitleFromNoteId(doc.id, { includeArchived: true, includeShared: true }),
       options: {
         ...(doc.options ?? {}),
         extra
       }
     })
+
+    setDocUpdated()
   }
 
   const removeDocument = async (key: Indexes, id: string) => {
     await wRemoveDoc(key, id)
+    setDocUpdated()
   }
 
   return {
     addDocument,
     searchInList,
+    updateBlocks,
     updateDocument,
     removeDocument
   }

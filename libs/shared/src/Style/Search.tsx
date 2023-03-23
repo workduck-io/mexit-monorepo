@@ -123,6 +123,7 @@ export const FilterValuesWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.small} 0;
 `
 
 export const SearchFiltersWrapper = styled.div`
@@ -138,9 +139,15 @@ export const SearchFilterCategoryLabel = styled.div`
   padding: ${({ theme }) => `${theme.spacing.small} 0`};
 `
 
-export const SearchFilterLabel = styled.div`
+export const SearchFilterLabel = styled.div<{ flexStart?: boolean }>`
   flex-shrink: 1;
   display: flex;
+
+  ${({ flexStart }) =>
+    flexStart &&
+    css`
+      align-self: flex-start;
+    `};
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;

@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { BodyFont } from './Search'
+
 export const FilterWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -53,6 +55,11 @@ export const FilterMenuDiv = styled(GenericFlex)<{ noBorder?: boolean }>`
     `}
 
   color: ${({ theme }) => theme.tokens.colors.primary.default};
+`
+
+export const StyledTag = styled(FilterMenuDiv)`
+  padding: ${({ theme }) => theme.spacing.tiny} ${({ theme }) => theme.spacing.small};
+  ${BodyFont}
 `
 
 export const FilterTypeDiv = styled(GenericSection)``

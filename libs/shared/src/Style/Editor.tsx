@@ -204,6 +204,11 @@ export const EditorStyles = styled.div<{ readOnly?: boolean; withShadow?: boolea
     }
   }
 
+  .slate-TableCellElement-content,
+  .slate-TableCellElement-handle {
+    z-index: 1;
+  }
+
   table {
     ${({ theme }) => generateStyle(theme.editor.elements.table.wrapper)}
     background: ${({ theme }) => theme.tokens.surfaces.s[2]};

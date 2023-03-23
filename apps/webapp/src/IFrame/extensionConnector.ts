@@ -19,7 +19,8 @@ import {
   searchIndexWithRanking,
   startRequestsWorkerService,
   startSearchWorker,
-  updateDoc
+  updateDoc,
+  updateOrAppendBlocks
 } from '../Workers/controller'
 
 import { broadCastMessage } from './channels'
@@ -55,6 +56,7 @@ export const webExtensionConnector = async () => {
     startRequestsWorkerService,
     addDoc,
     updateDoc,
+    updateOrAppendBlocks,
     removeDoc,
     initHighlightsExtension,
     initLinksExtension,
