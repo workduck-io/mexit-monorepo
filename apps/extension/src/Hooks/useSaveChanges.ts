@@ -272,8 +272,6 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = message.content ?? request.body.content
-        console.log('CONTENT IS', { content, message })
-
         appendContent(node.nodeid, content)
         const title = !bulkCreateRequest ? message.title : message.node.title
         updateBlocks({
