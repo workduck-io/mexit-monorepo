@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Tag } from '@mexit/core'
 
-import { FilterMenuDiv } from '../Style/Filter.style'
+import { StyledTag } from '../Style/Filter.style'
 
 import { Menu, MenuItem } from './FloatingElements/Dropdown'
 import { IconDisplay } from './IconDisplay'
@@ -28,14 +28,14 @@ export const AddTagMenu = ({ tags, addTag, createTag, root }: AddTagMenuProps) =
 
   return (
     <Menu
+      noBackground
       className={AddTagClassName}
       values={
-        <FilterMenuDiv>
+        <StyledTag>
           <IconDisplay icon={DefaultMIcons.ADD} />
           Add
-        </FilterMenuDiv>
+        </StyledTag>
       }
-      noHover
       allowSearch
       onCreate={onCreateNewTag}
       searchPlaceholder={`Search for a tag`}

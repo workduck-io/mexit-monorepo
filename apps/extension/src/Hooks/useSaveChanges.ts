@@ -17,7 +17,6 @@ import useDataStore from '../Stores/useDataStore'
 import { useHighlightStore } from '../Stores/useHighlightStore'
 import { useRecentsStore } from '../Stores/useRecentsStore'
 import { useSputlitStore } from '../Stores/useSputlitStore'
-import { wUpdateDoc } from '../Sync/invokeOnWorker'
 
 import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
@@ -25,6 +24,7 @@ import { useHighlights } from './useHighlights'
 import { useInternalLinks } from './useInternalLinks'
 import { useNamespaces } from './useNamespaces'
 import { useNodes } from './useNodes'
+import { useSearch } from './useSearch'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export interface AppendAndSaveProps {
@@ -40,6 +40,7 @@ export function useSaveChanges() {
   const { setPreviewMode, setNodeContent } = useEditorStore()
   const { getParentILink, getEntirePathILinks, updateMultipleILinks, updateSingleILink, createNoteHierarchyString } =
     useInternalLinks()
+  const { updateDocument, updateBlocks } = useSearch()
   const { setVisualState } = useSputlitContext()
   const setNode = useSputlitStore((s) => s.setNode)
   const setSelection = useSputlitStore((s) => s.setSelection)
@@ -127,7 +128,7 @@ export function useSaveChanges() {
         setContent(nodeid, content)
 
         const title = !bulkCreateRequest ? message.title : message.node.title
-        wUpdateDoc({ id: nodeid, contents: content, title })
+        updateDocument({ id: nodeid, contents: content, title })
 
         mog('DispatchAfterSave', { response, nodeid, content, metadata, highlight, blockHighlightMap })
         dispatchAfterSave({ nodeid, content, metadata, highlight, blockHighlightMap }, saveAndExit, notification)
@@ -271,10 +272,11 @@ export function useSaveChanges() {
         const bulkCreateRequest = request.subType === 'BULK_CREATE_NODES'
         const nodeid = !bulkCreateRequest ? message.id : message.node.id
         const content = message.content ?? request.body.content
+        console.log('CONTENT IS', { content, message })
 
         appendContent(node.nodeid, content)
         const title = !bulkCreateRequest ? message.title : message.node.title
-        wUpdateDoc({
+        updateBlocks({
           id: node.nodeid,
           contents: content,
           title

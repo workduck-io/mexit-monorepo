@@ -91,10 +91,12 @@ const SearchFilters = ({
         </FilterValuesWrapper>
         <NewFilterMenu filters={filters} addFilter={(f) => addCurrentFilter(f)} removeLastFilter={removeLastFilter} />
       </SearchFiltersWrapper>
-      {onGroupByChange && <GroupByMenu onChange={onGroupByChange} />}
-      {sortMenuProps && <SortMenu {...sortMenuProps} />}
-      {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
-      {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
+      <SearchFilterLabel flexStart>
+        {onGroupByChange && <GroupByMenu onChange={onGroupByChange} />}
+        {sortMenuProps && <SortMenu {...sortMenuProps} />}
+        {onEntityFilterChange && <EntityFilterMenu onChange={onEntityFilterChange} />}
+        {viewSelectorProps && <ViewSelector {...viewSelectorProps} />}
+      </SearchFilterLabel>
     </SearchFilterWrapper>
   )
 }

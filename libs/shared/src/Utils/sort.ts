@@ -35,5 +35,5 @@ export const sortGroup = <T extends object>(
 
   const val = getSortFunction(sortBy)(aValue, bValue)
 
-  return options.sortOrder === 'descending' ? val * -1 : val
+  return options.sortOrder === 'ascending' ? val * -1 : val
 }

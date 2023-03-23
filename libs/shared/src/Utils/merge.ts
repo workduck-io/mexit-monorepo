@@ -106,7 +106,7 @@ export const groupItems = (
 
   if (sortBy) {
     Object.keys(groupedValues).forEach((key) => {
-      groupedValues[key].sort((a, b) => sortGroup(a, b, { sortBy, sortOrder: options.sortOrder }))
+      groupedValues[key] = groupedValues[key].sort((a, b) => sortGroup(a, b, { sortBy, sortOrder: options.sortOrder }))
     })
   }
 
@@ -118,7 +118,7 @@ export const groupItems = (
       const sort = options.groupBy.split(SEPARATOR).at(-1)
       const val = getSortFunction(sort)(a, b)
 
-      return options.sortOrder === 'descending' ? val * -1 : val
+      return val
     })
     .reduce((acc, key) => {
       acc[key] = groupedValues[key]

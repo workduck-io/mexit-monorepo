@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import trashIcon from '@iconify/icons-codicon/trash'
 import arrowLeftRightLine from '@iconify/icons-ri/arrow-left-right-line'
@@ -17,8 +18,10 @@ import {
   LoadingButton,
   ToolbarTooltip
 } from '@workduck-io/mex-components'
+import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
+  PrimaryText,
   ShortcutToken,
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
@@ -40,6 +43,68 @@ interface ViewHeaderProps {
   cardSelected?: boolean // * To show actions related to selected Item
 }
 
+const ViewChangeStatus = ({ viewId }) => {
+  const views = useViewStore((store) => store.views)
+
+  const { viewType, sortOrder, globalJoin, sortType, entities, currentFilters, groupBy } = useViewFilters()
+  const { getView, updateView } = useViews()
+
+  const isCurrentViewChanged = useMemo(() => {
+    const currentView = getView(viewId)
+    return !(
+      JSON.stringify(currentFilters) === JSON.stringify(currentView?.filters) &&
+      viewType === currentView?.viewType &&
+      groupBy === currentView?.groupBy &&
+      sortType === currentView?.sortType &&
+      sortOrder === currentView?.sortOrder &&
+      entities === currentView?.entities
+    )
+  }, [currentFilters, viewType, entities, groupBy, sortType, sortOrder, views, viewId])
+
+  const onSaveView = useCallback(
+    async (viewId: string) => {
+      const oldview = getView(viewId)
+
+      const newView = {
+        ...oldview,
+        filters: currentFilters,
+        viewType,
+        globalJoin,
+        groupBy,
+        entities,
+        sortOrder,
+        sortType
+      }
+
+      try {
+        await updateView(newView)
+        toast('View Saved')
+      } catch (err) {
+        console.error('Unable to save view', err)
+        toast('Unable to save view')
+      }
+    },
+    [currentFilters, viewType, groupBy, sortType, sortOrder, entities]
+  )
+
+  useEffect(() => {
+    const unsubscribe = tinykeys(window, {
+      '$mod+KeyS': (e) => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        if (isCurrentViewChanged) {
+          onSaveView(viewId)
+        }
+      }
+    })
+
+    return () => unsubscribe()
+  }, [viewId, onSaveView, isCurrentViewChanged])
+
+  return <PrimaryText>{isCurrentViewChanged && '*'}</PrimaryText>
+}
+
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
 
@@ -50,19 +115,9 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const { goTo } = useRouting()
   const { deleteView } = useViews()
+
   const [source, target] = useSingleton()
   const { viewType, sortOrder, globalJoin, sortType, entities, currentFilters, groupBy } = useViewFilters()
-
-  const isCurrentViewChanged = useMemo(() => {
-    return !(
-      JSON.stringify(currentFilters) === JSON.stringify(view?.filters) &&
-      viewType === view?.viewType &&
-      groupBy === view?.groupBy &&
-      sortType === view?.sortType &&
-      sortOrder === view?.sortOrder &&
-      entities === view?.entities
-    )
-  }, [currentFilters, viewType, groupBy, sortType, sortOrder])
 
   const handleUpdateView = () => {
     openTaskViewModal({
@@ -96,7 +151,6 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
 
   const handleCloneView = () => {
     const { id, filters, ...properties } = view
-    console.log('cloning')
     openTaskViewModal({
       cloneViewId: view?.id,
       filters,
@@ -128,7 +182,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
             <TaskViewTitle>
               <Icon icon={stackLine} />
               <span>{view?.title}</span>
-              {isCurrentViewChanged && !isDefault && '*'}
+              {view?.id && !isDefault && <ViewChangeStatus viewId={view?.id} />}
             </TaskViewTitle>
             <TaskViewControls>
               {!isDefault && (
