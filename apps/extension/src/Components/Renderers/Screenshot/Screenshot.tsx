@@ -325,12 +325,9 @@ const Screenshot = () => {
       if (base64) {
         const imageURL = await uploadImageToCDN(base64)
         const appendContent = [
-          { type: 'p', children: [{ text: 'Screenshot' }] },
           { children: [{ text: '' }], type: 'img', url: imageURL },
           { text: '\n' },
-          { text: '[' },
-          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] },
-          { text: ' ]' }
+          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] }
         ]
         appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
         resetSpotlitState()

@@ -45,11 +45,12 @@ export const createStore = <T extends object, R extends boolean>(
     }
 
     const { storage, ...storeOptions } = persistOptions || {}
+    const storeName = getStoreName(name, isExtension())
 
     return create<TypeMap<T, R>>(
       devtools(
         persist(configX, {
-          name: getStoreName(name, isExtension()),
+          name: storeName,
           ...storeOptions,
           getStorage: () => {
             const webStorage = storage?.web ?? IDBStorage
@@ -62,7 +63,7 @@ export const createStore = <T extends object, R extends boolean>(
           }
         }),
         {
-          name
+          name: storeName
         }
       )
     )

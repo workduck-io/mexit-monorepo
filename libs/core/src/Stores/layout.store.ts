@@ -1,6 +1,7 @@
 import { ExtInfobarMode, InfobarMode } from '@mexit/shared'
 
 import { StoreIdentifier } from '../Types/Store'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 export interface FocusMode {
@@ -119,6 +120,6 @@ export const layoutStoreConfig = (set, get) => ({
 
 export const useLayoutStore = createStore(layoutStoreConfig, StoreIdentifier.LAYOUT, true, {
   storage: {
-    web: localStorage
+    web: getLocalStorage()
   }
 })

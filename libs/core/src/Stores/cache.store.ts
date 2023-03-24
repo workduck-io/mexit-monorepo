@@ -1,4 +1,5 @@
 import { StoreIdentifier } from '../Types/Store'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 export interface CacheUser {
@@ -38,6 +39,6 @@ const userCacheStoreConfig = (set, get) => ({
 
 export const useUserCacheStore = createStore(userCacheStoreConfig, StoreIdentifier.USERCACHE, true, {
   storage: {
-    web: localStorage
+    web: getLocalStorage()
   }
 })

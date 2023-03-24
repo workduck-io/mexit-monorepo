@@ -12,11 +12,12 @@ export const useViewFilters = () => {
    */
   const getFilters = () => {
     const notes = useDataStore.getState().ilinks
+    const sharedNotes = useDataStore.getState().sharedNodes ?? []
     const tags = useDataStore.getState().tags
     const spaces = useDataStore.getState().spaces
     const mentions = useMentionStore.getState().mentionable
 
-    const noteFilter = notes.reduce(
+    const noteFilter = [...notes, ...sharedNotes].reduce(
       (prev, noteLink) => {
         prev.options.push({ id: noteLink.nodeid, label: noteLink.path, value: noteLink.nodeid })
         return prev

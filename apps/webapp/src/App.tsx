@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
-import { compareVersions, mog, useAppStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
+import { compareVersions, mog, useAppStore, userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
 import { version as packageJsonVersion } from '../package.json'
@@ -17,7 +17,7 @@ import { useForceLogout } from './Stores/useAuth'
 import GlobalStyle from './Style/GlobalStyle'
 import Switch from './Switch'
 
-const FORCE_LOGOUT_VERSION = '0.23.0'
+const FORCE_LOGOUT_VERSION = '0.21.0'
 
 const AutoThemeSwitch = () => {
   const theme = useUserPreferenceStore((state) => state.theme)

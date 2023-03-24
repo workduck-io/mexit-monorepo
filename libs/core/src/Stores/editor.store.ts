@@ -1,6 +1,7 @@
 import { NodeContent, NodeProperties } from '../Types/Editor'
 import { StoreIdentifier } from '../Types/Store'
 import { defaultContent, getDefaultContent } from '../Utils/helpers'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 import { getInitialNode } from '../Utils/treeUtils'
 
@@ -104,6 +105,6 @@ export const editorStoreConfig = (set, get) => ({
 
 export const useEditorStore = createStore(editorStoreConfig, StoreIdentifier.EDITOR, true, {
   storage: {
-    web: localStorage
+    web: getLocalStorage()
   }
 })

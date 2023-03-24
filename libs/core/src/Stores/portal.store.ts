@@ -1,5 +1,6 @@
 import { AppsType, PortalType } from '../Types/Actions'
 import { StoreIdentifier } from '../Types/Store'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 const portalStoreConfig = (set, get) => ({
@@ -33,6 +34,6 @@ const portalStoreConfig = (set, get) => ({
 
 export const usePortalStore = createStore(portalStoreConfig, StoreIdentifier.PORTAL, true, {
   storage: {
-    web: localStorage
+    web: getLocalStorage()
   }
 })

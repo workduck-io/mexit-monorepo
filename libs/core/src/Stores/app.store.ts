@@ -3,6 +3,7 @@ import { compare as semverCompare } from 'semver'
 import { FeatureFlags, FeatureFlagsType } from '../Types/FeatureFlags'
 import { StoreIdentifier } from '../Types/Store'
 import { IS_DEV } from '../Utils/config'
+import { getLocalStorage } from '../Utils/storage'
 import { createStore } from '../Utils/storeCreator'
 
 const defaultFeatureFlags: FeatureFlagsType = {
@@ -31,7 +32,7 @@ export const appStoreConfig = (set, get) => ({
 
 export const useAppStore = createStore(appStoreConfig, StoreIdentifier.APP, true, {
   storage: {
-    web: localStorage
+    web: getLocalStorage()
   }
 })
 
