@@ -1,14 +1,10 @@
-import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace } from '@mexit/core'
-
-import useDataStore from '../Stores/useDataStore'
+import { ILink, MIcon, NodeType, RESERVED_NAMESPACES, SHARED_NAMESPACE, SingleNamespace, useDataStore } from '@mexit/core'
 
 import { useNodes } from './useNodes'
 
 export const useNamespaces = () => {
   const namespaces = useDataStore((state) => state.namespaces)
-  // const { createNewNamespace } = useApi()
   const { getNode, getNodeType } = useNodes()
-  // const { changeNamespaceName: chageNamespaceNameApi, changeNamespaceIcon: changeNamespaceIconApi } = useApi()
 
   const getNamespace = (id: string): SingleNamespace | undefined => {
     const namespaces = useDataStore.getState().namespaces
@@ -25,11 +21,6 @@ export const useNamespaces = () => {
       label: n.name
     }))
     const defaultNamespace = getDefaultNamespace() ?? namespaces[0]
-    // namespaces.push({
-    //   ...SHARED_NAMESPACE,
-    //   value: SHARED_NAMESPACE.name,
-    //   label: SHARED_NAMESPACE.name
-    // })
     return {
       namespaces,
       defaultNamespace: defaultNamespace
@@ -96,20 +87,6 @@ export const useNamespaces = () => {
     return namespace?.id
   }
 
-  // const addDefaultNewNamespace = async () => {
-  //   const namespaces = useDataStore.getState().namespaces
-  //   const newNamespaceName = getNewNamespaceName(namespaces.length)
-  //   return await addNewNamespace(newNamespaceName)
-  // }
-
-  // const addNewNamespace = async (name: string) => {
-  //   const ns = await createNewNamespace(name)
-  //   if (ns) addNamespace(ns)
-
-  //   mog('New namespace created', { ns })
-  //   return ns
-  // }
-
   const getNodesByNamespaces = () => {
     const ilinks = useDataStore.getState().ilinks
     const namespaces = useDataStore.getState().namespaces
@@ -132,74 +109,15 @@ export const useNamespaces = () => {
     }
   }
 
-  // const changeNamespaceName = (id: string, name: string) => {
-  //   chageNamespaceNameApi(id, name)
-  //     .then((res) => {
-  //       if (res) {
-  //         const namespaces = useDataStore.getState().namespaces
-  //         const newNamespaces = namespaces.map((n) =>
-  //           n.id === id
-  //             ? {
-  //                 ...n,
-  //                 name,
-  //                 updatedAt: Date.now()
-  //               }
-  //             : n
-  //         )
-  //         useDataStore.setState({ namespaces: newNamespaces })
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error changing namespace name', err)
-  //     })
-  // }
-
-  // const changeNamespaceIcon = async (id: string, name: string, icon: MIcon) => {
-  //   // Lets change the icon in hope that it changes
-  //   const namespaces = useDataStore.getState().namespaces
-  //   const namespace = namespaces.find((n) => n.id === id)
-  //   const oldIcon = { ...namespace }.icon
-  //   const newNamespaces = namespaces.map((n) =>
-  //     n.id === id
-  //       ? {
-  //           ...n,
-  //           icon,
-  //           updatedAt: Date.now()
-  //         }
-  //       : n
-  //   )
-  //   useDataStore.setState({ namespaces: newNamespaces })
-
-  //   await changeNamespaceIconApi(id, name, icon).catch((err) => {
-  //     console.log('Error changing namespace icon', err)
-  //     // We revert the icon
-  //     const namespaces = useDataStore.getState().namespaces
-  //     const newNamespaces = namespaces.map((n) =>
-  //       n.id === id
-  //         ? {
-  //             ...n,
-  //             icon: oldIcon,
-  //             updatedAt: Date.now()
-  //           }
-  //         : n
-  //     )
-  //     useDataStore.setState({ namespaces: newNamespaces })
-  //   })
-  // }
-
   return {
     getNamespace,
     getNodesOfNamespace,
     getDefaultNamespace,
     getDefaultNamespaceId,
-    // addNewNamespace,
     getNamespaceOfNodeid,
     getNodesByNamespaces,
-    // changeNamespaceName,
-    // changeNamespaceIcon,
     getNamespaceIcon,
     getNamespaceIconForNode,
-    // addDefaultNewNamespace,
     getNamespaceOfNode,
     getNamespaceOptions
   }

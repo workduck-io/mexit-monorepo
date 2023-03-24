@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
 
-import { mog } from '@mexit/core'
-
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import { mog, useHighlightStore } from '@mexit/core'
 
 import { useHighlightAPI } from './API/useHighlightAPI'
 

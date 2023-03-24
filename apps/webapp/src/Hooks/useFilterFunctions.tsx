@@ -1,11 +1,14 @@
-import { Filter, FilterJoin, FilterValue, getReminderState, isElder, Link, SearchFilterFunctions } from '@mexit/core'
-
-/**
- *
- * These Filter functions are not required, as we are using the search filters directly
- */
-import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
+import {
+  Filter,
+  FilterJoin,
+  FilterValue,
+  getReminderState,
+  isElder,
+  Link,
+  SearchFilterFunctions,
+  useDataStore,
+  useHighlightStore
+} from '@mexit/core'
 
 import { useLinks } from './useLinks'
 

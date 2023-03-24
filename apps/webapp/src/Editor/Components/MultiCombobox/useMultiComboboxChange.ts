@@ -3,23 +3,23 @@ import { useCallback } from 'react'
 import { OnChange, usePlateEditorRef } from '@udecode/plate'
 
 import {
+  ComboboxType,
   fuzzySearch,
   getMIcon,
   getTimeInText,
   isReservedOrClash,
   toLocaleString,
+  useComboboxStore,
   withoutContinuousDelimiter
 } from '@mexit/core'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNamespaces } from '../../../Hooks/useNamespaces'
 import { useRouting } from '../../../Hooks/useRouting'
-import { useComboboxStore } from '../../../Stores/useComboboxStore'
 import { QuickLinkType } from '../../constants'
 import { isInternalCommand } from '../../Hooks/useComboboxOnKeyDown'
 import { useComboboxOnChange } from '../../Hooks/useComboOnChange'
 import { ComboboxKey } from '../../Types/Combobox'
-import { ComboboxType } from '../../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../../Utils/helper'
 
 export const CreateNewPrefix = `Create `

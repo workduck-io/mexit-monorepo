@@ -1,8 +1,6 @@
 import { useRef } from 'react'
 
-import { KanbanCard, ViewType } from '@mexit/core'
-
-import { useLayoutStore } from '../../../Stores/useLayoutStore'
+import { KanbanCard, useLayoutStore, ViewType } from '@mexit/core'
 
 import BlockRenderer from './BlockRenderer'
 import { ViewBlockContainer } from './styled'

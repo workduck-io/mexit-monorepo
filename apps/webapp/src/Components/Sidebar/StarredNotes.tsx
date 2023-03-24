@@ -4,14 +4,13 @@ import closeCircleLine from '@iconify/icons-ri/close-circle-line'
 import Tippy, { useSingleton } from '@tippyjs/react'
 import styled from 'styled-components'
 
+import { useDataStore, useEditorStore } from '@mexit/core'
 import { getMIcon } from '@mexit/shared'
 
 import { useBookmarks } from '../../Hooks/useBookmarks'
 import { getTitleFromPath, useLinks } from '../../Hooks/useLinks'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
 import StarNoteButton from '../Buttons/StarNoteButton'
 
 import { PinnedList } from './Sidebar.style'

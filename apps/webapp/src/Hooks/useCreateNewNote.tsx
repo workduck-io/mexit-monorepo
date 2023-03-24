@@ -8,12 +8,12 @@ import {
   getUntitledKey,
   NodeEditorContent,
   RESERVED_NAMESPACES,
-  useContentStore
+  useContentStore,
+  useDataStore,
+  useEditorStore,
+  useMetadataStore
 } from '@mexit/core'
 
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
 import { updateILink } from '../Workers/controller'
 
 import { useHierarchy } from './useHierarchy'

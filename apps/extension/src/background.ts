@@ -1,11 +1,10 @@
 // eslint-disable-next-line
 import reloadOnUpdate from 'virtual:reload-on-update-in-background-script'
 
-import { ActionType, API_BASE_URLS, fuzzySearch } from '@mexit/core'
+import { ActionType, API_BASE_URLS, fuzzySearch, useAuthStore, useLinkStore } from '@mexit/core'
 import * as Sentry from '@sentry/browser'
 import { CaptureConsole } from '@sentry/integrations'
 
-import { useAuthStore } from './Hooks/useAuth'
 import {
   handleActionRequest,
   handleAsyncActionRequest,
@@ -16,7 +15,6 @@ import {
   handleShortenerRequest,
   handleSnippetRequest
 } from './Utils/requestHandler'
-import { useLinkStore } from './Stores/useLinkStore'
 
 reloadOnUpdate('src')
 

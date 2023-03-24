@@ -4,8 +4,9 @@ import { deleteText, getNodeEntries, getPlateEditorRef, usePlateId } from '@udec
 import { getRootProps } from '@udecode/plate-styled-components'
 import { useFocused, useReadOnly, useSelected } from 'slate-react'
 
+import { ModalsType, useModalStore } from '@mexit/core'
+
 import { getNodeIdFromEditor } from '../../Editor/Utils/helper'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 
 import { TodoBase } from './Todo'
 

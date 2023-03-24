@@ -2,7 +2,7 @@ import React from 'react'
 
 import { IconButton } from '@workduck-io/mex-components'
 
-import { getFavicon, Link, mog, Tag } from '@mexit/core'
+import { getFavicon, Link, mog, Tag, useAuthStore } from '@mexit/core'
 import {
   AddTagMenu,
   LinkHeader,
@@ -19,7 +19,6 @@ import {
 } from '@mexit/shared'
 
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { useAuthStore } from '../../Stores/useAuth'
 
 import HighlightGroups, { HighlightGroupToggle } from './HighlightGroup'
 

@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 
+import { useReminderStore } from '@mexit/core'
+
 import { useReminders } from '../Hooks/useReminders'
-import { useReminderStore } from '../Stores/useReminderStore'
 
 const ReminderArmer = () => {
   const reminders = useReminderStore((state) => state.reminders)

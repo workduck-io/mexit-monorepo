@@ -1,8 +1,4 @@
-import { getTodosFromContent, NodeEditorContent } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useTodoStore } from '../Stores/useTodoStore'
+import { getTodosFromContent, NodeEditorContent, useContentStore, useMetadataStore, useTodoStore } from '@mexit/core'
 
 import { useLinks } from './useLinks'
 import { useSearch } from './useSearch'
@@ -48,8 +44,10 @@ export const useUpdater = () => {
 
       updateLinksFromContent(noteId, content)
       updateTagsFromContent(noteId, content)
+
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
+      console.log('updateFromContent', noteId, todos, content)
       await updateDocument({
         id: noteId,
         contents: content,

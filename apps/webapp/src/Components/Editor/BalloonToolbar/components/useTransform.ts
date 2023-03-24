@@ -21,14 +21,14 @@ import {
   getSlug,
   NODE_PATH_SPACER,
   NodeEditorContent,
-  SEPARATOR
+  SEPARATOR,
+  useDataStore
 } from '@mexit/core'
 import { DefaultMIcons, ILinkNode } from '@mexit/shared'
 
 import { getNodeIdFromEditor } from '../../../../Editor/Utils/helper'
 import { useCreateNewNote } from '../../../../Hooks/useCreateNewNote'
 import { useSnippets } from '../../../../Hooks/useSnippets'
-import { useDataStore } from '../../../../Stores/useDataStore'
 import { convertValueToTasks } from '../../../../Utils/convertValueToTasks'
 import { useOpenToast } from '../../../Toast/useOpenToast'
 

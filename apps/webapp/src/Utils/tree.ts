@@ -9,12 +9,11 @@ import {
   isParent,
   LastOpenedState,
   MIcon,
-  NodeMetadata
+  NodeMetadata,
+  useReminderStore,
+  useTodoStore
 } from '@mexit/core'
 import { TreeNode } from '@mexit/shared'
-
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useTodoStore } from '../Stores/useTodoStore'
 
 import { filterIncompleteTodos } from './filter'
 

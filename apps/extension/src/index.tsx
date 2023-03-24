@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 
 import { Provider, useThemeContext } from '@workduck-io/mex-themes'
 
+import { userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { Notification } from '@mexit/shared'
 
-import { useUserPreferenceStore } from './Stores/userPreferenceStore'
 import { GlobalStyle } from './Styles/GlobalStyle'
 import Extension from './app'
 

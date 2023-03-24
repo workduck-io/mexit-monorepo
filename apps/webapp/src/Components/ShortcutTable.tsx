@@ -5,11 +5,10 @@ import Modal from 'react-modal'
 import { debounce } from 'lodash'
 import { matchSorter } from 'match-sorter'
 
+import { Shortcut, useShortcutStore } from '@mexit/core'
 import { Input } from '@mexit/shared'
 
-import { useShortcutStore } from '../Hooks/useShortcutStore'
 import useShortcutTableData from '../Hooks/useShortcutTableData'
-import { Shortcut } from '../Stores/useHelpStore'
 import {
   StyledRow,
   StyledTable,

@@ -1,9 +1,7 @@
 import create from 'zustand'
 
-import { mog, NodeEditorContent } from '@mexit/core'
+import { getContent, mog, NodeEditorContent, useBufferStore, useSnippetStore } from '@mexit/core'
 
-import { getContent } from '../Stores/useEditorStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { areEqual } from '../Utils/hash'
 
 import { useApi } from './API/useNodeAPI'
@@ -12,28 +10,7 @@ import { useNodes } from './useNodes'
 import { useDataSaverFromContent } from './useSave'
 import { useSnippets } from './useSnippets'
 
-interface BufferStore {
-  buffer: Record<string, NodeEditorContent>
-  getBuffer: (nodeId: string) => NodeEditorContent
-  add: (nodeid: string, val: NodeEditorContent) => void
-  remove: (nodeid: string) => void
-  clear: () => void
-}
-
-export const useBufferStore = create<BufferStore>((set, get) => ({
-  buffer: {},
-  add: (nodeid, val) => set({ buffer: { ...get().buffer, [nodeid]: val } }),
-  getBuffer: (nodeId) => {
-    const bufferVal = get().buffer?.[nodeId]
-    return bufferVal
-  },
-  remove: (nodeid) => {
-    const newBuffer = get().buffer
-    if (newBuffer[nodeid]) delete newBuffer[nodeid]
-    set({ buffer: newBuffer })
-  },
-  clear: () => set({ buffer: {} })
-}))
+export { useBufferStore }
 
 export const useEditorBuffer = () => {
   const add2Buffer = useBufferStore((s) => s.add)

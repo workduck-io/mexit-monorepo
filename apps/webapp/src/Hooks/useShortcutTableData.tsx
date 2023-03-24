@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { useHelpStore } from '../Stores/useHelpStore'
+import { useHelpStore } from '@mexit/core'
+
 
 const useShortcutTableData = () => {
   const shortcuts = useHelpStore((store) => store.shortcuts)

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 
 import {
   apiURLs,
+  ComboboxType,
   ELEMENT_ILINK,
   ELEMENT_INLINE_BLOCK,
   ELEMENT_LINK,
@@ -14,8 +15,12 @@ import {
   getMIcon,
   mog,
   PromptRenderType,
-  SEPARATOR
-} from '@mexit/core'
+  SEPARATOR,
+  useAuthStore,
+  useDataStore,
+  useEditorStore,
+useLinkStore , useMentionStore,  useShareModalStore
+ } from '@mexit/core'
 import { DefaultMIcons } from '@mexit/shared'
 
 import { useOpenReminderModal } from '../../Components/Reminders/CreateReminderModal'
@@ -24,12 +29,6 @@ import { useMentions } from '../../Hooks/useMentions'
 import usePrompts from '../../Hooks/usePrompts'
 import { useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLinkStore } from '../../Stores/useLinkStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { useViewStore } from '../../Stores/useViewStore'
 import { QuickLinkComboboxItem } from '../Components/QuickLink/QuickLinkComboboxItem'
 import { SlashComboboxItem } from '../Components/SlashCommands/SlashComboboxItem'
@@ -37,7 +36,7 @@ import { TagComboboxItem } from '../Components/Tags/TagComboboxItem'
 import { CategoryType, QuickLinkType } from '../constants'
 import { PluginOptionType } from '../Plugins'
 import { ComboboxKey } from '../Types/Combobox'
-import { ComboboxConfig, ComboboxType, ComboConfigData } from '../Types/MultiCombobox'
+import { ComboboxConfig, ComboConfigData } from '../Types/MultiCombobox'
 import { getNodeIdFromEditor } from '../Utils/helper'
 
 export const useEditorPluginConfig = (editorId: string, options?: PluginOptionType): ComboboxConfig => {

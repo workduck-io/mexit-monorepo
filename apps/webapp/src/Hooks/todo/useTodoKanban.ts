@@ -2,13 +2,19 @@ import { ELEMENT_TODO_LI } from '@udecode/plate'
 
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { PriorityType, TodoStatus, TodoType } from '@mexit/core'
+import { PriorityType, TodoStatus, TodoType, useTodoStore } from '@mexit/core'
 
 import { defaultContent } from '../../Data/baseData'
 import useUpdateBlock from '../../Editor/Hooks/useUpdateBlock'
-import { useTodoStore } from '../../Stores/useTodoStore'
-import { KanbanBoard, KanbanColumn } from '../../Types/Kanban'
+import { KanbanBoard, KanbanCard, KanbanColumn } from '../../Types/Kanban'
 import { useSearch } from '../useSearch'
+
+export interface TodoKanbanCard extends KanbanCard {
+  todoid: string
+  nodeid: string
+  status: TodoStatus
+  priority: PriorityType
+}
 
 export interface KanbanBoardColumn extends KanbanColumn {
   id: string

@@ -1,37 +1,38 @@
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
-import create from 'zustand'
-import { persist } from 'zustand/middleware'
-
 import { useAuth } from '@workduck-io/dwindle'
 import { UserCred } from '@workduck-io/dwindle/lib/esm/AuthStore/useAuthStore'
 
-import { API, authStoreConstructor, AuthStoreState, mog, RegisterFormData, useAppStore } from '@mexit/core'
+import {
+  API,
+  mog,
+  RegisterFormData,
+  useAppStore,
+  useAuthStore,
+  useCommentStore,
+  useContentStore,
+  useDataStore,
+  useEditorStore,
+  useHelpStore,
+  useMentionStore,
+  useMetadataStore,
+  usePromptStore,
+  usePublicNodeStore,
+  useReactionStore,
+  useRecentsStore,
+  useReminderStore,
+  useRouteStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSnippetStore,
+  useTodoStore,
+  useUserCacheStore
+} from '@mexit/core'
 
 import { getEmailStart } from '../Utils/constants'
 import { terminateAllWorkers } from '../Workers/controller'
 
-import { useCommentStore } from './useCommentStore'
-import { useContentStore } from './useContentStore'
-import { useDataStore } from './useDataStore'
-import { useEditorStore } from './useEditorStore'
-import { useHelpStore } from './useHelpStore'
-import { useMentionStore } from './useMentionsStore'
-import { useMetadataStore } from './useMetadataStore'
-import { usePromptStore } from './usePromptStore'
-import { usePublicNodeStore } from './usePublicNodes'
-import { useReactionStore } from './useReactionStore'
-import { useRecentsStore } from './useRecentsStore'
-import { useReminderStore } from './useReminderStore'
-import useRouteStore from './useRouteStore'
-import { useUserPreferenceStore } from './userPreferenceStore'
-import { useSnippetStore } from './useSnippetStore'
-import { useTodoStore } from './useTodoStore'
-import { useUserCacheStore } from './useUserCacheStore'
 import { useViewStore } from './useViewStore'
-
-export const useAuthStore = create<AuthStoreState>(persist(authStoreConstructor, { name: 'mexit-authstore' }))
 
 type LoginResult = { loginData: UserCred; loginStatus: string }
 

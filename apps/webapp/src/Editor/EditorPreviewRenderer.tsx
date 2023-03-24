@@ -6,11 +6,10 @@ import { debounce } from 'lodash'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
-import { NodeEditorContent } from '@mexit/core'
+import { ContextMenuType, NodeEditorContent, useBlockHighlightStore, useLayoutStore } from '@mexit/core'
 import { EditorStyles, TodoContainer } from '@mexit/shared'
 
-import { useBlockHighlightStore, useFocusBlock } from '../Stores/useFocusBlock'
-import { ContextMenuType, useLayoutStore } from '../Stores/useLayoutStore'
+import { useFocusBlock } from '../Stores/useFocusBlock'
 
 import components, { editorPreviewComponents } from './Components/EditorPreviewComponents'
 import { MultiComboboxContainer } from './Components/MultiCombobox/multiComboboxContainer'

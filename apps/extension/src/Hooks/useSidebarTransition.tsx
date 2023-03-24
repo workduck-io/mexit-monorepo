@@ -3,7 +3,7 @@ import { useSpring } from 'react-spring'
 
 import { useTheme } from 'styled-components'
 
-import { useLayoutStore } from '../Stores/useLayoutStore'
+import { useLayoutStore } from '@mexit/core'
 
 export const useSidebarTransition = () => {
   const rhSidebar = useLayoutStore((state) => state.rhSidebar)

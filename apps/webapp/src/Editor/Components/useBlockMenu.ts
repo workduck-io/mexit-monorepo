@@ -2,10 +2,9 @@ import toast from 'react-hot-toast'
 
 import { getPlateEditorRef } from '@udecode/plate'
 
-import { ContextMenuActionType } from '@mexit/core'
+import { ContextMenuActionType, useBlockStore } from '@mexit/core'
 
 import { useTransform } from '../../Components/Editor/BalloonToolbar/components/useTransform'
-import useBlockStore from '../../Stores/useBlockStore'
 import { useEditorBlockSelection } from '../Actions/useEditorBlockSelection'
 
 export const useBlockMenu = () => {

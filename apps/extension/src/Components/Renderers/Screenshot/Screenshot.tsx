@@ -9,10 +9,9 @@ import { Icon } from '@iconify/react'
 
 import { Button, IconButton, PrimaryButton } from '@workduck-io/mex-components'
 
-import { mog } from '@mexit/core'
+import { mog, useAuthStore } from '@mexit/core'
 import { useDebounceEffect } from '@mexit/shared'
 
-import { useAuthStore } from '../../../Hooks/useAuth'
 import { useSaveChanges } from '../../../Hooks/useSaveChanges'
 import { useSputlitStore } from '../../../Stores/useSputlitStore'
 import { uploadImageToCDN } from '../../../Sync/invokeOnWorker'
@@ -326,12 +325,9 @@ const Screenshot = () => {
       if (base64) {
         const imageURL = await uploadImageToCDN(base64)
         const appendContent = [
-          { type: 'p', children: [{ text: 'Screenshot' }] },
           { children: [{ text: '' }], type: 'img', url: imageURL },
           { text: '\n' },
-          { text: '[' },
-          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] },
-          { text: ' ]' }
+          { type: 'a', url: window.location.href, children: [{ text: 'Ref' }] }
         ]
         appendAndSave({ nodeid, content: appendContent, saveAndExit: true, notification: true })
         resetSpotlitState()

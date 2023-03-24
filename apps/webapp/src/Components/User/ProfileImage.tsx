@@ -9,13 +9,12 @@ import ColorScheme from 'color-scheme'
 import md5 from 'md5'
 import styled from 'styled-components'
 
-import { AccessLevel, mog } from '@mexit/core'
+import { AccessLevel, mog , useRequestCacheStore as useCacheStore} from '@mexit/core'
 import { CardShadow, Centered } from '@mexit/shared'
 
 import { MentionTooltipComponent } from '../../Editor/Components/Mentions/MentionElement'
 import { useUserService } from '../../Hooks/API/useUserAPI'
 import { useMentions } from '../../Hooks/useMentions'
-import { useCacheStore } from '../../Stores/useRequestCache'
 
 interface ProfileImageProps {
   email: string

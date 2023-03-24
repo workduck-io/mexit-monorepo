@@ -3,7 +3,16 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import styled, { useTheme } from 'styled-components'
 
-import { API_BASE_URLS, convertContentToRawText, DefaultMIcons, mog, WORKSPACE_HEADER } from '@mexit/core'
+import {
+  API_BASE_URLS,
+  convertContentToRawText,
+  DefaultMIcons,
+  mog,
+  useAuthStore,
+  useContentStore,
+useMetadataStore,  useRecentsStore,
+  WORKSPACE_HEADER
+ } from '@mexit/core'
 import {
   CopyButton,
   GenericFlex,
@@ -14,12 +23,8 @@ import {
   SnippetContentPreview
 } from '@mexit/shared'
 
-import { useAuthStore } from '../../Hooks/useAuth'
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { useNodes } from '../../Hooks/useNodes'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useRecentsStore } from '../../Stores/useRecentsStore'
 import SnippetPreview from '../Editor/SnippetPreview'
 
 export const NodeCardHeader = styled.div<{ $noHover?: boolean }>`

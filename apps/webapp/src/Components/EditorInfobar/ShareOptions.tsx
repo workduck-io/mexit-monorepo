@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { nicePromise, ShareContext } from '@mexit/core'
+import { nicePromise, ShareContext, useDataStore , useMetadataStore } from '@mexit/core'
 import { copyTextToClipboard, ShareToggle } from '@mexit/shared'
 
 import { useApi } from '../../Hooks/API/useNodeAPI'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 interface ShareOptionsProps {
   context: ShareContext

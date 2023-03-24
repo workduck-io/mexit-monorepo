@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react'
 
+import { useLayoutStore } from '@mexit/core'
 import { ExtInfobarMode } from '@mexit/shared'
 
-import { useLayoutStore } from '../Stores/useLayoutStore'
 import { useRightSidebarItems } from '../Stores/useRightSidebarItems'
 
 export const useRightSidebarShortcuts = () => {

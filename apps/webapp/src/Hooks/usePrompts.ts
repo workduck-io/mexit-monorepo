@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 
-import { PromptDataType } from '@mexit/core'
+import { PromptDataType, usePromptStore } from '@mexit/core'
 
-import { usePromptStore } from '../Stores/usePromptStore'
 
 const usePrompts = () => {
   const prompts = usePromptStore((store) => store.prompts)

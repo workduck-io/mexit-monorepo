@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import { addMinutes } from 'date-fns'
 
-import { useReminderStore } from '../Stores/useReminderStore'
+import { useReminderStore } from '@mexit/core'
 
 import { useReminders } from './useReminders'
 

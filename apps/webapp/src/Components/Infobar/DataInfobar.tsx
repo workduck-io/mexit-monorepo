@@ -1,6 +1,6 @@
+import { useEditorStore } from '@mexit/core'
 import { DataInfobarHeader, DataInfobarWrapper, MexIcon, Title } from '@mexit/shared'
 
-import { useEditorStore } from '../../Stores/useEditorStore'
 import TagsRelated, { TagsRelatedSuggestions } from '../Editor/TagsRelated'
 
 import Backlinks from './Backlinks'

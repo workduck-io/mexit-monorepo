@@ -7,10 +7,10 @@ import { Icon } from '@iconify/react'
 
 import { defaultThemes, ManagedProvider, useThemeContext } from '@workduck-io/mex-themes'
 
+import { userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 import { ToggleButton } from '@mexit/shared'
 
 import { useUserService } from '../Hooks/API/useUserAPI'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
 import { Theme, ThemeHeader, ThemeModeDiv, ThemePreviews, ThemeSwitch } from '../Style/Settings'
 
 import ThemeDemo from './ThemeDemo'

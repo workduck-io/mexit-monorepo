@@ -2,9 +2,8 @@ import { getPlateEditorRef, insertText, PlateEditor, select } from '@udecode/pla
 import { KeyboardHandler } from '@udecode/plate-core'
 import { findIndex, groupBy } from 'lodash'
 
-import { isElder, mog } from '@mexit/core'
+import { isElder, mog, useComboboxStore } from '@mexit/core'
 
-import { useComboboxStore } from '../../Stores/useComboboxStore'
 import { useElementOnChange as getElementOnChange } from '../Components/MultiCombobox/useMultiComboboxOnKeyDown'
 import { useSlashCommandOnChange } from '../Components/SlashCommands/useSlashCommandOnChange'
 import { CreateNewPrefix, SnippetCommandPrefix } from '../constants'

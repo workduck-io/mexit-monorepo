@@ -5,11 +5,11 @@ import Tippy from '@tippyjs/react'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
-import useLayout from '../../Hooks/useLayout'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
+import { useEditorStore,useLayoutStore  } from '@mexit/core'
 
-import { SidebarToggle,SpaceHeader, SpaceTitle, SpaceTitleWrapper } from './Sidebar.style'
+import useLayout from '../../Hooks/useLayout'
+
+import { SidebarToggle, SpaceHeader, SpaceTitle, SpaceTitleWrapper } from './Sidebar.style'
 
 interface SidebarHeaderLiteProps {
   title: string

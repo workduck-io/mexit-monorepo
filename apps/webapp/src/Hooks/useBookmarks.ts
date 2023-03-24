@@ -1,9 +1,6 @@
 import { useAuth } from '@workduck-io/dwindle'
 
-import { API } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useDataStore } from '../Stores/useDataStore'
+import { API, useAuthStore, useDataStore } from '@mexit/core'
 
 import { useLinks } from './useLinks'
 

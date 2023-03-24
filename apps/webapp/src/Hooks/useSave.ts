@@ -1,6 +1,4 @@
-import { mog } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
+import { mog, useContentStore } from '@mexit/core'
 
 import { useApi } from './API/useNodeAPI'
 

@@ -1,5 +1,5 @@
 import { diskIndex, indexNames } from '../Data/search'
-import { BlockType } from '../Stores/blockStoreConstructor'
+import { BlockType } from '../Stores/block.store'
 import { NodeEditorContent } from '../Types/Editor'
 import { GenericSearchData, PersistentData, SearchRepExtra } from '../Types/Search'
 

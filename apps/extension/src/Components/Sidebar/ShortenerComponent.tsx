@@ -5,7 +5,7 @@ import linkM from '@iconify/icons-ri/link-m'
 import { Icon } from '@iconify/react'
 import styled from 'styled-components'
 
-import { apiURLs, getFavicon } from '@mexit/core'
+import { apiURLs, getFavicon, useAuthStore, useLinkStore } from '@mexit/core'
 import {
   CopyButton,
   DefaultMIcons,
@@ -18,9 +18,7 @@ import {
   ShortenerTitle
 } from '@mexit/shared'
 
-import { useAuthStore } from '../../Hooks/useAuth'
 import { useLinkURLs } from '../../Hooks/useURLs'
-import { useLinkStore } from '../../Stores/useLinkStore'
 
 const ShortenerWrapper = styled(ShortenButton)`
   padding: ${({ theme }) => theme.spacing.small};

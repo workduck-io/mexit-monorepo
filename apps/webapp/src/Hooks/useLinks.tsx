@@ -10,14 +10,13 @@ import {
   mog,
   NodeLink,
   SEPARATOR,
-  TodoStatus
+  TodoStatus,
+  useContentStore,
+  useDataStore,
+  useReminderStore,
+  useSnippetStore,
+  useTodoStore
 } from '@mexit/core'
-
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useReminderStore } from '../Stores/useReminderStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
-import { useTodoStore } from '../Stores/useTodoStore'
 
 import { useNodes } from './useNodes'
 

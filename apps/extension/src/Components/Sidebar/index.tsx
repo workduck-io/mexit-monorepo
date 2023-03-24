@@ -2,12 +2,11 @@ import React, { useEffect, useMemo } from 'react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
+import { useAuthStore, useLayoutStore } from '@mexit/core'
 import { ExtInfobarMode, Group, InfoBarWrapper, LoginInfoBar, Tabs, WDLogo } from '@mexit/shared'
 
-import { useAuthStore } from '../../Hooks/useAuth'
 import { useRightSidebarShortcuts } from '../../Hooks/useRightSidebarShortcuts'
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { useRightSidebarItems } from '../../Stores/useRightSidebarItems'
 import { getElementById } from '../../Utils/cs-utils'
 import { RHSLogin } from '../Login'

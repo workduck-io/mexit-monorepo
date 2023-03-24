@@ -5,12 +5,10 @@ import * as Sentry from '@sentry/react'
 import { BrowserTracing } from '@sentry/tracing'
 import styled from 'styled-components'
 
-import { AppInitStatus, IS_DEV } from '@mexit/core'
+import { AppInitStatus, IS_DEV, useAuthStore , useLayoutStore } from '@mexit/core'
 import { GridWrapper, linkTooltip, navTooltip } from '@mexit/shared'
 
 import { useShortcutListener } from '../Hooks/useShortcutListener'
-import { useAuthStore } from '../Stores/useAuth'
-import { useLayoutStore } from '../Stores/useLayoutStore'
 
 import RHSidebar from './Infobar/RHSidebar'
 import Nav from './Sidebar/Nav'

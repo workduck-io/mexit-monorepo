@@ -9,14 +9,13 @@ import { useFocused, useSelected } from 'slate-react'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { ILink, NodeType, SharedNode } from '@mexit/core'
+import { ILink, NodeType, SharedNode, useMultipleEditors } from '@mexit/core'
 import { ILinkElementProps, sharedAccessIcon, SILink, SILinkRoot, StyledIcon } from '@mexit/shared'
 
 import { useLinks } from '../../../Hooks/useLinks'
 import { useNavigation } from '../../../Hooks/useNavigation'
 import { useNodes } from '../../../Hooks/useNodes'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
-import useMultipleEditors from '../../../Stores/useEditorsStore'
 import { getBlock } from '../../../Utils/parseData'
 import EditorPreview from '../EditorPreview/EditorPreview'
 

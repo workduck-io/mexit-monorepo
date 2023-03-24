@@ -5,15 +5,13 @@ import styled from 'styled-components'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { QuickLinkType } from '@mexit/core'
+import { QuickLinkType, useHelpStore, useSnippetStore } from '@mexit/core'
 import { blurEditableElement, Input, StyledCombobox, StyledInputWrapper } from '@mexit/shared'
 
 import { useKeyListener } from '../../Hooks/useChangeShortcutListener'
 import { useCreateNewNote } from '../../Hooks/useCreateNewNote'
 import { useNavigation } from '../../Hooks/useNavigation'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import { useHelpStore } from '../../Stores/useHelpStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import NodeSelect, { QuickLink } from '../NodeSelect/NodeSelect'
 
 const StyledModal = styled(Modal)`

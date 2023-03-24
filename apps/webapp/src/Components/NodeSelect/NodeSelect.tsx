@@ -21,8 +21,12 @@ import {
   SEPARATOR,
   SHARED_NAMESPACE,
   SingleNamespace,
+  useContentStore,
+  useDataStore,
+useMetadataStore ,   useRecentsStore,
+userPreferenceStore as useUserPreferenceStore,  useSnippetStore,
   withoutContinuousDelimiter
-} from '@mexit/core'
+ } from '@mexit/core'
 import {
   DefaultMIcons,
   IconDisplay,
@@ -42,12 +46,6 @@ import {
 import { useLinks } from '../../Hooks/useLinks'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useSearchExtra } from '../../Hooks/useSearch'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useDataStore } from '../../Stores/useDataStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import { useRecentsStore } from '../../Stores/useRecentsStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 import { StyledNamespaceSelectComponents } from '../../Style/Select'
 import NamespaceTag from '../NamespaceTag'
 

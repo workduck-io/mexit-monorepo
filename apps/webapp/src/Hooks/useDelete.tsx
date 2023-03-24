@@ -1,12 +1,17 @@
 import { Indexes } from '@workduck-io/mex-search'
 
-import { getAllParentIds, ILink, isMatch, mog } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { getContent, useEditorStore } from '../Stores/useEditorStore'
-import { useHistoryStore } from '../Stores/useHistoryStore'
-import { useRecentsStore } from '../Stores/useRecentsStore'
-import { RefactorPath } from '../Stores/useRenameStore'
+import {
+  getAllParentIds,
+  getContent,
+  ILink,
+  isMatch,
+  mog,
+  RefactorPath,
+  useDataStore,
+  useEditorStore,
+  useHistoryStore,
+  useRecentsStore
+} from '@mexit/core'
 
 import useArchive from './useArchive'
 import { useLinks } from './useLinks'

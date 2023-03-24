@@ -6,7 +6,7 @@ import { ItemId, RenderItemParams, TreeItem } from '@atlaskit/tree'
 import { Icon } from '@iconify/react'
 import Tippy from '@tippyjs/react'
 
-import { DRAFT_NODE, IS_DEV } from '@mexit/core'
+import { ContextMenuType, DRAFT_NODE, IS_DEV, useLayoutStore , useMetadataStore } from '@mexit/core'
 import {
   IconDisplay,
   ItemContent,
@@ -19,9 +19,6 @@ import {
   TooltipContentWrapper,
   TooltipCount
 } from '@mexit/shared'
-
-import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
 
 const defaultSnap = {
   isDragging: false,

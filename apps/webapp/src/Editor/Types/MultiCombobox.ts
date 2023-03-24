@@ -1,28 +1,9 @@
 import { BaseRange } from 'slate'
 
-import { MIcon } from '@mexit/core'
+import { ComboboxType } from '@mexit/core'
 
-import { CategoryType, QuickLinkType } from '../constants'
+import { ComboboxItemProps, RenderFunction, SlashCommandConfig } from './Combobox'
 
-import { ComboboxItemProps, ComboboxKey, RenderFunction, SlashCommandConfig } from './Combobox'
-
-export interface ComboboxItem {
-  text: string
-  value: string
-  icon?: MIcon
-  type?: CategoryType | QuickLinkType
-
-  /** Extended command -> Text after the command is part of it and used as arguments */
-  extended?: boolean
-}
-
-export interface ComboboxType {
-  cbKey: ComboboxKey
-  icon?: MIcon
-  trigger: string
-  data?: ComboboxItem[]
-  blockTrigger?: string
-}
 
 export interface ComboTriggerDataType {
   range: BaseRange

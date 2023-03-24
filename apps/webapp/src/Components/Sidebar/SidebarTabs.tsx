@@ -1,7 +1,8 @@
 import { useMatch } from 'react-router-dom'
 
+import { useLayoutStore } from '@mexit/core'
+
 import { ROUTE_PATHS } from '../../Hooks/useRouting'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { PublicNoteSidebar } from './PublicSidebar.notes'
 import { NoteSidebar } from './Sidebar.notes'

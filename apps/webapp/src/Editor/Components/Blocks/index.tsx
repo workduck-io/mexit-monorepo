@@ -3,9 +3,8 @@ import { useMemo } from 'react'
 import { findNodePath, usePlateEditorRef } from '@udecode/plate'
 import { createNodesHOC } from '@udecode/plate-core'
 
-import { BlockType } from '@mexit/core'
+import { BlockType, useBlockStore } from '@mexit/core'
 
-import useBlockStore from '../../../Stores/useBlockStore'
 import { BlockOptionProps } from '../../Types/Block'
 
 import Block from './Block'

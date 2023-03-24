@@ -7,10 +7,10 @@ import styled, { css } from 'styled-components'
 
 import { TitleWithShortcut } from '@workduck-io/mex-components'
 
+import { useLayoutStore } from '@mexit/core'
 import { WDLogo } from '@mexit/shared'
 
 import { useSidebarTransition } from '../../Hooks/useSidebarTransition'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 import { getElementById } from '../../Utils/cs-utils'
 
 const DragIcon = styled(Icon)<{ $show: boolean }>`

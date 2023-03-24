@@ -198,8 +198,10 @@ export enum QuickLinkType {
   snippet = 'Snippets',
   tags = 'Tags',
   action = 'Actions',
-  search = 'Search',
   mentions = 'Mentions',
+  taskView = 'Task View',
+  search = 'Search',
+  prompts = 'Prompts',
   webLinks = 'Links'
 }
 
@@ -210,6 +212,7 @@ export enum QuickLinkStatus {
 
 export enum ComboboxKey {
   TAG = 'tag',
+  MENTION = 'mention',
   INTERNAL = 'internal',
   INLINE_BLOCK = 'inline_block',
   SLASH_COMMAND = 'slash_command',
@@ -220,7 +223,8 @@ export enum CategoryType {
   backlink = 'Backlinks',
   action = 'Quick Actions',
   search = 'Search Results',
-  task = 'Task'
+  task = 'Task',
+  tag = 'Tags'
 }
 
 export interface SlashCommand {

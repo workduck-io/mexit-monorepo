@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { useLayoutStore } from '@mexit/core'
 import { InfoBarWrapper } from '@mexit/shared'
 
 import useLayout from '../../Hooks/useLayout'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 import DataInfoBar from './DataInfobar'
 

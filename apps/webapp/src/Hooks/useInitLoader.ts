@@ -1,15 +1,24 @@
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import { API, AppInitStatus, mog, runBatch, useAppStore, useLinkStore, withTimeout } from '@mexit/core'
+import {
+  API,
+  AppInitStatus,
+  mog,
+  runBatch,
+  useAppStore,
+  useAuthStore,
+  useContentStore,
+  useDataStore,
+  useHighlightStore,
+  useLinkStore,
+  usePromptStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSnippetStore,
+  withTimeout
+} from '@mexit/core'
 
-import { useAuthentication, useAuthStore } from '../Stores/useAuth'
-import { useContentStore } from '../Stores/useContentStore'
-import { useDataStore } from '../Stores/useDataStore'
-import { useHighlightStore } from '../Stores/useHighlightStore'
-import { usePromptStore } from '../Stores/usePromptStore'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
+import { useAuthentication } from '../Stores/useAuth'
 import { getSearchIndexInitState, initSearchIndex, startRequestsWorkerService } from '../Workers/controller'
 
 import { useNamespaceApi } from './API/useNamespaceAPI'

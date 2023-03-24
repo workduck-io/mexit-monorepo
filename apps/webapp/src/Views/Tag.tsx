@@ -5,7 +5,7 @@ import { useTransition } from 'react-spring'
 import { debounce } from 'lodash'
 import styled, { css } from 'styled-components'
 
-import { fuzzySearch, ViewType } from '@mexit/core'
+import { fuzzySearch, useContentStore, useMetadataStore, ViewType } from '@mexit/core'
 import {
   Group,
   HoverSubtleGlow,
@@ -26,8 +26,6 @@ import useLoad from '../Hooks/useLoad'
 import { useNamespaces } from '../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useTags } from '../Hooks/useTags'
-import { useContentStore } from '../Stores/useContentStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
 
 const TagsWrapper = styled.div`
   display: flex;

@@ -1,7 +1,6 @@
-import { ILink, LastOpenedState, MIcon, SingleNamespace, Tag } from '@mexit/core'
+import { ILink, LastOpenedState, MIcon, PollActions, SingleNamespace, Tag } from '@mexit/core'
 import { DesignItem } from '@mexit/shared'
 
-import { PollActions } from '../../Stores/useApiStore'
 
 /**
  * A generic item to be shown in sidebar

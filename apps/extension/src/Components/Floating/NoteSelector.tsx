@@ -7,12 +7,11 @@ import { debounce } from 'lodash'
 import { Button } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { fuzzySearch } from '@mexit/core'
+import { fuzzySearch, useDataStore } from '@mexit/core'
 import { DefaultMIcons, IconDisplay, Input, SidebarListFilter } from '@mexit/shared'
 
 import { getTitleFromPath } from '../../Hooks/useLinks'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
-import useDataStore from '../../Stores/useDataStore'
 
 import { Dialog } from './Dialog'
 import { NoteItem, NoteItemsWrapper, SelectionList } from './NoteSelector.style'

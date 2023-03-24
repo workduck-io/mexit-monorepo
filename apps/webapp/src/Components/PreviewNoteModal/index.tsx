@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 
 import { Button, MexIcon } from '@workduck-io/mex-components'
 
-import { defaultContent, NodeEditorContent, NodeType } from '@mexit/core'
+import { defaultContent, ModalsType,NodeEditorContent, NodeType, useContentStore , useMetadataStore, useModalStore } from '@mexit/core'
 import {
   EditorContainer,
   EditorPreviewControls,
@@ -25,9 +25,6 @@ import { useNodes } from '../../Hooks/useNodes'
 import { isReadonly, usePermissions } from '../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useTags } from '../../Hooks/useTags'
-import { useContentStore } from '../../Stores/useContentStore'
-import { useMetadataStore } from '../../Stores/useMetadataStore'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
 import Editor from '../Editor/Editor'
 import { TagsRelatedTiny } from '../Editor/TagsRelated'
 import NamespaceTag from '../NamespaceTag'

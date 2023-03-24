@@ -2,9 +2,7 @@ import { useCallback } from 'react'
 
 import { debounce } from 'lodash'
 
-import { getInitialNode, LastOpenedData, LastOpenedState, NodeType } from '@mexit/core'
-
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { getInitialNode, LastOpenedData, LastOpenedState, NodeType , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 
 import { useLinks } from './useLinks'
 import { useNodes } from './useNodes'

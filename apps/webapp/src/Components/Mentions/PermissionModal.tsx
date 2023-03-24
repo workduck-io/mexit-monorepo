@@ -3,7 +3,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { AccessLevel, DefaultPermissionValue, Mentionable, mog, permissionOptions } from '@mexit/core'
+import {
+  AccessLevel,
+  DefaultPermissionValue,
+  Mentionable,
+  mog,
+  permissionOptions,
+  useAuthStore,
+  useEditorStore,
+useMentionStore , userPreferenceStore as useUserPreferenceStore,  useShareModalStore
+ } from '@mexit/core'
 import {
   Center,
   copyTextToClipboard,
@@ -22,11 +31,6 @@ import { getAccessValue, useMentions } from '../../Hooks/useMentions'
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { useNodes } from '../../Hooks/useNodes'
 import { getUserAccess, usePermissions } from '../../Hooks/usePermissions'
-import { useAuthStore } from '../../Stores/useAuth'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useMentionStore } from '../../Stores/useMentionsStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { useShareModalStore } from '../../Stores/useShareModalStore'
 import { ModalActions, ModalFooter } from '../../Style/Refactor'
 import ShareOptions from '../EditorInfobar/ShareOptions'
 import { ProfileImage } from '../User/ProfileImage'

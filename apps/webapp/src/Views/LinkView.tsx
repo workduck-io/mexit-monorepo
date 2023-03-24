@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
 
-import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, ViewType } from '@mexit/core'
+import { fuzzySearchLinks, GenericSearchResult, Link, mog, sortByCreated, useLinkStore, ViewType } from '@mexit/core'
 import { MainHeader, Result, SearchContainer, Title } from '@mexit/shared'
 
 import LinkComponent from '../Components/Link'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../Hooks/useRouting'
 import { useURLFilters, useURLsAPI } from '../Hooks/useURLs'
-import { useLinkStore } from '../Stores/useLinkStore'
 
 import SearchFilters from './SearchFilters'
 import SearchView, { RenderFilterProps, RenderItemProps } from './SearchView'

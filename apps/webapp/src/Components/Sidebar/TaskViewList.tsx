@@ -2,12 +2,17 @@ import React from 'react'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import { getMIcon, ReminderViewData, ViewType } from '@mexit/core'
+import {
+  ContextMenuType,
+  getMIcon,
+  ReminderViewData,
+  useLayoutStore,
+  ViewType
+} from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { getBlockFieldIcon } from '../../Hooks/useSortIcons'
-import { ContextMenuType, useLayoutStore } from '../../Stores/useLayoutStore'
 import { useViewStore } from '../../Stores/useViewStore'
 import { useTaskViewModalStore } from '../TaskViewModal'
 

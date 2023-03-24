@@ -1,9 +1,6 @@
 import { useEffect } from 'react'
 
-import { mergeUserPreferences } from '@mexit/core'
-
-import { useAuthStore } from '../Stores/useAuth'
-import { useUserPreferenceStore } from '../Stores/userPreferenceStore'
+import { mergeUserPreferences, useAuthStore , userPreferenceStore as useUserPreferenceStore } from '@mexit/core'
 
 import { useUserService } from './API/useUserAPI'
 

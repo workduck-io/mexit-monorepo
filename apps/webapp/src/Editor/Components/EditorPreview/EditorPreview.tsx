@@ -10,7 +10,7 @@ import { useTheme } from 'styled-components'
 import { MexIcon, SecondaryButton } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { getNameFromPath, NodeEditorContent } from '@mexit/core'
+import { BannerType, getNameFromPath, NodeEditorContent, useContentStore, useDataStore, useMetadataStore,useMultipleEditors, useRouteStore  } from '@mexit/core'
 import {
   EditorPreviewControls,
   EditorPreviewEditorWrapper,
@@ -31,11 +31,6 @@ import { isReadonly, usePermissions } from '../../../Hooks/usePermissions'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../../Hooks/useRouting'
 import useSocket from '../../../Hooks/useSocket'
 import { useTags } from '../../../Hooks/useTags'
-import { useContentStore } from '../../../Stores/useContentStore'
-import { useDataStore } from '../../../Stores/useDataStore'
-import useMultipleEditors from '../../../Stores/useEditorsStore'
-import { useMetadataStore } from '../../../Stores/useMetadataStore'
-import useRouteStore, { BannerType } from '../../../Stores/useRouteStore'
 import { SocketActionType } from '../../../Types/Socket'
 import EditorPreviewRenderer from '../../EditorPreviewRenderer'
 

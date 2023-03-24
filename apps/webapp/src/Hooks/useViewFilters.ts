@@ -1,9 +1,7 @@
 import { SearchResult } from '@workduck-io/mex-search'
 
-import { FilterTypeWithOptions, SEPARATOR, useMentionStore } from '@mexit/core'
+import { FilterTypeWithOptions, SEPARATOR, useDataStore, useMentionStore } from '@mexit/core'
 import { findGroupingKey, getKeyFrequencyMap, keysToExcludeInGrouping, SearchEntityType } from '@mexit/shared'
-
-import { useDataStore } from '../Stores/useDataStore'
 
 import { getBlockFieldIcon } from './useSortIcons'
 
@@ -14,11 +12,12 @@ export const useViewFilters = () => {
    */
   const getFilters = () => {
     const notes = useDataStore.getState().ilinks
+    const sharedNotes = useDataStore.getState().sharedNodes ?? []
     const tags = useDataStore.getState().tags
     const spaces = useDataStore.getState().spaces
     const mentions = useMentionStore.getState().mentionable
 
-    const noteFilter = notes.reduce(
+    const noteFilter = [...notes, ...sharedNotes].reduce(
       (prev, noteLink) => {
         prev.options.push({ id: noteLink.nodeid, label: noteLink.path, value: noteLink.nodeid })
         return prev

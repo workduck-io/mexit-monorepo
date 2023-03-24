@@ -1,7 +1,8 @@
 import Modal from 'react-modal'
 
+import { useHelpStore } from '@mexit/core'
+
 import ShortcutTable from '../Components/ShortcutTable'
-import { useHelpStore } from '../Stores/useHelpStore'
 
 const HelpModal = () => {
   const open = useHelpStore((store) => store.open)

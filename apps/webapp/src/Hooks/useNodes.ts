@@ -1,11 +1,6 @@
 import { BreadcrumbItem } from '@workduck-io/mex-components'
 
-import { apiURLs, getParentBreadcrumbs, ILink, mog, NodeType, SharedNode } from '@mexit/core'
-
-import { useDataStore } from '../Stores/useDataStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { usePublicNodeStore } from '../Stores/usePublicNodes'
-import { useRecentsStore } from '../Stores/useRecentsStore'
+import { apiURLs, getParentBreadcrumbs, ILink, mog, NodeType, SharedNode, useDataStore, useMetadataStore,usePublicNodeStore, useRecentsStore  } from '@mexit/core'
 
 // Used to ensure no path clashes while adding ILink.
 // path functions to check wether clash is happening can be also used

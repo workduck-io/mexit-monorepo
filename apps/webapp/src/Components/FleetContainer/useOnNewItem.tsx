@@ -9,7 +9,13 @@ import {
   generateSnippetId,
   generateTempId,
   getDefaultContent,
-  TodoStatus
+  ModalsType,
+  TodoStatus,
+  useEditorStore,
+  useLayoutStore,
+  useModalStore,
+  userPreferenceStore as useUserPreferenceStore,
+  useSnippetStore
 } from '@mexit/core'
 import { DefaultMIcons, InteractiveToast } from '@mexit/shared'
 
@@ -19,11 +25,6 @@ import { useNamespaces } from '../../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
 import { useSnippets } from '../../Hooks/useSnippets'
 import { useTaskFromSelection } from '../../Hooks/useTaskFromSelection'
-import { useEditorStore } from '../../Stores/useEditorStore'
-import { useLayoutStore } from '../../Stores/useLayoutStore'
-import useModalStore, { ModalsType } from '../../Stores/useModalStore'
-import { useUserPreferenceStore } from '../../Stores/userPreferenceStore'
-import { useSnippetStore } from '../../Stores/useSnippetStore'
 
 export const useOnNewItem = () => {
   const ICONS = {

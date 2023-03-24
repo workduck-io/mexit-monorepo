@@ -9,17 +9,17 @@ import {
   getSnippetCommand,
   Snippet,
   SnippetID,
-  useContentStore
+  useAuthStore,
+  useContentStore,
+  useDataStore,
+  useDescriptionStore,
+  useMetadataStore,
+  useSnippetStore
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
-import useDataStore from '../Stores/useDataStore'
-import { useDescriptionStore } from '../Stores/useDescriptionStore'
-import { useMetadataStore } from '../Stores/useMetadataStore'
-import { useSnippetStore } from '../Stores/useSnippetStore'
 import { wUpdateDoc } from '../Sync/invokeOnWorker'
 
-import { useAuthStore } from './useAuth'
 import { useEditorStore } from './useEditorStore'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 

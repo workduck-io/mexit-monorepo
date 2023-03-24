@@ -7,7 +7,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { fuzzySearch, LastOpenedState, mog } from '@mexit/core'
+import { fuzzySearch, LastOpenedState, mog , useLayoutStore } from '@mexit/core'
 import {
   DesignItem,
   EmptyMessage,
@@ -20,8 +20,6 @@ import {
   SidebarListWrapper,
   StyledTreeItem
 } from '@mexit/shared'
-
-import { useLayoutStore } from '../../Stores/useLayoutStore'
 
 import { ItemContent } from './SharedNotes'
 import SidebarListItemComponent from './SidebarListItem'

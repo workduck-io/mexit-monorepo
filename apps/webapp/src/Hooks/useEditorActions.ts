@@ -1,7 +1,6 @@
 import create from 'zustand'
 
-import { useDataStore } from '../Stores/useDataStore'
-import { useEditorStore } from '../Stores/useEditorStore'
+import { useDataStore, useEditorStore } from '@mexit/core'
 
 import { useEditorBuffer } from './useEditorBuffer'
 import { useLinks } from './useLinks'

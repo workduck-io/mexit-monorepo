@@ -1,6 +1,5 @@
-import { getBlocks } from '@mexit/core'
+import { getBlocks, useContentStore } from '@mexit/core'
 
-import { useContentStore } from '../Stores/useContentStore'
 
 export const getBlock = (nodeid: string, blockId: string) => {
   const nodeContent = useContentStore.getState().getContent(nodeid)

@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react'
 
+import { useHighlightStore } from '@mexit/core'
 import { CenteredFlex, DefaultMIcons, getMIcon, List, SnippetCards } from '@mexit/shared'
-
-import { useHighlightStore } from '../../Stores/useHighlightStore'
 
 import { AddTags } from './AddTags'
 import { GenericCard } from './GenericCard'

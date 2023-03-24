@@ -44,8 +44,8 @@ export interface UserCred {
 }
 
 export interface UserDetails {
-  email: string
-  id: string
+  email?: string
+  id?: string
   name: string
   alias: string
 }

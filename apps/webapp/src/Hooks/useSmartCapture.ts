@@ -1,6 +1,5 @@
-import { API } from '@mexit/core'
+import { API, useSmartCaptureStore } from '@mexit/core'
 
-import { useSmartCaptureStore } from '../Stores/useSmartCaptureStore'
 
 export const useSmartCapture = () => {
   const setConfig = useSmartCaptureStore((s) => s.setSmartCaptureList)

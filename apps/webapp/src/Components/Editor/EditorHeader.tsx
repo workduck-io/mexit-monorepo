@@ -1,9 +1,8 @@
+import { BannerType, useBlockStore, useRouteStore } from '@mexit/core'
 import { EditorHeader as StyledHeaderEditor } from '@mexit/shared'
 
 import { useNamespaces } from '../../Hooks/useNamespaces'
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'
-import useBlockStore from '../../Stores/useBlockStore'
-import useRouteStore, { BannerType } from '../../Stores/useRouteStore'
 import BlockInfoBar from '../EditorInfobar/BlockInfobar'
 import Metadata from '../EditorInfobar/Metadata'
 import NavBreadCrumbs from '../NavBreadcrumbs'
