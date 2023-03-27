@@ -2,6 +2,7 @@ import { type KyInstance } from 'ky/distribution/types/ky'
 
 import { KYClient } from '@workduck-io/dwindle'
 
+import { AiAPI } from './AI'
 import { BookmarkAPI } from './Bookmarks'
 import { CommentAPI } from './Comment'
 import { HighlightAPI } from './Highlight'
@@ -30,6 +31,7 @@ class APIClass {
   public namespace: NamespaceAPI
   public view: ViewAPI
   public loch: LochAPI
+  public ai: AiAPI
   public link: LinkAPI
   public prompt: PromptAPI
   public reminder: ReminderAPI
@@ -56,6 +58,7 @@ class APIClass {
     this.prompt = new PromptAPI(this.client)
     this.view = new ViewAPI(this.client)
     this.link = new LinkAPI(this.client)
+    this.ai = new AiAPI(this.client)
     this.reminder = new ReminderAPI(this.client)
     this.user = new UserAPI(this.client)
     this.highlight = new HighlightAPI(this.client)

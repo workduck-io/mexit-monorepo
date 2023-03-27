@@ -119,13 +119,13 @@ export const BalloonToolbarBase = styled(ToolbarBase)<BalloonToolbarProps>`
 
   position: absolute;
   white-space: nowrap;
-  opacity: 100;
+  opacity: 1;
   transition: opacity 0.2s ease-in-out;
   color: ${({ theme }) => theme.tokens.text.default};
   ${({ theme }) => generateStyle(theme.editor.toolbar.balloonToolbar.wrapper)}
   z-index: 500;
   border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.borderRadius.tiny};
+  border-radius: ${({ theme }) => theme.borderRadius.small};
   padding: ${({ theme }) => theme.spacing.tiny};
   box-shadow: ${({ theme }) => theme.tokens.shadow.medium};
 
@@ -142,8 +142,10 @@ export const BalloonToolbarBase = styled(ToolbarBase)<BalloonToolbarProps>`
   }
 
   .slate-ToolbarButton-active {
-    color: ${({ theme }) => theme.tokens.colors.primary.default};
-    background: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.1);
+    svg {
+      color: ${({ theme }) => theme.tokens.colors.primary.default};
+    }
+    background: rgba(${({ theme }) => theme.rgbTokens.colors.primary.default}, 0.2);
   }
 `
 

@@ -47,7 +47,6 @@ export const useUpdater = () => {
 
       const todos = getTodosFromContent(content)
       updateNodeTodos(noteId, todos)
-      // console.log('updateFromContent', noteId, todos, content)
       await updateDocument({
         id: noteId,
         contents: content,

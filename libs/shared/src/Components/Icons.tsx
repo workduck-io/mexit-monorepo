@@ -125,7 +125,10 @@ export const DefaultMIcons = {
   TEXT: getMIcon('ICON', 'ri:text'),
   GROUPBY: getMIcon('ICON', 'fluent:group-list-20-filled'),
   SELECT: getMIcon('ICON', 'bxs:select-multiple'),
-  IMAGE: getMIcon('ICON', 'bx:image')
+  IMAGE: getMIcon('ICON', 'bx:image'),
+  AI: getMIcon('ICON', 'fluent:text-grammar-wand-24-filled'),
+  EMBED: getMIcon('ICON', 'lucide:file-input'),
+  INSERT: getMIcon('ICON', 'ri:arrow-go-back-line'),
 }
 
 export const ForwardlinkIcon = {

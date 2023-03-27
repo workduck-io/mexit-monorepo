@@ -51,8 +51,8 @@ const MultiLineElementsArray = [
   ELEMENT_LIC
 ] as const
 
-export type InlineElements = typeof InlineElementsArray[number]
-export type MultiLineElements = typeof MultiLineElementsArray[number]
+export type InlineElements = (typeof InlineElementsArray)[number]
+export type MultiLineElements = (typeof MultiLineElementsArray)[number]
 
 interface ItemRenderProps {
   children: React.ReactNode
@@ -284,6 +284,7 @@ const RenderPlateless = React.memo<RenderPlatelessProps>(
     return <>{childrenRender}</>
   }
 )
+
 RenderPlateless.displayName = 'RenderPlateless'
 
 /**

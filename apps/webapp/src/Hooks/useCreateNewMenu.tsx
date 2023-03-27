@@ -7,11 +7,13 @@ import generateName from 'project-name-generator'
 import {
   defaultContent,
   DRAFT_NODE,
+  FloatingElementType,
   generateSnippetId,
   isReservedNamespace,
   MIcon,
   ModalsType,
   useDataStore,
+  useFloatingStore,
   useLayoutStore,
   useMetadataStore,
   useModalStore,
@@ -27,6 +29,7 @@ import { useTaskViewModalStore } from '../Components/TaskViewModal'
 import { useBlockMenu } from '../Editor/Components/useBlockMenu'
 import { useViewStore } from '../Stores/useViewStore'
 
+import { useAIOptions } from './useAIOptions'
 import { useCreateNewNote } from './useCreateNewNote'
 import { useNamespaces } from './useNamespaces'
 import { useNavigation } from './useNavigation'
@@ -65,6 +68,8 @@ export const useCreateNewMenu = () => {
   const { addDefaultNewNamespace, getDefaultNamespaceId } = useNamespaces()
   const setCurrentView = useViewStore((store) => store.setCurrentView)
   const changeSpace = useUserPreferenceStore((store) => store.setActiveNamespace)
+  const setFloatingElement = useFloatingStore((s) => s.setFloatingElement)
+  const updateFloatingElementState = useFloatingStore((s) => s.updateFloatingElementState)
   const expandSidebar = useLayoutStore((store) => store.expandSidebar)
   const openShareModal = useShareModalStore((store) => store.openModal)
   const openDeleteModal = useDeleteStore((store) => store.openModal)
@@ -76,6 +81,7 @@ export const useCreateNewMenu = () => {
   const { push } = useNavigation()
   const { deleteView } = useViews()
   const { addSnippet } = useSnippets()
+  const { summarize } = useAIOptions()
   const { execRefactorAsync } = useRefactor()
   const { createNewNote } = useCreateNewNote()
   const blockMenuItems = useBlockMenu()
@@ -225,6 +231,18 @@ export const useCreateNewMenu = () => {
     })
   }
 
+  // * AI functions
+  const handleSummarize = () => {
+    setFloatingElement(FloatingElementType.AI_TOOLTIP, {
+      type: 'summarize',
+      label: 'Summarize'
+    })
+
+    summarize().then((result) => {
+      if (result) updateFloatingElementState(FloatingElementType.AI_TOOLTIP, { result })
+    })
+  }
+
   /**
    * Menu Items Getter Functions
    * @returns Array<MenuListItemType>
@@ -325,6 +343,14 @@ export const useCreateNewMenu = () => {
     ]
   }
 
+  const getAIMenuItems = () => {
+    return [
+      getMenuItem('Continue', handleSummarize, false, getMIcon('ICON', 'system-uicons:write')),
+      getMenuItem('Summarize', handleSummarize, false, DefaultMIcons.AI),
+      getMenuItem('Explain', handleSummarize, false, getMIcon('ICON', 'heroicons-solid:question-mark-circle'))
+    ]
+  }
+
   return {
     getCreateNewMenuItems,
     getSnippetsMenuItems,
@@ -332,7 +358,7 @@ export const useCreateNewMenu = () => {
     getBlockMenuItems,
     getTreeMenuItems,
     getViewMenuItems,
-
+    getAIMenuItems,
     // * Handlers
     handleCreateSnippet,
     handleCreateNote,

@@ -24,10 +24,6 @@ type ToolbarState = 'normal' | 'new-note' | 'new-snippet'
 interface BalloonToolbarStore {
   open: boolean
   setOpen: (open: boolean) => void
-  // isHidden: boolean
-  // setIsHidden: (isHidden: boolean) => void
-  // isFocused: boolean
-  // setIsFocused: (isFocused: boolean) => void
   toolbarState: ToolbarState
   setToolbarState: (state: ToolbarState) => void
 }
@@ -35,10 +31,6 @@ interface BalloonToolbarStore {
 export const useBalloonToolbarStore = create<BalloonToolbarStore>((set, get) => ({
   open: false,
   setOpen: (open) => set({ open }),
-  // isHidden: true,
-  // setIsHidden: (isHidden) => set({ isHidden }),
-  // isFocused: false,
-  // setIsFocused: (isFocused) => set({ isFocused }),
   toolbarState: 'normal',
   setToolbarState: (state) => set({ toolbarState: state })
 }))

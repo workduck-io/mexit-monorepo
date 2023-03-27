@@ -7,6 +7,7 @@ import { EditableProps } from 'slate-react/dist/components/editable'
 
 import { useBlockHighlightStore, useMultipleEditors } from '@mexit/core'
 
+import Floater from '../Components/AIPop/Floater'
 import { useGlobalListener } from '../Hooks/useGlobalListener'
 import { useFocusBlock } from '../Stores/useFocusBlock'
 
@@ -112,6 +113,7 @@ export const MexEditorBase = (props: MexEditorProps) => {
       >
         {props.options?.withBalloonToolbar && props.BalloonMarkToolbarButtons}
         {isEmpty && <MultiComboboxContainer config={comboConfigData} />}
+        <Floater />
         {props.options?.withGlobalListener !== false && <GlobalEditorListener />}
       </Plate>
       {props.debug && <pre>{JSON.stringify(content, null, 2)}</pre>}

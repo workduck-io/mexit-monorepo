@@ -48,6 +48,10 @@ export const apiURLs = {
     archiveInNamespace: (namespaceID: string) => `${API_BASE_URLS.archive}?namespaceID=${namespaceID}`
   },
 
+  openAi: {
+    perform: (actionId: string) => `${API_BASE_URLS.actions}/ai/${actionId}`
+  },
+
   // Namespaces
   namespaces: {
     getHierarchy: `${API_BASE_URLS.namespace}/all/hierarchy?getMetadata=true`,

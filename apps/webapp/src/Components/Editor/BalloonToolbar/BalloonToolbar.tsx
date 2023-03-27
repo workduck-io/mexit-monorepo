@@ -3,33 +3,20 @@ import React from 'react'
 import { withPlateEventProvider } from '@udecode/plate-core'
 import { PortalBody } from '@udecode/plate-styled-components'
 
-import { BalloonToolbarBase, BalloonToolbarProps, getBalloonToolbarStyles, useFloatingToolbar } from '@mexit/shared'
+import { BalloonToolbarBase, BalloonToolbarProps, useFloatingToolbar } from '@mexit/shared'
 
 export const BalloonToolbar = withPlateEventProvider((props: BalloonToolbarProps) => {
-  const { children, theme = 'dark', arrow = false, portalElement, floatingOptions } = props
+  const { children, arrow = true, portalElement, floatingOptions } = props
 
-  const { floating, style, placement, open } = useFloatingToolbar({
+  const { floating, style, open } = useFloatingToolbar({
     floatingOptions
-  })
-
-  const styles = getBalloonToolbarStyles({
-    placement,
-    theme,
-    arrow,
-    ...props
   })
 
   if (!open) return null
 
   return (
     <PortalBody element={portalElement}>
-      <BalloonToolbarBase
-        // TODO: the following properties are overwriting our styles
-        // css={styles.root.css}
-        // className={styles.root.className}
-        ref={floating}
-        style={style}
-      >
+      <BalloonToolbarBase ref={floating} style={style}>
         {children}
       </BalloonToolbarBase>
     </PortalBody>
