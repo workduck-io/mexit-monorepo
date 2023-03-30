@@ -26,7 +26,7 @@ const ExtInfoBarItems = () => {
   return (
     <Tabs
       visible={true}
-      openedTab={infobar.mode}
+      openedTab={infobar.mode ?? 'context'}
       root={getElementById('ext-side-nav')}
       onChange={(tab) => {
         setInfobarMode(tab as ExtInfobarMode)

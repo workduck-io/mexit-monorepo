@@ -10,7 +10,6 @@ import {
   Snippet,
   SnippetID,
   useAuthStore,
-  useContentStore,
   useDataStore,
   useDescriptionStore,
   useMetadataStore,
@@ -18,9 +17,8 @@ import {
 } from '@mexit/core'
 import { useSlashCommands } from '@mexit/shared'
 
-import { wUpdateDoc } from '../Sync/invokeOnWorker'
-
 import { useEditorStore } from './useEditorStore'
+import { useSearch } from './useSearch'
 import { useSputlitContext, VisualState } from './useSputlitContext'
 
 export const useSnippets = () => {
@@ -34,6 +32,7 @@ export const useSnippets = () => {
   const addMetadata = useMetadataStore((s) => s.addMetadata)
   const setSlashCommands = useDataStore((store) => store.setSlashCommands)
 
+  const { updateDocument } = useSearch()
   const { generateSlashCommands } = useSlashCommands()
 
   const getSnippets = () => {
@@ -70,13 +69,12 @@ export const useSnippets = () => {
         const metadata = extractMetadata(message.metadata, { icon: DefaultMIcons.SNIPPET })
 
         addMetadata('snippets', { [message.id]: metadata })
-        wUpdateDoc({
+
+        updateDocument({
           indexKey: Indexes.SNIPPET,
           id: message.id,
           contents: request.data.content,
           title: message.title
-        }).then(() => {
-          useContentStore.getState().setDocUpdated()
         })
 
         if (notify) {
@@ -93,6 +91,7 @@ export const useSnippets = () => {
       rawText: convertContentToRawText(snippet.content, '\n'),
       truncatedContent: snippet.content.slice(0, 8)
     })
+    console.log('DONE CHANGES')
   }
 
   const updateSlashCommands = (snippets: Snippet[]) => {
