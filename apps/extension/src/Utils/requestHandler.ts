@@ -32,7 +32,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
         .json()
         .then((response: any) => {
-          return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
+          return { message: { ...response, content: deserializeContent(reqData.data) }, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
@@ -62,7 +62,7 @@ export const handleCaptureRequest = ({ subType, data }) => {
         })
         .json()
         .then((response: any) => {
-          return { message: { ...response.data, content: deserializeContent(reqData.data) }, error: null }
+          return { message: { ...response, content: deserializeContent(reqData.data) }, error: null }
         })
         .catch((error) => {
           return { message: null, error: error }
@@ -90,7 +90,7 @@ export const handleSnippetRequest = ({ data }) => {
     })
     .json()
     .then((response: any) => {
-      return { message: response.data, error: null }
+      return { message: response, error: null }
     })
     .catch((err) => {
       return { message: null, error: err }
@@ -113,7 +113,7 @@ export const handleNodeContentRequest = ({ subType, body, headers }) => {
         })
         .json()
         .then((response: any) => {
-          return { message: response.data, error: null }
+          return { message: response, error: null }
         })
         .catch((err) => {
           return { message: null, error: err }
