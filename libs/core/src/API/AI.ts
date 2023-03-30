@@ -11,7 +11,7 @@ export class AiAPI {
   }
 
   async perform(action: string, data: any, options?: Options) {
-    return await this.client.post(apiURLs.openAi.perform(action), data, options)
+    return await this.client.post(apiURLs.openAi.perform, data, options)
   }
 
   //   async getAll(cacheConfig?: CacheConfig, options?: Options) {

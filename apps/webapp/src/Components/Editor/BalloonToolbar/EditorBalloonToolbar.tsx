@@ -90,6 +90,19 @@ const BallonMarkToolbarButtons = () => {
           normal: (
             <>
               <BallonOptionsUnwrapper
+                id="ai-actions"
+                icon={DefaultMIcons.AI}
+                color={theme.tokens.colors.primary.default}
+                active={isOptionOpen}
+                onClick={handleOpenOption}
+              >
+                {getAIMenuItems().map((item) => (
+                  <Icon key={item.id} onClick={item.onSelect} height={20} icon={item.icon.value} />
+                ))}
+              </BallonOptionsUnwrapper>
+              <ButtonSeparator />
+
+              <BallonOptionsUnwrapper
                 id="headings"
                 icon={DefaultMIcons.ADD}
                 active={isOptionOpen}
@@ -217,19 +230,6 @@ const BallonMarkToolbarButtons = () => {
                   tooltip={{ content: 'Convert to Snippet', ...tooltip }}
                 />
               </GenericFlex>
-              <ButtonSeparator />
-
-              <BallonOptionsUnwrapper
-                id="ai-actions"
-                icon={DefaultMIcons.AI}
-                color={theme.tokens.colors.primary.default}
-                active={isOptionOpen}
-                onClick={handleOpenOption}
-              >
-                {getAIMenuItems().map((item) => (
-                  <Icon key={item.id} onClick={item.onSelect} height={20} icon={item.icon.value} />
-                ))}
-              </BallonOptionsUnwrapper>
             </>
           ),
           'new-note': <SelectionToNodeInput />,

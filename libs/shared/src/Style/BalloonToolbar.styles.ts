@@ -120,7 +120,7 @@ export const BalloonToolbarBase = styled(ToolbarBase)<BalloonToolbarProps>`
   position: absolute;
   white-space: nowrap;
   opacity: 1;
-  transition: opacity 0.2s ease-in-out;
+  transition: width 0.5s ease, opacity 0.2s ease-in-out;
   color: ${({ theme }) => theme.tokens.text.default};
   ${({ theme }) => generateStyle(theme.editor.toolbar.balloonToolbar.wrapper)}
   z-index: 500;
@@ -153,10 +153,9 @@ export const BalloonToolbarInputWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.small};
-  padding: ${({ theme }) => theme.spacing.tiny};
 
   svg {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1rem;
+    height: 1rem;
   }
 `

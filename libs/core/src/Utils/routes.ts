@@ -22,6 +22,7 @@ export const API_BASE_URLS = {
   comment: `${MEXIT_BACKEND_URL_BASE}/comment`,
   reaction: `${MEXIT_BACKEND_URL_BASE}/reaction`,
   highlight: `${MEXIT_BACKEND_URL_BASE}/highlight`,
+  ai: `http://94e8-171-76-85-98.ngrok.io/chat`,
   prompt: `${MEXIT_BACKEND_URL_BASE}/prompt`,
   actions: `${MEXIT_FRONTEND_URL_BASE}/actions`,
   oauth: `${MEXIT_FRONTEND_URL_BASE}/oauth`,
@@ -49,7 +50,7 @@ export const apiURLs = {
   },
 
   openAi: {
-    perform: (actionId: string) => `${API_BASE_URLS.actions}/ai/${actionId}`
+    perform: `${API_BASE_URLS.ai}`
   },
 
   // Namespaces
