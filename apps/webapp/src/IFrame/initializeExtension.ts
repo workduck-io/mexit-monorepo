@@ -1,5 +1,3 @@
-import { get } from 'idb-keyval'
-
 import { BroadcastSyncedChannel, getStoreName, StoreIdentifier } from '@mexit/core'
 
 const updateDwindleAuth = (extension) => {
@@ -14,7 +12,7 @@ const updateDwindleAuth = (extension) => {
 
 const updateUserInfo = async (extension) => {
   const storeName = getStoreName(StoreIdentifier.AUTH, false)
-  const data = await get(storeName)
+  const data = localStorage.getItem(storeName)
   extension.sendToExtension({
     msgId: BroadcastSyncedChannel.AUTH,
     state: JSON.parse(data).state,
