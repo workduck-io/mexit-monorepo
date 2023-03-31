@@ -1,5 +1,18 @@
 # mexit-webapp
 
+## 0.23.0
+
+### Minor Changes
+
+- 860dca96: Generic Views
+
+### Patch Changes
+
+- 44b78251: Request Handler fixes; Revert flexsearh to 0.7.22; UI and Search Fixes
+- e194b4dd: Sync Views From Extension, CMD + S To Save Views
+- d9d5b31f: Manual Refresh on Splash Screen
+- 1d8ec7ca: Flexsearch to v0.0.6
+
 ## 0.22.25
 
 ### Patch Changes
