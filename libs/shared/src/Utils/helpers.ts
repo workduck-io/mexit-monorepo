@@ -2,7 +2,6 @@ import React from 'react'
 import toast from 'react-hot-toast'
 
 export async function copyTextToClipboard(text: any, toastMessage?: string) {
-  console.log('COPY TO CLIP', { text, s: String(text) })
   await navigator.clipboard
     .writeText(String(text))
     .then(() => {

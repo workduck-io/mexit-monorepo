@@ -91,7 +91,6 @@ export const useSnippets = () => {
       rawText: convertContentToRawText(snippet.content, '\n'),
       truncatedContent: snippet.content.slice(0, 8)
     })
-    console.log('DONE CHANGES')
   }
 
   const updateSlashCommands = (snippets: Snippet[]) => {
