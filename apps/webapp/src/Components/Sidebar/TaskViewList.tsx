@@ -2,13 +2,7 @@ import React from 'react'
 
 import stackLine from '@iconify/icons-ri/stack-line'
 
-import {
-  ContextMenuType,
-  getMIcon,
-  ReminderViewData,
-  useLayoutStore,
-  ViewType
-} from '@mexit/core'
+import { ContextMenuType, getMIcon, ReminderViewData, useLayoutStore, ViewType } from '@mexit/core'
 import { DefaultMIcons, IconDisplay } from '@mexit/shared'
 
 import { NavigationType, ROUTE_PATHS, useRouting } from '../../Hooks/useRouting'

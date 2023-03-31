@@ -23,7 +23,8 @@ import {
   useContentStore,
   useDataStore,
   useLinkStore,
-  useMentionStore
+  useMentionStore,
+  useSnippetStore
 } from '@mexit/core'
 import { useQuery } from '@mexit/shared'
 
@@ -33,7 +34,6 @@ import { getListItemFromNode, getListItemFromSnippet } from '../Utils/helper'
 
 import { useLinks } from './useLinks'
 import { useQuickLinks } from './useQuickLinks'
-import { useSnippets } from './useSnippets'
 
 export const useSearchExtra = () => {
   const ilinks = useDataStore((s) => s.ilinks)
@@ -70,7 +70,6 @@ export const useSearchExtra = () => {
 
 export const useSearch = () => {
   const { getQuickLinks } = useQuickLinks()
-  const { getSnippet } = useSnippets()
   const { generateSearchQuery } = useQuery()
   const setDocUpdated = useContentStore((store) => store.setDocUpdated)
 
@@ -111,8 +110,9 @@ export const useSearch = () => {
         })
 
         if (!selection) {
+          const snippets = useSnippetStore.getState().snippets
           snippetItems?.forEach((snippet) => {
-            const snip = getSnippet(snippet.parent)
+            const snip = snippets?.[snippet?.parent]
             if (snip) {
               const item = getListItemFromSnippet(snip, actionType)
               localNodes.push(item)

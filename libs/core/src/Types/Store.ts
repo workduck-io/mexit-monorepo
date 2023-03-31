@@ -62,7 +62,6 @@ export enum StoreIdentifier {
   TREE = 'tree',
   USERCACHE = 'user-cache',
   APP = 'app',
-  AUTHSTORE = 'authstore',
   EDITORS = 'editors',
   EDITOR = 'editor',
   BUFFER = 'buffer',

@@ -119,14 +119,14 @@ export const SnippetsInfoBar = () => {
       setSearchedSnippets(snippets)
     } else {
       const searched = res
-        .map((r) => {
+        ?.map((r) => {
           const snippet = snippets.find((snippet) => snippet.id === r.parent)
 
           return snippet
         })
-        .filter((s) => s !== undefined) as Snippet[]
+        ?.filter((s) => s !== undefined) as Snippet[]
 
-      setSearchedSnippets(searched)
+      setSearchedSnippets(searched ?? [])
     }
   }
 
