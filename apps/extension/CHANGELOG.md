@@ -1,5 +1,15 @@
 # mexit
 
+## 0.19.20
+
+### Patch Changes
+
+- 24b58b55: unify all stores in webapp and extension
+- 44b78251: Request Handler fixes; Revert flexsearh to 0.7.22; UI and Search Fixes
+- e194b4dd: Sync Views From Extension, CMD + S To Save Views
+- 1d8ec7ca: Flexsearch to v0.0.6
+- 860dca96: Generic Views
+
 ## 0.19.19
 
 ### Patch Changes
