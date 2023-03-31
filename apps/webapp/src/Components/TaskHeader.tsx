@@ -10,14 +10,7 @@ import stackLine from '@iconify/icons-ri/stack-line'
 import { Icon } from '@iconify/react'
 import { useSingleton } from '@tippyjs/react'
 
-import {
-  Button,
-  DisplayShortcut,
-  IconButton,
-  Infobox,
-  LoadingButton,
-  ToolbarTooltip
-} from '@workduck-io/mex-components'
+import { Button, DisplayShortcut, IconButton, LoadingButton, ToolbarTooltip } from '@workduck-io/mex-components'
 import { tinykeys } from '@workduck-io/tinykeys'
 
 import {
@@ -26,7 +19,6 @@ import {
   ShortcutTokens,
   TaskHeader as StyledTaskHeader,
   TaskHeaderTitleSection,
-  TasksHelp,
   TaskViewControls,
   TaskViewHeaderWrapper,
   TaskViewTitle
@@ -138,6 +130,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
     openTaskViewModal({
       cloneViewId: view?.id,
       filters: currentFilters,
+      type: 'save-as',
       properties: {
         viewType,
         globalJoin,
@@ -216,7 +209,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
       </TaskHeaderTitleSection>
       <ShortcutTokens>
         <ShortcutToken>
-          Select:
+          Select Card:
           <Icon icon={dragMove2Fill} />
         </ShortcutToken>
         {cardSelected && (
@@ -243,7 +236,7 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
           </ShortcutToken>
         )}
       </ShortcutTokens>
-      <Infobox text={TasksHelp} />
+      {/* <Infobox text={TasksHelp} /> */}
     </StyledTaskHeader>
   )
 }

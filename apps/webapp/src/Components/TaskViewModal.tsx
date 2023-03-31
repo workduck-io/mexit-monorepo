@@ -37,6 +37,8 @@ interface ViewProperties {
   groupBy?: string
 }
 
+export type ViewCreateType = 'new' | 'update' | 'clone' | 'save-as'
+
 interface TaskViewModalState {
   open: boolean
   // If present, changes in title, description will be applied to the view with viewid
@@ -45,9 +47,11 @@ interface TaskViewModalState {
   cloneViewId?: string
   filters: Filter[]
   properties?: ViewProperties
+  type?: ViewCreateType
 
   openModal: (args: {
     filters: Filter[]
+    type?: ViewCreateType
     updateViewId?: string
     cloneViewId?: string
     properties: ViewProperties
@@ -59,6 +63,7 @@ interface TaskViewModalState {
 const getInitialState = () => ({
   open: false,
   filters: [],
+  type: 'new' as ViewCreateType,
   updateViewId: undefined,
   cloneViewId: undefined,
   properties: {
@@ -88,6 +93,7 @@ const TaskViewModal = () => {
   const updateViewId = useTaskViewModalStore((store) => store.updateViewId)
   const cloneViewId = useTaskViewModalStore((store) => store.cloneViewId)
   const filters = useTaskViewModalStore((store) => store.filters)
+  const type = useTaskViewModalStore((store) => store.type)
 
   const closeModal = useTaskViewModalStore((store) => store.closeModal)
 
@@ -173,10 +179,17 @@ const TaskViewModal = () => {
     closeModal()
   }
 
-  // mog('TaskViewModal', { open, curView })
+  // * TODO: Use Type Based Switch here
+  const getTitle = () => {
+    if (updateViewId) return 'Update View'
+    if (type === 'save-as') return 'Save As'
+    if (cloneViewId) return 'Clone View'
+    return 'New View'
+  }
+
   return (
     <Modal className="ModalContent" overlayClassName="ModalOverlay" onRequestClose={closeModal} isOpen={open}>
-      <ModalHeader>{updateViewId ? 'Update' : cloneViewId ? 'Clone' : 'New'} Task View</ModalHeader>
+      <ModalHeader>{getTitle()}</ModalHeader>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input

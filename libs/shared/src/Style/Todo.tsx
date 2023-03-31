@@ -190,6 +190,7 @@ export const ShortcutTokens = styled.div`
 
 export const ShortcutToken = styled.div`
   display: flex;
+  pointer-events: none;
   align-items: center;
   ${({ theme }) => generateStyle(theme.generic.shortcut)};
   gap: ${({ theme }) => theme.spacing.small};

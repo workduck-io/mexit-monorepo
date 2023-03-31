@@ -7,7 +7,7 @@ import { debounce } from 'lodash'
 
 import { tinykeys } from '@workduck-io/tinykeys'
 
-import { fuzzySearch, LastOpenedState, mog , useLayoutStore } from '@mexit/core'
+import { fuzzySearch, LastOpenedState, mog, useLayoutStore } from '@mexit/core'
 import {
   DesignItem,
   EmptyMessage,
