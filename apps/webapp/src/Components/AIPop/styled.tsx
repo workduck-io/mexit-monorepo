@@ -45,7 +45,6 @@ export const AIContainerHeader = styled.header`
 `
 export const AIContainerSection = styled.section`
   flex: 1;
-  background: #cdcdcd;
 `
 export const AIContainerFooter = styled.footer`
   padding: ${({ theme }) => theme.spacing.small};
