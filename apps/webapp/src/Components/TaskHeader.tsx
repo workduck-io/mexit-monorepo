@@ -100,11 +100,12 @@ const ViewChangeStatus = ({ viewId }) => {
 const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const [deleting, setDeleting] = useState(false)
 
+  const { deleteView, getView } = useViews()
   const currentView = useViewStore((store) => store.currentView)
   const views = useViewStore((store) => store.views)
 
   const view = useMemo(() => {
-    return views?.find((view) => view.id === currentView?.id)
+    return getView(currentView?.id)
   }, [currentView, views])
 
   const openTaskViewModal = useTaskViewModalStore((store) => store.openModal)
@@ -112,7 +113,6 @@ const ViewHeader = ({ cardSelected = false }: ViewHeaderProps) => {
   const isDefault = ['tasks', 'reminders'].includes(view?.id)
 
   const { goTo } = useRouting()
-  const { deleteView } = useViews()
 
   const [source, target] = useSingleton()
   const { viewType, sortOrder, globalJoin, sortType, entities, currentFilters, groupBy } = useViewFilters()
